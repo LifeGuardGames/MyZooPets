@@ -8,6 +8,20 @@ public class DataManager : MonoBehaviour {
 
     //points that are used for activating evolution
     private int points;
+    private int stars;
+    private int health;
+    private int mood;
+    private int hunger;
+
+    //Data for evolution calculation
+    public DateTime lastUpdatedTime;
+    public TimeSpan durationCum;
+    public double lastEvoVal;
+    public double evoAverageCum;
+
+    //other mini game data
+
+    //Points
     public int GetPoints(){
         return points;
     }
@@ -20,8 +34,7 @@ public class DataManager : MonoBehaviour {
             points = 0;
     }
 
-    //currency in the game
-    private int stars;
+    //Stars
     public int GetStars(){
         return stars;
     }
@@ -34,8 +47,7 @@ public class DataManager : MonoBehaviour {
             stars = 0;
     }
 
-    //health of the pet
-    private int health;
+    //Health
     public int GetHealth(){
         return health;
     }
@@ -52,8 +64,7 @@ public class DataManager : MonoBehaviour {
         }
     }
 
-    //mood of the pet. weighted or unweighted
-    private int mood;
+    //Mood 
     public int GetMood(){
         return mood;
     }
@@ -73,8 +84,7 @@ public class DataManager : MonoBehaviour {
         }
     }
 
-    //hungriness of the pet
-    private int hunger;
+    //Hunger
     public int GetHunger(){
         return hunger;
     }
@@ -90,12 +100,6 @@ public class DataManager : MonoBehaviour {
             hunger = 0;
         }
     }
-
-    //information that need to be persistent
-    private float evolutionAverageCum;
-    private float lastEvolutionAverage;
-    private float duration; 
-    private DateTime lastUpdated; 
 
     // Use this for initialization
     // save and load data here

@@ -103,6 +103,7 @@ public class DataManager : MonoBehaviour {
 
     // Use this for initialization
     // save and load data here
+    // handles first time login?
     void Start () {
     
     }

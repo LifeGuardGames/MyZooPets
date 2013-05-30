@@ -6,78 +6,92 @@ using System;
 //Saves and loads data into player preference
 public class DataManager : MonoBehaviour {
 
+    private static bool firstTime = true; // starting game for the first time
+    public static bool FirstTime{
+        get {return firstTime;}
+        set {
+            if (!value) {
+                firstTime = value;
+            }
+        }
+    }
+
     //points that are used for activating evolution
-    private int points;
-    private int stars;
-    private int health;
-    private int mood;
-    private int hunger;
+    private static int points;
+    private static int stars;
+    private static int health;
+    private static int mood;
+    private static int hunger;
+
+    public static int Points{
+        get {return points;}
+    }
+    public static int Stars{
+        get {return stars;}
+    }
+    public static int Health{
+        get {return health;}
+    }
+    public static int Mood{
+        get {return mood;}
+    }
+    public static int Hunger{
+        get {return hunger;}
+    }
 
     //Data for evolution calculation
-    public DateTime lastUpdatedTime;
-    public TimeSpan durationCum;
-    public double lastEvoVal;
-    public double evoAverageCum;
+    public static DateTime lastUpdatedTime;
+    public static TimeSpan durationCum;
+    public static double lastEvoVal;
+    public static double evoAverageCum;
 
     //other mini game data
 
     //Points
-    public int GetPoints(){
-        return points;
-    }
-    public void AddPoints(int val){
+    public static void AddPoints(int val){
         points += val;
     }
-    public void SubtractPoints(int val){
+    public static void SubtractPoints(int val){
         points -= val;
         if (points < 0)
             points = 0;
     }
 
     //Stars
-    public int GetStars(){
-        return stars;
-    }
-    public void AddStars(int val){
+    public static void AddStars(int val){
         stars += val;
     }
-    public void SubtractStars(int val){
+    public static void SubtractStars(int val){
         stars -= val;
         if (stars < 0)
             stars = 0;
     }
 
     //Health
-    public int GetHealth(){
-        return health;
-    }
-    public void AddHealth(int val){
+    public static void AddHealth(int val){
         health += val;
         if (health > 100){
             health = 100;
         }
     }
-    public void SubtractHealth(int val){
+    public static void SubtractHealth(int val){
         health -= val;
         if (health < 0){
             health = 0;
         }
     }
 
-    //Mood 
-    public int GetMood(){
-        return mood;
-    }
-    public double GetWeightedMood(){
+    //Mood
+    public static double GetWeightedMood(){
         return (0.3*mood + 0.35*hunger + 0.35*health);
     }
-    public void AddMood(int val){
+    public static void AddMood(int val){
         mood += val;
         if (mood > 100){
             mood = 100;
         }
     }
-    public void SubtractMood(int val){
+    public static void SubtractMood(int val){
         mood -= val;
         if (mood < 0){
             mood = 0;
@@ -85,16 +99,13 @@ public class DataManager : MonoBehaviour {
     }
 
     //Hunger
-    public int GetHunger(){
-        return hunger;
-    }
-    public void AddHunger(int val){
+    public static void AddHunger(int val){
         hunger += val;
         if (hunger > 100){
             hunger = 100;
         }
     }
-    public void SubtractHunger(int val){
+    public static void SubtractHunger(int val){
         hunger -= val;
         if (hunger < 0){
             hunger = 0;
@@ -105,12 +116,12 @@ public class DataManager : MonoBehaviour {
     // save and load data here
     // handles first time login?
     void Start () {
-    
+
     }
-    
+
     // Update is called once per frame
     void Update () {
-    
+
     }
 
 

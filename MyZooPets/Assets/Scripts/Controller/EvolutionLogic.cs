@@ -2,27 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-//Decides and calculates when evolution should happen
-//Evolution meter = 0.5*mood + 0.5*health
+//Calculates evolution meter every 30 secs
+//Decides when pet hits evolution stage
 public class EvolutionLogic : MonoBehaviour {
 	private float timer = 0;
 	private float timeInterval = 30f;
+    private int level1EvolutionPoints = 50000;
+    private int level2EvolutionPoints = 150000;
 
 	// Use this for initialization
 	void Start () {
+        timer = timeInterval;
 
-		if (DataManager.FirstTime){
-			DataManager.lastUpdatedTime = DateTime.UtcNow;
-			DataManager.durationCum = new TimeSpan(0);
-
-			double evoVal = getEvoVal();
-			DataManager.lastEvoVal = evoVal;
-			DataManager.evoAverageCum = evoVal;
-
-			DataManager.FirstTime = false;
-
-			timer = timeInterval;
-		}
 	}
 
 	// Update is called once per frame
@@ -34,23 +25,34 @@ public class EvolutionLogic : MonoBehaviour {
 		}
 	}
 
-	void UpdateEvoAverage(){
+    //calculate evolution meter
+	private void UpdateEvoAverage(){
 		int cumDurationSecs = (int)DataManager.durationCum.TotalSeconds;
 		DateTime now = DateTime.UtcNow;
 		TimeSpan tempd = now.Subtract(DataManager.lastUpdatedTime);
 		int timeElapsedInSecs = (int)tempd.TotalSeconds;
 
-		double evoVal = getEvoVal();
-		double evoAverageNow = (evoVal + DataManager.lastEvoVal) / 2;
+		double evoMeter = getEvoMeter();
+		double evoAverageNow = (evoMeter + DataManager.lastEvoMeter) / 2;
 
-		// calculate the average evolution value, over the period of gameplay starting from hatching the pet up to now
-		DataManager.evoAverageCum = (DataManager.evoAverageCum * cumDurationSecs + evoAverageNow * timeElapsedInSecs) / (cumDurationSecs + timeElapsedInSecs);
+		//calculate the average evolution value, over the period of gameplay starting 
+        //from hatching the pet up to now
+		DataManager.evoAverageCum = (DataManager.evoAverageCum * cumDurationSecs + 
+            evoAverageNow * timeElapsedInSecs) / (cumDurationSecs + timeElapsedInSecs);
 		DataManager.lastUpdatedTime = now;
 		DataManager.durationCum += tempd;
-		DataManager.lastEvoVal = evoVal;
+		DataManager.lastEvoMeter = evoMeter;
 	}
 
-	double getEvoVal(){
+    //TO DO: Check points and decide how the pet should evolve according to evoAverageCum
+    private void CheckForEvolution(){
+        if(DataManager.Points >= level1EvolutionPoints){
+
+        }
+    }
+
+    //get the weighted evolution meter
+	private double getEvoMeter(){
 		return 0.5 * DataManager.Mood + 0.5 * DataManager.Health;
 	}
 }

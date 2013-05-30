@@ -7,21 +7,13 @@ using System;
 public class DataManager : MonoBehaviour {
 
     private static bool firstTime = true; // starting game for the first time
-    public static bool FirstTime{
-        get {return firstTime;}
-        set {
-            if (!value) {
-                firstTime = value;
-            }
-        }
-    }
 
     //points that are used for activating evolution
-    private static int points;
-    private static int stars;
-    private static int health;
-    private static int mood;
-    private static int hunger;
+    private static int points; //evolution points
+    private static int stars; //currency of the game
+    private static int health; //pet's health
+    private static int mood; //pet's mood (weighted or unweighted)
+    private static int hunger; //pet's hunger
 
     public static int Points{
         get {return points;}
@@ -39,13 +31,12 @@ public class DataManager : MonoBehaviour {
         get {return hunger;}
     }
 
-    //Data for evolution calculation
-    public static DateTime lastUpdatedTime;
-    public static TimeSpan durationCum;
-    public static double lastEvoVal;
-    public static double evoAverageCum;
-
-    //other mini game data
+    //Evolution Data
+    public static DateTime lastUpdatedTime; //last time evolution meter was calculated
+    public static TimeSpan durationCum; //the total time since hatching the pet
+    public static double lastEvoMeter; //last calculated evolution meter
+    public static double evoAverageCum; //cumulative average of evolution meter
+                                        //use this to decide how to evolve pet
 
     //Points
     public static void AddPoints(int val){
@@ -114,9 +105,26 @@ public class DataManager : MonoBehaviour {
 
     // Use this for initialization
     // save and load data here
-    // handles first time login?
     void Start () {
+        //first time playing the game. values need to be initialized
+        if (firstTime){
+            //Evolution Data initialization
+            lastUpdatedTime = DateTime.UtcNow;
+            durationCum = new TimeSpan(0);
+            lastEvoMeter = 0;
+            evoAverageCum = 0;
 
+            //Pet stats initialization
+            health = 50;
+            mood = 80;
+            hunger = 30;
+
+            //Game currency initialization
+            points = 0;
+            stars = 100;
+
+            firstTime = false;
+        }
     }
 
     // Update is called once per frame

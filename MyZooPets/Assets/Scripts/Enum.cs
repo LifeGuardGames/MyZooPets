@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public Enum EvoStages{
+public enum EvoStages{
     Amateur,
     Rookie,
     Mature,

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class RoomGui : MonoBehaviour {
+public class RoomGUI : MonoBehaviour {
 	
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;    //screen size 
@@ -32,52 +32,44 @@ public class RoomGui : MonoBehaviour {
 	public float mood;
 	public float health;
 		
-	private Vector2 tierBarloc;         
-	private Vector2 starBarloc;
-	private Vector2 healthBarloc;
-	private Vector2 moodBarloc;
-	private Vector2 foodBarloc;
-	private Vector2 starIconOffset;
-	private Vector2 healthIconOffset;
-	private Vector2 moodIconOffset;
-	private Vector2 foodIconOffset;
-	private Vector2 starTextOffset;
-	private Vector2 progressBarOffset;
-	private Vector2 progressTextOffset;
-	private Vector2 tierTextOffset;
-	private Vector2 healthBarOffset;
-	private Vector2 moodBarOffset;
-	private Vector2 foodbarOffset;
+	private Vector2 tierBarloc = new Vector2(0,2);
+	private Vector2 tierTextOffset = new Vector2(25,12);
+	
+	private Vector2 starBarloc = new Vector2(540,2);
+	private Vector2 starIconOffset = new Vector2(10,4);
+	private Vector2 starTextOffset = new Vector2(90,18);
+	private string starCount;
+	
+	private Vector2 healthBarloc = new Vector2(0,80);
+	private Vector2 healthIconOffset = new Vector2(5,18);
+	private Vector2 healthBarOffset = new Vector2(60,15);
+	
+	private Vector2 moodBarloc = new Vector2(0,180);
+	private Vector2 moodIconOffset = new Vector2(5,18);
+	private Vector2 moodBarOffset = new Vector2(60,15);
+	
+	private Vector2 foodBarloc = new Vector2(0,280);
+	private Vector2 foodIconOffset = new Vector2(3,20);
+	private Vector2 foodbarOffset = new Vector2(60,15);
+	
+	private Vector2 progressBarOffset = new Vector2(150,11);
+	private Vector2 progressTextOffset = new Vector2(230,12);
+	
 	private string tierLevel;
 	private string tierProgressText;
-	private string starCount;
 	
 	void Start (){
 		progress = 50f;
 		food = 30f;
 		mood = 50f;
 		health = 80f;
+		
 		isMenuExpanded = true;
 		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 475, 100);
-		tierBarloc = new Vector2(0,2);
-		starBarloc = new Vector2(540,2);
-		healthBarloc = new Vector2(0,80);
-		moodBarloc = new Vector2(0,180);
-		foodBarloc = new Vector2(0,280);
-		starIconOffset = new Vector2(10,4);
-		healthIconOffset = new Vector2(5,18);
-		moodIconOffset = new Vector2(5,18);
-		foodIconOffset = new Vector2(3,20);
-		starTextOffset = new Vector2(90,18);
-		progressBarOffset = new Vector2(150,11);
-		progressTextOffset = new Vector2(230,12);
-		tierTextOffset = new Vector2(25,12);
-		healthBarOffset = new Vector2(60,15);
-		moodBarOffset = new Vector2(60,15);
-		foodbarOffset = new Vector2(60,15);
 	}
 	
 	void Update (){
+		//TODO-s change this to read data
 		tierLevel = "Tier 1";
 		tierProgressText = "5000/10000";
 		starCount = "500";
@@ -90,7 +82,7 @@ public class RoomGui : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 	
-		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);  //temp room background 
+//		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);  //temp room background 
 		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
 		
 		
@@ -126,9 +118,6 @@ public class RoomGui : MonoBehaviour {
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFill, ScaleMode.ScaleAndCrop, true, 25/70);
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
-		
-		
-	   	
 		//Extending Button Groups
 		GUILayout.BeginArea(menuRect.rect, "test");
 		GUILayout.BeginHorizontal("box");

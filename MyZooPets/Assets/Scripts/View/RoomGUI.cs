@@ -12,7 +12,9 @@ public class RoomGui : MonoBehaviour {
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
 	public Texture2D starBarTexture;
-	public Texture2D statBarTexture;	
+	public Texture2D statBarTexture;
+	public Texture2D roomTexture;
+	public Texture2D demopet;
 	public GUIStyle starTextStyle;
 	
 	void Start (){
@@ -31,12 +33,14 @@ public class RoomGui : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 	
+		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);
 		GUI.DrawTexture(new Rect(0,2,530,75), tierBarTexture);
 		GUI.DrawTexture(new Rect(540,2,215,75), starBarTexture);
 		GUI.DrawTexture(new Rect(550,6,60,60), starTexture, ScaleMode.ScaleToFit);
 		GUI.DrawTexture(new Rect(0,80,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(0,180,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(0,280,100,100), statBarTexture);
+		GUI.DrawTexture(new Rect(330,300,500,500), demopet);
 	   	
 		GUI.TextField(new Rect(630,20,60,60),"X 500",starTextStyle);
 		//GUI.Box(new Rect(0, 0, 530, 60), "Tier level");

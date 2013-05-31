@@ -14,6 +14,9 @@ public class RoomGui : MonoBehaviour {
 	public Texture2D starBarTexture;
 	public Texture2D statBarTexture;
 	public Texture2D roomTexture;
+	public Texture2D foodIcon;
+	public Texture2D healthIcon;
+	public Texture2D moodIcon;
 	public Texture2D demopet;
 	public GUIStyle starTextStyle;
 	
@@ -40,14 +43,15 @@ public class RoomGui : MonoBehaviour {
 		GUI.DrawTexture(new Rect(0,80,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(0,180,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(0,280,100,100), statBarTexture);
+		GUI.DrawTexture(new Rect(5,100,54,53),healthIcon);
+		GUI.DrawTexture(new Rect(5,200,54,53),moodIcon);
+		GUI.DrawTexture(new Rect(3,300,61,53),foodIcon);
+		
+		
+		
 		GUI.DrawTexture(new Rect(330,300,500,500), demopet);
 	   	
 		GUI.TextField(new Rect(630,20,60,60),"X 500",starTextStyle);
-		//GUI.Box(new Rect(0, 0, 530, 60), "Tier level");
-		//GUI.Box(new Rect(540, 0, 200, 60), "Stars x " + 1);
-		//GUI.Box(new Rect(0, 70, 90, 90), "Health");
-		//GUI.Box(new Rect(0, 170, 90, 90), "Hunger");
-		//GUI.Box(new Rect(0, 270, 90, 90), "Mood");
 		
 		GUILayout.BeginArea(menuRect.rect, "test");
 		GUILayout.BeginHorizontal("box");

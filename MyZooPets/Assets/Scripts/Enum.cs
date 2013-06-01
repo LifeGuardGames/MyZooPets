@@ -1,9 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-public enum EvoStages{
+public enum EvoStage{
     Amateur,
     Rookie,
     Mature,
 }
+
+public enum DosageRecord{
+    Hit,
+    Null,
+    Miss,
+}
+
 

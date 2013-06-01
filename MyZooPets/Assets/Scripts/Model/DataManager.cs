@@ -1,20 +1,41 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 //This class handles all game data. No game logic
 //Saves and loads data into player preference
 public class DataManager : MonoBehaviour {
 
-    private static bool firstTime = true; // starting game for the first time
-
-    //points that are used for activating evolution
+    
+    //#region SaveData
+    private bool firstTime = true; // starting game for the first time
+    private static bool isCreated = false; //prevent DataManager from being loaded
+                                            //again during scene change
     private static int points; //evolution points
     private static int stars; //currency of the game
     private static int health; //pet's health
     private static int mood; //pet's mood (weighted or unweighted)
     private static int hunger; //pet's hunger
 
+    //Evolution Data
+    public static DateTime lastUpdatedTime; //last time evolution meter was calculated
+    public static TimeSpan durationCum; //the total time since hatching the pet
+    public static double lastEvoMeter; //last calculated evolution meter
+    public static double evoAverageCum; //cumulative average of evolution meter
+                                        //use this to decide how to evolve pet
+    
+    //Calendar Data
+    private static List<CalendarEntry> entries = new List<CalendarEntry>();
+    private static int calenderCombo = 0;
+    private static DateTime dateOfSunday; // keep track of the last day of the week,
+                                          // so we know if we have to clear the calendar
+                                          // for a new week or not.
+    private static DateTime lastPlayedDate;
+    //#endregion 
+
+    //#region Getters
+    //Stats
     public static int Points{
         get {return points;}
     }
@@ -31,13 +52,16 @@ public class DataManager : MonoBehaviour {
         get {return hunger;}
     }
 
-    //Evolution Data
-    public static DateTime lastUpdatedTime; //last time evolution meter was calculated
-    public static TimeSpan durationCum; //the total time since hatching the pet
-    public static double lastEvoMeter; //last calculated evolution meter
-    public static double evoAverageCum; //cumulative average of evolution meter
-                                        //use this to decide how to evolve pet
+    //calender 
+    public static List<CalendarEntry> Entries{get;set;}
+    public static int CalendarCombo{
+        get {return calenderCombo;}
+    }
+    public static DateTime LastPlayedDate{get; set;}
+    public static DateTime DateOfSunday{get; set;}
+    //#endregion
 
+    //#region StatsModifiers
     //Points
     public static void AddPoints(int val){
         points += val;
@@ -102,6 +126,15 @@ public class DataManager : MonoBehaviour {
             hunger = 0;
         }
     }
+    //#endregion
+
+    void Awake(){
+        if(isCreated){
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(transform.gameObject);
+        isCreated = true;
+    }
 
     // Use this for initialization
     // save and load data here
@@ -129,6 +162,20 @@ public class DataManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+    }
+
+    void OnApplicationPause(bool pauseStatus){
+        // if(pauseStatus) save data
+    }
+
+    void OnApplicationFocus(bool focusStatus){
+        // if(!focusStatus) save data
+            
+    }
+
+    //Save data before the game is quit
+    void OnApplicationQuit(){
 
     }
 

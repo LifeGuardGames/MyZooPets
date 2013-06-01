@@ -10,7 +10,7 @@ public class CalenderLogic : MonoBehaviour {
                                         //need to be saved
     List<CalendarEntry> tempEntries;
 
-    //#region API 
+    //#region API
     public int GetComboCount(){
         return DataManager.CalendarCombo;
     }
@@ -22,12 +22,12 @@ public class CalenderLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	   
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     void FirstTimeToday(){
@@ -60,11 +60,11 @@ public class CalenderLogic : MonoBehaviour {
             DataManager.LastPlayedDate = DateTime.Today;
         }
         else if (sinceLastPlayed.Days > 1){ //start missing days
-            tempEntries = new List<CalendarEntry>(); //temp list for calculation only                                        
+            tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
 
-            if(missedDays <= 3){ 
-                //if the player does not play for <=3 days, every dose of the drug 
+            if(missedDays <= 3){
+                //if the player does not play for <=3 days, every dose of the drug
                 //is taken by the pet with no misses
 
                 //generate entries for the missed days
@@ -75,8 +75,8 @@ public class CalenderLogic : MonoBehaviour {
                     tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
                 }
 
-            }else{ 
-                //if player misses for >3 days the pet starts missing doses with 60% 
+            }else{
+                //if player misses for >3 days the pet starts missing doses with 60%
                 //frequency for each 12 h dose and incurring the health consequences of this.
 
                 int counter; //use to tell how many missed day entries are without punishment
@@ -110,12 +110,13 @@ public class CalenderLogic : MonoBehaviour {
     //TO DO: when to set reset DateOfSunday
     private void IsNewWeek(){
         TimeSpan sinceLastPlayed = DateTime.Today.Subtract(DataManager.DateOfSunday);
-        if(DateTime.Today > DataManager.DateOfSunday){ 
+        if(DateTime.Today > DataManager.DateOfSunday){
             //today's  date is later than sunday
 
             TimeSpan sinceSunday = DateTime.Today - DataManager.DateOfSunday;
-            
+
             //create new list for the new week
+            // todo: do we need this? Since we're assigning something to DataManager.Entries right afterwards
             DataManager.Entries = new List<CalendarEntry>();
 
             //only move the latest entries into the new week
@@ -169,12 +170,12 @@ public class CalenderLogic : MonoBehaviour {
         }
         CalendarEntry today = new CalendarEntry(day, morning, afternoon);
         todaysEntry = today;
-        
+
     }
 
-    private DosageRecord GetHitOrMiss(int percentage){
+    private DosageRecord GetHitOrMiss(int missPercentage){
         int chance = rand.Next(100);
-        if (chance < percentage){
+        if (chance < missPercentage){
             return DosageRecord.Miss;
         }
         return DosageRecord.Hit;
@@ -185,6 +186,6 @@ public class CalenderLogic : MonoBehaviour {
         // rewardGivenToday = true;
     }
 
-    
+
 
 }

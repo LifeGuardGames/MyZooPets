@@ -9,19 +9,33 @@ public class RoomGUI : MonoBehaviour {
 	
 	private bool isMenuExpanded;
 	private LTRect menuRect;
+	private Rect menuTextureRect;
+	
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
 	public Texture2D starBarTexture;
 	public Texture2D statBarTexture;
+	public Texture2D itemBarTexture;
+	
 	public Texture2D roomTexture;
+	
 	public Texture2D foodIcon;
 	public Texture2D healthIcon;
 	public Texture2D moodIcon;
+	
 	public Texture2D demopet;
 	public Texture2D progressBarFrame;
 	public Texture2D progressBarFill;
 	public Texture2D statBarVerFill;
 	public Texture2D statBarVerFrame;
+	
+	public Texture2D inhalerTexture;
+	public Texture2D emInhalerTexture;
+	public Texture2D appleTexture;
+	public Texture2D sandwichTexture;
+	
+	public Texture2D plusTexture;
+	public Texture2D minusTexture;
 	
 	public GUIStyle starTextStyle;
 	public GUIStyle expreTextStyle;
@@ -58,6 +72,9 @@ public class RoomGUI : MonoBehaviour {
 	private string tierLevel;
 	private string tierProgressText;
 	
+	private int menuBoxHeight = 75;
+	private int menuBoxWidth = 75;
+	
 	void Start (){
 		progress = 50f;
 		food = 30f;
@@ -65,7 +82,7 @@ public class RoomGUI : MonoBehaviour {
 		health = 80f;
 		
 		isMenuExpanded = true;
-		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 475, 100);
+		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
 	}
 	
 	void Update (){
@@ -119,23 +136,25 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
 		//Extending Button Groups
-		GUILayout.BeginArea(menuRect.rect, "test");
-		GUILayout.BeginHorizontal("box");
-		GUILayout.Button("food", GUILayout.Height(90), GUILayout.Width(90));
-		GUILayout.Button("Inhaler", GUILayout.Height(90), GUILayout.Width(90));
-		GUILayout.Button("explore", GUILayout.Height(90), GUILayout.Width(90));
-		GUILayout.Button("EmInhaler", GUILayout.Height(90), GUILayout.Width(90));
+		menuTextureRect = new Rect(menuRect.rect.x - 600, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
+		GUI.DrawTexture(menuTextureRect, itemBarTexture);
+		GUILayout.BeginArea(menuRect.rect, "");
+		GUILayout.BeginHorizontal("");
+		GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
+		GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
+		GUILayout.Button(inhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
+		GUILayout.Button(emInhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
 		
 		if(isMenuExpanded){
-			if(GUILayout.Button("-", GUILayout.Height(90), GUILayout.Width(90))){
+			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 				isMenuExpanded = false;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);
-				LeanTween.move(menuRect, new Vector2(-376, NATIVE_HEIGHT - 100), 0.3f, optional);
+				LeanTween.move(menuRect, new Vector2(-317, NATIVE_HEIGHT - 100), 0.3f, optional);
 			}
 		}
 		else{
-			if(GUILayout.Button("+", GUILayout.Height(90), GUILayout.Width(90))){
+			if(GUILayout.Button(plusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 				isMenuExpanded = true;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);

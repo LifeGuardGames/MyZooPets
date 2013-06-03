@@ -47,3 +47,5 @@ public class CameraMove : MonoBehaviour {
 		CameraTransform(initPosition,initFaceDirection);
 	}
 }
+
+

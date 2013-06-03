@@ -6,8 +6,7 @@ using System;
 public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
-    private static CalendarEntry todaysEntry; //Not sure if this would work because the data would
-                                        //need to be saved
+    private static CalendarEntry todaysEntry;
     private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
@@ -19,7 +18,7 @@ public class CalendarLogic : MonoBehaviour {
         return DataManager.Entries;
     }
 
-    // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
+    // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
     public static DateTime GetDateOfSunday(DateTime dateTime){
         if (dateTime.DayOfWeek == DayOfWeek.Sunday){
             return dateTime;
@@ -37,13 +36,16 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     // call after giving inhaler to pet
-    public static void UpdateComboCount(){
-        UpdateComboCountOnDate(DateTime.Today);
+    public static void RecordAfternoonEntry(){
+        RecordAfternoonEntry(DateTime.Today);
     }
 
     // todo: for testing, delete later
     public static void CalendarOpenedTest(DateTime day){
         CalendarOpenedOnDate(day);
+    }
+    public static void RecordAfternoonEntryTest(DateTime day){
+        RecordAfternoonEntry(day);
     }
     //#endregion
 
@@ -93,13 +95,18 @@ public class CalendarLogic : MonoBehaviour {
 
             //by now tempEntries should include all the entries for the missed days
             //generate entries for today. add to list and update LastPlayedDate
-            GenerateEntry(today);
+            GenerateEntry(today); // stored in todaysEntry
             tempEntries.Add(todaysEntry); //add todays entry back in tempEntries
             IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 
             UpdateComboCountOnDate(today);
             DataManager.LastPlayedDate = today;
         }
+    }
+
+    private static void RecordAfternoonEntry(DateTime today){
+        todaysEntry.Afternoon = DosageRecord.Hit;
+        UpdateComboCountOnDate(today);
     }
 
 
@@ -110,11 +117,13 @@ public class CalendarLogic : MonoBehaviour {
         if (sinceLastCombo.Days > 1){ // missed at least one day
             DataManager.ResetCalendarCombo();
         }
-        if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
-            DataManager.IncrementCalendarCombo();
-            DataManager.LastComboDate = today;
+        // check if calendarCombo is already incremented for that day
+        if (DataManager.LastComboDate != today){
+            if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
+                DataManager.IncrementCalendarCombo();
+                DataManager.LastComboDate = today;
+            }
         }
-
     }
 
     private static DayOfWeek GetDay(DateTime day){
@@ -139,11 +148,6 @@ public class CalendarLogic : MonoBehaviour {
             DataManager.Entries.AddRange(tempEntries);
         }
     }
-
-    // private static DateTime FewDaysAgo(int days){
-    //     TimeSpan timeSpan = new TimeSpan(days, 0, 0, 0); //convert missed days to timespan
-    //     return DateTime.Today.Subtract(timeSpan);
-    // }
 
     private static CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);

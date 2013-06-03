@@ -8,7 +8,10 @@ public class LogicTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // AddCalendarEntries();
-        CalendarOpenedTest();
+        CalendarOpenedTestConsecutive();
+        // CalendarOpenedTestSkip1();
+        // CalendarOpenedTestSkip2();
+        CalendarOpenedTestSkip5();
         PrintCalendarEntries();
         GetComboCountTest();
 	}
@@ -31,12 +34,14 @@ public class LogicTest : MonoBehaviour {
         Debug.Log("GetDateOfSunday(DateTime.Today.AddDays(7))... Day specified is a " + DateTime.Today.AddDays(7).DayOfWeek + ". Date of Sunday is " + CalendarLogic.GetDateOfSunday(DateTime.Today.AddDays(7)));
     }
 
+    // tested 6/3/2013 - works properly
     void GetComboCountTest(){
         Debug.Log("Debugging GetComboCount()");
         Debug.Log("GetComboCount() -> " + CalendarLogic.GetComboCount());
     }
 
     // to populate calendar entries
+    // tested 6/3/2013 - works properly
     void AddCalendarEntries(){
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
         entries.Add(new CalendarEntry( DayOfWeek.Monday, DosageRecord.Hit, DosageRecord.Hit) );
@@ -45,6 +50,7 @@ public class LogicTest : MonoBehaviour {
         entries.Add(new CalendarEntry( DayOfWeek.Thursday, DosageRecord.Hit, DosageRecord.Hit) );
     }
 
+    // tested 6/3/2013 - works properly
     void PrintCalendarEntries(){
         Debug.Log("Debugging GetCalendarEntries()");
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
@@ -52,15 +58,42 @@ public class LogicTest : MonoBehaviour {
             CalendarEntry entry = entries[i];
             Debug.Log(entry.Day + " -> " + entry.Morning + ", " + entry.Afternoon);
         }
-
     }
 
     // tested 6/3/2013 - works properly
-    void CalendarOpenedTest(){
+    void RecordAfternoonEntryTest(DateTime day){
+        CalendarLogic.RecordAfternoonEntryTest(day);
+    }
+
+    // tested 6/3/2013 - works properly
+    void CalendarOpenedTestConsecutive(){
         CalendarLogic.CalendarOpenedTest(DateTime.Today);
         CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(1));
         CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(2));
+        RecordAfternoonEntryTest(DateTime.Today.AddDays(2));
+        // CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(3));
+        // CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(4));
+        // RecordAfternoonEntryTest(DateTime.Today.AddDays(4));
+    }
+
+    // tested 6/3/2013 - works properly
+    void CalendarOpenedTestSkip1(){
+        CalendarLogic.CalendarOpenedTest(DateTime.Today);
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(2));
+    }
+    // tested 6/3/2013 - works properly
+    void CalendarOpenedTestSkip2(){
+        CalendarLogic.CalendarOpenedTest(DateTime.Today);
         CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(3));
-        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(4));
+    }
+    // tested 6/3/2013 - works properly
+    void CalendarOpenedTestSkip5(){
+        CalendarLogic.CalendarOpenedTest(DateTime.Today);
+        Debug.Log("Six days from today: " + DateTime.Today.AddDays(6).DayOfWeek);
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(6));
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(7));
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(8));
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(9));
+        CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(10));
     }
 }

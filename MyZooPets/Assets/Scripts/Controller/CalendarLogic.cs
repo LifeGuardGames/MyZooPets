@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public static class CalendarLogic {
+public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
     private static CalendarEntry todaysEntry; //Not sure if this would work because the data would

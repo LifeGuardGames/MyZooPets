@@ -17,18 +17,8 @@ public class CalendarLogic : MonoBehaviour {
 
     public List<CalendarEntry> GetCalendarEntries(){
         return DataManager.Entries;
-    } 
+    }
     //#endregion
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
 
     //#region static functions
     // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.

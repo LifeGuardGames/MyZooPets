@@ -11,8 +11,14 @@ public class CalendarEntry{
         get{return day;}
     }
 
-    public DosageRecord Morning{get; set;}
-    public DosageRecord Afternoon{get; set;}
+    public DosageRecord Morning{
+        get { return this.morning;}
+        set { this.morning = value;}
+    }
+    public DosageRecord Afternoon{
+        get { return this.afternoon;}
+        set { this.afternoon = value;}
+    }
 
     public CalendarEntry(DayOfWeek day, DosageRecord morning, DosageRecord afternoon ){
         this.day = day;

@@ -6,8 +6,7 @@ using System;
 public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
-    private static CalendarEntry todaysEntry; //Not sure if this would work because the data would
-                                        //need to be saved
+    private static CalendarEntry todaysEntry;
     private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
@@ -19,7 +18,7 @@ public class CalendarLogic : MonoBehaviour {
         return DataManager.Entries;
     }
 
-    // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
+    // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
     public static DateTime GetDateOfSunday(DateTime dateTime){
         if (dateTime.DayOfWeek == DayOfWeek.Sunday){
             return dateTime;
@@ -96,7 +95,7 @@ public class CalendarLogic : MonoBehaviour {
 
             //by now tempEntries should include all the entries for the missed days
             //generate entries for today. add to list and update LastPlayedDate
-            GenerateEntry(today);
+            GenerateEntry(today); // stored in todaysEntry
             tempEntries.Add(todaysEntry); //add todays entry back in tempEntries
             IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 

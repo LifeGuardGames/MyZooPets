@@ -10,9 +10,9 @@ public class DataManager : MonoBehaviour {
     //#region Developer option
     public bool isDebugging = false;
 
-    //#endregion
 
-    private static bool loaded = false;
+    //#region SaveData
+    private bool firstTime = true; // starting game for the first time
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
     private bool firstTime; // starting game for the first time
@@ -39,19 +39,20 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     public static double evoAverageCum; //cumulative average of evolution meter
                                         //use this to decide how to evolve pet
-    
+
     //Calendar Data
     // [SerializeThis]
     private static List<CalendarEntry> entries; //list of entries that represent a weak
     [SerializeThis]
     private static int calenderCombo; //how many times user has open the calendar consecutively
     [SerializeThis]
+    private static int calendarCombo; //how many times user has open the calendar consecutively
     private static DateTime dateOfSunday; // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
     [SerializeThis]
     private static DateTime lastPlayedDate; //the last time that the user used the calendar
-    //#endregion 
+    //#endregion
 
     //#region Getters
     //Stats
@@ -71,10 +72,10 @@ public class DataManager : MonoBehaviour {
         get {return hunger;}
     }
 
-    //calender 
+    //calender
     public static List<CalendarEntry> Entries{get;set;}
     public static int CalendarCombo{
-        get {return calenderCombo;}
+        get {return calendarCombo;}
     }
     public static DateTime LastPlayedDate{get; set;}
     public static DateTime DateOfSunday{get; set;}
@@ -178,7 +179,7 @@ public class DataManager : MonoBehaviour {
 
             //Calendar data initialization
             entries = new List<CalendarEntry>();
-            calenderCombo = 0;
+            calendarCombo = 0;
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             lastPlayedDate = DateTime.Now;
 
@@ -207,6 +208,11 @@ public class DataManager : MonoBehaviour {
             PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
             Debug.Log(LevelSerializer.SerializeLevel());
         }
+    }
+
+    void OnApplicationFocus(bool focusStatus){
+        // if(!focusStatus) save data
+
     }
 
     //Save data before the game is quit

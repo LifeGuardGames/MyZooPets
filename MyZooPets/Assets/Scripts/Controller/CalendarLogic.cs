@@ -37,13 +37,16 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     // call after giving inhaler to pet
-    public static void UpdateComboCount(){
-        UpdateComboCountOnDate(DateTime.Today);
+    public static void RecordAfternoonEntry(){
+        RecordAfternoonEntry(DateTime.Today);
     }
 
     // todo: for testing, delete later
     public static void CalendarOpenedTest(DateTime day){
         CalendarOpenedOnDate(day);
+    }
+    public static void RecordAfternoonEntryTest(DateTime day){
+        RecordAfternoonEntry(day);
     }
     //#endregion
 
@@ -102,6 +105,11 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
+    private static void RecordAfternoonEntry(DateTime today){
+        todaysEntry.Afternoon = DosageRecord.Hit;
+        UpdateComboCountOnDate(today);
+    }
+
 
     private static void UpdateComboCountOnDate(DateTime today){
         TimeSpan sinceLastCombo = today.Subtract(DataManager.LastComboDate);
@@ -110,11 +118,13 @@ public class CalendarLogic : MonoBehaviour {
         if (sinceLastCombo.Days > 1){ // missed at least one day
             DataManager.ResetCalendarCombo();
         }
-        if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
-            DataManager.IncrementCalendarCombo();
-            DataManager.LastComboDate = today;
+        // check if calendarCombo is already incremented for that day
+        if (DataManager.LastComboDate != today){
+            if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
+                DataManager.IncrementCalendarCombo();
+                DataManager.LastComboDate = today;
+            }
         }
-
     }
 
     private static DayOfWeek GetDay(DateTime day){

@@ -93,6 +93,8 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+	
+		GUI.depth = 1;
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     //porpotional scaling
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;

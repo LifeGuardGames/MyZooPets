@@ -7,14 +7,14 @@ public class DiaryUIManager : MonoBehaviour {
 	
 	public Texture2D DiaryTexture;
 	
-	private Vector2 diaryInitPosition = new Vector2(100,-700);
-	private Vector2 diaryFinalPosition = new Vector2(100,100);
+	private Vector2 diaryInitPosition = new Vector2(125,-700);
+	private Vector2 diaryFinalPosition = new Vector2(125,100);
 	private LTRect diaryRect;
 	// Use this for initialization
 	void Start () {
 	
-		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 900, 500);
-	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 900, 500);
+	//	diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 1000, 500);
+		diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 1100, 650);
 	}
 	
 	// Update is called once per frame
@@ -45,9 +45,20 @@ public class DiaryUIManager : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		GUI.depth = 0;
 		GUI.DrawTexture(diaryRect.rect,DiaryTexture);
-		//GUI.Box(diaryRect.rect,"Diary");
 		
+		GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+130,400,500), "");
+		GUILayout.BeginVertical("");
+		for(int i = 0;i < 7; i++)
+		{
+			GUILayout.BeginHorizontal("");
+			GUILayout.Button("testing",GUILayout.Height(60),GUILayout.Width(175));
+			GUILayout.Button("testing",GUILayout.Height(60),GUILayout.Width(175));
+			GUILayout.EndHorizontal();	
+		}
+		GUILayout.EndVertical();
+		GUILayout.EndArea();
 
 		
 	}

@@ -29,9 +29,7 @@ public class CalendarEntry{
         this.morning = morning;
         this.afternoon = afternoon;
     }
-
-    public CalendarEntry(){
-        
-    }
+    //parameterless constructor required for Serializer
+    public CalendarEntry(){}
 }
 

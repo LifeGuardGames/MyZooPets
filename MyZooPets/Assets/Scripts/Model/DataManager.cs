@@ -11,9 +11,6 @@ public class DataManager : MonoBehaviour {
     public bool isDebugging = false;
     private bool loaded = false;
 
-
-    //#region SaveData
-    private bool firstTime = true; // starting game for the first time
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
     
@@ -47,11 +44,13 @@ public class DataManager : MonoBehaviour {
     private static int calenderCombo; //how many times user has open the calendar consecutively
     [SerializeThis]
     private static int calendarCombo; //how many times user has open the calendar consecutively
+    [SerializeThis]
     private static DateTime dateOfSunday; // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
     [SerializeThis]
     private static DateTime lastPlayedDate; //the last time that the user used the calendar
+    [SerializeThis]
     private static DateTime lastComboDate; //the last day that the user continued the combo
     //#endregion
 
@@ -225,7 +224,7 @@ public class DataManager : MonoBehaviour {
     //called when level data are loaded
     void OnDeserialized(){
         Debug.Log("health " + health + "mood " + mood);
-        Debug.Log(entries[0].Day);
+        // Debug.Log(entries[0].Day);
     }
 
     void OnApplicationPause(bool paused){

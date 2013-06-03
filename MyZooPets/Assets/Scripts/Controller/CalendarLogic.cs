@@ -30,6 +30,7 @@ public static class CalendarLogic {
             return nextSunday;
         }
     }
+
     public static void CalendarOpened(){
 
         // compare today's date and last updated day (calendar)

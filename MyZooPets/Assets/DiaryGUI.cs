@@ -5,6 +5,8 @@ public class DiaryGUI : MonoBehaviour {
 
 	bool showGUI = false;
 	
+	public Texture2D DiaryTexture;
+	
 	private Vector2 diaryInitPosition = new Vector2(150,-700);
 	private Vector2 diaryFinalPosition = new Vector2(150,100);
 	private LTRect diaryRect;
@@ -42,8 +44,8 @@ public class DiaryGUI : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		
-		GUI.Box(diaryRect.rect,"Diary");
+		GUI.DrawTexture(diaryRect.rect,DiaryTexture);
+		//GUI.Box(diaryRect.rect,"Diary");
 		
 
 		

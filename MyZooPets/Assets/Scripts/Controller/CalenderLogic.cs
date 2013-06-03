@@ -18,6 +18,18 @@ public class CalenderLogic : MonoBehaviour {
     public List<CalendarEntry> GetCalendarEntries(){
         return DataManager.Entries;
     }
+
+    // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
+    public static DateTime GetDateOfSunday(DateTime dateTime){
+        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
+            return dateTime;
+        }
+        else {
+            int dayOfWeek = (int) dateTime.DayOfWeek;
+            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
+            return nextSunday;
+        }
+    }
     //#endregion
 
 	// Use this for initialization
@@ -53,13 +65,7 @@ public class CalenderLogic : MonoBehaviour {
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry();
         }
-        else if (sinceLastPlayed.Days == 1){ // if next day. no miss days
-            GenerateEntryToday();
-
-            DataManager.Entries.Add(todaysEntry);
-            DataManager.LastPlayedDate = DateTime.Today;
-        }
-        else if (sinceLastPlayed.Days > 1){ //start missing days
+        else if (sinceLastPlayed.Days >= 1){ //start missing days
             tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
 
@@ -121,6 +127,8 @@ public class CalenderLogic : MonoBehaviour {
 
             //only move the latest entries into the new week
             DataManager.Entries = tempEntries.GetRange(tempEntries.Count - sinceSunday.Days, sinceSunday.Days);
+
+            DataManager.DateOfSunday = GetDateOfSunday(DateTime.Today);
 
             // sinceLastPlayed.Days
         }else{ //same week so all temporary entries get displayed

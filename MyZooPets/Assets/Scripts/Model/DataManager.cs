@@ -73,7 +73,10 @@ public class DataManager : MonoBehaviour {
     }
 
     //calendar
-    public static List<CalendarEntry> Entries{get;set;}
+    public static List<CalendarEntry> Entries{
+        get{return entries;}
+        set{entries = value;}
+    }
     public static int CalendarCombo{
         get {return calendarCombo;}
     }

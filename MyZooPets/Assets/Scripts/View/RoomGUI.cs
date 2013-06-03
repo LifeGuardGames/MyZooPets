@@ -100,7 +100,7 @@ public class RoomGUI : MonoBehaviour {
 		}
 	
 //		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);  //temp room background 
-		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
+//		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
 		
 		
 		//Room GUI Positioning 

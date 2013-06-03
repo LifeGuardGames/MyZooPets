@@ -150,11 +150,6 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    // private static DateTime FewDaysAgo(int days){
-    //     TimeSpan timeSpan = new TimeSpan(days, 0, 0, 0); //convert missed days to timespan
-    //     return DateTime.Today.Subtract(timeSpan);
-    // }
-
     private static CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
     }

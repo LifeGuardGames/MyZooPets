@@ -40,6 +40,15 @@ public class CalendarLogic : MonoBehaviour {
             SameDayGenerateEntry();
         }
         else if (sinceLastPlayed.Days >= 1){ //start missing days
+
+            // update combo count
+            if (sinceLastPlayed == 1){
+                DataManager.CalendarCombo ++;
+            }
+            else {
+                DataManager.CalendarCombo = 0;
+            }
+
             tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
 

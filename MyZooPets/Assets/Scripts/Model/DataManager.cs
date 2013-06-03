@@ -15,7 +15,6 @@ public class DataManager : MonoBehaviour {
     private static bool loaded = false;
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
-    private bool firstTime; // starting game for the first time
     
     //#region SaveData    
     [SerializeThis]
@@ -178,6 +177,9 @@ public class DataManager : MonoBehaviour {
 
             //Calendar data initialization
             entries = new List<CalendarEntry>();
+            // entries.Add(newDayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
+            // entries.Add(DayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
+            // entries.Add(DayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
             calenderCombo = 0;
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             lastPlayedDate = DateTime.Now;
@@ -203,7 +205,7 @@ public class DataManager : MonoBehaviour {
 
     void OnApplicationPause(bool paused){
         // Debug.Log(JSONLevelSerializer.SerializeLevel());
-        if(paused && !firstTime){
+        if(paused){
             PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
             Debug.Log(LevelSerializer.SerializeLevel());
         }

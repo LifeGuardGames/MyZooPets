@@ -2,9 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+[DoNotSerializePublic]
 public class CalendarEntry{
+    [SerializeThis]
     private DayOfWeek day;
+    [SerializeThis]
     private DosageRecord morning;
+    [SerializeThis]
     private DosageRecord afternoon;
 
     public DayOfWeek Day{
@@ -24,6 +28,10 @@ public class CalendarEntry{
         this.day = day;
         this.morning = morning;
         this.afternoon = afternoon;
+    }
+
+    public CalendarEntry(){
+        
     }
 }
 

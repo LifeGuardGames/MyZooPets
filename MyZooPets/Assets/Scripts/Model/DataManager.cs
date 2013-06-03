@@ -41,7 +41,7 @@ public class DataManager : MonoBehaviour {
                                         //use this to decide how to evolve pet
 
     //Calendar Data
-    // [SerializeThis]
+    [SerializeThis]
     private static List<CalendarEntry> entries; //list of entries that represent a weak
     [SerializeThis]
     private static int calenderCombo; //how many times user has open the calendar consecutively
@@ -203,9 +203,6 @@ public class DataManager : MonoBehaviour {
             //Calendar data initialization
             entries = new List<CalendarEntry>();
             calendarCombo = 0;
-            // entries.Add(newDayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
-            // entries.Add(DayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
-            // entries.Add(DayOfWeek.Saturday, DosageRecord.Hit, DosageRecord.Hit);
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             // set to one day before today so that the entry will be generated for the first day
             lastPlayedDate = DateTime.Today.AddDays(-1);
@@ -228,13 +225,14 @@ public class DataManager : MonoBehaviour {
     //called when level data are loaded
     void OnDeserialized(){
         Debug.Log("health " + health + "mood " + mood);
+        Debug.Log(entries[0].Day);
     }
 
     void OnApplicationPause(bool paused){
         // Debug.Log(JSONLevelSerializer.SerializeLevel());
         if(paused){
             PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-            Debug.Log(LevelSerializer.SerializeLevel());
+            Debug.Log(JSONLevelSerializer.SerializeLevel());
         }
     }
 

@@ -99,9 +99,6 @@ public class CalendarLogic : MonoBehaviour {
             TimeSpan sinceSunday = DateTime.Today - DataManager.DateOfSunday;
 
             //create new list for the new week
-            // todo: do we need this? Since we're assigning something to DataManager.Entries right afterwards
-            DataManager.Entries = new List<CalendarEntry>();
-
             //only move the latest entries into the new week
             DataManager.Entries = tempEntries.GetRange(tempEntries.Count - sinceSunday.Days, sinceSunday.Days);
 

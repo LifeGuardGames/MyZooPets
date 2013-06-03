@@ -3,24 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarLogic : MonoBehaviour {
+public static class CalendarLogic {
 
-    private System.Random rand = new System.Random();
-    private CalendarEntry todaysEntry; //Not sure if this would work because the data would
+    private static System.Random rand = new System.Random();
+    private static CalendarEntry todaysEntry; //Not sure if this would work because the data would
                                         //need to be saved
-    List<CalendarEntry> tempEntries;
+    private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
-    public int GetComboCount(){
+    public static int GetComboCount(){
         return DataManager.CalendarCombo;
     }
 
-    public List<CalendarEntry> GetCalendarEntries(){
+    public static List<CalendarEntry> GetCalendarEntries(){
         return DataManager.Entries;
     }
-    //#endregion
 
-    //#region static functions
     // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
     public static DateTime GetDateOfSunday(DateTime dateTime){
         if (dateTime.DayOfWeek == DayOfWeek.Sunday){
@@ -32,13 +30,7 @@ public class CalendarLogic : MonoBehaviour {
             return nextSunday;
         }
     }
-    //#endregion
-
-    private DayOfWeek getDayToday(){
-        return DateTime.Today.DayOfWeek;
-    }
-
-    private void CalendarOpened(){
+    public static void CalendarOpened(){
 
         // compare today's date and last updated day (calendar)
         TimeSpan sinceLastPlayed = DateTime.Today.Subtract(DataManager.LastPlayedDate);
@@ -91,10 +83,15 @@ public class CalendarLogic : MonoBehaviour {
             DataManager.LastPlayedDate = DateTime.Today;
         }
     }
+    //#endregion
+
+    private static DayOfWeek getDayToday(){
+        return DateTime.Today.DayOfWeek;
+    }
 
     //Check if it is a new week. Figure out how many entries need to be displayed
     //in the new week
-    private void IsNewWeek(){
+    private static void IsNewWeek(){
         if(DateTime.Today > DataManager.DateOfSunday){
             //today's  date is later than sunday
 
@@ -114,17 +111,17 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    // private DateTime FewDaysAgo(int days){
+    // private static DateTime FewDaysAgo(int days){
     //     TimeSpan timeSpan = new TimeSpan(days, 0, 0, 0); //convert missed days to timespan
     //     return DateTime.Today.Subtract(timeSpan);
     // }
 
-    private CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
+    private static CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
     }
 
     //60% frequency for each 12h dose: morning, afternoon
-    private CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
+    private static CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
         DosageRecord morning, afternoon;
         morning = GetHitOrMiss(60);
         afternoon = GetHitOrMiss(60);
@@ -132,7 +129,7 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, morning, afternoon);
     }
 
-    private void SameDayGenerateEntry(){
+    private static void SameDayGenerateEntry(){
         // check if morning or afternoon
         if (DateTime.Now.Hour < 12){ // morning
             // should be already generated, so do nothing
@@ -142,7 +139,7 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private void GenerateEntryToday(){
+    private static void GenerateEntryToday(){
         DayOfWeek day = getDayToday();
 
         DosageRecord morning, afternoon;
@@ -159,7 +156,7 @@ public class CalendarLogic : MonoBehaviour {
 
     }
 
-    private DosageRecord GetHitOrMiss(int missPercentage){
+    private static DosageRecord GetHitOrMiss(int missPercentage){
         int chance = rand.Next(100);
         if (chance < missPercentage){
             return DosageRecord.Miss;

@@ -26,12 +26,12 @@ public class DataManager : MonoBehaviour {
                                         //use this to decide how to evolve pet
     
     //Calendar Data
-    private static List<CalendarEntry> entries = new List<CalendarEntry>();
-    private static int calenderCombo = 0;
+    private static List<CalendarEntry> entries; //list of entries that represent a weak
+    private static int calenderCombo; //how many times user has open the calendar consecutively
     private static DateTime dateOfSunday; // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
-    private static DateTime lastPlayedDate;
+    private static DateTime lastPlayedDate; //the last time that the user used the calendar
     //#endregion 
 
     //#region Getters
@@ -141,7 +141,7 @@ public class DataManager : MonoBehaviour {
     void Start () {
         //first time playing the game. values need to be initialized
         if (firstTime){
-            //Evolution Data initialization
+            //Evolution data initialization
             lastUpdatedTime = DateTime.UtcNow;
             durationCum = new TimeSpan(0);
             lastEvoMeter = 0;
@@ -156,6 +156,13 @@ public class DataManager : MonoBehaviour {
             points = 0;
             stars = 100;
 
+            //Calendar data initialization
+            entries = new List<CalendarEntry>();
+            calenderCombo = 0;
+            dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
+            lastPlayedDate = DateTime.Now;
+
+            //turn first time initialization off
             firstTime = false;
         }
     }

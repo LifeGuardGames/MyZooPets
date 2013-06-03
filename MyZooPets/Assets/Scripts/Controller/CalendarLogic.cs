@@ -3,33 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalenderLogic : MonoBehaviour {
+public class CalendarLogic : MonoBehaviour {
 
     private System.Random rand = new System.Random();
     private CalendarEntry todaysEntry; //Not sure if this would work because the data would
                                         //need to be saved
     List<CalendarEntry> tempEntries;
 
-    //#region API
+    //#region API (use this for the UI)
     public int GetComboCount(){
         return DataManager.CalendarCombo;
     }
 
     public List<CalendarEntry> GetCalendarEntries(){
         return DataManager.Entries;
-    }
-
-    // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
-    public static DateTime GetDateOfSunday(DateTime dateTime){
-        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
-            return dateTime;
-        }
-        else {
-            int dayOfWeek = (int) dateTime.DayOfWeek;
-            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
-            return nextSunday;
-        }
-    }
+    } 
     //#endregion
 
 	// Use this for initialization
@@ -42,16 +30,19 @@ public class CalenderLogic : MonoBehaviour {
 
 	}
 
-    void FirstTimeToday(){
-        // rewardGivenToday = false;
+    //#region static functions
+    // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
+    public static DateTime GetDateOfSunday(DateTime dateTime){
+        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
+            return dateTime;
+        }
+        else {
+            int dayOfWeek = (int) dateTime.DayOfWeek;
+            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
+            return nextSunday;
+        }
     }
-
-    // void Calculate(){
-    //     GenerateEntryToday();
-    //     // if (!rewardGivenToday) {
-    //         GiveReward();
-    //     // }
-    // }
+    //#endregion
 
     private DayOfWeek getDayToday(){
         return DateTime.Today.DayOfWeek;

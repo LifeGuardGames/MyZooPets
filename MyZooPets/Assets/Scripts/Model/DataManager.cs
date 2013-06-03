@@ -5,32 +5,51 @@ using System;
 
 //This class handles all game data. No game logic
 //Saves and loads data into player preference
+[DoNotSerializePublic]
 public class DataManager : MonoBehaviour {
+    //#region Developer option
+    public bool isDebugging = false;
 
-    
-    //#region SaveData
-    private bool firstTime = true; // starting game for the first time
+    //#endregion
+
+    private static bool loaded = false;
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
+    private bool firstTime; // starting game for the first time
+    
+    //#region SaveData    
+    [SerializeThis]
     private static int points; //evolution points
+    [SerializeThis]
     private static int stars; //currency of the game
+    [SerializeThis]
     private static int health; //pet's health
+    [SerializeThis]
     private static int mood; //pet's mood (weighted or unweighted)
+    [SerializeThis]
     private static int hunger; //pet's hunger
 
     //Evolution Data
+    [SerializeThis]
     public static DateTime lastUpdatedTime; //last time evolution meter was calculated
+    [SerializeThis]
     public static TimeSpan durationCum; //the total time since hatching the pet
+    [SerializeThis]
     public static double lastEvoMeter; //last calculated evolution meter
+    [SerializeThis]
     public static double evoAverageCum; //cumulative average of evolution meter
                                         //use this to decide how to evolve pet
     
     //Calendar Data
+    // [SerializeThis]
     private static List<CalendarEntry> entries; //list of entries that represent a weak
+    [SerializeThis]
     private static int calenderCombo; //how many times user has open the calendar consecutively
+    [SerializeThis]
     private static DateTime dateOfSunday; // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
+    [SerializeThis]
     private static DateTime lastPlayedDate; //the last time that the user used the calendar
     //#endregion 
 
@@ -140,7 +159,8 @@ public class DataManager : MonoBehaviour {
     // save and load data here
     void Start () {
         //first time playing the game. values need to be initialized
-        if (firstTime){
+        if(isDebugging) PlayerPrefs.DeleteAll();
+        if (PlayerPrefs.GetInt("FirstTime", 1) > 0){
             //Evolution data initialization
             lastUpdatedTime = DateTime.UtcNow;
             durationCum = new TimeSpan(0);
@@ -148,7 +168,7 @@ public class DataManager : MonoBehaviour {
             evoAverageCum = 0;
 
             //Pet stats initialization
-            health = 50;
+            health = 100;
             mood = 80;
             hunger = 30;
 
@@ -163,28 +183,34 @@ public class DataManager : MonoBehaviour {
             lastPlayedDate = DateTime.Now;
 
             //turn first time initialization off
-            firstTime = false;
+            PlayerPrefs.SetInt("FirstTime", 0);
+        }else{ //load saved data
+            if(!loaded){
+                loaded = true;
+                string data = PlayerPrefs.GetString("_SAVE_GAME_","");
+                if(!string.IsNullOrEmpty(data)){
+                    LevelSerializer.LoadSavedLevel(data);
+                }
+            }
         }
+        
     }
 
-    // Update is called once per frame
-    void Update () {
-
+    //called when level data are loaded
+    void OnDeserialized(){
+        Debug.Log("health " + health + "mood " + mood);
     }
 
-    void OnApplicationPause(bool pauseStatus){
-        // if(pauseStatus) save data
-    }
-
-    void OnApplicationFocus(bool focusStatus){
-        // if(!focusStatus) save data
-            
+    void OnApplicationPause(bool paused){
+        // Debug.Log(JSONLevelSerializer.SerializeLevel());
+        if(paused && !firstTime){
+            PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
+            Debug.Log(LevelSerializer.SerializeLevel());
+        }
     }
 
     //Save data before the game is quit
     void OnApplicationQuit(){
 
     }
-
-
 }

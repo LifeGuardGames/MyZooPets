@@ -80,8 +80,14 @@ public class DataManager : MonoBehaviour {
     public static int CalendarCombo{
         get {return calendarCombo;}
     }
-    public static DateTime LastPlayedDate{get; set;}
-    public static DateTime DateOfSunday{get; set;}
+    public static DateTime LastPlayedDate{
+        get { return lastPlayedDate;}
+        set { lastPlayedDate = value;}
+    }
+    public static DateTime DateOfSunday{
+        get { return dateOfSunday;}
+        set { dateOfSunday = value;}
+    }
     //#endregion
 
     //#region StatsModifiers

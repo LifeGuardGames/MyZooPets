@@ -5,32 +5,20 @@ using System;
 
 public class CalendarLogic : MonoBehaviour {
 
-    private System.Random rand = new System.Random();
-    private CalendarEntry todaysEntry; //Not sure if this would work because the data would
+    private static System.Random rand = new System.Random();
+    private static CalendarEntry todaysEntry; //Not sure if this would work because the data would
                                         //need to be saved
-    List<CalendarEntry> tempEntries;
+    private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
-    public int GetComboCount(){
+    public static int GetComboCount(){
         return DataManager.CalendarCombo;
     }
 
-    public List<CalendarEntry> GetCalendarEntries(){
+    public static List<CalendarEntry> GetCalendarEntries(){
         return DataManager.Entries;
-    } 
-    //#endregion
+    }
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-    //#region static functions
     // if dateTime is a Sunday, return dateTime. Else, return the next Sunday.
     public static DateTime GetDateOfSunday(DateTime dateTime){
         if (dateTime.DayOfWeek == DayOfWeek.Sunday){
@@ -42,21 +30,32 @@ public class CalendarLogic : MonoBehaviour {
             return nextSunday;
         }
     }
-    //#endregion
 
-    private DayOfWeek getDayToday(){
-        return DateTime.Today.DayOfWeek;
+    // call whenever opening calendar
+    public static void CalendarOpened(){
+        CalendarOpenedOnDate(DateTime.Today);
     }
 
-    private void CalendarOpened(){
+    // call after giving inhaler to pet
+    public static void UpdateComboCount(){
+        UpdateComboCountOnDate(DateTime.Today);
+    }
 
-        // compare today's date and last updated day (calendar)
-        TimeSpan sinceLastPlayed = DateTime.Today.Subtract(DataManager.LastPlayedDate);
+    // todo: for testing, delete later
+    public static void CalendarOpenedTest(DateTime day){
+        CalendarOpenedOnDate(day);
+    }
+    //#endregion
+
+    private static void CalendarOpenedOnDate(DateTime today){
+         // compare today's date and last updated day (calendar)
+        TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry();
         }
-        else if (sinceLastPlayed.Days >= 1){ //start missing days
+        else if (sinceLastPlayed.Days >= 1){ //next day (missing 0 days) or missing >=1 days
+
             tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
 
@@ -68,7 +67,7 @@ public class CalendarLogic : MonoBehaviour {
                 //the oldest entries are generated first
                 for(int i=missedDays; i>0; i--){
                     TimeSpan timeSpan = new TimeSpan(i, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = DateTime.Today.Subtract(timeSpan);
+                    DateTime missedDate = today.Subtract(timeSpan);
                     tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
                 }
 
@@ -80,64 +79,78 @@ public class CalendarLogic : MonoBehaviour {
                 //and how many are with punishment
                 for(counter = missedDays; counter>=3; counter--){
                     TimeSpan timeSpan = new TimeSpan(counter, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = DateTime.Today.Subtract(timeSpan);
+                    DateTime missedDate = today.Subtract(timeSpan);
                     tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
                 }
 
                 //entries that include the missing doses with 60% frequency
                 for(int i=counter; i>0; i--){
                     TimeSpan timeSpan = new TimeSpan(counter, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = DateTime.Today.Subtract(timeSpan);
+                    DateTime missedDate = today.Subtract(timeSpan);
                     tempEntries.Add(GenerateEntryWithPunishment(missedDate.DayOfWeek));
                 }
             }
+
             //by now tempEntries should include all the entries for the missed days
             //generate entries for today. add to list and update LastPlayedDate
-            GenerateEntryToday();
+            GenerateEntry(today);
             tempEntries.Add(todaysEntry); //add todays entry back in tempEntries
+            IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 
-            IsNewWeek();
-            // DataManager.Entries.Add(todaysEntry);
-            DataManager.LastPlayedDate = DateTime.Today;
+            UpdateComboCountOnDate(today);
+            DataManager.LastPlayedDate = today;
         }
+    }
+
+
+    private static void UpdateComboCountOnDate(DateTime today){
+        TimeSpan sinceLastCombo = today.Subtract(DataManager.LastComboDate);
+
+        // update combo count
+        if (sinceLastCombo.Days > 1){ // missed at least one day
+            DataManager.ResetCalendarCombo();
+        }
+        if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
+            DataManager.IncrementCalendarCombo();
+            DataManager.LastComboDate = today;
+        }
+
+    }
+
+    private static DayOfWeek GetDay(DateTime day){
+        return day.DayOfWeek;
     }
 
     //Check if it is a new week. Figure out how many entries need to be displayed
     //in the new week
-    //TO DO: when to set reset DateOfSunday
-    private void IsNewWeek(){
-        TimeSpan sinceLastPlayed = DateTime.Today.Subtract(DataManager.DateOfSunday);
-        if(DateTime.Today > DataManager.DateOfSunday){
+    private static void IsNewWeek(DateTime today){
+        if(today > DataManager.DateOfSunday){
             //today's  date is later than sunday
 
-            TimeSpan sinceSunday = DateTime.Today - DataManager.DateOfSunday;
+            TimeSpan sinceSunday = today - DataManager.DateOfSunday;
 
             //create new list for the new week
-            // todo: do we need this? Since we're assigning something to DataManager.Entries right afterwards
-            DataManager.Entries = new List<CalendarEntry>();
-
             //only move the latest entries into the new week
             DataManager.Entries = tempEntries.GetRange(tempEntries.Count - sinceSunday.Days, sinceSunday.Days);
 
-            DataManager.DateOfSunday = GetDateOfSunday(DateTime.Today);
+            DataManager.DateOfSunday = GetDateOfSunday(today);
 
-            // sinceLastPlayed.Days
         }else{ //same week so all temporary entries get displayed
             DataManager.Entries.AddRange(tempEntries);
         }
     }
 
-    // private DateTime FewDaysAgo(int days){
+    // private static DateTime FewDaysAgo(int days){
     //     TimeSpan timeSpan = new TimeSpan(days, 0, 0, 0); //convert missed days to timespan
     //     return DateTime.Today.Subtract(timeSpan);
     // }
 
-    private CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
+    private static CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
     }
 
     //60% frequency for each 12h dose: morning, afternoon
-    private CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
+    private static CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
         DosageRecord morning, afternoon;
         morning = GetHitOrMiss(60);
         afternoon = GetHitOrMiss(60);
@@ -145,7 +158,7 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, morning, afternoon);
     }
 
-    private void SameDayGenerateEntry(){
+    private static void SameDayGenerateEntry(){
         // check if morning or afternoon
         if (DateTime.Now.Hour < 12){ // morning
             // should be already generated, so do nothing
@@ -155,8 +168,8 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private void GenerateEntryToday(){
-        DayOfWeek day = getDayToday();
+    private static void GenerateEntry(DateTime today){
+        DayOfWeek day = GetDay(today);
 
         DosageRecord morning, afternoon;
         if (DateTime.Now.Hour < 12){ // morning
@@ -167,12 +180,12 @@ public class CalendarLogic : MonoBehaviour {
             morning = DosageRecord.Hit;
             afternoon = GetHitOrMiss(40);
         }
-        CalendarEntry today = new CalendarEntry(day, morning, afternoon);
-        todaysEntry = today;
+        CalendarEntry newEntry = new CalendarEntry(day, morning, afternoon);
+        todaysEntry = newEntry;
 
     }
 
-    private DosageRecord GetHitOrMiss(int missPercentage){
+    private static DosageRecord GetHitOrMiss(int missPercentage){
         int chance = rand.Next(100);
         if (chance < missPercentage){
             return DosageRecord.Miss;
@@ -180,11 +193,6 @@ public class CalendarLogic : MonoBehaviour {
         return DosageRecord.Hit;
 
     }
-
-    private void GiveReward(){
-        // rewardGivenToday = true;
-    }
-
 
 
 }

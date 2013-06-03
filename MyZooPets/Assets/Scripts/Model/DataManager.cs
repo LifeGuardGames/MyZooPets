@@ -72,7 +72,7 @@ public class DataManager : MonoBehaviour {
         get {return hunger;}
     }
 
-    //calender
+    //calendar
     public static List<CalendarEntry> Entries{get;set;}
     public static int CalendarCombo{
         get {return calendarCombo;}

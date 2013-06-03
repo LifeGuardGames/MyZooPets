@@ -94,9 +94,7 @@ public class CalendarLogic : MonoBehaviour {
 
     //Check if it is a new week. Figure out how many entries need to be displayed
     //in the new week
-    //TO DO: when to set reset DateOfSunday
     private void IsNewWeek(){
-        TimeSpan sinceLastPlayed = DateTime.Today.Subtract(DataManager.DateOfSunday);
         if(DateTime.Today > DataManager.DateOfSunday){
             //today's  date is later than sunday
 
@@ -111,7 +109,6 @@ public class CalendarLogic : MonoBehaviour {
 
             DataManager.DateOfSunday = GetDateOfSunday(DateTime.Today);
 
-            // sinceLastPlayed.Days
         }else{ //same week so all temporary entries get displayed
             DataManager.Entries.AddRange(tempEntries);
         }
@@ -170,11 +167,6 @@ public class CalendarLogic : MonoBehaviour {
         return DosageRecord.Hit;
 
     }
-
-    private void GiveReward(){
-        // rewardGivenToday = true;
-    }
-
 
 
 }

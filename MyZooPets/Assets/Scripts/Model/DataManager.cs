@@ -9,6 +9,7 @@ using System;
 public class DataManager : MonoBehaviour {
     //#region Developer option
     public bool isDebugging = false;
+    private bool loaded = false;
 
 
     //#region SaveData

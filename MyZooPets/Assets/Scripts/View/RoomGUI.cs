@@ -10,6 +10,7 @@ public class RoomGUI : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 	
 	private bool isMenuExpanded;
+	private bool showOption = false;
 	private LTRect menuRect;
 	private Rect menuTextureRect;
 	
@@ -35,6 +36,9 @@ public class RoomGUI : MonoBehaviour {
 	public Texture2D emInhalerTexture;
 	public Texture2D appleTexture;
 	public Texture2D sandwichTexture;
+	
+	public Texture2D optionIconTexture;
+	public Texture2D optionMenuTexture;
 	
 	public Texture2D plusTexture;
 	public Texture2D minusTexture;
@@ -70,6 +74,9 @@ public class RoomGUI : MonoBehaviour {
 	
 	private Vector2 progressBarOffset = new Vector2(150,11);
 	private Vector2 progressTextOffset = new Vector2(230,12);
+	
+	private Vector2 optionIconLoc = new Vector2(1150,700);
+	private Vector2 optionMenuLoc = new Vector2(500,100);
 	
 	private string tierLevel;
 	private string tierProgressText;
@@ -180,5 +187,15 @@ public class RoomGUI : MonoBehaviour {
 		
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
+		
+		//GUI.DrawTexture(new Rect (optionIconLoc.x,optionIconLoc.y,90,90),optionIconTexture);
+		if(GUI.Button(new Rect (optionIconLoc.x,optionIconLoc.y,90,90),optionIconTexture))
+		{
+			showOption = !showOption;
+		}
+		if(showOption)
+		{
+			GUI.DrawTexture(new Rect(optionMenuLoc.x,optionMenuLoc.y,400,600),optionMenuTexture);
+		}
 	}
 }

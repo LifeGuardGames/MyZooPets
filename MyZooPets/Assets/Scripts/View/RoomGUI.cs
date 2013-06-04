@@ -93,6 +93,8 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+	
+		GUI.depth = 1;
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     //porpotional scaling
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
@@ -100,7 +102,7 @@ public class RoomGUI : MonoBehaviour {
 		}
 	
 //		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);  //temp room background 
-		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
+//		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
 		
 		
 		//Room GUI Positioning 

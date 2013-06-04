@@ -51,7 +51,7 @@ public class CalendarLogic : MonoBehaviour {
     //***********************************************************
 
     private static void UpdateLastEntryReference(){
-        List list = DataManager.Entries;
+        List<CalendarEntry> list = DataManager.Entries;
         if (list != null && list.Count > 0){
             lastEntry = DataManager.Entries[DataManager.Entries.Count - 1];
         }
@@ -93,7 +93,7 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private void CalculateScoreForToday(){
+    private static void CalculateScoreForToday(){
         int points = 0;
         if (DateTime.Now.Hour < 12 && lastEntry.Morning == DosageRecord.Hit){
             points += 250;
@@ -106,7 +106,7 @@ public class CalendarLogic : MonoBehaviour {
         DataManager.AddPoints(points);
     }
 
-    private void GenerateMissedEntries(DateTime today){
+    private static void GenerateMissedEntries(DateTime today){
         tempEntries = new List<CalendarEntry>(); //temp list for calculation only
         TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
         int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
@@ -138,7 +138,7 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private void CalculatePreviousAfternoon(){
+    private static void CalculatePreviousAfternoon(){
         if (lastEntry.Morning == DosageRecord.Miss || lastEntry.Afternoon == DosageRecord.Miss){
             DataManager.SubtractHealth(20);
             DataManager.SubtractMood(20);
@@ -146,11 +146,11 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private void CalculateForMissedEntries(){
+    private static void CalculateForMissedEntries(){
         if (tempEntries.Count > 0){ // if >0 days missed
             DataManager.ResetCalendarCombo();
         }
-        foreach (entry : tempEntries){
+        foreach (CalendarEntry entry in tempEntries){
             if (entry.Morning == DosageRecord.Miss || entry.Afternoon == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);
@@ -226,7 +226,7 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, morning, afternoon);
     }
 
-    private void fillPreviousAfternoon(){
+    private static void fillPreviousAfternoon(){
         // if player didn't play the previous afternoon, turn it into a hit
         if (lastEntry != null && lastEntry.Afternoon == DosageRecord.Null){
             lastEntry.Afternoon = DosageRecord.Hit;

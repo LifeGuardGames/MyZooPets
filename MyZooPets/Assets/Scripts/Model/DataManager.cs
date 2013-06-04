@@ -183,7 +183,7 @@ public class DataManager : MonoBehaviour {
         if(isDebugging) PlayerPrefs.DeleteAll();
         if (PlayerPrefs.GetInt("FirstTime", 1) > 0){
             //Evolution data initialization
-            lastUpdatedTime = DateTime.UtcNow;
+            lastUpdatedTime = DateTime.Now;
             durationCum = new TimeSpan(0);
             lastEvoMeter = 0;
             evoAverageCum = 0;

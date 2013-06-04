@@ -28,7 +28,7 @@ public class EvolutionLogic : MonoBehaviour {
     //calculate evolution meter
 	private void UpdateEvoAverage(){
 		int cumDurationSecs = (int)DataManager.durationCum.TotalSeconds;
-		DateTime now = DateTime.UtcNow;
+		DateTime now = DateTime.Now;
 		TimeSpan tempd = now.Subtract(DataManager.lastUpdatedTime);
 		int timeElapsedInSecs = (int)tempd.TotalSeconds;
 

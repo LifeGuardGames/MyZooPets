@@ -48,6 +48,7 @@ public class CalendarLogic : MonoBehaviour {
         RecordAfternoonEntry(day);
     }
     //#endregion
+    //***********************************************************
 
     private static void CalendarOpenedOnDate(DateTime today){
          // compare today's date and last updated day (calendar)
@@ -57,6 +58,10 @@ public class CalendarLogic : MonoBehaviour {
             SameDayGenerateEntry();
         }
         else if (sinceLastPlayed.Days >= 1){ //next day (missing 0 days) or missing >=1 days
+            // if player didn't play the previous night, turn it into a hit
+            if (todaysEntry != null && todaysEntry.Afternoon == DosageRecord.Null){
+                todaysEntry.Afternoon = DosageRecord.Hit;
+            }
 
             tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
@@ -89,13 +94,20 @@ public class CalendarLogic : MonoBehaviour {
                 for(int i=counter; i>0; i--){
                     TimeSpan timeSpan = new TimeSpan(counter, 0, 0, 0); //convert missed days to timespan
                     DateTime missedDate = today.Subtract(timeSpan);
-                    tempEntries.Add(GenerateEntryWithPunishment(missedDate.DayOfWeek));
+                    CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
+                    if (entry.Morning == DosageRecord.Miss || entry.Afternoon == DosageRecord.Miss){
+                        DataManager.SubtractHealth(20);
+                        DataManager.SubtractMood(20);
+                    }
+
+                    tempEntries.Add(entry);
                 }
             }
 
             //by now tempEntries should include all the entries for the missed days
             //generate entries for today. add to list and update LastPlayedDate
-            GenerateEntry(today); // stored in todaysEntry
+            // todo: change back to orignal method
+            GenerateEntryNow(today); // stored in todaysEntry
             tempEntries.Add(todaysEntry); //add todays entry back in tempEntries
             IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 
@@ -117,9 +129,18 @@ public class CalendarLogic : MonoBehaviour {
         if (sinceLastCombo.Days > 1){ // missed at least one day
             DataManager.ResetCalendarCombo();
         }
+        if (DataManager.LastPlayedDate == today.AddDays(-1)){
+
+            // todo
+        }
         // check if calendarCombo is already incremented for that day
         if (DataManager.LastComboDate != today){
             if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
+                // todo
+                if (DataManager.LastPlayedDate == today){
+                    DataManager.AddMood(10); // +10 mood for administering a missed dose
+                }
+                DataManager.AddMood(5); // +5 mood for checking diary every day
                 DataManager.IncrementCalendarCombo();
                 DataManager.LastComboDate = today;
             }
@@ -168,7 +189,12 @@ public class CalendarLogic : MonoBehaviour {
             // should be already generated, so do nothing
         }
         else { // afternoon
-            todaysEntry.Afternoon = GetHitOrMiss(40);
+            if (todaysEntry.Morning == DosageRecord.Hit){
+                todaysEntry.Afternoon = GetHitOrMiss(40);
+            }
+            else {
+                todaysEntry.Afternoon = DosageRecord.Hit;
+            }
         }
     }
 
@@ -177,6 +203,23 @@ public class CalendarLogic : MonoBehaviour {
 
         DosageRecord morning, afternoon;
         if (DateTime.Now.Hour < 12){ // morning
+            morning = GetHitOrMiss(40);
+            afternoon = DosageRecord.Null;
+        }
+        else { // afternoon
+            morning = DosageRecord.Hit;
+            afternoon = GetHitOrMiss(40);
+        }
+        CalendarEntry newEntry = new CalendarEntry(day, morning, afternoon);
+        todaysEntry = newEntry;
+
+    }
+    //todo: testing; delete when done
+    private static void GenerateEntryNow(DateTime now){
+        DayOfWeek day = GetDay(now);
+
+        DosageRecord morning, afternoon;
+        if (now.Hour < 12){ // morning
             morning = GetHitOrMiss(40);
             afternoon = DosageRecord.Null;
         }

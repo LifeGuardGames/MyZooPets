@@ -75,7 +75,7 @@ public class DiaryUIManager : MonoBehaviour {
 			GUILayout.EndArea();
 		
 			
-			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+60,1000,1000), "");
+			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
 			GUILayout.BeginVertical("");			
 			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(100),GUILayout.Width(40)))
 			{
@@ -89,7 +89,7 @@ public class DiaryUIManager : MonoBehaviour {
 		{
 			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
+			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+60,1000,1000), "");
 			GUILayout.BeginVertical("");			
 			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(110),GUILayout.Width(40)))
 			{

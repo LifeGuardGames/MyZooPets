@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DiaryUIManager : MonoBehaviour {
 
-	bool showGUI = false;
+	bool showGUI = true;
 	
 	public Texture2D diaryTexture1;
 	public Texture2D diaryTexture2;
@@ -55,9 +55,11 @@ public class DiaryUIManager : MonoBehaviour {
 		GUI.depth = 0;
 		if(diaryPage == 1)
 		{
+			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
 			GUI.DrawTexture(diaryRect.rect,diaryTexture1);
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
+				showGUI = !showGUI;
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 			}
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
@@ -85,7 +87,7 @@ public class DiaryUIManager : MonoBehaviour {
 		}
 		else if (diaryPage == 2)
 		{
-			
+			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
 			GUILayout.BeginVertical("");			
@@ -98,6 +100,7 @@ public class DiaryUIManager : MonoBehaviour {
 			GUILayout.EndArea();	
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
+				showGUI = !showGUI;
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 			}
 		}

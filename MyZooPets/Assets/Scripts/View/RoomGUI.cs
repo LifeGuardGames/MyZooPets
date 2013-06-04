@@ -111,7 +111,7 @@ public class RoomGUI : MonoBehaviour {
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
-		GUI.DrawTexture(new Rect(200,250,500,500), demopet);   //temp demo pet
+		//GUI.DrawTexture(new Rect(200,250,500,500), demopet);   //temp demo pet
 
 		//Room GUI Positioning 
 		

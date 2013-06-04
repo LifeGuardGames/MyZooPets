@@ -7,7 +7,7 @@ public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry;
-    private static List<CalendarEntry> tempEntries = new List<CalendarEntry>(); //temp list for calculation only
+    private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
     public static int GetComboCount(){
@@ -71,6 +71,7 @@ public class CalendarLogic : MonoBehaviour {
             CalculateScoreForToday(today);
         }
         else {
+            tempEntries = new List<CalendarEntry>(); //temp list for calculation only
             if (sinceLastPlayed.Days == 1){ // next day
                 // last played day
                 GeneratePreviousAfternoon();
@@ -122,7 +123,6 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     private static void GenerateMissedEntries(DateTime today){
-        tempEntries = new List<CalendarEntry>(); //temp list for calculation only
         TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
         int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
         int counter = 0; //use to tell how many missed day entries are without punishment

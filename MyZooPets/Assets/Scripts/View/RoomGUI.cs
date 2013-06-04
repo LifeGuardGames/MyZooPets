@@ -3,6 +3,8 @@ using System.Collections;
 
 public class RoomGUI : MonoBehaviour {
 	
+	private RoomGUIAnimator roomAnimator;
+	
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;    //screen size 
     private const float NATIVE_HEIGHT = 800.0f;
@@ -76,20 +78,29 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxWidth = 75;
 	
 	void Start (){
-		progress = 50f;
-		food = 30f;
-		mood = 50f;
-		health = 80f;
+		roomAnimator = this.GetComponent<RoomGUIAnimator>();
+		
+		progress = roomAnimator.displayPoints;
+		food = roomAnimator.displayHunger;
+		mood = roomAnimator.displayMood;
+		health = roomAnimator.displayHealth;
 		
 		isMenuExpanded = true;
 		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
+		
+		
 	}
 	
 	void Update (){
+		progress = roomAnimator.displayPoints;
+		food = roomAnimator.displayHunger;
+		mood = roomAnimator.displayMood;
+		health = roomAnimator.displayHealth;
+		
 		//TODO-s change this to read data
 		tierLevel = "Tier 1";
-		tierProgressText = "5000/10000";
-		starCount = "500";
+		tierProgressText = roomAnimator.displayPoints + "/10000";
+		starCount = roomAnimator.displayStars.ToString();
 	}
 	
 	void OnGUI(){
@@ -100,11 +111,8 @@ public class RoomGUI : MonoBehaviour {
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
-	
-//		GUI.DrawTexture(new Rect(0,0,1280,800), roomTexture);  //temp room background 
 //		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
-		
-		
+
 		//Room GUI Positioning 
 		
 		//Progress Bar
@@ -142,8 +150,14 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
 		GUILayout.BeginHorizontal("");
-		GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
-		GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
+		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+			
+			DataManager.AddMood(99);	
+		}
+		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+			
+			DataManager.SubtractMood(35);
+		}
 		GUILayout.Button(inhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
 		GUILayout.Button(emInhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
 		

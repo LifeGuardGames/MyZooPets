@@ -13,8 +13,8 @@ public class DiaryUIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
-	//	diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 1000, 500);
-		diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 1100, 650);
+		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 1000, 500);
+	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 1100, 650);
 	}
 	
 	// Update is called once per frame

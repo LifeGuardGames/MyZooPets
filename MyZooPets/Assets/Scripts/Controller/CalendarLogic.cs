@@ -47,7 +47,7 @@ public class CalendarLogic : MonoBehaviour {
     }
     // todo: for testing, delete later
     public static void RecordGivingInhalerTest(DateTime now){
-        CalendarOpenedOnDate(now);
+        RecordGivingInhaler(now);
     }
     //#endregion
     //***********************************************************

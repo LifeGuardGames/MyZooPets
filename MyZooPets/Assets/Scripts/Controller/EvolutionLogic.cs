@@ -5,6 +5,7 @@ using System;
 //Calculates evolution meter every 30 secs
 //Decides when pet hits evolution stage
 public class EvolutionLogic : MonoBehaviour {
+    public bool isDebug;
 	private float timer = 0;
 	private float timeInterval = 30f;
     private int level1EvolutionPoints = 50000;
@@ -18,11 +19,13 @@ public class EvolutionLogic : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		timer -= Time.deltaTime;
-		if (timer <= 0){
-			timer = timeInterval;
-			UpdateEvoAverage();
-		}
+        if(!isDebug){
+    		timer -= Time.deltaTime;
+    		if (timer <= 0){
+    			timer = timeInterval;
+    			UpdateEvoAverage();
+    		}
+        }
 	}
 
     //calculate evolution meter

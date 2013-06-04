@@ -38,21 +38,29 @@ public class CalendarLogic : MonoBehaviour {
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
     public static void RecordGivingInhaler(){
-        if (DateTime.Now.Hour < 12) {
+        RecordGivingInhaler(DateTime.Now);
+    }
+
+    // todo: for testing, delete later
+    public static void CalendarOpenedTest(DateTime now){
+        CalendarOpenedOnDate(now);
+    }
+    // todo: for testing, delete later
+    public static void RecordGivingInhalerTest(DateTime now){
+        CalendarOpenedOnDate(now);
+    }
+    //#endregion
+    //***********************************************************
+
+    private static void RecordGivingInhaler(DateTime now){
+        if (now.Hour < 12) {
             lastEntry.Morning = DosageRecord.Hit;
         }
-        else if (DateTime.Now.Hour >= 12) {
+        else if (now.Hour >= 12) {
             lastEntry.Afternoon = DosageRecord.Hit;
         }
         DataManager.IncrementCalendarCombo();
     }
-
-    // todo: for testing, delete later
-    public static void CalendarOpenedTest(DateTime day){
-        CalendarOpenedOnDate(day);
-    }
-    //#endregion
-    //***********************************************************
 
     private static void UpdateLastEntryReference(){
         List<CalendarEntry> list = DataManager.Entries;
@@ -67,7 +75,7 @@ public class CalendarLogic : MonoBehaviour {
         TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
-            SameDayGenerateEntry();
+            SameDayGenerateEntry(today);
             CalculateScoreForToday(today);
         }
         else {
@@ -245,9 +253,9 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     //Generate entry for the afternoon
-    private static void SameDayGenerateEntry(){
+    private static void SameDayGenerateEntry(DateTime now){
         // check if morning or afternoon
-        if (DateTime.Now.Hour < 12){ // morning
+        if (now.Hour < 12){ // morning
             // should be already generated, so do nothing
         }
         else { // afternoon
@@ -260,11 +268,11 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private static void GenerateEntry(DateTime today){
-        DayOfWeek day = GetDay(today);
+    private static void GenerateEntry(DateTime now){
+        DayOfWeek day = GetDay(now);
 
         DosageRecord morning, afternoon;
-        if (DateTime.Now.Hour < 12){ // morning
+        if (now.Hour < 12){ // morning
             morning = GetHitOrMiss(40);
             afternoon = DosageRecord.Null;
         }

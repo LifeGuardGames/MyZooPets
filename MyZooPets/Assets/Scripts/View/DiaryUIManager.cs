@@ -25,7 +25,7 @@ public class DiaryUIManager : MonoBehaviour {
 		{
 			if(hit.collider.name == "room_table"&&Input.GetMouseButtonUp(1))
 			{
-				print("You clicked table!");
+				//print("You clicked table!");
 				showGUI = !showGUI;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);

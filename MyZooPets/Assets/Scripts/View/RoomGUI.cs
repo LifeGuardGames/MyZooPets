@@ -152,11 +152,11 @@ public class RoomGUI : MonoBehaviour {
 		GUILayout.BeginHorizontal("");
 		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 			
-			DataManager.AddMood(99);	
+			DataManager.AddStars(99);	
 		}
 		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 			
-			DataManager.SubtractMood(35);
+			DataManager.SubtractStars(35);
 		}
 		GUILayout.Button(inhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
 		GUILayout.Button(emInhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));

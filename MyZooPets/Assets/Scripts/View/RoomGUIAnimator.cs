@@ -51,7 +51,6 @@ public class RoomGUIAnimator : MonoBehaviour {
 	}
 	
 	void FixedUpdate(){
-		Debug.Log(DataManager.Health);
 		//Listen for changes
 		if(dataPoints != DataManager.Points){
 			if(displayPoints > DataManager.Points){

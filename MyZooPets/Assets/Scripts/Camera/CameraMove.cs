@@ -15,8 +15,8 @@ public class CameraMove : MonoBehaviour {
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f,0,0);
 		
-		finalPosition = new Vector3 (0,2,-9);
-		finalFaceDirection = new Vector3(12,39,10);
+		finalPosition = new Vector3 (10.7f,1.6f,6.6f);
+		finalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
 	}
 	
 	void Update () {

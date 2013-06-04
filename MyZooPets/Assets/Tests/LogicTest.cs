@@ -38,7 +38,7 @@ public class LogicTest : MonoBehaviour {
         Debug.Log("GetComboCount() -> " + CalendarLogic.GetComboCount());
     }
 
-    // to populate calendar entries
+    // to populate calendar entries, without any combos or points
     void AddCalendarEntries(){
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
         entries.Add(new CalendarEntry( DayOfWeek.Monday, DosageRecord.Hit, DosageRecord.Hit) );
@@ -61,9 +61,15 @@ public class LogicTest : MonoBehaviour {
     }
 
     void CalendarOpenedTestConsecutive(){
-        CalendarLogic.CalendarOpenedTest(DateTime.Now);
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(1));
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(2));
+        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,1,7,0,0));
+        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,1,19,0,0));
+
+        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,2,7,0,0));
+        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,2,19,0,0));
+
+        // CalendarLogic.CalendarOpenedTest(DateTime.Now);
+        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(1));
+        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(2));
         // RecordGivingInhalerTest(DateTime.Now.AddDays(2));
         // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(3));
         // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(4));

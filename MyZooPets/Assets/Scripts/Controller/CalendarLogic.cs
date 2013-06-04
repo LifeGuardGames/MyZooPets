@@ -6,7 +6,7 @@ using System;
 public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
-    private static CalendarEntry todaysEntry;
+    private static CalendarEntry lastEntry;
     private static List<CalendarEntry> tempEntries;
 
     //#region API (use this for the UI)
@@ -50,78 +50,121 @@ public class CalendarLogic : MonoBehaviour {
     //#endregion
     //***********************************************************
 
+    private static void UpdateLastEntryReference(){
+        List list = DataManager.Entries;
+        if (list != null && list.Count > 0){
+            lastEntry = DataManager.Entries[DataManager.Entries.Count - 1];
+        }
+    }
+
     private static void CalendarOpenedOnDate(DateTime today){
+        UpdateLastEntryReference();
          // compare today's date and last updated day (calendar)
         TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry();
         }
-        else if (sinceLastPlayed.Days >= 1){ //next day (missing 0 days) or missing >=1 days
-            // if player didn't play the previous night, turn it into a hit
-            if (todaysEntry != null && todaysEntry.Afternoon == DosageRecord.Null){
-                todaysEntry.Afternoon = DosageRecord.Hit;
-            }
+        else if (sinceLastPlayed.Days == 1){ // next day
+            // last played day
+            fillPreviousAfternoon();
+            CalculatePreviousAfternoon();
+        }
+        else if (sinceLastPlayed.Days > 1){ // missing >1 days
+            // last played day
+            fillPreviousAfternoon();
+            CalculatePreviousAfternoon();
 
-            tempEntries = new List<CalendarEntry>(); //temp list for calculation only
-            int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
-
-            if(missedDays <= 3){
-                //if the player does not play for <=3 days, every dose of the drug
-                //is taken by the pet with no misses
-
-                //generate entries for the missed days
-                //the oldest entries are generated first
-                for(int i=missedDays; i>0; i--){
-                    TimeSpan timeSpan = new TimeSpan(i, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = today.Subtract(timeSpan);
-                    tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
-                }
-
-            }else{
-                //if player misses for >3 days the pet starts missing doses with 60%
-                //frequency for each 12 h dose and incurring the health consequences of this.
-
-                int counter; //use to tell how many missed day entries are without punishment
-                //and how many are with punishment
-                for(counter = missedDays; counter>=3; counter--){
-                    TimeSpan timeSpan = new TimeSpan(counter, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = today.Subtract(timeSpan);
-                    tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
-                }
-
-                //entries that include the missing doses with 60% frequency
-                for(int i=counter; i>0; i--){
-                    TimeSpan timeSpan = new TimeSpan(counter, 0, 0, 0); //convert missed days to timespan
-                    DateTime missedDate = today.Subtract(timeSpan);
-                    CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
-                    if (entry.Morning == DosageRecord.Miss || entry.Afternoon == DosageRecord.Miss){
-                        DataManager.SubtractHealth(20);
-                        DataManager.SubtractMood(20);
-                    }
-
-                    tempEntries.Add(entry);
-                }
-            }
-
+            // missed days except today
+            GenerateMissedEntries(today);
             //by now tempEntries should include all the entries for the missed days
+            CalculateForMissedEntries();
+
             //generate entries for today. add to list and update LastPlayedDate
             // todo: change back to orignal method
-            GenerateEntryNow(today); // stored in todaysEntry
-            tempEntries.Add(todaysEntry); //add todays entry back in tempEntries
+            GenerateEntryNow(today); // stored in lastEntry
+            CalculateScoreForToday();
+            tempEntries.Add(lastEntry); //add todays entry back in tempEntries
             IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 
+            // todo: change
             UpdateComboCountOnDate(today);
             DataManager.LastPlayedDate = today;
         }
     }
 
+    private void CalculateScoreForToday(){
+        int points = 0;
+        if (DateTime.Now.Hour < 12 && lastEntry.Morning == DosageRecord.Hit){
+            points += 250;
+            // todo: combo
+        }
+        if (DateTime.Now.Hour >= 12 && lastEntry.Afternoon == DosageRecord.Hit){
+            points += 250;
+            // todo: combo
+        }
+        DataManager.AddPoints(points);
+    }
+
+    private void GenerateMissedEntries(DateTime today){
+        tempEntries = new List<CalendarEntry>(); //temp list for calculation only
+        TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
+        int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
+
+        //if the player does not play for <=3 days, every dose of the drug
+        //is taken by the pet with no misses
+
+        //generate entries for the missed days
+        //the oldest entries are generated first
+
+        //if player misses for >3 days the pet starts missing doses with 60%
+        //frequency for each 12 h dose and incurring the health consequences of this.
+
+        int counter = 0; //use to tell how many missed day entries are without punishment
+        //and how many are with punishment
+        for(counter = 0; counter<3 && counter < missedDays; counter++){
+            TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
+            DateTime missedDate = today.Subtract(timeSpan);
+            tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
+        }
+
+        //entries that include the missing doses with 60% frequency
+        for(counter = counter; counter < missedDays; counter++){
+            TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
+            DateTime missedDate = today.Subtract(timeSpan);
+            CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
+
+            tempEntries.Add(entry);
+        }
+    }
+
+    private void CalculatePreviousAfternoon(){
+        if (lastEntry.Morning == DosageRecord.Miss || lastEntry.Afternoon == DosageRecord.Miss){
+            DataManager.SubtractHealth(20);
+            DataManager.SubtractMood(20);
+            DataManager.ResetCalendarCombo();
+        }
+    }
+
+    private void CalculateForMissedEntries(){
+        if (tempEntries.Count > 0){ // if >0 days missed
+            DataManager.ResetCalendarCombo();
+        }
+        foreach (entry : tempEntries){
+            if (entry.Morning == DosageRecord.Miss || entry.Afternoon == DosageRecord.Miss){
+                DataManager.SubtractHealth(20);
+                DataManager.SubtractMood(20);
+            }
+        }
+    }
+
     private static void RecordAfternoonEntry(DateTime today){
-        todaysEntry.Afternoon = DosageRecord.Hit;
+        lastEntry.Afternoon = DosageRecord.Hit;
         UpdateComboCountOnDate(today);
     }
 
 
+    // todo: change / delete
     private static void UpdateComboCountOnDate(DateTime today){
         TimeSpan sinceLastCombo = today.Subtract(DataManager.LastComboDate);
 
@@ -135,7 +178,7 @@ public class CalendarLogic : MonoBehaviour {
         }
         // check if calendarCombo is already incremented for that day
         if (DataManager.LastComboDate != today){
-            if (todaysEntry.Morning == DosageRecord.Hit && todaysEntry.Afternoon == DosageRecord.Hit){
+            if (lastEntry.Morning == DosageRecord.Hit && lastEntry.Afternoon == DosageRecord.Hit){
                 // todo
                 if (DataManager.LastPlayedDate == today){
                     DataManager.AddMood(10); // +10 mood for administering a missed dose
@@ -155,7 +198,7 @@ public class CalendarLogic : MonoBehaviour {
     //in the new week
     private static void IsNewWeek(DateTime today){
         if(today > DataManager.DateOfSunday){
-            //today's date is later than sunday
+            //today's  date is later than sunday
 
             TimeSpan sinceSunday = today - DataManager.DateOfSunday;
 
@@ -183,17 +226,25 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, morning, afternoon);
     }
 
+    private void fillPreviousAfternoon(){
+        // if player didn't play the previous afternoon, turn it into a hit
+        if (lastEntry != null && lastEntry.Afternoon == DosageRecord.Null){
+            lastEntry.Afternoon = DosageRecord.Hit;
+        }
+    }
+
+
     private static void SameDayGenerateEntry(){
         // check if morning or afternoon
         if (DateTime.Now.Hour < 12){ // morning
             // should be already generated, so do nothing
         }
         else { // afternoon
-            if (todaysEntry.Morning == DosageRecord.Hit){
-                todaysEntry.Afternoon = GetHitOrMiss(40);
+            if (lastEntry.Morning == DosageRecord.Hit){
+                lastEntry.Afternoon = GetHitOrMiss(40);
             }
             else {
-                todaysEntry.Afternoon = DosageRecord.Hit;
+                lastEntry.Afternoon = DosageRecord.Hit;
             }
         }
     }
@@ -211,7 +262,7 @@ public class CalendarLogic : MonoBehaviour {
             afternoon = GetHitOrMiss(40);
         }
         CalendarEntry newEntry = new CalendarEntry(day, morning, afternoon);
-        todaysEntry = newEntry;
+        lastEntry = newEntry;
 
     }
     //todo: testing; delete when done
@@ -228,7 +279,7 @@ public class CalendarLogic : MonoBehaviour {
             afternoon = GetHitOrMiss(40);
         }
         CalendarEntry newEntry = new CalendarEntry(day, morning, afternoon);
-        todaysEntry = newEntry;
+        lastEntry = newEntry;
 
     }
 
@@ -240,4 +291,6 @@ public class CalendarLogic : MonoBehaviour {
         return DosageRecord.Hit;
 
     }
+
+
 }

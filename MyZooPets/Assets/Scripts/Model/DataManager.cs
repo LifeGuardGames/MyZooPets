@@ -41,8 +41,6 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static List<CalendarEntry> entries; //list of entries that represent a weak
     [SerializeThis]
-    private static int calenderCombo; //how many times user has open the calendar consecutively
-    [SerializeThis]
     private static int calendarCombo; //how many times user has open the calendar consecutively
     [SerializeThis]
     private static DateTime dateOfSunday; // keep track of the last day of the week,
@@ -233,11 +231,6 @@ public class DataManager : MonoBehaviour {
             PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
             Debug.Log(JSONLevelSerializer.SerializeLevel());
         }
-    }
-
-    void OnApplicationFocus(bool focusStatus){
-        // if(!focusStatus) save data
-
     }
 
     //Save data before the game is quit

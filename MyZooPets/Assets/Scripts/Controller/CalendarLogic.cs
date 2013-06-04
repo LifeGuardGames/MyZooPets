@@ -134,7 +134,7 @@ public class CalendarLogic : MonoBehaviour {
     //in the new week
     private static void IsNewWeek(DateTime today){
         if(today > DataManager.DateOfSunday){
-            //today's  date is later than sunday
+            //today's date is later than sunday
 
             TimeSpan sinceSunday = today - DataManager.DateOfSunday;
 
@@ -197,6 +197,4 @@ public class CalendarLogic : MonoBehaviour {
         return DosageRecord.Hit;
 
     }
-
-
 }

@@ -99,7 +99,7 @@ public class RoomGUI : MonoBehaviour {
 		
 		//TODO-s change this to read data
 		tierLevel = "Tier 1";
-		tierProgressText = roomAnimator.displayPoints + "/10000";
+		tierProgressText = roomAnimator.displayPoints + "/50000";
 		starCount = roomAnimator.displayStars.ToString();
 	}
 	
@@ -111,14 +111,14 @@ public class RoomGUI : MonoBehaviour {
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
-//		GUI.DrawTexture(new Rect(330,300,500,500), demopet);   //temp demo pet
+		GUI.DrawTexture(new Rect(200,250,500,500), demopet);   //temp demo pet
 
 		//Room GUI Positioning 
 		
 		//Progress Bar
 		GUI.DrawTexture(new Rect(tierBarloc.x,tierBarloc.y,530,75), tierBarTexture);
 		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350,50),progressBarFrame);
-		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350 * Mathf.Clamp01(progress/100),50),progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);
+		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350 * Mathf.Clamp01(progress/50000),50),progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);
 		GUI.TextField(new Rect(tierBarloc.x + progressTextOffset.x,tierBarloc.y+progressTextOffset.y,200,40),tierProgressText,expreTextStyle);
 		GUI.TextField(new Rect(tierBarloc.x+tierTextOffset.x,tierBarloc.y+tierTextOffset.y,200,40),tierLevel,tierTextStyle);
 		
@@ -130,19 +130,19 @@ public class RoomGUI : MonoBehaviour {
 		//Health Bar
 		GUI.DrawTexture(new Rect(healthBarloc.x,healthBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y,25,70),statBarVerFrame);
-		GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFill, ScaleMode.ScaleAndCrop, true, 25/70);
+		GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFill, ScaleMode.StretchToFill, true, 1f);
 		GUI.DrawTexture(new Rect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
 		
 		//Mood Bar	
 		GUI.DrawTexture(new Rect(moodBarloc.x,moodBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y,25,70),statBarVerFrame);
-		GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFill, ScaleMode.ScaleAndCrop, true, 25/70);
+		GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFill, ScaleMode.StretchToFill, true, 1f);
 		GUI.DrawTexture(new Rect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,60,60),moodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
 		//Food Bar
 		GUI.DrawTexture(new Rect(foodBarloc.x,foodBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y,25,70),statBarVerFrame);
-		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFill, ScaleMode.ScaleAndCrop, true, 25/70);
+		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFill, ScaleMode.StretchToFill, true, 1f);
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
 		//Extending Button Groups
@@ -152,11 +152,11 @@ public class RoomGUI : MonoBehaviour {
 		GUILayout.BeginHorizontal("");
 		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 			
-			DataManager.AddMood(99);	
+			DataManager.AddHealth(50);	
 		}
 		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 			
-			DataManager.SubtractMood(35);
+			DataManager.SubtractHealth(40);
 		}
 		GUILayout.Button(inhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
 		GUILayout.Button(emInhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));

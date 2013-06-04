@@ -34,7 +34,6 @@ public class LogicTest : MonoBehaviour {
     }
 
     void GetComboCountTest(){
-        Debug.Log("Debugging GetComboCount()");
         Debug.Log("GetComboCount() -> " + CalendarLogic.GetComboCount());
     }
 
@@ -61,19 +60,29 @@ public class LogicTest : MonoBehaviour {
     }
 
     void CalendarOpenedTestConsecutive(){
-        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,1,7,0,0));
-        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,1,19,0,0));
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
 
-        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,2,7,0,0));
-        CalendarLogic.CalendarOpenedTest(new DateTime(2013,6,2,19,0,0));
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
 
-        // CalendarLogic.CalendarOpenedTest(DateTime.Now);
-        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(1));
-        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(2));
-        // RecordGivingInhalerTest(DateTime.Now.AddDays(2));
-        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(3));
-        // CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(4));
-        // RecordGivingInhalerTest(DateTime.Now.AddDays(4));
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker); // 7PM
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        // CalendarLogic.CalendarOpenedTest(timeTracker);
     }
 
     void CalendarOpenedTestSkip1(){

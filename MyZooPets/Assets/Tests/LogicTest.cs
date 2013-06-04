@@ -62,7 +62,7 @@ public class LogicTest : MonoBehaviour {
 
     // tested 6/3/2013 - works properly
     void RecordAfternoonEntryTest(DateTime day){
-        CalendarLogic.RecordAfternoonEntryTest(day);
+        CalendarLogic.RecordAfternoonEntry();
     }
 
     // tested 6/3/2013 - works properly

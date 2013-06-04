@@ -51,7 +51,7 @@ public class LogicTest : MonoBehaviour {
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
         for (int i = 0; i < entries.Count; i++){
             CalendarEntry entry = entries[i];
-            Debug.Log(entry.Day + " -> " + entry.Morning + ", " + entry.Afternoon);
+            Debug.Log(entry.Day + " -> " + entry.Morning + " ("+ entry.CheckedInMorning +"), " + entry.Afternoon + " ("+ entry.CheckedInAfternoon +")");
         }
     }
 

@@ -7,7 +7,7 @@ public class CalendarLogic : MonoBehaviour {
 
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry;
-    private static List<CalendarEntry> tempEntries;
+    private static List<CalendarEntry> tempEntries = new List<CalendarEntry>(); //temp list for calculation only
 
     //#region API (use this for the UI)
     public static int GetComboCount(){
@@ -36,8 +36,14 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     // call after giving inhaler to pet
-    public static void RecordAfternoonEntry(){
-        lastEntry.Afternoon = DosageRecord.Hit;
+    // assume that we can only give an inhaler to the pet if it missed it
+    public static void RecordGivingInhaler(){
+        if (DateTime.Now.Hour < 12) {
+            lastEntry.Morning = DosageRecord.Hit;
+        }
+        else if (DateTime.Now.Hour >= 12) {
+            lastEntry.Afternoon = DosageRecord.Hit;
+        }
         DataManager.IncrementCalendarCombo();
     }
 
@@ -62,26 +68,29 @@ public class CalendarLogic : MonoBehaviour {
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry();
+            CalculateScoreForToday(today);
         }
-        else if (sinceLastPlayed.Days == 1){ // next day
-            // last played day
-            GeneratePreviousAfternoon();
-            CalculateForPreviousAfternoon();
-        }
-        else if (sinceLastPlayed.Days > 1){ // missing >1 days
-            // last played day
-            GeneratePreviousAfternoon();
-            CalculateForPreviousAfternoon();
+        else {
+            if (sinceLastPlayed.Days == 1){ // next day
+                // last played day
+                GeneratePreviousAfternoon();
+                CalculateForPreviousAfternoon();
+            }
+            else if (sinceLastPlayed.Days > 1){ // missing >1 days
+                // last played day
+                GeneratePreviousAfternoon();
+                CalculateForPreviousAfternoon();
 
-            // missed days except today
-            GenerateMissedEntries(today);
-            //by now tempEntries should include all the entries for the missed days
-            CalculateForMissedEntries();
+                // missed days except today
+                GenerateMissedEntries(today);
+                //by now tempEntries should include all the entries for the missed days
+                CalculateForMissedEntries();
 
+            }
             //generate entries for today. add to list and update LastPlayedDate
             // todo: change back to orignal method
             GenerateEntryNow(today); // stored in lastEntry
-            CalculateScoreForToday();
+            CalculateScoreForToday(today);
             tempEntries.Add(lastEntry); //add todays entry back in tempEntries
             IsNewWeek(today); // add relevant entries from tempEntries to DataManager.Entries
 
@@ -91,15 +100,23 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private static void CalculateScoreForToday(){
+    private static void CalculateScoreForToday(DateTime now){
         int points = 0;
-        if (DateTime.Now.Hour < 12 && lastEntry.Morning == DosageRecord.Hit){
+        // if morning, only morning dosage is generated
+        if (now.Hour < 12 && lastEntry.Morning == DosageRecord.Hit){
             points += 250;
-            // todo: combo
+            DataManager.IncrementCalendarCombo();
+            DataManager.LastComboTime = now;
         }
-        if (DateTime.Now.Hour >= 12 && lastEntry.Afternoon == DosageRecord.Hit){
+        // note: if the user didn't check it in the morning, they lose the combo
+        // if afternoon, both dosages are generated
+        else if (now.Hour >= 12 && lastEntry.Afternoon == DosageRecord.Hit){
+            if (lastEntry.Morning == DosageRecord.Miss){
+                DataManager.ResetCalendarCombo();
+            }
             points += 250;
-            // todo: combo
+            DataManager.IncrementCalendarCombo();
+            DataManager.LastComboTime = now;
         }
         DataManager.AddPoints(points);
     }
@@ -133,6 +150,7 @@ public class CalendarLogic : MonoBehaviour {
 
     //Check if last entry still has a miss in the afternoon. If so -20 health and -20 mood
     private static void CalculateForPreviousAfternoon(){
+        if (lastEntry == null) return;
         if (lastEntry.Morning == DosageRecord.Miss || lastEntry.Afternoon == DosageRecord.Miss){
             DataManager.SubtractHealth(20);
             DataManager.SubtractMood(20);
@@ -222,6 +240,7 @@ public class CalendarLogic : MonoBehaviour {
     private static void GeneratePreviousAfternoon(){
         if (lastEntry != null && lastEntry.Afternoon == DosageRecord.Null){
             lastEntry.Afternoon = DosageRecord.Hit;
+            DataManager.ResetCalendarCombo();
         }
     }
 
@@ -250,6 +269,7 @@ public class CalendarLogic : MonoBehaviour {
             afternoon = DosageRecord.Null;
         }
         else { // afternoon
+            DataManager.ResetCalendarCombo();
             morning = DosageRecord.Hit;
             afternoon = GetHitOrMiss(40);
         }
@@ -267,6 +287,7 @@ public class CalendarLogic : MonoBehaviour {
             afternoon = DosageRecord.Null;
         }
         else { // afternoon
+            DataManager.ResetCalendarCombo();
             morning = DosageRecord.Hit;
             afternoon = GetHitOrMiss(40);
         }

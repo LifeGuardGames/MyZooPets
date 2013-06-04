@@ -11,7 +11,7 @@ public class LogicTest : MonoBehaviour {
         CalendarOpenedTestConsecutive();
         // CalendarOpenedTestSkip1();
         // CalendarOpenedTestSkip2();
-        CalendarOpenedTestSkip5();
+        // CalendarOpenedTestSkip5();
         PrintCalendarEntries();
         GetComboCountTest();
 	}
@@ -62,7 +62,7 @@ public class LogicTest : MonoBehaviour {
 
     // tested 6/3/2013 - works properly
     void RecordAfternoonEntryTest(DateTime day){
-        CalendarLogic.RecordAfternoonEntry();
+        CalendarLogic.RecordGivingInhaler();
     }
 
     // tested 6/3/2013 - works properly
@@ -70,7 +70,7 @@ public class LogicTest : MonoBehaviour {
         CalendarLogic.CalendarOpenedTest(DateTime.Today);
         CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(1));
         CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(2));
-        RecordAfternoonEntryTest(DateTime.Today.AddDays(2));
+        // RecordAfternoonEntryTest(DateTime.Today.AddDays(2));
         // CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(3));
         // CalendarLogic.CalendarOpenedTest(DateTime.Today.AddDays(4));
         // RecordAfternoonEntryTest(DateTime.Today.AddDays(4));

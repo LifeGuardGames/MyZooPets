@@ -13,8 +13,8 @@ public class DataManager : MonoBehaviour {
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
-    
-    //#region SaveData    
+
+    //#region SaveData
     [SerializeThis]
     private static int points; //evolution points
     [SerializeThis]
@@ -49,7 +49,7 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static DateTime lastPlayedDate; //the last time that the user used the calendar
     [SerializeThis]
-    private static DateTime lastComboDate; //the last day that the user continued the combo
+    private static DateTime lastComboTime; //the last day that the user continued the combo
     //#endregion
 
     //#region Getters
@@ -82,9 +82,9 @@ public class DataManager : MonoBehaviour {
         get { return lastPlayedDate;}
         set { lastPlayedDate = value;}
     }
-    public static DateTime LastComboDate{
-        get { return lastComboDate;}
-        set { lastComboDate = value;}
+    public static DateTime LastComboTime{
+        get { return lastComboTime;}
+        set { lastComboTime = value;}
     }
     public static DateTime DateOfSunday{
         get { return dateOfSunday;}
@@ -203,7 +203,7 @@ public class DataManager : MonoBehaviour {
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             // set to one day before today so that the entry will be generated for the first day
             lastPlayedDate = DateTime.Today.AddDays(-1);
-            lastComboDate = DateTime.Today.AddDays(-1);
+            lastComboTime = DateTime.Today.AddDays(-1);
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
@@ -216,7 +216,7 @@ public class DataManager : MonoBehaviour {
                 }
             }
         }
-        
+
     }
 
     //called when level data are loaded

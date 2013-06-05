@@ -35,8 +35,10 @@ public class RoomGUIAnimator : MonoBehaviour {
 	
 	public int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
 	public int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
+
 	
-	void Start(){
+	public void Init()
+	{
 		dataPoints = DataManager.Points;
 		dataStars = DataManager.Stars;
 		dataHealth = DataManager.Health;
@@ -49,8 +51,13 @@ public class RoomGUIAnimator : MonoBehaviour {
 		displayMood = DataManager.Mood;
 		displayHunger = DataManager.Hunger;
 	}
+	void Start(){
+	
+	}
 	
 	void FixedUpdate(){
+		if(!LoadDataLogic.IsDataLoaded) return;
+		
 		//Debug.Log(DataManager.Health);
 		//Listen for changes
 		if(dataPoints != DataManager.Points){

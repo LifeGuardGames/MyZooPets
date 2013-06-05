@@ -27,12 +27,17 @@ public class DiaryUIManager : MonoBehaviour {
 		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
 	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
-		calendar = CalendarLogic.GetCalendarEntries();
 
+
+	}
+
+	public void Init(){
+		calendar = CalendarLogic.GetCalendarEntries();	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(!LoadDataLogic.IsDataLoaded) return;
 		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if(Physics.Raycast(myRay,out hit))

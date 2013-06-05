@@ -14,6 +14,11 @@ public class DataManager : MonoBehaviour {
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
 
+    //delegate is called when DataManager is finished initializing data for the first time
+    //or deserializing previously saved data
+    public delegate void DataLoadedCallBack; 
+    public DataLoadedCallBack dataLoadedCallBack;                                           
+
     //#region SaveData
     [SerializeThis]
     private static int points; //evolution points
@@ -50,6 +55,16 @@ public class DataManager : MonoBehaviour {
     private static DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
     [SerializeThis]
     private static DateTime lastCalendarComboTime; //the last day that the user continued the combo
+
+    //Inhaler Data
+    private static int slotMachineCounter; //max 3. used to determine when to start slot
+                                            //machine game
+
+    private static numberOfTimesPlayed; //max 6. user can only played 6 inhaler game per day
+    private static DateTime lastInhalerGameOpenedTime; //keep track of when to reset the
+                                                        //slotMachineCounter and numberOfTimesPlayed
+    //inhaler skin used (needs enum type)
+
     //#endregion
 
     //#region Getters

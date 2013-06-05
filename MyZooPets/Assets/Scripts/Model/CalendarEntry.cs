@@ -11,9 +11,9 @@ public class CalendarEntry{
     [SerializeThis]
     private DosageRecord afternoon;
     [SerializeThis]
-    private bool scoreGivenInMorning;
+    private bool calculatedInMorning;
     [SerializeThis]
-    private bool scoreGivenInAfternoon;
+    private bool calculatedInAfternoon;
 
     public DayOfWeek Day{
         get{return day;}
@@ -27,21 +27,21 @@ public class CalendarEntry{
         get { return this.afternoon;}
         set { this.afternoon = value;}
     }
-    public bool ScoreGivenInMorning{
-        get { return this.scoreGivenInMorning;}
-        set { this.scoreGivenInMorning = value;}
+    public bool CalculatedInMorning{
+        get { return this.calculatedInMorning;}
+        set { this.calculatedInMorning = value;}
     }
-    public bool ScoreGivenInAfternoon{
-        get { return this.scoreGivenInAfternoon;}
-        set { this.scoreGivenInAfternoon = value;}
+    public bool CalculatedInAfternoon{
+        get { return this.calculatedInAfternoon;}
+        set { this.calculatedInAfternoon = value;}
     }
 
     public CalendarEntry(DayOfWeek day, DosageRecord morning, DosageRecord afternoon ){
         this.day = day;
         this.morning = morning;
         this.afternoon = afternoon;
-        this.scoreGivenInMorning = false;
-        this.scoreGivenInAfternoon = false;
+        this.calculatedInMorning = false;
+        this.calculatedInAfternoon = false;
     }
     //parameterless constructor required for Serializer
     public CalendarEntry(){}

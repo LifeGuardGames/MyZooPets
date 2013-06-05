@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DiaryUIManager : MonoBehaviour {
-
+	
+	RoomGUI roomGui;
 	bool showGUI = true;
 	List<CalendarEntry> calendar;
 	public Texture2D diaryTexture1;
@@ -23,7 +24,7 @@ public class DiaryUIManager : MonoBehaviour {
 	private LTRect diaryRect;
 	// Use this for initialization
 	void Start () {
-	
+		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
 	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
 		calendar = CalendarLogic.GetCalendarEntries();
@@ -39,6 +40,7 @@ public class DiaryUIManager : MonoBehaviour {
 			if(hit.collider.name == "room_table"&&Input.GetMouseButtonUp(0))
 			{
 				//print("You clicked table!");
+				roomGui.HideGUIs();
 				showGUI = false;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);
@@ -75,6 +77,7 @@ public class DiaryUIManager : MonoBehaviour {
 			{
 				showGUI = !showGUI;
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
+				roomGui.ShowGUIs();
 			}
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
 			GUILayout.BeginVertical("");
@@ -132,6 +135,7 @@ public class DiaryUIManager : MonoBehaviour {
 			{
 				showGUI = !showGUI;
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
+				roomGui.ShowGUIs();
 			}
 		}
 	}

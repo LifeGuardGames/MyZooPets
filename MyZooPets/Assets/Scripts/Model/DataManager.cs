@@ -54,7 +54,7 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
     [SerializeThis]
-    private static DateTime lastCalendarComboTime; //the last day that the user continued the combo
+    // private static DateTime lastCalendarComboTime; //the last day that the user continued the combo
 
     //Inhaler Data
     private static int slotMachineCounter; //max 3. used to determine when to start slot
@@ -97,10 +97,10 @@ public class DataManager : MonoBehaviour {
         get { return lastCalendarOpenedTime;}
         set { lastCalendarOpenedTime = value;}
     }
-    public static DateTime LastCalendarComboTime{
-        get { return lastCalendarComboTime;}
-        set { lastCalendarComboTime = value;}
-    }
+    // public static DateTime LastCalendarComboTime{
+    //     get { return lastCalendarComboTime;}
+    //     set { lastCalendarComboTime = value;}
+    // }
     public static DateTime DateOfSunday{
         get { return dateOfSunday;}
         set { dateOfSunday = value;}
@@ -229,7 +229,7 @@ public class DataManager : MonoBehaviour {
 
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
-            lastCalendarComboTime = DateTime.Today.AddDays(-1);
+            // lastCalendarComboTime = DateTime.Today.AddDays(-1);
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

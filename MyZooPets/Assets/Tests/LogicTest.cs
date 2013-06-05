@@ -8,15 +8,16 @@ public class LogicTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // AddCalendarEntries();
-        CalendarOpenedTestConsecutive();
+        // CalendarOpenedTestConsecutive();
         // AllHits();
         // Miss1Day();
         // Miss1Period();
         // Miss2Days();
-        // MissNDays(3);
+        MissNDays(3);
         // MissMoreThan3Days();
         PrintCalendarEntries();
         GetComboCountTest();
+        PrintScore();
 	}
 
 	// Update is called once per frame
@@ -39,6 +40,9 @@ public class LogicTest : MonoBehaviour {
     void GetComboCountTest(){
         Debug.Log("GetComboCount() -> " + CalendarLogic.GetComboCount());
     }
+    void PrintScore(){
+        Debug.Log("DataManager.Points() -> " + DataManager.Points);
+    }
 
     // to populate calendar entries, without any combos or points
     // void AddCalendarEntries(){
@@ -54,7 +58,7 @@ public class LogicTest : MonoBehaviour {
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
         for (int i = 0; i < entries.Count; i++){
             CalendarEntry entry = entries[i];
-            Debug.Log(entry.Day + " -> " + entry.Morning + " ("+ entry.ScoreGivenInMorning +"), " + entry.Afternoon + " ("+ entry.ScoreGivenInAfternoon +")");
+            Debug.Log(entry.Day + " -> " + entry.Morning + " ("+ entry.CalculatedInMorning +"), " + entry.Afternoon + " ("+ entry.CalculatedInAfternoon +")");
         }
     }
 

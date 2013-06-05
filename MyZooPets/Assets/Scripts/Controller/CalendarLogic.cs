@@ -245,8 +245,7 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    // lastEntry can either be Hit-Hit, Miss-Hit, (Calculated)-Miss, or Null-Null.
-    // only have to worry about penalties, as rewards should have been awarded already.
+    // Only have to worry about penalties, as rewards should have been awarded already.
     // Check if last entry still has a miss in the afternoon. If so -20 health and -20 mood
     private static void CalculateForPreviousDay(){
         if (lastEntry == null) return;

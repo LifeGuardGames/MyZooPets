@@ -184,9 +184,9 @@ public class DataManager : MonoBehaviour {
         if (PlayerPrefs.GetInt("FirstTime", 1) > 0){
             //Evolution data initialization
             lastUpdatedTime = DateTime.Now;
-            durationCum = new TimeSpan(0);
-            lastEvoMeter = 0;
-            evoAverageCum = 0;
+            durationCum = new TimeSpan(0,0,10);
+            lastEvoMeter = 90;
+            evoAverageCum = 90;
 
             //Pet stats initialization
             health = 100;

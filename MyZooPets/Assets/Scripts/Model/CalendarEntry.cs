@@ -11,9 +11,9 @@ public class CalendarEntry{
     [SerializeThis]
     private DosageRecord afternoon;
     [SerializeThis]
-    private bool checkedInMorning;
+    private bool checkedInMorning; //if the player checked the game in the morning
     [SerializeThis]
-    private bool checkedInAfternoon;
+    private bool checkedInAfternoon; //if the player checked the game in the afternoon
 
     public DayOfWeek Day{
         get{return day;}

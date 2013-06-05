@@ -5,11 +5,14 @@ using System;
 //Calculates evolution meter every 30 secs
 //Decides when pet hits evolution stage
 public class EvolutionLogic : MonoBehaviour {
-    public bool isDebug;
 	private float timer = 0;
-	private float timeInterval = 30f;
+	private float timeInterval = 10f;
     private int level1EvolutionPoints = 50000;
     private int level2EvolutionPoints = 150000;
+
+    //#region API
+
+    //#endregion
 
 	// Use this for initialization
 	void Start () {
@@ -19,18 +22,18 @@ public class EvolutionLogic : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if(!isDebug){
-    		timer -= Time.deltaTime;
-    		if (timer <= 0){
-    			timer = timeInterval;
-    			UpdateEvoAverage();
-    		}
-        }
+		timer -= Time.deltaTime;
+		if (timer <= 0){
+			timer = timeInterval;
+			UpdateEvoAverage();
+            
+		}
 	}
 
     //calculate evolution meter
 	private void UpdateEvoAverage(){
 		int cumDurationSecs = (int)DataManager.durationCum.TotalSeconds;
+        
 		DateTime now = DateTime.Now;
 		TimeSpan tempd = now.Subtract(DataManager.lastUpdatedTime);
 		int timeElapsedInSecs = (int)tempd.TotalSeconds;
@@ -55,7 +58,7 @@ public class EvolutionLogic : MonoBehaviour {
     }
 
     //get the weighted evolution meter
-	private double getEvoMeter(){
+	private static double getEvoMeter(){
 		return 0.5 * DataManager.Mood + 0.5 * DataManager.Health;
 	}
 }

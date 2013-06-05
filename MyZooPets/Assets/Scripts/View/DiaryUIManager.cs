@@ -15,6 +15,7 @@ public class DiaryUIManager : MonoBehaviour {
 	
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
+	public GUIStyle diaryTextStyle;
 	
 	private int diaryPage = 1;
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
@@ -61,6 +62,15 @@ public class DiaryUIManager : MonoBehaviour {
 		{
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
 			GUI.DrawTexture(diaryRect.rect,diaryTexture1);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+100,100,70),"Monday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+170,100,70),"Tuesday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+240,100,70),"Wednesday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+310,100,70),"Thursday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+380,100,70),"Friday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+450,100,70),"Saturday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
+			GUI.TextArea(new Rect (diaryRect.rect.x+100,diaryRect.rect.y+577,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
+			
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
 				showGUI = !showGUI;

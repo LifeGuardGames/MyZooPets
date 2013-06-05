@@ -201,6 +201,16 @@ public class DataManager : MonoBehaviour {
             entries = new List<CalendarEntry>();
             calendarCombo = 0;
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
+
+            // populate previous entries with DosageRecord.Null up to today's entry
+            // to make it more consistent - DataManager.Entries will always start with Monday's entry
+            DateTime lastSunday = dateOfSunday.AddDays(-7);
+            TimeSpan sinceLastSunday = DateTime.Today.Subtract(lastSunday);
+            for (int i = 1; i < sinceLastSunday.Days; i++){ // exclude today's entry, as that will be generated later
+                DateTime day = lastSunday.AddDays(i);
+                entries.Add(new CalendarEntry(day.DayOfWeek, DosageRecord.Null, DosageRecord.Null) );
+            }
+
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
             lastCalendarComboTime = DateTime.Today.AddDays(-1);
@@ -216,7 +226,6 @@ public class DataManager : MonoBehaviour {
                 }
             }
         }
-
     }
 
     //called when level data are loaded

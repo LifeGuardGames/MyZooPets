@@ -11,8 +11,13 @@ public class RoomGUI : MonoBehaviour {
 	
 	private bool isMenuExpanded;
 	private bool showOption = false;
+	private bool inhalerpicked = false; 
+	private bool emInhalerpicked = false;
 	private LTRect menuRect;
 	private Rect menuTextureRect;
+
+	public Texture2D textureSwap1;
+	public Texture2D textureSwap2;
 	
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
@@ -165,8 +170,16 @@ public class RoomGUI : MonoBehaviour {
 			
 			DataManager.SubtractHealth(40);
 		}
-		GUILayout.Button(inhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
-		GUILayout.Button(emInhalerTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth));
+		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth)))
+		{
+			inhalerpicked = true;
+		}
+		
+		
+		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth)))
+		{
+			emInhalerpicked = true;
+		}
 		
 		if(isMenuExpanded){
 			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
@@ -187,6 +200,24 @@ public class RoomGUI : MonoBehaviour {
 		
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
+		
+		if(inhalerpicked)
+		{
+			textureSwap1 = null; 
+			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),inhalerTexture);
+		}
+		if(emInhalerpicked)
+		{
+			textureSwap2 = null; 
+			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),emInhalerTexture);
+		}
+		if(Input.GetMouseButtonUp(0))
+		{
+			emInhalerpicked = false;
+			textureSwap1 = inhalerTexture;
+			inhalerpicked = false;
+			textureSwap2 = emInhalerTexture;
+		}
 		
 		//GUI.DrawTexture(new Rect (optionIconLoc.x,optionIconLoc.y,90,90),optionIconTexture);
 		if(GUI.Button(new Rect (optionIconLoc.x,optionIconLoc.y,90,90),optionIconTexture))

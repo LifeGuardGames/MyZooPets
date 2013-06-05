@@ -77,7 +77,7 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalendarOpenedOnDate(DateTime now){
         UpdateLastEntryReference();
          // compare today's date and last updated day (calendar)
-        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastPlayedTime.Date);
+        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry(now);
@@ -101,14 +101,14 @@ public class CalendarLogic : MonoBehaviour {
                 CalculateForMissedEntries();
 
             }
-            //generate entries for today. add to list and update LastPlayedTime
+            //generate entries for today. add to list and update LastCalendarOpenedTime
             // todo: change back to orignal method
             GenerateEntry(now); // stored in lastEntry
             CalculateScoreForToday(now);
             tempEntries.Add(lastEntry); //add todays entry back in tempEntries
             IsNewWeek(now); // add relevant entries from tempEntries to DataManager.Entries
 
-            DataManager.LastPlayedTime = now;
+            DataManager.LastCalendarOpenedTime = now;
         }
     }
 
@@ -148,7 +148,7 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     private static void GenerateMissedEntries(DateTime now){
-        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastPlayedTime.Date);
+        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
         int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
         int counter = 0; //use to tell how many missed day entries are without punishment
                         //and how many are with punishment
@@ -219,7 +219,7 @@ public class CalendarLogic : MonoBehaviour {
         if (now.Hour < 12 && lastEntry.Morning == DosageRecord.Hit){
             points += 250;
             DataManager.IncrementCalendarCombo();
-            DataManager.LastComboTime = now;
+            DataManager.LastCalendarComboTime = now;
         }
         // note: if the user didn't check it in the morning, they lose the combo
         // if afternoon, both dosages are generated
@@ -230,7 +230,7 @@ public class CalendarLogic : MonoBehaviour {
             if (lastEntry.Afternoon == DosageRecord.Hit){
                 points += 250;
                 DataManager.IncrementCalendarCombo();
-                DataManager.LastComboTime = now;
+                DataManager.LastCalendarComboTime = now;
             }
             DataManager.AddPoints(points);
         }

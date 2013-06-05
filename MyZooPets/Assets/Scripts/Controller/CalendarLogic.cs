@@ -215,7 +215,7 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalculateScoreForToday(DateTime now){
         // if morning, only morning dosage is generated
         if (now.Hour < 12){
-            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
+            if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Hit){
                     DataManager.AddPoints(250);
                     DataManager.IncrementCalendarCombo();
@@ -226,13 +226,13 @@ public class CalendarLogic : MonoBehaviour {
         // note: if the user didn't check it in the morning, they lose the combo
         // if afternoon, both dosages are generated
         else if (now.Hour >= 12){
-            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
+            if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Miss){
                     DataManager.SubtractHealth(20);
                     DataManager.SubtractMood(20);
-                    DataManager.ResetCalendarCombo();
-                    lastEntry.CalculatedInMorning = true;
                 }
+                DataManager.ResetCalendarCombo();
+                lastEntry.CalculatedInMorning = true;
             }
 
             if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){

@@ -11,9 +11,9 @@ public class LogicTest : MonoBehaviour {
         // CalendarOpenedTestConsecutive();
         // AllHits();
         // Miss1Day();
-        // Miss1Period();
+        Miss1Period();
         // Miss2Days();
-        MissNDays(3);
+        // MissNDays(3);
         // MissMoreThan3Days();
         PrintCalendarEntries();
         GetComboCountTest();

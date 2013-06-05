@@ -126,7 +126,8 @@ public class CalendarLogic : MonoBehaviour {
             // should be already generated, so do nothing
         }
         else { // afternoon
-            if (lastEntry.CalculatedInAfternoon == false){
+            if (lastEntry.OpenedInAfternoon == false){
+                lastEntry.OpenedInAfternoon = true;
                 if (lastEntry.Morning == DosageRecord.Hit){
                     lastEntry.Afternoon = GetHitOrMiss(40);
                 }
@@ -191,61 +192,80 @@ public class CalendarLogic : MonoBehaviour {
 
     private static void GenerateEntry(DateTime now){
         DayOfWeek day = GetDay(now);
+        CalendarEntry newEntry = new CalendarEntry(day);
 
         DosageRecord morning, afternoon;
         if (now.Hour < 12){ // morning
-            morning = GetHitOrMiss(40);
-            afternoon = DosageRecord.Null;
+            newEntry.OpenedInMorning = true;
+            newEntry.Morning = GetHitOrMiss(40);
+            newEntry.Afternoon = DosageRecord.Null;
         }
         else { // afternoon
-            DataManager.ResetCalendarCombo();
-            morning = DosageRecord.Hit;
-            afternoon = GetHitOrMiss(40);
+            newEntry.Morning = DosageRecord.Hit;
+            newEntry.OpenedInAfternoon = true;
+            newEntry.Afternoon = GetHitOrMiss(40);
         }
-        CalendarEntry newEntry = new CalendarEntry(day, morning, afternoon);
+
         lastEntry = newEntry;
     }
 
     //********************************************
     // calculation methods
 
-
     private static void CalculateScoreForToday(DateTime now){
         // if morning, only morning dosage is generated
-        if (now.Hour < 12 && lastEntry.CalculatedInMorning == false){
-            if (lastEntry.Morning == DosageRecord.Hit){
-                lastEntry.CalculatedInMorning = true;
-                DataManager.AddPoints(250);
-                DataManager.IncrementCalendarCombo();
+        if (now.Hour < 12){
+            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
+                if (lastEntry.Morning == DosageRecord.Hit){
+                    DataManager.AddPoints(250);
+                    DataManager.IncrementCalendarCombo();
+                    lastEntry.CalculatedInMorning = true;
+                }
             }
         }
         // note: if the user didn't check it in the morning, they lose the combo
         // if afternoon, both dosages are generated
         else if (now.Hour >= 12){
-            if (lastEntry.CalculatedInAfternoon == false){
+            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
                 if (lastEntry.Morning == DosageRecord.Miss){
-                    lastEntry.CalculatedInMorning = true;
+                    DataManager.SubtractHealth(20);
+                    DataManager.SubtractMood(20);
                     DataManager.ResetCalendarCombo();
+                    lastEntry.CalculatedInMorning = true;
                 }
+            }
+
+            if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){
                 if (lastEntry.Afternoon == DosageRecord.Hit){
-                    lastEntry.CalculatedInAfternoon = true;
                     DataManager.AddPoints(250);
                     DataManager.IncrementCalendarCombo();
+                    lastEntry.CalculatedInAfternoon = true;
                 }
             }
         }
     }
 
-    // Because of GeneratePreviousAfternoon(), lastEntry can either be Hit-Hit, Miss-Hit, or Null-Null.
+    // lastEntry can either be Hit-Hit, Miss-Hit, (Calculated)-Miss, or Null-Null.
+    // only have to worry about penalties, as rewards should have been awarded already.
     // Check if last entry still has a miss in the afternoon. If so -20 health and -20 mood
     private static void CalculateForPreviousDay(){
         if (lastEntry == null) return;
 
-        if (lastEntry.Afternoon == DosageRecord.Miss){
-            lastEntry.CalculatedInAfternoon = true;
-            DataManager.SubtractHealth(20);
-            DataManager.SubtractMood(20);
+        // if previous afternoon was skipped and previous morning was missed
+        if (lastEntry.OpenedInAfternoon == false){
             DataManager.ResetCalendarCombo();
+            if (lastEntry.OpenedInMorning && lastEntry.Morning == DosageRecord.Miss){
+                DataManager.SubtractHealth(20);
+                DataManager.SubtractMood(20);
+                lastEntry.CalculatedInMorning = true;
+            }
+        }
+        // previous afternoon was not skipped, but miss was not corrected
+        else if (lastEntry.Afternoon == DosageRecord.Miss){
+                DataManager.SubtractHealth(20);
+                DataManager.SubtractMood(20);
+                DataManager.ResetCalendarCombo();
+                lastEntry.CalculatedInAfternoon = true;
         }
 
     }
@@ -256,7 +276,11 @@ public class CalendarLogic : MonoBehaviour {
             DataManager.ResetCalendarCombo();
         }
         foreach (CalendarEntry entry in tempEntries){
-            if (entry.Morning == DosageRecord.Miss || entry.Afternoon == DosageRecord.Miss){
+            if (entry.Morning == DosageRecord.Miss){
+                DataManager.SubtractHealth(20);
+                DataManager.SubtractMood(20);
+            }
+            if (entry.Afternoon == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);
             }

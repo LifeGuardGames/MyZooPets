@@ -269,6 +269,6 @@ public class DataManager : MonoBehaviour {
 
     //Save data before the game is quit
     void OnApplicationQuit(){
-
+        PlayerPrefs.Save();
     }
 }

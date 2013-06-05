@@ -8,12 +8,12 @@ public class LogicTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // AddCalendarEntries();
-        // CalendarOpenedTestConsecutive();
+        CalendarOpenedTestConsecutive();
         // AllHits();
         // Miss1Day();
         // Miss1Period();
         // Miss2Days();
-        MissNDays(3);
+        // MissNDays(3);
         // MissMoreThan3Days();
         PrintCalendarEntries();
         GetComboCountTest();
@@ -54,7 +54,7 @@ public class LogicTest : MonoBehaviour {
         List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
         for (int i = 0; i < entries.Count; i++){
             CalendarEntry entry = entries[i];
-            Debug.Log(entry.Day + " -> " + entry.Morning + " ("+ entry.CheckedInMorning +"), " + entry.Afternoon + " ("+ entry.CheckedInAfternoon +")");
+            Debug.Log(entry.Day + " -> " + entry.Morning + " ("+ entry.ScoreGivenInMorning +"), " + entry.Afternoon + " ("+ entry.ScoreGivenInAfternoon +")");
         }
     }
 

@@ -10,6 +10,13 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject cameraObject;
 	
 	public GameObject popupTextureGreat;
+	public GameObject popupAward;
+	
+	
+	public Texture2D healthIcon;
+	public Texture2D moodIcon;
+	public Texture2D hungerIcon;
+	public Texture2D starIcon;
 	
 	void Start(){
 		gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
@@ -20,9 +27,16 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 	
 	//TODO-s some kind of complex hashmap storage for references? TODO-s particle not used
-	void PopupTexture(string message, string particle){
+	public void PopupTexture(string message, string particle){
 		if(message == "great"){
 			GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 2.0f);
+			
+			GameObject go2 = Instantiate(popupAward, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go2, 2.0f);
 		}
+		
+
+		
 	}
 }

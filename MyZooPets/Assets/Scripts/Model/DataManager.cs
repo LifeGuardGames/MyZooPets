@@ -47,7 +47,7 @@ public class DataManager : MonoBehaviour {
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
     [SerializeThis]
-    private static DateTime lastPlayedDate; //the last time that the user used the calendar
+    private static DateTime lastPlayedTime; //the last time that the user used the calendar
     [SerializeThis]
     private static DateTime lastComboTime; //the last day that the user continued the combo
     //#endregion
@@ -78,9 +78,9 @@ public class DataManager : MonoBehaviour {
     public static int CalendarCombo{
         get {return calendarCombo;}
     }
-    public static DateTime LastPlayedDate{
-        get { return lastPlayedDate;}
-        set { lastPlayedDate = value;}
+    public static DateTime LastPlayedTime{
+        get { return lastPlayedTime;}
+        set { lastPlayedTime = value;}
     }
     public static DateTime LastComboTime{
         get { return lastComboTime;}
@@ -202,7 +202,7 @@ public class DataManager : MonoBehaviour {
             calendarCombo = 0;
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             // set to one day before today so that the entry will be generated for the first day
-            lastPlayedDate = DateTime.Today.AddDays(-1);
+            lastPlayedTime = DateTime.Today.AddDays(-1);
             lastComboTime = DateTime.Today.AddDays(-1);
 
             //turn first time initialization off

@@ -55,15 +55,21 @@ public class CalendarLogic : MonoBehaviour {
     public static void CalendarOpenedTest(DateTime now){
         CalendarOpenedOnDate(now);
     }
+
+    public static CalendarEntry LastEntryTest(){
+        return lastEntry;
+    }
     //#endregion
     //***********************************************************
 
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {
             lastEntry.Morning = DosageRecord.Hit;
+            lastEntry.CheckedInMorning = true;
         }
         else if (now.Hour >= 12) {
             lastEntry.Afternoon = DosageRecord.Hit;
+            lastEntry.CheckedInAfternoon = true;
         }
         DataManager.IncrementCalendarCombo();
     }
@@ -71,7 +77,7 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalendarOpenedOnDate(DateTime now){
         UpdateLastEntryReference();
          // compare today's date and last updated day (calendar)
-        TimeSpan sinceLastPlayed = now.Subtract(DataManager.LastPlayedDate);
+        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastPlayedTime.Date);
 
         if (sinceLastPlayed.Days == 0){ // if same day. no miss days
             SameDayGenerateEntry(now);
@@ -95,14 +101,14 @@ public class CalendarLogic : MonoBehaviour {
                 CalculateForMissedEntries();
 
             }
-            //generate entries for today. add to list and update LastPlayedDate
+            //generate entries for today. add to list and update LastPlayedTime
             // todo: change back to orignal method
             GenerateEntry(now); // stored in lastEntry
             CalculateScoreForToday(now);
             tempEntries.Add(lastEntry); //add todays entry back in tempEntries
             IsNewWeek(now); // add relevant entries from tempEntries to DataManager.Entries
 
-            DataManager.LastPlayedDate = now;
+            DataManager.LastPlayedTime = now;
         }
     }
 
@@ -141,8 +147,8 @@ public class CalendarLogic : MonoBehaviour {
         }
     }
 
-    private static void GenerateMissedEntries(DateTime today){
-        TimeSpan sinceLastPlayed = today.Subtract(DataManager.LastPlayedDate);
+    private static void GenerateMissedEntries(DateTime now){
+        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastPlayedTime.Date);
         int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
         int counter = 0; //use to tell how many missed day entries are without punishment
                         //and how many are with punishment
@@ -151,7 +157,7 @@ public class CalendarLogic : MonoBehaviour {
         //is taken by the pet with no misses
         for(counter = 0; counter<3 && counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
-            DateTime missedDate = today.Subtract(timeSpan);
+            DateTime missedDate = now.Subtract(timeSpan);
             //generate entries for the missed days
             //the oldest entries are generated first
             tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
@@ -161,7 +167,7 @@ public class CalendarLogic : MonoBehaviour {
         //frequency for each 12 h dose and incurring the health consequences of this.
         for(counter = counter; counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
-            DateTime missedDate = today.Subtract(timeSpan);
+            DateTime missedDate = now.Subtract(timeSpan);
             CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
             tempEntries.Add(entry);
         }
@@ -282,17 +288,17 @@ public class CalendarLogic : MonoBehaviour {
 
     //Check if it is a new week. Figure out how many entries need to be displayed
     //in the new week
-    private static void IsNewWeek(DateTime today){
-        if(today > DataManager.DateOfSunday){
+    private static void IsNewWeek(DateTime now){
+        if(now.Date > DataManager.DateOfSunday){
             //today's  date is later than sunday
 
-            TimeSpan sinceSunday = today - DataManager.DateOfSunday;
+            TimeSpan sinceSunday = now.Date - DataManager.DateOfSunday;
 
             //create new list for the new week
             //only move the latest entries into the new week
             DataManager.Entries = tempEntries.GetRange(tempEntries.Count - sinceSunday.Days, sinceSunday.Days);
 
-            DataManager.DateOfSunday = GetDateOfSunday(today);
+            DataManager.DateOfSunday = GetDateOfSunday(now);
 
         }else{ //same week so all temporary entries get displayed
             DataManager.Entries.AddRange(tempEntries);

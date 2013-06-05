@@ -8,10 +8,13 @@ public class LogicTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // AddCalendarEntries();
-        CalendarOpenedTestConsecutive();
-        // CalendarOpenedTestSkip1();
-        // CalendarOpenedTestSkip2();
-        // CalendarOpenedTestSkip5();
+        // CalendarOpenedTestConsecutive();
+        // AllHits();
+        // Miss1Day();
+        // Miss1Period();
+        // Miss2Days();
+        MissNDays(3);
+        // MissMoreThan3Days();
         PrintCalendarEntries();
         GetComboCountTest();
 	}
@@ -38,13 +41,13 @@ public class LogicTest : MonoBehaviour {
     }
 
     // to populate calendar entries, without any combos or points
-    void AddCalendarEntries(){
-        List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
-        entries.Add(new CalendarEntry( DayOfWeek.Monday, DosageRecord.Hit, DosageRecord.Hit) );
-        entries.Add(new CalendarEntry( DayOfWeek.Tuesday, DosageRecord.Hit, DosageRecord.Hit) );
-        entries.Add(new CalendarEntry( DayOfWeek.Wednesday, DosageRecord.Hit, DosageRecord.Hit) );
-        entries.Add(new CalendarEntry( DayOfWeek.Thursday, DosageRecord.Hit, DosageRecord.Hit) );
-    }
+    // void AddCalendarEntries(){
+    //     List <CalendarEntry> entries = CalendarLogic.GetCalendarEntries();
+    //     entries.Add(new CalendarEntry( DayOfWeek.Monday, DosageRecord.Hit, DosageRecord.Hit) );
+    //     entries.Add(new CalendarEntry( DayOfWeek.Tuesday, DosageRecord.Hit, DosageRecord.Hit) );
+    //     entries.Add(new CalendarEntry( DayOfWeek.Wednesday, DosageRecord.Hit, DosageRecord.Hit) );
+    //     entries.Add(new CalendarEntry( DayOfWeek.Thursday, DosageRecord.Hit, DosageRecord.Hit) );
+    // }
 
     void PrintCalendarEntries(){
         Debug.Log("Debugging GetCalendarEntries()");
@@ -55,11 +58,16 @@ public class LogicTest : MonoBehaviour {
         }
     }
 
-    void RecordGivingInhalerTest(DateTime now){
-        CalendarLogic.RecordGivingInhalerTest(now);
+    void RecordGivingInhalerIfNotTakenTest(DateTime now){
+        CalendarEntry entry = CalendarLogic.LastEntryTest();
+        if ((now.Hour < 12 && entry.Morning == DosageRecord.Miss) ||
+            (now.Hour >= 12 && entry.Afternoon == DosageRecord.Miss)){
+            CalendarLogic.RecordGivingInhalerTest(now);
+        }
     }
 
     void CalendarOpenedTestConsecutive(){
+        Debug.Log("Debugging CalendarOpenedTestConsecutive()");
         DateTime timeTracker = DateTime.Today;
         TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
 
@@ -85,21 +93,158 @@ public class LogicTest : MonoBehaviour {
         // CalendarLogic.CalendarOpenedTest(timeTracker);
     }
 
-    void CalendarOpenedTestSkip1(){
-        CalendarLogic.CalendarOpenedTest(DateTime.Now);
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(2));
+    void AllHits(){
+        Debug.Log("Debugging AllHits()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker); // 7PM
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        RecordGivingInhalerIfNotTakenTest(timeTracker);
+
     }
-    void CalendarOpenedTestSkip2(){
-        CalendarLogic.CalendarOpenedTest(DateTime.Now);
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(3));
+
+    void Miss1Day(){
+        Debug.Log("Debugging Miss1Day()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
     }
-    void CalendarOpenedTestSkip5(){
-        CalendarLogic.CalendarOpenedTest(DateTime.Now);
-        Debug.Log("Six days from today: " + DateTime.Now.AddDays(6).DayOfWeek);
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(6));
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(7));
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(8));
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(9));
-        CalendarLogic.CalendarOpenedTest(DateTime.Now.AddDays(10));
+    void Miss2Days(){
+        Debug.Log("Debugging Miss2Days()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+    }
+    void Miss3Days(){
+        Debug.Log("Debugging Miss3Days()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+    }
+    void MissNDays(int numDays){
+        Debug.Log("Debugging MissNDays("+ numDays +")");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        for (int i = 0; i < numDays; i++){
+            timeTracker += twelveHourPeriod;
+            timeTracker += twelveHourPeriod;
+        }
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+    }
+    void Miss1Period(){
+        Debug.Log("Debugging Miss1Period()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        timeTracker += twelveHourPeriod;
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+    }
+    void MissMoreThan3Days(){
+        Debug.Log("Debugging MissMoreThan3Days()");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
+
+        // miss 6 days
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+        timeTracker += twelveHourPeriod;
+
+        timeTracker += twelveHourPeriod;
+        CalendarLogic.CalendarOpenedTest(timeTracker);
     }
 }

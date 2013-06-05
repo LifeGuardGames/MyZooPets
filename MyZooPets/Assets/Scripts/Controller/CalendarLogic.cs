@@ -250,14 +250,15 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalculateForPreviousDay(){
         if (lastEntry == null) return;
 
-        // if previous afternoon was skipped and previous morning was missed
+        // if on the previous day, the morning was missed, and that afternoon skipped
         if (lastEntry.OpenedInAfternoon == false){
-            DataManager.ResetCalendarCombo();
+            // if morning was not missed but afternoon skipped, no need to penalize, but just reset combo
             if (lastEntry.OpenedInMorning && lastEntry.Morning == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);
                 lastEntry.CalculatedInMorning = true;
             }
+            DataManager.ResetCalendarCombo();
         }
         // previous afternoon was not skipped, but miss was not corrected
         else if (lastEntry.Afternoon == DosageRecord.Miss){

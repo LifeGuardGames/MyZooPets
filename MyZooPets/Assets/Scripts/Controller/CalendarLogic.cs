@@ -142,8 +142,13 @@ public class CalendarLogic : MonoBehaviour {
     // if player didn't play the previous afternoon, turn it into a hit
     private static void GeneratePreviousAfternoon(){
         if (lastEntry != null && lastEntry.Afternoon == DosageRecord.Null){
-            lastEntry.Afternoon = DosageRecord.Hit;
-            DataManager.ResetCalendarCombo();
+            if (lastEntry.Morning == DosageRecord.Null){
+                // do nothing, as this means this entry is just a placeholder, and its DosageRecord.Null value should not be changed
+            }
+            else {
+                lastEntry.Afternoon = DosageRecord.Hit;
+                DataManager.ResetCalendarCombo();
+            }
         }
     }
 

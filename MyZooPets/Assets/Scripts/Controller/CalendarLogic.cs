@@ -166,7 +166,7 @@ public class CalendarLogic : MonoBehaviour {
             tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
         }
 
-        //if player misses for >3 days the pet starts missing doses with 60%
+        //if player misses for >3 days the pet starts missing doses with 70%
         //frequency for each 12 h dose and incurring the health consequences of this.
         for(counter = counter; counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
@@ -181,11 +181,11 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
     }
 
-    //60% frequency for each 12h dose: morning, afternoon
+    //70% miss frequency for each 12h dose: morning, afternoon
     private static CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
         DosageRecord morning, afternoon;
-        morning = GetHitOrMiss(60);
-        afternoon = GetHitOrMiss(60);
+        morning = GetHitOrMiss(70);
+        afternoon = GetHitOrMiss(70);
 
         return new CalendarEntry(day, morning, afternoon);
     }

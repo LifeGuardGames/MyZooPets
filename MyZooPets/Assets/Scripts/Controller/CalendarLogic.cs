@@ -19,6 +19,7 @@ public class CalendarLogic : MonoBehaviour {
     }
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
+    // only used here, and in DataManager to initialize DataManager.DateOfSunday
     public static DateTime GetDateOfSunday(DateTime dateTime){
         if (dateTime.DayOfWeek == DayOfWeek.Sunday){
             return dateTime;
@@ -41,6 +42,11 @@ public class CalendarLogic : MonoBehaviour {
         RecordGivingInhaler(DateTime.Now);
     }
 
+    //#endregion
+
+    //***********************************************************
+
+    //#region API
     // todo: for testing, delete later
     public static void CalendarOpenedTest(DateTime now){
         CalendarOpenedOnDate(now);
@@ -189,34 +195,6 @@ public class CalendarLogic : MonoBehaviour {
             }
         }
     }
-
-
-    // // todo: change
-    // private static void UpdateComboCountAtTime(DateTime now){
-    //     // if LastComboTime is in last 12 hour period,
-    //     TimeSpan sinceLastCombo = now.Subtract(DataManager.LastComboTime);
-
-    //     // update combo count
-    //     if (sinceLastCombo.Days > 1){ // missed at least one day
-    //         DataManager.ResetCalendarCombo();
-    //     }
-    //     if (DataManager.LastPlayedDate == now.AddDays(-1)){
-
-    //         // todo
-    //     }
-    //     // check if calendarCombo is already incremented for that day
-    //     if (DataManager.LastComboTime != now){
-    //         if (lastEntry.Morning == DosageRecord.Hit && lastEntry.Afternoon == DosageRecord.Hit){
-    //             // todo
-    //             if (DataManager.LastPlayedDate == now){
-    //                 DataManager.AddMood(10); // +10 mood for administering a missed dose
-    //             }
-    //             DataManager.AddMood(5); // +5 mood for checking diary every day
-    //             DataManager.IncrementCalendarCombo();
-    //             DataManager.LastComboTime = DateTime.Now;
-    //         }
-    //     }
-    // }
 
     private static DayOfWeek GetDay(DateTime day){
         return day.DayOfWeek;

@@ -8,15 +8,15 @@ public class PopupTexture : MonoBehaviour {
 	//public LTRect textureRect2 = new LTRect(0, 0, 551, 175);
 	
 	//public Vector2 initPosition = new Vector2(100, 100);
-	public Vector2 initScale = new Vector2(0, 0);
-	public Vector2 initRotation;
+	//public Vector2 initScale = new Vector2(0, 0);
+	//public Vector2 initRotation;
 	
 	//public Vector2 finalPosition = new Vector2(100, 100);
 	//public Vector2 finalScale = new Vector2(551, 175);
-	public Vector2 finalRotation;
+	//public Vector2 finalRotation;
 	
 	void Start(){
-		textureRect = new LTRect(Screen.width/2 - greatTexture.width/2, -100, 551, 175);
+		textureRect = new LTRect(Screen.width/2 - greatTexture.width/2, -300, 551, 175);
 		
 		Hashtable optional = new Hashtable();
 //		optional.Add("ease", LeanTweenType.easeInOutQuad);

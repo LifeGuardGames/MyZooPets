@@ -189,11 +189,10 @@ public class DataManager : MonoBehaviour {
         }
         DontDestroyOnLoad(transform.gameObject);
         isCreated = true;
-    }
 
-    // Use this for initialization
-    // save and load data here
-    void Start () {
+        // Use this for initialization
+        // save and load data here
+
         //first time playing the game. values need to be initialized
         if(isDebugging) PlayerPrefs.DeleteAll();
         if (PlayerPrefs.GetInt("FirstTime", 1) > 0){

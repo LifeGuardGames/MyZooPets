@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DiaryUIManager : MonoBehaviour {
 
 	bool showGUI = true;
-	
+	List<CalendarEntry> calendar;
 	public Texture2D diaryTexture1;
 	public Texture2D diaryTexture2;
+	public Texture2D tickBoxEmpty;
+	public Texture2D tickBoxChecked;
+	public Texture2D tickBoxMissed;
+	
+	
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
 	
@@ -19,6 +25,8 @@ public class DiaryUIManager : MonoBehaviour {
 	
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
 	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
+		calendar = CalendarLogic.GetCalendarEntries();
+
 	}
 	
 	// Update is called once per frame
@@ -27,23 +35,19 @@ public class DiaryUIManager : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(myRay,out hit))
 		{
-			if(hit.collider.name == "room_table"&&Input.GetMouseButtonUp(1))
+			if(hit.collider.name == "room_table"&&Input.GetMouseButtonUp(0))
 			{
 				//print("You clicked table!");
 				showGUI = false;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);
-		
+	
+				CalendarLogic.CalendarOpened();
 				if(!showGUI)
 				{
 					LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
-				//	LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 
 				}
-//				else
-//				{
-//					LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
-//				}
 			}
 		}
 	}
@@ -67,8 +71,24 @@ public class DiaryUIManager : MonoBehaviour {
 			for(int i = 0;i < 7; i++)
 			{
 				GUILayout.BeginHorizontal("");
-				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(60),GUILayout.Width(200));
-				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(60),GUILayout.Width(200));
+				diaryCheckBoxStyle.normal.background = tickBoxEmpty;
+				if(i < calendar.Count)
+				{
+					if(calendar[i].Morning == DosageRecord.Hit)  
+						diaryCheckBoxStyle.normal.background = tickBoxChecked;
+					else if (calendar[i].Morning == DosageRecord.Miss)					
+						diaryCheckBoxStyle.normal.background = tickBoxMissed;
+				}
+				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
+				diaryCheckBoxStyle.normal.background = tickBoxEmpty;
+				if(i < calendar.Count)
+				{
+					if(calendar[i].Afternoon == DosageRecord.Hit)
+						diaryCheckBoxStyle.normal.background = tickBoxChecked;
+					else if (calendar[i].Afternoon == DosageRecord.Miss)
+						diaryCheckBoxStyle.normal.background = tickBoxMissed;
+				}
+				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
 				GUILayout.EndHorizontal();	
 			}
 			GUILayout.EndVertical();
@@ -104,7 +124,5 @@ public class DiaryUIManager : MonoBehaviour {
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 			}
 		}
-
-		
 	}
 }

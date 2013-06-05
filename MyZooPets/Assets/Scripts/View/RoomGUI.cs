@@ -13,7 +13,7 @@ public class RoomGUI : MonoBehaviour {
 	private bool showOption = false;
 	private bool inhalerpicked = false; 
 	private bool emInhalerpicked = false;
-	private LTRect menuRect;
+	
 	private Rect menuTextureRect;
 
 	public Texture2D textureSwap1;
@@ -57,23 +57,28 @@ public class RoomGUI : MonoBehaviour {
 	public float mood;
 	public float health;
 		
-	private Vector2 tierBarloc = new Vector2(0,2);
-	private Vector2 tierTextOffset = new Vector2(25,12);
+	private LTRect TopGuiRect = new LTRect (0,0,1200,100);
+	private LTRect LeftGuiRect = new LTRect (0,0,100,800);
+	private LTRect menuRect;	
 	
-	private Vector2 starBarloc = new Vector2(540,2);
-	private Vector2 starIconOffset = new Vector2(10,4);
-	private Vector2 starTextOffset = new Vector2(90,18);
+	
+	private Vector2 tierBarloc;// = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
+	private Vector2 tierTextOffset = new Vector2(25, 12);
+	
+	private Vector2 starBarloc;// = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
+	private Vector2 starIconOffset = new Vector2( 10, 4);
+	private Vector2 starTextOffset = new Vector2(90, 18);
 	private string starCount;
 	
-	private Vector2 healthBarloc = new Vector2(0,80);
+	private Vector2 healthBarloc;// = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
 	private Vector2 healthIconOffset = new Vector2(5,18);
 	private Vector2 healthBarOffset = new Vector2(60,15);
 	
-	private Vector2 moodBarloc = new Vector2(0,180);
+	private Vector2 moodBarloc;// = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
 	private Vector2 moodIconOffset = new Vector2(5,18);
 	private Vector2 moodBarOffset = new Vector2(60,15);
 	
-	private Vector2 foodBarloc = new Vector2(0,280);
+	private Vector2 foodBarloc;// = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
 	private Vector2 foodIconOffset = new Vector2(3,20);
 	private Vector2 foodbarOffset = new Vector2(60,15);
 	
@@ -89,7 +94,12 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
 	
+	
+	
 	void Start (){
+	
+		
+		
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
 		
 		progress = roomAnimator.displayPoints;
@@ -98,12 +108,33 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.displayHealth;
 		
 		isMenuExpanded = true;
-		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
-		
-		
+		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);	
 	}
 	
 	void Update (){
+		
+		//TOP GUI bar location updates
+		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
+//		tierTextOffset = new Vector2(TopGuiRect.rect.x+ 25,TopGuiRect.rect.y+ 12);
+//		progressBarOffset = new Vector2(TopGuiRect.rect.x +150,TopGuiRect.rect.y +11);
+//		progressTextOffset = new Vector2(TopGuiRect.rect.x +230,TopGuiRect.rect.y +12);
+		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
+//		starIconOffset = new Vector2(TopGuiRect.rect.x+ 10,TopGuiRect.rect.y+ 4);
+//		starTextOffset = new Vector2(TopGuiRect.rect.x+ 90,TopGuiRect.rect.y+ 18);
+	
+		//LEFT GUI bar location updates
+		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
+//	  	healthIconOffset = new Vector2(LeftGuiRect.rect.x+5,LeftGuiRect.rect.y+18);
+//	  	healthBarOffset = new Vector2(LeftGuiRect.rect.x+60,LeftGuiRect.rect.y+15);
+	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
+//	  	moodIconOffset = new Vector2(LeftGuiRect.rect.x+5,LeftGuiRect.rect.y+18);
+//	  	moodBarOffset = new Vector2(LeftGuiRect.rect.x+60,LeftGuiRect.rect.y+15);
+	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
+//	  	foodIconOffset = new Vector2(LeftGuiRect.rect.x+3,LeftGuiRect.rect.y+20);
+//	  	foodbarOffset = new Vector2(LeftGuiRect.rect.x+60,LeftGuiRect.rect.y+15);
+	
+		
+		//Data reading from Data Manager
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
 		mood = roomAnimator.displayMood;
@@ -113,6 +144,20 @@ public class RoomGUI : MonoBehaviour {
 		tierLevel = "Tier 1";
 		tierProgressText = roomAnimator.displayPoints + "/50000";
 		starCount = roomAnimator.displayStars.ToString();
+	}
+	
+	public void HideGUIs()
+	{
+		LeanTween.move(TopGuiRect,new Vector2(0,-100),1f);
+		LeanTween.move(LeftGuiRect,new Vector2(-100,0),1f);
+		LeanTween.move(menuRect,new Vector2(0,800),1f);
+	}
+	
+	public void ShowGUIs()
+	{
+		LeanTween.move(TopGuiRect,new Vector2(0,0),1f);
+		LeanTween.move(LeftGuiRect,new Vector2(0,0),1f);
+		LeanTween.move(menuRect,new Vector2(0,menuRect.rect.y-100),1f);
 	}
 	
 	void OnGUI(){

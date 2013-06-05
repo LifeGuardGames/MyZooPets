@@ -17,7 +17,7 @@ public class DataManager : MonoBehaviour {
     //delegate is called when DataManager is finished initializing data for the first time
     //or deserializing previously saved data
     public delegate void DataLoadedCallBack(); 
-    public DataLoadedCallBack dataLoadedCallBack;                                           
+    public static DataLoadedCallBack dataLoadedCallBack;                                           
 
     //#region SaveData
     [SerializeThis]
@@ -189,10 +189,12 @@ public class DataManager : MonoBehaviour {
         }
         DontDestroyOnLoad(transform.gameObject);
         isCreated = true;
+    }
+
+    void Start(){
 
         // Use this for initialization
         // save and load data here
-
         //first time playing the game. values need to be initialized
         if(isDebugging) PlayerPrefs.DeleteAll();
         if (PlayerPrefs.GetInt("FirstTime", 1) > 0){
@@ -231,6 +233,7 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
+            dataLoaded();
         }else{ //load saved data
             if(!loaded){
                 loaded = true;
@@ -242,9 +245,17 @@ public class DataManager : MonoBehaviour {
         }
     }
 
+    //call the delegate when data initialization or deserialziation is done
+    private void dataLoaded(){
+        if(dataLoadedCallBack != null){
+            dataLoadedCallBack();
+        }
+    }
+
     //called when level data are loaded
     void OnDeserialized(){
         Debug.Log("health " + health + "mood " + mood);
+        dataLoaded();
         // Debug.Log(entries[0].Day);
     }
 

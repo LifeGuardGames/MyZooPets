@@ -31,21 +31,26 @@ public class EvolutionLogic : MonoBehaviour {
         if (DataManager.evoStage == EvoStage.Stage0){ // awaiting first evolution
             if (DataManager.evoAverageCum >= 50){
                 // good care
+                // todo: change to the corresponding "species"
             }
             else { // < 50
                 // bad care
+                // todo: change to the corresponding "species"
             }
             DataManager.evoStage = EvoStage.Stage1;
         }
         else if (DataManager.evoStage == EvoStage.Stage1){ // awaiting second evolution
             if (DataManager.evoAverageCum <= 30){
                 // bad care
+                // todo: change to the corresponding "species"
             }
             else if (DataManager.evoAverageCum <= 70){
                 // OK care
+                // todo: change to the corresponding "species"
             }
             else { // > 70
                 // good care
+                // todo: change to the corresponding "species"
             }
             DataManager.evoStage = EvoStage.Stage2;
         }

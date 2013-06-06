@@ -10,8 +10,9 @@ public class CalendarLogicTest : MonoBehaviour {
         // AddCalendarEntries();
         // CalendarOpenedTestConsecutive();
         // AllHits();
+        AllHits(68);
         // Miss1Day();
-        Miss1Period();
+        // Miss1Period();
         // Miss2Days();
         // MissNDays(3);
         // MissMoreThan3Days();
@@ -130,6 +131,21 @@ public class CalendarLogicTest : MonoBehaviour {
         timeTracker += twelveHourPeriod;
         CalendarLogic.CalendarOpenedTest(timeTracker);
         RecordGivingInhalerIfNotTakenTest(timeTracker);
+
+    }
+
+    void AllHits(int periods){
+        Debug.Log("Debugging AllHits("+ periods +")");
+        DateTime timeTracker = DateTime.Today;
+        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
+
+        timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
+
+        for (int i = 0; i < periods; i++){
+            CalendarLogic.CalendarOpenedTest(timeTracker);
+            RecordGivingInhalerIfNotTakenTest(timeTracker);
+            timeTracker += twelveHourPeriod;
+        }
 
     }
 

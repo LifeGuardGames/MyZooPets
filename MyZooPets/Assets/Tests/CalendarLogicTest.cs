@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class LogicTest : MonoBehaviour {
+public class CalendarLogicTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -166,7 +166,7 @@ public class CalendarLogic : MonoBehaviour {
             tempEntries.Add(GenerateEntryWithNoPunishment(missedDate.DayOfWeek));
         }
 
-        //if player misses for >3 days the pet starts missing doses with 60%
+        //if player misses for >3 days the pet starts missing doses with 70%
         //frequency for each 12 h dose and incurring the health consequences of this.
         for(counter = counter; counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
@@ -181,11 +181,11 @@ public class CalendarLogic : MonoBehaviour {
         return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
     }
 
-    //60% frequency for each 12h dose: morning, afternoon
+    //70% miss frequency for each 12h dose: morning, afternoon
     private static CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
         DosageRecord morning, afternoon;
-        morning = GetHitOrMiss(60);
-        afternoon = GetHitOrMiss(60);
+        morning = GetHitOrMiss(70);
+        afternoon = GetHitOrMiss(70);
 
         return new CalendarEntry(day, morning, afternoon);
     }
@@ -194,7 +194,6 @@ public class CalendarLogic : MonoBehaviour {
         DayOfWeek day = GetDay(now);
         CalendarEntry newEntry = new CalendarEntry(day);
 
-        DosageRecord morning, afternoon;
         if (now.Hour < 12){ // morning
             newEntry.OpenedInMorning = true;
             newEntry.Morning = GetHitOrMiss(40);
@@ -215,7 +214,7 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalculateScoreForToday(DateTime now){
         // if morning, only morning dosage is generated
         if (now.Hour < 12){
-            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
+            if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Hit){
                     DataManager.AddPoints(250);
                     DataManager.IncrementCalendarCombo();
@@ -226,13 +225,13 @@ public class CalendarLogic : MonoBehaviour {
         // note: if the user didn't check it in the morning, they lose the combo
         // if afternoon, both dosages are generated
         else if (now.Hour >= 12){
-            if (lastEntry.CalculatedInMorning == false && lastEntry.OpenedInMorning == true){
+            if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Miss){
                     DataManager.SubtractHealth(20);
                     DataManager.SubtractMood(20);
-                    DataManager.ResetCalendarCombo();
-                    lastEntry.CalculatedInMorning = true;
                 }
+                DataManager.ResetCalendarCombo();
+                lastEntry.CalculatedInMorning = true;
             }
 
             if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){
@@ -250,14 +249,15 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalculateForPreviousDay(){
         if (lastEntry == null) return;
 
-        // if previous afternoon was skipped and previous morning was missed
+        // if on the previous day, the morning was missed, and that afternoon skipped
         if (lastEntry.OpenedInAfternoon == false){
-            DataManager.ResetCalendarCombo();
+            // if morning was not missed but afternoon skipped, no need to penalize, but just reset combo
             if (lastEntry.OpenedInMorning && lastEntry.Morning == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);
                 lastEntry.CalculatedInMorning = true;
             }
+            DataManager.ResetCalendarCombo();
         }
         // previous afternoon was not skipped, but miss was not corrected
         else if (lastEntry.Afternoon == DosageRecord.Miss){

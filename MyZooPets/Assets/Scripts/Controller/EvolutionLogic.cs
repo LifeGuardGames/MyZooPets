@@ -14,26 +14,27 @@ public class EvolutionLogic : MonoBehaviour {
 
     //#endregion
 
-	// Use this for initialization
-	void Start () {
+    public void Init () {
         timer = timeInterval;
 
-	}
+    }
 
 	// Update is called once per frame
 	void Update () {
+        if(!LoadDataLogic.IsDataLoaded) return;
+
 		timer -= Time.deltaTime;
 		if (timer <= 0){
 			timer = timeInterval;
 			UpdateEvoAverage();
-            
+
 		}
 	}
 
     //calculate evolution meter
 	private void UpdateEvoAverage(){
 		int cumDurationSecs = (int)DataManager.durationCum.TotalSeconds;
-        
+
 		DateTime now = DateTime.Now;
 		TimeSpan tempd = now.Subtract(DataManager.lastUpdatedTime);
 		int timeElapsedInSecs = (int)tempd.TotalSeconds;
@@ -41,9 +42,9 @@ public class EvolutionLogic : MonoBehaviour {
 		double evoMeter = getEvoMeter();
 		double evoAverageNow = (evoMeter + DataManager.lastEvoMeter) / 2;
 
-		//calculate the average evolution value, over the period of gameplay starting 
+		//calculate the average evolution value, over the period of gameplay starting
         //from hatching the pet up to now
-		DataManager.evoAverageCum = (DataManager.evoAverageCum * cumDurationSecs + 
+		DataManager.evoAverageCum = (DataManager.evoAverageCum * cumDurationSecs +
             evoAverageNow * timeElapsedInSecs) / (cumDurationSecs + timeElapsedInSecs);
 		DataManager.lastUpdatedTime = now;
 		DataManager.durationCum += tempd;
@@ -52,6 +53,26 @@ public class EvolutionLogic : MonoBehaviour {
 
     //TO DO: Check points and decide how the pet should evolve according to evoAverageCum
     private void CheckForEvolution(){
+        if (DataManager.evoStage == EvoStage.Stage0){ // awaiting first evolution
+            if (DataManager.evoAverageCum >= 50){
+                // good care
+            }
+            else { // < 50
+                // bad care
+
+            }
+        }
+        else if (DataManager.evoStage == EvoStage.Stage1){ // awaiting second evolution
+            if (DataManager.evoAverageCum <= 30){
+                // bad care
+            }
+            else if (DataManager.evoAverageCum <= 70){
+                // OK care
+            }
+            else { // > 70
+                // good care
+            }
+        }
         if(DataManager.Points >= level1EvolutionPoints){
 
         }

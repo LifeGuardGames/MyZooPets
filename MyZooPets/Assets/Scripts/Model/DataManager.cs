@@ -16,8 +16,8 @@ public class DataManager : MonoBehaviour {
 
     //delegate is called when DataManager is finished initializing data for the first time
     //or deserializing previously saved data
-    public delegate void DataLoadedCallBack(); 
-    public static DataLoadedCallBack dataLoadedCallBack;                                           
+    public delegate void DataLoadedCallBack();
+    public static DataLoadedCallBack dataLoadedCallBack;
 
     //#region SaveData
     [SerializeThis]
@@ -41,6 +41,8 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     public static double evoAverageCum; //cumulative average of evolution meter
                                         //use this to decide how to evolve pet
+    [SerializeThis]
+    public static EvoStage evoStage; //current evolution stage
 
     //Calendar Data
     [SerializeThis]
@@ -269,6 +271,6 @@ public class DataManager : MonoBehaviour {
 
     //Save data before the game is quit
     void OnApplicationQuit(){
-
+        PlayerPrefs.Save();
     }
 }

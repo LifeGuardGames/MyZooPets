@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DiaryUIManager : MonoBehaviour {
-	
+
 	RoomGUI roomGui;
 	bool showGUI = true;
 	List<CalendarEntry> calendar;
@@ -12,12 +12,12 @@ public class DiaryUIManager : MonoBehaviour {
 	public Texture2D tickBoxEmpty;
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
-	
-	
+
+
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
 	public GUIStyle diaryTextStyle;
-	
+
 	private int diaryPage = 1;
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
 	private Vector2 diaryFinalPosition = new Vector2(650,100);
@@ -32,9 +32,9 @@ public class DiaryUIManager : MonoBehaviour {
 	}
 
 	public void Init(){
-		calendar = CalendarLogic.GetCalendarEntries();	
+		calendar = CalendarLogic.GetCalendarEntries();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(!LoadDataLogic.IsDataLoaded) return;
@@ -49,7 +49,7 @@ public class DiaryUIManager : MonoBehaviour {
 				showGUI = false;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);
-	
+
 				CalendarLogic.CalendarOpened();
 				if(!showGUI)
 				{
@@ -59,9 +59,10 @@ public class DiaryUIManager : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	void OnGUI()
 	{
+		if(!LoadDataLogic.IsDataLoaded) return;
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;
@@ -77,7 +78,7 @@ public class DiaryUIManager : MonoBehaviour {
 			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+450,100,70),"Saturday",diaryTextStyle);
 			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
 			GUI.TextArea(new Rect (diaryRect.rect.x+100,diaryRect.rect.y+577,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
-			
+
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
 				showGUI = !showGUI;
@@ -92,9 +93,9 @@ public class DiaryUIManager : MonoBehaviour {
 				diaryCheckBoxStyle.normal.background = tickBoxEmpty;
 				if(i < calendar.Count)
 				{
-					if(calendar[i].Morning == DosageRecord.Hit)  
+					if(calendar[i].Morning == DosageRecord.Hit)
 						diaryCheckBoxStyle.normal.background = tickBoxChecked;
-					else if (calendar[i].Morning == DosageRecord.Miss)					
+					else if (calendar[i].Morning == DosageRecord.Miss)
 						diaryCheckBoxStyle.normal.background = tickBoxMissed;
 				}
 				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
@@ -107,14 +108,14 @@ public class DiaryUIManager : MonoBehaviour {
 						diaryCheckBoxStyle.normal.background = tickBoxMissed;
 				}
 				GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
-				GUILayout.EndHorizontal();	
+				GUILayout.EndHorizontal();
 			}
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
-		
-			
+
+
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
-			GUILayout.BeginVertical("");			
+			GUILayout.BeginVertical("");
 			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(100),GUILayout.Width(40)))
 			{
 				Debug.Log("lalala");
@@ -125,17 +126,17 @@ public class DiaryUIManager : MonoBehaviour {
 		}
 		else if (diaryPage == 2)
 		{
-			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture1);
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+60,1000,1000), "");
-			GUILayout.BeginVertical("");			
+			GUILayout.BeginVertical("");
 			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(110),GUILayout.Width(40)))
 			{
 				Debug.Log("lalala");
 				diaryPage = 1;
 			}
 			GUILayout.EndVertical();
-			GUILayout.EndArea();	
+			GUILayout.EndArea();
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
 				showGUI = !showGUI;

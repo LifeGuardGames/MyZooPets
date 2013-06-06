@@ -194,7 +194,6 @@ public class CalendarLogic : MonoBehaviour {
         DayOfWeek day = GetDay(now);
         CalendarEntry newEntry = new CalendarEntry(day);
 
-        DosageRecord morning, afternoon;
         if (now.Hour < 12){ // morning
             newEntry.OpenedInMorning = true;
             newEntry.Morning = GetHitOrMiss(40);
@@ -218,7 +217,13 @@ public class CalendarLogic : MonoBehaviour {
             if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Hit){
                     DataManager.AddPoints(250);
+
+                    // Combo
                     DataManager.IncrementCalendarCombo();
+                    int comboPoints = DataManager.CalendarCombo * 100;
+                    if (comboPoints > 500) comboPoints = 500;
+                    DataManager.AddPoints(comboPoints);
+
                     lastEntry.CalculatedInMorning = true;
                 }
             }
@@ -238,7 +243,13 @@ public class CalendarLogic : MonoBehaviour {
             if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){
                 if (lastEntry.Afternoon == DosageRecord.Hit){
                     DataManager.AddPoints(250);
+
+                    // Combo
                     DataManager.IncrementCalendarCombo();
+                    int comboPoints = DataManager.CalendarCombo * 100;
+                    if (comboPoints > 500) comboPoints = 500;
+                    DataManager.AddPoints(comboPoints);
+
                     lastEntry.CalculatedInAfternoon = true;
                 }
             }
@@ -250,14 +261,15 @@ public class CalendarLogic : MonoBehaviour {
     private static void CalculateForPreviousDay(){
         if (lastEntry == null) return;
 
-        // if previous afternoon was skipped and previous morning was missed
+        // if on the previous day, the morning was missed, and that afternoon skipped
         if (lastEntry.OpenedInAfternoon == false){
-            DataManager.ResetCalendarCombo();
+            // if morning was not missed but afternoon skipped, no need to penalize, but just reset combo
             if (lastEntry.OpenedInMorning && lastEntry.Morning == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);
                 lastEntry.CalculatedInMorning = true;
             }
+            DataManager.ResetCalendarCombo();
         }
         // previous afternoon was not skipped, but miss was not corrected
         else if (lastEntry.Afternoon == DosageRecord.Miss){

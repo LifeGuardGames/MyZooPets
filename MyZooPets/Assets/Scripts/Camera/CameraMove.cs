@@ -21,19 +21,41 @@ public class CameraMove : MonoBehaviour {
 	
 	void Update () {
 		
-		if (Input.GetKeyUp(KeyCode.Space))
+		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if(Physics.Raycast(myRay,out hit))
 		{
-			if(zoomed)
+			if(hit.collider.name == "room_shelf"&&Input.GetMouseButtonUp(0))
 			{
-				ZoomOutMove();
-				zoomed = false;
-			}
-			else
-			{		
-	          CameraTransform(finalPosition,finalFaceDirection);
-    	      zoomed = true;
+				//print("You clicked shelf!");
+				if(zoomed)
+				{
+					ZoomOutMove();
+					zoomed = false;
+				}
+				else
+				{		
+	        		CameraTransform(finalPosition,finalFaceDirection);
+    	    		zoomed = true;
+				}	
 			}
 		}
+		
+		
+		
+//		if (Input.GetKeyUp(KeyCode.Space))
+//		{
+//			if(zoomed)
+//			{
+//				ZoomOutMove();
+//				zoomed = false;
+//			}
+//			else
+//			{		
+//	          CameraTransform(finalPosition,finalFaceDirection);
+//    	      zoomed = true;
+//			}
+//		}
 	}
 	
 	void CameraTransform (Vector3 newPosition, Vector3 newDirection){

@@ -9,6 +9,7 @@ public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;}
     private DiaryUIManager diaryUIManager;
     private RoomGUIAnimator roomGUIAnimator;
+    private EvolutionLogic evolutionLogic;
     
     //Testing Code
     private InhalerTest inhalerTest;
@@ -17,6 +18,7 @@ public class LoadDataLogic : MonoBehaviour {
         if(!isDebugging){
             roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
             diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
+        evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
         }else{
             //Testing
             inhalerTest = GameObject.Find("UIManager").GetComponent<InhalerTest>();    
@@ -35,6 +37,7 @@ public class LoadDataLogic : MonoBehaviour {
         if(!isDebugging){
             roomGUIAnimator.Init();
             diaryUIManager.Init();    
+        evolutionLogic.Init();
         }else{
             //Testing
             inhalerTest.Init();    

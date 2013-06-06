@@ -148,16 +148,16 @@ public class RoomGUI : MonoBehaviour {
 	
 	public void HideGUIs()
 	{
-		LeanTween.move(TopGuiRect,new Vector2(0,-100),1f);
-		LeanTween.move(LeftGuiRect,new Vector2(-100,0),1f);
-		LeanTween.move(menuRect,new Vector2(0,800),1f);
+		LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
+		LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
+		LeanTween.move(menuRect,new Vector2(0,850),0.5f);
 	}
 	
 	public void ShowGUIs()
 	{
-		LeanTween.move(TopGuiRect,new Vector2(0,0),1f);
-		LeanTween.move(LeftGuiRect,new Vector2(0,0),1f);
-		LeanTween.move(menuRect,new Vector2(0,menuRect.rect.y-100),1f);
+		LeanTween.move(TopGuiRect,new Vector2(0,0),0.5f);
+		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
+		LeanTween.move(menuRect,new Vector2(0,menuRect.rect.y-150),0.5f);
 	}
 	
 	void OnGUI(){

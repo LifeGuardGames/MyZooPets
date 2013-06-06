@@ -9,6 +9,8 @@ public class DiaryUIManager : MonoBehaviour {
 	List<CalendarEntry> calendar;
 	public Texture2D diaryTexture1;
 	public Texture2D diaryTexture2;
+	public Texture2D diaryTexture3;
+	public Texture2D diaryTexture4;
 	public Texture2D tickBoxEmpty;
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
@@ -26,7 +28,7 @@ public class DiaryUIManager : MonoBehaviour {
 	void Start () {
 		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
-	//	diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
+//		diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
 
 
 	}
@@ -67,6 +69,8 @@ public class DiaryUIManager : MonoBehaviour {
 		GUI.depth = 0;
 		if(diaryPage == 1)
 		{
+			GUI.DrawTexture(diaryRect.rect,diaryTexture3);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
 			GUI.DrawTexture(diaryRect.rect,diaryTexture1);
 			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+100,100,70),"Monday",diaryTextStyle);
@@ -112,36 +116,164 @@ public class DiaryUIManager : MonoBehaviour {
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
 		
-			
-			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
-			GUILayout.BeginVertical("");			
-			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(100),GUILayout.Width(40)))
+//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),""))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 1;	
+//			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle))
 			{
-				Debug.Log("lalala");
-				diaryPage = 2;
+//				Debug.Log("lalala");
+				diaryPage = 2;	
 			}
-			GUILayout.EndVertical();
-			GUILayout.EndArea();
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 3;	
+			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 4;	
+			}
+			
+			
+//			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+185,1000,1000), "");
+//			GUILayout.BeginVertical("");
+//			
+//			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(100),GUILayout.Width(40)))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 2;
+//			}
+//			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(100),GUILayout.Width(40)))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 2;
+//			}	
+//			GUILayout.EndVertical();
+//			GUILayout.EndArea();
 		}
 		else if (diaryPage == 2)
 		{
 			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
+			GUI.DrawTexture(diaryRect.rect,diaryTexture4);	
 			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+60,1000,1000), "");
-			GUILayout.BeginVertical("");			
-			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(110),GUILayout.Width(40)))
-			{
-				Debug.Log("lalala");
-				diaryPage = 1;
-			}
-			GUILayout.EndVertical();
-			GUILayout.EndArea();	
+			
 			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
 			{
 				showGUI = !showGUI;
 				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 				roomGui.ShowGUIs();
 			}
+			
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 1;	
+			}
+//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),""))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 2;	
+//			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 3;	
+			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 4;	
+			}	
+			
+//			GUILayout.BeginArea(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+60,1000,1000), "");
+//			GUILayout.BeginVertical("");			
+//			if(GUILayout.Button("",diaryTabStyle,GUILayout.Height(110),GUILayout.Width(40)))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 1;
+//			}
+//			GUILayout.EndVertical();
+//			GUILayout.EndArea();	
+//			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
+//			{
+//				showGUI = !showGUI;
+//				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
+//				roomGui.ShowGUIs();
+//			}
+		}
+		else if (diaryPage == 3)
+		{
+			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
+			GUI.DrawTexture(diaryRect.rect,diaryTexture4);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
+			
+			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
+			{
+				showGUI = !showGUI;
+				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
+				roomGui.ShowGUIs();
+			}
+			
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 1;	
+			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 2;	
+			}
+//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),""))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 3;	
+//			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 4;	
+			}
+		}
+		else if (diaryPage == 4)
+		{
+			GUI.DrawTexture(diaryRect.rect,diaryTexture1);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture2);
+			GUI.DrawTexture(diaryRect.rect,diaryTexture3);	
+			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
+			
+			if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X"))
+			{
+				showGUI = !showGUI;
+				LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
+				roomGui.ShowGUIs();
+			}
+			
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 1;	
+			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 2;	
+			}
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle))
+			{
+//				Debug.Log("lalala");
+				diaryPage = 3;	
+			}
+//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),""))
+//			{
+//				Debug.Log("lalala");
+//				diaryPage = 4;	
+//			}
 		}
 	}
 }

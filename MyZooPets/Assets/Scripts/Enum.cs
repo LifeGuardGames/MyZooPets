@@ -13,4 +13,9 @@ public enum DosageRecord{
     Miss,
 }
 
+public enum InhalerType{
+    Advair,
+    Rescue,
+}
+
 

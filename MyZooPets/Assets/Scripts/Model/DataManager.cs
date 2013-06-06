@@ -53,16 +53,22 @@ public class DataManager : MonoBehaviour {
                                           // for a new week or not.
     [SerializeThis]
     private static DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
-    [SerializeThis]
+    
     // private static DateTime lastCalendarComboTime; //the last day that the user continued the combo
 
     //Inhaler Data
+    [SerializeThis]
     private static int slotMachineCounter; //max 3. used to determine when to start slot
                                             //machine game
-
+    [SerializeThis]
     private static int numberOfTimesPlayed; //max 6. user can only played 6 inhaler game per day
-    private static DateTime lastInhalerGameOpenedTime; //keep track of when to reset the
+    [SerializeThis]
+    private static DateTime lastInhalerGamePlayed; //keep track of when to reset the
                                                         //slotMachineCounter and numberOfTimesPlayed
+    [SerializeThis]
+    private static int advairCount; //max 3. appears in the game max 3 times per day
+    [SerializeThis]
+    private static int rescueCount; //max 3. appears in the game max 3 times per day       
     //inhaler skin used (needs enum type)
 
     //#endregion
@@ -104,6 +110,28 @@ public class DataManager : MonoBehaviour {
     public static DateTime DateOfSunday{
         get { return dateOfSunday;}
         set { dateOfSunday = value;}
+    }
+
+    //Inhaler
+    public static DateTime LastInhalerGamePlayed{
+        get{return lastInhalerGamePlayed;}
+        set{lastInhalerGamePlayed = value;}
+    }
+    public static int SlotMachineCounter{
+        get{return slotMachineCounter;}
+        set{slotMachineCounter = value;}
+    }
+    public static int NumberOfTimesPlayed{
+        get{return numberOfTimesPlayed;}
+        set{numberOfTimesPlayed = value;}
+    }
+    public static int AdvairCount{
+        get{return advairCount;}
+        set{advairCount = value;}
+    }
+    public static int RescueCount{
+        get{return rescueCount;}
+        set{rescueCount = value;}
     }
     //#endregion
 
@@ -229,7 +257,13 @@ public class DataManager : MonoBehaviour {
 
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
-            // lastCalendarComboTime = DateTime.Today.AddDays(-1);
+
+            //Inhaler game data initialization
+            slotMachineCounter = 0;
+            numberOfTimesPlayed = 6;
+            lastInhalerGamePlayed = DateTime.Now;
+            advairCount = 3;
+            rescueCount = 3;
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
@@ -269,6 +303,6 @@ public class DataManager : MonoBehaviour {
 
     //Save data before the game is quit
     void OnApplicationQuit(){
-        PlayerPrefs.Save();
+
     }
 }

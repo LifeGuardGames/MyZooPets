@@ -64,6 +64,8 @@ public class DiaryUIManager : MonoBehaviour {
 	
 	void OnGUI()
 	{
+		if(!LoadDataLogic.IsDataLoaded) return;
+
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;

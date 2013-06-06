@@ -217,7 +217,13 @@ public class CalendarLogic : MonoBehaviour {
             if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Hit){
                     DataManager.AddPoints(250);
+
+                    // Combo
                     DataManager.IncrementCalendarCombo();
+                    int comboPoints = DataManager.CalendarCombo * 100;
+                    if (comboPoints > 500) comboPoints = 500;
+                    DataManager.AddPoints(comboPoints);
+
                     lastEntry.CalculatedInMorning = true;
                 }
             }
@@ -237,7 +243,13 @@ public class CalendarLogic : MonoBehaviour {
             if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){
                 if (lastEntry.Afternoon == DosageRecord.Hit){
                     DataManager.AddPoints(250);
+
+                    // Combo
                     DataManager.IncrementCalendarCombo();
+                    int comboPoints = DataManager.CalendarCombo * 100;
+                    if (comboPoints > 500) comboPoints = 500;
+                    DataManager.AddPoints(comboPoints);
+
                     lastEntry.CalculatedInAfternoon = true;
                 }
             }

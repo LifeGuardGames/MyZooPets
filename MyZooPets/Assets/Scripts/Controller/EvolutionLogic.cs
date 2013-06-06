@@ -11,6 +11,45 @@ public class EvolutionLogic : MonoBehaviour {
     private int level2EvolutionPoints = 150000;
 
     //#region API
+    public bool CanEvolve(){
+        // awaiting first evolution and has enough points
+        if (DataManager.evoStage == EvoStage.Stage0 && DataManager.Points >= level1EvolutionPoints){
+            return true;
+        }
+        // awaiting second evolution and has enough points
+        else if (DataManager.evoStage == EvoStage.Stage1 && DataManager.Points >= level2EvolutionPoints){
+            return true;
+        }
+        return false;
+    }
+
+    // Should only be called if CanEvolve() returns true.
+    public void Evolve(){
+
+        //TO DO: Check points and decide how the pet should evolve according to evoAverageCum
+
+        if (DataManager.evoStage == EvoStage.Stage0){ // awaiting first evolution
+            if (DataManager.evoAverageCum >= 50){
+                // good care
+            }
+            else { // < 50
+                // bad care
+            }
+            DataManager.evoStage = EvoStage.Stage1;
+        }
+        else if (DataManager.evoStage == EvoStage.Stage1){ // awaiting second evolution
+            if (DataManager.evoAverageCum <= 30){
+                // bad care
+            }
+            else if (DataManager.evoAverageCum <= 70){
+                // OK care
+            }
+            else { // > 70
+                // good care
+            }
+            DataManager.evoStage = EvoStage.Stage2;
+        }
+    }
 
     //#endregion
 
@@ -50,33 +89,6 @@ public class EvolutionLogic : MonoBehaviour {
 		DataManager.durationCum += tempd;
 		DataManager.lastEvoMeter = evoMeter;
 	}
-
-    //TO DO: Check points and decide how the pet should evolve according to evoAverageCum
-    private void CheckForEvolution(){
-        if (DataManager.evoStage == EvoStage.Stage0){ // awaiting first evolution
-            if (DataManager.evoAverageCum >= 50){
-                // good care
-            }
-            else { // < 50
-                // bad care
-
-            }
-        }
-        else if (DataManager.evoStage == EvoStage.Stage1){ // awaiting second evolution
-            if (DataManager.evoAverageCum <= 30){
-                // bad care
-            }
-            else if (DataManager.evoAverageCum <= 70){
-                // OK care
-            }
-            else { // > 70
-                // good care
-            }
-        }
-        if(DataManager.Points >= level1EvolutionPoints){
-
-        }
-    }
 
     //get the weighted evolution meter
 	private static double getEvoMeter(){

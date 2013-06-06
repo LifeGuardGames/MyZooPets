@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Fader : MonoBehaviour {
-	
+
 	public bool isDebug = false;
 	RoomGUI roomGui;
 	private bool loaded = false;
@@ -11,19 +11,26 @@ public class Fader : MonoBehaviour {
 		guiTexture.pixelInset = new Rect(0,0,0,0);
 		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 	}
-	
+
 
 	void Update()
 	{
-		if(isDebug) guiTexture.color = Color.clear;
-		StartScene();	
-		if(guiTexture.color == Color.clear)
-		{
-			roomGui.IntroFinished();	
+		if (!loaded){
+			if(isDebug){
+				guiTexture.color = Color.clear;
+				loaded = true;
+			}
+
+			FadeStartScene();
+			if(guiTexture.color == Color.clear)
+			{
+				roomGui.IntroFinished();
+				loaded = true;
+			}
 		}
 	}
-	
-	void StartScene()
+
+	void FadeStartScene()
 	{
 		guiTexture.color = Color.Lerp(guiTexture.color,Color.clear,0.9f * Time.deltaTime);
 		if(guiTexture.color.a <= 0.05f)
@@ -32,6 +39,4 @@ public class Fader : MonoBehaviour {
 			guiTexture.enabled = false;
 		}
 	}
-	
-
 }

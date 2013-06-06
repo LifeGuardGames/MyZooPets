@@ -194,7 +194,6 @@ public class CalendarLogic : MonoBehaviour {
         DayOfWeek day = GetDay(now);
         CalendarEntry newEntry = new CalendarEntry(day);
 
-        DosageRecord morning, afternoon;
         if (now.Hour < 12){ // morning
             newEntry.OpenedInMorning = true;
             newEntry.Morning = GetHitOrMiss(40);

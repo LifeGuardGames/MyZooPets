@@ -14,14 +14,15 @@ public class EvolutionLogic : MonoBehaviour {
 
     //#endregion
 
-	// Use this for initialization
-	void Start () {
+    public void Init () {
         timer = timeInterval;
 
-	}
+    }
 
 	// Update is called once per frame
 	void Update () {
+        if(!LoadDataLogic.IsDataLoaded) return;
+
 		timer -= Time.deltaTime;
 		if (timer <= 0){
 			timer = timeInterval;

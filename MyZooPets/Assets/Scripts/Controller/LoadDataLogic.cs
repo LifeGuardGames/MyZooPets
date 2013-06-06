@@ -8,10 +8,12 @@ public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;}
     private DiaryUIManager diaryUIManager;
     private RoomGUIAnimator roomGUIAnimator;
+    private EvolutionLogic evolutionLogic;
 
     void Awake(){
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
+        evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 		IsDataLoaded = false;
         DataManager.dataLoadedCallBack = InitializeDataForUI;
     }
@@ -19,6 +21,7 @@ public class LoadDataLogic : MonoBehaviour {
     private void InitializeDataForUI(){
 		roomGUIAnimator.Init();
 		diaryUIManager.Init ();
+        evolutionLogic.Init();
         IsDataLoaded = true;
     }
 }

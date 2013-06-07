@@ -7,11 +7,11 @@ using System;
 //Saves and loads data into player preference
 [DoNotSerializePublic]
 public class DataManager : MonoBehaviour {
-    //#region Developer option
+    //========Developer option=============
     public bool removePreviouslySavedData; //delete all from PlayerPrefs
     public bool showHatch; //go through the hatch animation
     private bool loaded = false;
-    //#endregion
+    //===============
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
@@ -22,7 +22,7 @@ public class DataManager : MonoBehaviour {
     public delegate void DataLoadedCallBack(bool firstTime);
     public static DataLoadedCallBack dataLoadedCallBack;
 
-    //#region SaveData
+    //==========SaveData============
     //pet info
     [SerializeThis]
     private static string petName; //name of the pet
@@ -80,9 +80,9 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static int rescueCount; //max 3. appears in the game max 3 times per day       
     //inhaler skin used (needs enum type)
-    //#endregion
+    //========================
 
-    //#region Getters & Setters
+    //=============Getters & Setters===============
     public static string PetName{
         get{return petName;}
         set{petName = value;}
@@ -126,10 +126,7 @@ public class DataManager : MonoBehaviour {
         get { return lastCalendarOpenedTime;}
         set { lastCalendarOpenedTime = value;}
     }
-    // public static DateTime LastCalendarComboTime{
-    //     get { return lastCalendarComboTime;}
-    //     set { lastCalendarComboTime = value;}
-    // }
+
     public static DateTime DateOfSunday{
         get { return dateOfSunday;}
         set { dateOfSunday = value;}
@@ -156,9 +153,9 @@ public class DataManager : MonoBehaviour {
         get{return rescueCount;}
         set{rescueCount = value;}
     }
-    //#endregion
+    //===============================
 
-    //#region StatsModifiers
+    //==============StatsModifiers================
     //Points
     public static void AddPoints(int val){
         points += val;
@@ -231,8 +228,7 @@ public class DataManager : MonoBehaviour {
     public static void ResetCalendarCombo(){
         calendarCombo = 0;
     }
-
-    //#endregion
+    //===================================
 
     void Awake(){
         if(isCreated){
@@ -304,11 +300,6 @@ public class DataManager : MonoBehaviour {
                 }
             }
         }
-    }
-
-    void Start(){
-
-        
     }
 
     //call the delegate when data initialization or deserialziation is done

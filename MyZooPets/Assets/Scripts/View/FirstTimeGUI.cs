@@ -13,6 +13,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	public GameObject eggSprite;
 	private tk2dSprite eggSpriteScript;
+	public GameObject nestSprite;
 	public string petName;
 	
 	private bool isEditEgg = false;
@@ -41,15 +42,20 @@ public class FirstTimeGUI : MonoBehaviour {
 	public Texture2D purpleButton;
 	
 	void Start(){
-		
-		eggSpriteScript = eggSprite.GetComponent<tk2dSprite>();
-		
-		if(isFirstTime){
+		if(DataManager.FirstTime){
+			Debug.Log("Hatch sequence");
+			eggSpriteScript = eggSprite.GetComponent<tk2dSprite>();
 			currentRenderColor = RenderSettings.ambientLight;
-			RenderSettings.ambientLight = Color.black;	
+			RenderSettings.ambientLight = Color.black;
+			
+			logoRect = new LTRect(Screen.width/2 - logo.width/2, 100f, 839f, 231f);
+			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
 		}
-		logoRect = new LTRect(Screen.width/2 - logo.width/2, 100f, 839f, 231f);
-		editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
+		else{
+			Destroy(eggSprite);
+			Destroy(nestSprite);
+			Destroy(gameObject);	
+		}
 	}
 	
 	void Update(){
@@ -147,4 +153,8 @@ public class FirstTimeGUI : MonoBehaviour {
 	void ZoomOutMove(){
 		CameraTransform(initPosition,initFaceDirection);
 	}
+	
+	public delegate void FinishHatchCallBack(bool boolean);
+	public static FinishHatchCallBack finishHatchCallBack;
+	//finishHatchCallBack(false);
 }

@@ -40,7 +40,6 @@ public class DiaryUIManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(!LoadDataLogic.IsDataLoaded) return;
-		
 		//TODO-s Avoid calling this every frame
 		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
@@ -67,7 +66,6 @@ public class DiaryUIManager : MonoBehaviour {
 	void OnGUI()
 	{
 		if(!LoadDataLogic.IsDataLoaded) return;
-
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;

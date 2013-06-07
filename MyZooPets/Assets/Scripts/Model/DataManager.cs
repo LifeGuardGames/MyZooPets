@@ -286,11 +286,11 @@ public class DataManager : MonoBehaviour {
             PlayerPrefs.SetInt("FirstTime", 0);
 
             //Debug options;
-            if(showHatch){
+            // if(showHatch){
                 dataLoaded(true); //hatch pet first
-            }else{
-                dataLoaded(false); //load all GUI
-            }
+            // }else{
+                // dataLoaded(false); //load all GUI
+            // }
         }else{ //load saved data
             if(!loaded){
                 loaded = true;

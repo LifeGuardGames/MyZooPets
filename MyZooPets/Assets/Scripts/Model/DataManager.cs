@@ -13,10 +13,11 @@ public class DataManager : MonoBehaviour {
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
+    private static bool firstTime;
 
     //delegate is called when DataManager is finished initializing data for the first time
     //or deserializing previously saved data
-    public delegate void DataLoadedCallBack();
+    public delegate void DataLoadedCallBack(bool firstTime);
     public static DataLoadedCallBack dataLoadedCallBack;
 
     //#region SaveData
@@ -76,6 +77,11 @@ public class DataManager : MonoBehaviour {
     //#endregion
 
     //#region Getters
+    //First Time. use this to know if user is player game for the first time
+    public static bool FirstTime{
+        get {return firstTime;}
+    }
+
     //Stats
     public static int Points{
         get {return points;}
@@ -219,15 +225,13 @@ public class DataManager : MonoBehaviour {
         }
         DontDestroyOnLoad(transform.gameObject);
         isCreated = true;
-    }
-
-    void Start(){
 
         // Use this for initialization
         // save and load data here
         //first time playing the game. values need to be initialized
         if(isDebugging) PlayerPrefs.DeleteAll();
-        if (PlayerPrefs.GetInt("FirstTime", 1) > 0){
+        firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
+        if (firstTime){
             //Evolution data initialization
             lastUpdatedTime = DateTime.Now;
             durationCum = new TimeSpan(0,0,10);
@@ -269,7 +273,13 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-            dataLoaded();
+
+            //skip hatching if debugging
+            if(isDebugging){
+                dataLoaded(false);
+            }else{
+                dataLoaded(true);    
+            }
         }else{ //load saved data
             if(!loaded){
                 loaded = true;
@@ -281,22 +291,25 @@ public class DataManager : MonoBehaviour {
         }
     }
 
+    void Start(){
+
+        
+    }
+
     //call the delegate when data initialization or deserialziation is done
-    private void dataLoaded(){
+    private void dataLoaded(bool firstTime){
         if(dataLoadedCallBack != null){
-            dataLoadedCallBack();
+            dataLoadedCallBack(firstTime);
         }
     }
 
     //called when level data are loaded
     void OnDeserialized(){
         Debug.Log("health " + health + "mood " + mood);
-        dataLoaded();
-        // Debug.Log(entries[0].Day);
+        dataLoaded(false);
     }
 
     void OnApplicationPause(bool paused){
-        // Debug.Log(JSONLevelSerializer.SerializeLevel());
         if(paused){
             PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
             Debug.Log(JSONLevelSerializer.SerializeLevel());

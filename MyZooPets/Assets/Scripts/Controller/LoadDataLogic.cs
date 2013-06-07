@@ -18,7 +18,7 @@ public class LoadDataLogic : MonoBehaviour {
         if(!isDebugging){
             roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
             diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
-        evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
+            evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
         }else{
             //Testing
             inhalerTest = GameObject.Find("UIManager").GetComponent<InhalerTest>();    
@@ -32,17 +32,21 @@ public class LoadDataLogic : MonoBehaviour {
     }
 
     //data is ready for use so initialize all UI data
-    //TO DO: disable splash screen here
-    private void InitializeDataForUI(){
+    //True: dont init yet need to wait for pet to hatch, False: init
+    private void InitializeDataForUI(bool firstTime){
+        
         if(!isDebugging){
-            roomGUIAnimator.Init();
-            diaryUIManager.Init();    
-        evolutionLogic.Init();
+            if(!firstTime){ //init UI only if pet is hatched
+                roomGUIAnimator.Init();
+                diaryUIManager.Init();    
+                evolutionLogic.Init();
+                IsDataLoaded = true;
+            }
         }else{
             //Testing
             inhalerTest.Init();    
         }
         
-        IsDataLoaded = true;
+        
     }
 }

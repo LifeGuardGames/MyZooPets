@@ -16,6 +16,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	private tk2dSprite eggSpriteScript;
 	public GameObject nestSprite;
 	public string petName;
+	public string petColor;
 	
 	private bool isEditEgg = false;
 	private LTRect editEggRect;
@@ -70,7 +71,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			
 			Hashtable optional2 = new Hashtable();
 			optional2.Add("ease", LeanTweenType.easeOutBounce);
-			LeanTween.move(eggSprite, eggSpritePosition, 2.0f, optional2);
+			LeanTween.move(eggSprite, eggSpritePosition, 1.5f, optional2);
 			splashScreenAux = false;
 		}
 		
@@ -106,6 +107,8 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	private void HelperFinishEditPet(){
+		DataManager.PetName = petName;
+		DataManager.PetColor = petColor;
 		isEditEgg = false;
 		finishHatchCallBack(false);
 		Destroy(eggSprite);
@@ -131,18 +134,23 @@ public class FirstTimeGUI : MonoBehaviour {
 			GUILayout.Label("Color");
 			if(GUILayout.Button(blueButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggBlueChoose");
+				petColor = "whiteBlue";
 			}
 			else if(GUILayout.Button(greenButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggGreenChoose");
+				petColor = "whiteGreen";
 			}
 			else if(GUILayout.Button(yellowButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggYellowChoose");
+				petColor = "whiteYellow";
 			}
 			else if(GUILayout.Button(redButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggRedChoose");
+				petColor = "whiteRed";
 			}
 			else if(GUILayout.Button(purpleButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggPurpleChoose");
+				petColor = "whiteRed";
 			}
 			else if(GUILayout.Button("Finish", GUILayout.Width(90), GUILayout.Height(90))){
 				if(isZoomed)

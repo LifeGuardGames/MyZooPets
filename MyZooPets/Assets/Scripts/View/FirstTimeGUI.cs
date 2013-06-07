@@ -6,12 +6,13 @@ using System.Collections;
 /// Stuffed everything that needs to be done in the first run here
 /// </summary>
 
-// TODO-s GROSS CODE REFACTOR MEEEEE!!!!
-
 public class FirstTimeGUI : MonoBehaviour {
-	public bool isFirstTime;
+	
+	public bool splashScreenAux = true;
 	
 	public GameObject eggSprite;
+	private Vector3 eggSpritePosition = new Vector3(0f, -1.88f, -10f);
+
 	private tk2dSprite eggSpriteScript;
 	public GameObject nestSprite;
 	public string petName;
@@ -43,32 +44,43 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	void Start(){
 		if(DataManager.FirstTime){
-			Debug.Log("Hatch sequence");
+			Debug.Log("Hatch sequences");
 			eggSpriteScript = eggSprite.GetComponent<tk2dSprite>();
 			currentRenderColor = RenderSettings.ambientLight;
 			RenderSettings.ambientLight = Color.black;
 			
-			logoRect = new LTRect(Screen.width/2 - logo.width/2, 100f, 839f, 231f);
+			logoRect = new LTRect(Screen.width/2 - logo.width/2, -200f, 839f, 231f);
+			
 			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
 		}
 		else{
 			Destroy(eggSprite);
 			Destroy(nestSprite);
-			Destroy(gameObject);	
+			Destroy(gameObject);
 		}
 	}
 	
 	void Update(){
-		if (Input.GetKeyUp(KeyCode.Space))
-		{
-			if(isZoomed)
-			{
+		
+		// Splash finished, Drop down the title and the egg sprite, only called once
+		if(splashScreenAux && Fader.IsSplashScreenFinished){
+			Hashtable optional = new Hashtable();
+			optional.Add("ease", LeanTweenType.easeInQuad);
+			LeanTween.move(logoRect, new Vector2(Screen.width/2 - logo.width/2, 100f), 0.5f, optional);
+			
+			Hashtable optional2 = new Hashtable();
+			optional2.Add("ease", LeanTweenType.easeOutBounce);
+			LeanTween.move(eggSprite, eggSpritePosition, 2.0f, optional2);
+			splashScreenAux = false;
+		}
+		
+		if (Input.GetKeyUp(KeyCode.Space)){
+			if(isZoomed){
 				ZoomOutMove();
 				isZoomed = false;
 				HideChooseGUI();
 			}
-			else
-			{
+			else{
 		        CameraTransform(finalPosition,finalFaceDirection);
 	    	    isZoomed = true;
 				HideTitle();
@@ -87,17 +99,24 @@ public class FirstTimeGUI : MonoBehaviour {
 	void HideChooseGUI(){
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "HelperSetEditEggFalse");
+		optional.Add("onComplete", "HelperFinishEditPet");
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(editEggRect, editEggRectInitPos, 1.0f, optional);
-		RenderSettings.ambientLight = currentRenderColor;
+		RenderSettings.ambientLight = currentRenderColor;	// lerp this
 	}
 	
-	private void HelperSetEditEggFalse(){
+	private void HelperFinishEditPet(){
 		isEditEgg = false;
+		finishHatchCallBack(false);
+		Destroy(eggSprite);
+		Destroy(nestSprite);
+		Destroy(gameObject);
 	}
 	
 	void OnGUI(){
+		if(!Fader.IsSplashScreenFinished){
+			return;
+		}
 		if(logo != null){
 			GUI.DrawTexture(logoRect.rect, logo);
 		}
@@ -125,8 +144,17 @@ public class FirstTimeGUI : MonoBehaviour {
 			else if(GUILayout.Button(purpleButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggPurpleChoose");
 			}
+			else if(GUILayout.Button("Finish", GUILayout.Width(90), GUILayout.Height(90))){
+				if(isZoomed)
+				{
+					ZoomOutMove();
+					isZoomed = false;
+					HideChooseGUI();
+				}
+			}
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
+			
 		}
 	}
 	
@@ -156,5 +184,4 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	public delegate void FinishHatchCallBack(bool boolean);
 	public static FinishHatchCallBack finishHatchCallBack;
-	//finishHatchCallBack(false);
 }

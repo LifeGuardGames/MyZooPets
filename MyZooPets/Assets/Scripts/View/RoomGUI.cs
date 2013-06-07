@@ -9,8 +9,6 @@ public class RoomGUI : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;    //screen size 
     private const float NATIVE_HEIGHT = 800.0f;
 	
-	private bool finishIntro = false;
-	
 	private bool isMenuExpanded;
 	private bool showOption = false;
 	private bool inhalerpicked = false; 
@@ -162,16 +160,11 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(menuRect,new Vector2(0,menuRect.rect.y-150),0.5f);
 	}
 	
-	public void IntroFinished()
-	{
-		finishIntro = true;
-	}
-	
 	void OnGUI(){
 	
-		if(!finishIntro) return;
-		if(!LoadDataLogic.IsDataLoaded) return;
-		
+		if(!Fader.IsSplashScreenFinished) return; //don't draw until splash screen is done
+		if(!LoadDataLogic.IsDataLoaded) return; //don't draw until all data is loaded
+
 		GUI.depth = 1;
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     //porpotional scaling
             float horizRatio = Screen.width/NATIVE_WIDTH;

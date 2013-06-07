@@ -10,7 +10,7 @@ public class CalendarLogicTest : MonoBehaviour {
         // AddCalendarEntries();
         // CalendarOpenedTestConsecutive();
         // AllHits();
-        AllHits(68);
+        AllHits(14);
         // Miss1Day();
         // Miss1Period();
         // Miss2Days();

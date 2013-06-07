@@ -40,11 +40,13 @@ public class DiaryUIManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(!LoadDataLogic.IsDataLoaded) return;
+		
+		//TODO-s Avoid calling this every frame
 		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if(Physics.Raycast(myRay,out hit))
 		{
-			if(hit.collider.name == "room_table"&&Input.GetMouseButtonUp(0))
+			if(hit.collider.name == "room_table" && Input.GetMouseButtonUp(0))
 			{
 				//print("You clicked table!");
 				roomGui.HideGUIs();

@@ -10,11 +10,12 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	public bool splashScreenAux = true;
 	
-	public GameObject eggSprite;
+	public GameObject eggObject;
 	private Vector3 eggSpritePosition = new Vector3(0f, -1.88f, -10f);
 
 	private tk2dSprite eggSpriteScript;
-	public GameObject nestSprite;
+	public GameObject nestObject;
+	public GameObject petObject;
 	public string petName;
 	public string petColor;
 	
@@ -46,7 +47,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	void Start(){
 		if(DataManager.FirstTime){
 			Debug.Log("Hatch sequences");
-			eggSpriteScript = eggSprite.GetComponent<tk2dSprite>();
+			eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
 			currentRenderColor = RenderSettings.ambientLight;
 			RenderSettings.ambientLight = Color.black;
 			
@@ -55,8 +56,8 @@ public class FirstTimeGUI : MonoBehaviour {
 			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
 		}
 		else{
-			Destroy(eggSprite);
-			Destroy(nestSprite);
+			Destroy(eggObject);
+			Destroy(nestObject);
 			Destroy(gameObject);
 		}
 	}
@@ -71,23 +72,37 @@ public class FirstTimeGUI : MonoBehaviour {
 			
 			Hashtable optional2 = new Hashtable();
 			optional2.Add("ease", LeanTweenType.easeOutBounce);
-			LeanTween.move(eggSprite, eggSpritePosition, 1.5f, optional2);
+			LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional2);
 			splashScreenAux = false;
 		}
 		
-		if (Input.GetKeyUp(KeyCode.Space)){
-			if(isZoomed){
-				ZoomOutMove();
-				isZoomed = false;
-				HideChooseGUI();
-			}
-			else{
-		        CameraTransform(finalPosition,finalFaceDirection);
+		//TODO-s avoid calling this every frame
+		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if(Physics.Raycast(myRay,out hit))
+		{
+			if(hit.collider.name == "SpriteEgg" && Input.GetMouseButtonUp(0))
+			{
+				CameraTransform(finalPosition,finalFaceDirection);
 	    	    isZoomed = true;
 				HideTitle();
 				ShowChooseGUI();
 			}
 		}
+		
+//		if (Input.GetKeyUp(KeyCode.Space)){
+//			if(isZoomed){
+//				ZoomOutMove();
+//				isZoomed = false;
+//				HideChooseGUI();
+//			}
+//			else{
+//		        CameraTransform(finalPosition,finalFaceDirection);
+//	    	    isZoomed = true;
+//				HideTitle();
+//				ShowChooseGUI();
+//			}
+//		}
 	}
 	
 	void ShowChooseGUI(){
@@ -110,9 +125,13 @@ public class FirstTimeGUI : MonoBehaviour {
 		DataManager.PetName = petName;
 		DataManager.PetColor = petColor;
 		isEditEgg = false;
+		
+		// Spawn pet object
+		GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
+
 		finishHatchCallBack(false);
-		Destroy(eggSprite);
-		Destroy(nestSprite);
+		Destroy(eggObject);
+		Destroy(nestObject);
 		Destroy(gameObject);
 	}
 	

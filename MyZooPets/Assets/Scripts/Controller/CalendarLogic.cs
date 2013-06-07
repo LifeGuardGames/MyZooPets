@@ -8,6 +8,8 @@ public class CalendarLogic : MonoBehaviour {
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry;
     private static List<CalendarEntry> tempEntries;
+    private static int comboBase = 750;
+    private static int comboMax = 3750;
 
     //#region API (use this for the UI)
     public static int GetComboCount(){
@@ -220,8 +222,8 @@ public class CalendarLogic : MonoBehaviour {
 
                     // Combo
                     DataManager.IncrementCalendarCombo();
-                    int comboPoints = DataManager.CalendarCombo * 100;
-                    if (comboPoints > 500) comboPoints = 500;
+                    int comboPoints = DataManager.CalendarCombo * comboBase;
+                    if (comboPoints > comboMax) comboPoints = comboMax;
                     DataManager.AddPoints(comboPoints);
 
                     lastEntry.CalculatedInMorning = true;
@@ -246,8 +248,8 @@ public class CalendarLogic : MonoBehaviour {
 
                     // Combo
                     DataManager.IncrementCalendarCombo();
-                    int comboPoints = DataManager.CalendarCombo * 100;
-                    if (comboPoints > 500) comboPoints = 500;
+                    int comboPoints = DataManager.CalendarCombo * comboBase;
+                    if (comboPoints > comboMax) comboPoints = comboMax;
                     DataManager.AddPoints(comboPoints);
 
                     lastEntry.CalculatedInAfternoon = true;

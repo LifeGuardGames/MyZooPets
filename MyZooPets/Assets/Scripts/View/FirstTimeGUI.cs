@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// First time GU.
+/// First time GUI.
+/// Stuffed everything that needs to be done in the first run here
 /// </summary>
 
 // TODO-s GROSS CODE REFACTOR MEEEEE!!!!
@@ -14,12 +15,12 @@ public class FirstTimeGUI : MonoBehaviour {
 	private tk2dSprite eggSpriteScript;
 	public string petName;
 	
-	
 	private bool isEditEgg = false;
 	private LTRect editEggRect;
 	private Vector2 editEggRectInitPos = new Vector2(1300f, 100f);
 	private Vector2 editEggRectFinalPos = new Vector2(600f, 100f);
-
+	
+	// Camera moving
 	public GameObject mCamera;
 	private float smooth = 1.0f;
 	private bool isZoomed = false;
@@ -64,7 +65,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			{
 		        CameraTransform(finalPosition,finalFaceDirection);
 	    	    isZoomed = true;
-				FadeTitle();
+				HideTitle();
 				ShowChooseGUI();
 			}
 		}
@@ -83,6 +84,7 @@ public class FirstTimeGUI : MonoBehaviour {
 		optional.Add("onComplete", "HelperSetEditEggFalse");
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(editEggRect, editEggRectInitPos, 1.0f, optional);
+		RenderSettings.ambientLight = currentRenderColor;
 	}
 	
 	private void HelperSetEditEggFalse(){
@@ -117,14 +119,12 @@ public class FirstTimeGUI : MonoBehaviour {
 			else if(GUILayout.Button(purpleButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggPurpleChoose");
 			}
-			
-				
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
 		}
 	}
 	
-	void FadeTitle(){
+	void HideTitle(){
 		if(logo != null){
 			Hashtable optional = new Hashtable();
 			optional.Add("onCompleteTarget", gameObject);
@@ -134,7 +134,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	private void HelperDeleteLogo(){
-		Debug.Log("BOOM");
 		logo = null;
 	}
 	

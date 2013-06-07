@@ -114,7 +114,7 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void Update (){
-		
+		// if(!LoadDataLogic.IsDataLoaded)	return;
 		//TOP GUI bar location updates
 		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
 //		tierTextOffset = new Vector2(TopGuiRect.rect.x+ 25,TopGuiRect.rect.y+ 12);
@@ -170,6 +170,7 @@ public class RoomGUI : MonoBehaviour {
 	void OnGUI(){
 	
 		if(!finishIntro) return;
+		if(!LoadDataLogic.IsDataLoaded) return;
 		
 		GUI.depth = 1;
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     //porpotional scaling

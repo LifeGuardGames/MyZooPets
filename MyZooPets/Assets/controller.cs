@@ -137,9 +137,9 @@ public class controller : MonoBehaviour
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
-	private Touch touch;
-	private float touchx;
-	private float touchy;
+//	private Touch touch;
+//	private float touchx;
+//	private float touchy;
 //
 //	bool VerifyTouch(Touch touch)
 //	{
@@ -162,21 +162,20 @@ public class controller : MonoBehaviour
 	{
 		if(Input.touchCount > 0){
 
-			//if ((touchx < Screen.width/4 || touchx > 3*(Screen.width/4))
-			//    || (touchy < Screen.height/2) )
-
-
-			touch = Input.GetTouch(0);
-			touchx = touch.position.x;
-			touchy = touch.position.y;
-
+			Touch touch = Input.GetTouch(0);	
 			Ray ray = Camera.main.ScreenPointToRay(touch.position);
 	        RaycastHit hit ;
 
 			if (Physics.Raycast(ray,out hit))
 			{
 				if(hit.collider.gameObject == this.gameObject)
-				{
+				{	
+					float touchx = touch.position.x;
+					float touchy = touch.position.y;
+					if(touch.phase == TouchPhase.Ended) 
+					{
+						return;
+					}
 					Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
 
 
@@ -209,7 +208,20 @@ public class controller : MonoBehaviour
 						transform.RotateAroundLocal(Vector3.forward, rotationAmount *0.25f * Time.deltaTime);
 					}
 				}
+				else {
+					
+					previousTouchPosition = Vector2.zero;
+					currentTouchPosition = Vector2.zero;
+					previousFrameTouchDown = false;
+				}
 			}
+
+		}
+		else {
+			previousTouchPosition = Vector2.zero;
+			currentTouchPosition = Vector2.zero; 
+			previousFrameTouchDown = false;
+			
 		}
 
 	}

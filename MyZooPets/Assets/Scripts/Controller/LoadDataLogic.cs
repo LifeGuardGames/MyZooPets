@@ -3,7 +3,7 @@ using System.Collections;
 
 //This class handles the timing for loading data into UI classes
 //data loading in data manager is asynchronous so this class is necessary
-//to provide an eventbased callback
+//to provide an event based callback
 public class LoadDataLogic : MonoBehaviour {
     public bool isDebugging;
     public static bool IsDataLoaded{get;set;}
@@ -29,6 +29,10 @@ public class LoadDataLogic : MonoBehaviour {
         //set callback for datamanager so it knows what to do when data have been
         //initialized or de serialized
         DataManager.dataLoadedCallBack = InitializeDataForUI;
+
+        //set callback for pet hatching so it knows what to do when the pet has been 
+        //hatched
+        FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
     }
 
     //data is ready for use so initialize all UI data

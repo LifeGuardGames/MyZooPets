@@ -8,12 +8,14 @@ using System;
 [DoNotSerializePublic]
 public class DataManager : MonoBehaviour {
     //#region Developer option
-    public bool isDebugging = false;
+    public bool removePreviouslySavedData; //delete all from PlayerPrefs
+    public bool showHatch; //go through the hatch animation
     private bool loaded = false;
+    //#endregion
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
-    private static bool firstTime;
+    private static bool firstTime; //is the user playing for the first time
 
     //delegate is called when DataManager is finished initializing data for the first time
     //or deserializing previously saved data
@@ -21,6 +23,13 @@ public class DataManager : MonoBehaviour {
     public static DataLoadedCallBack dataLoadedCallBack;
 
     //#region SaveData
+    //pet info
+    [SerializeThis]
+    private static string petName; //name of the pet
+    [SerializeThis]
+    private static string petColor; //color of the pet
+
+    //stats
     [SerializeThis]
     private static int points; //evolution points
     [SerializeThis]
@@ -56,8 +65,6 @@ public class DataManager : MonoBehaviour {
                                           // for a new week or not.
     [SerializeThis]
     private static DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
-    
-    // private static DateTime lastCalendarComboTime; //the last day that the user continued the combo
 
     //Inhaler Data
     [SerializeThis]
@@ -73,10 +80,18 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static int rescueCount; //max 3. appears in the game max 3 times per day       
     //inhaler skin used (needs enum type)
-
     //#endregion
 
-    //#region Getters
+    //#region Getters & Setters
+    public static string PetName{
+        get{return petName;}
+        set{petName = value;}
+    }
+    public static string PetColor{
+        get{return petColor;}
+        set{petColor = value;}
+    }
+
     //First Time. use this to know if user is player game for the first time
     public static bool FirstTime{
         get {return firstTime;}
@@ -229,7 +244,7 @@ public class DataManager : MonoBehaviour {
         // Use this for initialization
         // save and load data here
         //first time playing the game. values need to be initialized
-        if(isDebugging) PlayerPrefs.DeleteAll();
+        if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
         if (firstTime){
             //Evolution data initialization
@@ -274,11 +289,11 @@ public class DataManager : MonoBehaviour {
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
 
-            //skip hatching if debugging
-            if(isDebugging){
-                dataLoaded(false);
+            //Debug options;
+            if(showHatch){
+                dataLoaded(true); //hatch pet first
             }else{
-                dataLoaded(true);    
+                dataLoaded(false); //load all GUI
             }
         }else{ //load saved data
             if(!loaded){

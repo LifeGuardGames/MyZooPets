@@ -46,7 +46,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	void Start(){
 		if(DataManager.FirstTime){
-			Debug.Log("Hatch sequences");
 			eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
 			currentRenderColor = RenderSettings.ambientLight;
 			RenderSettings.ambientLight = Color.black;

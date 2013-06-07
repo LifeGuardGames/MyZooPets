@@ -137,54 +137,82 @@ public class controller : MonoBehaviour
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
-	
+	private Touch touch;
+	private float touchx;
+	private float touchy;
+//	
+//	bool VerifyTouch(Touch touch)
+//	{
+//		Ray ray = Camera.main.ScreenPointToRay(touch.position);
+//        	RaycastHit hit ;
+//		
+//		//Check if there is a collider attached already, otherwise add one on the fly
+//		if(collider == null)
+//			gameObject.AddComponent(typeof(BoxCollider));
+//		
+//       		if (Physics.Raycast (ray, out hit)) 
+//		{
+//			if(hit.collider.gameObject == this.gameObject)
+//				return true;
+//		}
+//		return false;
+//	}
+//	
 	private void Update() 
 	{
 	if(Input.touchCount > 0){
 	
-		Touch touch = Input.GetTouch(0);
-		float touchx = touch.position.x;
-		float touchy = touch.position.y;
-		if ((touchx < Screen.width/4 || touchx > 3*(Screen.width/4))
-				|| (touchy < Screen.height/2) ) 
-			{
-				//touchx = 0;
-				//touchy = 0;
-				return;
-			}
+		//if ((touchx < Screen.width/4 || touchx > 3*(Screen.width/4))
+		//    || (touchy < Screen.height/2) ) 	
 		
-		Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
-		
-
-		if (Input.GetMouseButtonDown(0) && !previousFrameTouchDown)
-		{
-			previousTouchPosition = touchPos;
-			currentTouchPosition = touchPos;
-			previousFrameTouchDown = true;
-		}
-		else if (Input.GetMouseButton(0) && previousFrameTouchDown)
-		{
-			previousTouchPosition = currentTouchPosition;
-			currentTouchPosition = touchPos;
-		}
-		else if (!Input.GetMouseButton(0))
-		{
-			previousFrameTouchDown = false;	
-		}
 			
-		Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-		Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
-		Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
-		Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
-		
-		if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
+		touch = Input.GetTouch(0);
+		touchx = touch.position.x;
+		touchy = touch.position.y;	
+			
+		Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        RaycastHit hit ;
+
+		if (Physics.Raycast(ray,out hit))
 		{
-			float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
-																   currentPositionVector);
-																
-			transform.RotateAroundLocal(Vector3.forward, rotationAmount *0.25f * Time.deltaTime);
+			if(hit.collider.gameObject == this.gameObjec)
+			{
+				Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
+			
+	
+				if (Input.GetMouseButtonDown(0) && !previousFrameTouchDown)
+				{
+					previousTouchPosition = touchPos;
+					currentTouchPosition = touchPos;
+					previousFrameTouchDown = true;
+				}
+				else if (Input.GetMouseButton(0) && previousFrameTouchDown)
+				{
+					previousTouchPosition = currentTouchPosition;
+					currentTouchPosition = touchPos;
+				}
+				else if (!Input.GetMouseButton(0))
+				{
+					previousFrameTouchDown = false;	
+				}
+					
+				Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+				Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
+				Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
+				Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
+				
+				if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
+				{
+					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
+																		   currentPositionVector);
+																		
+					transform.RotateAroundLocal(Vector3.forward, rotationAmount *0.25f * Time.deltaTime);
+				}
+			}					
 		}
-	}
+		
+		
+	
 	}
 	
 	

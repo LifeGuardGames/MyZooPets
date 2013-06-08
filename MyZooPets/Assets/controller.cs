@@ -137,95 +137,90 @@ public class controller : MonoBehaviour
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
-//	private Touch touch;
-//	private float touchx;
-//	private float touchy;
-//
-//	bool VerifyTouch(Touch touch)
-//	{
-//		Ray ray = Camera.main.ScreenPointToRay(touch.position);
-//        	RaycastHit hit ;
-//
-//		//Check if there is a collider attached already, otherwise add one on the fly
-//		if(collider == null)
-//			gameObject.AddComponent(typeof(BoxCollider));
-//
-//       		if (Physics.Raycast (ray, out hit))
-//		{
-//			if(hit.collider.gameObject == this.gameObject)
-//				return true;
-//		}
-//		return false;
-//	}
-//
+	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
+
 	void Update()
 	{
-		if(Input.touchCount > 0){
+		if (Input.touchCount == 0) { // if not touching screen
+			ResetTouch();
+			dragStartedOnObject = false;
+		}
+		else if(Input.touchCount > 0){
+			Touch touch = Input.GetTouch(0);
+			if (!isTouchingObject(touch)){ // if finger has left object
+				ResetTouch();
+			}
+			else {
+				float touchx = touch.position.x;
+				float touchy = touch.position.y;
+				Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
 
-			Touch touch = Input.GetTouch(0);	
-			Ray ray = Camera.main.ScreenPointToRay(touch.position);
-	        RaycastHit hit ;
-
-			if (Physics.Raycast(ray,out hit))
-			{
-				if(hit.collider.gameObject == this.gameObject)
-				{	
-					float touchx = touch.position.x;
-					float touchy = touch.position.y;
-					if(touch.phase == TouchPhase.Ended) 
-					{
-						return;
-					}
-					Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
-
-
-					if (Input.GetMouseButtonDown(0) && !previousFrameTouchDown)
-					{
-						previousTouchPosition = touchPos;
-						currentTouchPosition = touchPos;
-						previousFrameTouchDown = true;
-					}
-					else if (Input.GetMouseButton(0) && previousFrameTouchDown)
-					{
-						previousTouchPosition = currentTouchPosition;
-						currentTouchPosition = touchPos;
-					}
-					else if (!Input.GetMouseButton(0))
-					{
-						previousFrameTouchDown = false;
-					}
-
-					Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-					Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
-					Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
-					Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
-
-					if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
-					{
-						float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
-							currentPositionVector);
-
-						transform.RotateAroundLocal(Vector3.forward, rotationAmount *0.25f * Time.deltaTime);
-					}
+				// first touch. (GetMouseButtonDown(0) only happens once)
+				if (Input.GetMouseButtonDown(0) && !previousFrameTouchDown) {
+					previousTouchPosition = touchPos;
+					currentTouchPosition = touchPos;
+					previousFrameTouchDown = true;
+					dragStartedOnObject = true;
 				}
-				else {
-					
-					previousTouchPosition = Vector2.zero;
-					currentTouchPosition = Vector2.zero;
-					previousFrameTouchDown = false;
+				// finger was just dragged into the object
+				// (condition: the first touch was on the object, but the finger left the object at some point)
+				else if (dragStartedOnObject && Input.GetMouseButton(0) && !previousFrameTouchDown){
+					previousTouchPosition = touchPos;
+					currentTouchPosition = touchPos;
+					previousFrameTouchDown = true;
+				}
+
+				// last touch was also inside object
+				else if (Input.GetMouseButton(0) && previousFrameTouchDown)
+				{
+					previousTouchPosition = currentTouchPosition;
+					currentTouchPosition = touchPos;
+				}
+
+				// not needed, since the check for touchCount == 0 will take care of this
+				// else if (!Input.GetMouseButton(0))
+				// {
+				// 	previousFrameTouchDown = false;
+				// }
+
+				Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+				Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
+				Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
+				Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
+
+				if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
+				{
+					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
+						currentPositionVector);
+
+					transform.RotateAroundLocal(Vector3.forward, rotationAmount * Time.deltaTime);
 				}
 			}
-
 		}
-		else {
-			previousTouchPosition = Vector2.zero;
-			currentTouchPosition = Vector2.zero; 
-			previousFrameTouchDown = false;
-			
-		}
-
 	}
 
+	bool isTouchingObject(Touch touch){
+		Ray ray = Camera.main.ScreenPointToRay(touch.position);
+       	RaycastHit hit ;
+
+		//Check if there is a collider attached already, otherwise add one on the fly
+		if(collider == null){
+			gameObject.AddComponent(typeof(BoxCollider));
+		}
+
+		if (Physics.Raycast (ray, out hit)) {
+			if(hit.collider.gameObject == this.gameObject){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void ResetTouch(){
+		previousTouchPosition = Vector2.zero;
+		currentTouchPosition = Vector2.zero;
+		previousFrameTouchDown = false;
+	}
 
 	private float ReturnSignedAngleBetweenVectors(Vector2 vectorA, Vector2 vectorB)
 	{

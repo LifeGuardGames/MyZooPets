@@ -83,7 +83,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			splashScreenAux = false;
 		}
 		
-		//TODO-w Optimize this for touch?
+		//TODO-s Optimize this for touch? / ABSTRACT TO CAMERAMOVE?? perhaps not for coherency
 		if(Input.GetMouseButtonUp(0)){
 			Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;

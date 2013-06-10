@@ -3,10 +3,15 @@ using System.Collections;
 
 /// <summary>
 /// First time GUI.
-/// Stuffed everything that needs to be done in the first run here
+/// Stuffed everything that needs to be done in the first run here.
+/// If its not the first time the game is run, this will delete itself.
 /// </summary>
 
 public class FirstTimeGUI : MonoBehaviour {
+	
+	// native dimensions
+    private const float NATIVE_WIDTH = 1280.0f;
+    private const float NATIVE_HEIGHT = 800.0f;	
 	
 	public bool splashScreenAux = true;
 	
@@ -55,6 +60,10 @@ public class FirstTimeGUI : MonoBehaviour {
 			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
 		}
 		else{
+			// TEMPORARY spawn the pet in location
+			GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
+			goPet.name = "SpritePet";
+			
 			Destroy(eggObject);
 			Destroy(nestObject);
 			Destroy(gameObject);
@@ -62,7 +71,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	void Update(){
-		
 		// Splash finished, Drop down the title and the egg sprite, only called once
 		if(splashScreenAux && Fader.IsSplashScreenFinished){
 			Hashtable optional = new Hashtable();
@@ -75,33 +83,21 @@ public class FirstTimeGUI : MonoBehaviour {
 			splashScreenAux = false;
 		}
 		
-		//TODO-s avoid calling this every frame
-		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if(Physics.Raycast(myRay,out hit))
-		{
-			if(hit.collider.name == "SpriteEgg" && Input.GetMouseButtonUp(0))
+		//TODO-w Optimize this for touch?
+		if(Input.GetMouseButtonUp(0)){
+			Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if(Physics.Raycast(myRay,out hit))
 			{
-				CameraTransform(finalPosition,finalFaceDirection);
-	    	    isZoomed = true;
-				HideTitle();
-				ShowChooseGUI();
+				if(hit.collider.name == "SpriteEgg")
+				{
+					CameraTransform(finalPosition,finalFaceDirection);
+		    	    isZoomed = true;
+					HideTitle();
+					ShowChooseGUI();
+				}
 			}
 		}
-		
-//		if (Input.GetKeyUp(KeyCode.Space)){
-//			if(isZoomed){
-//				ZoomOutMove();
-//				isZoomed = false;
-//				HideChooseGUI();
-//			}
-//			else{
-//		        CameraTransform(finalPosition,finalFaceDirection);
-//	    	    isZoomed = true;
-//				HideTitle();
-//				ShowChooseGUI();
-//			}
-//		}
 	}
 	
 	void ShowChooseGUI(){
@@ -127,6 +123,7 @@ public class FirstTimeGUI : MonoBehaviour {
 		
 		// Spawn pet object
 		GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
+		goPet.name = "SpritePet";
 
 		finishHatchCallBack(false);
 		Destroy(eggObject);
@@ -135,12 +132,19 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!Fader.IsSplashScreenFinished){
-			return;
+		if(!Fader.IsSplashScreenFinished) return;
+		
+		// Proportional scaling
+		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
+            float horizRatio = Screen.width/NATIVE_WIDTH;
+            float vertRatio = Screen.height/NATIVE_HEIGHT;
+            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
+		
 		if(logo != null){
 			GUI.DrawTexture(logoRect.rect, logo);
 		}
+		
 		if(isEditEgg){
 			GUI.Box(editEggRect.rect, ""); 
 			GUILayout.BeginArea(editEggRect.rect);
@@ -180,7 +184,6 @@ public class FirstTimeGUI : MonoBehaviour {
 			}
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
-			
 		}
 	}
 	

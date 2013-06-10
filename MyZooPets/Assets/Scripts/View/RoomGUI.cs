@@ -6,7 +6,7 @@ public class RoomGUI : MonoBehaviour {
 	private RoomGUIAnimator roomAnimator;
 	
 	// native dimensions
-    private const float NATIVE_WIDTH = 1280.0f;    //screen size 
+    private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 	
 	private bool isMenuExpanded;
@@ -94,12 +94,7 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
 	
-	
-	
 	void Start (){
-	
-		
-		
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
 		
 		progress = roomAnimator.displayPoints;
@@ -140,8 +135,7 @@ public class RoomGUI : MonoBehaviour {
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
 		
-		//TODO-s change this to read data
-		tierLevel = "Tier 1";
+		tierLevel = "Tier 1";//TODO-s change this later
 		tierProgressText = roomAnimator.displayPoints + "/50000";
 		starCount = roomAnimator.displayStars.ToString();
 	}
@@ -161,17 +155,17 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-	
 		if(!Fader.IsSplashScreenFinished) return; //don't draw until splash screen is done
 		if(!LoadDataLogic.IsDataLoaded) return; //don't draw until all data is loaded
 
 		GUI.depth = 1;
-		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     //porpotional scaling
+		
+		// Proportional scaling
+		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
-		//GUI.DrawTexture(new Rect(200,250,500,500), demopet);   //temp demo pet
 
 		//Room GUI Positioning 
 		
@@ -218,11 +212,11 @@ public class RoomGUI : MonoBehaviour {
 			
 			DataManager.SubtractHealth(40);
 		}
+		
 		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth)))
 		{
 			inhalerpicked = true;
 		}
-		
 		
 		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth)))
 		{
@@ -271,11 +265,13 @@ public class RoomGUI : MonoBehaviour {
 				}
 			}
 		}
+		
 		if(emInhalerpicked)
 		{
 			textureSwap2 = null; 
 			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),emInhalerTexture);
 		}
+		
 		if(Input.GetMouseButtonUp(0))
 		{
 			emInhalerpicked = false;
@@ -289,6 +285,7 @@ public class RoomGUI : MonoBehaviour {
 		{
 			showOption = !showOption;
 		}
+		
 		if(showOption)
 		{
 			GUI.DrawTexture(new Rect(optionMenuLoc.x,optionMenuLoc.y,400,600),optionMenuTexture);

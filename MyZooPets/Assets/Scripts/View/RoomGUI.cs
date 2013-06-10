@@ -253,19 +253,22 @@ public class RoomGUI : MonoBehaviour {
 		{
 			textureSwap1 = null; 
 			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),inhalerTexture);
-			if(Input.GetTouch(0).phase == TouchPhase.Ended)
+			if(Input.touchCount > 0)
 			{
-				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
-				
-				if(Physics.Raycast(myRay,out hit))
+				if(Input.GetTouch(0).phase == TouchPhase.Ended)
 				{
-					if(hit.collider.name == "SpritePet(Clone)")
+					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					
+					if(Physics.Raycast(myRay,out hit))
 					{
-						print("You hit pet!");
-						DataManager.AddPoints(1000);	
-					}
-				}			
+						if(hit.collider.name == "SpritePet(Clone)")
+						{
+							print("You hit pet!");
+							DataManager.AddPoints(1000);	
+						}
+					}			
+				}
 			}
 		}
 		if(emInhalerpicked)

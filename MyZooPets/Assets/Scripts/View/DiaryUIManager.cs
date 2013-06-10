@@ -41,23 +41,30 @@ public class DiaryUIManager : MonoBehaviour {
 	void Update () {
 		if(!LoadDataLogic.IsDataLoaded) return;
 		//TODO-s Avoid calling this every frame
-		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if(Physics.Raycast(myRay,out hit))
+		
+		if(Input.touchCount > 0)
 		{
-			if(hit.collider.name == "room_table" && Input.GetMouseButtonUp(0))
+			if(Input.GetTouch(0).phase == TouchPhase.Ended)
 			{
-				//print("You clicked table!");
-				roomGui.HideGUIs();
-				showGUI = false;
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeInOutQuad);
-	
-				CalendarLogic.CalendarOpened();
-				if(!showGUI)
+				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if(Physics.Raycast(myRay,out hit))
 				{
-					LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
-
+					if(hit.collider.name == "room_table" && Input.GetMouseButtonUp(0))
+					{
+						//print("You clicked table!");
+						roomGui.HideGUIs();
+						showGUI = false;
+						Hashtable optional = new Hashtable();
+						optional.Add("ease", LeanTweenType.easeInOutQuad);
+			
+						CalendarLogic.CalendarOpened();
+						if(!showGUI)
+						{
+							LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
+		
+						}
+					}
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class controller : MonoBehaviour
+public class InhalerCap : MonoBehaviour
 {
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;

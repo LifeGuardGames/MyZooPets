@@ -24,6 +24,10 @@ public class DiaryUIManager : MonoBehaviour {
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
 	private Vector2 diaryFinalPosition = new Vector2(650,100);
 	private LTRect diaryRect;
+
+	// native dimensions
+    private const float NATIVE_WIDTH = 1280.0f;
+    private const float NATIVE_HEIGHT = 800.0f;
 	
 	public void Init(){
 		calendar = CalendarLogic.GetCalendarEntries();	
@@ -52,6 +56,14 @@ public class DiaryUIManager : MonoBehaviour {
 	void OnGUI()
 	{
 		if(!LoadDataLogic.IsDataLoaded) return;
+
+		// Proportional scaling
+		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
+            float horizRatio = Screen.width/NATIVE_WIDTH;
+            float vertRatio = Screen.height/NATIVE_HEIGHT;
+            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
+		}
+
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;

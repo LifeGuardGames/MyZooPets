@@ -4,14 +4,12 @@ using System.Collections;
 public class Fader : MonoBehaviour {
 
 	public bool isDebug = false;
-	RoomGUI roomGui;
 	private bool loaded = false;
 	public static bool IsSplashScreenFinished{get; set;}
 
 	void Awake()
 	{
 		guiTexture.pixelInset = new Rect(0,0,0,0);
-		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 		IsSplashScreenFinished = false;
 	}
 

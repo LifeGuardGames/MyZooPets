@@ -30,10 +30,10 @@ public class NotificationUIManager : MonoBehaviour {
 	public void PopupTexture(string message, string particle){
 		if(message == "great"){
 			GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
-			Destroy(go, 2.0f);
+			Destroy(go, 3.0f);
 			
 			GameObject go2 = Instantiate(popupAward, gameObject.transform.position, Quaternion.identity) as GameObject;
-			Destroy(go2, 2.0f);
+			Destroy(go2, 3.0f);
 		}
 		
 

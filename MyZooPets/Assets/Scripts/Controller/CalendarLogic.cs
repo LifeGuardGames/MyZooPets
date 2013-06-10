@@ -170,7 +170,7 @@ public class CalendarLogic : MonoBehaviour {
 
         //if player misses for >3 days the pet starts missing doses with 70%
         //frequency for each 12 h dose and incurring the health consequences of this.
-        for(counter = counter; counter < missedDays; counter++){
+        for(; counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
             DateTime missedDate = now.Subtract(timeSpan);
             CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);

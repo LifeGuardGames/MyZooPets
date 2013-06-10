@@ -20,27 +20,31 @@ public class CameraMove : MonoBehaviour {
 	}
 	
 	void Update () {
-		
-		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if(Physics.Raycast(myRay,out hit))
-		{
-			if(hit.collider.name == "room_shelf"&&Input.GetMouseButtonUp(0))
-			{
-				//print("You clicked shelf!");
-				if(zoomed)
+		if(Input.touchCount > 0)
+		{	
+			if(Input.GetTouch(0).phase == TouchPhase.Ended)
+			{	
+				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if(Physics.Raycast(myRay,out hit))
 				{
-					ZoomOutMove();
-					zoomed = false;
+					if(hit.collider.name == "room_shelf"&&Input.GetMouseButtonUp(0))
+					{
+						//print("You clicked shelf!");
+						if(zoomed)
+						{
+							ZoomOutMove();
+							zoomed = false;
+						}
+						else
+						{		
+			        		CameraTransform(finalPosition,finalFaceDirection);
+		    	    		zoomed = true;
+						}	
+					}
 				}
-				else
-				{		
-	        		CameraTransform(finalPosition,finalFaceDirection);
-    	    		zoomed = true;
-				}	
 			}
 		}
-		
 		
 		
 //		if (Input.GetKeyUp(KeyCode.Space))

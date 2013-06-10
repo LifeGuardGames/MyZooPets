@@ -6,12 +6,14 @@ public class ClickManager : MonoBehaviour {
 	private bool isMobilePlatform;
 	
 	// All the classes that need a click input go here
-	public GameObject cameraMoveObject;
-	private CameraMove cameraMove;
+//	public GameObject cameraMoveObject;
+//	private CameraMove cameraMove;
 	
 	public GameObject diaryUIManagerObject;
 	private DiaryUIManager diaryUIManager;
 	
+	public GameObject TrophyGUIObject;
+	private TrophyGUI trophyGUI;
 	
 	void Start(){
 		if(Application.platform == RuntimePlatform.Android ||
@@ -23,8 +25,9 @@ public class ClickManager : MonoBehaviour {
 		}
 		
 		// Linking script references
-		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+//		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryUIManager>();
+		trophyGUI = TrophyGUIObject.GetComponent<TrophyGUI>();
 	}
 
 	void Update(){
@@ -38,7 +41,7 @@ public class ClickManager : MonoBehaviour {
 				{
 					if(hit.collider.name == "room_shelf")
 					{
-						cameraMove.ShelfZoomToggle();
+						trophyGUI.TrophyClicked();
 					}
 					
 					if(hit.collider.name == "room_table")

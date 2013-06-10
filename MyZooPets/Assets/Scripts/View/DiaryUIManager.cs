@@ -24,49 +24,28 @@ public class DiaryUIManager : MonoBehaviour {
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
 	private Vector2 diaryFinalPosition = new Vector2(650,100);
 	private LTRect diaryRect;
+	
+	public void Init(){
+		calendar = CalendarLogic.GetCalendarEntries();	
+	}
+
 	// Use this for initialization
 	void Start () {
 		roomGui	= GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUI>();
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
-//		diaryRect = new LTRect(diaryFinalPosition.x,diaryFinalPosition.y, 600, 650);
-
-
-	}
-
-	public void Init(){
-		calendar = CalendarLogic.GetCalendarEntries();	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if(!LoadDataLogic.IsDataLoaded) return;
-		//TODO-s Avoid calling this every frame
-		
-		if(Input.touchCount > 0)
+	// Called from ClickManager
+	public void DiaryClicked(){
+		roomGui.HideGUIs();
+		showGUI = false;
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+	
+		CalendarLogic.CalendarOpened();
+		if(!showGUI)
 		{
-			if(Input.GetTouch(0).phase == TouchPhase.Ended)
-			{
-				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
-				if(Physics.Raycast(myRay,out hit))
-				{
-					if(hit.collider.name == "room_table" && Input.GetMouseButtonUp(0))
-					{
-						//print("You clicked table!");
-						roomGui.HideGUIs();
-						showGUI = false;
-						Hashtable optional = new Hashtable();
-						optional.Add("ease", LeanTweenType.easeInOutQuad);
-			
-						CalendarLogic.CalendarOpened();
-						if(!showGUI)
-						{
-							LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
-		
-						}
-					}
-				}
-			}
+			LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
 		}
 	}
 	

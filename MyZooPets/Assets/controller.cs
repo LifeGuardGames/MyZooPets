@@ -193,7 +193,7 @@ public class controller : MonoBehaviour
 					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
 						currentPositionVector);
 
-					transform.RotateAroundLocal(Vector3.forward, rotationAmount * Time.deltaTime);
+					transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
 				}
 			}
 		}

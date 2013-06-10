@@ -7,14 +7,19 @@ public class InhalerCap : MonoBehaviour
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
 	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
+	bool completelyOpened = false;
+	Vector3 finalPosition =  new Vector3(0,0,180);
 
 	void Update()
 	{
 		if (Input.touchCount == 0) { // if not touching screen
 			ResetTouch();
 			dragStartedOnObject = false;
+			if (!completelyOpened){
+				SnapBack();
+			}
 		}
-		else if(Input.touchCount > 0){
+		else if(Input.touchCount > 0 && !completelyOpened){
 			Touch touch = Input.GetTouch(0);
 			if (!isTouchingObject(touch)){ // if finger has left object
 				ResetTouch();
@@ -63,9 +68,12 @@ public class InhalerCap : MonoBehaviour
 						currentPositionVector);
 
 					transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
+					PreventAntiClockwiseRotation();
 				}
 			}
+			CheckIfCompletelyOpened();
 		}
+		PreventAntiClockwiseRotation();
 	}
 
 	bool isTouchingObject(Touch touch){
@@ -109,6 +117,27 @@ public class InhalerCap : MonoBehaviour
 			return Vector3.Angle(vector3A, vector3B);
 		else
 			throw new System.InvalidOperationException("the vectors are opposite");
+	}
+
+	void PreventAntiClockwiseRotation(){
+		if (transform.rotation.z < 0){
+			transform.rotation = Quaternion.identity;
+		}
+	}
+
+	void CheckIfCompletelyOpened(){
+		if (transform.eulerAngles.z >= 170){
+			transform.eulerAngles = finalPosition;
+			completelyOpened = true;
+		}
+	}
+
+	void SnapBack(){
+
+		if (transform.eulerAngles.z > 0){
+			float rotationAmount = -10;
+			transform.RotateAroundLocal(Vector3.forward, rotationAmount * Time.deltaTime);
+		}
 	}
 
 

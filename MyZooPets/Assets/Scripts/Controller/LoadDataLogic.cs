@@ -41,7 +41,6 @@ public class LoadDataLogic : MonoBehaviour {
         
         if(!isDebugging){
             if(!firstTime){ //init UI only if pet is hatched
-                Debug.Log("firsttimeee");
                 roomGUIAnimator.Init();
                 diaryUIManager.Init();    
                 evolutionLogic.Init();

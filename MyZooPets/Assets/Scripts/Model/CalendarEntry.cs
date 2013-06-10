@@ -5,24 +5,24 @@ using System;
 [DoNotSerializePublic]
 public class CalendarEntry{
     [SerializeThis]
-    private DayOfWeek day;
+    private DayOfWeek day; //day of the entry
     [SerializeThis]
-    private DosageRecord morning;
+    private DosageRecord morning; //morning dosage record: hit or miss
     [SerializeThis]
-    private DosageRecord afternoon;
+    private DosageRecord afternoon; //afternoon dosage record: hit or miss
     [SerializeThis]
-    private bool openedInMorning;
+    private bool openedInMorning; //has the entry been seen by the user in morning
     [SerializeThis]
-    private bool openedInAfternoon;
+    private bool openedInAfternoon; //has the entry been seen by user in the afternoon
     [SerializeThis]
-    private bool calculatedInMorning;
+    private bool calculatedInMorning; //has the stats/score been calculated in morning
     [SerializeThis]
-    private bool calculatedInAfternoon;
+    private bool calculatedInAfternoon; //has stats/score been calculated in afternoon
 
+    //===============Getters & Setters=============
     public DayOfWeek Day{
         get{return day;}
     }
-
     public DosageRecord Morning{
         get { return this.morning;}
         set { this.morning = value;}
@@ -47,7 +47,8 @@ public class CalendarEntry{
         get { return this.calculatedInAfternoon;}
         set { this.calculatedInAfternoon = value;}
     }
-
+    //=====================================
+    
     public CalendarEntry(DayOfWeek day){
         this.day = day;
         this.morning = DosageRecord.Null;

@@ -11,7 +11,7 @@ public class DataManager : MonoBehaviour {
     public bool removePreviouslySavedData; //delete all from PlayerPrefs
     public bool showHatch; //go through the hatch animation
     private bool loaded = false;
-    //===============
+    //=====================================
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change
@@ -286,11 +286,11 @@ public class DataManager : MonoBehaviour {
             PlayerPrefs.SetInt("FirstTime", 0);
 
             //Debug options;
-            // if(showHatch){
+            if(showHatch){
                 dataLoaded(true); //hatch pet first
-            // }else{
-                // dataLoaded(false); //load all GUI
-            // }
+            }else{
+                dataLoaded(false); //load all GUI
+            }
         }else{ //load saved data
             if(!loaded){
                 loaded = true;

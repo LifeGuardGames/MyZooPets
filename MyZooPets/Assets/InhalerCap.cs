@@ -3,6 +3,7 @@ using System.Collections;
 
 public class InhalerCap : MonoBehaviour
 {
+	public GameObject inhalerCapArrow;
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
@@ -129,6 +130,13 @@ public class InhalerCap : MonoBehaviour
 		if (transform.eulerAngles.z >= 170){
 			transform.eulerAngles = finalPosition;
 			completelyOpened = true;
+			RemoveArrowAnimation();
+		}
+	}
+
+	void RemoveArrowAnimation(){
+		if (inhalerCapArrow){
+			Destroy(inhalerCapArrow);
 		}
 	}
 

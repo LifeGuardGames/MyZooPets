@@ -3,13 +3,17 @@ using System.Collections;
 
 public class InhalerInhaleExhale : MonoBehaviour {
 
+    tk2dAnimatedSprite arrows;
     float firstTouchYPos;
     bool firstTouchOnObject = false;
     bool completedGame = false;
+    bool pointingUp = false;
     NotificationUIManager notificationUIManager;
 	// Use this for initialization
 	void Start () {
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
+        arrows = GetComponent<tk2dAnimatedSprite>();
+        renderer.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -17,7 +21,15 @@ public class InhalerInhaleExhale : MonoBehaviour {
         if (completedGame){
             return;
         }
+        if (InhalerLogic.CurrentStep == 3){
+            renderer.enabled = true;
+        }
 
+        if (InhalerLogic.CurrentStep == 5 && !pointingUp){
+            arrows.FlipY();
+            pointingUp = true;
+            renderer.enabled = true;
+        }
 
         if (Input.touchCount == 0) { // if not touching screen
             ResetTouch();
@@ -35,6 +47,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     if (InhalerLogic.IsCurrentStepCorrect(3)){
                         Debug.Log("Completed step 3");
                         InhalerLogic.IsDoneWithGame();
+                        renderer.enabled = false;
                     }
                 }
                 else if (isDraggingUp(touch)){
@@ -44,12 +57,14 @@ public class InhalerInhaleExhale : MonoBehaviour {
                         Debug.Log("Completed step 5");
                         completedGame = true;
                         notificationUIManager.PopupTexture("great", null);
+                        renderer.enabled = false;
                         InhalerLogic.IsDoneWithGame();
                     }
                 }
             }
         }
 	}
+
     void ResetTouch(){
         firstTouchOnObject = false;
     }

@@ -13,36 +13,57 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 petSideFinalPosition = new Vector3(2.5f, 2f, -15f);
 	private Vector3 petSideFinaleFaceDirection = new Vector3(15.54f, 0, 0);
 	
+	private bool isCameraMoving = false;
+	
 	void Start(){
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}
 	
 	// Called from ClickManager
+	// TODO toggle scheme using toggle, might want to set to definitive? (potential for transition bugs)
 	public void ShelfZoomToggle(){
-		if(zoomed){
-			ZoomOutMove();
-			zoomed = false;
+		if(!isCameraMoving){
+			if(zoomed){
+				ZoomOutMove();
+				zoomed = false;
+				LockCameraMove();
+			}
+			else{		
+	    		CameraTransform(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
+	    		zoomed = true;
+				LockCameraMove();
+			}
 		}
-		else{		
-    		CameraTransform(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
-    		zoomed = true;
-		}	
 	}
 	
 	public void PetSideZoomToggle(){
-		if(zoomed){
-			ZoomOutMove();
-			zoomed = false;
+		if(!isCameraMoving){
+			if(zoomed){
+				ZoomOutMove();
+				zoomed = false;
+				LockCameraMove();
+			}
+			else{
+	    		CameraTransform(petSideFinalPosition,petSideFinaleFaceDirection, 0.8f);
+	    		zoomed = true;
+				LockCameraMove();
+			}
 		}
-		else{
-    		CameraTransform(petSideFinalPosition,petSideFinaleFaceDirection, 0.8f);
-    		zoomed = true;
-		}	
+	}
+	
+	public void LockCameraMove(){
+		isCameraMoving = true;
+	}
+	
+	public void UnlockCameraMove(){
+		isCameraMoving = false;
 	}
 	
 	private void CameraTransform (Vector3 newPosition, Vector3 newDirection, float time){
 		Hashtable optional = new Hashtable();
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "UnlockCameraMove");
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(gameObject, newPosition, time, optional);
 		LeanTween.rotate(gameObject, newDirection, time, optional);

@@ -86,7 +86,8 @@ public class InhalerCap : MonoBehaviour
 			gameObject.AddComponent(typeof(BoxCollider));
 		}
 
-		if (Physics.Raycast (ray, out hit)) {
+		int layer = 1 << 8;
+		if (Physics.Raycast (ray, out hit, layer)) {
 			if(hit.collider.gameObject == this.gameObject){
 				return true;
 			}

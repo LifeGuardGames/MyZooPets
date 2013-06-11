@@ -9,7 +9,7 @@ using System;
 public class DataManager : MonoBehaviour {
     //========Developer option=============
     public bool removePreviouslySavedData; //delete all from PlayerPrefs
-    public bool showHatch; //go through the hatch animation
+    public bool skipHatch; 
     private bool loaded = false;
     //=====================================
 
@@ -239,9 +239,20 @@ public class DataManager : MonoBehaviour {
         // save and load data here
         //first time playing the game. values need to be initialized
         if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
-        FirstTime = showHatch; //developer option
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
+
+        // debug option
+        if(skipHatch && firstTime){ //first time but skip hatching
+            FirstTime = false;
+        }else if(firstTime){ //first time not skipping hatching
+            FirstTime = true;            
+        }
+        Debug.Log("first time: " + firstTime);
+        
+    }
+
+    void Start(){
         if (firstTime){
             //Evolution data initialization
             lastUpdatedTime = DateTime.Now;
@@ -284,13 +295,14 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-
+            SerializeGame();
             //Debug options;
-            if(showHatch){
-                dataLoaded(true); //hatch pet first
-            }else{
-                dataLoaded(false); //load all GUI
+            if(skipHatch){ //skip hatch so load GUI right away
+                dataLoaded(false);
+            }else{ //not skipping hatch so GUI waits for hatching to finish
+                dataLoaded(true);
             }
+                
         }else{ //load saved data
             if(!loaded){
                 loaded = true;
@@ -309,21 +321,31 @@ public class DataManager : MonoBehaviour {
         }
     }
 
+    private void SerializeGame(){
+        PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
+        // Debug.Log("serialized");
+    }
+
     //called when level data are loaded
     void OnDeserialized(){
-        Debug.Log("health " + health + "mood " + mood);
+        // Debug.Log("health " + health + "mood " + mood);
         dataLoaded(false);
     }
 
     void OnApplicationPause(bool paused){
+        // Debug.Log("on application paused " + paused);
         if(paused){
-            PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-            Debug.Log(JSONLevelSerializer.SerializeLevel());
+            SerializeGame();
+            // Debug.Log("serialize in pause");
         }
     }
 
-    //Save data before the game is quit
-    void OnApplicationQuit(){
+    void OnApplicationFocus(bool focused){
+        // Debug.Log("on application focus " + focused);
+        // if(!focused){
+        //     PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
+        //     Debug.Log("serialize in focus");
 
+        // }
     }
 }

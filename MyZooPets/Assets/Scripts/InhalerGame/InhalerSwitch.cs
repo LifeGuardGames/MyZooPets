@@ -13,16 +13,15 @@ public class InhalerSwitch : MonoBehaviour
 
 	void Update()
 	{
-		if (InhalerLogic.CurrentStep != 2){
-			return;
-		}
-
 		if (Input.touchCount == 0) { // if not touching screen
 			ResetTouch();
 			dragStartedOnObject = false;
 			SnapBack();
 		}
 		else if(Input.touchCount > 0 && !completelyOpened){
+			if (InhalerLogic.CurrentStep != 2){
+				return;
+			}
 			Touch touch = Input.GetTouch(0);
 			float touchx = touch.position.x;
 			float touchy = touch.position.y;
@@ -76,7 +75,6 @@ public class InhalerSwitch : MonoBehaviour
 				return true;
 			}
 		}
-		Debug.Log("not touching");
 		return false;
 	}
 

@@ -11,6 +11,8 @@ public class DiaryUIManager : MonoBehaviour {
 	public GameObject roomGuiObject;
 	private RoomGUI roomGui;
 	
+	public GUISkin defaultSkin;
+	
 	bool showGUI = true;
 	List<CalendarEntry> calendar;
 	public Texture2D diaryTexture1;
@@ -66,7 +68,9 @@ public class DiaryUIManager : MonoBehaviour {
 	
 	void OnGUI(){
 		if(!LoadDataLogic.IsDataLoaded) return;
-
+		
+		GUI.skin = defaultSkin;
+		
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
             float horizRatio = Screen.width/NATIVE_WIDTH;
@@ -181,6 +185,7 @@ public class DiaryUIManager : MonoBehaviour {
 		}
 		if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X")){
 			showGUI = !showGUI;
+			ClickManager.ReleaseLock();
 			LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 			roomGui.ShowGUIs();
 			cameraMove.PetSideZoomToggle();

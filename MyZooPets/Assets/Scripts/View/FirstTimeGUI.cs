@@ -13,6 +13,8 @@ public class FirstTimeGUI : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;	
 	
+	public GUISkin defaultSkin;
+	
 	public bool splashScreenAux = true;
 	
 	public GameObject eggObject;
@@ -49,6 +51,8 @@ public class FirstTimeGUI : MonoBehaviour {
 	public Texture2D redButton;
 	public Texture2D purpleButton;
 	
+	public Texture2D editPanel;
+	
 	void Start(){
 		if(DataManager.FirstTime){
 			eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
@@ -57,7 +61,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			
 			logoRect = new LTRect(Screen.width/2 - logo.width/2, -200f, 839f, 231f);
 			
-			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 600, 600);
+			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 610, 611);
 		}
 		else{
 			// TEMPORARY spawn the pet in location
@@ -132,7 +136,8 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!SplashScreen.IsFinished) return;
+		
+		if(!Fader.IsSplashScreenFinished) return;
 		
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
@@ -146,8 +151,9 @@ public class FirstTimeGUI : MonoBehaviour {
 		}
 		
 		if(isEditEgg){
-			GUI.Box(editEggRect.rect, ""); 
-			GUILayout.BeginArea(editEggRect.rect);
+			GUI.skin = defaultSkin;
+			GUI.DrawTexture(editEggRect.rect, editPanel); 
+			GUILayout.BeginArea(new Rect(editEggRect.rect.x + 20, editEggRect.rect.y + 20, editEggRect.rect.width - 40, editEggRect.rect.height - 40));
 			GUILayout.BeginVertical();
 			
 			GUILayout.Label("Name");

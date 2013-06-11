@@ -9,6 +9,8 @@ public class TrophyGUI : MonoBehaviour {
 	public GameObject roomGuiObject;
 	private RoomGUI roomGui;
 	
+	public GUISkin defaultSkin;
+	
 	private bool isActive = false;
 	
 	void Start(){
@@ -29,8 +31,10 @@ public class TrophyGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		GUI.skin = defaultSkin;
 		if(isActive){
 			if(GUI.Button(new Rect(10, 10, 100, 100), "X")){
+				ClickManager.ReleaseLock();
 				cameraMove.ShelfZoomToggle();
 				roomGui.ShowGUIs();	
 				isActive = false;

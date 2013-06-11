@@ -8,6 +8,11 @@ public class RoomGUI : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 	
+	public GameObject diagnoseGUIObject;
+	private DiagnoseGUI diagnoseGUI;
+	
+	public GUISkin defaultSkin;
+	
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
@@ -28,13 +33,10 @@ public class RoomGUI : MonoBehaviour {
 	public Texture2D statBarTexture;
 	public Texture2D itemBarTexture;
 	
-	public Texture2D roomTexture;
-	
 	public Texture2D foodIcon;
 	public Texture2D healthIcon;
 	public Texture2D moodIcon;
 	
-	public Texture2D demopet;
 	public Texture2D progressBarFrame;
 	public Texture2D progressBarFill;
 	public Texture2D statBarVerFillGreen;
@@ -64,7 +66,11 @@ public class RoomGUI : MonoBehaviour {
 		
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
-	private LTRect menuRect;	
+	private LTRect menuRect;
+	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
+	
+	//private Vector2 optionIconLoc = new Vector2(1150, 700);
+	private Vector2 optionMenuLoc = new Vector2(500, 100);
 	
 	private Vector2 tierBarloc;
 	private Vector2 tierTextOffset = new Vector2(25, 12);
@@ -89,9 +95,6 @@ public class RoomGUI : MonoBehaviour {
 	private Vector2 progressBarOffset = new Vector2(150, 11);
 	private Vector2 progressTextOffset = new Vector2(230, 12);
 	
-	private Vector2 optionIconLoc = new Vector2(1150, 700);
-	private Vector2 optionMenuLoc = new Vector2(500, 100);
-	
 	private string tierLevel;
 	private string tierProgressText;
 	
@@ -101,6 +104,8 @@ public class RoomGUI : MonoBehaviour {
 	void Start(){
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
+		
+		diagnoseGUI = diagnoseGUIObject.GetComponent<DiagnoseGUI>();
 		
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
@@ -136,18 +141,21 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
 		LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
 		LeanTween.move(menuRect,new Vector2(0,850),0.5f);
+		LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
 	}
 	
 	public void ShowGUIs(){
 		LeanTween.move(TopGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(menuRect,new Vector2(0,700),0.5f);
+		LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
 	}
 	
 	void OnGUI(){
 		if(!SplashScreen.IsFinished) return; //don't draw until splash screen is done
 		if(!LoadDataLogic.IsDataLoaded) return; //don't draw until all data is loaded
 
+		GUI.skin = defaultSkin;
 		GUI.depth = 1;
 		
 		// Proportional scaling
@@ -283,13 +291,13 @@ public class RoomGUI : MonoBehaviour {
 			textureSwap2 = emInhalerTexture;
 		}
 		
-		if(GUI.Button(new Rect(optionIconLoc.x,optionIconLoc.y,90,90),optionIconTexture)){
+		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
 			showOption = !showOption;
 		}
 		
 		// TODO-s change this later
-		if(GUI.Button(new Rect(optionIconLoc.x - 100,optionIconLoc.y ,90,90), "Diagnose Pet")){
-			cameraMove.PetSideZoomToggle();
+		if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
+			diagnoseGUI.DiagnoseClicked();
 		}
 		
 		if(showOption){

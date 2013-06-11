@@ -8,31 +8,6 @@ using System.Collections;
 
 public class RoomGUIAnimator : MonoBehaviour {
 	
-//	public int dataPoints{
-//        get {return dataPoints;}
-//		set {dataPoints = value;}
-//	}
-//	
-//	public int dataStars{
-//        get {return dataStars;}
-//		set {dataStars = value;}
-//	}
-//	
-//	public int dataHealth{
-//        get {return dataHealth;}
-//		set {dataHealth = value;}
-//	}
-//	
-//	public int dataMood{
-//        get {return dataMood;}
-//		set {dataMood = value;}
-//	}
-//	
-//	public int dataHunger{
-//        get {return dataHunger;}
-//		set {dataHunger = value;}
-//	}
-	
 	public int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
 	public int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 
@@ -58,14 +33,24 @@ public class RoomGUIAnimator : MonoBehaviour {
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
 		
-		//Debug.Log(DataManager.Health);
 		//Listen for changes
+		//TODO untested!
 		if(dataPoints != DataManager.Points){
 			if(displayPoints > DataManager.Points){
-				displayPoints--;
+				if(displayPoints - 5 >= DataManager.Points){
+					displayPoints -= 5;
+				}
+				else{
+					displayPoints -= displayPoints - DataManager.Points;
+				}
 			}
 			else if(displayPoints < DataManager.Points){
-				displayPoints++;
+				if(displayPoints + 5 <= DataManager.Points){
+					displayPoints += 5;
+				}
+				else{
+					displayPoints += DataManager.Points - displayPoints;
+				}
 			}
 			else{
 				dataPoints = DataManager.Points;	

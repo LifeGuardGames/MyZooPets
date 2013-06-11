@@ -93,9 +93,7 @@ public class DataManager : MonoBehaviour {
     }
 
     //First Time. use this to know if user is player game for the first time
-    public static bool FirstTime{
-        get {return firstTime;}
-    }
+    public static bool FirstTime{get; set;}
 
     //Stats
     public static int Points{
@@ -241,6 +239,8 @@ public class DataManager : MonoBehaviour {
         // save and load data here
         //first time playing the game. values need to be initialized
         if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
+        FirstTime = showHatch; //developer option
+
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
         if (firstTime){
             //Evolution data initialization

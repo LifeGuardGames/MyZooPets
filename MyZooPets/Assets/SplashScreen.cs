@@ -15,13 +15,13 @@ public class SplashScreen : MonoBehaviour {
 		IsFinished = false;
 		timer = delayTime;
 
-		if(isDebug) guiTexture.color = Color.clear;
+		if(isDebug) guiTexture.color = Color.clear; //splash screen is transparent during debug
 	}
 
 	void Update()
 	{
 		timer -= Time.deltaTime;
-		if(timer > 0) return;
+		if(timer > 0) return; //return if splash screen needs to hang longer
 
 		FadeStartScene();
 		if(guiTexture.color == Color.clear){
@@ -30,6 +30,7 @@ public class SplashScreen : MonoBehaviour {
 		}
 	}
 
+	//fades the splash screen
 	void FadeStartScene()
 	{
 		guiTexture.color = Color.Lerp(guiTexture.color,Color.clear,0.9f * Time.deltaTime);

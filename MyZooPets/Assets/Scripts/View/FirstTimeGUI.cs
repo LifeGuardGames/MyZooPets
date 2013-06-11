@@ -137,7 +137,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	void OnGUI(){
 		
-		if(!Fader.IsSplashScreenFinished) return;
+		if(!SplashScreen.IsFinished) return;
 		
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     

@@ -9,68 +9,51 @@ public class InhalerSwitch : MonoBehaviour
 	bool previousFrameTouchDown = false;
 	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
 	bool completelyOpened = false;
-	// Vector3 finalPosition =  new Vector3(0,0,180);
+	Vector3 maxPosition =  new Vector3(0,0,30);
 
 	void Update()
 	{
 		if (Input.touchCount == 0) { // if not touching screen
 			ResetTouch();
 			dragStartedOnObject = false;
-			if (!completelyOpened){
-				SnapBack();
-			}
+			SnapBack();
 		}
 		else if(Input.touchCount > 0 && !completelyOpened){
-			Touch touch = Input.GetTouch(0);
-			if (!isTouchingObject(touch)){ // if finger has left object
-				ResetTouch();
+			if (InhalerLogic.CurrentStep != 2){
+				return;
 			}
-			else {
-				float touchx = touch.position.x;
-				float touchy = touch.position.y;
-				Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
+			Touch touch = Input.GetTouch(0);
+			float touchx = touch.position.x;
+			float touchy = touch.position.y;
+			Vector2 touchPos = new Vector2( touchx,Screen.height - touchy);
 
-				// first touch. (GetMouseButtonDown(0) only happens once)
-				if (Input.GetMouseButtonDown(0) && !previousFrameTouchDown) {
-					previousTouchPosition = touchPos;
-					currentTouchPosition = touchPos;
-					previousFrameTouchDown = true;
-					dragStartedOnObject = true;
-				}
-				// finger was just dragged into the object
-				// (condition: the first touch was on the object, but the finger left the object at some point)
-				else if (dragStartedOnObject && Input.GetMouseButton(0) && !previousFrameTouchDown){
-					previousTouchPosition = touchPos;
-					currentTouchPosition = touchPos;
-					previousFrameTouchDown = true;
-				}
+			// first touch. (GetMouseButtonDown(0) only happens once)
+			if (Input.GetMouseButtonDown(0) && isTouchingObject(touch) && !previousFrameTouchDown) {
+				previousTouchPosition = touchPos;
+				currentTouchPosition = touchPos;
+				previousFrameTouchDown = true;
+				dragStartedOnObject = true;
+			}
 
-				// last touch was also inside object
-				else if (Input.GetMouseButton(0) && previousFrameTouchDown)
-				{
-					previousTouchPosition = currentTouchPosition;
-					currentTouchPosition = touchPos;
-				}
+			// last touch was also inside object
+			else if (Input.GetMouseButton(0) && previousFrameTouchDown)
+			{
+				previousTouchPosition = currentTouchPosition;
+				currentTouchPosition = touchPos;
+			}
 
-				// not needed, since the check for touchCount == 0 will take care of this
-				// else if (!Input.GetMouseButton(0))
-				// {
-				// 	previousFrameTouchDown = false;
-				// }
+			Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+			Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
+			Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
+			Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
 
-				Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-				Vector2 screenPositionXY = new Vector2(screenPosition.x, screenPosition.y);
-				Vector2 previousPositionVector = previousTouchPosition - screenPositionXY;
-				Vector2 currentPositionVector = currentTouchPosition - screenPositionXY;
+			if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
+			{
+				float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
+					currentPositionVector);
 
-				if (previousPositionVector != -currentPositionVector && previousFrameTouchDown)
-				{
-					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
-						currentPositionVector);
-
-					transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
-					PreventAntiClockwiseRotation();
-				}
+				transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
+				PreventAntiClockwiseRotation();
 			}
 			CheckIfCompletelyOpened();
 		}
@@ -129,9 +112,13 @@ public class InhalerSwitch : MonoBehaviour
 
 	void CheckIfCompletelyOpened(){
 		if (transform.eulerAngles.z >= 30){
-			// transform.eulerAngles = finalPosition;
+			transform.eulerAngles = maxPosition;
 			completelyOpened = true;
 			RemoveArrowAnimation();
+			audio.Play();
+			if (InhalerLogic.IsCurrentStepCorrect(2)){
+				InhalerLogic.IsDoneWithGame();
+			}
 		}
 	}
 
@@ -144,7 +131,7 @@ public class InhalerSwitch : MonoBehaviour
 	void SnapBack(){
 
 		if (transform.eulerAngles.z > 0){
-			float rotationAmount = -10;
+			float rotationAmount = -5;
 			transform.RotateAroundLocal(Vector3.forward, rotationAmount * Time.deltaTime);
 		}
 	}

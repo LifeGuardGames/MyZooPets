@@ -11,6 +11,11 @@ public class InhalerCap : MonoBehaviour
 	bool completelyOpened = false;
 	Vector3 finalPosition =  new Vector3(0,0,180);
 
+	void Start(){
+		InhalerLogic.Init();
+
+	}
+
 	void Update()
 	{
 		if (Input.touchCount == 0) { // if not touching screen
@@ -131,6 +136,9 @@ public class InhalerCap : MonoBehaviour
 		if (transform.eulerAngles.z >= 170){
 			transform.eulerAngles = finalPosition;
 			completelyOpened = true;
+			if (InhalerLogic.IsCurrentStepCorrect(1)){
+				InhalerLogic.IsDoneWithGame();
+			}
 			RemoveArrowAnimation();
 		}
 	}

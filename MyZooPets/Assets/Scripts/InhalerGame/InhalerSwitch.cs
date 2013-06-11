@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class InhalerCap : MonoBehaviour
+public class InhalerSwitch : MonoBehaviour
 {
-	public GameObject inhalerCapArrow;
+	public GameObject inhalerSwitchArrow;
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
 	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
 	bool completelyOpened = false;
-	Vector3 finalPosition =  new Vector3(0,0,180);
+	// Vector3 finalPosition =  new Vector3(0,0,180);
 
 	void Update()
 	{
@@ -86,7 +86,7 @@ public class InhalerCap : MonoBehaviour
 			gameObject.AddComponent(typeof(BoxCollider));
 		}
 
-		int layer = 1 << 8; // InhalerCap is on layer 8
+		int layer = 1 << 9; // InhalerSwitch is on layer 9
 		if (Physics.Raycast (ray, out hit, layer)) {
 			if(hit.collider.gameObject == this.gameObject){
 				return true;
@@ -128,16 +128,16 @@ public class InhalerCap : MonoBehaviour
 	}
 
 	void CheckIfCompletelyOpened(){
-		if (transform.eulerAngles.z >= 170){
-			transform.eulerAngles = finalPosition;
+		if (transform.eulerAngles.z >= 30){
+			// transform.eulerAngles = finalPosition;
 			completelyOpened = true;
 			RemoveArrowAnimation();
 		}
 	}
 
 	void RemoveArrowAnimation(){
-		if (inhalerCapArrow){
-			Destroy(inhalerCapArrow);
+		if (inhalerSwitchArrow){
+			Destroy(inhalerSwitchArrow);
 		}
 	}
 

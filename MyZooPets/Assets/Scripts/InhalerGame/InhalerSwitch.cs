@@ -23,7 +23,7 @@ public class InhalerSwitch : MonoBehaviour
 		else if(Input.touchCount > 0 && !completelyOpened){
 			Touch touch = Input.GetTouch(0);
 			if (!isTouchingObject(touch)){ // if finger has left object
-				ResetTouch();
+//				ResetTouch();
 			}
 			else {
 				float touchx = touch.position.x;
@@ -39,11 +39,11 @@ public class InhalerSwitch : MonoBehaviour
 				}
 				// finger was just dragged into the object
 				// (condition: the first touch was on the object, but the finger left the object at some point)
-				else if (dragStartedOnObject && Input.GetMouseButton(0) && !previousFrameTouchDown){
-					previousTouchPosition = touchPos;
-					currentTouchPosition = touchPos;
-					previousFrameTouchDown = true;
-				}
+//				else if (dragStartedOnObject && Input.GetMouseButton(0) && !previousFrameTouchDown){
+//					previousTouchPosition = touchPos;
+//					currentTouchPosition = touchPos;
+//					previousFrameTouchDown = true;
+//				}
 
 				// last touch was also inside object
 				else if (Input.GetMouseButton(0) && previousFrameTouchDown)

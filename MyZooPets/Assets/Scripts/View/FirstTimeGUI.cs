@@ -72,7 +72,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	void Update(){
 		// Splash finished, Drop down the title and the egg sprite, only called once
-		if(splashScreenAux && Fader.IsSplashScreenFinished){
+		if(splashScreenAux && SplashScreen.IsFinished){
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", LeanTweenType.easeInQuad);
 			LeanTween.move(logoRect, new Vector2(Screen.width/2 - logo.width/2, 100f), 0.5f, optional);
@@ -132,7 +132,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!Fader.IsSplashScreenFinished) return;
+		if(!SplashScreen.IsFinished) return;
 		
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     

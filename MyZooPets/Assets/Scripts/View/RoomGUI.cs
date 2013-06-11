@@ -145,7 +145,7 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!Fader.IsSplashScreenFinished) return; //don't draw until splash screen is done
+		if(!SplashScreen.IsFinished) return; //don't draw until splash screen is done
 		if(!LoadDataLogic.IsDataLoaded) return; //don't draw until all data is loaded
 
 		GUI.depth = 1;

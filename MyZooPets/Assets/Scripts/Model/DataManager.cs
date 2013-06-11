@@ -248,7 +248,7 @@ public class DataManager : MonoBehaviour {
         }else if(firstTime){ //first time not skipping hatching
             FirstTime = true;            
         }
-        Debug.Log("first time: " + firstTime);
+        // Debug.Log("first time: " + firstTime);
         
     }
 

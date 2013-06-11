@@ -17,9 +17,15 @@ public class NotificationUIManager : MonoBehaviour {
 	public Texture2D moodIcon;
 	public Texture2D hungerIcon;
 	public Texture2D starIcon;
+	public bool flipped;
 
 	void Start(){
-		gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
+		if (!flipped){
+			gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
+		}
+		else {
+			gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z - 4f);
+		}
 	}
 
 	void Update(){

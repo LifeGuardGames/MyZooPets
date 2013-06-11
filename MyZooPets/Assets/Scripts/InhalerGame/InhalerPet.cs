@@ -6,8 +6,10 @@ public class InhalerPet : MonoBehaviour {
     float firstTouchYPos;
     bool firstTouchOnObject = false;
     bool completedGame = false;
+    NotificationUIManager notificationUIManager;
 	// Use this for initialization
 	void Start () {
+        notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
 	}
 
 	// Update is called once per frame
@@ -41,6 +43,7 @@ public class InhalerPet : MonoBehaviour {
                     if (InhalerLogic.IsCurrentStepCorrect(5)){
                         Debug.Log("Completed step 5");
                         completedGame = true;
+                        notificationUIManager.PopupTexture("great", null);
                         InhalerLogic.IsDoneWithGame();
                     }
                 }
@@ -53,14 +56,14 @@ public class InhalerPet : MonoBehaviour {
 
     bool isDraggingUp(Touch touch){
         if (touch.position.y - firstTouchYPos > 50){
-            // Debug.Log("is dragging up");
+            Debug.Log("is dragging up");
             return true;
         }
         return false;
     }
     bool isDraggingDown(Touch touch){
         if (firstTouchYPos - touch.position.y > 50){
-            // Debug.Log("is dragging down");
+            Debug.Log("is dragging down");
             return true;
         }
         return false;

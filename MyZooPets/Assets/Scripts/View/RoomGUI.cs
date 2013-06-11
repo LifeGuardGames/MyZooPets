@@ -270,7 +270,7 @@ public class RoomGUI : MonoBehaviour {
 					RaycastHit hit;
 					
 					if(Physics.Raycast(myRay,out hit)){
-						if(hit.collider.name == "SpritePet(Clone)"){
+						if(hit.collider.name == "SpritePet"){
 							print("You hit pet!");
 							DataManager.AddPoints(1000);	
 						}

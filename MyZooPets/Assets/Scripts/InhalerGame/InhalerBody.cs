@@ -4,45 +4,65 @@ using System.Collections;
 public class InhalerBody : MonoBehaviour
 {
     public Texture2D smallInhaler ;
+    public Collider destinationCollider;
 
-    bool completelyOpened = false;
+    bool inhalerDraggedToPet = false;
     bool showSmallInhaler = false;
     bool firstTouchOnObject = false;
+    bool hitDestination = false;
 
     void Start(){
        collider.enabled = false;
     }
     void Update(){
-        // if (InhalerLogic.CurrentStep != 4){
-            // todo: set to 4 later
-        if (InhalerLogic.CurrentStep != 3){
+        if (hitDestination){
+            HideLargeInhaler();
+        }
+
+        if (InhalerLogic.CurrentStep != 4){
             return;
         }
-        else {
-            collider.enabled = true;
-            // todo: perhaps we need to disable other colliders? leave for later
 
-            if (Input.touchCount == 0) { // if not touching screen
-                ShowLargeInhaler();
-                // todo:
-                // SnapBack();
-                ResetTouch();
-            }
-            else if(Input.touchCount > 0 && !completelyOpened){
-                Touch touch = Input.GetTouch(0);
-                if (Input.GetMouseButtonDown(0) && isTouchingObject(touch)) {
-                    HideLargeInhaler();
-                    showSmallInhaler = true;
-                    firstTouchOnObject = true;
-                }
-                else if (Input.GetMouseButton(0) && firstTouchOnObject)
-                {
-                    // todo: if cursor is in target area, then do something
-                }
-            }
+        collider.enabled = true;
+        // todo: perhaps we need to disable other colliders? leave for later
 
+        if (Input.touchCount == 0) { // if not touching screen
+            ResetTouch();
+            ShowLargeInhaler();
+        }
+        else if(Input.touchCount > 0 && !inhalerDraggedToPet){
+            Touch touch = Input.GetTouch(0);
+            if (Input.GetMouseButtonDown(0) && isTouchingObject(touch)) {
+                HideLargeInhaler();
+                showSmallInhaler = true;
+                firstTouchOnObject = true;
+            }
+            else if (Input.GetMouseButton(0) && firstTouchOnObject)
+            {
+                if (HasHitDestination(touch)){
+                    if (InhalerLogic.IsCurrentStepCorrect(4)){
+                        print("completed step 4");
+                        InhalerLogic.IsDoneWithGame();
+                        hitDestination = true;
+                        inhalerDraggedToPet = true;
+                    }
+                }
+            }
         }
     }
+
+    bool HasHitDestination(Touch touch){
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        RaycastHit hit ;
+
+        if (Physics.Raycast (ray, out hit)) {
+            if(hit.collider == destinationCollider){
+                return true;
+            }
+        }
+        return false;
+    }
+
     void ShowLargeInhaler(){
         renderer.enabled = true;
         Component[] renderers = GetComponentsInChildren<Renderer>();
@@ -65,9 +85,11 @@ public class InhalerBody : MonoBehaviour
     }
 
     void OnGUI(){
-        if (showSmallInhaler){
-            Touch touch = Input.GetTouch(0);
-            GUI.DrawTexture(new Rect(touch.position.x - 50, Screen.height - touch.position.y - 50, 100, 100), smallInhaler);
+        if (!inhalerDraggedToPet && showSmallInhaler){
+            if (Input.touchCount > 0){
+                Touch touch = Input.GetTouch(0);
+                GUI.DrawTexture(new Rect(touch.position.x - 50, Screen.height - touch.position.y - 50, 100, 100), smallInhaler);
+            }
         }
     }
     bool isTouchingObject(Touch touch){

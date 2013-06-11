@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class InhalerPet : MonoBehaviour {
+public class InhalerInhaleExhale : MonoBehaviour {
 
     float firstTouchYPos;
     bool firstTouchOnObject = false;

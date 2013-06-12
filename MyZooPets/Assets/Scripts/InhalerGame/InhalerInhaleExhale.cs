@@ -1,15 +1,28 @@
 using UnityEngine;
 using System.Collections;
 
-public class InhalerPet : MonoBehaviour {
+public class InhalerInhaleExhale : MonoBehaviour {
 
+    tk2dAnimatedSprite arrows;
     float firstTouchYPos;
     bool firstTouchOnObject = false;
     bool completedGame = false;
+    bool pointingUp = false;
+    int breathingInStep;
     NotificationUIManager notificationUIManager;
 	// Use this for initialization
 	void Start () {
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
+        arrows = GetComponent<tk2dAnimatedSprite>();
+        renderer.enabled = false;
+
+        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
+            breathingInStep = 5;
+        }
+        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
+            breathingInStep = 6;
+        }
+        Debug.Log(breathingInStep);
 	}
 
 	// Update is called once per frame
@@ -17,7 +30,15 @@ public class InhalerPet : MonoBehaviour {
         if (completedGame){
             return;
         }
+        if (InhalerLogic.CurrentStep == 3){
+            renderer.enabled = true;
+        }
 
+        if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
+            arrows.FlipY();
+            pointingUp = true;
+            renderer.enabled = true;
+        }
 
         if (Input.touchCount == 0) { // if not touching screen
             ResetTouch();
@@ -35,21 +56,24 @@ public class InhalerPet : MonoBehaviour {
                     if (InhalerLogic.IsCurrentStepCorrect(3)){
                         Debug.Log("Completed step 3");
                         InhalerLogic.IsDoneWithGame();
+                        renderer.enabled = false;
                     }
                 }
                 else if (isDraggingUp(touch)){
-                    // check if step 5 is correct
+                    // check if step breathing in is correct
                     // if it is, increment InhalerLogic.CurrentStep
-                    if (InhalerLogic.IsCurrentStepCorrect(5)){
-                        Debug.Log("Completed step 5");
+                    if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
+                        Debug.Log("Completed step" + breathingInStep);
                         completedGame = true;
                         notificationUIManager.PopupTexture("great", null);
+                        renderer.enabled = false;
                         InhalerLogic.IsDoneWithGame();
                     }
                 }
             }
         }
 	}
+
     void ResetTouch(){
         firstTouchOnObject = false;
     }

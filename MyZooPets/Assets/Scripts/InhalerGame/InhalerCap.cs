@@ -11,11 +11,6 @@ public class InhalerCap : MonoBehaviour
 	bool completelyOpened = false;
 	Vector3 finalPosition =  new Vector3(0,0,180);
 
-	void Start(){
-		InhalerLogic.Init();
-
-	}
-
 	void Update()
 	{
 		if (Input.touchCount == 0) { // if not touching screen

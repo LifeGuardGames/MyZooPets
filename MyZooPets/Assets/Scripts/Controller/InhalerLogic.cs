@@ -67,25 +67,20 @@ public static class InhalerLogic{
         return step == currentStep;
     }
 
-    //use this function to move on to the next step
-    public static void NextStep(){
-        currentStep++;
-    }
-
     //use this method to tell logic that the user has successfully finished the current step
     //so move on to the next step of the sequence
     //True: done with the game , False: have more steps to go
     public static bool IsDoneWithGame(){
         bool retVal = false;
 
-        if(currentInhalerType == InhalerType.Advair && currentStep == 5){
+        if(currentInhalerType == InhalerType.Advair && currentStep > 5){
             retVal = true; //end of the sequence
 
             //adjust counters at the end of the game
             DataManager.AdvairCount--;
             DataManager.NumberOfTimesPlayed--;
             DataManager.SlotMachineCounter++;
-        } else if(currentInhalerType == InhalerType.Rescue && currentStep == 6){
+        } else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
             retVal = true; //end of the sequence
 
             //adjust counters at the end of the game
@@ -96,6 +91,11 @@ public static class InhalerLogic{
             // currentStep++;
         }
         return retVal;
+    }
+
+    //use this function to move on to the next step
+    public static void NextStep(){
+        currentStep++;
     }
     //================================================
 }

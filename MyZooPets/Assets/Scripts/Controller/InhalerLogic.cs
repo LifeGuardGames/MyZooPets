@@ -67,6 +67,11 @@ public static class InhalerLogic{
         return step == currentStep;
     }
 
+    //use this function to move on to the next step
+    public static void NextStep(){
+        currentStep++;
+    }
+
     //use this method to tell logic that the user has successfully finished the current step
     //so move on to the next step of the sequence
     //True: done with the game , False: have more steps to go
@@ -87,8 +92,8 @@ public static class InhalerLogic{
             DataManager.RescueCount--;
             DataManager.NumberOfTimesPlayed--;
             DataManager.SlotMachineCounter++;
-        } else{ //more steps to go
-            currentStep++;
+        } else{ 
+            // currentStep++;
         }
         return retVal;
     }

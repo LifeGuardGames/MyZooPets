@@ -5,8 +5,8 @@ public class RoomGUI : MonoBehaviour {
 	
 	private RoomGUIAnimator roomAnimator;
 	
-	public GameObject cameraMoveObject;
-	private CameraMove cameraMove;
+//	public GameObject cameraMoveObject;
+//	private CameraMove cameraMove;
 	
 	public GameObject diagnoseGUIObject;
 	private DiagnoseGUI diagnoseGUI;
@@ -102,7 +102,7 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxWidth = 75;
 	
 	void Start(){
-		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+//		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
 		
 		diagnoseGUI = diagnoseGUIObject.GetComponent<DiagnoseGUI>();

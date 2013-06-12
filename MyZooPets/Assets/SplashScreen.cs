@@ -8,7 +8,7 @@ public class SplashScreen : MonoBehaviour {
 	private float timer; //count down timer
 	public float delayTime; //how long you want the splash screen to last
 	public static bool IsFinished{get; set;} //use this method to check
-														//if splash screen is done
+											//if splash screen is done
 
 	void Start(){
 		guiTexture.pixelInset = new Rect(0,0,0,0);
@@ -20,7 +20,7 @@ public class SplashScreen : MonoBehaviour {
 
 	void Update()
 	{
-		timer -= Time.deltaTime;
+		timer -= Time.deltaTime; //decrease the delay time every frame
 		if(timer > 0) return; //return if splash screen needs to hang longer
 
 		FadeStartScene();

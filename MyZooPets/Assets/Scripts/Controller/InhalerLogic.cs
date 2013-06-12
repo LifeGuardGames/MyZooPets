@@ -10,7 +10,7 @@ public static class InhalerLogic{
     private static int currentStep;
 
 
-    //#region API (use this for UI)
+    //=================API (use this for UI)==================
     //return the current step of a sequence
     public static int CurrentStep{
         get{return currentStep;}
@@ -19,6 +19,9 @@ public static class InhalerLogic{
     //return the current type of the inhaler
     public static InhalerType CurrentInhalerType{
         get{return currentInhalerType;}
+
+        // todo: remove setter after testing
+        set {currentInhalerType = value;}
     }
 
     //return slot machine count
@@ -59,7 +62,7 @@ public static class InhalerLogic{
         return DataManager.NumberOfTimesPlayed != 0;
     }
 
-    //True: the step that the user is currently on is correct, False: wrong step 
+    //True: the step that the user is currently on is correct, False: wrong step
     public static bool IsCurrentStepCorrect(int step){
         return step == currentStep;
     }
@@ -70,24 +73,29 @@ public static class InhalerLogic{
     public static bool IsDoneWithGame(){
         bool retVal = false;
 
-        if(currentInhalerType == InhalerType.Advair && currentStep == 5){
+        if(currentInhalerType == InhalerType.Advair && currentStep > 5){
             retVal = true; //end of the sequence
 
             //adjust counters at the end of the game
             DataManager.AdvairCount--;
             DataManager.NumberOfTimesPlayed--;
             DataManager.SlotMachineCounter++;
-        } else if(currentInhalerType == InhalerType.Rescue && currentStep == 6){
+        } else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
             retVal = true; //end of the sequence
 
             //adjust counters at the end of the game
             DataManager.RescueCount--;
             DataManager.NumberOfTimesPlayed--;
             DataManager.SlotMachineCounter++;
-        } else{ //more steps to go
-            currentStep++;
+        } else{ 
+            // currentStep++;
         }
         return retVal;
     }
-    //#endregion
+
+    //use this function to move on to the next step
+    public static void NextStep(){
+        currentStep++;
+    }
+    //================================================
 }

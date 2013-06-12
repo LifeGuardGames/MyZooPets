@@ -4,16 +4,22 @@ using System.Collections;
 public class CameraMove : MonoBehaviour{
 	
 	private bool zoomed = false;
-	private Vector3 initPosition;	// 0, 5.7, -23
+	private Vector3 initPosition;	// Default position: 0, 5.7, -23
 	private Vector3 initFaceDirection;
 	
 	private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
 	private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
 	
 	private Vector3 petSideFinalPosition = new Vector3(2.5f, 2f, -15f);
-	private Vector3 petSideFinaleFaceDirection = new Vector3(15.54f, 0, 0);
+	private Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
+	
+	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
+	private Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
 	
 	private bool isCameraMoving = false;
+	
+	private bool tryLoadLevel = false;
+	private string levelToLoad;
 	
 	void Start(){
 		initPosition = gameObject.transform.position;
@@ -45,9 +51,22 @@ public class CameraMove : MonoBehaviour{
 				LockCameraMove();
 			}
 			else{
-	    		CameraTransform(petSideFinalPosition,petSideFinaleFaceDirection, 0.8f);
-	    		zoomed = true;
+				zoomed = true;
 				LockCameraMove();
+	    		CameraTransform(petSideFinalPosition,petSideFinalFaceDirection, 0.8f);
+			}
+		}
+	}
+	
+	public void GameboyZoomToggle(){
+		if(!isCameraMoving){
+			if(zoomed){
+				// SOMETHING HERE
+			}
+			else{
+				zoomed = true;
+				LockCameraMove();
+				CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGameBothInhalers");
 			}
 		}
 	}
@@ -58,9 +77,26 @@ public class CameraMove : MonoBehaviour{
 	
 	public void UnlockCameraMove(){
 		isCameraMoving = false;
+		if(tryLoadLevel && (levelToLoad != null)){
+			tryLoadLevel = false;
+			Application.LoadLevel(levelToLoad);
+		}
 	}
 	
-	private void CameraTransform (Vector3 newPosition, Vector3 newDirection, float time){
+	// Transforms camera
+	public void CameraTransform(Vector3 newPosition, Vector3 newDirection, float time){
+		Hashtable optional = new Hashtable();
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "UnlockCameraMove");
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(gameObject, newPosition, time, optional);
+		LeanTween.rotate(gameObject, newDirection, time, optional);
+	}
+	
+	// Same as CameraTransform but tries to load a scene after the transform has completed
+	public void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
+		tryLoadLevel = true;
+		levelToLoad = level;
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
 		optional.Add("onComplete", "UnlockCameraMove");

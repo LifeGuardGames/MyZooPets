@@ -117,7 +117,9 @@ public class InhalerSwitch : MonoBehaviour
 			RemoveArrowAnimation();
 			audio.Play();
 			if (InhalerLogic.IsCurrentStepCorrect(2)){
-				InhalerLogic.IsDoneWithGame();
+				if (!InhalerLogic.IsDoneWithGame()){
+					InhalerLogic.NextStep();
+				}
 			}
 		}
 	}

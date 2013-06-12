@@ -20,8 +20,11 @@ public class ClickManager : MonoBehaviour {
 	public GameObject diaryUIManagerObject;
 	private DiaryUIManager diaryUIManager;
 	
-	public GameObject TrophyGUIObject;
+	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;
+	
+	public GameObject cameraMoveObject;
+	private CameraMove cameraMove;
 	
 	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isLocked = false;
@@ -37,7 +40,8 @@ public class ClickManager : MonoBehaviour {
 		
 		// Linking script references
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryUIManager>();
-		trophyGUI = TrophyGUIObject.GetComponent<TrophyGUI>();
+		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 	}
 
 	void Update(){
@@ -47,6 +51,7 @@ public class ClickManager : MonoBehaviour {
 					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 					RaycastHit hit;
 					if(Physics.Raycast(myRay,out hit)){
+						//Debug.Log(hit.collider.name);
 						if(hit.collider.name == "room_shelf"){
 							trophyGUI.TrophyClicked();
 							isLocked = true;
@@ -55,6 +60,9 @@ public class ClickManager : MonoBehaviour {
 						else if(hit.collider.name == "room_table"){
 							diaryUIManager.DiaryClicked();
 							isLocked = true;
+						}
+						else if(hit.collider.name == "gameboy"){
+							cameraMove.GameboyZoomToggle();
 						}
 					}
 				}

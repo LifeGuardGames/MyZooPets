@@ -51,10 +51,17 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     }
                 }
                 else if (isDraggingUp(touch)){
-                    // check if step 5 is correct
+                    // check if step breathing in is correct
                     // if it is, increment InhalerLogic.CurrentStep
-                    if (InhalerLogic.IsCurrentStepCorrect(5)){
-                        Debug.Log("Completed step 5");
+                    int breathingInStep = 0;
+                    if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
+                        breathingInStep = 5;
+                    }
+                    else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
+                        breathingInStep = 6;
+                    }
+                    if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
+                        Debug.Log("Completed step" + breathingInStep);
                         completedGame = true;
                         notificationUIManager.PopupTexture("great", null);
                         renderer.enabled = false;

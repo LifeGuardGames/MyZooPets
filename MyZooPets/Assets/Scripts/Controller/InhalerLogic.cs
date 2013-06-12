@@ -19,6 +19,9 @@ public static class InhalerLogic{
     //return the current type of the inhaler
     public static InhalerType CurrentInhalerType{
         get{return currentInhalerType;}
+
+        // todo: remove setter after testing
+        set {currentInhalerType = value;}
     }
 
     //return slot machine count
@@ -59,7 +62,7 @@ public static class InhalerLogic{
         return DataManager.NumberOfTimesPlayed != 0;
     }
 
-    //True: the step that the user is currently on is correct, False: wrong step 
+    //True: the step that the user is currently on is correct, False: wrong step
     public static bool IsCurrentStepCorrect(int step){
         return step == currentStep;
     }

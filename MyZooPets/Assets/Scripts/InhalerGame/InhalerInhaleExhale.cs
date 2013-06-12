@@ -8,12 +8,21 @@ public class InhalerInhaleExhale : MonoBehaviour {
     bool firstTouchOnObject = false;
     bool completedGame = false;
     bool pointingUp = false;
+    int breathingInStep;
     NotificationUIManager notificationUIManager;
 	// Use this for initialization
 	void Start () {
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
         arrows = GetComponent<tk2dAnimatedSprite>();
         renderer.enabled = false;
+
+        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
+            breathingInStep = 5;
+        }
+        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
+            breathingInStep = 6;
+        }
+        Debug.Log(breathingInStep);
 	}
 
 	// Update is called once per frame
@@ -25,7 +34,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
             renderer.enabled = true;
         }
 
-        if (InhalerLogic.CurrentStep == 5 && !pointingUp){
+        if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
             arrows.FlipY();
             pointingUp = true;
             renderer.enabled = true;
@@ -53,13 +62,6 @@ public class InhalerInhaleExhale : MonoBehaviour {
                 else if (isDraggingUp(touch)){
                     // check if step breathing in is correct
                     // if it is, increment InhalerLogic.CurrentStep
-                    int breathingInStep = 0;
-                    if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
-                        breathingInStep = 5;
-                    }
-                    else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
-                        breathingInStep = 6;
-                    }
                     if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
                         Debug.Log("Completed step" + breathingInStep);
                         completedGame = true;

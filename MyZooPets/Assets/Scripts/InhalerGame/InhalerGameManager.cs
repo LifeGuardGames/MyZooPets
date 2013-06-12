@@ -6,7 +6,7 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject advair;
     public GameObject rescue;
 
-    void Start(){
+    void Awake(){
         InhalerLogic.Init();
 
         // todo: remove after testing

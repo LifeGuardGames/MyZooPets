@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class RescueCap : MonoBehaviour {
+public class RescueSwitch : MonoBehaviour {
 
     void Update()
     {
-        if (InhalerLogic.CurrentStep != 1){
+        if (InhalerLogic.CurrentStep != 5){
             return;
         }
 
@@ -14,13 +14,21 @@ public class RescueCap : MonoBehaviour {
             // if is clicked
             if (Input.GetMouseButtonDown(0)) {
                 if (isTouchingObject(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(1)){
-                        Destroy(gameObject);
+                    if (InhalerLogic.IsCurrentStepCorrect(5)){
                         InhalerLogic.IsDoneWithGame();
+                        InhalerClickAnimation();
                     }
                 }
             }
         }
+    }
+
+    void InhalerClickAnimation(){
+        Hashtable optional = new Hashtable();
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float z = transform.position.z;
+        LeanTween.move(gameObject, new Vector3(x,y - 2f,z), 0.5f, optional);
     }
 
     bool isTouchingObject(Touch touch){

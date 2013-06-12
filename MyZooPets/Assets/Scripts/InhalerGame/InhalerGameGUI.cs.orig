@@ -2,11 +2,16 @@ using UnityEngine;
 using System.Collections;
 
 public class InhalerGameGUI : MonoBehaviour {
+<<<<<<< HEAD
 	
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 	
+	public int numberOfNodes;
+=======
+
+>>>>>>> c912ba44b06ec381e3fd2c5ff2f6f8dd4bb6f1e6
 	public float speed;
 
 	public GUISkin defaultSkin;
@@ -80,6 +85,7 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	void OnGUI(){
 		GUI.skin = defaultSkin;
+<<<<<<< HEAD
 		
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
@@ -87,7 +93,10 @@ public class InhalerGameGUI : MonoBehaviour {
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
+		
+=======
 
+>>>>>>> c912ba44b06ec381e3fd2c5ff2f6f8dd4bb6f1e6
 		//draw the background
 		GUI.BeginGroup(new Rect(pos.x, pos.y, size.x, size.y));
 		//GUI.Box(new Rect(0,0, size.x, size.y), emptyTex);

@@ -22,7 +22,7 @@ public class SeansButtons : MonoBehaviour {
 			nuim.PopupTexture("great","");
 		}
 		if(GUI.Button(new Rect(120, 10, 100, 100), "WAPOWWW")){
-			igg.IncreaseBar();
+			//igg.IncreaseBar();
 		}
 	}
 }

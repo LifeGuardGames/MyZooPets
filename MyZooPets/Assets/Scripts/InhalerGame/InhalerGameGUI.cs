@@ -17,8 +17,6 @@ public class InhalerGameGUI : MonoBehaviour {
 	
     private Vector2 pos;
     private Vector2 size = new Vector2(1020, 40);
-    public Texture2D emptyTex;
-    public Texture2D fullTex;
 	
 	private float segmentChunkPx;	// Pixels in between chunks
 	
@@ -30,6 +28,8 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 	
 	void Start(){
+		currentNode = InhalerLogic.CurrentStep - 1; // Starting out with step 0 here
+		
 		if(numberOfNodes < 2){
 			Debug.LogError("Number of nodes cannot be less than 2");	
 		}
@@ -45,6 +45,9 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 	
 	void Update(){
+		if(currentNode != InhalerLogic.CurrentStep - 1){
+			UpdateBar();
+		}
 		if(currentPercentage != targetPercentage){
 			if (tParam < 1) {
 	   			tParam += speed;
@@ -80,17 +83,18 @@ public class InhalerGameGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(pos.x - circleGray.width / 2, 670, circleGray.width, circleGray.height), circleRed);
 		for(int i = 1; i <= numberOfNodes; i++){
 			if(boolList[i - 1]){
-				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleRed);	
+				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleRed);
 			}
 			else{
-				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleGray);	
+				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleGray);
 			}
+			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), i.ToString());
 		}
 	}
 
-	public void IncreaseBar(){
+	public void UpdateBar(){
 		if(currentNode < numberOfNodes){
-			currentNode++;
+			currentNode = InhalerLogic.CurrentStep - 1;
 			targetPercentage = currentNode / (numberOfNodes * 1.0f);
 			isUpdating = true;
 		}

@@ -10,7 +10,7 @@ public class InhalerGameManager : MonoBehaviour{
         InhalerLogic.Init();
 
         // todo: remove after testing
-        InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
+        // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
 
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){

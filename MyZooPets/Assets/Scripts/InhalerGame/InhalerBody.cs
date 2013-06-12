@@ -42,7 +42,9 @@ public class InhalerBody : MonoBehaviour
                 if (HasHitDestination(touch)){
                     if (InhalerLogic.IsCurrentStepCorrect(4)){
                         print("completed step 4");
-                        InhalerLogic.IsDoneWithGame();
+                        if (!InhalerLogic.IsDoneWithGame()){
+                            InhalerLogic.NextStep();
+                        }
                         hitDestination = true;
                         inhalerDraggedToPet = true;
                     }

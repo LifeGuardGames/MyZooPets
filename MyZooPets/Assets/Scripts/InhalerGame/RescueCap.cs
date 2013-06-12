@@ -16,7 +16,9 @@ public class RescueCap : MonoBehaviour {
                 if (isTouchingObject(touch)){
                     if (InhalerLogic.IsCurrentStepCorrect(1)){
                         Destroy(gameObject);
-                        InhalerLogic.IsDoneWithGame();
+                        if (!InhalerLogic.IsDoneWithGame()){
+                            InhalerLogic.NextStep();
+                        }
                     }
                 }
             }

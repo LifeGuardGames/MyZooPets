@@ -296,7 +296,8 @@ public class DataManager : MonoBehaviour {
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
             SerializeGame();
-            //Debug options;
+
+            //Debug options
             if(skipHatch){ //skip hatch so load GUI right away
                 dataLoaded(false);
             }else{ //not skipping hatch so GUI waits for hatching to finish
@@ -321,6 +322,7 @@ public class DataManager : MonoBehaviour {
         }
     }
 
+    //serialize data into byte array and store locally in PlayerPrefs
     private void SerializeGame(){
         PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
         // Debug.Log("serialized");
@@ -328,24 +330,12 @@ public class DataManager : MonoBehaviour {
 
     //called when level data are loaded
     void OnDeserialized(){
-        // Debug.Log("health " + health + "mood " + mood);
         dataLoaded(false);
     }
 
     void OnApplicationPause(bool paused){
-        // Debug.Log("on application paused " + paused);
         if(paused){
             SerializeGame();
-            // Debug.Log("serialize in pause");
         }
-    }
-
-    void OnApplicationFocus(bool focused){
-        // Debug.Log("on application focus " + focused);
-        // if(!focused){
-        //     PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-        //     Debug.Log("serialize in focus");
-
-        // }
     }
 }

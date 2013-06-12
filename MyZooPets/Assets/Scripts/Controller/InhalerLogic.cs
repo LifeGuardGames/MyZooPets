@@ -10,7 +10,7 @@ public static class InhalerLogic{
     private static int currentStep;
 
 
-    //#region API (use this for UI)
+    //=================API (use this for UI)==================
     //return the current step of a sequence
     public static int CurrentStep{
         get{return currentStep;}
@@ -89,5 +89,5 @@ public static class InhalerLogic{
         }
         return retVal;
     }
-    //#endregion
+    //================================================
 }

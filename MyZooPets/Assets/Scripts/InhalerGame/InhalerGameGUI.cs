@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class InhalerGameGUI : MonoBehaviour {
-	
+
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
@@ -80,7 +80,7 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	void OnGUI(){
 		GUI.skin = defaultSkin;
-		
+
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
             float horizRatio = Screen.width/NATIVE_WIDTH;

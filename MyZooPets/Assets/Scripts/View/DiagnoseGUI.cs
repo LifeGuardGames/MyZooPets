@@ -26,7 +26,6 @@ public class DiagnoseGUI : MonoBehaviour {
 		GUI.skin = defaultSkin;
 		if(isActive){
 			if(GUI.Button(new Rect(10, 10, 100, 100), "X")){
-				ClickManager.ReleaseLock();
 				cameraMove.PetSideZoomToggle();
 				roomGui.ShowGUIs();	
 				isActive = false;
@@ -35,9 +34,12 @@ public class DiagnoseGUI : MonoBehaviour {
 	}
 	
 	public void DiagnoseClicked(){
-		isActive = true;
-		ClickManager.Lock();
-		cameraMove.PetSideZoomToggle();
-		roomGui.HideGUIs();
+		if(!ClickManager.isClickLocked && !ClickManager.isModeLocked){
+			isActive = true;
+			ClickManager.ClickLock();
+			ClickManager.ModeLock();
+			cameraMove.PetSideZoomToggle();
+			roomGui.HideGUIs();
+		}
 	}
 }

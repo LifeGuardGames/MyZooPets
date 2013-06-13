@@ -18,8 +18,10 @@ public class CameraMove : MonoBehaviour{
 	
 	private bool isCameraMoving = false;
 	
-	private bool tryLoadLevel = false;
+	private bool isLoadLevel = false;
 	private string levelToLoad;
+	
+	private bool isEnterMode = false;
 	
 	void Start(){
 		initPosition = gameObject.transform.position;
@@ -36,7 +38,7 @@ public class CameraMove : MonoBehaviour{
 				LockCameraMove();
 			}
 			else{		
-	    		CameraTransform(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
+	    		CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
 	    		zoomed = true;
 				LockCameraMove();
 			}
@@ -53,7 +55,7 @@ public class CameraMove : MonoBehaviour{
 			else{
 				zoomed = true;
 				LockCameraMove();
-	    		CameraTransform(petSideFinalPosition,petSideFinalFaceDirection, 0.8f);
+	    		CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.8f);
 			}
 		}
 	}
@@ -75,37 +77,63 @@ public class CameraMove : MonoBehaviour{
 		isCameraMoving = true;
 	}
 	
+	// Mostly called on callback from camera move
 	public void UnlockCameraMove(){
 		isCameraMoving = false;
-		if(tryLoadLevel && (levelToLoad != null)){
-			tryLoadLevel = false;
+		if(!isEnterMode){
+			ClickManager.ReleaseModeLock();		// Only want to release the lock after camera done when exiting
+		}
+		if(isLoadLevel && (levelToLoad != null)){
+			isLoadLevel = false;
 			Application.LoadLevel(levelToLoad);
 		}
+		ClickManager.ReleaseClickLock();
 	}
 	
 	// Transforms camera
-	public void CameraTransform(Vector3 newPosition, Vector3 newDirection, float time){
+	public void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+		isLoadLevel = false;
+		isEnterMode = true;
 		Hashtable optional = new Hashtable();
+		Hashtable optional2 = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "UnlockCameraMove");
+		optional.Add("onComplete", "UnlockCameraMove");		// Callback here
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional2.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotate(gameObject, newDirection, time, optional);
+		LeanTween.rotate(gameObject, newDirection, time, optional2);
+	}
+	
+	// Transforms camera
+	public void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
+		isLoadLevel = false;
+		isEnterMode = false;
+		Hashtable optional = new Hashtable();
+		Hashtable optional2 = new Hashtable();
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "UnlockCameraMove");		// Callback here
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional2.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(gameObject, newPosition, time, optional);
+		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
 	
 	// Same as CameraTransform but tries to load a scene after the transform has completed
 	public void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
-		tryLoadLevel = true;
+		isLoadLevel = true;
+		isEnterMode = true;
 		levelToLoad = level;
 		Hashtable optional = new Hashtable();
+		Hashtable optional2 = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
 		optional.Add("onComplete", "UnlockCameraMove");
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional2.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotate(gameObject, newDirection, time, optional);
+		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
 	
 	private void ZoomOutMove(){
-		CameraTransform(initPosition,initFaceDirection, 1.0f);
+		CameraTransformExitMode(initPosition,initFaceDirection, 1.0f);
 	}
 }

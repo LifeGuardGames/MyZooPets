@@ -3,15 +3,36 @@ using System.Collections;
 
 public class InhalerGameManager : MonoBehaviour{
 
-    public GameObject advair;
-    public GameObject rescue;
-    public GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
-    public GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
+    public GameObject advairPrefab;
+    public GameObject rescuePrefab;
+    public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
+    public GameObject rescueShakerPrefab; // arrows that indicate that the rescue inhaler has to be shaken
+    public GameObject inhaleExhalePrefab; // arrows that indicate whether to breathe in or out
+
+    public GameObject slotMachine;
+
+    private GameObject advair;
+    private GameObject rescue;
+    private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
+    private GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
+    public GameObject inhaleExhale; // arrows that indicate whether to breathe in or out
+
+    private SlotMachineManager slotMachineManager; // component of slotMachine
 
     public void ResetInhalerGame(){
-        // reset inhaler prefabs
+        // delete gameobjects
+        Destroy(advair);
+        Destroy(rescue);
+        Destroy(smallRescue);
+        Destroy(rescueShaker);
+        Destroy(inhaleExhale);
 
-        // hide slot machine
+        // instantiate new prefabs and store references to new gameobjects
+        advair = Instantiate(advairPrefab) as GameObject;
+        rescue = Instantiate(rescuePrefab) as GameObject;
+        smallRescue = Instantiate(smallRescuePrefab) as GameObject;
+        rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
+        inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
 
         SetUpInhalerGame();
     }
@@ -28,6 +49,10 @@ public class InhalerGameManager : MonoBehaviour{
         // todo: remove after testing
         // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
 
+        slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
+        // hide slot machine
+        slotMachine.SetActive(false);
+
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
             rescue.SetActive(false);
@@ -42,11 +67,15 @@ public class InhalerGameManager : MonoBehaviour{
 
     void Update(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
+            InhalerLogic.ResetGame(); // call this before showing the slots
             ShowSlotMachine();
         }
     }
 
     void ShowSlotMachine(){
-
+        slotMachine.SetActive(true);
+        // todo
+        // if slot machine count == 3
+        slotMachineManager.StartGame();
     }
 }

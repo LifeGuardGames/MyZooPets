@@ -11,6 +11,7 @@ public class RescueBody : MonoBehaviour
     bool showSmallInhaler = false;
     bool firstTouchOnObject = false;
     bool hitDestination = false;
+    int dragToPetStep = 4;
 
     void Start(){
        collider.enabled = false;
@@ -21,7 +22,7 @@ public class RescueBody : MonoBehaviour
             HideLargeInhaler();
         }
 
-        if (InhalerLogic.CurrentStep != 4){
+        if (InhalerLogic.CurrentStep != dragToPetStep){
             return;
         }
 
@@ -42,8 +43,8 @@ public class RescueBody : MonoBehaviour
             else if (Input.GetMouseButton(0) && firstTouchOnObject)
             {
                 if (HasHitDestination(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(4)){
-                        print("completed step 4");
+                    if (InhalerLogic.IsCurrentStepCorrect(dragToPetStep)){
+                        print("completed step " + dragToPetStep);
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
                         }

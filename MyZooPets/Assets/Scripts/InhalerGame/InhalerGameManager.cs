@@ -7,8 +7,7 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject rescuePrefab;
     public GameObject rescueShakerPrefab; // arrows that indicate that the rescue inhaler has to be shaken
     public GameObject inhaleExhalePrefab; // arrows that indicate whether to breathe in or out
-    // public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
-    public GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
+    public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
 
     public GameObject slotMachine;
 
@@ -16,11 +15,11 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject rescue;
     private GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
     private GameObject inhaleExhale; // arrows that indicate whether to breathe in or out
+    private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     private SlotMachineManager slotMachineManager; // component of slotMachine
 
     public void ResetInhalerGame(){
-        smallRescue.SetActive(true);
         DestroyAndRecreatePrefabs();
         SetUpInhalerGame();
     }
@@ -38,17 +37,20 @@ public class InhalerGameManager : MonoBehaviour{
         // delete gameobjects
         Destroy(advair);
         Destroy(rescue);
-        // Destroy(smallRescue);
+        Destroy(smallRescue);
         Destroy(rescueShaker);
         Destroy(inhaleExhale);
 
         // instantiate new prefabs and store references to new gameobjects
         advair = Instantiate(advairPrefab) as GameObject;
         advair.name = advairPrefab.name;
-        // smallRescue = Instantiate(smallRescuePrefab) as GameObject;
-        // smallRescue.name = smallRescuePrefab.name;
+        smallRescue = Instantiate(smallRescuePrefab) as GameObject;
+        smallRescue.name = smallRescuePrefab.name;
+
         rescue = Instantiate(rescuePrefab) as GameObject;
         rescue.name = rescuePrefab.name;
+        rescue.GetComponent<RescueBody>().miniature = smallRescue;
+
         rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
         rescueShaker.name = rescueShakerPrefab.name;
         inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
@@ -70,16 +72,16 @@ public class InhalerGameManager : MonoBehaviour{
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
             rescue.SetActive(false);
             rescueShaker.SetActive(false);
-            smallRescue.SetActive(false);
         }
         else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
             advair.SetActive(false);
         }
+        smallRescue.SetActive(false);
     }
 
     void Update(){
         // todo: delete
-        
+
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
             InhalerLogic.ResetGame(); // call this before showing the slots
             print(InhalerLogic.GetSlotMachineCount);

@@ -7,7 +7,6 @@ public class InhalerSwitch : MonoBehaviour
 	Vector2 previousTouchPosition = Vector2.zero;
 	Vector2 currentTouchPosition = Vector2.zero;
 	bool previousFrameTouchDown = false;
-	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
 	bool completelyOpened = false;
 	Vector3 maxPosition =  new Vector3(0,0,30);
 
@@ -15,7 +14,6 @@ public class InhalerSwitch : MonoBehaviour
 	{
 		if (Input.touchCount == 0) { // if not touching screen
 			ResetTouch();
-			dragStartedOnObject = false;
 			SnapBack();
 		}
 		else if(Input.touchCount > 0 && !completelyOpened){
@@ -32,7 +30,6 @@ public class InhalerSwitch : MonoBehaviour
 				previousTouchPosition = touchPos;
 				currentTouchPosition = touchPos;
 				previousFrameTouchDown = true;
-				dragStartedOnObject = true;
 			}
 
 			// last touch was also inside object

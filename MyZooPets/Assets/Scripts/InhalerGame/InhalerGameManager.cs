@@ -8,9 +8,21 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
     public GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
 
+    public void ResetInhalerGame(){
+        // reset inhaler prefabs
+
+        // hide slot machine
+
+        SetUpInhalerGame();
+    }
+
     // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
     // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
     void Awake(){
+        SetUpInhalerGame();
+    }
+
+    void SetUpInhalerGame(){
         InhalerLogic.Init();
 
         // todo: remove after testing
@@ -25,5 +37,16 @@ public class InhalerGameManager : MonoBehaviour{
             advair.SetActive(false);
         }
         smallRescue.SetActive(false);
+    }
+
+
+    void Update(){
+        if (InhalerLogic.IsDoneWithGame()){ // if done with game
+            ShowSlotMachine();
+        }
+    }
+
+    void ShowSlotMachine(){
+
     }
 }

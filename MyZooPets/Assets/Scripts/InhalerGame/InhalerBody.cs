@@ -9,16 +9,11 @@ public class InhalerBody : MonoBehaviour
     bool inhalerDraggedToPet = false;
     bool showSmallInhaler = false;
     bool firstTouchOnObject = false;
-    bool hitDestination = false;
 
     void Start(){
        collider.enabled = false;
     }
     void Update(){
-        if (hitDestination){
-            HideLargeInhaler();
-        }
-
         if (InhalerLogic.CurrentStep != 4){
             return;
         }
@@ -45,7 +40,7 @@ public class InhalerBody : MonoBehaviour
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
                         }
-                        hitDestination = true;
+                        HideLargeInhaler();
                         inhalerDraggedToPet = true;
                     }
                 }
@@ -53,6 +48,7 @@ public class InhalerBody : MonoBehaviour
         }
     }
 
+    // Check if finger has been dragged into the specified collider.
     bool HasHitDestination(Touch touch){
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit hit ;
@@ -65,6 +61,7 @@ public class InhalerBody : MonoBehaviour
         return false;
     }
 
+    // Show the inhaler plus all its children.
     void ShowLargeInhaler(){
         renderer.enabled = true;
         Component[] renderers = GetComponentsInChildren<Renderer>();
@@ -73,6 +70,7 @@ public class InhalerBody : MonoBehaviour
         }
     }
 
+    // Hide the inhaler plus all its children.
     void HideLargeInhaler(){
         renderer.enabled = false;
         Component[] renderers = GetComponentsInChildren<Renderer>();
@@ -86,6 +84,9 @@ public class InhalerBody : MonoBehaviour
         firstTouchOnObject = false;
     }
 
+    // Only active at the right step.
+    // When the player tries to drag the inhaler to the pet, hide the large inhaler,
+    // and draw a small inhaler texture that follows the cursor (finger).
     void OnGUI(){
         if (!inhalerDraggedToPet && showSmallInhaler){
             if (Input.touchCount > 0){
@@ -94,6 +95,7 @@ public class InhalerBody : MonoBehaviour
             }
         }
     }
+
     bool isTouchingObject(Touch touch){
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit hit ;

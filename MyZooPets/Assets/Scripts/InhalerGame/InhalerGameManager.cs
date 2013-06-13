@@ -82,20 +82,20 @@ public class InhalerGameManager : MonoBehaviour{
     void Update(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
             InhalerLogic.ResetGame(); // call this before showing the slots
-            InvokeSlotMachine();
+            ShowSlotMachine();
             InhalerLogic.Init();
         }
     }
 
-    void InvokeSlotMachine(){
-        Invoke("ShowSlotMachine", 3);
-    }
+    // void InvokeSlotMachine(){
+    //     Invoke("ShowSlotMachine", 3);
+    // }
 
     void ShowSlotMachine(){
         slotMachine.SetActive(true);
         if (!slotMachineManager.SpinWhenReady()){
             // show only for a short while, then ResetInhalerGame()
-            Invoke("ResetInhalerGame", 5);
+            Invoke("ResetInhalerGame", 3);
         }
     }
 }

@@ -5,7 +5,8 @@ public class SpinningWheel : MonoBehaviour {
 
 	private float scrollSpeed = 8.0f;
     private bool spin; //True: spin the wheel, False: don't spin
-    private float chosenSlot;
+    private float chosenSlot; //The slot that the wheel is to stop on
+    public bool doneSpinning = false; //when the wheel is done spinning
 
     void Start(){
     }
@@ -21,6 +22,7 @@ public class SpinningWheel : MonoBehaviour {
     private void StopSpin(){
         spin = false;
         renderer.material.mainTextureOffset = new Vector2(this.chosenSlot, 0);
+        doneSpinning = true;
     }
 
     //spinning the slot

@@ -12,21 +12,31 @@ public class RescueBody : MonoBehaviour
     bool firstTouchOnObject = false;
     bool hitDestination = false;
     int dragToPetStep = 4;
+    // bool foundMiniature = false;
 
     void Start(){
        collider.enabled = false;
        destinationCollider = GameObject.Find("PetSprite").collider;
-       miniature = GameObject.Find("SmallRescueBody");
-       miniature.SetActive(false);
+       miniature.SetActive(false); // shouldn't be null
+
     }
     void Update(){
         if (hitDestination){
             HideLargeInhaler();
         }
 
+        // if (!foundMiniature){
+        //     miniature = GameObject.Find("SmallRescueBody");
+        //     if (miniature != null){
+        //         foundMiniature = true;
+        //         miniature.SetActive(false);
+        //     }
+        // }
+
         if (InhalerLogic.CurrentStep != dragToPetStep){
             return;
         }
+
 
         collider.enabled = true;
         // todo: perhaps we need to disable other colliders? leave for later

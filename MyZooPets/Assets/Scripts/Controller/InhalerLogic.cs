@@ -73,22 +73,22 @@ public static class InhalerLogic{
 
         if(currentInhalerType == InhalerType.Advair && currentStep > 5){
             retVal = true; //end of the sequence
-
-            //adjust counters at the end of the game
-            DataManager.AdvairCount--;
-            DataManager.NumberOfTimesPlayed--;
-            DataManager.SlotMachineCounter++;
+    
         } else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
             retVal = true; //end of the sequence
-
-            //adjust counters at the end of the game
-            DataManager.RescueCount--;
-            DataManager.NumberOfTimesPlayed--;
-            DataManager.SlotMachineCounter++;
-        } else{ 
-            // currentStep++;
         }
         return retVal;
+    }
+
+    //adjust counters at the end of the game
+    public static void ResetGame(){
+        if(currentInhalerType == InhalerType.Advair && currentStep > 5){
+            DataManager.AdvairCount--;
+        }else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
+            DataManager.RescueCount--;
+        }
+        DataManager.NumberOfTimesPlayed--;
+        DataManager.SlotMachineCounter++;
     }
 
     //use this function to move on to the next step

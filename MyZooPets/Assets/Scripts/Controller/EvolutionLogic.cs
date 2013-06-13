@@ -6,11 +6,11 @@ using System;
 //Decides when pet hits evolution stage
 public class EvolutionLogic : MonoBehaviour {
 	private float timer = 0;
-	private float timeInterval = 10f;
-    private int level1EvolutionPoints = 50000;
-    private int level2EvolutionPoints = 100000;
+	private float timeInterval = 30f;
+    private int level1EvolutionPoints = 50000; //level 1 evolution points requirement
+    private int level2EvolutionPoints = 100000; //level 2 evolution points requirement
 
-    //#region API
+    //=========================API============================
     public bool CanEvolve(){
         // awaiting first evolution and has enough points
         if (DataManager.evoStage == EvoStage.Stage0 && DataManager.Points >= level1EvolutionPoints){
@@ -24,6 +24,7 @@ public class EvolutionLogic : MonoBehaviour {
     }
 
     // Should only be called if CanEvolve() returns true.
+    // evolve the pet depending on the evoAVeragecum
     public void Evolve(){
 
         //TO DO: Check points and decide how the pet should evolve according to evoAverageCum
@@ -56,12 +57,11 @@ public class EvolutionLogic : MonoBehaviour {
         }
     }
 
-    //#endregion
-
+    //initialize game
     public void Init () {
         timer = timeInterval;
-
     }
+    //========================================================
 
 	// Update is called once per frame
 	void Update () {
@@ -81,9 +81,11 @@ public class EvolutionLogic : MonoBehaviour {
 
 		DateTime now = DateTime.Now;
 		TimeSpan tempd = now.Subtract(DataManager.lastUpdatedTime);
-		int timeElapsedInSecs = (int)tempd.TotalSeconds;
+		int timeElapsedInSecs = (int)tempd.TotalSeconds; //how many seconds since last played
 
 		double evoMeter = getEvoMeter();
+
+        //calculate the evo average based on the evoMeter now and the last evoMeter
 		double evoAverageNow = (evoMeter + DataManager.lastEvoMeter) / 2;
 
 		//calculate the average evolution value, over the period of gameplay starting

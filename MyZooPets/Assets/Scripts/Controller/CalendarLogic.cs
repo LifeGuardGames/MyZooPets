@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarLogic : MonoBehaviour {
+public static class CalendarLogic{
 
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry;
@@ -11,7 +11,7 @@ public class CalendarLogic : MonoBehaviour {
     private static int comboBase = 750;
     private static int comboMax = 3750;
 
-    //#region API (use this for the UI)
+    //====================API (use this for the UI)=======================
     public static int GetComboCount(){
         return DataManager.CalendarCombo;
     }
@@ -44,11 +44,9 @@ public class CalendarLogic : MonoBehaviour {
         CalendarOpenedOnDate(DateTime.Now);
     }
 
-    //#endregion
+    //===========================================
 
-    //***********************************************************
-
-    //#region API
+    //============Testing API===============================
     // todo: for testing, delete later
     public static void RecordGivingInhalerTest(DateTime now){
         RecordGivingInhaler(now);
@@ -61,8 +59,7 @@ public class CalendarLogic : MonoBehaviour {
     public static CalendarEntry LastEntryTest(){
         return lastEntry;
     }
-    //#endregion
-    //***********************************************************
+    //=============================================
 
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {

@@ -2,12 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+//InhalerLogic stores and manipulate any inhaler game related data 
 public static class InhalerLogic{
     //variables
     // currentInhalerSkin;
 
-    private static InhalerType currentInhalerType;
-    private static int currentStep;
+    private static InhalerType currentInhalerType; //either Advair or Rescue inhaler
+    private static int currentStep; //current step that user is on
 
 
     //=================API (use this for UI)==================
@@ -19,9 +20,6 @@ public static class InhalerLogic{
     //return the current type of the inhaler
     public static InhalerType CurrentInhalerType{
         get{return currentInhalerType;}
-
-        // todo: remove setter after testing
-        set {currentInhalerType = value;}
     }
 
     //return slot machine count

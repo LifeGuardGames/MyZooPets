@@ -71,10 +71,10 @@ public static class InhalerLogic{
     public static bool IsDoneWithGame(){
         bool retVal = false;
 
-        if(currentInhalerType == InhalerType.Advair && currentStep > 5){
+        if(currentInhalerType == InhalerType.Advair && currentStep == 6){
             retVal = true; //end of the sequence
     
-        } else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
+        } else if(currentInhalerType == InhalerType.Rescue && currentStep == 7){
             retVal = true; //end of the sequence
         }
         return retVal;

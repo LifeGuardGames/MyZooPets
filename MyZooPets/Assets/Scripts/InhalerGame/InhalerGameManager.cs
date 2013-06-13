@@ -79,10 +79,12 @@ public class InhalerGameManager : MonoBehaviour{
 
     void Update(){
         // todo: delete
-        print(InhalerLogic.GetSlotMachineCount);
+        
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
             InhalerLogic.ResetGame(); // call this before showing the slots
+            print(InhalerLogic.GetSlotMachineCount);
             ShowSlotMachine();
+            InhalerLogic.Init();
         }
     }
 

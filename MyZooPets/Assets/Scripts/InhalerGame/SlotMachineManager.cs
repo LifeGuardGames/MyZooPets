@@ -11,13 +11,17 @@ public class SlotMachineManager : MonoBehaviour {
     private Transform[] wheels = new Transform[3];
     private bool gameOver = false;
 
-	// Use this for initialization
-	void Start () {
-       int counter = 0;
+    void Awake(){
+        int counter = 0;
        foreach(Transform wheel in transform){
             wheels[counter] = wheel;
             counter++;
        }
+    }
+    
+	// Use this for initialization
+	void Start () {
+       
 	}
 
 	// Update is called once per frame

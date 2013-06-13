@@ -11,6 +11,9 @@ public class RoomGUI : MonoBehaviour {
 	public GameObject diagnoseGUIObject;
 	private DiagnoseGUI diagnoseGUI;
 	
+	public GameObject notificationUIManagerObject;
+	private NotificationUIManager notificationUIManager;
+	
 	public GUISkin defaultSkin;
 	
 	// native dimensions
@@ -102,6 +105,7 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxWidth = 75;
 	
 	void Start(){
+		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
 //		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
 		
@@ -298,6 +302,10 @@ public class RoomGUI : MonoBehaviour {
 		// TODO-s change this later
 		if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
 			diagnoseGUI.DiagnoseClicked();
+		}
+		
+		if(GUI.Button(new Rect(optionRect.rect.x - 200,optionRect.rect.y ,90,90), "YAY!")){
+			notificationUIManager.PopupTexture("award", -100, 100, 100, 100, 100);
 		}
 		
 		if(showOption){

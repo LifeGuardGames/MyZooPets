@@ -15,6 +15,8 @@ public class RescueBody : MonoBehaviour
 
     void Start(){
        collider.enabled = false;
+       destinationCollider = GameObject.Find("PetSprite").collider;
+       miniature = GameObject.Find("SmallRescueBody");
        miniature.SetActive(false);
     }
     void Update(){

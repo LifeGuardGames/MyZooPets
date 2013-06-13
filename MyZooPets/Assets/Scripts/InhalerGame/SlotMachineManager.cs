@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-//TO DO: probably needs a Logic class 
+//TO DO: probably needs a Logic class
 public class SlotMachineManager : MonoBehaviour {
     private const int NUMBER_OF_SLOTS = 5;
     private const float SLOT_OFFSET = 0.2f;
@@ -18,14 +18,13 @@ public class SlotMachineManager : MonoBehaviour {
             wheels[counter] = wheel;
             counter++;
        }
-       SpinWhenReady();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
         if(!gameOver){ //keep checking if wheels have been speen if game is not over
-            if(wheels[0].GetComponent<SpinningWheel>().doneSpinning && 
-                wheels[1].GetComponent<SpinningWheel>().doneSpinning && 
+            if(wheels[0].GetComponent<SpinningWheel>().doneSpinning &&
+                wheels[1].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[2].GetComponent<SpinningWheel>().doneSpinning){
                 if(doneWithSpinningCallBack != null) doneWithSpinningCallBack();
                 gameOver = true;
@@ -33,7 +32,8 @@ public class SlotMachineManager : MonoBehaviour {
         }
 	}
 
-    public void SpinWhenReady(){
+    public bool SpinWhenReady(){
+        bool retVal = false;
         //check counter
         if(InhalerLogic.GetSlotMachineCount <= 3){ //make sure not out of index
             for(int i = 0; i<InhalerLogic.GetSlotMachineCount; i++){
@@ -41,16 +41,21 @@ public class SlotMachineManager : MonoBehaviour {
             }
         }
         gameOver = false;
-        if(InhalerLogic.GetSlotMachineCount == 3) StartGame();
+        if(InhalerLogic.GetSlotMachineCount == 3){
+            StartGame();
+            retVal = true;
+        }
+        return retVal;
+
     }
 
     //Generate the random slots and spin the wheels
-    private void StartGame(){ 
+    private void StartGame(){
         for(int i = 0; i<3; i++){
             slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
             chosenSlots[i] = SLOT_OFFSET * (float)slots[i];
             wheels[i].GetComponent<SpinningWheel>().StartSpin(chosenSlots[i]);
-        } 
+        }
     }
 
     //check if the slots are 3 in a row

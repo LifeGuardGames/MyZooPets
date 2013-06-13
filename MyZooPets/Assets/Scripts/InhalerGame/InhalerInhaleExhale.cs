@@ -22,7 +22,6 @@ public class InhalerInhaleExhale : MonoBehaviour {
         else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
             breathingInStep = 6;
         }
-        Debug.Log(breathingInStep);
 	}
 
 	// Update is called once per frame

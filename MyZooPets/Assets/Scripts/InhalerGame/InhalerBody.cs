@@ -13,6 +13,7 @@ public class InhalerBody : MonoBehaviour
 
     void Start(){
        collider.enabled = false;
+       destinationCollider = GameObject.Find("PetSprite").collider;
     }
     void Update(){
         if (InhalerLogic.CurrentStep != dragToPetStep){

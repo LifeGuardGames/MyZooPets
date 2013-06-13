@@ -7,11 +7,11 @@ public class SeansButtons : MonoBehaviour {
 	private NotificationUIManager nuim;
 	
 	public GameObject inhalerGameGUIObject;
-	private InhalerGameGUI igg;
+//	private InhalerGameGUI igg;
 	
 	void Start(){
 		nuim = notificationManagerObject.GetComponent<NotificationUIManager>();
-		igg = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
+//		igg = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
 	}
 	
 	void Update(){

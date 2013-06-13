@@ -12,7 +12,6 @@ public class PopupAward : MonoBehaviour {
 	private int deltaPoints, deltaStars, deltaHealth, deltaMood, deltaHunger;
 	
 	private LTRect awardRect;
-	//private Hashtable<string, string> awardHash;
 	
 	void Start(){
 		awardRect = new LTRect(Screen.width/2 - 150, -100, 300, 400);

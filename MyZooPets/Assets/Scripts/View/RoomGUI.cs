@@ -71,9 +71,7 @@ public class RoomGUI : MonoBehaviour {
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
 	private LTRect menuRect;
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
-	
-	//private Vector2 optionIconLoc = new Vector2(1150, 700);
-	private Vector2 optionMenuLoc = new Vector2(500, 100);
+	private Vector2 optionLoc;
 	
 	private Vector2 tierBarloc;
 	private Vector2 tierTextOffset = new Vector2(25, 12);
@@ -117,7 +115,8 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.displayHealth;
 		
 		isMenuExpanded = true;
-		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);	
+		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
+		optionLoc = new Vector2(Screen.width/2 - optionMenuTexture.width/2, Screen.height/2 - optionMenuTexture.height/2);
 	}
 	
 	void Update(){
@@ -309,7 +308,7 @@ public class RoomGUI : MonoBehaviour {
 		}
 		
 		if(showOption){
-			GUI.DrawTexture(new Rect(optionMenuLoc.x,optionMenuLoc.y,400,600),optionMenuTexture);
+			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
 		}
 	}
 }

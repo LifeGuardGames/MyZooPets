@@ -185,7 +185,7 @@ public class DiaryUIManager : MonoBehaviour {
 		}
 		if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X")){
 			showGUI = !showGUI;
-			ClickManager.ReleaseLock();
+			ClickManager.ClickLock();
 			LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 			roomGui.ShowGUIs();
 			cameraMove.PetSideZoomToggle();

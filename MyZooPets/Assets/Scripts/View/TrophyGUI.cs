@@ -34,7 +34,7 @@ public class TrophyGUI : MonoBehaviour {
 		GUI.skin = defaultSkin;
 		if(isActive){
 			if(GUI.Button(new Rect(10, 10, 100, 100), "X")){
-				ClickManager.ReleaseLock();
+				ClickManager.ClickLock();
 				cameraMove.ShelfZoomToggle();
 				roomGui.ShowGUIs();	
 				isActive = false;

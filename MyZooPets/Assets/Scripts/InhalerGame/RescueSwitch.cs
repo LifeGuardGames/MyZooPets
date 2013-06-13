@@ -15,7 +15,9 @@ public class RescueSwitch : MonoBehaviour {
             if (Input.GetMouseButtonDown(0)) {
                 if (isTouchingObject(touch)){
                     if (InhalerLogic.IsCurrentStepCorrect(5)){
-                        InhalerLogic.IsDoneWithGame();
+                        if (!InhalerLogic.IsDoneWithGame()){
+                            InhalerLogic.NextStep();
+                        }
                         InhalerClickAnimation();
                     }
                 }

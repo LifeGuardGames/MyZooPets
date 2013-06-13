@@ -29,7 +29,9 @@ public class RescueShaker : MonoBehaviour {
             Debug.Log("shake target reached");
 
             if (InhalerLogic.IsCurrentStepCorrect(2)){
-                InhalerLogic.IsDoneWithGame();
+                if (!InhalerLogic.IsDoneWithGame()){
+                    InhalerLogic.NextStep();
+                }
                 renderer.enabled = false;
             }
         }

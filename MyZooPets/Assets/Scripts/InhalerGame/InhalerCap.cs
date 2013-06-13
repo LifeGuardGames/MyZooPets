@@ -132,7 +132,9 @@ public class InhalerCap : MonoBehaviour
 			transform.eulerAngles = finalPosition;
 			completelyOpened = true;
 			if (InhalerLogic.IsCurrentStepCorrect(1)){
-				InhalerLogic.IsDoneWithGame();
+				if (!InhalerLogic.IsDoneWithGame()){
+					InhalerLogic.NextStep();
+				}
 			}
 			RemoveArrowAnimation();
 		}

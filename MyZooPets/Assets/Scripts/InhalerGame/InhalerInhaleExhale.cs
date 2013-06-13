@@ -55,7 +55,9 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     // if it is, increment InhalerLogic.CurrentStep
                     if (InhalerLogic.IsCurrentStepCorrect(3)){
                         Debug.Log("Completed step 3");
-                        InhalerLogic.IsDoneWithGame();
+                        if (!InhalerLogic.IsDoneWithGame()){
+                            InhalerLogic.NextStep();
+                        }
                         renderer.enabled = false;
                     }
                 }
@@ -67,7 +69,9 @@ public class InhalerInhaleExhale : MonoBehaviour {
                         completedGame = true;
                         notificationUIManager.PopupTexture("great", null);
                         renderer.enabled = false;
-                        InhalerLogic.IsDoneWithGame();
+                        if (!InhalerLogic.IsDoneWithGame()){
+                            InhalerLogic.NextStep();
+                        }
                     }
                 }
             }

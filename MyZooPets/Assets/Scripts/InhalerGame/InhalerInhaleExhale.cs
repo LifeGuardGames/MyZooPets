@@ -67,7 +67,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
                         Debug.Log("Completed step" + breathingInStep);
                         completedGame = true;
-                        notificationUIManager.PopupTexture("great", null);
+                        notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
                         renderer.enabled = false;
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();

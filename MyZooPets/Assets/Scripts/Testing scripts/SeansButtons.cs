@@ -19,7 +19,7 @@ public class SeansButtons : MonoBehaviour {
 	
 	void OnGUI(){
 		if(GUI.Button(new Rect(10, 10, 100, 100), "KABOOYA")){
-			nuim.PopupTexture("great","");
+			nuim.PopupTexture("great", 0, 0, 0, 0, 0);
 		}
 		if(GUI.Button(new Rect(120, 10, 100, 100), "WAPOWWW")){
 			//igg.IncreaseBar();

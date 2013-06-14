@@ -45,7 +45,7 @@ public class ClickManager : MonoBehaviour {
 	}
 
 	void Update(){
-		Debug.Log(isClickLocked + " " + isModeLocked);
+		//Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){
 				if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Ended) || !isMobilePlatform){

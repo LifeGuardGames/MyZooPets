@@ -18,10 +18,14 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     private SlotMachineManager slotMachineManager; // component of slotMachine
+    bool gameEnded = false;
+    bool showPlayAgain = false;
 
     public void ResetInhalerGame(){
         DestroyAndRecreatePrefabs();
         SetUpInhalerGame();
+        gameEnded = false;
+        showPlayAgain = false;
     }
 
     // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
@@ -31,6 +35,14 @@ public class InhalerGameManager : MonoBehaviour{
     }
     void Start(){
 
+    }
+
+    void OnGUI(){
+        if (gameEnded && showPlayAgain){
+            if(GUI.Button(new Rect(Screen.width - 120, Screen.height - 120, 100, 100), "Play Again")){
+                ResetInhalerGame();
+            }
+        }
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -80,22 +92,32 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void Update(){
-        if (InhalerLogic.IsDoneWithGame()){ // if done with game
-            InhalerLogic.ResetGame(); // call this before showing the slots
-            ShowSlotMachine();
-            InhalerLogic.Init();
+        if (!gameEnded){
+            if (InhalerLogic.IsDoneWithGame()){ // if done with game
+                gameEnded = true;
+                InhalerLogic.ResetGame(); // call this before showing the slots
+                // ShowSlotMachine();
+                InvokeSlotMachine();
+                // InhalerLogic.Init();
+            }
         }
     }
 
-    // void InvokeSlotMachine(){
-    //     Invoke("ShowSlotMachine", 3);
-    // }
+    void InvokeSlotMachine(){
+        Invoke("ShowSlotMachine", 3);
+    }
 
     void ShowSlotMachine(){
         slotMachine.SetActive(true);
         if (!slotMachineManager.SpinWhenReady()){
-            // show only for a short while, then ResetInhalerGame()
-            Invoke("ResetInhalerGame", 3);
+            showPlayAgain = true;
         }
+        else {
+            slotMachineManager.doneWithSpinningCallBack = FinishedSpinning;
+        }
+    }
+
+    void FinishedSpinning(){
+        showPlayAgain = true;
     }
 }

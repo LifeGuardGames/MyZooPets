@@ -6,8 +6,8 @@ public class InhalerGameGUI : MonoBehaviour {
 	// Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-
-	public GUISkin defaultSkin;
+	
+	public GUIStyle inhalerStyle;
 	public Texture2D circleGray;
 	public Texture2D circleRed;
 	public float speed;
@@ -77,8 +77,6 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		GUI.skin = defaultSkin;
-
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
@@ -108,7 +106,7 @@ public class InhalerGameGUI : MonoBehaviour {
 			else{
 				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleGray);
 			}
-			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), i.ToString());
+			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx) + 30, 682, circleGray.width, circleGray.height), i.ToString(), inhalerStyle);
 		}
 	}
 

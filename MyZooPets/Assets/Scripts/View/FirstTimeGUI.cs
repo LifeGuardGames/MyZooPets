@@ -9,23 +9,24 @@ using System.Collections;
 
 public class FirstTimeGUI : MonoBehaviour {
 	
-	// native dimensions
+	// Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;	
 	
 	public GUISkin defaultSkin;
-	
+	public Texture2D logo;
 	public bool splashScreenAux = true;
 	
 	public GameObject eggObject;
 	private Vector3 eggSpritePosition = new Vector3(0f, -1.88f, -10f);
-
 	private tk2dSprite eggSpriteScript;
 	public GameObject nestObject;
 	public GameObject petObject;
 	public string petName;
 	public string petColor;
 	
+	// Edit egg panels
+	public Texture2D editPanel;
 	private bool isEditEgg = false;
 	private LTRect editEggRect;
 	private Vector2 editEggRectInitPos = new Vector2(1300f, 100f);
@@ -41,7 +42,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	private Vector3 finalFaceDirection = new Vector3(11.3f, 0, 0);
 	
 	private Color currentRenderColor;
-	public Texture2D logo;
 	private LTRect logoRect;
 	
 	//TODO-s Make this an array or something?
@@ -50,8 +50,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	public Texture2D yellowButton;
 	public Texture2D redButton;
 	public Texture2D purpleButton;
-	
-	public Texture2D editPanel;
 	
 	void Start(){
 		if(DataManager.FirstTime){
@@ -68,6 +66,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
 			goPet.name = "SpritePet";
 			
+			// Kill itself + related objects if not first time
 			Destroy(eggObject);
 			Destroy(nestObject);
 			Destroy(gameObject);
@@ -120,6 +119,7 @@ public class FirstTimeGUI : MonoBehaviour {
 		RenderSettings.ambientLight = currentRenderColor;	// lerp this
 	}
 	
+	// Callback for closing edit panel
 	private void HelperFinishEditPet(){
 		DataManager.PetName = petName;
 		DataManager.PetColor = petColor;
@@ -128,19 +128,21 @@ public class FirstTimeGUI : MonoBehaviour {
 		// Spawn pet object
 		GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
 		goPet.name = "SpritePet";
-
+		
+		// Start normal GUI stuff
 		finishHatchCallBack(false);
+		
+		// Commit seppuku
 		Destroy(eggObject);
 		Destroy(nestObject);
 		Destroy(gameObject);
 	}
 	
 	void OnGUI(){
-		
 		if(!SplashScreen.IsFinished) return;
 		
 		// Proportional scaling
-		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
+		if(NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
@@ -181,8 +183,7 @@ public class FirstTimeGUI : MonoBehaviour {
 				petColor = "whiteRed";
 			}
 			else if(GUILayout.Button("Finish", GUILayout.Width(90), GUILayout.Height(90))){
-				if(isZoomed)
-				{
+				if(isZoomed){
 					ZoomOutMove();
 					isZoomed = false;
 					HideChooseGUI();
@@ -202,6 +203,7 @@ public class FirstTimeGUI : MonoBehaviour {
 		}
 	}
 	
+	// Callback for hide title
 	private void HelperDeleteLogo(){
 		logo = null;
 	}

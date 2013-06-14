@@ -6,15 +6,10 @@ using System.Collections.Generic;
 public class DiaryUIManager : MonoBehaviour {
 	
 	public GameObject cameraMoveObject;
-	private CameraMove cameraMove;
-	
 	public GameObject roomGuiObject;
-	private RoomGUI roomGui;
-	
 	public GUISkin defaultSkin;
 	
-	bool showGUI = true;
-	List<CalendarEntry> calendar;
+	//Textures
 	public Texture2D diaryTexture1;
 	public Texture2D diaryTexture2;
 	public Texture2D diaryTexture3;
@@ -23,11 +18,12 @@ public class DiaryUIManager : MonoBehaviour {
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
 	
+	//Styles
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
 	public GUIStyle diaryTextStyle;
 	
-	private int diaryPage = 1;
+	//Diary positions
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
 	private Vector2 diaryFinalPosition = new Vector2(650,100);
 	private LTRect diaryRect;
@@ -35,9 +31,16 @@ public class DiaryUIManager : MonoBehaviour {
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	
+    
+	//MISC
+	private CameraMove cameraMove;
+	private RoomGUI roomGui;
 	private bool diaryActive = false;
+	private bool showGUI = true;
+	private int diaryPage = 1;
+	private List<CalendarEntry> calendar;
 	
+	//Reading calendar entries
 	public void Init(){
 		calendar = CalendarLogic.GetCalendarEntries();	
 	}
@@ -82,6 +85,9 @@ public class DiaryUIManager : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////                                         Diary Pages                                          ///////////
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;
@@ -99,6 +105,7 @@ public class DiaryUIManager : MonoBehaviour {
 			GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
 			GUI.TextArea(new Rect (diaryRect.rect.x+100,diaryRect.rect.y+577,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
 			
+			//Layout for inhaler checks in a week
 			GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
 			GUILayout.BeginVertical("");
 			for(int i = 0;i < 7; i++){
@@ -128,6 +135,7 @@ public class DiaryUIManager : MonoBehaviour {
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
 
+			//Page Selection by clicking Tabs
 			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
 				diaryPage = 2;	
 			}
@@ -187,6 +195,9 @@ public class DiaryUIManager : MonoBehaviour {
 				diaryPage = 3;	
 			}
 		}
+		
+		//Temp close Button
+		//TODO make a prettier icon??
 		if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X")){
 			showGUI = !showGUI;
 			ClickManager.ClickLock();

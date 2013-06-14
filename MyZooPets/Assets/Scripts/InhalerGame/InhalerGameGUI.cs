@@ -3,33 +3,27 @@ using System.Collections;
 
 public class InhalerGameGUI : MonoBehaviour {
 
-	// native dimensions
+	// Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-
-	public float speed;
 
 	public GUISkin defaultSkin;
 	public Texture2D circleGray;
 	public Texture2D circleRed;
+	public float speed;
 
 	private int currentNode;
-	public float currentPercentage;
-	public float targetPercentage;
-	public float tParam;
+	private float currentPercentage;
+	private float targetPercentage;
+	private float tParam;
 
 	private int numberOfNodes;
     private Vector2 pos;
     private Vector2 size = new Vector2(1020, 40);
 
 	private float segmentChunkPx;	// Pixels in between chunks
-
-	private bool[] boolList;
-
+	private bool[] boolList;		// List to keep track of current state rendering
 	private bool isUpdating = false;
-
-	void Awake(){
-	}
 
 	void Start(){
 		RestartProgressBar();
@@ -52,7 +46,6 @@ public class InhalerGameGUI : MonoBehaviour {
 		for(int i = 0; i < numberOfNodes; i++){
 			boolList[i] = false;
 		}
-
 	}
 
 	void SetNumOfNodes(){
@@ -69,7 +62,7 @@ public class InhalerGameGUI : MonoBehaviour {
 			UpdateBar();
 		}
 		if(currentPercentage != targetPercentage){
-			if (tParam < 1) {
+			if (tParam < 1){
 	   			tParam += speed;
 				currentPercentage = Mathf.Lerp(currentPercentage, targetPercentage, tParam);
 			}
@@ -133,7 +126,7 @@ public class InhalerGameGUI : MonoBehaviour {
 			boolList[i] = true;
 		}
 		else{
-			Debug.LogError("Illegal node index");
+			Debug.LogError("Illegal node index: " + i);
 		}
 	}
 }

@@ -71,14 +71,14 @@ public class DataManager : MonoBehaviour {
     private static int slotMachineCounter; //max 3. used to determine when to start slot
                                             //machine game
     [SerializeThis]
-    private static int numberOfTimesPlayed; //max 6. user can only played 6 inhaler game per day
+    private static int numberOfTimesLeft; //max 6. user can only played 6 inhaler game per day
     [SerializeThis]
     private static DateTime lastInhalerGamePlayed; //keep track of when to reset the
-                                                        //slotMachineCounter and numberOfTimesPlayed
+                                                        //slotMachineCounter and numberOfTimesLeft
     [SerializeThis]
-    private static int advairCount; //max 3. appears in the game max 3 times per day
+    private static int numberOfAdvairLeft; //max 3. appears in the game max 3 times per day
     [SerializeThis]
-    private static int rescueCount; //max 3. appears in the game max 3 times per day       
+    private static int numberOfRescueLeft; //max 3. appears in the game max 3 times per day       
     //inhaler skin used (needs enum type)
     //========================
 
@@ -139,17 +139,17 @@ public class DataManager : MonoBehaviour {
         get{return slotMachineCounter;}
         set{slotMachineCounter = value;}
     }
-    public static int NumberOfTimesPlayed{
-        get{return numberOfTimesPlayed;}
-        set{numberOfTimesPlayed = value;}
+    public static int NumberOfTimesLeft{
+        get{return numberOfTimesLeft;}
+        set{numberOfTimesLeft = value;}
     }
-    public static int AdvairCount{
-        get{return advairCount;}
-        set{advairCount = value;}
+    public static int NumberOfAdvairLeft{
+        get{return numberOfAdvairLeft;}
+        set{numberOfAdvairLeft = value;}
     }
-    public static int RescueCount{
-        get{return rescueCount;}
-        set{rescueCount = value;}
+    public static int NumberOfRescueLeft{
+        get{return numberOfRescueLeft;}
+        set{numberOfRescueLeft = value;}
     }
     //===============================
 
@@ -288,10 +288,10 @@ public class DataManager : MonoBehaviour {
 
             //Inhaler game data initialization
             slotMachineCounter = 0;
-            numberOfTimesPlayed = 6;
+            numberOfTimesLeft = 6;
             lastInhalerGamePlayed = DateTime.Now;
-            advairCount = 3;
-            rescueCount = 3;
+            numberOfAdvairLeft = 3;
+            numberOfRescueLeft = 3;
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

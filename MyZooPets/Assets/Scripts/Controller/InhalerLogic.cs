@@ -36,13 +36,13 @@ public static class InhalerLogic{
         //new day so resets counters
         if(sinceLastPlayed.Days > 0){
             DataManager.SlotMachineCounter = 0;
-            DataManager.NumberOfTimesPlayed = 6;
-            DataManager.AdvairCount = 3;
-            DataManager.RescueCount = 3;
+            DataManager.NumberOfTimesLeft = 6;
+            DataManager.NumberOfAdvairLeft = 3;
+            DataManager.NumberOfRescueLeft = 3;
         }
 
         //assign game inhaler
-        if(DataManager.AdvairCount >= DataManager.RescueCount){
+        if(DataManager.NumberOfAdvairLeft >= DataManager.NumberOfRescueLeft){
             currentInhalerType = InhalerType.Advair;
         }else{
             currentInhalerType = InhalerType.Rescue;
@@ -57,7 +57,7 @@ public static class InhalerLogic{
     //True: user can play the inhaler game, False: user has reached the max play time
     //so can't play the game
     public static bool PlayGame(){
-        return DataManager.NumberOfTimesPlayed != 0;
+        return DataManager.NumberOfTimesLeft != 0;
     }
 
     //True: the step that the user is currently on is correct, False: wrong step
@@ -83,11 +83,11 @@ public static class InhalerLogic{
     //adjust counters at the end of the game
     public static void ResetGame(){
         if(currentInhalerType == InhalerType.Advair && currentStep > 5){
-            DataManager.AdvairCount--;
+            DataManager.NumberOfAdvairLeft--;
         }else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
-            DataManager.RescueCount--;
+            DataManager.NumberOfRescueLeft--;
         }
-        DataManager.NumberOfTimesPlayed--;
+        DataManager.NumberOfTimesLeft--;
         DataManager.SlotMachineCounter++;
     }
 

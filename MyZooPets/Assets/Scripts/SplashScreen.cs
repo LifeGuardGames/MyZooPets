@@ -10,6 +10,7 @@ public class SplashScreen : MonoBehaviour {
 	public static bool IsFinished{get; set;} //use this method to check
 											//if splash screen is done
 
+
 	void Start(){
 		guiTexture.pixelInset = new Rect(0,0,0,0);
 		IsFinished = false;

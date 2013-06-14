@@ -57,7 +57,7 @@ public class DiaryUIManager : MonoBehaviour {
 		if(!diaryActive){
 			diaryActive = true;
 			cameraMove.PetSideZoomToggle();
-			roomGui.HideGUIs();
+			roomGui.HideGUIs(false, true, true, true);
 			showGUI = false;
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", LeanTweenType.easeInOutQuad);

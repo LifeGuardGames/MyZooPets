@@ -22,7 +22,7 @@ public class TrophyGUI : MonoBehaviour {
 		if(!isActive){
 			isActive = true;
 			cameraMove.ShelfZoomToggle();
-			roomGui.HideGUIs();
+			roomGui.HideGUIs(true, true, true, true);
 		}
 	}
 	

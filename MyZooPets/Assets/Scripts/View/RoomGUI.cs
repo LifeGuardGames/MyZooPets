@@ -128,11 +128,19 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	//Hide all GUIs
-	public void HideGUIs(){
-		LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
-		LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
-		LeanTween.move(menuRect,new Vector2(0,850),0.5f);
-		LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
+	public void HideGUIs(bool hideTop, bool hideLeft, bool hideMenu, bool hideOption){
+		if(hideTop){
+			LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);	
+		}
+		if(hideLeft){	
+			LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
+		}
+		if(hideMenu){
+			LeanTween.move(menuRect,new Vector2(0,850),0.5f);
+		}
+		if(hideOption){
+			LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
+		}
 	}
 	
 	//Show all GUIs

@@ -39,7 +39,7 @@ public class DiagnoseGUI : MonoBehaviour {
 			ClickManager.ClickLock();
 			ClickManager.ModeLock();
 			cameraMove.PetSideZoomToggle();
-			roomGui.HideGUIs();
+			roomGui.HideGUIs(true, true, true, true);
 		}
 	}
 }

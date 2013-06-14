@@ -23,8 +23,8 @@ public class ClickManager : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 	
-	public static bool isClickLocked = false;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
-	public static bool isModeLocked = false;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
+	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
+	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 	
 	void Start(){
 		if(Application.platform == RuntimePlatform.Android ||
@@ -34,6 +34,9 @@ public class ClickManager : MonoBehaviour {
 		else{
 			isMobilePlatform = false;
 		}
+
+		isClickLocked = false;
+		isModeLocked = false;
 		
 		// Linking script references
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryUIManager>();
@@ -42,6 +45,7 @@ public class ClickManager : MonoBehaviour {
 	}
 
 	void Update(){
+		Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){
 				if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Ended) || !isMobilePlatform){

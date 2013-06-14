@@ -6,7 +6,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	
+
 	public float speed;
 
 	public GUISkin defaultSkin;
@@ -32,6 +32,10 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	void Start(){
+		RestartProgressBar();
+	}
+
+	public void RestartProgressBar(){
 		currentNode = InhalerLogic.CurrentStep - 1; // Starting out with step 0 here
 
 		SetNumOfNodes();
@@ -48,6 +52,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		for(int i = 0; i < numberOfNodes; i++){
 			boolList[i] = false;
 		}
+
 	}
 
 	void SetNumOfNodes(){
@@ -82,7 +87,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		GUI.skin = defaultSkin;
 
 		// Proportional scaling
-		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
+		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));

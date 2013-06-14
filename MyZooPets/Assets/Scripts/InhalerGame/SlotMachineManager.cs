@@ -1,14 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-//TO DO: probably needs a Logic class
 public class SlotMachineManager : MonoBehaviour {
     private const int NUMBER_OF_SLOTS = 5;
     private const float SLOT_OFFSET = 0.2f;
 
-    private float[] chosenSlots = new float[3];
+    private float[] chosenSlots = new float[3]; //the position offsite for 3 wheels
     private int[] slots = new int[3];
-    private Transform[] wheels = new Transform[3];
+    private Transform[] wheels = new Transform[3]; //reference to the 3 wheels inside slot machine
     private bool gameOver = false;
 
     void Awake(){
@@ -26,7 +25,7 @@ public class SlotMachineManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if(!gameOver){ //keep checking if wheels have been speen if game is not over
+        if(!gameOver){ //keep checking if wheels have been spinned if game is not over
             if(wheels[0].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[1].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[2].GetComponent<SpinningWheel>().doneSpinning){
@@ -38,26 +37,35 @@ public class SlotMachineManager : MonoBehaviour {
 
     public bool SpinWhenReady(){
         bool retVal = false;
+        ResetGame(); //needs to reset the game show the black screens show up
+
         //check counter
         if(InhalerLogic.GetSlotMachineCount <= 3){ //make sure not out of index
             for(int i = 0; i<InhalerLogic.GetSlotMachineCount; i++){
-                wheels[i].Find("Screen").gameObject.SetActive(false);
+                //turn the black screen off according slot machine count
+                wheels[i].Find("Screen").renderer.enabled = false;
             }
         }
         gameOver = false;
         if(InhalerLogic.GetSlotMachineCount == 3){
-            StartGame();
+            StartGame(); //spin the wheels
             retVal = true;
         }
         return retVal;
 
     }
 
+    private void ResetGame(){
+        for(int i = 0; i<3; i++){
+            wheels[i].Find("Screen").renderer.enabled = true;
+        }
+    }
+
     //Generate the random slots and spin the wheels
     private void StartGame(){
         for(int i = 0; i<3; i++){
             slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
-            chosenSlots[i] = SLOT_OFFSET * (float)slots[i];
+            chosenSlots[i] = SLOT_OFFSET * (float)slots[i]; //calculate the offset for the wheels
             wheels[i].GetComponent<SpinningWheel>().StartSpin(chosenSlots[i]);
         }
     }

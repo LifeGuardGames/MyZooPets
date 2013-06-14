@@ -3,119 +3,105 @@ using System.Collections;
 
 public class RoomGUI : MonoBehaviour {
 	
-	private RoomGUIAnimator roomAnimator;
-	
-//	public GameObject cameraMoveObject;
-//	private CameraMove cameraMove;
 	
 	public GameObject diagnoseGUIObject;
-	private DiagnoseGUI diagnoseGUI;
-	
 	public GameObject notificationUIManagerObject;
-	private NotificationUIManager notificationUIManager;
-	
 	public GUISkin defaultSkin;
 	
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 	
-	private bool isMenuExpanded;
-	private bool showOption = false;
-	private bool inhalerpicked = false; 
-	private bool emInhalerpicked = false;
-	
-	private Rect menuTextureRect;
-
+	//Crazy long Texture bundle
 	public Texture2D textureSwap1;
 	public Texture2D textureSwap2;
-	
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
 	public Texture2D starBarTexture;
 	public Texture2D statBarTexture;
 	public Texture2D itemBarTexture;
-	
 	public Texture2D foodIcon;
 	public Texture2D healthIcon;
 	public Texture2D moodIcon;
-	
 	public Texture2D progressBarFrame;
 	public Texture2D progressBarFill;
 	public Texture2D statBarVerFillGreen;
 	public Texture2D statBarVerFillYellow;
 	public Texture2D statBarVerFillRed;
 	public Texture2D statBarVerFrame;
-	
 	public Texture2D inhalerTexture;
 	public Texture2D emInhalerTexture;
 	public Texture2D appleTexture;
 	public Texture2D sandwichTexture;
-	
 	public Texture2D optionIconTexture;
 	public Texture2D optionMenuTexture;
-	
 	public Texture2D plusTexture;
 	public Texture2D minusTexture;
 	
+	//GUI style for Texts on screen
 	public GUIStyle starTextStyle;
 	public GUIStyle expreTextStyle;
 	public GUIStyle tierTextStyle;
 	
+	//4 stat indicator
 	public float progress;
 	public float food;
 	public float mood;
 	public float health;
 		
+	//LTRects for LeanTween movement for all GUI Objects
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
-	private LTRect menuRect;
+	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);	
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
-	private Vector2 optionLoc;
 	
+	//Positions/Offsets for all GUI elements
+	private Vector2 optionLoc;	
 	private Vector2 tierBarloc;
-	private Vector2 tierTextOffset = new Vector2(25, 12);
-	
 	private Vector2 starBarloc;
+	private Vector2 healthBarloc;
+	private Vector2 moodBarloc;
+	private Vector2 foodBarloc;
+	private Vector2 tierTextOffset = new Vector2(25, 12);
 	private Vector2 starIconOffset = new Vector2(10, 4);
 	private Vector2 starTextOffset = new Vector2(90, 18);
-	private string starCount;
-	
-	private Vector2 healthBarloc;
 	private Vector2 healthIconOffset = new Vector2(5, 18);
 	private Vector2 healthBarOffset = new Vector2(60, 15);
-	
-	private Vector2 moodBarloc;
 	private Vector2 moodIconOffset = new Vector2(5, 18);
 	private Vector2 moodBarOffset = new Vector2(60, 15);
-	
-	private Vector2 foodBarloc;
 	private Vector2 foodIconOffset = new Vector2(3, 20);
 	private Vector2 foodbarOffset = new Vector2(60, 15);
-	
 	private Vector2 progressBarOffset = new Vector2(150, 11);
 	private Vector2 progressTextOffset = new Vector2(230, 12);
 	
+	//MISC
+	private bool isMenuExpanded = true;
+	private bool showOption = false;
+	private bool inhalerpicked = false; 
+	private bool emInhalerpicked = false;
+	private Rect menuTextureRect;	
+	private NotificationUIManager notificationUIManager;
+	private RoomGUIAnimator roomAnimator;
+	private DiagnoseGUI diagnoseGUI;
 	private string tierLevel;
 	private string tierProgressText;
-	
+	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
 	
 	void Start(){
+	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
-//		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
-		
 		diagnoseGUI = diagnoseGUIObject.GetComponent<DiagnoseGUI>();
 		
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
-		
-		isMenuExpanded = true;
-		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
+	//preset item menu
+//		isMenuExpanded = true;
+//		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
 		optionLoc = new Vector2(Screen.width/2 - optionMenuTexture.width/2, Screen.height/2 - optionMenuTexture.height/2);
 	}
 	
@@ -134,12 +120,14 @@ public class RoomGUI : MonoBehaviour {
 		food = roomAnimator.displayHunger;
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
-		
+	
+		//Data reading from other class
 		tierLevel = "Tier 1";//TODO-s change this later
 		tierProgressText = roomAnimator.displayPoints + "/50000";
 		starCount = roomAnimator.displayStars.ToString();
 	}
 	
+	//Hide all GUIs
 	public void HideGUIs(){
 		LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
 		LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
@@ -147,6 +135,7 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
 	}
 	
+	//Show all GUIs
 	public void ShowGUIs(){
 		LeanTween.move(TopGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
@@ -155,8 +144,11 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!SplashScreen.IsFinished) return; //don't draw until splash screen is done
-		if(!LoadDataLogic.IsDataLoaded) return; //don't draw until all data is loaded
+		//don't draw until splash screen is done
+		if(!SplashScreen.IsFinished) return; 
+		
+		//don't draw until all data is loaded
+		if(!LoadDataLogic.IsDataLoaded) return;
 
 		GUI.skin = defaultSkin;
 		GUI.depth = 1;
@@ -183,6 +175,8 @@ public class RoomGUI : MonoBehaviour {
 		GUI.Label(new Rect(starBarloc.x+starTextOffset.x,starBarloc.y+starTextOffset.y,60,60),starCount,starTextStyle);            
 		
 		//Health Bar
+		//Turns Yellow when health < 60
+		//Turns Red when health < 30
 		GUI.DrawTexture(new Rect(healthBarloc.x,healthBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y,25,70),statBarVerFrame);
 		if(health > 60){
@@ -197,6 +191,7 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
 		
 		//Mood Bar	
+		//Same as health bar
 		GUI.DrawTexture(new Rect(moodBarloc.x,moodBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y,25,70),statBarVerFrame);
 		if(mood > 60){
@@ -211,6 +206,7 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,60,60),moodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
 		//Food Bar
+		//Same as food bar
 		GUI.DrawTexture(new Rect(foodBarloc.x,foodBarloc.y,100,100), statBarTexture);
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y,25,70),statBarVerFrame);
 		if(food > 60){
@@ -225,15 +221,16 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
 		
 		//Extending Button Groups
+		//Includes 4 items/Buttons for now. 
 		menuTextureRect = new Rect(menuRect.rect.x - 600, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
 		GUILayout.BeginHorizontal("");
 		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			DataManager.AddHealth(50);	
+			DataManager.AddHunger(30);	
 		}
 		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			DataManager.SubtractHealth(40);
+			DataManager.AddHealth(10);
 		}
 		
 		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
@@ -243,7 +240,7 @@ public class RoomGUI : MonoBehaviour {
 		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 			emInhalerpicked = true;
 		}
-		
+		//move in/out of item bar	
 		if(isMenuExpanded){
 			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 				isMenuExpanded = false;
@@ -263,7 +260,9 @@ public class RoomGUI : MonoBehaviour {
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
 		
+		//Temp Pick & Drag of items
 		//TODO-w Refactor this somewhere else?
+		//Do this when we create Backpack .etc
 		if(inhalerpicked){
 			textureSwap1 = null; 
 			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),inhalerTexture);
@@ -274,39 +273,42 @@ public class RoomGUI : MonoBehaviour {
 					
 					if(Physics.Raycast(myRay,out hit)){
 						if(hit.collider.name == "SpritePet"){
-							print("You hit pet!");
-							DataManager.AddPoints(1000);	
+							CalendarLogic.RecordGivingInhaler();
 						}
 					}			
 				}
 			}
 		}
-		
 		if(emInhalerpicked){
 			textureSwap2 = null; 
 			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),emInhalerTexture);
 		}
-		
+		//Swap texture to blank when inhaler picked
+		//also temp solution
 		if(Input.GetMouseButtonUp(0)){
 			emInhalerpicked = false;
 			textureSwap1 = inhalerTexture;
 			inhalerpicked = false;
 			textureSwap2 = emInhalerTexture;
 		}
-		
+	
+		//Temp option Menu
 		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
 			showOption = !showOption;
 		}
 		
+		//Temp diagnose Button
 		// TODO-s change this later
 		if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
 			diagnoseGUI.DiagnoseClicked();
 		}
 		
+		//Temp pop out "GREAT"
 		if(GUI.Button(new Rect(optionRect.rect.x - 200,optionRect.rect.y ,90,90), "YAY!")){
 			notificationUIManager.PopupTexture("award", -100, 100, 100, 100, 100);
 		}
-		
+	
+		//Options?
 		if(showOption){
 			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
 		}

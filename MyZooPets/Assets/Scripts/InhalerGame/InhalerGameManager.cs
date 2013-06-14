@@ -26,23 +26,25 @@ public class InhalerGameManager : MonoBehaviour{
     bool noMorePlaysRemaining = false;
 
     public void ResetInhalerGame(){
-        if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not
+        if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
             inhalerGameGUI.RestartProgressBar();
             noMorePlaysRemaining = false;
+            gameEnded = false;
         }
         else {
             noMorePlaysRemaining = true;
             slotMachine.SetActive(false);
+            gameEnded = true;
         }
-        gameEnded = false;
         showPlayAgain = false;
     }
 
     // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
     // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
     void Awake(){
+        inhalerGameGUI = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
         ResetInhalerGame();
     }
     void Start(){
@@ -61,17 +63,19 @@ public class InhalerGameManager : MonoBehaviour{
             int y = 150;
             GUI.Label(new Rect(Screen.width / 2 - x/2, Screen.height / 2 - y/2, x, y), "Come play again tomorrow!");
             if(GUI.Button(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 100), "Quit Game")){
-                // Application.LoadLevel("BedRoom");
-                LoadLevel.Load("BedRoom");
+                QuitInhalerGame();
             }
         }
         else { // draw Quit Button in upper right corner
             if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
-                // Application.LoadLevel("BedRoom");
-                LoadLevel.Load("BedRoom");
+                QuitInhalerGame();
             }
         }
+    }
 
+    void QuitInhalerGame(){
+        inhalerGameGUI.RestartProgressBar();
+        LoadLevel.Load("BedRoom");
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -109,7 +113,6 @@ public class InhalerGameManager : MonoBehaviour{
         // hide slot machine
         slotMachine.SetActive(false);
 
-        inhalerGameGUI = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
 
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){

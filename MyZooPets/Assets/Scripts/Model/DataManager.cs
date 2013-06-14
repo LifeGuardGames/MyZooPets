@@ -295,6 +295,7 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
+            FirstTime = false;
             SerializeGame();
 
             //Debug options

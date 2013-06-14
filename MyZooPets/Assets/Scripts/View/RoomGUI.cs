@@ -144,11 +144,13 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+
 		//don't draw until splash screen is done
 		if(!SplashScreen.IsFinished) return; 
-		
+
 		//don't draw until all data is loaded
 		if(!LoadDataLogic.IsDataLoaded) return;
+
 
 		GUI.skin = defaultSkin;
 		GUI.depth = 1;

@@ -61,12 +61,14 @@ public class InhalerGameManager : MonoBehaviour{
             int y = 150;
             GUI.Label(new Rect(Screen.width / 2 - x/2, Screen.height / 2 - y/2, x, y), "Come play again tomorrow!");
             if(GUI.Button(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 100), "Quit Game")){
-                Application.LoadLevel("BedRoom");
+                // Application.LoadLevel("BedRoom");
+                LoadLevel.Load("BedRoom");
             }
         }
         else { // draw Quit Button in upper right corner
             if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
-                Application.LoadLevel("BedRoom");
+                // Application.LoadLevel("BedRoom");
+                LoadLevel.Load("BedRoom");
             }
         }
 

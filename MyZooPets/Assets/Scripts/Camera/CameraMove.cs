@@ -85,7 +85,8 @@ public class CameraMove : MonoBehaviour{
 		}
 		if(isLoadLevel && (levelToLoad != null)){
 			isLoadLevel = false;
-			Application.LoadLevel(levelToLoad);
+			// Application.LoadLevel(levelToLoad);
+			LoadLevel.Load(levelToLoad);
 		}
 		ClickManager.ReleaseClickLock();
 	}

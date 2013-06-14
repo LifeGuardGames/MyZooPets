@@ -15,7 +15,15 @@ public class LoadDataLogic : MonoBehaviour {
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 
-        IsDataLoaded = false;
+        //check if de serializing data is required or not.
+        //unless it's the first time launching the game, deserialzing is not necessary
+        //because the DataManager already contains all the data. GUI can be initialized
+        //right away without waiting for DataManager
+        if(LoadLevel.lastLevelLoaded != "BedRoom"){
+            InitializeDataForUI(false);
+        }else{
+            IsDataLoaded = false;
+        }
 
         //set callback for datamanager so it knows what to do when data have been
         //initialized or de serialized

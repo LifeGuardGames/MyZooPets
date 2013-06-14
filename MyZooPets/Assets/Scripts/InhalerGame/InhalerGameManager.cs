@@ -10,6 +10,7 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
 
     public GameObject slotMachine;
+    public GameObject inhalerGameGUIObject;
 
     private GameObject advair;
     private GameObject rescue;
@@ -18,12 +19,23 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     private SlotMachineManager slotMachineManager; // component of slotMachine
+    private InhalerGameGUI inhalerGameGUI; // used to reset progress bar
+
     bool gameEnded = false;
     bool showPlayAgain = false;
+    bool noMorePlaysRemaining = false;
 
     public void ResetInhalerGame(){
-        DestroyAndRecreatePrefabs();
-        SetUpInhalerGame();
+        if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not
+            DestroyAndRecreatePrefabs();
+            SetUpInhalerGame();
+            inhalerGameGUI.RestartProgressBar();
+            noMorePlaysRemaining = false;
+        }
+        else {
+            noMorePlaysRemaining = true;
+            slotMachine.SetActive(false);
+        }
         gameEnded = false;
         showPlayAgain = false;
     }
@@ -44,8 +56,18 @@ public class InhalerGameManager : MonoBehaviour{
                 ResetInhalerGame();
             }
         }
-        if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
-            Application.LoadLevel("BedRoom");
+        if (noMorePlaysRemaining){
+            int x = 200;
+            int y = 150;
+            GUI.Label(new Rect(Screen.width / 2 - x/2, Screen.height / 2 - y/2, x, y), "Come play again tomorrow!");
+            if(GUI.Button(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 100), "Quit Game")){
+                Application.LoadLevel("BedRoom");
+            }
+        }
+        else { // draw Quit Button in upper right corner
+            if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
+                Application.LoadLevel("BedRoom");
+            }
         }
 
     }
@@ -84,6 +106,8 @@ public class InhalerGameManager : MonoBehaviour{
         slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
         // hide slot machine
         slotMachine.SetActive(false);
+
+        inhalerGameGUI = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
 
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){

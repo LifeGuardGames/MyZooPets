@@ -23,13 +23,14 @@ public class InhalerGameManager : MonoBehaviour{
     bool noMorePlaysRemaining = false;
 
     public void ResetInhalerGame(){
-        DestroyAndRecreatePrefabs();
         if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not
+            DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
             noMorePlaysRemaining = false;
         }
         else {
             noMorePlaysRemaining = true;
+            slotMachine.SetActive(false);
         }
         gameEnded = false;
         showPlayAgain = false;

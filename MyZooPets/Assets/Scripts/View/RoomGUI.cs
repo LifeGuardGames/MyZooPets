@@ -100,8 +100,6 @@ public class RoomGUI : MonoBehaviour {
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
 	//preset item menu
-//		isMenuExpanded = true;
-//		menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
 		optionLoc = new Vector2(Screen.width/2 - optionMenuTexture.width/2, Screen.height/2 - optionMenuTexture.height/2);
 	}
 	
@@ -240,7 +238,7 @@ public class RoomGUI : MonoBehaviour {
 			DataManager.AddHunger(30);	
 		}
 		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			DataManager.AddHealth(10);
+			DataManager.AddHunger(10);
 		}
 		
 		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
@@ -318,9 +316,17 @@ public class RoomGUI : MonoBehaviour {
 			notificationUIManager.PopupTexture("award", -100, 100, 100, 100, 100);
 		}
 	
-		//Options?
+		//Options menu
 		if(showOption){
 			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
+			if(GUI.Button(new Rect(optionLoc.x,optionLoc.y,50,50),"X"))
+			{
+				showOption = false;
+			}
+			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50,310,100),"Volume");
+			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125,310,100),"Volume");
+			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
+			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 		}
 	}
 }

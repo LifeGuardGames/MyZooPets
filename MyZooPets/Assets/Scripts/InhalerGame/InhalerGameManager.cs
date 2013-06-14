@@ -38,11 +38,16 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void OnGUI(){
+        // Show "Play Again" button after showing (and spinning) slot machine
         if (gameEnded && showPlayAgain){
             if(GUI.Button(new Rect(Screen.width - 120, Screen.height - 120, 100, 100), "Play Again")){
                 ResetInhalerGame();
             }
         }
+        if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
+            Application.LoadLevel("BedRoom");
+        }
+
     }
 
     void DestroyAndRecreatePrefabs(){

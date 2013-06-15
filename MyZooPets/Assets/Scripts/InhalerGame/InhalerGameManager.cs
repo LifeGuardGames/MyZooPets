@@ -75,7 +75,7 @@ public class InhalerGameManager : MonoBehaviour{
 
     void QuitInhalerGame(){
         inhalerGameGUI.RestartProgressBar();
-        LoadLevel.Load("BedRoom");
+        Application.LoadLevel("BedRoom");
     }
 
     void DestroyAndRecreatePrefabs(){

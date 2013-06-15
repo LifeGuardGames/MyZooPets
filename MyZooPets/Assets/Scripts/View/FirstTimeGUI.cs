@@ -75,7 +75,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	
 	void Update(){
 		// Splash finished, Drop down the title and the egg sprite, only called once
-		if(splashScreenAux && SplashScreen.IsFinished){
+		if(splashScreenAux){
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", LeanTweenType.easeInQuad);
 			LeanTween.move(logoRect, new Vector2(Screen.width/2 - logo.width/2, 100f), 0.5f, optional);
@@ -128,9 +128,9 @@ public class FirstTimeGUI : MonoBehaviour {
 		// Spawn pet object
 		GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
 		goPet.name = "SpritePet";
-		
+
 		// Start normal GUI stuff
-		finishHatchCallBack(false);
+		finishHatchCallBack();
 		
 		// Commit seppuku
 		Destroy(eggObject);
@@ -139,7 +139,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		if(!SplashScreen.IsFinished) return;
 		
 		// Proportional scaling
 		if(NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){     
@@ -219,6 +218,6 @@ public class FirstTimeGUI : MonoBehaviour {
 		CameraTransform(initPosition,initFaceDirection);
 	}
 	
-	public delegate void FinishHatchCallBack(bool boolean);
+	public delegate void FinishHatchCallBack();
 	public static FinishHatchCallBack finishHatchCallBack;
 }

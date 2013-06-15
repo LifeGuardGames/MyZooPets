@@ -104,6 +104,9 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void Update(){
+		//don't draw until all data is loaded
+		if(!LoadDataLogic.IsDataLoaded) return;
+		
 		//TOP GUI bar location updates
 		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
 		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
@@ -150,13 +153,8 @@ public class RoomGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-
-		//don't draw until splash screen is done
-		if(!SplashScreen.IsFinished) return; 
-
 		//don't draw until all data is loaded
 		if(!LoadDataLogic.IsDataLoaded) return;
-
 
 		GUI.skin = defaultSkin;
 		GUI.depth = 1;

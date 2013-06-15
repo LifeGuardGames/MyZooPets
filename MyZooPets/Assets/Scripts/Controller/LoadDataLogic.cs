@@ -15,33 +15,22 @@ public class LoadDataLogic : MonoBehaviour {
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 
-        //check if de serializing data is required or not.
-        //unless it's the first time launching the game, deserialzing is not necessary
-        //because the DataManager already contains all the data. GUI can be initialized
-        //right away without waiting for DataManager
-        if(LoadLevel.lastLevelLoaded != "BedRoom"){
-            InitializeDataForUI(false);
-        }else{
-            IsDataLoaded = false;
+        IsDataLoaded = false;
+
+        if(!DataManager.FirstTime){ //if not first time load GUI right away
+            InitializeDataForUI();
+        }else{ //if first time set call back and wait for the hatching animation to finish
+            FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;    
         }
-
-        //set callback for datamanager so it knows what to do when data have been
-        //initialized or de serialized
-        DataManager.dataLoadedCallBack = InitializeDataForUI;
-
-        //set callback for pet hatching so it knows what to do when the pet has been 
-        //hatched
-        FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
     }
 
     //data is ready for use so initialize all UI data
     //True: dont init yet need to wait for pet to hatch, False: init
-    private void InitializeDataForUI(bool firstTime){
-        if(!firstTime){ //init UI only if pet is hatched
-            roomGUIAnimator.Init();
-            diaryUIManager.Init();    
-            evolutionLogic.Init();
-            IsDataLoaded = true;
-        }
+    private void InitializeDataForUI(){
+        if(!DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
+        roomGUIAnimator.Init();
+        diaryUIManager.Init();    
+        evolutionLogic.Init();
+        IsDataLoaded = true;
     }
 }

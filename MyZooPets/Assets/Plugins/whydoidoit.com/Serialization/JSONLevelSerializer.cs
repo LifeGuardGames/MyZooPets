@@ -867,7 +867,8 @@ public static class JSONLevelSerializer
 	                ld = new LevelData()
 	                         {
 	                             //The level to reload
-	                             Name = Application.loadedLevelName
+	                             // Name = Application.loadedLevelName
+                                 Name = "LoadScene"
 	                         };
 	                //All of the currently active uniquely identified objects
 	                ld.StoredObjectNames = UniqueIdentifier

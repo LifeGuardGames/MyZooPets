@@ -9,7 +9,6 @@ using System;
 public class DataManager : MonoBehaviour {
     //========Developer option=============
     public bool removePreviouslySavedData; //delete all from PlayerPrefs
-    public bool skipHatch; 
     private bool loaded = false;
     //=====================================
 
@@ -18,9 +17,9 @@ public class DataManager : MonoBehaviour {
     private static bool firstTime; //is the user playing for the first time
 
     //delegate is called when DataManager is finished initializing data for the first time
-    //or deserializing previously saved data
-    public delegate void DataLoadedCallBack(bool firstTime);
-    public static DataLoadedCallBack dataLoadedCallBack;
+    // //or deserializing previously saved data
+    // public delegate void DataLoadedCallBack(bool firstTime);
+    // public static DataLoadedCallBack dataLoadedCallBack;
 
     //==========SaveData============
     //pet info
@@ -93,7 +92,10 @@ public class DataManager : MonoBehaviour {
     }
 
     //First Time. use this to know if user is player game for the first time
-    public static bool FirstTime{get; set;}
+    public static bool FirstTime{
+        get {return firstTime;}
+        set {firstTime = value;}
+    }
 
     //Stats
     public static int Points{
@@ -241,14 +243,6 @@ public class DataManager : MonoBehaviour {
         if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
-
-        // debug option
-        if(skipHatch && firstTime){ //first time but skip hatching
-            FirstTime = false;
-        }else if(firstTime){ //first time not skipping hatching
-            FirstTime = true;            
-        }
-        // Debug.Log("first time: " + firstTime);
         
     }
 
@@ -295,16 +289,9 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-            FirstTime = false;
             SerializeGame();
 
-            //Debug options
-            if(skipHatch){ //skip hatch so load GUI right away
-                dataLoaded(false);
-            }else{ //not skipping hatch so GUI waits for hatching to finish
-                dataLoaded(true);
-            }
-                
+            DataLoaded(); 
         }else{ //load saved data
             if(!loaded){
                 loaded = true;
@@ -317,23 +304,22 @@ public class DataManager : MonoBehaviour {
     }
 
     //call the delegate when data initialization or deserialziation is done
-    private void dataLoaded(bool firstTime){
-        if(dataLoadedCallBack != null){
-            dataLoadedCallBack(firstTime);
-        }
+    private void DataLoaded(){
+        Application.LoadLevel("BedRoom");
     }
 
     //serialize data into byte array and store locally in PlayerPrefs
     private void SerializeGame(){
         PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-        // Debug.Log("serialized");
+        print(JSONLevelSerializer.SerializeLevel());
     }
 
     //called when level data are loaded
     void OnDeserialized(){
-        dataLoaded(false);
+        DataLoaded();
     }
 
+    //serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
         if(paused){
             SerializeGame();

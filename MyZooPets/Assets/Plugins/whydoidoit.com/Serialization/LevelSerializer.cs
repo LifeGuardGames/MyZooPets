@@ -904,7 +904,8 @@ public static class LevelSerializer
                 ld = new LevelData()
                          {
                              //The level to reload
-                             Name = Application.loadedLevelName,
+                             // Name = Application.loadedLevelName,
+                             Name = "LoadScene",
 					         rootObject = string.IsNullOrEmpty(id) ? null : id
 					   
                          };

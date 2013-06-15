@@ -309,7 +309,7 @@ public class DataManager : MonoBehaviour {
     }
 
     //serialize data into byte array and store locally in PlayerPrefs
-    private void SerializeGame(){
+    private static void SerializeGame(){
         PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
         print(JSONLevelSerializer.SerializeLevel());
     }

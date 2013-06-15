@@ -27,7 +27,7 @@ public class LoadDataLogic : MonoBehaviour {
     //data is ready for use so initialize all UI data
     //True: dont init yet need to wait for pet to hatch, False: init
     private void InitializeDataForUI(){
-        if(!DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
+        if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
         roomGUIAnimator.Init();
         diaryUIManager.Init();    
         evolutionLogic.Init();

@@ -149,6 +149,7 @@ public static class CalendarLogic{
         }
     }
 
+    //generate the entries during the days that the user didn't play the game
     private static void GenerateMissedEntries(DateTime now){
         TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
         int missedDays = sinceLastPlayed.Days - 1; //don't consider today's entry until the very end
@@ -189,6 +190,7 @@ public static class CalendarLogic{
         return new CalendarEntry(day, morning, afternoon);
     }
 
+    //generate entry for today. no special conditions here
     private static void GenerateEntry(DateTime now){
         DayOfWeek day = GetDay(now);
         CalendarEntry newEntry = new CalendarEntry(day);
@@ -210,6 +212,7 @@ public static class CalendarLogic{
     //********************************************
     // calculation methods
 
+    //look at the entry today and calculate the combo and points
     private static void CalculateScoreForToday(DateTime now){
         // if morning, only morning dosage is generated
         if (now.Hour < 12){
@@ -304,6 +307,7 @@ public static class CalendarLogic{
         return day.DayOfWeek;
     }
 
+    //decide if the dosage record of an entry is hit or miss depending on the missPercentage
     private static DosageRecord GetHitOrMiss(int missPercentage){
         int chance = rand.Next(100);
         if (chance < missPercentage){

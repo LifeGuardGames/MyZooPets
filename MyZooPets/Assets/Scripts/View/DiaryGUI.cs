@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//TODO-s Rename this to DiaryGUI?
-public class DiaryUIManager : MonoBehaviour {
+public class DiaryGUI : MonoBehaviour {
 	
 	public GameObject cameraMoveObject;
 	public GameObject roomGuiObject;
@@ -59,11 +58,11 @@ public class DiaryUIManager : MonoBehaviour {
 			cameraMove.PetSideZoomToggle();
 			roomGui.HideGUIs(false, true, true, true);
 			showGUI = false;
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", LeanTweenType.easeInOutQuad);
 		
 			CalendarLogic.CalendarOpened();
 			if(!showGUI){
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeInOutQuad);
 				LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
 			}
 		}

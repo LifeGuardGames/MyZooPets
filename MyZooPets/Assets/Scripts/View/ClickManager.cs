@@ -15,7 +15,7 @@ public class ClickManager : MonoBehaviour {
 	
 	// All the classes that need a click input go here
 	public GameObject diaryUIManagerObject;
-	private DiaryUIManager diaryUIManager;
+	private DiaryGUI diaryUIManager;
 	
 	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;
@@ -39,7 +39,7 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 		
 		// Linking script references
-		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryUIManager>();
+		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 	}

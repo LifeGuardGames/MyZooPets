@@ -120,12 +120,16 @@ public class InhalerGameManager : MonoBehaviour{
         if (!slotMachineManager.SpinWhenReady()){
             showPlayAgain = true;
         }
-        else {
+        else { // if spinning
             slotMachineManager.doneWithSpinningCallBack = FinishedSpinning;
         }
     }
 
     void FinishedSpinning(){
         showPlayAgain = true;
+        if (slotMachineManager.CheckMatch()){
+            // todo: change later
+            DataManager.AddPoints(100);
+        }
     }
 }

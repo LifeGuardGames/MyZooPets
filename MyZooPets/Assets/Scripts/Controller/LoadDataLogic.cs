@@ -6,13 +6,13 @@ using System.Collections;
 //to provide an event based callback
 public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
-    private DiaryUIManager diaryUIManager; //reference to UI
+    private DiaryGUI diaryUIManager; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
 
     void Awake(){
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
-        diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryUIManager>();
+        diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 
         IsDataLoaded = false;

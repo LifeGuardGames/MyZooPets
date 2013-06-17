@@ -2,9 +2,20 @@ using UnityEngine;
 using System.Collections;
 
 public class RescueShaker : MonoBehaviour {
+
+    public Texture2D statBarTexture;
+    public Texture2D statBarVerFrame;
+    public Texture2D statBarVerFillGreen;
+
+    // native dimensions
+    private const float NATIVE_WIDTH = 1280.0f;
+    private const float NATIVE_HEIGHT = 800.0f;
+
+    private Vector2 shakeBarOffset = new Vector2(60, 15);
+    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2);
+
     float shakeValue = 0f;
-    float shakeIncrement = 0.5f;
-    float shakeTarget = 10f;
+    float shakeTarget = 1f;
 
     void Start(){
         renderer.enabled = false;
@@ -20,7 +31,7 @@ public class RescueShaker : MonoBehaviour {
             Touch touch = Input.GetTouch(0);
             if (isTouchingObject(touch)){
                 if (touch.phase == TouchPhase.Moved){
-                    shakeValue += shakeIncrement;
+                    shakeValue += Time.deltaTime;
                 }
             }
         }
@@ -35,6 +46,22 @@ public class RescueShaker : MonoBehaviour {
                 renderer.enabled = false;
             }
         }
+    }
+
+    void OnGUI(){
+        if (InhalerLogic.CurrentStep != 2){
+            return;
+        }
+        if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
+            float horizRatio = Screen.width/NATIVE_WIDTH;
+            float vertRatio = Screen.height/NATIVE_HEIGHT;
+            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
+        }
+
+        GUI.DrawTexture(new Rect(shakeBarloc.x,shakeBarloc.y,100,100), statBarTexture);
+        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y,25,70),statBarVerFrame);
+        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y+(70-70*shakeValue/shakeTarget),25, 70 * Mathf.Clamp01(shakeValue/shakeTarget)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
+        // GUI.DrawTexture(new Rect(shakeBarloc.x + healthIconOffset.x,shakeBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
 
     }
 

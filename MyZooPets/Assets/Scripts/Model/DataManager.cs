@@ -9,6 +9,7 @@ using System;
 public class DataManager : MonoBehaviour {
     //========Developer option=============
     public bool removePreviouslySavedData; //delete all from PlayerPrefs
+    public bool isDebug = false; //turn isDebug to true if working on independent scene
     private bool loaded = false;
     //=====================================
 
@@ -247,8 +248,29 @@ public class DataManager : MonoBehaviour {
     }
 
     void Start(){
-        if (firstTime){
-            //Evolution data initialization
+        if(isDebug){ //debug for independent scene. only initialize data no 
+                    //serialization or scene loading
+            InitializeAllDataFirstTime();
+        }else{
+            if (firstTime){ //first time data initialization logic
+                InitializeAllDataFirstTime();
+                SerializeGame();
+                DataLoaded(); 
+            }else{ //load saved data
+                if(!loaded){
+                    loaded = true;
+                    string data = PlayerPrefs.GetString("_SAVE_GAME_","");
+                    if(!string.IsNullOrEmpty(data)){
+                        LevelSerializer.LoadSavedLevel(data);
+                    }
+                }
+            }
+        }
+    }
+
+    //initialize all data for the first time
+    private void InitializeAllDataFirstTime(){
+        //Evolution data initialization
             lastUpdatedTime = DateTime.Now;
             durationCum = new TimeSpan(0,0,10);
             lastEvoMeter = 90;
@@ -289,18 +311,6 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-            SerializeGame();
-
-            DataLoaded(); 
-        }else{ //load saved data
-            if(!loaded){
-                loaded = true;
-                string data = PlayerPrefs.GetString("_SAVE_GAME_","");
-                if(!string.IsNullOrEmpty(data)){
-                    LevelSerializer.LoadSavedLevel(data);
-                }
-            }
-        }
     }
 
     //call the delegate when data initialization or deserialziation is done

@@ -6,7 +6,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	// Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	
+
 	public GUIStyle inhalerStyle;
 	public Texture2D circleGray;
 	public Texture2D circleRed;
@@ -25,6 +25,8 @@ public class InhalerGameGUI : MonoBehaviour {
 	private bool[] boolList;		// List to keep track of current state rendering
 	private bool isUpdating = false;
 
+    public InhalerGameManager inhalerGameManager;
+
 	void Start(){
 		RestartProgressBar();
 	}
@@ -37,7 +39,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		if(numberOfNodes < 2){
 			Debug.LogError("Number of nodes cannot be less than 2");
 		}
-		pos = new Vector2(Screen.width/2 - size.x/2, 700);
+		pos = new Vector2(NATIVE_WIDTH/2 - size.x/2, 700);
 		currentNode = 0;
 
 		segmentChunkPx = size.x / numberOfNodes;
@@ -108,7 +110,32 @@ public class InhalerGameGUI : MonoBehaviour {
 			}
 			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx) + 30, 682, circleGray.width, circleGray.height), i.ToString(), inhalerStyle);
 		}
+
+		// Show "Play Again" button after showing (and spinning) slot machine
+        if (inhalerGameManager.gameEnded && inhalerGameManager.showPlayAgain){
+            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, NATIVE_HEIGHT - 120, 100, 100), "Play Again")){
+                inhalerGameManager.ResetInhalerGame();
+            }
+        }
+        if (inhalerGameManager.noMorePlaysRemaining){
+            int x = 200;
+            int y = 150;
+            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");
+            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 - 50, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
+                QuitInhalerGame();
+            }
+        }
+        else { // draw Quit Button in upper right corner
+            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Quit Game")){
+            	QuitInhalerGame();
+            }
+        }
 	}
+
+	void QuitInhalerGame(){
+        RestartProgressBar();
+        Application.LoadLevel("BedRoom");
+    }
 
 	public void UpdateBar(){
 		if(currentNode < numberOfNodes){

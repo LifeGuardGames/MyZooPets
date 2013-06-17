@@ -21,9 +21,10 @@ public class InhalerGameManager : MonoBehaviour{
     private SlotMachineManager slotMachineManager; // component of slotMachine
     private InhalerGameGUI inhalerGameGUI; // used to reset progress bar
 
-    bool gameEnded = false;
-    bool showPlayAgain = false;
-    bool noMorePlaysRemaining = false;
+    // todo: create accessors
+    public bool gameEnded = false;
+    public bool showPlayAgain = false;
+    public bool noMorePlaysRemaining = false;
 
     public void ResetInhalerGame(){
         if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not (any more plays remaining today)
@@ -49,33 +50,6 @@ public class InhalerGameManager : MonoBehaviour{
     }
     void Start(){
 
-    }
-
-    void OnGUI(){
-        // Show "Play Again" button after showing (and spinning) slot machine
-        if (gameEnded && showPlayAgain){
-            if(GUI.Button(new Rect(Screen.width - 120, Screen.height - 120, 100, 100), "Play Again")){
-                ResetInhalerGame();
-            }
-        }
-        if (noMorePlaysRemaining){
-            int x = 200;
-            int y = 150;
-            GUI.Label(new Rect(Screen.width / 2 - x/2, Screen.height / 2 - y/2, x, y), "Come play again tomorrow!");
-            if(GUI.Button(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 100), "Quit Game")){
-                QuitInhalerGame();
-            }
-        }
-        else { // draw Quit Button in upper right corner
-            if(GUI.Button(new Rect(Screen.width - 120, 10, 100, 100), "Quit Game")){
-                QuitInhalerGame();
-            }
-        }
-    }
-
-    void QuitInhalerGame(){
-        inhalerGameGUI.RestartProgressBar();
-        Application.LoadLevel("BedRoom");
     }
 
     void DestroyAndRecreatePrefabs(){

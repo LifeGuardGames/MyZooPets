@@ -17,10 +17,10 @@ public class SlotMachineManager : MonoBehaviour {
             counter++;
        }
     }
-    
+
 	// Use this for initialization
 	void Start () {
-       
+
 	}
 
 	// Update is called once per frame
@@ -71,7 +71,7 @@ public class SlotMachineManager : MonoBehaviour {
     }
 
     //check if the slots are 3 in a row
-    private bool CheckMatch(){
+    public bool CheckMatch(){
         return slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2];
     }
 

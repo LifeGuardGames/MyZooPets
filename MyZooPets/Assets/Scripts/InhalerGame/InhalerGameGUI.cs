@@ -31,11 +31,9 @@ public class InhalerGameGUI : MonoBehaviour {
     public GameObject slotMachine;
     NotificationUIManager notificationUIManager;
     public InhalerGameManager inhalerGameManager;
-    private SlotMachineManager slotMachineManager; // component of slotMachine
 
 	void Start(){
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
-        slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
 
 		RestartProgressBar();
 	}

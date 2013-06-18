@@ -26,7 +26,11 @@ public class ClickManager : MonoBehaviour {
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 	
+	private int touchCounter;
+	
 	void Start(){
+	
+		touchCounter = 0;
 		if(Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer){
 			isMobilePlatform = true;
@@ -48,9 +52,9 @@ public class ClickManager : MonoBehaviour {
 		//Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){
+				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
 				if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Ended) || !isMobilePlatform){
-					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-					RaycastHit hit;
 					if(Physics.Raycast(myRay,out hit)){
 						//Debug.Log(hit.collider.name);
 						if(hit.collider.name == "room_shelf"){
@@ -68,6 +72,22 @@ public class ClickManager : MonoBehaviour {
 							ClickLock();
 							ModeLock();
 						}
+						else if(hit.collider.name == "petHead"){
+							print("heat poke");
+						}
+						else if(hit.collider.name == "petBody"){
+							print ("body touched");
+						}
+					}
+				}
+				else if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Moved) || !isMobilePlatform){
+					if(Physics.Raycast(myRay, out hit)){
+						if(hit.collider.name == "petBody"){
+							touchCounter++;	
+						}
+					}
+					if(touchCounter > 3){
+						print("Swiping Body!");
 					}
 				}
 			}

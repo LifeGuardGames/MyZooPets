@@ -25,24 +25,8 @@ public class ClickManager : MonoBehaviour {
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-	private int touchCounter;
-	
-=======
 
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
-=======
-
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
-=======
-
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 	void Start(){
-	
-		touchCounter = 0;
 		if(Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer){
 			isMobilePlatform = true;
@@ -64,9 +48,9 @@ public class ClickManager : MonoBehaviour {
 		//Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){
-				Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
 				if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Ended) || !isMobilePlatform){
+					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
 					if(Physics.Raycast(myRay,out hit)){
 						//Debug.Log(hit.collider.name);
 						if(hit.collider.name == "room_shelf"){
@@ -84,30 +68,6 @@ public class ClickManager : MonoBehaviour {
 							ClickLock();
 							ModeLock();
 						}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-						else if(hit.collider.name == "petHead"){
-							print("heat poke");
-						}
-						else if(hit.collider.name == "petBody"){
-							print ("body touched");
-						}
-					}
-				}
-				else if(isMobilePlatform && (Input.GetTouch(0).phase == TouchPhase.Moved) || !isMobilePlatform){
-					if(Physics.Raycast(myRay, out hit)){
-						if(hit.collider.name == "petBody"){
-							touchCounter++;	
-						}
-					}
-					if(touchCounter > 3){
-						print("Swiping Body!");
-=======
-=======
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
-=======
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 						else if(hit.collider.name == "PetHead"){
 							// todo
 							print("Pet Head");
@@ -120,13 +80,6 @@ public class ClickManager : MonoBehaviour {
 							// ClickLock();
 							// ModeLock();
 						}
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
-=======
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
-=======
->>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 					}
 				}
 			}

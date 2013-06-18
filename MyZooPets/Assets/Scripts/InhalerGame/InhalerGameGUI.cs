@@ -25,9 +25,20 @@ public class InhalerGameGUI : MonoBehaviour {
 	private bool[] boolList;		// List to keep track of current state rendering
 	private bool isUpdating = false;
 
+	private bool showComeAgainMessage = false;
+	private bool showButtons = true;
+
+    public GameObject slotMachine;
+    NotificationUIManager notificationUIManager;
     public InhalerGameManager inhalerGameManager;
+    private SlotMachineManager slotMachineManager; // component of slotMachine
 
 	void Start(){
+        notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
+        slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
+        slotMachineManager.startSpinningCallBack = HideButtons;
+        slotMachineManager.onSpinEndOrNoSpinCallBack = ResetGame;
+
 		RestartProgressBar();
 	}
 
@@ -47,6 +58,28 @@ public class InhalerGameGUI : MonoBehaviour {
 		boolList = new bool[numberOfNodes];
 		for(int i = 0; i < numberOfNodes; i++){
 			boolList[i] = false;
+		}
+
+		GetPlayableStatus();
+	}
+
+	void HideButtons(){
+		showButtons = false;
+	}
+	void ResetGame(){
+		showButtons = true;
+		inhalerGameManager.showPlayAgain = true;
+	}
+
+	public void OnGameComplete(){
+		notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
+
+		inhalerGameManager.OnGameEnd();
+	}
+
+	void GetPlayableStatus(){
+		if (!InhalerLogic.HasPlaysRemaining()){
+			showComeAgainMessage = true;
 		}
 	}
 
@@ -111,25 +144,29 @@ public class InhalerGameGUI : MonoBehaviour {
 			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx) + 30, 682, circleGray.width, circleGray.height), i.ToString(), inhalerStyle);
 		}
 
-		// Show "Play Again" button after showing (and spinning) slot machine
-        if (inhalerGameManager.gameEnded && inhalerGameManager.showPlayAgain){
-            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, NATIVE_HEIGHT - 120, 100, 100), "Play Again")){
-                inhalerGameManager.ResetInhalerGame();
-            }
-        }
-        if (inhalerGameManager.noMorePlaysRemaining){
-            int x = 200;
-            int y = 150;
-            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");
-            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 - 50, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
-                QuitInhalerGame();
-            }
-        }
-        else { // draw Quit Button in upper right corner
-            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Quit Game")){
-            	QuitInhalerGame();
-            }
-        }
+		if (showButtons){
+			// Show "Play Again" button after showing (and spinning) slot machine
+	        if (inhalerGameManager.gameEnded && inhalerGameManager.showPlayAgain){
+	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, NATIVE_HEIGHT - 120, 100, 100), "Play Again")){
+	                inhalerGameManager.ResetInhalerGame();
+	                RestartProgressBar();
+	            }
+	        }
+	        if (showComeAgainMessage) {
+	            int x = 200;
+	            int y = 150;
+	            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 - 50, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
+	                QuitInhalerGame();
+	            }
+	        }
+	        else {
+	        	// draw Quit Button in upper right corner
+	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Quit Game")){
+	            	QuitInhalerGame();
+	            }
+	        }
+		}
 	}
 
 	void QuitInhalerGame(){

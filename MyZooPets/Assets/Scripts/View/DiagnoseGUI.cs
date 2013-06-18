@@ -9,26 +9,63 @@ public class DiagnoseGUI : MonoBehaviour {
 	public GameObject roomGuiObject;
 	private RoomGUI roomGui;
 	
-	private bool isActive = false;
+	public GameObject diaryGuiObject;
+	private DiaryGUI diaryGui;
 	
 	public GUISkin defaultSkin;
+	private bool isActive = false;
 	
-	void Start () {
-		roomGui = roomGuiObject.GetComponent<RoomGUI>();
+	public Texture2D txPanel;
+	public Texture2D txCheck;
+	public Texture2D txHappy;
+	public Texture2D txNeutral;
+	public Texture2D txSad;
+	
+	private LTRect diagnoseRect;
+	private Vector2 diagnoseInitPosition;
+	private Vector2 diagnoseFinalPosition;
+	
+	void Start(){
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+		roomGui = roomGuiObject.GetComponent<RoomGUI>();
+		diaryGui = roomGuiObject.GetComponent<DiaryGUI>();
+		
+		diagnoseInitPosition = new Vector2(1300, 100);
+		diagnoseFinalPosition = new Vector2(Screen.width/2, 100);
+		diagnoseRect = new LTRect(diagnoseInitPosition.x, diagnoseInitPosition.y, 611, 611);
 	}
 	
-	void Update () {
+	void Update(){
 	
 	}
 	
 	void OnGUI(){
-		GUI.skin = defaultSkin;
 		if(isActive){
+			GUI.skin = defaultSkin;
+			
+			GUI.DrawTexture(diagnoseRect.rect, txPanel);
+			
+			if(GUI.Button(new Rect(diagnoseRect.rect.x + 10, diagnoseRect.rect.y + 200, 190, 190), txHappy)){
+				
+			}
+			if(GUI.Button(new Rect(diagnoseRect.rect.x + 210, diagnoseRect.rect.y + 200, 190, 190), txNeutral)){
+				
+			}
+			if(GUI.Button(new Rect(diagnoseRect.rect.x + 410, diagnoseRect.rect.y + 200, 190, 190), txSad)){
+				
+			}
+			if(GUI.Button(new Rect(diagnoseRect.rect.x + 390, diagnoseRect.rect.y + 437, 200, 153), txCheck)){
+
+			}
+			
 			if(GUI.Button(new Rect(10, 10, 100, 100), "X")){
 				cameraMove.PetSideZoomToggle();
 				roomGui.ShowGUIs();	
 				isActive = false;
+				
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeInOutQuad);
+				LeanTween.move(diagnoseRect, diagnoseInitPosition, 0.5f, optional);
 			}
 		}
 	}
@@ -40,6 +77,10 @@ public class DiagnoseGUI : MonoBehaviour {
 			ClickManager.ModeLock();
 			cameraMove.PetSideZoomToggle();
 			roomGui.HideGUIs(true, true, true, true);
+			
+			Hashtable optional = new Hashtable();
+			optional.Add("ease", LeanTweenType.easeInOutQuad);
+			LeanTween.move(diagnoseRect, diagnoseFinalPosition, 0.5f, optional);
 		}
 	}
 }

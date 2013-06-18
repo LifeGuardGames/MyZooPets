@@ -24,5 +24,8 @@ public class SeansButtons : MonoBehaviour {
 		if(GUI.Button(new Rect(120, 10, 100, 100), "WAPOWWW")){
 			//igg.IncreaseBar();
 		}
+		if(GUI.Button(new Rect(230, 10, 100, 100), "CHACHING")){
+			//igg.IncreaseBar();
+		}
 	}
 }

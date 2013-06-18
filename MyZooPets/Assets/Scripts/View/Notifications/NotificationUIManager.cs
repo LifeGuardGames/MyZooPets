@@ -12,6 +12,7 @@ public class NotificationUIManager : MonoBehaviour {
 
 	public GameObject popupTextureGreat;
 	public GameObject popupAward;
+	public GameObject popupSpeech;
 
 	public bool flipped;
 		
@@ -45,5 +46,9 @@ public class NotificationUIManager : MonoBehaviour {
 			}
 			Destroy(go2, 3.0f);
 		}
+	}
+	
+	public void PopupSpeechBubble(){
+		
 	}
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-//InhalerLogic stores and manipulate any inhaler game related data 
+//InhalerLogic stores and manipulate any inhaler game related data
 public static class InhalerLogic{
     //variables
     // currentInhalerSkin;
@@ -60,6 +60,10 @@ public static class InhalerLogic{
         return DataManager.NumberOfTimesLeft != 0;
     }
 
+    public static bool HasPlaysRemaining(){
+        return DataManager.NumberOfTimesLeft != 0;
+    }
+
     //True: the step that the user is currently on is correct, False: wrong step
     public static bool IsCurrentStepCorrect(int step){
         return step == currentStep;
@@ -73,7 +77,7 @@ public static class InhalerLogic{
 
         if(currentInhalerType == InhalerType.Advair && currentStep == 6){
             retVal = true; //end of the sequence
-    
+
         } else if(currentInhalerType == InhalerType.Rescue && currentStep == 7){
             retVal = true; //end of the sequence
         }

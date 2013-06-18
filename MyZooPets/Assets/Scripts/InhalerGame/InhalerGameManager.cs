@@ -20,19 +20,18 @@ public class InhalerGameManager : MonoBehaviour{
     private SlotMachineManager slotMachineManager; // component of slotMachine
 
     // todo: create accessors
-    public bool gameEnded = false; // no more plays remaining
     public bool showPlayAgain = false;
+    public bool gameEnded = false;
 
     public void ResetInhalerGame(){
         if (InhalerLogic.HasPlaysRemaining()){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
-            gameEnded = false;
         }
         else {
             slotMachine.SetActive(false);
-            gameEnded = true;
         }
+        gameEnded = false;
         showPlayAgain = false;
     }
 
@@ -93,27 +92,17 @@ public class InhalerGameManager : MonoBehaviour{
         smallRescue.SetActive(false);
     }
 
-    void Update(){
-        if (!gameEnded){
-            if (InhalerLogic.IsDoneWithGame()){ // if done with game
-                gameEnded = true;
-                InhalerLogic.ResetGame(); // call this before showing the slots
-                // ShowSlotMachine();
-                InvokeSlotMachine();
-                // InhalerLogic.Init();
-            }
+    public void OnGameEnd(){
+        if (InhalerLogic.IsDoneWithGame()){ // if done with game
+            gameEnded = true;
+            InhalerLogic.ResetGame(); // call this before showing the slots
+            Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
         }
-    }
-
-    void InvokeSlotMachine(){
-        Invoke("ShowSlotMachine", 3);
     }
 
     void ShowSlotMachine(){
         slotMachine.SetActive(true);
-        if (!slotMachineManager.SpinWhenReady()){ // not spinning
-            showPlayAgain = true;
-        }
+        slotMachineManager.SpinWhenReady();
     }
 
     void FinishedSpinning(){

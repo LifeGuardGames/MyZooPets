@@ -77,7 +77,8 @@ public class SlotMachineManager : MonoBehaviour {
 
     //check if the slots are 3 in a row
     public bool CheckMatch(){
-        return slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2];
+        return ((InhalerLogic.GetSlotMachineCount == 3) &&
+            (slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2]));
     }
 
     //Notify other classes that the spinning are finished

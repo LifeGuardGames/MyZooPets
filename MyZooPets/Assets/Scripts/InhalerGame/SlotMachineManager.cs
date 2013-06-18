@@ -12,10 +12,10 @@ public class SlotMachineManager : MonoBehaviour {
 
     void Awake(){
         int counter = 0;
-       foreach(Transform wheel in transform){
+        foreach(Transform wheel in transform){
             wheels[counter] = wheel;
             counter++;
-       }
+        }
     }
 
 	// Use this for initialization

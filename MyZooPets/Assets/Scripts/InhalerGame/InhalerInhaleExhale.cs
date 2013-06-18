@@ -9,10 +9,10 @@ public class InhalerInhaleExhale : MonoBehaviour {
     bool completedGame = false;
     bool pointingUp = false;
     int breathingInStep;
-    NotificationUIManager notificationUIManager;
+    InhalerGameGUI inhalerGameGUI;
 	// Use this for initialization
 	void Start () {
-        notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
+        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
         arrows = GetComponent<tk2dAnimatedSprite>();
         renderer.enabled = false;
 
@@ -66,7 +66,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
                         Debug.Log("Completed step" + breathingInStep);
                         completedGame = true;
-                        notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
+                        inhalerGameGUI.OnGameComplete();
                         renderer.enabled = false;
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();

@@ -10,7 +10,6 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
 
     public GameObject slotMachine;
-    public GameObject inhalerGameGUIObject;
 
     private GameObject advair;
     private GameObject rescue;
@@ -19,23 +18,18 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     private SlotMachineManager slotMachineManager; // component of slotMachine
-    private InhalerGameGUI inhalerGameGUI; // used to reset progress bar
 
     // todo: create accessors
-    public bool gameEnded = false;
+    public bool gameEnded = false; // no more plays remaining
     public bool showPlayAgain = false;
-    public bool noMorePlaysRemaining = false;
 
     public void ResetInhalerGame(){
-        if (InhalerLogic.PlayGame()){ // tells us if we can play the game or not (any more plays remaining today)
+        if (InhalerLogic.HasPlaysRemaining()){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
-            inhalerGameGUI.RestartProgressBar();
-            noMorePlaysRemaining = false;
             gameEnded = false;
         }
         else {
-            noMorePlaysRemaining = true;
             slotMachine.SetActive(false);
             gameEnded = true;
         }
@@ -45,11 +39,11 @@ public class InhalerGameManager : MonoBehaviour{
     // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
     // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
     void Awake(){
-        inhalerGameGUI = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
         ResetInhalerGame();
     }
     void Start(){
 
+        slotMachineManager.onSpinEndCallBack = FinishedSpinning;
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -117,11 +111,8 @@ public class InhalerGameManager : MonoBehaviour{
 
     void ShowSlotMachine(){
         slotMachine.SetActive(true);
-        if (!slotMachineManager.SpinWhenReady()){
+        if (!slotMachineManager.SpinWhenReady()){ // not spinning
             showPlayAgain = true;
-        }
-        else { // if spinning
-            slotMachineManager.doneWithSpinningCallBack = FinishedSpinning;
         }
     }
 

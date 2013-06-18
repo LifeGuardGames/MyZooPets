@@ -18,6 +18,7 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     private SlotMachineManager slotMachineManager; // component of slotMachine
+    InhalerGameGUI inhalerGameGUI;
 
     // todo: create accessors
     public bool showPlayAgain = false;
@@ -42,7 +43,8 @@ public class InhalerGameManager : MonoBehaviour{
     }
     void Start(){
 
-        slotMachineManager.onSpinEndCallBack = FinishedSpinning;
+        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
+        slotMachineManager.SpinEndCallBack = FinishedSpinning;
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -94,8 +96,10 @@ public class InhalerGameManager : MonoBehaviour{
 
     public void OnGameEnd(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
+            inhalerGameGUI.DisplayMessage();
             gameEnded = true;
             InhalerLogic.ResetGame(); // call this before showing the slots
+            inhalerGameGUI.HideButtons();
             Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
@@ -107,6 +111,7 @@ public class InhalerGameManager : MonoBehaviour{
 
     void FinishedSpinning(){
         showPlayAgain = true;
+        inhalerGameGUI.ShowButtons();
         if (slotMachineManager.CheckMatch()){
             // todo: change later
             DataManager.AddPoints(100);

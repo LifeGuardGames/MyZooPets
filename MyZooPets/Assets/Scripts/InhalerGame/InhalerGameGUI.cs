@@ -31,13 +31,9 @@ public class InhalerGameGUI : MonoBehaviour {
     public GameObject slotMachine;
     NotificationUIManager notificationUIManager;
     public InhalerGameManager inhalerGameManager;
-    private SlotMachineManager slotMachineManager; // component of slotMachine
 
 	void Start(){
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
-        slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
-        slotMachineManager.startSpinningCallBack = HideButtons;
-        slotMachineManager.onSpinEndOrNoSpinCallBack = ResetGame;
 
 		RestartProgressBar();
 	}
@@ -63,18 +59,15 @@ public class InhalerGameGUI : MonoBehaviour {
 		GetPlayableStatus();
 	}
 
-	void HideButtons(){
+	public void HideButtons(){
 		showButtons = false;
 	}
-	void ResetGame(){
+	public void ShowButtons(){
 		showButtons = true;
-		inhalerGameManager.showPlayAgain = true;
 	}
 
-	public void OnGameComplete(){
+	public void DisplayMessage(){
 		notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
-
-		inhalerGameManager.OnGameEnd();
 	}
 
 	void GetPlayableStatus(){

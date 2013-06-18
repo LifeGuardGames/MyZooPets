@@ -65,12 +65,12 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     // if it is, increment InhalerLogic.CurrentStep
                     if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
                         Debug.Log("Completed step" + breathingInStep);
-                        completedGame = true;
-                        inhalerGameGUI.OnGameComplete();
-                        renderer.enabled = false;
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
                         }
+                        completedGame = true;
+                        inhalerGameGUI.OnGameComplete();
+                        renderer.enabled = false;
                     }
                 }
             }

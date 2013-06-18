@@ -27,9 +27,13 @@ public class ClickManager : MonoBehaviour {
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	private int touchCounter;
 	
+=======
+
+>>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 =======
 
 >>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
@@ -82,6 +86,7 @@ public class ClickManager : MonoBehaviour {
 						}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 						else if(hit.collider.name == "petHead"){
 							print("heat poke");
 						}
@@ -101,6 +106,8 @@ public class ClickManager : MonoBehaviour {
 =======
 =======
 >>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
+=======
+>>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 						else if(hit.collider.name == "PetHead"){
 							// todo
 							print("Pet Head");
@@ -114,6 +121,9 @@ public class ClickManager : MonoBehaviour {
 							// ModeLock();
 						}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
+=======
 >>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9
 =======
 >>>>>>> 30ceccf7ebfe124c47b186f0bc6a23eeb0700fa9

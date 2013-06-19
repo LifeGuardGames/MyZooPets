@@ -19,7 +19,7 @@ public class RescueShaker : MonoBehaviour {
     public RescueBody rescueBody;
 
     void Start(){
-        renderer.enabled = false;
+        Disable();
         // set in InhalerGameManager.DestroyAndRecreatePrefabs()
         // rescueBody = GameObject.Find("RescueBody").GetComponent<RescueBody>();
     }
@@ -28,7 +28,7 @@ public class RescueShaker : MonoBehaviour {
         if (InhalerLogic.CurrentStep != 2){
             return;
         }
-        renderer.enabled = true;
+        Enable();
 
         if(Input.touchCount > 0){
             Touch touch = Input.GetTouch(0);
@@ -47,7 +47,7 @@ public class RescueShaker : MonoBehaviour {
                 if (!InhalerLogic.IsDoneWithGame()){
                     InhalerLogic.NextStep();
                 }
-                renderer.enabled = false;
+                Disable();
             }
         }
     }
@@ -67,6 +67,16 @@ public class RescueShaker : MonoBehaviour {
         GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y+(70-70*shakeValue/shakeTarget),25, 70 * Mathf.Clamp01(shakeValue/shakeTarget)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
         // GUI.DrawTexture(new Rect(shakeBarloc.x + healthIconOffset.x,shakeBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
 
+    }
+
+    void Enable(){
+        renderer.enabled = true;
+        collider.enabled = true;
+    }
+
+    void Disable(){
+        renderer.enabled = false;
+        collider.enabled = false;
     }
 
     bool isTouchingObject(Touch touch){

@@ -14,7 +14,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
 	void Start () {
         inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
         arrows = GetComponent<tk2dAnimatedSprite>();
-        renderer.enabled = false;
+        Disable();
 
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
             breathingInStep = 5;
@@ -30,13 +30,13 @@ public class InhalerInhaleExhale : MonoBehaviour {
             return;
         }
         if (InhalerLogic.CurrentStep == 3){
-            renderer.enabled = true;
+            Enable();
         }
 
         if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
             arrows.FlipY();
             pointingUp = true;
-            renderer.enabled = true;
+            Enable();
         }
 
         if (Input.touchCount == 0) { // if not touching screen
@@ -57,7 +57,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
                         }
-                        renderer.enabled = false;
+                        Disable();
                     }
                 }
                 else if (isDraggingUp(touch)){
@@ -70,12 +70,22 @@ public class InhalerInhaleExhale : MonoBehaviour {
                         }
                         completedGame = true;
                         inhalerGameManager.OnGameEnd();
-                        renderer.enabled = false;
+                        Disable();
                     }
                 }
             }
         }
 	}
+
+    void Enable(){
+        renderer.enabled = true;
+        collider.enabled = true;
+    }
+
+    void Disable(){
+        renderer.enabled = false;
+        collider.enabled = false;
+    }
 
     void ResetTouch(){
         firstTouchOnObject = false;

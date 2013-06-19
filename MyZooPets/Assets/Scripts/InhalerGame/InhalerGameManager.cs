@@ -67,6 +67,8 @@ public class InhalerGameManager : MonoBehaviour{
 
         rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
         rescueShaker.name = rescueShakerPrefab.name;
+        rescueShaker.GetComponent<RescueShaker>().rescueBody = rescue.GetComponent<RescueBody>();
+
         inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
         inhaleExhale.name = inhaleExhalePrefab.name;
 

@@ -16,9 +16,12 @@ public class RescueShaker : MonoBehaviour {
 
     float shakeValue = 0f;
     float shakeTarget = 1f;
+    public RescueBody rescueBody;
 
     void Start(){
         renderer.enabled = false;
+        // set in InhalerGameManager.DestroyAndRecreatePrefabs()
+        // rescueBody = GameObject.Find("RescueBody").GetComponent<RescueBody>();
     }
 
     void Update(){
@@ -32,6 +35,7 @@ public class RescueShaker : MonoBehaviour {
             if (isTouchingObject(touch)){
                 if (touch.phase == TouchPhase.Moved){
                     shakeValue += Time.deltaTime;
+                    rescueBody.Shake();
                 }
             }
         }

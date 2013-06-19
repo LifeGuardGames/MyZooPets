@@ -140,7 +140,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		if (showButtons){
 			// Show "Play Again" button after showing (and spinning) slot machine
 	        if (inhalerGameManager.gameEnded && inhalerGameManager.showPlayAgain){
-	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, NATIVE_HEIGHT - 120, 100, 100), "Play Again")){
+	            if(GUI.Button(new Rect(NATIVE_WIDTH - 240, 10, 100, 100), "Play Again")){
 	                inhalerGameManager.ResetInhalerGame();
 	                RestartProgressBar();
 	            }

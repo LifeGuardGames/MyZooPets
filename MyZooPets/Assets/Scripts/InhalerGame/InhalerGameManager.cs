@@ -24,6 +24,15 @@ public class InhalerGameManager : MonoBehaviour{
     public bool showPlayAgain = false;
     public bool gameEnded = false;
 
+    int lastRecordedStep;
+    public bool ShowHint{
+        get {return showHint;}
+    }
+    bool showHint = false;
+    bool runShowHintTimer = true;
+    float timer = 0;
+    float timeBeforeHints = 5.0f;
+
     public void ResetInhalerGame(){
         if (InhalerLogic.HasPlaysRemaining()){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
@@ -94,15 +103,55 @@ public class InhalerGameManager : MonoBehaviour{
             advair.SetActive(false);
         }
         smallRescue.SetActive(false);
+
+        if ((InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair) ||
+            (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.FirstTimeRescue)){
+            runShowHintTimer = false;
+            showHint = true;
+        }
+        else {
+            runShowHintTimer = true;
+        }
+
+    }
+
+    void Update(){
+        if (runShowHintTimer){
+            ShowHintTimer();
+        }
+    }
+
+    void ShowHintTimer(){ // to be called in Update()
+        if (InhalerLogic.CurrentStep != lastRecordedStep){
+            timer = 0;
+            showHint = false;
+            lastRecordedStep = InhalerLogic.CurrentStep;
+        }
+        else {
+            timer += Time.deltaTime;
+            if (timer > timeBeforeHints){
+                showHint = true;
+            }
+        }
     }
 
     public void OnGameEnd(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
             inhalerGameGUI.DisplayMessage();
+            RemoveFirstTimeFlags();
             gameEnded = true;
             InhalerLogic.ResetGame(); // call this before showing the slots
             inhalerGameGUI.HideButtons();
             Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
+        }
+    }
+
+    void RemoveFirstTimeFlags(){
+        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair){
+            DataManager.FirstTimeAdvair = false;
+        }
+        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.FirstTimeRescue){
+            DataManager.FirstTimeRescue = false;
         }
     }
 

@@ -12,7 +12,7 @@ public class RescueShaker : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 
     private Vector2 shakeBarOffset = new Vector2(60, 15);
-    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2);
+    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2 + 180, NATIVE_HEIGHT / 4 - 50);
 
     float shakeValue = 0f;
     float shakeTarget = 1f;
@@ -64,9 +64,9 @@ public class RescueShaker : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
         }
 
-        GUI.DrawTexture(new Rect(shakeBarloc.x,shakeBarloc.y,100,100), statBarTexture);
-        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y,25,70),statBarVerFrame);
-        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y+(70-70*shakeValue/shakeTarget),25, 70 * Mathf.Clamp01(shakeValue/shakeTarget)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
+        // GUI.DrawTexture(new Rect(shakeBarloc.x,shakeBarloc.y,100,100), statBarTexture);
+        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y,50,200),statBarVerFrame);
+        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y+(200-200*shakeValue/shakeTarget),50, 200 * Mathf.Clamp01(shakeValue/shakeTarget)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
         // GUI.DrawTexture(new Rect(shakeBarloc.x + healthIconOffset.x,shakeBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
 
     }

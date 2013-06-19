@@ -17,8 +17,10 @@ public class RescueShaker : MonoBehaviour {
     float shakeValue = 0f;
     float shakeTarget = 1f;
     public RescueBody rescueBody;
+    private InhalerGameManager inhalerGameManager;
 
     void Start(){
+        inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
         Disable();
         // set in InhalerGameManager.DestroyAndRecreatePrefabs()
         // rescueBody = GameObject.Find("RescueBody").GetComponent<RescueBody>();
@@ -70,7 +72,12 @@ public class RescueShaker : MonoBehaviour {
     }
 
     void Enable(){
-        renderer.enabled = true;
+        if (inhalerGameManager.ShowHint){
+            renderer.enabled = true;
+        }
+        else {
+            renderer.enabled = false;
+        }
         collider.enabled = true;
     }
 

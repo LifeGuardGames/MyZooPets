@@ -29,15 +29,12 @@ public class InhalerInhaleExhale : MonoBehaviour {
         if (completedGame){
             return;
         }
-        if (InhalerLogic.CurrentStep == 3){
-            Enable();
-        }
-
         if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
             arrows.FlipY();
             pointingUp = true;
-            Enable();
         }
+
+        CheckAndEnable();
 
         if (Input.touchCount == 0) { // if not touching screen
             ResetTouch();
@@ -77,9 +74,16 @@ public class InhalerInhaleExhale : MonoBehaviour {
         }
 	}
 
-    void Enable(){
-        renderer.enabled = true;
-        collider.enabled = true;
+    void CheckAndEnable(){
+        if (InhalerLogic.CurrentStep == 3 || InhalerLogic.CurrentStep == breathingInStep){
+            if (inhalerGameManager.ShowHint){
+                renderer.enabled = true;
+            }
+            else {
+                renderer.enabled = false;
+            }
+            collider.enabled = true;
+        }
     }
 
     void Disable(){

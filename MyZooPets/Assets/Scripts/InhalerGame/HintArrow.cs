@@ -14,10 +14,12 @@ public class HintArrow : MonoBehaviour {
     private bool hasSpecificType = true;
     private InhalerType specificInhalerType;
 
+    private InhalerGameManager inhalerGameManager;
 
     // Use this for initialization
     void Start () {
         renderer.enabled = false;
+        inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
 
         if (specificInhalerTypeString == "rescue")
             specificInhalerType = InhalerType.Rescue;
@@ -35,7 +37,8 @@ public class HintArrow : MonoBehaviour {
             return;
         }
 
-        if (InhalerLogic.CurrentStep == showOnStep){
+        if (InhalerLogic.CurrentStep == showOnStep &&
+            inhalerGameManager.ShowHint){
             renderer.enabled = true;
         }
         else

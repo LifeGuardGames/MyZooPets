@@ -47,8 +47,6 @@ public static class InhalerLogic{
         }else{
             currentInhalerType = InhalerType.Rescue;
         }
-        // todo
-        currentInhalerType = InhalerType.Rescue;
         //sets step to 1
         currentStep = 1;
 

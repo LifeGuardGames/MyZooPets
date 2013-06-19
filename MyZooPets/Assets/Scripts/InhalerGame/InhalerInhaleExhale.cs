@@ -83,14 +83,14 @@ public class InhalerInhaleExhale : MonoBehaviour {
 
     bool isDraggingUp(Touch touch){
         if (touch.position.y - firstTouchYPos > 50){
-            Debug.Log("is dragging up");
+            // Debug.Log("is dragging up");
             return true;
         }
         return false;
     }
     bool isDraggingDown(Touch touch){
         if (firstTouchYPos - touch.position.y > 50){
-            Debug.Log("is dragging down");
+            // Debug.Log("is dragging down");
             return true;
         }
         return false;

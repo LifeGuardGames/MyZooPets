@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class Highlighting : MonoBehaviour {
-
+	
+	public bool forArrow = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -15,12 +16,20 @@ public class Highlighting : MonoBehaviour {
 			RaycastHit hit;
 			if(Physics.Raycast(myRay,out hit)){
 				if(hit.collider.name == this.name)
-					transform.localScale = new Vector3 (1.1f,1.1f,1.1f);
+					if(!forArrow)
+						transform.localScale = new Vector3 (1.1f,1.1f,1.1f);
+					else{
+						
+						GameObject.Find("PetSprite").transform.localScale = new Vector3(1.1f,1.1f,1.1f);
+					}
 			}
 		}
 		else{
-			transform.localScale = new Vector3(1,1,1);
+			if(!forArrow)
+				transform.localScale = new Vector3(1,1,1);
+			else
+				GameObject.Find("PetSprite").transform.localScale = new Vector3(1,1,1);
+				
 		}
-		
 	}
 }

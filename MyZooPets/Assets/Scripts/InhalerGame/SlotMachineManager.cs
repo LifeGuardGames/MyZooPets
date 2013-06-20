@@ -12,10 +12,10 @@ public class SlotMachineManager : MonoBehaviour {
 
     void Awake(){
         int counter = 0;
-       foreach(Transform wheel in transform){
+        foreach(Transform wheel in transform){
             wheels[counter] = wheel;
             counter++;
-       }
+        }
     }
 
 	// Use this for initialization
@@ -29,15 +29,13 @@ public class SlotMachineManager : MonoBehaviour {
             if(wheels[0].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[1].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[2].GetComponent<SpinningWheel>().doneSpinning){
-                if(onSpinEndOrNoSpinCallBack != null) onSpinEndOrNoSpinCallBack();
-                if(onSpinEndCallBack != null) onSpinEndCallBack();
+                if(SpinEndCallBack != null) SpinEndCallBack();
                 gameOver = true;
             }
         }
 	}
 
     public bool SpinWhenReady(){
-        if(startSpinningCallBack != null) startSpinningCallBack();
         bool retVal = false;
         ResetGame(); //needs to reset the game show the black screens show up
 
@@ -54,7 +52,7 @@ public class SlotMachineManager : MonoBehaviour {
             retVal = true;
         }
         else {
-            if(onSpinEndOrNoSpinCallBack != null) onSpinEndOrNoSpinCallBack();
+            if(SpinEndCallBack != null) SpinEndCallBack();
         }
         return retVal;
 
@@ -77,12 +75,11 @@ public class SlotMachineManager : MonoBehaviour {
 
     //check if the slots are 3 in a row
     public bool CheckMatch(){
-        return slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2];
+        return ((InhalerLogic.GetSlotMachineCount == 3) &&
+            (slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2]));
     }
 
     //Notify other classes that the spinning are finished
     public delegate void SpinningCallBack();
-    public SpinningCallBack onSpinEndCallBack;
-    public SpinningCallBack onSpinEndOrNoSpinCallBack;
-    public SpinningCallBack startSpinningCallBack;
+    public SpinningCallBack SpinEndCallBack;
 }

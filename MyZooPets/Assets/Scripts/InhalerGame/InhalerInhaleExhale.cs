@@ -9,12 +9,12 @@ public class InhalerInhaleExhale : MonoBehaviour {
     bool completedGame = false;
     bool pointingUp = false;
     int breathingInStep;
-    InhalerGameGUI inhalerGameGUI;
+    public InhalerGameManager inhalerGameManager;
 	// Use this for initialization
 	void Start () {
-        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
+        inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
         arrows = GetComponent<tk2dAnimatedSprite>();
-        renderer.enabled = false;
+        Disable();
 
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
             breathingInStep = 5;
@@ -29,15 +29,12 @@ public class InhalerInhaleExhale : MonoBehaviour {
         if (completedGame){
             return;
         }
-        if (InhalerLogic.CurrentStep == 3){
-            renderer.enabled = true;
-        }
-
         if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
             arrows.FlipY();
             pointingUp = true;
-            renderer.enabled = true;
         }
+
+        CheckAndEnable();
 
         if (Input.touchCount == 0) { // if not touching screen
             ResetTouch();
@@ -57,7 +54,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
                         }
-                        renderer.enabled = false;
+                        Disable();
                     }
                 }
                 else if (isDraggingUp(touch)){
@@ -69,13 +66,30 @@ public class InhalerInhaleExhale : MonoBehaviour {
                             InhalerLogic.NextStep();
                         }
                         completedGame = true;
-                        inhalerGameGUI.OnGameComplete();
-                        renderer.enabled = false;
+                        inhalerGameManager.OnGameEnd();
+                        Disable();
                     }
                 }
             }
         }
 	}
+
+    void CheckAndEnable(){
+        if (InhalerLogic.CurrentStep == 3 || InhalerLogic.CurrentStep == breathingInStep){
+            if (inhalerGameManager.ShowHint){
+                renderer.enabled = true;
+            }
+            else {
+                renderer.enabled = false;
+            }
+            collider.enabled = true;
+        }
+    }
+
+    void Disable(){
+        renderer.enabled = false;
+        collider.enabled = false;
+    }
 
     void ResetTouch(){
         firstTouchOnObject = false;
@@ -83,14 +97,14 @@ public class InhalerInhaleExhale : MonoBehaviour {
 
     bool isDraggingUp(Touch touch){
         if (touch.position.y - firstTouchYPos > 50){
-            Debug.Log("is dragging up");
+            // Debug.Log("is dragging up");
             return true;
         }
         return false;
     }
     bool isDraggingDown(Touch touch){
         if (firstTouchYPos - touch.position.y > 50){
-            Debug.Log("is dragging down");
+            // Debug.Log("is dragging down");
             return true;
         }
         return false;

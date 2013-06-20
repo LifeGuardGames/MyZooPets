@@ -78,8 +78,15 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static int numberOfAdvairLeft; //max 3. appears in the game max 3 times per day
     [SerializeThis]
-    private static int numberOfRescueLeft; //max 3. appears in the game max 3 times per day       
+    private static int numberOfRescueLeft; //max 3. appears in the game max 3 times per day
     //inhaler skin used (needs enum type)
+
+    [SerializeThis]
+    private static bool firstTimeAdvair;
+    // first time the player has seen the advair inhaler (this tells us whether to show tutorial arrows in the Inhaler Game)
+    [SerializeThis]
+    private static bool firstTimeRescue;
+    // first time the player has seen the rescue inhaler (this tells us whether to show tutorial arrows in the Inhaler Game)
     //========================
 
     //=============Getters & Setters===============
@@ -153,6 +160,14 @@ public class DataManager : MonoBehaviour {
     public static int NumberOfRescueLeft{
         get{return numberOfRescueLeft;}
         set{numberOfRescueLeft = value;}
+    }
+    public static bool FirstTimeAdvair{
+        get{return firstTimeAdvair;}
+        set{firstTimeAdvair = value;}
+    }
+    public static bool FirstTimeRescue{
+        get{return firstTimeRescue;}
+        set{firstTimeRescue = value;}
     }
     //===============================
 
@@ -244,18 +259,18 @@ public class DataManager : MonoBehaviour {
         if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
-        
+
     }
 
     void Start(){
-        if(isDebug){ //debug for independent scene. only initialize data no 
+        if(isDebug){ //debug for independent scene. only initialize data no
                     //serialization or scene loading
             InitializeAllDataFirstTime();
         }else{
             if (firstTime){ //first time data initialization logic
                 InitializeAllDataFirstTime();
                 SerializeGame();
-                DataLoaded(); 
+                DataLoaded();
             }else{ //load saved data
                 if(!loaded){
                     loaded = true;
@@ -308,6 +323,9 @@ public class DataManager : MonoBehaviour {
             lastInhalerGamePlayed = DateTime.Now;
             numberOfAdvairLeft = 3;
             numberOfRescueLeft = 3;
+
+            firstTimeAdvair = true;
+            firstTimeRescue = true;
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

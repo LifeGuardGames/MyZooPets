@@ -14,10 +14,20 @@ public class RescueBody : MonoBehaviour
     int dragToPetStep = 4;
     // bool foundMiniature = false;
 
+    // only moving in the y-axis
+    bool goingUp = true;
+    Vector3 shakeLowerBound;
+    Vector3 shakeUpperBound;
+    float shakeYDisplacement = 1.0f;
+
     void Start(){
        collider.enabled = false;
        destinationCollider = GameObject.Find("PetSprite").collider;
        miniature.SetActive(false); // shouldn't be null
+
+       shakeLowerBound = transform.position;
+       float yUpper = 2.0f;
+       shakeUpperBound = new Vector3(transform.position.x, transform.position.y + yUpper, transform.position.z);
 
     }
     void Update(){
@@ -129,5 +139,25 @@ public class RescueBody : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void Shake(){
+        if (goingUp){
+            // transform.position += new Vector3(0, shakeYDisplacement * Time.deltaTime, 0);
+            transform.position += new Vector3(0, shakeYDisplacement, 0);
+            if (transform.position.y > shakeUpperBound.y){
+                transform.position = shakeUpperBound;
+                goingUp = false;
+            }
+        }
+        else {
+            // transform.position -= new Vector3(0, shakeYDisplacement * Time.deltaTime, 0);
+            transform.position -= new Vector3(0, shakeYDisplacement, 0);
+            if (transform.position.y < shakeLowerBound.y){
+                transform.position = shakeLowerBound;
+                goingUp = true;
+            }
+
+        }
     }
 }

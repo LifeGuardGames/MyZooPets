@@ -14,11 +14,13 @@ public class Highlighting : MonoBehaviour {
 			Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if(Physics.Raycast(myRay,out hit)){
-				transform.localScale = new Vector3 (2,2,2);
-			}
-			else{
-				transform.localScale = new Vector3(2,2,2);
+				if(hit.collider.name == this.name)
+					transform.localScale = new Vector3 (1.1f,1.1f,1.1f);
 			}
 		}
+		else{
+			transform.localScale = new Vector3(1,1,1);
+		}
+		
 	}
 }

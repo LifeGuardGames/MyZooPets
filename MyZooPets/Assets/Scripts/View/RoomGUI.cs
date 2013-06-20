@@ -328,5 +328,10 @@ public class RoomGUI : MonoBehaviour {
 			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
 			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 		}
+		
+		//Temp store Button
+		if(GUI.Button(new Rect(optionRect.rect.x - 400,optionRect.rect.y, 90,90),"Store")){
+			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
+		}
 	}
 }

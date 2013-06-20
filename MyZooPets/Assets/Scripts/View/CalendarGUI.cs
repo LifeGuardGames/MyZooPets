@@ -10,15 +10,11 @@ public class CalendarGUI : MonoBehaviour {
 
     //Textures
     public Texture2D diaryTexture1;
-    public Texture2D diaryTexture2;
-    public Texture2D diaryTexture3;
-    public Texture2D diaryTexture4;
     public Texture2D tickBoxEmpty;
     public Texture2D tickBoxChecked;
     public Texture2D tickBoxMissed;
 
     //Styles
-    public GUIStyle diaryTabStyle;
     public GUIStyle diaryCheckBoxStyle;
     public GUIStyle diaryTextStyle;
 
@@ -89,9 +85,6 @@ public class CalendarGUI : MonoBehaviour {
         optional.Add("ease", LeanTweenType.easeInOutQuad);
         GUI.depth = 0;
         if(diaryPage == 1){
-            GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-            GUI.DrawTexture(diaryRect.rect,diaryTexture4);
-            GUI.DrawTexture(diaryRect.rect,diaryTexture2);
             GUI.DrawTexture(diaryRect.rect,diaryTexture1);
             GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+100,100,70),"Monday",diaryTextStyle);
             GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+170,100,70),"Tuesday",diaryTextStyle);
@@ -132,16 +125,6 @@ public class CalendarGUI : MonoBehaviour {
             GUILayout.EndVertical();
             GUILayout.EndArea();
 
-            //Page Selection by clicking Tabs
-            if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
-                diaryPage = 2;
-            }
-            if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
-                diaryPage = 3;
-            }
-            if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){
-                diaryPage = 4;
-            }
         }
 
         //Temp close Button

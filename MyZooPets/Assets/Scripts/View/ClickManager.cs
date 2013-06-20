@@ -76,13 +76,13 @@ public class ClickManager : MonoBehaviour {
 						else if(hit.collider.name == "PetHead"){
 							// todo
 							print("Pet Head");
-							ClickLock();
+							// ClickLock();
 							// ModeLock();
 						}
 						else if(hit.collider.name == "PetTummy"){
 							// todo
 							print("Pet Tummy");
-							ClickLock();
+							// ClickLock();
 							// ModeLock();
 						}
 					}

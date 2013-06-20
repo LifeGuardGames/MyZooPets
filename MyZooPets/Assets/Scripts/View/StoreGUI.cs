@@ -13,6 +13,9 @@ public class StoreGUI : MonoBehaviour {
 	
 	private int storePage = 1;
 	private bool StoreGUIOn = false;
+//	private bool StoreGUIOn = true;
+	
+	private float sliderValue;
 	
 	
 	// Use this for initialization
@@ -57,6 +60,7 @@ public class StoreGUI : MonoBehaviour {
 			
 			if(storePage == 1){
 				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page1Texture);
+				sliderValue = GUI.VerticalScrollbar(new Rect(1100,150,100,500),sliderValue,2f,20f,0f);
 			}
 			if(storePage == 2){
 				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page2Texture);

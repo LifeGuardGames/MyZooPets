@@ -7,12 +7,14 @@ using System.Collections;
 public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
     private DiaryGUI diaryUIManager; //reference to UI
+    // private CalendarGUI calendarGUI; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
 
     void Awake(){
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
+        // calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 
         IsDataLoaded = false;
@@ -20,7 +22,7 @@ public class LoadDataLogic : MonoBehaviour {
         if(!DataManager.FirstTime){ //if not first time load GUI right away
             InitializeDataForUI();
         }else{ //if first time set call back and wait for the hatching animation to finish
-            FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;    
+            FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
         }
     }
 
@@ -29,7 +31,8 @@ public class LoadDataLogic : MonoBehaviour {
     private void InitializeDataForUI(){
         if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
         roomGUIAnimator.Init();
-        diaryUIManager.Init();    
+        diaryUIManager.Init();
+        // calendarGUI.Init();
         evolutionLogic.Init();
         IsDataLoaded = true;
     }

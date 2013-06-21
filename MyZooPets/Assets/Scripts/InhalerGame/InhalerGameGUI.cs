@@ -130,13 +130,8 @@ public class InhalerGameGUI : MonoBehaviour {
 
 		if (showButtons){
 			// Show "Play Again" button after showing (and spinning) slot machine
-	        if (inhalerGameManager.gameEnded && inhalerGameManager.showPlayAgain){
-	            if(GUI.Button(new Rect(NATIVE_WIDTH - 240, 10, 100, 100), "Play Again")){
-	                inhalerGameManager.ResetInhalerGame();
-	                RestartProgressBar();
-	            }
-	        }
-	        if (!InhalerLogic.CanPlayGame) {
+	        if (!InhalerLogic.CanPlayGame ||
+	        	(inhalerGameManager.gameEnded && !inhalerGameManager.isPracticeGame)) {
 	            int x = 200;
 	            int y = 150;
 	            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");
@@ -148,6 +143,12 @@ public class InhalerGameGUI : MonoBehaviour {
 	        	// draw Quit Button in upper right corner
 	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Quit Game")){
 	            	QuitInhalerGame();
+	            }
+	        }
+	        if (inhalerGameManager.gameEnded && inhalerGameManager.isPracticeGame){
+	            if(GUI.Button(new Rect(NATIVE_WIDTH - 240, 10, 100, 100), "Play Again")){
+	                inhalerGameManager.ResetInhalerGame();
+	                RestartProgressBar();
 	            }
 	        }
 		}

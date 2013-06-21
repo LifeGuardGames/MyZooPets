@@ -23,7 +23,6 @@ public class InhalerGameManager : MonoBehaviour{
     InhalerGameGUI inhalerGameGUI;
 
     // todo: create accessors
-    public bool showPlayAgain = false;
     public bool gameEnded = false;
 
     int lastRecordedStep;
@@ -58,7 +57,6 @@ public class InhalerGameManager : MonoBehaviour{
             // slotMachine.SetActive(false);
         }
         gameEnded = false;
-        showPlayAgain = false;
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -144,7 +142,6 @@ public class InhalerGameManager : MonoBehaviour{
             inhalerGameGUI.DisplayMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
-            showPlayAgain = true;
             // InhalerLogic.ResetGame(); // call this before showing the slots
             inhalerGameGUI.HideButtons();
             Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play

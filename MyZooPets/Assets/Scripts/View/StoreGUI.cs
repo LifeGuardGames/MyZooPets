@@ -75,6 +75,14 @@ public class StoreGUI : MonoBehaviour {
 			if(GUI.Button(new Rect(backgroundloc.x+50,backgroundloc.y+50,50,50),"X")){
 				hideStore();
 			}
+			
+			GUILayout.BeginArea(new Rect(page1loc.x,page1loc.y,1000,600));
+			GUILayout.BeginHorizontal();
+			GUILayout.Button("item1",GUILayout.Width(200),GUILayout.Height(100));
+			GUILayout.Button("item1",GUILayout.Width(200),GUILayout.Height(100));
+			GUILayout.Button("item1",GUILayout.Width(200),GUILayout.Height(100));
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
 		}
 	}
 }

@@ -4,18 +4,13 @@ using System.Collections.Generic;
 
 public class ItemLogic : MonoBehaviour{
 
-	public static List<string> names = new List<string>();
-	public static List<Texture2D> textures = new List<Texture2D>();
-	public static List<int> costs = new List<int>();
+	public List<string> names = new List<string>();
+	public List<Texture2D> textures = new List<Texture2D>();
+	public List<int> costs = new List<int>();
 	
 	private Hashtable items = new Hashtable();
-	private Dictionary<object, Items.onUse> delegates = 
-		new Dictionary<object, Items.onUse>{
-		{names[0], takeApple},
-		{names[1], takeSandwich},
-		{names[2], takeInhaler},
-		{names[3], takeEmInhaler}
-	};
+	private Dictionary<object, Items.onUse> delegates;
+		
 	
 	public Items getItem(string name){
 		return (Items)items[name];
@@ -27,6 +22,13 @@ public class ItemLogic : MonoBehaviour{
 	
 	
 	void Awake(){
+		delegates = new Dictionary<object, Items.onUse>{
+		{names[0], takeApple},
+		{names[1], takeSandwich},
+		{names[2], takeInhaler},
+		{names[3], takeEmInhaler}
+	};	
+		
 		if(names.Count == textures.Count && textures.Count == costs.Count){
 			for(int i = 0;i< names.Count;i++){
 				items.Add (names[i],new Items(names[i],costs[i],textures[i]));

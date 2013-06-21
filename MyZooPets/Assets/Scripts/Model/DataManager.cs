@@ -17,11 +17,6 @@ public class DataManager : MonoBehaviour {
                                             //again during scene change
     private static bool firstTime; //is the user playing for the first time
 
-    //delegate is called when DataManager is finished initializing data for the first time
-    // //or deserializing previously saved data
-    // public delegate void DataLoadedCallBack(bool firstTime);
-    // public static DataLoadedCallBack dataLoadedCallBack;
-
     //==========SaveData============
     //pet info
     [SerializeThis]
@@ -68,19 +63,17 @@ public class DataManager : MonoBehaviour {
 
     //Inhaler Data
     [SerializeThis]
-    private static int slotMachineCounter; //max 3. used to determine when to start slot
-                                            //machine game
+    private static int numberOfTimesLeft; //max 1. once for every optimal time
     [SerializeThis]
-    private static int numberOfTimesLeft; //max 6. user can only played 6 inhaler game per day
+    private static DateTime optimalMorningStartTime; //the optimal start time to take inhaler in the morning
     [SerializeThis]
-    private static DateTime lastInhalerGamePlayed; //keep track of when to reset the
-                                                        //slotMachineCounter and numberOfTimesLeft
+    private static DateTime optimalAfternoonStartTime; //optimal start time to take inhaler in the afternoon
     [SerializeThis]
-    private static int numberOfAdvairLeft; //max 3. appears in the game max 3 times per day
+    private static DateTime lastInhalerGamePlayed; //the time user last played the game
     [SerializeThis]
-    private static int numberOfRescueLeft; //max 3. appears in the game max 3 times per day
-    //inhaler skin used (needs enum type)
-
+    private static bool canPlayGameMorning; //can user play in the morning (optimal game)
+    [SerializeThis]
+    private static bool canPlayGameAfternoon; //can user play in the afternoon (optimal game)
     [SerializeThis]
     private static bool firstTimeAdvair;
     // first time the player has seen the advair inhaler (this tells us whether to show tutorial arrows in the Inhaler Game)
@@ -153,13 +146,21 @@ public class DataManager : MonoBehaviour {
         get{return numberOfTimesLeft;}
         set{numberOfTimesLeft = value;}
     }
-    public static int NumberOfAdvairLeft{
-        get{return numberOfAdvairLeft;}
-        set{numberOfAdvairLeft = value;}
+    public static bool CanPlayGameMorning{
+        get{return canPlayGameMorning;}
+        set{canPlayGameMorning = value;}
     }
-    public static int NumberOfRescueLeft{
-        get{return numberOfRescueLeft;}
-        set{numberOfRescueLeft = value;}
+    public static bool CanPlayGameAfternoon{
+        get{return canPlayGameAfternoon;}
+        set{canPlayGameAfternoon = value;}
+    }
+    public static DateTime OptimalMorningStartTime{
+        get{return optimalMorningStartTime;}
+        set{optimalMorningStartTime = value;}
+    }
+    public static DateTime OptimalAfternoonStartTime{
+        get{return optimalAfternoonStartTime;}
+        set{optimalAfternoonStartTime = value;}
     }
     public static bool FirstTimeAdvair{
         get{return firstTimeAdvair;}
@@ -318,12 +319,11 @@ public class DataManager : MonoBehaviour {
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
 
             //Inhaler game data initialization
-            slotMachineCounter = 0;
-            numberOfTimesLeft = 6;
+            // optimalMorningStartTime = new DateTime();
+            // optimalAfternoonStartTime = new DateTime();
             lastInhalerGamePlayed = DateTime.Now;
-            numberOfAdvairLeft = 3;
-            numberOfRescueLeft = 3;
-
+            canPlayGameMorning = true;
+            canPlayGameAfternoon = true;
             firstTimeAdvair = true;
             firstTimeRescue = true;
 

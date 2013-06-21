@@ -3,15 +3,29 @@ using System.Collections;
 using System;
 
 //InhalerLogic stores and manipulate any inhaler game related data
+//TO DO: reward algorithm for optimal window and practice inhaler game
 public static class InhalerLogic{
     //variables
     // currentInhalerSkin;
 
     private static InhalerType currentInhalerType; //either Advair or Rescue inhaler
     private static int currentStep; //current step that user is on
-
+    // private static bool isOptimalTime; //True: allow user to plan high reward inhaler game, 
+                                         //False: can only plan practice game
+    private static TimeSpan optimalTimeWindow; //how long does the optimal window lasts
+    private static bool canPlayGame; //true: play game, false: exit game
+    private static bool isPracticeGame; //true: practice game less reward, 
+                                        //false: real game more reward.
 
     //=================API (use this for UI)==================
+    /*
+        call the api in this order
+        1)Init(true);
+        2)CanPlayGame
+        3)IsCurrentStepCorrect
+        4)IsDoneWithGame
+        5)NextStep
+    */
     //return the current step of a sequence
     public static int CurrentStep{
         get{return currentStep;}
@@ -27,41 +41,64 @@ public static class InhalerLogic{
         get{return DataManager.SlotMachineCounter;}
     }
 
-    //Initialize game data and reset counters if it's a new day
-    public static void Init(){
-        DateTime now = DateTime.Now;
-        TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastInhalerGamePlayed.Date);
-        DataManager.LastInhalerGamePlayed = now;
+    //can user play game? True: continue w game, False: prompt user to exit
+    public static bool CanPlayGame{
+        get{return canPlayGame;}
+    }
 
-        //new day so resets counters
-        if(sinceLastPlayed.Days > 0){
-            DataManager.SlotMachineCounter = 0;
-            DataManager.NumberOfTimesLeft = 6;
-            DataManager.NumberOfAdvairLeft = 3;
-            DataManager.NumberOfRescueLeft = 3;
+    //true: practice game less reward, false: real game more reward.
+    public static bool IsPracticeGame{
+        get{return isPracticeGame;}
+    }
+
+    //Initialize game data and reset counters if it's a new day
+    public static void Init(bool isPracticeGame){
+        canPlayGame = false;
+        isPracticeGame = isPracticeGame;
+        if(isPracticeGame){ //practice inhaler game (teddy bear)
+            canPlayGame = true;
+
+        }else{ //regular inhaler game
+            optimalTimeWindow = new TimeSpan(3, 0, 0); //optimal window lasts 3 hrs
+
+            DateTime now = DateTime.Now;
+            TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastInhalerGamePlayed.Date);
+            DataManager.LastInhalerGamePlayed = now;
+
+            //new day so resets counters
+            if(sinceLastPlayed.Days > 0){
+                DataManager.CanPlayGameMorning = true;
+                DataManager.CanPlayGameAfternoon = true;
+            }
+
+            //check if time now is within the optimal time range
+            // < 0 t1 is earlier than t2
+            // 0 t1 is the same as t2
+            // > 0 t1 later than t2
+            int startResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime);
+            int endResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime + optimalTimeWindow);
+            if(startResult >= 0 && endResult <= 0){
+                if(DataManager.CanPlayGameMorning){
+                    canPlayGame = true;
+                    DataManager.CanPlayGameMorning = false; //can only play optimal game once
+                }
+            }else if(now >= DataManager.OptimalAfternoonStartTime &&
+                    now <= (DataManager.OptimalAfternoonStartTime + optimalTimeWindow)){
+                if(DataManager.CanPlayGameAfternoon){
+                    canPlayGame = true;
+                    DataManager.CanPlayGameAfternoon = false; //can only play optimal game once
+                }
+            }else{}
+
         }
 
-        //assign game inhaler
-        if(DataManager.NumberOfAdvairLeft >= DataManager.NumberOfRescueLeft){
-            currentInhalerType = InhalerType.Advair;
-        }else{
-            currentInhalerType = InhalerType.Rescue;
+        int randomId = UnityEngine.Random.Range(0, 2);
+        switch(randomId){
+            case 0: currentInhalerType = InhalerType.Advair; break;
+            case 1: currentInhalerType = InhalerType.Rescue; break;
         }
         //sets step to 1
         currentStep = 1;
-
-        //resets slot machine if played already
-        if(DataManager.SlotMachineCounter == 3) DataManager.SlotMachineCounter = 0;
-    }
-
-    //True: user can play the inhaler game, False: user has reached the max play time
-    //so can't play the game
-    public static bool PlayGame(){
-        return DataManager.NumberOfTimesLeft != 0;
-    }
-
-    public static bool HasPlaysRemaining(){
-        return DataManager.NumberOfTimesLeft != 0;
     }
 
     //True: the step that the user is currently on is correct, False: wrong step
@@ -82,17 +119,6 @@ public static class InhalerLogic{
             retVal = true; //end of the sequence
         }
         return retVal;
-    }
-
-    //adjust counters at the end of the game
-    public static void ResetGame(){
-        if(currentInhalerType == InhalerType.Advair && currentStep > 5){
-            DataManager.NumberOfAdvairLeft--;
-        }else if(currentInhalerType == InhalerType.Rescue && currentStep > 6){
-            DataManager.NumberOfRescueLeft--;
-        }
-        DataManager.NumberOfTimesLeft--;
-        DataManager.SlotMachineCounter++;
     }
 
     //use this function to move on to the next step

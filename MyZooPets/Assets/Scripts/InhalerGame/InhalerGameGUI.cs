@@ -25,7 +25,6 @@ public class InhalerGameGUI : MonoBehaviour {
 	private bool[] boolList;		// List to keep track of current state rendering
 	private bool isUpdating = false;
 
-	private bool showComeAgainMessage = false;
 	private bool showButtons = true;
 
     public GameObject slotMachine;
@@ -55,8 +54,6 @@ public class InhalerGameGUI : MonoBehaviour {
 		for(int i = 0; i < numberOfNodes; i++){
 			boolList[i] = false;
 		}
-
-		GetPlayableStatus();
 	}
 
 	public void HideButtons(){
@@ -68,12 +65,6 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	public void DisplayMessage(){
 		notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
-	}
-
-	void GetPlayableStatus(){
-		if (!InhalerLogic.CanPlayGame){
-			showComeAgainMessage = true;
-		}
 	}
 
 	void SetNumOfNodes(){
@@ -145,7 +136,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	                RestartProgressBar();
 	            }
 	        }
-	        if (showComeAgainMessage) {
+	        if (!InhalerLogic.CanPlayGame) {
 	            int x = 200;
 	            int y = 150;
 	            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");

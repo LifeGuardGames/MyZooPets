@@ -9,7 +9,7 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject inhaleExhalePrefab; // arrows that indicate whether to breathe in or out
     public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
 
-    public GameObject slotMachine;
+    // public GameObject slotMachine;
 
     private GameObject advair;
     private GameObject rescue;
@@ -17,7 +17,9 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject inhaleExhale; // arrows that indicate whether to breathe in or out
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
-    private SlotMachineManager slotMachineManager; // component of slotMachine
+    public bool isPracticeGame;
+
+    // private SlotMachineManager slotMachineManager; // component of slotMachine
     InhalerGameGUI inhalerGameGUI;
 
     // todo: create accessors
@@ -33,27 +35,30 @@ public class InhalerGameManager : MonoBehaviour{
     float timer = 0;
     float timeBeforeHints = 5.0f;
 
+    // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
+    // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
+    void Awake(){
+        // ResetInhalerGame();
+    }
+    void Start(){
+        ResetInhalerGame();
+
+        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
+        // slotMachineManager.SpinEndCallBack = FinishedSpinning;
+    }
+
     public void ResetInhalerGame(){
+        InhalerLogic.Init(isPracticeGame);
+
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
         }
         else {
-            slotMachine.SetActive(false);
+            // slotMachine.SetActive(false);
         }
         gameEnded = false;
         showPlayAgain = false;
-    }
-
-    // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
-    // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
-    void Awake(){
-        ResetInhalerGame();
-    }
-    void Start(){
-
-        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
-        slotMachineManager.SpinEndCallBack = FinishedSpinning;
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -84,14 +89,13 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void SetUpInhalerGame(){
-        InhalerLogic.Init(false);
 
         // todo: remove after testing
         // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
 
-        slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
+        // slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
         // hide slot machine
-        slotMachine.SetActive(false);
+        // slotMachine.SetActive(false);
 
 
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
@@ -140,10 +144,16 @@ public class InhalerGameManager : MonoBehaviour{
             inhalerGameGUI.DisplayMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
+            showPlayAgain = true;
             // InhalerLogic.ResetGame(); // call this before showing the slots
             inhalerGameGUI.HideButtons();
-            Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
+            Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play
+            // Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
         }
+    }
+
+    void ShowButtons(){
+        inhalerGameGUI.ShowButtons();
     }
 
     void RemoveFirstTimeFlags(){
@@ -155,17 +165,17 @@ public class InhalerGameManager : MonoBehaviour{
         }
     }
 
-    void ShowSlotMachine(){
-        slotMachine.SetActive(true);
-        slotMachineManager.SpinWhenReady();
-    }
+    // void ShowSlotMachine(){
+    //     slotMachine.SetActive(true);
+    //     slotMachineManager.SpinWhenReady();
+    // }
 
-    void FinishedSpinning(){
-        showPlayAgain = true;
-        inhalerGameGUI.ShowButtons();
-        if (slotMachineManager.CheckMatch()){
-            // todo: change later
-            DataManager.AddPoints(100);
-        }
-    }
+    // void FinishedSpinning(){
+    //     showPlayAgain = true;
+    //     inhalerGameGUI.ShowButtons();
+    //     // if (slotMachineManager.CheckMatch()){
+    //         // todo: change later
+    //         DataManager.AddPoints(100);
+    //     }
+    // }
 }

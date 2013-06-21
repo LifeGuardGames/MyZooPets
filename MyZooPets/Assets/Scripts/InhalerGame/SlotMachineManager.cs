@@ -37,23 +37,23 @@ public class SlotMachineManager : MonoBehaviour {
 
     public bool SpinWhenReady(){
         bool retVal = false;
-        ResetGame(); //needs to reset the game show the black screens show up
+        // ResetGame(); //needs to reset the game show the black screens show up
 
-        //check counter
-        if(InhalerLogic.GetSlotMachineCount <= 3){ //make sure not out of index
-            for(int i = 0; i<InhalerLogic.GetSlotMachineCount; i++){
-                //turn the black screen off according slot machine count
-                wheels[i].Find("Screen").renderer.enabled = false;
-            }
-        }
-        gameOver = false;
-        if(InhalerLogic.GetSlotMachineCount == 3){
-            StartGame(); //spin the wheels
-            retVal = true;
-        }
-        else {
-            if(SpinEndCallBack != null) SpinEndCallBack();
-        }
+        // //check counter
+        // if(InhalerLogic.GetSlotMachineCount <= 3){ //make sure not out of index
+        //     for(int i = 0; i<InhalerLogic.GetSlotMachineCount; i++){
+        //         //turn the black screen off according slot machine count
+        //         wheels[i].Find("Screen").renderer.enabled = false;
+        //     }
+        // }
+        // gameOver = false;
+        // if(InhalerLogic.GetSlotMachineCount == 3){
+        //     StartGame(); //spin the wheels
+        //     retVal = true;
+        // }
+        // else {
+        //     if(SpinEndCallBack != null) SpinEndCallBack();
+        // }
         return retVal;
 
     }
@@ -75,8 +75,9 @@ public class SlotMachineManager : MonoBehaviour {
 
     //check if the slots are 3 in a row
     public bool CheckMatch(){
-        return ((InhalerLogic.GetSlotMachineCount == 3) &&
-            (slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2]));
+        // return ((InhalerLogic.GetSlotMachineCount == 3) &&
+            // (slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2]));
+        return false;
     }
 
     //Notify other classes that the spinning are finished

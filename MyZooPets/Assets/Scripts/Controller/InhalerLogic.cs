@@ -75,6 +75,8 @@ public static class InhalerLogic{
             // < 0 t1 is earlier than t2
             // 0 t1 is the same as t2
             // > 0 t1 later than t2
+            Debug.Log("Optimal morning period is from " + DataManager.OptimalMorningStartTime + " to " + DataManager.OptimalMorningStartTime + optimalTimeWindow);
+            Debug.Log("Optimal afternoon period is from " + DataManager.OptimalAfternoonStartTime + " to " + DataManager.OptimalAfternoonStartTime + optimalTimeWindow);
             int startResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime);
             int endResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime + optimalTimeWindow);
             if(startResult >= 0 && endResult <= 0){

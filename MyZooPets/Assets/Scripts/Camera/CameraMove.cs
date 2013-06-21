@@ -2,32 +2,32 @@ using UnityEngine;
 using System.Collections;
 
 public class CameraMove : MonoBehaviour{
-	
+
 	private bool zoomed = false;
 	private Vector3 initPosition;	// Default position: 0, 5.7, -23
 	private Vector3 initFaceDirection;
-	
+
 	private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
 	private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
-	
+
 	private Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
 	private Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
-	
+
 	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
 	private Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
-	
+
 	private bool isCameraMoving = false;
-	
+
 	private bool isLoadLevel = false;
 	private string levelToLoad;
-	
+
 	private bool isEnterMode = false;
-	
+
 	void Start(){
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}
-	
+
 	// Called from ClickManager
 	// TODO toggle scheme using toggle, might want to set to definitive? (potential for transition bugs)
 	public void ShelfZoomToggle(){
@@ -37,14 +37,14 @@ public class CameraMove : MonoBehaviour{
 				zoomed = false;
 				LockCameraMove();
 			}
-			else{		
+			else{
 	    		CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
 	    		zoomed = true;
 				LockCameraMove();
 			}
 		}
 	}
-	
+
 	public void PetSideZoomToggle(){
 		if(!isCameraMoving){
 			if(zoomed){
@@ -59,7 +59,7 @@ public class CameraMove : MonoBehaviour{
 			}
 		}
 	}
-	
+
 	public void GameboyZoomToggle(){
 		if(!isCameraMoving){
 			if(zoomed){
@@ -68,15 +68,16 @@ public class CameraMove : MonoBehaviour{
 			else{
 				zoomed = true;
 				LockCameraMove();
-				CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGameBothInhalers");
+				// CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGameBothInhalers");
+				CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGamePet");
 			}
 		}
 	}
-	
+
 	public void LockCameraMove(){
 		isCameraMoving = true;
 	}
-	
+
 	// Mostly called on callback from camera move
 	public void UnlockCameraMove(){
 		isCameraMoving = false;
@@ -89,7 +90,7 @@ public class CameraMove : MonoBehaviour{
 		}
 		ClickManager.ReleaseClickLock();
 	}
-	
+
 	// Transforms camera
 	public void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
@@ -103,7 +104,7 @@ public class CameraMove : MonoBehaviour{
 		LeanTween.move(gameObject, newPosition, time, optional);
 		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
-	
+
 	// Transforms camera
 	public void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
@@ -117,7 +118,7 @@ public class CameraMove : MonoBehaviour{
 		LeanTween.move(gameObject, newPosition, time, optional);
 		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
-	
+
 	// Same as CameraTransform but tries to load a scene after the transform has completed
 	public void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
 		isLoadLevel = true;
@@ -132,7 +133,7 @@ public class CameraMove : MonoBehaviour{
 		LeanTween.move(gameObject, newPosition, time, optional);
 		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
-	
+
 	private void ZoomOutMove(float time){
 		CameraTransformExitMode(initPosition,initFaceDirection, time);
 	}

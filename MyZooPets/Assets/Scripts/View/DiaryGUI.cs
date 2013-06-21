@@ -35,6 +35,7 @@ public class DiaryGUI : MonoBehaviour {
 	private CameraMove cameraMove;
 	private RoomGUI roomGui;
 	private bool diaryActive = false;
+	private bool isEnteredFromDiagnose = false;
 	private bool showGUI = true;
 	private int diaryPage = 1;
 	private List<CalendarEntry> calendar;
@@ -61,11 +62,24 @@ public class DiaryGUI : MonoBehaviour {
 		
 			CalendarLogic.CalendarOpened();
 			if(!showGUI){
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeInOutQuad);
-				LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
+				ShowDiary(1, false);
 			}
 		}
+	}
+	
+	// Used in check diary from diagnose game
+	public void ShowDiary(int pageNumber, bool enteredFromDiagnoseGame){
+		isEnteredFromDiagnose = enteredFromDiagnoseGame;
+		diaryPage = pageNumber;
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(diaryRect, diaryFinalPosition, 0.5f, optional);
+	}
+	
+	public void HideDiary(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
 	}
 	
 	void OnGUI(){
@@ -195,12 +209,15 @@ public class DiaryGUI : MonoBehaviour {
 		//Temp close Button
 		//TODO make a prettier icon??
 		if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X")){
-			showGUI = !showGUI;
-			ClickManager.ClickLock();
-			LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
-			roomGui.ShowGUIs();
-			cameraMove.PetSideZoomToggle();
-			diaryActive = false;
+			HideDiary();
+			if(!isEnteredFromDiagnose){
+				showGUI = true;
+				ClickManager.ClickLock();
+				roomGui.ShowGUIs();
+				cameraMove.PetSideZoomToggle();
+				diaryActive = false;
+			}
+			isEnteredFromDiagnose = false;
 		}
 	}
 }

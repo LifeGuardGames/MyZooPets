@@ -25,10 +25,12 @@ public class DiagnoseGUI : MonoBehaviour {
 	private Vector2 diagnoseInitPosition;
 	private Vector2 diagnoseFinalPosition;
 	
+	public GUIStyle diagnoseStyle;
+	
 	void Start(){
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		roomGui = roomGuiObject.GetComponent<RoomGUI>();
-		diaryGui = roomGuiObject.GetComponent<DiaryGUI>();
+		diaryGui = diaryGuiObject.GetComponent<DiaryGUI>();
 		
 		diagnoseInitPosition = new Vector2(1300, 100);
 		diagnoseFinalPosition = new Vector2(Screen.width/2, 100);
@@ -41,9 +43,11 @@ public class DiagnoseGUI : MonoBehaviour {
 	
 	void OnGUI(){
 		if(isActive){
-			GUI.skin = defaultSkin;
+			//GUI.skin = defaultSkin;
 			
 			GUI.DrawTexture(diagnoseRect.rect, txPanel);
+			
+			GUI.Label(new Rect(diagnoseRect.rect.x + 20, diagnoseRect.rect.y + 20, diagnoseRect.rect.width - 40, diagnoseRect.rect.height - 40), "How severe is its asthma?", diagnoseStyle);
 			
 			if(GUI.Button(new Rect(diagnoseRect.rect.x + 10, diagnoseRect.rect.y + 200, 190, 190), txHappy)){
 				
@@ -55,7 +59,7 @@ public class DiagnoseGUI : MonoBehaviour {
 				
 			}
 			if(GUI.Button(new Rect(diagnoseRect.rect.x + 390, diagnoseRect.rect.y + 437, 200, 153), txCheck)){
-
+				ShowDiary();
 			}
 			
 			if(GUI.Button(new Rect(10, 10, 100, 100), "X")){
@@ -68,6 +72,10 @@ public class DiagnoseGUI : MonoBehaviour {
 				LeanTween.move(diagnoseRect, diagnoseInitPosition, 0.5f, optional);
 			}
 		}
+	}
+	
+	private void ShowDiary(){
+		diaryGui.ShowDiary(4, true);
 	}
 	
 	public void DiagnoseClicked(){

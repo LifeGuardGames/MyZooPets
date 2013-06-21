@@ -71,7 +71,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	void GetPlayableStatus(){
-		if (!InhalerLogic.HasPlaysRemaining()){
+		if (!InhalerLogic.CanPlayGame){
 			showComeAgainMessage = true;
 		}
 	}

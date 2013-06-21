@@ -34,7 +34,7 @@ public class InhalerGameManager : MonoBehaviour{
     float timeBeforeHints = 5.0f;
 
     public void ResetInhalerGame(){
-        if (InhalerLogic.HasPlaysRemaining()){ // tells us if we can play the game or not (any more plays remaining today)
+        if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
         }
@@ -84,7 +84,7 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void SetUpInhalerGame(){
-        InhalerLogic.Init();
+        InhalerLogic.Init(false);
 
         // todo: remove after testing
         // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
@@ -140,7 +140,7 @@ public class InhalerGameManager : MonoBehaviour{
             inhalerGameGUI.DisplayMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
-            InhalerLogic.ResetGame(); // call this before showing the slots
+            // InhalerLogic.ResetGame(); // call this before showing the slots
             inhalerGameGUI.HideButtons();
             Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
         }

@@ -10,11 +10,11 @@ public static class InhalerLogic{
 
     private static InhalerType currentInhalerType; //either Advair or Rescue inhaler
     private static int currentStep; //current step that user is on
-    // private static bool isOptimalTime; //True: allow user to plan high reward inhaler game, 
+    // private static bool isOptimalTime; //True: allow user to plan high reward inhaler game,
                                          //False: can only plan practice game
     private static TimeSpan optimalTimeWindow; //how long does the optimal window lasts
     private static bool canPlayGame; //true: play game, false: exit game
-    private static bool isPracticeGame; //true: practice game less reward, 
+    private static bool isPracticeGame; //true: practice game less reward,
                                         //false: real game more reward.
 
     //=================API (use this for UI)==================
@@ -36,10 +36,10 @@ public static class InhalerLogic{
         get{return currentInhalerType;}
     }
 
-    //return slot machine count
-    public static int GetSlotMachineCount{
-        get{return DataManager.SlotMachineCounter;}
-    }
+    // //return slot machine count
+    // public static int GetSlotMachineCount{
+    //     get{return DataManager.SlotMachineCounter;}
+    // }
 
     //can user play game? True: continue w game, False: prompt user to exit
     public static bool CanPlayGame{
@@ -52,9 +52,9 @@ public static class InhalerLogic{
     }
 
     //Initialize game data and reset counters if it's a new day
-    public static void Init(bool isPracticeGame){
+    public static void Init(bool isPractice){
         canPlayGame = false;
-        isPracticeGame = isPracticeGame;
+        isPracticeGame = isPractice;
         if(isPracticeGame){ //practice inhaler game (teddy bear)
             canPlayGame = true;
 

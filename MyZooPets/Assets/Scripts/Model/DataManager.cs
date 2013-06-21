@@ -138,10 +138,10 @@ public class DataManager : MonoBehaviour {
         get{return lastInhalerGamePlayed;}
         set{lastInhalerGamePlayed = value;}
     }
-    public static int SlotMachineCounter{
-        get{return slotMachineCounter;}
-        set{slotMachineCounter = value;}
-    }
+    // public static int SlotMachineCounter{
+    //     get{return slotMachineCounter;}
+    //     set{slotMachineCounter = value;}
+    // }
     public static int NumberOfTimesLeft{
         get{return numberOfTimesLeft;}
         set{numberOfTimesLeft = value;}

@@ -16,7 +16,7 @@ public class StoreGUI : MonoBehaviour {
 //	private bool StoreGUIOn = true;
 	
 	private float sliderValue;
-	
+	private ItemLogic itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	
 	// Use this for initialization
 	void Start () {
@@ -75,6 +75,14 @@ public class StoreGUI : MonoBehaviour {
 			if(GUI.Button(new Rect(backgroundloc.x+50,backgroundloc.y+50,50,50),"X")){
 				hideStore();
 			}
+			
+			GUILayout.BeginArea(new Rect(page1loc.x,page1loc.y,1000,600));
+			GUILayout.BeginHorizontal();
+			for(int i = 0; i< itemlogic.names.Count ;i++){
+				GUILayout.Button(itemlogic.textures[i],GUILayout.Width(200),GUILayout.Height(100));
+			}
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
 		}
 	}
 }

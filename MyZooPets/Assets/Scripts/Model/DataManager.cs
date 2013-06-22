@@ -75,11 +75,17 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool canPlayGameAfternoon; //can user play in the afternoon (optimal game)
     [SerializeThis]
-    private static bool firstTimeAdvair;
-    // first time the player has seen the advair inhaler (this tells us whether to show tutorial arrows in the Inhaler Game)
+    private static bool firstTimeAdvair;// first time the player has seen the advair inhaler 
+                                        //(this tells us whether to show tutorial arrows in the Inhaler Game)
     [SerializeThis]
-    private static bool firstTimeRescue;
-    // first time the player has seen the rescue inhaler (this tells us whether to show tutorial arrows in the Inhaler Game)
+    private static bool firstTimeRescue; //first time the player has seen the rescue inhaler 
+                                        //(this tells us whether to show tutorial arrows in the Inhaler Game)
+
+    //Degradation Data
+    [SerializeThis]
+    private static DateTime lastTimeUserPlayedGame; //last time that the user opened the game
+    [SerializeThis]
+    private static List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
     //========================
 
     //=============Getters & Setters===============
@@ -138,10 +144,6 @@ public class DataManager : MonoBehaviour {
         get{return lastInhalerGamePlayed;}
         set{lastInhalerGamePlayed = value;}
     }
-    // public static int SlotMachineCounter{
-    //     get{return slotMachineCounter;}
-    //     set{slotMachineCounter = value;}
-    // }
     public static int NumberOfTimesLeft{
         get{return numberOfTimesLeft;}
         set{numberOfTimesLeft = value;}
@@ -169,6 +171,16 @@ public class DataManager : MonoBehaviour {
     public static bool FirstTimeRescue{
         get{return firstTimeRescue;}
         set{firstTimeRescue = value;}
+    }
+
+    //Degradation
+    public static DateTime LastTimeUserPlayedGame{
+        get{return lastTimeUserPlayedGame;}
+        set{lastTimeUserPlayedGame = value;}
+    }
+    public static List<DegradData> DegradationTriggers{
+        get{return degradationTriggers;}
+        set{degradationTriggers = value;}
     }
     //===============================
 
@@ -326,6 +338,10 @@ public class DataManager : MonoBehaviour {
             canPlayGameAfternoon = true;
             firstTimeAdvair = true;
             firstTimeRescue = true;
+
+            //Degradation game data
+            lastTimeUserPlayedGame = DateTime.Now;
+            degradationTriggers = new List<DegradData>();
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

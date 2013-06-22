@@ -36,11 +36,6 @@ public static class InhalerLogic{
         get{return currentInhalerType;}
     }
 
-    // //return slot machine count
-    // public static int GetSlotMachineCount{
-    //     get{return DataManager.SlotMachineCounter;}
-    // }
-
     //can user play game? True: continue w game, False: prompt user to exit
     public static bool CanPlayGame{
         get{return canPlayGame;}
@@ -75,23 +70,23 @@ public static class InhalerLogic{
             // < 0 t1 is earlier than t2
             // 0 t1 is the same as t2
             // > 0 t1 later than t2
-            Debug.Log("Optimal morning period is from " + DataManager.OptimalMorningStartTime + " to " + DataManager.OptimalMorningStartTime + optimalTimeWindow);
-            Debug.Log("Optimal afternoon period is from " + DataManager.OptimalAfternoonStartTime + " to " + DataManager.OptimalAfternoonStartTime + optimalTimeWindow);
-            int startResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime);
-            int endResult = DateTime.Compare(now, DataManager.OptimalMorningStartTime + optimalTimeWindow);
-            if(startResult >= 0 && endResult <= 0){
-                if(DataManager.CanPlayGameMorning){
+            Debug.Log("Optimal morning period is from " + DataManager.OptimalMorningStartTime + " to " + DataManager.OptimalMorningStartTime.Add(optimalTimeWindow));
+            Debug.Log("Optimal afternoon period is from " + DataManager.OptimalAfternoonStartTime + " to " + DataManager.OptimalAfternoonStartTime.Add(optimalTimeWindow));
+            if(now.Hour < 12){ //morning so check for morning optimal time
+                if(now.Hour >= DataManager.OptimalMorningStartTime.Hour && 
+                    now.Hour <= (DataManager.OptimalMorningStartTime + optimalTimeWindow).Hour &&
+                    DataManager.CanPlayGameMorning){
                     canPlayGame = true;
-                    DataManager.CanPlayGameMorning = false; //can only play optimal game once
+                    DataManager.CanPlayGameMorning = false;
                 }
-            }else if(now >= DataManager.OptimalAfternoonStartTime &&
-                    now <= (DataManager.OptimalAfternoonStartTime + optimalTimeWindow)){
-                if(DataManager.CanPlayGameAfternoon){
+            }else{ //afternoon so check for afternoon optimal time
+                if(now.Hour >= DataManager.OptimalAfternoonStartTime.Hour &&
+                    now.Hour <= (DataManager.OptimalAfternoonStartTime + optimalTimeWindow).Hour &&
+                    DataManager.CanPlayGameAfternoon){
                     canPlayGame = true;
-                    DataManager.CanPlayGameAfternoon = false; //can only play optimal game once
+                    DataManager.CanPlayGameAfternoon = false; //can only play optimal game once in afternoon
                 }
-            }else{}
-
+            }
         }
 
         int randomId = UnityEngine.Random.Range(0, 2);

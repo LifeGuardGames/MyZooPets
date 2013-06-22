@@ -319,8 +319,8 @@ public class DataManager : MonoBehaviour {
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
 
             //Inhaler game data initialization
-            // optimalMorningStartTime = new DateTime();
-            // optimalAfternoonStartTime = new DateTime();
+            optimalMorningStartTime = new DateTime(1, 1, 1, 6, 0, 0);
+            optimalAfternoonStartTime = new DateTime(1, 1, 1, 18, 0, 0);
             lastInhalerGamePlayed = DateTime.Now;
             canPlayGameMorning = true;
             canPlayGameAfternoon = true;

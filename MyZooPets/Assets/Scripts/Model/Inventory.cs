@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour {
 	}
 	
 	public void useItem(int id){
-		if(inventory[id]!=null){
+		if(inventory[id]!=0){
 			inventory[id] --;
 			itemlogic.OnCall(id);
 		}

@@ -11,6 +11,7 @@ public class Item {
 	public int ID;
 	public Texture2D Texture{get{return texture;} }
 	public string Name{get{return name;}}
+	public int Cost{get{return cost;}}
 	
 	public Item(int id,string n,int c, Texture2D t)
 	{

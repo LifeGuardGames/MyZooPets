@@ -5,6 +5,11 @@ public class StoreGUI : MonoBehaviour {
 
 	public Texture2D backgroundTexture;
 	public Texture2D page1Texture,page2Texture,page3Texture,page4Texture;
+	public GUIStyle itemTitleStyle;
+	public GUIStyle itemInfoStyle;
+	public GUIStyle itemBackgroundStyle;
+	public GUIStyle smallBoxStyle;
+	public GUIStyle buyIconStyle;
 	
 	private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
@@ -12,11 +17,17 @@ public class StoreGUI : MonoBehaviour {
 	private Vector2 page1loc = new Vector2(100,100);
 	
 	private int storePage = 1;
-	private bool StoreGUIOn = false;
-//	private bool StoreGUIOn = true;
+//	private bool StoreGUIOn = false;
+	private bool StoreGUIOn = true;
+	
+	//pop window
+	private bool windowOn = false;
+	private int itemId = 0;
 	
 	private float sliderValue;
 	private ItemLogic itemlogic; 
+	
+	private Rect windowRect = new Rect(0,0,100,100);
 	
 	// Use this for initialization
 	void Start () {
@@ -61,7 +72,6 @@ public class StoreGUI : MonoBehaviour {
 			
 			if(storePage == 1){
 				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page1Texture);
-				sliderValue = GUI.VerticalScrollbar(new Rect(1100,150,100,500),sliderValue,2f,20f,0f);
 			}
 			if(storePage == 2){
 				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page2Texture);
@@ -77,13 +87,25 @@ public class StoreGUI : MonoBehaviour {
 				hideStore();
 			}
 			
-			GUILayout.BeginArea(new Rect(page1loc.x,page1loc.y,1000,600));
-			GUILayout.BeginHorizontal();
-			for(int i = 0; i< itemlogic.names.Count ;i++){
-				GUILayout.Button(itemlogic.textures[i],GUILayout.Width(200),GUILayout.Height(100));
+			GUILayout.BeginArea(new Rect(page1loc.x+50,page1loc.y+50,1000,600));
+			for(int i = 0; i< itemlogic.items.Count ;i+=2){
+				GUI.Box (new Rect(0,i*100,480,200),"");
+				GUI.Box (new Rect(0,i*100,200,180),itemlogic.textures[i]);
+				GUI.Label(new Rect(220,i*100,220,100),itemlogic.items[i].Name,itemTitleStyle);
+				GUI.Label (new Rect(220,i*100+ 40,220,100),"Health + 10",itemInfoStyle);
+				GUI.Label( new Rect(220,i*100+ 60,200,100)," Cost: " + itemlogic.items[i].Cost.ToString(),itemInfoStyle);
+				GUI.Button( new Rect(250,i*100+ 100,200,80),"Buy");
+				
+//				GUI.Box (new Rect (500,i*100,200,180),itemlogic.textures[i+1]);
+				GUI.Box (new Rect(500,i*100,480,200),"");
+				GUI.Box (new Rect(500,i*100,200,180),itemlogic.textures[i+1]);
+				GUI.Label(new Rect(720,i*100,220,100),itemlogic.items[i+1].Name,itemTitleStyle);
+				GUI.Label (new Rect(720,i*100+ 40,220,100),"Health + 10",itemInfoStyle);
+				GUI.Label( new Rect(720,i*100+ 60,200,100)," Cost: " + itemlogic.items[i+1].Cost.ToString(),itemInfoStyle);
+				GUI.Button( new Rect(750,i*100+ 100,200,80),"Buy");
 			}
-			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
+			
 		}
 	}
 }

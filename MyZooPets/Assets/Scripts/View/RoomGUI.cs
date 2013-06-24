@@ -307,9 +307,9 @@ public class RoomGUI : MonoBehaviour {
 
 		//Temp diagnose Button
 		// TODO-s change this later
-		if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
-			diagnoseGUI.DiagnoseClicked();
-		}
+		// if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
+		// 	diagnoseGUI.DiagnoseClicked();
+		// }
 
 		//Temp pop out "GREAT"
 		if(GUI.Button(new Rect(optionRect.rect.x - 200,optionRect.rect.y ,90,90), "YAY!")){

@@ -18,5 +18,11 @@ public enum InhalerType{
     Rescue,
 }
 
+public enum AsthmaStage{
+    Discomfort,
+    Sick,
+    Attack,
+}
+
 
 

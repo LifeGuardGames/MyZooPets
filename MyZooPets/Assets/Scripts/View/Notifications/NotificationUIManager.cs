@@ -14,9 +14,12 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
 	public GameObject popupSpeech;
+	public GameObject popupNotification;
 
 	public bool flipped;
 
+
+		
 	void Start(){
 		if (!flipped){
 			gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
@@ -27,6 +30,7 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	//TODO-s some kind of complex hashmap storage for references? TODO-s particle not used
+	//use this method to display any sort of notification or popup
 	public void PopupTexture(string message, int deltaPoints, int deltaStars, int deltaHealth, int deltaMood, int deltaHunger){
 		if(message == "great"){
 			GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
@@ -46,6 +50,17 @@ public class NotificationUIManager : MonoBehaviour {
 				Debug.LogError("Script attachment missing");
 			}
 			Destroy(go2, 3.0f);
+		}
+	}
+
+	//use this method to display an notification that has an icon, message, yes button, and no button
+	public void PopupNotification(string message, PopupNotification.OnButtonClicked yesCallBack, 
+		PopupNotification.OnButtonClicked noCallBack){
+		GameObject go = Instantiate(popupNotification, gameObject.transform.position, Quaternion.identity) as GameObject;
+		PopupNotification script = go.GetComponent<PopupNotification>();
+		if(script != null){
+			print("working");
+			script.Init(message, yesCallBack, noCallBack);
 		}
 	}
 

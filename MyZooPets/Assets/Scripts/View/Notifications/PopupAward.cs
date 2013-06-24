@@ -12,14 +12,17 @@ public class PopupAward : MonoBehaviour {
 	private int deltaPoints, deltaStars, deltaHealth, deltaMood, deltaHunger;
 	
 	private LTRect awardRect;
+	// native dimensions
+    private const float NATIVE_WIDTH = 1280.0f;
+    private const float NATIVE_HEIGHT = 800.0f;
 	
 	void Start(){
-		awardRect = new LTRect(Screen.width/2 - 150, -100, 300, 400);
+		awardRect = new LTRect(NATIVE_WIDTH/2 - 150, NATIVE_HEIGHT/2, 300, 400);
 		//awardHash = new Hashtable<string, string>();
 		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutBounce);
-		LeanTween.move(awardRect, new Vector2(Screen.width/2 - awardRect.rect.width/2, Screen.height/2 + 150), 1.0f, optional);
+		LeanTween.move(awardRect, new Vector2(NATIVE_WIDTH/2 - awardRect.rect.width/2, NATIVE_HEIGHT/2 + 150), 1.0f, optional);
 	}
 	
 	//TODO-s correct way to contruct initilization?
@@ -32,9 +35,16 @@ public class PopupAward : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		// Proportional scaling
+		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
+            float horizRatio = Screen.width/NATIVE_WIDTH;
+            float vertRatio = Screen.height/NATIVE_HEIGHT;
+            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
+		}
+
 		GUILayout.BeginArea(awardRect.rect);
+		GUILayout.BeginHorizontal();
 		GUILayout.BeginVertical();
-		
 		if(deltaPoints != 0){
 			GUILayout.BeginHorizontal();
 			GUILayout.Box(pointsIcon, GUILayout.Height(60), GUILayout.Width(60));
@@ -59,6 +69,8 @@ public class PopupAward : MonoBehaviour {
 			GUI.color = Color.white;
 			GUILayout.EndHorizontal();
 		}
+		GUILayout.EndVertical();
+		GUILayout.BeginVertical();
 		if(deltaMood != 0){
 			GUILayout.BeginHorizontal();
 			GUILayout.Box(moodIcon, GUILayout.Height(60), GUILayout.Width(60));
@@ -75,8 +87,9 @@ public class PopupAward : MonoBehaviour {
 			GUI.color = Color.white;
 			GUILayout.EndHorizontal();
 		}
-		
 		GUILayout.EndVertical();
+		
+		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
 	}
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CheckupLogic : MonoBehaviour {
+public class RewardSystemTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -9,8 +9,6 @@ public class InhalerGameManager : MonoBehaviour{
     public GameObject inhaleExhalePrefab; // arrows that indicate whether to breathe in or out
     public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
 
-    // public GameObject slotMachine;
-
     private GameObject advair;
     private GameObject rescue;
     private GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
@@ -19,7 +17,6 @@ public class InhalerGameManager : MonoBehaviour{
 
     public bool isPracticeGame;
 
-    // private SlotMachineManager slotMachineManager; // component of slotMachine
     InhalerGameGUI inhalerGameGUI;
 
     // todo: create accessors
@@ -34,27 +31,20 @@ public class InhalerGameManager : MonoBehaviour{
     float timer = 0;
     float timeBeforeHints = 5.0f;
 
-    // On Awake, initialize the values in InhalerLogic. Then determine whether to show (activate)
-    // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
-    void Awake(){
-        // ResetInhalerGame();
-    }
     void Start(){
         ResetInhalerGame();
 
         inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
-        // slotMachineManager.SpinEndCallBack = FinishedSpinning;
     }
 
+    // Initialize the values in InhalerLogic. Then determine whether to show (activate)
+    // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
     public void ResetInhalerGame(){
         InhalerLogic.Init(isPracticeGame);
 
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
             DestroyAndRecreatePrefabs();
             SetUpInhalerGame();
-        }
-        else {
-            // slotMachine.SetActive(false);
         }
         gameEnded = false;
     }
@@ -90,11 +80,6 @@ public class InhalerGameManager : MonoBehaviour{
 
         // todo: remove after testing
         // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
-
-        // slotMachineManager = slotMachine.GetComponent<SlotMachineManager>();
-        // hide slot machine
-        // slotMachine.SetActive(false);
-
 
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
@@ -142,10 +127,8 @@ public class InhalerGameManager : MonoBehaviour{
             inhalerGameGUI.DisplayMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
-            // InhalerLogic.ResetGame(); // call this before showing the slots
             inhalerGameGUI.HideButtons();
             Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play
-            // Invoke("ShowSlotMachine", 3); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
 
@@ -161,18 +144,4 @@ public class InhalerGameManager : MonoBehaviour{
             DataManager.FirstTimeRescue = false;
         }
     }
-
-    // void ShowSlotMachine(){
-    //     slotMachine.SetActive(true);
-    //     slotMachineManager.SpinWhenReady();
-    // }
-
-    // void FinishedSpinning(){
-    //     showPlayAgain = true;
-    //     inhalerGameGUI.ShowButtons();
-    //     // if (slotMachineManager.CheckMatch()){
-    //         // todo: change later
-    //         DataManager.AddPoints(100);
-    //     }
-    // }
 }

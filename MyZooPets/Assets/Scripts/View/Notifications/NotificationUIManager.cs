@@ -11,11 +11,12 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject cameraObject;
 
 	public GameObject popupTextureGreat;
+	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
 	public GameObject popupSpeech;
 
 	public bool flipped;
-		
+
 	void Start(){
 		if (!flipped){
 			gameObject.transform.position = new Vector3(cameraObject.transform.position.x, cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
@@ -47,8 +48,19 @@ public class NotificationUIManager : MonoBehaviour {
 			Destroy(go2, 3.0f);
 		}
 	}
-	
+
+	public void PopupTexture(string message){
+		if(message == "great"){
+			GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 3.0f);
+		}
+		if (message == "intro"){
+			GameObject go = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 3.0f);
+		}
+	}
+
 	public void PopupSpeechBubble(){
-		
+
 	}
 }

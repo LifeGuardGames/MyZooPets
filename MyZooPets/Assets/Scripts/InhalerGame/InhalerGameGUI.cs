@@ -26,6 +26,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	private bool isUpdating = false;
 
 	private bool showButtons = true;
+	private bool showIntroEnded = false;
 
     public GameObject slotMachine;
     NotificationUIManager notificationUIManager;
@@ -95,6 +96,17 @@ public class InhalerGameGUI : MonoBehaviour {
 		}
 	}
 
+	public void ShowIntro(){
+		showIntroEnded = false;
+		notificationUIManager.PopupTexture("intro");
+
+		Invoke("ShowIntroEnd", 3);
+	}
+
+	void ShowIntroEnd(){
+		showIntroEnded = true;
+	}
+
 	void OnGUI(){
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
@@ -126,6 +138,10 @@ public class InhalerGameGUI : MonoBehaviour {
 				GUI.DrawTexture(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx), 670, circleGray.width, circleGray.height), circleGray);
 			}
 			GUI.Label(new Rect((pos.x - circleGray.width / 2) + (i * segmentChunkPx) + 30, 682, circleGray.width, circleGray.height), i.ToString(), inhalerStyle);
+		}
+
+		if (!showIntroEnded && InhalerLogic.CanPlayGame){
+			return;
 		}
 
 		if (showButtons){

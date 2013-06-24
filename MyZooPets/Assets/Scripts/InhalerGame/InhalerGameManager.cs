@@ -30,11 +30,12 @@ public class InhalerGameManager : MonoBehaviour{
     bool runShowHintTimer = true;
     float timer = 0;
     float timeBeforeHints = 5.0f;
+    bool introShown = false;
 
     void Start(){
-        ResetInhalerGame();
-
         inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
+
+        ResetInhalerGame();
     }
 
     // Initialize the values in InhalerLogic. Then determine whether to show (activate)
@@ -43,10 +44,21 @@ public class InhalerGameManager : MonoBehaviour{
         InhalerLogic.Init(isPracticeGame);
 
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
-            DestroyAndRecreatePrefabs();
-            SetUpInhalerGame();
+
+            if (!introShown){
+                inhalerGameGUI.ShowIntro();
+                Invoke("SetUpScene", 3);
+            }
+            else {
+                SetUpScene();
+            }
         }
         gameEnded = false;
+    }
+
+    void SetUpScene(){
+        DestroyAndRecreatePrefabs();
+        SetUpInhalerGame();
     }
 
     void DestroyAndRecreatePrefabs(){

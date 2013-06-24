@@ -47,6 +47,7 @@ public class InhalerGameManager : MonoBehaviour{
 
             if (!introShown){
                 inhalerGameGUI.ShowIntro();
+                introShown = true;
                 Invoke("SetUpScene", 3);
             }
             else {

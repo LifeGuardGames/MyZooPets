@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class Inventory : MonoBehaviour {
 
 	
-	private List<int> inventory = new List<int>();
+	public int[] inventory ;
+//	public List<int> inventory = new List<int>();
 	private ItemLogic itemlogic;
 	
 	public void addItem(int id, int count){
@@ -27,6 +28,7 @@ public class Inventory : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
+		inventory = new int[itemlogic.items.Count];
 		
 		//testing
 		addItem(1,2); //2 apples

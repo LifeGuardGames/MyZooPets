@@ -8,8 +8,8 @@ public class ItemLogic : MonoBehaviour{
 	public List<string> names = new List<string>();
 	public List<Texture2D> textures = new List<Texture2D>();
 	public List<int> costs = new List<int>();
-	private List<Item> items = new List<Item>();
-	private List<Action> methods = new List<Action>();
+	public List<Item> items = new List<Item>();
+	public List<Action> methods = new List<Action>();
 	
 	
 	public void OnCall(int id){

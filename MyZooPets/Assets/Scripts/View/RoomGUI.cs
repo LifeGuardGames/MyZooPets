@@ -43,6 +43,7 @@ public class RoomGUI : MonoBehaviour {
 	public GUIStyle starTextStyle;
 	public GUIStyle expreTextStyle;
 	public GUIStyle tierTextStyle;
+	public GUIStyle itemCountTextStyle;
 
 	//4 stat indicator
 	public float progress;
@@ -53,7 +54,7 @@ public class RoomGUI : MonoBehaviour {
 	//LTRects for LeanTween movement for all GUI Objects
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
-	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100, 1013, 105);
+	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100,1000, 105);
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
 
 	//Positions/Offsets for all GUI elements
@@ -75,6 +76,10 @@ public class RoomGUI : MonoBehaviour {
 	private Vector2 progressBarOffset = new Vector2(150, 11);
 	private Vector2 progressTextOffset = new Vector2(230, 12);
 
+	//inventory
+	public Inventory inventory;
+	public ItemLogic itemlogic;
+	
 	//MISC
 	private bool isMenuExpanded = true;
 	private bool showOption = false;
@@ -89,8 +94,12 @@ public class RoomGUI : MonoBehaviour {
 	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
+	
 
 	void Start(){
+		
+		inventory = GameObject.Find ("DataManager").GetComponent<Inventory>();
+		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
@@ -226,34 +235,51 @@ public class RoomGUI : MonoBehaviour {
 			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 		}
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
-
+		
+		//get count of items owned
+		int counter = 0;
+		for(int i = 0;i< inventory.inventory.Length;i++){
+			if(inventory.inventory[i]!=0) counter++;
+		}
 		//Extending Button Groups
 		//Includes 4 items/Buttons for now.
-		menuTextureRect = new Rect(menuRect.rect.x - 600, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
+		menuTextureRect = new Rect(menuRect.rect.x  - 910 + 80f * counter/*- (1000-((counter+1) * 85))*/, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
 		GUILayout.BeginHorizontal("");
-		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			DataManager.AddHunger(30);
+		
+		counter =0;
+		//implementing itemlogic
+		for(int i = 0 ;i < itemlogic.items.Count; i++){
+			if(inventory.inventory[i]!=0){
+				if(GUILayout.Button(itemlogic.items[i].Texture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+					inventory.useItem(i);
+				}
+				counter++;
+				GUI.Label(new Rect(-10+counter*80-80,35,100,80),"x " + inventory.inventory[i].ToString(),itemCountTextStyle);
+			}
 		}
-		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			DataManager.AddHunger(10);
-		}
-
-		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			inhalerpicked = true;
-		}
-
-		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-			emInhalerpicked = true;
-		}
+//		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+//			DataManager.AddHunger(30);
+//		}
+//		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+//			DataManager.AddHunger(10);
+//		}
+//
+//		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+//			inhalerpicked = true;
+//		}
+//
+//		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+//			emInhalerpicked = true;
+//		}
 		//move in/out of item bar
 		if(isMenuExpanded){
 			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 				isMenuExpanded = false;
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeInOutQuad);
-				LeanTween.move(menuRect, new Vector2(-317, NATIVE_HEIGHT - 100), 0.3f, optional);
+				LeanTween.move(menuRect, new Vector2(-80f * counter, NATIVE_HEIGHT - 100), 0.3f, optional);
 			}
 		}
 		else{

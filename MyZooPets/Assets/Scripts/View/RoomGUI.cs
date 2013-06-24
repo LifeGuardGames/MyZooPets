@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RoomGUI : MonoBehaviour {
 
@@ -48,7 +49,7 @@ public class RoomGUI : MonoBehaviour {
 	public float food;
 	public float mood;
 	public float health;
-
+	
 	//LTRects for LeanTween movement for all GUI Objects
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);

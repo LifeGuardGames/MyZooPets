@@ -1,25 +1,22 @@
 using UnityEngine;
 using System.Collections;
 
-public class Items {
+public class Item {
 
 	private string name;
 	private Texture2D texture;
 	private int cost;
 	private int count;
 	
+	public int ID;
 	public Texture2D Texture{get{return texture;} }
 	public string Name{get{return name;}}
-	public int Count{get{return count;}}
 	
-	public Items(string n,int c, Texture2D t)
+	public Item(int id,string n,int c, Texture2D t)
 	{
+		this.ID = id;
 		this.name = n;
-		this.texture = null;
 		this.cost = c;
 		this.texture = t;
-		this.count = 1;
 	}
-	
-	public delegate void onUse();
 }

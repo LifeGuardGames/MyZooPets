@@ -102,14 +102,14 @@ public class InhalerSwitch : MonoBehaviour
 	}
 
 	void PreventAntiClockwiseRotation(){
-		if (transform.rotation.z < 0){
-			transform.rotation = Quaternion.identity;
+		if (transform.localRotation.z < 0){
+			transform.localRotation = Quaternion.identity;
 		}
 	}
 
 	void CheckIfCompletelyOpened(){
-		if (transform.eulerAngles.z >= 30){
-			transform.eulerAngles = maxPosition;
+		if (transform.localEulerAngles.z >= 30){
+			transform.localEulerAngles = maxPosition;
 			completelyOpened = true;
 			RemoveArrowAnimation();
 			audio.Play();
@@ -129,7 +129,7 @@ public class InhalerSwitch : MonoBehaviour
 
 	void SnapBack(){
 
-		if (transform.eulerAngles.z > 0){
+		if (transform.localRotation.z > 0){
 			float rotationAmount = -5;
 			transform.RotateAroundLocal(Vector3.forward, rotationAmount * Time.deltaTime);
 		}

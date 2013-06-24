@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,33 +8,29 @@ public class ItemLogic : MonoBehaviour{
 	public List<string> names = new List<string>();
 	public List<Texture2D> textures = new List<Texture2D>();
 	public List<int> costs = new List<int>();
+	public List<Item> items = new List<Item>();
+	public List<Action> methods = new List<Action>();
 	
-	private Hashtable items = new Hashtable();
-	private Dictionary<object, Items.onUse> delegates;
-		
 	
-	public Items getItem(string name){
-		return (Items)items[name];
+	public void OnCall(int id){
+		methods[id]();
 	}
 	
-	public void OnCall(string name){
-		delegates[name]();
+	private void loadMethods(){
+		methods.Add(()=>takeApple());
+		methods.Add(()=>takeSandwich());
+		methods.Add(()=>takeInhaler());
+		methods.Add(()=>takeEmInhaler());	
 	}
-	
 	
 	void Awake(){
-		delegates = new Dictionary<object, Items.onUse>{
-		{names[0], takeApple},
-		{names[1], takeSandwich},
-		{names[2], takeInhaler},
-		{names[3], takeEmInhaler}
-	};	
 		
 		if(names.Count == textures.Count && textures.Count == costs.Count){
 			for(int i = 0;i< names.Count;i++){
-				items.Add (names[i],new Items(names[i],costs[i],textures[i]));
+				items.Add(new Item(i,names[i],costs[i],textures[i]));
 			}
 		}
+		loadMethods();
 	}
 	
 	public static void takeApple(){

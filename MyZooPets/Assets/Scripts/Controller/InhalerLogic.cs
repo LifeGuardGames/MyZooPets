@@ -73,7 +73,7 @@ public static class InhalerLogic{
             Debug.Log("Optimal morning period is from " + DataManager.OptimalMorningStartTime + " to " + DataManager.OptimalMorningStartTime.Add(optimalTimeWindow));
             Debug.Log("Optimal afternoon period is from " + DataManager.OptimalAfternoonStartTime + " to " + DataManager.OptimalAfternoonStartTime.Add(optimalTimeWindow));
             if(now.Hour < 12){ //morning so check for morning optimal time
-                if(now.Hour >= DataManager.OptimalMorningStartTime.Hour && 
+                if(now.Hour >= DataManager.OptimalMorningStartTime.Hour &&
                     now.Hour <= (DataManager.OptimalMorningStartTime + optimalTimeWindow).Hour &&
                     DataManager.CanPlayGameMorning){
                     canPlayGame = true;

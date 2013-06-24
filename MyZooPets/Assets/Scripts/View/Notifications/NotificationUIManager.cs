@@ -11,6 +11,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject cameraObject;
 
 	public GameObject popupTextureGreat;
+	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
 	public GameObject popupSpeech;
 	public GameObject popupNotification;
@@ -62,8 +63,19 @@ public class NotificationUIManager : MonoBehaviour {
 			script.Init(message, yesCallBack, noCallBack);
 		}
 	}
-	
+
+	public void PopupTexture(string message){
+		if(message == "great"){
+			GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 3.0f);
+		}
+		if (message == "intro"){
+			GameObject go = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 3.0f);
+		}
+	}
+
 	public void PopupSpeechBubble(){
-		
+
 	}
 }

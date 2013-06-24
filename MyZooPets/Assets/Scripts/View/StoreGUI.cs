@@ -16,11 +16,12 @@ public class StoreGUI : MonoBehaviour {
 //	private bool StoreGUIOn = true;
 	
 	private float sliderValue;
-	private ItemLogic itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
+	private ItemLogic itemlogic; 
 	
 	// Use this for initialization
 	void Start () {
 	
+		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	}
 	
 	// Update is called once per frame

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class InhalerInhaleExhale : MonoBehaviour {
 
+    public AudioSource inhale;
+    public AudioSource exhale;
     tk2dAnimatedSprite arrows;
     float firstTouchYPos;
     bool firstTouchOnObject = false;
@@ -50,6 +52,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     // check if step 3 is correct
                     // if it is, increment InhalerLogic.CurrentStep
                     if (InhalerLogic.IsCurrentStepCorrect(3)){
+                        exhale.Play();
                         Debug.Log("Completed step 3");
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();
@@ -61,6 +64,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
                     // check if step breathing in is correct
                     // if it is, increment InhalerLogic.CurrentStep
                     if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
+                        inhale.Play();
                         Debug.Log("Completed step" + breathingInStep);
                         if (!InhalerLogic.IsDoneWithGame()){
                             InhalerLogic.NextStep();

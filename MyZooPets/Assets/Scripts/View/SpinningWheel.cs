@@ -12,10 +12,10 @@ public class SpinningWheel : MonoBehaviour {
     }
 
     //start the slot machine
-    public void StartSpin(float chosenSlot){
+    public void StartSpin(float chosenSlot, int priority){
         this.chosenSlot = chosenSlot;
         spin = true;
-        Invoke("StopSpin", 2);
+        Invoke("StopSpin", priority + 2);
     }
 
     //stop the slot machine at a random slot

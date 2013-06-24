@@ -12,7 +12,8 @@ public class SlotMachineManager : MonoBehaviour {
 
     void Awake(){
         int counter = 0;
-        foreach(Transform wheel in transform){
+
+        foreach(Transform wheel in transform){ //obtain reference to 3 spinning wheels
             wheels[counter] = wheel;
             counter++;
         }
@@ -20,7 +21,7 @@ public class SlotMachineManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        StartGame();
 	}
 
 	// Update is called once per frame
@@ -35,49 +36,18 @@ public class SlotMachineManager : MonoBehaviour {
         }
 	}
 
-    public bool SpinWhenReady(){
-        bool retVal = false;
-        // ResetGame(); //needs to reset the game show the black screens show up
-
-        // //check counter
-        // if(InhalerLogic.GetSlotMachineCount <= 3){ //make sure not out of index
-        //     for(int i = 0; i<InhalerLogic.GetSlotMachineCount; i++){
-        //         //turn the black screen off according slot machine count
-        //         wheels[i].Find("Screen").renderer.enabled = false;
-        //     }
-        // }
-        // gameOver = false;
-        // if(InhalerLogic.GetSlotMachineCount == 3){
-        //     StartGame(); //spin the wheels
-        //     retVal = true;
-        // }
-        // else {
-        //     if(SpinEndCallBack != null) SpinEndCallBack();
-        // }
-        return retVal;
-
-    }
-
-    private void ResetGame(){
-        for(int i = 0; i<3; i++){
-            wheels[i].Find("Screen").renderer.enabled = true;
-        }
-    }
-
     //Generate the random slots and spin the wheels
     private void StartGame(){
         for(int i = 0; i<3; i++){
             slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
             chosenSlots[i] = SLOT_OFFSET * (float)slots[i]; //calculate the offset for the wheels
-            wheels[i].GetComponent<SpinningWheel>().StartSpin(chosenSlots[i]);
+            wheels[i].GetComponent<SpinningWheel>().StartSpin(chosenSlots[i], i);    
         }
     }
 
     //check if the slots are 3 in a row
     public bool CheckMatch(){
-        // return ((InhalerLogic.GetSlotMachineCount == 3) &&
-            // (slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2]));
-        return false;
+        return slots[0] == slots[1] && slots[0] == slots[2] && slots[1] == slots[2];
     }
 
     //Notify other classes that the spinning are finished

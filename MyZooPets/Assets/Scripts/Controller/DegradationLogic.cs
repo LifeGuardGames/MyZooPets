@@ -20,7 +20,6 @@ public class DegradationLogic : MonoBehaviour {
         TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;
         int daysMissed = sinceLastPlayed.Days;
         int numberOfTriggersToInit = 0;;
-        print(daysMissed);
 
         if(daysMissed > 1){
             if(daysMissed < 3){ //level 1 degradation
@@ -44,20 +43,14 @@ public class DegradationLogic : MonoBehaviour {
             GameObject trigger = (GameObject)Instantiate(degradTest, 
                 DataManager.DegradationTriggers[i].Position, Quaternion.identity);
             trigger.GetComponent<DegradTriggerManager>().id = i;
-            print(trigger.GetComponent<DegradTriggerManager>().id);
         }
 
         DataManager.LastTimeUserPlayedGame = DateTime.Now;
     }
 
-    void Update(){
-    }
-
     //use the method when a trigger has been destroyed by user
     public static void ClearDegradationTrigger(int id){
         DegradData degradData = DataManager.DegradationTriggers[0];
-        print(degradData);
-        // print(degradData.ID);
         DataManager.DegradationTriggers.Remove(degradData);
     }
 

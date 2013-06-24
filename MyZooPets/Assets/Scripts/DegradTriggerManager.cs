@@ -4,8 +4,8 @@ using System.Collections;
 public class DegradTriggerManager : MonoBehaviour {
     public int id; //the id of this specific degradation trigger
 	// Use this for initialization
+
 	void Start () {
-        	
 	}
 	
 	// Update is called once per frame

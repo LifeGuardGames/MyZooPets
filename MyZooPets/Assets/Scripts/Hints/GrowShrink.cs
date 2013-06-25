@@ -10,6 +10,10 @@ public class GrowShrink : MonoBehaviour {
     public float bigY = 1.1f;
     public float bigZ = 1.1f;
 
+    // for testing only
+    public bool running = false;
+    bool isPlaying = false;
+
     Vector3 smaller;
     Vector3 bigger;
 
@@ -32,14 +36,25 @@ public class GrowShrink : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+        if (running){
+            if (!isPlaying){
+                Play();
+            }
+        }
+        else {
+            if (isPlaying){
+                Stop();
+            }
+        }
 	}
 
     public void Play(){
+        isPlaying = true;
         Grow();
     }
 
     public void Stop(){
+        isPlaying = false;
         LeanTween.cancel(gameObject, leanTweenCurrent);
         transform.localScale = new Vector3(1,1,1); // reset to original size
     }

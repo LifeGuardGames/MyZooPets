@@ -8,6 +8,7 @@ public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
     private DiaryGUI diaryUIManager; //reference to UI
     private CalendarGUI calendarGUI; //reference to UI
+    private ChallengesGUI challengesGUI; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
 
@@ -15,6 +16,7 @@ public class LoadDataLogic : MonoBehaviour {
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
+        challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 
         IsDataLoaded = false;
@@ -33,6 +35,7 @@ public class LoadDataLogic : MonoBehaviour {
         roomGUIAnimator.Init();
         diaryUIManager.Init();
         calendarGUI.Init();
+        challengesGUI.Init();
         evolutionLogic.Init();
         IsDataLoaded = true;
     }

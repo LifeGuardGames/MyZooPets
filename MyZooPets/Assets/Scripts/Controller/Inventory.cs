@@ -7,15 +7,11 @@ public class Inventory : MonoBehaviour {
 	
 	public int[] inventory ;
 //	public List<int> inventory = new List<int>();
+	public bool isDebug;
 	private ItemLogic itemlogic;
 	
 	public void addItem(int id, int count){
-		if(inventory[id] == null){
-			inventory[id] = count;
-		}
-		else{
-			inventory[id] += count;
-		}
+		inventory[id] += count;
 	}
 	
 	public void useItem(int id){
@@ -28,7 +24,10 @@ public class Inventory : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
-		inventory = new int[itemlogic.items.Count];
+		inventory = DataManager.Inventory;
+		if(isDebug){
+			inventory = new int[10];
+		}
 		
 		//testing
 		addItem(1,2); //2 apples

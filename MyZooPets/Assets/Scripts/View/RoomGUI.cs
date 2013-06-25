@@ -98,7 +98,7 @@ public class RoomGUI : MonoBehaviour {
 
 	void Start(){
 		
-		inventory = GameObject.Find ("DataManager").GetComponent<Inventory>();
+		inventory = GameObject.Find ("GameManager").GetComponent<Inventory>();
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();

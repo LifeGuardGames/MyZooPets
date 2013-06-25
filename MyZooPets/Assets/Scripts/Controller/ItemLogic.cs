@@ -11,6 +11,8 @@ public class ItemLogic : MonoBehaviour{
 	public List<Item> items = new List<Item>();
 	public List<Action> methods = new List<Action>();
 	
+	public static int MAX_ITEM_COUNT = 10;
+	
 	
 	public void OnCall(int id){
 		methods[id]();

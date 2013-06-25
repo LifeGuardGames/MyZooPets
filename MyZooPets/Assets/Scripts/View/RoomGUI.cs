@@ -258,7 +258,7 @@ public class RoomGUI : MonoBehaviour {
 				textureSwap = itemlogic.items[i].Texture;
 			}
 			if(inventory.inventory[i]!=0){
-				if(GUILayout.Button(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+				if(GUILayout.RepeatButton(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 					pickedUp = true;
 					pickUpId = i;
 //					inventory.useItem(i);
@@ -305,7 +305,7 @@ public class RoomGUI : MonoBehaviour {
 		//TODO-w Refactor this somewhere else?
 		//Do this when we create Backpack .etc
 		if(pickedUp){
-			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
+			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,NATIVE_HEIGHT- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
 			if(Input.touchCount > 0){
 				if(Input.GetTouch(0).phase == TouchPhase.Ended){
 					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -324,12 +324,12 @@ public class RoomGUI : MonoBehaviour {
 			}
 		}
 		
-		//Swap texture to blank when  picked
-		//also temp solution
-//		if(Input.GetMouseButtonUp(0)){
-//			pickedUp = false;
-//			pickUpId = -1;
-//		}
+		//just for testing 
+		//Delete after
+		if(Input.GetMouseButtonUp(0)){
+			pickedUp = false;
+			pickUpId = -1;
+		}
 
 		//Temp option Menu
 		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){

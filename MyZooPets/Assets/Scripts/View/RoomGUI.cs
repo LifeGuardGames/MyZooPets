@@ -49,7 +49,7 @@ public class RoomGUI : MonoBehaviour {
 	public float food;
 	public float mood;
 	public float health;
-	
+
 	//LTRects for LeanTween movement for all GUI Objects
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
@@ -78,7 +78,7 @@ public class RoomGUI : MonoBehaviour {
 	//inventory
 	public Inventory inventory;
 	public ItemLogic itemlogic;
-	
+
 	//MISC
 	private bool isMenuExpanded = true;
 	private bool showOption = false;
@@ -94,10 +94,10 @@ public class RoomGUI : MonoBehaviour {
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
 	private int pickUpId= -1;
-	
+
 
 	void Start(){
-		
+
 		inventory = GameObject.Find ("GameManager").GetComponent<Inventory>();
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	//Reading & init from other classes
@@ -110,7 +110,7 @@ public class RoomGUI : MonoBehaviour {
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
 	//preset item menu
-		optionLoc = new Vector2(Screen.width/2 - optionMenuTexture.width/2, Screen.height/2 - optionMenuTexture.height/2);
+		optionLoc = new Vector2(NATIVE_WIDTH/2 - optionMenuTexture.width/2, NATIVE_HEIGHT/2 - optionMenuTexture.height/2);
 	}
 
 	void Update(){
@@ -235,7 +235,7 @@ public class RoomGUI : MonoBehaviour {
 			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 		}
 		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
-		
+
 		//get count of items owned
 		int counter = 0;
 		for(int i = 0;i< inventory.inventory.Length;i++){
@@ -247,7 +247,7 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
 		GUILayout.BeginHorizontal("");
-		
+
 		counter =0;
 		//implementing itemlogic
 		for(int i = 0 ;i < itemlogic.items.Count; i++){
@@ -323,8 +323,8 @@ public class RoomGUI : MonoBehaviour {
 				}
 			}
 		}
-		
-		//just for testing 
+
+		//just for testing
 		//Delete after
 		if(Input.GetMouseButtonUp(0)){
 			pickedUp = false;
@@ -359,7 +359,7 @@ public class RoomGUI : MonoBehaviour {
 			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
 			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 		}
-		
+
 		//Temp store Button
 		if(GUI.Button(new Rect(optionRect.rect.x - 400,optionRect.rect.y, 90,90),"Store")){
 			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();

@@ -60,10 +60,10 @@ public class GrowShrink : MonoBehaviour {
     }
 
     void Grow(){
-        leanTweenCurrent = LeanTween.scale(gameObject, bigger, 0.8f, optionalGrow);
+        leanTweenCurrent = LeanTween.scale(gameObject, bigger, 0.4f, optionalGrow);
     }
 
     void Shrink(){
-        leanTweenCurrent = LeanTween.scale(gameObject, smaller, 0.8f, optionalShrink);
+        leanTweenCurrent = LeanTween.scale(gameObject, smaller, 0.4f, optionalShrink);
     }
 }

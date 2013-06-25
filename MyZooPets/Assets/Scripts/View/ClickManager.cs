@@ -17,8 +17,8 @@ public class ClickManager : MonoBehaviour {
 	public GameObject diaryUIManagerObject;
 	private DiaryGUI diaryUIManager;
 
-	// public GameObject calendarGUIObject;
-	// private CalendarGUI calendarGUI;
+	public GameObject calendarGUIObject;
+	private CalendarGUI calendarGUI;
 
 	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;
@@ -42,7 +42,7 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 
 		// Linking script references
-		// calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
+		calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
@@ -65,6 +65,11 @@ public class ClickManager : MonoBehaviour {
 						else if(hit.collider.name == "room_table"){
 							diaryUIManager.DiaryClicked();
 							// calendarGUI.DiaryClicked();
+							ClickLock();
+							ModeLock();
+						}
+						else if(hit.collider.name == "Calendar"){
+							calendarGUI.DiaryClicked();
 							ClickLock();
 							ModeLock();
 						}

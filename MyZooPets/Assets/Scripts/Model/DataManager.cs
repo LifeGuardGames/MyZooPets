@@ -86,6 +86,12 @@ public class DataManager : MonoBehaviour {
     private static DateTime lastTimeUserPlayedGame; //last time that the user opened the game
     [SerializeThis]
     private static List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
+    
+	//inventory data
+    [SerializeThis]
+    private static int[] inventory; //array for all items, index as Item Id
+	
+	
     //========================
 
     //=============Getters & Setters===============
@@ -182,6 +188,14 @@ public class DataManager : MonoBehaviour {
         get{return degradationTriggers;}
         set{degradationTriggers = value;}
     }
+    
+	//inventory 
+	public static int[] Inventory{
+		get{ return inventory;}
+		set{ inventory = value;}
+	}
+	
+	
     //===============================
 
     //==============StatsModifiers================
@@ -342,9 +356,14 @@ public class DataManager : MonoBehaviour {
             //Degradation game data
             lastTimeUserPlayedGame = DateTime.Now;
             degradationTriggers = new List<DegradData>();
-
+		
+			//inventory
+			inventory = new int[ItemLogic.MAX_ITEM_COUNT];
+		
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
+            
+		
     }
 
     //call the delegate when data initialization or deserialziation is done

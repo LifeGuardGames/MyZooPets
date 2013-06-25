@@ -14,8 +14,7 @@ public class RoomGUI : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 
 	//Crazy long Texture bundle
-	public Texture2D textureSwap1;
-	public Texture2D textureSwap2;
+	public Texture2D textureSwap;
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
 	public Texture2D starBarTexture;
@@ -83,7 +82,7 @@ public class RoomGUI : MonoBehaviour {
 	//MISC
 	private bool isMenuExpanded = true;
 	private bool showOption = false;
-	private bool inhalerpicked = false;
+	private bool pickedUp = false;
 	private bool emInhalerpicked = false;
 	private Rect menuTextureRect;
 	private NotificationUIManager notificationUIManager;
@@ -94,11 +93,12 @@ public class RoomGUI : MonoBehaviour {
 	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
+	private int pickUpId= -1;
 	
 
 	void Start(){
 		
-		inventory = GameObject.Find ("DataManager").GetComponent<Inventory>();
+		inventory = GameObject.Find ("GameManager").GetComponent<Inventory>();
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
@@ -251,9 +251,17 @@ public class RoomGUI : MonoBehaviour {
 		counter =0;
 		//implementing itemlogic
 		for(int i = 0 ;i < itemlogic.items.Count; i++){
+			if(i == pickUpId){
+				textureSwap = null;
+			}
+			else{
+				textureSwap = itemlogic.items[i].Texture;
+			}
 			if(inventory.inventory[i]!=0){
-				if(GUILayout.Button(itemlogic.items[i].Texture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-					inventory.useItem(i);
+				if(GUILayout.RepeatButton(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
+					pickedUp = true;
+					pickUpId = i;
+//					inventory.useItem(i);
 				}
 				counter++;
 				GUI.Label(new Rect(-10+counter*80-80,35,100,80),"x " + inventory.inventory[i].ToString(),itemCountTextStyle);
@@ -296,9 +304,8 @@ public class RoomGUI : MonoBehaviour {
 		//Temp Pick & Drag of items
 		//TODO-w Refactor this somewhere else?
 		//Do this when we create Backpack .etc
-		if(inhalerpicked){
-			textureSwap1 = null;
-			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),inhalerTexture);
+		if(pickedUp){
+			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,NATIVE_HEIGHT- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
 			if(Input.touchCount > 0){
 				if(Input.GetTouch(0).phase == TouchPhase.Ended){
 					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -308,23 +315,20 @@ public class RoomGUI : MonoBehaviour {
 						if(hit.collider.name == "SpritePet" ||
 							hit.collider.name == "PetHead" ||
 							hit.collider.name == "PetTummy"){
-							CalendarLogic.RecordGivingInhaler();
+							inventory.useItem(pickUpId);
 						}
 					}
+					pickedUp = false;
+					pickUpId = -1;
 				}
 			}
 		}
-		if(emInhalerpicked){
-			textureSwap2 = null;
-			GUI.DrawTexture(new Rect(Input.mousePosition.x-50,Screen.height- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),emInhalerTexture);
-		}
-		//Swap texture to blank when inhaler picked
-		//also temp solution
+		
+		//just for testing 
+		//Delete after
 		if(Input.GetMouseButtonUp(0)){
-			emInhalerpicked = false;
-			textureSwap1 = inhalerTexture;
-			inhalerpicked = false;
-			textureSwap2 = emInhalerTexture;
+			pickedUp = false;
+			pickUpId = -1;
 		}
 
 		//Temp option Menu

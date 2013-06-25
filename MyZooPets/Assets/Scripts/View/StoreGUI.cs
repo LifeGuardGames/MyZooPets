@@ -17,8 +17,8 @@ public class StoreGUI : MonoBehaviour {
 	private Vector2 page1loc = new Vector2(100,100);
 	
 	private int storePage = 1;
-//	private bool StoreGUIOn = false;
-	private bool StoreGUIOn = true;
+	private bool StoreGUIOn = false;
+//	private bool StoreGUIOn = true;
 	
 	//pop window
 	private bool windowOn = false;

@@ -134,7 +134,6 @@ public class ClickManager : MonoBehaviour {
 							// ModeLock();
 						}
 						else if(hit.collider.name =="ColliderPlane"){
-//							petsprite.transform.position = hit.point;
 							destinationPoint = hit.point;
 						}
 					}

@@ -20,7 +20,7 @@ public class LoadDataLogic : MonoBehaviour {
         challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
 		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
-		
+
         IsDataLoaded = false;
 
         if(!DataManager.FirstTime){ //if not first time load GUI right away
@@ -40,6 +40,6 @@ public class LoadDataLogic : MonoBehaviour {
         challengesGUI.Init();
         evolutionLogic.Init();
         IsDataLoaded = true;
-		clickmanager.init();
+		clickmanager.Init();
     }
 }

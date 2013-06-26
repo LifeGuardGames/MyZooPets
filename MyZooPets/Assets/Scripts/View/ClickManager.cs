@@ -61,8 +61,47 @@ public class ClickManager : MonoBehaviour {
 		petsprite = GameObject.Find("SpritePet");
 		destinationPoint = petsprite.transform.position;
 
+		AssignOnTapCallbacks();
+
 		// Init swipe listener.
 		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
+	}
+
+	void AssignOnTapCallbacks(){
+		GameObject.Find("Book").GetComponent<TapItem>().OnTap = OnTapBook;
+		GameObject.Find("Laptop").GetComponent<TapItem>().OnTap = OnTapLaptop;
+		GameObject.Find("Calendar").GetComponent<TapItem>().OnTap = OnTapCalendar;
+	}
+
+	bool IsTappable(){
+		if (LoadDataLogic.IsDataLoaded){
+			if(!isClickLocked && !isModeLocked){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void OnTapBook(){
+		if (IsTappable()){
+			diaryUIManager.DiaryClicked();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapLaptop(){
+		if (IsTappable()){
+			challengesGUI.DiaryClicked();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapCalendar(){
+		if (IsTappable()){
+			calendarGUI.DiaryClicked();
+			ClickLock();
+			ModeLock();
+		}
 	}
 
 	void OnSwipeDetected(Swipe s){
@@ -95,45 +134,46 @@ public class ClickManager : MonoBehaviour {
 					RaycastHit hit;
 					if(Physics.Raycast(myRay,out hit)){
 						//Debug.Log(hit.collider.name);
-						if(hit.collider.name == "room_shelf"){
-							trophyGUI.TrophyClicked();
-							ClickLock();
-							ModeLock();
-						}
-						// else if(hit.collider.name == "room_table"){
-						else if(hit.collider.name == "Book"){
-							diaryUIManager.DiaryClicked();
-							ClickLock();
-							ModeLock();
-						}
-						else if(hit.collider.name == "Laptop"){
-							challengesGUI.DiaryClicked();
-							ClickLock();
-							ModeLock();
-						}
-						else if(hit.collider.name == "Calendar"){
-							calendarGUI.DiaryClicked();
-							ClickLock();
-							ModeLock();
-						}
-						else if(hit.collider.name == "gameboy"){
-							cameraMove.GameboyZoomToggle();
-							ClickLock();
-							ModeLock();
-						}
-						else if(hit.collider.name == "PetHead"){
-							// todo
-							print("Pet Head");
-							// ClickLock();
-							// ModeLock();
-						}
-						else if(hit.collider.name == "PetTummy"){
-							// todo
-							print("Pet Tummy");
-							// ClickLock();
-							// ModeLock();
-						}
-						else if(hit.collider.name =="ColliderPlane"){
+						// if(hit.collider.name == "room_shelf"){
+						// 	trophyGUI.TrophyClicked();
+						// 	ClickLock();
+						// 	ModeLock();
+						// }
+						// // else if(hit.collider.name == "room_table"){
+						// else if(hit.collider.name == "Book"){
+						// 	diaryUIManager.DiaryClicked();
+						// 	ClickLock();
+						// 	ModeLock();
+						// }
+						// else if(hit.collider.name == "Laptop"){
+						// 	challengesGUI.DiaryClicked();
+						// 	ClickLock();
+						// 	ModeLock();
+						// }
+						// else if(hit.collider.name == "Calendar"){
+						// 	calendarGUI.DiaryClicked();
+						// 	ClickLock();
+						// 	ModeLock();
+						// }
+						// else if(hit.collider.name == "gameboy"){
+						// 	cameraMove.GameboyZoomToggle();
+						// 	ClickLock();
+						// 	ModeLock();
+						// }
+						// else if(hit.collider.name == "PetHead"){
+						// 	// todo
+						// 	print("Pet Head");
+						// 	// ClickLock();
+						// 	// ModeLock();
+						// }
+						// else if(hit.collider.name == "PetTummy"){
+						// 	// todo
+						// 	print("Pet Tummy");
+						// 	// ClickLock();
+						// 	// ModeLock();
+						// }
+						// else if(hit.collider.name =="ColliderPlane"){
+						if (hit.collider.name =="ColliderPlane"){
 //							petsprite.transform.position = hit.point;
 							destinationPoint = hit.point;
 						}

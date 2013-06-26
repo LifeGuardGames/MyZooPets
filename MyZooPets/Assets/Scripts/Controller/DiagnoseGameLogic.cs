@@ -3,29 +3,24 @@ using System.Collections;
 
 //This logic generates the current asthma stage of the game
 //This logic will be used with DiagnoseUI
-public class DiagnoseGameLogic : MonoBehaviour {
+public static class DiagnoseGameLogic{
 
-	public AsthmaStage CurrentStage{get; set;}
+	public static AsthmaStage CurrentStage{get; set;}
 
     //check if the stage chosen by the user is correct
-    public bool IsThisStageCorrect(AsthmaStage asthmaStage){
+    public static bool IsThisStageCorrect(AsthmaStage asthmaStage){
         return asthmaStage.Equals(CurrentStage);
     }
 
-    // Use this for initialization
-    void Start () {
-    
-    }
-    
-    // Update is called once per frame
-    void Update () {
-    
+    public static void Init(){
+        GenerateRandomStage();
     }
 
-    private void GenerateRandomStage(){
+    //generate the sick stages randomly
+    private static void GenerateRandomStage(){
         int randomNumber = Random.Range(0, 3);
         switch(randomNumber){
-            case 0: CurrentStage = AsthmaStage.Discomfort; break;
+            case 0: CurrentStage = AsthmaStage.OK; break;
             case 1: CurrentStage = AsthmaStage.Sick; break;
             case 2: CurrentStage = AsthmaStage.Attack; break;
         }

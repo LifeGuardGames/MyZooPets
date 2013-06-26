@@ -8,8 +8,8 @@ using System.Collections;
 
 public class NotificationUIManager : MonoBehaviour {
 
+	//references
 	public GameObject cameraObject;
-
 	public GameObject popupTextureGreat;
 	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
@@ -17,8 +17,6 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupNotification;
 
 	public bool flipped;
-
-
 		
 	void Start(){
 		if (!flipped){
@@ -32,10 +30,13 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	//TODO-s some kind of complex hashmap storage for references? TODO-s particle not used
-	//use this method to display popup that display a message, score, (optional) hint
-	public void PopupTexture(string message, int deltaPoints, int deltaStars, 
+	/*
+		Desc: creates a popup with a texture and stats that have been modified
+		Params: notificationType, deltaPoints, deltaStars, deltaHealth, deltaMood, deltaHunger
+	*/
+	public void PopupTexture(string notificationType, int deltaPoints, int deltaStars, 
 		int deltaHealth, int deltaMood, int deltaHunger){
-		switch(message){
+		switch(notificationType){
 			case "award":
 				GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, 
 					Quaternion.identity) as GameObject;
@@ -58,10 +59,13 @@ public class NotificationUIManager : MonoBehaviour {
 
 	}
 
-	//display popup that only have a message
-	public void PopupTexture(string message){
+	/*
+		Desc: creates a popup with only a texture
+		Params: notificationType
+	*/
+	public void PopupTexture(string notificationType){
 		GameObject prefabName = null;
-		switch(message){
+		switch(notificationType){
 			case "great":
 				prefabName = popupTextureGreat;
 			break;
@@ -76,15 +80,17 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 	}
 
-	//use this method to display an notification that has an icon, message, yes button, and no button
-	public void PopupNotification(string message, PopupNotification.OnButtonClicked yesCallBack, 
+	/*
+		Desc: creates popup that has a popup texture and 2 buttons
+		Params: notificationType, call back for yes button, call back for no button
+	*/
+	public void PopupNotification(string notificationType, PopupNotification.OnButtonClicked yesCallBack, 
 		PopupNotification.OnButtonClicked noCallBack){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position, 
 			Quaternion.identity) as GameObject;
 		PopupNotification script = go.GetComponent<PopupNotification>();
 		if(script != null){
-			print("working");
-			script.Init(message, yesCallBack, noCallBack);
+			script.Init(notificationType, yesCallBack, noCallBack);
 		}
 	}
 

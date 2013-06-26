@@ -10,6 +10,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	   notificationUIManager = GameObject.Find("Main Camera/NotificationUIManager").GetComponent<NotificationUIManager>();
+       SendNotification();
 	}
 	
 	// Update is called once per frame
@@ -18,7 +19,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	}
 
     private void SendNotification(){
-        notificationUIManager.PopupNotification("You pet is not feeling well! It needs your help to diagnose the symptoms",
+        notificationUIManager.PopupNotification("Your pet is not feeling well! It needs your help!",
             delegate(){
                 Application.LoadLevel("DiagnosePet");
             },

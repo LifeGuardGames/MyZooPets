@@ -19,7 +19,7 @@ public enum InhalerType{
 }
 
 public enum AsthmaStage{
-    Discomfort,
+    OK,
     Sick,
     Attack,
 }

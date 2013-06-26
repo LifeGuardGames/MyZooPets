@@ -38,7 +38,7 @@ public class PopupNotification : MonoBehaviour {
         GUILayout.Label(message);
         
         GUILayout.BeginHorizontal();
-            if(GUILayout.Button("Yes")){
+        if(GUILayout.Button("Yes")){
             if(yesButtonClicked != null) yesButtonClicked();
         }
 

@@ -9,8 +9,10 @@ public class LoadDataLogic : MonoBehaviour {
     private DiaryGUI diaryUIManager; //reference to UI
     private CalendarGUI calendarGUI; //reference to UI
     private ChallengesGUI challengesGUI; //reference to UI
+    private DegradationGUI degradationUIManager; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
+    private DegradationLogic degradationLogic; //reference to logic
     private ClickManager clickmanager;
 
     void Awake(){
@@ -18,7 +20,9 @@ public class LoadDataLogic : MonoBehaviour {
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
         challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
+        degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
+        degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
 		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
         IsDataLoaded = false;
@@ -39,7 +43,9 @@ public class LoadDataLogic : MonoBehaviour {
         calendarGUI.Init();
         challengesGUI.Init();
         evolutionLogic.Init();
-        IsDataLoaded = true;
+        degradationLogic.Init();
+        degradationUIManager.Init();
 		clickmanager.Init();
+        IsDataLoaded = true;
     }
 }

@@ -7,13 +7,26 @@ using System;
 //and daily check-ins. 
 //TO DO: need to store diff types of trigger and distinct between room and yard
 public class DegradationLogic : MonoBehaviour {
-    public bool isDebug = false;
-    public GameObject degradTest;
+    [System.Serializable]
+    public class Location{
+        public bool isTaken;
+        public Vector3 position;
 
-    void Start(){
+        public Location(bool isTaken, Vector3 position){
+            this.isTaken = isTaken;
+            this.position = position;
+        }
+    }
+
+    public bool isDebug = false; //developer option. force the trigger to show
+    public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
+    public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
+    private const int NUMBER_OF_LOC = 6;
+    private const int NUMBBER_OF_PREFABS = 6;
+
+    public void Init(){
         if(isDebug){
             DataManager.LastTimeUserPlayedGame = new DateTime(2013, 6, 19);
-            DataManager.DegradationTriggers = new List<DegradData>();
         }
 
         DateTime now = DateTime.Now;
@@ -32,20 +45,21 @@ public class DegradationLogic : MonoBehaviour {
 
             //create triggers
             for(int i=0; i<numberOfTriggersToInit; i++){
+                //random location and prefab
+                int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
+                int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
+
+                Location triggerLocation = triggerLocations[locationIndex];
+                if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
+                    locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
+                }
+                triggerLocation.isTaken = true;
+                
                 //spawn them at a pre define location
-                Vector3 position = new Vector3(i*3, 0, 0);
-                DataManager.DegradationTriggers.Add(new DegradData(i, position)); 
+                DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex)); 
             }                
         }
-        //instantiate triggers in the game
-        for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
-            //choose random trigger. using cube for testing
-            GameObject trigger = (GameObject)Instantiate(degradTest, 
-                DataManager.DegradationTriggers[i].Position, Quaternion.identity);
-            trigger.GetComponent<DegradTriggerManager>().id = i;
-        }
-
-        DataManager.LastTimeUserPlayedGame = DateTime.Now;
+        DataManager.LastTimeUserPlayedGame = DateTime.Now; //update last played time
     }
 
     //use the method when a trigger has been destroyed by user

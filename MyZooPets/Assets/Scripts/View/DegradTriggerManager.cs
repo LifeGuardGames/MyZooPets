@@ -4,7 +4,6 @@ using System.Collections;
 public class DegradTriggerManager : MonoBehaviour {
     public int id; //the id of this specific degradation trigger
 	// Use this for initialization
-
 	void Start () {
 	}
 	
@@ -12,6 +11,7 @@ public class DegradTriggerManager : MonoBehaviour {
 	void Update () {
         if(Input.touchCount > 0){
             if(IsTouchingObject(Input.GetTouch(0))){
+                //when trigger is touched remove from DataManager and destroy GameObject
                 DegradationLogic.ClearDegradationTrigger(id);
                 Destroy(this.gameObject);
             }

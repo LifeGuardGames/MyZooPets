@@ -7,20 +7,27 @@ public class DegradData{
     [SerializeThis]
     private int id;
     [SerializeThis]
-    private Vector3 position;
+    private int positionId;
+    [SerializeThis]
+    private int prefabId;
 
     //================Getters & Setters
     public int ID{
         get{return id;}
     }
 
-    public Vector3 Position{
-        get{return position;}
+    public int PositionId{
+        get{return positionId;}
     }
 
-    public DegradData(int id, Vector3 position){
+    public int PrefabId{
+        get{return prefabId;}
+    }
+
+    public DegradData(int id, int positionId, int prefabId){
         this.id = id;
-        this.position = position;
+        this.positionId = positionId;
+        this.prefabId = prefabId;
     }
     public DegradData(){}
 }

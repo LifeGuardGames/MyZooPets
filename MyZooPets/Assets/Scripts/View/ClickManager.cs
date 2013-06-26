@@ -59,6 +59,7 @@ public class ClickManager : MonoBehaviour {
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		rotateInRoom = rotateInRoomObject.GetComponent<RotateInRoom>();
 		petsprite = GameObject.Find("SpritePet");
+		destinationPoint = petsprite.transform.position;
 
 		// Init swipe listener.
 		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
@@ -84,6 +85,8 @@ public class ClickManager : MonoBehaviour {
 	}
 
 	void Update(){
+		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading
+		
 		//Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){

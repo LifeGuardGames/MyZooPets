@@ -11,6 +11,7 @@ public class LoadDataLogic : MonoBehaviour {
     private ChallengesGUI challengesGUI; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
+    private ClickManager clickmanager;
 
     void Awake(){
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
@@ -18,7 +19,8 @@ public class LoadDataLogic : MonoBehaviour {
         calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
         challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
-
+		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
+		
         IsDataLoaded = false;
 
         if(!DataManager.FirstTime){ //if not first time load GUI right away
@@ -38,5 +40,6 @@ public class LoadDataLogic : MonoBehaviour {
         challengesGUI.Init();
         evolutionLogic.Init();
         IsDataLoaded = true;
+		clickmanager.init();
     }
 }

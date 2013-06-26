@@ -67,13 +67,14 @@ public class ClickManager : MonoBehaviour {
 		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
 	}
 
+	// assigning methods that get called when these individual objects get called in the scene
 	void AssignOnTapCallbacks(){
 		GameObject.Find("Book").GetComponent<TapItem>().OnTap = OnTapBook;
 		GameObject.Find("Laptop").GetComponent<TapItem>().OnTap = OnTapLaptop;
 		GameObject.Find("Calendar").GetComponent<TapItem>().OnTap = OnTapCalendar;
 	}
 
-	bool IsTappable(){
+	bool CanRespondToTap(){
 		if (LoadDataLogic.IsDataLoaded){
 			if(!isClickLocked && !isModeLocked){
 				return true;
@@ -83,21 +84,21 @@ public class ClickManager : MonoBehaviour {
 	}
 
 	void OnTapBook(){
-		if (IsTappable()){
+		if (CanRespondToTap()){
 			diaryUIManager.DiaryClicked();
 			ClickLock();
 			ModeLock();
 		}
 	}
 	void OnTapLaptop(){
-		if (IsTappable()){
+		if (CanRespondToTap()){
 			challengesGUI.DiaryClicked();
 			ClickLock();
 			ModeLock();
 		}
 	}
 	void OnTapCalendar(){
-		if (IsTappable()){
+		if (CanRespondToTap()){
 			calendarGUI.DiaryClicked();
 			ClickLock();
 			ModeLock();

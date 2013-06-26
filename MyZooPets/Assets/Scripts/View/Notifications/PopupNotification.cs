@@ -48,8 +48,6 @@ public class PopupNotification : MonoBehaviour {
         }
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
-
-        
         GUILayout.EndArea();
     }
 

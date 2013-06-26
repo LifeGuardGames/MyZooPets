@@ -12,6 +12,7 @@ using System.Collections;
 
 public class ClickManager : MonoBehaviour {
 	private bool isMobilePlatform;
+	private Vector3 destinationPoint;
 
 	// All the classes that need a click input go here
 	public GameObject diaryUIManagerObject;
@@ -31,11 +32,14 @@ public class ClickManager : MonoBehaviour {
 
 	public GameObject rotateInRoomObject;
 	private RotateInRoom rotateInRoom;
+	
+	
+	public GameObject petsprite;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 
-	void Start(){
+	public void init(){
 		if(Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer){
 			isMobilePlatform = true;
@@ -54,6 +58,7 @@ public class ClickManager : MonoBehaviour {
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		rotateInRoom = rotateInRoomObject.GetComponent<RotateInRoom>();
+		petsprite = GameObject.Find("SpritePet");
 
 		// Init swipe listener.
 		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
@@ -125,10 +130,17 @@ public class ClickManager : MonoBehaviour {
 							// ClickLock();
 							// ModeLock();
 						}
+						else if(hit.collider.name =="ColliderPlane"){
+//							petsprite.transform.position = hit.point;
+							destinationPoint = hit.point;
+						}
 					}
 				}
 			}
 		}
+		//Move pet to clicked position
+		petsprite.transform.position = Vector3.MoveTowards(petsprite.transform.position,destinationPoint,5f * Time.deltaTime);
+
 	}
 
 	// Disable clicking when transitioning between modes

@@ -20,11 +20,17 @@ public class ClickManager : MonoBehaviour {
 	public GameObject calendarGUIObject;
 	private CalendarGUI calendarGUI;
 
+	public GameObject challengesGUIObject;
+	private ChallengesGUI challengesGUI;
+
 	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;
 
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
+
+	public GameObject rotateInRoomObject;
+	private RotateInRoom rotateInRoom;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
@@ -43,9 +49,33 @@ public class ClickManager : MonoBehaviour {
 
 		// Linking script references
 		calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
+		challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+		rotateInRoom = rotateInRoomObject.GetComponent<RotateInRoom>();
+
+		// Init swipe listener.
+		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
+	}
+
+	void OnSwipeDetected(Swipe s){
+		switch (s){
+			case Swipe.Up:
+				print("Swipe.Up");
+			break;
+			case Swipe.Down:
+				print("Swipe.Down");
+			break;
+			case Swipe.Left:
+				print("Swipe.Left");
+				rotateInRoom.RotateLeft();
+			break;
+			case Swipe.Right:
+				print("Swipe.Right");
+				rotateInRoom.RotateRight();
+			break;
+		}
 	}
 
 	void Update(){
@@ -62,9 +92,14 @@ public class ClickManager : MonoBehaviour {
 							ClickLock();
 							ModeLock();
 						}
-						else if(hit.collider.name == "room_table"){
+						// else if(hit.collider.name == "room_table"){
+						else if(hit.collider.name == "Book"){
 							diaryUIManager.DiaryClicked();
-							// calendarGUI.DiaryClicked();
+							ClickLock();
+							ModeLock();
+						}
+						else if(hit.collider.name == "Laptop"){
+							challengesGUI.DiaryClicked();
 							ClickLock();
 							ModeLock();
 						}

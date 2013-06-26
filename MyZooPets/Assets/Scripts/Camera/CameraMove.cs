@@ -10,7 +10,8 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
 	private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
 
-	private Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
+	// private Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
+	private Vector3 petSideFinalPosition = new Vector3(4.83f, 8.6f, 12.64f);
 	private Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
 
 	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);

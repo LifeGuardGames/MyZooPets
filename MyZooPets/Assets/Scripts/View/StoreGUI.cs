@@ -15,6 +15,8 @@ public class StoreGUI : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 	private Vector2 backgroundloc = new Vector2(40,20);
 	private Vector2 page1loc = new Vector2(100,100);
+	private Vector2 menuItem1Loc;
+	private Vector2 menuItem2Loc;
 	
 	private int storePage = 1;
 	private bool StoreGUIOn = false;
@@ -24,7 +26,7 @@ public class StoreGUI : MonoBehaviour {
 	private bool windowOn = false;
 	private int itemId = 0;
 	
-	private float sliderValue;
+	private float slideValue;
 	private ItemLogic itemlogic; 
 	
 	private Rect windowRect = new Rect(0,0,100,100);
@@ -33,6 +35,9 @@ public class StoreGUI : MonoBehaviour {
 	void Start () {
 	
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
+		for(int i = 0; i< itemlogic.items.Count ;i+=2){
+			
+		}	
 	}
 	
 	// Update is called once per frame
@@ -88,24 +93,39 @@ public class StoreGUI : MonoBehaviour {
 			}
 			
 			GUILayout.BeginArea(new Rect(page1loc.x+50,page1loc.y+50,1000,600));
+		
 			for(int i = 0; i< itemlogic.items.Count ;i+=2){
-				GUI.Box (new Rect(0,i*100,480,200),"");
-				GUI.Box (new Rect(0,i*100,200,180),itemlogic.textures[i]);
-				GUI.Label(new Rect(220,i*100,220,100),itemlogic.items[i].Name,itemTitleStyle);
-				GUI.Label (new Rect(220,i*100+ 40,220,100),"Health + 10",itemInfoStyle);
-				GUI.Label( new Rect(220,i*100+ 60,200,100)," Cost: " + itemlogic.items[i].Cost.ToString(),itemInfoStyle);
-				GUI.Button( new Rect(250,i*100+ 100,200,80),"Buy");
+				menuItem1Loc = new Vector2(0,i*100+slideValue);
+				menuItem2Loc = new Vector2(500,i*100+slideValue);
+				if(Input.touchCount>0){
+					Touch touch = Input.GetTouch(0);
+					if(touch.position.x > page1loc.x && touch.position.x < page1loc.x +1000&& touch.position.y > page1loc.y && touch.position.y < page1loc.y+600){
+						if(Mathf.Abs(touch.deltaPosition.y) > 5){
+							slideValue -= touch.deltaPosition.y *2;
+						}	
+					}
+				}
+				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,480,200),"");
+				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,200,180),itemlogic.textures[i]);
+				GUI.Label(new Rect(menuItem1Loc.x + 220,menuItem1Loc.y ,220,100),itemlogic.items[i].Name,itemTitleStyle);
+				GUI.Label (new Rect(menuItem1Loc.x + 220,menuItem1Loc.y + 40,220,100),"Health + 10",itemInfoStyle);
+				GUI.Label( new Rect(menuItem1Loc.x + 220,menuItem1Loc.y + 60,200,100)," Cost: " + itemlogic.items[i].Cost.ToString(),itemInfoStyle);
+				GUI.Button( new Rect(menuItem1Loc.x + 250,menuItem1Loc.y + 100,200,80),"Buy");
 				
 //				GUI.Box (new Rect (500,i*100,200,180),itemlogic.textures[i+1]);
-				GUI.Box (new Rect(500,i*100,480,200),"");
-				GUI.Box (new Rect(500,i*100,200,180),itemlogic.textures[i+1]);
-				GUI.Label(new Rect(720,i*100,220,100),itemlogic.items[i+1].Name,itemTitleStyle);
-				GUI.Label (new Rect(720,i*100+ 40,220,100),"Health + 10",itemInfoStyle);
-				GUI.Label( new Rect(720,i*100+ 60,200,100)," Cost: " + itemlogic.items[i+1].Cost.ToString(),itemInfoStyle);
-				GUI.Button( new Rect(750,i*100+ 100,200,80),"Buy");
+				GUI.Box (new Rect( menuItem2Loc.x,menuItem2Loc.y,480,200),"");
+				GUI.Box (new Rect(menuItem2Loc.x,menuItem2Loc.y ,200,180),itemlogic.textures[i+1]);
+				GUI.Label(new Rect(menuItem2Loc.x + 220,menuItem2Loc.y,220,100),itemlogic.items[i+1].Name,itemTitleStyle);
+				GUI.Label (new Rect(menuItem2Loc.x + 220,menuItem2Loc.y + 40,220,100),"Health + 10",itemInfoStyle);
+				GUI.Label( new Rect(menuItem2Loc.x + 220,menuItem2Loc.y + 60,200,100)," Cost: " + itemlogic.items[i+1].Cost.ToString(),itemInfoStyle);
+				GUI.Button( new Rect(menuItem2Loc.x + 250,menuItem2Loc.y + 100,200,80),"Buy");
 			}
 			GUILayout.EndArea();
 			
+			
 		}
+		if(Input.touchCount > 0)
+//		print(Input.GetTouch(0).deltaPosition.y);
+		print(slideValue);
 	}
 }

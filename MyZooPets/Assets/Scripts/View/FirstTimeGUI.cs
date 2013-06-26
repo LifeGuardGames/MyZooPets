@@ -19,7 +19,7 @@ public class FirstTimeGUI : MonoBehaviour {
 
 	public GameObject eggObject;
 	// private Vector3 eggSpritePosition = new Vector3(0f, -1.88f, -10f);
-	private Vector3 eggSpritePosition = new Vector3(-2.48f, 1.71f, 26.44f);
+	private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
 	private tk2dSprite eggSpriteScript;
 	public GameObject nestObject;
 	public GameObject petObject;
@@ -41,7 +41,7 @@ public class FirstTimeGUI : MonoBehaviour {
 	private Vector3 initPosition = new Vector3(-2.47f, 11.47f, 2.83f);
 	private Vector3 initFaceDirection = new Vector3(11.3f, 0, 0);
 	// private Vector3 finalPosition = new Vector3(3.44f, 2.55f, -17.3f);
-	private Vector3 finalPosition = new Vector3(1.32f, 6f, 17.04f);
+	private Vector3 finalPosition = new Vector3(4.7f, 7.08f, 12.23f);
 	private Vector3 finalFaceDirection = new Vector3(11.3f, 0, 0);
 
 	private Color currentRenderColor;
@@ -130,7 +130,7 @@ public class FirstTimeGUI : MonoBehaviour {
 
 		// Spawn pet object
 		// GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
-		GameObject goPet = Instantiate(petObject, new Vector3(-2.84f, 0.35f, 25f), Quaternion.identity) as GameObject;
+		GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
 		goPet.name = "SpritePet";
 
 		// Start normal GUI stuff

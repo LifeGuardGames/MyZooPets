@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class RoomGUI : MonoBehaviour {
 
-
-	public GameObject diagnoseGUIObject;
 	public GameObject notificationUIManagerObject;
 	public GUISkin defaultSkin;
 
@@ -103,7 +101,6 @@ public class RoomGUI : MonoBehaviour {
 	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
-		diagnoseGUI = diagnoseGUIObject.GetComponent<DiagnoseGUI>();
 
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
@@ -335,12 +332,6 @@ public class RoomGUI : MonoBehaviour {
 		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
 			showOption = !showOption;
 		}
-
-		//Temp diagnose Button
-		// TODO-s change this later
-		// if(GUI.Button(new Rect(optionRect.rect.x - 100,optionRect.rect.y ,90,90), "Diagnose Pet")){
-		// 	diagnoseGUI.DiagnoseClicked();
-		// }
 
 		//Temp pop out "GREAT"
 		if(GUI.Button(new Rect(optionRect.rect.x - 200,optionRect.rect.y ,90,90), "YAY!")){

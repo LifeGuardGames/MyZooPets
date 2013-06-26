@@ -31,7 +31,8 @@ public class TapItem : MonoBehaviour {
 	{
 		if (e.State == Gesture.GestureState.Recognized)
 		{
-			OnTap();
+			if (OnTap != null)
+				OnTap();
 		}
 	}
 }

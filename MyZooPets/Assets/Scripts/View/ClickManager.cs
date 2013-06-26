@@ -32,14 +32,14 @@ public class ClickManager : MonoBehaviour {
 
 	public GameObject rotateInRoomObject;
 	private RotateInRoom rotateInRoom;
-	
-	
+
+
 	public GameObject petsprite;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 
-	public void init(){
+	public void Init(){
 		if(Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer){
 			isMobilePlatform = true;
@@ -86,7 +86,7 @@ public class ClickManager : MonoBehaviour {
 
 	void Update(){
 		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading
-		
+
 		//Debug.Log(isClickLocked + " " + isModeLocked);
 		if(!isClickLocked && !isModeLocked){
 			if((isMobilePlatform && Input.touchCount > 0) || (!isMobilePlatform && Input.GetMouseButtonUp(0))){

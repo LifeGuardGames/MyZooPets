@@ -29,7 +29,7 @@ public class StoreGUI : MonoBehaviour {
 	private float slideValue;
 	private ItemLogic itemlogic; 
 	
-	private Rect windowRect = new Rect(0,0,100,100);
+//	private Rect windowRect = new Rect(0,0,100,100);
 	
 	// Use this for initialization
 	void Start () {

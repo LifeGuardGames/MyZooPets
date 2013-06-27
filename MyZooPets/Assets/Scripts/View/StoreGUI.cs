@@ -139,8 +139,8 @@ public class StoreGUI : MonoBehaviour {
 			
 			
 		}
-		if(Input.touchCount > 0)
+		// if(Input.touchCount > 0)
 //		print(Input.GetTouch(0).deltaPosition.y);
-		print(slideValue);
+		// print(slideValue);
 	}
 }

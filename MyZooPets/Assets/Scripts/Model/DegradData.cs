@@ -11,7 +11,7 @@ public class DegradData{
     [SerializeThis]
     private int prefabId;
 
-    //================Getters & Setters
+    //================Getters & Setters============
     public int ID{
         get{return id;}
     }

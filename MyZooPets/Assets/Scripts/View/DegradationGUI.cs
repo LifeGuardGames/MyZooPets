@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
 public class DegradationGUI : MonoBehaviour{
-    // public GameObject cleanTriggerParticleDrop;
+    public GameObject cleanTriggerParticleDrop;
 
     /*
         handle particle system stuff in this class
@@ -15,6 +15,7 @@ public class DegradationGUI : MonoBehaviour{
 
     void Start(){
         degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
+        degradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
     }
 
     public void Init(){
@@ -28,5 +29,10 @@ public class DegradationGUI : MonoBehaviour{
                 degradationLogic.triggerLocations[positionId].position, Quaternion.identity);
             trigger.GetComponent<DegradTriggerManager>().id = i;
         }
+    }
+
+    private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){
+        GameObject particleDrop = (GameObject)Instantiate(cleanTriggerParticleDrop, e.TriggerPosition, Quaternion.Euler(270,0,0));
+        Destroy(particleDrop, 1);
     }
 }

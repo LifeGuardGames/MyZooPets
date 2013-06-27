@@ -8,9 +8,10 @@ using System.Collections;
 
 public class NotificationUIManager : MonoBehaviour {
 
-	//references
+	// References
 	public GameObject cameraObject;
 	public GameObject popupTextureGreat;
+	public GameObject popupTextureNiceTry;
 	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
 	public GameObject popupSpeech;
@@ -29,7 +30,6 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 	}
 
-	//TODO-s some kind of complex hashmap storage for references? TODO-s particle not used
 	/*
 		Desc: creates a popup with a texture and stats that have been modified
 		Params: notificationType, deltaPoints, deltaStars, deltaHealth, deltaMood, deltaHunger
@@ -38,13 +38,11 @@ public class NotificationUIManager : MonoBehaviour {
 		int deltaHealth, int deltaMood, int deltaHunger){
 		switch(notificationType){
 			case "award":
-				GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, 
-					Quaternion.identity) as GameObject;
+				GameObject go = Instantiate(popupTextureGreat, gameObject.transform.position, Quaternion.identity) as GameObject;
 				Destroy(go, 3.0f);
-
-				GameObject go2 = Instantiate(popupAward, gameObject.transform.position, 
-					Quaternion.identity) as GameObject;
-				PopupAward script = go2.GetComponent<PopupAward>();
+			
+				GameObject go2 = Instantiate(popupAward, gameObject.transform.position, Quaternion.identity) as GameObject;
+				PopupAward script = go2.GetComponent<PopupAward>();		// Make sure that the award object has a script to populate
 				if(script != null){
 					script.Populate(deltaPoints, deltaStars, deltaHealth, deltaMood, deltaHunger);
 				}else{
@@ -52,8 +50,10 @@ public class NotificationUIManager : MonoBehaviour {
 				}
 				Destroy(go2, 3.0f);
 			break;
-			case "nicetry":
-
+			
+			case "nice try":
+				GameObject go3 = Instantiate(popupTextureNiceTry, gameObject.transform.position, Quaternion.identity) as GameObject;
+				Destroy(go3, 3.0f);
 			break;
 		}
 
@@ -64,18 +64,22 @@ public class NotificationUIManager : MonoBehaviour {
 		Params: notificationType
 	*/
 	public void PopupTexture(string notificationType){
-		GameObject prefabName = null;
+		GameObject prefab = null;
 		switch(notificationType){
 			case "great":
-				prefabName = popupTextureGreat;
+				prefab = popupTextureGreat;
 			break;
+			
 			case "intro":
-				prefabName = popupTextureUseTheInhaler;
+				prefab = popupTextureUseTheInhaler;
+			break;
+			
+			case "nice try":
+				prefab = popupTextureNiceTry;
 			break;
 		}
-		if(prefabName != null){
-			GameObject go = Instantiate(prefabName, gameObject.transform.position, 
-				Quaternion.identity) as GameObject;
+		if(prefab != null){
+			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
 			Destroy(go, 3.0f);
 		}
 	}

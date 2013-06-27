@@ -95,14 +95,29 @@ public class StoreGUI : MonoBehaviour {
 			GUILayout.BeginArea(new Rect(page1loc.x+50,page1loc.y+50,1000,600));
 		
 			for(int i = 0; i< itemlogic.items.Count ;i+=2){
-				menuItem1Loc = new Vector2(0,i*100+slideValue);
-				menuItem2Loc = new Vector2(500,i*100+slideValue);
 				if(Input.touchCount>0){
 					Touch touch = Input.GetTouch(0);
 					if(touch.position.x > page1loc.x && touch.position.x < page1loc.x +1000&& touch.position.y > page1loc.y && touch.position.y < page1loc.y+600){
 						if(Mathf.Abs(touch.deltaPosition.y) > 5){
 							slideValue -= touch.deltaPosition.y *2;
 						}	
+					}
+				}
+				
+				//This code is buggy ....some one please take a look ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				if(slideValue <= 0 && slideValue >= - 100* itemlogic.items.Count){
+					menuItem1Loc = new Vector2(0,i*100+slideValue);
+					menuItem2Loc = new Vector2(500,i*100+slideValue);
+				}
+				else{
+					if(slideValue > 0){
+						menuItem1Loc = new Vector2(0,i*100);
+						menuItem2Loc = new Vector2(500,i*100);
+						slideValue = 0;
+					}
+					else{
+						menuItem1Loc = new Vector2(0,-(itemlogic.items.Count-i)*100);
+						menuItem2Loc = new Vector2(500,-(itemlogic.items.Count-i)*100);	
 					}
 				}
 				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,480,200),"");

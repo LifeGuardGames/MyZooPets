@@ -22,10 +22,6 @@ public class TapItem : MonoBehaviour {
 
 	public event TapEventHandler OnTap;
 
-    protected virtual void HandleTap() {
-        if (OnTap != null) OnTap();
-    }
-
 	void Start()
 	{
 		GetComponent<TapGesture>().StateChanged += HandleStateChanged;
@@ -35,7 +31,7 @@ public class TapItem : MonoBehaviour {
 	{
 		if (e.State == Gesture.GestureState.Recognized)
 		{
-			HandleTap();
+        	if (OnTap != null) OnTap();
 		}
 	}
 }

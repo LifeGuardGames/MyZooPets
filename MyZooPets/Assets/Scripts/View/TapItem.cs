@@ -16,10 +16,9 @@ using TouchScript.Gestures;
 */
 // ================================================================================================
 
-public delegate void TapEventHandler();
 
 public class TapItem : MonoBehaviour {
-
+	public delegate void TapEventHandler();
 	public event TapEventHandler OnTap;
 
 	void Start()

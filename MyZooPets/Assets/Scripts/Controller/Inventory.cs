@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour {
 	
 	public void addItem(int id, int count){
 		inventory[id] += count;
+		DataManager.SubtractStars((int)itemlogic.items[id].Cost);
 	}
 	
 	public void useItem(int id){

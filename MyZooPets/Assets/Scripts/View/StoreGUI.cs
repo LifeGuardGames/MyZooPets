@@ -24,14 +24,14 @@ public class StoreGUI : MonoBehaviour {
 	
 	private float slideValue;
 	private ItemLogic itemlogic; 
+	private Inventory inventory;
 	
 	
 	void Start () {
 	
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
-		for(int i = 0; i< itemlogic.items.Count ;i+=2){
-			
-		}	
+		inventory =  GameObject.Find("GameManager").GetComponent<Inventory>();
+		
 	}
 	
 	void Update () {
@@ -55,6 +55,9 @@ public class StoreGUI : MonoBehaviour {
 		
 		//GUI layouts
 		if(StoreGUIOn){
+		
+			ClickManager.ModeLock();
+			ClickManager.ClickLock();
 			GUI.DrawTexture(new Rect(backgroundloc.x,backgroundloc.y,1200,760),backgroundTexture);
 			if(GUI.Button(new Rect (page1loc.x+50,page1loc.y-50,200,50),"page1")){
 				storePage = 1;
@@ -84,6 +87,8 @@ public class StoreGUI : MonoBehaviour {
 			
 			if(GUI.Button(new Rect(backgroundloc.x+50,backgroundloc.y+50,50,50),"X")){
 				hideStore();
+				ClickManager.ReleaseClickLock();
+				ClickManager.ReleaseModeLock();
 			}
 			
 			//Central Item Group
@@ -121,14 +126,18 @@ public class StoreGUI : MonoBehaviour {
 				GUI.Label(new Rect(menuItem1Loc.x + 220,menuItem1Loc.y ,220,100),itemlogic.items[i].Name,itemTitleStyle);
 				GUI.Label (new Rect(menuItem1Loc.x + 220,menuItem1Loc.y + 40,220,100),"Health + 10",itemInfoStyle);
 				GUI.Label( new Rect(menuItem1Loc.x + 220,menuItem1Loc.y + 60,200,100)," Cost: " + itemlogic.items[i].Cost.ToString(),itemInfoStyle);
-				GUI.Button( new Rect(menuItem1Loc.x + 250,menuItem1Loc.y + 100,200,80),"Buy");
+				if(GUI.Button( new Rect(menuItem1Loc.x + 250,menuItem1Loc.y + 100,200,80),"Buy")){
+					inventory.addItem(i,1);
+				}
 				
 				GUI.Box (new Rect( menuItem2Loc.x,menuItem2Loc.y,480,200),"");
 				GUI.Box (new Rect(menuItem2Loc.x,menuItem2Loc.y ,200,180),itemlogic.textures[i+1]);
 				GUI.Label(new Rect(menuItem2Loc.x + 220,menuItem2Loc.y,220,100),itemlogic.items[i+1].Name,itemTitleStyle);
 				GUI.Label (new Rect(menuItem2Loc.x + 220,menuItem2Loc.y + 40,220,100),"Health + 10",itemInfoStyle);
 				GUI.Label( new Rect(menuItem2Loc.x + 220,menuItem2Loc.y + 60,200,100)," Cost: " + itemlogic.items[i+1].Cost.ToString(),itemInfoStyle);
-				GUI.Button( new Rect(menuItem2Loc.x + 250,menuItem2Loc.y + 100,200,80),"Buy");
+				if(GUI.Button( new Rect(menuItem2Loc.x + 250,menuItem2Loc.y + 100,200,80),"Buy")){
+					inventory.addItem(i+1,1);
+				}
 			}
 			GUILayout.EndArea();
 			

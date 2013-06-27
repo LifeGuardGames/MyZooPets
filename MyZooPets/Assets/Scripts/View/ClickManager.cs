@@ -74,7 +74,7 @@ public class ClickManager : MonoBehaviour {
 		GameObject.Find("Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
 	}
 
-	bool CanRespondToTap(){
+	public static bool CanRespondToTap(){
 		if (LoadDataLogic.IsDataLoaded){
 			if(!isClickLocked && !isModeLocked){
 				return true;

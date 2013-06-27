@@ -13,6 +13,7 @@ public class LoadDataLogic : MonoBehaviour {
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
+    private PetMovement petMovement; //reference to ...logic?
     private Tutorial tutorial; //reference to... logic?
     private ClickManager clickmanager;
 
@@ -25,6 +26,7 @@ public class LoadDataLogic : MonoBehaviour {
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
         degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
         tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
+        petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
 		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
         IsDataLoaded = false;
@@ -48,6 +50,7 @@ public class LoadDataLogic : MonoBehaviour {
         degradationLogic.Init();
         degradationUIManager.Init();
         tutorial.Init();
+        petMovement.Init();
 		clickmanager.Init();
         IsDataLoaded = true;
     }

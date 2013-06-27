@@ -16,15 +16,10 @@ using TouchScript.Gestures;
 */
 // ================================================================================================
 
-public delegate void TapEventHandler();
 
 public class TapItem : MonoBehaviour {
-
+	public delegate void TapEventHandler();
 	public event TapEventHandler OnTap;
-
-    protected virtual void HandleTap() {
-        if (OnTap != null) OnTap();
-    }
 
 	void Start()
 	{
@@ -35,7 +30,7 @@ public class TapItem : MonoBehaviour {
 	{
 		if (e.State == Gesture.GestureState.Recognized)
 		{
-			HandleTap();
+        	if (OnTap != null) OnTap();
 		}
 	}
 }

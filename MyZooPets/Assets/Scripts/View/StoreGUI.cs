@@ -73,16 +73,16 @@ public class StoreGUI : MonoBehaviour {
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
 			}
 			
-			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y, 200, 50), "page1")){
+			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y + 10, 200, 50), "page1")){
 				storePage = 1;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y, 200, 50), "page2")){
+			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y + 10, 200, 50), "page2")){
 				storePage = 2;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y, 200, 50), "page3")){
+			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y + 10, 200, 50), "page3")){
 				storePage = 3;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y, 200, 50), "page4")){
+			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y + 10, 200, 50), "page4")){
 				storePage = 4;
 			}
 			

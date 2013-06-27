@@ -22,16 +22,10 @@ public class StoreGUI : MonoBehaviour {
 	private bool StoreGUIOn = false;
 //	private bool StoreGUIOn = true;
 	
-	//pop window
-	private bool windowOn = false;
-	private int itemId = 0;
-	
 	private float slideValue;
 	private ItemLogic itemlogic; 
 	
-//	private Rect windowRect = new Rect(0,0,100,100);
 	
-	// Use this for initialization
 	void Start () {
 	
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
@@ -40,7 +34,6 @@ public class StoreGUI : MonoBehaviour {
 		}	
 	}
 	
-	// Update is called once per frame
 	void Update () {
 	
 	}
@@ -60,6 +53,7 @@ public class StoreGUI : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 		
+		//GUI layouts
 		if(StoreGUIOn){
 			GUI.DrawTexture(new Rect(backgroundloc.x,backgroundloc.y,1200,760),backgroundTexture);
 			if(GUI.Button(new Rect (page1loc.x+50,page1loc.y-50,200,50),"page1")){
@@ -92,8 +86,8 @@ public class StoreGUI : MonoBehaviour {
 				hideStore();
 			}
 			
+			//Central Item Group
 			GUILayout.BeginArea(new Rect(page1loc.x+50,page1loc.y+50,1000,600));
-		
 			for(int i = 0; i< itemlogic.items.Count ;i+=2){
 				if(Input.touchCount>0){
 					Touch touch = Input.GetTouch(0);
@@ -120,6 +114,8 @@ public class StoreGUI : MonoBehaviour {
 //					menuItem2Loc = new Vector2(500,-600+i*100);
 //					
 //				}
+
+				//Each line contains 2 items
 				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,480,200),"");
 				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,200,180),itemlogic.textures[i]);
 				GUI.Label(new Rect(menuItem1Loc.x + 220,menuItem1Loc.y ,220,100),itemlogic.items[i].Name,itemTitleStyle);
@@ -127,7 +123,6 @@ public class StoreGUI : MonoBehaviour {
 				GUI.Label( new Rect(menuItem1Loc.x + 220,menuItem1Loc.y + 60,200,100)," Cost: " + itemlogic.items[i].Cost.ToString(),itemInfoStyle);
 				GUI.Button( new Rect(menuItem1Loc.x + 250,menuItem1Loc.y + 100,200,80),"Buy");
 				
-//				GUI.Box (new Rect (500,i*100,200,180),itemlogic.textures[i+1]);
 				GUI.Box (new Rect( menuItem2Loc.x,menuItem2Loc.y,480,200),"");
 				GUI.Box (new Rect(menuItem2Loc.x,menuItem2Loc.y ,200,180),itemlogic.textures[i+1]);
 				GUI.Label(new Rect(menuItem2Loc.x + 220,menuItem2Loc.y,220,100),itemlogic.items[i+1].Name,itemTitleStyle);
@@ -139,8 +134,5 @@ public class StoreGUI : MonoBehaviour {
 			
 			
 		}
-		// if(Input.touchCount > 0)
-//		print(Input.GetTouch(0).deltaPosition.y);
-		// print(slideValue);
 	}
 }

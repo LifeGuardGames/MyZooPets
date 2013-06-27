@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
+//Item Model
+//Contains: 1. name
+//          2. texture
+//          3. cost
+//          4. ID
+
+
 public class Item {
 
 	private string name;
 	private Texture2D texture;
 	private int cost;
-	private int count;
 	
 	public int ID;
 	public Texture2D Texture{get{return texture;} }

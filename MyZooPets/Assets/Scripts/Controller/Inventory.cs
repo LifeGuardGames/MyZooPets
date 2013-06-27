@@ -2,11 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+//Inventory class for Pet
 public class Inventory : MonoBehaviour {
 
 	
+	//Use array to represent item. 
+	//this way ID is same as index of the array.
 	public int[] inventory ;
-//	public List<int> inventory = new List<int>();
 	public bool isDebug;
 	private ItemLogic itemlogic;
 	

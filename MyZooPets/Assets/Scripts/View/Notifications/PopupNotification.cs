@@ -61,7 +61,7 @@ public class PopupNotification : MonoBehaviour {
         noButtonClicked = noButton;
 				
         // Initialize positions for LTRect
-        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, -100);
+        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, notificationPanel.height * -1);
         finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
         panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, notificationPanel.height);
         Display();
@@ -70,7 +70,7 @@ public class PopupNotification : MonoBehaviour {
     // Display the popup panel
     private void Display(){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeInQuad);
+        optional.Add("ease", LeanTweenType.easeInOutQuad);
         LeanTween.move(panelRect, finalPosition, 0.5f, optional);
     }
 
@@ -79,7 +79,7 @@ public class PopupNotification : MonoBehaviour {
         Hashtable optional = new Hashtable();
         optional.Add("onCompleteTarget", gameObject);
         optional.Add("onComplete", "DestroyNotificaiton");
-        optional.Add("ease", LeanTweenType.easeOutCirc);
+        optional.Add("ease", LeanTweenType.easeInOutQuad);
         LeanTween.move(panelRect, initPosition, 0.5f, optional);
     }
 

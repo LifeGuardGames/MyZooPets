@@ -63,6 +63,7 @@ public class DegradationLogic : MonoBehaviour {
                 triggerLocation.isTaken = true;
                 
                 //spawn them at a pre define location
+                //ID is the order in which the data are created
                 DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex)); 
             }                
         }
@@ -71,7 +72,7 @@ public class DegradationLogic : MonoBehaviour {
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
-        DegradData degradData = DataManager.DegradationTriggers[0];
+        DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(TriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
             args.TriggerPosition = triggerLocations[degradData.PositionId].position;

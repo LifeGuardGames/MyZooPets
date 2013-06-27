@@ -20,7 +20,6 @@ public class DegradationGUI : MonoBehaviour{
 
     public void Init(){
         //instantiate triggers in the game
-        print("waht");
         for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
             int prefabId = DataManager.DegradationTriggers[i].PrefabId;
             int positionId = DataManager.DegradationTriggers[i].PositionId;
@@ -33,6 +32,7 @@ public class DegradationGUI : MonoBehaviour{
     }
 
     private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){
-        print(e.TriggerPosition);
+        GameObject particleDrop = (GameObject)Instantiate(cleanTriggerParticleDrop, e.TriggerPosition, Quaternion.Euler(270,0,0));
+        Destroy(particleDrop, 1);
     }
 }

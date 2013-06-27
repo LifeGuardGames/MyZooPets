@@ -13,7 +13,7 @@ public class DegradTriggerManager : MonoBehaviour {
 
     void OnTap(){
         //when trigger is touched remove from DataManager and destroy GameObject
-                degradationLogic.ClearDegradationTrigger(id);
+            degradationLogic.ClearDegradationTrigger(id);
         Destroy(this.gameObject);
     }
 }

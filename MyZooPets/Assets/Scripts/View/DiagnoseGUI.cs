@@ -4,6 +4,7 @@ using System.Collections;
 public class DiagnoseGUI : MonoBehaviour {
 	
 	public Texture2D txPanel;
+	public GameObject spritePet;
 
 	//stages texture
 	public Texture2D green;
@@ -40,7 +41,6 @@ public class DiagnoseGUI : MonoBehaviour {
 	private Texture2D currentTexture; //TO DO: this will need to be replaced with animation
 	private bool buttonClicked; //used to prevent buttons from clicking more than once
 	private bool isActive; //True: game in process, False: game over
-	// private bool showInhaler; //True: display inhaler, False: hide inhaler
 	private bool showTimerProgress; //True: display count down meter, False: hide it
 
 	// native dimensions
@@ -75,18 +75,20 @@ public class DiagnoseGUI : MonoBehaviour {
 
 		buttonClicked = false;
 		isActive = true;
-		// showInhaler = false;
 
 		DiagnoseGameLogic.Init();
 		switch(DiagnoseGameLogic.CurrentStage){
 			case AsthmaStage.OK:
 				currentTexture = green;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("OkPet");
 			break;
 			case AsthmaStage.Sick:
 				currentTexture = yellow;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("SickPet");
 			break;
 			case AsthmaStage.Attack:
 				currentTexture = red;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("AttackPet");
 			break;
 		}
 	}

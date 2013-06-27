@@ -4,7 +4,7 @@ using System.Collections;
 public class StoreGUI : MonoBehaviour {
 
 	public Texture2D backgroundTexture;
-	public Texture2D page1Texture,page2Texture,page3Texture,page4Texture;
+	public Texture2D page1Texture, page2Texture, page3Texture, page4Texture;
 	public GUIStyle itemTitleStyle;
 	public GUIStyle itemInfoStyle;
 	public GUIStyle itemBackgroundStyle;
@@ -13,8 +13,9 @@ public class StoreGUI : MonoBehaviour {
 	
 	private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	private Vector2 backgroundloc = new Vector2(40,20);
-	private Vector2 page1loc = new Vector2(100,100);
+	private Vector2 backgroundloc = new Vector2(20, 20);
+	private Vector2 tabLoc = new Vector2(50, 50);
+	private Vector2 tabSize = new Vector2(1125, 727);
 	private Vector2 menuItem1Loc;
 	private Vector2 menuItem2Loc;
 	
@@ -55,48 +56,48 @@ public class StoreGUI : MonoBehaviour {
 		
 		//GUI layouts
 		if(StoreGUIOn){
-		
 			ClickManager.ModeLock();
 			ClickManager.ClickLock();
-			GUI.DrawTexture(new Rect(backgroundloc.x,backgroundloc.y,1200,760),backgroundTexture);
-			if(GUI.Button(new Rect (page1loc.x+50,page1loc.y-50,200,50),"page1")){
+			GUI.DrawTexture(new Rect(backgroundloc.x,backgroundloc.y, backgroundTexture.width, backgroundTexture.height), backgroundTexture);
+
+			if(storePage == 1){
+				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
+			}
+			if(storePage == 2){
+				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
+			}
+			if(storePage == 3){
+				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
+			}
+			if(storePage == 4){
+				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
+			}
+			
+			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y, 200, 50), "page1")){
 				storePage = 1;
 			}
-			if(GUI.Button(new Rect (page1loc.x+300,page1loc.y-50,200,50),"page2")){
+			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y, 200, 50), "page2")){
 				storePage = 2;
 			}
-			if(GUI.Button(new Rect (page1loc.x+550,page1loc.y-50,200,50),"page3")){
+			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y, 200, 50), "page3")){
 				storePage = 3;
 			}
-			if(GUI.Button(new Rect (page1loc.x+800,page1loc.y-50,200,50),"page4")){
+			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y, 200, 50), "page4")){
 				storePage = 4;
 			}
 			
-			if(storePage == 1){
-				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page1Texture);
-			}
-			if(storePage == 2){
-				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page2Texture);
-			}
-			if(storePage == 3){
-				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page3Texture);
-			}
-			if(storePage == 4){
-				GUI.DrawTexture(new Rect(page1loc.x,page1loc.y,1080,650),page4Texture);
-			}
-			
-			if(GUI.Button(new Rect(backgroundloc.x+50,backgroundloc.y+50,50,50),"X")){
+			if(GUI.Button(new Rect(backgroundloc.x + 20,backgroundloc.y + 20, 50, 50), "X")){
 				hideStore();
 				ClickManager.ReleaseClickLock();
 				ClickManager.ReleaseModeLock();
 			}
 			
 			//Central Item Group
-			GUILayout.BeginArea(new Rect(page1loc.x+50,page1loc.y+50,1000,600));
-			for(int i = 0; i< itemlogic.items.Count ;i+=2){
+			GUILayout.BeginArea(new Rect(tabLoc.x + 50, tabLoc.y + 100, 1000, 600));
+			for(int i = 0; i< itemlogic.items.Count;i+=2){
 				if(Input.touchCount>0){
 					Touch touch = Input.GetTouch(0);
-					if(touch.position.x > page1loc.x && touch.position.x < page1loc.x +1000&& touch.position.y > page1loc.y && touch.position.y < page1loc.y+600){
+					if(touch.position.x > tabLoc.x && touch.position.x < tabLoc.x +1000&& touch.position.y > tabLoc.y && touch.position.y < tabLoc.y+600){
 						if(Mathf.Abs(touch.deltaPosition.y) > 5){
 							slideValue -= touch.deltaPosition.y *2;
 						}	

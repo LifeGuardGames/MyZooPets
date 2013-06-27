@@ -175,7 +175,12 @@ public class ClickManager : MonoBehaviour {
 						// 	// ModeLock();
 						// }
 						// else if(hit.collider.name =="ColliderPlane"){
+						//
+						//Disabled clicking on lower screen. Temp Solution
 						if (hit.collider.name =="ColliderPlane"){
+							if(Input.GetTouch(0).position.y > 110)
+//							print (Input.GetTouch(0).position.y);
+//							print (Input.mousePosition.y);
 							destinationPoint = hit.point;
 						}
 					}

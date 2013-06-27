@@ -105,21 +105,21 @@ public class StoreGUI : MonoBehaviour {
 				}
 				
 				//This code is buggy ....some one please take a look ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				if(slideValue <= 0 && slideValue >= - 100* itemlogic.items.Count){
+				if(slideValue <= 0 /*&& slideValue >= -600 + 100* itemlogic.items.Count*/){
+					
 					menuItem1Loc = new Vector2(0,i*100+slideValue);
 					menuItem2Loc = new Vector2(500,i*100+slideValue);
 				}
-				else{
-					if(slideValue > 0){
-						menuItem1Loc = new Vector2(0,i*100);
-						menuItem2Loc = new Vector2(500,i*100);
-						slideValue = 0;
-					}
-					else{
-						menuItem1Loc = new Vector2(0,-(itemlogic.items.Count-i)*100);
-						menuItem2Loc = new Vector2(500,-(itemlogic.items.Count-i)*100);	
-					}
+				else if( slideValue > 0){
+					menuItem1Loc = new Vector2(0,i*100);
+					menuItem2Loc = new Vector2(500,i*100);
+					slideValue = 0;
 				}
+//				else{
+//					menuItem1Loc = new Vector2(0,-600+100*i);
+//					menuItem2Loc = new Vector2(500,-600+i*100);
+//					
+//				}
 				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,480,200),"");
 				GUI.Box (new Rect(menuItem1Loc.x,menuItem1Loc.y,200,180),itemlogic.textures[i]);
 				GUI.Label(new Rect(menuItem1Loc.x + 220,menuItem1Loc.y ,220,100),itemlogic.items[i].Name,itemTitleStyle);

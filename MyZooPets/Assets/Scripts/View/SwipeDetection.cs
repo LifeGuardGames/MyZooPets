@@ -13,7 +13,9 @@ public class SwipeDetection : MonoBehaviour {
     float minSwipeDistancePixels;
     bool touchStarted;
     Vector2 touchStartPos;
+    float flickTimer = 0;
     public float minSwipeDistance = .025f;
+    public float flickTime = 0.5f;
     public static event System.Action<Swipe> OnSwipeDetected;
 
     void Start() {
@@ -24,10 +26,12 @@ public class SwipeDetection : MonoBehaviour {
     void Update() {
         if (Input.touchCount > 0) {
             var touch = Input.touches[0];
+            flickTimer += Time.deltaTime;
 
             switch (touch.phase) {
 
                 case TouchPhase.Began:
+                flickTimer = 0;
                 touchStarted = true;
                 touchStartPos = touch.position;
                 break;
@@ -56,7 +60,7 @@ public class SwipeDetection : MonoBehaviour {
         Vector2 lastPos = touch.position;
         float distance = Vector2.Distance(lastPos, touchStartPos);
 
-        if (distance > minSwipeDistancePixels) {
+        if (distance > minSwipeDistancePixels && flickTimer <= flickTime) {
             float dy = lastPos.y - touchStartPos.y;
             float dx = lastPos.x - touchStartPos.x;
 

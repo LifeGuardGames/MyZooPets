@@ -8,10 +8,10 @@ using System;
 //TO DO: need to store diff types of trigger and distinct between room and yard
 public class DegradationLogic : MonoBehaviour {
     [System.Serializable]
-    public class Location{
-        public bool isTaken;
-        public Vector3 position;
-
+    public class Location{ //make it serializable 
+        public bool isTaken; //if the position has been taken or not
+        public Vector3 position; //the position of the degradation trigger
+        
         public Location(bool isTaken, Vector3 position){
             this.isTaken = isTaken;
             this.position = position;
@@ -21,6 +21,13 @@ public class DegradationLogic : MonoBehaviour {
     public bool isDebug = false; //developer option. force the trigger to show
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
+
+    public class TriggerDestroyedEventArgs : EventArgs{ //arguments that will be passed to Event Handler
+        public Vector3 TriggerPosition {get; set;}
+    }
+    public delegate void TriggerDestroyEventHandler(object sender, TriggerDestroyedEventArgs e);
+    public event TriggerDestroyEventHandler TriggerDestroyed;
+
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 
@@ -63,8 +70,13 @@ public class DegradationLogic : MonoBehaviour {
     }
 
     //use the method when a trigger has been destroyed by user
-    public static void ClearDegradationTrigger(int id){
+    public void ClearDegradationTrigger(int id){
         DegradData degradData = DataManager.DegradationTriggers[0];
+        if(TriggerDestroyed != null){ //call event handler if not empty
+            TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
+            args.TriggerPosition = triggerLocations[degradData.PositionId].position;
+            TriggerDestroyed(this, args);
+        }
         DataManager.DegradationTriggers.Remove(degradData);
     }
 

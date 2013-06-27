@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class DiagnoseGUI : MonoBehaviour {
+	
 	public Texture2D txPanel;
 
 	//stages texture
@@ -47,8 +48,8 @@ public class DiagnoseGUI : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 
     //Button dimensions
-    private const float BUTTON_WIDTH = 175;
-    private const float BUTTON_HEIGHT = 190;
+    private const float BUTTON_WIDTH = 150;
+    private const float BUTTON_HEIGHT = 150;
 
     //progress bar max value
     private const int MAX_VALUE = 30;
@@ -111,7 +112,7 @@ public class DiagnoseGUI : MonoBehaviour {
             	new Vector3(horizRatio, vertRatio, 1));
 		}
 
-		//=========Timer progress bar==========
+		//=====Timer progress bar======
 		if(isActive){
 			// GUI.DrawTexture(new Rect(timerBarLoc.x,timerBarLoc.y,100,100), statBarTexture);
 			GUI.Label(new Rect(50, 80, 40, 20), "Timer");
@@ -127,17 +128,17 @@ public class DiagnoseGUI : MonoBehaviour {
 					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 			}
 		}
-		//====================================
+		//=============================
 
 		//=========Diagnose symptoms panel=============
 		GUI.BeginGroup(diagnoseRect.rect, txPanel);
-		GUI.Label(new Rect(0,0, 600, 100), "diagnose symptoms", diagnoseStyle);
+		GUI.Label(new Rect(0,0, 600, 100), "Diagnose the symptoms!", diagnoseStyle);
 		GUI.Label(new Rect(250, 150, 100, 50), "" + DiagnoseGameLogic.CurrentStage);
-		if(GUI.Button(new Rect(10, 200, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
+		if(GUI.Button(new Rect(30, 200, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
 			chosenStage = AsthmaStage.OK;
 			Clicked();
 		}
-		if(GUI.Button(new Rect(210, 200, BUTTON_WIDTH, BUTTON_HEIGHT), yellow)){
+		if(GUI.Button(new Rect(220, 200, BUTTON_WIDTH, BUTTON_HEIGHT), yellow)){
 			chosenStage = AsthmaStage.Sick;
 			Clicked();			
 		}
@@ -146,9 +147,9 @@ public class DiagnoseGUI : MonoBehaviour {
 			Clicked();	
 		}
 		GUI.EndGroup();
-		//==========================
+		//=============================================
 
-		//===========Drag Drop inhaler logic===========
+		//===========Drag Drop inhaler logic==================================
 		if(!pickedUp && isActive){
 			if(GUI.RepeatButton(inhalerRect.rect, inhalerTexture, buttonStyle)){
 				pickedUp = true;
@@ -178,7 +179,7 @@ public class DiagnoseGUI : MonoBehaviour {
 				}
 			}
 		}
-		//===============================
+		//=====================================================================
 	}
 
 	//user chose one of the stages, so check it the user is correct

@@ -12,15 +12,19 @@ using TouchScript.Gestures;
 	To use TapItem:
 		1) Attach TapItem to a GameObject
 		2) Attach TapGesture (from TouchScript.Gestures)
-		3) Assign a function to OnTap (in another script).
+		3) Add a function (using +=, not =) to OnTap (in another script).
 */
 // ================================================================================================
 
+public delegate void TapEventHandler();
 
 public class TapItem : MonoBehaviour {
 
-	public delegate void OnTapCallback();
-	public OnTapCallback OnTap;
+	public event TapEventHandler OnTap;
+
+    protected virtual void HandleTap() {
+        if (OnTap != null) OnTap();
+    }
 
 	void Start()
 	{
@@ -31,8 +35,7 @@ public class TapItem : MonoBehaviour {
 	{
 		if (e.State == Gesture.GestureState.Recognized)
 		{
-			if (OnTap != null)
-				OnTap();
+			HandleTap();
 		}
 	}
 }

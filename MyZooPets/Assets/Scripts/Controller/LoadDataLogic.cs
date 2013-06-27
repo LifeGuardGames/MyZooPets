@@ -13,6 +13,7 @@ public class LoadDataLogic : MonoBehaviour {
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private EvolutionLogic evolutionLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
+    private Tutorial tutorial; //reference to... logic?
     private ClickManager clickmanager;
 
     void Awake(){
@@ -23,6 +24,7 @@ public class LoadDataLogic : MonoBehaviour {
         degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
         evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
         degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
+        tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
 		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
         IsDataLoaded = false;
@@ -45,6 +47,7 @@ public class LoadDataLogic : MonoBehaviour {
         evolutionLogic.Init();
         degradationLogic.Init();
         degradationUIManager.Init();
+        tutorial.Init();
 		clickmanager.Init();
         IsDataLoaded = true;
     }

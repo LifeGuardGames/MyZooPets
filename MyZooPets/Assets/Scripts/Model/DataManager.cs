@@ -75,10 +75,10 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool canPlayGameAfternoon; //can user play in the afternoon (optimal game)
     [SerializeThis]
-    private static bool firstTimeAdvair;// first time the player has seen the advair inhaler 
+    private static bool firstTimeAdvair;// first time the player has seen the advair inhaler
                                         //(this tells us whether to show tutorial arrows in the Inhaler Game)
     [SerializeThis]
-    private static bool firstTimeRescue; //first time the player has seen the rescue inhaler 
+    private static bool firstTimeRescue; //first time the player has seen the rescue inhaler
                                         //(this tells us whether to show tutorial arrows in the Inhaler Game)
 
     //Degradation Data
@@ -86,12 +86,19 @@ public class DataManager : MonoBehaviour {
     private static DateTime lastTimeUserPlayedGame; //last time that the user opened the game
     [SerializeThis]
     private static List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
-    
-	//inventory data
+
+    //inventory data
     [SerializeThis]
     private static int[] inventory; //array for all items, index as Item Id
-	
-	
+
+	//Tutorial data
+    [SerializeThis]
+    private static bool firstTimeCalendar; //
+    [SerializeThis]
+    private static bool firstTimeChallenges; //
+    [SerializeThis]
+    private static bool firstTimeDiary; // evolution and symptoms pages
+
     //========================
 
     //=============Getters & Setters===============
@@ -188,14 +195,27 @@ public class DataManager : MonoBehaviour {
         get{return degradationTriggers;}
         set{degradationTriggers = value;}
     }
-    
-	//inventory 
+
+	//inventory
 	public static int[] Inventory{
 		get{ return inventory;}
 		set{ inventory = value;}
 	}
-	
-	
+
+    //tutorial
+    public static bool FirstTimeCalendar{
+        get{return firstTimeCalendar;}
+        set{firstTimeCalendar = value;}
+    }
+    public static bool FirstTimeChallenges{
+        get{return firstTimeChallenges;}
+        set{firstTimeChallenges = value;}
+    }
+    public static bool FirstTimeDiary{
+        get{return firstTimeDiary;}
+        set{firstTimeDiary = value;}
+    }
+
     //===============================
 
     //==============StatsModifiers================
@@ -356,14 +376,19 @@ public class DataManager : MonoBehaviour {
             //Degradation game data
             lastTimeUserPlayedGame = DateTime.Now;
             degradationTriggers = new List<DegradData>();
-		
+
 			//inventory
 			inventory = new int[ItemLogic.MAX_ITEM_COUNT];
-		
+
+            //tutorial
+            firstTimeCalendar = true;
+            firstTimeChallenges = true;
+            firstTimeDiary = true;
+
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-            
-		
+
+
     }
 
     //call the delegate when data initialization or deserialziation is done

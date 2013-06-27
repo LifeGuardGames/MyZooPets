@@ -10,8 +10,10 @@ public class GrowShrink : MonoBehaviour {
     public float bigY = 1.1f;
     public float bigZ = 1.1f;
 
-    // for testing only
-    public bool running = false;
+    // for testing only - when used with the code in the update loop,
+    // Play() and Stop() can be triggered from the inspector.
+    // public bool running = true;
+
     bool isPlaying = false;
 
     Vector3 smaller;
@@ -23,7 +25,6 @@ public class GrowShrink : MonoBehaviour {
     Hashtable optionalGrow = new Hashtable();
     Hashtable optionalShrink = new Hashtable();
 
-	// Use this for initialization
 	void Start () {
         smaller = new Vector3(smallX, smallY, smallZ);
         bigger = new Vector3(bigX, bigY, bigZ);
@@ -36,16 +37,17 @@ public class GrowShrink : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (running){
-            if (!isPlaying){
-                Play();
-            }
-        }
-        else {
-            if (isPlaying){
-                Stop();
-            }
-        }
+        // uncomment when testing
+        // if (running){
+        //     if (!isPlaying){
+        //         Play();
+        //     }
+        // }
+        // else {
+        //     if (isPlaying){
+        //         Stop();
+        //     }
+        // }
 	}
 
     public void Play(){

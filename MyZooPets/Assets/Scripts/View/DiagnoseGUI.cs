@@ -96,7 +96,7 @@ public class DiagnoseGUI : MonoBehaviour {
 			if(timer <= 0){
 				isActive = false;
 				HideGUIPanel();
-				notificationUIManager.PopupTexture("great"); //TO DO: change to nice try notification
+				notificationUIManager.PopupTexture("nice try");
 			}
 		}
 	}

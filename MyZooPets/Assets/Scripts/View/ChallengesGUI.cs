@@ -9,7 +9,7 @@ public class ChallengesGUI : MonoBehaviour {
     public GUISkin defaultSkin;
 
     //Textures
-    public Texture2D challengesTexture;
+    public Texture2D bgPanel;
 	public Texture2D backButton;
 
     //Styles
@@ -94,8 +94,11 @@ public class ChallengesGUI : MonoBehaviour {
         //////                                         Challenge Pages
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         GUI.depth = 0;
+		
+		
+		
         GUI.BeginGroup(challengesRect.rect);
-            GUI.Box(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), "");
+            GUI.DrawTexture(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), bgPanel);
             GUI.Label(new Rect(WINDOW_WIDTH/2 - DAILY_CHALLENGE_TITLE_WIDTH/2, 0, 
                 DAILY_CHALLENGE_TITLE_WIDTH, DAILY_CHALLENGE_TITLE_HEIGHT), 
                 "Daily Challenge", challengesTextStyle); //Title

@@ -23,6 +23,12 @@ public enum AsthmaStage{
     Sick,
     Attack,
 }
+public enum ItemCategory{
+	Foods,
+	Items,
+	Inhalers,
+	Decorations,
+}
 
 
 

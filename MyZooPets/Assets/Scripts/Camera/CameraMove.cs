@@ -18,10 +18,13 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
 	private Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
 
-	private Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
-	private Vector3 slotMachineFinalDirection = new Vector3(17.8f, 335.71f, 0f);
+	// private Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
+	private GameObject slotMachine;
+	private Vector3 slotMachineFinalPosition;
+	private Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
 
-	private Vector3 cameraOffset = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
+	private Vector3 petCameraOffset = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
+	private Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
 	// this way, the camera will always go to the pet
 
 	private GameObject spritePet;
@@ -35,6 +38,7 @@ public class CameraMove : MonoBehaviour{
 
 	public void Init(){
 		spritePet = GameObject.Find("SpritePet");
+		slotMachine = GameObject.Find("SlotMachine");
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}
@@ -67,7 +71,7 @@ public class CameraMove : MonoBehaviour{
 				zoomed = true;
 				LockCameraMove();
 
-				petSideFinalPosition = spritePet.transform.position + cameraOffset;
+				petSideFinalPosition = spritePet.transform.position + petCameraOffset;
 	    		CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
 			}
 		}
@@ -95,6 +99,7 @@ public class CameraMove : MonoBehaviour{
 			else{
 				zoomed = true;
 				LockCameraMove();
+				slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
 				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineTest");
 			}
 		}

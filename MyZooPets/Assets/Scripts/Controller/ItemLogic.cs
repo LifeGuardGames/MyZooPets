@@ -49,7 +49,6 @@ public class ItemLogic : MonoBehaviour{
 	}
 	
 	void Awake(){
-		print(names.Count);
 		if(names.Count == textures.Count && textures.Count == costs.Count){
 			for(int i = 0;i< names.Count;i++){
 				items.Add(new Item(i,names[i],costs[i],textures[i],category[i]));

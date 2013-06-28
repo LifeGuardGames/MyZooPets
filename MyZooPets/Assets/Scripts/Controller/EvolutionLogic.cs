@@ -7,8 +7,8 @@ using System;
 public class EvolutionLogic : MonoBehaviour {
 	private float timer = 0;
 	private float timeInterval = 30f;
-    private int level1EvolutionPoints = 50000; //level 1 evolution points requirement
-    private int level2EvolutionPoints = 100000; //level 2 evolution points requirement
+    private int level1EvolutionPoints = 500; //level 1 evolution points requirement
+    private int level2EvolutionPoints = 1000; //level 2 evolution points requirement
 
     //=========================API============================
     public bool CanEvolve(){

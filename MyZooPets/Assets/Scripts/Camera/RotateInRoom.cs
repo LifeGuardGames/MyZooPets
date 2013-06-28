@@ -18,20 +18,22 @@ public class RotateInRoom : MonoBehaviour {
 	}
 
     public void RotateRight(){
-        // todo: call lock on ClickManager?
         if (!lockRotation){
-            lockRotation = true;
-            currentYRotation += rotationIncrement;
-            LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
+            if (ClickManager.CanRespondToTap()){
+                lockRotation = true;
+                currentYRotation += rotationIncrement;
+                LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
+            }
         }
     }
 
     public void RotateLeft(){
-        // todo: call lock on ClickManager?
         if (!lockRotation){
-            lockRotation = true;
-            currentYRotation -= rotationIncrement;
-            LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
+            if (ClickManager.CanRespondToTap()){
+                lockRotation = true;
+                currentYRotation -= rotationIncrement;
+                LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
+            }
         }
     }
 

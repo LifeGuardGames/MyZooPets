@@ -5,12 +5,16 @@ public class RotateInRoom : MonoBehaviour {
 
     float currentYRotation;
     public float rotationIncrement = 72;
+    bool inverse = true;
     Hashtable optional = new Hashtable();
     bool lockRotation;
 	// Use this for initialization
 	void Start () {
         currentYRotation = transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
+        if (inverse){
+            rotationIncrement = - rotationIncrement;
+        }
 
         // todo: remove after testing
         // Invoke("RotateRight", 5);

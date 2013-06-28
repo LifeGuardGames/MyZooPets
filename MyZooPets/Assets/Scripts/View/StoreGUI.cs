@@ -147,7 +147,10 @@ public class StoreGUI : MonoBehaviour {
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 55, 220, 100), "Health + 10",itemInfoStyle);
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i]].Cost.ToString(), itemInfoStyle);
 			if(GUI.Button(new Rect(menuItem1Loc.x + 250, menuItem1Loc.y + 120, 180, 60), "Buy")){
-				inventory.addItem(categoryList[i], 1);
+				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i]].Cost){
+					inventory.addItem(categoryList[i], 1);
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);			
+				}
 			}
 			
 			GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
@@ -157,7 +160,10 @@ public class StoreGUI : MonoBehaviour {
 			GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
 			GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);
 			if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
-				inventory.addItem(categoryList[i+1], 1);
+				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
+					inventory.addItem(categoryList[i+1], 1);
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);			
+				}
 			}
 		}				
 		GUI.EndGroup();

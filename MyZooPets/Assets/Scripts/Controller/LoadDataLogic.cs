@@ -56,5 +56,8 @@ public class LoadDataLogic : MonoBehaviour {
         cameraMove.Init();
 		clickmanager.Init();
         IsDataLoaded = true;
+		
+		//hatching gives 500 stars
+        DataManager.AddStars(500);
     }
 }

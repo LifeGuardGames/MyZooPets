@@ -99,6 +99,9 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool firstTimeDiary; // evolution and symptoms pages
 
+    //Challenge data
+    
+
     //========================
 
     //=============Getters & Setters===============

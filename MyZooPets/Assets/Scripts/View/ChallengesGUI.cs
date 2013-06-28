@@ -14,7 +14,7 @@ public class ChallengesGUI : MonoBehaviour {
     //Styles
     public GUIStyle challengesTextStyle;
 
-    //Diary positions
+    //Challenge positions
     private Vector2 challengesInitPosition = new Vector2(125,-800);
     private Vector2 challengesFinalPosition = new Vector2(650,100);
     private LTRect challengesRect;
@@ -22,6 +22,13 @@ public class ChallengesGUI : MonoBehaviour {
     // native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
+
+    //challenge window dimensions
+    private const float WINDOW_WIDTH = 600;
+    private const float WINDOW_HEIGHT = 650;
+
+    private const float DAILY_CHALLENGE_TITLE_WIDTH = 300;
+    private const float DAILY_CHALLENGE_TITLE_HEIGHT = 100;
 
     //MISC
     private CameraMove cameraMove;
@@ -37,7 +44,8 @@ public class ChallengesGUI : MonoBehaviour {
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
         roomGui = roomGuiObject.GetComponent<RoomGUI>();
-        challengesRect = new LTRect(challengesInitPosition.x,challengesInitPosition.y, 600, 650);
+        challengesRect = new LTRect(challengesInitPosition.x,challengesInitPosition.y, 
+            WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
     // Called from ClickManager
@@ -81,10 +89,30 @@ public class ChallengesGUI : MonoBehaviour {
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////                                         Diary Pages                                          ///////////
+        //////                                         Challenge Pages
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         GUI.depth = 0;
-        GUI.DrawTexture(challengesRect.rect,challengesTexture);
+        GUI.BeginGroup(challengesRect.rect);
+            GUI.Box(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), "");
+            GUI.Label(new Rect(WINDOW_WIDTH/2 - DAILY_CHALLENGE_TITLE_WIDTH/2, 0, 
+                DAILY_CHALLENGE_TITLE_WIDTH, DAILY_CHALLENGE_TITLE_HEIGHT), 
+                "Daily Challenge", challengesTextStyle); //Title
+            
+            GUI.BeginGroup(new Rect(50, 100, 500, 200)); //Todays Challenge group
+                GUI.Box(new Rect(0, 0, 500, 300), "");
+                GUI.Label(new Rect(500/2 - 250/2, 25, 250, 100), "Description"); //Description
+            GUI.EndGroup();
+
+            GUI.BeginGroup(new Rect(50, WINDOW_HEIGHT/2, 500, 300)); //reward group
+                GUI.Box(new Rect(0, 0, 500, 300), "");
+                GUI.BeginGroup(new Rect(25, 0, 450, 100)); //Day 1 to 4
+                GUI.Box(new Rect(0, 0, 450, 100), "");
+                    GUI.Button(new Rect(10, 10, 80, 80), "Day 1");
+                GUI.EndGroup();
+                GUI.Box(new Rect(25, 120, 450, 180), "Day 5"); //Day 5
+            GUI.EndGroup();
+        GUI.EndGroup();
+        // GUI.DrawTexture(challengesRect.rect,challengesTexture);
 
         //Temp close Button
         //TODO make a prettier icon??

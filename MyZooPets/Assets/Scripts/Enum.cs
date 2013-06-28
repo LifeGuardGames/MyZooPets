@@ -24,5 +24,10 @@ public enum AsthmaStage{
     Attack,
 }
 
+public enum ChallengeType{
+    Weekly,
+    Daily,
+}
+
 
 

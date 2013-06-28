@@ -39,7 +39,7 @@ public class StoreGUI : MonoBehaviour {
 	}
 
 	void Update(){
-		slideValue -= Input.GetTouch(0).deltaPosition.y;
+		if(Input.touchCount > 0) slideValue -= Input.GetTouch(0).deltaPosition.y;
 		if(slideValue > 0) slideValue = 0;
 		if(slideValue < -(categoryList.Count/2*200 - 600)) slideValue = - (categoryList.Count/2*200 -600);
 		if(categoryList.Count <= 6){ slideValue = 0;}

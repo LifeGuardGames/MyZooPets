@@ -16,11 +16,13 @@ public class DiaryGUI : MonoBehaviour {
 	public Texture2D tickBoxEmpty;
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
-
+	public Texture2D backButton;
+	
 	//Styles
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
 	public GUIStyle diaryTextStyle;
+	public GUIStyle blankButtonStyle;
 
 	//Diary positions
 	private Vector2 diaryInitPosition = new Vector2(125,-800);
@@ -55,6 +57,9 @@ public class DiaryGUI : MonoBehaviour {
 	// Called from ClickManager
 	public void DiaryClicked(){
 		if(!diaryActive){
+			ClickManager.ModeLock();
+			ClickManager.ClickLock();
+			
 			diaryActive = true;
 			cameraMove.PetSideZoomToggle();
 			roomGui.HideGUIs(false, true, true, true);
@@ -186,31 +191,30 @@ public class DiaryGUI : MonoBehaviour {
 			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
 			// 	diaryPage = 2;
 			// }
-			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){
+			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){	// TODO-s Change rect to fit pixel from sprite
 				diaryPage = 4;
 			}
 		}
-		else if (diaryPage == 4){
-			// GUI.DrawTexture(diaryRect.rect,diaryTexture1);
-			// GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
+//		else if (diaryPage == 4){
+//			// GUI.DrawTexture(diaryRect.rect,diaryTexture1);
+//			// GUI.DrawTexture(diaryRect.rect,diaryTexture2);
+//			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
+//			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
+//
+//
+//			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle)){
+//			// 	diaryPage = 1;
+//			// }
+//			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
+//			// 	diaryPage = 2;
+//			// }
+//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
+//				diaryPage = 3;
+//			}
+//		}
 
-
-			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle)){
-			// 	diaryPage = 1;
-			// }
-			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
-			// 	diaryPage = 2;
-			// }
-			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
-				diaryPage = 3;
-			}
-		}
-
-		//Temp close Button
-		//TODO make a prettier icon??
-		if(GUI.Button(new Rect(diaryRect.rect.x,diaryRect.rect.y,50,50),"X")){
+		// Close Button
+		if(GUI.Button(new Rect(diaryRect.rect.x - 20, diaryRect.rect.y - 20, backButton.width, backButton.height), backButton, blankButtonStyle)){
 			HideDiary();
 			if(!isEnteredFromDiagnose){
 				showGUI = true;

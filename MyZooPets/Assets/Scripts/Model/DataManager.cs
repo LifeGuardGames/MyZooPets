@@ -101,6 +101,9 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool firstTimeSlotMachine;
 
+    //Challenge data
+    
+
     //========================
 
     //=============Getters & Setters===============

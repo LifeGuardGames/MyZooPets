@@ -4,6 +4,7 @@ using System.Collections;
 public class DiagnoseGUI : MonoBehaviour {
 	
 	public Texture2D txPanel;
+	public GameObject spritePet;
 
 	//stages texture
 	public Texture2D green;
@@ -40,7 +41,6 @@ public class DiagnoseGUI : MonoBehaviour {
 	private Texture2D currentTexture; //TO DO: this will need to be replaced with animation
 	private bool buttonClicked; //used to prevent buttons from clicking more than once
 	private bool isActive; //True: game in process, False: game over
-	// private bool showInhaler; //True: display inhaler, False: hide inhaler
 	private bool showTimerProgress; //True: display count down meter, False: hide it
 
 	// native dimensions
@@ -75,18 +75,20 @@ public class DiagnoseGUI : MonoBehaviour {
 
 		buttonClicked = false;
 		isActive = true;
-		// showInhaler = false;
 
 		DiagnoseGameLogic.Init();
 		switch(DiagnoseGameLogic.CurrentStage){
 			case AsthmaStage.OK:
 				currentTexture = green;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("OkPet");
 			break;
 			case AsthmaStage.Sick:
 				currentTexture = yellow;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("SickPet");
 			break;
 			case AsthmaStage.Attack:
 				currentTexture = red;
+				spritePet.GetComponent<tk2dSprite>().SetSprite("AttackPet");
 			break;
 		}
 	}
@@ -96,7 +98,7 @@ public class DiagnoseGUI : MonoBehaviour {
 			timer -= Time.deltaTime;
 			if(timer <= 0){
 				isActive = false;
-				HideGUIPanel();
+				HideGUIPanel(false);
 				notificationUIManager.PopupTexture("nice try");
 			}
 		}
@@ -187,15 +189,21 @@ public class DiagnoseGUI : MonoBehaviour {
 		if(!buttonClicked){
 			buttonClicked = true;
 			
-			HideGUIPanel();
+			
 			if(DiagnoseGameLogic.IsThisStageCorrect(chosenStage)){
+
 				if(chosenStage.Equals(AsthmaStage.OK)){
 					isActive = false;
 					notificationUIManager.PopupTexture("award",0, 1000, 0, 0, 0);
 				}
+				HideGUIPanel(true);
 			}else{
 				//wrong stage
 				//nice try notification
+				print("wrong");
+				isActive = false;
+				notificationUIManager.PopupTexture("nice try");
+				HideGUIPanel(false);
 			}
 		}
 	}
@@ -207,9 +215,9 @@ public class DiagnoseGUI : MonoBehaviour {
 	}
 
 	//hide the game panel after button has been clicked
-	private void HideGUIPanel(){
+	private void HideGUIPanel(bool isAnswerCorrect){
 		Hashtable optional = new Hashtable();
-		if(chosenStage.Equals(AsthmaStage.Sick) || chosenStage.Equals(AsthmaStage.Attack)){
+		if(isAnswerCorrect && (chosenStage.Equals(AsthmaStage.Sick) || chosenStage.Equals(AsthmaStage.Attack))){
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "ShowInhaler");	
 		}

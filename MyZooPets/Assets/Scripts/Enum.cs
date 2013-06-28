@@ -29,6 +29,12 @@ public enum ItemCategory{
 	Inhalers,
 	Decorations,
 }
+public enum TrophyTier{
+	Null,
+	Bronze,
+	Silver,
+	Gold,
+}
 
 
 

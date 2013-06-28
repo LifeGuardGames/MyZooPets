@@ -12,7 +12,7 @@ public class RescueShaker : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 
     private Vector2 shakeBarOffset = new Vector2(60, 15);
-    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2 + 180, NATIVE_HEIGHT / 4 - 50);
+    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2 + 160, NATIVE_HEIGHT / 4 - 50);
 
     float shakeValue = 0f;
     float shakeTarget = 1f;

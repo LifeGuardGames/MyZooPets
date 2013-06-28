@@ -6,6 +6,7 @@ public class Tutorial : MonoBehaviour {
     public GameObject calendar;
     public GameObject challenges;
     public GameObject diary;
+    public GameObject slotMachine;
 
     public void Init(){
         if (DataManager.FirstTimeCalendar){
@@ -23,21 +24,39 @@ public class Tutorial : MonoBehaviour {
             diary.GetComponent<TapItem>().OnTap += openDiary;
             growShrink.Play();
         }
+        if (DataManager.FirstTimeSlotMachine){
+            GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+            slotMachine.GetComponent<TapItem>().OnTap += openSlotMachine;
+            growShrink.Play();
+        }
     }
 
     void openCalendar(){
-        GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-        DataManager.FirstTimeCalendar = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+            DataManager.FirstTimeCalendar = false;
+            growShrink.Stop();
+        }
     }
     void openChallenges(){
-        GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
-        DataManager.FirstTimeChallenges = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
+            DataManager.FirstTimeChallenges = false;
+            growShrink.Stop();
+        }
     }
     void openDiary(){
-        GrowShrink growShrink = diary.GetComponent<GrowShrink>();
-        DataManager.FirstTimeDiary = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = diary.GetComponent<GrowShrink>();
+            DataManager.FirstTimeDiary = false;
+            growShrink.Stop();
+        }
+    }
+    void openSlotMachine(){
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+            DataManager.FirstTimeSlotMachine = false;
+            growShrink.Stop();
+        }
     }
 }

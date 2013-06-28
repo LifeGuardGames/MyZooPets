@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StoreGUI : MonoBehaviour {
 	public GUISkin skin;
@@ -26,9 +27,10 @@ public class StoreGUI : MonoBehaviour {
 	private bool StoreGUIOn = false;
 //	private bool StoreGUIOn = true;
 
-	private float slideValue;
+	private float slideValue= 0;
 	private ItemLogic itemlogic;
 	private Inventory inventory;
+	private	List<int> categoryList = new List<int>();
 
 
 	void Start(){
@@ -37,6 +39,11 @@ public class StoreGUI : MonoBehaviour {
 	}
 
 	void Update(){
+		if(Input.touchCount > 0) slideValue -= Input.GetTouch(0).deltaPosition.y;
+		if(slideValue > 0) slideValue = 0;
+		if(slideValue < -(categoryList.Count/2*200 - 600)) slideValue = - (categoryList.Count/2*200 -600);
+		if(categoryList.Count <= 6){ slideValue = 0;}
+		
 	}
 
 	public void showStore(){
@@ -67,24 +74,28 @@ public class StoreGUI : MonoBehaviour {
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
+				displayItems(ItemCategory.Foods);
 			}
 			if(storePage == 2){
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
+				displayItems(ItemCategory.Items);
 			}
 			if(storePage == 3){
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
+				displayItems(ItemCategory.Inhalers);
 			}
 			if(storePage == 4){
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
+				displayItems(ItemCategory.Decorations);
 			}
 
 			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y + 15, 200, 50), "Food", blankButtonStyle)){
@@ -105,68 +116,57 @@ public class StoreGUI : MonoBehaviour {
 				ClickManager.ReleaseClickLock();
 				ClickManager.ReleaseModeLock();
 			}
-
-			//Central Item Group
-			GUILayout.BeginArea(new Rect(tabLoc.x + 50, tabLoc.y + 100, 1000, 600));
-			for(int i = 0; i< itemlogic.items.Count;i+=2){
-				if(Input.touchCount>0){
-					Touch touch = Input.GetTouch(0);
-					if(touch.position.x > tabLoc.x && touch.position.x < tabLoc.x +1000&& touch.position.y > tabLoc.y && touch.position.y < tabLoc.y+600){
-						if(Mathf.Abs(touch.deltaPosition.y) > 5){
-							slideValue -= touch.deltaPosition.y *2;
-						}
-					}
-				}
-
-				int numRows = (itemlogic.items.Count + 1)/ 2;
-				int itemHeight = 200;
-				int minVal = -(numRows - 3) * itemHeight;
-				//This code is buggy ....some one please take a look ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				// if(slideValue <= 0 /*&& slideValue >= -600 + 100* itemlogic.items.Count*/){
-					//print(slideValue);
-				if(slideValue <= minVal /*&& slideValue >= -600 + 100* itemlogic.items.Count*/){
-
-					// menuItem1Loc = new Vector2(0,i*100+slideValue);
-					// menuItem2Loc = new Vector2(500,i*100+slideValue);
-					menuItem1Loc = new Vector2(0,minVal + i*100);
-					menuItem2Loc = new Vector2(500,minVal + i*100);
-					slideValue = minVal;
-				}
-				else if( slideValue >= 0){
-					menuItem1Loc = new Vector2(0,i*100);
-					menuItem2Loc = new Vector2(500,i*100);
-					slideValue = 0;
-				}
-//				else{
-//					menuItem1Loc = new Vector2(0,-600+100*i);
-//					menuItem2Loc = new Vector2(500,-600+i*100);
-//
-//				}
-
-				//Each line contains 2 items
-				GUI.Box (new Rect(menuItem1Loc.x + 20, menuItem1Loc.y + 20, 440, 160), "");
-				GUI.Box (new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), "");	// TODO-s Merge this into one draw call
-				GUI.DrawTexture(new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), itemlogic.textures[i]);
-				GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 10 ,220, 100), itemlogic.items[i].Name,itemTitleStyle);
-				GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 55, 220, 100), "Health + 10",itemInfoStyle);
-				GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[i].Cost.ToString(), itemInfoStyle);
-				if(GUI.Button(new Rect(menuItem1Loc.x + 250, menuItem1Loc.y + 120, 180, 60), "Buy")){
-					inventory.addItem(i, 1);
-				}
-
-				GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
-				GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
-				GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.textures[i+1]);
-				GUI.Label(new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 10, 220, 100), itemlogic.items[i+1].Name, itemTitleStyle);
-				GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
-				GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[i+1].Cost.ToString(), itemInfoStyle);
-				if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
-					inventory.addItem(i + 1, 1);
+			
+			
+			
+		}
+	}
+	
+	private void displayItems(ItemCategory c){
+		if(c == ItemCategory.Foods) categoryList = itemlogic.foodlist;
+		if(c == ItemCategory.Decorations) categoryList = itemlogic.decolist;
+		if(c == ItemCategory.Inhalers) categoryList = itemlogic.inhalerlist; 
+		if(c == ItemCategory.Items) categoryList = itemlogic.itemlist;
+		
+		//Window
+		GUI.BeginGroup(new Rect(tabLoc.x+50,tabLoc.y+100,1000,600));
+		//Movable group that display
+		GUI.BeginGroup(new Rect(0,slideValue,1000,100*itemlogic.items.Count));
+			
+		for(int i = 0;i< categoryList.Count ;i+=2){
+				
+			menuItem1Loc = new Vector2(0,i*100);
+			menuItem2Loc = new Vector2(500,i*100);
+				
+				
+//			Each line contains 2 items
+			GUI.Box (new Rect(menuItem1Loc.x + 20, menuItem1Loc.y + 20, 440, 160), "");
+			GUI.Box (new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), "");	// TODO-s Merge this into one draw call
+			GUI.DrawTexture(new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), itemlogic.textures[categoryList[i]]);
+			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 10 ,220, 100), itemlogic.items[categoryList[i]].Name,itemTitleStyle);
+			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 55, 220, 100), "Health + 10",itemInfoStyle);
+			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i]].Cost.ToString(), itemInfoStyle);
+			if(GUI.Button(new Rect(menuItem1Loc.x + 250, menuItem1Loc.y + 120, 180, 60), "Buy")){
+				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i]].Cost){
+					inventory.addItem(categoryList[i], 1);
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);			
 				}
 			}
-			GUILayout.EndArea();
-
-
-		}
+			
+			GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
+			GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
+			GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.textures[categoryList[i+1]]);
+			GUI.Label(new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 10, 220, 100), itemlogic.items[categoryList[i+1]].Name, itemTitleStyle);
+			GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
+			GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);
+			if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
+				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
+					inventory.addItem(categoryList[i+1], 1);
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);			
+				}
+			}
+		}				
+		GUI.EndGroup();
+		GUI.EndGroup();
 	}
 }

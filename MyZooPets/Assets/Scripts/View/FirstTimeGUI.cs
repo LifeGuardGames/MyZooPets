@@ -54,6 +54,8 @@ public class FirstTimeGUI : MonoBehaviour {
 	public Texture2D redButton;
 	public Texture2D purpleButton;
 
+	private bool eggClicked = false;
+
 	void Start(){
 		if(DataManager.FirstTime){
 			eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
@@ -95,8 +97,9 @@ public class FirstTimeGUI : MonoBehaviour {
 			RaycastHit hit;
 			if(Physics.Raycast(myRay,out hit))
 			{
-				if(hit.collider.name == "SpriteEgg")
+				if(hit.collider.name == "SpriteEgg" && eggClicked == false)
 				{
+					eggClicked = true;
 					CameraTransform(finalPosition,finalFaceDirection);
 		    	    isZoomed = true;
 					HideTitle();

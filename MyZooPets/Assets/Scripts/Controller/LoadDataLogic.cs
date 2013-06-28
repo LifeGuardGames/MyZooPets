@@ -14,6 +14,7 @@ public class LoadDataLogic : MonoBehaviour {
     private EvolutionLogic evolutionLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference to ...logic?
+    private CameraMove cameraMove; //reference to ...logic?
     private Tutorial tutorial; //reference to... logic?
     private ClickManager clickmanager;
 
@@ -27,6 +28,7 @@ public class LoadDataLogic : MonoBehaviour {
         degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
         tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
         petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
+        cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 		clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
         IsDataLoaded = false;
@@ -51,7 +53,11 @@ public class LoadDataLogic : MonoBehaviour {
         degradationUIManager.Init();
         tutorial.Init();
         petMovement.Init();
+        cameraMove.Init();
 		clickmanager.Init();
         IsDataLoaded = true;
+		
+		//hatching gives 500 stars
+        DataManager.AddStars(500);
     }
 }

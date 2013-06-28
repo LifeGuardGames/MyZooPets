@@ -69,9 +69,10 @@ public class ClickManager : MonoBehaviour {
 
 	// assigning methods that get called when these individual objects get called in the scene
 	void AssignOnTapEvents(){
-		GameObject.Find("Book").GetComponent<TapItem>().OnTap += OnTapBook;
+		// GameObject.Find("Book").GetComponent<TapItem>().OnTap += OnTapBook;
 		GameObject.Find("Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
 		GameObject.Find("Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
+		GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 	}
 
 	public static bool CanRespondToTap(){
@@ -100,6 +101,13 @@ public class ClickManager : MonoBehaviour {
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
 			calendarGUI.DiaryClicked();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapSlotMachine(){
+		if (CanRespondToTap()){
+			cameraMove.SlotMachineZoomToggle();
 			ClickLock();
 			ModeLock();
 		}

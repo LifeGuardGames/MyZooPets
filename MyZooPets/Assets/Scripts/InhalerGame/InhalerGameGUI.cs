@@ -172,7 +172,7 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	void QuitInhalerGame(){
         RestartProgressBar();
-        Application.LoadLevel("BedRoom");
+        Application.LoadLevel("NewBedRoom");
     }
 
 	public void UpdateBar(){

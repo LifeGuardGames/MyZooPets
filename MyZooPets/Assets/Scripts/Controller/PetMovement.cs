@@ -55,7 +55,9 @@ public class PetMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (petSprite != null){
-            petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
+            if (ClickManager.CanRespondToTap()){
+                petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
+            }
         }
 	}
 }

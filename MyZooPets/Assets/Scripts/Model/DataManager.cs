@@ -98,6 +98,8 @@ public class DataManager : MonoBehaviour {
     private static bool firstTimeChallenges; //
     [SerializeThis]
     private static bool firstTimeDiary; // evolution and symptoms pages
+    [SerializeThis]
+    private static bool firstTimeSlotMachine;
 
     //========================
 
@@ -214,6 +216,10 @@ public class DataManager : MonoBehaviour {
     public static bool FirstTimeDiary{
         get{return firstTimeDiary;}
         set{firstTimeDiary = value;}
+    }
+    public static bool FirstTimeSlotMachine{
+        get{return firstTimeSlotMachine;}
+        set{firstTimeSlotMachine = value;}
     }
 
     //===============================
@@ -384,6 +390,7 @@ public class DataManager : MonoBehaviour {
             firstTimeCalendar = true;
             firstTimeChallenges = true;
             firstTimeDiary = true;
+            firstTimeSlotMachine = true;
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

@@ -18,10 +18,6 @@ public class HorizontalSlideInYard : MonoBehaviour {
 
         // Init swipe listener.
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
-
-        // todo: remove after testing
-        // Invoke("SlideRight", 5);
-        // Invoke("SlideLeft", 10);
     }
 
     public void SlideRight(){
@@ -49,15 +45,16 @@ public class HorizontalSlideInYard : MonoBehaviour {
         currentXPos = transform.position.x;
     }
 
+    // function to pass to Swipe Listener
     void OnSwipeDetected(Swipe s){
         switch (s){
-            case Swipe.Up:
-            print("Swipe.Up");
-            break;
+            // case Swipe.Up:
+            // print("Swipe.Up");
+            // break;
 
-            case Swipe.Down:
-            print("Swipe.Down");
-            break;
+            // case Swipe.Down:
+            // print("Swipe.Down");
+            // break;
 
             case Swipe.Left:
             print("Swipe.Left");

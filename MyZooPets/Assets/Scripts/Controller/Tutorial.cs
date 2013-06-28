@@ -32,23 +32,31 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openCalendar(){
-        GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-        DataManager.FirstTimeCalendar = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+            DataManager.FirstTimeCalendar = false;
+            growShrink.Stop();
+        }
     }
     void openChallenges(){
-        GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
-        DataManager.FirstTimeChallenges = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
+            DataManager.FirstTimeChallenges = false;
+            growShrink.Stop();
+        }
     }
     void openDiary(){
-        GrowShrink growShrink = diary.GetComponent<GrowShrink>();
-        DataManager.FirstTimeDiary = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = diary.GetComponent<GrowShrink>();
+            DataManager.FirstTimeDiary = false;
+            growShrink.Stop();
+        }
     }
     void openSlotMachine(){
-        GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
-        DataManager.FirstTimeSlotMachine = false;
-        growShrink.Stop();
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+            DataManager.FirstTimeSlotMachine = false;
+            growShrink.Stop();
+        }
     }
 }

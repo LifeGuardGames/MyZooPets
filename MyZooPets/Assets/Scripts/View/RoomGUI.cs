@@ -329,32 +329,40 @@ public class RoomGUI : MonoBehaviour {
 			pickUpId = -1;
 		}
 
-		//Temp option Menu
-		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
-			showOption = !showOption;
-		}
-
-		//Temp pop out "GREAT"
-		if(GUI.Button(new Rect(optionRect.rect.x - 200,optionRect.rect.y ,90,90), "YAY!")){
-			notificationUIManager.PopupTexture("award", -100, 100, 100, 100, 100);
-		}
-
-		//Options menu
-		if(showOption){
-			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
-			if(GUI.Button(new Rect(optionLoc.x,optionLoc.y,50,50),"X"))
-			{
-				showOption = false;
+		// Exit to yard button
+		if(Application.loadedLevelName == "NewBedRoom"){
+			if(GUI.Button(new Rect(optionRect.rect.x - 50,optionRect.rect.y, 150, 90), "Yard")){
+				Application.LoadLevel("Yard");
 			}
-			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50,310,100),"Volume");
-			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125,310,100),"Volume");
-			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
-			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 		}
-
+		else if(Application.loadedLevelName == "Yard"){
+			if(GUI.Button(new Rect(optionRect.rect.x - 50,optionRect.rect.y, 150, 90), "Room")){
+				Application.LoadLevel("NewBedRoom");
+			}
+		}
+		
 		//Temp store Button
-		if(GUI.Button(new Rect(optionRect.rect.x - 400,optionRect.rect.y, 90,90),"Store")){
+		if(GUI.Button(new Rect(optionRect.rect.x - 220,optionRect.rect.y, 150, 90),"Store")){
 			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
 		}
+		
+//		//Temp option Menu
+//		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
+//			showOption = !showOption;
+//		}
+//
+//		//Options menu
+//		if(showOption){
+//			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
+//			if(GUI.Button(new Rect(optionLoc.x,optionLoc.y,50,50),"X"))
+//			{
+//				showOption = false;
+//			}
+//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50,310,100),"Volume");
+//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125,310,100),"Volume");
+//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
+//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
+//		}
+
 	}
 }

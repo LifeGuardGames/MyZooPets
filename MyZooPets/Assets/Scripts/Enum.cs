@@ -36,5 +36,10 @@ public enum TrophyTier{
 	Gold,
 }
 
+public enum ChallengeType{
+    Weekly,
+    Daily,
+}
+
 
 

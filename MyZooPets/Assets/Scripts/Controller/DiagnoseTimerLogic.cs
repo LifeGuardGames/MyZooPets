@@ -10,7 +10,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	   notificationUIManager = GameObject.Find("Main Camera/NotificationUIManager").GetComponent<NotificationUIManager>();
-        // SendNotification();
+        SendNotification();
 	}
 
 	// Update is called once per frame

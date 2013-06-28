@@ -9,7 +9,7 @@ public class InhalerCap : MonoBehaviour
 	bool previousFrameTouchDown = false;
 	bool dragStartedOnObject = false; // if the drag was first started on the object, instead of entering the object later on
 	bool completelyOpened = false;
-	Vector3 finalPosition =  new Vector3(0,0,140);
+	Vector3 finalPosition =  new Vector3(0,0,151);
 
 	void Update()
 	{
@@ -128,12 +128,13 @@ public class InhalerCap : MonoBehaviour
 	}
 
 	void CheckIfCompletelyOpened(){
-		if (transform.eulerAngles.z >= 140){
+		if (transform.eulerAngles.z >= 151){
 			transform.eulerAngles = finalPosition;
 			completelyOpened = true;
 			if (InhalerLogic.IsCurrentStepCorrect(1)){
 				if (!InhalerLogic.IsDoneWithGame()){
 					InhalerLogic.NextStep();
+					collider.enabled = false;
 				}
 			}
 			RemoveArrowAnimation();

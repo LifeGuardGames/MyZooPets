@@ -41,7 +41,7 @@ public class ChallengesGUI : MonoBehaviour {
     }
 
     // Called from ClickManager
-    public void DiaryClicked(){
+    public void ChallengesClicked(){
         if(!challengesActive){
             challengesActive = true;
             cameraMove.PetSideZoomToggle();

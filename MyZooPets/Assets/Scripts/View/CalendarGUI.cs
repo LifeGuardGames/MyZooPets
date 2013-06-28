@@ -49,7 +49,7 @@ public class CalendarGUI : MonoBehaviour {
 
 
     // Called from ClickManager
-    public void DiaryClicked(){
+    public void CalendarClicked(){
         if(!diaryActive){
             diaryActive = true;
             cameraMove.PetSideZoomToggle();

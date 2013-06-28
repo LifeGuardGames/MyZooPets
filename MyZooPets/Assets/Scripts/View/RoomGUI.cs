@@ -240,7 +240,7 @@ public class RoomGUI : MonoBehaviour {
 		}
 		//Extending Button Groups
 		//Includes 4 items/Buttons for now.
-		menuTextureRect = new Rect(menuRect.rect.x  - 910 + 80f * counter/*- (1000-((counter+1) * 85))*/, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
+		menuTextureRect = new Rect(menuRect.rect.x  - 900 + 80f * counter/*- (1000-((counter+1) * 85))*/, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
 		GUILayout.BeginHorizontal("");
@@ -344,6 +344,11 @@ public class RoomGUI : MonoBehaviour {
 		//Temp store Button
 		if(GUI.Button(new Rect(optionRect.rect.x - 220,optionRect.rect.y, 150, 90),"Store")){
 			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
+		}
+		
+		// Diary button
+		if(GUI.Button(new Rect(optionRect.rect.x - 390,optionRect.rect.y, 160, 90),"Notes")){
+			GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
 		}
 		
 //		//Temp option Menu

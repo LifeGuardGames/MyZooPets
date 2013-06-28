@@ -83,24 +83,24 @@ public class ClickManager : MonoBehaviour {
 		}
 		return false;
 	}
-
-	void OnTapBook(){
-		if (CanRespondToTap()){
-			diaryUIManager.DiaryClicked();
-			ClickLock();
-			ModeLock();
-		}
-	}
+	
+//	void OnTapBook(){ //TODO CHANGE FUNCTION NAME, no longer book but button
+//		if (CanRespondToTap()){
+//			diaryUIManager.DiaryClicked();	
+//			ClickLock();
+//			ModeLock();
+//		}
+//	}
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
-			challengesGUI.DiaryClicked();
+			challengesGUI.ChallengesClicked();
 			ClickLock();
 			ModeLock();
 		}
 	}
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
-			calendarGUI.DiaryClicked();
+			calendarGUI.CalendarClicked();
 			ClickLock();
 			ModeLock();
 		}

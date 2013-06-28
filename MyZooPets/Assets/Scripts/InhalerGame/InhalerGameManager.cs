@@ -111,6 +111,8 @@ public class InhalerGameManager : MonoBehaviour{
         }
         else {
             runShowHintTimer = true;
+            showHint = false;
+            timer = 0;
         }
 
     }

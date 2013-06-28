@@ -74,8 +74,8 @@ public class RoomGUI : MonoBehaviour {
 	private Vector2 progressTextOffset = new Vector2(230, 12);
 
 	//inventory
-	public Inventory inventory;
-	public ItemLogic itemlogic;
+	private Inventory inventory;
+	private ItemLogic itemlogic;
 
 	//MISC
 	private bool isMenuExpanded = true;

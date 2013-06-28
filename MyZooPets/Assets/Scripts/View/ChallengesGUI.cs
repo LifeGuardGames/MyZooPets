@@ -10,10 +10,12 @@ public class ChallengesGUI : MonoBehaviour {
 
     //Textures
     public Texture2D challengesTexture;
+	public Texture2D backButton;
 
     //Styles
     public GUIStyle challengesTextStyle;
-
+	public GUIStyle blankButtonStyle;
+	
     //Challenge positions
     private Vector2 challengesInitPosition = new Vector2(125,-800);
     private Vector2 challengesFinalPosition = new Vector2(650,100);
@@ -115,8 +117,7 @@ public class ChallengesGUI : MonoBehaviour {
         // GUI.DrawTexture(challengesRect.rect,challengesTexture);
 
         //Temp close Button
-        //TODO make a prettier icon??
-        if(GUI.Button(new Rect(challengesRect.rect.x,challengesRect.rect.y,50,50),"X")){
+        if(GUI.Button(new Rect(challengesRect.rect.x - 20, challengesRect.rect.y - 20, backButton.width, backButton.height), backButton, blankButtonStyle)){
             HideChallenges();
             showGUI = true;
             ClickManager.ClickLock();

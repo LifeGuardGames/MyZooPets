@@ -213,8 +213,7 @@ public class DiaryGUI : MonoBehaviour {
 //			}
 //		}
 
-		//Temp close Button
-		//TODO make a prettier icon??
+		// Close Button
 		if(GUI.Button(new Rect(diaryRect.rect.x - 20, diaryRect.rect.y - 20, backButton.width, backButton.height), backButton, blankButtonStyle)){
 			HideDiary();
 			if(!isEnteredFromDiagnose){

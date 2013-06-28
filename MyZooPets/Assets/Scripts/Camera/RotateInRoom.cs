@@ -9,7 +9,7 @@ public class RotateInRoom : MonoBehaviour {
     bool lockRotation;
 	// Use this for initialization
 	void Start () {
-        currentYRotation = transform.rotation.y;
+        currentYRotation = transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
 
         // todo: remove after testing
@@ -37,5 +37,6 @@ public class RotateInRoom : MonoBehaviour {
 
     void FinishedRotation(){
         lockRotation = false;
+        currentYRotation = transform.eulerAngles.y; // normalize angle
     }
 }

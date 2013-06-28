@@ -65,7 +65,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	public void DisplayMessage(){
-		notificationUIManager.PopupTexture("great", 0, 0, 0, 0, 0);
+		notificationUIManager.PopupTexture("great");
 	}
 
 	void SetNumOfNodes(){

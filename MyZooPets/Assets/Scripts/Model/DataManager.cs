@@ -403,7 +403,7 @@ public class DataManager : MonoBehaviour {
 
     //call the delegate when data initialization or deserialziation is done
     private void DataLoaded(){
-        Application.LoadLevel("BedRoom");
+        Application.LoadLevel("NewBedRoom");
     }
 
     //serialize data into byte array and store locally in PlayerPrefs

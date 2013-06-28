@@ -72,6 +72,7 @@ public class DegradationLogic : MonoBehaviour {
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
+        DataManager.AddStars(500);
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(TriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();

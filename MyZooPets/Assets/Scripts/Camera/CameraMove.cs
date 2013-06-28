@@ -23,7 +23,17 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 slotMachineFinalPosition;
 	private Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
 
+	private GameObject realInhaler;
+	private Vector3 realInhalerFinalPosition;
+	private Vector3 realInhalerFinalDirection = new Vector3(36f, 0, 0);
+
+	private GameObject teddyInhaler;
+	private Vector3 teddyInhalerFinalPosition;
+	private Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
+
 	private Vector3 petCameraOffset = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
+	private Vector3 realInhalerCameraOffset = new Vector3(0.69f, 2.91f, -4.31f); // use this whenever changing realInhalerFinalPosition
+	private Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
 	private Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
 	// this way, the camera will always go to the pet
 
@@ -39,6 +49,8 @@ public class CameraMove : MonoBehaviour{
 	public void Init(){
 		spritePet = GameObject.Find("SpritePet");
 		slotMachine = GameObject.Find("SlotMachine");
+		realInhaler = GameObject.Find("RealInhaler");
+		teddyInhaler = GameObject.Find("TeddyInhaler");
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}
@@ -101,6 +113,32 @@ public class CameraMove : MonoBehaviour{
 				LockCameraMove();
 				slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
 				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineTest");
+			}
+		}
+	}
+	public void RealInhalerZoomToggle(){
+		if(!isCameraMoving){
+			if(zoomed){
+				// SOMETHING HERE
+			}
+			else{
+				zoomed = true;
+				LockCameraMove();
+				realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
+				CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
+			}
+		}
+	}
+	public void TeddyInhalerZoomToggle(){
+		if(!isCameraMoving){
+			if(zoomed){
+				// SOMETHING HERE
+			}
+			else{
+				zoomed = true;
+				LockCameraMove();
+				teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
+				CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
 			}
 		}
 	}

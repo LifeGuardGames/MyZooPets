@@ -30,10 +30,6 @@ public class ClickManager : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
-	public GameObject rotateInRoomObject;
-	private RotateInRoom rotateInRoom;
-
-
 	public GameObject petsprite;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
@@ -57,14 +53,11 @@ public class ClickManager : MonoBehaviour {
 		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-		rotateInRoom = rotateInRoomObject.GetComponent<RotateInRoom>();
 		petsprite = GameObject.Find("SpritePet");
 		destinationPoint = petsprite.transform.position;
 
 		AssignOnTapEvents();
 
-		// Init swipe listener.
-		SwipeDetection.OnSwipeDetected += OnSwipeDetected;
 	}
 
 	// assigning methods that get called when these individual objects get called in the scene
@@ -83,10 +76,10 @@ public class ClickManager : MonoBehaviour {
 		}
 		return false;
 	}
-	
+
 //	void OnTapBook(){ //TODO CHANGE FUNCTION NAME, no longer book but button
 //		if (CanRespondToTap()){
-//			diaryUIManager.DiaryClicked();	
+//			diaryUIManager.DiaryClicked();
 //			ClickLock();
 //			ModeLock();
 //		}
@@ -114,24 +107,7 @@ public class ClickManager : MonoBehaviour {
 	}
 
 
-	void OnSwipeDetected(Swipe s){
-		switch (s){
-			case Swipe.Up:
-				print("Swipe.Up");
-			break;
-			case Swipe.Down:
-				print("Swipe.Down");
-			break;
-			case Swipe.Left:
-				print("Swipe.Left");
-				rotateInRoom.RotateLeft();
-			break;
-			case Swipe.Right:
-				print("Swipe.Right");
-				rotateInRoom.RotateRight();
-			break;
-		}
-	}
+
 
 	void Update(){
 // 		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading

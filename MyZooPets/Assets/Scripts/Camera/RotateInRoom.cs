@@ -8,7 +8,7 @@ public class RotateInRoom : MonoBehaviour {
     bool inverse = true;
     Hashtable optional = new Hashtable();
     bool lockRotation;
-	// Use this for initialization
+
 	void Start () {
         currentYRotation = transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
@@ -16,9 +16,8 @@ public class RotateInRoom : MonoBehaviour {
             rotationIncrement = - rotationIncrement;
         }
 
-        // todo: remove after testing
-        // Invoke("RotateRight", 5);
-        // Invoke("RotateLeft", 10);
+        // Init swipe listener.
+        SwipeDetection.OnSwipeDetected += OnSwipeDetected;
 	}
 
     public void RotateRight(){
@@ -44,5 +43,27 @@ public class RotateInRoom : MonoBehaviour {
     void FinishedRotation(){
         lockRotation = false;
         currentYRotation = transform.eulerAngles.y; // normalize angle
+    }
+
+    void OnSwipeDetected(Swipe s){
+        switch (s){
+            // case Swipe.Up:
+            // print("Swipe.Up");
+            // break;
+
+            // case Swipe.Down:
+            // print("Swipe.Down");
+            // break;
+
+            case Swipe.Left:
+            print("Swipe.Left");
+            RotateLeft();
+            break;
+
+            case Swipe.Right:
+            print("Swipe.Right");
+            RotateRight();
+            break;
+        }
     }
 }

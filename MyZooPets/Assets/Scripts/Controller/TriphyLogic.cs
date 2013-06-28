@@ -15,11 +15,16 @@ public class TriphyLogic : MonoBehaviour {
 	private Trophies[] trophies;
 	private int MAX_TROPHY_COUNT = 10;
 		
-	
+
+	private void loadTrophies(){
+		for(int i =0;i<MAX_TROPHY_COUNT;i++)
+			trophies[i] = new Trophies("Trophy " + i,TrophyTier.Null,"Info " + i);
+	}
 	// Use this for initialization
 	void Start () {
 	
 		trophies = new Trophies[MAX_TROPHY_COUNT];
+		loadTrophies();
 	}
 	
 	// Update is called once per frame

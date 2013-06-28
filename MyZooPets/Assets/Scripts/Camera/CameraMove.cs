@@ -18,6 +18,9 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
 	private Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
 
+	private Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
+	private Vector3 slotMachineFinalDirection = new Vector3(17.8f, 335.71f, 0f);
+
 	private Vector3 cameraOffset = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
 	// this way, the camera will always go to the pet
 
@@ -84,6 +87,19 @@ public class CameraMove : MonoBehaviour{
 		}
 	}
 
+	public void SlotMachineZoomToggle(){
+		if(!isCameraMoving){
+			if(zoomed){
+				// SOMETHING HERE
+			}
+			else{
+				zoomed = true;
+				LockCameraMove();
+				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineTest");
+			}
+		}
+	}
+
 	public void LockCameraMove(){
 		isCameraMoving = true;
 	}
@@ -111,8 +127,8 @@ public class CameraMove : MonoBehaviour{
 		optional.Add("onComplete", "UnlockCameraMove");		// Callback here
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional2.Add("ease", LeanTweenType.easeInOutQuad);
-		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotate(gameObject, newDirection, time, optional2);
+		LeanTween.moveLocal(gameObject, newPosition, time, optional);
+		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
 	}
 
 	// Transforms camera
@@ -125,8 +141,8 @@ public class CameraMove : MonoBehaviour{
 		optional.Add("onComplete", "UnlockCameraMove");		// Callback here
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional2.Add("ease", LeanTweenType.easeInOutQuad);
-		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotate(gameObject, newDirection, time, optional2);
+		LeanTween.moveLocal(gameObject, newPosition, time, optional);
+		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
 	}
 
 	// Same as CameraTransform but tries to load a scene after the transform has completed
@@ -140,8 +156,8 @@ public class CameraMove : MonoBehaviour{
 		optional.Add("onComplete", "UnlockCameraMove");
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional2.Add("ease", LeanTweenType.easeInOutQuad);
-		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotate(gameObject, newDirection, time, optional2);
+		LeanTween.moveLocal(gameObject, newPosition, time, optional);
+		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
 	}
 
 	private void ZoomOutMove(float time){

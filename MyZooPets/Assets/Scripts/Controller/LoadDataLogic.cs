@@ -38,7 +38,7 @@ public class LoadDataLogic : MonoBehaviour {
             clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
             if(!DataManager.FirstTime){ //if not first time load GUI right away
-                InitializeDataForUI();
+                FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
             }else{ //if first time set call back and wait for the hatching animation to finish
                 FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
             }

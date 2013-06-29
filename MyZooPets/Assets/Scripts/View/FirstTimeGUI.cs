@@ -56,8 +56,14 @@ public class FirstTimeGUI : MonoBehaviour {
 
 	private bool eggClicked = false;
 
+	public delegate void FinishHatchCallBack();
+	public static FinishHatchCallBack finishHatchCallBack; //call when hatching is done
+
+	public delegate void FinishCheckingForFirstTime();
+	public static FinishCheckingForFirstTime finishCheckingForFirstTime; //call when pet has been instantiated
+
 	void Start(){
-		if(DataManager.FirstTime){
+		if(DataManager.FirstTime){ //first time playing game
 			eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
 			currentRenderColor = RenderSettings.ambientLight;
 			RenderSettings.ambientLight = Color.black;
@@ -66,10 +72,13 @@ public class FirstTimeGUI : MonoBehaviour {
 
 			editEggRect = new LTRect(editEggRectInitPos.x, editEggRectInitPos.y, 610, 611);
 		}
-		else{
+		else{ //not first time. spawn pet as usual
 			// TEMPORARY spawn the pet in location
-			GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
+			GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
 			goPet.name = "SpritePet";
+
+			//continue normal gui stuff
+			if(finishCheckingForFirstTime != null) finishCheckingForFirstTime();
 
 			// Kill itself + related objects if not first time
 			Destroy(eggObject);
@@ -137,7 +146,7 @@ public class FirstTimeGUI : MonoBehaviour {
 		goPet.name = "SpritePet";
 
 		// Start normal GUI stuff
-		finishHatchCallBack();
+		if(finishHatchCallBack != null) finishHatchCallBack();
 
 		// Commit seppuku
 		Destroy(eggObject);
@@ -224,7 +233,4 @@ public class FirstTimeGUI : MonoBehaviour {
 	void ZoomOutMove(){
 		CameraTransform(initPosition,initFaceDirection);
 	}
-
-	public delegate void FinishHatchCallBack();
-	public static FinishHatchCallBack finishHatchCallBack;
 }

@@ -25,7 +25,7 @@ using System.Collections;
 
 public class PetMovement : MonoBehaviour {
 
-    public GameObject petSprite;
+    private GameObject petSprite;
     private Vector3 destinationPoint;
     private TapItem tapItem;
 

@@ -7,6 +7,7 @@ public class InhalerGameGUI : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 
+    public GUISkin defaultSkin;
 	public GUIStyle inhalerStyle;
 	public Texture2D circleGray;
 	public Texture2D circleRed;
@@ -115,6 +116,8 @@ public class InhalerGameGUI : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 
+		GUI.skin = defaultSkin;
+
 		//draw the background
 		GUI.BeginGroup(new Rect(pos.x, pos.y, size.x, size.y));
 		//GUI.Box(new Rect(0,0, size.x, size.y), emptyTex);
@@ -148,10 +151,10 @@ public class InhalerGameGUI : MonoBehaviour {
 			// Show "Play Again" button after showing (and spinning) slot machine
 	        if (!InhalerLogic.CanPlayGame ||
 	        	(inhalerGameManager.gameEnded && !inhalerGameManager.isPracticeGame)) {
-	            int x = 200;
+	            int x = 600;
 	            int y = 150;
-	            GUI.Label(new Rect(NATIVE_WIDTH / 2 - x/2, NATIVE_HEIGHT / 2 - y/2, x, y), "Come play again tomorrow!");
-	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 - 50, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
+	            GUI.Label(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - y, x, y), "I don't need this right now.");
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 + 200, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
 	                QuitInhalerGame();
 	            }
 	        }

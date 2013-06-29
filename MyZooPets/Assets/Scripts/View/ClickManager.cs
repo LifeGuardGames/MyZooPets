@@ -68,6 +68,7 @@ public class ClickManager : MonoBehaviour {
 		GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 		GameObject.Find("RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
 		GameObject.Find("TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
+		GameObject.Find("Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
 	}
 
 	public static bool CanRespondToTap(){
@@ -117,6 +118,13 @@ public class ClickManager : MonoBehaviour {
 	void OnTapTeddyInhaler(){
 		if (CanRespondToTap()){
 			cameraMove.TeddyInhalerZoomToggle();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapShelf(){
+		if (CanRespondToTap()){
+			trophyGUI.TrophyClicked();
 			ClickLock();
 			ModeLock();
 		}

@@ -11,6 +11,11 @@ public class Tutorial : MonoBehaviour {
     public GameObject teddyInhaler;
 
     public void Init(){
+        InhalerMissAndInhalerGame();
+    }
+
+    // not used right now
+    void HighlightAll(){
         if (DataManager.FirstTimeCalendar){
             GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
             calendar.GetComponent<TapItem>().OnTap += openCalendar;
@@ -43,11 +48,29 @@ public class Tutorial : MonoBehaviour {
         }
     }
 
+    // For the demo.
+    void InhalerMissAndInhalerGame(){
+        if (DataManager.FirstTimeCalendar){
+            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+            calendar.GetComponent<TapItem>().OnTap += openCalendar;
+            growShrink.Play();
+        }
+        if (DataManager.FirstTimeRealInhaler){
+            GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
+            realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
+        }
+    }
+
     void openCalendar(){
         if (ClickManager.CanRespondToTap()){
             GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
             DataManager.FirstTimeCalendar = false;
             growShrink.Stop();
+
+            // added for the demo
+            if (DataManager.FirstTimeRealInhaler){
+                realInhaler.GetComponent<GrowShrink>().Play();
+            }
         }
     }
     void openChallenges(){

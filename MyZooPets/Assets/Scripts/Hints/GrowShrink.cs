@@ -25,7 +25,7 @@ public class GrowShrink : MonoBehaviour {
     Hashtable optionalGrow = new Hashtable();
     Hashtable optionalShrink = new Hashtable();
 
-	void Start () {
+	void Awake () {
         smaller = new Vector3(smallX, smallY, smallZ);
         bigger = new Vector3(bigX, bigY, bigZ);
         // optionalGrow.Add("ease", LeanTweenType.easeInOutQuad);

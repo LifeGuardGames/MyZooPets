@@ -20,11 +20,14 @@ public class LoadDataLogic : MonoBehaviour {
 
     void Awake(){
         IsDataLoaded = false;
+        //=============GameObjects that are required in multiple scenes===================
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
-        
+        diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
+        cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
+        //==============================================================================
+
         //different things to load for different scenes
-        if(Application.loadedLevelName == "NewBedRoom"){
-            diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
+        if(Application.loadedLevelName == "NewBedRoom"){ //Bedroom specific references
             calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
             challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
             degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
@@ -32,7 +35,6 @@ public class LoadDataLogic : MonoBehaviour {
             degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
             tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
             petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
-            cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
             clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
             if(!DataManager.FirstTime){ //if not first time load GUI right away
@@ -40,17 +42,21 @@ public class LoadDataLogic : MonoBehaviour {
             }else{ //if first time set call back and wait for the hatching animation to finish
                 FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
             }
-        }else if(Application.loadedLevelName == "Yard"){
+        }else if(Application.loadedLevelName == "Yard"){ //Yard specific references
             InitializeDataForUI();
         }
     }
 
     //data is ready for use so initialize all UI data
     private void InitializeDataForUI(){
+        //========GameObjects that need to be init in multiple scenes============
         roomGUIAnimator.Init();
-        if(Application.loadedLevelName == "NewBedRoom"){
+        diaryUIManager.Init();
+        cameraMove.Init();
+        //=======================================================================
+
+        if(Application.loadedLevelName == "NewBedRoom"){ //Bed room specific gameobjects
             if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
-            diaryUIManager.Init();
             calendarGUI.Init();
             challengesGUI.Init();
             evolutionLogic.Init();
@@ -58,9 +64,8 @@ public class LoadDataLogic : MonoBehaviour {
             degradationUIManager.Init();
             tutorial.Init();
             petMovement.Init();
-            cameraMove.Init();
             clickmanager.Init();
-        }else if(Application.loadedLevelName == "Yard"){
+        }else if(Application.loadedLevelName == "Yard"){ //Yard specific gameobjects
 
         }
         IsDataLoaded = true;

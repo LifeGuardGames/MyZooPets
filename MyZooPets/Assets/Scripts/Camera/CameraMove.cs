@@ -47,10 +47,18 @@ public class CameraMove : MonoBehaviour{
 	private bool isEnterMode = false;
 
 	public void Init(){
+		//Camera move is used in multiple scenes so it needs to know what specific
+		//gameobjects to load at diff scenes
 		spritePet = GameObject.Find("SpritePet");
-		slotMachine = GameObject.Find("SlotMachine");
-		realInhaler = GameObject.Find("RealInhaler");
-		teddyInhaler = GameObject.Find("TeddyInhaler");
+
+		if(Application.loadedLevelName == "NewBedRoom"){
+			slotMachine = GameObject.Find("SlotMachine");
+			realInhaler = GameObject.Find("RealInhaler");
+			teddyInhaler = GameObject.Find("TeddyInhaler");
+		}else if(Application.loadedLevelName == "Yard"){
+
+		}
+		
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}

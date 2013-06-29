@@ -243,7 +243,7 @@ public class RoomGUI : MonoBehaviour {
 		menuTextureRect = new Rect(menuRect.rect.x  - 900 + 80f * counter/*- (1000-((counter+1) * 85))*/, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
 		GUI.DrawTexture(menuTextureRect, itemBarTexture);
 		GUILayout.BeginArea(menuRect.rect, "");
-		GUILayout.BeginHorizontal("");
+		GUILayout.BeginHorizontal();
 
 		counter =0;
 		//implementing itemlogic

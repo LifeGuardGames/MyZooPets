@@ -98,7 +98,7 @@ public class ChallengesGUI : MonoBehaviour {
 		
 		
         GUI.BeginGroup(challengesRect.rect);
-            GUI.DrawTexture(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), bgPanel);
+            // GUI.DrawTexture(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), bgPanel);
             GUI.Label(new Rect(WINDOW_WIDTH/2 - DAILY_CHALLENGE_TITLE_WIDTH/2, 0, 
                 DAILY_CHALLENGE_TITLE_WIDTH, DAILY_CHALLENGE_TITLE_HEIGHT), 
                 "Daily Challenge", challengesTextStyle); //Title

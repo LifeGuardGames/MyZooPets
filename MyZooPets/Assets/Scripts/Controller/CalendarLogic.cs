@@ -6,7 +6,7 @@ using System;
 public static class CalendarLogic{
 
     private static System.Random rand = new System.Random();
-    private static CalendarEntry lastEntry;
+    private static CalendarEntry lastEntry; //today's entry
     private static List<CalendarEntry> tempEntries;
     private static int comboBase = 750;
     private static int comboMax = 3750;
@@ -42,6 +42,16 @@ public static class CalendarLogic{
     // call whenever opening calendar
     public static void CalendarOpened(){
         CalendarOpenedOnDate(DateTime.Now);
+    }
+
+    //get today's entry
+    public static bool IsThereMissDosageToday{
+        get{    
+            bool retVal = false;
+            if(lastEntry != null) retVal = lastEntry.Morning.Equals(DosageRecord.Miss) || 
+            lastEntry.Afternoon.Equals(DosageRecord.Miss);
+            return retVal;
+        }
     }
 
     //===========================================

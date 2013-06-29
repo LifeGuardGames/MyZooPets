@@ -53,47 +53,16 @@ public static class InhalerLogic{
         if(isPracticeGame){ //practice inhaler game (teddy bear)
             canPlayGame = true;
 
+            int randomId = UnityEngine.Random.Range(0, 2);
+            switch(randomId){
+                case 0: currentInhalerType = InhalerType.Advair; break;
+                case 1: currentInhalerType = InhalerType.Rescue; break;
+            }
         }else{ //regular inhaler game
-            // optimalTimeWindow = new TimeSpan(3, 0, 0); //optimal window lasts 3 hrs
-
-            // DateTime now = DateTime.Now;
-            // TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastInhalerGamePlayed.Date);
-            // DataManager.LastInhalerGamePlayed = now;
-
-            // //new day so resets counters
-            // if(sinceLastPlayed.Days > 0){
-            //     DataManager.CanPlayGameMorning = true;
-            //     DataManager.CanPlayGameAfternoon = true;
-            // }
-
-            // //check if time now is within the optimal time range
-            // // < 0 t1 is earlier than t2
-            // // 0 t1 is the same as t2
-            // // > 0 t1 later than t2
-            // Debug.Log("Optimal morning period is from " + DataManager.OptimalMorningStartTime + " to " + DataManager.OptimalMorningStartTime.Add(optimalTimeWindow));
-            // Debug.Log("Optimal afternoon period is from " + DataManager.OptimalAfternoonStartTime + " to " + DataManager.OptimalAfternoonStartTime.Add(optimalTimeWindow));
-            // if(now.Hour < 12){ //morning so check for morning optimal time
-            //     if(now.Hour >= DataManager.OptimalMorningStartTime.Hour &&
-            //         now.Hour <= (DataManager.OptimalMorningStartTime + optimalTimeWindow).Hour &&
-            //         DataManager.CanPlayGameMorning){
-            //         canPlayGame = true;
-            //         DataManager.CanPlayGameMorning = false;
-            //     }
-            // }else{ //afternoon so check for afternoon optimal time
-            //     if(now.Hour >= DataManager.OptimalAfternoonStartTime.Hour &&
-            //         now.Hour <= (DataManager.OptimalAfternoonStartTime + optimalTimeWindow).Hour &&
-            //         DataManager.CanPlayGameAfternoon){
-            //         canPlayGame = true;
-            //         DataManager.CanPlayGameAfternoon = false; //can only play optimal game once in afternoon
-            //     }
-            // }
+            if(CalendarLogic.IsThereMissDosageToday) canPlayGame = true;
+            currentInhalerType = InhalerType.Advair;
         }
-
-        int randomId = UnityEngine.Random.Range(0, 2);
-        switch(randomId){
-            case 0: currentInhalerType = InhalerType.Advair; break;
-            case 1: currentInhalerType = InhalerType.Rescue; break;
-        }
+        
         //sets step to 1
         currentStep = 1;
     }

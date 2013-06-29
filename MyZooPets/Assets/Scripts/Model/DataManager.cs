@@ -63,18 +63,6 @@ public class DataManager : MonoBehaviour {
 
     //Inhaler Data
     [SerializeThis]
-    private static int numberOfTimesLeft; //max 1. once for every optimal time
-    [SerializeThis]
-    private static DateTime optimalMorningStartTime; //the optimal start time to take inhaler in the morning
-    [SerializeThis]
-    private static DateTime optimalAfternoonStartTime; //optimal start time to take inhaler in the afternoon
-    [SerializeThis]
-    private static DateTime lastInhalerGamePlayed; //the time user last played the game
-    [SerializeThis]
-    private static bool canPlayGameMorning; //can user play in the morning (optimal game)
-    [SerializeThis]
-    private static bool canPlayGameAfternoon; //can user play in the afternoon (optimal game)
-    [SerializeThis]
     private static bool firstTimeAdvair;// first time the player has seen the advair inhaler
                                         //(this tells us whether to show tutorial arrows in the Inhaler Game)
     [SerializeThis]
@@ -162,30 +150,6 @@ public class DataManager : MonoBehaviour {
     }
 
     //Inhaler
-    public static DateTime LastInhalerGamePlayed{
-        get{return lastInhalerGamePlayed;}
-        set{lastInhalerGamePlayed = value;}
-    }
-    public static int NumberOfTimesLeft{
-        get{return numberOfTimesLeft;}
-        set{numberOfTimesLeft = value;}
-    }
-    public static bool CanPlayGameMorning{
-        get{return canPlayGameMorning;}
-        set{canPlayGameMorning = value;}
-    }
-    public static bool CanPlayGameAfternoon{
-        get{return canPlayGameAfternoon;}
-        set{canPlayGameAfternoon = value;}
-    }
-    public static DateTime OptimalMorningStartTime{
-        get{return optimalMorningStartTime;}
-        set{optimalMorningStartTime = value;}
-    }
-    public static DateTime OptimalAfternoonStartTime{
-        get{return optimalAfternoonStartTime;}
-        set{optimalAfternoonStartTime = value;}
-    }
     public static bool FirstTimeAdvair{
         get{return firstTimeAdvair;}
         set{firstTimeAdvair = value;}
@@ -386,11 +350,6 @@ public class DataManager : MonoBehaviour {
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
 
             //Inhaler game data initialization
-            optimalMorningStartTime = new DateTime(1, 1, 1, 6, 0, 0);
-            optimalAfternoonStartTime = new DateTime(1, 1, 1, 18, 0, 0);
-            lastInhalerGamePlayed = DateTime.Now;
-            canPlayGameMorning = true;
-            canPlayGameAfternoon = true;
             firstTimeAdvair = true;
             firstTimeRescue = true;
 

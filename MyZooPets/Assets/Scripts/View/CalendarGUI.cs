@@ -82,12 +82,13 @@ public class CalendarGUI : MonoBehaviour {
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////                                         Diary Pages                                          ///////////
+        //////                                         Calendar Pages                                          ///////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeInOutQuad);
         GUI.depth = 0;
         GUI.DrawTexture(diaryRect.rect,diaryTexture1);
+        GUI.Label(new Rect(diaryRect.rect.x + 100, diaryRect.rect.y, 600, 150), "Did I take my inhaler?");
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+100,100,70),"Monday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+170,100,70),"Tuesday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+240,100,70),"Wednesday",diaryTextStyle);
@@ -95,13 +96,15 @@ public class CalendarGUI : MonoBehaviour {
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+380,100,70),"Friday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+450,100,70),"Saturday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
-        GUI.TextArea(new Rect (diaryRect.rect.x+100,diaryRect.rect.y+577,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
-
+        GUI.TextArea(new Rect (diaryRect.rect.x+150,diaryRect.rect.y+605,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
+        if(CalendarLogic.IsThereMissDosageToday)
+            GUI.Label(new Rect(diaryRect.rect.x+200, diaryRect.rect.y+590,400, 70), "Use the inhaler!!");
+        
         //Layout for inhaler checks in a week
         GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
-        GUILayout.BeginVertical("");
+        GUILayout.BeginVertical();
         for(int i = 0;i < 7; i++){
-            GUILayout.BeginHorizontal("");
+            GUILayout.BeginHorizontal();
             diaryCheckBoxStyle.normal.background = tickBoxEmpty;
 
             if(i < calendar.Count){

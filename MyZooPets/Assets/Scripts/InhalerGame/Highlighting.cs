@@ -58,12 +58,12 @@ public class Highlighting : MonoBehaviour {
 
 	void Glow(){
 		// bright glow
-		renderer.material.shader = Shader.Find("tk2d/LitCutoutVertexColor");
+		renderer.material.shader = Shader.Find("Mobile/Particles/Additive");
 	}
 
 	void Glow(GameObject g){
 		// bright glow
-		g.renderer.material.shader = Shader.Find("tk2d/LitCutoutVertexColor");
+		g.renderer.material.shader = Shader.Find("Mobile/Particles/Additive");
 	}
 
 	void UnGlow(){

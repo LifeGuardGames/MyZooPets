@@ -120,7 +120,7 @@ public class CameraMove : MonoBehaviour{
 				zoomed = true;
 				LockCameraMove();
 				slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
-				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineTest");
+				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
 			}
 		}
 	}

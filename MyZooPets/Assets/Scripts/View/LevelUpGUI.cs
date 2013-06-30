@@ -8,11 +8,10 @@ public class LevelUpGUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	   levelUpLogic = GameObject.Find("GameManager").GetComponent<LevelUpLogic>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+       levelUpLogic.OnLevelUp = OnLevelUpNotification;
 	}
 
+    private void OnLevelUpNotification(Level newLevel, TrophyTier trophy){
+
+    }
 }

@@ -135,7 +135,7 @@ public class RoomGUI : MonoBehaviour {
 
 		//points progress bar data
 		tierLevel = Enum.GetName(typeof(Level), DataManager.CurrentLevel);
-		nextLevelPoints = LevelUpLogic.levelPoints[(int)DataManager.CurrentLevel + 1];
+		nextLevelPoints = roomAnimator.nextLevelPoints; 
 		tierProgressText = roomAnimator.displayPoints + "/" + nextLevelPoints;
 
 		//Star data

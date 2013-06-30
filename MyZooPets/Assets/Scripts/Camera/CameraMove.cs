@@ -34,7 +34,8 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 teddyInhalerFinalPosition;
 	private Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
 
-	private Vector3 petCameraOffset = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
+	private Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
+	private Vector3 petCameraOffsetYard = new Vector3(1.8f, 2.87f, -3.1f); // use this whenever changing petSideFinalPosition
 	private Vector3 realInhalerCameraOffset = new Vector3(0.69f, 2.91f, -4.31f); // use this whenever changing realInhalerFinalPosition
 	private Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
 	private Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
@@ -99,8 +100,17 @@ public class CameraMove : MonoBehaviour{
 				zoomed = true;
 				LockCameraMove();
 
-				petSideFinalPosition = spritePet.transform.localPosition + petCameraOffset;
-	    		CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+				if(Application.loadedLevelName == "NewBedRoom"){
+					petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetRoom;
+	    			CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+				}
+				// todo: change or review this after pet moves along with camera
+				else if(Application.loadedLevelName == "Yard"){
+					// petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetYard;
+					// while pet doesn't move along with slide:
+					petSideFinalPosition = spritePet.transform.position + petCameraOffsetYard;
+	    			CameraWorldTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+				}
 			}
 		}
 	}
@@ -174,6 +184,20 @@ public class CameraMove : MonoBehaviour{
 			Application.LoadLevel(levelToLoad);
 		}
 		ClickManager.ReleaseClickLock();
+	}
+
+	// Transforms camera
+	public void CameraWorldTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+		isLoadLevel = false;
+		isEnterMode = true;
+		Hashtable optional = new Hashtable();
+		Hashtable optional2 = new Hashtable();
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "UnlockCameraMove");		// Callback here
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional2.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(gameObject, newPosition, time, optional);
+		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
 	}
 
 	// Transforms camera

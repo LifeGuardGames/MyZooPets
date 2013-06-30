@@ -139,6 +139,12 @@ public class InhalerGameManager : MonoBehaviour{
 
     public void OnGameEnd(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
+
+            // record having given the pet the inhaler, if this was the real game.
+            if (!isPracticeGame){
+                CalendarLogic.RecordGivingInhaler();
+            }
+
             inhalerGameGUI.DisplayMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;

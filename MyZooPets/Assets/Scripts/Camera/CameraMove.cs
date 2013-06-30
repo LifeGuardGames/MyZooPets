@@ -7,8 +7,11 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 initPosition;	// Default position: 0, 5.7, -23
 	private Vector3 initFaceDirection;
 
-	private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
-	private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
+	private GameObject shelf;
+	// private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
+	private Vector3 shelfFinalPosition;
+	// private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
+	private Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
 
 	// private Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
 	// private Vector3 petSideFinalPosition = new Vector3(4.83f, 8.6f, 12.64f);
@@ -35,6 +38,7 @@ public class CameraMove : MonoBehaviour{
 	private Vector3 realInhalerCameraOffset = new Vector3(0.69f, 2.91f, -4.31f); // use this whenever changing realInhalerFinalPosition
 	private Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
 	private Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
+	private Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
 	// this way, the camera will always go to the pet
 
 	private GameObject spritePet;
@@ -55,10 +59,11 @@ public class CameraMove : MonoBehaviour{
 			slotMachine = GameObject.Find("SlotMachine");
 			realInhaler = GameObject.Find("RealInhaler");
 			teddyInhaler = GameObject.Find("TeddyInhaler");
+			shelf = GameObject.Find("Shelf");
 		}else if(Application.loadedLevelName == "Yard"){
 
 		}
-		
+
 		initPosition = gameObject.transform.position;
 		initFaceDirection = new Vector3(15.54f, 0, 0);
 	}
@@ -73,9 +78,11 @@ public class CameraMove : MonoBehaviour{
 				LockCameraMove();
 			}
 			else{
-	    		CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
 	    		zoomed = true;
 				LockCameraMove();
+
+				shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
+	    		CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
 			}
 		}
 	}

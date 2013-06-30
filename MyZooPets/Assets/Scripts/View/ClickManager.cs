@@ -31,6 +31,7 @@ public class ClickManager : MonoBehaviour {
 	private CameraMove cameraMove;
 
 	public GameObject petsprite;
+	private NotificationUIManager notificationUIManager;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
@@ -54,6 +55,7 @@ public class ClickManager : MonoBehaviour {
 		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		petsprite = GameObject.Find("SpritePet");
+		notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
 		destinationPoint = petsprite.transform.position;
 
 		AssignOnTapEvents();
@@ -68,6 +70,8 @@ public class ClickManager : MonoBehaviour {
 		GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 		GameObject.Find("RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
 		GameObject.Find("TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
+		GameObject.Find("Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
+		GameObject.Find("HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
 	}
 
 	public static bool CanRespondToTap(){
@@ -117,6 +121,27 @@ public class ClickManager : MonoBehaviour {
 	void OnTapTeddyInhaler(){
 		if (CanRespondToTap()){
 			cameraMove.TeddyInhalerZoomToggle();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapShelf(){
+		if (CanRespondToTap()){
+			trophyGUI.TrophyClicked();
+			ClickLock();
+			ModeLock();
+		}
+	}
+	void OnTapHelpTrophy(){
+        // make sure we are in trophy mode
+        // todo: have a better way of checking if we are in trophy mode
+        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
+
+	        notificationUIManager.PopupNotification("Level up to get more trophies!",
+	            delegate(){
+	            	// nothing
+	            });
+
 			ClickLock();
 			ModeLock();
 		}

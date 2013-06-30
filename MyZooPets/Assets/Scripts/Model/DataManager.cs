@@ -95,6 +95,10 @@ public class DataManager : MonoBehaviour {
     private static bool firstTimeRealInhaler;
     [SerializeThis]
     private static bool firstTimeTeddyInhaler;
+    [SerializeThis]
+    private static bool firstTimeShelf;
+    [SerializeThis]
+    private static bool firstTimeHelpTrophy;
 
     //Challenge data
 
@@ -228,6 +232,14 @@ public class DataManager : MonoBehaviour {
     public static bool FirstTimeTeddyInhaler{
         get{return firstTimeTeddyInhaler;}
         set{firstTimeTeddyInhaler = value;}
+    }
+    public static bool FirstTimeShelf{
+        get{return firstTimeShelf;}
+        set{firstTimeShelf = value;}
+    }
+    public static bool FirstTimeHelpTrophy{
+        get{return firstTimeHelpTrophy;}
+        set{firstTimeHelpTrophy = value;}
     }
 
     //===============================
@@ -400,6 +412,8 @@ public class DataManager : MonoBehaviour {
             firstTimeSlotMachine = true;
             firstTimeRealInhaler = true;
             firstTimeTeddyInhaler = true;
+            firstTimeShelf = true;
+            firstTimeHelpTrophy = true;
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);

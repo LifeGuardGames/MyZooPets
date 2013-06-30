@@ -9,8 +9,16 @@ public class Tutorial : MonoBehaviour {
     public GameObject slotMachine;
     public GameObject realInhaler;
     public GameObject teddyInhaler;
+    public GameObject shelf;
+    public GameObject helpTrophy;
 
     public void Init(){
+        InhalerMissAndInhalerGame();
+        TrophyDemo();
+    }
+
+    // not used right now
+    void HighlightAll(){
         if (DataManager.FirstTimeCalendar){
             GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
             calendar.GetComponent<TapItem>().OnTap += openCalendar;
@@ -43,11 +51,41 @@ public class Tutorial : MonoBehaviour {
         }
     }
 
+    // For the demo.
+    void InhalerMissAndInhalerGame(){
+        if (DataManager.FirstTimeCalendar){
+            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+            calendar.GetComponent<TapItem>().OnTap += openCalendar;
+            growShrink.Play();
+        }
+        if (DataManager.FirstTimeRealInhaler){
+            GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
+            realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
+        }
+    }
+    // For the demo.
+    void TrophyDemo(){
+        if (DataManager.FirstTimeShelf){
+            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            shelf.GetComponent<TapItem>().OnTap += openShelf;
+            growShrink.Play();
+        }
+        if (DataManager.FirstTimeHelpTrophy){
+            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
+        }
+    }
+
     void openCalendar(){
         if (ClickManager.CanRespondToTap()){
             GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
             DataManager.FirstTimeCalendar = false;
             growShrink.Stop();
+
+            // added for the demo
+            if (DataManager.FirstTimeRealInhaler){
+                realInhaler.GetComponent<GrowShrink>().Play();
+            }
         }
     }
     void openChallenges(){
@@ -82,6 +120,28 @@ public class Tutorial : MonoBehaviour {
         if (ClickManager.CanRespondToTap()){
             GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
             DataManager.FirstTimeTeddyInhaler = false;
+            growShrink.Stop();
+        }
+    }
+    void openShelf(){
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            DataManager.FirstTimeShelf = false;
+            growShrink.Stop();
+
+            // added for the demo
+            if (DataManager.FirstTimeHelpTrophy){
+                helpTrophy.GetComponent<GrowShrink>().Play();
+            }
+        }
+    }
+    void openHelpTrophy(){
+
+        // make sure we are in trophy mode
+        // todo: have a better way of checking if we are in trophy mode
+        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
+            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            DataManager.FirstTimeHelpTrophy = false;
             growShrink.Stop();
         }
     }

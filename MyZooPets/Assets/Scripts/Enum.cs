@@ -49,5 +49,10 @@ public enum ChallengeType{
     Daily,
 }
 
+public enum NotificationType{
+    YesNo,
+    OK,
+}
+
 
 

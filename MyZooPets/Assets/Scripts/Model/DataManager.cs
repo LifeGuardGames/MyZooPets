@@ -374,7 +374,7 @@ public class DataManager : MonoBehaviour {
             hunger = 30;
 
             //Game currency initialization
-            points = 0;
+            points = 250;
             stars = 100;
 
             //Calendar data initialization

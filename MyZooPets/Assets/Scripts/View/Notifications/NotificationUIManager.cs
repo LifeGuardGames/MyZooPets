@@ -16,6 +16,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupAward;
 	public GameObject popupSpeech;
 	public GameObject popupNotification;
+	public GameObject popupImageMessage;
 
 	public bool flipped;
 
@@ -102,12 +103,26 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 1 button
 		Params: notificationType, call back for button
 	*/
-	public void PopupNotification(string notificationType, PopupNotification.OnButtonClicked okCallBac){
+	public void PopupNotification(string notificationType, PopupNotification.OnButtonClicked okCallBack){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		PopupNotification script = go.GetComponent<PopupNotification>();
 		if(script != null){
-			script.Init(notificationType, okCallBac);
+			script.Init(notificationType, okCallBack);
+		}
+	}
+
+	/*
+		Desc: creates popup that shows an image of the trophy, along with a corresponding message
+		Params: trophy, call back for button
+	*/
+	public void PopupImageMessage (TrophyTier trophy, PopupImageMessage.OnButtonClicked okCallBack){
+
+		GameObject go = Instantiate(popupImageMessage, gameObject.transform.position,
+			Quaternion.identity) as GameObject;
+		PopupImageMessage script = go.GetComponent<PopupImageMessage>();
+		if(script != null){
+			script.Init(trophy, okCallBack);
 		}
 	}
 

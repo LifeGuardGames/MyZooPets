@@ -5,7 +5,8 @@ public class PopupImageMessage : MonoBehaviour {
 
     public GUISkin skin;
     public Texture2D notificationPanel;
-    private string message;
+    private string message = "Level Up!";
+    private string trophyMessage;
 
     // Lean Tween
     private LTRect panelRect;
@@ -14,7 +15,15 @@ public class PopupImageMessage : MonoBehaviour {
 
     // Styles
     public GUIStyle styleLabel;
+    public GUIStyle styleMessage;
     public GUIStyle styleButton;
+
+    // trophies
+    public Texture2D bronze;
+    public Texture2D silver;
+    public Texture2D gold;
+
+    private Texture2D currentTexture;
 
     // Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
@@ -24,9 +33,7 @@ public class PopupImageMessage : MonoBehaviour {
     // Delegate method for buttons
     // Will be called when buttons are clicked
     public delegate void OnButtonClicked();
-    public OnButtonClicked yesButtonClicked;
-    public OnButtonClicked noButtonClicked;
-    private NotificationType notificationType;
+    public OnButtonClicked okButtonClicked;
 
     // Use this for initialization
     void Start () {
@@ -43,32 +50,23 @@ public class PopupImageMessage : MonoBehaviour {
         }
 
         GUI.DrawTexture(panelRect.rect, notificationPanel);
-        GUI.Label(new Rect(panelRect.rect.x + 50, panelRect.rect.y + 50, panelRect.rect.width - 100, 300), message, styleLabel);
+        int titleHeight = 150;
+        int spacing = 50;
+        GUI.Label(new Rect(panelRect.rect.x + spacing, panelRect.rect.y + spacing, panelRect.rect.width - spacing * 2, titleHeight), message, styleLabel);
 
-        if (notificationType == NotificationType.YesNo){
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 - 225, panelRect.rect.y + 350, 200, 100), "Yes")){
-                if(yesButtonClicked != null) yesButtonClicked();
-                Hide();
-            }
+        GUI.DrawTexture(new Rect(panelRect.rect.x + spacing, panelRect.rect.y + titleHeight, panelRect.rect.width / 2 - spacing * 2, panelRect.rect.height - titleHeight), currentTexture);
+        GUI.Label(new Rect(panelRect.rect.x + panelRect.rect.width / 2, panelRect.rect.y + titleHeight, panelRect.rect.width / 2, panelRect.rect.height - titleHeight), trophyMessage, styleMessage);
 
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 + 25, panelRect.rect.y + 350, 200, 100), "Ignore")){
-                if(noButtonClicked != null) noButtonClicked();
-                Hide();
-            }
-        }
-        else if (notificationType == NotificationType.OK){
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 - 100, panelRect.rect.y + 350, 200, 100), "Yes")){
-                if(yesButtonClicked != null) yesButtonClicked();
-                Hide();
-            }
+        if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 + 25, panelRect.rect.y + 350, 200, 100), "OK")){
+            if(okButtonClicked != null) okButtonClicked();
+            Hide();
         }
     }
 
-    public void Init(string message, OnButtonClicked yesButton, OnButtonClicked noButton){
-        notificationType = NotificationType.YesNo;
-        this.message = message;
-        yesButtonClicked = yesButton;
-        noButtonClicked = noButton;
+    public void Init (TrophyTier trophy, OnButtonClicked okButton){
+        trophyMessage = GetMessage(trophy);
+        currentTexture = GetTexture(trophy);
+        okButtonClicked = okButton;
 
         // Initialize positions for LTRect
         initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, notificationPanel.height * -1);
@@ -77,16 +75,55 @@ public class PopupImageMessage : MonoBehaviour {
         Display();
     }
 
-    public void Init(string message, OnButtonClicked yesButton){
-        notificationType = NotificationType.OK;
-        this.message = message;
-        yesButtonClicked = yesButton;
+    private string GetMessage(TrophyTier trophy){
+        string retVal = "";
 
-        // Initialize positions for LTRect
-        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, notificationPanel.height * -1);
-        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
-        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, notificationPanel.height);
-        Display();
+        switch (trophy){
+
+            case TrophyTier.Null:
+            retVal = "Too bad, better luck next time.";
+            break;
+
+            case TrophyTier.Bronze:
+            retVal = "Nice try, but you can do better.";
+            break;
+
+            case TrophyTier.Silver:
+            retVal = "Not bad!";
+            break;
+
+            case TrophyTier.Gold:
+            retVal = "Excellent work!";
+            break;
+
+        }
+
+        return retVal;
+    }
+
+    private Texture2D GetTexture(TrophyTier trophy){
+        Texture2D retVal = null;
+
+        switch (trophy){
+
+            case TrophyTier.Null:
+            break;
+
+            case TrophyTier.Bronze:
+            retVal = bronze;
+            break;
+
+            case TrophyTier.Silver:
+            retVal = silver;
+            break;
+
+            case TrophyTier.Gold:
+            retVal = gold;
+            break;
+
+        }
+
+        return retVal;
     }
 
     // Display the popup panel

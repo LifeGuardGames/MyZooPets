@@ -11,6 +11,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	void Start () {
 	   notificationUIManager = GameObject.Find("Main Camera/NotificationUIManager").GetComponent<NotificationUIManager>();
         // SendNotification();
+        // ShowLevelUp();
 	}
 
 	// Update is called once per frame
@@ -27,5 +28,12 @@ public class DiagnoseTimerLogic : MonoBehaviour {
                 //ignore. no punishment. unpause the game
                 //fewer rewards
             });
+    }
+
+    void ShowLevelUp(){
+
+        notificationUIManager.PopupImageMessage(TrophyTier.Bronze, delegate(){});
+        notificationUIManager.PopupImageMessage(TrophyTier.Silver, delegate(){});
+        notificationUIManager.PopupImageMessage(TrophyTier.Gold, delegate(){});
     }
 }

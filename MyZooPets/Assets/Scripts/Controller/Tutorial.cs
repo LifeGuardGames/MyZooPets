@@ -9,9 +9,12 @@ public class Tutorial : MonoBehaviour {
     public GameObject slotMachine;
     public GameObject realInhaler;
     public GameObject teddyInhaler;
+    public GameObject shelf;
+    public GameObject helpTrophy;
 
     public void Init(){
         InhalerMissAndInhalerGame();
+        TrophyDemo();
     }
 
     // not used right now
@@ -60,6 +63,18 @@ public class Tutorial : MonoBehaviour {
             realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
         }
     }
+    // For the demo.
+    void TrophyDemo(){
+        if (DataManager.FirstTimeShelf){
+            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            shelf.GetComponent<TapItem>().OnTap += openShelf;
+            growShrink.Play();
+        }
+        if (DataManager.FirstTimeHelpTrophy){
+            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
+        }
+    }
 
     void openCalendar(){
         if (ClickManager.CanRespondToTap()){
@@ -105,6 +120,28 @@ public class Tutorial : MonoBehaviour {
         if (ClickManager.CanRespondToTap()){
             GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
             DataManager.FirstTimeTeddyInhaler = false;
+            growShrink.Stop();
+        }
+    }
+    void openShelf(){
+        if (ClickManager.CanRespondToTap()){
+            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            DataManager.FirstTimeShelf = false;
+            growShrink.Stop();
+
+            // added for the demo
+            if (DataManager.FirstTimeHelpTrophy){
+                helpTrophy.GetComponent<GrowShrink>().Play();
+            }
+        }
+    }
+    void openHelpTrophy(){
+
+        // make sure we are in trophy mode
+        // todo: have a better way of checking if we are in trophy mode
+        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
+            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            DataManager.FirstTimeHelpTrophy = false;
             growShrink.Stop();
         }
     }

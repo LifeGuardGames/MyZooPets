@@ -65,7 +65,8 @@ public class CameraMove : MonoBehaviour{
 		}
 
 		initPosition = gameObject.transform.position;
-		initFaceDirection = new Vector3(15.54f, 0, 0);
+		// initFaceDirection = new Vector3(15.54f, 0, 0);
+		initFaceDirection = gameObject.transform.eulerAngles;
 	}
 
 	// Called from ClickManager

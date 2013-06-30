@@ -99,7 +99,7 @@ public class CameraMove : MonoBehaviour{
 				zoomed = true;
 				LockCameraMove();
 
-				petSideFinalPosition = spritePet.transform.position + petCameraOffset;
+				petSideFinalPosition = spritePet.transform.localPosition + petCameraOffset;
 	    		CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
 			}
 		}

@@ -38,16 +38,19 @@ public class DataManager : MonoBehaviour {
 
     //Evolution Data
     [SerializeThis]
-    public static DateTime lastUpdatedTime; //last time evolution meter was calculated
+    private static DateTime lastLevelUpdatedTime; //last time level up meter was calculated
     [SerializeThis]
     public static TimeSpan durationCum; //the total time since hatching the pet
     [SerializeThis]
-    public static double lastEvoMeter; //last calculated evolution meter
+    public static double lastLevelUpMeter; //last calculated level up meter
     [SerializeThis]
-    public static double evoAverageCum; //cumulative average of evolution meter
-                                        //use this to decide how to evolve pet
+    public static double levelUpAverageCum; //cumulative average of level up meter
+                                        //use this to decide what trophy to give when
+                                        //leveling up
     [SerializeThis]
-    public static EvoStage evoStage; //current evolution stage
+    public static Level currentLevel; //current level
+
+
 
     //Calendar Data
     [SerializeThis]
@@ -131,6 +134,32 @@ public class DataManager : MonoBehaviour {
         get {return hunger;}
     }
 
+    //Level Up
+    public static DateTime LastLevelUpdatedTime{
+        get{return lastLevelUpdatedTime;}
+        set{lastLevelUpdatedTime = value;}
+    }
+
+    public static TimeSpan DurationCum{
+        get{return durationCum;}
+        set{durationCum = value;}
+    }
+
+    public static double LastLevelUpMeter{
+        get{return lastLevelUpMeter;}
+        set{lastLevelUpMeter = value;}
+    }
+
+    public static double LevelUpAverageCum{
+        get{return levelUpAverageCum;}
+        set{levelUpAverageCum = value;}
+    }
+
+    public static Level CurrentLevel{
+        get{return currentLevel;}
+        set{currentLevel = value;}
+    }
+
     //calendar
     public static List<CalendarEntry> Entries{
         get{return entries;}
@@ -212,6 +241,9 @@ public class DataManager : MonoBehaviour {
         points -= val;
         if (points < 0)
             points = 0;
+    }
+    public static void ResetPointsOnLevelUp(){
+        points = 0;
     }
 
     //Stars
@@ -317,11 +349,12 @@ public class DataManager : MonoBehaviour {
 
     //initialize all data for the first time
     private void InitializeAllDataFirstTime(){
-        //Evolution data initialization
-            lastUpdatedTime = DateTime.Now;
+            //Evolution data initialization
+            lastLevelUpdatedTime = DateTime.Now;
             durationCum = new TimeSpan(0,0,10);
-            lastEvoMeter = 90;
-            evoAverageCum = 90;
+            lastLevelUpMeter = 90; //needs to be re calculated whenever health, mood are modified
+            levelUpAverageCum = 90; //needs to be re calculated whenever health, mood are modified
+            currentLevel = Level.Level0;
 
             //Pet stats initialization
             health = 100;

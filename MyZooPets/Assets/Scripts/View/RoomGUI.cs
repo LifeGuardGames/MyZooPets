@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class RoomGUI : MonoBehaviour {
 
@@ -86,8 +87,11 @@ public class RoomGUI : MonoBehaviour {
 	private NotificationUIManager notificationUIManager;
 	private RoomGUIAnimator roomAnimator;
 	private DiagnoseGUI diagnoseGUI;
+
 	private string tierLevel;
 	private string tierProgressText;
+	private int nextLevelPoints; //the minimum points required to level up
+	
 	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
@@ -129,9 +133,12 @@ public class RoomGUI : MonoBehaviour {
 		mood = roomAnimator.displayMood;
 		health = roomAnimator.displayHealth;
 
-		//Data reading from other class
-		tierLevel = "Tier 1";//TODO-s change this later
-		tierProgressText = roomAnimator.displayPoints + "/50000";
+		//points progress bar data
+		tierLevel = Enum.GetName(typeof(Level), DataManager.CurrentLevel);
+		nextLevelPoints = LevelUpLogic.levelPoints[(int)DataManager.CurrentLevel + 1];
+		tierProgressText = roomAnimator.displayPoints + "/" + nextLevelPoints;
+
+		//Star data
 		starCount = roomAnimator.displayStars.ToString();
 	}
 
@@ -178,7 +185,7 @@ public class RoomGUI : MonoBehaviour {
 		//Progress Bar
 		GUI.DrawTexture(new Rect(tierBarloc.x,tierBarloc.y,530,75), tierBarTexture);
 		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350,50),progressBarFrame);
-		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350 * Mathf.Clamp01(progress/50000),50),progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);
+		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350 * Mathf.Clamp01(progress/nextLevelPoints),50),progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);
 		GUI.Label(new Rect(tierBarloc.x + progressTextOffset.x,tierBarloc.y+progressTextOffset.y,200,40),tierProgressText,expreTextStyle);
 		GUI.Label(new Rect(tierBarloc.x+tierTextOffset.x,tierBarloc.y+tierTextOffset.y,200,40),tierLevel,tierTextStyle);
 

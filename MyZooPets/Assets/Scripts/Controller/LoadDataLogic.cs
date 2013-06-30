@@ -11,7 +11,7 @@ public class LoadDataLogic : MonoBehaviour {
     private ChallengesGUI challengesGUI; //reference to UI
     private DegradationGUI degradationUIManager; //reference to UI
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
-    private EvolutionLogic evolutionLogic; //reference to logic
+    private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference to ...logic?
     private CameraMove cameraMove; //reference to ...logic?
@@ -31,7 +31,7 @@ public class LoadDataLogic : MonoBehaviour {
             calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
             challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
             degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
-            evolutionLogic = GameObject.Find("GameManager").GetComponent<EvolutionLogic>();
+            levelUpLogic = GameObject.Find("GameManager").GetComponent<LevelUpLogic>();
             degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
             tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
             petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
@@ -59,7 +59,7 @@ public class LoadDataLogic : MonoBehaviour {
             if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
             calendarGUI.Init();
             challengesGUI.Init();
-            evolutionLogic.Init();
+            levelUpLogic.Init();
             degradationLogic.Init();
             degradationUIManager.Init();
             tutorial.Init();

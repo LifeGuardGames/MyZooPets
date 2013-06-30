@@ -8,8 +8,8 @@ public static class CalendarLogic{
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry; //today's entry
     private static List<CalendarEntry> tempEntries;
-    private static int comboBase = 750;
-    private static int comboMax = 3750;
+    private static int comboBase = 0; //TO DO: needs to be balance
+    private static int comboMax = 3750; //TO Do: needs to be balance
 
     //====================API (use this for the UI)=======================
     public static int GetComboCount(){

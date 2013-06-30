@@ -50,8 +50,8 @@ public class RoomGUIAnimator : MonoBehaviour {
 				// }
 			}
 			else if(displayPoints < DataManager.Points){
-				if(displayPoints + 5 <= DataManager.Points){
-					displayPoints += 5;
+				if(displayPoints + 3 <= DataManager.Points){
+					displayPoints += 3;
 				}
 				else{
 					displayPoints += DataManager.Points - displayPoints;

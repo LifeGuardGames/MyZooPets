@@ -11,7 +11,7 @@ public class LevelUpGUI : MonoBehaviour {
        levelUpLogic.OnLevelUp = OnLevelUpNotification;
 	}
 
-    private void OnLevelUpNotification(Level newLevel, TrophyTier trophy){
-
+    private void OnLevelUpNotification(TrophyTier trophy){
+        notificationUIManager.PopupImageMessage(trophy, null);
     }
 }

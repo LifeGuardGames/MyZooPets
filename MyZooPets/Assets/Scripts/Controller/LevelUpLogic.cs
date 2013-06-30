@@ -21,7 +21,7 @@ public class LevelUpLogic : MonoBehaviour {
     }
 
     //call when the pet levels up. used this to notify UI components
-    public delegate void OnLevelUpCallBack(Level newLevel, TrophyTier trophy);
+    public delegate void OnLevelUpCallBack(TrophyTier trophy);
     public OnLevelUpCallBack OnLevelUp;
 
     public static int NextLevelPoints(){
@@ -59,7 +59,7 @@ public class LevelUpLogic : MonoBehaviour {
             DataManager.CurrentLevel = (Level)nextLevelIndex;
             // DataManager.ResetPointsOnLevelUp();
 
-            if(OnLevelUp != null) OnLevelUp(DataManager.CurrentLevel, awardTrophy);
+            if(OnLevelUp != null) OnLevelUp(awardTrophy);
             canCheckLevelUp = true;
             print("LEVEL UP!!");
         }

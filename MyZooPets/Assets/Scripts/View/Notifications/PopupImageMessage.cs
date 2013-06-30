@@ -41,6 +41,7 @@ public class PopupImageMessage : MonoBehaviour {
     }
 
     void OnGUI(){
+        GUI.depth = -1;
         GUI.skin = skin;
         // Proportional scaling
         if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){

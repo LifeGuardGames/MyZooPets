@@ -11,7 +11,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 	public int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
 	public int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 	public int nextLevelPoints; //the minimum requirement for next level up
-	private Level lastLevel; 
+	private Level lastLevel; //pet's last level
 
 	public void Init()
 	{
@@ -37,15 +37,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 		//Listen for changes
 		//TODO untested!
 		if(dataPoints != DataManager.Points){
-			if(displayPoints > DataManager.Points){
-				// if(displayPoints - 5 >= DataManager.Points){
-				// 	displayPoints -= 5;
-				// }
-				// else{
-				// 	displayPoints -= displayPoints - DataManager.Points;
-				// }
-			}
-			else if(displayPoints < DataManager.Points){
+			if(displayPoints < DataManager.Points){ //animate 
 				if(displayPoints + 3 <= DataManager.Points){
 					displayPoints += 3;
 				}
@@ -53,8 +45,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 					displayPoints += DataManager.Points - displayPoints;
 				}
 			}
-			else{
-				
+			else{ //animation done
 				dataPoints = DataManager.Points;	
 			}
 		}else{ //animation is done and dataPoints is now == to DataManager.Points

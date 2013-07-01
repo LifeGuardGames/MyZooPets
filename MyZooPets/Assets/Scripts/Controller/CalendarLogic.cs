@@ -208,14 +208,14 @@ public static class CalendarLogic{
         if (now.Hour < 12){ // morning
             newEntry.OpenedInMorning = true;
             // newEntry.Morning = GetHitOrMiss(40);
-            newEntry.Morning = DosageRecord.Hit;
+            newEntry.Morning = DosageRecord.Hit; //only for user Testing
             newEntry.Afternoon = DosageRecord.Null;
         }
         else { // afternoon
             newEntry.Morning = DosageRecord.Hit;
             newEntry.OpenedInAfternoon = true;
             newEntry.Afternoon = GetHitOrMiss(40);
-            // newEntry.Afternoon = DosageRecord.Miss; //Only for User Testing I
+            // newEntry.Afternoon = DosageRecord.Miss; //Only for User Testing
         }
 
         lastEntry = newEntry;

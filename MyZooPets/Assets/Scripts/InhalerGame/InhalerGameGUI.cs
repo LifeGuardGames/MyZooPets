@@ -153,14 +153,19 @@ public class InhalerGameGUI : MonoBehaviour {
 	        	(inhalerGameManager.gameEnded && !inhalerGameManager.isPracticeGame)) {
 	            int x = 600;
 	            int y = 150;
-	            GUI.Label(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - y, x, y), "I don't need this right now.");
-	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 + 200, NATIVE_HEIGHT / 2 - 50, 100, 100), "Quit Game")){
+	            if (inhalerGameManager.HasPlayedGame){
+		            GUI.Label(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - y, x, y), "Thanks! I'm feeling much better.");
+	            }
+	            else {
+		            GUI.Label(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - y, x, y), "I don't need this right now.");
+	            }
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 + 200, NATIVE_HEIGHT / 2 - 50, 100, 100), "Back")){
 	                QuitInhalerGame();
 	            }
 	        }
 	        else {
 	        	// draw Quit Button in upper right corner
-	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Quit Game")){
+	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Back")){
 	            	QuitInhalerGame();
 	            }
 	        }

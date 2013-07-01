@@ -16,6 +16,10 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     public bool isPracticeGame;
+    bool hasPlayedGame = false;
+    public bool HasPlayedGame{
+        get {return hasPlayedGame;}
+    }
 
     InhalerGameGUI inhalerGameGUI;
 
@@ -139,6 +143,7 @@ public class InhalerGameManager : MonoBehaviour{
 
     public void OnGameEnd(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
+            hasPlayedGame = true;
 
             // record having given the pet the inhaler, if this was the real game.
             if (!isPracticeGame){

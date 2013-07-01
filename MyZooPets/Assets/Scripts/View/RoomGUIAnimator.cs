@@ -29,12 +29,8 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 		lastLevel = DataManager.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
+	}
 
-	}
-	void Start(){
-	
-	}
-	
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
 		
@@ -58,13 +54,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 				}
 			}
 			else{
-				if(!lastLevel.Equals(DataManager.CurrentLevel)){ 
-					//update the nxt level points if pet has leveled up
-					nextLevelPoints = LevelUpLogic.NextLevelPoints();
-					DataManager.ResetPoints(); //reset points back to 0
-					displayPoints = DataManager.Points; //display 0 in RoomGUI
-				}
+				
 				dataPoints = DataManager.Points;	
+			}
+		}else{ //animation is done and dataPoints is now == to DataManager.Points
+			//check if points have went beyond level up requirements
+			if(!lastLevel.Equals(DataManager.CurrentLevel)){ 
+				//update the nxt level points if pet has leveled up
+				nextLevelPoints = LevelUpLogic.NextLevelPoints();
+				DataManager.ResetPoints(); //reset points back to 0
+				displayPoints = DataManager.Points; //display 0 in RoomGUI
 			}
 		}
 		if(dataStars != DataManager.Stars){

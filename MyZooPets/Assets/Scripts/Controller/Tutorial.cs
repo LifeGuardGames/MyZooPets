@@ -128,6 +128,7 @@ public class Tutorial : MonoBehaviour {
             GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
             DataManager.FirstTimeShelf = false;
             growShrink.Stop();
+            helpTrophy.GetComponent<GrowShrink>().StopAll();
 
             // added for the demo
             if (DataManager.FirstTimeHelpTrophy){

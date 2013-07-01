@@ -16,9 +16,9 @@ public class StoreGUI : MonoBehaviour {
 
 	private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	private Vector2 bgLoc = new Vector2(100, 20);
-	private Vector2 tabLoc = new Vector2(130, 50);
-	private Vector2 tabSize = new Vector2(1125, 727);
+	private Vector2 bgLoc = new Vector2(100, 90);
+	private Vector2 tabLoc = new Vector2(130, 120);
+	private Vector2 tabSize = new Vector2(1120, 550);
 	private Vector2 backButtonLoc = new Vector2(40, 440);
 	private Vector2 menuItem1Loc;
 	private Vector2 menuItem2Loc;
@@ -41,7 +41,7 @@ public class StoreGUI : MonoBehaviour {
 	void Update(){
 		if(Input.touchCount > 0) slideValue -= Input.GetTouch(0).deltaPosition.y;
 		if(slideValue > 0) slideValue = 0;
-		if(slideValue < -(categoryList.Count/2*200 - 600)) slideValue = - (categoryList.Count/2*200 -600);
+		if(slideValue < -(categoryList.Count/2*200 - 440)) slideValue = - (categoryList.Count/2*200 - 440);
 		if(categoryList.Count <= 6){ slideValue = 0;}
 		
 	}
@@ -67,7 +67,7 @@ public class StoreGUI : MonoBehaviour {
 		if(StoreGUIOn){
 			ClickManager.ModeLock();
 			ClickManager.ClickLock();
-			GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, backgroundTexture.height), backgroundTexture);
+			GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, 600), backgroundTexture);
 
 			if(storePage == 1){
 				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
@@ -98,16 +98,16 @@ public class StoreGUI : MonoBehaviour {
 				displayItems(ItemCategory.Decorations);
 			}
 
-			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y + 15, 200, 50), "Food", blankButtonStyle)){
+			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y + 5, 200, 50), "Food", blankButtonStyle)){
 				storePage = 1;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y + 15, 200, 50), "Items", blankButtonStyle)){
+			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y + 5, 200, 50), "Items", blankButtonStyle)){
 				storePage = 2;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y + 15, 200, 50), "Inhalers", blankButtonStyle)){
+			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y + 5, 200, 50), "Inhalers", blankButtonStyle)){
 				storePage = 3;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y + 15, 200, 50), "Decoration", blankButtonStyle)){
+			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y + 5, 200, 50), "Decoration", blankButtonStyle)){
 				storePage = 4;
 			}
 
@@ -129,7 +129,7 @@ public class StoreGUI : MonoBehaviour {
 		if(c == ItemCategory.Items) categoryList = itemlogic.itemlist;
 		
 		//Window
-		GUI.BeginGroup(new Rect(tabLoc.x+50,tabLoc.y+100,1000,600));
+		GUI.BeginGroup(new Rect(tabLoc.x+50,tabLoc.y+100,1000,440));
 		//Movable group that display
 		GUI.BeginGroup(new Rect(0,slideValue,1000,100*itemlogic.items.Count));
 			

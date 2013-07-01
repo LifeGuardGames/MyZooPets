@@ -61,6 +61,13 @@ public class GrowShrink : MonoBehaviour {
         transform.localScale = new Vector3(1,1,1); // reset to original size
     }
 
+    public void StopAll(){
+        isPlaying = false;
+        LeanTween.cancel(gameObject);
+        transform.localScale = new Vector3(1,1,1); // reset to original size
+    }
+
+
     void Grow(){
         leanTweenCurrent = LeanTween.scale(gameObject, bigger, 0.4f, optionalGrow);
     }

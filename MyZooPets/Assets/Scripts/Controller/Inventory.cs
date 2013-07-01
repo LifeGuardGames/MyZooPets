@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 
 //Inventory class for Pet
+//Contains all items the pet owns.
+//Inventory creates space for all items at the beginning as an Array/
+//Index of inventory array correspond to each item ID
+//Int in each array position represents item count for each item
+//  eg.  inventory[2] = 1  means, the pet has 1 of the third item in Itemlogic class(the reference) 
 public class Inventory : MonoBehaviour {
 
 	
@@ -13,11 +18,12 @@ public class Inventory : MonoBehaviour {
 	public bool isDebug;
 	private ItemLogic itemlogic;
 	
+	//add items to inventory
 	public void addItem(int id, int count){
 		inventory[id] += count;
-	
 	}
 	
+	//Use item from inventory
 	public void useItem(int id){
 		if(inventory[id]!=0){
 			inventory[id] --;

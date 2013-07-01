@@ -91,7 +91,7 @@ public class RoomGUI : MonoBehaviour {
 	private string tierLevel;
 	private string tierProgressText;
 	private int nextLevelPoints; //the minimum points required to level up
-	
+
 	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
@@ -135,11 +135,16 @@ public class RoomGUI : MonoBehaviour {
 
 		//points progress bar data
 		tierLevel = Enum.GetName(typeof(Level), DataManager.CurrentLevel);
-		nextLevelPoints = roomAnimator.nextLevelPoints; 
+		nextLevelPoints = roomAnimator.nextLevelPoints;
 		tierProgressText = roomAnimator.displayPoints + "/" + nextLevelPoints;
 
 		//Star data
 		starCount = roomAnimator.displayStars.ToString();
+
+		if (pickedUp){
+			// if dragging an item, don't treat this as a swipe
+			SwipeDetection.CancelSwipe();
+		}
 	}
 
 	//Hide all GUIs
@@ -346,17 +351,17 @@ public class RoomGUI : MonoBehaviour {
 				Application.LoadLevel("NewBedRoom");
 			}
 		}
-		
+
 		//Temp store Button
 		if(GUI.Button(new Rect(optionRect.rect.x - 220,optionRect.rect.y, 150, 90),"Store")){
 			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
 		}
-		
+
 		// Diary button
 		if(GUI.Button(new Rect(optionRect.rect.x - 390,optionRect.rect.y, 160, 90),"Notes")){
 			GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
 		}
-		
+
 //		//Temp option Menu
 //		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
 //			showOption = !showOption;

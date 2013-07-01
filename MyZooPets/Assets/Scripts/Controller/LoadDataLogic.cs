@@ -25,7 +25,7 @@ public class LoadDataLogic : MonoBehaviour {
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
         //==============================================================================
-
+        print(Application.loadedLevelName);
         //different things to load for different scenes
         if(Application.loadedLevelName == "NewBedRoom"){ //Bedroom specific references
             calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
@@ -41,6 +41,7 @@ public class LoadDataLogic : MonoBehaviour {
                 FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
             }else{ //if first time set call back and wait for the hatching animation to finish
                 FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
+
             }
         }else if(Application.loadedLevelName == "Yard"){ //Yard specific references
             InitializeDataForUI();
@@ -71,7 +72,6 @@ public class LoadDataLogic : MonoBehaviour {
 
         }
         IsDataLoaded = true;
-		
 		//hatching gives 500 stars
         //DataManager.AddStars(500);
     }

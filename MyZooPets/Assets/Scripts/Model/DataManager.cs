@@ -364,12 +364,12 @@ public class DataManager : MonoBehaviour {
             //Evolution data initialization
             lastLevelUpdatedTime = DateTime.Now;
             durationCum = new TimeSpan(0,0,10);
-            lastLevelUpMeter = 90; //needs to be re calculated whenever health, mood are modified
-            levelUpAverageCum = 90; //needs to be re calculated whenever health, mood are modified
+            lastLevelUpMeter = 80; //needs to be re calculated whenever health, mood are modified
+            levelUpAverageCum = 80; //needs to be re calculated whenever health, mood are modified
             currentLevel = Level.Level0;
 
             //Pet stats initialization
-            health = 100;
+            health = 80;
             mood = 80;
             hunger = 30;
 

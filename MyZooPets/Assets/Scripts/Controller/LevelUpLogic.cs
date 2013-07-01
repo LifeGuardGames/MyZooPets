@@ -57,11 +57,10 @@ public class LevelUpLogic : MonoBehaviour {
                 awardTrophy = TrophyTier.Gold;
             }     
             DataManager.CurrentLevel = (Level)nextLevelIndex;
-            // DataManager.ResetPointsOnLevelUp();
 
+            //Level Up! so notify UI
             if(OnLevelUp != null) OnLevelUp(awardTrophy);
             canCheckLevelUp = true;
-            print("LEVEL UP!!");
         }
     }
 

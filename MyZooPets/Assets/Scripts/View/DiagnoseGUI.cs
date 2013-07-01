@@ -182,6 +182,13 @@ public class DiagnoseGUI : MonoBehaviour {
 			}
 		}
 		//=====================================================================
+
+		//quite game button
+		if(!isActive){
+			if(GUI.Button(new Rect(NATIVE_WIDTH-100, 100, 100, 100), "Quit")){
+				Application.LoadLevel("NewBedRoom");
+			}
+		}
 	}
 
 	//user chose one of the stages, so check it the user is correct

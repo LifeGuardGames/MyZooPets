@@ -16,7 +16,9 @@ public class SwipeDetection : MonoBehaviour {
     float flickTimer = 0;
     public float minSwipeDistance = .025f;
     public float flickTime = 0.5f;
+
     public static event System.Action<Swipe> OnSwipeDetected;
+    private static bool swipeCancelled;
 
     void Start() {
         screenDiagonalSize = Mathf.Sqrt(NATIVE_WIDTH * NATIVE_WIDTH + NATIVE_HEIGHT * NATIVE_HEIGHT);
@@ -37,7 +39,7 @@ public class SwipeDetection : MonoBehaviour {
                 break;
 
                 case TouchPhase.Ended:
-                if (touchStarted) {
+                if (!swipeCancelled && touchStarted) {
                     TestForSwipeGesture(touch);
                     touchStarted = false;
                 }
@@ -54,6 +56,14 @@ public class SwipeDetection : MonoBehaviour {
                 break;
             }
         }
+        else {
+            swipeCancelled = false;
+        }
+    }
+
+    // Use this when dragging an item.
+    public static void CancelSwipe(){
+        swipeCancelled = true;
     }
 
     void TestForSwipeGesture(Touch touch){

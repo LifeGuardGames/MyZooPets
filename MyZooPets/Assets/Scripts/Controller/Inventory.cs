@@ -34,9 +34,8 @@ public class Inventory : MonoBehaviour {
 		}
 		
 		//testing
-		addItem(1,2); //2 apples
-		addItem(2,1); //1 sandwich
-		addItem(3,1); //1 inhaler
+		addItem(0,2); //2 apples
+		addItem(1,1); //1 sandwich
 	}
 	
 	// Update is called once per frame

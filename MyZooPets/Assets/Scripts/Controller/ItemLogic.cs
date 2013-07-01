@@ -44,8 +44,6 @@ public class ItemLogic : MonoBehaviour{
 	private void loadMethods(){
 		methods.Add(()=>takeApple());
 		methods.Add(()=>takeSandwich());
-		methods.Add(()=>takeInhaler());
-		methods.Add(()=>takeEmInhaler());	
 	}
 	
 	void Awake(){
@@ -65,13 +63,5 @@ public class ItemLogic : MonoBehaviour{
 	
 	public static void takeSandwich(){
 		DataManager.AddHunger(30);
-	}
-	
-	public static void takeInhaler(){
-		CalendarLogic.RecordGivingInhaler();
-	}
-	
-	public static void takeEmInhaler(){
-		
 	}
 }

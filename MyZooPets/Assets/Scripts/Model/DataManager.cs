@@ -254,7 +254,7 @@ public class DataManager : MonoBehaviour {
         if (points < 0)
             points = 0;
     }
-    public static void ResetPointsOnLevelUp(){
+    public static void ResetPoints(){
         points = 0;
     }
 

@@ -49,6 +49,8 @@ public class LoadDataLogic : MonoBehaviour {
 
     //data is ready for use so initialize all UI data
     private void InitializeDataForUI(){
+        //Note: the order in which some of the classes are init matter
+        //1) roomGUIAnimator needs to be init before levelUpLogic
         //========GameObjects that need to be init in multiple scenes============
         roomGUIAnimator.Init();
         diaryUIManager.Init();

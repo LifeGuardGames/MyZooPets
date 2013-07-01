@@ -269,26 +269,12 @@ public class RoomGUI : MonoBehaviour {
 				if(GUILayout.RepeatButton(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 					pickedUp = true;
 					pickUpId = i;
-//					inventory.useItem(i);
 				}
 				counter++;
 				GUI.Label(new Rect(-10+counter*80-80,35,100,80),"x " + inventory.inventory[i].ToString(),itemCountTextStyle);
 			}
 		}
-//		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			DataManager.AddHunger(30);
-//		}
-//		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			DataManager.AddHunger(10);
-//		}
-//
-//		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			inhalerpicked = true;
-//		}
-//
-//		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			emInhalerpicked = true;
-//		}
+
 		//move in/out of item bar
 		if(isMenuExpanded){
 			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){

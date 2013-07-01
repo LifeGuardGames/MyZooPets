@@ -299,8 +299,9 @@ public class RoomGUI : MonoBehaviour {
 		//TODO-w Refactor this somewhere else?
 		//Do this when we create Backpack .etc
 		if(pickedUp){
-			// GUI.DrawTexture(new Rect(Input.mousePosition.x-50,NATIVE_HEIGHT- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
-			GUI.DrawTexture(new Rect(Input.mousePosition.x - menuBoxWidth / 2,NATIVE_HEIGHT- Input.mousePosition.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
+			// GUI.DrawTexture(new Rect(Input.mousePosition.x - menuBoxWidth / 2,NATIVE_HEIGHT- Input.mousePosition.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
+			Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(Input.mousePosition);
+			GUI.DrawTexture(new Rect(convertedGUIPos.x - menuBoxWidth / 2,NATIVE_HEIGHT- convertedGUIPos.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
 			if(Input.touchCount > 0){
 				if(Input.GetTouch(0).phase == TouchPhase.Ended){
 					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);

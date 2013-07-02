@@ -81,18 +81,23 @@ public class GrowShrink : MonoBehaviour {
     void InitClickHighlighting(){
         TapItem tapItem = GetComponent<TapItem>();
         if (tapItem != null){
+            tapItem.OnTap += StopAll;
             tapItem.OnStart += GrowInstantly;
             tapItem.OnFinish += ShrinkInstantly;
         }
     }
 
     void GrowInstantly(){
-        StopAll();
+        LeanTween.cancel(gameObject);
         transform.localScale = bigger;
     }
 
     void ShrinkInstantly(){
-        StopAll();
+        LeanTween.cancel(gameObject);
         transform.localScale = smaller;
+        // restart
+        if (isPlaying){
+           Grow();
+        }
     }
 }

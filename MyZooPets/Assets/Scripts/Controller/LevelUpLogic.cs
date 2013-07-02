@@ -9,6 +9,7 @@ public class LevelUpLogic : MonoBehaviour {
 	private float timeInterval = 30f;
     private bool canCheckLevelUp = true; //use this to prohibit update from checking
                                         //level up too many times
+    private static TrophyTier awardTrophy = TrophyTier.Null; //trophy awarded when leveling up
     private static int[] levelPoints = {0, 500, 1000, 1500, 2000, 2500, 3500, 4500, 
         5500, 6500, 8500}; //points required for the nxt level
     private const int OK_CARE = 30;
@@ -20,12 +21,14 @@ public class LevelUpLogic : MonoBehaviour {
         timer = timeInterval;
     }
 
-    //call when the pet levels up. used this to notify UI components
-    public delegate void OnLevelUpCallBack(TrophyTier trophy);
-    public OnLevelUpCallBack OnLevelUp;
-
+    //The point requirement for next level up
     public static int NextLevelPoints(){
         return levelPoints[(int)DataManager.CurrentLevel + 1];
+    }
+
+    //The trophy that is awarded at the time of level up
+    public static TrophyTier AwardedTrophy{
+        get{return awardTrophy;}
     }
     //========================================================
 
@@ -46,7 +49,6 @@ public class LevelUpLogic : MonoBehaviour {
     private void CanLevelUp(){
         int nextLevelIndex = (int)DataManager.CurrentLevel + 1;
         bool canLevelUp = DataManager.Points >= levelPoints[nextLevelIndex];
-        TrophyTier awardTrophy = TrophyTier.Null;
         if(canLevelUp){
             canCheckLevelUp = false;
             if(DataManager.LevelUpAverageCum <= OK_CARE){ //bad care
@@ -59,7 +61,7 @@ public class LevelUpLogic : MonoBehaviour {
             DataManager.CurrentLevel = (Level)nextLevelIndex;
 
             //Level Up! so notify UI
-            if(OnLevelUp != null) OnLevelUp(awardTrophy);
+            // if(OnLevelUp != null) OnLevelUp(awardTrophy);
             canCheckLevelUp = true;
         }
     }

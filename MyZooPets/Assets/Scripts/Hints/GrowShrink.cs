@@ -33,6 +33,8 @@ public class GrowShrink : MonoBehaviour {
 
         // optionalShrink.Add("ease", LeanTweenType.easeInOutQuad);
         optionalShrink.Add("onComplete", "Grow");
+
+        InitClickHighlighting();
 	}
 
 	// Update is called once per frame
@@ -74,5 +76,28 @@ public class GrowShrink : MonoBehaviour {
 
     void Shrink(){
         leanTweenCurrent = LeanTween.scale(gameObject, smaller, 0.4f, optionalShrink);
+    }
+
+    void InitClickHighlighting(){
+        TapItem tapItem = GetComponent<TapItem>();
+        if (tapItem != null){
+            tapItem.OnTap += StopAll;
+            tapItem.OnStart += GrowInstantly;
+            tapItem.OnFinish += ShrinkInstantly;
+        }
+    }
+
+    void GrowInstantly(){
+        LeanTween.cancel(gameObject);
+        transform.localScale = bigger;
+    }
+
+    void ShrinkInstantly(){
+        LeanTween.cancel(gameObject);
+        transform.localScale = smaller;
+        // restart
+        if (isPlaying){
+           Grow();
+        }
     }
 }

@@ -95,7 +95,8 @@ public class PopupNotification : MonoBehaviour {
     private void Display(){
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
-        LeanTween.move(panelRect, finalPosition, 0.5f, optional);
+        LeanTween.move(panelRect, finalPosition, 1.0f, optional);
+        Handheld.Vibrate();
     }
 
     // Hide the popup panel

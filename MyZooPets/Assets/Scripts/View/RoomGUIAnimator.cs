@@ -1,9 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Room GUI animator.
 /// This is the middleman proxy class that listens to the statLogic to display animation for roomGUI.
+/// 
+/// this animator will also have a series of events. These events will be raised
+/// when special things are happening to the changing stats. Client classes will need
+/// to provide listeners to handle these events. 
+/// For example, Event will be raised when the level up progress bar reached the leveling up point
+/// If any other class wants to display UI elements when this event happens, a listener will need to
+/// be provided.
 /// </summary>
 
 public class RoomGUIAnimator : MonoBehaviour {
@@ -11,6 +19,14 @@ public class RoomGUIAnimator : MonoBehaviour {
 	public int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
 	public int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 	public int nextLevelPoints; //the minimum requirement for next level up
+	
+	//================Events================
+	//call when the pet levels up. used this to level up UI components
+    public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
+    public static OnLevelUpEventHandlers OnLevelUp;
+
+    //========================================
+
 	private Level lastLevel; //pet's last level
 	private RoomGUI roomgui;
 	private bool IconSwitch = true;
@@ -66,8 +82,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
 
-		//Listen for changes
-		//TODO untested!
+		//Points 
 		if(dataPoints != DataManager.Points){
 			if(displayPoints < DataManager.Points){ //animate 
 				if(displayPoints + 3 <= DataManager.Points){
@@ -81,14 +96,18 @@ public class RoomGUIAnimator : MonoBehaviour {
 				dataPoints = DataManager.Points;	
 			}
 		}else{ //animation is done and dataPoints is now == to DataManager.Points
-			//check if points have went beyond level up requirements
-			if(!lastLevel.Equals(DataManager.CurrentLevel)){ 
-				//update the nxt level points if pet has leveled up
-				nextLevelPoints = LevelUpLogic.NextLevelPoints();
+			if(!lastLevel.Equals(DataManager.CurrentLevel)){ //check if points have went beyond level up requirements
+				nextLevelPoints = LevelUpLogic.NextLevelPoints(); //update the nxt level points if pet has leveled up
 				DataManager.ResetPoints(); //reset points back to 0
 				displayPoints = DataManager.Points; //display 0 in RoomGUI
+
+				lastLevel = DataManager.CurrentLevel;
+				//notify NotificationUIManager
+				if(OnLevelUp != null) OnLevelUp(this, EventArgs.Empty);
 			}
 		}
+
+		//Stars
 		if(dataStars != DataManager.Stars){
 			if(displayStars > DataManager.Stars){
 				displayStars--;
@@ -100,6 +119,8 @@ public class RoomGUIAnimator : MonoBehaviour {
 				dataStars = DataManager.Stars;	
 			}
 		}
+
+		//Health
 		if(dataHealth != DataManager.Health){
 			if(displayHealth > DataManager.Health){
 				displayHealth--;
@@ -120,6 +141,8 @@ public class RoomGUIAnimator : MonoBehaviour {
 				IconHealthSwitch = false;
 			}
 		}
+
+		//Mood
 		if(dataMood != DataManager.Mood){
 			if(displayMood > DataManager.Mood){
 				displayMood--;
@@ -140,6 +163,8 @@ public class RoomGUIAnimator : MonoBehaviour {
 				IconSwitch = true;
 			}
 		}
+
+		//Hunger
 		if(dataHunger != DataManager.Hunger){
 			if(displayHunger > DataManager.Hunger){
 				displayHunger--;

@@ -9,6 +9,7 @@ public class InhalerGameGUI : MonoBehaviour {
 
     public GUISkin defaultSkin;
 	public GUIStyle inhalerStyle;
+    public GUIStyle largeButtonStyle;
 	public Texture2D circleGray;
 	public Texture2D circleRed;
 	public float speed;
@@ -29,7 +30,6 @@ public class InhalerGameGUI : MonoBehaviour {
 	private bool showButtons = true;
 	private bool showIntroEnded = false;
 
-    public GameObject slotMachine;
     NotificationUIManager notificationUIManager;
     public InhalerGameManager inhalerGameManager;
 
@@ -159,20 +159,25 @@ public class InhalerGameGUI : MonoBehaviour {
 	            else {
 		            GUI.Label(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - y, x, y), "I don't need this right now.");
 	            }
-	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2 + 200, NATIVE_HEIGHT / 2 - 50, 100, 100), "Back")){
+	        	int largeWidth = 400;
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - 50, largeWidth, 100), "Back", largeButtonStyle)){
 	                QuitInhalerGame();
+	            }
+	        }
+	        else if (inhalerGameManager.gameEnded && inhalerGameManager.isPracticeGame){
+	        	int largeWidth = 400;
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2 - 100, largeWidth, 100), "Back", largeButtonStyle)){
+	                QuitInhalerGame();
+	            }
+	            if(GUI.Button(new Rect(NATIVE_WIDTH / 2, NATIVE_HEIGHT / 2, largeWidth, 100), "Play Again", largeButtonStyle)){
+	                inhalerGameManager.ResetInhalerGame();
+	                RestartProgressBar();
 	            }
 	        }
 	        else {
 	        	// draw Quit Button in upper right corner
 	            if(GUI.Button(new Rect(NATIVE_WIDTH - 120, 10, 100, 100), "Back")){
 	            	QuitInhalerGame();
-	            }
-	        }
-	        if (inhalerGameManager.gameEnded && inhalerGameManager.isPracticeGame){
-	            if(GUI.Button(new Rect(NATIVE_WIDTH - 240, 10, 100, 100), "Play Again")){
-	                inhalerGameManager.ResetInhalerGame();
-	                RestartProgressBar();
 	            }
 	        }
 		}

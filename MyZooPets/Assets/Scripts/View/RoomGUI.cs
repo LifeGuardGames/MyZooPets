@@ -269,26 +269,12 @@ public class RoomGUI : MonoBehaviour {
 				if(GUILayout.RepeatButton(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
 					pickedUp = true;
 					pickUpId = i;
-//					inventory.useItem(i);
 				}
 				counter++;
 				GUI.Label(new Rect(-10+counter*80-80,35,100,80),"x " + inventory.inventory[i].ToString(),itemCountTextStyle);
 			}
 		}
-//		if(GUILayout.Button(sandwichTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			DataManager.AddHunger(30);
-//		}
-//		if(GUILayout.Button(appleTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			DataManager.AddHunger(10);
-//		}
-//
-//		if(GUILayout.RepeatButton(textureSwap1, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			inhalerpicked = true;
-//		}
-//
-//		if(GUILayout.RepeatButton(textureSwap2, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-//			emInhalerpicked = true;
-//		}
+
 		//move in/out of item bar
 		if(isMenuExpanded){
 			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
@@ -313,8 +299,9 @@ public class RoomGUI : MonoBehaviour {
 		//TODO-w Refactor this somewhere else?
 		//Do this when we create Backpack .etc
 		if(pickedUp){
-			// GUI.DrawTexture(new Rect(Input.mousePosition.x-50,NATIVE_HEIGHT- Input.mousePosition.y-50, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
-			GUI.DrawTexture(new Rect(Input.mousePosition.x - menuBoxWidth / 2,NATIVE_HEIGHT- Input.mousePosition.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
+			// GUI.DrawTexture(new Rect(Input.mousePosition.x - menuBoxWidth / 2,NATIVE_HEIGHT- Input.mousePosition.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
+			Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(Input.mousePosition);
+			GUI.DrawTexture(new Rect(convertedGUIPos.x - menuBoxWidth / 2,NATIVE_HEIGHT- convertedGUIPos.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
 			if(Input.touchCount > 0){
 				if(Input.GetTouch(0).phase == TouchPhase.Ended){
 					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);

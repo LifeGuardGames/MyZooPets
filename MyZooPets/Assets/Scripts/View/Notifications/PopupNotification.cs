@@ -64,6 +64,7 @@ public class PopupNotification : MonoBehaviour {
         }
     }
 
+    //Initialize for 2 button popup
     public void Init(string message, OnButtonClicked yesButton, OnButtonClicked noButton){
         notificationType = NotificationType.YesNo;
         this.message = message;
@@ -77,6 +78,7 @@ public class PopupNotification : MonoBehaviour {
         Display();
     }
 
+    //Initialize for 1 button popup
     public void Init(string message, OnButtonClicked yesButton){
         notificationType = NotificationType.OK;
         this.message = message;
@@ -92,7 +94,7 @@ public class PopupNotification : MonoBehaviour {
     // Display the popup panel
     private void Display(){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeInOutQuad);
+        optional.Add("ease", LeanTweenType.easeOutBounce);
         LeanTween.move(panelRect, finalPosition, 0.5f, optional);
     }
 

@@ -89,13 +89,13 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 2 buttons
 		Params: notificationType, call back for yes button, call back for no button
 	*/
-	public void PopupNotification(string notificationType, PopupNotification.OnButtonClicked yesCallBack,
+	public void PopupNotification(string message, PopupNotification.OnButtonClicked yesCallBack,
 		PopupNotification.OnButtonClicked noCallBack){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		PopupNotification script = go.GetComponent<PopupNotification>();
 		if(script != null){
-			script.Init(notificationType, yesCallBack, noCallBack);
+			script.Init(message, yesCallBack, noCallBack);
 		}
 	}
 
@@ -103,12 +103,12 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 1 button
 		Params: notificationType, call back for button
 	*/
-	public void PopupNotification(string notificationType, PopupNotification.OnButtonClicked okCallBack){
+	public void PopupNotification(string message, PopupNotification.OnButtonClicked okCallBack){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		PopupNotification script = go.GetComponent<PopupNotification>();
 		if(script != null){
-			script.Init(notificationType, okCallBack);
+			script.Init(message, okCallBack);
 		}
 	}
 

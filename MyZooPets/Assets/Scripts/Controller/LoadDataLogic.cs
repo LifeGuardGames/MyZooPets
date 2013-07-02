@@ -5,6 +5,7 @@ using System.Collections;
 //data loading in data manager is asynchronous so this class is necessary
 //to provide an event based callback
 public class LoadDataLogic : MonoBehaviour {
+    public bool isDebug;
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
     private DiaryGUI diaryUIManager; //reference to UI
     private CalendarGUI calendarGUI; //reference to UI
@@ -19,6 +20,9 @@ public class LoadDataLogic : MonoBehaviour {
     private ClickManager clickmanager;
 
     void Awake(){
+        if(isDebug){
+            DataManager.FirstTime = true; 
+        }
         IsDataLoaded = false;
         //=============GameObjects that are required in multiple scenes===================
         roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();

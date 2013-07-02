@@ -256,7 +256,8 @@ public static bool throwErrors= true;
 
 private static TweenDescr[] tweens;
 private static int tweenMaxSearch = 0;
-private static int maxTweens = 400;
+// private static int maxTweens = 400;
+private static int maxTweens = 800;
 private static int frameRendered= -1;
 private static GameObject tweenEmpty;
 private static float dtEstimated;

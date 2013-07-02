@@ -1,17 +1,16 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class LevelUpGUI : MonoBehaviour {
     public NotificationUIManager notificationUIManager;
-    private LevelUpLogic levelUpLogic; //reference 
 
 	// Use this for initialization
 	void Start () {
-	   levelUpLogic = GameObject.Find("GameManager").GetComponent<LevelUpLogic>();
-       levelUpLogic.OnLevelUp = OnLevelUpNotification;
+       RoomGUIAnimator.OnLevelUp += OnLevelUpNotification;
 	}
 
-    private void OnLevelUpNotification(TrophyTier trophy){
-        notificationUIManager.PopupImageMessage(trophy, null);
+    private void OnLevelUpNotification(object senders, EventArgs e){
+        notificationUIManager.PopupImageMessage(LevelUpLogic.AwardedTrophy, null);
     }
 }

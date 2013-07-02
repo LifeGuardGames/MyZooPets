@@ -22,5 +22,17 @@ public class NotificationTest : MonoBehaviour {
         if(GUI.Button(new Rect(10, 10, BUTTON_WIDTH, BUTTON_HEIGHT), "one button")){
             notificationUIManager.PopupNotification("testing", null);
         }
+
+        //level up notification
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "level up")){
+            notificationUIManager.PopupImageMessage(TrophyTier.Bronze, null);
+        }
+
+        //popup texture "great"
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*2, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "great")){
+            notificationUIManager.PopupTexture("great");
+        }
     }
 }

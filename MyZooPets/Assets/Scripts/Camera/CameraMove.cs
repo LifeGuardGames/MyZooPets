@@ -44,12 +44,16 @@ public class CameraMove : MonoBehaviour{
 
 	private GameObject spritePet;
 
-	private bool isCameraMoving = false;
+	private bool isCameraMoving = false; //True: camera moving, False: camera static
 
-	private bool isLoadLevel = false;
-	private string levelToLoad;
+	private bool isLoadLevel = false; //True: there's a level to be loaded, False: no level 
+	private string levelToLoad; //name of the level that need to be loaded
 
-	private bool isEnterMode = false;
+	private bool isEnterMode = false; //True: camera will zoom into the specified game object
+
+	public bool IsCameraMoving{
+		get{return isCameraMoving;}
+	}
 
 	public void Init(){
 		//Camera move is used in multiple scenes so it needs to know what specific
@@ -169,14 +173,15 @@ public class CameraMove : MonoBehaviour{
 		}
 	}
 
-	public void LockCameraMove(){
+	private void LockCameraMove(){
 		isCameraMoving = true;
 	}
 
 	// Mostly called on callback from camera move
-	public void UnlockCameraMove(){
+	private void UnlockCameraMove(){
 		isCameraMoving = false;
 		if(!isEnterMode){
+			//call event listener here
 			ClickManager.ReleaseModeLock();		// Only want to release the lock after camera done when exiting
 		}
 		if(isLoadLevel && (levelToLoad != null)){
@@ -187,7 +192,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	public void CameraWorldTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+	private void CameraWorldTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = true;
 		Hashtable optional = new Hashtable();
@@ -201,7 +206,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	public void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+	private void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = true;
 		Hashtable optional = new Hashtable();
@@ -215,7 +220,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	public void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
+	private void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = false;
 		Hashtable optional = new Hashtable();
@@ -229,7 +234,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Same as CameraTransform but tries to load a scene after the transform has completed
-	public void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
+	private void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
 		isLoadLevel = true;
 		isEnterMode = true;
 		levelToLoad = level;

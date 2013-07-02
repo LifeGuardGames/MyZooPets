@@ -16,9 +16,10 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupAward;
 	public GameObject popupSpeech;
 	public GameObject popupNotification;
-	public GameObject popupImageMessage;
-
+	public GameObject levelUpMessage;
 	public bool flipped;
+
+	//
 
 	void Start(){
 		if (!flipped){
@@ -116,11 +117,11 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that shows an image of the trophy, along with a corresponding message
 		Params: trophy, call back for button
 	*/
-	public void PopupImageMessage (TrophyTier trophy, PopupImageMessage.OnButtonClicked okCallBack){
+	public void PopupImageMessage(TrophyTier trophy, LevelUpMessage.OnButtonClicked okCallBack){
 
-		GameObject go = Instantiate(popupImageMessage, gameObject.transform.position,
+		GameObject go = Instantiate(levelUpMessage, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
-		PopupImageMessage script = go.GetComponent<PopupImageMessage>();
+		LevelUpMessage script = go.GetComponent<LevelUpMessage>();
 		if(script != null){
 			script.Init(trophy, okCallBack);
 		}

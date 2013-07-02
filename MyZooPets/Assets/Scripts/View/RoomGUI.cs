@@ -71,9 +71,15 @@ public class RoomGUI : MonoBehaviour {
 	private Vector2 moodBarOffset = new Vector2(60, 15);
 	private Vector2 foodIconOffset = new Vector2(3, 20);
 	private Vector2 foodbarOffset = new Vector2(60, 15);
-	private Vector2 progressBarOffset = new Vector2(150, 11);
+	private Vector2 progressBarOffset = new Vector2(150, 11); 
 	private Vector2 progressTextOffset = new Vector2(230, 12);
-
+	public Vector2 healthIconSize = new Vector2(60,60);
+	public Vector2 moodIconSize = new Vector2(60,60);
+	public Vector2 foodIconSize = new Vector2(60,60);
+	public LTRect foodIconRect; 
+	public LTRect healthIconRect;
+	public LTRect moodIconRect;
+	
 	//inventory
 	private Inventory inventory;
 	private ItemLogic itemlogic;
@@ -112,12 +118,7 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.displayHealth;
 	//preset item menu
 		optionLoc = new Vector2(NATIVE_WIDTH/2 - optionMenuTexture.width/2, NATIVE_HEIGHT/2 - optionMenuTexture.height/2);
-	}
-
-	void Update(){
-		//don't draw until all data is loaded
-		if(!LoadDataLogic.IsDataLoaded) return;
-
+		
 		//TOP GUI bar location updates
 		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
 		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
@@ -126,6 +127,15 @@ public class RoomGUI : MonoBehaviour {
 		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
 	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
 	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
+		
+		healthIconRect = new LTRect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,healthIconSize.x,healthIconSize.y);
+		moodIconRect = new LTRect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,healthIconSize.x,healthIconSize.y);
+		foodIconRect = new LTRect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,foodIconSize.x,foodIconSize.y);
+	}
+
+	void Update(){
+		//don't draw until all data is loaded
+		if(!LoadDataLogic.IsDataLoaded) return;
 
 		//Data reading from Data Manager
 		progress = roomAnimator.displayPoints;
@@ -212,7 +222,7 @@ public class RoomGUI : MonoBehaviour {
 		else{
 			GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 		}
-		GUI.DrawTexture(new Rect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(healthIconRect.rect,healthIcon, ScaleMode.ScaleToFit, true, 0f);
 
 		//Mood Bar
 		//Same as health bar
@@ -227,7 +237,7 @@ public class RoomGUI : MonoBehaviour {
 		else{
 			GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 		}
-		GUI.DrawTexture(new Rect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,60,60),moodIcon,ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(moodIconRect.rect,moodIcon,ScaleMode.ScaleToFit, true, 0f);
 
 		//Food Bar
 		//Same as food bar
@@ -242,7 +252,7 @@ public class RoomGUI : MonoBehaviour {
 		else{
 			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 		}
-		GUI.DrawTexture(new Rect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,60,60),foodIcon,ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(foodIconRect.rect,foodIcon,ScaleMode.ScaleToFit, true, 0f);
 
 		//get count of items owned
 		int counter = 0;
@@ -366,6 +376,16 @@ public class RoomGUI : MonoBehaviour {
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 //		}
+		if(GUI.Button(new Rect(0,0,100,100),"food + 50")){
+			DataManager.AddHunger(50);
+			DataManager.AddHealth(50);
+			DataManager.AddMood(50);
+		}
+		if(GUI.Button(new Rect(500,0,100,100),"food + 50")){
+			DataManager.SubtractHunger(50);
+			DataManager.SubtractMood(50);
+			DataManager.SubtractHealth(50);
+		}
 
 	}
 }

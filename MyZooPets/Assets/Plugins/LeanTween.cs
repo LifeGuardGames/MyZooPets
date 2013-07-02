@@ -260,6 +260,9 @@ private static int tweenMaxSearch = 0;
 private static int maxTweens = 800;
 private static int frameRendered= -1;
 private static GameObject tweenEmpty;
+public static GameObject TweenEmpty{
+	get {return tweenEmpty;}
+}
 private static float dtEstimated;
 private static float dt;
 private static float dtActual;

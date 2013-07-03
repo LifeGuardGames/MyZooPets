@@ -35,6 +35,9 @@ public class GameOverRewardMessage : MonoBehaviour {
     private Rect rewardRect;
     private Rect yesButtonRect;
     private Rect noButtonRect;
+    private Rect centerButtonRect;
+
+    private NotificationType notificationType;
 
     void Update(){
         AnimateScore();
@@ -96,22 +99,54 @@ public class GameOverRewardMessage : MonoBehaviour {
         GUILayout.EndArea();
 
         //buttons
-        if(GUI.Button(yesButtonRect, "Play")){
-            if(yesButtonClicked != null) yesButtonClicked();
-            Hide();
+        if(notificationType == NotificationType.YesNo){
+            if(GUI.Button(yesButtonRect, "Play")){
+                if(yesButtonClicked != null) yesButtonClicked();
+                Hide();
+            }
+            if(GUI.Button(noButtonRect, "Done")){
+                if(noButtonClicked != null) noButtonClicked();
+                Hide();
+            }
+        }else if(notificationType == NotificationType.OK){
+            if(GUI.Button(centerButtonRect, "Done")){
+                if(yesButtonClicked != null) yesButtonClicked();
+                Hide();
+            }
         }
-        if(GUI.Button(noButtonRect, "Quit")){
-            if(noButtonClicked != null) noButtonClicked();
-            Hide();
-        }
+        
         GUI.EndGroup();
     }
 
+    //Initialize 2 button reward popup
     public void Init(int deltaStars, int deltaPoints, OnButtonClicked yesButton,
             OnButtonClicked noButton){
+        notificationType = NotificationType.YesNo;
         dataStars = deltaStars;
         dataPoints = deltaPoints;
-        // Initialize positions for LTRect
+       
+       InitializeGUIPosition();
+
+        yesButtonRect = new Rect(100, 360, 200, 100);
+        noButtonRect = new Rect(450, 360, 200, 100);
+
+        Display();
+    }
+
+    //Initialize 1 button reward popup
+    public void Init(int deltaStars, int deltaPoints, OnButtonClicked yesButton){
+        notificationType = NotificationType.OK;
+
+        dataStars = deltaStars;
+        dataPoints = deltaPoints;
+
+        InitializeGUIPosition();
+
+        centerButtonRect = new Rect(270, 360, 200, 100);
+    }
+
+    private void InitializeGUIPosition(){
+         // Initialize positions for LTRect
         initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
             notificationPanel.height * -1);
         finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
@@ -122,10 +157,6 @@ public class GameOverRewardMessage : MonoBehaviour {
         //Initialize position for other GUI elements
         titleRect = new Rect(30, 0, 680, 150);
         rewardRect = new Rect(240, 180, 260, 150);
-        yesButtonRect = new Rect(100, 360, 200, 100);
-        noButtonRect = new Rect(450, 360, 200, 100);
-
-        Display();
     }
 
     //Display popup panel

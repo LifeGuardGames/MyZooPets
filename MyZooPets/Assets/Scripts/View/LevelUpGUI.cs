@@ -11,6 +11,6 @@ public class LevelUpGUI : MonoBehaviour {
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){
-        notificationUIManager.PopupImageMessage(LevelUpLogic.AwardedTrophy, null);
+        notificationUIManager.LevelUpMessage(LevelUpLogic.AwardedTrophy, null);
     }
 }

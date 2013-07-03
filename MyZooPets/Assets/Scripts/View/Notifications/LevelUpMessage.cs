@@ -39,18 +39,19 @@ public class LevelUpMessage : MonoBehaviour {
     private const int TITLE_HEIGHT = 150;
     private const int SPACING = 50;
 
-    private Vector2 trophyInitPos;
-    private Vector2 trophyFinalPos;
-    private Rect trophyRect;
+    private Rect titleRect;
+    private Rect leftColumnRect;
+    private Rect rightColumnRect;
+    private Rect buttonRect;
 
     // Use this for initialization
     void Start () {
-        
-        
-        // trophyTextureInitPos = new Vector2(0, 0);
-        // trophyTextureFinalPos = new Vector2(0, 0);
-        // trophyRect = new Rect(0, 0, 0, 0);
-
+        /*
+            titleRect = new Rect(30, 0, 680, 145)
+            leftColumnRect = new Rect(30, 170, 270, 290)
+            rightColumnRect = new Rect(335, 170, 370, 160)
+            buttonRect = new Rect(500, 360, 200, 100)
+        */
     }
 
     void OnGUI(){
@@ -65,13 +66,12 @@ public class LevelUpMessage : MonoBehaviour {
         }
 
         GUI.BeginGroup(panelRect.rect, notificationPanel);
-        GUI.Label(new Rect(SPACING, 0, 
-            panelRect.rect.width - SPACING * 2, TITLE_HEIGHT), message, styleLabel);
+        GUI.Label(titleRect, message, styleLabel);
         
-        GUI.DrawTexture(trophyRect, currentTexture);
-        GUI.Label(new Rect(notificationPanel.width-380, notificationPanel.height-350, 300, 300), trophyMessage, styleMessage);
+        GUI.DrawTexture(leftColumnRect, currentTexture);
+        GUI.Label(rightColumnRect, trophyMessage, styleMessage);
 
-        if(GUI.Button(new Rect(notificationPanel.width-240, notificationPanel.height-120 , 200, 100), "OK")){
+        if(GUI.Button(buttonRect, "OK")){
             if(okButtonClicked != null) okButtonClicked();
             Hide();
         }
@@ -91,9 +91,10 @@ public class LevelUpMessage : MonoBehaviour {
         panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, 
             notificationPanel.height); 
 
-        // trophyInitPos = new Vector2(-400, notificationPanel.height-350);
-        // trophyFinalPos = new Vector2(SPACING, notificationPanel.height-350);
-        trophyRect = new Rect(SPACING, notificationPanel.height-350, 300, 300);
+        titleRect = new Rect(30, 0, 680, 145);
+        leftColumnRect = new Rect(30, 170, 270, 290);
+        rightColumnRect = new Rect(335, 170, 370, 160);
+        buttonRect = new Rect(500, 360, 200, 100);
 
         Display();
     }
@@ -177,7 +178,7 @@ public class LevelUpMessage : MonoBehaviour {
         // }
     }
 
-    // Destroy PopupImageMessage prefab after it's done
+    // Destroy prefab after it's done
     private void DestroyNotificaiton(){
         Destroy(gameObject);
     }

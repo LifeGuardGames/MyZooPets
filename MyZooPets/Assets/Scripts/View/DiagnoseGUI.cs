@@ -5,6 +5,7 @@ public class DiagnoseGUI : MonoBehaviour {
 	
 	public Texture2D txPanel;
 	public GameObject spritePet;
+	public GUISkin skin;
 
 	//stages texture
 	public Texture2D green;
@@ -52,7 +53,7 @@ public class DiagnoseGUI : MonoBehaviour {
     private const float BUTTON_HEIGHT = 150;
 
     //progress bar max value
-    private const int MAX_VALUE = 30;
+    private const int MAX_VALUE = 10;
     private const int BAR_LENGTH = 200;
 
     private const int INHALER_SIZE = 75;
@@ -64,7 +65,7 @@ public class DiagnoseGUI : MonoBehaviour {
 		timerBarLoc = new Vector2(50, 100);
 		timerBarOffset = new Vector2(10, 10);
 
-		timer = 30; //30 seconds game
+		timer = 10; //10 seconds game
 
 		diagnoseFinalPosition = new Vector2(NATIVE_WIDTH/2, NATIVE_HEIGHT+100);
 		diagnoseInitPosition = new Vector2(NATIVE_WIDTH/2, 100);
@@ -99,13 +100,13 @@ public class DiagnoseGUI : MonoBehaviour {
 			if(timer <= 0){
 				isActive = false;
 				HideGUIPanel(false);
-				notificationUIManager.PopupTexture("nice try");
+				RewardNotification(false);
 			}
 		}
 	}
 	
 	void OnGUI(){
-
+		GUI.skin = skin;
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
@@ -117,12 +118,12 @@ public class DiagnoseGUI : MonoBehaviour {
 		//=====Timer progress bar======
 		if(isActive){
 			// GUI.DrawTexture(new Rect(timerBarLoc.x,timerBarLoc.y,100,100), statBarTexture);
-			GUI.Label(new Rect(50, 80, 40, 20), "Timer");
+			GUI.Label(new Rect(50, 80, 200, 100), "Timer");
 			GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y,25,BAR_LENGTH),statBarVerFrame);
-			if(timer > 20){
+			if(timer > 8){
 				GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y+(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
 					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-			}else if(timer > 10){
+			}else if(timer > 5){
 				GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y+(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
 					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
 			}else{
@@ -135,7 +136,6 @@ public class DiagnoseGUI : MonoBehaviour {
 		//=========Diagnose symptoms panel=============
 		GUI.BeginGroup(diagnoseRect.rect, txPanel);
 		GUI.Label(new Rect(0,0, 600, 100), "Diagnose the symptoms!", diagnoseStyle);
-		GUI.Label(new Rect(250, 150, 100, 50), "" + DiagnoseGameLogic.CurrentStage);
 		if(GUI.Button(new Rect(30, 200, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
 			chosenStage = AsthmaStage.OK;
 			Clicked();
@@ -169,7 +169,7 @@ public class DiagnoseGUI : MonoBehaviour {
 					if(Physics.Raycast(myRay,out hit)){
 						if(hit.collider.name == "SpritePet"){
 							isActive = false;
-							notificationUIManager.PopupTexture("award",0, 1000, 0, 0, 0);
+							RewardNotification(true);
 							
 						}else{
 							//return to position
@@ -183,12 +183,6 @@ public class DiagnoseGUI : MonoBehaviour {
 		}
 		//=====================================================================
 
-		//quite game button
-		if(!isActive){
-			if(GUI.Button(new Rect(NATIVE_WIDTH-100, 100, 100, 100), "Quit")){
-				Application.LoadLevel("NewBedRoom");
-			}
-		}
 	}
 
 	//user chose one of the stages, so check it the user is correct
@@ -201,7 +195,7 @@ public class DiagnoseGUI : MonoBehaviour {
 
 				if(chosenStage.Equals(AsthmaStage.OK)){
 					isActive = false;
-					notificationUIManager.PopupTexture("award",0, 1000, 0, 0, 0);
+					RewardNotification(true);
 				}
 				HideGUIPanel(true);
 			}else{
@@ -209,10 +203,27 @@ public class DiagnoseGUI : MonoBehaviour {
 				//nice try notification
 				print("wrong");
 				isActive = false;
-				notificationUIManager.PopupTexture("nice try");
 				HideGUIPanel(false);
+				RewardNotification(false);
 			}
 		}
+	}
+
+	private void RewardNotification(bool moreReward){
+		int rewardStars;
+		int rewardPoints;
+		if(moreReward){
+			rewardStars = 200;
+			rewardPoints = 400;
+		}else{
+			rewardStars = 100;
+			rewardPoints = 100;
+		}
+
+		notificationUIManager.GameOverRewardMessage(rewardStars, rewardPoints,
+			delegate(){
+				Application.LoadLevel("NewBedRoom");
+			});
 	}
 
 	private void ShowInhaler(){

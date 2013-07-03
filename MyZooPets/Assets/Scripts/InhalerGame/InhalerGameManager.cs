@@ -154,7 +154,7 @@ public class InhalerGameManager : MonoBehaviour{
             RemoveFirstTimeFlags();
             gameEnded = true;
             inhalerGameGUI.HideButtons();
-            Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play
+            // Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
 

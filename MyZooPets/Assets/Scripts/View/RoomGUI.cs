@@ -181,6 +181,7 @@ public class RoomGUI : MonoBehaviour {
 	public void HideGUIs(bool hideTop, bool hideLeft, bool hideMenu, bool hideOption){
 		if(hideTop){
 			LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
+			LeanTween.move(starIconRect,new Vector2(555,-100),0.5f);
 		}
 		if(hideLeft){
 			LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
@@ -207,6 +208,7 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
 		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
 		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
+		LeanTween.move(starIconRect,new Vector2(555,5),0.5f);
 
 	}
 
@@ -408,18 +410,18 @@ public class RoomGUI : MonoBehaviour {
 
 		
 		//Testing for Icon pulsing.
-		if(GUI.Button(new Rect(500,500,100,100),"food + 50")){
-			DataManager.AddHunger(50);
-			DataManager.AddHealth(50);
-			DataManager.AddMood(50);
-			DataManager.AddStars(50);
-		}
-		if(GUI.Button(new Rect(500,700,100,100),"food + 50")){
-			DataManager.SubtractHunger(50);
-			DataManager.SubtractMood(50);
-			DataManager.SubtractHealth(50);
-			DataManager.SubtractStars(50);
-		}
+//		if(GUI.Button(new Rect(500,500,100,100),"food + 50")){
+//			DataManager.AddHunger(50);
+//			DataManager.AddHealth(50);
+//			DataManager.AddMood(50);
+//			DataManager.AddStars(50);
+//		}
+//		if(GUI.Button(new Rect(500,700,100,100),"food + 50")){
+//			DataManager.SubtractHunger(50);
+//			DataManager.SubtractMood(50);
+//			DataManager.SubtractHealth(50);
+//			DataManager.SubtractStars(50);
+//		}
 
 		// navigation arrows
         if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){

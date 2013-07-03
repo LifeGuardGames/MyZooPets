@@ -89,16 +89,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 	
 	//Below functions for Icon pulsing.
     public void GrowHealthIcon(){
-    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(80,80),0.2f, optionalGrow1);
+    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(70,70),0.2f, optionalGrow1);
     }
     public void GrowMoodIcon(){
-    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(80,80),0.2f, optionalGrow2);
+    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(70,70),0.2f, optionalGrow2);
     }
 	public void GrowFoodIcon(){
-    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(80,80),0.2f, optionalGrow3);
+    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(70,70),0.2f, optionalGrow3);
     }
     public void GrowStarIcon(){
-    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(80,80),0.2f, optionalGrow4);
+    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(70,70),0.2f, optionalGrow4);
     }
 
     public void ShrinkHealthIcon(){

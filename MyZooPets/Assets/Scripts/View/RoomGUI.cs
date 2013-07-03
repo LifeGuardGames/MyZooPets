@@ -54,6 +54,7 @@ public class RoomGUI : MonoBehaviour {
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
 	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100,1000, 105);
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
+	private LTRect RightArrowRect; // only the x-value is used
 
 	//Positions/Offsets for all GUI elements
 	private Vector2 optionLoc;
@@ -79,6 +80,7 @@ public class RoomGUI : MonoBehaviour {
 	public LTRect foodIconRect;
 	public LTRect healthIconRect;
 	public LTRect moodIconRect;
+	public LTRect starIconRect;
 
 	//inventory
 	private Inventory inventory;
@@ -137,12 +139,24 @@ public class RoomGUI : MonoBehaviour {
 		healthIconRect = new LTRect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,healthIconSize.x,healthIconSize.y);
 		moodIconRect = new LTRect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,healthIconSize.x,healthIconSize.y);
 		foodIconRect = new LTRect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,foodIconSize.x,foodIconSize.y);
+		starIconRect = new LTRect(starBarloc.x + starIconOffset.x,starBarloc.y + starIconOffset.y,60,60);
+
+		RightArrowRect = new LTRect(NATIVE_WIDTH - rightArrow.width, 0, 0, 0); // only the x-value is used
 	}
 
 	void Update(){
 		//don't draw until all data is loaded
 		if(!LoadDataLogic.IsDataLoaded) return;
 
+		//TOP GUI bar location updates
+		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
+		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
+
+		//LEFT GUI bar location updates
+		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
+	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
+	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
+	  	
 		//Data reading from Data Manager
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
@@ -170,12 +184,16 @@ public class RoomGUI : MonoBehaviour {
 		}
 		if(hideLeft){
 			LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
+			LeanTween.move(healthIconRect,new Vector2(-100,100),0.5f);
+			LeanTween.move(moodIconRect,new Vector2(-100,200),0.5f);
+			LeanTween.move(foodIconRect,new Vector2(-100,300),0.5f);
 		}
 		if(hideMenu){
 			LeanTween.move(menuRect,new Vector2(0,850),0.5f);
 		}
 		if(hideOption){
 			LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
+			LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH, 850), 0.5f);
 		}
 	}
 
@@ -185,6 +203,11 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(menuRect,new Vector2(0,700),0.5f);
 		LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
+		LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH - rightArrow.width, 850), 0.5f);
+		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
+		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
+		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
+
 	}
 
 	void OnGUI(){
@@ -211,7 +234,7 @@ public class RoomGUI : MonoBehaviour {
 
 		//Star Bar
 		GUI.DrawTexture(new Rect(starBarloc.x,starBarloc.y,215,75), starBarTexture);
-		GUI.DrawTexture(new Rect(starBarloc.x + starIconOffset.x,starBarloc.y + starIconOffset.y,60,60), starTexture, ScaleMode.ScaleToFit);
+		GUI.DrawTexture(starIconRect.rect, starTexture, ScaleMode.ScaleToFit);
 		GUI.Label(new Rect(starBarloc.x+starTextOffset.x,starBarloc.y+starTextOffset.y,60,60),starCount,starTextStyle);
 
 		//Health Bar
@@ -382,22 +405,27 @@ public class RoomGUI : MonoBehaviour {
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 //		}
-		if(GUI.Button(new Rect(0,0,100,100),"food + 50")){
-			DataManager.AddHunger(50);
-			DataManager.AddHealth(50);
-			DataManager.AddMood(50);
-		}
-		if(GUI.Button(new Rect(500,0,100,100),"food + 50")){
-			DataManager.SubtractHunger(50);
-			DataManager.SubtractMood(50);
-			DataManager.SubtractHealth(50);
-		}
+
+		
+		//Testing for Icon pulsing.
+//		if(GUI.Button(new Rect(500,500,100,100),"food + 50")){
+//			DataManager.AddHunger(50);
+//			DataManager.AddHealth(50);
+//			DataManager.AddMood(50);
+//			DataManager.AddStars(50);
+//		}
+//		if(GUI.Button(new Rect(500,700,100,100),"food + 50")){
+//			DataManager.SubtractHunger(50);
+//			DataManager.SubtractMood(50);
+//			DataManager.SubtractHealth(50);
+//			DataManager.SubtractStars(50);
+//		}
 
 		// navigation arrows
         if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
         	userNavigation.ToTheLeft();
         }
-        if(GUI.Button(new Rect(NATIVE_WIDTH - rightArrow.width, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
         	userNavigation.ToTheRight();
         }
 

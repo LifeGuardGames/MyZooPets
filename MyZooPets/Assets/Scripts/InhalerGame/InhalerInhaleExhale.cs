@@ -6,7 +6,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
     public AudioSource inhale;
     public AudioSource exhale;
     tk2dAnimatedSprite arrows;
-    GameObject breatheMessageObj;
+    public GameObject breatheMessageObj;
     float firstTouchYPos;
     bool firstTouchOnObject = false;
     bool completedGame = false;
@@ -17,7 +17,6 @@ public class InhalerInhaleExhale : MonoBehaviour {
 	void Start () {
         inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
         arrows = GetComponent<tk2dAnimatedSprite>();
-        breatheMessageObj = GameObject.Find("BreatheMessage");
         Disable();
 
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){

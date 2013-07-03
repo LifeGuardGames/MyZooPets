@@ -12,24 +12,26 @@ public abstract class UserNavigation : MonoBehaviour {
 
     // function to pass to Swipe Listener
     protected void OnSwipeDetected(Swipe s){
-        switch (s){
-            // case Swipe.Up:
-            // print("Swipe.Up");
-            // break;
+        // disabled swipe
 
-            // case Swipe.Down:
-            // print("Swipe.Down");
-            // break;
+        // switch (s){
+        //     // case Swipe.Up:
+        //     // print("Swipe.Up");
+        //     // break;
 
-            case Swipe.Left:
-            print("Swipe.Left");
-            ToTheLeft();
-            break;
+        //     // case Swipe.Down:
+        //     // print("Swipe.Down");
+        //     // break;
 
-            case Swipe.Right:
-            print("Swipe.Right");
-            ToTheRight();
-            break;
-        }
+        //     case Swipe.Left:
+        //     print("Swipe.Left");
+        //     ToTheLeft();
+        //     break;
+
+        //     case Swipe.Right:
+        //     print("Swipe.Right");
+        //     ToTheRight();
+        //     break;
+        // }
     }
 }

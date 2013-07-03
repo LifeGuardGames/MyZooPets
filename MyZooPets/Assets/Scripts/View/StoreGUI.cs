@@ -19,7 +19,7 @@ public class StoreGUI : MonoBehaviour {
 	private Vector2 bgLoc = new Vector2(100, 90);
 	private Vector2 tabLoc = new Vector2(130, 120);
 	private Vector2 tabSize = new Vector2(1120, 550);
-	private Vector2 backButtonLoc = new Vector2(40, 440);
+	private Vector2 backButtonLoc = new Vector2(40, 100);
 	private Vector2 menuItem1Loc;
 	private Vector2 menuItem2Loc;
 
@@ -30,12 +30,14 @@ public class StoreGUI : MonoBehaviour {
 	private float slideValue= 0;
 	private ItemLogic itemlogic;
 	private Inventory inventory;
+	private RoomGUI roomgui;
 	private	List<int> categoryList = new List<int>();
 
 
 	void Start(){
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 		inventory =  GameObject.Find("GameManager").GetComponent<Inventory>();
+		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
 	}
 
 	void Update(){
@@ -67,6 +69,8 @@ public class StoreGUI : MonoBehaviour {
 		if(StoreGUIOn){
 			ClickManager.ModeLock();
 			ClickManager.ClickLock();
+			
+			roomgui.HideGUIs(false,true,false,true);
 			GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, 600), backgroundTexture);
 
 			if(storePage == 1){
@@ -115,6 +119,7 @@ public class StoreGUI : MonoBehaviour {
 				hideStore();
 				ClickManager.ReleaseClickLock();
 				ClickManager.ReleaseModeLock();
+				roomgui.ShowGUIs();
 			}
 			
 			

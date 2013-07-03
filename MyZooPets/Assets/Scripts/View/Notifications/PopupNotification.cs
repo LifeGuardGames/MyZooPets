@@ -12,14 +12,17 @@ public class PopupNotification : MonoBehaviour {
     private Vector2 initPosition;
     private Vector2 finalPosition;
 
+    private Rect infoRect;
+    private Rect centerButtonRect;
+    private Rect leftButtonRect;
+    private Rect rightButtonRect;
+
 	// Styles
 	public GUIStyle styleLabel;
-	public GUIStyle styleButton;
 
     // Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-
 
     // Delegate method for buttons
     // Will be called when buttons are clicked
@@ -42,26 +45,26 @@ public class PopupNotification : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
         }
 
-		GUI.DrawTexture(panelRect.rect, notificationPanel);
-		GUI.Label(new Rect(panelRect.rect.x + 50, panelRect.rect.y + 50, panelRect.rect.width - 100, 300), message, styleLabel);
+		GUI.BeginGroup(panelRect.rect, notificationPanel);
+		GUI.Label(infoRect, message, styleLabel);
 
         if (notificationType == NotificationType.YesNo){
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 - 225, panelRect.rect.y + 350, 200, 100), "Yes")){
+            if(GUI.Button(leftButtonRect, "Yes")){
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }
 
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 + 25, panelRect.rect.y + 350, 200, 100), "Ignore")){
+            if(GUI.Button(rightButtonRect, "Ignore")){
                 if(noButtonClicked != null) noButtonClicked();
                 Hide();
             }
-        }
-        else if (notificationType == NotificationType.OK){
-            if(GUI.Button(new Rect(panelRect.rect.x + panelRect.rect.width/2 - 100, panelRect.rect.y + 350, 200, 100), "Yes")){
+        }else if (notificationType == NotificationType.OK){
+            if(GUI.Button(centerButtonRect, "Yes")){
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }
         }
+        GUI.EndGroup();
     }
 
     //Initialize for 2 button popup
@@ -71,10 +74,10 @@ public class PopupNotification : MonoBehaviour {
         yesButtonClicked = yesButton;
         noButtonClicked = noButton;
 
-        // Initialize positions for LTRect
-        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, notificationPanel.height * -1);
-        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
-        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, notificationPanel.height);
+        InitializeGUIPosition();
+        leftButtonRect = new Rect(90, 350, 200, 100);
+        rightButtonRect = new Rect(450, 350, 200, 100);
+
         Display();
     }
 
@@ -84,11 +87,22 @@ public class PopupNotification : MonoBehaviour {
         this.message = message;
         yesButtonClicked = yesButton;
 
-        // Initialize positions for LTRect
-        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, notificationPanel.height * -1);
-        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
-        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, notificationPanel.height);
+        InitializeGUIPosition();
+        centerButtonRect = new Rect(270, 350, 200, 100);
+
         Display();
+    }
+
+    private void InitializeGUIPosition(){
+        // Initialize positions for LTRect
+        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
+            notificationPanel.height * -1);
+        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
+            NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
+        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, 
+            notificationPanel.height);
+
+        infoRect = new Rect(90, 50, 560, 260);
     }
 
     // Display the popup panel
@@ -96,7 +110,6 @@ public class PopupNotification : MonoBehaviour {
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
         LeanTween.move(panelRect, finalPosition, 1.0f, optional);
-        Handheld.Vibrate();
     }
 
     // Hide the popup panel

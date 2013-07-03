@@ -26,13 +26,24 @@ public class NotificationTest : MonoBehaviour {
         //level up notification
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
             "level up")){
-            notificationUIManager.PopupImageMessage(TrophyTier.Bronze, null);
+            notificationUIManager.LevelUpMessage(TrophyTier.Bronze, null);
         }
 
         //popup texture "great"
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*2, BUTTON_WIDTH, BUTTON_HEIGHT),
             "great")){
             notificationUIManager.PopupTexture("great");
+        }
+
+        //game over reward
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "GG Reward")){
+            notificationUIManager.GameOverRewardMessage(1000, 0, null, null);
+        }
+
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT), 
+            "two button")){
+            notificationUIManager.PopupNotification("testing", null, null);
         }
     }
 }

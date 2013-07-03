@@ -14,9 +14,10 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureNiceTry;
 	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupAward;
-	public GameObject popupSpeech;
+
 	public GameObject popupNotification;
 	public GameObject levelUpMessage;
+	public GameObject gameOverRewardMessage;
 	public bool flipped;
 
 	//
@@ -31,6 +32,7 @@ public class NotificationUIManager : MonoBehaviour {
 				cameraObject.transform.position.y - 1f, cameraObject.transform.position.z - 4f);
 		}
 	}
+	//========================Deprecated===================================
 
 	/*
 		Desc: creates a popup with a texture and stats that have been modified
@@ -60,7 +62,7 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 
 	}
-
+	//==========================================================
 	/*
 		Desc: creates a popup with only a texture
 		Params: notificationType
@@ -84,7 +86,7 @@ public class NotificationUIManager : MonoBehaviour {
 			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
 			Destroy(go, 3.0f);
 		}
-	}
+	}	
 
 	/*
 		Desc: creates popup that has a popup texture and 2 buttons
@@ -117,7 +119,7 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that shows an image of the trophy, along with a corresponding message
 		Params: trophy, call back for button
 	*/
-	public void PopupImageMessage(TrophyTier trophy, LevelUpMessage.OnButtonClicked okCallBack){
+	public void LevelUpMessage(TrophyTier trophy, LevelUpMessage.OnButtonClicked okCallBack){
 
 		GameObject go = Instantiate(levelUpMessage, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
@@ -127,7 +129,19 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 	}
 
-	public void PopupSpeechBubble(){
+	/*
+		Desc: creates a popup that can be used at the end of a game to show points rewarded
+		Params: stars, points, play again button call back, quit button call back
+	*/
+	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
+		GameOverRewardMessage.OnButtonClicked yesButtonCallBack, 
+		GameOverRewardMessage.OnButtonClicked noButtonCallBack){
 
+		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position, 
+			Quaternion.identity) as GameObject;
+		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
+		if(script != null){
+			script.Init(deltaStars, deltaPoints, yesButtonCallBack, noButtonCallBack);
+		}
 	}
 }

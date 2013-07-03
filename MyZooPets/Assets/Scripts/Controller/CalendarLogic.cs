@@ -47,6 +47,21 @@ public static class CalendarLogic{
         CalendarOpenedOnDate(DateTime.Now);
     }
 
+    public static bool HasCheckedCalendar{
+        get{
+            TimeSpan sinceLastPlayed = DateTime.Now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
+            if (sinceLastPlayed.Days == 0){ // same day
+                if (DateTime.Now.Hour < 12){ // morning
+                    return lastEntry.OpenedInMorning;
+                }
+                else { // afternoon
+                    return lastEntry.OpenedInAfternoon;
+                }
+            }
+            return false;
+        }
+    }
+
     //get today's entry
     public static bool IsThereMissDosageToday{
         get{

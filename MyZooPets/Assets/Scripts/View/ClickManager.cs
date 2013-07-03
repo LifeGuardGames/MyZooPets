@@ -113,9 +113,26 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
-			cameraMove.RealInhalerZoomToggle();
-			ClickLock();
-			ModeLock();
+			if (CalendarLogic.HasCheckedCalendar){
+				if (CalendarLogic.IsThereMissDosageToday){
+					cameraMove.RealInhalerZoomToggle();
+					ClickLock();
+					ModeLock();
+				}
+				else {
+					notificationUIManager.PopupNotification(
+						"I don't need this right now.",
+						delegate(){}
+					);
+				}
+			}
+			else {
+				notificationUIManager.PopupNotification(
+					"I don't know if I need this now. Open calendar?",
+					calendarGUI.CalendarClicked,
+					delegate(){}
+				);
+			}
 		}
 	}
 	void OnTapTeddyInhaler(){

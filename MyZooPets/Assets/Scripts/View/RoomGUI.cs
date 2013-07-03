@@ -79,6 +79,7 @@ public class RoomGUI : MonoBehaviour {
 	public LTRect foodIconRect;
 	public LTRect healthIconRect;
 	public LTRect moodIconRect;
+	public LTRect starIconRect;
 
 	//inventory
 	private Inventory inventory;
@@ -137,6 +138,7 @@ public class RoomGUI : MonoBehaviour {
 		healthIconRect = new LTRect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,healthIconSize.x,healthIconSize.y);
 		moodIconRect = new LTRect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,healthIconSize.x,healthIconSize.y);
 		foodIconRect = new LTRect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,foodIconSize.x,foodIconSize.y);
+		starIconRect = new LTRect(starBarloc.x + starIconOffset.x,starBarloc.y + starIconOffset.y,60,60);
 	}
 
 	void Update(){
@@ -227,7 +229,7 @@ public class RoomGUI : MonoBehaviour {
 
 		//Star Bar
 		GUI.DrawTexture(new Rect(starBarloc.x,starBarloc.y,215,75), starBarTexture);
-		GUI.DrawTexture(new Rect(starBarloc.x + starIconOffset.x,starBarloc.y + starIconOffset.y,60,60), starTexture, ScaleMode.ScaleToFit);
+		GUI.DrawTexture(starIconRect.rect, starTexture, ScaleMode.ScaleToFit);
 		GUI.Label(new Rect(starBarloc.x+starTextOffset.x,starBarloc.y+starTextOffset.y,60,60),starCount,starTextStyle);
 
 		//Health Bar
@@ -398,16 +400,21 @@ public class RoomGUI : MonoBehaviour {
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 //		}
-		if(GUI.Button(new Rect(0,0,100,100),"food + 50")){
-			DataManager.AddHunger(50);
-			DataManager.AddHealth(50);
-			DataManager.AddMood(50);
-		}
-		if(GUI.Button(new Rect(500,0,100,100),"food + 50")){
-			DataManager.SubtractHunger(50);
-			DataManager.SubtractMood(50);
-			DataManager.SubtractHealth(50);
-		}
+
+		
+		//Testing for Icon pulsing.
+//		if(GUI.Button(new Rect(500,500,100,100),"food + 50")){
+//			DataManager.AddHunger(50);
+//			DataManager.AddHealth(50);
+//			DataManager.AddMood(50);
+//			DataManager.AddStars(50);
+//		}
+//		if(GUI.Button(new Rect(500,700,100,100),"food + 50")){
+//			DataManager.SubtractHunger(50);
+//			DataManager.SubtractMood(50);
+//			DataManager.SubtractHealth(50);
+//			DataManager.SubtractStars(50);
+//		}
 
 		// navigation arrows
         if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){

@@ -35,15 +35,19 @@ public class RoomGUIAnimator : MonoBehaviour {
 	private bool IconSwitch1 = true;
 	private bool IconSwitch2 = true;
 	private bool IconSwitch3 = true;
+	private bool IconSwitch4 = true;
 	private int leantween1;
 	private int leantween2;
 	private int leantween3;
+	private int leantween4;
 	Hashtable optionalGrow1 = new Hashtable();
 	Hashtable optionalGrow2 = new Hashtable();
 	Hashtable optionalGrow3 = new Hashtable();
+	Hashtable optionalGrow4 = new Hashtable();
     Hashtable optionalShrink1 = new Hashtable();
     Hashtable optionalShrink2 = new Hashtable();
     Hashtable optionalShrink3 = new Hashtable();
+    Hashtable optionalShrink4 = new Hashtable();
 	
 	
 	public void Init()
@@ -68,15 +72,19 @@ public class RoomGUIAnimator : MonoBehaviour {
 		optionalGrow1.Add("onCompleteTarget", gameObject);	
 		optionalGrow2.Add("onCompleteTarget", gameObject);	
 		optionalGrow3.Add("onCompleteTarget", gameObject);	
+		optionalGrow4.Add("onCompleteTarget", gameObject);	
 		optionalShrink1.Add("onCompleteTarget", gameObject);
 		optionalShrink2.Add("onCompleteTarget", gameObject);
 		optionalShrink3.Add("onCompleteTarget", gameObject);
+		optionalShrink4.Add("onCompleteTarget", gameObject);
     	optionalGrow1.Add("onComplete", "ShrinkHealthIcon");
     	optionalGrow2.Add("onComplete", "ShrinkMoodIcon");
     	optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
+    	optionalGrow4.Add("onComplete", "ShrinkStarIcon");
         optionalShrink1.Add("onComplete", "GrowHealthIcon");
         optionalShrink2.Add("onComplete", "GrowMoodIcon");
         optionalShrink3.Add("onComplete", "GrowFoodIcon");
+        optionalShrink4.Add("onComplete", "GrowStarIcon");
 	}
 	
 	//Below functions for Icon pulsing.
@@ -89,6 +97,9 @@ public class RoomGUIAnimator : MonoBehaviour {
 	public void GrowFoodIcon(){
     	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(80,80),0.2f, optionalGrow3);
     }
+    public void GrowStarIcon(){
+    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(80,80),0.2f, optionalGrow4);
+    }
 
     public void ShrinkHealthIcon(){
     	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink1);
@@ -98,6 +109,9 @@ public class RoomGUIAnimator : MonoBehaviour {
     }
 	public void ShrinkFoodIcon(){
     	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink3);
+    }
+    public void ShrinkStarIcon(){
+    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.2f, optionalShrink4);
     }
 	
 	
@@ -137,9 +151,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayStars < DataManager.Stars){
 				displayStars++;
+				if(IconSwitch4){
+					GrowStarIcon();
+					IconSwitch4 = false;
+				}
 			}
 			else{
-				dataStars = DataManager.Stars;	
+				dataStars = DataManager.Stars;
+				LeanTween.cancel(LeanTween.TweenEmpty,leantween4);
+				LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.1f);
+				IconSwitch4 = true;
 			}
 		}
 

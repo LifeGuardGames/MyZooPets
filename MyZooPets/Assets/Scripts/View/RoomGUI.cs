@@ -137,6 +137,15 @@ public class RoomGUI : MonoBehaviour {
 		//don't draw until all data is loaded
 		if(!LoadDataLogic.IsDataLoaded) return;
 
+		//TOP GUI bar location updates
+		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
+		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
+
+		//LEFT GUI bar location updates
+		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
+	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
+	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
+	  	
 		//Data reading from Data Manager
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
@@ -164,6 +173,9 @@ public class RoomGUI : MonoBehaviour {
 		}
 		if(hideLeft){
 			LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
+			LeanTween.move(healthIconRect,new Vector2(-100,100),0.5f);
+			LeanTween.move(moodIconRect,new Vector2(-100,200),0.5f);
+			LeanTween.move(foodIconRect,new Vector2(-100,300),0.5f);
 		}
 		if(hideMenu){
 			LeanTween.move(menuRect,new Vector2(0,850),0.5f);
@@ -179,6 +191,10 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(menuRect,new Vector2(0,700),0.5f);
 		LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
+		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
+		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
+		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
+
 	}
 
 	void OnGUI(){

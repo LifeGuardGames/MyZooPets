@@ -29,13 +29,22 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 	private Level lastLevel; //pet's last level
 	private RoomGUI roomgui;
-	private bool IconSwitch = true;
-	private int leantweencurrent;
-	Hashtable optionalGrow = new Hashtable();
-    Hashtable optionalShrink = new Hashtable();
-	private bool IconHealthSwitch;
-	private bool IconMoodSwitch;
-	private bool IconFoodSwitch;
+	
+	//Below are for Icon pulsing.
+	//Each 1 2 3, coorespond to Health, Mood, Food
+	private bool IconSwitch1 = true;
+	private bool IconSwitch2 = true;
+	private bool IconSwitch3 = true;
+	private int leantween1;
+	private int leantween2;
+	private int leantween3;
+	Hashtable optionalGrow1 = new Hashtable();
+	Hashtable optionalGrow2 = new Hashtable();
+	Hashtable optionalGrow3 = new Hashtable();
+    Hashtable optionalShrink1 = new Hashtable();
+    Hashtable optionalShrink2 = new Hashtable();
+    Hashtable optionalShrink3 = new Hashtable();
+	
 	
 	public void Init()
 	{
@@ -55,33 +64,47 @@ public class RoomGUIAnimator : MonoBehaviour {
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
 		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
 		
-		optionalGrow.Add("onCompleteTarget", gameObject);	
-		optionalShrink.Add("onCompleteTarget", gameObject);
-    	optionalGrow.Add("onComplete", "Shrink");
-        optionalShrink.Add("onComplete", "Grow");
+		//Had to make 3 hashtable for each icon pulsing
+		optionalGrow1.Add("onCompleteTarget", gameObject);	
+		optionalGrow2.Add("onCompleteTarget", gameObject);	
+		optionalGrow3.Add("onCompleteTarget", gameObject);	
+		optionalShrink1.Add("onCompleteTarget", gameObject);
+		optionalShrink2.Add("onCompleteTarget", gameObject);
+		optionalShrink3.Add("onCompleteTarget", gameObject);
+    	optionalGrow1.Add("onComplete", "ShrinkHealthIcon");
+    	optionalGrow2.Add("onComplete", "ShrinkMoodIcon");
+    	optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
+        optionalShrink1.Add("onComplete", "GrowHealthIcon");
+        optionalShrink2.Add("onComplete", "GrowMoodIcon");
+        optionalShrink3.Add("onComplete", "GrowFoodIcon");
 	}
 	
-    public void Grow(){
-//		if(IconHealthSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.healthIconRect,new Vector2(80,80),0.2f, optionalGrow);
-//    	if(IconMoodSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.moodIconRect,new Vector2(80,80),0.2f, optionalGrow);
-//    	if(IconFoodSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.foodIconRect,new Vector2(80,80),0.2f, optionalGrow);
+	//Below functions for Icon pulsing.
+    public void GrowHealthIcon(){
+    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(80,80),0.2f, optionalGrow1);
+    }
+    public void GrowMoodIcon(){
+    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(80,80),0.2f, optionalGrow2);
+    }
+	public void GrowFoodIcon(){
+    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(80,80),0.2f, optionalGrow3);
     }
 
-    public void Shrink(){
-//    	if(IconHealthSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink);
-//    	if(IconMoodSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink);
-//    	if(IconFoodSwitch)
-    	leantweencurrent = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink);
+    public void ShrinkHealthIcon(){
+    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink1);
     }
+    public void ShrinkMoodIcon(){
+    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink2);
+    }
+	public void ShrinkFoodIcon(){
+    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink3);
+    }
+	
+	
     
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
-
+		
 		//Points 
 		if(dataPoints != DataManager.Points){
 			if(displayPoints < DataManager.Points){ //animate 
@@ -127,18 +150,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayHealth < DataManager.Health){
 				displayHealth++;
-				if(IconSwitch){
-					IconHealthSwitch = true;
-					Grow();
-					IconSwitch = false;				
+				if(IconSwitch1){
+					GrowHealthIcon();
+					IconSwitch1 = false;				
 				}
 			}
 			else{
 				dataHealth = DataManager.Health;
-				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
 				LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.1f);
-				IconSwitch = true;
-				IconHealthSwitch = false;
+				IconSwitch1 = true;
 			}
 		}
 
@@ -149,18 +170,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayMood < DataManager.Mood){
 				displayMood++;
-				if(IconSwitch){
-					IconMoodSwitch = true;
-					Grow();
-					IconSwitch = false;				
+				if(IconSwitch2){
+					GrowMoodIcon();
+					IconSwitch2 = false;				
 				}
 			}
 			else{
 				dataMood = DataManager.Mood;	
-				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.cancel(LeanTween.TweenEmpty,leantween2);
 				LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.1f);
-				IconMoodSwitch = false;
-				IconSwitch = true;
+				IconSwitch2 = true;
 			}
 		}
 
@@ -171,18 +190,16 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayHunger < DataManager.Hunger){
 				displayHunger++;
-				if(IconSwitch){
-					IconFoodSwitch = true;
-					Grow();
-					IconSwitch = false;				
+				if(IconSwitch3){
+					GrowFoodIcon();
+					IconSwitch3 = false;				
 				}
 			}
 			else{
 				dataHunger = DataManager.Hunger;
-				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.cancel(LeanTween.TweenEmpty,leantween3);
 				LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.1f);
-				IconFoodSwitch = false;
-				IconSwitch = true;
+				IconSwitch3 = true;
 			}
 		}
 	}

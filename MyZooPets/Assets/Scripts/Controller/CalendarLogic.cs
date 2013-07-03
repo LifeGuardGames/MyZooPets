@@ -5,6 +5,9 @@ using System;
 
 public static class CalendarLogic{
 
+    public static int PointIncrement = 250;
+    public static int StarIncrement = 0;
+
     private static System.Random rand = new System.Random();
     private static CalendarEntry lastEntry; //today's entry
     private static List<CalendarEntry> tempEntries;
@@ -46,9 +49,9 @@ public static class CalendarLogic{
 
     //get today's entry
     public static bool IsThereMissDosageToday{
-        get{    
+        get{
             bool retVal = false;
-            if(lastEntry != null) retVal = lastEntry.Morning.Equals(DosageRecord.Miss) || 
+            if(lastEntry != null) retVal = lastEntry.Morning.Equals(DosageRecord.Miss) ||
             lastEntry.Afternoon.Equals(DosageRecord.Miss);
             return retVal;
         }
@@ -230,7 +233,7 @@ public static class CalendarLogic{
         if (now.Hour < 12){
             if (lastEntry.CalculatedInMorning == false){
                 if (lastEntry.Morning == DosageRecord.Hit){
-                    DataManager.AddPoints(250);
+                    DataManager.AddPoints(PointIncrement);
 
                     // Combo
                     DataManager.IncrementCalendarCombo();
@@ -256,7 +259,7 @@ public static class CalendarLogic{
 
             if (lastEntry.CalculatedInAfternoon == false && lastEntry.OpenedInAfternoon == true){
                 if (lastEntry.Afternoon == DosageRecord.Hit){
-                    DataManager.AddPoints(250);
+                    DataManager.AddPoints(PointIncrement);
 
                     // Combo
                     DataManager.IncrementCalendarCombo();

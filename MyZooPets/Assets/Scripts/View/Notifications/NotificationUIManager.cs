@@ -131,7 +131,8 @@ public class NotificationUIManager : MonoBehaviour {
 
 	/*
 		Desc: creates a popup that can be used at the end of a game to show points rewarded
-		Params: stars, points, play again button call back, quit button call back
+		Params: stars, points, yes button call back, no button call back
+		Note: pass in 0 for stars or points will result in the gui not showing up
 	*/
 	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
 		GameOverRewardMessage.OnButtonClicked yesButtonCallBack, 
@@ -143,5 +144,21 @@ public class NotificationUIManager : MonoBehaviour {
 		if(script != null){
 			script.Init(deltaStars, deltaPoints, yesButtonCallBack, noButtonCallBack);
 		}
+	}
+
+	/*
+		Desc: creates a popup reward message that only has one button(exiting button)
+		Params: stars, points, yes button call back
+	*/
+	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
+		GameOverRewardMessage.OnButtonClicked yesButtonCallBack){
+
+		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position, 
+			Quaternion.identity) as GameObject;
+		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
+		if(script != null){
+			script.Init(deltaStars, deltaPoints, yesButtonCallBack);
+		}
+
 	}
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class HorizontalSlideInYard : MonoBehaviour {
+public class HorizontalSlideInYard : UserNavigation {
 
     float currentXPos;
     public float slideIncrement = 40f;
@@ -20,7 +20,7 @@ public class HorizontalSlideInYard : MonoBehaviour {
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
     }
 
-    public void SlideRight(){
+    public override void ToTheRight(){
         if (!lockSlide){
             // if (ClickManager.CanRespondToTap()){
                 lockSlide = true;
@@ -30,7 +30,7 @@ public class HorizontalSlideInYard : MonoBehaviour {
         }
     }
 
-    public void SlideLeft(){
+    public override void ToTheLeft(){
         if (!lockSlide){
             // if (ClickManager.CanRespondToTap()){
                 lockSlide = true;
@@ -45,26 +45,5 @@ public class HorizontalSlideInYard : MonoBehaviour {
         currentXPos = transform.position.x;
     }
 
-    // function to pass to Swipe Listener
-    void OnSwipeDetected(Swipe s){
-        switch (s){
-            // case Swipe.Up:
-            // print("Swipe.Up");
-            // break;
 
-            // case Swipe.Down:
-            // print("Swipe.Down");
-            // break;
-
-            case Swipe.Left:
-            print("Swipe.Left");
-            SlideLeft();
-            break;
-
-            case Swipe.Right:
-            print("Swipe.Right");
-            SlideRight();
-            break;
-        }
-    }
 }

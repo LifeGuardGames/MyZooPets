@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class RotateInRoom : MonoBehaviour {
+public class RotateInRoom : UserNavigation {
 
     float currentYRotation;
     public float rotationIncrement = 72;
@@ -20,7 +20,7 @@ public class RotateInRoom : MonoBehaviour {
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
 	}
 
-    public void RotateRight(){
+    public override void ToTheRight(){
         if (!lockRotation){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
@@ -30,7 +30,7 @@ public class RotateInRoom : MonoBehaviour {
         }
     }
 
-    public void RotateLeft(){
+    public override void ToTheLeft(){
         if (!lockRotation){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
@@ -45,25 +45,4 @@ public class RotateInRoom : MonoBehaviour {
         currentYRotation = transform.eulerAngles.y; // normalize angle
     }
 
-    void OnSwipeDetected(Swipe s){
-        switch (s){
-            // case Swipe.Up:
-            // print("Swipe.Up");
-            // break;
-
-            // case Swipe.Down:
-            // print("Swipe.Down");
-            // break;
-
-            case Swipe.Left:
-            print("Swipe.Left");
-            RotateLeft();
-            break;
-
-            case Swipe.Right:
-            print("Swipe.Right");
-            RotateRight();
-            break;
-        }
-    }
 }

@@ -67,17 +67,25 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	public void DisplayMessage(){
 		// notificationUIManager.PopupTexture("great");
-		notificationUIManager.GameOverRewardMessage(
-			CalendarLogic.StarIncrement,
-			CalendarLogic.PointIncrement,
-			// GameOverRewardMessage.OnButtonClicked yesButtonCallBack,
-			// GameOverRewardMessage.OnButtonClicked noButtonCallBack
-			delegate (){
-				inhalerGameManager.ResetInhalerGame();
-				RestartProgressBar();
-			},
-			QuitInhalerGame
-		);
+		if (inhalerGameManager.isPracticeGame){
+			notificationUIManager.GameOverRewardMessage(
+				0,
+				0,
+				delegate (){
+					inhalerGameManager.ResetInhalerGame();
+					RestartProgressBar();
+				},
+				QuitInhalerGame
+			);
+		}
+		else {
+			notificationUIManager.GameOverRewardMessage(
+				CalendarLogic.StarIncrement,
+				CalendarLogic.PointIncrement,
+				QuitInhalerGame
+			);
+
+		}
 	}
 
 	void SetNumOfNodes(){

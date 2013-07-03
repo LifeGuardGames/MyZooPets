@@ -45,5 +45,10 @@ public class NotificationTest : MonoBehaviour {
             "two button")){
             notificationUIManager.PopupNotification("testing", null, null);
         }
+
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*5, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "1 button GG")){
+            notificationUIManager.GameOverRewardMessage(1000, 10000, null);
+        }
     }
 }

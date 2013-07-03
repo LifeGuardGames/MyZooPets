@@ -145,6 +145,8 @@ public class GameOverRewardMessage : MonoBehaviour {
         InitializeGUIPosition();
 
         centerButtonRect = new Rect(270, 360, 200, 100);
+
+        Display();
     }
 
     private void InitializeGUIPosition(){

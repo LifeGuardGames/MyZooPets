@@ -116,13 +116,13 @@ public class PopupNotification : MonoBehaviour {
     private void Hide(){
         Hashtable optional = new Hashtable();
         optional.Add("onCompleteTarget", gameObject);
-        optional.Add("onComplete", "DestroyNotificaiton");
+        optional.Add("onComplete", "DestroyNotification");
         optional.Add("ease", LeanTweenType.easeInOutQuad);
         LeanTween.move(panelRect, initPosition, 0.5f, optional);
     }
 
     // Destroy PopupNotification prefab after it's done
-    private void DestroyNotificaiton(){
+    private void DestroyNotification(){
         Destroy(gameObject);
     }
 

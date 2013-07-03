@@ -14,6 +14,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	void Start () {
 	   notificationUIManager = GameObject.Find("Main Camera/NotificationUIManager").GetComponent<NotificationUIManager>();
         timer = timeInterval;
+        turnOffDiagnoseTimer = true;
 	}
 
 	// Update is called once per frame
@@ -27,6 +28,11 @@ public class DiagnoseTimerLogic : MonoBehaviour {
             turnOffDiagnoseTimer = true;
         }
 	}
+
+    public void Init(){
+        timer = timeInterval;
+        turnOffDiagnoseTimer = false;
+    }
 
     private void SendNotification(){
         notificationUIManager.PopupNotification("Your pet is not feeling well! It needs your help!",

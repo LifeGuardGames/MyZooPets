@@ -17,6 +17,7 @@ public class LoadDataLogic : MonoBehaviour {
     private PetMovement petMovement; //reference to ...logic?
     private CameraMove cameraMove; //reference to ...logic?
     private Tutorial tutorial; //reference to... logic?
+    private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickmanager;
 
     void Awake(){
@@ -29,7 +30,7 @@ public class LoadDataLogic : MonoBehaviour {
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
         //==============================================================================
-        print(Application.loadedLevelName);
+        
         //different things to load for different scenes
         if(Application.loadedLevelName == "NewBedRoom"){ //Bedroom specific references
             calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
@@ -38,6 +39,7 @@ public class LoadDataLogic : MonoBehaviour {
             levelUpLogic = GameObject.Find("GameManager").GetComponent<LevelUpLogic>();
             degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
             tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
+            diagnoseTimerLogic = GameObject.Find("GameManager").GetComponent<DiagnoseTimerLogic>();
             petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
             clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 
@@ -45,7 +47,6 @@ public class LoadDataLogic : MonoBehaviour {
                 FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
             }else{ //if first time set call back and wait for the hatching animation to finish
                 FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
-
             }
         }else if(Application.loadedLevelName == "Yard"){ //Yard specific references
             InitializeDataForUI();
@@ -72,11 +73,10 @@ public class LoadDataLogic : MonoBehaviour {
             tutorial.Init();
             petMovement.Init();
             clickmanager.Init();
+            diagnoseTimerLogic.Init();
         }else if(Application.loadedLevelName == "Yard"){ //Yard specific gameobjects
 
         }
         IsDataLoaded = true;
-		//hatching gives 500 stars
-        //DataManager.AddStars(500);
     }
 }

@@ -73,7 +73,6 @@ public class InhalerGameGUI : MonoBehaviour {
 			// GameOverRewardMessage.OnButtonClicked yesButtonCallBack,
 			// GameOverRewardMessage.OnButtonClicked noButtonCallBack
 			delegate (){
-				print("yes delegate");
 				inhalerGameManager.ResetInhalerGame();
 				RestartProgressBar();
 			},
@@ -196,7 +195,6 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	void QuitInhalerGame(){
-		print("no delegate");
         RestartProgressBar();
         Application.LoadLevel("NewBedRoom");
     }

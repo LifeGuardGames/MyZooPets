@@ -5,7 +5,7 @@ public class HorizontalSlideInYard : UserNavigation {
 
     float currentXPos;
     public float slideIncrement = 40f;
-    bool inverse = true;
+    public bool inverse = false;
     Hashtable optional = new Hashtable();
     bool lockSlide = false;
     // Use this for initialization

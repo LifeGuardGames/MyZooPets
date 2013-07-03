@@ -5,7 +5,7 @@ public class RotateInRoom : UserNavigation {
 
     float currentYRotation;
     public float rotationIncrement = 72;
-    bool inverse = true;
+    public bool inverse = false;
     Hashtable optional = new Hashtable();
     bool lockRotation;
 

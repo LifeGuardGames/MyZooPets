@@ -71,18 +71,24 @@ public class RoomGUI : MonoBehaviour {
 	private Vector2 moodBarOffset = new Vector2(60, 15);
 	private Vector2 foodIconOffset = new Vector2(3, 20);
 	private Vector2 foodbarOffset = new Vector2(60, 15);
-	private Vector2 progressBarOffset = new Vector2(150, 11); 
+	private Vector2 progressBarOffset = new Vector2(150, 11);
 	private Vector2 progressTextOffset = new Vector2(230, 12);
 	public Vector2 healthIconSize = new Vector2(60,60);
 	public Vector2 moodIconSize = new Vector2(60,60);
 	public Vector2 foodIconSize = new Vector2(60,60);
-	public LTRect foodIconRect; 
+	public LTRect foodIconRect;
 	public LTRect healthIconRect;
 	public LTRect moodIconRect;
-	
+
 	//inventory
 	private Inventory inventory;
 	private ItemLogic itemlogic;
+
+	//navigation arrows
+	public GUIStyle blankButtonStyle;
+	public Texture2D leftArrow;
+	public Texture2D rightArrow;
+	public UserNavigation userNavigation;
 
 	//MISC
 	private bool isMenuExpanded = true;
@@ -118,7 +124,7 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.displayHealth;
 	//preset item menu
 		optionLoc = new Vector2(NATIVE_WIDTH/2 - optionMenuTexture.width/2, NATIVE_HEIGHT/2 - optionMenuTexture.height/2);
-		
+
 		//TOP GUI bar location updates
 		tierBarloc = new Vector2(TopGuiRect.rect.x+ 0,TopGuiRect.rect.y+ 2);
 		starBarloc = new Vector2(TopGuiRect.rect.x + 540,TopGuiRect.rect.y + 2);
@@ -127,7 +133,7 @@ public class RoomGUI : MonoBehaviour {
 		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
 	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
 	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
-		
+
 		healthIconRect = new LTRect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,healthIconSize.x,healthIconSize.y);
 		moodIconRect = new LTRect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,healthIconSize.x,healthIconSize.y);
 		foodIconRect = new LTRect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,foodIconSize.x,foodIconSize.y);
@@ -386,6 +392,14 @@ public class RoomGUI : MonoBehaviour {
 			DataManager.SubtractMood(50);
 			DataManager.SubtractHealth(50);
 		}
+
+		// navigation arrows
+        if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
+        	userNavigation.ToTheLeft();
+        }
+        if(GUI.Button(new Rect(NATIVE_WIDTH - rightArrow.width, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+        	userNavigation.ToTheRight();
+        }
 
 	}
 }

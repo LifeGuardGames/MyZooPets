@@ -54,6 +54,7 @@ public class RoomGUI : MonoBehaviour {
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
 	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100,1000, 105);
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
+	private LTRect RightArrowRect; // only the x-value is used
 
 	//Positions/Offsets for all GUI elements
 	private Vector2 optionLoc;
@@ -137,6 +138,8 @@ public class RoomGUI : MonoBehaviour {
 		healthIconRect = new LTRect(healthBarloc.x + healthIconOffset.x,healthBarloc.y + healthIconOffset.y,healthIconSize.x,healthIconSize.y);
 		moodIconRect = new LTRect(moodBarloc.x + moodIconOffset.x,moodBarloc.y+moodIconOffset.y,healthIconSize.x,healthIconSize.y);
 		foodIconRect = new LTRect(foodBarloc.x + foodIconOffset.x,foodBarloc.y + foodIconOffset.y,foodIconSize.x,foodIconSize.y);
+
+		RightArrowRect = new LTRect(NATIVE_WIDTH - rightArrow.width, 0, 0, 0); // only the x-value is used
 	}
 
 	void Update(){
@@ -188,6 +191,7 @@ public class RoomGUI : MonoBehaviour {
 		}
 		if(hideOption){
 			LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
+			LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH, 850), 0.5f);
 		}
 	}
 
@@ -197,6 +201,7 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(menuRect,new Vector2(0,700),0.5f);
 		LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
+		LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH - rightArrow.width, 850), 0.5f);
 		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
 		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
 		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
@@ -413,7 +418,7 @@ public class RoomGUI : MonoBehaviour {
         if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
         	userNavigation.ToTheLeft();
         }
-        if(GUI.Button(new Rect(NATIVE_WIDTH - rightArrow.width, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
         	userNavigation.ToTheRight();
         }
 

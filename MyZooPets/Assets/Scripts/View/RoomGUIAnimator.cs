@@ -28,7 +28,15 @@ public class RoomGUIAnimator : MonoBehaviour {
     //========================================
 
 	private Level lastLevel; //pet's last level
-
+	private RoomGUI roomgui;
+	private bool IconSwitch = true;
+	private int leantweencurrent;
+	Hashtable optionalGrow = new Hashtable();
+    Hashtable optionalShrink = new Hashtable();
+	private bool IconHealthSwitch;
+	private bool IconMoodSwitch;
+	private bool IconFoodSwitch;
+	
 	public void Init()
 	{
 		dataPoints = DataManager.Points;
@@ -45,11 +53,35 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 		lastLevel = DataManager.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
+		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
+		
+		optionalGrow.Add("onCompleteTarget", gameObject);	
+		optionalShrink.Add("onCompleteTarget", gameObject);
+    	optionalGrow.Add("onComplete", "Shrink");
+        optionalShrink.Add("onComplete", "Grow");
 	}
+	
+    public void Grow(){
+//		if(IconHealthSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.healthIconRect,new Vector2(80,80),0.2f, optionalGrow);
+//    	if(IconMoodSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.moodIconRect,new Vector2(80,80),0.2f, optionalGrow);
+//    	if(IconFoodSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.foodIconRect,new Vector2(80,80),0.2f, optionalGrow);
+    }
 
+    public void Shrink(){
+//    	if(IconHealthSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink);
+//    	if(IconMoodSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink);
+//    	if(IconFoodSwitch)
+    	leantweencurrent = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink);
+    }
+    
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
-		
+
 		//Points 
 		if(dataPoints != DataManager.Points){
 			if(displayPoints < DataManager.Points){ //animate 
@@ -95,9 +127,18 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayHealth < DataManager.Health){
 				displayHealth++;
+				if(IconSwitch){
+					IconHealthSwitch = true;
+					Grow();
+					IconSwitch = false;				
+				}
 			}
 			else{
-				dataHealth = DataManager.Health;	
+				dataHealth = DataManager.Health;
+				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.1f);
+				IconSwitch = true;
+				IconHealthSwitch = false;
 			}
 		}
 
@@ -108,9 +149,18 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayMood < DataManager.Mood){
 				displayMood++;
+				if(IconSwitch){
+					IconMoodSwitch = true;
+					Grow();
+					IconSwitch = false;				
+				}
 			}
 			else{
 				dataMood = DataManager.Mood;	
+				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.1f);
+				IconMoodSwitch = false;
+				IconSwitch = true;
 			}
 		}
 
@@ -121,9 +171,18 @@ public class RoomGUIAnimator : MonoBehaviour {
 			}
 			else if(displayHunger < DataManager.Hunger){
 				displayHunger++;
+				if(IconSwitch){
+					IconFoodSwitch = true;
+					Grow();
+					IconSwitch = false;				
+				}
 			}
 			else{
-				dataHunger = DataManager.Hunger;	
+				dataHunger = DataManager.Hunger;
+				LeanTween.cancel(LeanTween.TweenEmpty,leantweencurrent);
+				LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.1f);
+				IconFoodSwitch = false;
+				IconSwitch = true;
 			}
 		}
 	}

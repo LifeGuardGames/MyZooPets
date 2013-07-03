@@ -104,12 +104,12 @@ public class GameOverRewardMessage : MonoBehaviour {
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }
-            if(GUI.Button(noButtonRect, "Done")){
+            if(GUI.Button(noButtonRect, "Quit")){
                 if(noButtonClicked != null) noButtonClicked();
                 Hide();
             }
         }else if(notificationType == NotificationType.OK){
-            if(GUI.Button(centerButtonRect, "Done")){
+            if(GUI.Button(centerButtonRect, "Quit")){
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }

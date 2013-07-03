@@ -66,7 +66,19 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	public void DisplayMessage(){
-		notificationUIManager.PopupTexture("great");
+		// notificationUIManager.PopupTexture("great");
+		notificationUIManager.GameOverRewardMessage(
+			CalendarLogic.StarIncrement,
+			CalendarLogic.PointIncrement,
+			// GameOverRewardMessage.OnButtonClicked yesButtonCallBack,
+			// GameOverRewardMessage.OnButtonClicked noButtonCallBack
+			delegate (){
+				print("yes delegate");
+				inhalerGameManager.ResetInhalerGame();
+				RestartProgressBar();
+			},
+			QuitInhalerGame
+		);
 	}
 
 	void SetNumOfNodes(){
@@ -184,6 +196,7 @@ public class InhalerGameGUI : MonoBehaviour {
 	}
 
 	void QuitInhalerGame(){
+		print("no delegate");
         RestartProgressBar();
         Application.LoadLevel("NewBedRoom");
     }

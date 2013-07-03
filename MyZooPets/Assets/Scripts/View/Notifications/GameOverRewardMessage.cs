@@ -124,7 +124,9 @@ public class GameOverRewardMessage : MonoBehaviour {
         notificationType = NotificationType.YesNo;
         dataStars = deltaStars;
         dataPoints = deltaPoints;
-       
+        yesButtonClicked = yesButton;
+        noButtonClicked = noButton;    
+
        InitializeGUIPosition();
 
         yesButtonRect = new Rect(100, 360, 200, 100);
@@ -136,9 +138,9 @@ public class GameOverRewardMessage : MonoBehaviour {
     //Initialize 1 button reward popup
     public void Init(int deltaStars, int deltaPoints, OnButtonClicked yesButton){
         notificationType = NotificationType.OK;
-
         dataStars = deltaStars;
         dataPoints = deltaPoints;
+        yesButtonClicked = yesButton;
 
         InitializeGUIPosition();
 

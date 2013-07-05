@@ -571,6 +571,7 @@ public class tk2dSpriteCollectionBuilder
 				data.materialInst = null;
 				data.fontPlatforms = platformNames.ToArray();
 				data.fontPlatformGUIDs = new string[platformNames.Count];
+				data.premultipliedAlpha = gen.premultipliedAlpha;
 				for (int i = 0; i < gen.platforms.Count; ++i)
 				{
 					tk2dSpriteCollectionPlatform platform = gen.platforms[i];
@@ -1118,7 +1119,8 @@ public class tk2dSpriteCollectionBuilder
 				font.data.gradientTexture = null;
 				font.data.textureGradients = false;
 			}
-			
+
+			font.data.premultipliedAlpha = gen.premultipliedAlpha;
 			font.data.spriteCollection = gen.spriteCollection;
 			font.data.material = coll.materials[font.materialId];
 			font.editorData.material = coll.materials[font.materialId];

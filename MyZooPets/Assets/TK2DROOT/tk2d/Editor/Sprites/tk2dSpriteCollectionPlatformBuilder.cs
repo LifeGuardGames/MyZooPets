@@ -155,6 +155,11 @@ namespace tk2dEditor.SpriteCollectionBuilder
 								geom.points[p] *= scale;
 						}
 					}
+					else if (param.dice)
+					{
+						param.diceUnitX = (int)(param.diceUnitX * scale);
+						param.diceUnitY = (int)(param.diceUnitY * scale);
+					}
 
 					if (param.colliderType == tk2dSpriteCollectionDefinition.ColliderType.Polygon)
 					{

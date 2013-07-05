@@ -393,6 +393,11 @@ namespace tk2dEditor.SpriteCollectionEditor
 		
 		public string FindUniqueTextureName(string name)
 		{
+			int at = name.LastIndexOf('@');
+			if (at != -1) {
+				name = name.Substring(0, at);
+			}
+
 			List<string> textureNames = new List<string>();
 			foreach (var entry in textureParams)
 			{

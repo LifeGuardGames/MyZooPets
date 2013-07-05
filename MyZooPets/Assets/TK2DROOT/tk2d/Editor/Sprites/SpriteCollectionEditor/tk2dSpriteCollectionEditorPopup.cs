@@ -154,12 +154,18 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 		if (searchFilter.Length > 0)
 		{
 			// re-sort list
-			entries = (from entry in entries where Contains(entry.name, searchFilter) orderby entry.type, entry.name select entry).ToList();
+			entries = (from entry in entries where Contains(entry.name, searchFilter) select entry)
+						.OrderBy( e => e.type )
+						.ThenBy( e => e.name, new tk2dEditor.Shared.NaturalComparer() )
+						.ToList();
 		}
 		else
 		{
 			// re-sort list
-			entries = (from entry in entries orderby entry.type, entry.name select entry).ToList();
+			entries = (from entry in entries select entry)
+						.OrderBy( e => e.type )
+						.ThenBy( e => e.name, new tk2dEditor.Shared.NaturalComparer() )
+						.ToList();
 		}
 		for (int i = 0; i < entries.Count; ++i)
 			entries[i].listIndex = i;
@@ -312,6 +318,10 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 
 		_spriteCollection = null;
 		tk2dEditorUtility.CollectAndUnloadUnusedAssets();
+	}
+
+	void OnDestroy() {
+		tk2dEditorSkin.Done();
 	}
 	
 	string searchFilter = "";

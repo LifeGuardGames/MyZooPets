@@ -5,7 +5,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
 
     public AudioSource inhale;
     public AudioSource exhale;
-    tk2dAnimatedSprite arrows;
+    tk2dSpriteAnimator arrows;
     public GameObject breatheMessageObj;
     float firstTouchYPos;
     bool firstTouchOnObject = false;
@@ -16,7 +16,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
-        arrows = GetComponent<tk2dAnimatedSprite>();
+        arrows = GetComponent<tk2dSpriteAnimator>();
         Disable();
 
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
@@ -33,9 +33,9 @@ public class InhalerInhaleExhale : MonoBehaviour {
             return;
         }
         if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
-            arrows.FlipY();
+            arrows.Play("UpArrow");
             pointingUp = true;
-            breatheMessageObj.GetComponent<tk2dAnimatedSprite>().Play("Breathe In");
+            breatheMessageObj.GetComponent<tk2dSpriteAnimator>().Play("Breathe In");
         }
 
         CheckAndEnable();

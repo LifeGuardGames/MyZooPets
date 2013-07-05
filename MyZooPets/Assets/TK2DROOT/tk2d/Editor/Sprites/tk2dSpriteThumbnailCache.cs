@@ -67,29 +67,31 @@ public class tk2dSpriteThumbnailCache
 
 		if (Event.current.type == EventType.Repaint && visible)
 		{
-			Mesh tmpMesh = new Mesh();
-			tmpMesh.vertices = def.positions;
-			tmpMesh.uv = def.uvs;
-			tmpMesh.triangles = def.indices;
-			tmpMesh.RecalculateBounds();
-			tmpMesh.RecalculateNormals();
+			if (def.material != null) {
+				Mesh tmpMesh = new Mesh();
+				tmpMesh.vertices = def.positions;
+				tmpMesh.uv = def.uvs;
+				tmpMesh.triangles = def.indices;
+				tmpMesh.RecalculateBounds();
+				tmpMesh.RecalculateNormals();
 
-			Vector3 t = def.untrimmedBoundsData[1] * 0.5f - def.untrimmedBoundsData[0];
-			float tq = def.untrimmedBoundsData[1].y;
+				Vector3 t = def.untrimmedBoundsData[1] * 0.5f - def.untrimmedBoundsData[0];
+				float tq = def.untrimmedBoundsData[1].y;
 
-			mat.mainTexture = def.material.mainTexture;
-			mat.SetColor("_Tint", tint);
-			mat.SetVector("_Clip", clipRegion);
+				mat.mainTexture = def.material.mainTexture;
+				mat.SetColor("_Tint", tint);
+				mat.SetVector("_Clip", clipRegion);
 
-			Matrix4x4 m = new Matrix4x4();
-			m.SetTRS(new Vector3(rect.x + t.x * pixelSize.x, rect.y + (tq - t.y) * pixelSize.y, 0), 
-				Quaternion.identity, 
-				new Vector3(pixelSize.x, -pixelSize.y, 1));
+				Matrix4x4 m = new Matrix4x4();
+				m.SetTRS(new Vector3(rect.x + t.x * pixelSize.x, rect.y + (tq - t.y) * pixelSize.y, 0), 
+					Quaternion.identity, 
+					new Vector3(pixelSize.x, -pixelSize.y, 1));
 
-			mat.SetPass(0);
-			Graphics.DrawMeshNow(tmpMesh, m * GUI.matrix);
+				mat.SetPass(0);
+				Graphics.DrawMeshNow(tmpMesh, m * GUI.matrix);
 
-			Object.DestroyImmediate(tmpMesh);
+				Object.DestroyImmediate(tmpMesh);
+			}
 		}
 	}
 

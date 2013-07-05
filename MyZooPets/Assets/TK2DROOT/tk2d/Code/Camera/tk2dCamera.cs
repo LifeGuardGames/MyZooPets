@@ -198,11 +198,8 @@ public class tk2dCamera : MonoBehaviour
 	}
 
 	Rect _screenExtents;
-
 	Rect unitRect = new Rect(0, 0, 1, 1);
 	
-	public Vector2 dumbOffset = Vector2.zero;
-
 	// Trace back to the source, however far up the hierarchy that may be
 	tk2dCamera Settings {
 		get { 

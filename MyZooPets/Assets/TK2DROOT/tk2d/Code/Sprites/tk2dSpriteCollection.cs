@@ -136,7 +136,7 @@ public class tk2dSpriteCollectionDefinition
 	public ColliderType colliderType = ColliderType.UserDefined;
 	public Vector2 boxColliderMin, boxColliderMax;
 	public tk2dSpriteColliderIsland[] polyColliderIslands;
-	public PolygonColliderCap polyColliderCap = PolygonColliderCap.None;
+	public PolygonColliderCap polyColliderCap = PolygonColliderCap.FrontAndBack;
 	public bool colliderConvex = false;
 	public bool colliderSmoothSphereCollisions = false;
 	public ColliderColor colliderColor = ColliderColor.Default;
@@ -520,7 +520,7 @@ public class tk2dSpriteCollection : MonoBehaviour
 	
 	public bool useTk2dCamera = false;
 	public int targetHeight = 640;
-	public float targetOrthoSize = 1.0f;
+	public float targetOrthoSize = 10.0f;
 	public float globalScale = 1.0f;
 	
 	// Texture settings

@@ -379,7 +379,15 @@ namespace tk2dEditor.SpriteCollectionEditor
 			SpriteCollection.disableTrimming = EditorGUILayout.Toggle("Disable Trimming", SpriteCollection.disableTrimming);
 			SpriteCollection.normalGenerationMode = (tk2dSpriteCollection.NormalGenerationMode)EditorGUILayout.EnumPopup("Normal Generation", SpriteCollection.normalGenerationMode);
 	
-			SpriteCollection.useTk2dCamera = EditorGUILayout.Toggle("Use tk2dCamera", SpriteCollection.useTk2dCamera);
+			bool newUseTk2dCamera = EditorGUILayout.Toggle("Use tk2dCamera", SpriteCollection.useTk2dCamera);
+			if (SpriteCollection.useTk2dCamera != newUseTk2dCamera) {
+				SpriteCollection.useTk2dCamera = newUseTk2dCamera;
+				if (SpriteCollection.useTk2dCamera && SpriteCollection.physicsDepth < 1 &&
+					EditorUtility.DisplayDialog("Use tk2dCamera", "Would you like to adjust the collider depth to work better with the tk2dCamera? A depth of 1 or above works best.", "Yes", "No")) {
+					SpriteCollection.physicsDepth = 1;
+				}
+
+			}
 			if (!SpriteCollection.useTk2dCamera)
 			{
 				EditorGUI.indentLevel = EditorGUI.indentLevel + 1;

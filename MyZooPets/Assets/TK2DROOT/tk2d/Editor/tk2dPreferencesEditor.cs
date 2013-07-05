@@ -9,8 +9,10 @@ public class tk2dPreferences {
 	
 	public bool autoRebuild = true;
 	public bool showIds = false;
-	public bool isProSkin = true;
 	public string platform = "";
+
+	public bool enableSpriteHandles = true;
+	public bool enableMoveHandles = true;
 
 	public int spriteCollectionListWidth {
 		get { return _spriteCollectionListWidth; }
@@ -154,12 +156,19 @@ public class tk2dPreferencesEditor : EditorWindow
 
 	GUIContent label_autoRebuild = new GUIContent("Auto Rebuild", "Auto rebuild sprite collections when source textures have changed.");
 	GUIContent label_showIds = new GUIContent("Show Ids", "Show sprite and animation Ids.");
+
+	GUIContent label_enableSpriteHandles = new GUIContent("Enable Sprite Controls", "Enable controls for sprite resizing, rotation etc.");
+	GUIContent label_enableMoveHandles = new GUIContent("Drag sprite to move", "Allow dragging sprite in all modes. When turned off, this is only available when the Unity move/rotate/scale is not visible.");
 	
 #if (UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4)
 	GUIContent label_proSkin = new GUIContent("Pro Skin", "Select this to use the Dark skin.");
 #endif	
 
 	Vector2 scroll = Vector2.zero;
+
+	void OnDestroy() {
+		tk2dEditorSkin.Done();
+	}
 
 	void OnGUI()
 	{
@@ -211,9 +220,14 @@ public class tk2dPreferencesEditor : EditorWindow
 			}
 		}
 
-#if (UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4)
-		prefs.isProSkin = EditorGUILayout.Toggle(label_proSkin, prefs.isProSkin);
-#endif
+		prefs.enableSpriteHandles = EditorGUILayout.Toggle (label_enableSpriteHandles, prefs.enableSpriteHandles);
+		bool oldGuiEnable = GUI.enabled;
+		GUI.enabled = prefs.enableSpriteHandles;
+		EditorGUI.indentLevel++;
+		prefs.enableMoveHandles = EditorGUILayout.Toggle( label_enableMoveHandles, prefs.enableMoveHandles );
+		EditorGUI.indentLevel--;
+		GUI.enabled = oldGuiEnable;
+
 		GUILayout.EndScrollView();
 
 		if (GUI.changed) {

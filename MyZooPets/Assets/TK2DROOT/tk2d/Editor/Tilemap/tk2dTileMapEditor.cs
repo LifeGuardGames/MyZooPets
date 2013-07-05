@@ -221,12 +221,6 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			tileMap.data.tilePrefabs[selectedDataTile] = EditorGUILayout.ObjectField("Prefab", tileMap.data.tilePrefabs[selectedDataTile], typeof(Object), false);
 		}
 		
-		if (newSelectedPrefab != selectedDataTile)		
-		{
-			selectedDataTile = newSelectedPrefab;
-			Repaint();
-		}
-
 		// Add all additional tilemap data
 		var allTileInfos = tileMap.data.GetOrCreateTileInfo(SpriteCollection.Count);
 		if (selectedDataTile >= 0 && selectedDataTile < allTileInfos.Length)
@@ -237,6 +231,12 @@ public class tk2dTileMapEditor : Editor, ITileMapEditorHost
 			tileInfo.stringVal = EditorGUILayout.TextField("String", tileInfo.stringVal);
 			tileInfo.intVal = EditorGUILayout.IntField("Int", tileInfo.intVal);
 			tileInfo.floatVal = EditorGUILayout.FloatField("Float", tileInfo.floatVal);
+		}
+
+		if (newSelectedPrefab != selectedDataTile)		
+		{
+			selectedDataTile = newSelectedPrefab;
+			Repaint();
 		}
 	}
 	

@@ -45,11 +45,14 @@ public class StoreGUI : MonoBehaviour {
 		if(slideValue > 0) slideValue = 0;
 		if(slideValue < -(categoryList.Count/2*200 - 440)) slideValue = - (categoryList.Count/2*200 - 440);
 		if(categoryList.Count <= 6){ slideValue = 0;}
-		
+
 	}
 
 	public void showStore(){
 		StoreGUIOn = true;
+		roomgui.HideGUIs(false,true,false,true);
+		ClickManager.ModeLock();
+		ClickManager.ClickLock();
 	}
 
 	public void hideStore(){
@@ -58,7 +61,7 @@ public class StoreGUI : MonoBehaviour {
 
 	void OnGUI(){
 		GUI.skin = skin;
-		
+
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
@@ -67,10 +70,7 @@ public class StoreGUI : MonoBehaviour {
 
 		//GUI layouts
 		if(StoreGUIOn){
-			ClickManager.ModeLock();
-			ClickManager.ClickLock();
-			
-			roomgui.HideGUIs(false,true,false,true);
+
 			GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, 600), backgroundTexture);
 
 			if(storePage == 1){
@@ -121,29 +121,29 @@ public class StoreGUI : MonoBehaviour {
 				ClickManager.ReleaseModeLock();
 				roomgui.ShowGUIs();
 			}
-			
-			
-			
+
+
+
 		}
 	}
-	
+
 	private void displayItems(ItemCategory c){
 		if(c == ItemCategory.Foods) categoryList = itemlogic.foodlist;
 		if(c == ItemCategory.Decorations) categoryList = itemlogic.decolist;
-		if(c == ItemCategory.Inhalers) categoryList = itemlogic.inhalerlist; 
+		if(c == ItemCategory.Inhalers) categoryList = itemlogic.inhalerlist;
 		if(c == ItemCategory.Items) categoryList = itemlogic.itemlist;
-		
+
 		//Window
 		GUI.BeginGroup(new Rect(tabLoc.x+50,tabLoc.y+100,1000,440));
 		//Movable group that display
 		GUI.BeginGroup(new Rect(0,slideValue,1000,100*itemlogic.items.Count));
-			
+
 		for(int i = 0;i< categoryList.Count ;i+=2){
-				
+
 			menuItem1Loc = new Vector2(0,i*100);
 			menuItem2Loc = new Vector2(500,i*100);
-				
-				
+
+
 //			Each line contains 2 items
 			GUI.Box (new Rect(menuItem1Loc.x + 20, menuItem1Loc.y + 20, 440, 160), "");
 			GUI.Box (new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), "");	// TODO-s Merge this into one draw call
@@ -154,10 +154,10 @@ public class StoreGUI : MonoBehaviour {
 			if(GUI.Button(new Rect(menuItem1Loc.x + 250, menuItem1Loc.y + 120, 180, 60), "Buy")){
 				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i]].Cost){
 					inventory.addItem(categoryList[i], 1);
-					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);			
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);
 				}
 			}
-			
+
 			GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
 			GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
 			GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.textures[categoryList[i+1]]);
@@ -167,10 +167,10 @@ public class StoreGUI : MonoBehaviour {
 			if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
 				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
 					inventory.addItem(categoryList[i+1], 1);
-					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);			
+					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);
 				}
 			}
-		}				
+		}
 		GUI.EndGroup();
 		GUI.EndGroup();
 	}

@@ -15,18 +15,43 @@ using System;
 /// </summary>
 
 public class RoomGUIAnimator : MonoBehaviour {
-	
-	public int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
-	public int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
-	public int nextLevelPoints; //the minimum requirement for next level up
-	
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
     public static OnLevelUpEventHandlers OnLevelUp;
-
     //========================================
 
+    public int DisplayPoints{
+    	get{return displayPoints;}
+    }
+
+    public int DisplayStars{
+    	get{return displayStars;}
+    }
+
+    public int DisplayHealth{
+    	get{return displayHealth;}
+    }
+
+    public int DisplayMood{
+    	get{return displayMood;}
+    }
+
+    public int DisplayHunger{
+    	get{return displayHunger;}
+    }
+
+    public int NextLevelPoints{
+    	get{return nextLevelPoints;}
+    }
+
+    public Level LastLevel{
+    	get{return lastLevel;}
+    }
+
+    private int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
+	private int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
+	private int nextLevelPoints; //the minimum requirement for next level up
 	private Level lastLevel; //pet's last level
 	private RoomGUI roomgui;
 	
@@ -255,12 +280,13 @@ public class RoomGUIAnimator : MonoBehaviour {
 	private void LevelUpEventCheck(){
 		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Points - nextLevelPoints; //points to be added after leveling up
-			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
+			
 
 			if(OnLevelUp != null) OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
 
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
+			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
 			DataManager.AddPoints(remainderPoints);
 			displayPoints = 0;
 			dataPoints = 0;

@@ -122,10 +122,10 @@ public class RoomGUI : MonoBehaviour {
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
 		roomAnimator = this.GetComponent<RoomGUIAnimator>();
 
-		progress = roomAnimator.displayPoints;
-		food = roomAnimator.displayHunger;
-		mood = roomAnimator.displayMood;
-		health = roomAnimator.displayHealth;
+		progress = roomAnimator.DisplayPoints;
+		food = roomAnimator.DisplayHunger;
+		mood = roomAnimator.DisplayMood;
+		health = roomAnimator.DisplayHealth;
 	//preset item menu
 		optionLoc = new Vector2(NATIVE_WIDTH/2 - optionMenuTexture.width/2, NATIVE_HEIGHT/2 - optionMenuTexture.height/2);
 
@@ -160,18 +160,18 @@ public class RoomGUI : MonoBehaviour {
 	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
 	  	
 		//Data reading from Data Manager
-		progress = roomAnimator.displayPoints;
-		food = roomAnimator.displayHunger;
-		mood = roomAnimator.displayMood;
-		health = roomAnimator.displayHealth;
+		progress = roomAnimator.DisplayPoints;
+		food = roomAnimator.DisplayHunger;
+		mood = roomAnimator.DisplayMood;
+		health = roomAnimator.DisplayHealth;
 
 		//points progress bar data
-		tierLevel = Enum.GetName(typeof(Level), DataManager.CurrentLevel);
-		nextLevelPoints = roomAnimator.nextLevelPoints;
-		tierProgressText = roomAnimator.displayPoints + "/" + nextLevelPoints;
+		tierLevel = Enum.GetName(typeof(Level), roomAnimator.LastLevel);
+		nextLevelPoints = roomAnimator.NextLevelPoints;
+		tierProgressText = roomAnimator.DisplayPoints + "/" + nextLevelPoints;
 
 		//Star data
-		starCount = roomAnimator.displayStars.ToString();
+		starCount = roomAnimator.DisplayStars.ToString();
 
 		if (pickedUp){
 			// if dragging an item, don't treat this as a swipe
@@ -425,6 +425,7 @@ public class RoomGUI : MonoBehaviour {
 				DataManager.SubtractMood(50);
 				DataManager.SubtractHealth(50);
 				DataManager.SubtractStars(50);
+				notificationUIManager.GameOverRewardMessage(300, 250, null, null);
 			}
 		}
 

@@ -35,7 +35,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
     }
 
     private void SendNotification(){
-        notificationUIManager.PopupNotification("Your pet is not feeling well! It needs your help!",
+        notificationUIManager.PopupNotification("Something unusual is happening to you pet! Help it out!",
             delegate(){
                 Application.LoadLevel("DiagnosePet");
             },

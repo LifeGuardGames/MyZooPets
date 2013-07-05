@@ -30,7 +30,7 @@ public class ClickManager : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
-	public GameObject petsprite;
+	private GameObject petsprite;
 	private NotificationUIManager notificationUIManager;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)

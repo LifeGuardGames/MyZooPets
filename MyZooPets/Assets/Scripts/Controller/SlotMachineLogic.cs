@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class SlotMachineLogic{
     private const int NUMBER_OF_SLOTS = 5;
-    private const float SLOT_OFFSET = 0.2f;
+    private const float SLOT_OFFSET = 0.2f; //calculated by 1/NUMBER_OF_SLOTS
     private static float[] chosenSlots = new float[3]; //the position offsite for 3 wheels
     private static int[] slots = new int[3];
 
@@ -20,7 +20,8 @@ public static class SlotMachineLogic{
     //Generate the random slots and spin the wheels
     public static void GenerateRandomSlots(){
         for(int i=0; i<3; i++){
-            slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
+            // slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
+            slots[i] = 2;
             chosenSlots[i] = SLOT_OFFSET * (float)slots[i]; //calculate the offset for the wheels
         }
     }

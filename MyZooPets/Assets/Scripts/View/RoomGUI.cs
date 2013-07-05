@@ -158,7 +158,7 @@ public class RoomGUI : MonoBehaviour {
 		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
 	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
 	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
-	  	
+
 		//Data reading from Data Manager
 		progress = roomAnimator.displayPoints;
 		food = roomAnimator.displayHunger;
@@ -209,7 +209,7 @@ public class RoomGUI : MonoBehaviour {
 		LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH - rightArrow.width, 850), 0.5f);
 		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
 		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
-		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
+		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);
 		LeanTween.move(starIconRect,new Vector2(555,5),0.5f);
 
 	}
@@ -410,7 +410,7 @@ public class RoomGUI : MonoBehaviour {
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 //		}
 
-		
+
 		//debuggin options
 		if(isDebug){
 			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
@@ -429,12 +429,16 @@ public class RoomGUI : MonoBehaviour {
 		}
 
 		// navigation arrows
-        if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
-        	userNavigation.ToTheLeft();
-        }
-        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
-        	userNavigation.ToTheRight();
-        }
+		if (userNavigation.CanShowLeftArrow){
+	        if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
+	        	userNavigation.ToTheLeft();
+	        }
+		}
+		if (userNavigation.CanShowRightArrow){
+	        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+	        	userNavigation.ToTheRight();
+	        }
+	    }
 
 	}
 }

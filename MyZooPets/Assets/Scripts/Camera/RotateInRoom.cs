@@ -9,6 +9,9 @@ public class RotateInRoom : UserNavigation {
     Hashtable optional = new Hashtable();
     bool lockRotation;
 
+    float minLeft;
+    float maxRight;
+
 	void Start () {
         currentYRotation = transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
@@ -18,10 +21,14 @@ public class RotateInRoom : UserNavigation {
 
         // Init swipe listener.
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
+
+        // Init limits to room navigation
+        minLeft = 0;
+        maxRight = rotationIncrement;
 	}
 
     public override void ToTheRight(){
-        if (!lockRotation){
+        if (!lockRotation && currentYRotation < maxRight){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation += rotationIncrement;
@@ -31,7 +38,7 @@ public class RotateInRoom : UserNavigation {
     }
 
     public override void ToTheLeft(){
-        if (!lockRotation){
+        if (!lockRotation && currentYRotation > minLeft){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation -= rotationIncrement;

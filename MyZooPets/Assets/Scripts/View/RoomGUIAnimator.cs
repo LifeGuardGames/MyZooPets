@@ -86,142 +86,185 @@ public class RoomGUIAnimator : MonoBehaviour {
         optionalShrink3.Add("onComplete", "GrowFoodIcon");
         optionalShrink4.Add("onComplete", "GrowStarIcon");
 	}
-	
-	//Below functions for Icon pulsing.
-    public void GrowHealthIcon(){
-    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(70,70),0.2f, optionalGrow1);
-    }
-    public void GrowMoodIcon(){
-    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(70,70),0.2f, optionalGrow2);
-    }
-	public void GrowFoodIcon(){
-    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(70,70),0.2f, optionalGrow3);
-    }
-    public void GrowStarIcon(){
-    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(70,70),0.2f, optionalGrow4);
-    }
-
-    public void ShrinkHealthIcon(){
-    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink1);
-    }
-    public void ShrinkMoodIcon(){
-    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink2);
-    }
-	public void ShrinkFoodIcon(){
-    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink3);
-    }
-    public void ShrinkStarIcon(){
-    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.2f, optionalShrink4);
-    }
-	
-	
     
 	void FixedUpdate(){
 		if(!LoadDataLogic.IsDataLoaded) return;
 		
-		//Points 
-		if(dataPoints != DataManager.Points){
-			if(displayPoints < DataManager.Points){ //animate 
-				if(displayPoints + 3 <= DataManager.Points){
-					displayPoints += 3;
-				}
-				else{
-					displayPoints += DataManager.Points - displayPoints;
-				}
-			}
-			else{ //animation done
-				dataPoints = DataManager.Points;	
-			}
-		}else{ //animation is done and dataPoints is now == to DataManager.Points
-			if(!lastLevel.Equals(DataManager.CurrentLevel)){ //check if points have went beyond level up requirements
-				nextLevelPoints = LevelUpLogic.NextLevelPoints(); //update the nxt level points if pet has leveled up
-				DataManager.ResetPoints(); //reset points back to 0
-				displayPoints = DataManager.Points; //display 0 in RoomGUI
+		PointsAnimation();
+		StarsAnimation();
+		HealthAnimation();
+		MoodAnimation();
+		HungerAnimation();
+		
+	}
 
-				lastLevel = DataManager.CurrentLevel;
-				//notify NotificationUIManager
-				if(OnLevelUp != null) OnLevelUp(this, EventArgs.Empty);
-			}
-		}
-
-		//Stars
+	//==================GUI Animation=========================
+	private void StarsAnimation(){
 		if(dataStars != DataManager.Stars){
 			if(displayStars > DataManager.Stars){
 				displayStars--;
-			}
-			else if(displayStars < DataManager.Stars){
-				displayStars++;
-				if(IconSwitch4){
+
+				if(IconSwitch4){ //grow & shrink stars icon
 					GrowStarIcon();
 					IconSwitch4 = false;
 				}
-			}
-			else{
+			}else if(displayStars < DataManager.Stars){
+				displayStars++;
+
+				if(IconSwitch4){ //grow & shrink stars icon
+					GrowStarIcon();
+					IconSwitch4 = false;
+				}
+			}else{
 				dataStars = DataManager.Stars;
+
+				//stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween4);
 				LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.1f);
 				IconSwitch4 = true;
 			}
 		}
+	}
 
-		//Health
+	private void PointsAnimation(){
+		if(dataPoints != DataManager.Points){
+			if(displayPoints < DataManager.Points){ //animate 
+				if(displayPoints + 3 <= DataManager.Points){
+					displayPoints += 3;
+				}else{
+					displayPoints += DataManager.Points - displayPoints;
+				}
+				LevelUpEventCheck(); //Check if progress bar reach level max
+			}else{ //animation done
+				dataPoints = DataManager.Points;	
+			}
+		}
+	}
+
+	private void HealthAnimation(){
 		if(dataHealth != DataManager.Health){
 			if(displayHealth > DataManager.Health){
 				displayHealth--;
-			}
-			else if(displayHealth < DataManager.Health){
-				displayHealth++;
-				if(IconSwitch1){
+
+				if(IconSwitch1){ //Growth & shrink health icon
 					GrowHealthIcon();
 					IconSwitch1 = false;				
 				}
-			}
-			else{
+			}else if(displayHealth < DataManager.Health){
+				displayHealth++;
+
+				if(IconSwitch1){ //Growth & shrink health icon
+					GrowHealthIcon();
+					IconSwitch1 = false;				
+				}
+			}else{
 				dataHealth = DataManager.Health;
+
+				//Stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
 				LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.1f);
 				IconSwitch1 = true;
 			}
 		}
+	}
 
-		//Mood
+	private void MoodAnimation(){
 		if(dataMood != DataManager.Mood){
 			if(displayMood > DataManager.Mood){
 				displayMood--;
-			}
-			else if(displayMood < DataManager.Mood){
-				displayMood++;
-				if(IconSwitch2){
+
+				if(IconSwitch2){ //Grow & shrink mood icon
 					GrowMoodIcon();
 					IconSwitch2 = false;				
 				}
-			}
-			else{
+			}else if(displayMood < DataManager.Mood){
+				displayMood++;
+				if(IconSwitch2){ //Grow & shrink mood icon
+					GrowMoodIcon();
+					IconSwitch2 = false;				
+				}
+			}else{
 				dataMood = DataManager.Mood;	
+
+				//Stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween2);
 				LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.1f);
 				IconSwitch2 = true;
 			}
 		}
 
+	}
+
+	private void HungerAnimation(){
 		//Hunger
 		if(dataHunger != DataManager.Hunger){
 			if(displayHunger > DataManager.Hunger){
 				displayHunger--;
-			}
-			else if(displayHunger < DataManager.Hunger){
-				displayHunger++;
-				if(IconSwitch3){
+
+				if(IconSwitch3){ //Grow & shrink hunger icon
 					GrowFoodIcon();
 					IconSwitch3 = false;				
 				}
-			}
-			else{
+			}else if(displayHunger < DataManager.Hunger){
+				displayHunger++;
+				if(IconSwitch3){ //Grow & shrink hunger icon
+					GrowFoodIcon();
+					IconSwitch3 = false;				
+				}
+			}else{
 				dataHunger = DataManager.Hunger;
+
+				//Stop grow & shrink. reset icon
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween3);
 				LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.1f);
 				IconSwitch3 = true;
 			}
+		}				
+	}
+	//================================================================
+
+	//Below functions for Icon pulsing.
+    private void GrowHealthIcon(){
+    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(70,70),0.2f, optionalGrow1);
+    }
+    private void GrowMoodIcon(){
+    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(70,70),0.2f, optionalGrow2);
+    }
+	private void GrowFoodIcon(){
+    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(70,70),0.2f, optionalGrow3);
+    }
+    private void GrowStarIcon(){
+    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(70,70),0.2f, optionalGrow4);
+    }
+
+    private void ShrinkHealthIcon(){
+    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink1);
+    }
+    private void ShrinkMoodIcon(){
+    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink2);
+    }
+	private void ShrinkFoodIcon(){
+    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink3);
+    }
+    private void ShrinkStarIcon(){
+    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.2f, optionalShrink4);
+    }
+
+    //Check if the points progress bar has reached the level requirement
+	//if it does call on event listeners and reset the exp points progress bar
+	private void LevelUpEventCheck(){
+		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
+			int remainderPoints = DataManager.Points - nextLevelPoints; //points to be added after leveling up
+			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
+
+			if(OnLevelUp != null) OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
+
+			//reset the progress bar for next level
+			DataManager.ResetPoints();
+			DataManager.AddPoints(remainderPoints);
+			displayPoints = 0;
+			dataPoints = 0;
+			lastLevel = DataManager.CurrentLevel;
 		}
 	}
 }

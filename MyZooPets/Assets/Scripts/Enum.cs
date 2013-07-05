@@ -54,5 +54,10 @@ public enum NotificationType{
     OK,
 }
 
+public enum NotificationTitle{
+    Great,
+    NiceTry,
+}
+
 
 

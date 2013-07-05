@@ -8,6 +8,8 @@ public class RoomGUI : MonoBehaviour {
 	public GameObject notificationUIManagerObject;
 	public GUISkin defaultSkin;
 
+	public bool isDebug;
+
 	// native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
@@ -409,19 +411,22 @@ public class RoomGUI : MonoBehaviour {
 //		}
 
 		
-		//Testing for Icon pulsing.
-//		if(GUI.Button(new Rect(500,500,100,100),"food + 50")){
-//			DataManager.AddHunger(50);
-//			DataManager.AddHealth(50);
-//			DataManager.AddMood(50);
-//			DataManager.AddStars(50);
-//		}
-//		if(GUI.Button(new Rect(500,700,100,100),"food + 50")){
-//			DataManager.SubtractHunger(50);
-//			DataManager.SubtractMood(50);
-//			DataManager.SubtractHealth(50);
-//			DataManager.SubtractStars(50);
-//		}
+		//debuggin options
+		if(isDebug){
+			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
+				DataManager.AddHunger(50);
+				DataManager.AddHealth(50);
+				DataManager.AddMood(50);
+				DataManager.AddStars(50);
+				DataManager.AddPoints(500);
+			}
+			if(GUI.Button(new Rect(500,700,200,100),"+ stats")){
+				DataManager.SubtractHunger(50);
+				DataManager.SubtractMood(50);
+				DataManager.SubtractHealth(50);
+				DataManager.SubtractStars(50);
+			}
+		}
 
 		// navigation arrows
         if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){

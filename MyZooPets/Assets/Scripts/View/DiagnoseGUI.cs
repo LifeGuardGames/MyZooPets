@@ -201,7 +201,6 @@ public class DiagnoseGUI : MonoBehaviour {
 			}else{
 				//wrong stage
 				//nice try notification
-				print("wrong");
 				isActive = false;
 				HideGUIPanel(false);
 				RewardNotification(false);
@@ -216,10 +215,12 @@ public class DiagnoseGUI : MonoBehaviour {
 			rewardStars = 200;
 			rewardPoints = 400;
 		}else{
-			rewardStars = 100;
-			rewardPoints = 100;
+			rewardStars = 150;
+			rewardPoints = 150;
 		}
 
+		DataManager.AddPoints(rewardPoints);
+		DataManager.AddStars(rewardStars);
 		notificationUIManager.GameOverRewardMessage(rewardStars, rewardPoints,
 			delegate(){
 				Application.LoadLevel("NewBedRoom");

@@ -60,8 +60,6 @@ public class LevelUpLogic : MonoBehaviour {
             }     
             DataManager.CurrentLevel = (Level)nextLevelIndex;
 
-            //Level Up! so notify UI
-            // if(OnLevelUp != null) OnLevelUp(awardTrophy);
             canCheckLevelUp = true;
         }
     }

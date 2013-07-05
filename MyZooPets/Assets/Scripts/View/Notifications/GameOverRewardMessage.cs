@@ -15,8 +15,8 @@ public class GameOverRewardMessage : MonoBehaviour {
     public OnButtonClicked noButtonClicked;
 
     //reward points
-    public int dataPoints;
-    public int dataStars;
+    private int dataPoints;
+    private int dataStars;
 
     private int displayPoints = 0;
     private int displayStars = 0;

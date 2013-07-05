@@ -40,6 +40,14 @@ public class HorizontalSlideInYard : UserNavigation {
         }
     }
 
+    protected override bool IsRightArrowEnabled(){
+        return true;
+    }
+
+    protected override bool IsLeftArrowEnabled(){
+        return true;
+    }
+
     void FinishedSlide(){
         lockSlide = false;
         currentXPos = transform.position.x;

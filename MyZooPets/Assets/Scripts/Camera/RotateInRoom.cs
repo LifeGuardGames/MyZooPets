@@ -3,14 +3,17 @@ using System.Collections;
 
 public class RotateInRoom : UserNavigation {
 
-    float currentYRotation;
-    public float rotationIncrement = 72;
+    int currentYRotation;
+    public int rotationIncrement = 72;
     public bool inverse = false;
     Hashtable optional = new Hashtable();
     bool lockRotation;
 
+    float minLeft;
+    float maxRight;
+
 	void Start () {
-        currentYRotation = transform.eulerAngles.y;
+        currentYRotation = (int)transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
         if (inverse){
             rotationIncrement = - rotationIncrement;
@@ -18,10 +21,14 @@ public class RotateInRoom : UserNavigation {
 
         // Init swipe listener.
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
+
+        // Init limits to room navigation
+        minLeft = 0;
+        maxRight = rotationIncrement;
 	}
 
     public override void ToTheRight(){
-        if (!lockRotation){
+        if (!lockRotation && IsRightArrowEnabled()){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation += rotationIncrement;
@@ -31,7 +38,7 @@ public class RotateInRoom : UserNavigation {
     }
 
     public override void ToTheLeft(){
-        if (!lockRotation){
+        if (!lockRotation && IsLeftArrowEnabled()){
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation -= rotationIncrement;
@@ -40,9 +47,17 @@ public class RotateInRoom : UserNavigation {
         }
     }
 
+    protected override bool IsRightArrowEnabled(){
+        return (!lockRotation && currentYRotation < maxRight);
+    }
+
+    protected override bool IsLeftArrowEnabled(){
+        return (!lockRotation && currentYRotation > minLeft);
+    }
+
     void FinishedRotation(){
         lockRotation = false;
-        currentYRotation = transform.eulerAngles.y; // normalize angle
+        currentYRotation = (int)transform.eulerAngles.y; // normalize angle
     }
 
 }

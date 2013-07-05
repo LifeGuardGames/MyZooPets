@@ -16,6 +16,12 @@ public class InhalerGameManager : MonoBehaviour{
     private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
 
     public bool isPracticeGame;
+
+    int practiceGamePointIncrement = 50;
+    public int PracticeGamePointIncrement {
+        get {return practiceGamePointIncrement;}
+    }
+
     bool hasPlayedGame = false;
     public bool HasPlayedGame{
         get {return hasPlayedGame;}
@@ -148,6 +154,9 @@ public class InhalerGameManager : MonoBehaviour{
             // record having given the pet the inhaler, if this was the real game.
             if (!isPracticeGame){
                 CalendarLogic.RecordGivingInhaler();
+            }
+            else {
+                DataManager.AddPoints(practiceGamePointIncrement);
             }
 
             inhalerGameGUI.DisplayMessage();

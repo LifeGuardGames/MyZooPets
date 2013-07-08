@@ -1,4 +1,7 @@
 //source: https://code.google.com/p/pixelplacement/source/browse/trunk/unity/com/pixelplacement/scripts/SwipeDetection.cs?spec=svn158&r=158
+
+// To toggle inverting of directions, modify UserNavigation.cs
+
 using UnityEngine;
 using System.Collections;
 

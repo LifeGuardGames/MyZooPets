@@ -174,7 +174,7 @@ public class FirstTimeGUI : MonoBehaviour {
 			GUILayout.BeginVertical();
 
 			GUILayout.Label("Name");
-			petName = GUILayout.TextField(petName, 25);
+			petName = GUILayout.TextField(petName, 25,GUILayout.Height(50));
 
 			GUILayout.Label("Color");
 			if(GUILayout.Button(blueButton, GUILayout.Width(120), GUILayout.Height(61))){

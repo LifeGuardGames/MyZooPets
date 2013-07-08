@@ -45,8 +45,6 @@ public class RoomGUI : MonoBehaviour {
 	public Texture2D sandwichTexture;
 	public Texture2D optionIconTexture;
 	public Texture2D optionMenuTexture;
-	public Texture2D plusTexture;
-	public Texture2D minusTexture;
 
 	//GUI style for Texts on screen
 	public GUIStyle starTextStyle;
@@ -63,7 +61,6 @@ public class RoomGUI : MonoBehaviour {
 	//LTRects for LeanTween movement for all GUI Objects
 	private LTRect TopGuiRect = new LTRect (0, 0, 1200, 100);
 	private LTRect LeftGuiRect = new LTRect (0, 0, 100, 800);
-	private LTRect menuRect = new LTRect(0, NATIVE_HEIGHT - 100,1000, 105);
 	private LTRect optionRect = new LTRect(1150, 700, 0, 0);	//TODO wonky placeholder;
 	private LTRect RightArrowRect; // only the x-value is used
 
@@ -104,9 +101,7 @@ public class RoomGUI : MonoBehaviour {
 	public UserNavigation userNavigation;
 
 	//MISC
-	private bool isMenuExpanded = true;
 	private bool showOption = false;
-	private bool pickedUp = false;
 	private bool emInhalerpicked = false;
 	private Rect menuTextureRect;
 	private NotificationUIManager notificationUIManager;
@@ -120,7 +115,6 @@ public class RoomGUI : MonoBehaviour {
 	private string starCount;
 	private int menuBoxHeight = 75;
 	private int menuBoxWidth = 75;
-	private int pickUpId= -1;
 
 
 	void Start(){
@@ -175,18 +169,13 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.DisplayHealth;
 
 		//points progress bar data
-		//tierLevel = Enum.GetName(typeof(Level), roomAnimator.LastLevel);
-		tierLevel = "Lv ";
+		tierLevel = "Lv " + (int)roomAnimator.LastLevel;
 		nextLevelPoints = roomAnimator.NextLevelPoints;
 		tierProgressText = roomAnimator.DisplayPoints + "/" + nextLevelPoints;
 
 		//Star data
 		starCount = roomAnimator.DisplayStars.ToString();
 
-		if (pickedUp){
-			// if dragging an item, don't treat this as a swipe
-			SwipeDetection.CancelSwipe();
-		}
 	}
 
 	//Hide all GUIs
@@ -255,13 +244,6 @@ public class RoomGUI : MonoBehaviour {
 		GUI.DrawTexture(new Rect(1121, 22, 132 * Mathf.Clamp01(food/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
 		GUI.Label(new Rect(1151, 20, 60, 60), food.ToString());
 		GUI.DrawTexture(new Rect(699, 6, guiPanelStats .width, guiPanelStats.height), guiPanelStats);
-		 
-		//just for testing
-		//Delete after
-		if(Input.GetMouseButtonUp(0)){
-			pickedUp = false;
-			pickUpId = -1;
-		}
 
 		// Exit to yard button
 		if(Application.loadedLevelName == "NewBedRoom"){

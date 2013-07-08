@@ -75,6 +75,12 @@ public class InventoryGUI : MonoBehaviour{
                 }
             }
         }
+
+        // if (pickedUp){
+        //     // if dragging an item, don't treat this as a swipe
+        //     SwipeDetection.CancelSwipe();
+        // }
+
     }
 
     void OnGUI(){

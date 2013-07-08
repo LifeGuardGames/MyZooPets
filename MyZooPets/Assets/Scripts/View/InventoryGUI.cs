@@ -42,11 +42,6 @@ public class InventoryGUI : MonoBehaviour{
         Inventory.OnInventoryResize += ResizeInventory;
     }
 
-    //Initialize InventoryGUI
-    public void Init(){
-        
-    }
-
     //Display InventoryGUI in game
     public void Display(){
         LeanTween.move(inventoryRect, displayPosition, 0.5f);
@@ -155,6 +150,7 @@ public class InventoryGUI : MonoBehaviour{
     }
 
     private void ResizeInventory(object sender, EventArgs e){
-        inventoryTextureRect = new Rect(-900 + 80f * inventory.InventoryCount, 0, inventoryRect.rect.width, inventoryRect.rect.height);
+        inventoryTextureRect = new Rect(-900 + 80f * inventory.InventoryCount, 0, 
+            inventoryRect.rect.width, inventoryRect.rect.height);
     }
 }

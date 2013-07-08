@@ -64,9 +64,11 @@ public class GrowShrink : MonoBehaviour {
     }
 
     public void StopAll(){
-        isPlaying = false;
-        LeanTween.cancel(gameObject);
-        transform.localScale = new Vector3(1,1,1); // reset to original size
+        if (ClickManager.CanRespondToTap()){
+            isPlaying = false;
+            LeanTween.cancel(gameObject);
+            transform.localScale = new Vector3(1,1,1); // reset to original size
+        }
     }
 
 
@@ -88,16 +90,20 @@ public class GrowShrink : MonoBehaviour {
     }
 
     void GrowInstantly(){
-        LeanTween.cancel(gameObject);
-        transform.localScale = bigger;
+        if (ClickManager.CanRespondToTap()){
+            LeanTween.cancel(gameObject);
+            transform.localScale = bigger;
+        }
     }
 
     void ShrinkInstantly(){
-        LeanTween.cancel(gameObject);
-        transform.localScale = smaller;
-        // restart
-        if (isPlaying){
-           Grow();
+        if (ClickManager.CanRespondToTap()){
+            LeanTween.cancel(gameObject);
+            transform.localScale = smaller;
+            // restart
+            if (isPlaying){
+               Grow();
+            }
         }
     }
 }

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System;
 
 public class RoomGUI : MonoBehaviour {
-
+	
+	// TODO LOTS OF UNUSED TEXTURES AND VARIABLES, DISCUSS WITH JASON AND CLEAN UP
+	
 	public GameObject notificationUIManagerObject;
 	public GUISkin defaultSkin;
 
@@ -14,7 +16,14 @@ public class RoomGUI : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 
-	//Crazy long Texture bundle
+	//Crazy long Texture bundle	
+	public Texture2D guiPanelFill;
+	
+	public Texture2D guiPanelLevel;
+	public Texture2D guiPanelStars;
+	public Texture2D guiPanelStats;
+	
+	//
 	public Texture2D textureSwap;
 	public Texture2D starTexture;
 	public Texture2D tierBarTexture;
@@ -166,7 +175,8 @@ public class RoomGUI : MonoBehaviour {
 		health = roomAnimator.DisplayHealth;
 
 		//points progress bar data
-		tierLevel = Enum.GetName(typeof(Level), roomAnimator.LastLevel);
+		//tierLevel = Enum.GetName(typeof(Level), roomAnimator.LastLevel);
+		tierLevel = "Lv ";
 		nextLevelPoints = roomAnimator.NextLevelPoints;
 		tierProgressText = roomAnimator.DisplayPoints + "/" + nextLevelPoints;
 
@@ -223,66 +233,29 @@ public class RoomGUI : MonoBehaviour {
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
 		}
 
-		//Room GUI Positioning
+		// Room GUI Positioning
+		
+		// Level Panel
+		GUI.DrawTexture(new Rect(113, 23, guiPanelFill.width, guiPanelFill.height), guiPanelFill);
+		GUI.DrawTexture(new Rect(116, 22, 346 * Mathf.Clamp01(progress/nextLevelPoints), 36), progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);	//TODO-s Crop them
+		GUI.DrawTexture(new Rect(6, 6, guiPanelLevel.width, guiPanelLevel.height), guiPanelLevel);
+		GUI.Label(new Rect(15, 20, 200, 40), tierLevel, tierTextStyle);
+		GUI.Label(new Rect(200, 20, 200, 40), tierProgressText, expreTextStyle);
+		
+		// Stars Panel
+		GUI.DrawTexture(new Rect(486, 6, guiPanelStars.width, guiPanelStars.height), guiPanelStars);
+		GUI.Label(new Rect(550, 20, 60, 60), starCount, starTextStyle);
 
-		//Progress Bar
-		GUI.DrawTexture(new Rect(tierBarloc.x,tierBarloc.y,530,75), tierBarTexture);
-		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350,50),progressBarFrame);
-		GUI.DrawTexture(new Rect(tierBarloc.x + progressBarOffset.x,tierBarloc.y+progressBarOffset.y,350 * Mathf.Clamp01(progress/nextLevelPoints),50),progressBarFill, ScaleMode.ScaleAndCrop, true, 150/13);
-		GUI.Label(new Rect(tierBarloc.x + progressTextOffset.x,tierBarloc.y+progressTextOffset.y,200,40),tierProgressText,expreTextStyle);
-		GUI.Label(new Rect(tierBarloc.x+tierTextOffset.x,tierBarloc.y+tierTextOffset.y,200,40),tierLevel,tierTextStyle);
-
-		//Star Bar
-		GUI.DrawTexture(new Rect(starBarloc.x,starBarloc.y,215,75), starBarTexture);
-		GUI.DrawTexture(starIconRect.rect, starTexture, ScaleMode.ScaleToFit);
-		GUI.Label(new Rect(starBarloc.x+starTextOffset.x,starBarloc.y+starTextOffset.y,60,60),starCount,starTextStyle);
-
-		//Health Bar
-		//Turns Yellow when health < 60
-		//Turns Red when health < 30
-		GUI.DrawTexture(new Rect(healthBarloc.x,healthBarloc.y,100,100), statBarTexture);
-		GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y,25,70),statBarVerFrame);
-		if(health > 60){
-			GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-		}
-		else if(health > 30){
-			GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
-		}
-		else{
-			GUI.DrawTexture(new Rect(healthBarloc.x + healthBarOffset.x,healthBarloc.y + healthBarOffset.y+(70-70*health/100),25, 70 * Mathf.Clamp01(health/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
-		}
-		GUI.DrawTexture(healthIconRect.rect,healthIcon, ScaleMode.ScaleToFit, true, 0f);
-
-		//Mood Bar
-		//Same as health bar
-		GUI.DrawTexture(new Rect(moodBarloc.x,moodBarloc.y,100,100), statBarTexture);
-		GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y,25,70),statBarVerFrame);
-		if(mood > 60){
-			GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-		}
-		else if(mood > 30){
-			GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
-		}
-		else{
-			GUI.DrawTexture(new Rect(moodBarloc.x + moodBarOffset.x,moodBarloc.y+moodBarOffset.y+(70-70*mood/100),25, 70 * Mathf.Clamp01(mood/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
-		}
-		GUI.DrawTexture(moodIconRect.rect,moodIcon,ScaleMode.ScaleToFit, true, 0f);
-
-		//Food Bar
-		//Same as food bar
-		GUI.DrawTexture(new Rect(foodBarloc.x,foodBarloc.y,100,100), statBarTexture);
-		GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y,25,70),statBarVerFrame);
-		if(food > 60){
-			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-		}
-		else if(food > 30){
-			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
-		}
-		else{
-			GUI.DrawTexture(new Rect(foodBarloc.x + foodbarOffset.x,foodBarloc.y + foodbarOffset.y+(70-70*food/100),25, 70 * Mathf.Clamp01(food/100)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
-		}
-		GUI.DrawTexture(foodIconRect.rect,foodIcon,ScaleMode.ScaleToFit, true, 0f);
-
+		// Stats Panel
+		GUI.DrawTexture(new Rect(730, 23, 533, guiPanelFill.height), guiPanelFill);	// generic filler
+		GUI.DrawTexture(new Rect(743, 22, 132 * Mathf.Clamp01(health/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
+		GUI.Label(new Rect(773, 20, 60, 60), health.ToString());
+		GUI.DrawTexture(new Rect(932, 22, 132 * Mathf.Clamp01(mood/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
+		GUI.Label(new Rect(962, 20, 60, 60), mood.ToString());
+		GUI.DrawTexture(new Rect(1121, 22, 132 * Mathf.Clamp01(food/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
+		GUI.Label(new Rect(1151, 20, 60, 60), food.ToString());
+		GUI.DrawTexture(new Rect(699, 6, guiPanelStats .width, guiPanelStats.height), guiPanelStats);
+		 
 		//just for testing
 		//Delete after
 		if(Input.GetMouseButtonUp(0)){

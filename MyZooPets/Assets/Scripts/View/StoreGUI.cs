@@ -16,12 +16,17 @@ public class StoreGUI : MonoBehaviour {
 
 	private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-	private Vector2 bgLoc = new Vector2(100, 90);
-	private Vector2 tabLoc = new Vector2(130, 120);
+	// private Vector2 bgLoc = new Vector2(100, 90);
+	// private Vector2 tabLoc = new Vector2(130, 120);
 	private Vector2 tabSize = new Vector2(1120, 550);
-	private Vector2 backButtonLoc = new Vector2(40, 100);
+	// private Vector2 backButtonLoc = new Vector2(40, 100);
 	private Vector2 menuItem1Loc;
 	private Vector2 menuItem2Loc;
+
+    //Store positions
+    private Vector2 storeInitPosition = new Vector2(100,-800);
+    private Vector2 storeFinalPosition = new Vector2(100,90);
+    private LTRect storeRect;
 
 	private int storePage = 1;
 	private bool StoreGUIOn = false;
@@ -38,6 +43,7 @@ public class StoreGUI : MonoBehaviour {
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 		inventory =  GameObject.Find("GameManager").GetComponent<Inventory>();
 		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
+		storeRect = new LTRect(storeInitPosition.x, storeInitPosition.y, backgroundTexture.width, 600);
 	}
 
 	void Update(){
@@ -51,11 +57,28 @@ public class StoreGUI : MonoBehaviour {
 	public void showStore(){
 		StoreGUIOn = true;
 		roomgui.HideGUIs(false,true,false,true);
+
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		LeanTween.move(storeRect, storeFinalPosition, 0.5f, optional);
+
 		ClickManager.ModeLock();
 		ClickManager.ClickLock();
 	}
 
 	public void hideStore(){
+		roomgui.ShowGUIs();
+
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "OnStoreHidden");
+		LeanTween.move(storeRect, storeInitPosition, 0.5f, optional);
+	}
+
+	void OnStoreHidden(){
+		ClickManager.ReleaseClickLock();
+		ClickManager.ReleaseModeLock();
 		StoreGUIOn = false;
 	}
 
@@ -71,55 +94,53 @@ public class StoreGUI : MonoBehaviour {
 		//GUI layouts
 		if(StoreGUIOn){
 
-			GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, 600), backgroundTexture);
+			// GUI.DrawTexture(new Rect(bgLoc.x,bgLoc.y, backgroundTexture.width, 600), backgroundTexture);
+			GUI.DrawTexture(new Rect(storeRect.rect.x,storeRect.rect.y, backgroundTexture.width, 600), backgroundTexture);
 
 			if(storePage == 1){
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
 				displayItems(ItemCategory.Foods);
 			}
 			if(storePage == 2){
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
 				displayItems(ItemCategory.Items);
 			}
 			if(storePage == 3){
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
 				displayItems(ItemCategory.Inhalers);
 			}
 			if(storePage == 4){
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page1Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page2Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page3Texture);
-				GUI.DrawTexture(new Rect(tabLoc.x, tabLoc.y, tabSize.x, tabSize.y), page4Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
+				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
 				displayItems(ItemCategory.Decorations);
 			}
 
-			if(GUI.Button(new Rect(tabLoc.x + 50, tabLoc.y + 5, 200, 50), "Food", blankButtonStyle)){
+			if(GUI.Button(new Rect(storeRect.rect.x + 30 + 50, storeRect.rect.y + 30 + 5, 200, 50), "Food", blankButtonStyle)){
 				storePage = 1;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 300, tabLoc.y + 5, 200, 50), "Items", blankButtonStyle)){
+			if(GUI.Button(new Rect(storeRect.rect.x + 30 + 300, storeRect.rect.y + 30 + 5, 200, 50), "Items", blankButtonStyle)){
 				storePage = 2;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 550, tabLoc.y + 5, 200, 50), "Inhalers", blankButtonStyle)){
+			if(GUI.Button(new Rect(storeRect.rect.x + 30 + 550, storeRect.rect.y + 30 + 5, 200, 50), "Inhalers", blankButtonStyle)){
 				storePage = 3;
 			}
-			if(GUI.Button(new Rect(tabLoc.x + 800, tabLoc.y + 5, 200, 50), "Decoration", blankButtonStyle)){
+			if(GUI.Button(new Rect(storeRect.rect.x + 30 + 800, storeRect.rect.y + 30 + 5, 200, 50), "Decoration", blankButtonStyle)){
 				storePage = 4;
 			}
 
-			if(GUI.Button(new Rect(backButtonLoc.x,backButtonLoc.y, backButton.width, backButton.height), backButton, blankButtonStyle)){
+			if(GUI.Button(new Rect(storeRect.rect.x - 60,storeRect.rect.y + 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
 				hideStore();
-				ClickManager.ReleaseClickLock();
-				ClickManager.ReleaseModeLock();
-				roomgui.ShowGUIs();
 			}
 
 
@@ -134,7 +155,7 @@ public class StoreGUI : MonoBehaviour {
 		if(c == ItemCategory.Items) categoryList = itemlogic.itemlist;
 
 		//Window
-		GUI.BeginGroup(new Rect(tabLoc.x+50,tabLoc.y+100,1000,440));
+		GUI.BeginGroup(new Rect(storeRect.rect.x + 30+50,storeRect.rect.y + 30+100,1000,440));
 		//Movable group that display
 		GUI.BeginGroup(new Rect(0,slideValue,1000,100*itemlogic.items.Count));
 

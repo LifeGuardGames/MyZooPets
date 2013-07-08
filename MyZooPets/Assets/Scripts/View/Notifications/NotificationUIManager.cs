@@ -13,7 +13,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureGreat;
 	public GameObject popupTextureNiceTry;
 	public GameObject popupTextureUseTheInhaler;
-	public GameObject popupTextureInhalerPractice;
+	public GameObject popupTexturePracticeInhaler;
 	public GameObject popupAward;
 
 	public GameObject popupNotification;
@@ -75,6 +75,10 @@ public class NotificationUIManager : MonoBehaviour {
 				prefab = popupTextureGreat;
 			break;
 
+			case "practice intro":
+				prefab = popupTexturePracticeInhaler;
+			break;
+
 			case "intro":
 				prefab = popupTextureUseTheInhaler;
 			break;
@@ -83,10 +87,23 @@ public class NotificationUIManager : MonoBehaviour {
 				prefab = popupTextureNiceTry;
 			break;
 		}
-		if(prefab != null){
+		if(prefab == popupTexturePracticeInhaler){
+			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+			Destroy(go, 3.0f);
+
+			// show regular intro after announcing that it is a practice game
+			Invoke("ShowIntro", 3.0f);
+		}
+		else if(prefab != null){
 			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
 			Destroy(go, 3.0f);
 		}
+	}
+
+	// used to show regular intro after announcing that it is a practice game
+	private void ShowIntro () {
+		GameObject intro = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
+		Destroy(intro, 3.0f);
 	}
 
 	/*

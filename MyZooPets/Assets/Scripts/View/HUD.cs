@@ -252,12 +252,16 @@ public class HUD : MonoBehaviour {
 		}
 
 		// // navigation arrows
-  //       if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
-  //       	userNavigation.ToTheLeft();
-  //       }
-  //       if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
-  //       	userNavigation.ToTheRight();
-  //       }
+		// if (userNavigation.CanShowLeftArrow){
+		// 	if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
+		// 		userNavigation.ToTheLeft();
+		// 	}
+		// }
+		// if (userNavigation.CanShowRightArrow){
+		// 	if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+		// 		userNavigation.ToTheRight();
+		// 	}
+		// }
 
 	}
 }

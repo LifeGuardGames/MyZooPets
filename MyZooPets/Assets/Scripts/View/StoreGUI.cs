@@ -168,7 +168,7 @@ public class StoreGUI : MonoBehaviour {
 //			Each line contains 2 items
 			GUI.Box (new Rect(menuItem1Loc.x + 20, menuItem1Loc.y + 20, 440, 160), "");
 			GUI.Box (new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), "");	// TODO-s Merge this into one draw call
-			GUI.DrawTexture(new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), itemlogic.textures[categoryList[i]]);
+			GUI.DrawTexture(new Rect(menuItem1Loc.x + 40, menuItem1Loc.y + 40, 120, 120), itemlogic.items[categoryList[i]].texture);
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 10 ,220, 100), itemlogic.items[categoryList[i]].Name,itemTitleStyle);
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 55, 220, 100), "Health + 10",itemInfoStyle);
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i]].Cost.ToString(), itemInfoStyle);
@@ -181,7 +181,7 @@ public class StoreGUI : MonoBehaviour {
 
 			GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
 			GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
-			GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.textures[categoryList[i+1]]);
+			GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.items[categoryList[i+1]].texture);
 			GUI.Label(new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 10, 220, 100), itemlogic.items[categoryList[i+1]].Name, itemTitleStyle);
 			GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
 			GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);

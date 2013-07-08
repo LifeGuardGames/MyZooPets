@@ -7,13 +7,13 @@ using System.Collections;
 //          3. cost
 //          4. ID
 
-
+[System.Serializable]
 public class Item {
 
-	private string name;
-	private Texture2D texture;
-	private int cost;
-	private ItemCategory category;
+	public string name;
+	public Texture2D texture;
+	public int cost;
+	public ItemCategory category;
 	
 	public ItemCategory Category{get{return category;}}
 	public int ID;

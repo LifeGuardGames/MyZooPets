@@ -15,11 +15,12 @@ public class ItemLogic : MonoBehaviour{
 	
 	//Each Item has its component kept in different lists.
 	//This ID of the item is represented as index of the list. 
-	public List<string> names = new List<string>();
-	public List<Texture2D> textures = new List<Texture2D>();
-	public List<int> costs = new List<int>();
+//	public List<string> names = new List<string>();
+//	public List<Texture2D> textures = new List<Texture2D>();
+//	public List<int> costs = new List<int>();
 	public List<Action> methods = new List<Action>();
-	public List<ItemCategory> category = new List<ItemCategory>();
+//	public List<ItemCategory> category = new List<ItemCategory>();
+	
 	public List<int> foodlist = new List<int>();
 	public List<int> itemlist = new List<int>();
 	public List<int> inhalerlist = new List<int>();
@@ -52,21 +53,21 @@ public class ItemLogic : MonoBehaviour{
 	}
 	
 	void Awake(){
-		if(names.Count == textures.Count && textures.Count == costs.Count){
-			for(int i = 0;i< names.Count;i++){
-				items.Add(new Item(i,names[i],costs[i],textures[i],category[i]));
-			}
-		}
+//		if(names.Count == textures.Count && textures.Count == costs.Count){
+//			for(int i = 0;i< names.Count;i++){
+//				items.Add(new Item(i,names[i],costs[i],textures[i],category[i]));
+//			}
+//		}
 		categorize();
 		loadMethods();
 	}
 
 	//Functions for Each item. 
 	public static void takeApple(){
-		DataManager.AddHunger(10);
+		DataManager.AddMood(10);
 	}
 	
 	public static void takeSandwich(){
-		DataManager.AddHunger(30);
+		DataManager.AddMood(30);
 	}
 }

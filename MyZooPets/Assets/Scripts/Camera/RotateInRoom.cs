@@ -5,7 +5,6 @@ public class RotateInRoom : UserNavigation {
 
     int currentYRotation;
     public int rotationIncrement = 72;
-    public bool inverse = false;
     Hashtable optional = new Hashtable();
     bool lockRotation;
 
@@ -15,9 +14,6 @@ public class RotateInRoom : UserNavigation {
 	void Start () {
         currentYRotation = (int)transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
-        if (inverse){
-            rotationIncrement = - rotationIncrement;
-        }
 
         // Init swipe listener.
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;

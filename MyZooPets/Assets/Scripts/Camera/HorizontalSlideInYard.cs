@@ -5,16 +5,12 @@ public class HorizontalSlideInYard : UserNavigation {
 
     float currentXPos;
     public float slideIncrement = 40f;
-    public bool inverse = false;
     Hashtable optional = new Hashtable();
     bool lockSlide = false;
     // Use this for initialization
     void Start () {
         currentXPos = transform.position.x;
         optional.Add("onComplete", "FinishedSlide");
-        if (inverse){
-            slideIncrement = - slideIncrement;
-        }
 
         // Init swipe listener.
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;

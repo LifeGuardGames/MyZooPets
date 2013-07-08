@@ -20,6 +20,9 @@ public class SlotMachineUIManager : MonoBehaviour {
             delegate(){
                 DataManager.SubtractStars(50);
                 StartGame();
+            },
+            delegate(){
+                Application.LoadLevel("NewBedRoom");
             });
     }
 

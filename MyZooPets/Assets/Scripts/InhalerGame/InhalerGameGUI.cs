@@ -7,6 +7,9 @@ public class InhalerGameGUI : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 
+    public static float practiceMessageDuration = 3.0f;
+    public static float introMessageDuration = 3.0f;
+
     public GUISkin defaultSkin;
 	public GUIStyle inhalerStyle;
     public GUIStyle largeButtonStyle;
@@ -119,9 +122,14 @@ public class InhalerGameGUI : MonoBehaviour {
 
 	public void ShowIntro(){
 		showIntroEnded = false;
-		notificationUIManager.PopupTexture("intro");
+		if (inhalerGameManager.isPracticeGame){
+			notificationUIManager.PopupTexture("practice intro");
+		}
+		else {
+			notificationUIManager.PopupTexture("intro");
+		}
 
-		Invoke("ShowIntroEnd", 3);
+		Invoke("ShowIntroEnd", introMessageDuration);
 	}
 
 	void ShowIntroEnd(){

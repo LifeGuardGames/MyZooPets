@@ -35,6 +35,8 @@ public class PetMovement : MonoBehaviour {
 
         tapItem = GetComponent<TapItem>();
         tapItem.OnTap += MovePet;
+		
+//		InvokeRepeating("PetWalkAround",5f,5f);
 	}
 
     void MovePet(){
@@ -51,6 +53,12 @@ public class PetMovement : MonoBehaviour {
             }
         }
     }
+    
+	void PetWalkAround(){
+		destinationPoint = new Vector3(petSprite.transform.position.x+Random.value*10,petSprite.transform.position.y,petSprite.transform.position.z+Random.value*10);
+	    petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
+		
+	}
 
 	// Update is called once per frame
 	void Update () {

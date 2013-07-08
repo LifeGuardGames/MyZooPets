@@ -58,7 +58,15 @@ public class InhalerGameManager : MonoBehaviour{
             if (!introShown){
                 inhalerGameGUI.ShowIntro();
                 introShown = true;
-                Invoke("SetUpScene", 3);
+                float delay;
+                if (isPracticeGame){
+                    delay = InhalerGameGUI.practiceMessageDuration + InhalerGameGUI.introMessageDuration;
+                }
+                else {
+                    delay = InhalerGameGUI.introMessageDuration;
+                }
+
+                Invoke("SetUpScene", delay);
             }
             else {
                 SetUpScene();
@@ -163,7 +171,7 @@ public class InhalerGameManager : MonoBehaviour{
             RemoveFirstTimeFlags();
             gameEnded = true;
             inhalerGameGUI.HideButtons();
-            // Invoke("ShowButtons", 3); // set a 3 second delay so that the "great" message animation has time to play
+            // Invoke("ShowButtons", inhalerGameGUI.introMessageDuration); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
 

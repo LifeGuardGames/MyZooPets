@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 //Inventory class for Pet
@@ -12,22 +13,40 @@ using System.Collections.Generic;
 public class Inventory : MonoBehaviour {
 	private ItemLogic itemlogic;
 	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
-	
+	private int inventoryCount; //number of items that are actually in inventory
+
 	public bool isDebug; //developing option
+	public int InventoryCount{
+		get{return inventoryCount;}
+	}
 	public int[] InventoryArray{
 		get{return inventory;}
 	}
 
+	//==============Events=================
+	//call when items are added or removed from the inventory
+	public delegate void InventoryResizeEventHandlers(object sender, EventArgs e);
+	public static event InventoryResizeEventHandlers OnInventoryResize;
+	//===============================
+
 	//add items to inventory
 	public void addItem(int id, int count){
+		if(inventory[id] == 0){ //add one to inventory Count if item is new
+			inventoryCount++;
+			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
+		}
 		inventory[id] += count;
 	}
 	
 	//Use item from inventory
 	public void useItem(int id){
 		if(inventory[id]!=0){
-			inventory[id] --;
+			inventory[id]--;
 			itemlogic.OnCall(id);
+		}
+		if(inventory[id] == 0){ //minus one to inventory count if item is used up
+			inventoryCount--;
+			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
 		}
 	}
 	

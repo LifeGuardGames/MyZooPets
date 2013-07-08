@@ -38,8 +38,10 @@ public class SlotMachineUIManager : MonoBehaviour {
 
                 if(SlotMachineLogic.CheckMatch()){ //check if the user won
                     int stars = 500;
+                    int points = 100;
                     DataManager.AddStars(stars);
-                    notificationUIManager.GameOverRewardMessage(stars, 0,
+                    DataManager.AddPoints(points);
+                    notificationUIManager.GameOverRewardMessage(stars, points,
                         delegate(){
                             StartGame();
                         },

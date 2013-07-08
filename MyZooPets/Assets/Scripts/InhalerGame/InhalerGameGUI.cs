@@ -72,7 +72,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		// notificationUIManager.PopupTexture("great");
 		if (inhalerGameManager.isPracticeGame){
 			notificationUIManager.GameOverRewardMessage(
-				0,
+				inhalerGameManager.PracticeGameStarIncrement,
 				inhalerGameManager.PracticeGamePointIncrement,
 				delegate (){
 					inhalerGameManager.ResetInhalerGame();

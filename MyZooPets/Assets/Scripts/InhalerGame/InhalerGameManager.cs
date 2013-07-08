@@ -18,9 +18,13 @@ public class InhalerGameManager : MonoBehaviour{
     public bool isPracticeGame;
 
     int practiceGamePointIncrement = 50;
+    int practiceGameStarIncrement = 50;
     public int PracticeGamePointIncrement {
         get {return practiceGamePointIncrement;}
     }
+    public int PracticeGameStarIncrement{
+		get{return practiceGameStarIncrement;}
+	}
 
     bool hasPlayedGame = false;
     public bool HasPlayedGame{
@@ -165,6 +169,7 @@ public class InhalerGameManager : MonoBehaviour{
             }
             else {
                 DataManager.AddPoints(practiceGamePointIncrement);
+                DataManager.AddStars(practiceGameStarIncrement);
             }
 
             inhalerGameGUI.DisplayMessage();

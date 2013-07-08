@@ -74,6 +74,7 @@ public class InhalerGameGUI : MonoBehaviour {
 				delegate (){
 					inhalerGameManager.ResetInhalerGame();
 					RestartProgressBar();
+					ShowButtons();
 				},
 				QuitInhalerGame
 			);

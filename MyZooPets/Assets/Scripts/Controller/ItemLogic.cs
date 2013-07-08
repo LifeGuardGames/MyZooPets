@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 //Item Logic Class
 //Reference all Items.
-//Each properity of items are stored in a list, fill the list by draggin in Unity
+//Each property of items are stored in a list, fill the list by draggin in Unity
 //General list items contains a list of all items
 //Each Item 's ID is the index of itself in the general items list. 
 //Methods list contains all funtions for each item, cooresponding to its index

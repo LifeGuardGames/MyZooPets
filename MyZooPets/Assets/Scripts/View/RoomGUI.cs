@@ -167,7 +167,7 @@ public class RoomGUI : MonoBehaviour {
 		healthBarloc = new Vector2(LeftGuiRect.rect.x+ 0,LeftGuiRect.rect.y+80);
 	  	moodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+180);
 	  	foodBarloc = new Vector2(LeftGuiRect.rect.x+0,LeftGuiRect.rect.y+280);
-
+	  	
 		//Data reading from Data Manager
 		progress = roomAnimator.DisplayPoints;
 		food = roomAnimator.DisplayHunger;
@@ -201,9 +201,6 @@ public class RoomGUI : MonoBehaviour {
 			LeanTween.move(moodIconRect,new Vector2(-100,200),0.5f);
 			LeanTween.move(foodIconRect,new Vector2(-100,300),0.5f);
 		}
-		if(hideMenu){
-			LeanTween.move(menuRect,new Vector2(0,850),0.5f);
-		}
 		if(hideOption){
 			LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
 			LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH, 850), 0.5f);
@@ -214,12 +211,11 @@ public class RoomGUI : MonoBehaviour {
 	public void ShowGUIs(){
 		LeanTween.move(TopGuiRect,new Vector2(0,0),0.5f);
 		LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
-		LeanTween.move(menuRect,new Vector2(0,700),0.5f);
 		LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
 		LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH - rightArrow.width, 850), 0.5f);
 		LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
 		LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
-		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);
+		LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
 		LeanTween.move(starIconRect,new Vector2(555,5),0.5f);
 
 	}
@@ -260,82 +256,6 @@ public class RoomGUI : MonoBehaviour {
 		GUI.Label(new Rect(1151, 20, 60, 60), food.ToString());
 		GUI.DrawTexture(new Rect(699, 6, guiPanelStats .width, guiPanelStats.height), guiPanelStats);
 		 
-		//get count of items owned
-		int counter = 0;
-		for(int i = 0;i< inventory.inventory.Length;i++){
-			if(inventory.inventory[i]!=0) counter++;
-		}
-		//Extending Button Groups
-		//Includes 4 items/Buttons for now.
-		menuTextureRect = new Rect(menuRect.rect.x  - 900 + 80f * counter/*- (1000-((counter+1) * 85))*/, menuRect.rect.y - 10, menuRect.rect.width, menuRect.rect.height);
-		GUI.DrawTexture(menuTextureRect, itemBarTexture);
-		GUILayout.BeginArea(menuRect.rect, "");
-		GUILayout.BeginHorizontal();
-
-		counter =0;
-		//implementing itemlogic
-		for(int i = 0 ;i < itemlogic.items.Count; i++){
-			if(i == pickUpId){
-				textureSwap = null;
-			}
-			else{
-				textureSwap = itemlogic.items[i].Texture;
-			}
-			if(inventory.inventory[i]!=0){
-				if(GUILayout.RepeatButton(textureSwap, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-					pickedUp = true;
-					pickUpId = i;
-				}
-				counter++;
-				GUI.Label(new Rect(-10+counter*80-80,35,100,80),"x " + inventory.inventory[i].ToString(),itemCountTextStyle);
-			}
-		}
-
-		//move in/out of item bar
-		if(isMenuExpanded){
-			if(GUILayout.Button(minusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-				isMenuExpanded = false;
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeInOutQuad);
-				LeanTween.move(menuRect, new Vector2(-80f * counter, NATIVE_HEIGHT - 100), 0.3f, optional);
-			}
-		}
-		else{
-			if(GUILayout.Button(plusTexture, GUILayout.Height(menuBoxHeight), GUILayout.Width(menuBoxWidth))){
-				isMenuExpanded = true;
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeInOutQuad);
-				LeanTween.move(menuRect, new Vector2(0, NATIVE_HEIGHT - 100), 0.3f, optional);
-			}
-		}
-		GUILayout.EndHorizontal();
-		GUILayout.EndArea();
-
-		//Temp Pick & Drag of items
-		//TODO-w Refactor this somewhere else?
-		//Do this when we create Backpack .etc
-		if(pickedUp){
-			// GUI.DrawTexture(new Rect(Input.mousePosition.x - menuBoxWidth / 2,NATIVE_HEIGHT- Input.mousePosition.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
-			Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(Input.mousePosition);
-			GUI.DrawTexture(new Rect(convertedGUIPos.x - menuBoxWidth / 2,NATIVE_HEIGHT- convertedGUIPos.y - menuBoxHeight / 2, menuBoxWidth,menuBoxHeight),itemlogic.items[pickUpId].Texture);
-			if(Input.touchCount > 0){
-				if(Input.GetTouch(0).phase == TouchPhase.Ended){
-					Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-					RaycastHit hit;
-
-					if(Physics.Raycast(myRay,out hit)){
-						if(hit.collider.name == "SpritePet" ||
-							hit.collider.name == "PetHead" ||
-							hit.collider.name == "PetTummy"){
-							inventory.useItem(pickUpId);
-						}
-					}
-					pickedUp = false;
-					pickUpId = -1;
-				}
-			}
-		}
-
 		//just for testing
 		//Delete after
 		if(Input.GetMouseButtonUp(0)){
@@ -383,7 +303,7 @@ public class RoomGUI : MonoBehaviour {
 //			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
 //		}
 
-
+		
 		//debuggin options
 		if(isDebug){
 			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
@@ -403,16 +323,12 @@ public class RoomGUI : MonoBehaviour {
 		}
 
 		// navigation arrows
-		if (userNavigation.CanShowLeftArrow){
-	        if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
-	        	userNavigation.ToTheLeft();
-	        }
-		}
-		if (userNavigation.CanShowRightArrow){
-	        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
-	        	userNavigation.ToTheRight();
-	        }
-	    }
+        if(GUI.Button(new Rect(LeftGuiRect.rect.x, NATIVE_HEIGHT / 2, leftArrow.width, leftArrow.height), leftArrow, blankButtonStyle)){
+        	userNavigation.ToTheLeft();
+        }
+        if(GUI.Button(new Rect(RightArrowRect.rect.x, NATIVE_HEIGHT / 2, rightArrow.width, rightArrow.height), rightArrow, blankButtonStyle)){
+        	userNavigation.ToTheRight();
+        }
 
 	}
 }

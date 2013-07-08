@@ -3,16 +3,19 @@ using System.Collections;
 using System;
 
 public class InventoryGUI : MonoBehaviour{
-    private LTRect inventoryRect;
+    
     private Inventory inventory;
-    private Texture2D textureSwap;
-    private bool pickedUp;
-    private bool isMenuExpanded;
-    private int pickUpId;
+    private Texture2D textureSwap; //texture used when dragging
+    private bool pickedUp; //True: item has been picke dup
+    private bool isMenuExpanded; //True: inventory expanded
+    private int pickUpId; //The id of the item picked up
     private ItemLogic itemLogic;
-    private Vector2 displayPosition;
+
+    //LeanTween position
+    private LTRect inventoryRect; 
+    private Vector2 displayPosition; 
     private Vector2 hidePosition;
-    private Rect inventoryTextureRect;
+    private Rect inventoryTextureRect; //inventory background rect
 
     private const int ITEM_BOX_HEIGHT = 75;
     private const int ITEM_BOX_WIDTH = 75;
@@ -27,7 +30,7 @@ public class InventoryGUI : MonoBehaviour{
     public GUIStyle itemCountTextStyle;
     public GUISkin defaultSkin;
 
-    void Start(){
+    void Awake(){
         inventory = GameObject.Find("GameManager").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager").GetComponent<ItemLogic>();
 
@@ -84,13 +87,12 @@ public class InventoryGUI : MonoBehaviour{
             float vertRatio = Screen.height/NATIVE_HEIGHT;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
         }
-        
+       
         GUILayout.BeginArea(inventoryRect.rect);
             GUI.DrawTexture(inventoryTextureRect, itemBarTexture);
             GUILayout.BeginHorizontal();
 
-                int counter =0;
-
+                int itemCounter =0;
                 //implementing itemLogic
                 for(int i = 0 ;i < itemLogic.items.Count; i++){
                     if(i == pickUpId){
@@ -108,9 +110,9 @@ public class InventoryGUI : MonoBehaviour{
                                 pickedUp = true;
                                 pickUpId = i;
                             }
-                            counter++;
-                            GUI.Label(new Rect(0,0, ITEM_BOX_WIDTH, ITEM_BOX_HEIGHT),
+                            GUI.Label(new Rect(itemCounter*ITEM_BOX_WIDTH, 0, ITEM_BOX_WIDTH, ITEM_BOX_HEIGHT),
                                 "x " + inventory.InventoryArray[i].ToString(),itemCountTextStyle);
+                            itemCounter++;
                             GUILayout.FlexibleSpace();
                         GUILayout.EndVertical();
                     }
@@ -124,7 +126,7 @@ public class InventoryGUI : MonoBehaviour{
                         isMenuExpanded = false;
                         Hashtable optional = new Hashtable();
                         optional.Add("ease", LeanTweenType.easeInOutQuad);
-                        LeanTween.move(inventoryRect, new Vector2(-80f * counter, NATIVE_HEIGHT - 100), 0.3f, optional);
+                        LeanTween.move(inventoryRect, new Vector2(-80f * itemCounter, NATIVE_HEIGHT - 100), 0.3f, optional);
                     }
                 }
                 else{

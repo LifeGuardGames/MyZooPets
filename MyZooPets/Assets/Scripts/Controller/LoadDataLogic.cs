@@ -14,9 +14,9 @@ public class LoadDataLogic : MonoBehaviour {
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
-    private PetMovement petMovement; //reference to ...logic?
-    private CameraMove cameraMove; //reference to ...logic?
-    private Tutorial tutorial; //reference to... logic?
+    private PetMovement petMovement; //reference
+    private CameraMove cameraMove; //reference 
+    private Tutorial tutorial; //reference 
     private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickmanager;
 
@@ -74,6 +74,7 @@ public class LoadDataLogic : MonoBehaviour {
             petMovement.Init();
             clickmanager.Init();
             diagnoseTimerLogic.Init();
+            
         }else if(Application.loadedLevelName == "Yard"){ //Yard specific gameobjects
 
         }

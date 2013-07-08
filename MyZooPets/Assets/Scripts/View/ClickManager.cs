@@ -35,6 +35,7 @@ public class ClickManager : MonoBehaviour {
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
+    bool trophyMessageShowing = false;
 
 	public void Init(){
 		if(Application.platform == RuntimePlatform.Android ||
@@ -154,10 +155,14 @@ public class ClickManager : MonoBehaviour {
         // todo: have a better way of checking if we are in trophy mode
         if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
 
-	        notificationUIManager.PopupNotification("Level up to get more trophies!",
-	            delegate(){
-	            	// nothing
-	            });
+        	if (trophyMessageShowing == false){
+	        	trophyMessageShowing = true;
+		        notificationUIManager.PopupNotification("Level up to get more trophies!",
+		            delegate(){
+		            	trophyMessageShowing = false;
+	            	}
+	            );
+        	}
 
 			ClickLock();
 			ModeLock();

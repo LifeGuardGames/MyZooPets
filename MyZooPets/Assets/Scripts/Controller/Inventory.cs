@@ -10,14 +10,14 @@ using System.Collections.Generic;
 //Int in each array position represents item count for each item
 //  eg.  inventory[2] = 1  means, the pet has 1 of the third item in Itemlogic class(the reference) 
 public class Inventory : MonoBehaviour {
-
-	
-	//Use array to represent item. 
-	//this way ID is same as index of the array.
-	public int[] inventory ;
-	public bool isDebug;
 	private ItemLogic itemlogic;
+	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
 	
+	public bool isDebug; //developing option
+	public int[] InventoryArray{
+		get{return inventory;}
+	}
+
 	//add items to inventory
 	public void addItem(int id, int count){
 		inventory[id] += count;

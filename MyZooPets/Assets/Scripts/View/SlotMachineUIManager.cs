@@ -18,6 +18,7 @@ public class SlotMachineUIManager : MonoBehaviour {
 
         notificationUIManager.PopupNotification("-50 stars to play",
             delegate(){
+                DataManager.SubtractStars(50);
                 StartGame();
             });
     }
@@ -29,11 +30,13 @@ public class SlotMachineUIManager : MonoBehaviour {
                 wheels[1].GetComponent<SpinningWheel>().doneSpinning &&
                 wheels[2].GetComponent<SpinningWheel>().doneSpinning){
                 if(SlotMachineLogic.SpinEndCallBack != null) SlotMachineLogic.SpinEndCallBack();
-                
+
                 SlotMachineLogic.GameOver = true; //stop update from checking
 
                 if(SlotMachineLogic.CheckMatch()){ //check if the user won
-                    notificationUIManager.GameOverRewardMessage(500, 0, 
+                    int stars = 500;
+                    DataManager.AddStars(stars);
+                    notificationUIManager.GameOverRewardMessage(stars, 0,
                         delegate(){
                             StartGame();
                         },
@@ -63,7 +66,7 @@ public class SlotMachineUIManager : MonoBehaviour {
         SlotMachineLogic.GameOver = false;
         for(int i = 0; i<3; i++){
             SlotMachineLogic.GenerateRandomSlots();
-            wheels[i].GetComponent<SpinningWheel>().StartSpin(SlotMachineLogic.ChosenSlots[i], i);    
+            wheels[i].GetComponent<SpinningWheel>().StartSpin(SlotMachineLogic.ChosenSlots[i], i);
         }
     }
 }

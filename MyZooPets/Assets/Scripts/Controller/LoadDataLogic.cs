@@ -14,7 +14,6 @@ public class LoadDataLogic : MonoBehaviour {
     private RoomGUIAnimator roomGUIAnimator; //reference to UI
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
-    private InventoryGUI inventoryGUI; //reference to UI
     private PetMovement petMovement; //reference
     private CameraMove cameraMove; //reference 
     private Tutorial tutorial; //reference 
@@ -43,7 +42,6 @@ public class LoadDataLogic : MonoBehaviour {
             diagnoseTimerLogic = GameObject.Find("GameManager").GetComponent<DiagnoseTimerLogic>();
             petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
             clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
-            inventoryGUI = GameObject.Find("UIManager/InventoryGUI").GetComponent<InventoryGUI>();
 
             if(!DataManager.FirstTime){ //if not first time load GUI right away
                 FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
@@ -76,7 +74,6 @@ public class LoadDataLogic : MonoBehaviour {
             petMovement.Init();
             clickmanager.Init();
             diagnoseTimerLogic.Init();
-            inventoryGUI.Init();
             
         }else if(Application.loadedLevelName == "Yard"){ //Yard specific gameobjects
 

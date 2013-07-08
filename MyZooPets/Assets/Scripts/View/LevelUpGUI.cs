@@ -7,7 +7,7 @@ public class LevelUpGUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-       RoomGUIAnimator.OnLevelUp += OnLevelUpNotification;
+       HUDAnimator.OnLevelUp += OnLevelUpNotification;
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){

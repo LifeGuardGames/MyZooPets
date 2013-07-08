@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class ChallengesGUI : MonoBehaviour {
 
     public GameObject cameraMoveObject;
-    public GameObject roomGuiObject;
     public GUISkin defaultSkin;
 
     //Textures
@@ -34,7 +33,6 @@ public class ChallengesGUI : MonoBehaviour {
 
     //MISC
     private CameraMove cameraMove;
-    private RoomGUI roomGui;
     private bool challengesActive = false;
     private bool showGUI = true;
 
@@ -45,7 +43,6 @@ public class ChallengesGUI : MonoBehaviour {
     // Use this for initialization
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-        roomGui = roomGuiObject.GetComponent<RoomGUI>();
         challengesRect = new LTRect(challengesInitPosition.x,challengesInitPosition.y, 
             WINDOW_WIDTH, WINDOW_HEIGHT);
     }
@@ -55,7 +52,6 @@ public class ChallengesGUI : MonoBehaviour {
         if(!challengesActive){
             challengesActive = true;
             cameraMove.PetSideZoomToggle();
-            roomGui.HideGUIs(false, true, true, true);
             showGUI = false;
 
             if(!showGUI){
@@ -124,7 +120,6 @@ public class ChallengesGUI : MonoBehaviour {
             HideChallenges();
             showGUI = true;
             ClickManager.ClickLock();
-            roomGui.ShowGUIs();
             cameraMove.PetSideZoomToggle();
             challengesActive = false;
         }

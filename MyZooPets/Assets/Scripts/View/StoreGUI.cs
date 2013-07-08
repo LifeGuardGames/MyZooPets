@@ -35,14 +35,12 @@ public class StoreGUI : MonoBehaviour {
 	private float slideValue= 0;
 	private ItemLogic itemlogic;
 	private Inventory inventory;
-	private RoomGUI roomgui;
 	private	List<int> categoryList = new List<int>();
 
 
 	void Start(){
 		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
 		inventory =  GameObject.Find("GameManager").GetComponent<Inventory>();
-		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
 		storeRect = new LTRect(storeInitPosition.x, storeInitPosition.y, backgroundTexture.width, 600);
 	}
 
@@ -56,7 +54,6 @@ public class StoreGUI : MonoBehaviour {
 
 	public void showStore(){
 		StoreGUIOn = true;
-		roomgui.HideGUIs(false,true,false,true);
 
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
@@ -67,7 +64,6 @@ public class StoreGUI : MonoBehaviour {
 	}
 
 	public void hideStore(){
-		roomgui.ShowGUIs();
 
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);

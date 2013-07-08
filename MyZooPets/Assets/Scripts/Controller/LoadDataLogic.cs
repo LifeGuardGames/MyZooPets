@@ -11,7 +11,7 @@ public class LoadDataLogic : MonoBehaviour {
     private CalendarGUI calendarGUI; //reference to UI
     private ChallengesGUI challengesGUI; //reference to UI
     private DegradationGUI degradationUIManager; //reference to UI
-    private RoomGUIAnimator roomGUIAnimator; //reference to UI
+    private HUDAnimator animator; //reference to UI
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference
@@ -26,7 +26,7 @@ public class LoadDataLogic : MonoBehaviour {
         }
         IsDataLoaded = false;
         //=============GameObjects that are required in multiple scenes===================
-        roomGUIAnimator = GameObject.Find("UIManager/RoomGUI").GetComponent<RoomGUIAnimator>();
+        animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
         diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
         cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
         //==============================================================================
@@ -56,9 +56,9 @@ public class LoadDataLogic : MonoBehaviour {
     //data is ready for use so initialize all UI data
     private void InitializeDataForUI(){
         //Note: the order in which some of the classes are init matter
-        //1) roomGUIAnimator needs to be init before levelUpLogic
+        //1) animator needs to be init before levelUpLogic
         //========GameObjects that need to be init in multiple scenes============
-        roomGUIAnimator.Init();
+        animator.Init();
         diaryUIManager.Init();
         cameraMove.Init();
         //=======================================================================

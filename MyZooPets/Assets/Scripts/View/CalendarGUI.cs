@@ -33,7 +33,6 @@ public class CalendarGUI : MonoBehaviour {
 
     //MISC
     private CameraMove cameraMove;
-    private RoomGUI roomGui;
     private bool diaryActive = false;
     private bool showGUI = true;
     private List<CalendarEntry> calendar;
@@ -46,7 +45,6 @@ public class CalendarGUI : MonoBehaviour {
     // Use this for initialization
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-        roomGui = roomGuiObject.GetComponent<RoomGUI>();
         diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
     }
 
@@ -56,7 +54,6 @@ public class CalendarGUI : MonoBehaviour {
         if(!diaryActive){
             diaryActive = true;
             cameraMove.PetSideZoomToggle();
-            roomGui.HideGUIs(false, true, true, true);
             showGUI = false;
 
             CalendarLogic.CalendarOpened();
@@ -135,7 +132,6 @@ public class CalendarGUI : MonoBehaviour {
             showGUI = !showGUI;
             ClickManager.ClickLock();
             LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
-            roomGui.ShowGUIs();
             cameraMove.PetSideZoomToggle();
             diaryActive = false;
         }

@@ -14,7 +14,7 @@ using System;
 /// be provided.
 /// </summary>
 
-public class RoomGUIAnimator : MonoBehaviour {
+public class HUDAnimator : MonoBehaviour {
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
@@ -53,10 +53,14 @@ public class RoomGUIAnimator : MonoBehaviour {
 	private int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 	private int nextLevelPoints; //the minimum requirement for next level up
 	private Level lastLevel; //pet's last level
-	private RoomGUI roomgui;
+	private HUD hud;
 	
 	//Below are for Icon pulsing.
 	//Each 1 2 3, coorespond to Health, Mood, Food
+    private float grow;
+    private float shrink;
+    private float starGrow;
+    private float starShrink;
 	private bool IconSwitch1 = true;
 	private bool IconSwitch2 = true;
 	private bool IconSwitch3 = true;
@@ -91,7 +95,12 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 		lastLevel = DataManager.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
-		roomgui = GameObject.Find("RoomGUI").GetComponent<RoomGUI>();
+
+        hud = this.GetComponent<HUD>();
+        grow = hud.healthIcon.width + 10;
+        shrink = hud.healthIcon.width;
+        starGrow = hud.starIcon.width + 10;
+        starShrink = hud.starIcon.width;
 		
 		//Had to make 3 hashtable for each icon pulsing
 		optionalGrow1.Add("onCompleteTarget", gameObject);	
@@ -145,7 +154,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 				//stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween4);
-				LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.1f);
+				LeanTween.scale(hud.starIconRect,new Vector2(starShrink, starShrink),0.1f);
 				IconSwitch4 = true;
 			}
 		}
@@ -187,7 +196,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 				//Stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
-				LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.1f);
+				LeanTween.scale(hud.healthIconRect,new Vector2(hud.healthIcon.width,hud.healthIcon.height),0.1f);
 				IconSwitch1 = true;
 			}
 		}
@@ -213,7 +222,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 				//Stop grow & shrink. reset icon size
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween2);
-				LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.1f);
+				LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.1f);
 				IconSwitch2 = true;
 			}
 		}
@@ -241,7 +250,7 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 				//Stop grow & shrink. reset icon
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween3);
-				LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.1f);
+				LeanTween.scale(hud.foodIconRect,new Vector2(shrink,shrink),0.1f);
 				IconSwitch3 = true;
 			}
 		}				
@@ -250,29 +259,29 @@ public class RoomGUIAnimator : MonoBehaviour {
 
 	//Below functions for Icon pulsing.
     private void GrowHealthIcon(){
-    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(70,70),0.2f, optionalGrow1);
+    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(grow,grow),0.2f, optionalGrow1);
     }
     private void GrowMoodIcon(){
-    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(70,70),0.2f, optionalGrow2);
+    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(grow,grow),0.2f, optionalGrow2);
     }
 	private void GrowFoodIcon(){
-    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(70,70),0.2f, optionalGrow3);
+    	leantween3 = LeanTween.scale(hud.foodIconRect,new Vector2(grow,grow),0.2f, optionalGrow3);
     }
     private void GrowStarIcon(){
-    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(70,70),0.2f, optionalGrow4);
+    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starGrow,starGrow),0.2f, optionalGrow4);
     }
 
     private void ShrinkHealthIcon(){
-    	leantween1 = LeanTween.scale(roomgui.healthIconRect,new Vector2(60,60),0.2f, optionalShrink1);
+    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink1);
     }
     private void ShrinkMoodIcon(){
-    	leantween2 = LeanTween.scale(roomgui.moodIconRect,new Vector2(60,60),0.2f, optionalShrink2);
+    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink2);
     }
 	private void ShrinkFoodIcon(){
-    	leantween3 = LeanTween.scale(roomgui.foodIconRect,new Vector2(60,60),0.2f, optionalShrink3);
+    	leantween3 = LeanTween.scale(hud.foodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink3);
     }
     private void ShrinkStarIcon(){
-    	leantween4 = LeanTween.scale(roomgui.starIconRect,new Vector2(60,60),0.2f, optionalShrink4);
+    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starShrink,starShrink),0.2f, optionalShrink4);
     }
 
     //Check if the points progress bar has reached the level requirement

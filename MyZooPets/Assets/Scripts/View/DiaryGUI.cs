@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class DiaryGUI : MonoBehaviour {
 
 	public GameObject cameraMoveObject;
-	public GameObject roomGuiObject;
 	public GUISkin defaultSkin;
 
 	//Textures
@@ -35,7 +34,6 @@ public class DiaryGUI : MonoBehaviour {
 
 	//MISC
 	private CameraMove cameraMove;
-	private RoomGUI roomGui;
 	private bool diaryActive = false;
 	private bool isEnteredFromDiagnose = false;
 	private bool showGUI = true;
@@ -50,7 +48,6 @@ public class DiaryGUI : MonoBehaviour {
 	// Use this for initialization
 	void Start(){
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-		roomGui	= roomGuiObject.GetComponent<RoomGUI>();
 		diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
 	}
 
@@ -62,7 +59,6 @@ public class DiaryGUI : MonoBehaviour {
 			
 			diaryActive = true;
 			cameraMove.PetSideZoomToggle();
-			roomGui.HideGUIs(false, true, true, true);
 			showGUI = false;
 
 			// CalendarLogic.CalendarOpened();
@@ -219,7 +215,6 @@ public class DiaryGUI : MonoBehaviour {
 			if(!isEnteredFromDiagnose){
 				showGUI = true;
 				ClickManager.ClickLock();
-				roomGui.ShowGUIs();
 				cameraMove.PetSideZoomToggle();
 				diaryActive = false;
 			}

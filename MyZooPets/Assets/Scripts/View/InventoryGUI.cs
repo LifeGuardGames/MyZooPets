@@ -45,15 +45,7 @@ public class InventoryGUI : MonoBehaviour{
         Inventory.OnInventoryResize += ResizeInventory;
     }
 
-    //Display InventoryGUI in game
-    public void Display(){
-        LeanTween.move(inventoryRect, displayPosition, 0.5f);
-    }
-
-    //Hide InventoryGUI in game
-    public void Hide(){
-        LeanTween.move(inventoryRect, hidePosition, 0.5f);
-    }
+    
 
     void Update(){
         if(!LoadDataLogic.IsDataLoaded) return;
@@ -155,6 +147,16 @@ public class InventoryGUI : MonoBehaviour{
                 e.mousePosition.y - ITEM_BOX_HEIGHT / 2, ITEM_BOX_WIDTH,ITEM_BOX_HEIGHT),itemLogic.items[pickUpId].Texture);
 
         }
+    }
+
+    //Display InventoryGUI in game
+    public void Display(){
+        LeanTween.move(inventoryRect, displayPosition, 0.5f);
+    }
+
+    //Hide InventoryGUI in game
+    public void Hide(){
+        LeanTween.move(inventoryRect, hidePosition, 0.5f);
     }
 
     private void ResizeInventory(object sender, EventArgs e){

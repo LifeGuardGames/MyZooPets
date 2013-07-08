@@ -13,6 +13,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureGreat;
 	public GameObject popupTextureNiceTry;
 	public GameObject popupTextureUseTheInhaler;
+	public GameObject popupTextureInhalerPractice;
 	public GameObject popupAward;
 
 	public GameObject popupNotification;
@@ -86,7 +87,7 @@ public class NotificationUIManager : MonoBehaviour {
 			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
 			Destroy(go, 3.0f);
 		}
-	}	
+	}
 
 	/*
 		Desc: creates popup that has a popup texture and 2 buttons
@@ -135,10 +136,10 @@ public class NotificationUIManager : MonoBehaviour {
 		Note: pass in 0 for stars or points will result in the gui not showing up
 	*/
 	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
-		GameOverRewardMessage.OnButtonClicked yesButtonCallBack, 
+		GameOverRewardMessage.OnButtonClicked yesButtonCallBack,
 		GameOverRewardMessage.OnButtonClicked noButtonCallBack){
 
-		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position, 
+		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
 		if(script != null){
@@ -153,7 +154,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
 		GameOverRewardMessage.OnButtonClicked yesButtonCallBack){
 
-		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position, 
+		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
 		if(script != null){

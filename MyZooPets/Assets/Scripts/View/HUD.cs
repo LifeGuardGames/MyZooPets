@@ -219,7 +219,7 @@ public class HUD : MonoBehaviour {
 
 		//Store Button
 		if(GUILayout.Button("Store", GUILayout.Width(160), GUILayout.Height(100))){
-			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
+			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().ShowStore();
 		}
 
 		//Diary button

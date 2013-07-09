@@ -59,7 +59,7 @@ public class InventoryGUI : MonoBehaviour{
                         if(hit.collider.name == "SpritePet" ||
                             hit.collider.name == "PetHead" ||
                             hit.collider.name == "PetTummy"){
-                            inventory.useItem(pickUpId);
+                            inventory.UseItem(pickUpId);
                         }
                     }
                     pickedUp = false;

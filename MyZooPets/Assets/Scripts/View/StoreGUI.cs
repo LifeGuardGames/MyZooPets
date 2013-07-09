@@ -52,7 +52,7 @@ public class StoreGUI : MonoBehaviour {
 
 	}
 
-	public void showStore(){
+	public void ShowStore(){
 		StoreGUIOn = true;
 
 		Hashtable optional = new Hashtable();
@@ -63,7 +63,7 @@ public class StoreGUI : MonoBehaviour {
 		ClickManager.ClickLock();
 	}
 
-	public void hideStore(){
+	public void HideStore(){
 
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
@@ -98,28 +98,28 @@ public class StoreGUI : MonoBehaviour {
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
-				displayItems(ItemCategory.Foods);
+				DisplayItems(ItemCategory.Foods);
 			}
 			if(storePage == 2){
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
-				displayItems(ItemCategory.Items);
+				DisplayItems(ItemCategory.Items);
 			}
 			if(storePage == 3){
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
-				displayItems(ItemCategory.Inhalers);
+				DisplayItems(ItemCategory.Inhalers);
 			}
 			if(storePage == 4){
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page1Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page2Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page3Texture);
 				GUI.DrawTexture(new Rect(storeRect.rect.x + 30, storeRect.rect.y + 30, tabSize.x, tabSize.y), page4Texture);
-				displayItems(ItemCategory.Decorations);
+				DisplayItems(ItemCategory.Decorations);
 			}
 
 			if(GUI.Button(new Rect(storeRect.rect.x + 30 + 50, storeRect.rect.y + 30 + 5, 200, 50), "Food", blankButtonStyle)){
@@ -136,15 +136,12 @@ public class StoreGUI : MonoBehaviour {
 			}
 
 			if(GUI.Button(new Rect(storeRect.rect.x - 60,storeRect.rect.y + 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-				hideStore();
+				HideStore();
 			}
-
-
-
 		}
 	}
 
-	private void displayItems(ItemCategory c){
+	private void DisplayItems(ItemCategory c){
 		if(c == ItemCategory.Foods) categoryList = itemlogic.foodlist;
 		if(c == ItemCategory.Decorations) categoryList = itemlogic.decolist;
 		if(c == ItemCategory.Inhalers) categoryList = itemlogic.inhalerlist;
@@ -170,7 +167,7 @@ public class StoreGUI : MonoBehaviour {
 			GUI.Label(new Rect(menuItem1Loc.x + 220, menuItem1Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i]].Cost.ToString(), itemInfoStyle);
 			if(GUI.Button(new Rect(menuItem1Loc.x + 250, menuItem1Loc.y + 120, 180, 60), "Buy")){
 				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i]].Cost){
-					inventory.addItem(categoryList[i], 1);
+					inventory.AddItem(categoryList[i], 1);
 					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);
 				}
 			}
@@ -183,7 +180,7 @@ public class StoreGUI : MonoBehaviour {
 			GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);
 			if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
 				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
-					inventory.addItem(categoryList[i+1], 1);
+					inventory.AddItem(categoryList[i+1], 1);
 					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);
 				}
 			}

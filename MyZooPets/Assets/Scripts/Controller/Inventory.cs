@@ -14,8 +14,9 @@ public class Inventory : MonoBehaviour {
 	private ItemLogic itemlogic;
 	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
 	private int inventoryCount; //number of items that are actually in inventory
-
 	public bool isDebug; //developing option
+
+	//====================API===========================
 	public int InventoryCount{
 		get{return inventoryCount;}
 	}
@@ -30,7 +31,7 @@ public class Inventory : MonoBehaviour {
 	//===============================
 
 	//add items to inventory
-	public void addItem(int id, int count){
+	public void AddItem(int id, int count){
 		if(inventory[id] == 0){ //add one to inventory Count if item is new
 			inventoryCount++;
 			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
@@ -39,7 +40,7 @@ public class Inventory : MonoBehaviour {
 	}
 	
 	//Use item from inventory
-	public void useItem(int id){
+	public void UseItem(int id){
 		if(inventory[id]!=0){
 			inventory[id]--;
 			itemlogic.OnCall(id);
@@ -49,6 +50,7 @@ public class Inventory : MonoBehaviour {
 			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
 		}
 	}
+	//=================================================
 	
 	// Use this for initialization
 	void Start () {
@@ -59,8 +61,8 @@ public class Inventory : MonoBehaviour {
 		}
 		
 		//testing
-		addItem(0,2); //2 apples
-		addItem(1,1); //1 sandwich
+		AddItem(0,2); //2 apples
+		AddItem(1,1); //1 sandwich
 	}
 	
 	// Update is called once per frame

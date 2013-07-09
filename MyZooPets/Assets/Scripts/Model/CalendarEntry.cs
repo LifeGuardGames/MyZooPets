@@ -5,69 +5,44 @@ using System;
 [DoNotSerializePublic]
 public class CalendarEntry{
     [SerializeThis]
-    private DayOfWeek day; //day of the entry
+    private DosageRecord dayTime; //dayTime dosage record: hit or miss
     [SerializeThis]
-    private DosageRecord morning; //morning dosage record: hit or miss
+    private DosageRecord nightTime; //nightTime dosage record: hit or miss
     [SerializeThis]
-    private DosageRecord afternoon; //afternoon dosage record: hit or miss
+    private bool bonusCollectedDayTime;
     [SerializeThis]
-    private bool openedInMorning; //has the entry been seen by the user in morning
-    [SerializeThis]
-    private bool openedInAfternoon; //has the entry been seen by user in the afternoon
-    [SerializeThis]
-    private bool calculatedInMorning; //has the stats/score been calculated in morning
-    [SerializeThis]
-    private bool calculatedInAfternoon; //has stats/score been calculated in afternoon
+    private bool bonusCollectedNightTime;
 
     //===============Getters & Setters=============
-    public DayOfWeek Day{
-        get{return day;}
+    public DosageRecord DayTime{
+        get { return this.dayTime;}
+        set { this.dayTime = value;}
     }
-    public DosageRecord Morning{
-        get { return this.morning;}
-        set { this.morning = value;}
+    public DosageRecord NightTime{
+        get { return this.nightTime;}
+        set { this.nightTime = value;}
     }
-    public DosageRecord Afternoon{
-        get { return this.afternoon;}
-        set { this.afternoon = value;}
+    public bool BonusCollectedDayTime{
+        get { return this.bonusCollectedDayTime;}
+        set { this.bonusCollectedDayTime = value;}
     }
-    public bool OpenedInMorning{
-        get { return this.openedInMorning;}
-        set { this.openedInMorning = value;}
-    }
-    public bool OpenedInAfternoon{
-        get { return this.openedInAfternoon;}
-        set { this.openedInAfternoon = value;}
-    }
-    public bool CalculatedInMorning{
-        get { return this.calculatedInMorning;}
-        set { this.calculatedInMorning = value;}
-    }
-    public bool CalculatedInAfternoon{
-        get { return this.calculatedInAfternoon;}
-        set { this.calculatedInAfternoon = value;}
+    public bool BonusCollectedNightTime{
+        get { return this.bonusCollectedNightTime;}
+        set { this.bonusCollectedNightTime = value;}
     }
     //=====================================
-    
-    public CalendarEntry(DayOfWeek day){
-        this.day = day;
-        this.morning = DosageRecord.Null;
-        this.afternoon = DosageRecord.Null;
-        this.openedInMorning = false;
-        this.openedInAfternoon = false;
-        this.calculatedInMorning = false;
-        this.calculatedInAfternoon = false;
+
+    public CalendarEntry(){
+        this.dayTime = DosageRecord.Null;
+        this.nightTime = DosageRecord.Null;
+        this.bonusCollectedDayTime = false;
+        this.bonusCollectedNightTime = false;
     }
-    public CalendarEntry(DayOfWeek day, DosageRecord morning, DosageRecord afternoon ){
-        this.day = day;
-        this.morning = morning;
-        this.afternoon = afternoon;
-        this.openedInMorning = false;
-        this.openedInAfternoon = false;
-        this.calculatedInMorning = false;
-        this.calculatedInAfternoon = false;
+    public CalendarEntry(DosageRecord dayTime, DosageRecord nightTime ){
+        this.dayTime = dayTime;
+        this.nightTime = nightTime;
+        this.bonusCollectedDayTime = false;
+        this.bonusCollectedNightTime = false;
     }
-    //parameterless constructor required for Serializer
-    public CalendarEntry(){}
 }
 

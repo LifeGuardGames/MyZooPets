@@ -54,9 +54,9 @@ public class DataManager : MonoBehaviour {
 
     //Calendar Data
     [SerializeThis]
-    private static List<CalendarEntry> entries; //list of entries that represent a weak
+    private static List<CalendarEntry> entriesThisWeek;
     [SerializeThis]
-    private static int calendarCombo; //how many times user has open the calendar consecutively
+    private static List<CalendarEntry> entriesLastWeek;
     [SerializeThis]
     private static DateTime dateOfSunday; // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
@@ -171,12 +171,13 @@ public class DataManager : MonoBehaviour {
     }
 
     //calendar
-    public static List<CalendarEntry> Entries{
-        get{return entries;}
-        set{entries = value;}
+    public static List<CalendarEntry> EntriesThisWeek{
+        get{return entriesThisWeek;}
+        set{entriesThisWeek = value;}
     }
-    public static int CalendarCombo{
-        get {return calendarCombo;}
+    public static List<CalendarEntry> EntriesLastWeek{
+        get{return entriesLastWeek;}
+        set{entriesLastWeek = value;}
     }
     public static DateTime LastCalendarOpenedTime{
         get { return lastCalendarOpenedTime;}
@@ -331,13 +332,6 @@ public class DataManager : MonoBehaviour {
         }
     }
 
-    // Calendar Combo
-    public static void IncrementCalendarCombo(){
-        calendarCombo ++;
-    }
-    public static void ResetCalendarCombo(){
-        calendarCombo = 0;
-    }
     //===================================
 
     void Awake(){
@@ -396,18 +390,9 @@ public class DataManager : MonoBehaviour {
             stars = 100;
 
             //Calendar data initialization
-            entries = new List<CalendarEntry>();
-            calendarCombo = 0;
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
-
-            // populate previous entries with DosageRecord.Null up to today's entry
-            // to make it more consistent - DataManager.Entries will always start with Monday's entry
-            DateTime lastSunday = dateOfSunday.AddDays(-7);
-            TimeSpan sinceLastSunday = DateTime.Today.Subtract(lastSunday);
-            for (int i = 1; i < sinceLastSunday.Days; i++){ // exclude today's entry, as that will be generated later
-                DateTime day = lastSunday.AddDays(i);
-                entries.Add(new CalendarEntry(day.DayOfWeek, DosageRecord.Null, DosageRecord.Null) );
-            }
+            entriesLastWeek = CalendarLogic.LeaveBlankWeek();
+            entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
 
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);

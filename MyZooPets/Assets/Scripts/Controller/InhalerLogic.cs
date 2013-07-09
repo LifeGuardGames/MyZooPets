@@ -58,7 +58,26 @@ public static class InhalerLogic{
                 case 1: currentInhalerType = InhalerType.Rescue; break;
             }
         }else{ //regular inhaler game
-            if(CalendarLogic.IsThereMissDosageToday) canPlayGame = true;
+            
+            DateTime now = DateTime.Now;
+            TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.LastInhalerPlayTime.Date);
+            DataManager.LastInhalerPlayTime = now;
+
+            if(sinceLastPlayed.Days > 0){ //reset if new day
+                DataManager.PlayedInMorning = false;
+                DataManager.PlayedInAfternoon = false;
+            }
+            if(now.Hour < 12){ //morning
+                if(!DataManager.PlayedInMorning){ //can only play if not played in morning yet
+                    canPlayGame = true;
+                    DataManager.PlayedInMorning = true;
+                }
+            }else{ //afternoon
+                if(!DataManager.PlayedInAfternoon){ //can only play if not played in afternoon yet
+                    canPlayGame = true;
+                    DataManager.PlayedInAfternoon = true;
+                }
+            }
             currentInhalerType = InhalerType.Advair;
         }
         

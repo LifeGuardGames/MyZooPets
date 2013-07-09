@@ -71,6 +71,12 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool firstTimeRescue; //first time the player has seen the rescue inhaler
                                         //(this tells us whether to show tutorial arrows in the Inhaler Game)
+    [SerializeThis]
+    private static DateTime lastInhalerPlayTime; //last time the user played the regular inhaler
+    [SerializeThis]
+    private static bool playedInMorning; //has the user played in the morning
+    [SerializeThis]
+    private static bool playedInAfternoon; //has the user played in the afternoon
 
     //Degradation Data
     [SerializeThis]
@@ -190,6 +196,18 @@ public class DataManager : MonoBehaviour {
     public static bool FirstTimeRescue{
         get{return firstTimeRescue;}
         set{firstTimeRescue = value;}
+    }
+    public static DateTime LastInhalerPlayTime{
+        get{return lastInhalerPlayTime;}
+        set{lastInhalerPlayTime = value;}
+    }
+    public static bool PlayedInMorning{
+        get{return playedInMorning;}
+        set{playedInMorning = value;}
+    }
+    public static bool PlayedInAfternoon{
+        get{return playedInAfternoon;}
+        set{playedInAfternoon = value;}
     }
 
     //Degradation
@@ -397,6 +415,9 @@ public class DataManager : MonoBehaviour {
             //Inhaler game data initialization
             firstTimeAdvair = true;
             firstTimeRescue = true;
+            lastInhalerPlayTime = DateTime.Now;
+            playedInMorning = false;
+            playedInAfternoon = false;
 
             //Degradation game data
             lastTimeUserPlayedGame = DateTime.Now;
@@ -417,8 +438,6 @@ public class DataManager : MonoBehaviour {
 
             //turn first time initialization off
             PlayerPrefs.SetInt("FirstTime", 0);
-
-
     }
 
     //call the delegate when data initialization or deserialziation is done

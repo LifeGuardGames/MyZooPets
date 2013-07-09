@@ -210,24 +210,20 @@ public class HUD : MonoBehaviour {
 	public void Display(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(statsRect, statsPos, 0.5f, optional); //show stats Rect
+		LeanTween.move(statsRect, statsPos, 1f, optional); //show stats Rect
 	}
 
 	public void Hide(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f, optional);
+		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f);
 	}
 
 	public void DisplayNav(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(navigationRect, navigationPos, 0.5f, optional); //show stats Rect
+		LeanTween.move(navigationRect, navigationPos, 1f, optional); //show stats Rect
 	}
 
 	public void HideNav(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f, optional);
+		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f);
 	}
 }

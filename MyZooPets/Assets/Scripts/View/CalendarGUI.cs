@@ -32,6 +32,8 @@ public class CalendarGUI : MonoBehaviour {
 
     //MISC
     private CameraMove cameraMove;
+    private HUD hud;
+    private InventoryGUI inventoryGUI;
     private bool diaryActive = false;
     private bool showGUI = true;
     private List<CalendarEntry> calendar;
@@ -44,6 +46,8 @@ public class CalendarGUI : MonoBehaviour {
     // Use this for initialization
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+        hud = GameObject.Find("UIManager/HUD").GetComponent<HUD>();
+        inventoryGUI = GameObject.Find("UIManager/InventoryGUI").GetComponent<InventoryGUI>();
         diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
     }
 
@@ -51,6 +55,8 @@ public class CalendarGUI : MonoBehaviour {
     // Called from ClickManager
     public void CalendarClicked(){
         if(!diaryActive){
+            hud.HideNav();
+            inventoryGUI.Hide();
             diaryActive = true;
             cameraMove.PetSideZoomToggle();
             showGUI = false;
@@ -133,6 +139,8 @@ public class CalendarGUI : MonoBehaviour {
             LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
             cameraMove.PetSideZoomToggle();
             diaryActive = false;
+            hud.DisplayNav();
+            inventoryGUI.Display();
         }
     }
 }

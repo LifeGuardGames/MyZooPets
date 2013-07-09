@@ -36,7 +36,7 @@ public class PetMovement : MonoBehaviour {
         tapItem = GetComponent<TapItem>();
         tapItem.OnTap += MovePet;
 		
-//		InvokeRepeating("PetWalkAround",5f,5f);
+		InvokeRepeating("PetWalkAround",5f,5f);
 	}
 
     void MovePet(){
@@ -55,7 +55,20 @@ public class PetMovement : MonoBehaviour {
     }
     
 	void PetWalkAround(){
-		destinationPoint = new Vector3(petSprite.transform.position.x+Random.value*10,petSprite.transform.position.y,petSprite.transform.position.z+Random.value*10);
+		float ran1 = Random.value;
+		float ran2 = Random.value;
+		float ran3 = Random.value;
+		float ran4 = Random.value;
+		if(ran1 < 0.5) ran2 = -ran2;
+		if(ran3 < 0.5) ran4 = -ran4;
+		float moveToX = petSprite.transform.position.x + ran2 *10;
+		if (moveToX < -18f) moveToX = -18f;
+		if (moveToX > 18f) moveToX = 18f;
+		float moveToZ = petSprite.transform.position.z + ran4 *10;
+		if(moveToZ < -27f) moveToZ = - 27f;
+		if(moveToZ > 27f) moveToZ = 27f;
+			
+		destinationPoint = new Vector3(moveToX,petSprite.transform.position.y, moveToZ);
 	    petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
 		
 	}

@@ -76,10 +76,6 @@ public static class CalendarLogic{
 
     //====================API (use this for the UI)=======================
 
-    // public static int GetComboCount(){
-    //     return DataManager.CalendarCombo;
-    // }
-
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
     public static void RecordGivingInhaler(){
@@ -90,23 +86,6 @@ public static class CalendarLogic{
     public static void CalendarOpened(){
         CalendarOpenedOnDate(DateTime.Now);
     }
-
-    // public static bool HasCheckedCalendar{
-    //     get{
-    //         TimeSpan sinceLastPlayed = DateTime.Now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
-    //         if (sinceLastPlayed.Days == 0){ // same day
-    //             if (DateTime.Now.Hour < 12){ // morning
-    //                 return lastEntry.OpenedInMorning;
-    //             }
-    //             else { // afternoon
-    //                 return lastEntry.OpenedInAfternoon;
-    //             }
-    //         }
-    //         return false;
-    //     }
-    // }
-
-    //===========================================
 
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {

@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 
 //InhalerLogic stores and manipulate any inhaler game related data
-//TO DO: reward algorithm for optimal window and practice inhaler game
 public static class InhalerLogic{
     //variables
     // currentInhalerSkin;

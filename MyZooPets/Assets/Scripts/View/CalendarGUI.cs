@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class CalendarGUI : MonoBehaviour {
 
     public GameObject cameraMoveObject;
-    public GameObject roomGuiObject;
     public GUISkin defaultSkin;
 	
 	//TODO RENAME DIARY TO CALENDAR STUFF IN HERE

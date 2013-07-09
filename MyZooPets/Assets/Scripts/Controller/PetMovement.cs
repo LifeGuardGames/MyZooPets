@@ -26,19 +26,35 @@ using System.Collections;
 public class PetMovement : MonoBehaviour {
 
     private GameObject petSprite;
+	private GameObject petMovement;
     private Vector3 destinationPoint;
     private TapItem tapItem;
+    public Camera camera;
+    public bool allowPetMoveAround;
 
 	public void Init () {
         petSprite = GameObject.Find("SpritePet");
+        petMovement = GameObject.Find("PetMovement");
         destinationPoint = petSprite.transform.position;
 
         tapItem = GetComponent<TapItem>();
         tapItem.OnTap += MovePet;
 		
-		InvokeRepeating("PetWalkAround",5f,5f);
+		if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
 	}
-
+	
+	public void movePetWithCamera(){
+		Ray ray = camera.ScreenPointToRay(new Vector3(600, 200, 0));
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit)){
+		print ("testing");
+		print (hit.point);
+			if(hit.collider == petMovement.collider){
+				destinationPoint = hit.point;
+			}
+		}
+	}
+	
     void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;

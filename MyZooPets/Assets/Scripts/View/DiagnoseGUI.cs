@@ -119,7 +119,7 @@ public class DiagnoseGUI : MonoBehaviour {
 		//=========Diagnose symptoms panel=============
 		GUI.BeginGroup(diagnoseRect.rect, txPanel);
 		GUI.Label(new Rect(0,0, 600, 100), "How is your pet feeling?", diagnoseStyle);
-		if(GUI.Button(new Rect(40, 90, BUTTON_WIDTH, BUTTON_HEIGHT), buttonGreen)){
+		if(GUI.Button(new Rect(40, 90, BUTTON_WIDTH, BUTTON_HEIGHT), buttonGreen, buttonBlankStyle)){
 			chosenStage = AsthmaStage.OK;
 			Clicked();
 		}
@@ -184,14 +184,12 @@ public class DiagnoseGUI : MonoBehaviour {
 			}
 		}
 		//=====================================================================
-
 	}
 
 	//user chose one of the stages, so check it the user is correct
 	private void Clicked(){
 		if(!buttonClicked){
 			buttonClicked = true;
-			
 			
 			if(DiagnoseGameLogic.IsThisStageCorrect(chosenStage)){
 
@@ -246,5 +244,4 @@ public class DiagnoseGUI : MonoBehaviour {
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(diagnoseRect, diagnoseFinalPosition, 0.5f, optional);
 	}
-
 }

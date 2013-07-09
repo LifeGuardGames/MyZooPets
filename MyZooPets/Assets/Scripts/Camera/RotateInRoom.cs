@@ -11,6 +11,8 @@ public class RotateInRoom : UserNavigation {
 
     float minLeft;
     float maxRight;
+	
+	private PetMovement petmovement;
 
 	void Start () {
         currentYRotation = (int)transform.eulerAngles.y;
@@ -22,8 +24,10 @@ public class RotateInRoom : UserNavigation {
         // Init limits to room navigation
         minLeft = 0;
         maxRight = rotationIncrement;
+        
+		petmovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
 	}
-
+	
     public override void ToTheRight(){
         if (!lockRotation && IsRightArrowEnabled()){
             if (ClickManager.CanRespondToTap()){
@@ -59,6 +63,7 @@ public class RotateInRoom : UserNavigation {
     void FinishedRotation(){
         lockRotation = false;
         currentYRotation = (int)transform.eulerAngles.y; // normalize angle
+		petmovement.movePetWithCamera();
     }
 
     void UpdateClickableItemsInPartition(){

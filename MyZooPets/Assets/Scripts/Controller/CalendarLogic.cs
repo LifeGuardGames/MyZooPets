@@ -8,10 +8,12 @@ public static class CalendarLogic{
     public static int PointIncrement = 250;
     public static int StarIncrement = 0;
 
+    private static CalendarEntry todaysEntry; //today's entry
+
     //====================API (use this for generating weeks)=======================
 
     public static List<CalendarEntry> EmptyWeek(){
-        List list = new List<CalendarEntry>();
+        List<CalendarEntry> list = new List<CalendarEntry>();
         for (int i = 0; i < 7; i++){
             list.Add(new CalendarEntry());
         }
@@ -19,7 +21,7 @@ public static class CalendarLogic{
     }
 
     public static List<CalendarEntry> LeaveBlankWeek(){ // for those parts that should remain empty
-        List list = new List<CalendarEntry>();
+        List<CalendarEntry> list = new List<CalendarEntry>();
         for (int i = 0; i < 7; i++){
             list.Add(new CalendarEntry(DosageRecord.LeaveBlank, DosageRecord.LeaveBlank));
         }
@@ -28,11 +30,12 @@ public static class CalendarLogic{
 
     // All entries should be DosageRecord.LeaveBlank up to today's first entry (either day time or night time)
     public static List<CalendarEntry> LeaveBlankUntilNowWeek(DateTime now){ // for those parts that should remain empty
-        List list = EmptyWeek();
+        List<CalendarEntry> list = EmptyWeek();
         // assume that DateOfSunday is updated by this point
 
         // get days passed since last Sunday
-        int daysPassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        int daysPassed = timePassed.Days;
 
         // set all values of entries before today to DosageRecord.Miss
         // (except today's)
@@ -51,7 +54,7 @@ public static class CalendarLogic{
     }
 
     public static List<CalendarEntry> MissedWeek(){
-        List list = new List<CalendarEntry>();
+        List<CalendarEntry> list = new List<CalendarEntry>();
         for (int i = 0; i < 7; i++){
             list.Add(new CalendarEntry(DosageRecord.Miss, DosageRecord.Miss));
         }
@@ -73,9 +76,9 @@ public static class CalendarLogic{
 
     //====================API (use this for the UI)=======================
 
-    public static int GetComboCount(){
-        return DataManager.CalendarCombo;
-    }
+    // public static int GetComboCount(){
+    //     return DataManager.CalendarCombo;
+    // }
 
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
@@ -88,29 +91,18 @@ public static class CalendarLogic{
         CalendarOpenedOnDate(DateTime.Now);
     }
 
-    public static bool HasCheckedCalendar{
-        get{
-            TimeSpan sinceLastPlayed = DateTime.Now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
-            if (sinceLastPlayed.Days == 0){ // same day
-                if (DateTime.Now.Hour < 12){ // morning
-                    return lastEntry.OpenedInMorning;
-                }
-                else { // afternoon
-                    return lastEntry.OpenedInAfternoon;
-                }
-            }
-            return false;
-        }
-    }
-
-    //get today's entry
-    // might not be necessary anymore
-    // public static bool IsThereMissDosageToday{
+    // public static bool HasCheckedCalendar{
     //     get{
-    //         bool retVal = false;
-    //         if(lastEntry != null) retVal = lastEntry.DayTime.Equals(DosageRecord.Miss) ||
-    //         lastEntry.NightTime.Equals(DosageRecord.Miss);
-    //         return retVal;
+    //         TimeSpan sinceLastPlayed = DateTime.Now.Date.Subtract(DataManager.LastCalendarOpenedTime.Date);
+    //         if (sinceLastPlayed.Days == 0){ // same day
+    //             if (DateTime.Now.Hour < 12){ // morning
+    //                 return lastEntry.OpenedInMorning;
+    //             }
+    //             else { // afternoon
+    //                 return lastEntry.OpenedInAfternoon;
+    //             }
+    //         }
+    //         return false;
     //     }
     // }
 
@@ -118,10 +110,10 @@ public static class CalendarLogic{
 
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {
-            lastEntry.DayTime = DosageRecord.Hit;
+            todaysEntry.DayTime = DosageRecord.Hit;
         }
         else if (now.Hour >= 12) {
-            lastEntry.NightTime = DosageRecord.Hit;
+            todaysEntry.NightTime = DosageRecord.Hit;
         }
     }
 
@@ -144,13 +136,13 @@ public static class CalendarLogic{
             // throw away everything and start anew.
             if(now.Date > DataManager.DateOfSunday.AddDays(7)){
                 DataManager.EntriesLastWeek = MissedWeek();
-                DataManager.ThisWeek = EmptyWeek();
+                DataManager.EntriesThisWeek = EmptyWeek();
             }
             // Else, we want to move everything up by one week.
             else {
                 //create new list for the new week
-                DataManager.EntriesLastWeek = DataManager.ThisWeek;
-                DataManager.ThisWeek = EmptyWeek();
+                DataManager.EntriesLastWeek = DataManager.EntriesThisWeek;
+                DataManager.EntriesThisWeek = EmptyWeek();
             }
 
             DataManager.DateOfSunday = GetDateOfSunday(now);
@@ -161,7 +153,8 @@ public static class CalendarLogic{
         // assume that DateOfSunday is updated by this point
 
         // days passed since last Sunday
-        int daysPassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        int daysPassed = timePassed.Days;
 
         // replace all the DosageRecord.Null values with DosageRecord.Miss
         // (except today's)
@@ -175,11 +168,15 @@ public static class CalendarLogic{
             }
         }
 
+        // update reference to todaysEntry
+        todaysEntry = DataManager.EntriesThisWeek[daysPassed - 1];
+
         // fill in specifically for today
-        FillInMissesForToday(DataManager.EntriesThisWeek[daysPassed - 1]);
+        FillInMissesForToday(now);
+
     }
 
-    private static void FillInMissesForToday(CalendarEntry todaysEntry, DateTime now){
+    private static void FillInMissesForToday(DateTime now){
         if (now.Hour >= 12) {
             todaysEntry.DayTime = DosageRecord.Miss;
         }

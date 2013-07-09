@@ -135,16 +135,16 @@ public class DiagnoseGUI : MonoBehaviour {
 
 		//=========Diagnose symptoms panel=============
 		GUI.BeginGroup(diagnoseRect.rect, txPanel);
-		GUI.Label(new Rect(0,0, 600, 100), "Diagnose the symptoms!", diagnoseStyle);
-		if(GUI.Button(new Rect(30, 200, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
+		GUI.Label(new Rect(0,0, 600, 100), "How is your pet feeling?", diagnoseStyle);
+		if(GUI.Button(new Rect(30, 90, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
 			chosenStage = AsthmaStage.OK;
 			Clicked();
 		}
-		if(GUI.Button(new Rect(220, 200, BUTTON_WIDTH, BUTTON_HEIGHT), yellow)){
+		if(GUI.Button(new Rect(30, 255, BUTTON_WIDTH, BUTTON_HEIGHT), yellow)){
 			chosenStage = AsthmaStage.Sick;
 			Clicked();			
 		}
-		if(GUI.Button(new Rect(410, 200, BUTTON_WIDTH, BUTTON_HEIGHT), red)){
+		if(GUI.Button(new Rect(30, 420, BUTTON_WIDTH, BUTTON_HEIGHT), red)){
 			chosenStage = AsthmaStage.Attack;
 			Clicked();	
 		}

@@ -9,8 +9,8 @@ public static class CalendarLogicOld{
     public static int StarIncrement = 0;
 
     private static System.Random rand = new System.Random();
-    private static CalendarEntry lastEntry; //today's entry
-    private static List<CalendarEntry> tempEntries;
+    private static CalendarEntryOld lastEntry; //today's entry
+    private static List<CalendarEntryOld> tempEntries;
     private static int comboBase = 0; //TO DO: needs to be balance
     private static int comboMax = 3750; //TO Do: needs to be balance
 
@@ -19,7 +19,7 @@ public static class CalendarLogicOld{
         return DataManager.CalendarCombo;
     }
 
-    public static List<CalendarEntry> GetCalendarEntries(){
+    public static List<CalendarEntryOld> GetCalendarEntries(){
         return DataManager.Entries;
     }
 
@@ -84,7 +84,7 @@ public static class CalendarLogicOld{
         CalendarOpenedOnDate(now);
     }
 
-    public static CalendarEntry LastEntryTest(){
+    public static CalendarEntryOld LastEntryTest(){
         return lastEntry;
     }
     //=============================================
@@ -109,7 +109,7 @@ public static class CalendarLogicOld{
             CalculateScoreForToday(now);
         }
         else {
-            tempEntries = new List<CalendarEntry>(); //temp list for calculation only
+            tempEntries = new List<CalendarEntryOld>(); //temp list for calculation only
             if (sinceLastPlayed.Days == 1){ // next day
                 // last played day
                 GeneratePreviousAfternoon();
@@ -137,7 +137,7 @@ public static class CalendarLogicOld{
     }
 
     private static void UpdateLastEntryReference(){
-        List<CalendarEntry> list = DataManager.Entries;
+        List<CalendarEntryOld> list = DataManager.Entries;
         if (list != null && list.Count > 0){
             lastEntry = DataManager.Entries[DataManager.Entries.Count - 1];
         }
@@ -199,29 +199,29 @@ public static class CalendarLogicOld{
         for(; counter < missedDays; counter++){
             TimeSpan timeSpan = new TimeSpan(missedDays - counter, 0, 0, 0); //convert missed days to timespan
             DateTime missedDate = now.Subtract(timeSpan);
-            CalendarEntry entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
+            CalendarEntryOld entry = GenerateEntryWithPunishment(missedDate.DayOfWeek);
             tempEntries.Add(entry);
         }
     }
 
     //generate entry with DosageRecord.Hit for morning and afternoon
-    private static CalendarEntry GenerateEntryWithNoPunishment(DayOfWeek day){
-        return new CalendarEntry(day, DosageRecord.Hit, DosageRecord.Hit);
+    private static CalendarEntryOld GenerateEntryWithNoPunishment(DayOfWeek day){
+        return new CalendarEntryOld(day, DosageRecord.Hit, DosageRecord.Hit);
     }
 
     //70% miss frequency for each 12h dose: morning, afternoon
-    private static CalendarEntry GenerateEntryWithPunishment(DayOfWeek day){
+    private static CalendarEntryOld GenerateEntryWithPunishment(DayOfWeek day){
         DosageRecord morning, afternoon;
         morning = GetHitOrMiss(70);
         afternoon = GetHitOrMiss(70);
 
-        return new CalendarEntry(day, morning, afternoon);
+        return new CalendarEntryOld(day, morning, afternoon);
     }
 
     //generate entry for today. no special conditions here
     private static void GenerateEntry(DateTime now){
         DayOfWeek day = GetDay(now);
-        CalendarEntry newEntry = new CalendarEntry(day);
+        CalendarEntryOld newEntry = new CalendarEntryOld(day);
 
         if (now.Hour < 12){ // morning
             newEntry.OpenedInMorning = true;
@@ -318,7 +318,7 @@ public static class CalendarLogicOld{
         if (tempEntries.Count > 0){ // if >0 days missed
             DataManager.ResetCalendarCombo();
         }
-        foreach (CalendarEntry entry in tempEntries){
+        foreach (CalendarEntryOld entry in tempEntries){
             if (entry.Morning == DosageRecord.Miss){
                 DataManager.SubtractHealth(20);
                 DataManager.SubtractMood(20);

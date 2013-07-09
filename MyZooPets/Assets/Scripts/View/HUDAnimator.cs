@@ -37,10 +37,6 @@ public class HUDAnimator : MonoBehaviour {
     	get{return displayMood;}
     }
 
-    public int DisplayHunger{
-    	get{return displayHunger;}
-    }
-
     public int NextLevelPoints{
     	get{return nextLevelPoints;}
     }
@@ -91,7 +87,6 @@ public class HUDAnimator : MonoBehaviour {
 		displayStars = DataManager.Stars;
 		displayHealth = DataManager.Health;
 		displayMood = DataManager.Mood;
-		displayHunger = DataManager.Hunger;
 
 		lastLevel = DataManager.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
@@ -113,11 +108,10 @@ public class HUDAnimator : MonoBehaviour {
 		optionalShrink4.Add("onCompleteTarget", gameObject);
     	optionalGrow1.Add("onComplete", "ShrinkHealthIcon");
     	optionalGrow2.Add("onComplete", "ShrinkMoodIcon");
-    	optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
+    	// optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
     	optionalGrow4.Add("onComplete", "ShrinkStarIcon");
         optionalShrink1.Add("onComplete", "GrowHealthIcon");
         optionalShrink2.Add("onComplete", "GrowMoodIcon");
-        optionalShrink3.Add("onComplete", "GrowFoodIcon");
         optionalShrink4.Add("onComplete", "GrowStarIcon");
 	}
     
@@ -128,8 +122,6 @@ public class HUDAnimator : MonoBehaviour {
 		StarsAnimation();
 		HealthAnimation();
 		MoodAnimation();
-		HungerAnimation();
-		
 	}
 
 	//==================GUI Animation=========================
@@ -229,32 +221,6 @@ public class HUDAnimator : MonoBehaviour {
 
 	}
 
-	private void HungerAnimation(){
-		//Hunger
-		if(dataHunger != DataManager.Hunger){
-			if(displayHunger > DataManager.Hunger){
-				displayHunger--;
-
-				if(IconSwitch3){ //Grow & shrink hunger icon
-					GrowFoodIcon();
-					IconSwitch3 = false;				
-				}
-			}else if(displayHunger < DataManager.Hunger){
-				displayHunger++;
-				if(IconSwitch3){ //Grow & shrink hunger icon
-					GrowFoodIcon();
-					IconSwitch3 = false;				
-				}
-			}else{
-				dataHunger = DataManager.Hunger;
-
-				//Stop grow & shrink. reset icon
-				LeanTween.cancel(LeanTween.TweenEmpty,leantween3);
-				LeanTween.scale(hud.foodIconRect,new Vector2(shrink,shrink),0.1f);
-				IconSwitch3 = true;
-			}
-		}				
-	}
 	//================================================================
 
 	//Below functions for Icon pulsing.
@@ -263,9 +229,6 @@ public class HUDAnimator : MonoBehaviour {
     }
     private void GrowMoodIcon(){
     	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(grow,grow),0.2f, optionalGrow2);
-    }
-	private void GrowFoodIcon(){
-    	leantween3 = LeanTween.scale(hud.foodIconRect,new Vector2(grow,grow),0.2f, optionalGrow3);
     }
     private void GrowStarIcon(){
     	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starGrow,starGrow),0.2f, optionalGrow4);
@@ -276,9 +239,6 @@ public class HUDAnimator : MonoBehaviour {
     }
     private void ShrinkMoodIcon(){
     	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink2);
-    }
-	private void ShrinkFoodIcon(){
-    	leantween3 = LeanTween.scale(hud.foodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink3);
     }
     private void ShrinkStarIcon(){
     	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starShrink,starShrink),0.2f, optionalShrink4);

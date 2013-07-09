@@ -24,7 +24,7 @@ public class HUD : MonoBehaviour {
 
 	//stat indicator
 	private float progress;
-	private float food;
+	// private float food;
 	private float mood;
 	private float health;
 	private string tierLevel;
@@ -41,7 +41,6 @@ public class HUD : MonoBehaviour {
 	public Texture2D guiPanelLevel;
 	public Texture2D guiPanelStars;
 	public Texture2D guiPanelStats;
-	public Texture2D foodIcon;
 	public Texture2D healthIcon;
 	public Texture2D moodIcon;
 	public Texture2D starIcon;
@@ -53,7 +52,6 @@ public class HUD : MonoBehaviour {
 	public GUIStyle tierTextStyle;
 
 	//Positions/Offsets for all GUI elements
-	public LTRect foodIconRect;
 	public LTRect healthIconRect;
 	public LTRect moodIconRect;
 	public LTRect starIconRect;
@@ -69,13 +67,12 @@ public class HUD : MonoBehaviour {
 		animator = this.GetComponent<HUDAnimator>();
 
 		progress = animator.DisplayPoints;
-		food = animator.DisplayHunger;
+		// food = animator.DisplayHunger;
 		mood = animator.DisplayMood;
 		health = animator.DisplayHealth;
 
 		healthIconRect = new LTRect(710, 20, healthIcon.width, healthIcon.height);
-		moodIconRect = new LTRect(900, 20, moodIcon.width, moodIcon.height);
-		foodIconRect = new LTRect(1085, 20, foodIcon.width, foodIcon.height);
+		moodIconRect = new LTRect(988, 20, moodIcon.width, moodIcon.height);
 		starIconRect = new LTRect(495, 15, starIcon.width, starIcon.height);
 		
 		statsPos = new Vector2(0, 0);
@@ -91,7 +88,6 @@ public class HUD : MonoBehaviour {
 	  	
 		//Data reading from Data Manager
 		progress = animator.DisplayPoints;
-		food = animator.DisplayHunger;
 		mood = animator.DisplayMood;
 		health = animator.DisplayHealth;
 
@@ -104,39 +100,6 @@ public class HUD : MonoBehaviour {
 		starCount = animator.DisplayStars.ToString();
 
 	}
-
-	// //Hide all GUIs
-	// public void HideGUIs(bool hideTop, bool hideLeft, bool hideMenu, bool hideOption){
-	// 	// if(hideTop){
-	// 	// 	LeanTween.move(TopGuiRect,new Vector2(0,-100),0.5f);
-	// 	// 	LeanTween.move(starIconRect,new Vector2(555,-100),0.5f);
-	// 	// }
-	// 	// if(hideLeft){
-	// 	// 	LeanTween.move(LeftGuiRect,new Vector2(-100,0),0.5f);
-	// 	// 	LeanTween.move(healthIconRect,new Vector2(-100,100),0.5f);
-	// 	// 	LeanTween.move(moodIconRect,new Vector2(-100,200),0.5f);
-	// 	// 	LeanTween.move(foodIconRect,new Vector2(-100,300),0.5f);
-	// 	// }
-	// 	// if(hideOption){
-	// 	// 	LeanTween.move(optionRect, new Vector2(1150, 850), 0.5f);
-	// 	// 	LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH, 850), 0.5f);
-	// 	// }
-	// }
-
-	// //Show all GUIs
-	// public void ShowGUIs(){
-	// 	// LeanTween.move(TopGuiRect,new Vector2(0,0),0.5f);
-	// 	// LeanTween.move(LeftGuiRect,new Vector2(0,0),0.5f);
-	// 	// LeanTween.move(optionRect, new Vector2(1150, 700), 0.5f);
-	// 	// LeanTween.move(RightArrowRect, new Vector2(NATIVE_WIDTH - rightArrow.width, 850), 0.5f);
-	// 	// LeanTween.move(healthIconRect,new Vector2(5,100),0.5f);
-	// 	// LeanTween.move(moodIconRect,new Vector2(5,200),0.5f);
-	// 	// LeanTween.move(foodIconRect,new Vector2(5,300),0.5f);	
-	// 	// LeanTween.move(starIconRect,new Vector2(555,5),0.5f);
-
-	// }
-
-	
 
 	void OnGUI(){
 		//don't draw until all data is loaded
@@ -167,19 +130,18 @@ public class HUD : MonoBehaviour {
 
 		// Stats Panel
 		GUI.DrawTexture(new Rect(730, 23, 533, guiPanelFill.height), guiPanelFill);	// generic filler
-		GUI.DrawTexture(new Rect(699, 6, guiPanelStats .width, guiPanelStats.height), guiPanelStats);
-
 		GUI.DrawTexture(new Rect(743, 22, 132 * Mathf.Clamp01(health/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
-		GUI.Label(new Rect(773, 20, 60, 60), health.ToString());
-		GUI.DrawTexture(new Rect(932, 22, 132 * Mathf.Clamp01(mood/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
-		GUI.Label(new Rect(962, 20, 60, 60), mood.ToString());
-		GUI.DrawTexture(new Rect(1121, 22, 132 * Mathf.Clamp01(food/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
-		GUI.Label(new Rect(1151, 20, 60, 60), food.ToString());
+		GUI.Label(new Rect(840, 20, 60, 60), health.ToString());
+		GUI.DrawTexture(new Rect(1028, 22, 132 * Mathf.Clamp01(mood/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
+		GUI.Label(new Rect(1130, 20, 60, 60), mood.ToString());
+		GUI.DrawTexture(new Rect(699, 6, guiPanelStats .width, guiPanelStats.height), guiPanelStats);
+		// GUI.DrawTexture(new Rect(1121, 22, 132 * Mathf.Clamp01(food/100), 36), progressBarFill, ScaleMode.StretchToFill, true, 1f);	//TODO-s Crop them
+		// GUI.Label(new Rect(1151, 20, 60, 60), food.ToString());
 		
 		GUI.DrawTexture(starIconRect.rect, starIcon);
 		GUI.DrawTexture(healthIconRect.rect, healthIcon);
 		GUI.DrawTexture(moodIconRect.rect, moodIcon);
-		GUI.DrawTexture(foodIconRect.rect, foodIcon);
+		// GUI.DrawTexture(foodIconRect.rect, foodIcon);
 		GUI.EndGroup();
 
 		GUILayout.BeginArea(navigationRect.rect);
@@ -248,24 +210,20 @@ public class HUD : MonoBehaviour {
 	public void Display(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(statsRect, statsPos, 0.5f, optional); //show stats Rect
+		LeanTween.move(statsRect, statsPos, 1f, optional); //show stats Rect
 	}
 
 	public void Hide(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f, optional);
+		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f);
 	}
 
 	public void DisplayNav(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(navigationRect, navigationPos, 0.5f, optional); //show stats Rect
+		LeanTween.move(navigationRect, navigationPos, 1f, optional); //show stats Rect
 	}
 
 	public void HideNav(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f, optional);
+		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f);
 	}
 }

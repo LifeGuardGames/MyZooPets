@@ -145,7 +145,9 @@ public class InventoryGUI : MonoBehaviour{
 
     //Display InventoryGUI in game
     public void Display(){
-        LeanTween.move(inventoryRect, displayPosition, 0.5f);
+        Hashtable optional = new Hashtable();
+        optional.Add("ease", LeanTweenType.easeOutElastic);
+        LeanTween.move(inventoryRect, displayPosition, 1f, optional);
     }
 
     //Hide InventoryGUI in game

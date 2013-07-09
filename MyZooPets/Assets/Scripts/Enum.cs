@@ -19,6 +19,7 @@ public enum DosageRecord{
     Hit,
     Null,
     Miss,
+    LeaveBlank, // for those parts that should be
 }
 
 public enum InhalerType{

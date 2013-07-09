@@ -5,11 +5,10 @@ using System.Collections.Generic;
 public class CalendarGUI : MonoBehaviour {
 
     public GameObject cameraMoveObject;
-    public GameObject roomGuiObject;
     public GUISkin defaultSkin;
-	
+
 	//TODO RENAME DIARY TO CALENDAR STUFF IN HERE
-	
+
     //Textures
     public Texture2D diaryTexture1;
     public Texture2D tickBoxEmpty;
@@ -33,6 +32,8 @@ public class CalendarGUI : MonoBehaviour {
 
     //MISC
     private CameraMove cameraMove;
+    private HUD hud;
+    private InventoryGUI inventoryGUI;
     private bool diaryActive = false;
     private bool showGUI = true;
     private List<CalendarEntry> calendar;
@@ -45,6 +46,8 @@ public class CalendarGUI : MonoBehaviour {
     // Use this for initialization
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+        hud = GameObject.Find("UIManager/HUD").GetComponent<HUD>();
+        inventoryGUI = GameObject.Find("UIManager/InventoryGUI").GetComponent<InventoryGUI>();
         diaryRect = new LTRect(diaryInitPosition.x,diaryInitPosition.y, 600, 650);
     }
 
@@ -52,6 +55,8 @@ public class CalendarGUI : MonoBehaviour {
     // Called from ClickManager
     public void CalendarClicked(){
         if(!diaryActive){
+            hud.HideNav();
+            inventoryGUI.Hide();
             diaryActive = true;
             cameraMove.PetSideZoomToggle();
             showGUI = false;
@@ -96,7 +101,7 @@ public class CalendarGUI : MonoBehaviour {
         GUI.TextArea(new Rect (diaryRect.rect.x+150,diaryRect.rect.y+605,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
         if(CalendarLogic.IsThereMissDosageToday)
             GUI.Label(new Rect(diaryRect.rect.x+200, diaryRect.rect.y+590,400, 70), "Use the inhaler!!");
-        
+
         //Layout for inhaler checks in a week
         GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
         GUILayout.BeginVertical();
@@ -105,9 +110,9 @@ public class CalendarGUI : MonoBehaviour {
             diaryCheckBoxStyle.normal.background = tickBoxEmpty;
 
             if(i < calendar.Count){
-                if(calendar[i].Morning == DosageRecord.Hit)
+                if(calendar[i].DayTime == DosageRecord.Hit)
                     diaryCheckBoxStyle.normal.background = tickBoxChecked;
-                else if (calendar[i].Morning == DosageRecord.Miss)
+                else if (calendar[i].DayTime == DosageRecord.Miss)
                     diaryCheckBoxStyle.normal.background = tickBoxMissed;
             }
 
@@ -115,9 +120,9 @@ public class CalendarGUI : MonoBehaviour {
             diaryCheckBoxStyle.normal.background = tickBoxEmpty;
 
             if(i < calendar.Count){
-                if(calendar[i].Afternoon == DosageRecord.Hit)
+                if(calendar[i].NightTime == DosageRecord.Hit)
                     diaryCheckBoxStyle.normal.background = tickBoxChecked;
-                else if (calendar[i].Afternoon == DosageRecord.Miss)
+                else if (calendar[i].NightTime == DosageRecord.Miss)
                     diaryCheckBoxStyle.normal.background = tickBoxMissed;
             }
 
@@ -134,6 +139,8 @@ public class CalendarGUI : MonoBehaviour {
             LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
             cameraMove.PetSideZoomToggle();
             diaryActive = false;
+            hud.DisplayNav();
+            inventoryGUI.Display();
         }
     }
 }

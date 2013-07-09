@@ -7,17 +7,21 @@ public class DiagnoseGUI : MonoBehaviour {
 	public GameObject spritePet;
 	public GUISkin skin;
 
-	//stages texture
-	public Texture2D green;
-	public Texture2D yellow;
-	public Texture2D red;
-
+	//button texture
+	public GUIStyle buttonBlankStyle;
+	public Texture2D buttonGreen;
+	public Texture2D buttonYellow;
+	public Texture2D buttonRed;
+	
+	//timer texture
+	public Texture2D timerFrame;
+	public Texture2D timerFiller;
+	
 	//progress bar texture
 	public Texture2D statBarVerFillGreen;
 	public Texture2D statBarVerFillYellow;
 	public Texture2D statBarVerFillRed;
 	public Texture2D statBarTexture;
-	public Texture2D statBarVerFrame;
 
 	public Texture2D inhalerTexture;
 	public GUIStyle diagnoseStyle = new GUIStyle();
@@ -32,14 +36,14 @@ public class DiagnoseGUI : MonoBehaviour {
 	private Vector2 inhalerFinalPosition;
 
 	//progress bar positions
-	private Vector2 timerBarLoc;
-	private Vector2 timerBarOffset;
+	private Vector2 timerTxLoc = new Vector2(531, 166);
+	private Vector2 timerBarOffset = new Vector2(55, 146);
 
 	private float timer; //count timer to time the user
 	private bool pickedUp; //True: inhaler picked up by user, False: stationary
 	private AsthmaStage chosenStage; //what stage did the user choose
 
-	private Texture2D currentTexture; //TO DO: this will need to be replaced with animation
+	private Texture2D currentTexture; //TODO: this will need to be replaced with animation
 	private bool buttonClicked; //used to prevent buttons from clicking more than once
 	private bool isActive; //True: game in process, False: game over
 	private bool showTimerProgress; //True: display count down meter, False: hide it
@@ -49,12 +53,12 @@ public class DiagnoseGUI : MonoBehaviour {
     private const float NATIVE_HEIGHT = 800.0f;
 
     //Button dimensions
-    private const float BUTTON_WIDTH = 150;
+    private const float BUTTON_WIDTH = 518;
     private const float BUTTON_HEIGHT = 150;
 
     //progress bar max value
     private const int MAX_VALUE = 10;
-    private const int BAR_LENGTH = 200;
+    private const int BAR_LENGTH = 330;
 
     private const int INHALER_SIZE = 75;
 
@@ -62,9 +66,6 @@ public class DiagnoseGUI : MonoBehaviour {
     private GUIStyle buttonStyle = new GUIStyle();
 	
 	void Start(){
-		timerBarLoc = new Vector2(50, 100);
-		timerBarOffset = new Vector2(10, 10);
-
 		timer = 10; //10 seconds game
 
 		diagnoseFinalPosition = new Vector2(NATIVE_WIDTH/2, NATIVE_HEIGHT+100);
@@ -80,15 +81,15 @@ public class DiagnoseGUI : MonoBehaviour {
 		DiagnoseGameLogic.Init();
 		switch(DiagnoseGameLogic.CurrentStage){
 			case AsthmaStage.OK:
-				currentTexture = green;
+				currentTexture = buttonGreen;
 				spritePet.GetComponent<tk2dSprite>().SetSprite("OkPet");
 			break;
 			case AsthmaStage.Sick:
-				currentTexture = yellow;
+				currentTexture = buttonYellow;
 				spritePet.GetComponent<tk2dSprite>().SetSprite("SickPet");
 			break;
 			case AsthmaStage.Attack:
-				currentTexture = red;
+				currentTexture = buttonRed;
 				spritePet.GetComponent<tk2dSprite>().SetSprite("AttackPet");
 			break;
 		}
@@ -115,42 +116,43 @@ public class DiagnoseGUI : MonoBehaviour {
             	new Vector3(horizRatio, vertRatio, 1));
 		}
 
-		//=====Timer progress bar======
-		if(isActive){
-			// GUI.DrawTexture(new Rect(timerBarLoc.x,timerBarLoc.y,100,100), statBarTexture);
-			GUI.Label(new Rect(50, 80, 200, 100), "Timer");
-			GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y,25,BAR_LENGTH),statBarVerFrame);
-			if(timer > 8){
-				GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y+(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
-					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-			}else if(timer > 5){
-				GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y+(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
-					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
-			}else{
-				GUI.DrawTexture(new Rect(timerBarLoc.x + timerBarOffset.x,timerBarLoc.y + timerBarOffset.y+(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
-					25, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
-			}
-		}
-		//=============================
-
 		//=========Diagnose symptoms panel=============
 		GUI.BeginGroup(diagnoseRect.rect, txPanel);
 		GUI.Label(new Rect(0,0, 600, 100), "How is your pet feeling?", diagnoseStyle);
-		if(GUI.Button(new Rect(30, 90, BUTTON_WIDTH, BUTTON_HEIGHT), green)){
+		if(GUI.Button(new Rect(40, 90, BUTTON_WIDTH, BUTTON_HEIGHT), buttonGreen, buttonBlankStyle)){
 			chosenStage = AsthmaStage.OK;
 			Clicked();
 		}
-		if(GUI.Button(new Rect(30, 255, BUTTON_WIDTH, BUTTON_HEIGHT), yellow)){
+		if(GUI.Button(new Rect(40, 255, BUTTON_WIDTH, BUTTON_HEIGHT), buttonYellow, buttonBlankStyle)){
 			chosenStage = AsthmaStage.Sick;
 			Clicked();			
 		}
-		if(GUI.Button(new Rect(30, 420, BUTTON_WIDTH, BUTTON_HEIGHT), red)){
+		if(GUI.Button(new Rect(40, 420, BUTTON_WIDTH, BUTTON_HEIGHT), buttonRed, buttonBlankStyle)){
 			chosenStage = AsthmaStage.Attack;
 			Clicked();	
 		}
 		GUI.EndGroup();
 		//=============================================
+		
+		//=====Timer progress bar======
+		if(isActive){			
+			GUI.DrawTexture(new Rect(timerTxLoc.x + 57, timerTxLoc.y + 147, timerFiller.width, timerFiller.height), timerFiller);
 
+			if(timer > 8){
+				GUI.DrawTexture(new Rect(timerTxLoc.x + timerBarOffset.x, timerTxLoc.y + timerBarOffset.y +(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
+					57, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
+			}else if(timer > 5){
+				GUI.DrawTexture(new Rect(timerTxLoc.x + timerBarOffset.x, timerTxLoc.y + timerBarOffset.y +(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
+					57, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillYellow, ScaleMode.StretchToFill, true, 1f);
+			}else{
+				GUI.DrawTexture(new Rect(timerTxLoc.x + timerBarOffset.x, timerTxLoc.y + timerBarOffset.y +(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
+					57, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
+			}
+			
+			GUI.DrawTexture(new Rect(timerTxLoc.x, timerTxLoc.y, timerFrame.width, timerFrame.height), timerFrame);
+		}
+		//=============================
+		
 		//===========Drag Drop inhaler logic==================================
 		if(!pickedUp && isActive){
 			if(GUI.RepeatButton(inhalerRect.rect, inhalerTexture, buttonStyle)){
@@ -182,14 +184,12 @@ public class DiagnoseGUI : MonoBehaviour {
 			}
 		}
 		//=====================================================================
-
 	}
 
 	//user chose one of the stages, so check it the user is correct
 	private void Clicked(){
 		if(!buttonClicked){
 			buttonClicked = true;
-			
 			
 			if(DiagnoseGameLogic.IsThisStageCorrect(chosenStage)){
 
@@ -244,5 +244,4 @@ public class DiagnoseGUI : MonoBehaviour {
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(diagnoseRect, diagnoseFinalPosition, 0.5f, optional);
 	}
-
 }

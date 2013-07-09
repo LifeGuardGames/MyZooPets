@@ -9,6 +9,23 @@ public static class CalendarLogic{
     public static int StarIncrement = 0;
 
     private static CalendarEntry todaysEntry; //today's entry
+    // todo: remove these
+    //====================API (deprecated methods)=======================
+    public static int GetComboCount(){
+        return 0;
+    }
+
+    public static bool HasCheckedCalendar{
+        get {return true;}
+    }
+
+    public static List<CalendarEntry> GetCalendarEntries(){
+        return DataManager.EntriesThisWeek;
+    }
+
+    public static bool IsThereMissDosageToday{
+        get {return true;}
+    }
 
     //====================API (use this for generating weeks)=======================
 

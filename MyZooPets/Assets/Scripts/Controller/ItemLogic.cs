@@ -37,7 +37,7 @@ public class ItemLogic : MonoBehaviour{
 		methods[id]();
 	}
 	
-	private void categorize(){
+	private void Categorize(){
 		for(int i =0;i< items.Count;i++){
 			if(items[i].Category == ItemCategory.Foods) foodlist.Add(i);
 			if(items[i].Category == ItemCategory.Items) itemlist.Add(i);
@@ -47,9 +47,9 @@ public class ItemLogic : MonoBehaviour{
 	}
 	
 	//This methos has to expand when more items added
-	private void loadMethods(){
-		methods.Add(()=>takeApple());
-		methods.Add(()=>takeSandwich());
+	private void LoadMethods(){
+		methods.Add(()=>TakeApple());
+		methods.Add(()=>TakeSandwich());
 	}
 	
 	void Awake(){
@@ -58,16 +58,16 @@ public class ItemLogic : MonoBehaviour{
 //				items.Add(new Item(i,names[i],costs[i],textures[i],category[i]));
 //			}
 //		}
-		categorize();
-		loadMethods();
+		Categorize();
+		LoadMethods();
 	}
 
 	//Functions for Each item. 
-	public static void takeApple(){
+	public static void TakeApple(){
 		DataManager.AddMood(10);
 	}
 	
-	public static void takeSandwich(){
+	public static void TakeSandwich(){
 		DataManager.AddMood(30);
 	}
 }

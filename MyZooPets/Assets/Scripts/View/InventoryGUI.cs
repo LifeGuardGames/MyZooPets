@@ -31,8 +31,8 @@ public class InventoryGUI : MonoBehaviour{
     public GUISkin defaultSkin;
 
     void Awake(){
-        inventory = GameObject.Find("GameManager").GetComponent<Inventory>();
-        itemLogic = GameObject.Find("GameManager").GetComponent<ItemLogic>();
+        inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
+        itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 
         inventoryRect = new LTRect(0, NATIVE_HEIGHT - 100, 1000, 105);
         displayPosition = new Vector2(0, 700);

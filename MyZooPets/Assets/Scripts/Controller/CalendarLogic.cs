@@ -26,6 +26,20 @@ public static class CalendarLogic{
     public static bool IsThereMissDosageToday{
         get {return true;}
     }
+    // todo: remove these
+    //====================API (deprecated testing methods)=======================
+    public static CalendarEntry TodaysEntry {
+        get {return todaysEntry;}
+        set {todaysEntry = value;}
+    }
+
+    public static void CalendarOpenedTest(DateTime now){
+        CalendarOpenedOnDate(now);
+    }
+
+    public static void RecordGivingInhalerTest(DateTime now){
+        RecordGivingInhaler(now);
+    }
 
     //====================API (use this for generating weeks)=======================
 
@@ -51,7 +65,7 @@ public static class CalendarLogic{
         // assume that DateOfSunday is updated by this point
 
         // get days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(-7).Date);
         int daysPassed = timePassed.Days;
 
         // set all values of entries before today to DosageRecord.Miss
@@ -136,8 +150,19 @@ public static class CalendarLogic{
             }
             // Else, we want to move everything up by one week.
             else {
-                //create new list for the new week
+                // fill the rest of the entries with misses
+                for (int i = 0; i < 7; i++){
+                    CalendarEntry entry = DataManager.EntriesThisWeek[i];
+                    if (entry.DayTime == DosageRecord.Null){
+                        entry.DayTime = DosageRecord.Miss;
+                    }
+                    if (entry.NightTime == DosageRecord.Null){
+                        entry.NightTime = DosageRecord.Miss;
+                    }
+                }
+
                 DataManager.EntriesLastWeek = DataManager.EntriesThisWeek;
+                //create new list for the new week
                 DataManager.EntriesThisWeek = EmptyWeek();
             }
 
@@ -149,7 +174,7 @@ public static class CalendarLogic{
         // assume that DateOfSunday is updated by this point
 
         // days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(-7).Date);
         int daysPassed = timePassed.Days;
 
         // replace all the DosageRecord.Null values with DosageRecord.Miss
@@ -174,7 +199,9 @@ public static class CalendarLogic{
 
     private static void FillInMissesForToday(DateTime now){
         if (now.Hour >= 12) {
-            todaysEntry.DayTime = DosageRecord.Miss;
+            if (todaysEntry.DayTime == DosageRecord.Null){
+                todaysEntry.DayTime = DosageRecord.Miss;
+            }
         }
     }
 }

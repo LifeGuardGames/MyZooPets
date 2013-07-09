@@ -36,10 +36,10 @@ public class LoadDataLogic : MonoBehaviour {
             calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
             challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
             degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
-            levelUpLogic = GameObject.Find("GameManager").GetComponent<LevelUpLogic>();
-            degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
-            tutorial = GameObject.Find("GameManager").GetComponent<Tutorial>();
-            diagnoseTimerLogic = GameObject.Find("GameManager").GetComponent<DiagnoseTimerLogic>();
+            levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
+            degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+            tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();
+            diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
             petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
             clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
 

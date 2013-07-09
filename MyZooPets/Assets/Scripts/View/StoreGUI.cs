@@ -39,8 +39,8 @@ public class StoreGUI : MonoBehaviour {
 
 
 	void Start(){
-		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
-		inventory =  GameObject.Find("GameManager").GetComponent<Inventory>();
+		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+		inventory =  GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
 		storeRect = new LTRect(storeInitPosition.x, storeInitPosition.y, backgroundTexture.width, 600);
 	}
 

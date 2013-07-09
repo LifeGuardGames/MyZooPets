@@ -54,7 +54,7 @@ public class Inventory : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		itemlogic =  GameObject.Find("GameManager").GetComponent<ItemLogic>();
+		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		inventory = DataManager.Inventory;
 		if(isDebug){
 			inventory = new int[10];

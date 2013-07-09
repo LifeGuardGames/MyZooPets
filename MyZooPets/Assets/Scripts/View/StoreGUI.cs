@@ -171,17 +171,19 @@ public class StoreGUI : MonoBehaviour {
 					DataManager.SubtractStars((int)itemlogic.items[categoryList[i]].Cost);
 				}
 			}
-
-			GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
-			GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
-			GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.items[categoryList[i+1]].texture);
-			GUI.Label(new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 10, 220, 100), itemlogic.items[categoryList[i+1]].Name, itemTitleStyle);
-			GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
-			GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);
-			if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
-				if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
-					inventory.AddItem(categoryList[i+1], 1);
-					DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);
+			
+			if(categoryList.Count > 1){
+				GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
+				GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
+				GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.items[categoryList[i+1]].texture);
+				GUI.Label(new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 10, 220, 100), itemlogic.items[categoryList[i+1]].Name, itemTitleStyle);
+				GUI.Label (new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 55, 220, 100), "Health + 10", itemInfoStyle);
+				GUI.Label( new Rect(menuItem2Loc.x + 220, menuItem2Loc.y + 75, 200, 100), " Cost: " + itemlogic.items[categoryList[i+1]].Cost.ToString(), itemInfoStyle);
+				if(GUI.Button( new Rect(menuItem2Loc.x + 250, menuItem2Loc.y + 120, 180, 60), "Buy")){
+					if(DataManager.Stars >= (int)itemlogic.items[categoryList[i+1]].Cost){
+						inventory.AddItem(categoryList[i+1], 1);
+						DataManager.SubtractStars((int)itemlogic.items[categoryList[i+1]].Cost);
+					}
 				}
 			}
 		}

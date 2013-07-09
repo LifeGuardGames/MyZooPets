@@ -8,10 +8,7 @@ public class DiaryGUI : MonoBehaviour {
 	public GUISkin defaultSkin;
 
 	//Textures
-	// public Texture2D diaryTexture1;
-	// public Texture2D diaryTexture2;
 	public Texture2D diaryTexture3;
-	public Texture2D diaryTexture4;
 	public Texture2D tickBoxEmpty;
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
@@ -103,111 +100,12 @@ public class DiaryGUI : MonoBehaviour {
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		GUI.depth = 0;
-		// if(diaryPage == 1){
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture4);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture1);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+100,100,70),"Monday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+170,100,70),"Tuesday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+240,100,70),"Wednesday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+310,100,70),"Thursday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+380,100,70),"Friday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+450,100,70),"Saturday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
-		// 	GUI.TextArea(new Rect (diaryRect.rect.x+100,diaryRect.rect.y+577,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
 
-		// 	//Layout for inhaler checks in a week
-		// 	GUILayout.BeginArea(new Rect(diaryRect.rect.x+115,diaryRect.rect.y+100,500,500), "");
-		// 	GUILayout.BeginVertical("");
-		// 	for(int i = 0;i < 7; i++){
-		// 		GUILayout.BeginHorizontal("");
-		// 		diaryCheckBoxStyle.normal.background = tickBoxEmpty;
+		GUI.DrawTexture(diaryRect.rect,diaryTexture3);
 
-		// 		if(i < calendar.Count){
-		// 			if(calendar[i].Morning == DosageRecord.Hit)
-		// 				diaryCheckBoxStyle.normal.background = tickBoxChecked;
-		// 			else if (calendar[i].Morning == DosageRecord.Miss)
-		// 				diaryCheckBoxStyle.normal.background = tickBoxMissed;
-		// 		}
-
-		// 		GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
-		// 		diaryCheckBoxStyle.normal.background = tickBoxEmpty;
-
-		// 		if(i < calendar.Count){
-		// 			if(calendar[i].Afternoon == DosageRecord.Hit)
-		// 				diaryCheckBoxStyle.normal.background = tickBoxChecked;
-		// 			else if (calendar[i].Afternoon == DosageRecord.Miss)
-		// 				diaryCheckBoxStyle.normal.background = tickBoxMissed;
-		// 		}
-
-		// 		GUILayout.Button("",diaryCheckBoxStyle,GUILayout.Height(70),GUILayout.Width(200));
-		// 		GUILayout.EndHorizontal();
-		// 	}
-		// 	GUILayout.EndVertical();
-		// 	GUILayout.EndArea();
-
-		// 	//Page Selection by clicking Tabs
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
-		// 		diaryPage = 2;
-		// 	}
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
-		// 		diaryPage = 3;
-		// 	}
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){
-		// 		diaryPage = 4;
-		// 	}
-		// }
-		// else if (diaryPage == 2){
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture1);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture4);
-		// 	GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle)){
-		// 		diaryPage = 1;
-		// 	}
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
-		// 		diaryPage = 3;
-		// 	}
-		// 	if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){
-		// 		diaryPage = 4;
-		// 	}
-		// }
-		// else if (diaryPage == 3){
-		if (diaryPage == 3){
-			// GUI.DrawTexture(diaryRect.rect,diaryTexture1);
-			// GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
-			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-
-			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle)){
-			// 	diaryPage = 1;
-			// }
-			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
-			// 	diaryPage = 2;
-			// }
-			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){	// TODO-s Change rect to fit pixel from sprite
-				diaryPage = 4;
-			}
+		if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+480,40,110),"",diaryTabStyle)){	// TODO-s Change rect to fit pixel from sprite
+			diaryPage = 4;
 		}
-//		else if (diaryPage == 4){
-//			// GUI.DrawTexture(diaryRect.rect,diaryTexture1);
-//			// GUI.DrawTexture(diaryRect.rect,diaryTexture2);
-//			GUI.DrawTexture(diaryRect.rect,diaryTexture3);
-//			GUI.DrawTexture(diaryRect.rect,diaryTexture4);
-//
-//
-//			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+70,40,90),"",diaryTabStyle)){
-//			// 	diaryPage = 1;
-//			// }
-//			// if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+190,40,105),"",diaryTabStyle)){
-//			// 	diaryPage = 2;
-//			// }
-//			if(GUI.Button(new Rect(diaryRect.rect.x+555,diaryRect.rect.y+340,40,90),"",diaryTabStyle)){
-//				diaryPage = 3;
-//			}
-//		}
 
 		// Close Button
 		if(GUI.Button(new Rect(diaryRect.rect.x - 20, diaryRect.rect.y - 20, backButton.width, backButton.height), backButton, blankButtonStyle)){

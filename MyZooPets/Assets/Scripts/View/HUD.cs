@@ -4,12 +4,36 @@ using System.Collections.Generic;
 using System;
 
 public class HUD : MonoBehaviour {
-	
-	// TODO LOTS OF UNUSED TEXTURES AND VARIABLES, DISCUSS WITH JASON AND CLEAN UP
+	// native dimensions
+    private const float NATIVE_WIDTH = 1280.0f;
+    private const float NATIVE_HEIGHT = 800.0f;
+
+    //LTRects for LeanTween movement for all GUI Objects
+	private LTRect statsRect;
+	private LTRect RightArrowRect; // only the x-value is used
+	private LTRect navigationRect;
+
+	private Vector2 statsPos;
+	private Vector2 navigationPos;
+
+	//MISC
+	private bool showOption = false;
+	private NotificationUIManager notificationUIManager;
+	private HUDAnimator animator;
+	private DiagnoseGUI diagnoseGUI;
+
+	//stat indicator
+	private float progress;
+	private float food;
+	private float mood;
+	private float health;
+	private string tierLevel;
+	private string tierProgressText;
+	private int nextLevelPoints; //the minimum points required to level up
+	private string starCount;
 	
 	public GameObject notificationUIManagerObject;
 	public GUISkin defaultSkin;
-
 	public bool isDebug;
 
 	//Crazy long Texture bundle	
@@ -40,34 +64,7 @@ public class HUD : MonoBehaviour {
 	public Texture2D rightArrow;
 	public UserNavigation userNavigation;
 
-	// native dimensions
-    private const float NATIVE_WIDTH = 1280.0f;
-    private const float NATIVE_HEIGHT = 800.0f;
-
-    //LTRects for LeanTween movement for all GUI Objects
-	private LTRect statsRect = new LTRect (0, 0, 1280, 75);
-	private LTRect RightArrowRect; // only the x-value is used
-
-	//MISC
-	private bool showOption = false;
-	private NotificationUIManager notificationUIManager;
-	private HUDAnimator animator;
-	private DiagnoseGUI diagnoseGUI;
-
-	//stat indicator
-	private float progress;
-	private float food;
-	private float mood;
-	private float health;
-	private string tierLevel;
-	private string tierProgressText;
-	private int nextLevelPoints; //the minimum points required to level up
-	private string starCount;
-
-
 	void Start(){
-
-	//Reading & init from other classes
 		notificationUIManager = notificationUIManagerObject.GetComponent<NotificationUIManager>();
 		animator = this.GetComponent<HUDAnimator>();
 
@@ -80,7 +77,11 @@ public class HUD : MonoBehaviour {
 		moodIconRect = new LTRect(900, 20, moodIcon.width, moodIcon.height);
 		foodIconRect = new LTRect(1085, 20, foodIcon.width, foodIcon.height);
 		starIconRect = new LTRect(495, 15, starIcon.width, starIcon.height);
-
+		
+		statsPos = new Vector2(0, 0);
+		statsRect = new LTRect (statsPos.x, statsPos.y, 1280, 75);
+		navigationPos = new Vector2(760, 700);
+		navigationRect = new LTRect(navigationPos.x, navigationPos.y, 500, 90);
 		// RightArrowRect = new LTRect(NATIVE_WIDTH - rightArrow.width, 0, 0, 0); // only the x-value is used
 	}
 
@@ -138,13 +139,25 @@ public class HUD : MonoBehaviour {
 	public void Display(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(statsRect, new Vector2(0, 0), 0.5f, optional); //show stats Rect
+		LeanTween.move(statsRect, statsPos, 0.5f, optional); //show stats Rect
 	}
 
 	public void Hide(){
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(statsRect, new Vector2(0, -75), 0.5f, optional);
+		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f, optional);
+	}
+
+	public void DisplayNav(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeOutElastic);
+		LeanTween.move(navigationRect, navigationPos, 0.5f, optional); //show stats Rect
+	}
+
+	public void HideNav(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInElastic);
+		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f, optional);
 	}
 
 	void OnGUI(){
@@ -190,27 +203,32 @@ public class HUD : MonoBehaviour {
 		GUI.DrawTexture(moodIconRect.rect, moodIcon);
 		GUI.DrawTexture(foodIconRect.rect, foodIcon);
 		GUI.EndGroup();
-		// // Exit to yard button
-		// if(Application.loadedLevelName == "NewBedRoom"){
-		// 	if(GUI.Button(new Rect(optionRect.rect.x - 50,optionRect.rect.y, 150, 90), "Yard")){
-		// 		Application.LoadLevel("Yard");
-		// 	}
-		// }
-		// else if(Application.loadedLevelName == "Yard"){
-		// 	if(GUI.Button(new Rect(optionRect.rect.x - 50,optionRect.rect.y, 150, 90), "Room")){
-		// 		Application.LoadLevel("NewBedRoom");
-		// 	}
-		// }
 
-		// //Temp store Button
-		// if(GUI.Button(new Rect(optionRect.rect.x - 220,optionRect.rect.y, 150, 90),"Store")){
-		// 	GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
-		// }
+		GUILayout.BeginArea(navigationRect.rect);
+		GUILayout.BeginHorizontal();
+		//Exit to yard button
+		if(Application.loadedLevelName == "NewBedRoom"){
+			if(GUILayout.Button("Yard", GUILayout.Width(160), GUILayout.Height(100))){
+				Application.LoadLevel("Yard");
+			}
+		}else if(Application.loadedLevelName == "Yard"){
+			if(GUILayout.Button("Room", GUILayout.Width(160), GUILayout.Height(100))){
+				Application.LoadLevel("NewBedRoom");
+			}
+		}
 
-		// // Diary button
-		// if(GUI.Button(new Rect(optionRect.rect.x - 390,optionRect.rect.y, 160, 90),"Notes")){
-		// 	GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
-		// }
+		//Store Button
+		if(GUILayout.Button("Store", GUILayout.Width(160), GUILayout.Height(100))){
+			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().showStore();
+		}
+
+		//Diary button
+		if(GUILayout.Button("Notes", GUILayout.Width(160), GUILayout.Height(100))){
+			GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
+		}
+		GUILayout.EndHorizontal();
+		GUILayout.EndArea();
+		
 
 //		//Temp option Menu
 //		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
@@ -234,20 +252,24 @@ public class HUD : MonoBehaviour {
 		//debuggin options
 		if(isDebug){
 			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
-				DataManager.AddHunger(50);
-				DataManager.AddHealth(50);
-				DataManager.AddMood(50);
-				DataManager.AddStars(50);
-				DataManager.AddPoints(500);
-				// Hide();
+				// DataManager.AddHunger(50);
+				// DataManager.AddHealth(50);
+				// DataManager.AddMood(50);
+				// DataManager.AddStars(50);
+				// DataManager.AddPoints(500);
+				Hide();
+				HideNav();
+
 			}
 			if(GUI.Button(new Rect(500,700,200,100),"+ stats")){
-				DataManager.SubtractHunger(50);
-				DataManager.SubtractMood(50);
-				DataManager.SubtractHealth(50);
-				DataManager.SubtractStars(50);
+				// DataManager.SubtractHunger(50);
+				// DataManager.SubtractMood(50);
+				// DataManager.SubtractHealth(50);
+				// DataManager.SubtractStars(50);
 				// notificationUIManager.GameOverRewardMessage(300, 250, null, null);
-				// Display();
+				Display();
+				DisplayNav();
+				
 			}
 		}
 

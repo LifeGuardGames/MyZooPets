@@ -136,29 +136,7 @@ public class HUD : MonoBehaviour {
 
 	// }
 
-	public void Display(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(statsRect, statsPos, 0.5f, optional); //show stats Rect
-	}
-
-	public void Hide(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f, optional);
-	}
-
-	public void DisplayNav(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeOutElastic);
-		LeanTween.move(navigationRect, navigationPos, 0.5f, optional); //show stats Rect
-	}
-
-	public void HideNav(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.easeInElastic);
-		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f, optional);
-	}
+	
 
 	void OnGUI(){
 		//don't draw until all data is loaded
@@ -229,26 +207,6 @@ public class HUD : MonoBehaviour {
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
 		
-
-//		//Temp option Menu
-//		if(GUI.Button(new Rect(optionRect.rect.x,optionRect.rect.y,90,90),optionIconTexture)){
-//			showOption = !showOption;
-//		}
-//
-//		//Options menu
-//		if(showOption){
-//			GUI.DrawTexture(new Rect(optionLoc.x,optionLoc.y,610,611),optionMenuTexture);
-//			if(GUI.Button(new Rect(optionLoc.x,optionLoc.y,50,50),"X"))
-//			{
-//				showOption = false;
-//			}
-//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50,310,100),"Volume");
-//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125,310,100),"Volume");
-//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*2,310,100),"Volume");
-//			GUI.Button(new Rect(optionLoc.x+150,optionLoc.y+50+125*3,310,100),"Volume");
-//		}
-
-		
 		//debuggin options
 		if(isDebug){
 			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
@@ -285,5 +243,29 @@ public class HUD : MonoBehaviour {
 		// 	}
 		// }
 
+	}
+
+	public void Display(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeOutElastic);
+		LeanTween.move(statsRect, statsPos, 0.5f, optional); //show stats Rect
+	}
+
+	public void Hide(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInElastic);
+		LeanTween.move(statsRect, new Vector2(statsPos.x, -75), 0.5f, optional);
+	}
+
+	public void DisplayNav(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeOutElastic);
+		LeanTween.move(navigationRect, navigationPos, 0.5f, optional); //show stats Rect
+	}
+
+	public void HideNav(){
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInElastic);
+		LeanTween.move(navigationRect, new Vector2(navigationPos.x, NATIVE_HEIGHT), 0.5f, optional);
 	}
 }

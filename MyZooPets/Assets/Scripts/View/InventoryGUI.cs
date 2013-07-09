@@ -45,11 +45,11 @@ public class InventoryGUI : MonoBehaviour{
         Inventory.OnInventoryResize += ResizeInventory;
     }
 
-    
-
     void Update(){
         if(!LoadDataLogic.IsDataLoaded) return;
         if(pickedUp){
+            // if dragging an item, don't treat this as a swipe
+            SwipeDetection.CancelSwipe();
             if(Input.touchCount > 0){
                 if(Input.GetTouch(0).phase == TouchPhase.Ended){
                     Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -67,12 +67,6 @@ public class InventoryGUI : MonoBehaviour{
                 }
             }
         }
-
-        // if (pickedUp){
-        //     // if dragging an item, don't treat this as a swipe
-        //     SwipeDetection.CancelSwipe();
-        // }
-
     }
 
     void OnGUI(){

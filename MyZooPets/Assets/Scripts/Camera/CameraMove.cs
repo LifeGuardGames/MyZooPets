@@ -1,143 +1,40 @@
 using UnityEngine;
 using System.Collections;
 
-public class CameraMove : MonoBehaviour{
+public abstract class CameraMove : MonoBehaviour{
 
-	private bool zoomed = false;
-	private Vector3 initPosition;	// Default position: 0, 5.7, -23
-	private Vector3 initFaceDirection;
+	protected bool zoomed = false;
+	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
+	protected Vector3 initFaceDirection;
 
-	private GameObject shelf;
-	// private Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
-	private Vector3 shelfFinalPosition;
-	// private Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
-	private Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
+	protected bool isCameraMoving = false; //True: camera moving, False: camera static
 
-	// private Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
-	// private Vector3 petSideFinalPosition = new Vector3(4.83f, 8.6f, 12.64f);
-	private Vector3 petSideFinalPosition;
-	private Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
+	protected bool isLoadLevel = false; //True: there's a level to be loaded, False: no level
+	protected string levelToLoad; //name of the level that need to be loaded
 
-	private Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
-	private Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
-
-	// private Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
-	private GameObject slotMachine;
-	private Vector3 slotMachineFinalPosition;
-	private Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
-
-	private GameObject realInhaler;
-	private Vector3 realInhalerFinalPosition;
-	private Vector3 realInhalerFinalDirection = new Vector3(36f, 0, 0);
-
-	private GameObject teddyInhaler;
-	private Vector3 teddyInhalerFinalPosition;
-	private Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
-
-	private Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
-	private Vector3 petCameraOffsetYard = new Vector3(1.8f, 2.87f, -3.1f); // use this whenever changing petSideFinalPosition
-	private Vector3 realInhalerCameraOffset = new Vector3(0.29f, 3.24f, -6.19f); // use this whenever changing realInhalerFinalPosition
-	private Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
-	private Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
-	private Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
-	// this way, the camera will always go to the pet
-
-	private GameObject spritePet;
-
-	private bool isCameraMoving = false; //True: camera moving, False: camera static
-
-	private bool isLoadLevel = false; //True: there's a level to be loaded, False: no level
-	private string levelToLoad; //name of the level that need to be loaded
-
-	private bool isEnterMode = false; //True: camera will zoom into the specified game object
+	protected bool isEnterMode = false; //True: camera will zoom into the specified game object
 
 	public bool IsCameraMoving{
 		get{return isCameraMoving;}
 	}
 
-	public void Init(){
-		//Camera move is used in multiple scenes so it needs to know what specific
-		//gameobjects to load at diff scenes
-		spritePet = GameObject.Find("SpritePet");
+	public abstract void Init();
+	public abstract void ZoomToggle(ZoomItem item);
 
-		if(Application.loadedLevelName == "NewBedRoom"){
-			slotMachine = GameObject.Find("SlotMachine");
-			realInhaler = GameObject.Find("RealInhaler");
-			teddyInhaler = GameObject.Find("TeddyInhaler");
-			shelf = GameObject.Find("Shelf");
-		}else if(Application.loadedLevelName == "Yard"){
-
-		}
-
-		initPosition = gameObject.transform.position;
-		// initFaceDirection = new Vector3(15.54f, 0, 0);
-		initFaceDirection = gameObject.transform.eulerAngles;
-	}
-
-	public void ZoomToggle(ZoomItem item){
-		if(!isCameraMoving){
-			if(!zoomed){
-				switch (item){
-					case ZoomItem.Pet:
-					if(Application.loadedLevelName == "NewBedRoom"){
-						petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetRoom;
-		    			CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
-					}
-					// todo: change or review this after pet moves along with camera
-					else if(Application.loadedLevelName == "Yard"){
-						// petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetYard;
-						// while pet doesn't move along with slide:
-						petSideFinalPosition = spritePet.transform.position + petCameraOffsetYard;
-		    			CameraWorldTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
-					}
-					break;
-
-					case ZoomItem.TrophyShelf:
-					shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
-					CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
-					break;
-
-					case ZoomItem.SlotMachine:
-					slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
-					CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
-					break;
-
-					case ZoomItem.RealInhaler:
-					realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
-					CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
-					break;
-
-					case ZoomItem.PracticeInhaler:
-					teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
-					CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
-					break;
-
-					default:
-					Debug.Log("Invalid zoom item!");
-					return;
-					break;
-				}
-				zoomed = true;
-				LockCameraMove();
-
-			}
-		}
-	}
-
-	public void ZoomOutMove(){
+	public void ZoomOutMove(float time){
 		if (zoomed){
-			ZoomOutMove(1.0f);
+			CameraTransformExitMode(initPosition,initFaceDirection, time);
 			zoomed = false;
 			LockCameraMove();
 		}
 	}
 
-	private void LockCameraMove(){
+	protected void LockCameraMove(){
 		isCameraMoving = true;
 	}
 
 	// Mostly called on callback from camera move
-	private void UnlockCameraMove(){
+	protected void UnlockCameraMove(){
 		isCameraMoving = false;
 		if(!isEnterMode){
 			//call event listener here
@@ -151,7 +48,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	private void CameraWorldTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+	protected void CameraWorldTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = true;
 		Hashtable optional = new Hashtable();
@@ -165,7 +62,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	private void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
+	protected void CameraTransformEnterMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = true;
 		Hashtable optional = new Hashtable();
@@ -179,7 +76,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Transforms camera
-	private void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
+	protected void CameraTransformExitMode(Vector3 newPosition, Vector3 newDirection, float time){
 		isLoadLevel = false;
 		isEnterMode = false;
 		Hashtable optional = new Hashtable();
@@ -193,7 +90,7 @@ public class CameraMove : MonoBehaviour{
 	}
 
 	// Same as CameraTransform but tries to load a scene after the transform has completed
-	private void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
+	protected void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
 		isLoadLevel = true;
 		isEnterMode = true;
 		levelToLoad = level;
@@ -205,9 +102,5 @@ public class CameraMove : MonoBehaviour{
 		optional2.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.moveLocal(gameObject, newPosition, time, optional);
 		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
-	}
-
-	private void ZoomOutMove(float time){
-		CameraTransformExitMode(initPosition,initFaceDirection, time);
 	}
 }

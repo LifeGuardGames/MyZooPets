@@ -50,6 +50,9 @@ public class ItemLogic : MonoBehaviour{
 	private void LoadMethods(){
 		methods.Add(()=>TakeApple());
 		methods.Add(()=>TakeSandwich());
+		methods.Add(()=>UseCarpet(items[2].texture));
+		methods.Add(()=>UseCarpet(items[3].texture));
+		methods.Add(()=>UseCarpet(items[4].texture));
 	}
 	
 	void Awake(){
@@ -69,5 +72,9 @@ public class ItemLogic : MonoBehaviour{
 	
 	public static void TakeSandwich(){
 		DataManager.AddMood(30);
+	}
+	
+	public static void UseCarpet(Texture texture){
+		GameObject.Find("Floor Rectangular").renderer.material.SetTexture("_MainTex",texture);
 	}
 }

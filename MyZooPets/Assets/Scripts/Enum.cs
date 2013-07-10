@@ -60,5 +60,10 @@ public enum NotificationTitle{
     NiceTry,
 }
 
+public enum ItemReceiver{
+	Floor,
+	Wall,
+	Pet,
+}
 
 

@@ -14,6 +14,7 @@ public class Item {
 	public Texture2D texture;
 	public int cost;
 	public ItemCategory category;
+	public ItemReceiver itemreceiver;
 	
 	public ItemCategory Category{get{return category;}}
 	public int ID;

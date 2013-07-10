@@ -172,7 +172,7 @@ public class StoreGUI : MonoBehaviour {
 				}
 			}
 			
-			if(categoryList.Count > 1){
+			if(categoryList[i+1]!=null){
 				GUI.Box (new Rect(menuItem2Loc.x + 20, menuItem2Loc.y + 20, 440, 160), "");
 				GUI.Box (new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120 ,120), "");
 				GUI.DrawTexture(new Rect(menuItem2Loc.x + 40, menuItem2Loc.y + 40, 120, 120), itemlogic.items[categoryList[i+1]].texture);

@@ -56,12 +56,22 @@ public class InventoryGUI : MonoBehaviour{
                     RaycastHit hit;
 
                     if(Physics.Raycast(myRay,out hit)){
-                        if(hit.collider.name == "SpritePet" ||
-                            hit.collider.name == "PetHead" ||
-                            hit.collider.name == "PetTummy"){
-                            inventory.UseItem(pickUpId);
-                        }
-                    }
+	                    if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Pet){
+	                        if(hit.collider.name == "SpritePet" ||
+	                            hit.collider.name == "PetHead" ||
+	                            hit.collider.name == "PetTummy"){
+	                            inventory.UseItem(pickUpId);
+	                        }
+	                    }
+						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Floor){
+							print ("floorItem");
+							if(hit.collider == GameObject.Find("Floor Rectangular").collider ||
+								hit.collider == GameObject.Find("planeCenter").collider) inventory.UseItem(pickUpId);
+						}
+						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Wall){
+							if(hit.collider == GameObject.Find("Walls").collider) inventory.UseItem(pickUpId);
+						}
+					}
                     pickedUp = false;
                     pickUpId = -1;
                 }

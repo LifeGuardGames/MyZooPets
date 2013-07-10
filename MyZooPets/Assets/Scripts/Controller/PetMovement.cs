@@ -96,8 +96,6 @@ public class PetMovement : MonoBehaviour {
 		
 		RaycastHit hit;
 		Physics.Raycast(new Vector3(moveToX,10,moveToZ),new Vector3(0,-100,0),out hit);
-		print ("testing");
-		print (hit.collider);
 		if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
             if(moving == false){
                	destinationPoint = hit.point;

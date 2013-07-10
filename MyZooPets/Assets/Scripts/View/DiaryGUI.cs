@@ -115,7 +115,8 @@ public class DiaryGUI : MonoBehaviour {
 				showGUI = true;
 				ClickManager.ClickLock();
 				// cameraMove.PetSideZoomToggle();
-				cameraMove.ZoomToggle(ZoomItem.Pet);
+				// cameraMove.ZoomToggle(ZoomItem.Pet);
+	            cameraMove.ZoomOutMove();
 				diaryActive = false;
 			}
 			isEnteredFromDiagnose = false;

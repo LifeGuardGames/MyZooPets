@@ -35,7 +35,8 @@ public class TrophyGUI : MonoBehaviour {
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
 				ClickManager.ClickLock();
 				//cameraMove.ShelfZoomToggle();
-				cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
+				// cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
+	            cameraMove.ZoomOutMove();
 				isActive = false;
 			}
 		}

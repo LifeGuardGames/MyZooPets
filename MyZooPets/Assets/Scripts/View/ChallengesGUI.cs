@@ -122,7 +122,8 @@ public class ChallengesGUI : MonoBehaviour {
             showGUI = true;
             ClickManager.ClickLock();
             // cameraMove.PetSideZoomToggle();
-            cameraMove.ZoomToggle(ZoomItem.Pet);
+            // cameraMove.ZoomToggle(ZoomItem.Pet);
+            cameraMove.ZoomOutMove();
             challengesActive = false;
         }
     }

@@ -21,6 +21,9 @@ public abstract class CameraMove : MonoBehaviour{
 	public abstract void Init();
 	public abstract void ZoomToggle(ZoomItem item);
 
+	public void ZoomOutMove(){
+		ZoomOutMove(0.5f);
+	}
 	public void ZoomOutMove(float time){
 		if (zoomed){
 			CameraTransformExitMode(initPosition,initFaceDirection, time);

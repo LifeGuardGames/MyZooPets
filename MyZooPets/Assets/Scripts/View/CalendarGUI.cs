@@ -140,7 +140,8 @@ public class CalendarGUI : MonoBehaviour {
             ClickManager.ClickLock();
             LeanTween.move(diaryRect, diaryInitPosition, 0.5f, optional);
             // cameraMove.PetSideZoomToggle();
-            cameraMove.ZoomToggle(ZoomItem.Pet);
+            // cameraMove.ZoomToggle(ZoomItem.Pet);
+            cameraMove.ZoomOutMove();
             diaryActive = false;
             hud.DisplayNav();
             inventoryGUI.Display();

@@ -60,6 +60,12 @@ public enum NotificationTitle{
     NiceTry,
 }
 
+public enum ItemReceiver{
+	Floor,
+	Wall,
+	Pet,
+}
+
 public enum ZoomItem{
     Pet,
     TrophyShelf,
@@ -67,6 +73,3 @@ public enum ZoomItem{
     RealInhaler,
     PracticeInhaler
 }
-
-
-

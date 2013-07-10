@@ -17,69 +17,109 @@ public class DegradationLogic : MonoBehaviour {
             this.position = position;
         }
     }
-
-    public bool isDebug = false; //developer option. force the trigger to show
-    public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
-    public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
-
+    //====================Events==============================
     public class TriggerDestroyedEventArgs : EventArgs{ //arguments that will be passed to Event Handler
         public Vector3 TriggerPosition {get; set;}
     }
     public delegate void TriggerDestroyEventHandler(object sender, TriggerDestroyedEventArgs e);
     public event TriggerDestroyEventHandler TriggerDestroyed;
+    //=====================================================
 
+    public bool isDebug = false; //developer option. force the trigger to show
+    public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
+    public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
+
+    private float timer = 0;
+    private float timeInterval = 30f;
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 
+    void Update(){
+        timer -= Time.deltaTime;
+        if (timer <= 0){
+            TriggerDegradesHealth();
+            timer = timeInterval;
+        }
+    }
+
     public void Init(){
         if(isDebug){
-            DataManager.LastTimeUserPlayedGame = new DateTime(2013, 6, 19);
+            DataManager.LastTimeUserPlayedGame = DateTime.Now;
+            DataManager.MorningTrigger = true;
+            DataManager.AfternoonTrigger = true;
         }
 
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;
-        int daysMissed = sinceLastPlayed.Days;
         int numberOfTriggersToInit = 0;;
 
-        if(daysMissed > 1){
-            if(daysMissed < 3){ //level 1 degradation
-                numberOfTriggersToInit = 2;
-            }else if(daysMissed >= 3 && daysMissed < 5){ //level 2 degradation
-                numberOfTriggersToInit = 4;  
-            }else if(daysMissed >= 5){ //level 3 degradation
-                numberOfTriggersToInit = 6;
+
+        if(sinceLastPlayed.Days > 0){ //reset if new day
+            DataManager.MorningTrigger = true;
+            DataManager.AfternoonTrigger = true;
+        }
+        if(now.Hour > 12){ //morning
+            if(DataManager.MorningTrigger){
+                numberOfTriggersToInit = 3;
+                DataManager.MorningTrigger = false;
+            }
+        }else{ //afternoon
+            if(DataManager.AfternoonTrigger){
+                numberOfTriggersToInit = 3; 
+                DataManager.AfternoonTrigger = false;
             }
 
-            //create triggers
-            for(int i=0; i<numberOfTriggersToInit; i++){
-                //random location and prefab
-                int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
-                int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
-
-                Location triggerLocation = triggerLocations[locationIndex];
-                if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
-                    locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
-                }
-                triggerLocation.isTaken = true;
-                
-                //spawn them at a pre define location
-                //ID is the order in which the data are created
-                DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex)); 
-            }                
         }
+
+        //create triggers
+        for(int i=0; i<numberOfTriggersToInit; i++){
+            //don't add anymore triggers if there are already 6
+            if(DataManager.DegradationTriggers.Count == NUMBER_OF_LOC) break;
+
+            //random location and prefab
+            int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
+            int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
+
+            Location triggerLocation = triggerLocations[locationIndex];
+            if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
+                locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
+            }
+            triggerLocation.isTaken = true;
+            
+            //spawn them at a pre define location
+            //ID is the order in which the data are created
+            DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
+            
+        }                
+
         DataManager.LastTimeUserPlayedGame = DateTime.Now; //update last played time
     }
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
-        DataManager.AddStars(500);
+        DataManager.AddStars(50);
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(TriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
             args.TriggerPosition = triggerLocations[degradData.PositionId].position;
             TriggerDestroyed(this, args);
+        }else{
+            Debug.LogError("Trigger Destroyed listener is null");
         }
         DataManager.DegradationTriggers.Remove(degradData);
+    }
+
+    //triggers decreases health every 30 sec
+    private void TriggerDegradesHealth(){
+        int triggerCount = DataManager.DegradationTriggers.Count;
+        int minusHealth = 0;
+
+        int additionalTrigger = triggerCount - 3;
+        if(additionalTrigger >= 0){ //3 or more triggers. add health punishments
+            minusHealth = 10 + additionalTrigger * 10;
+        }
+
+        DataManager.SubtractHealth(minusHealth);
     }
 
 }

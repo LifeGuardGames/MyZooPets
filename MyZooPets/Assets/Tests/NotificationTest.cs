@@ -9,18 +9,18 @@ public class NotificationTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     void OnGUI(){
         //1 button popup notification
         if(GUI.Button(new Rect(10, 10, BUTTON_WIDTH, BUTTON_HEIGHT), "one button")){
-            notificationUIManager.PopupNotification("testing", null);
+            notificationUIManager.PopupNotificationOneButton("testing", null);
         }
 
         //level up notification
@@ -41,9 +41,9 @@ public class NotificationTest : MonoBehaviour {
             notificationUIManager.GameOverRewardMessage(1000, 0, null, null);
         }
 
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT), 
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT),
             "two button")){
-            notificationUIManager.PopupNotification("testing", null, null);
+            notificationUIManager.PopupNotificationTwoButtons("testing", null, null);
         }
 
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*5, BUTTON_WIDTH, BUTTON_HEIGHT),

@@ -175,20 +175,21 @@ public class HUD : MonoBehaviour {
 		//debuggin options
 		if(isDebug){
 			if(GUI.Button(new Rect(500,500,200,100),"+ stats")){
-				 DataManager.AddHunger(50);
-				 DataManager.AddHealth(50);
-				 DataManager.AddMood(50);
-				 DataManager.AddStars(50);
-				 DataManager.AddPoints(500);
+				GameObject.Find("Floor Rectangular").renderer.material = null;
+//				 DataManager.AddHunger(50);
+//				 DataManager.AddHealth(50);
+//				 DataManager.AddMood(50);
+//				 DataManager.AddStars(50);
+//				 DataManager.AddPoints(500);
 //				Hide();
 //				HideNav();
 
 			}
 			if(GUI.Button(new Rect(500,700,200,100),"+ stats")){
-				 DataManager.SubtractHunger(50);
-				 DataManager.SubtractMood(50);
-				 DataManager.SubtractHealth(50);
-				 DataManager.SubtractStars(50);
+//				 DataManager.SubtractHunger(50);
+//				 DataManager.SubtractMood(50);
+//				 DataManager.SubtractHealth(50);
+//				 DataManager.SubtractStars(50);
 //				 notificationUIManager.GameOverRewardMessage(300, 250, null, null);
 //				Display();
 //				DisplayNav();

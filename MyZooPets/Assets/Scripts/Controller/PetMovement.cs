@@ -6,7 +6,9 @@ using System.Collections;
     PetMovement:
 
     What it does:
-        When the user taps a spot on the floor, the pet moves to that spot.
+        1. When the user taps a spot on the floor, the pet moves to that spot.
+        2. If turned on, pet will walk around in the room randomly. 
+        3. when camera moves to another room, pet will move into that room. 
 
     To use PetMovement:
         1)Attach this script to the floor collider GameObject.
@@ -25,21 +27,28 @@ using System.Collections;
 
 public class PetMovement : MonoBehaviour {
 
+	public Plane planeCenter;
+	public Plane planeRight;
+	
+	
     private GameObject petSprite;
-	private GameObject petMovement;
     private Vector3 destinationPoint;
     private TapItem tapItem;
     public Camera camera;
     public bool allowPetMoveAround;
+	private bool moving;
+	
+	private float moveToX;
+	private float moveToZ;
 
 	public void Init () {
         petSprite = GameObject.Find("SpritePet");
-        petMovement = GameObject.Find("PetMovement");
         destinationPoint = petSprite.transform.position;
 
         tapItem = GetComponent<TapItem>();
         tapItem.OnTap += MovePet;
 		
+		//how often does pet walk by himself.  
 		if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
 	}
 	
@@ -47,10 +56,11 @@ public class PetMovement : MonoBehaviour {
 		Ray ray = camera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)){
-		print ("testing");
-		print (hit.point);
-			if(hit.collider == petMovement.collider){
-				destinationPoint = hit.point;
+			if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
+        		if(moving == false){
+					destinationPoint = hit.point;
+					moving = true;
+				}
 			}
 		}
 	}
@@ -64,29 +74,34 @@ public class PetMovement : MonoBehaviour {
         Ray myRay = Camera.main.ScreenPointToRay(tapItem.lastTapPosition);
         RaycastHit hit;
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == collider){
-                destinationPoint = hit.point;
+            if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
+            	if(moving == false){
+                	destinationPoint = hit.point;
+					moving = true;
+				}
             }
         }
     }
     
 	void PetWalkAround(){
+		//Get a random value for pet to move. 
 		float ran1 = Random.value;
 		float ran2 = Random.value;
 		float ran3 = Random.value;
 		float ran4 = Random.value;
 		if(ran1 < 0.5) ran2 = -ran2;
 		if(ran3 < 0.5) ran4 = -ran4;
-		float moveToX = petSprite.transform.position.x + ran2 *10;
-		if (moveToX < -18f) moveToX = -18f;
-		if (moveToX > 18f) moveToX = 18f;
-		float moveToZ = petSprite.transform.position.z + ran4 *10;
-		if(moveToZ < -27f) moveToZ = - 27f;
-		if(moveToZ > 27f) moveToZ = 27f;
-			
-		destinationPoint = new Vector3(moveToX,petSprite.transform.position.y, moveToZ);
-	    petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
+		moveToX = petSprite.transform.position.x + ran2 *10;
+		moveToZ = petSprite.transform.position.z + ran4 *10;
 		
+		RaycastHit hit;
+		Physics.Raycast(new Vector3(moveToX,10,moveToZ),new Vector3(0,-100,0),out hit);
+		if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
+            if(moving == false){
+               	destinationPoint = hit.point;
+				moving = true;
+			}
+        }
 	}
 
 	// Update is called once per frame
@@ -95,6 +110,7 @@ public class PetMovement : MonoBehaviour {
             if (ClickManager.CanRespondToTap()){
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
             }
+            if(petSprite.transform.position == destinationPoint) moving = false;
         }
 	}
 }

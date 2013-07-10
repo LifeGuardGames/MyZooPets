@@ -3,8 +3,6 @@ using System.Collections;
 
 public class YardCameraMove : CameraMove{
 
-    // protected Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
-    // protected Vector3 petSideFinalPosition = new Vector3(4.83f, 8.6f, 12.64f);
     protected Vector3 petSideFinalPosition;
     protected Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
 
@@ -14,12 +12,9 @@ public class YardCameraMove : CameraMove{
     protected GameObject spritePet;
 
     public override void Init(){
-        //Camera move is used in multiple scenes so it needs to know what specific
-        //gameobjects to load at diff scenes
         spritePet = GameObject.Find("SpritePet");
 
         initPosition = gameObject.transform.position;
-        // initFaceDirection = new Vector3(15.54f, 0, 0);
         initFaceDirection = gameObject.transform.eulerAngles;
     }
 

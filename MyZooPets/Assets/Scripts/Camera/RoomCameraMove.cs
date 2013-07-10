@@ -4,30 +4,18 @@ using System.Collections;
 public class RoomCameraMove : CameraMove{
 
     protected GameObject shelf;
-    // protected Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
-    // protected Vector3 shelfFinalPosition;
-    // protected Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
     protected Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
 
-    // protected Vector3 petSideFinalPosition = new Vector3(3f, 1.3f, -15f);
-    // protected Vector3 petSideFinalPosition = new Vector3(4.83f, 8.6f, 12.64f);
     protected Vector3 petSideFinalPosition;
     protected Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
 
-    protected Vector3 gameboyFinalPosition = new Vector3(-11.9f, -1.6f, -1.4f);
-    protected Vector3 gameboyFinalDirection = new Vector3(27f, 0, 1.35f);
-
-    // protected Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
     protected GameObject slotMachine;
-    // protected Vector3 slotMachineFinalPosition;
     protected Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
 
     protected GameObject realInhaler;
-    // protected Vector3 realInhalerFinalPosition;
     protected Vector3 realInhalerFinalDirection = new Vector3(36f, 0, 0);
 
     protected GameObject teddyInhaler;
-    // protected Vector3 teddyInhalerFinalPosition;
     protected Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
 
     protected Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
@@ -40,8 +28,6 @@ public class RoomCameraMove : CameraMove{
     protected GameObject spritePet;
 
     public override void Init(){
-        //Camera move is used in multiple scenes so it needs to know what specific
-        //gameobjects to load at diff scenes
         spritePet = GameObject.Find("SpritePet");
 
         slotMachine = GameObject.Find("SlotMachine");
@@ -50,7 +36,6 @@ public class RoomCameraMove : CameraMove{
         shelf = GameObject.Find("Shelf");
 
         initPosition = gameObject.transform.position;
-        // initFaceDirection = new Vector3(15.54f, 0, 0);
         initFaceDirection = gameObject.transform.eulerAngles;
     }
 

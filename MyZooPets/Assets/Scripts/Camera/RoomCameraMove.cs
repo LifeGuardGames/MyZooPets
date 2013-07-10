@@ -5,7 +5,7 @@ public class RoomCameraMove : CameraMove{
 
     protected GameObject shelf;
     // protected Vector3 shelfFinalPosition = new Vector3 (10.7f,1.6f,6.6f);
-    protected Vector3 shelfFinalPosition;
+    // protected Vector3 shelfFinalPosition;
     // protected Vector3 shelfFinalFaceDirection = new Vector3(7.34f,90.11f,359.62f);
     protected Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
 
@@ -19,19 +19,18 @@ public class RoomCameraMove : CameraMove{
 
     // protected Vector3 slotMachineFinalPosition = new Vector3(-9.66f, 9.95f, 32.58f);
     protected GameObject slotMachine;
-    protected Vector3 slotMachineFinalPosition;
+    // protected Vector3 slotMachineFinalPosition;
     protected Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
 
     protected GameObject realInhaler;
-    protected Vector3 realInhalerFinalPosition;
+    // protected Vector3 realInhalerFinalPosition;
     protected Vector3 realInhalerFinalDirection = new Vector3(36f, 0, 0);
 
     protected GameObject teddyInhaler;
-    protected Vector3 teddyInhalerFinalPosition;
+    // protected Vector3 teddyInhalerFinalPosition;
     protected Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
 
     protected Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
-    protected Vector3 petCameraOffsetYard = new Vector3(1.8f, 2.87f, -3.1f); // use this whenever changing petSideFinalPosition
     protected Vector3 realInhalerCameraOffset = new Vector3(0.29f, 3.24f, -6.19f); // use this whenever changing realInhalerFinalPosition
     protected Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
     protected Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
@@ -65,22 +64,22 @@ public class RoomCameraMove : CameraMove{
                     break;
 
                     case ZoomItem.TrophyShelf:
-                    shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
+                    Vector3 shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
                     CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
                     break;
 
                     case ZoomItem.SlotMachine:
-                    slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
+                    Vector3 slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
                     CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
                     break;
 
                     case ZoomItem.RealInhaler:
-                    realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
+                    Vector3 realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
                     CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
                     break;
 
                     case ZoomItem.PracticeInhaler:
-                    teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
+                    Vector3 teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
                     CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
                     break;
 

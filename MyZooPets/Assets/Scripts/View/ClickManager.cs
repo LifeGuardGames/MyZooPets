@@ -121,7 +121,7 @@ public class ClickManager : MonoBehaviour {
 					ModeLock();
 				}
 				else {
-					notificationUIManager.PopupNotification(
+					notificationUIManager.PopupNotificationOneButton(
 						"I don't need this right now.",
 						delegate(){}
 					);
@@ -157,7 +157,8 @@ public class ClickManager : MonoBehaviour {
 
         	if (trophyMessageShowing == false){
 	        	trophyMessageShowing = true;
-		        notificationUIManager.PopupNotification("Level up to get more trophies!",
+		        notificationUIManager.PopupNotificationOneButton(
+		        	"Level up to get more trophies!",
 		            delegate(){
 		            	trophyMessageShowing = false;
 	            	}

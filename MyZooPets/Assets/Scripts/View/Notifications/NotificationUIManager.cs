@@ -115,7 +115,7 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 2 buttons
 		Params: notificationType, call back for yes button, call back for no button
 	*/
-	public void PopupNotification(string message, PopupNotification.OnButtonClicked yesCallBack,
+	public void PopupNotificationTwoButtons(string message, PopupNotification.OnButtonClicked yesCallBack,
 		PopupNotification.OnButtonClicked noCallBack){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
@@ -125,15 +125,36 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 	}
 
-	/*
-		Desc: creates popup that has a popup texture and 1 button
-		Params: notificationType, call back for button
-	*/
-	public void PopupNotification(string message, PopupNotification.OnButtonClicked okCallBack){
+	public void PopupNotificationTwoButtons(string message, PopupNotification.OnButtonClicked yesCallBack,
+		PopupNotification.OnButtonClicked noCallBack, string button1, string button2){
 		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 			Quaternion.identity) as GameObject;
 		PopupNotification script = go.GetComponent<PopupNotification>();
 		if(script != null){
+			script.Button1String = button1;
+			script.Button2String = button2;
+			script.Init(message, yesCallBack, noCallBack);
+		}
+	}
+
+	/*
+		Desc: creates popup that has a popup texture and 1 button
+		Params: notificationType, call back for button
+	*/
+	public void PopupNotificationOneButton(string message, PopupNotification.OnButtonClicked okCallBack){
+		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
+			Quaternion.identity) as GameObject;
+		PopupNotification script = go.GetComponent<PopupNotification>();
+		if(script != null){
+			script.Init(message, okCallBack);
+		}
+	}
+	public void PopupNotificationOneButton(string message, PopupNotification.OnButtonClicked okCallBack, string button){
+		GameObject go = Instantiate(popupNotification, gameObject.transform.position,
+			Quaternion.identity) as GameObject;
+		PopupNotification script = go.GetComponent<PopupNotification>();
+		if(script != null){
+			script.Button1String = button;
 			script.Init(message, okCallBack);
 		}
 	}

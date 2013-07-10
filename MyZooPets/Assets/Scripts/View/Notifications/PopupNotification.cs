@@ -7,6 +7,19 @@ public class PopupNotification : MonoBehaviour {
 	public Texture2D notificationPanel;
     private string message;
 
+    // default values, change them using the accessors if necessary
+    private string button1 = "Yes";
+    private string button2 = "Ignore";
+
+    public string Button1String{
+        get {return button1;}
+        set {button1 = value;}
+    }
+    public string Button2String{
+        get {return button2;}
+        set {button2 = value;}
+    }
+
 	// Lean Tween
     private LTRect panelRect;
     private Vector2 initPosition;
@@ -49,17 +62,17 @@ public class PopupNotification : MonoBehaviour {
 		GUI.Label(infoRect, message, styleLabel);
 
         if (notificationType == NotificationType.YesNo){
-            if(GUI.Button(leftButtonRect, "Yes")){
+            if(GUI.Button(leftButtonRect, button1)){
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }
 
-            if(GUI.Button(rightButtonRect, "Ignore")){
+            if(GUI.Button(rightButtonRect, button2)){
                 if(noButtonClicked != null) noButtonClicked();
                 Hide();
             }
         }else if (notificationType == NotificationType.OK){
-            if(GUI.Button(centerButtonRect, "Yes")){
+            if(GUI.Button(centerButtonRect, button1)){
                 if(yesButtonClicked != null) yesButtonClicked();
                 Hide();
             }
@@ -95,11 +108,11 @@ public class PopupNotification : MonoBehaviour {
 
     private void InitializeGUIPosition(){
         // Initialize positions for LTRect
-        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
+        initPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2,
             notificationPanel.height * -1);
-        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2, 
+        finalPosition = new Vector2(NATIVE_WIDTH / 2 - notificationPanel.width / 2,
             NATIVE_HEIGHT / 2 - notificationPanel.height / 2);
-        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width, 
+        panelRect = new LTRect(initPosition.x, initPosition.y, notificationPanel.width,
             notificationPanel.height);
 
         infoRect = new Rect(90, 50, 560, 260);

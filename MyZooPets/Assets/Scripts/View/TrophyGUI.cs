@@ -20,7 +20,8 @@ public class TrophyGUI : MonoBehaviour {
 	public void TrophyClicked(){
 		if(!isActive){
 			isActive = true;
-			cameraMove.ShelfZoomToggle();
+			//cameraMove.ShelfZoomToggle();
+			cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
 		}
 	}
 
@@ -33,7 +34,8 @@ public class TrophyGUI : MonoBehaviour {
 		if(isActive){
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
 				ClickManager.ClickLock();
-				cameraMove.ShelfZoomToggle();
+				//cameraMove.ShelfZoomToggle();
+				cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
 				isActive = false;
 			}
 		}

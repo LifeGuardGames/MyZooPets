@@ -14,7 +14,7 @@ public class ChallengesGUI : MonoBehaviour {
     //Styles
     public GUIStyle challengesTextStyle;
 	public GUIStyle blankButtonStyle;
-	
+
     //Challenge positions
     private Vector2 challengesInitPosition = new Vector2(125,-800);
     private Vector2 challengesFinalPosition = new Vector2(650,100);
@@ -43,7 +43,7 @@ public class ChallengesGUI : MonoBehaviour {
     // Use this for initialization
     void Start(){
         cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-        challengesRect = new LTRect(challengesInitPosition.x,challengesInitPosition.y, 
+        challengesRect = new LTRect(challengesInitPosition.x,challengesInitPosition.y,
             WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
@@ -51,7 +51,8 @@ public class ChallengesGUI : MonoBehaviour {
     public void ChallengesClicked(){
         if(!challengesActive){
             challengesActive = true;
-            cameraMove.PetSideZoomToggle();
+            // cameraMove.PetSideZoomToggle();
+            cameraMove.ZoomToggle(ZoomItem.Pet);
             showGUI = false;
 
             if(!showGUI){
@@ -90,15 +91,15 @@ public class ChallengesGUI : MonoBehaviour {
         //////                                         Challenge Pages
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         GUI.depth = 0;
-		
-		
-		
+
+
+
         GUI.BeginGroup(challengesRect.rect);
             // GUI.DrawTexture(new Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), bgPanel);
-            GUI.Label(new Rect(WINDOW_WIDTH/2 - DAILY_CHALLENGE_TITLE_WIDTH/2, 0, 
-                DAILY_CHALLENGE_TITLE_WIDTH, DAILY_CHALLENGE_TITLE_HEIGHT), 
+            GUI.Label(new Rect(WINDOW_WIDTH/2 - DAILY_CHALLENGE_TITLE_WIDTH/2, 0,
+                DAILY_CHALLENGE_TITLE_WIDTH, DAILY_CHALLENGE_TITLE_HEIGHT),
                 "Daily Challenge", challengesTextStyle); //Title
-            
+
             GUI.BeginGroup(new Rect(50, 100, 500, 200)); //Todays Challenge group
                 GUI.Box(new Rect(0, 0, 500, 300), "");
                 GUI.Label(new Rect(500/2 - 250/2, 25, 250, 100), "Description"); //Description
@@ -120,7 +121,8 @@ public class ChallengesGUI : MonoBehaviour {
             HideChallenges();
             showGUI = true;
             ClickManager.ClickLock();
-            cameraMove.PetSideZoomToggle();
+            // cameraMove.PetSideZoomToggle();
+            cameraMove.ZoomToggle(ZoomItem.Pet);
             challengesActive = false;
         }
     }

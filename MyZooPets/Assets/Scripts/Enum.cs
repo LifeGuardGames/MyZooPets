@@ -60,5 +60,13 @@ public enum NotificationTitle{
     NiceTry,
 }
 
+public enum ZoomItem{
+    Pet,
+    TrophyShelf,
+    SlotMachine,
+    RealInhaler,
+    PracticeInhaler
+}
+
 
 

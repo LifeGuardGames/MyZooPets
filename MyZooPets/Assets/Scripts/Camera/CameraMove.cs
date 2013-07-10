@@ -46,7 +46,7 @@ public class CameraMove : MonoBehaviour{
 
 	private bool isCameraMoving = false; //True: camera moving, False: camera static
 
-	private bool isLoadLevel = false; //True: there's a level to be loaded, False: no level 
+	private bool isLoadLevel = false; //True: there's a level to be loaded, False: no level
 	private string levelToLoad; //name of the level that need to be loaded
 
 	private bool isEnterMode = false; //True: camera will zoom into the specified game object
@@ -74,102 +74,61 @@ public class CameraMove : MonoBehaviour{
 		initFaceDirection = gameObject.transform.eulerAngles;
 	}
 
-	// Called from ClickManager
-	// TODO toggle scheme using toggle, might want to set to definitive? (potential for transition bugs)
-	public void ShelfZoomToggle(){
+	public void ZoomToggle(ZoomItem item){
 		if(!isCameraMoving){
-			if(zoomed){
-				ZoomOutMove(1.0f);
-				zoomed = false;
-				LockCameraMove();
-			}
-			else{
-	    		zoomed = true;
-				LockCameraMove();
+			if(!zoomed){
+				switch (item){
+					case ZoomItem.Pet:
+					if(Application.loadedLevelName == "NewBedRoom"){
+						petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetRoom;
+		    			CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+					}
+					// todo: change or review this after pet moves along with camera
+					else if(Application.loadedLevelName == "Yard"){
+						// petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetYard;
+						// while pet doesn't move along with slide:
+						petSideFinalPosition = spritePet.transform.position + petCameraOffsetYard;
+		    			CameraWorldTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+					}
+					break;
 
-				shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
-	    		CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
-			}
-		}
-	}
+					case ZoomItem.TrophyShelf:
+					shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
+					CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
+					break;
 
-	public void PetSideZoomToggle(){
-		if(!isCameraMoving){
-			if(zoomed){
-				ZoomOutMove(0.5f);
-				zoomed = false;
-				LockCameraMove();
-			}
-			else{
-				zoomed = true;
-				LockCameraMove();
+					case ZoomItem.SlotMachine:
+					slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
+					CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
+					break;
 
-				if(Application.loadedLevelName == "NewBedRoom"){
-					petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetRoom;
-	    			CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+					case ZoomItem.RealInhaler:
+					realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
+					CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
+					break;
+
+					case ZoomItem.PracticeInhaler:
+					teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
+					CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
+					break;
+
+					default:
+					Debug.Log("Invalid zoom item!");
+					return;
+					break;
 				}
-				// todo: change or review this after pet moves along with camera
-				else if(Application.loadedLevelName == "Yard"){
-					// petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetYard;
-					// while pet doesn't move along with slide:
-					petSideFinalPosition = spritePet.transform.position + petCameraOffsetYard;
-	    			CameraWorldTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
-				}
+				zoomed = true;
+				LockCameraMove();
+
 			}
 		}
 	}
 
-	public void GameboyZoomToggle(){
-		if(!isCameraMoving){
-			if(zoomed){
-				// SOMETHING HERE
-			}
-			else{
-				zoomed = true;
-				LockCameraMove();
-				// CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGameBothInhalers");
-				CameraTransformLoadLevel(gameboyFinalPosition, gameboyFinalDirection, 2f, "InhalerGamePet");
-			}
-		}
-	}
-
-	public void SlotMachineZoomToggle(){
-		if(!isCameraMoving){
-			if(zoomed){
-				// SOMETHING HERE
-			}
-			else{
-				zoomed = true;
-				LockCameraMove();
-				slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
-				CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
-			}
-		}
-	}
-	public void RealInhalerZoomToggle(){
-		if(!isCameraMoving){
-			if(zoomed){
-				// SOMETHING HERE
-			}
-			else{
-				zoomed = true;
-				LockCameraMove();
-				realInhalerFinalPosition = realInhaler.transform.localPosition + realInhalerCameraOffset;
-				CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
-			}
-		}
-	}
-	public void TeddyInhalerZoomToggle(){
-		if(!isCameraMoving){
-			if(zoomed){
-				// SOMETHING HERE
-			}
-			else{
-				zoomed = true;
-				LockCameraMove();
-				teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
-				CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
-			}
+	public void ZoomOutMove(){
+		if (zoomed){
+			ZoomOutMove(1.0f);
+			zoomed = false;
+			LockCameraMove();
 		}
 	}
 

@@ -107,7 +107,8 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapSlotMachine(){
 		if (CanRespondToTap()){
-			cameraMove.SlotMachineZoomToggle();
+			// cameraMove.SlotMachineZoomToggle();
+			cameraMove.ZoomToggle(ZoomItem.SlotMachine);
 			ClickLock();
 			ModeLock();
 		}
@@ -116,7 +117,8 @@ public class ClickManager : MonoBehaviour {
 		if (CanRespondToTap()){
 			// if (CalendarLogic.HasCheckedCalendar){
 				if (CalendarLogic.CanUseRealInhaler){
-					cameraMove.RealInhalerZoomToggle();
+					// cameraMove.RealInhalerZoomToggle();
+					cameraMove.ZoomToggle(ZoomItem.RealInhaler);
 					ClickLock();
 					ModeLock();
 				}
@@ -138,7 +140,8 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapTeddyInhaler(){
 		if (CanRespondToTap()){
-			cameraMove.TeddyInhalerZoomToggle();
+			// cameraMove.TeddyInhalerZoomToggle();
+			cameraMove.ZoomToggle(ZoomItem.PracticeInhaler);
 			ClickLock();
 			ModeLock();
 		}

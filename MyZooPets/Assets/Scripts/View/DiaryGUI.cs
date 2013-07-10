@@ -13,7 +13,7 @@ public class DiaryGUI : MonoBehaviour {
 	public Texture2D tickBoxChecked;
 	public Texture2D tickBoxMissed;
 	public Texture2D backButton;
-	
+
 	//Styles
 	public GUIStyle diaryTabStyle;
 	public GUIStyle diaryCheckBoxStyle;
@@ -53,9 +53,10 @@ public class DiaryGUI : MonoBehaviour {
 		if(!diaryActive){
 			ClickManager.ModeLock();
 			ClickManager.ClickLock();
-			
+
 			diaryActive = true;
-			cameraMove.PetSideZoomToggle();
+			// cameraMove.PetSideZoomToggle();
+			cameraMove.ZoomToggle(ZoomItem.Pet);
 			showGUI = false;
 
 			// CalendarLogic.CalendarOpened();
@@ -113,7 +114,8 @@ public class DiaryGUI : MonoBehaviour {
 			if(!isEnteredFromDiagnose){
 				showGUI = true;
 				ClickManager.ClickLock();
-				cameraMove.PetSideZoomToggle();
+				// cameraMove.PetSideZoomToggle();
+				cameraMove.ZoomToggle(ZoomItem.Pet);
 				diaryActive = false;
 			}
 			isEnteredFromDiagnose = false;

@@ -19,37 +19,52 @@ public class LoadDataLogic : MonoBehaviour {
     private Tutorial tutorial; //reference 
     private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickmanager;
+    private HUD hud;
 
     void Awake(){
         if(isDebug){
             DataManager.FirstTime = true; 
         }
         IsDataLoaded = false;
-        //=============GameObjects that are required in multiple scenes===================
-        animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
-        diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
-        cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
-        //==============================================================================
         
-        //different things to load for different scenes
-        if(Application.loadedLevelName == "NewBedRoom"){ //Bedroom specific references
-            calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
-            challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
-            degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
-            levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
-            degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
-            tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();
-            diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
-            petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
-            clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
-
-            if(!DataManager.FirstTime){ //if not first time load GUI right away
-                FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
-            }else{ //if first time set call back and wait for the hatching animation to finish
-                FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
-            }
-        }else if(Application.loadedLevelName == "Yard"){ //Yard specific references
-            InitializeDataForUI();
+        switch(Application.loadedLevelName){
+            case "NewBedRoom":
+                calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
+                challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
+                degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
+                levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
+                degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+                tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();
+                diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
+                petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
+                clickmanager = GameObject.Find ("UIManager").GetComponent<ClickManager>();
+                animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
+                diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
+                cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
+                if(!DataManager.FirstTime){ //if not first time load GUI right away
+                    FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
+                }else{ //if first time set call back and wait for the hatching animation to finish
+                    FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
+                }
+            break;
+            case "Yard":
+                animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
+                diaryUIManager = GameObject.Find ("UIManager/DiaryGUI").GetComponent<DiaryGUI>();
+                cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
+                InitializeDataForUI();
+            break;
+            case "InhalerGamePet":
+                animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
+                InitializeDataForUI();
+            break;
+            case "InhalerGameTeddy":
+                animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
+                InitializeDataForUI();
+            break;
+            case "SlotMachineGame":
+                animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
+                InitializeDataForUI();
+            break;
         }
     }
 
@@ -57,27 +72,40 @@ public class LoadDataLogic : MonoBehaviour {
     private void InitializeDataForUI(){
         //Note: the order in which some of the classes are init matter
         //1) animator needs to be init before levelUpLogic
-        //========GameObjects that need to be init in multiple scenes============
-        animator.Init();
-        diaryUIManager.Init();
-        cameraMove.Init();
-        //=======================================================================
 
-        if(Application.loadedLevelName == "NewBedRoom"){ //Bed room specific gameobjects
-            if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
-            calendarGUI.Init();
-            challengesGUI.Init();
-            levelUpLogic.Init();
-            degradationLogic.Init();
-            degradationUIManager.Init();
-            tutorial.Init();
-            petMovement.Init();
-            clickmanager.Init();
-            diagnoseTimerLogic.Init();
-            
-        }else if(Application.loadedLevelName == "Yard"){ //Yard specific gameobjects
+        switch(Application.loadedLevelName){
+            case "NewBedRoom":
+                if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
+                animator.Init();
+                diaryUIManager.Init();
+                cameraMove.Init();
+                calendarGUI.Init();
+                challengesGUI.Init();
+                levelUpLogic.Init();
+                degradationLogic.Init();
+                degradationUIManager.Init();
+                tutorial.Init();
+                petMovement.Init();
+                clickmanager.Init();
+                diagnoseTimerLogic.Init();
 
+            break;
+            case "Yard":
+                animator.Init();
+                diaryUIManager.Init();
+                cameraMove.Init();
+
+            break;
+            case "InhalerGamePet":
+                animator.Init();
+            break;
+            case "InhalerGameTeddy":
+                animator.Init();
+            break;
+            case "SlotMachineGame":
+            break;
         }
+       
         IsDataLoaded = true;
     }
 }

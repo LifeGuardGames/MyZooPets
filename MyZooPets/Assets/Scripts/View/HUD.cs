@@ -144,30 +144,33 @@ public class HUD : MonoBehaviour {
 		// GUI.DrawTexture(foodIconRect.rect, foodIcon);
 		GUI.EndGroup();
 
-		GUILayout.BeginArea(navigationRect.rect);
-		GUILayout.BeginHorizontal();
-		//Exit to yard button
-		if(Application.loadedLevelName == "NewBedRoom"){
-			if(GUILayout.Button("Yard", GUILayout.Width(160), GUILayout.Height(100))){
-				Application.LoadLevel("Yard");
+		if(Application.loadedLevelName == "NewBedRoom" ||
+			Application.loadedLevelName == "Yard"){
+			GUILayout.BeginArea(navigationRect.rect);
+			GUILayout.BeginHorizontal();
+			//Exit to yard button
+			if(Application.loadedLevelName == "NewBedRoom"){
+				if(GUILayout.Button("Yard", GUILayout.Width(160), GUILayout.Height(100))){
+					Application.LoadLevel("Yard");
+				}
+			}else if(Application.loadedLevelName == "Yard"){
+				if(GUILayout.Button("Room", GUILayout.Width(160), GUILayout.Height(100))){
+					Application.LoadLevel("NewBedRoom");
+				}
 			}
-		}else if(Application.loadedLevelName == "Yard"){
-			if(GUILayout.Button("Room", GUILayout.Width(160), GUILayout.Height(100))){
-				Application.LoadLevel("NewBedRoom");
+
+			//Store Button
+			if(GUILayout.Button("Store", GUILayout.Width(160), GUILayout.Height(100))){
+				GameObject.Find("StoreGUI").GetComponent<StoreGUI>().ShowStore();
 			}
-		}
 
-		//Store Button
-		if(GUILayout.Button("Store", GUILayout.Width(160), GUILayout.Height(100))){
-			GameObject.Find("StoreGUI").GetComponent<StoreGUI>().ShowStore();
+			//Diary button
+			if(GUILayout.Button("Notes", GUILayout.Width(160), GUILayout.Height(100))){
+				GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
+			}
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
 		}
-
-		//Diary button
-		if(GUILayout.Button("Notes", GUILayout.Width(160), GUILayout.Height(100))){
-			GameObject.Find("DiaryGUI").GetComponent<DiaryGUI>().DiaryClicked();
-		}
-		GUILayout.EndHorizontal();
-		GUILayout.EndArea();
 		
 		//debuggin options
 		if(isDebug){
@@ -204,6 +207,10 @@ public class HUD : MonoBehaviour {
 		// 		userNavigation.ToTheRight();
 		// 	}
 		// }
+
+	}
+
+	public void Init(){
 
 	}
 

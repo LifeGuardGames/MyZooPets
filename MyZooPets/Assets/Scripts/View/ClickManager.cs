@@ -114,26 +114,26 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
-			if (CalendarLogic.HasCheckedCalendar){
-				if (CalendarLogic.IsThereMissDosageToday){
+			// if (CalendarLogic.HasCheckedCalendar){
+				if (CalendarLogic.CanUseRealInhaler){
 					cameraMove.RealInhalerZoomToggle();
 					ClickLock();
 					ModeLock();
 				}
 				else {
-					notificationUIManager.PopupNotification(
+					notificationUIManager.PopupNotificationOneButton(
 						"I don't need this right now.",
 						delegate(){}
 					);
 				}
-			}
-			else {
-				notificationUIManager.PopupNotification(
-					"I don't know if I need this now. Open calendar?",
-					calendarGUI.CalendarClicked,
-					delegate(){}
-				);
-			}
+			// }
+			// else {
+			// 	notificationUIManager.PopupNotification(
+			// 		"I don't know if I need this now. Open calendar?",
+			// 		calendarGUI.CalendarClicked,
+			// 		delegate(){}
+			// 	);
+			// }
 		}
 	}
 	void OnTapTeddyInhaler(){
@@ -157,7 +157,8 @@ public class ClickManager : MonoBehaviour {
 
         	if (trophyMessageShowing == false){
 	        	trophyMessageShowing = true;
-		        notificationUIManager.PopupNotification("Level up to get more trophies!",
+		        notificationUIManager.PopupNotificationOneButton(
+		        	"Level up to get more trophies!",
 		            delegate(){
 		            	trophyMessageShowing = false;
 	            	}

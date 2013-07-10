@@ -16,14 +16,17 @@ public class SlotMachineUIManager : MonoBehaviour {
             counter++;
         }
 
-        notificationUIManager.PopupNotification("-50 stars to play",
+        notificationUIManager.PopupNotificationTwoButtons(
+            "-50 stars to play",
             delegate(){
                 DataManager.SubtractStars(50);
                 StartGame();
             },
             delegate(){
                 Application.LoadLevel("NewBedRoom");
-            });
+            },
+            "Start",
+            "Back");
     }
 
 	// Update is called once per frame

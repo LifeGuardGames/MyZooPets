@@ -12,8 +12,10 @@ public class FirstTimeGUI : MonoBehaviour {
 	// Native dimensions
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
-
+	
 	public GUISkin defaultSkin;
+	public GUIStyle textAreaStyle;
+	
 	public Texture2D logo;
 	public bool splashScreenAux = true;
 
@@ -155,7 +157,6 @@ public class FirstTimeGUI : MonoBehaviour {
 	}
 
 	void OnGUI(){
-
 		// Proportional scaling
 		if(NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
@@ -174,38 +175,42 @@ public class FirstTimeGUI : MonoBehaviour {
 			GUILayout.BeginVertical();
 
 			GUILayout.Label("Name");
-			petName = GUILayout.TextField(petName, 25,GUILayout.Height(50));
+			petName = GUILayout.TextField(petName, 25);
 
 			GUILayout.Label("Color");
+			
+			//TODO find a way to auto wrap these buttons!!
+			
 			if(GUILayout.Button(blueButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggBlueChoose");
 				petColor = "whiteBlue";
 			}
-			else if(GUILayout.Button(greenButton, GUILayout.Width(120), GUILayout.Height(61))){
+			if(GUILayout.Button(greenButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggGreenChoose");
 				petColor = "whiteGreen";
 			}
-			else if(GUILayout.Button(yellowButton, GUILayout.Width(120), GUILayout.Height(61))){
+			if(GUILayout.Button(yellowButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggYellowChoose");
 				petColor = "whiteYellow";
 			}
-			else if(GUILayout.Button(redButton, GUILayout.Width(120), GUILayout.Height(61))){
+			if(GUILayout.Button(redButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggRedChoose");
 				petColor = "whiteRed";
 			}
-			else if(GUILayout.Button(purpleButton, GUILayout.Width(120), GUILayout.Height(61))){
+			if(GUILayout.Button(purpleButton, GUILayout.Width(120), GUILayout.Height(61))){
 				eggSpriteScript.SetSprite("eggPurpleChoose");
 				petColor = "whiteRed";
 			}
-			else if(GUILayout.Button("Finish", GUILayout.Width(90), GUILayout.Height(90))){
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
+			
+			if(GUI.Button(new Rect(editEggRect.rect.x + 450, editEggRect.rect.y + 540, 200, 100), "Finish")){
 				if(isZoomed){
 					ZoomOutMove();
 					isZoomed = false;
 					HideChooseGUI();
 				}
 			}
-			GUILayout.EndVertical();
-			GUILayout.EndArea();
 		}
 	}
 

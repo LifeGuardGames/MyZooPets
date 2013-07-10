@@ -35,6 +35,7 @@ public class DegradationLogic : MonoBehaviour {
     private const int NUMBBER_OF_PREFABS = 6;
 
     void Update(){
+        if(!LoadDataLogic.IsDataLoaded) return;
         timer -= Time.deltaTime;
         if (timer <= 0){
             TriggerDegradesHealth();

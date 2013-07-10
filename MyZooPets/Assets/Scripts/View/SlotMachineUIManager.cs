@@ -24,7 +24,9 @@ public class SlotMachineUIManager : MonoBehaviour {
             },
             delegate(){
                 Application.LoadLevel("NewBedRoom");
-            });
+            },
+            "Start",
+            "Back");
     }
 
 	// Update is called once per frame

@@ -83,6 +83,10 @@ public class DataManager : MonoBehaviour {
     private static DateTime lastTimeUserPlayedGame; //last time that the user opened the game
     [SerializeThis]
     private static List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
+    [SerializeThis]
+    private static bool morningTrigger; //True: spawn asthma trigger in morning, False: don't
+    [SerializeThis]
+    private static bool afternoonTrigger; //True: spawn asthma trigger in afternoon, False: don't
 
     //inventory data
     [SerializeThis]
@@ -219,6 +223,14 @@ public class DataManager : MonoBehaviour {
     public static List<DegradData> DegradationTriggers{
         get{return degradationTriggers;}
         set{degradationTriggers = value;}
+    }
+    public static bool MorningTrigger{
+        get{return morningTrigger;}
+        set{morningTrigger = value;}
+    }
+    public static bool AfternoonTrigger{
+        get{return afternoonTrigger;}
+        set{afternoonTrigger = value;}
     }
 
 	//inventory
@@ -407,6 +419,8 @@ public class DataManager : MonoBehaviour {
             //Degradation game data
             lastTimeUserPlayedGame = DateTime.Now;
             degradationTriggers = new List<DegradData>();
+            morningTrigger = true;
+            afternoonTrigger = true;
 
 			//inventory
 			inventory = new int[ItemLogic.MAX_ITEM_COUNT];

@@ -7,7 +7,7 @@ public class DegradTriggerManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        degradationLogic = GameObject.Find("GameManager").GetComponent<DegradationLogic>();
+        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
         GetComponent<TapItem>().OnTap += OnTap;
 	}
 

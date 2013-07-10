@@ -145,7 +145,8 @@ public class HUDAnimator : MonoBehaviour {
 				dataStars = DataManager.Stars;
 
 				//stop grow & shrink. reset icon size
-				LeanTween.cancel(LeanTween.TweenEmpty,leantween4);
+
+				LeanTween.cancel(LeanTween.TweenEmpty ,leantween4);
 				LeanTween.scale(hud.starIconRect,new Vector2(starShrink, starShrink),0.1f);
 				IconSwitch4 = true;
 			}
@@ -187,6 +188,7 @@ public class HUDAnimator : MonoBehaviour {
 				dataHealth = DataManager.Health;
 
 				//Stop grow & shrink. reset icon size
+
 				LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
 				LeanTween.scale(hud.healthIconRect,new Vector2(hud.healthIcon.width,hud.healthIcon.height),0.1f);
 				IconSwitch1 = true;
@@ -251,7 +253,11 @@ public class HUDAnimator : MonoBehaviour {
 			int remainderPoints = DataManager.Points - nextLevelPoints; //points to be added after leveling up
 			
 
-			if(OnLevelUp != null) OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
+			if(OnLevelUp != null){
+                OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
+            }else{
+                Debug.LogError("OnLevelUp listener is null");
+            }
 
 			//reset the progress bar for next level
 			DataManager.ResetPoints();

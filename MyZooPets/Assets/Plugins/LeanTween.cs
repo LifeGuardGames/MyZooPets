@@ -140,8 +140,8 @@ using System.Collections;
 using System;
 using System.Reflection;
 public enum LeanTweenType{
-	notUsed, linear, easeOutQuad, easeInQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart,
-	easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInExpo, easeOutExpo, easeInOutExpo, easeInCirc, easeOutCirc, easeInOutCirc,
+	notUsed, linear, easeOutQuad, easeInQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart, 
+	easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInExpo, easeOutExpo, easeInOutExpo, easeInCirc, easeOutCirc, easeInOutCirc, 
 	easeInBounce, easeOutBounce, easeInOutBounce, easeInBack, easeOutBack, easeInOutBack, easeInElastic, easeOutElastic, easeInOutElastic, punch
 }
 
@@ -197,7 +197,7 @@ class TweenDescr{
 public class LTRect{
 	/**
 	* Pass this value to the GUI Methods
-	*
+	* 
 	* @property rect
 	* @type {Rect} rect:Rect Rect object that controls the positioning and size
 	*/
@@ -237,7 +237,7 @@ public enum TweenAction{
 * <strong id='optional'>Optional Parameters</strong> are passed in a hastable variable that is accepted at the end of every tweening function.<br>
 * Values you can pass:<br>
 * <strong>delay</strong>: time (or frames if you are using "useFrames") before the tween starts<br>
-* <strong>ease</strong>: Function that desribes the easing you want to be used, you can pass your own or use many of the included tweens. ex: <i>{"ease":LeanTween.easeOutQuad}</i><br>
+* <strong>ease</strong>: Function that desribes the easing you want to be used, you can pass your own or use many of the included tweens. ex: <i>{"ease":LeanTween.easeOutQuad}</i><br> 
 * <strong>onComplete</strong>: Function to call at the end of the tween ex: <i>{"onComplete":functionToCallOnComplete}</i> or <i>{"onComplete":functionToCallOnComplete,"onCompleteParam":hashTableToPassToOnComplete}</i><br>
 * <strong>onUpdate</strong>: Function to call on every update ex: <i>{"onUpdate":functionToCallOnUpdate}</i> or <i>{"onUpdate":functionToCallOnUpdate,"onUpdateParam":hashTableToPassToOnUpdate}</i><br>
 * <strong>useEstimatedTime</strong>: This is useful if the Time.timeScale is set to zero (such as when the game is paused) or some other value and you still want the tween to move at a normal pace ex: <i>{"useEstimatedTime":true}</i><br>
@@ -249,19 +249,18 @@ public enum TweenAction{
 public class LeanTween: MonoBehaviour {
 
    //Added By Azade
-
+   
     public delegate float DelFunc(float fromVect, float toVect, float ratioPassed);
    //End
 public static bool throwErrors= true;
 
 private static TweenDescr[] tweens;
 private static int tweenMaxSearch = 0;
-// private static int maxTweens = 400;
 private static int maxTweens = 800;
 private static int frameRendered= -1;
 private static GameObject tweenEmpty;
 public static GameObject TweenEmpty{
-	get {return tweenEmpty;}
+	get{return tweenEmpty;}
 }
 private static float dtEstimated;
 private static float dt;
@@ -278,7 +277,7 @@ public static void init(){
 
 /**
 * This line is optional. Here you can specify the maximum number of tweens you will use (the default is 400).  This must be called before any use of LeanTween is made for it to be effective.
-*
+* 
 * @method LeanTween.init
 * @param {integer} maxSimultaneousTweens:int The maximum number of tweens you will use, make sure you don't go over this limit, otherwise the code will throw an error
 * @example
@@ -286,6 +285,7 @@ public static void init(){
 */
 public static void init(int maxSimultaneousTweens){
 	if(tweens==null){
+		Debug.LogWarning("If possible use the LeanTween.js file, this file is only provided for people who wish to compile LeanTween as a DLL file. LeanTween.js should be fully functionaly for C# users.");
 		maxTweens = maxSimultaneousTweens;
 		tweens = new TweenDescr[maxTweens];
 		tweenEmpty = new GameObject();
@@ -329,7 +329,7 @@ public static void update() {
 		// if(tweenMaxSearch>1500)
 		// 	Debug.Log("tweenMaxSearch:"+tweenMaxSearch +" maxTweens:"+maxTweens);
 		for( int i = 0; i < tweenMaxSearch && i < maxTweens; i++){
-
+			
 			//Debug.Log("tweens["+i+"].toggle:"+tweens[i].toggle);
 			if(tweens[i].toggle){
 				tween = tweens[i];
@@ -347,19 +347,19 @@ public static void update() {
 					dt = 1;
 				}
 				//Debug.Log("tweens["+i+"]:"+tweens[i] + " dt:"+Time.deltaTime);
-
+				
 				if(trans==null){
 					removeTween(i);
 					continue;
 				}
-
+				
 				// Check for tween finished
 				isTweenFinished = false;
 				if(tween.passed + dt > timeTotal){
 					isTweenFinished = true;
 					tween.passed = timeTotal; // Set to the exact end time so that it can finish tween exactly on the end value
 				}
-
+				
 				if(tween.passed==0.0 && tweens[i].delay==0.0){
 					// Initialize From Values
 					switch((TweenAction)tweenAction){
@@ -388,25 +388,25 @@ public static void update() {
 						case TweenAction.MOVE_LOCAL:
 							tween.from = trans.localPosition; break;
 						case TweenAction.ROTATE:
-							tween.from = trans.eulerAngles;
+							tween.from = trans.eulerAngles; 
 							tween.to.x = LeanTween.closestRot( tween.from.x, tween.to.x);
 							tween.to.y = LeanTween.closestRot( tween.from.y, tween.to.y);
 							tween.to.z = LeanTween.closestRot( tween.from.z, tween.to.z);
 							break;
 						case TweenAction.ROTATE_X:
-							tween.from.x = trans.eulerAngles.x;
+							tween.from.x = trans.eulerAngles.x; 
 							tween.to.x = LeanTween.closestRot( tween.from.x, tween.to.x);
 							break;
 						case TweenAction.ROTATE_Y:
-							tween.from.x = trans.eulerAngles.y;
+							tween.from.x = trans.eulerAngles.y; 
 							tween.to.x = LeanTween.closestRot( tween.from.x, tween.to.x);
 							break;
 						case TweenAction.ROTATE_Z:
-							tween.from.x = trans.eulerAngles.z;
+							tween.from.x = trans.eulerAngles.z; 
 							tween.to.x = LeanTween.closestRot( tween.from.x, tween.to.x);
 							break;
 						case TweenAction.ROTATE_LOCAL:
-							tween.from = trans.localEulerAngles;
+							tween.from = trans.localEulerAngles; 
 							tween.to.x = LeanTween.closestRot( tween.from.x, tween.to.x);
 							tween.to.y = LeanTween.closestRot( tween.from.y, tween.to.y);
 							tween.to.z = LeanTween.closestRot( tween.from.z, tween.to.z);
@@ -427,7 +427,7 @@ public static void update() {
 					ratioPassed = tween.passed / timeTotal;
 					if(ratioPassed>1.0)
 						ratioPassed = 1.0f;
-
+					
 					if(tweenAction>=(int)TweenAction.MOVE_X && tweenAction<=(int)TweenAction.CALLBACK){
 						if(animationCurve!=null){
 							val = tweenOnCurve(tween, ratioPassed);
@@ -494,7 +494,7 @@ public static void update() {
 								case LeanTweenType.easeOutElastic:
 									val = easeOutElastic(tween.from.x, tween.to.x, ratioPassed); break;
 								case LeanTweenType.easeInOutElastic:
-									val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed);
+									val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed); 
                                     break;
                                 case LeanTweenType.punch:
 									tween.animationCurve = LeanTween.punch;
@@ -505,7 +505,7 @@ public static void update() {
                                         val = tween.from.x + tween.diff.x * ratioPassed; break;
                                     }
 							}
-
+						
 						}
 						//Debug.Log("from:"+from+" to:"+to+" val:"+val+" ratioPassed:"+ratioPassed);
 						if((TweenAction)tweenAction==TweenAction.MOVE_X){
@@ -535,10 +535,10 @@ public static void update() {
 					    }else if((TweenAction)tweenAction==TweenAction.ALPHA){
 							trans.gameObject.renderer.material.color=new Color(trans.gameObject.renderer.material.color.r,trans.gameObject.renderer.material.color.g,trans.gameObject.renderer.material.color.b,val);
 						}
-
+						
 					}else if((TweenAction) tweenAction>=TweenAction.MOVE){
 						//
-
+						
 						if(animationCurve!=null){
 							newVect = tweenOnCurveVector(tween, ratioPassed);
 						}else{
@@ -628,7 +628,7 @@ public static void update() {
 								newVect.z = tween.from.z + tween.diff.z * ratioPassed;
 							}
 						}
-
+						 
 						if((TweenAction) tweenAction==TweenAction.MOVE){
 							trans.position = newVect;
 					    }else if((TweenAction) tweenAction==TweenAction.MOVE_LOCAL){
@@ -668,7 +668,7 @@ public static void update() {
 						}
 					}
 				}
-
+				
 				if(isTweenFinished){
 					//var callback=null;
 					string callbackS=string.Empty;
@@ -732,7 +732,7 @@ private static int pushNewTween( GameObject gameObject, Vector3 to, float time, 
 	init(maxTweens);
 	if(gameObject==null)
 		return -1;
-
+	
 	j = 0;
 	for(i = startSearch; j < maxTweens; i++){
 		if(i>=maxTweens-1){
@@ -747,7 +747,7 @@ private static int pushNewTween( GameObject gameObject, Vector3 to, float time, 
 			startSearch = i + 1;
 			break;
 		}
-
+		
 		j++;
 		if(j>=maxTweens){
 			string errorMsg = "LeanTween - You have run out of available spaces for tweening. To avoid this error increase the number of spaces to available for tweening when you initialize the LeanTween class ex: LeanTween.init( "+(maxTweens*2)+" );";
@@ -823,7 +823,7 @@ private static int pushNewTween( GameObject gameObject, Vector3 to, float time, 
 			tween.optional = null;  // nothing else is used with the extra piece, so set to null
 	}
 	//Debug.Log("pushing new tween["+i+"]:"+tweens[i]);
-
+	
 	return tweens[i].id;
 }
 
@@ -846,7 +846,7 @@ public static float closestRot( float from, float to ){
 
 /**
 * Cancel all tweens that are currently targeting the gameObject
-*
+* 
 * @method LeanTween.cancel
 * @param {GameObject} GameObject gameObject whose tweens you want to cancel
 */
@@ -860,7 +860,7 @@ public static void cancel( GameObject gameObject ){
 
 /**
 * Cancel a specific tween for a gameObject
-*
+* 
 * @method LeanTween.cancel
 * @param {GameObject} GameObject gameObject GameObject whose tweens you want to cancel
 * @param {int} int id Id of the tween you want to cancel ex: int id = LeanTween.MoveX(gameObject, 5, 1.0);
@@ -891,12 +891,12 @@ public static bool isTweening( LTRect ltRect ){
 }
 
 //////public int play( GameObject gameObject, toFrame:int, columns:int, rows:int, Hashtable optional ){
-
+	
 //////}
 
 /**
 * Tween any particular value, it does not need to be tied to any particular type or GameObject
-*
+* 
 * @method LeanTween.value
 * @param {Function} callOnUpdate:Function The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
 * @param {float} float from The original value to start the tween from
@@ -909,12 +909,12 @@ public static int value(string callOnUpdate, float from, float to, float time, H
 }
 
 public static int value(GameObject gameObject, string callOnUpdate, float from, float to, float time){
-	return value(gameObject, callOnUpdate, from, to, time, null);
+	return value(gameObject, callOnUpdate, from, to, time, null); 
 }
 
 /**
 * Tween any particular value, it does not need to be tied to any particular type or GameObject
-*
+* 
 * @method LeanTween.value
 * @param {GameObject} GameObject gameObject GameObject with which to tie the tweening with. This is only used when you need to cancel this tween, it does not actually perform any operations on this gameObject
 * @param {Function} callOnUpdate:Function The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
@@ -927,7 +927,7 @@ public static int value(GameObject gameObject, string callOnUpdate, float from, 
 public static int value(GameObject gameObject,string callOnUpdate, float from, float to, float time, Hashtable optional){
 	if(optional==null)
 		optional = new Hashtable();
-
+		
 	optional["onUpdate"] = callOnUpdate;
 	int id = pushNewTween( gameObject, new Vector3(to,0,0), time, TweenAction.CALLBACK, optional );
 	tweens[id].from = new Vector3(from,0,0);
@@ -938,7 +938,7 @@ public static int value(GameObject gameObject,string callOnUpdate, float from, f
 
 /**
 * Rotate a GameObject, to values are in passed in degrees
-*
+* 
 * @method LeanTween.rotate
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {Vector3} Vector3 to The final rotation with which to rotate to
@@ -955,7 +955,7 @@ public static int rotate(GameObject gameObject, Vector3 to, float time){
 }
 /**
 * Rotate a GameObject, to values that are in passed in degrees
-*
+* 
 * @method LeanTween.rotate
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {Vector3} Vector3 to The final rotation with which to rotate to
@@ -977,7 +977,7 @@ public static int rotate(GameObject gameObject, Vector3 to, float time, Hashtabl
 
 /**
 * Rotate a GameObject only on the X axis
-*
+* 
 * @method LeanTween.rotateX
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final x-axis rotation with which to rotate
@@ -988,7 +988,7 @@ public static int rotateX(GameObject gameObject, float to, float time){
 }
 /**
 * Rotate a GameObject only on the X axis
-*
+* 
 * @method LeanTween.rotateX
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final x-axis rotation with which to rotate
@@ -1001,7 +1001,7 @@ public static int rotateX(GameObject gameObject, float to, float time, Hashtable
 
 /**
 * Rotate a GameObject only on the Y axis
-*
+* 
 * @method LeanTween.rotateY
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final y-axis rotation with which to rotate
@@ -1012,7 +1012,7 @@ public static int rotateY(GameObject gameObject, float to, float time){
 }
 /**
 * Rotate a GameObject only on the Y axis
-*
+* 
 * @method LeanTween.rotateY
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final y-axis rotation with which to rotate
@@ -1025,7 +1025,7 @@ public static int rotateY(GameObject gameObject, float to, float time, Hashtable
 
 /**
 * Rotate a GameObject only on the Z axis
-*
+* 
 * @method LeanTween.rotateZ
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final z-axis rotation with which to rotate
@@ -1036,7 +1036,7 @@ public static int rotateZ(GameObject gameObject, float to, float time){
 }
 /**
 * Rotate a GameObject only on the Z axis
-*
+* 
 * @method LeanTween.rotateZ
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The final z-axis rotation with which to rotate
@@ -1049,7 +1049,7 @@ public static int rotateZ(GameObject gameObject, float to, float time, Hashtable
 
 /**
 * Rotate a GameObject in the objects local space (on the transforms localEulerAngles object)
-*
+* 
 * @method LeanTween.rotateLocal
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {Vector3} Vector3 to The final rotation with which to rotate to
@@ -1062,7 +1062,7 @@ public static int rotateLocal(GameObject gameObject, Vector3 to, float time, Has
 
 /**
 * Move a GameObject along the x-axis
-*
+* 
 * @method LeanTween.moveX
 * @param {GameObject} GameObject gameObject Gameobject that you wish to move
 * @param {float} float to The final position with which to move to
@@ -1075,7 +1075,7 @@ public static int moveX(GameObject gameObject, float to, float time, Hashtable o
 
 /**
 * Move a GameObject along the y-axis
-*
+* 
 * @method LeanTween.moveY
 * @param {GameObject} GameObject gameObject Gameobject that you wish to move
 * @param {float} float to The final position with which to move to
@@ -1088,7 +1088,7 @@ public static int moveY(GameObject gameObject, float to, float time, Hashtable o
 
 /**
 * Move a GameObject along the z-axis
-*
+* 
 * @method LeanTween.moveZ
 * @param {GameObject} GameObject gameObject Gameobject that you wish to move
 * @param {float} float to The final position with which to move to
@@ -1108,7 +1108,7 @@ public static int move(GameObject gameObject, Vector3 to, float time){
 
 /**
 * Move a GameObject to a certain location
-*
+* 
 * @method LeanTween.move
 * @param {GameObject} GameObject gameObject Gameobject that you wish to move
 * @param {Vector3} Vector3 to The final positin with which to move to
@@ -1129,7 +1129,7 @@ public static int move(GameObject gameObject, Vector3 to, float time, Hashtable 
 
 /**
 * Move a GUI Element to a certain location
-*
+* 
 * @method LeanTween.move (GUI)
 * @param {LTRect} LTRect ltRect LTRect object that you wish to move
 * @param {Vector2} Vector2 to The final position with which to move to (pixel coordinates)
@@ -1148,7 +1148,7 @@ public static int move(LTRect ltRect, Vector2 to, float time, Hashtable optional
 
 /**
 * Move a GUI Element to a certain location
-*
+* 
 * @method LeanTween.move (GUI)
 * @param {LTRect} LTRect ltRect LTRect object that you wish to move
 * @param {Vector2} Vector2 to The final position with which to move to (pixel coordinates)
@@ -1164,8 +1164,8 @@ public static int moveLocal(GameObject gameObject, Vector3 to, float time){
 }
 
 /**
-* Move a GameObject to a certain location relative to the parent transform.
-*
+* Move a GameObject to a certain location relative to the parent transform. 
+* 
 * @method LeanTween.moveLocal
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {Vector3} Vector3 to The final positin with which to move to
@@ -1195,7 +1195,7 @@ public static int scale(GameObject gameObject, Vector3 to, float time){
 
 /**
 * Scale a GameObject to a certain size
-*
+* 
 * @method LeanTween.scale
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {Vector3} Vector3 to The size with which to tween to
@@ -1209,7 +1209,7 @@ public static int scale(GameObject gameObject, Vector3 to, float time, Hashtable
 
 /**
 * Scale a GUI Element to a certain width and height
-*
+* 
 * @method LeanTween.scale (GUI)
 * @param {LTRect} LTRect ltRect LTRect object that you wish to move
 * @param {Vector2} Vector2 to The final width and height to scale to (pixel based)
@@ -1229,7 +1229,7 @@ public static int scale(LTRect ltRect,Vector2 to, float time, Hashtable optional
 
 /**
 * Scale a GUI Element to a certain width and height
-*
+* 
 * @method LeanTween.scale (GUI)
 * @param {LTRect} LTRect ltRect LTRect object that you wish to move
 * @param {Vector2} Vector2 to The final width and height to scale to (pixel based)
@@ -1277,7 +1277,7 @@ public static int scaleZ(GameObject gameObject, float to, float time, Hashtable 
 
 /**
 * Call a function after a certain amount of time has passed
-*
+* 
 * @method LeanTween.delayedCall
 * @param {float} float delayTime The time with which to delay before calling the function
 * @param {Function} callback:Function Function that is called after the certain amount of time.
@@ -1293,7 +1293,7 @@ public static int delayedCall( float delayTime, string callback, Hashtable optio
 
 /**
 * Call a function after a certain amount of time has passed
-*
+* 
 * @method LeanTween.delayedCall
 * @param {GameObject} GameObject gameObject Gameobject that you wish to tie this delayed function call to
 * @param {float} float delayTime The time with which to delay before calling the function
@@ -1304,7 +1304,7 @@ public static int delayedCall( float delayTime, string callback, Hashtable optio
 
 /**
 * Call a function after a certain amount of time has passed
-*
+* 
 * @method LeanTween.delayedCall
 * @param {GameObject} GameObject gameObject Gameobject that you wish to tie this delayed function call to
 * @param {float} float delayTime The time with which to delay before calling the function
@@ -1316,7 +1316,7 @@ public static int delayedCall( float delayTime, string callback, Hashtable optio
 
 /**
 * Call a function after a certain amount of time has passed
-*
+* 
 * @method LeanTween.delayedCall
 * @param {GameObject} GameObject gameObject Gameobject that you wish to call the Function on
 * @param {float} float delayTime The time with which to delay before calling the function
@@ -1329,7 +1329,7 @@ public static int delayedCall(GameObject gameObject, float delayTime, string cal
 }
 /**
 * Call a function after a certain amount of time has passed
-*
+* 
 * @method LeanTween.delayedCall
 * @param {GameObject} GameObject gameObject Gameobject that you wish to call the Function on
 * @param {float} float delayTime The time with which to delay before calling the function
@@ -1347,7 +1347,7 @@ public static int delayedCall( GameObject gameObject, float delayTime, string ca
 
 /**
 * Fade a gameobject's material to a certain alpha value. The material's shader needs to support alpha. <a href="http://owlchemylabs.com/content/">Owl labs has some excellent efficient shaders</a>.
-*
+* 
 * @method LeanTween.alpha
 * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
 * @param {float} float to The time with which to delay before callin the function
@@ -1359,8 +1359,8 @@ public static int alpha(GameObject gameObject, float to, float time, Hashtable o
 	return pushNewTween( gameObject, new Vector3(to,0,0), time, TweenAction.ALPHA, optional );
 }
 
-public static int alpha(GameObject gameObject, float to, float time){
-	return alpha(gameObject,to,time,null);
+public static int alpha(GameObject gameObject, float to, float time){ 
+	return alpha(gameObject,to,time,null); 
 }
 
 // Tweening Functions - Thanks to Robert Penner and GFX47
@@ -1610,16 +1610,16 @@ public static float easeInOutBack(float start, float end, float val){
 /* GFX47 MOD START */
 public static float easeInElastic(float start, float end, float val){
 	end -= start;
-
+	
 	float d = 1f;
 	float p = d * .3f;
 	float s= 0;
 	float a = 0;
-
+	
 	if (val == 0) return start;
 	val = val/d;
 	if (val == 1) return start + end;
-
+	
 	if (a == 0f || a < Mathf.Abs(end)){
 		a = end;
 		s = p / 4;
@@ -1628,7 +1628,7 @@ public static float easeInElastic(float start, float end, float val){
 	}
 	val = val-1;
 	return -(a * Mathf.Pow(2, 10 * val) * Mathf.Sin((val * d - s) * (2 * Mathf.PI) / p)) + start;
-}
+}		
 /* GFX47 MOD END */
 
 /* GFX47 MOD START */
@@ -1637,49 +1637,49 @@ public static float easeOutElastic(float start, float end, float val){
 /* GFX47 MOD END */
 	//Thank you to rafael.marteleto for fixing this as a port over from Pedro's UnityTween
 	end -= start;
-
+	
 	float d = 1f;
 	float p= d * .3f;
 	float s= 0;
 	float a= 0;
-
+	
 	if (val == 0) return start;
-
+	
 	val = val / d;
 	if (val == 1) return start + end;
-
+	
 	if (a == 0f || a < Mathf.Abs(end)){
 		a = end;
 		s = p / 4;
 		}else{
 		s = p / (2 * Mathf.PI) * Mathf.Asin(end / a);
 	}
-
+	
 	return (a * Mathf.Pow(2, -10 * val) * Mathf.Sin((val * d - s) * (2 * Mathf.PI) / p) + end + start);
-}
+}		
 
 /* GFX47 MOD START */
 public static float easeInOutElastic(float start, float end, float val)
 {
 	end -= start;
-
+	
 	float d = 1f;
 	float p= d * .3f;
 	float s= 0;
 	float a = 0;
-
+	
 	if (val == 0) return start;
-
+	
 	val = val / (d/2);
 	if (val == 2) return start + end;
-
+	
 	if (a == 0f || a < Mathf.Abs(end)){
 		a = end;
 		s = p / 4;
 		}else{
 		s = p / (2 * Mathf.PI) * Mathf.Asin(end / a);
 	}
-
+	
 	if (val < 1){
 	 val = val-1;
 	 return -0.5f * (a * Mathf.Pow(2, 10 * val) * Mathf.Sin((val * d - s) * (2 * Mathf.PI) / p)) + start;

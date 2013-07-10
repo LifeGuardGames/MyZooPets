@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class DiagnoseGUI : MonoBehaviour {
-	
+
 	public Texture2D txPanel;
 	public GameObject spritePet;
 	public GUISkin skin;
@@ -12,11 +12,11 @@ public class DiagnoseGUI : MonoBehaviour {
 	public Texture2D buttonGreen;
 	public Texture2D buttonYellow;
 	public Texture2D buttonRed;
-	
+
 	//timer texture
 	public Texture2D timerFrame;
 	public Texture2D timerFiller;
-	
+
 	//progress bar texture
 	public Texture2D statBarVerFillGreen;
 	public Texture2D statBarVerFillYellow;
@@ -25,8 +25,8 @@ public class DiagnoseGUI : MonoBehaviour {
 
 	public Texture2D inhalerTexture;
 	public GUIStyle diagnoseStyle = new GUIStyle();
-	public NotificationUIManager notificationUIManager; //reference 
-	
+	public NotificationUIManager notificationUIManager; //reference
+
 	//Lean Tween positions
 	private LTRect diagnoseRect;
 	private LTRect inhalerRect;
@@ -62,10 +62,19 @@ public class DiagnoseGUI : MonoBehaviour {
 
     private const int INHALER_SIZE = 75;
 
+    bool gameStarted = false;
+    float introMessageDuration = 3.0f;
+
     //testing
     private GUIStyle buttonStyle = new GUIStyle();
-	
+
+
 	void Start(){
+		notificationUIManager.PopupTexture("diagnose");
+		Invoke("StartGame", introMessageDuration);
+	}
+
+	void StartGame(){
 		timer = 10; //10 seconds game
 
 		diagnoseFinalPosition = new Vector2(NATIVE_WIDTH/2, NATIVE_HEIGHT+100);
@@ -93,9 +102,13 @@ public class DiagnoseGUI : MonoBehaviour {
 				spritePet.GetComponent<tk2dSprite>().SetSprite("AttackPet");
 			break;
 		}
+
+		gameStarted = true;
 	}
 
 	void Update(){
+		if (!gameStarted) return;
+
 		if(isActive){
 			timer -= Time.deltaTime;
 			if(timer <= 0){
@@ -105,14 +118,16 @@ public class DiagnoseGUI : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	void OnGUI(){
+		if (!gameStarted) return;
+
 		GUI.skin = skin;
 		// Proportional scaling
 		if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
             float horizRatio = Screen.width/NATIVE_WIDTH;
             float vertRatio = Screen.height/NATIVE_HEIGHT;
-            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, 
+            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity,
             	new Vector3(horizRatio, vertRatio, 1));
 		}
 
@@ -125,17 +140,17 @@ public class DiagnoseGUI : MonoBehaviour {
 		}
 		if(GUI.Button(new Rect(40, 255, BUTTON_WIDTH, BUTTON_HEIGHT), buttonYellow, buttonBlankStyle)){
 			chosenStage = AsthmaStage.Sick;
-			Clicked();			
+			Clicked();
 		}
 		if(GUI.Button(new Rect(40, 420, BUTTON_WIDTH, BUTTON_HEIGHT), buttonRed, buttonBlankStyle)){
 			chosenStage = AsthmaStage.Attack;
-			Clicked();	
+			Clicked();
 		}
 		GUI.EndGroup();
 		//=============================================
-		
+
 		//=====Timer progress bar======
-		if(isActive){			
+		if(isActive){
 			GUI.DrawTexture(new Rect(timerTxLoc.x + 57, timerTxLoc.y + 147, timerFiller.width, timerFiller.height), timerFiller);
 
 			if(timer > 8){
@@ -148,20 +163,20 @@ public class DiagnoseGUI : MonoBehaviour {
 				GUI.DrawTexture(new Rect(timerTxLoc.x + timerBarOffset.x, timerTxLoc.y + timerBarOffset.y +(BAR_LENGTH-BAR_LENGTH*timer/MAX_VALUE),
 					57, BAR_LENGTH * Mathf.Clamp01(timer/MAX_VALUE)),statBarVerFillRed, ScaleMode.StretchToFill, true, 1f);
 			}
-			
+
 			GUI.DrawTexture(new Rect(timerTxLoc.x, timerTxLoc.y, timerFrame.width, timerFrame.height), timerFrame);
 		}
 		//=============================
-		
+
 		//===========Drag Drop inhaler logic==================================
 		if(!pickedUp && isActive){
 			if(GUI.RepeatButton(inhalerRect.rect, inhalerTexture, buttonStyle)){
 				pickedUp = true;
-			}	
+			}
 		}
 
 		if(pickedUp){
-			GUI.DrawTexture(new Rect(Input.mousePosition.x-50, NATIVE_HEIGHT-Input.mousePosition.y-50, 
+			GUI.DrawTexture(new Rect(Input.mousePosition.x-50, NATIVE_HEIGHT-Input.mousePosition.y-50,
 				INHALER_SIZE, INHALER_SIZE), inhalerTexture);
 			if(Input.touchCount > 0){
 				if(Input.GetTouch(0).phase == TouchPhase.Ended){
@@ -172,12 +187,12 @@ public class DiagnoseGUI : MonoBehaviour {
 						if(hit.collider.name == "SpritePet"){
 							isActive = false;
 							RewardNotification(true);
-							
+
 						}else{
 							//return to position
 							// pickedUp = false;
 						}
-						
+
 					}
 					pickedUp = false;
 				}
@@ -190,7 +205,7 @@ public class DiagnoseGUI : MonoBehaviour {
 	private void Clicked(){
 		if(!buttonClicked){
 			buttonClicked = true;
-			
+
 			if(DiagnoseGameLogic.IsThisStageCorrect(chosenStage)){
 
 				if(chosenStage.Equals(AsthmaStage.OK)){
@@ -238,9 +253,9 @@ public class DiagnoseGUI : MonoBehaviour {
 		Hashtable optional = new Hashtable();
 		if(isAnswerCorrect && (chosenStage.Equals(AsthmaStage.Sick) || chosenStage.Equals(AsthmaStage.Attack))){
 			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onComplete", "ShowInhaler");	
+			optional.Add("onComplete", "ShowInhaler");
 		}
-		
+
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(diagnoseRect, diagnoseFinalPosition, 0.5f, optional);
 	}

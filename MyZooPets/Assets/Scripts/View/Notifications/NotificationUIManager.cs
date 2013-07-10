@@ -14,6 +14,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureNiceTry;
 	public GameObject popupTextureUseTheInhaler;
 	public GameObject popupTexturePracticeInhaler;
+	public GameObject popupTextureDiagnoseSymptoms;
 	public GameObject popupAward;
 
 	public GameObject popupNotification;
@@ -85,6 +86,10 @@ public class NotificationUIManager : MonoBehaviour {
 
 			case "nice try":
 				prefab = popupTextureNiceTry;
+			break;
+
+			case "diagnose":
+				prefab = popupTextureDiagnoseSymptoms;
 			break;
 		}
 		if(prefab == popupTexturePracticeInhaler){

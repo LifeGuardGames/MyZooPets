@@ -11,21 +11,21 @@ public static class CalendarLogic{
     private static CalendarEntry todaysEntry; //today's entry
     // todo: remove these
     //====================API (deprecated methods)=======================
-    public static int GetComboCount(){
-        return 0;
-    }
+    // public static int GetComboCount(){
+    //     return 0;
+    // }
 
-    public static bool HasCheckedCalendar{
-        get {return true;}
-    }
+    // public static bool HasCheckedCalendar{
+    //     get {return true;}
+    // }
 
-    public static List<CalendarEntry> GetCalendarEntries(){
-        return DataManager.EntriesThisWeek;
-    }
+    // public static List<CalendarEntry> GetCalendarEntries(){
+    //     return DataManager.EntriesThisWeek;
+    // }
 
-    public static bool IsThereMissDosageToday{
-        get {return true;}
-    }
+    // public static bool IsThereMissDosageToday{
+    //     get {return true;}
+    // }
     // todo: remove these
     //====================API (deprecated testing methods)=======================
     public static CalendarEntry TodaysEntry {
@@ -76,9 +76,10 @@ public static class CalendarLogic{
             entry.NightTime = DosageRecord.LeaveBlank;
         }
 
+        todaysEntry = list[daysPassed - 1];
         // fill in specifically for today
         if (now.Hour >= 12) {
-            list[daysPassed - 1].DayTime = DosageRecord.LeaveBlank;
+            todaysEntry.DayTime = DosageRecord.LeaveBlank;
         }
 
         return list;
@@ -91,6 +92,8 @@ public static class CalendarLogic{
         }
         return list;
     }
+
+    //====================API=======================
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
     // only used here, and in DataManager to initialize DataManager.DateOfSunday
@@ -105,7 +108,17 @@ public static class CalendarLogic{
         }
     }
 
-    //====================API (use this for the UI)=======================
+    public static bool CanUseRealInhaler{
+        get {
+            if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Null) {
+                return true;
+            }
+            else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Null ) {
+                return true;
+            }
+            return false;
+        }
+    }
 
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it

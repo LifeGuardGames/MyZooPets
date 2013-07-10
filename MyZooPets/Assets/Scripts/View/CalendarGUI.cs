@@ -40,7 +40,8 @@ public class CalendarGUI : MonoBehaviour {
 
     //Reading calendar entries
     public void Init(){
-        calendar = CalendarLogic.GetCalendarEntries();
+        // calendar = CalendarLogic.GetCalendarEntries();
+        calendar = new List<CalendarEntry>();
     }
 
     // Use this for initialization
@@ -98,8 +99,8 @@ public class CalendarGUI : MonoBehaviour {
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+380,100,70),"Friday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+450,100,70),"Saturday",diaryTextStyle);
         GUI.TextArea(new Rect (diaryRect.rect.x+10,diaryRect.rect.y+520,100,70),"Sunday",diaryTextStyle);
-        GUI.TextArea(new Rect (diaryRect.rect.x+150,diaryRect.rect.y+605,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
-        if(CalendarLogic.IsThereMissDosageToday)
+        // GUI.TextArea(new Rect (diaryRect.rect.x+150,diaryRect.rect.y+605,100,70),""+CalendarLogic.GetComboCount(),diaryTextStyle);
+        if(CalendarLogic.CanUseRealInhaler)
             GUI.Label(new Rect(diaryRect.rect.x+200, diaryRect.rect.y+590,400, 70), "Use the inhaler!!");
 
         //Layout for inhaler checks in a week

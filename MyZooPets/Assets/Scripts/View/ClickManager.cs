@@ -114,8 +114,8 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
-			if (CalendarLogic.HasCheckedCalendar){
-				if (CalendarLogic.IsThereMissDosageToday){
+			// if (CalendarLogic.HasCheckedCalendar){
+				if (CalendarLogic.CanUseRealInhaler){
 					cameraMove.RealInhalerZoomToggle();
 					ClickLock();
 					ModeLock();
@@ -126,14 +126,14 @@ public class ClickManager : MonoBehaviour {
 						delegate(){}
 					);
 				}
-			}
-			else {
-				notificationUIManager.PopupNotification(
-					"I don't know if I need this now. Open calendar?",
-					calendarGUI.CalendarClicked,
-					delegate(){}
-				);
-			}
+			// }
+			// else {
+			// 	notificationUIManager.PopupNotification(
+			// 		"I don't know if I need this now. Open calendar?",
+			// 		calendarGUI.CalendarClicked,
+			// 		delegate(){}
+			// 	);
+			// }
 		}
 	}
 	void OnTapTeddyInhaler(){

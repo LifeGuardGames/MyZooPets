@@ -44,6 +44,11 @@ public class Notification : MonoBehaviour {
         Button2Callback();
     }
 
+    // Destroy Notification prefab after it's done
+    void DestroyNotification(){
+        Destroy(gameObject);
+    }
+
     // =========================================================================================================================================================
     void Start () {
         Testing();
@@ -65,5 +70,6 @@ public class Notification : MonoBehaviour {
     }
     void message2(){
         Debug.Log("button 2 clicked");
+        DestroyNotification();
     }
 }

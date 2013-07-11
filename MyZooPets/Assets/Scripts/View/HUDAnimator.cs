@@ -49,30 +49,30 @@ public class HUDAnimator : MonoBehaviour {
 	private int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 	private int nextLevelPoints; //the minimum requirement for next level up
 	private Level lastLevel; //pet's last level
-	private HUD hud;
+	// private HUD hud;
 	
-	//Below are for Icon pulsing.
-	//Each 1 2 3, coorespond to Health, Mood, Food
-    private float grow;
-    private float shrink;
-    private float starGrow;
-    private float starShrink;
-	private bool IconSwitch1 = true;
-	private bool IconSwitch2 = true;
-	private bool IconSwitch3 = true;
-	private bool IconSwitch4 = true;
-	private int leantween1;
-	private int leantween2;
-	private int leantween3;
-	private int leantween4;
-	Hashtable optionalGrow1 = new Hashtable();
-	Hashtable optionalGrow2 = new Hashtable();
-	Hashtable optionalGrow3 = new Hashtable();
-	Hashtable optionalGrow4 = new Hashtable();
-    Hashtable optionalShrink1 = new Hashtable();
-    Hashtable optionalShrink2 = new Hashtable();
-    Hashtable optionalShrink3 = new Hashtable();
-    Hashtable optionalShrink4 = new Hashtable();
+	// //Below are for Icon pulsing.
+	// //Each 1 2 3, coorespond to Health, Mood, Food
+ //    private float grow;
+ //    private float shrink;
+ //    private float starGrow;
+ //    private float starShrink;
+	// private bool IconSwitch1 = true;
+	// private bool IconSwitch2 = true;
+	// private bool IconSwitch3 = true;
+	// private bool IconSwitch4 = true;
+	// private int leantween1;
+	// private int leantween2;
+	// private int leantween3;
+	// private int leantween4;
+	// Hashtable optionalGrow1 = new Hashtable();
+	// Hashtable optionalGrow2 = new Hashtable();
+	// Hashtable optionalGrow3 = new Hashtable();
+	// Hashtable optionalGrow4 = new Hashtable();
+ //    Hashtable optionalShrink1 = new Hashtable();
+ //    Hashtable optionalShrink2 = new Hashtable();
+ //    Hashtable optionalShrink3 = new Hashtable();
+ //    Hashtable optionalShrink4 = new Hashtable();
 	
 	
 	public void Init()
@@ -91,28 +91,28 @@ public class HUDAnimator : MonoBehaviour {
 		lastLevel = DataManager.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
 
-        hud = this.GetComponent<HUD>();
-        grow = hud.healthIcon.width + 10;
-        shrink = hud.healthIcon.width;
-        starGrow = hud.starIcon.width + 10;
-        starShrink = hud.starIcon.width;
+        // hud = this.GetComponent<HUD>();
+        // grow = hud.healthIcon.width + 10;
+        // shrink = hud.healthIcon.width;
+        // starGrow = hud.starIcon.width + 10;
+        // starShrink = hud.starIcon.width;
 		
-		//Had to make 3 hashtable for each icon pulsing
-		optionalGrow1.Add("onCompleteTarget", gameObject);	
-		optionalGrow2.Add("onCompleteTarget", gameObject);	
-		optionalGrow3.Add("onCompleteTarget", gameObject);	
-		optionalGrow4.Add("onCompleteTarget", gameObject);	
-		optionalShrink1.Add("onCompleteTarget", gameObject);
-		optionalShrink2.Add("onCompleteTarget", gameObject);
-		optionalShrink3.Add("onCompleteTarget", gameObject);
-		optionalShrink4.Add("onCompleteTarget", gameObject);
-    	optionalGrow1.Add("onComplete", "ShrinkHealthIcon");
-    	optionalGrow2.Add("onComplete", "ShrinkMoodIcon");
-    	// optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
-    	optionalGrow4.Add("onComplete", "ShrinkStarIcon");
-        optionalShrink1.Add("onComplete", "GrowHealthIcon");
-        optionalShrink2.Add("onComplete", "GrowMoodIcon");
-        optionalShrink4.Add("onComplete", "GrowStarIcon");
+		// //Had to make 3 hashtable for each icon pulsing
+		// optionalGrow1.Add("onCompleteTarget", gameObject);	
+		// optionalGrow2.Add("onCompleteTarget", gameObject);	
+		// optionalGrow3.Add("onCompleteTarget", gameObject);	
+		// optionalGrow4.Add("onCompleteTarget", gameObject);	
+		// optionalShrink1.Add("onCompleteTarget", gameObject);
+		// optionalShrink2.Add("onCompleteTarget", gameObject);
+		// optionalShrink3.Add("onCompleteTarget", gameObject);
+		// optionalShrink4.Add("onCompleteTarget", gameObject);
+  //   	optionalGrow1.Add("onComplete", "ShrinkHealthIcon");
+  //   	optionalGrow2.Add("onComplete", "ShrinkMoodIcon");
+  //   	// optionalGrow3.Add("onComplete", "ShrinkFoodIcon");
+  //   	optionalGrow4.Add("onComplete", "ShrinkStarIcon");
+  //       optionalShrink1.Add("onComplete", "GrowHealthIcon");
+  //       optionalShrink2.Add("onComplete", "GrowMoodIcon");
+  //       optionalShrink4.Add("onComplete", "GrowStarIcon");
 	}
     
 	void FixedUpdate(){
@@ -130,25 +130,25 @@ public class HUDAnimator : MonoBehaviour {
 			if(displayStars > DataManager.Stars){
 				displayStars--;
 
-				if(IconSwitch4){ //grow & shrink stars icon
-					GrowStarIcon();
-					IconSwitch4 = false;
-				}
+				// if(IconSwitch4){ //grow & shrink stars icon
+				// 	GrowStarIcon();
+				// 	IconSwitch4 = false;
+				// }
 			}else if(displayStars < DataManager.Stars){
 				displayStars++;
 
-				if(IconSwitch4){ //grow & shrink stars icon
-					GrowStarIcon();
-					IconSwitch4 = false;
-				}
+				// if(IconSwitch4){ //grow & shrink stars icon
+				// 	GrowStarIcon();
+				// 	IconSwitch4 = false;
+				// }
 			}else{
 				dataStars = DataManager.Stars;
 
-				//stop grow & shrink. reset icon size
+				// //stop grow & shrink. reset icon size
 
-				LeanTween.cancel(LeanTween.TweenEmpty ,leantween4);
-				LeanTween.scale(hud.starIconRect,new Vector2(starShrink, starShrink),0.1f);
-				IconSwitch4 = true;
+				// LeanTween.cancel(LeanTween.TweenEmpty ,leantween4);
+				// LeanTween.scale(hud.starIconRect,new Vector2(starShrink, starShrink),0.1f);
+				// IconSwitch4 = true;
 			}
 		}
 	}
@@ -173,25 +173,25 @@ public class HUDAnimator : MonoBehaviour {
 			if(displayHealth > DataManager.Health){
 				displayHealth--;
 
-				if(IconSwitch1){ //Growth & shrink health icon
-					GrowHealthIcon();
-					IconSwitch1 = false;				
-				}
+				// if(IconSwitch1){ //Growth & shrink health icon
+				// 	GrowHealthIcon();
+				// 	IconSwitch1 = false;				
+				// }
 			}else if(displayHealth < DataManager.Health){
 				displayHealth++;
 
-				if(IconSwitch1){ //Growth & shrink health icon
-					GrowHealthIcon();
-					IconSwitch1 = false;				
-				}
+				// if(IconSwitch1){ //Growth & shrink health icon
+				// 	GrowHealthIcon();
+				// 	IconSwitch1 = false;				
+				// }
 			}else{
 				dataHealth = DataManager.Health;
 
-				//Stop grow & shrink. reset icon size
+				// //Stop grow & shrink. reset icon size
 
-				LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
-				LeanTween.scale(hud.healthIconRect,new Vector2(hud.healthIcon.width,hud.healthIcon.height),0.1f);
-				IconSwitch1 = true;
+				// LeanTween.cancel(LeanTween.TweenEmpty,leantween1);
+				// LeanTween.scale(hud.healthIconRect,new Vector2(hud.healthIcon.width,hud.healthIcon.height),0.1f);
+				// IconSwitch1 = true;
 			}
 		}
 	}
@@ -201,23 +201,23 @@ public class HUDAnimator : MonoBehaviour {
 			if(displayMood > DataManager.Mood){
 				displayMood--;
 
-				if(IconSwitch2){ //Grow & shrink mood icon
-					GrowMoodIcon();
-					IconSwitch2 = false;				
-				}
+				// if(IconSwitch2){ //Grow & shrink mood icon
+				// 	GrowMoodIcon();
+				// 	IconSwitch2 = false;				
+				// }
 			}else if(displayMood < DataManager.Mood){
 				displayMood++;
-				if(IconSwitch2){ //Grow & shrink mood icon
-					GrowMoodIcon();
-					IconSwitch2 = false;				
-				}
+				// if(IconSwitch2){ //Grow & shrink mood icon
+				// 	GrowMoodIcon();
+				// 	IconSwitch2 = false;				
+				// }
 			}else{
 				dataMood = DataManager.Mood;	
 
-				//Stop grow & shrink. reset icon size
-				LeanTween.cancel(LeanTween.TweenEmpty,leantween2);
-				LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.1f);
-				IconSwitch2 = true;
+				// //Stop grow & shrink. reset icon size
+				// LeanTween.cancel(LeanTween.TweenEmpty,leantween2);
+				// LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.1f);
+				// IconSwitch2 = true;
 			}
 		}
 
@@ -225,26 +225,26 @@ public class HUDAnimator : MonoBehaviour {
 
 	//================================================================
 
-	//Below functions for Icon pulsing.
-    private void GrowHealthIcon(){
-    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(grow,grow),0.2f, optionalGrow1);
-    }
-    private void GrowMoodIcon(){
-    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(grow,grow),0.2f, optionalGrow2);
-    }
-    private void GrowStarIcon(){
-    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starGrow,starGrow),0.2f, optionalGrow4);
-    }
+	// //Below functions for Icon pulsing.
+ //    private void GrowHealthIcon(){
+ //    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(grow,grow),0.2f, optionalGrow1);
+ //    }
+ //    private void GrowMoodIcon(){
+ //    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(grow,grow),0.2f, optionalGrow2);
+ //    }
+ //    private void GrowStarIcon(){
+ //    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starGrow,starGrow),0.2f, optionalGrow4);
+ //    }
 
-    private void ShrinkHealthIcon(){
-    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink1);
-    }
-    private void ShrinkMoodIcon(){
-    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink2);
-    }
-    private void ShrinkStarIcon(){
-    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starShrink,starShrink),0.2f, optionalShrink4);
-    }
+ //    private void ShrinkHealthIcon(){
+ //    	leantween1 = LeanTween.scale(hud.healthIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink1);
+ //    }
+ //    private void ShrinkMoodIcon(){
+ //    	leantween2 = LeanTween.scale(hud.moodIconRect,new Vector2(shrink,shrink),0.2f, optionalShrink2);
+ //    }
+ //    private void ShrinkStarIcon(){
+ //    	leantween4 = LeanTween.scale(hud.starIconRect,new Vector2(starShrink,starShrink),0.2f, optionalShrink4);
+ //    }
 
     //Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar

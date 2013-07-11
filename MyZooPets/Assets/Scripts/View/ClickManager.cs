@@ -164,7 +164,8 @@ public class ClickManager : MonoBehaviour {
 		        	"Level up to get more trophies!",
 		            delegate(){
 		            	trophyMessageShowing = false;
-	            	}
+	            	},
+	            	"OK"
 	            );
         	}
 

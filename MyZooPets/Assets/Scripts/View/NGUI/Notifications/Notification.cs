@@ -4,9 +4,12 @@ using System.Collections;
 public class Notification : MonoBehaviour {
 
     public UILabel textArea;
-    public int numOfButtons = 1;
     public UILabel button1;
     public UILabel button2;
+
+    // set the following
+
+    public int numOfButtons = 1;
 
     public delegate void Callback();
     public Callback Button1Callback;
@@ -39,9 +42,30 @@ public class Notification : MonoBehaviour {
     // These two functions are called when the buttons are clicked.
     void Button1Action(){
         Button1Callback();
+        Hide();
     }
     void Button2Action(){
         Button2Callback();
+        Hide();
+    }
+
+    // Display the popup panel
+    public void Display(){
+        // Hashtable optional = new Hashtable();
+        // optional.Add("ease", LeanTweenType.easeOutBounce);
+        // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
+        Time.timeScale = 0;
+    }
+
+    // Hide the popup panel
+    void Hide(){
+        // Hashtable optional = new Hashtable();
+        // optional.Add("onCompleteTarget", gameObject);
+        // optional.Add("onComplete", "DestroyNotification");
+        DestroyNotification();
+        // optional.Add("ease", LeanTweenType.easeInOutQuad);
+        // LeanTween.move(panelRect, initPosition, 0.5f, optional);
+        Time.timeScale = 1;
     }
 
     // Destroy Notification prefab after it's done
@@ -50,9 +74,9 @@ public class Notification : MonoBehaviour {
     }
 
     // =========================================================================================================================================================
-    void Start () {
-        Testing();
-    }
+    // void Start () {
+    //     Testing();
+    // }
 
     void Testing(){
         // testing code

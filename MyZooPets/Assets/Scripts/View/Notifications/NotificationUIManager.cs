@@ -19,7 +19,7 @@ public class NotificationUIManager : MonoBehaviour {
 
 	public GameObject popupNotificationOneButton;
 	public GameObject popupNotificationTwoButtons;
-	public GameObject levelUpMessage;
+	public GameObject levelUpMessageNGUI;
 	public GameObject gameOverRewardMessageOneButton;
 	public GameObject gameOverRewardMessageTwoButtons;
 	public bool flipped;
@@ -155,14 +155,13 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that shows an image of the trophy, along with a corresponding message
 		Params: trophy, call back for button
 	*/
-	public void LevelUpMessage(TrophyTier trophy, LevelUpMessage.OnButtonClicked okCallBack){
+	public void LevelUpMessage(TrophyTier trophy, PopupNotificationNGUI.Callback okCallBack){
 
-		GameObject go = Instantiate(levelUpMessage, gameObject.transform.position,
-			Quaternion.identity) as GameObject;
-		LevelUpMessage script = go.GetComponent<LevelUpMessage>();
-		if(script != null){
-			script.Init(trophy, okCallBack);
-		}
+		LevelUpMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(levelUpMessageNGUI) as LevelUpMessageNGUI;
+		oneButtonMessage.GetTrophyMessageAndImage(trophy);
+		oneButtonMessage.Button1Callback = okCallBack;
+		oneButtonMessage.Button1Text = "OK";
+		oneButtonMessage.Display();
 	}
 
 	/*

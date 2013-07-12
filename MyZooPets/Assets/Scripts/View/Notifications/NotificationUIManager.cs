@@ -16,7 +16,6 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTextureUseTheInhalerNGUI;
 	public GameObject popupTexturePracticeInhalerNGUI;
 	public GameObject popupTextureDiagnoseSymptomsNGUI;
-	public GameObject popupAward;
 
 	public GameObject popupNotificationOneButton;
 	public GameObject popupNotificationTwoButtons;

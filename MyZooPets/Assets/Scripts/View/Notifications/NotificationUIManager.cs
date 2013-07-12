@@ -23,6 +23,8 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupNotificationTwoButtons;
 	public GameObject levelUpMessage;
 	public GameObject gameOverRewardMessage;
+	public GameObject gameOverRewardMessageOneButton;
+	public GameObject gameOverRewardMessageTwoButtons;
 	public bool flipped;
 
 	//
@@ -215,15 +217,23 @@ public class NotificationUIManager : MonoBehaviour {
 		Note: pass in 0 for stars or points will result in the gui not showing up
 	*/
 	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
-		GameOverRewardMessage.OnButtonClicked yesButtonCallBack,
-		GameOverRewardMessage.OnButtonClicked noButtonCallBack){
+		PopupNotificationNGUI.Callback yesButtonCallBack,
+		PopupNotificationNGUI.Callback noButtonCallBack){
 
-		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
-			Quaternion.identity) as GameObject;
-		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
-		if(script != null){
-			script.Init(deltaStars, deltaPoints, yesButtonCallBack, noButtonCallBack);
-		}
+		// GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
+		// 	Quaternion.identity) as GameObject;
+		// GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
+		// if(script != null){
+		// 	script.Init(deltaStars, deltaPoints, yesButtonCallBack, noButtonCallBack);
+		// }
+
+		GameOverRewardMessageNGUI twoButtonMessage = CreateNGUIMessage(gameOverRewardMessageTwoButtons) as GameOverRewardMessageNGUI;
+		twoButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
+		twoButtonMessage.Button1Callback = yesButtonCallBack;
+		twoButtonMessage.Button2Callback = noButtonCallBack;
+		twoButtonMessage.Button1Text = "Play";
+		twoButtonMessage.Button2Text = "Quit";
+		twoButtonMessage.Display();
 	}
 
 	/*
@@ -231,14 +241,20 @@ public class NotificationUIManager : MonoBehaviour {
 		Params: stars, points, yes button call back
 	*/
 	public void GameOverRewardMessage(int deltaStars, int deltaPoints,
-		GameOverRewardMessage.OnButtonClicked yesButtonCallBack){
+		PopupNotificationNGUI.Callback yesButtonCallBack){
 
-		GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
-			Quaternion.identity) as GameObject;
-		GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
-		if(script != null){
-			script.Init(deltaStars, deltaPoints, yesButtonCallBack);
-		}
+		// GameObject go = Instantiate(gameOverRewardMessage, gameObject.transform.position,
+		// 	Quaternion.identity) as GameObject;
+		// GameOverRewardMessage script = go.GetComponent<GameOverRewardMessage>();
+		// if(script != null){
+		// 	script.Init(deltaStars, deltaPoints, yesButtonCallBack);
+		// }
+
+		GameOverRewardMessageNGUI oneButtonMessage = CreateNGUIMessage(gameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
+		oneButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
+		oneButtonMessage.Button1Callback = yesButtonCallBack;
+		oneButtonMessage.Button1Text = "Quit";
+		oneButtonMessage.Display();
 
 	}
 }

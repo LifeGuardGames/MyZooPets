@@ -40,11 +40,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
     }
 
     // These two functions are called when the buttons are clicked.
-    void Button1Action(){
+    protected void Button1Action(){
         Button1Callback();
         Hide();
     }
-    void Button2Action(){
+    protected void Button2Action(){
         Button2Callback();
         Hide();
     }
@@ -58,7 +58,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
     }
 
     // Hide the popup panel
-    void Hide(){
+    protected void Hide(){
         // Hashtable optional = new Hashtable();
         // optional.Add("onCompleteTarget", gameObject);
         // optional.Add("onComplete", "DestroyNotification");
@@ -69,31 +69,31 @@ public class PopupNotificationNGUI : MonoBehaviour {
     }
 
     // Destroy Notification prefab after it's done
-    void DestroyNotification(){
+    protected void DestroyNotification(){
         Destroy(gameObject);
     }
 
     // =========================================================================================================================================================
     // Code for Testing
-    // void Start () {
-    //     Testing();
-    // }
-
-    void Testing(){
-        // testing code
-        Message = "Hello there!";
-        Button1Text = "Hey!";
-        Button1Callback = message1;
-        if (numOfButtons >= 2){
-            Button2Text = "Fuck off.";
-            Button2Callback = message2;
-        }
+    protected void Start () {
+        Testing();
     }
 
-    void message1(){
+    protected virtual void Testing(){
+        // // testing code
+        // Message = "Hello there!";
+        // Button1Text = "Hey!";
+        // Button1Callback = message1;
+        // if (numOfButtons >= 2){
+        //     Button2Text = "Fuck off.";
+        //     Button2Callback = message2;
+        // }
+    }
+
+    protected void message1(){
         Debug.Log("button 1 clicked");
     }
-    void message2(){
+    protected void message2(){
         Debug.Log("button 2 clicked");
         DestroyNotification();
     }

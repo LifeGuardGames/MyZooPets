@@ -12,10 +12,15 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject cameraObject;
 	public GameObject NguiAnchor;
 	public GameObject popupTextureGreat;
+	public GameObject popupTextureGreatNGUI;
 	public GameObject popupTextureNiceTry;
+	public GameObject popupTextureNiceTryNGUI;
 	public GameObject popupTextureUseTheInhaler;
+	public GameObject popupTextureUseTheInhalerNGUI;
 	public GameObject popupTexturePracticeInhaler;
+	public GameObject popupTexturePracticeInhalerNGUI;
 	public GameObject popupTextureDiagnoseSymptoms;
+	public GameObject popupTextureDiagnoseSymptomsNGUI;
 	public GameObject popupAward;
 
 	public GameObject popupNotification;
@@ -75,45 +80,89 @@ public class NotificationUIManager : MonoBehaviour {
 		Params: notificationType
 	*/
 	public void PopupTexture(string notificationType){
+		// GameObject prefab = null;
+		// switch(notificationType){
+		// 	case "great":
+		// 		prefab = popupTextureGreat;
+		// 	break;
+
+		// 	case "practice intro":
+		// 		prefab = popupTexturePracticeInhaler;
+		// 	break;
+
+		// 	case "intro":
+		// 		prefab = popupTextureUseTheInhaler;
+		// 	break;
+
+		// 	case "nice try":
+		// 		prefab = popupTextureNiceTry;
+		// 	break;
+
+		// 	case "diagnose":
+		// 		prefab = popupTextureDiagnoseSymptoms;
+		// 	break;
+		// }
+		// if(prefab == popupTexturePracticeInhaler){
+		// 	GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+		// 	Destroy(go, 3.0f);
+
+		// 	// show regular intro after announcing that it is a practice game
+		// 	Invoke("ShowIntro", 3.0f);
+		// }
+		// else if(prefab != null){
+		// 	GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+		// 	Destroy(go, 3.0f);
+		// }
 		GameObject prefab = null;
 		switch(notificationType){
 			case "great":
-				prefab = popupTextureGreat;
+				prefab = popupTextureGreatNGUI;
 			break;
 
 			case "practice intro":
-				prefab = popupTexturePracticeInhaler;
+				prefab = popupTexturePracticeInhalerNGUI;
 			break;
 
 			case "intro":
-				prefab = popupTextureUseTheInhaler;
+				prefab = popupTextureUseTheInhalerNGUI;
 			break;
 
 			case "nice try":
-				prefab = popupTextureNiceTry;
+				prefab = popupTextureNiceTryNGUI;
 			break;
 
 			case "diagnose":
-				prefab = popupTextureDiagnoseSymptoms;
+				prefab = popupTextureDiagnoseSymptomsNGUI;
 			break;
 		}
-		if(prefab == popupTexturePracticeInhaler){
-			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+		if(prefab == popupTexturePracticeInhalerNGUI){
+			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+			GameObject go = CreateNGUIObject(prefab);
 			Destroy(go, 3.0f);
 
 			// show regular intro after announcing that it is a practice game
 			Invoke("ShowIntro", 3.0f);
 		}
 		else if(prefab != null){
-			GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+			GameObject go = CreateNGUIObject(prefab);
 			Destroy(go, 3.0f);
 		}
 	}
 
+	GameObject CreateNGUIObject(GameObject prefab){
+		GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+        obj.transform.parent = NguiAnchor.transform;
+        obj.transform.localScale = Vector3.one;
+        return obj;
+	}
+
 	// used to show regular intro after announcing that it is a practice game
 	private void ShowIntro () {
-		GameObject intro = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
-		Destroy(intro, 3.0f);
+		// GameObject intro = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
+		// Destroy(intro, 3.0f);
+		GameObject go = CreateNGUIObject(popupTextureUseTheInhalerNGUI);
+		Destroy(go, 3.0f);
 	}
 
 	/*
@@ -128,7 +177,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// if(script != null){
 		// 	script.Init(message, yesCallBack, noCallBack);
 		// }
-		PopupNotificationNGUI twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
 		twoButtonMessage.Message = message;
 		twoButtonMessage.Button1Callback = yesCallBack;
 		twoButtonMessage.Button2Callback = noCallBack;
@@ -147,7 +196,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Button2String = button2;
 		// 	script.Init(message, yesCallBack, noCallBack);
 		// }
-		PopupNotificationNGUI twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
 		twoButtonMessage.Message = message;
 		twoButtonMessage.Button1Callback = yesCallBack;
 		twoButtonMessage.Button2Callback = noCallBack;
@@ -168,7 +217,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(message, okCallBack);
 		// }
 
-		PopupNotificationNGUI oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = "Yes";
@@ -183,14 +232,14 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(message, okCallBack);
 		// }
 
-		PopupNotificationNGUI oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = button;
 		oneButtonMessage.Display();
 	}
 
-	PopupNotificationNGUI CreateNGUIMessage(GameObject prefab){
+	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){
 		GameObject message = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
         message.transform.parent = NguiAnchor.transform;
         message.transform.localScale = Vector3.one;
@@ -227,7 +276,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(deltaStars, deltaPoints, yesButtonCallBack, noButtonCallBack);
 		// }
 
-		GameOverRewardMessageNGUI twoButtonMessage = CreateNGUIMessage(gameOverRewardMessageTwoButtons) as GameOverRewardMessageNGUI;
+		GameOverRewardMessageNGUI twoButtonMessage = CreatePopupNotificationNGUI(gameOverRewardMessageTwoButtons) as GameOverRewardMessageNGUI;
 		twoButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		twoButtonMessage.Button1Callback = yesButtonCallBack;
 		twoButtonMessage.Button2Callback = noButtonCallBack;
@@ -250,7 +299,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(deltaStars, deltaPoints, yesButtonCallBack);
 		// }
 
-		GameOverRewardMessageNGUI oneButtonMessage = CreateNGUIMessage(gameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
+		GameOverRewardMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(gameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
 		oneButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		oneButtonMessage.Button1Callback = yesButtonCallBack;
 		oneButtonMessage.Button1Text = "Quit";

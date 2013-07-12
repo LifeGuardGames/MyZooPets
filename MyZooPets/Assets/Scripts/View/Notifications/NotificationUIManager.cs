@@ -118,15 +118,15 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 2 buttons
 		Params: notificationType, call back for yes button, call back for no button
 	*/
-	public void PopupNotificationTwoButtons(string message, Notification.Callback yesCallBack,
-		Notification.Callback noCallBack){
+	public void PopupNotificationTwoButtons(string message, PopupNotificationNGUI.Callback yesCallBack,
+		PopupNotificationNGUI.Callback noCallBack){
 		// GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 		// 	Quaternion.identity) as GameObject;
 		// PopupNotification script = go.GetComponent<PopupNotification>();
 		// if(script != null){
 		// 	script.Init(message, yesCallBack, noCallBack);
 		// }
-		Notification twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
+		PopupNotificationNGUI twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
 		twoButtonMessage.Message = message;
 		twoButtonMessage.Button1Callback = yesCallBack;
 		twoButtonMessage.Button2Callback = noCallBack;
@@ -135,8 +135,8 @@ public class NotificationUIManager : MonoBehaviour {
 		twoButtonMessage.Display();
 	}
 
-	public void PopupNotificationTwoButtons(string message, Notification.Callback yesCallBack,
-		Notification.Callback noCallBack, string button1, string button2){
+	public void PopupNotificationTwoButtons(string message, PopupNotificationNGUI.Callback yesCallBack,
+		PopupNotificationNGUI.Callback noCallBack, string button1, string button2){
 		// GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 		// 	Quaternion.identity) as GameObject;
 		// PopupNotification script = go.GetComponent<PopupNotification>();
@@ -145,7 +145,7 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Button2String = button2;
 		// 	script.Init(message, yesCallBack, noCallBack);
 		// }
-		Notification twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
+		PopupNotificationNGUI twoButtonMessage = CreateNGUIMessage(popupNotificationTwoButtons);
 		twoButtonMessage.Message = message;
 		twoButtonMessage.Button1Callback = yesCallBack;
 		twoButtonMessage.Button2Callback = noCallBack;
@@ -158,7 +158,7 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that has a popup texture and 1 button
 		Params: notificationType, call back for button
 	*/
-	public void PopupNotificationOneButton(string message, Notification.Callback okCallBack){
+	public void PopupNotificationOneButton(string message, PopupNotificationNGUI.Callback okCallBack){
 		// GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 		// 	Quaternion.identity) as GameObject;
 		// PopupNotification script = go.GetComponent<PopupNotification>();
@@ -166,13 +166,13 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(message, okCallBack);
 		// }
 
-		Notification oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
+		PopupNotificationNGUI oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = "Yes";
 		oneButtonMessage.Display();
 	}
-	public void PopupNotificationOneButton(string message, Notification.Callback okCallBack, string button){
+	public void PopupNotificationOneButton(string message, PopupNotificationNGUI.Callback okCallBack, string button){
 		// GameObject go = Instantiate(popupNotification, gameObject.transform.position,
 		// 	Quaternion.identity) as GameObject;
 		// PopupNotification script = go.GetComponent<PopupNotification>();
@@ -181,18 +181,18 @@ public class NotificationUIManager : MonoBehaviour {
 		// 	script.Init(message, okCallBack);
 		// }
 
-		Notification oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
+		PopupNotificationNGUI oneButtonMessage = CreateNGUIMessage(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = button;
 		oneButtonMessage.Display();
 	}
 
-	Notification CreateNGUIMessage(GameObject prefab){
+	PopupNotificationNGUI CreateNGUIMessage(GameObject prefab){
 		GameObject message = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
         message.transform.parent = NguiAnchor.transform;
         message.transform.localScale = Vector3.one;
-        return message.GetComponent<Notification>();
+        return message.GetComponent<PopupNotificationNGUI>();
 	}
 
 	/*

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Notification : MonoBehaviour {
+public class PopupNotificationNGUI : MonoBehaviour {
 
     public UILabel textArea;
     public UILabel button1;

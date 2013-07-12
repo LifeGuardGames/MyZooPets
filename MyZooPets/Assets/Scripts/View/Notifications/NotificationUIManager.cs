@@ -17,11 +17,11 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTexturePracticeInhalerNGUI;
 	public GameObject popupTextureDiagnoseSymptomsNGUI;
 
-	public GameObject popupNotificationOneButton;
-	public GameObject popupNotificationTwoButtons;
+	public GameObject popupNotificationOneButton; // NGUI as well
+	public GameObject popupNotificationTwoButtons; // NGUI as well
 	public GameObject levelUpMessageNGUI;
-	public GameObject gameOverRewardMessageOneButton;
-	public GameObject gameOverRewardMessageTwoButtons;
+	public GameObject gameOverRewardMessageOneButton; // NGUI as well
+	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
 	public bool flipped;
 
 	//

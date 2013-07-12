@@ -4,7 +4,7 @@ using System;
 
 /// <summary>
 /// Room GUI animator.
-/// This is the middleman proxy class that listens to the statLogic to display animation for roomGUI.
+/// This is the middleman proxy class that listens to the statLogic to display animation for HUD.
 /// 
 /// this animator will also have a series of events. These events will be raised
 /// when special things are happening to the changing stats. Client classes will need
@@ -20,7 +20,7 @@ public class HUDAnimator : MonoBehaviour {
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
     public static OnLevelUpEventHandlers OnLevelUp;
     //========================================
-
+	
     public int DisplayPoints{
     	get{return displayPoints;}
     }

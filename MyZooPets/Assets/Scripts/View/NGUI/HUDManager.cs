@@ -21,7 +21,6 @@ public class HUDManager : MonoBehaviour {
     public UILabel healthLabel;
     public UILabel moodLabel;
     
-
 	// Use this for initialization
 	void Start () {
 	  hudAnimator = GetComponent<HUDAnimator>();

@@ -30,6 +30,8 @@ public class InventoryGUI : MonoBehaviour{
     public GUIStyle itemCountTextStyle;
     public GUISkin defaultSkin;
 
+	
+	
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
@@ -78,8 +80,78 @@ public class InventoryGUI : MonoBehaviour{
             }
         }
     }
+	
 
+	
+
+	
+	private GameObject SpawnInventoryInPanel(){
+		GameObject item = NGUITools.AddChild(UIGrid);
+		item.name = "Item";
+//		BoxCollider boxCollider = item.AddComponent<BoxCollider>();
+//		boxCollider.isTrigger = true;
+//		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
+		item.AddComponent("UIDragPanelContents");
+		//item.AddComponent("DragDropItem");
+		//item.AddComponent("InventoryDragDrop");
+		
+		UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
+		spriteFill.transform.localScale = new Vector3(90, 90, 1); 	// TODO make const
+		spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
+		
+		GameObject spriteGO = NGUITools.AddChild(item);
+		
+		BoxCollider boxCollider = spriteGO.AddComponent<BoxCollider>();
+		boxCollider.isTrigger = true;
+		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
+		
+		spriteGO.name = "SpriteGO";
+		UISprite sprite = NGUITools.AddSprite(spriteGO, itemAtlas, "teddy");
+		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const
+		sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
+		spriteGO.AddComponent("InventoryDragDrop");
+		
+		itemCount++;
+		
+		return item;
+	}
+	
+//	void Printo(){
+//		Debug.Log("KABOOYA");	// TODO windowsRoot callback lcok - UIButtonToggle to keep track of the state, the toggle button doesnt persist state?? check
+//	}
+
+	public UISprite itemSprite;
+	public UIAtlas itemAtlas;
+	public GameObject UIGrid;
+	public GameObject parentWindow;
+	public GameObject UIButtonToggleObject;
+	private UIButtonToggle uiButtonToggle;
+	
+	private int itemCount = 0;
+	private float collapsedPos;
+	
+	void Start(){
+		collapsedPos = 1115f;
+		uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
+	}
+	
     void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "spawn")){
+			SpawnInventoryInPanel();
+			UIGrid.GetComponent<UIGrid>().Reposition();	// Reposition the grid after item added
+			
+			if(parentWindow.GetComponent<TweenPosition>().from.x > 215){ 	// Limit Move after x items
+				parentWindow.GetComponent<TweenPosition>().from.x = collapsedPos - itemCount * 90;
+
+				if(uiButtonToggle.isActive){	// Animate the move if inventory is open
+					Hashtable optional = new Hashtable();
+					optional.Add("ease", LeanTweenType.easeOutBounce);
+					LeanTween.moveLocalX(parentWindow, collapsedPos - itemCount * 90, 0.4f, optional);				
+				}
+			}
+		}
+		
+		/*
         if(!LoadDataLogic.IsDataLoaded) return;
         GUI.skin = defaultSkin;
 
@@ -151,6 +223,8 @@ public class InventoryGUI : MonoBehaviour{
                 e.mousePosition.y - ITEM_BOX_HEIGHT / 2, ITEM_BOX_WIDTH,ITEM_BOX_HEIGHT),itemLogic.items[pickUpId].Texture);
 
         }
+        
+        */
     }
 
     //Display InventoryGUI in game

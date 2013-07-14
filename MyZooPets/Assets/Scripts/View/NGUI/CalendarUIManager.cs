@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CalendarManager : MonoBehaviour {
+public class CalendarUIManager : MonoBehaviour {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
@@ -73,6 +73,10 @@ public class CalendarManager : MonoBehaviour {
     public void CalendarClicked(){
 
         PopulateCalendar();
+    }
+
+    public void CalendarClosed(){
+        
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the

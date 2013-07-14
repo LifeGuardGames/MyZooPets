@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
-public class DegradationGUI : MonoBehaviour{
+public class DegradationUIManager : MonoBehaviour{
     public GameObject cleanTriggerParticleDrop;
 
     /*

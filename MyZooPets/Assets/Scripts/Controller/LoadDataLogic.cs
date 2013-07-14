@@ -10,7 +10,7 @@ public class LoadDataLogic : MonoBehaviour {
     private DiaryGUI diaryUIManager; //reference to UI
     private CalendarGUI calendarGUI; //reference to UI
     private ChallengesGUI challengesGUI; //reference to UI
-    private DegradationGUI degradationUIManager; //reference to UI
+    private DegradationUIManager degradationUIManager; //reference to UI
     private HUDAnimator animator; //reference to UI
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
@@ -31,7 +31,7 @@ public class LoadDataLogic : MonoBehaviour {
             case "NewBedRoom":
                 calendarGUI = GameObject.Find ("UIManager/CalendarGUI").GetComponent<CalendarGUI>();
                 challengesGUI = GameObject.Find ("UIManager/ChallengesGUI").GetComponent<ChallengesGUI>();
-                degradationUIManager = GameObject.Find("UIManager/DegradationGUI").GetComponent<DegradationGUI>();
+                degradationUIManager = GameObject.Find("UIManager/DegradationUIManager").GetComponent<DegradationUIManager>();
                 levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
                 degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
                 tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();

@@ -16,6 +16,11 @@ public static class DiagnoseGameLogic{
         GenerateRandomStage();
     }
 
+    public static void ClaimReward(int deltaPoints, int deltaStars){
+        DataManager.AddPoints(deltaPoints);
+        DataManager.AddStars(deltaStars);
+    }
+
     //generate the sick stages randomly
     private static void GenerateRandomStage(){
         int randomNumber = Random.Range(0, 3);

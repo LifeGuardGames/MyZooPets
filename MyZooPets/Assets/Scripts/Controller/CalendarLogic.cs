@@ -19,9 +19,7 @@ public static class CalendarLogic{
     //     get {return true;}
     // }
 
-    // public static List<CalendarEntry> GetCalendarEntries(){
-    //     return DataManager.EntriesThisWeek;
-    // }
+    
 
     // public static bool IsThereMissDosageToday{
     //     get {return true;}
@@ -43,6 +41,7 @@ public static class CalendarLogic{
 
     //====================API (use this for generating weeks)=======================
 
+    //Generate a week of empty CalendarEntry
     public static List<CalendarEntry> EmptyWeek(){
         List<CalendarEntry> list = new List<CalendarEntry>();
         for (int i = 0; i < 7; i++){
@@ -51,6 +50,7 @@ public static class CalendarLogic{
         return list;
     }
 
+    //Generate a week of CalendarEntry with blank dosage record
     public static List<CalendarEntry> LeaveBlankWeek(){ // for those parts that should remain empty
         List<CalendarEntry> list = new List<CalendarEntry>();
         for (int i = 0; i < 7; i++){
@@ -94,6 +94,22 @@ public static class CalendarLogic{
     }
 
     //====================API=======================
+    //Week in a list. In order from Monday to Sunday
+    public static List<CalendarEntry> GetCalendarEntriesThisWeek{
+        get{return DataManager.EntriesThisWeek;}
+    }
+
+    //Last week entries. In order from Monday to Sunday. Possible dosage records are
+    //Hit, Miss, and LeaveBlank
+    public static List<CalendarEntry> GetCalendarEntriesLastWeek{
+        get{return DataManager.EntriesLastWeek;}
+    }
+
+    //Give bonus when user collects
+    public static void ClaimReward(){
+        DataManager.AddPoints(50);
+        DataManager.AddStars(50);
+    }
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
     // only used here, and in DataManager to initialize DataManager.DateOfSunday
@@ -130,6 +146,9 @@ public static class CalendarLogic{
     public static void CalendarOpened(){
         CalendarOpenedOnDate(DateTime.Now);
     }
+
+   
+    //================================================
 
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {

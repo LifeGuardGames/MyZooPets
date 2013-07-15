@@ -22,6 +22,11 @@ public class ClickManager : MonoBehaviour {
 	public GameObject calendarUIObject;
 	private CalendarUIManager calendarUIManager;
 
+	public GameObject storeUIObject;
+
+	public GameObject noteUIObject;
+	private NoteUIManager noteUIManager;
+
 	public GameObject challengesGUIObject;
 	private ChallengesGUI challengesGUI;
 
@@ -52,7 +57,7 @@ public class ClickManager : MonoBehaviour {
 
 		// Linking script references
 		calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
-		// calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
+		noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		// diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		// trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
@@ -93,6 +98,24 @@ public class ClickManager : MonoBehaviour {
 //			ModeLock();
 //		}
 //	}
+	public void OnClickNote(){
+		if(CanRespondToTap()){
+			noteUIManager.NoteClicked();
+			NoteUIManager.OnNoteClosed += OnNoteClosed;
+			ClickLock();
+			ModeLock();
+		}
+	}
+	private void OnNoteClosed(object sender, EventArgs e){
+		ReleaseClickLock();
+		ReleaseModeLock();
+	}
+
+	public void OnClickStore(){
+
+	}
+
+
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
 			challengesGUI.ChallengesClicked();
@@ -100,6 +123,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
+
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
 			calendarUIManager.CalendarClicked();
@@ -182,6 +206,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
+
 
 	void Update(){
 // 		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading

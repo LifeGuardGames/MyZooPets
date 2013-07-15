@@ -128,26 +128,34 @@ public class InventoryGUI : MonoBehaviour{
 		//item.AddComponent("UIDragPanelContents");
 		//item.AddComponent("DragDropItem");
 		//item.AddComponent("InventoryDragDrop");
+		item.AddComponent("InventoryListener");
 		
 		UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
 		spriteFill.transform.localScale = new Vector3(90, 90, 1); 	// TODO make const
 		spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
+				
+		GameObject SpriteGo = NGUITools.AddChild(item);
+		SpriteGo.gameObject.name = id.ToString();	// Use ID as name
+		UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
 		
-		GameObject spriteGO = NGUITools.AddChild(item);
-		
-		BoxCollider boxCollider = spriteGO.AddComponent<BoxCollider>();
+		BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
 		boxCollider.isTrigger = true;
 		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
+		SpriteGo.gameObject.AddComponent("InventoryDragDrop");
+		SpriteGo.gameObject.AddComponent("UIDragPanelContents");
 		
-		spriteGO.name = id.ToString();	// Use ID as name
-		UISprite sprite = NGUITools.AddSprite(spriteGO, itemAtlas, name);
-		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const
+		
+		//sprite.gameObject.name = id.ToString();
+		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const TODO Dynamic size
 		sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
-		spriteGO.AddComponent("InventoryDragDrop");
-		spriteGO.AddComponent("UIDragPanelContents");
-		
 		itemCount++;
 		
+		UpdateBarPosition();
+		
+		return item;
+	}
+	
+	void UpdateBarPosition(){
 		UIGrid.GetComponent<UIGrid>().Reposition();
 		
 		if(parentWindow.GetComponent<TweenPosition>().from.x > 215){ 	// Limit Move after x items
@@ -159,12 +167,12 @@ public class InventoryGUI : MonoBehaviour{
 				LeanTween.moveLocalX(parentWindow, collapsedPos - itemCount * 90, 0.4f, optional);				
 			}
 		}
-		
-		return item;
 	}
 	
+	// TODO-s HANDLE DELETE ITEM CASE
+	
 //	void Printo(){
-//		Debug.Log("KABOOYA");	// TODO windowsRoot callback lcok - UIButtonToggle to keep track of the state, the toggle button doesnt persist state?? check
+//		Debug.Log("KABOOYA");
 //	}
 
 	public UISprite itemSprite;
@@ -184,13 +192,38 @@ public class InventoryGUI : MonoBehaviour{
 		// Populate initial items
 		for(int i = 0; i < itemLogic.items.Count; i++){
 			Debug.Log(itemLogic.items[i].name);
-        	SpawnInventoryInPanel(itemLogic.items[i].name, i);
+			if(inventory.InventoryArray[i]!=0)
+        		SpawnInventoryInPanel(itemLogic.items[i].name, i);
 		}
 	}
 	
+	public void test(){
+		UIGrid.GetComponent<UIGrid>().Reposition();
+		
+		
+//		Transform[] allChildren = GetComponentsInChildren();
+//   		foreach (UIWidget child in allChildren) {
+//			NGUITools.MarkParentAsChanged(gameObject);
+//   		}
+	}
+	
     void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "spawn")){
+		if(GUI.Button(new Rect(300, 100, 100, 100), "Update")){
+			UpdateBarPosition();
+		}
+		
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Spawn")){
 			SpawnInventoryInPanel("teddy", itemCount);
+		}
+		
+		if(GUI.Button(new Rect(100, 300, 100, 100), "Spawn")){
+			SpawnInventoryInPanel("ball", itemCount);
+		}
+		
+		if(GUI.Button(new Rect(100, 500, 100, 100), "Kill")){
+			Destroy(GameObject.Find("Item"));
+			itemCount--;
+			Invoke("UpdateBarPosition", 2f);
 		}
 		
 		/*

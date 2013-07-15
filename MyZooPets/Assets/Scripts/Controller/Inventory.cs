@@ -28,6 +28,9 @@ public class Inventory : MonoBehaviour {
 	//call when items are added or removed from the inventory
 	public delegate void InventoryResizeEventHandlers(object sender, EventArgs e);
 	public static event InventoryResizeEventHandlers OnInventoryResize;
+	
+	public delegate void OnUpdateItemHandlers(object sender, EventArgs e);
+	public static event OnUpdateItemHandlers OnUpdateItem;
 	//===============================
 
 	//add items to inventory
@@ -35,6 +38,7 @@ public class Inventory : MonoBehaviour {
 		if(inventory[id] == 0){ //add one to inventory Count if item is new
 			inventoryCount++;
 			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
+			if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 		}
 		inventory[id] += count;
 	}
@@ -48,6 +52,7 @@ public class Inventory : MonoBehaviour {
 		if(inventory[id] == 0){ //minus one to inventory count if item is used up
 			inventoryCount--;
 			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
+			if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 		}
 	}
 	//=================================================

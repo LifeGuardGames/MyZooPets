@@ -90,11 +90,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // }
     }
 
-    protected void message1(){
-        Debug.Log("button 1 clicked");
-    }
-    protected void message2(){
-        Debug.Log("button 2 clicked");
-        DestroyNotification();
-    }
+    // protected void message1(){
+    //     Debug.Log("button 1 clicked");
+    // }
+    // protected void message2(){
+    //     Debug.Log("button 2 clicked");
+    //     DestroyNotification();
+    // }
 }

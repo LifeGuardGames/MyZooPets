@@ -134,18 +134,20 @@ public class InventoryGUI : MonoBehaviour{
 		spriteFill.transform.localScale = new Vector3(90, 90, 1); 	// TODO make const
 		spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
 				
-		UISprite sprite = NGUITools.AddSprite(item, itemAtlas, name);
+		GameObject SpriteGo = NGUITools.AddChild(item);
+		SpriteGo.gameObject.name = id.ToString();	// Use ID as name
+		UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
 		
-		BoxCollider boxCollider = sprite.gameObject.AddComponent<BoxCollider>();
+		BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
 		boxCollider.isTrigger = true;
 		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
+		SpriteGo.gameObject.AddComponent("InventoryDragDrop");
+		SpriteGo.gameObject.AddComponent("UIDragPanelContents");
 		
-		sprite.gameObject.name = id.ToString();	// Use ID as name
-		sprite.gameObject.AddComponent("InventoryDragDrop");
-		sprite.gameObject.AddComponent("UIDragPanelContents");
-		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const
+		
+		//sprite.gameObject.name = id.ToString();
+		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const TODO Dynamic size
 		sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
-		
 		itemCount++;
 		
 		UpdateBarPosition();

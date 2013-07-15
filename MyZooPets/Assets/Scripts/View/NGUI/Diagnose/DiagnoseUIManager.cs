@@ -80,11 +80,14 @@ public class DiagnoseUIManager : MonoBehaviour {
         gameActive = false; //stop the game
         //set points and display notification
         if(isAnswerCorrect){
-
+            deltaPoints = 500;
+            deltaStars = 500;
         }else{
-
+            deltaPoints = 100;
+            deltaStars = 100;
         }
         DiagnoseGameLogic.ClaimReward(deltaPoints, deltaStars);
+        notificationUIManager.GameOverRewardMessage(deltaStars, deltaPoints, null);
     }
 
 

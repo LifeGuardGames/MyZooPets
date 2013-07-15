@@ -22,17 +22,19 @@ public class DragDropAdvair : MonoBehaviour {
 
             mIsDragging = false;
             Collider col = collider;
-            if(col != null) col.enabled = !isPressed;
+            
+            //collider needs to be disabled while dragging otherwise it will catch the OnDrop event
+            if(col != null) col.enabled = !isPressed; 
             if(!isPressed) Drop();
         }
     }	
 
     void OnDrag(Vector2 delta){
         if(enabled && UICamera.currentTouchID > -2){
-            if(!mIsDragging){
+            if(!mIsDragging){ //start dragging if not dragging yet
                 mIsDragging = true;
                 originalPos = mTrans.position;
-            }else{
+            }else{ //move position
                 mTrans.localPosition += (Vector3)delta;
             }
         }
@@ -40,7 +42,7 @@ public class DragDropAdvair : MonoBehaviour {
 
     private void Drop(){
         Collider col = UICamera.lastHit.collider;
-        if(col.gameObject.name == "SpritePet"){
+        if(col.gameObject.name == "SpritePet"){ //take action if drop on pet
             this.GetComponent<UISprite>().alpha = 0;
             if(target != null){
                 target.SendMessage(functionName, true, SendMessageOptions.DontRequireReceiver);

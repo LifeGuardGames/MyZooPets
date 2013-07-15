@@ -4,6 +4,7 @@ using System.Collections;
 public class InventoryDragDrop : MonoBehaviour {
 
 	/// <summary>
+	/// Modified to work with UIDragPanelContents
 	/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 	/// </summary>
 
@@ -12,9 +13,20 @@ public class InventoryDragDrop : MonoBehaviour {
 	Transform mTrans;
 	bool mIsDragging = false;
 	bool mSticky = false;
-	Transform mParent;	// Store parent when dragging
+	bool isScrolling = false;
+	bool isClickLock = false;
+	Transform mParent;						// Store parent when dragging
 	Vector3 savedLocalPosition;
+	UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
 	
+	GameObject inventoryGUIObject;
+	InventoryGUI inventoryGUI;
+	
+	void Start(){
+		dragScrollScript = GetComponent<UIDragPanelContents>();
+		inventoryGUIObject = GameObject.Find("Panel");
+		inventoryGUI = inventoryGUIObject.GetComponent<InventoryGUI>();
+	}
 	
 	/// <summary>
 	/// Update the table, if there is one.
@@ -32,37 +44,45 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void Drop ()
 	{
-		// Is there a droppable container?
-		Collider col = UICamera.lastHit.collider;
-		Debug.Log ("hit! " + gameObject.name);
-		DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
-		//Debug.Log("3 " + mParent.localPosition + "     " + mTrans.position);
-		if (container != null)
-		{
-			// Container found -- parent this object to the container
-			mTrans.parent = container.transform;
-
-			Vector3 pos = mTrans.localPosition;
-			pos.z = 0f;
-			mTrans.localPosition = pos;
-		}
-		else
-		{
-			Debug.Log ("no hit");
-			// No valid container under the mouse -- revert the item's parent
-			mTrans.parent = mParent;
+		Debug.Log("dropped");
+		if(!isScrolling && !isClickLock){	// Picked up drop
+//			// Is there a droppable container?
+//			Collider col = UICamera.lastHit.collider;
+//			Debug.Log ("hit! " + gameObject.name);
+//			DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
+//			if (container != null)
+//			{
+//				// Container found -- parent this object to the container
+//				mTrans.parent = container.transform;
+//	
+//				Vector3 pos = mTrans.localPosition;
+//				pos.z = 0f;
+//				mTrans.localPosition = pos;
+//			}
+			if(inventoryGUI.NotifyDroppedItem(int.Parse(gameObject.name))){
+				Debug.Log("hit! PLEASE DELETE OBJECT NOW");
+			}
+			else
+			{
+				Debug.Log ("no hit");
+				// No valid container under the mouse -- revert the item's parent
+				mTrans.parent = mParent;
+				
+				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
+				isClickLock = false;
+			}
+	
+			// Notify the table of this change
+			UpdateTable();
+	
+			// Make all widgets update their parents
+			NGUITools.MarkParentAsChanged(gameObject);
 			
-			gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
+			dragScrollScript.enabled = true;	// Re-enable the drag script
 		}
-
-		// Notify the table of this change
-		UpdateTable();
-
-		// Make all widgets update their parents
-		NGUITools.MarkParentAsChanged(gameObject);
-		
-		Debug.Log("3 " + mParent.localPosition + "     " + mTrans.position);
-
+		else{
+			isScrolling = false;	// Done scrolling
+		}
 	}
 
 	/// <summary>
@@ -77,15 +97,17 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
+		Debug.Log("drag");
 		if (enabled && UICamera.currentTouchID > -2)
 		{
-			if (!mIsDragging)
+			if (!mIsDragging && delta.y > 0 && !isScrolling)	// If the delta has positive Y, pick up
 			{
+				isClickLock = false;
+				dragScrollScript.enabled = false;
 				savedLocalPosition = gameObject.transform.localPosition;	// Save original position detection failed
 				
 				mIsDragging = true;
 				mParent = mTrans.parent;
-				Debug.Log("1 " + mParent.localPosition + "     " + mTrans.position);
 				mTrans.parent = DragDropRoot.root;
 				
 				Vector3 pos = mTrans.localPosition;
@@ -94,10 +116,12 @@ public class InventoryDragDrop : MonoBehaviour {
 
 				NGUITools.MarkParentAsChanged(gameObject);
 			}
-			else
+			else if(mIsDragging)
 			{
-				Debug.Log("2 " + mParent.localPosition);
 				mTrans.localPosition += (Vector3)delta;
+			}
+			else{
+				isScrolling = true;
 			}
 		}
 	}
@@ -108,6 +132,10 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnPress (bool isPressed)
 	{
+		if(!mIsDragging)
+			isClickLock = true;
+		
+		Debug.Log("pressed");
 		if (enabled)
 		{
 			if (isPressed)

@@ -30,8 +30,6 @@ public class InventoryGUI : MonoBehaviour{
     public GUIStyle itemCountTextStyle;
     public GUISkin defaultSkin;
 
-	
-	
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
@@ -47,51 +45,87 @@ public class InventoryGUI : MonoBehaviour{
         Inventory.OnInventoryResize += ResizeInventory;
     }
 
-    void Update(){
-        if(!LoadDataLogic.IsDataLoaded) return;
-        if(pickedUp){
-            // if dragging an item, don't treat this as a swipe
-            SwipeDetection.CancelSwipe();
-            if(Input.touchCount > 0){
-                if(Input.GetTouch(0).phase == TouchPhase.Ended){
-                    Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-
-                    if(Physics.Raycast(myRay,out hit)){
-	                    if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Pet){
-	                        if(hit.collider.name == "SpritePet" ||
-	                            hit.collider.name == "PetHead" ||
-	                            hit.collider.name == "PetTummy"){
-	                            inventory.UseItem(pickUpId);
-	                        }
-	                    }
-						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Floor){
-							print ("floorItem");
-							if(hit.collider == GameObject.Find("Floor Rectangular").collider ||
-								hit.collider == GameObject.Find("planeCenter").collider) inventory.UseItem(pickUpId);
-						}
-						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Wall){
-							if(hit.collider == GameObject.Find("Walls").collider) inventory.UseItem(pickUpId);
-						}
-					}
-                    pickedUp = false;
-                    pickUpId = -1;
-                }
-            }
-        }
-    }
+//    void Update(){
+//        if(!LoadDataLogic.IsDataLoaded) return;
+//        if(pickedUp){
+//            // if dragging an item, don't treat this as a swipe
+//            SwipeDetection.CancelSwipe();
+//            if(Input.touchCount > 0){
+//                if(Input.GetTouch(0).phase == TouchPhase.Ended){
+//                    Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+//                    RaycastHit hit;
+//
+//                    if(Physics.Raycast(myRay,out hit)){
+//	                    if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Pet){
+//	                        if(hit.collider.name == "SpritePet" ||
+//	                            hit.collider.name == "PetHead" ||
+//	                            hit.collider.name == "PetTummy"){
+//	                            inventory.UseItem(pickUpId);
+//	                        }
+//	                    }
+//						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Floor){
+//							print ("floorItem");
+//							if(hit.collider == GameObject.Find("Floor Rectangular").collider ||
+//								hit.collider == GameObject.Find("planeCenter").collider) inventory.UseItem(pickUpId);
+//						}
+//						else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Wall){
+//							if(hit.collider == GameObject.Find("Walls").collider) inventory.UseItem(pickUpId);
+//						}
+//					}
+//                    pickedUp = false;
+//                    pickUpId = -1;
+//                }
+//            }
+//        }
+//	}
 	
-
+	public bool NotifyDroppedItem(int pickUpId){
+		Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+	    RaycastHit hit;
 	
-
+	    if(Physics.Raycast(myRay,out hit)){
+	        if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Pet){
+	            if(hit.collider.name == "SpritePet" ||
+		                hit.collider.name == "PetHead" ||
+		                hit.collider.name == "PetTummy"){
+	                inventory.UseItem(pickUpId);
+					return true;
+	            }
+				else
+					return false;
+	        }
+			else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Floor){
+				print ("floorItem");
+				if(hit.collider == GameObject.Find("Floor Rectangular").collider ||
+						hit.collider == GameObject.Find("planeCenter").collider){
+					inventory.UseItem(pickUpId);
+					return true;
+				}
+				else
+					return false;
+			}
+			else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Wall){
+				if(hit.collider == GameObject.Find("Walls").collider){
+					inventory.UseItem(pickUpId);
+					return true;
+				}
+				else
+					return false;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
 	
-	private GameObject SpawnInventoryInPanel(){
+	private GameObject SpawnInventoryInPanel(string name, int id){
 		GameObject item = NGUITools.AddChild(UIGrid);
 		item.name = "Item";
 //		BoxCollider boxCollider = item.AddComponent<BoxCollider>();
 //		boxCollider.isTrigger = true;
 //		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
-		item.AddComponent("UIDragPanelContents");
+		//item.AddComponent("UIDragPanelContents");
 		//item.AddComponent("DragDropItem");
 		//item.AddComponent("InventoryDragDrop");
 		
@@ -105,13 +139,26 @@ public class InventoryGUI : MonoBehaviour{
 		boxCollider.isTrigger = true;
 		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
 		
-		spriteGO.name = "SpriteGO";
-		UISprite sprite = NGUITools.AddSprite(spriteGO, itemAtlas, "teddy");
+		spriteGO.name = id.ToString();	// Use ID as name
+		UISprite sprite = NGUITools.AddSprite(spriteGO, itemAtlas, name);
 		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const
 		sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
 		spriteGO.AddComponent("InventoryDragDrop");
+		spriteGO.AddComponent("UIDragPanelContents");
 		
 		itemCount++;
+		
+		UIGrid.GetComponent<UIGrid>().Reposition();
+		
+		if(parentWindow.GetComponent<TweenPosition>().from.x > 215){ 	// Limit Move after x items
+			parentWindow.GetComponent<TweenPosition>().from.x = collapsedPos - itemCount * 90;
+
+			if(uiButtonToggle.isActive){	// Animate the move if inventory is open
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeOutBounce);
+				LeanTween.moveLocalX(parentWindow, collapsedPos - itemCount * 90, 0.4f, optional);				
+			}
+		}
 		
 		return item;
 	}
@@ -127,28 +174,23 @@ public class InventoryGUI : MonoBehaviour{
 	public GameObject UIButtonToggleObject;
 	private UIButtonToggle uiButtonToggle;
 	
-	private int itemCount = 0;
+	private int itemCount = 0;	// Local GUI item count	
 	private float collapsedPos;
 	
 	void Start(){
 		collapsedPos = 1115f;
 		uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
+		
+		// Populate initial items
+		for(int i = 0; i < itemLogic.items.Count; i++){
+			Debug.Log(itemLogic.items[i].name);
+        	SpawnInventoryInPanel(itemLogic.items[i].name, i);
+		}
 	}
 	
     void OnGUI(){
 		if(GUI.Button(new Rect(100, 100, 100, 100), "spawn")){
-			SpawnInventoryInPanel();
-			UIGrid.GetComponent<UIGrid>().Reposition();	// Reposition the grid after item added
-			
-			if(parentWindow.GetComponent<TweenPosition>().from.x > 215){ 	// Limit Move after x items
-				parentWindow.GetComponent<TweenPosition>().from.x = collapsedPos - itemCount * 90;
-
-				if(uiButtonToggle.isActive){	// Animate the move if inventory is open
-					Hashtable optional = new Hashtable();
-					optional.Add("ease", LeanTweenType.easeOutBounce);
-					LeanTween.moveLocalX(parentWindow, collapsedPos - itemCount * 90, 0.4f, optional);				
-				}
-			}
+			SpawnInventoryInPanel("teddy", itemCount);
 		}
 		
 		/*

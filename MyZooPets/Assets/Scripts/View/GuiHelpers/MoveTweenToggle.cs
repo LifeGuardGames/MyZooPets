@@ -12,7 +12,13 @@ public class MoveTweenToggle : MonoBehaviour {
 	private bool isLocked = false;
 	
 	public Vector2 testButtonPos;
-	
+	public float showDeltaX;
+	public float showDeltaY;
+	public float hideDeltaX;
+	public float hideDeltaY;
+	public LeanTweenType easeOut;
+	public LeanTweenType easeIn;
+
 	void OnGUI(){
 		if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
 			Show();
@@ -27,10 +33,11 @@ public class MoveTweenToggle : MonoBehaviour {
 			isActive = true;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
-			optional.Add("ease", LeanTweenType.easeOutBounce);
+			optional.Add("ease", easeIn);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
-			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 0.3f, gameObject.transform.position.z), 0.5f, optional);
+			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + showDeltaX, 
+				gameObject.transform.position.y + showDeltaY, gameObject.transform.position.z), 0.5f, optional);
 		}
 		else{
 			Debug.LogError("trying show locked/active HUD");
@@ -42,10 +49,11 @@ public class MoveTweenToggle : MonoBehaviour {
 			isActive = false;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
-			optional.Add("ease", LeanTweenType.easeOutBounce);
+			optional.Add("ease", easeOut);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
-			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 0.3f, gameObject.transform.position.z), 0.5f, optional);
+			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + hideDeltaX, 
+				gameObject.transform.position.y + hideDeltaY, gameObject.transform.position.z), 0.5f, optional);
 		}
 		else{
 			Debug.LogError("trying hide locked/inactive HUD");

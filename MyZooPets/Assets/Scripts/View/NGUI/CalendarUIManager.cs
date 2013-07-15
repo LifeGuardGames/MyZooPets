@@ -1,11 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class CalendarUIManager : MonoBehaviour {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
+
+    //==================Events=======================
+    public delegate void CallBack(object sender, EventArgs e);
+    public static event CallBack OnCalendarClosed; //call when calendar is closed
+    //===============================================
 
     //Class to store UI reference
     private class ThisWeekDay{
@@ -65,18 +71,24 @@ public class CalendarUIManager : MonoBehaviour {
         //TO DO: count down timer for nxt reward collection	
 	}
 
+    //Initialize calendar when scene is ready
     public void Init(){
         currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
         pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
     }
 
     public void CalendarClicked(){
-
         PopulateCalendar();
+        GetComponent<MoveTweenToggle>().Show();
     }
 
     public void CalendarClosed(){
-        
+        GetComponent<MoveTweenToggle>().Hide();
+        if(OnCalendarClosed != null){
+            OnCalendarClosed(this, EventArgs.Empty);
+        }else{
+            Debug.LogError("OnCalendarClosed listener is null");
+        }
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the

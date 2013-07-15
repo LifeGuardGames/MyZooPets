@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Click manager.
@@ -15,11 +16,11 @@ public class ClickManager : MonoBehaviour {
 	private Vector3 destinationPoint;
 
 	// All the classes that need a click input go here
-	public GameObject diaryUIManagerObject;
-	private DiaryGUI diaryUIManager;
+	// public GameObject diaryUIManagerObject;
+	// private DiaryGUI diaryUIManager;
 
-	public GameObject calendarGUIObject;
-	private CalendarGUI calendarGUI;
+	public GameObject calendarUIObject;
+	private CalendarUIManager calendarUIManager;
 
 	public GameObject challengesGUIObject;
 	private ChallengesGUI challengesGUI;
@@ -30,8 +31,8 @@ public class ClickManager : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
+	public NotificationUIManager notificationUIManager;
 	private GameObject petsprite;
-	private NotificationUIManager notificationUIManager;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
@@ -50,13 +51,14 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 
 		// Linking script references
-		calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
-		challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
-		diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
-		trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+		calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
+		// calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
+		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
+		// diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
+		// trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+
 		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		petsprite = GameObject.Find("SpritePet");
-		notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
 		destinationPoint = petsprite.transform.position;
 
 		AssignOnTapEvents();
@@ -100,11 +102,18 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
-			calendarGUI.CalendarClicked();
+			calendarUIManager.CalendarClicked();
+			CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 			ClickLock();
 			ModeLock();
 		}
 	}
+	private void OnCalendarClosed(object sender, EventArgs e){
+		ReleaseClickLock();
+		ReleaseModeLock();
+	}
+
+
 	void OnTapSlotMachine(){
 		if (CanRespondToTap()){
 			// cameraMove.SlotMachineZoomToggle();
@@ -173,9 +182,6 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
-
-
-
 
 	void Update(){
 // 		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading

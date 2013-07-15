@@ -1,19 +1,16 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ProgressBarAnimation : MonoBehaviour {
 
     public UISlider slider; // for setup
     public GameObject progressStep;
+    private List<GameObject> markers;
 
-	void Start () {
-
+	public void Init () {
+        markers = new List<GameObject>();
         SetUpProgressSteps();
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 
     void SetUpProgressSteps(){
@@ -31,11 +28,12 @@ public class ProgressBarAnimation : MonoBehaviour {
 
             UILabel label = marker.transform.Find("Label").GetComponent<UILabel>();
             label.text = i.ToString();
+            markers.Add(marker);
         }
     }
 
     public void OnSliderChange(){
-        Debug.Log("slider changed");
-        // slider.sliderValue;
+        int step = (int) (slider.sliderValue * (slider.numberOfSteps - 1)); // same as slider.sliderValue / (1 / (slider.numberOfSteps - 1))
+        Debug.Log("Step " + step + " completed.");
     }
 }

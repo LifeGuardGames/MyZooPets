@@ -41,11 +41,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
-        Button1Callback();
+        if (Button1Callback != null) Button1Callback();
         Hide();
     }
     protected void Button2Action(){
-        Button2Callback();
+        if (Button2Callback != null) Button2Callback();
         Hide();
     }
 
@@ -90,11 +90,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // }
     }
 
-    protected void message1(){
-        Debug.Log("button 1 clicked");
-    }
-    protected void message2(){
-        Debug.Log("button 2 clicked");
-        DestroyNotification();
-    }
+    // protected void message1(){
+    //     Debug.Log("button 1 clicked");
+    // }
+    // protected void message2(){
+    //     Debug.Log("button 2 clicked");
+    //     DestroyNotification();
+    // }
 }

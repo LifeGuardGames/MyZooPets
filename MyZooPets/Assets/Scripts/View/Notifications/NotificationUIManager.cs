@@ -81,9 +81,11 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	GameObject CreateNGUIObject(GameObject prefab){
-		GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		GameObject obj = Instantiate(prefab) as GameObject;
+		Vector3 originalPos = obj.transform.position;
         obj.transform.parent = NguiAnchor.transform;
         obj.transform.localScale = Vector3.one;
+        obj.transform.localPosition = originalPos;
         return obj;
 	}
 
@@ -145,9 +147,11 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){
-		GameObject message = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		GameObject message = Instantiate(prefab) as GameObject;
+		Vector3 originalPos = message.transform.position;
         message.transform.parent = NguiAnchor.transform;
         message.transform.localScale = Vector3.one;
+        message.transform.localPosition = originalPos;
         return message.GetComponent<PopupNotificationNGUI>();
 	}
 

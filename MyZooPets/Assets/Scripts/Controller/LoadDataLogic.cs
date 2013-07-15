@@ -22,9 +22,11 @@ public class LoadDataLogic : MonoBehaviour {
     private DegradationUIManager degradationUIManager; //reference to UI
     private GameObject calendar;
     private GameObject hud;
+    private GameObject navigation;
 
     private const string ANCHOR_TOP = "UI Root (2D)/Camera/Panel/Anchor-Top/";
     private const string ANCHOR_CENTER = "UI Root (2D)/Camera/Panel/Anchor-Center/";
+    private const string ANHCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Panel/Anchor-BottomLeft/";
 
     void Awake(){
         if(isDebug){
@@ -36,6 +38,7 @@ public class LoadDataLogic : MonoBehaviour {
             case "NewBedRoom":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
                 calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
+                navigation = GameObject.Find(ANHCHOR_BOTTOMLEFT + "Navigation");
 
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
@@ -83,6 +86,7 @@ public class LoadDataLogic : MonoBehaviour {
                 hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
                 calendar.GetComponent<CalendarUIManager>().Init();
+                navigation.GetComponent<MoveTweenToggle>().Show();
                 clickManager.Init();
                 cameraMove.Init();
                 levelUpLogic.Init();

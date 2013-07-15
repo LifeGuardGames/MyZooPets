@@ -1,7 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class NoteUIManager : MonoBehaviour {
+
+    //======================Event=============================
+    public delegate void CallBack(object senders, EventArgs e);
+    public static event CallBack OnNoteClosed;
+    //=======================================================
 
 	// Use this for initialization
 	void Start () {
@@ -14,10 +20,15 @@ public class NoteUIManager : MonoBehaviour {
 	}
 
     public void NoteClicked(){
-
+        GetComponent<MoveTweenToggle>().Show();
     }
 
     public void NoteClosed(){
-        
+        GetComponent<MoveTweenToggle>().Hide();
+        if(OnNoteClosed != null){
+            OnNoteClosed(this, EventArgs.Empty);
+        }else{
+            Debug.LogError("OnNoteClosed listener is null");
+        }
     }
 }

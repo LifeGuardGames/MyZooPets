@@ -15,13 +15,17 @@ public class StoreNGUI : MonoBehaviour {
 	private bool changePage;
 	private int page;
 	private UISprite uisprite;
+	private GameObject grid;
+	private GameObject storegui;
 	
 	// Use this for initialization
 	void Start () {
 		//todo Change to GameManager later
 		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
-		createItems(null);
+		grid = GameObject.Find("Grid");
+		storegui = GameObject.Find("StoreGUI");
+		CreateItems(null);
 	}
 	
 	// Update is called once per frame
@@ -33,24 +37,23 @@ public class StoreNGUI : MonoBehaviour {
 		itemlogic.OnCall(Convert.ToInt32(button.transform.parent.name));
 	}
 	
-	void createItems(GameObject page){
+	void CreateItems(GameObject page){
 		
-		//When clicked, first destory every item
-		GameObject grid = GameObject.Find("Grid");
+		//Destory first 
 		foreach(Transform child in grid.transform){
-//			Destroy(child.gameObject);
+			Destroy(child.gameObject);
 		}
 		
 		if(page == null || page.name == "Food"){
 			uisprite.atlas = BackGroundRed;
 			for(int i = 0;i<itemlogic.foodlist.Count;i++){
-				GameObject item = NGUITools.AddChild(GameObject.Find("Grid"),ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,0);
+				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.foodlist[i].ToString();
-//				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
+				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.foodlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = GameObject.Find("StoreGUI");
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -58,13 +61,13 @@ public class StoreNGUI : MonoBehaviour {
 		else if(page.name == "Item"){
 			uisprite.atlas = BackGroundGreen;
 			for(int i = 0;i<itemlogic.itemlist.Count;i++){
-				GameObject item = NGUITools.AddChild(GameObject.Find("Grid"),ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,0);
+				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.itemlist[i].ToString();
-//				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
+				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.itemlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = GameObject.Find("StoreGUI");
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -72,37 +75,37 @@ public class StoreNGUI : MonoBehaviour {
 		else if(page.name == "Decoration"){
 			uisprite.atlas = BackGroundPurple;
 			for(int i = 0;i<itemlogic.decolist.Count;i++){
-				GameObject item = NGUITools.AddChild(GameObject.Find("Grid"),ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,0);
+				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.decolist[i].ToString();
-//				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
+				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.decolist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = GameObject.Find("StoreGUI");
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
 		}
 		else if(page.name == "Inhaler"){
-			uisprite.atlas = BackGroundGreen;
+			uisprite.atlas = BackGroundOrange;
 			for(int i = 0;i<itemlogic.inhalerlist.Count;i++){
-				GameObject item = NGUITools.AddChild(GameObject.Find("Grid"),ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,0);
+				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.inhalerlist[i].ToString();
-//				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
+				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.inhalerlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = GameObject.Find("StoreGUI");
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
 		}
 		grid.GetComponent<UIGrid>().Reposition();
-		Invoke("reposition",0.00000001f);
+		Invoke("Reposition",0.00000001f);
 	}
 	
-	void reposition(){
-		GameObject.Find("Grid").GetComponent<UIGrid>().Reposition();
+	void Reposition(){
+		grid.GetComponent<UIGrid>().Reposition();
 		
 	}
 }

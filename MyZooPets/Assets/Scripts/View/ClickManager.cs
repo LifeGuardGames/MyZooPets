@@ -5,6 +5,7 @@ using System;
 /// <summary>
 /// Click manager.
 /// All the classes that need a click to enter a certain mode will be handled here (ie. diary, trophy, inhaler game)
+///	
 ///
 /// NOTE: When entering a mode, lock click and mode, when done transitioning, unlock click
 ///       When exiting a mode, unlock click and mode after finish transitioning
@@ -21,6 +22,13 @@ public class ClickManager : MonoBehaviour {
 
 	public GameObject calendarUIObject;
 	private CalendarUIManager calendarUIManager;
+
+	public GameObject storeUIObject;
+
+	public GameObject noteUIObject;
+	private NoteUIManager noteUIManager;
+
+	public GameObject navigationUIObject;
 
 	public GameObject challengesGUIObject;
 	private ChallengesGUI challengesGUI;
@@ -52,7 +60,7 @@ public class ClickManager : MonoBehaviour {
 
 		// Linking script references
 		calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
-		// calendarGUI = calendarGUIObject.GetComponent<CalendarGUI>();
+		noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		// diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		// trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
@@ -93,6 +101,53 @@ public class ClickManager : MonoBehaviour {
 //			ModeLock();
 //		}
 //	}
+
+	//===========Note================
+	public void OnClickNote(){
+		if(CanRespondToTap()){
+			noteUIManager.NoteClicked();
+			NoteUIManager.OnNoteClosed += OnNoteClosed;
+			ClickLock();
+			ModeLock();
+
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+		}
+	}
+	private void OnNoteClosed(object sender, EventArgs e){
+		ReleaseClickLock();
+		ReleaseModeLock();
+
+		//Show other UI object
+		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+	}
+	//==============================
+
+	public void OnClickStore(){
+
+	}
+
+	//===========Calendar============
+	void OnTapCalendar(){
+		if (CanRespondToTap()){
+			calendarUIManager.CalendarClicked();
+			CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
+			ClickLock();
+			ModeLock();
+
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+		}
+	}
+	private void OnCalendarClosed(object sender, EventArgs e){
+		ReleaseClickLock();
+		ReleaseModeLock();
+
+		//Show other UI object
+		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+	}
+	//==========================
+
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
 			challengesGUI.ChallengesClicked();
@@ -100,19 +155,6 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
-	void OnTapCalendar(){
-		if (CanRespondToTap()){
-			calendarUIManager.CalendarClicked();
-			CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
-			ClickLock();
-			ModeLock();
-		}
-	}
-	private void OnCalendarClosed(object sender, EventArgs e){
-		ReleaseClickLock();
-		ReleaseModeLock();
-	}
-
 
 	void OnTapSlotMachine(){
 		if (CanRespondToTap()){
@@ -182,6 +224,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
+
 
 	void Update(){
 // 		if(!LoadDataLogic.IsDataLoaded) return; //return if not finish loading

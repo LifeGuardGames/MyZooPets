@@ -172,7 +172,7 @@ public class InhalerGameManager : MonoBehaviour{
                 DataManager.AddStars(practiceGameStarIncrement);
             }
 
-            inhalerGameGUI.DisplayMessage();
+            inhalerGameGUI.ShowGameOverMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
             inhalerGameGUI.HideButtons();

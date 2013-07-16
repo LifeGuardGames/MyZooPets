@@ -68,7 +68,7 @@ public class InhalerGameGUI : MonoBehaviour {
 		showButtons = true;
 	}
 
-	public void DisplayMessage(){
+	public void ShowGameOverMessage(){
 		// notificationUIManager.PopupTexture("great");
 		if (inhalerGameManager.isPracticeGame){
 			notificationUIManager.GameOverRewardMessage(

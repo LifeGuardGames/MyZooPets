@@ -56,9 +56,9 @@ public class MoveTweenToggle : MonoBehaviour {
 			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + showDeltaX, 
 				gameObject.transform.position.y + showDeltaY, gameObject.transform.position.z), 0.5f, optional);
 		}
-		else{
-			Debug.LogError("trying show locked/active HUD");
-		}
+		// else{
+		// 	Debug.LogError("trying show locked/active HUD");
+		// }
 	}
 	
 	public void Hide(){
@@ -72,9 +72,9 @@ public class MoveTweenToggle : MonoBehaviour {
 			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + hideDeltaX, 
 				gameObject.transform.position.y + hideDeltaY, gameObject.transform.position.z), 0.5f, optional);
 		}
-		else{
-			Debug.LogError("trying hide locked/inactive HUD");
-		}
+		// else{
+		// 	Debug.LogError("trying hide locked/inactive HUD");
+		// }
 	}
 	
 	// Callback

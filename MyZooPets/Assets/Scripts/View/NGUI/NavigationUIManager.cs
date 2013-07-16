@@ -26,6 +26,7 @@ public class NavigationUIManager : MonoBehaviour {
                 clickManager.OnClickNote();
             break;
             case "Store":
+                clickManager.OnClickStore();
             break;
             case "Yard":
                 if(isInRoom){

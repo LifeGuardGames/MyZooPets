@@ -24,6 +24,7 @@ public class ClickManager : MonoBehaviour {
 	private CalendarUIManager calendarUIManager;
 
 	public GameObject storeUIObject;
+	private StoreUIManager storeUIManager;
 
 	public GameObject noteUIObject;
 	private NoteUIManager noteUIManager;
@@ -61,6 +62,7 @@ public class ClickManager : MonoBehaviour {
 		// Linking script references
 		calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
 		noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
+		storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		// diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
 		// trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
@@ -123,9 +125,26 @@ public class ClickManager : MonoBehaviour {
 	}
 	//==============================
 
+	//==============Store=================
 	public void OnClickStore(){
+		if(CanRespondToTap()){
+			storeUIManager.StoreClicked();
+			StoreUIManager.OnStoreClosed += OnStoreClosed;
+			ClickLock();
+			ModeLock();
 
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+		}
 	}
+	private void OnStoreClosed(object sender, EventArgs e){
+		ReleaseClickLock();
+		ReleaseModeLock();
+
+		//Show other UI object
+		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+	}
+	//==================================
 
 	//===========Calendar============
 	void OnTapCalendar(){

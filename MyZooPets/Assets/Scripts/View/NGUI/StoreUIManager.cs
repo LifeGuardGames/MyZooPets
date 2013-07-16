@@ -3,28 +3,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StoreNGUI : MonoBehaviour {
+public class StoreUIManager : MonoBehaviour {
 	
 	public GameObject ItemPrefab;
 	public UIAtlas BackGroundRed;
 	public UIAtlas BackGroundGreen;
 	public UIAtlas BackGroundOrange;
 	public UIAtlas BackGroundPurple;
+
+	//=========================Events====================
+	public delegate void CallBack(object sender, EventArgs e);
+	public static event CallBack OnStoreClosed; //call when store is closed
+	//===================================================
 	
 	private ItemLogic itemlogic;
 	private bool changePage;
 	private int page;
 	private UISprite uisprite;
 	private GameObject grid;
-	private GameObject storegui;
 	
 	// Use this for initialization
 	void Start () {
 		//todo Change to GameManager later
-		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
-		storegui = GameObject.Find("StoreGUI");
 		CreateItems(null);
 	}
 	
@@ -32,12 +35,25 @@ public class StoreNGUI : MonoBehaviour {
 	void Update () {
 	
 	}
-	
-	void OnBuyButton(GameObject button){
-		itemlogic.OnCall(Convert.ToInt32(button.transform.parent.name));
+
+	public void StoreClicked(){
+		GetComponent<MoveTweenToggle>().Show();
+	}
+
+	public void StoreClosed(){
+		GetComponent<MoveTweenToggle>().Hide();
+		if(OnStoreClosed != null){
+			OnStoreClosed(this, EventArgs.Empty);
+		}else{
+			Debug.LogError("OnStoreClosed listener is null");
+		}
 	}
 	
-	void CreateItems(GameObject page){
+	public void OnBuyButton(GameObject button){
+		itemlogic.OnCall(int.Parse(button.transform.parent.name));
+	}
+	
+	private void CreateItems(GameObject page){
 		
 		//Destory first 
 		foreach(Transform child in grid.transform){
@@ -53,7 +69,7 @@ public class StoreNGUI : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.foodlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -67,7 +83,7 @@ public class StoreNGUI : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.itemlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -81,7 +97,7 @@ public class StoreNGUI : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.decolist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -95,7 +111,7 @@ public class StoreNGUI : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.inhalerlist[i]].name;
-				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = storegui;
+				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 				//Todo add Background and Description
 			}
@@ -104,7 +120,7 @@ public class StoreNGUI : MonoBehaviour {
 		Invoke("Reposition",0.00000001f);
 	}
 	
-	void Reposition(){
+	private void Reposition(){
 		grid.GetComponent<UIGrid>().Reposition();
 		
 	}

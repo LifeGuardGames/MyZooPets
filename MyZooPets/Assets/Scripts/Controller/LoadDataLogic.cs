@@ -40,7 +40,7 @@ public class LoadDataLogic : MonoBehaviour {
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
                 calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANHCHOR_BOTTOMLEFT + "Navigation");
-
+                print(hud);
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
                 degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
@@ -49,7 +49,7 @@ public class LoadDataLogic : MonoBehaviour {
                 // diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
-                
+
                 if(!DataManager.FirstTime){ //if not first time load GUI right away
                     FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
                 }else{ //if first time set call back and wait for the hatching animation to finish
@@ -87,6 +87,7 @@ public class LoadDataLogic : MonoBehaviour {
                 print("init");
                 if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
                 hud.GetComponent<HUDAnimator>().Init();
+                print(hud);
                 hud.GetComponent<MoveTweenToggle>().Show();
                 calendar.GetComponent<CalendarUIManager>().Init();
                 navigation.GetComponent<MoveTweenToggle>().Show();

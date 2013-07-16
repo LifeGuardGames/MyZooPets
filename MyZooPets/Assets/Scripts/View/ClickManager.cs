@@ -19,6 +19,7 @@ public class ClickManager : MonoBehaviour {
 	// All the classes that need a click input go here
 	// public GameObject diaryUIManagerObject;
 	// private DiaryGUI diaryUIManager;
+	public GameObject hudUIObject;
 
 	public GameObject calendarUIObject;
 	private CalendarUIManager calendarUIManager;
@@ -191,6 +192,10 @@ public class ClickManager : MonoBehaviour {
 					cameraMove.ZoomToggle(ZoomItem.RealInhaler);
 					ClickLock();
 					ModeLock();
+
+					//Hide other UI Objects
+					navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+					hudUIObject.GetComponent<MoveTweenToggle>().Hide();
 				}
 				else {
 					notificationUIManager.PopupNotificationOneButton(

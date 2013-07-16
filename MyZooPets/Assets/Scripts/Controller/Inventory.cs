@@ -67,9 +67,4 @@ public class Inventory : MonoBehaviour {
 			AddItem(1,1); //1 sandwich
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

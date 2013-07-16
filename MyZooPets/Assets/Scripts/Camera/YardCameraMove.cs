@@ -13,9 +13,6 @@ public class YardCameraMove : CameraMove{
 
     public override void Init(){
         spritePet = GameObject.Find("SpritePet");
-
-        initPosition = gameObject.transform.position;
-        initFaceDirection = gameObject.transform.eulerAngles;
     }
 
     public override void ZoomToggle(ZoomItem item){

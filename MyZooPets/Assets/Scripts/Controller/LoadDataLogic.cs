@@ -23,6 +23,7 @@ public class LoadDataLogic : MonoBehaviour {
     private GameObject calendar;
     private GameObject hud;
     private GameObject navigation;
+    private GameObject inventory;
 
     private const string ANCHOR_TOP = "UI Root (2D)/Camera/Panel/Anchor-Top/";
     private const string ANCHOR_CENTER = "UI Root (2D)/Camera/Panel/Anchor-Center/";
@@ -39,6 +40,8 @@ public class LoadDataLogic : MonoBehaviour {
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
                 calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANHCHOR_BOTTOMLEFT + "Navigation");
+                // inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT +)
+
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
                 degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();

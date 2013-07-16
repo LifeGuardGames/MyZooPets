@@ -67,7 +67,7 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 		if(prefab == popupTexturePracticeInhalerNGUI){
 			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-			GameObject go = CreateNGUIObject(prefab);
+			GameObject go = ShowPopupTexture(prefab);
 			Destroy(go, 3.0f);
 
 			// show regular intro after announcing that it is a practice game
@@ -75,25 +75,23 @@ public class NotificationUIManager : MonoBehaviour {
 		}
 		else if(prefab != null){
 			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-			GameObject go = CreateNGUIObject(prefab);
+			GameObject go = ShowPopupTexture(prefab);
 			Destroy(go, 3.0f);
 		}
 	}
 
-	GameObject CreateNGUIObject(GameObject prefab){
-		GameObject obj = Instantiate(prefab) as GameObject;
-		Vector3 originalPos = obj.transform.position;
-        obj.transform.parent = NguiAnchor.transform;
-        obj.transform.localScale = Vector3.one;
-        obj.transform.localPosition = originalPos;
-        return obj;
+	GameObject ShowPopupTexture(GameObject prefab){
+		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
+		obj.GetComponent<MoveTweenToggle>().Reset();
+		obj.GetComponent<MoveTweenToggle>().Show(1.0f);
+		return obj;
 	}
 
 	// used to show regular intro after announcing that it is a practice game
 	private void ShowIntro () {
 		// GameObject intro = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
 		// Destroy(intro, 3.0f);
-		GameObject go = CreateNGUIObject(popupTextureUseTheInhalerNGUI);
+		GameObject go = ShowPopupTexture(popupTextureUseTheInhalerNGUI);
 		Destroy(go, 3.0f);
 	}
 

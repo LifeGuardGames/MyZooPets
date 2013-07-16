@@ -9,7 +9,7 @@ using System;
 public class InventoryListener : MonoBehaviour {
 	
 	private Inventory inventoryScript;
-	private InventoryGUI inventoryGuiScript;
+	private InventoryUIManager inventoryGuiScript;
 	private UILabel itemLabel;
 	public string name;
 	public int id;
@@ -30,7 +30,7 @@ public class InventoryListener : MonoBehaviour {
 	void Awake(){
 		Inventory.OnUpdateItem += UpdateItem;
 		inventoryScript = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
-		inventoryGuiScript = GameObject.Find("Panel").GetComponent<InventoryGUI>();
+		inventoryGuiScript = GameObject.Find("Inventory").GetComponent<InventoryUIManager>();
 		itemLabel = gameObject.GetComponentInChildren<UILabel>();
 	}
 	
@@ -48,6 +48,6 @@ public class InventoryListener : MonoBehaviour {
 	
 	// Call when the item has been disabled
 	void OnDisable(){
-		// inventoryGuiScript.UpdateBarPosition();	// TODO asynchronous issues?
+		inventoryGuiScript.UpdateBarPosition();	// TODO asynchronous issues?
 	}
 }

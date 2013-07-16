@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class StoreUIManager : MonoBehaviour {
 	
 	public GameObject ItemPrefab;
+	public GameObject ItemSpritePrefab;
 	public UIAtlas BackGroundRed;
 	public UIAtlas BackGroundGreen;
 	public UIAtlas BackGroundOrange;
@@ -67,7 +68,13 @@ public class StoreUIManager : MonoBehaviour {
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
 //		optional.Add("orientToPath",true);
-		LeanTween.move(sprite,path,20f,optional);
+		GameObject animationSprite = NGUITools.AddChild(sprite.transform.parent.gameObject,ItemSpritePrefab);
+		animationSprite.transform.position = origin;
+		animationSprite.transform.localScale = new Vector3(156,154,0);
+//		print (origin);
+		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
+		LeanTween.move(animationSprite,path,50f,optional);
+//		Destroy(animationSprite);
 	}
 	
 	

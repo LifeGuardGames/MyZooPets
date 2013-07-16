@@ -19,13 +19,13 @@ public class InventoryDragDrop : MonoBehaviour {
 	Vector3 savedLocalPosition;
 	UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
 	
-	GameObject inventoryGUIObject;
-	InventoryGUI inventoryGUI;
+	GameObject inventoryUIObject;
+	InventoryUIManager inventoryUIManager;
 	
 	void Start(){
 		dragScrollScript = GetComponent<UIDragPanelContents>();
-		inventoryGUIObject = GameObject.Find("Panel");
-		inventoryGUI = inventoryGUIObject.GetComponent<InventoryGUI>();
+		inventoryUIObject = GameObject.Find("Inventory");
+		inventoryUIManager = inventoryUIObject.GetComponent<InventoryUIManager>();
 	}
 	
 	/// <summary>
@@ -59,8 +59,9 @@ public class InventoryDragDrop : MonoBehaviour {
 //				pos.z = 0f;
 //				mTrans.localPosition = pos;
 //			}
-			if(inventoryGUI.NotifyDroppedItem(int.Parse(gameObject.name))){
+			if(inventoryUIManager.NotifyDroppedItem(int.Parse(gameObject.name))){
 				Debug.Log("hit! PLEASE DELETE OBJECT NOW");
+				// Destroy(gameObject);
 			}
 			else
 			{

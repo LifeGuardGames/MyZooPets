@@ -8,8 +8,8 @@ using System.Collections;
 
 public class MoveTweenToggle : MonoBehaviour {
 
-	private bool isActive = true;
-	private bool isLocked = false;
+	private bool isActive;
+	private bool isLocked;
 	
 	public bool isDebug = false;	
 	public bool startsHidden = false; //True: the UI element started off the screen so Show function
@@ -47,6 +47,7 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Show(){
 		if(!isActive && !isLocked){
+			print("tween");
 			isActive = true;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
@@ -79,6 +80,7 @@ public class MoveTweenToggle : MonoBehaviour {
 	
 	// Callback
 	private void Unlock(){
+		print("callback");
 		isLocked = false;
 	}
 }

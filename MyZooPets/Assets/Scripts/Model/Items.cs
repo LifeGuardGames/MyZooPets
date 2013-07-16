@@ -15,6 +15,7 @@ public class Item {
 	public int cost;
 	public ItemCategory category;
 	public ItemReceiver itemreceiver;
+	public string description;
 	
 	public ItemCategory Category{get{return category;}}
 	public int ID;

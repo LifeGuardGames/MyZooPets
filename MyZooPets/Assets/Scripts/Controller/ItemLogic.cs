@@ -55,6 +55,13 @@ public class ItemLogic : MonoBehaviour{
 		methods.Add(()=>UseCarpet(items[4].texture));
 	}
 	
+	private void AddDescription(){
+		items[0].description = "Health + 50";
+		items[1].description = "Health + 100";
+		items[2].description = "Cute Teddy";
+		items[3].description = "Brand New!";
+	}
+	
 	void Awake(){
 //		if(names.Count == textures.Count && textures.Count == costs.Count){
 //			for(int i = 0;i< names.Count;i++){
@@ -63,6 +70,7 @@ public class ItemLogic : MonoBehaviour{
 //		}
 		Categorize();
 		LoadMethods();
+		AddDescription();
 	}
 
 	//Functions for Each item. 

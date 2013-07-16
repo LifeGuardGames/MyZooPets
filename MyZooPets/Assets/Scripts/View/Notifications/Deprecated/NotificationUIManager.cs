@@ -144,13 +144,10 @@ public class NotificationUIManager : MonoBehaviour {
 		oneButtonMessage.Display();
 	}
 
-	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){
-		GameObject message = Instantiate(prefab) as GameObject;
-		Vector3 originalPos = message.transform.position;
-        message.transform.parent = NguiAnchor.transform;
-        message.transform.localScale = Vector3.one;
-        message.transform.localPosition = originalPos;
-        return message.GetComponent<PopupNotificationNGUI>();
+	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ // doesn't call Show(). Show() is called in Display()
+		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
+		obj.GetComponent<MoveTweenToggle>().Reset();
+		return obj.GetComponent<PopupNotificationNGUI>();
 	}
 
 	/*

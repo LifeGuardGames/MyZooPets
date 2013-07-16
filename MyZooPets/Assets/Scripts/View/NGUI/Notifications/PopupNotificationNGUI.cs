@@ -54,8 +54,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // Hashtable optional = new Hashtable();
         // optional.Add("ease", LeanTweenType.easeOutBounce);
         // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
-        GetComponent<MoveTweenToggle>().Show();
-        Time.timeScale = 0;
+        GetComponent<MoveTweenToggle>().Show(0.5f);
+        // Time.timeScale = 0;
     }
 
     // Hide the popup panel
@@ -63,10 +63,10 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // Hashtable optional = new Hashtable();
         // optional.Add("onCompleteTarget", gameObject);
         // optional.Add("onComplete", "DestroyNotification");
-        GetComponent<MoveTweenToggle>().Hide();
+        GetComponent<MoveTweenToggle>().Hide(0.5f);
         // optional.Add("ease", LeanTweenType.easeInOutQuad);
         // LeanTween.move(panelRect, initPosition, 0.5f, optional);
-        Time.timeScale = 1;
+        // Time.timeScale = 1;
         Destroy(gameObject, 3.0f);
     }
 

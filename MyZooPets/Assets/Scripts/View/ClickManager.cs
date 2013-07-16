@@ -173,9 +173,10 @@ public class ClickManager : MonoBehaviour {
 
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
-			challengesGUI.ChallengesClicked();
-			ClickLock();
-			ModeLock();
+			//NOTE: logic not implemented so leaving it out for now
+			// challengesGUI.ChallengesClicked();
+			// ClickLock();
+			// ModeLock();
 		}
 	}
 

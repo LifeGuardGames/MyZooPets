@@ -7,6 +7,7 @@ public class CalendarUIManager : MonoBehaviour {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
+    public GameObject particleEffectPrefab;
 
     //==================Events=======================
     public delegate void CallBack(object sender, EventArgs e);
@@ -115,6 +116,9 @@ public class CalendarUIManager : MonoBehaviour {
         }
         calendarSlot.GetComponent<UIButton>().isEnabled = false; //turn button off
 
+        //spawn particle effect
+        GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
+        prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
         //Add reward
         CalendarLogic.ClaimReward(); 
     }

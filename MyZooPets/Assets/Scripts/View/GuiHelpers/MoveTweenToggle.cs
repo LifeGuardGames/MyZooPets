@@ -49,8 +49,6 @@ public class MoveTweenToggle : MonoBehaviour {
 		// if(!isActive && !isLocked){
 		// 	isActive = true;
 		// 	isLocked = false;
-			print(isActive);
-			print(isLocked);
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeShow);
 			// optional.Add("onComplete", "Unlock");		// Callback here

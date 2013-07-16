@@ -75,7 +75,6 @@ public class UIDragPanelContents : MonoBehaviour
 
 	void OnDrag (Vector2 delta)
 	{
-		Debug.Log("scrolling itemmm!");
 		if (enabled && NGUITools.GetActive(gameObject) && draggablePanel != null)
 		{
 			draggablePanel.Drag();

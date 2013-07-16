@@ -10,23 +10,44 @@ public class InventoryListener : MonoBehaviour {
 	
 	private Inventory inventoryScript;
 	private InventoryGUI inventoryGuiScript;
-	string name;
-	int id;
-	int count;
+	private UILabel itemLabel;
+	public string name;
+	public int id;
+	
+	private int count;
+	public int Count{
+		get{
+			return count;
+		}
+		set{
+			if(value < 1)
+				Debug.LogError("Spawning bad item count");
+			else
+				count = value;
+		}
+	}
 	
 	void Awake(){
 		Inventory.OnUpdateItem += UpdateItem;
 		inventoryScript = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
 		inventoryGuiScript = GameObject.Find("Panel").GetComponent<InventoryGUI>();
+		itemLabel = gameObject.GetComponentInChildren<UILabel>();
 	}
 	
 	private void UpdateItem(object sender, EventArgs e){
 		if(inventoryScript.InventoryArray[id] != count){
 			if(count < 1){
-				Destroy(this);
+				inventoryGuiScript.DecreaseItemTypeCount();
+				Destroy(this);					// TODO asynchronous issues?
+			}
+			else{
+				itemLabel.text = inventoryScript.InventoryArray[id].ToString();
 			}
 		}
     }
 	
-	
+	// Call when the item has been disabled
+	void OnDisable(){
+		inventoryGuiScript.UpdateBarPosition();	// TODO asynchronous issues?
+	}
 }

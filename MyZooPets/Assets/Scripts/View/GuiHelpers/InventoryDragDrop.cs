@@ -44,7 +44,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void Drop ()
 	{
-		Debug.Log("dropped");
+		//Debug.Log("dropped");
 		if(!isScrolling && !isClickLock){	// Picked up drop
 //			// Is there a droppable container?
 //			Collider col = UICamera.lastHit.collider;
@@ -97,7 +97,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
-		Debug.Log("drag");
+		//Debug.Log("drag");
 		if (enabled && UICamera.currentTouchID > -2)
 		{
 			if (!mIsDragging && delta.y > 0 && !isScrolling)	// If the delta has positive Y, pick up
@@ -135,7 +135,7 @@ public class InventoryDragDrop : MonoBehaviour {
 		if(!mIsDragging)
 			isClickLock = true;
 		
-		Debug.Log("pressed");
+		//Debug.Log("pressed");
 		if (enabled)
 		{
 			if (isPressed)

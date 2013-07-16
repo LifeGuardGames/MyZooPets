@@ -36,6 +36,7 @@ public class LoadDataLogic : MonoBehaviour {
         
         switch(Application.loadedLevelName){
             case "NewBedRoom":
+                print("in room");
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
                 calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANHCHOR_BOTTOMLEFT + "Navigation");
@@ -48,6 +49,7 @@ public class LoadDataLogic : MonoBehaviour {
                 // diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
+                
                 if(!DataManager.FirstTime){ //if not first time load GUI right away
                     FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
                 }else{ //if first time set call back and wait for the hatching animation to finish
@@ -82,16 +84,18 @@ public class LoadDataLogic : MonoBehaviour {
 
         switch(Application.loadedLevelName){
             case "NewBedRoom":
+                print("init");
                 if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
                 hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
                 calendar.GetComponent<CalendarUIManager>().Init();
                 navigation.GetComponent<MoveTweenToggle>().Show();
+
                 clickManager.Init();
                 cameraMove.Init();
                 levelUpLogic.Init();
-                degradationLogic.Init();
-                degradationUIManager.Init();
+                // degradationLogic.Init();
+                // degradationUIManager.Init();
                 tutorial.Init();
                 petMovement.Init();
                 // diagnoseTimerLogic.Init();

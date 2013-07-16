@@ -1,40 +1,24 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// User interface button toggle. -Sean
+/// Primitive Toggle button with send message state functionality
+/// </summary>
+
 public class UIButtonToggle : MonoBehaviour {
 
 	public bool isActive = true;
+	public bool enforceLock = false;
 	private bool isLocked = false;
 	
-//	public void Show(){
-//		if(!isActive && !isLocked){
-//			isActive = true;
-//			isLocked = true;
-//			Hashtable optional = new Hashtable();
-//			optional.Add("ease", LeanTweenType.easeOutBounce);
-//			optional.Add("onCompleteTarget", gameObject);
-//			optional.Add("onComplete", "Unlock");		// Callback here
-//			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 0.3f, gameObject.transform.position.z), 0.5f, optional);
-//		}
-//		else{
-//			Debug.LogError("trying show locked/active HUD");
-//		}
-//	}
-//	
-//	public void Hide(){
-//		if(isActive && !isLocked){
-//			isActive = false;
-//			isLocked = true;
-//			Hashtable optional = new Hashtable();
-//			optional.Add("ease", LeanTweenType.easeOutBounce);
-//			optional.Add("onCompleteTarget", gameObject);
-//			optional.Add("onComplete", "Unlock");		// Callback here
-//			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 0.3f, gameObject.transform.position.z), 0.5f, optional);
-//		}
-//		else{
-//			Debug.LogError("trying hide locked/inactive HUD");
-//		}
-//	}
+	public GameObject target;
+	public string functionName;
+	public bool includeChildren = false;
+	
+	void Start(){
+		
+	}
 	
 	// Callback
 	private void Unlock(){
@@ -42,9 +26,33 @@ public class UIButtonToggle : MonoBehaviour {
 	}
 	
 	void OnClick(){
-		if(enabled && !isLocked){
+		if(enforceLock && enabled && !isLocked){
 			isActive = !isActive;
 			isLocked = true;
+		}
+		else{
+			isActive = !isActive;
+		}
+	}
+	
+	void Send(){
+		if (string.IsNullOrEmpty(functionName)) return;
+		if (target == null) target = gameObject;
+
+		if (includeChildren)
+		{
+			Transform[] transforms = target.GetComponentsInChildren<Transform>();
+
+			for (int i = 0, imax = transforms.Length; i < imax; ++i)
+			{
+				Transform t = transforms[i];
+				t.gameObject.SendMessage(functionName, gameObject, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		else
+		{
+			target.SendMessage(functionName, gameObject, SendMessageOptions.DontRequireReceiver);
+
 		}
 	}
 }

@@ -19,6 +19,7 @@ public class FirstTimeNGUI : MonoBehaviour {
 
     public UILabel nameField;
     public GameObject firstTimeChoosePanel;
+    public GameObject popupTitle;
 
     // Camera moving
     public GameObject mCamera;
@@ -44,7 +45,7 @@ public class FirstTimeNGUI : MonoBehaviour {
             currentRenderColor = RenderSettings.ambientLight;
             RenderSettings.ambientLight = Color.black;
 
-            ShowEggDropAnimation();
+            ShowDropInAnimation();
 
         }
         else{ //not first time. spawn pet as usual
@@ -63,9 +64,9 @@ public class FirstTimeNGUI : MonoBehaviour {
         }
     }
 
-    void ShowEggDropAnimation(){
+    void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
-        // todo: title
+        popupTitle.GetComponent<MoveTweenToggleNew>().Show();
 
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
@@ -152,12 +153,8 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     void HideTitle(){
-        // todo
-    }
-
-    // Callback for hide title
-    private void HelperDeleteLogo(){
-        // todo
+        popupTitle.GetComponent<MoveTweenToggleNew>().Hide();
+        Destroy(popupTitle, 3.0f);
     }
 
     void CameraTransform (Vector3 newPosition, Vector3 newDirection){

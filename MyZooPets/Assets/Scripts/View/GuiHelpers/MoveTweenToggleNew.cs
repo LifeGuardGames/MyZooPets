@@ -32,9 +32,7 @@ public class MoveTweenToggleNew : MonoBehaviour {
 				gameObject.transform.position.z
 			);
 		}
-	}
 
-	void Start(){
 		if(startsHidden){ //need to call show first
 			isActive = false;
 			isLocked = false;

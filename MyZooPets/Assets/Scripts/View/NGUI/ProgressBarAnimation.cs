@@ -33,7 +33,11 @@ public class ProgressBarAnimation : MonoBehaviour {
         float increment = width / (slider.numberOfSteps - 1);
         for (int i = 0; i < slider.numberOfSteps; i++){
 
-            GameObject marker = NGUITools.AddChild(gameObject, progressStep);
+            GameObject marker = Instantiate(progressStep) as GameObject;
+            // Vector3 originalPos = marker.transform.position;
+            marker.transform.parent = gameObject.transform;
+            marker.transform.localScale = Vector3.one;
+            // marker.transform.localPosition = originalPos;
             marker.transform.localPosition = new Vector3(i * increment, 0, 0);
 
             UILabel label = marker.transform.Find("Label").GetComponent<UILabel>();

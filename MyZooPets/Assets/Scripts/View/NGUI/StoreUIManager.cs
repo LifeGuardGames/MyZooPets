@@ -25,6 +25,7 @@ public class StoreUIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+//		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);

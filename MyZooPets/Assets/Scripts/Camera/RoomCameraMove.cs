@@ -34,9 +34,6 @@ public class RoomCameraMove : CameraMove{
         realInhaler = GameObject.Find("RealInhaler");
         teddyInhaler = GameObject.Find("TeddyInhaler");
         shelf = GameObject.Find("Shelf");
-
-        initPosition = gameObject.transform.position;
-        initFaceDirection = gameObject.transform.eulerAngles;
     }
 
     public override void ZoomToggle(ZoomItem item){

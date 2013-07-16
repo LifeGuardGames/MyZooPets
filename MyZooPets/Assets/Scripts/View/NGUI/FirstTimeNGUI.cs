@@ -66,7 +66,7 @@ public class FirstTimeNGUI : MonoBehaviour {
 
     void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<MoveTweenToggleNew>().Show();
+        popupTitle.GetComponent<MoveTweenToggle>().Show();
 
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
@@ -94,11 +94,11 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     void ShowChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggleNew>().Show(smooth);
+        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Show(smooth);
     }
 
     void HideChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggleNew>().Hide(smooth);
+        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
         HelperFinishEditPet();
     }
@@ -153,7 +153,7 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     void HideTitle(){
-        popupTitle.GetComponent<MoveTweenToggleNew>().Hide();
+        popupTitle.GetComponent<MoveTweenToggle>().Hide();
         Destroy(popupTitle, 3.0f);
     }
 

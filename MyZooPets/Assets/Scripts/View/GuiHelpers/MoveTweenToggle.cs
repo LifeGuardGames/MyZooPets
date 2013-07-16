@@ -25,18 +25,21 @@ public class MoveTweenToggle : MonoBehaviour {
 
 
 	void Awake(){
+		Reset();
+	}
+
+	public void Reset(){
 		if (startsHidden){
 			gameObject.transform.position = new Vector3(
 				gameObject.transform.position.x + hideDeltaX,
 				gameObject.transform.position.y + hideDeltaY,
 				gameObject.transform.position.z
 			);
-		}
-
-		if(startsHidden){ //need to call show first
+		 	//need to call show first
 			isActive = false;
 			isLocked = false;
-		}else{ //need to call hide first
+		}
+		else{ //need to call hide first
 			isActive = true;
 			isLocked = false;
 		}

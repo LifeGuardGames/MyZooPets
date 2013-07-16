@@ -16,7 +16,7 @@ public class ProgressBarController : MonoBehaviour {
         slider.sliderValue = 0;
         slider.numberOfSteps = numOfNodes;
         increment = 1.0f / (numOfNodes - 1);
-        if (animation != null) animation.Init();
+        if (animation != null) animation.Init(numOfNodes);
     }
     // testing
 	// void Start () {

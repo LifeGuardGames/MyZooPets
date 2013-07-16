@@ -19,8 +19,6 @@ public class InhalerGameNGUI : MonoBehaviour {
     void Start(){
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
         progressBar = progressBarObject.GetComponent<ProgressBarController>();
-
-        RestartProgressBar();
     }
 
     public void RestartProgressBar(){
@@ -99,7 +97,6 @@ public class InhalerGameNGUI : MonoBehaviour {
     }
 
     void QuitInhalerGame(){
-        RestartProgressBar();
         Application.LoadLevel("NewBedRoom");
     }
 }

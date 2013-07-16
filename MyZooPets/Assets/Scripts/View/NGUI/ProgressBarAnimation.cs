@@ -11,7 +11,7 @@ public class ProgressBarAnimation : MonoBehaviour {
     private bool initCalled = false;
 
     // Call this once at the beginning, after having instantiated the Progress Bar.
-	public void Init () {
+	public void Init (int numOfNodes) {
         // Destroy all old markers if there are any.
         if (markers != null && markers.Count > 0){
             foreach (GameObject marker in markers){
@@ -20,9 +20,11 @@ public class ProgressBarAnimation : MonoBehaviour {
         }
 
         initCalled = true;
+        stepCompleted = 0;
 
         markers = new List<GameObject>();
-        SetUpProgressSteps();
+        // SetUpProgressSteps();
+        SetUpProgressSteps(numOfNodes);
         UpdateMarkerColors();
 	}
 
@@ -32,6 +34,22 @@ public class ProgressBarAnimation : MonoBehaviour {
         float width = foreground.transform.localScale.x;
         float increment = width / (slider.numberOfSteps - 1);
         for (int i = 0; i < slider.numberOfSteps; i++){
+
+            GameObject marker = NGUITools.AddChild(gameObject, progressStep);
+            marker.transform.localPosition = new Vector3(i * increment, 0, 0);
+
+            UILabel label = marker.transform.Find("Label").GetComponent<UILabel>();
+            label.text = i.ToString();
+            markers.Add(marker);
+        }
+    }
+
+    // Set up the markers.
+    void SetUpProgressSteps(int numOfNodes){
+        Transform foreground = slider.transform.Find("Foreground");
+        float width = foreground.transform.localScale.x;
+        float increment = width / (numOfNodes - 1);
+        for (int i = 0; i < numOfNodes; i++){
 
             GameObject marker = NGUITools.AddChild(gameObject, progressStep);
             marker.transform.localPosition = new Vector3(i * increment, 0, 0);

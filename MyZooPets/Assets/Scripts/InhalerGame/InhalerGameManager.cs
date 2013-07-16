@@ -60,6 +60,7 @@ public class InhalerGameManager : MonoBehaviour{
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
 
             if (!introShown){
+                inhalerGameNGUI.RestartProgressBar();
                 inhalerGameNGUI.ShowIntro();
                 introShown = true;
                 float delay;

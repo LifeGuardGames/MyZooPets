@@ -12,6 +12,13 @@ public class ProgressBarAnimation : MonoBehaviour {
 
     // Call this once at the beginning, after having instantiated the Progress Bar.
 	public void Init () {
+        // Destroy all old markers if there are any.
+        if (markers != null && markers.Count > 0){
+            foreach (GameObject marker in markers){
+                Destroy(marker);
+            }
+        }
+
         initCalled = true;
 
         markers = new List<GameObject>();

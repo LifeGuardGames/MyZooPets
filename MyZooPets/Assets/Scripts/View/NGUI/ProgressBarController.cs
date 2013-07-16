@@ -6,15 +6,19 @@ public class ProgressBarController : MonoBehaviour {
     public UISlider slider; // for setup
     public ProgressBarAnimation animation;
 
+    int increment;
+
     /*
-        numSteps includes step 0. So if numSteps were '3', then the steps
+        numOfNodes includes step 0. So if numOfNodes were '3', then the steps
         included would be 0, 1, 2.
     */
-    void Init(int numSteps){
+    public void Init(int numOfNodes){
         slider.sliderValue = 0;
-        slider.numberOfSteps = numSteps;
-        animation.Init();
+        slider.numberOfSteps = numOfNodes;
+        increment = 1 / numOfNodes;
+        if (animation != null) animation.Init();
     }
+    // testing
 	void Start () {
         Init(6); // 0 to 5
         // Init(7); // 0 to 6
@@ -24,4 +28,9 @@ public class ProgressBarController : MonoBehaviour {
 	void Update () {
 
 	}
+
+    public void UpdateStep(int currentStep){
+        slider.sliderValue = currentStep * increment;
+    }
+
 }

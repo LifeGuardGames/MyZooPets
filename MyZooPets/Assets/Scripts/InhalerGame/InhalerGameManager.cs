@@ -31,7 +31,7 @@ public class InhalerGameManager : MonoBehaviour{
         get {return hasPlayedGame;}
     }
 
-    InhalerGameGUI inhalerGameGUI;
+    InhalerGameNGUI inhalerGameNGUI;
 
     // todo: create accessors
     public bool gameEnded = false;
@@ -47,7 +47,7 @@ public class InhalerGameManager : MonoBehaviour{
     bool introShown = false;
 
     void Start(){
-        inhalerGameGUI = GameObject.Find("InhalerGameGUI").GetComponent<InhalerGameGUI>();
+        inhalerGameNGUI = GameObject.Find("InhalerGameNGUI").GetComponent<InhalerGameNGUI>();
 
         ResetInhalerGame();
     }
@@ -60,14 +60,14 @@ public class InhalerGameManager : MonoBehaviour{
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
 
             if (!introShown){
-                inhalerGameGUI.ShowIntro();
+                inhalerGameNGUI.ShowIntro();
                 introShown = true;
                 float delay;
                 if (isPracticeGame){
-                    delay = InhalerGameGUI.practiceMessageDuration + InhalerGameGUI.introMessageDuration;
+                    delay = InhalerGameNGUI.practiceMessageDuration + InhalerGameNGUI.introMessageDuration;
                 }
                 else {
-                    delay = InhalerGameGUI.introMessageDuration;
+                    delay = InhalerGameNGUI.introMessageDuration;
                 }
 
                 Invoke("SetUpScene", delay);
@@ -172,17 +172,17 @@ public class InhalerGameManager : MonoBehaviour{
                 DataManager.AddStars(practiceGameStarIncrement);
             }
 
-            inhalerGameGUI.ShowGameOverMessage();
+            inhalerGameNGUI.ShowGameOverMessage();
             RemoveFirstTimeFlags();
             gameEnded = true;
-            inhalerGameGUI.HideButtons();
-            // Invoke("ShowButtons", inhalerGameGUI.introMessageDuration); // set a 3 second delay so that the "great" message animation has time to play
+            // inhalerGameNGUI.HideButtons();
+            // Invoke("ShowButtons", inhalerGameNGUI.introMessageDuration); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
 
-    void ShowButtons(){
-        inhalerGameGUI.ShowButtons();
-    }
+    // void ShowButtons(){
+    //     inhalerGameNGUI.ShowButtons();
+    // }
 
     void RemoveFirstTimeFlags(){
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair){

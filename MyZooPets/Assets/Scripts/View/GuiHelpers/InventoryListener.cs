@@ -48,6 +48,6 @@ public class InventoryListener : MonoBehaviour {
 	
 	// Call when the item has been disabled
 	void OnDisable(){
-		inventoryGuiScript.UpdateBarPosition();	// TODO asynchronous issues?
+		// inventoryGuiScript.UpdateBarPosition();	// TODO asynchronous issues?
 	}
 }

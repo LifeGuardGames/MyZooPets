@@ -26,8 +26,8 @@ public class Inventory : MonoBehaviour {
 
 	//==============Events=================
 	//call when items are added or removed from the inventory
-	public delegate void InventoryResizeEventHandlers(object sender, EventArgs e);
-	public static event InventoryResizeEventHandlers OnInventoryResize;
+	// public delegate void InventoryResizeEventHandlers(object sender, EventArgs e);
+	// public static event InventoryResizeEventHandlers OnInventoryResize;
 	
 	public delegate void OnUpdateItemHandlers(object sender, EventArgs e);
 	public static event OnUpdateItemHandlers OnUpdateItem;
@@ -37,7 +37,7 @@ public class Inventory : MonoBehaviour {
 	public void AddItem(int id, int count){
 		if(inventory[id] == 0){ //add one to inventory Count if item is new
 			inventoryCount++;
-			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
+			// if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
 			if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 		}
 		inventory[id] += count;
@@ -51,23 +51,21 @@ public class Inventory : MonoBehaviour {
 		}
 		if(inventory[id] == 0){ //minus one to inventory count if item is used up
 			inventoryCount--;
-			if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
+			// if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
 			if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 		}
 	}
 	//=================================================
 	
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		inventory = DataManager.Inventory;
 		if(isDebug){
 			inventory = new int[10];
+			AddItem(0,2); //2 apples
+			AddItem(1,1); //1 sandwich
 		}
-		
-		//testing
-		AddItem(0,2); //2 apples
-		AddItem(1,1); //1 sandwich
 	}
 	
 	// Update is called once per frame

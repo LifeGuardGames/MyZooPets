@@ -57,7 +57,7 @@ public class InventoryGUI : MonoBehaviour{
         pickUpId = -1;
 
         // Set listener to resize Inventory texture when inventory size change
-        Inventory.OnInventoryResize += ResizeInventory;
+        // Inventory.OnInventoryResize += ResizeInventory;
     }
 	
 	void Start(){
@@ -68,7 +68,7 @@ public class InventoryGUI : MonoBehaviour{
 		
 		// Populate initial items
 		for(int i = 0; i < itemLogic.items.Count; i++){
-			if(inventory.InventoryArray[i] > 0)
+			if(inventory.InventoryArray[i] != null && inventory.InventoryArray[i] > 0)
         		SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
 		}
 	}

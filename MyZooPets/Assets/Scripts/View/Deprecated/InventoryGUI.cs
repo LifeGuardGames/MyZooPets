@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class InventoryGUI : MonoBehaviour{
     
@@ -29,7 +30,21 @@ public class InventoryGUI : MonoBehaviour{
     public Texture2D itemBarTexture;
     public GUIStyle itemCountTextStyle;
     public GUISkin defaultSkin;
-
+	
+	// NGUI revision variables
+	public UISprite itemSprite;
+	public UIAtlas itemAtlas;
+	public UIFont font;
+	public GameObject UIGrid;
+	public GameObject parentWindow;
+	public GameObject UIButtonToggleObject;
+	
+	private bool isGuiShowing = true; 	// Aux to keep track, not synced!!
+	private int itemCount = 0;			// Local GUI item count	
+	private float collapsedPos;
+	private UIButtonToggle uiButtonToggle;
+	private Dictionary<string, bool> itemTrackHash;	// Hashtable to keep track of the types of items present;
+	
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
@@ -41,10 +56,23 @@ public class InventoryGUI : MonoBehaviour{
         isMenuExpanded = true;
         pickUpId = -1;
 
-        //set listener to resize Inventory texture when inventory size change
+        // Set listener to resize Inventory texture when inventory size change
         Inventory.OnInventoryResize += ResizeInventory;
     }
-
+	
+	void Start(){
+		collapsedPos = parentWindow.GetComponent<TweenPosition>().to.x;
+		uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
+		
+		itemTrackHash = new Dictionary<string, bool>();
+		
+		// Populate initial items
+		for(int i = 0; i < itemLogic.items.Count; i++){
+			if(inventory.InventoryArray[i] > 0)
+        		SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
+		}
+	}
+	
 //    void Update(){
 //        if(!LoadDataLogic.IsDataLoaded) return;
 //        if(pickedUp){
@@ -119,48 +147,65 @@ public class InventoryGUI : MonoBehaviour{
 			return false;
 	}
 	
-	private GameObject SpawnInventoryInPanel(string name, int id){
-		GameObject item = NGUITools.AddChild(UIGrid);
-		item.name = "Item";
-//		BoxCollider boxCollider = item.AddComponent<BoxCollider>();
-//		boxCollider.isTrigger = true;
-//		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
-		//item.AddComponent("UIDragPanelContents");
-		//item.AddComponent("DragDropItem");
-		//item.AddComponent("InventoryDragDrop");
-		item.AddComponent("InventoryListener");
-		
-		UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
-		spriteFill.transform.localScale = new Vector3(90, 90, 1); 	// TODO make const
-		spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
-				
-		GameObject SpriteGo = NGUITools.AddChild(item);
-		SpriteGo.gameObject.name = id.ToString();	// Use ID as name
-		UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
-		
-		BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
-		boxCollider.isTrigger = true;
-		boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
-		SpriteGo.gameObject.AddComponent("InventoryDragDrop");
-		SpriteGo.gameObject.AddComponent("UIDragPanelContents");
-		
-		
-		//sprite.gameObject.name = id.ToString();
-		sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const TODO Dynamic size
-		sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
-		itemCount++;
-		
-		UpdateBarPosition();
-		
-		return item;
+	private GameObject SpawnInventoryTypeInPanel(string name, int id){
+		// If the item type already exists, should not create a new box
+		if(itemTrackHash.ContainsKey(name) && itemTrackHash[name] == true){
+			Debug.LogError("Creating new box for existing item in bar");
+			return null;
+		}
+		else{
+			// Flag new box created in hash
+			itemTrackHash.Add(name, true);
+			
+			// Create item structure
+			GameObject item = NGUITools.AddChild(UIGrid);
+			item.name = "Item";
+			InventoryListener listener = item.AddComponent("InventoryListener") as InventoryListener;
+			listener.Count = inventory.InventoryArray[id];
+			
+			UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
+			spriteFill.transform.localScale = new Vector3(90, 90, 1); 	// TODO make const
+			spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
+			
+			GameObject SpriteGo = NGUITools.AddChild(item);
+			SpriteGo.gameObject.name = id.ToString();					// Use ID as name
+			UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
+			
+			BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
+			boxCollider.isTrigger = true;
+			boxCollider.size = new Vector3(90, 90, 1); 					// TODO make const
+			SpriteGo.gameObject.AddComponent("InventoryDragDrop");
+			SpriteGo.gameObject.AddComponent("UIDragPanelContents");
+			
+			UILabel label = NGUITools.AddWidget<UILabel>(item);
+			label.gameObject.name = "label";
+			label.transform.localPosition = new Vector3(25, -25, -1); 	// TODO Different atlas for now, move forward
+			label.transform.localScale = new Vector3(40, 40, 1);
+			label.font = font;
+			label.depth = NGUITools.CalculateNextDepth(UIGrid);
+			label.text = inventory.InventoryArray[id].ToString();
+			
+			sprite.transform.localScale = new Vector3(52, 64, 1);		// TODO make const TODO Dynamic size
+			sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
+			
+			itemCount++;
+			UpdateBarPosition();
+			
+			return item;
+		}
 	}
 	
-	void UpdateBarPosition(){
+	// From InventoryListener 
+	public void DecreaseItemTypeCount(){
+		itemCount--;
+		UpdateBarPosition();
+	}
+	
+	public void UpdateBarPosition(){
 		UIGrid.GetComponent<UIGrid>().Reposition();
 		
-		if(parentWindow.GetComponent<TweenPosition>().from.x > 215){ 	// Limit Move after x items
+		if(parentWindow.GetComponent<TweenPosition>().from.x > -1064){ 	// Limit Move after x items		// TODO make const
 			parentWindow.GetComponent<TweenPosition>().from.x = collapsedPos - itemCount * 90;
-
 			if(uiButtonToggle.isActive){	// Animate the move if inventory is open
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeOutBounce);
@@ -169,62 +214,24 @@ public class InventoryGUI : MonoBehaviour{
 		}
 	}
 	
-	// TODO-s HANDLE DELETE ITEM CASE
-	
-//	void Printo(){
-//		Debug.Log("KABOOYA");
-//	}
+	// Image button clicked receiver
+	public void ExpandToggled(){
+		// Local aux to keep track of toggles
+		isGuiShowing = !isGuiShowing;
+		
+		// Change the sprite on the button
+		UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+		UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+		UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+		UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+	}
 
-	public UISprite itemSprite;
-	public UIAtlas itemAtlas;
-	public GameObject UIGrid;
-	public GameObject parentWindow;
-	public GameObject UIButtonToggleObject;
-	private UIButtonToggle uiButtonToggle;
-	
-	private int itemCount = 0;	// Local GUI item count	
-	private float collapsedPos;
-	
-	void Start(){
-		collapsedPos = 1115f;
-		uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
-		
-		// Populate initial items
-		for(int i = 0; i < itemLogic.items.Count; i++){
-			Debug.Log(itemLogic.items[i].name);
-			if(inventory.InventoryArray[i]!=0)
-        		SpawnInventoryInPanel(itemLogic.items[i].name, i);
-		}
-	}
-	
-	public void test(){
-		UIGrid.GetComponent<UIGrid>().Reposition();
-		
-		
-//		Transform[] allChildren = GetComponentsInChildren();
-//   		foreach (UIWidget child in allChildren) {
-//			NGUITools.MarkParentAsChanged(gameObject);
-//   		}
-	}
-	
     void OnGUI(){
-		if(GUI.Button(new Rect(300, 100, 100, 100), "Update")){
-			UpdateBarPosition();
-		}
 		
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Spawn")){
-			SpawnInventoryInPanel("teddy", itemCount);
-		}
-		
-		if(GUI.Button(new Rect(100, 300, 100, 100), "Spawn")){
-			SpawnInventoryInPanel("ball", itemCount);
-		}
-		
-		if(GUI.Button(new Rect(100, 500, 100, 100), "Kill")){
-			Destroy(GameObject.Find("Item"));
-			itemCount--;
-			Invoke("UpdateBarPosition", 2f);
-		}
+		// Test, deprecated...
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Spawn")){
+//			SpawnInventoryTypeInPanel("teddy", itemCount);
+//		}
 		
 		/*
         if(!LoadDataLogic.IsDataLoaded) return;
@@ -301,7 +308,8 @@ public class InventoryGUI : MonoBehaviour{
         
         */
     }
-
+	
+	// TODO Move these out, use toggleTween script on gameobject!!!	
     //Display InventoryGUI in game
     public void Display(){
         Hashtable optional = new Hashtable();

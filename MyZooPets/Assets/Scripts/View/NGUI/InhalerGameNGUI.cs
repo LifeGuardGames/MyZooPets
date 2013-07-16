@@ -24,11 +24,11 @@ public class InhalerGameNGUI : MonoBehaviour {
     }
 
     public void RestartProgressBar(){
+        currentNode = 0;
         int numOfNodes = GetNumOfNodes();
         if(numOfNodes < 2){
             Debug.LogError("Number of nodes cannot be less than 2");
         }
-        currentNode = 0;
         progressBar.Init(numOfNodes);
     }
 
@@ -76,6 +76,7 @@ public class InhalerGameNGUI : MonoBehaviour {
     void Update(){
         int lastCompletedStep = InhalerLogic.CurrentStep - 1;
         if(currentNode != lastCompletedStep){
+            currentNode = lastCompletedStep;
             progressBar.UpdateStep(lastCompletedStep);
         }
 

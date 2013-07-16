@@ -42,12 +42,11 @@ public class ProgressBarAnimation : MonoBehaviour {
         }
     }
 
-    public void OnSliderChange(){
+    public void UpdateStep(int lastCompletedStep){
         if (!initCalled) return;
 
         // Update the number of steps completed.
-        stepCompleted = (int) (slider.sliderValue * (slider.numberOfSteps - 1)); // same as slider.sliderValue / (1 / (slider.numberOfSteps - 1))
-        Debug.Log("Step " + stepCompleted + " completed.");
+        stepCompleted = lastCompletedStep;
 
         UpdateMarkerColors();
     }

@@ -11,15 +11,6 @@ public class AnimationControl : MonoBehaviour {
 	private bool isPlay = false;
 	public bool isLooping;
 	
-	void OnGUI(){
-		if(GUI.Button(new Rect(20, 20, 100, 20), "start")){
-			Play();
-		}
-		if(GUI.Button(new Rect(20, 50, 1000, 20), "stop")){
-			Stop();
-		}
-	}
-	
 	void Update(){
 		if(isLooping && isPlay && !animation.isPlaying){
 			animation.Play();

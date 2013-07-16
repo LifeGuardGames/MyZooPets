@@ -6,7 +6,7 @@ using System.Collections;
 /// Used to toogle move objects with LeanTween
 /// </summary>
 
-public class MoveTweenToggle : MonoBehaviour {
+public class MoveTweenToggleNew : MonoBehaviour {
 
 	private bool isActive;
 	private bool isLocked;
@@ -23,6 +23,16 @@ public class MoveTweenToggle : MonoBehaviour {
 	public LeanTweenType easeHide;
 	public LeanTweenType easeShow;
 
+
+	void Awake(){
+		if (startsHidden){
+			gameObject.transform.position = new Vector3(
+				gameObject.transform.position.x + hideDeltaX,
+				gameObject.transform.position.y + hideDeltaY,
+				gameObject.transform.position.z
+			);
+		}
+	}
 
 	void Start(){
 		if(startsHidden){ //need to call show first

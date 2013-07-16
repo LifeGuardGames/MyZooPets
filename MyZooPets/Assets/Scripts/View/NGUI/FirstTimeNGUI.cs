@@ -18,6 +18,7 @@ public class FirstTimeNGUI : MonoBehaviour {
     public string petColor;
 
     public UILabel nameField;
+    public GameObject firstTimeChoosePanel;
 
     // Camera moving
     public GameObject mCamera;
@@ -43,6 +44,8 @@ public class FirstTimeNGUI : MonoBehaviour {
             currentRenderColor = RenderSettings.ambientLight;
             RenderSettings.ambientLight = Color.black;
 
+            ShowEggDropAnimation();
+
         }
         else{ //not first time. spawn pet as usual
             // TEMPORARY spawn the pet in location
@@ -56,17 +59,20 @@ public class FirstTimeNGUI : MonoBehaviour {
             Destroy(eggObject);
             Destroy(nestObject);
             Destroy(gameObject);
+            Destroy(firstTimeChoosePanel);
         }
     }
 
-    void Update(){
+    void ShowEggDropAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
-        Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeInQuad);
+        // todo: title
 
-        Hashtable optional2 = new Hashtable();
-        optional2.Add("ease", LeanTweenType.easeOutBounce);
-        LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional2);
+        Hashtable optional = new Hashtable();
+        optional.Add("ease", LeanTweenType.easeOutBounce);
+        LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
+    }
+
+    void Update(){
 
         //TODO-s Optimize this for touch? / ABSTRACT TO CAMERAMOVE?? perhaps not for coherency
         if(Input.GetMouseButtonUp(0)){
@@ -87,18 +93,13 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     void ShowChooseGUI(){
-        // todo
-        Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeInOutQuad);
+        firstTimeChoosePanel.GetComponent<MoveTweenToggleNew>().Show(smooth);
     }
 
     void HideChooseGUI(){
-        // todo
-        Hashtable optional = new Hashtable();
-        optional.Add("onCompleteTarget", gameObject);
-        optional.Add("onComplete", "HelperFinishEditPet");
-        optional.Add("ease", LeanTweenType.easeInOutQuad);
+        firstTimeChoosePanel.GetComponent<MoveTweenToggleNew>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
+        HelperFinishEditPet();
     }
 
     // Callback for closing edit panel
@@ -114,11 +115,11 @@ public class FirstTimeNGUI : MonoBehaviour {
         // Start normal GUI stuff
         if(finishHatchCallBack != null) finishHatchCallBack();
 
-        // todo
         // Commit seppuku
         Destroy(eggObject);
         Destroy(nestObject);
         Destroy(gameObject);
+        Destroy(firstTimeChoosePanel, 3.0f);
     }
 
     void ButtonClicked_Blue(){

@@ -55,7 +55,7 @@ public class MoveTweenToggleNew : MonoBehaviour {
 		}
 	}
 
-	public void Show(){
+	public void Show(float time){
 		if(!isActive && !isLocked){
 			print("tween");
 			isActive = true;
@@ -65,14 +65,18 @@ public class MoveTweenToggleNew : MonoBehaviour {
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
 			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + showDeltaX,
-				gameObject.transform.position.y + showDeltaY, gameObject.transform.position.z), 0.5f, optional);
+				gameObject.transform.position.y + showDeltaY, gameObject.transform.position.z), time, optional);
 		}
 		// else{
 		// 	Debug.LogError("trying show locked/active HUD");
 		// }
 	}
 
-	public void Hide(){
+	public void Show(){
+		Show(0.5f);
+	}
+
+	public void Hide(float time){
 		if(isActive && !isLocked){
 			isActive = false;
 			isLocked = true;
@@ -81,11 +85,15 @@ public class MoveTweenToggleNew : MonoBehaviour {
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
 			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + hideDeltaX,
-				gameObject.transform.position.y + hideDeltaY, gameObject.transform.position.z), 0.5f, optional);
+				gameObject.transform.position.y + hideDeltaY, gameObject.transform.position.z), time, optional);
 		}
 		// else{
 		// 	Debug.LogError("trying hide locked/inactive HUD");
 		// }
+	}
+
+	public void Hide(){
+		Hide(0.5f);
 	}
 
 	// Callback

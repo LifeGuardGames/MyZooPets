@@ -7,14 +7,14 @@ using System.Collections;
 public class LoadDataLogic : MonoBehaviour {
     public bool isDebug;
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
-    
+
 
     //Logic
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference
-    private CameraMove cameraMove; //reference 
-    private Tutorial tutorial; //reference 
+    private CameraMove cameraMove; //reference
+    private Tutorial tutorial; //reference
     private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickManager;
 
@@ -30,10 +30,10 @@ public class LoadDataLogic : MonoBehaviour {
 
     void Awake(){
         if(isDebug){
-            DataManager.FirstTime = true; 
+            DataManager.FirstTime = true;
         }
         IsDataLoaded = false;
-        
+
         switch(Application.loadedLevelName){
             case "NewBedRoom":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
@@ -49,9 +49,9 @@ public class LoadDataLogic : MonoBehaviour {
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 
                 if(!DataManager.FirstTime){ //if not first time load GUI right away
-                    FirstTimeGUI.finishCheckingForFirstTime = InitializeDataForUI;
+                    FirstTimeNGUI.finishCheckingForFirstTime = InitializeDataForUI;
                 }else{ //if first time set call back and wait for the hatching animation to finish
-                    FirstTimeGUI.finishHatchCallBack = InitializeDataForUI;
+                    FirstTimeNGUI.finishHatchCallBack = InitializeDataForUI;
                 }
             break;
             case "Yard":
@@ -115,7 +115,7 @@ public class LoadDataLogic : MonoBehaviour {
             // case "SlotMachineGame":
             // break;
         }
-       
+
         IsDataLoaded = true;
     }
 }

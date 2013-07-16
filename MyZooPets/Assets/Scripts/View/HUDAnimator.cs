@@ -97,16 +97,14 @@ public class HUDAnimator : MonoBehaviour {
 		if(dataStars != DataManager.Stars){
 			if(displayStars > DataManager.Stars){
 				displayStars--;
-				
 				starAnimControl.Play();
 			}else if(displayStars < DataManager.Stars){
 				displayStars++;
-				
 				starAnimControl.Play();
 			}else{
 				dataStars = DataManager.Stars;
 
-				// Stop grow & shrink. reset icon size
+				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
 			}
 		}
@@ -120,7 +118,7 @@ public class HUDAnimator : MonoBehaviour {
 				}else{
 					displayPoints += DataManager.Points - displayPoints;
 				}
-				LevelUpEventCheck(); //Check if progress bar reach level max
+				LevelUpEventCheck(); // Check if progress bar reach level max
 			}else{ //animation done
 				dataPoints = DataManager.Points;	
 			}
@@ -138,7 +136,7 @@ public class HUDAnimator : MonoBehaviour {
 			}else{
 				dataHealth = DataManager.Health;
 
-				// //Stop grow & shrink. reset icon size
+				// Stop grow & shrink. reset icon size
 				healthAnimControl.Stop();
 			}
 		}
@@ -155,8 +153,8 @@ public class HUDAnimator : MonoBehaviour {
 			}else{
 				dataMood = DataManager.Mood;	
 
-				// //Stop grow & shrink. reset icon size
-				moodAnimControl.Play();
+				// Stop grow & shrink. reset icon size
+				moodAnimControl.Stop();
 			}
 		}
 

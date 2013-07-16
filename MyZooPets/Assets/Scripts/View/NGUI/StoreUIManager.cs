@@ -24,8 +24,9 @@ public class StoreUIManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-//		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		//debug option. use only in Store_NGUI scene
+//		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);
@@ -49,17 +50,40 @@ public class StoreUIManager : MonoBehaviour {
 		}
 	}
 	
-	public void OnBuyButton(GameObject button){
+	public void OnBuyAnimation(GameObject sprite){
+		Vector3 origin = sprite.transform.position;
+//		List<Vector3> path = new List<Vector3>();
+//		path.Add(new Vector3(0f,0f,0f));
+//		path.Add(new Vector3(1f,0f,0f));
+//		path.Add(new Vector3(2f,0f,0f));
 		
+		Vector3[] path = new Vector3[4];
+		path[0] = origin/*new Vector3(0f,0f,0f)*/;
+		path[1] = new Vector3(20f,0f,-2f);
+		path[2] = new Vector3(40f,0f,-2f);
+		path[3] = new Vector3(70f,0f,-2f);
+		
+//		LTBezierPath path = new LTBezierPath(new Vector3{Vector3(0f,0f,0f),Vector3(1f,0f,0f),Vector3(2f,0f,0f)});
+		Hashtable optional = new Hashtable();
+		optional.Add("ease",LeanTweenType.easeOutQuad);
+//		optional.Add("orientToPath",true);
+		LeanTween.move(sprite,path,20f,optional);
+	}
+	
+	
+	public void OnBuyButton(GameObject button){
+//		print (button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		if(DataManager.Stars >= cost){
 			//TODO add item to inventory	
 //			inventory.AddItem(categoryList[i], 1);
 			DataManager.SubtractStars(cost);
 		}
-		
+		OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
 	}
 	
+	//Drawing function. 
+	//draw according to itemlogic 
 	private void CreateItems(GameObject page){
 		
 		//Destory first 
@@ -75,7 +99,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.name = itemlogic.foodlist[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "Cost : " + itemlogic.items[itemlogic.foodlist[i]].cost.ToString();
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].cost.ToString();
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].name;
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.foodlist[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
@@ -91,7 +115,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "Cost : " + itemlogic.items[itemlogic.itemlist[i]].cost.ToString();
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].cost.ToString();
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.itemlist[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
@@ -106,7 +130,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "Cost : " + itemlogic.items[itemlogic.decolist[i]].cost.ToString();
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].cost.ToString();
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.decolist[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
@@ -121,7 +145,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "Cost : " + itemlogic.items[itemlogic.inhalerlist[i]].cost.ToString();
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].cost.ToString();
 				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.inhalerlist[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
@@ -130,7 +154,8 @@ public class StoreUIManager : MonoBehaviour {
 		grid.GetComponent<UIGrid>().Reposition();
 		Invoke("Reposition",0.00000001f);
 	}
-	
+	//Delay calling reposition due to async problem Destroying/Repositionoing.
+	//TODO Maybe change later when we have more items 
 	private void Reposition(){
 		grid.GetComponent<UIGrid>().Reposition();
 		

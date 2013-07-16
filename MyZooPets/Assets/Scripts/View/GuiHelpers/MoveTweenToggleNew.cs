@@ -6,7 +6,7 @@ using System.Collections;
 /// Used to toogle move objects with LeanTween
 /// </summary>
 
-public class MoveTweenToggle : MonoBehaviour {
+public class MoveTweenToggleNew : MonoBehaviour {
 
 	private bool isActive;
 	private bool isLocked;

@@ -83,6 +83,7 @@ public class InhalerGameManager : MonoBehaviour{
     void SetUpScene(){
         DestroyAndRecreatePrefabs();
         SetUpInhalerGame();
+        inhalerGameNGUI.ShowQuitButton();
     }
 
     void DestroyAndRecreatePrefabs(){
@@ -174,6 +175,8 @@ public class InhalerGameManager : MonoBehaviour{
             }
 
             inhalerGameNGUI.ShowGameOverMessage();
+            inhalerGameNGUI.HideQuitButton();
+
             RemoveFirstTimeFlags();
             gameEnded = true;
             // inhalerGameNGUI.HideButtons();

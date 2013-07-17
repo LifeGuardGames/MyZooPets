@@ -14,6 +14,7 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     public InhalerGameManager inhalerGameManager;
     public GameObject progressBarObject;
+    public GameObject quitButton;
     private ProgressBarController progressBar;
 
     void Start(){
@@ -94,6 +95,13 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     void ShowIntroEnd(){
         ShowProgressBar();
+    }
+
+    public void ShowQuitButton(){
+        quitButton.GetComponent<MoveTweenToggle>().Show();
+    }
+    public void HideQuitButton(){
+        quitButton.GetComponent<MoveTweenToggle>().Hide();
     }
 
     void QuitInhalerGame(){

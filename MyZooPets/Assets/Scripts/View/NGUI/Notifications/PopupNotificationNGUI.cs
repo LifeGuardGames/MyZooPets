@@ -7,6 +7,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
     public UILabel button1;
     public UILabel button2;
 
+    public UISprite backdrop;
+
     // set the following
 
     public int numOfButtons = 1;
@@ -39,6 +41,10 @@ public class PopupNotificationNGUI : MonoBehaviour {
         }
     }
 
+    protected void Awake(){
+        backdrop.active = false;
+    }
+
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
         if (Button1Callback != null) Button1Callback();
@@ -51,6 +57,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // Display the popup panel
     public void Display(){
+        backdrop.active = true;
         // Hashtable optional = new Hashtable();
         // optional.Add("ease", LeanTweenType.easeOutBounce);
         // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
@@ -61,6 +68,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // Hide the popup panel
     protected void Hide(){
+        backdrop.active = false;
         // Hashtable optional = new Hashtable();
         // optional.Add("onCompleteTarget", gameObject);
         // optional.Add("onComplete", "DestroyNotification");

@@ -55,6 +55,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // optional.Add("ease", LeanTweenType.easeOutBounce);
         // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
         Time.timeScale = 0;
+        ClickManager.ClickLock();
         GetComponent<MoveTweenToggle>().Show(0.5f);
     }
 
@@ -67,6 +68,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // optional.Add("ease", LeanTweenType.easeInOutQuad);
         // LeanTween.move(panelRect, initPosition, 0.5f, optional);
         Time.timeScale = 1;
+        ClickManager.ReleaseClickLock();
         Destroy(gameObject, 3.0f);
     }
 

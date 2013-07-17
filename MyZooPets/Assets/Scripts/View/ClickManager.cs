@@ -30,6 +30,8 @@ public class ClickManager : MonoBehaviour {
 	public GameObject noteUIObject;
 	private NoteUIManager noteUIManager;
 
+	public GameObject inventoryUIObject;
+
 	public GameObject navigationUIObject;
 
 	public GameObject challengesGUIObject;
@@ -85,7 +87,7 @@ public class ClickManager : MonoBehaviour {
 		switch(Application.loadedLevelName){
 			case "NewBedRoom":
 				GameObject.Find("Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
-				GameObject.Find("Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
+				GameObject.Find("R_Items/Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
 				GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 				GameObject.Find("RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
 				GameObject.Find("TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
@@ -118,6 +120,7 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
 	private void OnNoteClosed(object sender, EventArgs e){
@@ -126,6 +129,7 @@ public class ClickManager : MonoBehaviour {
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==============================
 
@@ -160,6 +164,7 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
 	private void OnCalendarClosed(object sender, EventArgs e){
@@ -168,6 +173,7 @@ public class ClickManager : MonoBehaviour {
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==========================
 

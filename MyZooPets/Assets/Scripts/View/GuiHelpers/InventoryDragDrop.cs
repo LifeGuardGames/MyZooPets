@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class InventoryDragDrop : MonoBehaviour {
 
@@ -8,74 +9,79 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 	/// </summary>
 
-	public GameObject prefab;
+	public class InvDragDropArgs : EventArgs{
+		public bool IsValidTarget{get; set;}
+		public Transform ItemTransform{get; set;}
+		public Transform ParentTransform{get; set;}
+		public Collider TargetCollider{get; set;}
+	}
 
-	Transform mTrans;
-	bool mIsDragging = false;
-	bool mSticky = false;
-	bool isScrolling = false;
-	bool isClickLock = false;
-	Transform mParent;						// Store parent when dragging
-	Vector3 savedLocalPosition;
-	UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
-	
-	GameObject inventoryUIObject;
-	InventoryUIManager inventoryUIManager;
-	
+	//============Event==============
+	public delegate void DragDropCallBack(object sender, InvDragDropArgs e);
+	public event DragDropCallBack OnItemDrop; //Event will be fired when an item is dropped
+	//==============================
+
+	private Transform mTrans;
+	private bool mIsDragging = false;
+	private bool mSticky = false;
+	private bool isScrolling = false;
+	private bool isClickLock = false;
+	private Transform mParent;						// Store parent when dragging
+	private Vector3 savedLocalPosition;
+	private UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
+
 	void Start(){
 		dragScrollScript = GetComponent<UIDragPanelContents>();
-		inventoryUIObject = GameObject.Find("Inventory");
-		inventoryUIManager = inventoryUIObject.GetComponent<InventoryUIManager>();
 	}
 	
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
-
-	void UpdateTable ()
+	private void UpdateGrid ()
 	{
-		UITable table = NGUITools.FindInParents<UITable>(gameObject);
-		if (table != null) table.repositionNow = true;
+		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
+		if(grid != null) grid.repositionNow = true;
 	}
+	
+
+	//Update the position of the Grid when the item has been destroyed
+	void OnDestroy(){
+		UpdateGrid();
+	}
+
 
 	/// <summary>
 	/// Drop the dragged object.
 	/// </summary>
 
-	void Drop ()
+	private void Drop ()
 	{
 		//Debug.Log("dropped");
 		if(!isScrolling && !isClickLock){	// Picked up drop
-//			// Is there a droppable container?
-//			Collider col = UICamera.lastHit.collider;
-//			Debug.Log ("hit! " + gameObject.name);
-//			DragDropContainer container = (col != null) ? col.gameObject.GetComponent<DragDropContainer>() : null;
-//			if (container != null)
-//			{
-//				// Container found -- parent this object to the container
-//				mTrans.parent = container.transform;
-//	
-//				Vector3 pos = mTrans.localPosition;
-//				pos.z = 0f;
-//				mTrans.localPosition = pos;
-//			}
-			if(inventoryUIManager.NotifyDroppedItem(int.Parse(gameObject.name))){
-				Debug.Log("hit! PLEASE DELETE OBJECT NOW");
-				// Destroy(gameObject);
-			}
-			else
-			{
+
+			InvDragDropArgs args = new InvDragDropArgs();
+			args.IsValidTarget = false;
+			args.ItemTransform = gameObject.transform; 
+			args.ParentTransform = mParent;
+			args.TargetCollider = UICamera.lastHit.collider;
+	
+			if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
+			
+			if(!args.IsValidTarget){
 				Debug.Log ("no hit");
 				// No valid container under the mouse -- revert the item's parent
 				mTrans.parent = mParent;
 				
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
+			}else{
+				mTrans.parent = mParent;	
+				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
+				isClickLock = false;
 			}
-	
-			// Notify the table of this change
-			UpdateTable();
-	
+			
+			UpdateGrid();
+				
 			// Make all widgets update their parents
 			NGUITools.MarkParentAsChanged(gameObject);
 			

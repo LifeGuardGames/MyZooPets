@@ -24,6 +24,8 @@ public class InventoryUIManager : MonoBehaviour {
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+
+        Inventory.OnItemAddedToInventory += OnItemAdded;
     }
     
     void Start(){
@@ -31,14 +33,6 @@ public class InventoryUIManager : MonoBehaviour {
         uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
         
         itemTrackHash = new Dictionary<string, bool>();
-        
-        // Populate initial items
-        //Note: make sure InventoryLogic populates item before this loop. Start()
-        //may not be called in the same order everytime, so beware
-        for(int i = 0; i < itemLogic.items.Count; i++){
-            if(inventory.InventoryArray[i] > 0)
-                SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
-        }
     }
 
     //Event listener. listening to when item is dragged out of the inventory on drop
@@ -66,6 +60,17 @@ public class InventoryUIManager : MonoBehaviour {
                 Destroy(e.ParentTransform.gameObject);
                 UpdateBarPosition();
             }    
+        }
+    }
+
+    //Event listener. listening to when new item is added to the inventory
+    private void OnItemAdded(object sender, Inventory.InventoryEventArgs e){
+       if(e.IsItemNew){
+            SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].name, e.ItemID);
+        }else{
+            //this is kind of bad.... need to change the structure of the UI
+            Transform item = UIGrid.transform.Find("Item/"+e.ItemID.ToString());
+            item.parent.Find("label").GetComponent<UILabel>().text = inventory.InventoryArray[e.ItemID].ToString();
         }
     }
     

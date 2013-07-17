@@ -64,7 +64,6 @@ public class InventoryDragDrop : MonoBehaviour {
 			args.ItemTransform = gameObject.transform; 
 			args.ParentTransform = mParent;
 			args.TargetCollider = UICamera.lastHit.collider;
-	
 			if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
 			
 			if(!args.IsValidTarget){
@@ -81,7 +80,7 @@ public class InventoryDragDrop : MonoBehaviour {
 			}
 			
 			UpdateGrid();
-				
+
 			// Make all widgets update their parents
 			NGUITools.MarkParentAsChanged(gameObject);
 			

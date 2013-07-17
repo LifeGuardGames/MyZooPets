@@ -16,6 +16,16 @@ public class Inventory : MonoBehaviour {
 	private int inventoryCount; //number of items that are actually in inventory
 	public bool isDebug; //developing option
 
+	public class InventoryEventArgs : EventArgs{
+		public bool IsItemNew{get; set;}
+		public int ItemID{get; set;}
+	}
+	//===================Events===================
+	public delegate void CallBack(object sender, InventoryEventArgs e);
+	public static event CallBack OnItemAddedToInventory; //Call when an item is added
+	//===========================================
+
+
 	//====================API===========================
 	public int InventoryCount{
 		get{return inventoryCount;}
@@ -26,10 +36,15 @@ public class Inventory : MonoBehaviour {
 
 	//add items to inventory
 	public void AddItem(int id, int count){
+		InventoryEventArgs args = new InventoryEventArgs();
+		args.ItemID = id;
+		args.IsItemNew = false;
 		if(inventory[id] == 0){ //add one to inventory Count if item is new
 			inventoryCount++;
+			args.IsItemNew = true;
 		}
 		inventory[id] += count;
+		if(OnItemAddedToInventory != null) OnItemAddedToInventory(this, args);
 	}
 	
 	//Use item from inventory
@@ -45,7 +60,7 @@ public class Inventory : MonoBehaviour {
 	//=================================================
 	
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		inventory = DataManager.Inventory;
 		if(isDebug){

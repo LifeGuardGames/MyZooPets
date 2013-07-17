@@ -29,8 +29,10 @@ public class StoreUIManager : MonoBehaviour {
 	void Start () {
 		//debug option. use only in Store_NGUI scene
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
-		else itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-		inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
+		else {
+			itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+			inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
+		}
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);

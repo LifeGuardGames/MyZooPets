@@ -85,7 +85,7 @@ public class ClickManager : MonoBehaviour {
 		switch(Application.loadedLevelName){
 			case "NewBedRoom":
 				GameObject.Find("Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
-				GameObject.Find("Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
+				GameObject.Find("R_Items/Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
 				GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 				GameObject.Find("RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
 				GameObject.Find("TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;

@@ -102,7 +102,6 @@ public class StoreUIManager : MonoBehaviour {
 			uisprite.atlas = BackGroundRed;
 			for(int i = 0;i<itemlogic.foodlist.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.foodlist[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].description;
@@ -117,7 +116,6 @@ public class StoreUIManager : MonoBehaviour {
 			uisprite.atlas = BackGroundGreen;
 			for(int i = 0;i<itemlogic.itemlist.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.itemlist[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].name;
@@ -132,7 +130,6 @@ public class StoreUIManager : MonoBehaviour {
 			uisprite.atlas = BackGroundPurple;
 			for(int i = 0;i<itemlogic.decolist.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.decolist[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].name;
@@ -147,7 +144,6 @@ public class StoreUIManager : MonoBehaviour {
 			uisprite.atlas = BackGroundOrange;
 			for(int i = 0;i<itemlogic.inhalerlist.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.transform.localScale = new Vector3(1.2f,1.3f,1);
 				item.name = itemlogic.inhalerlist[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].name;

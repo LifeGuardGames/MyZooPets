@@ -22,7 +22,7 @@ public class DegradationLogic : MonoBehaviour {
         public Vector3 TriggerPosition {get; set;}
     }
     public delegate void TriggerDestroyEventHandler(object sender, TriggerDestroyedEventArgs e);
-    public event TriggerDestroyEventHandler TriggerDestroyed;
+    public static event TriggerDestroyEventHandler TriggerDestroyed;
     //=====================================================
 
     public bool isDebug = false; //developer option. force the trigger to show
@@ -99,6 +99,7 @@ public class DegradationLogic : MonoBehaviour {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
         DataManager.AddStars(50);
+        DataManager.AddPoints(250);
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(TriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();

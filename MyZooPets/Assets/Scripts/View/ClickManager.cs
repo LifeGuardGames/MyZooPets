@@ -68,8 +68,9 @@ public class ClickManager : MonoBehaviour {
 		if(storeUIObject != null)
 			storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
-		// diaryUIManager = diaryUIManagerObject.GetComponent<DiaryGUI>();
-		// trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+		if(trophyGUIObject != null) 
+			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 		petsprite = GameObject.Find("SpritePet");
@@ -120,9 +121,8 @@ public class ClickManager : MonoBehaviour {
 		}
 	}
 	private void OnNoteClosed(object sender, EventArgs e){
+		ClickLock();
 		cameraMove.ZoomOutMove();
-		ReleaseClickLock();
-		ReleaseModeLock();
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
@@ -170,6 +170,29 @@ public class ClickManager : MonoBehaviour {
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==========================
+
+	//=================Shelf=====================
+	private void OnTapShelf(){
+		if (CanRespondToTap()){
+			trophyGUI.TrophyClicked();
+			TrophyGUI.OnTrophyClosed += OnTrophyClosed;
+			ClickLock();
+			ModeLock();
+
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			hudUIObject.GetComponent<MoveTweenToggle>().Hide();
+		}
+	}
+	private void OnTrophyClosed(object senders, EventArgs e){
+		ClickLock();
+		cameraMove.ZoomOutMove();
+
+		//Show other UI Objects
+		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		hudUIObject.GetComponent<MoveTweenToggle>().Show();
+	} 
+	//=========================================
 
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
@@ -225,13 +248,9 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
-	void OnTapShelf(){
-		if (CanRespondToTap()){
-			trophyGUI.TrophyClicked();
-			ClickLock();
-			ModeLock();
-		}
-	}
+
+
+
 	void OnTapHelpTrophy(){
         // make sure we are in trophy mode
         // todo: have a better way of checking if we are in trophy mode

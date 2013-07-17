@@ -13,17 +13,14 @@ public class DegradationUIManager : MonoBehaviour{
 
     private DegradationLogic degradationLogic;
 
-    void Start(){
-        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
-        degradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
-    }
-
     public void Init(){
+        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+        DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
+
         //instantiate triggers in the game
         for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
             int prefabId = DataManager.DegradationTriggers[i].PrefabId;
             int positionId = DataManager.DegradationTriggers[i].PositionId;
-
             //instantiate all the triggers save in DataManager
             GameObject trigger = (GameObject)Instantiate(degradationLogic.triggerPrefabs[prefabId],
                 degradationLogic.triggerLocations[positionId].position, Quaternion.identity);

@@ -38,9 +38,9 @@ public class Inventory : MonoBehaviour {
 		if(inventory[id] == 0){ //add one to inventory Count if item is new
 			inventoryCount++;
 			// if(OnInventoryResize != null) OnInventoryResize(this, EventArgs.Empty);
-			if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 		}
 		inventory[id] += count;
+		if(OnUpdateItem != null) OnUpdateItem(this, EventArgs.Empty);
 	}
 	
 	//Use item from inventory

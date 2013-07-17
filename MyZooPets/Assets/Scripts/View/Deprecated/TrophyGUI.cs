@@ -1,7 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class TrophyGUI : MonoBehaviour {
+
+	//======================Event=============================
+    public delegate void CallBack(object senders, EventArgs e);
+    public static event CallBack OnTrophyClosed;
+    //=======================================================
 
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
@@ -25,18 +31,11 @@ public class TrophyGUI : MonoBehaviour {
 		}
 	}
 
-	void Update(){
-
-	}
-
 	void OnGUI(){
 		GUI.skin = defaultSkin;
 		if(isActive){
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-				ClickManager.ClickLock();
-				//cameraMove.ShelfZoomToggle();
-				// cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
-	            cameraMove.ZoomOutMove();
+        		if(OnTrophyClosed != null) OnTrophyClosed(this, EventArgs.Empty);
 				isActive = false;
 			}
 		}

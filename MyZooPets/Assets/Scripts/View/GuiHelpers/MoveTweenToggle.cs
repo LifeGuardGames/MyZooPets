@@ -58,7 +58,7 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Show(float time){
 		if(!isActive && !isLocked){
-			print("tween");
+			// print("tween");
 			isActive = true;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
@@ -99,7 +99,7 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	// Callback
 	private void Unlock(){
-		print("callback");
+		// print("callback");
 		isLocked = false;
 	}
 }

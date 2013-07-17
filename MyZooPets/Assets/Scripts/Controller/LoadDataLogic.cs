@@ -94,8 +94,8 @@ public class LoadDataLogic : MonoBehaviour {
                 clickManager.Init();
                 cameraMove.Init();
                 levelUpLogic.Init();
-                // degradationLogic.Init();
-                // degradationUIManager.Init();
+                degradationLogic.Init();
+                degradationUIManager.Init();
                 tutorial.Init();
                 petMovement.Init();
                 // diagnoseTimerLogic.Init();

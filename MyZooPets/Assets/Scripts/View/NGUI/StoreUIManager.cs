@@ -64,7 +64,7 @@ public class StoreUIManager : MonoBehaviour {
 		path[2] = new Vector3(40f,0f,-2f);
 		path[3] = new Vector3(70f,0f,-2f);
 		
-//		LTBezierPath path = new LTBezierPath(new Vector3{Vector3(0f,0f,0f),Vector3(1f,0f,0f),Vector3(2f,0f,0f)});
+		// LTBezierPath path = new LTBezierPath(new Vector3{Vector3(0f,0f,0f),Vector3(1f,0f,0f),Vector3(2f,0f,0f)});
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
 //		optional.Add("orientToPath",true);

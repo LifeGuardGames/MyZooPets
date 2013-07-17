@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Click manager.
 /// All the classes that need a click to enter a certain mode will be handled here (ie. diary, trophy, inhaler game)
-///	
+///
 ///
 /// NOTE: When entering a mode, lock click and mode, when done transitioning, unlock click
 ///       When exiting a mode, unlock click and mode after finish transitioning
@@ -63,14 +63,14 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 
 		// Linking script references
-		if(calendarUIObject != null) 
+		if(calendarUIObject != null)
 			calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
 		if(noteUIObject != null)
 			noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
 		if(storeUIObject != null)
 			storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
-		if(trophyGUIObject != null) 
+		if(trophyGUIObject != null)
 			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 
 		if(cameraMoveObject != null)
@@ -86,13 +86,13 @@ public class ClickManager : MonoBehaviour {
 	void AssignOnTapEvents(){
 		switch(Application.loadedLevelName){
 			case "NewBedRoom":
-				GameObject.Find("Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
-				GameObject.Find("R_Items/Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
-				GameObject.Find("SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
-				GameObject.Find("RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
-				GameObject.Find("TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
-				GameObject.Find("Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
-				GameObject.Find("HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
+				GameObject.Find("GO_Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
+				GameObject.Find("GO_Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
+				GameObject.Find("GO_SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
+				GameObject.Find("GO_RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
+				GameObject.Find("GO_TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
+				GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
+				GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
 			break;
 			case "Yard":
 			break;
@@ -114,7 +114,7 @@ public class ClickManager : MonoBehaviour {
 			noteUIManager.NoteClicked();
 			NoteUIManager.OnNoteClosed += OnNoteClosed;
 			cameraMove.ZoomToggle(ZoomItem.Pet); //zoom into pet
-	
+
 			ClickLock();
 			ModeLock();
 
@@ -197,7 +197,7 @@ public class ClickManager : MonoBehaviour {
 		//Show other UI Objects
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
 		hudUIObject.GetComponent<MoveTweenToggle>().Show();
-	} 
+	}
 	//=========================================
 
 	void OnTapLaptop(){

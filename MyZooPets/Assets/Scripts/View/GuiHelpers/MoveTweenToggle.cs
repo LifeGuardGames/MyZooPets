@@ -7,7 +7,8 @@ using System.Collections;
 /// </summary>
 
 public class MoveTweenToggle : MonoBehaviour {
-	
+
+	public bool ignoreTimeScale = true;
 	public bool isUsingDemultiplexer = false;
 	private bool isActive;
 	private bool isLocked;
@@ -32,7 +33,7 @@ public class MoveTweenToggle : MonoBehaviour {
 	public float hideDelay = 0.0f;
 	public LeanTweenType easeHide;
 	public LeanTweenType easeShow;
-	
+
 	void Awake(){
 		Reset();
 	}
@@ -68,7 +69,6 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Show(float time){
 		if(!isActive && !isLocked){
-			print("tween");
 			isActive = true;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
@@ -76,13 +76,16 @@ public class MoveTweenToggle : MonoBehaviour {
 			optional.Add("delay", showDelay);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
+			if (ignoreTimeScale){
+				optional.Add("useEstimatedTime", true);
+			}
 			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + showDeltaX,
 				gameObject.transform.localPosition.y + showDeltaY, gameObject.transform.localPosition.z), time, optional);
 		}
 		// else{
 		// 	Debug.LogError("trying show locked/active HUD");
 		// }
-		
+
 	}
 
 	public void Show(){
@@ -98,6 +101,9 @@ public class MoveTweenToggle : MonoBehaviour {
 			optional.Add("delay", hideDelay);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
+			if (ignoreTimeScale){
+				optional.Add("useEstimatedTime", true);
+			}
 			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + hideDeltaX,
 				gameObject.transform.localPosition.y + hideDeltaY, gameObject.transform.localPosition.z), time, optional);
 		}

@@ -96,7 +96,6 @@ public class InventoryUIManager : MonoBehaviour {
             
             UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
             spriteFill.transform.localScale = new Vector3(90, 90, 1);   // TODO make const
-            spriteFill.depth = NGUITools.CalculateNextDepth(UIGrid);
             
             GameObject SpriteGo = NGUITools.AddChild(item);
             SpriteGo.gameObject.name = id.ToString();                   // Use ID as name
@@ -111,17 +110,15 @@ public class InventoryUIManager : MonoBehaviour {
 
             SpriteGo.gameObject.AddComponent("UIDragPanelContents");
             
-            UILabel label = NGUITools.AddWidget<UILabel>(item);
-            label.gameObject.name = "label";
-            label.transform.localPosition = new Vector3(25, -25, -1);   // TODO Different atlas for now, move forward
-            label.transform.localScale = new Vector3(40, 40, 1);
-            label.font = font;
-            label.depth = NGUITools.CalculateNextDepth(UIGrid);
-            label.text = inventory.InventoryArray[id].ToString();
-            
             sprite.transform.localScale = new Vector3(90, 90, 1);
             sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
-            sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
+
+			UILabel label = NGUITools.AddWidget<UILabel>(item);
+			label.gameObject.name = "label";
+			label.transform.localPosition = new Vector3(25, -25, -1);   // TODO Different atlas for now, move forward
+			label.transform.localScale = new Vector3(40, 40, 1);
+			label.font = font;
+			label.text = inventory.InventoryArray[id].ToString();
             
             UpdateBarPosition();
             

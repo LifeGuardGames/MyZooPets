@@ -32,8 +32,10 @@ public class InventoryUIManager : MonoBehaviour {
     }
     
     void Start(){
+        print("start");
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
+                print("drawing");
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
             }
         }
@@ -129,7 +131,7 @@ public class InventoryUIManager : MonoBehaviour {
     
     public void UpdateBarPosition(){
         UIGrid.GetComponent<UIGrid>().Reposition();
-        
+        print(inventory.InventoryCount);
         if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
             gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open

@@ -11,7 +11,7 @@ using System;
 //Int in each array position represents item count for each item
 //  eg.  inventory[2] = 1  means, the pet has 1 of the third item in Itemlogic class(the reference) 
 public class Inventory : MonoBehaviour {
-	private ItemLogic itemlogic;
+	private ItemLogic itemLogic;
 	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
 	private int inventoryCount; //number of items that are actually in inventory
 	public bool isDebug; //developing option
@@ -51,7 +51,7 @@ public class Inventory : MonoBehaviour {
 	public void UseItem(int id){
 		if(inventory[id]!=0){
 			inventory[id]--;
-			itemlogic.OnCall(id);
+			itemLogic.OnCall(id);
 		}
 		if(inventory[id] == 0){ //minus one to inventory count if item is used up
 			inventoryCount--;
@@ -61,12 +61,16 @@ public class Inventory : MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake () {
-		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-		inventory = DataManager.Inventory;
+		itemLogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+
 		if(isDebug){
-			inventory = new int[10];
-			AddItem(0,2); //2 apples
-			AddItem(1,1); //1 sandwich
+			DataManager.Inventory = new int[10];
+			inventoryCount = 0;
 		}
+		inventory = DataManager.Inventory;
+		for(int i=0; i<itemLogic.items.Count; i++){
+			if(inventory[i] > 0) inventoryCount++;
+		}
+
 	}
 }

@@ -145,7 +145,10 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ // doesn't call Show(). Show() is called in Display()
+		// save z-value, because it gets reset when using NGUITools.AddChild(...)
+		float zVal = prefab.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
+		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
 		obj.GetComponent<MoveTweenToggle>().Reset();
 		return obj.GetComponent<PopupNotificationNGUI>();
 	}

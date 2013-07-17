@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour {
 	//=================================================
 	
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		itemlogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		inventory = DataManager.Inventory;
 		if(isDebug){

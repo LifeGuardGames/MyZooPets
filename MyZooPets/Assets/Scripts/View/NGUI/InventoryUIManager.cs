@@ -117,6 +117,7 @@ public class InventoryUIManager : MonoBehaviour {
             label.depth = NGUITools.CalculateNextDepth(UIGrid);
             label.text = inventory.InventoryArray[id].ToString();
             
+            sprite.transform.localScale = new Vector3(90, 90, 1);
             sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
             sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
             

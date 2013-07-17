@@ -30,10 +30,10 @@ public class RoomCameraMove : CameraMove{
     public override void Init(){
         spritePet = GameObject.Find("SpritePet");
 
-        slotMachine = GameObject.Find("SlotMachine");
-        realInhaler = GameObject.Find("RealInhaler");
-        teddyInhaler = GameObject.Find("TeddyInhaler");
-        shelf = GameObject.Find("Shelf");
+        slotMachine = GameObject.Find("GO_SlotMachine");
+        realInhaler = GameObject.Find("GO_RealInhaler");
+        teddyInhaler = GameObject.Find("GO_TeddyInhaler");
+        shelf = GameObject.Find("GO_Shelf");
     }
 
     public override void ZoomToggle(ZoomItem item){

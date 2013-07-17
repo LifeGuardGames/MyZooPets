@@ -35,7 +35,7 @@ public class MoveTweenToggle : MonoBehaviour {
 	public LeanTweenType easeShow;
 
 	void Awake(){
-		Debug.Log("toggle awake");
+		//Debug.Log("toggle awake");
 		Reset();
 	}
 

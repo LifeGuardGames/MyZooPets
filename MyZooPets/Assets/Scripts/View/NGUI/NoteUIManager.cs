@@ -20,6 +20,7 @@ public class NoteUIManager : MonoBehaviour {
 	}
 
     public void NoteClicked(){
+		Debug.Log("Note CLicked");
         GetComponent<MoveTweenToggle>().Show();
     }
 

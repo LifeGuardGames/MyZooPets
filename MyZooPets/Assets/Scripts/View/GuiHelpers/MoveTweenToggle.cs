@@ -7,39 +7,49 @@ using System.Collections;
 /// </summary>
 
 public class MoveTweenToggle : MonoBehaviour {
-
+	
+	public bool isUsingDemultiplexer = false;
 	private bool isActive;
 	private bool isLocked;
+	public bool IsLocked{
+		get{
+			return isLocked;
+		}
+	}
 
 	public bool isDebug = false;
-	public bool startsHidden = false; //True: the UI element started off the screen so Show function
-										//will need to be called first, False: UI element started off
-										//displayed on screen so Hide function need to be called first
-	public Vector2 testButtonPos; //position of the test buttons
+	public bool startsHidden = false; 	//True: the UI element started off the screen so Show function
+											//will need to be called first, False: UI element started off
+											//displayed on screen so Hide function need to be called first
+	public Vector2 testButtonPos; 		//position of the test buttons
 	public float showDeltaX;
 	public float showDeltaY;
 	public float hideDeltaX;
 	public float hideDeltaY;
+	public float showDuration = 0.5f;
+	public float hideDuration = 0.5f;
+	public float showDelay = 0.0f;
+	public float hideDelay = 0.0f;
 	public LeanTweenType easeHide;
 	public LeanTweenType easeShow;
-
-
+	
 	void Awake(){
 		Reset();
 	}
 
 	public void Reset(){
 		if (startsHidden){
-			gameObject.transform.position = new Vector3(
-				gameObject.transform.position.x + hideDeltaX,
-				gameObject.transform.position.y + hideDeltaY,
-				gameObject.transform.position.z
+			gameObject.transform.localPosition = new Vector3(
+				gameObject.transform.localPosition.x + hideDeltaX,
+				gameObject.transform.localPosition.y + hideDeltaY,
+				gameObject.transform.localPosition.z
 			);
-		 	//need to call show first
+		 	// Need to call show first
 			isActive = false;
 			isLocked = false;
 		}
-		else{ //need to call hide first
+		else{
+			// Need to call hide first
 			isActive = true;
 			isLocked = false;
 		}
@@ -58,23 +68,25 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Show(float time){
 		if(!isActive && !isLocked){
-			// print("tween");
+			print("tween");
 			isActive = true;
 			isLocked = true;
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeShow);
+			optional.Add("delay", showDelay);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
-			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + showDeltaX,
-				gameObject.transform.position.y + showDeltaY, gameObject.transform.position.z), time, optional);
+			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + showDeltaX,
+				gameObject.transform.localPosition.y + showDeltaY, gameObject.transform.localPosition.z), time, optional);
 		}
 		// else{
 		// 	Debug.LogError("trying show locked/active HUD");
 		// }
+		
 	}
 
 	public void Show(){
-		Show(0.5f);
+		Show(showDuration);
 	}
 
 	public void Hide(float time){
@@ -83,10 +95,11 @@ public class MoveTweenToggle : MonoBehaviour {
 			isLocked = true;
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeHide);
+			optional.Add("delay", hideDelay);
 			optional.Add("onCompleteTarget", gameObject);
 			optional.Add("onComplete", "Unlock");		// Callback here
-			LeanTween.move(gameObject, new Vector3(gameObject.transform.position.x + hideDeltaX,
-				gameObject.transform.position.y + hideDeltaY, gameObject.transform.position.z), time, optional);
+			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + hideDeltaX,
+				gameObject.transform.localPosition.y + hideDeltaY, gameObject.transform.localPosition.z), time, optional);
 		}
 		// else{
 		// 	Debug.LogError("trying hide locked/inactive HUD");
@@ -94,12 +107,11 @@ public class MoveTweenToggle : MonoBehaviour {
 	}
 
 	public void Hide(){
-		Hide(0.5f);
+		Hide(hideDuration);
 	}
 
 	// Callback
 	private void Unlock(){
-		// print("callback");
 		isLocked = false;
 	}
 }

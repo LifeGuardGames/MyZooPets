@@ -23,6 +23,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	private bool isLocked;
 	
 	void Awake(){
+		Debug.Log("Demux awake");
 		if(startsHidden){
 			isActive = false;
 			isLocked = false;

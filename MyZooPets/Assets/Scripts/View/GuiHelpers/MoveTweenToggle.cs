@@ -8,7 +8,7 @@ using System.Collections;
 
 public class MoveTweenToggle : MonoBehaviour {
 
-	public bool ignoreTimeScale = true;
+	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
 	private bool isActive;
 	private bool isLocked;
@@ -35,16 +35,19 @@ public class MoveTweenToggle : MonoBehaviour {
 	public LeanTweenType easeShow;
 
 	void Awake(){
+		Debug.Log("toggle awake");
 		Reset();
 	}
 
 	public void Reset(){
 		if (startsHidden){
-			gameObject.transform.localPosition = new Vector3(
-				gameObject.transform.localPosition.x + hideDeltaX,
-				gameObject.transform.localPosition.y + hideDeltaY,
-				gameObject.transform.localPosition.z
-			);
+			if(!isUsingDemultiplexer){
+				gameObject.transform.localPosition = new Vector3(
+					gameObject.transform.localPosition.x + hideDeltaX,
+					gameObject.transform.localPosition.y + hideDeltaY,
+					gameObject.transform.localPosition.z
+				);
+			}
 		 	// Need to call show first
 			isActive = false;
 			isLocked = false;

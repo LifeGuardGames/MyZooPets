@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class StoreUIManager : MonoBehaviour {
 	
+	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
 	public UIAtlas BackGroundRed;
@@ -26,8 +27,8 @@ public class StoreUIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//debug option. use only in Store_NGUI scene
-//		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		else itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);
@@ -51,35 +52,34 @@ public class StoreUIManager : MonoBehaviour {
 		}
 	}
 	
+	//This function is called when buying an item
+	//It creates a icon for the item and move it to Inventory
+	//TODO Scales are a little mess up
 	public void OnBuyAnimation(GameObject sprite){
 		Vector3 origin = sprite.transform.position;
-//		List<Vector3> path = new List<Vector3>();
-//		path.Add(new Vector3(0f,0f,0f));
-//		path.Add(new Vector3(1f,0f,0f));
-//		path.Add(new Vector3(2f,0f,0f));
+		//adjust moving speed here
+		float speed = 50f;
 		
+		//Change the 3 V3 to where icon should move
 		Vector3[] path = new Vector3[4];
-		path[0] = origin/*new Vector3(0f,0f,0f)*/;
-		path[1] = new Vector3(20f,0f,-2f);
-		path[2] = new Vector3(40f,0f,-2f);
-		path[3] = new Vector3(70f,0f,-2f);
+		path[0] = origin;
+		path[1] = new Vector3(3f,0f,-2f);
+		path[2] = new Vector3(5f,-5f,-2f);
+		path[3] = new Vector3(7f,-7f,-2f);
 		
-		// LTBezierPath path = new LTBezierPath(new Vector3{Vector3(0f,0f,0f),Vector3(1f,0f,0f),Vector3(2f,0f,0f)});
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
-//		optional.Add("orientToPath",true);
-		GameObject animationSprite = NGUITools.AddChild(sprite.transform.parent.gameObject,ItemSpritePrefab);
+		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("StoreGUI")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(156,154,0);
-//		print (origin);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-		LeanTween.move(animationSprite,path,50f,optional);
-//		Destroy(animationSprite);
+		LeanTween.move(animationSprite,path,speed,optional);
+		Destroy(animationSprite);
 	}
 	
 	
+	//Called when "Buy" is clicked
 	public void OnBuyButton(GameObject button){
-//		print (button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		if(DataManager.Stars >= cost){
 			//TODO add item to inventory	

@@ -84,7 +84,7 @@ public class CalendarUIManager : MonoBehaviour {
     }
 
     public void CalendarClosed(){
-        GetComponent<MoveTweenToggle>().Hide();
+        GetComponent<MoveTweenToggleDemultiplexer>().Hide();
         if(OnCalendarClosed != null){
             OnCalendarClosed(this, EventArgs.Empty);
         }else{

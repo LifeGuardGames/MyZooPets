@@ -66,7 +66,8 @@ public abstract class CameraMove : MonoBehaviour{
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional2.Add("ease", LeanTweenType.easeInOutQuad);
 		LeanTween.move(gameObject, newPosition, time, optional);
-		LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
+		// LeanTween.rotateLocal(gameObject, newDirection, time, optional2);
+		LeanTween.rotate(gameObject, newDirection, time, optional2);
 	}
 
 	// Transforms camera

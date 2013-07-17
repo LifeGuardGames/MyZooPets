@@ -41,8 +41,8 @@ public class RoomCameraMove : CameraMove{
             if(!zoomed){
                 switch (item){
                     case ZoomItem.Pet:
-                    petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetRoom;
-                    CameraTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+                    petSideFinalPosition = spritePet.transform.position + petCameraOffsetRoom;
+                    CameraWorldTransformEnterMode(petSideFinalPosition, petSideFinalFaceDirection, 0.5f);
                     break;
 
                     case ZoomItem.TrophyShelf:

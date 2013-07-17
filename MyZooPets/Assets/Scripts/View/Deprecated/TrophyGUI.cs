@@ -33,7 +33,7 @@ public class TrophyGUI : MonoBehaviour {
 
 	void OnGUI(){
 		GUI.skin = defaultSkin;
-		if(isActive){
+		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
         		if(OnTrophyClosed != null) OnTrophyClosed(this, EventArgs.Empty);
 				isActive = false;

@@ -80,7 +80,7 @@ public class CalendarUIManager : MonoBehaviour {
 
     public void CalendarClicked(){
         PopulateCalendar();
-        GetComponent<MoveTweenToggle>().Show();
+        GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
     public void CalendarClosed(){

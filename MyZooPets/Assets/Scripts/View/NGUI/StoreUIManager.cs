@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class StoreUIManager : MonoBehaviour {
 	
+	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
 	public UIAtlas BackGroundRed;
@@ -26,8 +27,8 @@ public class StoreUIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//debug option. use only in Store_NGUI scene
-//		itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-		itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
+		else itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);

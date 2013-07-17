@@ -30,6 +30,8 @@ public class ClickManager : MonoBehaviour {
 	public GameObject noteUIObject;
 	private NoteUIManager noteUIManager;
 
+	public GameObject inventoryUIObject;
+
 	public GameObject navigationUIObject;
 
 	public GameObject challengesGUIObject;
@@ -118,6 +120,7 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
 	private void OnNoteClosed(object sender, EventArgs e){
@@ -126,6 +129,7 @@ public class ClickManager : MonoBehaviour {
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==============================
 
@@ -160,6 +164,7 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
 	private void OnCalendarClosed(object sender, EventArgs e){
@@ -168,6 +173,7 @@ public class ClickManager : MonoBehaviour {
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==========================
 

@@ -6,12 +6,10 @@ using System.Collections.Generic;
 public class InventoryUIManager : MonoBehaviour {
 
 	private Inventory inventory;
-    private bool pickedUp; //True: item has been picke dup
-    private int pickUpId; //The id of the item picked up
     private ItemLogic itemLogic;
-
     
     // NGUI revision variables
+    public bool isDebug;
     public UISprite itemSprite;
     public UIAtlas itemAtlas;
     public UIFont font;
@@ -19,7 +17,6 @@ public class InventoryUIManager : MonoBehaviour {
     public GameObject UIButtonToggleObject;
     
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
-    private int itemCount = 0;          // Local GUI item count 
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
     private Dictionary<string, bool> itemTrackHash; // Hashtable to keep track of the types of items present;
@@ -27,9 +24,6 @@ public class InventoryUIManager : MonoBehaviour {
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-
-        pickedUp = false;
-        pickUpId = -1;
     }
     
     void Start(){
@@ -46,36 +40,33 @@ public class InventoryUIManager : MonoBehaviour {
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
         }
     }
-    
-    public bool NotifyDroppedItem(int pickUpId){
-        Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        bool retVal = false; 
-        if(Physics.Raycast(myRay,out hit)){
-            if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Pet){
-                if(hit.collider.name == "SpritePet" ||
-                        hit.collider.name == "PetHead" ||
-                        hit.collider.name == "PetTummy"){
-                    inventory.UseItem(pickUpId);
-                    retVal = true;
-                }
-            }
-            else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Floor){
-                print ("floorItem");
-                if(hit.collider == GameObject.Find("Floor Rectangular").collider ||
-                        hit.collider == GameObject.Find("planeCenter").collider){
-                    inventory.UseItem(pickUpId);
-                    retVal = true;
-                }
-            }
-            else if(itemLogic.items[pickUpId].itemreceiver == ItemReceiver.Wall){
-                if(hit.collider == GameObject.Find("Walls").collider){
-                    inventory.UseItem(pickUpId);
-                    retVal = true;
-                }
-            }
+
+    //Event listener. listening to when item is dragged out of the inventory on drop
+    //on something in the game
+    private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
+        bool dropOnTarget = false;
+        if(isDebug){
+            if(e.TargetCollider.name == "Cube") dropOnTarget = true;
+        }else{
+             if(e.TargetCollider.name == "SpritePet" ||
+                e.TargetCollider.name == "PetHead" ||
+                e.TargetCollider.name == "PetTummy") dropOnTarget = true;
         }
-        return retVal;
+
+        if(dropOnTarget){
+            e.IsValidTarget = true;
+
+            int id = int.Parse(e.ItemTransform.name); //get id from listener args
+            inventory.UseItem(id); //notify inventory logic that this item is being used
+
+            if(inventory.InventoryArray[id] > 0){ //Redraw count label if item not 0
+                e.ParentTransform.Find("label").GetComponent<UILabel>().text = 
+                    inventory.InventoryArray[id].ToString();
+            }else{ //destroy object if it has been used up
+                Destroy(e.ParentTransform.gameObject);
+                UpdateBarPosition();
+            }    
+        }
     }
     
     private GameObject SpawnInventoryTypeInPanel(string name, int id){
@@ -91,8 +82,6 @@ public class InventoryUIManager : MonoBehaviour {
             // Create item structure
             GameObject item = NGUITools.AddChild(UIGrid);
             item.name = "Item";
-            InventoryListener listener = item.AddComponent("InventoryListener") as InventoryListener;
-            listener.Count = inventory.InventoryArray[id];
             
             UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
             spriteFill.transform.localScale = new Vector3(90, 90, 1);   // TODO make const
@@ -105,7 +94,10 @@ public class InventoryUIManager : MonoBehaviour {
             BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;
             boxCollider.size = new Vector3(90, 90, 1);                  // TODO make const
-            SpriteGo.gameObject.AddComponent("InventoryDragDrop");
+
+            InventoryDragDrop invDragDrop = SpriteGo.gameObject.AddComponent("InventoryDragDrop") as InventoryDragDrop;
+            invDragDrop.OnItemDrop += OnItemDrop;
+
             SpriteGo.gameObject.AddComponent("UIDragPanelContents");
             
             UILabel label = NGUITools.AddWidget<UILabel>(item);
@@ -119,28 +111,21 @@ public class InventoryUIManager : MonoBehaviour {
             sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
             sprite.depth = NGUITools.CalculateNextDepth(UIGrid);
             
-            itemCount++;
             UpdateBarPosition();
             
             return item;
         }
     }
     
-    // From InventoryListener 
-    public void DecreaseItemTypeCount(){
-        itemCount--;
-        UpdateBarPosition();
-    }
-    
     public void UpdateBarPosition(){
         UIGrid.GetComponent<UIGrid>().Reposition();
         
         if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
-            gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - itemCount * 90;
+            gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open
                 Hashtable optional = new Hashtable();
                 optional.Add("ease", LeanTweenType.easeOutBounce);
-                LeanTween.moveLocalX(gameObject, collapsedPos - itemCount * 90, 0.4f, optional);              
+                LeanTween.moveLocalX(gameObject, collapsedPos - inventory.InventoryCount * 90, 0.4f, optional);              
             }
         }
     }

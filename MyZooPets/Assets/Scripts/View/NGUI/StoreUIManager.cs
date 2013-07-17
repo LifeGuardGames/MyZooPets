@@ -19,6 +19,7 @@ public class StoreUIManager : MonoBehaviour {
 	//===================================================
 	
 	private ItemLogic itemlogic;
+	private Inventory inventory;
 	private bool changePage;
 	private int page;
 	private UISprite uisprite;
@@ -29,6 +30,7 @@ public class StoreUIManager : MonoBehaviour {
 		//debug option. use only in Store_NGUI scene
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		else itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+		inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		CreateItems(null);
@@ -81,9 +83,10 @@ public class StoreUIManager : MonoBehaviour {
 	//Called when "Buy" is clicked
 	public void OnBuyButton(GameObject button){
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
+		int itemId = int.Parse(button.transform.parent.name);
 		if(DataManager.Stars >= cost){
 			//TODO add item to inventory	
-//			inventory.AddItem(categoryList[i], 1);
+			inventory.AddItem(itemId, 1);
 			DataManager.SubtractStars(cost);
 		}
 		OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);

@@ -12,7 +12,6 @@ public class LoadDataLogic : MonoBehaviour {
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference
     private CameraMove cameraMove; //reference
-    private Tutorial tutorial; //reference
     private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickManager;
 
@@ -42,7 +41,6 @@ public class LoadDataLogic : MonoBehaviour {
                 levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
                 degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
                 degradationUIManager = GameObject.Find("UIManager/DegradationUIManager").GetComponent<DegradationUIManager>();
-                tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();
                 // diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
@@ -93,7 +91,6 @@ public class LoadDataLogic : MonoBehaviour {
                 levelUpLogic.Init();
                 degradationLogic.Init();
                 degradationUIManager.Init();
-                tutorial.Init();
                 petMovement.Init();
                 // diagnoseTimerLogic.Init();
 

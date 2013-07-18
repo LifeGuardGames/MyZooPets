@@ -12,7 +12,7 @@ public class Tutorial : MonoBehaviour {
     public GameObject shelf;
     public GameObject helpTrophy;
 
-    public void Init(){
+    public void Start(){
         InhalerMissAndInhalerGame();
         TrophyDemo();
     }

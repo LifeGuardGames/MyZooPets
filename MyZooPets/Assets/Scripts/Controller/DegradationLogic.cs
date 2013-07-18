@@ -25,7 +25,7 @@ public class DegradationLogic : MonoBehaviour {
     public static event TriggerDestroyEventHandler TriggerDestroyed;
     //=====================================================
 
-    public bool isDebug = false; //developer option. force the trigger to show
+    // public bool isDebug = false; //developer option. force the trigger to show
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 
@@ -44,11 +44,11 @@ public class DegradationLogic : MonoBehaviour {
     }
 
     public void Init(){
-        if(isDebug){
-            DataManager.LastTimeUserPlayedGame = DateTime.Now;
-            DataManager.MorningTrigger = true;
-            DataManager.AfternoonTrigger = true;
-        }
+        // if(isDebug){
+        //     DataManager.LastTimeUserPlayedGame = DateTime.Now;
+        //     DataManager.MorningTrigger = true;
+        //     DataManager.AfternoonTrigger = true;
+        // }
 
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;

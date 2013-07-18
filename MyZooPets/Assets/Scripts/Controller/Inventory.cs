@@ -14,7 +14,6 @@ public class Inventory : MonoBehaviour {
 	private ItemLogic itemLogic;
 	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
 	private int inventoryCount; //number of items that are actually in inventory
-	public bool isDebug; //developing option
 
 	public class InventoryEventArgs : EventArgs{
 		public bool IsItemNew{get; set;}
@@ -62,15 +61,9 @@ public class Inventory : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		itemLogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-
-		if(isDebug){
-			DataManager.Inventory = new int[10];
-			inventoryCount = 0;
-		}
 		inventory = DataManager.Inventory;
 		for(int i=0; i<itemLogic.items.Count; i++){
 			if(inventory[i] > 0) inventoryCount++;
 		}
-
 	}
 }

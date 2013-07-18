@@ -5,7 +5,6 @@ using System.Collections;
 //data loading in data manager is asynchronous so this class is necessary
 //to provide an event based callback
 public class LoadDataLogic : MonoBehaviour {
-    public bool isDebug;
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
 
     //Logic
@@ -29,10 +28,7 @@ public class LoadDataLogic : MonoBehaviour {
     private const string ANCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Panel/Anchor-BottomLeft/";
     private const string ANCHOR_BOTTOMRIGHT = "UI Root (2D)/Camera/Panel/Anchor-BottomRight/";
 
-    void Awake(){
-        if(isDebug){
-            DataManager.FirstTime = true;
-        }
+    void Start(){
         IsDataLoaded = false;
 
         switch(Application.loadedLevelName){
@@ -56,17 +52,16 @@ public class LoadDataLogic : MonoBehaviour {
                 // }else{ //if first time set call back and wait for the hatching animation to finish
                 //     FirstTimeNGUI.finishHatchCallBack = InitializeDataForUI;
                 // }
-                InitializeDataForUI();
+                Invoke("InitializeDataForUI", 0.5f);
             break;
             case "Yard":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
-                calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
-                InitializeDataForUI();
+                Invoke("InitializeDataForUI", 0.5f);
             break;
             // case "InhalerGamePet":
             //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();

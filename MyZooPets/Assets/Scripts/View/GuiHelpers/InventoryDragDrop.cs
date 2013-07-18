@@ -30,10 +30,6 @@ public class InventoryDragDrop : MonoBehaviour {
 	private Vector3 savedLocalPosition;
 	private UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
 
-	void Start(){
-		dragScrollScript = GetComponent<UIDragPanelContents>();
-	}
-	
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
@@ -94,7 +90,10 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// Cache the transform.
 	/// </summary>
 
-	void Awake () { mTrans = transform; }
+	void Awake () { 
+		mTrans = transform; 
+		dragScrollScript = GetComponent<UIDragPanelContents>();
+	}
 
 	/// <summary>
 	/// Start the drag event and perform the dragging.

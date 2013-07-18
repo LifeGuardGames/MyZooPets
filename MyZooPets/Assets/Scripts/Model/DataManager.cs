@@ -358,7 +358,7 @@ public class DataManager : MonoBehaviour {
         isCreated = true;
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
-        print(firstTime);
+        print("firsttime" + firstTime);
         if(isDebug){ //debug for independent scene. only initialize data no
                     //serialization or scene loading
             InitializeAllDataFirstTime();

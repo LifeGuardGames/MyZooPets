@@ -28,9 +28,7 @@ public class LoadDataLogic : MonoBehaviour {
     private const string ANCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Panel/Anchor-BottomLeft/";
     private const string ANCHOR_BOTTOMRIGHT = "UI Root (2D)/Camera/Panel/Anchor-BottomRight/";
 
-    void Start(){
-        IsDataLoaded = false;
-
+    void Awake(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
@@ -47,12 +45,6 @@ public class LoadDataLogic : MonoBehaviour {
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 
-                // if(!DataManager.FirstTime){ //if not first time load GUI right away
-                //     FirstTimeNGUI.finishCheckingForFirstTime = InitializeDataForUI;
-                // }else{ //if first time set call back and wait for the hatching animation to finish
-                //     FirstTimeNGUI.finishHatchCallBack = InitializeDataForUI;
-                // }
-                Invoke("InitializeDataForUI", 0.5f);
             break;
             case "Yard":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
@@ -61,7 +53,6 @@ public class LoadDataLogic : MonoBehaviour {
 
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
-                Invoke("InitializeDataForUI", 0.5f);
             break;
             // case "InhalerGamePet":
             //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
@@ -75,7 +66,10 @@ public class LoadDataLogic : MonoBehaviour {
             //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
             //     InitializeDataForUI();
             // break;
-        }
+    }
+
+    void Start(){
+        Invoke("InitializeDataForUI", 0.5f);
     }
 
     //Data is ready for use so initialize all UI data

@@ -13,6 +13,14 @@ public class DegradationUIManager : MonoBehaviour{
 
     private DegradationLogic degradationLogic;
 
+    void Awake(){
+        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+    }
+
+    void Start(){
+        
+    }
+
     public void Init(){
         degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
         DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;

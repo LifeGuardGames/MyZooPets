@@ -11,7 +11,8 @@ public class YardCameraMove : CameraMove{
 
     protected GameObject spritePet;
 
-    public override void Init(){
+    protected override void Start(){
+        base.Start();
         spritePet = GameObject.Find("SpritePet");
     }
 

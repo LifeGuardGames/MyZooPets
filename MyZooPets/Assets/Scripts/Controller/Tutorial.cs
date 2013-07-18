@@ -12,7 +12,7 @@ public class Tutorial : MonoBehaviour {
     public GameObject shelf;
     public GameObject helpTrophy;
 
-    public void Init(){
+    public void Start(){
         InhalerMissAndInhalerGame();
         TrophyDemo();
     }
@@ -122,16 +122,14 @@ public class Tutorial : MonoBehaviour {
         }
     }
     void openShelf(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
-            DataManager.FirstTimeShelf = false;
-            growShrink.Stop();
-            helpTrophy.GetComponent<GrowShrink>().StopAll();
+        GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+        DataManager.FirstTimeShelf = false;
+        growShrink.Stop();
+        helpTrophy.GetComponent<GrowShrink>().StopAll();
 
-            // added for the demo
-            if (DataManager.FirstTimeHelpTrophy){
-                helpTrophy.GetComponent<GrowShrink>().Play();
-            }
+        // added for the demo
+        if (DataManager.FirstTimeHelpTrophy){
+            helpTrophy.GetComponent<GrowShrink>().Play();
         }
     }
     void openHelpTrophy(){

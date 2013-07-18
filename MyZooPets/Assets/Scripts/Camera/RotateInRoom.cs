@@ -11,23 +11,22 @@ public class RotateInRoom : UserNavigation {
 
     float minLeft;
     float maxRight;
-	
+
 	private PetMovement petmovement;
 
-	void Start () {
+	protected override void Start () {
+        base.Start();
+
         currentYRotation = (int)transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
-
-        // Init swipe listener.
-        SwipeDetection.OnSwipeDetected += OnSwipeDetected;
 
         // Init limits to room navigation
         minLeft = 0;
         maxRight = rotationIncrement;
-        
+
 		petmovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
 	}
-	
+
     public override void ToTheRight(){
         if (!lockRotation && IsRightArrowEnabled()){
             if (ClickManager.CanRespondToTap()){

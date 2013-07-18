@@ -68,6 +68,18 @@ public class ClickManager : MonoBehaviour {
 
 		AssignOnTapEvents();
 
+		NoteUIManager.OnNoteClosed += OnNoteClosed;
+		StoreUIManager.OnStoreClosed += OnStoreClosed;
+		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
+		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
+	}
+
+	//Clean all even listeners
+	void OnDestroy(){
+		NoteUIManager.OnNoteClosed -= OnNoteClosed;
+		StoreUIManager.OnStoreClosed -= OnStoreClosed;
+		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
+		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
 	}
 
 	// assigning methods that get called when these individual objects get called in the scene
@@ -100,7 +112,6 @@ public class ClickManager : MonoBehaviour {
 	public void OnClickNote(){
 		if(CanRespondToTap()){
 			noteUIManager.NoteClicked();
-			NoteUIManager.OnNoteClosed += OnNoteClosed;
 			cameraMove.ZoomToggle(ZoomItem.Pet); //zoom into pet
 
 			ClickLock();
@@ -125,7 +136,6 @@ public class ClickManager : MonoBehaviour {
 	public void OnClickStore(){
 		if(CanRespondToTap()){
 			storeUIManager.StoreClicked();
-			StoreUIManager.OnStoreClosed += OnStoreClosed;
 			ClickLock();
 			ModeLock();
 
@@ -146,7 +156,6 @@ public class ClickManager : MonoBehaviour {
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
 			calendarUIManager.CalendarClicked();
-			CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 			ClickLock();
 			ModeLock();
 
@@ -169,7 +178,6 @@ public class ClickManager : MonoBehaviour {
 	private void OnTapShelf(){
 		if (CanRespondToTap()){
 			trophyGUI.TrophyClicked();
-			TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 			ClickLock();
 			ModeLock();
 
@@ -199,7 +207,6 @@ public class ClickManager : MonoBehaviour {
 
 	void OnTapSlotMachine(){
 		if (CanRespondToTap()){
-			// cameraMove.SlotMachineZoomToggle();
 			cameraMove.ZoomToggle(ZoomItem.SlotMachine);
 			ClickLock();
 			ModeLock();
@@ -242,8 +249,6 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
-
-
 
 	void OnTapHelpTrophy(){
         // make sure we are in trophy mode

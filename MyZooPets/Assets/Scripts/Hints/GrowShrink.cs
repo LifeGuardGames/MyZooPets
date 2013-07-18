@@ -34,8 +34,10 @@ public class GrowShrink : MonoBehaviour {
         // optionalShrink.Add("ease", LeanTweenType.easeInOutQuad);
         optionalShrink.Add("onComplete", "Grow");
 
-        InitClickHighlighting();
 	}
+    void Start(){
+        InitClickHighlighting();
+    }
 
 	// Update is called once per frame
 	void Update () {

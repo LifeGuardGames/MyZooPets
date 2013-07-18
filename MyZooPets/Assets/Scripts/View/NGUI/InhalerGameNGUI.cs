@@ -32,10 +32,10 @@ public class InhalerGameNGUI : MonoBehaviour {
     }
 
     public void HideProgressBar(){
-        progressBarObject.active = false;
+        progressBarObject.SetActive(false);
     }
     public void ShowProgressBar(){
-        progressBarObject.active = true;
+        progressBarObject.SetActive(true);
     }
 
     public void ShowGameOverMessage(){

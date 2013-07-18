@@ -4,7 +4,7 @@ using System.Collections;
 public class ProgressBarController : MonoBehaviour {
 
     public UISlider slider; // for setup
-    public ProgressBarAnimation animation;
+    public ProgressBarAnimation anim;
 
     float increment;
 
@@ -16,7 +16,7 @@ public class ProgressBarController : MonoBehaviour {
         slider.sliderValue = 0;
         slider.numberOfSteps = numOfNodes;
         increment = 1.0f / (numOfNodes - 1);
-        if (animation != null) animation.Init(numOfNodes);
+        if (anim != null) anim.Init(numOfNodes);
     }
     // testing
 	// void Start () {
@@ -31,7 +31,7 @@ public class ProgressBarController : MonoBehaviour {
 
     public void UpdateStep(int lastCompletedStep){
         slider.sliderValue = lastCompletedStep * increment;
-        animation.UpdateStep(lastCompletedStep);
+        anim.UpdateStep(lastCompletedStep);
     }
 
 }

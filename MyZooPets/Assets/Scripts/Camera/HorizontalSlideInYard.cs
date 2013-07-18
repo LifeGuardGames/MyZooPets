@@ -8,12 +8,10 @@ public class HorizontalSlideInYard : UserNavigation {
     Hashtable optional = new Hashtable();
     bool lockSlide = false;
     // Use this for initialization
-    void Start () {
+    protected override void Start () {
+        base.Start();
         currentXPos = transform.position.x;
         optional.Add("onComplete", "FinishedSlide");
-
-        // Init swipe listener.
-        SwipeDetection.OnSwipeDetected += OnSwipeDetected;
     }
 
     public override void ToTheRight(){

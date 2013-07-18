@@ -15,8 +15,12 @@ public abstract class UserNavigation : MonoBehaviour {
         get {return IsRightArrowEnabled();}
     }
 
-    void Start(){
+    protected virtual void Start(){
         SwipeDetection.OnSwipeDetected += OnSwipeDetected;
+    }
+
+    protected virtual void OnDestroy(){
+        SwipeDetection.OnSwipeDetected -= OnSwipeDetected;
     }
 
     protected abstract bool IsLeftArrowEnabled();

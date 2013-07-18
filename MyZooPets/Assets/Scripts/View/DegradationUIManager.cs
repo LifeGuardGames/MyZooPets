@@ -36,6 +36,10 @@ public class DegradationUIManager : MonoBehaviour{
         }
     }
 
+    public void OnDestroy(){
+        DegradationLogic.TriggerDestroyed -= SpawnStarsWhenTriggersDestroyed;
+    }
+
     private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){
         GameObject particleDrop = (GameObject)Instantiate(cleanTriggerParticleDrop, e.TriggerPosition, Quaternion.Euler(270,0,0));
         Destroy(particleDrop, 1);

@@ -13,8 +13,6 @@ using System;
 /// </summary>
 
 public class ClickManager : MonoBehaviour {
-	private bool isMobilePlatform;
-	private Vector3 destinationPoint;
 
 	// All the classes that need a click input go here
 	// public GameObject diaryUIManagerObject;
@@ -44,20 +42,12 @@ public class ClickManager : MonoBehaviour {
 	private CameraMove cameraMove;
 
 	public NotificationUIManager notificationUIManager;
-	private GameObject petsprite;
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
     bool trophyMessageShowing = false;
 
 	public void Init(){
-		if(Application.platform == RuntimePlatform.Android ||
-			Application.platform == RuntimePlatform.IPhonePlayer){
-			isMobilePlatform = true;
-		}
-		else{
-			isMobilePlatform = false;
-		}
 
 		isClickLocked = false;
 		isModeLocked = false;
@@ -75,8 +65,6 @@ public class ClickManager : MonoBehaviour {
 
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
-		petsprite = GameObject.Find("SpritePet");
-		destinationPoint = petsprite.transform.position;
 
 		AssignOnTapEvents();
 

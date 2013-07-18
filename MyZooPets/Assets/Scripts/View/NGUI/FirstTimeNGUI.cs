@@ -13,7 +13,6 @@ public class FirstTimeNGUI : MonoBehaviour {
     private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
     private tk2dSprite eggSpriteScript;
     public GameObject nestObject;
-    public GameObject petObject;
     public string petName;
     public string petColor;
 
@@ -33,35 +32,35 @@ public class FirstTimeNGUI : MonoBehaviour {
     private Color currentRenderColor;
     private bool eggClicked = false;
 
-    public delegate void FinishHatchCallBack();
-    public static FinishHatchCallBack finishHatchCallBack; //call when hatching is done
+    // public delegate void FinishHatchCallBack();
+    // public static FinishHatchCallBack finishHatchCallBack; //call when hatching is done
 
-    public delegate void FinishCheckingForFirstTime();
-    public static FinishCheckingForFirstTime finishCheckingForFirstTime; //call when pet has been instantiated
+    // public delegate void FinishCheckingForFirstTime();
+    // public static FinishCheckingForFirstTime finishCheckingForFirstTime; //call when pet has been instantiated
 
     void Start(){
-        if(DataManager.FirstTime){ //first time playing game
+        // if(DataManager.FirstTime){ //first time playing game
             eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
             currentRenderColor = RenderSettings.ambientLight;
             RenderSettings.ambientLight = Color.black;
 
             ShowDropInAnimation();
 
-        }
-        else{ //not first time. spawn pet as usual
-            // TEMPORARY spawn the pet in location
-            GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
-            goPet.name = "SpritePet";
+        // }
+        // else{ //not first time. spawn pet as usual
+        //     // TEMPORARY spawn the pet in location
+        //     GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
+        //     goPet.name = "SpritePet";
 
-            //continue normal gui stuff
-            if(finishCheckingForFirstTime != null) finishCheckingForFirstTime();
+        //     //continue normal gui stuff
+        //     if(finishCheckingForFirstTime != null) finishCheckingForFirstTime();
 
-            // Kill itself + related objects if not first time
-            Destroy(eggObject);
-            Destroy(nestObject);
-            Destroy(gameObject);
-            Destroy(firstTimeChoosePanel);
-        }
+        //     // Kill itself + related objects if not first time
+        //     Destroy(eggObject);
+        //     Destroy(nestObject);
+        //     Destroy(gameObject);
+        //     Destroy(firstTimeChoosePanel);
+        // }
     }
 
     void ShowDropInAnimation(){
@@ -107,20 +106,22 @@ public class FirstTimeNGUI : MonoBehaviour {
     private void HelperFinishEditPet(){
         DataManager.PetName = petName;
         DataManager.PetColor = petColor;
+        DataManager.TurnFirstTimeOff();
 
-        // Spawn pet object
-        // GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
-        GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
-        goPet.name = "SpritePet";
+        // // Spawn pet object
+        // // GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
+        // GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
+        // goPet.name = "SpritePet";
 
         // Start normal GUI stuff
-        if(finishHatchCallBack != null) finishHatchCallBack();
+        // if(finishHatchCallBack != null) finishHatchCallBack();
 
         // Commit seppuku
-        Destroy(eggObject);
-        Destroy(nestObject);
-        Destroy(gameObject);
-        Destroy(firstTimeChoosePanel, 3.0f);
+        // Destroy(eggObject);
+        // Destroy(nestObject);
+        // Destroy(gameObject);
+        // Destroy(firstTimeChoosePanel, 3.0f);
+        // Application.LoadLevel("NewBedRoom");
     }
 
     void ButtonClicked_Blue(){
@@ -166,5 +167,10 @@ public class FirstTimeNGUI : MonoBehaviour {
 
     void ZoomOutMove(){
         CameraTransform(initPosition,initFaceDirection);
+        Invoke("LoadScene", 1);
+    }
+
+    private void LoadScene(){
+        Application.LoadLevel("NewBedRoom");
     }
 }

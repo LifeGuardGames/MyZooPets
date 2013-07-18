@@ -13,7 +13,7 @@ public class InventoryUIManager : MonoBehaviour {
     public UISprite itemSprite;
     public UIAtlas itemAtlas;
     public UIFont font;
-    public GameObject UIGrid;
+    public GameObject UIGridObject;
     public GameObject UIButtonToggleObject;
     
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
@@ -75,7 +75,7 @@ public class InventoryUIManager : MonoBehaviour {
             SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].name, e.ItemID);
         }else{
             //this is kind of bad.... need to change the structure of the UI
-            Transform item = UIGrid.transform.Find("Item/"+e.ItemID.ToString());
+            Transform item = UIGridObject.transform.Find("Item/"+e.ItemID.ToString());
             item.parent.Find("label").GetComponent<UILabel>().text = inventory.InventoryArray[e.ItemID].ToString();
         }
     }
@@ -91,7 +91,7 @@ public class InventoryUIManager : MonoBehaviour {
             itemTrackHash.Add(name, true);
             
             // Create item structure
-            GameObject item = NGUITools.AddChild(UIGrid);
+            GameObject item = NGUITools.AddChild(UIGridObject);
             item.name = "Item";
             
             UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
@@ -127,7 +127,9 @@ public class InventoryUIManager : MonoBehaviour {
     }
     
     public void UpdateBarPosition(){
-        UIGrid.GetComponent<UIGrid>().Reposition();
+        print("update");
+        UIGridObject.GetComponent<UIGrid>().Reposition();
+
         print(inventory.InventoryCount);
         if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
             gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;

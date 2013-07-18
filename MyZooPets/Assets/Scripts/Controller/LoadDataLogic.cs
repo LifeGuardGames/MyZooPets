@@ -8,7 +8,6 @@ public class LoadDataLogic : MonoBehaviour {
     public bool isDebug;
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
 
-
     //Logic
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
@@ -52,18 +51,20 @@ public class LoadDataLogic : MonoBehaviour {
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 
-                if(!DataManager.FirstTime){ //if not first time load GUI right away
-                    FirstTimeNGUI.finishCheckingForFirstTime = InitializeDataForUI;
-                }else{ //if first time set call back and wait for the hatching animation to finish
-                    FirstTimeNGUI.finishHatchCallBack = InitializeDataForUI;
-                }
+                // if(!DataManager.FirstTime){ //if not first time load GUI right away
+                //     FirstTimeNGUI.finishCheckingForFirstTime = InitializeDataForUI;
+                // }else{ //if first time set call back and wait for the hatching animation to finish
+                //     FirstTimeNGUI.finishHatchCallBack = InitializeDataForUI;
+                // }
+                InitializeDataForUI();
             break;
             case "Yard":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
                 calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
-                clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
+                inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
+                clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
                 InitializeDataForUI();
             break;
@@ -86,7 +87,6 @@ public class LoadDataLogic : MonoBehaviour {
     private void InitializeDataForUI(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
-                if(DataManager.FirstTime) DataManager.FirstTime = false; //turn first time animation off
                 hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
                 calendar.GetComponent<CalendarUIManager>().Init();
@@ -107,6 +107,7 @@ public class LoadDataLogic : MonoBehaviour {
                 hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
                 navigation.GetComponent<MoveTweenToggle>().Show();
+                inventory.GetComponent<MoveTweenToggle>().Show();
 
                 clickManager.Init();
                 cameraMove.Init();

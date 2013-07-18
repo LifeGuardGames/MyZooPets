@@ -8,7 +8,7 @@ using System;
 [DoNotSerializePublic]
 public class DataManager : MonoBehaviour {
     //========Developer option=============
-    public bool removePreviouslySavedData; //delete all from PlayerPrefs
+    public bool removeDataOnDestroy; //delete all from PlayerPrefs
     public bool isDebug = false; //turn isDebug to true if working on independent scene
     private bool loaded = false;
     //=====================================
@@ -345,6 +345,10 @@ public class DataManager : MonoBehaviour {
     }
 
     //===================================
+    public static void TurnFirstTimeOff(){
+        firstTime = false;
+        PlayerPrefs.SetInt("FirstTime", 0);
+    }
 
     void Awake(){
         if(isCreated){
@@ -353,21 +357,13 @@ public class DataManager : MonoBehaviour {
         DontDestroyOnLoad(transform.gameObject);
         isCreated = true;
 
-        // Use this for initialization
-        // save and load data here
-        //first time playing the game. values need to be initialized
-        if(removePreviouslySavedData) PlayerPrefs.DeleteAll();
-
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
 
-    }
-
-    void Start(){
         if(isDebug){ //debug for independent scene. only initialize data no
                     //serialization or scene loading
             InitializeAllDataFirstTime();
         }else{
-            if (firstTime){ //first time data initialization logic
+            if(firstTime){ //first time data initialization logic
                 InitializeAllDataFirstTime();
                 SerializeGame();
                 DataLoaded();
@@ -380,7 +376,17 @@ public class DataManager : MonoBehaviour {
                     }
                 }
             }
+        }        
+    }
+
+    void OnDestroy(){
+        if(isDebug){
+            if(removeDataOnDestroy) PlayerPrefs.DeleteAll();
         }
+    }
+
+    private void InitializeTestData(){
+
     }
 
     //initialize all data for the first time
@@ -435,13 +441,17 @@ public class DataManager : MonoBehaviour {
             firstTimeShelf = true;
             firstTimeHelpTrophy = true;
 
-            //turn first time initialization off
-            PlayerPrefs.SetInt("FirstTime", 0);
+            // //turn first time initialization off
+            // PlayerPrefs.SetInt("FirstTime", 0);
     }
 
     //call the delegate when data initialization or deserialziation is done
     private void DataLoaded(){
-        Application.LoadLevel("NewBedRoom");
+        if(firstTime){
+            Application.LoadLevel("FirstTime");
+        }else{
+            Application.LoadLevel("NewBedRoom");
+        }
     }
 
     //serialize data into byte array and store locally in PlayerPrefs

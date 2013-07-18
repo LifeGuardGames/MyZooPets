@@ -65,11 +65,18 @@ public class StoreUIManager : MonoBehaviour {
 	public void OnBuyAnimation(GameObject sprite){
 		Vector3 origin = sprite.transform.position;
 		string id = sprite.transform.parent.name;
-		Vector3 itemPosition= origin;
+		Vector3 itemPosition = origin;
 		
+		//Find the existing object
 		foreach(Transform item in inventoryGrid.transform){
-			if(item.FindChild(id))
-				itemPosition = item.FindChild(id).position;
+			if(item.FindChild(id)){
+				if(item.FindChild("label").gameObject.GetComponent<UILabel>().text == "1"){
+					itemPosition = item.FindChild(id).position + new Vector3(-0.22f,0,0);
+				}
+				else{
+					itemPosition = item.FindChild(id).position;
+				}
+			}
 		}
 		
 		//adjust moving speed here
@@ -80,8 +87,7 @@ public class StoreUIManager : MonoBehaviour {
 		path[0] = origin ;
 		path[1] = origin + new Vector3(0,1.5f,0);
 		path[2] = origin;
-//		path[3] = new Vector3(7f,-7f,-2f);
-		path[3] = itemPosition + new Vector3(-0.22f,0,0);
+		path[3] = itemPosition;
 		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
@@ -93,7 +99,6 @@ public class StoreUIManager : MonoBehaviour {
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 		LeanTween.move(animationSprite,path,speed,optional);
 		toDestroy =animationSprite;
-//		Destroy(animationSprite);
 	}
 	
 	public void DestroySprite(){
@@ -106,7 +111,6 @@ public class StoreUIManager : MonoBehaviour {
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		int itemId = int.Parse(button.transform.parent.name);
 		if(DataManager.Stars >= cost){
-			//TODO add item to inventory	
 			inventory.AddItem(itemId, 1);
 			DataManager.SubtractStars(cost);
 		}

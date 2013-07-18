@@ -86,14 +86,14 @@ public class InventoryDragDrop : MonoBehaviour {
 		}
 	}
 
+	void Start(){
+		dragScrollScript = GetComponent<UIDragPanelContents>();
+	}
 	/// <summary>
 	/// Cache the transform.
 	/// </summary>
 
-	void Awake () { 
-		mTrans = transform; 
-		dragScrollScript = GetComponent<UIDragPanelContents>();
-	}
+	void Awake () { mTrans = transform; }
 
 	/// <summary>
 	/// Start the drag event and perform the dragging.

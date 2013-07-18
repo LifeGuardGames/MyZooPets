@@ -47,8 +47,7 @@ public class ClickManager : MonoBehaviour {
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
     bool trophyMessageShowing = false;
 
-	public void Init(){
-
+    void Awake(){
 		isClickLocked = false;
 		isModeLocked = false;
 
@@ -62,17 +61,44 @@ public class ClickManager : MonoBehaviour {
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		if(trophyGUIObject != null)
 			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
-
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+    }
 
+    void Start(){
 		AssignOnTapEvents();
 
 		NoteUIManager.OnNoteClosed += OnNoteClosed;
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
-	}
+    }
+	// public void Init(){
+
+	// 	// isClickLocked = false;
+	// 	// isModeLocked = false;
+
+	// 	// // Linking script references
+	// 	// if(calendarUIObject != null)
+	// 	// 	calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
+	// 	// if(noteUIObject != null)
+	// 	// 	noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
+	// 	// if(storeUIObject != null)
+	// 	// 	storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
+	// 	// // challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
+	// 	// if(trophyGUIObject != null)
+	// 	// 	trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+
+	// 	// if(cameraMoveObject != null)
+	// 	// 	cameraMove = cameraMoveObject.GetComponent<CameraMove>();
+
+	// 	// AssignOnTapEvents();
+
+	// 	// NoteUIManager.OnNoteClosed += OnNoteClosed;
+	// 	// StoreUIManager.OnStoreClosed += OnStoreClosed;
+	// 	// CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
+	// 	// TrophyGUI.OnTrophyClosed += OnTrophyClosed;
+	// }
 
 	//Clean all even listeners
 	void OnDestroy(){

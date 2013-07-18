@@ -16,10 +16,10 @@ public class LevelUpLogic : MonoBehaviour {
     private const int GOOD_CARE = 70;
 
     //=========================API============================
-    //initialize level up tracking timer
-    public void Init () {
-        timer = timeInterval;
-    }
+    // //initialize level up tracking timer
+    // public void Init () {
+    //     // timer = timeInterval;
+    // }
 
     //The point requirement for next level up
     public static int NextLevelPoints(){
@@ -31,7 +31,9 @@ public class LevelUpLogic : MonoBehaviour {
         get{return awardTrophy;}
     }
     //========================================================
-
+    void Awake(){
+        timer = timeInterval;
+    }
 	// Update is called once per frame
 	void Update () {
         if(!LoadDataLogic.IsDataLoaded) return;

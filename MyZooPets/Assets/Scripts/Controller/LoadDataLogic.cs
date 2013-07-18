@@ -36,13 +36,13 @@ public class LoadDataLogic : MonoBehaviour {
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
-                clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
-                levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
-                degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
-                degradationUIManager = GameObject.Find("UIManager/DegradationUIManager").GetComponent<DegradationUIManager>();
+                // clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
+                // levelUpLogic = GameObject.Find("GameManager/LevelUpLogic").GetComponent<LevelUpLogic>();
+                // degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+                // degradationUIManager = GameObject.Find("UIManager/DegradationUIManager").GetComponent<DegradationUIManager>();
                 tutorial = GameObject.Find("GameManager/Tutorial").GetComponent<Tutorial>();
                 // diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
-                petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
+                // petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 
             break;
@@ -51,7 +51,7 @@ public class LoadDataLogic : MonoBehaviour {
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
-                clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
+                // clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
                 cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
             break;
             // case "InhalerGamePet":
@@ -66,6 +66,7 @@ public class LoadDataLogic : MonoBehaviour {
             //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
             //     InitializeDataForUI();
             // break;
+        }
     }
 
     void Start(){
@@ -76,29 +77,23 @@ public class LoadDataLogic : MonoBehaviour {
     private void InitializeDataForUI(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
-                hud.GetComponent<HUDAnimator>().Init();
+                // hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
-                calendar.GetComponent<CalendarUIManager>().Init();
+                // calendar.GetComponent<CalendarUIManager>().Init();
                 navigation.GetComponent<MoveTweenToggle>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
 
-                clickManager.Init();
                 cameraMove.Init();
-                levelUpLogic.Init();
-                degradationLogic.Init();
-                degradationUIManager.Init();
                 tutorial.Init();
-                petMovement.Init();
+                // petMovement.Init();
                 // diagnoseTimerLogic.Init();
 
             break;
             case "Yard":
-                hud.GetComponent<HUDAnimator>().Init();
                 hud.GetComponent<MoveTweenToggle>().Show();
                 navigation.GetComponent<MoveTweenToggle>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
 
-                clickManager.Init();
                 cameraMove.Init();
             break;
             // case "InhalerGamePet":

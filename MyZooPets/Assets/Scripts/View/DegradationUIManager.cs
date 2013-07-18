@@ -18,11 +18,6 @@ public class DegradationUIManager : MonoBehaviour{
     }
 
     void Start(){
-        
-    }
-
-    public void Init(){
-        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
         DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
 
         //instantiate triggers in the game
@@ -36,9 +31,24 @@ public class DegradationUIManager : MonoBehaviour{
         }
     }
 
-    public void OnDestroy(){
+    void OnDestroy(){
         DegradationLogic.TriggerDestroyed -= SpawnStarsWhenTriggersDestroyed;
     }
+
+    // public void Init(){
+        // degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
+        // DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
+
+        // //instantiate triggers in the game
+        // for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
+        //     int prefabId = DataManager.DegradationTriggers[i].PrefabId;
+        //     int positionId = DataManager.DegradationTriggers[i].PositionId;
+        //     //instantiate all the triggers save in DataManager
+        //     GameObject trigger = (GameObject)Instantiate(degradationLogic.triggerPrefabs[prefabId],
+        //         degradationLogic.triggerLocations[positionId].position, Quaternion.identity);
+        //     trigger.GetComponent<DegradTriggerManager>().id = i;
+        // }
+    // }
 
     private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){
         GameObject particleDrop = (GameObject)Instantiate(cleanTriggerParticleDrop, e.TriggerPosition, Quaternion.Euler(270,0,0));

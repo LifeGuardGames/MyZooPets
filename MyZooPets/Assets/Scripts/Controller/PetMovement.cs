@@ -41,17 +41,18 @@ public class PetMovement : MonoBehaviour {
 	private float moveToX;
 	private float moveToZ;
 
-	public void Init () {
+    void Awake(){
         petSprite = GameObject.Find("SpritePet");
-        destinationPoint = petSprite.transform.position;
-
         tapItem = GetComponent<TapItem>();
-        tapItem.OnTap += MovePet;
-		
-		//how often does pet walk by himself.  
-		if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
-	}
-	
+    }
+
+    void Start(){
+       destinationPoint = petSprite.transform.position; 
+       tapItem.OnTap += MovePet;
+       //how often does pet walk by himself.  
+        if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
+    }
+
 	public void movePetWithCamera(){
 		Ray ray = camera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;

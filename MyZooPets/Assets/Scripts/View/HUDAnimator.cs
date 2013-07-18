@@ -59,8 +59,31 @@ public class HUDAnimator : MonoBehaviour {
 	private AnimationControl healthAnimControl;
 	private AnimationControl moodAnimControl;
 	
-	public void Init()
-	{
+	// public void Init()
+	// {
+		// dataPoints = DataManager.Points;
+		// dataStars = DataManager.Stars;
+		// dataHealth = DataManager.Health;
+		// dataMood = DataManager.Mood;
+		// dataHunger = DataManager.Hunger;
+		
+		// displayPoints = DataManager.Points;
+		// displayStars = DataManager.Stars;
+		// displayHealth = DataManager.Health;
+		// displayMood = DataManager.Mood;
+
+		// lastLevel = DataManager.CurrentLevel;
+		// nextLevelPoints = LevelUpLogic.NextLevelPoints();
+
+	// }
+    
+	void Awake(){
+		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
+		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
+		moodAnimControl = moodIconAnim.GetComponent<AnimationControl>();
+	}
+
+	void Start(){
 		dataPoints = DataManager.Points;
 		dataStars = DataManager.Stars;
 		dataHealth = DataManager.Health;
@@ -73,14 +96,7 @@ public class HUDAnimator : MonoBehaviour {
 		displayMood = DataManager.Mood;
 
 		lastLevel = DataManager.CurrentLevel;
-		nextLevelPoints = LevelUpLogic.NextLevelPoints();
-
-	}
-    
-	void Start(){
-		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
-		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
-		moodAnimControl = moodIconAnim.GetComponent<AnimationControl>();
+		nextLevelPoints = LevelUpLogic.NextLevelPoints();		
 	}
 	
 	void FixedUpdate(){

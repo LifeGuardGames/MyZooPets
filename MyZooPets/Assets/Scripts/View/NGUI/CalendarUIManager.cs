@@ -49,7 +49,7 @@ public class CalendarUIManager : MonoBehaviour {
     private const string HALF_STAMP_GREEN_TOP = "calendarHalfStampGreenTop";
 
 	// Use this for initialization
-	void Start () {
+	void Awake() {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
 
@@ -62,10 +62,15 @@ public class CalendarUIManager : MonoBehaviour {
             temp[2].DayTime = DosageRecord.Null;
             DataManager.EntriesLastWeek = temp;
             DataManager.EntriesThisWeek = temp;
-            Init();
+            // Init();
             CalendarClicked();
         }
 	}
+
+    void Start(){
+        currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
+        pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -73,10 +78,10 @@ public class CalendarUIManager : MonoBehaviour {
 	}
 
     //Initialize calendar when scene is ready
-    public void Init(){
-        currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
-    }
+    // public void Init(){
+        // currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
+        // pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
+    // }
 
     public void CalendarClicked(){
         PopulateCalendar();

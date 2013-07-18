@@ -41,6 +41,10 @@ public class InventoryUIManager : MonoBehaviour {
         }
     }
 
+    void OnDestroy(){
+        Inventory.OnItemAddedToInventory -= OnItemAdded; 
+    }
+
     //Event listener. listening to when item is dragged out of the inventory on drop
     //on something in the game
     private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){

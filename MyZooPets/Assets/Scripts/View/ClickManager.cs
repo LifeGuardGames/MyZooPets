@@ -70,6 +70,14 @@ public class ClickManager : MonoBehaviour {
 
 	}
 
+	//Clean all even listeners
+	void OnDestroy(){
+		NoteUIManager.OnNoteClosed -= OnNoteClosed;
+		StoreUIManager.OnStoreClosed -= OnStoreClosed;
+		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
+		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
+	}
+
 	// assigning methods that get called when these individual objects get called in the scene
 	void AssignOnTapEvents(){
 		switch(Application.loadedLevelName){
@@ -199,7 +207,6 @@ public class ClickManager : MonoBehaviour {
 
 	void OnTapSlotMachine(){
 		if (CanRespondToTap()){
-			// cameraMove.SlotMachineZoomToggle();
 			cameraMove.ZoomToggle(ZoomItem.SlotMachine);
 			ClickLock();
 			ModeLock();
@@ -242,8 +249,6 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 		}
 	}
-
-
 
 	void OnTapHelpTrophy(){
         // make sure we are in trophy mode

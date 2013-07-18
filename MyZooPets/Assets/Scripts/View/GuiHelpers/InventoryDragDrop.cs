@@ -49,7 +49,6 @@ public class InventoryDragDrop : MonoBehaviour {
 		UpdateGrid();
 	}
 
-
 	/// <summary>
 	/// Drop the dragged object.
 	/// </summary>

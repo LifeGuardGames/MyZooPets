@@ -35,6 +35,8 @@ public class NavigationUIManager : MonoBehaviour {
                     Application.LoadLevel("NewBedRoom");
                 }
             break;
+            default:
+            break;
        }
     }
 }

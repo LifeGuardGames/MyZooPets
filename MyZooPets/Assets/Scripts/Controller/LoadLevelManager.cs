@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class LoadLevelManager : MonoBehaviour {
+public class LoadDataLogic : MonoBehaviour {
     public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
     //UI
     private DegradationUIManager degradationUIManager; //reference to UI

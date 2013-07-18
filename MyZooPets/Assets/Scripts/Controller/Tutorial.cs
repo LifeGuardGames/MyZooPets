@@ -59,7 +59,6 @@ public class Tutorial : MonoBehaviour {
             growShrink.Play();
         }
         if (DataManager.FirstTimeRealInhaler){
-            GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
             realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
         }
     }
@@ -71,7 +70,6 @@ public class Tutorial : MonoBehaviour {
             growShrink.Play();
         }
         if (DataManager.FirstTimeHelpTrophy){
-            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
             helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
         }
     }

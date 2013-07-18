@@ -68,6 +68,10 @@ public class ClickManager : MonoBehaviour {
 
 		AssignOnTapEvents();
 
+		NoteUIManager.OnNoteClosed += OnNoteClosed;
+		StoreUIManager.OnStoreClosed += OnStoreClosed;
+		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
+		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 	}
 
 	//Clean all even listeners
@@ -108,7 +112,6 @@ public class ClickManager : MonoBehaviour {
 	public void OnClickNote(){
 		if(CanRespondToTap()){
 			noteUIManager.NoteClicked();
-			NoteUIManager.OnNoteClosed += OnNoteClosed;
 			cameraMove.ZoomToggle(ZoomItem.Pet); //zoom into pet
 
 			ClickLock();
@@ -133,7 +136,6 @@ public class ClickManager : MonoBehaviour {
 	public void OnClickStore(){
 		if(CanRespondToTap()){
 			storeUIManager.StoreClicked();
-			StoreUIManager.OnStoreClosed += OnStoreClosed;
 			ClickLock();
 			ModeLock();
 
@@ -154,7 +156,6 @@ public class ClickManager : MonoBehaviour {
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
 			calendarUIManager.CalendarClicked();
-			CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 			ClickLock();
 			ModeLock();
 
@@ -177,7 +178,6 @@ public class ClickManager : MonoBehaviour {
 	private void OnTapShelf(){
 		if (CanRespondToTap()){
 			trophyGUI.TrophyClicked();
-			TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 			ClickLock();
 			ModeLock();
 

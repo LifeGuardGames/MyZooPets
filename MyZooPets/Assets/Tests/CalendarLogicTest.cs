@@ -25,7 +25,6 @@ public class CalendarLogicTest : MonoBehaviour {
 	}
     void SetUpFakeTime(){
         DateTime timeTracker = DateTime.Today;
-        TimeSpan twelveHourPeriod = new TimeSpan(12,0,0);
 
         timeTracker += new TimeSpan(7,0,0); // 7AM this morning;
         DataManager.EntriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(timeTracker);

@@ -24,6 +24,8 @@ public class StoreUIManager : MonoBehaviour {
 	private int page;
 	private UISprite uisprite;
 	private GameObject grid;
+	private GameObject inventoryGrid;
+	private GameObject toDestroy = null;
 	
 	// Use this for initialization
 	void Start () {
@@ -35,6 +37,7 @@ public class StoreUIManager : MonoBehaviour {
 		}
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
+		inventoryGrid = GameObject.Find("UI Grid");
 		CreateItems(null);
 	}
 	
@@ -61,26 +64,41 @@ public class StoreUIManager : MonoBehaviour {
 	//TODO Scales are a little mess up
 	public void OnBuyAnimation(GameObject sprite){
 		Vector3 origin = sprite.transform.position;
+		string id = sprite.transform.parent.name;
+		Vector3 itemPosition= origin;
+		
+		foreach(Transform item in inventoryGrid.transform){
+			if(item.FindChild(id))
+				itemPosition = item.FindChild(id).position;
+		}
+		
 		//adjust moving speed here
-		float speed = 50f;
+		float speed = 1f;
 		
 		//Change the 3 V3 to where icon should move
 		Vector3[] path = new Vector3[4];
-		path[0] = origin;
-		path[1] = new Vector3(3f,0f,-2f);
-		path[2] = new Vector3(5f,-5f,-2f);
-		path[3] = new Vector3(7f,-7f,-2f);
+		path[0] = origin ;
+		path[1] = origin + new Vector3(0,1.5f,0);
+		path[2] = origin;
+//		path[3] = new Vector3(7f,-7f,-2f);
+		path[3] = itemPosition + new Vector3(-0.22f,0,0);
 		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
-		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("StoreGUI")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
+		optional.Add ("onComplete","DestroySprite");
+		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
 		animationSprite.transform.position = origin;
-		animationSprite.transform.localScale = new Vector3(156,154,0);
+		animationSprite.transform.localScale = new Vector3(100,100,0);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 		LeanTween.move(animationSprite,path,speed,optional);
-		Destroy(animationSprite);
+		toDestroy =animationSprite;
+//		Destroy(animationSprite);
 	}
 	
+	public void DestroySprite(){
+		Destroy(toDestroy);
+		toDestroy = null;
+	}
 	
 	//Called when "Buy" is clicked
 	public void OnBuyButton(GameObject button){

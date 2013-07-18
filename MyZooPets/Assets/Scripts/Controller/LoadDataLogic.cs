@@ -11,7 +11,6 @@ public class LoadDataLogic : MonoBehaviour {
     private LevelUpLogic levelUpLogic; //reference to logic
     private DegradationLogic degradationLogic; //reference to logic
     private PetMovement petMovement; //reference
-    private CameraMove cameraMove; //reference
     private DiagnoseTimerLogic diagnoseTimerLogic; //reference
     private ClickManager clickManager;
 
@@ -43,7 +42,6 @@ public class LoadDataLogic : MonoBehaviour {
                 degradationUIManager = GameObject.Find("UIManager/DegradationUIManager").GetComponent<DegradationUIManager>();
                 // diagnoseTimerLogic = GameObject.Find("GameManager/DiagnoseTimerLogic").GetComponent<DiagnoseTimerLogic>();
                 petMovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
-                cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
 
                 // if(!DataManager.FirstTime){ //if not first time load GUI right away
                 //     FirstTimeNGUI.finishCheckingForFirstTime = InitializeDataForUI;
@@ -58,7 +56,6 @@ public class LoadDataLogic : MonoBehaviour {
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
                 clickManager = GameObject.Find ("UIManager/ClickManager").GetComponent<ClickManager>();
-                cameraMove = GameObject.Find("Main Camera").GetComponent<CameraMove>();
                 Invoke("InitializeDataForUI", 0.5f);
             break;
             // case "InhalerGamePet":
@@ -87,7 +84,6 @@ public class LoadDataLogic : MonoBehaviour {
                 inventory.GetComponent<MoveTweenToggle>().Show();
 
                 clickManager.Init();
-                cameraMove.Init();
                 levelUpLogic.Init();
                 degradationLogic.Init();
                 degradationUIManager.Init();
@@ -102,7 +98,6 @@ public class LoadDataLogic : MonoBehaviour {
                 inventory.GetComponent<MoveTweenToggle>().Show();
 
                 clickManager.Init();
-                cameraMove.Init();
             break;
             // case "InhalerGamePet":
             //     animator.Init();

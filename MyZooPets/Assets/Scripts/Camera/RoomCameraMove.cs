@@ -27,7 +27,8 @@ public class RoomCameraMove : CameraMove{
 
     protected GameObject spritePet;
 
-    public override void Init(){
+    protected override void Start(){
+        base.Start();
         spritePet = GameObject.Find("SpritePet");
 
         slotMachine = GameObject.Find("GO_SlotMachine");

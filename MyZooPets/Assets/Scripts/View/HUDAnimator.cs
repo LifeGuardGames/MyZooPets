@@ -82,8 +82,6 @@ public class HUDAnimator : MonoBehaviour {
 	}
 	
 	void FixedUpdate(){
-		if(!LoadDataLogic.IsDataLoaded) return;
-		
 		PointsAnimation();
 		StarsAnimation();
 		HealthAnimation();

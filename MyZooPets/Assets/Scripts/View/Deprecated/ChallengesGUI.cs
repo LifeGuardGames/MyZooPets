@@ -76,7 +76,6 @@ public class ChallengesGUI : MonoBehaviour {
 
     void OnGUI(){
         //don't draw until all data is loaded
-        if(!LoadDataLogic.IsDataLoaded) return;
 
         GUI.skin = defaultSkin;
 

@@ -68,7 +68,6 @@ public class RoomCameraMove : CameraMove{
                     default:
                     Debug.Log("Invalid zoom item!");
                     return;
-                    break;
                 }
                 zoomed = true;
                 LockCameraMove();

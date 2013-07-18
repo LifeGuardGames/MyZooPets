@@ -18,10 +18,9 @@ public abstract class CameraMove : MonoBehaviour{
 		get{return isCameraMoving;}
 	}
 
-	public abstract void Init();
 	public abstract void ZoomToggle(ZoomItem item);
 
-	void Start(){
+	protected virtual void Start(){
         initPosition = gameObject.transform.position;
         initFaceDirection = gameObject.transform.eulerAngles;
 	}

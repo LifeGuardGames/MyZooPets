@@ -24,14 +24,14 @@ public class InventoryUIManager : MonoBehaviour {
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-        collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
         uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
-        
         itemTrackHash = new Dictionary<string, bool>();
-        Inventory.OnItemAddedToInventory += OnItemAdded;
+        
     }
     
     void Start(){
+        collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
+        Inventory.OnItemAddedToInventory += OnItemAdded;
         print("start");
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){

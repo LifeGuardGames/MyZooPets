@@ -87,6 +87,7 @@ public class StoreUIManager : MonoBehaviour {
 		optional.Add("ease",LeanTweenType.easeOutQuad);
 		optional.Add ("onComplete","DestroySprite");
 		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
+		optional.Add("onCompleteTarget",gameObject);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(100,100,0);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;

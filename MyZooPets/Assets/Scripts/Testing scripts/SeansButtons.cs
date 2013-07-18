@@ -4,13 +4,13 @@ using System.Collections;
 public class SeansButtons : MonoBehaviour {
 
 	public GameObject notificationManagerObject;
-	private NotificationUIManager nuim;
+	// private NotificationUIManager nuim;
 
 	public GameObject inhalerGameGUIObject;
 //	private InhalerGameGUI igg;
 
 	void Start(){
-		nuim = notificationManagerObject.GetComponent<NotificationUIManager>();
+		// nuim = notificationManagerObject.GetComponent<NotificationUIManager>();
 //		igg = inhalerGameGUIObject.GetComponent<InhalerGameGUI>();
 	}
 

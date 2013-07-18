@@ -30,13 +30,11 @@ public class HUDManager : MonoBehaviour {
         DataManager.AddStars(100);
         DataManager.AddHealth(50);
         DataManager.AddMood(70);
-        LoadDataLogic.IsDataLoaded = true;
       }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if(!LoadDataLogic.IsDataLoaded) return;
 
         //Data reading from Data Manager
         points = hudAnimator.DisplayPoints;

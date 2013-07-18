@@ -126,10 +126,8 @@ public class ClickManager : MonoBehaviour {
 	}
 
 	public static bool CanRespondToTap(){
-		if (LoadDataLogic.IsDataLoaded){
-			if(!isClickLocked && !isModeLocked){
-				return true;
-			}
+		if(!isClickLocked && !isModeLocked){
+			return true;
 		}
 		return false;
 	}

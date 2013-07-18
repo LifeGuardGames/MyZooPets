@@ -15,7 +15,6 @@ using System.Collections;
         1)Attach these other scripts:
             1) TapGesture (from TouchScript.Gestures)
             2) TapItem
-        2) Make sure Init() is called somewhere else.
 
     What this does:
         When a proper tap (configurable in TapGesture, in the inspector) is performed on

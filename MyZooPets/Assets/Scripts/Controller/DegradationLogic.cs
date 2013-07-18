@@ -82,66 +82,12 @@ public class DegradationLogic : MonoBehaviour {
     }
 
     void Update(){
-        if(!LoadDataLogic.IsDataLoaded) return;
         timer -= Time.deltaTime;
         if (timer <= 0){
             TriggerDegradesHealth();
             timer = timeInterval;
         }
     }
-
-    // public void Init(){
-        // if(isDebug){
-        //     DataManager.LastTimeUserPlayedGame = DateTime.Now;
-        //     DataManager.MorningTrigger = true;
-        //     DataManager.AfternoonTrigger = true;
-        // }
-
-        // DateTime now = DateTime.Now;
-        // TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;
-        // int numberOfTriggersToInit = 0;;
-
-
-        // if(sinceLastPlayed.Days > 0){ //reset if new day
-        //     DataManager.MorningTrigger = true;
-        //     DataManager.AfternoonTrigger = true;
-        // }
-        // if(now.Hour > 12){ //morning
-        //     if(DataManager.MorningTrigger){
-        //         numberOfTriggersToInit = 3;
-        //         DataManager.MorningTrigger = false;
-        //     }
-        // }else{ //afternoon
-        //     if(DataManager.AfternoonTrigger){
-        //         numberOfTriggersToInit = 3; 
-        //         DataManager.AfternoonTrigger = false;
-        //     }
-
-        // }
-
-        // //create triggers
-        // for(int i=0; i<numberOfTriggersToInit; i++){
-        //     //don't add anymore triggers if there are already 6
-        //     if(DataManager.DegradationTriggers.Count == NUMBER_OF_LOC) break;
-
-        //     //random location and prefab
-        //     int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
-        //     int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
-
-        //     Location triggerLocation = triggerLocations[locationIndex];
-        //     if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
-        //         locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
-        //     }
-        //     triggerLocation.isTaken = true;
-            
-        //     //spawn them at a pre define location
-        //     //ID is the order in which the data are created
-        //     DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
-            
-        // }                
-
-        // DataManager.LastTimeUserPlayedGame = DateTime.Now; //update last played time
-    // }
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){

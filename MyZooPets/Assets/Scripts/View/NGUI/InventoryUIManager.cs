@@ -32,7 +32,7 @@ public class InventoryUIManager : MonoBehaviour {
     void Start(){
         collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
-        
+
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
@@ -97,9 +97,13 @@ public class InventoryUIManager : MonoBehaviour {
             GameObject item = NGUITools.AddChild(UIGridObject);
             item.name = "Item";
 
+            // gray box
             UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
             spriteFill.transform.localScale = new Vector3(90, 90, 1);   // TODO make const
+            spriteFill.depth = 2; // two more than the panel behind it
+            spriteFill.transform.localPosition = new Vector3(0, 0, -15);
 
+            // container for sprite
             GameObject SpriteGo = NGUITools.AddChild(item);
             SpriteGo.gameObject.name = id.ToString();                   // Use ID as name
             UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
@@ -113,13 +117,15 @@ public class InventoryUIManager : MonoBehaviour {
 
             SpriteGo.gameObject.AddComponent("UIDragPanelContents");
 
+            // actual sprite
             // sprite.transform.localScale = new Vector3(90, 90, 1);
+            sprite.depth = 3; // one more than the panel
             sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
-            sprite.transform.localPosition = new Vector3(0, 0, -10);
+            sprite.transform.localPosition = new Vector3(0, 0, -20);
 
 			UILabel label = NGUITools.AddWidget<UILabel>(item);
 			label.gameObject.name = "label";
-			label.transform.localPosition = new Vector3(25, -25, -15);   // TODO Different atlas for now, move forward
+			label.transform.localPosition = new Vector3(25, -25, -20);   // TODO Different atlas for now, move forward
 			label.transform.localScale = new Vector3(40, 40, 1);
 			label.font = font;
 			label.text = inventory.InventoryArray[id].ToString();

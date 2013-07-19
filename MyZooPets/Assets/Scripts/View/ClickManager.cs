@@ -166,7 +166,7 @@ public class ClickManager : MonoBehaviour {
 		ReleaseClickLock();
 		ReleaseModeLock();
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==========================
@@ -180,7 +180,7 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			hudUIObject.GetComponent<MoveTweenToggle>().Hide();
+			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 		}
 	}
 	private void OnTrophyClosed(object senders, EventArgs e){
@@ -189,7 +189,7 @@ public class ClickManager : MonoBehaviour {
 
 		//Show other UI Objects
 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		hudUIObject.GetComponent<MoveTweenToggle>().Show();
+		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 	}
 	//=========================================
 
@@ -220,7 +220,7 @@ public class ClickManager : MonoBehaviour {
 
 					//Hide other UI Objects
 					navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-					hudUIObject.GetComponent<MoveTweenToggle>().Hide();
+					hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 				}
 				else {
 					notificationUIManager.PopupNotificationOneButton(

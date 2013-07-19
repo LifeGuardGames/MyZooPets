@@ -52,13 +52,13 @@ public class LoadLevelManager : MonoBehaviour {
     private void InitializeDataForUI(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
-                hud.GetComponent<MoveTweenToggle>().Show();
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
                 navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
             break;
             case "Yard":
-                hud.GetComponent<MoveTweenToggle>().Show();
-                navigation.GetComponent<MoveTweenToggle>().Show();
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
             break;
             // case "InhalerGamePet":

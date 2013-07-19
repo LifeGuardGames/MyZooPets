@@ -358,11 +358,16 @@ public class DataManager : MonoBehaviour {
         isCreated = true;
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
-        print("firsttime" + firstTime);
+
         if(isDebug){ //debug for independent scene. only initialize data no
                     //serialization or scene loading
             InitializeAllDataFirstTime();
-        }else{
+        }
+    }
+
+    //LevelSerailizer.LoadSavedLevel needs to be called in Start()
+    void Start(){
+        if(!isDebug){ 
             if(firstTime){ //first time data initialization logic
                 InitializeAllDataFirstTime();
                 SerializeGame();

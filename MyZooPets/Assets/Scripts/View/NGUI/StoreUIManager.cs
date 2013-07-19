@@ -25,7 +25,8 @@ public class StoreUIManager : MonoBehaviour {
 	private UISprite uisprite;
 	private GameObject grid;
 	private GameObject inventoryGrid;
-	private GameObject toDestroy = null;
+	private List<GameObject> toDestroy = new List<GameObject>();
+	// private GameObject toDestroy = null;
 
 	void Awake(){
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
@@ -88,20 +89,22 @@ public class StoreUIManager : MonoBehaviour {
 
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
-		optional.Add ("onComplete","DestroySprite");
+		optional.Add ("onComplete","DestroyAllSprites");
 		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
 		optional.Add("onCompleteTarget",gameObject);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(100,100,0);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 		LeanTween.move(animationSprite,path,speed,optional);
-		toDestroy = animationSprite;
+		toDestroy.Add(animationSprite);
 	}
 
 	//helper for Buying Animation
-	public void DestroySprite(){
-		Destroy(toDestroy);
-		toDestroy = null;
+	public void DestroyAllSprites(){
+		foreach (GameObject go in toDestroy){
+			Destroy(go);
+		}
+		toDestroy.Clear();
 	}
 
 	//Called when "Buy" is clicked

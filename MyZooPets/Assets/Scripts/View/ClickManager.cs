@@ -191,7 +191,6 @@ public class ClickManager : MonoBehaviour {
 	private void OnCalendarClosed(object sender, EventArgs e){
 		ReleaseClickLock();
 		ReleaseModeLock();
-
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
 		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();

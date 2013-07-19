@@ -53,7 +53,7 @@ public class LoadLevelManager : MonoBehaviour {
         switch(Application.loadedLevelName){
             case "NewBedRoom":
                 hud.GetComponent<MoveTweenToggle>().Show();
-                navigation.GetComponent<MoveTweenToggle>().Show();
+                navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
             break;
             case "Yard":

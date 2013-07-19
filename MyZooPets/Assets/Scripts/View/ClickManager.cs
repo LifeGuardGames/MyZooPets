@@ -116,7 +116,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
@@ -125,7 +125,7 @@ public class ClickManager : MonoBehaviour {
 		cameraMove.ZoomOutMove();
 
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==============================
@@ -138,7 +138,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 		}
 	}
 	private void OnStoreClosed(object sender, EventArgs e){
@@ -146,7 +146,7 @@ public class ClickManager : MonoBehaviour {
 		ReleaseModeLock();
 
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 	}
 	//==================================
 
@@ -158,7 +158,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
@@ -179,7 +179,7 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			hudUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
@@ -188,7 +188,7 @@ public class ClickManager : MonoBehaviour {
 		cameraMove.ZoomOutMove();
 
 		//Show other UI Objects
-		navigationUIObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		hudUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//=========================================
@@ -219,7 +219,7 @@ public class ClickManager : MonoBehaviour {
 					ModeLock();
 
 					//Hide other UI Objects
-					navigationUIObject.GetComponent<MoveTweenToggle>().Hide();
+					navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 					hudUIObject.GetComponent<MoveTweenToggle>().Hide();
 				}
 				else {

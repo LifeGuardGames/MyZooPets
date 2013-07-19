@@ -101,6 +101,7 @@ public class StoreUIManager : MonoBehaviour {
 		toDestroy =animationSprite;
 	}
 	
+	//helper for Buying Animation
 	public void DestroySprite(){
 		Destroy(toDestroy);
 		toDestroy = null;
@@ -113,8 +114,8 @@ public class StoreUIManager : MonoBehaviour {
 		if(DataManager.Stars >= cost){
 			inventory.AddItem(itemId, 1);
 			DataManager.SubtractStars(cost);
+			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
 		}
-		OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
 	}
 	
 	//Drawing function. 

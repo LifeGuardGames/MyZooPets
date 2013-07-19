@@ -20,8 +20,7 @@ public class Inventory : MonoBehaviour {
 		public int ItemID{get; set;}
 	}
 	//===================Events===================
-	public delegate void CallBack(object sender, InventoryEventArgs e);
-	public static event CallBack OnItemAddedToInventory; //Call when an item is added
+	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
 	//===========================================
 
 

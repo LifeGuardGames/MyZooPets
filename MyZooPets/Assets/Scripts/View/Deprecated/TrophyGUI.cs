@@ -5,8 +5,7 @@ using System;
 public class TrophyGUI : MonoBehaviour {
 
 	//======================Event=============================
-    public delegate void CallBack(object senders, EventArgs e);
-    public static event CallBack OnTrophyClosed;
+    public static event EventHandler<EventArgs> OnTrophyClosed;
     //=======================================================
 
 	public GameObject cameraMoveObject;

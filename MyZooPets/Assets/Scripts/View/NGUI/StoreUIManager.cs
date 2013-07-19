@@ -14,8 +14,7 @@ public class StoreUIManager : MonoBehaviour {
 	public UIAtlas BackGroundPurple;
 
 	//=========================Events====================
-	public delegate void CallBack(object sender, EventArgs e);
-	public static event CallBack OnStoreClosed; //call when store is closed
+	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
 	//===================================================
 	
 	private ItemLogic itemlogic;

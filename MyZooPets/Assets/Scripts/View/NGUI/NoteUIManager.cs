@@ -5,8 +5,7 @@ using System;
 public class NoteUIManager : MonoBehaviour {
 
     //======================Event=============================
-    public delegate void CallBack(object senders, EventArgs e);
-    public static event CallBack OnNoteClosed;
+    public static event EventHandler<EventArgs> OnNoteClosed;
     //=======================================================
 
 	// Use this for initialization

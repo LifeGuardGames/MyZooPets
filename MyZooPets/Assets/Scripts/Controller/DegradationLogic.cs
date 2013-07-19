@@ -21,8 +21,7 @@ public class DegradationLogic : MonoBehaviour {
     public class TriggerDestroyedEventArgs : EventArgs{ //arguments that will be passed to Event Handler
         public Vector3 TriggerPosition {get; set;}
     }
-    public delegate void TriggerDestroyEventHandler(object sender, TriggerDestroyedEventArgs e);
-    public static event TriggerDestroyEventHandler TriggerDestroyed;
+    public static event EventHandler<TriggerDestroyedEventArgs> TriggerDestroyed;
     //=====================================================
 
     public List<DegradData> DegradationTriggers{

@@ -10,8 +10,7 @@ public class CalendarUIManager : MonoBehaviour {
     public GameObject particleEffectPrefab;
 
     //==================Events=======================
-    public delegate void CallBack(object sender, EventArgs e);
-    public static event CallBack OnCalendarClosed; //call when calendar is closed
+    public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
     //===============================================
 
     //Class to store UI reference

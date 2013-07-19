@@ -17,8 +17,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	}
 
 	//============Event==============
-	public delegate void DragDropCallBack(object sender, InvDragDropArgs e);
-	public event DragDropCallBack OnItemDrop; //Event will be fired when an item is dropped
+	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	//==============================
 
 	private Transform mTrans;

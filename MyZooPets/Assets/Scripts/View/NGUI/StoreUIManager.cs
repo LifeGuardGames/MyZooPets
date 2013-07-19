@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : MonoBehaviour {
-	
+
 	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
@@ -17,7 +17,7 @@ public class StoreUIManager : MonoBehaviour {
 	public delegate void CallBack(object sender, EventArgs e);
 	public static event CallBack OnStoreClosed; //call when store is closed
 	//===================================================
-	
+
 	private ItemLogic itemlogic;
 	private Inventory inventory;
 	private bool changePage;
@@ -26,7 +26,7 @@ public class StoreUIManager : MonoBehaviour {
 	private GameObject grid;
 	private GameObject inventoryGrid;
 	private GameObject toDestroy = null;
-	
+
 	void Awake(){
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		else {
@@ -55,7 +55,7 @@ public class StoreUIManager : MonoBehaviour {
 			Debug.LogError("OnStoreClosed listener is null");
 		}
 	}
-	
+
 	//This function is called when buying an item
 	//It creates a icon for the item and move it to Inventory
 	//TODO Scales are a little mess up
@@ -63,7 +63,7 @@ public class StoreUIManager : MonoBehaviour {
 		Vector3 origin = sprite.transform.position;
 		string id = sprite.transform.parent.name;
 		Vector3 itemPosition = origin;
-		
+
 		//Find the existing object
 		foreach(Transform item in inventoryGrid.transform){
 			if(item.FindChild(id)){
@@ -75,17 +75,17 @@ public class StoreUIManager : MonoBehaviour {
 				}
 			}
 		}
-		
+
 		//adjust moving speed here
 		float speed = 1f;
-		
+
 		//Change the 3 V3 to where icon should move
 		Vector3[] path = new Vector3[4];
 		path[0] = origin ;
 		path[1] = origin + new Vector3(0,1.5f,0);
 		path[2] = origin;
 		path[3] = itemPosition;
-		
+
 		Hashtable optional = new Hashtable();
 		optional.Add("ease",LeanTweenType.easeOutQuad);
 		optional.Add ("onComplete","DestroySprite");
@@ -95,15 +95,15 @@ public class StoreUIManager : MonoBehaviour {
 		animationSprite.transform.localScale = new Vector3(100,100,0);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 		LeanTween.move(animationSprite,path,speed,optional);
-		toDestroy =animationSprite;
+		toDestroy = animationSprite;
 	}
-	
+
 	//helper for Buying Animation
 	public void DestroySprite(){
 		Destroy(toDestroy);
 		toDestroy = null;
 	}
-	
+
 	//Called when "Buy" is clicked
 	public void OnBuyButton(GameObject button){
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
@@ -114,16 +114,16 @@ public class StoreUIManager : MonoBehaviour {
 			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
 		}
 	}
-	
-	//Drawing function. 
-	//draw according to itemlogic 
+
+	//Drawing function.
+	//draw according to itemlogic
 	private void CreateItems(GameObject page){
-		
-		//Destory first 
+
+		//Destory first
 		foreach(Transform child in grid.transform){
 			Destroy(child.gameObject);
 		}
-		
+
 		if(page == null || page.name == "Food"){
 			uisprite.atlas = BackGroundRed;
 			for(int i = 0;i<itemlogic.foodlist.Count;i++){
@@ -184,9 +184,9 @@ public class StoreUIManager : MonoBehaviour {
 		Invoke("Reposition",0.00000001f);
 	}
 	//Delay calling reposition due to async problem Destroying/Repositionoing.
-	//TODO Maybe change later when we have more items 
+	//TODO Maybe change later when we have more items
 	private void Reposition(){
 		grid.GetComponent<UIGrid>().Reposition();
-		
+
 	}
 }

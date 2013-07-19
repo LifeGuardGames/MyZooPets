@@ -76,12 +76,6 @@ public class CalendarUIManager : MonoBehaviour {
         //TO DO: count down timer for nxt reward collection	
 	}
 
-    //Initialize calendar when scene is ready
-    // public void Init(){
-        // currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
-        // pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
-    // }
-
     public void CalendarClicked(){
         PopulateCalendar();
         GetComponent<MoveTweenToggleDemultiplexer>().Show();

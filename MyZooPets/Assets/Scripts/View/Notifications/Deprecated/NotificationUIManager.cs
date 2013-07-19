@@ -24,8 +24,6 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
 	public bool flipped;
 
-	//
-
 	void Start(){
 		if (!flipped){
 			gameObject.transform.position = new Vector3(cameraObject.transform.position.x,
@@ -42,7 +40,6 @@ public class NotificationUIManager : MonoBehaviour {
 		Params: notificationType
 	*/
 	public void PopupTexture(string notificationType){
-
 		GameObject prefab = null;
 		switch(notificationType){
 			case "great":

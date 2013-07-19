@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class LoadLevelManager : MonoBehaviour {
-    public static bool IsDataLoaded{get;set;} //has data been initialized or deserialzed
     //UI
     private DegradationUIManager degradationUIManager; //reference to UI
     private GameObject calendar;
@@ -71,7 +70,5 @@ public class LoadLevelManager : MonoBehaviour {
             // case "SlotMachineGame":
             // break;
         }
-
-        IsDataLoaded = true;
     }
 }

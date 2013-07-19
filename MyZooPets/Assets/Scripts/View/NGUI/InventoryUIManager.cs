@@ -32,10 +32,9 @@ public class InventoryUIManager : MonoBehaviour {
     void Start(){
         collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
-        print("start");
+        
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
-                print("drawing");
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
             }
         }

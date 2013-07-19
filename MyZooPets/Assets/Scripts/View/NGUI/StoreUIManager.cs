@@ -27,9 +27,7 @@ public class StoreUIManager : MonoBehaviour {
 	private GameObject inventoryGrid;
 	private GameObject toDestroy = null;
 	
-	// Use this for initialization
-	void Start () {
-		//debug option. use only in Store_NGUI scene
+	void Awake(){
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();
 		else {
 			itemlogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
@@ -38,12 +36,11 @@ public class StoreUIManager : MonoBehaviour {
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 		inventoryGrid = GameObject.Find("UI Grid");
-		CreateItems(null);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	// Use this for initialization
+	void Start () {
+		CreateItems(null);
 	}
 
 	public void StoreClicked(){

@@ -25,7 +25,9 @@ public class DegradationLogic : MonoBehaviour {
     public static event TriggerDestroyEventHandler TriggerDestroyed;
     //=====================================================
 
-    // public bool isDebug = false; //developer option. force the trigger to show
+    public List<DegradData> DegradationTriggers{
+        get{return DataManager.DegradationTriggers;}
+    }
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 

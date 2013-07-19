@@ -5,12 +5,6 @@ using System.Collections.Generic;
 //Instantiate all the degradation asthma triggers if there are any
 public class DegradationUIManager : MonoBehaviour{
     public GameObject cleanTriggerParticleDrop;
-
-    /*
-        handle particle system stuff in this class
-        perhaps a callback from DegradationLogic is required
-    */
-
     private DegradationLogic degradationLogic;
 
     void Awake(){
@@ -21,9 +15,9 @@ public class DegradationUIManager : MonoBehaviour{
         DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
 
         //instantiate triggers in the game
-        for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
-            int prefabId = DataManager.DegradationTriggers[i].PrefabId;
-            int positionId = DataManager.DegradationTriggers[i].PositionId;
+        for(int i=0; i<degradationLogic.DegradationTriggers.Count; i++){
+            int prefabId = degradationLogic.DegradationTriggers[i].PrefabId;
+            int positionId = degradationLogic.DegradationTriggers[i].PositionId;
             //instantiate all the triggers save in DataManager
             GameObject trigger = (GameObject)Instantiate(degradationLogic.triggerPrefabs[prefabId],
                 degradationLogic.triggerLocations[positionId].position, Quaternion.identity);
@@ -34,21 +28,6 @@ public class DegradationUIManager : MonoBehaviour{
     void OnDestroy(){
         DegradationLogic.TriggerDestroyed -= SpawnStarsWhenTriggersDestroyed;
     }
-
-    // public void Init(){
-        // degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
-        // DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
-
-        // //instantiate triggers in the game
-        // for(int i=0; i<DataManager.DegradationTriggers.Count; i++){
-        //     int prefabId = DataManager.DegradationTriggers[i].PrefabId;
-        //     int positionId = DataManager.DegradationTriggers[i].PositionId;
-        //     //instantiate all the triggers save in DataManager
-        //     GameObject trigger = (GameObject)Instantiate(degradationLogic.triggerPrefabs[prefabId],
-        //         degradationLogic.triggerLocations[positionId].position, Quaternion.identity);
-        //     trigger.GetComponent<DegradTriggerManager>().id = i;
-        // }
-    // }
 
     private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){
         GameObject particleDrop = (GameObject)Instantiate(cleanTriggerParticleDrop, e.TriggerPosition, Quaternion.Euler(270,0,0));

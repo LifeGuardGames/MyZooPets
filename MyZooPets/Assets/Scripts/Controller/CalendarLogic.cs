@@ -7,23 +7,7 @@ public static class CalendarLogic{
 
     public static int PointIncrement = 250;
     public static int StarIncrement = 0;
-
     private static CalendarEntry todaysEntry; //today's entry
-    // todo: remove these
-    //====================API (deprecated methods)=======================
-    // public static int GetComboCount(){
-    //     return 0;
-    // }
-
-    // public static bool HasCheckedCalendar{
-    //     get {return true;}
-    // }
-
-    
-
-    // public static bool IsThereMissDosageToday{
-    //     get {return true;}
-    // }
     // todo: remove these
     //====================API (deprecated testing methods)=======================
     public static CalendarEntry TodaysEntry {
@@ -40,7 +24,6 @@ public static class CalendarLogic{
     }
 
     //====================API (use this for generating weeks)=======================
-
     //Generate a week of empty CalendarEntry
     public static List<CalendarEntry> EmptyWeek(){
         List<CalendarEntry> list = new List<CalendarEntry>();

@@ -51,8 +51,13 @@ public class CalendarUIManager : MonoBehaviour {
 	void Awake() {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
+	}
 
-       if(isDebug){ //Testing code. generate dummy data for last week and this week
+    void Start(){
+        currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
+        pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
+		
+  		if(isDebug){ //Testing code. generate dummy data for last week and this week
             List<CalendarEntry> temp = new List<CalendarEntry>();
             for(int i=0; i<7; i++){
                 temp.Add(new CalendarEntry(
@@ -64,11 +69,6 @@ public class CalendarUIManager : MonoBehaviour {
             // Init();
             CalendarClicked();
         }
-	}
-
-    void Start(){
-        currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
     }
 	
 	// Update is called once per frame
@@ -120,7 +120,7 @@ public class CalendarUIManager : MonoBehaviour {
         //Add reward
         CalendarLogic.ClaimReward(); 
     }
-    
+	
     //Populate the calendar based on the data stored in DataManager
     private void PopulateCalendar(){
 
@@ -247,4 +247,15 @@ public class CalendarUIManager : MonoBehaviour {
             }
         }
     }
+	
+	void OnGUI(){
+		if(isDebug){
+			if(GUI.Button (new Rect(10, 10, 100, 50), "show")){
+				CalendarClicked();				
+			}
+			if(GUI.Button (new Rect(10, 70, 100, 50), "hide")){
+				CalendarClosed();				
+			}
+		}
+	}
 }

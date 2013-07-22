@@ -103,7 +103,7 @@ public class Tutorial : MonoBehaviour {
     }
     void openRealInhaler(){
         // todo: change sprite name
-        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "trophySilver", delegate(){});
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", delegate(){});
 
         GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
         growShrink.Stop();

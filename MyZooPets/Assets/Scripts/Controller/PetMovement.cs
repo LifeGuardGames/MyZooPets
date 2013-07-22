@@ -69,12 +69,9 @@ public class PetMovement : MonoBehaviour {
     void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
-        // temporary fix for making sure pet doesn't move when GUI elements are clicked
-        if(tapItem.lastTapPosition.y < 110) return;
 
         Ray myRay = Camera.main.ScreenPointToRay(tapItem.lastTapPosition);
         RaycastHit hit;
-        Debug.DrawRay(myRay.origin, myRay.direction*10, Color.green);
         if(Physics.Raycast(myRay,out hit)){
             if (hit.collider == planeCenter.collider || planeRight.collider){ 
             	if(moving == false){

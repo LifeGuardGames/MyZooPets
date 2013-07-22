@@ -77,15 +77,31 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openCalendar(){
+        ShowCalendarTip1();
+
         GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-        DataManager.FirstTimeCalendar = false;
         growShrink.Stop();
 
+        DataManager.FirstTimeCalendar = false;
         // added for the demo
         if (DataManager.FirstTimeRealInhaler){
             realInhaler.GetComponent<GrowShrink>().Play();
         }
     }
+
+    void ShowCalendarTip1(){
+        notificationUIManager.PopupTipWithImage("The Calendar tells you if your pet has been taking its inhaler.", "guiPanelStatsHealth", ShowCalendarTip2, true, true);
+    }
+    void ShowCalendarTip2(){
+        notificationUIManager.PopupTipWithImage("This means your pet missed a dose.", "calendarStampEx", ShowCalendarTip3, false, true);
+    }
+    void ShowCalendarTip3(){
+        notificationUIManager.PopupTipWithImage("This means your pet took its inhaler. Click on these to get extra points!", "calendarStampCheck", ShowCalendarTip4, false, true);
+    }
+    void ShowCalendarTip4(){
+        notificationUIManager.PopupTipWithImage("Come back every 12 hours to get more points!", "guiPanelStarsStar", delegate(){}, false, false);
+    }
+
     void openChallenges(){
         GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
         DataManager.FirstTimeChallenges = false;
@@ -103,7 +119,7 @@ public class Tutorial : MonoBehaviour {
     }
     void openRealInhaler(){
         // todo: change sprite name
-        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", delegate(){});
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", delegate(){}, true, false);
 
         GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
         growShrink.Stop();

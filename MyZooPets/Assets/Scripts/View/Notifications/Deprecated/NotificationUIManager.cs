@@ -143,11 +143,17 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ // doesn't call Show(). Show() is called in Display()
+		return CreatePopupNotificationNGUI(prefab, true);
+	}
+
+	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab, bool startsHidden){ // doesn't call Show(). Show() is called in Display()
 		// save z-value, because it gets reset when using NGUITools.AddChild(...)
 		float zVal = prefab.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
-		obj.GetComponent<MoveTweenToggle>().Reset();
+		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
+		mtt.startsHidden = startsHidden;
+		mtt.Reset();
 		return obj.GetComponent<PopupNotificationNGUI>();
 	}
 
@@ -168,9 +174,10 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates popup that shows a tip, along with an image on the left and a message on the right.
 		Params: tipImage, call back for button
 	*/
-	public void PopupTipWithImage(string message, string spriteName, PopupNotificationNGUI.Callback okCallBack){
+	public void PopupTipWithImage(string message, string spriteName, PopupNotificationNGUI.Callback okCallBack, bool startsHidden, bool killImmediately){
 
-		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImageNGUI) as PopupNotificationWithImageNGUI;
+		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImageNGUI, startsHidden) as PopupNotificationWithImageNGUI;
+		tip.killImmediately = killImmediately;
 		tip.Message = message;
 		tip.Title = "Tip";
 		tip.SetSprite(spriteName);

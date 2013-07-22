@@ -5,10 +5,10 @@ using System;
 /// <summary>
 /// Room GUI animator.
 /// This is the middleman proxy class that listens to the statLogic to display animation for HUD.
-/// 
+///
 /// this animator will also have a series of events. These events will be raised
 /// when special things are happening to the changing stats. Client classes will need
-/// to provide listeners to handle these events. 
+/// to provide listeners to handle these events.
 /// For example, Event will be raised when the level up progress bar reached the leveling up point
 /// If any other class wants to display UI elements when this event happens, a listener will need to
 /// be provided.
@@ -20,7 +20,7 @@ public class HUDAnimator : MonoBehaviour {
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
     public static OnLevelUpEventHandlers OnLevelUp;
     //========================================
-	
+
     public int DisplayPoints{
     	get{return displayPoints;}
     }
@@ -50,7 +50,7 @@ public class HUDAnimator : MonoBehaviour {
 	private int nextLevelPoints; //the minimum requirement for next level up
 	private Level lastLevel; //pet's last level
 	// private HUD hud;
-	
+
 	// Icon pulsing
 	public GameObject healthIconAnim;
 	public GameObject moodIconAnim;
@@ -58,7 +58,7 @@ public class HUDAnimator : MonoBehaviour {
 	private AnimationControl starAnimControl;
 	private AnimationControl healthAnimControl;
 	private AnimationControl moodAnimControl;
-    
+
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
 		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
@@ -71,21 +71,23 @@ public class HUDAnimator : MonoBehaviour {
 		dataHealth = DataManager.Health;
 		dataMood = DataManager.Mood;
 		dataHunger = DataManager.Hunger;
-		
+
 		displayPoints = DataManager.Points;
 		displayStars = DataManager.Stars;
 		displayHealth = DataManager.Health;
 		displayMood = DataManager.Mood;
 
 		lastLevel = DataManager.CurrentLevel;
-		nextLevelPoints = LevelUpLogic.NextLevelPoints();		
+		nextLevelPoints = LevelUpLogic.NextLevelPoints();
 	}
-	
+
 	void FixedUpdate(){
-		PointsAnimation();
-		StarsAnimation();
-		HealthAnimation();
-		MoodAnimation();
+		if (!LoadLevelManager.IsPaused){
+			PointsAnimation();
+			StarsAnimation();
+			HealthAnimation();
+			MoodAnimation();
+		}
 	}
 
 	//==================GUI Animation=========================
@@ -108,7 +110,7 @@ public class HUDAnimator : MonoBehaviour {
 
 	private void PointsAnimation(){
 		if(dataPoints != DataManager.Points){
-			if(displayPoints < DataManager.Points){ //animate 
+			if(displayPoints < DataManager.Points){ //animate
 				if(displayPoints + 3 <= DataManager.Points){
 					displayPoints += 3;
 				}else{
@@ -116,7 +118,7 @@ public class HUDAnimator : MonoBehaviour {
 				}
 				LevelUpEventCheck(); // Check if progress bar reach level max
 			}else{ //animation done
-				dataPoints = DataManager.Points;	
+				dataPoints = DataManager.Points;
 			}
 		}
 	}
@@ -147,7 +149,7 @@ public class HUDAnimator : MonoBehaviour {
 				displayMood++;
 				moodAnimControl.Play();
 			}else{
-				dataMood = DataManager.Mood;	
+				dataMood = DataManager.Mood;
 
 				// Stop grow & shrink. reset icon size
 				moodAnimControl.Stop();
@@ -163,7 +165,7 @@ public class HUDAnimator : MonoBehaviour {
 	private void LevelUpEventCheck(){
 		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Points - nextLevelPoints; //points to be added after leveling up
-			
+
 
 			if(OnLevelUp != null){
                 OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners

@@ -172,6 +172,7 @@ public class NotificationUIManager : MonoBehaviour {
 
 		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImageNGUI) as PopupNotificationWithImageNGUI;
 		tip.Message = message;
+		tip.Title = "Tip";
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;
 		tip.Button1Text = "OK";

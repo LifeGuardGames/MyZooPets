@@ -12,44 +12,46 @@ public class Tutorial : MonoBehaviour {
     public GameObject shelf;
     public GameObject helpTrophy;
 
+    public NotificationUIManager notificationUIManager;
+
     public void Start(){
         InhalerMissAndInhalerGame();
         TrophyDemo();
     }
 
     // not used right now
-    void HighlightAll(){
-        if (DataManager.FirstTimeCalendar){
-            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-            calendar.GetComponent<TapItem>().OnTap += openCalendar;
-            growShrink.Play();
-        }
-        if (DataManager.FirstTimeChallenges){
-            GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
-            challenges.GetComponent<TapItem>().OnTap += openChallenges;
-            growShrink.Play();
-        }
-        if (DataManager.FirstTimeDiary){
-            GrowShrink growShrink = diary.GetComponent<GrowShrink>();
-            diary.GetComponent<TapItem>().OnTap += openDiary;
-            growShrink.Play();
-        }
-        if (DataManager.FirstTimeSlotMachine){
-            GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
-            slotMachine.GetComponent<TapItem>().OnTap += openSlotMachine;
-            growShrink.Play();
-        }
-        if (DataManager.FirstTimeRealInhaler){
-            GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
-            realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
-            growShrink.Play();
-        }
-        if (DataManager.FirstTimeTeddyInhaler){
-            GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
-            teddyInhaler.GetComponent<TapItem>().OnTap += openTeddyInhaler;
-            growShrink.Play();
-        }
-    }
+    // void HighlightAll(){
+    //     if (DataManager.FirstTimeCalendar){
+    //         GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+    //         calendar.GetComponent<TapItem>().OnTap += openCalendar;
+    //         growShrink.Play();
+    //     }
+    //     if (DataManager.FirstTimeChallenges){
+    //         GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
+    //         challenges.GetComponent<TapItem>().OnTap += openChallenges;
+    //         growShrink.Play();
+    //     }
+    //     if (DataManager.FirstTimeDiary){
+    //         GrowShrink growShrink = diary.GetComponent<GrowShrink>();
+    //         diary.GetComponent<TapItem>().OnTap += openDiary;
+    //         growShrink.Play();
+    //     }
+    //     if (DataManager.FirstTimeSlotMachine){
+    //         GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+    //         slotMachine.GetComponent<TapItem>().OnTap += openSlotMachine;
+    //         growShrink.Play();
+    //     }
+    //     if (DataManager.FirstTimeRealInhaler){
+    //         GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
+    //         realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
+    //         growShrink.Play();
+    //     }
+    //     if (DataManager.FirstTimeTeddyInhaler){
+    //         GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
+    //         teddyInhaler.GetComponent<TapItem>().OnTap += openTeddyInhaler;
+    //         growShrink.Play();
+    //     }
+    // }
 
     // For the demo.
     void InhalerMissAndInhalerGame(){
@@ -80,8 +82,10 @@ public class Tutorial : MonoBehaviour {
             DataManager.FirstTimeCalendar = false;
             growShrink.Stop();
 
+            Debug.Log("outside");
             // added for the demo
             if (DataManager.FirstTimeRealInhaler){
+            Debug.Log("inside");
                 realInhaler.GetComponent<GrowShrink>().Play();
             }
         }
@@ -108,11 +112,13 @@ public class Tutorial : MonoBehaviour {
         }
     }
     void openRealInhaler(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
-            DataManager.FirstTimeRealInhaler = false;
-            growShrink.Stop();
-        }
+        // todo: change sprite name
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "trophySilver", delegate(){});
+
+        GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
+        growShrink.Stop();
+
+        DataManager.FirstTimeRealInhaler = false;
     }
     void openTeddyInhaler(){
         if (ClickManager.CanRespondToTap()){

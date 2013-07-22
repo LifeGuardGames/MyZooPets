@@ -60,7 +60,8 @@ public class CalendarUIManager : MonoBehaviour {
     void Start(){
         currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
         pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
-		
+		numberOfGreenStamps = CalendarLogic.GreenStampCount;
+        
   		if(isDebug){ //Testing code. generate dummy data for last week and this week
             List<CalendarEntry> temp = new List<CalendarEntry>();
             for(int i=0; i<7; i++){
@@ -74,7 +75,7 @@ public class CalendarUIManager : MonoBehaviour {
         }
     }
 	
-        numberOfGreenStamps = CalendarLogic.GreenStampCount;
+        
 	// Update is called once per frame
 	void Update () {
         //TO DO: count down timer for nxt reward collection	

@@ -9,6 +9,13 @@ public class LoadLevelManager : MonoBehaviour {
     private GameObject navigation;
     private GameObject inventory;
 
+    /*
+        Use IsPaused instead of Time.timeScale to pause all critical parts of the game,
+        so that nothing important happens while notifications are being displayed.
+
+        Why not just change Time.timeScale to zero? Because any particle animations
+        that come along with the notifications will be paused as well.
+    */
     public static bool IsPaused = false;
 
     private const string ANCHOR_TOP = "UI Root (2D)/Camera/Panel/Anchor-Top/";

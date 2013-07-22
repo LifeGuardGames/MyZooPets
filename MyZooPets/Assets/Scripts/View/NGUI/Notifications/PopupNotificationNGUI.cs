@@ -12,6 +12,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
     // set the following
 
     public int numOfButtons = 1;
+    public bool killImmediately = false;
 
     public delegate void Callback();
     public Callback Button1Callback;
@@ -47,12 +48,12 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
-        if (Button1Callback != null) Button1Callback();
         Hide();
+        if (Button1Callback != null) Button1Callback();
     }
     protected void Button2Action(){
-        if (Button2Callback != null) Button2Callback();
         Hide();
+        if (Button2Callback != null) Button2Callback();
     }
 
     // Display the popup panel
@@ -69,15 +70,15 @@ public class PopupNotificationNGUI : MonoBehaviour {
     // Hide the popup panel
     protected void Hide(){
         backdrop.gameObject.SetActive(false);
-        // Hashtable optional = new Hashtable();
-        // optional.Add("onCompleteTarget", gameObject);
-        // optional.Add("onComplete", "DestroyNotification");
-        GetComponent<MoveTweenToggle>().Hide(0.5f);
-        // optional.Add("ease", LeanTweenType.easeInOutQuad);
-        // LeanTween.move(panelRect, initPosition, 0.5f, optional);
-        Time.timeScale = 1;
+        if (killImmediately){
+            Destroy(gameObject);
+        }
+        else {
+            GetComponent<MoveTweenToggle>().Hide(0.5f);
+            Destroy(gameObject, 3.0f);
+        }
         ClickManager.ReleaseClickLock();
-        Destroy(gameObject, 3.0f);
+        Time.timeScale = 1;
     }
 
     // =========================================================================================================================================================

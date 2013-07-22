@@ -33,7 +33,7 @@ public class ClickManager : MonoBehaviour {
 	public GameObject navigationUIObject;
 
 	public GameObject challengesGUIObject;
-	private ChallengesGUI challengesGUI;
+	// private ChallengesGUI challengesGUI;
 
 	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;

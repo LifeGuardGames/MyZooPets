@@ -26,9 +26,8 @@ using System.Collections;
 
 public class PetMovement : MonoBehaviour {
 
-	public Plane planeCenter;
-	public Plane planeRight;
-	
+    private Transform planeCenter;
+    private Transform planeRight;
 	
     private GameObject petSprite;
     private Vector3 destinationPoint;
@@ -43,6 +42,8 @@ public class PetMovement : MonoBehaviour {
     void Awake(){
         petSprite = GameObject.Find("SpritePet");
         tapItem = GetComponent<TapItem>();
+        planeCenter = transform.Find("planeCenter");
+        planeRight = transform.Find("planeRight");
     }
 
     void Start(){
@@ -56,7 +57,7 @@ public class PetMovement : MonoBehaviour {
 		Ray ray = camera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)){
-			if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
+			if (hit.collider == planeCenter.collider || planeRight.collider){
         		if(moving == false){
 					destinationPoint = hit.point;
 					moving = true;
@@ -73,8 +74,9 @@ public class PetMovement : MonoBehaviour {
 
         Ray myRay = Camera.main.ScreenPointToRay(tapItem.lastTapPosition);
         RaycastHit hit;
+        Debug.DrawRay(myRay.origin, myRay.direction*10, Color.green);
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
+            if (hit.collider == planeCenter.collider || planeRight.collider){ 
             	if(moving == false){
                 	destinationPoint = hit.point;
 					moving = true;
@@ -83,32 +85,35 @@ public class PetMovement : MonoBehaviour {
         }
     }
     
+    //need to check if the pet moved out of the walk area
 	void PetWalkAround(){
-		//Get a random value for pet to move. 
-		float ran1 = Random.value;
-		float ran2 = Random.value;
-		float ran3 = Random.value;
-		float ran4 = Random.value;
-		if(ran1 < 0.5) ran2 = -ran2;
-		if(ran3 < 0.5) ran4 = -ran4;
-		moveToX = petSprite.transform.position.x + ran2 *10;
-		moveToZ = petSprite.transform.position.z + ran4 *10;
+		// //Get a random value for pet to move. 
+		// float ran1 = Random.value;
+		// float ran2 = Random.value;
+		// float ran3 = Random.value;
+		// float ran4 = Random.value;
+		// if(ran1 < 0.5) ran2 = -ran2;
+		// if(ran3 < 0.5) ran4 = -ran4;
+		// moveToX = petSprite.transform.position.x + ran2 *10;
+		// moveToZ = petSprite.transform.position.z + ran4 *10;
 		
-		RaycastHit hit;
-		Physics.Raycast(new Vector3(moveToX,10,moveToZ),new Vector3(0,-100,0),out hit);
-		if (hit.collider == GameObject.Find ("planeCenter").collider || hit.collider == GameObject.Find ("planeRight").collider){
-            if(moving == false){
-               	destinationPoint = hit.point;
-				moving = true;
-			}
-        }
+		// RaycastHit hit;
+		// Physics.Raycast(new Vector3(moveToX, planeCenter.transform.position.y ,
+  //           moveToZ),new Vector3(0,-100,0),out hit);
+		// if (hit.collider == planeCenter.collider || planeRight.collider){ 
+  //           if(moving == false){
+  //              	destinationPoint = hit.point;
+		// 		moving = true;
+		// 	}
+  //       }
 	}
 
 	// Update is called once per frame
 	void Update () {
         if (petSprite != null){
             if (ClickManager.CanRespondToTap()){
-                petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,destinationPoint,5f * Time.deltaTime);
+                petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
+                    destinationPoint,5f * Time.deltaTime);
             }
             if(petSprite.transform.position == destinationPoint) moving = false;
         }

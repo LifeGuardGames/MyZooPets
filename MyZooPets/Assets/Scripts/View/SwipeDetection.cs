@@ -12,6 +12,8 @@ public class SwipeDetection : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 
+    private int layerNGUI;
+
     float screenDiagonalSize;
     float minSwipeDistancePixels;
     bool touchStarted;
@@ -22,14 +24,22 @@ public class SwipeDetection : MonoBehaviour {
 
     public static event System.Action<Swipe> OnSwipeDetected;
     private static bool swipeCancelled;
+    private Camera NGUICamera;
 
     void Start() {
         screenDiagonalSize = Mathf.Sqrt(NATIVE_WIDTH * NATIVE_WIDTH + NATIVE_HEIGHT * NATIVE_HEIGHT);
         minSwipeDistancePixels = minSwipeDistance * screenDiagonalSize;
+
+        layerNGUI = LayerMask.NameToLayer("NGUI");
+        NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
+        if (NGUICamera == null){
+            Debug.LogError("NGUI camera not found!");
+        }
     }
 
     void Update() {
         if (Input.touchCount > 0) {
+
             var touch = Input.touches[0];
             flickTimer += Time.deltaTime;
 
@@ -39,6 +49,9 @@ public class SwipeDetection : MonoBehaviour {
                 flickTimer = 0;
                 touchStarted = true;
                 touchStartPos = touch.position;
+                if (IsTouchingNGUI()){
+                    swipeCancelled = true;
+                }
                 break;
 
                 case TouchPhase.Ended:
@@ -62,6 +75,21 @@ public class SwipeDetection : MonoBehaviour {
         else {
             swipeCancelled = false;
         }
+    }
+
+    bool IsTouchingNGUI(){
+
+        Ray ray = NGUICamera.ScreenPointToRay (Input.mousePosition);
+        RaycastHit hit;
+
+        // Raycast
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+
+            if (hit.transform.gameObject.layer == layerNGUI) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Use this when dragging an item.

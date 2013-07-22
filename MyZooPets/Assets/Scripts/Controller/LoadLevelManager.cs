@@ -9,6 +9,8 @@ public class LoadLevelManager : MonoBehaviour {
     private GameObject navigation;
     private GameObject inventory;
 
+    public static bool IsPaused = false;
+
     private const string ANCHOR_TOP = "UI Root (2D)/Camera/Panel/Anchor-Top/";
     private const string ANCHOR_CENTER = "UI Root (2D)/Camera/Panel/Anchor-Center/";
     private const string ANCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Panel/Anchor-BottomLeft/";

@@ -62,7 +62,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
         // Hashtable optional = new Hashtable();
         // optional.Add("ease", LeanTweenType.easeOutBounce);
         // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
-        Time.timeScale = 0;
+        // Time.timeScale = 0;
+        LoadLevelManager.IsPaused = true;
         ClickManager.ClickLock();
         GetComponent<MoveTweenToggle>().Show(0.5f);
     }
@@ -78,7 +79,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
             Destroy(gameObject, 3.0f);
         }
         ClickManager.ReleaseClickLock();
-        Time.timeScale = 1;
+        LoadLevelManager.IsPaused = false;
+        // Time.timeScale = 1;
     }
 
     // =========================================================================================================================================================

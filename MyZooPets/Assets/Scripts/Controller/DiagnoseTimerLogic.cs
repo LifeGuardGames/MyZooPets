@@ -21,11 +21,13 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 	void Update () {
         if(turnOffDiagnoseTimer) return;
 
-        timer -= Time.deltaTime;
-        if (timer <= 0){
-            timer = timeInterval;
-            SendNotification();
-            turnOffDiagnoseTimer = true;
+        if (!LoadLevelManager.IsPaused){
+            timer -= Time.deltaTime;
+            if (timer <= 0){
+                timer = timeInterval;
+                SendNotification();
+                turnOffDiagnoseTimer = true;
+            }
         }
 	}
 

@@ -77,39 +77,29 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openCalendar(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-            DataManager.FirstTimeCalendar = false;
-            growShrink.Stop();
+        GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+        DataManager.FirstTimeCalendar = false;
+        growShrink.Stop();
 
-            Debug.Log("outside");
-            // added for the demo
-            if (DataManager.FirstTimeRealInhaler){
-            Debug.Log("inside");
-                realInhaler.GetComponent<GrowShrink>().Play();
-            }
+        // added for the demo
+        if (DataManager.FirstTimeRealInhaler){
+            realInhaler.GetComponent<GrowShrink>().Play();
         }
     }
     void openChallenges(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
-            DataManager.FirstTimeChallenges = false;
-            growShrink.Stop();
-        }
+        GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
+        DataManager.FirstTimeChallenges = false;
+        growShrink.Stop();
     }
     void openDiary(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = diary.GetComponent<GrowShrink>();
-            DataManager.FirstTimeDiary = false;
-            growShrink.Stop();
-        }
+        GrowShrink growShrink = diary.GetComponent<GrowShrink>();
+        DataManager.FirstTimeDiary = false;
+        growShrink.Stop();
     }
     void openSlotMachine(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
-            DataManager.FirstTimeSlotMachine = false;
-            growShrink.Stop();
-        }
+        GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+        DataManager.FirstTimeSlotMachine = false;
+        growShrink.Stop();
     }
     void openRealInhaler(){
         // todo: change sprite name
@@ -121,11 +111,9 @@ public class Tutorial : MonoBehaviour {
         DataManager.FirstTimeRealInhaler = false;
     }
     void openTeddyInhaler(){
-        if (ClickManager.CanRespondToTap()){
-            GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
-            DataManager.FirstTimeTeddyInhaler = false;
-            growShrink.Stop();
-        }
+        GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
+        DataManager.FirstTimeTeddyInhaler = false;
+        growShrink.Stop();
     }
     void openShelf(){
         GrowShrink growShrink = shelf.GetComponent<GrowShrink>();

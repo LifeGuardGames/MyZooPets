@@ -88,6 +88,33 @@ public static class CalendarLogic{
         get{return DataManager.EntriesLastWeek;}
     }
 
+    //Return the count of all the checks for this week
+    public static int GreenStampCount{
+        get{return DataManager.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
+            entry.NightTime.Equals(DosageRecord.Hit))).Count;}
+    }
+
+    //Return the next time the user can collect bonuses
+    public static DateTime NextRewardTime{
+        get{return DataManager.NextRewardTime;}
+    }
+
+    public static bool IsRewardClaimed{
+        get{return DataManager.IsRewardClaimed;}
+        set{DataManager.IsRewardClaimed = value;}
+    }
+
+    //Based on the time now return the next reward time
+    public static DateTime CalculateNextRewardTime(){
+        DateTime nextRewardTime;
+        if(DateTime.Now.Hour < 12){ //next reward time at noon
+            nextRewardTime = DateTime.Today.AddHours(12);
+        }else{ //next reward time at midnight
+            nextRewardTime = DateTime.Today.AddDays(1);
+        }
+        return nextRewardTime;
+    }
+
     //Give bonus when user collects
     public static void ClaimReward(){
         DataManager.AddPoints(50);
@@ -109,13 +136,14 @@ public static class CalendarLogic{
 
     public static bool CanUseRealInhaler{
         get {
+            bool retVal = false;
             if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Null) {
-                return true;
+                retVal = true;
             }
             else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Null ) {
-                return true;
+                retVal = true;
             }
-            return false;
+            return retVal;
         }
     }
 
@@ -129,8 +157,6 @@ public static class CalendarLogic{
     public static void CalendarOpened(){
         CalendarOpenedOnDate(DateTime.Now);
     }
-
-   
     //================================================
 
     private static void RecordGivingInhaler(DateTime now){

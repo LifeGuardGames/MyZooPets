@@ -20,6 +20,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupNotificationOneButton; // NGUI as well
 	public GameObject popupNotificationTwoButtons; // NGUI as well
 	public GameObject levelUpMessageNGUI;
+	public GameObject popupTipWithImageNGUI;
 	public GameObject gameOverRewardMessageOneButton; // NGUI as well
 	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
 	public bool flipped;
@@ -161,6 +162,20 @@ public class NotificationUIManager : MonoBehaviour {
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = "OK";
 		oneButtonMessage.Display();
+	}
+
+	/*
+		Desc: creates popup that shows a tip, along with an image on the left and a message on the right.
+		Params: tipImage, call back for button
+	*/
+	public void PopupTipWithImage(string message, string spriteName, PopupNotificationNGUI.Callback okCallBack){
+
+		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImageNGUI) as PopupNotificationWithImageNGUI;
+		tip.Message = message;
+		tip.SetSprite(spriteName);
+		tip.Button1Callback = okCallBack;
+		tip.Button1Text = "OK";
+		tip.Display();
 	}
 
 	/*

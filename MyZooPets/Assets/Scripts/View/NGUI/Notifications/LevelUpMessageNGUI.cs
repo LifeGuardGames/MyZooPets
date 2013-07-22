@@ -41,15 +41,15 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
             break;
 
             case TrophyTier.Bronze:
-            imageSprite.spriteName="trophyBronze";
+            SetSprite("trophyBronze");
             break;
 
             case TrophyTier.Silver:
-            imageSprite.spriteName="trophySilver";
+            SetSprite("trophySilver");
             break;
 
             case TrophyTier.Gold:
-            imageSprite.spriteName="trophyGold";
+            SetSprite("trophyGold");
             break;
 
         }

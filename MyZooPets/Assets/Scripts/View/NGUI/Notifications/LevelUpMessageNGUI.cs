@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class LevelUpMessageNGUI : PopupNotificationNGUI {
-
-    public UISprite trophyImage;
+public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
 
     public void GetTrophyMessageAndImage (TrophyTier trophy){
         Message = GetMessage(trophy);
@@ -43,15 +41,15 @@ public class LevelUpMessageNGUI : PopupNotificationNGUI {
             break;
 
             case TrophyTier.Bronze:
-            trophyImage.spriteName="trophyBronze";
+            imageSprite.spriteName="trophyBronze";
             break;
 
             case TrophyTier.Silver:
-            trophyImage.spriteName="trophySilver";
+            imageSprite.spriteName="trophySilver";
             break;
 
             case TrophyTier.Gold:
-            trophyImage.spriteName="trophyGold";
+            imageSprite.spriteName="trophyGold";
             break;
 
         }

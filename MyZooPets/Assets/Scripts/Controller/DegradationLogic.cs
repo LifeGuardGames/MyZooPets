@@ -21,7 +21,8 @@ public class DegradationLogic : MonoBehaviour {
     public class TriggerDestroyedEventArgs : EventArgs{ //arguments that will be passed to Event Handler
         public Vector3 TriggerPosition {get; set;}
     }
-    public static event EventHandler<TriggerDestroyedEventArgs> TriggerDestroyed;
+    public static event EventHandler<TriggerDestroyedEventArgs> OnTriggerDestroyed;
+    public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
     //=====================================================
 
     public List<DegradData> DegradationTriggers{
@@ -31,7 +32,7 @@ public class DegradationLogic : MonoBehaviour {
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 
     private float timer = 0;
-    private float timeInterval = 30f;
+    private float timeInterval = 30f; //time interval for trigger to affect health
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 
@@ -39,7 +40,6 @@ public class DegradationLogic : MonoBehaviour {
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;;
-
 
         if(sinceLastPlayed.Days > 0){ //reset if new day
             DataManager.MorningTrigger = true;
@@ -95,10 +95,10 @@ public class DegradationLogic : MonoBehaviour {
         DataManager.AddStars(50);
         DataManager.AddPoints(250);
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
-        if(TriggerDestroyed != null){ //call event handler if not empty
+        if(OnTriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
             args.TriggerPosition = triggerLocations[degradData.PositionId].position;
-            TriggerDestroyed(this, args);
+            OnTriggerDestroyed(this, args);
         }else{
             Debug.LogError("Trigger Destroyed listener is null");
         }

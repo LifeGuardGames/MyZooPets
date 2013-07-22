@@ -7,7 +7,7 @@ using System.Collections;
 public class DiagnoseTimerLogic : MonoBehaviour {
     public NotificationUIManager notificationUIManager;
     private float timer = 0;
-    private float timeInterval = 30f;
+    private float timeInterval = 30f; //time interval for triggers to affect health
     private bool turnOffDiagnoseTimer; //For Testing
 
 	// Use this for initialization

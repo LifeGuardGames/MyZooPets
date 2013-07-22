@@ -12,7 +12,7 @@ public class DegradationUIManager : MonoBehaviour{
     }
 
     void Start(){
-        DegradationLogic.TriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
+        DegradationLogic.OnTriggerDestroyed += SpawnStarsWhenTriggersDestroyed;
 
         //instantiate triggers in the game
         for(int i=0; i<degradationLogic.DegradationTriggers.Count; i++){
@@ -26,7 +26,7 @@ public class DegradationUIManager : MonoBehaviour{
     }
 
     void OnDestroy(){
-        DegradationLogic.TriggerDestroyed -= SpawnStarsWhenTriggersDestroyed;
+        DegradationLogic.OnTriggerDestroyed -= SpawnStarsWhenTriggersDestroyed;
     }
 
     private void SpawnStarsWhenTriggersDestroyed(object sender, DegradationLogic.TriggerDestroyedEventArgs e){

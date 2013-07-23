@@ -93,9 +93,6 @@ public class MoveTweenToggle : MonoBehaviour {
 			}
 			LeanTween.moveLocal(gameObject, showingPos, time, optional);
 		}
-		else{
-			Debug.LogError("trying show locked/active HUD");
-		}
 
 	}
 
@@ -117,9 +114,6 @@ public class MoveTweenToggle : MonoBehaviour {
 				optional.Add("useEstimatedTime", true);
 			}
 			LeanTween.moveLocal(gameObject, hiddenPos, time, optional);
-		}
-		else{
-			Debug.LogError("trying hide locked/inactive HUD");
 		}
 	}
 

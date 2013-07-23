@@ -142,6 +142,7 @@ public class CalendarUIManager : MonoBehaviour {
             print(countDown);
         }else{
             //claim reward now!!!!
+ 
         }
     }
 	

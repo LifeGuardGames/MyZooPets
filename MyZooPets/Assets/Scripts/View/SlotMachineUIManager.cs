@@ -38,10 +38,7 @@ public class SlotMachineUIManager : MonoBehaviour {
                 if(SlotMachineLogic.SpinEndCallBack != null) SlotMachineLogic.SpinEndCallBack();
 
                 SlotMachineLogic.GameOver = true; //stop update from checking
-                print(SlotMachineLogic.CheckMatch());
-                // if(SlotMachineLogic.CheckMatch()){ //check if the user won
-                    Invoke("Reward", 0.5f);
-                // }
+                Invoke("Reward", 0.5f);
 
                 //reset wheels to original state so user can spin again right aways
                 wheels[0].GetComponent<SpinningWheel>().doneSpinning = false;
@@ -52,24 +49,31 @@ public class SlotMachineUIManager : MonoBehaviour {
 	}
 
     private void Reward(){
-        int stars = 500;
-                    int points = 100;
-                    DataManager.AddStars(stars);
-                    DataManager.AddPoints(points);
-                    notificationUIManager.GameOverRewardMessage(stars, points,
-                        delegate(){
-                            StartGame();
-                        },
-                        delegate(){
-                            Application.LoadLevel("NewBedRoom");
-                        });
+        int stars; 
+        int points;
+        if(SlotMachineLogic.CheckMatch()){
+            stars = 500;
+            points = 100;
+        }else{
+            stars = 200;
+            points = 10;
+        }
+        DataManager.AddStars(stars);
+        DataManager.AddPoints(points);
+        notificationUIManager.GameOverRewardMessage(stars, points,
+            delegate(){
+                StartGame();
+            },
+            delegate(){
+                Application.LoadLevel("NewBedRoom");
+            });
     }
 
     //start spinning the wheels
     private void StartGame(){
         SlotMachineLogic.GameOver = false;
+        SlotMachineLogic.GenerateRandomSlots();
         for(int i = 0; i<3; i++){
-            SlotMachineLogic.GenerateRandomSlots();
             wheels[i].GetComponent<SpinningWheel>().StartSpin(SlotMachineLogic.ChosenSlots[i], i);
         }
     }

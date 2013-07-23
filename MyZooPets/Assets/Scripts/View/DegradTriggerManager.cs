@@ -9,6 +9,10 @@ public class DegradTriggerManager : MonoBehaviour {
 	void Start () {
         degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
         GetComponent<TapItem>().OnTap += OnTap;
+        if (DataManager.FirstTimeDegradTrigger){
+            Tutorial tutorial = GameObject.Find("Tutorial").GetComponent<Tutorial>();
+            GetComponent<TapItem>().OnTap += tutorial.DegradTriggerClicked;
+        }
 	}
 
     void OnTap(){

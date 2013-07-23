@@ -38,9 +38,21 @@ public class SlotMachineUIManager : MonoBehaviour {
                 if(SlotMachineLogic.SpinEndCallBack != null) SlotMachineLogic.SpinEndCallBack();
 
                 SlotMachineLogic.GameOver = true; //stop update from checking
+                print(SlotMachineLogic.CheckMatch());
+                // if(SlotMachineLogic.CheckMatch()){ //check if the user won
+                    Invoke("Reward", 0.5f);
+                // }
 
-                if(SlotMachineLogic.CheckMatch()){ //check if the user won
-                    int stars = 500;
+                //reset wheels to original state so user can spin again right aways
+                wheels[0].GetComponent<SpinningWheel>().doneSpinning = false;
+                wheels[1].GetComponent<SpinningWheel>().doneSpinning = false;
+                wheels[2].GetComponent<SpinningWheel>().doneSpinning = false;
+            }
+        }
+	}
+
+    private void Reward(){
+        int stars = 500;
                     int points = 100;
                     DataManager.AddStars(stars);
                     DataManager.AddPoints(points);
@@ -51,22 +63,6 @@ public class SlotMachineUIManager : MonoBehaviour {
                         delegate(){
                             Application.LoadLevel("NewBedRoom");
                         });
-                }
-
-                //reset wheels to original state so user can spin again right aways
-                wheels[0].GetComponent<SpinningWheel>().doneSpinning = false;
-                wheels[1].GetComponent<SpinningWheel>().doneSpinning = false;
-                wheels[2].GetComponent<SpinningWheel>().doneSpinning = false;
-            }
-        }
-	}
-
-    void OnGUI(){
-        if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
-            float horizRatio = Screen.width/NATIVE_WIDTH;
-            float vertRatio = Screen.height/NATIVE_HEIGHT;
-            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
-        }
     }
 
     //start spinning the wheels

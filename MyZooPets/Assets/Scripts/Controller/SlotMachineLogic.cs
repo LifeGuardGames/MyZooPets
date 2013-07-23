@@ -20,8 +20,9 @@ public static class SlotMachineLogic{
     //Generate the random slots and spin the wheels
     public static void GenerateRandomSlots(){
         for(int i=0; i<3; i++){
-            // slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
-            slots[i] = 2;
+            slots[i] = Random.Range(0, NUMBER_OF_SLOTS-1);
+            Debug.Log(slots[i]);
+            // slots[i] = 2;
             chosenSlots[i] = SLOT_OFFSET * (float)slots[i]; //calculate the offset for the wheels
         }
     }

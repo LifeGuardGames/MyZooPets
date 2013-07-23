@@ -55,13 +55,14 @@ public class CalendarUIManager : MonoBehaviour {
 	void Awake() {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
+       timerActive = false;
 	}
 
     void Start(){
         currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
         pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
 		numberOfGreenStamps = CalendarLogic.GreenStampCount;
-        
+
   		if(isDebug){ //Testing code. generate dummy data for last week and this week
             List<CalendarEntry> temp = new List<CalendarEntry>();
             for(int i=0; i<7; i++){
@@ -74,11 +75,12 @@ public class CalendarUIManager : MonoBehaviour {
             CalendarClicked();
         }
     }
-	
         
 	// Update is called once per frame
 	void Update () {
-        //TO DO: count down timer for nxt reward collection	
+        if(timerActive){
+
+        }
 	}
 
     public void CalendarClicked(){
@@ -137,6 +139,7 @@ public class CalendarUIManager : MonoBehaviour {
         if(CalendarLogic.IsRewardClaimed){
             //next reward time
             TimeSpan countDown = CalendarLogic.NextRewardTime - DateTime.Now;
+            print(countDown);
         }else{
             //claim reward now!!!!
         }

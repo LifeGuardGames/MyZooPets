@@ -92,7 +92,7 @@ public class MoveTweenToggle : MonoBehaviour {
 				optional.Add("useEstimatedTime", true);
 			}
 			LeanTween.moveLocal(gameObject, showingPos, time, optional);
-		// }
+		}
 
 	}
 
@@ -114,7 +114,7 @@ public class MoveTweenToggle : MonoBehaviour {
 				optional.Add("useEstimatedTime", true);
 			}
 			LeanTween.moveLocal(gameObject, hiddenPos, time, optional);
-		// }
+		}
 	}
 
 	public void Hide(){

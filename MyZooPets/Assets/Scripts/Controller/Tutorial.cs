@@ -13,6 +13,7 @@ public class Tutorial : MonoBehaviour {
     public GameObject helpTrophy;
 
     public NotificationUIManager notificationUIManager;
+    public ClickManager clickManager;
 
     public void Start(){
         InhalerMissAndInhalerGame();
@@ -119,7 +120,7 @@ public class Tutorial : MonoBehaviour {
     }
     void openRealInhaler(){
         // todo: change sprite name
-        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", delegate(){}, true, false);
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", clickManager.OpenRealInhaler, true, false);
 
         GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
         growShrink.Stop();

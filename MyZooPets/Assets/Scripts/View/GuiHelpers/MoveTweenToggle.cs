@@ -36,18 +36,24 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	private Vector3 hiddenPos;
 	private Vector3 showingPos;
+	private bool positionSet;
 
 	void Awake(){
+		RememberPositions();
 		//Debug.Log("toggle awake");
 		Reset();
 	}
 
-	public void Reset(){
+	void RememberPositions(){
 		showingPos = gameObject.transform.localPosition;
 		hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, 0);
+		positionSet = true;
+	}
+
+	public void Reset(){
 
 		if (startsHidden){
-			if(!isUsingDemultiplexer){
+			if (positionSet){ // if not, Reset() will be called again by Awake() later
 				gameObject.transform.localPosition = hiddenPos;
 			}
 		 	// Need to call show first

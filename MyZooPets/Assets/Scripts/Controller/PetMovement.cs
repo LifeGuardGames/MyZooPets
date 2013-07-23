@@ -7,8 +7,8 @@ using System.Collections;
 
     What it does:
         1. When the user taps a spot on the floor, the pet moves to that spot.
-        2. If turned on, pet will walk around in the room randomly. 
-        3. when camera moves to another room, pet will move into that room. 
+        2. If turned on, pet will walk around in the room randomly.
+        3. when camera moves to another room, pet will move into that room.
 
     To use PetMovement:
         1)Attach this script to the floor collider GameObject.
@@ -28,14 +28,14 @@ public class PetMovement : MonoBehaviour {
 
     private Transform planeCenter;
     private Transform planeRight;
-	
+
     private GameObject petSprite;
     private Vector3 destinationPoint;
     private TapItem tapItem;
-    public Camera camera;
+    public Camera mainCamera;
     public bool allowPetMoveAround;
 	private bool moving;
-	
+
 	private float moveToX;
 	private float moveToZ;
 
@@ -47,14 +47,14 @@ public class PetMovement : MonoBehaviour {
     }
 
     void Start(){
-       destinationPoint = petSprite.transform.position; 
+       destinationPoint = petSprite.transform.position;
        tapItem.OnTap += MovePet;
-       //how often does pet walk by himself.  
+       //how often does pet walk by himself.
         if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
     }
 
 	public void movePetWithCamera(){
-		Ray ray = camera.ScreenPointToRay(new Vector3(600, 200, 0));
+		Ray ray = mainCamera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)){
 			if (hit.collider == planeCenter.collider || planeRight.collider){
@@ -65,7 +65,7 @@ public class PetMovement : MonoBehaviour {
 			}
 		}
 	}
-	
+
     void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
@@ -73,7 +73,7 @@ public class PetMovement : MonoBehaviour {
         Ray myRay = Camera.main.ScreenPointToRay(tapItem.lastTapPosition);
         RaycastHit hit;
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == planeCenter.collider || planeRight.collider){ 
+            if (hit.collider == planeCenter.collider || planeRight.collider){
             	if(moving == false){
                 	destinationPoint = hit.point;
 					moving = true;
@@ -81,10 +81,10 @@ public class PetMovement : MonoBehaviour {
             }
         }
     }
-    
+
     //need to check if the pet moved out of the walk area
 	void PetWalkAround(){
-		// //Get a random value for pet to move. 
+		// //Get a random value for pet to move.
 		// float ran1 = Random.value;
 		// float ran2 = Random.value;
 		// float ran3 = Random.value;
@@ -93,11 +93,11 @@ public class PetMovement : MonoBehaviour {
 		// if(ran3 < 0.5) ran4 = -ran4;
 		// moveToX = petSprite.transform.position.x + ran2 *10;
 		// moveToZ = petSprite.transform.position.z + ran4 *10;
-		
+
 		// RaycastHit hit;
 		// Physics.Raycast(new Vector3(moveToX, planeCenter.transform.position.y ,
   //           moveToZ),new Vector3(0,-100,0),out hit);
-		// if (hit.collider == planeCenter.collider || planeRight.collider){ 
+		// if (hit.collider == planeCenter.collider || planeRight.collider){
   //           if(moving == false){
   //              	destinationPoint = hit.point;
 		// 		moving = true;

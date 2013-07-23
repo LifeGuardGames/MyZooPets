@@ -38,11 +38,6 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 				if(startsHidden){
 					toggle.startsHidden = true;
 					toggle.Reset();
-					// go.transform.localPosition = new Vector3(
-					// 	go.transform.localPosition.x + toggle.hideDeltaX,
-					// 	go.transform.localPosition.y + toggle.hideDeltaY,
-					// 	go.transform.localPosition.z
-					// );
 				}
 				else{
 					toggle.startsHidden = false;
@@ -74,7 +69,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	}
 
 	public void Show(){
-		if(!isShown && !isMoving){
+		if(!isShown){
 			isShown = true;
 			isMoving = true;
 			foreach(GameObject go in GoList){
@@ -90,7 +85,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	}
 
 	public void Hide(){
-		if(isShown && !isMoving){
+		if(isShown){
 			isShown = false;
 			isMoving = true;
 			foreach(GameObject go in GoList){

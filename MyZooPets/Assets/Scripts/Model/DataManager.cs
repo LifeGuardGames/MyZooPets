@@ -87,6 +87,8 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
     [SerializeThis]
+    private static bool firstTimeDegradTrigger; //first time the user has clicked on an asthma trigger
+    [SerializeThis]
     private static bool morningTrigger; //True: spawn asthma trigger in morning, False: don't
     [SerializeThis]
     private static bool afternoonTrigger; //True: spawn asthma trigger in afternoon, False: don't
@@ -235,6 +237,10 @@ public class DataManager : MonoBehaviour {
         get{return degradationTriggers;}
         set{degradationTriggers = value;}
     }
+    public static bool FirstTimeDegradTrigger{
+        get{return firstTimeDegradTrigger;}
+        set{firstTimeDegradTrigger = value;}
+    }
     public static bool MorningTrigger{
         get{return morningTrigger;}
         set{morningTrigger = value;}
@@ -378,7 +384,7 @@ public class DataManager : MonoBehaviour {
 
     //LevelSerailizer.LoadSavedLevel needs to be called in Start()
     void Start(){
-        if(!isDebug){ 
+        if(!isDebug){
             if(firstTime){ //first time data initialization logic
                 InitializeAllDataFirstTime();
                 SerializeGame();
@@ -392,7 +398,7 @@ public class DataManager : MonoBehaviour {
                     }
                 }
             }
-        }        
+        }
     }
 
     void OnDestroy(){
@@ -459,6 +465,7 @@ public class DataManager : MonoBehaviour {
             //Degradation game data
             lastTimeUserPlayedGame = DateTime.Now;
             degradationTriggers = new List<DegradData>();
+            firstTimeDegradTrigger = true;
             morningTrigger = true;
             afternoonTrigger = true;
 

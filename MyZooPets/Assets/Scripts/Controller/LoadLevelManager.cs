@@ -4,7 +4,7 @@ using System.Collections;
 public class LoadLevelManager : MonoBehaviour {
     //UI
     private DegradationUIManager degradationUIManager; //reference to UI
-    private GameObject calendar;
+    // private GameObject calendar;
     private GameObject hud;
     private GameObject navigation;
     private GameObject inventory;
@@ -27,7 +27,7 @@ public class LoadLevelManager : MonoBehaviour {
         switch(Application.loadedLevelName){
             case "NewBedRoom":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
-                calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
+                // calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 

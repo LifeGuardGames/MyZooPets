@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class TrophyLogic : MonoBehaviour {
 
-	public List<string> name = new List<string>();
+	public List<string> trophyNames = new List<string>();
 	public List<TrophyTier> tier = new List<TrophyTier>();
 	public List<string> info = new List<string>();
 

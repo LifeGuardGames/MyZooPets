@@ -57,9 +57,13 @@ public class Tutorial : MonoBehaviour {
     // For the demo.
     void InhalerMissAndInhalerGame(){
         if (DataManager.FirstTimeCalendar){
-            GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
             calendar.GetComponent<TapItem>().OnTap += openCalendar;
-            growShrink.Play();
+
+            TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
+            highlight.ShowArrow();
+
+            // GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+            // growShrink.Play();
         }
         if (DataManager.FirstTimeRealInhaler){
             realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
@@ -68,9 +72,12 @@ public class Tutorial : MonoBehaviour {
     // For the demo.
     void TrophyDemo(){
         if (DataManager.FirstTimeShelf){
-            GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
+            highlight.ShowArrow();
+
+            // GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+            // growShrink.Play();
             shelf.GetComponent<TapItem>().OnTap += openShelf;
-            growShrink.Play();
         }
         if (DataManager.FirstTimeHelpTrophy){
             helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
@@ -80,13 +87,16 @@ public class Tutorial : MonoBehaviour {
     void openCalendar(){
         ShowCalendarTip1();
 
-        GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
-        growShrink.Stop();
+        TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        // GrowShrink growShrink = calendar.GetComponent<GrowShrink>();
+        // growShrink.Stop();
 
         DataManager.FirstTimeCalendar = false;
         // added for the demo
         if (DataManager.FirstTimeRealInhaler){
-            realInhaler.GetComponent<GrowShrink>().Play();
+            // realInhaler.GetComponent<GrowShrink>().Play();
+            realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }
     }
 
@@ -104,43 +114,59 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openChallenges(){
-        GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
         DataManager.FirstTimeChallenges = false;
-        growShrink.Stop();
+        TutorialHighlighting highlight = challenges.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        // GrowShrink growShrink = challenges.GetComponent<GrowShrink>();
+        // growShrink.Stop();
     }
     void openDiary(){
-        GrowShrink growShrink = diary.GetComponent<GrowShrink>();
         DataManager.FirstTimeDiary = false;
-        growShrink.Stop();
+        TutorialHighlighting highlight = diary.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        // GrowShrink growShrink = diary.GetComponent<GrowShrink>();
+        // growShrink.Stop();
     }
     void openSlotMachine(){
-        GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
         DataManager.FirstTimeSlotMachine = false;
-        growShrink.Stop();
+        TutorialHighlighting highlight = slotMachine.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        // GrowShrink growShrink = slotMachine.GetComponent<GrowShrink>();
+        // growShrink.Stop();
     }
     void openRealInhaler(){
         // todo: change sprite name
         notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", clickManager.OpenRealInhaler, true, false);
 
-        GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
-        growShrink.Stop();
+        TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        // GrowShrink growShrink = realInhaler.GetComponent<GrowShrink>();
+        // growShrink.Stop();
 
         DataManager.FirstTimeRealInhaler = false;
     }
     void openTeddyInhaler(){
-        GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
+        TutorialHighlighting highlight = teddyInhaler.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
         DataManager.FirstTimeTeddyInhaler = false;
-        growShrink.Stop();
+        // GrowShrink growShrink = teddyInhaler.GetComponent<GrowShrink>();
+        // growShrink.Stop();
     }
     void openShelf(){
-        GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+        TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+
         DataManager.FirstTimeShelf = false;
-        growShrink.Stop();
-        helpTrophy.GetComponent<GrowShrink>().StopAll();
+
+        // GrowShrink growShrink = shelf.GetComponent<GrowShrink>();
+        // growShrink.Stop();
+
+        // helpTrophy.GetComponent<GrowShrink>().StopAll();
 
         // added for the demo
         if (DataManager.FirstTimeHelpTrophy){
-            helpTrophy.GetComponent<GrowShrink>().Play();
+            // helpTrophy.GetComponent<GrowShrink>().Play();
+            helpTrophy.GetComponent<TutorialHighlighting>().ShowArrow();
         }
     }
     void openHelpTrophy(){
@@ -148,9 +174,25 @@ public class Tutorial : MonoBehaviour {
         // make sure we are in trophy mode
         // todo: have a better way of checking if we are in trophy mode
         if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
-            GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            // GrowShrink growShrink = helpTrophy.GetComponent<GrowShrink>();
+            // growShrink.Stop();
+            TutorialHighlighting highlight = helpTrophy.GetComponent<TutorialHighlighting>();
+            highlight.HideArrow();
             DataManager.FirstTimeHelpTrophy = false;
-            growShrink.Stop();
         }
+    }
+
+    public void DegradTriggerClicked(){
+        if (DataManager.FirstTimeDegradTrigger){
+            DataManager.FirstTimeDegradTrigger = false;
+            ShowDegradTip1();
+        }
+    }
+
+    void ShowDegradTip1(){
+        notificationUIManager.PopupTipWithImage("Good job! You just removed an asthma trigger.", "guiPanelStatsHealth", ShowDegradTip2, true, true);
+    }
+    void ShowDegradTip2(){
+        notificationUIManager.PopupTipWithImage("Make sure you clean them up when you see them, or your pet will get sick!", "Skull", delegate(){}, false, false);
     }
 }

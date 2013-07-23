@@ -16,6 +16,9 @@ public class InventoryUIManager : MonoBehaviour {
     public GameObject UIGridObject;
     public GameObject UIButtonToggleObject;
 
+    public GameObject spritePet;
+    public GameObject speechBubblePrefab;
+
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
@@ -57,6 +60,7 @@ public class InventoryUIManager : MonoBehaviour {
         }
 
         if(dropOnTarget){
+            ShowPetReceivedFoodAnimation();
             e.IsValidTarget = true;
 
             int id = int.Parse(e.ItemTransform.name); //get id from listener args
@@ -70,6 +74,16 @@ public class InventoryUIManager : MonoBehaviour {
                 UpdateBarPosition();
             }
         }
+    }
+
+    // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
+    void ShowPetReceivedFoodAnimation(){
+        GameObject speechBubble = Instantiate(speechBubblePrefab, spritePet.transform.position, Quaternion.identity) as GameObject;
+        speechBubble.transform.parent = spritePet.transform;
+        speechBubble.transform.localPosition = speechBubblePrefab.transform.localPosition;
+        speechBubble.transform.localScale = Vector3.one;
+
+        Destroy(speechBubble, 1.5f);
     }
 
     //Event listener. listening to when new item is added to the inventory

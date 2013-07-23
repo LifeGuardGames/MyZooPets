@@ -10,11 +10,11 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
-	private bool isActive;
-	private bool isLocked;
-	public bool IsLocked{
+	private bool isShown;
+	private bool isMoving;
+	public bool IsMoving{
 		get{
-			return isLocked;
+			return isMoving;
 		}
 	}
 
@@ -34,28 +34,36 @@ public class MoveTweenToggle : MonoBehaviour {
 	public LeanTweenType easeHide;
 	public LeanTweenType easeShow;
 
+	private Vector3 hiddenPos;
+	private Vector3 showingPos;
+	private bool positionSet;
+
 	void Awake(){
+		RememberPositions();
 		//Debug.Log("toggle awake");
 		Reset();
 	}
 
+	void RememberPositions(){
+		showingPos = gameObject.transform.localPosition;
+		hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, 0);
+		positionSet = true;
+	}
+
 	public void Reset(){
+
 		if (startsHidden){
-			if(!isUsingDemultiplexer){
-				gameObject.transform.localPosition = new Vector3(
-					gameObject.transform.localPosition.x + hideDeltaX,
-					gameObject.transform.localPosition.y + hideDeltaY,
-					gameObject.transform.localPosition.z
-				);
+			if (positionSet){ // if not, Reset() will be called again by Awake() later
+				gameObject.transform.localPosition = hiddenPos;
 			}
 		 	// Need to call show first
-			isActive = false;
-			isLocked = false;
+			isShown = false;
+			isMoving = false;
 		}
 		else{
 			// Need to call hide first
-			isActive = true;
-			isLocked = false;
+			isShown = true;
+			isMoving = false;
 		}
 	}
 
@@ -71,9 +79,10 @@ public class MoveTweenToggle : MonoBehaviour {
 	}
 
 	public void Show(float time){
-		if(!isActive && !isLocked){
-			isActive = true;
-			isLocked = true;
+		if(!isShown){
+			isShown = true;
+			isMoving = true;
+            LeanTween.cancel(gameObject);
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeShow);
 			optional.Add("delay", showDelay);
@@ -82,11 +91,7 @@ public class MoveTweenToggle : MonoBehaviour {
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
-			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + showDeltaX,
-				gameObject.transform.localPosition.y + showDeltaY, gameObject.transform.localPosition.z), time, optional);
-		}
-		// else{
-		// 	Debug.LogError("trying show locked/active HUD");
+			LeanTween.moveLocal(gameObject, showingPos, time, optional);
 		// }
 
 	}
@@ -96,9 +101,10 @@ public class MoveTweenToggle : MonoBehaviour {
 	}
 
 	public void Hide(float time){
-		if(isActive && !isLocked){
-			isActive = false;
-			isLocked = true;
+		if(isShown){
+			isShown = false;
+			isMoving = true;
+            LeanTween.cancel(gameObject);
 			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeHide);
 			optional.Add("delay", hideDelay);
@@ -107,11 +113,7 @@ public class MoveTweenToggle : MonoBehaviour {
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
-			LeanTween.moveLocal(gameObject, new Vector3(gameObject.transform.localPosition.x + hideDeltaX,
-				gameObject.transform.localPosition.y + hideDeltaY, gameObject.transform.localPosition.z), time, optional);
-		}
-		// else{
-		// 	Debug.LogError("trying hide locked/inactive HUD");
+			LeanTween.moveLocal(gameObject, hiddenPos, time, optional);
 		// }
 	}
 
@@ -121,6 +123,6 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	// Callback
 	private void Unlock(){
-		isLocked = false;
+		isMoving = false;
 	}
 }

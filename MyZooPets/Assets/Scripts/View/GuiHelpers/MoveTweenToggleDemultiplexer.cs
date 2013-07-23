@@ -7,75 +7,71 @@ using System.Collections;
 /// </summary>
 
 public class MoveTweenToggleDemultiplexer : MonoBehaviour {
-	
+
 	public GameObject[] GoList;
 	public Vector2 testButtonPos;
 	public bool isDebug = false;
 	public bool startsHidden = false;
-	
+
 	public GameObject lastFinishedShowObject;	// For lock
 	private MoveTweenToggle lastFinishedShowObjectScript;
 	public GameObject lastFinishedHideObject;	// For lock
 	private MoveTweenToggle lastFinishedHideObjectScript;
 
-	
-	private bool isActive;
-	private bool isLocked;
-	
+
+	private bool isShown;
+	private bool isMoving;
+
 	void Awake(){
 		//Debug.Log("Demux awake");
 		if(startsHidden){
-			isActive = false;
-			isLocked = false;
+			isShown = false;
+			isMoving = false;
 		}else{
-			isActive = true;
-			isLocked = false;
+			isShown = true;
+			isMoving = false;
 		}
-		
+
 		foreach(GameObject go in GoList){
 			MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
 			if(toggle != null){
 				if(startsHidden){
 					toggle.startsHidden = true;
-					go.transform.localPosition = new Vector3(
-						go.transform.localPosition.x + toggle.hideDeltaX,
-						go.transform.localPosition.y + toggle.hideDeltaY,
-						go.transform.localPosition.z
-					);
+					toggle.Reset();
 				}
 				else{
 					toggle.startsHidden = false;
 				}
-				
+
 				toggle.isDebug = false;	// Turn all the other debug off
 			}
 			else{
 				Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
 			}
 		}
-		
+
 		lastFinishedShowObjectScript = lastFinishedShowObject.GetComponent<MoveTweenToggle>();
 		lastFinishedHideObjectScript = lastFinishedHideObject.GetComponent<MoveTweenToggle>();
 	}
-	
+
 	void Update(){
 		// Polling for lock released
-		if(isLocked){
-			if(isActive && !lastFinishedShowObjectScript.IsLocked){
-				isLocked = false;
+		if(isMoving){
+			if(isShown && !lastFinishedShowObjectScript.IsMoving){
+				isMoving = false;
 				return;
 			}
-			if(!isActive && !lastFinishedHideObjectScript.IsLocked){
-				isLocked = false;
+			if(!isShown && !lastFinishedHideObjectScript.IsMoving){
+				isMoving = false;
 				return;
 			}
 		}
 	}
-	
+
 	public void Show(){
-		if(!isActive && !isLocked){
-			isActive = true;
-			isLocked = true;
+		if(!isShown){
+			isShown = true;
+			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
 				if(toggle != null){
@@ -87,11 +83,11 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	public void Hide(){
-		if(isActive && !isLocked){
-			isActive = false;
-			isLocked = true;
+		if(isShown){
+			isShown = false;
+			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
 				if(toggle != null){
@@ -103,7 +99,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){

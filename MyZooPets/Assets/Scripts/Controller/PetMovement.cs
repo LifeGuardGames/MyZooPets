@@ -40,6 +40,9 @@ public class PetMovement : MonoBehaviour {
 	private float moveToZ;
 
     void Awake(){
+        if (mainCamera == null){
+            mainCamera = GameObject.Find("Main Camera").camera;
+        }
         petSprite = GameObject.Find("SpritePet");
         tapItem = GetComponent<TapItem>();
         planeCenter = transform.Find("planeCenter");

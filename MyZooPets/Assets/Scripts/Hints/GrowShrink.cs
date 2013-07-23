@@ -10,6 +10,8 @@ public class GrowShrink : MonoBehaviour {
     public float bigY = 1.1f;
     public float bigZ = 1.1f;
 
+    public bool startAutomatically;
+
     // for testing only - when used with the code in the update loop,
     // Play() and Stop() can be triggered from the inspector.
     // public bool running = true;
@@ -37,6 +39,9 @@ public class GrowShrink : MonoBehaviour {
 	}
     void Start(){
         InitClickHighlighting();
+        if (startAutomatically){
+            Play();
+        }
     }
 
 	// Update is called once per frame

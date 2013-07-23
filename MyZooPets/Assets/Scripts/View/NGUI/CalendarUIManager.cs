@@ -7,6 +7,7 @@ public class CalendarUIManager : MonoBehaviour {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
+    public UILabel rewardLabel;
     public GameObject particleEffectPrefab;
 
     //==================Events=======================
@@ -42,6 +43,8 @@ public class CalendarUIManager : MonoBehaviour {
     private int numberOfGreenStamps; //keep track of the green checks so we know when the user
                                 //has collected all the rewards
     private bool timerActive; //True: run count down timer, False: don't run
+    private float countDownTime; //time till the next reward
+    private CalendarLogic calendarLogic; //reference
 
     //sprite name in atlas
     private const string STAMP_EX = "calendarStampEx";
@@ -56,35 +59,37 @@ public class CalendarUIManager : MonoBehaviour {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
        timerActive = false;
+        calendarLogic = GameObject.Find("GameManager/CalendarLogic").GetComponent<CalendarLogic>();
 	}
 
     void Start(){
-        currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
-		numberOfGreenStamps = CalendarLogic.GreenStampCount;
+        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
+        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
+		numberOfGreenStamps = calendarLogic.GreenStampCount;
+        CalendarLogic.OnCalendarReset += PopulateCalendar;
+    }
 
-  		if(isDebug){ //Testing code. generate dummy data for last week and this week
-            List<CalendarEntry> temp = new List<CalendarEntry>();
-            for(int i=0; i<7; i++){
-                temp.Add(new CalendarEntry(
-                    DosageRecord.Hit, DosageRecord.Miss));
-            }
-            temp[2].DayTime = DosageRecord.Null;
-            DataManager.EntriesLastWeek = temp;
-            DataManager.EntriesThisWeek = temp;
-            CalendarClicked();
-        }
+    void OnDestroy(){
+        CalendarLogic.OnCalendarReset -= PopulateCalendar;
     }
         
 	// Update is called once per frame
 	void Update () {
         if(timerActive){
-
+            countDownTime -= Time.deltaTime;
+            if(countDownTime <= 0){
+                timerActive = false; 
+                return;
+            }
+            TimeSpan interval = TimeSpan.FromSeconds(countDownTime);
+            string[] split = interval.ToString().Split('.');
+            rewardLabel.text = split[0]; 
         }
 	}
 
     public void CalendarClicked(){
-        PopulateCalendar();
+        calendarLogic.CalendarOpened();
+        // PopulateCalendar();
         GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
@@ -124,30 +129,36 @@ public class CalendarUIManager : MonoBehaviour {
         //spawn particle effect
         GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
         prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
+        prefab.transform.position = new Vector3(prefab.transform.position.x, 
+            prefab.transform.position.y, -0.5f);
+
         //Add reward
-        CalendarLogic.ClaimReward();
+        calendarLogic.ClaimReward();
 
         numberOfGreenStamps--; //keep track of the rewards claimed
         if(numberOfGreenStamps == 0){ //all rewards have been claimed
-            CalendarLogic.IsRewardClaimed = true;
-            PopulateCalendar();
+            calendarLogic.IsRewardClaimed = true;
+            PopulateTimer();
         }
     }
 
     private void PopulateTimer(){
+        TimeSpan timeSpan = calendarLogic.NextPlayPeriod - DateTime.Now;
+        countDownTime = (float) timeSpan.TotalSeconds;
         //Next Reward timer
-        if(CalendarLogic.IsRewardClaimed){
+        if(calendarLogic.IsRewardClaimed){
             //next reward time
-            TimeSpan countDown = CalendarLogic.NextRewardTime - DateTime.Now;
-            print(countDown);
+            timerActive = true;
+            
         }else{
             //claim reward now!!!!
- 
+            rewardLabel.text = "NOW!!";
+            timerActive = false;
         }
     }
 	
     //Populate the calendar based on the data stored in DataManager
-    private void PopulateCalendar(){
+    private void PopulateCalendar(object sender, EventArgs args){
         PopulateTimer();
 
         //Populate calendar for this week

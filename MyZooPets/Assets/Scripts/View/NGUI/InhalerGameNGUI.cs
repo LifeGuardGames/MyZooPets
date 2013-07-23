@@ -53,8 +53,8 @@ public class InhalerGameNGUI : MonoBehaviour {
         }
         else {
             notificationUIManager.GameOverRewardMessage(
-                CalendarLogic.StarIncrement,
-                CalendarLogic.PointIncrement,
+                250,
+                0,
                 QuitInhalerGame
             );
 

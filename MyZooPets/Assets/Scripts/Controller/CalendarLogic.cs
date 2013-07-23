@@ -3,25 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public static class CalendarLogic{
+public class CalendarLogic : MonoBehaviour{
 
-    public static int PointIncrement = 250;
-    public static int StarIncrement = 0;
     private static CalendarEntry todaysEntry; //today's entry
-    // todo: remove these
-    //====================API (deprecated testing methods)=======================
-    public static CalendarEntry TodaysEntry {
-        get {return todaysEntry;}
-        set {todaysEntry = value;}
-    }
-
-    public static void CalendarOpenedTest(DateTime now){
-        CalendarOpenedOnDate(now);
-    }
-
-    public static void RecordGivingInhalerTest(DateTime now){
-        RecordGivingInhaler(now);
-    }
+    //===========================Events=======================
+    public static event EventHandler<EventArgs> OnCalendarReset; //called when calendar opened or calendar resets
+    //========================================================
 
     //====================API (use this for generating weeks)=======================
     //Generate a week of empty CalendarEntry
@@ -78,45 +65,46 @@ public static class CalendarLogic{
 
     //====================API=======================
     //Week in a list. In order from Monday to Sunday
-    public static List<CalendarEntry> GetCalendarEntriesThisWeek{
+    public List<CalendarEntry> GetCalendarEntriesThisWeek{
         get{return DataManager.EntriesThisWeek;}
     }
 
     //Last week entries. In order from Monday to Sunday. Possible dosage records are
     //Hit, Miss, and LeaveBlank
-    public static List<CalendarEntry> GetCalendarEntriesLastWeek{
+    public List<CalendarEntry> GetCalendarEntriesLastWeek{
         get{return DataManager.EntriesLastWeek;}
     }
 
     //Return the count of all the checks for this week
-    public static int GreenStampCount{
+    public int GreenStampCount{
         get{return DataManager.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
             entry.NightTime.Equals(DosageRecord.Hit))).Count;}
     }
 
     //Return the next time the user can collect bonuses
-    public static DateTime NextRewardTime{
-        get{return DataManager.NextRewardTime;}
+    public DateTime NextPlayPeriod{
+        get{return DataManager.NextPlayPeriod;}
     }
 
-    public static bool IsRewardClaimed{
+    public bool IsRewardClaimed{
         get{return DataManager.IsRewardClaimed;}
         set{DataManager.IsRewardClaimed = value;}
     }
 
     //Based on the time now return the next reward time
-    public static DateTime CalculateNextRewardTime(){
-        DateTime nextRewardTime;
+    public static DateTime CalculateNextPlayPeriod(){
+        DateTime nextPlayTime;
         if(DateTime.Now.Hour < 12){ //next reward time at noon
-            nextRewardTime = DateTime.Today.AddHours(12);
+            nextPlayTime = DateTime.Today.AddHours(12);
         }else{ //next reward time at midnight
-            nextRewardTime = DateTime.Today.AddDays(1);
+            nextPlayTime = DateTime.Today.AddDays(1);
+            // nextPlayTime = new DateTime(2013, 7, 23, 17, 17, 0);
         }
-        return nextRewardTime;
+        return nextPlayTime;
     }
 
     //Give bonus when user collects
-    public static void ClaimReward(){
+    public void ClaimReward(){
         DataManager.AddPoints(50);
         DataManager.AddStars(50);
     }
@@ -154,7 +142,7 @@ public static class CalendarLogic{
     }
 
     // call whenever opening calendar
-    public static void CalendarOpened(){
+    public void CalendarOpened(){
         CalendarOpenedOnDate(DateTime.Now);
     }
     //================================================
@@ -162,25 +150,68 @@ public static class CalendarLogic{
     private static void RecordGivingInhaler(DateTime now){
         if (now.Hour < 12) {
             todaysEntry.DayTime = DosageRecord.Hit;
-        }
-        else if (now.Hour >= 12) {
+        }else if (now.Hour >= 12) {
             todaysEntry.NightTime = DosageRecord.Hit;
         }
     }
 
-    private static void CalendarOpenedOnDate(DateTime now){
+    private void CalendarOpenedOnDate(DateTime now){
         UpdateWeekReference(now);
         FillInMissedEntries(now);
+        ResetForNextPlayPeriod(now);
 
-        // todo: restart pulsing on any check marks
         DataManager.LastCalendarOpenedTime = now;
+
+        if(OnCalendarReset != null){
+            OnCalendarReset(this, EventArgs.Empty);
+        }else{
+            Debug.LogError("OnCalendarReset is null");
+        }
     }
 
     //********************************************
     // other methods
 
+    void Update(){
+        ResetForNextPlayPeriod(DateTime.Now);
+    }
+
+    //Play period is every 12 hr. Reward and punishment renews every play period
+    private void ResetForNextPlayPeriod(DateTime now){
+        if(now < DataManager.NextPlayPeriod) return; //not next play period yet return
+        print("reset");
+        //reset green stamps
+        for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
+            CalendarEntry entry = DataManager.EntriesThisWeek[i];
+            if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
+            if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
+        }
+
+        //punish for ex stamps
+        int punishmentCounter = 0; // max 2
+        for(int i = 0;i < 7; i++){
+            CalendarEntry entry = DataManager.EntriesThisWeek[i];
+            if(entry.DayTime.Equals(DosageRecord.Miss)){
+                DataManager.SubtractMood(20);
+                DataManager.SubtractHealth(20);
+                punishmentCounter++;
+            }
+            if(entry.NightTime.Equals(DosageRecord.Miss)){
+                DataManager.SubtractMood(20);
+                DataManager.SubtractHealth(20);
+                punishmentCounter++;
+            }
+            if(punishmentCounter == 2) break;
+        }
+
+        //set NextPlayPeriod
+        DataManager.NextPlayPeriod = CalculateNextPlayPeriod();
+
+
+    }
+
     //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)
-    private static void UpdateWeekReference(DateTime now){
+    private void UpdateWeekReference(DateTime now){
         if(now.Date > DataManager.DateOfSunday){ //today's date is later than Sunday
 
             // If today's date is later than a week past Sunday (two Sundays), then
@@ -189,9 +220,11 @@ public static class CalendarLogic{
                 DataManager.EntriesLastWeek = MissedWeek();
                 DataManager.EntriesThisWeek = EmptyWeek();
             }
-            // Else, we want to move everything up by one week.
+            // Else, we want to move everything up by one week. Move this week array to last week
+            // array and create an empty array of entries for this week.
             else {
-                // fill the rest of the entries with misses
+                // if there are any missed entries fill them with misses before moving
+                // them to last week array. 
                 for (int i = 0; i < 7; i++){
                     CalendarEntry entry = DataManager.EntriesThisWeek[i];
                     if (entry.DayTime == DosageRecord.Null){
@@ -202,6 +235,7 @@ public static class CalendarLogic{
                     }
                 }
 
+                //move this week array to last week array
                 DataManager.EntriesLastWeek = DataManager.EntriesThisWeek;
                 //create new list for the new week
                 DataManager.EntriesThisWeek = EmptyWeek();
@@ -211,7 +245,8 @@ public static class CalendarLogic{
         }
     }
 
-    private static void FillInMissedEntries(DateTime now){
+    //Fill in the missed entries for this week
+    private void FillInMissedEntries(DateTime now){
         // assume that DateOfSunday is updated by this point
 
         // days passed since last Sunday
@@ -238,8 +273,9 @@ public static class CalendarLogic{
 
     }
 
-    private static void FillInMissesForToday(DateTime now){
-        if (now.Hour >= 12) {
+    //Fill in the missed entry for today.
+    private void FillInMissesForToday(DateTime now){
+        if (now.Hour >= 12) { //PM
             if (todaysEntry.DayTime == DosageRecord.Null){
                 todaysEntry.DayTime = DosageRecord.Miss;
             }

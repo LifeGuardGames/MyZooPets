@@ -64,7 +64,8 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool isRewardClaimed; //has the check bonuses been collected by the user
     [SerializeThis]
-    private static DateTime nextRewardTime; //the next time that the user can collect check bonuses again
+    private static DateTime nextPlayPeriod; //the next time that the user can collect check bonuses 
+                                            //and be punished for missed entries 
 
     //Inhaler Data
     [SerializeThis]
@@ -193,9 +194,9 @@ public class DataManager : MonoBehaviour {
         get {return isRewardClaimed;}
         set {isRewardClaimed = value;}
     }
-    public static DateTime NextRewardTime{
-        get {return nextRewardTime;}
-        set {nextRewardTime = value;}
+    public static DateTime NextPlayPeriod{
+        get {return nextPlayPeriod;}
+        set {nextPlayPeriod = value;}
     }
 
     public static DateTime DateOfSunday{
@@ -425,9 +426,25 @@ public class DataManager : MonoBehaviour {
             //Calendar data initialization
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             entriesLastWeek = CalendarLogic.LeaveBlankWeek();
-            entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
+
+            if(isDebug){
+                List<CalendarEntry> temp = new List<CalendarEntry>();
+                for(int i=0; i<7; i++){
+                    CalendarEntry entry = new CalendarEntry(
+                        DosageRecord.Hit, DosageRecord.Miss);
+                    // entry.BonusCollectedDayTime = true;
+                    // entry.BonusCollectedNightTime = true;
+
+                    temp.Add(entry);
+                }
+                temp[2].DayTime = DosageRecord.Null;
+                entriesThisWeek = temp;
+            }else{
+                entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
+            }
+
             isRewardClaimed = false;
-            nextRewardTime = CalendarLogic.CalculateNextRewardTime();
+            nextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();
 
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);

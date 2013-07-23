@@ -39,7 +39,11 @@ public class CalendarUIManager : MonoBehaviour {
     private LastWeekDay[] pastWeek = new LastWeekDay[7]; //array of Days from last week
     private List<CalendarEntry> currentWeekData; //week data from DataManager
     private List<CalendarEntry> pastWeekData; //week data from DataManager
+    private int numberOfGreenStamps; //keep track of the green checks so we know when the user
+                                //has collected all the rewards
+    private bool timerActive; //True: run count down timer, False: don't run
 
+    //sprite name in atlas
     private const string STAMP_EX = "calendarStampEx";
     private const string STAMP_CHECK = "calendarStampCheck";
     private const string HALF_STAMP_RED_BOTTOM = "calendarHalfStampRedBottom";
@@ -56,7 +60,8 @@ public class CalendarUIManager : MonoBehaviour {
     void Start(){
         currentWeekData = CalendarLogic.GetCalendarEntriesThisWeek;
         pastWeekData = CalendarLogic.GetCalendarEntriesLastWeek;
-		
+		numberOfGreenStamps = CalendarLogic.GreenStampCount;
+        
   		if(isDebug){ //Testing code. generate dummy data for last week and this week
             List<CalendarEntry> temp = new List<CalendarEntry>();
             for(int i=0; i<7; i++){
@@ -66,11 +71,11 @@ public class CalendarUIManager : MonoBehaviour {
             temp[2].DayTime = DosageRecord.Null;
             DataManager.EntriesLastWeek = temp;
             DataManager.EntriesThisWeek = temp;
-            // Init();
             CalendarClicked();
         }
     }
 	
+        
 	// Update is called once per frame
 	void Update () {
         //TO DO: count down timer for nxt reward collection	
@@ -118,11 +123,28 @@ public class CalendarUIManager : MonoBehaviour {
         GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
         prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
         //Add reward
-        CalendarLogic.ClaimReward(); 
+        CalendarLogic.ClaimReward();
+
+        numberOfGreenStamps--; //keep track of the rewards claimed
+        if(numberOfGreenStamps == 0){ //all rewards have been claimed
+            CalendarLogic.IsRewardClaimed = true;
+            PopulateCalendar();
+        }
+    }
+
+    private void PopulateTimer(){
+        //Next Reward timer
+        if(CalendarLogic.IsRewardClaimed){
+            //next reward time
+            TimeSpan countDown = CalendarLogic.NextRewardTime - DateTime.Now;
+        }else{
+            //claim reward now!!!!
+        }
     }
 	
     //Populate the calendar based on the data stored in DataManager
     private void PopulateCalendar(){
+        PopulateTimer();
 
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){

@@ -50,8 +50,6 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     public static Level currentLevel; //current level
 
-
-
     //Calendar Data
     [SerializeThis]
     private static List<CalendarEntry> entriesThisWeek;
@@ -63,6 +61,10 @@ public class DataManager : MonoBehaviour {
                                           // for a new week or not.
     [SerializeThis]
     private static DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
+    [SerializeThis]
+    private static bool isRewardClaimed; //has the check bonuses been collected by the user
+    [SerializeThis]
+    private static DateTime nextRewardTime; //the next time that the user can collect check bonuses again
 
     //Inhaler Data
     [SerializeThis]
@@ -186,6 +188,14 @@ public class DataManager : MonoBehaviour {
     public static DateTime LastCalendarOpenedTime{
         get { return lastCalendarOpenedTime;}
         set { lastCalendarOpenedTime = value;}
+    }
+    public static bool IsRewardClaimed{
+        get {return isRewardClaimed;}
+        set {isRewardClaimed = value;}
+    }
+    public static DateTime NextRewardTime{
+        get {return nextRewardTime;}
+        set {nextRewardTime = value;}
     }
 
     public static DateTime DateOfSunday{
@@ -416,6 +426,8 @@ public class DataManager : MonoBehaviour {
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             entriesLastWeek = CalendarLogic.LeaveBlankWeek();
             entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
+            isRewardClaimed = false;
+            nextRewardTime = CalendarLogic.CalculateNextRewardTime();
 
             // set to one day before today so that the entry will be generated for the first day
             lastCalendarOpenedTime = DateTime.Today.AddDays(-1);

@@ -211,33 +211,32 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
-			// if (CalendarLogic.HasCheckedCalendar){
-				if (CalendarLogic.CanUseRealInhaler){
-					// cameraMove.RealInhalerZoomToggle();
-					cameraMove.ZoomToggle(ZoomItem.RealInhaler);
-					ClickLock();
-					ModeLock();
-
-					//Hide other UI Objects
-					navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-					hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-				}
-				else {
-					notificationUIManager.PopupNotificationOneButton(
-						"I don't need this right now.",
-						delegate(){}
-					);
-				}
-			// }
-			// else {
-			// 	notificationUIManager.PopupNotification(
-			// 		"I don't know if I need this now. Open calendar?",
-			// 		calendarGUI.CalendarClicked,
-			// 		delegate(){}
-			// 	);
-			// }
+			if (DataManager.FirstTimeRealInhaler){
+				return; // taken care of in Tutorial.cs
+			}
+			if (CalendarLogic.CanUseRealInhaler){
+				OpenRealInhaler();
+			}
+			else {
+				notificationUIManager.PopupNotificationOneButton(
+					"I don't need this right now.",
+					delegate(){}
+				);
+			}
 		}
 	}
+
+	// also called in tutorial as a callback
+	public void OpenRealInhaler(){
+		cameraMove.ZoomToggle(ZoomItem.RealInhaler);
+		ClickLock();
+		ModeLock();
+
+		//Hide other UI Objects
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+	}
+
 	void OnTapTeddyInhaler(){
 		if (CanRespondToTap()){
 			// cameraMove.TeddyInhalerZoomToggle();

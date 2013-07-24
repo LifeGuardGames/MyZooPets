@@ -17,13 +17,21 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	private MoveTweenToggle lastFinishedShowObjectScript;
 	public GameObject lastFinishedHideObject;	// For lock
 	private MoveTweenToggle lastFinishedHideObjectScript;
-
-
-	private bool isShown;
-	private bool isMoving;
+	
+	public bool isShowFinishedCallback = false;	// Call callback after the end of the tween instead of the beginning
+	public GameObject ShowTarget;
+	public string ShowFunctionName;
+	public bool ShowIncludeChildren = false;
+	
+	public bool isHideFinishedCallback = false;	// Call callback after the end of the tween instead of the beginning
+	public GameObject HideTarget;
+	public string HideFunctionName;
+	public bool HideIncludeChildren = false;
+	
+	private bool isShown;	// Active lock
+	private bool isMoving;	// Move lock
 
 	void Awake(){
-		//Debug.Log("Demux awake");
 		if(startsHidden){
 			isShown = false;
 			isMoving = false;
@@ -59,17 +67,27 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 		if(isMoving){
 			if(isShown && !lastFinishedShowObjectScript.IsMoving){
 				isMoving = false;
+				
+				// If option set for finish show callback, call it now!
+				if(isShowFinishedCallback){
+					ShowSendCallback();
+				}
 				return;
 			}
 			if(!isShown && !lastFinishedHideObjectScript.IsMoving){
 				isMoving = false;
+				
+				// If option set for finish hide callback, call it now!
+				if(isHideFinishedCallback){
+					HideSendCallback();
+				}
 				return;
 			}
 		}
 	}
 
 	public void Show(){
-		if(!isShown){
+		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;
 			foreach(GameObject go in GoList){
@@ -81,11 +99,16 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 					Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
 				}
 			}
+			
+			// If set to begin show callback, call it now!
+			if(!isShowFinishedCallback){
+				ShowSendCallback();
+			}
 		}
 	}
 
 	public void Hide(){
-		if(isShown){
+		if(isShown && !isMoving){
 			isShown = false;
 			isMoving = true;
 			foreach(GameObject go in GoList){
@@ -96,6 +119,11 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 				else{
 					Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
 				}
+			}
+			
+			// If set to begin hide callback, call it now!
+			if(!isHideFinishedCallback){
+				HideSendCallback();
 			}
 		}
 	}
@@ -108,6 +136,40 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
 				Hide();
 			}
+		}
+	}
+	
+	void ShowSendCallback(){
+		if (string.IsNullOrEmpty(ShowFunctionName)) return;
+		if (ShowTarget == null) ShowTarget = gameObject;
+
+		if (ShowIncludeChildren){
+			Transform[] transforms = ShowTarget.GetComponentsInChildren<Transform>();
+
+			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+				Transform t = transforms[i];
+				t.gameObject.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		else{
+			ShowTarget.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+	
+	void HideSendCallback(){
+		if (string.IsNullOrEmpty(HideFunctionName)) return;
+		if (HideTarget == null) HideTarget = gameObject;
+		
+		if (HideIncludeChildren){
+			Transform[] transforms = HideTarget.GetComponentsInChildren<Transform>();
+
+			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+				Transform t = transforms[i];
+				t.gameObject.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		else{
+			HideTarget.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

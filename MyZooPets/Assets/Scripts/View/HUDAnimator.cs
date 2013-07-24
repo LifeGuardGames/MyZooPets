@@ -14,13 +14,17 @@ using System;
 /// be provided.
 /// </summary>
 
+public enum HUDElementType{
+	points, stars, health, mood
+}
+
 public class HUDAnimator : MonoBehaviour {
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
     public static OnLevelUpEventHandlers OnLevelUp;
     //========================================
-
+	
     public int DisplayPoints{
     	get{return displayPoints;}
     }
@@ -58,6 +62,10 @@ public class HUDAnimator : MonoBehaviour {
 	private AnimationControl starAnimControl;
 	private AnimationControl healthAnimControl;
 	private AnimationControl moodAnimControl;
+	
+	// Tweening
+	public UIAtlas commonAtlas;
+	private GameObject toDestroy;
 
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
@@ -181,5 +189,59 @@ public class HUDAnimator : MonoBehaviour {
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
 		}
+	}
+	
+	//================================================================
+	// TWEEN ANIMATION
+	//========================
+	
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 50), "demo")){
+//			TweenCurveToPoint(HUDElementType.stars, 10);
+//		}
+//	}
+	
+	public void TweenCurveToPoint(HUDElementType type, int amount){
+		float duration = -1f;
+		String imageName = null;
+		switch(type){
+			case(HUDElementType.points):
+				imageName = "tweenPoints";
+				break;
+			case(HUDElementType.stars):
+				imageName = "tweenStars";
+				break;
+			case(HUDElementType.health):
+				imageName = "tweenHealthUp";
+				break;
+			case(HUDElementType.mood):
+				imageName = "tweenMoodUp";
+				break;
+		}
+		
+		//Testing
+		duration = 1f;
+		Vector3[] path = new Vector3[4];
+		path[0] = new Vector3(0.2f, 0.2f, 0);
+		path[1] = new Vector3(0.3f, 0.4f, 0);
+		path[2] = new Vector3(0.2f, 0.5f, 0);
+		
+		path[3] = new Vector3(-.3f, .93f, 0);	//Stars
+		
+		//path[3] = new Vector3(-1.28f, .93f, 0); //Points
+		
+		//path[3] = new Vector3(.25f, .93f, 0);	//Health
+		//path[3] = new Vector3(.93f, .93f, 0); //Mood
+		
+		Hashtable optional = new Hashtable();
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		
+		GameObject go = NGUITools.AddSprite(this.gameObject, commonAtlas, imageName).gameObject;
+		
+		go.AddComponent<DestroyOnCall>();
+	//	GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store"), ItemSpritePrefab);
+	//	animationSprite.transform.position = origin;
+	//	animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
+
 	}
 }

@@ -174,6 +174,7 @@ public class ClickManager : MonoBehaviour {
 	//===========Calendar============
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
+			Debug.Log("tapped!!!!");
 			calendarUIManager.CalendarClicked();
 			ClickLock();
 			ModeLock();

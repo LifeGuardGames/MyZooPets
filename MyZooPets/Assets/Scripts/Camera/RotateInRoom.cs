@@ -62,7 +62,7 @@ public class RotateInRoom : UserNavigation {
     void FinishedRotation(){
         lockRotation = false;
         currentYRotation = (int)transform.eulerAngles.y; // normalize angle
-		petmovement.movePetWithCamera(); //call this so pet follows the camera
+		// petmovement.movePetWithCamera(); //call this so pet follows the camera
     }
 
     void UpdateClickableItemsInPartition(){

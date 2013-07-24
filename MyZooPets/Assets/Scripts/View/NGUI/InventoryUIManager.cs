@@ -77,7 +77,7 @@ public class InventoryUIManager : MonoBehaviour {
     }
 
     // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
-    void ShowPetReceivedFoodAnimation(){
+    private void ShowPetReceivedFoodAnimation(){
         GameObject speechBubble = Instantiate(speechBubblePrefab, spritePet.transform.position, Quaternion.identity) as GameObject;
         speechBubble.transform.parent = spritePet.transform;
         speechBubble.transform.localPosition = speechBubblePrefab.transform.localPosition;
@@ -151,10 +151,7 @@ public class InventoryUIManager : MonoBehaviour {
     }
 
     public void UpdateBarPosition(){
-        print("update");
         UIGridObject.GetComponent<UIGrid>().Reposition();
-
-        print(inventory.InventoryCount);
         if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
             gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open

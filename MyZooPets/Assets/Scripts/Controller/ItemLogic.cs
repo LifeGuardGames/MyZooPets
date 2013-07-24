@@ -6,24 +6,38 @@ using System.Collections.Generic;
 //Item Logic Class
 //Reference all Items.
 //Each property of items are stored in a list, fill the list by draggin in Unity
-//General list items contains a list of all items
-//Each Item 's ID is the index of itself in the general items list. 
-//Methods list contains all funtions for each item, cooresponding to its index
 
-
+//Item databases contains a list of all items
+//Item ID = array index of the items list
+//Methods list contains all functions for each item, cooresponding to its index
 public class ItemLogic : MonoBehaviour{
-	
 	//Each Item has its component kept in different lists.
-	//This ID of the item is represented as index of the list. 
-	public List<Action> methods = new List<Action>();
-	public List<int> foodlist = new List<int>();
-	public List<int> itemlist = new List<int>();
-	public List<int> inhalerlist = new List<int>();
-	public List<int> decolist = new List<int>();
+	private List<Action> methods = new List<Action>(); //List of actions to be called when item is used. 
+														//Index: itemID, Value: functions
+	private List<int> foodList = new List<int>(); //Index: regular array index, Value: itemID 
+	private List<int> itemList = new List<int>(); //Index: regular array index, Value: itemID 
+	private List<int> inhalerList = new List<int>(); //Index: regular array index, Value: itemID
+	private List<int> decoList = new List<int>(); //Index: regular array index, Value: itemID 
+	public List<Item> items = new List<Item>(); //item database
+												//Index: itemID, Value: instance of Item class
+	//============Getters=============	
+	public List<int> FoodList{
+		get{return foodList;}
+	}	
+	public List<int> ItemList{
+		get{return itemList;}
+	}
+	public List<int> InhalerList{
+		get{return inhalerList;}
+	}
+	public List<int> DecoList{
+		get{return decoList;}
+	}
+	public List<Item> Items{
+		get{return items;}
+	}
+	//===============================
 
-	//General item list. 
-	public List<Item> items = new List<Item>();
-	
 	//This number has to change manually
 	public static int MAX_ITEM_COUNT = 10;
 	
@@ -32,16 +46,22 @@ public class ItemLogic : MonoBehaviour{
 		methods[id]();
 	}
 	
+	//sorting items list into category list
 	private void Categorize(){
 		for(int i =0;i< items.Count;i++){
-			if(items[i].Category == ItemCategory.Foods) foodlist.Add(i);
-			if(items[i].Category == ItemCategory.Items) itemlist.Add(i);
-			if(items[i].Category == ItemCategory.Inhalers) inhalerlist.Add(i);
-			if(items[i].Category == ItemCategory.Decorations) decolist.Add(i);
+			if(items[i].category == ItemCategory.Foods) foodList.Add(i);
+			if(items[i].category == ItemCategory.Items) itemList.Add(i);
+			if(items[i].category == ItemCategory.Inhalers) inhalerList.Add(i);
+			if(items[i].category == ItemCategory.Decorations) decoList.Add(i);
 		}
 	}
 	
-	//This methos has to expand when more items added
+	void Awake(){
+		//initalize all item in the database. Add methods and description
+		Categorize();
+		LoadMethods();
+	}
+
 	private void LoadMethods(){
 		methods.Add(()=>TakeApple());
 		methods.Add(()=>TakeGreenApple());
@@ -50,50 +70,28 @@ public class ItemLogic : MonoBehaviour{
 		methods.Add(()=>TakeDoughnut());
 		methods.Add(()=>TakeDoughnutBrown());
 		methods.Add(()=>TakeMilk());
-		
-	}
-	
-	private void AddDescription(){
-		items[0].description = "Mood + 10";
-		items[1].description = "Mood + 5";
-		items[2].description = "Mood + 30";
-		items[3].description = "Mood + 15";
-		items[4].description = "Mood + 20";
-		items[5].description = "Mood + 25";
-		items[6].description = "Mood + 40";
-	}
-	
-	void Awake(){
-		Categorize();
-		LoadMethods();
-		AddDescription();
 	}
 
 	//Functions for Each item.
-	public static void TakeApple(){
+	private void TakeApple(){
 		DataManager.AddMood(10);
 	}
-	public static void TakeGreenApple(){
+	private void TakeGreenApple(){
 		DataManager.AddMood(5);
 	}
-	public static void TakeSandwich(){
+	private void TakeSandwich(){
 		DataManager.AddMood(30);
 	}
-	public static void TakeBread(){
+	private void TakeBread(){
 		DataManager.AddMood(15);
 	}
-	public static void TakeDoughnut(){
+	private void TakeDoughnut(){
 		DataManager.AddMood(20);
 	}
-	public static void TakeDoughnutBrown(){
+	private void TakeDoughnutBrown(){
 		DataManager.AddMood(25);
 	}
-	public static void TakeMilk(){
+	private void TakeMilk(){
 		DataManager.AddMood(40);
 	}
-	
-	//Template for Room Decoration
-//	public static void UseCarpet(Texture texture){
-//		GameObject.Find("Floor Rectangular").renderer.material.SetTexture("_MainTex",texture);
-//	}
 }

@@ -94,11 +94,7 @@ public class InhalerGameNGUI : MonoBehaviour {
             messageDuration = introMessageDuration;
         }
 
-        Invoke("ShowIntroEnd", messageDuration);
-    }
-
-    void ShowIntroEnd(){
-        ShowProgressBar();
+        Invoke("ShowProgressBar", messageDuration);
     }
 
     public void ShowQuitButton(){

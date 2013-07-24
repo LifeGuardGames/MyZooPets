@@ -85,6 +85,7 @@ public class InhalerGameNGUI : MonoBehaviour {
         HideProgressBar();
         float messageDuration;
         if (inhalerGameManager.isPracticeGame){
+            // Note: NotificationUIManager knows to call PopupTexture("intro") after calling PopupTexture("practice intro").
             notificationUIManager.PopupTexture("practice intro");
             messageDuration = introMessageDuration + practiceMessageDuration;
         }

@@ -49,8 +49,12 @@ public class SwipeDetection : MonoBehaviour {
                 flickTimer = 0;
                 touchStarted = true;
                 touchStartPos = touch.position;
-                if (IsTouchingNGUI()){
+                if (IsTouchingNGUI(touch.position)){
                     swipeCancelled = true;
+                    Debug.Log("touching NGUI");
+                }
+                else {
+                    Debug.Log("not touching NGUI");
                 }
                 break;
 
@@ -77,9 +81,9 @@ public class SwipeDetection : MonoBehaviour {
         }
     }
 
-    bool IsTouchingNGUI(){
+    bool IsTouchingNGUI(Vector2 screenPos){
 
-        Ray ray = NGUICamera.ScreenPointToRay (Input.mousePosition);
+        Ray ray = NGUICamera.ScreenPointToRay (screenPos);
         RaycastHit hit;
 
         // Raycast

@@ -46,7 +46,6 @@ public class InhalerGameNGUI : MonoBehaviour {
                 delegate (){
                     inhalerGameManager.ResetInhalerGame();
                     RestartProgressBar();
-                    // ShowButtons();
                 },
                 QuitInhalerGame
             );

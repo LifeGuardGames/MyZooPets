@@ -28,7 +28,6 @@ public class InhalerGameManager : MonoBehaviour{
 
     InhalerGameNGUI inhalerGameNGUI;
 
-    // todo: create accessors
     public bool gameEnded = false;
 
     int lastRecordedStep;
@@ -54,10 +53,12 @@ public class InhalerGameManager : MonoBehaviour{
 
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
 
-            if (!introShown){
+            if (!introShown){ // Shows "Use The Inhaler" message if playing the first round of the game
                 inhalerGameNGUI.RestartProgressBar();
                 inhalerGameNGUI.ShowIntro();
                 introShown = true;
+
+                // Calculate how long to wait before creating the inhalers.
                 float delay;
                 if (isPracticeGame){
                     delay = InhalerGameNGUI.practiceMessageDuration + InhalerGameNGUI.introMessageDuration;
@@ -76,13 +77,14 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void SetUpScene(){
-        DestroyAndRecreatePrefabs();
+        DestroyAndRecreatePrefabs(); // Because adding fresh copies is easier than going back and fixing modified values.
         SetUpInhalerGame();
         inhalerGameNGUI.ShowQuitButton();
     }
 
+    // This creates both the advair and rescue inhalers. Hiding of the unnecessary ones is done in SetUpInhalerGame().
     void DestroyAndRecreatePrefabs(){
-        // delete gameobjects
+        // delete existing gameobjects from the last round if there are any
         Destroy(advair);
         Destroy(rescue);
         Destroy(smallRescue);
@@ -108,11 +110,11 @@ public class InhalerGameManager : MonoBehaviour{
 
     }
 
+    /*
+        Disable (hide) the game components that aren't required for this round.
+        Eg. Hide all rescue inhaler components if InhalerLogic.CurrentInhalerType is InhalerType.Advair.
+    */
     void SetUpInhalerGame(){
-
-        // todo: remove after testing
-        // InhalerLogic.CurrentInhalerType = InhalerType.Rescue;
-
         Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
             rescue.SetActive(false);
@@ -133,14 +135,26 @@ public class InhalerGameManager : MonoBehaviour{
             showHint = false;
             timer = 0;
         }
-
     }
 
     void Update(){
+
+        /*
+            If runShowHintTimer is true, hints will be hidden at first, and shown only when the user has not made the correct move
+            after a specified period of time (timeBeforeHints).
+            If it is false, that means the hints should be shown throughout the game (for someone's first time playing this).
+        */
+
         if (runShowHintTimer){
-            ShowHintTimer();
+            ShowHintTimer(); // This checks and shows hints if necessary.
         }
     }
+
+    /*
+        Hints will be hidden at first, and shown only when the user has not made the correct move after a specified
+        period of time (timeBeforeHints).
+        The timer is reset every time the current step changes.
+    */
 
     void ShowHintTimer(){ // to be called in Update()
         if (InhalerLogic.CurrentStep != lastRecordedStep){
@@ -159,7 +173,7 @@ public class InhalerGameManager : MonoBehaviour{
     public void OnGameEnd(){
         if (InhalerLogic.IsDoneWithGame()){ // if done with game
 
-            // record having given the pet the inhaler, if this was the real game.
+            // Record having given the pet the inhaler, if this was the real game.
             if (!isPracticeGame){
                 CalendarLogic.RecordGivingInhaler();
             }
@@ -173,14 +187,8 @@ public class InhalerGameManager : MonoBehaviour{
 
             RemoveFirstTimeFlags();
             gameEnded = true;
-            // inhalerGameNGUI.HideButtons();
-            // Invoke("ShowButtons", inhalerGameNGUI.introMessageDuration); // set a 3 second delay so that the "great" message animation has time to play
         }
     }
-
-    // void ShowButtons(){
-    //     inhalerGameNGUI.ShowButtons();
-    // }
 
     void RemoveFirstTimeFlags(){
         if (InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair){

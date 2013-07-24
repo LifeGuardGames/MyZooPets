@@ -43,6 +43,8 @@ public class ClickManager : MonoBehaviour {
 
 	public NotificationUIManager notificationUIManager;
 
+    public static GameObject UIRoot; // this is used to add a collider to the UIRoot to stop non-GUI elements from being clicked when GUI menus are active
+
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
     bool trophyMessageShowing = false;
@@ -74,12 +76,28 @@ public class ClickManager : MonoBehaviour {
 		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
     }
 
-	//Clean all even listeners
+	//Clean all event listeners and static references
 	void OnDestroy(){
 		NoteUIManager.OnNoteClosed -= OnNoteClosed;
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
+		UIRoot = null;
+	}
+
+	// If set to true (GUI menus are active), add a collider in UIRoot to stop user from clicking on anything else.
+	// If set to false, deactivate the collider.
+	public static void SetActiveGUIModeLock(bool GUIActive){
+		if (UIRoot == null){
+			UIRoot = GameObject.Find("UI Root (2D)");
+		}
+		BoxCollider col = UIRoot.collider as BoxCollider;
+		if (UIRoot.collider == null){
+			col = UIRoot.AddComponent<BoxCollider>();
+			col.center = new Vector3(0,0,50); // so this collider is behind all actual GUI elements and won't interfere with them
+			col.size = new Vector3(3000, 3000, 1); // this should be big enough to account for all different resolutions
+		}
+		col.enabled = GUIActive;
 	}
 
 	// assigning methods that get called when these individual objects get called in the scene
@@ -114,6 +132,7 @@ public class ClickManager : MonoBehaviour {
 
 			ClickLock();
 			ModeLock();
+			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
@@ -136,6 +155,7 @@ public class ClickManager : MonoBehaviour {
 			storeUIManager.StoreClicked();
 			ClickLock();
 			ModeLock();
+			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
@@ -144,6 +164,7 @@ public class ClickManager : MonoBehaviour {
 	private void OnStoreClosed(object sender, EventArgs e){
 		ReleaseClickLock();
 		ReleaseModeLock();
+		SetActiveGUIModeLock(false);
 
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
@@ -156,6 +177,7 @@ public class ClickManager : MonoBehaviour {
 			calendarUIManager.CalendarClicked();
 			ClickLock();
 			ModeLock();
+			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
@@ -165,6 +187,7 @@ public class ClickManager : MonoBehaviour {
 	private void OnCalendarClosed(object sender, EventArgs e){
 		ReleaseClickLock();
 		ReleaseModeLock();
+		SetActiveGUIModeLock(false);
 		//Show other UI object
 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
@@ -285,5 +308,6 @@ public class ClickManager : MonoBehaviour {
 	// Enable clicking other objects after completed exiting a mode
 	public static void ReleaseModeLock(){
 		isModeLocked = false;
+		SetActiveGUIModeLock(false);
 	}
 }

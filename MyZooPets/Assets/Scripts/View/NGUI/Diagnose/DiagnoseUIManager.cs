@@ -4,6 +4,7 @@ using System.Collections;
 public class DiagnoseUIManager : MonoBehaviour {
     public GameObject spritePet;
     public NotificationUIManager notificationUIManager;
+    public GameObject buttonPanel;
 
     private float timer = 0;
     private float timerInterval = 10;
@@ -97,5 +98,6 @@ public class DiagnoseUIManager : MonoBehaviour {
         }
 
         //TO DO: hide gui panel
+        buttonPanel.GetComponent<MoveTweenToggle>().Hide();
     }
 }

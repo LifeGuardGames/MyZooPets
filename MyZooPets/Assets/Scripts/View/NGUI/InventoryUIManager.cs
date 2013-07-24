@@ -15,6 +15,7 @@ public class InventoryUIManager : MonoBehaviour {
     public UIFont font;
     public GameObject UIGridObject;
     public GameObject UIButtonToggleObject;
+    public GameObject UIButtonSpriteObject;
 
     public GameObject spritePet;
     public GameObject speechBubblePrefab;
@@ -22,12 +23,14 @@ public class InventoryUIManager : MonoBehaviour {
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
+    private UISprite uiSprite;
     private Dictionary<string, bool> itemTrackHash; // Hashtable to keep track of the types of items present;
 
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
         uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
+        uiSprite = UIButtonSpriteObject.GetComponent<UISprite>();
         itemTrackHash = new Dictionary<string, bool>();
 
     }
@@ -171,10 +174,11 @@ public class InventoryUIManager : MonoBehaviour {
         isGuiShowing = !isGuiShowing;
 
         // Change the sprite on the button
-        UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
     }
 
 }

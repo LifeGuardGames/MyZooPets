@@ -51,10 +51,6 @@ public class SwipeDetection : MonoBehaviour {
                 touchStartPos = touch.position;
                 if (IsTouchingNGUI(touch.position)){
                     swipeCancelled = true;
-                    Debug.Log("touching NGUI");
-                }
-                else {
-                    Debug.Log("not touching NGUI");
                 }
                 break;
 

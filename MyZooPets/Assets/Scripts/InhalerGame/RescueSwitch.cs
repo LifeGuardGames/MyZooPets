@@ -1,6 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+    Rescue Inhaler Button / Prescription (Rescue Step 5).
+
+    This listens for the user's touch on the button (prescription bottle) on the rescue inhaler (the small one in front of the pet's mouth).
+
+    If the switch is tapped, it will go down, and the game will move on to the next step.
+
+*/
 public class RescueSwitch : MonoBehaviour {
 
     void Update()

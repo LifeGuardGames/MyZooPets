@@ -41,15 +41,15 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
             break;
 
             case BadgeTier.Bronze:
-            SetSprite("TrophyBronze");
+            SetSprite("trophyBronze");
             break;
 
             case BadgeTier.Silver:
-            SetSprite("TrophySilver");
+            SetSprite("trophySilver");
             break;
 
             case BadgeTier.Gold:
-            SetSprite("TrophyGold");
+            SetSprite("trophyGold");
             break;
 
         }

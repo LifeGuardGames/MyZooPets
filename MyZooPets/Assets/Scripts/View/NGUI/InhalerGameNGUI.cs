@@ -46,7 +46,6 @@ public class InhalerGameNGUI : MonoBehaviour {
                 delegate (){
                     inhalerGameManager.ResetInhalerGame();
                     RestartProgressBar();
-                    // ShowButtons();
                 },
                 QuitInhalerGame
             );
@@ -83,18 +82,18 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     public void ShowIntro(){
         HideProgressBar();
+        float messageDuration;
         if (inhalerGameManager.isPracticeGame){
+            // Note: NotificationUIManager knows to call PopupTexture("intro") after calling PopupTexture("practice intro").
             notificationUIManager.PopupTexture("practice intro");
+            messageDuration = introMessageDuration + practiceMessageDuration;
         }
         else {
             notificationUIManager.PopupTexture("intro");
+            messageDuration = introMessageDuration;
         }
 
-        Invoke("ShowIntroEnd", introMessageDuration);
-    }
-
-    void ShowIntroEnd(){
-        ShowProgressBar();
+        Invoke("ShowProgressBar", messageDuration);
     }
 
     public void ShowQuitButton(){

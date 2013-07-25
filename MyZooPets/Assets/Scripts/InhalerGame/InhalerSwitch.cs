@@ -1,6 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+	Advair switch (Advair Step 2).
+
+	This listens to the user's touch input, and rotates the part to follow the user's touch.
+
+	If the part reaches its target rotation (ie. finalPosition), the step is completed.
+
+	Unlike Advair Step 1, the switch bounces back to its original position regardless
+	of whether the target was reached.
+
+	The part only rotates in one direction, thanks to PreventAntiClockwiseRotation().
+*/
 public class InhalerSwitch : MonoBehaviour
 {
 	public GameObject inhalerSwitchArrow;

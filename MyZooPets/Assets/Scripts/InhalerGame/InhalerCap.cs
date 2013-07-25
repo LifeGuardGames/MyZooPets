@@ -1,6 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+	Advair part that rotates (Advair Step 1).
+
+	This is actually incorrectly named InhalerCap, but what is really is is that part of the
+	Advair inhaler that rotates to reveal a switch and a mouthpiecek.
+
+	This listens to the user's touch input, and rotates the part to follow the user's touch.
+
+	If the part reaches its target rotation (ie. finalPosition), the step is completed, and it stays there.
+	If it doesn't, it snaps back to its original position when the touch is released.
+
+	The part only rotates in one direction, thanks to PreventAntiClockwiseRotation().
+*/
 public class InhalerCap : MonoBehaviour
 {
 	public GameObject inhalerCapArrow;

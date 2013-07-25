@@ -228,7 +228,12 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
-			DataManager.AddPoints(remainderPoints);
+			
+			// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+			GameObject data = GameObject.Find("GameManager");
+			StatsController control = data.GetComponent<StatsController>();
+			control.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
+			
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
@@ -242,13 +247,13 @@ public class HUDAnimator : MonoBehaviour {
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				GameObject data = GameObject.Find("DataManager");
+				GameObject data = GameObject.Find("GameManager");
 				StatsController control = data.GetComponent<StatsController>();
 				
-				control.ChangeStats(200, 0, 0, 0, new Vector3(0, 0, 0));
+				control.ChangeStats(100, 0, 0, 0, Vector3.zero);
 			}
 			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				GameObject data = GameObject.Find("DataManager");
+				GameObject data = GameObject.Find("GameManager");
 				StatsController control = data.GetComponent<StatsController>();
 				
 				control.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
@@ -259,7 +264,7 @@ public class HUDAnimator : MonoBehaviour {
 				
 				displayHealth = 0;
 				
-				GameObject data = GameObject.Find("DataManager");
+				GameObject data = GameObject.Find("GameManager");
 				StatsController control = data.GetComponent<StatsController>();
 				
 				control.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
@@ -270,7 +275,7 @@ public class HUDAnimator : MonoBehaviour {
 				
 				displayMood = 0;
 				
-				GameObject data = GameObject.Find("DataManager");
+				GameObject data = GameObject.Find("GameManager");
 				StatsController control = data.GetComponent<StatsController>();
 				
 				control.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
@@ -284,8 +289,7 @@ public class HUDAnimator : MonoBehaviour {
 				dataHealth = 0;
 				
 				displayHealth = 0;
-				
-				GameObject data = GameObject.Find("DataManager");
+				GameObject data = GameObject.Find("GameManager");
 				StatsController control = data.GetComponent<StatsController>();
 				
 				control.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));

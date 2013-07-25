@@ -72,8 +72,12 @@ public class SlotMachineUIManager : MonoBehaviour {
             stars = 200;
             points = 10;
         }
-        DataManager.AddStars(stars);
-        DataManager.AddPoints(points);
+        
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(points, stars, 0, 0, Vector3.zero);
+		
         notificationUIManager.GameOverRewardMessage(stars, points,
             delegate(){
                 StartGame();

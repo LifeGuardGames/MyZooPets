@@ -22,7 +22,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             notificationUIManager.PopupNotificationTwoButtons(
                 "-"+ costStars +" stars to play",
                 delegate(){
-                    DataManager.SubtractStars(costStars);
+                    StatsController.Instance.ChangeStats(0, costStars * -1, 0, 0, Vector3.zero);	// Convert to negative
                     StartGame();
                 },
                 delegate(){

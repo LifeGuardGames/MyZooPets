@@ -342,22 +342,22 @@ public class HUDAnimator : MonoBehaviour {
 		switch(type){
 			case(HUDElementType.points):
 				imageName = "tweenPoints";
-				modifier = 1.3f / 200f * amount;
+				modifier = Math.Abs(1.3f / 200f * amount);
 				endPosition = new Vector3(130f, -25f, 0); //Points
 				break;
 			case(HUDElementType.stars):
 				imageName = "tweenStars";
-				modifier = 4f / 200f * amount;
+				modifier = Math.Abs(4f / 200f * amount);
 				endPosition = new Vector3(514f, -25f, 0);	//Stars
 				break;
 			case(HUDElementType.health):
 				imageName = "tweenHealthUp";
-				modifier = 1.6f / 80f * amount;
+				modifier = Math.Abs(1.6f / 80f * amount);
 				endPosition = new Vector3(730f, -23f, 0);	//Health
 				break;
 			case(HUDElementType.mood):
 				imageName = "tweenMoodUp";
-				modifier = 1.6f / 80f * amount;
+				modifier = Math.Abs(1.6f / 80f * amount);
 				endPosition = new Vector3(1010f, -23f, 0); //Mood
 				break;
 		}

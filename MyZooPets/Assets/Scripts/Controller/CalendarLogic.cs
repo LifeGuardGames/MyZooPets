@@ -192,13 +192,11 @@ public class CalendarLogic : MonoBehaviour{
         for(int i = 0;i < 7; i++){
             CalendarEntry entry = DataManager.EntriesThisWeek[i];
             if(entry.DayTime.Equals(DosageRecord.Miss)){
-                DataManager.SubtractMood(20);
-                DataManager.SubtractHealth(20);
+                StatsController.Instance.ChangeStats(0, 0, -20, -20, Vector3.zero);
                 punishmentCounter++;
             }
             if(entry.NightTime.Equals(DosageRecord.Miss)){
-                DataManager.SubtractMood(20);
-                DataManager.SubtractHealth(20);
+                StatsController.Instance.ChangeStats(0, 0, -20, -20, Vector3.zero);
                 punishmentCounter++;
             }
             if(punishmentCounter == 2) break;

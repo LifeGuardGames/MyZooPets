@@ -34,7 +34,7 @@ public class StatsController : Singleton<StatsController> {
 			if(deltaPoints > 0)
 				DataManager.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
-				DataManager.SubtractPoints(deltaPoints);
+				DataManager.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 			
 			// Tell HUDAnimator to animate and change
 //			hudAnimator.StartCurvePoints(deltaPoints);
@@ -44,7 +44,7 @@ public class StatsController : Singleton<StatsController> {
 			if(deltaStars > 0)
 				DataManager.AddStars(deltaStars);
 			else if(deltaStars < 0)
-				DataManager.SubtractStars(deltaStars);
+				DataManager.SubtractStars(-1 * deltaStars);
 		
 			// Tell HUDAnimator to animate and change
 //			hudAnimator.StartCurveStars(deltaStars);
@@ -54,7 +54,7 @@ public class StatsController : Singleton<StatsController> {
 			if(deltaHealth > 0)
 				DataManager.AddHealth(deltaHealth);
 			else if(deltaHealth < 0)
-				DataManager.SubtractHealth(deltaHealth);
+				DataManager.SubtractHealth(-1 * deltaHealth);
 		
 			// Tell HUDAnimator to animate and change
 //			hudAnimator.StartCurveHealth(deltaHealth);
@@ -64,7 +64,7 @@ public class StatsController : Singleton<StatsController> {
 			if(deltaMood > 0)
 				DataManager.AddMood(deltaMood);
 			else if(deltaMood < 0)
-				DataManager.SubtractMood(deltaMood);
+				DataManager.SubtractMood(-1 * deltaMood);
 		
 			// Tell HUDAnimator to animate and change
 //			hudAnimator.StartCurveMood(deltaMood);

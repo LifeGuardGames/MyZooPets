@@ -116,7 +116,7 @@ public class DegradationLogic : MonoBehaviour {
             minusHealth = 10 + additionalTrigger * 10;
         }
 
-        DataManager.SubtractHealth(minusHealth);
+        StatsController.Instance.ChangeStats(0, 0, minusHealth * -1, 0, Vector3.zero);	// Convert to negative
     }
 
 }

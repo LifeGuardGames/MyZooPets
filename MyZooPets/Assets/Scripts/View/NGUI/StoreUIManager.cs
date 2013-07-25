@@ -112,7 +112,7 @@ public class StoreUIManager : MonoBehaviour {
 		int itemId = int.Parse(button.transform.parent.name);
 		if(DataManager.Stars >= cost){
 			inventory.AddItem(itemId, 1);
-			DataManager.SubtractStars(cost);
+			StatsController.Instance.ChangeStats(0, cost * -1, 0, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
 		}
 	}

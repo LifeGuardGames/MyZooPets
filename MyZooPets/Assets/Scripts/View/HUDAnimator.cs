@@ -19,6 +19,8 @@ public enum HUDElementType{
 }
 
 public class HUDAnimator : MonoBehaviour {
+	public bool isDebug = false;
+	
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
     public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
@@ -66,7 +68,25 @@ public class HUDAnimator : MonoBehaviour {
 	// Tweening
 	public UIAtlas commonAtlas;
 	private GameObject toDestroy;
-
+	private bool isFirstTweenPointsDone = false;
+	private bool isFirstTweenPointsCall = true;
+	private bool isAnimatePointsBar = false;
+	
+	private bool isFirstTweenStarsDone = false;
+	private bool isFirstTweenStarsCall = true;
+	private bool isAnimateStarsBar = false;
+	
+	private bool isFirstTweenHealthDone = false;
+	private bool isFirstTweenHealthCall = true;
+	private bool isAnimateHealthBar = false;
+	
+	private bool isFirstTweenMoodDone = false;
+	private bool isFirstTweenMoodCall = true;
+	private bool isAnimateMoodBar = false;
+	
+	// Parent for tweening
+	public GameObject tweenParent;
+	
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
 		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
@@ -74,6 +94,7 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	void Start(){
+		// TODO-j Is this Initialization still valid??!!
 		dataPoints = DataManager.Points;
 		dataStars = DataManager.Stars;
 		dataHealth = DataManager.Health;
@@ -90,14 +111,22 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		if (!LoadLevelManager.IsPaused){
-			PointsAnimation();
-			StarsAnimation();
-			HealthAnimation();
-			MoodAnimation();
+		if(!LoadLevelManager.IsPaused){
+			if(isAnimatePointsBar){
+				PointsAnimation();
+			}
+			if(isAnimateStarsBar){
+				StarsAnimation();
+			}
+			if(isAnimateHealthBar){
+				HealthAnimation();
+			}
+			if(isAnimateMoodBar){
+				MoodAnimation();
+			}
 		}
 	}
-
+	
 	//==================GUI Animation=========================
 	private void StarsAnimation(){
 		if(dataStars != DataManager.Stars){
@@ -112,6 +141,10 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
+				
+				// Reset the bar animation flag
+				isAnimateStarsBar = false;
+				isFirstTweenStarsCall = true;
 			}
 		}
 	}
@@ -127,6 +160,10 @@ public class HUDAnimator : MonoBehaviour {
 				LevelUpEventCheck(); // Check if progress bar reach level max
 			}else{ //animation done
 				dataPoints = DataManager.Points;
+				
+				// Reset the bar animation flag
+				isAnimatePointsBar = false;
+				isFirstTweenPointsCall = true;
 			}
 		}
 	}
@@ -144,6 +181,10 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink. reset icon size
 				healthAnimControl.Stop();
+				
+				// Reset the bar animation flag
+				isAnimateHealthBar = false;
+				isFirstTweenHealthCall = true;
 			}
 		}
 	}
@@ -161,6 +202,10 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink. reset icon size
 				moodAnimControl.Stop();
+				
+				// Reset the bar animation flag
+				isAnimateMoodBar = false;
+				isFirstTweenMoodCall = true;
 			}
 		}
 
@@ -195,53 +240,220 @@ public class HUDAnimator : MonoBehaviour {
 	// TWEEN ANIMATION
 	//========================
 	
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 50), "demo")){
-//			TweenCurveToPoint(HUDElementType.stars, 10);
-//		}
-//	}
+	void OnGUI(){
+		if(isDebug){
+			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
+				GameObject data = GameObject.Find("DataManager");
+				StatsController control = data.GetComponent<StatsController>();
+				
+				control.ChangeStats(200, 0, 0, 0, new Vector3(0, 0, 0));
+			}
+			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
+				GameObject data = GameObject.Find("DataManager");
+				StatsController control = data.GetComponent<StatsController>();
+				
+				control.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
+			}
+			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
+				DataManager.SubtractHealth(100);
+				dataHealth = 0;
+				
+				displayHealth = 0;
+				
+				GameObject data = GameObject.Find("DataManager");
+				StatsController control = data.GetComponent<StatsController>();
+				
+				control.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
+			}
+			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
+				DataManager.SubtractMood(100);
+				dataMood = 0;
+				
+				displayMood = 0;
+				
+				GameObject data = GameObject.Find("DataManager");
+				StatsController control = data.GetComponent<StatsController>();
+				
+				control.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
+			}
+			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
+				DataManager.SubtractMood(100);
+				dataMood = 0;
+				
+				displayMood = 0;
+				DataManager.SubtractHealth(100);
+				dataHealth = 0;
+				
+				displayHealth = 0;
+				
+				GameObject data = GameObject.Find("DataManager");
+				StatsController control = data.GetComponent<StatsController>();
+				
+				control.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
+			}
+		}
+	}
 	
-	public void TweenCurveToPoint(HUDElementType type, int amount){
-		float duration = -1f;
+	// Making effects serial!
+	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
+		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
+		StartCoroutine(StartCurveStats(deltaPoints, new Vector3(0f,0f,0f), deltaStars, new Vector3(0f,0f,0f), deltaHealth, new Vector3(0f,0f,0f), deltaMood, new Vector3(0f,0f,0f)));
+	}
+	
+	// Helper function for StartCoroutineCurveStats
+	IEnumerator StartCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
+		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
+		
+		if(deltaPoints != 0){
+			if(pointsOrigin == Vector3.zero){
+				pointsOrigin = new Vector3(130f, 500f, 0f);	//Default spawn from top!
+			}
+			StartCurvePoints(deltaPoints, pointsOrigin);
+			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
+		}
+		if(deltaStars != 0){
+			if(starsOrigin == Vector3.zero){
+				starsOrigin = new Vector3(514f, 500f, 0f);
+			}
+			StartCurveStars(deltaStars, starsOrigin);
+			yield return new WaitForSeconds(4f / 200f * deltaStars);
+		}
+		if(deltaHealth != 0){
+			if(healthOrigin == Vector3.zero){
+				healthOrigin = new Vector3(730f, 500f, 0f);
+			}
+			StartCurveHealth(deltaHealth, healthOrigin);
+			yield return new WaitForSeconds(1.6f / 80f * deltaHealth);
+		}
+		if(deltaMood != 0){
+			if(moodOrigin == Vector3.zero){
+				moodOrigin = new Vector3(1010f, 500f, 0f);
+			}
+			StartCurveMood(deltaMood, moodOrigin);
+			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
+		}
+		
+	}
+	
+	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){
+		TweenMoveToPoint(HUDElementType.points, deltaPoints, pointsOrigin);
+	}
+	
+	public void StartCurveStars(int deltaStars, Vector3 starsOrigin){
+		TweenMoveToPoint(HUDElementType.stars, deltaStars, starsOrigin);
+	}
+	
+	public void StartCurveHealth(int deltaHealth, Vector3 healthOrigin){
+		TweenMoveToPoint(HUDElementType.health, deltaHealth, healthOrigin);
+	}
+	
+	public void StartCurveMood(int deltaMood, Vector3 moodOrigin){
+		TweenMoveToPoint(HUDElementType.mood, deltaMood, moodOrigin);
+	}
+	
+	// Using Linear move for now, LeanTween does not have moveLocal curve path
+	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint){
+		float duration = 1f;
 		String imageName = null;
+		Vector3 endPosition = Vector3.zero;
+		float modifier = 3f;	// How many to spawn for each change
+		
+		//Testing
+		duration = .7f;
+
 		switch(type){
 			case(HUDElementType.points):
 				imageName = "tweenPoints";
+				modifier = 1.3f / 200f * amount;
+				endPosition = new Vector3(130f, -25f, 0); //Points
 				break;
 			case(HUDElementType.stars):
 				imageName = "tweenStars";
+				modifier = 4f / 200f * amount;
+				endPosition = new Vector3(514f, -25f, 0);	//Stars
 				break;
 			case(HUDElementType.health):
 				imageName = "tweenHealthUp";
+				modifier = 1.6f / 80f * amount;
+				endPosition = new Vector3(730f, -23f, 0);	//Health
 				break;
 			case(HUDElementType.mood):
 				imageName = "tweenMoodUp";
+				modifier = 1.6f / 80f * amount;
+				endPosition = new Vector3(1010f, -23f, 0); //Mood
 				break;
 		}
 		
-		//Testing
-		duration = 1f;
-		Vector3[] path = new Vector3[4];
-		path[0] = new Vector3(0.2f, 0.2f, 0);
-		path[1] = new Vector3(0.3f, 0.4f, 0);
-		path[2] = new Vector3(0.2f, 0.5f, 0);
+		for(float i = 0f; i < modifier; i += 0.1f){
+			// On its own thread, asynchronous
+			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration));
+		}
+	}
+	
+	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration){
+		yield return new WaitForSeconds(waitTime);
 		
-		path[3] = new Vector3(-.3f, .93f, 0);	//Stars
-		
-		//path[3] = new Vector3(-1.28f, .93f, 0); //Points
-		
-		//path[3] = new Vector3(.25f, .93f, 0);	//Health
-		//path[3] = new Vector3(.93f, .93f, 0); //Mood
+		// Create the tween image
+		UISprite sprite = NGUITools.AddSprite(tweenParent, commonAtlas, imageName);
+		sprite.depth = 30;	// TODO-s make this dynamic?
+		GameObject go = sprite.gameObject;
+		go.transform.localPosition = fromPos;
+		go.transform.localScale = new Vector3(33f, 33f, 1f);
+		go.AddComponent<DestroyOnCall>();
+		ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
+		scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
+		scaleScript.duration = .7f;
 		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
+		optional.Add("onCompleteTarget", go);
+		optional.Add("onComplete", "DestroySelf");
+		LeanTween.moveLocal(go, toPos, duration, optional);
 		
-		GameObject go = NGUITools.AddSprite(this.gameObject, commonAtlas, imageName).gameObject;
-		
-		go.AddComponent<DestroyOnCall>();
-	//	GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store"), ItemSpritePrefab);
-	//	animationSprite.transform.position = origin;
-	//	animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-
+		// Enables the progress bar/count to animate after duration (when the first tween image touches the bar)
+		// Hopefully Invoke matches up with LeanTween time
+		//TODO sloppy logic speed and order, fix later
+		switch(type){
+			case(HUDElementType.points):
+				if(isFirstTweenPointsCall){
+					isFirstTweenPointsCall = false;
+					Invoke("StartBarAnimationPoints", duration);
+				}
+				break;
+			case(HUDElementType.stars):
+				if(isFirstTweenStarsCall){
+					isFirstTweenStarsCall = false;
+					Invoke("StartBarAnimationStars", duration);
+				}
+				break;
+			case(HUDElementType.health):
+				if(isFirstTweenHealthCall){
+					isFirstTweenHealthCall = false;
+					Invoke("StartBarAnimationHealth", duration);
+				}
+				break;
+			case(HUDElementType.mood):
+				if(isFirstTweenMoodCall){
+					isFirstTweenMoodCall = false;
+					Invoke("StartBarAnimationMood", duration);
+				}
+				break;
+		}
+	}
+	
+	public void StartBarAnimationPoints(){
+		isAnimatePointsBar = true;
+	}
+	
+	public void StartBarAnimationStars(){
+		isAnimateStarsBar = true;
+	}
+	
+	public void StartBarAnimationHealth(){
+		isAnimateHealthBar = true;
+	}
+	
+	public void StartBarAnimationMood(){
+		isAnimateMoodBar = true;
 	}
 }

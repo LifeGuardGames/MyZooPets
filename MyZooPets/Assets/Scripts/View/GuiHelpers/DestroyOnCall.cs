@@ -7,7 +7,9 @@ using System.Collections;
 /// </summary>
 
 public class DestroyOnCall : MonoBehaviour {
+	
 	public void DestroySelf(){
 		Destroy(gameObject);
 	}
+	
 }

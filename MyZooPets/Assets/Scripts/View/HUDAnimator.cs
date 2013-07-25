@@ -228,12 +228,7 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
-			
-			// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-			GameObject data = GameObject.Find("GameManager");
-			StatsController control = data.GetComponent<StatsController>();
-			control.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
-			
+			StatsController.Instance.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
@@ -247,52 +242,31 @@ public class HUDAnimator : MonoBehaviour {
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(100, 0, 0, 0, Vector3.zero);
+				StatsController.Instance.ChangeStats(100, 0, 0, 0, Vector3.zero);
 			}
 			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
-				
 				displayHealth = 0;
-				
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
-				
 				displayMood = 0;
-				
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
-				
 				displayMood = 0;
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
-				
 				displayHealth = 0;
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
 			}
 		}
 	}

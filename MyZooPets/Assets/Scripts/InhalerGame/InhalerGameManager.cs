@@ -50,6 +50,7 @@ public class InhalerGameManager : MonoBehaviour{
     // the Advair inhaler or Rescue inhaler, depending on what InhalerLogic.CurrentInhalerType is
     public void ResetInhalerGame(){
         InhalerLogic.Init(isPracticeGame);
+        inhalerGameNGUI.HideHUD();
 
         if (InhalerLogic.CanPlayGame){ // tells us if we can play the game or not (any more plays remaining today)
 
@@ -182,6 +183,7 @@ public class InhalerGameManager : MonoBehaviour{
             }
 
             inhalerGameNGUI.ShowGameOverMessage();
+            inhalerGameNGUI.ShowHUD();
             inhalerGameNGUI.HideQuitButton();
 
             RemoveFirstTimeFlags();

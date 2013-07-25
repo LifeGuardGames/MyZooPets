@@ -16,6 +16,7 @@ public class InhalerGameNGUI : MonoBehaviour {
     public GameObject progressBarObject;
     public GameObject quitButton;
     private ProgressBarController progressBar;
+    public GameObject hudObject;
 
     void Start(){
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
@@ -36,6 +37,13 @@ public class InhalerGameNGUI : MonoBehaviour {
     }
     public void ShowProgressBar(){
         progressBarObject.SetActive(true);
+    }
+
+    public void ShowHUD(){
+        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+    }
+    public void HideHUD(){
+        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
     }
 
     public void ShowGameOverMessage(){

@@ -19,7 +19,8 @@ public class SwipeDetection : MonoBehaviour {
     bool touchStarted;
     Vector2 touchStartPos;
     float flickTimer = 0;
-    public float minSwipeDistance = .025f;
+    // public float minSwipeDistance = .025f;
+    public float minSwipeDistance = 0.09f;
     public float flickTime = 0.5f;
 
     public static event System.Action<Swipe> OnSwipeDetected;
@@ -29,6 +30,7 @@ public class SwipeDetection : MonoBehaviour {
     void Start() {
         screenDiagonalSize = Mathf.Sqrt(NATIVE_WIDTH * NATIVE_WIDTH + NATIVE_HEIGHT * NATIVE_HEIGHT);
         minSwipeDistancePixels = minSwipeDistance * screenDiagonalSize;
+        // Debug.Log(minSwipeDistancePixels);
 
         layerNGUI = LayerMask.NameToLayer("NGUI");
         NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
@@ -100,6 +102,8 @@ public class SwipeDetection : MonoBehaviour {
     void TestForSwipeGesture(Touch touch){
         Vector2 lastPos = touch.position;
         float distance = Vector2.Distance(lastPos, touchStartPos);
+
+        // Debug.Log(distance);
 
         if (distance > minSwipeDistancePixels && flickTimer <= flickTime) {
             float dy = lastPos.y - touchStartPos.y;

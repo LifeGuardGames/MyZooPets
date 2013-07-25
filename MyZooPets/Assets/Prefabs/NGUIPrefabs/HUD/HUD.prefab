@@ -468,6 +468,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400058}
+  m_Layer: 0
+  m_Name: TweenGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -478,6 +493,7 @@ Transform:
   m_LocalPosition: {x: -10.4373932, y: -36.555481, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 400058}
   - {fileID: 400046}
   - {fileID: 400022}
   - {fileID: 400056}
@@ -815,17 +831,17 @@ Transform:
   - {fileID: 400024}
   - {fileID: 400002}
   m_Father: {fileID: 400000}
---- !u!65 &6500000
-BoxCollider:
+--- !u!4 &400058
+Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1279.05005, y: 70, z: 1}
+  m_GameObject: {fileID: 100058}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -623, y: 34, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
   m_Center: {x: 10.3999996, y: 0, z: 50}
 --- !u!111 &11100000
 Animation:
@@ -920,10 +936,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab0e44c82feb7064bbd7ad08994e57fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebug: 1
   healthIconAnim: {fileID: 100050}
   moodIconAnim: {fileID: 100054}
   starIconAnim: {fileID: 100052}
   commonAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
+  tweenParent: {fileID: 100058}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

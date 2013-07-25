@@ -8,6 +8,7 @@ using System.Collections;
 
 public class ScaleTweenUpDown : MonoBehaviour {
 	
+	public Vector3 scaleInit;
 	public Vector3 scaleDelta;
 	public float delay = 0;
 	public float duration = 2f;
@@ -17,19 +18,20 @@ public class ScaleTweenUpDown : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		scaleInit = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
 		scaleTo = new Vector3(transform.localScale.x * scaleDelta.x, transform.localScale.y * scaleDelta.y, transform.localScale.z * scaleDelta.z);
 		Invoke("StartScale", delay);
 	}
 	
 	void StartScale(){
 		Hashtable optional = new Hashtable();
-		optional.Add("OnCompleteTarget", gameObject);
-		optional.Add("OnComplete", "StartReverse");
-		//optional.Add("ease", LeanTweenType.easeInOutQuad);
-		LeanTween.scale(gameObject, scaleTo, duration);
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "StartReverse");
+		LeanTween.scale(gameObject, scaleTo, duration/2, optional);
 	}
 			
 	void StartReverse(){
-		
+		Hashtable optional = new Hashtable();
+		LeanTween.scale(gameObject, scaleInit, duration/2, optional);
 	}
 }

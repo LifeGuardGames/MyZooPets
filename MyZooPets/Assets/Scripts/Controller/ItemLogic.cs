@@ -74,24 +74,46 @@ public class ItemLogic : MonoBehaviour{
 
 	//Functions for Each item.
 	private void TakeApple(){
-		DataManager.AddMood(10);
+		
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 10, Vector3.zero);
 	}
 	private void TakeGreenApple(){
-		DataManager.AddMood(5);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 5, Vector3.zero);
 	}
 	private void TakeSandwich(){
-		DataManager.AddMood(30);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 30, Vector3.zero);
 	}
 	private void TakeBread(){
-		DataManager.AddMood(15);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 15, Vector3.zero);
 	}
 	private void TakeDoughnut(){
-		DataManager.AddMood(20);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 20, Vector3.zero);
 	}
 	private void TakeDoughnutBrown(){
-		DataManager.AddMood(25);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 25, Vector3.zero);
 	}
 	private void TakeMilk(){
-		DataManager.AddMood(40);
+		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
+		GameObject data = GameObject.Find("GameManager");
+		StatsController control = data.GetComponent<StatsController>();
+		control.ChangeStats(0, 0, 0, 40, Vector3.zero);
 	}
 }

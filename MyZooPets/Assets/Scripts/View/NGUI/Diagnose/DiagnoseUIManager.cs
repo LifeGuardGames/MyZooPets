@@ -5,6 +5,7 @@ public class DiagnoseUIManager : MonoBehaviour {
     public GameObject spritePet;
     public NotificationUIManager notificationUIManager;
     public GameObject buttonPanel;
+    public GameObject hud;
 
     private float timer = 0;
     private float timerInterval = 10;
@@ -87,8 +88,13 @@ public class DiagnoseUIManager : MonoBehaviour {
             deltaPoints = 100;
             deltaStars = 100;
         }
+        hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
         DiagnoseGameLogic.ClaimReward(deltaPoints, deltaStars);
-        notificationUIManager.GameOverRewardMessage(deltaStars, deltaPoints, null);
+        notificationUIManager.GameOverRewardMessage(deltaStars, deltaPoints, 
+            delegate(){
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+                Application.LoadLevel("NewBedRoom");
+                });
     }
 
 

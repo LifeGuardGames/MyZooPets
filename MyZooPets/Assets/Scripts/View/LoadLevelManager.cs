@@ -36,13 +36,16 @@ public class LoadLevelManager : MonoBehaviour {
 
             break;
             case "InhalerGamePet":
-                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+                // hud = GameObject.Find(ANCHOR_TOP + "HUD");
             break;
             case "InhalerGameTeddy":
-                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+                // hud = GameObject.Find(ANCHOR_TOP + "HUD");
             break;
             case "SlotMachineGame":
-                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+                // hud = GameObject.Find(ANCHOR_TOP + "HUD");
+            break;
+            case "DiagnosePet":
+                // hud = GameObject.Find(ANCHOR_TOP + "HUD");
             break;
         }
     }
@@ -65,13 +68,16 @@ public class LoadLevelManager : MonoBehaviour {
                 inventory.GetComponent<MoveTweenToggle>().Show();
             break;
             case "InhalerGamePet":
-                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                // hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
             break;
             case "InhalerGameTeddy":
-                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                // hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
             break;
             case "SlotMachineGame":
-                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                // hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+            break;
+            case "DiagnosePet":
+                // hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
             break;
         }
     }

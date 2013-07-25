@@ -7,13 +7,15 @@ using System.Collections.Generic;
 public class BadgeLogic : MonoBehaviour {
     public List<Badge> badges = new List<Badge>();
     public static int MAX_BADGE_COUNT = 20;
-
+    //===================Events======================
+    public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
+    //==============================================
     void Awake(){
     }
 
 	// Use this for initialization
 	void Start () {
-        //assign handlers	
+        //assign listeners	
         HUDAnimator.OnLevelUp += RewardBadgeOnLevelUp;
 	}
 
@@ -23,8 +25,14 @@ public class BadgeLogic : MonoBehaviour {
 
     //Event listener
     private void RewardBadgeOnLevelUp(object sender, EventArgs e){
-        print("reward badge");
-        // DataManager.CurrentLevel
-        // LevelUpLogic.AwardedBadge
+        int badgeIndex = (int) DataManager.CurrentLevel;
+        //award badge and make them show in UI
+        DataManager.BadgeStatus[badgeIndex].IsAwarded = true;
+        DataManager.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
+        if(OnNewBadgeAdded != null){
+            OnNewBadgeAdded(this, EventArgs.Empty);
+        }else{
+            Debug.LogError("OnNewBadgeAdded is null");
+        }
     }
 }

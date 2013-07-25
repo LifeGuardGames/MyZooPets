@@ -94,8 +94,7 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openRealInhaler(){
-        // todo: change sprite name
-        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "guiPanelStatsHealth", clickManager.OpenRealInhaler, true, false);
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
 
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
@@ -142,6 +141,6 @@ public class Tutorial : MonoBehaviour {
         notificationUIManager.PopupTipWithImage("Good job! You just removed an asthma trigger.", "guiPanelStatsHealth", ShowDegradTip2, true, true);
     }
     void ShowDegradTip2(){
-        notificationUIManager.PopupTipWithImage("Make sure you clean them up when you see them, or your pet will get sick!", "Skull", delegate(){}, false, false);
+        notificationUIManager.PopupTipWithImage("Make sure you clean them up when you see them, or your pet will get sick!", "Skull", delegate(){}, false, true); // disappear immediately when done, because the level up message should pop up right away
     }
 }

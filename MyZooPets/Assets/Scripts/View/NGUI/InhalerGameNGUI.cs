@@ -16,6 +16,7 @@ public class InhalerGameNGUI : MonoBehaviour {
     public GameObject progressBarObject;
     public GameObject quitButton;
     private ProgressBarController progressBar;
+    public GameObject hudObject;
 
     void Start(){
         notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
@@ -38,6 +39,13 @@ public class InhalerGameNGUI : MonoBehaviour {
         progressBarObject.SetActive(true);
     }
 
+    public void ShowHUD(){
+        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+    }
+    public void HideHUD(){
+        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+    }
+
     public void ShowGameOverMessage(){
         if (inhalerGameManager.isPracticeGame){
             notificationUIManager.GameOverRewardMessage(
@@ -52,8 +60,8 @@ public class InhalerGameNGUI : MonoBehaviour {
         }
         else {
             notificationUIManager.GameOverRewardMessage(
-                250,
-                0,
+                inhalerGameManager.RealGameStarIncrement,
+                inhalerGameManager.RealGamePointIncrement,
                 QuitInhalerGame
             );
 

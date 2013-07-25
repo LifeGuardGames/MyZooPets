@@ -121,6 +121,7 @@ public class CalendarLogic : MonoBehaviour{
         }
     }
 
+    //check if the user can play the inhaler game
     public static bool CanUseRealInhaler{
         get {
             bool retVal = false;
@@ -137,28 +138,19 @@ public class CalendarLogic : MonoBehaviour{
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
     public static void RecordGivingInhaler(){
-        RecordGivingInhaler(DateTime.Now);
-    }
-
-    // call whenever opening calendar
-    public void CalendarOpened(){
-        CalendarOpenedOnDate(DateTime.Now);
-    }
-    //================================================
-
-    private static void RecordGivingInhaler(DateTime now){
+        DateTime now = DateTime.Now;
         if (now.Hour < 12) {
             todaysEntry.DayTime = DosageRecord.Hit;
         }else if (now.Hour >= 12) {
             todaysEntry.NightTime = DosageRecord.Hit;
         }
+
     }
 
-    private void CalendarOpenedOnDate(DateTime now){
-        UpdateWeekReference(now);
-        FillInMissedEntries(now);
-        ResetForNextPlayPeriod(now);
-
+    // call whenever opening calendar
+    public void CalendarOpened(){
+        DateTime now = DateTime.Now;
+        UpdateCalendar(now);
         DataManager.LastCalendarOpenedTime = now;
 
         if(OnCalendarReset != null){
@@ -167,15 +159,21 @@ public class CalendarLogic : MonoBehaviour{
             Debug.LogError("OnCalendarReset is null");
         }
     }
-
-    //********************************************
-    // other methods
+    //================================================
+    
     void Awake(){
-       todaysEntry = new CalendarEntry(); 
+       UpdateCalendar(DateTime.Now);
     }
 
     void Update(){
         ResetForNextPlayPeriod(DateTime.Now);
+    }
+
+    //run a check to see if calendar needs to be updated and reset
+    private void UpdateCalendar(DateTime now){
+       UpdateWeekReference(now);
+       FillInMissedEntries(now);
+       ResetForNextPlayPeriod(now);
     }
 
     //Play period is every 12 hr. Reward and punishment renews every play period
@@ -208,8 +206,6 @@ public class CalendarLogic : MonoBehaviour{
 
         //set NextPlayPeriod
         DataManager.NextPlayPeriod = CalculateNextPlayPeriod();
-
-
     }
 
     //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)

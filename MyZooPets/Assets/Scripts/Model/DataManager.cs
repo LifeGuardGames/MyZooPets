@@ -440,21 +440,21 @@ public class DataManager : MonoBehaviour {
             dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
             entriesLastWeek = CalendarLogic.LeaveBlankWeek();
 
-            if(isDebug){
-                List<CalendarEntry> temp = new List<CalendarEntry>();
-                for(int i=0; i<7; i++){
-                    CalendarEntry entry = new CalendarEntry(
-                        DosageRecord.Hit, DosageRecord.Miss);
-                    // entry.BonusCollectedDayTime = true;
-                    // entry.BonusCollectedNightTime = true;
+            // if(isDebug){
+            //     List<CalendarEntry> temp = new List<CalendarEntry>();
+            //     for(int i=0; i<7; i++){
+            //         CalendarEntry entry = new CalendarEntry(
+            //             DosageRecord.Hit, DosageRecord.Miss);
+            //         // entry.BonusCollectedDayTime = true;
+            //         // entry.BonusCollectedNightTime = true;
 
-                    temp.Add(entry);
-                }
-                temp[2].DayTime = DosageRecord.Null;
-                entriesThisWeek = temp;
-            }else{
+            //         temp.Add(entry);
+            //     }
+            //     temp[2].DayTime = DosageRecord.Null;
+            //     entriesThisWeek = temp;
+            // }else{
                 entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
-            }
+            // }
 
             isRewardClaimed = false;
             nextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();

@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class LoadLevelManager : MonoBehaviour {
-    //UI
-    private DegradationUIManager degradationUIManager; //reference to UI
     // private GameObject calendar;
     private GameObject hud;
     private GameObject navigation;
@@ -27,7 +25,6 @@ public class LoadLevelManager : MonoBehaviour {
         switch(Application.loadedLevelName){
             case "NewBedRoom":
                 hud = GameObject.Find(ANCHOR_TOP + "HUD");
-                // calendar = GameObject.Find(ANCHOR_CENTER + "Calendar");
                 navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
@@ -38,18 +35,15 @@ public class LoadLevelManager : MonoBehaviour {
                 inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
 
             break;
-            // case "InhalerGamePet":
-            //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
-            //     InitializeDataForUI();
-            // break;
-            // case "InhalerGameTeddy":
-            //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
-            //     InitializeDataForUI();
-            // break;
-            // case "SlotMachineGame":
-            //     animator = GameObject.Find("UIManager/HUD").GetComponent<HUDAnimator>();
-            //     InitializeDataForUI();
-            // break;
+            case "InhalerGamePet":
+                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+            break;
+            case "InhalerGameTeddy":
+                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+            break;
+            case "SlotMachineGame":
+                hud = GameObject.Find(ANCHOR_TOP + "HUD");
+            break;
         }
     }
 
@@ -70,14 +64,15 @@ public class LoadLevelManager : MonoBehaviour {
                 navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
                 inventory.GetComponent<MoveTweenToggle>().Show();
             break;
-            // case "InhalerGamePet":
-            //     animator.Init();
-            // break;
-            // case "InhalerGameTeddy":
-            //     animator.Init();
-            // break;
-            // case "SlotMachineGame":
-            // break;
+            case "InhalerGamePet":
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+            break;
+            case "InhalerGameTeddy":
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+            break;
+            case "SlotMachineGame":
+                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+            break;
         }
     }
 }

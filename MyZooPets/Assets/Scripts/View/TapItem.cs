@@ -45,6 +45,7 @@ public class TapItem : MonoBehaviour {
 	{
 		if (tapGesture.ActiveTouches.Count > 0){
 			lastTapPosition = tapGesture.ActiveTouches[0].Position;
+			//couldn't this be done with tapGesture.ScreenPosition?
 		}
 		if (e.State == Gesture.GestureState.Began){
         	if (OnStart != null) OnStart();

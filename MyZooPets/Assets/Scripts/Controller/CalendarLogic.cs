@@ -170,6 +170,9 @@ public class CalendarLogic : MonoBehaviour{
 
     //********************************************
     // other methods
+    void Awake(){
+       todaysEntry = new CalendarEntry(); 
+    }
 
     void Update(){
         ResetForNextPlayPeriod(DateTime.Now);

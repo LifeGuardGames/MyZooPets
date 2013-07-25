@@ -1324,7 +1324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WillRecognizeWith: []
   timeLimit: Infinity
-  distanceLimit: Infinity
+  distanceLimit: .100000001
 --- !u!114 &147026836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4168,8 +4168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d40d3424a55b4c62b80de649f768254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSwipeDistance: .0250000004
-  flickTime: 1
+  minSwipeDistance: .0900000036
+  flickTime: .5
 --- !u!1 &594001149
 GameObject:
   m_ObjectHideFlags: 0
@@ -5957,60 +5957,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e61c33f7e9c8d04b9fe658d786e923a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodlist: 
-  itemlist: 
-  inhalerlist: 
-  decolist: 
   items:
   - name: apple
     texture: {fileID: 2800000, guid: e8f55f1381d6a354783fb88ad102d633, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +10
   - name: appleGreen
     texture: {fileID: 2800000, guid: 61c558ffe1f9e054e9a5dbe1cd843d17, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +5
   - name: sandwich
     texture: {fileID: 2800000, guid: 5dcd67ff374073e459a711230938f15d, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +30
   - name: bread
     texture: {fileID: 2800000, guid: b548b4057ebc4e04a95ac561614884ca, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +15
   - name: doughnut
     texture: {fileID: 2800000, guid: de34d975cd7172c4eb7d047b48ac3326, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +20
   - name: doughnutBrown
     texture: {fileID: 2800000, guid: d26eae8fd454ffe4eb34b2f4a5d36ffd, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +25
   - name: milk
     texture: {fileID: 2800000, guid: 6370888f0677cd04a8b5e55a6c0d40c9, type: 3}
     cost: 100
     category: 0
     itemreceiver: 2
-    description: 
-    ID: 0
+    description: Mood +40
 --- !u!1 &835595457
 GameObject:
   m_ObjectHideFlags: 0
@@ -6648,6 +6637,20 @@ Transform:
   m_Children:
   - {fileID: 1320603532}
   m_Father: {fileID: 1228667332}
+--- !u!114 &945533995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 2081998765}
+    Id: 3bab5160-b7d2-481a-bc2c-a67218be8187
 --- !u!1 &948361774
 GameObject:
   m_ObjectHideFlags: 0
@@ -8625,20 +8628,6 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
---- !u!114 &1232771219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 2081998765}
-    Id: 3bab5160-b7d2-481a-bc2c-a67218be8187
 --- !u!1 &1242221152
 GameObject:
   m_ObjectHideFlags: 0
@@ -10154,7 +10143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 1232771219}
+  Reference: {fileID: 945533995}
 --- !u!4 &1514197443
 Transform:
   m_ObjectHideFlags: 0

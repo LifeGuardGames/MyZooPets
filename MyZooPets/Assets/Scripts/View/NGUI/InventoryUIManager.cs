@@ -36,6 +36,7 @@ public class InventoryUIManager : MonoBehaviour {
         collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
 
+        //Spawn items in the inventory for the first time
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);

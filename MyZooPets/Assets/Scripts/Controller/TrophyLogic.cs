@@ -8,27 +8,27 @@ using System.Collections.Generic;
 
 public class TrophyLogic : MonoBehaviour {
 
-	public List<string> trophyNames = new List<string>();
-	public List<TrophyTier> tier = new List<TrophyTier>();
-	public List<string> info = new List<string>();
+	// public List<string> trophyNames = new List<string>();
+	// public List<TrophyTier> tier = new List<TrophyTier>();
+	// public List<string> info = new List<string>();
 
-	private Trophies[] trophies;
-	private int MAX_TROPHY_COUNT = 10;
+	// private Trophies[] trophies;
+	// private int MAX_TROPHY_COUNT = 10;
 
 
-	private void loadTrophies(){
-		for(int i =0;i<MAX_TROPHY_COUNT;i++)
-			trophies[i] = new Trophies("Trophy " + i,TrophyTier.Null,"Info " + i);
-	}
-	// Use this for initialization
-	void Start () {
+	// private void loadTrophies(){
+	// 	for(int i =0;i<MAX_TROPHY_COUNT;i++)
+	// 		trophies[i] = new Trophies("Trophy " + i,TrophyTier.Null,"Info " + i);
+	// }
+	// // Use this for initialization
+	// void Start () {
 
-		trophies = new Trophies[MAX_TROPHY_COUNT];
-		loadTrophies();
-	}
+	// 	trophies = new Trophies[MAX_TROPHY_COUNT];
+	// 	loadTrophies();
+	// }
 
-	// Update is called once per frame
-	void Update () {
+	// // Update is called once per frame
+	// void Update () {
 
-	}
+	// }
 }

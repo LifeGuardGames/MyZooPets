@@ -13,6 +13,16 @@ public enum Level{
     Level8,
     Level9,
     Level10,
+    Level11,
+    Level12,
+    Level13,
+    Level14,
+    Level15,
+    Level16,
+    Level17,
+    Level18,
+    Level19,
+    Level20,
 }
 
 public enum DosageRecord{
@@ -38,7 +48,7 @@ public enum ItemCategory{
 	Inhalers,
 	Decorations,
 }
-public enum TrophyTier{
+public enum BadgeTier{
 	Null,
 	Bronze,
 	Silver,
@@ -72,4 +82,8 @@ public enum ZoomItem{
     SlotMachine,
     RealInhaler,
     PracticeInhaler
+}
+public enum BadgeType{
+    Level,
+    Other
 }

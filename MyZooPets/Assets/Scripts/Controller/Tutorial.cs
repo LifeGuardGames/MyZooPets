@@ -94,7 +94,6 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openRealInhaler(){
-        // todo: change sprite name
         notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
 
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();

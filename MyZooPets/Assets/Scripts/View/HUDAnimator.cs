@@ -23,8 +23,7 @@ public class HUDAnimator : MonoBehaviour {
 	
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
-    public delegate void OnLevelUpEventHandlers(object sender, EventArgs e);
-    public static OnLevelUpEventHandlers OnLevelUp;
+    public static EventHandler<EventArgs> OnLevelUp;
     //========================================
 	
     public int DisplayPoints{

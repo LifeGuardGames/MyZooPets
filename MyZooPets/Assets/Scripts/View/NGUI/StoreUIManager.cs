@@ -128,56 +128,56 @@ public class StoreUIManager : MonoBehaviour {
 
 		if(page == null || page.name == "Food"){
 			uisprite.atlas = BackGroundRed;
-			for(int i = 0;i<itemlogic.foodlist.Count;i++){
+			for(int i = 0;i<itemlogic.FoodList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.name = itemlogic.foodlist[i].ToString();
+				item.name = itemlogic.FoodList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
-				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].cost.ToString();
-				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.foodlist[i]].name;
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.foodlist[i]].name;
+				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].description;
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].cost.ToString();
+				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].name;
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.FoodList[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
 		}
 		else if(page.name == "Item"){
 			uisprite.atlas = BackGroundGreen;
-			for(int i = 0;i<itemlogic.itemlist.Count;i++){
+			for(int i = 0;i<itemlogic.ItemList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.name = itemlogic.itemlist[i].ToString();
+				item.name = itemlogic.ItemList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
-				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].name;
-				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.itemlist[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.itemlist[i]].name;
+				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].name;
+				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].description;
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].cost.ToString();
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.ItemList[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
 		}
 		else if(page.name == "Decoration"){
 			uisprite.atlas = BackGroundPurple;
-			for(int i = 0;i<itemlogic.decolist.Count;i++){
+			for(int i = 0;i<itemlogic.DecoList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.name = itemlogic.decolist[i].ToString();
+				item.name = itemlogic.DecoList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
-				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].name;
-				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.decolist[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.decolist[i]].name;
+				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].name;
+				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].description;
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].cost.ToString();
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.DecoList[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
 		}
 		else if(page.name == "Inhaler"){
 			uisprite.atlas = BackGroundOrange;
-			for(int i = 0;i<itemlogic.inhalerlist.Count;i++){
+			for(int i = 0;i<itemlogic.InhalerList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
-				item.name = itemlogic.inhalerlist[i].ToString();
+				item.name = itemlogic.InhalerList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
-				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].name;
-				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].description;
-				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.items[itemlogic.inhalerlist[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.items[itemlogic.inhalerlist[i]].name;
+				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].name;
+				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].description;
+				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].cost.ToString();
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.InhalerList[i]].name;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
@@ -186,7 +186,7 @@ public class StoreUIManager : MonoBehaviour {
 		Invoke("Reposition",0.00000001f);
 	}
 	//Delay calling reposition due to async problem Destroying/Repositionoing.
-	//TODO Maybe change later when we have more items
+	//TODO Maybe change later when we have moreItems 
 	private void Reposition(){
 		grid.GetComponent<UIGrid>().Reposition();
 

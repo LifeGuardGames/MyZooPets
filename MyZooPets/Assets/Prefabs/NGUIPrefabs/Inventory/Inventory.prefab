@@ -28,6 +28,7 @@ GameObject:
   - 114: {fileID: 11400028}
   - 114: {fileID: 11400030}
   - 114: {fileID: 11400032}
+  - 65: {fileID: 6500002}
   m_Layer: 10
   m_Name: Inventory
   m_TagString: Untagged
@@ -95,7 +96,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400018}
   - 114: {fileID: 11400016}
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400024}
@@ -191,6 +191,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 80.0000153, y: 80, z: 0}
   m_Center: {x: -7.62939453e-06, y: 0, z: -.75}
+--- !u!65 &6500002
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1011, y: 103, z: 1}
+  m_Center: {x: 569.599976, y: 0, z: 50}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,22 +404,6 @@ MonoBehaviour:
   trigger: 0
   volume: 1
   pitch: 1
---- !u!114 &11400018
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4271d0dec29cc9845a75627e88f762af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 11400000}
-  normalSprite: InventoryContract
-  hoverSprite: InventoryContract
-  pressedSprite: InventoryContract
-  disabledSprite: InventoryContract
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -492,6 +488,7 @@ MonoBehaviour:
   font: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
   UIGridObject: {fileID: 100006}
   UIButtonToggleObject: {fileID: 100010}
+  UIButtonSpriteObject: {fileID: 100000}
   spritePet: {fileID: 0}
   speechBubblePrefab: {fileID: 100000, guid: b0d48ee35a9854f41bdde62d951178d9, type: 2}
 --- !u!114 &11400030
@@ -510,8 +507,6 @@ MonoBehaviour:
   isDebug: 0
   startsHidden: 1
   testButtonPos: {x: 0, y: 0}
-  showDeltaX: 0
-  showDeltaY: 120
   hideDeltaX: 0
   hideDeltaY: -120
   showDuration: .5

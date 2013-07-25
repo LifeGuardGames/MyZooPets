@@ -48,7 +48,7 @@ public class DataManager : MonoBehaviour {
                                         //use this to decide what trophy to give when
                                         //leveling up
     [SerializeThis]
-    public static Level currentLevel; //current level
+    public static Level currentLevel; //pets current level
 
     //Calendar Data
     [SerializeThis]
@@ -99,11 +99,11 @@ public class DataManager : MonoBehaviour {
 
 	//Tutorial data
     [SerializeThis]
-    private static bool firstTimeCalendar; //
+    private static bool firstTimeCalendar; //first time clicking on calendar
     [SerializeThis]
-    private static bool firstTimeChallenges; //
+    private static bool firstTimeChallenges; //first time clicking on challenges 
     [SerializeThis]
-    private static bool firstTimeDiary; // evolution and symptoms pages
+    private static bool firstTimeDiary;   
     [SerializeThis]
     private static bool firstTimeSlotMachine;
     [SerializeThis]
@@ -115,8 +115,9 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool firstTimeHelpTrophy;
 
-    //Challenge data
-
+    //Badge data
+    [SerializeThis]
+    private static BadgeData[] badgeStatus; //store the data for badges.
 
     //========================
 
@@ -288,6 +289,12 @@ public class DataManager : MonoBehaviour {
     public static bool FirstTimeHelpTrophy{
         get{return firstTimeHelpTrophy;}
         set{firstTimeHelpTrophy = value;}
+    }
+
+    //Badge
+    public static BadgeData[] BadgeStatus{
+        get{return badgeStatus;}
+        set{badgeStatus = value;}
     }
 
     //===============================
@@ -481,6 +488,9 @@ public class DataManager : MonoBehaviour {
             firstTimeTeddyInhaler = true;
             firstTimeShelf = true;
             firstTimeHelpTrophy = true;
+
+            //Badge
+            badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
 
             // //turn first time initialization off
             // PlayerPrefs.SetInt("FirstTime", 0);

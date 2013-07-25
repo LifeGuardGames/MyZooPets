@@ -9,7 +9,7 @@ public class LevelUpLogic : MonoBehaviour {
 	private float timeInterval = 30f;
     private bool canCheckLevelUp = true; //use this to prohibit update from checking
                                         //level up too many times
-    private static TrophyTier awardTrophy = TrophyTier.Null; //trophy awarded when leveling up
+    private static BadgeTier awardBadge = BadgeTier.Null; //trophy awarded when leveling up
     private static int[] levelPoints = {0, 500, 1000, 1500, 2000, 2500, 3500, 4500, 
         5500, 6500, 8500}; //points required for the nxt level
     private const int OK_CARE = 30;
@@ -27,8 +27,8 @@ public class LevelUpLogic : MonoBehaviour {
     }
 
     //The trophy that is awarded at the time of level up
-    public static TrophyTier AwardedTrophy{
-        get{return awardTrophy;}
+    public static BadgeTier AwardedBadge{
+        get{return awardBadge;}
     }
     //========================================================
     void Awake(){
@@ -52,11 +52,11 @@ public class LevelUpLogic : MonoBehaviour {
         if(canLevelUp){
             canCheckLevelUp = false;
             if(DataManager.LevelUpAverageCum <= OK_CARE){ //bad care
-                awardTrophy = TrophyTier.Bronze; 
+                awardBadge = BadgeTier.Bronze; 
             }else if(DataManager.LevelUpAverageCum <= GOOD_CARE){ //ok care
-                awardTrophy = TrophyTier.Silver;
+                awardBadge = BadgeTier.Silver;
             }else{ //good care
-                awardTrophy = TrophyTier.Gold;
+                awardBadge = BadgeTier.Gold;
             }     
             DataManager.CurrentLevel = (Level)nextLevelIndex;
 

@@ -158,13 +158,13 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	/*
-		Desc: creates popup that shows an image of the trophy, along with a corresponding message
-		Params: trophy, call back for button
+		Desc: creates popup that shows an image of the badge, along with a corresponding message
+		Params: badge, call back for button
 	*/
-	public void LevelUpMessage(TrophyTier trophy, PopupNotificationNGUI.Callback okCallBack){
+	public void LevelUpMessage(BadgeTier badge, PopupNotificationNGUI.Callback okCallBack){
 
 		LevelUpMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(levelUpMessageNGUI) as LevelUpMessageNGUI;
-		oneButtonMessage.GetTrophyMessageAndImage(trophy);
+		oneButtonMessage.GetTrophyMessageAndImage(badge);
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = "OK";
 		oneButtonMessage.Display();

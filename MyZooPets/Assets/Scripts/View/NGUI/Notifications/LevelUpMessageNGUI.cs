@@ -3,29 +3,29 @@ using System.Collections;
 
 public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
 
-    public void GetTrophyMessageAndImage (TrophyTier trophy){
-        Message = GetMessage(trophy);
-        GetTexture(trophy);
+    public void GetTrophyMessageAndImage (BadgeTier Badge){
+        Message = GetMessage(Badge);
+        GetTexture(Badge);
     }
 
-    private string GetMessage(TrophyTier trophy){
+    private string GetMessage(BadgeTier Badge){
         string retVal = "";
 
-        switch (trophy){
+        switch (Badge){
 
-            case TrophyTier.Null:
+            case BadgeTier.Null:
             retVal = "Too bad, better luck next time.";
             break;
 
-            case TrophyTier.Bronze:
+            case BadgeTier.Bronze:
             retVal = "Nice try, but you can do better.";
             break;
 
-            case TrophyTier.Silver:
+            case BadgeTier.Silver:
             retVal = "Not bad!";
             break;
 
-            case TrophyTier.Gold:
+            case BadgeTier.Gold:
             retVal = "Excellent work!";
             break;
         }
@@ -33,22 +33,22 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
         return retVal;
     }
 
-    private void GetTexture(TrophyTier trophy){
+    private void GetTexture(BadgeTier Badge){
 
-        switch (trophy){
+        switch (Badge){
 
-            case TrophyTier.Null:
+            case BadgeTier.Null:
             break;
 
-            case TrophyTier.Bronze:
+            case BadgeTier.Bronze:
             SetSprite("trophyBronze");
             break;
 
-            case TrophyTier.Silver:
+            case BadgeTier.Silver:
             SetSprite("trophySilver");
             break;
 
-            case TrophyTier.Gold:
+            case BadgeTier.Gold:
             SetSprite("trophyGold");
             break;
 
@@ -58,6 +58,6 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
     // ================================================================================
 
     protected override void Testing(){
-        // GetTrophyMessageAndImage(TrophyTier.Gold);
+        // GetTrophyMessageAndImage(BadgeTier.Gold);
     }
 }

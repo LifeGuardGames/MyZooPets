@@ -23,8 +23,6 @@ public class MoveTweenToggle : MonoBehaviour {
 											//will need to be called first, False: UI element started off
 											//displayed on screen so Hide function need to be called first
 	public Vector2 testButtonPos; 		//position of the test buttons
-	public float showDeltaX;
-	public float showDeltaY;
 	public float hideDeltaX;
 	public float hideDeltaY;
 	public float showDuration = 0.5f;

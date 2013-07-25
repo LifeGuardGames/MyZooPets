@@ -1,6 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+    Rescue Body Shaker (Rescue Step 2).
+
+    This listens for the user's touch input, and shakes in response to the user moving his fingers rapidly.
+
+    How this happens is, this script listens for movement in the user's touch. (TouchPhase.Moved)
+    When the touch is moving, the duration of its movement (Time.deltaTime) will be added to the
+    time counter (shakeValue). When the counter reaches its target (shakeTarget), the step will be
+    complete.
+*/
 public class RescueShaker : MonoBehaviour {
 
     public Texture2D statBarTexture;

@@ -15,6 +15,7 @@ public class InventoryUIManager : MonoBehaviour {
     public UIFont font;
     public GameObject UIGridObject;
     public GameObject UIButtonToggleObject;
+    public GameObject UIButtonSpriteObject;
 
     public GameObject spritePet;
     public GameObject speechBubblePrefab;
@@ -22,12 +23,14 @@ public class InventoryUIManager : MonoBehaviour {
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
+    private UISprite uiSprite;
     private Dictionary<string, bool> itemTrackHash; // Hashtable to keep track of the types of items present;
 
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
         uiButtonToggle = UIButtonToggleObject.GetComponent<UIButtonToggle>();
+        uiSprite = UIButtonSpriteObject.GetComponent<UISprite>();
         itemTrackHash = new Dictionary<string, bool>();
 
     }
@@ -36,6 +39,7 @@ public class InventoryUIManager : MonoBehaviour {
         collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
 
+        //Spawn items in the inventory for the first time
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
                 SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
@@ -77,7 +81,7 @@ public class InventoryUIManager : MonoBehaviour {
     }
 
     // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
-    void ShowPetReceivedFoodAnimation(){
+    private void ShowPetReceivedFoodAnimation(){
         GameObject speechBubble = Instantiate(speechBubblePrefab, spritePet.transform.position, Quaternion.identity) as GameObject;
         speechBubble.transform.parent = spritePet.transform;
         speechBubble.transform.localPosition = speechBubblePrefab.transform.localPosition;
@@ -151,10 +155,7 @@ public class InventoryUIManager : MonoBehaviour {
     }
 
     public void UpdateBarPosition(){
-        print("update");
         UIGridObject.GetComponent<UIGrid>().Reposition();
-
-        print(inventory.InventoryCount);
         if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
             gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open
@@ -171,10 +172,11 @@ public class InventoryUIManager : MonoBehaviour {
         isGuiShowing = !isGuiShowing;
 
         // Change the sprite on the button
-        UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        // UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
     }
 
 }

@@ -9,23 +9,15 @@ using System.Collections;
 
 [System.Serializable]
 public class Item {
-
-	public string name;
-	public Texture2D texture;
-	public int cost;
-	public ItemCategory category;
-	public ItemReceiver itemreceiver;
+	public string name; //name of item
+	public Texture2D texture; //texture of item
+	public int cost; //cost of item
+	public ItemCategory category; //item category
+	public ItemReceiver itemreceiver; //who will be receiving the time
 	public string description;
 	
-	public ItemCategory Category{get{return category;}}
-	public int ID;
-	public Texture2D Texture{get{return texture;} }
-	public string Name{get{return name;}}
-	public int Cost{get{return cost;}}
-	
-	public Item(int id,string n,int c, Texture2D t, ItemCategory i)
+	public Item(string n,int c, Texture2D t, ItemCategory i)
 	{
-		this.ID = id;
 		this.name = n;
 		this.cost = c;
 		this.texture = t;

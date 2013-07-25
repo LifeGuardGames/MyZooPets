@@ -8,6 +8,8 @@ public class SlotMachineUIManager : MonoBehaviour {
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
 
+    private int costStars = 50; //costs 50 stars to play
+
     void Start(){
         int counter = 0;
 
@@ -16,17 +18,29 @@ public class SlotMachineUIManager : MonoBehaviour {
             counter++;
         }
 
-        notificationUIManager.PopupNotificationTwoButtons(
-            "-50 stars to play",
-            delegate(){
-                DataManager.SubtractStars(50);
-                StartGame();
-            },
-            delegate(){
-                Application.LoadLevel("NewBedRoom");
-            },
-            "Start",
-            "Back");
+        if (DataManager.Stars >= costStars){
+            notificationUIManager.PopupNotificationTwoButtons(
+                "-"+ costStars +" stars to play",
+                delegate(){
+                    DataManager.SubtractStars(costStars);
+                    StartGame();
+                },
+                delegate(){
+                    Application.LoadLevel("NewBedRoom");
+                },
+                "Start",
+                "Back");
+        }
+        else { // not enough stars to play
+            notificationUIManager.PopupNotificationOneButton(
+                "You need at least " + costStars + " stars to play!",
+                delegate(){
+                    Application.LoadLevel("NewBedRoom");
+                },
+                "Back");
+
+        }
+
     }
 
 	// Update is called once per frame
@@ -49,7 +63,7 @@ public class SlotMachineUIManager : MonoBehaviour {
 	}
 
     private void Reward(){
-        int stars; 
+        int stars;
         int points;
         if(SlotMachineLogic.CheckMatch()){
             stars = 500;

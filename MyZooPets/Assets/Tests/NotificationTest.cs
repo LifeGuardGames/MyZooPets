@@ -26,7 +26,7 @@ public class NotificationTest : MonoBehaviour {
         //level up notification
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
             "level up")){
-            notificationUIManager.LevelUpMessage(TrophyTier.Bronze, null);
+            notificationUIManager.LevelUpMessage(BadgeTier.Bronze, null);
         }
 
         //popup texture "great"

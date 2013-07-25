@@ -142,6 +142,6 @@ public class Tutorial : MonoBehaviour {
         notificationUIManager.PopupTipWithImage("Good job! You just removed an asthma trigger.", "guiPanelStatsHealth", ShowDegradTip2, true, true);
     }
     void ShowDegradTip2(){
-        notificationUIManager.PopupTipWithImage("Make sure you clean them up when you see them, or your pet will get sick!", "Skull", delegate(){}, false, false);
+        notificationUIManager.PopupTipWithImage("Make sure you clean them up when you see them, or your pet will get sick!", "Skull", delegate(){}, false, true); // disappear immediately when done, because the level up message should pop up right away
     }
 }

@@ -23,7 +23,15 @@ public class InhalerGameManager : MonoBehaviour{
         get {return practiceGamePointIncrement;}
     }
     public int PracticeGameStarIncrement{
-		get{return practiceGameStarIncrement;}
+        get{return practiceGameStarIncrement;}
+    }
+    int realGamePointIncrement = 250;
+    int realGameStarIncrement = 0;
+    public int RealGamePointIncrement {
+        get {return realGamePointIncrement;}
+    }
+    public int RealGameStarIncrement{
+		get{return realGameStarIncrement;}
 	}
 
     InhalerGameNGUI inhalerGameNGUI;
@@ -177,6 +185,7 @@ public class InhalerGameManager : MonoBehaviour{
             // Record having given the pet the inhaler, if this was the real game.
             if (!isPracticeGame){
                 CalendarLogic.RecordGivingInhaler();
+                StatsController.Instance.ChangeStats(realGamePointIncrement, realGameStarIncrement, 0, 0, Vector3.zero);
             }
             else {
 				StatsController.Instance.ChangeStats(practiceGamePointIncrement, practiceGameStarIncrement, 0, 0, Vector3.zero);

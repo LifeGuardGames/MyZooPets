@@ -60,8 +60,8 @@ public class InhalerGameNGUI : MonoBehaviour {
         }
         else {
             notificationUIManager.GameOverRewardMessage(
-                250,
-                0,
+                inhalerGameManager.RealGameStarIncrement,
+                inhalerGameManager.RealGamePointIncrement,
                 QuitInhalerGame
             );
 

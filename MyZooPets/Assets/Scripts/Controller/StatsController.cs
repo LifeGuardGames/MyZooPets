@@ -12,7 +12,7 @@ using System.Collections;
 /// 					  HUDAnimator (view)
 /// </summary>
 
-public class StatsController : MonoBehaviour {
+public class StatsController : Singleton<StatsController> {
 	
 	public GameObject hudAnimatorObject;
 	private HUDAnimator hudAnimator;

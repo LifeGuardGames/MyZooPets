@@ -74,46 +74,24 @@ public class ItemLogic : MonoBehaviour{
 
 	//Functions for Each item.
 	private void TakeApple(){
-		
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 10, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 10, Vector3.zero);
 	}
 	private void TakeGreenApple(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 5, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 5, Vector3.zero);
 	}
 	private void TakeSandwich(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 30, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 30, Vector3.zero);
 	}
 	private void TakeBread(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 15, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 15, Vector3.zero);
 	}
 	private void TakeDoughnut(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 20, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 20, Vector3.zero);
 	}
 	private void TakeDoughnutBrown(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 25, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 25, Vector3.zero);
 	}
 	private void TakeMilk(){
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(0, 0, 0, 40, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, 0, 0, 40, Vector3.zero);
 	}
 }

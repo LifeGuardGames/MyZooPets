@@ -17,12 +17,7 @@ public static class DiagnoseGameLogic{
     }
 
     public static void ClaimReward(int deltaPoints, int deltaStars){
-		
-        // TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(deltaPoints, deltaStars, 0, 0, Vector3.zero);
-		
+		StatsController.Instance.ChangeStats(deltaPoints, deltaStars, 0, 0, Vector3.zero);
     }
 
     //generate the sick stages randomly

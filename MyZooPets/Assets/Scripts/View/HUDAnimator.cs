@@ -20,12 +20,12 @@ public enum HUDElementType{
 
 public class HUDAnimator : MonoBehaviour {
 	public bool isDebug = false;
-	
+
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
     public static EventHandler<EventArgs> OnLevelUp;
     //========================================
-	
+
     public int DisplayPoints{
     	get{return displayPoints;}
     }
@@ -63,29 +63,29 @@ public class HUDAnimator : MonoBehaviour {
 	private AnimationControl starAnimControl;
 	private AnimationControl healthAnimControl;
 	private AnimationControl moodAnimControl;
-	
+
 	// Tweening
 	public UIAtlas commonAtlas;
 	private GameObject toDestroy;
 	private bool isFirstTweenPointsDone = false;
 	private bool isFirstTweenPointsCall = true;
 	private bool isAnimatePointsBar = false;
-	
+
 	private bool isFirstTweenStarsDone = false;
 	private bool isFirstTweenStarsCall = true;
 	private bool isAnimateStarsBar = false;
-	
+
 	private bool isFirstTweenHealthDone = false;
 	private bool isFirstTweenHealthCall = true;
 	private bool isAnimateHealthBar = false;
-	
+
 	private bool isFirstTweenMoodDone = false;
 	private bool isFirstTweenMoodCall = true;
 	private bool isAnimateMoodBar = false;
-	
+
 	// Parent for tweening
 	public GameObject tweenParent;
-	
+
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
 		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
@@ -110,22 +110,24 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
+		if(isAnimatePointsBar){
+			PointsAnimation();
+		}
+		if(isAnimateStarsBar){
+			StarsAnimation();
+		}
+		if(isAnimateHealthBar){
+			HealthAnimation();
+		}
+		if(isAnimateMoodBar){
+			MoodAnimation();
+		}
+
 		if(!LoadLevelManager.IsPaused){
-			if(isAnimatePointsBar){
-				PointsAnimation();
-			}
-			if(isAnimateStarsBar){
-				StarsAnimation();
-			}
-			if(isAnimateHealthBar){
-				HealthAnimation();
-			}
-			if(isAnimateMoodBar){
-				MoodAnimation();
-			}
+			LevelUpEventCheck(); // Check if progress bar reach level max
 		}
 	}
-	
+
 	//==================GUI Animation=========================
 	private void StarsAnimation(){
 		if(dataStars != DataManager.Stars){
@@ -140,7 +142,7 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
-				
+
 				// Reset the bar animation flag
 				isAnimateStarsBar = false;
 				isFirstTweenStarsCall = true;
@@ -156,10 +158,9 @@ public class HUDAnimator : MonoBehaviour {
 				}else{
 					displayPoints += DataManager.Points - displayPoints;
 				}
-				LevelUpEventCheck(); // Check if progress bar reach level max
 			}else{ //animation done
 				dataPoints = DataManager.Points;
-				
+
 				// Reset the bar animation flag
 				isAnimatePointsBar = false;
 				isFirstTweenPointsCall = true;
@@ -180,7 +181,7 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink. reset icon size
 				healthAnimControl.Stop();
-				
+
 				// Reset the bar animation flag
 				isAnimateHealthBar = false;
 				isFirstTweenHealthCall = true;
@@ -201,7 +202,7 @@ public class HUDAnimator : MonoBehaviour {
 
 				// Stop grow & shrink. reset icon size
 				moodAnimControl.Stop();
-				
+
 				// Reset the bar animation flag
 				isAnimateMoodBar = false;
 				isFirstTweenMoodCall = true;
@@ -228,85 +229,59 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
-			
-			// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-			GameObject data = GameObject.Find("GameManager");
-			StatsController control = data.GetComponent<StatsController>();
-			control.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
-			
+			StatsController.Instance.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
 		}
 	}
-	
+
 	//================================================================
 	// TWEEN ANIMATION
 	//========================
-	
+
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(100, 0, 0, 0, Vector3.zero);
+				StatsController.Instance.ChangeStats(100, 0, 0, 0, Vector3.zero);
 			}
 			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
-				
 				displayHealth = 0;
-				
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
-				
 				displayMood = 0;
-				
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
-				
 				displayMood = 0;
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
-				
 				displayHealth = 0;
-				GameObject data = GameObject.Find("GameManager");
-				StatsController control = data.GetComponent<StatsController>();
-				
-				control.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
 			}
 		}
 	}
-	
+
 	// Making effects serial!
 	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
 		StartCoroutine(StartCurveStats(deltaPoints, new Vector3(0f,0f,0f), deltaStars, new Vector3(0f,0f,0f), deltaHealth, new Vector3(0f,0f,0f), deltaMood, new Vector3(0f,0f,0f)));
 	}
-	
+
 	// Helper function for StartCoroutineCurveStats
 	IEnumerator StartCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
-		
+
 		if(deltaPoints != 0){
 			if(pointsOrigin == Vector3.zero){
 				pointsOrigin = new Vector3(130f, 500f, 0f);	//Default spawn from top!
@@ -335,32 +310,32 @@ public class HUDAnimator : MonoBehaviour {
 			StartCurveMood(deltaMood, moodOrigin);
 			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
 		}
-		
+
 	}
-	
+
 	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){
 		TweenMoveToPoint(HUDElementType.points, deltaPoints, pointsOrigin);
 	}
-	
+
 	public void StartCurveStars(int deltaStars, Vector3 starsOrigin){
 		TweenMoveToPoint(HUDElementType.stars, deltaStars, starsOrigin);
 	}
-	
+
 	public void StartCurveHealth(int deltaHealth, Vector3 healthOrigin){
 		TweenMoveToPoint(HUDElementType.health, deltaHealth, healthOrigin);
 	}
-	
+
 	public void StartCurveMood(int deltaMood, Vector3 moodOrigin){
 		TweenMoveToPoint(HUDElementType.mood, deltaMood, moodOrigin);
 	}
-	
+
 	// Using Linear move for now, LeanTween does not have moveLocal curve path
 	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint){
 		float duration = 1f;
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
-		
+
 		//Testing
 		duration = .7f;
 
@@ -386,16 +361,16 @@ public class HUDAnimator : MonoBehaviour {
 				endPosition = new Vector3(1010f, -23f, 0); //Mood
 				break;
 		}
-		
+
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
 			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration));
 		}
 	}
-	
+
 	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration){
 		yield return new WaitForSeconds(waitTime);
-		
+
 		// Create the tween image
 		UISprite sprite = NGUITools.AddSprite(tweenParent, commonAtlas, imageName);
 		sprite.depth = 30;	// TODO-s make this dynamic?
@@ -406,13 +381,13 @@ public class HUDAnimator : MonoBehaviour {
 		ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
 		scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
 		scaleScript.duration = .7f;
-		
+
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional.Add("onCompleteTarget", go);
 		optional.Add("onComplete", "DestroySelf");
 		LeanTween.moveLocal(go, toPos, duration, optional);
-		
+
 		// Enables the progress bar/count to animate after duration (when the first tween image touches the bar)
 		// Hopefully Invoke matches up with LeanTween time
 		//TODO sloppy logic speed and order, fix later
@@ -443,19 +418,19 @@ public class HUDAnimator : MonoBehaviour {
 				break;
 		}
 	}
-	
+
 	public void StartBarAnimationPoints(){
 		isAnimatePointsBar = true;
 	}
-	
+
 	public void StartBarAnimationStars(){
 		isAnimateStarsBar = true;
 	}
-	
+
 	public void StartBarAnimationHealth(){
 		isAnimateHealthBar = true;
 	}
-	
+
 	public void StartBarAnimationMood(){
 		isAnimateMoodBar = true;
 	}

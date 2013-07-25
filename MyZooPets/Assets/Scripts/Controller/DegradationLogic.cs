@@ -93,10 +93,7 @@ public class DegradationLogic : MonoBehaviour {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
 
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(250, 50, 0, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(250, 50, 0, 0, Vector3.zero);
 		
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(OnTriggerDestroyed != null){ //call event handler if not empty

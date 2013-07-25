@@ -105,11 +105,7 @@ public class CalendarLogic : MonoBehaviour{
 
     //Give bonus when user collects
     public void ClaimReward(){
-		
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(50, 50, 0, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(50, 50, 0, 0, Vector3.zero);
     }
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
@@ -174,6 +170,9 @@ public class CalendarLogic : MonoBehaviour{
 
     //********************************************
     // other methods
+    void Awake(){
+       todaysEntry = new CalendarEntry(); 
+    }
 
     void Update(){
         ResetForNextPlayPeriod(DateTime.Now);

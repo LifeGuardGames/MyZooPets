@@ -73,10 +73,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             points = 10;
         }
         
-		// TODO-j TEMPORARY PLEASE CHANGE DATAMANAGER SINGLETON
-		GameObject data = GameObject.Find("GameManager");
-		StatsController control = data.GetComponent<StatsController>();
-		control.ChangeStats(points, stars, 0, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(points, stars, 0, 0, Vector3.zero);
 		
         notificationUIManager.GameOverRewardMessage(stars, points,
             delegate(){

@@ -58,12 +58,21 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // Display the popup panel
     public void Display(){
+        Display(true);
+    }
+
+    /*
+        Sometimes, we want the rest of the game not to be paused while this notification is displayed.
+        Eg. We want the Level Up message to pop up while we are displaying the game over message in the
+        inhaler game, if applicable.
+    */
+    public void Display(bool pauseGame){
         backdrop.gameObject.SetActive(true);
         // Hashtable optional = new Hashtable();
         // optional.Add("ease", LeanTweenType.easeOutBounce);
         // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
         // Time.timeScale = 0;
-        LoadLevelManager.IsPaused = true;
+        LoadLevelManager.IsPaused = pauseGame;
         ClickManager.ClickLock();
         GetComponent<MoveTweenToggle>().Show(0.5f);
     }

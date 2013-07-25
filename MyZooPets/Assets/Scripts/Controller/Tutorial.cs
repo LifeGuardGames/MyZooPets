@@ -60,7 +60,7 @@ public class Tutorial : MonoBehaviour {
     }
 
     void ShowCalendarTip1(){
-        notificationUIManager.PopupTipWithImage("The Calendar tells you if your pet has been taking its inhaler.", "guiPanelStatsHealth", ShowCalendarTip2, true, true);
+        notificationUIManager.PopupTipWithImage("The Calendar tells you if your pet has been taking its inhaler.", "calendarIcon", ShowCalendarTip2, true, true);
     }
 
     void ShowCalendarTip2(){
@@ -72,7 +72,7 @@ public class Tutorial : MonoBehaviour {
     }
 
     void ShowCalendarTip4(){
-        notificationUIManager.PopupTipWithImage("Come back every 12 hours to get more points!", "guiPanelStarsStar", delegate(){}, false, false);
+        notificationUIManager.PopupTipWithImage("Come back every 12 hours to get more points!", "calendarIcon", delegate(){}, false, false);
     }
 
     void openChallenges(){

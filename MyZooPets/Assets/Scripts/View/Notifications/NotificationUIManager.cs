@@ -201,7 +201,7 @@ public class NotificationUIManager : MonoBehaviour {
 		twoButtonMessage.Button2Callback = noButtonCallBack;
 		twoButtonMessage.Button1Text = "Play";
 		twoButtonMessage.Button2Text = "Quit";
-		twoButtonMessage.Display();
+		twoButtonMessage.Display(false);
 	}
 
 	/*
@@ -215,7 +215,7 @@ public class NotificationUIManager : MonoBehaviour {
 		oneButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		oneButtonMessage.Button1Callback = yesButtonCallBack;
 		oneButtonMessage.Button1Text = "Quit";
-		oneButtonMessage.Display();
+		oneButtonMessage.Display(false);
 
 	}
 }

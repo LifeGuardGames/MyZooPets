@@ -31,6 +31,7 @@ public class FirstTimeNGUI : MonoBehaviour {
 
     private Color currentRenderColor;
     private bool eggClicked = false;
+    private bool finishClicked = false;
 
     // public delegate void FinishHatchCallBack();
     // public static FinishHatchCallBack finishHatchCallBack; //call when hatching is done
@@ -125,31 +126,44 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     void ButtonClicked_Blue(){
-        eggSpriteScript.SetSprite("eggBlueChoose");
-        petColor = "whiteBlue";
+        if (!finishClicked){
+            eggSpriteScript.SetSprite("eggBlueChoose");
+            petColor = "whiteBlue";
+        }
     }
     void ButtonClicked_Green(){
-        eggSpriteScript.SetSprite("eggGreenChoose");
-        petColor = "whiteGreen";
+        if (!finishClicked){
+            eggSpriteScript.SetSprite("eggGreenChoose");
+            petColor = "whiteGreen";
+        }
     }
     void ButtonClicked_Yellow(){
-        eggSpriteScript.SetSprite("eggYellowChoose");
-        petColor = "whiteYellow";
+        if (!finishClicked){
+            eggSpriteScript.SetSprite("eggYellowChoose");
+            petColor = "whiteYellow";
+        }
     }
     void ButtonClicked_Red(){
-        eggSpriteScript.SetSprite("eggRedChoose");
-        petColor = "whiteRed";
+        if (!finishClicked){
+            eggSpriteScript.SetSprite("eggRedChoose");
+            petColor = "whiteRed";
+        }
     }
     void ButtonClicked_Purple(){
-        eggSpriteScript.SetSprite("eggPurpleChoose");
-        petColor = "whitePurple";
+        if (!finishClicked){
+            eggSpriteScript.SetSprite("eggPurpleChoose");
+            petColor = "whitePurple";
+        }
     }
     void ButtonClicked_Finish(){
-        petName = nameField.text;
-        if(isZoomed){
-            ZoomOutMove();
-            isZoomed = false;
-            HideChooseGUI();
+        if (!finishClicked){
+            finishClicked = true;
+            petName = nameField.text;
+            if(isZoomed){
+                ZoomOutMove();
+                isZoomed = false;
+                HideChooseGUI();
+            }
         }
     }
 

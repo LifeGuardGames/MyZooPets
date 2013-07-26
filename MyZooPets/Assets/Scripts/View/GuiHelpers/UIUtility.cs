@@ -13,8 +13,11 @@ public class UIUtility : Singleton<UIUtility> {
 		nguiCamera = nguiCameraObject.GetComponent<Camera>();
 	}
 
-	public Vector3 mCameraWorld2Screen(Vector3 worldPos){
-		Debug.Log("Logging! ---- " + worldPos + " ---> " + mainCamera.WorldToScreenPoint(worldPos));
+	public Vector3 mainCameraWorld2Screen(Vector3 worldPos){
 		return mainCamera.WorldToScreenPoint(worldPos);
+	}
+
+	public Vector3 nguiCameraWorld2Screen(Vector3 guiPos){
+		return nguiCamera.WorldToScreenPoint(guiPos);
 	}
 }

@@ -261,13 +261,13 @@ public class HUDAnimator : MonoBehaviour {
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
-				DataManager.SubtractMood(100);
-				dataMood = 0;
-				displayMood = 0;
-				DataManager.SubtractHealth(100);
-				dataHealth = 0;
-				displayHealth = 0;
-				StatsController.Instance.ChangeStats(200, Vector3.zero, 100, Vector3.zero, 73, Vector3.zero, 85, new Vector3(0, 0, 0));
+//				DataManager.SubtractMood(100);
+//				dataMood = 0;
+//				displayMood = 0;
+//				DataManager.SubtractHealth(100);
+//				dataHealth = 0;
+//				displayHealth = 0;
+				StatsController.Instance.ChangeStats(-100, Vector3.zero, -100, Vector3.zero, -20, Vector3.zero, -50, new Vector3(0, 0, 0));
 			}
 		}
 	}
@@ -327,40 +327,79 @@ public class HUDAnimator : MonoBehaviour {
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
+		bool isScaleUpDown = false;	// Used for adding animation
+		bool isFade = false;	// Used for subtracting animation
 
 		//Testing
 		duration = .7f;
 
 		switch(type){
-			case(HUDElementType.points):
-				imageName = "tweenPoints";
-				modifier = Math.Abs(1.3f / 200f * amount);
-				endPosition = new Vector3(130f, -25f, 0); //Points
-				break;
-			case(HUDElementType.stars):
-				imageName = "tweenStars";
-				modifier = Math.Abs(4f / 200f * amount);
-				endPosition = new Vector3(514f, -25f, 0);	//Stars
-				break;
-			case(HUDElementType.health):
+		case(HUDElementType.points):
+			modifier = Math.Abs(1.3f / 200f * amount);
+			imageName = "tweenPoints";
+			if(amount > 0){
+				endPosition = new Vector3(130f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				originPoint = new Vector3(130f, -25f, 0);
+				endPosition = new Vector3(130f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.stars):
+			modifier = Math.Abs(4f / 200f * amount);
+			imageName = "tweenStars";
+			if(amount > 0){
+				endPosition = new Vector3(514f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				originPoint = new Vector3(514f, -25f, 0);
+				endPosition = new Vector3(514f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.health):
+			modifier = Math.Abs(1.6f / 80f * amount);
+			if(amount > 0){
 				imageName = "tweenHealthUp";
-				modifier = Math.Abs(1.6f / 80f * amount);
-				endPosition = new Vector3(730f, -23f, 0);	//Health
-				break;
-			case(HUDElementType.mood):
+				endPosition = new Vector3(730f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				imageName = "tweenMinus";
+				originPoint = new Vector3(730f, -25f, 0);
+				endPosition = new Vector3(730f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.mood):
+			modifier = Math.Abs(1.6f / 80f * amount);
+			if(amount > 0){
 				imageName = "tweenMoodUp";
-				modifier = Math.Abs(1.6f / 80f * amount);
-				endPosition = new Vector3(1010f, -23f, 0); //Mood
-				break;
+				endPosition = new Vector3(1010f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				imageName = "tweenMinus";
+				originPoint = new Vector3(1010f, -25f, 0);
+				endPosition = new Vector3(1010f, -100f, 0);
+				isFade = true;
+			}
+			break;
 		}
 
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
-			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration));
+			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade));
 		}
 	}
 
-	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration){
+	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade){
 		yield return new WaitForSeconds(waitTime);
 
 		// Create the tween image
@@ -370,10 +409,17 @@ public class HUDAnimator : MonoBehaviour {
 		go.transform.localPosition = fromPos;
 		go.transform.localScale = new Vector3(33f, 33f, 1f);
 		go.AddComponent<DestroyOnCall>();
-		ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
-		scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
-		scaleScript.duration = .7f;
-
+		if(isScaleUpDown){
+			ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
+			scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
+			scaleScript.duration = 0.7f;
+		}
+		if(isFade){
+			NGUIAlphaTween alphaScript = go.AddComponent<NGUIAlphaTween>();
+			alphaScript.startAlpha = 1f;
+			alphaScript.endAlpha = 0f;
+			alphaScript.duration = 0.7f;
+		}
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional.Add("onCompleteTarget", go);

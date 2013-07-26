@@ -59,8 +59,8 @@ public class InventoryUIManager : MonoBehaviour {
             if(e.TargetCollider.name == "Cube") dropOnTarget = true;
         }else{
              if(e.TargetCollider.name == "SpritePet" ||
-                e.TargetCollider.name == "PetHead" ||
-                e.TargetCollider.name == "PetTummy") dropOnTarget = true;
+                e.TargetCollider.name == "Head" ||
+                e.TargetCollider.name == "Tummy") dropOnTarget = true;
         }
 
         if(dropOnTarget){

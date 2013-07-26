@@ -22,7 +22,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             notificationUIManager.PopupNotificationTwoButtons(
                 "-"+ costStars +" stars to play",
                 delegate(){
-                    StatsController.Instance.ChangeStats(0, costStars * -1, 0, 0, Vector3.zero);	// Convert to negative
+                    StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
                     StartGame();
                 },
                 delegate(){
@@ -73,7 +73,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             points = 10;
         }
         
-		StatsController.Instance.ChangeStats(points, stars, 0, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(points, Vector3.zero, stars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 		
         notificationUIManager.GameOverRewardMessage(stars, points,
             delegate(){

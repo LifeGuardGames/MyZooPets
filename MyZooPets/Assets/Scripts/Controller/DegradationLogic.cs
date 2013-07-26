@@ -92,17 +92,16 @@ public class DegradationLogic : MonoBehaviour {
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
-
-		StatsController.Instance.ChangeStats(250, 50, 0, 0, Vector3.zero);
-		
+		Vector3 triggerPos = Vector3.zero;
         DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
         if(OnTriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
             args.TriggerPosition = triggerLocations[degradData.PositionId].position;
-            OnTriggerDestroyed(this, args);
+			triggerPos = args.TriggerPosition;
         }else{
             Debug.LogError("Trigger Destroyed listener is null");
         }
+		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mCameraWorld2Screen(triggerPos), 50, UIUtility.Instance.mCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.DegradationTriggers.Remove(degradData);
     }
 
@@ -116,7 +115,7 @@ public class DegradationLogic : MonoBehaviour {
             minusHealth = 10 + additionalTrigger * 10;
         }
 
-        StatsController.Instance.ChangeStats(0, 0, minusHealth * -1, 0, Vector3.zero);	// Convert to negative
+        StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, minusHealth * -1, Vector3.zero, 0, Vector3.zero);	// Convert to negative
     }
 
 }

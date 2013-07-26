@@ -229,7 +229,7 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
+			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
@@ -243,22 +243,22 @@ public class HUDAnimator : MonoBehaviour {
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				StatsController.Instance.ChangeStats(100, 0, 0, 0, Vector3.zero);
+				StatsController.Instance.ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			}
 			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				StatsController.Instance.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 60, Vector3.zero, 0, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
 				displayHealth = 0;
-				StatsController.Instance.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 27, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
 				displayMood = 0;
-				StatsController.Instance.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
 				DataManager.SubtractMood(100);
@@ -267,15 +267,15 @@ public class HUDAnimator : MonoBehaviour {
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
 				displayHealth = 0;
-				StatsController.Instance.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(200, Vector3.zero, 100, Vector3.zero, 73, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 		}
 	}
 
-	// Making effects serial!
+	// Parse data and make effects serial
 	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
-		StartCoroutine(StartCurveStats(deltaPoints, new Vector3(0f,0f,0f), deltaStars, new Vector3(0f,0f,0f), deltaHealth, new Vector3(0f,0f,0f), deltaMood, new Vector3(0f,0f,0f)));
+		StartCoroutine(StartCurveStats(deltaPoints, pointsOrigin, deltaStars, starsOrigin, deltaHealth, healthOrigin, deltaMood, moodOrigin));
 	}
 
 	// Helper function for StartCoroutineCurveStats
@@ -283,34 +283,26 @@ public class HUDAnimator : MonoBehaviour {
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
 
 		if(deltaPoints != 0){
-			if(pointsOrigin == Vector3.zero){
-				pointsOrigin = new Vector3(130f, 500f, 0f);	//Default spawn from top!
-			}
+			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
+			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
 			StartCurvePoints(deltaPoints, pointsOrigin);
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
 		}
 		if(deltaStars != 0){
-			if(starsOrigin == Vector3.zero){
-				starsOrigin = new Vector3(514f, 500f, 0f);
-			}
+			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
 			StartCurveStars(deltaStars, starsOrigin);
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
 		}
 		if(deltaHealth != 0){
-			if(healthOrigin == Vector3.zero){
-				healthOrigin = new Vector3(730f, 500f, 0f);
-			}
+			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);
 			StartCurveHealth(deltaHealth, healthOrigin);
 			yield return new WaitForSeconds(1.6f / 80f * deltaHealth);
 		}
 		if(deltaMood != 0){
-			if(moodOrigin == Vector3.zero){
-				moodOrigin = new Vector3(1010f, 500f, 0f);
-			}
+			moodOrigin = (moodOrigin == Vector3.zero) ? new Vector3(1010f, 500f, 0f) : new Vector3(moodOrigin.x, moodOrigin.y - 800, 0);
 			StartCurveMood(deltaMood, moodOrigin);
 			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
 		}
-
 	}
 
 	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){

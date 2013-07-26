@@ -46,13 +46,19 @@ public class TapItem : MonoBehaviour {
 		if (tapGesture.ActiveTouches.Count > 0){
 			lastTapPosition = tapGesture.ActiveTouches[0].Position;
 			//couldn't this be done with tapGesture.ScreenPosition?
+			/*
+				There can be multiple touches at one time, hence the need for an array to contain
+				all the ActiveTouches.
+				Only looking at ActiveTouches[0] ensures that even if there are other touches,
+				they won't be able to interfere.
+			*/
 		}
 		if (e.State == Gesture.GestureState.Began){
         	if (OnStart != null) OnStart();
 		}
 		else if (e.State == Gesture.GestureState.Recognized)
 		{
-        	if (OnTap != null) OnTap(); 
+        	if (OnTap != null) OnTap();
         	if (OnFinish != null) OnFinish();
 		}
 		else if (e.State == Gesture.GestureState.Ended ||

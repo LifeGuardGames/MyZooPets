@@ -491,7 +491,9 @@ public class DataManager : MonoBehaviour {
 
             //Badge
             badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
-
+            for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
+                badgeStatus[i] = new BadgeData();
+            }
             // //turn first time initialization off
             // PlayerPrefs.SetInt("FirstTime", 0);
     }

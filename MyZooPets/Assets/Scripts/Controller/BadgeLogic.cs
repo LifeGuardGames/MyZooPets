@@ -3,13 +3,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//index of List<Badge>   = the id of the badges
-public class BadgeLogic : MonoBehaviour {
+//index of List<Badge> = the id of the badges
+public class BadgeLogic : Singleton<BadgeLogic> {
     public List<Badge> badges = new List<Badge>();
     public static int MAX_BADGE_COUNT = 20;
+
     //===================Events======================
     public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
     //==============================================
+
+    //====================API========================
+    //Read Only. Return a list of badges.
+    public List<Badge> Badges{
+        get{ return badges;}
+    }
+    //==============================================
+
     void Awake(){
     }
 

@@ -13,7 +13,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     //==============================================
 
     //====================API========================
-    //Read Only. Return a list of badges.
+    //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
     public List<Badge> Badges{
         get{ return badges;}
     }

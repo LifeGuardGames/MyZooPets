@@ -2,27 +2,26 @@
 using System.Collections;
 using TouchScript.Gestures;
 
-//Handles any touch gestures on the pets head
-public class Head : MonoBehaviour {
+public class Tummy : MonoBehaviour {
     private FlickGesture flickGesture;
     private TapGesture tapGesture;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         flickGesture = GetComponent<FlickGesture>();
         flickGesture.StateChanged += FlickHandleStateChanged;
         tapGesture = GetComponent<TapGesture>();
         tapGesture.StateChanged += TapHandleStateChange;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
+    
+    // Update is called once per frame
+    void Update () {
+    
+    }
 
     private void TapHandleStateChange(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
         if(e.State == Gesture.GestureState.Recognized){
-            PetSpeech.Instance.Talk("tickle!!");
+            PetSpeech.Instance.Talk("that's my tummy");
         }
     }
 
@@ -32,13 +31,13 @@ public class Head : MonoBehaviour {
 
             angle = (360 + angle - 45) % 360;
             if (angle < 90) { //swipe right
-                PetSpeech.Instance.Talk("nice move");
+                PetSpeech.Instance.Talk("hehehe");
             } else if (angle < 180) { //swipe down
-                PetSpeech.Instance.Talk("aww yeah");
+                PetSpeech.Instance.Talk("boooo");
             } else if (angle < 270) { //swipe left
-                PetSpeech.Instance.Talk("keep that moving");
+                PetSpeech.Instance.Talk("shake that ass");
             } else { //swipe up
-                PetSpeech.Instance.Talk("aint nobody got time for that");
+                PetSpeech.Instance.Talk("having fun?");
             }
         }
     }

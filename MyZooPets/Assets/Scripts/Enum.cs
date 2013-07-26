@@ -87,3 +87,6 @@ public enum BadgeType{
     Level,
     Other
 }
+public enum TalkImageType{
+    Heart,
+}

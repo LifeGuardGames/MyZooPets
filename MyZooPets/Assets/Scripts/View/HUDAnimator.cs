@@ -229,7 +229,7 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(remainderPoints, 0, 0, 0, Vector3.zero);
+			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.CurrentLevel;
@@ -243,39 +243,39 @@ public class HUDAnimator : MonoBehaviour {
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				StatsController.Instance.ChangeStats(100, 0, 0, 0, Vector3.zero);
+				StatsController.Instance.ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			}
 			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				StatsController.Instance.ChangeStats(0, 60, 0, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 60, Vector3.zero, 0, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
 				DataManager.SubtractHealth(100);
 				dataHealth = 0;
 				displayHealth = 0;
-				StatsController.Instance.ChangeStats(0, 0, 27, 0, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 27, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
 				DataManager.SubtractMood(100);
 				dataMood = 0;
 				displayMood = 0;
-				StatsController.Instance.ChangeStats(0, 0, 0, 85, new Vector3(0, 0, 0));
+				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
-				DataManager.SubtractMood(100);
-				dataMood = 0;
-				displayMood = 0;
-				DataManager.SubtractHealth(100);
-				dataHealth = 0;
-				displayHealth = 0;
-				StatsController.Instance.ChangeStats(200, 100, 73, 85, new Vector3(0, 0, 0));
+//				DataManager.SubtractMood(100);
+//				dataMood = 0;
+//				displayMood = 0;
+//				DataManager.SubtractHealth(100);
+//				dataHealth = 0;
+//				displayHealth = 0;
+				StatsController.Instance.ChangeStats(-100, Vector3.zero, -100, Vector3.zero, -20, Vector3.zero, -50, new Vector3(0, 0, 0));
 			}
 		}
 	}
 
-	// Making effects serial!
+	// Parse data and make effects serial
 	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
-		StartCoroutine(StartCurveStats(deltaPoints, new Vector3(0f,0f,0f), deltaStars, new Vector3(0f,0f,0f), deltaHealth, new Vector3(0f,0f,0f), deltaMood, new Vector3(0f,0f,0f)));
+		StartCoroutine(StartCurveStats(deltaPoints, pointsOrigin, deltaStars, starsOrigin, deltaHealth, healthOrigin, deltaMood, moodOrigin));
 	}
 
 	// Helper function for StartCoroutineCurveStats
@@ -283,34 +283,26 @@ public class HUDAnimator : MonoBehaviour {
 		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
 
 		if(deltaPoints != 0){
-			if(pointsOrigin == Vector3.zero){
-				pointsOrigin = new Vector3(130f, 500f, 0f);	//Default spawn from top!
-			}
+			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
+			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
 			StartCurvePoints(deltaPoints, pointsOrigin);
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
 		}
 		if(deltaStars != 0){
-			if(starsOrigin == Vector3.zero){
-				starsOrigin = new Vector3(514f, 500f, 0f);
-			}
+			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
 			StartCurveStars(deltaStars, starsOrigin);
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
 		}
 		if(deltaHealth != 0){
-			if(healthOrigin == Vector3.zero){
-				healthOrigin = new Vector3(730f, 500f, 0f);
-			}
+			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);
 			StartCurveHealth(deltaHealth, healthOrigin);
 			yield return new WaitForSeconds(1.6f / 80f * deltaHealth);
 		}
 		if(deltaMood != 0){
-			if(moodOrigin == Vector3.zero){
-				moodOrigin = new Vector3(1010f, 500f, 0f);
-			}
+			moodOrigin = (moodOrigin == Vector3.zero) ? new Vector3(1010f, 500f, 0f) : new Vector3(moodOrigin.x, moodOrigin.y - 800, 0);
 			StartCurveMood(deltaMood, moodOrigin);
 			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
 		}
-
 	}
 
 	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){
@@ -335,40 +327,79 @@ public class HUDAnimator : MonoBehaviour {
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
+		bool isScaleUpDown = false;	// Used for adding animation
+		bool isFade = false;	// Used for subtracting animation
 
 		//Testing
 		duration = .7f;
 
 		switch(type){
-			case(HUDElementType.points):
-				imageName = "tweenPoints";
-				modifier = Math.Abs(1.3f / 200f * amount);
-				endPosition = new Vector3(130f, -25f, 0); //Points
-				break;
-			case(HUDElementType.stars):
-				imageName = "tweenStars";
-				modifier = Math.Abs(4f / 200f * amount);
-				endPosition = new Vector3(514f, -25f, 0);	//Stars
-				break;
-			case(HUDElementType.health):
+		case(HUDElementType.points):
+			modifier = Math.Abs(1.3f / 200f * amount);
+			imageName = "tweenPoints";
+			if(amount > 0){
+				endPosition = new Vector3(130f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				originPoint = new Vector3(130f, -25f, 0);
+				endPosition = new Vector3(130f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.stars):
+			modifier = Math.Abs(4f / 200f * amount);
+			imageName = "tweenStars";
+			if(amount > 0){
+				endPosition = new Vector3(514f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				originPoint = new Vector3(514f, -25f, 0);
+				endPosition = new Vector3(514f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.health):
+			modifier = Math.Abs(1.6f / 80f * amount);
+			if(amount > 0){
 				imageName = "tweenHealthUp";
-				modifier = Math.Abs(1.6f / 80f * amount);
-				endPosition = new Vector3(730f, -23f, 0);	//Health
-				break;
-			case(HUDElementType.mood):
+				endPosition = new Vector3(730f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				imageName = "tweenMinus";
+				originPoint = new Vector3(730f, -25f, 0);
+				endPosition = new Vector3(730f, -100f, 0);
+				isFade = true;
+			}
+			break;
+
+		case(HUDElementType.mood):
+			modifier = Math.Abs(1.6f / 80f * amount);
+			if(amount > 0){
 				imageName = "tweenMoodUp";
-				modifier = Math.Abs(1.6f / 80f * amount);
-				endPosition = new Vector3(1010f, -23f, 0); //Mood
-				break;
+				endPosition = new Vector3(1010f, -25f, 0);
+				isScaleUpDown = true;
+			}
+			else{
+				imageName = "tweenMinus";
+				originPoint = new Vector3(1010f, -25f, 0);
+				endPosition = new Vector3(1010f, -100f, 0);
+				isFade = true;
+			}
+			break;
 		}
 
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
-			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration));
+			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade));
 		}
 	}
 
-	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration){
+	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade){
 		yield return new WaitForSeconds(waitTime);
 
 		// Create the tween image
@@ -378,10 +409,17 @@ public class HUDAnimator : MonoBehaviour {
 		go.transform.localPosition = fromPos;
 		go.transform.localScale = new Vector3(33f, 33f, 1f);
 		go.AddComponent<DestroyOnCall>();
-		ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
-		scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
-		scaleScript.duration = .7f;
-
+		if(isScaleUpDown){
+			ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
+			scaleScript.scaleDelta = new Vector3(4f, 4f, 1f);
+			scaleScript.duration = 0.7f;
+		}
+		if(isFade){
+			NGUIAlphaTween alphaScript = go.AddComponent<NGUIAlphaTween>();
+			alphaScript.startAlpha = 1f;
+			alphaScript.endAlpha = 0f;
+			alphaScript.duration = 0.7f;
+		}
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional.Add("onCompleteTarget", go);

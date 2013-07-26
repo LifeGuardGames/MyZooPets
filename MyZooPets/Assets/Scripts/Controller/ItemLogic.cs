@@ -74,24 +74,24 @@ public class ItemLogic : MonoBehaviour{
 
 	//Functions for Each item.
 	private void TakeApple(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 10, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 10, Vector3.zero);
 	}
 	private void TakeGreenApple(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 5, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 5, Vector3.zero);
 	}
 	private void TakeSandwich(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 30, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 30, Vector3.zero);
 	}
 	private void TakeBread(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 15, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 15, Vector3.zero);
 	}
 	private void TakeDoughnut(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 20, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 20, Vector3.zero);
 	}
 	private void TakeDoughnutBrown(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 25, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 25, Vector3.zero);
 	}
 	private void TakeMilk(){
-		StatsController.Instance.ChangeStats(0, 0, 0, 40, Vector3.zero);
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 40, Vector3.zero);
 	}
 }

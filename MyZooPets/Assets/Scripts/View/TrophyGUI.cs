@@ -11,6 +11,11 @@ public class TrophyGUI : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
+	/*
+	    trophyShelf: Used mainly for shelf and trophies right now. The shelf's collider blocks the trophy colliders, so we
+	    are disabling the shelf's collider here.
+	*/
+	public GameObject trophyShelf;
 
 	public GUISkin defaultSkin;
 	public Texture2D backButton;
@@ -27,6 +32,7 @@ public class TrophyGUI : MonoBehaviour {
 			isActive = true;
 			//cameraMove.ShelfZoomToggle();
 			cameraMove.ZoomToggle(ZoomItem.TrophyShelf);
+			trophyShelf.collider.enabled = false;
 		}
 	}
 
@@ -36,6 +42,7 @@ public class TrophyGUI : MonoBehaviour {
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
         		if(OnTrophyClosed != null) OnTrophyClosed(this, EventArgs.Empty);
 				isActive = false;
+				trophyShelf.collider.enabled = true;
 			}
 		}
 	}

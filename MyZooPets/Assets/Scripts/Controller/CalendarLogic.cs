@@ -105,7 +105,7 @@ public class CalendarLogic : MonoBehaviour{
 
     //Give bonus when user collects
     public void ClaimReward(){
-		StatsController.Instance.ChangeStats(50, 50, 0, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(50, Vector3.zero, 50, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
     }
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
@@ -192,11 +192,11 @@ public class CalendarLogic : MonoBehaviour{
         for(int i = 0;i < 7; i++){
             CalendarEntry entry = DataManager.EntriesThisWeek[i];
             if(entry.DayTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, 0, -20, -20, Vector3.zero);
+                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
                 punishmentCounter++;
             }
             if(entry.NightTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, 0, -20, -20, Vector3.zero);
+                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
                 punishmentCounter++;
             }
             if(punishmentCounter == 2) break;

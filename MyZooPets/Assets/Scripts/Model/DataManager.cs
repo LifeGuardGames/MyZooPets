@@ -64,8 +64,8 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool isRewardClaimed; //has the check bonuses been collected by the user
     [SerializeThis]
-    private static DateTime nextPlayPeriod; //the next time that the user can collect check bonuses 
-                                            //and be punished for missed entries 
+    private static DateTime nextPlayPeriod; //the next time that the user can collect check bonuses
+                                            //and be punished for missed entries
 
     //Inhaler Data
     [SerializeThis]
@@ -101,9 +101,9 @@ public class DataManager : MonoBehaviour {
     [SerializeThis]
     private static bool firstTimeCalendar; //first time clicking on calendar
     [SerializeThis]
-    private static bool firstTimeChallenges; //first time clicking on challenges 
+    private static bool firstTimeChallenges; //first time clicking on challenges
     [SerializeThis]
-    private static bool firstTimeDiary;   
+    private static bool firstTimeDiary;
     [SerializeThis]
     private static bool firstTimeSlotMachine;
     [SerializeThis]
@@ -118,6 +118,12 @@ public class DataManager : MonoBehaviour {
     //Badge data
     [SerializeThis]
     private static BadgeData[] badgeStatus; //store the data for badges.
+
+    //Dojo data
+    [SerializeThis]
+    private static int numOfPurchasedSkills;
+    [SerializeThis]
+    private static bool[] purchasedSkills; // store the data for purchased skills - enum tells us which is which
 
     //========================
 
@@ -295,6 +301,16 @@ public class DataManager : MonoBehaviour {
     public static BadgeData[] BadgeStatus{
         get{return badgeStatus;}
         set{badgeStatus = value;}
+    }
+
+    //Dojo
+    public static int NumOfPurchasedSkills{
+        get{return numOfPurchasedSkills;}
+        set{numOfPurchasedSkills = value;}
+    }
+    public static bool[] PurchasedSkills{
+        get{return purchasedSkills;}
+        set{purchasedSkills = value;}
     }
 
     //===============================
@@ -494,6 +510,15 @@ public class DataManager : MonoBehaviour {
             for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
                 badgeStatus[i] = new BadgeData();
             }
+
+            // Dojo
+            numOfPurchasedSkills = 0;
+            purchasedSkills = new bool[DojoLogic.MAX_SKILLS_COUNT];
+            for(int i=0; i<DojoLogic.MAX_SKILLS_COUNT; i++){
+                purchasedSkills[i] = false;
+            }
+            // starter skill automatically purchased in DojoLogic.Start()
+
             // //turn first time initialization off
             // PlayerPrefs.SetInt("FirstTime", 0);
     }

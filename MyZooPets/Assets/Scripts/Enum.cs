@@ -87,6 +87,11 @@ public enum BadgeType{
     Level,
     Other
 }
-public enum TalkImageType{
+
+public enum DojoSkillType{
+    Sit,
+    Wave,
+    Backflip
+}public enum TalkImageType{
     Heart,
 }

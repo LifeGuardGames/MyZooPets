@@ -33,5 +33,10 @@ public class Badge{
         get{return DataManager.BadgeStatus[id].Tier;}
         set{DataManager.BadgeStatus[id].Tier = value;}
     }
+    //True: New Badge show fancy animation, False: no animation
+    public bool IsBadgeNew{
+        get{return DataManager.BadgeStatus[id].IsBadgeNew;}
+        set{DataManager.BadgeStatus[id].IsBadgeNew = value;}        
+    }
     //========================================
 }

@@ -24,7 +24,7 @@ public class FirstTimeNGUI : MonoBehaviour {
     public GameObject mCamera;
     private float smooth = 1.0f;
     private bool isZoomed = false;
-    private Vector3 initPosition = new Vector3(-2.47f, 11.47f, 2.83f);
+    private Vector3 initPosition = new Vector3(0.1938391f, 11.47f, 2.83f);
     private Vector3 initFaceDirection = new Vector3(11.3f, 0, 0);
     private Vector3 finalPosition = new Vector3(4.7f, 7.08f, 12.23f);
     private Vector3 finalFaceDirection = new Vector3(11.3f, 0, 0);

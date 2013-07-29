@@ -83,6 +83,7 @@ public class PetMovement : MonoBehaviour {
 				}
             }
         }
+        ChangePetFacingDirection();
     }
 
     //need to check if the pet moved out of the walk area
@@ -107,6 +108,17 @@ public class PetMovement : MonoBehaviour {
 		// 	}
   //       }
 	}
+
+    void ChangePetFacingDirection(){
+        if (destinationPoint.x > petSprite.transform.position.x){
+            // face right
+            petSprite.GetComponent<tk2dSprite>().FlipX = false;
+        }
+        else {
+            // face left
+            petSprite.GetComponent<tk2dSprite>().FlipX = true;
+        }
+    }
 
 	// Update is called once per frame
 	void Update () {

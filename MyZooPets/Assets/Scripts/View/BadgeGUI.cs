@@ -33,7 +33,7 @@ public class BadgeGUI : MonoBehaviour {
 			int levelNumber = badge.ID;
 			if(badge.IsAwarded){
 				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
-					
+
 				// Display the tier if applicable
 				if(badge.Tier != BadgeTier.Null){
 					 UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
@@ -42,6 +42,10 @@ public class BadgeGUI : MonoBehaviour {
 					 tier.transform.localScale = new Vector3(34f, 50f, 1f);
 					 tier.transform.localPosition = new Vector3(40f, -40f, 0);
 				}
+			}
+			else{
+				// Activate the dark version of the badge
+				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber + "Dark";
 			}
 		}
 	}

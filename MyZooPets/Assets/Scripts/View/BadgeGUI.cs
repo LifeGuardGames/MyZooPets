@@ -36,11 +36,11 @@ public class BadgeGUI : MonoBehaviour {
 					
 				// Display the tier if applicable
 				if(badge.Tier != BadgeTier.Null){
-					// UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
+					 UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
 
 					//TO-DO s, scale incorrect
-					// tier.transform.localScale = new Vector3(183f, 233f, 1f);
-					// tier.transform.localPosition = new Vector3(50f, 50f, 0);
+					 tier.transform.localScale = new Vector3(34f, 50f, 1f);
+					 tier.transform.localPosition = new Vector3(40f, -40f, 0);
 				}
 			}
 		}

@@ -81,7 +81,8 @@ public enum ZoomItem{
     TrophyShelf,
     SlotMachine,
     RealInhaler,
-    PracticeInhaler
+    PracticeInhaler,
+    BadgeBoard
 }
 public enum BadgeType{
     Level,

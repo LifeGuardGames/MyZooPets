@@ -38,6 +38,9 @@ public class ClickManager : MonoBehaviour {
 	public GameObject trophyGUIObject;
 	private TrophyGUI trophyGUI;
 
+	public GameObject badgeGUIObject;
+	private BadgeGUI badgeGUI;
+
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
@@ -63,6 +66,8 @@ public class ClickManager : MonoBehaviour {
 		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		if(trophyGUIObject != null)
 			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
+		if(badgeGUIObject != null)
+			badgeGUI = badgeGUIObject.GetComponent<BadgeGUI>();
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
     }
@@ -74,7 +79,7 @@ public class ClickManager : MonoBehaviour {
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
-		badgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
+		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
     }
 
 	//Clean all event listeners and static references
@@ -83,7 +88,7 @@ public class ClickManager : MonoBehaviour {
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
-		badgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
+		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
 		UIRoot = null;
 	}
 

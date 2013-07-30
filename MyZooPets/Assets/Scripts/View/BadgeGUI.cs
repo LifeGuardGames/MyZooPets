@@ -1,14 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class BadgeGUI : MonoBehaviour {
+
+	//======================Event=============================
+    public static event EventHandler<EventArgs> OnBadgeBoardClosed;
+    //=======================================================
+
+	public GameObject cameraMoveObject;
+	private CameraMove cameraMove;
+
+	public GUISkin defaultSkin;
+	public Texture2D backButton;
+	public GUIStyle blankButtonStyle;
+
+	public GameObject badgeBoard;
+	private bool isActive = false;
 
 	public List<GameObject> LevelList = new List<GameObject>();
 	public UIAtlas badgeAtlas;
 
 	// Use this for initialization
 	void Start (){
+		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 
 		// Temprary check for badges
 		if(LevelList.Count < BadgeLogic.Instance.badges.Count){
@@ -32,6 +48,17 @@ public class BadgeGUI : MonoBehaviour {
 		}
 	}
 
+	void OnGUI(){
+		GUI.skin = defaultSkin;
+		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
+        	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
+        		if(OnBadgeBoardClosed != null) OnBadgeBoardClosed (this, EventArgs.Empty);
+				isActive = false;
+				badgeBoard.collider.enabled = true;
+			}
+		}
+	}
+
 	// Parses the level of the badge
 	private int parseLevelsBadge(string badgeName){
 		return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
@@ -39,5 +66,13 @@ public class BadgeGUI : MonoBehaviour {
 
 	public void BadgeClicked(GameObject go){
 		Debug.Log(go.name);
+	}
+
+	public void BadgeBoardClicked(){
+		if(!isActive){
+			isActive = true;
+			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
+			badgeBoard.collider.enabled = false;
+		}
 	}
 }

@@ -26,13 +26,6 @@ public class RotateInRoom : UserNavigation {
         currentYRotation = (int)transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
 
-<<<<<<< HEAD
-        // Init limits to room navigation
-        minLeft = 360 - (rotationIncrement);
-        maxRight = rotationIncrement * 2;
-
-=======
->>>>>>> camera rotation in room
 		petmovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
 	}
 

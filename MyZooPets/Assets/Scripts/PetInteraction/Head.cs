@@ -14,11 +14,6 @@ public class Head : MonoBehaviour {
         tapGesture = GetComponent<TapGesture>();
         tapGesture.StateChanged += TapHandleStateChange;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     private void TapHandleStateChange(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
         if(e.State == Gesture.GestureState.Recognized){

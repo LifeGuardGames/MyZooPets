@@ -13,7 +13,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     //===================Events======================
     public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
     //==============================================
-
+    
     //====================API========================
     //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
     public List<Badge> Badges{

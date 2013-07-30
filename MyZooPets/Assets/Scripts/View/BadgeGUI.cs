@@ -36,4 +36,8 @@ public class BadgeGUI : MonoBehaviour {
 	private int parseLevelsBadge(string badgeName){
 		return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
 	}
+
+	public void BadgeClicked(GameObject go){
+		Debug.Log(go.name);
+	}
 }

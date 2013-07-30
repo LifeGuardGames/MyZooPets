@@ -5,8 +5,10 @@ using System.Collections.Generic;
 
 //index of List<Badge> = the id of the badges
 public class BadgeLogic : Singleton<BadgeLogic> {
+    //=============For inspector use only. don't use these variables in UI
     public List<Badge> badges = new List<Badge>();
     public static int MAX_BADGE_COUNT = 20;
+    //===========================================
 
     //===================Events======================
     public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
@@ -16,6 +18,10 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
     public List<Badge> Badges{
         get{ return badges;}
+    }
+    //Read Only. Return a list of Level Badges.
+    public List<Badge> LevelBadges{
+        get{return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
     }
     //==============================================
 

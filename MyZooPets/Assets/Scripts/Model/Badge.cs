@@ -19,6 +19,10 @@ public class Badge{
     public BadgeType Type{
         get{return type;}
     }
+    //ID of the badge
+    public int ID{
+        get{return id;}
+    }
     //Short description of how to obtain the badge
     public string Descriptions{
         get{return description;}

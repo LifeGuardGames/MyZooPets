@@ -63,7 +63,6 @@ public class ClickManager : MonoBehaviour {
 			noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
 		if(storeUIObject != null)
 			storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
-		// challengesGUI = challengesGUIObject.GetComponent<ChallengesGUI>();
 		if(trophyGUIObject != null)
 			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
 		if(badgeGUIObject != null)
@@ -182,7 +181,6 @@ public class ClickManager : MonoBehaviour {
 	//===========Calendar============
 	void OnTapCalendar(){
 		if (CanRespondToTap()){
-			Debug.Log("tapped!!!!");
 			calendarUIManager.CalendarClicked();
 			ClickLock();
 			ModeLock();
@@ -228,12 +226,14 @@ public class ClickManager : MonoBehaviour {
 	private void OnTapBadgeBoard(){
 		if (CanRespondToTap()){
 			badgeGUI.BadgeBoardClicked();
+			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
 			ClickLock();
 			ModeLock();
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
 		}
 	}
 	private void OnBadgeBoardClosed(object senders, EventArgs e){
@@ -243,6 +243,7 @@ public class ClickManager : MonoBehaviour {
 		//Show other UI Objects
 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//=========================================
 

@@ -508,7 +508,10 @@ public class DataManager : MonoBehaviour {
             //Badge
             badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
             for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
-                badgeStatus[i] = new BadgeData();
+                BadgeData badgeData = new BadgeData();
+                badgeData.IsAwarded = true;
+
+                badgeStatus[i] = badgeData;
             }
 
             // Dojo

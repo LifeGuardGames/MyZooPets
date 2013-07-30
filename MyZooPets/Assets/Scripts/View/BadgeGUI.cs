@@ -9,9 +9,6 @@ public class BadgeGUI : MonoBehaviour {
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
     //=======================================================
 
-	public GameObject cameraMoveObject;
-	private CameraMove cameraMove;
-
 	public GUISkin defaultSkin;
 	public Texture2D backButton;
 	public GUIStyle blankButtonStyle;
@@ -19,30 +16,31 @@ public class BadgeGUI : MonoBehaviour {
 	public GameObject badgeBoard;
 	private bool isActive = false;
 
-	public List<GameObject> LevelList = new List<GameObject>();
+	public List<GameObject> LevelList = new List<GameObject>(); //list of badge gameobjects
+																//index of this list correlates to the index
+																//from BadgeLogic.Instance.badges
 	public UIAtlas badgeAtlas;
 
 	// Use this for initialization
 	void Start (){
-		cameraMove = cameraMoveObject.GetComponent<CameraMove>();
 
 		// Temprary check for badges
-		if(LevelList.Count < BadgeLogic.Instance.badges.Count){
+		if(LevelList.Count != BadgeLogic.Instance.badges.Count){
 			Debug.LogError("Temporary implementation badges has wrong size");
 		}
 
-		foreach(Badge badge in BadgeLogic.Instance.badges){
-			// Ghetto parse for badge level
-			//print(parseLevelsBadge(badge.name));
-			int levelNumber = parseLevelsBadge(badge.name);
+		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
+			int levelNumber = badge.ID;
 			if(badge.IsAwarded){
-				LevelList[levelNumber].GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
-
+				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
+					
 				// Display the tier if applicable
-				if(badge.Tier != BadgeTier.Null || badge.Tier != null){
-					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
-					tier.transform.localScale = new Vector3(183f, 233f, 1f);
-					tier.transform.localPosition = new Vector3(50f, 50f, 0);
+				if(badge.Tier != BadgeTier.Null){
+					// UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
+
+					//TO-DO s, scale incorrect
+					// tier.transform.localScale = new Vector3(183f, 233f, 1f);
+					// tier.transform.localPosition = new Vector3(50f, 50f, 0);
 				}
 			}
 		}
@@ -52,7 +50,11 @@ public class BadgeGUI : MonoBehaviour {
 		GUI.skin = defaultSkin;
 		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
         	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-        		if(OnBadgeBoardClosed != null) OnBadgeBoardClosed (this, EventArgs.Empty);
+        		if(OnBadgeBoardClosed != null){
+        			OnBadgeBoardClosed (this, EventArgs.Empty);
+    			}else{
+    				Debug.LogError("OnBadgeBoardClosed is null");
+    			}
 				isActive = false;
 				badgeBoard.collider.enabled = true;
 			}
@@ -64,6 +66,7 @@ public class BadgeGUI : MonoBehaviour {
 		return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
 	}
 
+	// When a badge is clicked. zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
 		Debug.Log(go.name);
 	}
@@ -71,7 +74,6 @@ public class BadgeGUI : MonoBehaviour {
 	public void BadgeBoardClicked(){
 		if(!isActive){
 			isActive = true;
-			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
 			badgeBoard.collider.enabled = false;
 		}
 	}

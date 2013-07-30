@@ -4,26 +4,35 @@ using System.Collections;
 public class RotateInRoom : UserNavigation {
 
     int currentYRotation;
-    int currentPartition = 1;
-    public int rotationIncrement = 72;
+    int currentPartition = 0;
+    int rotationIncrement;
     Hashtable optional = new Hashtable();
     bool lockRotation;
 
-    float minLeft;
-    float maxRight;
+    /*
+        Set this manually. enabledPartitions[0] means the default partition that appears when the game is started.
+    */
+    bool[] enabledPartitions = {true, true, true, false, true};
+    int numPartitions; // determined in Start()
 
 	private PetMovement petmovement;
 
 	protected override void Start () {
         base.Start();
 
+        numPartitions = enabledPartitions.Length;
+        rotationIncrement = 360 / numPartitions;
+
         currentYRotation = (int)transform.eulerAngles.y;
         optional.Add("onComplete", "FinishedRotation");
 
+<<<<<<< HEAD
         // Init limits to room navigation
         minLeft = 360 - (rotationIncrement);
         maxRight = rotationIncrement * 2;
 
+=======
+>>>>>>> camera rotation in room
 		petmovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();
 	}
 
@@ -32,7 +41,7 @@ public class RotateInRoom : UserNavigation {
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation += rotationIncrement;
-                currentPartition += 1;
+                currentPartition = GetRight();
                 UpdateClickableItemsInPartition();
                 LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
             }
@@ -44,7 +53,7 @@ public class RotateInRoom : UserNavigation {
             if (ClickManager.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation -= rotationIncrement;
-                currentPartition -= 1;
+                currentPartition = GetLeft();
                 UpdateClickableItemsInPartition();
                 LeanTween.rotateY(gameObject, currentYRotation, 1.0f, optional);
             }
@@ -52,11 +61,25 @@ public class RotateInRoom : UserNavigation {
     }
 
     protected override bool IsRightArrowEnabled(){
-        return (!lockRotation && currentYRotation < maxRight);
+        return (!lockRotation && enabledPartitions[GetRight()]);
     }
 
     protected override bool IsLeftArrowEnabled(){
-        return (!lockRotation && currentYRotation > minLeft);
+        return (!lockRotation && enabledPartitions[GetLeft()]);
+    }
+
+    int GetRight(){
+        if (currentPartition == numPartitions - 1){
+            return 0;
+        }
+        return currentPartition + 1;
+    }
+
+    int GetLeft(){
+        if (currentPartition == 0){
+            return numPartitions - 1;
+        }
+        return currentPartition - 1;
     }
 
     void FinishedRotation(){

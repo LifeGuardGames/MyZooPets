@@ -18,18 +18,12 @@ public class BadgeGUI : MonoBehaviour {
 
 	public List<GameObject> LevelList = new List<GameObject>(); //list of badge gameobjects
 																//index of this list correlates to the index
-																//from BadgeLogic.Instance.badges
+																//from BadgeLogic.Instance.LevelBadges
 	public UIAtlas badgeAtlas;
 
 	// Use this for initialization
 	void Start (){
-
-		// Temprary check for badges
-		if(LevelList.Count != BadgeLogic.Instance.badges.Count){
-			Debug.LogError("Temporary implementation badges has wrong size");
-		}
-
-		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
+			foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
 			int levelNumber = badge.ID;
 			if(badge.IsAwarded){
 				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
@@ -61,10 +55,10 @@ public class BadgeGUI : MonoBehaviour {
 		}
 	}
 
-	// Parses the level of the badge
-	private int parseLevelsBadge(string badgeName){
-		return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
-	}
+	// // Parses the level of the badge
+	// private int parseLevelsBadge(string badgeName){
+	// 	return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
+	// }
 
 	// When a badge is clicked. zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){

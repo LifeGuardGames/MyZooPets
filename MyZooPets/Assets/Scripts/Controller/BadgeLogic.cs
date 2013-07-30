@@ -7,9 +7,9 @@ using System.Collections.Generic;
 public class BadgeLogic : Singleton<BadgeLogic> {
     //=============For inspector use only. don't use these variables in UI
     public List<Badge> badges = new List<Badge>();
-    public static int MAX_BADGE_COUNT = 20;
     //===========================================
-
+    public static int MAX_BADGE_COUNT = 20;
+    
     //===================Events======================
     public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
     //==============================================

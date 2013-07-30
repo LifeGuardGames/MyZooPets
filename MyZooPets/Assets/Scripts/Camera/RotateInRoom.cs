@@ -21,7 +21,7 @@ public class RotateInRoom : UserNavigation {
         optional.Add("onComplete", "FinishedRotation");
 
         // Init limits to room navigation
-        minLeft = 0;
+        minLeft = 360 - (rotationIncrement);
         maxRight = rotationIncrement * 2;
 
 		petmovement = GameObject.Find("PetMovement").GetComponent<PetMovement>();

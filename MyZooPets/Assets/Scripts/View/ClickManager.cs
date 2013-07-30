@@ -115,8 +115,8 @@ public class ClickManager : MonoBehaviour {
 				GameObject.Find("GO_SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
 				GameObject.Find("GO_RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
 				GameObject.Find("GO_TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
-				GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
-				GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
+				// GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
+				// GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
 				GameObject.Find("GO_HousePlaque").GetComponent<TapItem>().OnTap += OnTapBadgeBoard;
 			break;
 			case "Yard":

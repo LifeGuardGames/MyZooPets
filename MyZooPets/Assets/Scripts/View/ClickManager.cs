@@ -74,6 +74,7 @@ public class ClickManager : MonoBehaviour {
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
+		badgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
     }
 
 	//Clean all event listeners and static references
@@ -82,6 +83,7 @@ public class ClickManager : MonoBehaviour {
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
+		badgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
 		UIRoot = null;
 	}
 
@@ -111,6 +113,7 @@ public class ClickManager : MonoBehaviour {
 				GameObject.Find("GO_TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
 				GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
 				GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
+				GameObject.Find("GO_HousePlaque").GetComponent<TapItem>().OnTap += OnTapBadgeBoard;
 			break;
 			case "Yard":
 			break;
@@ -215,6 +218,29 @@ public class ClickManager : MonoBehaviour {
 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 	}
+	//=========================================
+	//=================Badge Board=====================
+	private void OnTapBadgeBoard(){
+		if (CanRespondToTap()){
+			badgeGUI.BadgeBoardClicked();
+			ClickLock();
+			ModeLock();
+
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		}
+	}
+	private void OnBadgeBoardClosed(object senders, EventArgs e){
+		ClickLock();
+		cameraMove.ZoomOutMove();
+
+		//Show other UI Objects
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	}
+	//=========================================
+
 	//=========================================
 
 	void OnTapLaptop(){

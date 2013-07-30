@@ -19,17 +19,16 @@ public class BadgeGUI : MonoBehaviour {
 			// Ghetto parse for badge level
 			//print(parseLevelsBadge(badge.name));
 			int levelNumber = parseLevelsBadge(badge.name);
-		//	if(badge.IsAwarded){
+			if(badge.IsAwarded){
 				LevelList[levelNumber].GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
 
 				// Display the tier if applicable
-		//		if(badge.Tier != BadgeTier.Null || badge.Tier != null){
-//					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
-					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddonGold");
-					tier.transform.localPosition = new Vector3(50f, 50f, 0);
+				if(badge.Tier != BadgeTier.Null || badge.Tier != null){
+					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
 					tier.transform.localScale = new Vector3(183f, 233f, 1f);
-		//		}
-		//	}
+					tier.transform.localPosition = new Vector3(50f, 50f, 0);
+				}
+			}
 		}
 	}
 

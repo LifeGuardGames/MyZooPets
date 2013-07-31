@@ -60,7 +60,6 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
-  - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400012}
   m_Layer: 10
@@ -186,25 +185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
   trigger: 0
   volume: 1
   pitch: 1
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10616d4ce51c5994086c006a7c1189e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 0, y: 0, z: 0}
-  pressed: {x: 2, y: -2, z: 0}
-  duration: .200000003
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -217,9 +201,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 0}
-  hover: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
-  pressed: {x: 1.04999995, y: 1.04999995, z: 1.04999995}
-  duration: .200000003
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
+  duration: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -233,8 +217,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100002}
   hover: {r: 1, g: 1, b: 1, a: 1}
-  pressed: {r: .5, g: .5, b: .5, a: 1}
-  duration: .200000003
+  pressed: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
 --- !u!114 &11400012
 MonoBehaviour:
@@ -267,8 +251,6 @@ MonoBehaviour:
   isDebug: 0
   startsHidden: 1
   testButtonPos: {x: 0, y: 0}
-  showDeltaX: -680
-  showDeltaY: 0
   hideDeltaX: 680
   hideDeltaY: 0
   showDuration: .5

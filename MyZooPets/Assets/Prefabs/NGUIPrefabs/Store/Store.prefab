@@ -239,7 +239,6 @@ GameObject:
   - 65: {fileID: 6500006}
   - 114: {fileID: 11400064}
   - 114: {fileID: 11400062}
-  - 114: {fileID: 11400060}
   - 114: {fileID: 11400058}
   - 114: {fileID: 11400000}
   m_Layer: 10
@@ -344,7 +343,6 @@ GameObject:
   - 65: {fileID: 6500010}
   - 114: {fileID: 11400090}
   - 114: {fileID: 11400088}
-  - 114: {fileID: 11400086}
   - 114: {fileID: 11400084}
   - 114: {fileID: 11400082}
   m_Layer: 10
@@ -987,11 +985,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -4935.90723
+    e03: -4935.40723
     e10: 0
     e11: 400
     e12: 0
-    e13: -11325.3369
+    e13: -11325.8369
     e20: 0
     e21: 0
     e22: 400
@@ -1092,8 +1090,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: d650d98b3c4028a4a8b7225c1a6482f8, type: 2}
+  mTex: {fileID: 2800000, guid: d4b622e2ae4b7aa4abf761706845a53f, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
@@ -1437,11 +1435,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -4948.78564
+    e03: -4948.28564
     e10: 0
     e11: 400
     e12: 0
-    e13: -11253.7217
+    e13: -11254.2217
     e20: 0
     e21: 0
     e22: 400
@@ -1507,25 +1505,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
   trigger: 0
   volume: 1
   pitch: 1
---- !u!114 &11400060
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10616d4ce51c5994086c006a7c1189e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 0, y: 0, z: 0}
-  pressed: {x: 2, y: -2, z: 0}
-  duration: .200000003
 --- !u!114 &11400062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1538,9 +1521,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 0}
-  hover: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
-  pressed: {x: 1.04999995, y: 1.04999995, z: 1.04999995}
-  duration: .200000003
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
+  duration: 0
 --- !u!114 &11400064
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1554,8 +1537,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100022}
   hover: {r: 1, g: 1, b: 1, a: 1}
-  pressed: {r: .5, g: .5, b: .5, a: 1}
-  duration: .200000003
+  pressed: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
 --- !u!114 &11400066
 MonoBehaviour:
@@ -1735,25 +1718,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
   trigger: 0
   volume: 1
   pitch: 1
---- !u!114 &11400086
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10616d4ce51c5994086c006a7c1189e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 0, y: 0, z: 0}
-  pressed: {x: 2, y: -2, z: 0}
-  duration: .200000003
 --- !u!114 &11400088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1766,9 +1734,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 0}
-  hover: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
-  pressed: {x: 1.04999995, y: 1.04999995, z: 1.04999995}
-  duration: .200000003
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
+  duration: 0
 --- !u!114 &11400090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1782,8 +1750,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100036}
   hover: {r: 1, g: 1, b: 1, a: 1}
-  pressed: {r: .5, g: .5, b: .5, a: 1}
-  duration: .200000003
+  pressed: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
 --- !u!114 &11400092
 MonoBehaviour:

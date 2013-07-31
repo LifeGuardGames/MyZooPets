@@ -26,7 +26,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400002}
   m_Layer: 10
-  m_Name: Label
+  m_Name: Label_Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ GameObject:
   - 4: {fileID: 400004}
   - 114: {fileID: 11400004}
   m_Layer: 10
-  m_Name: Label
+  m_Name: Label_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,8 @@ GameObject:
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400016}
+  - 114: {fileID: 11400018}
   m_Layer: 10
   m_Name: BackButton
   m_TagString: Untagged
@@ -117,7 +119,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116, y: -61, z: 0}
+  m_LocalPosition: {x: 116, y: -61, z: -.5}
   m_LocalScale: {x: 96, y: 96, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
@@ -154,7 +156,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 670, y: 66, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
@@ -164,8 +166,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -869.647217, y: 233.325958, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
+  m_LocalPosition: {x: 382.112854, y: -279.405212, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -181,7 +183,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 100, y: 100, z: 0}
-  m_Center: {x: -.000183105469, y: -.000732421875, z: -25.5}
+  m_Center: {x: 0, y: 0, z: -10}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -276,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
   trigger: 0
   volume: 1
   pitch: 1
@@ -308,8 +310,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100008}
   hover: {r: 1, g: 1, b: 1, a: 1}
-  pressed: {r: .5, g: .5, b: .5, a: 1}
-  duration: .200000003
+  pressed: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
 --- !u!114 &11400012
 MonoBehaviour:
@@ -358,6 +360,36 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 4
   easeShow: 4
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  functionName: CloseDescription
+  trigger: 0
+  includeChildren: 0
+--- !u!114 &11400018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  functionName: CloseDescription
+  trigger: 0
+  includeChildren: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

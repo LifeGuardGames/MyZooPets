@@ -15,7 +15,11 @@ public class BadgeGUI : MonoBehaviour {
 
 	public GameObject badgeBoard;
 	public GameObject descriptionObject;
+	public GameObject badgeGUISpawnBase;	// Parent to clone badges and zoom out
+
 	private bool isActive = false;
+
+	private GameObject bgPanel;
 
 	public List<GameObject> LevelList = new List<GameObject>(); //list of badge gameobjects
 																//index of this list correlates to the index
@@ -24,18 +28,25 @@ public class BadgeGUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start (){
-			foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
+		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
 			int levelNumber = badge.ID;
+			BadgeMetadata meta = LevelList[levelNumber].AddComponent<BadgeMetadata>();
+			meta.title = badge.name;
+			meta.description = badge.description;
+
+			//Debug.Log(meta.title + " " + meta.description);
+
 			if(badge.IsAwarded){
 				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
 
 				// Display the tier if applicable
 				if(badge.Tier != BadgeTier.Null){
-					 UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
+					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
+					tier.gameObject.name = "tier";
 
 					//TO-DO s, scale incorrect
-					 tier.transform.localScale = new Vector3(34f, 50f, 1f);
-					 tier.transform.localPosition = new Vector3(40f, -40f, 0);
+					tier.transform.localScale = new Vector3(34f, 50f, 1f);
+					tier.transform.localPosition = new Vector3(40f, -40f, 0);
 				}
 			}
 			else{
@@ -68,6 +79,63 @@ public class BadgeGUI : MonoBehaviour {
 	// When a badge is clicked. Zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
 		Debug.Log(go.name);
+
+		BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
+		if(meta != null){
+			GameObject titleGO = GameObject.Find("Label_Title") as GameObject;
+
+			UILabel titleLabel = titleGO.GetComponent<UILabel>();
+			titleLabel.text = meta.title;
+			Debug.Log(titleLabel.text);
+
+			GameObject descriptionGO = GameObject.Find("Label_Description") as GameObject;
+			UILabel descriptionLabel = descriptionGO.GetComponent<UILabel>();
+			descriptionLabel.text = meta.description;
+		}
+		else{
+			Debug.LogError("No Metadata attached on badge");
+		}
+
+		// Spawn BG with collider
+		// Parent object needs to be 0, 0px;
+		UISprite bgSprite = NGUITools.AddSprite(descriptionObject, badgeAtlas, "box30");
+		bgSprite.type = UISprite.Type.Sliced;
+		bgSprite.color = new Color(0f, 0f, 0f, 0.6f);
+		bgSprite.depth = 50;
+		bgPanel = bgSprite.gameObject;
+		bgPanel.transform.localScale = new Vector3(3000f, 3000f, 1);
+		bgPanel.transform.localPosition = new Vector3(0f, 0f ,0f);
+		BoxCollider collider = bgPanel.AddComponent<BoxCollider>();
+		collider.size = new Vector3(3000f, 3000f, 1f);
+
+		// Spawn cloned badge
+		GameObject spriteObject = GameObject.Find(go.name + "/badgeSprite");
+		UISprite originalSprite = spriteObject.GetComponent<UISprite>();
+
+		UISprite badgeSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalSprite.spriteName);
+		Vector3 position = UIUtility.Instance.mainCameraWorld2Screen(go.transform.position);
+		badgeSprite.transform.localPosition = new Vector3(position.x, position.y, 0f);
+		badgeSprite.transform.localScale = new Vector3(100f, 100f, 0f);
+		badgeSprite.depth = 103;
+
+
+		GameObject tierObject = GameObject.Find(go.name + "/tier");
+		UISprite originalTier = tierObject.GetComponent<UISprite>();
+
+		// TODO refactor into function, used twice
+		UISprite tierSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalTier.spriteName);
+		tierSprite.transform.localPosition = new Vector3(position.x + 40f, position.y - 40f, 0f);
+		tierSprite.transform.localScale = new Vector3(34f, 50f, 1f);
+		tierSprite.depth = 104;
+
+//		LeanTween.delayedCall(badgeSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
+//		LeanTween.delayedCall(tierSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
+		// TODO-s error thrown here...
+		LeanTween.moveLocal(badgeSprite.gameObject, new Vector3(400, 400f, 0f), 0.4f);
+		LeanTween.scale(badgeSprite.gameObject, new Vector3(512f, 512, 0f), 0.4f);
+		LeanTween.moveLocal(tierSprite.gameObject, new Vector3(600f, 200f, 0f), 0.4f);
+		LeanTween.scale(tierSprite.gameObject, new Vector3(170f, 250, 0f), 0.4f);
+
 		OpenDescription();
 	}
 
@@ -77,6 +145,9 @@ public class BadgeGUI : MonoBehaviour {
 
 	public void CloseDescription(){
 		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
+		badgeGUISpawnBase.transform.DestroyChildren();
+
+		Destroy(bgPanel);
 	}
 
 	public void BadgeBoardClicked(){

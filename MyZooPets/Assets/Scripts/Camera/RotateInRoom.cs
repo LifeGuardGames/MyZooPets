@@ -12,7 +12,7 @@ public class RotateInRoom : UserNavigation {
     /*
         Set this manually. enabledPartitions[0] means the default partition that appears when the game is started.
     */
-    bool[] enabledPartitions = {true, true, true, false, true};
+    bool[] enabledPartitions = {true, true, true, false, false};
     int numPartitions; // determined in Start()
 
 	private PetMovement petmovement;

@@ -50,6 +50,9 @@ public class ClickManager : MonoBehaviour {
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
+
+	public GameObject dojoObject; //dojo game object in the scene
+
     bool trophyMessageShowing = false;
 
     void Awake(){
@@ -79,6 +82,7 @@ public class ClickManager : MonoBehaviour {
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
+		DojoUIManager.OnDojoDoorClosed += OnDojoDoorClosed;
     }
 
 	//Clean all event listeners and static references
@@ -88,6 +92,7 @@ public class ClickManager : MonoBehaviour {
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
 		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
+		DojoUIManager.OnDojoDoorClosed -= OnDojoDoorClosed;
 		UIRoot = null;
 	}
 
@@ -118,6 +123,7 @@ public class ClickManager : MonoBehaviour {
 				// GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
 				// GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
 				GameObject.Find("GO_HousePlaque").GetComponent<TapItem>().OnTap += OnTapBadgeBoard;
+				dojoObject.GetComponent<TapItem>().OnTap += OnTapDojoDoor;
 			break;
 			case "Yard":
 			break;
@@ -247,8 +253,40 @@ public class ClickManager : MonoBehaviour {
 	}
 	//=========================================
 
-	//=========================================
+	//========================Dojo Door================
+	private void OnTapDojoDoor(){
+		if(CanRespondToTap()){
+			dojoObject.GetComponent<DojoUIManager>().DojoDoorClicked();
+			dojoObject.GetComponent<Animator>().SetBool("Open", true);
+			cameraMove.ZoomToggle(ZoomItem.Dojo);
+			ClickLock();
+			ModeLock();
 
+			//Hide other UI objects
+			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+		}
+	}
+	private void OnDojoDoorClosed(object senders, EventArgs e){
+		dojoObject.GetComponent<Animator>().SetBool("Open", false);
+		ClickLock();
+		cameraMove.ZoomOutMove();
+
+		//Show other UI objects
+		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
+	}
+
+
+
+
+	//=======================
+
+
+
+	//=========================================
 	void OnTapLaptop(){
 		if (CanRespondToTap()){
 			//NOTE: logic not implemented so leaving it out for now

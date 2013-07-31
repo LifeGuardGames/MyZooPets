@@ -82,7 +82,8 @@ public enum ZoomItem{
     SlotMachine,
     RealInhaler,
     PracticeInhaler,
-    BadgeBoard
+    BadgeBoard,
+    Dojo
 }
 public enum BadgeType{
     Level,

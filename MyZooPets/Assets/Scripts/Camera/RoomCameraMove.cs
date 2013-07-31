@@ -6,8 +6,10 @@ public class RoomCameraMove : CameraMove{
     protected GameObject shelf;
     protected Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
 
+    protected GameObject dojo;
+    protected Vector3 dojoFinalFaceDirection = new Vector3(0, 0, 0);
+
     protected GameObject badgeBoard;
-    //todo
     protected Vector3 badgeBoardFinalFaceDirection = new Vector3(0, 0, 0);
 
     protected Vector3 petSideFinalPosition;
@@ -28,6 +30,7 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
     protected Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
     protected Vector3 badgeBoardCameraOffset = new Vector3(-24.53f, 0.8f, 54.89f); // use this whenever changing badgeBoardFinalPosition
+    protected Vector3 dojoCameraOffset = new Vector3(40.5f,8f,20f);
     // this way, the camera will always go to the pet
 
     protected GameObject spritePet;
@@ -41,6 +44,7 @@ public class RoomCameraMove : CameraMove{
         teddyInhaler = GameObject.Find("GO_TeddyInhaler");
         shelf = GameObject.Find("GO_Shelf");
         badgeBoard = GameObject.Find("GO_HousePlaque");
+        dojo = GameObject.Find("GO_Dojo");
     }
 
     public override void ZoomToggle(ZoomItem item){
@@ -75,6 +79,11 @@ public class RoomCameraMove : CameraMove{
                     case ZoomItem.BadgeBoard:
                     Vector3 badgeBoardFinalPosition = badgeBoard.transform.localPosition + badgeBoardCameraOffset;
                     CameraTransformEnterMode(badgeBoardFinalPosition,badgeBoardFinalFaceDirection, 1.0f);
+                    break;
+
+                    case ZoomItem.Dojo:
+                    Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset; 
+                    CameraTransformEnterMode(dojoFinalPosition, dojoFinalFaceDirection, 1.0f);
                     break;
 
                     default:

@@ -35,7 +35,7 @@ public class Tummy : MonoBehaviour {
             } else if (angle < 180) { //swipe down
                 PetSpeech.Instance.Talk("boooo");
             } else if (angle < 270) { //swipe left
-                PetSpeech.Instance.Talk("shake that ass");
+                PetSpeech.Instance.Talk("shake that butt");
             } else { //swipe up
                 PetSpeech.Instance.Talk("having fun?");
             }

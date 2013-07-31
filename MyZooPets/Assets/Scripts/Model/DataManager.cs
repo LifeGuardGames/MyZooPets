@@ -507,10 +507,14 @@ public class DataManager : MonoBehaviour {
 
             //Badge
             badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
+            int counter = 0;
             for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
                 BadgeData badgeData = new BadgeData();
-                badgeData.IsAwarded = true;
-				badgeData.Tier = BadgeTier.Gold;
+                if(counter < 7){
+                    badgeData.IsAwarded = true;
+                    badgeData.Tier = BadgeTier.Gold;
+                }
+                counter++;
                 badgeStatus[i] = badgeData;
             }
 

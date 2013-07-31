@@ -32,7 +32,7 @@ public class DegradationLogic : MonoBehaviour {
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 
     private float timer = 0;
-    private float timeInterval = 30f; //time interval for trigger to affect health
+    private float timeInterval = 10f; //time interval for trigger to affect health
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 

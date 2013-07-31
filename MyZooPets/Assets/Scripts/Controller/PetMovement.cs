@@ -31,6 +31,8 @@ public class PetMovement : MonoBehaviour {
     private Transform planeLeft;
 
     private GameObject petSprite;
+    private tk2dSpriteAnimator anim;
+
     private Vector3 destinationPoint;
     private TapItem tapItem;
     public Camera mainCamera;
@@ -48,6 +50,8 @@ public class PetMovement : MonoBehaviour {
         tapItem = GetComponent<TapItem>();
         planeCenter = transform.Find("planeCenter");
         planeRight = transform.Find("planeRight");
+
+        anim = petSprite.GetComponent<tk2dSpriteAnimator>();
     }
 
     void Start(){
@@ -81,6 +85,14 @@ public class PetMovement : MonoBehaviour {
 		}
 	}
 
+    private void OnAnimationFinished(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+        if(moving){
+            anim.Play("HappyWalk");
+        }else{
+            anim.Play("HappyIdle");
+        }
+    }
+
     private void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
@@ -91,6 +103,10 @@ public class PetMovement : MonoBehaviour {
             if (hit.collider == planeCenter.collider || planeRight.collider){
             	if(moving == false){
                 	destinationPoint = hit.point;
+                    if(!anim.IsPlaying("HappyWalk")){
+                        anim.Play("HappyWalk");
+                        anim.AnimationCompleted = OnAnimationFinished;
+                    }
 					moving = true;
 				}
             }
@@ -124,11 +140,11 @@ public class PetMovement : MonoBehaviour {
     private void ChangePetFacingDirection(){
         if (destinationPoint.x > petSprite.transform.position.x){
             // face right
-            petSprite.GetComponent<tk2dSprite>().FlipX = false;
+            petSprite.GetComponent<tk2dSprite>().FlipX = true;
         }
         else {
             // face left
-            petSprite.GetComponent<tk2dSprite>().FlipX = true;
+            petSprite.GetComponent<tk2dSprite>().FlipX = false;
         }
     }
 

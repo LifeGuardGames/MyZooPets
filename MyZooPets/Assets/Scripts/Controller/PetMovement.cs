@@ -28,6 +28,7 @@ public class PetMovement : MonoBehaviour {
 
     private Transform planeCenter;
     private Transform planeRight;
+    private Transform planeLeft;
 
     private GameObject petSprite;
     private Vector3 destinationPoint;
@@ -56,7 +57,18 @@ public class PetMovement : MonoBehaviour {
         if(allowPetMoveAround) InvokeRepeating("PetWalkAround",5f,5f);
     }
 
-	public void movePetWithCamera(){
+    // Update is called once per frame
+    void Update () {
+        if (petSprite != null){
+            if (ClickManager.CanRespondToTap()){
+                petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
+                    destinationPoint,5f * Time.deltaTime);
+            }
+            if(petSprite.transform.position == destinationPoint) moving = false;
+        }
+    }
+
+	public void MovePetWithCamera(){
 		Ray ray = mainCamera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)){
@@ -69,7 +81,7 @@ public class PetMovement : MonoBehaviour {
 		}
 	}
 
-    void MovePet(){
+    private void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
 
@@ -87,7 +99,7 @@ public class PetMovement : MonoBehaviour {
     }
 
     //need to check if the pet moved out of the walk area
-	void PetWalkAround(){
+	private void PetWalkAround(){
 		// //Get a random value for pet to move.
 		// float ran1 = Random.value;
 		// float ran2 = Random.value;
@@ -109,7 +121,7 @@ public class PetMovement : MonoBehaviour {
   //       }
 	}
 
-    void ChangePetFacingDirection(){
+    private void ChangePetFacingDirection(){
         if (destinationPoint.x > petSprite.transform.position.x){
             // face right
             petSprite.GetComponent<tk2dSprite>().FlipX = false;
@@ -120,14 +132,5 @@ public class PetMovement : MonoBehaviour {
         }
     }
 
-	// Update is called once per frame
-	void Update () {
-        if (petSprite != null){
-            if (ClickManager.CanRespondToTap()){
-                petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
-                    destinationPoint,5f * Time.deltaTime);
-            }
-            if(petSprite.transform.position == destinationPoint) moving = false;
-        }
-	}
+	
 }

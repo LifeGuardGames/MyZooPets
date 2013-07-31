@@ -29,8 +29,9 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
     protected Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
     protected Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
-    protected Vector3 badgeBoardCameraOffset = new Vector3(-24.53f, 0.8f, 54.89f); // use this whenever changing badgeBoardFinalPosition
-    protected Vector3 dojoCameraOffset = new Vector3(40.5f,8f,20f);
+//    protected Vector3 badgeBoardCameraOffset = new Vector3(-24.53f, 0.8f, 54.89f); // use this whenever changing badgeBoardFinalPosition
+	protected Vector3 badgeBoardCameraOffset = new Vector3(0f, 0f, 0f); // use this whenever changing badgeBoardFinalPosition
+	protected Vector3 dojoCameraOffset = new Vector3(40.5f,8f,20f);
     // this way, the camera will always go to the pet
 
     protected GameObject spritePet;
@@ -78,12 +79,14 @@ public class RoomCameraMove : CameraMove{
 
                     case ZoomItem.BadgeBoard:
                     Vector3 badgeBoardFinalPosition = badgeBoard.transform.localPosition + badgeBoardCameraOffset;
-                    CameraTransformEnterMode(badgeBoardFinalPosition,badgeBoardFinalFaceDirection, 1.0f);
+					// TODO-s i dont understand this code ^, hardcoding. needs fixing!
+                    CameraTransformEnterMode(new Vector3(.35f, 9f, 24.8f),badgeBoardFinalFaceDirection, 1.0f);
                     break;
 
                     case ZoomItem.Dojo:
-                    Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset; 
-                    CameraTransformEnterMode(dojoFinalPosition, dojoFinalFaceDirection, 1.0f);
+                    Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset;
+					// TODO-s i dont understand this code ^, hardcoding. needs fixing!
+                    CameraTransformEnterMode(new Vector3(.19f, 6.82f, 31.34f), dojoFinalFaceDirection, 1.0f);
                     break;
 
                     default:

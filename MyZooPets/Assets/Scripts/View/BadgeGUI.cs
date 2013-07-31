@@ -26,6 +26,7 @@ public class BadgeGUI : MonoBehaviour {
 																//from BadgeLogic.Instance.LevelBadges
 	public UIAtlas badgeAtlas;
 
+	//TODO-s refactor this dam script!!!!
 	// Use this for initialization
 	void Start (){
 		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
@@ -71,6 +72,10 @@ public class BadgeGUI : MonoBehaviour {
 		}
 	}
 
+	public void disableBackButton(){
+		isActive = false;
+	}
+
 	// // Parses the level of the badge
 	// private int parseLevelsBadge(string badgeName){
 	// 	return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
@@ -78,9 +83,10 @@ public class BadgeGUI : MonoBehaviour {
 
 	// When a badge is clicked. Zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
-		Debug.Log(go.name);
+		disableBackButton();
 
 		BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
+
 		if(meta != null){
 			GameObject titleGO = GameObject.Find("Label_Title") as GameObject;
 
@@ -91,52 +97,57 @@ public class BadgeGUI : MonoBehaviour {
 			GameObject descriptionGO = GameObject.Find("Label_Description") as GameObject;
 			UILabel descriptionLabel = descriptionGO.GetComponent<UILabel>();
 			descriptionLabel.text = meta.description;
+
+			// Spawn BG with collider
+			// Parent object needs to be 0, 0px;
+			UISprite bgSprite = NGUITools.AddSprite(descriptionObject, badgeAtlas, "box30");
+			bgSprite.type = UISprite.Type.Sliced;
+			bgSprite.color = new Color(0f, 0f, 0f, 0.6f);
+			bgSprite.depth = 50;
+			bgPanel = bgSprite.gameObject;
+			bgPanel.transform.localScale = new Vector3(3000f, 3000f, 1);
+			bgPanel.transform.localPosition = new Vector3(0f, 0f ,0f);
+			BoxCollider collider = bgPanel.AddComponent<BoxCollider>();
+			collider.size = new Vector3(3000f, 3000f, 1f);
+	
+			// Spawn cloned badge
+			GameObject spriteObject = GameObject.Find(go.name + "/badgeSprite");
+			UISprite originalSprite = spriteObject.GetComponent<UISprite>();
+	
+			UISprite badgeSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalSprite.spriteName);
+			Vector3 position = UIUtility.Instance.mainCameraWorld2Screen(go.transform.position);
+			badgeSprite.transform.localPosition = new Vector3(position.x, position.y, 0f);
+			badgeSprite.transform.localScale = new Vector3(100f, 100f, 0f);
+			badgeSprite.depth = 103;
+	
+			LeanTween.moveLocal(badgeSprite.gameObject, new Vector3(400, 400f, 0f), 0.4f);
+			LeanTween.scale(badgeSprite.gameObject, new Vector3(512f, 512, 0f), 0.4f);
+	
+	
+	
+			GameObject tierObject = GameObject.Find(go.name + "/tier");
+			UISprite originalTier = tierObject.GetComponent<UISprite>();
+	
+			if(tierObject != null){
+				// TODO refactor into function, used twice
+				UISprite tierSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalTier.spriteName);
+				tierSprite.transform.localPosition = new Vector3(position.x + 40f, position.y - 40f, 0f);
+				tierSprite.transform.localScale = new Vector3(34f, 50f, 1f);
+				tierSprite.depth = 104;
+	
+		//		LeanTween.delayedCall(badgeSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
+		//		LeanTween.delayedCall(tierSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
+				// TODO-s error thrown here...
+				LeanTween.moveLocal(tierSprite.gameObject, new Vector3(600f, 200f, 0f), 0.4f);
+				LeanTween.scale(tierSprite.gameObject, new Vector3(170f, 250, 0f), 0.4f);
+			}
+	
+			OpenDescription();
+
 		}
 		else{
 			Debug.LogError("No Metadata attached on badge");
 		}
-
-		// Spawn BG with collider
-		// Parent object needs to be 0, 0px;
-		UISprite bgSprite = NGUITools.AddSprite(descriptionObject, badgeAtlas, "box30");
-		bgSprite.type = UISprite.Type.Sliced;
-		bgSprite.color = new Color(0f, 0f, 0f, 0.6f);
-		bgSprite.depth = 50;
-		bgPanel = bgSprite.gameObject;
-		bgPanel.transform.localScale = new Vector3(3000f, 3000f, 1);
-		bgPanel.transform.localPosition = new Vector3(0f, 0f ,0f);
-		BoxCollider collider = bgPanel.AddComponent<BoxCollider>();
-		collider.size = new Vector3(3000f, 3000f, 1f);
-
-		// Spawn cloned badge
-		GameObject spriteObject = GameObject.Find(go.name + "/badgeSprite");
-		UISprite originalSprite = spriteObject.GetComponent<UISprite>();
-
-		UISprite badgeSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalSprite.spriteName);
-		Vector3 position = UIUtility.Instance.mainCameraWorld2Screen(go.transform.position);
-		badgeSprite.transform.localPosition = new Vector3(position.x, position.y, 0f);
-		badgeSprite.transform.localScale = new Vector3(100f, 100f, 0f);
-		badgeSprite.depth = 103;
-
-
-		GameObject tierObject = GameObject.Find(go.name + "/tier");
-		UISprite originalTier = tierObject.GetComponent<UISprite>();
-
-		// TODO refactor into function, used twice
-		UISprite tierSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalTier.spriteName);
-		tierSprite.transform.localPosition = new Vector3(position.x + 40f, position.y - 40f, 0f);
-		tierSprite.transform.localScale = new Vector3(34f, 50f, 1f);
-		tierSprite.depth = 104;
-
-//		LeanTween.delayedCall(badgeSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
-//		LeanTween.delayedCall(tierSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
-		// TODO-s error thrown here...
-		LeanTween.moveLocal(badgeSprite.gameObject, new Vector3(400, 400f, 0f), 0.4f);
-		LeanTween.scale(badgeSprite.gameObject, new Vector3(512f, 512, 0f), 0.4f);
-		LeanTween.moveLocal(tierSprite.gameObject, new Vector3(600f, 200f, 0f), 0.4f);
-		LeanTween.scale(tierSprite.gameObject, new Vector3(170f, 250, 0f), 0.4f);
-
-		OpenDescription();
 	}
 
 	public void OpenDescription(){
@@ -148,6 +159,8 @@ public class BadgeGUI : MonoBehaviour {
 		badgeGUISpawnBase.transform.DestroyChildren();
 
 		Destroy(bgPanel);
+
+		BadgeBoardClicked();
 	}
 
 	public void BadgeBoardClicked(){

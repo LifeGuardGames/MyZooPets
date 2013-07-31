@@ -126,9 +126,9 @@ public class BadgeGUI : MonoBehaviour {
 	
 	
 			GameObject tierObject = GameObject.Find(go.name + "/tier");
-			UISprite originalTier = tierObject.GetComponent<UISprite>();
-	
+
 			if(tierObject != null){
+				UISprite originalTier = tierObject.GetComponent<UISprite>();
 				// TODO refactor into function, used twice
 				UISprite tierSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeAtlas, originalTier.spriteName);
 				tierSprite.transform.localPosition = new Vector3(position.x + 40f, position.y - 40f, 0f);

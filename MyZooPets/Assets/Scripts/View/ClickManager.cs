@@ -278,10 +278,6 @@ public class ClickManager : MonoBehaviour {
 		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
 	}
-
-
-
-
 	//=======================
 
 

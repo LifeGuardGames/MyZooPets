@@ -14,6 +14,7 @@ public class BadgeGUI : MonoBehaviour {
 	public GUIStyle blankButtonStyle;
 
 	public GameObject badgeBoard;
+	public GameObject descriptionObject;
 	private bool isActive = false;
 
 	public List<GameObject> LevelList = new List<GameObject>(); //list of badge gameobjects
@@ -27,7 +28,7 @@ public class BadgeGUI : MonoBehaviour {
 			int levelNumber = badge.ID;
 			if(badge.IsAwarded){
 				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
-					
+
 				// Display the tier if applicable
 				if(badge.Tier != BadgeTier.Null){
 					 UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeAtlas, "badgeAddon" + badge.Tier.ToString());
@@ -36,6 +37,10 @@ public class BadgeGUI : MonoBehaviour {
 					 tier.transform.localScale = new Vector3(34f, 50f, 1f);
 					 tier.transform.localPosition = new Vector3(40f, -40f, 0);
 				}
+			}
+			else{
+				// Activate the dark version of the badge
+				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber + "Dark";
 			}
 		}
 	}
@@ -60,9 +65,18 @@ public class BadgeGUI : MonoBehaviour {
 	// 	return int.Parse(badgeName.Substring(badgeName.IndexOf(" ") + 1));
 	// }
 
-	// When a badge is clicked. zoom in on the badge and display detail information
+	// When a badge is clicked. Zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
 		Debug.Log(go.name);
+		OpenDescription();
+	}
+
+	public void OpenDescription(){
+		descriptionObject.GetComponent<MoveTweenToggle>().Show();
+	}
+
+	public void CloseDescription(){
+		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
 	}
 
 	public void BadgeBoardClicked(){

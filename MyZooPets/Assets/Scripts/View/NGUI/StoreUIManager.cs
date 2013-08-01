@@ -110,7 +110,7 @@ public class StoreUIManager : MonoBehaviour {
 	public void OnBuyButton(GameObject button){
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		int itemId = int.Parse(button.transform.parent.name);
-		if(DataManager.Stars >= cost){
+		if(DataManager.Instance.Stats.Stars >= cost){
 			inventory.AddItem(itemId, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);

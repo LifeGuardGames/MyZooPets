@@ -28,19 +28,19 @@ public class Badge{
         get{return description;}
     }
     //True: Show badge in UI, False: Black out
-    public bool IsAwarded{ //returns data that were serialized from DataManager
-        get{return DataManager.BadgeStatus[id].IsAwarded;}
-        set{DataManager.BadgeStatus[id].IsAwarded = value;}
+    public bool IsAwarded{ //returns data that were serialized fromDataManager.Instance 
+        get{return DataManager.Instance.BadgeStatus[id].IsAwarded;}
+        set{DataManager.Instance.BadgeStatus[id].IsAwarded = value;}
     }
     //If badge type is Level, then Tier tells UI what kind of badge to show (gold, silver, bronze)
-    public BadgeTier Tier{ //get data from DataManager
-        get{return DataManager.BadgeStatus[id].Tier;}
-        set{DataManager.BadgeStatus[id].Tier = value;}
+    public BadgeTier Tier{ //get data fromDataManager.Instance 
+        get{return DataManager.Instance.BadgeStatus[id].Tier;}
+        set{DataManager.Instance.BadgeStatus[id].Tier = value;}
     }
     //True: New Badge show fancy animation, False: no animation
     public bool IsBadgeNew{
-        get{return DataManager.BadgeStatus[id].IsBadgeNew;}
-        set{DataManager.BadgeStatus[id].IsBadgeNew = value;}        
+        get{return DataManager.Instance.BadgeStatus[id].IsBadgeNew;}
+        set{DataManager.Instance.BadgeStatus[id].IsBadgeNew = value;}        
     }
     //========================================
 }

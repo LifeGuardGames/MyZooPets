@@ -301,7 +301,7 @@ public class ClickManager : MonoBehaviour {
 	}
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
-			if (DataManager.FirstTimeRealInhaler){
+			if (DataManager.Instance.Tutorial.FirstTimeRealInhaler){
 				return; // taken care of in Tutorial.cs
 			}
 			if (CalendarLogic.CanUseRealInhaler){

@@ -134,8 +134,8 @@ public class InhalerGameManager : MonoBehaviour{
         }
         smallRescue.SetActive(false);
 
-        if ((InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair) ||
-            (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.FirstTimeRescue)){
+        if ((InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.Instance.Inhaler.FirstTimeAdvair) ||
+            (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.Instance.Inhaler.FirstTimeRescue)){
             runShowHintTimer = false;
             showHint = true;
         }
@@ -201,11 +201,11 @@ public class InhalerGameManager : MonoBehaviour{
     }
 
     void RemoveFirstTimeFlags(){
-        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.FirstTimeAdvair){
-            DataManager.FirstTimeAdvair = false;
+        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair && DataManager.Instance.Inhaler.FirstTimeAdvair){
+            DataManager.Instance.Inhaler.FirstTimeAdvair = false;
         }
-        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.FirstTimeRescue){
-            DataManager.FirstTimeRescue = false;
+        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue && DataManager.Instance.Inhaler.FirstTimeRescue){
+            DataManager.Instance.Inhaler.FirstTimeRescue = false;
         }
     }
 }

@@ -22,33 +22,33 @@ public class Tutorial : MonoBehaviour {
 
     // For the demo.
     void InhalerMissAndInhalerGame(){
-        if (DataManager.FirstTimeCalendar){
+        if (DataManager.Instance.Tutorial.FirstTimeCalendar){
             calendar.GetComponent<TapItem>().OnTap += openCalendar;
 
             TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
             highlight.ShowArrow();
         }
-        if (DataManager.FirstTimeRealInhaler){
+        if (DataManager.Instance.Tutorial.FirstTimeRealInhaler){
             realInhaler.GetComponent<TapItem>().OnTap += openRealInhaler;
         }
     }
     // For the demo.
     void TrophyDemo(){
-        if (DataManager.FirstTimeShelf){
+        if (DataManager.Instance.Tutorial.FirstTimeShelf){
             TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
             highlight.ShowArrow();
 
             shelf.GetComponent<TapItem>().OnTap += openShelf;
         }
-        if (DataManager.FirstTimeHelpTrophy){
+        if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
             helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
         }
     }
 
     void openCalendar(){
         // added for the demo
-        if (DataManager.FirstTimeCalendar){
-            DataManager.FirstTimeCalendar = false;
+        if (DataManager.Instance.Tutorial.FirstTimeCalendar){
+            DataManager.Instance.Tutorial.FirstTimeCalendar = false;
 
             TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
             highlight.HideArrow();
@@ -76,19 +76,19 @@ public class Tutorial : MonoBehaviour {
     }
 
     void openChallenges(){
-        DataManager.FirstTimeChallenges = false;
+        DataManager.Instance.Tutorial.FirstTimeChallenges = false;
         TutorialHighlighting highlight = challenges.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
     }
 
     void openDiary(){
-        DataManager.FirstTimeDiary = false;
+        DataManager.Instance.Tutorial.FirstTimeDiary = false;
         TutorialHighlighting highlight = diary.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
     }
 
     void openSlotMachine(){
-        DataManager.FirstTimeSlotMachine = false;
+        DataManager.Instance.Tutorial.FirstTimeSlotMachine = false;
         TutorialHighlighting highlight = slotMachine.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
     }
@@ -99,19 +99,19 @@ public class Tutorial : MonoBehaviour {
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
 
-        DataManager.FirstTimeRealInhaler = false;
+        DataManager.Instance.Tutorial.FirstTimeRealInhaler = false;
     }
 
     void openTeddyInhaler(){
         TutorialHighlighting highlight = teddyInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
-        DataManager.FirstTimeTeddyInhaler = false;
+        DataManager.Instance.Tutorial.FirstTimeTeddyInhaler = false;
     }
 
     void openShelf(){
         // added for the demo
-        if (DataManager.FirstTimeHelpTrophy){
-            DataManager.FirstTimeShelf = false;
+        if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
+            DataManager.Instance.Tutorial.FirstTimeShelf = false;
 
             TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
             highlight.HideArrow();
@@ -126,13 +126,13 @@ public class Tutorial : MonoBehaviour {
         if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
             TutorialHighlighting highlight = helpTrophy.GetComponent<TutorialHighlighting>();
             highlight.HideArrow();
-            DataManager.FirstTimeHelpTrophy = false;
+            DataManager.Instance.Tutorial.FirstTimeHelpTrophy = false;
         }
     }
 
     public void DegradTriggerClicked(){
-        if (DataManager.FirstTimeDegradTrigger){
-            DataManager.FirstTimeDegradTrigger = false;
+        if (DataManager.Instance.Tutorial.FirstTimeDegradTrigger){
+            DataManager.Instance.Tutorial.FirstTimeDegradTrigger = false;
             ShowDegradTip1();
         }
     }

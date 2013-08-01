@@ -24,13 +24,6 @@ public class HUDManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	  hudAnimator = GetComponent<HUDAnimator>();
-
-      if(isDebug){ //dummy data for debugging
-        DataManager.AddPoints(100);
-        DataManager.AddStars(100);
-        DataManager.AddHealth(50);
-        DataManager.AddMood(70);
-      }
 	}
 	
 	// Update is called once per frame

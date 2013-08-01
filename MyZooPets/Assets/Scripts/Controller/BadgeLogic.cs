@@ -40,10 +40,10 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
     //Event listener
     private void RewardBadgeOnLevelUp(object sender, EventArgs e){
-        int badgeIndex = (int) DataManager.CurrentLevel;
+        int badgeIndex = (int) DataManager.Instance.Level.CurrentLevel;
         //award badge and make them show in UI
-        DataManager.BadgeStatus[badgeIndex].IsAwarded = true;
-        DataManager.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
+        DataManager.Instance.BadgeStatus[badgeIndex].IsAwarded = true;
+        DataManager.Instance.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
         if(OnNewBadgeAdded != null){
             OnNewBadgeAdded(this, EventArgs.Empty);
         }else{

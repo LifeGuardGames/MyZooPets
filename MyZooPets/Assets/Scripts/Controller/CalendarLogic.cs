@@ -35,7 +35,7 @@ public class CalendarLogic : MonoBehaviour{
         // assume that DateOfSunday is updated by this point
 
         // get days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(-7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.Calendar.DateOfSunday.AddDays(-7).Date);
         int daysPassed = timePassed.Days;
 
         // set all values of entries before today to DosageRecord.Miss
@@ -66,29 +66,29 @@ public class CalendarLogic : MonoBehaviour{
     //====================API=======================
     //Week in a list. In order from Monday to Sunday
     public List<CalendarEntry> GetCalendarEntriesThisWeek{
-        get{return DataManager.EntriesThisWeek;}
+        get{return DataManager.Instance.Calendar.EntriesThisWeek;}
     }
 
     //Last week entries. In order from Monday to Sunday. Possible dosage records are
     //Hit, Miss, and LeaveBlank
     public List<CalendarEntry> GetCalendarEntriesLastWeek{
-        get{return DataManager.EntriesLastWeek;}
+        get{return DataManager.Instance.Calendar.EntriesLastWeek;}
     }
 
     //Return the count of all the checks for this week
     public int GreenStampCount{
-        get{return DataManager.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
+        get{return DataManager.Instance.Calendar.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
             entry.NightTime.Equals(DosageRecord.Hit))).Count;}
     }
 
     //Return the next time the user can collect bonuses
     public DateTime NextPlayPeriod{
-        get{return DataManager.NextPlayPeriod;}
+        get{return DataManager.Instance.Calendar.NextPlayPeriod;}
     }
 
     public bool IsRewardClaimed{
-        get{return DataManager.IsRewardClaimed;}
-        set{DataManager.IsRewardClaimed = value;}
+        get{return DataManager.Instance.Calendar.IsRewardClaimed;}
+        set{DataManager.Instance.Calendar.IsRewardClaimed = value;}
     }
 
     //Based on the time now return the next reward time
@@ -151,7 +151,7 @@ public class CalendarLogic : MonoBehaviour{
     public void CalendarOpened(){
         DateTime now = DateTime.Now;
         UpdateCalendar(now);
-        DataManager.LastCalendarOpenedTime = now;
+        DataManager.Instance.Calendar.LastCalendarOpenedTime = now;
 
         if(OnCalendarReset != null){
             OnCalendarReset(this, EventArgs.Empty);
@@ -178,11 +178,11 @@ public class CalendarLogic : MonoBehaviour{
 
     //Play period is every 12 hr. Reward and punishment renews every play period
     private void ResetForNextPlayPeriod(DateTime now){
-        if(now < DataManager.NextPlayPeriod) return; //not next play period yet return
+        if(now < DataManager.Instance.Calendar.NextPlayPeriod) return; //not next play period yet return
         print("reset");
         //reset green stamps
         for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
-            CalendarEntry entry = DataManager.EntriesThisWeek[i];
+            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
             if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
             if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
         }
@@ -190,7 +190,7 @@ public class CalendarLogic : MonoBehaviour{
         //punish for ex stamps
         int punishmentCounter = 0; // max 2
         for(int i = 0;i < 7; i++){
-            CalendarEntry entry = DataManager.EntriesThisWeek[i];
+            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
             if(entry.DayTime.Equals(DosageRecord.Miss)){
                 StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
                 punishmentCounter++;
@@ -203,18 +203,18 @@ public class CalendarLogic : MonoBehaviour{
         }
 
         //set NextPlayPeriod
-        DataManager.NextPlayPeriod = CalculateNextPlayPeriod();
+        DataManager.Instance.Calendar.NextPlayPeriod = CalculateNextPlayPeriod();
     }
 
     //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)
     private void UpdateWeekReference(DateTime now){
-        if(now.Date > DataManager.DateOfSunday){ //today's date is later than Sunday
+        if(now.Date > DataManager.Instance.Calendar.DateOfSunday){ //today's date is later than Sunday
 
             // If today's date is later than a week past Sunday (two Sundays), then
             // throw away everything and start anew.
-            if(now.Date > DataManager.DateOfSunday.AddDays(7)){
-                DataManager.EntriesLastWeek = MissedWeek();
-                DataManager.EntriesThisWeek = EmptyWeek();
+            if(now.Date > DataManager.Instance.Calendar.DateOfSunday.AddDays(7)){
+                DataManager.Instance.Calendar.EntriesLastWeek = MissedWeek();
+                DataManager.Instance.Calendar.EntriesThisWeek = EmptyWeek();
             }
             // Else, we want to move everything up by one week. Move this week array to last week
             // array and create an empty array of entries for this week.
@@ -222,7 +222,7 @@ public class CalendarLogic : MonoBehaviour{
                 // if there are any missed entries fill them with misses before moving
                 // them to last week array. 
                 for (int i = 0; i < 7; i++){
-                    CalendarEntry entry = DataManager.EntriesThisWeek[i];
+                    CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
                     if (entry.DayTime == DosageRecord.Null){
                         entry.DayTime = DosageRecord.Miss;
                     }
@@ -232,12 +232,12 @@ public class CalendarLogic : MonoBehaviour{
                 }
 
                 //move this week array to last week array
-                DataManager.EntriesLastWeek = DataManager.EntriesThisWeek;
+                DataManager.Instance.Calendar.EntriesLastWeek = DataManager.Instance.Calendar.EntriesThisWeek;
                 //create new list for the new week
-                DataManager.EntriesThisWeek = EmptyWeek();
+                DataManager.Instance.Calendar.EntriesThisWeek = EmptyWeek();
             }
 
-            DataManager.DateOfSunday = GetDateOfSunday(now);
+            DataManager.Instance.Calendar.DateOfSunday = GetDateOfSunday(now);
         }
     }
 
@@ -246,13 +246,13 @@ public class CalendarLogic : MonoBehaviour{
         // assume that DateOfSunday is updated by this point
 
         // days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.DateOfSunday.AddDays(-7).Date);
+        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.Calendar.DateOfSunday.AddDays(-7).Date);
         int daysPassed = timePassed.Days;
 
         // replace all the DosageRecord.Null values with DosageRecord.Miss
         // (except today's)
         for (int i = 0; i < daysPassed - 1; i++){
-            CalendarEntry entry = DataManager.EntriesThisWeek[i];
+            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
             if (entry.DayTime == DosageRecord.Null){
                 entry.DayTime = DosageRecord.Miss;
             }
@@ -262,7 +262,7 @@ public class CalendarLogic : MonoBehaviour{
         }
 
         // update reference to todaysEntry
-        todaysEntry = DataManager.EntriesThisWeek[daysPassed - 1];
+        todaysEntry = DataManager.Instance.Calendar.EntriesThisWeek[daysPassed - 1];
 
         // fill in specifically for today
         FillInMissesForToday(now);

@@ -23,7 +23,7 @@ public class LevelUpLogic : MonoBehaviour {
 
     //The point requirement for next level up
     public static int NextLevelPoints(){
-        return levelPoints[(int)DataManager.CurrentLevel + 1];
+        return levelPoints[(int)DataManager.Instance.Level.CurrentLevel + 1];
     }
 
     //The trophy that is awarded at the time of level up
@@ -47,18 +47,18 @@ public class LevelUpLogic : MonoBehaviour {
 
     //Check if the pet is ready to level up
     private void CanLevelUp(){
-        int nextLevelIndex = (int)DataManager.CurrentLevel + 1;
-        bool canLevelUp = DataManager.Points >= levelPoints[nextLevelIndex];
+        int nextLevelIndex = (int)DataManager.Instance.Level.CurrentLevel + 1;
+        bool canLevelUp = DataManager.Instance.Stats.Points >= levelPoints[nextLevelIndex];
         if(canLevelUp){
             canCheckLevelUp = false;
-            if(DataManager.LevelUpAverageCum <= OK_CARE){ //bad care
+            if(DataManager.Instance.Level.LevelUpAverageCum <= OK_CARE){ //bad care
                 awardBadge = BadgeTier.Bronze; 
-            }else if(DataManager.LevelUpAverageCum <= GOOD_CARE){ //ok care
+            }else if(DataManager.Instance.Level.LevelUpAverageCum <= GOOD_CARE){ //ok care
                 awardBadge = BadgeTier.Silver;
             }else{ //good care
                 awardBadge = BadgeTier.Gold;
             }     
-            DataManager.CurrentLevel = (Level)nextLevelIndex;
+            DataManager.Instance.Level.CurrentLevel = (Level)nextLevelIndex;
 
             canCheckLevelUp = true;
         }
@@ -66,28 +66,28 @@ public class LevelUpLogic : MonoBehaviour {
 
     //calculate evolution meter
 	private void UpdateLevelUpAverage(){
-		int cumDurationSecs = (int)DataManager.DurationCum.TotalSeconds;
+		int cumDurationSecs = (int)DataManager.Instance.Level.DurationCum.TotalSeconds;
 
 		DateTime now = DateTime.Now;
-		TimeSpan tempd = now.Subtract(DataManager.LastLevelUpdatedTime);
+		TimeSpan tempd = now.Subtract(DataManager.Instance.Level.LastLevelUpdatedTime);
 		int timeElapsedInSecs = (int)tempd.TotalSeconds; //how many seconds since last played
 
 		double levelUpMeter = getLevelUpMeter();
 
         //calculate the evo average based on the evoMeter now and the last evoMeter
-		double levelUpAverageNow = (levelUpMeter + DataManager.LastLevelUpMeter) / 2;
+		double levelUpAverageNow = (levelUpMeter + DataManager.Instance.Level.LastLevelUpMeter) / 2;
 
 		//calculate the average evolution value, over the period of gameplay starting
         //from hatching the pet up to now
-		DataManager.LevelUpAverageCum = (DataManager.LevelUpAverageCum * cumDurationSecs +
+		DataManager.Instance.Level.LevelUpAverageCum = (DataManager.Instance.Level.LevelUpAverageCum * cumDurationSecs +
             levelUpAverageNow * timeElapsedInSecs) / (cumDurationSecs + timeElapsedInSecs);
-		DataManager.LastLevelUpdatedTime = now;
-		DataManager.DurationCum += tempd;
-		DataManager.LastLevelUpMeter = levelUpMeter;
+		DataManager.Instance.Level.LastLevelUpdatedTime = now;
+		DataManager.Instance.Level.DurationCum += tempd;
+		DataManager.Instance.Level.LastLevelUpMeter = levelUpMeter;
 	}
 
     //get the weighted evolution meter
 	private static double getLevelUpMeter(){
-		return 0.5 * DataManager.Mood + 0.5 * DataManager.Health;
+		return 0.5 * DataManager.Instance.Stats.Mood + 0.5 * DataManager.Instance.Stats.Health;
 	}
 }

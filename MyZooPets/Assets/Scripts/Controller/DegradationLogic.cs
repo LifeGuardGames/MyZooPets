@@ -26,7 +26,7 @@ public class DegradationLogic : MonoBehaviour {
     //=====================================================
 
     public List<DegradData> DegradationTriggers{
-        get{return DataManager.DegradationTriggers;}
+        get{return DataManager.Instance.Degradation.DegradationTriggers;}
     }
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
@@ -38,22 +38,22 @@ public class DegradationLogic : MonoBehaviour {
 
     void Awake(){
         DateTime now = DateTime.Now;
-        TimeSpan sinceLastPlayed = now.Date - DataManager.LastTimeUserPlayedGame.Date;
+        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.Degradation.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;;
 
         if(sinceLastPlayed.Days > 0){ //reset if new day
-            DataManager.MorningTrigger = true;
-            DataManager.AfternoonTrigger = true;
+            DataManager.Instance.Degradation.MorningTrigger = true;
+            DataManager.Instance.Degradation.AfternoonTrigger = true;
         }
         if(now.Hour > 12){ //morning
-            if(DataManager.MorningTrigger){
+            if(DataManager.Instance.Degradation.MorningTrigger){
                 numberOfTriggersToInit = 3;
-                DataManager.MorningTrigger = false;
+                DataManager.Instance.Degradation.MorningTrigger = false;
             }
         }else{ //afternoon
-            if(DataManager.AfternoonTrigger){
+            if(DataManager.Instance.Degradation.AfternoonTrigger){
                 numberOfTriggersToInit = 3; 
-                DataManager.AfternoonTrigger = false;
+                DataManager.Instance.Degradation.AfternoonTrigger = false;
             }
 
         }
@@ -61,7 +61,7 @@ public class DegradationLogic : MonoBehaviour {
         //create triggers
         for(int i=0; i<numberOfTriggersToInit; i++){
             //don't add anymore triggers if there are already 6
-            if(DataManager.DegradationTriggers.Count == NUMBER_OF_LOC) break;
+            if(DataManager.Instance.Degradation.DegradationTriggers.Count == NUMBER_OF_LOC) break;
 
             //random location and prefab
             int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
@@ -75,11 +75,11 @@ public class DegradationLogic : MonoBehaviour {
             
             //spawn them at a pre define location
             //ID is the order in which the data are created
-            DataManager.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
+            DataManager.Instance.Degradation.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
             
         }                
 
-        DataManager.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
+        DataManager.Instance.Degradation.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
     }
 
     void Update(){
@@ -93,7 +93,7 @@ public class DegradationLogic : MonoBehaviour {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
 		Vector3 triggerPos = Vector3.zero;
-        DegradData degradData = DataManager.DegradationTriggers.Find(x => x.ID == id);
+        DegradData degradData = DataManager.Instance.Degradation.DegradationTriggers.Find(x => x.ID == id);
         if(OnTriggerDestroyed != null){ //call event handler if not empty
             TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
             args.TriggerPosition = triggerLocations[degradData.PositionId].position;
@@ -102,12 +102,12 @@ public class DegradationLogic : MonoBehaviour {
             Debug.LogError("Trigger Destroyed listener is null");
         }
 		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
-        DataManager.DegradationTriggers.Remove(degradData);
+        DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);
     }
 
     //triggers decreases health every 30 sec
     private void TriggerDegradesHealth(){
-        int triggerCount = DataManager.DegradationTriggers.Count;
+        int triggerCount = DataManager.Instance.Degradation.DegradationTriggers.Count;
         int minusHealth = 0;
 
         int additionalTrigger = triggerCount - 3;

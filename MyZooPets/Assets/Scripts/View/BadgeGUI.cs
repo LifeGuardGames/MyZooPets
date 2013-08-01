@@ -146,8 +146,6 @@ public class BadgeGUI : MonoBehaviour {
 				tierSprite.transform.localScale = new Vector3(39f, 50f, 1f);
 				tierSprite.depth = 104;
 	
-		//		LeanTween.delayedCall(badgeSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
-		//		LeanTween.delayedCall(tierSprite.gameObject ,5.0f,"loadtips", new object[]{"onCompleteTarget", this} );
 				// TODO-s error thrown here...
 				LeanTween.moveLocal(tierSprite.gameObject, new Vector3(600f, 200f, -1.1f), 0.4f);
 				LeanTween.scale(tierSprite.gameObject, new Vector3(170f, 250, 0f), 0.4f);

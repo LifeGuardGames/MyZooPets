@@ -13,28 +13,28 @@ public class DataManager : Singleton<DataManager>{
     private bool loaded = false;
     //=====================================
 
-    private bool isCreated = false; //prevent DataManager from being loaded
-                                            //again during scene change
+    private static bool isCreated = false; //prevent DataManager from being loaded
+                                            //again during scene change (needs to be static)
     private bool firstTime; //is the user playing for the first time
 
     //==========SaveData============
 
     [SerializeThis] 
-    public StatsData Stats{get; set;}
+    public StatsData Stats;
     [SerializeThis]
-    public LevelUpData Level{get; set;}
+    public LevelUpData Level;
     [SerializeThis]
-    public CalendarData Calendar{get; set;}
+    public CalendarData Calendar;
     [SerializeThis]
-    public DegradationData Degradation{get; set;}
+    public DegradationData Degradation;
     [SerializeThis]
-    public InhalerData Inhaler{get; set;}
+    public InhalerData Inhaler;
     [SerializeThis]
-    public TutorialData Tutorial{get; set;}
+    public TutorialData Tutorial;
     [SerializeThis]
-    public InventoryData Inventory{get; set;}
+    public InventoryData Inventory;
     [SerializeThis]
-    public DojoData Dojo{get; set;}
+    public DojoData Dojo;
 
     //pet info
     [SerializeThis]

@@ -105,9 +105,9 @@ public class FirstTimeNGUI : MonoBehaviour {
 
     // Callback for closing edit panel
     private void HelperFinishEditPet(){
-        DataManager.PetName = petName;
-        DataManager.PetColor = petColor;
-        DataManager.TurnFirstTimeOff();
+        DataManager.Instance.PetName = petName;
+        DataManager.Instance.PetColor = petColor;
+        DataManager.Instance.TurnFirstTimeOff();
 
         // // Spawn pet object
         // // GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;

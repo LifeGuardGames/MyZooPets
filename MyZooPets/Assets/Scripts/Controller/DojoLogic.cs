@@ -20,13 +20,13 @@ public class DojoLogic : Singleton<DojoLogic> {
     }
 
     public void Buy(DojoSkillType skillType){
-        if (DataManager.NumOfPurchasedSkills < numSkillsUnlocked){ // Still enough skill slots
+        if (DataManager.Instance.Dojo.NumOfPurchasedSkills < numSkillsUnlocked){ // Still enough skill slots
             int index = (int)skillType;
             DojoSkill skill = skills[index];
-            if (DataManager.Stars >= skill.CostStars){ // can afford it
-                DataManager.SubtractStars(skill.CostStars);
-                DataManager.PurchasedSkills[index] = true;
-                DataManager.NumOfPurchasedSkills ++;
+            if (DataManager.Instance.Stats.Stars >= skill.CostStars){ // can afford it
+                DataManager.Instance.Stats.SubtractStars(skill.CostStars);
+                DataManager.Instance.Dojo.PurchasedSkills[index] = true;
+                DataManager.Instance.Dojo.NumOfPurchasedSkills ++;
             }
         }
     }
@@ -58,15 +58,16 @@ public class DojoLogic : Singleton<DojoLogic> {
     }
 
     void Update(){
+        //To Do. define a listener for OnLevelUp
         // check if can unlock additional skills
-        if (DataManager.CurrentLevel != lastRecordedLevel){
+        if (DataManager.Instance.Level.CurrentLevel != lastRecordedLevel){
             UpdateNumSkillsShown();
-            lastRecordedLevel = DataManager.CurrentLevel;
+            lastRecordedLevel = DataManager.Instance.Level.CurrentLevel;
         }
     }
 
     void UpdateNumSkillsShown(){
-        numSkillsUnlocked = (int)DataManager.CurrentLevel / 3 * 2; // 2 additional skill slots unlocked every 3 levels
+        numSkillsUnlocked = (int)DataManager.Instance.Level.CurrentLevel / 3 * 2; // 2 additional skill slots unlocked every 3 levels
         numSkillsUnlocked += 1; // to account for the first skill given by default
     }
 

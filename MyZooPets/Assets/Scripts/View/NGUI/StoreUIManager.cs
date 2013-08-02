@@ -110,7 +110,7 @@ public class StoreUIManager : MonoBehaviour {
 	public void OnBuyButton(GameObject button){
 		int cost = int.Parse(button.transform.parent.FindChild("ItemCost").GetComponent<UILabel>().text);
 		int itemId = int.Parse(button.transform.parent.name);
-		if(DataManager.Stars >= cost){
+		if(DataManager.Instance.Stats.Stars >= cost){
 			inventory.AddItem(itemId, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
@@ -129,7 +129,7 @@ public class StoreUIManager : MonoBehaviour {
 		if(page == null || page.name == "Food"){
 			uisprite.atlas = BackGroundRed;
 			for(int i = 0;i<itemlogic.FoodList.Count;i++){
-				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.FoodList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].description;
@@ -143,7 +143,7 @@ public class StoreUIManager : MonoBehaviour {
 		else if(page.name == "Item"){
 			uisprite.atlas = BackGroundGreen;
 			for(int i = 0;i<itemlogic.ItemList.Count;i++){
-				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.ItemList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].name;
@@ -157,7 +157,7 @@ public class StoreUIManager : MonoBehaviour {
 		else if(page.name == "Decoration"){
 			uisprite.atlas = BackGroundPurple;
 			for(int i = 0;i<itemlogic.DecoList.Count;i++){
-				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.DecoList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].name;
@@ -171,7 +171,7 @@ public class StoreUIManager : MonoBehaviour {
 		else if(page.name == "Inhaler"){
 			uisprite.atlas = BackGroundOrange;
 			for(int i = 0;i<itemlogic.InhalerList.Count;i++){
-				GameObject item = NGUITools.AddChild(grid,ItemPrefab);
+				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.InhalerList[i].ToString();
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].name;

@@ -94,18 +94,17 @@ public class HUDAnimator : MonoBehaviour {
 
 	void Start(){
 		// TODO-j Is this Initialization still valid??!!
-		dataPoints = DataManager.Points;
-		dataStars = DataManager.Stars;
-		dataHealth = DataManager.Health;
-		dataMood = DataManager.Mood;
-		dataHunger = DataManager.Hunger;
+		dataPoints = DataManager.Instance.Stats.Points;
+		dataStars = DataManager.Instance.Stats.Stars;
+		dataHealth = DataManager.Instance.Stats.Health;
+		dataMood = DataManager.Instance.Stats.Mood;
 
-		displayPoints = DataManager.Points;
-		displayStars = DataManager.Stars;
-		displayHealth = DataManager.Health;
-		displayMood = DataManager.Mood;
+		displayPoints = DataManager.Instance.Stats.Points;
+		displayStars = DataManager.Instance.Stats.Stars;
+		displayHealth = DataManager.Instance.Stats.Health;
+		displayMood = DataManager.Instance.Stats.Mood;
 
-		lastLevel = DataManager.CurrentLevel;
+		lastLevel = DataManager.Instance.Level.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.NextLevelPoints();
 	}
 
@@ -130,15 +129,15 @@ public class HUDAnimator : MonoBehaviour {
 
 	//==================GUI Animation=========================
 	private void StarsAnimation(){
-		if(dataStars != DataManager.Stars){
-			if(displayStars > DataManager.Stars){
+		if(dataStars != DataManager.Instance.Stats.Stars){
+			if(displayStars > DataManager.Instance.Stats.Stars){
 				displayStars--;
 				starAnimControl.Play();
-			}else if(displayStars < DataManager.Stars){
+			}else if(displayStars < DataManager.Instance.Stats.Stars){
 				displayStars++;
 				starAnimControl.Play();
 			}else{
-				dataStars = DataManager.Stars;
+				dataStars = DataManager.Instance.Stats.Stars;
 
 				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
@@ -151,15 +150,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void PointsAnimation(){
-		if(dataPoints != DataManager.Points){
-			if(displayPoints < DataManager.Points){ //animate
-				if(displayPoints + 3 <= DataManager.Points){
+		if(dataPoints != DataManager.Instance.Stats.Points){
+			if(displayPoints < DataManager.Instance.Stats.Points){ //animate
+				if(displayPoints + 3 <= DataManager.Instance.Stats.Points){
 					displayPoints += 3;
 				}else{
-					displayPoints += DataManager.Points - displayPoints;
+					displayPoints += DataManager.Instance.Stats.Points - displayPoints;
 				}
 			}else{ //animation done
-				dataPoints = DataManager.Points;
+				dataPoints = DataManager.Instance.Stats.Points;
 
 				// Reset the bar animation flag
 				isAnimatePointsBar = false;
@@ -169,15 +168,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void HealthAnimation(){
-		if(dataHealth != DataManager.Health){
-			if(displayHealth > DataManager.Health){
+		if(dataHealth != DataManager.Instance.Stats.Health){
+			if(displayHealth > DataManager.Instance.Stats.Health){
 				displayHealth--;
 				healthAnimControl.Play();
-			}else if(displayHealth < DataManager.Health){
+			}else if(displayHealth < DataManager.Instance.Stats.Health){
 				displayHealth++;
 				healthAnimControl.Play();
 			}else{
-				dataHealth = DataManager.Health;
+				dataHealth = DataManager.Instance.Stats.Health;
 
 				// Stop grow & shrink. reset icon size
 				healthAnimControl.Stop();
@@ -190,15 +189,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void MoodAnimation(){
-		if(dataMood != DataManager.Mood){
-			if(displayMood > DataManager.Mood){
+		if(dataMood != DataManager.Instance.Stats.Mood){
+			if(displayMood > DataManager.Instance.Stats.Mood){
 				displayMood--;
 				moodAnimControl.Play();
-			}else if(displayMood < DataManager.Mood){
+			}else if(displayMood < DataManager.Instance.Stats.Mood){
 				displayMood++;
 				moodAnimControl.Play();
 			}else{
-				dataMood = DataManager.Mood;
+				dataMood = DataManager.Instance.Stats.Mood;
 
 				// Stop grow & shrink. reset icon size
 				moodAnimControl.Stop();
@@ -217,7 +216,7 @@ public class HUDAnimator : MonoBehaviour {
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
 		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
-			int remainderPoints = DataManager.Points - nextLevelPoints; //points to be added after leveling up
+			int remainderPoints = DataManager.Instance.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 
 			if(OnLevelUp != null){
@@ -227,12 +226,12 @@ public class HUDAnimator : MonoBehaviour {
             }
 
 			//reset the progress bar for next level
-			DataManager.ResetPoints();
+			DataManager.Instance.Stats.ResetPoints();
 			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
 			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;
-			lastLevel = DataManager.CurrentLevel;
+			lastLevel = DataManager.Instance.Level.CurrentLevel;
 		}
 	}
 
@@ -249,22 +248,22 @@ public class HUDAnimator : MonoBehaviour {
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 60, Vector3.zero, 0, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
-				DataManager.SubtractHealth(100);
+				DataManager.Instance.Stats.SubtractHealth(100);
 				dataHealth = 0;
 				displayHealth = 0;
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 27, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
-				DataManager.SubtractMood(100);
+				DataManager.Instance.Stats.SubtractMood(100);
 				dataMood = 0;
 				displayMood = 0;
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
-//				DataManager.SubtractMood(100);
+//				DataManager.Instance.Stats.SubtractMood(100);
 //				dataMood = 0;
 //				displayMood = 0;
-//				DataManager.SubtractHealth(100);
+//				DataManager.Instance.Stats.SubtractHealth(100);
 //				dataHealth = 0;
 //				displayHealth = 0;
 				StatsController.Instance.ChangeStats(-100, Vector3.zero, -100, Vector3.zero, -20, Vector3.zero, -50, new Vector3(0, 0, 0));

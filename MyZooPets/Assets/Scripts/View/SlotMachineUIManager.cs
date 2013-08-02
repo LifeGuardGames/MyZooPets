@@ -18,7 +18,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             counter++;
         }
 
-        if (DataManager.Stars >= costStars){
+        if (DataManager.Instance.Stats.Stars >= costStars){
             notificationUIManager.PopupNotificationTwoButtons(
                 "-"+ costStars +" stars to play",
                 delegate(){

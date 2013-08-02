@@ -33,30 +33,30 @@ public class StatsController : Singleton<StatsController> {
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
-				DataManager.AddPoints(deltaPoints);
+				DataManager.Instance.Stats.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
-				DataManager.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+				DataManager.Instance.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 		}
 	
 		if(deltaStars != 0){
 			if(deltaStars > 0)
-				DataManager.AddStars(deltaStars);
+				DataManager.Instance.Stats.AddStars(deltaStars);
 			else if(deltaStars < 0)
-				DataManager.SubtractStars(-1 * deltaStars);
+				DataManager.Instance.Stats.SubtractStars(-1 * deltaStars);
 		}
 		
 		if(deltaHealth != 0){
 			if(deltaHealth > 0)
-				DataManager.AddHealth(deltaHealth);
+				DataManager.Instance.Stats.AddHealth(deltaHealth);
 			else if(deltaHealth < 0)
-				DataManager.SubtractHealth(-1 * deltaHealth);
+				DataManager.Instance.Stats.SubtractHealth(-1 * deltaHealth);
 		}
 		
 		if(deltaMood != 0){
 			if(deltaMood > 0)
-				DataManager.AddMood(deltaMood);
+				DataManager.Instance.Stats.AddMood(deltaMood);
 			else if(deltaMood < 0)
-				DataManager.SubtractMood(-1 * deltaMood);
+				DataManager.Instance.Stats.SubtractMood(-1 * deltaMood);
 		}
 		
 		// Tell HUDAnimator to animate and change

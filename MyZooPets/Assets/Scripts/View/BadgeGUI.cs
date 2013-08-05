@@ -11,6 +11,9 @@ public class BadgeGUI : MonoBehaviour {
 	public GUISkin defaultSkin;
 	public Texture2D backButton;
 	public GUIStyle blankButtonStyle;
+
+	public GameObject backButtonPrefab;
+	private GameObject backButtonReference;
 	private bool isActive = false;
 
 	public GameObject badgeBoard;
@@ -70,17 +73,37 @@ public class BadgeGUI : MonoBehaviour {
 		}
 	}
 
-	void OnGUI(){
-		GUI.skin = defaultSkin;
-		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
-        	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-        		if(OnBadgeBoardClosed != null){
-        			OnBadgeBoardClosed (this, EventArgs.Empty);
-    			}else{
-    				Debug.LogError("OnBadgeBoardClosed is null");
-    			}
-				isActive = false;
-				badgeBoard.collider.enabled = true;
+//	void OnGUI(){
+//		GUI.skin = defaultSkin;
+//		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
+//        	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
+//        		if(OnBadgeBoardClosed != null){
+//        			OnBadgeBoardClosed (this, EventArgs.Empty);
+//    			}else{
+//    				Debug.LogError("OnBadgeBoardClosed is null");
+//    			}
+//				isActive = false;
+//				badgeBoard.collider.enabled = true;
+//			}
+//		}
+//	}
+
+	public void BadgeBoardBackButtonClicked(){
+		Debug.Log("BOOM");
+		if(isActive && !ClickManager.isClickLocked){
+			if(OnBadgeBoardClosed != null){
+    			OnBadgeBoardClosed (this, EventArgs.Empty);
+			}else{
+				Debug.LogError("OnBadgeBoardClosed is null");
+			}
+			isActive = false;
+			badgeBoard.collider.enabled = true;
+
+			if(backButtonReference != null){
+				Destroy(backButtonReference);
+			}
+			else{
+				Debug.LogError("No back button to delete");
 			}
 		}
 	}
@@ -176,6 +199,12 @@ public class BadgeGUI : MonoBehaviour {
 		if(!isActive){
 			isActive = true;
 			badgeBoard.collider.enabled = false;
+
+			backButtonReference = NGUITools.AddChild(this.gameObject, backButtonPrefab);
+			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
+			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
+			messageScript.target = this.gameObject;
+			messageScript.functionName = "BadgeBoardBackButtonClicked";
 		}
 	}
 }

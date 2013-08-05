@@ -64,14 +64,23 @@ public class PetMovement : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if (petSprite != null){
-            if (ClickManager.CanRespondToTap()){
+            if (ClickManager.CanRespondToTap()){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint,5f * Time.deltaTime);
             }
-            if(petSprite.transform.position == destinationPoint) moving = false;
+
+            //when the sprite reaches destination. stop transform and animation
+            if(petSprite.transform.position == destinationPoint){
+                moving = false;
+                anim.Stop();
+                anim.Play("HappyIdle");
+            }
         }
     }
 
+    /*
+        TO DO: currently unused
+    */
 	public void MovePetWithCamera(){
 		Ray ray = mainCamera.ScreenPointToRay(new Vector3(600, 200, 0));
 		RaycastHit hit;
@@ -85,6 +94,7 @@ public class PetMovement : MonoBehaviour {
 		}
 	}
 
+    //What to do when animation is finished playing. 
     private void OnAnimationFinished(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
         if(moving){
             anim.Play("HappyWalk");
@@ -101,14 +111,12 @@ public class PetMovement : MonoBehaviour {
         RaycastHit hit;
         if(Physics.Raycast(myRay,out hit)){
             if (hit.collider == planeCenter.collider || planeRight.collider){
-            	if(moving == false){
-                	destinationPoint = hit.point;
-                    if(!anim.IsPlaying("HappyWalk")){
-                        anim.Play("HappyWalk");
-                        anim.AnimationCompleted = OnAnimationFinished;
-                    }
-					moving = true;
-				}
+            	destinationPoint = hit.point;
+                if(!anim.IsPlaying("HappyWalk")){
+                    anim.Play("HappyWalk");
+                    anim.AnimationCompleted = OnAnimationFinished;
+                }
+				moving = true;
             }
         }
         ChangePetFacingDirection();

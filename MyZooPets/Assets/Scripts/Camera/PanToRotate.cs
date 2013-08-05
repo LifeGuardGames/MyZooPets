@@ -21,7 +21,8 @@ public class PanToRotate : MonoBehaviour {
     private Hashtable snapOption;
     private bool touchCancelled; //cancel touch detection if user click on NGUI first
     private Camera NGUICamera;
-    private int layerNGUI; //layer that NGUI is on
+    private Camera mainCamera;
+    // private int layerNGUI; //layer that NGUI is on
     private enum Direction{
         Left,
         Right
@@ -31,7 +32,8 @@ public class PanToRotate : MonoBehaviour {
 	   numPartitions = enabledPartitions.Length;
        snapOption = new Hashtable();
        snapOption.Add("ease", LeanTweenType.easeOutBack);
-       layerNGUI = LayerMask.NameToLayer("NGUI");
+       mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
+       int layerNGUI = LayerMask.NameToLayer("NGUI");
         NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
         if (NGUICamera == null){
             Debug.LogError("NGUI camera not found!");
@@ -125,16 +127,28 @@ public class PanToRotate : MonoBehaviour {
         return prevIndex;
     }
 
+    //True: if finger touches NGUI 
     private bool IsTouchingNGUI(Vector2 screenPos){
         Ray ray = NGUICamera.ScreenPointToRay (screenPos);
         RaycastHit hit;
+        int layerMask = 1 << 10;
         bool isOnNGUILayer = false;
         // Raycast
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
-            if (hit.transform.gameObject.layer == layerNGUI) {
-                isOnNGUILayer = true;
-            }
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+            isOnNGUILayer = true;
         }
         return isOnNGUILayer;
+    }
+
+    //True; if finger touches default layer
+    private bool IsTouchingDefaultLayer(Vector2 screenPos){
+        Ray ray = mainCamera.ScreenPointToRay(screenPos);
+        RaycastHit hit;
+        int layerMask = 1 << 0;
+        bool isOnDefaultLayer = false;
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+            isOnDefaultLayer = true;;
+        }
+        return isOnDefaultLayer;
     }
 }

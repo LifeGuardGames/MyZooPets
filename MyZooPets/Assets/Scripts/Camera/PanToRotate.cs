@@ -19,6 +19,9 @@ public class PanToRotate : MonoBehaviour {
     private Direction panDirection; //the direction of the last pan gesture
     private int partitionOffset = 20; //camera rotates if it's rotated +/- partitionOffset of the current partition angle
     private Hashtable snapOption;
+    private bool touchCancelled; //cancel touch detection if user click on NGUI first
+    private Camera NGUICamera;
+    private int layerNGUI; //layer that NGUI is on
     private enum Direction{
         Left,
         Right
@@ -28,6 +31,11 @@ public class PanToRotate : MonoBehaviour {
 	   numPartitions = enabledPartitions.Length;
        snapOption = new Hashtable();
        snapOption.Add("ease", LeanTweenType.easeOutBack);
+       layerNGUI = LayerMask.NameToLayer("NGUI");
+        NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
+        if (NGUICamera == null){
+            Debug.LogError("NGUI camera not found!");
+        }
 	}
 	
 	// Update is called once per frame
@@ -37,8 +45,13 @@ public class PanToRotate : MonoBehaviour {
             switch (touch.phase) {
                 case TouchPhase.Began:
                     startTouchPos = touch.position;                 
+                    if(IsTouchingNGUI(startTouchPos)) touchCancelled = true;
                 break;
                 case TouchPhase.Ended:
+                    if(touchCancelled){
+                        touchCancelled = false;
+                        return;
+                    }
                     //When the panning ends decides which direction to snap the camera
                     if(panDirection.Equals(Direction.Left)){ //panning left, so rotate right
                         int nextIndex = GetNextPartitionIndex();
@@ -70,6 +83,7 @@ public class PanToRotate : MonoBehaviour {
                     //Detect if finger is panning left or right
                     //if left rotate camera to the right else to the left
                     //camera can only rotate if the partition is enabled
+                    if(touchCancelled) return;
                     Vector2 touchDeltaPosition = touch.deltaPosition;
                     float rotate = 0; 
                     if(touch.position.x < startTouchPos.x - minPanDistance){
@@ -109,5 +123,18 @@ public class PanToRotate : MonoBehaviour {
             prevIndex = currentIndex - 1;
         }
         return prevIndex;
+    }
+
+    private bool IsTouchingNGUI(Vector2 screenPos){
+        Ray ray = NGUICamera.ScreenPointToRay (screenPos);
+        RaycastHit hit;
+        bool isOnNGUILayer = false;
+        // Raycast
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+            if (hit.transform.gameObject.layer == layerNGUI) {
+                isOnNGUILayer = true;
+            }
+        }
+        return isOnNGUILayer;
     }
 }

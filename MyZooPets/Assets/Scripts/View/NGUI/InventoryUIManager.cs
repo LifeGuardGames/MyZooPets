@@ -84,8 +84,8 @@ public class InventoryUIManager : MonoBehaviour {
     private void ShowPetReceivedFoodAnimation(){
         GameObject speechBubble = Instantiate(speechBubblePrefab, spritePet.transform.position, Quaternion.identity) as GameObject;
         speechBubble.transform.parent = spritePet.transform;
-        speechBubble.transform.localPosition = speechBubblePrefab.transform.localPosition;
-        speechBubble.transform.localScale = Vector3.one;
+        speechBubble.transform.localPosition = new Vector3(3.5f, 9, 0);
+        speechBubble.transform.localScale = new Vector3(2, 2, 1);
 
         Destroy(speechBubble, 1.5f);
     }

@@ -219,6 +219,8 @@ public class CalendarUIManager : MonoBehaviour {
                     dayImageButton.hoverSprite = BLANK;
                 break;
             }
+            dayImageButton.enabled = false; // Tell it to redraw
+			dayImageButton.enabled = true;
 
             UIImageButton nightImageButton = day.PM.GetComponent<UIImageButton>();
             switch(entry.NightTime){
@@ -241,6 +243,8 @@ public class CalendarUIManager : MonoBehaviour {
                     nightImageButton.hoverSprite = BLANK;
                 break;
             }
+			nightImageButton.enabled = false; // Tell it to redraw
+			nightImageButton.enabled = true;
         }
 
         for(int i=0; i<pastWeekData.Count; i++){

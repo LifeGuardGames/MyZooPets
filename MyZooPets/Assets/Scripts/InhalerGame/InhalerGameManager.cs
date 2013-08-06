@@ -5,17 +5,21 @@ public class InhalerGameManager : MonoBehaviour{
 
     public GameObject advairPrefab;
     public GameObject rescuePrefab;
-    public GameObject rescueShakerPrefab; // arrows that indicate that the rescue inhaler has to be shaken
-    public GameObject inhaleExhalePrefab; // arrows that indicate whether to breathe in or out
-    public GameObject smallRescuePrefab; // rescue inhaler that appears in front of the pet's mouth
+    public GameObject rescueShakerPrefab; 	// Arrows that indicate that the rescue inhaler has to be shaken
+    public GameObject inhaleExhalePrefab; 	// Arrows that indicate whether to breathe in or out
+    public GameObject smallRescuePrefab; 	// Rescue inhaler that appears in front of the pet's mouth
 
     private GameObject advair;
     private GameObject rescue;
-    private GameObject rescueShaker; // arrows that indicate that the rescue inhaler has to be shaken
-    private GameObject inhaleExhale; // arrows that indicate whether to breathe in or out
-    private GameObject smallRescue; // rescue inhaler that appears in front of the pet's mouth
+    private GameObject rescueShaker; 		// Arrows that indicate that the rescue inhaler has to be shaken
+    private GameObject inhaleExhale; 		// Arrows that indicate whether to breathe in or out
+    private GameObject smallRescue; 		// Rescue inhaler that appears in front of the pet's mouth
 
-    public bool isPracticeGame; // Is this a practice game, or the real thing (which counts towards the calendar tally)
+	public GameObject textPrefabShake;		// Attach text to the hints that popup
+	public GameObject textPrefabSwipe;
+	public GameObject textPrefabDrag;
+
+    public bool isPracticeGame; 			// Practice game or the real thing (calendar tally)
 
     int practiceGamePointIncrement = 50;
     int practiceGameStarIncrement = 50;
@@ -116,6 +120,8 @@ public class InhalerGameManager : MonoBehaviour{
 
         inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
         inhaleExhale.name = inhaleExhalePrefab.name;
+//		HintArrow hintScript = inhaleExhale.GetComponent<HintArrow>(); TODO-s THIS ENABLES OTHER INHALERS WHY
+//		hintScript.optionalTextPrefab = textPrefabSwipe;
 
     }
 

@@ -1,0 +1,194 @@
+using UnityEngine;
+using System;
+using System.Collections;
+
+public class TutorialUIManager : Singleton<TutorialUIManager> {
+
+    public GameObject calendar;
+    // public GameObject challenges;
+    // public GameObject diary;
+    // public GameObject slotMachine;
+    public GameObject realInhaler;
+    public GameObject teddyInhaler;
+
+    public NotificationUIManager notificationUIManager;
+    public ClickManager clickManager;
+
+    private const string CALENDAR_TIP_INTRO = "This calendar shows if you have been using the inhaler on your pet on time.";
+    private const string CALENDAR_TIP_GREEN_STAMP = "Good Job! Green stamp means you used the inhaler on your pet on time. You can click on the green stamps to earn stars!";
+    private const string CALENDAR_TIP_RED_STAMP = "Ah Oh. Red stamp means you forgot to use the inhaler on your pet on time. This is not good for the pets heath.";
+    private const string CALENDAR_TIP_BONUS = "Extra stars can be collected ever 12 hours. Remember to check often!";
+    private const string CALENDAR_TIP_CONCLUDE = "Now let's start the game with a new calendar";
+    private const string DEGRAD_TIP1 = "Good job! You just removed an asthma trigger.";
+    private const string DEGRAD_TIP2 = "Make sure you clean them up when you see them, or your pet will get sick!";
+    
+    void Start(){
+        //use a if else if here to make sure that any tutorials not visited get called
+        // InhalerMissAndInhalerGame();
+        // TrophyDemo();
+        TutorialLogic.OnTutorialUpdated += UpdateTutorial;
+        SetupTutorial();
+        UpdateTutorial(null, EventArgs.Empty);
+    }
+
+    void OnDestroy(){
+        TutorialLogic.OnTutorialUpdated -= UpdateTutorial;
+    }
+
+    //Event listener that activates new tutorial when an old tutorial is completed
+    private void UpdateTutorial(object sender, EventArgs args){
+        if(TutorialLogic.Instance.FirstTimeCalendar){
+            calendar.GetComponent<TutorialHighlighting>().ShowArrow();
+        }else if(TutorialLogic.Instance.FirstTimeRealInhaler){
+            realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
+        }else{
+
+        }
+    }
+
+    //Assign OnTap event listener to game objects that are still new to the user
+    private void SetupTutorial(){
+        if(TutorialLogic.Instance.FirstTimeCalendar){
+            calendar.GetComponent<TapItem>().OnTap += StartCalendarTutorial;
+        }
+        if(TutorialLogic.Instance.FirstTimeRealInhaler){
+            realInhaler.GetComponent<TapItem>().OnTap += StartRealInhalerTutorial;
+        }
+    }
+    // // For the demo.
+    // private void InhalerMissAndInhalerGame(){
+    //     if(TutorialLogic.Instance.FirstTimeCalendar){
+    //         calendar.GetComponent<TapItem>().OnTap += OpenCalendar;
+    //         TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
+    //         highlight.ShowArrow();
+    //     }
+    //     if(TutorialLogic.Instance.FirstTimeRealInhaler){
+    //         realInhaler.GetComponent<TapItem>().OnTap += OpenRealInhaler;
+    //     }
+    // }
+    // // For the demo.
+    // void TrophyDemo(){
+    //     if (DataManager.Instance.Tutorial.FirstTimeShelf){
+    //         TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
+    //         highlight.ShowArrow();
+
+    //         shelf.GetComponent<TapItem>().OnTap += openShelf;
+    //     }
+    //     if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
+    //         helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
+    //     }
+    // }
+
+    //========================Calendar Tutorial======================
+    private void StartCalendarTutorial(){
+        // if (DataManager.Instance.Tutorial.FirstTimeCalendar){
+            calendar.GetComponent<TutorialHighlighting>().HideArrow();
+
+            ShowCalendarTipIntro();
+
+            realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
+            TutorialLogic.Instance.FirstTimeCalendar = false;
+        // }
+    }
+
+    private void ShowCalendarTipIntro(){
+        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_INTRO, "calendarIcon", 
+            null, true, true);
+    }
+
+    public void ShowCalendarTipGreenStamp(){
+        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
+            null, false, true);
+    }
+
+    public void ShowCalendarTipRedStamp(){
+        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
+            null, false, true);
+    }
+
+    public void ShowCalendarTipBonus(){
+        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
+            null, false, false);
+    }
+
+    public void ShowCalendarTipConclude(){
+
+    }
+
+    //============Trigger tutorial=================
+    public void StartDegradTriggerTutorial(){
+        if (TutorialLogic.Instance.FirstTimeDegradTrigger){
+            ShowDegradTip1();
+            TutorialLogic.Instance.FirstTimeDegradTrigger = false;
+        }
+    }
+
+    void ShowDegradTip1(){
+        notificationUIManager.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", 
+            ShowDegradTip2, true, true);
+    }
+    void ShowDegradTip2(){
+        // disappear immediately when done, because the level up message should pop up right away
+        notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 
+    }
+
+    //==============Inhaler tutorial=================
+    private void StartRealInhalerTutorial(){
+        notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
+
+        TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+
+        DataManager.Instance.Tutorial.FirstTimeRealInhaler = false;
+    }
+
+    private void StartTeddyInhalertutorial(){
+        TutorialHighlighting highlight = teddyInhaler.GetComponent<TutorialHighlighting>();
+        highlight.HideArrow();
+        DataManager.Instance.Tutorial.FirstTimeTeddyInhaler = false;
+    }
+    
+    // private void openChallenges(){
+    //     DataManager.Instance.Tutorial.FirstTimeChallenges = false;
+    //     TutorialHighlighting highlight = challenges.GetComponent<TutorialHighlighting>();
+    //     highlight.HideArrow();
+    // }
+
+    // void openDiary(){
+    //     DataManager.Instance.Tutorial.FirstTimeDiary = false;
+    //     TutorialHighlighting highlight = diary.GetComponent<TutorialHighlighting>();
+    //     highlight.HideArrow();
+    // }
+
+    // void openSlotMachine(){
+    //     DataManager.Instance.Tutorial.FirstTimeSlotMachine = false;
+    //     TutorialHighlighting highlight = slotMachine.GetComponent<TutorialHighlighting>();
+    //     highlight.HideArrow();
+    // }
+
+    
+
+    // void openShelf(){
+    //     // added for the demo
+    //     if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
+    //         DataManager.Instance.Tutorial.FirstTimeShelf = false;
+
+    //         TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
+    //         highlight.HideArrow();
+
+    //         helpTrophy.GetComponent<TutorialHighlighting>().ShowArrow();
+    //     }
+    // }
+    // void openHelpTrophy(){
+
+    //     // make sure we are in trophy mode
+    //     // todo: have a better way of checking if we are in trophy mode
+    //     if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
+    //         TutorialHighlighting highlight = helpTrophy.GetComponent<TutorialHighlighting>();
+    //         highlight.HideArrow();
+    //         DataManager.Instance.Tutorial.FirstTimeHelpTrophy = false;
+    //     }
+    // }
+
+   
+}

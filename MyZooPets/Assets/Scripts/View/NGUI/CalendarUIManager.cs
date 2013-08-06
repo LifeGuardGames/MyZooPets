@@ -47,8 +47,12 @@ public class CalendarUIManager : MonoBehaviour {
     private CalendarLogic calendarLogic; //reference
 
     //sprite name in atlas
-    private const string STAMP_EX = "calendarStampEx";
-    private const string STAMP_CHECK = "calendarStampCheck";
+    private const string BLANK = "calendarButtonBlank";
+    private const string RED_EX_DOWN = "calendarButtonRedExDown";
+    private const string RED_EX = "calendarButtonRedEx";
+    private const string GREEN_CHECK_DOWN = "calendarButtonGreenCheckDown";
+    private const string GREEN_CHECK = "calendarButtonGreenCheck";
+    private const string GRAY_CHECK = "calendarButtonGrayCheck";
     private const string HALF_STAMP_RED_BOTTOM = "calendarHalfStampRedBottom";
     private const string HALF_STAMP_RED_TOP = "calendarHalfStampRedTop";
     private const string HALF_STAMP_GREEN_BOTTOM = "calendarHalfStampGreenBottom";
@@ -130,7 +134,7 @@ public class CalendarUIManager : MonoBehaviour {
         }else{ //PM
             entry.BonusCollectedNightTime = true;
         }
-        calendarSlot.GetComponent<UIButton>().isEnabled = false; //turn button off
+        calendarSlot.GetComponent<UIImageButton>().normalSprite = GRAY_CHECK;
 
         // //spawn particle effect
         // GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
@@ -187,65 +191,54 @@ public class CalendarUIManager : MonoBehaviour {
     //Populate the calendar based on the data stored in DataManager
     private void PopulateCalendar(object sender, EventArgs args){
         PopulateTimer();
-
+        print("populate");
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){
             CalendarEntry entry = currentWeekData[i]; //Data day
             ThisWeekDay day = currentWeek[i]; //UI day
 
-            UISprite stampSprite = day.AM.Find("Stamp").GetComponent<UISprite>();
-            UIButton dayButton = day.AM.GetComponent<UIButton>();
+            UIImageButton dayImageButton = day.AM.GetComponent<UIImageButton>();
             switch(entry.DayTime){
                 case DosageRecord.Hit: //show check stamp
-                    stampSprite.spriteName = STAMP_CHECK;
-                    stampSprite.alpha = 1;
-
-                    if(!entry.BonusCollectedDayTime){
-                        dayButton.isEnabled = true;
-                    }else{
-                        dayButton.isEnabled = false;
-                    }
+                    print("hi");
+                    dayImageButton.normalSprite = GREEN_CHECK;
+                    dayImageButton.hoverSprite = GREEN_CHECK;
+                    dayImageButton.pressedSprite = GREEN_CHECK_DOWN;
                 break;
                 case DosageRecord.Miss: //show ex stamp
-                    stampSprite.spriteName = STAMP_EX;
-                    stampSprite.alpha = 1;
-                    dayButton.isEnabled = false;
+                    dayImageButton.normalSprite = RED_EX;
+                    dayImageButton.hoverSprite = RED_EX;
+                    dayImageButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null: //blank
-                    stampSprite.alpha = 0;
-                    dayButton.isEnabled = false;
+                    dayImageButton.normalSprite = BLANK;
+                    dayImageButton.hoverSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank: //blank
-                    stampSprite.alpha = 0;
-                    dayButton.isEnabled = false;
+                    dayImageButton.normalSprite = BLANK;
+                    dayImageButton.hoverSprite = BLANK;
                 break;
             }
 
-            UISprite stampSpriteNight = day.PM.Find("Stamp").GetComponent<UISprite>();
-            UIButton nightButton = day.PM.GetComponent<UIButton>();
+            UIImageButton nightImageButton = day.PM.GetComponent<UIImageButton>();
             switch(entry.NightTime){
                 case DosageRecord.Hit:
-                    stampSpriteNight.spriteName = STAMP_CHECK;
-                    stampSpriteNight.alpha = 1;
-
-                    if(!entry.BonusCollectedNightTime){
-                        nightButton.isEnabled = true;
-                    }else{
-                        nightButton.isEnabled = false;
-                    }
+                    nightImageButton.normalSprite = GREEN_CHECK;
+                    nightImageButton.hoverSprite = GREEN_CHECK;
+                    nightImageButton.pressedSprite = GREEN_CHECK_DOWN;
                 break;
                 case DosageRecord.Miss:
-                    stampSpriteNight.spriteName = STAMP_EX;
-                    stampSpriteNight.alpha = 1;
-                    nightButton.isEnabled = false;
+                    nightImageButton.normalSprite = RED_EX;
+                    nightImageButton.hoverSprite = RED_EX;
+                    nightImageButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null:
-                    stampSpriteNight.alpha = 0;
-                    nightButton.isEnabled = false;
+                    nightImageButton.normalSprite = BLANK;
+                    nightImageButton.hoverSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank:
-                    stampSpriteNight.alpha = 0;
-                    nightButton.isEnabled = false;
+                    nightImageButton.normalSprite = BLANK;
+                    nightImageButton.hoverSprite = BLANK;
                 break;
             }
         }

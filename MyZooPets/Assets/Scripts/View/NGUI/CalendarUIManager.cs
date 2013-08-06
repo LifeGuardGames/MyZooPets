@@ -99,7 +99,6 @@ public class CalendarUIManager : MonoBehaviour {
 
     public void CalendarClicked(){
         calendarLogic.CalendarOpened();
-        // PopulateCalendar();
         GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
@@ -115,6 +114,9 @@ public class CalendarUIManager : MonoBehaviour {
     //Called when a checked calendar slot is clicked. Reward the player and turn the
     //slot off until the next bonus time
     public void ClaimReward(GameObject calendarSlot){
+        UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
+        if(button.normalSprite != GREEN_CHECK) return;
+
         CalendarEntry entry;
         int index = 0;
         switch(calendarSlot.transform.parent.name){
@@ -134,13 +136,7 @@ public class CalendarUIManager : MonoBehaviour {
         }else{ //PM
             entry.BonusCollectedNightTime = true;
         }
-        calendarSlot.GetComponent<UIImageButton>().normalSprite = GRAY_CHECK;
-
-        // //spawn particle effect
-        // GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
-        // prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
-        // prefab.transform.position = new Vector3(prefab.transform.position.x, 
-        //     prefab.transform.position.y, -0.5f);
+        button.normalSprite = GRAY_CHECK;
 
         //Add reward
         calendarLogic.ClaimReward(calendarSlot.transform.position);
@@ -154,13 +150,14 @@ public class CalendarUIManager : MonoBehaviour {
 
     //Make the necessary modification to set up for tutorial
     private void SetUpForTutorial(){
-        currentWeek[3].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
     }
 
     //Reset calendar to original after tutorial is finished
     private void ResetAfterTutorialFinish(){
         //erase all tutorial data
-
+        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        calendarLogic.ThisWeek = calendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
     }
 
     public void TutorialRewardClaim(GameObject calendarSlot){
@@ -191,7 +188,6 @@ public class CalendarUIManager : MonoBehaviour {
     //Populate the calendar based on the data stored in DataManager
     private void PopulateCalendar(object sender, EventArgs args){
         PopulateTimer();
-        print("populate");
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){
             CalendarEntry entry = currentWeekData[i]; //Data day
@@ -200,7 +196,6 @@ public class CalendarUIManager : MonoBehaviour {
             UIImageButton dayImageButton = day.AM.GetComponent<UIImageButton>();
             switch(entry.DayTime){
                 case DosageRecord.Hit: //show check stamp
-                    print("hi");
                     dayImageButton.normalSprite = GREEN_CHECK;
                     dayImageButton.hoverSprite = GREEN_CHECK;
                     dayImageButton.pressedSprite = GREEN_CHECK_DOWN;
@@ -213,10 +208,12 @@ public class CalendarUIManager : MonoBehaviour {
                 case DosageRecord.Null: //blank
                     dayImageButton.normalSprite = BLANK;
                     dayImageButton.hoverSprite = BLANK;
+                    dayImageButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank: //blank
                     dayImageButton.normalSprite = BLANK;
                     dayImageButton.hoverSprite = BLANK;
+                    dayImageButton.pressedSprite = BLANK;
                 break;
             }
 
@@ -235,10 +232,12 @@ public class CalendarUIManager : MonoBehaviour {
                 case DosageRecord.Null:
                     nightImageButton.normalSprite = BLANK;
                     nightImageButton.hoverSprite = BLANK;
+                    nightImageButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank:
                     nightImageButton.normalSprite = BLANK;
                     nightImageButton.hoverSprite = BLANK;
+                    nightImageButton.pressedSprite = BLANK;
                 break;
             }
         }

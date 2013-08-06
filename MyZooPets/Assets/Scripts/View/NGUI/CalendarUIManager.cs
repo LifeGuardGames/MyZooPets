@@ -155,11 +155,11 @@ public class CalendarUIManager : MonoBehaviour {
 
     //Reset calendar to original after tutorial is finished
     private void ResetAfterTutorialFinish(){
+        //erase all tutorial data
 
     }
 
     public void TutorialRewardClaim(GameObject calendarSlot){
-
         calendarLogic.ClaimReward(calendarSlot.transform.position);
         TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
     }

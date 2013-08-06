@@ -24,8 +24,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     
     void Start(){
         //use a if else if here to make sure that any tutorials not visited get called
-        // InhalerMissAndInhalerGame();
-        // TrophyDemo();
         TutorialLogic.OnTutorialUpdated += UpdateTutorial;
         SetupTutorial();
         UpdateTutorial(null, EventArgs.Empty);
@@ -55,40 +53,15 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
             realInhaler.GetComponent<TapItem>().OnTap += StartRealInhalerTutorial;
         }
     }
-    // // For the demo.
-    // private void InhalerMissAndInhalerGame(){
-    //     if(TutorialLogic.Instance.FirstTimeCalendar){
-    //         calendar.GetComponent<TapItem>().OnTap += OpenCalendar;
-    //         TutorialHighlighting highlight = calendar.GetComponent<TutorialHighlighting>();
-    //         highlight.ShowArrow();
-    //     }
-    //     if(TutorialLogic.Instance.FirstTimeRealInhaler){
-    //         realInhaler.GetComponent<TapItem>().OnTap += OpenRealInhaler;
-    //     }
-    // }
-    // // For the demo.
-    // void TrophyDemo(){
-    //     if (DataManager.Instance.Tutorial.FirstTimeShelf){
-    //         TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
-    //         highlight.ShowArrow();
-
-    //         shelf.GetComponent<TapItem>().OnTap += openShelf;
-    //     }
-    //     if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
-    //         helpTrophy.GetComponent<TapItem>().OnTap += openHelpTrophy;
-    //     }
-    // }
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        // if (DataManager.Instance.Tutorial.FirstTimeCalendar){
-            calendar.GetComponent<TutorialHighlighting>().HideArrow();
+        calendar.GetComponent<TutorialHighlighting>().HideArrow();
 
-            ShowCalendarTipIntro();
+        ShowCalendarTipIntro();
 
-            realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
-            TutorialLogic.Instance.FirstTimeCalendar = false;
-        // }
+        realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
+        TutorialLogic.Instance.FirstTimeCalendar = false;
     }
 
     private void ShowCalendarTipIntro(){
@@ -118,18 +91,18 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
         if (TutorialLogic.Instance.FirstTimeDegradTrigger){
-            ShowDegradTip1();
-            TutorialLogic.Instance.FirstTimeDegradTrigger = false;
+            ShowDegradTipIntro();
         }
     }
 
-    void ShowDegradTip1(){
+    void ShowDegradTipIntro(){
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", 
-            ShowDegradTip2, true, true);
+            ShowDegradTipConclude, true, true);
     }
-    void ShowDegradTip2(){
+    void ShowDegradTipConclude(){
         // disappear immediately when done, because the level up message should pop up right away
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 
+        TutorialLogic.Instance.FirstTimeDegradTrigger = false;
     }
 
     //==============Inhaler tutorial=================

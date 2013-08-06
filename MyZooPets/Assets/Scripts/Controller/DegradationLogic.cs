@@ -101,7 +101,8 @@ public class DegradationLogic : MonoBehaviour {
         }else{
             Debug.LogError("Trigger Destroyed listener is null");
         }
-		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
+            50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);
     }
 

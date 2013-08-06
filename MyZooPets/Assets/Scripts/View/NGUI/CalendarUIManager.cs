@@ -67,6 +67,12 @@ public class CalendarUIManager : MonoBehaviour {
         pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
 		numberOfGreenStamps = calendarLogic.GreenStampCount;
         CalendarLogic.OnCalendarReset += PopulateCalendar;
+
+        //check if in tutorial phase. special handler needed for sample data
+        //ThisWeekDay[3] sample data. set special button handler
+        if(TutorialLogic.Instance.FirstTimeCalendar){
+            SetUpForTutorial();
+        }
     }
 
     void OnDestroy(){
@@ -126,20 +132,41 @@ public class CalendarUIManager : MonoBehaviour {
         }
         calendarSlot.GetComponent<UIButton>().isEnabled = false; //turn button off
 
-        //spawn particle effect
-        GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
-        prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
-        prefab.transform.position = new Vector3(prefab.transform.position.x, 
-            prefab.transform.position.y, -0.5f);
+        // //spawn particle effect
+        // GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
+        // prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
+        // prefab.transform.position = new Vector3(prefab.transform.position.x, 
+        //     prefab.transform.position.y, -0.5f);
 
         //Add reward
-        calendarLogic.ClaimReward();
+        calendarLogic.ClaimReward(calendarSlot.transform.position);
 
         numberOfGreenStamps--; //keep track of the rewards claimed
         if(numberOfGreenStamps == 0){ //all rewards have been claimed
             calendarLogic.IsRewardClaimed = true;
             PopulateTimer();
         }
+    }
+
+    //Make the necessary modification to set up for tutorial
+    private void SetUpForTutorial(){
+        currentWeek[3].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+    }
+
+    //Reset calendar to original after tutorial is finished
+    private void ResetAfterTutorialFinish(){
+
+    }
+
+    public void TutorialRewardClaim(GameObject calendarSlot){
+
+        calendarLogic.ClaimReward(calendarSlot.transform.position);
+        TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
+    }
+
+    //Called when user click on the red stamp
+    public void IllegalRewardClaim(){
+       //shake the whole calendar 
     }
 
     private void PopulateTimer(){

@@ -7,7 +7,8 @@ public class CalendarLogic : MonoBehaviour{
 
     private static CalendarEntry todaysEntry; //today's entry
     //===========================Events=======================
-    public static event EventHandler<EventArgs> OnCalendarReset; //called when calendar opened or calendar resets
+    //called when calendar opened or calendar resets
+    public static event EventHandler<EventArgs> OnCalendarReset; 
     //========================================================
 
     //====================API (use this for generating weeks)=======================
@@ -104,8 +105,9 @@ public class CalendarLogic : MonoBehaviour{
     }
 
     //Give bonus when user collects
-    public void ClaimReward(){
-		StatsController.Instance.ChangeStats(50, Vector3.zero, 50, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+    public void ClaimReward(Vector3 screenPos){
+		StatsController.Instance.ChangeStats(50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos),
+         50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos), 0, Vector3.zero, 0, Vector3.zero);
     }
 
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.

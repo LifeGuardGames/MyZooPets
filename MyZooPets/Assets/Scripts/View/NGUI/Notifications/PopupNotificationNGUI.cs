@@ -6,11 +6,9 @@ public class PopupNotificationNGUI : MonoBehaviour {
     public UILabel textArea;
     public UILabel button1;
     public UILabel button2;
-
     public UISprite backdrop;
 
     // set the following
-
     public int numOfButtons = 1;
     public bool killImmediately = false;
 

@@ -172,7 +172,7 @@ public class NotificationUIManager : MonoBehaviour {
 
 	/*
 		Desc: creates popup that shows a tip, along with an image on the left and a message on the right.
-		Params: tipImage, call back for button
+		Params: message to display, tipImage, call back for button, starts hidden?, kill after used?
 	*/
 	public void PopupTipWithImage(string message, string spriteName, PopupNotificationNGUI.Callback okCallBack, bool startsHidden, bool killImmediately){
 

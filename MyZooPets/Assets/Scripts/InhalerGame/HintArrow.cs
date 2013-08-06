@@ -16,33 +16,38 @@ public class HintArrow : MonoBehaviour {
 
     private InhalerGameManager inhalerGameManager;
 
-    // Use this for initialization
-    void Start () {
+	public GameObject optionalTextPrefab;
+	private GameObject optionalTextReference;
+
+    void Start(){
         renderer.enabled = false;
         inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
 
-        if (specificInhalerTypeString == "rescue")
+        if(specificInhalerTypeString == "rescue")
             specificInhalerType = InhalerType.Rescue;
-        else if (specificInhalerTypeString == "advair"){
+        else if(specificInhalerTypeString == "advair"){
             specificInhalerType = InhalerType.Advair;
         }
-        else {
+        else{
             hasSpecificType = false;
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-        if (hasSpecificType && InhalerLogic.CurrentInhalerType != specificInhalerType){
+    void Update(){
+        if(hasSpecificType && InhalerLogic.CurrentInhalerType != specificInhalerType){
             return;
         }
-
-        if (InhalerLogic.CurrentStep == showOnStep &&
-            inhalerGameManager.ShowHint){
-            renderer.enabled = true;
+        if(InhalerLogic.CurrentStep == showOnStep && inhalerGameManager.ShowHint){
+			if(optionalTextPrefab != null && optionalTextReference == null){
+				optionalTextReference = Instantiate(optionalTextPrefab) as GameObject;
+			}
+			renderer.enabled = true;
         }
-        else
-        {
+        else{
+			if(optionalTextReference != null){
+				Debug.Log("bye");
+				Destroy(optionalTextReference);
+			}
             renderer.enabled = false;
         }
     }

@@ -66,7 +66,7 @@ public class PetMovement : MonoBehaviour {
         if (petSprite != null){
             if (ClickManager.CanRespondToTap()){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
-                    destinationPoint,5f * Time.deltaTime);
+                    destinationPoint,8f * Time.deltaTime);
             }
 
             //when the sprite reaches destination. stop transform and animation

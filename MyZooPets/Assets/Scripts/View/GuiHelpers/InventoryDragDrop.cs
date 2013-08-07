@@ -122,7 +122,7 @@ public class InventoryDragDrop : MonoBehaviour {
 			else if(mIsDragging)
 			{
 				// Sean: Not syncing with UIRoot manual height for ratio change account for them here
-				// TODO-s Fine pernament solution to this
+				// TODO-s Find pernament solution to this
 				float ratioX = 1280f/(Screen.width * 1.0f);
 				float ratioY = 800f/(Screen.height * 1.0f);
 				Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);

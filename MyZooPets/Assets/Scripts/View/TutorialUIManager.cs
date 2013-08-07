@@ -10,6 +10,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     // public GameObject slotMachine;
     public GameObject realInhaler;
     public GameObject teddyInhaler;
+    public GameObject backDrop; //use this giant collider for forced tutorial
+    public GameObject nguiAnchor; //the anchor to spawn the backDrop;
 
     public NotificationUIManager notificationUIManager;
     public ClickManager clickManager;
@@ -51,6 +53,19 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         }
         if(TutorialLogic.Instance.FirstTimeRealInhaler){
             realInhaler.GetComponent<TapItem>().OnTap += StartRealInhalerTutorial;
+        }
+    }
+
+    //Use to cover up the whole screen during a mandatory tutorial
+    public void BackDrop(bool isVisible){
+        if(isVisible){
+            GameObject go = NGUITools.AddChild(nguiAnchor, backDrop);
+            go.name = "TutorialBackDrop";
+            go.transform.localPosition = new Vector3(0, 0, -10);
+            go.transform.localScale = new Vector3(5000, 5000, 1);
+        }else{
+            GameObject go = transform.Find("TutorialBackDrop").gameObject;
+            if(go != null) Destroy(go, 0.5f);
         }
     }
 

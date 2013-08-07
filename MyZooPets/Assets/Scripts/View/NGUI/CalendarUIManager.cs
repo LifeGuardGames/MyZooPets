@@ -148,27 +148,32 @@ public class CalendarUIManager : MonoBehaviour {
         }
     }
 
+    //Called when user click on the red stamp
+    public void IllegalRewardClaim(){
+       //shake the whole calendar 
+    }
+
+    //==================Tutorial===========================
     //Make the necessary modification to set up for tutorial
     private void SetUpForTutorial(){
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        // TutorialUIManager.Instance.BackDrop(true);
     }
 
     //Reset calendar to original after tutorial is finished
     private void ResetAfterTutorialFinish(){
         //erase all tutorial data
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-        calendarLogic.ThisWeek = calendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
+        calendarLogic.ResetWeekAfterTutorialFinish();
     }
 
     public void TutorialRewardClaim(GameObject calendarSlot){
         calendarLogic.ClaimReward(calendarSlot.transform.position);
         TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
     }
+    //===================================================
 
-    //Called when user click on the red stamp
-    public void IllegalRewardClaim(){
-       //shake the whole calendar 
-    }
+    
 
     private void PopulateTimer(){
         TimeSpan timeSpan = calendarLogic.NextPlayPeriod - DateTime.Now;

@@ -161,6 +161,11 @@ public class CalendarLogic : MonoBehaviour{
             Debug.LogError("OnCalendarReset is null");
         }
     }
+
+    //Reset the week back to blank entries
+    public void ResetWeekAfterTutorialFinish(){
+        DataManager.Instance.Calendar.EntriesThisWeek = LeaveBlankUntilNowWeek(DateTime.Now);
+    }
     //================================================
     
     void Awake(){
@@ -181,7 +186,6 @@ public class CalendarLogic : MonoBehaviour{
     //Play period is every 12 hr. Reward and punishment renews every play period
     private void ResetForNextPlayPeriod(DateTime now){
         if(now < DataManager.Instance.Calendar.NextPlayPeriod) return; //not next play period yet return
-        print("reset");
         //reset green stamps
         for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
             CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];

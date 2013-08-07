@@ -61,10 +61,10 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         if(isVisible){
             GameObject go = NGUITools.AddChild(nguiAnchor, backDrop);
             go.name = "TutorialBackDrop";
-            go.transform.localPosition = new Vector3(0, 0, -10);
+            go.transform.localPosition = new Vector3(0, 0, -20);
             go.transform.localScale = new Vector3(5000, 5000, 1);
         }else{
-            GameObject go = transform.Find("TutorialBackDrop").gameObject;
+            GameObject go = nguiAnchor.transform.Find("TutorialBackDrop").gameObject;
             if(go != null) Destroy(go, 0.5f);
         }
     }
@@ -103,7 +103,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     public void ShowCalendarTipConclude(){
         notificationUIManager.PopupTipWithImage(CALENDAR_TIP_CONCLUDE, "calendarIcon",
             CalendarUIManager.Instance.ResetAfterTutorialFinish, false, true);
-        
+
         TutorialLogic.Instance.FirstTimeCalendar = false;
         calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();

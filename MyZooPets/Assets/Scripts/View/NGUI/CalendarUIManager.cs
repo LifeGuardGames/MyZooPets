@@ -8,7 +8,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
     public UILabel rewardLabel;
-    public GameObject particleEffectPrefab;
+    public GameObject calendarHintArrow;
 
     //==================Events=======================
     public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
@@ -156,22 +156,35 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     }
 
     //==================Tutorial===========================
+    private GameObject greenStampHintArrow;
+    private GameObject redStampHintArrow;
     //Make the necessary modification to set up for tutorial
     private void SetUpForTutorial(){
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
         currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
     }
 
+    //Black out everything. Only shows the green stamp
     public void GreenStampTutorial(){
-        // TutorialUIManager.Instance.BackDrop(true);
+        TutorialUIManager.Instance.BackDrop(true);
+        //Display hint arrow
 
-        // Transform day = currentWeek[6].AM;
-        // day.localPosition = new Vector3(day.localPosition.x,
-        //     day.localPosition.y, -15);
+        greenStampHintArrow = NGUITools.AddChild(currentWeek[6].AM.gameObject, calendarHintArrow);
+        greenStampHintArrow.transform.localPosition = new Vector3(116, 23, 0);
+
+        //Bring green stamp above the back drop
+        Transform day = currentWeek[6].AM;
+        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21); 
     }
 
     public void RedExTutorial(){
+        //Display hint arrow
+        redStampHintArrow = NGUITools.AddChild(currentWeek[6].PM.gameObject, calendarHintArrow);
+        redStampHintArrow.transform.localPosition = new Vector3(116, 22, 0);
 
+       //Bring green stamp above the back drop
+        Transform night = currentWeek[6].PM;
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
     }
 
     //Reset calendar to original after tutorial is finished
@@ -179,6 +192,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         //erase all tutorial data
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
         currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        TutorialUIManager.Instance.BackDrop(false);
         calendarLogic.ResetWeekAfterTutorialFinish();
     }
 
@@ -186,9 +200,21 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public void TutorialRewardClaim(GameObject calendarSlot){
         UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
         if(button.normalSprite == GREEN_CHECK){
+            //Disable green stamp hint
+            Destroy(greenStampHintArrow);
+            Transform day = currentWeek[6].AM;
+            day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
+
+            //Reward and show tip 
             calendarLogic.ClaimReward(calendarSlot.transform.position);
             TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
         }else{
+            //Display hint arrow
+            Destroy(redStampHintArrow);
+           //Bring green stamp above the back drop
+            Transform night = currentWeek[6].PM;
+            night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
+
             TutorialUIManager.Instance.ShowCalendarTipRedStamp();
             //shake the calendar slot
             Hashtable optional = new Hashtable();
@@ -225,57 +251,69 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
             CalendarEntry entry = currentWeekData[i]; //Data day
             ThisWeekDay day = currentWeek[i]; //UI day
 
-            UIImageButton dayImageButton = day.AM.GetComponent<UIImageButton>();
+            UIImageButton dayButton = day.AM.GetComponent<UIImageButton>();
             switch(entry.DayTime){
                 case DosageRecord.Hit: //show check stamp
-                    dayImageButton.normalSprite = GREEN_CHECK;
-                    dayImageButton.hoverSprite = GREEN_CHECK;
-                    dayImageButton.pressedSprite = GREEN_CHECK_DOWN;
+                    if(!entry.BonusCollectedDayTime){
+                        dayButton.normalSprite = GREEN_CHECK;
+                        dayButton.hoverSprite = GREEN_CHECK;
+                        dayButton.pressedSprite = GREEN_CHECK_DOWN;
+                    }else{
+                        dayButton.normalSprite = GRAY_CHECK;
+                        dayButton.hoverSprite = GRAY_CHECK;
+                        dayButton.pressedSprite = GRAY_CHECK;
+                    }
                 break;
                 case DosageRecord.Miss: //show ex stamp
-                    dayImageButton.normalSprite = RED_EX;
-                    dayImageButton.hoverSprite = RED_EX;
-                    dayImageButton.pressedSprite = RED_EX_DOWN;
+                    dayButton.normalSprite = RED_EX;
+                    dayButton.hoverSprite = RED_EX;
+                    dayButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null: //blank
-                    dayImageButton.normalSprite = BLANK;
-                    dayImageButton.hoverSprite = BLANK;
-                    dayImageButton.pressedSprite = BLANK;
+                    dayButton.normalSprite = BLANK;
+                    dayButton.hoverSprite = BLANK;
+                    dayButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank: //blank
-                    dayImageButton.normalSprite = BLANK;
-                    dayImageButton.hoverSprite = BLANK;
-                    dayImageButton.pressedSprite = BLANK;
+                    dayButton.normalSprite = BLANK;
+                    dayButton.hoverSprite = BLANK;
+                    dayButton.pressedSprite = BLANK;
                 break;
             }
-            dayImageButton.enabled = false; // Tell it to redraw
-			dayImageButton.enabled = true;
+            dayButton.enabled = false; // Tell it to redraw
+			dayButton.enabled = true;
 
-            UIImageButton nightImageButton = day.PM.GetComponent<UIImageButton>();
+            UIImageButton nightButton = day.PM.GetComponent<UIImageButton>();
             switch(entry.NightTime){
                 case DosageRecord.Hit:
-                    nightImageButton.normalSprite = GREEN_CHECK;
-                    nightImageButton.hoverSprite = GREEN_CHECK;
-                    nightImageButton.pressedSprite = GREEN_CHECK_DOWN;
+                    if(!entry.BonusCollectedNightTime){
+                        nightButton.normalSprite = GREEN_CHECK;
+                        nightButton.hoverSprite = GREEN_CHECK;
+                        nightButton.pressedSprite = GREEN_CHECK_DOWN;
+                    }else{
+                        nightButton.normalSprite = GRAY_CHECK;
+                        nightButton.hoverSprite = GRAY_CHECK;
+                        nightButton.pressedSprite = GRAY_CHECK;
+                    }
                 break;
                 case DosageRecord.Miss:
-                    nightImageButton.normalSprite = RED_EX;
-                    nightImageButton.hoverSprite = RED_EX;
-                    nightImageButton.pressedSprite = RED_EX_DOWN;
+                    nightButton.normalSprite = RED_EX;
+                    nightButton.hoverSprite = RED_EX;
+                    nightButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null:
-                    nightImageButton.normalSprite = BLANK;
-                    nightImageButton.hoverSprite = BLANK;
-                    nightImageButton.pressedSprite = BLANK;
+                    nightButton.normalSprite = BLANK;
+                    nightButton.hoverSprite = BLANK;
+                    nightButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank:
-                    nightImageButton.normalSprite = BLANK;
-                    nightImageButton.hoverSprite = BLANK;
-                    nightImageButton.pressedSprite = BLANK;
+                    nightButton.normalSprite = BLANK;
+                    nightButton.hoverSprite = BLANK;
+                    nightButton.pressedSprite = BLANK;
                 break;
             }
-			nightImageButton.enabled = false; // Tell it to redraw
-			nightImageButton.enabled = true;
+			nightButton.enabled = false; // Tell it to redraw
+			nightButton.enabled = true;
         }
 
         for(int i=0; i<pastWeekData.Count; i++){

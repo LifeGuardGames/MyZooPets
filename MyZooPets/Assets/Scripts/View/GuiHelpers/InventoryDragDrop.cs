@@ -121,7 +121,13 @@ public class InventoryDragDrop : MonoBehaviour {
 			}
 			else if(mIsDragging)
 			{
-				mTrans.localPosition += (Vector3)delta;
+				// Sean: Not syncing with UIRoot manual height for ratio change account for them here
+				// TODO-s Fine pernament solution to this
+				float ratioX = 1280f/(Screen.width * 1.0f);
+				float ratioY = 800f/(Screen.height * 1.0f);
+				Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
+				Vector3 newDelta = new Vector3(delta.x * ratioX, delta.y * ratioY, 0f);
+				mTrans.localPosition += newDelta;
 			}
 			else{
 				isScrolling = true;

@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarUIManager : MonoBehaviour {
+public class CalendarUIManager : Singleton<CalendarUIManager> {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
     public UILabel rewardLabel;
-    public GameObject particleEffectPrefab;
+    public GameObject calendarHintArrow;
 
     //==================Events=======================
     public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
@@ -47,8 +47,12 @@ public class CalendarUIManager : MonoBehaviour {
     private CalendarLogic calendarLogic; //reference
 
     //sprite name in atlas
-    private const string STAMP_EX = "calendarStampEx";
-    private const string STAMP_CHECK = "calendarStampCheck";
+    private const string BLANK = "calendarButtonBlank";
+    private const string RED_EX_DOWN = "calendarButtonRedExDown";
+    private const string RED_EX = "calendarButtonRedEx";
+    private const string GREEN_CHECK_DOWN = "calendarButtonGreenCheckDown";
+    private const string GREEN_CHECK = "calendarButtonGreenCheck";
+    private const string GRAY_CHECK = "calendarButtonGrayCheck";
     private const string HALF_STAMP_RED_BOTTOM = "calendarHalfStampRedBottom";
     private const string HALF_STAMP_RED_TOP = "calendarHalfStampRedTop";
     private const string HALF_STAMP_GREEN_BOTTOM = "calendarHalfStampGreenBottom";
@@ -63,14 +67,17 @@ public class CalendarUIManager : MonoBehaviour {
 	}
 
     void Start(){
-        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
-		numberOfGreenStamps = calendarLogic.GreenStampCount;
-        CalendarLogic.OnCalendarReset += PopulateCalendar;
+        CalendarLogic.OnCalendarReset += ResetCalendar;
+
+        //check if in tutorial phase. special handler needed for sample data
+        //ThisWeekDay[3] sample data. set special button handler
+        if(TutorialLogic.Instance.FirstTimeCalendar){
+            SetUpForTutorial();
+        }
     }
 
     void OnDestroy(){
-        CalendarLogic.OnCalendarReset -= PopulateCalendar;
+        CalendarLogic.OnCalendarReset -= ResetCalendar;
     }
         
 	// Update is called once per frame
@@ -89,7 +96,6 @@ public class CalendarUIManager : MonoBehaviour {
 
     public void CalendarClicked(){
         calendarLogic.CalendarOpened();
-        // PopulateCalendar();
         GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
@@ -105,44 +111,120 @@ public class CalendarUIManager : MonoBehaviour {
     //Called when a checked calendar slot is clicked. Reward the player and turn the
     //slot off until the next bonus time
     public void ClaimReward(GameObject calendarSlot){
-        CalendarEntry entry;
-        int index = 0;
-        switch(calendarSlot.transform.parent.name){
-            case "Mon": index = 0; break;
-            case "Tue": index = 1; break;
-            case "Wed": index = 2; break;
-            case "Thu": index = 3; break;
-            case "Fri": index = 4; break;
-            case "Sat": index = 5; break;
-            case "Sun": index = 6; break;
-        }
-        entry = currentWeekData[index]; //get the Data reference of the button clicked
-       
-        //Disable further reward collection 
-        if(calendarSlot.name == "AM"){ //AM
-            entry.BonusCollectedDayTime = true;
-        }else{ //PM
-            entry.BonusCollectedNightTime = true;
-        }
-        calendarSlot.GetComponent<UIButton>().isEnabled = false; //turn button off
+        UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
 
-        //spawn particle effect
-        GameObject prefab = NGUITools.AddChild(calendarSlot, particleEffectPrefab);
-        prefab.transform.rotation = Quaternion.Euler(270, 0, 0);
-        prefab.transform.position = new Vector3(prefab.transform.position.x, 
-            prefab.transform.position.y, -0.5f);
+        if(button.normalSprite == GREEN_CHECK){ //bonuses for green check
+            CalendarEntry entry;
+            int index = 0;
+            switch(calendarSlot.transform.parent.name){
+                case "Mon": index = 0; break;
+                case "Tue": index = 1; break;
+                case "Wed": index = 2; break;
+                case "Thu": index = 3; break;
+                case "Fri": index = 4; break;
+                case "Sat": index = 5; break;
+                case "Sun": index = 6; break;
+            }
+            entry = currentWeekData[index]; //get the Data reference of the button clicked
+           
+            //Disable further reward collection 
+            if(calendarSlot.name == "AM"){ //AM
+                entry.BonusCollectedDayTime = true;
+            }else{ //PM
+                entry.BonusCollectedNightTime = true;
+            }
+            button.normalSprite = GRAY_CHECK;
+            button.hoverSprite = GRAY_CHECK;
+            button.pressedSprite = GRAY_CHECK;
+            button.isEnabled = false;
+            button.isEnabled = true;
 
-        //Add reward
-        calendarLogic.ClaimReward();
+            //Add reward
+            calendarLogic.ClaimReward(calendarSlot.transform.position);
 
-        numberOfGreenStamps--; //keep track of the rewards claimed
-        if(numberOfGreenStamps == 0){ //all rewards have been claimed
-            calendarLogic.IsRewardClaimed = true;
-            PopulateTimer();
+            numberOfGreenStamps--; //keep track of the rewards claimed
+            if(numberOfGreenStamps == 0){ //all rewards have been claimed
+                calendarLogic.IsRewardClaimed = true;
+                ResetTimer();
+            }
+        }else{ //No bonuses for blank for red ex
+            //shake the calendar slot
+            Hashtable optional = new Hashtable();
+            optional.Add("ease", LeanTweenType.punch);
+            LeanTween.moveX(calendarSlot, 0.01f, 0.5f, optional);
         }
     }
 
-    private void PopulateTimer(){
+    //==================Tutorial===========================
+    private GameObject greenStampHintArrow;
+    private GameObject redStampHintArrow;
+    //Make the necessary modification to set up for tutorial
+    private void SetUpForTutorial(){
+        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+    }
+
+    //Black out everything. Only shows the green stamp
+    public void GreenStampTutorial(){
+        TutorialUIManager.Instance.BackDrop(true);
+        //Display hint arrow
+
+        greenStampHintArrow = NGUITools.AddChild(currentWeek[6].AM.gameObject, calendarHintArrow);
+        greenStampHintArrow.transform.localPosition = new Vector3(116, 23, 0);
+
+        //Bring green stamp above the back drop
+        Transform day = currentWeek[6].AM;
+        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21); 
+    }
+
+    public void RedExTutorial(){
+        //Display hint arrow
+        redStampHintArrow = NGUITools.AddChild(currentWeek[6].PM.gameObject, calendarHintArrow);
+        redStampHintArrow.transform.localPosition = new Vector3(116, 22, 0);
+
+       //Bring green stamp above the back drop
+        Transform night = currentWeek[6].PM;
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
+    }
+
+    //Reset calendar to original after tutorial is finished
+    public void ResetAfterTutorialFinish(){
+        //erase all tutorial data
+        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        TutorialUIManager.Instance.BackDrop(false);
+        calendarLogic.ResetWeekAfterTutorialFinish();
+    }
+
+    //Use only during tutorial to prompt tips when green or red stamps are clicked
+    public void TutorialRewardClaim(GameObject calendarSlot){
+        UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
+        if(button.normalSprite == GREEN_CHECK){
+            //Disable green stamp hint
+            Destroy(greenStampHintArrow);
+            Transform day = currentWeek[6].AM;
+            day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
+
+            //Reward and show tip 
+            calendarLogic.ClaimReward(calendarSlot.transform.position);
+            TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
+        }else{
+            //Display hint arrow
+            Destroy(redStampHintArrow);
+           //Bring green stamp above the back drop
+            Transform night = currentWeek[6].PM;
+            night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
+
+            TutorialUIManager.Instance.ShowCalendarTipRedStamp();
+            //shake the calendar slot
+            Hashtable optional = new Hashtable();
+            optional.Add("ease", LeanTweenType.punch);
+            LeanTween.moveX(calendarSlot, 0.03f, 0.5f, optional);
+        }
+    }
+    //===================================================
+
+    private void ResetTimer(){
         TimeSpan timeSpan = calendarLogic.NextPlayPeriod - DateTime.Now;
         countDownTime = (float) timeSpan.TotalSeconds;
         //Next Reward timer
@@ -158,69 +240,80 @@ public class CalendarUIManager : MonoBehaviour {
     }
 	
     //Populate the calendar based on the data stored in DataManager
-    private void PopulateCalendar(object sender, EventArgs args){
-        PopulateTimer();
+    private void ResetCalendar(object sender, EventArgs args){
+        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
+        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
+        numberOfGreenStamps = calendarLogic.GreenStampCount;
 
+        ResetTimer();
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){
             CalendarEntry entry = currentWeekData[i]; //Data day
             ThisWeekDay day = currentWeek[i]; //UI day
 
-            UISprite stampSprite = day.AM.Find("Stamp").GetComponent<UISprite>();
-            UIButton dayButton = day.AM.GetComponent<UIButton>();
+            UIImageButton dayButton = day.AM.GetComponent<UIImageButton>();
             switch(entry.DayTime){
                 case DosageRecord.Hit: //show check stamp
-                    stampSprite.spriteName = STAMP_CHECK;
-                    stampSprite.alpha = 1;
-
                     if(!entry.BonusCollectedDayTime){
-                        dayButton.isEnabled = true;
+                        dayButton.normalSprite = GREEN_CHECK;
+                        dayButton.hoverSprite = GREEN_CHECK;
+                        dayButton.pressedSprite = GREEN_CHECK_DOWN;
                     }else{
-                        dayButton.isEnabled = false;
+                        dayButton.normalSprite = GRAY_CHECK;
+                        dayButton.hoverSprite = GRAY_CHECK;
+                        dayButton.pressedSprite = GRAY_CHECK;
                     }
                 break;
                 case DosageRecord.Miss: //show ex stamp
-                    stampSprite.spriteName = STAMP_EX;
-                    stampSprite.alpha = 1;
-                    dayButton.isEnabled = false;
+                    dayButton.normalSprite = RED_EX;
+                    dayButton.hoverSprite = RED_EX;
+                    dayButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null: //blank
-                    stampSprite.alpha = 0;
-                    dayButton.isEnabled = false;
+                    dayButton.normalSprite = BLANK;
+                    dayButton.hoverSprite = BLANK;
+                    dayButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank: //blank
-                    stampSprite.alpha = 0;
-                    dayButton.isEnabled = false;
+                    dayButton.normalSprite = BLANK;
+                    dayButton.hoverSprite = BLANK;
+                    dayButton.pressedSprite = BLANK;
                 break;
             }
+            dayButton.enabled = false; // Tell it to redraw
+			dayButton.enabled = true;
 
-            UISprite stampSpriteNight = day.PM.Find("Stamp").GetComponent<UISprite>();
-            UIButton nightButton = day.PM.GetComponent<UIButton>();
+            UIImageButton nightButton = day.PM.GetComponent<UIImageButton>();
             switch(entry.NightTime){
                 case DosageRecord.Hit:
-                    stampSpriteNight.spriteName = STAMP_CHECK;
-                    stampSpriteNight.alpha = 1;
-
                     if(!entry.BonusCollectedNightTime){
-                        nightButton.isEnabled = true;
+                        nightButton.normalSprite = GREEN_CHECK;
+                        nightButton.hoverSprite = GREEN_CHECK;
+                        nightButton.pressedSprite = GREEN_CHECK_DOWN;
                     }else{
-                        nightButton.isEnabled = false;
+                        nightButton.normalSprite = GRAY_CHECK;
+                        nightButton.hoverSprite = GRAY_CHECK;
+                        nightButton.pressedSprite = GRAY_CHECK;
                     }
                 break;
                 case DosageRecord.Miss:
-                    stampSpriteNight.spriteName = STAMP_EX;
-                    stampSpriteNight.alpha = 1;
-                    nightButton.isEnabled = false;
+                    nightButton.normalSprite = RED_EX;
+                    nightButton.hoverSprite = RED_EX;
+                    nightButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null:
-                    stampSpriteNight.alpha = 0;
-                    nightButton.isEnabled = false;
+                    nightButton.normalSprite = BLANK;
+                    nightButton.hoverSprite = BLANK;
+                    nightButton.pressedSprite = BLANK;
                 break;
                 case DosageRecord.LeaveBlank:
-                    stampSpriteNight.alpha = 0;
-                    nightButton.isEnabled = false;
+                    nightButton.normalSprite = BLANK;
+                    nightButton.hoverSprite = BLANK;
+                    nightButton.pressedSprite = BLANK;
                 break;
             }
+			nightButton.enabled = false; // Tell it to redraw
+			nightButton.enabled = true;
         }
 
         for(int i=0; i<pastWeekData.Count; i++){

@@ -33,9 +33,18 @@ public class BadgeGUI : MonoBehaviour {
 	public UIAtlas badgeLevelAtlas2;
 	public UIAtlas badgeLevelAtlas3;
 
-	// Populate badges on plaque here
 	void Start(){
+		BadgeLogic.OnNewBadgeAdded += UpdateLevelBadges;
+		UpdateLevelBadges(null, EventArgs.Empty);
+	}
 
+	void OnDestroy(){
+		BadgeLogic.OnNewBadgeAdded -= UpdateLevelBadges;
+	}
+
+	//Event Listener that updates the Level badges UI when new badges are added or
+	//when badges UI are loaded for the first time
+	private void UpdateLevelBadges(object senders, EventArgs arg){
 		// Level Badges
 		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
 			int levelNumber = badge.ID;
@@ -88,26 +97,7 @@ public class BadgeGUI : MonoBehaviour {
 //		}
 //	}
 
-	public void BadgeBoardBackButtonClicked(){
-		Debug.Log("BOOM");
-		if(isActive && !ClickManager.isClickLocked){
-			if(OnBadgeBoardClosed != null){
-    			OnBadgeBoardClosed (this, EventArgs.Empty);
-			}else{
-				Debug.LogError("OnBadgeBoardClosed is null");
-			}
-			isActive = false;
-			badgeBoard.collider.enabled = true;
-
-			if(backButtonReference != null){
-				Destroy(backButtonReference);
-			}
-			else{
-				Debug.LogError("No back button to delete");
-			}
-		}
-	}
-
+	
 	// When a badge is clicked. Zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
 		DisableBackButton();
@@ -195,6 +185,7 @@ public class BadgeGUI : MonoBehaviour {
 		isActive = false;
 	}
 
+	//When the badge board is clicked and zoomed into
 	public void BadgeBoardClicked(){
 		if(!isActive){
 			isActive = true;
@@ -207,4 +198,25 @@ public class BadgeGUI : MonoBehaviour {
 			messageScript.functionName = "BadgeBoardBackButtonClicked";
 		}
 	}
+
+	//The back button on the left top corner is clicked to zoom out of the badge board
+	public void BadgeBoardBackButtonClicked(){
+		if(isActive && !ClickManager.isClickLocked){
+			if(OnBadgeBoardClosed != null){
+    			OnBadgeBoardClosed (this, EventArgs.Empty);
+			}else{
+				Debug.LogError("OnBadgeBoardClosed is null");
+			}
+			isActive = false;
+			badgeBoard.collider.enabled = true;
+
+			if(backButtonReference != null){
+				Destroy(backButtonReference);
+			}
+			else{
+				Debug.LogError("No back button to delete");
+			}
+		}
+	}
+
 }

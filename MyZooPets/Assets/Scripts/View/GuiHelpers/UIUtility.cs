@@ -18,6 +18,7 @@ public class UIUtility : Singleton<UIUtility> {
 	}
 
 	public Vector3 nguiCameraWorld2Screen(Vector3 guiPos){
+		// guiPos = new Vector3(guiPos.x + 1.5f, guiPos.y + 0.8f, 0);
 		return nguiCamera.WorldToScreenPoint(guiPos);
 	}
 }

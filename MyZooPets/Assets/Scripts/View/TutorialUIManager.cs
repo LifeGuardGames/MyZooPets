@@ -71,36 +71,43 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        calendar.GetComponent<TutorialHighlighting>().HideArrow();
-
         ShowCalendarTipIntro();
-
-        realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
-        TutorialLogic.Instance.FirstTimeCalendar = false;
     }
 
     private void ShowCalendarTipIntro(){
         notificationUIManager.PopupTipWithImage(CALENDAR_TIP_INTRO, "calendarIcon", 
-            null, true, true);
+            CalendarUIManager.Instance.GreenStampTutorial, true, true);
     }
 
     public void ShowCalendarTipGreenStamp(){
         notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
-            null, false, true);
+            CalendarUIManager.Instance.RedExTutorial, false, true);
     }
 
     public void ShowCalendarTipRedStamp(){
         notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
-            null, false, true);
+            ShowCalendarTipBonus, false, true);
     }
 
     public void ShowCalendarTipBonus(){
         notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
-            null, false, false);
+            ShowCalendarTipConclude, false, true);
     }
 
+    /*
+        1)Conclude the calendar tutorial. 
+        2)Turn this tutorial off in DataManager. 
+        3)Unregister the tap item listener. 
+        4)Show Arrow for Real Inhaler.
+    */
     public void ShowCalendarTipConclude(){
-
+        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_CONCLUDE, "calendarIcon",
+            CalendarUIManager.Instance.ResetAfterTutorialFinish, false, true);
+        
+        TutorialLogic.Instance.FirstTimeCalendar = false;
+        calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
+        calendar.GetComponent<TutorialHighlighting>().HideArrow();
+        realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
     }
 
     //============Trigger tutorial=================

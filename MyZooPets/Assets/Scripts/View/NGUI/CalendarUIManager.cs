@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarUIManager : MonoBehaviour {
+public class CalendarUIManager : Singleton<CalendarUIManager> {
     public bool isDebug; //developing option
     public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
@@ -67,10 +67,7 @@ public class CalendarUIManager : MonoBehaviour {
 	}
 
     void Start(){
-        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
-		numberOfGreenStamps = calendarLogic.GreenStampCount;
-        CalendarLogic.OnCalendarReset += PopulateCalendar;
+        CalendarLogic.OnCalendarReset += ResetCalendar;
 
         //check if in tutorial phase. special handler needed for sample data
         //ThisWeekDay[3] sample data. set special button handler
@@ -80,7 +77,7 @@ public class CalendarUIManager : MonoBehaviour {
     }
 
     void OnDestroy(){
-        CalendarLogic.OnCalendarReset -= PopulateCalendar;
+        CalendarLogic.OnCalendarReset -= ResetCalendar;
     }
         
 	// Update is called once per frame
@@ -115,67 +112,93 @@ public class CalendarUIManager : MonoBehaviour {
     //slot off until the next bonus time
     public void ClaimReward(GameObject calendarSlot){
         UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
-        if(button.normalSprite != GREEN_CHECK) return;
 
-        CalendarEntry entry;
-        int index = 0;
-        switch(calendarSlot.transform.parent.name){
-            case "Mon": index = 0; break;
-            case "Tue": index = 1; break;
-            case "Wed": index = 2; break;
-            case "Thu": index = 3; break;
-            case "Fri": index = 4; break;
-            case "Sat": index = 5; break;
-            case "Sun": index = 6; break;
+        if(button.normalSprite == GREEN_CHECK){ //bonuses for green check
+            CalendarEntry entry;
+            int index = 0;
+            switch(calendarSlot.transform.parent.name){
+                case "Mon": index = 0; break;
+                case "Tue": index = 1; break;
+                case "Wed": index = 2; break;
+                case "Thu": index = 3; break;
+                case "Fri": index = 4; break;
+                case "Sat": index = 5; break;
+                case "Sun": index = 6; break;
+            }
+            entry = currentWeekData[index]; //get the Data reference of the button clicked
+           
+            //Disable further reward collection 
+            if(calendarSlot.name == "AM"){ //AM
+                entry.BonusCollectedDayTime = true;
+            }else{ //PM
+                entry.BonusCollectedNightTime = true;
+            }
+            button.normalSprite = GRAY_CHECK;
+            button.hoverSprite = GRAY_CHECK;
+            button.pressedSprite = GRAY_CHECK;
+            button.isEnabled = false;
+            button.isEnabled = true;
+
+            //Add reward
+            calendarLogic.ClaimReward(calendarSlot.transform.position);
+
+            numberOfGreenStamps--; //keep track of the rewards claimed
+            if(numberOfGreenStamps == 0){ //all rewards have been claimed
+                calendarLogic.IsRewardClaimed = true;
+                ResetTimer();
+            }
+        }else{ //No bonuses for blank for red ex
+            //shake the calendar slot
+            Hashtable optional = new Hashtable();
+            optional.Add("ease", LeanTweenType.punch);
+            LeanTween.moveX(calendarSlot, 0.01f, 0.5f, optional);
         }
-        entry = currentWeekData[index]; //get the Data reference of the button clicked
-       
-        //Disable further reward collection 
-        if(calendarSlot.name == "AM"){ //AM
-            entry.BonusCollectedDayTime = true;
-        }else{ //PM
-            entry.BonusCollectedNightTime = true;
-        }
-        button.normalSprite = GRAY_CHECK;
-
-        //Add reward
-        calendarLogic.ClaimReward(calendarSlot.transform.position);
-
-        numberOfGreenStamps--; //keep track of the rewards claimed
-        if(numberOfGreenStamps == 0){ //all rewards have been claimed
-            calendarLogic.IsRewardClaimed = true;
-            PopulateTimer();
-        }
-    }
-
-    //Called when user click on the red stamp
-    public void IllegalRewardClaim(){
-       //shake the whole calendar 
     }
 
     //==================Tutorial===========================
     //Make the necessary modification to set up for tutorial
     private void SetUpForTutorial(){
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+    }
+
+    public void GreenStampTutorial(){
         // TutorialUIManager.Instance.BackDrop(true);
+
+        // Transform day = currentWeek[6].AM;
+        // day.localPosition = new Vector3(day.localPosition.x,
+        //     day.localPosition.y, -15);
+    }
+
+    public void RedExTutorial(){
+
     }
 
     //Reset calendar to original after tutorial is finished
-    private void ResetAfterTutorialFinish(){
+    public void ResetAfterTutorialFinish(){
         //erase all tutorial data
         currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
         calendarLogic.ResetWeekAfterTutorialFinish();
     }
 
+    //Use only during tutorial to prompt tips when green or red stamps are clicked
     public void TutorialRewardClaim(GameObject calendarSlot){
-        calendarLogic.ClaimReward(calendarSlot.transform.position);
-        TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
+        UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
+        if(button.normalSprite == GREEN_CHECK){
+            calendarLogic.ClaimReward(calendarSlot.transform.position);
+            TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
+        }else{
+            TutorialUIManager.Instance.ShowCalendarTipRedStamp();
+            //shake the calendar slot
+            Hashtable optional = new Hashtable();
+            optional.Add("ease", LeanTweenType.punch);
+            LeanTween.moveX(calendarSlot, 0.03f, 0.5f, optional);
+        }
     }
     //===================================================
 
-    
-
-    private void PopulateTimer(){
+    private void ResetTimer(){
         TimeSpan timeSpan = calendarLogic.NextPlayPeriod - DateTime.Now;
         countDownTime = (float) timeSpan.TotalSeconds;
         //Next Reward timer
@@ -191,8 +214,12 @@ public class CalendarUIManager : MonoBehaviour {
     }
 	
     //Populate the calendar based on the data stored in DataManager
-    private void PopulateCalendar(object sender, EventArgs args){
-        PopulateTimer();
+    private void ResetCalendar(object sender, EventArgs args){
+        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
+        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
+        numberOfGreenStamps = calendarLogic.GreenStampCount;
+
+        ResetTimer();
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){
             CalendarEntry entry = currentWeekData[i]; //Data day

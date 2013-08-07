@@ -4,11 +4,9 @@ using System.Collections.Generic;
 public class LevelComponent : MonoBehaviour
 {
 	private int mNextID = 0;
-
 	[SerializeField]
-	private List<PointGroup> mPointGroups = new List<PointGroup>();
-
-	//private Dictionary<string, PointGroup> mPointGroups = new Dictionary<string, PointGroup>();
+    private List<PointGroup> mPointGroups = new List<PointGroup>();
+    private List<GameObject> mSpawnedItems = new List<GameObject>();
 
 	public List<PointGroup> PointGroups
 	{
@@ -16,8 +14,10 @@ public class LevelComponent : MonoBehaviour
 	}
 	public int NextID
 	{
-		get;
-		set;
+		get
+        {
+            return mNextID++;
+        }
 	}
 
 	public PointGroup GetGroup(string inID)
@@ -95,14 +95,18 @@ public class PointGroup
 	public string mID;
 	public List<PointInfo> mPoints;
 	public List<string> mGroups;
-	public List<string> mPurposes;
+    public bool[] mPurposes;
 
 	public PointGroup(string inID)
 	{
 		mID = inID;
 		mPoints = new List<PointInfo>();
 		mGroups = new List<string>();
-		mPurposes = new List<string>();
+        mPurposes = new bool[(int)eSelectionTypes.Max];
+        for (int purposeIndex = 0; purposeIndex < (int)eSelectionTypes.Max; purposeIndex++)
+        {
+            mPurposes[purposeIndex] = false;
+        }
 	}
 }
 
@@ -110,7 +114,8 @@ public class PointGroup
 public class PointInfo
 {
 	public Vector3 mPosition;
-	public eLineType mLineType;
+    public eLineType mLineType;
+    public Vector3 mLocalPosition;
 
 	public PointInfo()
 	{
@@ -131,4 +136,14 @@ public enum eLineType
 	Straight,
 	Curve,
 	Bezier
+}
+
+[System.Serializable]
+public enum eSelectionTypes
+{
+    None = -1,
+    Coins = 0,
+    Hazards,
+    Items,
+    Max
 }

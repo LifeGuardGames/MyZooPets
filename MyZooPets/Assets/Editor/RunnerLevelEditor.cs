@@ -34,7 +34,8 @@ public class RunnerLevelEditor : EditorWindow
     {
         if (mLastSelectedPointInfo != null && mLastSelectedObject != null)
         {
-            mLastSelectedPointInfo.mPosition = mLastSelectedObject.transform.position;
+            mLastSelectedPointInfo.mPosition = mLastSelectedObject.transform.position - mLastChosenLevelComponent.transform.position;
+            mLastSelectedPointInfo.mLocalPosition = mLastSelectedObject.transform.localPosition;
             //@HACK constanlty re-add
             mLastChosenLevelComponent.UpdatePointInfo(mSelectedGroupID, mLastSelectedPointInfo, mSelectedPointIndex);
         }
@@ -113,22 +114,33 @@ public class RunnerLevelEditor : EditorWindow
             GUILayout.EndArea();
 
 			// Groups
-            GUILayout.BeginArea(new Rect(100, 40, 200, 100));
-			EditorGUILayout.BeginToggleGroup("Groups", true);
-			mSelectedGroupToggles[0] = EditorGUILayout.Toggle("Group 1", mSelectedGroupToggles[0]);
-			mSelectedGroupToggles[1] = EditorGUILayout.Toggle("Group 2", mSelectedGroupToggles[1]);
-			mSelectedGroupToggles[2] = EditorGUILayout.Toggle("Group 3", mSelectedGroupToggles[2]);
-			EditorGUILayout.EndToggleGroup();
-            GUILayout.EndArea();
+	        bool[] mSelectedGroupToggles = new bool[3] { false, false, false };
 
-            // Purpose Area
-            GUILayout.BeginArea(new Rect(300, 40, 200, 100));
-            EditorGUILayout.BeginToggleGroup("Purpose", true);
-            mSelectedPurposeToggles[0] = EditorGUILayout.Toggle("Purpose 1", mSelectedPurposeToggles[0]);
-            mSelectedPurposeToggles[1] = EditorGUILayout.Toggle("Purpose 2", mSelectedPurposeToggles[1]);
-            mSelectedPurposeToggles[2] = EditorGUILayout.Toggle("Purpose 3", mSelectedPurposeToggles[2]);
-            EditorGUILayout.EndToggleGroup();
-            GUILayout.EndArea();
+            if (mCurrentSelectedGroup != null && mCurrentSelectedGroup.mPurposes.Length > 0)
+            {
+                /*
+                GUILayout.BeginArea(new Rect(100, 40, 200, 100));
+                EditorGUILayout.BeginToggleGroup("Groups", true);
+                //for (int selectedGroupIndex = )
+                mSelectedGroupToggles[0] = EditorGUILayout.Toggle("Group 1", mSelectedGroupToggles[0]);
+                mSelectedGroupToggles[1] = EditorGUILayout.Toggle("Group 2", mSelectedGroupToggles[1]);
+                mSelectedGroupToggles[2] = EditorGUILayout.Toggle("Group 3", mSelectedGroupToggles[2]);
+                EditorGUILayout.EndToggleGroup();
+                GUILayout.EndArea();
+                */
+
+                // Purpose Area
+                GUILayout.BeginArea(new Rect(300, 40, 200, 100));
+                EditorGUILayout.BeginToggleGroup("Purpose", true);
+                for (int selectedPurposeIndex = 0; selectedPurposeIndex < (int)eSelectionTypes.Max; selectedPurposeIndex++)
+                {
+                    mCurrentSelectedGroup.mPurposes[selectedPurposeIndex] = EditorGUILayout.Toggle(
+                        ((eSelectionTypes)selectedPurposeIndex).ToString(), 
+                        mCurrentSelectedGroup.mPurposes[selectedPurposeIndex] );
+                }
+                EditorGUILayout.EndToggleGroup();
+                GUILayout.EndArea();
+            }
 
             // Points Area
             GUILayout.BeginArea(new Rect(0, 140, 100, 40));
@@ -163,7 +175,7 @@ public class RunnerLevelEditor : EditorWindow
 						PointInfo currentPoint = points[pointIndex];
 
 						string newItem = "id" + pointIndex + " | " + currentPoint.mLineType + " | "
-							+ currentPoint.mPosition;
+							+ (currentPoint.mPosition + mLastChosenLevelComponent.transform.position);
 						pointGridItems.Add(newItem);
 					}
 					mSelectedPointIndex = GUILayout.SelectionGrid(-1, pointGridItems.ToArray(), 1);
@@ -171,7 +183,7 @@ public class RunnerLevelEditor : EditorWindow
 					// Attempt to re-select that item
 					if (mSelectedPointIndex >= 0 && mSelectedPointIndex < points.Count)
 					{
-                        SelectPoint(points[mSelectedPointIndex], mSelectedPointIndex);
+                        SelectPoint(mLastChosenLevelComponent, points[mSelectedPointIndex], mSelectedPointIndex);
                         
 					}
 				}
@@ -196,8 +208,14 @@ public class RunnerLevelEditor : EditorWindow
 			List<string> ids = new List<string>();
 			foreach (PointGroup currentPointGroup in selectedGroups)
 			{
+                string purposes = "";
+                for (int purposeIndex = 0; purposeIndex < (int)eSelectionTypes.Max; purposeIndex++)
+                {
+                    if (currentPointGroup.mPurposes[purposeIndex])
+                        purposes += ((eSelectionTypes)purposeIndex).ToString();
+                }
 				string newItem = currentPointGroup.mID + " | " + currentPointGroup.mPoints.Count.ToString() + " | "
-					+ string.Join(",", currentPointGroup.mGroups.ToArray()) + " | " + string.Join(",", currentPointGroup.mPurposes.ToArray());
+                    + string.Join(",", currentPointGroup.mGroups.ToArray()) + " | " + purposes;
 				gridItems.Add(newItem);
 				ids.Add(currentPointGroup.mID);
 			}
@@ -228,7 +246,9 @@ public class RunnerLevelEditor : EditorWindow
 			{
 				for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count - 1; pointIndex++)
 				{
-					Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition, currentGroup.mPoints[pointIndex + 1].mPosition);
+                    Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition + mLastChosenLevelComponent.transform.position,
+                        currentGroup.mPoints[pointIndex + 1].mPosition + mLastChosenLevelComponent.transform.position);
+					//Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition, currentGroup.mPoints[pointIndex + 1].mPosition);
 				}
 			}
 		}
@@ -237,8 +257,7 @@ public class RunnerLevelEditor : EditorWindow
 	private void CreateNewGroup(LevelComponent inSelectedLevel)
 	{
 		// Create new, blank data.
-		string defaultName = "ID" + inSelectedLevel.NextID;
-		inSelectedLevel.NextID += 1;
+        string defaultName = "ID" + inSelectedLevel.NextID;
 
 		PointGroup newGroup = new PointGroup(defaultName);
 
@@ -247,11 +266,11 @@ public class RunnerLevelEditor : EditorWindow
 
 	private void AddNewPoint(LevelComponent inSelectedLevel, string inGroupID)
     {
-        PointInfo generatedPoint = inSelectedLevel.AddNewPoint(inGroupID, inSelectedLevel.transform.position);
-        SelectPoint(generatedPoint, inSelectedLevel.GetNextPointNum(inGroupID));
+        PointInfo generatedPoint = inSelectedLevel.AddNewPoint(inGroupID, Vector3.zero);//inSelectedLevel.transform.position);
+        SelectPoint(inSelectedLevel, generatedPoint, inSelectedLevel.GetNextPointNum(inGroupID));
 	}
 
-    private void SelectPoint(PointInfo inPointToselect, int inIndex)
+    private void SelectPoint(LevelComponent inSelectedLevel, PointInfo inPointToselect, int inIndex)
     {
         // Clean out the old point
         ObjectDestroyUpdate(true);
@@ -260,7 +279,8 @@ public class RunnerLevelEditor : EditorWindow
         mLastSelectedPointInfo = inPointToselect;
         // Generate a new transform
         GameObject selectedPoint = new GameObject("point" + inIndex);
-        selectedPoint.transform.position = mLastSelectedPointInfo.mPosition;
+        selectedPoint.transform.SetParent(inSelectedLevel.gameObject);
+        selectedPoint.transform.position = (mLastSelectedPointInfo.mPosition + inSelectedLevel.transform.position);
 		mLastSelectedObject = selectedPoint;
 
         // Reselect gameobject

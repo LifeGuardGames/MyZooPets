@@ -7,11 +7,6 @@ public class BadgeGUI : MonoBehaviour {
 	//======================Event=============================
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
     //=======================================================
-
-	public GUISkin defaultSkin;
-	public Texture2D backButton;
-	public GUIStyle blankButtonStyle;
-
 	public GameObject backButtonPrefab;
 	private GameObject backButtonReference;
 	private bool isActive = false;
@@ -82,22 +77,6 @@ public class BadgeGUI : MonoBehaviour {
 		}
 	}
 
-//	void OnGUI(){
-//		GUI.skin = defaultSkin;
-//		if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
-//        	if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-//        		if(OnBadgeBoardClosed != null){
-//        			OnBadgeBoardClosed (this, EventArgs.Empty);
-//    			}else{
-//    				Debug.LogError("OnBadgeBoardClosed is null");
-//    			}
-//				isActive = false;
-//				badgeBoard.collider.enabled = true;
-//			}
-//		}
-//	}
-
-	
 	// When a badge is clicked. Zoom in on the badge and display detail information
 	public void BadgeClicked(GameObject go){
 		DisableBackButton();

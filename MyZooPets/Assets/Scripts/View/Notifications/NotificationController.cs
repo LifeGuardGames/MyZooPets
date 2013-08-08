@@ -10,14 +10,8 @@ using System.Collections;
 public class NotificationController : MonoBehaviour {
 
 	public GameObject backdrop;
-
-	public GameObject titleLabel;
 	public GameObject titleSprite;
-
 	public GameObject button1;
-	public GameObject button2;
-
-	public GameObject contentLabel;
 	public GameObject contentSprite;
 
 	void Init(){
@@ -29,14 +23,6 @@ public class NotificationController : MonoBehaviour {
 
 		UIButtonMessage buttonMessage = button1.GetComponent<UIButtonMessage>();
 		buttonMessage.target = (button1Target != null)? button1Target : this.gameObject;
-		buttonMessage.functionName = functionName;
-	}
-
-	public void setButton2Message(GameObject button2Target, string functionName){
-		D.assert(button2 != null, "No button2 in notification");
-
-		UIButtonMessage buttonMessage = button2.GetComponent<UIButtonMessage>();
-		buttonMessage.target = (button2Target != null)? button2Target : this.gameObject;
 		buttonMessage.functionName = functionName;
 	}
 
@@ -52,13 +38,6 @@ public class NotificationController : MonoBehaviour {
 		titleSprite.transform.localScale = new Vector3(spriteScale.x, spriteScale.y, 1f);
 	}
 
-	public void SetTitle(string text){
-		D.assert(titleLabel != null, "No titleLabel in notification");
-
-		UILabel label = titleLabel.GetComponent<UILabel>();
-		label.text = text;
-	}
-
 	public void SetContent(string atlasName, string spriteName, Vector2 spriteScale){
 		D.assert(contentSprite != null, "No contentSprite in notification");
 
@@ -69,13 +48,6 @@ public class NotificationController : MonoBehaviour {
 		sprite.atlas = atlas;
 		spriteName = spriteName;
 		contentSprite.transform.localScale = new Vector3(spriteScale.x, spriteScale.y, 1f);
-	}
-
-	public void SetContent(string text){
-		D.assert (contentLabel != null, "No contentLabel in notification");
-
-		UILabel label = contentLabel.GetComponent<UILabel>();
-		label.text = text;
 	}
 
 	public void Show(){

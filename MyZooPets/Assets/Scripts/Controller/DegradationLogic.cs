@@ -18,11 +18,8 @@ public class DegradationLogic : MonoBehaviour {
         }
     }
     //====================Events==============================
-    public class TriggerDestroyedEventArgs : EventArgs{ //arguments that will be passed to Event Handler
-        public Vector3 TriggerPosition {get; set;}
-    }
-    public static event EventHandler<TriggerDestroyedEventArgs> OnTriggerDestroyed;
     public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
+
     //=====================================================
 
     public List<DegradData> DegradationTriggers{
@@ -55,7 +52,6 @@ public class DegradationLogic : MonoBehaviour {
                 numberOfTriggersToInit = 3; 
                 DataManager.Instance.Degradation.AfternoonTrigger = false;
             }
-
         }
 
         //create triggers
@@ -83,6 +79,7 @@ public class DegradationLogic : MonoBehaviour {
     }
 
     void Update(){
+        if(TutorialLogic.Instance.FirstTimeDegradTrigger) return; //no degradation during tutorial phase
         timer -= Time.deltaTime;
         if (timer <= 0){
             TriggerDegradesHealth();
@@ -94,13 +91,8 @@ public class DegradationLogic : MonoBehaviour {
     public void ClearDegradationTrigger(int id){
 		Vector3 triggerPos = Vector3.zero;
         DegradData degradData = DataManager.Instance.Degradation.DegradationTriggers.Find(x => x.ID == id);
-        if(OnTriggerDestroyed != null){ //call event handler if not empty
-            TriggerDestroyedEventArgs args = new TriggerDestroyedEventArgs();
-            args.TriggerPosition = triggerLocations[degradData.PositionId].position;
-			triggerPos = args.TriggerPosition;
-        }else{
-            Debug.LogError("Trigger Destroyed listener is null");
-        }
+        triggerPos = triggerLocations[degradData.PositionId].position;
+
 		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
             50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);

@@ -12,11 +12,13 @@ public class TutorialPopupManager : BackDrop {
 	public GameObject titleSprite;
 	public GameObject button1;
 	public GameObject contentSprite;
+	public GameObject buttonHintArrow;
 	public UILabel buttonLabel;
 
 	protected override void Awake(){
 		base.Awake();
 		backDropParent = gameObject;
+		buttonHintArrow.active = false;
 	}
 
 	//Handler for button

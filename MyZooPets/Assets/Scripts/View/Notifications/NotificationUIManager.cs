@@ -236,9 +236,9 @@ public class NotificationUIManager : MonoBehaviour {
 
 		//Spawn tutorial prefab
 		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
-		GameObject obj = NGUITools.AddChild(centerAnchor, popupNotificiationTutorialLeft);
-		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, 
-			obj.transform.localPosition.y, zVal);
+		Vector3 prefabPosition = popupNotificiationTutorialLeft.transform.localPosition;
+		GameObject obj = NGUITools.AddChild(leftAnchor, popupNotificiationTutorialLeft);
+		obj.transform.localPosition = prefabPosition;
 
 		//Set content
 		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();

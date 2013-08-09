@@ -71,9 +71,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 
         //check if in tutorial phase. special handler needed for sample data
         //ThisWeekDay[3] sample data. set special button handler
-        if(TutorialLogic.Instance.FirstTimeCalendar){
-            SetUpForTutorial();
-        }
+        if(TutorialLogic.Instance.FirstTimeCalendar) SetUpForTutorial();
     }
 
     void OnDestroy(){

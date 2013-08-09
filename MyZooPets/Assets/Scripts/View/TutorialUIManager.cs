@@ -38,7 +38,11 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
             realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeCalendar){
             calendar.GetComponent<TutorialHighlighting>().ShowArrow();
-        }else{}
+        }else{
+            //start trigger tutorial after others are done
+            DegradationUIManager.Instance.ActivateParticleEffects();
+        }
+
     }
 
     //Assign OnTap event listener to game objects that are still new to the user
@@ -78,7 +82,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         TutorialLogic.Instance.FirstTimeCalendar = false;
         calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
-        realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         CalendarUIManager.Instance.CleanUpTutorial();
     }
 
@@ -98,22 +101,21 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         // disappear immediately when done, because the level up message should pop up right away
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;
+        DegradationUIManager.Instance.ActivateParticleEffects();
     }
 
     //==============Inhaler tutorial=================
     private void StartRealInhalerTutorial(){
         notificationUIManager.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
-
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
-
-        DataManager.Instance.Tutorial.FirstTimeRealInhaler = false;
+        TutorialLogic.Instance.FirstTimeRealInhaler = false;
     }
 
     private void StartTeddyInhalertutorial(){
         TutorialHighlighting highlight = teddyInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
-        DataManager.Instance.Tutorial.FirstTimeTeddyInhaler = false;
+        // TutorialLogic.Instance.FirstTimeTeddyInhaler = false;
     }
     
     // private void openChallenges(){

@@ -13,51 +13,32 @@ public class TutorialPopupManager : BackDrop {
 	public GameObject button1;
 	public GameObject contentSprite;
 
-	public delegate void CallBack();
-	public CallBack NextButtonCallBack;
-
-	// public void SetButton1Message(GameObject button1Target){ 
-	// 	D.assert(button1 != null, "No button1 in notification");
-
-	// 	UIButtonMessage buttonMessage = button1.GetComponent<UIButtonMessage>();
-	// 	buttonMessage.target = (button1Target != null)? button1Target : this.gameObject;
-	// 	buttonMessage.functionName = functionName;
-	// }
-
 	protected override void Awake(){
 		base.Awake();
 		backDropParent = gameObject;
 	}
 
 	//Handler for button
-	public void OnNextButtonClick(){
-		if(NextButtonCallBack != null) NextButtonCallBack();
+	public void OnButtonClick(){
 		Hide();
 	}
 
-	// public void SetTitle(string atlasName, string spriteName, Vector2 spriteScale){
-	// 	D.assert(titleSprite != null, "No titleSprite in notification");
+	public void SetButtonMessage(string message){
+		// button1.transform.Find()
+	}
 
-	// 	UIAtlas atlas = Resources.Load("Atlas/" + atlasName) as UIAtlas;
-	// 	D.assert(atlas != null);
+	//Function to be called after the tutorial panel hides itself
+	public void SetButtonCallBack(GameObject target, string functionName){
+		MoveTweenToggleDemultiplexer moveToggleDemux = this.GetComponent<MoveTweenToggleDemultiplexer>();
+		moveToggleDemux.isHideFinishedCallback = true;
+		moveToggleDemux.HideTarget = target;
+		moveToggleDemux.HideFunctionName = functionName;
+	}
 
-	// 	UISprite sprite = titleSprite.GetComponent<UISprite>();
-	// 	sprite.atlas = atlas;
-	// 	spriteName = spriteName;
-	// 	titleSprite.transform.localScale = new Vector3(spriteScale.x, spriteScale.y, 1f);
-	// }
-
+	//Set the image that needs to be displayed
 	public void SetContent(string spriteName){
-		// D.assert(contentSprite != null, "No contentSprite in notification");
-
-		// UIAtlas atlas = Resources.Load("Atlas/" + atlasName) as UIAtlas;
-		// D.assert(atlas != null);
-
 		UISprite sprite = contentSprite.GetComponent<UISprite>();
 		sprite.spriteName = spriteName;
-		// sprite.atlas = atlas;
-		// spriteName = spriteName;
-		// contentSprite.transform.localScale = new Vector3(spriteScale.x, spriteScale.y, 1f);
 	}
 
 	public void Display(){

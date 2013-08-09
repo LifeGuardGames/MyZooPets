@@ -35,10 +35,13 @@ public class BackDrop : MonoBehaviour {
     //Display the back drop
     protected void DisplayBackDrop(){
        //spawn  
+       float zVal = BackDrop.PrefabReference.transform.localPosition.z;
+       Vector3 prefabScale = BackDrop.PrefabReference.transform.localScale;
        tempBackDrop = NGUITools.AddChild(backDropParent, BackDrop.PrefabReference);
        tempBackDrop.name = "NotificationBackDrop";
-       // tempBackDrop.transform.localPosition = new Vector3(0, 0, -20);
-       tempBackDrop.transform.localScale = new Vector3(5000, 5000, 1);
+       tempBackDrop.transform.localPosition = new Vector3(tempBackDrop.transform.localPosition.x,
+            tempBackDrop.transform.localPosition.y, zVal);
+       tempBackDrop.transform.localScale = prefabScale; 
     }
 
     //Destroy the spawned back drop

@@ -156,43 +156,68 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     }
 
     //==================Tutorial===========================
-    private GameObject greenStampHintArrow;
+    private GameObject greenStampHintArrow; //temp reference to hint arrow.
     private GameObject redStampHintArrow;
+    private Transform day;
+    private Transform night;
+
     //Make the necessary modification to set up for tutorial
     private void SetUpForTutorial(){
-        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
-        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        day = currentWeek[6].AM;
+        night = currentWeek[6].PM;
+        day.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+        night.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
+
+        //Set the finish target to TutorialUIManager
+        GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = true;
+        GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = TutorialUIManager.Instance.gameObject;
+        GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "StartCalendarTutorial";
     }
 
     //Black out everything. Only shows the green stamp
-    public void GreenStampTutorial(){
-        TutorialUIManager.Instance.BackDrop(true);
+    public void SetUpGreenStampTip(){
         //Display hint arrow
-
-        greenStampHintArrow = NGUITools.AddChild(currentWeek[6].AM.gameObject, calendarHintArrow);
+        greenStampHintArrow = NGUITools.AddChild(day.gameObject, calendarHintArrow);
         greenStampHintArrow.transform.localPosition = new Vector3(116, 23, 0);
 
         //Bring green stamp above the back drop
-        Transform day = currentWeek[6].AM;
         day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21); 
     }
 
-    public void RedExTutorial(){
+    //Black out everything. Only shows the red stamp
+    public void SetUpRedExTip(){
+        //Remove green stamp tutorial
+        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
+
         //Display hint arrow
         redStampHintArrow = NGUITools.AddChild(currentWeek[6].PM.gameObject, calendarHintArrow);
         redStampHintArrow.transform.localPosition = new Vector3(116, 22, 0);
 
-       //Bring green stamp above the back drop
-        Transform night = currentWeek[6].PM;
+       //Bring red stamp above the back drop
         night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
     }
 
+    public void SetUpBonusTip(){
+       //Bring red stamp below the back drop
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6); 
+
+        //Bring gray stamp above
+        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21);
+ 
+    }
+
     //Reset calendar to original after tutorial is finished
-    public void ResetAfterTutorialFinish(){
-        //erase all tutorial data
-        currentWeek[6].AM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-        currentWeek[6].PM.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-        TutorialUIManager.Instance.BackDrop(false);
+    public void CleanUpTutorial(){
+        //Erase all tutorial data
+        day.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+        night.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+
+        //Reset the finish target
+        GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = false;
+        GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = null; 
+        GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "";
+
+        //Erase tutorial data
         calendarLogic.ResetWeekAfterTutorialFinish();
     }
 
@@ -200,22 +225,20 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public void TutorialRewardClaim(GameObject calendarSlot){
         UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
         if(button.normalSprite == GREEN_CHECK){
+
             //Disable green stamp hint
             Destroy(greenStampHintArrow);
-            Transform day = currentWeek[6].AM;
-            day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
+            button.normalSprite = GRAY_CHECK;
+            button.hoverSprite = GRAY_CHECK;
+            button.pressedSprite = GRAY_CHECK;
+            button.isEnabled = false;
+            button.isEnabled = true;
 
-            //Reward and show tip 
+            //Reward
             calendarLogic.ClaimReward(calendarSlot.transform.position);
-            TutorialUIManager.Instance.ShowCalendarTipGreenStamp();
         }else{
-            //Display hint arrow
-            Destroy(redStampHintArrow);
-           //Bring green stamp above the back drop
-            Transform night = currentWeek[6].PM;
-            night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
+            if(button.normalSprite == RED_EX) Destroy(redStampHintArrow);
 
-            TutorialUIManager.Instance.ShowCalendarTipRedStamp();
             //shake the calendar slot
             Hashtable optional = new Hashtable();
             optional.Add("ease", LeanTweenType.punch);

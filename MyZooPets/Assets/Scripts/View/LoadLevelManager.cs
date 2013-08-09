@@ -52,6 +52,9 @@ public class LoadLevelManager : MonoBehaviour {
 
     void Start(){
         Invoke("InitializeDataForUI", 0.5f);
+
+		// Load bg music here
+		AudioManager.Instance.PlayBackground("background1");
     }
 
     //Data is ready for use so initialize all UI data

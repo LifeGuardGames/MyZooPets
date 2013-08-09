@@ -1,15 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class AudioManager : MonoBehaviour {
+public class AudioManager : Singleton<AudioManager>{
 
 	/** Types of Audio Clips
 	*	background	:	only one playing at a time, if any (ie. music)
 	*	effect		:	overlapping allowed to all (ie. jump, coin collect)
 	**/
-	
-	public AudioClip button1;
-	public AudioClip button2;
 	
 	public AudioClip background1;
 
@@ -20,6 +17,7 @@ public class AudioManager : MonoBehaviour {
 	private AudioSource effectSource;
 
 	void Awake(){
+		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
 		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
 	}
@@ -27,19 +25,15 @@ public class AudioManager : MonoBehaviour {
 	public void PlayBackground(string audioClipName){
 		if(audioClipName == "background1"){
 			backgroundClip = background1;
-		}
-		else{
-			Debug.LogError("Could not find AudioClip Name");	
-		}
-		
-		if(backgroundClip == null){
-			Debug.LogError("Background audio clip can not be found in refmap");
-		}
-		else{
+
+			D.assert(backgroundClip != null, "Null audioclip");
 			backgroundSource.volume = 1;
 			backgroundSource.loop = true;
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();
+		}
+		else{
+			Debug.LogError("Could not find AudioClip Name");	
 		}
 	}
 
@@ -61,6 +55,7 @@ public class AudioManager : MonoBehaviour {
 		}
 	}
 
+	/*
 	public void PlayEffect(string audioClipName){
 		PlayEffect(audioClipName, 1.0f);
 	}
@@ -89,7 +84,8 @@ public class AudioManager : MonoBehaviour {
 			backgroundSource.PlayOneShot(effectClip);
 		}
 		else{
-			Debug.LogError("Effect audio clip can not be found in refmap");
+			Debug.LogError("Effect audio clip can not be found");
 		}
 	}
+	*/
 }

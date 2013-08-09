@@ -187,6 +187,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     //Black out everything. Only shows the red stamp
     public void SetUpRedExTip(){
         //Remove green stamp tutorial
+        if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
         day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
 
         //Display hint arrow
@@ -197,8 +198,10 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
     }
 
+    //Black out everything.
     public void SetUpBonusTip(){
        //Bring red stamp below the back drop
+        if(redStampHintArrow != null) Destroy(redStampHintArrow);
         night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6); 
 
         //Bring gray stamp above
@@ -216,6 +219,10 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = false;
         GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = null; 
         GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "";
+
+        //Clean up hint arrow if still there
+        if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
+        if(redStampHintArrow != null) Destroy(redStampHintArrow);
 
         //Erase tutorial data
         calendarLogic.ResetWeekAfterTutorialFinish();

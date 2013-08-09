@@ -12,6 +12,7 @@ public class TutorialPopupManager : BackDrop {
 	public GameObject titleSprite;
 	public GameObject button1;
 	public GameObject contentSprite;
+	public UILabel buttonLabel;
 
 	protected override void Awake(){
 		base.Awake();
@@ -24,7 +25,7 @@ public class TutorialPopupManager : BackDrop {
 	}
 
 	public void SetButtonMessage(string message){
-		// button1.transform.Find()
+		buttonLabel.text = message;
 	}
 
 	//Function to be called after the tutorial panel hides itself

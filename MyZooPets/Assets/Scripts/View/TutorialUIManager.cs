@@ -52,19 +52,19 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     private void StartCalendarTutorial(){
         CalendarUIManager.Instance.SetUpGreenStampTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp, 
-           this.gameObject, "ShowCalendarTipRedStamp"); 
+           this.gameObject, "ShowCalendarTipRedStamp", "Next"); 
     }
 
     public void ShowCalendarTipRedStamp(){
         CalendarUIManager.Instance.SetUpRedExTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarRedStamp, 
-            this.gameObject, "ShowCalendarTipBonus");
+            this.gameObject, "ShowCalendarTipBonus", "Next");
     }
 
     public void ShowCalendarTipBonus(){
         CalendarUIManager.Instance.SetUpBonusTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarBonus, 
-            this.gameObject, "ShowCalendarTipConclude");
+            this.gameObject, "ShowCalendarTipConclude", "Done");
     }
 
     /*

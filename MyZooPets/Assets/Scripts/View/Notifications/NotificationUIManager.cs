@@ -225,7 +225,8 @@ public class NotificationUIManager : MonoBehaviour {
 		Desc: creates a popup for tutorial
 		Param: tutorial sprite name, the target for call back, the function name for call back
 	*/
-	public void TutorialMessage(TutorialImageType imageType, GameObject target, string functionName){
+	public void TutorialMessage(TutorialImageType imageType, GameObject target, 
+		string functionName, string buttonMessage){
 		string spriteName = "";
 		switch(imageType){
 			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
@@ -242,6 +243,7 @@ public class NotificationUIManager : MonoBehaviour {
 		//Set content
 		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();
 		script.SetContent(spriteName);
+		if(buttonMessage != "") script.SetButtonMessage(buttonMessage);
 		script.SetButtonCallBack(target, functionName);
 		script.Display();
 	}

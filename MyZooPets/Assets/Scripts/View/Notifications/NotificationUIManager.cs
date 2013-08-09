@@ -10,7 +10,8 @@ public class NotificationUIManager : MonoBehaviour {
 
 	// References
 	public GameObject cameraObject;
-	public GameObject NguiAnchor;
+	public GameObject centerAnchor;
+	public GameObject leftAnchor;
 	public GameObject popupTextureGreatNGUI;
 	public GameObject popupTextureNiceTryNGUI;
 	public GameObject popupTextureUseTheInhalerNGUI;
@@ -23,6 +24,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public GameObject popupTipWithImageNGUI;
 	public GameObject gameOverRewardMessageOneButton; // NGUI as well
 	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
+	public GameObject popupNotificiationTutorialLeft;
 	public bool flipped;
 
 	void Start(){
@@ -79,7 +81,7 @@ public class NotificationUIManager : MonoBehaviour {
 	}
 
 	GameObject ShowPopupTexture(GameObject prefab){
-		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
+		GameObject obj = NGUITools.AddChild(centerAnchor, prefab);
 		obj.GetComponent<MoveTweenToggle>().Reset();
 		obj.GetComponent<MoveTweenToggle>().Show(1.0f);
 		return obj;
@@ -149,7 +151,7 @@ public class NotificationUIManager : MonoBehaviour {
 	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab, bool startsHidden){ // doesn't call Show(). Show() is called in Display()
 		// save z-value, because it gets reset when using NGUITools.AddChild(...)
 		float zVal = prefab.transform.localPosition.z;
-		GameObject obj = NGUITools.AddChild(NguiAnchor, prefab);
+		GameObject obj = NGUITools.AddChild(centerAnchor, prefab);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
 		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
 		mtt.startsHidden = startsHidden;
@@ -217,5 +219,18 @@ public class NotificationUIManager : MonoBehaviour {
 		oneButtonMessage.Button1Text = "Quit";
 		oneButtonMessage.Display(false);
 
+	}
+
+	/*
+		Desc: creates a popup for tutorial
+	*/
+	public void TutorialMessage(string spriteName){
+		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
+		GameObject obj = NGUITools.AddChild(centerAnchor, popupNotificiationTutorialLeft);
+		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, 
+			obj.transform.localPosition.y, zVal);
+		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();
+		script.SetContent(spriteName);
+		script.Display();
 	}
 }

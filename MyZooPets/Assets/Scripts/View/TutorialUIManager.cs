@@ -59,10 +59,12 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     //Use to cover up the whole screen during a mandatory tutorial
     public void BackDrop(bool isVisible){
         if(isVisible){
+            Vector3 prefabLocalPosition = backDrop.transform.localPosition;
+            Vector3 prefabLocalScale = backDrop.transform.localScale;
             GameObject go = NGUITools.AddChild(nguiAnchor, backDrop);
             go.name = "TutorialBackDrop";
-            go.transform.localPosition = new Vector3(0, 0, -20);
-            go.transform.localScale = new Vector3(5000, 5000, 1);
+            go.transform.localPosition = prefabLocalPosition; 
+            go.transform.localScale = prefabLocalScale; 
         }else{
             GameObject go = nguiAnchor.transform.Find("TutorialBackDrop").gameObject;
             if(go != null) Destroy(go, 0.5f);

@@ -50,5 +50,10 @@ public class NotificationTest : MonoBehaviour {
             "1 button GG")){
             notificationUIManager.GameOverRewardMessage(1000, 10000, null);
         }
+
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*6, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "tutorial test")){
+            
+        }
     }
 }

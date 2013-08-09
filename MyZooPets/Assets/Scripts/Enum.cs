@@ -94,6 +94,14 @@ public enum DojoSkillType{
     Sit,
     Wave,
     Backflip
-}public enum TalkImageType{
+}
+
+public enum TalkImageType{
     Heart,
+}
+
+public enum TutorialImageType{
+    CalendarGreenStamp,
+    CalendarRedStamp,
+    CalendarBonus
 }

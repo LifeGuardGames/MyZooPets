@@ -75,19 +75,22 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     public void ShowCalendarTipGreenStamp(){
         // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
         //     CalendarUIManager.Instance.RedExTutorial, false, true);
-        notificationUIManager.TutorialMessage("help", CalendarUIManager.Instance.RedExTutorial);
+        notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp, 
+            CalendarUIManager.Instance.RedExTutorial);
     }
 
     public void ShowCalendarTipRedStamp(){
         // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
         //     ShowCalendarTipBonus, false, true);
-        notificationUIManager.TutorialMessage("help", ShowCalendarTipBonus);
+        notificationUIManager.TutorialMessage(TutorialImageType.CalendarRedStamp, 
+            ShowCalendarTipBonus);
     }
 
     public void ShowCalendarTipBonus(){
         // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
         //     ShowCalendarTipConclude, false, true);
-        notificationUIManager.TutorialMessage("help", ShowCalendarTipConclude);
+        notificationUIManager.TutorialMessage(TutorialImageType.CalendarBonus, 
+            ShowCalendarTipConclude);
     }
 
     /*
@@ -117,7 +120,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", 
             ShowDegradTipConclude, true, true);
     }
-    
+
     private void ShowDegradTipConclude(){
         // disappear immediately when done, because the level up message should pop up right away
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 

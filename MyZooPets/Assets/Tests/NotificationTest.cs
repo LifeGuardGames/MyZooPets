@@ -53,7 +53,8 @@ public class NotificationTest : MonoBehaviour {
 
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*6, BUTTON_WIDTH, BUTTON_HEIGHT),
             "tutorial test")){
-            notificationUIManager.TutorialMessage("Help", delegate(){print("sup");});
+            notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp,
+                delegate(){print("sup");});
         }
     }
 }

@@ -224,11 +224,21 @@ public class NotificationUIManager : MonoBehaviour {
 	/*
 		Desc: creates a popup for tutorial
 	*/
-	public void TutorialMessage(string spriteName, TutorialPopupManager.CallBack nextButtonCallBack){
+	public void TutorialMessage(TutorialImageType imageType, TutorialPopupManager.CallBack nextButtonCallBack){
+		string spriteName = "";
+		switch(imageType){
+			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
+			case TutorialImageType.CalendarRedStamp: spriteName = "tutorialCalendar2"; break;
+			case TutorialImageType.CalendarBonus: spriteName = "tutorialCalendar3"; break;
+		}
+
+		//Spawn tutorial prefab
 		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(centerAnchor, popupNotificiationTutorialLeft);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, 
 			obj.transform.localPosition.y, zVal);
+
+		//Set content
 		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();
 		script.SetContent(spriteName);
 		script.NextButtonCallBack = nextButtonCallBack;

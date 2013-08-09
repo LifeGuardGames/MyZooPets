@@ -10,8 +10,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     // public GameObject slotMachine;
     public GameObject realInhaler;
     public GameObject teddyInhaler;
-    public GameObject backDrop; //use this giant collider for forced tutorial
-    public GameObject nguiAnchor; //the anchor to spawn the backDrop;
 
     public NotificationUIManager notificationUIManager;
     public ClickManager clickManager;
@@ -20,7 +18,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     private const string CALENDAR_TIP_GREEN_STAMP = "Good Job! Green stamp means you used the inhaler on your pet on time. You can click on the green stamps to earn stars!";
     private const string CALENDAR_TIP_RED_STAMP = "Ah Oh. Red stamp means you forgot to use the inhaler on your pet on time. This is not good for the pets heath.";
     private const string CALENDAR_TIP_BONUS = "Extra stars can be collected ever 12 hours. Remember to check often!";
-    private const string CALENDAR_TIP_CONCLUDE = "Now let's start the game with a new calendar";
     private const string DEGRAD_TIP1 = "Good job! You just removed an asthma trigger.";
     private const string DEGRAD_TIP2 = "Make sure you clean them up when you see them, or your pet will get sick!";
     
@@ -46,51 +43,28 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //Assign OnTap event listener to game objects that are still new to the user
     private void SetupTutorial(){
-        if(TutorialLogic.Instance.FirstTimeCalendar){
-            calendar.GetComponent<TapItem>().OnTap += StartCalendarTutorial;
-        }
         if(TutorialLogic.Instance.FirstTimeRealInhaler){
             realInhaler.GetComponent<TapItem>().OnTap += StartRealInhalerTutorial;
         }
     }
 
-    //Use to cover up the whole screen during a mandatory tutorial
-    public void BackDrop(bool isVisible){
-        if(isVisible){
-            GameObject go = NGUITools.AddChild(nguiAnchor, backDrop);
-            go.name = "TutorialBackDrop";
-            go.transform.localPosition = new Vector3(0, 0, -20); 
-            go.transform.localScale = new Vector3(5000, 5000, 1); 
-        }else{
-            GameObject go = nguiAnchor.transform.Find("TutorialBackDrop").gameObject;
-            if(go != null) Destroy(go, 0.5f);
-        }
-    }
-
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        CalendarUIManager.Instance.GreenStampTutorial();
-    }
-
-    public void ShowCalendarTipGreenStamp(){
-        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
-        //     CalendarUIManager.Instance.RedExTutorial, false, true);
+        CalendarUIManager.Instance.SetUpGreenStampTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp, 
-            CalendarUIManager.Instance.RedExTutorial);
+           this.gameObject, "ShowCalendarTipRedStamp"); 
     }
 
     public void ShowCalendarTipRedStamp(){
-        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
-        //     ShowCalendarTipBonus, false, true);
+        CalendarUIManager.Instance.SetUpRedExTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarRedStamp, 
-            ShowCalendarTipBonus);
+            this.gameObject, "ShowCalendarTipBonus");
     }
 
     public void ShowCalendarTipBonus(){
-        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
-        //     ShowCalendarTipConclude, false, true);
+        CalendarUIManager.Instance.SetUpBonusTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarBonus, 
-            ShowCalendarTipConclude);
+            this.gameObject, "ShowCalendarTipConclude");
     }
 
     /*
@@ -98,15 +72,14 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         2)Turn this tutorial off in DataManager. 
         3)Unregister the tap item listener. 
         4)Show Arrow for Real Inhaler.
+        5)Clean calendar UI
     */
     public void ShowCalendarTipConclude(){
-        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_CONCLUDE, "calendarIcon",
-            CalendarUIManager.Instance.ResetAfterTutorialFinish, false, true);
-
         TutorialLogic.Instance.FirstTimeCalendar = false;
         calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
         realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
+        CalendarUIManager.Instance.CleanUpTutorial();
     }
 
     //============Trigger tutorial=================

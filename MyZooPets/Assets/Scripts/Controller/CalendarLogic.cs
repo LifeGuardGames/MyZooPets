@@ -164,7 +164,7 @@ public class CalendarLogic : MonoBehaviour{
 
     //Reset the week back to blank entries
     public void ResetWeekAfterTutorialFinish(){
-        DataManager.Instance.Calendar.EntriesThisWeek = LeaveBlankWeek();
+        DataManager.Instance.Calendar.EntriesThisWeek[6] = new CalendarEntry();
         if(OnCalendarReset != null){
             OnCalendarReset(this, EventArgs.Empty);
         }else{

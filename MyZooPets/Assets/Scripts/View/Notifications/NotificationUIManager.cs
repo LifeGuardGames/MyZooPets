@@ -224,13 +224,14 @@ public class NotificationUIManager : MonoBehaviour {
 	/*
 		Desc: creates a popup for tutorial
 	*/
-	public void TutorialMessage(string spriteName){
+	public void TutorialMessage(string spriteName, TutorialPopupManager.CallBack nextButtonCallBack){
 		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(centerAnchor, popupNotificiationTutorialLeft);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, 
 			obj.transform.localPosition.y, zVal);
 		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();
 		script.SetContent(spriteName);
+		script.NextButtonCallBack = nextButtonCallBack;
 		script.Display();
 	}
 }

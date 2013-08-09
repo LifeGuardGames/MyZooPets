@@ -37,13 +37,11 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //Event listener that activates new tutorial when an old tutorial is completed
     private void UpdateTutorial(object sender, EventArgs args){
-        if(TutorialLogic.Instance.FirstTimeCalendar){
-            calendar.GetComponent<TutorialHighlighting>().ShowArrow();
-        }else if(TutorialLogic.Instance.FirstTimeRealInhaler){
+        if(TutorialLogic.Instance.FirstTimeRealInhaler){
             realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
-        }else{
-
-        }
+        }else if(TutorialLogic.Instance.FirstTimeCalendar){
+            calendar.GetComponent<TutorialHighlighting>().ShowArrow();
+        }else{}
     }
 
     //Assign OnTap event listener to game objects that are still new to the user
@@ -59,12 +57,10 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     //Use to cover up the whole screen during a mandatory tutorial
     public void BackDrop(bool isVisible){
         if(isVisible){
-            Vector3 prefabLocalPosition = backDrop.transform.localPosition;
-            Vector3 prefabLocalScale = backDrop.transform.localScale;
             GameObject go = NGUITools.AddChild(nguiAnchor, backDrop);
             go.name = "TutorialBackDrop";
-            go.transform.localPosition = prefabLocalPosition; 
-            go.transform.localScale = prefabLocalScale; 
+            go.transform.localPosition = new Vector3(0, 0, -20); 
+            go.transform.localScale = new Vector3(5000, 5000, 1); 
         }else{
             GameObject go = nguiAnchor.transform.Find("TutorialBackDrop").gameObject;
             if(go != null) Destroy(go, 0.5f);
@@ -73,27 +69,25 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        ShowCalendarTipIntro();
-    }
-
-    private void ShowCalendarTipIntro(){
-        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_INTRO, "calendarIcon", 
-            CalendarUIManager.Instance.GreenStampTutorial, true, true);
+        CalendarUIManager.Instance.GreenStampTutorial();
     }
 
     public void ShowCalendarTipGreenStamp(){
-        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
-            CalendarUIManager.Instance.RedExTutorial, false, true);
+        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_GREEN_STAMP, "calendarStampCheck", 
+        //     CalendarUIManager.Instance.RedExTutorial, false, true);
+        notificationUIManager.TutorialMessage("help", CalendarUIManager.Instance.RedExTutorial);
     }
 
     public void ShowCalendarTipRedStamp(){
-        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
-            ShowCalendarTipBonus, false, true);
+        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_RED_STAMP, "calendarStampEx", 
+        //     ShowCalendarTipBonus, false, true);
+        notificationUIManager.TutorialMessage("help", ShowCalendarTipBonus);
     }
 
     public void ShowCalendarTipBonus(){
-        notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
-            ShowCalendarTipConclude, false, true);
+        // notificationUIManager.PopupTipWithImage(CALENDAR_TIP_BONUS, "calendarIcon", 
+        //     ShowCalendarTipConclude, false, true);
+        notificationUIManager.TutorialMessage("help", ShowCalendarTipConclude);
     }
 
     /*
@@ -119,11 +113,12 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         }
     }
 
-    void ShowDegradTipIntro(){
+    private void ShowDegradTipIntro(){
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", 
             ShowDegradTipConclude, true, true);
     }
-    void ShowDegradTipConclude(){
+    
+    private void ShowDegradTipConclude(){
         // disappear immediately when done, because the level up message should pop up right away
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;

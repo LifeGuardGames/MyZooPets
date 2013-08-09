@@ -506,7 +506,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 292439500}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.707168579, y: 0, z: 0}
+  m_LocalPosition: {x: -.736409545, y: .736665726, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 761162431}
@@ -820,7 +820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -888,6 +888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   removeDataOnDestroy: 0
   isDebug: 1
+  calendarDummyData: 0
 --- !u!4 &440341769
 Transform:
   m_ObjectHideFlags: 0
@@ -942,6 +943,9 @@ MonoBehaviour:
   rescueShakerPrefab: {fileID: 100000, guid: 6b788af8704bf40168311d7ae813cb75, type: 2}
   inhaleExhalePrefab: {fileID: 100000, guid: 9ef0098ef69b6465fb60200b9176605e, type: 2}
   smallRescuePrefab: {fileID: 100002, guid: 123d72a65bf6a4e55a0ad02405640258, type: 2}
+  textPrefabShake: {fileID: 0}
+  textPrefabSwipe: {fileID: 0}
+  textPrefabDrag: {fileID: 0}
   isPracticeGame: 1
   gameEnded: 0
 --- !u!1 &515763883
@@ -1124,9 +1128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
-  mColor: {r: .407843143, g: .996078432, b: .498039216, a: 1}
+  mColor: {r: .242647052, g: .183215737, b: .119539358, a: 1}
   mPivot: 4
   mDepth: 7
   mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
@@ -1928,6 +1932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   specificInhalerTypeString: none
   showOnStep: 4
+  optionalTextPrefab: {fileID: 0}
 --- !u!1 &1058318308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,7 +1956,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1058318308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.707168579, y: 400, z: 0}
+  m_LocalPosition: {x: -.736409545, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 35392446}
@@ -2474,7 +2479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: 39122d5ff3f8df244bade0f2af93effa, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 1}
   mPivot: 4
@@ -2532,9 +2537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
-  mColor: {r: .407843143, g: .996078432, b: .498039216, a: 1}
+  mColor: {r: .242647052, g: .183215737, b: .119539358, a: 1}
   mPivot: 4
   mDepth: 7
   mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
@@ -3046,7 +3051,7 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: 11.1445618
+    e03: 11.1738024
     e10: 0
     e11: 400
     e12: 0
@@ -3173,6 +3178,10 @@ Prefab:
       objectReference: {fileID: 361685015}
     - target: {fileID: 11400000, guid: 8af0a417382214921b179d7f1be402d2, type: 2}
       propertyPath: NguiAnchor
+      value: 
+      objectReference: {fileID: 292439500}
+    - target: {fileID: 11400000, guid: 8af0a417382214921b179d7f1be402d2, type: 2}
+      propertyPath: centerAnchor
       value: 
       objectReference: {fileID: 292439500}
     m_RemovedComponents: []
@@ -3748,7 +3757,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraObject: {fileID: 361685015}
-  NguiAnchor: {fileID: 292439500}
+  centerAnchor: {fileID: 292439500}
+  leftAnchor: {fileID: 0}
   popupTextureGreatNGUI: {fileID: 100000, guid: 12ef9b1e3b2c14e41ae9088527803573,
     type: 2}
   popupTextureNiceTryNGUI: {fileID: 100000, guid: 339c0cfdd55b948279d1c42949bcd1ee,
@@ -3769,6 +3779,8 @@ MonoBehaviour:
   gameOverRewardMessageOneButton: {fileID: 100010, guid: 2e5dcbccf55824c2f9134bc8951e56c6,
     type: 2}
   gameOverRewardMessageTwoButtons: {fileID: 100008, guid: fdfa4d242fb104649af77ae7ee863c64,
+    type: 2}
+  popupNotificiationTutorialLeft: {fileID: 100014, guid: d0cac8f2171928445b4e6994e9972e1c,
     type: 2}
   flipped: 0
 --- !u!1001 &1981459102
@@ -3866,9 +3878,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
-  mColor: {r: .410447776, g: 1, b: .505270839, a: 1}
+  mColor: {r: .242647052, g: .183215752, b: .119539358, a: 1}
   mPivot: 4
   mDepth: 6
   mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
@@ -3991,7 +4003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4

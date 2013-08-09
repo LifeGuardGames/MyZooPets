@@ -37,7 +37,7 @@ public class BackDrop : MonoBehaviour {
        //spawn  
        tempBackDrop = NGUITools.AddChild(backDropParent, BackDrop.PrefabReference);
        tempBackDrop.name = "NotificationBackDrop";
-       tempBackDrop.transform.localPosition = new Vector3(0, 0, -20);
+       // tempBackDrop.transform.localPosition = new Vector3(0, 0, -20);
        tempBackDrop.transform.localScale = new Vector3(5000, 5000, 1);
     }
 

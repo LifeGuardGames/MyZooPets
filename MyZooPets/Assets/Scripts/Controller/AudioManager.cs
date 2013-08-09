@@ -16,6 +16,8 @@ public class AudioManager : Singleton<AudioManager>{
 	private AudioSource backgroundSource;
 	private AudioSource effectSource;
 
+	public bool isMusicOn = true; // Thank me(Sean) later, devs
+
 	void Awake(){
 		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
@@ -23,17 +25,19 @@ public class AudioManager : Singleton<AudioManager>{
 	}
 
 	public void PlayBackground(string audioClipName){
-		if(audioClipName == "background1"){
-			backgroundClip = background1;
-
-			D.assert(backgroundClip != null, "Null audioclip");
-			backgroundSource.volume = 1;
-			backgroundSource.loop = true;
-			backgroundSource.clip = backgroundClip;
-			backgroundSource.Play();
-		}
-		else{
-			Debug.LogError("Could not find AudioClip Name");	
+		if(isMusicOn){
+			if(audioClipName == "background1"){
+				backgroundClip = background1;
+	
+				D.assert(backgroundClip != null, "Null audioclip");
+				backgroundSource.volume = 1;
+				backgroundSource.loop = true;
+				backgroundSource.clip = backgroundClip;
+				backgroundSource.Play();
+			}
+			else{
+				Debug.LogError("Could not find AudioClip Name");	
+			}
 		}
 	}
 

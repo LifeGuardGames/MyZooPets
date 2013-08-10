@@ -724,7 +724,7 @@ public abstract class UIWidget : MonoBehaviour
 						if (!hasMatrix) mLocalToPanel = p.worldToLocal * cachedTransform.localToWorldMatrix;
 
 						mGeom.ApplyOffset(offset);
-						mGeom.ApplyTransform(mLocalToPanel, p.generateNormals);
+						mGeom.ApplyTransform(mLocalToPanel);
 					}
 					return true;
 				}
@@ -737,7 +737,7 @@ public abstract class UIWidget : MonoBehaviour
 #if OLD_UNITY
 			else if (parentMoved && mGeom.hasVertices)
 			{
-				mGeom.ApplyTransform(p.worldToLocal * cachedTransform.localToWorldMatrix, p.generateNormals);
+				mGeom.ApplyTransform(p.worldToLocal * cachedTransform.localToWorldMatrix);
 			}
 #endif
 		}

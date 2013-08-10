@@ -42,7 +42,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 
 		foreach(GameObject go in GoList){
 			MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-			if(toggle != null){
+			if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName())){
 				if(startsHidden){
 					toggle.startsHidden = true;
 					toggle.Reset();
@@ -52,9 +52,6 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 				}
 
 				toggle.isDebug = false;	// Turn all the other debug off
-			}
-			else{
-				Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
 			}
 		}
 
@@ -92,12 +89,8 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-				if(toggle != null){
+				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName()))
 					toggle.Show();
-				}
-				else{
-					Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
-				}
 			}
 			
 			// If set to begin show callback, call it now!
@@ -113,12 +106,8 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-				if(toggle != null){
+				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName()))
 					toggle.Hide();
-				}
-				else{
-					Debug.LogError("No MoveTweenToggle script for " + go.GetFullName());
-				}
 			}
 			
 			// If set to begin hide callback, call it now!

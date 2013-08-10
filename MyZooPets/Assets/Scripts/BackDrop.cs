@@ -19,9 +19,7 @@ public class BackDrop : MonoBehaviour {
         get{
             if(prefabReference == null){
                 prefabReference = Resources.Load("NotificationBackDrop") as GameObject;
-                if(prefabReference == null){
-                    Debug.LogError("NotificationBackDrop prefab cannot be found in the Resources folder");
-                }
+                D.Assert(prefabReference != null, "NotificationBackDrop prefab cannot be found in the Resources folder");
             }
             return prefabReference;
         }

@@ -14,7 +14,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-#if !USE_SIMPLE_DICTIONARY
+#if !USE_SIMPLE_DICTIONARY && OLD_UNITY
 using System.Collections.Specialized;
 #endif
 
@@ -699,8 +699,8 @@ public class UIPanel : MonoBehaviour
 			UIDrawCall dc = mDrawCalls.buffer[--i];
 			if (dc != null) NGUITools.DestroyImmediate(dc.gameObject);
 		}
-		mDrawCalls.Clear();
-		mChanged.Clear();
+		mDrawCalls.Release();
+		mChanged.Release();
 #if OLD_UNITY
 		mChildren.Clear();
 #endif

@@ -44,10 +44,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         //award badge and make them show in UI
         DataManager.Instance.BadgeStatus[badgeIndex].IsAwarded = true;
         DataManager.Instance.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
-        if(OnNewBadgeAdded != null){
+        if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
             OnNewBadgeAdded(this, EventArgs.Empty);
-        }else{
-            Debug.LogError("OnNewBadgeAdded is null");
-        }
     }
 }

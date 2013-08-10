@@ -46,22 +46,18 @@ public class TutorialPopupManager : BackDrop {
 
 	public void Display(){
 		MoveTweenToggleDemultiplexer moveToggleDemux = this.GetComponent<MoveTweenToggleDemultiplexer>();
-		if(moveToggleDemux != null){
+		if(D.Assert(moveToggleDemux != null, "No move tween script detected")){
 			moveToggleDemux.Show();
 			DisplayBackDrop();
-		}else{
-			Debug.LogError("No move tween script detected");
 		}
 	}
 
 	private void Hide(){
 		MoveTweenToggleDemultiplexer moveToggleDemux = this.GetComponent<MoveTweenToggleDemultiplexer>();
-		if(moveToggleDemux != null){
+		if(D.Assert(moveToggleDemux != null, "No move tween script detect")){
 			moveToggleDemux.Hide();
 			HideBackDrop();
 			Destroy(gameObject, 1f);
-		}else{
-			Debug.LogError("No move tween script detected");
 		}
 	}
 }

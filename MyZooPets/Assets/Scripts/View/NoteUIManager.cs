@@ -25,10 +25,7 @@ public class NoteUIManager : MonoBehaviour {
 
     public void NoteClosed(){
         GetComponent<MoveTweenToggle>().Hide();
-        if(OnNoteClosed != null){
+        if(D.Assert(OnNoteClosed != null, "OnNoteClosed has no listeners"))
             OnNoteClosed(this, EventArgs.Empty);
-        }else{
-            Debug.LogError("OnNoteClosed listener is null");
-        }
     }
 }

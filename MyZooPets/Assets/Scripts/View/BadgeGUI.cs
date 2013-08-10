@@ -83,7 +83,7 @@ public class BadgeGUI : MonoBehaviour {
 
 		BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
 
-		if(meta != null){
+		if(D.Assert(meta != null, "No Metadata attached on badge")){
 			// Find the appropriate atlas TODO-s load resource dynamically?
 			UIAtlas activeAtlas = null;
 			if(meta.atlasName == badgeLevelAtlas1.name){
@@ -146,9 +146,6 @@ public class BadgeGUI : MonoBehaviour {
 			// Show description panel
 			descriptionObject.GetComponent<MoveTweenToggle>().Show();
 		}
-		else{
-			Debug.LogError("No Metadata attached on badge");
-		}
 	}
 
 	public void CloseDescription(){
@@ -181,20 +178,15 @@ public class BadgeGUI : MonoBehaviour {
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	public void BadgeBoardBackButtonClicked(){
 		if(isActive && !ClickManager.isClickLocked){
-			if(OnBadgeBoardClosed != null){
-    			OnBadgeBoardClosed (this, EventArgs.Empty);
-			}else{
-				Debug.LogError("OnBadgeBoardClosed is null");
-			}
+
+			if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
+    			OnBadgeBoardClosed(this, EventArgs.Empty);
+
 			isActive = false;
 			badgeBoard.collider.enabled = true;
 
-			if(backButtonReference != null){
+			if(D.Assert(backButtonReference != null, "No back button to delete"))
 				Destroy(backButtonReference);
-			}
-			else{
-				Debug.LogError("No back button to delete");
-			}
 		}
 	}
 

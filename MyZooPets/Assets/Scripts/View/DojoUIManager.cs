@@ -16,11 +16,8 @@ public class DojoUIManager : MonoBehaviour {
         GUI.skin = defaultSkin;
         if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
             if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-                if(OnDojoDoorClosed != null){
+                if(D.Assert(OnDojoDoorClosed != null, "OnDojoDoorClosed has no listeners"))
                     OnDojoDoorClosed (this, EventArgs.Empty);
-                }else{
-                    Debug.LogError("OnDojoDoorClosed is null");
-                }
                 isActive = false;
             }
         }

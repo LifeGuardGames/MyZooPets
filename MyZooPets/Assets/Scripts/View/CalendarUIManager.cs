@@ -99,11 +99,8 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 
     public void CalendarClosed(){
         GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-        if(OnCalendarClosed != null){
+        if(D.Assert(OnCalendarClosed != null, "OnCalendarClosed has no listeners"))
             OnCalendarClosed(this, EventArgs.Empty);
-        }else{
-            Debug.LogError("OnCalendarClosed listener is null");
-        }
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the

@@ -49,11 +49,8 @@ public class StoreUIManager : MonoBehaviour {
 
 	public void StoreClosed(){
 		GetComponent<MoveTweenToggle>().Hide();
-		if(OnStoreClosed != null){
+		if(D.Assert(OnStoreClosed != null, "OnStoreClosed has no listeners"))
 			OnStoreClosed(this, EventArgs.Empty);
-		}else{
-			Debug.LogError("OnStoreClosed listener is null");
-		}
 	}
 
 	//This function is called when buying an item

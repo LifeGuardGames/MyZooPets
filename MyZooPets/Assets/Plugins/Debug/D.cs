@@ -13,7 +13,7 @@ public class D
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_WARN" )]
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_ERROR" )]
-	public static void log( object format, params object[] paramList )
+	public static void Log( object format, params object[] paramList )
 	{
 		if( format is string )
 			Debug.Log( string.Format( format as string, paramList ) );
@@ -24,7 +24,7 @@ public class D
 
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_WARN" )]
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_ERROR" )]
-	public static void warn( object format, params object[] paramList )
+	public static void Warn( object format, params object[] paramList )
 	{
 		if( format is string )
 			Debug.LogWarning( string.Format( format as string, paramList ) );
@@ -34,7 +34,7 @@ public class D
 
 
 	[System.Diagnostics.Conditional( "DEBUG_LEVEL_ERROR" )]
-	public static void error( object format, params object[] paramList )
+	public static void Error( object format, params object[] paramList )
 	{
 		if( format is string )
 			Debug.LogError( string.Format( format as string, paramList ) );
@@ -43,32 +43,41 @@ public class D
 	}
 
 
-	[System.Diagnostics.Conditional( "UNITY_EDITOR" )]
-	[System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
-	public static void assert( bool condition )
+	// [System.Diagnostics.Conditional( "UNITY_EDITOR" )]
+	// [System.Diagnostics.Conditional("UNITY_IPHONE")]
+	// [System.Diagnostics.Conditional("UNITY_ANDROID")]
+	// [System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
+	public static bool Assert( bool condition )
 	{
-		assert( condition, string.Empty, true );
+		return Assert( condition, string.Empty, true );
 	}
  
 
-	[System.Diagnostics.Conditional( "UNITY_EDITOR" )]
-	[System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
-	public static void assert( bool condition, string assertString )
+	// [System.Diagnostics.Conditional( "UNITY_EDITOR" )]
+	// [System.Diagnostics.Conditional("UNITY_IPHONE")]
+	// [System.Diagnostics.Conditional("UNITY_ANDROID")]
+	// [System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
+	public static bool Assert( bool condition, string assertString )
 	{
-		assert( condition, assertString, false );
+		return Assert( condition, assertString, false );
 	}
 
 
-	[System.Diagnostics.Conditional( "UNITY_EDITOR" )]
-	[System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
-	public static void assert( bool condition, string assertString, bool pauseOnFail )
+	// [System.Diagnostics.Conditional( "UNITY_EDITOR" )]
+	// [System.Diagnostics.Conditional("UNITY_IPHONE")]
+	// [System.Diagnostics.Conditional("UNITY_ANDROID")]
+	// [System.Diagnostics.Conditional( "DEBUG_LEVEL_LOG" )]
+	public static bool Assert( bool condition, string assertString, bool pauseOnFail )
 	{
+		bool retVal = true;
 		if( !condition )
 		{
+			retVal = false;
 			Debug.LogError( "assert failed! " + assertString );
 			throw new Exception();	// Throw exception here
 			if( pauseOnFail )
 				Debug.Break();
 		}
+		return retVal;
 	}
 }

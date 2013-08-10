@@ -540,7 +540,7 @@ public class UILabel : UIWidget
 						float x = (mSize.x * scale > maxX) ? (maxX / mSize.x) * scale : scale;
 						scale = Mathf.Min(x, scale);
 					}
-					
+
 					scale = Mathf.Round(scale);
 					cachedTransform.localScale = new Vector3(scale, scale, 1f);
 				}

@@ -18,12 +18,9 @@ public class StatsController : Singleton<StatsController> {
 	private HUDAnimator hudAnimator;
 	
 	void Start(){
-		if(hudAnimatorObject == null)
-			Debug.LogError("Please attach hudanimator object!");
-		else{
+		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-			if(hudAnimator == null)
-				Debug.LogError("No HUDAnimator script attached");
+			if(D.Assert(hudAnimator != null, "No HUDAnimator script attached"));
 		}
 	}
 	

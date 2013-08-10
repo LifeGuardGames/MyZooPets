@@ -26,17 +26,14 @@ public class AudioManager : Singleton<AudioManager>{
 
 	public void PlayBackground(string audioClipName){
 		if(isMusicOn){
-			if(audioClipName == "background1"){
+			if(D.Assert(audioClipName == "background1", "Could not find AudioClip Name")){
 				backgroundClip = background1;
 	
-				D.assert(backgroundClip != null, "Null audioclip");
+				D.Assert(backgroundClip != null, "Null audioclip");
 				backgroundSource.volume = 1;
 				backgroundSource.loop = true;
 				backgroundSource.clip = backgroundClip;
 				backgroundSource.Play();
-			}
-			else{
-				Debug.LogError("Could not find AudioClip Name");	
 			}
 		}
 	}

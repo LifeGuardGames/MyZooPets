@@ -155,21 +155,15 @@ public class CalendarLogic : MonoBehaviour{
         UpdateCalendar(now);
         DataManager.Instance.Calendar.LastCalendarOpenedTime = now;
 
-        if(OnCalendarReset != null){
+        if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
             OnCalendarReset(this, EventArgs.Empty);
-        }else{
-            Debug.LogError("OnCalendarReset is null");
-        }
     }
 
     //Reset the week back to blank entries
     public void ResetWeekAfterTutorialFinish(){
         DataManager.Instance.Calendar.EntriesThisWeek[6] = new CalendarEntry();
-        if(OnCalendarReset != null){
+        if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
             OnCalendarReset(this, EventArgs.Empty);
-        }else{
-            Debug.LogError("OnCalendarReset is null");
-        }
     }
     //================================================
     

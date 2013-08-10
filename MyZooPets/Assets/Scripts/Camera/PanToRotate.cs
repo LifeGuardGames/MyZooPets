@@ -37,9 +37,8 @@ public class PanToRotate : MonoBehaviour {
        mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
        int layerNGUI = LayerMask.NameToLayer("NGUI");
         NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
-        if (NGUICamera == null){
-            Debug.LogError("NGUI camera not found!");
-        }
+        
+        D.Assert(NGUICamera != null, "NGUI camera not found");
 	}
 	
 	// Update is called once per frame

@@ -14,11 +14,7 @@ public class TutorialLogic : Singleton<TutorialLogic> {
         }
         set{
             DataManager.Instance.Tutorial.FirstTimeCalendar = value;
-            if(OnTutorialUpdated != null){
-                OnTutorialUpdated(this, EventArgs.Empty);
-            }else{
-                Debug.LogError("OnTutorialUpdated is null");
-            }
+            UpdateCallBack();
         }
     }
 
@@ -28,11 +24,7 @@ public class TutorialLogic : Singleton<TutorialLogic> {
         }
         set{
             DataManager.Instance.Tutorial.FirstTimeRealInhaler = value;
-            if(OnTutorialUpdated != null){
-                OnTutorialUpdated(this, EventArgs.Empty);
-            }else{
-                Debug.LogError("OnTutorialUpdated is null");
-            }
+            UpdateCallBack();
         }
     }
 
@@ -42,12 +34,13 @@ public class TutorialLogic : Singleton<TutorialLogic> {
         }
         set{
             DataManager.Instance.Tutorial.FirstTimeDegradTrigger = value;
-            if(OnTutorialUpdated != null){
-                OnTutorialUpdated(this, EventArgs.Empty);
-            }else{
-                Debug.LogError("OnTutorialUpdated is null");
-            }
+            UpdateCallBack();
         }
+    }
+
+    private void UpdateCallBack(){
+        if(D.Assert(OnTutorialUpdated != null, "OnTutorialUpdated has no listeners"))
+            OnTutorialUpdated(null, EventArgs.Empty);
     }
 
 	// Use this for initialization

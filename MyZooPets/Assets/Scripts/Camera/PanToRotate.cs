@@ -14,6 +14,8 @@ public class PanToRotate : MonoBehaviour {
     private Vector2 startTouchPos; //position of the touch when finger touches the screen
     private bool[] enabledPartitions = {true, true, true, false, false}; //is the partition accessible to user
     private float[] partitionAngles = {0, 72, 144, 216, 288}; //the camera angle for the partition
+    private int rightLimit = 2; //id of the first partition that is locked on the right
+    private int leftLimit = 0; //rotation can never rotate to the left of the first partition
     private int currentIndex = 0; //current partition
     private int numPartitions = 5; //total number of room partitions
     private Direction panDirection; //the direction of the last pan gesture
@@ -92,13 +94,21 @@ public class PanToRotate : MonoBehaviour {
                         panDirection = Direction.Left;
                         int nextIndex = GetNextPartitionIndex();
                         if(nextIndex != -1 && enabledPartitions[nextIndex]){
-                            rotate = touchDeltaPosition.x * panSpeed;
+                            float temp = touchDeltaPosition.x * panSpeed;
+
+                            //Check if camera is not rotating beyond the allowed partitions
+                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
+                            if(calculatedRotation < partitionAngles[rightLimit]) rotate = temp;
                         }
                     }else if(touch.position.x > startTouchPos.x + minPanDistance){
                         panDirection = Direction.Right;
                         int prevIndex = GetPrevPartitionIndex();
                         if(prevIndex != -1 && enabledPartitions[prevIndex]){
-                            rotate = touchDeltaPosition.x * panSpeed;
+                            float temp = touchDeltaPosition.x * panSpeed;
+
+                            //Check if camera is not rotating beyond the allowed partitions
+                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
+                            if(calculatedRotation > partitionAngles[leftLimit]) rotate = temp;
                         }
                     }
                     gameObject.transform.Rotate(0, -rotate, 0);

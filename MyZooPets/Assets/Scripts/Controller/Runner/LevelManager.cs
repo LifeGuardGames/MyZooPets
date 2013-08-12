@@ -18,8 +18,9 @@ public class LevelManager : MonoBehaviour
 	public LevelComponent StartingLevelComponent;
 	public List<LevelComponent> LevelComponents;
 
+    private Vector3 mLastCenterPosition = Vector3.zero;
+    private PlayerRunner mPlayerRunner = null;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
-	private Vector3 lastCenterPosition = Vector3.zero;
 
 	// Use this for initialization
 	void Start ()
@@ -35,22 +36,22 @@ public class LevelManager : MonoBehaviour
 		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
 		PopulateLevelComponent(nextLevel);
+
+        GameObject playerRunnerGameObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerRunnerGameObject != null)
+            mPlayerRunner = (PlayerRunner)playerRunnerGameObject.GetComponent<PlayerRunner>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		// When the runner has run enough distance from the last position, it's time to kick it for a new one.
-		GameObject runner = GameObject.FindGameObjectWithTag("Player");
-
 		// Yknow, assuming there is a runner and  alevel.
-		if (mLevelComponentQueue.Count > 0 && runner != null)
+        if (mLevelComponentQueue.Count > 0 && mPlayerRunner != null)
 		{
-			Vector3 currentRunnerPosition = runner.transform.position;
+            Vector3 currentRunnerPosition = mPlayerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
 
-			//@TODO test if this actually is a good number.
-			int zExtent = 2;
+			const int zExtent = 2;
 
 			Vector3 frontLevelPosition = frontLevelComponent.transform.position;
 			// Different betwee the two positions
@@ -62,7 +63,7 @@ public class LevelManager : MonoBehaviour
 				// Dequeue the first
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
 				// Destroy it
-				GameObject.Destroy(removedLevelComponent);
+				GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
 				LevelComponent nextLevel = PushAndInstantiateRandomComponent();
 				PopulateLevelComponent(nextLevel);
@@ -86,7 +87,7 @@ public class LevelManager : MonoBehaviour
 			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
 			
 			// Set its position to the last max point (I hope).
-			newComponent.transform.position = lastCenterPosition;
+			newComponent.transform.position = mLastCenterPosition;
 			
 			// Get the min of the new component
 			Transform minAnchor = newComponent.transform.FindChild("AnchorMin");
@@ -97,7 +98,7 @@ public class LevelManager : MonoBehaviour
 			
 			// Update the next position as this ones max anchor
 			Transform maxAnchor = newComponent.transform.FindChild("AnchorMax");
-			lastCenterPosition = maxAnchor.position;
+			mLastCenterPosition = maxAnchor.position;
 			
 			mLevelComponentQueue.Enqueue(newComponent);
 
@@ -177,6 +178,8 @@ public class LevelManager : MonoBehaviour
             randomPoint += inLevelComponent.transform.position;
             GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
             spawnedItem.transform.position = randomPoint;
+
+            inLevelComponent.AddLevelItem(spawnedItem.GetComponent<RunnerItem>());
         }
     }
 	

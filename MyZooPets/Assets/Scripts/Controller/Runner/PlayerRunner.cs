@@ -143,7 +143,6 @@ public class PlayerRunner : MonoBehaviour
         // Reset movement.
         if (isGrounded)
             mMovementVector = new Vector3();
-		
 
         mbGrounded = isGrounded;
     }
@@ -151,7 +150,7 @@ public class PlayerRunner : MonoBehaviour
     private void UpdateInput()
     {
         // Add in jump, since we are grounded, if its pressed.
-        if (!mbJumping && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        if (mbGrounded && !mbJumping && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
         {
             TriggerJump();
         }

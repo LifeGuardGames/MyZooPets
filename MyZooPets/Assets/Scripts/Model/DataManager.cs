@@ -134,6 +134,8 @@ public class DataManager : Singleton<DataManager>{
         Dojo = new DojoData(); 
         Dojo.Init();
 
+        //Pet info
+        petName = "LazyWinkle";
         //Badge
         badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
         int counter = 0;

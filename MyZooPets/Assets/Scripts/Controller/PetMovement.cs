@@ -24,25 +24,23 @@ using System.Collections;
 */
 // ================================================================================================
 
-public class PetMovement : MonoBehaviour {
+public class PetMovement : Singleton<PetMovement> {
 
-    private Transform planeCenter;
-    private Transform planeRight;
-    private Transform planeLeft;
-
-    private GameObject petSprite;
-    private tk2dSpriteAnimator anim;
-
-    private Vector3 destinationPoint;
-    private TapItem tapItem;
     public Camera mainCamera;
     public bool allowPetMoveAround;
-	private bool moving;
+    public Transform area1;
+    public Transform area2;
+    public Transform area3;
+
+    private GameObject petSprite; //Pet sprite
+    private tk2dSpriteAnimator anim; //2D sprite animator
+
+    private Vector3 destinationPoint; //destination that the pet is going to move to
+    private TapItem tapItem; //Tap gesture
+	private bool moving; //Is Pet moving now or not
 
 	private float moveToX;
 	private float moveToZ;
-
-    private float centerVertical; //sprite will be flip based on this line
 
     void Awake(){
         if (mainCamera == null){
@@ -50,11 +48,7 @@ public class PetMovement : MonoBehaviour {
         }
         petSprite = GameObject.Find("SpritePet");
         tapItem = GetComponent<TapItem>();
-        planeCenter = transform.Find("planeCenter");
-        planeRight = transform.Find("planeRight");
-
         anim = petSprite.GetComponent<tk2dSpriteAnimator>();
-        centerVertical = Screen.width/2;
     }
 
     void Start(){
@@ -81,20 +75,8 @@ public class PetMovement : MonoBehaviour {
         }
     }
 
-    /*
-        TO DO: currently unused
-    */
 	public void MovePetWithCamera(){
-		Ray ray = mainCamera.ScreenPointToRay(new Vector3(600, 200, 0));
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit)){
-			if (hit.collider == planeCenter.collider || planeRight.collider){
-        		if(moving == false){
-					destinationPoint = hit.point;
-					moving = true;
-				}
-			}
-		}
+		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/3, 80, 0)));
 	}
 
     //What to do when animation is finished playing. 
@@ -106,20 +88,27 @@ public class PetMovement : MonoBehaviour {
         }
     }
 
+    //Event listener for tap on walkable area
     private void MovePet(){
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
+        MovePet(Camera.main.ScreenPointToRay(tapItem.lastTapPosition));    
+    }
 
-        Ray myRay = Camera.main.ScreenPointToRay(tapItem.lastTapPosition);
+    //Check if the touch is in walkable area then move/animate pet
+    private void MovePet(Ray myRay){
         RaycastHit hit;
+        // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == planeCenter.collider || planeRight.collider){
-            	destinationPoint = hit.point;
+            if (hit.collider == area1.collider || 
+                hit.collider == area2.collider ||
+                hit.collider == area3.collider){
+                destinationPoint = hit.point;
                 if(!anim.IsPlaying("HappyWalk")){
                     anim.Play("HappyWalk");
                     anim.AnimationCompleted = OnAnimationFinished;
                 }
-				moving = true;
+                moving = true;
             }
         }
         ChangePetFacingDirection();

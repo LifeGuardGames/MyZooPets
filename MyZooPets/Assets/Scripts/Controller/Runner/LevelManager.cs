@@ -109,9 +109,9 @@ public class LevelManager : MonoBehaviour
 	private void PopulateLevelComponent(LevelComponent inLevelComponent)
 	{
 		// Roll for some values
-		bool bSpawnCoins = Random.RandomRange(0.0f, 100.0f) <= CoinSpawnChance;
-		bool bSpawnItems = Random.RandomRange(0.0f, 100.0f) <= ItemSpawnChance;
-		bool bSpawnHazards = Random.RandomRange(0.0f, 100.0f) <= HazardSpawnChance;
+		bool bSpawnCoins = Random.Range(0.0f, 100.0f) <= CoinSpawnChance;
+        bool bSpawnItems = Random.Range(0.0f, 100.0f) <= ItemSpawnChance;
+        bool bSpawnHazards = Random.Range(0.0f, 100.0f) <= HazardSpawnChance;
 
 		// Go through every group, and if we are set to spawn stuff, spawn stuff!
 		if (bSpawnCoins)

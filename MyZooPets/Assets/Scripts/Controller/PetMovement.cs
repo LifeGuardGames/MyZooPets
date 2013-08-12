@@ -42,6 +42,8 @@ public class PetMovement : MonoBehaviour {
 	private float moveToX;
 	private float moveToZ;
 
+    private float centerVertical; //sprite will be flip based on this line
+
     void Awake(){
         if (mainCamera == null){
             mainCamera = GameObject.Find("Main Camera").camera;
@@ -52,6 +54,7 @@ public class PetMovement : MonoBehaviour {
         planeRight = transform.Find("planeRight");
 
         anim = petSprite.GetComponent<tk2dSpriteAnimator>();
+        centerVertical = Screen.width/2;
     }
 
     void Start(){
@@ -145,13 +148,13 @@ public class PetMovement : MonoBehaviour {
   //       }
 	}
 
+    //Decides when to flip sprite by comparing the screen position of the sprite and
+    //the last tap screen position
     private void ChangePetFacingDirection(){
-        if (destinationPoint.x > petSprite.transform.position.x){
-            // face right
+        Vector3 petScreenPos = mainCamera.WorldToScreenPoint(petSprite.transform.position);
+        if(tapItem.lastTapPosition.x > petScreenPos.x){
             petSprite.GetComponent<tk2dSprite>().FlipX = true;
-        }
-        else {
-            // face left
+        }else{
             petSprite.GetComponent<tk2dSprite>().FlipX = false;
         }
     }

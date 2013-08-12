@@ -228,11 +228,7 @@ public class NotificationUIManager : MonoBehaviour {
 	public void TutorialMessage(TutorialImageType imageType, GameObject target, 
 		string functionName, string buttonMessage){
 		string spriteName = "";
-		switch(imageType){
-			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
-			case TutorialImageType.CalendarRedStamp: spriteName = "tutorialCalendar2"; break;
-			case TutorialImageType.CalendarBonus: spriteName = "tutorialCalendar3"; break;
-		}
+		
 
 		//Spawn tutorial prefab
 		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
@@ -242,7 +238,7 @@ public class NotificationUIManager : MonoBehaviour {
 
 		//Set content
 		TutorialPopupManager script = obj.GetComponent<TutorialPopupManager>();
-		script.SetContent(spriteName);
+		script.SetContent(imageType);
 		if(buttonMessage != "") script.SetButtonMessage(buttonMessage);
 		script.SetButtonCallBack(target, functionName);
 		script.Display();

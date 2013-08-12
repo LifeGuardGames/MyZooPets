@@ -14,6 +14,7 @@ public class TutorialPopupManager : BackDrop {
 	public GameObject contentSprite;
 	public GameObject buttonHintArrow;
 	public UILabel buttonLabel;
+	public GameObject calendarTutorialMessage;
 
 	protected override void Awake(){
 		base.Awake();
@@ -39,7 +40,19 @@ public class TutorialPopupManager : BackDrop {
 	}
 
 	//Set the image that needs to be displayed
-	public void SetContent(string spriteName){
+	public void SetContent(TutorialImageType imageType){
+		string spriteName = "";
+		switch(imageType){
+			case TutorialImageType.CalendarIntro: 
+				spriteName = "tutorialCalendar0"; 
+				calendarTutorialMessage.active = true;
+				calendarTutorialMessage.transform.Find("Label_PetName").GetComponent<UILabel>().
+					text = DataManager.Instance.PetName;
+			break;
+			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
+			case TutorialImageType.CalendarRedStamp: spriteName = "tutorialCalendar2"; break;
+			case TutorialImageType.CalendarBonus: spriteName = "tutorialCalendar3"; break;
+		}	
 		UISprite sprite = contentSprite.GetComponent<UISprite>();
 		sprite.spriteName = spriteName;
 	}

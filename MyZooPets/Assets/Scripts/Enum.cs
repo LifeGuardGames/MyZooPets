@@ -101,6 +101,7 @@ public enum TalkImageType{
 }
 
 public enum TutorialImageType{
+    CalendarIntro,
     CalendarGreenStamp,
     CalendarRedStamp,
     CalendarBonus

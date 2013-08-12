@@ -54,6 +54,11 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
+        notificationUIManager.TutorialMessage(TutorialImageType.CalendarIntro,
+            this.gameObject, "ShowCalendarTipGreenStamp", "Next");
+    }
+
+    public void ShowCalendarTipGreenStamp(){
         CalendarUIManager.Instance.SetUpGreenStampTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp, 
            this.gameObject, "ShowCalendarTipRedStamp", "Next"); 

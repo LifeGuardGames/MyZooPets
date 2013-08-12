@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerRunner : MonoBehaviour
@@ -15,8 +16,12 @@ public class PlayerRunner : MonoBehaviour
 	private bool mbColliding = false;
 	private bool mbJumping = false;
 	private bool mbGrounded = false;
-	private Vector3 mMovementVector = Vector3.zero;
-	private CharacterController mCharacterController;
+    private bool mbFalling = false;
+    private Vector3 mMovementVector = Vector3.zero;
+    private Vector3 mLastPosition = Vector3.zero;
+    private CharacterController mCharacterController;
+	private List<Collider> mCurrentCollisions = new List<Collider>();
+	private List<Collider> mIgnoringCollisions = new List<Collider>();
 	
 	// Use this for initialization
 	void Start() {
@@ -24,28 +29,44 @@ public class PlayerRunner : MonoBehaviour
 		if (mCharacterController == null)
 			Debug.LogError("Character Controller not attached!");
 		mSpeedIncreasePulse = SpeedIncreaseTime;
+        mLastPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update() {
-        if (mCharacterController == null)
-            mCharacterController = GetComponent<CharacterController>();
-
-        UpdateMovement();
-
+        UpdateInput();
+    }
+	
+	void FixedUpdate() {
+		
         UpdateSpeed();
+
+
+		mCurrentCollisions.Clear();
+        UpdateMovement();
+        
+        UpdateFalling();
+
+        if (!Vector3.Equals(mLastPosition, transform.position))
+            mLastPosition = transform.position;
+
         CheckAndActOnDeath();
-    }
-
-    void OnCollisionEnter(Collision inOther) {
-        mbColliding = true;
-        mbJumping = false;
-    }
-
-    void OnCollisionExit(Collision inOther) {
-        mbColliding = false;
-    }
-
+	}
+	
+	void OnControllerColliderHit(ControllerColliderHit inHit)
+	{
+		if (!mCurrentCollisions.Contains(inHit.collider))
+			mCurrentCollisions.Add(inHit.collider);
+		
+		if (mIgnoringCollisions.Count > 0) {
+			foreach (Collider ignored in mIgnoringCollisions)
+			{
+				Physics.IgnoreCollision(mCharacterController, ignored, false);
+			}
+			mIgnoringCollisions.Clear ();
+		}
+	}
+	
     void onSwipeUp() {
         // Attempt to move to a platform above
         Debug.Log("Going Up");
@@ -83,20 +104,29 @@ public class PlayerRunner : MonoBehaviour
         }
     }
 
+    // I can't name things.
+    // Checks if we are "falling down" to re-eneable collision.
+    // Assuming it wasn't enabled already.
+    private void UpdateFalling()
+    {
+        if (gameObject.layer != 0) {
+            if (mbJumping) {
+                Vector3 currentMovementDirection = mLastPosition - transform.position;
+                if (currentMovementDirection.y > 0) {
+                    gameObject.layer = 0;
+                }
+            } else if (!mbFalling) {
+                gameObject.layer = 0;
+            }
+        }
+
+    }
+
     private void UpdateMovement()
     {
-        if (mbGrounded)
-        {
-            // Reset movement.
-            mMovementVector = new Vector3();
+        if (mbGrounded) {
             // These are constant speeds, not forces. It's wierd I know.
             mMovementVector.z = Speed;
-
-            // Add in jump, since we are grounded, if its pressed.
-            if (Input.GetKeyDown("space"))
-            {
-                mMovementVector.y = JumpSpeed;
-            }
         }
 
         // Add in Gravity force.
@@ -104,7 +134,53 @@ public class PlayerRunner : MonoBehaviour
 
         if (mCharacterController == null)
             Debug.LogError("No Character Controller exists!");
+
         CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
-        mbGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
+        bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
+        if (isGrounded && mbJumping)
+            mbJumping = false;
+		
+        // Reset movement.
+        if (isGrounded)
+            mMovementVector = new Vector3();
+		
+
+        mbGrounded = isGrounded;
+    }
+
+    private void UpdateInput()
+    {
+        // Add in jump, since we are grounded, if its pressed.
+        if (!mbJumping && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        {
+            TriggerJump();
+        }
+        // Add in jump, since we are grounded, if its pressed.
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            TriggerFall();
+        }
+    }
+
+    private void TriggerJump()
+    {
+        mMovementVector.y += JumpSpeed;
+        gameObject.layer = 12;
+		mbJumping = true;
+    }
+
+    private void TriggerFall()
+    {
+		mbFalling = true;
+		
+		foreach (Collider currentCollision in mCurrentCollisions)
+		{
+			if (!mIgnoringCollisions.Contains(currentCollision))
+			{
+				mIgnoringCollisions.Add(currentCollision);
+				Physics.IgnoreCollision(mCharacterController, currentCollision);
+			}
+		}
+		
     }
 }

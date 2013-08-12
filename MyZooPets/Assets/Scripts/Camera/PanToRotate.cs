@@ -20,7 +20,8 @@ public class PanToRotate : MonoBehaviour {
     private int numPartitions = 5; //total number of room partitions
     private Direction panDirection; //the direction of the last pan gesture
     private int partitionOffset = 20; //camera rotates if it's rotated +/- partitionOffset of the current partition angle
-    private Hashtable snapOption;
+    private Hashtable snapOption1;
+    private Hashtable snapOption2;
     private bool touchCancelled; //cancel touch detection if user click on NGUI first
     private Camera NGUICamera;
     private Camera mainCamera;
@@ -32,8 +33,12 @@ public class PanToRotate : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	   numPartitions = enabledPartitions.Length;
-       snapOption = new Hashtable();
-       snapOption.Add("ease", LeanTweenType.easeOutBack);
+       snapOption1 = new Hashtable();
+       snapOption2 = new Hashtable();
+       snapOption1.Add("ease", LeanTweenType.easeOutBack);
+       snapOption1.Add("onCompleteTarget", PetMovement.Instance.gameObject);
+       snapOption1.Add("onComplete", "MovePetWithCamera");
+       snapOption2.Add("ease", LeanTweenType.easeOutBack);
        mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
        int layerNGUI = LayerMask.NameToLayer("NGUI");
         NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
@@ -59,26 +64,32 @@ public class PanToRotate : MonoBehaviour {
                     if(panDirection.Equals(Direction.Left)){ //panning left, so rotate right
                         int nextIndex = GetNextPartitionIndex();
                         float rotateTo;
+                        Hashtable optional;
                         if(nextIndex != -1 && enabledPartitions[nextIndex]){
                             if(transform.eulerAngles.y > partitionAngles[currentIndex] + partitionOffset){
                                 rotateTo = partitionAngles[nextIndex];
                                 currentIndex = nextIndex;
+                                optional = snapOption1;
                             }else{
                                rotateTo = partitionAngles[currentIndex]; 
+                               optional = snapOption2;
                             }
-                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, snapOption);
+                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
                         }
                     }else if(panDirection.Equals(Direction.Right)){ //panning right, so rotate left
                         int prevIndex = GetPrevPartitionIndex();
                         float rotateTo;
+                        Hashtable optional;
                         if(prevIndex != -1 && enabledPartitions[prevIndex]){
                             if(transform.eulerAngles.y < partitionAngles[currentIndex] - partitionOffset){
                                 rotateTo = partitionAngles[prevIndex];
                                 currentIndex = prevIndex;
+                                optional = snapOption1;
                             }else{
                                 rotateTo = partitionAngles[currentIndex];
+                                optional = snapOption2;
                             }
-                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, snapOption);
+                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
                         }
                     }
                 break;

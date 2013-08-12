@@ -139,24 +139,11 @@ public class PlayerRunner : MonoBehaviour
         bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
         if (isGrounded && mbJumping)
             mbJumping = false;
-
+		
+        // Reset movement.
         if (isGrounded)
-            // Reset movement.
             mMovementVector = new Vector3();
 		
-		if (mbFalling) {
-			// Since i'm disabling collisions, I still need to know when it is
-			//Safe to re-enable them.
-			int currentLayer = gameObject.layer;
-			gameObject.layer = 0;
-			
-			flags = mCharacterController.Move(Vector3.zero);
-        	bool bCollidingAtAll = (flags & CollisionFlags.None) != 0;
-       		if (bCollidingAtAll)
-				mbFalling = false;
-			
-			gameObject.layer = currentLayer;
-		}
 
         mbGrounded = isGrounded;
     }

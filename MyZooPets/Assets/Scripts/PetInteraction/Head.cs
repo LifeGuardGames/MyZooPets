@@ -17,7 +17,7 @@ public class Head : MonoBehaviour {
 
     private void TapHandleStateChange(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
         if(e.State == Gesture.GestureState.Recognized){
-            PetSpeech.Instance.Talk("tickle!!");
+            SpeechBubbleControllerTK2D.Instance.Talk("tickle!!");
         }
     }
 
@@ -27,13 +27,13 @@ public class Head : MonoBehaviour {
 
             angle = (360 + angle - 45) % 360;
             if (angle < 90) { //swipe right
-                PetSpeech.Instance.Talk("nice move");
+                SpeechBubbleControllerTK2D.Instance.Talk("nice move");
             } else if (angle < 180) { //swipe down
-                PetSpeech.Instance.Talk("aww yeah");
+                SpeechBubbleControllerTK2D.Instance.Talk("aww yeah");
             } else if (angle < 270) { //swipe left
-                PetSpeech.Instance.Talk("keep that moving");
+                SpeechBubbleControllerTK2D.Instance.Talk("keep that moving");
             } else { //swipe up
-                PetSpeech.Instance.Talk("aint nobody got time for that");
+                SpeechBubbleControllerTK2D.Instance.Talk("aint nobody got time for that");
             }
         }
     }

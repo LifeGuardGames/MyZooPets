@@ -80,7 +80,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed += OnNoteClosed;
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
-		TrophyGUI.OnTrophyClosed += OnTrophyClosed;
+		// TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
 		DojoUIManager.OnDojoDoorClosed += OnDojoDoorClosed;
     }
@@ -90,7 +90,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed -= OnNoteClosed;
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
-		TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
+		// TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
 		DojoUIManager.OnDojoDoorClosed -= OnDojoDoorClosed;
 		UIRoot = null;
@@ -150,6 +150,8 @@ public class ClickManager : MonoBehaviour {
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+
+			GA.API.Design.NewEvent("UserTouch:Note");
 		}
 	}
 	private void OnNoteClosed(object sender, EventArgs e){
@@ -172,6 +174,8 @@ public class ClickManager : MonoBehaviour {
 
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+
+			GA.API.Design.NewEvent("UserTouch:Store");
 		}
 	}
 	private void OnStoreClosed(object sender, EventArgs e){
@@ -195,6 +199,8 @@ public class ClickManager : MonoBehaviour {
 			//Hide other UI objects
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+
+			GA.API.Design.NewEvent("UserTouch:Calendar");
 		}
 	}
 	private void OnCalendarClosed(object sender, EventArgs e){
@@ -208,25 +214,25 @@ public class ClickManager : MonoBehaviour {
 	//==========================
 
 	//=================Shelf=====================
-	private void OnTapShelf(){
-		if (CanRespondToTap()){
-			trophyGUI.TrophyClicked();
-			ClickLock();
-			ModeLock();
+	// private void OnTapShelf(){
+	// 	if (CanRespondToTap()){
+	// 		trophyGUI.TrophyClicked();
+	// 		ClickLock();
+	// 		ModeLock();
 
-			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-		}
-	}
-	private void OnTrophyClosed(object senders, EventArgs e){
-		ClickLock();
-		cameraMove.ZoomOutMove();
+	// 		//Hide other UI objects
+	// 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+	// 		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+	// 	}
+	// }
+	// private void OnTrophyClosed(object senders, EventArgs e){
+	// 	ClickLock();
+	// 	cameraMove.ZoomOutMove();
 
-		//Show other UI Objects
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-	}
+	// 	//Show other UI Objects
+	// 	navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	// 	hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	// }
 	//=========================================
 	//=================Badge Board=====================
 	private void OnTapBadgeBoard(){
@@ -240,6 +246,8 @@ public class ClickManager : MonoBehaviour {
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+
+			GA.API.Design.NewEvent("UserTouch:BadgeBoard");
 		}
 	}
 	private void OnBadgeBoardClosed(object senders, EventArgs e){
@@ -266,6 +274,8 @@ public class ClickManager : MonoBehaviour {
 			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+
+			GA.API.Design.NewEvent("UserTouch:Dojo");
 		}
 	}
 	private void OnDojoDoorClosed(object senders, EventArgs e){
@@ -289,6 +299,7 @@ public class ClickManager : MonoBehaviour {
 			// challengesGUI.ChallengesClicked();
 			// ClickLock();
 			// ModeLock();
+			GA.API.Design.NewEvent("UserTouch:Computer");
 		}
 	}
 
@@ -297,6 +308,7 @@ public class ClickManager : MonoBehaviour {
 			cameraMove.ZoomToggle(ZoomItem.SlotMachine);
 			ClickLock();
 			ModeLock();
+			GA.API.Design.NewEvent("UserTouch:SlotMachine");
 		}
 	}
 	void OnTapRealInhaler(){
@@ -313,6 +325,7 @@ public class ClickManager : MonoBehaviour {
 					delegate(){}
 				);
 			}
+			GA.API.Design.NewEvent("UserTouch:RealInhaler");
 		}
 	}
 
@@ -333,29 +346,30 @@ public class ClickManager : MonoBehaviour {
 			cameraMove.ZoomToggle(ZoomItem.PracticeInhaler);
 			ClickLock();
 			ModeLock();
+			GA.API.Design.NewEvent("UserTouch:TeddyInhaler");
 		}
 	}
 
-	void OnTapHelpTrophy(){
-        // make sure we are in trophy mode
-        // todo: have a better way of checking if we are in trophy mode
-        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
+	// void OnTapHelpTrophy(){
+ //        // make sure we are in trophy mode
+ //        // todo: have a better way of checking if we are in trophy mode
+ //        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
 
-        	if (trophyMessageShowing == false){
-	        	trophyMessageShowing = true;
-		        notificationUIManager.PopupNotificationOneButton(
-		        	"Level up to get more trophies!",
-		            delegate(){
-		            	trophyMessageShowing = false;
-	            	},
-	            	"OK"
-	            );
-        	}
+ //        	if (trophyMessageShowing == false){
+	//         	trophyMessageShowing = true;
+	// 	        notificationUIManager.PopupNotificationOneButton(
+	// 	        	"Level up to get more trophies!",
+	// 	            delegate(){
+	// 	            	trophyMessageShowing = false;
+	//             	},
+	//             	"OK"
+	//             );
+ //        	}
 
-			ClickLock();
-			ModeLock();
-		}
-	}
+	// 		ClickLock();
+	// 		ModeLock();
+	// 	}
+	// }
 
 	// Disable clicking when transitioning between modes
 	public static void ClickLock(){

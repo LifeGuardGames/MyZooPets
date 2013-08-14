@@ -16,6 +16,14 @@ public class TouchDetectorManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // Check keys
+        if (Input.GetKeyDown(KeyCode.T)) {
+            Debug.Log("Triggering fade");
+            ParallaxingBackgroundManager bgm = GameObject.Find("ParralaxingBGManager").GetComponent<ParallaxingBackgroundManager>();
+            bgm.TransitionToGroup("lol");
+        }
+
+        // Check touches
         bool bIsTouching = Input.touchCount > 0;
 		if (bIsTouching) {
             Touch firstTouch =  Input.touches[0];

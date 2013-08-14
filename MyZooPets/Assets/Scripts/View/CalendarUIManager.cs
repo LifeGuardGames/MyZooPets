@@ -142,11 +142,17 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
                 calendarLogic.IsRewardClaimed = true;
                 ResetTimer();
             }
+            GA.API.Design.NewEvent("UserTouch:Calendar:Green");
         }else{ //No bonuses for blank for red ex
             //shake the calendar slot
             Hashtable optional = new Hashtable();
             optional.Add("ease", LeanTweenType.punch);
             LeanTween.moveX(calendarSlot, 0.01f, 0.5f, optional);
+            if(button.normalSprite == RED_EX){
+                GA.API.Design.NewEvent("UserTouch:Calendar:Red");
+            }else{
+                GA.API.Design.NewEvent("UserTouch:Calendar:Gray");
+            }
         }
     }
 

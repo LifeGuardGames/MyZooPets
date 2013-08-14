@@ -90,6 +90,7 @@ public class PetMovement : Singleton<PetMovement> {
 
     //Event listener for tap on walkable area
     private void MovePet(){
+        print("move pet");
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if (!ClickManager.CanRespondToTap()) return;
         MovePet(Camera.main.ScreenPointToRay(tapItem.lastTapPosition));    
@@ -98,7 +99,7 @@ public class PetMovement : Singleton<PetMovement> {
     //Check if the touch is in walkable area then move/animate pet
     private void MovePet(Ray myRay){
         RaycastHit hit;
-        // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
+        Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
         if(Physics.Raycast(myRay,out hit)){
             if (hit.collider == area1.collider || 
                 hit.collider == area2.collider ||

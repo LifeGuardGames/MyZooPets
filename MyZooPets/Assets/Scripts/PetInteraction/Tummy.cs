@@ -21,7 +21,7 @@ public class Tummy : MonoBehaviour {
 
     private void TapHandleStateChange(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
         if(e.State == Gesture.GestureState.Recognized){
-            PetSpeech.Instance.Talk("that's my tummy");
+            SpeechBubbleControllerTK2D.Instance.Talk("that's my tummy");
         }
     }
 
@@ -31,13 +31,13 @@ public class Tummy : MonoBehaviour {
 
             angle = (360 + angle - 45) % 360;
             if (angle < 90) { //swipe right
-                PetSpeech.Instance.Talk("hehehe");
+                SpeechBubbleControllerTK2D.Instance.Talk("hehehe");
             } else if (angle < 180) { //swipe down
-                PetSpeech.Instance.Talk("boooo");
+                SpeechBubbleControllerTK2D.Instance.Talk("boooo");
             } else if (angle < 270) { //swipe left
-                PetSpeech.Instance.Talk("shake that butt");
+                SpeechBubbleControllerTK2D.Instance.Talk("shake that butt");
             } else { //swipe up
-                PetSpeech.Instance.Talk("having fun?");
+                SpeechBubbleControllerTK2D.Instance.Talk("having fun?");
             }
         }
     }

@@ -38,7 +38,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
             realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeCalendar){
             calendar.GetComponent<TutorialHighlighting>().ShowArrow();
-        }else{
+        }else if(TutorialLogic.Instance.FirstTimeDegradTrigger){
             //start trigger tutorial after others are done
             DegradationUIManager.Instance.ActivateParticleEffects();
         }
@@ -56,24 +56,28 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     private void StartCalendarTutorial(){
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarIntro,
             this.gameObject, "ShowCalendarTipGreenStamp", "Next");
+        GA.API.Design.NewEvent("Tutorial:Calendar:Intro");
     }
 
     public void ShowCalendarTipGreenStamp(){
         CalendarUIManager.Instance.SetUpGreenStampTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarGreenStamp, 
            this.gameObject, "ShowCalendarTipRedStamp", "Next"); 
+        GA.API.Design.NewEvent("Tutorial:Calendar:1");
     }
 
     public void ShowCalendarTipRedStamp(){
         CalendarUIManager.Instance.SetUpRedExTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarRedStamp, 
             this.gameObject, "ShowCalendarTipBonus", "Next");
+        GA.API.Design.NewEvent("Tutorial:Calendar:2");
     }
 
     public void ShowCalendarTipBonus(){
         CalendarUIManager.Instance.SetUpBonusTip();
         notificationUIManager.TutorialMessage(TutorialImageType.CalendarBonus, 
             this.gameObject, "ShowCalendarTipConclude", "Done");
+        GA.API.Design.NewEvent("Tutorial:Calendar:3");
     }
 
     /*
@@ -88,18 +92,19 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
         CalendarUIManager.Instance.CleanUpTutorial();
+        GA.API.Design.NewEvent("Tutorial:Calendar:End");
     }
 
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
-        if (TutorialLogic.Instance.FirstTimeDegradTrigger){
+        if(TutorialLogic.Instance.FirstTimeDegradTrigger == true)
             ShowDegradTipIntro();
-        }
     }
 
     private void ShowDegradTipIntro(){
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", 
             ShowDegradTipConclude, true, true);
+        GA.API.Design.NewEvent("Tutorial:Trigger:Intro");
     }
 
     private void ShowDegradTipConclude(){
@@ -107,6 +112,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         notificationUIManager.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true); 
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;
         DegradationUIManager.Instance.ActivateParticleEffects();
+        GA.API.Design.NewEvent("Tutorial:Trigger:End");
     }
 
     //==============Inhaler tutorial=================
@@ -115,6 +121,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;
+        GA.API.Design.NewEvent("Tutorial:Inhaler:Intro");
+        GA.API.Design.NewEvent("Tutorial:Inhaler:End");
     }
 
     private void StartTeddyInhalertutorial(){

@@ -52,6 +52,7 @@ public class PanToRotate : MonoBehaviour {
             Touch touch = Input.touches[0];
             switch (touch.phase) {
                 case TouchPhase.Began:
+                    GA.API.Design.NewEvent("Finger", 1, touch.position);
                     startTouchPos = touch.position;                 
                     if(IsTouchingNGUI(startTouchPos)) touchCancelled = true;
                 break;

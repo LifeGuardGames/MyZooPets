@@ -3,7 +3,6 @@ using System.Collections;
 
 public class SlotMachineUIManager : MonoBehaviour {
     public GameObject slotMachine;
-    public NotificationUIManager notificationUIManager; //reference
     private Transform[] wheels = new Transform[3]; //reference to the 3 wheels inside slot machine
     private const float NATIVE_WIDTH = 1280.0f;
     private const float NATIVE_HEIGHT = 800.0f;
@@ -19,7 +18,7 @@ public class SlotMachineUIManager : MonoBehaviour {
         }
 
         if (DataManager.Instance.Stats.Stars >= costStars){
-            notificationUIManager.PopupNotificationTwoButtons(
+            NotificationUIManager.Instance.PopupNotificationTwoButtons(
                 "-"+ costStars +" stars to play",
                 delegate(){
                     StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
@@ -32,7 +31,7 @@ public class SlotMachineUIManager : MonoBehaviour {
                 "Back");
         }
         else { // not enough stars to play
-            notificationUIManager.PopupNotificationOneButton(
+            NotificationUIManager.Instance.PopupNotificationOneButton(
                 "You need at least " + costStars + " stars to play!",
                 delegate(){
                     Application.LoadLevel("NewBedRoom");
@@ -75,7 +74,7 @@ public class SlotMachineUIManager : MonoBehaviour {
         
 		StatsController.Instance.ChangeStats(points, Vector3.zero, stars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 		
-        notificationUIManager.GameOverRewardMessage(stars, points,
+        NotificationUIManager.Instance.GameOverRewardMessage(stars, points,
             delegate(){
                 StartGame();
             },

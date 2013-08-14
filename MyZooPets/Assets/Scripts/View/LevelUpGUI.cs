@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 
 public class LevelUpGUI : MonoBehaviour {
-    public NotificationUIManager notificationUIManager;
 
 	// Use this for initialization
 	void Start () {
@@ -11,6 +10,6 @@ public class LevelUpGUI : MonoBehaviour {
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){
-        notificationUIManager.LevelUpMessage(LevelUpLogic.AwardedBadge, null);
+        NotificationUIManager.Instance.LevelUpMessage(LevelUpLogic.AwardedBadge, null);
     }
 }

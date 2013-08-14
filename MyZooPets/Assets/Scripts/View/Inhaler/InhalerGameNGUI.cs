@@ -10,8 +10,6 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     private int currentNode;
 
-    private NotificationUIManager notificationUIManager;
-
     public InhalerGameManager inhalerGameManager;
     public GameObject progressBarObject;
     public GameObject quitButton;
@@ -19,7 +17,6 @@ public class InhalerGameNGUI : MonoBehaviour {
     public GameObject hudObject;
 
     void Start(){
-        notificationUIManager = GameObject.Find("NotificationUIManager").GetComponent<NotificationUIManager>();
         progressBar = progressBarObject.GetComponent<ProgressBarController>();
     }
 
@@ -48,7 +45,7 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     public void ShowGameOverMessage(){
         if (inhalerGameManager.isPracticeGame){
-            notificationUIManager.GameOverRewardMessage(
+            NotificationUIManager.Instance.GameOverRewardMessage(
                 inhalerGameManager.PracticeGameStarIncrement,
                 inhalerGameManager.PracticeGamePointIncrement,
                 delegate (){
@@ -59,7 +56,7 @@ public class InhalerGameNGUI : MonoBehaviour {
             );
         }
         else {
-            notificationUIManager.GameOverRewardMessage(
+            NotificationUIManager.Instance.GameOverRewardMessage(
                 inhalerGameManager.RealGameStarIncrement,
                 inhalerGameManager.RealGamePointIncrement,
                 QuitInhalerGame
@@ -93,11 +90,11 @@ public class InhalerGameNGUI : MonoBehaviour {
         float messageDuration;
         if (inhalerGameManager.isPracticeGame){
             // Note: NotificationUIManager knows to call PopupTexture("intro") after calling PopupTexture("practice intro").
-            notificationUIManager.PopupTexture("practice intro");
+            NotificationUIManager.Instance.PopupTexture("practice intro");
             messageDuration = introMessageDuration + practiceMessageDuration;
         }
         else {
-            notificationUIManager.PopupTexture("intro");
+            NotificationUIManager.Instance.PopupTexture("intro");
             messageDuration = introMessageDuration;
         }
 

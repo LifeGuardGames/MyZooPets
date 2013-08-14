@@ -44,8 +44,6 @@ public class ClickManager : MonoBehaviour {
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
 
-	public NotificationUIManager notificationUIManager;
-
     public static GameObject UIRoot; // this is used to add a collider to the UIRoot to stop non-GUI elements from being clicked when GUI menus are active
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
@@ -320,7 +318,7 @@ public class ClickManager : MonoBehaviour {
 				OpenRealInhaler();
 			}
 			else {
-				notificationUIManager.PopupNotificationOneButton(
+				NotificationUIManager.Instance.PopupNotificationOneButton(
 					"I don't need this right now.",
 					delegate(){}
 				);
@@ -349,27 +347,6 @@ public class ClickManager : MonoBehaviour {
 			GA.API.Design.NewEvent("UserTouch:TeddyInhaler");
 		}
 	}
-
-	// void OnTapHelpTrophy(){
- //        // make sure we are in trophy mode
- //        // todo: have a better way of checking if we are in trophy mode
- //        if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
-
- //        	if (trophyMessageShowing == false){
-	//         	trophyMessageShowing = true;
-	// 	        notificationUIManager.PopupNotificationOneButton(
-	// 	        	"Level up to get more trophies!",
-	// 	            delegate(){
-	// 	            	trophyMessageShowing = false;
-	//             	},
-	//             	"OK"
-	//             );
- //        	}
-
-	// 		ClickLock();
-	// 		ModeLock();
-	// 	}
-	// }
 
 	// Disable clicking when transitioning between modes
 	public static void ClickLock(){

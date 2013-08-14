@@ -3,7 +3,6 @@ using System.Collections;
 
 public class DiagnoseUIManager : MonoBehaviour {
     public GameObject spritePet;
-    public NotificationUIManager notificationUIManager;
     public GameObject buttonPanel;
     public GameObject hud;
 
@@ -88,9 +87,12 @@ public class DiagnoseUIManager : MonoBehaviour {
             deltaPoints = 100;
             deltaStars = 100;
         }
+		
         hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+
         DiagnoseGameLogic.ClaimReward(deltaPoints, deltaStars);
-        notificationUIManager.GameOverRewardMessage(deltaStars, deltaPoints, 
+
+        NotificationUIManager.Instance.GameOverRewardMessage(deltaStars, deltaPoints,
             delegate(){
                 hud.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
                 Application.LoadLevel("NewBedRoom");

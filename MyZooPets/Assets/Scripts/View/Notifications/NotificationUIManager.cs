@@ -6,7 +6,7 @@ using System.Collections;
 /// Make this a child of Main Camera so it inherits the position when camera moves
 /// </summary>
 
-public class NotificationUIManager : MonoBehaviour {
+public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 	// References
 	public GameObject cameraObject;

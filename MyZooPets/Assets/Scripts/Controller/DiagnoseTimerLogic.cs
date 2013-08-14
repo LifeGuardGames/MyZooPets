@@ -5,14 +5,12 @@ using System.Collections;
 //when the flare up happens this logic will notify the NotificationUIManager
 //and pauses the game
 public class DiagnoseTimerLogic : MonoBehaviour {
-    public NotificationUIManager notificationUIManager;
     private float timer = 0;
     private float timeInterval = 30f; //time interval for triggers to affect health
     private bool turnOffDiagnoseTimer; //For Testing
 
 	// Use this for initialization
 	void Start () {
-	   notificationUIManager = GameObject.Find("Main Camera/NotificationUIManager").GetComponent<NotificationUIManager>();
         timer = timeInterval;
         turnOffDiagnoseTimer = true;
 	}
@@ -37,7 +35,7 @@ public class DiagnoseTimerLogic : MonoBehaviour {
     }
 
     private void SendNotification(){
-        notificationUIManager.PopupNotificationTwoButtons("Something unusual is happening to you pet! Help it out!",
+        NotificationUIManager.Instance.PopupNotificationTwoButtons("Something unusual is happening to you pet! Help it out!",
             delegate(){
                 Application.LoadLevel("DiagnosePet");
             },

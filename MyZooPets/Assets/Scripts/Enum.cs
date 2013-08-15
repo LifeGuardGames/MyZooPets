@@ -90,7 +90,7 @@ public enum BadgeType{
     Other
 }
 
-public enum DojoSkillType{
+public enum DojoSkillName{
     Sit,
     Wave,
     Backflip

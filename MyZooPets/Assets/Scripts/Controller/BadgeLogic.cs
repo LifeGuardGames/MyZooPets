@@ -6,7 +6,7 @@ using System.Collections.Generic;
 //index of List<Badge> = the id of the badges
 public class BadgeLogic : Singleton<BadgeLogic> {
     //=============For inspector use only. don't use these variables in UI
-    public List<Badge> badges = new List<Badge>();
+    public List<BadgeUIData> badges = new List<BadgeUIData>();
     //===========================================
     public static int MAX_BADGE_COUNT = 20;
     
@@ -16,11 +16,11 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     
     //====================API========================
     //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
-    public List<Badge> Badges{
+    public List<BadgeUIData> Badges{
         get{ return badges;}
     }
     //Read Only. Return a list of Level Badges.
-    public List<Badge> LevelBadges{
+    public List<BadgeUIData> LevelBadges{
         get{return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
     }
     //==============================================

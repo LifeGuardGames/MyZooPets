@@ -80,7 +80,7 @@ public class ClickManager : MonoBehaviour {
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
 		// TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
-		DojoUIManager.OnDojoDoorClosed += OnDojoDoorClosed;
+		// DojoUIManager.OnDojoDoorClosed += OnDojoDoorClosed;
     }
 
 	//Clean all event listeners and static references
@@ -90,7 +90,7 @@ public class ClickManager : MonoBehaviour {
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
 		// TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
-		DojoUIManager.OnDojoDoorClosed -= OnDojoDoorClosed;
+		// DojoUIManager.OnDojoDoorClosed -= OnDojoDoorClosed;
 		UIRoot = null;
 	}
 
@@ -262,7 +262,7 @@ public class ClickManager : MonoBehaviour {
 	//========================Dojo Door================
 	private void OnTapDojoDoor(){
 		if(CanRespondToTap()){
-			dojoObject.GetComponent<DojoUIManager>().DojoDoorClicked();
+			// dojoObject.GetComponent<DojoUIManager>().DojoDoorClicked();
 			dojoObject.GetComponent<Animator>().SetBool("Open", true);
 			cameraMove.ZoomToggle(ZoomItem.Dojo);
 			ClickLock();

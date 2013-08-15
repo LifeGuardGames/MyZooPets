@@ -16,10 +16,10 @@ public class LoadLevelManager : MonoBehaviour {
     */
     public static bool IsPaused = false;
 
-    private const string ANCHOR_TOP = "UI Root (2D)/Camera/Panel/Anchor-Top/";
-    private const string ANCHOR_CENTER = "UI Root (2D)/Camera/Panel/Anchor-Center/";
-    private const string ANCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Panel/Anchor-BottomLeft/";
-    private const string ANCHOR_BOTTOMRIGHT = "UI Root (2D)/Camera/Panel/Anchor-BottomRight/";
+    private const string ANCHOR_TOP = "UI Root (2D)/Camera/Anchor-Top/";
+    private const string ANCHOR_CENTER = "UI Root (2D)/Camera/Anchor-Center/";
+    private const string ANCHOR_BOTTOMLEFT = "UI Root (2D)/Camera/Anchor-BottomLeft/";
+    private const string ANCHOR_BOTTOMRIGHT = "UI Root (2D)/Camera/Anchor-BottomRight/";
 
     void Awake(){
         switch(Application.loadedLevelName){

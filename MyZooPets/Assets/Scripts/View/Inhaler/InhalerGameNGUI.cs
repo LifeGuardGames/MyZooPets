@@ -45,7 +45,7 @@ public class InhalerGameNGUI : MonoBehaviour {
 
     public void ShowGameOverMessage(){
         if (inhalerGameManager.isPracticeGame){
-            NotificationUIManager.Instance.GameOverRewardMessage(
+            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(
                 inhalerGameManager.PracticeGameStarIncrement,
                 inhalerGameManager.PracticeGamePointIncrement,
                 delegate (){
@@ -56,7 +56,7 @@ public class InhalerGameNGUI : MonoBehaviour {
             );
         }
         else {
-            NotificationUIManager.Instance.GameOverRewardMessage(
+            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(
                 inhalerGameManager.RealGameStarIncrement,
                 inhalerGameManager.RealGamePointIncrement,
                 QuitInhalerGame
@@ -109,6 +109,7 @@ public class InhalerGameNGUI : MonoBehaviour {
     }
 
     void QuitInhalerGame(){
+		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
         Application.LoadLevel("NewBedRoom");
     }
 }

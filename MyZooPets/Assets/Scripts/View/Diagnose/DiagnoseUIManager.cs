@@ -92,9 +92,10 @@ public class DiagnoseUIManager : MonoBehaviour {
 
         DiagnoseGameLogic.ClaimReward(deltaPoints, deltaStars);
 
-        NotificationUIManager.Instance.GameOverRewardMessage(deltaStars, deltaPoints,
+        NotificationUIManager.Instance.EnqueueGameOverRewardMessage(deltaStars, deltaPoints,
             delegate(){
                 hud.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+				// TODO-s Call NotificationUIManager.Instance.UnlockQueue???
                 Application.LoadLevel("NewBedRoom");
                 });
     }

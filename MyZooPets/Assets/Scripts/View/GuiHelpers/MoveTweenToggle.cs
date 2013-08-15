@@ -36,6 +36,15 @@ public class MoveTweenToggle : MonoBehaviour {
 	private Vector3 showingPos;
 	private bool positionSet;
 
+	// Finish tween callback operations
+	public GameObject ShowTarget;
+	public string ShowFunctionName;
+	public bool ShowIncludeChildren = false;
+
+	public GameObject HideTarget;
+	public string HideFunctionName;
+	public bool HideIncludeChildren = false;
+
 	void Awake(){
 		RememberPositions();
 		//Debug.Log("toggle awake");
@@ -76,6 +85,10 @@ public class MoveTweenToggle : MonoBehaviour {
 		}
 	}
 
+	public void Show(){
+		Show(showDuration);
+	}
+
 	public void Show(float time){
 		if(!isShown){
 			isShown = true;
@@ -85,17 +98,16 @@ public class MoveTweenToggle : MonoBehaviour {
 			optional.Add("ease", easeShow);
 			optional.Add("delay", showDelay);
 			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onComplete", "Unlock");		// Callback here
+			optional.Add("onComplete", "ShowUnlockCallback");
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
 			LeanTween.moveLocal(gameObject, showingPos, time, optional);
 		}
-
 	}
 
-	public void Show(){
-		Show(showDuration);
+	public void Hide(){
+		Hide(hideDuration);
 	}
 
 	public void Hide(float time){
@@ -107,7 +119,7 @@ public class MoveTweenToggle : MonoBehaviour {
 			optional.Add("ease", easeHide);
 			optional.Add("delay", hideDelay);
 			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onComplete", "Unlock");		// Callback here
+			optional.Add("onComplete", "HideUnlockCallback");
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
@@ -115,12 +127,47 @@ public class MoveTweenToggle : MonoBehaviour {
 		}
 	}
 
-	public void Hide(){
-		Hide(hideDuration);
+	///////////////////////// CALLBACKS ///////////////////////////////
+
+	private void ShowUnlockCallback(){
+		isMoving = false;
+		ShowSendCallback();
 	}
 
-	// Callback
-	private void Unlock(){
+	private void HideUnlockCallback(){
 		isMoving = false;
+		HideSendCallback();
+	}
+
+	private void ShowSendCallback(){
+		if (string.IsNullOrEmpty(ShowFunctionName)) return;
+		if (ShowTarget == null) ShowTarget = gameObject;
+		if (ShowIncludeChildren){
+			Transform[] transforms = ShowTarget.GetComponentsInChildren<Transform>();
+
+			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+				Transform t = transforms[i];
+				t.gameObject.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		else{
+			ShowTarget.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	private void HideSendCallback(){
+		if (string.IsNullOrEmpty(HideFunctionName)) return;
+		if (HideTarget == null) HideTarget = gameObject;
+		if (HideIncludeChildren){
+			Transform[] transforms = HideTarget.GetComponentsInChildren<Transform>();
+
+			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+				Transform t = transforms[i];
+				t.gameObject.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		else{
+			HideTarget.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
+		}
 	}
 }

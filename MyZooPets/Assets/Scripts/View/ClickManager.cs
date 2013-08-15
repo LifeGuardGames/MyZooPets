@@ -318,7 +318,7 @@ public class ClickManager : MonoBehaviour {
 				OpenRealInhaler();
 			}
 			else {
-				NotificationUIManager.Instance.PopupNotificationOneButton(
+				NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
 					"I don't need this right now.",
 					delegate(){}
 				);

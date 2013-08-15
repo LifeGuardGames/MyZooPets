@@ -53,29 +53,29 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        NotificationUIManager.Instance.TutorialMessage(TutorialImageType.CalendarIntro,
-            this.gameObject, "ShowCalendarTipGreenStamp", "Next");
-        GA.API.Design.NewEvent("Tutorial:Calendar:Intro");
+        EnqueueCalendarTipIntro();
+		EnqueueCalendarTipGreenStamp();
+		EnqueueCalendarTipRedStamp();
+		EnqueueCalendarTipBonus();
     }
 
-    public void ShowCalendarTipGreenStamp(){
-        CalendarUIManager.Instance.SetUpGreenStampTip();
-        NotificationUIManager.Instance.TutorialMessage(TutorialImageType.CalendarGreenStamp,
-           this.gameObject, "ShowCalendarTipRedStamp", "Next"); 
+	private void EnqueueCalendarTipIntro(){
+		NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarIntro, CalendarUIManager.Instance.SetUpGreenStampTip, "Next");
+		GA.API.Design.NewEvent("Tutorial:Calendar:Intro");	// TODO-j Right semantic??
+	}
+
+	public void EnqueueCalendarTipGreenStamp(){
+        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarGreenStamp, CalendarUIManager.Instance.SetUpRedExTip, "Next");
         GA.API.Design.NewEvent("Tutorial:Calendar:1");
     }
 
-    public void ShowCalendarTipRedStamp(){
-        CalendarUIManager.Instance.SetUpRedExTip();
-        NotificationUIManager.Instance.TutorialMessage(TutorialImageType.CalendarRedStamp,
-            this.gameObject, "ShowCalendarTipBonus", "Next");
+    public void EnqueueCalendarTipRedStamp(){
+        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarRedStamp, CalendarUIManager.Instance.SetUpBonusTip, "Next");
         GA.API.Design.NewEvent("Tutorial:Calendar:2");
     }
 
-    public void ShowCalendarTipBonus(){
-        CalendarUIManager.Instance.SetUpBonusTip();
-        NotificationUIManager.Instance.TutorialMessage(TutorialImageType.CalendarBonus,
-            this.gameObject, "ShowCalendarTipConclude", "Done");
+    public void EnqueueCalendarTipBonus(){
+        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarBonus, ShowCalendarTipConclude, "Done");	// Conclude tutorial, setup new
         GA.API.Design.NewEvent("Tutorial:Calendar:3");
     }
 
@@ -96,19 +96,20 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger == true)
-            ShowDegradTipIntro();
+        if(TutorialLogic.Instance.FirstTimeDegradTrigger == true){
+            EnqueueDegradTipIntro();
+			EnqueueDegradTipConclude();
+		}
     }
 
-    private void ShowDegradTipIntro(){
-        NotificationUIManager.Instance.PopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth",
-            ShowDegradTipConclude, true, true);
+    private void EnqueueDegradTipIntro(){
+        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", null, true, true);
         GA.API.Design.NewEvent("Tutorial:Trigger:Intro");
     }
 
-    private void ShowDegradTipConclude(){
+    private void EnqueueDegradTipConclude(){
         // disappear immediately when done, because the level up message should pop up right away
-        NotificationUIManager.Instance.PopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, true);
+        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, false);
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;
         DegradationUIManager.Instance.ActivateParticleEffects();
         GA.API.Design.NewEvent("Tutorial:Trigger:End");
@@ -116,7 +117,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //==============Inhaler tutorial=================
     private void StartRealInhalerTutorial(){
-        NotificationUIManager.Instance.PopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
+        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;

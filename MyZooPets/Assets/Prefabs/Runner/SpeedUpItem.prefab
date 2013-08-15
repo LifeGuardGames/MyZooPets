@@ -9,12 +9,12 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
-  - 65: {fileID: 6500000}
+  - 136: {fileID: 13600000}
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
-  m_Layer: 13
-  m_Name: MegaHazard
-  m_TagString: MegaHazard
+  m_Layer: 0
+  m_Name: SpeedUpItem
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,8 +26,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .126930013, y: 4.66267681, z: -6.57188177}
-  m_LocalScale: {x: 6.4000001, y: 25.879282, z: 1}
+  m_LocalPosition: {x: 100, y: 0, z: -3.93188}
+  m_LocalScale: {x: 1, y: .637220085, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -54,19 +54,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6500000
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -75,13 +63,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a0e7ba69fb7e084582f733ce748e899, type: 3}
+  m_Script: {fileID: 11500000, guid: e2d800165b294bc45a5deec332ce3ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZDefaultDistanceFromPlayer: -8
-  DistanceDivisor: 2
-  DistanceRegainIncrement: .100000001
-  DistanceRegainTime: 1
+  Name: 
+  PointValue: 0
+  SpeedBoostAmmount: 10
+  ItemDuration: 2.5
+--- !u!136 &13600000
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: .5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

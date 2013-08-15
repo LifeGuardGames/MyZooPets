@@ -1,24 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AppleItem : RunnerItem
-{
+public class AppleItem : RunnerItem {
 
 	// Use this for initialization
-	void Start ()
-    {
-	
+	public override void Start() {
+        base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () 
-    {
-	
+	public override void Update() {
+        base.Update();
 	}
 
-    public override void OnPickup()
-    {
-        Debug.Log("Hello!");
+    public override void OnPickup() {
         GameObject.Destroy(gameObject);
     }
 }

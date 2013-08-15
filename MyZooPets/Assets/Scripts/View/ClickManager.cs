@@ -15,41 +15,43 @@ using System;
 public class ClickManager : MonoBehaviour {
 
 	// All the classes that need a click input go here
-	// public GameObject diaryUIManagerObject;
-	// private DiaryGUI diaryUIManager;
-	public GameObject hudUIObject;
 
-	public GameObject calendarUIObject;
+	//===========Objects and components in NGUI==========
+	public GameObject UIHudObject;
+
+	public GameObject UICalendarObject;
 	private CalendarUIManager calendarUIManager;
 
-	public GameObject storeUIObject;
+	public GameObject UIStoreObject;
 	private StoreUIManager storeUIManager;
 
-	public GameObject noteUIObject;
+	public GameObject UINoteObject;
 	private NoteUIManager noteUIManager;
 
-	public GameObject inventoryUIObject;
-
-	public GameObject navigationUIObject;
-
-	public GameObject challengesGUIObject;
-	// private ChallengesGUI challengesGUI;
-
-	public GameObject trophyGUIObject;
-	private TrophyGUI trophyGUI;
-
-	public GameObject badgeGUIObject;
+	public GameObject UIInventoryObject;
+	public GameObject UINavigationObject;
+	public GameObject UIBadgeObject; 
 	private BadgeGUI badgeGUI;
+	public GameObject UILoadScreen;
+	//=================================================
+
+	//==============GameObjects and components in the world==============
+	public GameObject GOCalendarObject;
+	public GameObject GOSlotMachineObject;
+	public GameObject GORealInhalerObject;
+	public GameObject GOTeddyInhalerObject;
+	public GameObject GOBadgeObject;
+	public GameObject GODojoObject; 
+	public GameObject GOYardSignObject; 
 
 	public GameObject cameraMoveObject;
 	private CameraMove cameraMove;
+	//===============================================
 
     public static GameObject UIRoot; // this is used to add a collider to the UIRoot to stop non-GUI elements from being clicked when GUI menus are active
 
 	public static bool isClickLocked;	// Lock to prevent multiple clicking (diary + trophy modes at the same time)
 	public static bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
-
-	public GameObject dojoObject; //dojo game object in the scene
 
     bool trophyMessageShowing = false;
 
@@ -58,16 +60,14 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 
 		// Linking script references
-		if(calendarUIObject != null)
-			calendarUIManager = calendarUIObject.GetComponent<CalendarUIManager>();
-		if(noteUIObject != null)
-			noteUIManager = noteUIObject.GetComponent<NoteUIManager>();
-		if(storeUIObject != null)
-			storeUIManager = storeUIObject.GetComponent<StoreUIManager>();
-		if(trophyGUIObject != null)
-			trophyGUI = trophyGUIObject.GetComponent<TrophyGUI>();
-		if(badgeGUIObject != null)
-			badgeGUI = badgeGUIObject.GetComponent<BadgeGUI>();
+		if(UICalendarObject != null)
+			calendarUIManager = UICalendarObject.GetComponent<CalendarUIManager>();
+		if(UINoteObject != null)
+			noteUIManager = UINoteObject.GetComponent<NoteUIManager>();
+		if(UIStoreObject != null)
+			storeUIManager = UIStoreObject.GetComponent<StoreUIManager>();
+		if(UIBadgeObject != null)
+			badgeGUI = UIBadgeObject.GetComponent<BadgeGUI>();
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
     }
@@ -78,9 +78,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed += OnNoteClosed;
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
-		// TrophyGUI.OnTrophyClosed += OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
-		// DojoUIManager.OnDojoDoorClosed += OnDojoDoorClosed;
     }
 
 	//Clean all event listeners and static references
@@ -88,9 +86,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed -= OnNoteClosed;
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
-		// TrophyGUI.OnTrophyClosed -= OnTrophyClosed;
 		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
-		// DojoUIManager.OnDojoDoorClosed -= OnDojoDoorClosed;
 		UIRoot = null;
 	}
 
@@ -114,14 +110,13 @@ public class ClickManager : MonoBehaviour {
 		switch(Application.loadedLevelName){
 			case "NewBedRoom":
 				GameObject.Find("GO_Laptop").GetComponent<TapItem>().OnTap += OnTapLaptop;
-				GameObject.Find("GO_Calendar").GetComponent<TapItem>().OnTap += OnTapCalendar;
-				GameObject.Find("GO_SlotMachine").GetComponent<TapItem>().OnTap += OnTapSlotMachine;
-				GameObject.Find("GO_RealInhaler").GetComponent<TapItem>().OnTap += OnTapRealInhaler;
-				GameObject.Find("GO_TeddyInhaler").GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
-				// GameObject.Find("GO_Shelf").GetComponent<TapItem>().OnTap += OnTapShelf;
-				// GameObject.Find("GO_HelpTrophy").GetComponent<TapItem>().OnTap += OnTapHelpTrophy;
-				GameObject.Find("GO_HousePlaque").GetComponent<TapItem>().OnTap += OnTapBadgeBoard;
-				dojoObject.GetComponent<TapItem>().OnTap += OnTapDojoDoor;
+				GOCalendarObject.GetComponent<TapItem>().OnTap += OnTapCalendar;
+				GOSlotMachineObject.GetComponent<TapItem>().OnTap += OnTapSlotMachine;
+				GORealInhalerObject.GetComponent<TapItem>().OnTap += OnTapRealInhaler;
+				GOTeddyInhalerObject.GetComponent<TapItem>().OnTap += OnTapTeddyInhaler;
+				GOBadgeObject.GetComponent<TapItem>().OnTap += OnTapBadgeBoard;
+				GODojoObject.GetComponent<TapItem>().OnTap += OnTapDojoDoor;
+				GOYardSignObject.GetComponent<TapItem>().OnTap += OnTapYardSign;
 			break;
 			case "Yard":
 			break;
@@ -146,8 +141,8 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
 
 			GA.API.Design.NewEvent("UserTouch:Note");
 		}
@@ -157,8 +152,8 @@ public class ClickManager : MonoBehaviour {
 		cameraMove.ZoomOutMove();
 
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
+		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==============================
 
@@ -171,7 +166,7 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 
 			GA.API.Design.NewEvent("UserTouch:Store");
 		}
@@ -182,7 +177,7 @@ public class ClickManager : MonoBehaviour {
 		SetActiveGUIModeLock(false);
 
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
 	}
 	//==================================
 
@@ -195,8 +190,8 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
 
 			GA.API.Design.NewEvent("UserTouch:Calendar");
 		}
@@ -206,32 +201,11 @@ public class ClickManager : MonoBehaviour {
 		ReleaseModeLock();
 		SetActiveGUIModeLock(false);
 		//Show other UI object
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
+		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//==========================
 
-	//=================Shelf=====================
-	// private void OnTapShelf(){
-	// 	if (CanRespondToTap()){
-	// 		trophyGUI.TrophyClicked();
-	// 		ClickLock();
-	// 		ModeLock();
-
-	// 		//Hide other UI objects
-	// 		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-	// 		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-	// 	}
-	// }
-	// private void OnTrophyClosed(object senders, EventArgs e){
-	// 	ClickLock();
-	// 	cameraMove.ZoomOutMove();
-
-	// 	//Show other UI Objects
-	// 	navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-	// 	hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-	// }
-	//=========================================
 	//=================Badge Board=====================
 	private void OnTapBadgeBoard(){
 		if (CanRespondToTap()){
@@ -241,9 +215,9 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
 
 			GA.API.Design.NewEvent("UserTouch:BadgeBoard");
 		}
@@ -253,41 +227,49 @@ public class ClickManager : MonoBehaviour {
 		cameraMove.ZoomOutMove();
 
 		//Show other UI Objects
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
+		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
 	}
 	//=========================================
 
 	//========================Dojo Door================
 	private void OnTapDojoDoor(){
 		if(CanRespondToTap()){
-			// dojoObject.GetComponent<DojoUIManager>().DojoDoorClicked();
-			dojoObject.GetComponent<Animator>().SetBool("Open", true);
+			// GODojoObject.GetComponent<DojoUIManager>().DojoDoorClicked();
+			GODojoObject.GetComponent<Animator>().SetBool("Open", true);
 			cameraMove.ZoomToggle(ZoomItem.Dojo);
 			ClickLock();
 			ModeLock();
 
 			//Hide other UI objects
-			navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			inventoryUIObject.GetComponent<MoveTweenToggle>().Hide();
+			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
 
 			GA.API.Design.NewEvent("UserTouch:Dojo");
+
+			UILoadScreen.SetActive(true);
+			Application.LoadLevel("Dojo");
 		}
 	}
-	private void OnDojoDoorClosed(object senders, EventArgs e){
-		dojoObject.GetComponent<Animator>().SetBool("Open", false);
-		ClickLock();
-		cameraMove.ZoomOutMove();
+	// private void OnDojoDoorClosed(object senders, EventArgs e){
+	// 	GODojoObject.GetComponent<Animator>().SetBool("Open", false);
+	// 	ClickLock();
+	// 	cameraMove.ZoomOutMove();
 
-		//Show other UI objects
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		inventoryUIObject.GetComponent<MoveTweenToggle>().Show();
-	}
+	// 	//Show other UI objects
+	// 	UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	// 	UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	// 	UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
+	// }
 	//=======================
 
+	//====================Yard Sign========================
+	private void OnTapYardSign(){
+		UILoadScreen.SetActive(true);
+		Application.LoadLevel("Yard");
+	}
 
 
 	//=========================================
@@ -334,11 +316,11 @@ public class ClickManager : MonoBehaviour {
 		ModeLock();
 
 		//Hide other UI Objects
-		navigationUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-		hudUIObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 	}
 
-	void OnTapTeddyInhaler(){
+	public void OnTapTeddyInhaler(){
 		if (CanRespondToTap()){
 			// cameraMove.TeddyInhalerZoomToggle();
 			cameraMove.ZoomToggle(ZoomItem.PracticeInhaler);

@@ -1,36 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class RunnerItem : MonoBehaviour
-{
+public abstract class RunnerItem : MonoBehaviour {
 	public string Name = "";
 	public int PointValue = 0;
 
+	protected ScoreManager mScoreManager;
+
 	// Use this for initialization
-	void Start ()
-	{
+	public virtual void Start() {
+		GameObject scoreManagerObject = GameObject.Find("ScoreManager");
+		if (scoreManagerObject != null) {
+				mScoreManager = scoreManagerObject.GetComponent<ScoreManager>();
+		}
 	}
 	
 	// Update is called once per frame
-	void Update ()
-	{
+	public virtual void Update() {
 		
 	}
 
-	void OnTriggerEnter(Collider inOther)
-	{
-		if (inOther.gameObject.tag == "Player")
-		{
+	void OnTriggerEnter(Collider inOther) {
+		if (inOther.gameObject.tag == "Player") {
 			Debug.Log("Picking up " + Name + ". Adding point value " + PointValue);
 			OnPickup();
 
-            GameObject scoreManagerObject = GameObject.Find("ScoreManager");
-            if (scoreManagerObject != null) {
-                ScoreManager scoreManager = (ScoreManager)scoreManagerObject.GetComponent<ScoreManager>();
-                if (scoreManager != null) {
-                    scoreManager.AddPoints(PointValue);
-                }
-            }
+			if (mScoreManager != null)
+				mScoreManager.AddPoints(PointValue);
 		}
 	}
 

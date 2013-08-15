@@ -203,7 +203,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public void SetUpBonusTip(){
        //Bring red stamp below the back drop
         if(redStampHintArrow != null) Destroy(redStampHintArrow);
-        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6); 
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
 
         //Bring gray stamp above
         day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21);

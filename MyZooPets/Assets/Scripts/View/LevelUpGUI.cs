@@ -10,6 +10,6 @@ public class LevelUpGUI : MonoBehaviour {
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){
-        NotificationUIManager.Instance.LevelUpMessage(LevelUpLogic.AwardedBadge, null);
+        NotificationUIManager.Instance.EnqueueLevelUpMessage(LevelUpLogic.AwardedBadge, null);
     }
 }

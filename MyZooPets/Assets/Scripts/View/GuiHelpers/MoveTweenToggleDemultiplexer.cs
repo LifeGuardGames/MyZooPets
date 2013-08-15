@@ -147,8 +147,9 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	
 	void HideSendCallback(){
 		if (string.IsNullOrEmpty(HideFunctionName)) return;
+		Debug.Log("SENDING callback");
 		if (HideTarget == null) HideTarget = gameObject;
-		
+
 		if (HideIncludeChildren){
 			Transform[] transforms = HideTarget.GetComponentsInChildren<Transform>();
 

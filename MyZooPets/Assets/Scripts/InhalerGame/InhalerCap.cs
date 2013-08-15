@@ -26,6 +26,14 @@ public class InhalerCap : MonoBehaviour
 
 	void Update()
 	{
+		/*
+			Touch touch = Input.touches[0];
+            switch (touch.phase) {
+                case TouchPhase.Began:
+                case TouchPhase.Moved:
+                case TouchPhase.Ended:
+
+		*/
 		if (Input.touchCount == 0) { // if not touching screen
 			ResetTouch();
 			dragStartedOnObject = false;
@@ -80,7 +88,7 @@ public class InhalerCap : MonoBehaviour
 				{
 					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
 						currentPositionVector);
-
+					print(rotationAmount);
 					transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
 					PreventAntiClockwiseRotation();
 				}

@@ -18,7 +18,7 @@ public class SlotMachineUIManager : MonoBehaviour {
         }
 
         if (DataManager.Instance.Stats.Stars >= costStars){
-            NotificationUIManager.Instance.PopupNotificationTwoButtons(
+            NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons(
                 "-"+ costStars +" stars to play",
                 delegate(){
                     StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
@@ -31,7 +31,7 @@ public class SlotMachineUIManager : MonoBehaviour {
                 "Back");
         }
         else { // not enough stars to play
-            NotificationUIManager.Instance.PopupNotificationOneButton(
+            NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
                 "You need at least " + costStars + " stars to play!",
                 delegate(){
                     Application.LoadLevel("NewBedRoom");
@@ -74,11 +74,12 @@ public class SlotMachineUIManager : MonoBehaviour {
         
 		StatsController.Instance.ChangeStats(points, Vector3.zero, stars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 		
-        NotificationUIManager.Instance.GameOverRewardMessage(stars, points,
+        NotificationUIManager.Instance.EnqueueGameOverRewardMessage(stars, points,
             delegate(){
                 StartGame();
             },
             delegate(){
+				// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
                 Application.LoadLevel("NewBedRoom");
             });
     }

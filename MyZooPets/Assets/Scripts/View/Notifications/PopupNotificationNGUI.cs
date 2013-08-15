@@ -6,11 +6,10 @@ public class PopupNotificationNGUI : MonoBehaviour {
     public UILabel textArea;
     public UILabel button1;
     public UILabel button2;
-    public UISprite backdrop;
 
     // set the following
     public int numOfButtons = 1;
-    public bool killImmediately = false;
+    public bool HideImmediately = false;
 
     public delegate void Callback();
     public Callback Button1Callback;
@@ -40,16 +39,14 @@ public class PopupNotificationNGUI : MonoBehaviour {
         }
     }
 
-    protected void Awake(){
-        backdrop.gameObject.SetActive(false);
-    }
-
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
+		Debug.Log("Button1");
         Hide();
         if (Button1Callback != null) Button1Callback();
     }
     protected void Button2Action(){
+		Debug.Log("Button2");
         Hide();
         if (Button2Callback != null) Button2Callback();
     }
@@ -59,59 +56,84 @@ public class PopupNotificationNGUI : MonoBehaviour {
         Display(true);
     }
 
-    /*
-        Sometimes, we want the rest of the game not to be paused while this notification is displayed.
-        Eg. We want the Level Up message to pop up while we are displaying the game over message in the
-        inhaler game, if applicable.
-    */
     public void Display(bool pauseGame){
-        backdrop.gameObject.SetActive(true);
-        // Hashtable optional = new Hashtable();
-        // optional.Add("ease", LeanTweenType.easeOutBounce);
-        // LeanTween.move(panelRect, finalPosition, 1.0f, optional);
-        // Time.timeScale = 0;
         LoadLevelManager.IsPaused = pauseGame;
         ClickManager.ClickLock();
-        GetComponent<MoveTweenToggle>().Show(0.5f);
+		TryShowDemuxThenToggle(-1);
     }
+
+	// IMPORTANT: All notifications should call this when finished tween hide callback
+	public void UnlockNotificationQueue(){
+		Debug.Log("SENDING UNLOCK");
+		NotificationUIManager.Instance.CheckNextInQueue();
+	}
 
     // Hide the popup panel
     protected void Hide(){
-        backdrop.gameObject.SetActive(false);
-        if (killImmediately){
-            Destroy(gameObject);
+		Debug.Log("Moved out! gonna destroy");
+        if (HideImmediately){
+			TryHideDemuxThenToggle(0f);
+            Destroy(gameObject, 1.0f);
         }
         else {
-            GetComponent<MoveTweenToggle>().Hide(0.5f);
+            TryHideDemuxThenToggle(0.5f);
             Destroy(gameObject, 3.0f);
         }
         ClickManager.ReleaseClickLock();
         LoadLevelManager.IsPaused = false;
-        // Time.timeScale = 1;
     }
 
-    // =========================================================================================================================================================
-    // Code for Testing
-    protected void Start () {
-        Testing();
-    }
+	/// <summary>
+	/// Helper class to show this object. Will try to see if there is MoveTweenToggleDemultiplexer, else just MoveTweenToggle
+	/// </summary>
+	/// <param name='toggleDuration'>
+	/// -1 to use default
+	/// </param>
+	private void TryShowDemuxThenToggle(float toggleDuration){
+		MoveTweenToggleDemultiplexer mtDemux = GetComponent<MoveTweenToggleDemultiplexer>();
+		MoveTweenToggle mt = GetComponent<MoveTweenToggle>();
+		if(mtDemux != null){
+			mtDemux.Show();
+		}
+		else if(mt != null){
+			if(toggleDuration >= 0){
+				mt.Show(toggleDuration);
+			}
+			else{
+				mt.Show();
+			}
+		}
+		else{
+			Debug.LogError("No move tween attached to object");
+		}
+	}
 
-    protected virtual void Testing(){
-        // // testing code
-        // Message = "Hello there!";
-        // Button1Text = "Hey!";
-        // Button1Callback = message1;
-        // if (numOfButtons >= 2){
-        //     Button2Text = "Fuck off.";
-        //     Button2Callback = message2;
-        // }
-    }
+	/// <summary>
+	/// Helper Hide to show this object. Will try to see if there is MoveTweenToggleDemultiplexer, else just MoveTweenToggle
+	/// </summary>
+	/// <param name='toggleDuration'>
+	/// -1 to use default
+	/// </param>
+	private void TryHideDemuxThenToggle(float toggleDuration){
+		MoveTweenToggleDemultiplexer mtDemux = GetComponent<MoveTweenToggleDemultiplexer>();
+		MoveTweenToggle mt = GetComponent<MoveTweenToggle>();
+		if(mtDemux != null){
+			mtDemux.Hide();
+		}
+		else if(mt != null){
+			if(toggleDuration >= 0){
+				mt.Hide(toggleDuration);
+			}
+			else{
+				mt.Hide();
+			}
+		}
+		else{
+			Debug.LogError("No move tween attached to object");
+		}
+	}
 
-    // protected void message1(){
-    //     Debug.Log("button 1 clicked");
-    // }
-    // protected void message2(){
-    //     Debug.Log("button 2 clicked");
-    //     DestroyNotification();
-    // }
+	protected virtual void Testing(){
+
+    }
 }

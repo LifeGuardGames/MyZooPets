@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class RunnerItem : MonoBehaviour
 {
 	public string Name = "";
-	public float PickupChance = 1.0f;
+	public int PointValue = 0;
 
 	// Use this for initialization
 	void Start ()
@@ -19,11 +19,18 @@ public abstract class RunnerItem : MonoBehaviour
 
 	void OnTriggerEnter(Collider inOther)
 	{
-		Debug.Log("Coh-Liding");
 		if (inOther.gameObject.tag == "Player")
 		{
-			Debug.Log("Picking up " + Name);
+			Debug.Log("Picking up " + Name + ". Adding point value " + PointValue);
 			OnPickup();
+
+            GameObject scoreManagerObject = GameObject.Find("ScoreManager");
+            if (scoreManagerObject != null) {
+                ScoreManager scoreManager = (ScoreManager)scoreManagerObject.GetComponent<ScoreManager>();
+                if (scoreManager != null) {
+                    scoreManager.AddPoints(PointValue);
+                }
+            }
 		}
 	}
 

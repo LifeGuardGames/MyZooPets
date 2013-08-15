@@ -35,6 +35,7 @@ public class PlayerRunner : MonoBehaviour
     // Update is called once per frame
     void Update() {
         UpdateInput();
+
     }
 	
 	void FixedUpdate() {
@@ -68,13 +69,11 @@ public class PlayerRunner : MonoBehaviour
 	}
 	
     void onSwipeUp() {
-        // Attempt to move to a platform above
-        Debug.Log("Going Up");
+        TriggerJump();
     }
 
     void onSwipeDown() {
-        // Attempt to move to a platform below
-        Debug.Log("Going Down");
+        TriggerFall();
     }
 
     public void TriggerSlowdown(float inDivisor)
@@ -143,7 +142,6 @@ public class PlayerRunner : MonoBehaviour
         // Reset movement.
         if (isGrounded)
             mMovementVector = new Vector3();
-		
 
         mbGrounded = isGrounded;
     }
@@ -151,7 +149,7 @@ public class PlayerRunner : MonoBehaviour
     private void UpdateInput()
     {
         // Add in jump, since we are grounded, if its pressed.
-        if (!mbJumping && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             TriggerJump();
         }
@@ -164,9 +162,12 @@ public class PlayerRunner : MonoBehaviour
 
     private void TriggerJump()
     {
-        mMovementVector.y += JumpSpeed;
-        gameObject.layer = 12;
-		mbJumping = true;
+        if (mbGrounded && !mbJumping)
+        {
+            mMovementVector.y += JumpSpeed;
+            gameObject.layer = 12;
+            mbJumping = true;
+        }
     }
 
     private void TriggerFall()

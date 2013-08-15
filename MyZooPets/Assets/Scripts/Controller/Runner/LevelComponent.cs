@@ -4,9 +4,11 @@ using System.Collections.Generic;
 public class LevelComponent : MonoBehaviour
 {
 	private int mNextID = 0;
+
 	[SerializeField]
     private List<PointGroup> mPointGroups = new List<PointGroup>();
-    private List<GameObject> mSpawnedItems = new List<GameObject>();
+
+    private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
 
 	public List<PointGroup> PointGroups
 	{
@@ -18,7 +20,27 @@ public class LevelComponent : MonoBehaviour
         {
             return mNextID++;
         }
-	}
+    }
+
+    // Use this for initialization.
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame.
+    void Update()
+    {
+
+    }
+
+    void OnDestroy()
+    {
+        foreach (RunnerItem currentItem in mSpawnedItems)
+        {
+            GameObject.Destroy(currentItem);
+        }
+    }
 
 	public PointGroup GetGroup(string inID)
 	{
@@ -76,17 +98,10 @@ public class LevelComponent : MonoBehaviour
 		return -1;
 	}
 
-	// Use this for initialization.
-	void Start ()
-	{
-	
-	}
-	
-	// Update is called once per frame.
-	void Update ()
-	{
-	
-	}
+    public void AddLevelItem(RunnerItem inItemToAdd)
+    {
+        mSpawnedItems.Add(inItemToAdd);
+    }
 }
 
 [System.Serializable]

@@ -17,15 +17,22 @@ public class PlayerRunner : MonoBehaviour
 	private bool mbJumping = false;
 	private bool mbGrounded = false;
     private bool mbFalling = false;
+    private bool mbTriggerColliding = false;
     private Vector3 mMovementVector = Vector3.zero;
     private Vector3 mLastPosition = Vector3.zero;
+    private CapsuleCollider mCapsuleTrigger;
     private CharacterController mCharacterController;
-	private List<Collider> mCurrentCollisions = new List<Collider>();
-	private List<Collider> mIgnoringCollisions = new List<Collider>();
 	
 	// Use this for initialization
 	void Start() {
 		mCharacterController = gameObject.GetComponent<CharacterController>();
+        Transform layerObject = transform.FindChild("LayerTrigger");
+        if (layerObject != null) {
+            mCapsuleTrigger = layerObject.GetComponent<CapsuleCollider>();
+            Physics.IgnoreCollision(mCharacterController, mCapsuleTrigger);
+        } else
+            Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
+
 		if (mCharacterController == null)
 			Debug.LogError("Character Controller not attached!");
 		mSpeedIncreasePulse = SpeedIncreaseTime;
@@ -35,15 +42,13 @@ public class PlayerRunner : MonoBehaviour
     // Update is called once per frame
     void Update() {
         UpdateInput();
-
+        if (mbFalling && !mbTriggerColliding)
+            mbFalling = false;
     }
 	
 	void FixedUpdate() {
-		
         UpdateSpeed();
 
-
-		mCurrentCollisions.Clear();
         UpdateMovement();
         
         UpdateFalling();
@@ -54,18 +59,7 @@ public class PlayerRunner : MonoBehaviour
         CheckAndActOnDeath();
 	}
 	
-	void OnControllerColliderHit(ControllerColliderHit inHit)
-	{
-		if (!mCurrentCollisions.Contains(inHit.collider))
-			mCurrentCollisions.Add(inHit.collider);
-		
-		if (mIgnoringCollisions.Count > 0) {
-			foreach (Collider ignored in mIgnoringCollisions)
-			{
-				Physics.IgnoreCollision(mCharacterController, ignored, false);
-			}
-			mIgnoringCollisions.Clear ();
-		}
+	void OnControllerColliderHit(ControllerColliderHit inHit) {
 	}
 	
     void onSwipeUp() {
@@ -76,38 +70,42 @@ public class PlayerRunner : MonoBehaviour
         TriggerFall();
     }
 
-    public void TriggerSlowdown(float inDivisor)
-    {
-        Speed /= inDivisor;
+    void LayerTriggerCollisionEnter(Collider inCollider) {
+        mbTriggerColliding = true;
     }
 
-    private void CheckAndActOnDeath()
-    {
+    void LayerTriggerCollisionStay(Collider inCollider) {
+        mbTriggerColliding = true;
+    }
+
+    void LayerTriggerCollisionExit(Collider inCollider) {
+        mbTriggerColliding = false;
+    }
+
+    private void CheckAndActOnDeath() {
         RunnerGameManager gameManager = ((GameObject)GameObject.FindGameObjectWithTag("GameManager")).GetComponent<RunnerGameManager>();
 
         // Are we below the maps floor value
         LevelManager levelManager = ((GameObject)GameObject.FindGameObjectWithTag("LevelManager")).GetComponent<LevelManager>();
-        if (transform.position.y < levelManager.LevelTooLowYValue)
-        {
+        if (transform.position.y < levelManager.LevelTooLowYValue) {
             gameManager.ActivateGameOver();
         }
     }
 
-    private void UpdateSpeed()
-    {
+    public void TriggerSlowdown(float inDivisor) {
+        Speed /= inDivisor;
+    }
+
+    private void UpdateSpeed() {
         mSpeedIncreasePulse -= Time.deltaTime;
-        if (mSpeedIncreasePulse <= 0)
-        {
+        if (mSpeedIncreasePulse <= 0) {
             Speed += SpeedIncrease;
             mSpeedIncreasePulse = SpeedIncreaseTime;
         }
     }
 
-    // I can't name things.
     // Checks if we are "falling down" to re-eneable collision.
-    // Assuming it wasn't enabled already.
-    private void UpdateFalling()
-    {
+    private void UpdateFalling() {
         if (gameObject.layer != 0) {
             if (mbJumping) {
                 Vector3 currentMovementDirection = mLastPosition - transform.position;
@@ -121,8 +119,7 @@ public class PlayerRunner : MonoBehaviour
 
     }
 
-    private void UpdateMovement()
-    {
+    private void UpdateMovement() {
         if (mbGrounded) {
             // These are constant speeds, not forces. It's wierd I know.
             mMovementVector.z = Speed;
@@ -146,42 +143,28 @@ public class PlayerRunner : MonoBehaviour
         mbGrounded = isGrounded;
     }
 
-    private void UpdateInput()
-    {
-        // Add in jump, since we are grounded, if its pressed.
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
+    private void UpdateInput() {
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            // Add in jump, since we are grounded, if its pressed.
             TriggerJump();
-        }
-        // Add in jump, since we are grounded, if its pressed.
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
+        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            // Add in jump, since we are grounded, if its pressed.
             TriggerFall();
         }
     }
 
-    private void TriggerJump()
-    {
-        if (mbGrounded && !mbJumping)
-        {
+    private void TriggerJump() {
+        if (mbGrounded && !mbJumping) {
             mMovementVector.y += JumpSpeed;
             gameObject.layer = 12;
             mbJumping = true;
         }
     }
 
-    private void TriggerFall()
-    {
-		mbFalling = true;
-		
-		foreach (Collider currentCollision in mCurrentCollisions)
-		{
-			if (!mIgnoringCollisions.Contains(currentCollision))
-			{
-				mIgnoringCollisions.Add(currentCollision);
-				Physics.IgnoreCollision(mCharacterController, currentCollision);
-			}
-		}
-		
+    private void TriggerFall() {
+        if (!mbFalling) {
+            mbFalling = true;
+            gameObject.layer = 12;
+        }
     }
 }

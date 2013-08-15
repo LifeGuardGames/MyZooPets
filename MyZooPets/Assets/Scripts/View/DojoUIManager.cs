@@ -1,29 +1,75 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
-public class DojoUIManager : MonoBehaviour {
-    //======================Event=============================
-    public static event EventHandler<EventArgs> OnDojoDoorClosed;
-    //=======================================================
-    public GUISkin defaultSkin;
-    public Texture2D backButton;
-    public GUIStyle blankButtonStyle;
+public class DojoUIManager : Singleton<DojoUIManager> {
+    public GameObject grid; //Parent of the unlockGroups
+    public GameObject unlockGroupPrefab; //Template for the unlockGroups
+    private int[] groupLabels = {3, 6, 9};
+    private int groupCounter = 0;
+    private List<GameObject> skillUIReferences; //list of UI components that represent all the skills 
 
-    private bool isActive = false;
+    void Awake(){
+        skillUIReferences = new List<GameObject>();
+        InitUIReference();
+    }
 
-    void OnGUI(){
-        GUI.skin = defaultSkin;
-        if(isActive && !ClickManager.isClickLocked){ // checking isClickLocked because trophy shelf back button should not be clickable if there is a notification
-            if(GUI.Button(new Rect(10, 10, backButton.width, backButton.height), backButton, blankButtonStyle)){
-                if(D.Assert(OnDojoDoorClosed != null, "OnDojoDoorClosed has no listeners"))
-                    OnDojoDoorClosed (this, EventArgs.Empty);
-                isActive = false;
+    void Start(){
+        DojoLogic.OnNewDojoSkillUnlocked += UpdateDojoSkill;
+        UpdateDojoSkill(this, EventArgs.Empty);
+    }
+
+    void OnDestroy(){
+        DojoLogic.OnNewDojoSkillUnlocked -= UpdateDojoSkill;
+    }
+
+    //Called when Button_Buy from UI has been clicked
+    public void BuySkill(GameObject go){
+       DojoLogic.Instance.BuySkill(Convert.ToInt32(go.transform.parent.name));
+    }
+
+    //Called when Button_Preview from UI has been clicked
+    public void PreviewSkill(GameObject go){
+        print("testin");
+    }
+
+    //Called when Back Button Clicked
+    public void CloseDojo(){
+        print("back");
+    }
+
+    //Event Listener. Update dojo skill UI when a new level is unlocked
+    private void UpdateDojoSkill(object sender, EventArgs args){
+        foreach(GameObject go in skillUIReferences){
+            DojoUIData skill = DojoLogic.Instance.GetSkillWithID(Convert.ToInt32(go.name));
+            if(!skill.IsUnlocked || skill.IsPurchased){
+                go.transform.Find("Button_Buy").GetComponent<UIImageButton>().isEnabled = false;
             }
         }
     }
 
-    public void DojoDoorClicked(){
-        if(!isActive) isActive = true;
+    //Spawn the unlockgroups and store them in skillUIReference
+    private void InitUIReference(){
+        List<DojoUIData> dojoSkills = DojoLogic.Instance.DojoSkills;
+        GameObject unlockGroup = null;
+        for(int i=0; i<dojoSkills.Count; i++){
+            if(i % 2 == 0){ //Spawn new unlockGroup
+                unlockGroup = NGUITools.AddChild(grid, unlockGroupPrefab);
+                unlockGroup.transform.Find("Label_Level").GetComponent<UILabel>().text = "Level " + groupLabels[groupCounter];
+                groupCounter++;
+            }
+            Transform trans = unlockGroup.transform.Find("Skill");
+            //Change the gameObject name to skillID
+            trans.name = dojoSkills[i].SkillID.ToString();
+            //Fill in the cost
+            trans.Find("Label_Cost").GetComponent<UILabel>().text = dojoSkills[i].CostStars.ToString();
+            //Set the OnClick Target and functionName
+            trans.Find("Button_Buy").GetComponent<UIButtonMessage>().target = gameObject;
+            trans.Find("Button_Buy").GetComponent<UIButtonMessage>().functionName = "BuySkill";
+            trans.Find("Button_Preview").GetComponent<UIButtonMessage>().target = gameObject;
+            trans.Find("Button_Preview").GetComponent<UIButtonMessage>().functionName = "PreviewSkill";
+            skillUIReferences.Add(trans.gameObject);
+        }
     }
 }

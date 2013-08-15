@@ -35,7 +35,7 @@ public class DataManager : Singleton<DataManager>{
     [SerializeThis]
     public InventoryData Inventory;
     [SerializeThis]
-    public DojoData Dojo;
+    public DojoRawData Dojo;
 
     //pet info
     [SerializeThis]
@@ -131,7 +131,7 @@ public class DataManager : Singleton<DataManager>{
         Tutorial.Init();
         Inventory = new InventoryData();
         Inventory.Init();
-        Dojo = new DojoData(); 
+        Dojo = new DojoRawData(); 
         Dojo.Init();
 
         //Pet info

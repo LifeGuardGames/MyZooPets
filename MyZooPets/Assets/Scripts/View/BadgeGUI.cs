@@ -41,7 +41,7 @@ public class BadgeGUI : MonoBehaviour {
 	//when badges UI are loaded for the first time
 	private void UpdateLevelBadges(object senders, EventArgs arg){
 		// Level Badges
-		foreach(Badge badge in BadgeLogic.Instance.LevelBadges){
+		foreach(BadgeUIData badge in BadgeLogic.Instance.LevelBadges){
 			int levelNumber = badge.ID;
 
 			// Populate metadata script in object

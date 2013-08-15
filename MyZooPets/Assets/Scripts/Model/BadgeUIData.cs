@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.Serializable]
-public class Badge{
+public class BadgeUIData{
     //needs to be public to be assigned in inspector, but please don't use this
     //variables use the getters and setters
     public string name;

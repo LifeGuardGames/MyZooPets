@@ -1,88 +1,82 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
-/*
-    Make sure that max_skills_count accurately reflects how many skills there are in total (both locked and unlocked).
-*/
 public class DojoLogic : Singleton<DojoLogic> {
+    public List<DojoUIData> dojoSkills = new List<DojoUIData>(); //list of dojo skills. for use in the inspector only
 
-    private static int max_skills_count = 3;
-    private static int numSkillsUnlocked;
-    private Level lastRecordedLevel;
-    private DojoSkill[] skills;
+    //=======================Events========================
+    public static EventHandler<EventArgs> OnNewDojoSkillUnlocked; //when there are changes to the dojo skills
+    public static EventHandler<EventArgs> OnNotEnoughStars; //try to buy dojo skill, but doesn't have enough stars
+    //======================================================
 
-    public static int MAX_SKILLS_COUNT{
-        get {return max_skills_count;}
+    //=====================API============================
+    public int MAX_SKILLS_COUNT{
+        get {return dojoSkills.Count;}
     }
 
-    public static int NumSkillsUnlocked{
-        get {return numSkillsUnlocked;}
+    public List<DojoUIData> DojoSkills{
+        get {return dojoSkills;}
     }
 
-    public void Buy(DojoSkillType skillType){
-        if (DataManager.Instance.Dojo.NumOfPurchasedSkills < numSkillsUnlocked){ // Still enough skill slots
-            int index = (int)skillType;
-            DojoSkill skill = skills[index];
-            if (DataManager.Instance.Stats.Stars >= skill.CostStars){ // can afford it
-                DataManager.Instance.Stats.SubtractStars(skill.CostStars);
-                DataManager.Instance.Dojo.PurchasedSkills[index] = true;
-                DataManager.Instance.Dojo.NumOfPurchasedSkills ++;
+    public DojoUIData GetSkillWithID(int skillID){
+        return dojoSkills.Find(skill => skill.SkillID == skillID);
+    }
+
+    //Buy the dojo skill with skillID
+    public void BuySkill(int skillID){
+        DojoUIData dojoSkill = dojoSkills.Find(entity => entity.SkillID == skillID);
+        if(D.Assert(dojoSkill != null)){
+            if(DataManager.Instance.Stats.Stars >= dojoSkill.CostStars){
+                StatsController.Instance.ChangeStats(0, Vector3.zero, dojoSkill.CostStars * -1, 
+                    Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+                dojoSkill.IsPurchased = true;                   
+            }else{
+                if(D.Assert(OnNotEnoughStars != null, "OnNotEnoughStars has no listeners")) 
+                    OnNotEnoughStars(this, EventArgs.Empty);
             }
         }
     }
-
-    public DojoSkill GetSkill (DojoSkillType skillType){
-        return skills[(int)skillType];
-    }
+    //======================================================
 
     void Start(){
-        UpdateNumSkillsShown();
-        InitSkillsList();
-        Buy(DojoSkillType.Backflip); // unlock starter skill
+        //listen to on level up event
+        HUDAnimator.OnLevelUp += CheckForNewDojoSkills;
     }
 
-    // todo: fill in rest of descriptions
-    void InitSkillsList(){
-        skills = new DojoSkill[max_skills_count];
-        DojoSkill skill;
-
-        skill = new DojoSkill("Sit", "Just sitting. Nothing spectacular.", "NoIconName", "NoPetAnimationName", "NoGestureAnimationName", 0); // starter skill, so costs nothing
-        skills[(int)DojoSkillType.Sit] = skill;
-
-        skill = new DojoSkill("Wave", "Say hello!", "NoIconName", "NoPetAnimationName", "NoGestureAnimationName", 200);
-        skills[(int)DojoSkillType.Wave] = skill;
-
-        skill = new DojoSkill("Backflip", "A superb backflip.", "NoIconName", "NoPetAnimationName", "NoGestureAnimationName", 0);
-        skills[(int)DojoSkillType.Backflip] = skill;
-
+    void OnDestroy(){
+        HUDAnimator.OnLevelUp -= CheckForNewDojoSkills;
     }
 
-    void Update(){
-        //To Do. define a listener for OnLevelUp
-        // check if can unlock additional skills
-        if (DataManager.Instance.Level.CurrentLevel != lastRecordedLevel){
-            UpdateNumSkillsShown();
-            lastRecordedLevel = DataManager.Instance.Level.CurrentLevel;
+    //Event listener. checks if new dojo skills can be unlocked when level up event is fired
+    private void CheckForNewDojoSkills(object sender, EventArgs args){
+        bool fireEvent = false;
+        switch(DataManager.Instance.Level.CurrentLevel){
+            case Level.Level3:
+                UnlockSkills(1);
+                UnlockSkills(2);
+                fireEvent = true;
+            break;
+            case Level.Level6:
+                UnlockSkills(3);
+                UnlockSkills(4);
+                fireEvent = true;
+            break;
+            case Level.Level9:
+                UnlockSkills(5);
+                UnlockSkills(6);
+                fireEvent = true;
+            break;
+        }
+        if(fireEvent){
+           if(D.Assert(OnNewDojoSkillUnlocked != null, "OnNewDojoSkillUnlocked has no listeners"))
+                OnNewDojoSkillUnlocked(this, EventArgs.Empty);
         }
     }
 
-    void UpdateNumSkillsShown(){
-        numSkillsUnlocked = (int)DataManager.Instance.Level.CurrentLevel / 3 * 2; // 2 additional skill slots unlocked every 3 levels
-        numSkillsUnlocked += 1; // to account for the first skill given by default
+    private void UnlockSkills(int skillID){
+        DojoUIData skill = dojoSkills.Find(entity => entity.SkillID == skillID);
+        skill.IsUnlocked = true;    
     }
-
-    // //todo: change return type
-    // void GetPetAnimationForSkill(DojoSkillType skillType){
-
-    // }
-    // //todo: change return type
-    // void GetGestureAnimationForSkill(DojoSkillType skillType){
-
-    // }
-    // // string GetDescForSkill(DojoSkillType skillType){
-    // //     return skills[(int)skillType].Desc;
-    // // }
-    // //todo: change return type
-    // void GetIconForSkill(DojoSkillType skillType){
-    // }
 }

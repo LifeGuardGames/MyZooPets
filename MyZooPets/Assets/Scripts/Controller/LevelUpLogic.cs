@@ -42,6 +42,7 @@ public class LevelUpLogic : MonoBehaviour {
 			UpdateLevelUpAverage();
 		}
 
+        //TO DO: make a listener that listens to OnLevelUp event instead
         if(canCheckLevelUp) CanLevelUp();
 	}
 

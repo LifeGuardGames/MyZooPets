@@ -2113,7 +2113,6 @@ GameObject:
   - 65: {fileID: 122047595}
   - 114: {fileID: 122047596}
   - 114: {fileID: 122047597}
-  - 114: {fileID: 122047598}
   m_Layer: 0
   m_Name: GO_YardSign
   m_TagString: Untagged
@@ -2214,18 +2213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastTapPosition: {x: 0, y: 0}
---- !u!114 &122047598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 122047590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4df31385379812441bfc75a419c76729, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: Yard
 --- !u!1001 &126383405
 Prefab:
   m_ObjectHideFlags: 0
@@ -2341,6 +2328,20 @@ MonoBehaviour:
   hideDelay: .25
   easeHide: 27
   easeShow: 2
+--- !u!114 &136314999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 1814776890}
+    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &141950105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4536,6 +4537,110 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1001 &242628413
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 614338483}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -.0273860693
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: .277409434
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -.0146875
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UIHudObject
+      value: 
+      objectReference: {fileID: 731379403}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UICalendarObject
+      value: 
+      objectReference: {fileID: 1244029619}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UIStoreObject
+      value: 
+      objectReference: {fileID: 59116455}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UINoteObject
+      value: 
+      objectReference: {fileID: 822312379}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UIInventoryObject
+      value: 
+      objectReference: {fileID: 188946390}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UINavigationObject
+      value: 
+      objectReference: {fileID: 1613790790}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UIBadgeObject
+      value: 
+      objectReference: {fileID: 732789647}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GOCalendarObject
+      value: 
+      objectReference: {fileID: 777068110}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GOSlotMachineObject
+      value: 
+      objectReference: {fileID: 76193789}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GORealInhalerObject
+      value: 
+      objectReference: {fileID: 1027916321}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GOTeddyInhalerObject
+      value: 
+      objectReference: {fileID: 1946128873}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GOBadgeObject
+      value: 
+      objectReference: {fileID: 599627655}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GODojoObject
+      value: 
+      objectReference: {fileID: 1934050951}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: GOYardSignObject
+      value: 
+      objectReference: {fileID: 122047590}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: cameraMoveObject
+      value: 
+      objectReference: {fileID: 1648505570}
+    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+      propertyPath: UILoadScreen
+      value: 
+      objectReference: {fileID: 1801667298}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
+  m_RootGameObject: {fileID: 1008479045}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &243003550
 GameObject:
   m_ObjectHideFlags: 0
@@ -9083,7 +9188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece66dd73855642f4b4c91a767f97460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationUIManager: {fileID: 2136483446}
 --- !u!1 &643400508
 GameObject:
   m_ObjectHideFlags: 0
@@ -14724,7 +14828,7 @@ MeshFilter:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-  m_PrefabInternal: {fileID: 2043441910}
+  m_PrefabInternal: {fileID: 242628413}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1008479047}
@@ -14741,30 +14845,34 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af,
     type: 2}
-  m_PrefabInternal: {fileID: 2043441910}
+  m_PrefabInternal: {fileID: 242628413}
   m_GameObject: {fileID: 1008479045}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86a9558f5bf9ef643afaad7697bc3d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hudUIObject: {fileID: 731379403}
-  calendarUIObject: {fileID: 1244029619}
-  storeUIObject: {fileID: 59116455}
-  noteUIObject: {fileID: 822312379}
-  inventoryUIObject: {fileID: 188946390}
-  navigationUIObject: {fileID: 1613790790}
-  challengesGUIObject: {fileID: 0}
-  trophyGUIObject: {fileID: 0}
-  badgeGUIObject: {fileID: 732789647}
+  UIHudObject: {fileID: 731379403}
+  UICalendarObject: {fileID: 1244029619}
+  UIStoreObject: {fileID: 59116455}
+  UINoteObject: {fileID: 822312379}
+  UIInventoryObject: {fileID: 188946390}
+  UINavigationObject: {fileID: 1613790790}
+  UIBadgeObject: {fileID: 732789647}
+  UILoadScreen: {fileID: 1801667298}
+  GOCalendarObject: {fileID: 777068110}
+  GOSlotMachineObject: {fileID: 76193789}
+  GORealInhalerObject: {fileID: 1027916321}
+  GOTeddyInhalerObject: {fileID: 1946128873}
+  GOBadgeObject: {fileID: 599627655}
+  GODojoObject: {fileID: 1934050951}
+  GOYardSignObject: {fileID: 122047590}
   cameraMoveObject: {fileID: 1648505570}
-  notificationUIManager: {fileID: 2136483446}
-  dojoObject: {fileID: 1934050951}
 --- !u!4 &1008479047
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-  m_PrefabInternal: {fileID: 2043441910}
+  m_PrefabInternal: {fileID: 242628413}
   m_GameObject: {fileID: 1008479045}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -.0273860693, y: .277409434, z: -.0146875}
@@ -15316,7 +15424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 2081567762}
+  Reference: {fileID: 136314999}
 --- !u!4 &1044562557
 Transform:
   m_ObjectHideFlags: 0
@@ -25585,7 +25693,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182c0a2d4c9aa46cbb8fcb9e05add9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationUIManager: {fileID: 2136483446}
 --- !u!1 &1766991202
 GameObject:
   m_ObjectHideFlags: 0
@@ -28816,90 +28923,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 266744510}
   m_GameObject: {fileID: 2040159199}
   m_Mesh: {fileID: 4300000, guid: 727d0d645eebed142a5d13118a7f83e2, type: 3}
---- !u!1001 &2043441910
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 614338483}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -.0273860693
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: .277409434
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -.0146875
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: hudUIObject
-      value: 
-      objectReference: {fileID: 731379403}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: calendarUIObject
-      value: 
-      objectReference: {fileID: 1244029619}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: storeUIObject
-      value: 
-      objectReference: {fileID: 59116455}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: noteUIObject
-      value: 
-      objectReference: {fileID: 822312379}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: navigationUIObject
-      value: 
-      objectReference: {fileID: 1613790790}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: trophyGUIObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: cameraMoveObject
-      value: 
-      objectReference: {fileID: 1648505570}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: notificationUIManager
-      value: 
-      objectReference: {fileID: 2136483446}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: inventoryUIObject
-      value: 
-      objectReference: {fileID: 188946390}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: badgeGUIObject
-      value: 
-      objectReference: {fileID: 732789647}
-    - target: {fileID: 11400000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-      propertyPath: dojoObject
-      value: 
-      objectReference: {fileID: 1934050951}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 8df77d0462d73458ca9f7051ac86a3af, type: 2}
-  m_RootGameObject: {fileID: 1008479045}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &2048889479
 GameObject:
   m_ObjectHideFlags: 0
@@ -29491,20 +29514,6 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
---- !u!114 &2081567762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 1814776890}
-    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &2081643737
 GameObject:
   m_ObjectHideFlags: 0
@@ -30086,7 +30095,6 @@ MonoBehaviour:
   calendar: {fileID: 777068110}
   realInhaler: {fileID: 1027916321}
   teddyInhaler: {fileID: 1946128873}
-  notificationUIManager: {fileID: 2136483446}
   clickManager: {fileID: 1008479046}
 --- !u!1 &2125800589
 GameObject:

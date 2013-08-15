@@ -11,10 +11,15 @@ public class PlayerRunner : MonoBehaviour
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
 
-	private float mSpeedIncreasePulse = 0.0f;
-	private float mDistanceTravelled = 0.0f;
-	private bool mbColliding = false;
-	private bool mbJumping = false;
+    private float mInvinciblePulse = 0f;
+    private float mSpeedBoostPulse = 0f; // Boosts from items
+    private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
+
+	private float mDistanceTravelled = 0f;
+    private float mSpeedBoostAmmount = 0f;
+    private bool mbInvincible = false;
+    private bool mbJumping = false;
+    private bool mbColliding = false;
 	private bool mbGrounded = false;
 	private bool mbFalling = false;
 	private bool mbTriggerColliding = false;
@@ -42,6 +47,12 @@ public class PlayerRunner : MonoBehaviour
 	// Update is called once per frame
 	void Update() {
 		UpdateInput();
+
+        if (mbInvincible) {
+            mInvinciblePulse -= Time.deltaTime;
+            if (mInvinciblePulse <= 0f)
+                mbInvincible = false;
+        }
 	}
 	
 	void FixedUpdate() {
@@ -91,7 +102,8 @@ public class PlayerRunner : MonoBehaviour
 	}
 
 	public void TriggerSlowdown(float inDivisor) {
-		Speed /= inDivisor;
+        if (!mbInvincible)
+		    Speed /= inDivisor;
 	}
 
 	private void UpdateSpeed() {
@@ -100,6 +112,14 @@ public class PlayerRunner : MonoBehaviour
 			Speed += SpeedIncrease;
 			mSpeedIncreasePulse = SpeedIncreaseTime;
 		}
+
+        if (mSpeedBoostPulse > 0f) {
+            mSpeedBoostPulse -= Time.deltaTime;
+            if (mSpeedBoostPulse <= 0f) {
+                mSpeedBoostPulse = 0f;
+                mSpeedBoostAmmount = 0f;
+            }
+        }
 	}
 
 	// Checks if we are "falling down" to re-eneable collision.
@@ -125,7 +145,7 @@ public class PlayerRunner : MonoBehaviour
 	private void UpdateMovement() {
 		if (mbGrounded) {
 			// These are constant speeds, not forces. It's wierd I know.
-			mMovementVector.z = Speed;
+            mMovementVector.z = Speed + mSpeedBoostAmmount;
 		}
 
 		// Add in Gravity force.
@@ -170,4 +190,14 @@ public class PlayerRunner : MonoBehaviour
 			gameObject.layer = 12;
 		}
 	}
+
+    public void TriggerInvincibility(float inDuration) {
+        mInvinciblePulse = inDuration;
+        mbInvincible = true;
+    }
+
+    public void TriggerSpeedBoost(float inDuration, float inSpeedAmmount) {
+        mSpeedBoostAmmount = inSpeedAmmount;
+        mSpeedBoostPulse = inDuration;
+    }
 }

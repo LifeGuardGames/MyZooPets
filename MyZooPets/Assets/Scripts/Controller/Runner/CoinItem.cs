@@ -11,7 +11,7 @@ public class CoinItem : RunnerItem {
 	
 	// Update is called once per frame
     public override void Update() {
-	
+        base.Update();
 	}
 
     public override void OnPickup()

@@ -19,41 +19,41 @@ public class NotificationTest : MonoBehaviour {
     void OnGUI(){
         //1 button popup notification
         if(GUI.Button(new Rect(10, 10, BUTTON_WIDTH, BUTTON_HEIGHT), "one button")){
-            NotificationUIManager.Instance.PopupNotificationOneButton("testing", null);
+            NotificationUIManager.Instance.EnqueuePopupNotificationOneButton("testing", null);
         }
 
         //level up notification
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
             "level up")){
-            NotificationUIManager.Instance.LevelUpMessage(BadgeTier.Bronze, null);
+            NotificationUIManager.Instance.EnqueueLevelUpMessage(BadgeTier.Bronze, null);
         }
 
         //popup texture "great"
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*2, BUTTON_WIDTH, BUTTON_HEIGHT),
             "great")){
-            NotificationUIManager.Instance.PopupTexture("great");
+            NotificationUIManager.Instance.PopupTexture("great");	// Textures are not queued
         }
 
         //game over reward
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
             "GG Reward")){
-            NotificationUIManager.Instance.GameOverRewardMessage(1000, 0, null, null);
+            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(1000, 0, null, null);
         }
 
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT),
             "two button")){
-            NotificationUIManager.Instance.PopupNotificationTwoButtons("testing", null, null);
+            NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons("testing", null, null);
         }
 
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*5, BUTTON_WIDTH, BUTTON_HEIGHT),
             "1 button GG")){
-            NotificationUIManager.Instance.GameOverRewardMessage(1000, 10000, null);
+            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(1000, 10000, null);
         }
 
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*6, BUTTON_WIDTH, BUTTON_HEIGHT),
             "tutorial test")){
-            NotificationUIManager.Instance.TutorialMessage(TutorialImageType.CalendarGreenStamp,
-               null, "", "");
+            NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarGreenStamp,
+               null, "");
         }
     }
 }

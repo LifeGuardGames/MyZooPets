@@ -2,20 +2,22 @@
 using System.Collections;
 
 public class CoinItem : RunnerItem {
+    public int CoinValue = 1;
 
 	// Use this for initialization
-	void Start () {
-	
+	public override void Start () {
+        base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+    public override void Update() {
+        base.Update();
 	}
 
     public override void OnPickup()
     {
-        Debug.Log("Coin Picked Up!!");
+        if (mScoreManager != null)
+            mScoreManager.AddCoins(CoinValue);
         GameObject.Destroy(gameObject);
     }
 }

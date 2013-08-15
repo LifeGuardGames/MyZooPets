@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class RunnerGameManager : MonoBehaviour {
+    private PlayerRunner mPlayerRunner;
 
     public bool GameRunning
     {
@@ -11,29 +12,28 @@ public class RunnerGameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-	
+        GameObject playerObject = GameObject.Find("Player");
+        if (playerObject != null)
+            mPlayerRunner = playerObject.GetComponent<PlayerRunner>();
 	}
 	
 	// Update is called once per frame
 	void Update() {
-	
 	}
 
     public void ActivateGameOver() {
         GameRunning = false;
 
         // Disable the player
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.SetActive(false);
-        // 
+        if (mPlayerRunner != null)
+            mPlayerRunner.gameObject.SetActive(false);
     }
 
     void ResetGame() {
         GameRunning = true;
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-       
         // Turn player on, if it isnt
-        player.SetActive(true);
+        if (mPlayerRunner != null)
+            mPlayerRunner.gameObject.SetActive(true);
     }
 }

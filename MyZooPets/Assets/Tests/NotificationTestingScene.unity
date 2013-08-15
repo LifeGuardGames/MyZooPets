@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: cbd1079135c27b946b381dbb810561f0, type: 2}
+  mTex: {fileID: 2800000, guid: 3aa8bca82abd56a4bb019942fab01c2a, type: 3}
   mColor: {r: 1, g: .486815453, b: .154411793, a: 1}
   mPivot: 4
   mDepth: 13
@@ -213,6 +213,64 @@ Transform:
   m_Children:
   - {fileID: 2115627299}
   m_Father: {fileID: 0}
+--- !u!1 &67175222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100028, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 67175223}
+  - 114: {fileID: 67175224}
+  m_Layer: 10
+  m_Name: Label_Message1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &67175223
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400028, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 67175222}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -374, y: 52, z: 0}
+  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1081624364}
+--- !u!114 &67175224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400036, guid: d0cac8f2171928445b4e6994e9972e1c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 67175222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mPivot: 4
+  mDepth: 14
+  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mText: Did you remember to give inhaler to
+  mMaxLineWidth: 350
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &213698679
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +299,7 @@ Transform:
   - {fileID: 764153353}
   - {fileID: 1020102191}
   - {fileID: 1544606521}
+  - {fileID: 1081624364}
   m_Father: {fileID: 1022960757}
 --- !u!1 &339142642
 GameObject:
@@ -286,6 +345,64 @@ MonoBehaviour:
   manualHeight: 800
   minimumHeight: 320
   maximumHeight: 1536
+--- !u!1 &402004114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100024, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 402004115}
+  - 114: {fileID: 402004116}
+  m_Layer: 10
+  m_Name: Label_PetName
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &402004115
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400024, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 402004114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -385, y: -117, z: 0}
+  m_LocalScale: {x: 32, y: 32, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1081624364}
+--- !u!114 &402004116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400032, guid: d0cac8f2171928445b4e6994e9972e1c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 402004114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mPivot: 4
+  mDepth: 17
+  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mText: LazyWinkle
+  mMaxLineWidth: 300
+  mEncoding: 1
+  mMaxLineCount: 1
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &517154987
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +426,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 517154987}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3941.37305, y: 400, z: 0}
+  m_LocalPosition: {x: -3695.04102, y: 399.999939, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1022960757}
@@ -642,7 +759,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412f34ca1ab2b4dd0b2ab410de9d501a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationUIManager: {fileID: 2115627300}
 --- !u!4 &833474311
 Transform:
   m_ObjectHideFlags: 0
@@ -776,8 +892,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: 12678752b9e9549b0b2fa2f775285a4c, type: 2}
+  mTex: {fileID: 2800000, guid: 05d9323cd2c494dd3b69f2fff2b1ac50, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -915,8 +1031,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: 12678752b9e9549b0b2fa2f775285a4c, type: 2}
+  mTex: {fileID: 2800000, guid: 05d9323cd2c494dd3b69f2fff2b1ac50, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
@@ -978,11 +1094,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: 59.5466309
+    e03: -186.7854
     e10: 0
     e11: 400
     e12: 0
-    e13: 24.4906006
+    e13: 24.4906616
     e20: 0
     e21: 0
     e22: 400
@@ -1013,6 +1129,7 @@ MonoBehaviour:
   contentSprite: {fileID: 1912353777}
   buttonHintArrow: {fileID: 4749959}
   buttonLabel: {fileID: 1426266493}
+  calendarTutorialMessage: {fileID: 1081624363}
 --- !u!114 &1022960760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,6 +1159,93 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+--- !u!1 &1081624363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100030, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1081624364}
+  m_Layer: 0
+  m_Name: CalendarTutorialMessage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1081624364
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400030, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 1081624363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 67175223}
+  - {fileID: 1205648900}
+  - {fileID: 402004115}
+  m_Father: {fileID: 213698680}
+--- !u!1 &1205648899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100026, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1205648900}
+  - 114: {fileID: 1205648901}
+  m_Layer: 10
+  m_Name: Label_Message2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1205648900
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400026, guid: d0cac8f2171928445b4e6994e9972e1c, type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 1205648899}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -382, y: -195, z: 0}
+  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1081624364}
+--- !u!114 &1205648901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400034, guid: d0cac8f2171928445b4e6994e9972e1c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1526219421}
+  m_GameObject: {fileID: 1205648899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
+  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mPivot: 4
+  mDepth: 16
+  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mText: today?
+  mMaxLineWidth: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1247640620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,7 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: 39122d5ff3f8df244bade0f2af93effa, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: 1}
   mPivot: 4
@@ -1286,7 +1490,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1536844414}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.909016907, y: 0, z: 0}
+  m_LocalPosition: {x: -.50000006, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 907601826}
@@ -1514,13 +1718,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: 323da1de3908dfc489447c3e195a5e1d, type: 2}
+  mTex: {fileID: 2800000, guid: 6132af60cdd08a448a760503cee1762f, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 12
   mAtlas: {fileID: 11400000, guid: ff44f6f5f5aca0b44b62ef4fb759d496, type: 2}
-  mSpriteName: tutorialCalendar3
+  mSpriteName: tutorialCalendar0
   mFillCenter: 1
   mType: 0
   mFillDirection: 4

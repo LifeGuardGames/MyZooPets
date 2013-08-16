@@ -9,14 +9,14 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
     private PlayerRunner mPlayerRunner = null;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
         GameObject playerObject = GameObject.Find("Player");
         if (playerObject != null)
             mPlayerRunner = playerObject.GetComponent<PlayerRunner>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+    void LateUpdate() {
         foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
         {
             float currentSpeed = currentParallax.ScrollSpeed * Time.time;
@@ -24,16 +24,17 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
                 currentSpeed *= mPlayerRunner.Speed;
 
             Vector2 newOffset = new Vector2(currentSpeed, 0f);
-            currentParallax.renderer.material.SetTextureOffset("_MainTex", newOffset);
+            UITexture theTexture = currentParallax.GetComponent<UITexture>();
+            theTexture.material.SetTextureOffset("_MainTex", newOffset);
         }
 	}
 
     public void SetAlpha(float inAlpha) {
-        foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
-        {
-            Color currentColor = currentParallax.renderer.material.color;
+        foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
+            UITexture theTexture = currentParallax.GetComponent<UITexture>();
+            Color currentColor = theTexture.material.color;
             currentColor.a = inAlpha;
-            currentParallax.renderer.material.color = currentColor;
+            theTexture.material.color = currentColor;
         }
     }
 }

@@ -16,8 +16,7 @@ public class CoinItem : RunnerItem {
 
     public override void OnPickup()
     {
-        if (mScoreManager != null)
-            mScoreManager.AddCoins(CoinValue);
+        RunnerGameManager.GetInstance().ScoreManager.AddCoins(CoinValue);
         GameObject.Destroy(gameObject);
     }
 }

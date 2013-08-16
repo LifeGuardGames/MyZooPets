@@ -9,20 +9,14 @@ public class MegaHazard : MonoBehaviour {
 
     private float mDistanceRegainPulse = 0f;
     private float mCurrentDistanceFromPlayer = 0f;
-    private PlayerRunner mPlayerRunner;
 
 	// Use this for initialization
 	void Start() {
         mCurrentDistanceFromPlayer = ZDefaultDistanceFromPlayer;
         mDistanceRegainPulse = DistanceRegainTime;
 
-        GameObject playerObject = GameObject.Find("Player");
-        if (playerObject != null) {
-            mPlayerRunner = playerObject.GetComponent<PlayerRunner>();
-            transform.position = mPlayerRunner.transform.position;
-            UpdatePositionRelativeToPlayer();
-        } else
-            Debug.LogError("No player exists");
+        transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
+        UpdatePositionRelativeToPlayer();
 	}
 	
 	// Update is called once per frame
@@ -42,8 +36,8 @@ public class MegaHazard : MonoBehaviour {
     void OnTriggerEnter(Collider inOther) {
         if (inOther.gameObject.tag == "Player") {
             Debug.Log("Smoke monster ahhh");
-    
-            RunnerGameManager gameManager = ((GameObject)GameObject.FindGameObjectWithTag("GameManager")).GetComponent<RunnerGameManager>();
+
+            RunnerGameManager gameManager = RunnerGameManager.GetInstance();
             gameManager.ActivateGameOver();
         }
     }
@@ -54,7 +48,8 @@ public class MegaHazard : MonoBehaviour {
 
     private void UpdatePositionRelativeToPlayer() {
         Vector3 myPos = transform.position;
-        myPos.z = mPlayerRunner.transform.position.z + mCurrentDistanceFromPlayer;
+        PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+        myPos.z = playerRunner.transform.position.z + mCurrentDistanceFromPlayer;
         transform.position = myPos;
     }
 }

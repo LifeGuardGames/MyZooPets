@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ParallaxingBackgroundManager : MonoBehaviour {
 	public Vector3 BackgroundCameraOffset;
 	public Camera BackgroundCamera;
+    public GameObject BackgroundParent;
 	public string FirstGroupID = "";
 	public float TransitionLengthSeconds = 1.0f;
 	public List<ParallaxingBackgroundGroup> ParralaxingGroups = new List<ParallaxingBackgroundGroup>();
@@ -21,7 +22,7 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+    void LateUpdate() {
 		if (mNextGroup != null) {
 			mTransitionPulse -= Time.deltaTime;
 			if (mTransitionPulse <= 0) {
@@ -36,7 +37,6 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
                     mCurrentGroup.SetAlpha(currentAlpha);
 				if (mNextGroup != null)
                     mNextGroup.SetAlpha(inverseAlpha);
-                
 			}
 		}
 	}
@@ -63,8 +63,8 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 	private void SpawnAndSetNextGroup(ParallaxingBackgroundGroup inNextGroup) {
 		mTransitionPulse = TransitionLengthSeconds;
 		mNextGroup = (ParallaxingBackgroundGroup)GameObject.Instantiate(inNextGroup);
-        mNextGroup.transform.SetParent(BackgroundCamera.gameObject);
-        mNextGroup.transform.position = BackgroundCamera.transform.position + BackgroundCameraOffset;
+        mNextGroup.transform.SetParent(BackgroundParent.gameObject);
+        mNextGroup.transform.position = BackgroundParent.transform.position + BackgroundCameraOffset;
 	}
 
 	private void SetNextGroupAsCurrentAndDeleteCurrent() {

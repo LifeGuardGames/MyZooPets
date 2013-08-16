@@ -20,7 +20,7 @@ public class HazardItem : RunnerItem {
 		Debug.Log("Hazard Hit!");
 
         // Player, sloooooowwww downnnnnnnn
-        PlayerRunner player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerRunner>();
+        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
         player.TriggerSlowdown(SlowdownDivisor);
 
         MegaHazard megaHazard = GameObject.FindGameObjectWithTag("MegaHazard").GetComponent<MegaHazard>();

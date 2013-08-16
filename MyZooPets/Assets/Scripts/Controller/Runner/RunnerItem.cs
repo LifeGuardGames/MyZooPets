@@ -5,14 +5,8 @@ public abstract class RunnerItem : MonoBehaviour {
 	public string Name = "";
 	public int PointValue = 0;
 
-	protected ScoreManager mScoreManager;
-
 	// Use this for initialization
 	public virtual void Start() {
-		GameObject scoreManagerObject = GameObject.Find("ScoreManager");
-		if (scoreManagerObject != null) {
-				mScoreManager = scoreManagerObject.GetComponent<ScoreManager>();
-		}
 	}
 	
 	// Update is called once per frame
@@ -25,8 +19,8 @@ public abstract class RunnerItem : MonoBehaviour {
 			Debug.Log("Picking up " + Name + ". Adding point value " + PointValue);
 			OnPickup();
 
-			if (mScoreManager != null)
-				mScoreManager.AddPoints(PointValue);
+            ScoreManager scoreManager = RunnerGameManager.GetInstance().ScoreManager;
+            scoreManager.AddPoints(PointValue);
 		}
 	}
 

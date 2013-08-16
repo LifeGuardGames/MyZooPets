@@ -11,21 +11,17 @@ public class ScoreManager : MonoBehaviour {
     private int mPlayerDistancePoints = 0;
     private int mPlayerCoins = 0;
     private int mPlayerPoints = 0;
-    private PlayerRunner mPlayerRunner;
 
 	// Use this for initialization
     void Start() {
-        GameObject playerObject = GameObject.Find("Player");
-        if (playerObject != null)
-            mPlayerRunner = playerObject.GetComponent<PlayerRunner>();
-
         AddCoins(0);
 	}
 	
 	// Update is called once per frame
 	void Update() {
-        if (mPlayerRunner != null) {
-            float distanceTraveled = mPlayerRunner.transform.position.z;
+        PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+        if (playerRunner != null) {
+            float distanceTraveled = playerRunner.transform.position.z;
 
             if (ScoreLabel != null) {
                 int newDistanceScore = (int)(distanceTraveled / ScoreDistance) * ScorePerIncrement;

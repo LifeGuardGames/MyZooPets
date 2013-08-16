@@ -103,6 +103,9 @@ public class InhalerGameNGUI : Singleton<InhalerGameNGUI> {
     }
 
     private void QuitInhalerGame(){
+        GA.API.Design.NewEvent("InhalerGame:" + Enum.GetName(typeof(InhalerType), 
+            InhalerLogic.Instance.CurrentInhalerType) + ":" + InhalerLogic.Instance.CurrentStep +
+            ":Quit");
 		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
         Application.LoadLevel("NewBedRoom");
     }

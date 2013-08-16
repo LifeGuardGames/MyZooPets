@@ -33,11 +33,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         get{return currentInhalerType;}
     }
 
-    //can user play game? True: continue w game, False: prompt user to exit
-    public bool CanPlayGame{
-        get{return canPlayGame;}
-    }
-
     //true: practice game less reward, false: real game more reward.
     public bool IsPracticeGame{
         get{return isPracticeGame;}
@@ -51,11 +46,16 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             //     OnWrongStep(this, EventArgs.Empty);
         }
         //TO DO: Add game analytics here
+        /*
+            GA.API.Design.NewEvent("InhalerGame:" + currentInhalerType + ":" + currentStep + ":" + wrongstep);
+        */
         return retVal; 
     }
 
-    //use this function to move on to the next step
+    //Use this function to move on to the next step
     public void NextStep(){
+        GA.API.Design.NewEvent("InhalerGame:" + Enum.GetName(typeof(InhalerType), currentInhalerType) + 
+            ":" + currentStep + ":Correct");
         currentStep++;
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
                 OnNextStep(this, EventArgs.Empty);
@@ -63,7 +63,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
                 OnGameOver(this, EventArgs.Empty);
         }
-        //TO DO: Add game analytics here
     }
     //======================================================
     public void ResetGame(){

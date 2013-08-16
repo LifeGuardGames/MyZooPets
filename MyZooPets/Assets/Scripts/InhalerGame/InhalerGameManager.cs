@@ -187,21 +187,21 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
 
     //Event listener.
     private void OnGameEnd(object sender, EventArgs args){
-            // Record having given the pet the inhaler, if this was the real game.
-            if (!InhalerLogic.Instance.IsPracticeGame){
-                CalendarLogic.RecordGivingInhaler();
-                StatsController.Instance.ChangeStats(realGamePointIncrement, Vector3.zero, realGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
-            }
-            else {
-				StatsController.Instance.ChangeStats(practiceGamePointIncrement, Vector3.zero, practiceGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
-            }
+        // Record having given the pet the inhaler, if this was the real game.
+        if (!InhalerLogic.Instance.IsPracticeGame){
+            CalendarLogic.RecordGivingInhaler();
+            StatsController.Instance.ChangeStats(realGamePointIncrement, Vector3.zero, 
+                realGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+        }
+        else {
+			StatsController.Instance.ChangeStats(practiceGamePointIncrement, Vector3.zero, 
+                practiceGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+        }
 
-            InhalerGameNGUI.Instance.ShowGameOverMessage();
-            InhalerGameNGUI.Instance.ShowHUD();
-            InhalerGameNGUI.Instance.HideQuitButton();
+        InhalerGameNGUI.Instance.ShowGameOverMessage();
+        InhalerGameNGUI.Instance.ShowHUD();
+        InhalerGameNGUI.Instance.HideQuitButton();
 
-            RemoveFirstTimeFlags();
+        RemoveFirstTimeFlags();
     }
-
-   
 }

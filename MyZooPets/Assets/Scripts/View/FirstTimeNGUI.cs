@@ -10,18 +10,15 @@ using System.Collections;
 public class FirstTimeNGUI : MonoBehaviour {
 
     public GameObject eggObject;
-    private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
-    private tk2dSprite eggSpriteScript;
     public GameObject nestObject;
-    public string petName;
-    public string petColor;
-
-    public UILabel nameField;
     public GameObject firstTimeChoosePanel;
     public GameObject popupTitle;
-
-    // Camera moving
     public GameObject mCamera;
+    public GameObject loadingScreen;
+    
+    public UILabel nameField;
+    
+    // Camera moving
     private float smooth = 1.0f;
     private bool isZoomed = false;
     private Vector3 initPosition = new Vector3(0.1938391f, 11.47f, 2.83f);
@@ -32,49 +29,20 @@ public class FirstTimeNGUI : MonoBehaviour {
     private Color currentRenderColor;
     private bool eggClicked = false;
     private bool finishClicked = false;
-
-    // public delegate void FinishHatchCallBack();
-    // public static FinishHatchCallBack finishHatchCallBack; //call when hatching is done
-
-    // public delegate void FinishCheckingForFirstTime();
-    // public static FinishCheckingForFirstTime finishCheckingForFirstTime; //call when pet has been instantiated
+    private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
+    private tk2dSprite eggSpriteScript;
+    private string petName;
+    private string petColor;
 
     void Start(){
-        // if(DataManager.FirstTime){ //first time playing game
             eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
             currentRenderColor = RenderSettings.ambientLight;
             RenderSettings.ambientLight = Color.black;
 
             ShowDropInAnimation();
-
-        // }
-        // else{ //not first time. spawn pet as usual
-        //     // TEMPORARY spawn the pet in location
-        //     GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
-        //     goPet.name = "SpritePet";
-
-        //     //continue normal gui stuff
-        //     if(finishCheckingForFirstTime != null) finishCheckingForFirstTime();
-
-        //     // Kill itself + related objects if not first time
-        //     Destroy(eggObject);
-        //     Destroy(nestObject);
-        //     Destroy(gameObject);
-        //     Destroy(firstTimeChoosePanel);
-        // }
-    }
-
-    void ShowDropInAnimation(){
-        // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<MoveTweenToggle>().Show();
-
-        Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutBounce);
-        LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
     }
 
     void Update(){
-
         //TODO-s Optimize this for touch? / ABSTRACT TO CAMERAMOVE?? perhaps not for coherency
         if(Input.GetMouseButtonUp(0)){
             Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -93,11 +61,20 @@ public class FirstTimeNGUI : MonoBehaviour {
         }
     }
 
-    void ShowChooseGUI(){
+    private void ShowDropInAnimation(){
+        // Splash finished, Drop down the title and the egg sprite, only called once
+        popupTitle.GetComponent<MoveTweenToggle>().Show();
+
+        Hashtable optional = new Hashtable();
+        optional.Add("ease", LeanTweenType.easeOutBounce);
+        LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
+    }
+    
+    private void ShowChooseGUI(){
         firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Show(smooth);
     }
 
-    void HideChooseGUI(){
+    private void HideChooseGUI(){
         firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
         HelperFinishEditPet();
@@ -108,54 +85,39 @@ public class FirstTimeNGUI : MonoBehaviour {
         DataManager.Instance.PetName = petName;
         DataManager.Instance.PetColor = petColor;
         DataManager.Instance.TurnFirstTimeOff();
-
-        // // Spawn pet object
-        // // GameObject goPet = Instantiate(petObject, new Vector3(0f, -2.87f, -10f), Quaternion.identity) as GameObject;
-        // GameObject goPet = Instantiate(petObject, new Vector3(0f, 0.35f, 23f), Quaternion.identity) as GameObject;
-        // goPet.name = "SpritePet";
-
-        // Start normal GUI stuff
-        // if(finishHatchCallBack != null) finishHatchCallBack();
-
-        // Commit seppuku
-        // Destroy(eggObject);
-        // Destroy(nestObject);
-        // Destroy(gameObject);
-        // Destroy(firstTimeChoosePanel, 3.0f);
-        // Application.LoadLevel("NewBedRoom");
     }
 
-    void ButtonClicked_Blue(){
+    private void ButtonClicked_Blue(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggBlueChoose");
             petColor = "whiteBlue";
         }
     }
-    void ButtonClicked_Green(){
+    private void ButtonClicked_Green(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggGreenChoose");
             petColor = "whiteGreen";
         }
     }
-    void ButtonClicked_Yellow(){
+    private void ButtonClicked_Yellow(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggYellowChoose");
             petColor = "whiteYellow";
         }
     }
-    void ButtonClicked_Red(){
+    private void ButtonClicked_Red(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggRedChoose");
             petColor = "whiteRed";
         }
     }
-    void ButtonClicked_Purple(){
+    private void ButtonClicked_Purple(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggPurpleChoose");
             petColor = "whitePurple";
         }
     }
-    void ButtonClicked_Finish(){
+    private void ButtonClicked_Finish(){
         if (!finishClicked){
             finishClicked = true;
             petName = nameField.text;
@@ -167,19 +129,19 @@ public class FirstTimeNGUI : MonoBehaviour {
         }
     }
 
-    void HideTitle(){
+    private void HideTitle(){
         popupTitle.GetComponent<MoveTweenToggle>().Hide();
         Destroy(popupTitle, 3.0f);
     }
 
-    void CameraTransform (Vector3 newPosition, Vector3 newDirection){
+    private void CameraTransform (Vector3 newPosition, Vector3 newDirection){
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeInOutQuad);
         LeanTween.move(mCamera, newPosition, smooth, optional);
         LeanTween.rotate(mCamera, newDirection, smooth, optional);
     }
 
-    void ZoomOutMove(){
+    private void ZoomOutMove(){
         CameraTransform(initPosition,initFaceDirection);
         Invoke("LoadScene", 1);
     }

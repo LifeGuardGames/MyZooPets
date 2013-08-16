@@ -6,7 +6,9 @@ public class MegaHazard : MonoBehaviour {
     public float DistanceDivisor = 2.0f;
     public float DistanceRegainIncrement = 0.1f;
     public float DistanceRegainTime = 1f;
+    public float mGapClosingIncrement = 0.01f;
 
+    private float mDistanceUntilTarget = 0f;
     private float mDistanceRegainPulse = 0f;
     private float mCurrentDistanceFromPlayer = 0f;
 
@@ -30,7 +32,6 @@ public class MegaHazard : MonoBehaviour {
                 mCurrentDistanceFromPlayer += DistanceRegainIncrement;
             }
         }
-
 	}
 
     void OnTriggerEnter(Collider inOther) {
@@ -43,13 +44,18 @@ public class MegaHazard : MonoBehaviour {
     }
 
     public void TriggerPlayerSlowdown() {
-        mCurrentDistanceFromPlayer -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
+        mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
+        mCurrentDistanceFromPlayer += mDistanceUntilTarget;
     }
 
     private void UpdatePositionRelativeToPlayer() {
+        if (mDistanceUntilTarget > 0)
+            mDistanceUntilTarget -= mGapClosingIncrement;
+
+        float currentDistance = mCurrentDistanceFromPlayer - mDistanceUntilTarget;
         Vector3 myPos = transform.position;
         PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
-        myPos.z = playerRunner.transform.position.z + mCurrentDistanceFromPlayer;
+        myPos.z = playerRunner.transform.position.z + currentDistance;
         transform.position = myPos;
     }
 }

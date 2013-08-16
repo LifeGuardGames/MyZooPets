@@ -13,7 +13,7 @@ public class RescueSwitch : MonoBehaviour {
 
     void Update()
     {
-        if (InhalerLogic.CurrentStep != 5){
+        if (InhalerLogic.Instance.CurrentStep != 5){
             return;
         }
 
@@ -22,10 +22,8 @@ public class RescueSwitch : MonoBehaviour {
             // if is clicked
             if (Input.GetMouseButtonDown(0)) {
                 if (isTouchingObject(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(5)){
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(5)){
+                        InhalerLogic.Instance.NextStep();
                         InhalerClickAnimation();
                     }
                 }

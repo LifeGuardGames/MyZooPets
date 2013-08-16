@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: InhalerGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.95159888, y: -1.86536932, z: -45.1817665}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f703466f465c54b4c943babed3eebcc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  advairPrefab: {fileID: 100008, guid: 1367fb4ec085c4d1290d62450b4d8811, type: 2}
+  rescuePrefab: {fileID: 100000, guid: 3636691d47c8b4a45a58cd7319031555, type: 2}
+  rescueShakerPrefab: {fileID: 100000, guid: 6b788af8704bf40168311d7ae813cb75, type: 2}
+  inhaleExhalePrefab: {fileID: 100000, guid: 9ef0098ef69b6465fb60200b9176605e, type: 2}
+  smallRescuePrefab: {fileID: 100002, guid: 123d72a65bf6a4e55a0ad02405640258, type: 2}
+  textPrefabShake: {fileID: 0}
+  textPrefabSwipe: {fileID: 0}
+  textPrefabDrag: {fileID: 0}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 100000}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1

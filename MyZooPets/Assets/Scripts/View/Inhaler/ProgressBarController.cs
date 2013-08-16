@@ -18,16 +18,6 @@ public class ProgressBarController : MonoBehaviour {
         increment = 1.0f / (numOfNodes - 1);
         if (anim != null) anim.Init(numOfNodes);
     }
-    // testing
-	// void Start () {
- //        Init(6); // 0 to 5
- //        // Init(7); // 0 to 6
-	// }
-
-	// Update is called once per frame
-	void Update () {
-
-	}
 
     public void UpdateStep(int lastCompletedStep){
         slider.sliderValue = lastCompletedStep * increment;

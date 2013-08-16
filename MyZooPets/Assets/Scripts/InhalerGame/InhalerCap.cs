@@ -152,11 +152,9 @@ public class InhalerCap : MonoBehaviour
 		if (transform.eulerAngles.z >= 151){
 			transform.eulerAngles = finalPosition;
 			completelyOpened = true;
-			if (InhalerLogic.IsCurrentStepCorrect(1)){
-				if (!InhalerLogic.IsDoneWithGame()){
-					InhalerLogic.NextStep();
-					collider.enabled = false;
-				}
+			if (InhalerLogic.Instance.IsCurrentStepCorrect(1)){
+				InhalerLogic.Instance.NextStep();
+				collider.enabled = false;
 			}
 			RemoveArrowAnimation();
 		}

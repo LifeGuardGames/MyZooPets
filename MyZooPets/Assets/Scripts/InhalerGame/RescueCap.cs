@@ -13,7 +13,7 @@ public class RescueCap : MonoBehaviour {
 
     void Update()
     {
-        if (InhalerLogic.CurrentStep != 1){
+        if (InhalerLogic.Instance.CurrentStep != 1){
             return;
         }
 
@@ -22,11 +22,9 @@ public class RescueCap : MonoBehaviour {
             // if is clicked
             if (Input.GetMouseButtonDown(0)) {
                 if (isTouchingObject(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(1)){
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(1)){
                         Destroy(gameObject);
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                        InhalerLogic.Instance.NextStep();
                     }
                 }
             }

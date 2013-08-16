@@ -14,8 +14,7 @@ using System.Collections;
     step is completed.
     If it is released anywhere else, the original advair inhaler will reappear.
 */
-public class InhalerBody : MonoBehaviour
-{
+public class InhalerBody : MonoBehaviour{
     public Texture2D smallInhaler ;
     public Collider destinationCollider;
 
@@ -29,7 +28,7 @@ public class InhalerBody : MonoBehaviour
        destinationCollider = GameObject.Find("PetSprite").collider;
     }
     void Update(){
-        if (InhalerLogic.CurrentStep != dragToPetStep){
+        if (InhalerLogic.Instance.CurrentStep != dragToPetStep){
             return;
         }
 
@@ -50,11 +49,9 @@ public class InhalerBody : MonoBehaviour
             else if (Input.GetMouseButton(0) && firstTouchOnObject)
             {
                 if (HasHitDestination(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(dragToPetStep)){
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(dragToPetStep)){
                         print("completed step " + dragToPetStep);
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                        InhalerLogic.Instance.NextStep();
                         HideLargeInhaler();
                         inhalerDraggedToPet = true;
                     }

@@ -37,7 +37,7 @@ public class RescueShaker : MonoBehaviour {
     }
 
     void Update(){
-        if (InhalerLogic.CurrentStep != 2){
+        if (InhalerLogic.Instance.CurrentStep != 2){
             return;
         }
         Enable();
@@ -55,17 +55,15 @@ public class RescueShaker : MonoBehaviour {
             // todo: play sound
             Debug.Log("shake target reached");
 
-            if (InhalerLogic.IsCurrentStepCorrect(2)){
-                if (!InhalerLogic.IsDoneWithGame()){
-                    InhalerLogic.NextStep();
-                }
+            if (InhalerLogic.Instance.IsCurrentStepCorrect(2)){
+                InhalerLogic.Instance.NextStep();
                 Disable();
             }
         }
     }
 
     void OnGUI(){
-        if (InhalerLogic.CurrentStep != 2){
+        if (InhalerLogic.Instance.CurrentStep != 2){
             return;
         }
         if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){

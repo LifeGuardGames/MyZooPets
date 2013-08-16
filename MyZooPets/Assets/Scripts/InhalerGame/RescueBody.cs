@@ -56,7 +56,7 @@ public class RescueBody : MonoBehaviour
         //     }
         // }
 
-        if (InhalerLogic.CurrentStep != dragToPetStep){
+        if (InhalerLogic.Instance.CurrentStep != dragToPetStep){
             return;
         }
 
@@ -78,11 +78,9 @@ public class RescueBody : MonoBehaviour
             else if (Input.GetMouseButton(0) && firstTouchOnObject)
             {
                 if (HasHitDestination(touch)){
-                    if (InhalerLogic.IsCurrentStepCorrect(dragToPetStep)){
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(dragToPetStep)){
                         print("completed step " + dragToPetStep);
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                        InhalerLogic.Instance.NextStep();
                         hitDestination = true;
                         inhalerDraggedToPet = true;
                     }

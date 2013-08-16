@@ -32,10 +32,10 @@ public class InhalerInhaleExhale : MonoBehaviour {
         arrows = GetComponent<tk2dSpriteAnimator>();
         Disable();
 
-        if (InhalerLogic.CurrentInhalerType == InhalerType.Advair){
+        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
             breathingInStep = 5;
         }
-        else if (InhalerLogic.CurrentInhalerType == InhalerType.Rescue){
+        else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
             breathingInStep = 6;
         }
 	}
@@ -45,7 +45,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
         if (completedGame){
             return;
         }
-        if (InhalerLogic.CurrentStep == breathingInStep && !pointingUp){
+        if (InhalerLogic.Instance.CurrentStep == breathingInStep && !pointingUp){
             arrows.Play("UpArrow");
             pointingUp = true;
             breatheMessageObj.GetComponent<tk2dSpriteAnimator>().Play("Breathe In");
@@ -65,27 +65,23 @@ public class InhalerInhaleExhale : MonoBehaviour {
             else if (Input.GetMouseButton(0) && firstTouchOnObject) {
                 if (isDraggingDown(touch)){
                     // check if step 3 is correct
-                    // if it is, increment InhalerLogic.CurrentStep
-                    if (InhalerLogic.IsCurrentStepCorrect(3)){
+                    // if it is, increment InhalerLogic.Instance.CurrentStep
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(3)){
                         exhale.Play();
                         Debug.Log("Completed step 3");
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                        InhalerLogic.Instance.NextStep();
                         Disable();
                     }
                 }
                 else if (isDraggingUp(touch)){
                     // check if step breathing in is correct
-                    // if it is, increment InhalerLogic.CurrentStep
-                    if (InhalerLogic.IsCurrentStepCorrect(breathingInStep)){
+                    // if it is, increment InhalerLogic.Instance.CurrentStep
+                    if (InhalerLogic.Instance.IsCurrentStepCorrect(breathingInStep)){
                         inhale.Play();
                         Debug.Log("Completed step" + breathingInStep);
-                        if (!InhalerLogic.IsDoneWithGame()){
-                            InhalerLogic.NextStep();
-                        }
+                        InhalerLogic.Instance.NextStep();
                         completedGame = true;
-                        inhalerGameManager.OnGameEnd();
+                        // inhalerGameManager.OnGameEnd();
                         Disable();
                     }
                 }
@@ -94,7 +90,7 @@ public class InhalerInhaleExhale : MonoBehaviour {
 	}
 
     void CheckAndEnable(){
-        if (InhalerLogic.CurrentStep == 3 || InhalerLogic.CurrentStep == breathingInStep){
+        if (InhalerLogic.Instance.CurrentStep == 3 || InhalerLogic.Instance.CurrentStep == breathingInStep){
             if (inhalerGameManager.ShowHint){
                 renderer.enabled = true;
                 breatheMessageObj.renderer.enabled = true;

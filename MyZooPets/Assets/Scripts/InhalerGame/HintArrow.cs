@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+    This generic class controls the hint arrows for inhaler parts
+*/
 public class HintArrow : MonoBehaviour {
 
     // To limit this hint arrow to show only for a specific type of inhaler,
@@ -14,14 +17,12 @@ public class HintArrow : MonoBehaviour {
     private bool hasSpecificType = true;
     private InhalerType specificInhalerType;
 
-    private InhalerGameManager inhalerGameManager;
 
 	public GameObject optionalTextPrefab;
 	private GameObject optionalTextReference;
 
     void Start(){
         renderer.enabled = false;
-        inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
 
         if(specificInhalerTypeString == "rescue")
             specificInhalerType = InhalerType.Rescue;
@@ -34,10 +35,10 @@ public class HintArrow : MonoBehaviour {
     }
 
     void Update(){
-        if(hasSpecificType && InhalerLogic.CurrentInhalerType != specificInhalerType){
+        if(hasSpecificType && InhalerLogic.Instance.CurrentInhalerType != specificInhalerType){
             return;
         }
-        if(InhalerLogic.CurrentStep == showOnStep && inhalerGameManager.ShowHint){
+        if(InhalerLogic.Instance.CurrentStep == showOnStep && InhalerGameManager.Instance.ShowHint){
 			if(optionalTextPrefab != null && optionalTextReference == null){
 				optionalTextReference = Instantiate(optionalTextPrefab) as GameObject;
 			}

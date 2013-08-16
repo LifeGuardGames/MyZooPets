@@ -29,7 +29,7 @@ public class InhalerSwitch : MonoBehaviour
 			SnapBack();
 		}
 		else if(Input.touchCount > 0 && !completelyOpened){
-			if (InhalerLogic.CurrentStep != 2){
+			if (InhalerLogic.Instance.CurrentStep != 2){
 				return;
 			}
 			Touch touch = Input.GetTouch(0);
@@ -125,10 +125,8 @@ public class InhalerSwitch : MonoBehaviour
 			completelyOpened = true;
 			RemoveArrowAnimation();
 			audio.Play();
-			if (InhalerLogic.IsCurrentStepCorrect(2)){
-				if (!InhalerLogic.IsDoneWithGame()){
-					InhalerLogic.NextStep();
-				}
+			if (InhalerLogic.Instance.IsCurrentStepCorrect(2)){
+				InhalerLogic.Instance.NextStep();
 			}
 		}
 	}

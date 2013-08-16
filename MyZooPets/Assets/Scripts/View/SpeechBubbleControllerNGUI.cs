@@ -21,7 +21,7 @@ public class SpeechBubbleControllerNGUI : Singleton<SpeechBubbleControllerNGUI> 
 	public bool isFollowTarget;
 	public GameObject followTarget;
 
-	public float speechDuration = 2f;
+	public float speechDuration = .7f;
 
 	public bool isDebug = false;
 

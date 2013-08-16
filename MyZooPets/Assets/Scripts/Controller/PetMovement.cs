@@ -34,6 +34,7 @@ public class PetMovement : Singleton<PetMovement> {
 
     private GameObject petSprite; //Pet sprite
     private tk2dSpriteAnimator anim; //2D sprite animator
+	public GameObject shadowObject;		// The shadow of the pet
 
     private Vector3 destinationPoint; //destination that the pet is going to move to
     private TapItem tapItem; //Tap gesture
@@ -99,7 +100,7 @@ public class PetMovement : Singleton<PetMovement> {
     //Check if the touch is in walkable area then move/animate pet
     private void MovePet(Ray myRay){
         RaycastHit hit;
-        Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
+        //Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
         if(Physics.Raycast(myRay,out hit)){
             if (hit.collider == area1.collider || 
                 hit.collider == area2.collider ||
@@ -144,8 +145,10 @@ public class PetMovement : Singleton<PetMovement> {
         Vector3 petScreenPos = mainCamera.WorldToScreenPoint(petSprite.transform.position);
         if(tapItem.lastTapPosition.x > petScreenPos.x){
             petSprite.GetComponent<tk2dSprite>().FlipX = true;
+			shadowObject.transform.localPosition = new Vector3(0.6f, shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }else{
             petSprite.GetComponent<tk2dSprite>().FlipX = false;
+			shadowObject.transform.localPosition = new Vector3(-0.6f, shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }
     }
 

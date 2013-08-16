@@ -16,7 +16,8 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
 
     protected GameObject slotMachine;
-    protected Vector3 slotMachineFinalDirection = new Vector3(17.8f, 20.47f, 0f);
+	protected Vector3 slotMachineFinalPosition = new Vector3(13.82f, 9.41f, 30.16f);
+    protected Vector3 slotMachineFinalDirection = new Vector3(8.79f, 45.47f, 0.3f);
 
     protected GameObject realInhaler;
     protected Vector3 realInhalerFinalDirection = new Vector3(36f, 0, 0);
@@ -63,7 +64,7 @@ public class RoomCameraMove : CameraMove{
                     break;
 
                     case ZoomItem.SlotMachine:
-                    Vector3 slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
+                    //Vector3 slotMachineFinalPosition = slotMachine.transform.localPosition + slotMachineCameraOffset;
                     CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
                     break;
 

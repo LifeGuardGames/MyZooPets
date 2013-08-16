@@ -11,15 +11,15 @@ public class PlayerRunner : MonoBehaviour
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
 
-    private float mInvinciblePulse = 0f;
-    private float mSpeedBoostPulse = 0f; // Boosts from items
-    private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
+	private float mInvinciblePulse = 0f;
+	private float mSpeedBoostPulse = 0f; // Boosts from items
+	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
 
 	private float mDistanceTravelled = 0f;
-    private float mSpeedBoostAmmount = 0f;
-    private bool mbInvincible = false;
-    private bool mbJumping = false;
-    private bool mbColliding = false;
+	private float mSpeedBoostAmmount = 0f;
+	private bool mbInvincible = false;
+	private bool mbJumping = false;
+	private bool mbColliding = false;
 	private bool mbGrounded = false;
 	private bool mbFalling = false;
 	private bool mbTriggerColliding = false;
@@ -48,11 +48,31 @@ public class PlayerRunner : MonoBehaviour
 	void Update() {
 		UpdateInput();
 
-        if (mbInvincible) {
-            mInvinciblePulse -= Time.deltaTime;
-            if (mInvinciblePulse <= 0f)
-                mbInvincible = false;
-        }
+		if (mbInvincible) {
+			mInvinciblePulse -= Time.deltaTime;
+			if (mInvinciblePulse <= 0f) {
+				// Ready to uninvincible, except, we need to make sure we don't do it
+				//while the character is dying...
+
+                if (mbGrounded)
+                    mbInvincible = false;
+                else {
+				    // Raycast around up. If there is something to latch on to, go to it!
+                    RaycastHit hitInfo;
+                    bool bSomethingAbove = Physics.Raycast(transform.position, Vector3.up, out hitInfo);
+                    if (bSomethingAbove) {
+                        // Latch onto it
+                        Vector3 newPosition = hitInfo.transform.position;
+                        newPosition.y += mCharacterController.height / 2;
+                        transform.position = newPosition;
+                    } else {
+                        bool bSomethingBelow = Physics.Raycast(transform.position, Vector3.down, out hitInfo);
+                        if (bSomethingBelow)
+                            mbInvincible = false;
+                    }
+                }
+			}
+		}
 	}
 	
 	void FixedUpdate() {
@@ -92,18 +112,24 @@ public class PlayerRunner : MonoBehaviour
 	}
 
 	private void CheckAndActOnDeath() {
-		RunnerGameManager gameManager = ((GameObject)GameObject.FindGameObjectWithTag("GameManager")).GetComponent<RunnerGameManager>();
+		RunnerGameManager gameManager = RunnerGameManager.GetInstance();
 
 		// Are we below the maps floor value
-		LevelManager levelManager = ((GameObject)GameObject.FindGameObjectWithTag("LevelManager")).GetComponent<LevelManager>();
+		LevelManager levelManager = gameManager.LevelManager;
 		if (transform.position.y < levelManager.LevelTooLowYValue) {
-			gameManager.ActivateGameOver();
+            if (!mbInvincible)
+                gameManager.ActivateGameOver();
+            else {
+                Vector3 position = transform.position;
+                position.y = levelManager.LevelTooLowYValue;
+                transform.position = position;
+            }
 		}
 	}
 
 	public void TriggerSlowdown(float inDivisor) {
-        if (!mbInvincible)
-		    Speed /= inDivisor;
+		if (!mbInvincible)
+			Speed /= inDivisor;
 	}
 
 	private void UpdateSpeed() {
@@ -113,24 +139,25 @@ public class PlayerRunner : MonoBehaviour
 			mSpeedIncreasePulse = SpeedIncreaseTime;
 		}
 
-        if (mSpeedBoostPulse > 0f) {
-            mSpeedBoostPulse -= Time.deltaTime;
-            if (mSpeedBoostPulse <= 0f) {
-                mSpeedBoostPulse = 0f;
-                mSpeedBoostAmmount = 0f;
-            }
-        }
+		if (mSpeedBoostPulse > 0f) {
+			mSpeedBoostPulse -= Time.deltaTime;
+			if (mSpeedBoostPulse <= 0f) {
+				mSpeedBoostPulse = 0f;
+				mSpeedBoostAmmount = 0f;
+			}
+		}
 	}
 
 	// Checks if we are "falling down" to re-eneable collision.
-    private void UpdateFalling() {
-        if (mbFalling) {
-            if (!mbTriggerColliding || mbGrounded)
-                mbFalling = false;
-        }
+	private void UpdateFalling() {
+		if (mbFalling) {
+			if (!mbTriggerColliding || mbGrounded)
+				mbFalling = false;
+		}
 
 		if (gameObject.layer != 0) {
 			if (mbJumping) {
+				// If we begin falling downward, reset the layer
 				Vector3 currentMovementDirection = mLastPosition - transform.position;
 				if (currentMovementDirection.y > 0) {
 					gameObject.layer = 0;
@@ -143,10 +170,8 @@ public class PlayerRunner : MonoBehaviour
 	}
 
 	private void UpdateMovement() {
-		if (mbGrounded) {
-			// These are constant speeds, not forces. It's wierd I know.
-            mMovementVector.z = Speed + mSpeedBoostAmmount;
-		}
+		// These are constant speeds, not forces. It's weird I know.
+		mMovementVector.z = Speed + mSpeedBoostAmmount;
 
 		// Add in Gravity force.
 		mMovementVector += Physics.gravity * Time.deltaTime;
@@ -191,13 +216,13 @@ public class PlayerRunner : MonoBehaviour
 		}
 	}
 
-    public void TriggerInvincibility(float inDuration) {
-        mInvinciblePulse = inDuration;
-        mbInvincible = true;
-    }
+	public void TriggerInvincibility(float inDuration) {
+		mInvinciblePulse = inDuration;
+		mbInvincible = true;
+	}
 
-    public void TriggerSpeedBoost(float inDuration, float inSpeedAmmount) {
-        mSpeedBoostAmmount = inSpeedAmmount;
-        mSpeedBoostPulse = inDuration;
-    }
+	public void TriggerSpeedBoost(float inDuration, float inSpeedAmmount) {
+		mSpeedBoostAmmount = inSpeedAmmount;
+		mSpeedBoostPulse = inDuration;
+	}
 }

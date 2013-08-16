@@ -23,7 +23,6 @@ public class LevelManager : MonoBehaviour
     private float mLevelSwitchPulse = 0f;
     private Vector3 mLastCenterPosition = Vector3.zero;
     private LevelGroup mCurrentLevelGroup = null;
-    private PlayerRunner mPlayerRunner = null;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
 	// Use this for initialization
@@ -44,19 +43,16 @@ public class LevelManager : MonoBehaviour
 		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
 		PopulateLevelComponent(nextLevel);
-
-        GameObject playerRunnerGameObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerRunnerGameObject != null)
-            mPlayerRunner = playerRunnerGameObject.GetComponent<PlayerRunner>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		// Assuming there is a runner and a level.
-        if (mLevelComponentQueue.Count > 0 && mPlayerRunner != null)
+        // Assuming there is a runner and a level.
+        PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+        if (mLevelComponentQueue.Count > 0 && playerRunner != null)
 		{
-            Vector3 currentRunnerPosition = mPlayerRunner.transform.position;
+            Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
 
 			const int zExtent = 2;
@@ -95,11 +91,13 @@ public class LevelManager : MonoBehaviour
 
             if (potentialLevels.Count > 0) {
                 // Choose a random level
-                LevelGroup newLevelGroup = potentialLevels[Random.Range(0, potentialLevels.Count)];
+                int randomIndex = Random.Range(0, potentialLevels.Count);
+                LevelGroup newLevelGroup = potentialLevels[randomIndex];
+                string groupID = newLevelGroup.ParallaxingBackground.GroupID;
 
                 // Transition!
-                ParallaxingBackgroundManager parralaxManager = GameObject.Find("ParralaxingBGManager").GetComponent<ParallaxingBackgroundManager>();
-                parralaxManager.TransitionToGroup(newLevelGroup.ParallaxingBackground.GroupID);
+                ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
+                parralaxManager.TransitionToGroup(groupID);
             } else
                 Debug.LogError("No other levels to switch to.");
         }

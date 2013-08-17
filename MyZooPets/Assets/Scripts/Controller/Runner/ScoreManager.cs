@@ -29,7 +29,7 @@ public class ScoreManager : MonoBehaviour {
             }
 
             if (DistanceLabel != null) {
-                DistanceLabel.text = "Distance: " + distanceTraveled;
+                DistanceLabel.text = "Distance: " + distanceTraveled.ToString("F1");
             }
         }
 	    

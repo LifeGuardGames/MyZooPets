@@ -187,12 +187,10 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
-	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose)
-	{
+	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose) {
 		// Determine a random location of all given points
 		List<Vector3> pointChoices = new List<Vector3>();
-		foreach (PointGroup currentGroup in inLevelComponent.PointGroups)
-		{
+		foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
 			if (currentGroup.mPoints.Count > 0
 				&& currentGroup.mPurposes[(int)inPurpose])
 			{
@@ -200,8 +198,7 @@ public class LevelManager : MonoBehaviour
 			}
 		}
 
-		if (pointChoices.Count > 0)
-		{
+		if (pointChoices.Count > 0) {
 			Vector3 randomPoint = pointChoices[Random.Range(0, pointChoices.Count)];
 			randomPoint += inLevelComponent.transform.position;
 			GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
@@ -211,18 +208,15 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 	
-	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent)
-	{
+	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent) {
 		Vector3 max = inObjectToSearch.transform.position;
 		Vector3 min = inObjectToSearch.transform.position;
 		GetMinMaxExtentsIncludingChildren(inObjectToSearch, inExtent, ref min, ref max);
 		return (max[inExtent] - min[inExtent]);
 	}
 	
-	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent)
-	{
-		if (inObjectToSearch.collider != null)
-		{
+	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent) {
+		if (inObjectToSearch.collider != null) {
 			if (ioMinExtent == null
 				|| inObjectToSearch.collider.bounds.min[inExtent] < ioMinExtent[inExtent])
 				//|| Vector3.Min(inObjectToSearch.collider.bounds.min, ioMinExtent) == ioMinExtent)
@@ -233,9 +227,34 @@ public class LevelManager : MonoBehaviour
 				ioMaxExtent = inObjectToSearch.collider.bounds.max;
 		}
 		
-		foreach (Transform currentChild in inObjectToSearch.transform)
-		{
+		foreach (Transform currentChild in inObjectToSearch.transform) {
 			GetMinMaxExtentsIncludingChildren(currentChild.gameObject, inExtent, ref ioMinExtent, ref ioMaxExtent);
 		}
 	}
+
+    private GameObject GetLowestGameObjectOnField() {
+        GameObject lowestComponent = null;
+        foreach (LevelComponent currentComponent in mLevelComponentQueue) {
+            foreach (Transform currentLevelPiece in currentComponent.transform) {
+                if (lowestComponent == null
+                    || currentLevelPiece.position.y < lowestComponent.transform.position.y)
+                {
+                    lowestComponent = currentLevelPiece.gameObject;
+                }
+            }
+        }
+        return lowestComponent;
+    }
+
+    public float GetTooLowYValue(Vector3 inPosition) {
+
+        // Get the lowest component
+        GameObject lowestComponent = GetLowestGameObjectOnField();
+        float yTooLowValue = 0f;
+        if (lowestComponent != null) {
+            yTooLowValue = lowestComponent.collider.bounds.max.y + LevelTooLowYValue;
+        }
+
+        return yTooLowValue;
+    }
 }

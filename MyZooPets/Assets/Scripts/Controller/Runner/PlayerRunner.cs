@@ -122,12 +122,13 @@ public class PlayerRunner : MonoBehaviour
 
 		// Are we below the maps floor value
 		LevelManager levelManager = gameManager.LevelManager;
-		if (transform.position.y < levelManager.LevelTooLowYValue) {
+        float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
+        if (transform.position.y < yTooLowValue) {
             if (!mbInvincible)
                 gameManager.ActivateGameOver();
             else {
                 Vector3 position = transform.position;
-                position.y = levelManager.LevelTooLowYValue;
+                position.y = yTooLowValue;
                 transform.position = position;
             }
 		}

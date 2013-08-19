@@ -186,9 +186,13 @@ public class PlayerRunner : MonoBehaviour
 		// Add in Gravity force.
 		mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
 
+        // Vertical drag
+        mMovementVector += (Vector3.down * rigidbody.drag * Time.deltaTime);
+
 		if (mCharacterController == null)
 			Debug.LogError("No Character Controller exists!");
 
+        // Perform the move
 		CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
 		bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
 		if (isGrounded && mbJumping)

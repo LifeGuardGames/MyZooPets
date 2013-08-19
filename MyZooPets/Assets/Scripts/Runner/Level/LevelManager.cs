@@ -55,12 +55,14 @@ public class LevelManager : MonoBehaviour
 
 			const int zExtent = 2;
 
-			Vector3 frontLevelPosition = frontLevelComponent.transform.position;
+            Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
+            Vector3 frontLevelPosition = minAnchor.position;
+
 			// Different between the two positions
-			float distanceBetween = currentRunnerPosition[zExtent] - frontLevelPosition[zExtent];
+			float distanceBetween = Mathf.Abs(currentRunnerPosition[zExtent] - frontLevelPosition[zExtent]);
 			
 			float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, zExtent) * 2.0f;
-			if (distanceBetween >= distanceToUpdateLevel) {
+            if (minAnchor.position.z < currentRunnerPosition.z && distanceBetween >= distanceToUpdateLevel) {
 				// Dequeue the first
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
                 // Find the new first
@@ -226,7 +228,7 @@ public class LevelManager : MonoBehaviour
 				//|| Vector3.Min(inObjectToSearch.collider.bounds.min, ioMinExtent) == ioMinExtent)
 				ioMinExtent = inObjectToSearch.collider.bounds.min;
 			if (ioMaxExtent == null 
-				|| inObjectToSearch.collider.bounds.max[inExtent] < ioMaxExtent[inExtent])
+				|| inObjectToSearch.collider.bounds.max[inExtent] > ioMaxExtent[inExtent])
 				//|| Vector3.Min(inObjectToSearch.collider.bounds.max, ioMaxExtent) == ioMaxExtent)
 				ioMaxExtent = inObjectToSearch.collider.bounds.max;
 		}

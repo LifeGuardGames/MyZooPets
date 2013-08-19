@@ -11,6 +11,7 @@ public class MegaHazard : MonoBehaviour {
     private float mDistanceUntilTarget = 0f;
     private float mDistanceRegainPulse = 0f;
     private float mCurrentDistanceFromPlayer = 0f;
+    private Vector3 mDestinationPosition = Vector3.zero;
 
 	// Use this for initialization
 	void Start() {
@@ -19,19 +20,13 @@ public class MegaHazard : MonoBehaviour {
 
         transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
         UpdatePositionRelativeToPlayer();
+        mDestinationPosition = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update() {
         UpdatePositionRelativeToPlayer();
-
-        if (mCurrentDistanceFromPlayer < ZDefaultDistanceFromPlayer) {
-            mDistanceRegainPulse -= Time.deltaTime;
-            if (mDistanceRegainPulse <= 0f) {
-                mDistanceRegainPulse = DistanceRegainTime;
-                mCurrentDistanceFromPlayer += DistanceRegainIncrement;
-            }
-        }
+        transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
 	}
 
     void OnTriggerEnter(Collider inOther) {
@@ -52,12 +47,19 @@ public class MegaHazard : MonoBehaviour {
     private void UpdatePositionRelativeToPlayer() {
         if (mDistanceUntilTarget > 0)
             mDistanceUntilTarget -= mGapClosingIncrement;
+        else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
+            mDistanceRegainPulse -= Time.deltaTime;
+            if (mDistanceRegainPulse <= 0f) {
+                mDistanceRegainPulse = DistanceRegainTime;
+                mCurrentDistanceFromPlayer += DistanceRegainIncrement;
+            }
+        }
 
         float currentDistance = GetCurrentOffsetDistance();
-        Vector3 myPos = transform.position;
+        //Vector3 myPos = transform.position;
         PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
-        myPos.z = playerRunner.transform.position.z + currentDistance;
-        transform.position = myPos;
+        mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
+        transform.position = mDestinationPosition;
     }
 
     public float GetCurrentOffsetDistance() {

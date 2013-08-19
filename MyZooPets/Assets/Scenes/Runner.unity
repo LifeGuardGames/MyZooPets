@@ -158,8 +158,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ZDefaultDistanceFromPlayer: -8
   DistanceDivisor: 2
-  DistanceRegainIncrement: -.200000003
-  DistanceRegainTime: 1
+  DistanceRegainIncrement: -.00999999978
+  DistanceRegainTime: .00100000005
   mGapClosingIncrement: .00999999978
 --- !u!1 &160403905
 GameObject:
@@ -1307,7 +1307,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 602980679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -534.16748, y: 400.833313, z: 0}
+  m_LocalPosition: {x: -641.317749, y: 401.315796, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 808368988}
@@ -1748,11 +1748,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -39465.832
+    e03: -39358.6836
     e10: 0
     e11: 400
     e12: 0
-    e13: -400.833313
+    e13: -401.315796
     e20: 0
     e21: 0
     e22: 400
@@ -2852,7 +2852,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1277307334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -534.16748, y: 400.833313, z: 0}
+  m_LocalPosition: {x: -641.317749, y: 401.315796, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2078354369}
@@ -3534,7 +3534,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 652f1ebe08971cc4eb8e200fb5c89a0d, type: 2}
       propertyPath: DistanceRegainIncrement
-      value: -.200000003
+      value: -.00999999978
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 652f1ebe08971cc4eb8e200fb5c89a0d, type: 2}
+      propertyPath: mGapClosingIncrement
+      value: .00999999978
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 652f1ebe08971cc4eb8e200fb5c89a0d, type: 2}
+      propertyPath: DistanceRegainTime
+      value: .00100000005
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 652f1ebe08971cc4eb8e200fb5c89a0d, type: 2}
@@ -4642,11 +4650,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -39465.832
+    e03: -39358.6836
     e10: 0
     e11: 400
     e12: 0
-    e13: -1431.66284
+    e13: -1432.14526
     e20: 0
     e21: 0
     e22: 400

@@ -25,7 +25,7 @@ public class PlayerRunner : MonoBehaviour
 	private bool mbFalling = false;
 	private bool mbTriggerColliding = false;
 	private Vector3 mMovementVector = Vector3.zero;
-	private Vector3 mLastPosition = Vector3.zero;
+    private Vector3 mLastPosition = Vector3.zero;
 	private CapsuleCollider mCapsuleTrigger;
 	private CharacterController mCharacterController;
 

@@ -218,7 +218,6 @@ public class HUDAnimator : MonoBehaviour {
 		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Instance.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
-
 			if(D.Assert(OnLevelUp != null, "OnLevelUp has no listeners"))
                 OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
 

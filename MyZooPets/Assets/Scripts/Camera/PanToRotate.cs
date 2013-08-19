@@ -54,8 +54,8 @@ public class PanToRotate : MonoBehaviour {
                 case TouchPhase.Began:
                     GA.API.Design.NewEvent("Finger", 1, touch.position);
                     startTouchPos = touch.position;                 
-                    if(IsTouchingNGUI(startTouchPos)) touchCancelled = true;
-                    //TO DO: if touching pet cancel touch
+                    if(IsTouchingNGUI(startTouchPos) || IsTouchingPet(startTouchPos)) 
+                        touchCancelled = true;
                 break;
                 case TouchPhase.Ended:
                     if(touchCancelled){
@@ -163,14 +163,16 @@ public class PanToRotate : MonoBehaviour {
     }
 
     //True; if finger touches default layer
-    private bool IsTouchingDefaultLayer(Vector2 screenPos){
+    private bool IsTouchingPet(Vector2 screenPos){
         Ray ray = mainCamera.ScreenPointToRay(screenPos);
         RaycastHit hit;
         int layerMask = 1 << 0;
-        bool isOnDefaultLayer = false;
+        bool isOnPet = false;
         if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-            isOnDefaultLayer = true;;
+            if(hit.collider.name == "Head" || hit.collider.name == "Tummy"){
+                isOnPet = true;
+            }
         }
-        return isOnDefaultLayer;
+        return isOnPet;
     }
 }

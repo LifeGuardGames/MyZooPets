@@ -136,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 33164406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 400.511505, z: 0}
+  m_LocalPosition: {x: 0, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1759701212}
@@ -361,7 +361,7 @@ Prefab:
     - target: {fileID: 11400000, guid: cd3abd5e13f604a588f9751372e768bb, type: 2}
       propertyPath: quitButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1759701211}
     - target: {fileID: 11400000, guid: cd3abd5e13f604a588f9751372e768bb, type: 2}
       propertyPath: hudObject
       value: 
@@ -645,7 +645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressBarObject: {fileID: 1137665732}
-  quitButton: {fileID: 0}
+  quitButton: {fileID: 1759701211}
   hudObject: {fileID: 1505259811}
 --- !u!1001 &329076905
 Prefab:
@@ -1017,7 +1017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ee16603e1d598408cc50e3546067ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background1: {fileID: 0}
+  background1: {fileID: 8300000, guid: 9840b4025fc635d4cb75fa2a74e87453, type: 3}
   isMusicOn: 0
 --- !u!4 &375266683
 Transform:
@@ -1162,6 +1162,10 @@ Prefab:
     - target: {fileID: 11400000, guid: 12abd2ff6f58e42ea8556efcaa3855e3, type: 2}
       propertyPath: mTex
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 12abd2ff6f58e42ea8556efcaa3855e3, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 12abd2ff6f58e42ea8556efcaa3855e3, type: 2}
@@ -2130,7 +2134,7 @@ MonoBehaviour:
     e10: 0
     e11: 400
     e12: 0
-    e13: 0
+    e13: -.230592728
     e20: 0
     e21: 0
     e22: 400
@@ -2893,7 +2897,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1329125153
 Transform:
   m_ObjectHideFlags: 0
@@ -2930,8 +2934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: 0e596a2b587d84f46935a072f7ede38e, type: 2}
-  mTex: {fileID: 2800000, guid: 90715a95d475b4b32a6cd51514116cac, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 0, g: 0, b: 0, a: .517647088}
   mPivot: 4
   mDepth: 8
@@ -3034,7 +3038,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1358462900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .511508942, z: 0}
+  m_LocalPosition: {x: 0, y: .742101669, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 821002515}
@@ -3219,7 +3223,7 @@ MonoBehaviour:
     e10: 0
     e11: 400
     e12: 0
-    e13: -363.956024
+    e13: -363.444519
     e20: 0
     e21: 0
     e22: 400

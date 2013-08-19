@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerRunner : MonoBehaviour
 {
-	public float Speed = 0.1f;
+    public float DefaultSpeed = 1.0f;
 	public float JumpSpeed = 0.5f;
 	public float Mass = 1.0f;
 	public float SpeedIncrease = 0.1f;
@@ -15,6 +15,7 @@ public class PlayerRunner : MonoBehaviour
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
 
+    private float mSpeed = 0.1f;
 	private float mDistanceTravelled = 0f;
 	private float mSpeedBoostAmmount = 0f;
 	private bool mbInvincible = false;
@@ -27,7 +28,9 @@ public class PlayerRunner : MonoBehaviour
 	private Vector3 mLastPosition = Vector3.zero;
 	private CapsuleCollider mCapsuleTrigger;
 	private CharacterController mCharacterController;
-	
+
+    public float Speed { get { return mSpeed; } }
+
 	// Use this for initialization
 	void Start() {
 		mCharacterController = gameObject.GetComponent<CharacterController>();
@@ -42,6 +45,7 @@ public class PlayerRunner : MonoBehaviour
 			Debug.LogError("Character Controller not attached!");
 		mSpeedIncreasePulse = SpeedIncreaseTime;
 		mLastPosition = transform.position;
+        mSpeed = DefaultSpeed;
 	}
 
 	// Update is called once per frame
@@ -129,13 +133,15 @@ public class PlayerRunner : MonoBehaviour
 
 	public void TriggerSlowdown(float inDivisor) {
 		if (!mbInvincible)
-			Speed /= inDivisor;
+            mSpeed /= inDivisor;
+        if (mSpeed < DefaultSpeed)
+            mSpeed = DefaultSpeed;
 	}
 
 	private void UpdateSpeed() {
 		mSpeedIncreasePulse -= Time.deltaTime;
 		if (mSpeedIncreasePulse <= 0) {
-			Speed += SpeedIncrease;
+            mSpeed += SpeedIncrease;
 			mSpeedIncreasePulse = SpeedIncreaseTime;
 		}
 
@@ -171,7 +177,7 @@ public class PlayerRunner : MonoBehaviour
 
 	private void UpdateMovement() {
 		// These are constant speeds, not forces. It's weird I know.
-		mMovementVector.z = Speed + mSpeedBoostAmmount;
+        mMovementVector.z = mSpeed + mSpeedBoostAmmount;
 
 		// Add in Gravity force.
 		mMovementVector += Physics.gravity * Time.deltaTime;

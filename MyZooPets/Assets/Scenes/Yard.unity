@@ -784,7 +784,7 @@ GameObject:
   - 64: {fileID: 110813832}
   - 23: {fileID: 110813831}
   m_Layer: 0
-  m_Name: planeRight
+  m_Name: Area2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1382,6 +1382,12 @@ MonoBehaviour:
   hideDelay: .100000001
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &138072588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1467,8 +1473,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WillRecognizeWith: []
-  timeLimit: Infinity
-  distanceLimit: Infinity
+  timeLimit: .200000003
+  distanceLimit: .100000001
 --- !u!114 &147026836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1496,6 +1502,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   allowPetMoveAround: 1
+  area1: {fileID: 203080395}
+  area2: {fileID: 110813830}
+  area3: {fileID: 1198727414}
+  shadowObject: {fileID: 0}
 --- !u!1 &158208823
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,7 +1713,7 @@ GameObject:
   - 64: {fileID: 203080397}
   - 23: {fileID: 203080396}
   m_Layer: 0
-  m_Name: planeCenter
+  m_Name: Area1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5023,6 +5033,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!1 &568243075
 GameObject:
   m_ObjectHideFlags: 0
@@ -5366,8 +5382,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraObject: {fileID: 1911208084}
-  centerAnchor: {fileID: 942641575}
-  leftAnchor: {fileID: 0}
+  centerPanel: {fileID: 0}
+  leftPanel: {fileID: 0}
+  backDrop: {fileID: 0}
   popupTextureGreatNGUI: {fileID: 100000, guid: 12ef9b1e3b2c14e41ae9088527803573,
     type: 2}
   popupTextureNiceTryNGUI: {fileID: 100000, guid: 339c0cfdd55b948279d1c42949bcd1ee,
@@ -5532,6 +5549,12 @@ MonoBehaviour:
   hideDelay: .100000001
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!1 &608757176
 GameObject:
   m_ObjectHideFlags: 0
@@ -7273,6 +7296,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!1 &824936000
 GameObject:
   m_ObjectHideFlags: 0
@@ -8175,18 +8204,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a9558f5bf9ef643afaad7697bc3d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hudUIObject: {fileID: 1684754471}
-  calendarUIObject: {fileID: 0}
-  storeUIObject: {fileID: 1320603531}
-  noteUIObject: {fileID: 809025762}
-  inventoryUIObject: {fileID: 1141039015}
-  navigationUIObject: {fileID: 138072585}
-  challengesGUIObject: {fileID: 0}
-  trophyGUIObject: {fileID: 0}
-  badgeGUIObject: {fileID: 0}
+  UIHudObject: {fileID: 0}
+  UICalendarObject: {fileID: 0}
+  UIStoreObject: {fileID: 0}
+  UINoteObject: {fileID: 0}
+  UIInventoryObject: {fileID: 0}
+  UINavigationObject: {fileID: 0}
+  UIBadgeObject: {fileID: 0}
+  UILoadScreen: {fileID: 0}
+  GOCalendarObject: {fileID: 0}
+  GOSlotMachineObject: {fileID: 0}
+  GORealInhalerObject: {fileID: 0}
+  GOTeddyInhalerObject: {fileID: 0}
+  GOBadgeObject: {fileID: 0}
+  GODojoObject: {fileID: 0}
+  GOYardSignObject: {fileID: 0}
   cameraMoveObject: {fileID: 1911208084}
-  notificationUIManager: {fileID: 598114480}
-  dojoObject: {fileID: 0}
 --- !u!4 &928559680
 Transform:
   m_ObjectHideFlags: 0
@@ -9796,6 +9829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background1: {fileID: 8300000, guid: 9840b4025fc635d4cb75fa2a74e87453, type: 3}
+  isMusicOn: 1
 --- !u!1 &1105399050
 GameObject:
   m_ObjectHideFlags: 0
@@ -9966,6 +10000,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 27
   easeShow: 24
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &1141039019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10429,7 +10469,7 @@ GameObject:
   - 64: {fileID: 1198727412}
   - 23: {fileID: 1198727411}
   m_Layer: 0
-  m_Name: planeLeft
+  m_Name: Area3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10482,8 +10522,8 @@ Transform:
   m_PrefabParentObject: {fileID: 400004, guid: 4aceddfd196494a89b31098183e41bfe, type: 2}
   m_PrefabInternal: {fileID: 431745024}
   m_GameObject: {fileID: 1198727410}
-  m_LocalRotation: {x: 0, y: .84710741, z: 0, w: .531421781}
-  m_LocalPosition: {x: -38.4077759, y: 0, z: -6.8558588}
+  m_LocalRotation: {x: 0, y: .956734359, z: 0, w: .290962964}
+  m_LocalPosition: {x: 6.98390961, y: 0, z: -38.4808044}
   m_LocalScale: {x: 3, y: 5.79231215, z: .899999976}
   m_Children: []
   m_Father: {fileID: 147026834}
@@ -11216,6 +11256,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &1320603534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12038,6 +12084,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!1 &1476699699
 GameObject:
   m_ObjectHideFlags: 0
@@ -13158,6 +13210,12 @@ MonoBehaviour:
   hideDelay: .200000003
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!1 &1616608259
 GameObject:
   m_ObjectHideFlags: 0

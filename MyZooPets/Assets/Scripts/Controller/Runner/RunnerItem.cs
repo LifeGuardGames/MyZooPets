@@ -16,7 +16,6 @@ public abstract class RunnerItem : MonoBehaviour {
 
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player") {
-			Debug.Log("Picking up " + Name + ". Adding point value " + PointValue);
 			OnPickup();
 
             ScoreManager scoreManager = RunnerGameManager.GetInstance().ScoreManager;

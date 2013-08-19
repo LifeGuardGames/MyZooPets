@@ -36,26 +36,31 @@ public class MegaHazard : MonoBehaviour {
 
     void OnTriggerEnter(Collider inOther) {
         if (inOther.gameObject.tag == "Player") {
-            Debug.Log("Smoke monster ahhh");
-
             RunnerGameManager gameManager = RunnerGameManager.GetInstance();
             gameManager.ActivateGameOver();
         }
     }
 
     public void TriggerPlayerSlowdown() {
-        mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
-        mCurrentDistanceFromPlayer += mDistanceUntilTarget;
+        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+        if (player != null && !player.Invincible) { 
+            mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
+            mCurrentDistanceFromPlayer += mDistanceUntilTarget;
+        }
     }
 
     private void UpdatePositionRelativeToPlayer() {
         if (mDistanceUntilTarget > 0)
             mDistanceUntilTarget -= mGapClosingIncrement;
 
-        float currentDistance = mCurrentDistanceFromPlayer - mDistanceUntilTarget;
+        float currentDistance = GetCurrentOffsetDistance();
         Vector3 myPos = transform.position;
         PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
         myPos.z = playerRunner.transform.position.z + currentDistance;
         transform.position = myPos;
+    }
+
+    public float GetCurrentOffsetDistance() {
+        return mCurrentDistanceFromPlayer - mDistanceUntilTarget;
     }
 }

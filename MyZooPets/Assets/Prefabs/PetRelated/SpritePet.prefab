@@ -14,7 +14,6 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400020}
   - 65: {fileID: 6500004}
-  - 114: {fileID: 11400028}
   m_Layer: 0
   m_Name: SpritePet
   m_TagString: Untagged
@@ -77,7 +76,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100008
 GameObject:
   m_ObjectHideFlags: 1
@@ -95,7 +94,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100010
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +124,7 @@ GameObject:
   - 114: {fileID: 11400026}
   - 114: {fileID: 11400024}
   m_Layer: 0
-  m_Name: Sprite_Shadow
+  m_Name: SpritePetShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -.604504108, y: .170939922, z: .521512985}
+  m_LocalPosition: {x: -.202757835, y: .165593743, z: .453577042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -577,9 +576,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4a4eb57a9177df43a1383ea3545f943, type: 3}
+  m_Script: {fileID: 11500000, guid: f3646fc886c79f84597bc7b519bbf5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockX: 1
+  overrideX: 90
+  lockY: 0
+  overrideY: 0
+  lockZ: 1
+  overrideZ: 0
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -599,23 +604,6 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
---- !u!114 &11400028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc953023a93774c11ae7d1d04130fbfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  allowPetMoveAround: 1
-  area1: {fileID: 0}
-  area2: {fileID: 0}
-  area3: {fileID: 0}
-  shadowObject: {fileID: 100012}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

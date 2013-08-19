@@ -35,6 +35,9 @@ public class InhalerCap : MonoBehaviour
                 case TouchPhase.Began:
                 case TouchPhase.Moved:
                 case TouchPhase.Ended:
+                	ResetTouch();
+                	dragStargedOnObject = false;
+                	if(!completelyOpened) SnapBack();
 
 		*/
 		if (Input.touchCount == 0) { // if not touching screen
@@ -91,7 +94,6 @@ public class InhalerCap : MonoBehaviour
 				{
 					float rotationAmount = ReturnSignedAngleBetweenVectors(previousPositionVector,
 						currentPositionVector);
-					print(rotationAmount);
 					transform.RotateAroundLocal(Vector3.forward, rotationAmount *  Time.deltaTime);
 					PreventAntiClockwiseRotation();
 				}
@@ -101,7 +103,8 @@ public class InhalerCap : MonoBehaviour
 		PreventAntiClockwiseRotation();
 	}
 
-	bool isTouchingObject(Touch touch){
+	//Cast a ray to test if the touch position is ontop of the object
+	private bool isTouchingObject(Touch touch){
 		Ray ray = Camera.main.ScreenPointToRay(touch.position);
        	RaycastHit hit ;
 
@@ -111,12 +114,13 @@ public class InhalerCap : MonoBehaviour
 		}
 
 		int layer = 1 << 8;
+		bool retVal = false;
 		if (Physics.Raycast (ray, out hit, layer)) {
 			if(hit.collider.gameObject == this.gameObject){
-				return true;
+				retVal = true;
 			}
 		}
-		return false;
+		return retVal;
 	}
 
 	void ResetTouch(){

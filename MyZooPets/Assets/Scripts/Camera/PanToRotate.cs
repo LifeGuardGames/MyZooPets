@@ -52,8 +52,10 @@ public class PanToRotate : MonoBehaviour {
             Touch touch = Input.touches[0];
             switch (touch.phase) {
                 case TouchPhase.Began:
-                    GA.API.Design.NewEvent("Finger", 1, touch.position);
+                    GA.API.Design.NewEvent("Finger", 1, touch.position); //record every position that the user touched
                     startTouchPos = touch.position;                 
+                    
+                    //Cancel touch if finger is touching on undesirable objects
                     if(IsTouchingNGUI(startTouchPos) || IsTouchingPet(startTouchPos)) 
                         touchCancelled = true;
                 break;
@@ -68,11 +70,13 @@ public class PanToRotate : MonoBehaviour {
                         float rotateTo;
                         Hashtable optional;
                         if(nextIndex != -1 && enabledPartitions[nextIndex]){
+                            //if camera angle is closer to the angle of the next partition then
+                            //snap the camera to the next partition
                             if(transform.eulerAngles.y > partitionAngles[currentIndex] + partitionOffset){
                                 rotateTo = partitionAngles[nextIndex];
                                 currentIndex = nextIndex;
                                 optional = snapOption1;
-                            }else{
+                            }else{ //snap camera back to the current partition
                                rotateTo = partitionAngles[currentIndex]; 
                                optional = snapOption2;
                             }
@@ -83,11 +87,13 @@ public class PanToRotate : MonoBehaviour {
                         float rotateTo;
                         Hashtable optional;
                         if(prevIndex != -1 && enabledPartitions[prevIndex]){
+                            //if the camera angle is closer to the angle of the previous partition then
+                            //snap the camera to the previous partition
                             if(transform.eulerAngles.y < partitionAngles[currentIndex] - partitionOffset){
                                 rotateTo = partitionAngles[prevIndex];
                                 currentIndex = prevIndex;
                                 optional = snapOption1;
-                            }else{
+                            }else{ //snap the camera back to current partition
                                 rotateTo = partitionAngles[currentIndex];
                                 optional = snapOption2;
                             }

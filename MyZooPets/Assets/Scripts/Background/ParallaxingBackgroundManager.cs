@@ -16,8 +16,7 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 	private Queue<ParallaxingBackgroundGroup> mNextTransition = new Queue<ParallaxingBackgroundGroup>();
 
 	// Use this for initialization
-	void Start()
-	{
+	void Start() {
 		TransitionToGroup(FirstGroupID);
 	}
 	
@@ -50,14 +49,14 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 			}
 		}
 
-		if (nextGroup != null)
-		{
+		if (nextGroup != null) {
 			if (mNextTransition.Count == 0) {
 				SpawnAndSetNextGroup(nextGroup);
 			} else {
 				mNextTransition.Enqueue(nextGroup);
 			}
-		}
+		} else
+			Debug.LogError("No parralaxing bg named " + inGroupID);
 	}
 
 	private void SpawnAndSetNextGroup(ParallaxingBackgroundGroup inNextGroup) {

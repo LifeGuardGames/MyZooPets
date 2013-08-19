@@ -19,8 +19,11 @@ public class TouchDetectorManager : MonoBehaviour {
         // Check keys
         if (Input.GetKeyDown(KeyCode.T)) {
             Debug.Log("Triggering fade");
-            ParallaxingBackgroundManager bgm = GameObject.Find("ParralaxingBGManager").GetComponent<ParallaxingBackgroundManager>();
-            bgm.TransitionToGroup("lol");
+            ParallaxingBackgroundManager bgm = GameObject.Find("ParallaxingBGManager").GetComponent<ParallaxingBackgroundManager>();
+            bgm.TransitionToGroup("Test2");
+        }
+        if (Input.GetKeyDown(KeyCode.J)) {
+            RunnerGameManager.GetInstance().PlayerRunner.TriggerSlowdown(2.0f);
         }
 
         // Check touches

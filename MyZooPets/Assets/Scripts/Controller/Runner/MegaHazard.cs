@@ -6,9 +6,12 @@ public class MegaHazard : MonoBehaviour {
     public float DistanceDivisor = 2.0f;
     public float DistanceRegainIncrement = 0.1f;
     public float DistanceRegainTime = 1f;
+    public float mGapClosingIncrement = 0.01f;
 
+    private float mDistanceUntilTarget = 0f;
     private float mDistanceRegainPulse = 0f;
     private float mCurrentDistanceFromPlayer = 0f;
+    private Vector3 mDestinationPosition = Vector3.zero;
 
 	// Use this for initialization
 	void Start() {
@@ -17,13 +20,34 @@ public class MegaHazard : MonoBehaviour {
 
         transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
         UpdatePositionRelativeToPlayer();
+        mDestinationPosition = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update() {
         UpdatePositionRelativeToPlayer();
+        transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
+	}
 
-        if (mCurrentDistanceFromPlayer < ZDefaultDistanceFromPlayer) {
+    void OnTriggerEnter(Collider inOther) {
+        if (inOther.gameObject.tag == "Player") {
+            RunnerGameManager gameManager = RunnerGameManager.GetInstance();
+            gameManager.ActivateGameOver();
+        }
+    }
+
+    public void TriggerPlayerSlowdown() {
+        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+        if (player != null && !player.Invincible) { 
+            mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
+            mCurrentDistanceFromPlayer += mDistanceUntilTarget;
+        }
+    }
+
+    private void UpdatePositionRelativeToPlayer() {
+        if (mDistanceUntilTarget > 0)
+            mDistanceUntilTarget -= mGapClosingIncrement;
+        else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
             mDistanceRegainPulse -= Time.deltaTime;
             if (mDistanceRegainPulse <= 0f) {
                 mDistanceRegainPulse = DistanceRegainTime;
@@ -31,25 +55,14 @@ public class MegaHazard : MonoBehaviour {
             }
         }
 
-	}
-
-    void OnTriggerEnter(Collider inOther) {
-        if (inOther.gameObject.tag == "Player") {
-            Debug.Log("Smoke monster ahhh");
-
-            RunnerGameManager gameManager = RunnerGameManager.GetInstance();
-            gameManager.ActivateGameOver();
-        }
-    }
-
-    public void TriggerPlayerSlowdown() {
-        mCurrentDistanceFromPlayer -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
-    }
-
-    private void UpdatePositionRelativeToPlayer() {
-        Vector3 myPos = transform.position;
+        float currentDistance = GetCurrentOffsetDistance();
+        //Vector3 myPos = transform.position;
         PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
-        myPos.z = playerRunner.transform.position.z + mCurrentDistanceFromPlayer;
-        transform.position = myPos;
+        mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
+        transform.position = mDestinationPosition;
+    }
+
+    public float GetCurrentOffsetDistance() {
+        return mCurrentDistanceFromPlayer - mDistanceUntilTarget;
     }
 }

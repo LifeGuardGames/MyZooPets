@@ -10,16 +10,17 @@ public class LevelComponent : MonoBehaviour
 
     private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
 
-	public List<PointGroup> PointGroups
-	{
+	public List<PointGroup> PointGroups {
 		get { return mPointGroups; }
 	}
-	public int NextID
-	{
-		get
-        {
+	public int NextID {
+		get {
             return mNextID++;
         }
+    }
+    public LevelGroup ParentGroup {
+        get;
+        set;
     }
 
     // Use this for initialization.

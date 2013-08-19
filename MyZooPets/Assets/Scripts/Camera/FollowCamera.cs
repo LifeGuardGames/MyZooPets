@@ -20,7 +20,7 @@ public class FollowCamera : MonoBehaviour
 
         // o wait, is there a megahazard to pull an offset from?
         if (MegaHazardToOffset != null) {
-            float hazardOffset = MegaHazardToOffset.GetCurrentOffsetDistance() / 2.0f;
+            float hazardOffset = MegaHazardToOffset.GetCurrentOffsetDistance();
             newPosition.z += hazardOffset;
         }
 

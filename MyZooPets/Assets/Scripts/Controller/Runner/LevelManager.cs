@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class LevelManager : MonoBehaviour
 {
 	public GameObject CoinPrefab;
-    public List<RunnerItem> ItemPrefabs;
-    public List<RunnerItem> HazardPrefabs;
+	public List<RunnerItem> ItemPrefabs;
+	public List<RunnerItem> HazardPrefabs;
 
 	public float CoinSpawnChance = 60.0f;
 	public float CoinSpawnDistance = 1.0f;
@@ -14,30 +14,30 @@ public class LevelManager : MonoBehaviour
 	public float HazardSpawnChance = 10.0f;
 
 	public float LevelTooLowYValue = -50.0f;
-    public float LevelGroupSwitchTime = 40.0f;
+	public float LevelGroupSwitchTime = 40.0f;
 
-    public LevelGroup StartingLevelGroup;
-    public List<LevelGroup> LevelGroups;
+	public LevelGroup StartingLevelGroup;
+	public List<LevelGroup> LevelGroups;
 
-    private int mNumLevelSwitches = 0;
-    private float mLevelSwitchPulse = 0f;
-    private Vector3 mLastCenterPosition = Vector3.zero;
-    private LevelGroup mCurrentLevelGroup = null;
+	private int mNumLevelSwitches = 0;
+	private float mLevelSwitchPulse = 0f;
+	private Vector3 mLastCenterPosition = Vector3.zero;
+	private LevelGroup mCurrentLevelGroup = null;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
 	// Use this for initialization
 	void Start() {
-        mLevelSwitchPulse = LevelGroupSwitchTime;
-        mCurrentLevelGroup = StartingLevelGroup;
+		mLevelSwitchPulse = LevelGroupSwitchTime;
+		mCurrentLevelGroup = StartingLevelGroup;
 
 		if (LevelGroups.Count <= 0)
 			Debug.LogError("No level groups found.");
 		
 		// @HACK shove 3 in there. @TODO Better way to do it w/ screen size or something..?
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+		PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
 		PushAndInstantiateRandomComponent();
 		LevelComponent nextLevel;
-        nextLevel = PushAndInstantiateRandomComponent();
+		nextLevel = PushAndInstantiateRandomComponent();
 		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
 		PopulateLevelComponent(nextLevel);
@@ -46,13 +46,11 @@ public class LevelManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
-	{
-        // Assuming there is a runner and a level.
-        PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
-        if (mLevelComponentQueue.Count > 0 && playerRunner != null)
-		{
-            Vector3 currentRunnerPosition = playerRunner.transform.position;
+	void Update() {
+		// Assuming there is a runner and a level.
+		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
+			Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
 
 			const int zExtent = 2;
@@ -62,10 +60,17 @@ public class LevelManager : MonoBehaviour
 			float distanceBetween = currentRunnerPosition[zExtent] - frontLevelPosition[zExtent];
 			
 			float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, zExtent) * 2.0f;
-			if (distanceBetween >= distanceToUpdateLevel)
-			{
+			if (distanceBetween >= distanceToUpdateLevel) {
 				// Dequeue the first
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
+                // Find the new first
+                LevelComponent newFront = mLevelComponentQueue.Peek();
+
+                if (removedLevelComponent.ParentGroup.LevelID != newFront.ParentGroup.LevelID) {
+                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
+                    parralaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
+                }
+
 				// Destroy it
 				GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
@@ -74,50 +79,52 @@ public class LevelManager : MonoBehaviour
 			}
 		}
 
-        mLevelSwitchPulse -= Time.deltaTime;
-        if (mLevelSwitchPulse <= 0f) {
-            mLevelSwitchPulse = LevelGroupSwitchTime;
+		mLevelSwitchPulse -= Time.deltaTime;
+		if (mLevelSwitchPulse <= 0f) {
+			mLevelSwitchPulse = LevelGroupSwitchTime;
 
-            // Cut to a new, different level that has the proper level ID.
-            mNumLevelSwitches++;
+			// Cut to a new, different level that has the proper level ID.
+			mNumLevelSwitches++;
+			
+			List<LevelGroup> potentialLevels = new List<LevelGroup>();
+			foreach (LevelGroup levelGroup in LevelGroups) {
+				if (levelGroup != mCurrentLevelGroup && levelGroup.LevelGroupNumber <= mNumLevelSwitches) {
+					potentialLevels.Add(levelGroup);
+				}
+			}
 
-            
-            List<LevelGroup> potentialLevels = new List<LevelGroup>();
-            foreach (LevelGroup levelGroup in LevelGroups) {
-                if (levelGroup != mCurrentLevelGroup && levelGroup.LevelGroupNumber <= mNumLevelSwitches) {
-                    potentialLevels.Add(levelGroup);
-                }
-            }
+			if (potentialLevels.Count > 0) {
+				// Choose a random level
+				int randomIndex = Random.Range(0, potentialLevels.Count);
+				LevelGroup newLevelGroup = potentialLevels[randomIndex];
+				string groupID = newLevelGroup.ParallaxingBackground.GroupID;
 
-            if (potentialLevels.Count > 0) {
-                // Choose a random level
-                int randomIndex = Random.Range(0, potentialLevels.Count);
-                LevelGroup newLevelGroup = potentialLevels[randomIndex];
-                string groupID = newLevelGroup.ParallaxingBackground.GroupID;
-
-                // Transition!
-                ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
-                parralaxManager.TransitionToGroup(groupID);
-            } else
-                Debug.LogError("No other levels to switch to.");
-        }
+				// Transition!
+                mCurrentLevelGroup = newLevelGroup;
+				Debug.Log("Transitioning to level " + newLevelGroup.LevelID);
+			} else
+				Debug.LogError("No other levels to switch to.");
+		}
 	}
 
 	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
 		if (mCurrentLevelGroup.LevelComponents.Count > 0) {
 			LevelComponent nextlevelComponent = null;
-			if (inForceUseThisComponent == null)
-                nextlevelComponent = mCurrentLevelGroup.LevelComponents[Random.Range(0, mCurrentLevelGroup.LevelComponents.Count)];
-			else {
+
+			if (inForceUseThisComponent == null) {
+				nextlevelComponent = mCurrentLevelGroup.LevelComponents[Random.Range(0, mCurrentLevelGroup.LevelComponents.Count)];
+				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelID);
+			} else {
 				Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
 			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
+            newComponent.ParentGroup = mCurrentLevelGroup;
 			
 			// Set its position to the last max point (I hope).
 			newComponent.transform.position = mLastCenterPosition;
-			
+
 			// Get the min of the new component
 			Transform minAnchor = newComponent.transform.FindChild("AnchorMin");
 			// Determine the vector that we need to push the center by
@@ -139,8 +146,8 @@ public class LevelManager : MonoBehaviour
 	private void PopulateLevelComponent(LevelComponent inLevelComponent) {
 		// Roll for some values
 		bool bSpawnCoins = Random.Range(0.0f, 100.0f) <= CoinSpawnChance;
-        bool bSpawnItems = Random.Range(0.0f, 100.0f) <= ItemSpawnChance;
-        bool bSpawnHazards = Random.Range(0.0f, 100.0f) <= HazardSpawnChance;
+		bool bSpawnItems = Random.Range(0.0f, 100.0f) <= ItemSpawnChance;
+		bool bSpawnHazards = Random.Range(0.0f, 100.0f) <= HazardSpawnChance;
 
 		// Go through every group, and if we are set to spawn stuff, spawn stuff!
 		if (bSpawnCoins) {
@@ -170,37 +177,37 @@ public class LevelManager : MonoBehaviour
 		} else if (bSpawnItems && ItemPrefabs.Count > 0) {
 			// Determine which item to spawn
 			GameObject chosenPrefab = ItemPrefabs[Random.Range(0, ItemPrefabs.Count)].gameObject;
-            SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Items);
-        } else if (bSpawnHazards && HazardPrefabs.Count > 0) {
-            // Determine which hazard to spawn
-            GameObject chosenPrefab = HazardPrefabs[Random.Range(0, HazardPrefabs.Count)].gameObject;
-            SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Hazards);
-        }
+			SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Items);
+		} else if (bSpawnHazards && HazardPrefabs.Count > 0) {
+			// Determine which hazard to spawn
+			GameObject chosenPrefab = HazardPrefabs[Random.Range(0, HazardPrefabs.Count)].gameObject;
+			SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Hazards);
+		}
 	}
 
-    private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose)
-    {
-        // Determine a random location of all given points
-        List<Vector3> pointChoices = new List<Vector3>();
-        foreach (PointGroup currentGroup in inLevelComponent.PointGroups)
-        {
-            if (currentGroup.mPoints.Count > 0
-                && currentGroup.mPurposes[(int)inPurpose])
-            {
-                pointChoices.Add(currentGroup.mPoints[0].mPosition);
-            }
-        }
+	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose)
+	{
+		// Determine a random location of all given points
+		List<Vector3> pointChoices = new List<Vector3>();
+		foreach (PointGroup currentGroup in inLevelComponent.PointGroups)
+		{
+			if (currentGroup.mPoints.Count > 0
+				&& currentGroup.mPurposes[(int)inPurpose])
+			{
+				pointChoices.Add(currentGroup.mPoints[0].mPosition);
+			}
+		}
 
-        if (pointChoices.Count > 0)
-        {
-            Vector3 randomPoint = pointChoices[Random.Range(0, pointChoices.Count)];
-            randomPoint += inLevelComponent.transform.position;
-            GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
-            spawnedItem.transform.position = randomPoint;
+		if (pointChoices.Count > 0)
+		{
+			Vector3 randomPoint = pointChoices[Random.Range(0, pointChoices.Count)];
+			randomPoint += inLevelComponent.transform.position;
+			GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
+			spawnedItem.transform.position = randomPoint;
 
-            inLevelComponent.AddLevelItem(spawnedItem.GetComponent<RunnerItem>());
-        }
-    }
+			inLevelComponent.AddLevelItem(spawnedItem.GetComponent<RunnerItem>());
+		}
+	}
 	
 	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent)
 	{

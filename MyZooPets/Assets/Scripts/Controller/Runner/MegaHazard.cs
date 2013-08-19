@@ -42,8 +42,11 @@ public class MegaHazard : MonoBehaviour {
     }
 
     public void TriggerPlayerSlowdown() {
-        mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
-        mCurrentDistanceFromPlayer += mDistanceUntilTarget;
+        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+        if (player != null && !player.Invincible) { 
+            mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
+            mCurrentDistanceFromPlayer += mDistanceUntilTarget;
+        }
     }
 
     private void UpdatePositionRelativeToPlayer() {

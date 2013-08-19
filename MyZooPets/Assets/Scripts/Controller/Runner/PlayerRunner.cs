@@ -7,7 +7,6 @@ public class PlayerRunner : MonoBehaviour
 {
     public float DefaultSpeed = 1.0f;
 	public float JumpSpeed = 0.5f;
-	public float Mass = 1.0f;
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
 
@@ -15,6 +14,7 @@ public class PlayerRunner : MonoBehaviour
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
 
+    private float mInitialXPos = 0;
     private float mSpeed = 0.1f;
 	private float mDistanceTravelled = 0f;
 	private float mSpeedBoostAmmount = 0f;
@@ -29,10 +29,13 @@ public class PlayerRunner : MonoBehaviour
 	private CapsuleCollider mCapsuleTrigger;
 	private CharacterController mCharacterController;
 
+    public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
 
 	// Use this for initialization
 	void Start() {
+        mInitialXPos = transform.position.x;
+
 		mCharacterController = gameObject.GetComponent<CharacterController>();
 		Transform layerObject = transform.FindChild("LayerTrigger");
 		if (layerObject != null) {
@@ -57,7 +60,6 @@ public class PlayerRunner : MonoBehaviour
 			if (mInvinciblePulse <= 0f) {
 				// Ready to uninvincible, except, we need to make sure we don't do it
 				//while the character is dying...
-
                 if (mbGrounded)
                     mbInvincible = false;
                 else {
@@ -132,10 +134,12 @@ public class PlayerRunner : MonoBehaviour
 	}
 
 	public void TriggerSlowdown(float inDivisor) {
-		if (!mbInvincible)
+        if (!mbInvincible) { 
             mSpeed /= inDivisor;
-        if (mSpeed < DefaultSpeed)
-            mSpeed = DefaultSpeed;
+
+            if (mSpeed < DefaultSpeed)
+                mSpeed = DefaultSpeed;
+        }
 	}
 
 	private void UpdateSpeed() {
@@ -180,7 +184,7 @@ public class PlayerRunner : MonoBehaviour
         mMovementVector.z = mSpeed + mSpeedBoostAmmount;
 
 		// Add in Gravity force.
-		mMovementVector += Physics.gravity * Time.deltaTime;
+		mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
 
 		if (mCharacterController == null)
 			Debug.LogError("No Character Controller exists!");
@@ -195,6 +199,10 @@ public class PlayerRunner : MonoBehaviour
 			mMovementVector = new Vector3();
 
 		mbGrounded = isGrounded;
+
+        Vector3 position = transform.position;
+        position.x = mInitialXPos;
+        transform.position = position;
 	}
 
 	private void UpdateInput() {

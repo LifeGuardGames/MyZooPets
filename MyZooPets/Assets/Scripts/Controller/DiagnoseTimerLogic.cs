@@ -7,35 +7,24 @@ using System.Collections;
 public class DiagnoseTimerLogic : MonoBehaviour {
     private float timer = 0;
     private float timeInterval = 30f; //time interval for triggers to affect health
-    private bool turnOffDiagnoseTimer; //For Testing
 
 	// Use this for initialization
 	void Start () {
         timer = timeInterval;
-        turnOffDiagnoseTimer = true;
 	}
 
 	// Update is called once per frame
 	void Update () {
-        if(turnOffDiagnoseTimer) return;
-
-        if (!LoadLevelManager.IsPaused){
-            timer -= Time.deltaTime;
-            if (timer <= 0){
-                timer = timeInterval;
-                SendNotification();
-                turnOffDiagnoseTimer = true;
-            }
+        timer -= Time.deltaTime;
+        if (timer <= 0){
+            timer = timeInterval;
+            SendNotification();
         }
 	}
 
-    public void Init(){
-        timer = timeInterval;
-        turnOffDiagnoseTimer = false;
-    }
-
+    //Increases the chance of this happening if health is low
     private void SendNotification(){
-        NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons("Something unusual is happening to you pet! Help it out!",
+        NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons("Something unusual is happening to your pet! Help it out!",
             delegate(){
                 Application.LoadLevel("DiagnosePet");
             },

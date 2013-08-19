@@ -5,15 +5,13 @@ using System.Collections.Generic;
 
 //index of List<Badge> = the id of the badges
 public class BadgeLogic : Singleton<BadgeLogic> {
+    public static int MAX_BADGE_COUNT = 20;
     //=============For inspector use only. don't use these variables in UI
     public List<BadgeUIData> badges = new List<BadgeUIData>();
     //===========================================
-    public static int MAX_BADGE_COUNT = 20;
-    
     //===================Events======================
     public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
     //==============================================
-    
     //====================API========================
     //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
     public List<BadgeUIData> Badges{
@@ -24,14 +22,11 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         get{return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
     }
     //==============================================
-
-    void Awake(){
-    }
-
 	// Use this for initialization
 	void Start () {
         //assign listeners	
         HUDAnimator.OnLevelUp += RewardBadgeOnLevelUp;
+        RewardBadgeOnLevelUp(this, EventArgs.Empty);
 	}
 
     void OnDestroy(){
@@ -42,9 +37,12 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     private void RewardBadgeOnLevelUp(object sender, EventArgs e){
         int badgeIndex = (int) DataManager.Instance.Level.CurrentLevel;
         //award badge and make them show in UI
-        DataManager.Instance.BadgeStatus[badgeIndex].IsAwarded = true;
-        DataManager.Instance.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
-        if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
-            OnNewBadgeAdded(this, EventArgs.Empty);
+        bool isAwarded = DataManager.Instance.BadgeStatus[badgeIndex].IsAwarded;
+        if(!isAwarded){
+            DataManager.Instance.BadgeStatus[badgeIndex].IsAwarded = true;
+            DataManager.Instance.BadgeStatus[badgeIndex].Tier = LevelUpLogic.AwardedBadge;
+            if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
+                OnNewBadgeAdded(this, EventArgs.Empty);
+        }
     }
 }

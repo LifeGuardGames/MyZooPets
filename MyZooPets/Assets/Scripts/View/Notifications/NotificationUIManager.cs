@@ -78,6 +78,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	private void AddToQueue(GameObject notificationGameObject){
+//		Debug.Log("Adding to Q");
 		notificationGameObject.SetActive(false);
 		q.Enqueue(notificationGameObject);
 		if(isFirstPop){		// If it is the first time, start queue check, else let Update check
@@ -88,7 +89,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	private void PopQueueAndDisplay(){
-		Debug.Log("POP");
+//		Debug.Log("POP");
 		backDrop.SetActive(true);
 
 		GameObject notificationGameObject = q.Dequeue() as GameObject;
@@ -101,8 +102,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	public void CheckNextInQueue(){
-		Debug.Log ("UNLOCKED");
-		//Debug.Log(UnityEngine.StackTraceUtility.ExtractStackTrace());
+//		Debug.Log ("UNLOCKED");
 		qLock = false;
 	}
 

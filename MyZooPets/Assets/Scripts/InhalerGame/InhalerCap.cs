@@ -27,6 +27,9 @@ public class InhalerCap : MonoBehaviour
 	void Update()
 	{
 		/*
+			if(Input.touchCount > 0){
+	
+			}
 			Touch touch = Input.touches[0];
             switch (touch.phase) {
                 case TouchPhase.Began:

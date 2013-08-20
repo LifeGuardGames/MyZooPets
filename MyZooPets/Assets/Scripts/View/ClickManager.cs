@@ -4,7 +4,7 @@ using System;
 
 /// <summary>
 /// Click manager.
-/// All the classes that need a click to enter a certain mode will be handled here (ie. diary, trophy, inhaler game)
+/// All the classes that need a click to enter a certain mode will be handled here (ie. diary, badge, inhaler game)
 ///
 ///
 /// NOTE: When entering a mode, lock click and mode, when done transitioning, unlock click

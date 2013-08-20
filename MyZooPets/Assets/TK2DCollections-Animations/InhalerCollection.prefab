@@ -61,10 +61,10 @@ MonoBehaviour:
   atlasWidth: 512
   atlasHeight: 1024
   forceSquareAtlas: 0
-  atlasWastage: 21.0969925
+  atlasWastage: 15.4550552
   allowMultipleAtlases: 0
   textureParams:
-  - name: tophalf
+  - name: advair_body
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
@@ -96,7 +96,7 @@ MonoBehaviour:
     regionId: 0
     colliderType: 4
     boxColliderMin: {x: 0, y: 0}
-    boxColliderMax: {x: 600, y: 600}
+    boxColliderMax: {x: 407, y: 407}
     polyColliderIslands:
     - connected: 1
       points:
@@ -112,26 +112,21 @@ MonoBehaviour:
       - {x: 1, y: 220}
       - {x: 3, y: 228}
       - {x: 21, y: 228}
-      - {x: 35, y: 239}
-      - {x: 54, y: 277}
-      - {x: 77, y: 316}
-      - {x: 110, y: 347}
-      - {x: 142, y: 364}
-      - {x: 167, y: 379}
-      - {x: 182, y: 403}
-      - {x: 202, y: 405}
-      - {x: 207, y: 407}
-      - {x: 223, y: 396}
-      - {x: 245, y: 393}
-      - {x: 267, y: 397}
-      - {x: 317, y: 369}
-      - {x: 342, y: 351}
-      - {x: 358, y: 337}
-      - {x: 362, y: 319}
-      - {x: 374, y: 300}
-      - {x: 392, y: 282}
-      - {x: 407, y: 271}
-      - {x: 405, y: 163}
+      - {x: 47.5, y: 258}
+      - {x: 91.5, y: 329.5}
+      - {x: 157.5, y: 367}
+      - {x: 198.5, y: 285.5}
+      - {x: 165, y: 262}
+      - {x: 126, y: 228}
+      - {x: 113.5, y: 187.5}
+      - {x: 123.5, y: 145.5}
+      - {x: 154, y: 115.5}
+      - {x: 200, y: 94}
+      - {x: 244.5, y: 93}
+      - {x: 277, y: 115}
+      - {x: 311, y: 155.5}
+      - {x: 326.5, y: 221.5}
+      - {x: 407, y: 225.5}
       - {x: 395, y: 120}
       - {x: 365, y: 70}
       - {x: 331, y: 35}
@@ -139,11 +134,11 @@ MonoBehaviour:
       - {x: 248, y: 0}
       - {x: 182, y: 0}
       - {x: 128, y: 17}
-    polyColliderCap: 0
-    colliderConvex: 1
+    polyColliderCap: 1
+    colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: insidehalf
+  - name: advair_cap
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
@@ -196,15 +191,15 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: 
+  - name: advair_small
     disableTrimming: 0
     additive: 0
-    scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    scale: {x: 2, y: 2, z: 1}
+    texture: {fileID: 2800000, guid: 2309231c3a99bf34e8838501b5a7ca2a, type: 3}
     materialId: 0
     anchor: 4
-    anchorX: 1
-    anchorY: 1
+    anchorX: 85
+    anchorY: 85
     overrideMesh: {fileID: 0}
     doubleSidedSprite: 0
     customSpriteGeometry: 0
@@ -229,7 +224,13 @@ MonoBehaviour:
     colliderType: 0
     boxColliderMin: {x: 0, y: 0}
     boxColliderMax: {x: 0, y: 0}
-    polyColliderIslands: []
+    polyColliderIslands:
+    - connected: 1
+      points:
+      - {x: 0, y: 0}
+      - {x: 0, y: 170}
+      - {x: 170, y: 170}
+      - {x: 170, y: 0}
     polyColliderCap: 0
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
@@ -386,7 +387,7 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: insidehalfSwitch
+  - name: advair_switch
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
@@ -576,7 +577,7 @@ MonoBehaviour:
   normalGenerationMode: 0
   padAmount: -1
   autoUpdate: 1
-  editorDisplayScale: 2.16781187
+  editorDisplayScale: 1.05400336
   version: 3
   assetName: 
 --- !u!1001 &100100000

@@ -59,6 +59,36 @@ public class PanToRotate : MonoBehaviour {
                     if(IsTouchingNGUI(startTouchPos) || IsTouchingPet(startTouchPos)) 
                         touchCancelled = true;
                 break;
+                case TouchPhase.Moved:
+                    //Detect if finger is panning left or right
+                    //if left rotate camera to the right else to the left
+                    //camera can only rotate if the partition is enabled
+                    if(touchCancelled) return;
+                    Vector2 touchDeltaPosition = touch.deltaPosition;
+                    float rotate = 0; 
+                    if(touch.position.x < startTouchPos.x - minPanDistance){
+                        panDirection = Direction.Left;
+                        int nextIndex = GetNextPartitionIndex();
+                        if(nextIndex != -1 && enabledPartitions[nextIndex]){
+                            float temp = touchDeltaPosition.x * panSpeed;
+
+                            //Check if camera is not rotating beyond the allowed partitions
+                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
+                            if(calculatedRotation < partitionAngles[rightLimit]) rotate = temp;
+                        }
+                    }else if(touch.position.x > startTouchPos.x + minPanDistance){
+                        panDirection = Direction.Right;
+                        int prevIndex = GetPrevPartitionIndex();
+                        if(prevIndex != -1 && enabledPartitions[prevIndex]){
+                            float temp = touchDeltaPosition.x * panSpeed;
+
+                            //Check if camera is not rotating beyond the allowed partitions
+                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
+                            if(calculatedRotation > partitionAngles[leftLimit]) rotate = temp;
+                        }
+                    }
+                    gameObject.transform.Rotate(0, -rotate, 0);
+                break;
                 case TouchPhase.Ended:
                     if(touchCancelled){
                         touchCancelled = false;
@@ -100,36 +130,6 @@ public class PanToRotate : MonoBehaviour {
                             LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
                         }
                     }
-                break;
-                case TouchPhase.Moved:
-                    //Detect if finger is panning left or right
-                    //if left rotate camera to the right else to the left
-                    //camera can only rotate if the partition is enabled
-                    if(touchCancelled) return;
-                    Vector2 touchDeltaPosition = touch.deltaPosition;
-                    float rotate = 0; 
-                    if(touch.position.x < startTouchPos.x - minPanDistance){
-                        panDirection = Direction.Left;
-                        int nextIndex = GetNextPartitionIndex();
-                        if(nextIndex != -1 && enabledPartitions[nextIndex]){
-                            float temp = touchDeltaPosition.x * panSpeed;
-
-                            //Check if camera is not rotating beyond the allowed partitions
-                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
-                            if(calculatedRotation < partitionAngles[rightLimit]) rotate = temp;
-                        }
-                    }else if(touch.position.x > startTouchPos.x + minPanDistance){
-                        panDirection = Direction.Right;
-                        int prevIndex = GetPrevPartitionIndex();
-                        if(prevIndex != -1 && enabledPartitions[prevIndex]){
-                            float temp = touchDeltaPosition.x * panSpeed;
-
-                            //Check if camera is not rotating beyond the allowed partitions
-                            float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
-                            if(calculatedRotation > partitionAngles[leftLimit]) rotate = temp;
-                        }
-                    }
-                    gameObject.transform.Rotate(0, -rotate, 0);
                 break;
             }
         }

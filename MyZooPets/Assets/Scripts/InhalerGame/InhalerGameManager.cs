@@ -103,27 +103,27 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
     private void DestroyAndRecreatePrefabs(){
         // delete existing gameobjects from the last round if there are any
         Destroy(advair);
-        Destroy(rescue);
-        Destroy(smallRescue);
-        Destroy(rescueShaker);
-        Destroy(inhaleExhale);
+        // Destroy(rescue);
+        // Destroy(smallRescue);
+        // Destroy(rescueShaker);
+        // Destroy(inhaleExhale);
 
         // instantiate new prefabs and store references to new gameobjects
         advair = Instantiate(advairPrefab) as GameObject;
         advair.name = advairPrefab.name;
-        smallRescue = Instantiate(smallRescuePrefab) as GameObject;
-        smallRescue.name = smallRescuePrefab.name;
+        // smallRescue = Instantiate(smallRescuePrefab) as GameObject;
+        // smallRescue.name = smallRescuePrefab.name;
 
-        rescue = Instantiate(rescuePrefab) as GameObject;
-        rescue.name = rescuePrefab.name;
-        rescue.GetComponent<RescueBody>().miniature = smallRescue;
+        // rescue = Instantiate(rescuePrefab) as GameObject;
+        // rescue.name = rescuePrefab.name;
+        // rescue.GetComponent<RescueBody>().miniature = smallRescue;
 
-        rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
-        rescueShaker.name = rescueShakerPrefab.name;
-        rescueShaker.GetComponent<RescueShaker>().rescueBody = rescue.GetComponent<RescueBody>();
+        // rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
+        // rescueShaker.name = rescueShakerPrefab.name;
+        // rescueShaker.GetComponent<RescueShaker>().rescueBody = rescue.GetComponent<RescueBody>();
 
-        inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
-        inhaleExhale.name = inhaleExhalePrefab.name;
+        // inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
+        // inhaleExhale.name = inhaleExhalePrefab.name;
     }
 
     /*
@@ -133,13 +133,13 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
     private void SetUpInhalerGame(){
         // Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
         if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
-            rescue.SetActive(false);
-            rescueShaker.SetActive(false);
+            // rescue.SetActive(false);
+            // rescueShaker.SetActive(false);
         }
         else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
             advair.SetActive(false);
         }
-        smallRescue.SetActive(false);
+        // smallRescue.SetActive(false);
 
         //Show hint right away if it's users' first time
         if ((InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && DataManager.Instance.Inhaler.FirstTimeAdvair) ||

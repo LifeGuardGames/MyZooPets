@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class BadgeUIManager : Singleton<BadgeUIManager> {
+public class BadgeUIManager : MonoBehaviour {
 	//======================Event=============================
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
     //=======================================================
@@ -163,9 +163,7 @@ public class BadgeUIManager : Singleton<BadgeUIManager> {
 
 	//When the badge board is clicked and zoomed into
 	public void BadgeBoardClicked(){
-		Debug.Log("uiMan preIN");
 		if(!isActive){
-			Debug.Log("uiMan IN");
 			isActive = true;
 			badgeBoard.collider.enabled = false;
 
@@ -179,9 +177,7 @@ public class BadgeUIManager : Singleton<BadgeUIManager> {
 
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	public void BadgeBoardBackButtonClicked(){
-		Debug.Log("uiMan preOUT");
 		if(isActive && !ClickManager.isClickLocked){
-			Debug.Log("uiMan OUT");
 			if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
     			OnBadgeBoardClosed(this, EventArgs.Empty);
 

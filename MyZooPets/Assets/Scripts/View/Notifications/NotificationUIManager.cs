@@ -8,7 +8,6 @@ using System.Collections;
 /// </summary>
 
 public class NotificationUIManager : Singleton<NotificationUIManager> {
-
 	// References
 	public GameObject cameraObject;
 	public GameObject centerPanel;

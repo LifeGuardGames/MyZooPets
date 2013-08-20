@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class HUDManager : MonoBehaviour {
+public class HUDUIManager : MonoBehaviour {
+
+	public GameObject HUDPanel;
+
     private HUDAnimator hudAnimator;
     private float points;
     private float mood;
@@ -50,5 +53,13 @@ public class HUDManager : MonoBehaviour {
         healthSlider.sliderValue = health/100;
         healthLabel.text = health.ToString();
         starLabel.text = starCount;
+	}
+
+	public void ShowPanel(){
+		HUDPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+	}
+
+	public void HidePanel(){
+		HUDPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 	}
 }

@@ -5,17 +5,18 @@ using System.Collections.Generic;
 
 public class StoreUIManager : MonoBehaviour {
 
+	//=========================Events====================
+	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
+	//===================================================
+	
 	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
+	public GameObject storePanel;
 	public UIAtlas BackGroundRed;
 	public UIAtlas BackGroundGreen;
 	public UIAtlas BackGroundOrange;
 	public UIAtlas BackGroundPurple;
-
-	//=========================Events====================
-	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
-	//===================================================
 
 	private ItemLogic itemlogic;
 	private Inventory inventory;
@@ -44,11 +45,11 @@ public class StoreUIManager : MonoBehaviour {
 	}
 
 	public void StoreClicked(){
-		GetComponent<MoveTweenToggle>().Show();
+		storePanel.GetComponent<MoveTweenToggle>().Show();
 	}
 
 	public void StoreClosed(){
-		GetComponent<MoveTweenToggle>().Hide();
+		storePanel.GetComponent<MoveTweenToggle>().Hide();
 		if(D.Assert(OnStoreClosed != null, "OnStoreClosed has no listeners"))
 			OnStoreClosed(this, EventArgs.Empty);
 	}

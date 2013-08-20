@@ -26,7 +26,7 @@ public abstract class CameraMove : MonoBehaviour{
 	}
 
 	public void ZoomOutMove(){
-		ZoomOutMove(0.5f);
+		ZoomOutMove(.3f);
 	}
 	public void ZoomOutMove(float time){
 		if (zoomed){

@@ -125,7 +125,7 @@ public class InventoryDragDrop : MonoBehaviour {
 				// TODO-s Find pernament solution to this
 				float ratioX = 1280f/(Screen.width * 1.0f);
 				float ratioY = 800f/(Screen.height * 1.0f);
-				Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
+				//Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
 				Vector3 newDelta = new Vector3(delta.x * ratioX, delta.y * ratioY, 0f);
 				mTrans.localPosition += newDelta;
 			}

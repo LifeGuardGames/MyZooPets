@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System;
 
 public class CalendarUIManager : Singleton<CalendarUIManager> {
+	//==================Events=======================
+	public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
+	//===============================================
+
     public bool isDebug; //developing option
-    public Transform thisWeek; //reference to the ThisWeek gameObject
+	public GameObject calendarPanel;
+	public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
     public UILabel rewardLabel;
     public GameObject calendarHintArrow;
-
-    //==================Events=======================
-    public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
-    //===============================================
 
     //Class to store UI reference
     private class ThisWeekDay{
@@ -63,7 +64,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
        timerActive = false;
-        calendarLogic = GameObject.Find("GameManager/CalendarLogic").GetComponent<CalendarLogic>();
+       calendarLogic = GameObject.Find("GameManager/CalendarLogic").GetComponent<CalendarLogic>();
 	}
 
     void Start(){
@@ -94,11 +95,11 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 
     public void CalendarClicked(){
         calendarLogic.CalendarOpened();
-        GetComponent<MoveTweenToggleDemultiplexer>().Show();
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
     public void CalendarClosed(){
-        GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
         if(D.Assert(OnCalendarClosed != null, "OnCalendarClosed has no listeners"))
             OnCalendarClosed(this, EventArgs.Empty);
     }
@@ -170,9 +171,9 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         night.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
 
         //Set the finish target to TutorialUIManager
-        GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = true;
-        GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = TutorialUIManager.Instance.gameObject;
-        GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "StartCalendarTutorial";
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = true;
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = TutorialUIManager.Instance.gameObject;
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "StartCalendarTutorial";
     }
 
     //Black out everything. Only shows the green stamp
@@ -217,9 +218,9 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         night.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
 
         //Reset the finish target
-        GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = false;
-        GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = null; 
-        GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "";
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = false;
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = null;
+        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "";
 
         //Clean up hint arrow if still there
         if(greenStampHintArrow != null) Destroy(greenStampHintArrow);

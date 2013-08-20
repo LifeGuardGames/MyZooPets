@@ -8,6 +8,8 @@ public class NoteUIManager : MonoBehaviour {
     public static event EventHandler<EventArgs> OnNoteClosed;
     //=======================================================
 
+	public GameObject notePanel;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -20,12 +22,14 @@ public class NoteUIManager : MonoBehaviour {
 
     public void NoteClicked(){
 		Debug.Log("Note CLicked");
-        GetComponent<MoveTweenToggle>().Show();
+        notePanel.GetComponent<MoveTweenToggle>().Show();
     }
 
     public void NoteClosed(){
-        GetComponent<MoveTweenToggle>().Hide();
-        if(D.Assert(OnNoteClosed != null, "OnNoteClosed has no listeners"))
+		// Make sure callback NoteFinishedClosing is assigned in tween
+        notePanel.GetComponent<MoveTweenToggle>().Hide();
+
+		if(D.Assert(OnNoteClosed != null, "OnNoteClosed has no listeners"))
             OnNoteClosed(this, EventArgs.Empty);
     }
 }

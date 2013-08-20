@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class TouchDetectorManager : MonoBehaviour {
-
+    public float SwipeDistance = 5.0f;
     public float MaxSwipeAngleDegrees = 45.0f;
     public List<MonoBehaviour> ListeningScripts = new List<MonoBehaviour>();
 
@@ -35,41 +35,53 @@ public class TouchDetectorManager : MonoBehaviour {
             Touch firstTouch =  Input.touches[0];
             TouchPhase currentTouchPhase = firstTouch.phase;
 
-            switch (currentTouchPhase)
-            {
+            switch (currentTouchPhase) {
                 case TouchPhase.Began:
-                    mbSwipingStraight = true;
-					mStartTouchPosition = firstTouch.position;
+                    mbSwipingStraight = false;
+                    mStartTouchPosition = firstTouch.position;
                     break;
 
-                case TouchPhase.Ended:
-                {
-                    if (mbSwipingStraight)
-                    {
-                        // How angled was the swipe compared to what we tolerate?
-                        Vector2 swipeVector = firstTouch.position - mStartTouchPosition;
-                        float swipeAngle = Vector2.Angle(Vector2.up, swipeVector);
-                        if (swipeAngle < MaxSwipeAngleDegrees)
-                        {
-                            foreach (MonoBehaviour currentScript in ListeningScripts)
-                            {
-                                currentScript.SendMessage("onSwipeUp");
+                case TouchPhase.Moved: {
+                    if (!mbSwipingStraight) {
+                        float verticalSwipeLength = firstTouch.position.y - mStartTouchPosition.y;
+                        if (Mathf.Abs(verticalSwipeLength) > SwipeDistance) {
+                            foreach (MonoBehaviour currentScript in ListeningScripts) {
+                                if (verticalSwipeLength >= 0)
+                                    currentScript.SendMessage("onSwipeUp", SendMessageOptions.DontRequireReceiver);
+                                else
+                                    currentScript.SendMessage("onSwipeDown", SendMessageOptions.DontRequireReceiver);
                             }
-                            break;
-                        }
-
-                        swipeAngle = Vector2.Angle(-Vector2.up, swipeVector);
-                        if (swipeAngle < MaxSwipeAngleDegrees)
-                        {
-                            foreach (MonoBehaviour currentScript in ListeningScripts)
-                            {
-                                currentScript.SendMessage("onSwipeDown");
-                            }
-                            break;
+                            mbSwipingStraight = true;
                         }
                     }
                     break;
                 }
+
+
+                /*
+            case TouchPhase.Ended: {
+                if (mbSwipingStraight) {
+                    // How angled was the swipe compared to what we tolerate?
+                    Vector2 swipeVector = firstTouch.position - mStartTouchPosition;
+                    float swipeAngle = Vector2.Angle(Vector2.up, swipeVector);
+                    if (swipeAngle < MaxSwipeAngleDegrees) {
+                        foreach (MonoBehaviour currentScript in ListeningScripts) {
+                            currentScript.SendMessage("onSwipeUp");
+                        }
+                        break;
+                    }
+
+                    swipeAngle = Vector2.Angle(-Vector2.up, swipeVector);
+                    if (swipeAngle < MaxSwipeAngleDegrees) {
+                        foreach (MonoBehaviour currentScript in ListeningScripts) {
+                            currentScript.SendMessage("onSwipeDown");
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+                 * */
             }
 		}
 	

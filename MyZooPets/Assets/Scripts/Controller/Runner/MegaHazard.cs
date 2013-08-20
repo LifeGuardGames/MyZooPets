@@ -34,6 +34,7 @@ public class MegaHazard : MonoBehaviour {
     public void Reset() {
         mCurrentDistanceFromPlayer = ZDefaultDistanceFromPlayer;
         mDistanceRegainPulse = DistanceRegainTime;
+        mDistanceUntilTarget = 0f;
 
         transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
         UpdatePositionRelativeToPlayer();

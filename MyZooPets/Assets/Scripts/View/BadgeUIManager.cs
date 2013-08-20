@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class BadgeGUI : MonoBehaviour {
+public class BadgeUIManager : Singleton<BadgeUIManager> {
 	//======================Event=============================
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
     //=======================================================
@@ -12,9 +12,10 @@ public class BadgeGUI : MonoBehaviour {
 	private bool isActive = false;
 
 	public GameObject badgeBoard;
+	public GameObject badgeBoardBadges;
 	public GameObject descriptionObject;
 	public GameObject badgeGUISpawnBase;	// Parent to clone badges in (anchor-center) when zoomed in
-	private GameObject bgPanel;
+	private GameObject badgeBackdrop;
 
 	// List of badge gameobjects
 	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
@@ -83,7 +84,7 @@ public class BadgeGUI : MonoBehaviour {
 
 		BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
 
-		if(D.Assert(meta != null, "No Metadata attached on badge")){
+		if(meta != null){
 			// Find the appropriate atlas TODO-s load resource dynamically?
 			UIAtlas activeAtlas = null;
 			if(meta.atlasName == badgeLevelAtlas1.name){
@@ -107,16 +108,15 @@ public class BadgeGUI : MonoBehaviour {
 
 			// Spawn BG with collider
 			// NOTE: Parent object needs to be 0, 0px, lower left corner;
-			UISprite bgSprite = NGUITools.AddSprite(descriptionObject, badgeCommonAtlas, "box30");
-			bgSprite.type = UISprite.Type.Sliced;
-			bgSprite.color = new Color(0f, 0f, 0f, 0.6f);
-			bgSprite.depth = 50;
-			bgPanel = bgSprite.gameObject;	// Get reference to delete later
-			bgPanel.transform.localScale = new Vector3(3000f, 3000f, 1);
-			bgPanel.transform.localPosition = new Vector3(0f, 0f ,0f);
-			BoxCollider collider = bgPanel.AddComponent<BoxCollider>();
-			collider.size = new Vector3(3000f, 3000f, 1f);
-	
+			UISprite badgeBackdropSprite = NGUITools.AddSprite(descriptionObject, badgeCommonAtlas, "box30");
+			badgeBackdropSprite.type = UISprite.Type.Sliced;
+			badgeBackdropSprite.color = new Color(0f, 0f, 0f, 0.5f);
+			badgeBackdropSprite.depth = 50;
+			badgeBackdrop = badgeBackdropSprite.gameObject;	// Get reference to delete later
+			badgeBackdrop.transform.localScale = new Vector3(3000f, 3000f, 1);
+			badgeBackdrop.transform.localPosition = new Vector3(0f, 0f ,0f);
+			BoxCollider collider = badgeBackdrop.AddComponent<BoxCollider>();
+
 			// Spawn cloned badge
 			GameObject spriteObject = GameObject.Find(go.name + "/badgeSprite");
 			UISprite originalSprite = spriteObject.GetComponent<UISprite>();
@@ -151,7 +151,7 @@ public class BadgeGUI : MonoBehaviour {
 	public void CloseDescription(){
 		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
 		badgeGUISpawnBase.transform.DestroyChildren();
-		Destroy(bgPanel);
+		Destroy(badgeBackdrop);
 
 		// Enable back button for badge board
 		BadgeBoardClicked();
@@ -163,11 +163,13 @@ public class BadgeGUI : MonoBehaviour {
 
 	//When the badge board is clicked and zoomed into
 	public void BadgeBoardClicked(){
+		Debug.Log("uiMan preIN");
 		if(!isActive){
+			Debug.Log("uiMan IN");
 			isActive = true;
 			badgeBoard.collider.enabled = false;
 
-			backButtonReference = NGUITools.AddChild(this.gameObject, backButtonPrefab);
+			backButtonReference = NGUITools.AddChild(badgeBoardBadges, backButtonPrefab);
 			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
 			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
 			messageScript.target = this.gameObject;
@@ -177,8 +179,9 @@ public class BadgeGUI : MonoBehaviour {
 
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	public void BadgeBoardBackButtonClicked(){
+		Debug.Log("uiMan preOUT");
 		if(isActive && !ClickManager.isClickLocked){
-
+			Debug.Log("uiMan OUT");
 			if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
     			OnBadgeBoardClosed(this, EventArgs.Empty);
 

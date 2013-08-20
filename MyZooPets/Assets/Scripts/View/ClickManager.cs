@@ -30,8 +30,7 @@ public class ClickManager : MonoBehaviour {
 
 	public GameObject UIInventoryObject;
 	public GameObject UINavigationObject;
-	public GameObject UIBadgeObject; 
-	private BadgeGUI badgeGUI;
+	public GameObject UIBadgeObject;
 	public GameObject UILoadScreen;
 	//=================================================
 
@@ -66,8 +65,6 @@ public class ClickManager : MonoBehaviour {
 			noteUIManager = UINoteObject.GetComponent<NoteUIManager>();
 		if(UIStoreObject != null)
 			storeUIManager = UIStoreObject.GetComponent<StoreUIManager>();
-		if(UIBadgeObject != null)
-			badgeGUI = UIBadgeObject.GetComponent<BadgeGUI>();
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
     }
@@ -78,7 +75,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed += OnNoteClosed;
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
-		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
+		BadgeUIManager.OnBadgeBoardClosed += OnBadgeBoardClosed;
     }
 
 	//Clean all event listeners and static references
@@ -86,7 +83,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed -= OnNoteClosed;
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
-		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
+		BadgeUIManager.OnBadgeBoardClosed -= OnBadgeBoardClosed;
 		UIRoot = null;
 	}
 
@@ -208,8 +205,10 @@ public class ClickManager : MonoBehaviour {
 
 	//=================Badge Board=====================
 	private void OnTapBadgeBoard(){
+		Debug.Log("OPEN");
 		if (CanRespondToTap()){
-			badgeGUI.BadgeBoardClicked();
+			Debug.Log("OPEN IN");
+			BadgeUIManager.Instance.BadgeBoardClicked();
 			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
 			ClickLock();
 			ModeLock();
@@ -223,7 +222,9 @@ public class ClickManager : MonoBehaviour {
 		}
 	}
 	private void OnBadgeBoardClosed(object senders, EventArgs e){
+		Debug.Log("CLOSED");
 		ClickLock();
+
 		cameraMove.ZoomOutMove();
 
 		//Show other UI Objects

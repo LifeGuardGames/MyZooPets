@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: DegradationUIManager
+  m_Name: InventoryUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,11 +35,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e749d78d5e0324a48b02350a82c54a80, type: 3}
+  m_Script: {fileID: 11500000, guid: e745fe6221e6e4da7b8fcf573260e49c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cleanTriggerParticleDrop: {fileID: 100000, guid: 2241ed812e2fa4e919c1f2f85e8a7b2d,
-    type: 2}
+  inventoryPanel: {fileID: 0}
+  isDebug: 0
+  itemSprite: {fileID: 0}
+  itemAtlas: {fileID: 11400000, guid: 8abc7c4caeaecda4680ebedd42a8405f, type: 2}
+  font: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  UIGridObject: {fileID: 0}
+  UIButtonToggleObject: {fileID: 0}
+  UIButtonSpriteObject: {fileID: 0}
+  spritePet: {fileID: 0}
+  speechBubblePrefab: {fileID: 100000, guid: b0d48ee35a9854f41bdde62d951178d9, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

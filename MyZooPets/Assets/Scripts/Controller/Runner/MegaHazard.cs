@@ -15,12 +15,7 @@ public class MegaHazard : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-        mCurrentDistanceFromPlayer = ZDefaultDistanceFromPlayer;
-        mDistanceRegainPulse = DistanceRegainTime;
-
-        transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
-        UpdatePositionRelativeToPlayer();
-        mDestinationPosition = transform.position;
+        Reset();
 	}
 	
 	// Update is called once per frame
@@ -34,6 +29,15 @@ public class MegaHazard : MonoBehaviour {
             RunnerGameManager gameManager = RunnerGameManager.GetInstance();
             gameManager.ActivateGameOver();
         }
+    }
+
+    public void Reset() {
+        mCurrentDistanceFromPlayer = ZDefaultDistanceFromPlayer;
+        mDistanceRegainPulse = DistanceRegainTime;
+
+        transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
+        UpdatePositionRelativeToPlayer();
+        mDestinationPosition = transform.position;
     }
 
     public void TriggerPlayerSlowdown() {

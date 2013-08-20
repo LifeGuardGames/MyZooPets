@@ -25,6 +25,9 @@ public class TouchDetectorManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.J)) {
             RunnerGameManager.GetInstance().PlayerRunner.TriggerSlowdown(2.0f);
         }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            RunnerGameManager.GetInstance().ResetGame();
+        }
 
         // Check touches
         bool bIsTouching = Input.touchCount > 0;

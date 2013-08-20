@@ -14,18 +14,17 @@ public class PlayerRunner : MonoBehaviour
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
 
-    private float mInitialXPos = 0;
-    private float mSpeed = 0.1f;
-	private float mDistanceTravelled = 0f;
+    private float mSpeed;
 	private float mSpeedBoostAmmount = 0f;
-	private bool mbInvincible = false;
-	private bool mbJumping = false;
-	private bool mbColliding = false;
-	private bool mbGrounded = false;
-	private bool mbFalling = false;
-	private bool mbTriggerColliding = false;
-	private Vector3 mMovementVector = Vector3.zero;
-    private Vector3 mLastPosition = Vector3.zero;
+    private bool mbInvincible;
+    private bool mbJumping;
+    private bool mbColliding;
+    private bool mbGrounded;
+    private bool mbFalling;
+    private bool mbTriggerColliding;
+    private Vector2 mInitialPosition;
+    private Vector3 mMovementVector;
+    private Vector3 mLastPosition;
 	private CapsuleCollider mCapsuleTrigger;
 	private CharacterController mCharacterController;
 
@@ -34,21 +33,14 @@ public class PlayerRunner : MonoBehaviour
 
 	// Use this for initialization
 	void Start() {
-        mInitialXPos = transform.position.x;
+        mInitialPosition = transform.position;
 
-		mCharacterController = gameObject.GetComponent<CharacterController>();
-		Transform layerObject = transform.FindChild("LayerTrigger");
-		if (layerObject != null) {
-			mCapsuleTrigger = layerObject.GetComponent<CapsuleCollider>();
-			Physics.IgnoreCollision(mCharacterController, mCapsuleTrigger);
-		} else
-			Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
+        mCharacterController = gameObject.GetComponent<CharacterController>();
+        if (mCharacterController == null)
+            Debug.LogError("Character Controller not attached!");
 
-		if (mCharacterController == null)
-			Debug.LogError("Character Controller not attached!");
-		mSpeedIncreasePulse = SpeedIncreaseTime;
-		mLastPosition = transform.position;
-        mSpeed = DefaultSpeed;
+        // Slightly redundant in some ways, but keeps some logic together.
+        Reset();
 	}
 
 	// Update is called once per frame
@@ -116,6 +108,46 @@ public class PlayerRunner : MonoBehaviour
 	void LayerTriggerCollisionExit(Collider inCollider) {
 		mbTriggerColliding = false;
 	}
+
+    public void Reset() {
+        // Go back to the original position.
+		transform.position = mInitialPosition;
+        // Reset some timers
+        mSpeedIncreasePulse = SpeedIncreaseTime;
+        mSpeedBoostPulse = 0f;
+        mInvinciblePulse = 0f;
+        // Player values
+        mLastPosition = transform.position;
+        mMovementVector = Vector3.zero;
+        mLastPosition = Vector3.zero;
+        mSpeed = DefaultSpeed;
+        mbInvincible = false;
+        // Collision values
+        mbColliding = false;
+        mbTriggerColliding = false;
+        mbGrounded = false;
+        mbFalling = false;
+        mbJumping = false;
+        gameObject.layer = 0;
+
+        Transform layerObject = transform.FindChild("LayerTrigger");
+        if (layerObject != null) {
+            mCapsuleTrigger = layerObject.GetComponent<CapsuleCollider>();
+            Physics.IgnoreCollision(mCharacterController, mCapsuleTrigger);
+        } else
+            Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
+
+    }
+
+    public void TriggerInvincibility(float inDuration) {
+        mInvinciblePulse = inDuration;
+        mbInvincible = true;
+    }
+
+    public void TriggerSpeedBoost(float inDuration, float inSpeedAmmount) {
+        mSpeedBoostAmmount = inSpeedAmmount;
+        mSpeedBoostPulse = inDuration;
+    }
 
 	private void CheckAndActOnDeath() {
 		RunnerGameManager gameManager = RunnerGameManager.GetInstance();
@@ -206,7 +238,7 @@ public class PlayerRunner : MonoBehaviour
 		mbGrounded = isGrounded;
 
         Vector3 position = transform.position;
-        position.x = mInitialXPos;
+        position.x = mInitialPosition.x;
         transform.position = position;
 	}
 
@@ -233,15 +265,5 @@ public class PlayerRunner : MonoBehaviour
 			mbFalling = true;
 			gameObject.layer = 12;
 		}
-	}
-
-	public void TriggerInvincibility(float inDuration) {
-		mInvinciblePulse = inDuration;
-		mbInvincible = true;
-	}
-
-	public void TriggerSpeedBoost(float inDuration, float inSpeedAmmount) {
-		mSpeedBoostAmmount = inSpeedAmmount;
-		mSpeedBoostPulse = inDuration;
 	}
 }

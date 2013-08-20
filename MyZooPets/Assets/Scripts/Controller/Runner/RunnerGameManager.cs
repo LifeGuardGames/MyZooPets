@@ -7,6 +7,7 @@ public class RunnerGameManager : MonoBehaviour {
     private ParallaxingBackgroundManager mParallaxingBackgroundManager;
     private ScoreManager mScoreManager;
     private TouchDetectorManager mTouchDetectorManager;
+    private MegaHazard mMegaHazard;
 
     public bool GameRunning
     {
@@ -18,6 +19,7 @@ public class RunnerGameManager : MonoBehaviour {
     public ParallaxingBackgroundManager ParallaxingBackgroundManager { get { return mParallaxingBackgroundManager; } }
     public ScoreManager ScoreManager { get { return mScoreManager; } }
     public TouchDetectorManager TouchDetectorManager { get { return mTouchDetectorManager; } }
+    public MegaHazard MegaHazard { get { return mMegaHazard; } }
     
     private static RunnerGameManager sRunnerGameManagerInstance = null;
     static public RunnerGameManager GetInstance()
@@ -62,11 +64,30 @@ public class RunnerGameManager : MonoBehaviour {
             mTouchDetectorManager = foundObject.GetComponent<TouchDetectorManager>();
         else
             Debug.LogError("Could not find an object named 'TouchDetectorManager'");
+
+        foundObject = GameObject.Find("MegaHazard");
+        if (foundObject != null)
+            mMegaHazard = foundObject.GetComponent<MegaHazard>();
+        else
+            Debug.LogError("Could not find an object named 'MegaHazard'");
 	}
 	
 	// Update is called once per frame
 	void Update() {
 	}
+
+    public void ResetGame() {
+        GameRunning = true;
+
+        // Turn player on, if it isnt
+        if (mPlayerRunner != null) {
+            mPlayerRunner.gameObject.SetActive(true);
+            mPlayerRunner.Reset();
+        }
+
+        mLevelManager.Reset();
+        mMegaHazard.Reset();
+    }
 
     public void ActivateGameOver() {
         GameRunning = false;
@@ -74,13 +95,5 @@ public class RunnerGameManager : MonoBehaviour {
         // Disable the player
         if (mPlayerRunner != null)
             mPlayerRunner.gameObject.SetActive(false);
-    }
-
-    void ResetGame() {
-        GameRunning = true;
-
-        // Turn player on, if it isnt
-        if (mPlayerRunner != null)
-            mPlayerRunner.gameObject.SetActive(true);
     }
 }

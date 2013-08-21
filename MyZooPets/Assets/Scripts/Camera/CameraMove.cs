@@ -10,7 +10,7 @@ public abstract class CameraMove : MonoBehaviour{
 	protected bool isCameraMoving = false; //True: camera moving, False: camera static
 
 	protected bool isLoadLevel = false; //True: there's a level to be loaded, False: no level
-	protected string levelToLoad; //name of the level that need to be loaded
+	protected GameObject levelLoadObject; //GO of the level that need to be loaded
 
 	protected bool isEnterMode = false; //True: camera will zoom into the specified game object
 
@@ -47,9 +47,10 @@ public abstract class CameraMove : MonoBehaviour{
 			//call event listener here
 			ClickManager.ReleaseModeLock();		// Only want to release the lock after camera done when exiting
 		}
-		if(isLoadLevel && (levelToLoad != null)){
+		if(isLoadLevel && (levelLoadObject != null)){
 			isLoadLevel = false;
-			Application.LoadLevel(levelToLoad);
+			SceneTransition sceneTransition = levelLoadObject.GetComponent<SceneTransition>();	//GameObject must have script attached to it
+			sceneTransition.StartTransition();
 		}
 		ClickManager.ReleaseClickLock();
 	}
@@ -98,10 +99,10 @@ public abstract class CameraMove : MonoBehaviour{
 	}
 
 	// Same as CameraTransform but tries to load a scene after the transform has completed
-	protected void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, string level){
+	protected void CameraTransformLoadLevel(Vector3 newPosition, Vector3 newDirection, float time, GameObject loadLevelObject){
 		isLoadLevel = true;
 		isEnterMode = true;
-		levelToLoad = level;
+		levelLoadObject = loadLevelObject;
 		Hashtable optional = new Hashtable();
 		Hashtable optional2 = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);

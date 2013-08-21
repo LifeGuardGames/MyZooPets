@@ -282,8 +282,8 @@ public class ClickManager : MonoBehaviour {
 
 	//====================Yard Sign========================
 	private void OnTapYardSign(){
-		UILoadScreen.SetActive(true);
-		Application.LoadLevel("Yard");
+		//UILoadScreen.SetActive(true);
+		//Application.LoadLevel("Yard");
 	}
 
 

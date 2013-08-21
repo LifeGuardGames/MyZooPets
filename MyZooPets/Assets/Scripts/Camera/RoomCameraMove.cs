@@ -64,16 +64,16 @@ public class RoomCameraMove : CameraMove{
                     break;
 
                     case ZoomItem.SlotMachine:
-                    CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, "SlotMachineGame");
+                    CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, slotMachine);	// Pass in gameobject to load level callback
                     break;
 
                     case ZoomItem.RealInhaler:
-                    CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, "InhalerGamePet");
+                    CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, realInhaler); // Pass in gameobject to load level callback
                     break;
 
                     case ZoomItem.PracticeInhaler:
                     Vector3 teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
-                    CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, "InhalerGameTeddy");
+                    CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, teddyInhaler); // Pass in gameobject to load level callback
                     break;
 
                     case ZoomItem.BadgeBoard:

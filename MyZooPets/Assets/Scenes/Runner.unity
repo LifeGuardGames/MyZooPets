@@ -1962,7 +1962,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1
+      scalar: .600000024
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1977,7 +1977,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .899999976
+          value: .666666627
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -2954,7 +2954,7 @@ Transform:
   m_PrefabInternal: {fileID: 1156566191}
   m_GameObject: {fileID: 558092199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -7.23068571}
+  m_LocalPosition: {x: 0, y: 0, z: -4.18336725}
   m_LocalScale: {x: .15625, y: 1.72000003, z: .0386409461}
   m_Children: []
   m_Father: {fileID: 53468378}
@@ -3361,7 +3361,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 602980679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -534.16748, y: 400.833313, z: 0}
+  m_LocalPosition: {x: -640.499878, y: 400.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 808368988}
@@ -3433,7 +3433,7 @@ Transform:
   m_PrefabInternal: {fileID: 759038327}
   m_GameObject: {fileID: 624191286}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.833129883, y: .833333373, z: 0}
+  m_LocalPosition: {x: -.500488281, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2094426378}
@@ -3766,11 +3766,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400016, guid: 396a7daf0187da84ab0718fee7ed1a67, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.833129883
+      value: -.500488281
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 396a7daf0187da84ab0718fee7ed1a67, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .833333373
+      value: .5
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 396a7daf0187da84ab0718fee7ed1a67, type: 2}
       propertyPath: m_LocalPosition.z
@@ -4120,11 +4120,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -39465.832
+    e03: -39359.5
     e10: 0
     e11: 400
     e12: 0
-    e13: -400.833313
+    e13: -400.5
     e20: 0
     e21: 0
     e22: 400
@@ -5462,7 +5462,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -7.23068571
+      value: -4.18336725
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
       propertyPath: m_LocalRotation.x
@@ -5478,6 +5478,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
+      propertyPath: InitialModule.startLifetime.minCurve.m_Curve.Array.data[0].value
+      value: .666666627
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: .600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: a9fcee249cb41594e84d6b5c20303158, type: 2}
+      propertyPath: InitialModule.startLifetime.maxCurve.m_Curve.Array.data[0].value
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5730,7 +5742,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1277307334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -534.16748, y: 400.833313, z: 0}
+  m_LocalPosition: {x: -640.499878, y: 400.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2078354369}
@@ -8938,11 +8950,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -39465.832
+    e03: -39359.5
     e10: 0
     e11: 400
     e12: 0
-    e13: -1431.66284
+    e13: -1431.32947
     e20: 0
     e21: 0
     e22: 400
@@ -9010,11 +9022,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -39999.168
+    e03: -39999.5
     e10: 0
     e11: 400
     e12: 0
-    e13: -.833333373
+    e13: -.5
     e20: 0
     e21: 0
     e22: 400

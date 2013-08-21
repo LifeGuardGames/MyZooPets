@@ -39,17 +39,17 @@ public class AdvairDragToRotate : MonoBehaviour {
                     startVector = startTouchPos - centerPos;
                 break;
                 case TouchPhase.Moved:
-                    //Conditions that terminate the touch
-                    //Swipping to the left or finger is no longer touching the object will moving
-                    if(touch.position.x < startTouchPos.x || !IsTouchingObject(touch)) return;
-
                     //Calculate the vector of the current touch position
                     Vector2 currentTouchPos = touch.position;
                     Vector2 currentVector = currentTouchPos - centerPos;
 
                     //Get the angle between the start vector and the current vector
-                    float absAngle = ReturnSignedAngleBetweenVectors(startVector, currentVector);
-                    transform.localEulerAngles = new Vector3(0, 0, absAngle); //Set the transform to the angle
+                    float signedAngle = ReturnSignedAngleBetweenVectors(startVector, currentVector);
+                    
+                    //Conditions that terminate the touch
+                    //only want object to rotate right while finger is touching object
+                    if(signedAngle >= 0 || !IsTouchingObject(touch)) return; 
+                    transform.localEulerAngles = new Vector3(0, 0, signedAngle); //Set the transform to the angle
                     CheckIfCompletelyOpened();
                 break;
                 case TouchPhase.Ended:
@@ -67,41 +67,22 @@ public class AdvairDragToRotate : MonoBehaviour {
         bool retVal = false;
         if (Physics.Raycast (ray, out hit, maskLayer)) {
             if(hit.collider.gameObject == this.gameObject){
+                print("touch");
                 retVal = true;
             }
         }
         return retVal;
     }
 
-    private float ReturnSignedAngleBetweenVectors(Vector2 vectorA, Vector2 vectorB)
+    private float ReturnSignedAngleBetweenVectors(Vector2 startVector, Vector2 currentVector)
     {
-        // the vector that we want to measure an angle from
-        /* some vector that is not Vector3.up */
-        Vector3 referenceForward = new Vector3(vectorA.x, vectorA.y, 0);
-         
-        // the vector perpendicular to referenceForward (90 degrees clockwise)
-        // (used to determine if angle is positive or negative)
-        Vector3 referenceRight = Vector3.Cross(Vector3.up, referenceForward);
-         
-        // the vector of interest
-        /* some vector that we're interested in */
-        Vector3 newDirection = new Vector3(vectorB.x, vectorB.y, 0);
-         
-        // Get the angle in degrees between 0 and 180
-        float angle = Vector3.Angle(newDirection, referenceForward);
-         
-        // Determine if the degree value should be negative.  Here, a positive value
-        // from the dot product means that our vector is the right of the reference vector   
-        // whereas a negative value means we're on the left.
-        float sign = (Vector3.Dot(newDirection, referenceRight) > 0.0f) ? -1.0f: 1.0f;
-         
-        float finalAngle = sign * angle;
-        return finalAngle;
+        float angle = Mathf.Atan2(currentVector.y, currentVector.x) - Mathf.Atan2(startVector.y, startVector.x);
+        return angle * Mathf.Rad2Deg;
     }
 
     //Check if the inhaler body has been snap to the right position
     private void CheckIfCompletelyOpened(){
-        if(transform.localEulerAngles.z >= finalPosition.z){ //151 is the final rotation value
+        if(transform.localEulerAngles.z <= finalPosition.z){
             transform.localEulerAngles = finalPosition;
             completelyOpened = true;
             if(InhalerLogic.Instance.IsCurrentStepCorrect(advairStepID)){

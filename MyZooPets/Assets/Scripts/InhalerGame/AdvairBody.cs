@@ -12,7 +12,7 @@ using System.Collections;
 public class AdvairBody : AdvairDragToRotate{
     protected override void Awake(){
         base.Awake();
-        finalPosition = new Vector3(0, 0, 151);
+        finalPosition = new Vector3(0, 0, 208);
         advairStepID = 1;
         maskLayer = 1 << 8;
     }	

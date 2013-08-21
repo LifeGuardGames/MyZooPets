@@ -46,7 +46,6 @@ public class HintArrow : MonoBehaviour {
         }
         else{
 			if(optionalTextReference != null){
-				Debug.Log("bye");
 				Destroy(optionalTextReference);
 			}
             renderer.enabled = false;

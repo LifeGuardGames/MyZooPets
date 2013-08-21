@@ -8,7 +8,7 @@ using System.Collections;
     when dragged to the pet.
 
     How this happens is, when the user's touch starts on the inhaler, the original body is hidden.
-    At the same time, a GUI texture is drawn under the user's touch position.
+    At the same time, a sprite is drawn under the user's touch position.
 
     If the inhaler is dragged to and released over the pet, it will disappear, and the
     step is completed.
@@ -19,9 +19,9 @@ public class AdvairDrag : MonoBehaviour{
     private GameObject advairSmall; //Reference to the gameobject instantiated
     private GameObject petSprite;
     private const string ADVAIR_SMALL = "advair_small";
-    private int advairStepID = 3; //step id correlating to Inhaler logic
+    private int advairStepID = 4; //step id correlating to Inhaler logic
     private bool firstTouchOnObject = false; //User needs to touch the object first before
-                                            //other touch logic can work
+                                            //touch events can be handled
     void Awake(){
         petSprite = GameObject.Find("PetSprite");
         advairSmall = GameObject.Find("AdvairSmall");
@@ -100,6 +100,8 @@ public class AdvairDrag : MonoBehaviour{
         }
     }
 
+    //Show small inhaler. If small inhaler is not present in the hierarchy
+    //a new one is instantiated else just activate the game object
     private void ShowSmallInhaler(Vector3 pos){
         if(advairSmall == null){
             float posZ = advairSmallPrefab.transform.position.z;
@@ -112,6 +114,7 @@ public class AdvairDrag : MonoBehaviour{
         MoveSmallInhalerToTouchPos(pos);
     }
 
+    //Hide by deactivating the game object
     private void HideSmallInhaler(){
         advairSmall.active = false;
     }

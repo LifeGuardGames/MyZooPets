@@ -98,6 +98,11 @@ public class PlayerRunner : MonoBehaviour
 		TriggerFall();
 	}
 
+    void onPlayerJumpBegin() { }
+    void onPlayerJumpEnd() {}
+    void onPlayerFallBegin() {}
+    void onPlayerFallEnd() {}
+
 	void LayerTriggerCollisionEnter(Collider inCollider) {
         int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
         if (inCollider.gameObject.layer != bottomLayer)

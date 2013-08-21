@@ -28,6 +28,7 @@ public class PlayerRunner : MonoBehaviour
     private Vector3 mLastPosition;
     private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
+	private tk2dSpriteAnimator animator;
 
     public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
@@ -39,6 +40,10 @@ public class PlayerRunner : MonoBehaviour
         mCharacterController = gameObject.GetComponent<CharacterController>();
         if (mCharacterController == null)
             Debug.LogError("Character Controller not attached!");
+
+		animator = gameObject.GetComponent<tk2dSpriteAnimator>();
+		if (animator == null)
+            Debug.LogError("Runner animator not attached!");
 
         // Slightly redundant in some ways, but keeps some logic together.
         Reset();

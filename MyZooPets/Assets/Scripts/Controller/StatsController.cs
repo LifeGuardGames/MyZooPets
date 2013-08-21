@@ -20,7 +20,7 @@ public class StatsController : Singleton<StatsController> {
 	void Start(){
 		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-			if(D.Assert(hudAnimator != null, "No HUDAnimator script attached"));
+			D.Assert(hudAnimator != null, "No HUDAnimator script attached");
 		}
 	}
 	

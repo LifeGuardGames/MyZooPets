@@ -198,8 +198,10 @@ public class PlayerRunner : MonoBehaviour
 	// Checks if we are "falling down" to re-eneable collision.
 	private void UpdateFalling() {
 		if (mbFalling) {
-			if (!mbTriggerColliding || mbGrounded)
+            if (!mbTriggerColliding || mbGrounded) {
 				mbFalling = false;
+                SendMessage("onPlayerFallEnd", SendMessageOptions.DontRequireReceiver);
+            }
 		}
 
 		if (gameObject.layer != 0) {
@@ -232,8 +234,10 @@ public class PlayerRunner : MonoBehaviour
         // Perform the move
 		CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
 		bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
-		if (isGrounded && mbJumping)
-			mbJumping = false;
+        if (isGrounded && mbJumping) {
+            mbJumping = false;
+            SendMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
+        }
 		
 		// Reset movement.
 		if (isGrounded)
@@ -260,7 +264,8 @@ public class PlayerRunner : MonoBehaviour
 		if (mbGrounded && !mbJumping) {
 			mMovementVector.y += JumpSpeed;
 			gameObject.layer = 12;
-			mbJumping = true;
+            mbJumping = true;
+            SendMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
@@ -280,8 +285,9 @@ public class PlayerRunner : MonoBehaviour
             }
 
             if (!bOnLowestLevel) {
-                mbFalling = true;
                 gameObject.layer = 12;
+                mbFalling = true;
+                SendMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
             }
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class LevelComponent : MonoBehaviour
 {
 	private int mNextID = 0;
@@ -83,14 +84,16 @@ public class LevelComponent : MonoBehaviour
 
 		return null;
 	}
-	public void UpdatePointInfo(string inID, PointInfo inPointInfo, int inPointIndex)
+	public void UpdatePointInfo(string inGroupID, PointInfo inPointInfo, int inPointIndex)
 	{
-		PointGroup currentGroup = GetGroup(inID);
+        PointGroup currentGroup = GetGroup(inGroupID);
 		if (currentGroup != null
 			&& inPointIndex >= 0 && inPointIndex < currentGroup.mPoints.Count)
 		{
 			currentGroup.mPoints[inPointIndex] = inPointInfo;
 		}
+		else if (inPointIndex != -1)
+            Debug.LogError("Point for group ID " + inGroupID + " and point index " + inPointIndex + " does not exist!");
 	}
 	public int GetNextPointNum(string inID)
 	{
@@ -104,14 +107,33 @@ public class LevelComponent : MonoBehaviour
     {
         mSpawnedItems.Add(inItemToAdd);
     }
+
+    public void DeletePointGroup(PointGroup inGroupToDelete) {
+        // Remove the group from our list
+        if (mPointGroups.Contains(inGroupToDelete)) {
+            mPointGroups.Remove(inGroupToDelete);
+        }
+    }
+
+    public void DeletePointInfo(PointGroup inParentPointGroup, PointInfo inInfoToDelete) {
+        if (mPointGroups.Contains(inParentPointGroup)
+            && inParentPointGroup.mPoints.Contains(inInfoToDelete))
+        {
+            inParentPointGroup.mPoints.Remove(inInfoToDelete);
+        }
+    }
 }
 
 [System.Serializable]
 public class PointGroup
 {
+    [SerializeField]
 	public string mID;
+    [SerializeField]
 	public List<PointInfo> mPoints;
+    [SerializeField]
 	public List<string> mGroups;
+    [SerializeField]
     public bool[] mPurposes;
 
 	public PointGroup(string inID)
@@ -130,8 +152,11 @@ public class PointGroup
 [System.Serializable]
 public class PointInfo
 {
+    [SerializeField]
 	public Vector3 mPosition;
+    [SerializeField]
     public eLineType mLineType;
+    [SerializeField]
     public Vector3 mLocalPosition;
 
 	public PointInfo()

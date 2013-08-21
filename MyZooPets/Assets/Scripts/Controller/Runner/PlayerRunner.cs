@@ -9,11 +9,12 @@ public class PlayerRunner : MonoBehaviour
 	public float JumpSpeed = 0.5f;
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
+    public int DefaultLayer = 0;
+    public int PassLayer = 30;
 
 	private float mInvinciblePulse = 0f;
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
-
     private float mSpeed;
 	private float mSpeedBoostAmmount = 0f;
     private bool mbInvincible;
@@ -25,7 +26,7 @@ public class PlayerRunner : MonoBehaviour
     private Vector2 mInitialPosition;
     private Vector3 mMovementVector;
     private Vector3 mLastPosition;
-	private CapsuleCollider mCapsuleTrigger;
+    private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
 
     public bool Invincible { get { return mbInvincible; } }
@@ -98,7 +99,9 @@ public class PlayerRunner : MonoBehaviour
 	}
 
 	void LayerTriggerCollisionEnter(Collider inCollider) {
-		mbTriggerColliding = true;
+        int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
+        if (inCollider.gameObject.layer != bottomLayer)
+		    mbTriggerColliding = true;
 	}
 
 	void LayerTriggerCollisionStay(Collider inCollider) {
@@ -132,8 +135,9 @@ public class PlayerRunner : MonoBehaviour
 
         Transform layerObject = transform.FindChild("LayerTrigger");
         if (layerObject != null) {
-            mCapsuleTrigger = layerObject.GetComponent<CapsuleCollider>();
-            Physics.IgnoreCollision(mCharacterController, mCapsuleTrigger);
+            mPlayerTrigger = layerObject.GetComponent<PlayerLayerTrigger>();
+            Collider layerCollider = layerObject.GetComponent<Collider>();
+            Physics.IgnoreCollision(mCharacterController, layerCollider);
         } else
             Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
 
@@ -262,8 +266,23 @@ public class PlayerRunner : MonoBehaviour
 
 	private void TriggerFall() {
 		if (!mbFalling) {
-			mbFalling = true;
-			gameObject.layer = 12;
+            // nop you can't fall through a bottom layered collision.
+            bool bOnLowestLevel = false;
+            int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
+            List<Collider> currentColliders = mPlayerTrigger.CurrentColliders;
+            foreach (Collider currentCollider in currentColliders) {
+                if (currentCollider != null
+                    && currentCollider.gameObject.layer == bottomLayer)
+                {
+                    bOnLowestLevel = true;
+                    break;
+                }
+            }
+
+            if (!bOnLowestLevel) {
+                mbFalling = true;
+                gameObject.layer = 12;
+            }
 		}
 	}
 }

@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerLayerTrigger : MonoBehaviour {
 
+    private List<Collider> mCurrentColliders = new List<Collider>();
+
+    public List<Collider> CurrentColliders { get { return mCurrentColliders; } }
+    
 	// Use this for initialization
 	void Start () {
 	    
@@ -14,6 +19,8 @@ public class PlayerLayerTrigger : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider inCollider) {
+        if (inCollider.GetComponent<RunnerItem>() == null)
+            mCurrentColliders.Add(inCollider);
         transform.parent.SendMessage("LayerTriggerCollisionEnter", inCollider);
     }
 
@@ -22,6 +29,8 @@ public class PlayerLayerTrigger : MonoBehaviour {
     }
 
     void OnTriggerExit(Collider inCollider) {
+        if (inCollider.GetComponent<RunnerItem>() == null)
+            mCurrentColliders.Remove(inCollider);
         transform.parent.SendMessage("LayerTriggerCollisionExit", inCollider);
     }
 }

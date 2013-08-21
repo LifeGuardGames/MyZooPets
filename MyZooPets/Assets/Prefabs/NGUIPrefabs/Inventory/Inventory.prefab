@@ -24,10 +24,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400002}
-  - 114: {fileID: 11400002}
-  - 114: {fileID: 11400028}
-  - 114: {fileID: 11400030}
   - 114: {fileID: 11400032}
+  - 114: {fileID: 11400030}
+  - 114: {fileID: 11400002}
   - 65: {fileID: 6500002}
   m_Layer: 10
   m_Name: Inventory
@@ -189,8 +188,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 80.0000153, y: 80, z: 0}
-  m_Center: {x: -7.62939453e-06, y: 0, z: -.75}
+  m_Size: {x: 80, y: 80, z: 0}
+  m_Center: {x: 0, y: 0, z: -.75}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -347,11 +346,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -5775.40723
+    e03: -5775.20117
     e10: 0
     e11: 400
     e12: 0
-    e13: -10976.8369
+    e13: -10977.043
     e20: 0
     e21: 0
     e22: 400
@@ -467,30 +466,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 100002}
+  target: {fileID: 0}
   functionName: ExpandToggled
   trigger: 0
   includeChildren: 0
---- !u!114 &11400028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e745fe6221e6e4da7b8fcf573260e49c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDebug: 0
-  itemSprite: {fileID: 0}
-  itemAtlas: {fileID: 11400000, guid: 8abc7c4caeaecda4680ebedd42a8405f, type: 2}
-  font: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
-  UIGridObject: {fileID: 100006}
-  UIButtonToggleObject: {fileID: 100010}
-  UIButtonSpriteObject: {fileID: 100000}
-  spritePet: {fileID: 0}
-  speechBubblePrefab: {fileID: 100000, guid: b0d48ee35a9854f41bdde62d951178d9, type: 2}
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -515,6 +494,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 27
   easeShow: 24
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &11400032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -535,11 +520,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -5411.40723
+    e03: -5411.20117
     e10: 0
     e11: 400
     e12: 0
-    e13: -10975.8369
+    e13: -10976.043
     e20: 0
     e21: 0
     e22: 400

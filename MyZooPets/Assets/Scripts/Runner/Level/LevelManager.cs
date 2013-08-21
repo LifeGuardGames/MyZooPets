@@ -19,30 +19,18 @@ public class LevelManager : MonoBehaviour
 	public LevelGroup StartingLevelGroup;
 	public List<LevelGroup> LevelGroups;
 
-	private int mNumLevelSwitches = 0;
-	private float mLevelSwitchPulse = 0f;
-	private Vector3 mLastCenterPosition = Vector3.zero;
-	private LevelGroup mCurrentLevelGroup = null;
+    private int mNumLevelSwitches;
+    private float mLevelSwitchPulse;
+    private Vector3 mLastCenterPosition;
+    private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
 	// Use this for initialization
 	void Start() {
-		mLevelSwitchPulse = LevelGroupSwitchTime;
-		mCurrentLevelGroup = StartingLevelGroup;
-
 		if (LevelGroups.Count <= 0)
 			Debug.LogError("No level groups found.");
-		
-		// @HACK shove 3 in there. @TODO Better way to do it w/ screen size or something..?
-		PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-		PushAndInstantiateRandomComponent();
-		LevelComponent nextLevel;
-		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
-		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
-		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
+
+        Reset();
 	}
 	
 	// Update is called once per frame
@@ -107,7 +95,47 @@ public class LevelManager : MonoBehaviour
 			} else
 				Debug.LogError("No other levels to switch to.");
 		}
-	}
+    }
+
+    public void Reset() {
+        // Reset to default values
+        mLevelSwitchPulse = LevelGroupSwitchTime;
+        mCurrentLevelGroup = StartingLevelGroup;
+        mNumLevelSwitches = 0;
+
+        // Clean out some other values
+        mLastCenterPosition = Vector3.zero;
+
+        // Clear out all components
+        LevelComponent currentComponent;
+        while (mLevelComponentQueue.Count > 0) { 
+            currentComponent = mLevelComponentQueue.Dequeue();
+            GameObject.Destroy(currentComponent.gameObject);
+        }
+
+        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
+        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PushAndInstantiateRandomComponent();
+        LevelComponent nextLevel;
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+    }
+
+    public float GetTooLowYValue(Vector3 inPosition) {
+
+        // Get the lowest component
+        GameObject lowestComponent = GetLowestGameObjectOnField();
+        float yTooLowValue = 0f;
+        if (lowestComponent != null) {
+            yTooLowValue = lowestComponent.collider.bounds.max.y + LevelTooLowYValue;
+        }
+
+        return yTooLowValue;
+    }
 
 	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
 		if (mCurrentLevelGroup.LevelComponents.Count > 0) {
@@ -168,8 +196,10 @@ public class LevelManager : MonoBehaviour
 							// But wait, that's on the prefab. Add in our real world clones position.
 							newCoinPosition += (inLevelComponent.transform.position);
 
-							GameObject newCoin = (GameObject)GameObject.Instantiate(CoinPrefab);
+                            GameObject newCoin = (GameObject)GameObject.Instantiate(CoinPrefab);
 							newCoin.transform.position = newCoinPosition;
+
+                            inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
 
 							interpolationLeftovers = currentInterpolation - currentLineDistance;
 						}
@@ -187,12 +217,10 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
-	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose)
-	{
+	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose) {
 		// Determine a random location of all given points
 		List<Vector3> pointChoices = new List<Vector3>();
-		foreach (PointGroup currentGroup in inLevelComponent.PointGroups)
-		{
+		foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
 			if (currentGroup.mPoints.Count > 0
 				&& currentGroup.mPurposes[(int)inPurpose])
 			{
@@ -200,8 +228,7 @@ public class LevelManager : MonoBehaviour
 			}
 		}
 
-		if (pointChoices.Count > 0)
-		{
+		if (pointChoices.Count > 0) {
 			Vector3 randomPoint = pointChoices[Random.Range(0, pointChoices.Count)];
 			randomPoint += inLevelComponent.transform.position;
 			GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
@@ -211,31 +238,39 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 	
-	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent)
-	{
+	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent) {
 		Vector3 max = inObjectToSearch.transform.position;
 		Vector3 min = inObjectToSearch.transform.position;
 		GetMinMaxExtentsIncludingChildren(inObjectToSearch, inExtent, ref min, ref max);
 		return (max[inExtent] - min[inExtent]);
 	}
 	
-	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent)
-	{
-		if (inObjectToSearch.collider != null)
-		{
+	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent) {
+		if (inObjectToSearch.collider != null) {
 			if (ioMinExtent == null
 				|| inObjectToSearch.collider.bounds.min[inExtent] < ioMinExtent[inExtent])
-				//|| Vector3.Min(inObjectToSearch.collider.bounds.min, ioMinExtent) == ioMinExtent)
 				ioMinExtent = inObjectToSearch.collider.bounds.min;
 			if (ioMaxExtent == null 
 				|| inObjectToSearch.collider.bounds.max[inExtent] > ioMaxExtent[inExtent])
-				//|| Vector3.Min(inObjectToSearch.collider.bounds.max, ioMaxExtent) == ioMaxExtent)
 				ioMaxExtent = inObjectToSearch.collider.bounds.max;
 		}
 		
-		foreach (Transform currentChild in inObjectToSearch.transform)
-		{
+		foreach (Transform currentChild in inObjectToSearch.transform) {
 			GetMinMaxExtentsIncludingChildren(currentChild.gameObject, inExtent, ref ioMinExtent, ref ioMaxExtent);
 		}
 	}
+
+    private GameObject GetLowestGameObjectOnField() {
+        GameObject lowestComponent = null;
+        foreach (LevelComponent currentComponent in mLevelComponentQueue) {
+            foreach (Transform currentLevelPiece in currentComponent.transform) {
+                if (lowestComponent == null
+                    || currentLevelPiece.position.y < lowestComponent.transform.position.y)
+                {
+                    lowestComponent = currentLevelPiece.gameObject;
+                }
+            }
+        }
+        return lowestComponent;
+    }
 }

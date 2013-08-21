@@ -8,10 +8,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400004}
-  - 114: {fileID: 11400002}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400058}
+  - 114: {fileID: 11400000}
   m_Layer: 10
   m_Name: HUD
   m_TagString: Untagged
@@ -461,7 +459,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400056}
   - 114: {fileID: 11400056}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +474,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400058}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TweenGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,7 +488,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.4373932, y: -36.555481, z: 0}
+  m_LocalPosition: {x: -10.4373932, y: -36.555481, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400058}
@@ -924,43 +922,6 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab0e44c82feb7064bbd7ad08994e57fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDebug: 0
-  healthIconAnim: {fileID: 100050}
-  moodIconAnim: {fileID: 100054}
-  starIconAnim: {fileID: 100052}
-  commonAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  tweenParent: {fileID: 100058}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ee5e2bf23c3d403daa88f87aa15dd37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDebug: 0
-  healthSlider: {fileID: 11400028}
-  moodSlider: {fileID: 11400008}
-  levelSlider: {fileID: 11400022}
-  starLabel: {fileID: 11400042}
-  levelLabel: {fileID: 11400034}
-  levelTextLabel: {fileID: 11400040}
-  healthLabel: {fileID: 11400024}
-  moodLabel: {fileID: 11400016}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1082,7 +1043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: .242647052, g: .183215737, b: .119539358, a: 1}
   mPivot: 4
@@ -1176,7 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: .242647052, g: .183215737, b: .119539358, a: 1}
   mPivot: 4
@@ -1293,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -1369,7 +1330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: .242647052, g: .183215752, b: .119539358, a: 1}
   mPivot: 4
@@ -1399,7 +1360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: e41d9b14610d6214db6d2443faff02eb, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -1501,6 +1462,12 @@ MonoBehaviour:
   hideDelay: .100000001
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &11400054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1525,6 +1492,12 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &11400056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1549,6 +1522,12 @@ MonoBehaviour:
   hideDelay: .200000003
   easeHide: 26
   easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &11400058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1569,15 +1548,15 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -4924.46094
+    e03: -4925.46973
     e10: 0
     e11: 400
     e12: 0
-    e13: -11689.2852
+    e13: -11689.4873
     e20: 0
     e21: 0
     e22: 400
-    e23: 0
+    e23: 40
     e30: 0
     e31: 0
     e32: 0

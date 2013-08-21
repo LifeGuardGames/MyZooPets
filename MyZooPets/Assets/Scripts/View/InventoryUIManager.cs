@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class InventoryUIManager : MonoBehaviour {
 
+	public GameObject inventoryPanel;
+
 	private Inventory inventory;
     private ItemLogic itemLogic;
 
@@ -36,7 +38,7 @@ public class InventoryUIManager : MonoBehaviour {
     }
 
     void Start(){
-        collapsedPos = gameObject.GetComponent<TweenPosition>().to.x;
+        collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
 
         //Spawn items in the inventory for the first time
@@ -71,8 +73,7 @@ public class InventoryUIManager : MonoBehaviour {
             inventory.UseItem(id); //notify inventory logic that this item is being used
 
             if(inventory.InventoryArray[id] > 0){ //Redraw count label if item not 0
-                e.ParentTransform.Find("label").GetComponent<UILabel>().text =
-                    inventory.InventoryArray[id].ToString();
+                e.ParentTransform.Find("label").GetComponent<UILabel>().text = inventory.InventoryArray[id].ToString();
             }else{ //destroy object if it has been used up
                 Destroy(e.ParentTransform.gameObject);
                 UpdateBarPosition();
@@ -156,12 +157,12 @@ public class InventoryUIManager : MonoBehaviour {
 
     public void UpdateBarPosition(){
         UIGridObject.GetComponent<UIGrid>().Reposition();
-        if(gameObject.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
-            gameObject.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
+        if(inventoryPanel.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
+            inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - inventory.InventoryCount * 90;
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open
                 Hashtable optional = new Hashtable();
                 optional.Add("ease", LeanTweenType.easeOutBounce);
-                LeanTween.moveLocalX(gameObject, collapsedPos - inventory.InventoryCount * 90, 0.4f, optional);
+                LeanTween.moveLocalX(inventoryPanel, collapsedPos - inventory.InventoryCount * 90, 0.4f, optional);
             }
         }
     }
@@ -170,13 +171,14 @@ public class InventoryUIManager : MonoBehaviour {
     public void ExpandToggled(){
         // Local aux to keep track of toggles
         isGuiShowing = !isGuiShowing;
-
-        // Change the sprite on the button
-        // UIButtonToggleObject.GetComponent<UIImageButton>().normalSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        // UIButtonToggleObject.GetComponent<UIImageButton>().disabledSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        // UIButtonToggleObject.GetComponent<UIImageButton>().hoverSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
-        // UIButtonToggleObject.GetComponent<UIImageButton>().pressedSprite = isGuiShowing ? "InventoryContract" : "InventoryExpand";
         uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
     }
 
+	public void ShowPanel(){
+		inventoryPanel.GetComponent<MoveTweenToggle>().Show();
+	}
+
+	public void HidePanel(){
+		inventoryPanel.GetComponent<MoveTweenToggle>().Hide();
+	}
 }

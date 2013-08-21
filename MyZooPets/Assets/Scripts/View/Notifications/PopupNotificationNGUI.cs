@@ -64,13 +64,13 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback
 	public void UnlockNotificationQueue(){
-		Debug.Log("SENDING UNLOCK");
+//		Debug.Log("SENDING UNLOCK");
 		NotificationUIManager.Instance.CheckNextInQueue();
 	}
 
     // Hide the popup panel
     protected void Hide(){
-		Debug.Log("Moved out! gonna destroy");
+//		Debug.Log("Moved out! gonna destroy");
         if (HideImmediately){
 			TryHideDemuxThenToggle(0f);
             Destroy(gameObject, 1.0f);

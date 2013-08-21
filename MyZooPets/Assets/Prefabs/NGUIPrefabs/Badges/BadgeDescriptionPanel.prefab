@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 10
-  m_Name: Sprite (badgePanel)
+  m_Name: badgePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,6 +56,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400006}
+  - 114: {fileID: 11400016}
   - 114: {fileID: 11400014}
   m_Layer: 10
   m_Name: BadgeDescriptionPanel
@@ -92,8 +93,6 @@ GameObject:
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400006}
-  - 114: {fileID: 11400016}
-  - 114: {fileID: 11400018}
   - 114: {fileID: 11400020}
   m_Layer: 10
   m_Name: BackButton
@@ -219,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: 5e682c92c1a43a34483d81ab8ccebd0b, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -249,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: aa69e9be0fd96bc46977af434c8f4e57, type: 2}
+  mMat: {fileID: 2100000, guid: 8abe4de487329e64d8be6f26be26c1e5, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: .984178483, b: .426470578, a: 1}
   mPivot: 4
@@ -297,7 +296,7 @@ MonoBehaviour:
   tweenTarget: {fileID: 0}
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
-  duration: .100000001
+  duration: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -361,36 +360,50 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 4
   easeShow: 4
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
+  m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: CloseDescription
-  trigger: 0
-  includeChildren: 0
---- !u!114 &11400018
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: CloseDescription
-  trigger: 0
-  includeChildren: 0
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 400
+    e01: 0
+    e02: 0
+    e03: -5134.20166
+    e10: 0
+    e11: 400
+    e12: 0
+    e13: -11326.748
+    e20: 0
+    e21: 0
+    e22: 400
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1

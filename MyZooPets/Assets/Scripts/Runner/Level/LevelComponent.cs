@@ -39,7 +39,8 @@ public class LevelComponent : MonoBehaviour
     {
         foreach (RunnerItem currentItem in mSpawnedItems)
         {
-            GameObject.Destroy(currentItem);
+            if (currentItem != null)
+                GameObject.Destroy(currentItem.gameObject);
         }
     }
 

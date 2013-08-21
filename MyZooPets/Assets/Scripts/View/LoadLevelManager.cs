@@ -3,9 +3,9 @@ using System.Collections;
 
 public class LoadLevelManager : MonoBehaviour {
     // private GameObject calendar;
-    private GameObject hud;
-    private GameObject navigation;
-    private GameObject inventory;
+    private GameObject hudPanel;
+    private GameObject navigationPanel;
+    private GameObject inventoryPanel;
 
     /*
         Use IsPaused instead of Time.timeScale to pause all critical parts of the game,
@@ -24,15 +24,15 @@ public class LoadLevelManager : MonoBehaviour {
     void Awake(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
-                hud = GameObject.Find(ANCHOR_TOP + "HUD");
-                navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
-                inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
+                hudPanel = GameObject.Find(ANCHOR_TOP + "HUDPanel");
+                navigationPanel = GameObject.Find(ANCHOR_BOTTOMLEFT + "NavigationPanel");
+                inventoryPanel = GameObject.Find(ANCHOR_BOTTOMRIGHT + "InventoryPanel");
 
             break;
             case "Yard":
-                hud = GameObject.Find(ANCHOR_TOP + "HUD");
-                navigation = GameObject.Find(ANCHOR_BOTTOMLEFT + "Navigation");
-                inventory = GameObject.Find(ANCHOR_BOTTOMRIGHT + "Inventory");
+                hudPanel = GameObject.Find(ANCHOR_TOP + "HUDPanel");
+                navigationPanel = GameObject.Find(ANCHOR_BOTTOMLEFT + "NavigationPanel");
+                inventoryPanel = GameObject.Find(ANCHOR_BOTTOMRIGHT + "InventoryPanel");
 
             break;
             case "InhalerGamePet":
@@ -61,14 +61,14 @@ public class LoadLevelManager : MonoBehaviour {
     private void InitializeDataForUI(){
         switch(Application.loadedLevelName){
             case "NewBedRoom":
-                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-                navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-                inventory.GetComponent<MoveTweenToggle>().Show();
+                hudPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                navigationPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                inventoryPanel.GetComponent<MoveTweenToggle>().Show();
             break;
             case "Yard":
-                hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-                navigation.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-                inventory.GetComponent<MoveTweenToggle>().Show();
+                hudPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                navigationPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+                inventoryPanel.GetComponent<MoveTweenToggle>().Show();
             break;
             case "InhalerGamePet":
                 // hud.GetComponent<MoveTweenToggleDemultiplexer>().Show();

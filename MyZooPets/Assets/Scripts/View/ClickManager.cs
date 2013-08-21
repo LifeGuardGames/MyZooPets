@@ -4,7 +4,7 @@ using System;
 
 /// <summary>
 /// Click manager.
-/// All the classes that need a click to enter a certain mode will be handled here (ie. diary, trophy, inhaler game)
+/// All the classes that need a click to enter a certain mode will be handled here (ie. diary, badge, inhaler game)
 ///
 ///
 /// NOTE: When entering a mode, lock click and mode, when done transitioning, unlock click
@@ -17,21 +17,27 @@ public class ClickManager : MonoBehaviour {
 	// All the classes that need a click input go here
 
 	//===========Objects and components in NGUI==========
-	public GameObject UIHudObject;
+	public GameObject hudUIManagerObject;
+	private HUDUIManager hudUIManager;
 
-	public GameObject UICalendarObject;
+	public GameObject calendarUIManagerObject;
 	private CalendarUIManager calendarUIManager;
 
-	public GameObject UIStoreObject;
+	public GameObject storeUIManagerObject;
 	private StoreUIManager storeUIManager;
 
-	public GameObject UINoteObject;
+	public GameObject noteUIManagerObject;
 	private NoteUIManager noteUIManager;
 
-	public GameObject UIInventoryObject;
-	public GameObject UINavigationObject;
-	public GameObject UIBadgeObject; 
-	private BadgeGUI badgeGUI;
+	public GameObject inventoryUIManagerObject;
+	private InventoryUIManager inventoryUIManager;
+
+	public GameObject navigationUIManagerObject;
+	private NavigationUIManager navigationUIManager;
+
+	public GameObject badgeUIManagerObject;
+	private BadgeUIManager badgeUIManager;
+
 	public GameObject UILoadScreen;
 	//=================================================
 
@@ -60,14 +66,21 @@ public class ClickManager : MonoBehaviour {
 		isModeLocked = false;
 
 		// Linking script references
-		if(UICalendarObject != null)
-			calendarUIManager = UICalendarObject.GetComponent<CalendarUIManager>();
-		if(UINoteObject != null)
-			noteUIManager = UINoteObject.GetComponent<NoteUIManager>();
-		if(UIStoreObject != null)
-			storeUIManager = UIStoreObject.GetComponent<StoreUIManager>();
-		if(UIBadgeObject != null)
-			badgeGUI = UIBadgeObject.GetComponent<BadgeGUI>();
+		if(hudUIManagerObject != null)
+			hudUIManager = hudUIManagerObject.GetComponent<HUDUIManager>();
+		if(calendarUIManagerObject != null)
+			calendarUIManager = calendarUIManagerObject.GetComponent<CalendarUIManager>();
+		if(noteUIManagerObject != null)
+			noteUIManager = noteUIManagerObject.GetComponent<NoteUIManager>();
+		if(storeUIManagerObject != null)
+			storeUIManager = storeUIManagerObject.GetComponent<StoreUIManager>();
+		if(navigationUIManagerObject != null)
+			navigationUIManager = navigationUIManagerObject.GetComponent<NavigationUIManager>();
+		if(badgeUIManagerObject != null)
+			badgeUIManager = badgeUIManagerObject.GetComponent<BadgeUIManager>();
+		if(inventoryUIManagerObject != null)
+			inventoryUIManager = inventoryUIManagerObject.GetComponent<InventoryUIManager>();
+
 		if(cameraMoveObject != null)
 			cameraMove = cameraMoveObject.GetComponent<CameraMove>();
     }
@@ -78,7 +91,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed += OnNoteClosed;
 		StoreUIManager.OnStoreClosed += OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed += OnCalendarClosed;
-		BadgeGUI.OnBadgeBoardClosed += OnBadgeBoardClosed;
+		BadgeUIManager.OnBadgeBoardClosed += OnBadgeBoardClosed;
     }
 
 	//Clean all event listeners and static references
@@ -86,7 +99,7 @@ public class ClickManager : MonoBehaviour {
 		NoteUIManager.OnNoteClosed -= OnNoteClosed;
 		StoreUIManager.OnStoreClosed -= OnStoreClosed;
 		CalendarUIManager.OnCalendarClosed -= OnCalendarClosed;
-		BadgeGUI.OnBadgeBoardClosed -= OnBadgeBoardClosed;
+		BadgeUIManager.OnBadgeBoardClosed -= OnBadgeBoardClosed;
 		UIRoot = null;
 	}
 
@@ -141,8 +154,8 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIManager.HidePanel();
+			inventoryUIManager.HidePanel();
 
 			GA.API.Design.NewEvent("UserTouch:Note");
 		}
@@ -152,8 +165,8 @@ public class ClickManager : MonoBehaviour {
 		cameraMove.ZoomOutMove();
 
 		//Show other UI object
-		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIManager.ShowPanel();
+		inventoryUIManager.ShowPanel();
 	}
 	//==============================
 
@@ -166,7 +179,7 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+			navigationUIManager.HidePanel();
 
 			GA.API.Design.NewEvent("UserTouch:Store");
 		}
@@ -177,7 +190,7 @@ public class ClickManager : MonoBehaviour {
 		SetActiveGUIModeLock(false);
 
 		//Show other UI object
-		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		navigationUIManager.ShowPanel();
 	}
 	//==================================
 
@@ -190,8 +203,8 @@ public class ClickManager : MonoBehaviour {
 			SetActiveGUIModeLock(true);
 
 			//Hide other UI objects
-			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIManager.HidePanel();
+			inventoryUIManager.HidePanel();
 
 			GA.API.Design.NewEvent("UserTouch:Calendar");
 		}
@@ -201,35 +214,37 @@ public class ClickManager : MonoBehaviour {
 		ReleaseModeLock();
 		SetActiveGUIModeLock(false);
 		//Show other UI object
-		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIManager.ShowPanel();
+		inventoryUIManager.ShowPanel();
 	}
 	//==========================
 
 	//=================Badge Board=====================
 	private void OnTapBadgeBoard(){
 		if (CanRespondToTap()){
-			badgeGUI.BadgeBoardClicked();
+			badgeUIManager.BadgeBoardClicked();
 			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
 			ClickLock();
 			ModeLock();
 
 			//Hide other UI objects
-			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIManager.HidePanel();
+			hudUIManager.HidePanel();
+			inventoryUIManager.HidePanel();
 
 			GA.API.Design.NewEvent("UserTouch:BadgeBoard");
 		}
 	}
 	private void OnBadgeBoardClosed(object senders, EventArgs e){
-		ClickLock();
+		ReleaseClickLock();
+		ReleaseModeLock();
+
 		cameraMove.ZoomOutMove();
 
 		//Show other UI Objects
-		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-		UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
+		navigationUIManager.ShowPanel();
+		hudUIManager.ShowPanel();
+		inventoryUIManager.ShowPanel();
 	}
 	//=========================================
 
@@ -243,9 +258,9 @@ public class ClickManager : MonoBehaviour {
 			ModeLock();
 
 			//Hide other UI objects
-			UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-			UIInventoryObject.GetComponent<MoveTweenToggle>().Hide();
+			navigationUIManager.HidePanel();
+			hudUIManager.HidePanel();
+			inventoryUIManager.HidePanel();
 
 			GA.API.Design.NewEvent("UserTouch:Dojo");
 
@@ -259,9 +274,9 @@ public class ClickManager : MonoBehaviour {
 	// 	cameraMove.ZoomOutMove();
 
 	// 	//Show other UI objects
-	// 	UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-	// 	UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
-	// 	UIInventoryObject.GetComponent<MoveTweenToggle>().Show();
+	// 	navigationUIManager.ShowPanel();
+	// 	hudUIManager.ShowPanel();
+	// 	inventoryUIManager.ShowPanel();
 	// }
 	//=======================
 
@@ -316,8 +331,8 @@ public class ClickManager : MonoBehaviour {
 		ModeLock();
 
 		//Hide other UI Objects
-		UINavigationObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-		UIHudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		navigationUIManager.HidePanel();
+		hudUIManager.HidePanel();
 	}
 
 	public void OnTapTeddyInhaler(){

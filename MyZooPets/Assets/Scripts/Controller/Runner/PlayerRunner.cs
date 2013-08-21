@@ -28,6 +28,7 @@ public class PlayerRunner : MonoBehaviour
     private Vector3 mLastPosition;
     private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
+	private RunnerAnimationController animator;
 
     public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
@@ -39,6 +40,10 @@ public class PlayerRunner : MonoBehaviour
         mCharacterController = gameObject.GetComponent<CharacterController>();
         if (mCharacterController == null)
             Debug.LogError("Character Controller not attached!");
+
+		animator = gameObject.GetComponent<RunnerAnimationController>();
+		if (animator == null)
+            Debug.LogError("Runner animator not attached!");
 
         // Slightly redundant in some ways, but keeps some logic together.
         Reset();
@@ -205,7 +210,7 @@ public class PlayerRunner : MonoBehaviour
 		if (mbFalling) {
             if (!mbTriggerColliding || mbGrounded) {
 				mbFalling = false;
-                SendMessage("onPlayerFallEnd", SendMessageOptions.DontRequireReceiver);
+				animator.onPlayerFallEnd();
             }
 		}
 
@@ -241,7 +246,7 @@ public class PlayerRunner : MonoBehaviour
 		bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
         if (isGrounded && mbJumping) {
             mbJumping = false;
-            SendMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
+            animator.onPlayerJumpEnd();
         }
 		
 		// Reset movement.
@@ -270,7 +275,7 @@ public class PlayerRunner : MonoBehaviour
 			mMovementVector.y += JumpSpeed;
 			gameObject.layer = 12;
             mbJumping = true;
-            SendMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
+            animator.onPlayerJumpBegin();
 		}
 	}
 
@@ -292,7 +297,7 @@ public class PlayerRunner : MonoBehaviour
             if (!bOnLowestLevel) {
                 gameObject.layer = 12;
                 mbFalling = true;
-                SendMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
+                animator.onPlayerFallBegin();
             }
 		}
 	}

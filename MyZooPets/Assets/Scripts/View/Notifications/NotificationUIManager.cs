@@ -222,7 +222,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
-		oneButtonMessage.Button1Text = "Yes";
+		oneButtonMessage.Button1Text = "Ok";
 //		oneButtonMessage.Display();
 		AddToQueue(oneButtonMessage.gameObject);
 	}

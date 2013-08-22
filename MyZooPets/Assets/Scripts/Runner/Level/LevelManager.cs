@@ -5,13 +5,10 @@ using System.Collections.Generic;
 public class LevelManager : MonoBehaviour
 {
     public int BottomLayer = 31;
-	public float CoinSpawnChance = 60.0f;
-	public float CoinSpawnDistance = 1.0f;
-	public float ItemSpawnChance = 10.0f;
-	public float HazardSpawnChance = 10.0f;
 	public float LevelTooLowYValue = -50.0f;
 	public float LevelGroupSwitchTime = 40.0f;
-    public GameObject CoinPrefab;
+    public float CoinSpawnDistance = 1f;
+    public CoinItem CoinPrefab;
     public LevelGroup StartingLevelGroup;
     public List<LevelGroup> LevelGroups;
     public List<RunnerItem> ItemPrefabs;
@@ -172,66 +169,90 @@ public class LevelManager : MonoBehaviour
 	}
 
 	private void PopulateLevelComponent(LevelComponent inLevelComponent) {
-		// Roll for some values
-		bool bSpawnCoins = Random.Range(0.0f, 100.0f) <= CoinSpawnChance;
-		bool bSpawnItems = Random.Range(0.0f, 100.0f) <= ItemSpawnChance;
-		bool bSpawnHazards = Random.Range(0.0f, 100.0f) <= HazardSpawnChance;
+        // See what groups we could spawn.
+        List<Bundle> possibleSpawns = new List<Bundle>();
+        foreach (Bundle currentBundle in inLevelComponent.Bundles) {
+            float spawnChance = currentBundle.mSpawnChance;
+            // Roll the dice
+            bool bSpawnBundle = (Random.value < (spawnChance / 100f));
+            if (bSpawnBundle)
+                possibleSpawns.Add(currentBundle);
+        }
 
-		// Go through every group, and if we are set to spawn stuff, spawn stuff!
-		if (bSpawnCoins) {
-			foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
-				if (currentGroup.mPurposes[(int)eSelectionTypes.Coins]) {
-					float interpolationLeftovers = 0;
-					for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count - 1; pointIndex++) {
-						Vector3 currentLineBegin = currentGroup.mPoints[pointIndex].mPosition;
-						Vector3 currentLineEnd = currentGroup.mPoints[pointIndex + 1].mPosition;
-						float currentLineDistance = Vector3.Distance(currentLineBegin, currentLineEnd);
+        if (possibleSpawns.Count > 0) {
+            // Choose a random bundle
+            Bundle chosenBundle = possibleSpawns[Random.Range(0, possibleSpawns.Count)];
 
-						// Interpolate along our current line
-						for (float currentInterpolation = interpolationLeftovers; currentInterpolation < currentLineDistance; currentInterpolation += CoinSpawnDistance) {
-							// Find our new spawn point
-							Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
-							// But wait, that's on the prefab. Add in our real world clones position.
-							newCoinPosition += (inLevelComponent.transform.position);
+            //@OPTIMIZE cache this out in a dictionary when we generate the group. prefab. somehow. Then just pull from the dictionary.
+            List<PointGroup> bundlePointGroups = new List<PointGroup>();
+		    foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
+                if (currentGroup.mBundleID == chosenBundle.mBundleID)
+                    bundlePointGroups.Add(currentGroup);
+            }
 
-                            GameObject newCoin = (GameObject)GameObject.Instantiate(CoinPrefab);
-							newCoin.transform.position = newCoinPosition;
+            // Phew. Now spawn all those itams! 
+            foreach (PointGroup spawningGroup in bundlePointGroups) {
+                SpawnItemsInLevel(inLevelComponent, spawningGroup);
+            }
+        }
 
-                            inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
-
-							interpolationLeftovers = currentInterpolation - currentLineDistance;
-						}
-					}
-				}
-			}
-		} else if (bSpawnItems && ItemPrefabs.Count > 0) {
-			// Determine which item to spawn
-			GameObject chosenPrefab = ItemPrefabs[Random.Range(0, ItemPrefabs.Count)].gameObject;
-			SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Items);
-		} else if (bSpawnHazards && HazardPrefabs.Count > 0) {
-			// Determine which hazard to spawn
-			GameObject chosenPrefab = HazardPrefabs[Random.Range(0, HazardPrefabs.Count)].gameObject;
-			SpawnObjectAtRandomStartPointInLevel(inLevelComponent, chosenPrefab, eSelectionTypes.Hazards);
-		}
 	}
 
-	private void SpawnObjectAtRandomStartPointInLevel(LevelComponent inLevelComponent, GameObject inObjectToSpawn, eSelectionTypes inPurpose) {
-		// Determine a random location of all given points
-		List<Vector3> pointChoices = new List<Vector3>();
-		foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
-			if (currentGroup.mPoints.Count > 0
-				&& currentGroup.mPurposes[(int)inPurpose])
-			{
-				pointChoices.Add(currentGroup.mPoints[0].mPosition);
-			}
-		}
+    private void SpawnItemsInLevel(LevelComponent inLevelComponent, PointGroup inGroup) {
+        switch (inGroup.mSpawnType) {
+            case eSpawnType.Coins: {
+                CoinItem newCoin = CoinPrefab;
+                SpawnCoinStrip(inLevelComponent, inGroup, newCoin);
+                break;
+            }
 
-		if (pointChoices.Count > 0) {
-			Vector3 randomPoint = pointChoices[Random.Range(0, pointChoices.Count)];
+            case eSpawnType.Hazards: {
+                HazardItem newHazard = (HazardItem)HazardPrefabs[Random.Range(0, HazardPrefabs.Count)];
+                SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newHazard);
+                break;
+            }
+
+            case eSpawnType.Items: {
+                RunnerItem newItem = HazardPrefabs[Random.Range(0, HazardPrefabs.Count)];
+                SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newItem);
+                break;
+            }
+        }
+    }
+
+    private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup, CoinItem inCoinPrefab) {
+        float interpolationLeftovers = 0;
+	    for (int pointIndex = 0; pointIndex < inSpawnGroup.mPoints.Count - 1; pointIndex++) {
+		    Vector3 currentLineBegin = inSpawnGroup.mPoints[pointIndex].mPosition;
+		    Vector3 currentLineEnd = inSpawnGroup.mPoints[pointIndex + 1].mPosition;
+		    float currentLineDistance = Vector3.Distance(currentLineBegin, currentLineEnd);
+
+		    // Interpolate along our current line
+		    for (float currentInterpolation = interpolationLeftovers; currentInterpolation < currentLineDistance; currentInterpolation += CoinSpawnDistance) {
+			    // Find our new spawn point
+			    Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
+			    // But wait, that's on the prefab. Add in our real world clones position.
+			    newCoinPosition += (inLevelComponent.transform.position);
+
+                GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
+			    newCoin.transform.position = newCoinPosition;
+
+                inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
+
+			    interpolationLeftovers = currentInterpolation - currentLineDistance;
+		    }
+	    }
+    }
+
+	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn) {
+		// Determine a random location of all given points
+        if (inSpawnGroup.mPoints.Count > 0) {
+            Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
 			randomPoint += inLevelComponent.transform.position;
-			GameObject spawnedItem = (GameObject)GameObject.Instantiate(inObjectToSpawn);
+            GameObject spawnedItem = (GameObject)GameObject.Instantiate(inItemToSpawn);
 			spawnedItem.transform.position = randomPoint;
 
+            // Spawn it at that point
 			inLevelComponent.AddLevelItem(spawnedItem.GetComponent<RunnerItem>());
 		}
 	}

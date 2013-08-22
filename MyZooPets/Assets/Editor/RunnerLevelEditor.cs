@@ -15,7 +15,12 @@ public class RunnerLevelEditor : EditorWindow
     private PointInfo mLastSelectedPointInfo = null;
     private int mSelectedPointIndex = -1;
     private GameObject mLastSelectedObject = null;
+    private int mLastSelectedBundleIndex = -1;
+    private Bundle mLastSelectedBundle = null;
 
+    private int mNewBundleID = 0;
+    private float mNewSpawnChance = 0f;
+    
 	[MenuItem("Window/Runner Level Editor")]
 	public static void ShowWindow()
 	{
@@ -118,27 +123,33 @@ public class RunnerLevelEditor : EditorWindow
             GUILayout.BeginArea(new Rect(0, 40, 100, 50));
 			// ID
 			GUILayout.Label("ID");
-			string idText = "Enter ID Here";
-			if (mCurrentSelectedGroup != null)
-				idText = mCurrentSelectedGroup.mID;
-			GUILayout.TextArea(idText);
+            if (mCurrentSelectedGroup != null) {
+                mCurrentSelectedGroup.mID = GUILayout.TextArea(mCurrentSelectedGroup.mID);
+            }
             GUILayout.EndArea();
 
-			// Groups
-	        bool[] mSelectedGroupToggles = new bool[3] { false, false, false };
-
-            if (mCurrentSelectedGroup != null && mCurrentSelectedGroup.mPurposes.Length > 0)
+            if (mCurrentSelectedGroup != null)
             {
                 // Purpose Area
-                GUILayout.BeginArea(new Rect(300, 40, 200, 100));
-                EditorGUILayout.BeginToggleGroup("Purpose", true);
-                for (int selectedPurposeIndex = 0; selectedPurposeIndex < (int)eSelectionTypes.Max; selectedPurposeIndex++)
+                GUILayout.BeginArea(new Rect(300, 0, 200, 75));
+                GUILayout.BeginVertical();
+                string[] selectionTypes = new string[(int)eSpawnType.Max];
+                for (int selectedPurposeIndex = 0; selectedPurposeIndex < (int)eSpawnType.Max; selectedPurposeIndex++)
                 {
-                    mCurrentSelectedGroup.mPurposes[selectedPurposeIndex] = EditorGUILayout.Toggle(
-                        ((eSelectionTypes)selectedPurposeIndex).ToString(), 
-                        mCurrentSelectedGroup.mPurposes[selectedPurposeIndex] );
+                    selectionTypes[selectedPurposeIndex] = ((eSpawnType)selectedPurposeIndex).ToString();
                 }
-                EditorGUILayout.EndToggleGroup();
+                GUILayout.Label("Spawn Type");
+                mCurrentSelectedGroup.mSpawnType = (eSpawnType)GUILayout.SelectionGrid((int)mCurrentSelectedGroup.mSpawnType, selectionTypes, 2);
+                GUILayout.EndVertical();
+                GUILayout.EndArea();
+
+
+                // Groups
+                GUILayout.BeginArea(new Rect(300, 75, 200, 75));
+                GUILayout.BeginVertical();
+                GUILayout.Label("Bundle ID");
+                mCurrentSelectedGroup.mBundleID = (int)GUILayout.HorizontalSlider(mCurrentSelectedGroup.mBundleID, 0, 100);
+                GUILayout.EndVertical();
                 GUILayout.EndArea();
             }
 
@@ -203,20 +214,16 @@ public class RunnerLevelEditor : EditorWindow
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Label("ID");
 			GUILayout.Label("#pts");
-			GUILayout.Label("Groups");
-			GUILayout.Label("Purpose");
+			GUILayout.Label("Bundle");
+			GUILayout.Label("SpawnType");
 			EditorGUILayout.EndHorizontal();
 
 			List<string> gridItems = new List<string>();
 			List<string> ids = new List<string>();
 			foreach (PointGroup currentPointGroup in selectedGroups) {
-                string purposes = "";
-                for (int purposeIndex = 0; purposeIndex < (int)eSelectionTypes.Max; purposeIndex++) {
-                    if (currentPointGroup.mPurposes[purposeIndex])
-                        purposes += ((eSelectionTypes)purposeIndex).ToString();
-                }
+                string purposes = currentPointGroup.mSpawnType.ToString();
 				string newItem = currentPointGroup.mID + " | " + currentPointGroup.mPoints.Count.ToString() + " | "
-                    + string.Join(",", currentPointGroup.mGroups.ToArray()) + " | " + purposes;
+                    + currentPointGroup.mBundleID + " | " + purposes;
 				gridItems.Add(newItem);
 				ids.Add(currentPointGroup.mID);
 			}
@@ -249,7 +256,56 @@ public class RunnerLevelEditor : EditorWindow
             GUI.enabled = (mLastSelectedPointInfo != null);
             if (GUILayout.Button("Delete Selected Point"))
                 DeletePointInfo(mLastChosenLevelComponent, mCurrentSelectedGroup, mLastSelectedPointInfo);
-            GUI.enabled = false;
+            GUI.enabled = true;
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
+
+            // Bundle Area
+            GUILayout.BeginArea(new Rect(0, 390, 300, 100));
+            mSelectedGroupsScrollPosition = GUILayout.BeginScrollView(
+                mSelectedGroupsScrollPosition, false, true);
+            GUILayout.Label("Bundles");
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("BundleID");
+            GUILayout.Label("Spawn Chance");
+            EditorGUILayout.EndHorizontal();
+
+            List<Bundle> currentBundles = mLastChosenLevelComponent.Bundles;
+            List<string> bundleGridItems = new List<string>();
+            foreach (Bundle currentBundle in currentBundles) {
+                string newItem = currentBundle.mBundleID + " | " + currentBundle.mSpawnChance;
+                bundleGridItems.Add(newItem);
+            }
+
+            mLastSelectedBundleIndex = GUILayout.SelectionGrid(mLastSelectedBundleIndex, bundleGridItems.ToArray(), 4);
+            if (mLastSelectedBundleIndex >= 0 && mLastSelectedBundleIndex < currentBundles.Count)
+                mLastSelectedBundle = currentBundles[mLastSelectedBundleIndex];
+            else
+                mLastSelectedBundle = null;
+
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
+
+            // Bundle buttons
+            // Add
+            GUILayout.BeginArea(new Rect(300, 390, 200, 100));
+            GUILayout.BeginVertical();
+            GUILayout.Label("ID " + mNewBundleID);
+            mNewBundleID = (int)GUILayout.HorizontalSlider(mNewBundleID, 0, 100);
+            GUILayout.Label("Spawn Chance " + mNewSpawnChance);
+            mNewSpawnChance = GUILayout.HorizontalSlider(mNewSpawnChance, 0f, 100f);
+            if (GUILayout.Button("Add/Update Bundle")) {
+                mLastChosenLevelComponent.SetBundleChance(mNewBundleID, mNewSpawnChance);
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndArea();
+
+            // Delete
+            GUILayout.BeginArea(new Rect(0, 490, 300, 50));
+            GUILayout.BeginHorizontal();
+            GUI.enabled = (mLastSelectedBundle != null);
+            if (GUILayout.Button("Delete Selected Bundle"))
+                mLastChosenLevelComponent.RemoveBundle(mLastSelectedBundle.mBundleID);
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
 

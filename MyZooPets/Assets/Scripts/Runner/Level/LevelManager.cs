@@ -4,20 +4,18 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
-	public GameObject CoinPrefab;
-	public List<RunnerItem> ItemPrefabs;
-	public List<RunnerItem> HazardPrefabs;
-
+    public int BottomLayer = 31;
 	public float CoinSpawnChance = 60.0f;
 	public float CoinSpawnDistance = 1.0f;
 	public float ItemSpawnChance = 10.0f;
 	public float HazardSpawnChance = 10.0f;
-
 	public float LevelTooLowYValue = -50.0f;
 	public float LevelGroupSwitchTime = 40.0f;
-
-	public LevelGroup StartingLevelGroup;
-	public List<LevelGroup> LevelGroups;
+    public GameObject CoinPrefab;
+    public LevelGroup StartingLevelGroup;
+    public List<LevelGroup> LevelGroups;
+    public List<RunnerItem> ItemPrefabs;
+    public List<RunnerItem> HazardPrefabs;
 
     private int mNumLevelSwitches;
     private float mLevelSwitchPulse;

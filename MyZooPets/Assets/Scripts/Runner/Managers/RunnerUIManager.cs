@@ -29,7 +29,7 @@ public class RunnerUIManager : MonoBehaviour {
         float distance = runnerGameManager.PlayerRunner.transform.position.z;
 
         FinalScoreLabel.text = "Score: " + numScore;
-        FinalDistanceLabel.text = "Distance: " + distance;
+        FinalDistanceLabel.text = "Distance: " + distance.ToString("F1");
         FinalCoinsLabel.text = "Coins: " + numCoins;
     }
 

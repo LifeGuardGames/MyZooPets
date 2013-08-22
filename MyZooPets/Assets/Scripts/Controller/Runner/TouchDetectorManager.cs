@@ -57,31 +57,14 @@ public class TouchDetectorManager : MonoBehaviour {
                     break;
                 }
 
-
-                /*
-            case TouchPhase.Ended: {
-                if (mbSwipingStraight) {
-                    // How angled was the swipe compared to what we tolerate?
-                    Vector2 swipeVector = firstTouch.position - mStartTouchPosition;
-                    float swipeAngle = Vector2.Angle(Vector2.up, swipeVector);
-                    if (swipeAngle < MaxSwipeAngleDegrees) {
+                case TouchPhase.Ended: {
+                    if (!mbSwipingStraight) {
                         foreach (MonoBehaviour currentScript in ListeningScripts) {
-                            currentScript.SendMessage("onSwipeUp");
+                            currentScript.SendMessage("onSwipeUp", SendMessageOptions.DontRequireReceiver);
                         }
-                        break;
                     }
-
-                    swipeAngle = Vector2.Angle(-Vector2.up, swipeVector);
-                    if (swipeAngle < MaxSwipeAngleDegrees) {
-                        foreach (MonoBehaviour currentScript in ListeningScripts) {
-                            currentScript.SendMessage("onSwipeDown");
-                        }
-                        break;
-                    }
+                    break;
                 }
-                break;
-            }
-                 * */
             }
 		}
 	

@@ -157,7 +157,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: -.707106888, y: 0, z: 0, w: .707106769}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: .400000006, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -480,7 +480,7 @@ ParticleSystem:
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 10
+      scalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -495,7 +495,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .699999988
+          value: .800000012
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -503,7 +503,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 3
     startSpeed:
-      scalar: .600000024
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -518,7 +518,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .666666627
+          value: .5
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -677,7 +677,7 @@ ParticleSystem:
       minMaxState: 0
     gravityModifier: 0
     inheritVelocity: 0
-    maxNumParticles: 1
+    maxNumParticles: 3
   ShapeModule:
     serializedVersion: 2
     enabled: 1
@@ -695,7 +695,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 10
+      scalar: .5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -737,19 +737,24 @@ ParticleSystem:
     time3: 0
     m_BurstCount: 0
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: 1
+          value: .870370388
           inSlope: 0
           outSlope: 0
           tangentMode: 0
+        - time: .623651087
+          value: .554820657
+          inSlope: -1.22591853
+          outSlope: -1.22591853
+          tangentMode: 0
         - time: 1
-          value: 1
+          value: .259259254
           inSlope: 0
           outSlope: 0
           tangentMode: 0

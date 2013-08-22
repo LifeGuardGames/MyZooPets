@@ -22,6 +22,7 @@ public class PlayerLayerTrigger : MonoBehaviour {
         if (inCollider.GetComponent<RunnerItem>() == null)
             mCurrentColliders.Add(inCollider);
         transform.parent.SendMessage("LayerTriggerCollisionEnter", inCollider);
+        Debug.Log("Collide: " + inCollider.name);
     }
 
     void OnTriggerStay(Collider inCollider) {
@@ -32,5 +33,6 @@ public class PlayerLayerTrigger : MonoBehaviour {
         if (inCollider.GetComponent<RunnerItem>() == null)
             mCurrentColliders.Remove(inCollider);
         transform.parent.SendMessage("LayerTriggerCollisionExit", inCollider);
+        Debug.Log("Collide End: " + inCollider.name);
     }
 }

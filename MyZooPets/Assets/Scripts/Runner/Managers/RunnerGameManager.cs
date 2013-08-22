@@ -95,6 +95,7 @@ public class RunnerGameManager : MonoBehaviour {
         mScoreManager.Reset();
         mLevelManager.Reset();
         mMegaHazard.Reset();
+        mParallaxingBackgroundManager.Reset();
     }
 
     public void ActivateGameOver() {

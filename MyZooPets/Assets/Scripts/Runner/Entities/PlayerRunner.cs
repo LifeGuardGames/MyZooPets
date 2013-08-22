@@ -28,7 +28,6 @@ public class PlayerRunner : MonoBehaviour
     private Vector3 mLastPosition;
     private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
-	private RunnerAnimationController animator;
 
     public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
@@ -41,10 +40,6 @@ public class PlayerRunner : MonoBehaviour
         if (mCharacterController == null)
             Debug.LogError("Character Controller not attached!");
 
-		animator = gameObject.GetComponent<RunnerAnimationController>();
-		if (animator == null)
-            Debug.LogError("Runner animator not attached!");
-
         // Slightly redundant in some ways, but keeps some logic together.
         Reset();
 	}
@@ -53,30 +48,7 @@ public class PlayerRunner : MonoBehaviour
 	void Update() {
 		UpdateInput();
 
-		if (mbInvincible) {
-			mInvinciblePulse -= Time.deltaTime;
-			if (mInvinciblePulse <= 0f) {
-				// Ready to uninvincible, except, we need to make sure we don't do it
-				//while the character is dying...
-                if (mbGrounded)
-                    mbInvincible = false;
-                else {
-				    // Raycast around up. If there is something to latch on to, go to it!
-                    RaycastHit hitInfo;
-                    bool bSomethingAbove = Physics.Raycast(transform.position, Vector3.up, out hitInfo);
-                    if (bSomethingAbove) {
-                        // Latch onto it
-                        Vector3 newPosition = hitInfo.transform.position;
-                        newPosition.y += mCharacterController.height / 2;
-                        transform.position = newPosition;
-                    } else {
-                        bool bSomethingBelow = Physics.Raycast(transform.position, Vector3.down, out hitInfo);
-                        if (bSomethingBelow)
-                            mbInvincible = false;
-                    }
-                }
-			}
-		}
+        UpdateInvincible();
 	}
 	
 	void FixedUpdate() {
@@ -103,7 +75,7 @@ public class PlayerRunner : MonoBehaviour
 		TriggerFall();
 	}
 
-    void onPlayerJumpBegin() { }
+    void onPlayerJumpBegin() {}
     void onPlayerJumpEnd() {}
     void onPlayerFallBegin() {}
     void onPlayerFallEnd() {}
@@ -153,6 +125,117 @@ public class PlayerRunner : MonoBehaviour
 
     }
 
+    private void UpdateInvincible() {
+        if (mbInvincible) {
+            mInvinciblePulse -= Time.deltaTime;
+            if (mInvinciblePulse <= 0f) {
+                // Ready to uninvincible, except, we need to make sure we don't do it
+                //while the character is dying...
+                if (mbGrounded)
+                    mbInvincible = false;
+                else {
+                    // Raycast around up. If there is something to latch on to, go to it!
+                    RaycastHit hitInfo;
+                    bool bSomethingAbove = Physics.Raycast(transform.position, Vector3.up, out hitInfo);
+                    if (bSomethingAbove) {
+                        // Latch onto it
+                        Vector3 newPosition = hitInfo.transform.position;
+                        newPosition.y += mCharacterController.height / 2;
+                        transform.position = newPosition;
+
+                        // Reset movement vector
+                        mMovementVector = Vector3.zero;
+                    } else {
+                        bool bSomethingBelow = Physics.Raycast(transform.position, Vector3.down, out hitInfo);
+                        if (bSomethingBelow)
+                            mbInvincible = false;
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateSpeed() {
+        mSpeedIncreasePulse -= Time.deltaTime;
+        if (mSpeedIncreasePulse <= 0) {
+            mSpeed += SpeedIncrease;
+            mSpeedIncreasePulse = SpeedIncreaseTime;
+        }
+
+        if (mSpeedBoostPulse > 0f) {
+            mSpeedBoostPulse -= Time.deltaTime;
+            if (mSpeedBoostPulse <= 0f) {
+                mSpeedBoostPulse = 0f;
+                mSpeedBoostAmmount = 0f;
+            }
+        }
+    }
+
+    // Checks if we are "falling down" to re-eneable collision.
+    private void UpdateFalling() {
+        if (mbFalling) {
+            if (!mbTriggerColliding || mbGrounded) {
+                mbFalling = false;
+                BroadcastMessage("onPlayerFallEnd", SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
+        if (gameObject.layer != 0) {
+            if (mbJumping) {
+                // If we begin falling downward, reset the layer
+                Vector3 currentMovementDirection = mLastPosition - transform.position;
+                if (currentMovementDirection.y > 0) {
+                    gameObject.layer = 0;
+                }
+            } else if (!mbFalling) {
+                gameObject.layer = 0;
+            }
+        }
+
+    }
+
+    private void UpdateMovement() {
+        // These are constant speeds, not forces. It's weird I know.
+        mMovementVector.z = mSpeed + mSpeedBoostAmmount;
+
+        // Add in Gravity force.
+        mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
+
+        // Vertical drag
+        mMovementVector += (Vector3.down * rigidbody.drag * Time.deltaTime);
+
+        if (mCharacterController == null)
+            Debug.LogError("No Character Controller exists!");
+
+        // Perform the move
+        CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
+        bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
+        if (isGrounded && mbJumping) {
+            mbJumping = false;
+            BroadcastMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
+        }
+
+        // Reset movement.
+        if (isGrounded)
+            mMovementVector = new Vector3();
+
+        mbGrounded = isGrounded;
+
+        Vector3 position = transform.position;
+        position.x = mInitialPosition.x;
+        transform.position = position;
+    }
+
+    private void UpdateInput() {
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            // Add in jump, since we are grounded, if its pressed.
+            TriggerJump();
+        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            // Add in jump, since we are grounded, if its pressed.
+            TriggerFall();
+        }
+    }
+
     public void TriggerInvincibility(float inDuration) {
         mInvinciblePulse = inDuration;
         mbInvincible = true;
@@ -189,98 +272,17 @@ public class PlayerRunner : MonoBehaviour
         }
 	}
 
-	private void UpdateSpeed() {
-		mSpeedIncreasePulse -= Time.deltaTime;
-		if (mSpeedIncreasePulse <= 0) {
-            mSpeed += SpeedIncrease;
-			mSpeedIncreasePulse = SpeedIncreaseTime;
-		}
-
-		if (mSpeedBoostPulse > 0f) {
-			mSpeedBoostPulse -= Time.deltaTime;
-			if (mSpeedBoostPulse <= 0f) {
-				mSpeedBoostPulse = 0f;
-				mSpeedBoostAmmount = 0f;
-			}
-		}
-	}
-
-	// Checks if we are "falling down" to re-eneable collision.
-	private void UpdateFalling() {
-		if (mbFalling) {
-            if (!mbTriggerColliding || mbGrounded) {
-				mbFalling = false;
-				animator.onPlayerFallEnd();
-            }
-		}
-
-		if (gameObject.layer != 0) {
-			if (mbJumping) {
-				// If we begin falling downward, reset the layer
-				Vector3 currentMovementDirection = mLastPosition - transform.position;
-				if (currentMovementDirection.y > 0) {
-					gameObject.layer = 0;
-				}
-			} else if (!mbFalling) {
-				gameObject.layer = 0;
-			}
-		}
-
-	}
-
-	private void UpdateMovement() {
-		// These are constant speeds, not forces. It's weird I know.
-        mMovementVector.z = mSpeed + mSpeedBoostAmmount;
-
-		// Add in Gravity force.
-		mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
-
-        // Vertical drag
-        mMovementVector += (Vector3.down * rigidbody.drag * Time.deltaTime);
-
-		if (mCharacterController == null)
-			Debug.LogError("No Character Controller exists!");
-
-        // Perform the move
-		CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
-		bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
-        if (isGrounded && mbJumping) {
-            mbJumping = false;
-            animator.onPlayerJumpEnd();
-        }
-		
-		// Reset movement.
-		if (isGrounded)
-			mMovementVector = new Vector3();
-
-		mbGrounded = isGrounded;
-
-        Vector3 position = transform.position;
-        position.x = mInitialPosition.x;
-        transform.position = position;
-	}
-
-	private void UpdateInput() {
-		if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-			// Add in jump, since we are grounded, if its pressed.
-			TriggerJump();
-		} else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-			// Add in jump, since we are grounded, if its pressed.
-			TriggerFall();
-		}
-	}
-
 	private void TriggerJump() {
 		if (mbGrounded && !mbJumping) {
 			mMovementVector.y += JumpSpeed;
 			gameObject.layer = 12;
             mbJumping = true;
-            animator.onPlayerJumpBegin();
+            BroadcastMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
 	private void TriggerFall() {
-		if (!mbFalling) {
+		if (!mbJumping && !mbFalling) {
             // nop you can't fall through a bottom layered collision.
             bool bOnLowestLevel = false;
             int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
@@ -297,7 +299,7 @@ public class PlayerRunner : MonoBehaviour
             if (!bOnLowestLevel) {
                 gameObject.layer = 12;
                 mbFalling = true;
-                animator.onPlayerFallBegin();
+                BroadcastMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
             }
 		}
 	}

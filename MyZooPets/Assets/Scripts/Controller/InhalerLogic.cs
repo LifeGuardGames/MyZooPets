@@ -81,7 +81,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             case "InhalerGameTeddy":
                 canPlayGame = true;
 
-                int randomId = UnityEngine.Random.Range(0, 2);
+                // int randomId = UnityEngine.Random.Range(0, 2);
+                int randomId = 1;
                 switch(randomId){
                     case 0: currentInhalerType = InhalerType.Advair; break;
                     case 1: currentInhalerType = InhalerType.Rescue; break;

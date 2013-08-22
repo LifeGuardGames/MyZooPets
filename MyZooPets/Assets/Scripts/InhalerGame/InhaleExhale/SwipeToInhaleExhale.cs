@@ -13,9 +13,8 @@ public class SwipeToInhaleExhale : MonoBehaviour {
     private bool firstTouchOnObject = false; //User needs to touch the object first before
                                             //touch events can be handled    
 
-    protected virtual void Awake(){}
     // Use this for initialization
-    void Start () {
+    protected virtual void Start () {
         InhalerLogic.OnNextStep += CheckAndEnable;
         Disable();
     }

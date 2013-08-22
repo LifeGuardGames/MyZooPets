@@ -81,43 +81,43 @@ public class FirstTimeNGUI : MonoBehaviour {
     }
 
     // Callback for closing edit panel
-    private void HelperFinishEditPet(){
+    public void HelperFinishEditPet(){
         DataManager.Instance.PetName = petName;
         DataManager.Instance.PetColor = petColor;
         DataManager.Instance.TurnFirstTimeOff();
     }
 
-    private void ButtonClicked_Blue(){
+    public void ButtonClicked_Blue(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggBlueChoose");
             petColor = "whiteBlue";
         }
     }
-    private void ButtonClicked_Green(){
+    public void ButtonClicked_Green(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggGreenChoose");
             petColor = "whiteGreen";
         }
     }
-    private void ButtonClicked_Yellow(){
+    public void ButtonClicked_Yellow(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggYellowChoose");
             petColor = "whiteYellow";
         }
     }
-    private void ButtonClicked_Red(){
+    public void ButtonClicked_Red(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggRedChoose");
             petColor = "whiteRed";
         }
     }
-    private void ButtonClicked_Purple(){
+    public void ButtonClicked_Purple(){
         if (!finishClicked){
             eggSpriteScript.SetSprite("eggPurpleChoose");
             petColor = "whitePurple";
         }
     }
-    private void ButtonClicked_Finish(){
+    public void ButtonClicked_Finish(){
         if (!finishClicked){
             finishClicked = true;
             petName = nameField.text;

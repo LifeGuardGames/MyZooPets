@@ -38,6 +38,16 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         get{return isPracticeGame;}
     }
 
+    public bool IsFirstTimeAdvair{
+        get{return DataManager.Instance.Inhaler.FirstTimeAdvair;}
+        set{DataManager.Instance.Inhaler.FirstTimeAdvair = value;}
+    }
+
+    public bool IsFirstTimeRescue{
+        get{return DataManager.Instance.Inhaler.FirstTimeRescue;}
+        set{DataManager.Instance.Inhaler.FirstTimeRescue = value;}
+    }
+
     //True: the step that the user is currently on is correct, False: wrong step
     public bool IsCurrentStepCorrect(int step){
         bool retVal = step == currentStep;
@@ -57,6 +67,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         GA.API.Design.NewEvent("InhalerGame:" + Enum.GetName(typeof(InhalerType), currentInhalerType) + 
             ":" + currentStep + ":Correct");
         currentStep++;
+        print(currentStep);
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
                 OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame()){ //Fire GameOver event if game is done
@@ -78,7 +89,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
                 isPracticeGame = true;
             break;
             case "InhalerGamePet":
-                currentInhalerType = InhalerType.Advair;
+                currentInhalerType = InhalerType.Rescue;
                 isPracticeGame = false;
             break;
         }
@@ -98,38 +109,4 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         }
         return retVal;
     }
-
-    // //Initialize game data and reset counters if it's a new day
-    // public void Init(bool isPractice){
-    //     canPlayGame = false;
-    //     isPracticeGame = isPractice;
-    //     if(isPracticeGame){ //practice inhaler game (teddy bear)
-            
-    //     }else{ //regular inhaler game
-            
-    //         DateTime now = DateTime.Now;
-    //         TimeSpan sinceLastPlayed = now.Date.Subtract(DataManager.Instance.Inhaler.LastInhalerPlayTime.Date);
-    //         DataManager.Instance.Inhaler.LastInhalerPlayTime = now;
-
-    //         if(sinceLastPlayed.Days > 0){ //reset if new day
-    //             DataManager.Instance.Inhaler.PlayedInMorning = false;
-    //             DataManager.Instance.Inhaler.PlayedInAfternoon = false;
-    //         }
-    //         if(now.Hour < 12){ //morning
-    //             if(!DataManager.Instance.Inhaler.PlayedInMorning){ //can only play if not played in morning yet
-    //                 canPlayGame = true;
-    //                 DataManager.Instance.Inhaler.PlayedInMorning = true;
-    //             }
-    //         }else{ //afternoon
-    //             if(!DataManager.Instance.Inhaler.PlayedInAfternoon){ //can only play if not played in afternoon yet
-    //                 canPlayGame = true;
-    //                 DataManager.Instance.Inhaler.PlayedInAfternoon = true;
-    //             }
-    //         }
-    //         currentInhalerType = InhalerType.Advair;
-    //     }
-        
-    //     //sets step to 1
-    //     currentStep = 1;
-    // }
 }

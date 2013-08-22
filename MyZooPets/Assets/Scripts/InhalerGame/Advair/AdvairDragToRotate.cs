@@ -6,13 +6,11 @@ using System.Collections;
     when finger drags from start to end position
 */
 public class AdvairDragToRotate : MonoBehaviour {
-    public GameObject hintArrow;
     private Vector3 centerWorlPos; //Position of the center of the Inhaler game object
     private Vector2 centerPos;
     private Vector2 startTouchPos; //Position of touch in TouchPhase.Began
     private Vector2 startVector;
     private bool completelyOpened; //True: transform reaches its final position
-
 
     //Variables that need to be defined by child class
     protected Vector3 finalPosition; //the final position that the transform can be rotated to
@@ -32,7 +30,7 @@ public class AdvairDragToRotate : MonoBehaviour {
             switch(touch.phase){
                 case TouchPhase.Began:
                     //Condition that terminate touch
-                    if(!IsTouchingObject(touch)) return;
+                    if(!InhalerUtility.IsTouchingObject(touch, gameObject, maskLayer)) return;
 
                     //Store the vector of the first touch
                     startTouchPos = touch.position;
@@ -42,13 +40,12 @@ public class AdvairDragToRotate : MonoBehaviour {
                     //Calculate the vector of the current touch position
                     Vector2 currentTouchPos = touch.position;
                     Vector2 currentVector = currentTouchPos - centerPos;
-
                     //Get the angle between the start vector and the current vector
                     float signedAngle = ReturnSignedAngleBetweenVectors(startVector, currentVector);
                     
                     //Conditions that terminate the touch
                     //only want object to rotate right while finger is touching object
-                    if(signedAngle >= 0 || !IsTouchingObject(touch)) return; 
+                    if(signedAngle >= 0 || !InhalerUtility.IsTouchingObject(touch, gameObject, maskLayer)) return; 
                     transform.localEulerAngles = new Vector3(0, 0, signedAngle); //Set the transform to the angle
                     CheckIfCompletelyOpened();
                 break;
@@ -57,21 +54,6 @@ public class AdvairDragToRotate : MonoBehaviour {
                 break;
             }
         }
-    }
-
-    //Cast a ray to test if the touch position is ontop of the object
-    private bool IsTouchingObject(Touch touch){
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
-        RaycastHit hit ;
-
-        bool retVal = false;
-        if (Physics.Raycast (ray, out hit, maskLayer)) {
-            if(hit.collider.gameObject == this.gameObject){
-                print("touch");
-                retVal = true;
-            }
-        }
-        return retVal;
     }
 
     private float ReturnSignedAngleBetweenVectors(Vector2 startVector, Vector2 currentVector)
@@ -89,14 +71,6 @@ public class AdvairDragToRotate : MonoBehaviour {
                 InhalerLogic.Instance.NextStep();
                 collider.enabled = false;
             }
-            RemoveArrowAnimation();
-        }
-    }
-
-    //Remove the hint arrow animation
-    private void RemoveArrowAnimation(){
-        if(hintArrow != null){
-            Destroy(hintArrow);
         }
     }
 

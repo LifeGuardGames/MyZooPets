@@ -58,7 +58,7 @@ public class StoreUIManager : MonoBehaviour {
 	//It creates a icon for the item and move it to Inventory
 	//TODO Scales are a little mess up
 	public void OnBuyAnimation(GameObject sprite){
-		Vector3 origin = sprite.transform.position;
+		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string id = sprite.transform.parent.name;
 		Vector3 itemPosition = origin;
 
@@ -79,20 +79,20 @@ public class StoreUIManager : MonoBehaviour {
 
 		//Change the 3 V3 to where icon should move
 		Vector3[] path = new Vector3[4];
-		path[0] = origin ;
-		path[1] = origin + new Vector3(0,1.5f,0);
+		path[0] = origin;
+		path[1] = origin + new Vector3(0f, 1.5f, -0.1f);
 		path[2] = origin;
 		path[3] = itemPosition;
 
 		Hashtable optional = new Hashtable();
-		optional.Add("ease",LeanTweenType.easeOutQuad);
-		optional.Add ("onComplete","DestroyAllSprites");
-		GameObject animationSprite = NGUITools.AddChild(GameObject.Find("Anchor-Center/Store")/*sprite.transform.parent.gameObject*/,ItemSpritePrefab);
-		optional.Add("onCompleteTarget",gameObject);
+		optional.Add("ease", LeanTweenType.easeOutQuad);
+		optional.Add ("onComplete", "DestroyAllSprites");
+		GameObject animationSprite = NGUITools.AddChild(storePanel, ItemSpritePrefab);
+		optional.Add("onCompleteTarget", gameObject);
 		animationSprite.transform.position = origin;
-		animationSprite.transform.localScale = new Vector3(100,100,0);
+		animationSprite.transform.localScale = new Vector3(130, 130, 1);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-		LeanTween.move(animationSprite,path,speed,optional);
+		LeanTween.move(animationSprite, path, speed, optional);
 		toDestroy.Add(animationSprite);
 	}
 
@@ -129,7 +129,7 @@ public class StoreUIManager : MonoBehaviour {
 			for(int i = 0;i<itemlogic.FoodList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.FoodList[i].ToString();
-				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
+				//item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelBlue";
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].cost.ToString();
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].name;
@@ -143,7 +143,7 @@ public class StoreUIManager : MonoBehaviour {
 			for(int i = 0;i<itemlogic.ItemList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.ItemList[i].ToString();
-				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
+				//item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelRed";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].cost.ToString();
@@ -157,7 +157,7 @@ public class StoreUIManager : MonoBehaviour {
 			for(int i = 0;i<itemlogic.DecoList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.DecoList[i].ToString();
-				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
+				//item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelPurple";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].cost.ToString();
@@ -171,7 +171,7 @@ public class StoreUIManager : MonoBehaviour {
 			for(int i = 0;i<itemlogic.InhalerList.Count;i++){
 				GameObject item = NGUITools.AddChild(grid, ItemPrefab);
 				item.name = itemlogic.InhalerList[i].ToString();
-				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
+				//item.transform.FindChild("ItemBackground").GetComponent<UISprite>().spriteName = "panelYellow";
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].cost.ToString();

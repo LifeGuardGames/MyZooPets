@@ -10,11 +10,10 @@ GameObject:
   - 4: {fileID: 400000}
   - 23: {fileID: 2300004}
   - 33: {fileID: 3300004}
-  - 114: {fileID: 11400010}
   - 114: {fileID: 11400028}
   - 114: {fileID: 11400002}
   m_Layer: 8
-  m_Name: AdvairBodyHint
+  m_Name: AdvairBodyHintArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,16 +29,15 @@ GameObject:
   - 4: {fileID: 400002}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400026}
   - 114: {fileID: 11400012}
   m_Layer: 0
-  m_Name: AdvairSwitchHint
+  m_Name: AdvairSwitchHintArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,10 +48,10 @@ GameObject:
   - 4: {fileID: 400006}
   - 23: {fileID: 2300006}
   - 33: {fileID: 3300006}
+  - 64: {fileID: 6400000}
   - 114: {fileID: 11400018}
   - 114: {fileID: 11400016}
-  - 114: {fileID: 11400014}
-  - 64: {fileID: 6400000}
+  - 114: {fileID: 11400004}
   m_Layer: 8
   m_Name: AdvairBody
   m_TagString: Untagged
@@ -74,8 +72,8 @@ GameObject:
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400006}
   - 82: {fileID: 8200000}
-  - 114: {fileID: 11400004}
   - 65: {fileID: 6500002}
+  - 114: {fileID: 11400000}
   m_Layer: 9
   m_Name: AdvairSwitch
   m_TagString: Untagged
@@ -111,7 +109,7 @@ GameObject:
   - 33: {fileID: 3300008}
   - 23: {fileID: 2300008}
   - 114: {fileID: 11400022}
-  - 65: {fileID: 6500000}
+  - 64: {fileID: 6400002}
   m_Layer: 0
   m_Name: AdvairCap
   m_TagString: Untagged
@@ -328,18 +326,19 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 0}
---- !u!65 &6500000
-BoxCollider:
+--- !u!64 &6400002
+MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 19.78125, y: 15.281251, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_SmoothSphereCollisions: 0
+  m_Convex: 0
+  m_Mesh: {fileID: 0}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -360,10 +359,10 @@ BoxCollider:
   m_GameObject: {fileID: 100008}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 10, z: 5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 20, y: 20, z: 5}
+  m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -427,15 +426,17 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
+  m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specificInhalerTypeString: advair
+  inhalerType: 0
+  startHidden: 1
   showOnStep: 2
-  optionalTextPrefab: {fileID: 0}
+  hintArrow: {fileID: 100002}
+  hintMessage: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -460,14 +461,17 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
+  m_GameObject: {fileID: 100004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f8bd55cab93c7d41863c5001c7bcde7, type: 3}
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expand: 0
-  forArrow: 0
+  inhalerType: 0
+  startHidden: 0
+  showOnStep: 1
+  hintArrow: {fileID: 100000}
+  hintMessage: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -479,7 +483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d017dfabc0e4a40eabec1286623e058c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hintArrow: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -527,20 +530,6 @@ MonoBehaviour:
   - {x: -.243749976, y: .865625024, z: -.100000001}
   - {x: -.243749976, y: .865625024, z: .100000001}
   meshColliderMesh: {fileID: 0}
---- !u!114 &11400010
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  specificInhalerTypeString: advair
-  showOnStep: 1
-  optionalTextPrefab: {fileID: 0}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -560,19 +549,6 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f8bd55cab93c7d41863c5001c7bcde7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  expand: 0
-  forArrow: 0
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -584,7 +560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1851a06b1845483e9c1340eebd11114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hintArrow: {fileID: 0}
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -671,7 +646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e739fb179444a4391ee90fc88ca6dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  advairSmallPrefab: {fileID: 100000, guid: 33ffb05854f3744f8b44af2bd40add97, type: 2}
+  smallInhalerPrefab: {fileID: 100000, guid: 33ffb05854f3744f8b44af2bd40add97, type: 2}
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -687,35 +662,37 @@ MonoBehaviour:
   _color: {r: 1, g: 1, b: 1, a: 1}
   _scale: {x: 15, y: 15, z: 15}
   _spriteId: 1
-  boxCollider: {fileID: 6500000}
-  meshCollider: {fileID: 0}
+  boxCollider: {fileID: 0}
+  meshCollider: {fileID: 6400002}
   meshColliderPositions:
-  - {x: -.0312501192, y: 7.00000048, z: -1}
-  - {x: -.0312501192, y: 7.00000048, z: 1}
-  - {x: 3.99999976, y: 5.90625048, z: -1}
-  - {x: 3.99999976, y: 5.90625048, z: 1}
-  - {x: 6.6875, y: 3.09375048, z: -1}
-  - {x: 6.6875, y: 3.09375048, z: 1}
-  - {x: 7.5, y: -.374999642, z: -1}
-  - {x: 7.5, y: -.374999642, z: 1}
-  - {x: 6.90625, y: -3.68749976, z: -1}
-  - {x: 6.90625, y: -3.68749976, z: 1}
-  - {x: 5.0625, y: -6.09375, z: -1}
-  - {x: 5.0625, y: -6.09375, z: 1}
-  - {x: .874999762, y: -8.0625, z: -1}
-  - {x: .874999762, y: -8.0625, z: 1}
-  - {x: -2.25000024, y: -7.8125, z: -1}
-  - {x: -2.25000024, y: -7.8125, z: 1}
-  - {x: -4.78125, y: -6.5625, z: -1}
-  - {x: -4.78125, y: -6.5625, z: 1}
-  - {x: -6.96875, y: -3.84374976, z: -1}
-  - {x: -6.96875, y: -3.84374976, z: 1}
-  - {x: -7.62500048, y: -.187500119, z: -1}
-  - {x: -7.62500048, y: -.187500119, z: 1}
-  - {x: -6.5625, y: 3.46875072, z: -1}
-  - {x: -6.5625, y: 3.46875072, z: 1}
-  - {x: -4.09375095, y: 5.9375, z: -1}
-  - {x: -4.09375095, y: 5.9375, z: 1}
+  - {x: 3.91406274, y: 5.76562452, z: -1.5}
+  - {x: 3.91406274, y: 5.76562452, z: 1.5}
+  - {x: 1.40625, y: 7.35937452, z: -1.5}
+  - {x: 1.40625, y: 7.35937452, z: 1.5}
+  - {x: -1.9921875, y: 7.3359375, z: -1.5}
+  - {x: -1.9921875, y: 7.3359375, z: 1.5}
+  - {x: -3.82031274, y: 5.60156202, z: -1.5}
+  - {x: -3.82031274, y: 5.60156202, z: 1.5}
+  - {x: -5.69531298, y: 3.09374928, z: -1.5}
+  - {x: -5.69531298, y: 3.09374928, z: 1.5}
+  - {x: -9.796875, y: 1.10156178, z: -1.5}
+  - {x: -9.796875, y: 1.10156178, z: 1.5}
+  - {x: -6.9375, y: -4.66406298, z: -1.5}
+  - {x: -6.9375, y: -4.66406298, z: 1.5}
+  - {x: -3.21093774, y: -6.93750048, z: -1.5}
+  - {x: -3.21093774, y: -6.93750048, z: 1.5}
+  - {x: 1.03125036, y: -7.33593845, z: -1.5}
+  - {x: 1.03125036, y: -7.33593845, z: 1.5}
+  - {x: 4.734375, y: -6.25781298, z: -1.5}
+  - {x: 4.734375, y: -6.25781298, z: 1.5}
+  - {x: 7.50000095, y: -3.82031274, z: -1.5}
+  - {x: 7.50000095, y: -3.82031274, z: 1.5}
+  - {x: 8.78906345, y: -2.08593798, z: -1.5}
+  - {x: 8.78906345, y: -2.08593798, z: 1.5}
+  - {x: 9.6796875, y: 1.49999952, z: -1.5}
+  - {x: 9.6796875, y: 1.49999952, z: 1.5}
+  - {x: 6.7265625, y: 2.74218678, z: -1.5}
+  - {x: 6.7265625, y: 2.74218678, z: 1.5}
   meshColliderMesh: {fileID: 0}
 --- !u!114 &11400026
 MonoBehaviour:
@@ -730,7 +707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   library: {fileID: 11400000, guid: d5bcbb583736cf84aa11ab7d48623a9b, type: 2}
   defaultClipId: 4
-  playAutomatically: 1
+  playAutomatically: 0
   _sprite: {fileID: 0}
 --- !u!114 &11400028
 MonoBehaviour:

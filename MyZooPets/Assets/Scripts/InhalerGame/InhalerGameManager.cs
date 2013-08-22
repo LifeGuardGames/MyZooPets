@@ -4,28 +4,21 @@ using System.Collections;
 
 public class InhalerGameManager : Singleton<InhalerGameManager>{
 
-    public GameObject advairPrefab;
+    public GameObject advairPrefab; 
     public GameObject rescuePrefab;
-    public GameObject rescueShakerPrefab; 	// Arrows that indicate that the rescue inhaler has to be shaken
-    public GameObject inhaleExhalePrefab; 	// Arrows that indicate whether to breathe in or out
-    public GameObject smallRescuePrefab; 	// Rescue inhaler that appears in front of the pet's mouth
-
-    private GameObject advair;
-    private GameObject rescue;
-    private GameObject rescueShaker; 		// Arrows that indicate that the rescue inhaler has to be shaken
-    private GameObject inhaleExhale; 		// Arrows that indicate whether to breathe in or out
-    private GameObject smallRescue; 		// Rescue inhaler that appears in front of the pet's mouth
-
-	public GameObject textPrefabShake;		// Attach text to the hints that popup
-	public GameObject textPrefabSwipe;
-	public GameObject textPrefabDrag;
+    public GameObject inhale; //Game object that contains hint controller for inhale step
+    public GameObject exhale; //contains hint controller for exhale step
+    public GameObject drag; //contains hint controller for drag step
+    private GameObject advair; //Game object that contains all the parts for advair
+    private GameObject rescue; //Game object that contains all the parts for rescue inhaler	
 
     private int practiceGamePointIncrement = 50;
     private int practiceGameStarIncrement = 50;
     private int realGamePointIncrement = 250;
     private int realGameStarIncrement = 0;
+
     private bool showHint = false; //display swipe hints for the inhaler
-    private bool runShowHintTimer = true;
+    private bool runShowHintTimer = true; //True: start running hint timer
     private float timer = 0; //hint timer
     private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
     private bool introShown = false; //has the intro text been shown
@@ -72,23 +65,23 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
         InhalerGameNGUI.Instance.HideHUD();
         InhalerLogic.Instance.ResetGame();
 
-        if (!introShown){ // Shows "Use The Inhaler" message if playing the first round of the game
+        if(!introShown){ // Shows "Use The Inhaler" message if playing the first round of the game
             InhalerGameNGUI.Instance.RestartProgressBar();
             InhalerGameNGUI.Instance.ShowIntro();
             introShown = true;
 
             // Calculate how long to wait before creating the inhalers.
             float delay;
-            if (InhalerLogic.Instance.IsPracticeGame){
+            if(InhalerLogic.Instance.IsPracticeGame){
                 delay = InhalerGameNGUI.practiceMessageDuration + InhalerGameNGUI.introMessageDuration;
             }
-            else {
+            else{
                 delay = InhalerGameNGUI.introMessageDuration;
             }
 
             Invoke("SetUpScene", delay);
         }
-        else {
+        else{
             SetUpScene();
         }
     }
@@ -99,55 +92,52 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
         InhalerGameNGUI.Instance.ShowQuitButton();
     }
 
-    // This creates both the advair and rescue inhalers. Hiding of the unnecessary ones is done in SetUpInhalerGame().
+    // This destories and creates an advair or a rescue inhaler.
     private void DestroyAndRecreatePrefabs(){
-        // delete existing gameobjects from the last round if there are any
-        Destroy(advair);
-        // Destroy(rescue);
-        // Destroy(smallRescue);
-        // Destroy(rescueShaker);
-        // Destroy(inhaleExhale);
-
-        // instantiate new prefabs and store references to new gameobjects
-        advair = Instantiate(advairPrefab) as GameObject;
-        advair.name = advairPrefab.name;
-        // smallRescue = Instantiate(smallRescuePrefab) as GameObject;
-        // smallRescue.name = smallRescuePrefab.name;
-
-        // rescue = Instantiate(rescuePrefab) as GameObject;
-        // rescue.name = rescuePrefab.name;
-        // rescue.GetComponent<RescueBody>().miniature = smallRescue;
-
-        // rescueShaker = Instantiate(rescueShakerPrefab) as GameObject;
-        // rescueShaker.name = rescueShakerPrefab.name;
-        // rescueShaker.GetComponent<RescueShaker>().rescueBody = rescue.GetComponent<RescueBody>();
-
-        // inhaleExhale = Instantiate(inhaleExhalePrefab) as GameObject;
-        // inhaleExhale.name = inhaleExhalePrefab.name;
+        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
+            // delete existing gameobjects from the last round if there are any
+            Destroy(advair);
+            // instantiate new prefabs and store references to new gameobjects
+            advair = Instantiate(advairPrefab) as GameObject;
+            advair.name = advairPrefab.name;
+        }else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
+            Destroy(rescue);
+            rescue = Instantiate(rescuePrefab) as GameObject;
+            rescue.name = rescuePrefab.name;
+        }
     }
 
     /*
-        Disable (hide) the game components that aren't required for this round.
-        Eg. Hide all rescue inhaler components if InhalerLogic.CurrentInhalerType is InhalerType.Advair.
+        Determine if HintTimer should be started right away
+        Make sure shared actions like inhale, exhale, drag have the correct stepID
     */
     private void SetUpInhalerGame(){
-        // Debug.Log("Current inhaler type is -> " + InhalerLogic.CurrentInhalerType);
-        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
-            // rescue.SetActive(false);
-            // rescueShaker.SetActive(false);
+        HintController inhaleHintController = inhale.GetComponent<HintController>();
+        HintController exhaleHintController = exhale.GetComponent<HintController>();
+        HintController dragHintController = drag.GetComponent<HintController>();
+
+        if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
+            inhaleHintController.inhalerType = InhalerType.Rescue;
+            inhaleHintController.showOnStep = 6;
+            exhaleHintController.inhalerType = InhalerType.Rescue;
+            exhaleHintController.showOnStep = 3;
+            dragHintController.inhalerType = InhalerType.Rescue;
+            dragHintController.showOnStep = 4;
+        }else{
+            inhaleHintController.inhalerType = InhalerType.Advair;
+            inhaleHintController.showOnStep = 5;
+            exhaleHintController.inhalerType = InhalerType.Advair;
+            exhaleHintController.showOnStep = 3;
+            dragHintController.inhalerType = InhalerType.Advair;
+            dragHintController.showOnStep = 4;
         }
-        else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
-            advair.SetActive(false);
-        }
-        // smallRescue.SetActive(false);
 
         //Show hint right away if it's users' first time
-        if ((InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && DataManager.Instance.Inhaler.FirstTimeAdvair) ||
-            (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue && DataManager.Instance.Inhaler.FirstTimeRescue)){
+        if((InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && InhalerLogic.Instance.IsFirstTimeAdvair) ||
+            (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue && InhalerLogic.Instance.IsFirstTimeRescue)){ 
             runShowHintTimer = false;
             showHint = true;
-        }
-        else {
+        }else{
             runShowHintTimer = true;
             showHint = false;
             timer = 0;
@@ -171,12 +161,14 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
         showHint = false; 
     }
 
-     private void RemoveFirstTimeFlags(){
-        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && DataManager.Instance.Inhaler.FirstTimeAdvair){
-            DataManager.Instance.Inhaler.FirstTimeAdvair = false;
-        }
-        else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue && DataManager.Instance.Inhaler.FirstTimeRescue){
-            DataManager.Instance.Inhaler.FirstTimeRescue = false;
+    //Remove first time flag so hints won't be shown automatically
+    private void RemoveFirstTimeFlags(){
+        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && 
+            InhalerLogic.Instance.IsFirstTimeAdvair){
+            InhalerLogic.Instance.IsFirstTimeAdvair = false;
+        }else if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue && 
+            InhalerLogic.Instance.IsFirstTimeRescue){ 
+            InhalerLogic.Instance.IsFirstTimeRescue = false;
         }
     }
 

@@ -4,110 +4,57 @@ using System.Collections;
 /*
     Rescue Body Shaker (Rescue Step 2).
 
-    This listens for the user's touch input, and shakes in response to the user moving his fingers rapidly.
+    This listens for the user's touch input, and shakes in response to the user shaking the device 
 
-    How this happens is, this script listens for movement in the user's touch. (TouchPhase.Moved)
-    When the touch is moving, the duration of its movement (Time.deltaTime) will be added to the
-    time counter (shakeValue). When the counter reaches its target (shakeTarget), the step will be
+     When the counter reaches its target (shakeTarget), the step will be
     complete.
 */
 public class RescueShaker : MonoBehaviour {
+    //Variables for tracking accelerometer 
+    private float accelerometerUpdateInterval = 1.0f/60.0f;
+    // The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
+    private float lowPassKernelWidthInSeconds = 1.0f;
+    // This next parameter is initialized to 2.0 per Apple's recommendation, or at least according to Brady! ;)
+    private float shakeDetectionThreshold = 2.0f;
+    private float lowPassFilterFactor;
+    private Vector3 lowPassValue = Vector3.zero;
+    private Vector3 acceleration;
+    private Vector3 deltaAcceleration;
 
-    public Texture2D statBarTexture;
-    public Texture2D statBarVerFrame;
-    public Texture2D statBarVerFillGreen;
-
-    // native dimensions
-    private const float NATIVE_WIDTH = 1280.0f;
-    private const float NATIVE_HEIGHT = 800.0f;
-
-    private Vector2 shakeBarOffset = new Vector2(60, 15);
-    private Vector2 shakeBarloc = new Vector2(NATIVE_WIDTH / 2 + 160, NATIVE_HEIGHT / 4 - 50);
-
-    float shakeValue = 0f;
-    float shakeTarget = 1f;
-    public RescueBody rescueBody;
-    private InhalerGameManager inhalerGameManager;
+    //Inhaler game 
+    private int gameStepID = 2;
+    private int shakeCounter = 0; //decides how long user needs to shake before it's recognized
 
     void Start(){
-        inhalerGameManager = GameObject.Find("InhalerGameManager").GetComponent<InhalerGameManager>();
-        Disable();
-        // set in InhalerGameManager.DestroyAndRecreatePrefabs()
-        // rescueBody = GameObject.Find("RescueBody").GetComponent<RescueBody>();
+        lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds; 
+        shakeDetectionThreshold *= shakeDetectionThreshold;
+        lowPassValue = Input.acceleration;
     }
 
     void Update(){
-        if (InhalerLogic.Instance.CurrentStep != 2){
-            return;
-        }
-        Enable();
+        if(gameStepID != InhalerLogic.Instance.CurrentStep) return;
 
-        if(Input.touchCount > 0){
-            Touch touch = Input.GetTouch(0);
-            if (isTouchingObject(touch)){
-                if (touch.phase == TouchPhase.Moved){
-                    shakeValue += Time.deltaTime;
-                    rescueBody.Shake();
-                }
-            }
+        acceleration = Input.acceleration;
+        LowPassFilterAccelerometer();
+        deltaAcceleration = acceleration - lowPassValue;
+        if(deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold){
+            // Perform your "shaking actions" here, with suitable guards in the if check above, if necessary to not, to not fire again if they're already being performed.
+            Debug.Log("Shake event detected at time "+Time.time);
+            shakeCounter++;
         }
-        if (shakeValue >= shakeTarget){
-            // todo: play sound
-            Debug.Log("shake target reached");
 
-            if (InhalerLogic.Instance.IsCurrentStepCorrect(2)){
-                InhalerLogic.Instance.NextStep();
-                Disable();
-            }
+        if(shakeCounter == 30){ //shake about 2 seconds
+            Handheld.Vibrate();
+            InhalerLogic.Instance.NextStep();
         }
     }
 
-    void OnGUI(){
-        if (InhalerLogic.Instance.CurrentStep != 2){
-            return;
-        }
-        if (NATIVE_WIDTH != Screen.width || NATIVE_HEIGHT != Screen.height){
-            float horizRatio = Screen.width/NATIVE_WIDTH;
-            float vertRatio = Screen.height/NATIVE_HEIGHT;
-            GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(horizRatio, vertRatio, 1));
-        }
-
-        // GUI.DrawTexture(new Rect(shakeBarloc.x,shakeBarloc.y,100,100), statBarTexture);
-        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y,50,200),statBarVerFrame);
-        GUI.DrawTexture(new Rect(shakeBarloc.x + shakeBarOffset.x,shakeBarloc.y + shakeBarOffset.y+(200-200*shakeValue/shakeTarget),50, 200 * Mathf.Clamp01(shakeValue/shakeTarget)),statBarVerFillGreen, ScaleMode.StretchToFill, true, 1f);
-        // GUI.DrawTexture(new Rect(shakeBarloc.x + healthIconOffset.x,shakeBarloc.y + healthIconOffset.y,60,60),healthIcon, ScaleMode.ScaleToFit, true, 0f);
-
-    }
-
-    void Enable(){
-        if (inhalerGameManager.ShowHint){
-            renderer.enabled = true;
-        }
-        else {
-            renderer.enabled = false;
-        }
-        collider.enabled = true;
-    }
-
-    void Disable(){
-        renderer.enabled = false;
-        collider.enabled = false;
-    }
-
-    bool isTouchingObject(Touch touch){
-        Ray ray = Camera.main.ScreenPointToRay(touch.position);
-        RaycastHit hit ;
-
-        //Check if there is a collider attached already, otherwise add one on the fly
-        if(collider == null){
-            gameObject.AddComponent(typeof(BoxCollider));
-        }
-
-        if (Physics.Raycast (ray, out hit)) {
-            if(hit.collider.gameObject == this.gameObject){
-                return true;
-            }
-        }
-        return false;
+    /*
+        Source: unity3d documentation
+        Accelerometer readings can be jerky and noisy. Applying low-pass filtering on the signal allows
+        you to smooth it and get rid of high frequency noise
+    */
+    private void LowPassFilterAccelerometer(){
+        lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
     }
 }

@@ -58,10 +58,10 @@ MonoBehaviour:
   forcedTextureWidth: 1024
   forcedTextureHeight: 1024
   textureCompression: 0
-  atlasWidth: 512
+  atlasWidth: 1024
   atlasHeight: 1024
   forceSquareAtlas: 0
-  atlasWastage: 15.4550552
+  atlasWastage: 41.2302017
   allowMultipleAtlases: 0
   textureParams:
   - name: advair_body
@@ -162,25 +162,26 @@ MonoBehaviour:
     regionW: 0
     regionH: 0
     regionId: 0
-    colliderType: 2
+    colliderType: 4
     boxColliderMin: {x: 0, y: 0}
     boxColliderMax: {x: 600, y: 600}
     polyColliderIslands:
     - connected: 1
       points:
-      - {x: 301, y: 76}
-      - {x: 172, y: 111}
-      - {x: 86, y: 201}
-      - {x: 60, y: 312}
-      - {x: 79, y: 418}
-      - {x: 138, y: 495}
-      - {x: 272, y: 558}
-      - {x: 372, y: 550}
-      - {x: 453, y: 510}
-      - {x: 523, y: 423}
-      - {x: 544, y: 306}
-      - {x: 510, y: 189}
-      - {x: 431, y: 110}
+      - {x: 294.5, y: 40}
+      - {x: 241, y: 6}
+      - {x: 168.5, y: 6.5}
+      - {x: 129.5, y: 43.5}
+      - {x: 89.5, y: 97}
+      - {x: 2, y: 139.5}
+      - {x: 63, y: 262.5}
+      - {x: 142.5, y: 311}
+      - {x: 233, y: 319.5}
+      - {x: 312, y: 296.5}
+      - {x: 371, y: 244.5}
+      - {x: 398.5, y: 207.5}
+      - {x: 417.5, y: 131}
+      - {x: 354.5, y: 104.5}
     polyColliderCap: 0
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
@@ -229,15 +230,53 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: 
+  - name: rescue_small
+    disableTrimming: 0
+    additive: 0
+    scale: {x: 2, y: 2, z: 1}
+    texture: {fileID: 2800000, guid: c053cf8bd1e31534d933d2f1d909af24, type: 3}
+    materialId: 0
+    anchor: 4
+    anchorX: 85
+    anchorY: 85
+    overrideMesh: {fileID: 0}
+    doubleSidedSprite: 0
+    customSpriteGeometry: 0
+    geometryIslands: []
+    dice: 0
+    diceUnitX: 64
+    diceUnitY: 0
+    pad: 0
+    extraPadding: 0
+    source: 0
+    fromSpriteSheet: 0
+    hasSpriteSheetId: 0
+    spriteSheetId: 0
+    spriteSheetX: 0
+    spriteSheetY: 0
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    regionId: 0
+    colliderType: 2
+    boxColliderMin: {x: 0, y: 0}
+    boxColliderMax: {x: 170, y: 170}
+    polyColliderIslands: []
+    polyColliderCap: 0
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    colliderColor: 0
+  - name: rescue_spacer
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 5ad33df40589c42279d3b6fe7a6a30db, type: 3}
     materialId: 0
     anchor: 4
-    anchorX: 1
-    anchorY: 1
+    anchorX: 345
+    anchorY: 104
     overrideMesh: {fileID: 0}
     doubleSidedSprite: 0
     customSpriteGeometry: 0
@@ -267,53 +306,15 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: 
+  - name: inhalerMouth
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 567f9aea01c320247a8bfbbe15926c1d, type: 3}
     materialId: 0
     anchor: 4
-    anchorX: 1
-    anchorY: 1
-    overrideMesh: {fileID: 0}
-    doubleSidedSprite: 0
-    customSpriteGeometry: 0
-    geometryIslands: []
-    dice: 0
-    diceUnitX: 64
-    diceUnitY: 0
-    pad: 0
-    extraPadding: 0
-    source: 0
-    fromSpriteSheet: 0
-    hasSpriteSheetId: 0
-    spriteSheetId: 0
-    spriteSheetX: 0
-    spriteSheetY: 0
-    extractRegion: 0
-    regionX: 0
-    regionY: 0
-    regionW: 0
-    regionH: 0
-    regionId: 0
-    colliderType: 0
-    boxColliderMin: {x: 0, y: 0}
-    boxColliderMax: {x: 0, y: 0}
-    polyColliderIslands: []
-    polyColliderCap: 0
-    colliderConvex: 0
-    colliderSmoothSphereCollisions: 0
-    colliderColor: 0
-  - name: 
-    disableTrimming: 0
-    additive: 0
-    scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
-    materialId: 0
-    anchor: 4
-    anchorX: 1
-    anchorY: 1
+    anchorX: 36
+    anchorY: 40
     overrideMesh: {fileID: 0}
     doubleSidedSprite: 0
     customSpriteGeometry: 0
@@ -419,7 +420,7 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: mouthpiece_gray
+  - name: rescue_mouthpiece
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
@@ -451,13 +452,13 @@ MonoBehaviour:
     regionId: 0
     colliderType: 2
     boxColliderMin: {x: 0, y: 0}
-    boxColliderMax: {x: 0, y: 0}
+    boxColliderMax: {x: 100, y: 131}
     polyColliderIslands: []
     polyColliderCap: 0
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: prescription_gray
+  - name: rescue_prescription
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
@@ -487,7 +488,7 @@ MonoBehaviour:
     regionW: 0
     regionH: 0
     regionId: 0
-    colliderType: 2
+    colliderType: 0
     boxColliderMin: {x: 0, y: 0}
     boxColliderMax: {x: 0, y: 0}
     polyColliderIslands: []
@@ -495,7 +496,7 @@ MonoBehaviour:
     colliderConvex: 0
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
-  - name: body_blue
+  - name: rescue_body
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}

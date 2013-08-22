@@ -28,6 +28,7 @@ public class PlayerRunner : MonoBehaviour
     private Vector3 mLastPosition;
     private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
+    private List<Collider> mGroundedCollision = new List<Collider>();
 
     public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
@@ -51,6 +52,7 @@ public class PlayerRunner : MonoBehaviour
         UpdateInvincible();
 	}
 	
+    // The more physics-y update. Called multiple times per frame.
 	void FixedUpdate() {
 		UpdateSpeed();
 
@@ -62,9 +64,6 @@ public class PlayerRunner : MonoBehaviour
 			mLastPosition = transform.position;
 
 		CheckAndActOnDeath();
-	}
-	
-	void OnControllerColliderHit(ControllerColliderHit inHit) {
 	}
 	
 	void onSwipeUp() {
@@ -84,14 +83,17 @@ public class PlayerRunner : MonoBehaviour
         int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
         if (inCollider.gameObject.layer != bottomLayer)
 		    mbTriggerColliding = true;
+        UpdateFalling(inCollider);
 	}
 
 	void LayerTriggerCollisionStay(Collider inCollider) {
-		mbTriggerColliding = true;
+        mbTriggerColliding = true;
+        UpdateFalling(inCollider);
 	}
 
 	void LayerTriggerCollisionExit(Collider inCollider) {
-		mbTriggerColliding = false;
+        mbTriggerColliding = false;
+        UpdateFalling(inCollider);
 	}
 
     public void Reset() {
@@ -114,6 +116,7 @@ public class PlayerRunner : MonoBehaviour
         mbFalling = false;
         mbJumping = false;
         gameObject.layer = 0;
+        mGroundedCollision.Clear();
 
         Transform layerObject = transform.FindChild("LayerTrigger");
         if (layerObject != null) {
@@ -172,7 +175,7 @@ public class PlayerRunner : MonoBehaviour
     }
 
     // Checks if we are "falling down" to re-eneable collision.
-    private void UpdateFalling() {
+    private void UpdateFalling(Collider inCollider = null) {
         if (mbFalling) {
             if (!mbTriggerColliding || mbGrounded) {
                 mbFalling = false;
@@ -182,10 +185,20 @@ public class PlayerRunner : MonoBehaviour
 
         if (gameObject.layer != 0) {
             if (mbJumping) {
-                // If we begin falling downward, reset the layer
-                Vector3 currentMovementDirection = mLastPosition - transform.position;
-                if (currentMovementDirection.y > 0) {
-                    gameObject.layer = 0;
+                // Only update this when we are given a collider to check.
+                if (inCollider != null && !mGroundedCollision.Contains(inCollider)) {
+                    // If we are given a collider, and if we arent touching a collider that we were touching when grounded...
+                    // Determine the lowest point of us
+                    Vector3 playerTriggerMin = mPlayerTrigger.collider.bounds.min;
+                    // the top of them
+                    Vector3 colliderMax = inCollider.bounds.max;
+                    // Distance between
+                    float yDistanceBetween = Mathf.Abs(colliderMax.y - playerTriggerMin.y);
+                    // And how much we are willing to forgive for being off 0
+                    const float yDistanceForgiveness = 0.5f;
+                    if (yDistanceBetween <= yDistanceForgiveness) {
+                        gameObject.layer = 0;
+                    }
                 }
             } else if (!mbFalling) {
                 gameObject.layer = 0;
@@ -218,6 +231,10 @@ public class PlayerRunner : MonoBehaviour
         // Reset movement.
         if (isGrounded)
             mMovementVector = new Vector3();
+
+        if (mbGrounded) {
+            mGroundedCollision = new List<Collider>(mPlayerTrigger.CurrentColliders);
+        }
 
         mbGrounded = isGrounded;
 
@@ -269,11 +286,14 @@ public class PlayerRunner : MonoBehaviour
 
             if (mSpeed < DefaultSpeed)
                 mSpeed = DefaultSpeed;
+
+            MegaHazard megaHazard = GameObject.FindGameObjectWithTag("MegaHazard").GetComponent<MegaHazard>();
+            megaHazard.TriggerPlayerSlowdown();
         }
 	}
 
 	private void TriggerJump() {
-		if (mbGrounded && !mbJumping) {
+		if (mbGrounded && !mbJumping && !mbFalling) {
 			mMovementVector.y += JumpSpeed;
 			gameObject.layer = 12;
             mbJumping = true;

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class DiagnoseUIManager : MonoBehaviour {
+
+	public GameObject diagnosePanel;
     public GameObject spritePet;
     public GameObject buttonPanel;
     public GameObject hud;
@@ -13,18 +15,16 @@ public class DiagnoseUIManager : MonoBehaviour {
     private UISlider progressBar; //reference to UI
     private UISprite advair;
 
-	// Use this for initialization
-	void Start () {
+	void Start(){
         timer = timerInterval;
-        progressBar = transform.Find("Timer").GetComponent<UISlider>();
-        advair = transform.Find("Advair").GetComponent<UISprite>();
+        progressBar = diagnosePanel.transform.Find("Timer").GetComponent<UISlider>();
+        advair = diagnosePanel.transform.Find("Advair").GetComponent<UISprite>();
         advair.alpha = 0;
 
         StartGame();	
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update(){
 	   if(!gameActive) return;
 
        timer -= Time.deltaTime;
@@ -61,13 +61,13 @@ public class DiagnoseUIManager : MonoBehaviour {
 
         switch(DiagnoseGameLogic.CurrentStage){
             case AsthmaStage.OK:
-                spritePet.GetComponent<tk2dSprite>().SetSprite("OkPet");
+                spritePet.GetComponent<tk2dSprite>().SetSprite("Happy_Stand");
             break;
             case AsthmaStage.Sick:
-                spritePet.GetComponent<tk2dSprite>().SetSprite("SickPet");
+                spritePet.GetComponent<tk2dSprite>().SetSprite("Sad_Stand");
             break;
             case AsthmaStage.Attack:
-                spritePet.GetComponent<tk2dSprite>().SetSprite("AttackPet");
+                spritePet.GetComponent<tk2dSprite>().SetSprite("Attack_Stand");
             break;
         }
         gameActive = true;

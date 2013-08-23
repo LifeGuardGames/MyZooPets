@@ -3584,6 +3584,11 @@ Prefab:
       propertyPath: LevelGroups.Array.data[1]
       value: 
       objectReference: {fileID: 443295478}
+    - target: {fileID: 11400000, guid: 02056d048b78dd746b5fe82946d9dd52, type: 2}
+      propertyPath: CoinPrefab
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e420736fe46abd48b749f0d09060401,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 02056d048b78dd746b5fe82946d9dd52, type: 2}
   m_RootGameObject: {fileID: 1540033949}
@@ -6082,7 +6087,7 @@ MonoBehaviour:
   LevelTooLowYValue: -10
   LevelGroupSwitchTime: 40
   CoinSpawnDistance: 1
-  CoinPrefab: {fileID: 0}
+  CoinPrefab: {fileID: 11400000, guid: 0e420736fe46abd48b749f0d09060401, type: 2}
   StartingLevelGroup: {fileID: 340973608}
   LevelGroups:
   - {fileID: 340973608}
@@ -7548,7 +7553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultSpeed: 7
   JumpSpeed: 25
-  SpeedIncrease: .400000006
+  SpeedIncrease: .100000001
   SpeedIncreaseTime: 3
   DefaultLayer: 0
   PassLayer: 12
@@ -7561,7 +7566,7 @@ Rigidbody:
   m_GameObject: {fileID: 2027763470}
   serializedVersion: 2
   m_Mass: 3
-  m_Drag: 25
+  m_Drag: 15
   m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 1
@@ -7963,6 +7968,14 @@ Prefab:
     - target: {fileID: 100000, guid: 7b27dd116b2fe2f43b6618c91419c950, type: 2}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 7b27dd116b2fe2f43b6618c91419c950, type: 2}
+      propertyPath: SpeedIncrease
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400000, guid: 7b27dd116b2fe2f43b6618c91419c950, type: 2}
+      propertyPath: m_Drag
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b27dd116b2fe2f43b6618c91419c950, type: 2}

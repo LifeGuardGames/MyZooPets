@@ -41,6 +41,7 @@ public class MegaHazard : MonoBehaviour {
         transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
         UpdatePositionRelativeToPlayer();
         mDestinationPosition = transform.position;
+
     }
 
     public void TriggerPlayerSlowdown() {
@@ -53,6 +54,7 @@ public class MegaHazard : MonoBehaviour {
     }
 
     private void UpdatePositionRelativeToPlayer() {
+        // Update the Z distance
         if (mDistanceUntilTarget > 0)
             mDistanceUntilTarget -= GapClosingIncrement;
         else {
@@ -69,10 +71,14 @@ public class MegaHazard : MonoBehaviour {
         }
 
         float currentDistance = GetCurrentOffsetDistance();
-        //Vector3 myPos = transform.position;
         PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
         mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
         transform.position = mDestinationPosition;
+
+        // Update the Y distance
+        Vector3 currentPosition = transform.position;
+        currentPosition.y = playerRunner.transform.position.y;
+        transform.position = currentPosition;
     }
 
     public float GetCurrentOffsetDistance() {

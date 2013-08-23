@@ -16,6 +16,7 @@ public class PlayerRunner : MonoBehaviour
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
     private float mSpeed;
+    private float mCurrentTimeMultiplier;
 	private float mSpeedBoostAmmount = 0f;
     private bool mbInvincible;
     private bool mbJumping;
@@ -83,20 +84,27 @@ public class PlayerRunner : MonoBehaviour
         int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
         if (inCollider.gameObject.layer != bottomLayer)
 		    mbTriggerColliding = true;
-        UpdateFalling(inCollider);
+
+        if (inCollider.GetComponent<RunnerItem>() == null)
+            UpdateFalling(inCollider);
 	}
 
 	void LayerTriggerCollisionStay(Collider inCollider) {
         mbTriggerColliding = true;
-        UpdateFalling(inCollider);
+
+        if (inCollider.GetComponent<RunnerItem>() == null)
+            UpdateFalling(inCollider);
 	}
 
 	void LayerTriggerCollisionExit(Collider inCollider) {
         mbTriggerColliding = false;
-        UpdateFalling(inCollider);
+
+        if (inCollider.GetComponent<RunnerItem>() == null)
+            UpdateFalling(inCollider);
 	}
 
     public void Reset() {
+        mCurrentTimeMultiplier = 1f;
         // Go back to the original position.
 		transform.position = mInitialPosition;
         // Reset some timers
@@ -126,7 +134,10 @@ public class PlayerRunner : MonoBehaviour
         } else
             Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
 
-    }
+        RunnerAnimationController animationController = GetComponent<RunnerAnimationController>();
+        if (animationController != null)
+            animationController.Reset();
+}
 
     private void UpdateInvincible() {
         if (mbInvincible) {
@@ -161,7 +172,9 @@ public class PlayerRunner : MonoBehaviour
     private void UpdateSpeed() {
         mSpeedIncreasePulse -= Time.deltaTime;
         if (mSpeedIncreasePulse <= 0) {
-            mSpeed += SpeedIncrease;
+            //mSpeed += SpeedIncrease;
+            mCurrentTimeMultiplier += SpeedIncrease;
+            RunnerGameManager.GetInstance().IncreaseTimeSpeed(SpeedIncrease);
             mSpeedIncreasePulse = SpeedIncreaseTime;
         }
 
@@ -209,19 +222,22 @@ public class PlayerRunner : MonoBehaviour
 
     private void UpdateMovement() {
         // These are constant speeds, not forces. It's weird I know.
+        //float currentSpeed = mSpeed + mSpeedBoostAmmount;
+        float currentDeltaTime = Time.deltaTime;
+
         mMovementVector.z = mSpeed + mSpeedBoostAmmount;
 
         // Add in Gravity force.
-        mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
+        mMovementVector += (Physics.gravity * rigidbody.mass) * currentDeltaTime;
 
         // Vertical drag
-        mMovementVector += (Vector3.down * rigidbody.drag * Time.deltaTime);
+        mMovementVector += (Vector3.down * rigidbody.drag * currentDeltaTime);
 
         if (mCharacterController == null)
             Debug.LogError("No Character Controller exists!");
 
         // Perform the move
-        CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
+        CollisionFlags flags = mCharacterController.Move(mMovementVector * currentDeltaTime);
         bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
         if (isGrounded && mbJumping) {
             mbJumping = false;

@@ -2,9 +2,11 @@
 using System.Collections;
 
 public class RunnerAnimationController : TK2DAnimationController {
+    private bool mbStarted = false;
 
 	void Start(){
 		base.Initialize();
+        mbStarted = true;
 	}
 
 	public void onPlayerJumpBegin(){
@@ -22,4 +24,9 @@ public class RunnerAnimationController : TK2DAnimationController {
 	public void onPlayerFallEnd(){
 		animator.Play("Run");
 	}
+
+    public void Reset() {
+        if (animator != null)
+            animator.Play("Run");
+    }
 }

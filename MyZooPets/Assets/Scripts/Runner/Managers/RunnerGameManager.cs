@@ -85,6 +85,8 @@ public class RunnerGameManager : MonoBehaviour {
 	}
 
     public void ResetGame() {
+        Time.timeScale = 1f;
+
         mRunnerUIManager.DeActivateGameOverPanel();
 
         GameRunning = true;
@@ -106,5 +108,9 @@ public class RunnerGameManager : MonoBehaviour {
         // Disable the player
         if (mPlayerRunner != null)
             mPlayerRunner.gameObject.SetActive(false);
+    }
+
+    public void IncreaseTimeSpeed(float inIncreaseTime) {
+        Time.timeScale += inIncreaseTime;
     }
 }

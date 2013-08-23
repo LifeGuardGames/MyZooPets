@@ -6,8 +6,10 @@ public class MegaHazard : MonoBehaviour {
     public float DistanceDivisor = 2.0f;
     public float DistanceRegainIncrement = 0.1f;
     public float DistanceRegainTime = 1f;
-    public float mGapClosingIncrement = 0.01f;
+    public float GapClosingIncrement = 0.01f;
+    public float SlowDownStayDuration = 1.0f;
 
+    private float mSlowDownStayPulse = 0f;
     private float mDistanceUntilTarget = 0f;
     private float mDistanceRegainPulse = 0f;
     private float mCurrentDistanceFromPlayer = 0f;
@@ -43,7 +45,8 @@ public class MegaHazard : MonoBehaviour {
 
     public void TriggerPlayerSlowdown() {
         PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
-        if (player != null && !player.Invincible) { 
+        if (player != null) {
+            mSlowDownStayPulse = SlowDownStayDuration;
             mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
             mCurrentDistanceFromPlayer += mDistanceUntilTarget;
         }
@@ -51,12 +54,17 @@ public class MegaHazard : MonoBehaviour {
 
     private void UpdatePositionRelativeToPlayer() {
         if (mDistanceUntilTarget > 0)
-            mDistanceUntilTarget -= mGapClosingIncrement;
-        else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
-            mDistanceRegainPulse -= Time.deltaTime;
-            if (mDistanceRegainPulse <= 0f) {
-                mDistanceRegainPulse = DistanceRegainTime;
-                mCurrentDistanceFromPlayer += DistanceRegainIncrement;
+            mDistanceUntilTarget -= GapClosingIncrement;
+        else {
+            if (mSlowDownStayPulse > 0f) {
+                // When we get hit, we must stay at our slowed-down locaiton until the time elapses.
+                mSlowDownStayPulse -= Time.deltaTime;           
+            } else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
+                mDistanceRegainPulse -= Time.deltaTime;
+                if (mDistanceRegainPulse <= 0f) {
+                    mDistanceRegainPulse = DistanceRegainTime;
+                    mCurrentDistanceFromPlayer += DistanceRegainIncrement;
+                }
             }
         }
 

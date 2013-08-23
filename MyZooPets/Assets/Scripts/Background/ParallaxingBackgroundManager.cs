@@ -40,6 +40,10 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 		}
 	}
 
+    public void Reset() {
+        TransitionToGroup(FirstGroupID);
+    }
+
 	public void TransitionToGroup(string inGroupID) {
 		ParallaxingBackgroundGroup nextGroup = null;
 		foreach (ParallaxingBackgroundGroup currentGroup in ParralaxingGroups) {

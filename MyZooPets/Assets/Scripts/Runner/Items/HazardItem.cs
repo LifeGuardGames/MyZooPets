@@ -23,9 +23,6 @@ public class HazardItem : RunnerItem {
         PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
         player.TriggerSlowdown(SlowdownDivisor);
 
-        MegaHazard megaHazard = GameObject.FindGameObjectWithTag("MegaHazard").GetComponent<MegaHazard>();
-        megaHazard.TriggerPlayerSlowdown();
-
 		GameObject.Destroy(gameObject);
 	}
 }

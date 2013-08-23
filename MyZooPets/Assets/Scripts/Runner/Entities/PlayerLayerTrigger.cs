@@ -18,6 +18,10 @@ public class PlayerLayerTrigger : MonoBehaviour {
 	
 	}
 
+    void OnCollisionEnter(Collision inCollision) {
+        Debug.LogError("werraerae");
+    }
+
     void OnTriggerEnter(Collider inCollider) {
         if (inCollider.GetComponent<RunnerItem>() == null)
             mCurrentColliders.Add(inCollider);

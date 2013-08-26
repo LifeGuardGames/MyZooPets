@@ -1,4 +1,14 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * TouchDetectorManager.cs
+ * 8:26:2013   14:39
+ * Description:
+ * Handles all input.
+ * Right now that' just touches, so you can dig into the TouchPhase switch in Update()
+ * Whenever a swipe happens, we let every script that is "lestening to us" know by sending an approprait
+ * message to them.
+ */
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

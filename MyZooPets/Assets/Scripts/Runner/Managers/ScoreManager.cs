@@ -1,4 +1,15 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * ScoreManager.cs
+ * 8:26:2013   14:38
+ * Description:
+ * Keeps track of the various 'score' elements of the game.
+ * The distance covered is involed in the final score.
+ * Score of items gathered is then added to this distance covered for the final score.
+ * Also keeps track of coins.
+ * This is usually dispalyed via the UI.
+ */
+
+using UnityEngine;
 using System.Collections;
 
 public class ScoreManager : MonoBehaviour {

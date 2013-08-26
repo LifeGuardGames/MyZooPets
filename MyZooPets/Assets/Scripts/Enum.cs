@@ -93,7 +93,13 @@ public enum BadgeType{
 public enum DojoSkillName{
     Sit,
     Wave,
-    Backflip
+    Backflip,
+    HighFive,
+    DiscoMove,
+    SadFace,
+    Konfu,
+    Chilling,
+    HighJump,
 }
 
 public enum TalkImageType{

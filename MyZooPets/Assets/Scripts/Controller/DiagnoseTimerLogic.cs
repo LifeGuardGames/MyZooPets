@@ -6,7 +6,8 @@ using System.Collections;
 //and pauses the game
 public class DiagnoseTimerLogic : MonoBehaviour {
     private float timer = 0;
-    private float timeInterval = 30f; //time interval for triggers to affect health
+    private float timeInterval = 40f; //time interval for triggers to affect health
+    private bool allowTimer = true;
 
 	// Use this for initialization
 	void Start () {
@@ -15,10 +16,13 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        timer -= Time.deltaTime;
-        if (timer <= 0){
-            timer = timeInterval;
-            SendNotification();
+        if(allowTimer){
+            timer -= Time.deltaTime;
+            if (timer <= 0){
+                timer = timeInterval;
+                SendNotification();
+                allowTimer = false;
+            }
         }
 	}
 

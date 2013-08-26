@@ -30,14 +30,19 @@ public class HintController : MonoBehaviour {
     }
 
     void Start(){
-        if(startHidden){
-            DisableHint();
-        }
+        if(startHidden) DisableHint();
+        else if(InhalerType.Advair == InhalerLogic.Instance.CurrentInhalerType && 
+            !InhalerLogic.Instance.IsFirstTimeAdvair) DisableHint();
+        else if(InhalerType.Rescue == InhalerLogic.Instance.CurrentInhalerType &&
+            !InhalerLogic.Instance.IsFirstTimeRescue) DisableHint();
+
         InhalerLogic.OnNextStep += CheckAndEnableHint;
+        InhalerGameManager.OnShowHint += CheckAndEnableHint;
     }
 
     void OnDestroy(){
         InhalerLogic.OnNextStep -= CheckAndEnableHint;
+        InhalerGameManager.OnShowHint -= CheckAndEnableHint;
     }
 
     //Even Listener. Check if hint for the next step is necessary and disable hint for
@@ -46,7 +51,6 @@ public class HintController : MonoBehaviour {
         if(showOnStep == InhalerLogic.Instance.CurrentStep && 
             inhalerType == InhalerLogic.Instance.CurrentInhalerType &&
             InhalerGameManager.Instance.ShowHint){
-
             EnableHint();            
         }else{
             if((hintArrow != null && hintArrow.renderer.enabled) ||

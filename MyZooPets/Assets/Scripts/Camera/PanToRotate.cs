@@ -93,46 +93,56 @@ public class PanToRotate : MonoBehaviour {
                         touchCancelled = false;
                         return;
                     }
+
                     //When the panning ends decides which direction to snap the camera
-                    if(panDirection.Equals(Direction.Left)){ //panning left, so rotate right
-                        int nextIndex = GetNextPartitionIndex();
-                        float rotateTo;
-                        Hashtable optional;
-                        if(nextIndex != -1 && enabledPartitions[nextIndex]){
-                            //if camera angle is closer to the angle of the next partition then
-                            //snap the camera to the next partition
-                            if(transform.eulerAngles.y > partitionAngles[currentIndex] + partitionOffset){
-                                rotateTo = partitionAngles[nextIndex];
-                                currentIndex = nextIndex;
-                                optional = snapOption1;
-                            }else{ //snap camera back to the current partition
-                               rotateTo = partitionAngles[currentIndex]; 
-                               optional = snapOption2;
-                            }
-                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
-                        }
-                    }else if(panDirection.Equals(Direction.Right)){ //panning right, so rotate left
-                        int prevIndex = GetPrevPartitionIndex();
-                        float rotateTo;
-                        Hashtable optional;
-                        if(prevIndex != -1 && enabledPartitions[prevIndex]){
-                            //if the camera angle is closer to the angle of the previous partition then
-                            //snap the camera to the previous partition
-                            if(transform.eulerAngles.y < partitionAngles[currentIndex] - partitionOffset){
-                                rotateTo = partitionAngles[prevIndex];
-                                currentIndex = prevIndex;
-                                optional = snapOption1;
-                            }else{ //snap the camera back to current partition
-                                rotateTo = partitionAngles[currentIndex];
-                                optional = snapOption2;
-                            }
-                            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
-                        }
-                    }
+                    if(panDirection.Equals(Direction.Left)) //panning left, so rotate right
+                        SnapCameraToRight();
+                    else if(panDirection.Equals(Direction.Right)) //panning right, so rotate left
+                        SnapCameraToLeft();                        
                 break;
             }
         }
 	}
+
+    //Rotate camera to right when touch is finished
+    private void SnapCameraToRight(){
+        int nextIndex = GetNextPartitionIndex();
+        float rotateTo;
+        Hashtable optional;
+        if(nextIndex != -1 && enabledPartitions[nextIndex]){
+            //if camera angle is closer to the angle of the next partition then
+            //snap the camera to the next partition
+            if(transform.eulerAngles.y > partitionAngles[currentIndex] + partitionOffset){
+                rotateTo = partitionAngles[nextIndex];
+                currentIndex = nextIndex;
+                optional = snapOption1;
+            }else{ //snap camera back to the current partition
+               rotateTo = partitionAngles[currentIndex]; 
+               optional = snapOption2;
+            }
+            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
+        }
+    }
+
+    //Rotate camera to left when touch is finished
+    private void SnapCameraToLeft(){
+        int prevIndex = GetPrevPartitionIndex();
+        float rotateTo;
+        Hashtable optional;
+        if(prevIndex != -1 && enabledPartitions[prevIndex]){
+            //if the camera angle is closer to the angle of the previous partition then
+            //snap the camera to the previous partition
+            if(transform.eulerAngles.y < partitionAngles[currentIndex] - partitionOffset){
+                rotateTo = partitionAngles[prevIndex];
+                currentIndex = prevIndex;
+                optional = snapOption1;
+            }else{ //snap the camera back to current partition
+                rotateTo = partitionAngles[currentIndex];
+                optional = snapOption2;
+            }
+            LeanTween.rotateY(gameObject, rotateTo, snapSpeed, optional);
+        }
+    }
 
     //Return index of the partition on the right.
     //Return -1 if the current partition is the last

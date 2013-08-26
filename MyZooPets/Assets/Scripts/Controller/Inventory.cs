@@ -3,27 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-
-//Inventory class for Pet
-//Contains all items the pet owns.
-//Inventory creates space for all items at the beginning as an Array/
-//Index of inventory array correspond to each item ID
-//Int in each array position represents item count for each item
-//  eg.  inventory[2] = 1  means, the pet has 1 of the third item in Itemlogic class(the reference) 
+/*
+	Inventory class for Pet
+	Contains all items the pet owns.
+	Inventory creates space for all items at the beginning as an Array/
+	Index of inventory array correspond to each item ID
+	Int in each array position represents item count for each item
+	eg.  inventory[2] = 1  means, the pet has 1 of the third item in Itemlogic class(the reference) 
+*/
 public class Inventory : MonoBehaviour {
-	private ItemLogic itemLogic;
-	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
-	private int inventoryCount; //number of items that are actually in inventory
-
-	public class InventoryEventArgs : EventArgs{
+	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
+	public struct InventoryEventArgs : EventArgs{
 		public bool IsItemNew{get; set;}
 		public int ItemID{get; set;}
 	}
-	//===================Events===================
-	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
-	//===========================================
 
-
+	private ItemLogic itemLogic;
+	private int[] inventory ; //Use array to represent item. this way ID is same as index of the array.
+	private int inventoryCount; //number of items that are actually in inventory
 	//====================API===========================
 	public int InventoryCount{
 		get{return inventoryCount;}

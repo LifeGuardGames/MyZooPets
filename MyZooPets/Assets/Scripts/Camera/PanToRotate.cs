@@ -10,7 +10,7 @@ using System.Collections;
 public class PanToRotate : MonoBehaviour {
     public float panSpeed = 0.5f; //the speed that you want the camera to rotate while panning
     public float snapSpeed = 0.5f; //the speed that you want the camera to snap back when touch ends
-    public float minPanDistance = 40.0f; //min distance required for panning to be recognized
+    public float minPanDistance = 80.0f; //min distance required for panning to be recognized
     private Vector2 startTouchPos; //position of the touch when finger touches the screen
     private bool[] enabledPartitions = {true, true, true, false, false}; //is the partition accessible to user
     private float[] partitionAngles = {0, 72, 144, 216, 288}; //the camera angle for the partition
@@ -25,7 +25,6 @@ public class PanToRotate : MonoBehaviour {
     private bool touchCancelled; //cancel touch detection if user click on NGUI first
     private Camera NGUICamera;
     private Camera mainCamera;
-    // private int layerNGUI; //layer that NGUI is on
     private enum Direction{
         Left,
         Right

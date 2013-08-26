@@ -25,6 +25,14 @@ public class RunnerAnimationController : TK2DAnimationController {
 		animator.Play("Run");
 	}
 
+    public void onPlayerGrounded() {
+        animator.Play("Run");
+    }
+
+    public void onPlayerFreeFall() {
+        animator.Play("Fall");
+    }
+
     public void Reset() {
         if (animator != null)
             animator.Play("Run");

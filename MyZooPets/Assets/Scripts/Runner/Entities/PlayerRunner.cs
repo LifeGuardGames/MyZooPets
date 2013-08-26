@@ -208,6 +208,14 @@ public class PlayerRunner : MonoBehaviour
                     else
                         mIgnoringCollisions.RemoveAt(ignoredIndex);
                 }
+
+                BroadcastMessage("onPlayerGrounded", SendMessageOptions.DontRequireReceiver);
+            }
+        } else {
+            if (mbGrounded) {
+                // Just entered freefall
+                if (!mbJumping && !mbFalling)
+                    BroadcastMessage("onPlayerFreeFall", SendMessageOptions.DontRequireReceiver);
             }
         }
 

@@ -1,9 +1,27 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * LevelComponent.cs
+ * 8:26:2013   14:25
+ * Description:
+ * The peices of the levels, these Components define 'sections' of a random level component.
+ * They are simply a bunch of colliders and art that are grouped together as one component.
+ * As the level progresses, a random component is chosen and spawned. These are generally not very large. 
+ * 
+ * Components are, as I said, made up of whatever it's children objects are.
+ * As well, they contain the Point and Bundle information. This is the data we use for spawning items.
+ * The pointgroups are the collection of positions, item spawn types, and the kind of line. (As of this writing its just Lines. But they could be curves, or whatever.)
+ * PointGroups are spawned based off a Bundle and that bundles chance. Thus components also keep a list of bundles, their IDS, and the chances for each.
+ *
+ * When a component is created, and when it's destroyed, it brings the items with it. The items are spawned and store din here. On destroy, we
+ * flush those items out.
+ * 
+ * Besides that... Almost everything here is for the level editor to work more easily with.
+ */
+
+using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class LevelComponent : MonoBehaviour
-{
+public class LevelComponent : MonoBehaviour {
 	[SerializeField]
     private List<PointGroup> mPointGroups = new List<PointGroup>();
     [SerializeField]
@@ -14,11 +32,7 @@ public class LevelComponent : MonoBehaviour
 
 	public List<PointGroup> PointGroups { get { return mPointGroups; } }
     public List<Bundle> Bundles { get { return mBundles; } }
-	public int NextID {
-		get {
-			return mNextID++;
-		}
-	}
+	public int NextID { get { return mNextID++; } }
 	public LevelGroup ParentGroup {
 		get;
 		set;

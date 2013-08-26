@@ -4,10 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : MonoBehaviour {
-
-	//=========================Events====================
 	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
-	//===================================================
 	
 	public bool isDebug;
 	public GameObject ItemPrefab;
@@ -26,7 +23,6 @@ public class StoreUIManager : MonoBehaviour {
 	private GameObject grid;
 	private GameObject inventoryGrid;
 	private List<GameObject> toDestroy = new List<GameObject>();
-	// private GameObject toDestroy = null;
 
 	void Awake(){
 		if(isDebug)	itemlogic = GameObject.Find("Grid").GetComponent<ItemLogic>();

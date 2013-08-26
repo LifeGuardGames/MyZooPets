@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * ParallaxingBackgroundGroup.cs
+ * 8:26:2013   14:43
+ * Description:
+ * Handles updating the current translation of the spawned ParralaxingBackgrounds.
+ * The mesh never moves, we jiust set the texture offset to let that do the "moving:
+ */
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

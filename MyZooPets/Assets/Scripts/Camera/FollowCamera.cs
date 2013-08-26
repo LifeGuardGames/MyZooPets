@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * FollowCamera.cs
+ * 8:26:2013   14:06
+ * Description:
+ * Drags the attached camera along this objects transform.
+ * Also, if a megahazard exists, it responds to the given offset.
+ * This gives the illusion of the player moving backwards while running.
+ */
+
+using UnityEngine;
 using System.Collections;
 
-public class FollowCamera : MonoBehaviour
-{
+public class FollowCamera : MonoBehaviour {
 	public Camera FollowingCamera;
     public MegaHazard MegaHazardToOffset;
 	

@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * RunnerUIManager.cs
+ * 8:26:2013   14:38
+ * Description:
+ * A centralized place to keep the more custom UI.
+ * Right now doesnt do much more than give buttons the ability to show/hide certain panels.
+ * Any runner specific UI code should probably exist here.
+ */
+
+using UnityEngine;
 using System.Collections;
 
 public class RunnerUIManager : MonoBehaviour {

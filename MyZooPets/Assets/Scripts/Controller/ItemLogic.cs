@@ -11,36 +11,24 @@ using System.Collections.Generic;
 //Item ID = array index of the items list
 //Methods list contains all functions for each item, cooresponding to its index
 public class ItemLogic : MonoBehaviour{
-	//Each Item has its component kept in different lists.
+	//This number has to change manually
+	public static int MAX_ITEM_COUNT = 10;
+	public List<Item> items = new List<Item>(); //item database
+												//Index: itemID, Value: instance of Item class
+
 	private List<Action> methods = new List<Action>(); //List of actions to be called when item is used. 
 														//Index: itemID, Value: functions
 	private List<int> foodList = new List<int>(); //Index: regular array index, Value: itemID 
 	private List<int> itemList = new List<int>(); //Index: regular array index, Value: itemID 
 	private List<int> inhalerList = new List<int>(); //Index: regular array index, Value: itemID
 	private List<int> decoList = new List<int>(); //Index: regular array index, Value: itemID 
-	public List<Item> items = new List<Item>(); //item database
-												//Index: itemID, Value: instance of Item class
-	//============Getters=============	
-	public List<int> FoodList{
-		get{return foodList;}
-	}	
-	public List<int> ItemList{
-		get{return itemList;}
-	}
-	public List<int> InhalerList{
-		get{return inhalerList;}
-	}
-	public List<int> DecoList{
-		get{return decoList;}
-	}
-	public List<Item> Items{
-		get{return items;}
-	}
-	//===============================
 
-	//This number has to change manually
-	public static int MAX_ITEM_COUNT = 10;
-	
+	public List<int> FoodList{get{return foodList;}}	
+	public List<int> ItemList{get{return itemList;}}
+	public List<int> InhalerList{get{return inhalerList;}}
+	public List<int> DecoList{get{return decoList;}}
+	public List<Item> Items{get{return items;}}
+
 	//Calls the id function in the function list.
 	public void OnCall(int id){
 		methods[id]();
@@ -70,6 +58,7 @@ public class ItemLogic : MonoBehaviour{
 		methods.Add(()=>TakeDoughnut());
 		methods.Add(()=>TakeDoughnutBrown());
 		methods.Add(()=>TakeMilk());
+		methods.Add(()=>TakeInhaler());
 	}
 
 	//Functions for Each item.
@@ -93,5 +82,8 @@ public class ItemLogic : MonoBehaviour{
 	}
 	private void TakeMilk(){
 		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 40, Vector3.zero);
+	}
+	private void TakeInhaler(){
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 10, Vector3.zero, 0, Vector3.zero);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /*
@@ -7,8 +8,14 @@ using System.Collections;
 public class Inhale : SwipeToInhaleExhale {
     protected override void Start(){
         base.Start();
-        gameStepID = 6;
+        InhalerLogic.OnResetGame += UpdateStepID;
     }    
+
+    protected override void OnDestroy(){
+        base.OnDestroy();
+        InhalerLogic.OnResetGame -= UpdateStepID;
+    }
+
     //True: finger swiping up
     protected override bool IsDragging(Touch touch){
         bool retVal = false;
@@ -17,5 +24,13 @@ public class Inhale : SwipeToInhaleExhale {
         }
         return retVal;
     } 
+
+    private void UpdateStepID(object sender, EventArgs args){
+        if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
+            gameStepID = 5;
+        }else if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
+            gameStepID = 6;
+        }
+    }
 
 }

@@ -6,11 +6,13 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
 
     public GameObject advairPrefab; 
     public GameObject rescuePrefab;
+    public GameObject smallRescuePrefab;
     public GameObject inhale; //Game object that contains hint controller for inhale step
     public GameObject exhale; //contains hint controller for exhale step
     public GameObject drag; //contains hint controller for drag step
     private GameObject advair; //Game object that contains all the parts for advair
     private GameObject rescue; //Game object that contains all the parts for rescue inhaler	
+    private GameObject smallRescue; //Game object that contains smaller version of rescue inhaler
 
     private int practiceGamePointIncrement = 50;
     private int practiceGameStarIncrement = 50;
@@ -22,6 +24,10 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
     private float timer = 0; //hint timer
     private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
     private bool introShown = false; //has the intro text been shown
+
+    //========================Events==============================
+    public static EventHandler<EventArgs> OnShowHint; //Fire this event when hints need to display 
+    //============================================================
 
     public int PracticeGamePointIncrement {
         get {return practiceGamePointIncrement;}
@@ -41,7 +47,13 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
 
     void Start(){
         InhalerLogic.OnGameOver += OnGameEnd;
+        InhalerLogic.OnNextStep += OnNextStep;
         ResetInhalerGame();
+    }
+
+    void OnDestroy(){
+        InhalerLogic.OnGameOver -= OnGameEnd;
+        InhalerLogic.OnNextStep -= OnNextStep;
     }
 
      /*
@@ -53,10 +65,6 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
         if (runShowHintTimer){
             ShowHintTimer(); // This checks and shows hints if necessary.
         }
-    }
-
-    void OnDestroy(){
-        InhalerLogic.OnGameOver -= OnGameEnd;
     }
 
     // Initialize the values in InhalerLogic. Then determine whether to show (activate)
@@ -94,16 +102,17 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
 
     // This destories and creates an advair or a rescue inhaler.
     private void DestroyAndRecreatePrefabs(){
+        Destroy(advair);
+        Destroy(rescue);
+        Destroy(smallRescue);
         if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
-            // delete existing gameobjects from the last round if there are any
-            Destroy(advair);
-            // instantiate new prefabs and store references to new gameobjects
             advair = Instantiate(advairPrefab) as GameObject;
             advair.name = advairPrefab.name;
         }else if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
-            Destroy(rescue);
             rescue = Instantiate(rescuePrefab) as GameObject;
             rescue.name = rescuePrefab.name;
+
+            smallRescue = Instantiate(smallRescuePrefab) as GameObject;
         }
     }
 
@@ -152,6 +161,8 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
         timer += Time.deltaTime;
         if (timer > timeBeforeHints){
             showHint = true;
+            if(D.Assert(OnShowHint != null, "OnShowHint has no listeners"))
+                OnShowHint(this, EventArgs.Empty);
         }
     }
 
@@ -174,26 +185,29 @@ public class InhalerGameManager : Singleton<InhalerGameManager>{
 
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){
-        ResetHintTimer();
+        if (InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair && 
+            !InhalerLogic.Instance.IsFirstTimeAdvair){
+            ResetHintTimer();
+        }else if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue && 
+            !InhalerLogic.Instance.IsFirstTimeRescue){ 
+            ResetHintTimer();
+        }
     }
 
-    //Event listener.
+    //Event listener. Listens to game over message. Show game over popup/clean up game
     private void OnGameEnd(object sender, EventArgs args){
         // Record having given the pet the inhaler, if this was the real game.
         if (!InhalerLogic.Instance.IsPracticeGame){
             CalendarLogic.RecordGivingInhaler();
             StatsController.Instance.ChangeStats(realGamePointIncrement, Vector3.zero, 
                 realGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
-        }
-        else {
+        }else{
 			StatsController.Instance.ChangeStats(practiceGamePointIncrement, Vector3.zero, 
                 practiceGameStarIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
         }
-
         InhalerGameNGUI.Instance.ShowGameOverMessage();
         InhalerGameNGUI.Instance.ShowHUD();
         InhalerGameNGUI.Instance.HideQuitButton();
-
         RemoveFirstTimeFlags();
     }
 }

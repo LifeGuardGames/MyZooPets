@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class CalendarUIManager : Singleton<CalendarUIManager> {
-	//==================Events=======================
 	public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
-	//===============================================
 
     public bool isDebug; //developing option
 	public GameObject calendarPanel;
@@ -16,7 +14,7 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public GameObject calendarHintArrow;
 
     //Class to store UI reference
-    private class ThisWeekDay{
+    private struct ThisWeekDay{
         public Transform AM {get; set;}
         public Transform PM {get; set;}
 
@@ -25,9 +23,8 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
             PM = pm;
         }
     }
-
     //Class to store UI reference
-    private class LastWeekDay{
+    private struct LastWeekDay{
         public UISprite AM {get; set;}
         public UISprite PM {get; set;}
 
@@ -36,16 +33,6 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
             PM = pm;
         }
     }
-
-    private ThisWeekDay[] currentWeek = new ThisWeekDay[7]; //array of Days from this week
-    private LastWeekDay[] pastWeek = new LastWeekDay[7]; //array of Days from last week
-    private List<CalendarEntry> currentWeekData; //week data from DataManager
-    private List<CalendarEntry> pastWeekData; //week data from DataManager
-    private int numberOfGreenStamps; //keep track of the green checks so we know when the user
-                                //has collected all the rewards
-    private bool timerActive; //True: run count down timer, False: don't run
-    private float countDownTime; //time till the next reward
-    private CalendarLogic calendarLogic; //reference
 
     //sprite name in atlas
     private const string BLANK = "calendarButtonBlank";
@@ -58,6 +45,16 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     private const string HALF_STAMP_RED_TOP = "calendarHalfStampRedTop";
     private const string HALF_STAMP_GREEN_BOTTOM = "calendarHalfStampGreenBottom";
     private const string HALF_STAMP_GREEN_TOP = "calendarHalfStampGreenTop";
+
+    private ThisWeekDay[] currentWeek = new ThisWeekDay[7]; //array of Days from this week
+    private LastWeekDay[] pastWeek = new LastWeekDay[7]; //array of Days from last week
+    private List<CalendarEntry> currentWeekData; //week data from DataManager
+    private List<CalendarEntry> pastWeekData; //week data from DataManager
+    private int numberOfGreenStamps; //keep track of the green checks so we know when the user
+                                //has collected all the rewards
+    private bool timerActive; //True: run count down timer, False: don't run
+    private float countDownTime; //time till the next reward
+    private CalendarLogic calendarLogic; //reference
 
 	// Use this for initialization
 	void Awake() {

@@ -62,6 +62,8 @@ public class DojoUIManager : Singleton<DojoUIManager> {
             Transform trans = unlockGroup.transform.Find("Skill");
             //Change the gameObject name to skillID
             trans.name = dojoSkills[i].SkillID.ToString();
+            //Name and desc of the skill
+            trans.Find("Label_Name").GetComponent<UILabel>().text = dojoSkills[i].SkillName.ToString();
             //Fill in the cost
             trans.Find("Label_Cost").GetComponent<UILabel>().text = dojoSkills[i].CostStars.ToString();
             //Set the OnClick Target and functionName

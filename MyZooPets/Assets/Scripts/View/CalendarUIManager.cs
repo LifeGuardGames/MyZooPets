@@ -177,7 +177,9 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
     public void SetUpGreenStampTip(){
         //Display hint arrow
         greenStampHintArrow = NGUITools.AddChild(day.gameObject, calendarHintArrow);
-        greenStampHintArrow.transform.localPosition = new Vector3(116, 23, 0);
+        greenStampHintArrow.transform.localPosition = new Vector3(-136, 23, 0);
+        greenStampHintArrow.transform.localEulerAngles = new Vector3(0, 
+            calendarHintArrow.transform.localEulerAngles.y, 0);
 
         //Bring green stamp above the back drop
         day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21); 
@@ -191,7 +193,9 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 
         //Display hint arrow
         redStampHintArrow = NGUITools.AddChild(currentWeek[6].PM.gameObject, calendarHintArrow);
-        redStampHintArrow.transform.localPosition = new Vector3(116, 22, 0);
+        redStampHintArrow.transform.localPosition = new Vector3(-136, 22, 0);
+        redStampHintArrow.transform.localEulerAngles = new Vector3(0, 
+            calendarHintArrow.transform.localEulerAngles.y, 0);
 
        //Bring red stamp above the back drop
         night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 

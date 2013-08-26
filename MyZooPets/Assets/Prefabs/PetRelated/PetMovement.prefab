@@ -8,8 +8,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: PetMovement
@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -12.3326969, y: 0, z: 7.09553146}
-  m_LocalScale: {x: 3, y: 5.79231167, z: .985480726}
+  m_LocalScale: {x: 3.32802534, y: 6.42565632, z: 1.88588166}
   m_Children: []
   m_Father: {fileID: 400000}
 --- !u!4 &400004
@@ -104,8 +104,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: .956734359, z: 0, w: .290962964}
-  m_LocalPosition: {x: 6.98390961, y: 0, z: -38.4808044}
-  m_LocalScale: {x: 3, y: 5.79231215, z: .899999976}
+  m_LocalPosition: {x: 1.30837917, y: 0, z: -34.3594894}
+  m_LocalScale: {x: 3.32802534, y: 6.42565632, z: 1.88588166}
   m_Children: []
   m_Father: {fileID: 400000}
 --- !u!4 &400006
@@ -115,8 +115,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: .588155568, z: 0, w: .808747888}
-  m_LocalPosition: {x: 12.3326969, y: 0, z: -7.96445942}
-  m_LocalScale: {x: 3, y: 5.79231167, z: .899999976}
+  m_LocalPosition: {x: 11.5959263, y: 0, z: -8.20310497}
+  m_LocalScale: {x: 3.32802534, y: 6.42565632, z: 1.88588166}
   m_Children: []
   m_Father: {fileID: 400000}
 --- !u!23 &2300000
@@ -241,14 +241,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc953023a93774c11ae7d1d04130fbfb, type: 3}
+  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  allowPetMoveAround: 1
-  area1: {fileID: 400002}
-  area2: {fileID: 400006}
-  area3: {fileID: 400004}
+  WillRecognizeWith: []
+  timeLimit: .200000003
+  distanceLimit: .100000001
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -269,12 +267,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
+  m_Script: {fileID: 11500000, guid: cc953023a93774c11ae7d1d04130fbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WillRecognizeWith: []
-  timeLimit: .200000003
-  distanceLimit: .100000001
+  mainCamera: {fileID: 0}
+  allowPetMoveAround: 1
+  area1: {fileID: 400002}
+  area2: {fileID: 400006}
+  area3: {fileID: 400004}
+  shadowObject: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -4,12 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public class InventoryUIManager : MonoBehaviour {
-
 	public GameObject inventoryPanel;
-
-	private Inventory inventory;
-    private ItemLogic itemLogic;
-
     // NGUI revision variables
     public bool isDebug;
     public UISprite itemSprite;
@@ -18,7 +13,6 @@ public class InventoryUIManager : MonoBehaviour {
     public GameObject UIGridObject;
     public GameObject UIButtonToggleObject;
     public GameObject UIButtonSpriteObject;
-
     public GameObject spritePet;
     public GameObject speechBubblePrefab;
 
@@ -27,7 +21,9 @@ public class InventoryUIManager : MonoBehaviour {
     private UIButtonToggle uiButtonToggle;
     private UISprite uiSprite;
     private Dictionary<string, bool> itemTrackHash; // Hashtable to keep track of the types of items present;
-
+    private Inventory inventory;
+    private ItemLogic itemLogic;
+    
     void Awake(){
         inventory = GameObject.Find("GameManager/InventoryLogic").GetComponent<Inventory>();
         itemLogic = GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();

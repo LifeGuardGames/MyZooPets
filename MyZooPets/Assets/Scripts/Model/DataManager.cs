@@ -36,17 +36,14 @@ public class DataManager : Singleton<DataManager>{
     public InventoryData Inventory;
     [SerializeThis]
     public DojoRawData Dojo;
+    [SerializeThis]
+    public BadgeRawData Badge; 
 
     //pet info
     [SerializeThis]
     private string petName; //name of the pet
     [SerializeThis]
     private string petColor; //color of the pet
-
-    //Badge data
-    [SerializeThis]
-    private BadgeData[] badgeStatus; //store the data for badges.
-    //========================
 
     //=============Getters & Setters===============
     public string PetName{
@@ -64,11 +61,11 @@ public class DataManager : Singleton<DataManager>{
         set {firstTime = value;}
     }
 
-    //Badge
-    public BadgeData[] BadgeStatus{
-        get{return badgeStatus;}
-        set{badgeStatus = value;}
-    }
+    // //Badge
+    // public BadgeData[] BadgeStatus{
+    //     get{return badgeStatus;}
+    //     set{badgeStatus = value;}
+    // }
     //===================================
     public void TurnFirstTimeOff(){
         firstTime = false;
@@ -133,23 +130,25 @@ public class DataManager : Singleton<DataManager>{
         Inventory.Init();
         Dojo = new DojoRawData(); 
         Dojo.Init();
+        Badge = new BadgeRawData();
+        Badge.Init();
 
         //Pet info
         petName = "LazyWinkle";
         //Badge
-        badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
-        int counter = 0;
-        for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
-            BadgeData badgeData = new BadgeData();
-            // if(counter < 7){
-            //     badgeData.IsAwarded = true;
-            //     badgeData.Tier = BadgeTier.Gold;
-            // }
-            // counter++;
-            badgeStatus[i] = badgeData;
-        }
-        badgeStatus[0].IsAwarded = true;
-        badgeStatus[0].Tier = BadgeTier.Gold;
+        // badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
+        // int counter = 0;
+        // for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
+        //     BadgeData badgeData = new BadgeData();
+        //     // if(counter < 7){
+        //     //     badgeData.IsAwarded = true;
+        //     //     badgeData.Tier = BadgeTier.Gold;
+        //     // }
+        //     // counter++;
+        //     badgeStatus[i] = badgeData;
+        // }
+        // badgeStatus[0].IsAwarded = true;
+        // badgeStatus[0].Tier = BadgeTier.Gold;
     }
 
     //call the delegate when data initialization or deserialziation is done

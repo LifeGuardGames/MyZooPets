@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 [DoNotSerializePublic]
 public class DojoRawData{
-    private class Skill{
+    private struct Skill{
         public bool IsUnlocked {get; set;}
         public bool IsPurchased {get; set;}
 
@@ -17,9 +17,13 @@ public class DojoRawData{
     private Dictionary<int, Skill> skills; //Key: ID of the Dojo Skill, Value: skill data 
     
     //===============Getters & Setters=================
-    //Get IsUnlocked field for entity with skillID
-    //if the entity with skillID can't be found that means it hasn't been initialized
-    //add the entity into the dictionary
+    /*
+        Get IsUnlocked field for entity with skillID
+        if the entity with skillID can't be found that means it hasn't been initialized
+        add the entity into the dictionary
+
+        This is assuming that GetSkillIsUnlocked will be call first.
+    */
     public bool GetSkillIsUnlocked(int skillID){
         bool retVal = false;
         Skill skill; 

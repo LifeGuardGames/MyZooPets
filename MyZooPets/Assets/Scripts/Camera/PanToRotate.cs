@@ -11,6 +11,7 @@ public class PanToRotate : MonoBehaviour {
     public float panSpeed = 0.5f; //the speed that you want the camera to rotate while panning
     public float snapSpeed = 0.5f; //the speed that you want the camera to snap back when touch ends
     public float minPanDistance = 80.0f; //min distance required for panning to be recognized
+    
     private Vector2 startTouchPos; //position of the touch when finger touches the screen
     private bool[] enabledPartitions = {true, true, true, false, false}; //is the partition accessible to user
     private float[] partitionAngles = {0, 72, 144, 216, 288}; //the camera angle for the partition
@@ -23,7 +24,7 @@ public class PanToRotate : MonoBehaviour {
     private Hashtable snapOption1;
     private Hashtable snapOption2;
     private bool touchCancelled; //cancel touch detection if user click on NGUI first
-    private Camera NGUICamera;
+    private Camera nguiCamera;
     private Camera mainCamera;
     private enum Direction{
         Left,
@@ -40,9 +41,9 @@ public class PanToRotate : MonoBehaviour {
        snapOption2.Add("ease", LeanTweenType.easeOutBack);
        mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
        int layerNGUI = LayerMask.NameToLayer("NGUI");
-        NGUICamera = NGUITools.FindCameraForLayer(layerNGUI);
+        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
         
-        D.Assert(NGUICamera != null, "NGUI camera not found");
+        D.Assert(nguiCamera != null, "NGUI camera not found");
 	}
 	
 	//************************************************
@@ -211,7 +212,7 @@ public class PanToRotate : MonoBehaviour {
 
     //True: if finger touches NGUI 
     private bool IsTouchingNGUI(Vector2 screenPos){
-        Ray ray = NGUICamera.ScreenPointToRay (screenPos);
+        Ray ray = nguiCamera.ScreenPointToRay (screenPos);
         RaycastHit hit;
         int layerMask = 1 << 10;
         bool isOnNGUILayer = false;

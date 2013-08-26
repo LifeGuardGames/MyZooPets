@@ -13,7 +13,7 @@ using System;
 */
 public class Inventory : MonoBehaviour {
 	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
-	public struct InventoryEventArgs : EventArgs{
+	public class InventoryEventArgs : EventArgs{
 		public bool IsItemNew{get; set;}
 		public int ItemID{get; set;}
 	}

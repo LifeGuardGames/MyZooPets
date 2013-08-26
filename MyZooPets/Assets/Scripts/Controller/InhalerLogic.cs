@@ -4,15 +4,19 @@ using System;
 
 //InhalerLogic stores and manipulate any inhaler game related data
 public class InhalerLogic : Singleton<InhalerLogic>{
+    public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
+    public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
+    public static EventHandler<EventArgs> OnWrongStep; //User did not follow the correct swipe sequence
+    public static EventHandler<EventArgs> OnResetGame; //When game is reset at the beginning
+
+    public const int ADVAIR_NUM_STEPS = 6;
+    public const int RESCUE_NUM_STEPS = 7;
+
     private InhalerType currentInhalerType; //either Advair or Rescue inhaler
     private int currentStep; //current step that user is on
     private bool canPlayGame; //true: play game, false: exit game
     private bool isPracticeGame; //true: practice game less reward,
                                         //false: real game more reward.
-    //====================Events============================
-    public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
-    public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-    public static EventHandler<EventArgs> OnWrongStep; //User did not follow the correct swipe sequence
 
     //=================API (use this for UI)==================
     /*
@@ -20,8 +24,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         1)IsCurrentStepCorrect
         2)NextStep
     */
-    public const int ADVAIR_NUM_STEPS = 6;
-    public const int RESCUE_NUM_STEPS = 7;
 
     //return the current step of a sequence
     public int CurrentStep{
@@ -67,7 +69,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         GA.API.Design.NewEvent("InhalerGame:" + Enum.GetName(typeof(InhalerType), currentInhalerType) + 
             ":" + currentStep + ":Correct");
         currentStep++;
-        print(currentStep);
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
                 OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame()){ //Fire GameOver event if game is done
@@ -81,8 +82,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             case "InhalerGameTeddy":
                 canPlayGame = true;
 
-                // int randomId = UnityEngine.Random.Range(0, 2);
-                int randomId = 1;
+                int randomId = UnityEngine.Random.Range(0, 2);
                 switch(randomId){
                     case 0: currentInhalerType = InhalerType.Advair; break;
                     case 1: currentInhalerType = InhalerType.Rescue; break;
@@ -95,6 +95,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             break;
         }
         currentStep = 1;
+        if(D.Assert(OnResetGame != null, "OnResetGame has no listeners"))
+            OnResetGame(this, EventArgs.Empty);
     }
 
     /*

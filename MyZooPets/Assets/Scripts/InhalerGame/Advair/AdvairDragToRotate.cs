@@ -26,7 +26,7 @@ public class AdvairDragToRotate : MonoBehaviour {
     {
         if(Input.touchCount > 0){
             Touch touch = Input.touches[0];
-            if(completelyOpened) return; //Terminate touch right away if object already rated to finalPosition
+            if(completelyOpened) return; //Terminate touch right away if object already rotate to finalPosition
             switch(touch.phase){
                 case TouchPhase.Began:
                     //Condition that terminate touch

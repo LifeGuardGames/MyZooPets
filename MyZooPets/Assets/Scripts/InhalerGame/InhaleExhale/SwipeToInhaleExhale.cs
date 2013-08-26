@@ -19,7 +19,7 @@ public class SwipeToInhaleExhale : MonoBehaviour {
         Disable();
     }
 
-    void OnDestory(){
+    protected virtual void OnDestroy(){
         InhalerLogic.OnNextStep -= CheckAndEnable;
     }
     

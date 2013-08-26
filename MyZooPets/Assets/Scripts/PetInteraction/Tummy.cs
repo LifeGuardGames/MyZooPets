@@ -35,7 +35,7 @@ public class Tummy : MonoBehaviour {
             } else if (angle < 180) { //swipe down
                 SpeechBubbleControllerTK2D.Instance.Talk("boooo");
             } else if (angle < 270) { //swipe left
-                SpeechBubbleControllerTK2D.Instance.Talk("shake that butt");
+                SpeechBubbleControllerTK2D.Instance.Talk("I like to move it move it");
             } else { //swipe up
                 SpeechBubbleControllerTK2D.Instance.Talk("having fun?");
             }

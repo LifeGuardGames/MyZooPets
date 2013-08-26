@@ -46,7 +46,7 @@ public class PanToRotate : MonoBehaviour {
 	}
 	
 	//************************************************
-	// CheckArrowKeys()
+	// CheckArrowKeys() 
 	// Checks arrow key input for moving around the
 	// area.  Only use for standalone and web player.
 	//************************************************	
@@ -63,15 +63,13 @@ public class PanToRotate : MonoBehaviour {
 	// MoveCameraWithKey()
 	// Snaps and moves the camera with arrow keys.
 	//************************************************		
-	private void MoveCameraWithKey( Direction i_eDirection )
-	{
+	private void MoveCameraWithKey( Direction eDirection ) {
 		// get the index properly depending on which direction we're moving in
-        int nIndex = i_eDirection == Direction.Left ? GetNextPartitionIndex() : GetPrevPartitionIndex();
+        int nIndex = eDirection == Direction.Left ? GetNextPartitionIndex() : GetPrevPartitionIndex();
 
-        if( nIndex != -1 && enabledPartitions[nIndex] )
-		{
+        if( nIndex != -1 && enabledPartitions[nIndex] ) {
             float fRotateTo = partitionAngles[nIndex];	// get the rotation of the partition
-			
+
             currentIndex = nIndex;						// update our current partition
 			
             LeanTween.rotateY(gameObject, fRotateTo, snapSpeed, snapOption1);

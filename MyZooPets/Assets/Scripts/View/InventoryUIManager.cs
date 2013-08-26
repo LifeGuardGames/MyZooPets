@@ -44,7 +44,7 @@ public class InventoryUIManager : MonoBehaviour {
         //Spawn items in the inventory for the first time
         for(int i=0; i<itemLogic.items.Count; i++) {
             if(inventory.InventoryArray[i] > 0){
-                SpawnInventoryTypeInPanel(itemLogic.items[i].name, i);
+                SpawnInventoryTypeInPanel(itemLogic.items[i].textureName, i);
             }
         }
     }
@@ -94,7 +94,7 @@ public class InventoryUIManager : MonoBehaviour {
     //Event listener. listening to when new item is added to the inventory
     private void OnItemAdded(object sender, Inventory.InventoryEventArgs e){
        if(e.IsItemNew){
-            SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].name, e.ItemID);
+            SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].textureName, e.ItemID);
         }else{
             //this is kind of bad.... need to change the structure of the UI
             Transform item = UIGridObject.transform.Find("Item/"+e.ItemID.ToString());
@@ -102,15 +102,15 @@ public class InventoryUIManager : MonoBehaviour {
         }
     }
 
-    private GameObject SpawnInventoryTypeInPanel(string name, int id){
+    private GameObject SpawnInventoryTypeInPanel(string textureName, int id){
         // If the item type already exists, should not create a new box
-        if(itemTrackHash.ContainsKey(name) && itemTrackHash[name] == true){
+        if(itemTrackHash.ContainsKey(textureName) && itemTrackHash[textureName] == true){
             Debug.LogError("Creating new box for existing item in bar");
             return null;
         }
         else{
             // Flag new box created in hash
-            itemTrackHash.Add(name, true);
+            itemTrackHash.Add(textureName, true);
 
             // Create item structure
             GameObject item = NGUITools.AddChild(UIGridObject);
@@ -125,7 +125,7 @@ public class InventoryUIManager : MonoBehaviour {
             // container for sprite
             GameObject SpriteGo = NGUITools.AddChild(item);
             SpriteGo.gameObject.name = id.ToString();                   // Use ID as name
-            UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, name);
+            UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, textureName);
 
             BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;

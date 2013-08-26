@@ -11,9 +11,10 @@ public class TutorialHighlighting : MonoBehaviour {
 	}
 
     public void ShowArrow(){
-        arrowSprite.renderer.enabled = true;
+        arrowSprite.SetActive(true);
     }
+	
     public void HideArrow(){
-        arrowSprite.renderer.enabled = false;
+        arrowSprite.SetActive(false);
     }
 }

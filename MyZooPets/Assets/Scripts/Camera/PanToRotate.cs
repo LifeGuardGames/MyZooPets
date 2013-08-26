@@ -45,8 +45,48 @@ public class PanToRotate : MonoBehaviour {
         D.Assert(NGUICamera != null, "NGUI camera not found");
 	}
 	
+	//************************************************
+	// CheckArrowKeys()
+	// Checks arrow key input for moving around the
+	// area.  Only use for standalone and web player.
+	//************************************************	
+	private void CheckArrowKeys()
+	{
+		// check arrow keys
+		if( Input.GetKeyDown( KeyCode.RightArrow ) )
+			MoveCameraWithKey( Direction.Left );
+		else if ( Input.GetKeyDown( KeyCode.LeftArrow ) )
+			MoveCameraWithKey( Direction.Right );		
+	}
+	
+	//************************************************
+	// MoveCameraWithKey()
+	// Snaps and moves the camera with arrow keys.
+	//************************************************		
+	private void MoveCameraWithKey( Direction i_eDirection )
+	{
+		// get the index properly depending on which direction we're moving in
+        int nIndex = i_eDirection == Direction.Left ? GetNextPartitionIndex() : GetPrevPartitionIndex();
+
+        if( nIndex != -1 && enabledPartitions[nIndex] )
+		{
+            float fRotateTo = partitionAngles[nIndex];	// get the rotation of the partition
+			
+            currentIndex = nIndex;						// update our current partition
+			
+            LeanTween.rotateY(gameObject, fRotateTo, snapSpeed, snapOption1);
+        }		
+	}
+
 	// Update is called once per frame
 	void Update () {
+#if UNITY_STANDALONE
+		CheckArrowKeys();
+#endif
+#if UNITY_WEBPLAYER
+		CheckArrowKeys();	
+#endif	
+		
         if (Input.touchCount > 0) {
             Touch touch = Input.touches[0];
             switch (touch.phase) {
@@ -66,6 +106,7 @@ public class PanToRotate : MonoBehaviour {
                     Vector2 touchDeltaPosition = touch.deltaPosition;
                     float rotate = 0; 
                     if(touch.position.x < startTouchPos.x - minPanDistance){
+						
                         panDirection = Direction.Left;
                         int nextIndex = GetNextPartitionIndex();
                         if(nextIndex != -1 && enabledPartitions[nextIndex]){
@@ -75,7 +116,10 @@ public class PanToRotate : MonoBehaviour {
                             float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
                             if(calculatedRotation < partitionAngles[rightLimit]) rotate = temp;
                         }
+                        
+						//MoveCamera( Direction.Left, touch );
                     }else if(touch.position.x > startTouchPos.x + minPanDistance){
+					
                         panDirection = Direction.Right;
                         int prevIndex = GetPrevPartitionIndex();
                         if(prevIndex != -1 && enabledPartitions[prevIndex]){
@@ -85,7 +129,10 @@ public class PanToRotate : MonoBehaviour {
                             float calculatedRotation = gameObject.transform.eulerAngles.y + (-temp);
                             if(calculatedRotation > partitionAngles[leftLimit]) rotate = temp;
                         }
+                      
+					//MoveCamera( Direction.Right, touch );
                     }
+                    
                     gameObject.transform.Rotate(0, -rotate, 0);
                 break;
                 case TouchPhase.Ended:

@@ -9,8 +9,9 @@ public class PlayerRunner : MonoBehaviour
 	public float JumpSpeed = 0.5f;
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
-    public int DefaultLayer = 0;
-    public int PassLayer = 30;
+
+    private const int mFramesUntilActivSet = 3;
+    private int mFramesSinceInactiveSet = 0;
 
 	private float mInvinciblePulse = 0f;
 	private float mSpeedBoostPulse = 0f; // Boosts from items
@@ -20,16 +21,14 @@ public class PlayerRunner : MonoBehaviour
 	private float mSpeedBoostAmmount = 0f;
     private bool mbInvincible;
     private bool mbJumping;
-    private bool mbColliding;
     private bool mbGrounded;
     private bool mbFalling;
     private bool mbTriggerColliding;
     private Vector2 mInitialPosition;
     private Vector3 mMovementVector;
     private Vector3 mLastPosition;
-    private PlayerLayerTrigger mPlayerTrigger;
 	private CharacterController mCharacterController;
-    private List<Collider> mGroundedCollision = new List<Collider>();
+    private List<Collider> mIgnoringCollisions = new List<Collider>();
 
     public bool Invincible { get { return mbInvincible; } }
     public float Speed { get { return mSpeed; } }
@@ -48,6 +47,13 @@ public class PlayerRunner : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
+        if (mbFalling) {
+            mFramesSinceInactiveSet++;
+            if (mFramesSinceInactiveSet >= mFramesUntilActivSet) {
+                mbFalling = false;
+            }
+        }
+        // Unignore all current collisions
 		UpdateInput();
 
         UpdateInvincible();
@@ -58,7 +64,7 @@ public class PlayerRunner : MonoBehaviour
 		UpdateSpeed();
 
 		UpdateMovement();
-		
+
 		UpdateFalling();
 
 		if (!Vector3.Equals(mLastPosition, transform.position))
@@ -80,29 +86,6 @@ public class PlayerRunner : MonoBehaviour
     void onPlayerFallBegin() {}
     void onPlayerFallEnd() {}
 
-	void LayerTriggerCollisionEnter(Collider inCollider) {
-        int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
-        if (inCollider.gameObject.layer != bottomLayer)
-		    mbTriggerColliding = true;
-
-        if (inCollider.GetComponent<RunnerItem>() == null)
-            UpdateFalling(inCollider);
-	}
-
-	void LayerTriggerCollisionStay(Collider inCollider) {
-        mbTriggerColliding = true;
-
-        if (inCollider.GetComponent<RunnerItem>() == null)
-            UpdateFalling(inCollider);
-	}
-
-	void LayerTriggerCollisionExit(Collider inCollider) {
-        mbTriggerColliding = false;
-
-        if (inCollider.GetComponent<RunnerItem>() == null)
-            UpdateFalling(inCollider);
-	}
-
     public void Reset() {
         mCurrentTimeMultiplier = 1f;
         // Go back to the original position.
@@ -118,21 +101,12 @@ public class PlayerRunner : MonoBehaviour
         mSpeed = DefaultSpeed;
         mbInvincible = false;
         // Collision values
-        mbColliding = false;
         mbTriggerColliding = false;
         mbGrounded = false;
         mbFalling = false;
         mbJumping = false;
-        gameObject.layer = 0;
-        mGroundedCollision.Clear();
-
-        Transform layerObject = transform.FindChild("LayerTrigger");
-        if (layerObject != null) {
-            mPlayerTrigger = layerObject.GetComponent<PlayerLayerTrigger>();
-            Collider layerCollider = layerObject.GetComponent<Collider>();
-            Physics.IgnoreCollision(mCharacterController, layerCollider);
-        } else
-            Debug.LogError("The player requires a capsule collider trigger child called 'LayerTrigger'!!!!");
+        //@TODO you may have to reset all ignoring collisions before clearing. idk.
+        mIgnoringCollisions.Clear();
 
         RunnerAnimationController animationController = GetComponent<RunnerAnimationController>();
         if (animationController != null)
@@ -195,29 +169,6 @@ public class PlayerRunner : MonoBehaviour
                 BroadcastMessage("onPlayerFallEnd", SendMessageOptions.DontRequireReceiver);
             }
         }
-
-        if (gameObject.layer != 0) {
-            if (mbJumping) {
-                // Only update this when we are given a collider to check.
-                if (inCollider != null && !mGroundedCollision.Contains(inCollider)) {
-                    // If we are given a collider, and if we arent touching a collider that we were touching when grounded...
-                    // Determine the lowest point of us
-                    Vector3 playerTriggerMin = mPlayerTrigger.collider.bounds.min;
-                    // the top of them
-                    Vector3 colliderMax = inCollider.bounds.max;
-                    // Distance between
-                    float yDistanceBetween = Mathf.Abs(colliderMax.y - playerTriggerMin.y);
-                    // And how much we are willing to forgive for being off 0
-                    const float yDistanceForgiveness = 0.5f;
-                    if (yDistanceBetween <= yDistanceForgiveness) {
-                        gameObject.layer = 0;
-                    }
-                }
-            } else if (!mbFalling) {
-                gameObject.layer = 0;
-            }
-        }
-
     }
 
     private void UpdateMovement() {
@@ -245,11 +196,19 @@ public class PlayerRunner : MonoBehaviour
         }
 
         // Reset movement.
-        if (isGrounded)
+        if (isGrounded) {
             mMovementVector = new Vector3();
 
-        if (mbGrounded) {
-            mGroundedCollision = new List<Collider>(mPlayerTrigger.CurrentColliders);
+            if (!mbGrounded) {
+                // Was previously in freefall.
+                for (int ignoredIndex = mIgnoringCollisions.Count - 1; ignoredIndex >= 0; ignoredIndex--) {
+                    Collider ignoredCollider = mIgnoringCollisions[ignoredIndex];
+                    if (ignoredCollider != null)
+                        Physics.IgnoreCollision(ignoredCollider, collider, false);
+                    else
+                        mIgnoringCollisions.RemoveAt(ignoredIndex);
+                }
+            }
         }
 
         mbGrounded = isGrounded;
@@ -280,14 +239,12 @@ public class PlayerRunner : MonoBehaviour
     }
 
 	private void CheckAndActOnDeath() {
-		RunnerGameManager gameManager = RunnerGameManager.GetInstance();
-
 		// Are we below the maps floor value
-		LevelManager levelManager = gameManager.LevelManager;
+		LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
         float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
         if (transform.position.y < yTooLowValue) {
             if (!mbInvincible)
-                gameManager.ActivateGameOver();
+                RunnerGameManager.GetInstance().ActivateGameOver();
             else {
                 Vector3 position = transform.position;
                 position.y = yTooLowValue;
@@ -311,7 +268,6 @@ public class PlayerRunner : MonoBehaviour
 	private void TriggerJump() {
 		if (mbGrounded && !mbJumping && !mbFalling) {
 			mMovementVector.y += JumpSpeed;
-			gameObject.layer = 12;
             mbJumping = true;
             BroadcastMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
 		}
@@ -320,23 +276,19 @@ public class PlayerRunner : MonoBehaviour
 	private void TriggerFall() {
 		if (!mbJumping && !mbFalling) {
             // nop you can't fall through a bottom layered collision.
-            bool bOnLowestLevel = false;
             int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
-            List<Collider> currentColliders = mPlayerTrigger.CurrentColliders;
-            foreach (Collider currentCollider in currentColliders) {
-                if (currentCollider != null
-                    && currentCollider.gameObject.layer == bottomLayer)
-                {
-                    bOnLowestLevel = true;
-                    break;
+
+            RaycastHit hitinfo;
+            if (Physics.Raycast(collider.bounds.min, Vector3.down, out hitinfo, 1f)) {
+                Collider hitCollider = hitinfo.collider;
+                if (hitCollider.gameObject.layer != bottomLayer) {
+                    Physics.IgnoreCollision(hitinfo.collider, collider);
+                    mIgnoringCollisions.Add(hitinfo.collider);
+                    mbFalling = true;
+                    mbGrounded = false;
+            		BroadcastMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
                 }
             }
-
-            if (!bOnLowestLevel) {
-                gameObject.layer = 12;
-                mbFalling = true;
-                BroadcastMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
-            }
-		}
+        }
 	}
 }

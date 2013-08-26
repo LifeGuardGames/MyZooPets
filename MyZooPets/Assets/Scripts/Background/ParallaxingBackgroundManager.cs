@@ -23,7 +23,7 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 	// Update is called once per frame
     void LateUpdate() {
 		if (mNextGroup != null) {
-			mTransitionPulse -= Time.deltaTime;
+            mTransitionPulse -= Time.deltaTime / Time.timeScale;
 			if (mTransitionPulse <= 0) {
 				SetNextGroupAsCurrentAndDeleteCurrent();
 				if (mNextTransition.Count > 0)

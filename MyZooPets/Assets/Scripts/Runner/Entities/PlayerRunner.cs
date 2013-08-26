@@ -1,4 +1,46 @@
-﻿using UnityEngine;
+﻿/* Sean Duane
+ * PlayerRunner.cs
+ * 8:26:2013   12:26
+ * Description:
+ * This script is what controls everything the player does in the runner game.
+ * It's arguably the largets and heaviest script.
+ * 
+ * INPUT:
+ * Input is pulled from the InputManager, which triggers certain events here. Like onSwipeUp().
+ * 
+ * MOVEMENT:
+ * The character uses a charactercontroller. So, we also use the .Move() method of that controller.
+ * The movement is done with psuedo-forces.
+ * A "movementvector" keeps track of certain forces, like jumping.
+ * Then we apply the different forces to this vector. Right now, we just directly set the X and Y components, since that's all we move
+ * that stuff at. if you wanted to apply others, you would "add" in the vectors instead.
+ * The forces are then all multiplied by dt a few times. See the f=ma equation and it's unit of measurements to understand why. tldr newton.
+ * The jumping is a bit more finicky though. You just apply an upward force of the jump speed once, and it goes.
+ * However, falling kinda stinks. Falling is gravity*dt. What about mass? air drag?
+ * I did my best to implement those features, but they might be wrong. The mass should make the player fall more (with more mass), and less
+ * drag should make it float a bit more.
+ * 
+ * COLLISION:
+ * ..is pretty messed up. Good luck fixing this, becuase I just could not do it as much as I tried.
+ * Basically:
+ * The player runs around with .Move() of the CC (character controller) and a rigidbody. Those magic unity classes will let you do
+ * the 'sliding' on the screen that you see.
+ * However, then you get to the Jumping and Falling. How do you jump THROUGH a platform and fall THROUGH one?
+ * CHANGE THIS WHEN YOU FIX COLLISION:
+ * Basically, right now, it's like this- All platforms are actually one-sided mesh colliders. That means that collision sort of occurs only on one side.
+ * So that takes care of jumping- it jumps through the non collision side.
+ * Falling will simply raycast down, find the current thing it's standing on, check if that is NOT a ground peice (marked by its layer), then ignore collision with that.
+ * When we become grounded again, we un-ignore those collisions.
+ * 
+ * SPEED:
+ * The player has a set speed. It never changes. The timestep of the game is what makes things 'faster'. This may change from the time of this writing.
+ * 
+ * INVINCIBILITY:
+ * Right now, it sets a flag and a time pulse. Whjeneve ryou hit a bad item, nothing happens.
+ * When you die, it tries to find the topmost componetn and sticks you there, if you arent above one already.
+ */
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,13 +52,13 @@ public class PlayerRunner : MonoBehaviour
 	public float SpeedIncrease = 0.1f;
 	public float SpeedIncreaseTime = 5;
 
-    private const int mFramesUntilActivSet = 3;
-    private int mFramesSinceInactiveSet = 0;
-
+    // Various pulses.
+    // fyi, pulses are 'countdown' timers. They just get a time (in seconds for unity) shoved in them, then
+    //subtract dt (deltaTime) from it every update. <= zero? Time has elapsed!
+    // Also, I divide by the timescale. Cuz we want "REAL" time sconds, not "GAME" time seconds, which is what timescale is doing.
 	private float mInvinciblePulse = 0f;
 	private float mSpeedBoostPulse = 0f; // Boosts from items
 	private float mSpeedIncreasePulse = 0f; // Time til we speed up our constant speed
-    private float mSpeed;
     private float mCurrentTimeMultiplier;
 	private float mSpeedBoostAmmount = 0f;
     private bool mbInvincible;
@@ -31,7 +73,6 @@ public class PlayerRunner : MonoBehaviour
     private List<Collider> mIgnoringCollisions = new List<Collider>();
 
     public bool Invincible { get { return mbInvincible; } }
-    public float Speed { get { return mSpeed; } }
 
 	// Use this for initialization
 	void Start() {
@@ -47,13 +88,6 @@ public class PlayerRunner : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
-        if (mbFalling) {
-            mFramesSinceInactiveSet++;
-            if (mFramesSinceInactiveSet >= mFramesUntilActivSet) {
-                mbFalling = false;
-            }
-        }
-        // Unignore all current collisions
 		UpdateInput();
 
         UpdateInvincible();
@@ -98,7 +132,6 @@ public class PlayerRunner : MonoBehaviour
         mLastPosition = transform.position;
         mMovementVector = Vector3.zero;
         mLastPosition = Vector3.zero;
-        mSpeed = DefaultSpeed;
         mbInvincible = false;
         // Collision values
         mbTriggerColliding = false;
@@ -111,11 +144,81 @@ public class PlayerRunner : MonoBehaviour
         RunnerAnimationController animationController = GetComponent<RunnerAnimationController>();
         if (animationController != null)
             animationController.Reset();
-}
+    }
+
+    private void UpdateMovement() {
+        // These are constant speeds, not forces. But I treat them like forces. It's weird I know.
+        mMovementVector.z = DefaultSpeed + mSpeedBoostAmmount;
+
+        // Add in Gravity force.
+        mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;
+
+        // Vertical drag
+        mMovementVector += (Vector3.down * rigidbody.drag * Time.deltaTime);
+
+        if (mCharacterController == null)
+            Debug.LogError("No Character Controller exists!");
+
+        // Perform the move
+        CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
+        bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
+        if (isGrounded && mbJumping) {
+            mbJumping = false;
+            BroadcastMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
+        }
+
+        // Reset movement.
+        if (isGrounded) {
+            mMovementVector = new Vector3();
+
+            if (!mbGrounded) {
+                // Was previously in freefall.
+                for (int ignoredIndex = mIgnoringCollisions.Count - 1; ignoredIndex >= 0; ignoredIndex--) {
+                    Collider ignoredCollider = mIgnoringCollisions[ignoredIndex];
+                    if (ignoredCollider != null)
+                        Physics.IgnoreCollision(ignoredCollider, collider, false);
+                    else
+                        mIgnoringCollisions.RemoveAt(ignoredIndex);
+                }
+
+                BroadcastMessage("onPlayerGrounded", SendMessageOptions.DontRequireReceiver);
+            }
+        } else {
+            if (mbGrounded) {
+                // Just entered freefall
+                if (!mbJumping && !mbFalling)
+                    BroadcastMessage("onPlayerFreeFall", SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
+        mbGrounded = isGrounded;
+
+        Vector3 position = transform.position;
+        position.x = mInitialPosition.x;
+        transform.position = position;
+    }
+
+    private void UpdateSpeed() {
+        mSpeedIncreasePulse -= Time.deltaTime / Time.timeScale;
+        if (mSpeedIncreasePulse <= 0) {
+            //mSpeed += SpeedIncrease;
+            mCurrentTimeMultiplier += SpeedIncrease;
+            RunnerGameManager.GetInstance().IncreaseTimeSpeed(SpeedIncrease);
+            mSpeedIncreasePulse = SpeedIncreaseTime;
+        }
+
+        if (mSpeedBoostPulse > 0f) {
+            mSpeedBoostPulse -= Time.deltaTime / Time.timeScale;
+            if (mSpeedBoostPulse <= 0f) {
+                mSpeedBoostPulse = 0f;
+                mSpeedBoostAmmount = 0f;
+            }
+        }
+    }
 
     private void UpdateInvincible() {
         if (mbInvincible) {
-            mInvinciblePulse -= Time.deltaTime;
+            mInvinciblePulse -= Time.deltaTime / Time.timeScale;
             if (mInvinciblePulse <= 0f) {
                 // Ready to uninvincible, except, we need to make sure we don't do it
                 //while the character is dying...
@@ -143,24 +246,6 @@ public class PlayerRunner : MonoBehaviour
         }
     }
 
-    private void UpdateSpeed() {
-        mSpeedIncreasePulse -= Time.deltaTime;
-        if (mSpeedIncreasePulse <= 0) {
-            //mSpeed += SpeedIncrease;
-            mCurrentTimeMultiplier += SpeedIncrease;
-            RunnerGameManager.GetInstance().IncreaseTimeSpeed(SpeedIncrease);
-            mSpeedIncreasePulse = SpeedIncreaseTime;
-        }
-
-        if (mSpeedBoostPulse > 0f) {
-            mSpeedBoostPulse -= Time.deltaTime;
-            if (mSpeedBoostPulse <= 0f) {
-                mSpeedBoostPulse = 0f;
-                mSpeedBoostAmmount = 0f;
-            }
-        }
-    }
-
     // Checks if we are "falling down" to re-eneable collision.
     private void UpdateFalling(Collider inCollider = null) {
         if (mbFalling) {
@@ -169,53 +254,6 @@ public class PlayerRunner : MonoBehaviour
                 BroadcastMessage("onPlayerFallEnd", SendMessageOptions.DontRequireReceiver);
             }
         }
-    }
-
-    private void UpdateMovement() {
-        // These are constant speeds, not forces. It's weird I know.
-        //float currentSpeed = mSpeed + mSpeedBoostAmmount;
-        float currentDeltaTime = Time.deltaTime;
-
-        mMovementVector.z = mSpeed + mSpeedBoostAmmount;
-
-        // Add in Gravity force.
-        mMovementVector += (Physics.gravity * rigidbody.mass) * currentDeltaTime;
-
-        // Vertical drag
-        mMovementVector += (Vector3.down * rigidbody.drag * currentDeltaTime);
-
-        if (mCharacterController == null)
-            Debug.LogError("No Character Controller exists!");
-
-        // Perform the move
-        CollisionFlags flags = mCharacterController.Move(mMovementVector * currentDeltaTime);
-        bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
-        if (isGrounded && mbJumping) {
-            mbJumping = false;
-            BroadcastMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
-        }
-
-        // Reset movement.
-        if (isGrounded) {
-            mMovementVector = new Vector3();
-
-            if (!mbGrounded) {
-                // Was previously in freefall.
-                for (int ignoredIndex = mIgnoringCollisions.Count - 1; ignoredIndex >= 0; ignoredIndex--) {
-                    Collider ignoredCollider = mIgnoringCollisions[ignoredIndex];
-                    if (ignoredCollider != null)
-                        Physics.IgnoreCollision(ignoredCollider, collider, false);
-                    else
-                        mIgnoringCollisions.RemoveAt(ignoredIndex);
-                }
-            }
-        }
-
-        mbGrounded = isGrounded;
-
-        Vector3 position = transform.position;
-        position.x = mInitialPosition.x;
-        transform.position = position;
     }
 
     private void UpdateInput() {
@@ -238,30 +276,11 @@ public class PlayerRunner : MonoBehaviour
         mSpeedBoostPulse = inDuration;
     }
 
-	private void CheckAndActOnDeath() {
-		// Are we below the maps floor value
-		LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
-        float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
-        if (transform.position.y < yTooLowValue) {
-            if (!mbInvincible)
-                RunnerGameManager.GetInstance().ActivateGameOver();
-            else {
-                Vector3 position = transform.position;
-                position.y = yTooLowValue;
-                transform.position = position;
-            }
-		}
-	}
-
 	public void TriggerSlowdown(float inDivisor) {
-        if (!mbInvincible) { 
-            mSpeed /= inDivisor;
-
-            if (mSpeed < DefaultSpeed)
-                mSpeed = DefaultSpeed;
-
-            MegaHazard megaHazard = GameObject.FindGameObjectWithTag("MegaHazard").GetComponent<MegaHazard>();
-            megaHazard.TriggerPlayerSlowdown();
+        if (!mbInvincible) {
+            RunnerGameManager gameManager = RunnerGameManager.GetInstance();
+            gameManager.SlowTimeSpeed(inDivisor);
+            gameManager.MegaHazard.TriggerPlayerSlowdown();
         }
 	}
 
@@ -291,4 +310,19 @@ public class PlayerRunner : MonoBehaviour
             }
         }
 	}
+
+    private void CheckAndActOnDeath() {
+        // Are we below the maps floor value
+        LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
+        float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
+        if (transform.position.y < yTooLowValue) {
+            if (!mbInvincible)
+                RunnerGameManager.GetInstance().ActivateGameOver();
+            else {
+                Vector3 position = transform.position;
+                position.y = yTooLowValue;
+                transform.position = position;
+            }
+        }
+    }
 }

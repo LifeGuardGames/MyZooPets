@@ -1,3 +1,21 @@
+/* Sean Duane
+ * LevelManager.cs
+ * 8:26:2013   12:00
+ * Description:
+ * Handles the pushing, popping, and management of all levelcomponents.
+ * This works mainly off 'levelgroups'. These groups contain a level ID, and a list of components.
+ * Every x distance, this manager will grab the current levelgroup, pull out a random component, and push that to the queue.
+ * The queue get automatically destroyed and added as we run along it.
+ * 
+ * Level transitions occur every x seconds, and simply switch the current group to a random new group.
+ * The new group cannot be the current group, and must be within a level range (mNumLevelSwitches)
+ * 
+ * Whenever we push a new level component, it will randomly spawn items on that level component.
+ * This manager pulls from the new component all the "bundles" of items.
+ * Based on each ones spawn chance, it rolls for a random one.
+ * Then, we take that bundle, and spawn everything within it on that level component.
+ */
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +29,7 @@ public class LevelManager : MonoBehaviour
     public CoinItem CoinPrefab;
     public LevelGroup StartingLevelGroup;
     public List<LevelGroup> LevelGroups;
+    public List<LevelTransitionComponent> LevelTransitionGroups;
     public List<RunnerItem> ItemPrefabs;
     public List<RunnerItem> HazardPrefabs;
 
@@ -36,11 +55,10 @@ public class LevelManager : MonoBehaviour
 			Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
 
-			const int zExtent = 2;
-
             Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
             Vector3 frontLevelPosition = minAnchor.position;
 
+            const int zExtent = 2;
 			// Different between the two positions
 			float distanceBetween = Mathf.Abs(currentRunnerPosition[zExtent] - frontLevelPosition[zExtent]);
 			
@@ -64,31 +82,11 @@ public class LevelManager : MonoBehaviour
 			}
 		}
 
-		mLevelSwitchPulse -= Time.deltaTime;
+    	mLevelSwitchPulse -= Time.deltaTime / Time.timeScale;
 		if (mLevelSwitchPulse <= 0f) {
-			mLevelSwitchPulse = LevelGroupSwitchTime;
+            mLevelSwitchPulse = LevelGroupSwitchTime;
 
-			// Cut to a new, different level that has the proper level ID.
-			mNumLevelSwitches++;
-			
-			List<LevelGroup> potentialLevels = new List<LevelGroup>();
-			foreach (LevelGroup levelGroup in LevelGroups) {
-				if (levelGroup != mCurrentLevelGroup && levelGroup.LevelGroupNumber <= mNumLevelSwitches) {
-					potentialLevels.Add(levelGroup);
-				}
-			}
-
-			if (potentialLevels.Count > 0) {
-				// Choose a random level
-				int randomIndex = Random.Range(0, potentialLevels.Count);
-				LevelGroup newLevelGroup = potentialLevels[randomIndex];
-				string groupID = newLevelGroup.ParallaxingBackground.GroupID;
-
-				// Transition!
-                mCurrentLevelGroup = newLevelGroup;
-				Debug.Log("Transitioning to level " + newLevelGroup.LevelID);
-			} else
-				Debug.LogError("No other levels to switch to.");
+            TransitionToRandomNewLevelGroup();
 		}
     }
 
@@ -118,6 +116,48 @@ public class LevelManager : MonoBehaviour
         PopulateLevelComponent(nextLevel);
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
+    }
+
+    private void TransitionToRandomNewLevelGroup() {
+        // Cut to a new, different level that has the proper level ID.
+        // Update our level switches
+        mNumLevelSwitches++;
+
+        // Pull out all levels that are 'legal' to switch to
+        List<LevelGroup> potentialLevels = new List<LevelGroup>();
+        foreach (LevelGroup levelGroup in LevelGroups) {
+            if (levelGroup != mCurrentLevelGroup  // Don't switch to the current group
+                && levelGroup.LevelGroupNumber <= mNumLevelSwitches) // Dont switch to a group that is a higher 'level' then us
+            {
+                potentialLevels.Add(levelGroup);
+            }
+        }
+
+        if (potentialLevels.Count > 0) {
+            // Choose a random level
+            int randomIndex = Random.Range(0, potentialLevels.Count);
+            LevelGroup newLevelGroup = potentialLevels[randomIndex];
+            string currentGroupID = mCurrentLevelGroup.LevelID;
+            string newGroupID = newLevelGroup.LevelID;
+
+            // Transition!
+            mCurrentLevelGroup = newLevelGroup;
+            Debug.Log("Transitioning to level " + newLevelGroup.LevelID);
+
+            // Now that we succesfully transitioned, determine if there is a level transition component.
+            foreach (LevelTransitionComponent currentTransition in LevelTransitionGroups) {
+                if (currentTransition.FromGroupID == currentGroupID
+                    && currentTransition.ToGroupID == newGroupID) 
+                {
+                    // Push this component nowww
+                    PushAndInstantiateRandomComponent(currentTransition);
+                }
+            }
+
+        } else {
+            Debug.LogError("No other levels to switch to. Perhaps there are no other level groups, or we havent reached a new "
+                + "level number yet? Current number transitions: " + mNumLevelSwitches);
+        }
     }
 
     public float GetTooLowYValue(Vector3 inPosition) {

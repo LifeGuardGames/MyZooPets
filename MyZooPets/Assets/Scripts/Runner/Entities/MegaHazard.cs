@@ -60,9 +60,9 @@ public class MegaHazard : MonoBehaviour {
         else {
             if (mSlowDownStayPulse > 0f) {
                 // When we get hit, we must stay at our slowed-down locaiton until the time elapses.
-                mSlowDownStayPulse -= Time.deltaTime;           
+                mSlowDownStayPulse -= Time.deltaTime / Time.timeScale;         
             } else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
-                mDistanceRegainPulse -= Time.deltaTime;
+                mDistanceRegainPulse -= Time.deltaTime / Time.timeScale;
                 if (mDistanceRegainPulse <= 0f) {
                     mDistanceRegainPulse = DistanceRegainTime;
                     mCurrentDistanceFromPlayer += DistanceRegainIncrement;

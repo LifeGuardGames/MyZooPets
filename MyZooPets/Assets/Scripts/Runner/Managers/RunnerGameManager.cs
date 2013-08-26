@@ -113,4 +113,10 @@ public class RunnerGameManager : MonoBehaviour {
     public void IncreaseTimeSpeed(float inIncreaseTime) {
         Time.timeScale += inIncreaseTime;
     }
+
+    public void SlowTimeSpeed(float inTimeDivisor) {
+        Time.timeScale /= inTimeDivisor;
+        if (Time.timeScale < 1f)
+            Time.timeScale = 1f;
+    }
 }

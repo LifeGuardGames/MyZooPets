@@ -26,12 +26,9 @@ public class LevelManager : MonoBehaviour
 	public float LevelTooLowYValue = -50.0f;
 	public float LevelGroupSwitchTime = 40.0f;
     public float CoinSpawnDistance = 1f;
-    public CoinItem CoinPrefab;
     public LevelGroup StartingLevelGroup;
     public List<LevelGroup> LevelGroups;
     public List<LevelTransitionComponent> LevelTransitionGroups;
-    public List<RunnerItem> ItemPrefabs;
-    public List<RunnerItem> HazardPrefabs;
 
     private int mNumLevelSwitches;
     private float mLevelSwitchPulse;
@@ -239,28 +236,29 @@ public class LevelManager : MonoBehaviour
 	}
 
     private void SpawnItemsInLevel(LevelComponent inLevelComponent, PointGroup inGroup) {
+        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
         switch (inGroup.mSpawnType) {
             case eSpawnType.Coins: {
-                CoinItem newCoin = CoinPrefab;
-                SpawnCoinStrip(inLevelComponent, inGroup, newCoin);
+                SpawnCoinStrip(inLevelComponent, inGroup);
                 break;
             }
 
             case eSpawnType.Hazards: {
-                HazardItem newHazard = (HazardItem)HazardPrefabs[Random.Range(0, HazardPrefabs.Count)];
+                HazardItem newHazard = (HazardItem)itemManager.GetRandomItemOfType(typeof(HazardItem));
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newHazard);
                 break;
             }
 
             case eSpawnType.Items: {
-                RunnerItem newItem = ItemPrefabs[Random.Range(0, ItemPrefabs.Count)];
+                RunnerItem newItem = (RunnerItem)itemManager.GetRandomItemOfType(typeof(RunnerItem));
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newItem);
                 break;
             }
         }
     }
 
-    private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup, CoinItem inCoinPrefab) {
+    private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup) {
+        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point:
             case eCurveType.Linear: {
@@ -277,10 +275,10 @@ public class LevelManager : MonoBehaviour
                         // But wait, that's on the prefab. Add in our real world clones position.
                         newCoinPosition += inLevelComponent.transform.position;
 
-                        GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
+                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem));
                         newCoin.transform.position = newCoinPosition;
 
-                        inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
+                        inLevelComponent.AddLevelItem(newCoin);
 
                         interpolationLeftovers = currentInterpolation - currentLineDistance;
                     }
@@ -313,9 +311,9 @@ public class LevelManager : MonoBehaviour
 
                         coinSpawnLocation += inLevelComponent.transform.position;
                         // And spawn
-                        GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
+                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem));
                         newCoin.transform.position = coinSpawnLocation;
-                        inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
+                        inLevelComponent.AddLevelItem(newCoin);
                     }
                 }
             }

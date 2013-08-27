@@ -46,10 +46,12 @@ public class LevelComponent : MonoBehaviour {
 	void Update() {
 	}
 
-	void OnDestroy() {
+    void OnDestroy() {
+        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
 		foreach (RunnerItem currentItem in mSpawnedItems) {
-			if (currentItem != null)
-				GameObject.Destroy(currentItem.gameObject);
+            if (currentItem != null) {
+                itemManager.StoreOrDisposeItem(currentItem);
+            }
 		}
 	}
 

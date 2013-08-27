@@ -80,7 +80,7 @@ public class LevelComponent : MonoBehaviour {
 	public PointInfo AddNewPoint(string inID, Vector3 inNewPoint) {
 		PointGroup currentGroup = GetGroup(inID);
 		if (currentGroup != null) {
-			PointInfo newPoint = new PointInfo(inNewPoint, eLineType.Straight);
+			PointInfo newPoint = new PointInfo(inNewPoint);
 			currentGroup.mPoints.Add(newPoint);
 			return newPoint;
 		}
@@ -168,13 +168,16 @@ public class PointGroup {
 	[SerializeField]
 	public List<PointInfo> mPoints;
 	[SerializeField]
-	public eSpawnType mSpawnType;
+    public eSpawnType mSpawnType;
+    [SerializeField]
+    public eCurveType mCurveType;
 
 	public PointGroup(string inID) {
 		mID = inID;
         mBundleID = 0;
 		mPoints = new List<PointInfo>();
-		mSpawnType = eSpawnType.None;
+        mSpawnType = eSpawnType.None;
+        mCurveType = eCurveType.Linear;
 	}
 }
 
@@ -183,18 +186,14 @@ public class PointInfo {
 	[SerializeField]
 	public Vector3 mPosition;
 	[SerializeField]
-	public eLineType mLineType;
-	[SerializeField]
 	public Vector3 mLocalPosition;
 
 	public PointInfo() {
 		mPosition = Vector3.zero;
-		mLineType = eLineType.Straight;
 	}
 
-	public PointInfo(Vector3 inPosition, eLineType inLineType) {
+	public PointInfo(Vector3 inPosition) {
 		mPosition = inPosition;
-		mLineType = inLineType;
 	}
 }
 
@@ -212,10 +211,13 @@ public class Bundle {
 }
 
 [System.Serializable]
-public enum eLineType {
-	Straight,
-	Curve,
-	Bezier
+public enum eCurveType {
+    Point,
+	Linear,
+	Quadratic,
+	Cubic,
+
+    Max
 }
 
 [System.Serializable]
@@ -224,5 +226,6 @@ public enum eSpawnType {
 	Coins = 0,
 	Hazards,
 	Items,
+
 	Max
 }

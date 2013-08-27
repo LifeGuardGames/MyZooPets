@@ -763,6 +763,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400090}
+  - 114: {fileID: 11400020}
   m_Layer: 0
   m_Name: FromForest_Transition
   m_TagString: Untagged
@@ -2353,8 +2354,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87edab2e3f5d5834ab0fcf12378bde85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPointGroups: []
-  mBundles: []
+  mPointGroups:
+  - mID: ID0
+    mBundleID: 0
+    mPoints:
+    - mPosition: {x: 0, y: 2.08774853, z: -17.1717529}
+      mLocalPosition: {x: 0, y: 2.08774853, z: -17.1717529}
+    - mPosition: {x: 0, y: 13.685112, z: 32.9134064}
+      mLocalPosition: {x: 0, y: 13.685112, z: 32.9134064}
+    - mPosition: {x: 0, y: 14.7903433, z: -26.6724548}
+      mLocalPosition: {x: 0, y: 14.7903433, z: -26.6724548}
+    - mPosition: {x: 0, y: 0, z: 0}
+      mLocalPosition: {x: 0, y: 0, z: 0}
+    mSpawnType: 0
+    mCurveType: 3
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2468,6 +2484,21 @@ MonoBehaviour:
     height: 1
   mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
   mTexture: {fileID: 0}
+--- !u!114 &11400020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f7c019a47c376c4c97407909d7f0b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mPointGroups: []
+  mBundles: []
+  FromGroupID: Forest
+  ToGroupID: City
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -555,6 +555,7 @@ Transform:
   - {fileID: 1857700959}
   - {fileID: 447575721}
   - {fileID: 1996345049}
+  - {fileID: 1411197180}
   m_Father: {fileID: 340973607}
 --- !u!114 &143501693
 MonoBehaviour:
@@ -569,47 +570,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPointGroups:
-  - mID: ID0
+  - mID: Coins1
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 11.1789589, z: -1.46056366}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 11.1789589, z: -1.46056366}
-    - mPosition: {x: 0, y: 11.1789589, z: 16.7965279}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 11.1789589, z: 16.7965279}
+    - mPosition: {x: 0, y: 6.21186447, z: -9.04807281}
+      mLocalPosition: {x: 0, y: 6.21186447, z: -9.04807281}
+    - mPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+      mLocalPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+    - mPosition: {x: 0, y: 12.1436386, z: 10.7042999}
+      mLocalPosition: {x: 0, y: 12.1436386, z: 10.7042999}
     mSpawnType: 0
-  - mID: ID1
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 6.46020126, z: -9.88691711}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.46020126, z: -9.88691711}
-    - mPosition: {x: 0, y: 6.40402603, z: 15.3359604}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.40402603, z: 15.3359604}
-    mSpawnType: 0
-  - mID: ID2
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 1.34821701, z: -11.965416}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.34821701, z: -11.965416}
-    - mPosition: {x: 0, y: 1.46056747, z: 19.4929581}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.46056747, z: 19.4929581}
-    mSpawnType: 0
-  - mID: ID3
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 2.13467407, z: 0}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 2.13467407, z: 0}
-    - mPosition: {x: 0, y: 1.62909698, z: 1.79762268}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.62909698, z: 1.79762268}
-    mSpawnType: 0
-  mBundles: []
+    mCurveType: 2
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!1 &143543147
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,12 +2124,11 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 11.51297, z: -2.87824249}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 11.51297, z: -2.87824249}
     - mPosition: {x: 0, y: 7.1519928, z: .959411621}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.1519928, z: .959411621}
     mSpawnType: 0
+    mCurveType: 0
   mBundles: []
 --- !u!1 &558092199
 GameObject:
@@ -3843,18 +3816,15 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 1.27629471, z: -11.4866562}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 1.27629471, z: -11.4866562}
     - mPosition: {x: 0, y: 1.27629471, z: 0}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 1.27629471, z: 0}
     - mPosition: {x: 0, y: 5.56100082, z: 11.121994}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 5.56100082, z: 11.121994}
     - mPosition: {x: 0, y: 5.74332809, z: 21.1500244}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 5.74332809, z: 21.1500244}
     mSpawnType: 0
+    mCurveType: 1
   mBundles: []
 --- !u!1001 &747397590
 Prefab:
@@ -3863,6 +3833,26 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mBundles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 400044, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
       propertyPath: m_LocalPosition.x
       value: 33.5790634
@@ -3925,6 +3915,162 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 2300014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mSpawnType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mID
+      value: foofighters
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mPosition.y
+      value: 3.9367466
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mPosition.z
+      value: -12.57621
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mLocalPosition.y
+      value: 3.9367466
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mLocalPosition.z
+      value: -12.57621
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mPosition.y
+      value: 19.0722389
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mPosition.z
+      value: 26.2530022
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mLocalPosition.y
+      value: 19.0722389
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mLocalPosition.z
+      value: 26.2530022
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mCurveType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mPosition.y
+      value: 4.10636902
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mPosition.z
+      value: 15.0215683
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mLocalPosition.y
+      value: 4.10636902
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mLocalPosition.z
+      value: 15.0215683
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mPosition.y
+      value: 17.3216171
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mPosition.z
+      value: -25.3361588
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mLocalPosition.y
+      value: 17.3216171
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mLocalPosition.z
+      value: -25.3361588
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mCurveType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mSpawnType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mCurveType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mPosition.y
+      value: 12.8547363
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mPosition.z
+      value: -11.6033859
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mLocalPosition.y
+      value: 12.8547363
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[0].mLocalPosition.z
+      value: -11.6033859
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mPosition.y
+      value: 15.4711838
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mPosition.z
+      value: 12.8547211
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mLocalPosition.y
+      value: 15.4711838
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[1].mLocalPosition.z
+      value: 12.8547211
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mBundles.Array.data[0].mSpawnChance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mPosition.z
+      value: 16.836277
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mLocalPosition.z
+      value: 16.836277
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mPosition.y
+      value: 12.1721802
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[3].mLocalPosition.y
+      value: 12.1721802
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mPosition.z
+      value: -13.8785553
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mLocalPosition.z
+      value: -13.8785553
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+      propertyPath: mPointGroups.Array.data[0].mPoints.Array.data[2].mLocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4468,8 +4614,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87edab2e3f5d5834ab0fcf12378bde85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPointGroups: []
-  mBundles: []
+  mPointGroups:
+  - mID: ID0
+    mBundleID: 0
+    mPoints:
+    - mPosition: {x: 0, y: 2.08774853, z: -17.1717529}
+      mLocalPosition: {x: 0, y: 2.08774853, z: -17.1717529}
+    - mPosition: {x: 0, y: 13.685112, z: 32.9134064}
+      mLocalPosition: {x: 0, y: 13.685112, z: 32.9134064}
+    - mPosition: {x: 0, y: 14.7903433, z: -26.6724548}
+      mLocalPosition: {x: 0, y: 14.7903433, z: -26.6724548}
+    - mPosition: {x: 0, y: 0, z: 0}
+      mLocalPosition: {x: 0, y: 0, z: 0}
+    mSpawnType: 0
+    mCurveType: 3
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!1 &882956202
 GameObject:
   m_ObjectHideFlags: 0
@@ -6091,37 +6252,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPointGroups:
-  - mID: ID0
+  - mID: foofighters
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 6.28501892, z: -9.36933136}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.28501892, z: -9.36933136}
-    - mPosition: {x: 0, y: 8.96197319, z: -5.17932892}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 8.96197319, z: -5.17932892}
+    - mPosition: {x: 0, y: 3.9367466, z: -12.57621}
+      mLocalPosition: {x: 0, y: 3.9367466, z: -12.57621}
+    - mPosition: {x: 0, y: 19.0722389, z: 26.2530022}
+      mLocalPosition: {x: 0, y: 19.0722389, z: 26.2530022}
+    - mPosition: {x: 0, y: 17.3216171, z: -25.3361588}
+      mLocalPosition: {x: 0, y: 17.3216171, z: -25.3361588}
+    - mPosition: {x: 0, y: 4.10636902, z: 15.0215683}
+      mLocalPosition: {x: 0, y: 4.10636902, z: 15.0215683}
     mSpawnType: 0
-  - mID: ID1
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 7.54218864, z: 2.46138763}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 7.54218864, z: 2.46138763}
-    - mPosition: {x: 0, y: 10.6554947, z: 7.07352448}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 10.6554947, z: 7.07352448}
-    mSpawnType: 0
-  - mID: ID2
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 7.79808044, z: -2.32319641}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 7.79808044, z: -2.32319641}
-    - mPosition: {x: 0, y: 7.6931591, z: 0}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 7.6931591, z: 0}
-    mSpawnType: 0
-  mBundles: []
+    mCurveType: 3
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!4 &1382482893
 Transform:
   m_ObjectHideFlags: 0
@@ -6304,6 +6450,32 @@ MeshFilter:
   m_PrefabInternal: {fileID: 206436320}
   m_GameObject: {fileID: 1407547532}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1411197179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100106, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+  m_PrefabInternal: {fileID: 747397590}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1411197180}
+  m_Layer: 0
+  m_Name: point1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1411197180
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400106, guid: f06b2b397b7d94c47bf0d50af02f699c, type: 2}
+  m_PrefabInternal: {fileID: 747397590}
+  m_GameObject: {fileID: 1411197179}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 143501692}
 --- !u!1 &1426693847
 GameObject:
   m_ObjectHideFlags: 0
@@ -6353,29 +6525,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPointGroups:
-  - mID: ID0
+  - mID: ID3
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 0, z: -19.086235}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 0, z: -19.086235}
-    - mPosition: {x: 0, y: 0, z: 18.3228149}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 0, z: 18.3228149}
-    mSpawnType: 0
-  - mID: ID1
-    mBundleID: 1
+    - mPosition: {x: 0, y: 5.31906891, z: -14.3978577}
+      mLocalPosition: {x: 0, y: 5.31906891, z: -14.3978577}
+    mSpawnType: 2
+    mCurveType: 0
+  - mID: ID4
+    mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 6.10931778, z: -17.0822601}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.10931778, z: -17.0822601}
-    - mPosition: {x: 0, y: 9.83218384, z: 0}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 9.83218384, z: 0}
-    - mPosition: {x: 0, y: 5.5365715, z: 17.9410629}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 5.5365715, z: 17.9410629}
-    mSpawnType: 0
+    - mPosition: {x: 0, y: 9.45195198, z: -.723182678}
+      mLocalPosition: {x: 0, y: 9.45195198, z: -.723182678}
+    mSpawnType: 1
+    mCurveType: 0
+  - mID: ID5
+    mBundleID: 0
+    mPoints:
+    - mPosition: {x: 0, y: 5.60835075, z: 14.939682}
+      mLocalPosition: {x: 0, y: 5.60835075, z: 14.939682}
+    mSpawnType: 2
+    mCurveType: 0
   mBundles:
   - mBundleID: 0
     mSpawnChance: 100
@@ -7188,6 +7358,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1652896912}
+  - 114: {fileID: 1652896914}
   - 114: {fileID: 1652896913}
   m_Layer: 0
   m_Name: FromForest_Transition
@@ -7216,6 +7387,22 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1652896911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f7c019a47c376c4c97407909d7f0b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mPointGroups: []
+  mBundles: []
+  FromGroupID: Forest
+  ToGroupID: City
+--- !u!114 &1652896914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400020, guid: 3736caa7a474122488826ee0041472d2,
+    type: 2}
+  m_PrefabInternal: {fileID: 206436320}
   m_GameObject: {fileID: 1652896911}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -8234,14 +8421,19 @@ MonoBehaviour:
   - mID: ID0
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 7.29438782, z: -1.25257111}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 7.29438782, z: -1.25257111}
-    - mPosition: {x: 0, y: 10.3152695, z: 1.69464874}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 10.3152695, z: 1.69464874}
+    - mPosition: {x: 0, y: 12.8547363, z: -11.6033859}
+      mLocalPosition: {x: 0, y: 12.8547363, z: -11.6033859}
+    - mPosition: {x: 0, y: 15.4711838, z: 12.8547211}
+      mLocalPosition: {x: 0, y: 15.4711838, z: 12.8547211}
+    - mPosition: {x: 0, y: 0, z: -13.8785553}
+      mLocalPosition: {x: 0, y: 0, z: -13.8785553}
+    - mPosition: {x: 0, y: 12.1721802, z: 16.836277}
+      mLocalPosition: {x: 0, y: 12.1721802, z: 16.836277}
     mSpawnType: 0
-  mBundles: []
+    mCurveType: 3
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!1 &1939294082
 GameObject:
   m_ObjectHideFlags: 0

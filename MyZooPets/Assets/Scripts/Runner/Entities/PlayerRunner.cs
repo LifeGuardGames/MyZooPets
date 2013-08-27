@@ -88,22 +88,26 @@ public class PlayerRunner : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
-		UpdateInput();
-
+        // Poll the input. Generally the InputManager handles this, so its really just for debugging.
+        UpdateInput();
+        // If we are invincible, update the timer.
         UpdateInvincible();
+        // If the speed timer elapses, increase game time speed.
+        UpdateSpeed();
+        // Some falling logic to help collision.
+        UpdateFalling();
 	}
 	
     // The more physics-y update. Called multiple times per frame.
 	void FixedUpdate() {
-		UpdateSpeed();
-
+        // This is what actually moves the player.
 		UpdateMovement();
 
-		UpdateFalling();
-
+        // Needs to be different, so that we can determine a vector.
 		if (!Vector3.Equals(mLastPosition, transform.position))
 			mLastPosition = transform.position;
 
+        // Make sure we aint dead now that we've moved.
 		CheckAndActOnDeath();
 	}
 	
@@ -115,10 +119,12 @@ public class PlayerRunner : MonoBehaviour
 		TriggerFall();
 	}
 
-    void onPlayerJumpBegin() {}
-    void onPlayerJumpEnd() {}
-    void onPlayerFallBegin() {}
-    void onPlayerFallEnd() {}
+    void onPlayerJumpBegin() { }
+    void onPlayerJumpEnd() { }
+    void onPlayerFallBegin() { }
+    void onPlayerFallEnd() { }
+    void onPlayerGrounded() { }
+    void onPlayerFreeFall() { }
 
     public void Reset() {
         mCurrentTimeMultiplier = 1f;
@@ -162,13 +168,15 @@ public class PlayerRunner : MonoBehaviour
         // Perform the move
         CollisionFlags flags = mCharacterController.Move(mMovementVector * Time.deltaTime);
         bool isGrounded = (flags & CollisionFlags.CollidedBelow) != 0;
+
+        // Now update some states based on our groundedness
         if (isGrounded && mbJumping) {
             mbJumping = false;
             BroadcastMessage("onPlayerJumpEnd", SendMessageOptions.DontRequireReceiver);
         }
 
-        // Reset movement.
         if (isGrounded) {
+            // Reset movement.
             mMovementVector = new Vector3();
 
             if (!mbGrounded) {

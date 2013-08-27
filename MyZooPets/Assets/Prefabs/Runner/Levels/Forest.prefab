@@ -882,6 +882,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100106
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400106}
+  m_Layer: 0
+  m_Name: point1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -1034,6 +1049,7 @@ Transform:
   - {fileID: 400096}
   - {fileID: 400094}
   - {fileID: 400092}
+  - {fileID: 400106}
   m_Father: {fileID: 400044}
 --- !u!4 &400026
 Transform:
@@ -1517,6 +1533,17 @@ Transform:
   m_LocalScale: {x: .220130146, y: 1, z: .786409676}
   m_Children: []
   m_Father: {fileID: 400042}
+--- !u!4 &400106
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100106}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400024}
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -2518,47 +2545,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPointGroups:
-  - mID: ID0
+  - mID: Coins1
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 11.1789589, z: -1.46056366}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 11.1789589, z: -1.46056366}
-    - mPosition: {x: 0, y: 11.1789589, z: 16.7965279}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 11.1789589, z: 16.7965279}
+    - mPosition: {x: 0, y: 6.21186447, z: -9.04807281}
+      mLocalPosition: {x: 0, y: 6.21186447, z: -9.04807281}
+    - mPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+      mLocalPosition: {x: 0, y: 13.9133759, z: -6.52774048}
+    - mPosition: {x: 0, y: 12.1436386, z: 10.7042999}
+      mLocalPosition: {x: 0, y: 12.1436386, z: 10.7042999}
     mSpawnType: 0
-  - mID: ID1
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 6.46020126, z: -9.88691711}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.46020126, z: -9.88691711}
-    - mPosition: {x: 0, y: 6.40402603, z: 15.3359604}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.40402603, z: 15.3359604}
-    mSpawnType: 0
-  - mID: ID2
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 1.34821701, z: -11.965416}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.34821701, z: -11.965416}
-    - mPosition: {x: 0, y: 1.46056747, z: 19.4929581}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.46056747, z: 19.4929581}
-    mSpawnType: 0
-  - mID: ID3
-    mBundleID: 0
-    mPoints:
-    - mPosition: {x: 0, y: 2.13467407, z: 0}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 2.13467407, z: 0}
-    - mPosition: {x: 0, y: 1.62909698, z: 1.79762268}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 1.62909698, z: 1.79762268}
-    mSpawnType: 0
-  mBundles: []
+    mCurveType: 2
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2575,33 +2575,32 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 6.28501892, z: -9.36933136}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 6.28501892, z: -9.36933136}
     - mPosition: {x: 0, y: 8.96197319, z: -5.17932892}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 8.96197319, z: -5.17932892}
     mSpawnType: 0
+    mCurveType: 1
   - mID: ID1
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 7.54218864, z: 2.46138763}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.54218864, z: 2.46138763}
     - mPosition: {x: 0, y: 10.6554947, z: 7.07352448}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 10.6554947, z: 7.07352448}
     mSpawnType: 0
+    mCurveType: 1
   - mID: ID2
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 7.79808044, z: -2.32319641}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.79808044, z: -2.32319641}
     - mPosition: {x: 0, y: 7.6931591, z: 0}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.6931591, z: 0}
     mSpawnType: 0
-  mBundles: []
+    mCurveType: 1
+  mBundles:
+  - mBundleID: 0
+    mSpawnChance: 100
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2614,29 +2613,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPointGroups:
-  - mID: ID0
+  - mID: ID3
     mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 0, z: -19.086235}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 0, z: -19.086235}
-    - mPosition: {x: 0, y: 0, z: 18.3228149}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 0, z: 18.3228149}
-    mSpawnType: 0
-  - mID: ID1
-    mBundleID: 1
+    - mPosition: {x: 0, y: 5.31906891, z: -14.3978577}
+      mLocalPosition: {x: 0, y: 5.31906891, z: -14.3978577}
+    mSpawnType: 2
+    mCurveType: 0
+  - mID: ID4
+    mBundleID: 0
     mPoints:
-    - mPosition: {x: 0, y: 6.10931778, z: -17.0822601}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 6.10931778, z: -17.0822601}
-    - mPosition: {x: 0, y: 9.83218384, z: 0}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 9.83218384, z: 0}
-    - mPosition: {x: 0, y: 5.5365715, z: 17.9410629}
-      mLineType: 0
-      mLocalPosition: {x: 0, y: 5.5365715, z: 17.9410629}
-    mSpawnType: 0
+    - mPosition: {x: 0, y: 9.45195198, z: -.723182678}
+      mLocalPosition: {x: 0, y: 9.45195198, z: -.723182678}
+    mSpawnType: 1
+    mCurveType: 0
+  - mID: ID5
+    mBundleID: 0
+    mPoints:
+    - mPosition: {x: 0, y: 5.60835075, z: 14.939682}
+      mLocalPosition: {x: 0, y: 5.60835075, z: 14.939682}
+    mSpawnType: 2
+    mCurveType: 0
   mBundles:
   - mBundleID: 0
     mSpawnChance: 100
@@ -2680,12 +2677,11 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 11.51297, z: -2.87824249}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 11.51297, z: -2.87824249}
     - mPosition: {x: 0, y: 7.1519928, z: .959411621}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.1519928, z: .959411621}
     mSpawnType: 0
+    mCurveType: 0
   mBundles: []
 --- !u!114 &11400022
 MonoBehaviour:
@@ -2703,18 +2699,15 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 1.27629471, z: -11.4866562}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 1.27629471, z: -11.4866562}
     - mPosition: {x: 0, y: 1.27629471, z: 0}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 1.27629471, z: 0}
     - mPosition: {x: 0, y: 5.56100082, z: 11.121994}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 5.56100082, z: 11.121994}
     - mPosition: {x: 0, y: 5.74332809, z: 21.1500244}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 5.74332809, z: 21.1500244}
     mSpawnType: 0
+    mCurveType: 0
   mBundles: []
 --- !u!114 &11400024
 MonoBehaviour:
@@ -2732,12 +2725,11 @@ MonoBehaviour:
     mBundleID: 0
     mPoints:
     - mPosition: {x: 0, y: 7.29438782, z: -1.25257111}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 7.29438782, z: -1.25257111}
     - mPosition: {x: 0, y: 10.3152695, z: 1.69464874}
-      mLineType: 0
       mLocalPosition: {x: 0, y: 10.3152695, z: 1.69464874}
     mSpawnType: 0
+    mCurveType: 0
   mBundles: []
 --- !u!1001 &100100000
 Prefab:

@@ -46,8 +46,9 @@ public class RunnerLevelEditor : EditorWindow
             if (newPosition != mLastSelectedPointInfo.mPosition) {
                 mLastSelectedPointInfo.mPosition = newPosition;
                 mLastSelectedPointInfo.mLocalPosition = newLocalPosition;
-                //@HACK constanlty re-add
-                //mLastChosenLevelComponent.UpdatePointInfo(mSelectedGroupID, mLastSelectedPointInfo, mSelectedPointIndex);
+
+                // Tell the editor to re-serialize.
+                EditorUtility.SetDirty(mLastChosenLevelComponent);
             }
         } else if (mLastSelectedPointInfo == null && mLastSelectedObject != null)
             Debug.LogError("The point is empty, but you're selecting an object. idk something is fucked.");
@@ -103,6 +104,8 @@ public class RunnerLevelEditor : EditorWindow
     // Pull from the gui the current selection values
 	void OnGUI()
 	{
+        GUI.changed = false;
+
 		if (Selection.activeTransform != null && Selection.activeTransform.GetComponent<LevelComponent>() != null)
 			mLastChosenLevelComponent = Selection.activeTransform.GetComponent<LevelComponent>();
 
@@ -128,9 +131,10 @@ public class RunnerLevelEditor : EditorWindow
             }
             GUILayout.EndArea();
 
+            // Depending on if a group is selected
             if (mCurrentSelectedGroup != null)
             {
-                // Purpose Area
+                // Spawn Type area
                 GUILayout.BeginArea(new Rect(300, 0, 200, 75));
                 GUILayout.BeginVertical();
                 string[] selectionTypes = new string[(int)eSpawnType.Max];
@@ -143,12 +147,24 @@ public class RunnerLevelEditor : EditorWindow
                 GUILayout.EndVertical();
                 GUILayout.EndArea();
 
-
-                // Groups
+                // Bundle ID area
                 GUILayout.BeginArea(new Rect(300, 75, 200, 75));
                 GUILayout.BeginVertical();
                 GUILayout.Label("Bundle ID");
                 mCurrentSelectedGroup.mBundleID = (int)GUILayout.HorizontalSlider(mCurrentSelectedGroup.mBundleID, 0, 100);
+                GUILayout.EndVertical();
+                GUILayout.EndArea();
+
+                // Curve Type area
+                GUILayout.BeginArea(new Rect(300, 150, 200, 75));
+                GUILayout.BeginVertical();
+                string[] curveTypes = new string[(int)eCurveType.Max];
+                for (int curveIndex = 0; curveIndex < (int)eCurveType.Max; curveIndex++) {
+                    curveTypes[curveIndex] = ((eCurveType)curveIndex).ToString();
+                }
+                GUILayout.Label("Curve Type (will modify pts)");
+                eCurveType selectedCurve = (eCurveType)GUILayout.SelectionGrid((int)mCurrentSelectedGroup.mCurveType, curveTypes, 2);
+                SelectCurveType(mLastChosenLevelComponent, mCurrentSelectedGroup, selectedCurve);
                 GUILayout.EndVertical();
                 GUILayout.EndArea();
             }
@@ -170,7 +186,6 @@ public class RunnerLevelEditor : EditorWindow
 				mSelectedPointsScrollPosition, false, true);
             GUILayout.BeginHorizontal();
 			GUILayout.Label("#");
-			GUILayout.Label("Type");
 			GUILayout.Label("Pos");
             GUILayout.EndHorizontal();
 			
@@ -185,8 +200,7 @@ public class RunnerLevelEditor : EditorWindow
 					{
 						PointInfo currentPoint = points[pointIndex];
 
-						string newItem = "id" + pointIndex + " | " + currentPoint.mLineType + " | "
-							+ (currentPoint.mPosition + mLastChosenLevelComponent.transform.position);
+						string newItem = "id" + pointIndex + " | " + (currentPoint.mPosition + mLastChosenLevelComponent.transform.position);
 						pointGridItems.Add(newItem);
 					}
 
@@ -215,7 +229,8 @@ public class RunnerLevelEditor : EditorWindow
 			GUILayout.Label("ID");
 			GUILayout.Label("#pts");
 			GUILayout.Label("Bundle");
-			GUILayout.Label("SpawnType");
+            GUILayout.Label("SpawnType");
+            GUILayout.Label("CurveType");
 			EditorGUILayout.EndHorizontal();
 
 			List<string> gridItems = new List<string>();
@@ -223,7 +238,7 @@ public class RunnerLevelEditor : EditorWindow
 			foreach (PointGroup currentPointGroup in selectedGroups) {
                 string purposes = currentPointGroup.mSpawnType.ToString();
 				string newItem = currentPointGroup.mID + " | " + currentPointGroup.mPoints.Count.ToString() + " | "
-                    + currentPointGroup.mBundleID + " | " + purposes;
+                    + currentPointGroup.mBundleID + " | " + purposes + " | " + currentPointGroup.mCurveType.ToString();
 				gridItems.Add(newItem);
 				ids.Add(currentPointGroup.mID);
 			}
@@ -312,6 +327,9 @@ public class RunnerLevelEditor : EditorWindow
             // Done with all the layouts.
 
 			OnDrawGizmos();
+
+            if (GUI.changed)
+                EditorUtility.SetDirty(mLastChosenLevelComponent);
 		}
 		else
 		{
@@ -326,15 +344,92 @@ public class RunnerLevelEditor : EditorWindow
 		{
 			foreach (PointGroup currentGroup in mLastChosenLevelComponent.PointGroups)
 			{
-				for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count - 1; pointIndex++)
-				{
-                    Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition + mLastChosenLevelComponent.transform.position,
-                        currentGroup.mPoints[pointIndex + 1].mPosition + mLastChosenLevelComponent.transform.position);
-					//Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition, currentGroup.mPoints[pointIndex + 1].mPosition);
-				}
+                switch (currentGroup.mCurveType) {
+                    case (eCurveType.Point): {
+	    	            Handles.color = Color.white;
+                        for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count; pointIndex++)
+			            {
+                            Vector3 pointPosition = currentGroup.mPoints[pointIndex].mPosition + mLastChosenLevelComponent.transform.position;
+                            Handles.CircleCap(0, pointPosition, Quaternion.LookRotation(Vector3.right), 0.75f);
+                            Handles.DrawSolidDisc(pointPosition, Vector3.right, 0.1f);
+                        }
+                    }
+                    break;
+
+                    case (eCurveType.Linear): {
+                        Handles.color = Color.red;
+
+                        for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count - 1; pointIndex++)
+			            {
+                            Handles.DrawLine(currentGroup.mPoints[pointIndex].mPosition + mLastChosenLevelComponent.transform.position,
+                                currentGroup.mPoints[pointIndex + 1].mPosition + mLastChosenLevelComponent.transform.position);
+			            }
+                        break;
+                    }
+
+                    case (eCurveType.Quadratic): {
+                        Handles.color = Color.cyan;
+                        if (currentGroup.mPoints.Count == 3) {
+                            Vector3 beginPoint = currentGroup.mPoints[0].mPosition + mLastChosenLevelComponent.transform.position;
+                            Vector3 anchorPoint = currentGroup.mPoints[1].mPosition + mLastChosenLevelComponent.transform.position;
+                            Vector3 endPoint = currentGroup.mPoints[2].mPosition + mLastChosenLevelComponent.transform.position;
+                            DisplayCurve(true, beginPoint, anchorPoint, endPoint, Vector3.zero);
+                        } else
+                            Debug.LogError("Cannot draw cubic bezier with " + currentGroup.mPoints.Count + " points when expecting 3!");
+                        break;
+                    }
+
+                    case (eCurveType.Cubic): {
+                        Handles.color = Color.green;
+                        if (currentGroup.mPoints.Count == 4) {
+                            Vector3 beginPoint = currentGroup.mPoints[0].mPosition + mLastChosenLevelComponent.transform.position;
+                            Vector3 anchorPoint1 = currentGroup.mPoints[1].mPosition + mLastChosenLevelComponent.transform.position;
+                            Vector3 anchorPoint2 = currentGroup.mPoints[2].mPosition + mLastChosenLevelComponent.transform.position;
+                            Vector3 endPoint = currentGroup.mPoints[3].mPosition + mLastChosenLevelComponent.transform.position;
+                            DisplayCurve(false, beginPoint, anchorPoint1, anchorPoint2, endPoint);
+                        } else
+                            Debug.LogError("Cannot draw cubic bezier with " + currentGroup.mPoints.Count + " points when expecting 4!");
+                        break;
+                    }
+                }
+
+				
 			}
 		}
 	}
+
+    private void DisplayCurve(bool inbQuadratic, Vector3 inA, Vector3 inB, Vector3 inC, Vector3 inD) {
+        Vector3 lastCurvePoint = Vector3.zero;
+        bool bOnNext = false;
+        for (int pointIndex = 0; pointIndex <= 1000; pointIndex++) {
+            float currentTime = (float)pointIndex / 1000f;
+
+            Vector3 nextCurvePoint;
+            if (inbQuadratic)
+                nextCurvePoint = LevelManager.CalculateQuadtraticPoint(currentTime, inA, inB, inC);
+            else
+                nextCurvePoint = LevelManager.CalculateBezierPoint(currentTime, inA, inB, inC, inD);
+
+            if (bOnNext)
+                Handles.DrawLine(nextCurvePoint, lastCurvePoint);
+            else
+                bOnNext = true;
+            lastCurvePoint = nextCurvePoint;
+        }
+
+        // Also display each point
+        Handles.CircleCap(0, inA, Quaternion.LookRotation(Vector3.right), 0.75f);
+        Handles.DrawSolidDisc(inA, Vector3.right, 0.1f);
+        Handles.CircleCap(0, inB, Quaternion.LookRotation(Vector3.right), 0.75f);
+        Handles.DrawSolidDisc(inB, Vector3.right, 0.1f);
+        Handles.CircleCap(0, inC, Quaternion.LookRotation(Vector3.right), 0.75f);
+        Handles.DrawSolidDisc(inC, Vector3.right, 0.1f);
+        if (!inbQuadratic) {
+            Handles.CircleCap(0, inD, Quaternion.LookRotation(Vector3.right), 0.75f);
+            Handles.DrawSolidDisc(inD, Vector3.right, 0.1f);
+        }
+
+    }
 
     private void DeletePointGroup(LevelComponent inSelectedLevel, PointGroup inPointGroupToDelete) {
         inSelectedLevel.DeletePointGroup(inPointGroupToDelete);
@@ -374,5 +469,40 @@ public class RunnerLevelEditor : EditorWindow
         // Reselect gameobject
         GameObject[] selections = new GameObject[] { selectedPoint };
         Selection.objects = selections;
+    }
+
+    private void SelectCurveType(LevelComponent inComponent, PointGroup inGroup, eCurveType inNewSelectedCurve) {
+        eCurveType currentCurveType = inGroup.mCurveType;
+        if (currentCurveType != inNewSelectedCurve) {
+            // Determine the new point.
+            switch (inNewSelectedCurve) {
+                case eCurveType.Point:
+                    CutOrAddGroupPointsTo(inComponent, inGroup, 1);
+                    break;
+                case eCurveType.Quadratic:
+                    CutOrAddGroupPointsTo(inComponent, inGroup, 3);
+                    break;
+                case eCurveType.Cubic:
+                    CutOrAddGroupPointsTo(inComponent, inGroup, 4);
+                    break;
+            }
+
+            // Set it.
+            inGroup.mCurveType = inNewSelectedCurve;
+        }
+    }
+
+    private void CutOrAddGroupPointsTo(LevelComponent inComponent, PointGroup inGroup, int inNumPoints) {
+        List<PointInfo> groupPoints = inGroup.mPoints;
+
+        // Cut our points down to the given number
+        while (groupPoints.Count > inNumPoints) {
+            groupPoints.RemoveAt(groupPoints.Count - 1);
+        }
+
+        // Increment our points up to the given number
+        while (groupPoints.Count < inNumPoints) {
+            AddNewPoint(inComponent, inGroup.mID);
+        }
     }
 }

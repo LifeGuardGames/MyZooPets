@@ -253,7 +253,7 @@ public class LevelManager : MonoBehaviour
             }
 
             case eSpawnType.Items: {
-                RunnerItem newItem = HazardPrefabs[Random.Range(0, HazardPrefabs.Count)];
+                RunnerItem newItem = ItemPrefabs[Random.Range(0, ItemPrefabs.Count)];
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newItem);
                 break;
             }
@@ -261,40 +261,120 @@ public class LevelManager : MonoBehaviour
     }
 
     private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup, CoinItem inCoinPrefab) {
-        float interpolationLeftovers = 0;
-	    for (int pointIndex = 0; pointIndex < inSpawnGroup.mPoints.Count - 1; pointIndex++) {
-		    Vector3 currentLineBegin = inSpawnGroup.mPoints[pointIndex].mPosition;
-		    Vector3 currentLineEnd = inSpawnGroup.mPoints[pointIndex + 1].mPosition;
-		    float currentLineDistance = Vector3.Distance(currentLineBegin, currentLineEnd);
+        switch (inSpawnGroup.mCurveType) {
+            case eCurveType.Point:
+            case eCurveType.Linear: {
+                float interpolationLeftovers = 0;
+                for (int pointIndex = 0; pointIndex < inSpawnGroup.mPoints.Count - 1; pointIndex++) {
+                    Vector3 currentLineBegin = inSpawnGroup.mPoints[pointIndex].mPosition;
+                    Vector3 currentLineEnd = inSpawnGroup.mPoints[pointIndex + 1].mPosition;
+                    float currentLineDistance = Vector3.Distance(currentLineBegin, currentLineEnd);
 
-		    // Interpolate along our current line
-		    for (float currentInterpolation = interpolationLeftovers; currentInterpolation < currentLineDistance; currentInterpolation += CoinSpawnDistance) {
-			    // Find our new spawn point
-			    Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
-			    // But wait, that's on the prefab. Add in our real world clones position.
-			    newCoinPosition += (inLevelComponent.transform.position);
+                    // Interpolate along our current line
+                    for (float currentInterpolation = interpolationLeftovers; currentInterpolation < currentLineDistance; currentInterpolation += CoinSpawnDistance) {
+                        // Find our new spawn point
+                        Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
+                        // But wait, that's on the prefab. Add in our real world clones position.
+                        newCoinPosition += inLevelComponent.transform.position;
 
-                GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
-			    newCoin.transform.position = newCoinPosition;
+                        GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
+                        newCoin.transform.position = newCoinPosition;
 
-                inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
+                        inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
 
-			    interpolationLeftovers = currentInterpolation - currentLineDistance;
-		    }
-	    }
+                        interpolationLeftovers = currentInterpolation - currentLineDistance;
+                    }
+                }
+            }
+            break;
+
+            case eCurveType.Quadratic:
+            case eCurveType.Cubic: {
+                float lineLength = CalculateCurveLength(inSpawnGroup);
+                if (lineLength > 0f) {
+                    // Set up some variables.
+                    Vector3 ptA = inSpawnGroup.mPoints[0].mPosition;
+                    Vector3 ptB = inSpawnGroup.mPoints[1].mPosition;
+                    Vector3 ptC = inSpawnGroup.mPoints[2].mPosition;
+                    Vector3 ptD = Vector3.zero;
+                    if (inSpawnGroup.mPoints.Count > 3)
+                        ptD = inSpawnGroup.mPoints[3].mPosition;
+
+                    // Iterate the line length.
+                    for (float currentPosition = 0f; currentPosition < lineLength; currentPosition += CoinSpawnDistance) {
+                        // Determine current t
+                        float currentT = currentPosition / lineLength;
+                        // Get the new position
+                        Vector3 coinSpawnLocation;
+                        if (inSpawnGroup.mCurveType == eCurveType.Quadratic)
+                            coinSpawnLocation = CalculateQuadtraticPoint(currentT, ptA, ptB, ptC);
+                        else
+                            coinSpawnLocation = CalculateBezierPoint(currentT, ptA, ptB, ptC, ptD);
+
+                        coinSpawnLocation += inLevelComponent.transform.position;
+                        // And spawn
+                        GameObject newCoin = (GameObject)GameObject.Instantiate(inCoinPrefab.gameObject);
+                        newCoin.transform.position = coinSpawnLocation;
+                        inLevelComponent.AddLevelItem(newCoin.GetComponent<RunnerItem>());
+                    }
+                }
+            }
+            break;
+        }
     }
 
 	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn) {
-		// Determine a random location of all given points
-        if (inSpawnGroup.mPoints.Count > 0) {
-            Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
-			randomPoint += inLevelComponent.transform.position;
-            GameObject spawnedItem = (GameObject)GameObject.Instantiate(inItemToSpawn);
-			spawnedItem.transform.position = randomPoint;
+        RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
+        Vector3 newPosition = inLevelComponent.transform.position;
+        switch (inSpawnGroup.mCurveType) {
+            case eCurveType.Point: {
+                if (inSpawnGroup.mPoints.Count > 0)
+                    newPosition += inSpawnGroup.mPoints[0].mPosition;
+                else
+                    Debug.LogError("No point for the line type point?");
+            }
+            break;
 
-            // Spawn it at that point
-			inLevelComponent.AddLevelItem(spawnedItem.GetComponent<RunnerItem>());
-		}
+            case eCurveType.Linear: {
+                if (inSpawnGroup.mPoints.Count > 0) {
+                    Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
+                    newPosition += inSpawnGroup.mPoints[0].mPosition;
+                } else
+                    Debug.LogError("No points for the line type linear");
+            }
+            break;
+
+            case eCurveType.Quadratic: {
+                if (inSpawnGroup.mPoints.Count > 3) {
+                    float randomT = Random.value;
+                    Vector3 retrievedCurvePoint = CalculateQuadtraticPoint(randomT,
+                        inSpawnGroup.mPoints[0].mPosition,
+                        inSpawnGroup.mPoints[1].mPosition,
+                        inSpawnGroup.mPoints[2].mPosition);
+                    newPosition += retrievedCurvePoint;
+                } else
+                    Debug.LogError("only " + inSpawnGroup.mPoints.Count + " points for quad curve when I need 3");
+            }
+            break;
+
+            case eCurveType.Cubic: {
+                if (inSpawnGroup.mPoints.Count > 4) {
+                    float randomT = Random.value;
+                    Vector3 retrievedCurvePoint = CalculateBezierPoint(randomT,
+                        inSpawnGroup.mPoints[0].mPosition,
+                        inSpawnGroup.mPoints[1].mPosition,
+                        inSpawnGroup.mPoints[2].mPosition,
+                        inSpawnGroup.mPoints[3].mPosition);
+                    newPosition += retrievedCurvePoint;
+                } else
+                    Debug.LogError("only " + inSpawnGroup.mPoints.Count + " points for cubic curve when I need 4");
+            }
+            break;
+        }
+        spawnedItem.transform.position = newPosition;
+
+        // Spawn it at that point
+        inLevelComponent.AddLevelItem(spawnedItem);
 	}
 	
 	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent) {
@@ -331,5 +411,78 @@ public class LevelManager : MonoBehaviour
             }
         }
         return lowestComponent;
+    }
+    
+    // Quadtratic(t) = (s^2)A + 2(st)B + (t^2)C where s=1-t
+    static public Vector3 CalculateQuadtraticPoint(float inTime, Vector3 inA, Vector3 inB, Vector3 inC) {
+        float inverseTime = 1f - inTime;
+        float cubeInverse = inverseTime * inverseTime;
+        float timeAndInverse = inTime * inverseTime;
+        float cubeTime = inTime * inTime;
+
+        Vector3 termA = cubeInverse * inA;
+        Vector3 termB = 2f * timeAndInverse * inB;
+        Vector3 termC = cubeTime * inC;
+
+        return termA + termB + termC;
+    }
+
+
+    // Function taken from:
+    // http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/
+    // It's blending in the 4 points, and spitting out the one point of all the blends.
+    static public Vector3 CalculateBezierPoint(float inTime, Vector3 inA, Vector3 inB, Vector3 inC, Vector3 inD) {
+        float u = 1f - inTime;
+        float tt = inTime * inTime;
+        float uu = u*u;
+        float uuu = uu * u;
+        float ttt = tt * inTime;
+ 
+        Vector3 p = uuu * inA; //first term
+        p += 3 * uu * inTime * inB; //second term
+        p += 3 * u * tt * inC; //third term
+        p += ttt * inD; //fourth term
+ 
+        return p;
+    }
+
+    static public float CalculateCurveLength(PointGroup inSpawnGroup) {
+        if (inSpawnGroup.mCurveType == eCurveType.Quadratic && inSpawnGroup.mPoints.Count < 3) {
+            Debug.LogError("Not enough points, fix it!");
+            return -1f;
+        }
+        if (inSpawnGroup.mCurveType == eCurveType.Cubic && inSpawnGroup.mPoints.Count < 4) {
+            Debug.LogError("Not enough points, fix it!");
+            return -1f;
+        }
+        // Uhh.. Determine the lenght?
+        Vector3 ptA = inSpawnGroup.mPoints[0].mPosition;
+        Vector3 ptB = inSpawnGroup.mPoints[1].mPosition;
+        Vector3 ptC = inSpawnGroup.mPoints[2].mPosition;
+        Vector3 ptD = Vector3.zero;
+        if (inSpawnGroup.mPoints.Count > 3)
+            ptD = inSpawnGroup.mPoints[3].mPosition;
+
+        float notExactLengthOfCurve = 0.0f;
+
+        bool bPastFirst = false;
+        Vector3 lastDTVector = Vector3.zero;
+        for (int dt = 0; dt < 100; dt++) {
+            float currentDT = (float)dt / 100f;
+            Vector3 currentDTVector;
+
+            if (inSpawnGroup.mCurveType == eCurveType.Quadratic)
+                currentDTVector = CalculateQuadtraticPoint(currentDT, ptA, ptB, ptC);
+            else
+                currentDTVector = CalculateBezierPoint(currentDT, ptA, ptB, ptC, ptD);
+
+            if (bPastFirst) {
+                notExactLengthOfCurve += Vector3.Distance(currentDTVector, lastDTVector);
+            } else
+                bPastFirst = true;
+            lastDTVector = currentDTVector;
+        }
+
+        return notExactLengthOfCurve;
     }
 }

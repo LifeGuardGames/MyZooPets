@@ -15,14 +15,14 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     }
     //Read Only. Return a list of Level Badges.
     public List<BadgeUIData> LevelBadges{
-        get{return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
+        get{ return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
     }
 
 	// Use this for initialization
 	void Start () {
         //assign listeners	
         HUDAnimator.OnLevelUp += RewardBadgeOnLevelUp;
-        RewardBadgeOnLevelUp(this, EventArgs.Empty);
+        RewardBadgeOnLevelUp();
 	}
 
     void OnDestroy(){
@@ -31,14 +31,18 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
     //Event listener
     private void RewardBadgeOnLevelUp(object sender, EventArgs e){
+        RewardBadgeOnLevelUp();
+        if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
+            OnNewBadgeAdded(this, EventArgs.Empty);
+    }
+
+    private void RewardBadgeOnLevelUp(){
         int badgeIndex = (int) DataManager.Instance.Level.CurrentLevel;
 
         BadgeUIData badge = badges.Find(entity => entity.ID == badgeIndex);
         if(D.Assert(badge != null) && !badge.IsAwarded){
             badge.IsAwarded = true;
             badge.Tier = LevelUpLogic.AwardedBadge;
-            if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
-                OnNewBadgeAdded(this, EventArgs.Empty);
-        }
+        }      
     }
 }

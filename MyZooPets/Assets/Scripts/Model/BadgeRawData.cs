@@ -4,32 +4,6 @@ using System.Collections.Generic;
 
 [DoNotSerializePublic]
 public class BadgeRawData{
-    // [SerializeThis]
-    // private bool isAwarded;
-    // [SerializeThis]
-    // private BadgeTier tier;
-    // [SerializeThis]
-    // private bool isBadgeNew;
-
-    // public bool IsAwarded{
-    //     get{return isAwarded;}
-    //     set{isAwarded = value;}
-    // }
-    // public BadgeTier Tier{
-    //     get{return tier;}
-    //     set{tier = value;}
-    // }
-    // public bool IsBadgeNew{
-    //     get{return isBadgeNew;}
-    //     set{isBadgeNew = value;}
-    // }
-
-    // public BadgeData(){
-    //     isAwarded = false;
-    //     isBadgeNew = false;
-    //     tier = BadgeTier.Null;
-    // }
-
     private struct BadgeStatus{
         public bool IsAwarded {get; set;}
         public BadgeTier Tier {get; set;}
@@ -44,7 +18,6 @@ public class BadgeRawData{
 
     [SerializeThis]
     private Dictionary<int, BadgeStatus> badgeStatuses; //Key: ID of the badge, value: badge status
-
 
      /*
         Get IsUnlocked field for entity with badgeID 
@@ -85,24 +58,27 @@ public class BadgeRawData{
     }
 
     public void SetBadgeIsAwarded(int badgeID, bool value){
-        BadgeStatus status;
-        if(badgeStatuses.TryGetValue(badgeID, out status)){
+        if(badgeStatuses.ContainsKey(badgeID)){
+            BadgeStatus status = badgeStatuses[badgeID];
             status.IsAwarded = value;
+            badgeStatuses[badgeID] = status;
         }
     }
 
     public void SetBadgeIsBadgeNew(int badgeID, bool value){
-        BadgeStatus status;
-        if(badgeStatuses.TryGetValue(badgeID, out status)){
+        if(badgeStatuses.ContainsKey(badgeID)){
+            BadgeStatus status = badgeStatuses[badgeID];
             status.IsBadgeNew = value;
+            badgeStatuses[badgeID] = status;
         }
     }
 
-    public void SetBadgeTier(int badgeID, BadgeTier tier){
-        BadgeStatus status;
-        if(badgeStatuses.TryGetValue(badgeID, out status)){
-            status.Tier = tier;
-        }
+    public void SetBadgeTier(int badgeID, BadgeTier value){
+        if(badgeStatuses.ContainsKey(badgeID)){
+            BadgeStatus status = badgeStatuses[badgeID];
+            status.Tier = value;
+            badgeStatuses[badgeID] = status;
+        }      
     }
 
     //======================Initialization====================

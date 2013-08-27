@@ -30,7 +30,8 @@ public class BadgeUIData{
     //True: Show badge in UI, False: Black out
     public bool IsAwarded{ //returns data that were serialized fromDataManager.Instance 
         get{return DataManager.Instance.Badge.GetBadgeIsAwarded(id);}
-        set{DataManager.Instance.Badge.SetBadgeIsAwarded(id, value);}
+        set{
+            DataManager.Instance.Badge.SetBadgeIsAwarded(id, value);}
     }
     //If badge type is Level, then Tier tells UI what kind of badge to show (gold, silver, bronze)
     public BadgeTier Tier{ //get data fromDataManager.Instance 

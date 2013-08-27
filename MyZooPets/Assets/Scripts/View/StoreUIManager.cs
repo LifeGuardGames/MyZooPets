@@ -129,7 +129,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].cost.ToString();
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.FoodList[i]].name;
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.FoodList[i]].name;
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.FoodList[i]].textureName;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
@@ -143,7 +143,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.ItemList[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.ItemList[i]].name;
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.ItemList[i]].textureName;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
@@ -157,7 +157,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.DecoList[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.DecoList[i]].name;
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.DecoList[i]].textureName;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}
@@ -171,7 +171,7 @@ public class StoreUIManager : MonoBehaviour {
 				item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].name;
 				item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].description;
 				item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemlogic.Items[itemlogic.InhalerList[i]].cost.ToString();
-				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.InhalerList[i]].name;
+				item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemlogic.Items[itemlogic.InhalerList[i]].textureName;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 				item.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 			}

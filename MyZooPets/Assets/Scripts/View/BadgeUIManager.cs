@@ -4,30 +4,24 @@ using System.Collections.Generic;
 using System;
 
 public class BadgeUIManager : MonoBehaviour {
-	//======================Event=============================
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
-    //=======================================================
 	public GameObject backButtonPrefab;
-	private GameObject backButtonReference;
-	private bool isActive = false;
-
 	public GameObject badgeBoard;
 	public GameObject badgeBoardBadges;
 	public GameObject descriptionObject;
 	public GameObject badgeGUISpawnBase;	// Parent to clone badges in (anchor-center) when zoomed in
-	private GameObject badgeBackdrop;
-
-	// List of badge gameobjects
-	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
-
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
 	public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-
 	// High Definition badges go here for closeup
 	// NOTE: 512x512 px, zero padding to fit extra row
 	public UIAtlas badgeLevelAtlas1;
 	public UIAtlas badgeLevelAtlas2;
 	public UIAtlas badgeLevelAtlas3;
+	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
+
+	private GameObject backButtonReference;
+	private bool isActive = false;
+	private GameObject badgeBackdrop;
 
 	void Start(){
 		BadgeLogic.OnNewBadgeAdded += UpdateLevelBadges;

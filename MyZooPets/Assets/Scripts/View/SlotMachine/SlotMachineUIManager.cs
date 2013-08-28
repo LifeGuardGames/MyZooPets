@@ -18,25 +18,65 @@ public class SlotMachineUIManager : MonoBehaviour {
         }
 
         if (DataManager.Instance.Stats.Stars >= costStars){
-            NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons(
-                "-"+ costStars +" stars to play",
-                delegate(){
-                    StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
+			
+			/////// Send Notication ////////
+			// Assign delegate functions to be passed in hashtable
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	                StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
                     StartGame();
-                },
-                delegate(){
-                    Application.LoadLevel("NewBedRoom");
-                },
-                "Start",
-                "Back");
+	            };
+			PopupNotificationNGUI.HashEntry button2Function = delegate() {
+					Application.LoadLevel("NewBedRoom");
+				};
+			
+			// Populate notification entry table
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+			notificationEntry.Add(NotificationPopupFields.Message, "-"+ costStars +" stars to play");
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+			notificationEntry.Add(NotificationPopupFields.Button1Label, "Start");
+			notificationEntry.Add(NotificationPopupFields.Button2Label, "Back");
+			
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			
+//            NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons(
+//                "-"+ costStars +" stars to play",
+//                delegate(){
+//                    StatsController.Instance.ChangeStats(0, Vector3.zero, costStars * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
+//                    StartGame();
+//                },
+//                delegate(){
+//                    Application.LoadLevel("NewBedRoom");
+//                },
+//                "Start",
+//                "Back");
         }
         else { // not enough stars to play
-            NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
-                "You need at least " + costStars + " stars to play!",
-                delegate(){
-                    Application.LoadLevel("NewBedRoom");
-                },
-                "Back");
+			
+			/////// Send Notication ////////
+			// Assign delegate functions to be passed in hashtable
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	                Application.LoadLevel("NewBedRoom");
+	            };
+			
+			// Populate notification entry table
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
+			notificationEntry.Add(NotificationPopupFields.Message, "You need at least " + costStars + " stars to play!");
+			notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			
+//            NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
+//                "You need at least " + costStars + " stars to play!",
+//                delegate(){
+//                    Application.LoadLevel("NewBedRoom");
+//                },
+//                "Back");
 
         }
 
@@ -74,14 +114,35 @@ public class SlotMachineUIManager : MonoBehaviour {
         
 		StatsController.Instance.ChangeStats(points, Vector3.zero, stars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 		
-        NotificationUIManager.Instance.EnqueueGameOverRewardMessage(stars, points,
-            delegate(){
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
                 StartGame();
-            },
-            delegate(){
-				// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
-                Application.LoadLevel("NewBedRoom");
-            });
+            };
+		PopupNotificationNGUI.HashEntry button2Function = delegate() {
+				Application.LoadLevel("NewBedRoom");
+			};
+		
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardTwoButton);
+		notificationEntry.Add(NotificationPopupFields.DeltaStars, stars);
+		notificationEntry.Add(NotificationPopupFields.DeltaPoints, points);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+		
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		
+//        NotificationUIManager.Instance.EnqueueGameOverRewardMessage(stars, points,
+//            delegate(){
+//                StartGame();
+//            },
+//            delegate(){
+//                Application.LoadLevel("NewBedRoom");
+//            });
+		
+		////////////////////////////////
     }
 
     //start spinning the wheels

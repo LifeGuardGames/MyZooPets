@@ -22,6 +22,7 @@ public class RunnerGameManager : MonoBehaviour {
     private TouchDetectorManager mTouchDetectorManager;
     private MegaHazard mMegaHazard;
     private RunnerUIManager mRunnerUIManager;
+    private ItemManager mItemManager;
 
     public bool GameRunning
     {
@@ -35,6 +36,7 @@ public class RunnerGameManager : MonoBehaviour {
     public TouchDetectorManager TouchDetectorManager { get { return mTouchDetectorManager; } }
     public MegaHazard MegaHazard { get { return mMegaHazard; } }
     public RunnerUIManager RunnerUIManager { get { return mRunnerUIManager; } }
+    public ItemManager ItemManager { get { return mItemManager; } }
     
     private static RunnerGameManager sRunnerGameManagerInstance = null;
     static public RunnerGameManager GetInstance()
@@ -91,6 +93,12 @@ public class RunnerGameManager : MonoBehaviour {
             mRunnerUIManager = foundObject.GetComponent<RunnerUIManager>();
         else
             Debug.LogError("Could not find an object named 'RunnerUIManager'");
+
+        foundObject = GameObject.Find("ItemManager");
+        if (foundObject != null)
+            mItemManager = foundObject.GetComponent<ItemManager>();
+        else
+            Debug.LogError("Could not find an object named 'ItemManager'");
 	}
 	
 	// Update is called once per frame

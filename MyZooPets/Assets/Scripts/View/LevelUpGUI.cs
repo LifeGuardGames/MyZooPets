@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 
 public class LevelUpGUI : MonoBehaviour {
-
 	void Start () {
     	HUDAnimator.OnLevelUp += OnLevelUpNotification;
 	}
@@ -14,7 +13,14 @@ public class LevelUpGUI : MonoBehaviour {
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){
-        NotificationUIManager.Instance.EnqueueLevelUpMessage(LevelUpLogic.AwardedBadge, null);
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
+		notificationEntry.Add(NotificationPopupFields.Badge, LevelUpLogic.AwardedBadge);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+		
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//        NotificationUIManager.Instance.EnqueueLevelUpMessage(LevelUpLogic.AwardedBadge, null);
     }
 
 }

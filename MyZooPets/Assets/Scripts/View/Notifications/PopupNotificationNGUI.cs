@@ -11,9 +11,10 @@ public class PopupNotificationNGUI : MonoBehaviour {
     public int numOfButtons = 1;
     public bool HideImmediately = false;
 
-    public delegate void Callback();
-    public Callback Button1Callback;
-    public Callback Button2Callback;
+	public delegate void HashEntry(); // Used for notification entry
+    public HashEntry Button1Callback;
+    public HashEntry Button2Callback;
+	public HashEntry OnHideFinished;
 
     public string Message{
         get{return textArea.text;}
@@ -63,9 +64,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
     }
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback
-	public void UnlockNotificationQueue(){
+	public void BroadcastHideFinished(){
 //		Debug.Log("SENDING UNLOCK");
-		NotificationUIManager.Instance.CheckNextInQueue();
+		if(OnHideFinished != null){
+			OnHideFinished();
+		}
 	}
 
     // Hide the popup panel
@@ -132,7 +135,14 @@ public class PopupNotificationNGUI : MonoBehaviour {
 			Debug.LogError("No move tween attached to object");
 		}
 	}
-
+	
+	void OnDestroy(){
+		// Unassign all listeners
+		OnHideFinished = null;
+		Button1Callback = null;
+		Button2Callback = null;
+	}
+	
 	protected virtual void Testing(){
 
     }

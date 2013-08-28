@@ -122,9 +122,7 @@ public class HUDAnimator : MonoBehaviour {
 			MoodAnimation();
 		}
 
-		if(!LoadLevelManager.IsPaused){
-			LevelUpEventCheck(); // Check if progress bar reach level max
-		}
+		LevelUpEventCheck(); // Check if progress bar reach level max
 	}
 
 	//==================GUI Animation=========================

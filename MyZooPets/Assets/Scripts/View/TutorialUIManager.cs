@@ -210,7 +210,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
-               clickManager.OpenRealInhaler();
+               buttonRealInhaler.OpenRealInhaler();
             };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();

@@ -21,10 +21,19 @@ public class ButtonRealInhaler : LgButton {
 			OpenRealInhaler();
 		}
 		else {
-			NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
-				"I don't need this right now.",
-				delegate(){}
-			);
+			/////// Send Notication ////////
+			// Assign delegate functions to be passed in hashtable
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){};
+			
+			// Populate notification entry table
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
+			notificationEntry.Add(NotificationPopupFields.Message, "I don't need this right now.");
+			notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);			
 		}
 	}
 	

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 
 public class BadgeUIManager : SingletonUI<BadgeUIManager> {
-    public static event EventHandler<EventArgs> OnBadgeBoardClosed;
 	public GameObject backButtonPrefab;
 	public GameObject badgeBoard;
 	public GameObject badgeBoardBadges;
@@ -181,9 +180,6 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	protected override void _CloseUI(){
 		if(isActive && !ClickManager.Instance.isClickLocked){
-			//if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
-    		//	OnBadgeBoardClosed(this, EventArgs.Empty);
-
 			isActive = false;
 			badgeBoard.collider.enabled = true;
 			

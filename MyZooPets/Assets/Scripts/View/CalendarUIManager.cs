@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System;
 
 public class CalendarUIManager : SingletonUI<CalendarUIManager> {
-	public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
-
     public bool isDebug; //developing option
 	public GameObject calendarPanel;
 	public Transform thisWeek; //reference to the ThisWeek gameObject
@@ -105,8 +103,6 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		InventoryUIManager.Instance.ShowPanel();
 		
         calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-        //if(D.Assert(OnCalendarClosed != null, "OnCalendarClosed has no listeners"))
-        //    OnCalendarClosed(this, EventArgs.Empty);
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the

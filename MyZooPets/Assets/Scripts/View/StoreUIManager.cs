@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
-	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
-	
 	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
@@ -52,8 +50,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		NavigationUIManager.Instance.ShowPanel();		
 		
 		storePanel.GetComponent<MoveTweenToggle>().Hide();
-		if(D.Assert(OnStoreClosed != null, "OnStoreClosed has no listeners"))
-			OnStoreClosed(this, EventArgs.Empty);
 	}
 
 	//This function is called when buying an item

@@ -4,10 +4,6 @@ using System;
 
 public class NoteUIManager : SingletonUI<NoteUIManager> {
 
-    //======================Event=============================
-    public static event EventHandler<EventArgs> OnNoteClosed;
-    //=======================================================
-
 	public GameObject notePanel;
 	
 	public CameraMove cameraMove;
@@ -44,8 +40,5 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		
 		// Make sure callback NoteFinishedClosing is assigned in tween
         notePanel.GetComponent<MoveTweenToggle>().Hide();
-
-		if(D.Assert(OnNoteClosed != null, "OnNoteClosed has no listeners"))
-            OnNoteClosed(this, EventArgs.Empty);
     }
 }

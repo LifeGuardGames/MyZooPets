@@ -19,6 +19,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     private const string CALENDAR_TIP_BONUS = "Extra stars can be collected ever 12 hours. Remember to check often!";
     private const string DEGRAD_TIP1 = "Good job! You just removed an asthma trigger.";
     private const string DEGRAD_TIP2 = "Make sure you clean them up when you see them, or your pet will get sick!";
+	private const string INHALER_TIP = "Use this inhaler every morning and afternoon to keep your pet healthy!";
     
     void Start(){
         //use a if else if here to make sure that any tutorials not visited get called
@@ -60,22 +61,84 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     }
 
 	private void EnqueueCalendarTipIntro(){
-		NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarIntro, CalendarUIManager.Instance.SetUpGreenStampTip, "Next");
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
+               CalendarUIManager.Instance.SetUpGreenStampTip();
+            };
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
+		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarIntro);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//		NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarIntro, CalendarUIManager.Instance.SetUpGreenStampTip, "Next");
+		
+		
+		
 		GA.API.Design.NewEvent("Tutorial:Calendar:Intro");	// TODO-j Right semantic??
 	}
 
 	public void EnqueueCalendarTipGreenStamp(){
-        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarGreenStamp, CalendarUIManager.Instance.SetUpRedExTip, "Next");
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
+               CalendarUIManager.Instance.SetUpRedExTip();
+            };
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
+		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarGreenStamp);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarGreenStamp, CalendarUIManager.Instance.SetUpRedExTip, "Next");
+		
+		
         GA.API.Design.NewEvent("Tutorial:Calendar:1");
     }
 
     public void EnqueueCalendarTipRedStamp(){
-        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarRedStamp, CalendarUIManager.Instance.SetUpBonusTip, "Next");
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
+               CalendarUIManager.Instance.SetUpBonusTip();
+            };
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
+		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarRedStamp);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarRedStamp, CalendarUIManager.Instance.SetUpBonusTip, "Next");
+		
+		
+		
         GA.API.Design.NewEvent("Tutorial:Calendar:2");
     }
 
     public void EnqueueCalendarTipBonus(){
-        NotificationUIManager.Instance.EnqueueTutorialMessage(TutorialImageType.CalendarBonus, ShowCalendarTipConclude, "Done");	// Conclude tutorial, setup new
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
+               ShowCalendarTipConclude();
+            };
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
+		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarBonus);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button1Label, "Done");
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarBonus, ShowCalendarTipConclude, "Done");	// Conclude tutorial, setup new
+		
+		
         GA.API.Design.NewEvent("Tutorial:Calendar:3");
     }
 
@@ -97,19 +160,44 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
         if(TutorialLogic.Instance.FirstTimeDegradTrigger == true){
-            EnqueueDegradTipIntro();
-			EnqueueDegradTipConclude();
+            AddDegradTipIntro();
+			AddDegradTipConclude();
 		}
     }
 
-    private void EnqueueDegradTipIntro(){
-        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", null, true, true);
+    private void AddDegradTipIntro(){
+		/////// Send Notication ////////
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
+		notificationEntry.Add(NotificationPopupFields.Message, DEGRAD_TIP1);
+		notificationEntry.Add(NotificationPopupFields.SpriteName, "guiPanelStatsHealth");
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+		notificationEntry.Add(NotificationPopupFields.StartsHidden, true);
+		notificationEntry.Add(NotificationPopupFields.HideImmediately, true);
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		
+//        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", null, true, true);
         GA.API.Design.NewEvent("Tutorial:Trigger:Intro");
     }
 
-    private void EnqueueDegradTipConclude(){
+    private void AddDegradTipConclude(){
         // disappear immediately when done, because the level up message should pop up right away
-        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, false);
+		
+		/////// Send Notication ////////
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
+		notificationEntry.Add(NotificationPopupFields.Message, DEGRAD_TIP2);
+		notificationEntry.Add(NotificationPopupFields.SpriteName, "Skull");
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+		notificationEntry.Add(NotificationPopupFields.StartsHidden, false);
+		notificationEntry.Add(NotificationPopupFields.HideImmediately, false);
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		
+//        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, false);
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;
         DegradationUIManager.Instance.ActivateParticleEffects();
         GA.API.Design.NewEvent("Tutorial:Trigger:End");
@@ -117,7 +205,24 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //==============Inhaler tutorial=================
     private void StartRealInhalerTutorial(){
-        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
+		
+		/////// Send Notication ////////
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
+               clickManager.OpenRealInhaler();
+            };
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
+		notificationEntry.Add(NotificationPopupFields.Message, INHALER_TIP);
+		notificationEntry.Add(NotificationPopupFields.SpriteName, "advairPurple");
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.StartsHidden, true);
+		notificationEntry.Add(NotificationPopupFields.HideImmediately, false);
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		
+//        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;

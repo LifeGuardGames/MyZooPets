@@ -92,7 +92,7 @@ public class DiagnoseUIManager : MonoBehaviour {
 
         DiagnoseGameLogic.ClaimReward(deltaPoints, deltaStars);
 
-        NotificationUIManager.Instance.EnqueueGameOverRewardMessage(deltaStars, deltaPoints,
+        NotificationUIManager.Instance.ShowGameOverRewardMessage(deltaStars, deltaPoints,
             delegate(){
                 hud.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
 				// TODO-s Call NotificationUIManager.Instance.UnlockQueue???

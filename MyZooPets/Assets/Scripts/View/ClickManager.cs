@@ -306,6 +306,7 @@ public class ClickManager : MonoBehaviour {
 			GA.API.Design.NewEvent("UserTouch:SlotMachine");
 		}
 	}
+	
 	void OnTapRealInhaler(){
 		if (CanRespondToTap()){
 			if (DataManager.Instance.Tutorial.FirstTimeRealInhaler){
@@ -315,10 +316,11 @@ public class ClickManager : MonoBehaviour {
 				OpenRealInhaler();
 			}
 			else {
-				NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
-					"I don't need this right now.",
-					delegate(){}
-				);
+				//TODO-s Notification
+//				NotificationUIManager.Instance.EnqueuePopupNotificationOneButton(
+//					"I don't need this right now.",
+//					delegate(){}
+//				);
 			}
 			GA.API.Design.NewEvent("UserTouch:RealInhaler");
 		}

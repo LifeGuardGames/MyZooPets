@@ -60,6 +60,32 @@ public enum ChallengeType{
     Daily,
 }
 
+public enum NotificationPopupType{
+	OneButton,
+	TwoButtons,
+	GameOverRewardOneButton,
+	GameOverRewardTwoButton,
+	TutorialLeft,
+	TipWithImage,
+	LevelUp,
+}
+
+public enum NotificationPopupFields{
+	Type,
+	Message,
+	Button1Label,
+	Button1Callback,
+	Button2Label,
+	Button2Callback,
+	DeltaStars,
+	DeltaPoints,
+	SpriteName,
+	StartsHidden,
+	HideImmediately,
+	Badge,
+	TutorialImageType,
+}
+
 public enum NotificationType{
     YesNo,
     OK,

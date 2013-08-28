@@ -25,16 +25,29 @@ public class DiagnoseTimerLogic : MonoBehaviour {
             }
         }
 	}
-
+	
     //Increases the chance of this happening if health is low
     private void SendNotification(){
-        NotificationUIManager.Instance.EnqueuePopupNotificationTwoButtons("Something unusual is happening to your pet! Help it out!",
-            delegate(){
+		
+		// Assign delegate functions to be passed in hashtable
+		PopupNotificationNGUI.HashEntry button1Function = delegate(){
                 Application.LoadLevel("DiagnosePet");
-            },
-            delegate(){
-                //ignore. no punishment. unpause the game
+            };
+		PopupNotificationNGUI.HashEntry button2Function = delegate() {
+				//ignore. no punishment. unpause the game
                 //fewer rewards
-            });
+			};
+		
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+		notificationEntry.Add(NotificationPopupFields.Message, "Something unusual is happening to your pet! Help it out!");
+		notificationEntry.Add(NotificationPopupFields.Button1Label, "Okay");
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupFields.Button2Label, "Ignore");
+		notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+		
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
     }
 }

@@ -84,7 +84,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 	}
 
 	public void Show(){
-		Debug.Log ("SHOW");
+//		Debug.Log ("SHOW");
 		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;

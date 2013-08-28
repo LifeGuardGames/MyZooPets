@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 
 public class InhalerGameNGUI : Singleton<InhalerGameNGUI> {
-
     public static float practiceMessageDuration = 3.0f; //duration of popup message
     public static float introMessageDuration = 3.0f; //duration of popup message
     public GameObject progressBarObject;
@@ -51,24 +50,63 @@ public class InhalerGameNGUI : Singleton<InhalerGameNGUI> {
     public void HideQuitButton(){
         quitButton.GetComponent<MoveTweenToggle>().Hide();
     }
+	
     public void ShowGameOverMessage(){
         if (InhalerLogic.Instance.IsPracticeGame){
-            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(
-                InhalerGameManager.Instance.PracticeGameStarIncrement,
-                InhalerGameManager.Instance.PracticeGamePointIncrement,
-                delegate (){
-                    InhalerGameManager.Instance.ResetInhalerGame();
-                    RestartProgressBar();
-                },
-                QuitInhalerGame
-            );
+			
+			// Assign delegate functions to be passed in hashtable
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	                InhalerGameManager.Instance.ResetInhalerGame();
+					RestartProgressBar();
+	            };
+			
+			PopupNotificationNGUI.HashEntry button2Function = delegate() {
+				QuitInhalerGame();
+			};
+			
+			// Populate notification entry table
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardTwoButton);
+			notificationEntry.Add(NotificationPopupFields.DeltaStars, InhalerGameManager.Instance.PracticeGameStarIncrement);
+			notificationEntry.Add(NotificationPopupFields.DeltaPoints, InhalerGameManager.Instance.PracticeGamePointIncrement);
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			
+//            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(
+//                InhalerGameManager.Instance.PracticeGameStarIncrement,
+//                InhalerGameManager.Instance.PracticeGamePointIncrement,
+//                delegate (){
+//                    InhalerGameManager.Instance.ResetInhalerGame();
+//                    RestartProgressBar();
+//                },
+//                QuitInhalerGame
+//            );
         }
         else {
-            NotificationUIManager.Instance.EnqueueGameOverRewardMessage(
-                InhalerGameManager.Instance.RealGameStarIncrement,
-                InhalerGameManager.Instance.RealGamePointIncrement,
-                QuitInhalerGame
-            );
+			// Assign delegate functions to be passed in hashtable
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	                QuitInhalerGame();
+	            };
+			
+			// Populate notification entry table
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardOneButton);
+			notificationEntry.Add(NotificationPopupFields.DeltaStars, InhalerGameManager.Instance.RealGameStarIncrement);
+			notificationEntry.Add(NotificationPopupFields.DeltaPoints, InhalerGameManager.Instance.RealGamePointIncrement);
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			
+			
+//            NotificationUIManager.Instance.ShowGameOverRewardMessage(
+//                InhalerGameManager.Instance.RealGameStarIncrement,
+//                InhalerGameManager.Instance.RealGamePointIncrement,
+//                QuitInhalerGame
+//            );
 
         }
     }

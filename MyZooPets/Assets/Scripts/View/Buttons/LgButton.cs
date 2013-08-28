@@ -10,20 +10,44 @@ using System.Collections;
 
 public class LgButton : MonoBehaviour {
 	
+	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
+	public bool bSprite;
+	
 	public string strAnalytics;	// string key for analytics on this button
 	protected string GetAnalyticsKey()
 	{
 		return strAnalytics;
 	}	
 	
+    void Start(){
+		
+		// this works for 3D -- 2D uses OnPressed
+        TapItem tapItem = GetComponent<TapItem>();
+        if (tapItem != null){
+            tapItem.OnTap += ButtonClicked;
+        }
+    }	
+	
 	//---------------------------------------------------
-	// OnPress
+	// OnPress()
+	// 2D sprite buttons will receive this event, which
+	// will click the button.  At the moment 3D objects
+	// also happen to receive this event, but it's possible
+	// they won't in the future, so this is for 2D only.
+	//---------------------------------------------------	
+	void OnPress( bool bPress ) {
+		if ( bPress && bSprite )
+			ButtonClicked();
+	}
+	
+	//---------------------------------------------------
+	// ButtonClicked()
 	// When the button is actually clicked/pressed.
 	//---------------------------------------------------	
-	void OnPress (bool isPressed)
+	public void ButtonClicked ()
 	{
 		// if the button is being pressed and it is okay to respond...
-		if ( isPressed && ClickManager.Instance.CanRespondToTap() ) {
+		if ( ClickManager.Instance.CanRespondToTap() ) {
 			
 			// if there is an analytic event on this button, let's process that
 			string strAnalytics = GetAnalyticsKey();

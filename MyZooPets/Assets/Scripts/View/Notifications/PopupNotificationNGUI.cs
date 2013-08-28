@@ -58,7 +58,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     public void Display(bool pauseGame){
         LoadLevelManager.IsPaused = pauseGame;
-        ClickManager.ClickLock();
+        ClickManager.Instance.ClickLock();
 		TryShowDemuxThenToggle(-1);
     }
 
@@ -79,7 +79,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
             TryHideDemuxThenToggle(0.5f);
             Destroy(gameObject, 3.0f);
         }
-        ClickManager.ReleaseClickLock();
+        ClickManager.Instance.ReleaseClickLock();
         LoadLevelManager.IsPaused = false;
     }
 

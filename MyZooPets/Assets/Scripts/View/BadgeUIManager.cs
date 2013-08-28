@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class BadgeUIManager : MonoBehaviour {
+public class BadgeUIManager : SingletonUI<BadgeUIManager> {
     public static event EventHandler<EventArgs> OnBadgeBoardClosed;
 	public GameObject backButtonPrefab;
 	public GameObject badgeBoard;
@@ -18,7 +18,8 @@ public class BadgeUIManager : MonoBehaviour {
 	public UIAtlas badgeLevelAtlas2;
 	public UIAtlas badgeLevelAtlas3;
 	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
-
+	public CameraMove cameraMove;
+	
 	private GameObject backButtonReference;
 	private bool isActive = false;
 	private GameObject badgeBackdrop;
@@ -141,14 +142,15 @@ public class BadgeUIManager : MonoBehaviour {
 			descriptionObject.GetComponent<MoveTweenToggle>().Show();
 		}
 	}
-
+	
+	// where is this called from?
 	public void CloseDescription(){
 		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
 		badgeGUISpawnBase.transform.DestroyChildren();
 		Destroy(badgeBackdrop);
 
 		// Enable back button for badge board
-		BadgeBoardClicked();
+		_OpenUI(); // formerly BadgeBoardClicked();
 	}
 
 	public void DisableBackButton(){
@@ -156,8 +158,15 @@ public class BadgeUIManager : MonoBehaviour {
 	}
 
 	//When the badge board is clicked and zoomed into
-	public void BadgeBoardClicked(){
+	protected override void _OpenUI(){		
 		if(!isActive){
+			cameraMove.ZoomToggle(ZoomItem.BadgeBoard);
+			
+			//Hide other UI objects
+			NavigationUIManager.Instance.HidePanel();
+			HUDUIManager.Instance.HidePanel();
+			InventoryUIManager.Instance.HidePanel();			
+			
 			isActive = true;
 			badgeBoard.collider.enabled = false;
 
@@ -165,18 +174,25 @@ public class BadgeUIManager : MonoBehaviour {
 			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
 			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
 			messageScript.target = this.gameObject;
-			messageScript.functionName = "BadgeBoardBackButtonClicked";
+			messageScript.functionName = "CloseUI";
 		}
 	}
 
 	//The back button on the left top corner is clicked to zoom out of the badge board
-	public void BadgeBoardBackButtonClicked(){
-		if(isActive && !ClickManager.isClickLocked){
-			if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
-    			OnBadgeBoardClosed(this, EventArgs.Empty);
+	protected override void _CloseUI(){
+		if(isActive && !ClickManager.Instance.isClickLocked){
+			//if(D.Assert(OnBadgeBoardClosed != null, "OnBadgeBoardClosed has no listeners"))
+    		//	OnBadgeBoardClosed(this, EventArgs.Empty);
 
 			isActive = false;
 			badgeBoard.collider.enabled = true;
+			
+			cameraMove.ZoomOutMove();
+	
+			//Show other UI Objects
+			NavigationUIManager.Instance.ShowPanel();
+			HUDUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel();			
 
 			if(D.Assert(backButtonReference != null, "No back button to delete"))
 				Destroy(backButtonReference);

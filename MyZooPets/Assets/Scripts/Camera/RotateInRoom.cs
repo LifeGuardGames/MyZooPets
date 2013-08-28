@@ -31,7 +31,7 @@ public class RotateInRoom : UserNavigation {
 
     public override void ToTheRight(){
         if (IsRightArrowEnabled()){
-            if (ClickManager.CanRespondToTap()){
+            if (ClickManager.Instance.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation += rotationIncrement;
                 currentPartition = GetRight();
@@ -43,7 +43,7 @@ public class RotateInRoom : UserNavigation {
 
     public override void ToTheLeft(){
         if (IsLeftArrowEnabled()){
-            if (ClickManager.CanRespondToTap()){
+            if (ClickManager.Instance.CanRespondToTap()){
                 lockRotation = true;
                 currentYRotation -= rotationIncrement;
                 currentPartition = GetLeft();

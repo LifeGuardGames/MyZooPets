@@ -17,7 +17,8 @@ public class MoveTweenToggle : MonoBehaviour {
 			return isMoving;
 		}
 	}
-
+	
+	public bool bLockUI = false;		// if this is true, when this object is tweening it will lock the UI
 	public bool isDebug = false;
 	public bool startsHidden = false; 	//True: the UI element started off the screen so Show function
 											//will need to be called first, False: UI element started off
@@ -91,6 +92,11 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Show(float time){
 		if(!isShown){
+			
+			// if this tween locks the UI, properly increment the counter
+			if ( bLockUI )
+				ClickManager.Instance.IncrementTweenCount();
+			
 			isShown = true;
 			isMoving = true;
             LeanTween.cancel(gameObject);
@@ -112,6 +118,11 @@ public class MoveTweenToggle : MonoBehaviour {
 
 	public void Hide(float time){
 		if(isShown){
+			
+			// if this tween locks the UI, properly increment the counter
+			if ( bLockUI )
+				ClickManager.Instance.IncrementTweenCount();
+			
 			isShown = false;
 			isMoving = true;
             LeanTween.cancel(gameObject);
@@ -130,16 +141,24 @@ public class MoveTweenToggle : MonoBehaviour {
 	///////////////////////// CALLBACKS ///////////////////////////////
 
 	private void ShowUnlockCallback(){
+		// if this tween locks the UI, now that the tween is finished, decrement the counter
+		if ( bLockUI )
+			ClickManager.Instance.DecrementTweenCount();		
+		
 		isMoving = false;
 		ShowSendCallback();
 	}
 
 	private void HideUnlockCallback(){
+		// if this tween locks the UI, now that the tween is finished, decrement the counter
+		if ( bLockUI )
+			ClickManager.Instance.DecrementTweenCount();
+		
 		isMoving = false;
 		HideSendCallback();
 	}
 
-	private void ShowSendCallback(){
+	private void ShowSendCallback(){		
 		if (string.IsNullOrEmpty(ShowFunctionName)) return;
 		if (ShowTarget == null) ShowTarget = gameObject;
 		if (ShowIncludeChildren){

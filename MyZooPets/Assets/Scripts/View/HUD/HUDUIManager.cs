@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class HUDUIManager : MonoBehaviour {
+public class HUDUIManager : Singleton<HUDUIManager> {
 
 	public GameObject HUDPanel;
 

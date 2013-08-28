@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarUIManager : Singleton<CalendarUIManager> {
+public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 	public static event EventHandler<EventArgs> OnCalendarClosed; //call when calendar is closed
 
     public bool isDebug; //developing option
@@ -90,15 +90,23 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
         }
 	}
 
-    public void CalendarClicked(){
+    protected override void _OpenUI(){
+		//Hide other UI objects
+		NavigationUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
+		
         calendarLogic.CalendarOpened();
         calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
-    public void CalendarClosed(){
+    protected override void _CloseUI(){		
+		//Show other UI object
+		NavigationUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel();
+		
         calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
-        if(D.Assert(OnCalendarClosed != null, "OnCalendarClosed has no listeners"))
-            OnCalendarClosed(this, EventArgs.Empty);
+        //if(D.Assert(OnCalendarClosed != null, "OnCalendarClosed has no listeners"))
+        //    OnCalendarClosed(this, EventArgs.Empty);
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the
@@ -414,10 +422,10 @@ public class CalendarUIManager : Singleton<CalendarUIManager> {
 	void OnGUI(){
 		if(isDebug){
 			if(GUI.Button (new Rect(10, 10, 100, 50), "show")){
-				CalendarClicked();				
+				OpenUI();				
 			}
 			if(GUI.Button (new Rect(10, 70, 100, 50), "hide")){
-				CalendarClosed();				
+				CloseUI();				
 			}
 		}
 	}

@@ -12,8 +12,8 @@ GameObject:
   - 114: {fileID: 11400026}
   - 114: {fileID: 11400028}
   - 114: {fileID: 11400032}
-  - 114: {fileID: 11400006}
   - 114: {fileID: 11400012}
+  - 114: {fileID: 11400006}
   m_Layer: 10
   m_Name: Store
   m_TagString: Untagged
@@ -65,8 +65,9 @@ GameObject:
   - 114: {fileID: 11400040}
   - 114: {fileID: 11400038}
   - 114: {fileID: 11400034}
-  - 114: {fileID: 11400008}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: Note
   m_TagString: Untagged
@@ -243,6 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
+  bLockUI: 1
   isDebug: 0
   startsHidden: 0
   testButtonPos: {x: 0, y: 0}
@@ -260,6 +262,18 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f136880c2bf647919db7ea673e7132a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strAnalytics: UserTouch:Note
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -280,11 +294,11 @@ MonoBehaviour:
     e00: 400
     e01: 0
     e02: 0
-    e03: -4538.20117
+    e03: -4538.90723
     e10: 0
     e11: 400
     e12: 0
-    e13: -10876.043
+    e13: -10795.3369
     e20: 0
     e21: 0
     e22: 400
@@ -306,13 +320,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Script: {fileID: 11500000, guid: d2728a8ae85c448f58d8b0a383bbc3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 100018}
-  functionName: NavigationButtonClicked
-  trigger: 0
-  includeChildren: 0
+  strAnalytics: UserTouch:Store
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,6 +352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
+  bLockUI: 1
   isDebug: 0
   startsHidden: 0
   testButtonPos: {x: 0, y: 0}

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StoreUIManager : MonoBehaviour {
+public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
 	
 	public bool isDebug;
@@ -40,11 +40,17 @@ public class StoreUIManager : MonoBehaviour {
 		CreateItems(null);
 	}
 
-	public void StoreClicked(){
+	protected override void _OpenUI(){
+		//Hide other UI objects
+		NavigationUIManager.Instance.HidePanel();
+		
 		storePanel.GetComponent<MoveTweenToggle>().Show();
 	}
 
-	public void StoreClosed(){
+	protected override void _CloseUI(){
+		//Show other UI object
+		NavigationUIManager.Instance.ShowPanel();		
+		
 		storePanel.GetComponent<MoveTweenToggle>().Hide();
 		if(D.Assert(OnStoreClosed != null, "OnStoreClosed has no listeners"))
 			OnStoreClosed(this, EventArgs.Empty);

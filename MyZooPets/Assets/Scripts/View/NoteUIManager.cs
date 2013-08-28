@@ -2,13 +2,15 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class NoteUIManager : MonoBehaviour {
+public class NoteUIManager : SingletonUI<NoteUIManager> {
 
     //======================Event=============================
     public static event EventHandler<EventArgs> OnNoteClosed;
     //=======================================================
 
 	public GameObject notePanel;
+	
+	public CameraMove cameraMove;
 
 	// Use this for initialization
 	void Start () {
@@ -20,12 +22,26 @@ public class NoteUIManager : MonoBehaviour {
 	
 	}
 
-    public void NoteClicked(){
+    protected override void _OpenUI(){
+		//Hide other UI objects
+		NavigationUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
+		
+		// zoom into pet
+		cameraMove.ZoomToggle(ZoomItem.Pet); 
+		
 		Debug.Log("Note CLicked");
         notePanel.GetComponent<MoveTweenToggle>().Show();
     }
 
-    public void NoteClosed(){
+    protected override void _CloseUI(){
+		//Show other UI object
+		NavigationUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel();
+		
+		// zoom away from pet
+		cameraMove.ZoomOutMove();
+		
 		// Make sure callback NoteFinishedClosing is assigned in tween
         notePanel.GetComponent<MoveTweenToggle>().Hide();
 

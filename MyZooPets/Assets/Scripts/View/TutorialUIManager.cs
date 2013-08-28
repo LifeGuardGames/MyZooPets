@@ -9,6 +9,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     // public GameObject diary;
     // public GameObject slotMachine;
     public GameObject realInhaler;
+	public ButtonRealInhaler buttonRealInhaler;
     public GameObject teddyInhaler;
 
     public ClickManager clickManager;
@@ -117,7 +118,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //==============Inhaler tutorial=================
     private void StartRealInhalerTutorial(){
-        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
+        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", buttonRealInhaler.OpenRealInhaler, true, false);
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class NavigationUIManager : MonoBehaviour {
-
+public class NavigationUIManager : Singleton<NavigationUIManager> {
 	public GameObject navigationPanel;
     public ClickManager clickManager;
-
+	
+	/*
     public void NavigationButtonClicked(GameObject button){
        switch(button.name){
             case "Note":
@@ -18,6 +18,7 @@ public class NavigationUIManager : MonoBehaviour {
             break;
        }
     }
+    */
 
 	public void ShowPanel(){
 		navigationPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();

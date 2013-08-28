@@ -83,9 +83,11 @@ public class RoomCameraMove : CameraMove{
                     break;
 
                     case ZoomItem.Dojo:
-                    Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset;
+					Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset;
+					CameraTransformLoadLevel(dojoFinalPosition, dojoFinalFaceDirection, 2f, dojo);	// Pass in gameobject to load level callback
+					
 					// TODO-s i dont understand this code ^, hardcoding. needs fixing!
-                    CameraTransformEnterMode(new Vector3(.19f, 6.82f, 31.34f), dojoFinalFaceDirection, 1.0f);
+                    //CameraTransformEnterMode(new Vector3(.19f, 6.82f, 31.34f), dojoFinalFaceDirection, 1.0f);
                     break;
 
                     default:

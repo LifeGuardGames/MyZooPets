@@ -71,7 +71,7 @@ public class GrowShrink : MonoBehaviour {
     }
 
     public void StopAll(){
-        if (ClickManager.CanRespondToTap()){
+        if (ClickManager.Instance.CanRespondToTap()){
             isPlaying = false;
             LeanTween.cancel(gameObject);
             transform.localScale = new Vector3(1,1,1); // reset to original size
@@ -97,14 +97,14 @@ public class GrowShrink : MonoBehaviour {
     }
 
     void GrowInstantly(){
-        if (ClickManager.CanRespondToTap()){
+        if (ClickManager.Instance.CanRespondToTap()){
             LeanTween.cancel(gameObject);
             transform.localScale = bigger;
         }
     }
 
     void ShrinkInstantly(){
-        if (ClickManager.CanRespondToTap()){
+        if (ClickManager.Instance.CanRespondToTap()){
             LeanTween.cancel(gameObject);
             transform.localScale = smaller;
             // restart

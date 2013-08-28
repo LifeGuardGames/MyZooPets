@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class InventoryUIManager : MonoBehaviour {
+public class InventoryUIManager : Singleton<InventoryUIManager> {
 	public GameObject inventoryPanel;
     // NGUI revision variables
     public bool isDebug;

@@ -56,10 +56,10 @@ public class Inventory : MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake () {
-		itemLogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
-		inventory = DataManager.Instance.Inventory.InventoryArray;
-		for(int i=0; i<itemLogic.items.Count; i++){
-			if(inventory[i] > 0) inventoryCount++;
-		}
+		// itemLogic =  GameObject.Find("GameManager/ItemLogic").GetComponent<ItemLogic>();
+		// inventory = DataManager.Instance.Inventory.InventoryArray;
+		// for(int i=0; i<itemLogic.items.Count; i++){
+		// 	if(inventory[i] > 0) inventoryCount++;
+		// }
 	}
 }

@@ -37,12 +37,12 @@ public class InventoryUIManager : MonoBehaviour {
         collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
         Inventory.OnItemAddedToInventory += OnItemAdded;
 
-        //Spawn items in the inventory for the first time
-        for(int i=0; i<itemLogic.items.Count; i++) {
-            if(inventory.InventoryArray[i] > 0){
-                SpawnInventoryTypeInPanel(itemLogic.items[i].textureName, i);
-            }
-        }
+        // //Spawn items in the inventory for the first time
+        // for(int i=0; i<itemLogic.items.Count; i++) {
+        //     if(inventory.InventoryArray[i] > 0){
+        //         SpawnInventoryTypeInPanel(itemLogic.items[i].textureName, i);
+        //     }
+        // }
     }
 
     void OnDestroy(){
@@ -89,66 +89,67 @@ public class InventoryUIManager : MonoBehaviour {
 
     //Event listener. listening to when new item is added to the inventory
     private void OnItemAdded(object sender, Inventory.InventoryEventArgs e){
-       if(e.IsItemNew){
-            SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].textureName, e.ItemID);
-        }else{
-            //this is kind of bad.... need to change the structure of the UI
-            Transform item = UIGridObject.transform.Find("Item/"+e.ItemID.ToString());
-            item.parent.Find("label").GetComponent<UILabel>().text = inventory.InventoryArray[e.ItemID].ToString();
-        }
+       // if(e.IsItemNew){
+       //      SpawnInventoryTypeInPanel(itemLogic.items[e.ItemID].textureName, e.ItemID);
+       //  }else{
+       //      //this is kind of bad.... need to change the structure of the UI
+       //      Transform item = UIGridObject.transform.Find("Item/"+e.ItemID.ToString());
+       //      item.parent.Find("label").GetComponent<UILabel>().text = inventory.InventoryArray[e.ItemID].ToString();
+       //  }
     }
 
     private GameObject SpawnInventoryTypeInPanel(string textureName, int id){
-        // If the item type already exists, should not create a new box
-        if(itemTrackHash.ContainsKey(textureName) && itemTrackHash[textureName] == true){
-            Debug.LogError("Creating new box for existing item in bar");
-            return null;
-        }
-        else{
-            // Flag new box created in hash
-            itemTrackHash.Add(textureName, true);
+        return null;
+   //      // If the item type already exists, should not create a new box
+   //      if(itemTrackHash.ContainsKey(textureName) && itemTrackHash[textureName] == true){
+   //          Debug.LogError("Creating new box for existing item in bar");
+   //          return null;
+   //      }
+   //      else{
+   //          // Flag new box created in hash
+   //          itemTrackHash.Add(textureName, true);
 
-            // Create item structure
-            GameObject item = NGUITools.AddChild(UIGridObject);
-            item.name = "Item";
+   //          // Create item structure
+   //          GameObject item = NGUITools.AddChild(UIGridObject);
+   //          item.name = "Item";
 
-            // gray box
-            UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
-            spriteFill.transform.localScale = new Vector3(90, 90, 1);   // TODO make const
-            spriteFill.depth = 2; // two more than the panel behind it
-            spriteFill.transform.localPosition = new Vector3(0, 0, -15);
+   //          // gray box
+   //          UISprite spriteFill = NGUITools.AddSprite(item, itemAtlas, "fill");
+   //          spriteFill.transform.localScale = new Vector3(90, 90, 1);   // TODO make const
+   //          spriteFill.depth = 2; // two more than the panel behind it
+   //          spriteFill.transform.localPosition = new Vector3(0, 0, -15);
 
-            // container for sprite
-            GameObject SpriteGo = NGUITools.AddChild(item);
-            SpriteGo.gameObject.name = id.ToString();                   // Use ID as name
-            UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, textureName);
+   //          // container for sprite
+   //          GameObject SpriteGo = NGUITools.AddChild(item);
+   //          SpriteGo.gameObject.name = id.ToString();                   // Use ID as name
+   //          UISprite sprite = NGUITools.AddSprite(SpriteGo, itemAtlas, textureName);
 
-            BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
-            boxCollider.isTrigger = true;
-            boxCollider.size = new Vector3(90, 90, 1);                  // TODO make const
+   //          BoxCollider boxCollider = SpriteGo.gameObject.AddComponent<BoxCollider>();
+   //          boxCollider.isTrigger = true;
+   //          boxCollider.size = new Vector3(90, 90, 1);                  // TODO make const
 
-            InventoryDragDrop invDragDrop = SpriteGo.gameObject.AddComponent("InventoryDragDrop") as InventoryDragDrop;
-            invDragDrop.OnItemDrop += OnItemDrop;
+   //          InventoryDragDrop invDragDrop = SpriteGo.gameObject.AddComponent("InventoryDragDrop") as InventoryDragDrop;
+   //          invDragDrop.OnItemDrop += OnItemDrop;
 
-            SpriteGo.gameObject.AddComponent("UIDragPanelContents");
+   //          SpriteGo.gameObject.AddComponent("UIDragPanelContents");
 
-            // actual sprite
-            // sprite.transform.localScale = new Vector3(90, 90, 1);
-            sprite.depth = 3; // one more than the panel
-            sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
-            sprite.transform.localPosition = new Vector3(0, 0, -20);
+   //          // actual sprite
+   //          // sprite.transform.localScale = new Vector3(90, 90, 1);
+   //          sprite.depth = 3; // one more than the panel
+   //          sprite.transform.localScale = new Vector3(52, 64, 1);       // TODO make const TODO Dynamic size
+   //          sprite.transform.localPosition = new Vector3(0, 0, -20);
 
-			UILabel label = NGUITools.AddWidget<UILabel>(item);
-			label.gameObject.name = "label";
-			label.transform.localPosition = new Vector3(25, -25, -20);   // TODO Different atlas for now, move forward
-			label.transform.localScale = new Vector3(40, 40, 1);
-			label.font = font;
-			label.text = inventory.InventoryArray[id].ToString();
+			// UILabel label = NGUITools.AddWidget<UILabel>(item);
+			// label.gameObject.name = "label";
+			// label.transform.localPosition = new Vector3(25, -25, -20);   // TODO Different atlas for now, move forward
+			// label.transform.localScale = new Vector3(40, 40, 1);
+			// label.font = font;
+			// label.text = inventory.InventoryArray[id].ToString();
 
-            UpdateBarPosition();
+   //          UpdateBarPosition();
 
-            return item;
-        }
+   //          return item;
+   //      }
     }
 
     public void UpdateBarPosition(){

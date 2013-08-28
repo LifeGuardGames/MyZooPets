@@ -79,12 +79,9 @@ public class PanToRotate : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-#if UNITY_STANDALONE
+#if UNITY_EDITOR
 		CheckArrowKeys();
 #endif
-#if UNITY_WEBPLAYER
-		CheckArrowKeys();	
-#endif	
 		
         if (Input.touchCount > 0) {
             Touch touch = Input.touches[0];

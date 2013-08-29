@@ -61,8 +61,8 @@ public class PetMovement : Singleton<PetMovement> {
 
     // Update is called once per frame
     void Update () {
-        if (petSprite != null){
-            if (ClickManager.CanRespondToTap()){ //move the pet location if allowed
+        if (moving && petSprite != null){
+            if (ClickManager.Instance.CanRespondToTap()){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint,8f * Time.deltaTime);
             }
@@ -93,7 +93,7 @@ public class PetMovement : Singleton<PetMovement> {
     private void MovePet(){
         print("move pet");
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if (!ClickManager.CanRespondToTap()) return;
+        if (!ClickManager.Instance.CanRespondToTap()) return;
         MovePet(Camera.main.ScreenPointToRay(tapItem.lastTapPosition));    
     }
 

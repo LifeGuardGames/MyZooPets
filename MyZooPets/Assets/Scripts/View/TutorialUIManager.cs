@@ -9,6 +9,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     // public GameObject diary;
     // public GameObject slotMachine;
     public GameObject realInhaler;
+	public ButtonRealInhaler buttonRealInhaler;
     public GameObject teddyInhaler;
 
     public ClickManager clickManager;
@@ -209,7 +210,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
-               clickManager.OpenRealInhaler();
+               buttonRealInhaler.OpenRealInhaler();
             };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();

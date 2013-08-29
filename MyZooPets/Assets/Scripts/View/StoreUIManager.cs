@@ -3,9 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StoreUIManager : MonoBehaviour {
-	public static event EventHandler<EventArgs> OnStoreClosed; //call when store is closed
-	
+public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public bool isDebug;
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
@@ -40,14 +38,18 @@ public class StoreUIManager : MonoBehaviour {
 		CreateItems(null);
 	}
 
-	public void StoreClicked(){
+	protected override void _OpenUI(){
+		//Hide other UI objects
+		NavigationUIManager.Instance.HidePanel();
+		
 		storePanel.GetComponent<MoveTweenToggle>().Show();
 	}
 
-	public void StoreClosed(){
+	protected override void _CloseUI(){
+		//Show other UI object
+		NavigationUIManager.Instance.ShowPanel();		
+		
 		storePanel.GetComponent<MoveTweenToggle>().Hide();
-		if(D.Assert(OnStoreClosed != null, "OnStoreClosed has no listeners"))
-			OnStoreClosed(this, EventArgs.Empty);
 	}
 
 	//This function is called when buying an item

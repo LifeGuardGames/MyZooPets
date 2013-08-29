@@ -45,14 +45,14 @@ public abstract class CameraMove : MonoBehaviour{
 		isCameraMoving = false;
 		if(!isEnterMode){
 			//call event listener here
-			ClickManager.ReleaseModeLock();		// Only want to release the lock after camera done when exiting
+			ClickManager.Instance.ReleaseModeLock();		// Only want to release the lock after camera done when exiting
 		}
 		if(isLoadLevel && (levelLoadObject != null)){
 			isLoadLevel = false;
 			SceneTransition sceneTransition = levelLoadObject.GetComponent<SceneTransition>();	//GameObject must have script attached to it
 			sceneTransition.StartTransition();
 		}
-		ClickManager.ReleaseClickLock();
+		ClickManager.Instance.ReleaseClickLock();
 	}
 
 	// Transforms camera

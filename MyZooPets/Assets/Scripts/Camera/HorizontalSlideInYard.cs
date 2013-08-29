@@ -24,7 +24,7 @@ public class HorizontalSlideInYard : UserNavigation {
 
     public override void ToTheRight(){
         if (IsRightArrowEnabled()){
-            if (ClickManager.CanRespondToTap()){
+            if (ClickManager.Instance.CanRespondToTap()){
                 lockSlide = true;
                 currentXPos += slideIncrement;
                 LeanTween.moveX(gameObject, currentXPos, 1.0f, optional);
@@ -34,7 +34,7 @@ public class HorizontalSlideInYard : UserNavigation {
 
     public override void ToTheLeft(){
         if (IsLeftArrowEnabled()){
-            if (ClickManager.CanRespondToTap()){
+            if (ClickManager.Instance.CanRespondToTap()){
                 lockSlide = true;
                 currentXPos -= slideIncrement;
                 LeanTween.moveX(gameObject, currentXPos, 1.0f, optional);

@@ -47,6 +47,10 @@ public enum ItemType{
 	Usables,
 	Decorations,
 }
+public enum StatType{
+    Mood,
+    Health,
+}
 public enum BadgeTier{
 	Null,
 	Bronze,

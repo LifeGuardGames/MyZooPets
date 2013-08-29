@@ -21,6 +21,9 @@ public class Item {
 	public string TextureName{
 		get{return textureName;}
 	}
+	public ItemType Type{
+		get{return type;}
+	}
 	public int Cost{
 		get{return cost;}
 	}
@@ -43,13 +46,16 @@ public class Item {
 	}
 
 	//Returns all attributes of all the children of a IXMLNode in a hastable
-    protected Hashtable GetStats(IXMLNode node){
-        Hashtable statsHash = new Hashtable();
+    protected Dictionary<StatType, int> GetStats(IXMLNode node){
+        Dictionary<StatType, int> statsDict = new Dictionary<StatType, int>();
         List<IXMLNode> childrenList = XMLUtils.GetChildrenList(node);
+
         foreach(IXMLNode xmlNode in childrenList){
             Hashtable attrHash = XMLUtils.GetAttributes(xmlNode);
-            statsHash.Add((string)attrHash["ID"], Convert.ToInt32(attrHash["Amount"]));
+            StatType statType = (StatType)Enum.Parse(typeof(StatType), (string)attrHash["ID"]);
+            int amount = Convert.ToInt32(attrHash["Amount"]);
+            statsDict.Add(statType, amount);
         }
-        return statsHash;
+        return statsDict;
     }
 }

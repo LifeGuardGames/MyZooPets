@@ -2,23 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+/// <summary>
+/// Modified to work with UIDragPanelContents
+/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
+/// </summary>
 public class InventoryDragDrop : MonoBehaviour {
-
-	/// <summary>
-	/// Modified to work with UIDragPanelContents
-	/// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
-	/// </summary>
-
+	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	public class InvDragDropArgs : EventArgs{
 		public bool IsValidTarget{get; set;}
 		public Transform ItemTransform{get; set;}
 		public Transform ParentTransform{get; set;}
 		public Collider TargetCollider{get; set;}
 	}
-
-	//============Event==============
-	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
-	//==============================
 
 	private Transform mTrans;
 	private bool mIsDragging = false;
@@ -37,7 +32,6 @@ public class InventoryDragDrop : MonoBehaviour {
 		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
 		if(grid != null) grid.repositionNow = true;
 	}
-	
 
 	//Update the position of the Grid when the item has been destroyed
 	void OnDestroy(){
@@ -50,7 +44,6 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	private void Drop ()
 	{
-		//Debug.Log("dropped");
 		if(!isScrolling && !isClickLock){	// Picked up drop
 
 			InvDragDropArgs args = new InvDragDropArgs();
@@ -100,7 +93,6 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
-		//Debug.Log("drag");
 		if (enabled && UICamera.currentTouchID > -2)
 		{
 			if (!mIsDragging && delta.y > 0 && !isScrolling)	// If the delta has positive Y, pick up
@@ -144,7 +136,6 @@ public class InventoryDragDrop : MonoBehaviour {
 		if(!mIsDragging)
 			isClickLock = true;
 		
-		//Debug.Log("pressed");
 		if (enabled)
 		{
 			if (isPressed)

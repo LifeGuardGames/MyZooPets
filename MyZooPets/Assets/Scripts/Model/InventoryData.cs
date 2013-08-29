@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [DoNotSerializePublic]
 public class InventoryData{
     [SerializeThis]
-    private int[] inventory; //array for all items, index as Item Id
+    private Dictionary<string, InventoryItem> inventoryItems; //Key: itemID, Value: InventoryItem instance
 
-    //===============Getters & Setters=================
-    public int[] InventoryArray{
-        get{ return inventory;}
-        set{ inventory = value;}
+    public Dictionary<string, InventoryItem> InventoryItems{
+        get{return inventoryItems;}
+        set{inventoryItems = value;}
     }
 
-    //================Initialization============
     public InventoryData(){}
 
     public void Init(){
-        inventory = new int[ItemLogic.MAX_ITEM_COUNT];
+        inventoryItems = new Dictionary<string, InventoryItem>(); 
     }
 }

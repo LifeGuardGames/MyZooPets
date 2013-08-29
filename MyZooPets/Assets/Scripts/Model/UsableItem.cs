@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UsableItem : Item{
-    private Hashtable stats; //item's effect on stats. Optional
+    private Dictionary<StatType, int> stats; //item's effect on stats. Optional
 
-    public Hashtable Stats{
+    public Dictionary<StatType, int> Stats{
         get{return stats;}
-        set{stats = value;}
     }
 
     public UsableItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){

@@ -3,28 +3,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+    This class loads constant item data from a xml file. Only ItemLogic should
+    be interfacing with this class
+*/
 public class DataItems{
-    //Key: itemtype, value: dictionary of items
-    //Key: itemID, value: instance of Item.cs
+    //Key: itemtype, Value: dictionary of items
+    //Key: itemID, Value: instance of Item.cs
     private static Dictionary<ItemType, Dictionary<string, Item>> allItems = 
         new Dictionary<ItemType, Dictionary<string, Item>>();
-    private static bool dataLoaded = false;
-
-    // void Start(){
-    //    SetupData(); 
-    //    Item hi = GetItem("Usable0", ItemType.Usables);
-    //    Item test = GetItem("Food0", ItemType.Foods);
-    //    Item test2 = GetItem("Food1", ItemType.Foods);
-    // }
+    private static bool dataLoaded = false; //Prohibit double loading data
 
     //Look for item with itemID in the dictionary
-    public static Item GetItem(string itemID, ItemType category){
+    public static Item GetItem(string itemID){
         Item item = null;
-        Dictionary<string, Item> items = allItems[category];
-        if(items.ContainsKey(itemID)){
-            item = items[itemID];
+
+        if(allItems[ItemType.Foods].ContainsKey(itemID)){
+            item = allItems[ItemType.Foods][itemID];
+        }else if(allItems[ItemType.Usables].ContainsKey(itemID)){
+            item = allItems[ItemType.Usables][itemID];
+        }else if(allItems[ItemType.Decorations].ContainsKey(itemID)){
+            item = allItems[ItemType.Decorations][itemID];
         }
+
         return item;
+    }
+
+    //Return the ItemType of the item with itemID
+    public static ItemType GetItemType(string itemID){
+       Item item = GetItem(itemID);
+       return item.Type;
+    }
+
+    //Returns the texture name of item with itemID
+    public static string GetItemTextureName(string itemID){
+        Item item = GetItem(itemID);
+        return item.TextureName;
+    }
+
+    //Returns all the data for a specific item type
+    public static Dictionary<string, Item> GetAllItemsOfType(ItemType type){
+        return allItems[type];
     }
 
     public static void SetupData(){

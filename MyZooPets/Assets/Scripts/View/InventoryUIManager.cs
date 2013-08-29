@@ -55,7 +55,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
             e.IsValidTarget = true;
 
             string invItemID = e.ItemTransform.name; //get id from listener args
-            print(invItemID);
             InventoryLogic.Instance.UseItem(invItemID); //notify inventory logic that this item is being used
 
             InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);

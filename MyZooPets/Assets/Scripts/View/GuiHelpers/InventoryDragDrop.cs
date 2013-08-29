@@ -54,7 +54,6 @@ public class InventoryDragDrop : MonoBehaviour {
 			if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
 			
 			if(!args.IsValidTarget){
-				Debug.Log ("no hit");
 				// No valid container under the mouse -- revert the item's parent
 				mTrans.parent = mParent;
 				

@@ -11,6 +11,9 @@ public class MoveTweenToggle : MonoBehaviour {
 	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
 	private bool isShown;
+	public bool IsShowing() {
+		return isShown;
+	}
 	private bool isMoving;
 	public bool IsMoving{
 		get{

@@ -20,6 +20,9 @@ public class ClickManager : Singleton<ClickManager> {
 	public bool isModeLocked;	// Lock to prevent clicking other objects when zoomed into a mode (clicking diary in trophy more)
 	private int nTweenCount = 0;		// if this is > 0, a tween that affects the UI is happening
 	
+	// the current mode the UI is in
+	private UIModeTypes eCurMode;
+	
     bool trophyMessageShowing = false;
 
     void Awake(){
@@ -75,8 +78,14 @@ public class ClickManager : Singleton<ClickManager> {
 	}
 
 	// Disable clicking other objects inside a mode (ie, cant click shelf when in trophy mode)
-	public void ModeLock(){
+	public void ModeLock( UIModeTypes eMode ){
+		eCurMode = eMode;
 		isModeLocked = true;
+	}
+	
+	// get the current mode
+	public UIModeTypes GetCurrentMode() {
+		return eCurMode;
 	}
 
 	// Enable clicking other objects after completed exiting a mode

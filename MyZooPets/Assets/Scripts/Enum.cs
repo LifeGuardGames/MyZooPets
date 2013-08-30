@@ -139,3 +139,15 @@ public enum TutorialImageType{
     CalendarBonus
 }
 
+// various type of modes the UI could be in
+public enum UIModeTypes {
+	None,
+	Store,
+	EditDecos
+}
+
+// decoration node anchor types
+public enum DecorationTypes {
+	Wall,
+	Floor
+}

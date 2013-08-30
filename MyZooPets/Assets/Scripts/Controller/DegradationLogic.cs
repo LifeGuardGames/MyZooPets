@@ -6,7 +6,9 @@ using System;
 //Logic for the daily maintenance system that drives retention
 //and daily check-ins. 
 //TO DO: need to store diff types of trigger and distinct between room and yard
-public class DegradationLogic : MonoBehaviour {
+public class DegradationLogic : Singleton<DegradationLogic> {
+    public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
+    
     [System.Serializable]
     public class Location{ //make it serializable 
         public bool isTaken; //if the position has been taken or not
@@ -17,14 +19,7 @@ public class DegradationLogic : MonoBehaviour {
             this.position = position;
         }
     }
-    //====================Events==============================
-    public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
 
-    //=====================================================
-
-    public List<DegradData> DegradationTriggers{
-        get{return DataManager.Instance.Degradation.DegradationTriggers;}
-    }
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 
@@ -32,6 +27,16 @@ public class DegradationLogic : MonoBehaviour {
     private float timeInterval = 10f; //time interval for trigger to affect health
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
+
+    public List<DegradData> DegradationTriggers{
+        get{return DataManager.Instance.Degradation.DegradationTriggers;}
+    }
+    public List<Location> TriggerLocations{
+        get{return triggerLocations;}
+    }
+    public List<GameObject> TriggerPrefabs{
+        get{return triggerPrefabs;}
+    }
 
     void Awake(){
         DateTime now = DateTime.Now;

@@ -52,14 +52,12 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
                                 //has collected all the rewards
     private bool timerActive; //True: run count down timer, False: don't run
     private float countDownTime; //time till the next reward
-    private CalendarLogic calendarLogic; //reference
 
 	// Use this for initialization
 	void Awake() {
 	   InitWeekUIReference(true); //this week
        InitWeekUIReference(false); //last week
        timerActive = false;
-       calendarLogic = GameObject.Find("GameManager/CalendarLogic").GetComponent<CalendarLogic>();
 	}
 
     void Start(){
@@ -93,7 +91,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		
-        calendarLogic.CalendarOpened();
+        CalendarLogic.Instance.CalendarOpened();
         calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
     }
 
@@ -137,11 +135,11 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             button.isEnabled = true;
 
             //Add reward
-            calendarLogic.ClaimReward(calendarSlot.transform.position);
+            CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
 
             numberOfGreenStamps--; //keep track of the rewards claimed
             if(numberOfGreenStamps == 0){ //all rewards have been claimed
-                calendarLogic.IsRewardClaimed = true;
+                CalendarLogic.Instance.IsRewardClaimed = true;
                 ResetTimer();
             }
             GA.API.Design.NewEvent("UserTouch:Calendar:Green");
@@ -232,7 +230,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         if(redStampHintArrow != null) Destroy(redStampHintArrow);
 
         //Erase tutorial data
-        calendarLogic.ResetWeekAfterTutorialFinish();
+        CalendarLogic.Instance.ResetWeekAfterTutorialFinish();
     }
 
     //Use only during tutorial to prompt tips when green or red stamps are clicked
@@ -249,7 +247,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             button.isEnabled = true;
 
             //Reward
-            calendarLogic.ClaimReward(calendarSlot.transform.position);
+            CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
         }else{
             if(button.normalSprite == RED_EX) Destroy(redStampHintArrow);
 
@@ -262,10 +260,10 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
     //===================================================
 
     private void ResetTimer(){
-        TimeSpan timeSpan = calendarLogic.NextPlayPeriod - DateTime.Now;
+        TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
         countDownTime = (float) timeSpan.TotalSeconds;
         //Next Reward timer
-        if(calendarLogic.IsRewardClaimed){
+        if(CalendarLogic.Instance.IsRewardClaimed){
             //next reward time
             timerActive = true;
             
@@ -275,12 +273,18 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             timerActive = false;
         }
     }
+
+    private void SetSpriteOfUIImageButton(UIImageButton imageButton, string sprite){
+        imageButton.normalSprite = sprite;
+        imageButton.hoverSprite = sprite;
+        imageButton.pressedSprite = sprite; 
+    }
 	
     //Populate the calendar based on the data stored in DataManager
     private void ResetCalendar(object sender, EventArgs args){
-        currentWeekData = calendarLogic.GetCalendarEntriesThisWeek;
-        pastWeekData = calendarLogic.GetCalendarEntriesLastWeek;
-        numberOfGreenStamps = calendarLogic.GreenStampCount;
+        currentWeekData = CalendarLogic.Instance.GetCalendarEntriesThisWeek;
+        pastWeekData = CalendarLogic.Instance.GetCalendarEntriesLastWeek;
+        numberOfGreenStamps = CalendarLogic.Instance.GreenStampCount;
 
         ResetTimer();
         //Populate calendar for this week
@@ -296,9 +300,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
                         dayButton.hoverSprite = GREEN_CHECK;
                         dayButton.pressedSprite = GREEN_CHECK_DOWN;
                     }else{
-                        dayButton.normalSprite = GRAY_CHECK;
-                        dayButton.hoverSprite = GRAY_CHECK;
-                        dayButton.pressedSprite = GRAY_CHECK;
+                        SetSpriteOfUIImageButton(dayButton, GRAY_CHECK);
                     }
                 break;
                 case DosageRecord.Miss: //show ex stamp
@@ -307,14 +309,10 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
                     dayButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null: //blank
-                    dayButton.normalSprite = BLANK;
-                    dayButton.hoverSprite = BLANK;
-                    dayButton.pressedSprite = BLANK;
+                    SetSpriteOfUIImageButton(dayButton, BLANK);
                 break;
                 case DosageRecord.LeaveBlank: //blank
-                    dayButton.normalSprite = BLANK;
-                    dayButton.hoverSprite = BLANK;
-                    dayButton.pressedSprite = BLANK;
+                    SetSpriteOfUIImageButton(dayButton, BLANK);
                 break;
             }
             dayButton.enabled = false; // Tell it to redraw
@@ -328,9 +326,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
                         nightButton.hoverSprite = GREEN_CHECK;
                         nightButton.pressedSprite = GREEN_CHECK_DOWN;
                     }else{
-                        nightButton.normalSprite = GRAY_CHECK;
-                        nightButton.hoverSprite = GRAY_CHECK;
-                        nightButton.pressedSprite = GRAY_CHECK;
+                        SetSpriteOfUIImageButton(nightButton, GRAY_CHECK);
                     }
                 break;
                 case DosageRecord.Miss:
@@ -339,14 +335,10 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
                     nightButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null:
-                    nightButton.normalSprite = BLANK;
-                    nightButton.hoverSprite = BLANK;
-                    nightButton.pressedSprite = BLANK;
+                    SetSpriteOfUIImageButton(nightButton, BLANK);
                 break;
                 case DosageRecord.LeaveBlank:
-                    nightButton.normalSprite = BLANK;
-                    nightButton.hoverSprite = BLANK;
-                    nightButton.pressedSprite = BLANK;
+                    SetSpriteOfUIImageButton(nightButton, BLANK);
                 break;
             }
 			nightButton.enabled = false; // Tell it to redraw

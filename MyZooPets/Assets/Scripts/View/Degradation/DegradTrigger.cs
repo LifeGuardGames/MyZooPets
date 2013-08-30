@@ -2,13 +2,11 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class DegradTriggerManager : MonoBehaviour {
-    public int id; //the id of this specific degradation trigger
-    private DegradationLogic degradationLogic;
+public class DegradTrigger : MonoBehaviour {
+    public int ID{get; set;} //the id of this specific degradation trigger
 
 	// Use this for initialization
 	void Start () {
-        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
         GetComponent<TapItem>().OnTap += OnTap;
         DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
 
@@ -30,7 +28,7 @@ public class DegradTriggerManager : MonoBehaviour {
     private void OnTap(){
         //when trigger is touched remove from DataManager and destroy GameObject
         if (ClickManager.Instance.CanRespondToTap()){
-            degradationLogic.ClearDegradationTrigger(id);
+            DegradationLogic.Instance.ClearDegradationTrigger(ID);
             Destroy(this.gameObject);
         }
     }

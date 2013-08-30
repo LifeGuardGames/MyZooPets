@@ -13,6 +13,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 		//Destory all items in the list first
 		foreach(Transform child in goGrid.transform){
 			Destroy(child.gameObject);
+			Debug.Log("Destroy child");
 		}		
 		
 		for ( int i = 0; i < 7; i++ ) {

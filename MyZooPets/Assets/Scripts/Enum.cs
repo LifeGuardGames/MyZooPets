@@ -42,11 +42,14 @@ public enum AsthmaStage{
     Sick,
     Attack,
 }
-public enum ItemCategory{
+public enum ItemType{
 	Foods,
-	Items,
-	Inhalers,
+	Usables,
 	Decorations,
+}
+public enum StatType{
+    Mood,
+    Health,
 }
 public enum BadgeTier{
 	Null,
@@ -54,7 +57,6 @@ public enum BadgeTier{
 	Silver,
 	Gold,
 }
-
 public enum ChallengeType{
     Weekly,
     Daily,

@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CalendarLogic : MonoBehaviour{
-
-    private static CalendarEntry todaysEntry; //today's entry
-    //===========================Events=======================
+public class CalendarLogic : Singleton<CalendarLogic>{
     //called when calendar opened or calendar resets
     public static event EventHandler<EventArgs> OnCalendarReset; 
-    //========================================================
+
+    private static CalendarEntry todaysEntry; //today's entry
 
     //====================API (use this for generating weeks)=======================
     //Generate a week of empty CalendarEntry
@@ -104,12 +102,6 @@ public class CalendarLogic : MonoBehaviour{
         return nextPlayTime;
     }
 
-    //Give bonus when user collects
-    public void ClaimReward(Vector3 screenPos){
-		StatsController.Instance.ChangeStats(50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos),
-         50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos), 0, Vector3.zero, 0, Vector3.zero);
-    }
-
     // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
     // only used here, and in DataManager to initialize DataManager.DateOfSunday
     public static DateTime GetDateOfSunday(DateTime dateTime){
@@ -123,7 +115,13 @@ public class CalendarLogic : MonoBehaviour{
         }
     }
 
-    //check if the user can play the inhaler game
+    //Give bonus when user collects
+    public void ClaimReward(Vector3 screenPos){
+		StatsController.Instance.ChangeStats(50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos),
+         50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos), 0, Vector3.zero, 0, Vector3.zero);
+    }
+
+    //Check if the user can play the inhaler game
     public static bool CanUseRealInhaler{
         get {
             bool retVal = false;
@@ -175,43 +173,14 @@ public class CalendarLogic : MonoBehaviour{
         ResetForNextPlayPeriod(DateTime.Now);
     }
 
-    //run a check to see if calendar needs to be updated and reset
+    //Run a check to see if calendar needs to be updated and reset
     private void UpdateCalendar(DateTime now){
        UpdateWeekReference(now);
        FillInMissedEntries(now);
        ResetForNextPlayPeriod(now);
     }
 
-    //Play period is every 12 hr. Reward and punishment renews every play period
-    private void ResetForNextPlayPeriod(DateTime now){
-        if(now < DataManager.Instance.Calendar.NextPlayPeriod) return; //not next play period yet return
-        //reset green stamps
-        for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
-            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
-            if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
-            if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
-        }
-
-        //punish for ex stamps
-        int punishmentCounter = 0; // max 2
-        for(int i = 0;i < 7; i++){
-            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
-            if(entry.DayTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
-                punishmentCounter++;
-            }
-            if(entry.NightTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
-                punishmentCounter++;
-            }
-            if(punishmentCounter == 2) break;
-        }
-
-        //set NextPlayPeriod
-        DataManager.Instance.Calendar.NextPlayPeriod = CalculateNextPlayPeriod();
-    }
-
-    //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)
+     //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)
     private void UpdateWeekReference(DateTime now){
         if(now.Date > DataManager.Instance.Calendar.DateOfSunday){ //today's date is later than Sunday
 
@@ -271,10 +240,9 @@ public class CalendarLogic : MonoBehaviour{
 
         // fill in specifically for today
         FillInMissesForToday(now);
-
     }
 
-    //Fill in the missed entry for today.
+     //Fill in the missed entry for today.
     private void FillInMissesForToday(DateTime now){
         if (now.Hour >= 12) { //PM
             if (todaysEntry.DayTime == DosageRecord.Null){
@@ -282,4 +250,35 @@ public class CalendarLogic : MonoBehaviour{
             }
         }
     }
+
+    //Play period is every 12 hr. Reward and punishment renews every play period
+    private void ResetForNextPlayPeriod(DateTime now){
+        if(now < DataManager.Instance.Calendar.NextPlayPeriod) return; //not next play period yet return
+        //reset green stamps
+        for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
+            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
+            if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
+            if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
+        }
+
+        //punish for ex stamps
+        int punishmentCounter = 0; // max 2
+        for(int i = 0;i < 7; i++){
+            CalendarEntry entry = DataManager.Instance.Calendar.EntriesThisWeek[i];
+            if(entry.DayTime.Equals(DosageRecord.Miss)){
+                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
+                punishmentCounter++;
+            }
+            if(entry.NightTime.Equals(DosageRecord.Miss)){
+                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
+                punishmentCounter++;
+            }
+            if(punishmentCounter == 2) break;
+        }
+
+        //set NextPlayPeriod
+        DataManager.Instance.Calendar.NextPlayPeriod = CalculateNextPlayPeriod();
+    }
+
+   
 }

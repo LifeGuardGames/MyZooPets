@@ -61,11 +61,6 @@ public class DataManager : Singleton<DataManager>{
         set {firstTime = value;}
     }
 
-    // //Badge
-    // public BadgeData[] BadgeStatus{
-    //     get{return badgeStatus;}
-    //     set{badgeStatus = value;}
-    // }
     //===================================
     public void TurnFirstTimeOff(){
         firstTime = false;
@@ -135,20 +130,6 @@ public class DataManager : Singleton<DataManager>{
 
         //Pet info
         petName = "LazyWinkle";
-        //Badge
-        // badgeStatus = new BadgeData[BadgeLogic.MAX_BADGE_COUNT];
-        // int counter = 0;
-        // for(int i=0; i<BadgeLogic.MAX_BADGE_COUNT; i++){
-        //     BadgeData badgeData = new BadgeData();
-        //     // if(counter < 7){
-        //     //     badgeData.IsAwarded = true;
-        //     //     badgeData.Tier = BadgeTier.Gold;
-        //     // }
-        //     // counter++;
-        //     badgeStatus[i] = badgeData;
-        // }
-        // badgeStatus[0].IsAwarded = true;
-        // badgeStatus[0].Tier = BadgeTier.Gold;
     }
 
     //call the delegate when data initialization or deserialziation is done
@@ -163,7 +144,7 @@ public class DataManager : Singleton<DataManager>{
     //serialize data into byte array and store locally in PlayerPrefs
     private void SerializeGame(){
         PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-        // print(JSONLevelSerializer.SerializeLevel());
+        print(JSONLevelSerializer.SerializeLevel());
     }
 
     //called when level data are loaded

@@ -5,27 +5,23 @@ using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
 public class DegradationUIManager : Singleton<DegradationUIManager>{
-    public GameObject cleanTriggerParticleDrop;
-    private DegradationLogic degradationLogic;
-
-    //=========================Events===================================
     //When particle effects need to be turned on
     public static event EventHandler<EventArgs> OnActivateParticleEffects;
-    //==================================================================
-
-    void Awake(){
-        degradationLogic = GameObject.Find("GameManager/DegradationLogic").GetComponent<DegradationLogic>();
-    }
+    public GameObject cleanTriggerParticleDrop;
 
     void Start(){
         //instantiate triggers in the game
-        for(int i=0; i<degradationLogic.DegradationTriggers.Count; i++){
-            int prefabId = degradationLogic.DegradationTriggers[i].PrefabId;
-            int positionId = degradationLogic.DegradationTriggers[i].PositionId;
+        List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;
+        List<GameObject> triggerPrefabs = DegradationLogic.Instance.TriggerPrefabs;
+        List<DegradationLogic.Location> triggerLocations = DegradationLogic.Instance.TriggerLocations;
+
+        for(int i=0; i<degradTriggers.Count; i++){
+            int prefabId = degradTriggers[i].PrefabId;
+            int positionId = degradTriggers[i].PositionId;
             //instantiate all the triggers save in DataManager
-            GameObject trigger = (GameObject)Instantiate(degradationLogic.triggerPrefabs[prefabId],
-                degradationLogic.triggerLocations[positionId].position, Quaternion.identity);
-            trigger.GetComponent<DegradTriggerManager>().id = i;
+            GameObject trigger = (GameObject)Instantiate(triggerPrefabs[prefabId],
+                triggerLocations[positionId].position, Quaternion.identity);
+            trigger.GetComponent<DegradTrigger>().ID = i;
         }
     }
 

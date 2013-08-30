@@ -105,7 +105,7 @@ public class HUDAnimator : MonoBehaviour {
 		displayMood = DataManager.Instance.Stats.Mood;
 
 		lastLevel = DataManager.Instance.Level.CurrentLevel;
-		nextLevelPoints = LevelUpLogic.NextLevelPoints();
+		nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints();
 	}
 
 	void FixedUpdate(){
@@ -221,7 +221,7 @@ public class HUDAnimator : MonoBehaviour {
 
 			//reset the progress bar for next level
 			DataManager.Instance.Stats.ResetPoints();
-			nextLevelPoints = LevelUpLogic.NextLevelPoints(); //set the requirement for nxt level
+			nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
 			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
 			displayPoints = 0;
 			dataPoints = 0;

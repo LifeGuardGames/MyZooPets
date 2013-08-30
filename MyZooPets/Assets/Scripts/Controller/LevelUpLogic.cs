@@ -4,30 +4,25 @@ using System;
 
 //Calculates evolution meter every 30 secs
 //Decides when pet hits evolution stage
-public class LevelUpLogic : MonoBehaviour {
+public class LevelUpLogic : Singleton<LevelUpLogic> {
 	private float timer = 0;
 	private float timeInterval = 30f;
     private bool canCheckLevelUp = true; //use this to prohibit update from checking
                                         //level up too many times
-    private static BadgeTier awardBadge = BadgeTier.Null; //trophy awarded when leveling up
+    private BadgeTier awardBadge = BadgeTier.Null; //trophy awarded when leveling up
     private static int[] levelPoints = {0, 500, 1000, 1500, 2000, 2500, 3500, 4500, 
         5500, 6500, 8500}; //points required for the nxt level
     private const int OK_CARE = 30;
     private const int GOOD_CARE = 70;
 
     //=========================API============================
-    // //initialize level up tracking timer
-    // public void Init () {
-    //     // timer = timeInterval;
-    // }
-
     //The point requirement for next level up
-    public static int NextLevelPoints(){
+    public int NextLevelPoints(){
         return levelPoints[(int)DataManager.Instance.Level.CurrentLevel + 1];
     }
 
     //The trophy that is awarded at the time of level up
-    public static BadgeTier AwardedBadge{
+    public BadgeTier AwardedBadge{
         get{return awardBadge;}
     }
     //========================================================

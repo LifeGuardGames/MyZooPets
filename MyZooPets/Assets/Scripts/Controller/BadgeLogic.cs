@@ -42,7 +42,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         BadgeUIData badge = badges.Find(entity => entity.ID == badgeIndex);
         if(D.Assert(badge != null) && !badge.IsAwarded){
             badge.IsAwarded = true;
-            badge.Tier = LevelUpLogic.AwardedBadge;
+            badge.Tier = LevelUpLogic.Instance.AwardedBadge;
         }      
     }
 }

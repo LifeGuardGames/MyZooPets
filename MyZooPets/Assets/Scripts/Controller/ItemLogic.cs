@@ -1,89 +1,107 @@
 using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 //Item Logic Class
 //Reference all Items.
-//Each property of items are stored in a list, fill the list by draggin in Unity
-
-//Item databases contains a list of all items
-//Item ID = array index of the items list
-//Methods list contains all functions for each item, cooresponding to its index
-public class ItemLogic : MonoBehaviour{
+public class ItemLogic : Singleton<ItemLogic>{
 	//This number has to change manually
 	public static int MAX_ITEM_COUNT = 10;
-	public List<Item> items = new List<Item>(); //item database
-												//Index: itemID, Value: instance of Item class
+	private List<Item> foodList; //list with only FoodItem. sorted by cost
+	private List<Item> usableList; //list with only UsableItem. sorted by cost
+	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
 
-	private List<Action> methods = new List<Action>(); //List of actions to be called when item is used. 
-														//Index: itemID, Value: functions
-	private List<int> foodList = new List<int>(); //Index: regular array index, Value: itemID 
-	private List<int> itemList = new List<int>(); //Index: regular array index, Value: itemID 
-	private List<int> inhalerList = new List<int>(); //Index: regular array index, Value: itemID
-	private List<int> decoList = new List<int>(); //Index: regular array index, Value: itemID 
-
-	public List<int> FoodList{get{return foodList;}}	
-	public List<int> ItemList{get{return itemList;}}
-	public List<int> InhalerList{get{return inhalerList;}}
-	public List<int> DecoList{get{return decoList;}}
-	public List<Item> Items{get{return items;}}
-
-	//Calls the id function in the function list.
-	public void OnCall(int id){
-		methods[id]();
-	}
-	
-	//sorting items list into category list
-	private void Categorize(){
-		for(int i =0;i< items.Count;i++){
-			if(items[i].category == ItemCategory.Foods) foodList.Add(i);
-			if(items[i].category == ItemCategory.Items) itemList.Add(i);
-			if(items[i].category == ItemCategory.Inhalers) inhalerList.Add(i);
-			if(items[i].category == ItemCategory.Decorations) decoList.Add(i);
+	public List<Item> FoodList{
+		get{
+			if(foodList == null){
+				foodList = new List<Item>();
+				Dictionary<string, Item> foodDict = DataItems.GetAllItemsOfType(ItemType.Foods);
+				foodList = SelectListFromDictionaryAndSort(foodDict);
+			}
+			return foodList;
 		}
 	}
-	
+
+	public List<Item> UsableList{
+		get{
+			if(usableList == null){
+				usableList = new List<Item>();
+				Dictionary<string, Item> usableDict = DataItems.GetAllItemsOfType(ItemType.Usables);
+				usableList = SelectListFromDictionaryAndSort(usableDict);
+			}
+			return usableList;
+		}
+	}
+
+	// public List<Item> DecorationList{}
+
 	void Awake(){
-		//initalize all item in the database. Add methods and description
-		Categorize();
-		LoadMethods();
+		DataItems.SetupData();
 	}
 
-	private void LoadMethods(){
-		methods.Add(()=>TakeApple());
-		methods.Add(()=>TakeGreenApple());
-		methods.Add(()=>TakeSandwich());
-		methods.Add(()=>TakeBread());
-		methods.Add(()=>TakeDoughnut());
-		methods.Add(()=>TakeDoughnutBrown());
-		methods.Add(()=>TakeMilk());
-		methods.Add(()=>TakeInhaler());
+	//Returns Item with itemID
+	public Item GetItem(string itemID){
+		Item item;
+		item = DataItems.GetItem(itemID);
+		D.Assert(item != null, "itemID not valid");
+		return item;
 	}
 
-	//Functions for Each item.
-	private void TakeApple(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 10, Vector3.zero);
+	//Returns the type of item with itemID
+	public ItemType GetItemType(string itemID){
+		return DataItems.GetItemType(itemID);
 	}
-	private void TakeGreenApple(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 5, Vector3.zero);
+
+	//Returns the texture name of item with itemID
+	public string GetItemTextureName(string itemID){
+		return DataItems.GetItemTextureName(itemID);
 	}
-	private void TakeSandwich(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 30, Vector3.zero);
+
+	//Apply the stats effect that the Item with itemID has to the appropriate stats
+	public void StatsEffect(string itemID){
+		Item item = GetItem(itemID);
+		Dictionary<StatType, int> statDict = null;
+		switch(item.Type){
+			case ItemType.Foods:
+				FoodItem foodItem = (FoodItem) item;
+				statDict = foodItem.Stats;
+
+				if(statDict != null)
+					StatsEffect(statDict);
+			break;
+			case ItemType.Usables:
+				UsableItem usableItem = (UsableItem) item;
+				statDict = usableItem.Stats;
+
+				if(statDict != null)
+					StatsEffect(statDict);
+			break;
+		}
 	}
-	private void TakeBread(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 15, Vector3.zero);
+
+	//StatsEffect helper method
+	private void StatsEffect(Dictionary<StatType, int> statDict){
+		int moodAmount = 0;
+		int healthAmount = 0;
+
+		if(statDict.ContainsKey(StatType.Mood))	{
+			moodAmount = statDict[StatType.Mood];
+		}
+		if(statDict.ContainsKey(StatType.Health)){
+			moodAmount = statDict[StatType.Health];
+		}
+
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero,
+			healthAmount, Vector3.zero, moodAmount, Vector3.zero);	
 	}
-	private void TakeDoughnut(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 20, Vector3.zero);
-	}
-	private void TakeDoughnutBrown(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 25, Vector3.zero);
-	}
-	private void TakeMilk(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 40, Vector3.zero);
-	}
-	private void TakeInhaler(){
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 10, Vector3.zero, 0, Vector3.zero);
+
+	//Get list sorted by cost in ascending order from the item dictionary
+	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
+		List<Item> itemList = (from keyValuePair in itemDict 
+								orderby keyValuePair.Value.Cost ascending
+								select keyValuePair.Value).ToList();
+		return itemList;
 	}
 }

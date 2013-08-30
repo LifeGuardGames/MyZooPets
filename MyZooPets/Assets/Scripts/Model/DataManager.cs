@@ -144,7 +144,7 @@ public class DataManager : Singleton<DataManager>{
     //serialize data into byte array and store locally in PlayerPrefs
     private void SerializeGame(){
         PlayerPrefs.SetString("_SAVE_GAME_", LevelSerializer.SerializeLevel());
-        // print(JSONLevelSerializer.SerializeLevel());
+        print(JSONLevelSerializer.SerializeLevel());
     }
 
     //called when level data are loaded

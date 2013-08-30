@@ -36,4 +36,6 @@ public class InventoryItem{
         this.itemTextureName = textureName;
         amount = 1;
     }
+
+    public InventoryItem(){}
 }

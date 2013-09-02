@@ -119,7 +119,7 @@ public class PanToMoveCamera : MonoBehaviour{
     //************************************************  
     private void MoveCameraWithKey(Direction direction){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutBack);
+        optional.Add("ease", LeanTweenType.easeOutQuad);
         float moveTo = 0;
 
         if(direction == Direction.Left)
@@ -134,7 +134,7 @@ public class PanToMoveCamera : MonoBehaviour{
 
     private void SnapCameraTo(Direction direction){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutBack);
+        optional.Add("ease", LeanTweenType.easeOutQuad);
         float moveTo = 0;
 
         //code goes here

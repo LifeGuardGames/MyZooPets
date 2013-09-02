@@ -7,7 +7,6 @@ public class InhalerGameNGUI : Singleton<InhalerGameNGUI> {
     public static float introMessageDuration = 3.0f; //duration of popup message
     public GameObject progressBarObject;
     public GameObject quitButton;
-    public GameObject hudObject;
     private ProgressBarController progressBar;
 
     void Awake(){
@@ -39,10 +38,10 @@ public class InhalerGameNGUI : Singleton<InhalerGameNGUI> {
         progressBarObject.SetActive(true);
     }
     public void ShowHUD(){
-        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+        HUDUIManager.Instance.ShowPanel();
     }
     public void HideHUD(){
-        hudObject.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+        HUDUIManager.Instance.HidePanel();
     }
     public void ShowQuitButton(){
         quitButton.GetComponent<MoveTweenToggle>().Show();

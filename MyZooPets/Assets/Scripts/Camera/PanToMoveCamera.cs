@@ -18,6 +18,7 @@ public class PanToMoveCamera : MonoBehaviour{
     private Direction panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
     private bool touchCancelled = false; //True: touch shouldn't be handled
+    private float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
 
     private Camera nguiCamera; 
     private Camera mainCamera;
@@ -87,7 +88,7 @@ public class PanToMoveCamera : MonoBehaviour{
                     // if(!CheckForSwipeGesture(touch.position))
                     float swipeTime = Time.time - startTime;
 
-                    if(swipeTime <= 0.3 && normalizedTouchPosX >= 0.05){
+                    if(swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance){
                         print("swipe");
                         SwipeSnapCameraTo(panDirection);
                     }else{

@@ -92,7 +92,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		InventoryUIManager.Instance.HidePanel();
 		
         CalendarLogic.Instance.CalendarOpened();
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+        calendarPanel.GetComponent<TweenToggleDemux>().Show();
     }
 
     protected override void _CloseUI(){		
@@ -100,7 +100,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+        calendarPanel.GetComponent<TweenToggleDemux>().Hide();
     }
 
     //Called when a checked calendar slot is clicked. Reward the player and turn the
@@ -170,9 +170,9 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         night.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
 
         //Set the finish target to TutorialUIManager
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = true;
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = TutorialUIManager.Instance.gameObject;
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "StartCalendarTutorial";
+        calendarPanel.GetComponent<TweenToggleDemux>().isShowFinishedCallback = true;
+        calendarPanel.GetComponent<TweenToggleDemux>().ShowTarget = TutorialUIManager.Instance.gameObject;
+        calendarPanel.GetComponent<TweenToggleDemux>().ShowFunctionName = "StartCalendarTutorial";
     }
 
     //Black out everything. Only shows the green stamp
@@ -218,12 +218,14 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
     public void CleanUpTutorial(){
         //Erase all tutorial data
         day.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
+		day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, 0);
         night.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-
+		night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, 0);
+		
         //Reset the finish target
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().isShowFinishedCallback = false;
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowTarget = null;
-        calendarPanel.GetComponent<MoveTweenToggleDemultiplexer>().ShowFunctionName = "";
+        calendarPanel.GetComponent<TweenToggleDemux>().isShowFinishedCallback = false;
+        calendarPanel.GetComponent<TweenToggleDemux>().ShowTarget = null;
+        calendarPanel.GetComponent<TweenToggleDemux>().ShowFunctionName = "";
 
         //Clean up hint arrow if still there
         if(greenStampHintArrow != null) Destroy(greenStampHintArrow);

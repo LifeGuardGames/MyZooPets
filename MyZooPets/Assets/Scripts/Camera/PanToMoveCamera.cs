@@ -87,11 +87,13 @@ public class PanToMoveCamera : MonoBehaviour{
                     // if(!CheckForSwipeGesture(touch.position))
                     float swipeTime = Time.time - startTime;
 
-                    if(swipeTime <= 0.3 && normalizedTouchPosX >= 0.05)
+                    if(swipeTime <= 0.3 && normalizedTouchPosX >= 0.05){
+                        print("swipe");
                         SwipeSnapCameraTo(panDirection);
-                    else
+                    }else{
+                        print("pan snap");
                         PanSnapCameraTo(panDirection);
-
+                    }
                     touchCancelled = false;
                 break;
             }
@@ -140,7 +142,7 @@ public class PanToMoveCamera : MonoBehaviour{
         Hashtable optional = new Hashtable();
         float moveTo = 0;
 
-        if(normalizedTouchPosX >= 0.3){ //more than half way to the next screen
+        if(normalizedTouchPosX >= 0.5){ //more than half way to the next screen
             if(direction == Direction.Left)
                 MoveRightOnePartition();
             else

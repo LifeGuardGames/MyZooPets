@@ -19,6 +19,6 @@ public class ButtonChangeScene : LgButton {
 	protected override void ProcessClick() {
 		cameraMove.ZoomToggle(zoomItem);
 		ClickManager.Instance.ClickLock();
-		ClickManager.Instance.ModeLock();
+		ClickManager.Instance.ModeLock( UIModeTypes.None );
 	}	
 }

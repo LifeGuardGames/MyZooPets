@@ -44,7 +44,7 @@ public class ButtonRealInhaler : LgButton {
 	public void OpenRealInhaler(){
 		cameraMove.ZoomToggle(ZoomItem.RealInhaler);
 		ClickManager.Instance.ClickLock();
-		ClickManager.Instance.ModeLock();
+		ClickManager.Instance.ModeLock( UIModeTypes.None );
 
 		//Hide other UI Objects
 		NavigationUIManager.Instance.HidePanel();

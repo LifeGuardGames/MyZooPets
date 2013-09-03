@@ -4,17 +4,20 @@ using System.Collections;
 /*
     Attach this script to main camera.
     Panning left or right will move the camera x position right or left, respectively.
+    Swiping Left or right will snap the camera x position right or left, respectively.
 */
 public class PanToMoveCamera : MonoBehaviour{
     public float minNormalizedPanDistance = 0.1f; //min normalized panning distance
     public int numOfPartitions = 3; //number of partitions allowed
     public float partitionOffset = 80.0f; //How big each partition is in world position
+    public float maxSwipeTime = 0.15f; //swipe gesture needs to be faster than maxSwipeTime
 
     private Vector2 startTouchPos; //Position of touch when finger touches the screen
+    private float startTime; //Time at when finger touches screen
     private int currentPartition = 0;
     private Direction panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
-    private bool touchCancelled = false;
+    private bool touchCancelled = false; //True: touch shouldn't be handled
 
     private Camera nguiCamera; 
     private Camera mainCamera;
@@ -42,6 +45,7 @@ public class PanToMoveCamera : MonoBehaviour{
             switch(touch.phase){
                 case TouchPhase.Began:
                     startTouchPos = touch.position;
+                    startTime = Time.time;
 
                     //Cancel touch if finger is touching undesirable objects while panning
                     if(IsTouchingNGUI(startTouchPos) || IsTouchingPet(startTouchPos))
@@ -58,11 +62,7 @@ public class PanToMoveCamera : MonoBehaviour{
                     if(nowTouchPos.x < startTouchPos.x && currentPartition != numOfPartitions){
                         panDirection = Direction.Left;
 
-                        //Get the different of the touch position now and the touch position at start
-                        float deltaTouchPosX = Mathf.Abs(nowTouchPos.x - startTouchPos.x);
-
-                        //Divide by screen width to get the normalize position;
-                        normalizedTouchPosX = deltaTouchPosX / Screen.width;
+                        normalizedTouchPosX = GetNormalizedPosition(nowTouchPos);
                         
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -74,11 +74,7 @@ public class PanToMoveCamera : MonoBehaviour{
                     }else if(nowTouchPos.x > startTouchPos.x && currentPartition != 0){
                         panDirection = Direction.Right;
 
-                        //Get the different of the touch position now and the touch position at start
-                        float deltaTouchPosX = Mathf.Abs(nowTouchPos.x - startTouchPos.x);
-
-                        //Divide by screen width to get the normalize position;
-                        normalizedTouchPosX = deltaTouchPosX / Screen.width;
+                        normalizedTouchPosX = GetNormalizedPosition(nowTouchPos);
 
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -91,14 +87,39 @@ public class PanToMoveCamera : MonoBehaviour{
                 break;
 
                 case TouchPhase.Ended:
-                    touchCancelled = false;
+                    // if(!CheckForSwipeGesture())
+                        PanSnapCameraTo(panDirection);
 
-                    SnapCameraTo(panDirection);
+                    touchCancelled = false;
                 break;
             }
         }
     }    
 
+    //Check if the gesture is a swipe gesture
+    private bool CheckForSwipeGesture(){
+        bool retVal = false;
+        float swipeTime = Time.time - startTime;
+
+        if(swipeTime <= maxSwipeTime){ //swipe gesture needs to be faster than minSwipeTime
+            if(panDirection == Direction.Left && currentPartition != numOfPartitions){
+                if(normalizedTouchPosX < minNormalizedPanDistance){
+                    retVal = true;
+
+                    SwipeSnapCameraTo(Direction.Left);
+                }
+            }else if(panDirection == Direction.Right && currentPartition != 0){
+                if(normalizedTouchPosX < minNormalizedPanDistance){
+                    retVal = true;
+
+                    SwipeSnapCameraTo(Direction.Right);
+                }
+            }
+        } 
+
+        return retVal;
+    }
+   
     //************************************************
     // CheckArrowKeys() 
     // Checks arrow key input for moving around the
@@ -108,18 +129,22 @@ public class PanToMoveCamera : MonoBehaviour{
     {
         // check arrow keys
         if( Input.GetKeyDown( KeyCode.RightArrow ) )
-            MoveCameraWithKey( Direction.Left );
+            SwipeSnapCameraTo( Direction.Left );
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) )
-            MoveCameraWithKey( Direction.Right );       
+            SwipeSnapCameraTo( Direction.Right );       
     }
 
-    //************************************************
-    // MoveCameraWithKey()
-    // Snaps and moves the camera with arrow keys.
-    //************************************************  
-    private void MoveCameraWithKey(Direction direction){
+   
+    private float GetNormalizedPosition(Vector2 currentTouchPos){
+        //Get the different of the touch position now and the touch position at start
+        float deltaTouchPosX = Mathf.Abs(currentTouchPos.x - startTouchPos.x);
+
+        //Divide by screen width to get the normalize position;
+        return deltaTouchPosX / Screen.width;
+    }
+
+    private void SwipeSnapCameraTo(Direction direction){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutQuad);
         float moveTo = 0;
 
         if(direction == Direction.Left)
@@ -132,9 +157,8 @@ public class PanToMoveCamera : MonoBehaviour{
         normalizedTouchPosX = 0;
     }
 
-    private void SnapCameraTo(Direction direction){
+    private void PanSnapCameraTo(Direction direction){
         Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutQuad);
         float moveTo = 0;
 
         //code goes here
@@ -146,7 +170,7 @@ public class PanToMoveCamera : MonoBehaviour{
         }
         moveTo = partitionOffset * currentPartition;
 
-        LeanTween.moveX(gameObject, moveTo, 1.0f, optional);
+        LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
         normalizedTouchPosX = 0;
     }
 

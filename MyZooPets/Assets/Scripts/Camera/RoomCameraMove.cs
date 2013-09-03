@@ -7,6 +7,7 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
 
     protected GameObject dojo;
+    protected Vector3 dojoFinalPosition = new Vector3(0, 6, 34);
     protected Vector3 dojoFinalFaceDirection = new Vector3(0, 0, 0);
 
     protected GameObject badgeBoard;
@@ -83,7 +84,7 @@ public class RoomCameraMove : CameraMove{
                     break;
 
                     case ZoomItem.Dojo:
-					Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset;
+					// Vector3 dojoFinalPosition = dojo.transform.position + dojoCameraOffset;
 					CameraTransformLoadLevel(dojoFinalPosition, dojoFinalFaceDirection, 2f, dojo);	// Pass in gameobject to load level callback
 					
 					// TODO-s i dont understand this code ^, hardcoding. needs fixing!

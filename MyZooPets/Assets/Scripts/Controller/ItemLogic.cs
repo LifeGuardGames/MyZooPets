@@ -99,9 +99,11 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Get list sorted by cost in ascending order from the item dictionary
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
-		List<Item> itemList = (from keyValuePair in itemDict 
-								orderby keyValuePair.Value.Cost ascending
-								select keyValuePair.Value).ToList();
+		var items = from keyValuePair in itemDict 
+						select keyValuePair.Value;
+		List<Item> itemList = (from Item in items 
+						orderby Item.Cost
+						select Item).ToList();
 		return itemList;
 	}
 }

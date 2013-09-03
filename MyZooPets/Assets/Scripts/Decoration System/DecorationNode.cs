@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//---------------------------------------------------
+// DecorationNode
+// Script that resides on node objects that define
+// the type of decoration node.
+//---------------------------------------------------
+
 public class DecorationNode : MonoBehaviour {
 	
 	// what type of decorations can go on this node?
@@ -8,6 +14,9 @@ public class DecorationNode : MonoBehaviour {
 	public DecorationTypes GetDecoType() {
 		return eType;
 	}
+	
+	// the decoration currently being displayed on this node
+	private GameObject goDeco;
 
 	void Start () {
 		
@@ -38,17 +47,56 @@ public class DecorationNode : MonoBehaviour {
         }
     }
 	
+	//---------------------------------------------------
+	// ToggleNode()
+	// Makes the node visible or invisible.
+	//---------------------------------------------------	
 	private void ToggleNode( bool bOn ) {
 		GetComponent<MeshRenderer>().enabled = bOn;
 		GetComponent<BoxCollider>().enabled = bOn;
 	}
 	
+	//---------------------------------------------------
+	// NodeClicked()
+	// Called when this node is clicked.
+	//---------------------------------------------------	
 	private void NodeClicked() {
 		// inform the ui manager
 		DecorationTypes eType = GetDecoType();
 		
 		Debug.Log("deco node of type " + eType + " clicked");
 		
-		EditDecosUIManager.Instance.UpdateChooseMenu( eType );
+		// have the deco UI manager update itself based on this node being selected
+		EditDecosUIManager.Instance.UpdateChooseMenu( this );
+	}
+	
+	//---------------------------------------------------
+	// HasDecoration()
+	// Does this node currently have a decoration on it?
+	//---------------------------------------------------	
+	public bool HasDecoration() {
+		return goDeco != null;
+	}
+	
+	//---------------------------------------------------
+	// SetDecoration()
+	// Sets this node's decoration to the incoming
+	// decoration.
+	//---------------------------------------------------	
+	public void SetDecoration( GameObject goDecoNew ) {
+		// if there was already a decoration here, destroy it
+		if ( goDeco )
+			Destroy( goDeco );
+		
+		goDeco = goDecoNew;
+	}
+	
+	//---------------------------------------------------
+	// RemoveDecoration()
+	// Removes the decoration from this node.
+	//---------------------------------------------------	
+	public void RemoveDecoration() {
+		if ( goDeco )
+			Destroy( goDeco );
 	}
 }

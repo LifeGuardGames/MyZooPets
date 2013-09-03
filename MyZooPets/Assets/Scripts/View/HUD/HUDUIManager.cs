@@ -15,14 +15,17 @@ public class HUDUIManager : Singleton<HUDUIManager> {
     private string starCount;
 
     public bool isDebug;
-    public UISlider healthSlider;
-    public UISlider moodSlider;
-    public UISlider levelSlider;
-    public UILabel starLabel;
-    public UILabel levelLabel;
-    public UILabel levelTextLabel;
-    public UILabel healthLabel;
-    public UILabel moodLabel;
+	public UISlider healthSlider;
+	public UILabel healthLabel;
+	
+	public UILabel levelNumber;
+	public UILabel levelFraction;
+	public UISlider levelSlider;
+
+	public UISlider moodSlider;
+	public UILabel moodLabel;
+
+	public UILabel starLabel;
     
 	// Use this for initialization
 	void Start () {
@@ -38,7 +41,7 @@ public class HUDUIManager : Singleton<HUDUIManager> {
         health = hudAnimator.DisplayHealth;
 
         //points progress bar data
-        level = "Lv " + (int)hudAnimator.LastLevel;
+        level = ((int)hudAnimator.LastLevel).ToString();
         nextLevelPoints = hudAnimator.NextLevelPoints;
         levelText = hudAnimator.DisplayPoints + "/" + nextLevelPoints;
 
@@ -46,12 +49,12 @@ public class HUDUIManager : Singleton<HUDUIManager> {
         starCount = hudAnimator.DisplayStars.ToString();
 
         levelSlider.sliderValue = points/nextLevelPoints;
-        levelLabel.text = level;
-        levelTextLabel.text = levelText;
+        levelNumber.text = level;
+        levelFraction.text = levelText;
         moodSlider.sliderValue = mood/100;
-        moodLabel.text = mood.ToString();
+        moodLabel.text = mood.ToString() + "%";
         healthSlider.sliderValue = health/100;
-        healthLabel.text = health.ToString();
+        healthLabel.text = health.ToString() + "%";
         starLabel.text = starCount;
 	}
 

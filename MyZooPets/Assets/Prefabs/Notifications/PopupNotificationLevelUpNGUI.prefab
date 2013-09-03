@@ -209,7 +209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -120.220001}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 64, y: 64, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -242,7 +242,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 143, y: 1, z: -6}
+  m_LocalPosition: {x: 143, y: 1, z: -5}
   m_LocalScale: {x: 32, y: 32, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
@@ -253,7 +253,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 129, y: -137, z: -5}
+  m_LocalPosition: {x: 129, y: -137, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -266,7 +266,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 17.5440865, z: -70}
+  m_LocalPosition: {x: 0, y: 17.5440865, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400018}
@@ -279,7 +279,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 217, z: -4.99966431}
+  m_LocalPosition: {x: 3, y: 217, z: 0}
   m_LocalScale: {x: 638, y: 155, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
@@ -290,7 +290,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -208.839996, y: -44, z: -5}
+  m_LocalPosition: {x: -208.839996, y: -44, z: -3}
   m_LocalScale: {x: 183, y: 233, z: 0}
   m_Children: []
   m_Father: {fileID: 400018}
@@ -312,7 +312,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -50}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -372,7 +372,7 @@ MonoBehaviour:
   mTex: {fileID: 2800000, guid: 05d9323cd2c494dd3b69f2fff2b1ac50, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1001
+  mDepth: 0
   mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
   mSpriteName: panelSlantBlue
   mFillCenter: 1
@@ -455,7 +455,7 @@ MonoBehaviour:
   mTex: {fileID: 2800000, guid: 05d9323cd2c494dd3b69f2fff2b1ac50, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1003
+  mDepth: 3
   mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
   mSpriteName: buttonShort
   mFillCenter: 1
@@ -524,7 +524,7 @@ MonoBehaviour:
   mTex: {fileID: 2800000, guid: 5b8f3801b05ac564aa05925e61357139, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1010
+  mDepth: 1
   mAtlas: {fileID: 11400000, guid: 76e376728def9f147a2489e1d2b72448, type: 2}
   mSpriteName: badgeAddonGold
   mFillCenter: 1
@@ -565,7 +565,7 @@ MonoBehaviour:
   mTex: {fileID: 2800000, guid: 05d9323cd2c494dd3b69f2fff2b1ac50, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1010
+  mDepth: 1
   mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
   mSpriteName: notificationLevelUp
   mFillCenter: 1
@@ -586,6 +586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 0
+  bLockUI: 0
   isDebug: 0
   startsHidden: 1
   testButtonPos: {x: 0, y: 0}

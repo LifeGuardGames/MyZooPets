@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: InhalerGameManager
+  m_Name: Box Atlas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,15 +35,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f703466f465c54b4c943babed3eebcc4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  advairPrefab: {fileID: 100008, guid: 1367fb4ec085c4d1290d62450b4d8811, type: 2}
-  rescuePrefab: {fileID: 100000, guid: 114b4d65f37e0462ca9b40823fd0535a, type: 2}
-  smallRescuePrefab: {fileID: 100002, guid: 48604700de89849128dcf6df2f1b4a30, type: 2}
-  inhale: {fileID: 0}
-  exhale: {fileID: 0}
-  drag: {fileID: 0}
+  material: {fileID: 2100000, guid: 0e596a2b587d84f46935a072f7ede38e, type: 2}
+  sprites:
+  - name: box30
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 192
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 31
+      y: 223
+      width: 2
+      height: 2
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: box20
+    outer:
+      serializedVersion: 2
+      x: 0
+      y: 127
+      width: 64
+      height: 64
+    inner:
+      serializedVersion: 2
+      x: 21
+      y: 148
+      width: 22
+      height: 22
+    rotated: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  mCoordinates: 0
+  mPixelSize: 1
+  mReplacement: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

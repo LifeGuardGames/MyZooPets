@@ -21,11 +21,10 @@ public class SceneTransition : MonoBehaviour {
 		if (!string.IsNullOrEmpty(levelName))
 		{
 			transitionToggleObject.SetActive(true);
-
-			Hashtable hash = new Hashtable();
-			LeanTween.rotateLocal(transitionToggleObject, new Vector3(0, 0, 180f), 0.8f, hash);
-			MoveTweenToggleDemultiplexer demux = transitionToggleObject.GetComponent<MoveTweenToggleDemultiplexer>();
-			MoveTweenToggle toggle = transitionToggleObject.GetComponent<MoveTweenToggle>();
+			
+			// Check for any tween toggles
+			TweenToggleDemux demux = transitionToggleObject.GetComponent<TweenToggleDemux>();
+			TweenToggle toggle = transitionToggleObject.GetComponent<TweenToggle>();
 			if(demux != null){
 				demux.ShowTarget = gameObject;
 				demux.isShowFinishedCallback = true;

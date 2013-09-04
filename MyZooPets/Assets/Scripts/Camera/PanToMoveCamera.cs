@@ -7,17 +7,18 @@ using System.Collections;
     Swiping Left or right will snap the camera x position right or left, respectively.
 */
 public class PanToMoveCamera : MonoBehaviour{
-    public float minNormalizedPanDistance = 0.1f; //min normalized panning distance
+    public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
     public int numOfPartitions = 3; //number of partitions allowed
     public float partitionOffset = 80.0f; //How big each partition is in world position
-    public float maxSwipeTime = 0.15f; //swipe gesture needs to be faster than maxSwipeTime
 
     private Vector2 startTouchPos; //Position of touch when finger touches the screen
+    private Vector2 currentTouchPos; //Position of touch right now
     private float startTime; //Time at when finger touches screen
     private int currentPartition = 0;
     private Direction panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
     private bool touchCancelled = false; //True: touch shouldn't be handled
+    private float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
 
     private Camera nguiCamera; 
     private Camera mainCamera;
@@ -55,14 +56,13 @@ public class PanToMoveCamera : MonoBehaviour{
                 case TouchPhase.Moved:
                     if(touchCancelled) return;
                     // Vector2 touchDeltaPosition = touch.deltaPosition;
-                    Vector2 nowTouchPos = touch.position;
+                    currentTouchPos = touch.position;
                     float currentPosX = currentPartition * partitionOffset;
+                    normalizedTouchPosX = GetNormalizedPosition();
 
                     //Is touching panning to the left 
-                    if(nowTouchPos.x < startTouchPos.x && currentPartition != numOfPartitions){
+                    if(currentTouchPos.x < startTouchPos.x && currentPartition != numOfPartitions){
                         panDirection = Direction.Left;
-
-                        normalizedTouchPosX = GetNormalizedPosition(nowTouchPos);
                         
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -71,10 +71,8 @@ public class PanToMoveCamera : MonoBehaviour{
 
                             transform.localPosition = new Vector3(newPosX, 0, 0);
                         }
-                    }else if(nowTouchPos.x > startTouchPos.x && currentPartition != 0){
+                    }else if(currentTouchPos.x > startTouchPos.x && currentPartition != 0){
                         panDirection = Direction.Right;
-
-                        normalizedTouchPosX = GetNormalizedPosition(nowTouchPos);
 
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -87,39 +85,22 @@ public class PanToMoveCamera : MonoBehaviour{
                 break;
 
                 case TouchPhase.Ended:
-                    // if(!CheckForSwipeGesture())
-                        PanSnapCameraTo(panDirection);
+                    // if(!CheckForSwipeGesture(touch.position))
+                    float swipeTime = Time.time - startTime;
 
+                    if(swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance){
+                        print("swipe");
+                        SwipeSnapCameraTo(panDirection);
+                    }else{
+                        print("pan snap");
+                        PanSnapCameraTo(panDirection);
+                    }
                     touchCancelled = false;
                 break;
             }
         }
     }    
 
-    //Check if the gesture is a swipe gesture
-    private bool CheckForSwipeGesture(){
-        bool retVal = false;
-        float swipeTime = Time.time - startTime;
-
-        if(swipeTime <= maxSwipeTime){ //swipe gesture needs to be faster than minSwipeTime
-            if(panDirection == Direction.Left && currentPartition != numOfPartitions){
-                if(normalizedTouchPosX < minNormalizedPanDistance){
-                    retVal = true;
-
-                    SwipeSnapCameraTo(Direction.Left);
-                }
-            }else if(panDirection == Direction.Right && currentPartition != 0){
-                if(normalizedTouchPosX < minNormalizedPanDistance){
-                    retVal = true;
-
-                    SwipeSnapCameraTo(Direction.Right);
-                }
-            }
-        } 
-
-        return retVal;
-    }
-   
     //************************************************
     // CheckArrowKeys() 
     // Checks arrow key input for moving around the
@@ -134,8 +115,9 @@ public class PanToMoveCamera : MonoBehaviour{
             SwipeSnapCameraTo( Direction.Right );       
     }
 
-   
-    private float GetNormalizedPosition(Vector2 currentTouchPos){
+    //Normalized position tells how much of the screen does your gesture cover.
+    //From 0 ~ 1
+    private float GetNormalizedPosition(){
         //Get the different of the touch position now and the touch position at start
         float deltaTouchPosX = Mathf.Abs(currentTouchPos.x - startTouchPos.x);
 
@@ -148,12 +130,12 @@ public class PanToMoveCamera : MonoBehaviour{
         float moveTo = 0;
 
         if(direction == Direction.Left)
-            currentPartition++;
+            MoveRightOnePartition();
         else
-            currentPartition--;    
+            MoveLeftOnePartition();
 
         moveTo = partitionOffset * currentPartition;
-        LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
+        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
         normalizedTouchPosX = 0;
     }
 
@@ -161,17 +143,28 @@ public class PanToMoveCamera : MonoBehaviour{
         Hashtable optional = new Hashtable();
         float moveTo = 0;
 
-        //code goes here
         if(normalizedTouchPosX >= 0.5){ //more than half way to the next screen
             if(direction == Direction.Left)
-                currentPartition++;
+                MoveRightOnePartition();
             else
-                currentPartition--;    
+                MoveLeftOnePartition();
         }
-        moveTo = partitionOffset * currentPartition;
 
-        LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
+        moveTo = partitionOffset * currentPartition;
+        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
         normalizedTouchPosX = 0;
+    }
+
+    //Move to the next partition and check boundary
+    private void MoveRightOnePartition(){
+        if(currentPartition + 1 <= numOfPartitions)
+            currentPartition++;
+    }
+
+    //Move to previous partition and check boundary
+    private void MoveLeftOnePartition(){
+        if(currentPartition - 1 >= 0)
+            currentPartition--;
     }
 
     //True: if finger touches NGUI 

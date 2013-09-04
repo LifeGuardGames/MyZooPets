@@ -36,7 +36,8 @@ public class DojoUIManager : Singleton<DojoUIManager> {
 
     //Called when Back Button Clicked
     public void CloseDojo(){
-        Application.LoadLevel("NewBedRoom");
+		// Handled by button
+//        Application.LoadLevel("NewBedRoom");
     }
 
     //Event Listener. Update dojo skill UI when a new level is unlocked

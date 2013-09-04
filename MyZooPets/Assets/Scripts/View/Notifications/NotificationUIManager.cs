@@ -36,15 +36,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 //	private bool isFirstPop = true; // Aux to stop subsequent AddToQueue() to trigger queue check
 
 	void Start(){
-//		if(!flipped){
-//			gameObject.transform.position = new Vector3(cameraObject.transform.position.x,
-//				cameraObject.transform.position.y - 1f, cameraObject.transform.position.z + 4f);
-//		}
-//		else{
-//			gameObject.transform.position = new Vector3(cameraObject.transform.position.x,
-//				cameraObject.transform.position.y - 1f, cameraObject.transform.position.z - 4f);
-//		}
-
 		backDrop.SetActive(false);
 		
 		// Check the static queue to see if anything is there on level load
@@ -86,12 +77,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
 				case NotificationPopupType.OneButton:
+					backDrop.SetActive(true);
 					ShowPopupNotificationOneButton(	(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Button1Label]);
 					break;
 				
 				case NotificationPopupType.TwoButtons:
+					backDrop.SetActive(true);
 					ShowPopupNotificationTwoButtons((string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback],
@@ -100,12 +93,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.GameOverRewardOneButton:
+					backDrop.SetActive(true);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]);
 					break;
 				
 				case NotificationPopupType.GameOverRewardTwoButton:
+					backDrop.SetActive(true);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -113,6 +108,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.TipWithImage:
+					backDrop.SetActive(true);
 					ShowPopupTipWithImage(			(string)						entry[NotificationPopupFields.Message],
 													(string)						entry[NotificationPopupFields.SpriteName],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -121,18 +117,24 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.LevelUp:
+					backDrop.SetActive(true);
 					ShowLevelUpMessage(				(BadgeTier)						entry[NotificationPopupFields.Badge],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]);
 					break;
 				
 				case NotificationPopupType.TutorialLeft:
+					backDrop.SetActive(true);
 					ShowTutorialMessage(			(TutorialImageType)				entry[NotificationPopupFields.TutorialImageType],
 													(PopupNotificationNGUI.HashEntry)	entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Button1Label]);
 					break;
+				default:
+					Debug.LogError("Invalid Notification");
+					break;
 			}
 		}
 		else{
+			backDrop.SetActive(false);
 			isNotificationActive = false;
 			Debug.Log ("No notification detected");
 		}

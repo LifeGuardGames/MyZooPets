@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+    TO DO: Get rid of camera offset. Use absolute position instead
+*/
 public class RoomCameraMove : CameraMove{
 
     protected GameObject shelf;
@@ -31,7 +34,6 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
     protected Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
     protected Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
-//    protected Vector3 badgeBoardCameraOffset = new Vector3(-24.53f, 0.8f, 54.89f); // use this whenever changing badgeBoardFinalPosition
 	protected Vector3 badgeBoardCameraOffset = new Vector3(0f, 0f, 0f); // use this whenever changing badgeBoardFinalPosition
 	protected Vector3 dojoCameraOffset = new Vector3(40.5f,8f,20f);
     // this way, the camera will always go to the pet

@@ -19,7 +19,9 @@ public class DataManager : Singleton<DataManager>{
     private bool firstTime; //is the user playing for the first time
 
     //==========SaveData============
-
+	
+    [SerializeThis] 
+    public DecorationSystemData Decorations;	
     [SerializeThis] 
     public StatsData Stats;
     [SerializeThis]
@@ -109,6 +111,9 @@ public class DataManager : Singleton<DataManager>{
 
     //initialize all data for the first time
     private void InitializeAllDataFirstTime(){
+		
+		Decorations = new DecorationSystemData();
+		Decorations.Init();
         Stats = new StatsData();
         Stats.Init();
         Level = new LevelUpData();

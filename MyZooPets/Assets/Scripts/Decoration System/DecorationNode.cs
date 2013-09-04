@@ -18,8 +18,7 @@ public class DecorationNode : MonoBehaviour {
 	// the decoration currently being displayed on this node
 	private GameObject goDeco;
 
-	void Start () {
-		
+	void Start () {	
 		// use event handler to listen for when the player goes into edit deco mode
 		EditDecosUIManager.OnManagerOpen += OnDecoMode;
 		
@@ -61,6 +60,10 @@ public class DecorationNode : MonoBehaviour {
 	// Called when this node is clicked.
 	//---------------------------------------------------	
 	private void NodeClicked() {
+		
+		Debug.Log("Testing save game system: " + DataManager.Instance.Decorations.DecoTest);
+		DataManager.Instance.Decorations.DecoTest += 100;
+		
 		// inform the ui manager
 		DecorationTypes eType = GetDecoType();
 		

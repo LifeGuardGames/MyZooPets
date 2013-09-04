@@ -17,6 +17,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	public GameObject goChoosePanel;
 	public ChooseDecorationUI scriptChooseUI;
 	
+	void Start() {
+		//Debug.Log("Starting deco system...here is where I should load everything i guess");	
+	}
+	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	

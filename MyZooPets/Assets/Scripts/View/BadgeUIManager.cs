@@ -171,6 +171,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 
 			backButtonReference = NGUITools.AddChild(badgeBoardBadges, backButtonPrefab);
 			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
+			//backButtonReference.SetActive(true);
 			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
 			messageScript.target = this.gameObject;
 			messageScript.functionName = "CloseUI";

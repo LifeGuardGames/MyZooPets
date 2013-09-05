@@ -60,9 +60,8 @@ public class PanToMoveCamera : MonoBehaviour{
                     float currentPosX = currentPartition * partitionOffset;
                     normalizedTouchPosX = GetNormalizedPosition();
 
-                    //Is touching panning to the left 
                     if(currentTouchPos.x < startTouchPos.x && currentPartition != numOfPartitions){
-                        panDirection = Direction.Left;
+                        panDirection = Direction.Left; //panning left
                         
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -72,7 +71,7 @@ public class PanToMoveCamera : MonoBehaviour{
                             transform.localPosition = new Vector3(newPosX, 0, 0);
                         }
                     }else if(currentTouchPos.x > startTouchPos.x && currentPartition != 0){
-                        panDirection = Direction.Right;
+                        panDirection = Direction.Right; //panning right
 
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
                             //With the normalize position figure out how much the camera will have to move
@@ -85,16 +84,13 @@ public class PanToMoveCamera : MonoBehaviour{
                 break;
 
                 case TouchPhase.Ended:
-                    // if(!CheckForSwipeGesture(touch.position))
                     float swipeTime = Time.time - startTime;
 
-                    if(swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance){
-                        print("swipe");
+                    if(swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance)
                         SwipeSnapCameraTo(panDirection);
-                    }else{
-                        print("pan snap");
+                    else
                         PanSnapCameraTo(panDirection);
-                    }
+                    
                     touchCancelled = false;
                 break;
             }

@@ -65,7 +65,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
-               CalendarUIManager.Instance.SetUpGreenStampTip();
+               CalendarTutorialHelper.Instance.SetUpGreenStampTip();
             };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
@@ -73,11 +73,9 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarIntro);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//		NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarIntro, CalendarUIManager.Instance.SetUpGreenStampTip, "Next");
-		
-		
 		
 		GA.API.Design.NewEvent("Tutorial:Calendar:Intro");	// TODO-j Right semantic??
 	}
@@ -86,7 +84,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
-               CalendarUIManager.Instance.SetUpRedExTip();
+               CalendarTutorialHelper.Instance.SetUpRedExTip();
             };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
@@ -94,10 +92,9 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarGreenStamp);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarGreenStamp, CalendarUIManager.Instance.SetUpRedExTip, "Next");
-		
 		
         GA.API.Design.NewEvent("Tutorial:Calendar:1");
     }
@@ -106,20 +103,18 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
-               CalendarUIManager.Instance.SetUpBonusTip();
-            };
+               CalendarTutorialHelper.Instance.SetUpBonusTip();
+        };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarRedStamp);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarRedStamp, CalendarUIManager.Instance.SetUpBonusTip, "Next");
-		
-		
-		
+
         GA.API.Design.NewEvent("Tutorial:Calendar:2");
     }
 
@@ -128,17 +123,16 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		// Assign delegate functions to be passed in hashtable
 		PopupNotificationNGUI.HashEntry button1Function = delegate(){
                ShowCalendarTipConclude();
-            };
+        };
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarBonus);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		notificationEntry.Add(NotificationPopupFields.Button1Label, "Done");
+
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//        NotificationUIManager.Instance.ShowTutorialMessage(TutorialImageType.CalendarBonus, ShowCalendarTipConclude, "Done");	// Conclude tutorial, setup new
-		
 		
         GA.API.Design.NewEvent("Tutorial:Calendar:3");
     }
@@ -154,7 +148,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         TutorialLogic.Instance.FirstTimeCalendar = false;
         calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
-        CalendarUIManager.Instance.CleanUpTutorial();
+        CalendarTutorialHelper.Instance.CleanUpTutorial();
         GA.API.Design.NewEvent("Tutorial:Calendar:End");
     }
 

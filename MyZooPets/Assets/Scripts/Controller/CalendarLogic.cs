@@ -159,7 +159,6 @@ public class CalendarLogic : Singleton<CalendarLogic>{
 
     //Reset the week back to blank entries
     public void ResetWeekAfterTutorialFinish(){
-        DataManager.Instance.Calendar.EntriesThisWeek[6] = new CalendarEntry();
         if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
             OnCalendarReset(this, EventArgs.Empty);
     }

@@ -18,7 +18,7 @@ public class TweenToggle : MonoBehaviour {
 	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
 	
-	public bool bLockUI = false;		// If true, when this object is tweening it will lock the UI
+	public bool blockUI = true;		// If true, when this object is tweening it will lock the UI
 	public bool startsHidden = false;
 	
 	public float hideDeltaX; //Position, Scale, or Rotation depending on subclass
@@ -99,7 +99,7 @@ public class TweenToggle : MonoBehaviour {
 
 	protected void ShowUnlockCallback(){
 		// If this tween locks the UI, now that the tween is finished, decrement the counter
-		if(bLockUI){
+		if(blockUI){
 			ClickManager.Instance.DecrementTweenCount();
 		}
 		isMoving = false;
@@ -108,7 +108,7 @@ public class TweenToggle : MonoBehaviour {
 
 	protected void HideUnlockCallback(){
 		// If this tween locks the UI, now that the tween is finished, decrement the counter
-		if(bLockUI){
+		if(blockUI){
 			ClickManager.Instance.DecrementTweenCount();
 		}
 		isMoving = false;

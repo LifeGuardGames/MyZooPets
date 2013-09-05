@@ -7,10 +7,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject ItemPrefab;
 	public GameObject ItemSpritePrefab;
 	public GameObject storePanel;
-	public UIAtlas BackGroundRed;
-	public UIAtlas BackGroundGreen;
-	public UIAtlas BackGroundOrange;
-	public UIAtlas BackGroundPurple;
+	public GameObject storeBackground;
 
 	private bool changePage;
 	private int page;
@@ -23,23 +20,22 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		grid = GameObject.Find("Grid");
 	}
 
-	// Use this for initialization
-	void Start () {
+	void Start (){
 		CreateItems(null);
 	}
 
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
-		
-		storePanel.GetComponent<MoveTweenToggle>().Show();
+		BGController.Instance.Show("black");
+		storePanel.GetComponent<TweenToggle>().Show();
 	}
 
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();		
-		
-		storePanel.GetComponent<MoveTweenToggle>().Hide();
+		BGController.Instance.Hide();
+		storePanel.GetComponent<TweenToggle>().Hide();
 	}
 
 	//This function is called when buying an item
@@ -95,33 +91,31 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}
 	}
 
-	//Drawing function.
-	//draw according to ItemLogic.Instance 
+	// Drawing function
+	// Draw according to ItemLogic.Instance 
 	private void CreateItems(GameObject page){
 
-		//Destory first
+		// Destory first
 		foreach(Transform child in grid.transform){
 			Destroy(child.gameObject);
 		}
 
 		if(page == null || page.name == "Food"){
-			uisprite.atlas = BackGroundRed;
 			List<Item> foodList = ItemLogic.Instance.FoodList;
-
+			storeBackground.GetComponent<UISprite>().color = new Color(0.5529f, 0.6863f, 1f, .784f);
 			foreach(Item itemData in foodList){
 				GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
 				SetUpItemObject(itemUIObject, itemData);
 			}
-		}else if(page.name == "Usable"){
-			uisprite.atlas = BackGroundGreen;
+		}else if(page.name == "Item"){
 			List<Item> usableList = ItemLogic.Instance.UsableList;
-
+			storeBackground.GetComponent<UISprite>().color = new Color(1f, 0.6196f, 0.6196f, .784f);
 			foreach(Item itemData in usableList){
 				GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
 				SetUpItemObject(itemUIObject, itemData);
 			}
 		}else if(page.name == "Decoration"){
-
+			storeBackground.GetComponent<UISprite>().color = new Color(0.639f, 1, 0.7529f, .784f);
 		}
 		
 		grid.GetComponent<UIGrid>().Reposition();
@@ -131,7 +125,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private void SetUpItemObject(GameObject itemUIObject, Item itemData){
 		itemUIObject.name = itemData.ID;
 		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.Description;
-		itemUIObject.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemData.Cost.ToString();
+		itemUIObject.transform.FindChild("BuyButton/L_Cost").GetComponent<UILabel>().text = itemData.Cost.ToString();
 		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemData.Name;
 		itemUIObject.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemData.TextureName;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;

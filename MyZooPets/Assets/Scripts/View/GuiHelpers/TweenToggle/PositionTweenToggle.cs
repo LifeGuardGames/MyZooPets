@@ -31,7 +31,7 @@ public class PositionTweenToggle : TweenToggle {
 	public override void Show(float time){
 		if(!isShown){
 			// If this tween locks the UI, properly increment the counter
-			if ( bLockUI )
+			if(blockUI)
 				ClickManager.Instance.IncrementTweenCount();
 			
 			isShown = true;
@@ -52,7 +52,7 @@ public class PositionTweenToggle : TweenToggle {
 	public override void Hide(float time){
 		if(isShown){
 			// If this tween locks the UI, properly increment the counter
-			if ( bLockUI )
+			if(blockUI)
 				ClickManager.Instance.IncrementTweenCount();
 			
 			isShown = false;

@@ -91,6 +91,8 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		
+		BGController.Instance.Show("blue");
+		
         CalendarLogic.Instance.CalendarOpened();
         calendarPanel.GetComponent<TweenToggleDemux>().Show();
     }
@@ -99,6 +101,8 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
+		
+		BGController.Instance.Hide();
 		
         calendarPanel.GetComponent<TweenToggleDemux>().Hide();
     }

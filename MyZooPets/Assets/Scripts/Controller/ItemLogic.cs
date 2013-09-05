@@ -34,6 +34,17 @@ public class ItemLogic : Singleton<ItemLogic>{
 			return usableList;
 		}
 	}
+	
+	public List<Item> DecorationList {
+		get{
+			if(decorationList == null){
+				decorationList = new List<Item>();
+				Dictionary<string, Item> decorationDict = DataItems.GetAllItemsOfType(ItemType.Decorations);
+				decorationList = SelectListFromDictionaryAndSort(decorationDict);
+			}
+			return decorationList;
+		}		
+	}
 
 	// public List<Item> DecorationList{}
 

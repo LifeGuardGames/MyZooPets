@@ -40,7 +40,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 			}
 			return inventoryItemList;
 		}
-	}
+	}	
 
 	// public List<InventoryItem> FoodInventoryItems{}
 	// public List<InventoryItem> UsableInventoryItems{}
@@ -59,7 +59,8 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 	//Add items to inventory
 	public void AddItem(string itemID, int count){
-		Dictionary<string, InventoryItem> invItems = DataManager.Instance.Inventory.InventoryItems;
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem( itemID );
+		
 		InventoryItem invItem = null;
 		bool itemNew = false;
 		listNeedsUpdate = true;
@@ -81,9 +82,28 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		if(OnItemAddedToInventory != null) OnItemAddedToInventory(this, args);
 	}
 	
+	//---------------------------------------------------
+	// GetInventoryForItem()
+	// Based on the item type of strItemID, this function
+	// will return the proper inventory for it.
+	//---------------------------------------------------	
+	private Dictionary<string, InventoryItem> GetInventoryForItem( string strItemID ) {
+		// what list the item is placed in depends on what kind of item it is
+		ItemType eType = DataItems.GetItemType( strItemID );
+		
+		switch ( eType ) {
+			case ItemType.Decorations:
+				return DataManager.Instance.Inventory.DecorationItems;
+				break;
+			default:
+				return DataManager.Instance.Inventory.InventoryItems;
+				break;
+		}		
+	}
+	
 	//Use item from inventory
 	public void UseItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = DataManager.Instance.Inventory.InventoryItems;
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem( itemID );
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
 

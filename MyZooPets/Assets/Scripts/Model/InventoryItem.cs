@@ -29,6 +29,10 @@ public class InventoryItem{
         get{return amount;}
         set{amount = value;}
     }
+	
+	public Item ItemData{
+		get{return DataItems.GetItem(ItemID);}
+	}
 
     public InventoryItem(string itemID, ItemType itemType, string textureName){
         this.itemID = itemID;

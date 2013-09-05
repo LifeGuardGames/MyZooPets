@@ -30,7 +30,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         //Spawn items in the inventory for the first time
         List<InventoryItem> allInvItems = InventoryLogic.Instance.AllInventoryItems;
         foreach(InventoryItem invItem in allInvItems){
-            SpawnInventoryItemInPanel(invItem);
+			// ideally, we might abstract out the inventory to be an inventory of certain things (food, usables, decos, etc)
+			// but for now, I guess just don't show decorations in the inventory
+			//if ( invItem.ItemType != ItemType.Decorations )
+           	SpawnInventoryItemInPanel(invItem);
         }
     }
 
@@ -55,7 +58,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
             e.IsValidTarget = true;
 
             string invItemID = e.ItemTransform.name; //get id from listener args
-            InventoryLogic.Instance.UseItem(invItemID); //notify inventory logic that this item is being used
+			
+			//notify inventory logic that this item is being used
+            InventoryLogic.Instance.UseItem(invItemID); 
 
             InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
             if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
@@ -80,6 +85,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
     //Event listener. listening to when new item is added to the inventory
     private void OnItemAdded(object sender, InventoryLogic.InventoryEventArgs e){
+		
+		// inventory doesn't currently care about decorations
+		if ( e.InvItem.ItemType == ItemType.Decorations )
+			return;
+		
        if(e.IsItemNew){
             SpawnInventoryItemInPanel(e.InvItem);
         }else{

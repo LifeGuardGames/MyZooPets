@@ -10,7 +10,7 @@ public class Item {
 	private ItemType type;
 	private int cost; //cost of item
 	private string description;
-	private int unlockAtLevel; //the level when item is unlocked
+	private int unlockAtLevel = 0; //the level when item is unlocked
 
 	public string ID{
 		get{return id;}
@@ -42,7 +42,10 @@ public class Item {
         textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
         cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
         description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
-        unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode);
+		
+		// optional for now
+		if ( hashItemData.Contains("UnlockAtLevel") )
+       		unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode);
 	}
 
 	//Returns all attributes of all the children of a IXMLNode in a hastable

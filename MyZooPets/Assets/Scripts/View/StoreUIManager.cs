@@ -45,14 +45,23 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//This function is called when buying an item
 	//It creates a icon for the item and move it to Inventory
 	//TODO Scales are a little mess up
-	public void OnBuyAnimation(GameObject sprite){
+	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string itemID = sprite.transform.parent.name;
 		Vector3 itemPosition = origin;
 
 		//-0.22
-		itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
-
+		// depending on what type of item the user bought, the animation has the item going to different places
+		ItemType eType = itemData.Type;
+		switch ( eType ) {
+		case ItemType.Decorations:
+			itemPosition = EditDecosUIManager.Instance.GetEditButtonPosition();
+			break;
+		default:
+			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
+			break;
+		}
+		
 		//adjust moving speed here
 		float speed = 1f;
 
@@ -91,7 +100,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		if(DataManager.Instance.Stats.Stars >= itemData.Cost){
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
-			OnBuyAnimation(button.transform.parent.FindChild("ItemTexture").gameObject);
+			OnBuyAnimation(itemData, button.transform.parent.FindChild("ItemTexture").gameObject);
 		}
 	}
 
@@ -104,31 +113,43 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			Destroy(child.gameObject);
 		}
 
-		if(page == null || page.name == "Food"){
-			uisprite.atlas = BackGroundRed;
-			List<Item> foodList = ItemLogic.Instance.FoodList;
-
-			foreach(Item itemData in foodList){
-				GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
-				SetUpItemObject(itemUIObject, itemData);
-			}
-		}else if(page.name == "Usable"){
-			uisprite.atlas = BackGroundGreen;
-			List<Item> usableList = ItemLogic.Instance.UsableList;
-
-			foreach(Item itemData in usableList){
-				GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
-				SetUpItemObject(itemUIObject, itemData);
-			}
-		}else if(page.name == "Decoration"){
-
-		}
+		if(page == null || page.name == "Food")
+			CreateItemsTab( BackGroundRed, ItemLogic.Instance.FoodList);
+		else if(page.name == "Usable")
+			CreateItemsTab( BackGroundGreen, ItemLogic.Instance.UsableList);
+		else if(page.name == "Decoration")
+			CreateItemsTab( BackGroundOrange, ItemLogic.Instance.DecorationList);
+		else
+			Debug.Log("Illegal store UI page: " + page.name);
 		
 		grid.GetComponent<UIGrid>().Reposition();
 		Invoke("Reposition",0.00000001f);
 	}
-
-	private void SetUpItemObject(GameObject itemUIObject, Item itemData){
+	
+	//---------------------------------------------------
+	// CreateItemsTab()
+	// Populates the store UI with the incoming list
+	// of items and bg atlas.
+	//---------------------------------------------------	
+	private void CreateItemsTab( UIAtlas uiBG, List<Item> listItems ) {
+		// set the proper bg
+		uisprite.atlas = uiBG;
+		
+		// go through our list of items and create an entry for each one
+		foreach(Item itemData in listItems)
+			SetUpItemObject(itemData);
+	}
+	
+	//---------------------------------------------------
+	// SetUpItemObject()
+	// Creates an individual store UI entry for the
+	// incoming item data.
+	//---------------------------------------------------	
+	private void SetUpItemObject(Item itemData) {
+		// create and add our UI entry to NGUI
+		GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
+		
+		// set the proper values on the entry
 		itemUIObject.name = itemData.ID;
 		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.Description;
 		itemUIObject.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemData.Cost.ToString();

@@ -9,8 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  m_Layer: 0
-  m_Name: Store BG Atlas Red
+  m_Layer: 10
+  m_Name: NotificationLeftPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -35,32 +35,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: 8a879902eb13d0a4c9a916e907af4bba, type: 2}
-  sprites:
-  - name: panelRedTab
-    outer:
-      serializedVersion: 2
-      x: 0
-      y: 1321
-      width: 1125
-      height: 727
-    inner:
-      serializedVersion: 2
-      x: 0
-      y: 1321
-      width: 1125
-      height: 727
-    rotated: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
-  mCoordinates: 0
-  mPixelSize: 1
-  mReplacement: {fileID: 0}
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 384
+    e01: 0
+    e02: 0
+    e03: 615.000061
+    e10: 0
+    e11: 384
+    e12: 0
+    e13: -7680.59961
+    e20: 0
+    e21: 0
+    e22: 384
+    e23: 10
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

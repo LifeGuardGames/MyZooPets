@@ -1,26 +1,29 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
+using System.Collections.Generic;
+
+//---------------------------------------------------
+// DecorationSystemData
+// Save data script for the decoration s ystem.
+//---------------------------------------------------
 
 [DoNotSerializePublic]
 public class DecorationSystemData{
-
-    [SerializeThis]
-    private int decoTest;
+    
+	[SerializeThis]
+    private Dictionary<string, string> dictPlacedDecorations; // dictionary of placed decorations; Key: node ID, Value: item ID
 	
     //===============Getters & Setters=================
-    public int DecoTest{
-        get{return decoTest;}
-        set{decoTest = value;}
-    }	
-	
-    public bool UseDummyData{get; set;} //initialize with test data
+    public Dictionary<string, string> PlacedDecorations {
+        get{return dictPlacedDecorations;}
+        set{dictPlacedDecorations = value;}
+    }
 
     //=======================Initialization==================
     public DecorationSystemData(){}
 
     //Populate with dummy data
     public void Init(){
-        decoTest = 111;
+        dictPlacedDecorations = new Dictionary<string, string>();
     }
 }

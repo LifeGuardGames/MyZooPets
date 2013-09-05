@@ -86,6 +86,7 @@ public class DataItems{
                         item = new UsableItem(itemID, itemType, hashItemData);
                     break;
                     case ItemType.Decorations:
+						item = new DecorationItem(itemID, itemType, hashItemData);
                     break;
                 }
 

@@ -15,10 +15,18 @@ public class DecorationNode : MonoBehaviour {
 		return eType;
 	}
 	
+	// the ID of this decoration node -- changing this will corrupt the save data
+	// should be unique
+	public string strNodeID;
+	
 	// the decoration currently being displayed on this node
 	private GameObject goDeco;
+	private string strDecoID;
 
 	void Start () {	
+		// check save data to see if something was on this node
+		CheckSaveData();
+		
 		// use event handler to listen for when the player goes into edit deco mode
 		EditDecosUIManager.OnManagerOpen += OnDecoMode;
 		
@@ -35,6 +43,19 @@ public class DecorationNode : MonoBehaviour {
 	void OnDestroy() {
 		// remove event handler when this node is destroyed
 		EditDecosUIManager.OnManagerOpen -= OnDecoMode;	
+	}
+	//---------------------------------------------------
+	// CheckSaveData()
+	// Checks save data to see if this node has any
+	// decoration saved there.  If it does, place that
+	// decoration.
+	//---------------------------------------------------	
+	private void CheckSaveData() {
+		// if the saved data contains this node's id, it means there was a decoration placed here
+		if ( DataManager.Instance.Decorations.PlacedDecorations.ContainsKey( strNodeID ) ) {
+			string strSavedDeco = DataManager.Instance.Decorations.PlacedDecorations[ strNodeID ];
+			SetDecoration( strSavedDeco );
+		}
 	}
 	
     //Event listener. listening to when decoration mode is enabled/disabled
@@ -60,17 +81,20 @@ public class DecorationNode : MonoBehaviour {
 	// Called when this node is clicked.
 	//---------------------------------------------------	
 	private void NodeClicked() {
-		
-		Debug.Log("Testing save game system: " + DataManager.Instance.Decorations.DecoTest);
-		DataManager.Instance.Decorations.DecoTest += 100;
-		
 		// inform the ui manager
 		DecorationTypes eType = GetDecoType();
 		
-		Debug.Log("deco node of type " + eType + " clicked");
-		
 		// have the deco UI manager update itself based on this node being selected
 		EditDecosUIManager.Instance.UpdateChooseMenu( this );
+	}
+	
+	//---------------------------------------------------
+	// GetDecorationID()
+	// Returns this nodes decoration id.  May be null if
+	// no decoration is set.
+	//---------------------------------------------------	
+	public string GetDecorationID() {
+		return strDecoID;
 	}
 	
 	//---------------------------------------------------
@@ -79,19 +103,52 @@ public class DecorationNode : MonoBehaviour {
 	//---------------------------------------------------	
 	public bool HasDecoration() {
 		return goDeco != null;
-	}
+	}	
 	
 	//---------------------------------------------------
 	// SetDecoration()
 	// Sets this node's decoration to the incoming
 	// decoration.
 	//---------------------------------------------------	
-	public void SetDecoration( GameObject goDecoNew ) {
-		// if there was already a decoration here, destroy it
-		if ( goDeco )
-			Destroy( goDeco );
+	public void SetDecoration( string strID ) {
+		// do one last check
+		if ( !CanPlaceDecoration( strID ) ) {
+			Debug.Log("Illegal deco placement for " + strID + " on node " + gameObject);
+			return;
+		}
 		
-		goDeco = goDecoNew;
+		// if there was already a decoration here, remove it
+		if ( goDeco )
+			RemoveDecoration();		
+		
+		// cache the id
+		strDecoID = strID;
+		
+		// build the prefab from the id of the decoration
+		string strResource = "GO_" + strDecoID;
+		GameObject goPrefab = Resources.Load(strResource) as GameObject;
+		Vector3 vPos = transform.position;
+		goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;	
+		
+		// update the save data with the new decoration id
+		DataManager.Instance.Decorations.PlacedDecorations[strNodeID] = strID;
+	}
+	
+	//---------------------------------------------------
+	// CanPlaceDecoration()
+	// Checks to see if the decoration with strID may
+	// be placed on this node.
+	//---------------------------------------------------	
+	private bool CanPlaceDecoration( string strID ) {
+		bool bOK = true;	// start optimistic
+		
+		// compare the node type to the decoration type
+		DecorationItem itemDeco = (DecorationItem) DataItems.GetItem( strID );
+		DecorationTypes eNodeType = GetDecoType();
+		DecorationTypes eDecoType = itemDeco.DecorationType;
+		bOK = eNodeType == eDecoType;
+		
+		return bOK;
 	}
 	
 	//---------------------------------------------------
@@ -99,7 +156,24 @@ public class DecorationNode : MonoBehaviour {
 	// Removes the decoration from this node.
 	//---------------------------------------------------	
 	public void RemoveDecoration() {
-		if ( goDeco )
-			Destroy( goDeco );
+		if ( goDeco == null ) {
+			Debug.Log("Attempting to remove a non existant decoration...");
+			return;
+		}
+		
+		// destroy the game object
+		Destroy( goDeco );
+		
+		// update the save data since this node is now empty
+		DataManager.Instance.Decorations.PlacedDecorations.Remove( strNodeID );
+		
+		// give the user the decoration back in their inventory
+		if ( strDecoID != null )
+			InventoryLogic.Instance.AddItem(strDecoID, 1);
+		else
+			Debug.Log("Just removed an illegal decoration?");		
+		
+		// reset the deco id on this node
+		strDecoID = string.Empty;
 	}
 }

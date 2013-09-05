@@ -10,15 +10,27 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {	
+	// temp boolean to control whetehr or not edit mode is accessible
+	public bool bDisableEditMode = false;
+	
 	// the exit button for leaving edit mode
 	public MoveTweenToggle tweenExit;
+	
+	// the edit deco button
+	public GameObject goEdit;
+	private MoveTweenToggle tweenEdit;
 	
 	// the choose deco panel
 	public GameObject goChoosePanel;
 	public ChooseDecorationUI scriptChooseUI;
 	
 	void Start() {
-		//Debug.Log("Starting deco system...here is where I should load everything i guess");	
+		// cache the tween on the edit button for easier use
+		tweenEdit = goEdit.GetComponent<MoveTweenToggle>();
+		
+		// if edit mode is currently disabled, destroy the button
+		if ( bDisableEditMode )
+			Destroy( goEdit );
 	}
 	
 	//---------------------------------------------------
@@ -29,7 +41,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		
 		// show the exit button
-		tweenExit.Show();		
+		tweenExit.Show();	
+		
+		// hide the edit button
+		tweenEdit.Hide();
 	}
 	
 	//---------------------------------------------------
@@ -46,6 +61,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// hide the exit button
 		tweenExit.Hide();	
+		
+		// show the edit button again
+		tweenEdit.Show();
 	}
 	
 	//---------------------------------------------------
@@ -78,5 +96,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 			tween.Hide();
 		
 		// we possibly want to Resources.UnloadUnusedAssets() here because the menu is instantiated
+	}
+	
+	public Vector3 GetEditButtonPosition() {
+		return goEdit.transform.position;	
 	}
 }

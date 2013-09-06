@@ -14,13 +14,21 @@ public class ButtonRealInhaler : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		if (DataManager.Instance.Tutorial.FirstTimeRealInhaler){
-			return; // taken care of in Tutorial.cs
-		}
-		if (CalendarLogic.CanUseRealInhaler){
+		//Start tutorial if first time; otherwise, open inhaler game
+		if(TutorialLogic.Instance.FirstTimeRealInhaler)
+			TutorialUIManager.Instance.StartRealInhalerTutorial();
+		else
+			CheckToOpenInhaler();
+	}
+
+	//--------------------------------------------------
+	// Check if inhaler can be used at the current time. 
+	// Open if yes or show notification	
+	//--------------------------------------------------
+	private void CheckToOpenInhaler(){
+		if(CalendarLogic.CanUseRealInhaler){
 			OpenRealInhaler();
-		}
-		else {
+		}else{
 			/////// Send Notication ////////
 			// Assign delegate functions to be passed in hashtable
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){};

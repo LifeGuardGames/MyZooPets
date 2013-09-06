@@ -8,13 +8,16 @@ using System.Collections;
 */
 public class PanToMoveCamera : MonoBehaviour{
     public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
-    public int numOfPartitions = 3; //number of partitions allowed
+    public int numOfPartitions = 4; //number of partitions allowed
+    public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
+                                    //on the left of the starting partition(always 0)
+    public int lastPartition = 2;
     public float partitionOffset = 80.0f; //How big each partition is in world position
 
     private Vector2 startTouchPos; //Position of touch when finger touches the screen
     private Vector2 currentTouchPos; //Position of touch right now
+    public int currentPartition = 0;
     private float startTime; //Time at when finger touches screen
-    private int currentPartition = 0;
     private Direction panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
     private bool touchCancelled = false; //True: touch shouldn't be handled
@@ -60,7 +63,7 @@ public class PanToMoveCamera : MonoBehaviour{
                     float currentPosX = currentPartition * partitionOffset;
                     normalizedTouchPosX = GetNormalizedPosition();
 
-                    if(currentTouchPos.x < startTouchPos.x && currentPartition != numOfPartitions){
+                    if(currentTouchPos.x < startTouchPos.x && currentPartition != lastPartition){
                         panDirection = Direction.Left; //panning left
                         
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
@@ -70,7 +73,7 @@ public class PanToMoveCamera : MonoBehaviour{
 
                             transform.localPosition = new Vector3(newPosX, 0, 0);
                         }
-                    }else if(currentTouchPos.x > startTouchPos.x && currentPartition != 0){
+                    }else if(currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition){
                         panDirection = Direction.Right; //panning right
 
                         if(normalizedTouchPosX >= minNormalizedPanDistance){
@@ -153,13 +156,13 @@ public class PanToMoveCamera : MonoBehaviour{
 
     //Move to the next partition and check boundary
     private void MoveRightOnePartition(){
-        if(currentPartition + 1 <= numOfPartitions)
+        if(currentPartition + 1 <= lastPartition)
             currentPartition++;
     }
 
     //Move to previous partition and check boundary
     private void MoveLeftOnePartition(){
-        if(currentPartition - 1 >= 0)
+        if(currentPartition - 1 >= firstPartition)
             currentPartition--;
     }
 

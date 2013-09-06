@@ -19,15 +19,6 @@ public class LgButton : MonoBehaviour {
 		return strAnalytics;
 	}	
 	
-    void Start(){
-		
-		// this works for 3D -- 2D uses OnPressed
-        TapItem tapItem = GetComponent<TapItem>();
-        if (tapItem != null){
-            tapItem.OnTap += ButtonClicked;
-        }
-    }	
-	
 	//---------------------------------------------------
 	// OnPress()
 	// 2D sprite buttons will receive this event, which
@@ -38,6 +29,14 @@ public class LgButton : MonoBehaviour {
 	void OnPress( bool bPress ) {
 		if ( bPress && bSprite )
 			ButtonClicked();
+	}
+
+	//---------------------------------------------------
+	// OnTap()
+	// 3D gameObjects will receive this event.
+	//---------------------------------------------------
+	void OnTap(TapGesture gesture) { 
+		ButtonClicked();
 	}
 	
 	//---------------------------------------------------

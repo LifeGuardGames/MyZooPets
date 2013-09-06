@@ -32,7 +32,6 @@ public class PetMovement : Singleton<PetMovement> {
 
     private tk2dSpriteAnimator anim; //2D sprite animator
     private Vector3 destinationPoint; //destination that the pet is going to move to
-    private TapItem tapItem; //Tap gesture
 	private bool moving; //Is Pet moving now or not
 	private float moveToX;
 	private float moveToZ;

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using TouchScript.Gestures;
 
 //Handles any touch gestures on the pets head
 public class Head : MonoBehaviour {

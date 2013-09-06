@@ -1854,9 +1854,7 @@ MonoBehaviour:
   m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WillRecognizeWith: []
-  timeLimit: Infinity
-  distanceLimit: 1
+  m_EditorClassIdentifier: 
 --- !u!114 &122047597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1867,6 +1865,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09e657fa4e7f642c595d0ea3fb9722d8, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
 --- !u!114 &122047598
 MonoBehaviour:
@@ -3760,20 +3759,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c33bc83ab81ec0c44976c6fb1d44e55a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
 --- !u!114 &250861602
@@ -5817,7 +5802,7 @@ Transform:
   m_LocalPosition: {x: 2.94376564, y: .839588165, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1707843207}
+  m_Father: {fileID: 614338483}
 --- !u!114 &453010937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8590,6 +8575,8 @@ Transform:
   - {fileID: 1008479047}
   - {fileID: 1254368574}
   - {fileID: 388452862}
+  - {fileID: 453010936}
+  - {fileID: 1645322218}
   - {fileID: 1046731219}
   - {fileID: 173481453}
   - {fileID: 1766788325}
@@ -11517,10 +11504,7 @@ MonoBehaviour:
   m_Script: {fileID: 1298086939, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 2d Camera
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1024
+  m_EditorClassIdentifier: 
 --- !u!1 &801734211
 GameObject:
   m_ObjectHideFlags: 0
@@ -12187,8 +12171,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 841604781}
   - 65: {fileID: 225751033}
-  - 114: {fileID: 841604784}
-  - 114: {fileID: 841604783}
   - 114: {fileID: 841604782}
   m_Layer: 0
   m_Name: Head
@@ -12220,39 +12202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eab41e7e43e495089af6220cb6ad28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &841604783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400008, guid: 15fe0cf6104693c4e8ee620e5631a727,
-    type: 2}
-  m_PrefabInternal: {fileID: 1487478232}
-  m_GameObject: {fileID: 841604780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WillRecognizeWith: []
-  timeLimit: .200000003
-  distanceLimit: .100000001
---- !u!114 &841604784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400006, guid: 15fe0cf6104693c4e8ee620e5631a727,
-    type: 2}
-  m_PrefabInternal: {fileID: 1487478232}
-  m_GameObject: {fileID: 841604780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1254797990, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WillRecognizeWith:
-  - {fileID: 841604783}
-  flickTime: .5
-  minDistance: .5
-  movementThreshold: .5
-  direction: 0
 --- !u!1 &852736587
 GameObject:
   m_ObjectHideFlags: 0
@@ -15752,7 +15701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 1228367060}
+  Reference: {fileID: 1283402047}
 --- !u!4 &1044562557
 Transform:
   m_ObjectHideFlags: 0
@@ -18083,20 +18032,6 @@ Prefab:
   m_RootGameObject: {fileID: 1111509436}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!114 &1228367060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 1814776890}
-    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &1229436683
 GameObject:
   m_ObjectHideFlags: 0
@@ -19032,6 +18967,20 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+--- !u!114 &1283402047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 1814776890}
+    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1001 &1285413513
 Prefab:
   m_ObjectHideFlags: 0
@@ -21144,7 +21093,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1707843207}
+    m_TransformParent: {fileID: 614338483}
     m_Modifications:
     - target: {fileID: 400000, guid: ad6fdd6c3751993499aef52903582a27, type: 2}
       propertyPath: m_LocalPosition.x
@@ -22187,7 +22136,11 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11400006, guid: 15fe0cf6104693c4e8ee620e5631a727, type: 2}
+    - {fileID: 11400008, guid: 15fe0cf6104693c4e8ee620e5631a727, type: 2}
+    - {fileID: 11400016, guid: 15fe0cf6104693c4e8ee620e5631a727, type: 2}
+    - {fileID: 11400014, guid: 15fe0cf6104693c4e8ee620e5631a727, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 15fe0cf6104693c4e8ee620e5631a727, type: 2}
   m_RootGameObject: {fileID: 225751032}
   m_IsPrefabParent: 0
@@ -24202,10 +24155,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1645322217}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.51209164, y: -3.99241447, z: -0}
+  m_LocalPosition: {x: 2.51209164, y: -3.99241447, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1707843207}
+  m_Father: {fileID: 614338483}
 --- !u!114 &1645322219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24356,10 +24309,7 @@ MonoBehaviour:
   m_Script: {fileID: 1298086939, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 3d Camera
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
+  m_EditorClassIdentifier: 
 --- !u!114 &1648505578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24879,8 +24829,6 @@ Transform:
   - {fileID: 1483632391}
   - {fileID: 1464374365}
   - {fileID: 642233490}
-  - {fileID: 453010936}
-  - {fileID: 1645322218}
   - {fileID: 554924083}
   - {fileID: 1763106081}
   - {fileID: 893261391}
@@ -27634,8 +27582,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1925165423}
   - 65: {fileID: 1925165422}
-  - 114: {fileID: 1925165424}
-  - 114: {fileID: 1925165425}
   - 114: {fileID: 1925165426}
   m_Layer: 0
   m_Name: Tummy
@@ -27668,39 +27614,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 225751038}
---- !u!114 &1925165424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400016, guid: 15fe0cf6104693c4e8ee620e5631a727,
-    type: 2}
-  m_PrefabInternal: {fileID: 1487478232}
-  m_GameObject: {fileID: 1925165421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1254797990, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WillRecognizeWith:
-  - {fileID: 1925165425}
-  flickTime: .5
-  minDistance: .5
-  movementThreshold: .5
-  direction: 0
---- !u!114 &1925165425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400014, guid: 15fe0cf6104693c4e8ee620e5631a727,
-    type: 2}
-  m_PrefabInternal: {fileID: 1487478232}
-  m_GameObject: {fileID: 1925165421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1235405773, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WillRecognizeWith: []
-  timeLimit: .200000003
-  distanceLimit: .100000001
 --- !u!114 &1925165426
 MonoBehaviour:
   m_ObjectHideFlags: 0

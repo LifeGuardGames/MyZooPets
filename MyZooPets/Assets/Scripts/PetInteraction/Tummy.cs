@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using TouchScript.Gestures;
 
 public class Tummy : MonoBehaviour {
     // private FlickGesture flickGesture;

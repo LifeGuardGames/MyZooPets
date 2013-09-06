@@ -47,30 +47,16 @@ public class CalendarData{
         get{return nextPlayPeriod;}
         set{nextPlayPeriod = value;}
     }
-    public bool UseDummyData{get; set;} //initialize with test data
 
     //================Initialization============
     public CalendarData(){}
 
-    public void Init(bool dummyData){
+    public void Init(){
         dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
         entriesLastWeek = CalendarLogic.LeaveBlankWeek();
 
-        if(dummyData){
-            //Dummy data
-            List<CalendarEntry> dummyThisWeek = new List<CalendarEntry>();
-            for(int i=0; i<6; i++){
-                CalendarEntry entry = new CalendarEntry();
-                dummyThisWeek.Add(entry);
-            }
-            dummyThisWeek.Add(new CalendarEntry(DosageRecord.Hit, DosageRecord.Miss));
-            entriesThisWeek = dummyThisWeek;  
-        }else{
-            //initialize this week with sample data to be used for tutorial
-            entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
-            entriesThisWeek[6].DayTime = DosageRecord.Hit;
-            // entriesThisWeek[6].NightTime = DosageRecord.Miss;
-        }
+        //initialize this week with sample data to be used for tutorial
+        entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
 
         isRewardClaimed = false;
         nextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();

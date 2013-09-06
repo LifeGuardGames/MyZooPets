@@ -32,7 +32,6 @@ public class PetMovement : Singleton<PetMovement> {
 
     private tk2dSpriteAnimator anim; //2D sprite animator
     private Vector3 destinationPoint; //destination that the pet is going to move to
-    private TapItem tapItem; //Tap gesture
 	private bool moving; //Is Pet moving now or not
 	private float moveToX;
 	private float moveToZ;
@@ -40,13 +39,13 @@ public class PetMovement : Singleton<PetMovement> {
     void Awake(){
         D.Assert(mainCamera != null, "Camera missing in " + this);
         D.Assert(petSprite != null, "PetSprite missing in " + this);
-        tapItem = GetComponent<TapItem>();
+        // tapItem = GetComponent<TapItem>();
         anim = petSprite.GetComponent<tk2dSpriteAnimator>();
     }
 
     void Start(){
        destinationPoint = petSprite.transform.position;
-       tapItem.OnTap += MovePet;
+       // tapItem.OnTap += MovePet;
     }
 
     // Update is called once per frame
@@ -66,6 +65,14 @@ public class PetMovement : Singleton<PetMovement> {
         }
     }
 
+    //Listen to OnTap Event from FingerGesture
+    void OnTap(TapGesture gesture) { 
+        // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
+        if(!ClickManager.Instance.CanRespondToTap()) return;
+
+        MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
+    }
+
 	public void MovePetWithCamera(){
 		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/3, 80, 0)));
 	}
@@ -77,14 +84,6 @@ public class PetMovement : Singleton<PetMovement> {
         }else{
             anim.Play("HappyIdle");
         }
-    }
-
-    //Event listener for tap on walkable area
-    private void MovePet(){
-        // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap()) return;
-
-        MovePet(Camera.main.ScreenPointToRay(tapItem.lastTapPosition));    
     }
 
     //Check if the touch is in walkable area then move/animate pet

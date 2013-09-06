@@ -382,17 +382,6 @@ static public class NGUITools
 		}
 		return go;
 	}
-	static public GameObject AddChildWithPosition(GameObject parent, GameObject prefab)
-	{
-		GameObject go = AddChild(parent, prefab);
-		if (go != null )
-		{
-			Transform t = go.transform;
-			t.localPosition = prefab.transform.localPosition;
-		}
-		
-		return go;
-	}
 
 	/// <summary>
 	/// Gathers all widgets and calculates the depth for the next widget.

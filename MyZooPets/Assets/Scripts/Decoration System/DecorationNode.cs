@@ -30,12 +30,6 @@ public class DecorationNode : MonoBehaviour {
 		// use event handler to listen for when the player goes into edit deco mode
 		EditDecosUIManager.OnManagerOpen += OnDecoMode;
 		
-		// listen for when this node is tapped/clicked -- if we change nodes to 2D, use OnPress instead
-        TapItem tapItem = GetComponent<TapItem>();
-        if (tapItem != null){
-            tapItem.OnTap += NodeClicked;
-        }		
-		
 		// by default, decoration nodes are not visible/interactable
 		ToggleNode( false );
 	}
@@ -44,6 +38,12 @@ public class DecorationNode : MonoBehaviour {
 		// remove event handler when this node is destroyed
 		EditDecosUIManager.OnManagerOpen -= OnDecoMode;	
 	}
+
+	// listen for when this node is tapped/clicked -- if we change nodes to 2D, use OnPress instead
+	void OnTap(TapGesture gesture) { 
+		NodeClicked();	
+	}
+
 	//---------------------------------------------------
 	// CheckSaveData()
 	// Checks save data to see if this node has any

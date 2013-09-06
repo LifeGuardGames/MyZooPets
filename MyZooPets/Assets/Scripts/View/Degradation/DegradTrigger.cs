@@ -7,12 +7,7 @@ public class DegradTrigger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GetComponent<TapItem>().OnTap += OnTap;
         DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
-
-       //Set up for tutorial
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger)
-            GetComponent<TapItem>().OnTap += TutorialUIManager.Instance.StartDegradTriggerTutorial;
             
         //Disable particle effects when other tutorials are not finished yet
         if(TutorialLogic.Instance.FirstTimeRealInhaler || 
@@ -25,12 +20,21 @@ public class DegradTrigger : MonoBehaviour {
         DegradationUIManager.OnActivateParticleEffects -= ActivateParticleEffects;
     }
 
-    private void OnTap(){
-        //when trigger is touched remove from DataManager and destroy GameObject
-        if (ClickManager.Instance.CanRespondToTap()){
-            DegradationLogic.Instance.ClearDegradationTrigger(ID);
-            Destroy(this.gameObject);
+    //Listen to OnTap event from FingerGesture
+    void OnTap(TapGesture gesture){
+        if(TutorialLogic.Instance.FirstTimeDegradTrigger){
+            TutorialUIManager.Instance.StartDegradTriggerTutorial();
+            CleanTriggerAndDestroy();
         }
+
+        //when trigger is touched remove from DataManager and destroy GameObject
+        if(ClickManager.Instance.CanRespondToTap())
+            CleanTriggerAndDestroy();
+    }
+
+    private void CleanTriggerAndDestroy(){
+        DegradationLogic.Instance.ClearDegradationTrigger(ID);
+        Destroy(this.gameObject);
     }
 
     private void ActivateParticleEffects(object senders, EventArgs args){

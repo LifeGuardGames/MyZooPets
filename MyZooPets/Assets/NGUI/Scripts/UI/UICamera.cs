@@ -367,7 +367,6 @@ public class UICamera : MonoBehaviour
 						Notify(mSel, "OnSelect", true);
 						current = null;
 					}
-					else Debug.Log("The fuck? " + mList.Count);
 				}
 			}
 		}
@@ -383,8 +382,8 @@ public class UICamera : MonoBehaviour
 		{
 			int count = 0;
 
-			for (int i = 0; i < mTouches.Count; ++i)
-				if (mTouches[i].pressed != null)
+			foreach (KeyValuePair<int, MouseOrTouch> touch in mTouches)
+				if (touch.Value.pressed != null)
 					++count;
 
 			for (int i = 0; i < mMouse.Length; ++i)
@@ -408,11 +407,9 @@ public class UICamera : MonoBehaviour
 		{
 			int count = 0;
 
-			for (int i = 0; i < mTouches.Count; ++i)
-			{
-				if (mTouches[i].dragged != null)
+			foreach (KeyValuePair<int, MouseOrTouch> touch in mTouches)
+				if (touch.Value.dragged != null)
 					++count;
-			}
 
 			for (int i = 0; i < mMouse.Length; ++i)
 				if (mMouse[i].dragged != null)
@@ -474,11 +471,13 @@ public class UICamera : MonoBehaviour
 		return 0;
 	}
 
+	static RaycastHit mEmpty = new RaycastHit();
+
 	/// <summary>
 	/// Returns the object under the specified position.
 	/// </summary>
 
-	static public bool Raycast (Vector3 inPos, ref RaycastHit hit)
+	static public bool Raycast (Vector3 inPos, out RaycastHit hit)
 	{
 		for (int i = 0; i < mList.Count; ++i)
 		{
@@ -490,6 +489,7 @@ public class UICamera : MonoBehaviour
 			// Convert to view space
 			currentCamera = cam.cachedCamera;
 			Vector3 pos = currentCamera.ScreenToViewportPoint(inPos);
+			if (float.IsNaN(pos.x) || float.IsNaN(pos.y)) continue;
 
 			// If it's outside the camera's viewport, do nothing
 			if (pos.x < 0f || pos.x > 1f || pos.y < 0f || pos.y > 1f) continue;
@@ -528,6 +528,7 @@ public class UICamera : MonoBehaviour
 			}
 			if (Physics.Raycast(ray, out hit, dist, mask)) return true;
 		}
+		hit = mEmpty;
 		return false;
 	}
 
@@ -722,7 +723,12 @@ public class UICamera : MonoBehaviour
 #endif
 
 		if (Application.platform == RuntimePlatform.Android ||
-			Application.platform == RuntimePlatform.IPhonePlayer)
+			Application.platform == RuntimePlatform.IPhonePlayer
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
+			|| Application.platform == RuntimePlatform.WP8Player
+			|| Application.platform == RuntimePlatform.BB10Player
+#endif
+			)
 		{
 			useMouse = false;
 			useTouch = true;
@@ -776,7 +782,7 @@ public class UICamera : MonoBehaviour
 	{
 		if (useMouse && Application.isPlaying && handlesEvents)
 		{
-			hoveredObject = Raycast(Input.mousePosition, ref lastHit) ? lastHit.collider.gameObject : fallThrough;
+			hoveredObject = Raycast(Input.mousePosition, out lastHit) ? lastHit.collider.gameObject : fallThrough;
 			if (hoveredObject == null) hoveredObject = genericEventHandler;
 			for (int i = 0; i < 3; ++i) mMouse[i].current = hoveredObject;
 		}
@@ -871,7 +877,7 @@ public class UICamera : MonoBehaviour
 		// Update the object under the mouse
 		if (updateRaycast)
 		{
-			hoveredObject = Raycast(Input.mousePosition, ref lastHit) ? lastHit.collider.gameObject : fallThrough;
+			hoveredObject = Raycast(Input.mousePosition, out lastHit) ? lastHit.collider.gameObject : fallThrough;
 			if (hoveredObject == null) hoveredObject = genericEventHandler;
 			mMouse[0].current = hoveredObject;
 		}
@@ -981,7 +987,7 @@ public class UICamera : MonoBehaviour
 			}
 
 			currentTouch.pos = input.position;
-			hoveredObject = Raycast(currentTouch.pos, ref lastHit) ? lastHit.collider.gameObject : fallThrough;
+			hoveredObject = Raycast(currentTouch.pos, out lastHit) ? lastHit.collider.gameObject : fallThrough;
 			if (hoveredObject == null) hoveredObject = genericEventHandler;
 			currentTouch.current = hoveredObject;
 			lastTouchPosition = currentTouch.pos;

@@ -70,6 +70,12 @@ public class UISprite : UIWidget
 	}
 
 	/// <summary>
+	/// Retrieve the material used by the font.
+	/// </summary>
+
+	public override Material material { get { return (mAtlas != null) ? mAtlas.spriteMaterial : null; } }
+
+	/// <summary>
 	/// Atlas used by this widget.
 	/// </summary>
  
@@ -83,12 +89,11 @@ public class UISprite : UIWidget
 		{
 			if (mAtlas != value)
 			{
+				RemoveFromPanel();
+
 				mAtlas = value;
 				mSpriteSet = false;
 				mSprite = null;
-
-				// Update the material
-				material = (mAtlas != null) ? mAtlas.spriteMaterial : null;
 
 				// Automatically choose the first sprite
 				if (string.IsNullOrEmpty(mSpriteName))
@@ -106,7 +111,7 @@ public class UISprite : UIWidget
 					string sprite = mSpriteName;
 					mSpriteName = "";
 					spriteName = sprite;
-					mChanged = true;
+					MarkAsChanged();
 					UpdateUVs(true);
 				}
 			}
@@ -153,27 +158,6 @@ public class UISprite : UIWidget
 	/// </summary>
 
 	public bool isValid { get { return GetAtlasSprite() != null; } }
-
-	/// <summary>
-	/// Retrieve the material used by the font.
-	/// </summary>
-
-	public override Material material
-	{
-		get
-		{
-			Material mat = base.material;
-
-			if (mat == null)
-			{
-				mat = (mAtlas != null) ? mAtlas.spriteMaterial : null;
-				mSprite = null;
-				material = mat;
-				if (mat != null) UpdateUVs(true);
-			}
-			return mat;
-		}
-	}
 
 	/// <summary>
 	/// Inner set of UV coordinates.
@@ -337,12 +321,8 @@ public class UISprite : UIWidget
 				mSpriteName = mSprite.name;
 			}
 
-			// If the sprite has been set, update the material
-			if (mSprite != null)
-			{
-				material = mAtlas.spriteMaterial;
-				UpdateUVs(true);
-			}
+			// If the sprite has been set, update the UVs
+			if (mSprite != null) UpdateUVs(true);
 		}
 		return mSprite;
 	}
@@ -1068,7 +1048,7 @@ public class UISprite : UIWidget
 		float height = Mathf.Abs(rect.height / scale.y) * pixelSize;
 
 		// Safety check. Useful so Unity doesn't run out of memory if the sprites are too small.
-		if (width < 0.01f || height < 0.01f)
+		if (width * height < 0.0001f)
 		{
 			Debug.LogWarning("The tiled sprite (" + NGUITools.GetHierarchy(gameObject) + ") is too small.\nConsider using a bigger one.");
 

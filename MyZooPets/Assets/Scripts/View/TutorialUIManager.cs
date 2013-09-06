@@ -25,8 +25,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     void Start(){
         //use a if else if here to make sure that any tutorials not visited get called
         TutorialLogic.OnTutorialUpdated += UpdateTutorial;
-        SetupTutorial();
-        UpdateTutorial(null, EventArgs.Empty);
+        UpdateTutorial();
     }
 
     void OnDestroy(){
@@ -35,6 +34,10 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //Event listener that activates new tutorial when an old tutorial is completed
     private void UpdateTutorial(object sender, EventArgs args){
+        UpdateTutorial();
+    }
+
+    private void UpdateTutorial(){
         if(TutorialLogic.Instance.FirstTimeRealInhaler){
             realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeCalendar){
@@ -42,14 +45,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         }else if(TutorialLogic.Instance.FirstTimeDegradTrigger){
             //start trigger tutorial after others are done
             DegradationUIManager.Instance.ActivateParticleEffects();
-        }
-
-    }
-
-    //Assign OnTap event listener to game objects that are still new to the user
-    private void SetupTutorial(){
-        if(TutorialLogic.Instance.FirstTimeRealInhaler){
-            realInhaler.GetComponent<TapItem>().OnTap += StartRealInhalerTutorial;
         }
     }
 
@@ -146,7 +141,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     */
     public void ShowCalendarTipConclude(){
         TutorialLogic.Instance.FirstTimeCalendar = false;
-        calendar.GetComponent<TapItem>().OnTap -= StartCalendarTutorial;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
         CalendarTutorialHelper.Instance.CleanUpTutorial();
         GA.API.Design.NewEvent("Tutorial:Calendar:End");
@@ -173,7 +167,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
-//        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP1, "guiPanelStatsHealth", null, true, true);
         GA.API.Design.NewEvent("Tutorial:Trigger:Intro");
     }
 
@@ -192,14 +185,13 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
-//        NotificationUIManager.Instance.EnqueuePopupTipWithImage(DEGRAD_TIP2, "Skull", null, false, false);
         TutorialLogic.Instance.FirstTimeDegradTrigger = false;
         DegradationUIManager.Instance.ActivateParticleEffects();
         GA.API.Design.NewEvent("Tutorial:Trigger:End");
     }
 
     //==============Inhaler tutorial=================
-    private void StartRealInhalerTutorial(){
+    public void StartRealInhalerTutorial(){
 		
 		/////// Send Notication ////////
 		// Assign delegate functions to be passed in hashtable
@@ -217,7 +209,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
-//        NotificationUIManager.Instance.EnqueuePopupTipWithImage("Use this inhaler every morning and afternoon to keep your pet healthy!", "advairPurple", clickManager.OpenRealInhaler, true, false);
         TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
         highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;
@@ -225,11 +216,6 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         GA.API.Design.NewEvent("Tutorial:Inhaler:End");
     }
 
-    private void StartTeddyInhalertutorial(){
-        TutorialHighlighting highlight = teddyInhaler.GetComponent<TutorialHighlighting>();
-        highlight.HideArrow();
-        // TutorialLogic.Instance.FirstTimeTeddyInhaler = false;
-    }
     
     // private void openChallenges(){
     //     DataManager.Instance.Tutorial.FirstTimeChallenges = false;

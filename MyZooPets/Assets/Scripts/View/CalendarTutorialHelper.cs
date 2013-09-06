@@ -31,10 +31,11 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
         nightButtonMessage.functionName = "TutorialRewardClaim";
 
         //Add UIPanel to morning and night, so their Z index can be modified without
-        //affecting other UI components
+        //affecting other UI components. Need to refresh gameObject by using SetActive
         morning.gameObject.AddComponent<UIPanel>();
+        morning.gameObject.SetActive(false);
+        morning.gameObject.SetActive(true);
         night.gameObject.AddComponent<UIPanel>();
-
 
         //Set the finish target to TutorialUIManager
         this.calendarPanel.GetComponent<TweenToggleDemux>().isShowFinishedCallback = true;
@@ -74,7 +75,7 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
 
         //Remove green stamp tutorial
         if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
-        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -6);
+        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, 0);
 
         //Display hint arrow
         redStampHintArrow = NGUITools.AddChild(night.gameObject, calendarHintArrowPrefab);
@@ -90,7 +91,7 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
     public void SetUpBonusTip(){
        //Bring red stamp below the back drop
         if(redStampHintArrow != null) Destroy(redStampHintArrow);
-        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, 0);
 
         //Bring gray stamp above
         morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -21);

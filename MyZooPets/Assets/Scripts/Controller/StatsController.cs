@@ -59,4 +59,16 @@ public class StatsController : Singleton<StatsController> {
 		// Tell HUDAnimator to animate and change
 		hudAnimator.StartCoroutineCurveStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc);
 	}	
+	
+	//---------------------------------------------------
+	// GetStatText()
+	// Returns the localized stat text for incoming
+	// stat id.
+	//---------------------------------------------------	
+	public string GetStatText( StatType eStat ) {
+		string strKey = "STAT_" + eStat;
+		string strLocalizedStat = Localization.Localize( strKey );
+		
+		return strLocalizedStat;
+	}
 }

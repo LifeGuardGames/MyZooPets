@@ -28,7 +28,7 @@ public class Item {
 		get{return cost;}
 	}
 	public string Description{
-		get{return description;}
+		get{return Localization.Localize( description );}
 	}
 	public int UnlockAtLevel{
 		get{return unlockAtLevel;}
@@ -61,4 +61,12 @@ public class Item {
         }
         return statsDict;
     }
+	
+	//---------------------------------------------------
+	// GetDesc()
+	// Returns this item's description.
+	//---------------------------------------------------	
+	public virtual string GetDesc() {
+		return Description;
+	}
 }

@@ -275,7 +275,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             
         }else{
             //claim reward now!!!!
-            rewardLabel.text = "NOW!!";
+            rewardLabel.text = Localization.Localize( "CALENDAR_NOW" );
             timerActive = false;
         }
     }

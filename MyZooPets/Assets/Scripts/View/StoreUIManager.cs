@@ -147,9 +147,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		
 		// set the proper values on the entry
 		itemUIObject.name = itemData.ID;
-		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.Description;
+		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.GetDesc();
 		itemUIObject.transform.FindChild("BuyButton/L_Cost").GetComponent<UILabel>().text = itemData.Cost.ToString();
-		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemData.Name;
+		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize(itemData.Name);
 		itemUIObject.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemData.TextureName;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";

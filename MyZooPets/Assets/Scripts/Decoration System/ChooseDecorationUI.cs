@@ -39,7 +39,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 		// instantiate the item area
 		if ( goChooseArea )
 			Destroy( goChooseArea );	// destroy the section of the UI with all the entries if it existed already
-		goChooseArea = NGUITools.AddChildWithPosition( gameObject, prefabChooseArea );
+		goChooseArea = LgNGUITools.AddChildWithPosition( gameObject, prefabChooseArea );
 		goGrid = goChooseArea.transform.Find("Grid").gameObject;
 		
 		// create the decoration entries in the UI

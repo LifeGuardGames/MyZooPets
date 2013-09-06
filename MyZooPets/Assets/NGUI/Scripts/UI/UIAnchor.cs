@@ -70,6 +70,13 @@ public class UIAnchor : MonoBehaviour
 	/// </summary>
 
 	public Vector2 relativeOffset = Vector2.zero;
+	
+	/// <summary>
+	/// Pixel offset value if any. For example "10" in x will move the widget 10 pixels to the right 
+	/// while "-10" in x is 10 pixels to the left based on the pixel values set in UIRoot.
+	/// </summary>
+	
+	public Vector2 pixelOffset = Vector2.zero;
 
 	Transform mTrans;
 	Animation mAnim;
@@ -187,6 +194,9 @@ public class UIAnchor : MonoBehaviour
 				v.x = Mathf.Round(v.x);
 				v.y = Mathf.Round(v.y);
 
+				v.x += pixelOffset.x;
+				v.y += pixelOffset.y;
+
 				if (halfPixelOffset && mNeedsHalfPixelOffset)
 				{
 					v.x -= 0.5f;
@@ -200,6 +210,9 @@ public class UIAnchor : MonoBehaviour
 		{
 			v.x = Mathf.Round(v.x);
 			v.y = Mathf.Round(v.y);
+
+			v.x += pixelOffset.x;
+			v.y += pixelOffset.y;
 
 			if (panelContainer != null)
 			{

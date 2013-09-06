@@ -30,8 +30,6 @@ public abstract class UIWidget : MonoBehaviour
 	}
 
 	// Cached and saved values
-	[HideInInspector][SerializeField] protected Material mMat;
-	[HideInInspector][SerializeField] protected Texture mTex;
 	[HideInInspector][SerializeField] Color mColor = Color.white;
 	[HideInInspector][SerializeField] Pivot mPivot = Pivot.Center;
 	[HideInInspector][SerializeField] int mDepth = 0;
@@ -43,6 +41,7 @@ public abstract class UIWidget : MonoBehaviour
 	protected bool mChanged = true;
 	protected bool mPlayMode = true;
 
+	bool mStarted = false;
 	Vector3 mDiffPos;
 	Quaternion mDiffRot;
 	Vector3 mDiffScale;
@@ -179,80 +178,35 @@ public abstract class UIWidget : MonoBehaviour
 	public Transform cachedTransform { get { if (mTrans == null) mTrans = transform; return mTrans; } }
 
 	/// <summary>
-	/// Returns the material used by this widget.
+	/// Material used by the widget.
 	/// </summary>
 
 	public virtual Material material
 	{
 		get
 		{
-			return mMat;
+			return null;
 		}
 		set
 		{
-			if (mMat != value)
-			{
-				if (mMat != null && mPanel != null) mPanel.RemoveWidget(this);
-
-				mPanel = null;
-				mMat = value;
-				mTex = null;
-
-				if (mMat != null) CreatePanel();
-			}
+			throw new System.NotImplementedException(GetType() + " has no material setter");
 		}
 	}
 
 	/// <summary>
-	/// Returns the texture used to draw this widget.
+	/// Texture used by the widget.
 	/// </summary>
 
 	public virtual Texture mainTexture
 	{
 		get
 		{
-			// If the material has a texture, always use it instead of 'mTex'.
 			Material mat = material;
-			
-			if (mat != null)
-			{
-				if (mat.mainTexture != null)
-				{
-					mTex = mat.mainTexture;
-				}
-				else if (mTex != null)
-				{
-					// The material has no texture, but we have a saved texture
-					if (mPanel != null) mPanel.RemoveWidget(this);
-
-					// Set the material's texture to the saved value
-					mPanel = null;
-					mMat.mainTexture = mTex;
-
-					// Ensure this widget gets added to the panel
-					if (enabled) CreatePanel();
-				}
-			}
-			return mTex;
+			return (mat != null) ? mat.mainTexture : null;
 		}
 		set
 		{
-			Material mat = material;
-
-			if (mat == null || mat.mainTexture != value)
-			{
-				if (mPanel != null) mPanel.RemoveWidget(this);
-
-				mPanel = null;
-				mTex = value;
-				mat = material;
-
-				if (mat != null)
-				{
-					mat.mainTexture = value;
-					if (enabled) CreatePanel();
-				}
-			}
+			throw new System.NotImplementedException(GetType() + " has no mainTexture setter");
 		}
 	}
 
@@ -311,6 +265,19 @@ public abstract class UIWidget : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Remove this widget from the panel.
+	/// </summary>
+
+	protected void RemoveFromPanel ()
+	{
+		if (mPanel != null)
+		{
+			mPanel.RemoveWidget(this);
+			mPanel = null;
+		}
+	}
+
+	/// <summary>
 	/// Only sets the local flag, does not notify the panel.
 	/// In most cases you will want to use MarkAsChanged() instead.
 	/// </summary>
@@ -345,7 +312,7 @@ public abstract class UIWidget : MonoBehaviour
 	{
 		if (mPanel == null && enabled && NGUITools.GetActive(gameObject) && material != null)
 		{
-			mPanel = UIPanel.Find(cachedTransform);
+			mPanel = UIPanel.Find(cachedTransform, mStarted);
 
 			if (mPanel != null)
 			{
@@ -401,8 +368,7 @@ public abstract class UIWidget : MonoBehaviour
 			// This widget is no longer parented to the same panel. Remove it and re-add it to a new one.
 			if (!valid)
 			{
-				if (!keepMaterial || Application.isPlaying) material = null;
-				mPanel = null;
+				RemoveFromPanel();
 				CreatePanel();
 			}
 #else
@@ -410,9 +376,7 @@ public abstract class UIWidget : MonoBehaviour
 
 			if (mPanel != p)
 			{
-				mPanel.RemoveWidget(this);
-				if (!keepMaterial || Application.isPlaying) material = null;
-				mPanel = null;
+				RemoveFromPanel();
 				CreatePanel();
 			}
 #endif
@@ -445,12 +409,6 @@ public abstract class UIWidget : MonoBehaviour
 #endif
 		{
 			mChanged = true;
-
-			if (!keepMaterial)
-			{
-				mMat = null;
-				mTex = null;
-			}
 			mPanel = null;
 		}
 	}
@@ -461,6 +419,7 @@ public abstract class UIWidget : MonoBehaviour
 
 	void Start ()
 	{
+		mStarted = true;
 		OnStart();
 		CreatePanel();
 	}
@@ -484,31 +443,13 @@ public abstract class UIWidget : MonoBehaviour
 	/// Clear references.
 	/// </summary>
 
-	void OnDisable ()
-	{
-		if (!keepMaterial)
-		{
-			material = null;
-		}
-		else if (mPanel != null)
-		{
-			mPanel.RemoveWidget(this);
-		}
-		mPanel = null;
-	}
+	protected virtual void OnDisable () { RemoveFromPanel(); }
 
 	/// <summary>
 	/// Unregister this widget.
 	/// </summary>
 
-	void OnDestroy ()
-	{
-		if (mPanel != null)
-		{
-			mPanel.RemoveWidget(this);
-			mPanel = null;
-		}
-	}
+	void OnDestroy () { RemoveFromPanel(); }
 
 #if UNITY_EDITOR
 
@@ -811,12 +752,6 @@ public abstract class UIWidget : MonoBehaviour
 	/// </summary>
 
 	virtual public Vector4 border { get { return Vector4.zero; } }
-
-	/// <summary>
-	/// Whether the material will be kept when the widget gets disabled (by default no, it won't be).
-	/// </summary>
-
-	virtual public bool keepMaterial { get { return false; } }
 
 	/// <summary>
 	/// Whether this widget will automatically become pixel-perfect after resize operation finishes.

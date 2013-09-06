@@ -10,7 +10,6 @@ public class DataManager : Singleton<DataManager>{
     //========Developer option=============
     public bool removeDataOnDestroy; //delete all from PlayerPrefs
     public bool isDebug = false; //turn isDebug to true if working on independent scene
-    public bool calendarDummyData = false;
     private bool loaded = false;
     //=====================================
 
@@ -119,7 +118,7 @@ public class DataManager : Singleton<DataManager>{
         Level = new LevelUpData();
         Level.Init();
         Calendar = new CalendarData();
-        Calendar.Init(calendarDummyData);
+        Calendar.Init();
         Degradation = new DegradationData();
         Degradation.Init();
         Inhaler = new InhalerData();

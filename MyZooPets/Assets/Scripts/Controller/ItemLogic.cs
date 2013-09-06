@@ -7,8 +7,6 @@ using System.Collections.Generic;
 //Item Logic Class
 //Reference all Items.
 public class ItemLogic : Singleton<ItemLogic>{
-	//This number has to change manually
-	public static int MAX_ITEM_COUNT = 10;
 	private List<Item> foodList; //list with only FoodItem. sorted by cost
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
@@ -45,8 +43,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 			return decorationList;
 		}		
 	}
-
-	// public List<Item> DecorationList{}
 
 	void Awake(){
 		DataItems.SetupData();
@@ -109,6 +105,8 @@ public class ItemLogic : Singleton<ItemLogic>{
 	}
 
 	//Get list sorted by cost in ascending order from the item dictionary
+	//Select and sort need to be done in two steps because IOS doesn't support 
+	//OrderBy for value types, ex string. but works fine if use on class.
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;

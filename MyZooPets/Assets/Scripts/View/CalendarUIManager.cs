@@ -5,11 +5,11 @@ using System;
 
 public class CalendarUIManager : SingletonUI<CalendarUIManager> {
     public bool isDebug; //developing option
+    public GameObject calendarTutorialHelperPrefab;
 	public GameObject calendarPanel;
 	public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
     public UILabel rewardLabel;
-    public GameObject calendarHintArrow;
 
     //Class to store UI reference
     private struct ThisWeekDay{
@@ -63,9 +63,14 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
     void Start(){
         CalendarLogic.OnCalendarReset += ResetCalendar;
 
-        //check if in tutorial phase. special handler needed for sample data
-        //ThisWeekDay[3] sample data. set special button handler
-        if(TutorialLogic.Instance.FirstTimeCalendar) SetUpForTutorial();
+        //Instantiate CalendarTutorialHelper
+        if(TutorialLogic.Instance.FirstTimeCalendar){
+            GameObject tutorialHelper = (GameObject)Instantiate(calendarTutorialHelperPrefab);
+            tutorialHelper.name = "CalendarTutorialHelper";
+            tutorialHelper.transform.parent = transform.parent;
+
+            CalendarTutorialHelper.Instance.SetUpForTutorial(currentWeek[6].AM, currentWeek[6].PM, calendarPanel);
+        }
     }
 
     void OnDestroy(){
@@ -160,111 +165,6 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         }
     }
 
-    //==================Tutorial===========================
-    private GameObject greenStampHintArrow; //temp reference to hint arrow.
-    private GameObject redStampHintArrow;
-    private Transform day;
-    private Transform night;
-
-    //Make the necessary modification to set up for tutorial
-    private void SetUpForTutorial(){
-        day = currentWeek[6].AM;
-        night = currentWeek[6].PM;
-        day.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
-        night.GetComponent<UIButtonMessage>().functionName = "TutorialRewardClaim";
-
-        //Set the finish target to TutorialUIManager
-        calendarPanel.GetComponent<TweenToggleDemux>().isShowFinishedCallback = true;
-        calendarPanel.GetComponent<TweenToggleDemux>().ShowTarget = TutorialUIManager.Instance.gameObject;
-        calendarPanel.GetComponent<TweenToggleDemux>().ShowFunctionName = "StartCalendarTutorial";
-    }
-
-    //Black out everything. Only shows the green stamp
-    public void SetUpGreenStampTip(){
-        //Display hint arrow
-        greenStampHintArrow = NGUITools.AddChild(day.gameObject, calendarHintArrow);
-        greenStampHintArrow.transform.localPosition = new Vector3(-136, 23, 0);
-        greenStampHintArrow.transform.localEulerAngles = new Vector3(0, 
-            calendarHintArrow.transform.localEulerAngles.y, 0);
-
-        //Bring green stamp above the back drop
-        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21); 
-    }
-
-    //Black out everything. Only shows the red stamp
-    public void SetUpRedExTip(){
-        //Remove green stamp tutorial
-        if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
-        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -6);
-
-        //Display hint arrow
-        redStampHintArrow = NGUITools.AddChild(currentWeek[6].PM.gameObject, calendarHintArrow);
-        redStampHintArrow.transform.localPosition = new Vector3(-136, 22, 0);
-        redStampHintArrow.transform.localEulerAngles = new Vector3(0, 
-            calendarHintArrow.transform.localEulerAngles.y, 0);
-
-       //Bring red stamp above the back drop
-        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
-    }
-
-    //Black out everything.
-    public void SetUpBonusTip(){
-       //Bring red stamp below the back drop
-        if(redStampHintArrow != null) Destroy(redStampHintArrow);
-        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -6);
-
-        //Bring gray stamp above
-        day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, -21);
- 
-    }
-
-    //Reset calendar to original after tutorial is finished
-    public void CleanUpTutorial(){
-        //Erase all tutorial data
-        day.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-		day.localPosition = new Vector3(day.localPosition.x, day.localPosition.y, 0);
-        night.GetComponent<UIButtonMessage>().functionName = "ClaimReward";
-		night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, 0);
-		
-        //Reset the finish target
-        calendarPanel.GetComponent<TweenToggleDemux>().isShowFinishedCallback = false;
-        calendarPanel.GetComponent<TweenToggleDemux>().ShowTarget = null;
-        calendarPanel.GetComponent<TweenToggleDemux>().ShowFunctionName = "";
-
-        //Clean up hint arrow if still there
-        if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
-        if(redStampHintArrow != null) Destroy(redStampHintArrow);
-
-        //Erase tutorial data
-        CalendarLogic.Instance.ResetWeekAfterTutorialFinish();
-    }
-
-    //Use only during tutorial to prompt tips when green or red stamps are clicked
-    public void TutorialRewardClaim(GameObject calendarSlot){
-        UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
-        if(button.normalSprite == GREEN_CHECK){
-
-            //Disable green stamp hint
-            Destroy(greenStampHintArrow);
-            button.normalSprite = GRAY_CHECK;
-            button.hoverSprite = GRAY_CHECK;
-            button.pressedSprite = GRAY_CHECK;
-            button.isEnabled = false;
-            button.isEnabled = true;
-
-            //Reward
-            CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
-        }else{
-            if(button.normalSprite == RED_EX) Destroy(redStampHintArrow);
-
-            //shake the calendar slot
-            Hashtable optional = new Hashtable();
-            optional.Add("ease", LeanTweenType.punch);
-            LeanTween.moveX(calendarSlot, 0.03f, 0.5f, optional);
-        }
-    }
-    //===================================================
-
     private void ResetTimer(){
         TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
         countDownTime = (float) timeSpan.TotalSeconds;
@@ -298,31 +198,31 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             CalendarEntry entry = currentWeekData[i]; //Data day
             ThisWeekDay day = currentWeek[i]; //UI day
 
-            UIImageButton dayButton = day.AM.GetComponent<UIImageButton>();
+            UIImageButton morningButton = day.AM.GetComponent<UIImageButton>();
             switch(entry.DayTime){
                 case DosageRecord.Hit: //show check stamp
                     if(!entry.BonusCollectedDayTime){
-                        dayButton.normalSprite = GREEN_CHECK;
-                        dayButton.hoverSprite = GREEN_CHECK;
-                        dayButton.pressedSprite = GREEN_CHECK_DOWN;
+                        morningButton.normalSprite = GREEN_CHECK;
+                        morningButton.hoverSprite = GREEN_CHECK;
+                        morningButton.pressedSprite = GREEN_CHECK_DOWN;
                     }else{
-                        SetSpriteOfUIImageButton(dayButton, GRAY_CHECK);
+                        SetSpriteOfUIImageButton(morningButton, GRAY_CHECK);
                     }
                 break;
                 case DosageRecord.Miss: //show ex stamp
-                    dayButton.normalSprite = RED_EX;
-                    dayButton.hoverSprite = RED_EX;
-                    dayButton.pressedSprite = RED_EX_DOWN;
+                    morningButton.normalSprite = RED_EX;
+                    morningButton.hoverSprite = RED_EX;
+                    morningButton.pressedSprite = RED_EX_DOWN;
                 break;
                 case DosageRecord.Null: //blank
-                    SetSpriteOfUIImageButton(dayButton, BLANK);
+                    SetSpriteOfUIImageButton(morningButton, BLANK);
                 break;
                 case DosageRecord.LeaveBlank: //blank
-                    SetSpriteOfUIImageButton(dayButton, BLANK);
+                    SetSpriteOfUIImageButton(morningButton, BLANK);
                 break;
             }
-            dayButton.enabled = false; // Tell it to redraw
-			dayButton.enabled = true;
+            morningButton.enabled = false; // Tell it to redraw
+			morningButton.enabled = true;
 
             UIImageButton nightButton = day.PM.GetComponent<UIImageButton>();
             switch(entry.NightTime){

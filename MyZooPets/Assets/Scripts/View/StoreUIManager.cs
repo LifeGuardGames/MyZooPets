@@ -8,8 +8,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject ItemSpritePrefab;
 	public GameObject storePanel;
 	public GameObject storeBackground;
+	public GameObject ItemArea;
+	public GameObject FirstPageTag;
 
 	private bool changePage;
+	private string currentPage;
 	private int page;
 	private UISprite uisprite;
 	private GameObject grid;
@@ -21,7 +24,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	void Start (){
-		CreateItems(null);
+		CreateItems(FirstPageTag);
 	}
 
 	protected override void _OpenUI(){
@@ -103,23 +106,38 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Drawing function
 	// Draw according to ItemLogic.Instance 
 	private void CreateItems(GameObject page){
-
-		// Destory first
-		foreach(Transform child in grid.transform){
-			Destroy(child.gameObject);
+		if(currentPage != page.name){
+			// Destory first
+			foreach(Transform child in grid.transform){
+				Destroy(child.gameObject);
+			}
+			
+			Vector4 clipRange = ItemArea.GetComponent<UIPanel>().clipRange;
+			
+			if(page == null || page.name == "Food"){
+				currentPage = page.name;
+				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
+				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+				CreateItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
+			}
+			else if(page.name == "Item"){
+				currentPage = page.name;
+				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
+				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+				CreateItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
+			}
+			else if(page.name == "Decoration"){
+				currentPage = page.name;
+				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
+				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+				CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
+			}
+			else
+				Debug.Log("Illegal store UI page: " + page.name);
+			
+			grid.GetComponent<UIGrid>().Reposition();
+			Invoke("Reposition",0.00000001f);
 		}
-
-		if(page == null || page.name == "Food")
-			CreateItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
-		else if(page.name == "Usable")
-			CreateItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
-		else if(page.name == "Decoration")
-			CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
-		else
-			Debug.Log("Illegal store UI page: " + page.name);
-		
-		grid.GetComponent<UIGrid>().Reposition();
-		Invoke("Reposition",0.00000001f);
 	}
 	
 	//---------------------------------------------------

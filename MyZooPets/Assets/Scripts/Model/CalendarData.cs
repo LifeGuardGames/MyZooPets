@@ -69,7 +69,7 @@ public class CalendarData{
             //initialize this week with sample data to be used for tutorial
             entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
             entriesThisWeek[6].DayTime = DosageRecord.Hit;
-            entriesThisWeek[6].NightTime = DosageRecord.Miss;
+            // entriesThisWeek[6].NightTime = DosageRecord.Miss;
         }
 
         isRewardClaimed = false;

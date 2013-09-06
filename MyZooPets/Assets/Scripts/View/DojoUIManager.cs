@@ -57,14 +57,16 @@ public class DojoUIManager : Singleton<DojoUIManager> {
         for(int i=0; i<dojoSkills.Count; i++){
             if(i % 2 == 0){ //Spawn new unlockGroup
                 unlockGroup = NGUITools.AddChild(grid, unlockGroupPrefab);
-                unlockGroup.transform.Find("Label_Level").GetComponent<UILabel>().text = "Level " + groupLabels[groupCounter];
+				string strLevel = Localization.Localize( "LEVEL" );
+                unlockGroup.transform.Find("Label_Level").GetComponent<UILabel>().text = strLevel + " " + groupLabels[groupCounter];
                 groupCounter++;
             }
             Transform trans = unlockGroup.transform.Find("Skill");
             //Change the gameObject name to skillID
             trans.name = dojoSkills[i].SkillID.ToString();
             //Name and desc of the skill
-            trans.Find("Label_Name").GetComponent<UILabel>().text = dojoSkills[i].SkillName.ToString();
+			string strSkillKey = "SKILL_" + dojoSkills[i].SkillName;
+            trans.Find("Label_Name").GetComponent<UILabel>().text = Localization.Localize( strSkillKey );
             //Fill in the cost
             trans.Find("Label_Cost").GetComponent<UILabel>().text = dojoSkills[i].CostStars.ToString();
             //Set the OnClick Target and functionName

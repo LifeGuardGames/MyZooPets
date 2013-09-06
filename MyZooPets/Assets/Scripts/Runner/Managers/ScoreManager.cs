@@ -44,7 +44,7 @@ public class ScoreManager : MonoBehaviour {
             }
 
             if (DistanceLabel != null) {
-                DistanceLabel.text = "Distance: " + distanceTraveled.ToString("F1");
+                DistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distanceTraveled.ToString("F1");
             }
         }
 	}
@@ -58,19 +58,19 @@ public class ScoreManager : MonoBehaviour {
     public void AddCoins(int inNumCoinsToAdd) {
         mPlayerCoins += inNumCoinsToAdd;
         if (CoinLabel != null)
-            CoinLabel.text = "Coins: " + mPlayerCoins;
+            CoinLabel.text = Localization.Localize( "RUNNER_COINS" ) + mPlayerCoins;
     }
 
     public void AddPoints(int inNumPointsToAdd) {
         mPlayerPoints += inNumPointsToAdd;
         if (ScoreLabel != null)
-            ScoreLabel.text = "Score: " + (mPlayerDistancePoints + mPlayerPoints);
+            ScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + (mPlayerDistancePoints + mPlayerPoints);
     }
 
     public void SetDistancePoints(int inDistancePoints) {
         mPlayerDistancePoints = inDistancePoints;
         if (ScoreLabel != null)
-            ScoreLabel.text = "Score: " + (mPlayerDistancePoints + mPlayerPoints);
+            ScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + (mPlayerDistancePoints + mPlayerPoints);
     }
 
     public float GetScore() {

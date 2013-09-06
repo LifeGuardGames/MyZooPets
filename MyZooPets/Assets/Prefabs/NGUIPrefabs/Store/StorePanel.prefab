@@ -242,6 +242,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400028}
   - 114: {fileID: 11400044}
+  - 114: {fileID: 11400078}
   m_Layer: 10
   m_Name: Label
   m_TagString: Untagged
@@ -277,6 +278,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400032}
   - 114: {fileID: 11400052}
+  - 114: {fileID: 11400080}
   m_Layer: 10
   m_Name: Label
   m_TagString: Untagged
@@ -341,6 +343,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400040}
   - 114: {fileID: 11400056}
+  - 114: {fileID: 11400082}
   m_Layer: 10
   m_Name: Label
   m_TagString: Untagged
@@ -865,11 +868,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .600000024
+    e03: 1.57133794
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.59961
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -1342,16 +1345,16 @@ MonoBehaviour:
   mDepth: 6
   mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
   mText: Item
-  mMaxLineWidth: 0
+  mMaxLineWidth: 220
   mEncoding: 1
-  mMaxLineCount: 0
+  mMaxLineCount: 1
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 0
+  mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
 --- !u!114 &11400046
@@ -1418,16 +1421,16 @@ MonoBehaviour:
   mDepth: 6
   mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
   mText: Food
-  mMaxLineWidth: 0
+  mMaxLineWidth: 220
   mEncoding: 1
-  mMaxLineCount: 0
+  mMaxLineCount: 1
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 0
+  mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
 --- !u!114 &11400054
@@ -1471,16 +1474,16 @@ MonoBehaviour:
   mDepth: 6
   mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
   mText: Decoration
-  mMaxLineWidth: 0
+  mMaxLineWidth: 220
   mEncoding: 1
-  mMaxLineCount: 0
+  mMaxLineCount: 1
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 0
+  mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
 --- !u!114 &11400058
@@ -1649,11 +1652,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -12.2784004
+    e03: -11.3070631
     e10: 0
     e11: 384
     e12: 0
-    e13: -7608.98438
+    e13: -7606.8125
     e20: 0
     e21: 0
     e22: 384
@@ -1690,6 +1693,42 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: STORE_TAB_ITEM
+--- !u!114 &11400080
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: STORE_TAB_FOOD
+--- !u!114 &11400082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: STORE_TAB_DECO
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

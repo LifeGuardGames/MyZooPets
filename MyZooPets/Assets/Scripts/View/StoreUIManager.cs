@@ -112,26 +112,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				Destroy(child.gameObject);
 			}
 			
-			Vector4 clipRange = ItemArea.GetComponent<UIPanel>().clipRange;
+			// cache our new page name
+			currentPage = page.name;
 			
-			if(page == null || page.name == "Food"){
-				currentPage = page.name;
-				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
-				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+			// based on the page, create the proper set of item in the store
+			if(page == null || page.name == "Food")
 				CreateItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
-			}
-			else if(page.name == "Item"){
-				currentPage = page.name;
-				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
-				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+			else if(page.name == "Item")
 				CreateItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
-			}
-			else if(page.name == "Decoration"){
-				currentPage = page.name;
-				ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
-				ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+			else if(page.name == "Decoration")
 				CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
-			}
 			else
 				Debug.Log("Illegal store UI page: " + page.name);
 			
@@ -146,6 +136,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// of items and bg atlas.
 	//---------------------------------------------------	
 	private void CreateItemsTab( Color colorBG, List<Item> listItems ) {
+		// reset the clip range for the item area so that 
+		Vector4 clipRange = ItemArea.GetComponent<UIPanel>().clipRange;
+		ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
+		ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+		
 		// set the proper bg
 		storeBackground.GetComponent<UISprite>().color = colorBG;
 		
@@ -165,9 +160,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		
 		// set the proper values on the entry
 		itemUIObject.name = itemData.ID;
-		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.Description;
+		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.GetDesc();
 		itemUIObject.transform.FindChild("BuyButton/L_Cost").GetComponent<UILabel>().text = itemData.Cost.ToString();
-		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemData.Name;
+		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize(itemData.Name);
 		itemUIObject.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemData.TextureName;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";

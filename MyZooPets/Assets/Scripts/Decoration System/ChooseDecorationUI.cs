@@ -60,11 +60,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 	private void AddRemoveEntry( GameObject goGrid ) {
 		GameObject itemRemove = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
 		itemRemove.name = "item_remove";
-		itemRemove.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = "Remove this decoration.";
+		itemRemove.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE_DESC" );
 		itemRemove.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "100";
-		itemRemove.transform.FindChild("ItemName").GetComponent<UILabel>().text = "Remove";
+		itemRemove.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE" );
 		itemRemove.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = "apple";
-		itemRemove.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = "Remove"; // JOE_LOCALIZE
+		itemRemove.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_REMOVE");
 		itemRemove.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>().target = gameObject;
 		itemRemove.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>().functionName = "OnRemoveButton";			
 	}
@@ -93,11 +93,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 			
 			GameObject item = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
 			item.name = itemDeco.ID;
-			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
+			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize(itemDeco.Description);
 			item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemDeco.Cost.ToString();
-			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
+			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize(itemDeco.Name);
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
-			item.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = "Place"; // JOE_LOCALIZE
+			item.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_PLACE");
 			
 			// depending on if the deco can be placed or not, set certain attributes on the entry
 			UIButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>();

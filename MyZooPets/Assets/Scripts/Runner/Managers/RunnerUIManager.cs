@@ -37,9 +37,9 @@ public class RunnerUIManager : MonoBehaviour {
         float numScore = scoreManager.GetScore();
         float distance = runnerGameManager.PlayerRunner.transform.position.z;
 
-        FinalScoreLabel.text = "Score: " + numScore;
-        FinalDistanceLabel.text = "Distance: " + distance.ToString("F1");
-        FinalCoinsLabel.text = "Coins: " + numCoins;
+        FinalScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + numScore;
+        FinalDistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distance.ToString("F1");
+        FinalCoinsLabel.text = Localization.Localize( "RUNNER_COINS" ) + numCoins;
     }
 
     public void DeActivateGameOverPanel() {

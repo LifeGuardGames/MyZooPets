@@ -118,6 +118,7 @@ public enum BadgeType{
     Other
 }
 
+// NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
 public enum DojoSkillName{
     Sit,
     Wave,

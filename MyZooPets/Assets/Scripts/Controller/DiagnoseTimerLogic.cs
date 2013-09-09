@@ -41,10 +41,10 @@ public class DiagnoseTimerLogic : MonoBehaviour {
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-		notificationEntry.Add(NotificationPopupFields.Message, "Something unusual is happening to your pet! Help it out!");
-		notificationEntry.Add(NotificationPopupFields.Button1Label, "Okay");
+		notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("NOTIFICATION_DIAGNOSE"));
+		notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("OKAY"));
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Button2Label, "Ignore");
+		notificationEntry.Add(NotificationPopupFields.Button2Label, Localization.Localize("IGNORE"));
 		notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
 		
 		// Place notification entry table in static queue

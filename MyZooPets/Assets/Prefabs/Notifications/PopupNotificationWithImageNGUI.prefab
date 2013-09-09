@@ -402,10 +402,11 @@ MonoBehaviour:
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
-  isHideFinishedCallback: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
+  isHideFinishedCallback: 1
+  HideTarget: {fileID: 100018}
+  HideFunctionName: BroadcastHideFinished
   HideIncludeChildren: 0
+  hideImmediately: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -551,7 +552,7 @@ MonoBehaviour:
   blockUI: 1
   startsHidden: 0
   hideDeltaX: 0
-  hideDeltaY: 0
+  hideDeltaY: 1000
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .300000012

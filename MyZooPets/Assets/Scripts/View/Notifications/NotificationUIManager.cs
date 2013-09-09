@@ -27,13 +27,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
 	public GameObject popupNotificiationTutorialLeft;
 
-//	public bool flipped;
-
-	// Queue variables
-//	private Queue q = new Queue();
 	private bool isNotificationActive = false;
-//	private bool qLock = true;
-//	private bool isFirstPop = true; // Aux to stop subsequent AddToQueue() to trigger queue check
 
 	void Start(){
 		backDrop.SetActive(false);
@@ -41,20 +35,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		// Check the static queue to see if anything is there on level load
 		TryNextNotification();
 	}
-
-//	void Update(){
-//		if(isActive){						// Keep polling queue if it is active and something in it
-//			if(q.Count >= 1 && !qLock){
-//				PopQueueAndDisplay();
-//			}
-//			if(q.Count == 0 && !qLock){		// Shut self off if nothing in queue, reset
-//				isActive = false;
-//				qLock = true;
-//				isFirstPop = true;
-//				backDrop.SetActive(false);
-//			}
-//		}
-//	}
 
 	/////////////// QUEUE HANDLERS /////////////////
 	
@@ -134,9 +114,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			}
 		}
 		else{
+			Debug.Log ("No notification detected");
 			backDrop.SetActive(false);
 			isNotificationActive = false;
-			Debug.Log ("No notification detected");
 		}
 	}
 
@@ -210,16 +190,17 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		float zVal = prefab.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(centerPanel, prefab);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
-		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
-		if(mtt != null){
-			mtt.startsHidden = startsHidden;
-			mtt.Reset();
-		}
+//		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
+//		if(mtt != null){
+//			mtt.startsHidden = startsHidden;
+//			mtt.Reset();
+//		}
 		//TODO /// REMOVE^^
 		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
 		if(demux != null){
 			demux.startsHidden = startsHidden;
-			//demux.Reset();
+			Debug.Log("STARTS HIDDEN" + startsHidden);
+			demux.Reset();
 		}
 		
 		

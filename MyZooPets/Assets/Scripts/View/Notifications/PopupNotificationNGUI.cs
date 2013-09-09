@@ -65,7 +65,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback
 	public void BroadcastHideFinished(){
-//		Debug.Log("SENDING UNLOCK");
 		if(OnHideFinished != null){
 			OnHideFinished();
 		}
@@ -96,6 +95,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
 		TweenToggleDemux mtDemux = GetComponent<TweenToggleDemux>();
 		TweenToggle mt = GetComponent<TweenToggle>();
 		if(mtDemux != null){
+			//No support for duration
 			mtDemux.Show();
 		}
 		else if(mt != null){
@@ -121,6 +121,9 @@ public class PopupNotificationNGUI : MonoBehaviour {
 		TweenToggleDemux mtDemux = GetComponent<TweenToggleDemux>();
 		TweenToggle mt = GetComponent<TweenToggle>();
 		if(mtDemux != null){
+			if(toggleDuration == 0){		//TODO-s not uniform semantic
+				mtDemux.hideImmediately = true;
+			}
 			mtDemux.Hide();
 		}
 		else if(mt != null){

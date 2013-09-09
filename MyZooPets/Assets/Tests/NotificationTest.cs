@@ -136,7 +136,7 @@ public class NotificationTest : MonoBehaviour {
 	            };
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 			notificationEntry.Add(NotificationPopupFields.Message, "TESTTTT");
 			notificationEntry.Add(NotificationPopupFields.SpriteName, "advairPurple");
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);

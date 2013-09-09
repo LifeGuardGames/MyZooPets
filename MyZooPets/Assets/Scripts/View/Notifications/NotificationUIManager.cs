@@ -269,7 +269,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		LevelUpMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(levelUpMessageNGUI) as LevelUpMessageNGUI;
 		oneButtonMessage.GetTrophyMessageAndImage(badge);
 		oneButtonMessage.Button1Callback = okCallBack;
-		oneButtonMessage.Button1Text = "OK";
+		oneButtonMessage.Button1Text = Localization.Localize("OK");
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
@@ -284,10 +284,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImageNGUI, startsHidden) as PopupNotificationWithImageNGUI;
 		tip.HideImmediately = hideImmediately;
 		tip.Message = message;
-		tip.Title = "Tip";
+		tip.Title = Localization.Localize("TIP");
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;
-		tip.Button1Text = "OK";
+		tip.Button1Text = Localization.Localize("OK");
 		tip.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(tip));
@@ -306,8 +306,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		twoButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		twoButtonMessage.Button1Callback = yesButtonCallBack;
 		twoButtonMessage.Button2Callback = noButtonCallBack;
-		twoButtonMessage.Button1Text = "Play";
-		twoButtonMessage.Button2Text = "Quit";
+		twoButtonMessage.Button1Text = Localization.Localize("PLAY");
+		twoButtonMessage.Button2Text = Localization.Localize("QUIT");
 		twoButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
@@ -322,7 +322,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		GameOverRewardMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(gameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
 		oneButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		oneButtonMessage.Button1Callback = buttonCallBack;
-		oneButtonMessage.Button1Text = "Quit";
+		oneButtonMessage.Button1Text = Localization.Localize("QUIT");
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));

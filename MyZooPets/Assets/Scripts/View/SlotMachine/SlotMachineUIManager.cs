@@ -29,14 +29,18 @@ public class SlotMachineUIManager : MonoBehaviour {
 					Application.LoadLevel("NewBedRoom");
 				};
 			
+			// create string for notification
+			string strStarCost = Localization.Localize("NOTIFICATION_SLOT_COST");
+			strStarCost = StringUtils.Replace( strStarCost, StringUtils.NUM, costStars );
+			
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-			notificationEntry.Add(NotificationPopupFields.Message, "-"+ costStars +" stars to play");
+			notificationEntry.Add(NotificationPopupFields.Message, strStarCost);
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-			notificationEntry.Add(NotificationPopupFields.Button1Label, "Start");
-			notificationEntry.Add(NotificationPopupFields.Button2Label, "Back");
+			notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("START"));
+			notificationEntry.Add(NotificationPopupFields.Button2Label, Localization.Localize("BACK"));
 			
 			// Place notification entry table in static queue
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
@@ -61,11 +65,15 @@ public class SlotMachineUIManager : MonoBehaviour {
 	                Application.LoadLevel("NewBedRoom");
 	            };
 			
+			// create string for notification
+			string strStarCost = Localization.Localize("NOTIFICATION_SLOT_COST_ERROR");
+			strStarCost = StringUtils.Replace( strStarCost, StringUtils.NUM, costStars );			
+			
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
-			notificationEntry.Add(NotificationPopupFields.Message, "You need at least " + costStars + " stars to play!");
-			notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
+			notificationEntry.Add(NotificationPopupFields.Message, strStarCost);
+			notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			
 			// Place notification entry table in static queue

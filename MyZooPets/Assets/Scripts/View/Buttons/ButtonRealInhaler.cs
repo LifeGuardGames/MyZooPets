@@ -36,8 +36,8 @@ public class ButtonRealInhaler : LgButton {
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
-			notificationEntry.Add(NotificationPopupFields.Message, "I don't need this right now.");
-			notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
+			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"));
+			notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			
 			// Place notification entry table in static queue

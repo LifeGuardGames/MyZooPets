@@ -7,7 +7,7 @@ using System.Collections;
 /// If its not the first time the game is run, this will delete itself.
 /// </summary>
 
-public class FirstTimeNGUI : MonoBehaviour {
+public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 
     public GameObject eggObject;
     public GameObject nestObject;
@@ -41,7 +41,19 @@ public class FirstTimeNGUI : MonoBehaviour {
 
             ShowDropInAnimation();
     }
-
+	
+	//---------------------------------------------------
+	// _OpenUI()
+	//---------------------------------------------------	
+	protected override void _OpenUI(){
+       	eggClicked = true;
+        CameraTransform(finalPosition,finalFaceDirection);
+        isZoomed = true;
+        HideTitle();
+        ShowChooseGUI();	
+	}	
+	
+	/*
     void Update(){
         //TODO-s Optimize this for touch? / ABSTRACT TO CAMERAMOVE?? perhaps not for coherency
         if(Input.GetMouseButtonUp(0)){
@@ -60,6 +72,7 @@ public class FirstTimeNGUI : MonoBehaviour {
             }
         }
     }
+    */
 
     private void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once

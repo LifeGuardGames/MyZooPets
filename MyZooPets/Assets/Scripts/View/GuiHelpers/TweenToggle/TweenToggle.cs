@@ -29,8 +29,8 @@ public class TweenToggle : MonoBehaviour {
 	public float hideDuration = 0.5f;
 	public float showDelay = 0.0f;
 	public float hideDelay = 0.0f;
-	public LeanTweenType easeHide;
-	public LeanTweenType easeShow;
+	public LeanTweenType easeHide = LeanTweenType.easeInBack;
+	public LeanTweenType easeShow = LeanTweenType.easeOutBack;
 
 	protected Vector3 hiddenPos;
 	protected Vector3 showingPos;

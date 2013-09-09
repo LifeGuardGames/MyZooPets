@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  - 114: {fileID: 11400008}
+  - 114: {fileID: 11400028}
   m_Layer: 10
   m_Name: Level
   m_TagString: Untagged
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400026}
   - 114: {fileID: 11400026}
-  - 114: {fileID: 11400024}
+  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: HUDPanel
   m_TagString: Untagged
@@ -234,7 +234,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400028}
-  - 114: {fileID: 11400028}
+  - 114: {fileID: 11400034}
   m_Layer: 10
   m_Name: Mood
   m_TagString: Untagged
@@ -283,7 +283,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400034}
-  - 114: {fileID: 11400034}
+  - 114: {fileID: 11400052}
   m_Layer: 10
   m_Name: Star
   m_TagString: Untagged
@@ -427,7 +427,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400052}
-  - 114: {fileID: 11400052}
+  - 114: {fileID: 11400024}
   m_Layer: 10
   m_Name: Health
   m_TagString: Untagged
@@ -936,32 +936,31 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
+  m_GameObject: {fileID: 100026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272f1ed4d193b5748971fa3257383b35, type: 3}
+  m_Script: {fileID: 11500000, guid: f42792f9f59fb63429c0918e98fcc60e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  bLockUI: 0
+  GoList:
+  - {fileID: 100008}
+  - {fileID: 100052}
+  - {fileID: 100028}
+  - {fileID: 100034}
+  testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 0
-  testButtonPos: {x: 0, y: 0}
-  hideDeltaX: 0
-  hideDeltaY: 70
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: 0
-  hideDelay: 0
-  easeHide: 26
-  easeShow: 27
+  lastFinishedShowObject: {fileID: 100028}
+  lastFinishedHideObject: {fileID: 100028}
+  isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
+  isHideFinishedCallback: 1
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  hideImmediately: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1121,30 +1120,33 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100026}
+  m_GameObject: {fileID: 100052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c65a9c8988633f4fb62322ddc122849, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoList:
-  - {fileID: 100008}
-  - {fileID: 100034}
-  - {fileID: 100052}
-  - {fileID: 100028}
-  testButtonPos: {x: 0, y: 0}
-  isDebug: 0
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 1
+  blockUI: 0
   startsHidden: 0
-  lastFinishedShowObject: {fileID: 100028}
-  lastFinishedHideObject: {fileID: 100028}
-  isShowFinishedCallback: 0
+  hideDeltaX: 0
+  hideDeltaY: 70
+  hideDeltaZ: 0
+  showDuration: .200000003
+  hideDuration: .200000003
+  showDelay: .200000003
+  hideDelay: .200000003
+  easeHide: 26
+  easeShow: 27
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
-  isHideFinishedCallback: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1188,24 +1190,23 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100028}
+  m_GameObject: {fileID: 100008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272f1ed4d193b5748971fa3257383b35, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  bLockUI: 0
-  isDebug: 0
+  blockUI: 0
   startsHidden: 0
-  testButtonPos: {x: 0, y: 0}
   hideDeltaX: 0
   hideDeltaY: 70
+  hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .200000003
-  showDelay: .300000012
-  hideDelay: .300000012
+  showDelay: 0
+  hideDelay: 0
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1214,6 +1215,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1249,24 +1252,23 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
+  m_GameObject: {fileID: 100028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272f1ed4d193b5748971fa3257383b35, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  bLockUI: 0
-  isDebug: 0
+  blockUI: 0
   startsHidden: 0
-  testButtonPos: {x: 0, y: 0}
   hideDeltaX: 0
   hideDeltaY: 70
+  hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .200000003
-  showDelay: .100000001
-  hideDelay: .100000001
+  showDelay: .300000012
+  hideDelay: .300000012
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1275,6 +1277,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1458,24 +1462,23 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100052}
+  m_GameObject: {fileID: 100034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272f1ed4d193b5748971fa3257383b35, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  bLockUI: 0
-  isDebug: 0
+  blockUI: 0
   startsHidden: 0
-  testButtonPos: {x: 0, y: 0}
   hideDeltaX: 0
   hideDeltaY: 70
+  hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .200000003
-  showDelay: .200000003
-  hideDelay: .200000003
+  showDelay: .100000001
+  hideDelay: .100000001
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1484,6 +1487,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400054
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -21,10 +21,10 @@ public class NavigationUIManager : Singleton<NavigationUIManager> {
     */
 
 	public void ShowPanel(){
-		navigationPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		navigationPanel.GetComponent<TweenToggleDemux>().Show();
 	}
 
 	public void HidePanel(){
-		navigationPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		navigationPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 }

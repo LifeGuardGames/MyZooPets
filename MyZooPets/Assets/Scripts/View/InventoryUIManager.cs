@@ -151,10 +151,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     }
 
 	public void ShowPanel(){
-		inventoryPanel.GetComponent<MoveTweenToggle>().Show();
+		inventoryPanel.GetComponent<TweenToggle>().Show();
 	}
 
 	public void HidePanel(){
-		inventoryPanel.GetComponent<MoveTweenToggle>().Hide();
+		inventoryPanel.GetComponent<TweenToggle>().Hide();
 	}
 }

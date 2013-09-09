@@ -141,8 +141,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			descriptionObject.GetComponent<MoveTweenToggle>().Show();
 		}
 	}
-	
-	// where is this called from?
+
+	//Call when detail badge description is closed	
 	public void CloseDescription(){
 		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
 		badgeGUISpawnBase.transform.DestroyChildren();
@@ -171,7 +171,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 
 			backButtonReference = NGUITools.AddChild(badgeBoardBadges, backButtonPrefab);
 			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
-			//backButtonReference.SetActive(true);
+
 			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
 			messageScript.target = this.gameObject;
 			messageScript.functionName = "CloseUI";

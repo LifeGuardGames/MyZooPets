@@ -72,7 +72,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarIntro);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("NEXT"));
 
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
@@ -91,7 +91,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarGreenStamp);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("NEXT"));
 
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
@@ -110,7 +110,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarRedStamp);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Button1Label, "Next");
+		notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("NEXT"));
 
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
@@ -129,7 +129,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
 		notificationEntry.Add(NotificationPopupFields.TutorialImageType, TutorialImageType.CalendarBonus);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Button1Label, "Done");
+		notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("DONE"));
 
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);

@@ -13,6 +13,15 @@ public class LgButton : MonoBehaviour {
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
 	
+	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
+	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
+	// which buttons have a mode, opening a UI pushes a mode (and closing a UI pops a mode) and this class should
+	// actually check the button's mode against the latest mode in the queue.
+	public bool bCheckClickManager = true;
+	private bool ShouldCheckClickManager() {
+		return bCheckClickManager;	
+	}
+	
 	public string strAnalytics;	// string key for analytics on this button
 	protected string GetAnalyticsKey()
 	{
@@ -35,8 +44,8 @@ public class LgButton : MonoBehaviour {
 	// also happen to receive this event, but it's possible
 	// they won't in the future, so this is for 2D only.
 	//---------------------------------------------------	
-	void OnPress( bool bPress ) {
-		if ( bPress && bSprite )
+	void OnClick() {
+		if ( enabled && bSprite )
 			ButtonClicked();
 	}
 	
@@ -46,17 +55,18 @@ public class LgButton : MonoBehaviour {
 	//---------------------------------------------------	
 	public void ButtonClicked ()
 	{
-		// if the button is being pressed and it is okay to respond...
-		if ( ClickManager.Instance.CanRespondToTap() ) {
-			
-			// if there is an analytic event on this button, let's process that
-			string strAnalytics = GetAnalyticsKey();
-			if ( strAnalytics != null )
-				GA.API.Design.NewEvent( strAnalytics );			
-			
-			// process the click
-			ProcessClick();
+		// if the button needs to check the click manager before proceding, do so and return if necessary
+		if ( ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap() ) {
+			return;
 		}
+			
+		// if there is an analytic event on this button, let's process that
+		string strAnalytics = GetAnalyticsKey();
+		if ( strAnalytics != null )
+			GA.API.Design.NewEvent( strAnalytics );			
+		
+		// process the click
+		ProcessClick();
 	}
 	
 	//---------------------------------------------------

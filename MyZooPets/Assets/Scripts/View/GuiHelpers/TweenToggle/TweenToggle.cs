@@ -56,10 +56,12 @@ public class TweenToggle : MonoBehaviour {
 
 	protected void Awake(){
 		RememberPositions();
-		positionSet = true;
+	}
+	
+	protected void Start(){
 		Reset();
 	}
-
+	
 	protected virtual void RememberPositions(){
 		// Implement in child
 	}
@@ -97,22 +99,29 @@ public class TweenToggle : MonoBehaviour {
 
 	///////////////////////// CALLBACKS ///////////////////////////////
 
-	protected void ShowUnlockCallback(){
-		// If this tween locks the UI, now that the tween is finished, decrement the counter
-		if(blockUI){
-			ClickManager.Instance.DecrementTweenCount();
+	protected void ShowUnlockCallback(Hashtable hash){
+		// Since LeanTween uses BroadcastMessage, it applies to all children, check for self object
+		if(hash["selfCaller"] == this.gameObject){
+//			print("HASH " + hash["selfCaller"] + " " + gameObject.name);
+			// If this tween locks the UI, now that the tween is finished, decrement the counter
+			if(blockUI){
+				ClickManager.Instance.DecrementTweenCount();
+			}
+			isMoving = false;
+			ShowSendCallback();
 		}
-		isMoving = false;
-		ShowSendCallback();
 	}
 
-	protected void HideUnlockCallback(){
-		// If this tween locks the UI, now that the tween is finished, decrement the counter
-		if(blockUI){
-			ClickManager.Instance.DecrementTweenCount();
+	protected void HideUnlockCallback(Hashtable hash){
+		// Since LeanTween uses BroadcastMessage, it applies to all children, check for self object
+		if(hash["selfCaller"] == this.gameObject){
+			// If this tween locks the UI, now that the tween is finished, decrement the counter
+			if(blockUI){
+				ClickManager.Instance.DecrementTweenCount();
+			}
+			isMoving = false;
+			HideSendCallback();
 		}
-		isMoving = false;
-		HideSendCallback();
 	}
 
 	protected void ShowSendCallback(){		

@@ -44,8 +44,7 @@ public class TweenToggleDemux : MonoBehaviour {
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
 			if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
 				if(startsHidden){
-					toggle.startsHidden = true;
-					toggle.Reset();
+					toggle.startsHidden = true;	// TweenToggle Start() will take care of setting position
 				}
 				else{
 					toggle.startsHidden = false;

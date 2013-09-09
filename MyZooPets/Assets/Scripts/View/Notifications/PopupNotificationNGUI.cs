@@ -93,8 +93,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
 	/// -1 to use default
 	/// </param>
 	private void TryShowDemuxThenToggle(float toggleDuration){
-		MoveTweenToggleDemultiplexer mtDemux = GetComponent<MoveTweenToggleDemultiplexer>();
-		MoveTweenToggle mt = GetComponent<MoveTweenToggle>();
+		TweenToggleDemux mtDemux = GetComponent<TweenToggleDemux>();
+		TweenToggle mt = GetComponent<TweenToggle>();
 		if(mtDemux != null){
 			mtDemux.Show();
 		}
@@ -118,8 +118,8 @@ public class PopupNotificationNGUI : MonoBehaviour {
 	/// -1 to use default
 	/// </param>
 	private void TryHideDemuxThenToggle(float toggleDuration){
-		MoveTweenToggleDemultiplexer mtDemux = GetComponent<MoveTweenToggleDemultiplexer>();
-		MoveTweenToggle mt = GetComponent<MoveTweenToggle>();
+		TweenToggleDemux mtDemux = GetComponent<TweenToggleDemux>();
+		TweenToggle mt = GetComponent<TweenToggle>();
 		if(mtDemux != null){
 			mtDemux.Hide();
 		}

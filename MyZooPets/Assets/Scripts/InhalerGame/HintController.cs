@@ -6,16 +6,11 @@ using System.Collections;
     This generic class controls the hint arrows and message for inhaler parts
 */
 public class HintController : MonoBehaviour {
-
-    // To limit this hint arrow to show only for a specific type of inhaler,
-    // set inhalerType to either "advair" or "rescue".
-    public InhalerType inhalerType; 
     public bool startHidden = true; //Hide hint when game loads
-
-    // Set this to the step that the hint arrow should be shown on.
-    public int showOnStep = 0;
+    public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
     public GameObject hintArrow; //Game object that contains the hint animation
     public GameObject hintMessage; //Game object that contains the hint message
+
     private tk2dSpriteAnimator arrowAnimator; //Sprite animator
 	private Animation messageAnimation;
 	private Animation arrowAnimation;
@@ -31,26 +26,21 @@ public class HintController : MonoBehaviour {
 
     void Start(){
         if(startHidden) DisableHint();
-        else if(InhalerType.Advair == InhalerLogic.Instance.CurrentInhalerType && 
-            !InhalerLogic.Instance.IsFirstTimeAdvair) DisableHint();
-        else if(InhalerType.Rescue == InhalerLogic.Instance.CurrentInhalerType &&
-            !InhalerLogic.Instance.IsFirstTimeRescue) DisableHint();
 
         InhalerLogic.OnNextStep += CheckAndEnableHint;
-        InhalerGameManager.OnShowHint += CheckAndEnableHint;
+        InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
     }
 
     void OnDestroy(){
         InhalerLogic.OnNextStep -= CheckAndEnableHint;
-        InhalerGameManager.OnShowHint -= CheckAndEnableHint;
+        InhalerGameUIManager.OnShowHint -= CheckAndEnableHint;
     }
 
     //Even Listener. Check if hint for the next step is necessary and disable hint for
     //current step 
     private void CheckAndEnableHint(object sender, EventArgs args){
         if(showOnStep == InhalerLogic.Instance.CurrentStep && 
-            inhalerType == InhalerLogic.Instance.CurrentInhalerType &&
-            InhalerGameManager.Instance.ShowHint){
+            InhalerGameUIManager.Instance.ShowHint){
             EnableHint();            
         }else{
             if((hintArrow != null && hintArrow.renderer.enabled) ||

@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,7 +36,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0
@@ -46,7 +46,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
   m_Layer: 0
   m_Name: Inhale
@@ -150,24 +149,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 15, y: 18, z: 1}
-  m_Center: {x: -10, y: 5, z: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inhalerType: 0
-  startHidden: 1
-  showOnStep: 5
-  hintArrow: {fileID: 100002}
-  hintMessage: {fileID: 100000}
+  m_Size: {x: 23, y: 18, z: 1}
+  m_Center: {x: -12, y: 5, z: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

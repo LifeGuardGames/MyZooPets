@@ -3,29 +3,37 @@ using System.Collections;
 
 /*
     Rescue Inhaler Cap (Rescue Step 1).
-
-    This listens for the user's touch on the cap.
-
-    If the cap is tapped, it will be removed (it will destroy itself), and the game will move on to the next step.
-
+    Listens to swipe gesture from FingerGesture.
 */
-public class RescueCap : MonoBehaviour {
-    private int gameStepID = 1;
+public class RescueCap : InhalerPart{
+    protected override void Awake(){
+        gameStepID = 1;
+    }
 
-    void Update()
-    {
-        if (InhalerLogic.Instance.CurrentStep != gameStepID) return;
+    void OnSwipe(SwipeGesture gesture) { 
+       FingerGestures.SwipeDirection direction = gesture.Direction; 
 
-        if (Input.touchCount > 0){
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began) {
-                if (InhalerUtility.IsTouchingObject(touch, gameObject)){
-                    if (InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
-                        Destroy(gameObject);
-                        InhalerLogic.Instance.NextStep();
-                    }
-                }
+       if(direction == FingerGestures.SwipeDirection.Left || 
+            direction == FingerGestures.SwipeDirection.LowerLeftDiagonal){
+
+            //If current step is the right sequence
+            if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+                //Lean tween cap
+                Vector3 to = new Vector3(2, -6, 0); //off the screen
+                Hashtable optional = new Hashtable();
+                optional.Add("onCompleteTarget", gameObject);
+                optional.Add("onComplete", "NextStep");
+                LeanTween.move(gameObject, to, 0.5f, optional);
             }
         }
+    }
+
+    protected override void Enable(){
+        gameObject.SetActive(true);
+    }
+
+    protected override void NextStep(){
+       base.NextStep();
+       Destroy(gameObject);
     }
 }

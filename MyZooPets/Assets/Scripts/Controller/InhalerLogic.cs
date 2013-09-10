@@ -9,14 +9,11 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     public static EventHandler<EventArgs> OnWrongStep; //User did not follow the correct swipe sequence
     public static EventHandler<EventArgs> OnResetGame; //When game is reset at the beginning
 
-    public const int ADVAIR_NUM_STEPS = 6;
-    public const int RESCUE_NUM_STEPS = 7;
+    public const int RESCUE_NUM_STEPS = 8;
 
     private InhalerType currentInhalerType; //either Advair or Rescue inhaler
-    private int currentStep; //current step that user is on
+    private int currentStep = 1; //current step that user is on
     private bool canPlayGame; //true: play game, false: exit game
-    private bool isPracticeGame; //true: practice game less reward,
-                                        //false: real game more reward.
 
     //=================API (use this for UI)==================
     /*
@@ -28,16 +25,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     //return the current step of a sequence
     public int CurrentStep{
         get{return currentStep;}
-    }
-
-    //return the current type of the inhaler
-    public InhalerType CurrentInhalerType{
-        get{return currentInhalerType;}
-    }
-
-    //true: practice game less reward, false: real game more reward.
-    public bool IsPracticeGame{
-        get{return isPracticeGame;}
     }
 
     public bool IsFirstTimeAdvair{
@@ -53,10 +40,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     //True: the step that the user is currently on is correct, False: wrong step
     public bool IsCurrentStepCorrect(int step){
         bool retVal = step == currentStep;
-        if(!retVal){
+        // if(!retVal){
             // if(D.Assert(OnWrongStep != null, "OnWrongStep has no listeners"))
             //     OnWrongStep(this, EventArgs.Empty);
-        }
+        // }
         //TO DO: Add game analytics here
         /*
             GA.API.Design.NewEvent("InhalerGame:" + currentInhalerType + ":" + currentStep + ":" + wrongstep);
@@ -66,37 +53,20 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
     //Use this function to move on to the next step
     public void NextStep(){
-        GA.API.Design.NewEvent("InhalerGame:" + Enum.GetName(typeof(InhalerType), currentInhalerType) + 
-            ":" + currentStep + ":Correct");
         currentStep++;
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
                 OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame()){ //Fire GameOver event if game is done
+            IsFirstTimeRescue = false;
+            
             if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
                 OnGameOver(this, EventArgs.Empty);
         }
     }
     //======================================================
-    public void ResetGame(){
-        switch(Application.loadedLevelName){
-            case "InhalerGameTeddy":
-                canPlayGame = true;
 
-                int randomId = UnityEngine.Random.Range(0, 2);
-                switch(randomId){
-                    case 0: currentInhalerType = InhalerType.Advair; break;
-                    case 1: currentInhalerType = InhalerType.Rescue; break;
-                }
-                isPracticeGame = true;
-            break;
-            case "InhalerGamePet":
-                currentInhalerType = InhalerType.Rescue;
-                isPracticeGame = false;
-            break;
-        }
+    public void ResetGame(){
         currentStep = 1;
-        if(D.Assert(OnResetGame != null, "OnResetGame has no listeners"))
-            OnResetGame(this, EventArgs.Empty);
     }
 
     /*
@@ -104,12 +74,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         True: done with the game , False: have more steps to go
     */
     private bool IsDoneWithGame(){
-        bool retVal = false;
-        if(currentInhalerType == InhalerType.Advair && currentStep == ADVAIR_NUM_STEPS){
-            retVal = true; //end of the sequence
-        }else if(currentInhalerType == InhalerType.Rescue && currentStep == RESCUE_NUM_STEPS){
-            retVal = true; //end of the sequence
-        }
-        return retVal;
+        return currentStep == RESCUE_NUM_STEPS;
     }
 }

@@ -16,7 +16,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private int page;
 	private UISprite uisprite;
 	private GameObject grid;
-	private List<GameObject> animSpriteRemoveList = new List<GameObject>(); //sprites used for buy animation
 
 	void Awake(){
 		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
@@ -73,23 +72,32 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(storePanel, ItemSpritePrefab);
+		
+		// hashtable for completion params for the callback (stash the icon we are animating)
+		Hashtable completeParamHash = new Hashtable();
+		completeParamHash.Add("Icon", animationSprite);		
 
 		optional.Add("ease", LeanTweenType.easeOutQuad);
-		optional.Add ("onComplete", "DestroyAllSprites");
+		optional.Add ("onComplete", "DestroySprite");
 		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onCompleteParam", completeParamHash);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(90, 90, 1);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 		LeanTween.move(animationSprite, path, speed, optional);
-		animSpriteRemoveList.Add(animationSprite);
 	}
 
-	//helper for Buying Animation
-	public void DestroyAllSprites(){
-		foreach (GameObject go in animSpriteRemoveList){
-			Destroy(go);
-		}
-		animSpriteRemoveList.Clear();
+	//---------------------------------------------------
+	// DestroySprite()
+	// Callback for buy animation -- will destroy the
+	// sprite icon clone we create and animated.
+	//---------------------------------------------------
+	public void DestroySprite( Hashtable hash ){
+		// delete the icon we moved
+		if ( hash.ContainsKey("Icon") ) {
+			GameObject goSprite = (GameObject) hash["Icon"];
+			Destroy(goSprite);
+		}	
 	}
 
 	//Called when "Buy" is clicked

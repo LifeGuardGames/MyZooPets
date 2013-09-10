@@ -31,6 +31,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		BGController.Instance.Show("black");
 		storePanel.GetComponent<TweenToggle>().Show();
+		EditDecosUIManager.Instance.HideNavButton();
 	}
 
 	protected override void _CloseUI(){
@@ -38,6 +39,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		NavigationUIManager.Instance.ShowPanel();		
 		BGController.Instance.Hide();
 		storePanel.GetComponent<TweenToggle>().Hide();
+		EditDecosUIManager.Instance.ShowNavButton();
 	}
 
 	//This function is called when buying an item

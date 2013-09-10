@@ -44,7 +44,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		tweenExit.Show();	
 		
 		// hide the edit button
-		tweenEdit.Hide();
+		HideNavButton();
 	}
 	
 	//---------------------------------------------------
@@ -63,7 +63,15 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		tweenExit.Hide();	
 		
 		// show the edit button again
+		ShowNavButton();
+	}
+	
+	public void ShowNavButton(){
 		tweenEdit.Show();
+	}
+	
+	public void HideNavButton(){
+		tweenEdit.Hide();
 	}
 	
 	//---------------------------------------------------

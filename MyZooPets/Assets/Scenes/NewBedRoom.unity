@@ -1077,7 +1077,7 @@ BoxCollider:
   m_GameObject: {fileID: 76193789}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 7.96000004, y: 10.9700003, z: 6.11000013}
   m_Center: {x: -.400000006, y: 6.21000004, z: .709999979}
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelName: SlotMachineGame
+  levelName: DiagnoseGameTracks
   optionalLoadingScreen: {fileID: 1801667298}
   transitionToggleObject: {fileID: 1716341845}
 --- !u!114 &76193796
@@ -1122,6 +1122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:SlotMachine
   cameraMove: {fileID: 1648505576}
   zoomItem: 2
@@ -1858,23 +1859,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &122047597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1885,23 +1869,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09e657fa4e7f642c595d0ea3fb9722d8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -2112,7 +2079,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 814bac2eda76f4ea3b6005bbb9b76afe, type: 2}
+  - {fileID: 2100000, guid: c366c43ab62684e2c9f8b50baa6dc743, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -3804,23 +3771,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &250861602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4711,11 +4661,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .986206174
+    e03: 1.57133794
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -5807,20 +5757,6 @@ Transform:
   - {fileID: 1669027440}
   - {fileID: 1794809892}
   m_Father: {fileID: 380180419}
---- !u!114 &424638615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 1814776890}
-    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &426052575
 GameObject:
   m_ObjectHideFlags: 0
@@ -6867,11 +6803,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 240.986359
+    e03: 241.571487
     e10: 0
     e11: 384
     e12: 0
-    e13: -7323.23486
+    e13: -7320.67627
     e20: 0
     e21: 0
     e22: 384
@@ -8024,7 +7960,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6d187fb276b674a28b496f7bb343d19b, type: 2}
+  - {fileID: 2100000, guid: 5e3b359830cba4c5fb91c4a48bba55f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -8357,7 +8293,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 814bac2eda76f4ea3b6005bbb9b76afe, type: 2}
+  - {fileID: 2100000, guid: c366c43ab62684e2c9f8b50baa6dc743, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -8425,6 +8361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:BadgeBoard
 --- !u!1 &600941541
 GameObject:
@@ -8550,11 +8487,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .986206174
+    e03: 1.57133794
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -8609,7 +8546,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6d187fb276b674a28b496f7bb343d19b, type: 2}
+  - {fileID: 2100000, guid: 5e3b359830cba4c5fb91c4a48bba55f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -8930,11 +8867,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .986206174
+    e03: 1.57133794
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -9954,6 +9891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
+  bCheckClickManager: 1
   strAnalytics: UserTouch:Note
 --- !u!114 &737506704
 MonoBehaviour:
@@ -10997,6 +10935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:Calendar
 --- !u!65 &777068113
 BoxCollider:
@@ -11499,23 +11438,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!1 &801734211
 GameObject:
   m_ObjectHideFlags: 0
@@ -11756,7 +11678,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -7633.98828
+    e13: -7631.42969
     e20: 0
     e21: 0
     e22: 384
@@ -12585,7 +12507,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6d187fb276b674a28b496f7bb343d19b, type: 2}
+  - {fileID: 2100000, guid: 5e3b359830cba4c5fb91c4a48bba55f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -12963,6 +12885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
+  bCheckClickManager: 1
   strAnalytics: UserTouch:Store
 --- !u!114 &897338623
 MonoBehaviour:
@@ -13377,7 +13300,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921228466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 614.400024, y: .986572266, z: 0}
+  m_LocalPosition: {x: 614.400024, y: -1.57250977, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1357933893}
@@ -13530,7 +13453,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 938998348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -614.400024, y: .986572266, z: 0}
+  m_LocalPosition: {x: -614.400024, y: -1.57250977, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1445519630}
@@ -15464,6 +15387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:RealInhaler
   cameraMove: {fileID: 1648505576}
 --- !u!1 &1031899125
@@ -15646,7 +15570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 424638615}
+  Reference: {fileID: 1171481975}
 --- !u!4 &1044562557
 Transform:
   m_ObjectHideFlags: 0
@@ -17173,6 +17097,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 100, y: 100, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1171481975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 1814776890}
+    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1001 &1176504234
 Prefab:
   m_ObjectHideFlags: 0
@@ -17906,7 +17844,7 @@ MonoBehaviour:
     e00: 320
     e01: 0
     e02: 0
-    e03: .821838439
+    e03: 1.30944824
     e10: 0
     e11: 320
     e12: 0
@@ -18197,11 +18135,11 @@ MonoBehaviour:
     e00: 320
     e01: 0
     e02: 0
-    e03: 242.488495
+    e03: 242.976105
     e10: 0
     e11: 320
     e12: 0
-    e13: -6375.82178
+    e13: -6373.68945
     e20: 0
     e21: 0
     e22: 384
@@ -19697,11 +19635,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -11.8921947
+    e03: -11.3070631
     e10: 0
     e11: 384
     e12: 0
-    e13: -7609.37109
+    e13: -7606.8125
     e20: 0
     e21: 0
     e22: 384
@@ -20081,7 +20019,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -20118,7 +20056,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1362516099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.986206174, y: .986572266, z: 0}
+  m_LocalPosition: {x: -1.57133794, y: -1.57250977, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1244029620}
@@ -20726,7 +20664,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6d187fb276b674a28b496f7bb343d19b, type: 2}
+  - {fileID: 2100000, guid: 5e3b359830cba4c5fb91c4a48bba55f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -21530,7 +21468,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -21842,6 +21780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:Dojo
   cameraMove: {fileID: 1648505576}
   zoomItem: 6
@@ -22319,6 +22258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
+  bCheckClickManager: 1
   strAnalytics: 
 --- !u!114 &1515320960
 MonoBehaviour:
@@ -24244,23 +24184,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1648505578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24616,6 +24539,11 @@ MonoBehaviour:
   languages:
   - {fileID: 4900000, guid: 7dd9ea0524c0349c9a4ceeaaa85d3af8, type: 3}
   - {fileID: 4900000, guid: 2ba4f2aaa33234267be74d4151ae9fb2, type: 3}
+  - {fileID: 4900000, guid: 44ae9b1be6be242f3ac7cdb4acb10eef, type: 3}
+  - {fileID: 4900000, guid: 693cd08aecb4a4c69aecfca364698b8e, type: 3}
+  - {fileID: 4900000, guid: 06627c0fef9a7482b9f443418b0f6cbe, type: 3}
+  - {fileID: 4900000, guid: 2adbac43073894f02a60fe2cc4f2191d, type: 3}
+  - {fileID: 4900000, guid: 49909b9e68f0d496d9f4670fd8af1d03, type: 3}
 --- !u!4 &1687750692
 Transform:
   m_ObjectHideFlags: 0
@@ -26957,7 +26885,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1876011761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.986206174, y: 460.800293, z: 0}
+  m_LocalPosition: {x: -1.57133794, y: 460.800293, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1223414674}
@@ -27767,11 +27695,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .986206174
+    e03: 1.57133794
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.98633
+    e13: -7678.42773
     e20: 0
     e21: 0
     e22: 384
@@ -28149,6 +28077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  bCheckClickManager: 1
   strAnalytics: UserTouch:TeddyInhaler
   cameraMove: {fileID: 1648505576}
   zoomItem: 4

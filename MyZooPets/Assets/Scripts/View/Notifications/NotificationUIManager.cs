@@ -27,13 +27,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
 	public GameObject popupNotificiationTutorialLeft;
 
-//	public bool flipped;
-
-	// Queue variables
-//	private Queue q = new Queue();
 	private bool isNotificationActive = false;
-//	private bool qLock = true;
-//	private bool isFirstPop = true; // Aux to stop subsequent AddToQueue() to trigger queue check
 
 	void Start(){
 		backDrop.SetActive(false);
@@ -41,20 +35,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		// Check the static queue to see if anything is there on level load
 		TryNextNotification();
 	}
-
-//	void Update(){
-//		if(isActive){						// Keep polling queue if it is active and something in it
-//			if(q.Count >= 1 && !qLock){
-//				PopQueueAndDisplay();
-//			}
-//			if(q.Count == 0 && !qLock){		// Shut self off if nothing in queue, reset
-//				isActive = false;
-//				qLock = true;
-//				isFirstPop = true;
-//				backDrop.SetActive(false);
-//			}
-//		}
-//	}
 
 	/////////////// QUEUE HANDLERS /////////////////
 	
@@ -134,52 +114,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			}
 		}
 		else{
+			Debug.Log ("No notification detected");
 			backDrop.SetActive(false);
 			isNotificationActive = false;
-			Debug.Log ("No notification detected");
 		}
 	}
-	
-	// TODO-S The unlock queue method is assigned to the callback of respective notifications, i need to abstract these away into this class, or embed them into the prefabs themselves
-
-	// Used to resume notifications after pausing
-//	public void StartQueue(){
-//		isActive = true;
-//	}
-//
-//	// Pauses the popping of the queue
-//	public void PauseQueue(){
-//		isActive = false;
-//	}
-//
-//	private void AddToQueue(GameObject notificationGameObject){
-////		Debug.Log("Adding to Q");
-//		notificationGameObject.SetActive(false);
-//		q.Enqueue(notificationGameObject);
-//		if(isFirstPop){		// If it is the first time, start queue check, else let Update check
-//			isFirstPop = false;
-//			qLock = false;
-//		}
-//		StartQueue();
-//	}
-//
-//	private void PopQueueAndDisplay(){
-////		Debug.Log("POP");
-//		backDrop.SetActive(true);
-//
-//		GameObject notificationGameObject = q.Dequeue() as GameObject;
-//		notificationGameObject.SetActive(true);
-//		PopupNotificationNGUI popupNotifNgui = notificationGameObject.GetComponent<PopupNotificationNGUI>();
-//		D.Assert(popupNotifNgui != null, "Object is not a valid popup notification");
-//
-//		popupNotifNgui.Display();
-//		qLock = true;
-//	}
-//
-//	public void CheckNextInQueue(){
-////		Debug.Log ("UNLOCKED");
-//		qLock = false;
-//	}
 
 	////////////////////////////////////////////////////////////////
 
@@ -251,9 +190,20 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		float zVal = prefab.transform.localPosition.z;
 		GameObject obj = NGUITools.AddChild(centerPanel, prefab);
 		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
-		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
-		mtt.startsHidden = startsHidden;
-		mtt.Reset();
+//		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
+//		if(mtt != null){
+//			mtt.startsHidden = startsHidden;
+//			mtt.Reset();
+//		}
+		//TODO /// REMOVE^^
+		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
+		if(demux != null){
+			demux.startsHidden = startsHidden;
+			Debug.Log("STARTS HIDDEN" + startsHidden);
+			demux.Reset();
+		}
+		
+		
 		PopupNotificationNGUI popup = obj.GetComponent<PopupNotificationNGUI>();
 		return popup;
 	}
@@ -274,7 +224,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		twoButtonMessage.Button1Text = button1;
 		twoButtonMessage.Button2Text = button2;
 		twoButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		twoButtonMessage.Display();
+		
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	/*
@@ -287,7 +238,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = button;
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		oneButtonMessage.Display();
+		
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 
 	/*
@@ -300,7 +252,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = Localization.Localize("OK");
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		oneButtonMessage.Display();
+		
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 
 	/*
@@ -317,7 +270,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		tip.Button1Callback = okCallBack;
 		tip.Button1Text = Localization.Localize("OK");
 		tip.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		tip.Display();
+		
+		StartCoroutine(DisplayAfterInit(tip));
 	}
 
 	/*
@@ -336,7 +290,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		twoButtonMessage.Button1Text = Localization.Localize("PLAY");
 		twoButtonMessage.Button2Text = Localization.Localize("QUIT");
 		twoButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		twoButtonMessage.Display();
+		
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	/*
@@ -350,7 +305,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		oneButtonMessage.Button1Callback = buttonCallBack;
 		oneButtonMessage.Button1Text = Localization.Localize("QUIT");
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		oneButtonMessage.Display();
+		
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 
 	/*
@@ -372,6 +328,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		if(buttonText != "") script.SetButtonText(buttonText);
 		script.Button1Callback = buttonCallBack;
 		script.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		script.Display();
+		
+		StartCoroutine(DisplayAfterInit(script));
+	}
+	
+	// Displaying after one frame, make sure the notification is loaded nicely
+	IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){
+		yield return 0;
+		notification.Display();
 	}
 }

@@ -62,7 +62,6 @@ public class MoveTweenToggle : MonoBehaviour {
 	}
 
 	public void Reset(){
-
 		if (startsHidden){
 			if (positionSet){ // if not, Reset() will be called again by Awake() later
 				gameObject.transform.localPosition = hiddenPos;

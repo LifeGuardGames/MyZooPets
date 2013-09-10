@@ -59,10 +59,10 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 	}
 
 	public void ShowPanel(){
-		HUDPanel.GetComponent<MoveTweenToggleDemultiplexer>().Show();
+		HUDPanel.GetComponent<TweenToggleDemux>().Show();
 	}
 
 	public void HidePanel(){
-		HUDPanel.GetComponent<MoveTweenToggleDemultiplexer>().Hide();
+		HUDPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 }

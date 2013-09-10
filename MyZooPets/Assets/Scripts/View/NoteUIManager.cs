@@ -5,7 +5,6 @@ using System;
 public class NoteUIManager : SingletonUI<NoteUIManager> {
 
 	public GameObject notePanel;
-	
 	public CameraMove cameraMove;
 
 	// Use this for initialization
@@ -26,8 +25,8 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		// zoom into pet
 		cameraMove.ZoomToggle(ZoomItem.Pet); 
 		
-		Debug.Log("Note CLicked");
-        notePanel.GetComponent<MoveTweenToggle>().Show();
+		Debug.Log("Note Clicked");
+        notePanel.GetComponent<TweenToggle>().Show();
     }
 
     protected override void _CloseUI(){
@@ -39,6 +38,6 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		cameraMove.ZoomOutMove();
 		
 		// Make sure callback NoteFinishedClosing is assigned in tween
-        notePanel.GetComponent<MoveTweenToggle>().Hide();
+        notePanel.GetComponent<TweenToggle>().Hide();
     }
 }

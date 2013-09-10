@@ -64,6 +64,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// show the edit button again
 		tweenEdit.Show();
+		
+		// unload unused resources (since we may have instantiated some that are no longer needed)
+		Resources.UnloadUnusedAssets();
 	}
 	
 	//---------------------------------------------------

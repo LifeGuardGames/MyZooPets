@@ -46,7 +46,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 		CreateEntries( goGrid );	
 		
 		// the last item in the list (so it shows up first) is the removal option (if there is a decoration at this node)
-		if ( decoNodeCurrent.HasDecoration() )
+		if ( decoNodeCurrent.HasRemoveOption() )
 			AddRemoveEntry( goGrid );
 		
 		goGrid.GetComponent<UIGrid>().Reposition();
@@ -93,9 +93,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 			
 			GameObject item = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
 			item.name = itemDeco.ID;
-			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize(itemDeco.Description);
+			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemDeco.Cost.ToString();
-			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize(itemDeco.Name);
+			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
 			item.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_PLACE");
 			

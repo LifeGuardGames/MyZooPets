@@ -10,7 +10,7 @@ public class TweenToggle : MonoBehaviour {
 
 	public bool IsMoving{ get { return isMoving; } }
 	protected bool isMoving;
-	public bool IsShown{ get { return isShown; } }
+	public bool IsShowing{ get { return isShown; } }
 	protected bool isShown;
 
 	//////////////////////////////////////////////////////

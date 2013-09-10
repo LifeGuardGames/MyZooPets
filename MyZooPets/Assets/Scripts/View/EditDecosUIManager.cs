@@ -14,11 +14,11 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	public bool bDisableEditMode = false;
 	
 	// the exit button for leaving edit mode
-	public MoveTweenToggle tweenExit;
+	public PositionTweenToggle tweenExit;
 	
 	// the edit deco button
 	public GameObject goEdit;
-	private MoveTweenToggle tweenEdit;
+	private PositionTweenToggle tweenEdit;
 	
 	// the choose deco panel
 	public GameObject goChoosePanel;
@@ -26,7 +26,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	
 	void Start() {
 		// cache the tween on the edit button for easier use
-		tweenEdit = goEdit.GetComponent<MoveTweenToggle>();
+		tweenEdit = goEdit.GetComponent<PositionTweenToggle>();
 		
 		// if edit mode is currently disabled, destroy the button
 		if ( bDisableEditMode )
@@ -52,8 +52,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
 		// if the choose menu was open, close it
-		MoveTweenToggle tween = goChoosePanel.GetComponent<MoveTweenToggle>();
-		if ( tween.IsShowing() )
+		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		if (tween.IsShowing)
 			tween.Hide();		
 		
 		//Show other UI object
@@ -75,8 +75,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------	
 	public void UpdateChooseMenu( DecorationNode decoNode ) {
 		// if the menu is not showing, show it
-		MoveTweenToggle tween = goChoosePanel.GetComponent<MoveTweenToggle>();
-		if ( !tween.IsShowing() )
+		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		if (!tween.IsShowing)
 			tween.Show();
 		
 		// update the menu based on the incoming deco node
@@ -89,8 +89,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	// this does not exit deco mode.
 	//---------------------------------------------------	
 	public void CloseChooseMenu() {
-		MoveTweenToggle tween = goChoosePanel.GetComponent<MoveTweenToggle>();
-		if ( !tween.IsShowing() )
+		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		if (!tween.IsShowing)
 			Debug.Log("Something trying to close an already closed choose menu for deco edit.");
 		else
 			tween.Hide();

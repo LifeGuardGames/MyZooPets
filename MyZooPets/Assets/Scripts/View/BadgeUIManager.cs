@@ -138,13 +138,13 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			}
 
 			// Show description panel
-			descriptionObject.GetComponent<MoveTweenToggle>().Show();
+			descriptionObject.GetComponent<PositionTweenToggle>().Show();
 		}
 	}
 
 	//Call when detail badge description is closed	
 	public void CloseDescription(){
-		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
+		descriptionObject.GetComponent<PositionTweenToggle>().Hide();
 		badgeGUISpawnBase.transform.DestroyChildren();
 		Destroy(badgeBackdrop);
 

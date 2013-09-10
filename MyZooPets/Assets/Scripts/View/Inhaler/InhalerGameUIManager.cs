@@ -172,6 +172,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         }
     }
 
+
     // Loop through all step sliderNodes, and set their colors accordingly.
     private void UpdateNodeColors(){
         for (int i = 0; i < sliderNodes.Count; i++){

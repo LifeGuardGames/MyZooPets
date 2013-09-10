@@ -26,9 +26,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400032}
-  - 114: {fileID: 11400030}
   - 114: {fileID: 11400002}
   - 65: {fileID: 6500002}
+  - 114: {fileID: 11400028}
   m_Layer: 10
   m_Name: Inventory
   m_TagString: Untagged
@@ -214,8 +214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: 017c4f0329b97cd4ab38cb287bae79bf, type: 2}
-  mTex: {fileID: 2800000, guid: 703fd1894b8233f4a8ca7d5b02c59c72, type: 3}
   mColor: {r: .822982967, g: 1, b: .76119405, a: 1}
   mPivot: 4
   mDepth: 2
@@ -274,8 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: 017c4f0329b97cd4ab38cb287bae79bf, type: 2}
-  mTex: {fileID: 2800000, guid: 703fd1894b8233f4a8ca7d5b02c59c72, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
@@ -329,6 +325,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -349,11 +347,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -814.400024
+    e03: -711.37561
     e10: 0
     e11: 384
     e12: 0
-    e13: -7270.19971
+    e13: -7347.62402
     e20: 0
     e21: 0
     e22: 384
@@ -485,7 +483,7 @@ MonoBehaviour:
   functionName: ExpandToggled
   trigger: 0
   includeChildren: 0
---- !u!114 &11400030
+--- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -493,29 +491,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272f1ed4d193b5748971fa3257383b35, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 0
-  bLockUI: 0
-  isDebug: 0
+  blockUI: 0
   startsHidden: 1
-  testButtonPos: {x: 0, y: 0}
   hideDeltaX: 0
   hideDeltaY: -120
+  hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
   showDelay: 0
   hideDelay: 0
-  easeHide: 27
-  easeShow: 24
+  easeHide: 26
+  easeShow: 27
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -536,11 +535,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -450.400024
+    e03: -347.37561
     e10: 0
     e11: 384
     e12: 0
-    e13: -7269.19971
+    e13: -7346.62402
     e20: 0
     e21: 0
     e22: 384

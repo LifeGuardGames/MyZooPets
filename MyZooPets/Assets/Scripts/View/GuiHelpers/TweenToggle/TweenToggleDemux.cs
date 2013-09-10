@@ -18,15 +18,17 @@ public class TweenToggleDemux : MonoBehaviour {
 	public GameObject lastFinishedHideObject;	// For lock
 	private TweenToggle lastFinishedHideObjectScript;
 	
-	public bool isShowFinishedCallback = false;	// Call callback after the end of the tween instead of the beginning
+	public bool isShowFinishedCallback = true;	// Call callback after the end of the tween instead of the beginning
 	public GameObject ShowTarget;
 	public string ShowFunctionName;
 	public bool ShowIncludeChildren = false;
 	
-	public bool isHideFinishedCallback = false;	// Call callback after the end of the tween instead of the beginning
+	public bool isHideFinishedCallback = true;	// Call callback after the end of the tween instead of the beginning
 	public GameObject HideTarget;
 	public string HideFunctionName;
 	public bool HideIncludeChildren = false;
+	
+	public bool hideImmediately = false;
 	
 	private bool isShown; // Active lock
 	private bool isMoving; // Move lock
@@ -62,7 +64,15 @@ public class TweenToggleDemux : MonoBehaviour {
 			lastFinishedHideObjectScript = lastFinishedHideObject.GetComponent<TweenToggle>();
 		}
 	}
-
+	
+	public void Reset(){
+		foreach(GameObject go in GoList){
+			TweenToggle toggle = go.GetComponent<TweenToggle>();
+			toggle.startsHidden = startsHidden;
+			toggle.Reset();
+		}
+	}
+	
 	void Update(){
 		// Polling for lock released
 		if(isMoving){
@@ -85,15 +95,17 @@ public class TweenToggleDemux : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	public void Show(){
 		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;
+			
 			foreach(GameObject go in GoList){
 				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName()))
+				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
 					toggle.Show();
+				}
 			}
 			
 			// If set to begin show callback, call it now!
@@ -102,15 +114,22 @@ public class TweenToggleDemux : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	public void Hide(){
 		if(isShown && !isMoving){
 			isShown = false;
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName()))
+				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
+					if(hideImmediately){
+						Debug.Log(" -- - - HIDE BOOLEAN TRUE");
+						// TODO Need to call last hide object last!!!!
+						toggle.hideDuration = 0f;
+						toggle.hideDelay = 0f;
+					}
 					toggle.Hide();
+				}
 			}
 			
 			// If set to begin hide callback, call it now!

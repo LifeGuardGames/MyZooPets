@@ -95,6 +95,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		
 		BGController.Instance.Show("blue");
 		
@@ -106,6 +107,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		
 		BGController.Instance.Hide();
 		

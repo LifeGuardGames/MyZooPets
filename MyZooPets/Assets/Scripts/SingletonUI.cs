@@ -17,10 +17,10 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	}	
 	
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
-	public bool bLockGUI;	
+	public bool blockGUI;	
 	protected bool ShouldLockUI()
 	{
-		return bLockGUI;
+		return blockGUI;
 	}
 	
 	// the mode type of this manager

@@ -68,7 +68,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
 			string strSkillKey = "SKILL_" + dojoSkills[i].SkillName;
             trans.Find("Label_Name").GetComponent<UILabel>().text = Localization.Localize( strSkillKey );
             //Fill in the cost
-            trans.Find("Label_Cost").GetComponent<UILabel>().text = dojoSkills[i].CostStars.ToString();
+            trans.Find("Button_Buy/Label_Cost").GetComponent<UILabel>().text = dojoSkills[i].CostStars.ToString();
             //Set the OnClick Target and functionName
             trans.Find("Button_Buy").GetComponent<UIButtonMessage>().target = gameObject;
             trans.Find("Button_Buy").GetComponent<UIButtonMessage>().functionName = "BuySkill";

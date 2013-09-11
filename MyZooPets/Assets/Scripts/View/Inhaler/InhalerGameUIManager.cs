@@ -89,6 +89,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void StartGame(){
         HideHUD();
+        ShowQuitButton();
         ShowIntro();
         SetUpHintTimer();
     }
@@ -171,7 +172,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
             sliderNodes.Add(node);
         }
     }
-
 
     // Loop through all step sliderNodes, and set their colors accordingly.
     private void UpdateNodeColors(){

@@ -22,19 +22,17 @@ public class DegradTrigger : MonoBehaviour {
 
     //Listen to OnTap event from FingerGesture
     void OnTap(TapGesture gesture){
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger){
-            TutorialUIManager.Instance.StartDegradTriggerTutorial();
+        //when trigger is touched remove from DataManager and destroy GameObject
+        if(ClickManager.Instance.CanRespondToTap()){
+            if(TutorialLogic.Instance.FirstTimeDegradTrigger)
+                TutorialUIManager.Instance.StartDegradTriggerTutorial();
             CleanTriggerAndDestroy();
         }
-
-        //when trigger is touched remove from DataManager and destroy GameObject
-        if(ClickManager.Instance.CanRespondToTap())
-            CleanTriggerAndDestroy();
     }
 
     private void CleanTriggerAndDestroy(){
         DegradationLogic.Instance.ClearDegradationTrigger(ID);
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, 0.5f);
     }
 
     private void ActivateParticleEffects(object senders, EventArgs args){

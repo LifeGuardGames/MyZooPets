@@ -97,7 +97,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		Vector3 triggerPos = Vector3.zero;
         DegradData degradData = DataManager.Instance.Degradation.DegradationTriggers.Find(x => x.ID == id);
         triggerPos = triggerLocations[degradData.PositionId].position;
-
+        
 		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
             50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);

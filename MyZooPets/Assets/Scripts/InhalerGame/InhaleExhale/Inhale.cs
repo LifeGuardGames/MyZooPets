@@ -5,32 +5,29 @@ using System.Collections;
 /*
     Handles inhale (swipe up) action
 */
-public class Inhale : SwipeToInhaleExhale {
-    protected override void Start(){
-        base.Start();
-        InhalerLogic.OnResetGame += UpdateStepID;
-    }    
-
-    protected override void OnDestroy(){
-        base.OnDestroy();
-        InhalerLogic.OnResetGame -= UpdateStepID;
+public class Inhale : InhalerPart {
+    protected override void Awake(){
+        gameStepID = 7;
     }
 
-    //True: finger swiping up
-    protected override bool IsDragging(Touch touch){
-        bool retVal = false;
-        if (touch.position.y - startTouchPos.y > minSwipeDistance){
-            retVal = true;
-        }
-        return retVal;
-    } 
+    void OnSwipe(SwipeGesture gesture){
+       FingerGestures.SwipeDirection direction = gesture.Direction; 
 
-    private void UpdateStepID(object sender, EventArgs args){
-        if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Advair){
-            gameStepID = 5;
-        }else if(InhalerLogic.Instance.CurrentInhalerType == InhalerType.Rescue){
-            gameStepID = 6;
-        }
+       if(direction == FingerGestures.SwipeDirection.Up){
+            NextStep();
+       }
     }
 
+    protected override void Disable(){
+        gameObject.SetActive(false);
+    }
+
+    protected override void Enable(){
+        gameObject.SetActive(true);
+    }
+
+    protected override void NextStep(){
+        base.NextStep();
+        Destroy(gameObject);
+    }
 }

@@ -21,6 +21,7 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		
 		// zoom into pet
 		cameraMove.ZoomToggle(ZoomItem.Pet); 
@@ -33,6 +34,7 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		
 		// zoom away from pet
 		cameraMove.ZoomOutMove();

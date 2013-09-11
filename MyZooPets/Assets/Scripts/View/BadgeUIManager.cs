@@ -138,13 +138,13 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			}
 
 			// Show description panel
-			descriptionObject.GetComponent<MoveTweenToggle>().Show();
+			descriptionObject.GetComponent<PositionTweenToggle>().Show();
 		}
 	}
 
 	//Call when detail badge description is closed	
 	public void CloseDescription(){
-		descriptionObject.GetComponent<MoveTweenToggle>().Hide();
+		descriptionObject.GetComponent<PositionTweenToggle>().Hide();
 		badgeGUISpawnBase.transform.DestroyChildren();
 		Destroy(badgeBackdrop);
 
@@ -164,7 +164,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
-			InventoryUIManager.Instance.HidePanel();			
+			InventoryUIManager.Instance.HidePanel();
+			EditDecosUIManager.Instance.HideNavButton();
 			
 			isActive = true;
 			badgeBoard.collider.enabled = false;
@@ -189,7 +190,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			//Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();			
+			InventoryUIManager.Instance.ShowPanel();
+			EditDecosUIManager.Instance.ShowNavButton();
 
 			if(D.Assert(backButtonReference != null, "No back button to delete"))
 				Destroy(backButtonReference);

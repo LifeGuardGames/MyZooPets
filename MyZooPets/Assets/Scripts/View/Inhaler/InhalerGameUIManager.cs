@@ -176,11 +176,15 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     // Loop through all step sliderNodes, and set their colors accordingly.
     private void UpdateNodeColors(){
         for (int i = 0; i < sliderNodes.Count; i++){
+			GameObject stepObject = sliderNodes[i].transform.Find("Sprite").gameObject;
             if (i <= stepCompleted){
-                sliderNodes[i].transform.Find("Sprite").GetComponent<UISprite>().spriteName="circleRed";
+                stepObject.GetComponent<UISprite>().spriteName="circleRed";
+				if(i == stepCompleted){
+					stepObject.transform.parent.GetComponent<AnimationControl>().Play();
+				}
             }
             else {
-                sliderNodes[i].transform.Find("Sprite").GetComponent<UISprite>().spriteName="circleGray";
+                stepObject.GetComponent<UISprite>().spriteName="circleGray";
             }
         }
     }

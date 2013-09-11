@@ -10,7 +10,7 @@ public class AnimationControl : MonoBehaviour {
 	
 	private bool isPlay = false;
 	public bool isLooping;
-	
+
 	void Update(){
 		if(isLooping && isPlay && !animation.isPlaying){
 			animation.Play();
@@ -19,6 +19,8 @@ public class AnimationControl : MonoBehaviour {
 	
 	public void Play(){
 		isPlay = true;
+		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		print (animation.wrapMode);
 		animation.Play();
 	}
 		

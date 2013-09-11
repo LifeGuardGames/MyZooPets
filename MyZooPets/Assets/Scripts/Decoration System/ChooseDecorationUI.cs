@@ -59,7 +59,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 	//---------------------------------------------------		
 	private void AddRemoveEntry( GameObject goGrid ) {
 		GameObject itemRemove = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
-		itemRemove.name = "item_remove";
+		itemRemove.name = "_item_remove";	// DO NOT CHANGE its used for sorting
 		itemRemove.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE_DESC" );
 		itemRemove.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "100";
 		itemRemove.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE" );
@@ -89,10 +89,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 		for ( int i = 0; i < listDecos.Count; i++ ) {
 			DecorationItem itemDeco = (DecorationItem) listDecos[i].ItemData;
 			bool bDecoOK = itemDeco.DecorationType == eType;
-			//string strDesc = bDecoOK ? "Deco item " + i + "(" + itemDeco + ")" : "Cannot place!";
 			
 			GameObject item = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
-			item.name = itemDeco.ID;
+			ChooseDecorationUIEntry scriptEntry = item.GetComponent<ChooseDecorationUIEntry>();
+			scriptEntry.SetDecoID( itemDeco.ID );
+			item.name = (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
 			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemDeco.Cost.ToString();
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
@@ -129,7 +130,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 											select keyValuePair.Value).ToList();
 		
 		// now order the list by the type of decoration we are looking for
-		listDecos = listDecos.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == eType).ToList();
+		listDecos = listDecos.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == eType).ToList();	
 		
 		return listDecos;
 	}
@@ -147,10 +148,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// place button for putting a decoration into the
 	// scene.
 	//---------------------------------------------------
-	public void OnPlaceButton( GameObject button ) {
-		// we build the prefab from the item id
-		string strID = button.transform.parent.name;
-		
+	public void OnPlaceButton( GameObject button ) {	
+		// get the ID from the UI entry that was clicked
+		ChooseDecorationUIEntry scriptEntry = button.transform.parent.gameObject.GetComponent<ChooseDecorationUIEntry>();
+		string strID = scriptEntry.GetDecoID();
+
 		// set the deco on the node -- it does the instantiation of the 3d game object
 		decoNodeCurrent.SetDecoration( strID );
 		

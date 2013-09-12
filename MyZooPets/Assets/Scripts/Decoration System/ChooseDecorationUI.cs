@@ -59,9 +59,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	//---------------------------------------------------		
 	private void AddRemoveEntry( GameObject goGrid ) {
 		GameObject itemRemove = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
+		
 		itemRemove.name = "_item_remove";	// DO NOT CHANGE its used for sorting
 		itemRemove.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE_DESC" );
-		itemRemove.transform.FindChild("ItemCost").GetComponent<UILabel>().text = "100";
 		itemRemove.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE" );
 		itemRemove.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = "apple";
 		itemRemove.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_REMOVE");
@@ -95,7 +95,6 @@ public class ChooseDecorationUI : MonoBehaviour {
 			scriptEntry.SetDecoID( itemDeco.ID );
 			item.name = (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
 			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
-			item.transform.FindChild("ItemCost").GetComponent<UILabel>().text = itemDeco.Cost.ToString();
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
 			item.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_PLACE");

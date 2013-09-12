@@ -16,7 +16,7 @@ public class Item {
 		get{return id;}
 	}
 	public string Name{ 
-		get{return name;} 
+		get{return Localization.Localize( name );} 
 	}
 	public string TextureName{
 		get{return textureName;}

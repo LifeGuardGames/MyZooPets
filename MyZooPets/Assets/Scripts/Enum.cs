@@ -152,5 +152,7 @@ public enum UIModeTypes {
 // decoration node anchor types
 public enum DecorationTypes {
 	Wall,
-	Floor
+	Floor,
+	Wallpaper,
+	Carpet
 }

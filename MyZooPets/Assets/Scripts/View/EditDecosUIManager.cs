@@ -39,6 +39,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
 		
 		// show the exit button
 		tweenExit.Show();	
@@ -58,6 +59,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();	
+		InventoryUIManager.Instance.ShowPanel();
 		
 		// hide the exit button
 		tweenExit.Hide();	
@@ -68,6 +70,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	
 	public void ShowNavButton(){
 		tweenEdit.Show();
+		
+		// unload unused resources (since we may have instantiated some that are no longer needed)
+		Resources.UnloadUnusedAssets();
 	}
 	
 	public void HideNavButton(){

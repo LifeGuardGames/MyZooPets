@@ -20,8 +20,7 @@ public class DecorationNode : MonoBehaviour {
 	public string strNodeID;
 	
 	// the decoration currently being displayed on this node
-	private GameObject goDeco;
-	private string strDecoID;
+	private string strDecoID = string.Empty;
 
 	void Start () {	
 		// check save data to see if something was on this node
@@ -101,9 +100,18 @@ public class DecorationNode : MonoBehaviour {
 	// HasDecoration()
 	// Does this node currently have a decoration on it?
 	//---------------------------------------------------	
-	public bool HasDecoration() {
-		return goDeco != null;
+	public virtual bool HasDecoration() {
+		return strDecoID != string.Empty;
 	}	
+	
+	//---------------------------------------------------
+	// HasRemoveOption()
+	// Can this decoration be removed by the user?
+	//---------------------------------------------------	
+	public virtual bool HasRemoveOption() {
+		// children implement this
+		return false;
+	}		
 	
 	//---------------------------------------------------
 	// SetDecoration()
@@ -118,20 +126,21 @@ public class DecorationNode : MonoBehaviour {
 		}
 		
 		// if there was already a decoration here, remove it
-		if ( goDeco )
+		if ( HasDecoration() )
 			RemoveDecoration();		
 		
 		// cache the id
 		strDecoID = strID;
 		
-		// build the prefab from the id of the decoration
-		string strResource = "GO_" + strDecoID;
-		GameObject goPrefab = Resources.Load(strResource) as GameObject;
-		Vector3 vPos = transform.position;
-		goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;	
-		
 		// update the save data with the new decoration id
-		DataManager.Instance.Decorations.PlacedDecorations[strNodeID] = strID;
+		DataManager.Instance.Decorations.PlacedDecorations[strNodeID] = strID;		
+		
+		// actually create/set the decoration
+		_SetDecoration( strDecoID );
+	}
+	
+	protected virtual void _SetDecoration( string strID ) {
+		// children implement this
 	}
 	
 	//---------------------------------------------------
@@ -155,17 +164,9 @@ public class DecorationNode : MonoBehaviour {
 	// RemoveDecoration()
 	// Removes the decoration from this node.
 	//---------------------------------------------------	
-	public void RemoveDecoration() {
-		if ( goDeco == null ) {
-			Debug.Log("Attempting to remove a non existant decoration...");
-			return;
-		}
-		
-		// destroy the game object
-		Destroy( goDeco );
-		
-		// update the save data since this node is now empty
-		DataManager.Instance.Decorations.PlacedDecorations.Remove( strNodeID );
+	public void RemoveDecoration() {		
+		// call child function to actually remove the decoration
+		_RemoveDecoration();
 		
 		// give the user the decoration back in their inventory
 		if ( strDecoID != null )
@@ -173,7 +174,14 @@ public class DecorationNode : MonoBehaviour {
 		else
 			Debug.Log("Just removed an illegal decoration?");		
 		
+		// update the save data since this node is now empty
+		DataManager.Instance.Decorations.PlacedDecorations.Remove( strNodeID );
+		
 		// reset the deco id on this node
 		strDecoID = string.Empty;
+	}
+	
+	protected virtual void _RemoveDecoration() {
+		// children implement this	
 	}
 }

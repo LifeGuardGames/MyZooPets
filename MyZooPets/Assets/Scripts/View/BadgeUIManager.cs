@@ -5,18 +5,12 @@ using System;
 
 public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	public AnimationClip pulseClip;
-	public GameObject backButtonPrefab;
+	public GameObject backButton;
 	public GameObject badgeBoard;
-	public GameObject badgeBoardBadges;
 	public GameObject descriptionObject;
-	public GameObject badgeGUISpawnBase;	// Parent to clone badges in (anchor-center) when zoomed in
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
 	public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-	// High Definition badges go here for closeup
-	// NOTE: 512x512 px, zero padding to fit extra row
-	public UIAtlas badgeLevelAtlas1;
-	public UIAtlas badgeLevelAtlas2;
-	public UIAtlas badgeLevelAtlas3;
+
 	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
 	public CameraMove cameraMove;
 	
@@ -24,7 +18,6 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	private GameObject lastClickedBadge;
 	private GameObject backButtonReference;
 	private bool isActive = false;
-	private GameObject badgeBackdrop;
 
 	void Start(){
 		BadgeLogic.OnNewBadgeAdded += UpdateLevelBadges;
@@ -85,23 +78,25 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			ShowDescriptionPanel();
 		}
 		
-		// Remove the animation component in the last badge and assign new reference
-		if(lastClickedBadge != null){
-			Destroy(lastClickedBadge.GetComponent<Animation>());
-			lastClickedBadge.transform.localScale = Vector3.one;
+		if(lastClickedBadge != go){
+			// Remove the animation component in the last badge and assign new reference
+			if(lastClickedBadge != null){
+				Destroy(lastClickedBadge.GetComponent<Animation>());
+				lastClickedBadge.transform.localScale = Vector3.one;
+			}
+			lastClickedBadge = go;
+			
+			// Play pulsing animation in current badge
+			Animation anim = go.AddComponent<Animation>();
+			anim.AddClip(pulseClip, "scaleUpDown");
+			anim.Play("scaleUpDown");
+			
+			// Hide callback, show last badge info
+			TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
+			toggle.HideTarget = gameObject;
+			toggle.HideFunctionName = "RepopulateAndShowDescriptionPanel";
+			HideDescriptionPanel();
 		}
-		lastClickedBadge = go;
-		
-		// Play pulsing animation in current badge
-		Animation anim = go.AddComponent<Animation>();
-		anim.AddClip(pulseClip, "scaleUpDown");
-		anim.Play("scaleUpDown");
-		
-		// Hide callback, show last badge info
-		TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
-		toggle.HideTarget = gameObject;
-		toggle.HideFunctionName = "RepopulateAndShowDescriptionPanel";
-		HideDescriptionPanel();
 	}
 	
 	// Callback for finished hide description, populate panel with new info and show
@@ -110,6 +105,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.title : "";
 		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.description : "";
 		ShowDescriptionPanel();
+		descriptionObject.GetComponent<PositionTweenToggle>().HideTarget = null;
+		descriptionObject.GetComponent<PositionTweenToggle>().HideFunctionName = null;
 	}
 	
 	private void ShowDescriptionPanel(){
@@ -138,21 +135,22 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			isActive = true;
 			badgeBoard.collider.enabled = false;
 			firstClick = true;
-
-			backButtonReference = NGUITools.AddChild(badgeBoardBadges, backButtonPrefab);
-			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
-
-			UIButtonMessage messageScript = backButtonReference.GetComponent<UIButtonMessage>();
-			messageScript.target = this.gameObject;
-			messageScript.functionName = "CloseUI";
+			
+			backButton.SetActive(true);
 		}
 	}
 
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	protected override void _CloseUI(){
 		if(isActive && !ClickManager.Instance.isClickLocked){
-			isActive = false;
 			HideDescriptionPanel();
+			if(lastClickedBadge != null){
+				Destroy(lastClickedBadge.GetComponent<Animation>());
+				lastClickedBadge.transform.localScale = Vector3.one;
+			}
+			lastClickedBadge = null;
+			
+			isActive = false;
 			badgeBoard.collider.enabled = true;
 			
 			cameraMove.ZoomOutMove();
@@ -163,8 +161,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			InventoryUIManager.Instance.ShowPanel();
 			EditDecosUIManager.Instance.ShowNavButton();
 
-			if(D.Assert(backButtonReference != null, "No back button to delete"))
-				Destroy(backButtonReference);
+			if(D.Assert(backButton != null, "No back button to delete"))
+				backButton.SetActive(false);
 		}
 	}
 

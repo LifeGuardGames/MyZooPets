@@ -41,8 +41,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public void AddToQueue(Hashtable notificationEntry){
 		NotificationQueueData.AddNotification(notificationEntry);
 		
-		Debug.Log ("ADDING");
-		
 		if(!isNotificationActive){
 			TryNextNotification();
 		}

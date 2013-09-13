@@ -20,11 +20,11 @@ public class AnimationControl : MonoBehaviour {
 	public void Play(){
 		isPlay = true;
 		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
-		print (animation.wrapMode);
 		animation.Play();
 	}
 		
 	public void Stop(){
 		isPlay = false;
+		animation.Stop();
 	}
 }

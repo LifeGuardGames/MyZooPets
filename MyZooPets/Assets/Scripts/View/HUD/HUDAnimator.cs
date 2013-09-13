@@ -136,7 +136,6 @@ public class HUDAnimator : MonoBehaviour {
 				starAnimControl.Play();
 			}else{
 				dataStars = DataManager.Instance.Stats.Stars;
-
 				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
 

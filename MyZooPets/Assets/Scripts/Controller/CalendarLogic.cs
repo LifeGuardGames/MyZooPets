@@ -137,7 +137,7 @@ public class CalendarLogic : Singleton<CalendarLogic>{
 
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
-    public static void RecordGivingInhaler(){
+    public void RecordGivingInhaler(){
         DateTime now = DateTime.Now;
         if (now.Hour < 12) {
             todaysEntry.DayTime = DosageRecord.Hit;

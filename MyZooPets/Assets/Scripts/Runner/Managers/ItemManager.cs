@@ -55,6 +55,25 @@ public class ItemManager : MonoBehaviour {
 	
 	}
 
+    //Remove cached items when resetting 
+    public void Reset(){
+        if(mItemPool.ContainsKey(typeof(CoinItem))){
+            Queue<RunnerItem> coinQueue = mItemPool[typeof(CoinItem)];
+            while(coinQueue.Count > 0){
+                RunnerItem coin = coinQueue.Dequeue();
+                GameObject.Destroy(coin.gameObject);
+            }
+        }
+
+        if(mItemPool.ContainsKey(typeof(RunnerItem))){
+            Queue<RunnerItem> itemQueue = mItemPool[typeof(RunnerItem)];
+            while(itemQueue.Count > 0){
+                RunnerItem item = itemQueue.Dequeue();
+                GameObject.Destroy(item.gameObject);
+            }
+        }
+    }
+
     /*
         CurrentLevel is optional for CoinItem and RunnerItem. Required for Hazard Item because
         hazard item could be different for different levels

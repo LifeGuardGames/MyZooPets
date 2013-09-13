@@ -45,20 +45,23 @@ public class LevelComponent : MonoBehaviour {
 	void Update() {
 	}
 
-    /*
-        Using OnDestroy doesn't seem to work because of timing issues so use this 
-        function to cache items and destroy. 
-        When using OnDestroy items are still being pushed into the cache after the
-        cache has been cleaned up for reset
-    */
-    public void DestroyLevelComponent(){
+    public void DestroyAndCache(){
         ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
         foreach (RunnerItem currentItem in mSpawnedItems) {
             if (currentItem != null) {
                 itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
             }
         }
-        GameObject.Destroy(gameObject);
+        DestroyWithoutCache();
+    }
+
+    public void DestroyWithoutCache(){
+        foreach (RunnerItem currentItem in mSpawnedItems) {
+            if (currentItem != null) {
+                GameObject.Destroy(currentItem);
+            }
+        }
+        GameObject.Destroy(this.gameObject);
     }
 
     public PointGroup GetGroup(int index){

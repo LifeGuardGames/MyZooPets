@@ -60,6 +60,7 @@ public class ItemManager : MonoBehaviour {
         if(mItemPool.ContainsKey(typeof(CoinItem))){
             Queue<RunnerItem> coinQueue = mItemPool[typeof(CoinItem)];
             while(coinQueue.Count > 0){
+                print("destroy coin cache");
                 RunnerItem coin = coinQueue.Dequeue();
                 GameObject.Destroy(coin.gameObject);
             }
@@ -118,9 +119,10 @@ public class ItemManager : MonoBehaviour {
             if (!mItemPool.ContainsKey(itemType)) {
                 mItemPool.Add(itemType, new Queue<RunnerItem>());
             }
-
+            print(mItemPool[itemType].Count);
            //Add to cache if cache size allows
             if (mItemPool[itemType].Count < ItemPoolMaxSize) {
+                print("push in cache");
                 mItemPool[itemType].Enqueue(inItem);
             } else
                 GameObject.Destroy(inItem.gameObject);

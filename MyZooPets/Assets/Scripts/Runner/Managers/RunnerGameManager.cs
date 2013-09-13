@@ -119,7 +119,6 @@ public class RunnerGameManager : MonoBehaviour {
         mLevelManager.Reset();
         mMegaHazard.Reset();
         mParallaxingBackgroundManager.Reset();
-        mItemManager.Reset();
     }
 
     public void ActivateGameOver() {
@@ -130,6 +129,9 @@ public class RunnerGameManager : MonoBehaviour {
         // Disable the player
         if (mPlayerRunner != null)
             mPlayerRunner.gameObject.SetActive(false);
+
+        print("game over");
+        mItemManager.Reset();
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {

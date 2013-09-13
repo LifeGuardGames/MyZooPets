@@ -79,7 +79,6 @@ public class PositionTweenToggle : TweenToggle {
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
-			Debug.Log(time + " ----- ");
 			LeanTween.moveLocal(gameObject, hiddenPos, time, optional);
 		}
 	}

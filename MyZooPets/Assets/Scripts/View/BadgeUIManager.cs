@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class BadgeUIManager : SingletonUI<BadgeUIManager> {
+	public AnimationClip pulseClip;
 	public GameObject backButtonPrefab;
 	public GameObject badgeBoard;
 	public GameObject badgeBoardBadges;
@@ -19,6 +20,8 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
 	public CameraMove cameraMove;
 	
+	private bool firstClick = true;
+	private GameObject lastClickedBadge;
 	private GameObject backButtonReference;
 	private bool isActive = false;
 	private GameObject badgeBackdrop;
@@ -71,85 +74,50 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			}
 		}
 	}
-
-	// When a badge is clicked. Zoom in on the badge and display detail information
+	
 	public void BadgeClicked(GameObject go){
-		DisableBackButton();
-
-		BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
-
-		if(meta != null){
-			// Find the appropriate atlas TODO-s load resource dynamically?
-			UIAtlas activeAtlas = null;
-			if(meta.atlasName == badgeLevelAtlas1.name){
-				activeAtlas = badgeLevelAtlas1;
-			}
-			else if(meta.atlasName == badgeLevelAtlas2.name){
-				activeAtlas = badgeLevelAtlas2;
-			}
-			else if(meta.atlasName == badgeLevelAtlas3.name){
-				activeAtlas = badgeLevelAtlas3;
-			}
-
-			GameObject titleGO = GameObject.Find("Label_Title") as GameObject;
-
-			UILabel titleLabel = titleGO.GetComponent<UILabel>();
-			titleLabel.text = meta.title;
-
-			GameObject descriptionGO = GameObject.Find("Label_Description") as GameObject;
-			UILabel descriptionLabel = descriptionGO.GetComponent<UILabel>();
-			descriptionLabel.text = meta.description;
-
-			// Spawn BG with collider
-			// NOTE: Parent object needs to be 0, 0px, lower left corner;
-			UISprite badgeBackdropSprite = NGUITools.AddSprite(descriptionObject, badgeCommonAtlas, "box30");
-			badgeBackdropSprite.type = UISprite.Type.Sliced;
-			badgeBackdropSprite.color = new Color(0f, 0f, 0f, 0.5f);
-			badgeBackdropSprite.depth = 50;
-			badgeBackdrop = badgeBackdropSprite.gameObject;	// Get reference to delete later
-			badgeBackdrop.transform.localScale = new Vector3(3000f, 3000f, 1);
-			badgeBackdrop.transform.localPosition = new Vector3(0f, 0f ,0f);
-			BoxCollider collider = badgeBackdrop.AddComponent<BoxCollider>();
-
-			// Spawn cloned badge
-			GameObject spriteObject = GameObject.Find(go.name + "/badgeSprite");
-			UISprite originalSprite = spriteObject.GetComponent<UISprite>();
-	
-			UISprite badgeSprite = NGUITools.AddSprite(badgeGUISpawnBase, activeAtlas, originalSprite.spriteName);
-			Vector3 position = UIUtility.Instance.mainCameraWorld2Screen(go.transform.position);
-			badgeSprite.transform.localPosition = new Vector3(position.x, position.y, -1f);
-			badgeSprite.transform.localScale = new Vector3(100f, 100f, 0f);
-			badgeSprite.depth = 103;
-
-			LeanTween.moveLocal(badgeSprite.gameObject, new Vector3(400, 400f, -1f), 0.4f);
-			LeanTween.scale(badgeSprite.gameObject, new Vector3(512f, 512, 0f), 0.4f);
-
-			GameObject tierObject = GameObject.Find(go.name + "/tier");
-			if(tierObject != null){
-				UISprite originalTier = tierObject.GetComponent<UISprite>();
-				UISprite tierSprite = NGUITools.AddSprite(badgeGUISpawnBase, badgeExtraAtlas, originalTier.spriteName);
-				tierSprite.transform.localPosition = new Vector3(position.x + 40f, position.y - 40f, -1.1f);
-				tierSprite.transform.localScale = new Vector3(39f, 50f, 1f);
-				tierSprite.depth = 104;
-	
-				// TODO-s error thrown here...
-				LeanTween.moveLocal(tierSprite.gameObject, new Vector3(600f, 200f, -1.1f), 0.4f);
-				LeanTween.scale(tierSprite.gameObject, new Vector3(170f, 250, 0f), 0.4f);
-			}
-
-			// Show description panel
-			descriptionObject.GetComponent<PositionTweenToggle>().Show();
+		// First time clicking, not showing description
+		if(firstClick){
+			firstClick = false;
+			BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
+			descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.title : "";
+			descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.description : "";
+			ShowDescriptionPanel();
 		}
+		
+		// Remove the animation component in the last badge and assign new reference
+		if(lastClickedBadge != null){
+			Destroy(lastClickedBadge.GetComponent<Animation>());
+			lastClickedBadge.transform.localScale = Vector3.one;
+		}
+		lastClickedBadge = go;
+		
+		// Play pulsing animation in current badge
+		Animation anim = go.AddComponent<Animation>();
+		anim.AddClip(pulseClip, "scaleUpDown");
+		anim.Play("scaleUpDown");
+		
+		// Hide callback, show last badge info
+		TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
+		toggle.HideTarget = gameObject;
+		toggle.HideFunctionName = "RepopulateAndShowDescriptionPanel";
+		HideDescriptionPanel();
 	}
-
-	//Call when detail badge description is closed	
-	public void CloseDescription(){
+	
+	// Callback for finished hide description, populate panel with new info and show
+	private void RepopulateAndShowDescriptionPanel(){
+		BadgeMetadata meta = lastClickedBadge.GetComponent<BadgeMetadata>();
+		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.title : "";
+		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.description : "";
+		ShowDescriptionPanel();
+	}
+	
+	private void ShowDescriptionPanel(){
+		descriptionObject.GetComponent<PositionTweenToggle>().Show();
+	}
+	
+	private void HideDescriptionPanel(){
 		descriptionObject.GetComponent<PositionTweenToggle>().Hide();
-		badgeGUISpawnBase.transform.DestroyChildren();
-		Destroy(badgeBackdrop);
-
-		// Enable back button for badge board
-		_OpenUI(); // formerly BadgeBoardClicked();
 	}
 
 	public void DisableBackButton(){
@@ -169,6 +137,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			
 			isActive = true;
 			badgeBoard.collider.enabled = false;
+			firstClick = true;
 
 			backButtonReference = NGUITools.AddChild(badgeBoardBadges, backButtonPrefab);
 			backButtonReference.transform.localPosition = new Vector3(-595f, 330, 0);
@@ -183,6 +152,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	protected override void _CloseUI(){
 		if(isActive && !ClickManager.Instance.isClickLocked){
 			isActive = false;
+			HideDescriptionPanel();
 			badgeBoard.collider.enabled = true;
 			
 			cameraMove.ZoomOutMove();

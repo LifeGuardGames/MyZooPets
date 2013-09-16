@@ -16,6 +16,11 @@ public class SceneTransition : MonoBehaviour {
 
 		transitionToggleObject.SetActive(false);
 	}
+	
+	public void StartTransition( string strLevel ) {
+		levelName = strLevel;	
+		StartTransition();
+	}
 
 	public void StartTransition(){
 		if (!string.IsNullOrEmpty(levelName))

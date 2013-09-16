@@ -154,3 +154,11 @@ public enum DecorationTypes {
 	Wall,
 	Floor
 }
+
+// mini game states
+public enum MinigameStates {
+	Opening,	// scene has just been loaded, opening UI is up
+	Playing,	// the game is playing, no UI is up
+	Paused,		// the game is paused, paused game UI is up
+	GameOver	// the game has ended, game over UI is up
+}

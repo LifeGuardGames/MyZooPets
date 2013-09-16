@@ -69,7 +69,10 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	// in this function.  See NewGame() for stuff that
 	// should be done whenever the minigame starts.
 	//---------------------------------------------------
-	void Start () {
+	IEnumerator Start () {
+		// have to yield at start because popup UIs need to run Start()
+		yield return 0;
+		
 		// show the opening UI
 		ToggleUI( goOpening, true );
 		

@@ -58,7 +58,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
                 OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame()){ //Fire GameOver event if game is done
             IsFirstTimeRescue = false;
-            
+            CalendarLogic.Instance.RecordGivingInhaler(); 
             if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
                 OnGameOver(this, EventArgs.Empty);
         }

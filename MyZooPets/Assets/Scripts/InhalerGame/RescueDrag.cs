@@ -14,7 +14,7 @@ public class RescueDrag : InhalerPart{
     protected override void Awake(){
         gameStepID = 5;
         startDragPos = transform.position;
-        targetDragPos = new Vector3(3, 4, 16.8f);
+        targetDragPos = new Vector3(6.3f, 2.7f, 16.8f);
     }
 
     void OnDrag(DragGesture gesture){

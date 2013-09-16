@@ -18,6 +18,7 @@
  */
 
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 [System.Serializable]
@@ -27,12 +28,10 @@ public class LevelComponent : MonoBehaviour {
     [SerializeField]
     private List<Bundle> mBundles = new List<Bundle>();
 
-    private int mNextID = 0;
 	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
 
 	public List<PointGroup> PointGroups { get { return mPointGroups; } }
     public List<Bundle> Bundles { get { return mBundles; } }
-	public int NextID { get { return mNextID++; } }
 	public LevelGroup ParentGroup {
 		get;
 		set;
@@ -46,67 +45,63 @@ public class LevelComponent : MonoBehaviour {
 	void Update() {
 	}
 
-    void OnDestroy() {
+    public void DestroyAndCache(){
         ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
-		foreach (RunnerItem currentItem in mSpawnedItems) {
+        foreach (RunnerItem currentItem in mSpawnedItems) {
             if (currentItem != null) {
-                itemManager.StoreOrDisposeItem(currentItem);
+                itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
             }
-		}
+        }
+        DestroyWithoutCache();
+    }
+
+    public void DestroyWithoutCache(){
+        foreach (RunnerItem currentItem in mSpawnedItems) {
+            if (currentItem != null) {
+                GameObject.Destroy(currentItem);
+            }
+        }
+        GameObject.Destroy(this.gameObject);
+    }
+
+    public PointGroup GetGroup(int index){
+        PointGroup pointGroup = null;
+        try{
+            pointGroup = mPointGroups[index];
+        }catch(ArgumentOutOfRangeException e){
+            pointGroup = null;
+        }
+        return pointGroup;
+    }
+
+	public void SetPointGroupInfo(PointGroup inGroup) {
+		mPointGroups.Add(inGroup);
 	}
 
-	public PointGroup GetGroup(string inID) {
-		foreach (PointGroup currentGroup in mPointGroups) {
-			if (currentGroup.mID == inID)
-				return currentGroup;
-		}
-		return null;
+	public PointInfo AddNewPoint(int groupIndex, Vector3 inNewPoint) {
+		PointGroup currentGroup = GetGroup(groupIndex);
+        return AddNewPoint(currentGroup, inNewPoint);
 	}
 
-	public int GetGroupIndex(string inID) {
-		for (int pointIndex = 0; pointIndex < mPointGroups.Count; pointIndex++) {
-			if (mPointGroups[pointIndex].mID == inID)
-				return pointIndex;
-		}
-		return -1;
+    public PointInfo AddNewPoint(PointGroup currentGroup, Vector3 inNewPoint){
+        if (currentGroup != null) {
+            PointInfo newPoint = new PointInfo(inNewPoint);
+            currentGroup.mPoints.Add(newPoint);
+            return newPoint;
+        }
+        return null;
+    }
+
+	public int GetNextPointNum(int groupIndex) {
+		PointGroup currentGroup = GetGroup(groupIndex);
+        return GetNextPointNum(currentGroup);
 	}
 
-	public void SetPointGroupInfo(string inID, PointGroup inGroup) {
-		int existingGroupIndex = GetGroupIndex(inID);
-		if (existingGroupIndex != -1)
-			mPointGroups[existingGroupIndex] = inGroup;
-		else
-			mPointGroups.Add(inGroup);
-	}
-
-	public PointInfo AddNewPoint(string inID, Vector3 inNewPoint) {
-		PointGroup currentGroup = GetGroup(inID);
-		if (currentGroup != null) {
-			PointInfo newPoint = new PointInfo(inNewPoint);
-			currentGroup.mPoints.Add(newPoint);
-			return newPoint;
-		}
-
-		return null;
-	}
-
-	public void UpdatePointInfo(string inGroupID, PointInfo inPointInfo, int inPointIndex) {
-		PointGroup currentGroup = GetGroup(inGroupID);
-		if (currentGroup != null
-			&& inPointIndex >= 0 && inPointIndex < currentGroup.mPoints.Count)
-		{
-			currentGroup.mPoints[inPointIndex] = inPointInfo;
-		}
-		else if (inPointIndex != -1)
-			Debug.LogError("Point for group ID " + inGroupID + " and point index " + inPointIndex + " does not exist!");
-	}
-
-	public int GetNextPointNum(string inID) {
-		PointGroup currentGroup = GetGroup(inID);
-		if (currentGroup != null)
-			return currentGroup.mPoints.Count;
-		return -1;
-	}
+    public int GetNextPointNum(PointGroup currentGroup) {
+        if (currentGroup != null)
+            return currentGroup.mPoints.Count;
+        return -1;
+    }
 
 	public void AddLevelItem(RunnerItem inItemToAdd) {
 		mSpawnedItems.Add(inItemToAdd);
@@ -164,8 +159,6 @@ public class LevelComponent : MonoBehaviour {
 [System.Serializable]
 public class PointGroup {
 	[SerializeField]
-	public string mID;
-	[SerializeField]
 	public int mBundleID;
 	[SerializeField]
 	public List<PointInfo> mPoints;
@@ -174,13 +167,13 @@ public class PointGroup {
     [SerializeField]
     public eCurveType mCurveType;
 
-	public PointGroup(string inID) {
-		mID = inID;
+    public PointGroup() {
+        // mID = inID;
         mBundleID = 0;
-		mPoints = new List<PointInfo>();
+        mPoints = new List<PointInfo>();
         mSpawnType = eSpawnType.None;
         mCurveType = eCurveType.Linear;
-	}
+    }
 }
 
 [System.Serializable]

@@ -15,4 +15,5 @@ public class ButtonEgg : LgButton {
 	protected override void ProcessClick() {
 		FirstTimeNGUI.Instance.OpenUI();
 	}
+
 }

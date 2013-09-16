@@ -14,6 +14,6 @@ using UnityEngine;
 using System.Collections;
 
 public class LevelTransitionComponent : LevelComponent {
-    public string FromGroupID;
-    public string ToGroupID;
+    public LevelGroup.eLevelGroupID FromGroupID;
+    public LevelGroup.eLevelGroupID ToGroupID;
 }

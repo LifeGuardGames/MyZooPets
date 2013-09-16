@@ -110,7 +110,7 @@ public class PlayerRunner : MonoBehaviour
         // Make sure we aint dead now that we've moved.
 		CheckAndActOnDeath();
 	}
-	
+
 	void onSwipeUp() {
 		TriggerJump();
 	}

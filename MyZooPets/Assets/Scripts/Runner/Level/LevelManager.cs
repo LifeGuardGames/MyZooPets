@@ -66,13 +66,14 @@ public class LevelManager : MonoBehaviour
                 // Find the new first
                 LevelComponent newFront = mLevelComponentQueue.Peek();
 
-                if (removedLevelComponent.ParentGroup.LevelID != newFront.ParentGroup.LevelID) {
+                if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
                     ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
                     parralaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
                 }
 
 				// Destroy it
-				GameObject.Destroy(removedLevelComponent.gameObject);
+                removedLevelComponent.DestroyAndCache();
+				// GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
 				LevelComponent nextLevel = PushAndInstantiateRandomComponent();
 				PopulateLevelComponent(nextLevel);
@@ -100,7 +101,7 @@ public class LevelManager : MonoBehaviour
         LevelComponent currentComponent;
         while (mLevelComponentQueue.Count > 0) { 
             currentComponent = mLevelComponentQueue.Dequeue();
-            GameObject.Destroy(currentComponent.gameObject);
+            currentComponent.DestroyWithoutCache();
         }
 
         // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
@@ -134,12 +135,12 @@ public class LevelManager : MonoBehaviour
             // Choose a random level
             int randomIndex = Random.Range(0, potentialLevels.Count);
             LevelGroup newLevelGroup = potentialLevels[randomIndex];
-            string currentGroupID = mCurrentLevelGroup.LevelID;
-            string newGroupID = newLevelGroup.LevelID;
+            LevelGroup.eLevelGroupID currentGroupID = mCurrentLevelGroup.LevelGroupID;
+            LevelGroup.eLevelGroupID newGroupID = newLevelGroup.LevelGroupID;
 
             // Transition!
             mCurrentLevelGroup = newLevelGroup;
-            Debug.Log("Transitioning to level " + newLevelGroup.LevelID);
+            Debug.Log("Transitioning to level " + newLevelGroup.LevelGroupID);
 
             // Now that we succesfully transitioned, determine if there is a level transition component.
             foreach (LevelTransitionComponent currentTransition in LevelTransitionGroups) {
@@ -175,7 +176,7 @@ public class LevelManager : MonoBehaviour
 
 			if (inForceUseThisComponent == null) {
 				nextlevelComponent = mCurrentLevelGroup.LevelComponents[Random.Range(0, mCurrentLevelGroup.LevelComponents.Count)];
-				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelID);
+				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
 				Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
@@ -244,13 +245,13 @@ public class LevelManager : MonoBehaviour
             }
 
             case eSpawnType.Hazards: {
-                HazardItem newHazard = (HazardItem)itemManager.GetRandomItemOfType(typeof(HazardItem));
+                HazardItem newHazard = (HazardItem)itemManager.GetRandomItemOfType(typeof(HazardItem), mCurrentLevelGroup.LevelGroupID);
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newHazard);
                 break;
             }
 
             case eSpawnType.Items: {
-                RunnerItem newItem = (RunnerItem)itemManager.GetRandomItemOfType(typeof(RunnerItem));
+                RunnerItem newItem = (RunnerItem)itemManager.GetRandomItemOfType(typeof(RunnerItem), mCurrentLevelGroup.LevelGroupID);
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newItem);
                 break;
             }
@@ -275,7 +276,7 @@ public class LevelManager : MonoBehaviour
                         // But wait, that's on the prefab. Add in our real world clones position.
                         newCoinPosition += inLevelComponent.transform.position;
 
-                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem));
+                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = newCoinPosition;
 
                         inLevelComponent.AddLevelItem(newCoin);
@@ -311,7 +312,7 @@ public class LevelManager : MonoBehaviour
 
                         coinSpawnLocation += inLevelComponent.transform.position;
                         // And spawn
-                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem));
+                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = coinSpawnLocation;
                         inLevelComponent.AddLevelItem(newCoin);
                     }

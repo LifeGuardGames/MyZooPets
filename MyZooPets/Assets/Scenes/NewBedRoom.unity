@@ -1908,7 +1908,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &122047597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1919,7 +1918,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09e657fa4e7f642c595d0ea3fb9722d8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -3857,20 +3855,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 100, y: 100, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &250753466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 1814776890}
-    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &250861599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3911,7 +3895,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c33bc83ab81ec0c44976c6fb1d44e55a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -11536,7 +11519,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!1 &801734211
 GameObject:
   m_ObjectHideFlags: 0
@@ -11689,7 +11671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background1: {fileID: 8300000, guid: 9840b4025fc635d4cb75fa2a74e87453, type: 3}
-  isMusicOn: 0
+  isMusicOn: 1
 --- !u!1 &822312379
 GameObject:
   m_ObjectHideFlags: 0
@@ -11785,7 +11767,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -6804.42822
+    e13: -7654.37695
     e20: 0
     e21: 0
     e22: 384
@@ -15900,7 +15882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 250753466}
+  Reference: {fileID: 1161040466}
 --- !u!4 &1044562557
 Transform:
   m_ObjectHideFlags: 0
@@ -17259,6 +17241,20 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &1161040466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 1814776890}
+    Id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
 --- !u!1 &1165113815
 GameObject:
   m_ObjectHideFlags: 0
@@ -24349,7 +24345,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1648505578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26418,6 +26413,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
+      propertyPath: isMusicOn
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

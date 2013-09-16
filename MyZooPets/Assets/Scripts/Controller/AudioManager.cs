@@ -55,8 +55,7 @@ public class AudioManager : Singleton<AudioManager>{
 			backgroundSource.Stop();
 		}
 	}
-
-	/*
+/*
 	public void PlayEffect(string audioClipName){
 		PlayEffect(audioClipName, 1.0f);
 	}

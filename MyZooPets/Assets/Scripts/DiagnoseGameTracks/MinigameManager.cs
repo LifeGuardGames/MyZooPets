@@ -184,10 +184,10 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	//---------------------------------------------------		
 	public void RestartGame() {
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
-		if ( goGameOver.GetComponent<PositionTweenToggle>().IsShown )
+		if ( goGameOver.GetComponent<PositionTweenToggle>().IsShowing )
 			ToggleUI( goGameOver, false );
 		
-		if ( goPaused.GetComponent<PositionTweenToggle>().IsShown )
+		if ( goPaused.GetComponent<PositionTweenToggle>().IsShowing )
 			ToggleUI( goPaused, false );
 		
 		NewGame();

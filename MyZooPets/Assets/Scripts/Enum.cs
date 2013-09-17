@@ -86,6 +86,7 @@ public enum NotificationPopupFields{
 	HideImmediately,
 	Badge,
 	TutorialImageType,
+	Sound
 }
 
 public enum NotificationType{

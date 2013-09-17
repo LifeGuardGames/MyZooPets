@@ -39,6 +39,15 @@ public class PopupNotificationNGUI : MonoBehaviour {
             button2.text = value;
         }
     }
+	
+	// sound this notification should play when it opens
+	private AudioClip soundOpen;
+	public void SetSound( AudioClip sound ) {
+		soundOpen = sound;	
+	}
+	public AudioClip GetSound() {
+		return soundOpen;
+	}
 
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
@@ -61,6 +70,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
         LoadLevelManager.IsPaused = pauseGame;
         ClickManager.Instance.ClickLock();
 		TryShowDemuxThenToggle(-1);
+		
+		// play sound if there is one
+		AudioClip sound = GetSound();
+		if ( sound ) 
+			AudioManager.Instance.PlayClip( sound, Preferences.Sound );
     }
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback

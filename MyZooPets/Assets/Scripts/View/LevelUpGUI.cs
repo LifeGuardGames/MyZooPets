@@ -3,6 +3,9 @@ using System.Collections;
 using System;
 
 public class LevelUpGUI : MonoBehaviour {
+	// audio to play when notification is shown
+	public AudioClip sound;
+	
 	void Start () {
     	HUDAnimator.OnLevelUp += OnLevelUpNotification;
 	}
@@ -18,6 +21,7 @@ public class LevelUpGUI : MonoBehaviour {
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
 		notificationEntry.Add(NotificationPopupFields.Badge, LevelUpLogic.Instance.AwardedBadge);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+		notificationEntry.Add(NotificationPopupFields.Sound, sound );
 		
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 //        NotificationUIManager.Instance.EnqueueLevelUpMessage(LevelUpLogic.Instance.AwardedBadge, null);

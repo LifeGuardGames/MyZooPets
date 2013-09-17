@@ -97,7 +97,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 				case NotificationPopupType.LevelUp:
 					backDrop.SetActive(true);
 					ShowLevelUpMessage(				(BadgeTier)						entry[NotificationPopupFields.Badge],
-													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]);
+													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
+													(AudioClip)						entry[NotificationPopupFields.Sound]);
 					break;
 				
 				case NotificationPopupType.TutorialLeft:
@@ -244,11 +245,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		Desc: creates popup that shows an image of the badge, along with a corresponding message
 		Params: badge, call back for button
 	*/
-	public void ShowLevelUpMessage(BadgeTier badge, PopupNotificationNGUI.HashEntry okCallBack){
+	public void ShowLevelUpMessage(BadgeTier badge, PopupNotificationNGUI.HashEntry okCallBack, AudioClip sound){
 		LevelUpMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(levelUpMessageNGUI) as LevelUpMessageNGUI;
 		oneButtonMessage.GetTrophyMessageAndImage(badge);
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.Button1Text = Localization.Localize("OK");
+		oneButtonMessage.SetSound( sound );
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));

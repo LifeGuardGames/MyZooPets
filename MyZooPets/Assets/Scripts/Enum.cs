@@ -33,7 +33,6 @@ public enum DosageRecord{
 }
 
 public enum InhalerType{
-    Advair,
     Rescue,
 }
 
@@ -50,12 +49,6 @@ public enum ItemType{
 public enum StatType{
     Mood,
     Health,
-}
-public enum BadgeTier{
-	Null,
-	Bronze,
-	Silver,
-	Gold,
 }
 public enum ChallengeType{
     Weekly,
@@ -87,35 +80,21 @@ public enum NotificationPopupFields{
 	Badge,
 	TutorialImageType,
 }
-
-public enum NotificationType{
-    YesNo,
-    OK,
-}
-
-public enum NotificationTitle{
-    Great,
-    NiceTry,
-}
-
-public enum ItemReceiver{
-	Floor,
-	Wall,
-	Pet,
-}
-
 public enum ZoomItem{
     Pet,
     TrophyShelf,
     SlotMachine,
     RealInhaler,
-    PracticeInhaler,
     BadgeBoard,
     Dojo
 }
 public enum BadgeType{
     Level,
-    Other
+    RunnerGame,
+    RunnerDistance,
+    DiagnoseGame,
+    PatientNumber,
+    Decoration
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!

@@ -110,9 +110,9 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
-		List<Item> itemList = (from Item in items 
-						orderby Item.Cost
-						select Item).ToList();
+		List<Item> itemList = (from item in items 
+						orderby item.Cost
+						select item).ToList();
 		return itemList;
 	}
 }

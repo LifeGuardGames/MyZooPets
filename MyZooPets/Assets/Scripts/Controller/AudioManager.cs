@@ -55,37 +55,59 @@ public class AudioManager : Singleton<AudioManager>{
 			backgroundSource.Stop();
 		}
 	}
-/*
-	public void PlayEffect(string audioClipName){
-		PlayEffect(audioClipName, 1.0f);
-	}
 	
-	public void PlayEffect(string audioClipName, float volume){
-		if(audioClipName == "button1"){
-			effectClip = button1;
+	
+	///////////////////////////////////////////
+	// PlayClip()
+	// Plays a sound with the name strClip
+	// from resources.
+	///////////////////////////////////////////	
+	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume ) {
+		if ( strClip == "" ) {
+			Debug.Log("Something trying to play a sound with an empty sound id...");
+			return null;
 		}
-		else if(audioClipName == "button2"){
-			effectClip = button2;
-		}
-		else{
-			Debug.LogError("Could not find AudioClip Name");	
+			
+		AudioClip clip = Resources.Load( strClip ) as AudioClip;
+			
+		return PlayClip( clip, eType, fVolume );	
+	}
+	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
+		return PlayClip( strClip, eType, 1.0f );	
+	}	
+	
+	
+	///////////////////////////////////////////
+	// PlayClip()
+	// Plays the incoming audio clip.
+	///////////////////////////////////////////	
+	public LgAudioSource PlayClip( AudioClip clip, Preferences eType, float fVolume )  {	
+		// TO DO check some kind of save or preference manager to see if the sound should be played at all (i.e. sound turned off)
+		
+		return PlaySound( clip, fVolume );
+	}	
+	public LgAudioSource PlayClip( AudioClip clip, Preferences eType )  {	
+		return PlaySound( clip, 1.0f );
+	}		
+	
+	
+	///////////////////////////////////////////
+	// PlaySound()
+	// The base level private method that plays
+	// a sound.  It creates a custom audio
+	// source that gives us more control over
+	// the sound.
+	///////////////////////////////////////////	
+	private LgAudioSource PlaySound( AudioClip sound, float fVolume  ) {
+		if ( sound == null ) {
+			Debug.Log("Trying to play a null audio clip");
+			return null;
 		}
 		
-		if(effectClip != null){
-			if(volume > 1){
-				Debug.Log("Audio volume greater than 1");
-				volume = 1;
-			}
-			else if(volume < 0){
-				Debug.Log("Audio volume negative");
-				volume = 0;
-			}
-			effectSource.volume = volume;
-			backgroundSource.PlayOneShot(effectClip);
-		}
-		else{
-			Debug.LogError("Effect audio clip can not be found");
-		}
-	}
-	*/
+		GameObject soundObject = new GameObject("Sound: " + sound.name); 
+		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
+		soundSource.Init( sound, transform, fVolume );
+		
+		return soundSource;
+	}	
 }

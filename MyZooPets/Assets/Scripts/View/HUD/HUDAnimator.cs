@@ -85,6 +85,11 @@ public class HUDAnimator : MonoBehaviour {
 
 	// Parent for tweening
 	public GameObject tweenParent;
+	
+	// sounds for animations
+	public float fSoundFadeTime;
+	public AudioClip soundStars;
+	public AudioClip soundXP;
 
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
@@ -278,12 +283,16 @@ public class HUDAnimator : MonoBehaviour {
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
 			StartCurvePoints(deltaPoints, pointsOrigin);
+			LgAudioSource sourcePoints = AudioManager.Instance.PlayClip( soundXP, Preferences.Sound, 1.0f );
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
+			StartCoroutine(sourcePoints.FadeOut(fSoundFadeTime));
 		}
 		if(deltaStars != 0){
 			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
 			StartCurveStars(deltaStars, starsOrigin);
+			LgAudioSource sourceStars = AudioManager.Instance.PlayClip( soundStars, Preferences.Sound, 1.0f );
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
+			StartCoroutine(sourceStars.FadeOut(fSoundFadeTime));
 		}
 		if(deltaHealth != 0){
 			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);
@@ -384,7 +393,7 @@ public class HUDAnimator : MonoBehaviour {
 			}
 			break;
 		}
-
+		
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
 			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade));

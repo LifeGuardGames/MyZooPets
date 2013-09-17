@@ -164,3 +164,9 @@ public enum MinigameStates {
 	Paused,		// the game is paused, paused game UI is up
 	GameOver	// the game has ended, game over UI is up
 }
+
+// preferences
+public enum Preferences {
+	Sound,
+	Music
+}

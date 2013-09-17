@@ -22,6 +22,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
+	
+	public int nPoints;
 
     private float timer = 0;
     private float timeInterval = 10f; //time interval for trigger to affect health
@@ -98,7 +100,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         DegradData degradData = DataManager.Instance.Degradation.DegradationTriggers.Find(x => x.ID == id);
         triggerPos = triggerLocations[degradData.PositionId].position;
         
-		StatsController.Instance.ChangeStats(250, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
+		StatsController.Instance.ChangeStats(nPoints, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
             50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);
     }

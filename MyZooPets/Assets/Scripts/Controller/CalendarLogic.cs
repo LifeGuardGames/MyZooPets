@@ -8,6 +8,9 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     public static event EventHandler<EventArgs> OnCalendarReset; 
 
     private static CalendarEntry todaysEntry; //today's entry
+	
+	// sound to play when the player claims a reward
+	public AudioClip soundClaimReward;
 
     //====================API (use this for generating weeks)=======================
     //Generate a week of empty CalendarEntry
@@ -117,6 +120,9 @@ public class CalendarLogic : Singleton<CalendarLogic>{
 
     //Give bonus when user collects
     public void ClaimReward(Vector3 screenPos){
+		// play a sound for the claim
+		AudioManager.Instance.PlayClip( soundClaimReward, Preferences.Sound );
+		
 		StatsController.Instance.ChangeStats(50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos),
          50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos), 0, Vector3.zero, 0, Vector3.zero);
     }

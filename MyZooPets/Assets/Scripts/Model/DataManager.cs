@@ -38,7 +38,7 @@ public class DataManager : Singleton<DataManager>{
     [SerializeThis]
     public DojoRawData Dojo;
     [SerializeThis]
-    public BadgeRawData Badge; 
+    public BadgeMutableData Badge; 
 
     //pet info
     [SerializeThis]
@@ -129,7 +129,7 @@ public class DataManager : Singleton<DataManager>{
         Inventory.Init();
         Dojo = new DojoRawData(); 
         Dojo.Init();
-        Badge = new BadgeRawData();
+        Badge = new BadgeMutableData();
         Badge.Init();
 
         //Pet info

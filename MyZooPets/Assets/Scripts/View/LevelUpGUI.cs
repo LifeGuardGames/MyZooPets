@@ -16,11 +16,9 @@ public class LevelUpGUI : MonoBehaviour {
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
-		notificationEntry.Add(NotificationPopupFields.Badge, LevelUpLogic.Instance.AwardedBadge);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
 		
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//        NotificationUIManager.Instance.EnqueueLevelUpMessage(LevelUpLogic.Instance.AwardedBadge, null);
     }
 
 }

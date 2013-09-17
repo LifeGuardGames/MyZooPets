@@ -6,6 +6,9 @@ using System.Collections.Generic;
 /*
     This class loads constant item data from a xml file. Only ItemLogic should
     be interfacing with this class
+
+    An immutable class, meaning that no other classes should be modifying the data
+    from this class
 */
 public class DataItems{
     //Key: itemtype, Value: dictionary of items

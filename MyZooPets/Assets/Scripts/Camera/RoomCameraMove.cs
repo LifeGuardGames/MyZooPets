@@ -6,9 +6,6 @@ using System.Collections;
 */
 public class RoomCameraMove : CameraMove{
 
-    protected GameObject shelf;
-    protected Vector3 shelfFinalFaceDirection = new Vector3(0,353.8f, 0);
-
     protected GameObject dojo;
     protected Vector3 dojoFinalPosition = new Vector3(0, 6, 34);
     protected Vector3 dojoFinalFaceDirection = new Vector3(0, 0, 0);
@@ -27,13 +24,9 @@ public class RoomCameraMove : CameraMove{
 	protected Vector3 realInhalerFinalPosition = new Vector3(7.6f, 9.8f, 31.17f);
     protected Vector3 realInhalerFinalDirection = new Vector3(11.3f, 24.86f, 5.19f);
 
-    protected GameObject teddyInhaler;
-    protected Vector3 teddyInhalerFinalDirection = new Vector3(15.54f, 0, 0);
-
     protected Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
     protected Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition
     protected Vector3 slotMachineCameraOffset = new Vector3(-0.2f, 9.95f, -8.2f); // use this whenever changing slotMachineFinalPosition
-    protected Vector3 shelfCameraOffset = new Vector3(-39.4f, -0.29f, 2.08f); // use this whenever changing shelfFinalPosition
 	protected Vector3 badgeBoardCameraOffset = new Vector3(0f, 0f, 0f); // use this whenever changing badgeBoardFinalPosition
 	protected Vector3 dojoCameraOffset = new Vector3(40.5f,8f,20f);
     // this way, the camera will always go to the pet
@@ -46,8 +39,6 @@ public class RoomCameraMove : CameraMove{
 
         slotMachine = GameObject.Find("GO_SlotMachine");
         realInhaler = GameObject.Find("GO_RealInhaler");
-        teddyInhaler = GameObject.Find("GO_TeddyInhaler");
-        shelf = GameObject.Find("GO_Shelf");
         badgeBoard = GameObject.Find("GO_HousePlaque");
         dojo = GameObject.Find("GO_Dojo");
     }
@@ -61,22 +52,12 @@ public class RoomCameraMove : CameraMove{
                     CameraWorldTransformEnterMode(petSideFinalPosition, petSideFinalFaceDirection, 0.5f);
                     break;
 
-                    case ZoomItem.TrophyShelf:
-                    Vector3 shelfFinalPosition = shelf.transform.position + shelfCameraOffset;
-                    CameraTransformEnterMode(shelfFinalPosition,shelfFinalFaceDirection, 1.0f);
-                    break;
-
                     case ZoomItem.SlotMachine:
                     CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, slotMachine);	// Pass in gameobject to load level callback
                     break;
 
                     case ZoomItem.RealInhaler:
                     CameraTransformLoadLevel(realInhalerFinalPosition, realInhalerFinalDirection, 2f, realInhaler); // Pass in gameobject to load level callback
-                    break;
-
-                    case ZoomItem.PracticeInhaler:
-                    Vector3 teddyInhalerFinalPosition = teddyInhaler.transform.localPosition + teddyInhalerCameraOffset;
-                    CameraTransformLoadLevel(teddyInhalerFinalPosition, teddyInhalerFinalDirection, 2f, teddyInhaler); // Pass in gameobject to load level callback
                     break;
 
                     case ZoomItem.BadgeBoard:

@@ -9,23 +9,39 @@ using System.Collections.Generic;
 //Checks and manages when a badge should be unlocked
 //-----------------------
 public class BadgeLogic : Singleton<BadgeLogic> {
-    public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
+    public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
+    public class BadgeEventArgs : EventArgs{
+        private Badge unlockedBadge;
+
+        public Badge UnlockedBadge{
+            get{return unlockedBadge;}
+        }
+
+        public BadgeEventArgs(Badge badge){
+            unlockedBadge = badge;
+        }
+    }
 
     private List<Badge> allBadges;
 
     public List<Badge> AllBadges{
         get{
-            if(allBadges == null){
-                allBadges = new List<Badge>();
-                Dictionary<string, Badge> badgesDict = DataBadges.GetAllBadges();
-                allBadges = SelectListFromDictionary(badgesDict);
-            }
             return allBadges;
         }
     }
 
     void Awake(){
-        DataBadges.SetupData(); 
+        DataBadges.SetupData();
+
+        Dictionary<string, Badge> badgesDict = DataBadges.GetAllBadges();
+        allBadges = SelectListFromDictionary(badgesDict);
+    }
+
+    public Badge GetBadge(string badgeID){
+        Badge badge;
+        badge = DataBadges.GetBadge(badgeID);
+        D.Assert(badge != null, "badgeID is not valid");
+        return badge;
     }
 
     //Use this function to check which one of the badges with badgeType can be unlocked
@@ -36,7 +52,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         int latestProgress;
         bool unlockedAllSeriesBadges = true;
 
-        var sortedBadgesType = from badge in AllBadges
+        var sortedBadgesType = from badge in allBadges
                                 where badge.Type == badgeType
                                 orderby badge.UnlockCondition ascending
                                 select badge;
@@ -95,10 +111,11 @@ public class BadgeLogic : Singleton<BadgeLogic> {
             if(!isUnlocked){ //Unlock new badges
                 DataManager.Instance.Badge.UpdateBadgeStatus(badge.ID, true, true);
 
-                if(OnNewBadgeAdded != null)
-                    OnNewBadgeAdded(this, EventArgs.Empty);
+                if(OnNewBadgeUnlocked != null){
+                    BadgeEventArgs arg = new BadgeEventArgs(badge);
+                    OnNewBadgeUnlocked(this, arg);
+                }
 
-                print(badge.Name);
                 unlockNewBadge = true;
             }
         }
@@ -106,7 +123,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         return unlockNewBadge;
     }
 
-    //Return a list from dictionary
+    //Return a list from dictionary. 
     private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
         List<Badge> badgeList = (from keyValuePair in badgeDict
                                     select keyValuePair.Value).ToList();

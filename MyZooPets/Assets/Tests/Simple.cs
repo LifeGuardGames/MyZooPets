@@ -8,6 +8,8 @@ public class Simple : LWFObject {
 		setLoader();
 		// #1 Show popup lwf/textures
 		Load("test2.swf/test2", "test2.swf/");
+		
+		SetColorTransform(new LWF.ColorTransform( 0.3f, 0.3f, 0.3f, 1f));
 	}
 
 

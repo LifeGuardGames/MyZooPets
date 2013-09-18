@@ -22,6 +22,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
+	
+	// --- mood related degradation variables
+	// if the pet's health is below this value, mood effects are doubled
+	public float fHealthMoodThreshold;
+	public float fFirstHoursPenalty;
+	public float fSecondHoursPenalty;
 
     private float timer = 0;
     private float timeInterval = 10f; //time interval for trigger to affect health
@@ -41,7 +47,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     void Awake(){
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.Degradation.LastTimeUserPlayedGame.Date;
-        int numberOfTriggersToInit = 0;;
+        int numberOfTriggersToInit = 0;
 
         if(sinceLastPlayed.Days > 0){ //reset if new day
             DataManager.Instance.Degradation.MorningTrigger = true;
@@ -58,6 +64,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
                 DataManager.Instance.Degradation.AfternoonTrigger = false;
             }
         }
+		
+		// calculate changes in the pets mood
+		CalculateMoodDegradation( sinceLastPlayed );
 
         //create triggers
         for(int i=0; i<numberOfTriggersToInit; i++){
@@ -82,6 +91,35 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
         DataManager.Instance.Degradation.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
     }
+		
+	//---------------------------------------------------
+	// CalculateMoodDegradation()
+	// Depending on how long it has been since the user
+	// last played, the pet will suffer some mood loss.
+	//---------------------------------------------------	
+	private void CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
+		// amount to degrade mood by
+		int nMoodLoss = 0;
+		
+		// get the pet's health %, because it affects how their mood changes
+		float fHP = (float) ( DataManager.Instance.Stats.Health / 100.0f );
+		float fMultiplier = 1;
+		if ( fHP < fHealthMoodThreshold )
+			fMultiplier = 2;
+		
+		// first part of the mood degradation -- the first 24 hours of not playing
+		int nFirstHours = timeSinceLastPlayed.TotalHours > 24 ? 24 : (int) timeSinceLastPlayed.TotalHours;
+		if ( nFirstHours > 0 )
+			nMoodLoss += (int)( nFirstHours * ( fFirstHoursPenalty * fMultiplier ) );
+		
+		// second part of mood degradation -- anything after 24 hours of not playing
+		int nSecondHours = (int)( timeSinceLastPlayed.TotalHours - 24 );
+		if ( nSecondHours > 0 )
+			nMoodLoss += (int) ( nSecondHours * ( fSecondHoursPenalty * fMultiplier ) );
+		
+		// actually change the pet's mood
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
+	}
 
     void Update(){
         if(TutorialLogic.Instance.FirstTimeDegradTrigger) return; //no degradation during tutorial phase

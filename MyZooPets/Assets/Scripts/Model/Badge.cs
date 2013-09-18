@@ -26,7 +26,7 @@ public class Badge{
     public string Description{
         get{
             return StringUtils.Replace(Localization.Localize(description), StringUtils.NUM, 
-                unlockCondition);
+                unlockCondition.ToString());
         }
     }
     public int UnlockCondition{

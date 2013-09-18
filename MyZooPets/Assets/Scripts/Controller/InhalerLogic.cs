@@ -6,8 +6,6 @@ using System;
 public class InhalerLogic : Singleton<InhalerLogic>{
     public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
     public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-    public static EventHandler<EventArgs> OnWrongStep; //User did not follow the correct swipe sequence
-    public static EventHandler<EventArgs> OnResetGame; //When game is reset at the beginning
 
     public const int RESCUE_NUM_STEPS = 8;
 

@@ -122,8 +122,8 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
         calendarPanel.GetComponent<TweenToggleDemux>().ShowFunctionName = "";
 
         //Clean up hint arrow if still there
-        if(greenStampHintArrow != null) Destroy(greenStampHintArrow);
-        if(redStampHintArrow != null) Destroy(redStampHintArrow);
+        Destroy(greenStampHintArrow);
+        Destroy(redStampHintArrow);
 
         //Erase tutorial data and redraw calendar
         CalendarLogic.Instance.ResetWeekAfterTutorialFinish();

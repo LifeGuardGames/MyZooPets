@@ -8,10 +8,9 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	public GameObject backButton;
 	public GameObject badgeBoard;
 	public GameObject descriptionObject;
+	public Transform badgeBase; //Parent of all the badges UI
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
 	public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-
-	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
 	public CameraMove cameraMove;
 	
 	private bool firstClick = true;
@@ -19,54 +18,59 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	private GameObject backButtonReference;
 	private bool isActive = false;
 
-	// void Start(){
-	// 	BadgeLogic.OnNewBadgeAdded += UpdateLevelBadges;
-	// 	UpdateLevelBadges(null, EventArgs.Empty);
-	// }
+	void Start(){
+		BadgeLogic.OnNewBadgeAdded += UpdateBadges;
+		UpdateBadges(null, EventArgs.Empty);
+	}
 
-	// void OnDestroy(){
-	// 	BadgeLogic.OnNewBadgeAdded -= UpdateLevelBadges;
-	// }
+	void OnDestroy(){
+		BadgeLogic.OnNewBadgeAdded -= UpdateBadges;
+	}
 
-	// //Event Listener that updates the Level badges UI when new badges are added or
-	// //when badges UI are loaded for the first time
-	// private void UpdateLevelBadges(object senders, EventArgs arg){
-	// 	// Level Badges
-	// 	foreach(BadgeUIData badge in BadgeLogic.Instance.LevelBadges){
-	// 		int levelNumber = badge.ID;
+	//Event Listener that updates the Level badges UI when new badges are added or
+	//when badges UI are loaded for the first time
+	private void UpdateBadges(object senders, EventArgs arg){
+		List<Badge> badges = BadgeLogic.Instance.AllBadges;
 
-	// 		// Populate metadata script in object
-	// 		BadgeMetadata meta = LevelList[levelNumber].AddComponent<BadgeMetadata>();
-	// 		meta.title = badge.name;
-	// 		meta.description = badge.description;
+		foreach(Badge badge in badges){
 
-	// 		if(badge.ID <= 7){
-	// 			meta.atlasName = "BadgeLevelAtlas1";
-	// 		}
-	// 		else if(badge.ID <= 15){
-	// 			meta.atlasName = "BadgeLevelAtlas2";
-	// 		}
-	// 		else{
-	// 			meta.atlasName = "BadgeLevelAtlas3";
-	// 		}
+		}
+		// // Level Badges
+		// foreach(BadgeUIData badge in BadgeLogic.Instance.LevelBadges){
+		// 	int levelNumber = badge.ID;
 
-	// 		// Decide which sprite to use
-	// 		if(badge.IsAwarded){
-	// 			LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
+		// 	// Populate metadata script in object
+		// 	BadgeMetadata meta = LevelList[levelNumber].AddComponent<BadgeMetadata>();
+		// 	meta.title = badge.name;
+		// 	meta.description = badge.description;
 
-	// 			// Display the tier if applicable
-	// 			if(badge.Tier != BadgeTier.Null){
-	// 				UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeCommonAtlas, "badgeAddon" + badge.Tier.ToString());
-	// 				tier.gameObject.name = "tier";
-	// 				tier.transform.localScale = new Vector3(39f, 50f, 1f);
-	// 				tier.transform.localPosition = new Vector3(40f, -40f, 0);
-	// 			}
-	// 		}
-	// 		else{	// Dark version of the badge
-	// 			LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber + "Dark";
-	// 		}
-	// 	}
-	// }
+		// 	if(badge.ID <= 7){
+		// 		meta.atlasName = "BadgeLevelAtlas1";
+		// 	}
+		// 	else if(badge.ID <= 15){
+		// 		meta.atlasName = "BadgeLevelAtlas2";
+		// 	}
+		// 	else{
+		// 		meta.atlasName = "BadgeLevelAtlas3";
+		// 	}
+
+		// 	// Decide which sprite to use
+		// 	if(badge.IsAwarded){
+		// 		LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
+
+		// 		// Display the tier if applicable
+		// 		if(badge.Tier != BadgeTier.Null){
+		// 			UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeCommonAtlas, "badgeAddon" + badge.Tier.ToString());
+		// 			tier.gameObject.name = "tier";
+		// 			tier.transform.localScale = new Vector3(39f, 50f, 1f);
+		// 			tier.transform.localPosition = new Vector3(40f, -40f, 0);
+		// 		}
+		// 	}
+		// 	else{	// Dark version of the badge
+		// 		LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber + "Dark";
+		// 	}
+		// }
+	}
 	
 	// public void BadgeClicked(GameObject go){
 	// 	// First time clicking, not showing description

@@ -27,11 +27,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         get{return currentStep;}
     }
 
-    public bool IsFirstTimeAdvair{
-        get{return DataManager.Instance.Inhaler.FirstTimeAdvair;}
-        set{DataManager.Instance.Inhaler.FirstTimeAdvair = value;}
-    }
-
     public bool IsFirstTimeRescue{
         get{return DataManager.Instance.Inhaler.FirstTimeRescue;}
         set{DataManager.Instance.Inhaler.FirstTimeRescue = value;}

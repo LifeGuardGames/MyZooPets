@@ -104,7 +104,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// get the pet's health %, because it affects how their mood changes
 		float fHP = (float) ( DataManager.Instance.Stats.Health / 100.0f );
 		float fMultiplier = 1;
-		if ( fHP <= fHealthMoodThreshold )
+		if ( fHP < fHealthMoodThreshold )
 			fMultiplier = 2;
 		
 		// first part of the mood degradation -- the first 24 hours of not playing

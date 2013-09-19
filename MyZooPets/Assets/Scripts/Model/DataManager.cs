@@ -18,7 +18,7 @@ public class DataManager : Singleton<DataManager>{
     private bool firstTime; //is the user playing for the first time
 
     //==========SaveData============
-	
+
     [SerializeThis] 
     public DecorationSystemData Decorations;	
     [SerializeThis] 
@@ -38,7 +38,7 @@ public class DataManager : Singleton<DataManager>{
     [SerializeThis]
     public DojoRawData Dojo;
     [SerializeThis]
-    public BadgeRawData Badge; 
+    public BadgeMutableData Badge; 
 
     //pet info
     [SerializeThis]
@@ -129,7 +129,7 @@ public class DataManager : Singleton<DataManager>{
         Inventory.Init();
         Dojo = new DojoRawData(); 
         Dojo.Init();
-        Badge = new BadgeRawData();
+        Badge = new BadgeMutableData();
         Badge.Init();
 
         //Pet info
@@ -159,6 +159,9 @@ public class DataManager : Singleton<DataManager>{
     //serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
         if(paused){
+			// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
+			DataManager.Instance.Degradation.LastTimeUserPlayedGame = DateTime.Now;
+			
             SerializeGame();
         }
     }

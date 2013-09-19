@@ -213,6 +213,13 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		
 		if ( labelScore )
 			labelScore.text = nScore.ToString();
+		
+		// Animate if any
+		AnimationControl anim = labelScore.transform.parent.gameObject.GetComponent<AnimationControl>();
+		if(anim != null){
+			anim.Stop();
+			anim.Play();
+		}
 	}
 	
 	//---------------------------------------------------
@@ -237,6 +244,13 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		// check for game over
 		if ( nLives <= 0 )
 			GameOver();
+		
+		// Animate if any
+		AnimationControl anim = labelLives.transform.parent.gameObject.GetComponent<AnimationControl>();
+		if(anim != null){
+			anim.Stop();
+			anim.Play();
+		}
 	}
 	
 	//---------------------------------------------------

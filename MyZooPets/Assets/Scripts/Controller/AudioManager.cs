@@ -58,7 +58,6 @@ public class AudioManager : Singleton<AudioManager>{
 		}
 	}
 	
-	
 	///////////////////////////////////////////
 	// PlayClip()
 	// Plays a sound with the name strClip
@@ -112,4 +111,36 @@ public class AudioManager : Singleton<AudioManager>{
 		
 		return soundSource;
 	}	
+	
+//	public void PlayEffect(string audioClipName){
+//		PlayEffect(audioClipName, 1.0f);
+//	}
+//	
+//	public void PlayEffect(string audioClipName, float volume){
+//		if(audioClipName == "button1"){
+//			effectClip = button1;
+//		}
+//		else if(audioClipName == "button2"){
+//			effectClip = button2;
+//		}
+//		else{
+//			Debug.LogError("Could not find AudioClip Name");	
+//		}
+//		
+//		if(effectClip != null){
+//			if(volume > 1){
+//				Debug.Log("Audio volume greater than 1");
+//				volume = 1;
+//			}
+//			else if(volume < 0){
+//				Debug.Log("Audio volume negative");
+//				volume = 0;
+//			}
+//			effectSource.volume = volume;
+//			backgroundSource.PlayOneShot(effectClip);
+//		}
+//		else{
+//			Debug.LogError("Effect audio clip can not be found");
+//		}
+//	}
 }

@@ -22,5 +22,11 @@ public class DGTZone : LgButton {
 	protected override void ProcessClick() {
 		// let the manager know the player has selected a new zone
 		DGTManager.Instance.SetSelectedZone( gameObject );
+		
+		AnimationControl anim = GetComponent<AnimationControl>();
+		if(anim != null){
+			anim.Stop();
+			anim.Play();
+		}
 	}	
 }

@@ -2,16 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	public AnimationClip pulseClip;
 	public GameObject backButton;
 	public GameObject badgeBoard;
 	public GameObject descriptionObject;
+	public GameObject badgePrefab;
+	public GameObject badgeBase;
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
 	public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-
-	public List<GameObject> LevelList = new List<GameObject>();	// Index of this list correlates to the index from BadgeLogic.Instance.LevelBadges
 	public CameraMove cameraMove;
 	
 	private bool firstClick = true;
@@ -20,61 +21,77 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	private bool isActive = false;
 
 	void Start(){
-		BadgeLogic.OnNewBadgeAdded += UpdateLevelBadges;
-		UpdateLevelBadges(null, EventArgs.Empty);
+		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
+		InitBadges();
 	}
 
 	void OnDestroy(){
-		BadgeLogic.OnNewBadgeAdded -= UpdateLevelBadges;
+		BadgeLogic.OnNewBadgeUnlocked -= UnlockBadge;
 	}
 
-	//Event Listener that updates the Level badges UI when new badges are added or
-	//when badges UI are loaded for the first time
-	private void UpdateLevelBadges(object senders, EventArgs arg){
-		// Level Badges
-		foreach(BadgeUIData badge in BadgeLogic.Instance.LevelBadges){
-			int levelNumber = badge.ID;
+	private void InitBadges(){
+		List<Badge> badges = BadgeLogic.Instance.AllBadges;
 
-			// Populate metadata script in object
-			BadgeMetadata meta = LevelList[levelNumber].AddComponent<BadgeMetadata>();
-			meta.title = badge.name;
-			meta.description = badge.description;
+		//Can't decide whether is query should be in BadgeLogic or not
+		//Because it's using anonymous type I thought it's better to place it with
+		//the query execution(foreach loop)
+		var query = 
+			from badge in badges
+			group badge by badge.Type into badgeGroup
+			select new{
+				Key = badgeGroup.Key,
+				Elements = 
+					from badge2 in badgeGroup
+					orderby badge2.UnlockCondition descending
+					select badge2
+			};
 
-			if(badge.ID <= 7){
-				meta.atlasName = "BadgeLevelAtlas1";
-			}
-			else if(badge.ID <= 15){
-				meta.atlasName = "BadgeLevelAtlas2";
-			}
-			else{
-				meta.atlasName = "BadgeLevelAtlas3";
-			}
+		foreach(var group in query){
+			foreach(var badge in group.Elements){
+				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
+				badgeGO.name = badge.ID;
+				badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
 
-			// Decide which sprite to use
-			if(badge.IsAwarded){
-				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber;
+				//TO DO: Update this after you have all the art for badges
+				if(badge.IsUnlocked){
 
-				// Display the tier if applicable
-				if(badge.Tier != BadgeTier.Null){
-					UISprite tier = NGUITools.AddSprite(LevelList[levelNumber], badgeCommonAtlas, "badgeAddon" + badge.Tier.ToString());
-					tier.gameObject.name = "tier";
-					tier.transform.localScale = new Vector3(39f, 50f, 1f);
-					tier.transform.localPosition = new Vector3(40f, -40f, 0);
+				}else{
+
 				}
-			}
-			else{	// Dark version of the badge
-				LevelList[levelNumber].transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeLevel" + levelNumber + "Dark";
+				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeBlank";
+
 			}
 		}
+
+		badgeBase.GetComponent<UIGrid>().Reposition();
+	}
+
+	//Event Listener that updates the Level badges UI when a new badge is unlocked
+	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
+		Badge badge = arg.UnlockedBadge;
+		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
+
+		//TO DO: Update this after you have all the art for badges
+		if(badge.IsUnlocked){
+
+		}else{
+
+		}
+
+		if(badgeTrans != null)
+			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeBlank";
+
+		badgeBase.GetComponent<UIGrid>().Reposition();
 	}
 	
 	public void BadgeClicked(GameObject go){
+		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
+
 		// First time clicking, not showing description
 		if(firstClick){
 			firstClick = false;
-			BadgeMetadata meta = go.GetComponent<BadgeMetadata>();
-			descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.title : "";
-			descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.description : "";
+			descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
+			descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
 			ShowDescriptionPanel();
 		}
 		
@@ -101,9 +118,9 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	
 	// Callback for finished hide description, populate panel with new info and show
 	private void RepopulateAndShowDescriptionPanel(){
-		BadgeMetadata meta = lastClickedBadge.GetComponent<BadgeMetadata>();
-		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.title : "";
-		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (meta != null) ? meta.description : "";
+		Badge clickedBadge = BadgeLogic.Instance.GetBadge(lastClickedBadge.name);
+		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
+		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
 		ShowDescriptionPanel();
 		descriptionObject.GetComponent<PositionTweenToggle>().HideTarget = null;
 		descriptionObject.GetComponent<PositionTweenToggle>().HideFunctionName = null;

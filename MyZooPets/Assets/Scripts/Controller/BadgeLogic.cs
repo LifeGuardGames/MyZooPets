@@ -1,48 +1,132 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-//index of List<Badge> = the id of the badges
+//-----------------------
+//Provide data for BadgeUIManager
+//Checks and manages when a badge should be unlocked
+//-----------------------
 public class BadgeLogic : Singleton<BadgeLogic> {
-    public static event EventHandler<EventArgs> OnNewBadgeAdded; //Event fires when new badge has been added
-    public static int MAX_BADGE_COUNT = 20;
-    public List<BadgeUIData> badges = new List<BadgeUIData>();
+    public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
+    public class BadgeEventArgs : EventArgs{
+        private Badge unlockedBadge;
 
-    //Read Only. Return a list of badges. Refer to Model/Badge for more documentation
-    public List<BadgeUIData> Badges{
-        get{ return badges;}
-    }
-    //Read Only. Return a list of Level Badges.
-    public List<BadgeUIData> LevelBadges{
-        get{ return badges.FindAll(badge => badge.Type.Equals(BadgeType.Level));}
-    }
+        public Badge UnlockedBadge{
+            get{return unlockedBadge;}
+        }
 
-	// Use this for initialization
-	void Start () {
-        //assign listeners	
-        HUDAnimator.OnLevelUp += RewardBadgeOnLevelUp;
-        RewardBadgeOnLevelUp();
-	}
-
-    void OnDestroy(){
-        HUDAnimator.OnLevelUp -= RewardBadgeOnLevelUp;
+        public BadgeEventArgs(Badge badge){
+            unlockedBadge = badge;
+        }
     }
 
-    //Event listener
-    private void RewardBadgeOnLevelUp(object sender, EventArgs e){
-        RewardBadgeOnLevelUp();
-        if(D.Assert(OnNewBadgeAdded != null, "OnNewBadgeAdded has no listeners"))
-            OnNewBadgeAdded(this, EventArgs.Empty);
+    private List<Badge> allBadges;
+
+    public List<Badge> AllBadges{
+        get{
+            return allBadges;
+        }
     }
 
-    private void RewardBadgeOnLevelUp(){
-        int badgeIndex = (int) DataManager.Instance.Level.CurrentLevel;
+    void Awake(){
+        DataBadges.SetupData();
 
-        BadgeUIData badge = badges.Find(entity => entity.ID == badgeIndex);
-        if(D.Assert(badge != null) && !badge.IsAwarded){
-            badge.IsAwarded = true;
-            badge.Tier = LevelUpLogic.Instance.AwardedBadge;
-        }      
+        Dictionary<string, Badge> badgesDict = DataBadges.GetAllBadges();
+        allBadges = SelectListFromDictionary(badgesDict);
+    }
+
+    public Badge GetBadge(string badgeID){
+        Badge badge;
+        badge = DataBadges.GetBadge(badgeID);
+        D.Assert(badge != null, "badgeID is not valid");
+        return badge;
+    }
+
+    //Use this function to check which one of the badges with badgeType can be unlocked
+    //PARAMETERS: badgeType, currentProgress, overrideProgress.
+    //            overrideProgress is used to specify whether currentProgress should replace
+    //            the recorded progress from DataManager or add to the recorded progress.
+    public void CheckSeriesUnlockProgress(BadgeType badgeType, int currentProgress, bool overrideProgress){
+        int latestProgress;
+        bool unlockedAllSeriesBadges = true;
+
+        var sortedBadgesType = from badge in allBadges
+                                where badge.Type == badgeType
+                                orderby badge.UnlockCondition ascending
+                                select badge;
+
+        //Decides to override or add to recorded progress from DataManager
+        if(overrideProgress){
+            latestProgress = currentProgress;
+        }else{
+            int progress = DataManager.Instance.Badge.GetSeriesUnlockProgress(badgeType);
+            latestProgress = progress += currentProgress;
+        }
+
+        //Check if a new badge can be unlocked
+        foreach(Badge badge in sortedBadgesType)
+            if(CheckUnlockProgress(badge, latestProgress)) break;
+
+        //Check if all badges of the same type have been unlocked
+        foreach(Badge badge in sortedBadgesType){
+            if(!badge.IsUnlocked){
+                unlockedAllSeriesBadges = false;
+                break;
+            }
+        }
+
+        //Only update DataManager if there are still locked badges
+        if(!unlockedAllSeriesBadges)
+            DataManager.Instance.Badge.UpdateSeriesUnlockProgress(badgeType, latestProgress);
+    }
+
+    //Use this function to check if badge with badgeID can be unlocked
+    public void CheckSingleUnlockProgress(string badgeID, int currentProgress, bool overrideProgress){
+        int latestProgress;
+        Badge badge = DataBadges.GetBadge(badgeID);
+
+        //Decides to override or add to recorded progress from DataManager
+        if(overrideProgress){
+            latestProgress = currentProgress;
+        }else{
+            int progress = DataManager.Instance.Badge.GetSingleUnlockProgress(badgeID);
+            latestProgress = progress += currentProgress;
+        }
+
+        //Update DataManager only if badge with badgeID is still locked
+        if(!CheckUnlockProgress(badge, latestProgress))
+            DataManager.Instance.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
+    }
+
+    //Check if badge unlock progress meets the unlock condition
+    //True: new badge unlocked
+    private bool CheckUnlockProgress(Badge badge, int progress){
+        bool unlockNewBadge = false;
+
+        if(progress >= badge.UnlockCondition){ //Check if progress matches unlock conditions
+            bool isUnlocked = DataManager.Instance.Badge.GetIsUnlocked(badge.ID);
+
+            if(!isUnlocked){ //Unlock new badges
+                DataManager.Instance.Badge.UpdateBadgeStatus(badge.ID, true, true);
+
+                if(OnNewBadgeUnlocked != null){
+                    BadgeEventArgs arg = new BadgeEventArgs(badge);
+                    OnNewBadgeUnlocked(this, arg);
+                }
+
+                unlockNewBadge = true;
+            }
+        }
+
+        return unlockNewBadge;
+    }
+
+    //Return a list from dictionary. 
+    private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
+        List<Badge> badgeList = (from keyValuePair in badgeDict
+                                    select keyValuePair.Value).ToList();
+        return badgeList;
     }
 }

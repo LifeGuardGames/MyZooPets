@@ -28,58 +28,5 @@ public class TouchDetectorManager : MonoBehaviour {
         }
 
     }	
-	// // Update is called once per frame
-	// void Update () {
- //        // Check keys
- //        if (Input.GetKeyDown(KeyCode.T)) {
- //            Debug.Log("Triggering fade");
- //            ParallaxingBackgroundManager bgm = GameObject.Find("ParallaxingBGManager").GetComponent<ParallaxingBackgroundManager>();
- //            bgm.TransitionToGroup("Test2");
- //        }
- //        if (Input.GetKeyDown(KeyCode.J)) {
- //            RunnerGameManager.GetInstance().PlayerRunner.TriggerSlowdown(2.0f);
- //        }
- //        if (Input.GetKeyDown(KeyCode.R)) {
- //            RunnerGameManager.GetInstance().ResetGame();
- //        }
-
- //        // Check touches
- //        bool bIsTouching = Input.touchCount > 0;
-	// 	if (bIsTouching) {
- //            Touch firstTouch =  Input.touches[0];
- //            TouchPhase currentTouchPhase = firstTouch.phase;
-
- //            switch (currentTouchPhase) {
- //                case TouchPhase.Began:
- //                    mbSwipingStraight = false;
- //                    mStartTouchPosition = firstTouch.position;
- //                    break;
-
- //                case TouchPhase.Moved: {
- //                    if (!mbSwipingStraight) {
- //                        float verticalSwipeLength = firstTouch.position.y - mStartTouchPosition.y;
- //                        if (Mathf.Abs(verticalSwipeLength) > SwipeDistance) {
- //                            foreach (MonoBehaviour currentScript in ListeningScripts) {
- //                                if (verticalSwipeLength >= 0)
- //                                    currentScript.SendMessage("onSwipeUp", SendMessageOptions.DontRequireReceiver);
- //                                else
- //                                    currentScript.SendMessage("onSwipeDown", SendMessageOptions.DontRequireReceiver);
- //                            }
- //                            mbSwipingStraight = true;
- //                        }
- //                    }
- //                    break;
- //                }
-
- //                case TouchPhase.Ended: {
- //                    if (!mbSwipingStraight) {
- //                        foreach (MonoBehaviour currentScript in ListeningScripts) {
- //                            currentScript.SendMessage("onSwipeUp", SendMessageOptions.DontRequireReceiver);
- //                        }
- //                    }
- //                    break;
- //                }
- //            }
-	// 	}
 	
 }

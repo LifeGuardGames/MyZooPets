@@ -1,29 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-// ================================================================================================
-/*
-    PetMovement:
-
-    What it does:
-        1. When the user taps a spot on the floor, the pet moves to that spot.
-        2. If turned on, pet will walk around in the room randomly.
-        3. when camera moves to another room, pet will move into that room.
-
-    To use PetMovement:
-        1)Attach this script to the floor collider GameObject.
-        1)Attach these other scripts:
-            1) TapGesture (from TouchScript.Gestures)
-            2) TapItem
-
-    What this does:
-        When a proper tap (configurable in TapGesture, in the inspector) is performed on
-        the floor GameObject, MovePet() is called.
-        MovePet() checks the tap's screen position, and moves the pet to that corresponding
-        location.
-*/
-// ================================================================================================
-
 public class PetMovement : Singleton<PetMovement> {
     public Camera mainCamera;
     public GameObject shadowObject;     // The shadow of the pet
@@ -35,17 +12,19 @@ public class PetMovement : Singleton<PetMovement> {
 	private bool moving; //Is Pet moving now or not
 	private float moveToX;
 	private float moveToZ;
+    private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
+                                //be moved when clicking on NGUI
 
     void Awake(){
         D.Assert(mainCamera != null, "Camera missing in " + this);
         D.Assert(petSprite != null, "PetSprite missing in " + this);
-        // tapItem = GetComponent<TapItem>();
         anim = petSprite.GetComponent<tk2dSpriteAnimator>();
+        int layerNGUI = LayerMask.NameToLayer("NGUI");
+        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
     }
 
     void Start(){
        destinationPoint = petSprite.transform.position;
-       // tapItem.OnTap += MovePet;
     }
 
     // Update is called once per frame
@@ -54,6 +33,10 @@ public class PetMovement : Singleton<PetMovement> {
             if (ClickManager.Instance.CanRespondToTap()){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint,8f * Time.deltaTime);
+            }else{
+                moving = false;
+                anim.Stop();
+                anim.Play("HappyIdle");
             }
 
             //when the sprite reaches destination. stop transform and animation
@@ -68,7 +51,7 @@ public class PetMovement : Singleton<PetMovement> {
     //Listen to OnTap Event from FingerGesture
     void OnTap(TapGesture gesture) { 
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap()) return;
+        if(!ClickManager.Instance.CanRespondToTap() || IsTouchingNGUI(gesture.Position)) return;
 
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
     }
@@ -116,5 +99,19 @@ public class PetMovement : Singleton<PetMovement> {
 			shadowObject.transform.localPosition = new Vector3(-0.6f, 
                 shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }
+    }
+
+    //True: if finger touches NGUI 
+    private bool IsTouchingNGUI(Vector2 screenPos){
+        Ray ray = nguiCamera.ScreenPointToRay (screenPos);
+        RaycastHit hit;
+        int layerMask = 1 << 10; 
+        bool isOnNGUILayer = false;
+
+        // Raycast
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+            isOnNGUILayer = true;
+        }
+        return isOnNGUILayer;
     }
 }

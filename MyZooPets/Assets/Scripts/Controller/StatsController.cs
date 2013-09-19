@@ -15,7 +15,7 @@ using System.Collections;
 public class StatsController : Singleton<StatsController> {
 	
 	public GameObject hudAnimatorObject;
-	private HUDAnimator hudAnimator;
+	public HUDAnimator hudAnimator;
 	
 	void Start(){
 		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){

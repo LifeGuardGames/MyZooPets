@@ -42,7 +42,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 				Key = badgeGroup.Key,
 				Elements = 
 					from badge2 in badgeGroup
-					orderby badge2.UnlockCondition descending
+					orderby badge2.UnlockCondition ascending
 					select badge2
 			};
 

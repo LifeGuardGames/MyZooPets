@@ -32,11 +32,6 @@ public class DecorationNode : MonoBehaviour {
 		// by default, decoration nodes are not visible/interactable
 		ToggleNode( false );
 	}
-	
-	void OnDestroy() {
-		// remove event handler when this node is destroyed
-		EditDecosUIManager.Instance.OnManagerOpen -= OnDecoMode;	
-	}
 
 	// listen for when this node is tapped/clicked -- if we change nodes to 2D, use OnPress instead
 	void OnTap(TapGesture gesture) { 

@@ -10,6 +10,11 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 	public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
     public UILabel rewardLabel;
+	
+	// sounds to play when the user clicks days on the calendar
+	public string strSoundClaimReward;
+	public string strSoundMissedReward;
+	public string strSoundBlankDay;	
 
     //Class to store UI reference
     private struct ThisWeekDay{
@@ -144,7 +149,10 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             button.pressedSprite = GRAY_CHECK;
             button.isEnabled = false;
             button.isEnabled = true;
-
+			
+			// play a sound for the claim
+			AudioManager.Instance.PlayClip( strSoundClaimReward, Preferences.Sound );
+			
             //Add reward
             CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
 
@@ -161,8 +169,14 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             LeanTween.moveX(calendarSlot, 0.01f, 0.5f, optional);
             if(button.normalSprite == RED_EX){
                 GA.API.Design.NewEvent("UserTouch:Calendar:Red");
+			
+				// play a sound for the box being red
+				AudioManager.Instance.PlayClip( strSoundMissedReward, Preferences.Sound );				
             }else{
                 GA.API.Design.NewEvent("UserTouch:Calendar:Gray");
+				
+				// play a sound for the box being empty
+				AudioManager.Instance.PlayClip( strSoundBlankDay, Preferences.Sound );				
             }
         }
     }

@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 400006}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400028}
-  - 114: {fileID: 11400032}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400000}
   m_Layer: 10
@@ -62,7 +61,6 @@ GameObject:
   - 4: {fileID: 400016}
   - 65: {fileID: 6500004}
   - 114: {fileID: 11400038}
-  - 114: {fileID: 11400034}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400008}
   m_Layer: 10
@@ -274,6 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
+  strSoundProcess: notesOpen
   bCheckClickManager: 1
   strAnalytics: UserTouch:Note
 --- !u!114 &11400004
@@ -296,11 +295,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.500977
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.50098
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -326,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
+  strSoundProcess: shopOpen
   bCheckClickManager: 1
   strAnalytics: UserTouch:Store
 --- !u!114 &11400008
@@ -400,7 +400,7 @@ MonoBehaviour:
   - {fileID: 100006}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
-  startsHidden: 1
+  startsHidden: 0
   lastFinishedShowObject: {fileID: 100006}
   lastFinishedHideObject: {fileID: 100016}
   isShowFinishedCallback: 1
@@ -448,36 +448,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
   duration: 0
---- !u!114 &11400032
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
---- !u!114 &11400034
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &11400038
 MonoBehaviour:
   m_ObjectHideFlags: 1

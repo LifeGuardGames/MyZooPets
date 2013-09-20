@@ -9,6 +9,7 @@ public class AudioManager : Singleton<AudioManager>{
 	**/
 	
 	public AudioClip background1;
+	public string strBgMusic;
 
 	private AudioClip backgroundClip;
 	private AudioClip effectClip;
@@ -22,6 +23,9 @@ public class AudioManager : Singleton<AudioManager>{
 		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
 		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
+		
+		// load sound xml data
+		DataSounds.SetupData();
 	}
 	
 	void Start() {
@@ -29,11 +33,14 @@ public class AudioManager : Singleton<AudioManager>{
 	}
 
 	public void PlayBackground(){
-		if(isMusicOn && background1){
-			backgroundClip = background1;
+		if(isMusicOn){
+			if ( background1 )
+				backgroundClip = background1;
+			else if ( strBgMusic != null )
+				backgroundClip = Resources.Load( strBgMusic ) as AudioClip;
 
 			D.Assert(backgroundClip != null, "Null audioclip");
-			backgroundSource.volume = .3f;
+			backgroundSource.volume = .2f;
 			backgroundSource.loop = true;
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();
@@ -68,14 +75,22 @@ public class AudioManager : Singleton<AudioManager>{
 			Debug.Log("Something trying to play a sound with an empty sound id...");
 			return null;
 		}
+		
+		DataSound sound = DataSounds.GetSoundData( strClip );
+		
+		if ( sound == null ) {
+			Debug.Log("No such sound with id " + strClip );
+			return null;
+		}
 			
-		AudioClip clip = Resources.Load( strClip ) as AudioClip;
-			
-		return PlayClip( clip, eType, fVolume );	
+		return PlaySound( sound );	
 	}
 	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
 		return PlayClip( strClip, eType, 1.0f );	
 	}	
+	public LgAudioSource PlayClip( string strClip ) {
+		return PlayClip( strClip, Preferences.Sound, 1.0f );	
+	}
 	
 	
 	///////////////////////////////////////////
@@ -110,7 +125,14 @@ public class AudioManager : Singleton<AudioManager>{
 		soundSource.Init( sound, transform, fVolume );
 		
 		return soundSource;
-	}	
+	}
+	private LgAudioSource PlaySound( DataSound sound ) {
+		GameObject soundObject = new GameObject("Sound: " + sound.GetResourceName()); 
+		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
+		soundSource.Init( sound, transform );
+		
+		return soundSource;		
+	}
 	
 //	public void PlayEffect(string audioClipName){
 //		PlayEffect(audioClipName, 1.0f);

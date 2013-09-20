@@ -82,6 +82,21 @@ public static class XMLUtils{
         }
         return retVal;
     }
+	
+	public static float GetFloat(IXMLNode node) {
+		return GetFloat(node, 0);		
+	}
+	
+	public static float GetFloat(IXMLNode node, float defaultValue){
+		float retVal = defaultValue;
+        if(node != null){
+            if(node.Children.Count == 1)
+                retVal = float.Parse(node.Children[0].value);
+            else
+                Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
+        }
+        return retVal;		
+	}
 
     public static bool GetBool(IXMLNode node){
         bool retVal = false;

@@ -10,7 +10,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject storeBackground;
 	public GameObject ItemArea;
 	public GameObject FirstPageTag;
-
+	
+	// store related sounds
+	public string strSoundChangeTab;
+	public string strSoundBuy;
+	
 	private bool changePage;
 	private string currentPage;
 	private int page;
@@ -110,6 +114,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(itemData, button.transform.parent.FindChild("ItemTexture").gameObject);
+			
+			// play a sound since an item was bought
+			AudioManager.Instance.PlayClip( strSoundBuy );
 		}
 	}
 
@@ -121,6 +128,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			foreach(Transform child in grid.transform){
 				Destroy(child.gameObject);
 			}
+			
+			// if the current page is not null, we are switching pages, so play a sound
+			if ( currentPage != null )
+				AudioManager.Instance.PlayClip( strSoundChangeTab );	
 			
 			// cache our new page name
 			currentPage = page.name;

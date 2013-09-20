@@ -96,11 +96,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400016}
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400024}
   - 114: {fileID: 11400022}
-  - 114: {fileID: 11400026}
+  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: Image Button
   m_TagString: Untagged
@@ -327,6 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -347,11 +347,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -711.37561
+    e03: -712
     e10: 0
     e11: 384
     e12: 0
-    e13: -7347.62402
+    e13: -7347
     e20: 0
     e21: 0
     e22: 384
@@ -397,13 +397,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Script: {fileID: 11500000, guid: a8d9ddd6213a44e979f6297bf45518d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
-  trigger: 3
-  volume: 1
-  pitch: 1
+  bSprite: 1
+  strSoundProcess: invSound
+  bCheckClickManager: 0
+  strAnalytics: 
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -468,21 +468,6 @@ MonoBehaviour:
   includeChildren: 0
   eventReceiver: {fileID: 0}
   callWhenFinished: 
---- !u!114 &11400026
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: ExpandToggled
-  trigger: 0
-  includeChildren: 0
 --- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -497,7 +482,7 @@ MonoBehaviour:
   ignoreTimeScale: 0
   isUsingDemultiplexer: 0
   blockUI: 0
-  startsHidden: 1
+  startsHidden: 0
   hideDeltaX: 0
   hideDeltaY: -120
   hideDeltaZ: 0
@@ -535,11 +520,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -347.37561
+    e03: -348
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.62402
+    e13: -7346
     e20: 0
     e21: 0
     e22: 384

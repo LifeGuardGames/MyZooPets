@@ -69,6 +69,7 @@ public class NotificationTest : MonoBehaviour {
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
+			notificationEntry.Add(NotificationPopupFields.Message, "BOOO HOO!");
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
 			
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);

@@ -11,7 +11,7 @@ using System;
 
 public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	// event that fires when the user enters or exits a UI mode
-	public static event EventHandler<UIManagerEventArgs> OnManagerOpen;	
+	public event EventHandler<UIManagerEventArgs> OnManagerOpen;	
 	
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
 	public bool blockGUI;	

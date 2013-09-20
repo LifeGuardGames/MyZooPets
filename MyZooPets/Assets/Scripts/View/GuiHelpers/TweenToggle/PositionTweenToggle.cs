@@ -37,12 +37,11 @@ public class PositionTweenToggle : TweenToggle {
 			isShown = true;
 			isMoving = true;
 
-            LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-
 			Hashtable completeParamHash = new Hashtable();
 			completeParamHash.Add("selfCaller", gameObject);
 			
+			LeanTween.cancel(gameObject);
+			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeShow);
 			optional.Add("delay", showDelay);
 			optional.Add("onCompleteTarget", gameObject);
@@ -64,13 +63,12 @@ public class PositionTweenToggle : TweenToggle {
 			
 			isShown = false;
 			isMoving = true;
-			
-            LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-			
+						
 			Hashtable completeParamHash = new Hashtable();
 			completeParamHash.Add("selfCaller", gameObject);
 			
+			LeanTween.cancel(gameObject);
+			Hashtable optional = new Hashtable();
 			optional.Add("ease", easeHide);
 			optional.Add("delay", hideDelay);
 			optional.Add("onCompleteTarget", gameObject);

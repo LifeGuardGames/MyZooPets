@@ -17,11 +17,6 @@ public class SceneTransition : MonoBehaviour {
 		transitionToggleObject.SetActive(false);
 	}
 	
-	public void StartTransition( string strLevel ) {
-		levelName = strLevel;	
-		StartTransition();
-	}
-
 	public void StartTransition(){
 		if (!string.IsNullOrEmpty(levelName))
 		{
@@ -46,9 +41,15 @@ public class SceneTransition : MonoBehaviour {
 			}
 		}
 	}
+	
+	public void StartTransition(string strLevel) {
+		levelName = strLevel;	
+		StartTransition();
+	}
 
 	// Call this with callback from toggle
 	public void ShowPictureAndLoad(){
+		print ("SDFSDF");
 		if(optionalLoadingScreen != null){
 			optionalLoadingScreen.SetActive(true);
 		}

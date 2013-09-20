@@ -47,9 +47,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 	
 	public void TryNextNotification(){
-		Debug.Log ("Checking for notification");
 		if(!NotificationQueueData.IsEmpty()){
-			Debug.Log ("Yes notification detected");
 			isNotificationActive = true;
 			Hashtable entry = NotificationQueueData.PopNotification();
 			

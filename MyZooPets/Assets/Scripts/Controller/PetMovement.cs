@@ -5,6 +5,7 @@ public class PetMovement : Singleton<PetMovement> {
     public Camera mainCamera;
     public GameObject runWay; //Where the pet is allowed to move
     public GameObject petSprite;
+	public GameObject shadowObject;
 	
 	// sound for when the pet moves
 	public string strSoundMove;
@@ -96,8 +97,12 @@ public class PetMovement : Singleton<PetMovement> {
     private void ChangePetFacingDirection(){
         if(destinationPoint.x > petSprite.transform.position.x){
             petSprite.GetComponent<tk2dSprite>().FlipX = true;
+			shadowObject.transform.localPosition = new Vector3(0.6f, 
+                shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }else{
             petSprite.GetComponent<tk2dSprite>().FlipX = false;
+			shadowObject.transform.localPosition = new Vector3(-0.6f, 
+                shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }
     }
 

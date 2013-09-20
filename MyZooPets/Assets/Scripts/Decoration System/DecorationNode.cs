@@ -58,7 +58,7 @@ public class DecorationNode : MonoBehaviour {
 	}
 	
     //Event listener. listening to when decoration mode is enabled/disabled
-    private void OnDecoMode(object sender, SingletonUI<EditDecosUIManager>.UIManagerEventArgs e){
+    private void OnDecoMode(object sender, UIManagerEventArgs e){
        if(e.Opening){
             ToggleNode( true );		// edit mode is opening, so turn this node on
         }else{

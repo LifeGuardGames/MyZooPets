@@ -27,7 +27,9 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 
     //Use this to turn on all particle effects in triggers
     public void ActivateParticleEffects(){
-        if(D.Assert(OnActivateParticleEffects != null, "OnActivateParticleEffetcts has no listeners"))
+        if(OnActivateParticleEffects != null)
             OnActivateParticleEffects(this, EventArgs.Empty);
+        else
+            Debug.LogWarning("OnActivateParticleEffects is null");
     }
 }

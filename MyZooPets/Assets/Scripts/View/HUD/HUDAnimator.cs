@@ -283,16 +283,32 @@ public class HUDAnimator : MonoBehaviour {
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
 			StartCurvePoints(deltaPoints, pointsOrigin);
-			LgAudioSource sourcePoints = AudioManager.Instance.PlayClip( soundXP, Preferences.Sound, 1.0f );
+			
+			// only play sounds if we are gaining points
+			LgAudioSource sourcePoints = null;
+			if ( deltaPoints > 0 )
+				sourcePoints = AudioManager.Instance.PlayClip( soundXP, Preferences.Sound, 1.0f );
+			
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
-			StartCoroutine(sourcePoints.FadeOut(fSoundFadeTime));
+			
+			// fade out the sound now that the graphics are done
+			if ( sourcePoints )
+				StartCoroutine(sourcePoints.FadeOut(fSoundFadeTime));
 		}
 		if(deltaStars != 0){
 			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
 			StartCurveStars(deltaStars, starsOrigin);
-			LgAudioSource sourceStars = AudioManager.Instance.PlayClip( soundStars, Preferences.Sound, 1.0f );
+			
+			// only play sounds if we are gaining points
+			LgAudioSource sourceStars = null;
+			if ( deltaStars > 0 )
+				sourceStars = AudioManager.Instance.PlayClip( soundStars, Preferences.Sound, 1.0f );
+			
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
-			StartCoroutine(sourceStars.FadeOut(fSoundFadeTime));
+			
+			// fade out the sound now that the graphics are done
+			if ( sourceStars )
+				StartCoroutine(sourceStars.FadeOut(fSoundFadeTime));
 		}
 		if(deltaHealth != 0){
 			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);

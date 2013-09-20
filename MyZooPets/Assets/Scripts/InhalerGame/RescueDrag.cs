@@ -49,6 +49,9 @@ public class RescueDrag : InhalerPart{
     }
 
     protected override void NextStep(){
+		// play sound here -- as we get more sounds I think I'll want to make this a bit more generic (Joe)
+		AudioManager.Instance.PlayClip( "InhalerGive", Preferences.Sound );
+		
         base.NextStep();
         Destroy(targetCollider);
         transform.collider.enabled = false;

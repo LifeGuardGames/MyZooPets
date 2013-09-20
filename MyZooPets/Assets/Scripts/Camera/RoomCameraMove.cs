@@ -21,8 +21,8 @@ public class RoomCameraMove : CameraMove{
     protected Vector3 slotMachineFinalDirection = new Vector3(8.79f, 45.47f, 0.3f);
 
     protected GameObject realInhaler;
-	protected Vector3 realInhalerFinalPosition = new Vector3(7.6f, 9.8f, 31.17f);
-    protected Vector3 realInhalerFinalDirection = new Vector3(11.3f, 24.86f, 5.19f);
+	protected Vector3 realInhalerFinalPosition = new Vector3(14f, 10f, 31f);
+    protected Vector3 realInhalerFinalDirection = new Vector3(12f, 23f, 6f);
 
     protected Vector3 petCameraOffsetRoom = new Vector3(4.83f, 8.253f, -10.36f); // use this whenever changing petSideFinalPosition
     protected Vector3 teddyInhalerCameraOffset = new Vector3(0.99f, 2.02f, -10.36f); // use this whenever changing teddyInhalerFinalPosition

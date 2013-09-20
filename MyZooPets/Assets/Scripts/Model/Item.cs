@@ -11,6 +11,9 @@ public class Item {
 	private int cost; //cost of item
 	private string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
+	
+	// sound item makes when it is used
+	private string strSoundUsed;
 
 	public string ID{
 		get{return id;}
@@ -33,6 +36,9 @@ public class Item {
 	public int UnlockAtLevel{
 		get{return unlockAtLevel;}
 	}
+	public string SoundUsed{
+		get{return strSoundUsed;}	
+	}
 
 	public Item(string id, ItemType type, Hashtable hashItemData){
 		this.id = id;
@@ -46,6 +52,9 @@ public class Item {
 		// optional for now
 		if ( hashItemData.Contains("UnlockAtLevel") )
        		unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode);
+		
+		if ( hashItemData.Contains("Sound") )
+			strSoundUsed = XMLUtils.GetString(hashItemData["Sound"] as IXMLNode);
 	}
 
 	//Returns all attributes of all the children of a IXMLNode in a hastable

@@ -5,7 +5,7 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
 
     public void GetTrophyMessageAndImage (){
         Message = GetMessage();
-        GetTexture();
+        //GetTexture();
     }
 
     private string GetMessage(){
@@ -14,9 +14,9 @@ public class LevelUpMessageNGUI : PopupNotificationWithImageNGUI {
         return retVal;
     }
 
-    private void GetTexture(){
-        SetSprite("badgeAddonGold");
-    }
+//    private void GetTexture(){
+//        SetSprite("badgeAddonGold");
+//    }
     // // ================================================================================
 
     // protected override void Testing(){

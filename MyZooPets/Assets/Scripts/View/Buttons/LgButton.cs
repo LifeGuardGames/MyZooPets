@@ -13,6 +13,12 @@ public class LgButton : MonoBehaviour {
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
 	
+	// the sound resource this button plays when it is clicked
+	public string strSoundProcess;
+	public string GetProcessSound() {
+		return strSoundProcess;	
+	}
+	
 	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
 	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
 	// which buttons have a mode, opening a UI pushes a mode (and closing a UI pops a mode) and this class should
@@ -62,10 +68,20 @@ public class LgButton : MonoBehaviour {
 		// if there is an analytic event on this button, let's process that
 		string strAnalytics = GetAnalyticsKey();
 		if ( strAnalytics != null )
-			GA.API.Design.NewEvent( strAnalytics );			
+			GA.API.Design.NewEvent( strAnalytics );
+		
+		// play the sound
+		PlayProcessSound();
 		
 		// process the click
 		ProcessClick();
+	}
+	
+	private void PlayProcessSound() {
+		string strSound = GetProcessSound();
+		
+		if ( !string.IsNullOrEmpty(strSound) )
+			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
 	}
 	
 	//---------------------------------------------------

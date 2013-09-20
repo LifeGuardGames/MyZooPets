@@ -107,6 +107,7 @@ public class TweenToggle : MonoBehaviour {
 			if(blockUI){
 				ClickManager.Instance.DecrementTweenCount();
 			}
+			print("setting done show");
 			isMoving = false;
 			ShowSendCallback();
 		}
@@ -120,6 +121,7 @@ public class TweenToggle : MonoBehaviour {
 				ClickManager.Instance.DecrementTweenCount();
 			}
 			isMoving = false;
+			print("setting hide show");
 			HideSendCallback();
 		}
 	}

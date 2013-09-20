@@ -50,7 +50,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			foreach(var badge in group.Elements){
 				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
 				badgeGO.name = badge.ID;
-				badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
+				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
 
 				//TO DO: Update this after you have all the art for badges
 				if(badge.IsUnlocked){

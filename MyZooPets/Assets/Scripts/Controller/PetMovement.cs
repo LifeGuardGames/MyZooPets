@@ -6,6 +6,9 @@ public class PetMovement : Singleton<PetMovement> {
     public GameObject shadowObject;     // The shadow of the pet
     public GameObject runWay; //Where the pet is allowed to move
     public GameObject petSprite;
+	
+	// sound for when the pet moves
+	public string strSoundMove;
 
     private tk2dSpriteAnimator anim; //2D sprite animator
     private Vector3 destinationPoint; //destination that the pet is going to move to
@@ -52,6 +55,8 @@ public class PetMovement : Singleton<PetMovement> {
     void OnTap(TapGesture gesture) { 
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if(!ClickManager.Instance.CanRespondToTap() || IsTouchingNGUI(gesture.Position)) return;
+		
+		AudioManager.Instance.PlayClip( strSoundMove );
 
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
     }

@@ -16,6 +16,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// prefab that items in this UI are instantiated from
 	public GameObject prefabChooseDecoEntry;
 	
+	// sound that gets played when a decoration is placed
+	public string strSoundPlace;
+	
 	// prefab of the area that items are populated to -- this exists because if we don't instantiate it, the list "remembers" where it was last scrolled to
 	public GameObject prefabChooseArea;
 	private GameObject goChooseArea;
@@ -154,6 +157,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 
 		// set the deco on the node -- it does the instantiation of the 3d game object
 		decoNodeCurrent.SetDecoration( strID );
+		
+		// play a sound
+		AudioManager.Instance.PlayClip( strSoundPlace );
 		
 		//notify inventory logic that this item is being used
         InventoryLogic.Instance.UseItem(strID);		

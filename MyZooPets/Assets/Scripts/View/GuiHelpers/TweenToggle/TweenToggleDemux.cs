@@ -76,10 +76,14 @@ public class TweenToggleDemux : MonoBehaviour {
 	void Update(){
 		// Polling for lock released
 		if(isMoving){
+			print("demux moving");
 			if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
+				print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 				isMoving = false;
 				// If option set for finish show callback, call it now!
 				if(isShowFinishedCallback){
+				print ("SHOW CALLBACK");
+					
 					ShowSendCallback();
 				}
 				return;
@@ -97,6 +101,15 @@ public class TweenToggleDemux : MonoBehaviour {
 	}
 	
 	public void Show(){
+		StartCoroutine(SetNextFrameShow());
+	}
+	
+	public void Hide(){
+		StartCoroutine(SetNextFrameHide());
+	}
+	
+	IEnumerator SetNextFrameShow(){
+		yield return 0;
 		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;
@@ -115,7 +128,8 @@ public class TweenToggleDemux : MonoBehaviour {
 		}
 	}
 	
-	public void Hide(){
+	IEnumerator SetNextFrameHide(){
+		yield return 0;
 		if(isShown && !isMoving){
 			isShown = false;
 			isMoving = true;
@@ -151,6 +165,7 @@ public class TweenToggleDemux : MonoBehaviour {
 	}
 	
 	void ShowSendCallback(){
+		
 		if (string.IsNullOrEmpty(ShowFunctionName)) return;
 		if (ShowTarget == null) ShowTarget = gameObject;
 

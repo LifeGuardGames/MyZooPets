@@ -33,8 +33,8 @@ public class CalendarEntry{
     //=====================================
 
     public CalendarEntry(){
-        this.dayTime = DosageRecord.Null;
-        this.nightTime = DosageRecord.Null;
+        this.dayTime = DosageRecord.Hit;
+        this.nightTime = DosageRecord.Miss;
         this.bonusCollectedDayTime = false;
         this.bonusCollectedNightTime = false;
     }

@@ -109,25 +109,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400012}
-  - 114: {fileID: 11400020}
-  m_Layer: 10
-  m_Name: Sprite_Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100014
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400014}
   - 114: {fileID: 11400014}
   m_Layer: 10
-  m_Name: Sprite_Image
+  m_Name: Label_Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,8 +226,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 111, y: 31, z: -5}
-  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_LocalPosition: {x: 11.8661575, y: 123.971207, z: -5.00000143}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
 --- !u!4 &400008
@@ -253,7 +237,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116.550774, y: -150.304382, z: -3.7997961e-07}
+  m_LocalPosition: {x: 0, y: -150.304382, z: -3.7997961e-07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -279,19 +263,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 217, z: 0}
-  m_LocalScale: {x: 638, y: 155, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400018}
---- !u!4 &400014
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -208.839996, y: -44, z: -3}
-  m_LocalScale: {x: 183, y: 233, z: 0}
+  m_LocalPosition: {x: 0, y: -12.4696188, z: -5.00000143}
+  m_LocalScale: {x: 64, y: 64, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
 --- !u!4 &400016
@@ -316,12 +289,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
-  - {fileID: 400006}
+  - {fileID: 400012}
   - {fileID: 400004}
   - {fileID: 400020}
-  - {fileID: 400012}
-  - {fileID: 400014}
   - {fileID: 400022}
+  - {fileID: 400006}
   m_Father: {fileID: 400010}
 --- !u!4 &400020
 Transform:
@@ -392,9 +364,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
-  mText: 
-  mMaxLineWidth: 400
+  mFont: {fileID: 11400000, guid: 8b2c55d5657b57d4eb03e9a7f7978db9, type: 2}
+  mText: Level Up!
+  mMaxLineWidth: 0
   mMaxLineHeight: 0
   mEncoding: 1
   mMaxLineCount: 0
@@ -508,22 +480,30 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
+  m_GameObject: {fileID: 100012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 1
-  mAtlas: {fileID: 11400000, guid: 76e376728def9f147a2489e1d2b72448, type: 2}
-  mSpriteName: badgeAddonGold
-  mFillCenter: 1
-  mType: 0
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
+  mDepth: 5
+  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mText: 
+  mMaxLineWidth: 600
+  mMaxLineHeight: 150
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 1
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -567,34 +547,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73648a4569aea443887a6dab766a0644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textArea: {fileID: 11400002}
+  textArea: {fileID: 11400014}
   button1: {fileID: 11400004}
   button2: {fileID: 0}
   numOfButtons: 1
   HideImmediately: 0
-  imageSprite: {fileID: 11400014}
+  imageSprite: {fileID: 0}
   title: {fileID: 0}
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mDepth: 1
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
-  mSpriteName: notificationLevelUp
-  mFillCenter: 1
-  mType: 0
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 1

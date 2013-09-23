@@ -4,7 +4,7 @@ using System;
 
 public class LevelUpGUI : MonoBehaviour {
 	// audio to play when notification is shown
-	public AudioClip sound;
+	public string sound;
 	
 	void Start () {
     	HUDAnimator.OnLevelUp += OnLevelUpNotification;

@@ -88,8 +88,8 @@ public class HUDAnimator : MonoBehaviour {
 	
 	// sounds for animations
 	public float fSoundFadeTime;
-	public AudioClip soundStars;
-	public AudioClip soundXP;
+	public string strSoundStars;
+	public string strSoundXP;
 
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
@@ -287,7 +287,7 @@ public class HUDAnimator : MonoBehaviour {
 			// only play sounds if we are gaining points
 			LgAudioSource sourcePoints = null;
 			if ( deltaPoints > 0 )
-				sourcePoints = AudioManager.Instance.PlayClip( soundXP, Preferences.Sound, 1.0f );
+				sourcePoints = AudioManager.Instance.PlayClip( strSoundXP );
 			
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
 			
@@ -302,7 +302,7 @@ public class HUDAnimator : MonoBehaviour {
 			// only play sounds if we are gaining points
 			LgAudioSource sourceStars = null;
 			if ( deltaStars > 0 )
-				sourceStars = AudioManager.Instance.PlayClip( soundStars, Preferences.Sound, 1.0f );
+				sourceStars = AudioManager.Instance.PlayClip( strSoundStars );
 			
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
 			

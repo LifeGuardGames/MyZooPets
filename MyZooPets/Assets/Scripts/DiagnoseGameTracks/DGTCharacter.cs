@@ -241,10 +241,16 @@ public class DGTCharacter : MonoBehaviour {
 			// character was sent to the right zone -- get some points!
 			int nVal = GetPointValue();
 			DGTManager.Instance.UpdateScore( nVal );
+			
+			// play a good sound
+			AudioManager.Instance.PlayClip( "clinicCorrect" );
 		}
 		else {
 			// character was sent to wrong zone...lose a life!
 			DGTManager.Instance.UpdateLives( -1 );
+			
+			// play an incorrect sound
+			AudioManager.Instance.PlayClip( "clinicWrong" );
 		}
 	}	
 }

@@ -87,6 +87,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		if ( goZone == goSelectedZone )
 			return;
 		
+		// the zone changed, so play a sound (only if there was a valid zone before though)
+		if ( goSelectedZone != null )
+			AudioManager.Instance.PlayClip( "clinicSwitchTracks" );		
+		
 		// change the zone
 		goSelectedZone = goZone;
 		
@@ -164,6 +168,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------		
 	private void ChangeTrackSpeed( float fChange ) {
 		fCurrentSpeed += fChange;	
+		
+		// track speed is increasing, so play a sound
+		AudioManager.Instance.PlayClip( "clinicSpeedUp" );
 		
 		// send out a message to all things on the track letting them know their speed needs to change
        if( OnSpeedChange != null )

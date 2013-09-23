@@ -96,7 +96,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					backDrop.SetActive(true);
 					ShowLevelUpMessage(				(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
-													(AudioClip)						entry[NotificationPopupFields.Sound]);
+													(string)						entry[NotificationPopupFields.Sound]);
 					break;
 				
 				case NotificationPopupType.TutorialLeft:
@@ -243,7 +243,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		Desc: creates popup that shows an image of the badge, along with a corresponding message
 		Params: badge, call back for button
 	*/
-	public void ShowLevelUpMessage(string message, PopupNotificationNGUI.HashEntry okCallBack, AudioClip sound){
+	public void ShowLevelUpMessage(string message, PopupNotificationNGUI.HashEntry okCallBack, string sound){
 		LevelUpMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(levelUpMessageNGUI) as LevelUpMessageNGUI;
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;

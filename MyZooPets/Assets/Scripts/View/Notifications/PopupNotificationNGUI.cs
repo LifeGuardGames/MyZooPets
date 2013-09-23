@@ -41,11 +41,11 @@ public class PopupNotificationNGUI : MonoBehaviour {
     }
 	
 	// sound this notification should play when it opens
-	private AudioClip soundOpen;
-	public void SetSound( AudioClip sound ) {
+	private string soundOpen;
+	public void SetSound( string sound ) {
 		soundOpen = sound;	
 	}
-	public AudioClip GetSound() {
+	public string GetSound() {
 		return soundOpen;
 	}
 
@@ -72,9 +72,9 @@ public class PopupNotificationNGUI : MonoBehaviour {
 		TryShowDemuxThenToggle(-1);
 		
 		// play sound if there is one
-		AudioClip sound = GetSound();
-		if ( sound ) 
-			AudioManager.Instance.PlayClip( sound, Preferences.Sound );
+		string sound = GetSound();
+		if ( !string.IsNullOrEmpty(sound) ) 
+			AudioManager.Instance.PlayClip( sound );
     }
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback

@@ -49,7 +49,6 @@ public class SceneTransition : MonoBehaviour {
 
 	// Call this with callback from toggle
 	public void ShowPictureAndLoad(){
-		print ("SDFSDF");
 		if(optionalLoadingScreen != null){
 			optionalLoadingScreen.SetActive(true);
 		}

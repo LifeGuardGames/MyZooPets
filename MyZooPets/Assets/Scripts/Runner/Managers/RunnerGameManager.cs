@@ -137,6 +137,11 @@ public class RunnerGameManager : MonoBehaviour {
         mItemManager.Reset();
     }
 
+    public void QuitGame(){
+        GetComponent<SceneTransition>().StartTransition();
+
+    }
+
     public void IncreaseTimeSpeed(float inIncreaseTime) {
         Time.timeScale += inIncreaseTime;
     }

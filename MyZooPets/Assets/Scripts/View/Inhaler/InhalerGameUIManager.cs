@@ -142,7 +142,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private void OnGameEnd(object sender, EventArgs args){
         // Record having given the pet the inhaler, if this was the real game.
         StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
-            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
 
         ShowGameOverMessage();
         ShowHUD();

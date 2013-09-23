@@ -271,13 +271,13 @@ public class HUDAnimator : MonoBehaviour {
 
 	// Parse data and make effects serial
 	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
-		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
-		StartCoroutine(StartCurveStats(deltaPoints, pointsOrigin, deltaStars, starsOrigin, deltaHealth, healthOrigin, deltaMood, moodOrigin));
+		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin, bool bPlaySounds){
+		StartCoroutine(StartCurveStats(deltaPoints, pointsOrigin, deltaStars, starsOrigin, deltaHealth, healthOrigin, deltaMood, moodOrigin, bPlaySounds));
 	}
 
 	// Helper function for StartCoroutineCurveStats
 	IEnumerator StartCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
-		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin){
+		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin, bool bPlaySounds){
 
 		if(deltaPoints != 0){
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
@@ -286,7 +286,7 @@ public class HUDAnimator : MonoBehaviour {
 			
 			// only play sounds if we are gaining points
 			LgAudioSource sourcePoints = null;
-			if ( deltaPoints > 0 )
+			if ( deltaPoints > 0 && bPlaySounds )
 				sourcePoints = AudioManager.Instance.PlayClip( strSoundXP );
 			
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
@@ -301,7 +301,7 @@ public class HUDAnimator : MonoBehaviour {
 			
 			// only play sounds if we are gaining points
 			LgAudioSource sourceStars = null;
-			if ( deltaStars > 0 )
+			if ( deltaStars > 0 && bPlaySounds )
 				sourceStars = AudioManager.Instance.PlayClip( strSoundStars );
 			
 			yield return new WaitForSeconds(4f / 200f * deltaStars);

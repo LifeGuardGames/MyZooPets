@@ -27,6 +27,9 @@ public class Inhale : InhalerPart {
     }
 
     protected override void NextStep(){
+		// play sound here
+		AudioManager.Instance.PlayClip( "inhalerInhale" );		
+		
         base.NextStep();
         Destroy(gameObject);
     }

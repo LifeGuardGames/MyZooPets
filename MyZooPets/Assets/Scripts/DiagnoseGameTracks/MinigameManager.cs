@@ -30,6 +30,9 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	
 	// scene transition
 	public SceneTransition scriptTransition;
+	
+	// sound IDs
+	public string strSoundGameOver;
 
 	// player score
 	public UILabel labelScore;
@@ -49,6 +52,10 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		}
 		
 		eCurrentState = eNewState;
+		
+		// play appropriate sound for game state changes
+		if ( eCurrentState == MinigameStates.GameOver )
+			AudioManager.Instance.PlayClip( strSoundGameOver );
 		
 		// send out a message to everything that cares about the game state
 		if ( OnStateChanged != null )

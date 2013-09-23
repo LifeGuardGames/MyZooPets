@@ -19,6 +19,10 @@ public class RoomCameraMove : CameraMove{
     protected GameObject slotMachine;
 	protected Vector3 slotMachineFinalPosition = new Vector3(13.82f, 9.41f, 30.16f);
     protected Vector3 slotMachineFinalDirection = new Vector3(8.79f, 45.47f, 0.3f);
+	
+	protected GameObject yardSign;
+	public Vector3 yardFinalPosition = new Vector3(-15f, 16f, 36f);
+    public Vector3 yardFinalDirection = new Vector3(8.79f, 45.47f, 0.3f);	
 
     protected GameObject realInhaler;
 	protected Vector3 realInhalerFinalPosition = new Vector3(14f, 10f, 31f);
@@ -41,6 +45,7 @@ public class RoomCameraMove : CameraMove{
         realInhaler = GameObject.Find("GO_RealInhaler");
         badgeBoard = GameObject.Find("GO_HousePlaque");
         dojo = GameObject.Find("GO_Dojo");
+		yardSign = GameObject.Find("GO_YardSign");
     }
 
     public override void ZoomToggle(ZoomItem item){
@@ -51,6 +56,10 @@ public class RoomCameraMove : CameraMove{
                     petSideFinalPosition = spritePet.transform.position + petCameraOffsetRoom;
                     CameraWorldTransformEnterMode(petSideFinalPosition, petSideFinalFaceDirection, 0.5f);
                     break;
+					
+					case ZoomItem.YardSign:
+					CameraTransformLoadLevel(yardFinalPosition, yardFinalDirection, 2f, yardSign);	// Pass in gameobject to load level callback
+					break;
 
                     case ZoomItem.SlotMachine:
                     CameraTransformLoadLevel(slotMachineFinalPosition, slotMachineFinalDirection, 2f, slotMachine);	// Pass in gameobject to load level callback

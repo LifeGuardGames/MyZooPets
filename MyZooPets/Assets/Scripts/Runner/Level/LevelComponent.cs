@@ -45,15 +45,15 @@ public class LevelComponent : MonoBehaviour {
 	void Update() {
 	}
 
-    public void DestroyAndCache(){
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
-        foreach (RunnerItem currentItem in mSpawnedItems) {
-            if (currentItem != null) {
-                itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
-            }
-        }
-        DestroyWithoutCache();
-    }
+    // public void DestroyAndCache(){
+    //     ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+    //     foreach (RunnerItem currentItem in mSpawnedItems) {
+    //         if (currentItem != null) {
+    //             itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
+    //         }
+    //     }
+    //     DestroyWithoutCache();
+    // }
 
     public void DestroyWithoutCache(){
         foreach (RunnerItem currentItem in mSpawnedItems) {

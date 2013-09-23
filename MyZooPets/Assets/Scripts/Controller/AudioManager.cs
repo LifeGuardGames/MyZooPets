@@ -98,7 +98,7 @@ public class AudioManager : Singleton<AudioManager>{
 	// Plays a sound with the name strClip
 	// from resources.
 	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume ) {
+	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume, Hashtable hashOverrides ) {
 		if ( strClip == "" ) {
 			Debug.Log("Something trying to play a sound with an empty sound id...");
 			return null;
@@ -111,13 +111,16 @@ public class AudioManager : Singleton<AudioManager>{
 			return null;
 		}
 			
-		return PlaySound( sound );	
+		return PlaySound( sound, hashOverrides );	
 	}
 	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
-		return PlayClip( strClip, eType, 1.0f );	
+		return PlayClip( strClip, eType, 1.0f, new Hashtable() );	
 	}	
 	public LgAudioSource PlayClip( string strClip ) {
-		return PlayClip( strClip, Preferences.Sound, 1.0f );	
+		return PlayClip( strClip, Preferences.Sound, 1.0f, new Hashtable() );	
+	}
+	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides ) {
+		return PlayClip( strClip, Preferences.Sound, 1.0f, hashOverrides );	
 	}
 	
 	///////////////////////////////////////////
@@ -127,10 +130,10 @@ public class AudioManager : Singleton<AudioManager>{
 	// source that gives us more control over
 	// the sound.
 	///////////////////////////////////////////	
-	private LgAudioSource PlaySound( DataSound sound ) {
+	private LgAudioSource PlaySound( DataSound sound, Hashtable hashOverrides ) {
 		GameObject soundObject = new GameObject("Sound: " + sound.GetResourceName()); 
 		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
-		soundSource.Init( sound, transform );
+		soundSource.Init( sound, transform, hashOverrides );
 		
 		return soundSource;		
 	}

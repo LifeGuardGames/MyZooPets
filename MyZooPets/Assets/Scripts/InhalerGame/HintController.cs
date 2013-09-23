@@ -10,7 +10,8 @@ public class HintController : MonoBehaviour {
     public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
     public GameObject hintArrow; //Game object that contains the hint animation
     public GameObject hintMessage; //Game object that contains the hint message
-
+	public string clipToPlay;
+	
     private tk2dSpriteAnimator arrowAnimator; //Sprite animator
 	private Animation messageAnimation;
 	private Animation arrowAnimation;
@@ -64,7 +65,7 @@ public class HintController : MonoBehaviour {
         if(hintArrow != null) hintArrow.renderer.enabled = true;
         if(hintMessage != null) hintMessage.renderer.enabled = true;
         if(arrowAnimator != null) arrowAnimator.Play();
-		if(arrowAnimation != null) arrowAnimation.Play();
+		if(arrowAnimation != null) arrowAnimation.Play(clipToPlay);
 		if(messageAnimation != null) messageAnimation.Play();
     }
 }

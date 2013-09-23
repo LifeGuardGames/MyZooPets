@@ -12,6 +12,9 @@ using System.Collections;
 public abstract class RunnerItem : MonoBehaviour {
 	public string Name = "";
 	public int PointValue = 0;
+	
+	// sound to play on pickup, if any
+	public string strSoundPickup;
 
 	// Use this for initialization
 	public virtual void Start() { }
@@ -22,6 +25,9 @@ public abstract class RunnerItem : MonoBehaviour {
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player") {
 			OnPickup();
+			
+			if ( !string.IsNullOrEmpty(strSoundPickup) )
+				AudioManager.Instance.PlayClip( strSoundPickup );
 
             ScoreManager scoreManager = RunnerGameManager.GetInstance().ScoreManager;
             scoreManager.AddPoints(PointValue);

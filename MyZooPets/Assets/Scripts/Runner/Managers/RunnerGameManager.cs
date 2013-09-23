@@ -129,6 +129,9 @@ public class RunnerGameManager : MonoBehaviour {
         // Disable the player
         if (mPlayerRunner != null)
             mPlayerRunner.gameObject.SetActive(false);
+		
+		// play game over sound
+		AudioManager.Instance.PlayClip( "runnerGameOver" );
 
         print("game over");
         mItemManager.Reset();

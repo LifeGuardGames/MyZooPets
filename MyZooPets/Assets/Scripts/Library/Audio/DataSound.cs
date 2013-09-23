@@ -15,6 +15,12 @@ public class DataSound {
 		return fVolume;	
 	}
 	
+	// pitch of the sound
+	private float fPitch = 1.0f;
+	public float GetPitch() {
+		return fPitch;	
+	}
+	
 	public DataSound( string id ) {
 		strID = id;	
 	}
@@ -23,7 +29,11 @@ public class DataSound {
 		strID = id;	
 
 		// get volume if it exists
-		if ( hashData.Contains("Volume" ) ) 
-			fVolume = float.Parse((string)hashData["Volume"]);		
+		if ( hashData.Contains("Volume") ) 
+			fVolume = float.Parse((string)hashData["Volume"]);	
+		
+		// get the pitch if it exists
+		if ( hashData.Contains("Pitch") )
+			fPitch = float.Parse((string)hashData["Pitch"]);	 
 	}
 }

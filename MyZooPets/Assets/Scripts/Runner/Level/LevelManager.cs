@@ -73,7 +73,8 @@ public class LevelManager : MonoBehaviour
                 }
 
 				// Destroy it
-                removedLevelComponent.DestroyAndCache();
+                removedLevelComponent.DestroyWithoutCache();
+
 				// GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
 				LevelComponent nextLevel = PushAndInstantiateRandomComponent();

@@ -99,34 +99,35 @@ public class ItemManager : MonoBehaviour {
         }
     }
 
+    //TO DO: need to fix caching bug
     public void StoreOrDisposeItem(RunnerItem inItem, LevelGroup.eLevelGroupID levelGroupID) {
-        Type itemType = inItem.GetType();
+        // Type itemType = inItem.GetType();
 
-        //HazardItem pool needs to be handled differently from the other items
-        if(itemType == typeof(HazardItem)){
-            //Create cache queue
-           if(!mHazardItemPool.ContainsKey(levelGroupID)){
-                mHazardItemPool.Add(levelGroupID, new Queue<HazardItem>());
-           }
+        // //HazardItem pool needs to be handled differently from the other items
+        // if(itemType == typeof(HazardItem)){
+        //     //Create cache queue
+        //    // if(!mHazardItemPool.ContainsKey(levelGroupID)){
+        //    //      mHazardItemPool.Add(levelGroupID, new Queue<HazardItem>());
+        //    // }
 
-           //Add to cache if cache size allows
-           if(mHazardItemPool[levelGroupID].Count < ItemPoolMaxSize){
-                mHazardItemPool[levelGroupID].Enqueue((HazardItem)inItem);
-           }else
-                GameObject.Destroy(inItem.gameObject);
-        }else{
-            //Create cache queue
-            if (!mItemPool.ContainsKey(itemType)) {
-                mItemPool.Add(itemType, new Queue<RunnerItem>());
-            }
-            print(mItemPool[itemType].Count);
-           //Add to cache if cache size allows
-            if (mItemPool[itemType].Count < ItemPoolMaxSize) {
-                print("push in cache");
-                mItemPool[itemType].Enqueue(inItem);
-            } else
-                GameObject.Destroy(inItem.gameObject);
-        }
+        //    // //Add to cache if cache size allows
+        //    // if(mHazardItemPool[levelGroupID].Count < ItemPoolMaxSize){
+        //    //      mHazardItemPool[levelGroupID].Enqueue((HazardItem)inItem);
+        //    // }else
+        //         GameObject.Destroy(inItem.gameObject);
+        // }else{
+        //     //Create cache queue
+        //    //  if (!mItemPool.ContainsKey(itemType)) {
+        //    //      mItemPool.Add(itemType, new Queue<RunnerItem>());
+        //    //  }
+        //    //  print(mItemPool[itemType].Count);
+        //    // //Add to cache if cache size allows
+        //    //  if (mItemPool[itemType].Count < ItemPoolMaxSize) {
+        //    //      print("push in cache");
+        //    //      mItemPool[itemType].Enqueue(inItem);
+        //    //  } else
+        //         GameObject.Destroy(inItem.gameObject);
+        // }
     }
 
     private RunnerItem ItemFactory(Type inItemType, LevelGroup.eLevelGroupID levelGroupID) {

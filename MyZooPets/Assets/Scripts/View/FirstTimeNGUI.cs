@@ -99,39 +99,19 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
         DataManager.Instance.PetColor = petColor;
         DataManager.Instance.TurnFirstTimeOff();
     }
+	
+	public void ChangeEggColor( string strSprite, string strColor ) {
+        if (!finishClicked){
+            eggSpriteScript.SetSprite(strSprite);
+            petColor = strColor;
+        }		
+	}
 
-    public void ButtonClicked_Blue(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggBlueChoose");
-            petColor = "whiteBlue";
-        }
-    }
-    public void ButtonClicked_Green(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggGreenChoose");
-            petColor = "whiteGreen";
-        }
-    }
-    public void ButtonClicked_Yellow(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggYellowChoose");
-            petColor = "whiteYellow";
-        }
-    }
-    public void ButtonClicked_Red(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggRedChoose");
-            petColor = "whiteRed";
-        }
-    }
-    public void ButtonClicked_Purple(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggPurpleChoose");
-            petColor = "whitePurple";
-        }
-    }
     public void ButtonClicked_Finish(){
         if (!finishClicked){
+			// play sound
+			AudioManager.Instance.PlayClip( "introDoneNaming" );
+			
             finishClicked = true;
             petName = nameField.text;
             if(isZoomed){

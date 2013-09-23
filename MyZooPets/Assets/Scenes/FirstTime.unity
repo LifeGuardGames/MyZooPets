@@ -444,7 +444,6 @@ GameObject:
   - 4: {fileID: 103591732}
   - 65: {fileID: 103591737}
   - 114: {fileID: 103591736}
-  - 114: {fileID: 103591735}
   - 114: {fileID: 103591734}
   - 114: {fileID: 103591738}
   m_Layer: 10
@@ -483,22 +482,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0
---- !u!114 &103591735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400008, guid: 7efc74f4d9a82784dafe53a891f85514,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 103591731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: b591eb7d2ca44f6418151e67cac50f68, type: 3}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &103591736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,8 +607,7 @@ GameObject:
   - 4: {fileID: 117977764}
   - 65: {fileID: 117977768}
   - 114: {fileID: 117977767}
-  - 114: {fileID: 117977766}
-  - 114: {fileID: 117977765}
+  - 114: {fileID: 117977769}
   m_Layer: 10
   m_Name: Button_Red
   m_TagString: Untagged
@@ -645,38 +627,6 @@ Transform:
   m_Children:
   - {fileID: 890078289}
   m_Father: {fileID: 1868595378}
---- !u!114 &117977765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400026, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 117977763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 949532637}
-  functionName: ButtonClicked_Red
-  trigger: 0
-  includeChildren: 0
---- !u!114 &117977766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400014, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 117977763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &117977767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,6 +657,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 110, y: 51, z: 0}
   m_Center: {x: 0, y: .500007629, z: -1.25}
+--- !u!114 &117977769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 117977763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 0
+  strAnalytics: 
+  strSprite: eggRedChoose
+  strColor: whiteRed
 --- !u!1 &190126453
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,8 +917,7 @@ GameObject:
   - 4: {fileID: 255384485}
   - 65: {fileID: 255384489}
   - 114: {fileID: 255384488}
-  - 114: {fileID: 255384487}
-  - 114: {fileID: 255384486}
+  - 114: {fileID: 255384490}
   m_Layer: 10
   m_Name: Button_Yellow
   m_TagString: Untagged
@@ -971,38 +937,6 @@ Transform:
   m_Children:
   - {fileID: 1848553016}
   m_Father: {fileID: 1868595378}
---- !u!114 &255384486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400012, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 255384484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 949532637}
-  functionName: ButtonClicked_Yellow
-  trigger: 0
-  includeChildren: 0
---- !u!114 &255384487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400040, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 255384484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &255384488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1033,6 +967,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 110, y: 51, z: 0}
   m_Center: {x: 0, y: .5, z: -1.25}
+--- !u!114 &255384490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 255384484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 0
+  strAnalytics: 
+  strSprite: eggYellowChoose
+  strColor: whiteYellow
 --- !u!1 &297751135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,8 +1176,7 @@ GameObject:
   - 4: {fileID: 352093027}
   - 65: {fileID: 352093031}
   - 114: {fileID: 352093030}
-  - 114: {fileID: 352093029}
-  - 114: {fileID: 352093028}
+  - 114: {fileID: 352093032}
   m_Layer: 10
   m_Name: Button_Blue
   m_TagString: Untagged
@@ -1246,38 +1196,6 @@ Transform:
   m_Children:
   - {fileID: 481580665}
   m_Father: {fileID: 1868595378}
---- !u!114 &352093028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400064, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 352093026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 949532637}
-  functionName: ButtonClicked_Blue
-  trigger: 0
-  includeChildren: 0
---- !u!114 &352093029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400030, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 352093026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &352093030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,20 +1226,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 110, y: 50.9999962, z: 0}
   m_Center: {x: 0, y: .500001907, z: -1.25}
---- !u!114 &361026958
+--- !u!114 &352093032
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 352093026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 1007869956}
-    Id: b280330d-85f2-404d-bbb3-ea7881d58796
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 0
+  strAnalytics: 
+  strSprite: eggBlueChoose
+  strColor: whiteBlue
 --- !u!1 &361186181
 GameObject:
   m_ObjectHideFlags: 0
@@ -2435,6 +2356,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!1 &802812494
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,7 +3217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 361026958}
+  Reference: {fileID: 1304270000}
 --- !u!4 &1044562557
 Transform:
   m_ObjectHideFlags: 0
@@ -3598,8 +3525,7 @@ GameObject:
   - 4: {fileID: 1156247220}
   - 65: {fileID: 1156247224}
   - 114: {fileID: 1156247223}
-  - 114: {fileID: 1156247222}
-  - 114: {fileID: 1156247221}
+  - 114: {fileID: 1156247225}
   m_Layer: 10
   m_Name: Button_Purple
   m_TagString: Untagged
@@ -3619,38 +3545,6 @@ Transform:
   m_Children:
   - {fileID: 1745929995}
   m_Father: {fileID: 1868595378}
---- !u!114 &1156247221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400028, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1156247219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 949532637}
-  functionName: ButtonClicked_Purple
-  trigger: 0
-  includeChildren: 0
---- !u!114 &1156247222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400042, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1156247219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &1156247223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3681,6 +3575,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 110, y: 51, z: 0}
   m_Center: {x: 0, y: .5, z: -1.25}
+--- !u!114 &1156247225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1156247219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 0
+  strAnalytics: 
+  strSprite: eggPurpleChoose
+  strColor: whitePurple
 --- !u!1 &1263557850
 GameObject:
   m_ObjectHideFlags: 0
@@ -4010,6 +3921,20 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 06627c0fef9a7482b9f443418b0f6cbe, type: 3}
   - {fileID: 4900000, guid: 2adbac43073894f02a60fe2cc4f2191d, type: 3}
   - {fileID: 4900000, guid: 49909b9e68f0d496d9f4670fd8af1d03, type: 3}
+--- !u!114 &1304270000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 1007869956}
+    Id: b280330d-85f2-404d-bbb3-ea7881d58796
 --- !u!1 &1319384360
 GameObject:
   m_ObjectHideFlags: 0
@@ -4834,6 +4759,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1648505578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5137,8 +5068,7 @@ GameObject:
   - 4: {fileID: 1765168031}
   - 65: {fileID: 1765168035}
   - 114: {fileID: 1765168034}
-  - 114: {fileID: 1765168033}
-  - 114: {fileID: 1765168032}
+  - 114: {fileID: 1765168036}
   m_Layer: 10
   m_Name: Button_Green
   m_TagString: Untagged
@@ -5158,38 +5088,6 @@ Transform:
   m_Children:
   - {fileID: 6818928}
   m_Father: {fileID: 1868595378}
---- !u!114 &1765168032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400060, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1765168030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 949532637}
-  functionName: ButtonClicked_Green
-  trigger: 0
-  includeChildren: 0
---- !u!114 &1765168033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400024, guid: 65f73940970334ba8889654290088589,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1765168030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &1765168034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5220,6 +5118,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 110, y: 51, z: 0}
   m_Center: {x: 0, y: .5, z: -1.25}
+--- !u!114 &1765168036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1765168030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 0
+  strAnalytics: 
+  strSprite: eggGreenChoose
+  strColor: whiteGreen
 --- !u!1 &1770599745
 GameObject:
   m_ObjectHideFlags: 0

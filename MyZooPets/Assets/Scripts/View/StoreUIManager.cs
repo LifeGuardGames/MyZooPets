@@ -22,11 +22,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private GameObject grid;
 
 	void Awake(){
-		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		grid = GameObject.Find("Grid");
 	}
 
 	void Start (){
+		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		CreateItems(FirstPageTag);
 	}
 

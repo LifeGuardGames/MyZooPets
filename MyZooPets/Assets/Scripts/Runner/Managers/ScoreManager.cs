@@ -18,7 +18,35 @@ public class ScoreManager : MonoBehaviour {
     public UILabel ScoreLabel = null;
     public UILabel CoinLabel = null;
     public UILabel DistanceLabel = null;
-
+	
+	// if X seconds elapse without picking up a coin, the streak is over
+	public float fCoinStreakTime;
+	
+	// coin streak countdown
+	private float mfCoinStreakCountdown;
+	private int mnCoinStreak;
+	
+	public int GetCoinStreak() {
+		return mnCoinStreak;
+	}
+	private void SetCoinStreak( int num ) {
+		mnCoinStreak = num;	
+	}
+	private void ChangeCoinStreak( int change ) {
+		int nStreak = GetCoinStreak();
+		SetCoinStreak( nStreak+change );
+	}
+	private float GetCoinStreakCountdown() {
+		return mfCoinStreakCountdown;	
+	}
+	private void SetCoinStreakCountdown( float num ) {
+		mfCoinStreakCountdown = num;	
+	}
+	private void ChangeCoinStreakCountdown( float change ) {
+		float fCountdown = GetCoinStreakCountdown();
+		SetCoinStreakCountdown( fCountdown + change );
+	}	
+	
     private int mPlayerDistancePoints = 0;
     private int mPlayerCoins = 0;
     private int mPlayerPoints = 0;
@@ -46,6 +74,15 @@ public class ScoreManager : MonoBehaviour {
             if (DistanceLabel != null) {
                 DistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distanceTraveled.ToString("F1");
             }
+			
+			// update coin streak countdown (if it's not 0)
+			if ( mfCoinStreakCountdown > 0 ) {
+				ChangeCoinStreakCountdown( -Time.deltaTime );
+			
+				// if the countdown ran out, our streak is reset
+				if ( mfCoinStreakCountdown <= 0 )
+					SetCoinStreak( 0 );
+			}
         }
 	}
 
@@ -53,9 +90,15 @@ public class ScoreManager : MonoBehaviour {
         mPlayerDistancePoints = 0;
         mPlayerCoins = 0;
         mPlayerPoints = 0;
+		SetCoinStreakCountdown( 0 );
+		SetCoinStreak( 0 );
     }
 
     public void AddCoins(int inNumCoinsToAdd) {
+		// the player picked up a coin, so increment their streak and reset the countdown
+		SetCoinStreakCountdown( fCoinStreakTime );
+		ChangeCoinStreak( 1 );
+		
         mPlayerCoins += inNumCoinsToAdd;
         if (CoinLabel != null)
             CoinLabel.text = Localization.Localize( "RUNNER_COINS" ) + mPlayerCoins;

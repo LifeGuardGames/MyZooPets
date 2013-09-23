@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour
 {
     public int BottomLayer = 31;
 	public float LevelTooLowYValue = -50.0f;
+	public float LevelTooLowYValueGameOver = -80.0f;
 	public float LevelGroupSwitchTime = 40.0f;
     public float CoinSpawnDistance = 1f;
     public LevelGroup StartingLevelGroup;

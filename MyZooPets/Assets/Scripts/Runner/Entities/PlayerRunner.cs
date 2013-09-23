@@ -71,6 +71,7 @@ public class PlayerRunner : MonoBehaviour
     private Vector3 mLastPosition;
 	private CharacterController mCharacterController;
     private List<Collider> mIgnoringCollisions = new List<Collider>();
+	private bool mbDied;
 
     public bool Invincible { get { return mbInvincible; } }
 
@@ -144,6 +145,7 @@ public class PlayerRunner : MonoBehaviour
         mbGrounded = false;
         mbFalling = false;
         mbJumping = false;
+		mbDied = false;
         //@TODO you may have to reset all ignoring collisions before clearing. idk.
         mIgnoringCollisions.Clear();
 
@@ -194,8 +196,9 @@ public class PlayerRunner : MonoBehaviour
         } else {
             if (mbGrounded) {
                 // Just entered freefall
-                if (!mbJumping && !mbFalling)
+                if (!mbJumping && !mbFalling) {
                     BroadcastMessage("onPlayerFreeFall", SendMessageOptions.DontRequireReceiver);
+				}
             }
         }
 
@@ -297,6 +300,9 @@ public class PlayerRunner : MonoBehaviour
 			mMovementVector.y += JumpSpeed;
             mbJumping = true;
             BroadcastMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
+			
+			// play jump sound
+			AudioManager.Instance.PlayClip( "runnerJumpUp" );
 		}
 	}
 
@@ -314,6 +320,9 @@ public class PlayerRunner : MonoBehaviour
                     mbFalling = true;
                     mbGrounded = false;
             		BroadcastMessage("onPlayerFallBegin", SendMessageOptions.DontRequireReceiver);
+					
+					// play jump down sound
+					AudioManager.Instance.PlayClip( "runnerJumpDown" );
                 }
             }
         }
@@ -324,8 +333,18 @@ public class PlayerRunner : MonoBehaviour
         LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
         float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
         if (transform.position.y < yTooLowValue) {
-            if (!mbInvincible)
-                RunnerGameManager.GetInstance().ActivateGameOver();
+            if (!mbInvincible) {
+				
+				if ( transform.position.y < levelManager.LevelTooLowYValueGameOver )
+                	RunnerGameManager.GetInstance().ActivateGameOver();
+				else {
+					// play die sound (once)
+					if ( !mbDied ) {
+						mbDied = true;
+						AudioManager.Instance.PlayClip( "runnerDie" );
+					}
+				}
+			}
             else {
                 Vector3 position = transform.position;
                 position.y = yTooLowValue;

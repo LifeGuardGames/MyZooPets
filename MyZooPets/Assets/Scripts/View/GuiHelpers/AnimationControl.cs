@@ -17,6 +17,11 @@ public class AnimationControl : MonoBehaviour {
 		}
 	}
 	
+	public void Play(string animationName){
+		isPlay = true;
+		animation.Play(animationName);
+	}
+	
 	public void Play(){
 		isPlay = true;
 		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;

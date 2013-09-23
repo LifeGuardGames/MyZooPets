@@ -83,12 +83,12 @@ public enum NotificationPopupFields{
 }
 public enum ZoomItem{
     Pet,
-    TrophyShelf,
     SlotMachine,
     RealInhaler,
     BadgeBoard,
     Dojo,
-	YardSign
+	YardSign,
+    RunnerGame
 }
 public enum BadgeType{
     Level,

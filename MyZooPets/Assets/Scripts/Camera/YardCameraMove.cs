@@ -3,35 +3,22 @@ using System.Collections;
 
 public class YardCameraMove : CameraMove{
 
-    protected Vector3 petSideFinalPosition;
-    protected Vector3 petSideFinalFaceDirection = new Vector3(15.54f, 0, 0);
+    public GameObject runnerEntrance;
+    public Vector3 runnerFinalPosition;
+    public Vector3 runnerFinalFaceDirection;
 
-    protected Vector3 petCameraOffsetYard = new Vector3(1.8f, 2.87f, -3.1f); // use this whenever changing petSideFinalPosition
-    // this way, the camera will always go to the pet
-
-    protected GameObject spritePet;
-
-    protected override void Start(){
-        base.Start();
-        spritePet = GameObject.Find("SpritePet");
-    }
+    public GameObject spritePet;
 
     public override void ZoomToggle(ZoomItem item){
         if(!isCameraMoving){
             if(!zoomed){
                 switch (item){
-                    case ZoomItem.Pet:
-                    // todo: change or review this after pet moves along with camera
-
-                    // petSideFinalPosition = spritePet.transform.localPosition + petCameraOffsetYard;
-                    // while pet doesn't move along with slide:
-                    petSideFinalPosition = spritePet.transform.position + petCameraOffsetYard;
-                    CameraWorldTransformEnterMode(petSideFinalPosition,petSideFinalFaceDirection, 0.5f);
+                    case ZoomItem.RunnerGame:
+                    CameraTransformLoadLevel(runnerFinalPosition, runnerFinalFaceDirection, 2f, runnerEntrance);
                     break;
-
                     default:
                     Debug.Log("Invalid zoom item!");
-                    return;
+                    break;
                 }
                 zoomed = true;
                 LockCameraMove();

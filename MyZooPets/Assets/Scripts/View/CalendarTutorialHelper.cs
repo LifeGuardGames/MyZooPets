@@ -60,7 +60,7 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
             calendarHintArrowPrefab.transform.localEulerAngles.y, 0);
 
         //Bring green stamp above the back drop
-        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -21); 
+        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -31); 
     }
 
     //Black out everything. Only shows the red stamp
@@ -84,7 +84,7 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
             calendarHintArrowPrefab.transform.localEulerAngles.y, 0);
 
        //Bring red stamp above the back drop
-        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -21); 
+        night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, -31); 
     }
 
     //Black out everything.
@@ -94,7 +94,7 @@ public class CalendarTutorialHelper : Singleton<CalendarTutorialHelper>{
         night.localPosition = new Vector3(night.localPosition.x, night.localPosition.y, 0);
 
         //Bring gray stamp above
-        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -21);
+        morning.localPosition = new Vector3(morning.localPosition.x, morning.localPosition.y, -31);
     }
 
     //Reset calendar to original after tutorial is finished

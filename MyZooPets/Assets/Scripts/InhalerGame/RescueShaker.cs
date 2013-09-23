@@ -43,6 +43,9 @@ public class RescueShaker : InhalerPart {
 
    protected override void NextStep(){
         base.NextStep();
+		
+		// play sound here
+		AudioManager.Instance.PlayClip( "inhalerShake" );		
 
         doneWithShake = true;
         Disable();

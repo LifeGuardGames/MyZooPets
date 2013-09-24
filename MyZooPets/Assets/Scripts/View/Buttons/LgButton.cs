@@ -34,6 +34,13 @@ public class LgButton : MonoBehaviour {
 		return strAnalytics;
 	}	
 	
+	void Awake() {
+		_Awake();	
+	}
+	
+	protected virtual void _Awake() {
+	}
+	
 	//---------------------------------------------------
 	// OnPress()
 	// 2D sprite buttons will receive this event, which

@@ -226,7 +226,7 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.Instance.Stats.ResetPoints();
 			nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
 			displayPoints = 0;
 			dataPoints = 0;
 			lastLevel = DataManager.Instance.Level.CurrentLevel;
@@ -282,33 +282,18 @@ public class HUDAnimator : MonoBehaviour {
 		if(deltaPoints != 0){
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
-			StartCurvePoints(deltaPoints, pointsOrigin);
 			
-			// only play sounds if we are gaining points
-			LgAudioSource sourcePoints = null;
-			if ( deltaPoints > 0 && bPlaySounds )
-				sourcePoints = AudioManager.Instance.PlayClip( strSoundXP );
+			string strSound = bPlaySounds && deltaPoints > 0 ? strSoundXP : null;
+			StartCurvePoints(deltaPoints, pointsOrigin, strSound);
 			
 			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
-			
-			// fade out the sound now that the graphics are done
-			if ( sourcePoints )
-				StartCoroutine(sourcePoints.FadeOut(fSoundFadeTime));
 		}
 		if(deltaStars != 0){
 			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
-			StartCurveStars(deltaStars, starsOrigin);
-			
-			// only play sounds if we are gaining points
-			LgAudioSource sourceStars = null;
-			if ( deltaStars > 0 && bPlaySounds )
-				sourceStars = AudioManager.Instance.PlayClip( strSoundStars );
+			string strSound = bPlaySounds && deltaStars > 0 ? strSoundStars : null;
+			StartCurveStars(deltaStars, starsOrigin, strSound);
 			
 			yield return new WaitForSeconds(4f / 200f * deltaStars);
-			
-			// fade out the sound now that the graphics are done
-			if ( sourceStars )
-				StartCoroutine(sourceStars.FadeOut(fSoundFadeTime));
 		}
 		if(deltaHealth != 0){
 			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);
@@ -321,13 +306,19 @@ public class HUDAnimator : MonoBehaviour {
 			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
 		}
 	}
-
+	
 	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){
-		TweenMoveToPoint(HUDElementType.points, deltaPoints, pointsOrigin);
+		StartCurvePoints( deltaPoints, pointsOrigin, null );
 	}
-
+	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin, string strSound ){
+		TweenMoveToPoint(HUDElementType.points, deltaPoints, pointsOrigin, strSound);
+	}
+	
 	public void StartCurveStars(int deltaStars, Vector3 starsOrigin){
-		TweenMoveToPoint(HUDElementType.stars, deltaStars, starsOrigin);
+		StartCurveStars( deltaStars, starsOrigin, null );
+	}
+	public void StartCurveStars(int deltaStars, Vector3 starsOrigin, string strSound){
+		TweenMoveToPoint(HUDElementType.stars, deltaStars, starsOrigin, strSound);
 	}
 
 	public void StartCurveHealth(int deltaHealth, Vector3 healthOrigin){
@@ -340,6 +331,9 @@ public class HUDAnimator : MonoBehaviour {
 
 	// Using Linear move for now, LeanTween does not have moveLocal curve path
 	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint){
+		TweenMoveToPoint( type, amount, originPoint, null );	
+	}
+	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint, string strSound){
 		float duration = 1f;
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
@@ -409,15 +403,20 @@ public class HUDAnimator : MonoBehaviour {
 			}
 			break;
 		}
-		
+
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
-			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade));
+			Hashtable hashSoundOverrides = new Hashtable();
+			hashSoundOverrides["Pitch"] = 1.0f + i;
+			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade, strSound, hashSoundOverrides));
 		}
 	}
 
-	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade){
+	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade, string strSound, Hashtable hashSoundOverrides){
 		yield return new WaitForSeconds(waitTime);
+		
+		if ( !string.IsNullOrEmpty(strSound) )
+			AudioManager.Instance.PlayClip( strSound, hashSoundOverrides );
 
 		// Create the tween image
 		UISprite sprite = NGUITools.AddSprite(tweenParent, commonAtlas, imageName);

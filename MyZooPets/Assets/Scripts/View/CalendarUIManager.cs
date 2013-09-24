@@ -150,9 +150,6 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             button.isEnabled = false;
             button.isEnabled = true;
 			
-			// play a sound for the claim
-			AudioManager.Instance.PlayClip( strSoundClaimReward, Preferences.Sound );
-			
             //Add reward
             CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
 

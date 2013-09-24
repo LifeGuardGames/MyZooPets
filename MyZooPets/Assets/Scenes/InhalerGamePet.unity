@@ -136,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 33164406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.5, z: 0}
+  m_LocalPosition: {x: 0, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1759701212}
@@ -842,7 +842,7 @@ Animation:
   m_GameObject: {fileID: 293361878}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: ce48838773479ee44a28aac09a41e17c, type: 2}
+  m_Animation: {fileID: 0}
   m_Animations:
   - {fileID: 7400000, guid: ce48838773479ee44a28aac09a41e17c, type: 2}
   - {fileID: 7400000, guid: cfe58b05248f8274dacdf1cdcce675d2, type: 2}
@@ -851,7 +851,7 @@ Animation:
   - {fileID: 7400000, guid: ee0da02c244656a4e89475a0a3668c5a, type: 2}
   - {fileID: 7400000, guid: 576f0083fc9cbb842bfa5ca034b6d37a, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
   m_UserAABB:
@@ -1117,8 +1117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 7
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: breatheIn
 --- !u!65 &323068338
 BoxCollider:
@@ -1569,20 +1568,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!114 &443088802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 440341766}
-    Id: 8756fa83-0558-474d-a101-1e7123c65547
 --- !u!1 &473155786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1822,7 +1807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 443088802}
+  Reference: {fileID: 1873146089}
 --- !u!4 &585321543
 Transform:
   m_ObjectHideFlags: 0
@@ -1857,7 +1842,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 591515949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.5, z: 0}
+  m_LocalPosition: {x: 0, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1137665733}
@@ -2214,8 +2199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 2
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: attachSpacer
 --- !u!1 &644272486
 GameObject:
@@ -2747,8 +2731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 3
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: Shake
 --- !u!114 &742270403
 MonoBehaviour:
@@ -2763,8 +2746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 5
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: giveInhaler
 --- !u!1 &757663629
 GameObject:
@@ -3055,11 +3037,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: .0115089417
+    e13: .511508942
     e20: 0
     e21: 0
     e22: 384
@@ -3573,11 +3555,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -349.5
+    e13: -349
     e20: 0
     e21: 0
     e22: 384
@@ -4008,8 +3990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 1
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: takeOffCap
 --- !u!1001 &1176515501
 Prefab:
@@ -4319,7 +4300,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1358462900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 821002515}
@@ -5377,7 +5358,6 @@ GameObject:
   - 114: {fileID: 1839394716}
   - 65: {fileID: 1839394719}
   - 114: {fileID: 1839394720}
-  - 114: {fileID: 1839394721}
   m_Layer: 0
   m_Name: Prescription
   m_TagString: Untagged
@@ -5468,22 +5448,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c83d540ec79b4e6a9af104c3bd0eadc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1839394721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1839394714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startHidden: 1
-  showOnStep: 6
-  hintArrow: {fileID: 0}
-  hintMessage: {fileID: 0}
-  clipToPlay: 
 --- !u!1 &1856142249
 GameObject:
   m_ObjectHideFlags: 0
@@ -5699,6 +5663,20 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &1873146089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 440341766}
+    Id: 8756fa83-0558-474d-a101-1e7123c65547
 --- !u!1 &1874253335
 GameObject:
   m_ObjectHideFlags: 0
@@ -6544,8 +6522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHidden: 1
   showOnStep: 4
-  hintArrow: {fileID: 293361878}
-  hintMessage: {fileID: 0}
+  finger: {fileID: 293361878}
   clipToPlay: breatheOut
 --- !u!65 &2099793785
 BoxCollider:

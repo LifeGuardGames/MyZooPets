@@ -1460,6 +1460,20 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &400880328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entries:
+  - gameObject: {fileID: 440341766}
+    Id: 8756fa83-0558-474d-a101-1e7123c65547
 --- !u!1001 &401523462
 Prefab:
   m_ObjectHideFlags: 0
@@ -1807,7 +1821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredObjects: []
-  Reference: {fileID: 1873146089}
+  Reference: {fileID: 400880328}
 --- !u!4 &585321543
 Transform:
   m_ObjectHideFlags: 0
@@ -2314,8 +2328,8 @@ MonoBehaviour:
   commonAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   tweenParent: {fileID: 600010814}
   fSoundFadeTime: .5
-  strSoundStars: StarsGain
-  strSoundXP: XpGain
+  strSoundStars: StarSingle
+  strSoundXP: PointSingle
 --- !u!114 &678316139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3585,6 +3599,8 @@ GameObject:
   - 114: {fileID: 1093178303}
   - 114: {fileID: 1093178302}
   - 114: {fileID: 1093178304}
+  - 114: {fileID: 1093178305}
+  - 114: {fileID: 1093178306}
   m_Layer: 0
   m_Name: Gestures
   m_TagString: Untagged
@@ -3695,6 +3711,43 @@ MonoBehaviour:
   MinDOT: -.699999988
   MinDistance: 5
   DeltaScale: 1
+--- !u!114 &1093178305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1093178299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d4b152ea6d4a44bbd27f639edb4bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FingerIndexFilter: 0
+  Raycaster: {fileID: 0}
+  UseSendMessage: 1
+  SendMessageToSelection: 1
+  MessageTarget: {fileID: 0}
+  MessageName: OnFingerHover
+--- !u!114 &1093178306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1093178299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3aeaa6af5a2574dbc0c14ed591b5b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FingerIndexFilter: 0
+  Raycaster: {fileID: 0}
+  UseSendMessage: 1
+  SendMessageToSelection: 1
+  MessageTarget: {fileID: 0}
+  MoveMessageName: OnFingerMove
+  StationaryMessageName: OnFingerStationary
+  TrackMove: 0
+  TrackStationary: 1
 --- !u!1 &1113856632
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,20 +5716,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &1873146089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7debdd6cf0c58417c8b76cf5f31b1c12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entries:
-  - gameObject: {fileID: 440341766}
-    Id: 8756fa83-0558-474d-a101-1e7123c65547
 --- !u!1 &1874253335
 GameObject:
   m_ObjectHideFlags: 0

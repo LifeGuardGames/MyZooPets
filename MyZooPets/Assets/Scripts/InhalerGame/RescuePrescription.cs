@@ -14,29 +14,18 @@ public class RescuePrescription : InhalerPart{
    } 
 
     void OnPinch(PinchGesture gesture){ 
-		Debug.Log("Pinch detected");
         // current gesture phase (Started/Updated/Ended)
         ContinuousGesturePhase phase = gesture.Phase;
 
         if(phase == ContinuousGesturePhase.Ended){
             // Current gap distance between the two fingers
             float gap = gesture.Gap;
-			Debug.Log("Pinch ended: " + gap + " vs " + minGapDistance);
             if(gap <= minGapDistance){
                 PrescriptionAnimation();
                 NextStep();
             }
         }
     }
-
-#if UNITY_EDITOR
-    void Update(){
-       if(Input.GetKeyDown(KeyCode.P)){
-            PrescriptionAnimation();
-            NextStep();
-       }
-    }
-#endif 
 
     private void PrescriptionAnimation(){
         Vector3 to = new Vector3(transform.localPosition.x, 1.5f, transform.localPosition.z);

@@ -69,6 +69,7 @@ public class PanToMoveCamera : MonoBehaviour{
                     float currentPosX = currentPartition * partitionOffset;
                     normalizedTouchPosX = GetNormalizedPosition();
 				
+					// see if we are moving in either direction
 					bool bMovingLeft = currentTouchPos.x < startTouchPos.x && currentPartition != lastPartition;
 					bool bMovingRight = currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition;
 				
@@ -83,30 +84,6 @@ public class PanToMoveCamera : MonoBehaviour{
                             transform.localPosition = new Vector3(newPosX, 0, 0);
                         }
 					}
-					
-					/*
-                    if(currentTouchPos.x < startTouchPos.x && currentPartition != lastPartition){
-                        panDirection = Direction.Left; //panning left
-                        
-                        if(normalizedTouchPosX >= minNormalizedPanDistance){
-                            //With the normalize position figure out how much the camera will have to move
-                            float normalizedPartitionX = normalizedTouchPosX * partitionOffset;
-                            float newPosX = currentPosX + normalizedPartitionX;
-
-                            transform.localPosition = new Vector3(newPosX, 0, 0);
-                        }
-                    }else if(currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition){
-                        panDirection = Direction.Right; //panning right
-
-                        if(normalizedTouchPosX >= minNormalizedPanDistance){
-                            //With the normalize position figure out how much the camera will have to move
-                            float normalizedPartitionX = normalizedTouchPosX * partitionOffset;
-                            float newPosX = currentPosX - normalizedPartitionX;
-
-                            transform.localPosition = new Vector3(newPosX, 0, 0);
-                        }
-                    }
-                    */
                 break;
 
                 case TouchPhase.Ended:
@@ -155,25 +132,6 @@ public class PanToMoveCamera : MonoBehaviour{
         return deltaTouchPosX / Screen.width;
     }
 	
-	/*
-    private void SnapCamera(Direction direction){
-        Hashtable optional = new Hashtable();
-        float moveTo = 0;
-		
-		//ChangePartition( 1, direction );
-
-        if(direction == Direction.Left)
-            MoveRightOnePartition();
-        else
-            MoveLeftOnePartition();
-       	
-
-        moveTo = partitionOffset * currentPartition;
-        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
-        normalizedTouchPosX = 0;
-    }
-    */
-	
 	///////////////////////////////////////////
 	// SnapCamera()
 	// Snaps the camera to the current partition.
@@ -186,39 +144,6 @@ public class PanToMoveCamera : MonoBehaviour{
         LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
         normalizedTouchPosX = 0;		
 	}
-	/*
-    private void PanSnapCameraTo(Direction direction){
-        Hashtable optional = new Hashtable();
-        float moveTo = 0;
-
-        if(normalizedTouchPosX >= 0.5){ //more than half way to the next screen
-			//ChangePartition( 1, direction );
-			
-            if(direction == Direction.Left)
-                MoveRightOnePartition();
-            else
-                MoveLeftOnePartition();
-                
-        }
-
-        moveTo = partitionOffset * currentPartition;
-        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
-        normalizedTouchPosX = 0;
-    }*/
-	
-	/*
-    //Move to the next partition and check boundary
-    private void MoveRightOnePartition(){
-        if(currentPartition + 1 <= lastPartition)
-            currentPartition++;
-    }
-
-    //Move to previous partition and check boundary
-    private void MoveLeftOnePartition(){
-        if(currentPartition - 1 >= firstPartition)
-            currentPartition--;
-    }
-    */
 	
 	///////////////////////////////////////////
 	// ChangePartition()

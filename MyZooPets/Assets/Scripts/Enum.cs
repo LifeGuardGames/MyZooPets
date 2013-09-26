@@ -100,18 +100,6 @@ public enum BadgeType{
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
-public enum DojoSkillName{
-    Sit,
-    Wave,
-    Backflip,
-    HighFive,
-    DiscoMove,
-    SadFace,
-    Konfu,
-    Chilling,
-    HighJump,
-}
-
 public enum TalkImageType{
     Heart,
 }

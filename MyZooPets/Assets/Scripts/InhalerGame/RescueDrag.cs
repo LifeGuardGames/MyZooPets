@@ -10,6 +10,7 @@ public class RescueDrag : InhalerPart{
 
     private Vector3 startDragPos; //Original position of the inhaler
     private Vector3 targetDragPos;
+    private bool doneWithDrag = true;
 
     protected override void Awake(){
         gameStepID = 5;
@@ -31,9 +32,10 @@ public class RescueDrag : InhalerPart{
             if(Physics.Raycast(ray, out hit, 100, maskLayer)){
                 if(hit.collider.gameObject == targetCollider){ 
                     transform.position = targetDragPos;
-                    
-                    NextStep();
-                    snapBack = false;
+                    if(!doneWithDrag){
+                        NextStep();
+                        snapBack = false;
+                    }
                 }
             }
 
@@ -46,6 +48,7 @@ public class RescueDrag : InhalerPart{
     protected override void Enable(){
         transform.collider.enabled = true;
         targetCollider.SetActive(true);
+        doneWithDrag = false;
     }
 
     protected override void NextStep(){
@@ -55,5 +58,6 @@ public class RescueDrag : InhalerPart{
         base.NextStep();
         Destroy(targetCollider);
         transform.collider.enabled = false;
+        doneWithDrag = true;
     }
 }

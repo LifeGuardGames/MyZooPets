@@ -3,30 +3,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DataBadges{
-    private static Dictionary<string, Badge> allBadges =
-        new Dictionary<string, Badge>(); //Key: badgeID, Value: instance of Badge.cs
-    private static bool dataLoaded = false; //Prohibit double loading data
+public class DataSkills{
+    private static Dictionary<string, Skill> allSkills = 
+        new Dictionary<string, Skill>(); //Key: skillID, Value: instance of Skill.cs
+    private static bool dataLoaded = false;
+   
+    //Return all the data for all Skills 
+    public static Dictionary<string, Skill> GetAllSkills(){
+        return allSkills;
+    } 
 
-    //Return all the data for all badges
-    public static Dictionary<string, Badge> GetAllBadges(){
-        return allBadges;
-    }
-
-    //Return the Badge with badgeID
-    public static Badge GetBadge(string badgeID){
-        Badge badge = null;
-        if(allBadges.ContainsKey(badgeID)){
-            badge = allBadges[badgeID];
+    public static Skill GetSkill(string skillID){
+        Skill skill = null;
+        if(allSkills.ContainsKey(skillID)){
+            skill = allSkills[skillID];
         }
-        return badge;
+        return skill;
     }
 
     public static void SetupData(){
         if(dataLoaded) return;
 
         //Load from xml
-        TextAsset file = (TextAsset) Resources.Load("Badges", typeof(TextAsset));
+        TextAsset file = (TextAsset) Resources.Load("Skills", typeof(TextAsset));
         string xmlString = file.text;
 
         //Create XMLParser instance
@@ -41,16 +40,16 @@ public class DataBadges{
 
             //Get id
             Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
-            string badgeID = (string)hashAttr["ID"]; 
+            string skillID = (string)hashAttr["ID"]; 
 
             //Get badge properties from xml node
             Hashtable hashItemData = XMLUtils.GetChildren(childNode);
 
-            Badge badge = null;
-            badge = new Badge(badgeID, hashItemData);
+            Skill skill = null;
+            skill = new Skill(skillID, hashItemData);
 
-            allBadges.Add(badgeID, badge);
+            allSkills.Add(skillID, skill);
         }
         dataLoaded = true;
-    } 
+    }
 }

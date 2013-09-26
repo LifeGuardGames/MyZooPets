@@ -132,11 +132,30 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void QuitInhalerGame(){
-
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
+			ShowCutscene();
+			return;	
+		}
+		
 		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
         // Add scene transition as well
         Application.LoadLevel("NewBedRoom");
     }
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_PostInhaler") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+		QuitInhalerGame();
+    }	
 
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){

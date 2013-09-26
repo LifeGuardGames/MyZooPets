@@ -58,10 +58,15 @@ public class DGTManager : MinigameManager<DGTManager> {
 	public static EventHandler<EventArgs> OnSpeedChange; //when the game speed changes
 	//=====================================================
 	
+	protected override void _Start() {
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
+			ShowCutscene();
+	}	
+	
 	//---------------------------------------------------
 	// _NewGame()
 	//---------------------------------------------------	
-	protected override void _NewGame() {
+	protected override void _NewGame() {	
 		// set our selected zone to the starting zone
 		SetSelectedZone( goStartingZone );
 		
@@ -77,6 +82,20 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// set the spawn timer to 0
 		SetSpawnTimer( 0 );
 	}
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_Clinic") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Clinic");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+    }		
 	
 	//---------------------------------------------------
 	// SetSelectedZone()

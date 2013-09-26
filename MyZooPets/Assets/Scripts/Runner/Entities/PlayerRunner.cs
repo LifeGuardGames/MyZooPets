@@ -89,6 +89,9 @@ public class PlayerRunner : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
+		if ( !RunnerGameManager.GetInstance().GameRunning )
+			return;
+		
         // Poll the input. Generally the InputManager handles this, so its really just for debugging.
         UpdateInput();
         // If we are invincible, update the timer.
@@ -101,6 +104,9 @@ public class PlayerRunner : MonoBehaviour
 	
     // The more physics-y update. Called multiple times per frame.
 	void FixedUpdate() {
+		if ( !RunnerGameManager.GetInstance().GameRunning )
+			return;
+		
         // This is what actually moves the player.
 		UpdateMovement();
 

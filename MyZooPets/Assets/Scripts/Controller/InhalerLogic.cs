@@ -49,19 +49,21 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         currentStep++;
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
                 OnNextStep(this, EventArgs.Empty);
-        if(IsDoneWithGame()){ //Fire GameOver event if game is done
-			
-			// play game over sound
-			AudioManager.Instance.PlayClip( "inhalerDone" );
-			
-            IsFirstTimeRescue = false;
-            CalendarLogic.Instance.RecordGivingInhaler(); 
-            if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
-                OnGameOver(this, EventArgs.Empty);
-        }
+        if(IsDoneWithGame())
+			GameDone();
     }
     //======================================================
-
+	
+	private void GameDone() {		
+		// play game over sound
+		AudioManager.Instance.PlayClip( "inhalerDone" );
+		
+        IsFirstTimeRescue = false;
+        CalendarLogic.Instance.RecordGivingInhaler(); 
+        if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
+            OnGameOver(this, EventArgs.Empty);		
+	}
+	
     public void ResetGame(){
         currentStep = 1;
     }

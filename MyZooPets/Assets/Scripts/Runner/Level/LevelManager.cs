@@ -47,6 +47,9 @@ public class LevelManager : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update() {
+		if ( !RunnerGameManager.GetInstance().GameRunning )
+			return;
+		
 		// Assuming there is a runner and a level.
 		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
 		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {

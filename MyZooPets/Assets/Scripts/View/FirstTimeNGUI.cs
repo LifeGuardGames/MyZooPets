@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// First time GUI.
@@ -136,10 +138,25 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 
     private void ZoomOutMove(){
         CameraTransform(initPosition,initFaceDirection);
-        Invoke("LoadScene", 1);
+        Invoke("ShowIntroMovie", 1);
     }
-
-    private void LoadScene(){
-        Application.LoadLevel("NewBedRoom");
+	
+	private void ShowIntroMovie() {
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Intro") )
+			LoadScene();
+		
+		GameObject resourceMovie = Resources.Load("Cutscene_Intro") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += IntroMovieDone;
+	}
+	
+    private void IntroMovieDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Intro");
+		CutsceneFrames.OnCutsceneDone -= IntroMovieDone;
+		LoadScene();
     }
+	
+	private void LoadScene() {
+		Application.LoadLevel("NewBedRoom");	
+	}
 }

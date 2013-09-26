@@ -123,7 +123,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		if ( OnNewGame != null )
 			OnNewGame( this, EventArgs.Empty );
 		
-		// wait one frame
+		// wait one frame so that cleanup from the previous game can happen properly
 		StartCoroutine(NewGameAfterFrame());
 	}
 	

@@ -9,7 +9,7 @@ using System.Collections;
 public class RescueShaker : InhalerPart {
     
     private Vector3 startDragPos;
-    private bool doneWithShake = false; //disable shake after it's done
+    private bool doneWithShake = true; //disable shake after it's done
     private float elapsed;
 
    protected override void Awake(){
@@ -39,25 +39,31 @@ public class RescueShaker : InhalerPart {
         // check the hover event phase to check if we're entering or exiting the object
         if( e.Phase == FingerHoverPhase.Exit )
         {
-            //Cancel shaker if finger moves out of the Rescue game object
-            transform.position = startDragPos;
-            elapsed = 0; 
+            if(!doneWithShake){
+                //Cancel shaker if finger moves out of the Rescue game object
+                transform.position = startDragPos;
+                elapsed = 0; 
+            }
         }
     }
 
     void OnFingerStationary( FingerMotionEvent e ) 
     {
-        //Cancel shaker if finger stops moving and stays stationary
-        transform.position = startDragPos;
-        elapsed = 0;
+        if(!doneWithShake){
+            //Cancel shaker if finger stops moving and stays stationary
+            transform.position = startDragPos;
+            elapsed = 0;
+        }
     }
    
    protected override void Disable(){
         transform.collider.enabled = false;
+        doneWithShake = true;
    }
 
    protected override void Enable(){
         transform.collider.enabled = true;
+        doneWithShake = false;
    }
 
    protected override void NextStep(){
@@ -66,7 +72,6 @@ public class RescueShaker : InhalerPart {
 		// play sound here
 		AudioManager.Instance.PlayClip( "inhalerShake" );		
 
-        doneWithShake = true;
         Disable();
         transform.position = startDragPos;
    }

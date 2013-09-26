@@ -32,7 +32,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	public float fSecondHoursPenalty;
 
     private float timer = 0;
-    private float timeInterval = 10f; //time interval for trigger to affect health
+    private float timeInterval = 5f; //time interval for trigger to affect health
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 
@@ -143,16 +143,13 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);
     }
 
-    //triggers decreases health every 30 sec
+    //Calculate health degration
     private void TriggerDegradesHealth(){
         int triggerCount = DataManager.Instance.Degradation.DegradationTriggers.Count;
-        int minusHealth = 0;
+        int minusHealth = 2;
+        Debug.Log("degrad health");
 
-        int additionalTrigger = triggerCount - 3;
-        if(additionalTrigger >= 0){ //3 or more triggers. add health punishments
-            minusHealth = 10 + additionalTrigger * 10;
-        }
-
+        minusHealth = minusHealth * triggerCount; 
         StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, minusHealth * -1, Vector3.zero, 0, Vector3.zero);	// Convert to negative
     }
 

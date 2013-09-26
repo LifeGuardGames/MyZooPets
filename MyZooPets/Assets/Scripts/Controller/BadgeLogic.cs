@@ -25,9 +25,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     private List<Badge> allBadges;
 
     public List<Badge> AllBadges{
-        get{
-            return allBadges;
-        }
+        get{return allBadges;}
     }
 
     void Awake(){

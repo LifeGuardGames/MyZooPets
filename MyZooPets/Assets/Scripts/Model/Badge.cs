@@ -29,12 +29,15 @@ public class Badge{
                 unlockCondition.ToString());
         }
     }
+    //How to unlock this badge
     public int UnlockCondition{
         get{return unlockCondition;}
     } 
+    //Is badge unlocked?
     public bool IsUnlocked{
         get{return DataManager.Instance.Badge.GetIsUnlocked(id);}
     }
+    //Is badge new?
     public bool IsNew{
         get{return DataManager.Instance.Badge.GetIsNew(id);}
     }

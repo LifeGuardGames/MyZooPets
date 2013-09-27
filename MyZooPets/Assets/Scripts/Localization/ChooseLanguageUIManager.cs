@@ -15,16 +15,16 @@ public class ChooseLanguageUIManager : SingletonUI<ChooseLanguageUIManager> {
 	
 	// the button that launches this manager
 	public GameObject goButton;
-	private MoveTweenToggle tweenButton;
+	private PositionTweenToggle tweenButton;
 	
 	// panel holding all language buttons
 	public GameObject goChoosePanel;
-	private MoveTweenToggle tweenChoose;
+	private PositionTweenToggle tweenChoose;
 	
 	void Start() {
 		// cache the tweens for easier use
-		tweenButton = goButton.GetComponent<MoveTweenToggle>();
-		tweenChoose = goChoosePanel.GetComponent<MoveTweenToggle>();
+		tweenButton = goButton.GetComponent<PositionTweenToggle>();
+		tweenChoose = goChoosePanel.GetComponent<PositionTweenToggle>();
 		
 		// if currently disabled, destroy the button
 		if ( bDisable )

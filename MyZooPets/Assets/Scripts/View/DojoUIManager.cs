@@ -51,6 +51,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
         if(skill != null && DataManager.Instance.Stats.Stars >= skill.Cost){
             DojoLogic.Instance.BuySkill(skillID);
         }
+
         //play sound
         //Modify buy button to show it has been bought and equipped
     }

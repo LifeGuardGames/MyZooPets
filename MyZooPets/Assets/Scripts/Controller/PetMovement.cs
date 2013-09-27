@@ -24,7 +24,7 @@ public class PetMovement : Singleton<PetMovement> {
     void Awake(){
         D.Assert(mainCamera != null, "Camera missing in " + this);
         D.Assert(petSprite != null, "PetSprite missing in " + this);
-        anim = petSprite.GetComponent<tk2dSpriteAnimator>();
+        // anim = petSprite.GetComponent<tk2dSpriteAnimator>();
         int layerNGUI = LayerMask.NameToLayer("NGUI");
         nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
     }
@@ -62,14 +62,14 @@ public class PetMovement : Singleton<PetMovement> {
 		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/3, 80, 0)));
 	}
 
-    //What to do when animation is finished playing. 
-    private void OnAnimationFinished(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
-        if(moving){
-            anim.Play("HappyWalk");
-        }else{
-            anim.Play("HappyIdle");
-        }
-    }
+    // //What to do when animation is finished playing. 
+    // private void OnAnimationFinished(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
+    //     if(moving){
+    //         anim.Play("HappyWalk");
+    //     }else{
+    //         anim.Play("HappyIdle");
+    //     }
+    // }
 	
 	private void StopMoving() {
     	moving = false;

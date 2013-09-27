@@ -29,6 +29,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 		BadgeLogic.OnNewBadgeUnlocked -= UnlockBadge;
 	}
 
+	//When the scene starts Initialize all the badges once
 	private void InitBadges(){
 		List<Badge> badges = BadgeLogic.Instance.AllBadges;
 

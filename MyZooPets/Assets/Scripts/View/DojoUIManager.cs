@@ -15,6 +15,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
 
     }
 
+    //When the scene starts initializes all the skills once
     private void InitSkills(){
         List<Skill> skills = DojoLogic.Instance.AllSkills;
 
@@ -22,6 +23,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
             GameObject skillGO = NGUITools.AddChild(skillGrid, skillPrefab);
             skillGO.name = skill.ID;
 
+            // skillGO.transform.Find("Sprite_ActionImage").GetComponent<UISprite>().sprite = skill.TextureName;
             skillGO.transform.Find("Label_Damage").GetComponent<UILabel>().text = skill.GetDamagePointString();
             skillGO.transform.Find("Label_Name").GetComponent<UILabel>().text = skill.Name;
             skillGO.transform.Find("Label_UnlockLevel").GetComponent<UILabel>().text = skill.GetUnlockLevelString();
@@ -35,15 +37,21 @@ public class DojoUIManager : Singleton<DojoUIManager> {
             if(!skill.IsUnlocked){
                 buttonGO.GetComponent<UIImageButton>().isEnabled = false;
             }
-
         }
     }
 
     private void UnlockSkill(object senders, DojoLogic.SkillEventArgs arg){
-
+        //Get Skill from arg and find that specific skill in skillgrid. then unlock the skill
     }
 
     private void BuySkill(GameObject go){
+        string skillID = go.transform.parent.name;
+        Skill skill = DojoLogic.Instance.GetSkill(skillID);
 
+        if(skill != null && DataManager.Instance.Stats.Stars >= skill.Cost){
+            DojoLogic.Instance.BuySkill(skillID);
+        }
+        //play sound
+        //Modify buy button to show it has been bought and equipped
     }
 }

@@ -17,6 +17,12 @@ public class SkillMutableData{
 
     [SerializeThis]
     private Dictionary<string, Status> skillStatus; //Key: Skill ID, Value: Instance of Status
+    [SerializeThis]
+    private string currentSkillID; //The current skill that the pet has
+
+    public string CurrentSkillID{
+        get{return currentSkillID;}
+    }
 
     public void UpdateSkillStatus(string skillID, bool isUnlocked, bool isPurchased){
         if(skillStatus.ContainsKey(skillID)){
@@ -44,7 +50,6 @@ public class SkillMutableData{
             retVal = skillStatus[skillID].isPurchased;
         }
         return retVal;
-
     }
 
     //========================Initialization===================================
@@ -52,5 +57,6 @@ public class SkillMutableData{
 
     public void Init(){
         skillStatus = new Dictionary<string, Status>();
+        UpdateSkillStatus("Skill0", true, false);
     }
 }

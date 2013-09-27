@@ -9,7 +9,6 @@ using System.Collections.Generic;
 //Checks and manages when skill can be unlocked and purchased
 public class DojoLogic : Singleton<DojoLogic> {
     public static EventHandler<EventArgs> OnNewDojoSkillUnlocked; //when there are changes to the dojo skills
-    public static EventHandler<EventArgs> OnNotEnoughStars; //try to buy dojo skill, but doesn't have enough stars
     public class SkillEventArgs : EventArgs{
         private Skill unlockedSkill;
 
@@ -35,13 +34,20 @@ public class DojoLogic : Singleton<DojoLogic> {
         allSkills = SelectListFromDictionaryAndSort(skillsDict);
     }
 
-    void Start(){
-        //listen to on level up event
-        // HUDAnimator.OnLevelUp += CheckForNewDojoSkills;
+    //Return skill with skillID
+    public Skill GetSkill(string skillID){
+        return DataSkills.GetSkill(skillID);
     }
 
-    void OnDestroy(){
-        // HUDAnimator.OnLevelUp -= CheckForNewDojoSkills;
+    //Return the current skill that the pet is equipped with
+    public Skill GetCurrentSkill(){
+        string currentSkillID = DataManager.Instance.Dojo.CurrentSkillID;
+        return DataSkills.GetSkill(currentSkillID);
+    }
+
+    //Buy skill with skillID. Update SkillMutableData
+    public void BuySkill(string skillID){
+        DataManager.Instance.Dojo.UpdateSkillStatus(skillID, true, true);
     }
 
     //Select list from dictionary and sort by unlocklevel
@@ -52,7 +58,5 @@ public class DojoLogic : Singleton<DojoLogic> {
                                 orderby skill.UnlockLevel ascending
                                 select skill).ToList();
         return skillList;
-
     }
-
 }

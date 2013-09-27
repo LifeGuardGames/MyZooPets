@@ -35,11 +35,9 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         allBadges = SelectListFromDictionary(badgesDict);
     }
 
+    //Return badge with badgeID
     public Badge GetBadge(string badgeID){
-        Badge badge;
-        badge = DataBadges.GetBadge(badgeID);
-        D.Assert(badge != null, "badgeID is not valid");
-        return badge;
+        return DataBadges.GetBadge(badgeID);
     }
 
     //Use this function to check which one of the badges with badgeType can be unlocked

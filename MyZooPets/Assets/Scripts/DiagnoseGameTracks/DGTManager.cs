@@ -55,13 +55,30 @@ public class DGTManager : MinigameManager<DGTManager> {
 	private GameObject goSelectedZone;
 	
 	//=======================Events========================
-	public static EventHandler<EventArgs> OnSpeedChange; //when the game speed changes
+	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
 	//=====================================================
 	
+	private int nTest = 0;
+	
+	//---------------------------------------------------
+	// _Start()
+	//---------------------------------------------------	
 	protected override void _Start() {
+		// show the cutscene for the clinic game if it has not yet been viewed
 		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
 			ShowCutscene();
+		
+		// listen for character scoring
+		DGTCharacter.OnCharacterScored += CharacterScored;
 	}	
+	
+	//---------------------------------------------------
+	// _OnDestroy()
+	//---------------------------------------------------	
+	protected override void _OnDestroy() {
+		// stop listening for character scoring	
+		DGTCharacter.OnCharacterScored -= CharacterScored;
+	}
 	
 	//---------------------------------------------------
 	// _NewGame()
@@ -79,7 +96,11 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// set the wave countdown
 		SetWaveCountdown( nCharactersPerWave );
 		
+		// if the tutorial is set, let's do it up...
+		StartTutorial();		
+		
 		// set the spawn timer to 0
+		// NOTE this must come after the tutorial starts because setting spawn timer to 0 immediately spawns a character
 		SetSpawnTimer( 0 );
 	}
 	
@@ -105,6 +126,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 	public void SetSelectedZone( GameObject goZone ) {
 		if ( goZone == goSelectedZone )
 			return;
+		
+		// if a tutorial is happening, just set the speed to starting speed...this is in case the track was stopped
+		// because the player didn't switch the tracks quick enough
+		SetTrackSpeed( fStartingSpeed );
 		
 		// the zone changed, so play a sound (only if there was a valid zone before though)
 		if ( goSelectedZone != null )
@@ -149,6 +174,20 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}	
 	
 	//---------------------------------------------------
+	// CharacterScored()
+	// When a character reaches a zone (regardless of if
+	// it's the correct zone).
+	//---------------------------------------------------		
+	public void CharacterScored( object sender, EventArgs args ) {
+		// if there is a tutorial going on, we don't really care about updating the wave count
+		if ( IsTutorial() )
+			return;
+		
+		// update the wave count
+		UpdateWaveCountdown(-1);
+	}
+	
+	//---------------------------------------------------
 	// SetWaveCountdown()
 	//---------------------------------------------------		
 	private void SetWaveCountdown( int num ) {
@@ -176,7 +215,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------
 	// UpdateWaveCountdown()
 	//---------------------------------------------------		
-	public void UpdateWaveCountdown( int num ) {
+	private void UpdateWaveCountdown( int num ) {
 		int nNew = nWaveCountdown + num;
 		SetWaveCountdown( nNew );
 	}
@@ -186,14 +225,25 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// Changes the speed of the characters/track.
 	//---------------------------------------------------		
 	private void ChangeTrackSpeed( float fChange ) {
-		fCurrentSpeed += fChange;	
+		float fCurSpeed = GetSpeed();
+		float fNewSpeed = fCurSpeed + fChange;	
 		
 		// track speed is increasing, so play a sound
+		// NOTE currently assumes track speed can only increase
 		AudioManager.Instance.PlayClip( "clinicSpeedUp" );
+		
+		// set the speed
+		SetTrackSpeed( fNewSpeed );
+	}
+	private void SetTrackSpeed( float fNewSpeed ) {
+		fCurrentSpeed = fNewSpeed;
 		
 		// send out a message to all things on the track letting them know their speed needs to change
        if( OnSpeedChange != null )
-            OnSpeedChange(this, EventArgs.Empty);	
+            OnSpeedChange(this, EventArgs.Empty);		
+	}
+	public void StopTrack() {
+		SetTrackSpeed( 0 );	
 	}
 	
 	//---------------------------------------------------
@@ -222,12 +272,24 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// SpawnCharacter()
 	//---------------------------------------------------		
 	private void SpawnCharacter() {
+		// if a tutorial is going on, and the stage stack is empty, it means we need to wait to spawn more characters
+		DGTTutorial tutorial = GetTutorial() as DGTTutorial;
+		if ( IsTutorial() && tutorial.ShouldWait() )
+			return;
+		
 		// first, reset our spawn timer
 		SetSpawnTimer( fSpawnRate );
 		
 		// now, create a character
 		Vector3 vLoc = GetSpawnLocation();
-		Instantiate( prefabCharacter, vLoc, Quaternion.identity );
+		GameObject goChar = Instantiate( prefabCharacter, vLoc, Quaternion.identity ) as GameObject;
+		
+		// if there is something in the stages stack, it means that the newly spawned character should have a specific type
+		if ( IsTutorial() ) {
+			AsthmaStage eStage = tutorial.GetStageToSpawn();
+			DGTCharacter script = goChar.GetComponent<DGTCharacter>();
+			script.SetAttributes( eStage );
+		}
 	}
 	
 	//---------------------------------------------------
@@ -237,4 +299,32 @@ public class DGTManager : MinigameManager<DGTManager> {
 		float fNew = fSpawnTimer + fTime;
 		SetSpawnTimer( fNew );
 	}
+	
+	//---------------------------------------------------
+	// IsZoneLocked()
+	// A zone may be locked (user can't select it) if
+	// the tutorial is going on.
+	//---------------------------------------------------		
+	public bool IsZoneLocked( AsthmaStage eZoneStage ) {
+		bool bLocked = false;
+		
+		if ( IsTutorial() ) {
+			DGTTutorial tutorial = GetTutorial() as DGTTutorial;
+			AsthmaStage eCurrentStage = tutorial.GetCurrentStage();
+			bLocked = eCurrentStage != eZoneStage;
+		}
+		
+		return bLocked;
+	}
+	
+	////////----------------- Tutorial code	
+	private void StartTutorial() {
+		if ( nTest != 0 )
+			return;
+		
+		nTest = 1;
+		
+		// set our tutorial
+		SetTutorial( new DGTTutorial() );
+	}	
 }

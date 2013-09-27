@@ -43,6 +43,31 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	private int nLives;
 	public int nStartingLives;
 	
+	// tutorial stuff
+	private MinigameTutorial tutorial;
+	public bool IsTutorial() {
+		return tutorial != null;
+	}
+	protected void SetTutorial( MinigameTutorial tutorial ) {
+		this.tutorial = tutorial;
+		
+		this.tutorial.OnTutorialEnd += TutorialEnded;
+	}	
+	protected MinigameTutorial GetTutorial() {
+		return tutorial;	
+	}
+	private void TutorialEnded( object sender, EventArgs args ) {
+		// set the game to over so that it restarts properly
+		// cheat a little bit and DONT use SetGameState() because we don't want the usual stuff to happen
+		eCurrentState = MinigameStates.GameOver;
+		
+		// set the tutorial to null
+		tutorial = null;
+		
+		// then just restart the game
+		RestartGame();
+	}
+	
 	// the state of this minigame
 	private MinigameStates eCurrentState = MinigameStates.Opening;
 	private void SetGameState( MinigameStates eNewState ) {
@@ -97,6 +122,17 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	}
 	
 	protected virtual void _Start() {
+		// children implement	
+	}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------	
+	void OnDestroy() {
+		_OnDestroy();	
+	}
+	
+	protected virtual void _OnDestroy() {
 		// children implement	
 	}
 	

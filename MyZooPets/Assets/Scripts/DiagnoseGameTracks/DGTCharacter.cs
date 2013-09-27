@@ -25,6 +25,9 @@ public class DGTCharacter : MonoBehaviour {
 		return eStage;	
 	}
 	
+	// has this character had its attributes set yet?
+	private bool bSet = false;
+	
 	// how many points is this character worth?
 	public int nPoints;
 	public int GetPointValue() {
@@ -36,6 +39,10 @@ public class DGTCharacter : MonoBehaviour {
 	
 	// has this character been scored?
 	private bool bScored = false;
+	
+	//=======================Events========================
+	public static EventHandler<EventArgs> OnCharacterScored; // when a character scores
+	//=====================================================	
 
 	//---------------------------------------------------
 	// Start()
@@ -46,8 +53,9 @@ public class DGTCharacter : MonoBehaviour {
 		DGTManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
 		DGTManager.OnNewGame += OnNewGame;					// new game
 		
-		// set this characters' attributes
-		SetAttributes();
+		// set this characters' attributes (if it wasn't set externally)
+		if ( !bSet )
+			SetAttributes( EnumUtils.GetRandomEnum<AsthmaStage>() );
 		
 		// get moving to the first target
 		goTarget = DGTManager.Instance.GetArrow();
@@ -59,9 +67,9 @@ public class DGTCharacter : MonoBehaviour {
 	// Sets the attributes on this characters (their sprite,
 	// asthma stage, etc).
 	//---------------------------------------------------	
-	private void SetAttributes() {
-		// set a random asthma stage
-		eStage = EnumUtils.GetRandomEnum<AsthmaStage>();
+	public void SetAttributes( AsthmaStage eStage ) {
+		// set asthma stage
+		this.eStage = eStage;
 		
 		// pick a sprite associated with that stage -- little messy at the moment, because I think this structure may change
 		string strSprite;
@@ -81,6 +89,8 @@ public class DGTCharacter : MonoBehaviour {
 		strSprite = arraySprites[nRandom];
 		tk2dSprite sprite = gameObject.GetComponent<tk2dSprite>();
 		sprite.SetSprite( strSprite );
+		
+		bSet = true;
 	}
 	
 	//---------------------------------------------------
@@ -114,26 +124,6 @@ public class DGTCharacter : MonoBehaviour {
 		optional.Add ("onComplete", "DoneMoving");
 		LeanTweenUtils.MoveAlongPathWithSpeed( gameObject, path, fSpeed, optional );
 	}
-
-	//---------------------------------------------------
-	// OnTriggerEnter()
-	// No longer using this because it seemed possible
-	// for a character to be moving so fast that they
-	// completed their movement before triggering collision.
-	//---------------------------------------------------	
-	/*
-	void OnTriggerEnter(Collider other)
-   	{
-		DGTZone scriptZone = other.gameObject.GetComponent<DGTZone>();
-		
-		if ( scriptZone == null ) {
-			Debug.Log("DGTCharacter is colliding with something other than a zone?");
-			return;
-		}
-		
-		goZone = other.gameObject;
-   	}	
-   	*/
 	
 	//---------------------------------------------------
 	// OnSpeedChange()
@@ -207,11 +197,38 @@ public class DGTCharacter : MonoBehaviour {
 			Destroy( gameObject );
 		}
 		else {
+			// if a tutorial is going on, we don't want to move this character to the wrong zone
+			if ( IsHeadingToIncorrectZone() ) {
+				// stop the presses!
+				DGTManager.Instance.StopTrack();
+				return;
+			}
+			
 			// move the character to the currently selected zone
 			goTarget = DGTManager.Instance.GetSelectedZone();
 			
+			// set the character moving again
 			Move();
 		}
+	}
+	
+	//---------------------------------------------------
+	// IsHeadingToIncorrectZone()
+	// Returns true if this character is headed to the
+	// wrong zone.  This is only used for the tutorial.
+	//---------------------------------------------------		
+	private bool IsHeadingToIncorrectZone() {
+		bool bWrong = false;
+		
+		if ( DGTManager.Instance.IsTutorial() ) {
+			GameObject goZone = DGTManager.Instance.GetSelectedZone();
+			DGTZone script = goZone.GetComponent<DGTZone>();
+			AsthmaStage eCharStage = GetStage();
+			AsthmaStage eZonestage = script.GetStage();
+			bWrong = eCharStage != eZonestage;
+		}
+		
+		return bWrong;
 	}
 	
 	//---------------------------------------------------
@@ -228,9 +245,10 @@ public class DGTCharacter : MonoBehaviour {
 			return;
 		}
 		
-		// update the wave countdown
+		// let the game know a character has scored
 		// it's important this happens BEFORE anything else or the game may get into a weird state
-		DGTManager.Instance.UpdateWaveCountdown(-1);		
+       if( OnCharacterScored != null )
+            OnCharacterScored(this, EventArgs.Empty);		
 		
 		DGTZone scriptZone = goTarget.GetComponent<DGTZone>();
 		

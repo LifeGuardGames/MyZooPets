@@ -38,15 +38,15 @@ public class PetMovement : Singleton<PetMovement> {
                     destinationPoint,8f * Time.deltaTime);
             }else{
                 moving = false;
-                anim.Stop();
-                anim.Play("HappyIdle");
+                //anim.Stop();
+                //anim.Play("HappyIdle");
             }
 
             //when the sprite reaches destination. stop transform and animation
             if(petSprite.transform.position == destinationPoint){
                 moving = false;
-                anim.Stop();
-                anim.Play("HappyIdle");
+                //anim.Stop();
+                //anim.Play("HappyIdle");
             }
         }
     }
@@ -82,10 +82,10 @@ public class PetMovement : Singleton<PetMovement> {
             if (hit.collider == runWay.collider){
                 destinationPoint = hit.point;
 
-                if(!anim.IsPlaying("HappyWalk")){
+                /*if(!anim.IsPlaying("HappyWalk")){
                     anim.Play("HappyWalk");
                     anim.AnimationCompleted = OnAnimationFinished;
-                }
+                }*/
                 moving = true;
             }
         }

@@ -37,12 +37,15 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     private string petColor;
 
     void Start(){
-            eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
-            currentRenderColor = RenderSettings.ambientLight;
-            RenderSettings.ambientLight = Color.black;
+        eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
+        currentRenderColor = RenderSettings.ambientLight;
+        RenderSettings.ambientLight = Color.black;
 
-            ShowDropInAnimation();
-    }
+      //  ShowDropInAnimation();
+    	Invoke ("ShowDropInAnimation", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
+	}
+	
+	
 	
 	//---------------------------------------------------
 	// _OpenUI()
@@ -78,7 +81,7 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 
     private void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<MoveTweenToggle>().Show();
+        popupTitle.GetComponent<PositionTweenToggle>().Show();
 
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
@@ -86,11 +89,11 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     }
     
     private void ShowChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Show(smooth);
+        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Show(smooth);
     }
 
     private void HideChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Hide(smooth);
+        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
         HelperFinishEditPet();
     }
@@ -125,8 +128,8 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     }
 
     private void HideTitle(){
-        popupTitle.GetComponent<MoveTweenToggle>().Hide();
-        Destroy(popupTitle, 3.0f);
+        popupTitle.GetComponent<PositionTweenToggle>().Hide();
+//        Destroy(popupTitle, 3.0f);
     }
 
     private void CameraTransform (Vector3 newPosition, Vector3 newDirection){

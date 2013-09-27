@@ -32,6 +32,9 @@ public class LWFAnimator : LWFObject {
 	
 	// the clip that was last played
 	protected FlashMovieClip clipCurrent;
+	protected FlashMovieClip GetCurrentClip() {
+		return clipCurrent;	
+	}
 	
 	// list of playing movies
 	private List<LWF.Movie> attachedMovies = new List<LWF.Movie>();
@@ -95,7 +98,12 @@ public class LWFAnimator : LWFObject {
 	// Callback that called every frame.
 	private void EnterFrameCallback(LWF.Movie _movie)
 	{
-		if (_movie.currentFrame == _movie.totalFrames || !_movie.playing) {
+		//Debug.Log(clipCurrent.clipName + ": " + _movie.currentFrame + " of " + _movie.totalFrames);
+		
+		if (_movie.currentFrame == _movie.totalFrames || !_movie.playing)
+			ClipFinished();
+		
+		if (_movie.currentFrame == _movie.totalFrames || !_movie.playing) {			
 			WrapMode _clipWrapMode = GetWrapMode(_movie.name);
 			switch (_clipWrapMode) {
 			case WrapMode.Default:
@@ -111,6 +119,9 @@ public class LWFAnimator : LWFObject {
 				// for loop, no need detach not stop, as it'll loop itself anyway
 			}
 		}
+	}
+	
+	protected virtual void ClipFinished() {
 	}
 	
 	// get a clip from the clips array based on its name

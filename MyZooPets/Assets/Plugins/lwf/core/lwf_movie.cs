@@ -17,7 +17,7 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -434,6 +434,7 @@ public partial class Movie : IObject
 						DeleteAttachedMovie(this, movie, true, false);
 				}
 				m_detachedMovies.Clear();
+				//Debug.Log("THIS MANY MOVIES: " + m_attachedMovieList.Values.Count);
 				foreach (Movie movie in m_attachedMovieList.Values) {
 					if (movie != null) {
 						movie.PostExec(progressing);

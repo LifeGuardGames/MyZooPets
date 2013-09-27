@@ -27,12 +27,37 @@ public class PetAnimator : LgCharacterAnimator {
 		string strSpecies = GetSpeciesKey();
 		string strColor = GetColorKey();
 		animName = strSpecies + strColor;
-		folderPath = animName + "/";
+		folderPath = "LWF/" + animName + "/";
 		
 		// only call this AFTER we have set our loading data
 		base.Start();	
 		
 		// the animator starts off empty, so immediately pick the animation we want to play
 		PlayClip( "happyIdle" );
+	}
+	
+	public void StartMoving() {
+		PlayClip( "happyWalk" );
+	}
+	
+	public void StopMoving() {
+		PlayClip( "happyIdle" );
+	}
+	
+	public void Flip( bool bFlip ) {
+		if ( bFlip )
+			transform.parent.localScale = new Vector3(-1f, 1f, 1f);	
+		else
+			transform.parent.localScale = new Vector3(1f, 1f, 1f);	
+	}
+	
+	protected override void ClipFinished() {
+		/*
+		FlashMovieClip clip = GetCurrentClip();
+		if ( clip.clipName == "happyWalkIn" )
+			PlayClip( "sadHappyTransition" );
+		else if ( clip.clipName == "sadHappyTransition" )
+			PlayClip( "happyWalk" );
+			*/
 	}
 }

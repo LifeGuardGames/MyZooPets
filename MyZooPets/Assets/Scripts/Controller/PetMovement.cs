@@ -7,6 +7,9 @@ public class PetMovement : Singleton<PetMovement> {
     public GameObject petSprite;
 	public GameObject shadowObject;
 	
+	// lwf animator
+	public PetAnimator scriptAnim;
+	
 	// sound for when the pet moves
 	public string strSoundMove;
 
@@ -36,18 +39,12 @@ public class PetMovement : Singleton<PetMovement> {
             if (ClickManager.Instance.CanRespondToTap()){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint,8f * Time.deltaTime);
-            }else{
-                moving = false;
-                //anim.Stop();
-                //anim.Play("HappyIdle");
-            }
+            }else
+				StopMoving();
 
             //when the sprite reaches destination. stop transform and animation
-            if(petSprite.transform.position == destinationPoint){
-                moving = false;
-                //anim.Stop();
-                //anim.Play("HappyIdle");
-            }
+            if(petSprite.transform.position == destinationPoint)
+				StopMoving();
         }
     }
 
@@ -73,7 +70,12 @@ public class PetMovement : Singleton<PetMovement> {
             anim.Play("HappyIdle");
         }
     }
-
+	
+	private void StopMoving() {
+    	moving = false;
+		scriptAnim.StopMoving();
+	}
+	
     //Check if the touch is in walkable area then move/animate pet
     private void MovePet(Ray myRay){
         RaycastHit hit;
@@ -81,27 +83,31 @@ public class PetMovement : Singleton<PetMovement> {
         if(Physics.Raycast(myRay,out hit)){
             if (hit.collider == runWay.collider){
                 destinationPoint = hit.point;
-
-                /*if(!anim.IsPlaying("HappyWalk")){
-                    anim.Play("HappyWalk");
-                    anim.AnimationCompleted = OnAnimationFinished;
-                }*/
+				
+				// tell the pet animator script to tart moving
+                scriptAnim.StartMoving();
+				
                 moving = true;
             }
         }
         ChangePetFacingDirection();
     }
-
+	
+	
+	public float fShadow = .6f;
+	
     //Decides when to flip sprite by comparing the screen position of the sprite and
     //the last tap screen position
     private void ChangePetFacingDirection(){
         if(destinationPoint.x > petSprite.transform.position.x){
-            petSprite.GetComponent<tk2dSprite>().FlipX = true;
-			shadowObject.transform.localPosition = new Vector3(0.6f, 
+            //petSprite.GetComponent<tk2dSprite>().FlipX = true;
+			scriptAnim.Flip( true );
+			shadowObject.transform.localPosition = new Vector3(fShadow, 
                 shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }else{
-            petSprite.GetComponent<tk2dSprite>().FlipX = false;
-			shadowObject.transform.localPosition = new Vector3(-0.6f, 
+            //petSprite.GetComponent<tk2dSprite>().FlipX = false;
+			scriptAnim.Flip( false );
+			shadowObject.transform.localPosition = new Vector3(-fShadow, 
                 shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
         }
     }

@@ -28,6 +28,8 @@ public class LgCharacterAnimator : LWFAnimator {
 			return;
 		}
 		
+		//Debug.Log("Playing clip: " + _clipName);
+		
 		// stop all other movies
 		DetachAllMovies();	
 		

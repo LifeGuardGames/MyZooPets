@@ -44,27 +44,18 @@ public class LevelComponent : MonoBehaviour {
 
 	// Use this for initialization.
 	void Start() {
-		FindBottomLayers();
+		// FindBottomLayers();
 	}
 
 	// Update is called once per frame.
 	void Update() {
 	}
 
-    // public void DestroyAndCache(){
-    //     ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
-    //     foreach (RunnerItem currentItem in mSpawnedItems) {
-    //         if (currentItem != null) {
-    //             itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
-    //         }
-    //     }
-    //     DestroyWithoutCache();
-    // }
-
-    public void DestroyWithoutCache(){
+    public void DestroyAndCache(){
+        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
         foreach (RunnerItem currentItem in mSpawnedItems) {
             if (currentItem != null) {
-                GameObject.Destroy(currentItem);
+                itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
             }
         }
         GameObject.Destroy(this.gameObject);
@@ -161,21 +152,21 @@ public class LevelComponent : MonoBehaviour {
         }
     }
 	
-	private void FindBottomLayers(){
-		mBottomLayers.Clear();
-		FindBottomLayers(transform);
-	}
+	// private void FindBottomLayers(){
+	// 	mBottomLayers.Clear();
+	// 	FindBottomLayers(transform);
+	// }
 	
-	private void FindBottomLayers(Transform inCurrentTransform){
-		if (currentChild != null){
-			LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
-			foreach (Transform currentChild in inCurrentTransform) {
-				if (currentChild.gameObject.layer == levelManager.BottomLayer)
-					mBottomLayers.Add(currentChild.gameObject);
-				FindBottomLayers(currentChild);
-			}
-		}
-	}
+	// private void FindBottomLayers(Transform inCurrentTransform){
+	// 	if (currentChild != null){
+	// 		LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
+	// 		foreach (Transform currentChild in inCurrentTransform) {
+	// 			if (currentChild.gameObject.layer == levelManager.BottomLayer)
+	// 				mBottomLayers.Add(currentChild.gameObject);
+	// 			FindBottomLayers(currentChild);
+	// 		}
+	// 	}
+	// }
 }
 
 [System.Serializable]

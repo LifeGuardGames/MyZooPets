@@ -84,8 +84,9 @@ public class PetMovement : Singleton<PetMovement> {
             if (hit.collider == runWay.collider){
                 destinationPoint = hit.point;
 				
-				// tell the pet animator script to tart moving
-                scriptAnim.StartMoving();
+				// tell the pet animator script to tart moving (but only if we aren't already moving)
+				if ( !moving )
+                	scriptAnim.StartMoving();
 				
                 moving = true;
             }

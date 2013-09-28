@@ -22,6 +22,23 @@ public class PetAnimator : LgCharacterAnimator {
 		return strKeyColor;	
 	}
 	
+	// number of idles
+	public int nIdleCount;
+	
+	private string strAnimQueued;
+	
+	// pet's animation state
+	private PetAnimStates eAnimState;
+	private void SetAnimState( PetAnimStates eState ) {
+		eAnimState = eState;	
+	}
+	public PetAnimStates GetAnimState() {
+		return eAnimState;
+	}
+	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------	
 	void Start() {
 		// set the LWFAnimator loading data based on the pet's attributes
 		string strSpecies = GetSpeciesKey();
@@ -32,32 +49,71 @@ public class PetAnimator : LgCharacterAnimator {
 		// only call this AFTER we have set our loading data
 		base.Start();	
 		
-		// the animator starts off empty, so immediately pick the animation we want to play
-		PlayClip( "happyIdle" );
+		// the animator starts off empty, so immediately pick the animation we want to play (idle)
+		Idle();
+	}
+
+	//---------------------------------------------------
+	// Idle()
+	//---------------------------------------------------
+	private void Idle() {
+		// set pet's anim state
+		SetAnimState( PetAnimStates.Idling );
+		
+		// pick a random idle
+		int nIdle = UnityEngine.Random.Range(1,nIdleCount+1);
+		
+		// queue the anim
+		strAnimQueued = "happyIdle_" + nIdle;
 	}
 	
+	//---------------------------------------------------
+	// StartMoving()
+	//---------------------------------------------------		
 	public void StartMoving() {
+		SetAnimState( PetAnimStates.Walking );
 		PlayClip( "happyWalk" );
 	}
 	
+	//---------------------------------------------------
+	// StopMoving()
+	//---------------------------------------------------		
 	public void StopMoving() {
-		PlayClip( "happyIdle" );
+		Idle();
 	}
 	
-	public void Flip( bool bFlip ) {
-		if ( bFlip )
-			transform.parent.localScale = new Vector3(-1f, 1f, 1f);	
-		else
-			transform.parent.localScale = new Vector3(1f, 1f, 1f);	
+	//---------------------------------------------------
+	// Update()
+	//---------------------------------------------------		
+	void Update() {
+		// call base update so that LWF can do it's thing
+		base.Update();
+		
+		// if we have a queued animation, play it
+		if ( !string.IsNullOrEmpty(strAnimQueued) )	{
+			//Debug.Log("Playing queued anim: " + strAnimQueued);
+			PlayClip( strAnimQueued );
+			strAnimQueued = null;
+		}
 	}
 	
+	//---------------------------------------------------
+	// ClipFinished()
+	//---------------------------------------------------		
 	protected override void ClipFinished() {
-		/*
-		FlashMovieClip clip = GetCurrentClip();
-		if ( clip.clipName == "happyWalkIn" )
-			PlayClip( "sadHappyTransition" );
-		else if ( clip.clipName == "sadHappyTransition" )
-			PlayClip( "happyWalk" );
-			*/
+		PetAnimStates eState = GetAnimState();
+		
+		switch ( eState ) {
+			case PetAnimStates.Idling:
+				Idle();
+				break;				
+			case PetAnimStates.Walking:
+				// do nothing; the anim will loop
+				break;
+			default:
+				Debug.Log("Unhandled pet anim state finishing: " + eState);
+				Idle();
+				break;
+		}
 	}
 }

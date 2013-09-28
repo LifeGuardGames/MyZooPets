@@ -10,7 +10,6 @@
  */
 
 using UnityEngine;
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,7 +81,9 @@ public class ItemManager : MonoBehaviour {
     public RunnerItem GetRandomItemOfType(Type inItemType, LevelGroup.eLevelGroupID currentLevelGroup) {
         if(inItemType == typeof(HazardItem)){
             if(mHazardItemPool.ContainsKey(currentLevelGroup) && mHazardItemPool[currentLevelGroup].Count > 0){
-                return mHazardItemPool[currentLevelGroup].Dequeue();
+				RunnerItem existingHazardItem = mHazardItemPool[currentLevelGroup].Dequeue();
+				existingHazardItem.gameObject.SetActive(true);
+                return existingHazardItem;
             }else{
                 //Create new Hazard Item
                 RunnerItem newItem = ItemFactory(inItemType, currentLevelGroup);
@@ -90,7 +91,9 @@ public class ItemManager : MonoBehaviour {
             }
         }else{
             if (mItemPool.ContainsKey(inItemType) && mItemPool[inItemType].Count > 0) {
-                return mItemPool[inItemType].Dequeue();
+				RunnerItem existingPoolItem = mItemPool[inItemType].Dequeue();
+				existingPoolItem.gameObject.SetActive(true);
+                return existingPoolItem;
             } else {
                 // Create a new item
                 RunnerItem newItem = ItemFactory(inItemType, currentLevelGroup);
@@ -101,6 +104,10 @@ public class ItemManager : MonoBehaviour {
 
     public void StoreOrDisposeItem(RunnerItem inItem, LevelGroup.eLevelGroupID levelGroupID) {
         Type itemType = inItem.GetType();
+		
+		// Disable it. If its queued, then it will 'disapaear' off the map. If its deleted well who cares!
+		if (inItem != null)
+			inItem.gameObject.SetActive(false);
 
         //HazardItem pool needs to be handled differently from the other items
         if(itemType == typeof(HazardItem)){

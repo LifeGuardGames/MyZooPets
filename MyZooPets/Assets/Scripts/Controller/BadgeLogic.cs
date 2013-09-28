@@ -22,7 +22,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         }
     }
 
-    private List<Badge> allBadges;
+    private List<Badge> allBadges; //List of all badges
 
     public List<Badge> AllBadges{
         get{return allBadges;}

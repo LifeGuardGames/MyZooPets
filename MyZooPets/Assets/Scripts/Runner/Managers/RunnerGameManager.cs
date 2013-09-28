@@ -104,7 +104,8 @@ public class RunnerGameManager : MonoBehaviour {
 		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
 			ShowCutscene();
 			GameRunning = false;	
-		}		
+		}else
+            GameRunning = true;    
 	}
 	
 	//---------------------------------------------------
@@ -119,7 +120,7 @@ public class RunnerGameManager : MonoBehaviour {
     private void CutsceneDone(object sender, EventArgs args){
 		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Runner");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-		GameRunning = true;
+        GameRunning = true;
     }	
 	
 	// Update is called once per frame

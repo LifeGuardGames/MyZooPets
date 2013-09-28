@@ -139,3 +139,9 @@ public enum Preferences {
 	Sound,
 	Music
 }
+
+// pet anim states
+public enum PetAnimStates {
+	Idling,
+	Walking
+}

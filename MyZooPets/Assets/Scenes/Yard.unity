@@ -1083,7 +1083,9 @@ MonoBehaviour:
   runWay: {fileID: 203080394}
   petSprite: {fileID: 452963176}
   shadowObject: {fileID: 155376279}
+  scriptAnim: {fileID: 0}
   strSoundMove: petMove
+  fShadow: .600000024
 --- !u!1 &155376279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,8 +1371,8 @@ Transform:
   m_PrefabInternal: {fileID: 1162553827}
   m_GameObject: {fileID: 203080394}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .834877253, y: 22.2691422, z: -19.8611031}
-  m_LocalScale: {x: 3.17562079, y: 1, z: 1.05015695}
+  m_LocalPosition: {x: 0, y: 0, z: 16.5366306}
+  m_LocalScale: {x: 40.5891075, y: 1, z: 3.44359636}
   m_Children: []
   m_Father: {fileID: 147026834}
 --- !u!23 &203080396
@@ -2394,7 +2396,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
@@ -3627,7 +3629,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 608757176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 533.333374, y: 0, z: 0}
+  m_LocalPosition: {x: 533.333374, y: -.577545166, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 809025763}
@@ -7179,8 +7181,8 @@ MonoBehaviour:
   commonAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   tweenParent: {fileID: 1578197225}
   fSoundFadeTime: .5
-  strSoundStars: StarsGain
-  strSoundXP: XpGain
+  strSoundStars: StarSingle
+  strSoundXP: PointSingle
 --- !u!114 &892564947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7471,6 +7473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &929744672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7481,6 +7484,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -102971247, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -7739,7 +7743,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 988943288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -533.333374, y: 0, z: 0}
+  m_LocalPosition: {x: -533.333374, y: -.577545166, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1093589301}
@@ -8315,7 +8319,7 @@ MonoBehaviour:
     e10: 0
     e11: 400
     e12: 0
-    e13: -10856.1504
+    e13: -10855.5732
     e20: 0
     e21: 0
     e22: 400
@@ -9547,6 +9551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1244381864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9558,6 +9563,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 1254797990, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -11241,6 +11247,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c33bc83ab81ec0c44976c6fb1d44e55a, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -14651,6 +14658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1988720255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14662,6 +14670,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 1254797990, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -15061,7 +15070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2081998766
 MonoBehaviour:
   m_ObjectHideFlags: 0

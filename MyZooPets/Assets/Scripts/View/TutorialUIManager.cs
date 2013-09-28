@@ -148,7 +148,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger == true){
+        if(TutorialLogic.Instance.FirstTimeDegradTrigger){
             AddDegradTipIntro();
 			AddDegradTipConclude();
 		}

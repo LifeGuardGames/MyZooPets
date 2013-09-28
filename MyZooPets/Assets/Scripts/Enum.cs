@@ -83,11 +83,12 @@ public enum NotificationPopupFields{
 }
 public enum ZoomItem{
     Pet,
-    TrophyShelf,
     SlotMachine,
     RealInhaler,
     BadgeBoard,
-    Dojo
+    Dojo,
+	YardSign,
+    RunnerGame
 }
 public enum BadgeType{
     Level,
@@ -99,18 +100,6 @@ public enum BadgeType{
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
-public enum DojoSkillName{
-    Sit,
-    Wave,
-    Backflip,
-    HighFive,
-    DiscoMove,
-    SadFace,
-    Konfu,
-    Chilling,
-    HighJump,
-}
-
 public enum TalkImageType{
     Heart,
 }
@@ -149,4 +138,10 @@ public enum MinigameStates {
 public enum Preferences {
 	Sound,
 	Music
+}
+
+// pet anim states
+public enum PetAnimStates {
+	Idling,
+	Walking
 }

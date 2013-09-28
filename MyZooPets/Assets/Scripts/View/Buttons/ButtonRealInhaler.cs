@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // ButtonRealInahler
@@ -15,11 +17,28 @@ public class ButtonRealInhaler : LgButton {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		//Start tutorial if first time; otherwise, open inhaler game
-		if(TutorialLogic.Instance.FirstTimeRealInhaler)
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
+			ShowCutscene();
+		else if(TutorialLogic.Instance.FirstTimeRealInhaler)
 			TutorialUIManager.Instance.StartRealInhalerTutorial();
 		else
 			CheckToOpenInhaler();
 	}
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_Inhaler") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+		ProcessClick();
+    }	
 
 	//--------------------------------------------------
 	// Check if inhaler can be used at the current time. 

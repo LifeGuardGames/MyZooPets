@@ -12,7 +12,7 @@ public class LgAudioSource : MonoBehaviour {
 
 	private AudioSource audioSource;
 	
-	public void Init( DataSound sound, Transform tf ) {		
+	public void Init( DataSound sound, Transform tf, Hashtable hashOverrides ) {		
 		string strResource = sound.GetResourceName();
 		AudioClip clip = Resources.Load(strResource) as AudioClip;
 		
@@ -21,20 +21,38 @@ public class LgAudioSource : MonoBehaviour {
 			return;
 		}
 		
+		// this is a little messy, but get variables that could be overriden
+		float fVol = sound.GetVolume();
+		if ( hashOverrides.Contains("Volume" ) )
+			fVol = (float)hashOverrides["Volume"];
+		
+		float fPitch = sound.GetPitch();
+		if ( hashOverrides.Contains("Pitch") )
+			fPitch = (float)hashOverrides["Pitch"];
+		
 		// create the audio source	
 		audioSource = gameObject.AddComponent<AudioSource>(); 
 		audioSource.clip = clip; 
-		audioSource.volume = sound.GetVolume(); 
-		audioSource.pitch = 1.0f;
+		audioSource.volume = fVol;
+		audioSource.pitch = fPitch;
 		gameObject.transform.parent = tf;
 		gameObject.transform.position = tf.position;
 		audioSource.Play();
+		
+		// listen for pausing
+		AudioManager.Instance.OnGamePaused += SetPauseState;
 		
 		// add destroy script
 		DestroyThis scriptDestroy = gameObject.AddComponent<DestroyThis>();
 		scriptDestroy.SetLife( clip.length + 0.1f );		
 	}
 	
+	void OnDestroy() {
+		// stop listening for pausing	
+		AudioManager.Instance.OnGamePaused -= SetPauseState;
+	}
+	
+	/*
 	// DEPRECATED
 	public void Init( AudioClip sound, Transform tf, float fVolume ) {
 		//Messenger.instance.Listen( LibraryMessageTypes.PAUSE, this );	// listen for combat being paused
@@ -54,6 +72,7 @@ public class LgAudioSource : MonoBehaviour {
 		
 		//StartCoroutine( FadeOut() );	
 	}
+	*/
 	
 	///////////////////////////////////////////
 	// FadeOut()
@@ -68,20 +87,17 @@ public class LgAudioSource : MonoBehaviour {
 		//Debug.Log(audioSource.name + " should be completely faded out now");
 	}
 	
-	// TO DO: implement pause functionality
-	/*
 	///////////////////////////////////////////
-	// _SetPauseState()
+	// SetPauseState()
 	// If the game is pausing or unpausing.
 	///////////////////////////////////////////
-	function _SetPauseState( i_msg:MessageSetPauseState )
+	private void SetPauseState( object sender, PauseArgs args )
 	{	
-		var eState:PauseStates = i_msg.GetState();	
+		bool bPausing = args.IsPausing();	
 
-		if ( eState == PauseStates.ON )
-			m_audioSource.Pause();
+		if ( bPausing )
+			audioSource.Pause();
 		else
-			m_audioSource.Play();
+			audioSource.Play();
 	}
-	*/
 }

@@ -6,7 +6,7 @@ using System.Collections;
     Listens to pinch gesture. 
 */
 public class RescuePrescription : InhalerPart{
-    private float minGapDistance = 80.0f; //Pinch will only be registered if the 
+    private float minGapDistance = 180.0f; //Pinch will only be registered if the 
                                         //gap distance is <= minGapDistance when the gesture ended
 
    protected override void Awake(){
@@ -20,13 +20,21 @@ public class RescuePrescription : InhalerPart{
         if(phase == ContinuousGesturePhase.Ended){
             // Current gap distance between the two fingers
             float gap = gesture.Gap;
-
             if(gap <= minGapDistance){
                 PrescriptionAnimation();
                 NextStep();
             }
         }
     }
+    
+#if UNITY_EDITOR
+    void Update(){
+       if(Input.GetKeyDown(KeyCode.P)){
+            PrescriptionAnimation();
+            NextStep();
+       }
+    }
+#endif
 
     private void PrescriptionAnimation(){
         Vector3 to = new Vector3(transform.localPosition.x, 1.5f, transform.localPosition.z);
@@ -42,6 +50,9 @@ public class RescuePrescription : InhalerPart{
     }
 
     protected override void NextStep(){
+		// play sound here
+		AudioManager.Instance.PlayClip( "inhalerSqueeze" );				
+		
         base.NextStep();
         Disable();
     }

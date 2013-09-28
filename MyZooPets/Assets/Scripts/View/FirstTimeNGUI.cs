@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// First time GUI.
@@ -35,12 +37,15 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     private string petColor;
 
     void Start(){
-            eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
-            currentRenderColor = RenderSettings.ambientLight;
-            RenderSettings.ambientLight = Color.black;
+        eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
+        currentRenderColor = RenderSettings.ambientLight;
+        RenderSettings.ambientLight = Color.black;
 
-            ShowDropInAnimation();
-    }
+      //  ShowDropInAnimation();
+    	Invoke ("ShowDropInAnimation", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
+	}
+	
+	
 	
 	//---------------------------------------------------
 	// _OpenUI()
@@ -76,7 +81,7 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 
     private void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<MoveTweenToggle>().Show();
+        popupTitle.GetComponent<PositionTweenToggle>().Show();
 
         Hashtable optional = new Hashtable();
         optional.Add("ease", LeanTweenType.easeOutBounce);
@@ -84,11 +89,11 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     }
     
     private void ShowChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Show(smooth);
+        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Show(smooth);
     }
 
     private void HideChooseGUI(){
-        firstTimeChoosePanel.GetComponent<MoveTweenToggle>().Hide(smooth);
+        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
         HelperFinishEditPet();
     }
@@ -99,39 +104,19 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
         DataManager.Instance.PetColor = petColor;
         DataManager.Instance.TurnFirstTimeOff();
     }
+	
+	public void ChangeEggColor( string strSprite, string strColor ) {
+        if (!finishClicked){
+            eggSpriteScript.SetSprite(strSprite);
+            petColor = strColor;
+        }		
+	}
 
-    public void ButtonClicked_Blue(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggBlueChoose");
-            petColor = "whiteBlue";
-        }
-    }
-    public void ButtonClicked_Green(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggGreenChoose");
-            petColor = "whiteGreen";
-        }
-    }
-    public void ButtonClicked_Yellow(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggYellowChoose");
-            petColor = "whiteYellow";
-        }
-    }
-    public void ButtonClicked_Red(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggRedChoose");
-            petColor = "whiteRed";
-        }
-    }
-    public void ButtonClicked_Purple(){
-        if (!finishClicked){
-            eggSpriteScript.SetSprite("eggPurpleChoose");
-            petColor = "whitePurple";
-        }
-    }
     public void ButtonClicked_Finish(){
         if (!finishClicked){
+			// play sound
+			AudioManager.Instance.PlayClip( "introDoneNaming" );
+			
             finishClicked = true;
             petName = nameField.text;
             if(isZoomed){
@@ -143,8 +128,8 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     }
 
     private void HideTitle(){
-        popupTitle.GetComponent<MoveTweenToggle>().Hide();
-        Destroy(popupTitle, 3.0f);
+        popupTitle.GetComponent<PositionTweenToggle>().Hide();
+//        Destroy(popupTitle, 3.0f);
     }
 
     private void CameraTransform (Vector3 newPosition, Vector3 newDirection){
@@ -156,10 +141,25 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 
     private void ZoomOutMove(){
         CameraTransform(initPosition,initFaceDirection);
-        Invoke("LoadScene", 1);
+        Invoke("ShowIntroMovie", 1);
     }
-
-    private void LoadScene(){
-        Application.LoadLevel("NewBedRoom");
+	
+	private void ShowIntroMovie() {
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Intro") )
+			LoadScene();
+		
+		GameObject resourceMovie = Resources.Load("Cutscene_Intro") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += IntroMovieDone;
+	}
+	
+    private void IntroMovieDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Intro");
+		CutsceneFrames.OnCutsceneDone -= IntroMovieDone;
+		LoadScene();
     }
+	
+	private void LoadScene() {
+		Application.LoadLevel("NewBedRoom");	
+	}
 }

@@ -58,10 +58,15 @@ public class DGTManager : MinigameManager<DGTManager> {
 	public static EventHandler<EventArgs> OnSpeedChange; //when the game speed changes
 	//=====================================================
 	
+	protected override void _Start() {
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
+			ShowCutscene();
+	}	
+	
 	//---------------------------------------------------
 	// _NewGame()
 	//---------------------------------------------------	
-	protected override void _NewGame() {
+	protected override void _NewGame() {	
 		// set our selected zone to the starting zone
 		SetSelectedZone( goStartingZone );
 		
@@ -79,6 +84,20 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}
 	
 	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_Clinic") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Clinic");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+    }		
+	
+	//---------------------------------------------------
 	// SetSelectedZone()
 	// Sets the currently selected zone to the incoming
 	// goZone.
@@ -86,6 +105,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 	public void SetSelectedZone( GameObject goZone ) {
 		if ( goZone == goSelectedZone )
 			return;
+		
+		// the zone changed, so play a sound (only if there was a valid zone before though)
+		if ( goSelectedZone != null )
+			AudioManager.Instance.PlayClip( "clinicSwitchTracks" );		
 		
 		// change the zone
 		goSelectedZone = goZone;
@@ -164,6 +187,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------		
 	private void ChangeTrackSpeed( float fChange ) {
 		fCurrentSpeed += fChange;	
+		
+		// track speed is increasing, so play a sound
+		AudioManager.Instance.PlayClip( "clinicSpeedUp" );
 		
 		// send out a message to all things on the track letting them know their speed needs to change
        if( OnSpeedChange != null )

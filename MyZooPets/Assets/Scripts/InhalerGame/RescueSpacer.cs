@@ -59,6 +59,9 @@ public class RescueSpacer : InhalerPart{
     }
 
     protected override void NextStep(){
+		// play sound here
+		AudioManager.Instance.PlayClip( "inhalerAttachSpacer", Preferences.Sound );		
+		
         base.NextStep();
         Destroy(rescueSpacerTarget);
         transform.collider.enabled = false;

@@ -101,11 +101,12 @@ public class DGTCharacter : MonoBehaviour {
 		float fSpeed = DGTManager.Instance.GetSpeed();
 		
 		//Change the 3 V3 to where icon should move
+		Vector3 vTarget = new Vector3(goTarget.transform.position.x, goTarget.transform.position.y, gameObject.transform.position.z); // the target location (keep this object's z position, though)
 		Vector3[] path = new Vector3[4];
 		path[0] = gameObject.transform.position;
-		path[1] = goTarget.transform.position;
-		path[2] = goTarget.transform.position;
-		path[3] = goTarget.transform.position;
+		path[1] = vTarget;
+		path[2] = vTarget;
+		path[3] = vTarget;
 		
 		Hashtable optional = new Hashtable();
 		
@@ -241,10 +242,16 @@ public class DGTCharacter : MonoBehaviour {
 			// character was sent to the right zone -- get some points!
 			int nVal = GetPointValue();
 			DGTManager.Instance.UpdateScore( nVal );
+			
+			// play a good sound
+			AudioManager.Instance.PlayClip( "clinicCorrect" );
 		}
 		else {
 			// character was sent to wrong zone...lose a life!
 			DGTManager.Instance.UpdateLives( -1 );
+			
+			// play an incorrect sound
+			AudioManager.Instance.PlayClip( "clinicWrong" );
 		}
 	}	
 }

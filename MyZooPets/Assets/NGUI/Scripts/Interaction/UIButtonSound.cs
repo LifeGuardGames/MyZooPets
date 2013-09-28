@@ -28,25 +28,31 @@ public class UIButtonSound : MonoBehaviour
 
 	void OnHover (bool isOver)
 	{
-		if (enabled && ((isOver && trigger == Trigger.OnMouseOver) || (!isOver && trigger == Trigger.OnMouseOut)))
+		if ( audioClip && enabled && ((isOver && trigger == Trigger.OnMouseOver) || (!isOver && trigger == Trigger.OnMouseOut)))
 		{
-			NGUITools.PlaySound(audioClip, volume, pitch);
+			string strName = audioClip.name;
+			AudioManager.Instance.PlayClip( strName );			
+			//NGUITools.PlaySound(audioClip, volume, pitch);
 		}
 	}
 
 	void OnPress (bool isPressed)
 	{
-		if (enabled && ((isPressed && trigger == Trigger.OnPress) || (!isPressed && trigger == Trigger.OnRelease)))
+		if (audioClip && enabled && ((isPressed && trigger == Trigger.OnPress) || (!isPressed && trigger == Trigger.OnRelease)))
 		{
-			NGUITools.PlaySound(audioClip, volume, pitch);
+			string strName = audioClip.name;
+			AudioManager.Instance.PlayClip( strName );			
+			//NGUITools.PlaySound(audioClip, volume, pitch);
 		}
 	}
 
 	void OnClick ()
 	{
-		if (enabled && trigger == Trigger.OnClick)
+		if ( audioClip && enabled && trigger == Trigger.OnClick)
 		{
-			NGUITools.PlaySound(audioClip, volume, pitch);
+			string strName = audioClip.name;
+			AudioManager.Instance.PlayClip( strName );
+			//NGUITools.PlaySound(audioClip, volume, pitch);
 		}
 	}
 }

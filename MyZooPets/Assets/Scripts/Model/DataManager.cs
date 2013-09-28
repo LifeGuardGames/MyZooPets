@@ -18,7 +18,9 @@ public class DataManager : Singleton<DataManager>{
     private bool firstTime; //is the user playing for the first time
 
     //==========SaveData============
-
+	
+    [SerializeThis] 
+    public CutsceneData Cutscenes;	
     [SerializeThis] 
     public DecorationSystemData Decorations;	
     [SerializeThis] 
@@ -36,7 +38,7 @@ public class DataManager : Singleton<DataManager>{
     [SerializeThis]
     public InventoryData Inventory;
     [SerializeThis]
-    public DojoRawData Dojo;
+    public SkillMutableData Dojo;
     [SerializeThis]
     public BadgeMutableData Badge; 
 
@@ -111,6 +113,8 @@ public class DataManager : Singleton<DataManager>{
     //initialize all data for the first time
     private void InitializeAllDataFirstTime(){
 		
+		Cutscenes = new CutsceneData();
+		Cutscenes.Init();
 		Decorations = new DecorationSystemData();
 		Decorations.Init();
         Stats = new StatsData();
@@ -127,7 +131,7 @@ public class DataManager : Singleton<DataManager>{
         Tutorial.Init();
         Inventory = new InventoryData();
         Inventory.Init();
-        Dojo = new DojoRawData(); 
+        Dojo = new SkillMutableData(); 
         Dojo.Init();
         Badge = new BadgeMutableData();
         Badge.Init();

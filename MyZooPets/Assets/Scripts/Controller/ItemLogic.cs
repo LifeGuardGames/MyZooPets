@@ -50,10 +50,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
-		Item item;
-		item = DataItems.GetItem(itemID);
-		D.Assert(item != null, "itemID not valid");
-		return item;
+		return DataItems.GetItem(itemID);
 	}
 
 	//Returns the type of item with itemID

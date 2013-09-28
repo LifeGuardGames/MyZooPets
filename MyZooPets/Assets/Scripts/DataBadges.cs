@@ -25,8 +25,8 @@ public class DataBadges{
     public static void SetupData(){
         if(dataLoaded) return;
 
-        //Load all item xml files
-         TextAsset file = (TextAsset) Resources.Load("Badges", typeof(TextAsset));
+        //Load from xml
+        TextAsset file = (TextAsset) Resources.Load("Badges", typeof(TextAsset));
         string xmlString = file.text;
 
         //Create XMLParser instance

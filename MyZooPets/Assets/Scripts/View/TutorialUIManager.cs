@@ -139,7 +139,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         4)Show Arrow for Real Inhaler.
         5)Clean calendar UI
     */
-    public void ShowCalendarTipConclude(){
+    public void ShowCalendarTipConclude(){		
         TutorialLogic.Instance.FirstTimeCalendar = false;
         calendar.GetComponent<TutorialHighlighting>().HideArrow();
         CalendarTutorialHelper.Instance.CleanUpTutorial();

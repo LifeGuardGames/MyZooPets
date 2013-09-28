@@ -35,7 +35,7 @@ public class BadgeMutableData{
             badgeStatus[badgeID] = status;
         }else{
             Status status = new Status(isUnlocked, isNew);
-            badgeStatus[badgeID] = status;
+            badgeStatus.Add(badgeID, status);
         }
     }
 

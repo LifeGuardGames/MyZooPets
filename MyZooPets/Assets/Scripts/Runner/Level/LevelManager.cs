@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour
 {
     public int BottomLayer = 31;
 	public float LevelTooLowYValue = -50.0f;
+	public float LevelTooLowYValueGameOver = -80.0f;
 	public float LevelGroupSwitchTime = 40.0f;
     public float CoinSpawnDistance = 1f;
     public LevelGroup StartingLevelGroup;
@@ -46,6 +47,9 @@ public class LevelManager : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update() {
+		if ( !RunnerGameManager.GetInstance().GameRunning )
+			return;
+		
 		// Assuming there is a runner and a level.
 		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
 		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
@@ -72,7 +76,8 @@ public class LevelManager : MonoBehaviour
                 }
 
 				// Destroy it
-                removedLevelComponent.DestroyAndCache();
+                removedLevelComponent.DestroyWithoutCache();
+
 				// GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
 				LevelComponent nextLevel = PushAndInstantiateRandomComponent();

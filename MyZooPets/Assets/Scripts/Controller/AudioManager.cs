@@ -1,5 +1,19 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+
+// event arguments for game pausing
+public class PauseArgs : EventArgs{
+	private bool bIsPausing;
+	public bool IsPausing() {
+		return bIsPausing;	
+	}
+
+	public PauseArgs( bool bIsPausing){
+		this.bIsPausing = bIsPausing;
+	}
+}
 
 public class AudioManager : Singleton<AudioManager>{
 
@@ -18,6 +32,10 @@ public class AudioManager : Singleton<AudioManager>{
 	private AudioSource effectSource;
 
 	public bool isMusicOn = true; // Thank me(Sean) later, devs
+	
+	//=======================Events========================
+	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
+	//=====================================================		
 
 	void Awake(){
 		// Spawns components itself
@@ -66,11 +84,21 @@ public class AudioManager : Singleton<AudioManager>{
 	}
 	
 	///////////////////////////////////////////
+	// Pause()
+	// If the game ever gets paused, all the
+	// audio sources also need to pause.
+	///////////////////////////////////////////		
+	public void Pause( bool bPausing ) {
+		if ( OnGamePaused != null )
+			OnGamePaused( this, new PauseArgs(bPausing) );		
+	}
+	
+	///////////////////////////////////////////
 	// PlayClip()
 	// Plays a sound with the name strClip
 	// from resources.
 	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume ) {
+	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume, Hashtable hashOverrides ) {
 		if ( strClip == "" ) {
 			Debug.Log("Something trying to play a sound with an empty sound id...");
 			return null;
@@ -83,29 +111,17 @@ public class AudioManager : Singleton<AudioManager>{
 			return null;
 		}
 			
-		return PlaySound( sound );	
+		return PlaySound( sound, hashOverrides );	
 	}
 	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
-		return PlayClip( strClip, eType, 1.0f );	
+		return PlayClip( strClip, eType, 1.0f, new Hashtable() );	
 	}	
 	public LgAudioSource PlayClip( string strClip ) {
-		return PlayClip( strClip, Preferences.Sound, 1.0f );	
+		return PlayClip( strClip, Preferences.Sound, 1.0f, new Hashtable() );	
 	}
-	
-	
-	///////////////////////////////////////////
-	// PlayClip()
-	// Plays the incoming audio clip.
-	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( AudioClip clip, Preferences eType, float fVolume )  {	
-		// TO DO check some kind of save or preference manager to see if the sound should be played at all (i.e. sound turned off)
-		
-		return PlaySound( clip, fVolume );
-	}	
-	public LgAudioSource PlayClip( AudioClip clip, Preferences eType )  {	
-		return PlaySound( clip, 1.0f );
-	}		
-	
+	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides ) {
+		return PlayClip( strClip, Preferences.Sound, 1.0f, hashOverrides );	
+	}
 	
 	///////////////////////////////////////////
 	// PlaySound()
@@ -114,22 +130,10 @@ public class AudioManager : Singleton<AudioManager>{
 	// source that gives us more control over
 	// the sound.
 	///////////////////////////////////////////	
-	private LgAudioSource PlaySound( AudioClip sound, float fVolume  ) {
-		if ( sound == null ) {
-			Debug.Log("Trying to play a null audio clip");
-			return null;
-		}
-		
-		GameObject soundObject = new GameObject("Sound: " + sound.name); 
-		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
-		soundSource.Init( sound, transform, fVolume );
-		
-		return soundSource;
-	}
-	private LgAudioSource PlaySound( DataSound sound ) {
+	private LgAudioSource PlaySound( DataSound sound, Hashtable hashOverrides ) {
 		GameObject soundObject = new GameObject("Sound: " + sound.GetResourceName()); 
 		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
-		soundSource.Init( sound, transform );
+		soundSource.Init( sound, transform, hashOverrides );
 		
 		return soundSource;		
 	}

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-// event arguments for game state callbakc
+// event arguments for game state callback
 public class GameStateArgs : EventArgs{
 	private MinigameStates eState;
 	public MinigameStates GetGameState() {
@@ -30,6 +30,9 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	
 	// scene transition
 	public SceneTransition scriptTransition;
+	
+	// sound IDs
+	public string strSoundGameOver;
 
 	// player score
 	public UILabel labelScore;
@@ -48,7 +51,18 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 			return;
 		}
 		
+		MinigameStates eOldState = eCurrentState;
 		eCurrentState = eNewState;
+		
+		// play appropriate sound for game state changes
+		if ( eCurrentState == MinigameStates.GameOver )
+			AudioManager.Instance.PlayClip( strSoundGameOver );
+		
+		// if the game is being paused, let the audio manager know so it can pause sounds
+		if ( eCurrentState == MinigameStates.Paused )
+			AudioManager.Instance.Pause(true);
+		else if ( eCurrentState == MinigameStates.Playing && eOldState == MinigameStates.Paused )
+			AudioManager.Instance.Pause(false);
 		
 		// send out a message to everything that cares about the game state
 		if ( OnStateChanged != null )
@@ -109,7 +123,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		if ( OnNewGame != null )
 			OnNewGame( this, EventArgs.Empty );
 		
-		// wait one frame
+		// wait one frame so that cleanup from the previous game can happen properly
 		StartCoroutine(NewGameAfterFrame());
 	}
 	

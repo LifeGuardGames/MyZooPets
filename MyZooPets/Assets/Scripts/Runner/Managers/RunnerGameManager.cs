@@ -10,9 +10,10 @@
  * 
  * Handles Resetting, Game Ending, and TimeScale.
  */
-
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RunnerGameManager : MonoBehaviour {
     private PlayerRunner mPlayerRunner;
@@ -99,7 +100,27 @@ public class RunnerGameManager : MonoBehaviour {
             mItemManager = foundObject.GetComponent<ItemManager>();
         else
             Debug.LogError("Could not find an object named 'ItemManager'");
+		
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
+			ShowCutscene();
+			GameRunning = false;	
+		}		
 	}
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_Runner") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Runner");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+		GameRunning = true;
+    }	
 	
 	// Update is called once per frame
 	void Update() {
@@ -129,9 +150,17 @@ public class RunnerGameManager : MonoBehaviour {
         // Disable the player
         if (mPlayerRunner != null)
             mPlayerRunner.gameObject.SetActive(false);
+		
+		// play game over sound
+		AudioManager.Instance.PlayClip( "runnerGameOver" );
 
         print("game over");
         mItemManager.Reset();
+    }
+
+    public void QuitGame(){
+        GetComponent<SceneTransition>().StartTransition();
+
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {

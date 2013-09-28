@@ -4,7 +4,7 @@ using System.Collections;
 
 public class DegradTrigger : MonoBehaviour {
     public int ID{get; set;} 		//the id of this specific degradation trigger
-	public AudioClip soundClean;	// sound this degrade trigger makes when the player cleans it up
+	public string strSoundClean;	// sound this degrade trigger makes when the player cleans it up
 
 	// Use this for initialization
 	void Start () {
@@ -26,7 +26,7 @@ public class DegradTrigger : MonoBehaviour {
         //when trigger is touched remove from DataManager and destroy GameObject
         if(ClickManager.Instance.CanRespondToTap()){
 			// play sound associated with cleaning the trigger
-			AudioManager.Instance.PlayClip( soundClean, Preferences.Sound, 1.0f );
+			AudioManager.Instance.PlayClip( strSoundClean );
 			
             //if(TutorialLogic.Instance.FirstTimeDegradTrigger)
              //   TutorialUIManager.Instance.StartDegradTriggerTutorial();

@@ -62,27 +62,33 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         }
     }
  
-    public void HideProgressBar(){
+    private  void HideProgressBar(){
         progressBarObject.SetActive(false);
     }
 
-    public void ShowProgressBar(){
+    private void ShowProgressBar(){
         progressBarObject.SetActive(true);
     }
 
-    public void ShowHUD(){
+    private void ShowGameUI(){
+        ShowProgressBar();
+        if(OnShowHint != null)
+            OnShowHint(this, EventArgs.Empty);
+    }
+
+    private void ShowHUD(){
         HUDUIManager.Instance.ShowPanel();
     }
 
-    public void HideHUD(){
+    private void HideHUD(){
         HUDUIManager.Instance.HidePanel();
     }
 
-    public void ShowQuitButton(){
+    private void ShowQuitButton(){
         quitButton.GetComponent<MoveTweenToggle>().Show();
     }
 
-    public void HideQuitButton(){
+    private void HideQuitButton(){
         quitButton.GetComponent<MoveTweenToggle>().Hide();
     }
 
@@ -114,7 +120,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         timer += Time.deltaTime;
         if (timer > timeBeforeHints){
             showHint = true;
-            if(D.Assert(OnShowHint != null, "OnShowHint has no listeners"))
+            if(OnShowHint != null)
                 OnShowHint(this, EventArgs.Empty);
         }
     }
@@ -126,23 +132,45 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void QuitInhalerGame(){
-
+		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
+			ShowCutscene();
+			return;	
+		}
+		
 		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
         // Add scene transition as well
         Application.LoadLevel("NewBedRoom");
     }
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		GameObject resourceMovie = Resources.Load("Cutscene_PostInhaler") as GameObject;
+		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+    private void CutsceneDone(object sender, EventArgs args){
+		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+		QuitInhalerGame();
+    }	
 
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){
         if(!InhalerLogic.Instance.IsFirstTimeRescue)
             ResetHintTimer();
+
+        if(OnShowHint != null)
+            OnShowHint(this, EventArgs.Empty);
     }
 
     //Event listener. Listens to game over message. Show game over popup/clean up game
     private void OnGameEnd(object sender, EventArgs args){
         // Record having given the pet the inhaler, if this was the real game.
         StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
-            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
 
         ShowGameOverMessage();
         ShowHUD();
@@ -198,7 +226,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         NotificationUIManager.Instance.PopupTexture("intro");
         messageDuration = introMessageDuration;
 
-        Invoke("ShowProgressBar", messageDuration);
+        Invoke("ShowGameUI", messageDuration);
     }
 
     private void ShowGameOverMessage(){

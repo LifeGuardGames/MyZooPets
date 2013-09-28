@@ -17,7 +17,10 @@ public class HintController : MonoBehaviour {
 		if(finger != null)
 			fingerAnimation = finger.GetComponent<Animation>();
 
-        if(showOnStep == 1) finger.renderer.enabled = false;
+        if(startHidden)
+            finger.renderer.enabled = false;
+
+        // if(showOnStep == 1) finger.renderer.enabled = false;
 
         InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
     }

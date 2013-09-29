@@ -58,7 +58,7 @@ MeshFilter:
   m_Mesh: {fileID: 0}
 --- !u!54 &5400000
 Rigidbody:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collection: {fileID: 11400000, guid: afa17bf342cf54f8ba8d8baddcbe8dbf, type: 2}
   _color: {r: 1, g: 1, b: 1, a: 1}
-  _scale: {x: 1, y: 1, z: 1}
+  _scale: {x: -1, y: 1, z: 1}
   _spriteId: 5
   boxCollider: {fileID: 0}
   meshCollider: {fileID: 0}
@@ -102,20 +102,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrayOK:
-  - CharA_Good_1
-  - CharA_Good_2
-  - CharB_Good_1
-  - CharB_Good_2
+  - happy_1
+  - happy_2
   arraySick:
-  - CharA_Unwell_1
-  - CharA_Unwell_2
-  - CharB_Unwell_1
-  - CharB_Unwell_2
+  - unwell_1
+  - unwell_2
   arrayAttack:
-  - CharA_Sick_1
-  - CharA_Sick_2
-  - CharB_Sick_1
-  - CharB_Sick_2
+  - sick_1
+  - sick_2
   nPoints: 100
 --- !u!1001 &100100000
 Prefab:

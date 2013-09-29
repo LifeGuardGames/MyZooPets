@@ -8,7 +8,7 @@ using System;
 [DoNotSerializePublic]
 public class DataManager : Singleton<DataManager>{
     //========Developer option=============
-    public bool removeDataOnDestroy; //delete all from PlayerPrefs
+    public bool removeDataOnApplicationQuit; //delete all from PlayerPrefs
     public bool isDebug = false; //turn isDebug to true if working on independent scene
     private bool loaded = false;
     //=====================================
@@ -71,16 +71,16 @@ public class DataManager : Singleton<DataManager>{
     }
 
     void Awake(){
-        if(isCreated){
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(transform.gameObject);
+        if(isCreated) Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
         isCreated = true;
 
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
 
-        if(isDebug){ //debug for independent scene. only initialize data no
-                    //serialization or scene loading
+        if(removeDataOnApplicationQuit)
+            firstTime = true;
+
+        if(isDebug){ //debug for independent scene. only initialize data no serialization or scene loading
             InitializeAllDataFirstTime();
         }
     }
@@ -104,15 +104,8 @@ public class DataManager : Singleton<DataManager>{
         }
     }
 
-    void OnDestroy(){
-        if(isDebug){
-            if(removeDataOnDestroy) PlayerPrefs.DeleteAll();
-        }
-    }
-
     //initialize all data for the first time
     private void InitializeAllDataFirstTime(){
-		
 		Cutscenes = new CutsceneData();
 		Cutscenes.Init();
 		Decorations = new DecorationSystemData();

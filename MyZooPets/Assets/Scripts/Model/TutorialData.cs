@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [DoNotSerializePublic]
 public class TutorialData{
@@ -21,6 +22,9 @@ public class TutorialData{
     private bool firstTimeHelpTrophy; 
     [SerializeThis]
     private bool firstTimeDegradTrigger;
+	
+    [SerializeThis]
+    private List<string> listPlayed;	// list of tutorials that have been played	
 
 
     //===============Getters & Setters=================
@@ -60,6 +64,13 @@ public class TutorialData{
         get{return firstTimeDegradTrigger;}
         set{firstTimeDegradTrigger = value;}
     }
+	
+    //===============Getters & Setters=================
+    public List<string> ListPlayed {
+        get{return listPlayed;}
+        set{listPlayed = value;}
+    }
+	
     //================Initialization============
     public TutorialData(){}
 
@@ -73,5 +84,7 @@ public class TutorialData{
         firstTimeShelf = true;
         firstTimeHelpTrophy = true; 
         firstTimeDegradTrigger = true;
+		
+		listPlayed = new List<string>();
     }
 }

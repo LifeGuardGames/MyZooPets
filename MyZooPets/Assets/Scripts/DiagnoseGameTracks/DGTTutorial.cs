@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +9,9 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class DGTTutorial : MinigameTutorial {
+	// key
+	public static string TUT_KEY = "DGT_TUT";
+	
 	// constants
 	private const int NUM_TO_SPAWN = 3;		// number of characters to spawn per tutorial step
 	
@@ -31,17 +34,21 @@ public class DGTTutorial : MinigameTutorial {
 		// set the max steps for this tutorial
 		nMaxSteps = 3;
 		
-		// set the key
-		strKey = "DGT_TUT";
-		
 		// listen for character scoring
 		DGTCharacter.OnCharacterScored += CharacterScored;
 	}
 	
 	//---------------------------------------------------
+	// SetKey()
+	//---------------------------------------------------	
+	protected override void SetKey() {
+		strKey = TUT_KEY;
+	}
+	
+	//---------------------------------------------------
 	// _End()
 	//---------------------------------------------------	
-	protected override void _End() {
+	protected override void _End( bool bFinished ) {
 		// stop listen for character scoring
 		DGTCharacter.OnCharacterScored -= CharacterScored;	
 	}
@@ -50,29 +57,37 @@ public class DGTTutorial : MinigameTutorial {
 	// ProcessStep()
 	//---------------------------------------------------		
 	protected override void ProcessStep( int nStep ) {
-		// show the proper tutorial message
-		ShowMessage();
+		// location and type of the tutorial message
+		Vector3 vPos = new Vector3();
+		string strResourceKey = "TutorialMessage";
 		
 		switch ( nStep ) {
 			case 0:				
 				// send healthy pets out
+				vPos = POS_BOT;
 				QueueCharacters( AsthmaStage.OK );
 				break;
 			case 1:
 				// send sick pets out
+				vPos = POS_TOP;
 				QueueCharacters( AsthmaStage.Sick );
 				break;	
 			case 2:
 				// send very sick pets out
+				vPos = POS_TOP;
 				QueueCharacters( AsthmaStage.Attack );
 				break;				
 			case 3:
-				// this part of the tutorial is just text			
+				// this part of the tutorial is just text		
+				strResourceKey = "TutorialMessageEnd";
 				break;
 			default:
 				Debug.Log("Clinic tutorial has an unhandled step: " + nStep );
-				break;
+				break;		
 		}		
+			
+		// show the proper tutorial message
+		ShowMessage( strResourceKey, vPos );			
 	}
 	
 	//---------------------------------------------------

@@ -57,9 +57,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//=======================Events========================
 	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
 	//=====================================================
-	
-	private int nTest = 0;
-	
+
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
@@ -96,8 +94,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// set the wave countdown
 		SetWaveCountdown( nCharactersPerWave );
 		
-		// if the tutorial is set, let's do it up...
-		StartTutorial();		
+		// if the play hasn't played the tutorial yet, start it
+		if ( IsTutorialOverride() || !DataManager.Instance.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) )
+			StartTutorial();		
 		
 		// set the spawn timer to 0
 		// NOTE this must come after the tutorial starts because setting spawn timer to 0 immediately spawns a character
@@ -319,11 +318,6 @@ public class DGTManager : MinigameManager<DGTManager> {
 	
 	////////----------------- Tutorial code	
 	private void StartTutorial() {
-		if ( nTest != 0 )
-			return;
-		
-		nTest = 1;
-		
 		// set our tutorial
 		SetTutorial( new DGTTutorial() );
 	}	

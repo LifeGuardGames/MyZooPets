@@ -145,3 +145,18 @@ public enum PetAnimStates {
 	Idling,
 	Walking
 }
+
+// mood states
+public enum PetMoods {
+	Happy,
+	Sad
+}
+
+// health states
+// Joe: I decided not to map these to the asthma stages because I felt they were more unique, and we might possibly want
+// to expand then one day.
+public enum PetHealthStates {
+	Healthy,
+	Sick,
+	VerySick
+}

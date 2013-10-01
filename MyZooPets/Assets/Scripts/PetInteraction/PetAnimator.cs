@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // PetAnimator
@@ -26,6 +28,8 @@ public class PetAnimator : LgCharacterAnimator {
 	public int nIdleCount;
 	
 	private string strAnimQueued;
+	
+	private Queue<string> queueAnims = new Queue<string>();
 	
 	// pet's animation state
 	private PetAnimStates eAnimState;
@@ -64,7 +68,9 @@ public class PetAnimator : LgCharacterAnimator {
 		int nIdle = UnityEngine.Random.Range(1,nIdleCount+1);
 		
 		// queue the anim
-		strAnimQueued = "happyIdle_" + nIdle;
+		string anim = "happyIdle_" + nIdle;
+		
+		
 	}
 	
 	//---------------------------------------------------
@@ -90,10 +96,10 @@ public class PetAnimator : LgCharacterAnimator {
 		base.Update();
 		
 		// if we have a queued animation, play it
-		if ( !string.IsNullOrEmpty(strAnimQueued) )	{
+		if ( queueAnims.Count > 0 ) {
+			string strAnim = queueAnims.Dequeue();
 			//Debug.Log("Playing queued anim: " + strAnimQueued);
-			PlayClip( strAnimQueued );
-			strAnimQueued = null;
+			PlayClip( strAnim );
 		}
 	}
 	

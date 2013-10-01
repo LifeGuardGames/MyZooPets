@@ -21,6 +21,8 @@ public class DataManager : Singleton<DataManager>{
 	
     [SerializeThis] 
     public CutsceneData Cutscenes;	
+	[SerializeThis]
+    public GatingProgressData GatingProgress;	
     [SerializeThis] 
     public DecorationSystemData Decorations;	
     [SerializeThis] 
@@ -108,6 +110,8 @@ public class DataManager : Singleton<DataManager>{
     private void InitializeAllDataFirstTime(){
 		Cutscenes = new CutsceneData();
 		Cutscenes.Init();
+		GatingProgress = new GatingProgressData();
+		GatingProgress.Init();
 		Decorations = new DecorationSystemData();
 		Decorations.Init();
         Stats = new StatsData();

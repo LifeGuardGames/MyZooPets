@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 //---------------------------------------------------
 // DecorationSystemData
-// Save data script for the decoration s ystem.
+// Save data script for the decoration system.
 //---------------------------------------------------
 
 [DoNotSerializePublic]

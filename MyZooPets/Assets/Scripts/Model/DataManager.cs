@@ -18,7 +18,9 @@ public class DataManager : Singleton<DataManager>{
     private bool firstTime; //is the user playing for the first time
 
     //==========SaveData============
-
+	
+    [SerializeThis] 
+    public GatingProgressData GatingProgress;	
     [SerializeThis] 
     public DecorationSystemData Decorations;	
     [SerializeThis] 
@@ -111,6 +113,8 @@ public class DataManager : Singleton<DataManager>{
     //initialize all data for the first time
     private void InitializeAllDataFirstTime(){
 		
+		GatingProgress = new GatingProgressData();
+		GatingProgress.Init();
 		Decorations = new DecorationSystemData();
 		Decorations.Init();
         Stats = new StatsData();

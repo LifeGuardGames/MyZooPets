@@ -30,6 +30,8 @@ public class PetGameData{
     public SkillMutableData Dojo;
     [SerializeThis]
     public BadgeMutableData Badge; 
+    [SerializeThis]
+    public GatingProgressData GatingProgress;
 
     public PetGameData(){}
 
@@ -58,5 +60,7 @@ public class PetGameData{
         Dojo.Init();
         Badge = new BadgeMutableData();
         Badge.Init();
+        GatingProgress = new GatingProgressData();
+        GatingProgress.Init();
     }
 }

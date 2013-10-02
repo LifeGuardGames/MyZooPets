@@ -18,7 +18,6 @@ public class TouchDetectorManager : MonoBehaviour {
     void OnSwipe(SwipeGesture gesture) {
        // Approximate swipe direction
         FingerGestures.SwipeDirection direction = gesture.Direction; 
-
         if(direction == FingerGestures.SwipeDirection.Up){
             foreach(MonoBehaviour currentScript in ListeningScripts)
                 currentScript.SendMessage("onSwipeUp", SendMessageOptions.DontRequireReceiver);

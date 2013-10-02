@@ -13,8 +13,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	// temp boolean to control whetehr or not edit mode is accessible
 	public bool bDisableEditMode = false;
 	
-	// the exit button for leaving edit mode
-	public PositionTweenToggle tweenExit;
+	// the exit panels for leaving edit mode
+	public TweenToggleDemux tweenExit;
 	
 	// the edit deco button
 	public GameObject goEdit;
@@ -41,7 +41,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		
-		// show the exit button
+		// show the exit panels
 		tweenExit.Show();	
 		
 		// hide the edit button
@@ -61,7 +61,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		NavigationUIManager.Instance.ShowPanel();	
 		InventoryUIManager.Instance.ShowPanel();
 		
-		// hide the exit button
+		// hide the exit panels
 		tweenExit.Hide();	
 		
 		// show the edit button again
@@ -89,8 +89,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	public void UpdateChooseMenu( DecorationNode decoNode ) {
 		// if the menu is not showing, show it
 		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
-		if (!tween.IsShowing)
+		if (!tween.IsShowing){
 			tween.Show();
+			tweenExit.Hide();
+		}
 		
 		// update the menu based on the incoming deco node
 		scriptChooseUI.UpdateItems( decoNode );
@@ -105,9 +107,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
 		if (!tween.IsShowing)
 			Debug.Log("Something trying to close an already closed choose menu for deco edit.");
-		else
+		else{
 			tween.Hide();
-		
+			tweenExit.Show();
+		}
 		// we possibly want to Resources.UnloadUnusedAssets() here because the menu is instantiated
 	}
 	

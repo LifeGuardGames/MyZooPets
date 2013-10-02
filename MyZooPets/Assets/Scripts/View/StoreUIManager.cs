@@ -18,7 +18,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private bool changePage;
 	private string currentPage;
 	private int page;
-	private UISprite uisprite;
 	private GameObject grid;
 
 	void Awake(){
@@ -26,7 +25,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	void Start (){
-		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		CreateItems(FirstPageTag);
 	}
 

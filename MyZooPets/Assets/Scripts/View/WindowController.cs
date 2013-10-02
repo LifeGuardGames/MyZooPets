@@ -12,6 +12,8 @@ public class WindowController : MonoBehaviour {
 	
 	public void setTime(bool isDaytime){
 		if(isDaytime){
+			Debug.Log(windowObject.name);
+			
 			// Set the sun sprite
 			windowObject.SetSprite("windowSun");
 			
@@ -27,13 +29,13 @@ public class WindowController : MonoBehaviour {
 		}
 	}
 	
-	void OnGUI(){
-		if(GUI.Button(new Rect(10f, 10f, 10f, 10f), "1")){
-			setTime(true);
-		}
-		
-		if(GUI.Button(new Rect(30f, 10f, 10f, 10f), "2")){
-			setTime (false);
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(10f, 10f, 10f, 10f), "1")){
+//			setTime(true);
+//		}
+//		
+//		if(GUI.Button(new Rect(30f, 10f, 10f, 10f), "2")){
+//			setTime (false);
+//		}
+//	}
 }

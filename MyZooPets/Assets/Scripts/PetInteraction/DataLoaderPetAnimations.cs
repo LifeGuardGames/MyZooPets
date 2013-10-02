@@ -64,8 +64,8 @@ public class DataLoaderPetAnimations {
 	//---------------------------------------------------	
 	public static DataPetAnimation GetRestrictedData( string strCat, bool bUseWeights = true ) {
 		// get the pet's mood and health states
-		PetMoods eMood = DataManager.Instance.Stats.GetMoodState();
-		PetHealthStates eHealth = DataManager.Instance.Stats.GetHealthState();
+		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
+		PetHealthStates eHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 		
 		// if the pet is NOT healthy, their mood does not matter
 		//if ( eHealth != PetHealthStates.Healthy )

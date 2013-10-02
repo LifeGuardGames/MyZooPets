@@ -35,39 +35,39 @@ public class StatsController : Singleton<StatsController> {
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
-				DataManager.Instance.Stats.AddPoints(deltaPoints);
+				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
-				DataManager.Instance.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 		}
 	
 		if(deltaStars != 0){
 			if(deltaStars > 0)
-				DataManager.Instance.Stats.AddStars(deltaStars);
+				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
 			else if(deltaStars < 0)
-				DataManager.Instance.Stats.SubtractStars(-1 * deltaStars);
+				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
 		}
 		
 		// so that the pet animations play properly, make sure to change and check mood BEFORE health
 		if(deltaMood != 0){
 			
-			PetMoods eOld = DataManager.Instance.Stats.GetMoodState();
+			PetMoods eOld = DataManager.Instance.GameData.Stats.GetMoodState();
 			if(deltaMood > 0)
-				DataManager.Instance.Stats.AddMood(deltaMood);
+				DataManager.Instance.GameData.Stats.AddMood(deltaMood);
 			else if(deltaMood < 0)
-				DataManager.Instance.Stats.SubtractMood(-1 * deltaMood);
+				DataManager.Instance.GameData.Stats.SubtractMood(-1 * deltaMood);
 			
-			PetMoods eNew = DataManager.Instance.Stats.GetMoodState();
+			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
 			CheckForMoodTransition( eOld, eNew );
 		}		
 		
 		if(deltaHealth != 0){
-			PetHealthStates eOldHealth = DataManager.Instance.Stats.GetHealthState();
+			PetHealthStates eOldHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			if(deltaHealth > 0)
-				DataManager.Instance.Stats.AddHealth(deltaHealth);
+				DataManager.Instance.GameData.Stats.AddHealth(deltaHealth);
 			else if(deltaHealth < 0)
-				DataManager.Instance.Stats.SubtractHealth(-1 * deltaHealth);
-			PetHealthStates eNewHealth = DataManager.Instance.Stats.GetHealthState();
+				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
+			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
 			CheckForHealthTransition( eOldHealth, eNewHealth );
 		}
@@ -83,7 +83,7 @@ public class StatsController : Singleton<StatsController> {
 	//---------------------------------------------------		
 	private void CheckForMoodTransition( PetMoods eOld, PetMoods eNew ) {
 		// if, at this moment, the pet is not healthy, there will be no mood transitions
-		PetHealthStates eHealth = DataManager.Instance.Stats.GetHealthState();
+		PetHealthStates eHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 		if ( eHealth != PetHealthStates.Healthy )
 			return;
 		

@@ -41,13 +41,13 @@ public class DojoLogic : Singleton<DojoLogic> {
 
     //Return the current skill that the pet is equipped with
     public Skill GetCurrentSkill(){
-        string currentSkillID = DataManager.Instance.Dojo.CurrentSkillID;
+        string currentSkillID = DataManager.Instance.GameData.Dojo.CurrentSkillID;
         return DataSkills.GetSkill(currentSkillID);
     }
 
     //Buy skill with skillID. Update SkillMutableData
     public void BuySkill(string skillID){
-        DataManager.Instance.Dojo.UpdateSkillStatus(skillID, true, true);
+        DataManager.Instance.GameData.Dojo.UpdateSkillStatus(skillID, true, true);
     }
 
     private void CheckForUnlockSkills(){

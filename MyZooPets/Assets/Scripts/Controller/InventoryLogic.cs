@@ -34,7 +34,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	public List<InventoryItem> AllInventoryItems{ //TO DO: cache data
 		get{
 			if(inventoryItemList == null || listNeedsUpdate){
-				inventoryItemList = (from keyValuePair in DataManager.Instance.Inventory.InventoryItems
+				inventoryItemList = (from keyValuePair in DataManager.Instance.GameData.Inventory.InventoryItems
 									select keyValuePair.Value).ToList();
 				listNeedsUpdate = false;
 			}
@@ -48,7 +48,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	//Return InventoryItem with itemID
 	//Return null if inventory item has been removed
 	public InventoryItem GetInvItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = DataManager.Instance.Inventory.InventoryItems;
+		Dictionary<string, InventoryItem> invItems = DataManager.Instance.GameData.Inventory.InventoryItems;
 		InventoryItem invItem = null;
 
 		if(invItems.ContainsKey(itemID))
@@ -93,10 +93,10 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		
 		switch ( eType ) {
 			case ItemType.Decorations:
-				return DataManager.Instance.Inventory.DecorationItems;
+				return DataManager.Instance.GameData.Inventory.DecorationItems;
 				break;
 			default:
-				return DataManager.Instance.Inventory.InventoryItems;
+				return DataManager.Instance.GameData.Inventory.InventoryItems;
 				break;
 		}		
 	}

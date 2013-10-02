@@ -10,30 +10,30 @@ public class TutorialLogic : Singleton<TutorialLogic> {
     //==================================================
     public bool FirstTimeCalendar{
         get{
-            return DataManager.Instance.Tutorial.FirstTimeCalendar;
+            return DataManager.Instance.GameData.Tutorial.FirstTimeCalendar;
         }
         set{
-            DataManager.Instance.Tutorial.FirstTimeCalendar = value;
+            DataManager.Instance.GameData.Tutorial.FirstTimeCalendar = value;
             UpdateCallBack();
         }
     }
 
     public bool FirstTimeRealInhaler{
         get{
-            return DataManager.Instance.Tutorial.FirstTimeRealInhaler;
+            return DataManager.Instance.GameData.Tutorial.FirstTimeRealInhaler;
         }
         set{
-            DataManager.Instance.Tutorial.FirstTimeRealInhaler = value;
+            DataManager.Instance.GameData.Tutorial.FirstTimeRealInhaler = value;
             UpdateCallBack();
         }
     }
 
     public bool FirstTimeDegradTrigger{
         get{
-            return DataManager.Instance.Tutorial.FirstTimeDegradTrigger;
+            return DataManager.Instance.GameData.Tutorial.FirstTimeDegradTrigger;
         }
         set{
-            DataManager.Instance.Tutorial.FirstTimeDegradTrigger = value;
+            DataManager.Instance.GameData.Tutorial.FirstTimeDegradTrigger = value;
             UpdateCallBack();
         }
     }

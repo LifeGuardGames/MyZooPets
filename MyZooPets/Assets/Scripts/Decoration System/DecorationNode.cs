@@ -46,8 +46,8 @@ public class DecorationNode : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CheckSaveData() {
 		// if the saved data contains this node's id, it means there was a decoration placed here
-		if ( DataManager.Instance.Decorations.PlacedDecorations.ContainsKey( strNodeID ) ) {
-			string strSavedDeco = DataManager.Instance.Decorations.PlacedDecorations[ strNodeID ];
+		if ( DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey( strNodeID ) ) {
+			string strSavedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[ strNodeID ];
 			SetDecoration( strSavedDeco );
 		}
 	}
@@ -128,7 +128,7 @@ public class DecorationNode : MonoBehaviour {
 		strDecoID = strID;
 		
 		// update the save data with the new decoration id
-		DataManager.Instance.Decorations.PlacedDecorations[strNodeID] = strID;		
+		DataManager.Instance.GameData.Decorations.PlacedDecorations[strNodeID] = strID;		
 		
 		// actually create/set the decoration
 		_SetDecoration( strDecoID );
@@ -170,7 +170,7 @@ public class DecorationNode : MonoBehaviour {
 			Debug.Log("Just removed an illegal decoration?");		
 		
 		// update the save data since this node is now empty
-		DataManager.Instance.Decorations.PlacedDecorations.Remove( strNodeID );
+		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove( strNodeID );
 		
 		// reset the deco id on this node
 		strDecoID = string.Empty;

@@ -35,10 +35,10 @@ public class Skill{
         get{return damagePoint;}
     }
     public bool IsUnlocked{
-        get{return DataManager.Instance.Dojo.GetIsUnlocked(id);}
+        get{return DataManager.Instance.GameData.Dojo.GetIsUnlocked(id);}
     }
     public bool IsPurchased{
-        get{return DataManager.Instance.Dojo.GetIsPurchased(id);}
+        get{return DataManager.Instance.GameData.Dojo.GetIsPurchased(id);}
     }
 
     public Skill(string id, Hashtable hashItemData){

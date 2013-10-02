@@ -48,7 +48,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
         string skillID = go.transform.parent.name;
         Skill skill = DojoLogic.Instance.GetSkill(skillID);
 
-        if(skill != null && DataManager.Instance.Stats.Stars >= skill.Cost){
+        if(skill != null && DataManager.Instance.GameData.Stats.Stars >= skill.Cost){
             DojoLogic.Instance.BuySkill(skillID);
         }
 

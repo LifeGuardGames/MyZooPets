@@ -57,7 +57,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         if(overrideProgress){
             latestProgress = currentProgress;
         }else{
-            int progress = DataManager.Instance.Badge.GetSeriesUnlockProgress(badgeType);
+            int progress = DataManager.Instance.GameData.Badge.GetSeriesUnlockProgress(badgeType);
             latestProgress = progress += currentProgress;
         }
 
@@ -75,7 +75,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         //Only update DataManager if there are still locked badges
         if(!unlockedAllSeriesBadges)
-            DataManager.Instance.Badge.UpdateSeriesUnlockProgress(badgeType, latestProgress);
+            DataManager.Instance.GameData.Badge.UpdateSeriesUnlockProgress(badgeType, latestProgress);
     }
 
     //Use this function to check if badge with badgeID can be unlocked
@@ -87,13 +87,13 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         if(overrideProgress){
             latestProgress = currentProgress;
         }else{
-            int progress = DataManager.Instance.Badge.GetSingleUnlockProgress(badgeID);
+            int progress = DataManager.Instance.GameData.Badge.GetSingleUnlockProgress(badgeID);
             latestProgress = progress += currentProgress;
         }
 
         //Update DataManager only if badge with badgeID is still locked
         if(!CheckUnlockProgress(badge, latestProgress))
-            DataManager.Instance.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
+            DataManager.Instance.GameData.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
     }
 
     //Check if badge unlock progress meets the unlock condition
@@ -102,10 +102,10 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         bool unlockNewBadge = false;
 
         if(progress >= badge.UnlockCondition){ //Check if progress matches unlock conditions
-            bool isUnlocked = DataManager.Instance.Badge.GetIsUnlocked(badge.ID);
+            bool isUnlocked = DataManager.Instance.GameData.Badge.GetIsUnlocked(badge.ID);
 
             if(!isUnlocked){ //Unlock new badges
-                DataManager.Instance.Badge.UpdateBadgeStatus(badge.ID, true, true);
+                DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);
 
                 if(OnNewBadgeUnlocked != null){
                     BadgeEventArgs arg = new BadgeEventArgs(badge);

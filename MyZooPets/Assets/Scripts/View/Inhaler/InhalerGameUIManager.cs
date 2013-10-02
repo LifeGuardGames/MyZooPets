@@ -132,7 +132,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void QuitInhalerGame(){
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
 			ShowCutscene();
 			return;	
 		}
@@ -152,7 +152,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	}
 	
     private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
 		QuitInhalerGame();
     }	

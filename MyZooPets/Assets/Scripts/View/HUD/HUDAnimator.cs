@@ -99,17 +99,17 @@ public class HUDAnimator : MonoBehaviour {
 
 	void Start(){
 		// TODO-j Is this Initialization still valid??!!
-		dataPoints = DataManager.Instance.Stats.Points;
-		dataStars = DataManager.Instance.Stats.Stars;
-		dataHealth = DataManager.Instance.Stats.Health;
-		dataMood = DataManager.Instance.Stats.Mood;
+		dataPoints = DataManager.Instance.GameData.Stats.Points;
+		dataStars = DataManager.Instance.GameData.Stats.Stars;
+		dataHealth = DataManager.Instance.GameData.Stats.Health;
+		dataMood = DataManager.Instance.GameData.Stats.Mood;
 
-		displayPoints = DataManager.Instance.Stats.Points;
-		displayStars = DataManager.Instance.Stats.Stars;
-		displayHealth = DataManager.Instance.Stats.Health;
-		displayMood = DataManager.Instance.Stats.Mood;
+		displayPoints = DataManager.Instance.GameData.Stats.Points;
+		displayStars = DataManager.Instance.GameData.Stats.Stars;
+		displayHealth = DataManager.Instance.GameData.Stats.Health;
+		displayMood = DataManager.Instance.GameData.Stats.Mood;
 
-		lastLevel = DataManager.Instance.Level.CurrentLevel;
+		lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints();
 	}
 
@@ -132,15 +132,15 @@ public class HUDAnimator : MonoBehaviour {
 
 	//==================GUI Animation=========================
 	private void StarsAnimation(){
-		if(dataStars != DataManager.Instance.Stats.Stars){
-			if(displayStars > DataManager.Instance.Stats.Stars){
+		if(dataStars != DataManager.Instance.GameData.Stats.Stars){
+			if(displayStars > DataManager.Instance.GameData.Stats.Stars){
 				displayStars--;
 				starAnimControl.Play();
-			}else if(displayStars < DataManager.Instance.Stats.Stars){
+			}else if(displayStars < DataManager.Instance.GameData.Stats.Stars){
 				displayStars++;
 				starAnimControl.Play();
 			}else{
-				dataStars = DataManager.Instance.Stats.Stars;
+				dataStars = DataManager.Instance.GameData.Stats.Stars;
 				// Stop grow & shrink, reset icon size
 				starAnimControl.Stop();
 
@@ -152,15 +152,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void PointsAnimation(){
-		if(dataPoints != DataManager.Instance.Stats.Points){
-			if(displayPoints < DataManager.Instance.Stats.Points){ //animate
-				if(displayPoints + 3 <= DataManager.Instance.Stats.Points){
+		if(dataPoints != DataManager.Instance.GameData.Stats.Points){
+			if(displayPoints < DataManager.Instance.GameData.Stats.Points){ //animate
+				if(displayPoints + 3 <= DataManager.Instance.GameData.Stats.Points){
 					displayPoints += 3;
 				}else{
-					displayPoints += DataManager.Instance.Stats.Points - displayPoints;
+					displayPoints += DataManager.Instance.GameData.Stats.Points - displayPoints;
 				}
 			}else{ //animation done
-				dataPoints = DataManager.Instance.Stats.Points;
+				dataPoints = DataManager.Instance.GameData.Stats.Points;
 
 				// Reset the bar animation flag
 				isAnimatePointsBar = false;
@@ -170,15 +170,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void HealthAnimation(){
-		if(dataHealth != DataManager.Instance.Stats.Health){
-			if(displayHealth > DataManager.Instance.Stats.Health){
+		if(dataHealth != DataManager.Instance.GameData.Stats.Health){
+			if(displayHealth > DataManager.Instance.GameData.Stats.Health){
 				displayHealth--;
 				healthAnimControl.Play();
-			}else if(displayHealth < DataManager.Instance.Stats.Health){
+			}else if(displayHealth < DataManager.Instance.GameData.Stats.Health){
 				displayHealth++;
 				healthAnimControl.Play();
 			}else{
-				dataHealth = DataManager.Instance.Stats.Health;
+				dataHealth = DataManager.Instance.GameData.Stats.Health;
 
 				// Stop grow & shrink. reset icon size
 				healthAnimControl.Stop();
@@ -191,15 +191,15 @@ public class HUDAnimator : MonoBehaviour {
 	}
 
 	private void MoodAnimation(){
-		if(dataMood != DataManager.Instance.Stats.Mood){
-			if(displayMood > DataManager.Instance.Stats.Mood){
+		if(dataMood != DataManager.Instance.GameData.Stats.Mood){
+			if(displayMood > DataManager.Instance.GameData.Stats.Mood){
 				displayMood--;
 				moodAnimControl.Play();
-			}else if(displayMood < DataManager.Instance.Stats.Mood){
+			}else if(displayMood < DataManager.Instance.GameData.Stats.Mood){
 				displayMood++;
 				moodAnimControl.Play();
 			}else{
-				dataMood = DataManager.Instance.Stats.Mood;
+				dataMood = DataManager.Instance.GameData.Stats.Mood;
 
 				// Stop grow & shrink. reset icon size
 				moodAnimControl.Stop();
@@ -218,18 +218,18 @@ public class HUDAnimator : MonoBehaviour {
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
 		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
-			int remainderPoints = DataManager.Instance.Stats.Points - nextLevelPoints; //points to be added after leveling up
+			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			if(D.Assert(OnLevelUp != null, "OnLevelUp has no listeners"))
                 OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
 
 			//reset the progress bar for next level
-			DataManager.Instance.Stats.ResetPoints();
+			DataManager.Instance.GameData.Stats.ResetPoints();
 			nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
 			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
 			displayPoints = 0;
 			dataPoints = 0;
-			lastLevel = DataManager.Instance.Level.CurrentLevel;
+			lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
 		}
 	}
 
@@ -246,22 +246,22 @@ public class HUDAnimator : MonoBehaviour {
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 60, Vector3.zero, 0, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
-				DataManager.Instance.Stats.SubtractHealth(100);
+				DataManager.Instance.GameData.Stats.SubtractHealth(100);
 				dataHealth = 0;
 				displayHealth = 0;
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 27, Vector3.zero, 0, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
-				DataManager.Instance.Stats.SubtractMood(100);
+				DataManager.Instance.GameData.Stats.SubtractMood(100);
 				dataMood = 0;
 				displayMood = 0;
 				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
 			}
 			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
-//				DataManager.Instance.Stats.SubtractMood(100);
+//				DataManager.Instance.GameData.Stats.SubtractMood(100);
 //				dataMood = 0;
 //				displayMood = 0;
-//				DataManager.Instance.Stats.SubtractHealth(100);
+//				DataManager.Instance.GameData.Stats.SubtractHealth(100);
 //				dataHealth = 0;
 //				displayHealth = 0;
 				StatsController.Instance.ChangeStats(-100, Vector3.zero, -100, Vector3.zero, -20, Vector3.zero, -50, new Vector3(0, 0, 0));

@@ -3,17 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// First time GUI.
-/// Stuffed everything that needs to be done in the first run here.
-/// If its not the first time the game is run, this will delete itself.
-/// </summary>
+/*
+    
+*/
 
-public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
+public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 
-    public GameObject eggObject;
-    public GameObject nestObject;
-    public GameObject firstTimeChoosePanel;
+    // public GameObject eggObject;
+    // public GameObject nestObject;
+    public GameObject customizationPanel;
     public GameObject popupTitle;
     public GameObject mCamera;
     public GameObject loadingScreen;
@@ -31,13 +29,13 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     private Color currentRenderColor;
     private bool eggClicked = false;
     private bool finishClicked = false;
-    private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
-    private tk2dSprite eggSpriteScript;
+    // private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
+    // private tk2dSprite eggSpriteScript;
     private string petName;
     private string petColor;
 
     void Start(){
-        eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
+        // eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
         currentRenderColor = RenderSettings.ambientLight;
         RenderSettings.ambientLight = Color.black;
 
@@ -57,58 +55,37 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
         HideTitle();
         ShowChooseGUI();	
 	}	
-	
-	/*
-    void Update(){
-        //TODO-s Optimize this for touch? / ABSTRACT TO CAMERAMOVE?? perhaps not for coherency
-        if(Input.GetMouseButtonUp(0)){
-            Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if(Physics.Raycast(myRay,out hit))
-            {
-                if(hit.collider.name == "SpriteEgg" && eggClicked == false)
-                {
-                    eggClicked = true;
-                    CameraTransform(finalPosition,finalFaceDirection);
-                    isZoomed = true;
-                    HideTitle();
-                    ShowChooseGUI();
-                }
-            }
-        }
-    }
-    */
 
     private void ShowDropInAnimation(){
         // Splash finished, Drop down the title and the egg sprite, only called once
         popupTitle.GetComponent<PositionTweenToggle>().Show();
 
-        Hashtable optional = new Hashtable();
-        optional.Add("ease", LeanTweenType.easeOutBounce);
-        LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
+        // Hashtable optional = new Hashtable();
+        // optional.Add("ease", LeanTweenType.easeOutBounce);
+        // LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
     }
     
     private void ShowChooseGUI(){
-        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Show(smooth);
+        // firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Show(smooth);
     }
 
     private void HideChooseGUI(){
-        firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Hide(smooth);
+        // firstTimeChoosePanel.GetComponent<PositionTweenToggle>().Hide(smooth);
         RenderSettings.ambientLight = currentRenderColor;   // lerp this
         HelperFinishEditPet();
     }
 
     // Callback for closing edit panel
     public void HelperFinishEditPet(){
-        DataManager.Instance.PetName = petName;
-        DataManager.Instance.PetColor = petColor;
-        DataManager.Instance.TurnFirstTimeOff();
+        // DataManager.Instance.GameData.PetName = petName;
+        // DataManager.Instance.GameData.PetColor = petColor;
+        // DataManager.Instance.GameData.TurnFirstTimeOff();
     }
 	
 	public void ChangeEggColor( string strSprite, string strColor ) {
         if (!finishClicked){
-            eggSpriteScript.SetSprite(strSprite);
-            petColor = strColor;
+            // eggSpriteScript.SetSprite(strSprite);
+            // petColor = strColor;
         }		
 	}
 
@@ -145,7 +122,7 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Intro") )
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Intro") )
 			LoadScene();
 		
 		GameObject resourceMovie = Resources.Load("Cutscene_Intro") as GameObject;
@@ -154,7 +131,7 @@ public class FirstTimeNGUI : SingletonUI<FirstTimeNGUI> {
 	}
 	
     private void IntroMovieDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Intro");
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Intro");
 		CutsceneFrames.OnCutsceneDone -= IntroMovieDone;
 		LoadScene();
     }

@@ -218,19 +218,19 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     
     // private void openChallenges(){
-    //     DataManager.Instance.Tutorial.FirstTimeChallenges = false;
+    //     DataManager.Instance.GameData.Tutorial.FirstTimeChallenges = false;
     //     TutorialHighlighting highlight = challenges.GetComponent<TutorialHighlighting>();
     //     highlight.HideArrow();
     // }
 
     // void openDiary(){
-    //     DataManager.Instance.Tutorial.FirstTimeDiary = false;
+    //     DataManager.Instance.GameData.Tutorial.FirstTimeDiary = false;
     //     TutorialHighlighting highlight = diary.GetComponent<TutorialHighlighting>();
     //     highlight.HideArrow();
     // }
 
     // void openSlotMachine(){
-    //     DataManager.Instance.Tutorial.FirstTimeSlotMachine = false;
+    //     DataManager.Instance.GameData.Tutorial.FirstTimeSlotMachine = false;
     //     TutorialHighlighting highlight = slotMachine.GetComponent<TutorialHighlighting>();
     //     highlight.HideArrow();
     // }
@@ -239,8 +239,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     // void openShelf(){
     //     // added for the demo
-    //     if (DataManager.Instance.Tutorial.FirstTimeHelpTrophy){
-    //         DataManager.Instance.Tutorial.FirstTimeShelf = false;
+    //     if (DataManager.Instance.GameData.Tutorial.FirstTimeHelpTrophy){
+    //         DataManager.Instance.GameData.Tutorial.FirstTimeShelf = false;
 
     //         TutorialHighlighting highlight = shelf.GetComponent<TutorialHighlighting>();
     //         highlight.HideArrow();
@@ -255,7 +255,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     //     if (!ClickManager.CanRespondToTap()){ // meaning we have clicked something
     //         TutorialHighlighting highlight = helpTrophy.GetComponent<TutorialHighlighting>();
     //         highlight.HideArrow();
-    //         DataManager.Instance.Tutorial.FirstTimeHelpTrophy = false;
+    //         DataManager.Instance.GameData.Tutorial.FirstTimeHelpTrophy = false;
     //     }
     // }
 

@@ -119,7 +119,7 @@ public class MinigameTutorial {
 		
 		// save the fact that the user completed this tutorial
 		if ( bFinished )
-			DataManager.Instance.Tutorial.ListPlayed.Add( GetKey() );
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add( GetKey() );
 		
 		// if there are any messages showing, destroy them
 		if ( scriptMessage != null )

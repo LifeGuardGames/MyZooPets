@@ -128,7 +128,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 	//---------------------------------------------------	
 	private List<InventoryItem> GetDecorationList( DecorationTypes eType ) {
 		// get the list of decorations the user owns
-		List<InventoryItem> listDecos = (from keyValuePair in DataManager.Instance.Inventory.DecorationItems
+		List<InventoryItem> listDecos = (from keyValuePair in DataManager.Instance.GameData.Inventory.DecorationItems
 											select keyValuePair.Value).ToList();
 		
 		// now order the list by the type of decoration we are looking for

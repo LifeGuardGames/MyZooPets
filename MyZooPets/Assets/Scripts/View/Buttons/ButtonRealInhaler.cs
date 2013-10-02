@@ -17,7 +17,7 @@ public class ButtonRealInhaler : LgButton {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		//Start tutorial if first time; otherwise, open inhaler game
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
 			ShowCutscene();
 		else if(TutorialLogic.Instance.FirstTimeRealInhaler)
 			TutorialUIManager.Instance.StartRealInhalerTutorial();
@@ -35,7 +35,7 @@ public class ButtonRealInhaler : LgButton {
 	}
 	
     private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
 		ProcessClick();
     }	

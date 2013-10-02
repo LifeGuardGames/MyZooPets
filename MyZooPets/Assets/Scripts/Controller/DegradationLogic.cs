@@ -37,7 +37,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     private const int NUMBBER_OF_PREFABS = 6;
 
     public List<DegradData> DegradationTriggers{
-        get{return DataManager.Instance.Degradation.DegradationTriggers;}
+        get{return DataManager.Instance.GameData.Degradation.DegradationTriggers;}
     }
     public List<Location> TriggerLocations{
         get{return triggerLocations;}
@@ -48,22 +48,22 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
     void Awake(){
         DateTime now = DateTime.Now;
-        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.Degradation.LastTimeUserPlayedGame.Date;
+        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;
 
         if(sinceLastPlayed.Days > 0){ //reset if new day
-            DataManager.Instance.Degradation.MorningTrigger = true;
-            DataManager.Instance.Degradation.AfternoonTrigger = true;
+            DataManager.Instance.GameData.Degradation.MorningTrigger = true;
+            DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
         }
         if(now.Hour > 12){ //morning
-            if(DataManager.Instance.Degradation.MorningTrigger){
+            if(DataManager.Instance.GameData.Degradation.MorningTrigger){
                 numberOfTriggersToInit = 3;
-                DataManager.Instance.Degradation.MorningTrigger = false;
+                DataManager.Instance.GameData.Degradation.MorningTrigger = false;
             }
         }else{ //afternoon
-            if(DataManager.Instance.Degradation.AfternoonTrigger){
+            if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
                 numberOfTriggersToInit = 3; 
-                DataManager.Instance.Degradation.AfternoonTrigger = false;
+                DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
             }
         }
 		
@@ -73,7 +73,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         //create triggers
         for(int i=0; i<numberOfTriggersToInit; i++){
             //don't add anymore triggers if there are already 6
-            if(DataManager.Instance.Degradation.DegradationTriggers.Count == NUMBER_OF_LOC) break;
+            if(DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == NUMBER_OF_LOC) break;
 
             //random location and prefab
             int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
@@ -87,11 +87,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             
             //spawn them at a pre define location
             //ID is the order in which the data are created
-            DataManager.Instance.Degradation.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
+            DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
             
         }                
 
-        DataManager.Instance.Degradation.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
+        DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
     }
 		
 	//---------------------------------------------------
@@ -104,7 +104,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		int nMoodLoss = 0;
 		
 		// get the pet's health %, because it affects how their mood changes
-		float fHP = (float) ( DataManager.Instance.Stats.Health / 100.0f );
+		float fHP = (float) ( DataManager.Instance.GameData.Stats.Health / 100.0f );
 		float fMultiplier = 1;
 		if ( fHP < fHealthMoodThreshold )
 			fMultiplier = 2;
@@ -135,18 +135,18 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
 		Vector3 triggerPos = Vector3.zero;
-        DegradData degradData = DataManager.Instance.Degradation.DegradationTriggers.Find(x => x.ID == id);
+        DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == id);
         if(degradData != null)
             triggerPos = triggerLocations[degradData.PositionId].position;
         
 		StatsController.Instance.ChangeStats(nPoints, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 
             50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
-        DataManager.Instance.Degradation.DegradationTriggers.Remove(degradData);
+        DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
     }
 
     //Calculate health degration
     private void TriggerDegradesHealth(){
-        int triggerCount = DataManager.Instance.Degradation.DegradationTriggers.Count;
+        int triggerCount = DataManager.Instance.GameData.Degradation.DegradationTriggers.Count;
         int minusHealth = 2;
         Debug.Log("degrad health");
 

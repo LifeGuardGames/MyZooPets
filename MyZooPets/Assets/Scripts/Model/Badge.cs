@@ -35,11 +35,11 @@ public class Badge{
     } 
     //Is badge unlocked?
     public bool IsUnlocked{
-        get{return DataManager.Instance.Badge.GetIsUnlocked(id);}
+        get{return DataManager.Instance.GameData.Badge.GetIsUnlocked(id);}
     }
     //Is badge new?
     public bool IsNew{
-        get{return DataManager.Instance.Badge.GetIsNew(id);}
+        get{return DataManager.Instance.GameData.Badge.GetIsNew(id);}
     }
 
     public Badge(string id, Hashtable hashItemData){

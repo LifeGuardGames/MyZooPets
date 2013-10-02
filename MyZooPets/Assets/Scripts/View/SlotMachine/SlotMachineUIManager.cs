@@ -17,7 +17,7 @@ public class SlotMachineUIManager : MonoBehaviour {
             counter++;
         }
 
-        if (DataManager.Instance.Stats.Stars >= costStars){
+        if (DataManager.Instance.GameData.Stats.Stars >= costStars){
 			
 			/////// Send Notication ////////
 			// Assign delegate functions to be passed in hashtable

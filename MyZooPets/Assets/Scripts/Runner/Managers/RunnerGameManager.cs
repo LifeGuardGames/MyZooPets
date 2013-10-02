@@ -101,7 +101,7 @@ public class RunnerGameManager : MonoBehaviour {
         else
             Debug.LogError("Could not find an object named 'ItemManager'");
 		
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
 			ShowCutscene();
 			GameRunning = false;	
 		}else
@@ -118,7 +118,7 @@ public class RunnerGameManager : MonoBehaviour {
 	}
 	
     private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Runner");	
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Runner");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
         GameRunning = true;
     }	

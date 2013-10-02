@@ -29,7 +29,7 @@ public class PopupNotificationTutorial: PopupNotificationNGUI {
 				spriteName = "tutorialCalendar0"; 
 				calendarTutorialMessage.active = true;
 				calendarTutorialMessage.transform.Find("Label_PetName").GetComponent<UILabel>().
-					text = DataManager.Instance.PetName;
+					text = DataManager.Instance.GameData.PetInfo.PetName;
 			break;
 			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
 			case TutorialImageType.CalendarRedStamp: spriteName = "tutorialCalendar2"; break;

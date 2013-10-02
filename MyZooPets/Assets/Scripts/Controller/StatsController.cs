@@ -32,30 +32,30 @@ public class StatsController : Singleton<StatsController> {
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
-				DataManager.Instance.Stats.AddPoints(deltaPoints);
+				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
-				DataManager.Instance.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 		}
 	
 		if(deltaStars != 0){
 			if(deltaStars > 0)
-				DataManager.Instance.Stats.AddStars(deltaStars);
+				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
 			else if(deltaStars < 0)
-				DataManager.Instance.Stats.SubtractStars(-1 * deltaStars);
+				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
 		}
 		
 		if(deltaHealth != 0){
 			if(deltaHealth > 0)
-				DataManager.Instance.Stats.AddHealth(deltaHealth);
+				DataManager.Instance.GameData.Stats.AddHealth(deltaHealth);
 			else if(deltaHealth < 0)
-				DataManager.Instance.Stats.SubtractHealth(-1 * deltaHealth);
+				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 		}
 		
 		if(deltaMood != 0){
 			if(deltaMood > 0)
-				DataManager.Instance.Stats.AddMood(deltaMood);
+				DataManager.Instance.GameData.Stats.AddMood(deltaMood);
 			else if(deltaMood < 0)
-				DataManager.Instance.Stats.SubtractMood(-1 * deltaMood);
+				DataManager.Instance.GameData.Stats.SubtractMood(-1 * deltaMood);
 		}
 		
 		// Tell HUDAnimator to animate and change

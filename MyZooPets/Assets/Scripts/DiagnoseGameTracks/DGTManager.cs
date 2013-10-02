@@ -63,7 +63,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------	
 	protected override void _Start() {
 		// show the cutscene for the clinic game if it has not yet been viewed
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
 			ShowCutscene();
 		
 		// listen for character scoring
@@ -95,7 +95,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		SetWaveCountdown( nCharactersPerWave );
 		
 		// if the play hasn't played the tutorial yet, start it
-		if ( IsTutorialOverride() || !DataManager.Instance.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) )
+		if ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) )
 			StartTutorial();		
 		
 		// set the spawn timer to 0
@@ -113,7 +113,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}
 	
     private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Clinic");	
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Clinic");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
     }		
 	

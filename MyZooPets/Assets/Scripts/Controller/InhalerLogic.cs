@@ -26,8 +26,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     }
 
     public bool IsFirstTimeRescue{
-        get{return DataManager.Instance.Inhaler.FirstTimeRescue;}
-        set{DataManager.Instance.Inhaler.FirstTimeRescue = value;}
+        get{return DataManager.Instance.GameData.Inhaler.FirstTimeRescue;}
+        set{DataManager.Instance.GameData.Inhaler.FirstTimeRescue = value;}
     }
 
     //True: the step that the user is currently on is correct, False: wrong step

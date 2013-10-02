@@ -20,6 +20,6 @@ public class ButtonChangeEggColor : LgButton {
 	}
 	
 	protected override void ProcessClick() {
-		FirstTimeNGUI.Instance.ChangeEggColor( strSprite, strColor );
+		// FirstTimeNGUI.Instance.ChangeEggColor( strSprite, strColor );
 	}
 }

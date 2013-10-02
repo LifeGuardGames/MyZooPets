@@ -15,13 +15,13 @@ public class LevelUpLogic : Singleton<LevelUpLogic> {
     }
 
     public int NextLevelPoints(){
-        return levelPoints[(int)DataManager.Instance.Level.CurrentLevel + 1];
+        return levelPoints[(int)DataManager.Instance.GameData.Level.CurrentLevel + 1];
     }
 
     //Check if the pet is ready to level up
     private void LevelUp(object senders, EventArgs args){
-        int nextLevelIndex = (int)DataManager.Instance.Level.CurrentLevel + 1;
-        DataManager.Instance.Level.CurrentLevel = (Level)nextLevelIndex;
+        int nextLevelIndex = (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
+        DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevelIndex;
 
         BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, nextLevelIndex, true);
     }

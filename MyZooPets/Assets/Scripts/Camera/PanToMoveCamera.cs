@@ -20,7 +20,7 @@ public class PanToMoveCamera : MonoBehaviour{
     private Vector2 currentTouchPos; //Position of touch right now
     public int currentPartition = 0;
     private float startTime; //Time at when finger touches screen
-    private Direction panDirection; //direction of the last finger gesture
+    private RoomDirection panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
     private bool touchCancelled = false; //True: touch shouldn't be handled
     public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
@@ -28,11 +28,6 @@ public class PanToMoveCamera : MonoBehaviour{
 
     private Camera nguiCamera; 
     private Camera mainCamera;
-	private enum Direction{
-	    Left,
-	    Right
-	}
-	
 
     // Use this for initialization
     void Start () {
@@ -74,7 +69,7 @@ public class PanToMoveCamera : MonoBehaviour{
 					bool bMovingRight = currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition;
 				
 					if ( bMovingLeft || bMovingRight ) {
-						panDirection = bMovingLeft ? Direction.Left : Direction.Right;
+						panDirection = bMovingLeft ? RoomDirection.Left : RoomDirection.Right;
 					
 					    if(normalizedTouchPosX >= minNormalizedPanDistance) {
                             //With the normalize position figure out how much the camera will have to move
@@ -87,11 +82,13 @@ public class PanToMoveCamera : MonoBehaviour{
                 break;
 
                 case TouchPhase.Ended:
-					// if the user swiped quick enough (or panned long enough), change the partition
+					// if the user swiped quick enough (or panned long enough), and they can enter the room, change the partition
                     float swipeTime = Time.time - startTime;
-                    if( 	( swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance) || 
-							( normalizedTouchPosX >= panDistanceToChange ) )
-								ChangePartition( 1, panDirection );
+					int nTargetPartition = GetTargetPartition( 1, panDirection );
+                    if( 	( ( swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance) || 
+							( normalizedTouchPosX >= panDistanceToChange ) ) &&
+							GatingManager.Instance.CanEnterRoom( currentPartition, panDirection ) )
+								ChangePartition( nTargetPartition );
 	
 					// then snap the camera to the partition
                     SnapCamera();
@@ -110,12 +107,16 @@ public class PanToMoveCamera : MonoBehaviour{
     private void CheckArrowKeys()
     {
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
-			ChangePartition( 1, Direction.Left );
-            SnapCamera();
+			if ( GatingManager.Instance.CanEnterRoom( currentPartition, RoomDirection.Left  ) ) {
+				ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
+	            SnapCamera();
+			}
 		}
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
-			ChangePartition( 1, Direction.Right );
-            SnapCamera();       
+			if ( GatingManager.Instance.CanEnterRoom( currentPartition, RoomDirection.Right  ) ) {
+				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );
+	            SnapCamera();       
+			}
 		}
     }
 
@@ -150,17 +151,24 @@ public class PanToMoveCamera : MonoBehaviour{
 	// Changes the current partition by nMoves
 	// in eSwipeDirection (if it's legal).
 	///////////////////////////////////////////		
-	private void ChangePartition( int nMoves, Direction eSwipeDirection ) {
-		// get the partition limit to check and numerical change in partition based on the direction
-		int nCheck = eSwipeDirection == Direction.Left ? lastPartition : firstPartition;
-		int nChange = eSwipeDirection == Direction.Left ? nMoves : -nMoves;
-		
+	private void ChangePartition( int nTargetPartition) {
 		// check to make sure the move is legal (i.e. within bounds)
-		if ( 	( 	eSwipeDirection == Direction.Left && currentPartition + nChange <= nCheck )  ||
-				( 	eSwipeDirection == Direction.Right && currentPartition + nChange >= nCheck ) )
-		{
-					currentPartition += nChange;
-					Debug.Log("Partition is: " + currentPartition);	
+		if ( nTargetPartition >= firstPartition && nTargetPartition <= lastPartition ) {
+			currentPartition = nTargetPartition;
+			Debug.Log("Partition is: " + currentPartition);	
+			GatingManager.Instance.EnteredRoom( currentPartition );
 		}
+	}
+	
+	///////////////////////////////////////////
+	// GetTargetPartition()
+	// Given a direction and a distance, what
+	// partition is the target?
+	///////////////////////////////////////////		
+	private int GetTargetPartition( int nMoves, RoomDirection eSwipeDirection ) {
+		int nChange = eSwipeDirection == RoomDirection.Left ? nMoves : -nMoves;
+		int nTarget = currentPartition + nChange;
+		
+		return nTarget;
 	}
 }

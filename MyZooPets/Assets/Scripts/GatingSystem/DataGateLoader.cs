@@ -9,11 +9,20 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class DataGateLoader {
-
+	
+	// dictionary of all gates
     private static Dictionary<string, DataGate> dictData = new Dictionary<string, DataGate>();
+	
+	// hash of areas to rooms to gates
+	private static Hashtable hashData = new Hashtable();
+	
     private static bool dataLoaded = false; //Prohibit double loading data
 
-    // Get monster with incoming id
+	//---------------------------------------------------
+	// GetData()
+	// Returns the gate with incoming id.  This probably
+	// isn't very useful.
+	//---------------------------------------------------
     public static DataGate GetData(string id){
         DataGate data = null;
 
@@ -23,6 +32,23 @@ public class DataGateLoader {
 			Debug.Log("No such gate with id " + id + " -- creating one with default values");
 
         return data;
+	}
+	
+	//---------------------------------------------------
+	// GetData()
+	// Returns the gate data for a given area & room.
+	// Will be null if there is no gate.
+	//---------------------------------------------------
+	public static DataGate GetData( string strArea, int nRoom ) {
+		DataGate dataGate = null;
+		
+		if ( hashData.ContainsKey( strArea ) ) {
+			Hashtable hashArea = (Hashtable) hashData[strArea];
+			if ( hashArea.ContainsKey( nRoom ) )
+				dataGate = (DataGate) hashArea[nRoom];
+		}
+		
+		return dataGate;
 	}
 	
 	public static Dictionary<string, DataGate> GetAllData() {
@@ -60,11 +86,37 @@ public class DataGateLoader {
 	           	// store the data
 				if ( dictData.ContainsKey( id ) )
 					Debug.Log(strError + "Duplicate keys!");
-				else
-	            	dictData.Add(id, data);		
+				else {
+					// add to dictionary of all gates
+	            	dictData.Add(id, data);	
+					
+					// we also want to store the gates in a more elaborate hashtable for easy access
+					StoreGate( data );
+				}
             }
          }
          dataLoaded = true;
     }
+	
+	//---------------------------------------------------
+	// StoreGate()
+	// Stores the gate in a hash of areas to partition 
+	// ids to the actual data.
+	//---------------------------------------------------	
+	private static void StoreGate( DataGate dataGate ) {
+		string strArea = dataGate.GetArea();
+		int nRoom = dataGate.GetPartition();
+		
+		// if the area isn't in the hash yet, create it
+		if ( !hashData.ContainsKey( strArea ) )
+			hashData[strArea] = new Hashtable();
+		
+		Hashtable hashArea = (Hashtable) hashData[strArea];
+		
+		if ( hashArea.ContainsKey( nRoom ) )
+			Debug.Log("Duplicate gate for room " + nRoom + " in area " + strArea);
+		else
+			hashArea[nRoom] = dataGate;
+	}
 }
 

@@ -163,3 +163,9 @@ public enum PetHealthStates {
 	Sick,
 	VerySick
 }
+
+// direction used in moving and gating
+public enum RoomDirection {
+    Left,
+    Right
+}

@@ -42,7 +42,7 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	void Start() {
+	new void Start() {
 		// load up our animation data from xml
 		DataLoaderPetAnimations.SetupData();
 		
@@ -175,7 +175,7 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// Update()
 	//---------------------------------------------------		
-	void Update() {
+	new void Update() {
 		// call base update so that LWF can do it's thing
 		base.Update();
 		

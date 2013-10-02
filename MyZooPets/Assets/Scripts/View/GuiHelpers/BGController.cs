@@ -5,11 +5,11 @@ public class BGController : Singleton<BGController> {
 	
 	public Material blue;
 	public Material black;
-	public Camera camera;	// For far clipping optimization when bg is shown;
+	public Camera mCamera;	// For far clipping optimization when bg is shown;
 	private float startFarClip;
 	
 	void Start(){
-		startFarClip = camera.farClipPlane;
+		startFarClip = mCamera.farClipPlane;
 	}
 
 	public void Show(string material){
@@ -34,10 +34,10 @@ public class BGController : Singleton<BGController> {
 	
 	// Callback of BG Tween
 	public void DecreaseCameraClip(){
-		camera.farClipPlane = 5;
+		mCamera.farClipPlane = 5;
 	}
 	
 	public void RestoreCameraClip(){
-		camera.farClipPlane = startFarClip;
+		mCamera.farClipPlane = startFarClip;
 	}
 }

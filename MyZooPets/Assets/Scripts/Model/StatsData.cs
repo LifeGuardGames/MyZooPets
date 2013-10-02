@@ -13,6 +13,16 @@ public class StatsData{
     private int health; //pet's health
     [SerializeThis]
     private int mood; //pet's mood (weighted or unweighted)
+	
+	// constants
+	// if the pet's mood <= this number, it will be sad
+	private static int SAD_THRESH = 50;
+	
+	// if the pet's health <= this number, it will be sick
+	private static int SICK_THRESH = 60;
+	
+	// if the pet's health <= this number, it will be very sick
+	private static int VERY_SICK_THRESH = 30;	
 
     //=====================Getters & Setters=============
     public int Points{
@@ -94,4 +104,34 @@ public class StatsData{
             mood = 0;
         }
     }
+	
+	//---------------------------------------------------
+	// GetMoodState()
+	// Based on the numerical value of the mood stat,
+	// returns an enum of the pet's mood.
+	//---------------------------------------------------		
+	public PetMoods GetMoodState() {
+		PetMoods eMood = PetMoods.Happy;
+		
+		if ( Mood <= SAD_THRESH )
+			eMood = PetMoods.Sad;
+		
+		return eMood;
+	}
+	
+	//---------------------------------------------------
+	// GetHealthState()
+	// Based on the numerical value of the health stat,
+	// returns an enum of the pet's health.
+	//---------------------------------------------------		
+	public PetHealthStates GetHealthState() {
+		PetHealthStates eHealth = PetHealthStates.Healthy;
+		
+		if ( Health <= VERY_SICK_THRESH )
+			eHealth = PetHealthStates.VerySick;
+		else if ( Health <= SICK_THRESH )
+			eHealth = PetHealthStates.Sick;
+		
+		return eHealth;
+	}	
 }

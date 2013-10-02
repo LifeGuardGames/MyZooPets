@@ -158,6 +158,9 @@ public class PanToMoveCamera : MonoBehaviour{
 		// check to make sure the move is legal (i.e. within bounds)
 		if ( 	( 	eSwipeDirection == Direction.Left && currentPartition + nChange <= nCheck )  ||
 				( 	eSwipeDirection == Direction.Right && currentPartition + nChange >= nCheck ) )
+		{
 					currentPartition += nChange;
+					Debug.Log("Partition is: " + currentPartition);	
+		}
 	}
 }

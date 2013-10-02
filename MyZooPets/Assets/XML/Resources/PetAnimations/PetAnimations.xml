@@ -1,0 +1,171 @@
+<PetAnims>
+	<Anim ID="happyIdle" state="Idling">
+		<Weight>5</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>	
+	</Anim>	
+
+	<Anim ID="happyGestureDance" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle,Dance</Categories>	
+	</Anim>	
+
+	<Anim ID="happyGestureShuffle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+	
+	<Anim ID="happyGestureGuns" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>		
+	
+	<Anim ID="happySpitFire" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>		
+
+	<Anim ID="sadGestureKick" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>	
+
+	<Anim ID="sadGestureLook" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>	
+
+	<Anim ID="sadGestureShuffle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>	
+	
+	<Anim ID="sick1Idle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Sick</Health>
+		<Categories>Idle</Categories>
+	</Anim>		
+	
+	<Anim ID="sick2Idle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<Categories>Idle</Categories>
+	</Anim>	
+	
+	<Anim ID="happyWalk" state="Walking">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Walk</Categories>
+	</Anim>
+
+	<Anim ID="sadWalk" state="Walking">
+		<Clip>happyWalk</Clip>
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Walk</Categories>
+	</Anim>		
+
+	<Anim ID="sick1Walk" state="Walking">
+		<Clip>happyWalk</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>Sick</Health>
+		<Categories>Walk</Categories>
+	</Anim>
+
+	<Anim ID="sick2Walk" state="Walking">
+		<Clip>happyWalk</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<Categories>Walk</Categories>
+	</Anim>			
+	
+	<Anim ID="sadHappyTransition" state="Transitioning">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_SadHappy</Categories>
+	</Anim>		
+	
+	<Anim ID="happySadTransition" state="Transitioning">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_HappySad</Categories>
+	</Anim>		
+	
+	<Anim ID="happySick1Transition" state="Transitioning">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Sick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_HealthySick</Categories>
+	</Anim>	
+
+	<Anim ID="sadSick1Transition" state="Transitioning">
+		<Clip>happySick1Transition</Clip>
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Sick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_HealthySick</Categories>
+	</Anim>	
+	
+	<Anim ID="sick1HappyTransition" state="Transitioning">
+		<Clip>happySick1Transition</Clip>
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_SickHealthy</Categories>
+	</Anim>	
+	
+	<Anim ID="sick1SadTransition" state="Transitioning">
+		<Clip>happySick1Transition</Clip>
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_SickHealthy</Categories>
+	</Anim>	
+	
+	<Anim ID="sick1Sick2Transition" state="Transitioning">
+		<Clip>happySick1Transition</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_SickVerySick</Categories>
+	</Anim>	
+	
+	<Anim ID="sick2Sick1Transition" state="Transitioning">
+		<Clip>happySick1Transition</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>Sick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Transition_VerySickSick</Categories>
+	</Anim>	
+</PetAnims>

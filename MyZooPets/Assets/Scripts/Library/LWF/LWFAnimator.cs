@@ -15,6 +15,21 @@ public class FlashMovieClip {
 	public string ASLinkage;	// the name of the linkage in the source SWF file
 	public WrapMode wrapMode;	// loop, play once, etc
 	public bool bCanInterrupt = true;	// can this animation be interrupted?
+	
+	public FlashMovieClip( DataPetAnimation dataAnim ) {
+		string strID = dataAnim.GetID();
+		
+		clipName = strID;
+		ASLinkage = strID;
+		wrapMode = WrapMode.Loop;
+		this.bCanInterrupt = dataAnim.CanInterrupt();
+		
+		// -- Note by Joe
+		// I was going to make the wrap mode also accessible by XML, but honestly, I was running into issues using anything
+		// except loop.  So, as far as I'm concerned, we have to police this ourselves with ClipFinished().
+		//if ( dataAnim.CanInterrupt() == false )
+		//	wrapMode = WrapMode.Clamp;
+	}
 }
 
 public class LWFAnimator : LWFObject {
@@ -38,6 +53,9 @@ public class LWFAnimator : LWFObject {
 	
 	// list of playing movies
 	private List<LWF.Movie> attachedMovies = new List<LWF.Movie>();
+	protected int GetMovieCount() {
+		return attachedMovies.Count;	
+	}
 	
 	//---------------------------------------------------
 	// PlayClip()

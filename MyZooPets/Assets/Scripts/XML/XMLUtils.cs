@@ -56,7 +56,7 @@ public static class XMLUtils{
         return GetString(node, "");
     }
 
-    public static string GetString(IXMLNode node, string defaultstring){
+    public static string GetString(IXMLNode node, string defaultstring, string strError = null){
         string retVal = defaultstring;
         if(node != null){
             if(node.Children.Count != 0)
@@ -64,6 +64,9 @@ public static class XMLUtils{
             else
                 Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
+		else if ( strError != null )
+			Debug.Log(strError + "Required data is missing.");
+		
         return retVal;
     }
 
@@ -72,7 +75,7 @@ public static class XMLUtils{
         return GetInt(node, 0);
     }
 
-    public static int GetInt(IXMLNode node, int defaultValue){
+    public static int GetInt(IXMLNode node, int defaultValue, string strError = null){
         int retVal = defaultValue;
         if(node != null){
             if(node.Children.Count == 1)
@@ -80,6 +83,9 @@ public static class XMLUtils{
             else
                 Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
+		else if ( strError != null )
+			Debug.Log(strError + "Required data is missing.");
+		
         return retVal;
     }
 	
@@ -87,7 +93,7 @@ public static class XMLUtils{
 		return GetFloat(node, 0);		
 	}
 	
-	public static float GetFloat(IXMLNode node, float defaultValue){
+	public static float GetFloat(IXMLNode node, float defaultValue, string strError = null){
 		float retVal = defaultValue;
         if(node != null){
             if(node.Children.Count == 1)
@@ -95,11 +101,14 @@ public static class XMLUtils{
             else
                 Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
+		else if ( strError != null )
+			Debug.Log(strError + "Required data is missing.");
+		
         return retVal;		
 	}
 
-    public static bool GetBool(IXMLNode node){
-        bool retVal = false;
+    public static bool GetBool(IXMLNode node, bool defaultValue = true){
+        bool retVal = defaultValue;
         if(node != null){
             if(node.Children.Count == 1)
                 retVal = node.Children[0].value == "True";

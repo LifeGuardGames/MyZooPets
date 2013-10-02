@@ -7,6 +7,9 @@ using System;
 //Saves and loads data into player preference
 [DoNotSerializePublic]
 public class DataManager : Singleton<DataManager>{
+    public event EventHandler<EventArgs> OnDeserialized;
+    public event EventHandler<EventArgs> OnSerialized;
+
     public bool removeDataOnApplicationQuit; //delete all from PlayerPrefs
     public bool isDebug = false; //turn isDebug to true if working on independent scene
 
@@ -36,7 +39,6 @@ public class DataManager : Singleton<DataManager>{
     void Awake(){
         MakePersistant();
 
-
         if(removeDataOnApplicationQuit){
             firstTime = true;
             numOfPets = 0;
@@ -51,14 +53,17 @@ public class DataManager : Singleton<DataManager>{
             numOfPets = PlayerPrefs.GetInt("NumOfPets", 0);
         }
         else{
+            numOfPets = 3;
             currentPetID = "Pet0";
-            InitializeDataForDebug();
+            InitializeGameDataForDebug();
         }
     }
 
     //LevelSerailizer.LoadSavedLevel needs to be called in Start()
     void Start(){
         if(!isDebug){
+            LevelSerializer.Deserialized += Deserialized;
+            LevelSerializer.GameSaved += Serialized;
             if(firstTime && numOfPets == 0){ 
                 //First time opening the game, so need to initialize the first 3 pets
                 PlayerPrefs.SetString("Pet0", "Egg");
@@ -75,19 +80,33 @@ public class DataManager : Singleton<DataManager>{
         }
     }
 
+    void OnDestory(){
+        LevelSerializer.Deserialized -= Deserialized;
+        LevelSerializer.GameSaved -= Serialized;
+    }
+
     //serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
         if(paused){
             // special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
             DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now;
             
-            SerializePetData();
+            SerializeGameData();
         }
     }
 
-    //called when pet data has be deserialized and ready to be used
-    void OnDeserialized(){
-        Application.LoadLevel("NewBedRoom");
+    //called when game data has be deserialized and ready to be used
+    void Deserialized(){
+        Debug.Log("Deserialized");
+        if(OnDeserialized != null)
+            OnDeserialized(this, EventArgs.Empty);
+    }
+
+    //called when game data has been serialized
+    void Serialized(){
+        Debug.Log("Serialized");
+        if(OnSerialized != null)
+            OnSerialized(this, EventArgs.Empty);
     }
 
     //"Egg" not born yet (needs to be initialize), "Hatch" borned
@@ -102,7 +121,7 @@ public class DataManager : Singleton<DataManager>{
         return retVal; 
     }
 
-    public void InitializeDataForNewPet(){
+    public void InitializeGameDataForNewPet(){
         if(!String.IsNullOrEmpty(currentPetID)){
             PlayerPrefs.SetString(currentPetID, "Hatch");
             gameData = new PetGameData();
@@ -113,7 +132,7 @@ public class DataManager : Singleton<DataManager>{
     }
 
     //Load the data of the pet that has been chosen
-    public void DeserializePetData(){
+    public void DeserializeGameData(){
         if(!String.IsNullOrEmpty(currentPetID)){
             //Deserialize data
             if(!loaded){
@@ -128,7 +147,7 @@ public class DataManager : Singleton<DataManager>{
     }
 
     //serialize data into byte array and store locally in PlayerPrefs
-    public void SerializePetData(){
+    public void SerializeGameData(){
         if(!String.IsNullOrEmpty(currentPetID)){
             PlayerPrefs.SetString(currentPetID + "GameData", LevelSerializer.SerializeLevel());
 
@@ -147,11 +166,9 @@ public class DataManager : Singleton<DataManager>{
     }
 
 #if UNITY_EDITOR
-    private void InitializeDataForDebug(){
-        InitializeDataForNewPet(); 
+    private void InitializeGameDataForDebug(){
+        InitializeGameDataForNewPet(); 
     }
 #endif
-
-    
 
 }

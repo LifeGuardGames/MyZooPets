@@ -35,9 +35,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private string petColor;
 
     void Start(){
-        // eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
-        currentRenderColor = RenderSettings.ambientLight;
-        RenderSettings.ambientLight = Color.black;
+        // // eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
+        // currentRenderColor = RenderSettings.ambientLight;
+        // RenderSettings.ambientLight = Color.black;
 
       //  ShowDropInAnimation();
     	Invoke ("ShowDropInAnimation", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?

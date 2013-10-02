@@ -34,7 +34,7 @@ public class DataMonsterLoader {
             string xmlString = file.text;
 			
 			// error message
-			string strError = "Error in file " + file.name;			
+			string strErrorFile = "Error in file " + file.name;			
 
             //Create XMLParser instance
             XMLParser xmlParser = new XMLParser(xmlString);
@@ -49,7 +49,7 @@ public class DataMonsterLoader {
                 //Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
-				strError += "(" + id + "): ";
+				string strError = strErrorFile + "(" + id + "): ";
 				
 				DataMonster data = new DataMonster( id, hashAttr, strError );
 				

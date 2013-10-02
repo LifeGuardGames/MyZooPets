@@ -51,7 +51,7 @@ public class PetMovement : Singleton<PetMovement> {
     //Listen to OnTap Event from FingerGesture
     void OnTap(TapGesture gesture) { 
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap() || IsTouchingNGUI(gesture.Position)) return;
+        if(!ClickManager.Instance.CanRespondToTap() || IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
 		
 		AudioManager.Instance.PlayClip( strSoundMove );
 
@@ -71,7 +71,7 @@ public class PetMovement : Singleton<PetMovement> {
     //     }
     // }
 	
-	private void StopMoving() {
+	public void StopMoving() {
     	moving = false;
 		scriptAnim.StopMoving();
 	}

@@ -38,7 +38,7 @@ public class DataGateLoader {
             string xmlString = file.text;
 			
 			// error message
-			string strError = "Error in file " + file.name;			
+			string strErrorFile = "Error in file " + file.name;			
 
             //Create XMLParser instance
             XMLParser xmlParser = new XMLParser(xmlString);
@@ -53,7 +53,7 @@ public class DataGateLoader {
                 //Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
-				strError += "(" + id + "): ";
+				string strError = strErrorFile + "(" + id + "): ";
 				
 				DataGate data = new DataGate( id, hashAttr, strError );
 				

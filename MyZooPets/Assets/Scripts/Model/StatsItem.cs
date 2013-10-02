@@ -36,7 +36,7 @@ public class StatsItem : Item{
 		    strDesc += StatsController.Instance.GetStatText( entry.Key );
 			
 			// use a + or - modifier
-			string strModifier = entry.Value > 0 ? "+" : "-";
+			string strModifier = entry.Value > 0 ? "+" : "";
 			strDesc += " " + strModifier;
 			
 			// add the value

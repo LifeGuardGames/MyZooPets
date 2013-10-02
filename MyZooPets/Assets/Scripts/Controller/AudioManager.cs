@@ -29,7 +29,7 @@ public class AudioManager : Singleton<AudioManager>{
 	private AudioClip effectClip;
 
 	private AudioSource backgroundSource;
-	private AudioSource effectSource;
+//	private AudioSource effectSource;
 
 	public bool isMusicOn = true; // Thank me(Sean) later, devs
 	
@@ -40,7 +40,7 @@ public class AudioManager : Singleton<AudioManager>{
 	void Awake(){
 		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
-		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
+//		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
 		
 		// load sound xml data
 		DataSounds.SetupData();

@@ -23,8 +23,6 @@ public class ClickManager : Singleton<ClickManager> {
 	// the current mode the UI is in
 	private UIModeTypes eCurMode;
 	
-    bool trophyMessageShowing = false;
-
     void Awake(){
 		isClickLocked = false;
 		isModeLocked = false;

@@ -10,7 +10,9 @@ public class HintController : MonoBehaviour {
     public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
     public GameObject finger; //Game object that contains the hint animation
 	public string clipToPlay; //The animation that you want to play
-	public GameObject outlineTexture;
+	public GameObject outlineTexture;	// Texture of outline if applicable
+	public GameObject textObject;	// NGUI label of the text
+	public GameObject customPlayFinger;	// Used for pinch, just enable the gameobject
 	
 	private Animation fingerAnimation;
 
@@ -19,9 +21,17 @@ public class HintController : MonoBehaviour {
 			fingerAnimation = finger.GetComponent<Animation>();
 
         if(startHidden){
-            finger.renderer.enabled = false;
+            if(finger != null)
+				finger.renderer.enabled = false;
+			
 			if(outlineTexture != null)
 				outlineTexture.SetActive(false);
+			
+			if(textObject != null)
+				textObject.SetActive(false);
+			
+			if(customPlayFinger != null)
+				customPlayFinger.SetActive(false);
 		}
 			
         InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
@@ -44,23 +54,39 @@ public class HintController : MonoBehaviour {
 
     //Turn off hint 
     private void DisableHint(){
-		if(fingerAnimation.IsPlaying(clipToPlay))
-            fingerAnimation.Stop(clipToPlay);
-
+		if(fingerAnimation != null){
+			if(fingerAnimation.IsPlaying(clipToPlay))
+	            fingerAnimation.Stop(clipToPlay);
+			
         //If no animation is currently playing turn the renderer off so no hints will be in the game
         if(!fingerAnimation.isPlaying)
             finger.renderer.enabled = false;
+		}
 		
 		if(outlineTexture != null)
 				outlineTexture.SetActive(false);
+		
+		if(textObject != null)
+				textObject.SetActive(false);
+		
+		if(customPlayFinger != null)
+				customPlayFinger.SetActive(false);
     }
 
     //Turn on hint
     private void EnableHint(){
-        finger.renderer.enabled = true;
-		fingerAnimation.Play(clipToPlay);
-		
+		if(finger != null){
+	        finger.renderer.enabled = true;
+			fingerAnimation.Play(clipToPlay);
+		}
+
 		if(outlineTexture != null)
 				outlineTexture.SetActive(true);
+		
+		if(textObject != null)
+				textObject.SetActive(true);
+		
+		if(customPlayFinger != null)
+				customPlayFinger.SetActive(true);
     }
 }

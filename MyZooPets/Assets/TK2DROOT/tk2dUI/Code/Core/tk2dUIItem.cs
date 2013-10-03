@@ -216,7 +216,7 @@ public class tk2dUIItem : MonoBehaviour
 
                     if (OnDown != null) { OnDown(); }
                     if (OnDownUIItem != null) { OnDownUIItem(this); }
-                    if (SendMessageOnDownMethodName != "" && sendMessageTarget!=null) { sendMessageTarget.SendMessage(SendMessageOnDownMethodName, SendMessageOptions.RequireReceiver); }
+                    DoSendMessage( SendMessageOnDownMethodName );
                 }
             }
 
@@ -240,6 +240,13 @@ public class tk2dUIItem : MonoBehaviour
         }
     }
 
+    // A wrapper for sendmessage, either sends with no parameter, or this as parameter
+    private void DoSendMessage( string methodName ) {
+        if (sendMessageTarget != null && methodName.Length > 0) {
+            sendMessageTarget.SendMessage( methodName, this, SendMessageOptions.RequireReceiver );
+        }
+    }
+
     /// <summary>
     /// Touch is released, if called without Exit being called means that it was released on top of button without leaving it.
     /// Only call manually if you need to simulate a touch.
@@ -252,16 +259,16 @@ public class tk2dUIItem : MonoBehaviour
 
             if (OnUp != null) { OnUp(); }
             if (OnUpUIItem != null) { OnUpUIItem(this); }
-            if (SendMessageOnUpMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnUpMethodName, SendMessageOptions.RequireReceiver); }
+            DoSendMessage( SendMessageOnUpMethodName );
 
             if (OnClick != null) { OnClick(); }
             if (OnClickUIItem != null) { OnClickUIItem(this); }
-            if (SendMessageOnClickMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnClickMethodName, SendMessageOptions.RequireReceiver); }
+            DoSendMessage( SendMessageOnClickMethodName );
         }
 
         if (OnRelease != null) { OnRelease(); }
         if (OnReleaseUIItem != null) { OnReleaseUIItem(this); }
-        if (SendMessageOnReleaseMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnReleaseMethodName, SendMessageOptions.RequireReceiver); }
+        DoSendMessage( SendMessageOnReleaseMethodName );
 
         if (parentUIItem != null)
         {
@@ -340,7 +347,7 @@ public class tk2dUIItem : MonoBehaviour
 
             if (OnUp != null) { OnUp(); }
             if (OnUpUIItem != null) { OnUpUIItem(this); }
-            if (SendMessageOnUpMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnUpMethodName, SendMessageOptions.RequireReceiver); }
+            DoSendMessage( SendMessageOnUpMethodName );
         }
     }
 
@@ -434,19 +441,19 @@ public class tk2dUIItem : MonoBehaviour
     {
         if (OnDown != null) { OnDown(); }
         if (OnDownUIItem != null) { OnDownUIItem(this); }
-        if (SendMessageOnDownMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnDownMethodName, SendMessageOptions.RequireReceiver); }
+        DoSendMessage( SendMessageOnDownMethodName );
 
         if (OnUp != null) { OnUp(); }
         if (OnUpUIItem != null) { OnUpUIItem(this); }
-        if (SendMessageOnUpMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnUpMethodName, SendMessageOptions.RequireReceiver); }
+        DoSendMessage( SendMessageOnUpMethodName );
 
         if (OnClick != null) { OnClick(); }
         if (OnClickUIItem != null) { OnClickUIItem(this); }
-        if (SendMessageOnClickMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnClickMethodName, SendMessageOptions.RequireReceiver); }
+        DoSendMessage( SendMessageOnClickMethodName );
 
         if (OnRelease != null) { OnRelease(); }
         if (OnReleaseUIItem != null) { OnReleaseUIItem(this); }
-        if (SendMessageOnReleaseMethodName != "" && sendMessageTarget != null) { sendMessageTarget.SendMessage(SendMessageOnReleaseMethodName, SendMessageOptions.RequireReceiver); }
+        DoSendMessage( SendMessageOnReleaseMethodName );
     }
 
     /// <summary>

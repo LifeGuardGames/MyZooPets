@@ -16,6 +16,8 @@ public class tk2dUIItemEditor : Editor
         ignoreBoundsProp = serializedObject.FindProperty("editorIgnoreBounds");
     }
 
+    tk2dUIMethodBindingHelper methodBindingUtil = new tk2dUIMethodBindingHelper();
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -36,28 +38,12 @@ public class tk2dUIItemEditor : Editor
 
         btn.isHoverEnabled = EditorGUILayout.Toggle("Is Hover Events Enabled?", btn.isHoverEnabled);
 
-        GUILayout.Label("Send Message", EditorStyles.boldLabel);
-        EditorGUI.indentLevel++;
-
-        GameObject newSendMessageTarget = EditorGUILayout.ObjectField("Target", btn.sendMessageTarget, typeof(GameObject), true, null) as GameObject;
-        if (newSendMessageTarget != btn.sendMessageTarget)
-        {
-            changeOccurred = true;
-            btn.sendMessageTarget = newSendMessageTarget;
-        }
-        if (btn.sendMessageTarget != null && EditorUtility.IsPersistent(btn.sendMessageTarget))
-        {
-            changeOccurred = true;
-            btn.sendMessageTarget = null;
-        }
-        if (btn.sendMessageTarget != null)
-        {
-            btn.SendMessageOnDownMethodName = EditorGUILayout.TextField("On Down Method Name", btn.SendMessageOnDownMethodName);
-            btn.SendMessageOnUpMethodName = EditorGUILayout.TextField("On Up Method Name", btn.SendMessageOnUpMethodName);
-            btn.SendMessageOnClickMethodName = EditorGUILayout.TextField("On Clicked Method Name", btn.SendMessageOnClickMethodName);
-            btn.SendMessageOnReleaseMethodName = EditorGUILayout.TextField("On Release Method Name", btn.SendMessageOnReleaseMethodName);
-        }
-        EditorGUI.indentLevel--;
+        btn.sendMessageTarget = methodBindingUtil.BeginMessageGUI(btn.sendMessageTarget);
+        methodBindingUtil.MethodBinding( "On Down", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnDownMethodName );
+        methodBindingUtil.MethodBinding( "On Up", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnUpMethodName );
+        methodBindingUtil.MethodBinding( "On Click", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnClickMethodName );
+        methodBindingUtil.MethodBinding( "On Release", typeof(tk2dUIItem), btn.sendMessageTarget, ref btn.SendMessageOnReleaseMethodName );
+        methodBindingUtil.EndMessageGUI();
 
         if (btn.collider != null) {
             GUILayout.Label("Collider", EditorStyles.boldLabel);

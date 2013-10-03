@@ -183,7 +183,8 @@ public class tk2dClippedSprite : tk2dBaseSprite
 		mesh.triangles = indices;
 
 		mesh.RecalculateBounds();
-		
+		mesh.bounds = AdjustedMeshBounds( mesh.bounds, renderLayer );
+
 		GetComponent<MeshFilter>().mesh = mesh;
 		
 		UpdateCollider();
@@ -221,6 +222,7 @@ public class tk2dClippedSprite : tk2dBaseSprite
 			mesh.vertices = meshVertices;
 			mesh.uv = meshUvs;
 			mesh.RecalculateBounds();
+			mesh.bounds = AdjustedMeshBounds( mesh.bounds, renderLayer );
 		}
 	}
 
@@ -234,7 +236,7 @@ public class tk2dClippedSprite : tk2dBaseSprite
 					boxCollider = gameObject.AddComponent<BoxCollider>();
 				}
 			}
-			boxCollider.extents = boundsExtents;
+			boxCollider.size = 2 * boundsExtents;
 			boxCollider.center = boundsCenter;
 		} else {
 #if UNITY_EDITOR
@@ -287,5 +289,20 @@ public class tk2dClippedSprite : tk2dBaseSprite
 			return 0;
 #endif
 		return 4;
+	}
+
+	public override void ReshapeBounds(Vector3 dMin, Vector3 dMax) {
+		var sprite = CurrentSprite;
+		Vector3 oldMin = Vector3.Scale(sprite.untrimmedBoundsData[0] - 0.5f * sprite.untrimmedBoundsData[1], _scale);
+		Vector3 oldSize = Vector3.Scale(sprite.untrimmedBoundsData[1], _scale);
+		Vector3 newScale = oldSize + dMax - dMin;
+		newScale.x /= sprite.untrimmedBoundsData[1].x;
+		newScale.y /= sprite.untrimmedBoundsData[1].y;
+		Vector3 scaledMin = new Vector3(Mathf.Approximately(_scale.x, 0) ? 0 : (oldMin.x * newScale.x / _scale.x),
+			Mathf.Approximately(_scale.y, 0) ? 0 : (oldMin.y * newScale.y / _scale.y));
+		Vector3 offset = oldMin + dMin - scaledMin;
+		offset.z = 0;
+		transform.position = transform.TransformPoint(offset);
+		scale = new Vector3(newScale.x, newScale.y, _scale.z);
 	}
 }

@@ -29,7 +29,7 @@ public static class tk2dUIItemBoundsHelper {
                     minMax[1] = Vector3.Max(minMax[1], pointRelativeToRoot);
                 }
             }
-            for (int i = 0; i < t.GetChildCount(); ++i) {
+            for (int i = 0; i < t.childCount; ++i) {
                 Transform child = t.GetChild(i);
 
                 if (!includeAllChildren && child.collider != null) {
@@ -80,9 +80,9 @@ public static class tk2dUIItemBoundsHelper {
         BoxCollider boxCollider = collider as BoxCollider;
         if (boxCollider != null) {
             Undo.RegisterUndo(boxCollider, "Fit Collider");
-            b.extents = new Vector3(b.extents.x, b.extents.y, boxCollider.extents.z);
+            b.size = new Vector3(b.size.x, b.size.y, boxCollider.size.z);
             b.center = new Vector3(b.center.x, b.center.y, boxCollider.center.z);
-            boxCollider.extents = b.extents;
+            boxCollider.size = b.size;
             boxCollider.center = b.center;
         }
 
@@ -90,7 +90,7 @@ public static class tk2dUIItemBoundsHelper {
         if (sphereCollider != null) {
             Undo.RegisterUndo(sphereCollider, "Fit Collider");
             sphereCollider.center = new Vector3(b.center.x, b.center.y, 0);
-            sphereCollider.radius = Mathf.Max( b.extents.x, b.extents.y );
+            sphereCollider.radius = 0.5f * Mathf.Max( b.size.x, b.size.y );
         }
     }
 

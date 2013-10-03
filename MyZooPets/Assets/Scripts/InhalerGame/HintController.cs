@@ -10,6 +10,7 @@ public class HintController : MonoBehaviour {
     public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
     public GameObject finger; //Game object that contains the hint animation
 	public string clipToPlay; //The animation that you want to play
+	public GameObject outlineTexture;
 	
 	private Animation fingerAnimation;
 
@@ -17,9 +18,12 @@ public class HintController : MonoBehaviour {
 		if(finger != null)
 			fingerAnimation = finger.GetComponent<Animation>();
 
-        if(startHidden)
+        if(startHidden){
             finger.renderer.enabled = false;
-
+			if(outlineTexture != null)
+				outlineTexture.SetActive(false);
+		}
+			
         InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
     }
 
@@ -40,17 +44,23 @@ public class HintController : MonoBehaviour {
 
     //Turn off hint 
     private void DisableHint(){
-        if(fingerAnimation.IsPlaying(clipToPlay))
+		if(fingerAnimation.IsPlaying(clipToPlay))
             fingerAnimation.Stop(clipToPlay);
 
         //If no animation is currently playing turn the renderer off so no hints will be in the game
         if(!fingerAnimation.isPlaying)
             finger.renderer.enabled = false;
+		
+		if(outlineTexture != null)
+				outlineTexture.SetActive(false);
     }
 
     //Turn on hint
     private void EnableHint(){
         finger.renderer.enabled = true;
 		fingerAnimation.Play(clipToPlay);
+		
+		if(outlineTexture != null)
+				outlineTexture.SetActive(true);
     }
 }

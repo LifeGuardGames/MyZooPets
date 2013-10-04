@@ -124,7 +124,7 @@ public class tk2dUIMask : MonoBehaviour {
 			}
 			Bounds bounds = ThisMeshFilter.sharedMesh.bounds;
 			ThisBoxCollider.center = new Vector3( bounds.center.x, bounds.center.y, -depth );
-			ThisBoxCollider.extents = new Vector3( bounds.extents.x, bounds.extents.y, 0.0001f );
+			ThisBoxCollider.size = new Vector3( bounds.size.x, bounds.size.y, 0.0002f );
 		}
 		else if (ThisBoxCollider != null) {
 #if UNITY_EDITOR
@@ -133,5 +133,31 @@ public class tk2dUIMask : MonoBehaviour {
 			Object.Destroy(ThisBoxCollider);
 #endif
 		}
+	}
+
+	public void ReshapeBounds(Vector3 dMin, Vector3 dMax) {
+		Vector3 oldSize = new Vector3(size.x, size.y);
+		Vector3 oldMin = Vector3.zero;
+		switch (anchor) {
+			case tk2dBaseSprite.Anchor.LowerLeft: oldMin.Set(0,0,0); break;
+			case tk2dBaseSprite.Anchor.LowerCenter: oldMin.Set(0.5f,0,0); break;
+			case tk2dBaseSprite.Anchor.LowerRight: oldMin.Set(1,0,0); break;
+			case tk2dBaseSprite.Anchor.MiddleLeft: oldMin.Set(0,0.5f,0); break;
+			case tk2dBaseSprite.Anchor.MiddleCenter: oldMin.Set(0.5f,0.5f,0); break;
+			case tk2dBaseSprite.Anchor.MiddleRight: oldMin.Set(1,0.5f,0); break;
+			case tk2dBaseSprite.Anchor.UpperLeft: oldMin.Set(0,1,0); break;
+			case tk2dBaseSprite.Anchor.UpperCenter: oldMin.Set(0.5f,1,0); break;
+			case tk2dBaseSprite.Anchor.UpperRight: oldMin.Set(1,1,0); break;
+		}
+		oldMin = Vector3.Scale(oldMin, oldSize) * -1;
+		Vector3 newSize = oldSize + dMax - dMin;
+		Vector3 scaledMin = new Vector3(Mathf.Approximately(oldSize.x, 0) ? 0 : (oldMin.x * newSize.x / oldSize.x),
+			Mathf.Approximately(oldSize.y, 0) ? 0 : (oldMin.y * newSize.y / oldSize.y));
+		Vector3 offset = oldMin + dMin - scaledMin;
+		offset.z = 0;
+		transform.position = transform.TransformPoint(offset);
+		size = new Vector2(newSize.x, newSize.y);
+
+		Build();
 	}
 }

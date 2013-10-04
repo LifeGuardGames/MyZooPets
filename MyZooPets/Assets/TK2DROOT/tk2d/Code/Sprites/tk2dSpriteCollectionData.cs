@@ -122,6 +122,27 @@ public class tk2dSpriteDefinition
 	public int[] colliderIndicesBack;
 	public bool colliderConvex;
 	public bool colliderSmoothSphereCollisions;
+
+
+	[System.Serializable]
+	public class AttachPoint
+	{
+		public string name = "";
+		public Vector3 position = Vector3.zero;
+		public float angle = 0;
+
+		public void CopyFrom( AttachPoint src ) {
+			name = src.name;
+			position = src.position;
+			angle = src.angle;
+		}
+
+		public bool CompareTo( AttachPoint src ) {
+			return (name == src.name && src.position == position && src.angle == angle);
+		}
+	}
+
+	public AttachPoint[] attachPoints = new AttachPoint[0];
 	
 	public bool Valid { get { return name.Length != 0; } }
 

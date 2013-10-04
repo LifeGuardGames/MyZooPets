@@ -61,7 +61,7 @@ public class DataGateLoader {
 		
 		DataGate data = GetData( strArea, nRoom );
 		if ( data != null ) 
-			bHas = DataManager.Instance.GatingProgress.IsGateActive( data.GetGateID() );
+			bHas = DataManager.Instance.GameData.GatingProgress.IsGateActive( data.GetGateID() );
 		
 		return bHas;
 	}

@@ -67,19 +67,15 @@ public class HUDAnimator : MonoBehaviour {
 	// Tweening
 	public UIAtlas commonAtlas;
 	private GameObject toDestroy;
-	private bool isFirstTweenPointsDone = false;
 	private bool isFirstTweenPointsCall = true;
 	private bool isAnimatePointsBar = false;
 
-	private bool isFirstTweenStarsDone = false;
 	private bool isFirstTweenStarsCall = true;
 	private bool isAnimateStarsBar = false;
 
-	private bool isFirstTweenHealthDone = false;
 	private bool isFirstTweenHealthCall = true;
 	private bool isAnimateHealthBar = false;
 
-	private bool isFirstTweenMoodDone = false;
 	private bool isFirstTweenMoodCall = true;
 	private bool isAnimateMoodBar = false;
 

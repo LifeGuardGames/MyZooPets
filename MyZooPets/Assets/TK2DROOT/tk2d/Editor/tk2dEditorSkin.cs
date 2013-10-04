@@ -24,6 +24,24 @@ public class tk2dEditorSkin
 		return tk2dExternal.Skin.Inst.GetStyle(name);
 	}
 
+	public static GUIStyle SimpleButton(string textureInactive) {
+		return SimpleButton(textureInactive, "");
+	}
+
+	public static GUIStyle SimpleButton(string textureInactive, string textureActive) {
+		GUIStyle style = GetStyle("SimpleButtonTemplate");
+		style.normal.background = GetTexture(textureInactive);
+		style.active.background = string.IsNullOrEmpty(textureActive) ? null : GetTexture(textureActive);
+		return style;
+	}
+
+	public static GUIStyle SimpleCheckbox(string textureInactive, string textureActive) {
+		GUIStyle style = GetStyle("SimpleButtonTemplate");
+		style.normal.background = GetTexture(textureInactive);
+		style.onNormal.background = string.IsNullOrEmpty(textureActive) ? null : GetTexture(textureActive);
+		return style;
+	}
+
 	public static void Done() {
 		tk2dExternal.Skin.Done();
 	}

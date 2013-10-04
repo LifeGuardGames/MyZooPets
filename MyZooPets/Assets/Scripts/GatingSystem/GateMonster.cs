@@ -29,7 +29,7 @@ public class GateMonster : Gate {
 		// the monster's position should be set relative to its hp
 		DataGate data = DataGateLoader.GetData( strID );
 		int nMax = data.GetMonster().GetMonsterHealth();
-		int nCurrent = DataManager.Instance.GatingProgress.GatingProgress[strID];
+		int nCurrent = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
 		int nDamage = nMax - nCurrent;
 		
 		// if the monster is missing hp, it needs to move

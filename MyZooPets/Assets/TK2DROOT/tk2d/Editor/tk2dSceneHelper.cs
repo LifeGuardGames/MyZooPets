@@ -25,6 +25,7 @@ public static class tk2dSceneHelper {
 	private static List<Transform> dragObjCachedTransforms = new List<Transform>();
 	private static List<Vector3> dragObjStartPos = new List<Vector3>();
 	private static Vector3 dragOrigin = Vector3.zero;
+	private static Plane dragPlane = new Plane();
 	public static void HandleMoveSprites(Transform t, Rect rect) {
 		Event ev = Event.current;
 		
@@ -38,16 +39,14 @@ public static class tk2dSceneHelper {
 			return;
 		}
 
-
 		int controlId = t.GetInstanceID();
-		Plane plane = new Plane(t.forward, t.position);
 		Ray mouseRay = HandleUtility.GUIPointToWorldRay(ev.mousePosition);
-
 		rect = PositiveRect(rect);
 
 		if (ev.type == EventType.MouseDown && ev.button == 0 && !ev.control && !ev.alt && !ev.command) {
 			float hitD = 0.0f;
-			if (plane.Raycast(mouseRay, out hitD)) {
+			dragPlane = new Plane(t.forward, t.position);
+			if (dragPlane.Raycast(mouseRay, out hitD)) {
 				Vector3 intersect = mouseRay.GetPoint(hitD);
 				Vector3 pLocal = t.InverseTransformPoint (intersect);
 
@@ -74,7 +73,7 @@ public static class tk2dSceneHelper {
 			switch (ev.GetTypeForControl(controlId)) {
 				case EventType.MouseDrag: {
 					float hitD = 0.0f;
-					if (plane.Raycast(mouseRay, out hitD)) {
+					if (dragPlane.Raycast(mouseRay, out hitD)) {
 						Vector3 intersect = mouseRay.GetPoint(hitD);
 						Vector3 offset = intersect - dragOrigin;
 						if (ev.shift) {
@@ -82,7 +81,6 @@ public static class tk2dSceneHelper {
 							float y = Mathf.Abs (Vector3.Dot (offset, t.up));
 							offset = Vector3.Project (offset, (x > y) ? t.right : t.up);
 						}
-						offset.z = 0.0f;
 
 						Undo.RegisterUndo(dragObjCachedTransforms.ToArray(), "Move");
 
@@ -464,7 +462,7 @@ public static class tk2dSceneHelper {
 					d0.Normalize();
 					d1.Normalize();
 					float ang = Mathf.Acos(Vector3.Dot(d0, d1)) * Mathf.Rad2Deg;
-					float sgn = Mathf.Sign(Vector3.Dot( Vector3.Cross(t.forward, d0), d1));
+					float sgn = Mathf.Sign(d1.x * -d0.y + d1.y * d0.x);
 					result = ang * sgn;
 
 					guiChanged = true;

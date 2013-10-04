@@ -86,7 +86,7 @@ public class Gate : MonoBehaviour {
 	//---------------------------------------------------	
 	public void DamageGate( int nDamage ) {
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DataManager.Instance.GatingProgress.DamageGate( strID, nDamage );
+		bool bDestroyed = DataManager.Instance.GameData.GatingProgress.DamageGate( strID, nDamage );
 		
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip( "Damage_" + strResource );

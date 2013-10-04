@@ -41,7 +41,7 @@ public class GatingManager : Singleton<GatingManager> {
 			DataGate dataGate = (DataGate) entry.Value;
 			
 			// if the gate is activate, spawn the monster at an offset 
-			bool bActive = DataManager.Instance.GatingProgress.IsGateActive( dataGate.GetGateID() );
+			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive( dataGate.GetGateID() );
 			if ( bActive ) {
 				int nStartingRoom = scriptPan.currentPartition;				// room the player is starting in
 				float fDistance = scriptPan.partitionOffset;				// the distance between each room
@@ -121,7 +121,6 @@ public class GatingManager : Singleton<GatingManager> {
 		DataGate data = DataGateLoader.GetData( strArea, nRoom );
 		
 		// then get the id of the gate and get that gate object from our list of active gates
-		string strID = data.GetGateID();
 		Gate gate = (Gate) hashActiveGates[nRoom];
 		
 		// get the position the player should approach
@@ -142,7 +141,7 @@ public class GatingManager : Singleton<GatingManager> {
 		
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
 		DataGate dataGate = DataGateLoader.GetData( strArea, nCurrentRoom );
-		if ( dataGate != null && DataManager.Instance.GatingProgress.IsGateActive( dataGate.GetGateID() ) && dataGate.DoesBlock( eSwipeDirection ) )
+		if ( dataGate != null && DataManager.Instance.GameData.GatingProgress.IsGateActive( dataGate.GetGateID() ) && dataGate.DoesBlock( eSwipeDirection ) )
 			bOK = false;
 		
 		return bOK; 

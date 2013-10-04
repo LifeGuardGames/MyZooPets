@@ -312,10 +312,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		Param: tutorial sprite name, the target for call back, the function name for call back
 	*/
 	public void ShowTutorialMessage(TutorialImageType imageType, PopupNotificationNGUI.HashEntry buttonCallBack, string buttonText){
-		string spriteName = "";
-
 		//Spawn tutorial prefab
-		float zVal = popupNotificiationTutorialLeft.transform.localPosition.z;
 		Vector3 prefabPosition = popupNotificiationTutorialLeft.transform.localPosition;
 		GameObject obj = NGUITools.AddChild(leftPanel, popupNotificiationTutorialLeft);
 		obj.transform.localPosition = prefabPosition;

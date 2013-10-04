@@ -6,8 +6,8 @@ using System.IO;
 [InitializeOnLoad]
 public static class tk2dEditorUtility
 {
-	public static double version = 2.00;
-	public static int releaseId = 2; // < -10000 = alpha, other negative = beta release, 0 = final, positive = final hotfix
+	public static double version = 2.20;
+	public static int releaseId = 0; // < -10000 = alpha, other negative = beta release, 0 = final, positive = final hotfix
 
 	static tk2dEditorUtility() {
 		System.Reflection.FieldInfo undoCallback = typeof(EditorApplication).GetField("undoRedoPerformed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
@@ -24,6 +24,7 @@ public static class tk2dEditorUtility
 			tk2dSpriteFromTexture sft = go.GetComponent<tk2dSpriteFromTexture>();
 			tk2dBaseSprite spr = go.GetComponent<tk2dBaseSprite>();
 			tk2dTextMesh tm = go.GetComponent<tk2dTextMesh>();
+			tk2dTileMap tilemap = go.GetComponent<tk2dTileMap>();
 			if (sft != null) {
 				sft.ForceBuild();
 			}
@@ -32,6 +33,9 @@ public static class tk2dEditorUtility
 			}
 			else if (tm != null) {
 				tm.ForceBuild();
+			}
+			else if (tilemap != null) {
+				tilemap.ForceBuild();
 			}
 		}
 	}

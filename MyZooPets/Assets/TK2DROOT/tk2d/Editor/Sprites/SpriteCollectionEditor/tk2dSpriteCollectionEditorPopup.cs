@@ -16,7 +16,7 @@ namespace tk2dEditor.SpriteCollectionEditor
 		Texture2D GetTextureForSprite(int spriteId);
 		
 		SpriteCollectionProxy SpriteCollection { get; }
-		
+
 		int InspectorWidth { get; }
 		SpriteView SpriteView { get; }
 		void SelectSpritesFromList(int[] indices);
@@ -60,7 +60,7 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 	SpriteCollectionProxy spriteCollectionProxy = null;
 	public SpriteCollectionProxy SpriteCollection { get { return spriteCollectionProxy; } }
 	public SpriteView SpriteView { get { return spriteView; } }
-	
+
 	// This lists all entries
 	List<SpriteCollectionEditorEntry> entries = new List<SpriteCollectionEditorEntry>();
 	// This lists all selected entries
@@ -315,12 +315,11 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 	void OnDisable()
 	{
 		ClearTextureCache();
-
 		_spriteCollection = null;
-		tk2dEditorUtility.CollectAndUnloadUnusedAssets();
 	}
 
 	void OnDestroy() {
+		tk2dSpriteThumbnailCache.Done();
 		tk2dEditorSkin.Done();
 	}
 	
@@ -647,19 +646,43 @@ public class tk2dSpriteCollectionEditorPopup : EditorWindow, IEditorHost
 		Debug.LogError("Unhandled type");
 		return "";
 	}
+
+	bool PromptImportDuplicate(string title, string message) {
+		return EditorUtility.DisplayDialog(title, message, "Ignore", "Create Copy");
+	}
 	
 	void HandleDroppedPayload(Object[] objects)
 	{
+		bool hasDuplicates = false;
+		foreach (var obj in objects)
+		{
+			Texture2D tex = obj as Texture2D;
+			if (tex != null) {
+				if (spriteCollectionProxy.FindSpriteBySource(tex) != -1) {
+					hasDuplicates = true;
+				}
+			}
+		}
+
+		bool cloneDuplicates = false;
+		if (hasDuplicates && EditorUtility.DisplayDialog("Duplicate textures detected.",
+				"One or more textures is already in the collection. What do you want to do with the duplicates?", 
+				"Clone", "Ignore")) {
+			cloneDuplicates = true;
+		}
+
 		List<int> addedIndices = new List<int>();
 		foreach (var obj in objects)
 		{
 			Texture2D tex = obj as Texture2D;
-			string name = spriteCollectionProxy.FindUniqueTextureName(tex.name);
-			int slot = spriteCollectionProxy.FindOrCreateEmptySpriteSlot();
-			spriteCollectionProxy.textureParams[slot].name = name;
-			spriteCollectionProxy.textureParams[slot].colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
-			spriteCollectionProxy.textureParams[slot].texture = (Texture2D)obj;
-			addedIndices.Add(slot);
+			if ((tex != null) && (cloneDuplicates || spriteCollectionProxy.FindSpriteBySource(tex) == -1)) {
+				string name = spriteCollectionProxy.FindUniqueTextureName(tex.name);
+				int slot = spriteCollectionProxy.FindOrCreateEmptySpriteSlot();
+				spriteCollectionProxy.textureParams[slot].name = name;
+				spriteCollectionProxy.textureParams[slot].colliderType = tk2dSpriteCollectionDefinition.ColliderType.UserDefined;
+				spriteCollectionProxy.textureParams[slot].texture = (Texture2D)obj;
+				addedIndices.Add(slot);
+			}
 		}
 		// And now select them
 		searchFilter = "";

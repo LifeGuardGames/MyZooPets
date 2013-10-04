@@ -108,7 +108,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------	
 	private void ShowCutscene() {
 		GameObject resourceMovie = Resources.Load("Cutscene_Clinic") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
 	}
 	

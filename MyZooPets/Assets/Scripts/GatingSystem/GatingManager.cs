@@ -135,9 +135,6 @@ public class GatingManager : Singleton<GatingManager> {
 	// relation to the gate in the incoming room.
 	//---------------------------------------------------	
 	private void MovePlayer( int nRoom ) {
-		// first get the data
-		DataGate data = DataGateLoader.GetData( strArea, nRoom );
-		
 		// then get the id of the gate and get that gate object from our list of active gates
 		Gate gate = (Gate) hashActiveGates[nRoom];
 		
@@ -154,6 +151,10 @@ public class GatingManager : Singleton<GatingManager> {
 	// room from the incoming direction.
 	//---------------------------------------------------	
 	public bool CanEnterRoom( int nCurrentRoom, RoomDirection eSwipeDirection ) {
+		// early out if click manager is tweening
+		if ( ClickManager.Instance.IsTweeningUI() )
+			return false;
+		
 		// start off optimistic
 		bool bOK = true;
 		

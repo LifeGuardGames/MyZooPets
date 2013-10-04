@@ -104,7 +104,7 @@ public class ItemManager : MonoBehaviour {
 
     //TO DO: need to fix caching bug
     public void StoreOrDisposeItem(RunnerItem inItem, LevelGroup.eLevelGroupID levelGroupID) {
-        Type itemType = inItem.GetType();
+        //Type itemType = inItem.GetType();
 		
 		// Disable it. If its queued, then it will 'disapaear' off the map. If its deleted well who cares!
 		if (inItem != null)

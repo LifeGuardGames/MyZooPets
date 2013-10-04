@@ -21,6 +21,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+#pragma warning disable 0168
+
 [System.Serializable]
 public class LevelComponent : MonoBehaviour {
 	[SerializeField]

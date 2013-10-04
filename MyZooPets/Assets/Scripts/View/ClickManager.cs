@@ -27,7 +27,7 @@ public class ClickManager : Singleton<ClickManager> {
 	// list of things that can still happen despite a click lock being in effect...this may be a bad idea...(Joe)
 	private List<ClickLockExceptions> listExceptions;
 	
-    bool trophyMessageShowing = false;
+    //bool trophyMessageShowing = false;
 
     void Awake(){
 		isClickLocked = false;

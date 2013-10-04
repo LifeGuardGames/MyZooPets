@@ -341,7 +341,7 @@ public class LevelManager : MonoBehaviour
 
             case eCurveType.Linear: {
                 if (inSpawnGroup.mPoints.Count > 0) {
-                    Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
+                    //Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
                     newPosition += inSpawnGroup.mPoints[0].mPosition;
                 } else
                     Debug.LogError("No points for the line type linear");
@@ -388,13 +388,13 @@ public class LevelManager : MonoBehaviour
 		return (max[inExtent] - min[inExtent]);
 	}
 	
-	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent) {
+	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent) {		
 		if (inObjectToSearch.collider != null) {
-			if (ioMinExtent == null
-				|| inObjectToSearch.collider.bounds.min[inExtent] < ioMinExtent[inExtent])
+			// there used to be a check in these two ifs for ioMinExtend != null -- but this check is pointless.  What was it really
+			// supposed to be checking?			
+			if (inObjectToSearch.collider.bounds.min[inExtent] < ioMinExtent[inExtent])
 				ioMinExtent = inObjectToSearch.collider.bounds.min;
-			if (ioMaxExtent == null 
-				|| inObjectToSearch.collider.bounds.max[inExtent] > ioMaxExtent[inExtent])
+			if (inObjectToSearch.collider.bounds.max[inExtent] > ioMaxExtent[inExtent])
 				ioMaxExtent = inObjectToSearch.collider.bounds.max;
 		}
 		

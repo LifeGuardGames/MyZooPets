@@ -147,7 +147,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	//---------------------------------------------------	
 	private void ShowCutscene() {
 		GameObject resourceMovie = Resources.Load("Cutscene_PostInhaler") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
 	}
 	

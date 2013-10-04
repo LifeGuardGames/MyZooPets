@@ -113,7 +113,7 @@ public class RunnerGameManager : MonoBehaviour {
 	//---------------------------------------------------	
 	private void ShowCutscene() {
 		GameObject resourceMovie = Resources.Load("Cutscene_Runner") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
 	}
 	

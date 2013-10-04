@@ -135,9 +135,6 @@ public class GatingManager : Singleton<GatingManager> {
 	// relation to the gate in the incoming room.
 	//---------------------------------------------------	
 	private void MovePlayer( int nRoom ) {
-		// first get the data
-		DataGate data = DataGateLoader.GetData( strArea, nRoom );
-		
 		// then get the id of the gate and get that gate object from our list of active gates
 		Gate gate = (Gate) hashActiveGates[nRoom];
 		

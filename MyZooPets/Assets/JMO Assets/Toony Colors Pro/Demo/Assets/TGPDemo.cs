@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+#pragma warning disable 0618
+
 public class TGPDemo : MonoBehaviour
 {
 	public bool rotate = true;

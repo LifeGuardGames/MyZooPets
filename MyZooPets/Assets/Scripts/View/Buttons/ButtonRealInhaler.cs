@@ -30,7 +30,7 @@ public class ButtonRealInhaler : LgButton {
 	//---------------------------------------------------	
 	private void ShowCutscene() {
 		GameObject resourceMovie = Resources.Load("Cutscene_Inhaler") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
 	}
 	

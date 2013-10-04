@@ -27,11 +27,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private Vector3 finalFaceDirection = new Vector3(11.3f, 0, 0);
 
     private Color currentRenderColor;
-    private bool eggClicked = false;
+    //private bool eggClicked = false;
     private bool finishClicked = false;
     // private Vector3 eggSpritePosition = new Vector3(0f, 2.8f, 22.44f);
     // private tk2dSprite eggSpriteScript;
-    private string petName;
+    //private string petName;
     private string petColor;
 
     void Start(){
@@ -49,7 +49,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------	
 	protected override void _OpenUI(){
-       	eggClicked = true;
+       	//eggClicked = true;
         CameraTransform(finalPosition,finalFaceDirection);
         isZoomed = true;
         HideTitle();
@@ -95,7 +95,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 			AudioManager.Instance.PlayClip( "introDoneNaming" );
 			
             finishClicked = true;
-            petName = nameField.text;
+            //petName = nameField.text;
             if(isZoomed){
                 ZoomOutMove();
                 isZoomed = false;
@@ -126,7 +126,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 			LoadScene();
 		
 		GameObject resourceMovie = Resources.Load("Cutscene_Intro") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += IntroMovieDone;
 	}
 	

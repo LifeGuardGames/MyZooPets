@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class RunnerAnimationController : TK2DAnimationController {
-    private bool mbStarted = false;
+    //private bool mbStarted = false;
 
 	void Start(){
 		base.Initialize();
-        mbStarted = true;
+        //mbStarted = true;
 	}
 
 	public void onPlayerJumpBegin(){

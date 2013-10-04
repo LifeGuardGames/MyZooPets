@@ -90,15 +90,18 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	private Dictionary<string, InventoryItem> GetInventoryForItem( string strItemID ) {
 		// what list the item is placed in depends on what kind of item it is
 		ItemType eType = DataItems.GetItemType( strItemID );
+		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
 		switch ( eType ) {
 			case ItemType.Decorations:
-				return DataManager.Instance.GameData.Inventory.DecorationItems;
+				inventory = DataManager.Instance.GameData.Inventory.DecorationItems;
 				break;
 			default:
-				return DataManager.Instance.GameData.Inventory.InventoryItems;
+				inventory = DataManager.Instance.GameData.Inventory.InventoryItems;
 				break;
 		}		
+		
+		return inventory;
 	}
 	
 	//Use item from inventory

@@ -75,9 +75,6 @@ public class DecorationNode : MonoBehaviour {
 	// Called when this node is clicked.
 	//---------------------------------------------------	
 	private void NodeClicked() {
-		// inform the ui manager
-		DecorationTypes eType = GetDecoType();
-		
 		// have the deco UI manager update itself based on this node being selected
 		EditDecosUIManager.Instance.UpdateChooseMenu( this );
 	}

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+#pragma warning disable 0618
+
 /*
     AdvairDrag.cs and RescueDrag.cs inherit from this class
     Inherit from this class to be able to drag a large inhaler, which changes to a small

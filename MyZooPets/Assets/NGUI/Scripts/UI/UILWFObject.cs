@@ -10,6 +10,10 @@ public class UILWFObject : UIWidget
         InitLWF();
     }
 
+    // override protected void OnEnable(){
+    //     InitLWF();
+    // }
+
     private void InitLWF()
     {
         showCaseAnimator = (GameObject)Instantiate(showCasePrefab);
@@ -22,7 +26,7 @@ public class UILWFObject : UIWidget
         transform.localScale = showCasePrefab.transform.localScale; 
 
         //TO DO: add finish loading call back in LWFAnimator
-        Invoke("Testing", 2.0f);
+        Invoke("Testing", 1.0f);
     }
 
     private void Testing(){

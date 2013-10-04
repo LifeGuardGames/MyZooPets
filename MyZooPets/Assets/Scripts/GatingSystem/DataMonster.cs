@@ -21,11 +21,20 @@ public class DataMonster {
 		return nHP;	
 	}
 	
+	// key for the monster, used to buid resources
+	private string strResourceKey;
+	public string GetResourceKey() {
+		return strResourceKey;	
+	}
+	
 	public DataMonster( string id, Hashtable hashData, string strError ) {
 		strID = id;	
 
 		// get monster hp
 		nHP = int.Parse( HashUtils.GetHashValue<string>( hashData, "Health", "100", strError ) );
+		
+		// get prefab that this monster spawns
+		strResourceKey = HashUtils.GetHashValue<string>( hashData, "Key", "SmokeMonster", strError );		
 		
 		//Debug.Log("Loading monster " + strID + " with hp " + nHP);
 	}

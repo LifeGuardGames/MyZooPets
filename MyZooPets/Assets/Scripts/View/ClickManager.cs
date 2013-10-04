@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Click manager.
@@ -22,6 +23,9 @@ public class ClickManager : Singleton<ClickManager> {
 	
 	// the current mode the UI is in
 	private UIModeTypes eCurMode;
+	
+	// list of things that can still happen despite a click lock being in effect...this may be a bad idea...(Joe)
+	private List<ClickLockExceptions> listExceptions;
 	
     bool trophyMessageShowing = false;
 
@@ -59,7 +63,11 @@ public class ClickManager : Singleton<ClickManager> {
 	// B) Mode is not locked
 	// C) The UI isn't tweening
 	//---------------------------------------------------------
-	public bool CanRespondToTap(){
+	public bool CanRespondToTap( ClickLockExceptions eException = ClickLockExceptions.None ){
+		// if there is an Exception in effect for the incoming action, then it is okay regardless
+		if ( listExceptions != null && listExceptions.Contains( eException ) )
+			return true;
+		
 		bool bIsTweening = IsTweeningUI();
 		if(!isClickLocked && !isModeLocked && !bIsTweening){
 			return true;
@@ -68,12 +76,18 @@ public class ClickManager : Singleton<ClickManager> {
 	}
 
 	// Disable clicking when transitioning between modes
-	public void ClickLock(){
+	public void ClickLock( List<ClickLockExceptions> listExceptions = null){
 		isClickLocked = true;
+		
+		if ( listExceptions != null )
+			this.listExceptions = listExceptions;
 	}
 
 	// Enable clicking after the transitioning is done, usually called from LeanTween callback
 	public void ReleaseClickLock(){
+		// clear our exceptions
+		listExceptions = null;
+		
 		isClickLocked = false;
 	}
 

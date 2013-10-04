@@ -16,9 +16,9 @@ public class DataGate {
 	}
 	
 	// location of the gate
-	private string strLocation;
-	public string GetLocation() {
-		return strLocation;	
+	private string strArea;
+	public string GetArea() {
+		return strArea;	
 	}
 	
 	// partition id of the gate
@@ -33,11 +33,17 @@ public class DataGate {
 		return DataMonsterLoader.GetData( strMonsterID );	
 	}
 	
+	// the swipe direction that this monster is blocking
+	private RoomDirection eSwipeDirection;
+	public bool DoesBlock( RoomDirection eSwipeDirection ) {
+		return this.eSwipeDirection == eSwipeDirection;
+	}
+	
 	public DataGate( string id, Hashtable hashData, string strError ) {
 		strID = id;	
 
 		// get location
-		strLocation = HashUtils.GetHashValue<string>( hashData, "Location", null, strError );
+		strArea = HashUtils.GetHashValue<string>( hashData, "Location", null, strError );
 		
 		// get partition
 		nPartition = int.Parse( HashUtils.GetHashValue<string>( hashData, "Partition", "0", strError ) );
@@ -45,6 +51,10 @@ public class DataGate {
 		// get monster
 		strMonsterID = HashUtils.GetHashValue<string>( hashData, "Monster", null, strError );
 		
-		//Debug.Log("Loading gate " + strID + " in loc " + strLocation + " in partition " + nPartition + " and monster " + strMonsterID);
+		// get the direction the gate is blocking
+		eSwipeDirection = (RoomDirection) System.Enum.Parse( typeof(RoomDirection), 
+														HashUtils.GetHashValue<string>( hashData, "Blocking", null, strError ) );
+		
+		//Debug.Log("Loading gate " + strID + " in loc " + strArea + " in partition " + nPartition + " and monster " + strMonsterID);
 	}
 }

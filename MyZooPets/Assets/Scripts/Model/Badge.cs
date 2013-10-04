@@ -3,6 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//---------------------------------------------------
+// Badge 
+// Badge data that is used during game. Contains a mix
+// of mutable and immutable data 
+//---------------------------------------------------
+
 public class Badge{
     private string id;
     private string name;

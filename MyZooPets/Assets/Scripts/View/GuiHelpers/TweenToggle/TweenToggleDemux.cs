@@ -44,7 +44,7 @@ public class TweenToggleDemux : MonoBehaviour {
 
 		foreach(GameObject go in GoList){
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
-			if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
+			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
 				if(startsHidden){
 					toggle.startsHidden = true;	// TweenToggle Start() will take care of setting position
 				}
@@ -113,7 +113,7 @@ public class TweenToggleDemux : MonoBehaviour {
 			
 			foreach(GameObject go in GoList){
 				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
+				if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
 					toggle.Show();
 				}
 			}
@@ -132,7 +132,7 @@ public class TweenToggleDemux : MonoBehaviour {
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.GetFullName())){
+				if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
 					if(hideImmediately){
 						Debug.Log(" -- - - HIDE BOOLEAN TRUE");
 						// TODO Need to call last hide object last!!!!

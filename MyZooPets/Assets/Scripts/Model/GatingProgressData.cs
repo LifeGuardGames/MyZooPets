@@ -7,17 +7,8 @@ using System.Collections.Generic;
 // Save data script for the gating progress system.
 //---------------------------------------------------
 
-[DoNotSerializePublic]
 public class GatingProgressData{
-    
-	[SerializeThis]
-    private Dictionary<string, int> dictGatingProgress; // dictionary of gate IDs to HP remaining for the monster inside
-	
-    //===============Getters & Setters=================
-    public Dictionary<string, int> GatingProgress {
-        get{return dictGatingProgress;}
-        set{dictGatingProgress = value;}
-    }
+    public Dictionary<string, int> GatingProgress {get; set;} // dictionary of gate IDs to HP remaining for the monster inside
 	
 	//---------------------------------------------------
 	// IsActivateGate()
@@ -69,7 +60,7 @@ public class GatingProgressData{
 
     //Populate with dummy data
     public void Init(){
-        dictGatingProgress = new Dictionary<string, int>();
+        GatingProgress = new Dictionary<string, int>();
 		
 		// load data from xml
 		DataGateLoader.SetupData();
@@ -83,7 +74,7 @@ public class GatingProgressData{
 			int nHP = dataGate.GetMonster().GetMonsterHealth();
 			
 			// maps gate key to monster's max hp (i.e. no progress)
-			dictGatingProgress[strKey] = nHP;
+			GatingProgress[strKey] = nHP;
 		}
 
 		

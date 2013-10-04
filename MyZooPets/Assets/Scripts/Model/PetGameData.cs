@@ -3,35 +3,20 @@ using UnityEngine;
 /*
     Class that contains all the game data of a pet
 */
-[DoNotSerializePublic]
 public class PetGameData{
-
-    [SerializeThis]
-    public PetInfoData PetInfo;
-    [SerializeThis] 
-    public CutsceneData Cutscenes;  
-    [SerializeThis] 
-    public DecorationSystemData Decorations;    
-    [SerializeThis] 
-    public StatsData Stats;
-    [SerializeThis]
-    public LevelUpData Level;
-    [SerializeThis]
-    public CalendarData Calendar;
-    [SerializeThis]
-    public DegradationData Degradation;
-    [SerializeThis]
-    public InhalerData Inhaler;
-    [SerializeThis]
-    public TutorialData Tutorial;
-    [SerializeThis]
-    public InventoryData Inventory;
-    [SerializeThis]
-    public SkillMutableData Dojo;
-    [SerializeThis]
-    public BadgeMutableData Badge; 
-    [SerializeThis]
-    public GatingProgressData GatingProgress;
+    public PetInfoData PetInfo {get; set;}
+    public CutsceneData Cutscenes {get; set;} 
+    public DecorationSystemData Decorations {get; set;}
+    public StatsData Stats {get; set;}
+    public LevelUpData Level {get; set;}
+    public CalendarData Calendar {get; set;}
+    public DegradationData Degradation {get; set;}
+    public InhalerData Inhaler {get; set;}
+    public TutorialData Tutorial {get; set;}
+    public InventoryData Inventory {get; set;}
+    public SkillMutableData Dojo {get; set;}
+    public BadgeMutableData Badge {get; set;}
+    public GatingProgressData GatingProgress {get; set;}
 
     public PetGameData(){}
 

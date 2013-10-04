@@ -42,7 +42,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 
         if(petStatus == "Egg"){
             //Open CustomizationUIManager to create/initiate new pet game data
-            print("working");
             DataManager.Instance.CurrentPetID = selectedPetID;
             CustomizationUIManager.Instance.selectedEgg = selectedPetGO.transform.parent.Find("Sprite_Egg").gameObject;
             CustomizationUIManager.Instance.OpenUI();
@@ -59,8 +58,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     private void EnterGameAfterGameDataDeserialized(object sender, EventArgs args){
-        print("what is going on");
         LoadScene();
+        
         //Unregister itself from the event
         DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
     }
@@ -68,19 +67,4 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     private void LoadScene(){
         GetComponent<SceneTransition>().StartTransition();
     }
-
-    // //After the current pet game data have been serialized. Load the game data for selected pet
-    // private void LoadGameDataForSelectedPet(object sender, EventArgs args){
-    //     print("what's going on");
-
-    //     string currentPetID = DataManager.Instance.CurrentPetID;
-
-    //     //Deserialize data from selected pet
-    //     DataManager.Instance.CurrentPetID = selectedPetID;
-    //     DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
-    //     DataManager.Instance.LoadGameData();
-
-    //     //Unregister itself from OnGameDataSaved event
-    //     DataManager.Instance.OnGameDataSaved -= LoadGameDataForSelectedPet;
-    // }
 }

@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using fastJSON;
 
 //This class handles all game data. No game logic
 //Saves and loads data into player preference
-[DoNotSerializePublic]
 public class DataManager : Singleton<DataManager>{
     public event EventHandler<EventArgs> OnGameDataLoaded;
     public event EventHandler<EventArgs> OnGameDataSaved;
@@ -20,8 +20,6 @@ public class DataManager : Singleton<DataManager>{
     public string currentPetID; //The id that will be used for pet serialization
     private bool loaded = false; //Has the data been deserialized
 
-
-    [SerializeThis]
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
     public PetGameData GameData{
@@ -41,7 +39,6 @@ public class DataManager : Singleton<DataManager>{
         //Make Object persistent
         if(isCreated){
             //If There is a duplicate in the scene. delete the object and jump Awake
-            print("destroying duplicate datamanager");
             Destroy(gameObject);
             return;
         }
@@ -60,8 +57,9 @@ public class DataManager : Singleton<DataManager>{
         firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
         numOfPets = PlayerPrefs.GetInt("NumOfPets", 0);
 
+
+        //First time opening the game, so need to initialize the first 3 pets
         if(firstTime && numOfPets == 0){ 
-            //First time opening the game, so need to initialize the first 3 pets
             PlayerPrefs.SetString("Pet0", "Egg");
             PlayerPrefs.SetString("Pet1", "Egg");
             PlayerPrefs.SetString("Pet2", "Egg");
@@ -75,6 +73,8 @@ public class DataManager : Singleton<DataManager>{
             PlayerPrefs.SetInt("NumOfPets", 3);
         }
 
+        //Use this when developing on an independent scene. Will initialize all the data
+        //before other classes call DataManager
         if(isDebug){
             currentPetID = "Pet0";
             InitializeGameDataForNewPet();
@@ -84,7 +84,6 @@ public class DataManager : Singleton<DataManager>{
     //This function gets called before the script variables are ready so don't try
     //to use class variables here
     void OnLevelWasLoaded(){
-        print("hi");
 
         /*
             Game data should be serialized whenever user return to MenuScene because
@@ -93,34 +92,38 @@ public class DataManager : Singleton<DataManager>{
         */
         if(Application.loadedLevelName == "MenuScene"){
             PlayerPrefs.SetString("CanSaveData", "Yes");
-            print("in");
         }
     }
 
     void Update(){
-        string canSaveData = PlayerPrefs.GetString("CanSaveData", "");
-        if(!firstTime && canSaveData == "Yes"){
-            SaveGameData();
-            PlayerPrefs.SetString("CanSaveData", "No");
+        string loadedLevelName = Application.loadedLevelName;
+
+        if(loadedLevelName == "MenuScene"){
+            string canSaveData = PlayerPrefs.GetString("CanSaveData", "");
+
+            //Serialize current pet data when loading into MenuScene
+            if(!firstTime && canSaveData == "Yes"){
+                SaveGameData();
+                PlayerPrefs.SetString("CanSaveData", "No");
+            }
         }
     }
 
-    //serialize the data whenever the game is paused
+    //Serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
-
         if(paused){
             string loadedLevelName = Application.loadedLevelName;
-            // if(loadedLevelName != "MenuScene" && loadedLevelName != "LoadScene"){
-            //     // special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-            //     DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now;
+            if(loadedLevelName != "MenuScene" && loadedLevelName != "LoadScene"){
+                // special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
+                DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now;
                 
                 SaveGameData();
-            // }
+            }
         }
     }
 
     //called when game data has be deserialized and ready to be used
-    void OnDeserialized(){
+    private void Deserialized(){
         Debug.Log("Deserialized");
         if(OnGameDataLoaded != null)
             OnGameDataLoaded(this, EventArgs.Empty);
@@ -153,12 +156,13 @@ public class DataManager : Singleton<DataManager>{
     //Load the data of the pet that has been chosen
     public void LoadGameData(){
         if(!String.IsNullOrEmpty(currentPetID)){
-            //Deserialize data
-            if(!loaded){
-                // loaded = true;
-                string data = PlayerPrefs.GetString(currentPetID + "GameData", "");
-                if(!String.IsNullOrEmpty(data))
-                    LevelSerializer.LoadSavedLevel(data);
+            PetGameData newGameData = null;
+
+            string jsonString = PlayerPrefs.GetString(currentPetID + "GameData", "");
+            if(!String.IsNullOrEmpty(jsonString)){
+                newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
+                gameData = newGameData;
+                Deserialized();
             }
         }else{
             Debug.LogError("PetID is null or empty. Can't load pet without ID. Check  currentPetID");
@@ -167,22 +171,21 @@ public class DataManager : Singleton<DataManager>{
 
     //serialize data into byte array and store locally in PlayerPrefs
     public void SaveGameData(){
+        //JSON serializer setting
+        JSON.Instance.Parameters.UseExtensions = false;
+
         if(!String.IsNullOrEmpty(currentPetID)){
-            PlayerPrefs.SetString(currentPetID + "GameData", LevelSerializer.SerializeLevel());
-            Serialized();
+            string jsonString = JSON.Instance.ToJSON(gameData);
 
 #if UNITY_EDITOR
-    print(JSONLevelSerializer.SerializeLevel());
+    Debug.Log(jsonString);
 #endif
+
+            PlayerPrefs.SetString(currentPetID + "GameData", jsonString); 
+            Serialized();
 
         }else{
             Debug.LogError("PetID is null or empty, so data cannot be serialized");
         }
-    }
-
-    private void MakePersistant(){
-        if(isCreated)Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
-        isCreated = true;
     }
 }

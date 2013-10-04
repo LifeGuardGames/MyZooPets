@@ -3,51 +3,51 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-[DoNotSerializePublic]
+//---------------------------------------------------
+// SkillMutableData 
+// Save the data for skills/dojo. Mutable data
+//---------------------------------------------------
 public class SkillMutableData{
-    private struct Status{
-        public bool isUnlocked;
-        public bool isPurchased;
+    public class Status{
+        public bool IsUnlocked {get; set;}
+        public bool IsPurchased {get; set;}
+
+        public Status(){}
 
         public Status(bool isUnlocked, bool isPurchased){
-            this.isUnlocked = isUnlocked;
-            this.isPurchased = isPurchased;
+            IsUnlocked = isUnlocked;
+            IsPurchased = isPurchased;
         }
     }
 
-    [SerializeThis]
-    private Dictionary<string, Status> skillStatus; //Key: Skill ID, Value: Instance of Status
-    [SerializeThis]
-    private string currentSkillID; //The current skill that the pet has
+    public Dictionary<string, Status> SkillStatus {get; set;} //Key: Skill ID, Value: Instance of Status
+    public string CurrentSkillID {get; set;} //The current skill that the pet has
 
-    public string CurrentSkillID{
-        get{return currentSkillID;}
-    }
 
     public void UpdateSkillStatus(string skillID, bool isUnlocked, bool isPurchased){
-        if(skillStatus.ContainsKey(skillID)){
-            Status status = skillStatus[skillID];
-            status.isUnlocked = isUnlocked;
-            status.isPurchased = isPurchased;
-            skillStatus[skillID] = status;
+        if(SkillStatus.ContainsKey(skillID)){
+            Status status = SkillStatus[skillID];
+            status.IsUnlocked = isUnlocked;
+            status.IsPurchased = isPurchased;
+            SkillStatus[skillID] = status;
         }else{
             Status status = new Status(isUnlocked, isPurchased);
-            skillStatus.Add(skillID, status);
+            SkillStatus.Add(skillID, status);
         }
     }
 
     public bool GetIsUnlocked(string skillID){
         bool retVal = false;
-        if(skillStatus.ContainsKey(skillID)){
-            retVal = skillStatus[skillID].isUnlocked;
+        if(SkillStatus.ContainsKey(skillID)){
+            retVal = SkillStatus[skillID].IsUnlocked;
         }
         return retVal;
     }
 
     public bool GetIsPurchased(string skillID){
         bool retVal = false;
-        if(skillStatus.ContainsKey(skillID)){
-            retVal = skillStatus[skillID].isPurchased;
+        if(SkillStatus.ContainsKey(skillID)){
+            retVal = SkillStatus[skillID].IsPurchased;
         }
         return retVal;
     }
@@ -56,7 +56,7 @@ public class SkillMutableData{
     public SkillMutableData(){}
 
     public void Init(){
-        skillStatus = new Dictionary<string, Status>();
+        SkillStatus = new Dictionary<string, Status>();
         UpdateSkillStatus("Skill0", true, false);
     }
 }

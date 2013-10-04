@@ -58,7 +58,6 @@ public class tk2dSpritePickerPopup  : EditorWindow
 	int selectedIndex = -1;
 	bool makeSelectionVisible = false;
 	Vector2 scroll = Vector2.zero;
-	tk2dSpriteThumbnailCache spriteThumbnailRenderer = null;
 	tk2dSpriteDefinition SelectedDefinition 
 	{
 		get {
@@ -75,12 +74,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 
 	void OnDestroy()
 	{
-		if (spriteThumbnailRenderer != null)
-		{
-			spriteThumbnailRenderer.Destroy();
-			spriteThumbnailRenderer = null;
-		}
-
+		tk2dSpriteThumbnailCache.Done();
 		tk2dEditorSkin.Done();
 		tk2dGrid.Done();
 	}
@@ -278,9 +272,6 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		r.x += presentParams.border;
 		r.y += presentParams.border;
 
-		if (spriteThumbnailRenderer == null)
-			spriteThumbnailRenderer = new tk2dSpriteThumbnailCache();
-
 		int ix = 0;
 		float x = r.x;
 		float y = r.y;
@@ -289,7 +280,7 @@ public class tk2dSpritePickerPopup  : EditorWindow
 		{
 			Rect spriteRect = new Rect(x, y, tileSize, tileSize);
 			tk2dGrid.Draw(spriteRect, Vector2.zero);
-			spriteThumbnailRenderer.DrawSpriteTextureInRect(spriteRect, def, Color.white);
+			tk2dSpriteThumbnailCache.DrawSpriteTextureInRect(spriteRect, def, Color.white);
 
 			Rect labelRect = new Rect(x, y + tileSize + presentParams.labelOffset, tileSize, presentParams.labelHeight);
 			if (selectedIndex == index)

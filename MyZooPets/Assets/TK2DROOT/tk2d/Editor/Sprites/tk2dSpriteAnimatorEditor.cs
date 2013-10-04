@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 [CanEditMultipleObjects]
 [CustomEditor(typeof(tk2dSpriteAnimator))]
-class tk2dSpriteAnimatorEditor : Editor
+public class tk2dSpriteAnimatorEditor : Editor
 {
 	tk2dGenericIndexItem[] animLibs = null;
 	string[] animLibNames = null;
@@ -14,7 +14,7 @@ class tk2dSpriteAnimatorEditor : Editor
 
     protected T[] GetTargetsOfType<T>( Object[] objects ) where T : UnityEngine.Object {
     	List<T> ts = new List<T>();
-    	foreach (Object o in targets) {
+    	foreach (Object o in objects) {
     		T s = o as T;
     		if (s != null)
     			ts.Add(s);

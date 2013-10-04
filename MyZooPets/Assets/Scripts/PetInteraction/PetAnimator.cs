@@ -3,6 +3,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public class PetAnimArgs : EventArgs{
+	private PetAnimStates eState;
+	public PetAnimStates GetAnimState() {
+		return eState;	
+	}
+
+	public PetAnimArgs( PetAnimStates eState){
+		this.eState = eState;
+	}
+}
+
 //---------------------------------------------------
 // PetAnimator
 // Script that controls all the pet's animations.
@@ -39,6 +50,10 @@ public class PetAnimator : LgCharacterAnimator {
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
 	
+	//=======================Events========================
+	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
+	//=====================================================		
+
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
@@ -108,6 +123,18 @@ public class PetAnimator : LgCharacterAnimator {
 		if ( dataAnim != null )
 			queueAnims.Enqueue( dataAnim );			
 	}
+	
+	//---------------------------------------------------
+	// BreathFire()
+	// The player is attacking a gate!
+	//---------------------------------------------------	
+	public void BreathFire() {
+		// get anim based on pet's attributes
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Fire" );
+		
+		// then start playing the anim immediately
+		PlayAnimation( dataAnim );	
+	}
 
 	//---------------------------------------------------
 	// Idle()
@@ -141,6 +168,10 @@ public class PetAnimator : LgCharacterAnimator {
 	public void StopMoving() {
 		// we have to do this ourselves here because walking is on a loop...kind of annoying, but so is LWF
 		SetAnimating( false );
+		
+		// I hate to do this here, but there seems to be a bug where the walk animation is finishing precisely as the pet is
+		// supposed to stop moving, and so the pet enters an endless walk-cycle.  This is definitely hacky.
+		SetAnimState( PetAnimStates.Idling );
 		
 		// now that we're done moving, idle
 		Idle();
@@ -223,6 +254,7 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		switch ( eState ) {
 			case PetAnimStates.Idling:
+			case PetAnimStates.BreathingFire:
 				Idle();
 				break;				
 			case PetAnimStates.Walking:
@@ -238,5 +270,9 @@ public class PetAnimator : LgCharacterAnimator {
 				Idle();
 				break;
 		}
+		
+		// send out a message to anyone listening that the anim is done
+		if ( OnAnimDone != null )
+			OnAnimDone( this, new PetAnimArgs(eState) );		
 	}
 }

@@ -144,7 +144,8 @@ public enum Preferences {
 public enum PetAnimStates {
 	Idling,
 	Walking,
-	Transitioning
+	Transitioning,
+	BreathingFire
 }
 
 // mood states
@@ -168,4 +169,10 @@ public enum PetHealthStates {
 public enum RoomDirection {
     Left,
     Right
+}
+
+// click lock exceptions...uh...I feel like this is setting a bad precedent
+public enum ClickLockExceptions{
+	None,
+	Moving
 }

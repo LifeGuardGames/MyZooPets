@@ -15,7 +15,6 @@ public class SmokeMonsterController : MonoBehaviour {
 	void Start () {
 		anim = face.animation;
 		setNormalAnimation("eyes1", "mouth1");
-		Debug.Log(anim.GetClipCount());
 	}
 	
 	public void setNormalAnimation(string eyesSpriteName, string mouthSpriteName){

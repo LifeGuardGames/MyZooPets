@@ -50,8 +50,8 @@ public class PanToMoveCamera : MonoBehaviour{
                     startTouchPos = touch.position;
                     startTime = Time.time;
 
-                    // Cancel touch if finger is touching undesirable objects while panning
-                    if(CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
+                    // Cancel touch if finger is touching undesirable objects while panning or the click manager is locked
+                    if(!ClickManager.Instance.CanRespondToTap() || CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
                         touchCancelled = true;
                 break;
 
@@ -154,9 +154,10 @@ public class PanToMoveCamera : MonoBehaviour{
 	private void ChangePartition( int nTargetPartition) {
 		// check to make sure the move is legal (i.e. within bounds)
 		if ( nTargetPartition >= firstPartition && nTargetPartition <= lastPartition ) {
+			int nOldPartition = currentPartition;
 			currentPartition = nTargetPartition;
-			Debug.Log("Partition is: " + currentPartition);	
-			GatingManager.Instance.EnteredRoom( currentPartition );
+			
+			GatingManager.Instance.EnteredRoom( nOldPartition, currentPartition );
 		}
 	}
 	

@@ -51,6 +51,36 @@ public class DataGateLoader {
 		return dataGate;
 	}
 	
+	//---------------------------------------------------
+	// IsActiveGate()
+	// Returns whether or not the incoming room in the
+	// incoming area has an active gate.
+	//---------------------------------------------------	
+	public static bool HasActiveGate( string strArea, int nRoom ) {
+		bool bHas = false;
+		
+		DataGate data = GetData( strArea, nRoom );
+		if ( data != null ) 
+			bHas = DataManager.Instance.GatingProgress.IsGateActive( data.GetGateID() );
+		
+		return bHas;
+	}
+	
+	//---------------------------------------------------
+	// GetAreaGates()
+	// Returns all the gates for the incoming area.
+	//---------------------------------------------------	
+	public static Hashtable GetAreaGates( string strArea ) {
+		Hashtable hashGates = new Hashtable();
+		
+		if ( hashData.ContainsKey( strArea ) )
+			hashGates = (Hashtable) hashData[strArea];
+		else
+			Debug.Log("No such area in the gates hash!!!");
+		
+		return hashGates;
+	}
+	
 	public static Dictionary<string, DataGate> GetAllData() {
 		return dictData;	
 	}

@@ -77,7 +77,7 @@ public class TweenToggleDemux : MonoBehaviour {
 		// Polling for lock released
 		if(isMoving){
 			if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
-				print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
+				//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 				isMoving = false;
 				// If option set for finish show callback, call it now!
 				if(isShowFinishedCallback){

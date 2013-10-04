@@ -151,6 +151,10 @@ public class GatingManager : Singleton<GatingManager> {
 	// room from the incoming direction.
 	//---------------------------------------------------	
 	public bool CanEnterRoom( int nCurrentRoom, RoomDirection eSwipeDirection ) {
+		// early out if click manager is tweening
+		if ( ClickManager.Instance.IsTweeningUI() )
+			return false;
+		
 		// start off optimistic
 		bool bOK = true;
 		

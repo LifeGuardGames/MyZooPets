@@ -69,6 +69,15 @@ public class GatingManager : Singleton<GatingManager> {
 	}
 	
 	//---------------------------------------------------
+	// GateCleared()
+	// When the player clears a gate.
+	//---------------------------------------------------		
+	public void GateCleared() {
+		// enable the player to do stuff in the room
+		EnableUI();
+	}
+	
+	//---------------------------------------------------
 	// IsInGatedRoom()
 	// Returns whether or not the player is currently
 	// in a gated room.
@@ -105,10 +114,19 @@ public class GatingManager : Singleton<GatingManager> {
 		}
 		else if ( bGateLeaving && !bGateEntering ) {
 			// if they are entering a non-gated room from a gated room, show that ui and unlock click manager
-			ClickManager.Instance.ReleaseClickLock();
-			NavigationUIManager.Instance.ShowPanel();
-			EditDecosUIManager.Instance.ShowNavButton();
+			EnableUI();
 		}
+	}
+	
+	//---------------------------------------------------
+	// EnableUI()
+	// Enables the UI for the player that had previously
+	// been locked.
+	//---------------------------------------------------	
+	private void EnableUI() {
+		ClickManager.Instance.ReleaseClickLock();
+		NavigationUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();		
 	}
 	
 	//---------------------------------------------------

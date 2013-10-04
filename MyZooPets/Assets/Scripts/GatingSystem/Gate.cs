@@ -106,6 +106,9 @@ public class Gate : MonoBehaviour {
 		// play a sound
 		AudioManager.Instance.PlayClip( "Defeat_" + strResource );
 		
+		// let the gating manager know
+		GatingManager.Instance.GateCleared();
+		
 		// destroy the object
 		Destroy( gameObject );		
 	}

@@ -44,6 +44,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+#pragma warning disable 1717
+
 public enum XMLTokenType          {None,Declaration,EntityElement,StartElement,EndElement,Attribute,Text,Entity}
 public enum XMLParserAttrbuteMode {Name,Assignment,Value}
 public enum XMLNodeType           {Text,Element}

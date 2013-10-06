@@ -13,7 +13,8 @@ public class ButtonEgg : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		FirstTimeNGUI.Instance.OpenUI();
+		// FirstTimeNGUI.Instance.OpenUI();
+        CustomizationUIManager.Instance.OpenUI();
 	}
 
 }

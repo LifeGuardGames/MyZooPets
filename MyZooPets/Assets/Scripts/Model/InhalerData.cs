@@ -2,43 +2,25 @@
 using System;
 using System.Collections;
 
-[DoNotSerializePublic]
+//---------------------------------------------------
+// InhalerData 
+// Save data for Inhaler. Mutable data 
+//---------------------------------------------------
+
 public class InhalerData{
-    [SerializeThis]
-    private bool firstTimeRescue; //first time the player has seen the rescue inhaler
+    public bool FirstTimeRescue {get; set;} //first time the player has seen the rescue inhaler
                                         //(this tells us whether to show tutorial arrows in the Inhaler Game)
-    [SerializeThis]
-    private DateTime lastInhalerPlayTime; //last time the user played the regular inhaler
-    [SerializeThis]
-    private bool playedInMorning; //has the user played in the morning
-    [SerializeThis]
-    private bool playedInAfternoon; //has the user played in the afternoon
-    
-    //===============Getters & Setters=================
-    public bool FirstTimeRescue{
-        get{return firstTimeRescue;}
-        set{firstTimeRescue = value;}
-    }
-    public DateTime LastInhalerPlayTime{
-        get{return lastInhalerPlayTime;}
-        set{lastInhalerPlayTime = value;}
-    }
-    public bool PlayedInMorning{
-        get{return playedInMorning;}
-        set{playedInMorning = value;}
-    }
-    public bool PlayedInAfternoon{
-        get{return playedInAfternoon;}
-        set{playedInAfternoon = value;}
-    }
+    public DateTime LastInhalerPlayTime {get; set;} //last time the user played the regular inhaler
+    public bool PlayedInMorning {get; set;} //has the user played in the morning
+    public bool PlayedInAfternoon {get; set;} //has the user played in the afternoon
 
     //================Initialization============
     public InhalerData(){}
 
     public void Init(){
-        firstTimeRescue = true;
-        lastInhalerPlayTime = DateTime.Now;
-        playedInMorning = false;
-        playedInAfternoon = false;
+        FirstTimeRescue = true;
+        LastInhalerPlayTime = DateTime.Now;
+        PlayedInMorning = false;
+        PlayedInAfternoon = false;
     }
 }

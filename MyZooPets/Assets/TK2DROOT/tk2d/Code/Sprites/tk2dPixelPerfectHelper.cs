@@ -52,7 +52,7 @@ public class tk2dPixelPerfectHelper : MonoBehaviour
 		}
 		else
 		{
-			float tk = resScale * Mathf.Tan(Mathf.Deg2Rad * cam.fov * 0.5f) / collectionOrthoSize;
+			float tk = resScale * Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView * 0.5f) / collectionOrthoSize;
 			scaleK = tk * -cam.transform.position.z;
 			scaleD = tk;
 		}

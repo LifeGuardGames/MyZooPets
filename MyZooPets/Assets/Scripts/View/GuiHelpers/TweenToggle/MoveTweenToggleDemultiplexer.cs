@@ -42,7 +42,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 
 		foreach(GameObject go in GoList){
 			MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-			if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName())){
+			if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.name)){
 				if(startsHidden){
 					toggle.startsHidden = true;
 					toggle.Reset();
@@ -90,7 +90,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName()))
+				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.name))
 					toggle.Show();
 			}
 			
@@ -107,7 +107,7 @@ public class MoveTweenToggleDemultiplexer : MonoBehaviour {
 			isMoving = true;
 			foreach(GameObject go in GoList){
 				MoveTweenToggle toggle = go.GetComponent<MoveTweenToggle>();
-				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.GetFullName()))
+				if(D.Assert(toggle != null, "No MoveTweenToggle script for " + go.name))
 					toggle.Hide();
 			}
 			

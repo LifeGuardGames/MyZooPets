@@ -36,7 +36,7 @@ public class PetMovement : Singleton<PetMovement> {
     // Update is called once per frame
     void Update () {
         if (moving && petSprite != null){
-            if (ClickManager.Instance.CanRespondToTap()){ //move the pet location if allowed
+            if (ClickManager.Instance.CanRespondToTap( ClickLockExceptions.Moving )){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint,8f * Time.deltaTime);
             }else
@@ -50,8 +50,12 @@ public class PetMovement : Singleton<PetMovement> {
 
     //Listen to OnTap Event from FingerGesture
     void OnTap(TapGesture gesture) { 
+		// if the player is in a gated room, moving on tap is not allowed
+		if ( GatingManager.Instance.IsInGatedRoom() )
+			return;
+		
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap() || IsTouchingNGUI(gesture.Position)) return;
+        if(!ClickManager.Instance.CanRespondToTap( ClickLockExceptions.Moving ) || IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
 		
 		AudioManager.Instance.PlayClip( strSoundMove );
 
@@ -71,7 +75,7 @@ public class PetMovement : Singleton<PetMovement> {
     //     }
     // }
 	
-	private void StopMoving() {
+	public void StopMoving() {
     	moving = false;
 		scriptAnim.StopMoving();
 	}
@@ -81,19 +85,22 @@ public class PetMovement : Singleton<PetMovement> {
         RaycastHit hit;
         // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == runWay.collider){
-                destinationPoint = hit.point;
-				
-				// tell the pet animator script to tart moving (but only if we aren't already moving)
-				if ( !moving )
-                	scriptAnim.StartMoving();
-				
-                moving = true;
-            }
+            if (hit.collider == runWay.collider)
+				MovePet( hit.point );
         }
-        ChangePetFacingDirection();
     }
 	
+	public void MovePet( Vector3 vLoc ) {
+        destinationPoint = vLoc;
+		
+		// tell the pet animator script to tart moving (but only if we aren't already moving)
+		if ( !moving )
+        	scriptAnim.StartMoving();
+		
+        moving = true;		
+		
+		ChangePetFacingDirection();
+	}
 	
 	public float fShadow = .6f;
 	

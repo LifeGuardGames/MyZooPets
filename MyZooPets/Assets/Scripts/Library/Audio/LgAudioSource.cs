@@ -48,6 +48,11 @@ public class LgAudioSource : MonoBehaviour {
 	}
 	
 	void OnDestroy() {
+		// it's possible that the audio manager has been destroyed because the scene is changing, in which case, don't worry
+		// about removing listeners, because the audio manager has been destroyed
+		if ( !AudioManager.Instance )
+			return;
+		
 		// stop listening for pausing	
 		AudioManager.Instance.OnGamePaused -= SetPauseState;
 	}

@@ -3,65 +3,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-[DoNotSerializePublic]
+//---------------------------------------------------
+// CalendarData 
+// Save the data for Calendar. Mutable data
+//---------------------------------------------------
+
 public class CalendarData{
-    //Calendar Data
-    [SerializeThis]
-    private List<CalendarEntry> entriesThisWeek;
-    [SerializeThis]
-    private List<CalendarEntry> entriesLastWeek;
-    [SerializeThis]
-    private DateTime dateOfSunday; // keep track of the last day of the week,
+    public List<CalendarEntry> EntriesThisWeek {get; set;}
+    public List<CalendarEntry> EntriesLastWeek {get; set;}
+    public DateTime DateOfSunday {get; set;} // keep track of the last day of the week,
                                           // so we know if we have to clear the calendar
                                           // for a new week or not.
-    [SerializeThis]
-    private DateTime lastCalendarOpenedTime; //the last time that the user used the calendar
-    [SerializeThis]
-    private bool isRewardClaimed; //has the check bonuses been collected by the user
-    [SerializeThis]
-    private DateTime nextPlayPeriod; //the next time that the user can collect check bonuses
+    public DateTime LastCalendarOpenedTime {get; set;} //the last time that the user used the calendar
+    public bool IsRewardClaimed {get; set;} //has the check bonuses been collected by the user
+    public DateTime NextPlayPeriod {get; set;} //the next time that the user can collect check bonuses
                                             //and be punished for missed entries
-
-    //===============Getters & Setters=================
-    public List<CalendarEntry> EntriesThisWeek{
-        get{return entriesThisWeek;}
-        set{entriesThisWeek = value;}
-    }
-    public List<CalendarEntry> EntriesLastWeek{
-        get{return entriesLastWeek;}
-        set{entriesLastWeek = value;}
-    }
-    public DateTime DateOfSunday{
-        get{return dateOfSunday;}
-        set{dateOfSunday = value;}
-    }
-    public DateTime LastCalendarOpenedTime{
-        get{return lastCalendarOpenedTime;}
-        set{lastCalendarOpenedTime = value;}
-    }
-    public bool IsRewardClaimed{
-        get{return isRewardClaimed;}
-        set{isRewardClaimed = value;}
-    }
-    public DateTime NextPlayPeriod{
-        get{return nextPlayPeriod;}
-        set{nextPlayPeriod = value;}
-    }
 
     //================Initialization============
     public CalendarData(){}
 
     public void Init(){
-        dateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
-        entriesLastWeek = CalendarLogic.LeaveBlankWeek();
+        DateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
+        EntriesLastWeek = CalendarLogic.LeaveBlankWeek();
 
         //initialize this week with sample data to be used for tutorial
-        entriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
+        EntriesThisWeek = CalendarLogic.LeaveBlankUntilNowWeek(DateTime.Now);
 
-        isRewardClaimed = false;
-        nextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();
+        IsRewardClaimed = false;
+        NextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();
 
         // set to one day before today so that the entry will be generated for the first day
-        lastCalendarOpenedTime = DateTime.Today.AddDays(-1);
+        LastCalendarOpenedTime = DateTime.Today.AddDays(-1);
     }
 }

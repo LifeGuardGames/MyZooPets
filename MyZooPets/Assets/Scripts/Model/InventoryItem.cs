@@ -1,44 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Items that are stored in the inventory
-[DoNotSerializePublic]
+//---------------------------------------------------
+// InventoryItem
+// Items that are stored in the inventory. Mutable data 
+//---------------------------------------------------
 public class InventoryItem{
-    [SerializeThis]
-    private string itemID;
-    [SerializeThis]
-    private string itemTextureName;
-    [SerializeThis]
-    private ItemType itemType;
-    [SerializeThis]
-    private int amount;
+    public string ItemID {get; set;}
+    public string ItemTextureName {get; set;}
+    public ItemType ItemType {get; set;}
+    public int Amount {get; set;}
 
-    public string ItemID{
-        get{return itemID;}
-    }
-
-    public string ItemTextureName{
-        get{return itemTextureName;}
-    }
-
-    public ItemType ItemType{
-        get{return itemType;}
-    }
-
-    public int Amount{
-        get{return amount;}
-        set{amount = value;}
-    }
-	
+    //TO DO: should problem just use ItemLogic.Instance.GetItem(itemID)	
+    //redundant method
 	public Item ItemData{
 		get{return DataItems.GetItem(ItemID);}
 	}
 
     public InventoryItem(string itemID, ItemType itemType, string textureName){
-        this.itemID = itemID;
-        this.itemType = itemType;
-        this.itemTextureName = textureName;
-        amount = 1;
+        ItemID = itemID;
+        ItemType = itemType;
+        ItemTextureName = textureName;
+        Amount = 1;
     }
 
     public InventoryItem(){}

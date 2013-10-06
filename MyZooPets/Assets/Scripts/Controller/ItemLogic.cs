@@ -94,7 +94,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			moodAmount = statDict[StatType.Mood];
 		}
 		if(statDict.ContainsKey(StatType.Health)){
-			moodAmount = statDict[StatType.Health];
+			healthAmount = statDict[StatType.Health];
 		}
 
 		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero,

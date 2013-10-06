@@ -17,7 +17,14 @@ class tk2dStaticSpriteBatcherEditor : Editor
 			allTransforms = (from t in allTransforms where t != batcher.transform select t).ToArray();
 			
 			// sort sprites, smaller to larger z
-			allTransforms = (from t in allTransforms orderby t.position.z descending select t).ToArray();
+			if (batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera)) {
+				tk2dCamera tk2dCam = tk2dCamera.CameraForLayer( batcher.gameObject.layer );
+				Camera cam = tk2dCam ? tk2dCam.camera : Camera.main;
+				allTransforms = (from t in allTransforms orderby cam.WorldToScreenPoint((t.renderer != null) ? t.renderer.bounds.center : t.position).z descending select t).ToArray();
+			}
+			else {
+				allTransforms = (from t in allTransforms orderby t.renderer.bounds.center.z descending select t).ToArray();
+			}
 			
 			// and within the z sort by material
 			if (allTransforms.Length == 0)
@@ -63,6 +70,7 @@ class tk2dStaticSpriteBatcherEditor : Editor
 					bs.type = tk2dBatchedSprite.Type.TextMesh;
 					bs.color = textmesh.color;
 					bs.baseScale = textmesh.scale;
+					bs.renderLayer = textmesh.SortingOrder;
 					bs.localScale = new Vector3(t.localScale.x * textmesh.scale.x, t.localScale.y * textmesh.scale.y, t.localScale.z * textmesh.scale.z);
 					bs.FormattedText = textmesh.FormattedText;
 
@@ -129,9 +137,9 @@ class tk2dStaticSpriteBatcherEditor : Editor
 			Vector3 p = boxCollider.center;
 			p.z = offset;
 			boxCollider.center = p;
-			p = boxCollider.extents;
-			p.z = extents;
-			boxCollider.extents = p;
+			p = boxCollider.size;
+			p.z = extents * 2;
+			boxCollider.size = p;
 		}
 	}
 	
@@ -146,10 +154,11 @@ class tk2dStaticSpriteBatcherEditor : Editor
 		bs.spriteCollection = baseSprite.Collection;
 		bs.baseScale = baseSprite.scale;
 		bs.color = baseSprite.color;
+		bs.renderLayer = baseSprite.SortingOrder;
 		if (baseSprite.boxCollider != null)
 		{
 			bs.BoxColliderOffsetZ = baseSprite.boxCollider.center.z;
-			bs.BoxColliderExtentZ = baseSprite.boxCollider.extents.z;
+			bs.BoxColliderExtentZ = baseSprite.boxCollider.size.z * 0.5f;
 		}
 		else {
 			bs.BoxColliderOffsetZ = 0.0f;
@@ -232,8 +241,11 @@ class tk2dStaticSpriteBatcherEditor : Editor
 					break;
 				}
 		}
-		baseSprite.scale = bs.baseScale;
-		baseSprite.color = bs.color;		
+		if (baseSprite != null) {
+			baseSprite.SortingOrder = bs.renderLayer;
+			baseSprite.scale = bs.baseScale;
+			baseSprite.color = bs.color;
+		}
 	}
 
 	void DrawInstanceGUI()
@@ -294,8 +306,9 @@ class tk2dStaticSpriteBatcherEditor : Editor
 					}
 					else {
 						tk2dTextMeshData tmd = batcher.allTextMeshData[bs.xRefId];
-						s.scale = bs.baseScale;
 						s.font = tmd.font;
+						s.scale = bs.baseScale;
+						s.SortingOrder = bs.renderLayer;
 						s.text = tmd.text;
 						s.color = bs.color;
 						s.color2 = tmd.color2;
@@ -332,6 +345,7 @@ class tk2dStaticSpriteBatcherEditor : Editor
 
 		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.GenerateCollider, EditorGUILayout.Toggle("Generate Collider", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.GenerateCollider)));
 		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.FlattenDepth, EditorGUILayout.Toggle("Flatten Depth", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.FlattenDepth)));
+		batcher.SetFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera, EditorGUILayout.Toggle("Sort to Camera", batcher.CheckFlag(tk2dStaticSpriteBatcher.Flags.SortToCamera)));
 
 		MeshFilter meshFilter = batcher.GetComponent<MeshFilter>();
 		MeshRenderer meshRenderer = batcher.GetComponent<MeshRenderer>();

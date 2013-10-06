@@ -35,7 +35,6 @@ GameObject:
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400018}
-  - 114: {fileID: 11400016}
   m_Layer: 0
   m_Name: Prescription
   m_TagString: Untagged
@@ -104,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.14213371, y: 2.5, z: 0}
+  m_LocalPosition: {x: 1.14213371, y: 2.5, z: -.692907333}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -283,6 +282,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
+  renderLayer: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,6 +302,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
+  renderLayer: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -332,6 +333,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
+  renderLayer: 0
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -369,21 +371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1882c8b25bb4f48b09434997f2667f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startHidden: 1
-  showOnStep: 6
-  finger: {fileID: 0}
-  clipToPlay: pinchInhaler2
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -399,6 +386,9 @@ MonoBehaviour:
   showOnStep: 6
   finger: {fileID: 0}
   clipToPlay: pinchInhaler
+  outlineTexture: {fileID: 0}
+  textObject: {fileID: 0}
+  customPlayFinger: {fileID: 0}
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -414,6 +404,9 @@ MonoBehaviour:
   showOnStep: 3
   finger: {fileID: 0}
   clipToPlay: Shake
+  outlineTexture: {fileID: 0}
+  textObject: {fileID: 0}
+  customPlayFinger: {fileID: 0}
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -429,6 +422,9 @@ MonoBehaviour:
   showOnStep: 5
   finger: {fileID: 0}
   clipToPlay: giveInhaler
+  outlineTexture: {fileID: 0}
+  textObject: {fileID: 0}
+  customPlayFinger: {fileID: 0}
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -444,6 +440,9 @@ MonoBehaviour:
   showOnStep: 1
   finger: {fileID: 0}
   clipToPlay: takeOffCap
+  outlineTexture: {fileID: 0}
+  textObject: {fileID: 0}
+  customPlayFinger: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

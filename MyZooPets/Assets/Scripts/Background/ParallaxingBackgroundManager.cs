@@ -74,7 +74,7 @@ public class ParallaxingBackgroundManager : MonoBehaviour {
 	private void SpawnAndSetNextGroup(ParallaxingBackgroundGroup inNextGroup) {
 		mTransitionPulse = TransitionLengthSeconds;
 		mNextGroup = (ParallaxingBackgroundGroup)GameObject.Instantiate(inNextGroup);
-        mNextGroup.transform.SetParent(BackgroundParent.gameObject);
+        mNextGroup.transform.parent = BackgroundParent.transform;
         mNextGroup.transform.position = BackgroundParent.transform.position + BackgroundCameraOffset;
 	}
 

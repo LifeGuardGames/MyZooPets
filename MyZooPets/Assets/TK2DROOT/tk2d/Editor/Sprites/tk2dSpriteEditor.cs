@@ -6,8 +6,6 @@ using System.Collections.Generic;
 [CustomEditor(typeof(tk2dSprite))]
 class tk2dSpriteEditor : Editor
 {
-	tk2dSpriteThumbnailCache thumbnailCache;
-	
 	// Serialized properties are going to be far too much hassle
 	private tk2dBaseSprite[] targetSprites = new tk2dBaseSprite[0];
 
@@ -30,7 +28,6 @@ class tk2dSpriteEditor : Editor
 		Transform t = spr.transform;
 		Bounds b = spr.GetUntrimmedBounds();
 		Rect localRect = new Rect(b.min.x, b.min.y, b.size.x, b.size.y);
-		Vector3 unscaledBoundsSize = sprite.untrimmedBoundsData[1];
 
 		// Draw rect outline
 		Handles.color = new Color(1,1,1,0.5f);
@@ -42,20 +39,10 @@ class tk2dSpriteEditor : Editor
 			EditorGUI.BeginChangeCheck ();
 			Rect resizeRect = tk2dSceneHelper.RectControl (999888, localRect, t);
 			if (EditorGUI.EndChangeCheck ()) {
-				Vector3 newScale = new Vector3 (resizeRect.width / unscaledBoundsSize.x, resizeRect.height / unscaledBoundsSize.y, spr.scale.z);
-				if (newScale != spr.scale) {
-					Undo.RegisterUndo (new Object[] {t, spr}, "Resize");
-					float factorX = (Mathf.Abs (spr.scale.x) > Mathf.Epsilon) ? (newScale.x / spr.scale.x) : 0.0f;
-					float factorY = (Mathf.Abs (spr.scale.y) > Mathf.Epsilon) ? (newScale.y / spr.scale.y) : 0.0f;
-					Vector3 offset = new Vector3(resizeRect.xMin - localRect.xMin * factorX,
-					                             resizeRect.yMin - localRect.yMin * factorY, 0.0f);
-					Vector3 newPosition = t.TransformPoint (offset);
-					if (newPosition != t.position) {
-						t.position = newPosition;
-					}
-					spr.scale = newScale;
-					EditorUtility.SetDirty(spr);
-				}
+				Undo.RegisterUndo (new Object[] {t, spr}, "Resize");
+				spr.ReshapeBounds(new Vector3(resizeRect.xMin, resizeRect.yMin) - new Vector3(localRect.xMin, localRect.yMin),
+					new Vector3(resizeRect.xMax, resizeRect.yMax) - new Vector3(localRect.xMax, localRect.yMax));
+				EditorUtility.SetDirty(spr);
 			}
 		}
 		// Rotate handles
@@ -65,7 +52,7 @@ class tk2dSpriteEditor : Editor
 			if (EditorGUI.EndChangeCheck()) {
 				Undo.RegisterUndo (t, "Rotate");
 				if (Mathf.Abs(theta) > Mathf.Epsilon) {
-					t.Rotate(t.forward, theta);
+					t.Rotate(t.forward, theta, Space.World);
 				}
 			}
 		}
@@ -76,11 +63,15 @@ class tk2dSpriteEditor : Editor
 
 		// Move targeted sprites
     	tk2dSceneHelper.HandleMoveSprites(t, localRect);
+
+    	if (GUI.changed) {
+    		EditorUtility.SetDirty(target);
+    	}
 	}
 
     protected T[] GetTargetsOfType<T>( Object[] objects ) where T : UnityEngine.Object {
     	List<T> ts = new List<T>();
-    	foreach (Object o in targets) {
+    	foreach (Object o in objects) {
     		T s = o as T;
     		if (s != null)
     			ts.Add(s);
@@ -90,15 +81,14 @@ class tk2dSpriteEditor : Editor
 
     protected void OnEnable()
     {
-    	thumbnailCache = new tk2dSpriteThumbnailCache();
     	targetSprites = GetTargetsOfType<tk2dBaseSprite>( targets );
     }
 	
 	void OnDestroy()
 	{
 		targetSprites = new tk2dBaseSprite[0];
-		thumbnailCache.Destroy();
-	
+
+		tk2dSpriteThumbnailCache.Done();
 		tk2dGrid.Done();
 		tk2dEditorSkin.Done();
 	}
@@ -152,7 +142,7 @@ class tk2dSpriteEditor : Editor
 					int tileSize = 128;
 					Rect r = GUILayoutUtility.GetRect(tileSize, tileSize, GUILayout.ExpandWidth(false));
 					tk2dGrid.Draw(r);
-					thumbnailCache.DrawSpriteTextureInRect(r, def, Color.white);
+					tk2dSpriteThumbnailCache.DrawSpriteTextureInRect(r, def, Color.white);
 
 					GUILayout.EndHorizontal();
 
@@ -170,6 +160,15 @@ class tk2dSpriteEditor : Editor
             		s.color = newColor;
             	}
             }
+
+			int sortingOrder = EditorGUILayout.IntField("Sorting Order In Layer", targetSprites[0].SortingOrder);
+			if (sortingOrder != targetSprites[0].SortingOrder) {
+            	Undo.RegisterUndo(targetSprites, "Sorting Order In Layer");
+            	foreach (tk2dBaseSprite s in targetSprites) {
+            		s.SortingOrder = sortingOrder;
+            	}
+			}
+
 			Vector3 newScale = EditorGUILayout.Vector3Field("Scale", targetSprites[0].scale);
 			if (newScale != targetSprites[0].scale)
 			{
@@ -382,17 +381,12 @@ class tk2dSpriteEditor : Editor
 		}
 	}
 
-	[MenuItem("CONTEXT/tk2dBaseSprite/Remove animator", true, 10001)]
-	static bool ValidateRemoveAnimator() {
-		if (Selection.activeGameObject == null) return false;
-		return Selection.activeGameObject.GetComponent<tk2dSpriteAnimator>() != null;
-	}
-	[MenuItem("CONTEXT/tk2dBaseSprite/Remove animator", false, 10001)]
+	[MenuItem("CONTEXT/tk2dBaseSprite/Add AttachPoint", false, 10002)]
 	static void DoRemoveAnimator() {
-		PerformActionOnGlobalSelection("Remove animator", delegate(GameObject go) {
-			tk2dSpriteAnimator anim = go.GetComponent<tk2dSpriteAnimator>();
-			if (anim != null) {
-				Object.DestroyImmediate(anim, true);
+		PerformActionOnGlobalSelection("Add AttachPoint", delegate(GameObject go) {
+			tk2dSpriteAttachPoint ap = go.GetComponent<tk2dSpriteAttachPoint>();
+			if (ap == null) {
+				go.AddComponent<tk2dSpriteAttachPoint>();
 			}
 		});	
 	}

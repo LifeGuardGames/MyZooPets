@@ -3,51 +3,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-[DoNotSerializePublic]
-public class DegradationData{
-    //Degradation Data
-    [SerializeThis]
-    private DateTime lastTimeUserPlayedGame; //last time that the user opened the game
-    [SerializeThis]
-    private List<DegradData> degradationTriggers; //list of degradation triggers that are currently in game
-    [SerializeThis]
-    private bool firstTimeDegradTrigger; //first time the user has clicked on an asthma trigger
-    [SerializeThis]
-    private bool morningTrigger; //True: spawn asthma trigger in morning, False: don't
-    [SerializeThis]
-    private bool afternoonTrigger; //True: spawn asthma trigger in afternoon, False: don't
+//---------------------------------------------------
+// DegradationData 
+// Save data for degradation. Mutable data 
+//---------------------------------------------------
 
-    //===============Getters & Setters=================
-    public DateTime LastTimeUserPlayedGame{
-        get{return lastTimeUserPlayedGame;}
-        set{lastTimeUserPlayedGame = value;}
-    }
-    public List<DegradData> DegradationTriggers{
-        get{return degradationTriggers;}
-        set{degradationTriggers = value;}
-    }
-    public bool FirstTimeDegradTrigger{
-        get{return firstTimeDegradTrigger;}
-        set{firstTimeDegradTrigger = value;}
-    }
-    public bool MorningTrigger{
-        get{return morningTrigger;}
-        set{morningTrigger = value;}
-    }
-    public bool AfternoonTrigger{
-        get{return afternoonTrigger;}
-        set{afternoonTrigger = value;}
-    }
-    public bool UseDummyData{get; set;} //initialize with test data
+public class DegradationData{
+    public DateTime LastTimeUserPlayedGame {get; set;} //last time that the user opened the game
+    public List<DegradData> DegradationTriggers {get; set;} //list of degradation triggers that are currently in game
+    public bool FirstTimeDegradTrigger {get; set;} //first time the user has clicked on an asthma trigger
+    public bool MorningTrigger {get; set;} //True: spawn asthma trigger in morning, False: don't
+    public bool AfternoonTrigger {get; set;} //True: spawn asthma trigger in afternoon, False: don't
 
     //================Initialization============
     public DegradationData(){}
 
     public void Init(){
-       lastTimeUserPlayedGame = DateTime.Now;
-        degradationTriggers = new List<DegradData>();
-        firstTimeDegradTrigger = true;
-        morningTrigger = true;
-        afternoonTrigger = true; 
+        LastTimeUserPlayedGame = DateTime.Now;
+        DegradationTriggers = new List<DegradData>();
+        FirstTimeDegradTrigger = true;
+        MorningTrigger = true;
+        AfternoonTrigger = true; 
     }
 }

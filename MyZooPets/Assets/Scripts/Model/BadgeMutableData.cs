@@ -3,86 +3,87 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//Save the data for badges. Unlock progress and isUnlocked?
+//---------------------------------------------------
+// BadgeMutableData 
+// Save the data for badges. Mutable data
+//---------------------------------------------------
 
-[DoNotSerializePublic]
 public class BadgeMutableData{
-    private struct Status{
-        public bool isUnlocked;
-        public bool isNew;
+    public class Status{
+        public bool IsUnlocked {get; set;}
+        public bool IsNew {get; set;}
+
+        public Status(){}
 
         public Status(bool isUnlocked, bool isNew){
-            this.isUnlocked = isUnlocked;
-            this.isNew = isNew;
+            IsUnlocked = isUnlocked; 
+            IsNew = isNew; 
         }
     }
 
-    [SerializeThis]
-    private Dictionary<string, Status> badgeStatus; //Key: Badge ID, Value: instance of status
-    [SerializeThis]
-    private Dictionary<string, int> singleBadgeUnlockProgress; //Key: Badge ID, Value: data to check with Badge's unlock condition
-    [SerializeThis]
-    private Dictionary<BadgeType, int> seriesBadgeUnlockProgress; //Key: Badge type, Value: data to check with badges' unlock condition
+    public Dictionary<string, Status> BadgeStatus {get; set;} //Key: Badge ID, Value: instance of status
+    public Dictionary<string, int> SingleUnlockProgress {get; set;} //Key: Badge ID, Value: data to check with Badge's unlock condition
+    public Dictionary<BadgeType, int> SeriesBadgeUnlockProgress {get; set;} //Key: Badge type, Value: data to check with badges' unlock condition
                                                                 //series Badge are accumulative. For example, the level badges are awarded
                                                                 //at level 1, 5, 10, 15, 20. Even though all the level badges have their own
                                                                 //badge id they are considered as the same type
 
     public void UpdateBadgeStatus(string badgeID, bool isUnlocked, bool isNew){
-        if(badgeStatus.ContainsKey(badgeID)){
-            Status status = badgeStatus[badgeID];
-            status.isUnlocked = isUnlocked;
-            status.isNew = isNew;
-            badgeStatus[badgeID] = status;
+        if(BadgeStatus.ContainsKey(badgeID)){
+            Status status = BadgeStatus[badgeID];
+            status.IsUnlocked = isUnlocked;
+            status.IsNew = isNew;
+            BadgeStatus[badgeID] = status;
         }else{
             Status status = new Status(isUnlocked, isNew);
-            badgeStatus.Add(badgeID, status);
+            BadgeStatus.Add(badgeID, status);
         }
     }
 
     public void UpdateSingleUnlockProgress(string badgeID, int progress){
-        if(singleBadgeUnlockProgress.ContainsKey(badgeID)){
-            singleBadgeUnlockProgress[badgeID] = progress;
+        if(SingleUnlockProgress.ContainsKey(badgeID)){
+            SingleUnlockProgress[badgeID] = progress;
         }else{
-            singleBadgeUnlockProgress.Add(badgeID, progress);
+            SingleUnlockProgress.Add(badgeID, progress);
         }
     }
 
     public void UpdateSeriesUnlockProgress(BadgeType type, int progress){
-        if(seriesBadgeUnlockProgress.ContainsKey(type)){
-            seriesBadgeUnlockProgress[type] = progress;
+        if(SeriesBadgeUnlockProgress.ContainsKey(type)){
+            SeriesBadgeUnlockProgress[type] = progress;
         }else{
-            seriesBadgeUnlockProgress.Add(type, progress);
+            SeriesBadgeUnlockProgress.Add(type, progress);
         }
     }
 
     public bool GetIsUnlocked(string badgeID){
         bool retVal = false;
-        if(badgeStatus.ContainsKey(badgeID)){
-            retVal = badgeStatus[badgeID].isUnlocked;
+        if(BadgeStatus.ContainsKey(badgeID)){
+            retVal = BadgeStatus[badgeID].IsUnlocked;
         }
         return retVal;
     }
 
     public bool GetIsNew(string badgeID){
         bool retVal = false;
-        if(badgeStatus.ContainsKey(badgeID)){
-            retVal = badgeStatus[badgeID].isNew;
+        if(BadgeStatus.ContainsKey(badgeID)){
+            retVal = BadgeStatus[badgeID].IsNew;
         }
         return retVal;
     }
 
     public int GetSingleUnlockProgress(string badgeID){
         int retVal = 0;
-        if(singleBadgeUnlockProgress.ContainsKey(badgeID)){
-            retVal = singleBadgeUnlockProgress[badgeID];
+        if(SingleUnlockProgress.ContainsKey(badgeID)){
+            retVal = SingleUnlockProgress[badgeID];
         }
         return retVal;
     }
 
     public int GetSeriesUnlockProgress(BadgeType type){
         int retVal = 0;
-        if(seriesBadgeUnlockProgress.ContainsKey(type)){
-            retVal = seriesBadgeUnlockProgress[type];
+        if(SeriesBadgeUnlockProgress.ContainsKey(type)){
+            retVal = SeriesBadgeUnlockProgress[type];
         }
         return retVal;
     }
@@ -91,8 +92,8 @@ public class BadgeMutableData{
     public BadgeMutableData(){}
 
     public void Init(){
-        badgeStatus = new Dictionary<string, Status>();
-        singleBadgeUnlockProgress = new Dictionary<string, int>();
-        seriesBadgeUnlockProgress = new Dictionary<BadgeType, int>();
+        BadgeStatus = new Dictionary<string, Status>();
+        SingleUnlockProgress = new Dictionary<string, int>();
+        SeriesBadgeUnlockProgress = new Dictionary<BadgeType, int>();
     }
 }

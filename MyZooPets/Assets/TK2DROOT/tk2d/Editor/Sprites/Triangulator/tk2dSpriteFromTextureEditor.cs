@@ -4,21 +4,6 @@ using UnityEditor;
 [CustomEditor(typeof(tk2dSpriteFromTexture))]
 class tk2dSpriteFromTextureEditor : Editor {
 
-	void SpriteCollectionSizeField(tk2dSpriteCollectionSize spriteCollectionSize) {
-		GUIContent sc = new GUIContent("Sprite Collection Size", null, "The resolution this sprite will be pixel perfect at");
-		spriteCollectionSize.type = (tk2dSpriteCollectionSize.Type)EditorGUILayout.EnumPopup(sc, spriteCollectionSize.type);
-		if (spriteCollectionSize.type == tk2dSpriteCollectionSize.Type.Explicit) {
-			EditorGUI.indentLevel++;
-			EditorGUILayout.LabelField("Resolution", "");
-			EditorGUI.indentLevel++;
-			spriteCollectionSize.width = EditorGUILayout.IntField("Width", (int)spriteCollectionSize.width);
-			spriteCollectionSize.height = EditorGUILayout.IntField("Height", (int)spriteCollectionSize.height);
-			EditorGUI.indentLevel--;
-			spriteCollectionSize.orthoSize = EditorGUILayout.FloatField("Ortho Size", spriteCollectionSize.orthoSize);
-			EditorGUI.indentLevel--;
-		}
-	}
-
 	public override void OnInspectorGUI() {
 		tk2dSpriteFromTexture target = (tk2dSpriteFromTexture)this.target;
 		EditorGUIUtility.LookLikeInspector();
@@ -38,7 +23,7 @@ class tk2dSpriteFromTextureEditor : Editor {
 
 		if (texture != null) {
 			anchor = (tk2dBaseSprite.Anchor)EditorGUILayout.EnumPopup("Anchor", target.anchor);
-			SpriteCollectionSizeField( spriteCollectionSize );
+			tk2dGuiUtility.SpriteCollectionSize(spriteCollectionSize);
 		}
 
 		if (EditorGUI.EndChangeCheck()) {
@@ -69,7 +54,11 @@ class tk2dSpriteFromTextureEditor : Editor {
 		go.AddComponent<tk2dSprite>();
 		tk2dSpriteFromTexture sft = go.AddComponent<tk2dSpriteFromTexture>();
 		if (tex != null) {
-			sft.Create( new tk2dSpriteCollectionSize(), tex, tk2dBaseSprite.Anchor.MiddleCenter );
+			tk2dSpriteCollectionSize scs = tk2dSpriteCollectionSize.Default();
+			if (tk2dCamera.Instance != null) {
+				scs = tk2dSpriteCollectionSize.ForTk2dCamera(tk2dCamera.Instance);
+			}
+			sft.Create( scs, tex, tk2dBaseSprite.Anchor.MiddleCenter );
 		}
 		Selection.activeGameObject = go;
 		Undo.RegisterCreatedObjectUndo(go, "Create Sprite From Texture");

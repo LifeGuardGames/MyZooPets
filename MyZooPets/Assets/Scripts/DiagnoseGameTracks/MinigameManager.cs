@@ -43,6 +43,29 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	private int nLives;
 	public int nStartingLives;
 	
+	// tutorial stuff
+	private MinigameTutorial tutorial;
+	public bool IsTutorial() {
+		return tutorial != null;
+	}
+	protected void SetTutorial( MinigameTutorial tutorial ) {
+		this.tutorial = tutorial;
+		
+		this.tutorial.OnTutorialEnd += TutorialEnded;
+	}	
+	protected MinigameTutorial GetTutorial() {
+		return tutorial;	
+	}
+	
+	// is there a tutorial override? i.e. tutorial has already been played but the user wants to see it again
+	private bool bTutorialOverride;
+	protected bool IsTutorialOverride() {
+		return bTutorialOverride;	
+	}
+	protected void SetTutorialOverride( bool bOverride ) {
+		bTutorialOverride = bOverride;
+	}	
+	
 	// the state of this minigame
 	private MinigameStates eCurrentState = MinigameStates.Opening;
 	private void SetGameState( MinigameStates eNewState ) {
@@ -97,6 +120,17 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	}
 	
 	protected virtual void _Start() {
+		// children implement	
+	}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------	
+	void OnDestroy() {
+		_OnDestroy();	
+	}
+	
+	protected virtual void _OnDestroy() {
 		// children implement	
 	}
 	
@@ -207,8 +241,36 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		if ( goPaused.GetComponent<PositionTweenToggle>().IsShowing )
 			ToggleUI( goPaused, false );
 		
+		if ( IsTutorial() ) {
+			tutorial.Abort();
+			tutorial = null;	
+		}
+		
 		NewGame();
 	}
+	
+	//---------------------------------------------------
+	// TutorialEnded()
+	// When the tutorial for this minigame ends.
+	//---------------------------------------------------	
+	private void TutorialEnded( object sender, TutorialEndEventArgs args ) {
+		// if the tutorial did not get finished; don't do anything 
+		if ( !args.DidFinish() )
+				return;
+		
+		// set the game to over so that it restarts properly
+		// cheat a little bit and DONT use SetGameState() because we don't want the usual stuff to happen
+		eCurrentState = MinigameStates.GameOver;
+		
+		// set the tutorial to null
+		tutorial = null;
+		
+		// turn the override off (in case it was on)
+		SetTutorialOverride( false );
+		
+		// then just restart the game
+		RestartGame();
+	}	
 	
 	//---------------------------------------------------
 	// Quit()
@@ -315,4 +377,13 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		// hide the game paused UI
 		ToggleUI( goPaused, false );
 	}	
+	
+	//---------------------------------------------------
+	// HowToPlay()
+	// The user has manually turned the tutorial back on.
+	//---------------------------------------------------		
+	private void HowToPlay() {
+		SetTutorialOverride( true );
+		StartGame();
+	}
 }

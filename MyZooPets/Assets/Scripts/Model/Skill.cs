@@ -3,6 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//---------------------------------------------------
+// Skill 
+// skill data that is used during game. Contains a mix
+// of mutable and immutable data 
+//---------------------------------------------------
 public class Skill{
     private string id;
     private string name;
@@ -35,10 +40,10 @@ public class Skill{
         get{return damagePoint;}
     }
     public bool IsUnlocked{
-        get{return DataManager.Instance.Dojo.GetIsUnlocked(id);}
+        get{return DataManager.Instance.GameData.Dojo.GetIsUnlocked(id);}
     }
     public bool IsPurchased{
-        get{return DataManager.Instance.Dojo.GetIsPurchased(id);}
+        get{return DataManager.Instance.GameData.Dojo.GetIsPurchased(id);}
     }
 
     public Skill(string id, Hashtable hashItemData){

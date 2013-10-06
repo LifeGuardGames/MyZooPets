@@ -18,7 +18,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private bool changePage;
 	private string currentPage;
 	private int page;
-	private UISprite uisprite;
 	private GameObject grid;
 
 	void Awake(){
@@ -26,7 +25,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	void Start (){
-		uisprite = GameObject.Find("BuyingAreaBackground").GetComponent<UISprite>();
 		CreateItems(FirstPageTag);
 	}
 
@@ -110,7 +108,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void OnBuyButton(GameObject button){
 		string itemID = button.transform.parent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
-		if(DataManager.Instance.Stats.Stars >= itemData.Cost){
+		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(itemData, button.transform.parent.FindChild("ItemTexture").gameObject);

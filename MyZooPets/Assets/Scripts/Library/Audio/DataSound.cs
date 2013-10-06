@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//---------------------------------------------------
+// DataSound
+// Individual piece of sound data as loaded from xml.
+// Considered to be immutable.
+//---------------------------------------------------
+
 public class DataSound {
 
 	// id of the sound (must match sound in the resources folder)

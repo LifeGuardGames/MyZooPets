@@ -14,7 +14,7 @@ public class PopupNotificationTutorial: PopupNotificationNGUI {
 	public GameObject calendarTutorialMessage;
 
 	void Awake(){
-		buttonHintArrow.active = false;
+		buttonHintArrow.SetActive(false);
 	}
 
 	public void SetButtonText(string text){
@@ -25,11 +25,11 @@ public class PopupNotificationTutorial: PopupNotificationNGUI {
 	public void SetContent(TutorialImageType imageType){
 		string spriteName = "";
 		switch(imageType){
-			case TutorialImageType.CalendarIntro: 
+			case TutorialImageType.CalendarIntro:
 				spriteName = "tutorialCalendar0"; 
-				calendarTutorialMessage.active = true;
+				calendarTutorialMessage.SetActive(true);
 				calendarTutorialMessage.transform.Find("Label_PetName").GetComponent<UILabel>().
-					text = DataManager.Instance.PetName;
+					text = DataManager.Instance.GameData.PetInfo.PetName;
 			break;
 			case TutorialImageType.CalendarGreenStamp: spriteName = "tutorialCalendar1"; break;
 			case TutorialImageType.CalendarRedStamp: spriteName = "tutorialCalendar2"; break;

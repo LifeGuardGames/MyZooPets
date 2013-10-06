@@ -143,5 +143,36 @@ public enum Preferences {
 // pet anim states
 public enum PetAnimStates {
 	Idling,
-	Walking
+	Walking,
+	Transitioning,
+	BreathingFire
+}
+
+// mood states
+// Any must come last, if anyone adds new mood states
+public enum PetMoods {
+	Happy,
+	Sad,
+	Any
+}
+
+// health states
+// Joe: I decided not to map these to the asthma stages because I felt they were more unique, and we might possibly want
+// to expand then one day.
+public enum PetHealthStates {
+	Healthy,
+	Sick,
+	VerySick
+}
+
+// direction used in moving and gating
+public enum RoomDirection {
+    Left,
+    Right
+}
+
+// click lock exceptions...uh...I feel like this is setting a bad precedent
+public enum ClickLockExceptions{
+	None,
+	Moving
 }

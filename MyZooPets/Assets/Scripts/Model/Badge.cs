@@ -3,6 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//---------------------------------------------------
+// Badge 
+// Badge data that is used during game. Contains a mix
+// of mutable and immutable data 
+//---------------------------------------------------
+
 public class Badge{
     private string id;
     private string name;
@@ -35,11 +41,11 @@ public class Badge{
     } 
     //Is badge unlocked?
     public bool IsUnlocked{
-        get{return DataManager.Instance.Badge.GetIsUnlocked(id);}
+        get{return DataManager.Instance.GameData.Badge.GetIsUnlocked(id);}
     }
     //Is badge new?
     public bool IsNew{
-        get{return DataManager.Instance.Badge.GetIsNew(id);}
+        get{return DataManager.Instance.GameData.Badge.GetIsNew(id);}
     }
 
     public Badge(string id, Hashtable hashItemData){

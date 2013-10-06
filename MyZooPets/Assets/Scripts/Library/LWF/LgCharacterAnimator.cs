@@ -6,6 +6,16 @@ using System.Collections;
 //---------------------------------------------------
 
 public class LgCharacterAnimator : LWFAnimator {
+	// I don't trust the LWFAnimatoro OR LWFObject, so I'm creating a custom way of knowing if an animation is finished or not
+	private bool bAnimating = false;
+	public bool IsAnimating() {
+		return bAnimating;	
+	}
+	protected
+	void SetAnimating( bool b ) {
+		bAnimating = b;	
+	}
+	
 	//---------------------------------------------------
 	// IsBusy()
 	// Is this character busy?  i.e. is it playing an
@@ -31,15 +41,22 @@ public class LgCharacterAnimator : LWFAnimator {
 		if ( clipCurrent != null && clipCurrent.clipName == _clipName )
 			return;
 		
+		// -- Note by Joe
+		// I decided to bail out on the below code because of the complexity it would introduce.  It's now up to the scripts
+		// to do their own checking and controlling of this.
+		
 		// a final failsafe; before we play a clip, if there is a clip currently playing and it is uninterruptable, bail out.
 		// show a debug message because this should not be happening...the responsibility of the caller is to check first.
-		if ( IsBusy() ) {
-			Debug.Log("Trying to play clip " + _clipName + " but " + clipCurrent.clipName + " is not interruptable.  Check first.");
-			return;
-		}
+		//if ( IsBusy() ) {
+		//	Debug.Log("Trying to play clip " + _clipName + " but " + clipCurrent.clipName + " is not interruptable.  Check first.");
+		//	return;
+		//}
 		
 		// characters should only be playing one movie at a time
 		DetachAllMovies();		
+		
+		// the character is now animating
+		SetAnimating( true );
 		
 		base.PlayClip( _clipName );
 	}
@@ -63,4 +80,19 @@ public class LgCharacterAnimator : LWFAnimator {
 		else
 			transform.parent.localScale = new Vector3(1f, 1f, 1f);	
 	}	
+	
+	//---------------------------------------------------
+	// ClipFinished()
+	//---------------------------------------------------		
+	protected override void ClipFinished() {
+		// the clip is finished; we are done animating
+		SetAnimating( false );
+		
+		// have children do their thing
+		_ClipFinished();
+	}	
+	
+	protected virtual void _ClipFinished() {
+		// child should implement this
+	}
 }

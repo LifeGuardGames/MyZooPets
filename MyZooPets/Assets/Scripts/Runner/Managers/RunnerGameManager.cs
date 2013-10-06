@@ -101,10 +101,11 @@ public class RunnerGameManager : MonoBehaviour {
         else
             Debug.LogError("Could not find an object named 'ItemManager'");
 		
-		if ( DataManager.Instance.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
 			ShowCutscene();
 			GameRunning = false;	
-		}		
+		}else
+            GameRunning = true;    
 	}
 	
 	//---------------------------------------------------
@@ -112,14 +113,14 @@ public class RunnerGameManager : MonoBehaviour {
 	//---------------------------------------------------	
 	private void ShowCutscene() {
 		GameObject resourceMovie = Resources.Load("Cutscene_Runner") as GameObject;
-		GameObject goMovie = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
 		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
 	}
 	
     private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.Cutscenes.ListViewed.Add("Cutscene_Runner");	
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Runner");	
 		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-		GameRunning = true;
+        GameRunning = true;
     }	
 	
 	// Update is called once per frame

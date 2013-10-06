@@ -7,23 +7,14 @@ using System.Collections.Generic;
 // Save data script for cutscenes.
 //---------------------------------------------------
 
-[DoNotSerializePublic]
 public class CutsceneData{
-    
-    [SerializeThis]
-    private List<string> listViewed;
-	
-    //===============Getters & Setters=================
-    public List<string> ListViewed {
-        get{return listViewed;}
-        set{listViewed = value;}
-    }
+    public List<string> ListViewed {get; set;}
 
     //=======================Initialization==================
     public CutsceneData(){}
 
     //Populate with dummy data
     public void Init(){
-        listViewed = new List<string>();
+        ListViewed = new List<string>();
     }
 }

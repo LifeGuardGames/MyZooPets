@@ -76,7 +76,7 @@ public class LevelManager : MonoBehaviour
                 }
 
 				// Destroy it
-                removedLevelComponent.DestroyWithoutCache();
+                removedLevelComponent.DestroyAndCache();
 
 				// GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
@@ -106,7 +106,7 @@ public class LevelManager : MonoBehaviour
         LevelComponent currentComponent;
         while (mLevelComponentQueue.Count > 0) { 
             currentComponent = mLevelComponentQueue.Dequeue();
-            currentComponent.DestroyWithoutCache();
+            currentComponent.DestroyAndCache();
         }
 
         // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?

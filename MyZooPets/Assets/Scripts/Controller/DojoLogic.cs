@@ -50,6 +50,10 @@ public class DojoLogic : Singleton<DojoLogic> {
         DataManager.Instance.Dojo.UpdateSkillStatus(skillID, true, true);
     }
 
+    private void CheckForUnlockSkills(){
+        
+    }
+
     //Select list from dictionary and sort by unlocklevel
     private List<Skill> SelectListFromDictionaryAndSort(Dictionary<string, Skill> skillDict){
         var skills = from keyValuePair in skillDict

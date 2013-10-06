@@ -29,6 +29,10 @@ public class LevelComponent : MonoBehaviour {
     private List<Bundle> mBundles = new List<Bundle>();
 
 	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
+	
+	// When the game runs and spawns a group, each group will grab a list of bottom most layers.
+	//@TODO do this once, for the group templates, at runtime.
+	private List<GameObject> mBottomLayers = new List<GameObject>();
 
 	public List<PointGroup> PointGroups { get { return mPointGroups; } }
     public List<Bundle> Bundles { get { return mBundles; } }
@@ -36,29 +40,22 @@ public class LevelComponent : MonoBehaviour {
 		get;
 		set;
 	}
+	public List<GameObject> BottomLayers { get { return mBottomLayers; } }
 
 	// Use this for initialization.
 	void Start() {
+		// FindBottomLayers();
 	}
 
 	// Update is called once per frame.
 	void Update() {
 	}
 
-    // public void DestroyAndCache(){
-    //     ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
-    //     foreach (RunnerItem currentItem in mSpawnedItems) {
-    //         if (currentItem != null) {
-    //             itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
-    //         }
-    //     }
-    //     DestroyWithoutCache();
-    // }
-
-    public void DestroyWithoutCache(){
+    public void DestroyAndCache(){
+        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
         foreach (RunnerItem currentItem in mSpawnedItems) {
             if (currentItem != null) {
-                GameObject.Destroy(currentItem);
+                itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
             }
         }
         GameObject.Destroy(this.gameObject);
@@ -154,6 +151,22 @@ public class LevelComponent : MonoBehaviour {
             mBundles.Add(bundleToModify);
         }
     }
+	
+	// private void FindBottomLayers(){
+	// 	mBottomLayers.Clear();
+	// 	FindBottomLayers(transform);
+	// }
+	
+	// private void FindBottomLayers(Transform inCurrentTransform){
+	// 	if (currentChild != null){
+	// 		LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
+	// 		foreach (Transform currentChild in inCurrentTransform) {
+	// 			if (currentChild.gameObject.layer == levelManager.BottomLayer)
+	// 				mBottomLayers.Add(currentChild.gameObject);
+	// 			FindBottomLayers(currentChild);
+	// 		}
+	// 	}
+	// }
 }
 
 [System.Serializable]

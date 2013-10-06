@@ -12,6 +12,8 @@ GameObject:
   - 114: {fileID: 11400014}
   - 114: {fileID: 11400012}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11400020}
+  - 114: {fileID: 11400022}
   m_Layer: 0
   m_Name: Rescue
   m_TagString: Untagged
@@ -32,6 +34,8 @@ GameObject:
   - 114: {fileID: 11400002}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400018}
+  - 114: {fileID: 11400016}
   m_Layer: 0
   m_Name: Prescription
   m_TagString: Untagged
@@ -71,6 +75,7 @@ GameObject:
   - 114: {fileID: 11400008}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400024}
   m_Layer: 0
   m_Name: Cap
   m_TagString: Untagged
@@ -364,6 +369,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1882c8b25bb4f48b09434997f2667f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHidden: 1
+  showOnStep: 6
+  finger: {fileID: 0}
+  clipToPlay: pinchInhaler2
+--- !u!114 &11400018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHidden: 1
+  showOnStep: 6
+  finger: {fileID: 0}
+  clipToPlay: pinchInhaler
+--- !u!114 &11400020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHidden: 1
+  showOnStep: 3
+  finger: {fileID: 0}
+  clipToPlay: Shake
+--- !u!114 &11400022
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHidden: 1
+  showOnStep: 5
+  finger: {fileID: 0}
+  clipToPlay: giveInhaler
+--- !u!114 &11400024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad68e9a8d68be4799b3d6ba20dbe24fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHidden: 1
+  showOnStep: 1
+  finger: {fileID: 0}
+  clipToPlay: takeOffCap
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

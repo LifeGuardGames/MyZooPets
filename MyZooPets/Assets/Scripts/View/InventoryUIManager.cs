@@ -46,11 +46,12 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
         bool dropOnTarget = false;
         if(isDebug){
-            if(e.TargetCollider.name == "Cube") dropOnTarget = true;
+            if(e.TargetCollider && e.TargetCollider.name == "Cube") dropOnTarget = true;
         }else{
-             if(e.TargetCollider.name == "SpritePet" ||
+             if(e.TargetCollider && 
+				( e.TargetCollider.name == "SpritePet" ||
                 e.TargetCollider.name == "Head" ||
-                e.TargetCollider.name == "Tummy") dropOnTarget = true;
+                e.TargetCollider.name == "Tummy") ) dropOnTarget = true;
         }
 
         if(dropOnTarget){

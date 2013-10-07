@@ -19,9 +19,12 @@ public class DGTManager : MinigameManager<DGTManager> {
 	
 	// speed of the tracks
 	public float fStartingSpeed;
+	public float fMaxSpeed;
 	private float fCurrentSpeed;
-	public float GetSpeed() {
-		return fCurrentSpeed;	
+	public float GetSpeed( bool bMax = false ) {
+		float fSpeed = bMax ? fMaxSpeed : fCurrentSpeed;
+		
+		return fSpeed;	
 	}
 	
 	// gameplay variables
@@ -128,7 +131,8 @@ public class DGTManager : MinigameManager<DGTManager> {
 		
 		// if a tutorial is happening, just set the speed to starting speed...this is in case the track was stopped
 		// because the player didn't switch the tracks quick enough
-		SetTrackSpeed( fStartingSpeed );
+		if ( IsTutorial() )
+			SetTrackSpeed( fStartingSpeed );
 		
 		// the zone changed, so play a sound (only if there was a valid zone before though)
 		if ( goSelectedZone != null )

@@ -101,11 +101,15 @@ public class RunnerGameManager : MonoBehaviour {
         else
             Debug.LogError("Could not find an object named 'ItemManager'");
 		
+		/*
 		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
 			ShowCutscene();
 			GameRunning = false;	
 		}else
-            GameRunning = true;    
+            GameRunning = true;
+		*/
+		
+		GameRunning = true;  
 	}
 	
 	//---------------------------------------------------

@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
     private Vector3 mLastCenterPosition;
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
+	private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
 
 	// Use this for initialization
 	void Start() {
@@ -91,6 +92,8 @@ public class LevelManager : MonoBehaviour
 
             TransitionToRandomNewLevelGroup();
 		}
+		
+		UpdateInvincibility();
     }
 
     public void Reset() {
@@ -111,6 +114,7 @@ public class LevelManager : MonoBehaviour
 
         // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
         PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
         PushAndInstantiateRandomComponent();
         LevelComponent nextLevel;
         nextLevel = PushAndInstantiateRandomComponent();
@@ -120,6 +124,77 @@ public class LevelManager : MonoBehaviour
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
     }
+	
+	//@HACK there is a lot of room for optimization here. IF it needs to be.
+	// The bottom layers can be cached out
+	// The order of them can be cached out and manag
+	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
+	private void UpdateInvincibility() {
+		PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+		if (player.Invincible) {
+			Debug.Log("asfafas");
+			// Get all lowest components
+			List<GameObject> allLowestObjects = new List<GameObject>();
+			foreach (LevelComponent currentComponent in mLevelComponentQueue) {
+				List<GameObject> currentLowestObjects = currentComponent.BottomLayers;
+				allLowestObjects.AddRange(currentLowestObjects);
+			}
+			
+			if (allLowestObjects.Count > 1) {
+				// Sort
+				allLowestObjects.Sort(delegate(GameObject g1, GameObject g2) {
+					if (g1.transform.position.z < g2.transform.position.z)
+						return -1;
+					else if (g1.transform.position.z > g2.transform.position.z)
+						return 1;
+					else
+						return 0;
+				});
+				
+				// Attempt to spawn items between it all
+				for (int lowestIndex = 1; lowestIndex < allLowestObjects.Count; lowestIndex++) {
+					GameObject leftObject = allLowestObjects[lowestIndex - 1];
+					GameObject rightObject = allLowestObjects[lowestIndex];
+					Vector3 leftObjectRightPoint = leftObject.collider.ClosestPointOnBounds(rightObject.collider.bounds.max);
+					Vector3 rightObjectRightPoint = rightObject.collider.ClosestPointOnBounds(leftObject.collider.bounds.max);
+					
+					// Vector that goes between the points
+					Vector3 betweenVector = rightObjectRightPoint - leftObjectRightPoint;
+					Vector3 midPoint = leftObjectRightPoint + (betweenVector * 0.5f);
+					
+					if (!mBetweenInvinciblePlatforms.ContainsKey(midPoint)) {
+						// No object exists, create one
+						GameObject betweenPlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						// Position
+						betweenPlatform.transform.position = midPoint;
+						
+						// Scale
+						//BoxCollider collider = (BoxCollider)betweenPlatform.collider;
+						//Vector3 colliderSize = collider.size;
+						//colliderSize.z = betweenVector.magnitude;
+						//collider.size = colliderSize;
+						Vector3 scale = betweenPlatform.transform.localScale;
+						scale.z = betweenVector.magnitude;
+						betweenPlatform.transform.localScale = scale;
+						
+						// Angle
+						float angleBetween = Vector3.Angle(betweenVector, Vector3.forward);
+						Quaternion newAngle = new Quaternion();
+						newAngle.eulerAngles = new Vector3(angleBetween, 0f, 0f);
+						betweenPlatform.transform.rotation = newAngle;
+						
+						// Add to the list
+						mBetweenInvinciblePlatforms[midPoint] = betweenPlatform;
+					}
+				}
+			}
+		} else {
+			foreach (GameObject currentObject in mBetweenInvinciblePlatforms.Values) {
+				GameObject.Destroy(currentObject);
+			}
+			mBetweenInvinciblePlatforms.Clear();
+		}
+	}
 
     private void TransitionToRandomNewLevelGroup() {
         // Cut to a new, different level that has the proper level ID.

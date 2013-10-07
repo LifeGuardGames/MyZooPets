@@ -465,7 +465,7 @@ public class RunnerLevelEditor : EditorWindow
 
         // Generate a new transform
         GameObject selectedPoint = new GameObject("point" + inIndex);
-        selectedPoint.transform.SetParent(inSelectedLevel.gameObject);
+        selectedPoint.transform.parent = inSelectedLevel.transform;
         selectedPoint.transform.position = (mLastSelectedPointInfo.mPosition + inSelectedLevel.transform.position);
 		mLastSelectedObject = selectedPoint;
 

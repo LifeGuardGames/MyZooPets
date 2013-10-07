@@ -18,7 +18,7 @@ public class DataManager : Singleton<DataManager>{
     private bool firstTime; //Is the user playing for the first time
     private int numOfPets; //Number of pets saved on this device
     public string currentPetID; //The id that will be used for pet serialization
-    private bool loaded = false; //Has the data been deserialized
+    //private bool loaded = false; //Has the data been deserialized
 
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 

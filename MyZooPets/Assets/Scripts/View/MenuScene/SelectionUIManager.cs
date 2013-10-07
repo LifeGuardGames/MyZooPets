@@ -2,17 +2,19 @@
 using System.Collections;
 using System;
 
-public class SelectionUIManager : Singleton<SelectionUIManager> {
+public class SelectionUIManager : SingletonUI<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab;
-
+	
+	public TweenToggle petSelectionAreaTween;
+	
     private string selectedPetID;
 
 	// Use this for initialization
 	void Start () {
         InitializeSelection();	
 	}
-    
+	
     private void InitializeSelection(){
         int numOfPets = DataManager.Instance.NumOfPets;
         print(numOfPets);
@@ -56,14 +58,22 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }
         }
     }
-
+	
+	protected override void _OpenUI(){
+		petSelectionAreaTween.Show();
+	}
+	
+	protected override void _CloseUI(){
+		petSelectionAreaTween.Hide();
+	}
+	
     private void EnterGameAfterGameDataDeserialized(object sender, EventArgs args){
         LoadScene();
         
         //Unregister itself from the event
         DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
     }
-
+	
     private void LoadScene(){
         GetComponent<SceneTransition>().StartTransition();
     }

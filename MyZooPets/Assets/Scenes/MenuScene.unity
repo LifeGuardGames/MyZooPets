@@ -1601,6 +1601,10 @@ Prefab:
       propertyPath: mColor.b
       value: .118728399
       objectReference: {fileID: 0}
+    - target: {fileID: 11400056, guid: 65f73940970334ba8889654290088589, type: 2}
+      propertyPath: mColor.a
+      value: .784313738
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65f73940970334ba8889654290088589, type: 2}
   m_RootGameObject: {fileID: 1130294046}
@@ -1630,7 +1634,7 @@ Transform:
   m_PrefabInternal: {fileID: 636769432}
   m_GameObject: {fileID: 466856161}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -370, z: 0}
+  m_LocalPosition: {x: 0, y: -370, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 755084863}
@@ -1708,7 +1712,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 0
+    e23: 5
     e30: 0
     e31: 0
     e32: 0
@@ -2054,7 +2058,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: LANGUAGE
+  key: AUDIO
 --- !u!114 &609908858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,7 +2106,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2184,6 +2188,18 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 326323865}
+    - target: {fileID: 11400008, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
+      propertyPath: functionName
+      value: CloseUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
+      propertyPath: mColor.a
+      value: .784313738
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400114, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
+      propertyPath: key
+      value: AUDIO
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26c608ac1bfa74cfbb5bd20aeb75becd, type: 2}
   m_RootGameObject: {fileID: 466856161}
@@ -2707,7 +2723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 326323865}
-  functionName: _CloseUI
+  functionName: CloseUI
   trigger: 0
   includeChildren: 0
 --- !u!114 &755084865
@@ -3928,8 +3944,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d2e34060b1e4cd3a08359e7644ff23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockGUI: 0
+  eModeType: 0
   selectionGrid: {fileID: 2146989774}
   petSelectionPrefab: {fileID: 100002, guid: b17988e14b5054605a1b7de6aae42097, type: 2}
+  petSelectionAreaTween: {fileID: 1429519287}
 --- !u!114 &1009615799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5195,7 +5214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bSprite: 1
   strSoundProcess: 
-  bCheckClickManager: 1
+  bCheckClickManager: 0
   strAnalytics: 
 --- !u!1 &1320715092
 GameObject:
@@ -5741,6 +5760,7 @@ GameObject:
   - 4: {fileID: 1429519284}
   - 114: {fileID: 1429519286}
   - 114: {fileID: 1429519285}
+  - 114: {fileID: 1429519287}
   m_Layer: 10
   m_Name: PetSelectionArea
   m_TagString: Untagged
@@ -5822,6 +5842,38 @@ MonoBehaviour:
   mClipping: 3
   mClipRange: {x: 0, y: 0, z: 1100, w: 450}
   mClipSoftness: {x: 40, y: 40}
+--- !u!114 &1429519287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1429519283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 0
+  blockUI: 1
+  startsHidden: 0
+  hideDeltaX: 0
+  hideDeltaY: 700
+  hideDeltaZ: 0
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 4
+  easeShow: 4
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!1 &1508849904
 GameObject:
   m_ObjectHideFlags: 0
@@ -6265,7 +6317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: .58431375}
+  mColor: {r: 0, g: 0, b: 0, a: .784313738}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 655996eb324b54e2d8e0e6f02584fee6, type: 2}
@@ -6314,7 +6366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .792156875}
+  mColor: {r: 1, g: 1, b: 1, a: .784313738}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 655996eb324b54e2d8e0e6f02584fee6, type: 2}

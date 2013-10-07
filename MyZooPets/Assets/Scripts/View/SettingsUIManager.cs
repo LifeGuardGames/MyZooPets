@@ -30,9 +30,11 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------
 	protected override void _OpenUI(){
-		print ("Holler");
 		// hide the panel that opened this ui
 		tweenNav.Hide();
+		
+		// Hide the pet selection
+		SelectionUIManager.Instance.CloseUI();// TODO DOES THIS GO IN LG BUTTON???
 		
 		// show the panel holding all settings
 		tweenSettings.Show();		
@@ -44,6 +46,9 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	protected override void _CloseUI(){
 		// show the panel again
 		tweenNav.Show();
+	
+		// Show the pet selection
+		SelectionUIManager.Instance.OpenUI();// TODO DOES THIS GO IN LG BUTTON???
 		
 		// hide the panel holding all settings
 		tweenSettings.Hide();		

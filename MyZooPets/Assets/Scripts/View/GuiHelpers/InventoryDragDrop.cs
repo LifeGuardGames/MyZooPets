@@ -114,10 +114,14 @@ public class InventoryDragDrop : MonoBehaviour {
 			{
 				// Sean: Not syncing with UIRoot manual height for ratio change account for them here
 				// TODO-s Find pernament solution to this
-				float ratioX = 1280f/(Screen.width * 1.0f);
-				float ratioY = 800f/(Screen.height * 1.0f);
+				// Joe: Reverting these changes to fix the drag on PC and iOS.  If something is still wrong on Android, and this change fixed it,
+				// we may just want to ifdef these code chunks
+				//float ratioX = 1280f/(Screen.width * 1.0f);
+				//float ratioY = 800f/(Screen.height * 1.0f);
 				//Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
-				Vector3 newDelta = new Vector3(delta.x * ratioX, delta.y * ratioY, 0f);
+				//Vector3 newDelta = new Vector3(delta.x * ratioX, delta.y * ratioY, 0f);
+				
+				Vector3 newDelta = new Vector3(delta.x, delta.y, 0);
 				mTrans.localPosition += newDelta;
 			}
 			else{

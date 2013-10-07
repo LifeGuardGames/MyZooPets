@@ -61,9 +61,9 @@ public class Gate : MonoBehaviour {
 		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint( vPos );
 		float fMoveWidth = Screen.width * ( fPlayerBuffer / 100 );
 		
-		// get the target location and then transform it into world coordinates
+		// get the target location and then transform it into world coordinates MOVE_DIR
 		Vector3 vNewLoc = vScreenLoc;
-		vNewLoc.x += fMoveWidth;
+		vNewLoc.x -= fMoveWidth;
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
 		vNewLocWorld.y = fPlayerY;
 		

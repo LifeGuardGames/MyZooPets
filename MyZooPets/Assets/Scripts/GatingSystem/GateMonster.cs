@@ -61,9 +61,9 @@ public class GateMonster : Gate {
 		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint( transform.position );
 		float fMoveWidth = Screen.width * ( fMovePercent / 100 );
 		
-		// get the new screen location of the monster, then tranform it into world location
+		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
 		Vector3 vNewLoc = vScreenLoc;
-		vNewLoc.x -= fMoveWidth;
+		vNewLoc.x += fMoveWidth;
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
 		
 		// play a hurt animation on the monster

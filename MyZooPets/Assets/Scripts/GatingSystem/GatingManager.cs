@@ -48,7 +48,7 @@ public class GatingManager : Singleton<GatingManager> {
 				int nDistance = dataGate.GetPartition() - nStartingRoom;	// the distance between the starting room and this gate's room
 				float fOffset = nDistance * fDistance;						// offset of the gate
 				
-				// get the position of the gate by adding the offset to the starting location
+				// get the position of the gate by adding the offset to the starting location MOVE_DIR
 				Vector3 vPos = vStartingLoc;
 				vPos.x += fOffset;
 				

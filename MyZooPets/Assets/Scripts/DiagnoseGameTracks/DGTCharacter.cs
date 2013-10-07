@@ -108,7 +108,9 @@ public class DGTCharacter : MonoBehaviour {
 	//  Moves the character towards their current target.
 	//---------------------------------------------------		
 	private void Move() {
-		float fSpeed = DGTManager.Instance.GetSpeed();
+		// if the character is moving past the pivot, they should go at max speed
+		bool bMax = IsAfterPivot();
+		float fSpeed = DGTManager.Instance.GetSpeed( bMax );
 		
 		//Change the 3 V3 to where icon should move
 		Vector3 vTarget = new Vector3(goTarget.transform.position.x, goTarget.transform.position.y, gameObject.transform.position.z); // the target location (keep this object's z position, though)
@@ -131,8 +133,8 @@ public class DGTCharacter : MonoBehaviour {
 	// needs to react.
 	//---------------------------------------------------
 	private void OnSpeedChange(object sender, EventArgs args) {
-		// if this character has been scored, we don't care about speed changes
-		if ( bScored )
+		// if this character has been scored or passed the pivot, we don't care about speed changes
+		if ( bScored || IsAfterPivot() )
 			return;
 		
 		// stop moving
@@ -181,6 +183,16 @@ public class DGTCharacter : MonoBehaviour {
 				break;
 		}
 	}
+
+	//---------------------------------------------------
+	// IsAfterPivot()
+	// Has this character passed the pivot point yet?
+	//---------------------------------------------------
+	private bool IsAfterPivot() {
+		// if the character's target has a DGTZone script, it means they have passed the pivot
+		bool bAfter = goTarget.GetComponent<DGTZone>() != null;
+		return bAfter;
+	}
 	
 	//---------------------------------------------------
 	// DoneMoving()
@@ -189,7 +201,7 @@ public class DGTCharacter : MonoBehaviour {
 	// pick the next target.
 	//---------------------------------------------------	
 	private void DoneMoving() {
-		if ( goTarget.GetComponent<DGTZone>() != null ) {
+		if ( IsAfterPivot() ) {
 			// score the character
 			ScoreCharacter();
 		
@@ -203,6 +215,9 @@ public class DGTCharacter : MonoBehaviour {
 				DGTManager.Instance.StopTrack();
 				return;
 			}
+			
+			// this character has reached the pivot point, so play a sound
+			AudioManager.Instance.PlayClip( "clinicReachedPivot" );
 			
 			// move the character to the currently selected zone
 			goTarget = DGTManager.Instance.GetSelectedZone();

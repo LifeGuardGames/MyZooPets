@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -9,11 +10,26 @@ public class WindowController : MonoBehaviour {
 
 	public tk2dSprite windowObject; // The sun or the moon
 	public tk2dSprite windowBackground; // The background sprite, for changing color
-	
-	public void setTime(bool isDaytime){
+
+	void Start(){
+		CheckTime();
+	}
+
+	void OnApplicationPause(bool pauseStatus){
+		if(!pauseStatus)
+			CheckTime();
+	}
+
+	private void CheckTime(){
+		DateTime now = DateTime.Now;
+		if(now.Hour	< 12)
+			SetTime(true);
+		else
+			SetTime(false);
+	}
+
+	private void SetTime(bool isDaytime){
 		if(isDaytime){
-			Debug.Log(windowObject.name);
-			
 			// Set the sun sprite
 			windowObject.SetSprite("windowSun");
 			

@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -39,26 +38,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c235dfeba71374033b791cbf28056a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removeDataOnDestroy: 1
+  removeDataOnApplicationQuit: 0
   isDebug: 1
-  calendarDummyData: 0
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5ac6d84dca7648fab1a3a905dbc55b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsDeserializing: 0
-  _id: 6dbbb0c4-dfa0-40f7-8ae7-ad0940ffc6bc
-  classId: 2b0e072d-f8d0-4d2c-ae6e-3ca83ba39d97
-  StoreAllComponents: 0
-  Components:
-  - DataManager
+  currentPetID: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

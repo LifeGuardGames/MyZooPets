@@ -25,6 +25,9 @@ public class PanToMoveCamera : MonoBehaviour{
     private bool touchCancelled = false; //True: touch shouldn't be handled
     public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
 	public float panDistanceToChange = 0.5f;	// distance to pan before the camera will snap to the next partition
+	
+	// link to hud animator
+	public HUDAnimator scriptHudAnim;
 
     private Camera nguiCamera; 
     private Camera mainCamera;
@@ -82,13 +85,10 @@ public class PanToMoveCamera : MonoBehaviour{
                 break;
 
                 case TouchPhase.Ended:
-					// if the user swiped quick enough (or panned long enough), and they can enter the room, change the partition
-                    float swipeTime = Time.time - startTime;
+					float swipeTime = Time.time - startTime;
 					int nTargetPartition = GetTargetPartition( 1, panDirection );
-                    if( 	( ( swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance) || 
-							( normalizedTouchPosX >= panDistanceToChange ) ) &&
-							GatingManager.Instance.CanEnterRoom( currentPartition, panDirection ) )
-								ChangePartition( nTargetPartition );
+					if ( CanMoveToPartition( nTargetPartition, panDirection, swipeTime ) )
+						ChangePartition( nTargetPartition );
 	
 					// then snap the camera to the partition
                     SnapCamera();
@@ -99,6 +99,32 @@ public class PanToMoveCamera : MonoBehaviour{
         }
     }    
 
+	///////////////////////////////////////////////////
+    // CanMoveToPartition() 
+    // The user has attempted to initiate a change in
+	// partition; this function makes sure that it is
+	// a legal move.
+    /////////////////////////////////////////////////// 
+	private bool CanMoveToPartition( int nTargetPartition, RoomDirection panDirection, float swipeTime ) {	
+		// first check that the user siped long and hard enough
+		if ( swipeTime > 0 ) {
+			bool bSwipedRight = ( swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance ) || normalizedTouchPosX >= panDistanceToChange;
+	        if( bSwipedRight == false ) 			
+				return false;
+		}
+			
+		// then check to make sure the gating manager is okay with the move
+		if ( GatingManager.Instance.CanEnterRoom( currentPartition, panDirection ) == false )
+			return false;
+			
+		// also check to make sure that the HUD animator is not animating
+		if ( scriptHudAnim && scriptHudAnim.AreSpawnedSprites() )
+			return false;
+		
+		// if we get here, the move is valid
+		return true;
+	}
+
     ///////////////////////////////////////////////////
     // CheckArrowKeys() 
     // Checks arrow key input for moving around the
@@ -107,13 +133,13 @@ public class PanToMoveCamera : MonoBehaviour{
     private void CheckArrowKeys()
     {
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
-			if ( GatingManager.Instance.CanEnterRoom( currentPartition, RoomDirection.Left  ) ) {
+			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
 				ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
 	            SnapCamera();
 			}
 		}
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
-			if ( GatingManager.Instance.CanEnterRoom( currentPartition, RoomDirection.Right  ) ) {
+			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
 				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );
 	            SnapCamera();       
 			}

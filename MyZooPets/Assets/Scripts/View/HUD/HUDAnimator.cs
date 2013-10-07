@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Room GUI animator.
@@ -86,6 +87,13 @@ public class HUDAnimator : MonoBehaviour {
 	public float fSoundFadeTime;
 	public string strSoundStars;
 	public string strSoundXP;
+	
+	// list of UI sprite objects that may have been spawned
+	private List<GameObject> listMovingSprites = new List<GameObject>();
+	public bool AreSpawnedSprites() {
+		bool b = listMovingSprites.Count > 0;
+		return b;
+	}
 
 	void Awake(){
 		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
@@ -432,6 +440,14 @@ public class HUDAnimator : MonoBehaviour {
 			alphaScript.endAlpha = 0f;
 			alphaScript.duration = 0.7f;
 		}
+		
+		// also add a component that keeps track of this UI element (if it's xp or starts)
+		if ( type == HUDElementType.stars || type == HUDElementType.points ) {
+			TrackSprite scriptTrack = go.AddComponent<TrackSprite>();
+			scriptTrack.Init( listMovingSprites );
+		}
+		
+		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);
 		optional.Add("onCompleteTarget", go);

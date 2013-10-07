@@ -85,11 +85,11 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void ShowQuitButton(){
-        quitButton.GetComponent<MoveTweenToggle>().Show();
+        quitButton.GetComponent<PositionTweenToggle>().Show();
     }
 
     private void HideQuitButton(){
-        quitButton.GetComponent<MoveTweenToggle>().Hide();
+        quitButton.GetComponent<PositionTweenToggle>().Hide();
     }
 
 

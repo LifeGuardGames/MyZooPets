@@ -7,12 +7,13 @@ using System.Collections;
 // choose what language they would like used.
 //---------------------------------------------------
 
-public class ButtonOpenLanguages : LgButton {
+public class ButtonOpenSettings : LgButton {
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		ChooseLanguageUIManager.Instance.OpenUI();
+		print ("SFSDF");	// DOESNT GET CALLED THE SECOND TIME
+		SettingsUIManager.Instance.OpenUI();
 	}
 }

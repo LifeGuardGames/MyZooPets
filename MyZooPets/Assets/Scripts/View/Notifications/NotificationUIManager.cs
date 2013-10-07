@@ -163,8 +163,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 	GameObject ShowPopupTexture(GameObject prefab){
 		GameObject obj = NGUITools.AddChild(centerPanel, prefab);
-		obj.GetComponent<MoveTweenToggle>().Reset();
-		obj.GetComponent<MoveTweenToggle>().Show(1.0f);
+		obj.GetComponent<PositionTweenToggle>().Reset();
+		obj.GetComponent<PositionTweenToggle>().Show(1.0f);
 		return obj;
 	}
 

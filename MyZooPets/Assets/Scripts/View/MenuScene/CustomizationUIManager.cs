@@ -14,15 +14,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject customizationPanel;
     public GameObject popupTitle;
     public UILabel nameField;
-    public GameObject selectedEgg; 
-    
-    // Camera moving
-    private float smooth = 1.0f;
-    //private bool isZoomed = false;
-    //private Vector3 initPosition = new Vector3(0.1938391f, 11.47f, 2.83f);
-    //private Vector3 initFaceDirection = new Vector3(11.3f, 0, 0);
-    //private Vector3 finalPosition = new Vector3(4.7f, 7.08f, 12.23f);
-    //private Vector3 finalFaceDirection = new Vector3(11.3f, 0, 0);
+    public GameObject selectedEgg;
 
     private string petColor;
     private string petName;
@@ -36,7 +28,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         // RenderSettings.ambientLight = Color.black;
 
       //  ShowDropInAnimation();
-    	Invoke ("ShowDropInAnimation", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
+    	Invoke ("ShowTitle", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
 	}
 	
 	//---------------------------------------------------
@@ -89,27 +81,22 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         }
     }
 
-    private void ShowDropInAnimation(){
+    public void ShowTitle(){
         // Splash finished, Drop down the title and the egg sprite, only called once
         popupTitle.GetComponent<PositionTweenToggle>().Show();
-
-        // Hashtable optional = new Hashtable();
-        // optional.Add("ease", LeanTweenType.easeOutBounce);
-        // LeanTween.move(eggObject, eggSpritePosition, 1.5f, optional);
     }
     
+	public void HideTitle(){
+        popupTitle.GetComponent<PositionTweenToggle>().Hide();
+    }
+	
     private void ShowChooseGUI(){
-        customizationPanel.GetComponent<PositionTweenToggle>().Show(smooth);
+        customizationPanel.GetComponent<TweenToggleDemux>().Show();
     }
 
     private void HideChooseGUI(){
-        customizationPanel.GetComponent<PositionTweenToggle>().Hide(smooth);
+        customizationPanel.GetComponent<TweenToggleDemux>().Hide();
         Invoke("ShowIntroMovie", 1);
-    }
-
-    private void HideTitle(){
-        popupTitle.GetComponent<PositionTweenToggle>().Hide();
-//        Destroy(popupTitle, 3.0f);
     }
 
     // private void CameraTransform (Vector3 newPosition, Vector3 newDirection){

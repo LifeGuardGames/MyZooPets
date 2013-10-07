@@ -13,6 +13,7 @@ public class ButtonSelectPet : LgButton {
     // ProcessClick()
     //---------------------------------------------------   
     protected override void ProcessClick() {
+		CustomizationUIManager.Instance.HideTitle();
         SelectionUIManager.Instance.PetSelected(this.gameObject);
     }
 

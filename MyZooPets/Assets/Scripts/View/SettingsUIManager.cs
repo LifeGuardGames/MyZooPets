@@ -30,9 +30,12 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------
 	protected override void _OpenUI(){
-		print ("Holler");
 		// hide the panel that opened this ui
 		tweenNav.Hide();
+
+		// Hide PetSelection Area
+		SelectionUIManager.Instance.HidePanel();
+
 		
 		// show the panel holding all settings
 		tweenSettings.Show();		
@@ -44,6 +47,9 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	protected override void _CloseUI(){
 		// show the panel again
 		tweenNav.Show();
+
+		//Show PetSelection Area
+		SelectionUIManager.Instance.ShowPanel();
 		
 		// hide the panel holding all settings
 		tweenSettings.Hide();		

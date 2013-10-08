@@ -5,6 +5,7 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab;
+    public TweenToggle petSelectionAreaTween;
 
     private string selectedPetID;
 
@@ -12,33 +13,18 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 	void Start () {
         InitializeSelection();	
 	}
-    
-    private void InitializeSelection(){
-        int numOfPets = DataManager.Instance.NumOfPets;
-        print(numOfPets);
-        for(int i = 0; i < numOfPets; i++){
-            GameObject petSelectionGO = NGUITools.AddChild(selectionGrid, petSelectionPrefab);
-            petSelectionGO.name = "Pet" + i;
 
-            //Turn show case animation on or off
-            string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
-            print(petStatus);
-            if(petStatus == "Egg"){
-                petSelectionGO.transform.Find("Animator").gameObject.SetActive(false);
-                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(true);
-            }else{
-                petSelectionGO.transform.Find("Animator").gameObject.SetActive(true);
-                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(false);
-            }
-        }
+    public void HidePanel(){
+        petSelectionAreaTween.Hide();
+    }
 
-        selectionGrid.GetComponent<UIGrid>().Reposition();
-    }	
+    public void ShowPanel(){
+        petSelectionAreaTween.Show();    
+    }
 
     public void PetSelected(GameObject selectedPetGO){
         selectedPetID = selectedPetGO.transform.parent.name;
         string petStatus = DataManager.Instance.GetPetStatus(selectedPetID);
-        print(selectedPetID);
 
         if(petStatus == "Egg"){
             //Open CustomizationUIManager to create/initiate new pet game data
@@ -56,6 +42,26 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }
         }
     }
+    
+    private void InitializeSelection(){
+        int numOfPets = DataManager.Instance.NumOfPets;
+        for(int i = 0; i < numOfPets; i++){
+            GameObject petSelectionGO = NGUITools.AddChild(selectionGrid, petSelectionPrefab);
+            petSelectionGO.name = "Pet" + i;
+
+            //Turn show case animation on or off
+            string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
+            if(petStatus == "Egg"){
+                petSelectionGO.transform.Find("Animator").gameObject.SetActive(false);
+                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(true);
+            }else{
+                petSelectionGO.transform.Find("Animator").gameObject.SetActive(true);
+                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(false);
+            }
+        }
+
+        selectionGrid.GetComponent<UIGrid>().Reposition();
+    }	
 
     private void EnterGameAfterGameDataDeserialized(object sender, EventArgs args){
         LoadScene();

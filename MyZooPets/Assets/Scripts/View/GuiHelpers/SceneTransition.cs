@@ -43,6 +43,7 @@ public class SceneTransition : MonoBehaviour {
 	}
 	
 	public void StartTransition(string strLevel) {
+		print ("CALLING start transition : " + strLevel);
 		levelName = strLevel;	
 		StartTransition();
 	}
@@ -52,6 +53,7 @@ public class SceneTransition : MonoBehaviour {
 		if(optionalLoadingScreen != null){
 			optionalLoadingScreen.SetActive(true);
 		}
+		print ("Loading level : " + levelName);
 		Application.LoadLevel(levelName);
 	}
 }

@@ -63,11 +63,22 @@ public class DecorationNode : MonoBehaviour {
 	
 	//---------------------------------------------------
 	// ToggleNode()
-	// Makes the node visible or invisible.
+	// Makes the node visible or invisible. Checks for TweenToggleScale
+	// Not perfect, hide is invisible prematurely, but its okay
 	//---------------------------------------------------	
 	private void ToggleNode( bool bOn ) {
 		GetComponent<MeshRenderer>().enabled = bOn;
 		GetComponent<BoxCollider>().enabled = bOn;
+		
+		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
+		if(toggle != null){
+			if(bOn){
+				toggle.Show();
+			}
+			else{
+				toggle.Hide();
+			}
+		}
 	}
 	
 	//---------------------------------------------------

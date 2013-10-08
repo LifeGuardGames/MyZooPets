@@ -90,6 +90,17 @@ public class GatingManager : Singleton<GatingManager> {
 	}
 	
 	//---------------------------------------------------
+	// HasActiveGate()
+	// Returns if the incoming partition has a gate in it.
+	// Note this assumes the area that this gating manager
+	// is in.
+	//---------------------------------------------------		
+	public bool HasActiveGate( int nPartition ) {
+		bool bHasGate = DataGateLoader.HasActiveGate( strArea, nPartition );
+		return bHasGate;
+	}
+	
+	//---------------------------------------------------
 	// EnteredRoom()
 	// When the player enters a room.
 	//---------------------------------------------------	

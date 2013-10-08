@@ -40,7 +40,13 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         // isZoomed = true;
         HideTitle();
         ShowChooseGUI();	
-	}	
+	}
+	
+	// Used when pressing back button in the panel, NOT finished
+	protected override void _CloseUI(){
+		ShowTitle();
+		HideChooseGUI(false);
+	}
 
     // Callback for closing edit panel
     public void HelperFinishEditPet(){
@@ -77,7 +83,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             //     isZoomed = false;
             //     HideChooseGUI();
             // }
-            HideChooseGUI();
+            HideChooseGUI(true);
         }
     }
 
@@ -94,9 +100,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
     }
 
-    private void HideChooseGUI(){
+    private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
-        Invoke("ShowIntroMovie", 1);
+		if(showMovie){
+        	Invoke("ShowIntroMovie", 1);
+		}
     }
 
     // private void CameraTransform (Vector3 newPosition, Vector3 newDirection){

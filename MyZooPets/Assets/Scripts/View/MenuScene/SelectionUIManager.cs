@@ -5,7 +5,6 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab;
-    public TweenToggle petSelectionAreaTween;
 
     private string selectedPetID;
 
@@ -13,14 +12,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 	void Start () {
         InitializeSelection();	
 	}
-
-    public void HidePanel(){
-        petSelectionAreaTween.Hide();
-    }
-
-    public void ShowPanel(){
-        petSelectionAreaTween.Show();    
-    }
 
     public void PetSelected(GameObject selectedPetGO){
         selectedPetID = selectedPetGO.transform.parent.name;

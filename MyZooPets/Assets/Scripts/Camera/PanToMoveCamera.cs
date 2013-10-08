@@ -121,6 +121,14 @@ public class PanToMoveCamera : MonoBehaviour{
 		if ( scriptHudAnim && scriptHudAnim.AreSpawnedSprites() )
 			return false;
 		
+		// if the user is in deco mode and the room they are moving to has an active gate, illegal move
+		if ( EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen()  && GatingManager.Instance.HasActiveGate( nTargetPartition ) )
+			return false;
+		
+		// if the shop is open, no movement allowed
+		if ( StoreUIManager.Instance && StoreUIManager.Instance.IsOpen() )
+			return false;
+		
 		// if we get here, the move is valid
 		return true;
 	}

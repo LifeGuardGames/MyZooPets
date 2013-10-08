@@ -24,6 +24,10 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	public UIModeTypes eModeType;
 	
 	// is this ui open?
+	private bool bOpen = false;
+	public bool IsOpen() {
+		return bOpen;	
+	}
 	
 	//---------------------------------------------------
 	// OpenUI()
@@ -45,6 +49,9 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		args.Opening = true;
         if( OnManagerOpen != null )
             OnManagerOpen(this, args);		
+		
+		// the UI is now open
+		bOpen = true;
 		
 		_OpenUI();
 	}
@@ -80,6 +87,9 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		args.Opening = false;
         if( OnManagerOpen != null )
             OnManagerOpen(this, args);			
+		
+		// the ui is no longer open
+		bOpen = false;
 		
 		_CloseUI();
 	}

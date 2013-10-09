@@ -15,6 +15,10 @@ public class DecorationNode : MonoBehaviour {
 		return eType;
 	}
 	
+//	const string BUTTON_INACTIVE = "buildIcon";
+//	const string BUTTON_ACTIVE = "buildIconActive";
+//	public UISprite buttonImage;
+	
 	// the ID of this decoration node -- changing this will corrupt the save data
 	// should be unique
 	public string strNodeID;
@@ -22,7 +26,7 @@ public class DecorationNode : MonoBehaviour {
 	// the decoration currently being displayed on this node
 	private string strDecoID = string.Empty;
 
-	void Start () {	
+	void Start () {
 		// check save data to see if something was on this node
 		CheckSaveData();
 		
@@ -64,10 +68,8 @@ public class DecorationNode : MonoBehaviour {
 	//---------------------------------------------------
 	// ToggleNode()
 	// Makes the node visible or invisible. Checks for TweenToggleScale
-	// Not perfect, hide is invisible prematurely, but its okay
 	//---------------------------------------------------	
 	private void ToggleNode( bool bOn ) {
-		GetComponent<MeshRenderer>().enabled = bOn;
 		GetComponent<BoxCollider>().enabled = bOn;
 		
 		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
@@ -80,6 +82,14 @@ public class DecorationNode : MonoBehaviour {
 			}
 		}
 	}
+	
+//	//---------------------------------------------------
+//	// SetNodeImageActive()
+//	// Called from editDecosUiManager to set color
+//	//---------------------------------------------------
+//	public void SetNodeImageActive(bool isActive){
+//		buttonImage.spriteName = isActive ? BUTTON_ACTIVE : BUTTON_INACTIVE;
+//	}
 	
 	//---------------------------------------------------
 	// NodeClicked()

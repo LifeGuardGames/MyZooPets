@@ -8,6 +8,8 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
     //When particle effects need to be turned on
     public static event EventHandler<EventArgs> OnActivateParticleEffects;
     public GameObject cleanTriggerParticleDrop;
+	
+	public GameObject petHitLocation;	// Used for triggers to attach as end destination
 
     void Start(){
         //instantiate triggers in the game

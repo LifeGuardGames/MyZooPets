@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: DegradationUIManager
+  m_Name: DegredationParticleEmitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,12 +35,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e749d78d5e0324a48b02350a82c54a80, type: 3}
+  m_Script: {fileID: 11500000, guid: 062ab4d3b5a0ae44f9050d20c24e39ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cleanTriggerParticleDrop: {fileID: 100000, guid: 2241ed812e2fa4e919c1f2f85e8a7b2d,
-    type: 2}
-  petHitLocation: {fileID: 0}
+  particleObject: {fileID: 100000, guid: c8ab7dd5411b3394eb87b14d9d0648a2, type: 2}
+  isActive: 0
+  delayBeforeStart: 0
+  minInterval: 1
+  maxInterval: 3
+  targetDestination: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

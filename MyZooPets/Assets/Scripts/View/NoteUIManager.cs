@@ -30,7 +30,7 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		
 		// zoom into pet
 		Vector3 vPos =  pet.transform.position + vOffset;
-		CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, pet ); 
+		CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null ); 
 		
 		Debug.Log("Note Clicked");
         notePanel.GetComponent<TweenToggle>().Show();

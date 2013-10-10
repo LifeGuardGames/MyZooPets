@@ -30,9 +30,6 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	
 	// scene transition
 	public SceneTransition scriptTransition;
-	
-	// sound IDs
-	public string strSoundGameOver;
 
 	// player score
 	public UILabel labelScore;
@@ -57,6 +54,12 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		return tutorial;	
 	}
 	
+	// the key of this minigame
+	protected virtual string GetMinigameKey() {
+		// children should implement this
+		return null;	
+	}
+	
 	// is there a tutorial override? i.e. tutorial has already been played but the user wants to see it again
 	private bool bTutorialOverride;
 	protected bool IsTutorialOverride() {
@@ -76,10 +79,6 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		
 		MinigameStates eOldState = eCurrentState;
 		eCurrentState = eNewState;
-		
-		// play appropriate sound for game state changes
-		if ( eCurrentState == MinigameStates.GameOver )
-			AudioManager.Instance.PlayClip( strSoundGameOver );
 		
 		// if the game is being paused, let the audio manager know so it can pause sounds
 		if ( eCurrentState == MinigameStates.Paused )
@@ -115,6 +114,11 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		
 		// reset labels
 		ResetLabels();
+		
+		// show the cutscene for the game if it has not yet been viewed
+		string strKey = GetMinigameKey();
+		if ( HasCutscene() && DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_" + strKey) == false )
+			ShowCutscene();		
 		
 		_Start();
 	}
@@ -385,5 +389,32 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	private void HowToPlay() {
 		SetTutorialOverride( true );
 		StartGame();
+	}
+	
+	//---------------------------------------------------
+	// ShowCutscene()
+	//---------------------------------------------------	
+	private void ShowCutscene() {
+		string strKey = GetMinigameKey();
+		GameObject resourceMovie = Resources.Load("Cutscene_" + strKey) as GameObject;
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	}
+	
+	//---------------------------------------------------
+	// CutsceneDone()
+	//---------------------------------------------------		
+    private void CutsceneDone(object sender, EventArgs args){
+		string strKey = GetMinigameKey();
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_" + strKey);	
+		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+    }	
+	
+	//---------------------------------------------------
+	// HasCutscene()
+	//---------------------------------------------------		
+	protected virtual bool HasCutscene() {
+		// children implement this
+		return false;
 	}
 }

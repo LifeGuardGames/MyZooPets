@@ -606,6 +606,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &51425605
@@ -688,7 +690,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 63828956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.800000072, y: -383.200195, z: 0}
+  m_LocalPosition: {x: -1.30944824, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1357933893}
@@ -713,6 +715,35 @@ MonoBehaviour:
   runOnlyOnce: 0
   relativeOffset: {x: 0, y: 0}
   pixelOffset: {x: 0, y: 0}
+--- !u!1 &67260443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 67260444}
+  m_Layer: 0
+  m_Name: roomInhaler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &67260444
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 67260443}
+  m_LocalRotation: {x: .384377867, y: -.792779744, z: -.206368834, w: .425635934}
+  m_LocalPosition: {x: -.473203659, y: -2.56154203, z: -3.18012238}
+  m_LocalScale: {x: 19.7356606, y: 19.7356644, z: 19.7356606}
+  m_Children:
+  - {fileID: 1899540200}
+  - {fileID: 598347042}
+  - {fileID: 1125945961}
+  m_Father: {fileID: 1400294534}
 --- !u!114 &74758069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,6 +1436,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &139581299
@@ -1805,6 +1838,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &166443825
@@ -2247,6 +2282,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &188946394
@@ -2308,11 +2345,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -347.200012
+    e03: -348
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.7998
+    e13: -7346
     e20: 0
     e21: 0
     e22: 384
@@ -3749,11 +3786,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -3960,6 +3997,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &333210146
@@ -4356,6 +4395,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &381220139
@@ -4638,6 +4679,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &390781793
@@ -4702,6 +4745,63 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 106.999992, y: 107, z: 0}
   m_Center: {x: .5, y: .5, z: -.75}
+--- !u!1 &391237669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100002, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 391237670}
+  - 33: {fileID: 391237672}
+  - 23: {fileID: 391237671}
+  m_Layer: 0
+  m_Name: teddybearShaded_polySurface1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &391237670
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400002, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 391237669}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .0491519161, z: 0}
+  m_LocalScale: {x: .592212141, y: .592212141, z: .592212141}
+  m_Children: []
+  m_Father: {fileID: 1635101269}
+--- !u!23 &391237671
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300000, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 391237669}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 940a17178867db348a000d76d4329c3e, type: 2}
+  - {fileID: 2100000, guid: aef876278cced0a4ba336f3a9ab7a838, type: 2}
+  - {fileID: 2100000, guid: 96ea75149dda39045a6c196363b0828c, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &391237672
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300000, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 391237669}
+  m_Mesh: {fileID: 4300000, guid: a5f70eb772ac08e408eaa3de3a6e5e94, type: 3}
 --- !u!1 &392094380
 GameObject:
   m_ObjectHideFlags: 0
@@ -4872,6 +4972,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &399067280
@@ -5294,7 +5396,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400006, guid: 3c4a4ee65bc219142a895e0d5bfd5d05, type: 3}
   m_PrefabInternal: {fileID: 954607679}
   m_GameObject: {fileID: 426052575}
-  m_LocalRotation: {x: .529558122, y: .437713414, z: -.205176875, w: -.69704932}
+  m_LocalRotation: {x: .529558063, y: .437713355, z: -.205176845, w: -.69704926}
   m_LocalPosition: {x: .376459926, y: -1.16437197, z: 1.26642466}
   m_LocalScale: {x: 35.5792274, y: 35.579216, z: 35.5792236}
   m_Children:
@@ -5361,6 +5463,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &445215706
@@ -6279,11 +6383,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.7998
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -6328,6 +6432,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1001 &499332658
@@ -7241,6 +7347,7 @@ Transform:
   - {fileID: 1463336877}
   - {fileID: 1186974800}
   - {fileID: 599627656}
+  - {fileID: 1400294534}
   - {fileID: 1219479483}
   - {fileID: 1027916322}
   - {fileID: 1802145313}
@@ -7951,6 +8058,61 @@ MeshFilter:
   m_PrefabInternal: {fileID: 602588409}
   m_GameObject: {fileID: 597612027}
   m_Mesh: {fileID: 0}
+--- !u!1 &598347041
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100004, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 598347042}
+  - 33: {fileID: 598347044}
+  - 23: {fileID: 598347043}
+  m_Layer: 0
+  m_Name: inhaler2_pCylinder1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &598347042
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400004, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 598347041}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .0841218084, z: .000243370057}
+  m_LocalScale: {x: .944869578, y: .944869578, z: .944869578}
+  m_Children: []
+  m_Father: {fileID: 67260444}
+--- !u!23 &598347043
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300002, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 598347041}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 2d96069d6f487ea48a2a94c2afed423d, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &598347044
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300002, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 598347041}
+  m_Mesh: {fileID: 4300002, guid: 3c4a4ee65bc219142a895e0d5bfd5d05, type: 3}
 --- !u!1 &599627655
 GameObject:
   m_ObjectHideFlags: 0
@@ -8134,11 +8296,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -8500,6 +8662,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &641376764
@@ -8552,11 +8716,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -8593,7 +8757,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 643400508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.799988, y: -383.200195, z: 0}
+  m_LocalPosition: {x: -512, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2007499536}
@@ -9879,6 +10043,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &777068110
@@ -10355,6 +10521,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &812610674
@@ -10467,6 +10635,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &822312383
@@ -10490,11 +10660,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -511.200012
+    e03: -512
     e10: 0
     e11: 384
     e12: 0
-    e13: -7656.4873
+    e13: -7654.37695
     e20: 0
     e21: 0
     e22: 384
@@ -11827,6 +11997,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!65 &897338627
@@ -12094,7 +12266,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921228466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.200012, y: .799804688, z: 0}
+  m_LocalPosition: {x: 512, y: -1.31030273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 822312380}
@@ -12221,6 +12393,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &938998348
@@ -12246,7 +12420,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 938998348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.799988, y: .799804688, z: 0}
+  m_LocalPosition: {x: -512, y: -1.31030273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1445519630}
@@ -12464,6 +12638,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &945887276
@@ -12739,6 +12915,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1001 &954607679
@@ -15322,7 +15500,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1064487670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.200012, y: -383.200195, z: 0}
+  m_LocalPosition: {x: 512, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 188946391}
@@ -15786,6 +15964,61 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0
+--- !u!1 &1125945960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100006, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1125945961}
+  - 33: {fileID: 1125945963}
+  - 23: {fileID: 1125945962}
+  m_Layer: 0
+  m_Name: pCube3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1125945961
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400006, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1125945960}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: -.00210767123, y: .0164949372, z: .0363103971}
+  m_LocalScale: {x: 1.13100958, y: 1.13100958, z: 1.13100958}
+  m_Children: []
+  m_Father: {fileID: 67260444}
+--- !u!23 &1125945962
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300004, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1125945960}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 87dcc65637569914ea717bb1d5c3dbde, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &1125945963
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300004, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1125945960}
+  m_Mesh: {fileID: 4300004, guid: 3c4a4ee65bc219142a895e0d5bfd5d05, type: 3}
 --- !u!1 &1129855712
 GameObject:
   m_ObjectHideFlags: 0
@@ -16341,11 +16574,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -16453,6 +16686,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1183442116
@@ -16548,6 +16783,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1183815275
@@ -17080,11 +17317,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -8029.7998
+    e13: -8029
     e20: 0
     e21: 0
     e22: 384
@@ -17372,11 +17609,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 240.800003
+    e03: 241.309448
     e10: 0
     e11: 384
     e12: 0
-    e13: -7650.7998
+    e13: -7648.68945
     e20: 0
     e21: 0
     e22: 384
@@ -17506,6 +17743,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1001 &1248776717
@@ -18031,6 +18270,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1289475258
@@ -18094,6 +18335,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1294074467
@@ -18974,11 +19217,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7081.7998
+    e13: -7081
     e20: 0
     e21: 0
     e22: 384
@@ -19023,6 +19266,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1362516099
@@ -19048,7 +19293,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1362516099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.800000072, y: .799804688, z: 0}
+  m_LocalPosition: {x: -1.30944824, y: -1.31030273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1244029620}
@@ -19307,6 +19552,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1387772900
@@ -19540,11 +19787,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: 1.30944824
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -19719,6 +19966,113 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1 &1400294533
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1400294534}
+  - 65: {fileID: 1400294538}
+  - 114: {fileID: 1400294537}
+  - 114: {fileID: 1400294536}
+  - 114: {fileID: 1400294535}
+  - 114: {fileID: 1400294539}
+  m_Layer: 0
+  m_Name: GO_Ninja
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1400294534
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_LocalRotation: {x: -.0948968753, y: -.0119549492, z: -.0117373727, w: .995346129}
+  m_LocalPosition: {x: -69.0633774, y: 4.03433228, z: 38.2706947}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1635101269}
+  - {fileID: 67260444}
+  - {fileID: 1538977682}
+  m_Father: {fileID: 559724172}
+--- !u!114 &1400294535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1400294533}
+  functionName: StartTransition
+  trigger: 0
+  includeChildren: 0
+--- !u!114 &1400294536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 0}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
+  duration: 0
+--- !u!114 &1400294537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelName: TriggerNinja
+  optionalLoadingScreen: {fileID: 2049267477}
+  transitionToggleObject: {fileID: 1183442113}
+--- !u!65 &1400294538
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6500000, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.75, y: 7.57999992, z: 5.48999977}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1400294539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400006, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1400294533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 134a3932a389245b78f0115f75addba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_fStartLife: 0
 --- !u!1 &1406724016
 GameObject:
   m_ObjectHideFlags: 0
@@ -19906,6 +20260,54 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1316767788}
   m_GameObject: {fileID: 1410120183}
   m_Mesh: {fileID: 4300008, guid: a0c1ec202fd3bd748ab8d168d9425183, type: 3}
+--- !u!1001 &1410940994
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 559724172}
+    m_Modifications:
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -69.0633774
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 4.03433228
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 38.2706947
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -.0948968753
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -.0119549492
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -.0117373727
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: .995346129
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: optionalLoadingScreen
+      value: 
+      objectReference: {fileID: 2049267477}
+    - target: {fileID: 11400004, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+      propertyPath: transitionToggleObject
+      value: 
+      objectReference: {fileID: 1183442113}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_RootGameObject: {fileID: 1400294533}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &1419502271
 GameObject:
   m_ObjectHideFlags: 0
@@ -20232,6 +20634,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1436452347
@@ -20489,11 +20893,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.799988
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.7998
+    e13: -7678.68945
     e20: 0
     e21: 0
     e22: 384
@@ -21348,6 +21752,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1518022963
@@ -21611,6 +22017,64 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1 &1538977681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1538977682}
+  - 33: {fileID: 1538977684}
+  - 23: {fileID: 1538977683}
+  m_Layer: 0
+  m_Name: teddybear
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1538977682
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1538977681}
+  m_LocalRotation: {x: 0, y: .71563226, z: 0, w: .698477328}
+  m_LocalPosition: {x: .615498543, y: -3.5091176, z: -1.27827835}
+  m_LocalScale: {x: 471.011292, y: 471.01123, z: 471.0112}
+  m_Children: []
+  m_Father: {fileID: 1400294534}
+--- !u!23 &1538977683
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300006, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1538977681}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: d0694d468f048b0418e44f93b5841abc, type: 2}
+  - {fileID: 2100000, guid: 84b0d05e57f3ded459a898ccde287df2, type: 2}
+  - {fileID: 2100000, guid: 2b1350cabb385c347af96e10dfe77989, type: 2}
+  - {fileID: 2100000, guid: 76d3f46763a30fc4bb8b82117cbea73a, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &1538977684
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300006, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1538977681}
+  m_Mesh: {fileID: 4300000, guid: f9deb1163faea9c4996b592706369cb3, type: 3}
 --- !u!1 &1567502223
 GameObject:
   m_ObjectHideFlags: 0
@@ -22152,11 +22616,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.799988
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.7998
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -22187,6 +22651,33 @@ MonoBehaviour:
   hoverSprite: calendarButtonBlank
   pressedSprite: calendarButtonBlank
   disabledSprite: calendarButtonBlank
+--- !u!1 &1635101268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100012, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1635101269}
+  m_Layer: 0
+  m_Name: new_teddy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1635101269
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400012, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1635101268}
+  m_LocalRotation: {x: .0199694764, y: .975754619, z: .100844152, w: -.193222001}
+  m_LocalPosition: {x: .101158917, y: -3.34786987, z: -.218668714}
+  m_LocalScale: {x: 71.6004944, y: 71.6004944, z: 71.6004944}
+  m_Children:
+  - {fileID: 391237670}
+  m_Father: {fileID: 1400294534}
 --- !u!1001 &1637849299
 Prefab:
   m_ObjectHideFlags: 0
@@ -22956,6 +23447,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1687750690
@@ -23432,6 +23925,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1001 &1715271672
@@ -23680,6 +24175,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1743409366
@@ -23900,6 +24397,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1763106080
@@ -24799,7 +25298,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1876011761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.800000072, y: 384.799805, z: 0}
+  m_LocalPosition: {x: -1.30944824, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1223414674}
@@ -25007,6 +25506,61 @@ MonoBehaviour:
   hoverSprite: calendarButtonBlank
   pressedSprite: calendarButtonBlank
   disabledSprite: calendarButtonBlank
+--- !u!1 &1899540199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100014, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1899540200}
+  - 33: {fileID: 1899540202}
+  - 23: {fileID: 1899540201}
+  m_Layer: 0
+  m_Name: inhaler2_pCube1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1899540200
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400014, guid: 73ae3c4b4346f4b60be35b8754f690b1, type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1899540199}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .047552269, z: -.00607647235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 67260444}
+--- !u!23 &1899540201
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 2300008, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1899540199}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: b478e486555c1e34a97684fdaadf916e, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &1899540202
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 3300008, guid: 73ae3c4b4346f4b60be35b8754f690b1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1410940994}
+  m_GameObject: {fileID: 1899540199}
+  m_Mesh: {fileID: 4300000, guid: 3c4a4ee65bc219142a895e0d5bfd5d05, type: 3}
 --- !u!1001 &1903582912
 Prefab:
   m_ObjectHideFlags: 0
@@ -25233,6 +25787,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1913402454
@@ -26317,6 +26873,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1989741166
@@ -26665,11 +27223,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 462.799988
+    e03: 462
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.7998
+    e13: -7346
     e20: 0
     e21: 0
     e22: 384
@@ -27024,11 +27582,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -711.200012
+    e03: -712
     e10: 0
     e11: 384
     e12: 0
-    e13: -7347.7998
+    e13: -7347
     e20: 0
     e21: 0
     e22: 384
@@ -27548,6 +28106,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!65 &2101819753

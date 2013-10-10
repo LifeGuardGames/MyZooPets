@@ -133,6 +133,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &10909035
@@ -384,6 +386,7 @@ GameObject:
   - 4: {fileID: 77779802}
   - 114: {fileID: 77779804}
   - 114: {fileID: 77779803}
+  - 114: {fileID: 77779805}
   m_Layer: 10
   m_Name: Transition
   m_TagString: Untagged
@@ -439,6 +442,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &77779804
@@ -475,6 +480,20 @@ MonoBehaviour:
   HideFunctionName: 
   HideIncludeChildren: 0
   hideImmediately: 0
+--- !u!114 &77779805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 77779801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  demux: {fileID: 77779804}
+  toggle: {fileID: 0}
+  goLoadScreen: {fileID: 1592131651}
 --- !u!1 &83497440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1405,6 +1424,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &264275648
@@ -1722,6 +1743,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &311186558
@@ -2441,6 +2464,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &435346585
@@ -4401,7 +4426,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 624191286}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.36413574, y: -1.36518478, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2094426378}
@@ -6119,7 +6144,12 @@ Prefab:
       propertyPath: transitionToggleObject
       value: 
       objectReference: {fileID: 77779801}
-    m_RemovedComponents: []
+    - target: {fileID: 11400000, guid: 7c9e2f310f5a9084396f0eba40b59375, type: 2}
+      propertyPath: scriptTransition
+      value: 
+      objectReference: {fileID: 77779805}
+    m_RemovedComponents:
+    - {fileID: 11400002, guid: 7c9e2f310f5a9084396f0eba40b59375, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7c9e2f310f5a9084396f0eba40b59375, type: 2}
   m_RootGameObject: {fileID: 1781106312}
   m_IsPrefabParent: 0
@@ -6464,10 +6494,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1233164721
 Transform:
   m_ObjectHideFlags: 0
@@ -6538,6 +6564,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1233487865
@@ -9283,7 +9311,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1781106313}
   - 114: {fileID: 1781106314}
-  - 114: {fileID: 1781106315}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -9314,21 +9341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adeb7739daf14ee4eb97e270871fcf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1781106315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: 7c9e2f310f5a9084396f0eba40b59375,
-    type: 2}
-  m_PrefabInternal: {fileID: 1096595506}
-  m_GameObject: {fileID: 1781106312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: Yard
-  optionalLoadingScreen: {fileID: 1592131651}
-  transitionToggleObject: {fileID: 77779801}
+  scriptTransition: {fileID: 77779805}
 --- !u!1 &1782816623
 GameObject:
   m_ObjectHideFlags: 0
@@ -11169,6 +11182,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &2083344085

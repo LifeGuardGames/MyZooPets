@@ -81,16 +81,6 @@ public enum NotificationPopupFields{
 	TutorialImageType,
 	Sound
 }
-public enum ZoomItem{
-    Pet,
-    SlotMachine,
-    RealInhaler,
-    BadgeBoard,
-    Dojo,
-	YardSign,
-    RunnerGame,
-	ExitSign
-}
 public enum BadgeType{
     Level,
     RunnerGame,

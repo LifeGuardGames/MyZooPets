@@ -21,6 +21,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 
     private Color currentRenderColor;
     private bool finishClicked = false;
+	
+	// transition
+	public SceneTransition scriptTransition;
 
     void Start(){
         // // eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
@@ -130,6 +133,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void LoadScene() {
-        GetComponent<SceneTransition>().StartTransition();
+        scriptTransition.StartTransition( SceneUtils.BEDROOM );
 	}
 }

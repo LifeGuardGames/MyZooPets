@@ -5,7 +5,12 @@ using System;
 public class NoteUIManager : SingletonUI<NoteUIManager> {
 
 	public GameObject notePanel;
-	public CameraMove cameraMove;
+	
+	// related to zooming in on the pet
+	public GameObject pet;
+	public Vector3 vRotation;
+	public Vector3 vOffset;
+	public float fZoomTime;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +29,8 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		EditDecosUIManager.Instance.HideNavButton();
 		
 		// zoom into pet
-		cameraMove.ZoomToggle(ZoomItem.Pet); 
+		Vector3 vPos =  pet.transform.position + vOffset;
+		CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, pet ); 
 		
 		Debug.Log("Note Clicked");
         notePanel.GetComponent<TweenToggle>().Show();
@@ -37,7 +43,7 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 		EditDecosUIManager.Instance.ShowNavButton();
 		
 		// zoom away from pet
-		cameraMove.ZoomOutMove();
+		CameraManager.Instance.ZoomOutMove();
 		
 		// Make sure callback NoteFinishedClosing is assigned in tween
         notePanel.GetComponent<TweenToggle>().Hide();

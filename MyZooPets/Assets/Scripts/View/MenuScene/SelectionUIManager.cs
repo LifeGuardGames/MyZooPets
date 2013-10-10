@@ -5,7 +5,10 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab;
-
+	
+	// transition
+	public SceneTransition scriptTransition;
+	
     private string selectedPetID;
 
 	// Use this for initialization
@@ -62,6 +65,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     private void LoadScene(){
-        GetComponent<SceneTransition>().StartTransition();
+        scriptTransition.StartTransition( SceneUtils.BEDROOM );
     }
 }

@@ -8,9 +8,9 @@ using System.Collections;
 
 public class DecorationNodeMaterial : DecorationNode {
 	
-	// the game object for which the material should be changed
-	public GameObject goObject;
-	
+	// the game objects for which the material should be changed
+	public GameObject[] arrayObjects;
+
 	//---------------------------------------------------
 	// _SetDecoration()
 	//---------------------------------------------------	
@@ -19,8 +19,11 @@ public class DecorationNodeMaterial : DecorationNode {
 		string strResource = "MAT_" + strID;
 		Material matPrefab = Resources.Load(strResource) as Material;
 		
-		if ( goObject && goObject.renderer )
-			goObject.renderer.material = matPrefab;
+		for ( int i = 0; i < arrayObjects.Length; ++i ) {
+			GameObject go = arrayObjects[i];
+			if ( go.renderer )
+				go.renderer.material = matPrefab;
+		}
 	}
 	
 	//---------------------------------------------------

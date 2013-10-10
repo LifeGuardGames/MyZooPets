@@ -14,7 +14,7 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	
 	// the NavPanel that launches this manager
 	public GameObject firstTimeNavPanel;
-	private TweenToggleDemux tweenNav;	// TODO move this out later, this has parent portal too
+	//private TweenToggleDemux tweenNav;	// TODO move this out later, this has parent portal too
 	
 	// SettingsPanel holding all settings
 	public GameObject settingsPanel;
@@ -22,7 +22,7 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	
 	void Start() {
 		// cache the tweens for easier use
-		tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
+		//tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
 		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
 	}
 	

@@ -17,6 +17,9 @@ public class NinjaTrigger : MonoBehaviour {
 	public string strSoundHit;
 	public string strSoundMissed;
 	
+	// is this object in the process of being cut?  Necessary because we use multiple colliders on some objects
+	private bool bCut = false;
+	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
@@ -40,6 +43,13 @@ public class NinjaTrigger : MonoBehaviour {
 	// When this trigger gets cut.
 	//---------------------------------------------------	
 	public void OnCut() {
+		// if this object was already cut, return.  This is possible because some objects use multiple primitive colliders
+		if ( bCut )
+			return;
+		
+		// mark the object as cut
+		bCut = true;
+		
 		// call child first
 		_OnCut();
 		

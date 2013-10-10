@@ -5,7 +5,11 @@ using System.Collections;
     TO DO: Get rid of camera offset. Use absolute position instead
 */
 public class RoomCameraMove : CameraMove{
-
+	
+	public GameObject exitSign;
+	public Vector3 exitSignFinalPosition;
+    public Vector3 exitSignFinalFaceDirection; 
+	
     public GameObject dojo;
     public Vector3 dojoFinalPosition;
     public Vector3 dojoFinalFaceDirection; 
@@ -51,7 +55,11 @@ public class RoomCameraMove : CameraMove{
                     case ZoomItem.Dojo:
 					CameraTransformLoadLevel(dojoFinalPosition, dojoFinalFaceDirection, 2f, dojo);	// Pass in gameobject to load level callback
                     break;
-
+					
+					case ZoomItem.ExitSign:
+					CameraTransformLoadLevel(exitSignFinalPosition, exitSignFinalFaceDirection, 0f, exitSign);
+					break;
+						
                     default:
                     Debug.Log("Invalid zoom item!");
                     break;

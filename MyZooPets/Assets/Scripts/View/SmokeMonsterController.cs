@@ -37,12 +37,12 @@ public class SmokeMonsterController : MonoBehaviour {
 		mouthSprite.SetSprite(mouthSpriteName);
 	}
 	
-	void OnGUI(){
-		if(GUI.Button(new Rect(10f, 10f, 20f, 20f), "1")){
-			playHurtAnimation();
-		}
-		if(GUI.Button(new Rect(30f, 10f, 20f, 20f), "2")){
-			playNormalAnimation();
-		}
-	}
+	// void OnGUI(){
+	// 	if(GUI.Button(new Rect(10f, 10f, 20f, 20f), "1")){
+	// 		playHurtAnimation();
+	// 	}
+	// 	if(GUI.Button(new Rect(30f, 10f, 20f, 20f), "2")){
+	// 		playNormalAnimation();
+	// 	}
+	// }
 }

@@ -14,28 +14,22 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	
 	// the NavPanel that launches this manager
 	public GameObject firstTimeNavPanel;
-	private TweenToggleDemux tweenNav;
+	private TweenToggleDemux tweenNav;	// TODO move this out later, this has parent portal too
 	
 	// SettingsPanel holding all settings
 	public GameObject settingsPanel;
-	private PositionTweenToggle tweenSettings;
+	private TweenToggleDemux tweenSettings;
 	
 	void Start() {
 		// cache the tweens for easier use
 		tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
-		tweenSettings = settingsPanel.GetComponent<PositionTweenToggle>();
+		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
 	}
 	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------
 	protected override void _OpenUI(){
-		// hide the panel that opened this ui
-		tweenNav.Hide();
-		
-		// Hide the pet selection
-		SelectionUIManager.Instance.CloseUI();// TODO DOES THIS GO IN LG BUTTON???
-		
 		// show the panel holding all settings
 		tweenSettings.Show();		
 	}
@@ -44,12 +38,6 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	// _CloseUI()
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
-		// show the panel again
-		tweenNav.Show();
-	
-		// Show the pet selection
-		SelectionUIManager.Instance.OpenUI();// TODO DOES THIS GO IN LG BUTTON???
-		
 		// hide the panel holding all settings
 		tweenSettings.Hide();		
 	}

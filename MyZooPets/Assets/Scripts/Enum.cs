@@ -88,7 +88,8 @@ public enum ZoomItem{
     BadgeBoard,
     Dojo,
 	YardSign,
-    RunnerGame
+    RunnerGame,
+	ExitSign
 }
 public enum BadgeType{
     Level,

@@ -5,22 +5,16 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab;
-    public TweenToggle petSelectionAreaTween;
-
+	
+	// transition
+	public SceneTransition scriptTransition;
+	
     private string selectedPetID;
 
 	// Use this for initialization
 	void Start () {
         InitializeSelection();	
 	}
-
-    public void HidePanel(){
-        petSelectionAreaTween.Hide();
-    }
-
-    public void ShowPanel(){
-        petSelectionAreaTween.Show();    
-    }
 
     public void PetSelected(GameObject selectedPetGO){
         selectedPetID = selectedPetGO.transform.parent.name;
@@ -71,6 +65,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     private void LoadScene(){
-        GetComponent<SceneTransition>().StartTransition();
+        scriptTransition.StartTransition( SceneUtils.BEDROOM );
     }
 }

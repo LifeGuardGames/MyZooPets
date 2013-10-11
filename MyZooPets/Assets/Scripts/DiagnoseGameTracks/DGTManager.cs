@@ -64,11 +64,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
-	protected override void _Start() {
-		// show the cutscene for the clinic game if it has not yet been viewed
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Clinic") == false )
-			ShowCutscene();
-		
+	protected override void _Start() {		
 		// listen for character scoring
 		DGTCharacter.OnCharacterScored += CharacterScored;
 	}	
@@ -107,18 +103,18 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}
 	
 	//---------------------------------------------------
-	// ShowCutscene()
+	// GetMinigameKey()
 	//---------------------------------------------------	
-	private void ShowCutscene() {
-		GameObject resourceMovie = Resources.Load("Cutscene_Clinic") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-	}
+	protected override string GetMinigameKey() {
+		return "Clinic";	
+	}	
 	
-    private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Clinic");	
-		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-    }		
+	//---------------------------------------------------
+	// HasCutscene()
+	//---------------------------------------------------		
+	protected override bool HasCutscene() {
+		return true;
+	}	
 	
 	//---------------------------------------------------
 	// SetSelectedZone()

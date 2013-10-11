@@ -270,6 +270,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &48885153
@@ -353,6 +355,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &62409281
@@ -631,6 +635,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &108091191
@@ -1479,7 +1485,12 @@ Prefab:
       propertyPath: transitionToggleObject
       value: 
       objectReference: {fileID: 1430107263}
-    m_RemovedComponents: []
+    - target: {fileID: 11400000, guid: b782c6acd48544364b424a599b3562a1, type: 2}
+      propertyPath: scriptTransition
+      value: 
+      objectReference: {fileID: 1430107267}
+    m_RemovedComponents:
+    - {fileID: 11400002, guid: b782c6acd48544364b424a599b3562a1, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: b782c6acd48544364b424a599b3562a1, type: 2}
   m_RootGameObject: {fileID: 702271452}
   m_IsPrefabParent: 0
@@ -1775,7 +1786,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 702271453}
   - 114: {fileID: 702271454}
-  - 114: {fileID: 702271455}
   m_Layer: 0
   m_Name: DGTManager
   m_TagString: Untagged
@@ -1809,8 +1819,7 @@ MonoBehaviour:
   goOpening: {fileID: 1228308468}
   goGameOver: {fileID: 2095608904}
   goPaused: {fileID: 889925889}
-  scriptTransition: {fileID: 702271455}
-  strSoundGameOver: clinicGameOver
+  scriptTransition: {fileID: 1430107267}
   labelScore: {fileID: 1065766152}
   labelLives: {fileID: 499481550}
   nStartingLives: 3
@@ -1824,21 +1833,6 @@ MonoBehaviour:
   vSpawnLocation: {x: 0, y: 384, z: 0}
   prefabCharacter: {fileID: 100000, guid: b81ac4ddc1c10475b85dc66b98b23f81, type: 2}
   goStartingZone: {fileID: 1713714605}
---- !u!114 &702271455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: b782c6acd48544364b424a599b3562a1,
-    type: 2}
-  m_PrefabInternal: {fileID: 538596902}
-  m_GameObject: {fileID: 702271452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: 
-  optionalLoadingScreen: {fileID: 1455398013}
-  transitionToggleObject: {fileID: 1430107263}
 --- !u!1 &707733018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,6 +1892,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &707733021
@@ -2436,6 +2432,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &902060820
@@ -2943,7 +2941,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1071829514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -384, z: 0}
+  m_LocalPosition: {x: -1.30944824, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1487388098}
@@ -3096,6 +3094,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1128380021
@@ -3393,6 +3393,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1 &1228597686
@@ -3421,13 +3423,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d49efd53907b42149a342aa0ce6e3d2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
@@ -3616,6 +3611,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1355868777
@@ -3871,6 +3868,7 @@ GameObject:
   - 4: {fileID: 1430107264}
   - 114: {fileID: 1430107266}
   - 114: {fileID: 1430107265}
+  - 114: {fileID: 1430107267}
   m_Layer: 10
   m_Name: Transition
   m_TagString: Untagged
@@ -3926,6 +3924,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &1430107266
@@ -3962,6 +3962,20 @@ MonoBehaviour:
   HideFunctionName: 
   HideIncludeChildren: 0
   hideImmediately: 0
+--- !u!114 &1430107267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1430107263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  demux: {fileID: 1430107266}
+  toggle: {fileID: 0}
+  goLoadScreen: {fileID: 1455398013}
 --- !u!1 &1455398013
 GameObject:
   m_ObjectHideFlags: 0
@@ -4729,6 +4743,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!4 &1738275096
@@ -4767,7 +4783,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1740612236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 512, y: 0, z: 0}
+  m_LocalPosition: {x: 512, y: -1.31057739, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1487388098}
@@ -5496,7 +5512,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2035032513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.30944824, y: -1.31057739, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2095608905}
@@ -5746,5 +5762,7 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}

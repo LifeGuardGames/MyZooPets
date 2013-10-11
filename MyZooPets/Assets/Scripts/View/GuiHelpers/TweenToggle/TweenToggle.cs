@@ -49,6 +49,11 @@ public class TweenToggle : MonoBehaviour {
 	
 	//////////////////////////////////////////////////////
 	
+	// sounds to be played when this object tweens in or out.
+	// we might want these to get fancier at some point (i.e. start the sound when the object tweens in, or when it finishes, etc)
+	public string strSoundShow;
+	public string strSoundHide;
+	
 	// Testing purposes, isDebug true will show OnGUI buttons
 	public bool isDebug = false;
 	public Vector2 testButtonPos; // Set base positions of test buttons
@@ -82,6 +87,10 @@ public class TweenToggle : MonoBehaviour {
 	}
 
 	public void Show(){
+		// play sound (if it exists)
+		if ( !string.IsNullOrEmpty(strSoundShow) )
+			AudioManager.Instance.PlayClip( strSoundShow );
+		
 		Show(showDuration);
 	}
 
@@ -90,6 +99,10 @@ public class TweenToggle : MonoBehaviour {
 	}
 
 	public void Hide(){
+		// play sound (if it exists)
+		if ( !string.IsNullOrEmpty(strSoundHide) )
+			AudioManager.Instance.PlayClip( strSoundHide );		
+		
 		Hide(hideDuration);
 	}
 

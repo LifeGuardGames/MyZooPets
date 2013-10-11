@@ -12,7 +12,6 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
   m_Layer: 0
@@ -89,20 +88,7 @@ MonoBehaviour:
   meshCollider: {fileID: 0}
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: Yard
-  optionalLoadingScreen: {fileID: 0}
-  transitionToggleObject: {fileID: 0}
+  renderLayer: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -118,8 +104,12 @@ MonoBehaviour:
   strSoundProcess: houseEntrance
   bCheckClickManager: 1
   strAnalytics: 
-  cameraMove: {fileID: 0}
-  zoomItem: 6
+  strScene: Yard
+  goLoadScreen: {fileID: 0}
+  scriptTransition: {fileID: 0}
+  vOffset: {x: -5, y: 0, z: -10}
+  vFinalRotation: {x: 9, y: 45, z: .300000012}
+  fTime: 2
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

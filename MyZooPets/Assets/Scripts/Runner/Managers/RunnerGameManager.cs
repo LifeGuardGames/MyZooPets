@@ -44,7 +44,10 @@ public class RunnerGameManager : MonoBehaviour {
     {
         return sRunnerGameManagerInstance;
     }
-
+	
+	// scene transition
+	public SceneTransition scriptTransition;
+	
 	// Use this for initialization
 	void Start() {
         if (sRunnerGameManagerInstance != null)
@@ -164,7 +167,7 @@ public class RunnerGameManager : MonoBehaviour {
     }
 
     public void QuitGame(){
-        GetComponent<SceneTransition>().StartTransition();
+        scriptTransition.StartTransition( SceneUtils.BEDROOM );
 
     }
 

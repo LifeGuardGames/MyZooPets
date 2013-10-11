@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+#pragma warning disable 0618
+
 
 /// <summary>
 /// Put this script on a Camera object to allow for pinch-zoom gesture.

@@ -8,9 +8,7 @@ using System.Collections.Generic;
 // Button class that loads up the real inhaler game.
 //---------------------------------------------------
 
-public class ButtonRealInhaler : LgButton {
-	
-	public CameraMove cameraMove;
+public class ButtonRealInhaler : ButtonChangeScene {
 	
 	//---------------------------------------------------
 	// ProcessClick()
@@ -69,9 +67,8 @@ public class ButtonRealInhaler : LgButton {
 	// Also called from tutorial as a callback.
 	//---------------------------------------------------
 	public void OpenRealInhaler(){
-		cameraMove.ZoomToggle(ZoomItem.RealInhaler);
-		ClickManager.Instance.ClickLock();
-		ClickManager.Instance.ModeLock( UIModeTypes.None );
+		// use parent
+		base.ProcessClick();
 
 		//Hide other UI Objects
 		NavigationUIManager.Instance.HidePanel();

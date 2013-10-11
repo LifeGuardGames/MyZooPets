@@ -2,6 +2,8 @@
 #define DEBUG_LEVEL_WARN
 #define DEBUG_LEVEL_ERROR
 
+#pragma warning disable 0162
+
 using UnityEngine;
 using System.Collections;
 using System;

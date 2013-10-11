@@ -16,6 +16,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         InitializeSelection();	
 	}
 
+    //Call when select button is clicked. Decides to start a new pet or load existing game data
     public void PetSelected(GameObject selectedPetGO){
         selectedPetID = selectedPetGO.transform.parent.name;
         string petStatus = DataManager.Instance.GetPetStatus(selectedPetID);
@@ -37,6 +38,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         }
     }
     
+    //First initialization of the PetSelectionArea
     private void InitializeSelection(){
         int numOfPets = DataManager.Instance.NumOfPets;
         for(int i = 0; i < numOfPets; i++){
@@ -57,6 +59,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         selectionGrid.GetComponent<UIGrid>().Reposition();
     }	
 
+    //After existing game data has been loaded. Enter the game
     private void EnterGameAfterGameDataDeserialized(object sender, EventArgs args){
         LoadScene();
         

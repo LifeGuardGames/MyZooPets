@@ -32,6 +32,7 @@ public class FacebookUIManager : MonoBehaviour {
         FacebookManager.loginFailedEvent -= LoginFailedEvent;
     }
 
+    //Toggle UI Buttons depending user's access token
     private void RefreshFacebookButtons(){
         GameObject fbButton = facebook.transform.Find("Button").gameObject;
         GameObject fbLogoutButton = facebook.transform.Find("Logout").gameObject;
@@ -98,6 +99,7 @@ public class FacebookUIManager : MonoBehaviour {
         RefreshFacebookButtons();
     }
 
+    //After reauthorization to get more permission from user
     private void ReauthorizationSucceededEvent(){
         fbHasPublishPermission = FacebookBinding.getSessionPermissions().Contains( "publish_stream" );
 

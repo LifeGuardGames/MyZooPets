@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
 
+//Use this script to create create LWF animations in NGUI
 public class UILWFObject : UIWidget
 {
     public GameObject showCasePrefab;
@@ -10,10 +12,7 @@ public class UILWFObject : UIWidget
         InitLWF();
     }
 
-    // override protected void OnEnable(){
-    //     InitLWF();
-    // }
-
+    //Display LWF animation in NGUI
     private void InitLWF()
     {
         showCaseAnimator = (GameObject)Instantiate(showCasePrefab);
@@ -25,11 +24,14 @@ public class UILWFObject : UIWidget
         transform.localPosition = showCasePrefab.transform.localPosition;
         transform.localScale = showCasePrefab.transform.localScale; 
 
-        //TO DO: add finish loading call back in LWFAnimator
-        Invoke("Testing", 1.0f);
+        StartCoroutine(StartAnimation());
     }
 
-    private void Testing(){
+    //Play animation clip after waiting for a frame
+    private IEnumerator StartAnimation(){
+        yield return 0;
+
         showCaseAnimator.GetComponent<LWFAnimator>().PlayClip("happyIdle");
     }
+
 }

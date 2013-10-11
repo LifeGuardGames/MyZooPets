@@ -8,9 +8,6 @@ using System.Collections.Generic;
 */
 
 public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
-
-    // public GameObject eggObject;
-    // public GameObject nestObject;
     public GameObject customizationPanel;
     public GameObject popupTitle;
     public UILabel nameField;
@@ -26,11 +23,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	public SceneTransition scriptTransition;
 
     void Start(){
-        // // eggSpriteScript = eggObject.GetComponent<tk2dSprite>();
-        // currentRenderColor = RenderSettings.ambientLight;
-        // RenderSettings.ambientLight = Color.black;
-
-      //  ShowDropInAnimation();
     	Invoke ("ShowTitle", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
 	}
 	
@@ -38,9 +30,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------	
 	protected override void _OpenUI(){
-       	// eggClicked = true;
-        // CameraTransform(finalPosition,finalFaceDirection);
-        // isZoomed = true;
         HideTitle();
         ShowChooseGUI();	
 	}
@@ -50,13 +39,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		ShowTitle();
 		HideChooseGUI(false);
 	}
-
-    // Callback for closing edit panel
-    public void HelperFinishEditPet(){
-        // DataManager.Instance.GameData.PetName = petName;
-        // DataManager.Instance.GameData.PetColor = petColor;
-        // DataManager.Instance.GameData.TurnFirstTimeOff();
-    }
     
     public void ChangeEggColor( string strSprite, string strColor ) {
         if (!finishClicked){
@@ -81,11 +63,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             DataManager.Instance.GameData.PetInfo.PetName = petName;
             DataManager.Instance.GameData.PetInfo.PetColor = petColor;
             DataManager.Instance.GameData.PetInfo.IsHatched = true;
-            // if(isZoomed){
-            //     ZoomOutMove();
-            //     isZoomed = false;
-            //     HideChooseGUI();
-            // }
+
             HideChooseGUI(true);
         }
     }
@@ -109,13 +87,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         	Invoke("ShowIntroMovie", 1);
 		}
     }
-
-    // private void CameraTransform (Vector3 newPosition, Vector3 newDirection){
-    //     Hashtable optional = new Hashtable();
-    //     optional.Add("ease", LeanTweenType.easeInOutQuad);
-    //     LeanTween.move(mCamera, newPosition, smooth, optional);
-    //     LeanTween.rotate(mCamera, newDirection, smooth, optional);
-    // }
 	
 	private void ShowIntroMovie() {
 		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Intro") )

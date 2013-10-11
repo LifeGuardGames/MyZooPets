@@ -38,6 +38,7 @@ public class TwitterUIManager : MonoBehaviour {
         TwitterManager.requestDidFailEvent -= RequestDidFailEvent;
     }
 
+    //Toggle UI Buttons depending user's access token
     private void RefreshTwitterButtons(){
         GameObject twitterButton = twitter.transform.Find("Button").gameObject;
         GameObject twitterLogoutButton = twitter.transform.Find("Logout").gameObject;
@@ -94,7 +95,9 @@ public class TwitterUIManager : MonoBehaviour {
         Debug.Log("Login failed " + error);
     }
 
-    //Tweet is successful
+    //Whenever a request is successful
+    //TO DO: Prime31 says the plugin will support customizable event handler
+    //once unity WWW has been fixed
     private void RequestDidFinishEvent(object result){
         if(result != null){
             switch(lastRequestType){
@@ -108,6 +111,7 @@ public class TwitterUIManager : MonoBehaviour {
         }
     }
 
+    //Whenever a request fail
     private void RequestDidFailEvent(string error){
         Debug.Log("request fail " + error);
         switch(lastRequestType){
@@ -120,6 +124,4 @@ public class TwitterUIManager : MonoBehaviour {
         }
         lastRequestType = "";
     }
-
-   
 }

@@ -35,6 +35,28 @@ public class DataManager : Singleton<DataManager>{
         get{return numOfPets;}
     }
 
+    //TO Do: hash the pin before saving
+    public string ParentPortalPin{
+        get{
+            return PlayerPrefs.GetString("ParentPortalPin", "");
+        }
+
+        set{
+            PlayerPrefs.SetString("ParentPortalPin", value);
+        }
+    }
+
+    public string ParentEmail{
+        get{
+            return PlayerPrefs.GetString("ParentEmail", "");
+        }
+
+        set{
+            PlayerPrefs.SetString("ParentEmail", value);
+        }
+
+    }
+
     void Awake(){
         //Make Object persistent
         if(isCreated){

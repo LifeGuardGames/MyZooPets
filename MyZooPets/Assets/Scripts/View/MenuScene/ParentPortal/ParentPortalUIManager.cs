@@ -20,7 +20,6 @@ public class ParentPortalUIManager : Singleton<ParentPortalUIManager> {
 	}
 
     public void OkButtonClicked(){
-        Debug.Log("ok clicked");
         if(onOkButtonClicked != null)
             onOkButtonClicked();
     }

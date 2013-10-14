@@ -123,7 +123,7 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
         else
             //Check if pin is correct
             if(savedPin != inputPin)
-                result.Add("InputPinErrorMsg", Localization.Localize("ERRO_WRONG_PIN"));
+                result.Add("InputPinErrorMsg", Localization.Localize("ERROR_WRONG_PIN"));
     }
 
     /*
@@ -144,7 +144,8 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
     }
 
     private bool IsValidEmail(string email){
-        return Regex.IsMatch(email, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"); 
+        return Regex.IsMatch(email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" + 
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$");
     }
 
     /*
@@ -175,33 +176,36 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
             SendMailErrorMsg
     */
     private void SendPinToEmail(string email, string pin, ref Hashtable result){
-            string to = email;
-            string from = "info@lifeguardgames.com";
-            MailMessage message = new MailMessage(from, to);
-     
-            message.Subject = "Wellapets parent portal";
-            message.Body = "This is for testing SMTP mail from GMAIL";
+        string to = email;
+        string from = "info@lifeguardgames.com";
 
-            //TO DO: consider changing this to NameCheap server instead
-            SmtpClient client = new SmtpClient("smtp.gmail.com");
-            client.Timeout = 10;
-            client.Port = 587;
-            client.Credentials = new System.Net.NetworkCredential("account", "password") as ICredentialsByHost;
-            client.EnableSsl = true;
+        string account = "";
+        string password = "";
+        MailMessage message = new MailMessage(from, to);
+ 
+        message.Subject = "Wellapets parent portal";
+        message.Body = "This is for testing SMTP mail from LifeGuardGames";
 
-            //TO DO: doesn't look right to be returning true all the time.
-            //Is it even necessary?
-            ServicePointManager.ServerCertificateValidationCallback = 
-                delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) 
-                    { return true; };
+        //TO DO: consider changing this to NameCheap server instead
+        SmtpClient client = new SmtpClient("smtp.gmail.com");
+        client.Timeout = 10;
+        client.Port = 587;
+        client.Credentials = new System.Net.NetworkCredential(account, password) as ICredentialsByHost;
+        client.EnableSsl = true;
+
+        //TO DO: Need to figure out how to check server certificate. Is it even important for us because
+        //we are only using the server to send an email 
+        ServicePointManager.ServerCertificateValidationCallback = 
+        delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors){
+            return true;
+        };
 
         try{
             //Send message synchronously 
             client.Send(message);
 
-        }catch(SmtpException smptEx){
-            //TO DO: look at status code to determine what is the error
-            Debug.Log(smptEx.Message);
+        }catch(SmtpException e){
+            Debug.Log(e.Message + " : " + e.StatusCode);
             result.Add("SendMailErrorMsg", Localization.Localize("ERROR_SMTP_BAD_CONNECTION"));
         }
     }

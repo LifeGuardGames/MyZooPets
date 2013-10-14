@@ -13,7 +13,7 @@ public class PortalRecovery : PortalContent {
 
     protected override void OkButtonClicked(){
         string email = emailInput.GetComponent<UIInput>().text;
-        
+
         Hashtable result = ParentPortalLogic.Instance.VerifyAndSendPinToEmail(email);
 
         if(result != null){
@@ -34,7 +34,7 @@ public class PortalRecovery : PortalContent {
                         emailError.GetComponent<UILabel>().text = sendEmailErrorMsg;
                     }
                 }else{
-
+                    ParentPortalUIManager.Instance.DisplayGeneralMessage("MSG_PIN_RECOVERY_SENT");
                     ParentPortalUIManager.Instance.ShowPortalLogin(this.gameObject);
                 }
             }

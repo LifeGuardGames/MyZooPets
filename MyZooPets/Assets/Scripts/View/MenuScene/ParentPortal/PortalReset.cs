@@ -41,12 +41,11 @@ public class PortalReset : PortalContent {
                         newPinConfirmError.GetComponent<UILabel>().text = confirmPinErrorMsg;
                     }
                 }else{ //Reset is successful. redirect to login page
-
+                    ParentPortalUIManager.Instance.DisplayGeneralMessage("MSG_PIN_RESET");
                     ParentPortalUIManager.Instance.ShowPortalLogin(this.gameObject);
                 }
             }
         }
-
     }
 
     protected override void CancelButtonClicked(){

@@ -54,7 +54,6 @@ public class DataManager : Singleton<DataManager>{
         set{
             PlayerPrefs.SetString("ParentEmail", value);
         }
-
     }
 
     void Awake(){

@@ -25,7 +25,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   m_Layer: 0
-  m_Name: InputTemplate
+  m_Name: Input_Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100006
 GameObject:
   m_ObjectHideFlags: 1
@@ -120,6 +120,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400014}
+  - 114: {fileID: 11400036}
   m_Layer: 10
   m_Name: PortalLogin
   m_TagString: Untagged
@@ -504,10 +505,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   label: {fileID: 11400006}
-  maxChars: 0
+  maxChars: 4
   caratChar: '|'
   type: 0
-  isPassword: 0
+  isPassword: 1
   autoCorrect: 0
   useLabelTextAtStart: 0
   activeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -529,7 +530,7 @@ MonoBehaviour:
   mPivot: 3
   mDepth: 2
   mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
-  mText: You can type here
+  mText: 
   mMaxLineWidth: 394
   mMaxLineHeight: 0
   mEncoding: 0
@@ -815,6 +816,19 @@ MonoBehaviour:
   hoverSprite: buttonLong
   pressedSprite: buttonLongDown
   disabledSprite: buttonLongInactive
+--- !u!114 &11400036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c244dc4aac1460d9e80480af1d548b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pinInput: {fileID: 100010}
+  pinError: {fileID: 100004}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

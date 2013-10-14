@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PortalSetup : MonoBehaviour {
+public class PortalSetup : PortalContent {
     public GameObject emailInput;
     public GameObject pinInput;
     public GameObject pinConfirmInput; 
@@ -9,17 +9,7 @@ public class PortalSetup : MonoBehaviour {
     public GameObject pinError;
     public GameObject pinConfirmError;
 
-    void OnEnable(){
-        ParentPortalUIManager.onOkButtonClicked = OkButtonClicked;
-        ParentPortalUIManager.onCancelButtonClicked = CancelButtonClicked;
-    }
-
-    void OnDisable(){
-        ParentPortalUIManager.onOkButtonClicked = null; 
-        ParentPortalUIManager.onCancelButtonClicked = null;
-    }
-
-    public void OkButtonClicked(){
+    protected override void OkButtonClicked(){
         string email = emailInput.GetComponent<UIInput>().text;
         string pin = pinInput.GetComponent<UIInput>().text;
         string pinConfirm = pinConfirmInput.GetComponent<UIInput>().text;
@@ -32,8 +22,8 @@ public class PortalSetup : MonoBehaviour {
             pinError.SetActive(false);
             pinConfirmError.SetActive(false);
 
-            if(result.Contains("Saved")){
-                bool valid = (bool)result["Saved"];
+            if(result.Contains("Completed")){
+                bool valid = (bool)result["Completed"];
 
                 if(!valid){ //There are errors. Display them
                     if(result.Contains("EmailErrorMsg")){
@@ -59,7 +49,7 @@ public class PortalSetup : MonoBehaviour {
         }
     }
 
-    public void CancelButtonClicked(){
+    protected override void CancelButtonClicked(){
 
     }
 }

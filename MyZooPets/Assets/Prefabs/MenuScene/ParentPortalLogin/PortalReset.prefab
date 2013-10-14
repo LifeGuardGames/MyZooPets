@@ -30,7 +30,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 1
@@ -144,7 +144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100018
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100024
 GameObject:
   m_ObjectHideFlags: 1
@@ -312,6 +312,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400038}
+  - 114: {fileID: 11400032}
   m_Layer: 0
   m_Name: PortalReset
   m_TagString: Untagged
@@ -1013,6 +1014,23 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &11400032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a07df29183e4708b8ac56b92527769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oldPinInput: {fileID: 100028}
+  newPinInput: {fileID: 100010}
+  newPinConfirmInput: {fileID: 100008}
+  oldPinError: {fileID: 100022}
+  newPinError: {fileID: 100016}
+  newPinConfirmError: {fileID: 100002}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

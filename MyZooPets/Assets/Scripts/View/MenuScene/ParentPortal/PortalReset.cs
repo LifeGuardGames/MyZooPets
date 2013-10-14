@@ -46,7 +46,6 @@ public class PortalReset : PortalContent {
                 }
             }
         }
-
     }
 
     protected override void CancelButtonClicked(){

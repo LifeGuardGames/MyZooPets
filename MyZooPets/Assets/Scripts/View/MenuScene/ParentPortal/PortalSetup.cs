@@ -42,7 +42,7 @@ public class PortalSetup : PortalContent {
                         pinConfirmError.GetComponent<UILabel>().text = confirmPinErrorMsg;
                     }
                 }else{ //Setup is successful. redirect to login page
-
+                    ParentPortalUIManager.Instance.DisplayGeneralMessage("MSG_PIN_CREATED");
                     ParentPortalUIManager.Instance.ShowPortalLogin(this.gameObject);
                 }
             }

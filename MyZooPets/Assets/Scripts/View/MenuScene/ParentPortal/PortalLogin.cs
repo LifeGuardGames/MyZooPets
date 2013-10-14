@@ -24,7 +24,7 @@ public class PortalLogin : PortalContent {
                     }
                 }else{ //Login successful. Redirect to parent portal scene
                     //Load scene here
-
+                    Debug.Log("Load into parent portal");
                 }
             }
         }   

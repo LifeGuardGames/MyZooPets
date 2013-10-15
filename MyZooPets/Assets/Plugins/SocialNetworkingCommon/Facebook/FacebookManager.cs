@@ -7,7 +7,7 @@ using Prime31;
 
 public class FacebookManager : AbstractManager
 {
-#if UNITY_ANDROID || UNITY_IPHONE
+#if UNITY_ANDROID || UNITY_IPHONE || UNITY_EDITOR
 	// Fired after a successful login attempt was made
 	public static event Action sessionOpenedEvent;
 

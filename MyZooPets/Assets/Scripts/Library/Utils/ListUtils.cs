@@ -1,0 +1,45 @@
+﻿using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+///////////////////////////////////////////
+// ListUtils
+// Misc utility functions for lists.
+///////////////////////////////////////////
+
+public static class ListUtils {
+	///////////////////////////////////////////
+	// GetRandomElements()
+	// Given a list, will return another list
+	// comprised of random, unique elements of
+	// the incoming list.
+	///////////////////////////////////////////
+	public static List<T> GetRandomElements<T>( List<T> list, int nCount )
+	{
+		// simple check to make sure we aren't trying to get more elements than are in the array
+		if ( nCount <= 0 || nCount > list.Count )
+		{
+			Debug.Log("Attempted to get random # of elements from an array too small!  Shrinking elements to match array length.");
+			nCount = list.Count;
+		}
+		
+		List<T> listResults = new List<T>();		// list with results function will return
+		List<T> listCopy = new List<T>(list);		// a copy of the list, since we manipulate it
+		
+		// while we haven't reached our number of results...
+		while ( listResults.Count < nCount )
+		{
+			// get a random element from the remaining elements in arrayCopy
+			// and then stick it in the results
+			int nRandom = UnityEngine.Random.Range(0, listCopy.Count);
+			listResults.Add(listCopy[nRandom]);
+			
+			// remove that object from the array of possible objects so we get unique results
+			listCopy.RemoveAt(nRandom);
+		}
+		
+		return listResults;
+	}
+
+}

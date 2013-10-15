@@ -21,7 +21,18 @@ public class NinjaTriggerTarget : NinjaTrigger {
 	protected override void _OnCut() {
 		// award points
 		int nVal = GetPointValue();
-		NinjaManager.Instance.UpdateScore( nVal );		
+		NinjaManager.Instance.UpdateScore( nVal );	
+		
+		// then launch the trigger into the air
+		
+		// get proper forces
+		int nForceRangeX = Constants.GetConstant<int>("CutForceRangeX");
+		int nForceX = UnityEngine.Random.Range( -nForceRangeX, nForceRangeX );
+		int nForceY = Constants.GetConstant<int>("CutForceY");
+		Vector3 vForce = new Vector3( nForceX, nForceY, 0 );
+		
+		// apply said force
+		gameObject.rigidbody.AddForce( vForce );
 	}
 	
 	//---------------------------------------------------

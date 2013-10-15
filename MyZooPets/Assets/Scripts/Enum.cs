@@ -167,3 +167,13 @@ public enum ClickLockExceptions{
 	None,
 	Moving
 }
+
+// group types for the trigger ninja game
+public enum NinjaGroupTypes {
+	Separate,
+	Clustered,
+	Cross,
+	Split,
+	Meet,
+	Sequence
+}

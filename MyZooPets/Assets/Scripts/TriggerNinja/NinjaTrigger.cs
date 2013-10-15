@@ -9,6 +9,8 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class NinjaTrigger : MonoBehaviour {		
+	// is this object active?  this is really only 
+	
 	// saved velocities on this object for when it is paused/resumed
 	private Vector3 savedVelocity;
 	private Vector3 savedAngularVelocity;	
@@ -16,6 +18,9 @@ public class NinjaTrigger : MonoBehaviour {
 	// sounds
 	public string strSoundHit;
 	public string strSoundMissed;
+	
+	// is this object in the process of being cut?  Necessary because we use multiple colliders on some objects
+	private bool bCut = false;
 	
 	//---------------------------------------------------
 	// Start()
@@ -40,15 +45,19 @@ public class NinjaTrigger : MonoBehaviour {
 	// When this trigger gets cut.
 	//---------------------------------------------------	
 	public void OnCut() {
-		// call child first
-		_OnCut();
+		// if this object was already cut, return.  This is possible because some objects use multiple primitive colliders
+		if ( bCut )
+			return;
+		
+		// mark the object as cut
+		bCut = true;
 		
 		// play a sound (if it exists)
 		if ( !string.IsNullOrEmpty( strSoundHit ) )
-			AudioManager.Instance.PlayClip( strSoundHit );
+			AudioManager.Instance.PlayClip( strSoundHit );		
 		
-		// then destroy the object
-		Destroy( gameObject );
+		// call child behaviour
+		_OnCut();
 	}
 	
 	//---------------------------------------------------
@@ -113,13 +122,22 @@ public class NinjaTrigger : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// Update()
-	//---------------------------------------------------	
-	void Update() {
-		// gah...I hate to do this in Update()...I'm not sure where else to put it though
-		float fFloor = NinjaManager.Instance.GetFloor();
-		if ( transform.position.y <= fFloor ) {
-			// if the object reached this location, the player did NOT cut it
+	// OnBecameInvisible()
+	// Nifty callback function that will tell us when
+	// the trigger is no longer being rendered by the
+	// camera.
+	//---------------------------------------------------		
+	void OnBecameInvisible() {
+#if UNITY_EDITOR
+		// check to make sure the game is playing, because this function is called in the editor
+		if ( !AudioManager.Instance )
+			return;
+#endif			
+		// if the object is going invisible and was cut, just destroy it
+		if ( bCut )
+			Destroy( gameObject );
+		else {
+			// otherwise, it means the object was missed
 			OnMissed();
 		}
 	}

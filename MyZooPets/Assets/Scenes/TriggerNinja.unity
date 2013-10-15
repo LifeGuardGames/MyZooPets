@@ -1376,7 +1376,6 @@ GameObject:
   - 4: {fileID: 491809514}
   - 114: {fileID: 491809516}
   - 114: {fileID: 491809515}
-  - 114: {fileID: 491809517}
   m_Layer: 10
   m_Name: Transition
   m_TagString: Untagged
@@ -1470,20 +1469,6 @@ MonoBehaviour:
   HideFunctionName: 
   HideIncludeChildren: 0
   hideImmediately: 0
---- !u!114 &491809517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 491809513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  demux: {fileID: 491809516}
-  toggle: {fileID: 0}
-  goLoadScreen: {fileID: 1894578203}
 --- !u!1 &496872767
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,6 +3038,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1020919715}
+  - 114: {fileID: 1020919714}
   - 114: {fileID: 1020919713}
   m_Layer: 0
   m_Name: NInjaManager
@@ -3076,10 +3062,28 @@ MonoBehaviour:
   goOpening: {fileID: 356260360}
   goGameOver: {fileID: 969131737}
   goPaused: {fileID: 591972174}
-  scriptTransition: {fileID: 491809517}
+  scriptTransition: {fileID: 1020919714}
   labelScore: {fileID: 445915061}
   labelLives: {fileID: 1627268520}
-  nStartingLives: 3
+  nStartingLives: 3000
+  fMax: 3
+  num: 2
+  eSpawnType: 4
+--- !u!114 &1020919714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: e11342ebc0acc46d6b9f71d19fbffc21,
+    type: 2}
+  m_PrefabInternal: {fileID: 1816222952}
+  m_GameObject: {fileID: 1020919712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelName: 
+  optionalLoadingScreen: {fileID: 1894578203}
+  transitionToggleObject: {fileID: 491809513}
 --- !u!4 &1020919715
 Transform:
   m_ObjectHideFlags: 0
@@ -4261,7 +4265,7 @@ Prefab:
       objectReference: {fileID: 445915061}
     - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
       propertyPath: nStartingLives
-      value: 3
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
       propertyPath: labelLives
@@ -4274,7 +4278,7 @@ Prefab:
     - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
       propertyPath: scriptTransition
       value: 
-      objectReference: {fileID: 491809517}
+      objectReference: {fileID: 1020919714}
     - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
       propertyPath: goOpening
       value: 
@@ -4287,8 +4291,19 @@ Prefab:
       propertyPath: goGameOver
       value: 
       objectReference: {fileID: 969131737}
-    m_RemovedComponents:
-    - {fileID: 11400002, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+    - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+      propertyPath: fMax
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+      propertyPath: num
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+      propertyPath: eSpawnType
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
   m_RootGameObject: {fileID: 1020919712}
   m_IsPrefabParent: 0

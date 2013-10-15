@@ -10,25 +10,11 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class NinjaManager : MinigameManager<NinjaManager> {
-	
-	// the y threshold after which objects get destroyed
-	private float fFloor;
-	public float GetFloor() {
-		return fFloor;	
-	}
-	
 	// testing
 	private float fTime = 0;
-	
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------	
-	protected override void _Start() {
-		// set the floor -- this varies from device to device
-		// we get the floor by finding the y value of the 0,-.5 position of the viewport
-		Vector3 vFloor = Camera.main.ViewportToWorldPoint( new Vector3(0, -.5f, 10) );
-		fFloor = vFloor.y;
-	}	
+	public float fMax;
+	public int num;
+	public NinjaGroupTypes eSpawnType;
 	
 	//---------------------------------------------------
 	// _OnDestroy()
@@ -61,25 +47,63 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	//---------------------------------------------------
 	protected override void _Update () {
 		if ( fTime <= 0 ) {
+			/*
 			float fX = UnityEngine.Random.Range(.1f, .9f);
-			Vector3 vPos = Camera.main.ViewportToWorldPoint( new Vector3( fX, -.25f, 10 ) );
+			
 			
 			string strPrefab = fX < .5f ? "NinjaTrigger" : "NinjaTriggerBomb";
 			//string strPrefab = "NinjaTrigger";
 			
 			GameObject resource = Resources.Load(strPrefab) as GameObject;
-			GameObject go = Instantiate( resource, vPos, Quaternion.identity ) as GameObject;
 			
-			float fForceY = UnityEngine.Random.Range(500, 900);
-			//float fForceY = 500;
+			for ( float i = .1f; i <= 1f; i += .1f ) {
+				Vector3 vPos = Camera.main.ViewportToWorldPoint( new Vector3( i, -.25f, 10 ) );
+				GameObject go = Instantiate( resource, vPos, Quaternion.identity ) as GameObject;
+				
+				float fForceY = UnityEngine.Random.Range(500, 900);
+				//float fForceY = 500;
+				
+				go.rigidbody.AddForce( new Vector3(0, fForceY, 0) );
+			}
+			*/
 			
-			go.rigidbody.AddForce( new Vector3(0, fForceY, 0) );
+			SpawnGroup( num, eSpawnType );
 			
-			fTime = 1;
+			fTime = fMax;
 		}
 		else
 			fTime -= Time.deltaTime;
 	}	
+	
+	//---------------------------------------------------
+	// SpawnGroup()
+	//---------------------------------------------------	
+	private void SpawnGroup( int num, NinjaGroupTypes eType ) {
+		List<string> listObjects = new List<string>();
+		for ( int i = 0; i < num; ++i )
+			listObjects.Add("NinjaTrigger");
+		
+		switch ( eType ) {
+			case NinjaGroupTypes.Separate:
+				new SpawnGroup_Separate( listObjects );
+				break;
+			case NinjaGroupTypes.Clustered:
+				new SpawnGroup_Cluster( listObjects );
+				break;
+			case NinjaGroupTypes.Meet:
+				new SpawnGroup_Meet( listObjects );
+				break;
+			case NinjaGroupTypes.Cross:
+				new SpawnGroup_Cross( listObjects );
+				break;
+			case NinjaGroupTypes.Split:
+				new SpawnGroup_Split( listObjects );
+				break;			
+			default:
+				Debug.Log("Unhandled group type: " + eType);
+				break;
+		}
+	}
 	
 	//---------------------------------------------------
 	// OnDrag()
@@ -95,7 +119,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		
 		GameObject go = gesture.Selection;
 		if ( go ) {
-			Debug.Log("Touching " + go.name);
+			//Debug.Log("Touching " + go.name);
 			NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
 			
 			// if the trigger is null, check the parent...a little hacky, but sue me!

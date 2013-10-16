@@ -23,6 +23,9 @@ public class NinjaTriggerTarget : NinjaTrigger {
 		int nVal = GetPointValue();
 		NinjaManager.Instance.UpdateScore( nVal );	
 		
+		// increase the player's combo
+		NinjaManager.Instance.IncreaseCombo( 1 );
+		
 		// then launch the trigger into the air
 		
 		// get proper forces

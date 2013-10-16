@@ -34,6 +34,9 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	// player score
 	public UILabel labelScore;
 	private int nScore;	
+	public int GetScore() {
+		return nScore;	
+	}
 	
 	// player lives
 	public UILabel labelLives;
@@ -90,7 +93,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		if ( OnStateChanged != null )
 			OnStateChanged( this, new GameStateArgs(eCurrentState) );
 	}
-	protected MinigameStates GetGameState() {
+	public MinigameStates GetGameState() {
 		return eCurrentState;
 	}
 	
@@ -315,7 +318,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	// SetLives()
 	// Sets the player's lives and updates the label.
 	//---------------------------------------------------	
-	private void SetLives( int num ) {
+	private void SetLives( int num ) {		
 		nLives = num;
 		
 		if ( labelLives )

@@ -9,7 +9,8 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class NinjaTrigger : MonoBehaviour {		
-	// is this object active?  this is really only 
+	// number of children objects that are visible
+	private int nChildrenVis;
 	
 	// saved velocities on this object for when it is paused/resumed
 	private Vector3 savedVelocity;
@@ -26,6 +27,11 @@ public class NinjaTrigger : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------	
 	void Start() {
+		// count the number of children that have NinjaTriggerChildren scripts -- this will be used when determining if the
+		// trigger is being shown by the camera or not.
+		NinjaTriggerChild[] children = gameObject.GetComponentsInChildren<NinjaTriggerChild>();
+		nChildrenVis = children.Length;
+		
 		// we don't want our objects colliding with each other
 		rigidbody.detectCollisions = false;	
 		
@@ -122,31 +128,61 @@ public class NinjaTrigger : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
+	// ChildBecameInvis()
+	// When a child of this trigger becomes invisible.
+	// This isn't the best/most completely implementation
+	// becaues it assumes that once a children becomes
+	// invisible, it will not become visible again.  This
+	// is currently the case.
+	//---------------------------------------------------	
+	public void ChildBecameInvis() {
+		nChildrenVis--;
+		
+		// if there are no more children visible...
+		if ( nChildrenVis == 0 )
+			TriggerOffScreen();
+	}
+	
+	//---------------------------------------------------
 	// OnBecameInvisible()
 	// Nifty callback function that will tell us when
 	// the trigger is no longer being rendered by the
 	// camera.
 	//---------------------------------------------------		
 	void OnBecameInvisible() {
+		TriggerOffScreen();
+	}
+	
+	//---------------------------------------------------
+	// TriggerOffScreen()
+	// This trigger is no longer on the screen.
+	//---------------------------------------------------	
+	private void TriggerOffScreen() {
 #if UNITY_EDITOR
 		// check to make sure the game is playing, because this function is called in the editor
-		if ( !AudioManager.Instance )
+		if ( !AudioManager.Instance || !NinjaManager.Instance )
 			return;
-#endif			
+#endif
+		
+		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
+		// despite the game being over (because the object was becoming invisible).
+		if ( NinjaManager.Instance.GetGameState() == MinigameStates.GameOver )
+			return;	
+		
 		// if the object is going invisible and was cut, just destroy it
 		if ( bCut )
 			Destroy( gameObject );
 		else {
 			// otherwise, it means the object was missed
 			OnMissed();
-		}
+		}		
 	}
 	
 	//---------------------------------------------------
 	// OnMissed()
 	// The object was not destroyed by the player.
 	//---------------------------------------------------	
-	private void OnMissed() {
+	private void OnMissed() {		
 		// call children first
 		_OnMissed();
 		

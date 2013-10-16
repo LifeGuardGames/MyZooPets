@@ -118,7 +118,7 @@ public class PlayerRunner : MonoBehaviour
 		CheckAndActOnDeath();
 	}
 
-	void onSwipeUp() {
+	void onTap() {
 		TriggerJump();
 	}
 

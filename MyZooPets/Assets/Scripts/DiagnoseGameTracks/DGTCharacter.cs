@@ -95,8 +95,8 @@ public class DGTCharacter : MonoBehaviour {
 		sprite.SetSprite( strSprite );
 		
 		// Create random horizontal flip
-		int flipRandom = UnityEngine.Random.Range(0, 1);
-		sprite.scale = new Vector3((flipRandom == 0 ? -1 * spriteScale : spriteScale), spriteScale, 1);
+//		int flipRandom = UnityEngine.Random.Range(0, 2);
+//		sprite.scale = new Vector3((flipRandom == 0 ? -1 * spriteScale : spriteScale), spriteScale, 1);
 		
 		bSet = true;
 	}

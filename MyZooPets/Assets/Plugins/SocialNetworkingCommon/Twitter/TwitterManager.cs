@@ -7,7 +7,7 @@ using Prime31;
 
 public class TwitterManager : MonoBehaviour
 {
-#if UNITY_IPHONE || UNITY_ANDROID
+#if UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR
 	// Fired after a successful login attempt was made. Provides the screenname of the user.
 	public static event Action<string> loginSucceededEvent;
 	

@@ -167,3 +167,28 @@ public enum ClickLockExceptions{
 	None,
 	Moving
 }
+
+// patterns for the trigger ninja game
+public enum NinjaPatterns {
+	Separate,
+	Clustered,
+	Cross,
+	Split,
+	Meet,
+	Sequence
+}
+
+// scoring categories for the ninja game
+public enum NinjaScoring {
+	Start_1,
+	Start_2,
+	Start_3,
+	Med,
+	Med_High,
+	High
+}
+
+// ninja game modes
+public enum NinjaModes {
+	Classic
+}

@@ -11,6 +11,10 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class DGTCharacter : MonoBehaviour {	
+	
+	// Sprite scale
+	public float spriteScale;
+	
 	// list of potential sprites
 	public string[] arrayOK;
 	public string[] arraySick;
@@ -89,6 +93,10 @@ public class DGTCharacter : MonoBehaviour {
 		strSprite = arraySprites[nRandom];
 		tk2dSprite sprite = gameObject.GetComponent<tk2dSprite>();
 		sprite.SetSprite( strSprite );
+		
+		// Create random horizontal flip
+//		int flipRandom = UnityEngine.Random.Range(0, 2);
+//		sprite.scale = new Vector3((flipRandom == 0 ? -1 * spriteScale : spriteScale), spriteScale, 1);
 		
 		bSet = true;
 	}

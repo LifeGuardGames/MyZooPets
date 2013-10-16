@@ -31,11 +31,11 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 	}
 
     public void SetAlpha(float inAlpha) {
-        foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
-            UITexture theTexture = currentParallax.GetComponent<UITexture>();
-            // Color currentColor = theTexture.material.color;
-            // currentColor.a = inAlpha;
-            // theTexture.material.color = currentColor;
-        }
+        // foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
+        //     UITexture theTexture = currentParallax.GetComponent<UITexture>();
+        //     Color currentColor = theTexture.material.color;
+        //     currentColor.a = inAlpha;
+        //     theTexture.material.color = currentColor;
+        // }
     }
 }

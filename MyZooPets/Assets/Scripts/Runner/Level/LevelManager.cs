@@ -38,6 +38,8 @@ public class LevelManager : MonoBehaviour
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 	private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
 
+    private LevelComponent lastQueuedComponent;
+
 	// Use this for initialization
 	void Start() {
 		if (LevelGroups.Count <= 0)
@@ -112,11 +114,12 @@ public class LevelManager : MonoBehaviour
             currentComponent.DestroyAndCache();
         }
 
-        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
-        PushAndInstantiateRandomComponent();
         LevelComponent nextLevel;
+        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
+        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
+        // PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
         nextLevel = PushAndInstantiateRandomComponent();
@@ -255,15 +258,23 @@ public class LevelManager : MonoBehaviour
 			LevelComponent nextlevelComponent = null;
 
 			if (inForceUseThisComponent == null) {
-				nextlevelComponent = mCurrentLevelGroup.LevelComponents[Random.Range(0, mCurrentLevelGroup.LevelComponents.Count)];
+                //Only queue new component that is different from the previous ona
+                while(true){
+                    int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
+
+                    nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
+                    if(lastQueuedComponent.name != nextlevelComponent.name) break;
+                }
 				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
 				Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
+
 			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
             newComponent.ParentGroup = mCurrentLevelGroup;
+            newComponent.name = nextlevelComponent.name;
 			
 			// Set its position to the last max point (I hope).
 			newComponent.transform.position = mLastCenterPosition;
@@ -280,6 +291,7 @@ public class LevelManager : MonoBehaviour
 			mLastCenterPosition = maxAnchor.position;
 			
 			mLevelComponentQueue.Enqueue(newComponent);
+            lastQueuedComponent = newComponent;
 
 			return newComponent;
 		}
@@ -482,10 +494,16 @@ public class LevelManager : MonoBehaviour
         GameObject lowestComponent = null;
         foreach (LevelComponent currentComponent in mLevelComponentQueue) {
             foreach (Transform currentLevelPiece in currentComponent.transform) {
-                if (lowestComponent == null
-                    || currentLevelPiece.position.y < lowestComponent.transform.position.y)
-                {
-                    lowestComponent = currentLevelPiece.gameObject;
+                //TO DO: this is a temporary fix to ignore tile map that doesn't have
+                //a collider
+                if(currentLevelPiece.name != "TileMap" && 
+                    currentLevelPiece.name != "TileMap Render Data"){
+
+                    if (lowestComponent == null
+                        || currentLevelPiece.position.y < lowestComponent.transform.position.y){
+
+                        lowestComponent = currentLevelPiece.gameObject;
+                    }
                 }
             }
         }

@@ -166,7 +166,8 @@ public class NinjaTrigger : MonoBehaviour {
 		
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
-		if ( NinjaManager.Instance.GetGameState() == MinigameStates.GameOver )
+		MinigameStates eState = NinjaManager.Instance.GetGameState();
+		if ( eState == MinigameStates.GameOver || eState == MinigameStates.Restarting )
 			return;	
 		
 		// if the object is going invisible and was cut, just destroy it

@@ -10,11 +10,10 @@ using UnityEngine;
 using System.Collections;
 
 public abstract class RunnerItem : MonoBehaviour {
-	public string Name = "";
-	public int PointValue = 0;
-	
-	// sound to play on pickup, if any
-	public string strSoundPickup;
+	public string ID = "";
+	public int pointValue = 0;
+	public string strSoundPickup;  	// sound to play on pickup, if any
+	public bool hasTutorial; //Whether this item has a tutorial or not 
 
 	// Use this for initialization
 	public virtual void Start() { }
@@ -25,12 +24,18 @@ public abstract class RunnerItem : MonoBehaviour {
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player") {
 			OnPickup();
-			
+		
+			//Display tutorial if needed	
+			if(hasTutorial)
+				ItemManager.Instance.DisplayTutorial(ID);
+
+			//Add to minus points depending on trigger
+            ScoreManager scoreManager = RunnerGameManager.Instance.ScoreManager;
+            scoreManager.AddPoints(pointValue);
+
+            //Play sound
 			if ( !string.IsNullOrEmpty(strSoundPickup) )
 				AudioManager.Instance.PlayClip( strSoundPickup );
-
-            ScoreManager scoreManager = RunnerGameManager.GetInstance().ScoreManager;
-            scoreManager.AddPoints(PointValue);
 		}
 	}
 

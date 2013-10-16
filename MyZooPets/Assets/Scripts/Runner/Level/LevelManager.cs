@@ -50,11 +50,11 @@ public class LevelManager : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update() {
-		if ( !RunnerGameManager.GetInstance().GameRunning )
+		if ( !RunnerGameManager.Instance.GameRunning )
 			return;
 		
 		// Assuming there is a runner and a level.
-		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
 		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
 			Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour
                 LevelComponent newFront = mLevelComponentQueue.Peek();
 
                 if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
-                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
+                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.Instance.ParallaxingBackgroundManager;
                     parralaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
                 }
 
@@ -133,7 +133,7 @@ public class LevelManager : MonoBehaviour
 	// The order of them can be cached out and manag
 	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
 	private void UpdateInvincibility() {
-		PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
 		if (player.Invincible) {
 			Debug.Log("asfafas");
 			// Get all lowest components
@@ -329,7 +329,7 @@ public class LevelManager : MonoBehaviour
 	}
 
     private void SpawnItemsInLevel(LevelComponent inLevelComponent, PointGroup inGroup) {
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+        ItemManager itemManager = ItemManager.Instance; 
         switch (inGroup.mSpawnType) {
             case eSpawnType.Coins: {
                 SpawnCoinStrip(inLevelComponent, inGroup);
@@ -351,7 +351,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup) {
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+        ItemManager itemManager = ItemManager.Instance; 
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point:
             case eCurveType.Linear: {
@@ -415,7 +415,7 @@ public class LevelManager : MonoBehaviour
     }
 
 	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn) {
-        RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
+        // RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
         Vector3 newPosition = inLevelComponent.transform.position;
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point: {
@@ -462,10 +462,10 @@ public class LevelManager : MonoBehaviour
             }
             break;
         }
-        spawnedItem.transform.position = newPosition;
+        inItemToSpawn.transform.position = newPosition;
 
         // Spawn it at that point
-        inLevelComponent.AddLevelItem(spawnedItem);
+        inLevelComponent.AddLevelItem(inItemToSpawn);
 	}
 	
 	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent) {

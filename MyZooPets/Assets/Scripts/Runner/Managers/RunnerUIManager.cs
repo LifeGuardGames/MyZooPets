@@ -31,7 +31,7 @@ public class RunnerUIManager : MonoBehaviour {
         GameOverPanel.gameObject.SetActive(true);
 
         // Determine the pointss
-        RunnerGameManager runnerGameManager = RunnerGameManager.GetInstance();
+        RunnerGameManager runnerGameManager = RunnerGameManager.Instance;
         ScoreManager scoreManager = runnerGameManager.ScoreManager;
         float numCoins = scoreManager.Coins;
         float numScore = scoreManager.GetScore();

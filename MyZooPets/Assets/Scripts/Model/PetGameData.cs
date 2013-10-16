@@ -17,6 +17,7 @@ public class PetGameData{
     public SkillMutableData Dojo {get; set;}
     public BadgeMutableData Badge {get; set;}
     public GatingProgressData GatingProgress {get; set;}
+    public RunnerGameData RunnerGame {get; set;}
 
     public PetGameData(){}
 
@@ -47,5 +48,7 @@ public class PetGameData{
         Badge.Init();
         GatingProgress = new GatingProgressData();
         GatingProgress.Init();
+        RunnerGame = new RunnerGameData();
+        RunnerGame.Init();
     }
 }

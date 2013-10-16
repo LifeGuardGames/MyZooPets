@@ -21,25 +21,20 @@ public class GameStateArgs : EventArgs{
 // Generic manager of a minigame.
 //---------------------------------------------------
 
-public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
-		
-	// UIs
-	public GameObject goOpening;
-	public GameObject goGameOver;
-	public GameObject goPaused;
+public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {	
+	// reference to the UI controller
+	public MinigameUI ui;
 	
 	// scene transition
 	public SceneTransition scriptTransition;
 
 	// player score
-	public UILabel labelScore;
 	private int nScore;	
 	public int GetScore() {
 		return nScore;	
 	}
 	
 	// player lives
-	public UILabel labelLives;
 	private int nLives;
 	public int nStartingLives;
 	
@@ -113,7 +108,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		yield return 0;
 		
 		// show the opening UI
-		ToggleUI( goOpening, true );
+		ui.TogglePopup( MinigamePopups.Opening, true );
 		
 		// reset labels
 		ResetLabels();
@@ -199,38 +194,12 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// ToggleUI()
-	// Show or hide one of the UI panels for this mini game.
-	//---------------------------------------------------		
-	private void ToggleUI( GameObject goUI, bool bShow ) {
-		if ( goUI ) {
-			PositionTweenToggle script = goUI.GetComponent<PositionTweenToggle>();
-			if ( bShow ) {
-				script.Show();
-				
-				// lock clicks
-				ClickManager.Instance.ClickLock();
-				ClickManager.SetActiveGUIModeLock( true );
-			}
-			else {
-				script.Hide();
-				
-				// clicks are ok
-				ClickManager.Instance.ReleaseClickLock();
-				ClickManager.SetActiveGUIModeLock( false );
-			}
-		}
-		else
-			Debug.Log("Minigame doesn't have a UI panel but it's trying to be shown!");
-	}
-	
-	//---------------------------------------------------
 	// StartGame()
 	// This comes from clicking a button.
 	//---------------------------------------------------	
 	public void StartGame() {
 		// minigame is starting, so hide the opening
-		ToggleUI( goOpening, false );
+		ui.TogglePopup( MinigamePopups.Opening, false );
 		
 		// init stuff
 		NewGame();
@@ -242,16 +211,18 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	//---------------------------------------------------		
 	public void RestartGame() {
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
-		if ( goGameOver.GetComponent<PositionTweenToggle>().IsShowing )
-			ToggleUI( goGameOver, false );
+		if ( ui.IsPopupShowing( MinigamePopups.GameOver ) )
+			ui.TogglePopup( MinigamePopups.GameOver, false );
 		
-		if ( goPaused.GetComponent<PositionTweenToggle>().IsShowing )
-			ToggleUI( goPaused, false );
+		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
+			ui.TogglePopup( MinigamePopups.Pause, false );
 		
 		if ( IsTutorial() ) {
 			tutorial.Abort();
 			tutorial = null;	
 		}
+		
+		SetGameState( MinigameStates.Restarting );
 		
 		NewGame();
 	}
@@ -294,15 +265,8 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	private void SetScore( int num ) {
 		nScore = num;
 		
-		if ( labelScore )
-			labelScore.text = nScore.ToString();
-		
-		// Animate if any
-		AnimationControl anim = labelScore.transform.parent.gameObject.GetComponent<AnimationControl>();
-		if(anim != null){
-			anim.Stop();
-			anim.Play();
-		}
+		// update ui
+		ui.SetLabel( MinigameLabels.Score, num.ToString() );
 	}
 	
 	//---------------------------------------------------
@@ -321,19 +285,12 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	private void SetLives( int num ) {		
 		nLives = num;
 		
-		if ( labelLives )
-			labelLives.text = nLives.ToString();
+		// update ui
+		ui.SetLabel( MinigameLabels.Lives, num.ToString() );
 		
 		// check for game over
 		if ( nLives <= 0 )
 			GameOver();
-		
-		// Animate if any
-		AnimationControl anim = labelLives.transform.parent.gameObject.GetComponent<AnimationControl>();
-		if(anim != null){
-			anim.Stop();
-			anim.Play();
-		}
 	}
 	
 	//---------------------------------------------------
@@ -354,7 +311,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		SetGameState( MinigameStates.GameOver );
 		
 		// show the game over UI
-		ToggleUI( goGameOver, true );
+		ui.TogglePopup( MinigamePopups.GameOver, true );
 	}
 	
 	//---------------------------------------------------
@@ -370,7 +327,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		SetGameState( MinigameStates.Paused );
 		
 		// show the pause game UI
-		ToggleUI( goPaused, true );
+		ui.TogglePopup( MinigamePopups.Pause, true );
 	}	
 	
 	//---------------------------------------------------
@@ -382,7 +339,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		SetGameState( MinigameStates.Playing );
 		
 		// hide the game paused UI
-		ToggleUI( goPaused, false );
+		ui.TogglePopup( MinigamePopups.Pause, false );
 	}	
 	
 	//---------------------------------------------------

@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: DGTManager
+  m_Name: NinjaManagerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 800.673584, y: 363.249023, z: 130.945862}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -35,22 +35,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cbaba87aa27d44c48521d1dd8036450, type: 3}
+  m_Script: {fileID: 11500000, guid: e0aac035af948418899a8549b2abd8f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 0}
-  scriptTransition: {fileID: 0}
-  nStartingLives: 3
-  goArrow: {fileID: 0}
-  fStartingSpeed: 100
-  fMaxSpeed: 500
-  fStartSpawnRate: 2
-  nCharactersPerWave: 5
-  fSpeedIncrease: 50
-  fSpawnChange: -.5
-  vSpawnLocation: {x: 0, y: 384, z: 0}
-  prefabCharacter: {fileID: 100000, guid: b81ac4ddc1c10475b85dc66b98b23f81, type: 2}
-  goStartingZone: {fileID: 0}
+  goOpening: {fileID: 0}
+  goGameOver: {fileID: 0}
+  goPaused: {fileID: 0}
+  labelScore: {fileID: 0}
+  labelLives: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

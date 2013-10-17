@@ -45,8 +45,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerRunner : MonoBehaviour
-{
+public class PlayerRunner : Singleton<PlayerRunner>{
     public float DefaultSpeed = 1.0f;
 	public float JumpSpeed = 0.5f;
 	public float SpeedIncrease = 0.1f;
@@ -294,10 +293,9 @@ public class PlayerRunner : MonoBehaviour
     }
 
 	public void TriggerSlowdown(float inDivisor) {
-        if (!mbInvincible) {
-            RunnerGameManager gameManager = RunnerGameManager.Instance;
-            gameManager.SlowTimeSpeed(inDivisor);
-            gameManager.MegaHazard.TriggerPlayerSlowdown();
+        if(!mbInvincible){
+            RunnerGameManager.Instance.SlowTimeSpeed(inDivisor);
+            MegaHazard.Instance.TriggerPlayerSlowdown();
         }
 	}
 
@@ -315,7 +313,7 @@ public class PlayerRunner : MonoBehaviour
 	private void TriggerFall() {
 		if (!mbJumping && !mbFalling) {
             // nop you can't fall through a bottom layered collision.
-            int bottomLayer = RunnerGameManager.Instance.LevelManager.BottomLayer;
+            int bottomLayer = LevelManager.Instance.BottomLayer;
 
             RaycastHit hitinfo;
             if (Physics.Raycast(collider.bounds.min, Vector3.down, out hitinfo, 1f)) {
@@ -336,7 +334,7 @@ public class PlayerRunner : MonoBehaviour
 
     private void CheckAndActOnDeath() {
         // Are we below the maps floor value
-        LevelManager levelManager = RunnerGameManager.Instance.LevelManager;
+        LevelManager levelManager = LevelManager.Instance;
         float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
         if (transform.position.y < yTooLowValue) {
             if (!mbInvincible) {

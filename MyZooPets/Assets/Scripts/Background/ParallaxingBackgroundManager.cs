@@ -10,7 +10,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ParallaxingBackgroundManager : MonoBehaviour {
+public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManager> {
 	public Vector3 BackgroundCameraOffset;
 	public Camera BackgroundCamera;
     public GameObject BackgroundParent;

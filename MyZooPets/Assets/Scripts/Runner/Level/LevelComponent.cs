@@ -161,7 +161,7 @@ public class LevelComponent : MonoBehaviour {
 	
 	private void FindBottomLayers(Transform inCurrentTransform){
 		if (inCurrentTransform != null){
-			LevelManager levelManager = RunnerGameManager.Instance.LevelManager;
+			LevelManager levelManager = LevelManager.Instance;
 			foreach (Transform currentChild in inCurrentTransform) {
 				if (currentChild.gameObject.layer == levelManager.BottomLayer)
 					mBottomLayers.Add(currentChild.gameObject);

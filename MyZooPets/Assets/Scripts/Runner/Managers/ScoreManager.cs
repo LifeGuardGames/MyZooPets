@@ -12,7 +12,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ScoreManager : MonoBehaviour {
+public class ScoreManager : Singleton<ScoreManager> {
     public int ScorePerIncrement = 10;
     public float ScoreDistance = 10.0f;
     public UILabel ScoreLabel = null;
@@ -62,7 +62,7 @@ public class ScoreManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-        PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
+        PlayerRunner playerRunner = PlayerRunner.Instance;
         if (playerRunner != null) {
             float distanceTraveled = playerRunner.transform.position.z;
 

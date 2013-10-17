@@ -25,7 +25,7 @@ public class CoinItem : RunnerItem {
 		hashOverride["Pitch"] = fPitch;
 		AudioManager.Instance.PlayClip( "StarSingle", hashOverride );
 		
-        RunnerGameManager.Instance.ScoreManager.AddCoins(CoinValue);
+        ScoreManager.Instance.AddCoins(CoinValue);
         GameObject.Destroy(gameObject);
     }
 	
@@ -35,7 +35,7 @@ public class CoinItem : RunnerItem {
 	// pitch at which the coin sound should play.
 	//---------------------------------------------------	
 	public float GetCoinStreakPitch() {
-		int nStreak = RunnerGameManager.Instance.ScoreManager.GetCoinStreak();
+		int nStreak = ScoreManager.Instance.GetCoinStreak();
 		float fPitch = 1.0f + ( nStreak * fPitchPerCoin );
 
 		return fPitch;

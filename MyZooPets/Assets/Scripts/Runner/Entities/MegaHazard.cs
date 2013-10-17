@@ -11,7 +11,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class MegaHazard : MonoBehaviour {
+public class MegaHazard : Singleton<MegaHazard> {
 	public float ZDefaultDistanceFromPlayer = 5f;
 	public float DistanceDivisor = 2.0f;
 	public float DistanceRegainIncrement = 0.1f;
@@ -51,14 +51,14 @@ public class MegaHazard : MonoBehaviour {
 		mDistanceRegainPulse = DistanceRegainTime;
 		mDistanceUntilTarget = 0f;
 
-		transform.position = RunnerGameManager.Instance.PlayerRunner.transform.position;
+		transform.position = PlayerRunner.Instance.transform.position;
 		UpdatePositionRelativeToPlayer();
 		mDestinationPosition = transform.position;
 
 	}
 
 	public void TriggerPlayerSlowdown() {
-		PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
+		PlayerRunner player = PlayerRunner.Instance;
 		if (player != null) {
 			mSlowDownStayPulse = SlowDownStayDuration;
 			mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
@@ -84,7 +84,7 @@ public class MegaHazard : MonoBehaviour {
 		}
 
 		float currentDistance = GetCurrentOffsetDistance();
-		PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
+		PlayerRunner playerRunner = PlayerRunner.Instance;
 		mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
 		transform.position = mDestinationPosition;
 

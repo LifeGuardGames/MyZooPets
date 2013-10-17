@@ -16,87 +16,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class RunnerGameManager : Singleton<RunnerGameManager> {
-    private PlayerRunner mPlayerRunner;
-    private LevelManager mLevelManager;
-    private ParallaxingBackgroundManager mParallaxingBackgroundManager;
-    private ScoreManager mScoreManager;
-    private TouchDetectorManager mTouchDetectorManager;
-    private MegaHazard mMegaHazard;
-    private RunnerUIManager mRunnerUIManager;
-
+    public SceneTransition scriptTransition;
     public bool GameRunning{
         get; 
         protected set;
     }
-
-    public PlayerRunner PlayerRunner { get { return mPlayerRunner; } }
-    public LevelManager LevelManager { get { return mLevelManager; } }
-    public ParallaxingBackgroundManager ParallaxingBackgroundManager { get { return mParallaxingBackgroundManager; } }
-    public ScoreManager ScoreManager { get { return mScoreManager; } }
-    public TouchDetectorManager TouchDetectorManager { get { return mTouchDetectorManager; } }
-    public MegaHazard MegaHazard { get { return mMegaHazard; } }
-    public RunnerUIManager RunnerUIManager { get { return mRunnerUIManager; } }
-	
-	// scene transition
-	public SceneTransition scriptTransition;
 	
 	// Use this for initialization
 	void Start() {
-        GameObject foundObject;
-
-        foundObject  = GameObject.Find("Player");
-        if (foundObject != null)
-            mPlayerRunner = foundObject.GetComponent<PlayerRunner>();
-        else
-            Debug.LogError("Could not find an object named 'Player'");
-
-        foundObject = GameObject.Find("LevelManager");
-        if (foundObject != null)
-            mLevelManager = foundObject.GetComponent<LevelManager>();
-        else
-            Debug.LogError("Could not find an object named 'LevelManager'");
-
-        foundObject = GameObject.Find("ParallaxingBGManager");
-        if (foundObject != null)
-            mParallaxingBackgroundManager = foundObject.GetComponent<ParallaxingBackgroundManager>();
-        else
-            Debug.LogError("Could not find an object named 'ParallaxingBGManager'");
-
-        foundObject = GameObject.Find("ScoreManager");
-        if (foundObject != null)
-            mScoreManager = foundObject.GetComponent<ScoreManager>();
-        else
-            Debug.LogError("Could not find an object named 'ScoreManager'");
-
-        foundObject = GameObject.Find("TouchDetectorManager");
-        if (foundObject != null)
-            mTouchDetectorManager = foundObject.GetComponent<TouchDetectorManager>();
-        else
-            Debug.LogError("Could not find an object named 'TouchDetectorManager'");
-
-        foundObject = GameObject.Find("MegaHazard");
-        if (foundObject != null)
-            mMegaHazard = foundObject.GetComponent<MegaHazard>();
-        else
-            Debug.LogError("Could not find an object named 'MegaHazard'");
-
-        foundObject = GameObject.Find("RunnerUIManager");
-        if (foundObject != null)
-            mRunnerUIManager = foundObject.GetComponent<RunnerUIManager>();
-        else
-            Debug.LogError("Could not find an object named 'RunnerUIManager'");
-
-        
-		
-		/*
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
 			ShowCutscene();
 			GameRunning = false;	
 		}else
             GameRunning = true;
-		*/
-		
-		GameRunning = true;  
 	}
 	
 	//---------------------------------------------------
@@ -117,17 +49,15 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
     public void ResetGame() {
         Time.timeScale = 1f;
 
-        mRunnerUIManager.DeActivateGameOverPanel();
-
+        RunnerUIManager.Instance.DeActivateGameOverPanel();
         GameRunning = true;
 
-        mPlayerRunner.gameObject.SetActive(true);
-        mPlayerRunner.Reset();
-
-        mScoreManager.Reset();
-        mLevelManager.Reset();
-        mMegaHazard.Reset();
-        mParallaxingBackgroundManager.Reset();
+        PlayerRunner.Instance.gameObject.SetActive(true);
+        PlayerRunner.Instance.Reset();
+        ScoreManager.Instance.Reset();
+        LevelManager.Instance.Reset();
+        MegaHazard.Instance.Reset();
+        ParallaxingBackgroundManager.Instance.Reset();
     }
 
     public void PauseGame(){
@@ -141,11 +71,10 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
     public void ActivateGameOver() {
         GameRunning = false;
 
-        mRunnerUIManager.ActivateGameOverPanel();
+        RunnerUIManager.Instance.ActivateGameOverPanel();
 
         // Disable the player
-        if (mPlayerRunner != null)
-            mPlayerRunner.gameObject.SetActive(false);
+        PlayerRunner.Instance.gameObject.SetActive(false);
 		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "runnerGameOver" );

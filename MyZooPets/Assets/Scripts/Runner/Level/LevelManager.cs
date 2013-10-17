@@ -20,8 +20,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LevelManager : MonoBehaviour
-{
+public class LevelManager : Singleton<LevelManager> {
     public int BottomLayer = 31;
 	public float LevelTooLowYValue = -50.0f;
 	public float LevelTooLowYValueGameOver = -80.0f;
@@ -54,7 +53,7 @@ public class LevelManager : MonoBehaviour
 			return;
 		
 		// Assuming there is a runner and a level.
-		PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
+		PlayerRunner playerRunner = PlayerRunner.Instance;
 		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
 			Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
@@ -74,8 +73,8 @@ public class LevelManager : MonoBehaviour
                 LevelComponent newFront = mLevelComponentQueue.Peek();
 
                 if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
-                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.Instance.ParallaxingBackgroundManager;
-                    parralaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
+                    ParallaxingBackgroundManager parallaxManager = ParallaxingBackgroundManager.Instance;
+                    parallaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
                 }
 
 				// Destroy it
@@ -133,7 +132,7 @@ public class LevelManager : MonoBehaviour
 	// The order of them can be cached out and manag
 	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
 	private void UpdateInvincibility() {
-		PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
+		PlayerRunner player = PlayerRunner.Instance;
 		if (player.Invincible) {
 			Debug.Log("asfafas");
 			// Get all lowest components

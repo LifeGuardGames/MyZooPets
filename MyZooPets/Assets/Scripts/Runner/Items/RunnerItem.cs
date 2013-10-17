@@ -30,8 +30,7 @@ public abstract class RunnerItem : MonoBehaviour {
 				ItemManager.Instance.DisplayTutorial(ID);
 
 			//Add to minus points depending on trigger
-            ScoreManager scoreManager = RunnerGameManager.Instance.ScoreManager;
-            scoreManager.AddPoints(pointValue);
+            ScoreManager.Instance.AddPoints(pointValue);
 
             //Play sound
 			if ( !string.IsNullOrEmpty(strSoundPickup) )

@@ -10,7 +10,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class RunnerUIManager : MonoBehaviour {
+public class RunnerUIManager : Singleton<RunnerUIManager> {
     public UIPanel GameOverPanel;
     public UILabel FinalScoreLabel;
     public UILabel FinalDistanceLabel;
@@ -31,11 +31,9 @@ public class RunnerUIManager : MonoBehaviour {
         GameOverPanel.gameObject.SetActive(true);
 
         // Determine the pointss
-        RunnerGameManager runnerGameManager = RunnerGameManager.Instance;
-        ScoreManager scoreManager = runnerGameManager.ScoreManager;
-        float numCoins = scoreManager.Coins;
-        float numScore = scoreManager.GetScore();
-        float distance = runnerGameManager.PlayerRunner.transform.position.z;
+        float numCoins = ScoreManager.Instance.Coins;
+        float numScore = ScoreManager.Instance.GetScore();
+        float distance = PlayerRunner.Instance.transform.position.z;
 
         FinalScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + numScore;
         FinalDistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distance.ToString("F1");

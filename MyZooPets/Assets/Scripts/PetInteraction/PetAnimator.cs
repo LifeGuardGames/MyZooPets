@@ -35,6 +35,11 @@ public class PetAnimator : LgCharacterAnimator {
 		return strKeyColor;	
 	}
 	
+	// related to fire blowing
+	public GameObject goBlow;		// where to parent the fire particle
+	private GameObject goFire;		// actual fire particle game object
+	public float fFireDelay;		// delay before the particle effect starts, to account for the "windup" portion of the pet animation
+	
 	// queue of animations the pet should be doing
 	private Queue<DataPetAnimation> queueAnims = new Queue<DataPetAnimation>();
 	
@@ -134,6 +139,29 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// then start playing the anim immediately
 		PlayAnimation( dataAnim );	
+		
+		// spawn the particle effect
+		GameObject resource = Resources.Load( "FireBlow1" ) as GameObject;
+		goFire = Instantiate( resource, new Vector3(0,0,0), resource.transform.rotation ) as GameObject;
+		
+		// parent it to the right position
+		goFire.transform.parent = goBlow.transform;				
+		goFire.transform.localPosition = new Vector3(0,0,0);
+		
+		// actually kick off the effect
+		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
+		script.Play( fFireDelay );
+	}
+	
+	//---------------------------------------------------
+	// DoneBreathingFire()
+	//---------------------------------------------------	
+	private void DoneBreathingFire() {
+		// destroy the game object of the fire
+		Destroy( goFire );
+		
+		// idle
+		Idle();
 	}
 
 	//---------------------------------------------------
@@ -254,8 +282,10 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		switch ( eState ) {
 			case PetAnimStates.Idling:
-			case PetAnimStates.BreathingFire:
 				Idle();
+				break;
+			case PetAnimStates.BreathingFire:
+				DoneBreathingFire();
 				break;				
 			case PetAnimStates.Walking:
 				// do nothing; the anim will loop

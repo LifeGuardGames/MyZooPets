@@ -32,10 +32,15 @@ public class ParticleSystemController : MonoBehaviour {
 		// Overridden in child
 	}
 	
-	public void Play(){
+	public void Play( float fDelay = 0 ){
+		StartCoroutine(PlayAfterDelay(fDelay));
+	}
+	
+	IEnumerator PlayAfterDelay( float fDelay ){
+		yield return new WaitForSeconds( fDelay );
 		pSystem.Play();
 		_Play();
-	}
+	}	
 	
 	protected virtual void _Play(){
 		// Overridden in child	

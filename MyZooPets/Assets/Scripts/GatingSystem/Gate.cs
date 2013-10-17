@@ -67,6 +67,10 @@ public class Gate : MonoBehaviour {
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
 		vNewLocWorld.y = fPlayerY;
 		
+		// we need to apply a Z offset to the pet so that the pet is kind of in front of the monster
+		float fOffsetZ = Constants.GetConstant<float>( "PetOffsetZ" );
+		vNewLocWorld.z -= fOffsetZ;
+		
 		return vNewLocWorld;		
 	}
 	

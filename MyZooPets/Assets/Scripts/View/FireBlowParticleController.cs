@@ -23,25 +23,7 @@ public class FireBlowParticleController : ParticleSystemController {
 		}
 	}
 	
-	// Dumb way to check parent for scale and change firestream direction;
-	public GameObject parentObjectCheckFlip;
-	private float streamScale;
-	
 	protected override void _Start(){
-		if(parentObjectCheckFlip != null)
-			streamScale = parentObjectCheckFlip.transform.localScale.x;
-		else
-			Debug.Log("No object parent found!");
-	}
-	
-	// Stupid particle effect shortcoming, update the direction manually every frame to see if it was scaled
-	protected override void _Update(){
-		if(parentObjectCheckFlip != null){
-			if(parentObjectCheckFlip.transform.localScale.x != streamScale){
-				pSystem.startSpeed = -1f * pSystem.startSpeed;
-				streamScale = parentObjectCheckFlip.transform.localScale.x;
-			}
-		}
 	}
 	
 	protected override void _Play(){

@@ -38,6 +38,8 @@ public class LevelManager : MonoBehaviour
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 	private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
 
+    private LevelComponent lastQueuedComponent;
+
 	// Use this for initialization
 	void Start() {
 		if (LevelGroups.Count <= 0)
@@ -48,11 +50,11 @@ public class LevelManager : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update() {
-		if ( !RunnerGameManager.GetInstance().GameRunning )
+		if ( !RunnerGameManager.Instance.GameRunning )
 			return;
 		
 		// Assuming there is a runner and a level.
-		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
 		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
 			Vector3 currentRunnerPosition = playerRunner.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
@@ -72,7 +74,7 @@ public class LevelManager : MonoBehaviour
                 LevelComponent newFront = mLevelComponentQueue.Peek();
 
                 if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
-                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.GetInstance().ParallaxingBackgroundManager;
+                    ParallaxingBackgroundManager parralaxManager = RunnerGameManager.Instance.ParallaxingBackgroundManager;
                     parralaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
                 }
 
@@ -112,11 +114,12 @@ public class LevelManager : MonoBehaviour
             currentComponent.DestroyAndCache();
         }
 
-        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
-        PushAndInstantiateRandomComponent();
         LevelComponent nextLevel;
+        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
+        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
+        // PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
         nextLevel = PushAndInstantiateRandomComponent();
@@ -130,7 +133,7 @@ public class LevelManager : MonoBehaviour
 	// The order of them can be cached out and manag
 	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
 	private void UpdateInvincibility() {
-		PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
 		if (player.Invincible) {
 			Debug.Log("asfafas");
 			// Get all lowest components
@@ -255,15 +258,23 @@ public class LevelManager : MonoBehaviour
 			LevelComponent nextlevelComponent = null;
 
 			if (inForceUseThisComponent == null) {
-				nextlevelComponent = mCurrentLevelGroup.LevelComponents[Random.Range(0, mCurrentLevelGroup.LevelComponents.Count)];
+                //Only queue new component that is different from the previous ona
+                while(true){
+                    int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
+
+                    nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
+                    if(lastQueuedComponent.name != nextlevelComponent.name) break;
+                }
 				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
 				Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
+
 			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
             newComponent.ParentGroup = mCurrentLevelGroup;
+            newComponent.name = nextlevelComponent.name;
 			
 			// Set its position to the last max point (I hope).
 			newComponent.transform.position = mLastCenterPosition;
@@ -280,6 +291,7 @@ public class LevelManager : MonoBehaviour
 			mLastCenterPosition = maxAnchor.position;
 			
 			mLevelComponentQueue.Enqueue(newComponent);
+            lastQueuedComponent = newComponent;
 
 			return newComponent;
 		}
@@ -317,7 +329,7 @@ public class LevelManager : MonoBehaviour
 	}
 
     private void SpawnItemsInLevel(LevelComponent inLevelComponent, PointGroup inGroup) {
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+        ItemManager itemManager = ItemManager.Instance; 
         switch (inGroup.mSpawnType) {
             case eSpawnType.Coins: {
                 SpawnCoinStrip(inLevelComponent, inGroup);
@@ -339,7 +351,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup) {
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+        ItemManager itemManager = ItemManager.Instance; 
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point:
             case eCurveType.Linear: {
@@ -403,7 +415,7 @@ public class LevelManager : MonoBehaviour
     }
 
 	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn) {
-        RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
+        // RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
         Vector3 newPosition = inLevelComponent.transform.position;
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point: {
@@ -450,10 +462,10 @@ public class LevelManager : MonoBehaviour
             }
             break;
         }
-        spawnedItem.transform.position = newPosition;
+        inItemToSpawn.transform.position = newPosition;
 
         // Spawn it at that point
-        inLevelComponent.AddLevelItem(spawnedItem);
+        inLevelComponent.AddLevelItem(inItemToSpawn);
 	}
 	
 	private float GetLengthWithChildren(GameObject inObjectToSearch, int inExtent) {
@@ -482,10 +494,16 @@ public class LevelManager : MonoBehaviour
         GameObject lowestComponent = null;
         foreach (LevelComponent currentComponent in mLevelComponentQueue) {
             foreach (Transform currentLevelPiece in currentComponent.transform) {
-                if (lowestComponent == null
-                    || currentLevelPiece.position.y < lowestComponent.transform.position.y)
-                {
-                    lowestComponent = currentLevelPiece.gameObject;
+                //TO DO: this is a temporary fix to ignore tile map that doesn't have
+                //a collider
+                if(currentLevelPiece.name != "TileMap" && 
+                    currentLevelPiece.name != "TileMap Render Data"){
+
+                    if (lowestComponent == null
+                        || currentLevelPiece.position.y < lowestComponent.transform.position.y){
+
+                        lowestComponent = currentLevelPiece.gameObject;
+                    }
                 }
             }
         }

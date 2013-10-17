@@ -16,7 +16,7 @@ public class SpeedUpItem : RunnerItem {
 	}
 
     public override void OnPickup() {
-        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+        PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
         player.TriggerSpeedBoost(ItemDuration, SpeedBoostAmmount);
         player.TriggerInvincibility(ItemDuration);
 

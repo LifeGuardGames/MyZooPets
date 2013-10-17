@@ -16,12 +16,13 @@ using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
 
-public class ItemManager : MonoBehaviour {
+public class ItemManager : Singleton<ItemManager> {
     public int ItemPoolMaxSize = 50;
-
     public List<CoinItem> CoinItems;
     public List<RunnerItem> ItemPrefabs;
     public List<HazardItem> HazardPrefabs;
+    public GameObject itemTutorialPrefab;
+    public GameObject itemTutorialParent;
 
     //Item pool for Coin and Items
     private Dictionary<Type, Queue<RunnerItem>> mItemPool = new Dictionary<Type, Queue<RunnerItem>>();
@@ -49,11 +50,6 @@ public class ItemManager : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     //Remove cached items when resetting 
     public void Reset(){
         if(mItemPool.ContainsKey(typeof(CoinItem))){
@@ -104,57 +100,75 @@ public class ItemManager : MonoBehaviour {
 
     //TO DO: need to fix caching bug
     public void StoreOrDisposeItem(RunnerItem inItem, LevelGroup.eLevelGroupID levelGroupID) {
-        //Type itemType = inItem.GetType();
 		
 		// Disable it. If its queued, then it will 'disapaear' off the map. If its deleted well who cares!
 		if (inItem != null)
 			inItem.gameObject.SetActive(false);
+
         // Type itemType = inItem.GetType();
 
         // //HazardItem pool needs to be handled differently from the other items
         // if(itemType == typeof(HazardItem)){
-        //     //Create cache queue
-        //    // if(!mHazardItemPool.ContainsKey(levelGroupID)){
+        //    //  //Create cache queue
+        //    // if(!mHazardItemPool.ContainsKey(levelGroupID))
         //    //      mHazardItemPool.Add(levelGroupID, new Queue<HazardItem>());
-        //    // }
 
         //    // //Add to cache if cache size allows
-        //    // if(mHazardItemPool[levelGroupID].Count < ItemPoolMaxSize){
+        //    // if(mHazardItemPool[levelGroupID].Count < ItemPoolMaxSize)
         //    //      mHazardItemPool[levelGroupID].Enqueue((HazardItem)inItem);
-        //    // }else
+        //    // else
         //         GameObject.Destroy(inItem.gameObject);
         // }else{
         //     //Create cache queue
-        //    //  if (!mItemPool.ContainsKey(itemType)) {
-        //    //      mItemPool.Add(itemType, new Queue<RunnerItem>());
-        //    //  }
-        //    //  print(mItemPool[itemType].Count);
-        //    // //Add to cache if cache size allows
-        //    //  if (mItemPool[itemType].Count < ItemPoolMaxSize) {
-        //    //      print("push in cache");
-        //    //      mItemPool[itemType].Enqueue(inItem);
-        //    //  } else
+        //     if (!mItemPool.ContainsKey(itemType))
+        //         mItemPool.Add(itemType, new Queue<RunnerItem>());
+
+        //    //Add to cache if cache size allows
+        //     if (mItemPool[itemType].Count < ItemPoolMaxSize)
+        //         mItemPool[itemType].Enqueue(inItem);
+        //     else
         //         GameObject.Destroy(inItem.gameObject);
         // }
     }
 
+    public void DisplayTutorial(string itemID){
+        if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)){
+            string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
+            GameObject tutorialGO = NGUITools.AddChild(itemTutorialParent, itemTutorialPrefab);
+            tutorialGO.GetComponent<PositionTweenToggle>().Show();
+            tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().target = this.gameObject;
+            tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().functionName = "DestroyTutorial";
+            tutorialGO.transform.Find("Label").GetComponent<UILabel>().text = hintMessage;
+
+            RunnerGameManager.Instance.PauseGame();
+            DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
+        }
+    }
+
+    public void DestroyTutorial(GameObject tutorialGO){
+        Destroy(tutorialGO.transform.parent.gameObject);
+
+        RunnerGameManager.Instance.UnPauseGame();
+    }
+
     private RunnerItem ItemFactory(Type inItemType, LevelGroup.eLevelGroupID levelGroupID) {
+        RunnerItem spawnedItem = null;
+
         if (inItemType == typeof(HazardItem)) {
             List<HazardItem> hazardItems = levelHazardItems[levelGroupID];
             HazardItem randomHazard = hazardItems[Random.Range(0, hazardItems.Count)];
-            HazardItem spawnedItem = (HazardItem)Instantiate(randomHazard);
-            return spawnedItem;
+            spawnedItem = (HazardItem)Instantiate(randomHazard);
         } else if (inItemType == typeof(CoinItem)) {
             CoinItem randomCoin = CoinItems[Random.Range(0, CoinItems.Count)];
-            CoinItem spawnedItem = (CoinItem)Instantiate(randomCoin);
-            return spawnedItem;
+            spawnedItem = (CoinItem)Instantiate(randomCoin);
+            
         } else if (inItemType == typeof(RunnerItem)) {
             RunnerItem randomItem = ItemPrefabs[Random.Range(0, ItemPrefabs.Count)];
-            RunnerItem spawnedItem = (RunnerItem)Instantiate(randomItem);
-            return spawnedItem;
+            spawnedItem = (RunnerItem)Instantiate(randomItem);
+            
         } else {
             Debug.LogError("No spawn logic set for item type " + inItemType);
         }
-        return null;
+        return spawnedItem;
     }
 }

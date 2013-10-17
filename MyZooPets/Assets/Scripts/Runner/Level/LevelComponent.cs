@@ -54,7 +54,7 @@ public class LevelComponent : MonoBehaviour {
 	}
 
     public void DestroyAndCache(){
-        ItemManager itemManager = RunnerGameManager.GetInstance().ItemManager;
+        ItemManager itemManager = ItemManager.Instance; 
         foreach (RunnerItem currentItem in mSpawnedItems) {
             if (currentItem != null) {
                 itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
@@ -161,7 +161,7 @@ public class LevelComponent : MonoBehaviour {
 	
 	private void FindBottomLayers(Transform inCurrentTransform){
 		if (inCurrentTransform != null){
-			LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
+			LevelManager levelManager = RunnerGameManager.Instance.LevelManager;
 			foreach (Transform currentChild in inCurrentTransform) {
 				if (currentChild.gameObject.layer == levelManager.BottomLayer)
 					mBottomLayers.Add(currentChild.gameObject);

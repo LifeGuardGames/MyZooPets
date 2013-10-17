@@ -32,13 +32,16 @@ public class MegaHazard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
+		if(!RunnerGameManager.Instance.GameRunning)
+			return;
+			
 		UpdatePositionRelativeToPlayer();
 		transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
 	}
 
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player") {
-			RunnerGameManager gameManager = RunnerGameManager.GetInstance();
+			RunnerGameManager gameManager = RunnerGameManager.Instance;
 			gameManager.ActivateGameOver();
 		}
 	}
@@ -48,14 +51,14 @@ public class MegaHazard : MonoBehaviour {
 		mDistanceRegainPulse = DistanceRegainTime;
 		mDistanceUntilTarget = 0f;
 
-		transform.position = RunnerGameManager.GetInstance().PlayerRunner.transform.position;
+		transform.position = RunnerGameManager.Instance.PlayerRunner.transform.position;
 		UpdatePositionRelativeToPlayer();
 		mDestinationPosition = transform.position;
 
 	}
 
 	public void TriggerPlayerSlowdown() {
-		PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
 		if (player != null) {
 			mSlowDownStayPulse = SlowDownStayDuration;
 			mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
@@ -81,7 +84,7 @@ public class MegaHazard : MonoBehaviour {
 		}
 
 		float currentDistance = GetCurrentOffsetDistance();
-		PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+		PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
 		mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
 		transform.position = mDestinationPosition;
 

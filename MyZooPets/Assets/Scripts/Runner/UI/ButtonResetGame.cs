@@ -14,7 +14,7 @@ public class ButtonResetGame : MonoBehaviour {
 	}
 
     void OnClick() {
-        RunnerGameManager gameManager = RunnerGameManager.GetInstance();
+        RunnerGameManager gameManager = RunnerGameManager.Instance;
         gameManager.ResetGame();
 	}
 }

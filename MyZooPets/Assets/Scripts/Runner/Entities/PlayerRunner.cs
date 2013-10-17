@@ -89,7 +89,7 @@ public class PlayerRunner : MonoBehaviour
 
 	// Update is called once per frame
 	void Update() {
-		if ( !RunnerGameManager.GetInstance().GameRunning )
+		if ( !RunnerGameManager.Instance.GameRunning )
 			return;
 		
         // Poll the input. Generally the InputManager handles this, so its really just for debugging.
@@ -104,7 +104,7 @@ public class PlayerRunner : MonoBehaviour
 	
     // The more physics-y update. Called multiple times per frame.
 	void FixedUpdate() {
-		if ( !RunnerGameManager.GetInstance().GameRunning )
+		if ( !RunnerGameManager.Instance.GameRunning )
 			return;
 		
         // This is what actually moves the player.
@@ -118,7 +118,7 @@ public class PlayerRunner : MonoBehaviour
 		CheckAndActOnDeath();
 	}
 
-	void onSwipeUp() {
+	void onTap() {
 		TriggerJump();
 	}
 
@@ -220,7 +220,7 @@ public class PlayerRunner : MonoBehaviour
         if (mSpeedIncreasePulse <= 0) {
             //mSpeed += SpeedIncrease;
             mCurrentTimeMultiplier += SpeedIncrease;
-            RunnerGameManager.GetInstance().IncreaseTimeSpeed(SpeedIncrease);
+            RunnerGameManager.Instance.IncreaseTimeSpeed(SpeedIncrease);
             mSpeedIncreasePulse = SpeedIncreaseTime;
         }
 
@@ -295,14 +295,14 @@ public class PlayerRunner : MonoBehaviour
 
 	public void TriggerSlowdown(float inDivisor) {
         if (!mbInvincible) {
-            RunnerGameManager gameManager = RunnerGameManager.GetInstance();
+            RunnerGameManager gameManager = RunnerGameManager.Instance;
             gameManager.SlowTimeSpeed(inDivisor);
             gameManager.MegaHazard.TriggerPlayerSlowdown();
         }
 	}
 
 	private void TriggerJump() {
-		if (mbGrounded && !mbJumping && !mbFalling) {
+		if (!mbJumping) {
 			mMovementVector.y += JumpSpeed;
             mbJumping = true;
             BroadcastMessage("onPlayerJumpBegin", SendMessageOptions.DontRequireReceiver);
@@ -315,7 +315,7 @@ public class PlayerRunner : MonoBehaviour
 	private void TriggerFall() {
 		if (!mbJumping && !mbFalling) {
             // nop you can't fall through a bottom layered collision.
-            int bottomLayer = RunnerGameManager.GetInstance().LevelManager.BottomLayer;
+            int bottomLayer = RunnerGameManager.Instance.LevelManager.BottomLayer;
 
             RaycastHit hitinfo;
             if (Physics.Raycast(collider.bounds.min, Vector3.down, out hitinfo, 1f)) {
@@ -336,13 +336,13 @@ public class PlayerRunner : MonoBehaviour
 
     private void CheckAndActOnDeath() {
         // Are we below the maps floor value
-        LevelManager levelManager = RunnerGameManager.GetInstance().LevelManager;
+        LevelManager levelManager = RunnerGameManager.Instance.LevelManager;
         float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
         if (transform.position.y < yTooLowValue) {
             if (!mbInvincible) {
 				
 				if ( transform.position.y < levelManager.LevelTooLowYValueGameOver )
-                	RunnerGameManager.GetInstance().ActivateGameOver();
+                	RunnerGameManager.Instance.ActivateGameOver();
 				else {
 					// play die sound (once)
 					if ( !mbDied ) {

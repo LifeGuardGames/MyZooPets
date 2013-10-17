@@ -15,7 +15,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RunnerGameManager : MonoBehaviour {
+public class RunnerGameManager : Singleton<RunnerGameManager> {
     private PlayerRunner mPlayerRunner;
     private LevelManager mLevelManager;
     private ParallaxingBackgroundManager mParallaxingBackgroundManager;
@@ -23,13 +23,12 @@ public class RunnerGameManager : MonoBehaviour {
     private TouchDetectorManager mTouchDetectorManager;
     private MegaHazard mMegaHazard;
     private RunnerUIManager mRunnerUIManager;
-    private ItemManager mItemManager;
 
-    public bool GameRunning
-    {
-        get;
+    public bool GameRunning{
+        get; 
         protected set;
     }
+
     public PlayerRunner PlayerRunner { get { return mPlayerRunner; } }
     public LevelManager LevelManager { get { return mLevelManager; } }
     public ParallaxingBackgroundManager ParallaxingBackgroundManager { get { return mParallaxingBackgroundManager; } }
@@ -37,23 +36,12 @@ public class RunnerGameManager : MonoBehaviour {
     public TouchDetectorManager TouchDetectorManager { get { return mTouchDetectorManager; } }
     public MegaHazard MegaHazard { get { return mMegaHazard; } }
     public RunnerUIManager RunnerUIManager { get { return mRunnerUIManager; } }
-    public ItemManager ItemManager { get { return mItemManager; } }
-    
-    private static RunnerGameManager sRunnerGameManagerInstance = null;
-    static public RunnerGameManager GetInstance()
-    {
-        return sRunnerGameManagerInstance;
-    }
 	
 	// scene transition
 	public SceneTransition scriptTransition;
 	
 	// Use this for initialization
 	void Start() {
-        if (sRunnerGameManagerInstance != null)
-            Debug.LogError("There cannot be two RunnerGameManagers, it's supposed to be a SINGLEton! Please remove one.");
-        sRunnerGameManagerInstance = this;
-
         GameObject foundObject;
 
         foundObject  = GameObject.Find("Player");
@@ -98,11 +86,7 @@ public class RunnerGameManager : MonoBehaviour {
         else
             Debug.LogError("Could not find an object named 'RunnerUIManager'");
 
-        foundObject = GameObject.Find("ItemManager");
-        if (foundObject != null)
-            mItemManager = foundObject.GetComponent<ItemManager>();
-        else
-            Debug.LogError("Could not find an object named 'ItemManager'");
+        
 		
 		/*
 		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
@@ -130,10 +114,6 @@ public class RunnerGameManager : MonoBehaviour {
         GameRunning = true;
     }	
 	
-	// Update is called once per frame
-	void Update() {
-	}
-
     public void ResetGame() {
         Time.timeScale = 1f;
 
@@ -150,6 +130,14 @@ public class RunnerGameManager : MonoBehaviour {
         mParallaxingBackgroundManager.Reset();
     }
 
+    public void PauseGame(){
+        GameRunning = false;
+    }
+
+    public void UnPauseGame(){
+        GameRunning = true;
+    }
+
     public void ActivateGameOver() {
         GameRunning = false;
 
@@ -163,7 +151,7 @@ public class RunnerGameManager : MonoBehaviour {
 		AudioManager.Instance.PlayClip( "runnerGameOver" );
 
         print("game over");
-        mItemManager.Reset();
+        ItemManager.Instance.Reset();
     }
 
     public void QuitGame(){

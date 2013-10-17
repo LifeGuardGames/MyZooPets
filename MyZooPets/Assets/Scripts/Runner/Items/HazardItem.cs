@@ -21,7 +21,7 @@ public class HazardItem : RunnerItem {
 		Debug.Log("Hazard Hit!");
 
         // Player, sloooooowwww downnnnnnnn
-        PlayerRunner player = RunnerGameManager.GetInstance().PlayerRunner;
+        PlayerRunner player = RunnerGameManager.Instance.PlayerRunner;
         player.TriggerSlowdown(SlowdownDivisor);
 
 		GameObject.Destroy(gameObject);

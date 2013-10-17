@@ -62,7 +62,7 @@ public class ScoreManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-        PlayerRunner playerRunner = RunnerGameManager.GetInstance().PlayerRunner;
+        PlayerRunner playerRunner = RunnerGameManager.Instance.PlayerRunner;
         if (playerRunner != null) {
             float distanceTraveled = playerRunner.transform.position.z;
 

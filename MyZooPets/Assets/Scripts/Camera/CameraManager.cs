@@ -19,8 +19,6 @@ public class CameraManager : Singleton<CameraManager> {
 	// Start()
 	//---------------------------------------------------	
 	protected virtual void Start(){
-        initPosition = gameObject.transform.position;
-        initFaceDirection = gameObject.transform.eulerAngles;
 	}	
 
 	//---------------------------------------------------
@@ -29,6 +27,10 @@ public class CameraManager : Singleton<CameraManager> {
 	// target rotation over a set time.
 	//---------------------------------------------------	
 	public void ZoomToTarget( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
+		// before zooming, cache the camera position
+        initPosition = gameObject.transform.position;
+        initFaceDirection = gameObject.transform.eulerAngles;
+		
 		// move the camera
 		MoveCamera( vPos, vRotation, fTime, goObject );
 			
@@ -57,6 +59,9 @@ public class CameraManager : Singleton<CameraManager> {
 	private void MoveCamera( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
 		// set up the movement hash
 		Hashtable hashMove = new Hashtable();
+		
+		// make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
+		vPos -= gameObject.transform.parent.position;
 		
 		// if the incoming object isn't null, set up a callback
 		if ( goObject != null ) {

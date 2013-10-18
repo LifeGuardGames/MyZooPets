@@ -26,6 +26,7 @@ public class TouchDetectorManager : MonoBehaviour {
 
     void OnTap(TapGesture gesture) {
         foreach(MonoBehaviour currentScript in ListeningScripts)
-            currentScript.SendMessage("onTap", SendMessageOptions.DontRequireReceiver);
+            if(RunnerGameManager.Instance.GameRunning)
+                currentScript.SendMessage("onTap", SendMessageOptions.DontRequireReceiver);
     } 
 }

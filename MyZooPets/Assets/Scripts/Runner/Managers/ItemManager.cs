@@ -148,6 +148,13 @@ public class ItemManager : Singleton<ItemManager> {
     public void DestroyTutorial(GameObject tutorialGO){
         Destroy(tutorialGO.transform.parent.gameObject);
 
+        StartCoroutine(UnPauseGame());
+    }
+
+    //Yield for a frame before unpausing the game. The only way to avoid OnTap being called when resume
+    //button is clicked
+    private IEnumerator UnPauseGame(){
+        yield return 0;
         RunnerGameManager.Instance.UnPauseGame();
     }
 

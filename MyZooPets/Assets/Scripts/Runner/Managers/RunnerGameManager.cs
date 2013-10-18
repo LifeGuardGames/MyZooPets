@@ -84,8 +84,7 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
     }
 
     public void QuitGame(){
-        scriptTransition.StartTransition( SceneUtils.BEDROOM );
-
+        scriptTransition.StartTransition( SceneUtils.YARD );
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {

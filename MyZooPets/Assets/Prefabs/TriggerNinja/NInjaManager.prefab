@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: NInjaManager
@@ -39,29 +38,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7317f097126bb4b74bd1209338265aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goOpening: {fileID: 0}
-  goGameOver: {fileID: 0}
-  goPaused: {fileID: 0}
-  scriptTransition: {fileID: 11400002}
-  labelScore: {fileID: 0}
-  labelLives: {fileID: 0}
+  ui: {fileID: 0}
+  scriptTransition: {fileID: 0}
   nStartingLives: 3
   fComboMaxTime: .25
   fMax: 3
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  demux: {fileID: 0}
-  toggle: {fileID: 0}
-  goLoadScreen: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

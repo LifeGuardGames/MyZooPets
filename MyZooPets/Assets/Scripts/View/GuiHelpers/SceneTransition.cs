@@ -17,7 +17,7 @@ public class SceneTransition : MonoBehaviour {
 	private string strScene;
 	
 	// loading screen to show when the scene is loading
-	public GameObject goLoadScreen;	
+	private GameObject goLoadScreen;	
 
 	//---------------------------------------------------
 	// Start()

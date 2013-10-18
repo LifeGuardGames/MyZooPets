@@ -2271,6 +2271,10 @@ Prefab:
       propertyPath: ui
       value: 
       objectReference: {fileID: 993593841}
+    - target: {fileID: 100000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+      propertyPath: m_Name
+      value: NinjaManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
   m_RootGameObject: {fileID: 1020919712}
@@ -2692,6 +2696,59 @@ MonoBehaviour:
   hoverSprite: buttonShort
   pressedSprite: buttonShortDown
   disabledSprite: buttonShortInactive
+--- !u!1 &889779123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 889779127}
+  - 33: {fileID: 889779126}
+  - 23: {fileID: 889779124}
+  m_Layer: 0
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &889779124
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 889779123}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 887e4f0a2ed4eb94d95fda9f323fb72f, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+--- !u!33 &889779126
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 889779123}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &889779127
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 889779123}
+  m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: 1, z: 5.09319735}
+  m_LocalScale: {x: 2.69105172, y: 1.40472674, z: 1.99481165}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &912006170
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,7 +3344,7 @@ GameObject:
   - 114: {fileID: 1020919714}
   - 114: {fileID: 1020919713}
   m_Layer: 0
-  m_Name: NInjaManager
+  m_Name: NinjaManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -157,8 +157,9 @@ public class PetAnimator : LgCharacterAnimator {
 	// DoneBreathingFire()
 	//---------------------------------------------------	
 	private void DoneBreathingFire() {
-		// destroy the game object of the fire
-		Destroy( goFire );
+		// stop the game object of the fire
+		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
+		script.Stop();
 		
 		// idle
 		Idle();

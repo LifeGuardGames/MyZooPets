@@ -2106,7 +2106,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 66.909874, y: -3.67605972, z: 24.5292168}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 601228583}
   m_Father: {fileID: 521174547}
 --- !u!114 &303577011
 MonoBehaviour:
@@ -3240,6 +3241,7 @@ MonoBehaviour:
   vOffset: {x: 0, y: 0, z: 0}
   vFinalRotation: {x: 0, y: 0, z: 0}
   fTime: 0
+  strLoadingScreen: 
 --- !u!1 &461851691
 GameObject:
   m_ObjectHideFlags: 0
@@ -4395,6 +4397,67 @@ MonoBehaviour:
     type: 2}
   popupNotificiationTutorialLeft: {fileID: 100014, guid: d0cac8f2171928445b4e6994e9972e1c,
     type: 2}
+--- !u!1 &601228582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 601228583}
+  - 65: {fileID: 601228586}
+  - 114: {fileID: 601228584}
+  m_Layer: 0
+  m_Name: DiagnoseEntrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &601228583
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 601228582}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .821920991, y: .821920991, z: 2.46576405}
+  m_Children: []
+  m_Father: {fileID: 303577010}
+--- !u!114 &601228584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 601228582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f8cf9a5438004f38888249a95898ca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 0
+  strSoundProcess: 
+  bCheckClickManager: 1
+  strAnalytics: 
+  strScene: DiagnoseGameTracks
+  scriptTransition: {fileID: 1448367746}
+  vOffset: {x: 1, y: 2, z: -10}
+  vFinalRotation: {x: 0, y: 0, z: 0}
+  fTime: 0
+  strLoadingScreen: 
+--- !u!65 &601228586
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 601228582}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.31000042, y: 8.76000023, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &601836508
 GameObject:
   m_ObjectHideFlags: 0
@@ -8710,8 +8773,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &929744672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8722,8 +8783,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -102971247, guid: 20c2a163775f09b4cafa29b19d0c9204, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
 --- !u!1 &939556658
@@ -12802,7 +12861,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   demux: {fileID: 1448367745}
   toggle: {fileID: 0}
-  goLoadScreen: {fileID: 707867208}
 --- !u!1 &1453953888
 GameObject:
   m_ObjectHideFlags: 0
@@ -13333,8 +13391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1491323718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13579,8 +13635,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d49efd53907b42149a342aa0ce6e3d2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
 --- !u!4 &1514197443
@@ -17373,6 +17427,7 @@ MonoBehaviour:
   vOffset: {x: 1, y: 2, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
   fTime: 0
+  strLoadingScreen: 
 --- !u!1 &2080933504
 GameObject:
   m_ObjectHideFlags: 0

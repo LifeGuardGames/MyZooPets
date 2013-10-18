@@ -4,6 +4,8 @@ using System.Collections;
 public class ParticleSystemController : MonoBehaviour {
 
 	public ParticleSystem pSystem;
+	public bool destroyAfterStop;
+	public float destroyAfterStopDelay = 0;
 	
 	void Start(){
 		
@@ -53,6 +55,10 @@ public class ParticleSystemController : MonoBehaviour {
 	public void Stop(){
 		pSystem.Stop();
 		_Stop();
+		
+		if(destroyAfterStop){
+			Destroy (gameObject, destroyAfterStopDelay);
+		}
 	}
 	
 	protected virtual void _Stop(){

@@ -8,10 +8,13 @@ using System.Collections;
 // and makes sure that the button can process a click.
 //---------------------------------------------------
 
-public class LgButton : MonoBehaviour {
+public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
+	
+	// what type of clicking is this button? 3d buttons only at the moment
+	public ButtonClickTypes eClickType;
 	
 	// the sound resource this button plays when it is clicked
 	public string strSoundProcess;
@@ -58,7 +61,18 @@ public class LgButton : MonoBehaviour {
 	// 3D gameObjects will receive this event.
 	//---------------------------------------------------
 	void OnTap(TapGesture gesture) { 
-		ButtonClicked();
+		if ( eClickType == ButtonClickTypes.Tap )
+			ButtonClicked();
+	}
+	
+	void OnFingerStationary( FingerMotionEvent e ) {
+		if ( eClickType != ButtonClickTypes.Hold )
+			return;
+		
+		if ( e.Phase == FingerMotionPhase.Started )
+			ButtonClicked();
+		else if ( e.Phase == FingerMotionPhase.Ended )
+			ButtonReleased();
 	}
 	
 	//---------------------------------------------------
@@ -90,6 +104,8 @@ public class LgButton : MonoBehaviour {
 		if ( !string.IsNullOrEmpty(strSound) )
 			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
 	}
+	
+	protected abstract void ButtonReleased();
 	
 	//---------------------------------------------------
 	// ProcessClick()

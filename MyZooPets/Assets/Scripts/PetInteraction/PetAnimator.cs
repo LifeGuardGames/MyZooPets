@@ -39,7 +39,8 @@ public class PetAnimator : LgCharacterAnimator {
 	public GameObject goBlow;		// where to parent the fire particle
 	private GameObject goFire;		// actual fire particle game object
 	public float fFireDelay;		// delay before the particle effect starts, to account for the "windup" portion of the pet animation
-	
+	private FireBlowParticleController scriptFire;
+	 
 	// queue of animations the pet should be doing
 	private Queue<DataPetAnimation> queueAnims = new Queue<DataPetAnimation>();
 	
@@ -54,6 +55,9 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
+	
+	// testing fire anim stuff
+	public float fFireWait;
 	
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
@@ -149,14 +153,35 @@ public class PetAnimator : LgCharacterAnimator {
 		goFire.transform.localPosition = new Vector3(0,0,0);
 		
 		// actually kick off the effect
-		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
-		script.Play( fFireDelay );
+		scriptFire = goFire.GetComponent<FireBlowParticleController>();
+		//script.Play( fFireDelay );
+		
+		StartCoroutine( FireWait( script ) );
+	}
+	
+	private IEnumerator FireWait( FireBlowParticleController scriptFire ) {
+		yield return new WaitForSeconds( fFireWait );
+		Debug.Log("Pausing fire");
+		Pause();
+		
+		//yield return new WaitForSeconds( fFireWait * 2 );
+		//Debug.Log("Resuming fire");
+		//Resume();
+		//scriptFire.Play( fFireDelay - fFireWait );
+		
+		//Destroy( goFireMeter );
+	}
+	
+	public void FinishFire() {
+		Resume();	
+		
+		scriptFire.Play( fFireDelay - fFireWait );
 	}
 	
 	//---------------------------------------------------
 	// DoneBreathingFire()
 	//---------------------------------------------------	
-	private void DoneBreathingFire() {
+	public void DoneBreathingFire() {
 		// destroy the game object of the fire
 		Destroy( goFire );
 		

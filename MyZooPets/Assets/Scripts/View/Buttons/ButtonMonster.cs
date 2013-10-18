@@ -9,6 +9,12 @@ using System.Collections;
 public class ButtonMonster : LgButton {
 	public int nDamage;
 	
+	// attack gate script
+	private AttackGate scriptAttack;
+	
+	// fire meter script
+	private FireMeter scriptFireMeter;
+	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
@@ -21,7 +27,21 @@ public class ButtonMonster : LgButton {
 			return;
 		
 		// otherwise, add the attack script
-		AttackGate script = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-		script.Init( scriptPetAnimator, scriptGate, nDamage );
+		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
+		scriptAttack.Init( scriptPetAnimator, scriptGate, nDamage );
+		
+		// create the fire meter
+		GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
+		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Top"), resourceFireMeter );	
+		scriptFireMeter = goFireMeter.GetComponent<FireMeter>();
+	}
+	
+	protected override void ButtonReleased() {
+		if ( scriptFireMeter.IsFull() )
+			scriptAttack.FinishAttack();
+		else {
+			scriptAttack.Cancel();
+			Destroy( scriptFireMeter.gameObject );
+		}	
 	}
 }

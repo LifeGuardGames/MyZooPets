@@ -53,9 +53,9 @@ public class DegradTrigger : MonoBehaviour {
     }
 
     private void ActivateParticleEffects(object senders, EventArgs args){
-        //transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
+        transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
 		
 		// Enable the skull flying to pet
-		//LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>().Enable();
+		LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>().Enable();
     }
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Stats controller.
@@ -73,7 +75,12 @@ public class StatsController : Singleton<StatsController> {
 		}
 		
 		// Tell HUDAnimator to animate and change
-		hudAnimator.StartCoroutineCurveStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, bPlaySounds);
+		List<StatPair> listStats = new List<StatPair>();
+		listStats.Add( new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ?  hudAnimator.strSoundXP : null ) );
+		listStats.Add( new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ?  hudAnimator.strSoundStars : null ) );
+		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
+		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
+		StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds ) );
 	}	
 	
 	//---------------------------------------------------

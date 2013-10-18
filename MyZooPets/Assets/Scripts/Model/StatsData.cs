@@ -28,6 +28,30 @@ public class StatsData{
         Points = 250;
         Stars = 100;
     }
+	
+	public int GetStat( HUDElementType eStat ) {
+		int nStat = 0;
+		
+		switch ( eStat ) {
+		case HUDElementType.Points:
+			nStat = Points;
+			break;
+		case HUDElementType.Health:
+			nStat = Health;
+			break;
+		case HUDElementType.Mood:
+			nStat = Mood;
+			break;
+		case HUDElementType.Stars:
+			nStat = Stars;
+			break;
+		default:
+			Debug.Log("No such display target for " + eStat);
+			break;
+		}	
+		
+		return nStat;
+	}
 
     //==============StatsModifiers================
     //Points

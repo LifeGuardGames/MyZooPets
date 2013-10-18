@@ -20,6 +20,9 @@ public class ButtonChangeScene : LgButton {
 	public Vector3 vFinalRotation;	// how the camera should rotate
 	public float fTime;				// how long the tween should last
 	
+	// what loading screen to show after the transition?  This is a prefab's name
+	public string strLoadingScreen = "LoadingScreen";
+	
 	//public CameraMove cameraMove;
 	//public ZoomItem zoomItem;
 	
@@ -48,7 +51,7 @@ public class ButtonChangeScene : LgButton {
 	private void CameraMoveDone() {
 		// the camera move is complete, so now let's start the transition (if it exists)
 		if ( scriptTransition != null )
-			scriptTransition.StartTransition( strScene );
+			scriptTransition.StartTransition( strScene, strLoadingScreen );
 		else
 			Debug.Log("No transition script for a scene change button!");
 	}

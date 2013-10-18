@@ -34,8 +34,16 @@ public class SceneTransition : MonoBehaviour {
 	// Begins fancy transition.  Will send a callback to
 	// goCaller when the transition is complete.
 	//---------------------------------------------------
-	public void StartTransition( string strScene ){
+	public void StartTransition( string strScene, string strLoadingPrefab = "LoadingScreen" ){
 		gameObject.SetActive(true);
+		
+		// wow, this is dumb...thanks for not updating public default variables, Unity
+		if ( string.IsNullOrEmpty(strLoadingPrefab) )
+			strLoadingPrefab = "LoadingScreen";
+		
+		// load the loading prefab (it will start inactive)
+		GameObject goLoading = Resources.Load( strLoadingPrefab ) as GameObject;
+		goLoadScreen = LgNGUITools.AddChildWithPosition( transform.parent.gameObject, goLoading );
 		
 		// cache scene to load
 		this.strScene = strScene;
@@ -63,12 +71,15 @@ public class SceneTransition : MonoBehaviour {
 	//---------------------------------------------------	
 	private void TransitionDone() {
 		// show the loading screen (if it exists)
-		if(goLoadScreen != null)
+		if(goLoadScreen != null) {
 			goLoadScreen.SetActive(true);
-
-		Debug.Log("Loading level: " + strScene);
-		
-		// load the scene
-		Application.LoadLevel( strScene );		
+			
+			// init the loading screen script
+			LoadingScreen script = goLoadScreen.GetComponent<LoadingScreen>();
+			if ( script )
+				script.Init( strScene );
+			else
+				Debug.Log("No loading screen on " + goLoadScreen);
+		}	
 	}	
 }

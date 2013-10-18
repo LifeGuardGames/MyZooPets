@@ -3,6 +3,20 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
+public struct StatPair {
+	public HUDElementType eType;
+	public int nPoints;
+	public Vector3 vOrigin;
+	public string strSound;
+	
+	public StatPair( HUDElementType eType, int nPoints, Vector3 vOrigin, string strSound = null ) {
+		this.eType = eType;
+		this.nPoints = nPoints;
+		this.vOrigin = vOrigin;
+		this.strSound = strSound;
+	}
+}
+
 /// <summary>
 /// Room GUI animator.
 /// This is the middleman proxy class that listens to the statLogic to display animation for HUD.
@@ -15,10 +29,6 @@ using System.Collections.Generic;
 /// be provided.
 /// </summary>
 
-public enum HUDElementType{
-	points, stars, health, mood
-}
-
 public class HUDAnimator : MonoBehaviour {
 	public bool isDebug = false;
 
@@ -26,22 +36,6 @@ public class HUDAnimator : MonoBehaviour {
 	//call when the pet levels up. used this to level up UI components
     public static EventHandler<EventArgs> OnLevelUp;
     //========================================
-
-    public int DisplayPoints{
-    	get{return displayPoints;}
-    }
-
-    public int DisplayStars{
-    	get{return displayStars;}
-    }
-
-    public int DisplayHealth{
-    	get{return displayHealth;}
-    }
-
-    public int DisplayMood{
-    	get{return displayMood;}
-    }
 
     public int NextLevelPoints{
     	get{return nextLevelPoints;}
@@ -51,8 +45,6 @@ public class HUDAnimator : MonoBehaviour {
     	get{return lastLevel;}
     }
 
-    private int dataPoints, dataStars, dataHealth, dataMood, dataHunger;
-	private int displayPoints, displayStars, displayHealth, displayMood, displayHunger;
 	private int nextLevelPoints; //the minimum requirement for next level up
 	private Level lastLevel; //pet's last level
 	// private HUD hud;
@@ -61,24 +53,10 @@ public class HUDAnimator : MonoBehaviour {
 	public GameObject healthIconAnim;
 	public GameObject moodIconAnim;
 	public GameObject starIconAnim;
-	private AnimationControl starAnimControl;
-	private AnimationControl healthAnimControl;
-	private AnimationControl moodAnimControl;
 
 	// Tweening
 	public UIAtlas commonAtlas;
 	private GameObject toDestroy;
-	private bool isFirstTweenPointsCall = true;
-	private bool isAnimatePointsBar = false;
-
-	private bool isFirstTweenStarsCall = true;
-	private bool isAnimateStarsBar = false;
-
-	private bool isFirstTweenHealthCall = true;
-	private bool isAnimateHealthBar = false;
-
-	private bool isFirstTweenMoodCall = true;
-	private bool isAnimateMoodBar = false;
 
 	// Parent for tweening
 	public GameObject tweenParent;
@@ -88,6 +66,10 @@ public class HUDAnimator : MonoBehaviour {
 	public string strSoundStars;
 	public string strSoundXP;
 	
+	// stores elements for easy access
+	private Dictionary<HUDElementType, int> hashDisplays = new Dictionary<HUDElementType, int>();
+	private Dictionary<HUDElementType, AnimationControl> hashAnimControls = new Dictionary<HUDElementType, AnimationControl>();
+	 
 	// list of UI sprite objects that may have been spawned
 	private List<GameObject> listMovingSprites = new List<GameObject>();
 	public bool AreSpawnedSprites() {
@@ -95,133 +77,83 @@ public class HUDAnimator : MonoBehaviour {
 		return b;
 	}
 
-	void Awake(){
-		starAnimControl = starIconAnim.GetComponent<AnimationControl>();
-		healthAnimControl = healthIconAnim.GetComponent<AnimationControl>();
-		moodAnimControl = moodIconAnim.GetComponent<AnimationControl>();
-	}
-
-	void Start(){
-		// TODO-j Is this Initialization still valid??!!
-		dataPoints = DataManager.Instance.GameData.Stats.Points;
-		dataStars = DataManager.Instance.GameData.Stats.Stars;
-		dataHealth = DataManager.Instance.GameData.Stats.Health;
-		dataMood = DataManager.Instance.GameData.Stats.Mood;
-
-		displayPoints = DataManager.Instance.GameData.Stats.Points;
-		displayStars = DataManager.Instance.GameData.Stats.Stars;
-		displayHealth = DataManager.Instance.GameData.Stats.Health;
-		displayMood = DataManager.Instance.GameData.Stats.Mood;
-
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------	
+	void Start(){		
+		// store all the relevant elements in hashes...kind of annoying
+		
+		hashAnimControls[HUDElementType.Points] = null;
+		hashAnimControls[HUDElementType.Stars] = starIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[HUDElementType.Mood] = moodIconAnim.GetComponent<AnimationControl>();		
+		
+		hashDisplays[HUDElementType.Points] = DataManager.Instance.GameData.Stats.Points;
+		hashDisplays[HUDElementType.Stars] = DataManager.Instance.GameData.Stats.Stars;
+		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
+		hashDisplays[HUDElementType.Mood] = DataManager.Instance.GameData.Stats.Mood;
+		
+		
 		lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
 		nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints();
 	}
 
 	void FixedUpdate(){
-		if(isAnimatePointsBar){
-			PointsAnimation();
-		}
-		if(isAnimateStarsBar){
-			StarsAnimation();
-		}
-		if(isAnimateHealthBar){
-			HealthAnimation();
-		}
-		if(isAnimateMoodBar){
-			MoodAnimation();
-		}
-
 		LevelUpEventCheck(); // Check if progress bar reach level max
 	}
-
-	//==================GUI Animation=========================
-	private void StarsAnimation(){
-		if(dataStars != DataManager.Instance.GameData.Stats.Stars){
-			if(displayStars > DataManager.Instance.GameData.Stats.Stars){
-				displayStars--;
-				starAnimControl.Play();
-			}else if(displayStars < DataManager.Instance.GameData.Stats.Stars){
-				displayStars++;
-				starAnimControl.Play();
-			}else{
-				dataStars = DataManager.Instance.GameData.Stats.Stars;
-				// Stop grow & shrink, reset icon size
-				starAnimControl.Stop();
-
-				// Reset the bar animation flag
-				isAnimateStarsBar = false;
-				isFirstTweenStarsCall = true;
-			}
-		}
+	
+	//---------------------------------------------------
+	// GetDisplayValue()
+	//---------------------------------------------------		
+	public int GetDisplayValue( HUDElementType eType ) {
+		return hashDisplays[eType];	
 	}
-
-	private void PointsAnimation(){
-		if(dataPoints != DataManager.Instance.GameData.Stats.Points){
-			if(displayPoints < DataManager.Instance.GameData.Stats.Points){ //animate
-				if(displayPoints + 3 <= DataManager.Instance.GameData.Stats.Points){
-					displayPoints += 3;
-				}else{
-					displayPoints += DataManager.Instance.GameData.Stats.Points - displayPoints;
-				}
-			}else{ //animation done
-				dataPoints = DataManager.Instance.GameData.Stats.Points;
-
-				// Reset the bar animation flag
-				isAnimatePointsBar = false;
-				isFirstTweenPointsCall = true;
-			}
+	
+	//---------------------------------------------------
+	// AnimateStatBar()
+	// Animates the stat bar for eStat.
+	//---------------------------------------------------	
+	private IEnumerator AnimateStatBar( HUDElementType eStat, float fDelay ) {
+		// wait X seconds
+		yield return new WaitForSeconds(fDelay);
+		
+		// required data for animating the bar
+		int nStep = Constants.GetConstant<int>( eStat + "_Step" );
+		AnimationControl anim = hashAnimControls[eStat];
+		int nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
+		
+		// while the display number is not where we want to be...
+		while( hashDisplays[eStat] != nTarget ){
+			// add proper signage to the step
+			if ( hashDisplays[eStat] > nTarget )
+				nStep *= -1;			
+			
+			// animate by altering the display amount, but don't go over/under the target
+			if ( nStep > 0 )
+				hashDisplays[eStat] = Mathf.Min( hashDisplays[eStat] + nStep, nTarget );
+			else
+				hashDisplays[eStat] = Mathf.Max( hashDisplays[eStat] + nStep, nTarget );
+				
+			// if there is a controller, play it
+			if ( anim )
+				anim.Play();
+			
+			// wait one frame
+			yield return 0;
+			
+			// update our target in case it changed
+			nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
 		}
+		
+		// animating is finished, so stop the control if it exists
+		if ( anim )
+			anim.Stop();
 	}
-
-	private void HealthAnimation(){
-		if(dataHealth != DataManager.Instance.GameData.Stats.Health){
-			if(displayHealth > DataManager.Instance.GameData.Stats.Health){
-				displayHealth--;
-				healthAnimControl.Play();
-			}else if(displayHealth < DataManager.Instance.GameData.Stats.Health){
-				displayHealth++;
-				healthAnimControl.Play();
-			}else{
-				dataHealth = DataManager.Instance.GameData.Stats.Health;
-
-				// Stop grow & shrink. reset icon size
-				healthAnimControl.Stop();
-
-				// Reset the bar animation flag
-				isAnimateHealthBar = false;
-				isFirstTweenHealthCall = true;
-			}
-		}
-	}
-
-	private void MoodAnimation(){
-		if(dataMood != DataManager.Instance.GameData.Stats.Mood){
-			if(displayMood > DataManager.Instance.GameData.Stats.Mood){
-				displayMood--;
-				moodAnimControl.Play();
-			}else if(displayMood < DataManager.Instance.GameData.Stats.Mood){
-				displayMood++;
-				moodAnimControl.Play();
-			}else{
-				dataMood = DataManager.Instance.GameData.Stats.Mood;
-
-				// Stop grow & shrink. reset icon size
-				moodAnimControl.Stop();
-
-				// Reset the bar animation flag
-				isAnimateMoodBar = false;
-				isFirstTweenMoodCall = true;
-			}
-		}
-
-	}
-
-	//================================================================
 
     //Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
-		if(displayPoints >= nextLevelPoints){ //logic for when progress bar reaches level requirement
+		if(hashDisplays[HUDElementType.Points] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			if(OnLevelUp != null)
@@ -231,183 +163,78 @@ public class HUDAnimator : MonoBehaviour {
 			DataManager.Instance.GameData.Stats.ResetPoints();
 			nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
 			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
-			displayPoints = 0;
-			dataPoints = 0;
+			hashDisplays[HUDElementType.Points] = 0;
 			lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
 		}
 	}
-
-	//================================================================
-	// TWEEN ANIMATION
-	//========================
-
-	void OnGUI(){
-		if(isDebug){
-			if(GUI.Button(new Rect(100, 100, 100, 50), "add points")){
-				StatsController.Instance.ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
-			}
-			if(GUI.Button(new Rect(100, 200, 100, 50), "add stars")){
-				StatsController.Instance.ChangeStats(0, Vector3.zero, 60, Vector3.zero, 0, Vector3.zero, 0, new Vector3(0, 0, 0));
-			}
-			if(GUI.Button(new Rect(100, 300, 100, 50), "add health")){
-				DataManager.Instance.GameData.Stats.SubtractHealth(100);
-				dataHealth = 0;
-				displayHealth = 0;
-				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 27, Vector3.zero, 0, new Vector3(0, 0, 0));
-			}
-			if(GUI.Button(new Rect(100, 400, 100, 50), "add mood")){
-				DataManager.Instance.GameData.Stats.SubtractMood(100);
-				dataMood = 0;
-				displayMood = 0;
-				StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 85, new Vector3(0, 0, 0));
-			}
-			if(GUI.Button(new Rect(100, 500, 100, 50), "KABOOYA")){
-//				DataManager.Instance.GameData.Stats.SubtractMood(100);
-//				dataMood = 0;
-//				displayMood = 0;
-//				DataManager.Instance.GameData.Stats.SubtractHealth(100);
-//				dataHealth = 0;
-//				displayHealth = 0;
-				StatsController.Instance.ChangeStats(-100, Vector3.zero, -100, Vector3.zero, -20, Vector3.zero, -50, new Vector3(0, 0, 0));
-			}
-		}
-	}
-
-	// Parse data and make effects serial
-	public void StartCoroutineCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
-		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin, bool bPlaySounds){
-		StartCoroutine(StartCurveStats(deltaPoints, pointsOrigin, deltaStars, starsOrigin, deltaHealth, healthOrigin, deltaMood, moodOrigin, bPlaySounds));
-	}
-
-	// Helper function for StartCoroutineCurveStats
-	IEnumerator StartCurveStats(int deltaPoints, Vector3 pointsOrigin, int deltaStars, Vector3 starsOrigin,
-		int deltaHealth, Vector3 healthOrigin, int deltaMood, Vector3 moodOrigin, bool bPlaySounds){
-
-		if(deltaPoints != 0){
+	
+	//---------------------------------------------------
+	// StartCurveStats()
+	// For each piece of data in the incoming list, this
+	// function will start a curve of visual elements for
+	// it.
+	//---------------------------------------------------	
+	public IEnumerator StartCurveStats( List<StatPair> listStat, bool bPlaySounds ){
+		for ( int i = 0; i < listStat.Count; ++i ) {
+			StatPair pair = listStat[i];
+			HUDElementType eType = pair.eType;
+			
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
-			pointsOrigin = (pointsOrigin == Vector3.zero) ? new Vector3(130f, 500f, 0f) : new Vector3(pointsOrigin.x, pointsOrigin.y - 800, 0);
+			Vector3 vHUD = Constants.GetConstant<Vector3>( eType + "_HUD" );
+			Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y - 800, 0);
+			StartCurve( eType, pair.nPoints, vOrigin, pair.strSound );
 			
-			string strSound = bPlaySounds && deltaPoints > 0 ? strSoundXP : null;
-			StartCurvePoints(deltaPoints, pointsOrigin, strSound);
-			
-			yield return new WaitForSeconds(1.3f / 200f * deltaPoints);
-		}
-		if(deltaStars != 0){
-			starsOrigin = (starsOrigin == Vector3.zero) ? new Vector3(514f, 500f, 0f) : new Vector3(starsOrigin.x, starsOrigin.y - 800, 0);
-			string strSound = bPlaySounds && deltaStars > 0 ? strSoundStars : null;
-			StartCurveStars(deltaStars, starsOrigin, strSound);
-			
-			yield return new WaitForSeconds(4f / 200f * deltaStars);
-		}
-		if(deltaHealth != 0){
-			healthOrigin = (healthOrigin == Vector3.zero) ? new Vector3(730f, 500f, 0f) : new Vector3(healthOrigin.x, healthOrigin.y - 800, 0);
-			StartCurveHealth(deltaHealth, healthOrigin);
-			yield return new WaitForSeconds(1.6f / 80f * deltaHealth);
-		}
-		if(deltaMood != 0){
-			moodOrigin = (moodOrigin == Vector3.zero) ? new Vector3(1010f, 500f, 0f) : new Vector3(moodOrigin.x, moodOrigin.y - 800, 0);
-			StartCurveMood(deltaMood, moodOrigin);
-			yield return new WaitForSeconds(1.6f / 80f * deltaMood);
+			float fModifier = Constants.GetConstant<float>( eType + "_Modifier" );
+			yield return new WaitForSeconds( fModifier * pair.nPoints );			
 		}
 	}
 	
-	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin){
-		StartCurvePoints( deltaPoints, pointsOrigin, null );
-	}
-	public void StartCurvePoints(int deltaPoints, Vector3 pointsOrigin, string strSound ){
-		TweenMoveToPoint(HUDElementType.points, deltaPoints, pointsOrigin, strSound);
-	}
-	
-	public void StartCurveStars(int deltaStars, Vector3 starsOrigin){
-		StartCurveStars( deltaStars, starsOrigin, null );
-	}
-	public void StartCurveStars(int deltaStars, Vector3 starsOrigin, string strSound){
-		TweenMoveToPoint(HUDElementType.stars, deltaStars, starsOrigin, strSound);
-	}
-
-	public void StartCurveHealth(int deltaHealth, Vector3 healthOrigin){
-		TweenMoveToPoint(HUDElementType.health, deltaHealth, healthOrigin);
-	}
-
-	public void StartCurveMood(int deltaMood, Vector3 moodOrigin){
-		TweenMoveToPoint(HUDElementType.mood, deltaMood, moodOrigin);
+	//---------------------------------------------------
+	// StartCurve()
+	// Starts a curve for one particular stat.
+	//---------------------------------------------------	
+	public void StartCurve( HUDElementType eType, int nDelta, Vector3 vPointsOrigin, string strSound = null ) {
+		TweenMoveToPoint( eType, nDelta, vPointsOrigin, strSound );	
 	}
 
 	// Using Linear move for now, LeanTween does not have moveLocal curve path
 	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint){
 		TweenMoveToPoint( type, amount, originPoint, null );	
 	}
+	
+	//---------------------------------------------------
+	// TweenMoveToPoint()
+	// For one stat, actually prepare and spawn the
+	// visuals.
+	//---------------------------------------------------	
 	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint, string strSound){
-		float duration = 1f;
+		float duration = .7f;
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isScaleUpDown = false;	// Used for adding animation
 		bool isFade = false;	// Used for subtracting animation
-
-		//Testing
-		duration = .7f;
-
-		switch(type){
-		case(HUDElementType.points):
-			modifier = Math.Abs(1.3f / 200f * amount);
-			imageName = "tweenPoints";
-			if(amount > 0){
-				endPosition = new Vector3(130f, -25f, 0);
-				isScaleUpDown = true;
-			}
-			else{
-				originPoint = new Vector3(130f, -25f, 0);
-				endPosition = new Vector3(130f, -100f, 0);
-				isFade = true;
-			}
-			break;
-
-		case(HUDElementType.stars):
-			modifier = Math.Abs(4f / 200f * amount);
-			imageName = "tweenStars";
-			if(amount > 0){
-				endPosition = new Vector3(514f, -25f, 0);
-				isScaleUpDown = true;
-			}
-			else{
-				originPoint = new Vector3(514f, -25f, 0);
-				endPosition = new Vector3(514f, -100f, 0);
-				isFade = true;
-			}
-			break;
-
-		case(HUDElementType.health):
-			modifier = Math.Abs(1.6f / 80f * amount);
-			if(amount > 0){
-				imageName = "tweenHealthUp";
-				endPosition = new Vector3(730f, -25f, 0);
-				isScaleUpDown = true;
-			}
-			else{
-				imageName = "tweenMinus";
-				originPoint = new Vector3(730f, -25f, 0);
-				endPosition = new Vector3(730f, -100f, 0);
-				isFade = true;
-			}
-			break;
-
-		case(HUDElementType.mood):
-			modifier = Math.Abs(1.6f / 80f * amount);
-			if(amount > 0){
-				imageName = "tweenMoodUp";
-				endPosition = new Vector3(1010f, -25f, 0);
-				isScaleUpDown = true;
-			}
-			else{
-				imageName = "tweenMinus";
-				originPoint = new Vector3(1010f, -25f, 0);
-				endPosition = new Vector3(1010f, -100f, 0);
-				isFade = true;
-			}
-			break;
+		
+		string strImageUp = Constants.GetConstant<string>( type + "_Up" );
+		string strImageDown = Constants.GetConstant<string>( type + "_Down" );
+		float fModifier = Constants.GetConstant<float>( type + "_Modifier" );
+		Vector3 vHUD = Constants.GetConstant<Vector3>( type + "_HUD" );
+		
+		modifier = Math.Abs( fModifier * amount );
+		if ( amount > 0 ) {
+			endPosition = vHUD;
+			isScaleUpDown = true;
+			imageName = strImageUp;
 		}
-
+		else {
+			originPoint = vHUD;
+			Vector3 vOffset = Constants.GetConstant<Vector3>( "Below_HUD" );
+			endPosition = originPoint + vOffset;
+			isFade = true;
+			imageName = strImageDown;
+		}
+		
+		// spawns the individual visual elements
 		for(float i = 0f; i < modifier; i += 0.1f){
 			// On its own thread, asynchronous
 			Hashtable hashSoundOverrides = new Hashtable();
@@ -416,6 +243,10 @@ public class HUDAnimator : MonoBehaviour {
 		}
 	}
 
+	//---------------------------------------------------
+	// SpawnOneSprite()
+	// Spawns one sprite for the visual curve.
+	//---------------------------------------------------	
 	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade, string strSound, Hashtable hashSoundOverrides){
 		yield return new WaitForSeconds(waitTime);
 		
@@ -442,7 +273,7 @@ public class HUDAnimator : MonoBehaviour {
 		}
 		
 		// also add a component that keeps track of this UI element (if it's xp or starts)
-		if ( type == HUDElementType.stars || type == HUDElementType.points ) {
+		if ( type == HUDElementType.Stars || type == HUDElementType.Points ) {
 			TrackSprite scriptTrack = go.AddComponent<TrackSprite>();
 			scriptTrack.Init( listMovingSprites );
 		}
@@ -456,48 +287,7 @@ public class HUDAnimator : MonoBehaviour {
 
 		// Enables the progress bar/count to animate after duration (when the first tween image touches the bar)
 		// Hopefully Invoke matches up with LeanTween time
-		//TODO sloppy logic speed and order, fix later
-		switch(type){
-			case(HUDElementType.points):
-				if(isFirstTweenPointsCall){
-					isFirstTweenPointsCall = false;
-					Invoke("StartBarAnimationPoints", duration);
-				}
-				break;
-			case(HUDElementType.stars):
-				if(isFirstTweenStarsCall){
-					isFirstTweenStarsCall = false;
-					Invoke("StartBarAnimationStars", duration);
-				}
-				break;
-			case(HUDElementType.health):
-				if(isFirstTweenHealthCall){
-					isFirstTweenHealthCall = false;
-					Invoke("StartBarAnimationHealth", duration);
-				}
-				break;
-			case(HUDElementType.mood):
-				if(isFirstTweenMoodCall){
-					isFirstTweenMoodCall = false;
-					Invoke("StartBarAnimationMood", duration);
-				}
-				break;
-		}
-	}
-
-	public void StartBarAnimationPoints(){
-		isAnimatePointsBar = true;
-	}
-
-	public void StartBarAnimationStars(){
-		isAnimateStarsBar = true;
-	}
-
-	public void StartBarAnimationHealth(){
-		isAnimateHealthBar = true;
-	}
-
-	public void StartBarAnimationMood(){
-		isAnimateMoodBar = true;
+		if ( waitTime == 0 )
+			StartCoroutine( AnimateStatBar( type, duration ) );
 	}
 }

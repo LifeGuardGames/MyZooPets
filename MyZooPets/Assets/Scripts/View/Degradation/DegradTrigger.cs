@@ -7,6 +7,9 @@ public class DegradTrigger : MonoBehaviour {
 	public string strSoundClean;	// sound this degrade trigger makes when the player cleans it up
 	public GameObject LgDegredationEmitter;		// The custom emittor emitter that emits skulls that fly towards pet
 	
+	// has this trigger been cleaned yet?
+	private bool bCleaned = false;
+	
 	// Use this for initialization
 	void Start(){
         DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
@@ -28,6 +31,10 @@ public class DegradTrigger : MonoBehaviour {
 
     //Listen to OnTap event from FingerGesture
     void OnTap(TapGesture gesture){
+		// check if this trigger has been cleaned yet
+		if ( bCleaned )
+			return;
+		
         //when trigger is touched remove from DataManager and destroy GameObject
         if(ClickManager.Instance.CanRespondToTap()){
 			// play sound associated with cleaning the trigger
@@ -40,14 +47,15 @@ public class DegradTrigger : MonoBehaviour {
     }
 
     private void CleanTriggerAndDestroy(){
+		bCleaned = true;
         DegradationLogic.Instance.ClearDegradationTrigger(ID);
         Destroy(this.gameObject, 0.5f);
     }
 
     private void ActivateParticleEffects(object senders, EventArgs args){
-        transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
+        //transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
 		
 		// Enable the skull flying to pet
-		LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>().Enable();
+		//LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>().Enable();
     }
 }

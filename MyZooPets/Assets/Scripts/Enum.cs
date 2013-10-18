@@ -206,3 +206,10 @@ public enum MinigamePopups {
 	Pause,
 	GameOver
 }
+
+public enum HUDElementType{
+	Points, 
+	Stars, 
+	Health, 
+	Mood
+}

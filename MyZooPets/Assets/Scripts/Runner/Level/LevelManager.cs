@@ -53,20 +53,20 @@ public class LevelManager : Singleton<LevelManager> {
 			return;
 		
 		// Assuming there is a runner and a level.
-		PlayerRunner playerRunner = PlayerRunner.Instance;
-		if (mLevelComponentQueue.Count > 0 && playerRunner != null) {
-			Vector3 currentRunnerPosition = playerRunner.transform.position;
+		PlayerController playerController = PlayerController.Instance;
+		if (mLevelComponentQueue.Count > 0 && playerController != null) {
+			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
 
             Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
             Vector3 frontLevelPosition = minAnchor.position;
 
-            const int zExtent = 2;
+            const int xExtent = 2;
 			// Different between the two positions
-			float distanceBetween = Mathf.Abs(currentRunnerPosition[zExtent] - frontLevelPosition[zExtent]);
+			float distanceBetween = Mathf.Abs(currentRunnerPosition[xExtent] - frontLevelPosition[xExtent]);
 			
-			float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, zExtent) * 2.0f;
-            if (minAnchor.position.z < currentRunnerPosition.z && distanceBetween >= distanceToUpdateLevel) {
+			float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
+            if (minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
 				// Dequeue the first
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
                 // Find the new first
@@ -94,7 +94,7 @@ public class LevelManager : Singleton<LevelManager> {
             TransitionToRandomNewLevelGroup();
 		}
 		
-		UpdateInvincibility();
+		// UpdateInvincibility();
     }
 
     public void Reset() {
@@ -119,12 +119,12 @@ public class LevelManager : Singleton<LevelManager> {
         PopulateLevelComponent(nextLevel);
         //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
         // PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
+        // nextLevel = PushAndInstantiateRandomComponent();
+        // PopulateLevelComponent(nextLevel);
+        // nextLevel = PushAndInstantiateRandomComponent();
+        // PopulateLevelComponent(nextLevel);
+        // nextLevel = PushAndInstantiateRandomComponent();
+        // PopulateLevelComponent(nextLevel);
     }
 	
 	//@HACK there is a lot of room for optimization here. IF it needs to be.
@@ -132,70 +132,70 @@ public class LevelManager : Singleton<LevelManager> {
 	// The order of them can be cached out and manag
 	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
 	private void UpdateInvincibility() {
-		PlayerRunner player = PlayerRunner.Instance;
-		if (player.Invincible) {
-			Debug.Log("asfafas");
-			// Get all lowest components
-			List<GameObject> allLowestObjects = new List<GameObject>();
-			foreach (LevelComponent currentComponent in mLevelComponentQueue) {
-				List<GameObject> currentLowestObjects = currentComponent.BottomLayers;
-				allLowestObjects.AddRange(currentLowestObjects);
-			}
+		// PlayerRunner player = PlayerRunner.Instance;
+		// if (player.Invincible) {
+		// 	Debug.Log("asfafas");
+		// 	// Get all lowest components
+		// 	List<GameObject> allLowestObjects = new List<GameObject>();
+		// 	foreach (LevelComponent currentComponent in mLevelComponentQueue) {
+		// 		List<GameObject> currentLowestObjects = currentComponent.BottomLayers;
+		// 		allLowestObjects.AddRange(currentLowestObjects);
+		// 	}
 			
-			if (allLowestObjects.Count > 1) {
-				// Sort
-				allLowestObjects.Sort(delegate(GameObject g1, GameObject g2) {
-					if (g1.transform.position.z < g2.transform.position.z)
-						return -1;
-					else if (g1.transform.position.z > g2.transform.position.z)
-						return 1;
-					else
-						return 0;
-				});
+		// 	if (allLowestObjects.Count > 1) {
+		// 		// Sort
+		// 		allLowestObjects.Sort(delegate(GameObject g1, GameObject g2) {
+		// 			if (g1.transform.position.z < g2.transform.position.z)
+		// 				return -1;
+		// 			else if (g1.transform.position.z > g2.transform.position.z)
+		// 				return 1;
+		// 			else
+		// 				return 0;
+		// 		});
 				
-				// Attempt to spawn items between it all
-				for (int lowestIndex = 1; lowestIndex < allLowestObjects.Count; lowestIndex++) {
-					GameObject leftObject = allLowestObjects[lowestIndex - 1];
-					GameObject rightObject = allLowestObjects[lowestIndex];
-					Vector3 leftObjectRightPoint = leftObject.collider.ClosestPointOnBounds(rightObject.collider.bounds.max);
-					Vector3 rightObjectRightPoint = rightObject.collider.ClosestPointOnBounds(leftObject.collider.bounds.max);
+		// 		// Attempt to spawn items between it all
+		// 		for (int lowestIndex = 1; lowestIndex < allLowestObjects.Count; lowestIndex++) {
+		// 			GameObject leftObject = allLowestObjects[lowestIndex - 1];
+		// 			GameObject rightObject = allLowestObjects[lowestIndex];
+		// 			Vector3 leftObjectRightPoint = leftObject.collider.ClosestPointOnBounds(rightObject.collider.bounds.max);
+		// 			Vector3 rightObjectRightPoint = rightObject.collider.ClosestPointOnBounds(leftObject.collider.bounds.max);
 					
-					// Vector that goes between the points
-					Vector3 betweenVector = rightObjectRightPoint - leftObjectRightPoint;
-					Vector3 midPoint = leftObjectRightPoint + (betweenVector * 0.5f);
+		// 			// Vector that goes between the points
+		// 			Vector3 betweenVector = rightObjectRightPoint - leftObjectRightPoint;
+		// 			Vector3 midPoint = leftObjectRightPoint + (betweenVector * 0.5f);
 					
-					if (!mBetweenInvinciblePlatforms.ContainsKey(midPoint)) {
-						// No object exists, create one
-						GameObject betweenPlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						// Position
-						betweenPlatform.transform.position = midPoint;
+		// 			if (!mBetweenInvinciblePlatforms.ContainsKey(midPoint)) {
+		// 				// No object exists, create one
+		// 				GameObject betweenPlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		// 				// Position
+		// 				betweenPlatform.transform.position = midPoint;
 						
-						// Scale
-						//BoxCollider collider = (BoxCollider)betweenPlatform.collider;
-						//Vector3 colliderSize = collider.size;
-						//colliderSize.z = betweenVector.magnitude;
-						//collider.size = colliderSize;
-						Vector3 scale = betweenPlatform.transform.localScale;
-						scale.z = betweenVector.magnitude;
-						betweenPlatform.transform.localScale = scale;
+		// 				// Scale
+		// 				//BoxCollider collider = (BoxCollider)betweenPlatform.collider;
+		// 				//Vector3 colliderSize = collider.size;
+		// 				//colliderSize.z = betweenVector.magnitude;
+		// 				//collider.size = colliderSize;
+		// 				Vector3 scale = betweenPlatform.transform.localScale;
+		// 				scale.z = betweenVector.magnitude;
+		// 				betweenPlatform.transform.localScale = scale;
 						
-						// Angle
-						float angleBetween = Vector3.Angle(betweenVector, Vector3.forward);
-						Quaternion newAngle = new Quaternion();
-						newAngle.eulerAngles = new Vector3(angleBetween, 0f, 0f);
-						betweenPlatform.transform.rotation = newAngle;
+		// 				// Angle
+		// 				float angleBetween = Vector3.Angle(betweenVector, Vector3.forward);
+		// 				Quaternion newAngle = new Quaternion();
+		// 				newAngle.eulerAngles = new Vector3(angleBetween, 0f, 0f);
+		// 				betweenPlatform.transform.rotation = newAngle;
 						
-						// Add to the list
-						mBetweenInvinciblePlatforms[midPoint] = betweenPlatform;
-					}
-				}
-			}
-		} else {
-			foreach (GameObject currentObject in mBetweenInvinciblePlatforms.Values) {
-				GameObject.Destroy(currentObject);
-			}
-			mBetweenInvinciblePlatforms.Clear();
-		}
+		// 				// Add to the list
+		// 				mBetweenInvinciblePlatforms[midPoint] = betweenPlatform;
+		// 			}
+		// 		}
+		// 	}
+		// } else {
+		// 	foreach (GameObject currentObject in mBetweenInvinciblePlatforms.Values) {
+		// 		GameObject.Destroy(currentObject);
+		// 	}
+		// 	mBetweenInvinciblePlatforms.Clear();
+		// }
 	}
 
     private void TransitionToRandomNewLevelGroup() {

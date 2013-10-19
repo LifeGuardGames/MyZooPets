@@ -94,7 +94,7 @@ public class PlayerRunner : Singleton<PlayerRunner>{
         // Poll the input. Generally the InputManager handles this, so its really just for debugging.
         UpdateInput();
         // If we are invincible, update the timer.
-        UpdateInvincible();
+        // UpdateInvincible();
         // If the speed timer elapses, increase game time speed.
         UpdateSpeed();
         // Some falling logic to help collision.
@@ -114,7 +114,7 @@ public class PlayerRunner : Singleton<PlayerRunner>{
 			mLastPosition = transform.position;
 
         // Make sure we aint dead now that we've moved.
-		CheckAndActOnDeath();
+		// CheckAndActOnDeath();
 	}
 
 	void onTap() {
@@ -161,7 +161,7 @@ public class PlayerRunner : Singleton<PlayerRunner>{
 
     private void UpdateMovement() {
         // These are constant speeds, not forces. But I treat them like forces. It's weird I know.
-        mMovementVector.z = DefaultSpeed + mSpeedBoostAmmount;
+        mMovementVector.x = DefaultSpeed + mSpeedBoostAmmount;
 
         // Add in Gravity force.
         mMovementVector += (Physics.gravity * rigidbody.mass) * Time.deltaTime;

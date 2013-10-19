@@ -12,7 +12,7 @@ using UnityEngine;
 using System.Collections;
 
 public class MegaHazard : Singleton<MegaHazard> {
-	public float ZDefaultDistanceFromPlayer = 5f;
+	public float XDefaultDistanceFromPlayer = 5f;
 	public float DistanceDivisor = 2.0f;
 	public float DistanceRegainIncrement = 0.1f;
 	public float DistanceRegainTime = 1f;
@@ -47,23 +47,20 @@ public class MegaHazard : Singleton<MegaHazard> {
 	}
 
 	public void Reset() {
-		mCurrentDistanceFromPlayer = ZDefaultDistanceFromPlayer;
+		mCurrentDistanceFromPlayer = XDefaultDistanceFromPlayer;
 		mDistanceRegainPulse = DistanceRegainTime;
 		mDistanceUntilTarget = 0f;
 
-		transform.position = PlayerRunner.Instance.transform.position;
+		transform.position = PlayerController.Instance.transform.position;
 		UpdatePositionRelativeToPlayer();
 		mDestinationPosition = transform.position;
 
 	}
 
 	public void TriggerPlayerSlowdown() {
-		PlayerRunner player = PlayerRunner.Instance;
-		if (player != null) {
-			mSlowDownStayPulse = SlowDownStayDuration;
-			mDistanceUntilTarget -= (ZDefaultDistanceFromPlayer / DistanceDivisor);
-			mCurrentDistanceFromPlayer += mDistanceUntilTarget;
-		}
+		mSlowDownStayPulse = SlowDownStayDuration;
+		mDistanceUntilTarget -= (XDefaultDistanceFromPlayer / DistanceDivisor);
+		mCurrentDistanceFromPlayer += mDistanceUntilTarget;
 	}
 
 	private void UpdatePositionRelativeToPlayer() {
@@ -74,7 +71,7 @@ public class MegaHazard : Singleton<MegaHazard> {
 			if (mSlowDownStayPulse > 0f) {
 				// When we get hit, we must stay at our slowed-down locaiton until the time elapses.
 				mSlowDownStayPulse -= Time.deltaTime / Time.timeScale;         
-			} else if (mCurrentDistanceFromPlayer > ZDefaultDistanceFromPlayer) {
+			} else if (mCurrentDistanceFromPlayer > XDefaultDistanceFromPlayer) {
 				mDistanceRegainPulse -= Time.deltaTime / Time.timeScale;
 				if (mDistanceRegainPulse <= 0f) {
 					mDistanceRegainPulse = DistanceRegainTime;
@@ -84,13 +81,12 @@ public class MegaHazard : Singleton<MegaHazard> {
 		}
 
 		float currentDistance = GetCurrentOffsetDistance();
-		PlayerRunner playerRunner = PlayerRunner.Instance;
-		mDestinationPosition.z = playerRunner.transform.position.z + currentDistance;
+		mDestinationPosition.x = PlayerController.Instance.transform.position.x + currentDistance;
 		transform.position = mDestinationPosition;
 
 		// Update the Y distance
 		Vector3 currentPosition = transform.position;
-		currentPosition.y = playerRunner.transform.position.y;
+		currentPosition.y = PlayerController.Instance.transform.position.y;
 		transform.position = currentPosition;
 	}
 

@@ -52,8 +52,8 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
         RunnerUIManager.Instance.DeActivateGameOverPanel();
         GameRunning = true;
 
-        PlayerRunner.Instance.gameObject.SetActive(true);
-        PlayerRunner.Instance.Reset();
+        PlayerController.Instance.gameObject.SetActive(true);
+        PlayerController.Instance.Reset();
         ScoreManager.Instance.Reset();
         LevelManager.Instance.Reset();
         MegaHazard.Instance.Reset();
@@ -74,7 +74,7 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
         RunnerUIManager.Instance.ActivateGameOverPanel();
 
         // Disable the player
-        PlayerRunner.Instance.gameObject.SetActive(false);
+        PlayerController.Instance.gameObject.SetActive(false);
 		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "runnerGameOver" );
@@ -88,7 +88,10 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {
-        Time.timeScale += inIncreaseTime;
+        //Limit timescale to 2. Beyond 2 the game becomes too fast to be playable
+        if(Time.timeScale != 2){
+            Time.timeScale += inIncreaseTime;
+        }
     }
 
     public void SlowTimeSpeed(float inTimeDivisor) {

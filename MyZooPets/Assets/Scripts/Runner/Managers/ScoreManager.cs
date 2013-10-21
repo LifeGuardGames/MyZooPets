@@ -62,28 +62,26 @@ public class ScoreManager : Singleton<ScoreManager> {
 	
 	// Update is called once per frame
 	void Update() {
-        PlayerRunner playerRunner = PlayerRunner.Instance;
-        if (playerRunner != null) {
-            float distanceTraveled = playerRunner.transform.position.z;
+        PlayerController playerController = PlayerController.Instance;
+        float distanceTraveled = playerController.transform.position.x;
 
-            if (ScoreLabel != null) {
-                int newDistanceScore = (int)(distanceTraveled / ScoreDistance) * ScorePerIncrement;
-                SetDistancePoints(newDistanceScore);
-            }
-
-            if (DistanceLabel != null) {
-                DistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distanceTraveled.ToString("F1");
-            }
-			
-			// update coin streak countdown (if it's not 0)
-			if ( mfCoinStreakCountdown > 0 ) {
-				ChangeCoinStreakCountdown( -Time.deltaTime );
-			
-				// if the countdown ran out, our streak is reset
-				if ( mfCoinStreakCountdown <= 0 )
-					SetCoinStreak( 0 );
-			}
+        if (ScoreLabel != null) {
+            int newDistanceScore = (int)(distanceTraveled / ScoreDistance) * ScorePerIncrement;
+            SetDistancePoints(newDistanceScore);
         }
+
+        if (DistanceLabel != null) {
+            DistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distanceTraveled.ToString("F1");
+        }
+		
+		// update coin streak countdown (if it's not 0)
+		if ( mfCoinStreakCountdown > 0 ) {
+			ChangeCoinStreakCountdown( -Time.deltaTime );
+		
+			// if the countdown ran out, our streak is reset
+			if ( mfCoinStreakCountdown <= 0 )
+				SetCoinStreak( 0 );
+		}
 	}
 
     public void Reset() {

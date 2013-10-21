@@ -33,7 +33,7 @@ public class RunnerUIManager : Singleton<RunnerUIManager> {
         // Determine the pointss
         float numCoins = ScoreManager.Instance.Coins;
         float numScore = ScoreManager.Instance.GetScore();
-        float distance = PlayerRunner.Instance.transform.position.z;
+        float distance = PlayerController.Instance.transform.position.x;
 
         FinalScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + numScore;
         FinalDistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distance.ToString("F1");

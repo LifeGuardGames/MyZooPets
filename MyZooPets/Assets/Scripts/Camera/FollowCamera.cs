@@ -1,6 +1,4 @@
-﻿/* Sean Duane
- * FollowCamera.cs
- * 8:26:2013   14:06
+﻿/* 
  * Description:
  * Drags the attached camera along this objects transform.
  * Also, if a megahazard exists, it responds to the given offset.
@@ -23,15 +21,15 @@ public class FollowCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Whenever we move, move the camera relative to use.
+		// Whenever we move, move the camera relative to user
 		Vector3 newPosition = transform.position + mCameraRelativeVector;
 
-        // o wait, is there a megahazard to pull an offset from?
-        if (MegaHazardToOffset != null) {
-            float hazardOffset = MegaHazardToOffset.GetCurrentOffsetDistance();
-            newPosition.z += hazardOffset;
-        }
+        //Make sure to consider the mega hazard offset ass well
+        float hazardOffset = MegaHazardToOffset.GetCurrentOffsetDistance();
+        newPosition.x += hazardOffset;
 
-		FollowingCamera.transform.position = newPosition;
+        //Camera only follows the players' x position
+        Vector3 cameraPos = FollowingCamera.transform.position;
+		FollowingCamera.transform.position = new Vector3(newPosition.x, cameraPos.y, cameraPos.z);
 	}
 }

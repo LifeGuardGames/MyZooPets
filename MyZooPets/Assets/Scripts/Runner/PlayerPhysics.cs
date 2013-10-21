@@ -4,7 +4,6 @@ using System.Collections;
 
 [RequireComponent (typeof(BoxCollider))]
 public class PlayerPhysics : MonoBehaviour {
-    private BoxCollider collider;
     private Vector3 colliderSize;
     private Vector3 colliderCenter;
     private float skin = .005f; //Padding for collider
@@ -21,9 +20,8 @@ public class PlayerPhysics : MonoBehaviour {
     RaycastHit hit;
     
     void Start() {
-        collider = GetComponent<BoxCollider>();
-        colliderSize = collider.size;
-        colliderCenter = collider.center;
+        colliderSize = GetComponent<BoxCollider>().size;
+        colliderCenter = GetComponent<BoxCollider>().center;
     }
 
     public void Move(Vector2 moveAmount, ref int numOfLayerToPassThrough) {
@@ -41,6 +39,9 @@ public class PlayerPhysics : MonoBehaviour {
 
     private void CheckCollisionsAboveAndBelow(ref int numOfLayerToPassThrough){
         Grounded = false;
+
+        //Create 3 rays that switch between top and bottom depending on movement direction
+        //detects above and below collision.
         for (int i=0; i<3; i++) {
             float dir = Mathf.Sign(deltaY);
             float x = (pos.x + colliderCenter.x - colliderSize.x/2) + colliderSize.x/2 * i; // Left, centre and then rightmost point of collider
@@ -79,10 +80,13 @@ public class PlayerPhysics : MonoBehaviour {
 
     private void CheckCollisionsLefAndRight(){
         MovementStopped = false;
-        for(int i=0; i<3; i++){
+
+        //Creates 3 rays that switches left or right depending on the movement.
+        //This 3 rays are used to detect left/right collisions
+        // for(int i=0; i<3; i++){
             float dir = Mathf.Sign(deltaX);
             float x = pos.x + colliderCenter.x + colliderSize.x/2 * dir;
-            float y = pos.y + colliderCenter.y - colliderSize.y/2 + colliderSize.y/2 * i;
+            float y = pos.y + colliderCenter.y - colliderSize.y/2 + colliderSize.y/2;
 
             ray = new Ray(new Vector2(x, y), new Vector2(dir, 0));
             Debug.DrawRay(ray.origin,ray.direction);
@@ -91,10 +95,12 @@ public class PlayerPhysics : MonoBehaviour {
                 // Get Distance between player and ground
                 float dst = Vector3.Distance (ray.origin, hit.point);
 
-                //Don't allow collision for pass through layer
-                if(hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("PassThroughLayer"))
-                    break;
-                
+                //Don't allow collision for pass through layer or items layer
+                int hitLayer = hit.collider.transform.gameObject.layer;
+                if(hitLayer == LayerMask.NameToLayer("PassThroughLayer") ||
+                    hitLayer == LayerMask.NameToLayer("ItemsLayer"))
+                    return;
+
                 // Stop player's downwards movement after coming within skin width of a collider
                 if (dst > skin)
                     deltaX = dst * dir - skin * dir;
@@ -102,8 +108,8 @@ public class PlayerPhysics : MonoBehaviour {
                     deltaX = 0;
                 
                 MovementStopped = true;
-                break; //Break when collision is detected
+                // break; //Break when collision is detected
             }
-        }
+        // }
     }
 }

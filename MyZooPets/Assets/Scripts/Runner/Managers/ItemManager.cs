@@ -23,6 +23,7 @@ public class ItemManager : Singleton<ItemManager> {
     public List<HazardItem> HazardPrefabs;
     public GameObject itemTutorialPrefab;
     public GameObject itemTutorialParent;
+    public GameObject runnerItemsParent;
 
     //Item pool for Coin and Items
     private Dictionary<Type, Queue<RunnerItem>> mItemPool = new Dictionary<Type, Queue<RunnerItem>>();
@@ -176,6 +177,8 @@ public class ItemManager : Singleton<ItemManager> {
         } else {
             Debug.LogError("No spawn logic set for item type " + inItemType);
         }
+        
+        spawnedItem.transform.parent = runnerItemsParent.transform;
         return spawnedItem;
     }
 }

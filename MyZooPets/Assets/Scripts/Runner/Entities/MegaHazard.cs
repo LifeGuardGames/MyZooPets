@@ -1,6 +1,4 @@
-﻿/* Sean Duane
- * MegaHazard.cs
- * 8:26:2013   14:12
+﻿/* 
  * Description:
  * The megahazard follows the player through the level, and give them a chase.
  * If the player touches the MegaHazard, they lose.
@@ -39,8 +37,8 @@ public class MegaHazard : Singleton<MegaHazard> {
 		transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
 	}
 
-	void OnTriggerEnter(Collider inOther) {
-		if (inOther.gameObject.tag == "Player") {
+	void OnTriggerEnter(Collider inOther){
+		if(inOther.gameObject.tag == "Player") {
 			RunnerGameManager gameManager = RunnerGameManager.Instance;
 			gameManager.ActivateGameOver();
 		}
@@ -51,10 +49,11 @@ public class MegaHazard : Singleton<MegaHazard> {
 		mDistanceRegainPulse = DistanceRegainTime;
 		mDistanceUntilTarget = 0f;
 
-		transform.position = PlayerController.Instance.transform.position;
-		UpdatePositionRelativeToPlayer();
+		//Set the hazards y position to the players y position
+		transform.position = new Vector3(PlayerController.Instance.transform.position.x, transform.position.y, transform.position.z);
 		mDestinationPosition = transform.position;
 
+		UpdatePositionRelativeToPlayer();
 	}
 
 	public void TriggerPlayerSlowdown() {
@@ -63,8 +62,13 @@ public class MegaHazard : Singleton<MegaHazard> {
 		mCurrentDistanceFromPlayer += mDistanceUntilTarget;
 	}
 
+	public float GetCurrentOffsetDistance() {
+		return mCurrentDistanceFromPlayer - mDistanceUntilTarget;
+	}
+
+	//Make hazard move with the player
 	private void UpdatePositionRelativeToPlayer() {
-		// Update the Z distance
+		// Update the X distance
 		if (mDistanceUntilTarget > 0)
 			mDistanceUntilTarget -= GapClosingIncrement;
 		else {
@@ -82,15 +86,11 @@ public class MegaHazard : Singleton<MegaHazard> {
 
 		float currentDistance = GetCurrentOffsetDistance();
 		mDestinationPosition.x = PlayerController.Instance.transform.position.x + currentDistance;
-		transform.position = mDestinationPosition;
+		transform.position = new Vector3(mDestinationPosition.x, transform.position.y, transform.position.z);
 
 		// Update the Y distance
-		Vector3 currentPosition = transform.position;
-		currentPosition.y = PlayerController.Instance.transform.position.y;
-		transform.position = currentPosition;
-	}
-
-	public float GetCurrentOffsetDistance() {
-		return mCurrentDistanceFromPlayer - mDistanceUntilTarget;
+		// Vector3 currentPosition = transform.position;
+		// currentPosition.y = PlayerController.Instance.transform.position.y + 5;
+		// transform.position = currentPosition;
 	}
 }

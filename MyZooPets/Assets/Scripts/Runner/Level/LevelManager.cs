@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 public class LevelManager : Singleton<LevelManager> {
     public int BottomLayer = 31;
-	public float LevelTooLowYValue = -50.0f;
+	// public float LevelTooLowYValue = -50.0f;
 	public float LevelTooLowYValueGameOver = -80.0f;
 	public float LevelGroupSwitchTime = 40.0f;
     public float CoinSpawnDistance = 1f;
@@ -35,7 +35,7 @@ public class LevelManager : Singleton<LevelManager> {
     private Vector3 mLastCenterPosition;
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
-	private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
+	// private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
 
     private LevelComponent lastQueuedComponent;
 
@@ -54,18 +54,20 @@ public class LevelManager : Singleton<LevelManager> {
 		
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
+        print(mLevelComponentQueue.Count);
 		if (mLevelComponentQueue.Count > 0 && playerController != null) {
 			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
-
             Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
             Vector3 frontLevelPosition = minAnchor.position;
 
-            const int xExtent = 2;
-			// Different between the two positions
-			float distanceBetween = Mathf.Abs(currentRunnerPosition[xExtent] - frontLevelPosition[xExtent]);
-			
-			float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
+            const int xExtent = 0;
+			// Different between the runner position and the min anchor of the first component in queue 
+			float distanceBetween = Mathf.Abs(currentRunnerPosition.x - frontLevelPosition.x);
+			// float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
+            float distanceToUpdateLevel = (frontLevelComponent.transform.FindChild("AnchorMax").position.x -
+                frontLevelComponent.transform.FindChild("AnchorMin").position.x) * 2f;
+
             if (minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
 				// Dequeue the first
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
@@ -115,6 +117,12 @@ public class LevelManager : Singleton<LevelManager> {
 
         LevelComponent nextLevel;
         // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
         nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
         PopulateLevelComponent(nextLevel);
         //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
@@ -240,30 +248,18 @@ public class LevelManager : Singleton<LevelManager> {
         }
     }
 
-    public float GetTooLowYValue(Vector3 inPosition) {
-
-        // Get the lowest component
-        GameObject lowestComponent = GetLowestGameObjectOnField();
-        float yTooLowValue = 0f;
-        if (lowestComponent != null) {
-            yTooLowValue = lowestComponent.collider.bounds.max.y + LevelTooLowYValue;
-        }
-
-        return yTooLowValue;
-    }
-
 	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
 		if (mCurrentLevelGroup.LevelComponents.Count > 0) {
 			LevelComponent nextlevelComponent = null;
 
 			if (inForceUseThisComponent == null) {
                 //Only queue new component that is different from the previous ona
-                while(true){
+                // while(true){
                     int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
 
                     nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
-                    if(lastQueuedComponent.name != nextlevelComponent.name) break;
-                }
+                    // if(lastQueuedComponent.name != nextlevelComponent.name) break;
+                // }
 				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
 				Debug.Log("Pushing default");

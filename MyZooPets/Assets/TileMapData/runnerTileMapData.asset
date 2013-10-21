@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb356b9a6a1da084695128b00c8721be, type: 3}
-  m_Name: forestSmllHillTileMapData
+  m_Name: runnerTileMapData
   m_EditorClassIdentifier: 
   tileSize: {x: 3.5, y: 3.5, z: 0}
   tileOrigin: {x: -1.75, y: -1.75, z: 0}
   tileType: 0
   sortMethod: 0
-  layersFixedZ: 0
+  layersFixedZ: 1
   tilePrefabs:
   - {fileID: 0}
   - {fileID: 0}
@@ -201,11 +201,27 @@ MonoBehaviour:
   - {fileID: 0}
   tileInfo: []
   tileMapLayers:
-  - name: Layer 0
+  - name: GroundLayer
     hash: 1892887448
     useColor: 1
     generateCollider: 1
     z: 0
+    unityLayer: 11
+    skipMeshGeneration: 0
+    physicMaterial: {fileID: 0}
+  - name: PassThroughLayer
+    hash: 1860728063
+    useColor: 1
+    generateCollider: 1
+    z: 0
+    unityLayer: 12
+    skipMeshGeneration: 0
+    physicMaterial: {fileID: 0}
+  - name: PropsLayer
+    hash: 691295268
+    useColor: 1
+    generateCollider: 0
+    z: -1
     unityLayer: 0
     skipMeshGeneration: 0
     physicMaterial: {fileID: 0}

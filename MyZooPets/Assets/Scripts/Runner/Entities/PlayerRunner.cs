@@ -335,25 +335,29 @@ public class PlayerRunner : Singleton<PlayerRunner>{
     private void CheckAndActOnDeath() {
         // Are we below the maps floor value
         LevelManager levelManager = LevelManager.Instance;
-        float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
-        if (transform.position.y < yTooLowValue) {
-            if (!mbInvincible) {
-				
-				if ( transform.position.y < levelManager.LevelTooLowYValueGameOver )
-                	RunnerGameManager.Instance.ActivateGameOver();
-				else {
-					// play die sound (once)
-					if ( !mbDied ) {
-						mbDied = true;
-						AudioManager.Instance.PlayClip( "runnerDie" );
-					}
-				}
-			}
-            else {
-                Vector3 position = transform.position;
-                position.y = yTooLowValue;
-                transform.position = position;
-            }
+        if(transform.position.y < levelManager.LevelTooLowYValueGameOver){
+            AudioManager.Instance.PlayClip("runnerDie");
+            RunnerGameManager.Instance.ActivateGameOver();
         }
+   //      float yTooLowValue = levelManager.GetTooLowYValue(transform.position);
+   //      if (transform.position.y < yTooLowValue) {
+   //          if (!mbInvincible) {
+				
+			// 	if ( transform.position.y < levelManager.LevelTooLowYValueGameOver )
+   //              	RunnerGameManager.Instance.ActivateGameOver();
+			// 	else {
+			// 		// play die sound (once)
+			// 		if ( !mbDied ) {
+			// 			mbDied = true;
+			// 			AudioManager.Instance.PlayClip( "runnerDie" );
+			// 		}
+			// 	}
+			// }
+   //          else {
+   //              Vector3 position = transform.position;
+   //              position.y = yTooLowValue;
+   //              transform.position = position;
+   //          }
+   //      }
     }
 }

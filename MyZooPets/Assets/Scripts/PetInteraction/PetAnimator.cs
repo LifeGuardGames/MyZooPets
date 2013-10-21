@@ -39,7 +39,8 @@ public class PetAnimator : LgCharacterAnimator {
 	public GameObject goBlow;		// where to parent the fire particle
 	private GameObject goFire;		// actual fire particle game object
 	public float fFireDelay;		// delay before the particle effect starts, to account for the "windup" portion of the pet animation
-	
+	private FireBlowParticleController scriptFire;
+	 
 	// queue of animations the pet should be doing
 	private Queue<DataPetAnimation> queueAnims = new Queue<DataPetAnimation>();
 	
@@ -54,6 +55,9 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
+	
+	// testing fire anim stuff
+	public float fFireWait;
 	
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
@@ -149,26 +153,46 @@ public class PetAnimator : LgCharacterAnimator {
 		goFire.transform.localPosition = new Vector3(0,0,0);
 		
 		// actually kick off the effect
-		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
-		script.Play( fFireDelay );
+		scriptFire = goFire.GetComponent<FireBlowParticleController>();
+		//script.Play( fFireDelay );
+		
+		StartCoroutine( FireWait() );
+	}
+	
+	private IEnumerator FireWait() {
+		yield return new WaitForSeconds( fFireWait );
+		Pause();
+	}
+	
+	public void FinishFire() {
+		Resume();	
+		
+		scriptFire.Play( fFireDelay - fFireWait );
 	}
 	
 	//---------------------------------------------------
 	// DoneBreathingFire()
 	//---------------------------------------------------	
-	private void DoneBreathingFire() {
+	public void DoneBreathingFire( bool bFinished ) {
+		if ( !bFinished )
+			Resume();
+		
 		// stop the game object of the fire
 		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
 		script.Stop();
 		
 		// idle
-		Idle();
+		Idle( !bFinished );
+	}
+	
+	public void CancelFire() {
+		DoneBreathingFire( false );
 	}
 
 	//---------------------------------------------------
 	// Idle()
 	//---------------------------------------------------
-	private void Idle() {
+	private void Idle( bool bImmediate = false ) {
 		// if the pet's animation queue is not empty, we should not kick off an idle
 		if ( queueAnims.Count > 0 )
 			return;
@@ -176,8 +200,12 @@ public class PetAnimator : LgCharacterAnimator {
 		// get a random idle based on pet's attributes
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
 		
-		// queue the anim
-		QueueAnim( dataAnim );
+		if ( bImmediate )
+			PlayAnimation( dataAnim );
+		else {
+			// queue the anim
+			QueueAnim( dataAnim );
+		}
 	}
 	
 	//---------------------------------------------------
@@ -286,7 +314,7 @@ public class PetAnimator : LgCharacterAnimator {
 				Idle();
 				break;
 			case PetAnimStates.BreathingFire:
-				DoneBreathingFire();
+				DoneBreathingFire( true );
 				break;				
 			case PetAnimStates.Walking:
 				// do nothing; the anim will loop

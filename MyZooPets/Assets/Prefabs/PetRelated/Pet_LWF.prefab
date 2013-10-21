@@ -154,6 +154,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400018}
+  m_Layer: 0
+  m_Name: FireBlowPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -181,6 +196,7 @@ Transform:
   - {fileID: 400012}
   - {fileID: 400010}
   - {fileID: 400016}
+  - {fileID: 400018}
   m_Father: {fileID: 0}
 --- !u!4 &400004
 Transform:
@@ -258,6 +274,17 @@ Transform:
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 4.01371765, z: -.885560036}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400002}
+--- !u!4 &400018
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.51999998, y: 4.19999981, z: -2.07999992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -432,6 +459,9 @@ MonoBehaviour:
     bCanInterrupt: 1
   strKeySpecies: Basic
   strKeyColor: OrangeYellow
+  goBlow: {fileID: 100018}
+  fFireDelay: 1
+  fFireWait: .400000006
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

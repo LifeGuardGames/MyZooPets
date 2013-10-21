@@ -213,3 +213,9 @@ public enum HUDElementType{
 	Health, 
 	Mood
 }
+
+// types of button clicks
+public enum ButtonClickTypes {
+	Tap,
+	Hold
+}

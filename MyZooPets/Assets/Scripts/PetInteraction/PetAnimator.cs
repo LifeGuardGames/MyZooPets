@@ -84,15 +84,6 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// the animator starts off empty, so immediately pick the animation we want to play (idle)
 		Idle();
-		
-		// testing
-		/*
-		DataPetAnimation data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Walk" );
-		*/
 	}
 	
 	//---------------------------------------------------
@@ -154,19 +145,33 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// actually kick off the effect
 		scriptFire = goFire.GetComponent<FireBlowParticleController>();
-		//script.Play( fFireDelay );
 		
-		StartCoroutine( FireWait() );
+		// start a coroutine to pause the animation, for timing purposes.
+		// it is resumed from the FireMeter script.
+		StartCoroutine( PauseAnim( fFireWait ) );
 	}
 	
-	private IEnumerator FireWait() {
-		yield return new WaitForSeconds( fFireWait );
+	//---------------------------------------------------
+	// PauseAnim()
+	// A helper function that basically just pauses the
+	// current animation after a short duration.  Used
+	// for timing purposes.
+	//---------------------------------------------------		
+	private IEnumerator PauseAnim( float fWait ) {
+		yield return new WaitForSeconds( fWait );
 		Pause();
 	}
 	
+	//---------------------------------------------------
+	// FinishFire()
+	// The pet is stopped mid-animation when breathing
+	// fire.  This function will finish the animation.
+	//---------------------------------------------------		
 	public void FinishFire() {
+		// resume the animation
 		Resume();	
 		
+		// play the actual particle effect
 		scriptFire.Play( fFireDelay - fFireWait );
 	}
 	
@@ -185,6 +190,10 @@ public class PetAnimator : LgCharacterAnimator {
 		Idle( !bFinished );
 	}
 	
+	//---------------------------------------------------
+	// CancelFire()
+	// Cancels the whole fire breathing animation.
+	//---------------------------------------------------		
 	public void CancelFire() {
 		DoneBreathingFire( false );
 	}

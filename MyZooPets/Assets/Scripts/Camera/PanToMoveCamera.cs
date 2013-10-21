@@ -1,5 +1,17 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+
+public class PartitionChangedArgs : EventArgs{
+	public int nOld;
+	public int nNew;
+
+	public PartitionChangedArgs( int nOld, int nNew ){
+		this.nOld = nOld;
+		this.nNew = nNew;
+	}
+}
 
 //---------------------------------------------------
 // PanToMoveCamera
@@ -8,7 +20,7 @@ using System.Collections;
 //    Swiping Left or right will snap the camera x position right or left, respectively.
 //---------------------------------------------------
 
-public class PanToMoveCamera : MonoBehaviour{
+public class PanToMoveCamera : MonoBehaviour {
     public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
     public int numOfPartitions = 4; //number of partitions allowed
     public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
@@ -31,6 +43,10 @@ public class PanToMoveCamera : MonoBehaviour{
 
     private Camera nguiCamera; 
     private Camera mainCamera;
+	
+	//=======================Events========================
+	public EventHandler<PartitionChangedArgs> OnPartitionChanged; 	// when the partition changes
+	//=====================================================			
 
     // Use this for initialization
     void Start () {
@@ -191,7 +207,9 @@ public class PanToMoveCamera : MonoBehaviour{
 			int nOldPartition = currentPartition;
 			currentPartition = nTargetPartition;
 			
-			GatingManager.Instance.EnteredRoom( nOldPartition, currentPartition );
+			if ( OnPartitionChanged != null )
+				OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );
+			//GatingManager.Instance.EnteredRoom( nOldPartition, currentPartition );
 		}
 	}
 	

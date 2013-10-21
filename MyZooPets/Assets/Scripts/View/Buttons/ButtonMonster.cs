@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // ButtonMonster
 // Button that is on a gating monster.
 //---------------------------------------------------
 
-public class ButtonMonster : LgButton {
+public class ButtonMonster : LgButtonHold {
 	public int nDamage;
 	
 	// attack gate script
@@ -15,19 +17,62 @@ public class ButtonMonster : LgButton {
 	// fire meter script
 	private FireMeter scriptFireMeter;
 	
-	// actual fire meter object
+	// actual fire meter object created when this button is pressed
 	public GameObject goFireMeter;
+	
+	// the gate that this button is for
+	private Gate gate;
+	
+	// is this button being pressed legally?  Mainly used as a stopgap for now
+	private bool bLegal;
+	
+	//---------------------------------------------------
+	// _Start()
+	//---------------------------------------------------		
+	protected override void _Start() {
+		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+		scriptPan.OnPartitionChanged += OnPartitionChanged;
+	}
+	
+	//---------------------------------------------------
+	// _OnDestroy()
+	//---------------------------------------------------		
+	protected override void _OnDestroy() {
+		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+		scriptPan.OnPartitionChanged -= OnPartitionChanged;		
+	}
+	
+	//---------------------------------------------------
+	// OnPartitionChanged()
+	//---------------------------------------------------	
+	public void OnPartitionChanged( object sender, PartitionChangedArgs args ) {
+		// if the partition is changing at all, destroy this UI
+		Destroy( gameObject );
+	}
+	
+	//---------------------------------------------------
+	// SetGate()
+	//---------------------------------------------------	
+	public void SetGate( Gate gate ) {
+		this.gate = gate;
+	}
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
-	protected override void ProcessClick() {
+	protected override void ProcessClick() {	
+		bLegal = false;
+		
 		PetAnimator scriptPetAnimator = GatingManager.Instance.GetPlayerPetAnimator();
-		Gate scriptGate = GetComponent<Gate>();
 		
 		// if the pet is currently busy, forgetaboutit
 		if ( scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking )
 			return;
+		
+		bLegal = true;
+		
+		// get the gate for this monster
+		Gate scriptGate = gate;		
 		
 		// otherwise, add the attack script
 		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
@@ -35,18 +80,29 @@ public class ButtonMonster : LgButton {
 		
 		// create the fire meter
 		//GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
-		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Top"), this.goFireMeter );	
+		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), this.goFireMeter );
 		scriptFireMeter = goFireMeter.GetComponent<FireMeter>();
 	}
 	
+	//---------------------------------------------------
+	// ButtonReleased()
+	//---------------------------------------------------	
 	protected override void ButtonReleased() {
+		if ( !bLegal )  {
+			Debug.Log("Something going wrong with the fire button.  Aborting");
+			return;
+		}
+		
 		if ( scriptFireMeter.IsFull() ) {
+			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();
-			Destroy( scriptFireMeter.gameObject );
 		}
 		else {
+			// if the meter was not full, cancel the attack
 			scriptAttack.Cancel();
-			Destroy( scriptFireMeter.gameObject );
 		}	
+		
+		// either way, the meter should be destroyed
+		Destroy( scriptFireMeter.gameObject );
 	}
 }

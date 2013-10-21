@@ -37,7 +37,6 @@ public class AttackGate : MonoBehaviour {
 	// OnDestroy()
 	//---------------------------------------------------	
 	private void OnDestroy() {
-		Debug.Log("Destroying attack gate script");
 		// stop listening
 		PetAnimator.OnAnimDone -= DoneAnimating;	
 	}

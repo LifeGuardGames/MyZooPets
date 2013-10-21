@@ -12,10 +12,7 @@ public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
-	
-	// what type of clicking is this button? 3d buttons only at the moment
-	public ButtonClickTypes eClickType;
-	
+
 	// the sound resource this button plays when it is clicked
 	public string strSoundProcess;
 	public string GetProcessSound() {
@@ -37,6 +34,22 @@ public abstract class LgButton : MonoBehaviour {
 		return strAnalytics;
 	}	
 	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------		
+	void Start() {
+		_Start();
+	}
+	protected virtual void _Start() {}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------		
+	void OnDestroy() {
+		_OnDestroy();
+	}	
+	protected virtual void _OnDestroy() {}
+	
 	void Awake() {
 		_Awake();	
 	}
@@ -45,7 +58,7 @@ public abstract class LgButton : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// OnPress()
+	// OnClick()
 	// 2D sprite buttons will receive this event, which
 	// will click the button.  At the moment 3D objects
 	// also happen to receive this event, but it's possible
@@ -55,35 +68,13 @@ public abstract class LgButton : MonoBehaviour {
 		if ( enabled && bSprite )
 			ButtonClicked();
 	}
-
+	
 	//---------------------------------------------------
 	// OnTap()
 	// 3D gameObjects will receive this event.
 	//---------------------------------------------------
 	void OnTap(TapGesture gesture) { 
-		if ( eClickType == ButtonClickTypes.Tap )
-			ButtonClicked();
-	}
-	
-	void OnFingerStationary( FingerMotionEvent e ) {
-		if ( eClickType != ButtonClickTypes.Hold )
-			return;
-		
-		if ( e.Phase == FingerMotionPhase.Started )
-			ButtonClicked();
-		else if ( e.Phase == FingerMotionPhase.Ended )
-			ButtonReleased();
-			
-		/*
-	    float elapsed = e.ElapsedTime;
-	 
-	    if( e.Phase == FingerMotionPhase.Started )
-	        Debug.Log( e.Finger + " started stationary state at " + e.Position );
-	    else if( e.Phase == FingerMotionPhase.Updated )
-	        Debug.Log( e.Finger + " is still stationary at " + e.Position );
-	    else if( e.Phase == FingerMotionPhase.Ended )
-	        Debug.Log( e.Finger + " stopped being stationary at " + e.Position );	
-	        */	
+		ButtonClicked();
 	}
 	
 	//---------------------------------------------------
@@ -115,8 +106,6 @@ public abstract class LgButton : MonoBehaviour {
 		if ( !string.IsNullOrEmpty(strSound) )
 			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
 	}
-	
-	protected virtual void ButtonReleased() {}
 	
 	//---------------------------------------------------
 	// ProcessClick()

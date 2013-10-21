@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PetMovement : Singleton<PetMovement> {
     public Camera mainCamera;
@@ -20,6 +22,10 @@ public class PetMovement : Singleton<PetMovement> {
 	private float moveToZ;
     private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
                                 //be moved when clicking on NGUI
+	
+	//=======================Events========================
+	public EventHandler<EventArgs> OnReachedDest; 	// when the pet reaches its destination
+	//=====================================================		
 
     void Awake(){
         D.Assert(mainCamera != null, "Camera missing in " + this);
@@ -43,8 +49,13 @@ public class PetMovement : Singleton<PetMovement> {
 				StopMoving();
 
             //when the sprite reaches destination. stop transform and animation
-            if(petSprite.transform.position == destinationPoint)
+            if(petSprite.transform.position == destinationPoint) {
+				// send out an event because the pet has reached their destination
+				if ( OnReachedDest != null )
+					OnReachedDest( this, EventArgs.Empty );
+				
 				StopMoving();
+			}
         }
     }
 

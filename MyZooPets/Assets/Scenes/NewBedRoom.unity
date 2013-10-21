@@ -168,7 +168,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: houseEntrance
   bCheckClickManager: 1
   strAnalytics: 
@@ -946,7 +945,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   demux: {fileID: 0}
   toggle: {fileID: 0}
-  goLoadScreen: {fileID: 0}
 --- !u!114 &76193796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,7 +957,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: 
   bCheckClickManager: 1
   strAnalytics: UserTouch:SlotMachine
@@ -2631,7 +2628,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
-  eClickType: 0
   strSoundProcess: invSound
   bCheckClickManager: 0
   strAnalytics: 
@@ -6754,6 +6750,10 @@ Prefab:
       propertyPath: GoList.Array.data[1]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 400022, guid: 3aaf3e784d3b74740800ceab37bc3612, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.61376953
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3aaf3e784d3b74740800ceab37bc3612, type: 2}
   m_RootGameObject: {fileID: 1613790790}
@@ -8468,7 +8468,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: badgesView
   bCheckClickManager: 1
   strAnalytics: UserTouch:BadgeBoard
@@ -9518,7 +9517,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: 
   bCheckClickManager: 1
   strAnalytics: 
@@ -10692,7 +10690,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: calendarView
   bCheckClickManager: 1
   strAnalytics: UserTouch:Calendar
@@ -12531,7 +12528,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
-  eClickType: 0
   strSoundProcess: shopOpen
   bCheckClickManager: 1
   strAnalytics: UserTouch:Store
@@ -15469,7 +15465,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: 
   bCheckClickManager: 1
   strAnalytics: UserTouch:RealInhaler
@@ -17043,7 +17038,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   demux: {fileID: 1183442116}
   toggle: {fileID: 0}
-  goLoadScreen: {fileID: 0}
 --- !u!1 &1183815272
 GameObject:
   m_ObjectHideFlags: 0
@@ -17580,7 +17574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
-  eClickType: 0
   strSoundProcess: notesOpen
   bCheckClickManager: 1
   strAnalytics: UserTouch:Note
@@ -18585,7 +18578,7 @@ MonoBehaviour:
   badgeCommonAtlas: {fileID: 11400000, guid: 48f0d7582fa85e042b2b7ca833b4d145, type: 2}
   badgeExtraAtlas: {fileID: 0}
   fZoomTime: 1
-  vOffset: {x: 80, y: 0, z: -20}
+  vOffset: {x: 0, y: 0, z: -20}
   vRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &1278791171
 GameObject:
@@ -21126,13 +21119,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: dojoView
   bCheckClickManager: 1
   strAnalytics: UserTouch:Dojo
   strScene: Dojo
   scriptTransition: {fileID: 1183442117}
-  vOffset: {x: -80, y: 4, z: -10}
+  vOffset: {x: 0, y: 10, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
   fTime: 2
   strLoadingScreen: 
@@ -21611,7 +21603,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
-  eClickType: 0
   strSoundProcess: decoEnter
   bCheckClickManager: 1
   strAnalytics: 
@@ -22002,7 +21993,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: houseEntrance
   bCheckClickManager: 1
   strAnalytics: 
@@ -23317,6 +23307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9cb69b54ad0469c872757a751f89e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scriptPan: {fileID: 158023567}
 --- !u!1 &1652810766
 GameObject:
   m_ObjectHideFlags: 0
@@ -26515,7 +26506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
-  eClickType: 0
   strSoundProcess: 
   bCheckClickManager: 1
   strAnalytics: 

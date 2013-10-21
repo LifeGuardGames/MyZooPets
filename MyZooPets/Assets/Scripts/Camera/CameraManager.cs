@@ -12,6 +12,12 @@ public class CameraManager : Singleton<CameraManager> {
 	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
 	protected Vector3 initFaceDirection;	
 	
+	// pan to move script
+	public PanToMoveCamera scriptPan;
+	public PanToMoveCamera GetPanScript() {
+		return scriptPan;	
+	}
+	
 	// is the camera zoomed?
 	private bool bZoomed;
 	

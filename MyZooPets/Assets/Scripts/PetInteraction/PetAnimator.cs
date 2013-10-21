@@ -156,20 +156,12 @@ public class PetAnimator : LgCharacterAnimator {
 		scriptFire = goFire.GetComponent<FireBlowParticleController>();
 		//script.Play( fFireDelay );
 		
-		StartCoroutine( FireWait( script ) );
+		StartCoroutine( FireWait() );
 	}
 	
-	private IEnumerator FireWait( FireBlowParticleController scriptFire ) {
+	private IEnumerator FireWait() {
 		yield return new WaitForSeconds( fFireWait );
-		Debug.Log("Pausing fire");
 		Pause();
-		
-		//yield return new WaitForSeconds( fFireWait * 2 );
-		//Debug.Log("Resuming fire");
-		//Resume();
-		//scriptFire.Play( fFireDelay - fFireWait );
-		
-		//Destroy( goFireMeter );
 	}
 	
 	public void FinishFire() {
@@ -181,18 +173,25 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// DoneBreathingFire()
 	//---------------------------------------------------	
-	public void DoneBreathingFire() {
+	public void DoneBreathingFire( bool bFinished ) {
+		if ( !bFinished )
+			Resume();
+		
 		// destroy the game object of the fire
 		Destroy( goFire );
 		
 		// idle
-		Idle();
+		Idle( !bFinished );
+	}
+	
+	public void CancelFire() {
+		DoneBreathingFire( false );
 	}
 
 	//---------------------------------------------------
 	// Idle()
 	//---------------------------------------------------
-	private void Idle() {
+	private void Idle( bool bImmediate = false ) {
 		// if the pet's animation queue is not empty, we should not kick off an idle
 		if ( queueAnims.Count > 0 )
 			return;
@@ -200,8 +199,12 @@ public class PetAnimator : LgCharacterAnimator {
 		// get a random idle based on pet's attributes
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
 		
-		// queue the anim
-		QueueAnim( dataAnim );
+		if ( bImmediate )
+			PlayAnimation( dataAnim );
+		else {
+			// queue the anim
+			QueueAnim( dataAnim );
+		}
 	}
 	
 	//---------------------------------------------------
@@ -310,7 +313,7 @@ public class PetAnimator : LgCharacterAnimator {
 				Idle();
 				break;
 			case PetAnimStates.BreathingFire:
-				DoneBreathingFire();
+				DoneBreathingFire( true );
 				break;				
 			case PetAnimStates.Walking:
 				// do nothing; the anim will loop

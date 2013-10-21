@@ -102,6 +102,7 @@ public class LWFAnimator : LWFObject {
 		if (attachedMovies != null && attachedMovies.Count > 0) {
 			for (int i=0; i<attachedMovies.Count; i++) {
 				LWF.Movie _movie = attachedMovies[i];
+				Debug.Log("Detaching movie: " + _movie.name);
 				lwf.rootMovie.DetachMovie(_movie);
 			}
 			

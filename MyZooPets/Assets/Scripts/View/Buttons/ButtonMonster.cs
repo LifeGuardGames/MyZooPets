@@ -15,6 +15,9 @@ public class ButtonMonster : LgButton {
 	// fire meter script
 	private FireMeter scriptFireMeter;
 	
+	// actual fire meter object
+	public GameObject goFireMeter;
+	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
@@ -31,14 +34,16 @@ public class ButtonMonster : LgButton {
 		scriptAttack.Init( scriptPetAnimator, scriptGate, nDamage );
 		
 		// create the fire meter
-		GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
-		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Top"), resourceFireMeter );	
+		//GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
+		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Top"), this.goFireMeter );	
 		scriptFireMeter = goFireMeter.GetComponent<FireMeter>();
 	}
 	
 	protected override void ButtonReleased() {
-		if ( scriptFireMeter.IsFull() )
+		if ( scriptFireMeter.IsFull() ) {
 			scriptAttack.FinishAttack();
+			Destroy( scriptFireMeter.gameObject );
+		}
 		else {
 			scriptAttack.Cancel();
 			Destroy( scriptFireMeter.gameObject );

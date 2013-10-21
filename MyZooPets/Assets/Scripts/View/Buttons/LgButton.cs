@@ -73,6 +73,17 @@ public abstract class LgButton : MonoBehaviour {
 			ButtonClicked();
 		else if ( e.Phase == FingerMotionPhase.Ended )
 			ButtonReleased();
+			
+		/*
+	    float elapsed = e.ElapsedTime;
+	 
+	    if( e.Phase == FingerMotionPhase.Started )
+	        Debug.Log( e.Finger + " started stationary state at " + e.Position );
+	    else if( e.Phase == FingerMotionPhase.Updated )
+	        Debug.Log( e.Finger + " is still stationary at " + e.Position );
+	    else if( e.Phase == FingerMotionPhase.Ended )
+	        Debug.Log( e.Finger + " stopped being stationary at " + e.Position );	
+	        */	
 	}
 	
 	//---------------------------------------------------
@@ -105,7 +116,7 @@ public abstract class LgButton : MonoBehaviour {
 			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
 	}
 	
-	protected abstract void ButtonReleased();
+	protected virtual void ButtonReleased() {}
 	
 	//---------------------------------------------------
 	// ProcessClick()

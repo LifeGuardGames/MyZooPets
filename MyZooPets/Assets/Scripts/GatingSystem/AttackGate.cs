@@ -52,7 +52,7 @@ public class AttackGate : MonoBehaviour {
 	}
 	
 	public void FinishAttack() {
-		attacker.FinishFire();	
+		StartCoroutine( attacker.FinishFire() );	
 	}
 	
 	public void Cancel() {

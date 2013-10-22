@@ -38,8 +38,10 @@ public class ButtonMonster : LgButtonHold {
 	// _OnDestroy()
 	//---------------------------------------------------		
 	protected override void _OnDestroy() {
-		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
-		scriptPan.OnPartitionChanging -= OnPartitionChanging;		
+		if ( CameraManager.Instance ) {
+			PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
+		}
 	}
 	
 	//---------------------------------------------------

@@ -38,7 +38,6 @@ public class PetAnimator : LgCharacterAnimator {
 	// related to fire blowing
 	public GameObject goBlow;		// where to parent the fire particle
 	private GameObject goFire;		// actual fire particle game object
-	public float fFireDelay;		// delay before the particle effect starts, to account for the "windup" portion of the pet animation
 	private FireBlowParticleController scriptFire;
 	 
 	// queue of animations the pet should be doing
@@ -55,9 +54,6 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
-	
-	// testing fire anim stuff
-	public float fFireWait;
 	
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
@@ -148,6 +144,7 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// start a coroutine to pause the animation, for timing purposes.
 		// it is resumed from the FireMeter script.
+		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
 		StartCoroutine( PauseAnim( fFireWait ) );
 	}
 	
@@ -167,12 +164,32 @@ public class PetAnimator : LgCharacterAnimator {
 	// The pet is stopped mid-animation when breathing
 	// fire.  This function will finish the animation.
 	//---------------------------------------------------		
-	public void FinishFire() {
+	public IEnumerator FinishFire() {
 		// resume the animation
-		Resume();	
+		Resume();
+		
+		// pause it again once the pet begins to exhale
+		float fUntilExhale = Constants.GetConstant<float>( "UntilExhale" );
+		yield return new WaitForSeconds( fUntilExhale );
+		
+		// the pet is now exhaling, so pause
+		Pause();
 		
 		// play the actual particle effect
-		scriptFire.Play( fFireDelay - fFireWait );
+		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
+		float fFireDelay = Constants.GetConstant<float>( "FireDelay" );
+		scriptFire.Play( fFireDelay - fFireWait - fUntilExhale );		
+		
+		// then wait another amount of time
+		float fHoldExhale = Constants.GetConstant<float>( "HoldExhale" );
+		yield return new WaitForSeconds( fHoldExhale );
+		
+		// done holding exhale
+		Resume();
+		
+		// stop the game object of the fire
+		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
+		script.Stop();		
 	}
 	
 	//---------------------------------------------------
@@ -181,10 +198,6 @@ public class PetAnimator : LgCharacterAnimator {
 	public void DoneBreathingFire( bool bFinished ) {
 		if ( !bFinished )
 			Resume();
-		
-		// stop the game object of the fire
-		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
-		script.Stop();
 		
 		// idle
 		Idle( !bFinished );

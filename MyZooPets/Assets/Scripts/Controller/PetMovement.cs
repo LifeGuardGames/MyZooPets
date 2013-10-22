@@ -23,6 +23,16 @@ public class PetMovement : Singleton<PetMovement> {
     private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
                                 //be moved when clicking on NGUI
 	
+	public float fMagic;
+	public float fSpeedNormal;
+	public float fSpeedFast;
+	public float fViewX;
+	public float fViewY;
+	public bool bFreeze;
+	
+	// how fast the pet moves
+	private float fSpeed;
+	
 	//=======================Events========================
 	public EventHandler<EventArgs> OnReachedDest; 	// when the pet reaches its destination
 	//=====================================================		
@@ -33,6 +43,9 @@ public class PetMovement : Singleton<PetMovement> {
         // anim = petSprite.GetComponent<tk2dSpriteAnimator>();
         int layerNGUI = LayerMask.NameToLayer("NGUI");
         nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
+		
+		// get speed from constants
+		fSpeed = Constants.GetConstant<float>( "MoveSpeed" );
     }
 
     void Start(){
@@ -44,7 +57,7 @@ public class PetMovement : Singleton<PetMovement> {
         if (moving && petSprite != null){
             if (ClickManager.Instance.CanRespondToTap( ClickLockExceptions.Moving )){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
-                    destinationPoint,8f * Time.deltaTime);
+                    destinationPoint, fSpeed * Time.deltaTime);
             }else
 				StopMoving();
 
@@ -76,15 +89,6 @@ public class PetMovement : Singleton<PetMovement> {
 	public void MovePetWithCamera(){
 		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/3, 80, 0)));
 	}
-
-    // //What to do when animation is finished playing. 
-    // private void OnAnimationFinished(tk2dSpriteAnimator sprite, tk2dSpriteAnimationClip clip){
-    //     if(moving){
-    //         anim.Play("HappyWalk");
-    //     }else{
-    //         anim.Play("HappyIdle");
-    //     }
-    // }
 	
 	public void StopMoving() {
     	moving = false;
@@ -108,7 +112,27 @@ public class PetMovement : Singleton<PetMovement> {
 		if ( !moving )
         	scriptAnim.StartMoving();
 		
-        moving = true;		
+        moving = true;	
+		
+		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
+		// take so long for the pet to move to its new destination.
+		if ( !petSprite.renderer.isVisible ) {
+			// get the point right off screen
+			float fFromX = Constants.GetConstant<float>( "FromX" );
+			float fDiff = vLoc.x - petSprite.transform.position.x;
+			fFromX = fDiff < 0 ? 1 + fFromX : -fFromX; 				// the point varies if the pet is coming from the right or left
+			
+			// also, the viewport y varies and is based on where the player is moving to
+			float fFromY = Camera.main.WorldToViewportPoint( vLoc ).y;
+			
+			// change the y and z because we really only want the x.  if we don't change the z the pet kind of appears too big
+			Vector3 vTarget = Camera.main.ViewportToWorldPoint( new Vector3( fFromX,fFromY,vLoc.z ) );
+			vTarget.y = vLoc.y;
+			vTarget.z = vLoc.z;
+			
+			// transport the pet to that point
+			petSprite.transform.position = vTarget;
+		}
 		
 		ChangePetFacingDirection();
 	}
@@ -118,6 +142,10 @@ public class PetMovement : Singleton<PetMovement> {
     //Decides when to flip sprite by comparing the screen position of the sprite and
     //the last tap screen position
     private void ChangePetFacingDirection(){
+		// if the pet hasn't actually moved, then we don't have to worry about flipping anything
+		if ( destinationPoint == petSprite.transform.position ) 
+			return;
+		
         if(destinationPoint.x > petSprite.transform.position.x){
             //petSprite.GetComponent<tk2dSprite>().FlipX = true;
 			scriptAnim.Flip( true );

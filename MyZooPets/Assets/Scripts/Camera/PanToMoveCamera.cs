@@ -45,7 +45,8 @@ public class PanToMoveCamera : MonoBehaviour {
     private Camera mainCamera;
 	
 	//=======================Events========================
-	public EventHandler<PartitionChangedArgs> OnPartitionChanged; 	// when the partition changes
+	public EventHandler<PartitionChangedArgs> OnPartitionChanged; 	// when the partition has changed (and the camera has finished moving)
+	public EventHandler<PartitionChangedArgs> OnPartitionChanging;	// when the partition is changing (i.e. camera is still moving)
 	//=====================================================			
 
     // Use this for initialization
@@ -106,14 +107,63 @@ public class PanToMoveCamera : MonoBehaviour {
 					if ( CanMoveToPartition( nTargetPartition, panDirection, swipeTime ) )
 						ChangePartition( nTargetPartition );
 	
-					// then snap the camera to the partition
-                    SnapCamera();
-                    
                     touchCancelled = false;
                 break;
             }
         }
     }    
+	
+	///////////////////////////////////////////
+	// SnapCamera()
+	// Snaps the camera to the current partition.
+	///////////////////////////////////////////		
+	private void SnapCamera( int nOldPartition ) {
+		// prepare the hashtables for the camera snap callback
+        Hashtable optional = new Hashtable();
+		optional.Add ("onComplete", "OnCameraSnapped");
+		optional.Add("onCompleteTarget", gameObject);
+		
+		Hashtable completeParamHash = new Hashtable();
+		completeParamHash.Add("Old", nOldPartition);			
+		optional.Add("onCompleteParam", completeParamHash);
+		
+        float moveTo = partitionOffset * currentPartition;
+        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
+        normalizedTouchPosX = 0;		
+	}
+	
+	///////////////////////////////////////////
+	// OnCameraSnapped()
+	// Callback for when the camera is done
+	// snapping.
+	///////////////////////////////////////////		
+	private void OnCameraSnapped( Hashtable hash ) {
+		int nOldPartition = (int) hash["Old"];
+		
+		// camera is done snapping, so send the partition changed callback
+		if ( OnPartitionChanged != null )
+			OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );		
+	}
+	
+	///////////////////////////////////////////
+	// ChangePartition()
+	// Changes the current partition by nMoves
+	// in eSwipeDirection (if it's legal).
+	///////////////////////////////////////////		
+	private void ChangePartition( int nTargetPartition) {
+		// check to make sure the move is legal (i.e. within bounds)
+		if ( nTargetPartition >= firstPartition && nTargetPartition <= lastPartition ) {
+			int nOldPartition = currentPartition;
+			currentPartition = nTargetPartition;
+			
+			// the partition changed, so snap the camera
+			SnapCamera( nOldPartition );
+			
+			// also send a callback that the partition is in the process of changing
+			if ( OnPartitionChanging != null )
+				OnPartitionChanging( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );			
+		}
+	}	
 
 	///////////////////////////////////////////////////
     // CanMoveToPartition() 
@@ -159,13 +209,11 @@ public class PanToMoveCamera : MonoBehaviour {
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
 			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
 				ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
-	            SnapCamera();
 			}
 		}
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
 			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
-				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );
-	            SnapCamera();       
+				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
 			}
 		}
     }
@@ -182,36 +230,6 @@ public class PanToMoveCamera : MonoBehaviour {
         //Divide by screen width to get the normalize position;
         return deltaTouchPosX / Screen.width;
     }
-	
-	///////////////////////////////////////////
-	// SnapCamera()
-	// Snaps the camera to the current partition.
-	///////////////////////////////////////////		
-	private void SnapCamera() {
-        Hashtable optional = new Hashtable();
-        float moveTo = 0;
-
-        moveTo = partitionOffset * currentPartition;
-        LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
-        normalizedTouchPosX = 0;		
-	}
-	
-	///////////////////////////////////////////
-	// ChangePartition()
-	// Changes the current partition by nMoves
-	// in eSwipeDirection (if it's legal).
-	///////////////////////////////////////////		
-	private void ChangePartition( int nTargetPartition) {
-		// check to make sure the move is legal (i.e. within bounds)
-		if ( nTargetPartition >= firstPartition && nTargetPartition <= lastPartition ) {
-			int nOldPartition = currentPartition;
-			currentPartition = nTargetPartition;
-			
-			if ( OnPartitionChanged != null )
-				OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );
-			//GatingManager.Instance.EnteredRoom( nOldPartition, currentPartition );
-		}
-	}
 	
 	///////////////////////////////////////////
 	// GetTargetPartition()

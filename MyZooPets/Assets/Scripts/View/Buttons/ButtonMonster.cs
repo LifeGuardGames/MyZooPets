@@ -31,7 +31,7 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------		
 	protected override void _Start() {
 		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
-		scriptPan.OnPartitionChanged += OnPartitionChanged;
+		scriptPan.OnPartitionChanging += OnPartitionChanging;
 	}
 	
 	//---------------------------------------------------
@@ -39,13 +39,13 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------		
 	protected override void _OnDestroy() {
 		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
-		scriptPan.OnPartitionChanged -= OnPartitionChanged;		
+		scriptPan.OnPartitionChanging -= OnPartitionChanging;		
 	}
 	
 	//---------------------------------------------------
 	// OnPartitionChanged()
 	//---------------------------------------------------	
-	public void OnPartitionChanged( object sender, PartitionChangedArgs args ) {
+	public void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
 		// if the partition is changing at all, destroy this UI
 		Destroy( gameObject );
 	}
@@ -96,6 +96,10 @@ public class ButtonMonster : LgButtonHold {
 		if ( scriptFireMeter.IsFull() ) {
 			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();
+			
+			// just kind of a hack for now until the gating system is complete
+			if ( gate.GetGateHP() == nDamage )
+				Destroy( gameObject );
 		}
 		else {
 			// if the meter was not full, cancel the attack

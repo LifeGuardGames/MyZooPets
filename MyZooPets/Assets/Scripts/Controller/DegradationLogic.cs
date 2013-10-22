@@ -19,6 +19,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             this.position = position;
         }
     }
+	
+	// tut key
+	public static string TIME_DECAY_TUT = "TimeMoodDecay";
 
     public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
@@ -68,7 +71,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         }
 		
 		// calculate changes in the pets mood
-		CalculateMoodDegradation( sinceLastPlayed );
+		Debug.Log("About to calc mood loss...what's this?: " + sinceLastPlayed);
+		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
 
         //create triggers
         for(int i=0; i<numberOfTriggersToInit; i++){
@@ -99,7 +103,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	// Depending on how long it has been since the user
 	// last played, the pet will suffer some mood loss.
 	//---------------------------------------------------	
-	private void CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
+	private IEnumerator CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
+		// wait a frame, or else the notification manager won't work properly
+		yield return 0;
+		
 		// amount to degrade mood by
 		int nMoodLoss = 0;
 		
@@ -118,9 +125,13 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		int nSecondHours = (int)( timeSinceLastPlayed.TotalHours - 24 );
 		if ( nSecondHours > 0 )
 			nMoodLoss += (int) ( nSecondHours * ( fSecondHoursPenalty * fMultiplier ) );
-		
+
 		// actually change the pet's mood
 		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
+		
+		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
+		if ( nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TIME_DECAY_TUT ) )
+			TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
 	}
 
     void Update(){

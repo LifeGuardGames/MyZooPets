@@ -37,6 +37,7 @@ public class MegaHazard : Singleton<MegaHazard> {
 		transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
 	}
 
+	//When megahazard collides with the player. End the game
 	void OnTriggerEnter(Collider inOther){
 		if(inOther.gameObject.tag == "Player") {
 			RunnerGameManager gameManager = RunnerGameManager.Instance;

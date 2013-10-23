@@ -346,8 +346,8 @@ public class RunnerLevelEditor : EditorWindow
                         for (int pointIndex = 0; pointIndex < currentGroup.mPoints.Count; pointIndex++)
 			            {
                             Vector3 pointPosition = currentGroup.mPoints[pointIndex].mPosition + mLastChosenLevelComponent.transform.position;
-                            Handles.CircleCap(0, pointPosition, Quaternion.LookRotation(Vector3.right), 0.75f);
-                            Handles.DrawSolidDisc(pointPosition, Vector3.right, 0.1f);
+                            Handles.CircleCap(0, pointPosition, Quaternion.identity, 0.75f);
+                            Handles.DrawSolidDisc(pointPosition, Vector3.forward, 0.1f);
                         }
                     }
                     break;

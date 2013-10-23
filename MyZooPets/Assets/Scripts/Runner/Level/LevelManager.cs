@@ -21,8 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LevelManager : Singleton<LevelManager> {
-    public int BottomLayer = 31;
-	// public float LevelTooLowYValue = -50.0f;
+    // public int BottomLayer = 31;
 	public float LevelTooLowYValueGameOver = -80.0f;
 	public float LevelGroupSwitchTime = 40.0f;
     public float CoinSpawnDistance = 1f;
@@ -54,14 +53,13 @@ public class LevelManager : Singleton<LevelManager> {
 		
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
-        print(mLevelComponentQueue.Count);
+        // print(mLevelComponentQueue.Count);
 		if (mLevelComponentQueue.Count > 0 && playerController != null) {
 			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
             Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
             Vector3 frontLevelPosition = minAnchor.position;
 
-            const int xExtent = 0;
 			// Different between the runner position and the min anchor of the first component in queue 
 			float distanceBetween = Mathf.Abs(currentRunnerPosition.x - frontLevelPosition.x);
 			// float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
@@ -260,9 +258,9 @@ public class LevelManager : Singleton<LevelManager> {
                     nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
                     // if(lastQueuedComponent.name != nextlevelComponent.name) break;
                 // }
-				Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
+				// Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
-				Debug.Log("Pushing default");
+				// Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
@@ -410,7 +408,6 @@ public class LevelManager : Singleton<LevelManager> {
     }
 
 	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn) {
-        // RunnerItem spawnedItem = (RunnerItem)GameObject.Instantiate(inItemToSpawn);
         Vector3 newPosition = inLevelComponent.transform.position;
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point: {

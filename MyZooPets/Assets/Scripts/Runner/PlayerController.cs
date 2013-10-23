@@ -38,7 +38,7 @@ public class PlayerController : Singleton<PlayerController> {
     void FixedUpdate(){
         if(!RunnerGameManager.Instance.GameRunning)
             return;
-        
+
         targetSpeed = defaultSpeed;
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration);
 
@@ -62,6 +62,7 @@ public class PlayerController : Singleton<PlayerController> {
     public void Reset(){
         speedIncreaseCounter = speedIncreaseTime;
         transform.position = initialPosition;
+        numOfLayerToPassThrough = 0;
     }
 
     //Slow down the game and decrease the distance between player and megahazard
@@ -84,7 +85,7 @@ public class PlayerController : Singleton<PlayerController> {
         
         amountToMove.x = currentSpeed;
         amountToMove.y -= gravity * Time.deltaTime;
-        playerPhysics.Move(amountToMove * Time.deltaTime, ref numOfLayerToPassThrough);
+        playerPhysics.Move(amountToMove * Time.deltaTime);
     }
 
     //Increase the pace of the game
@@ -113,7 +114,7 @@ public class PlayerController : Singleton<PlayerController> {
     }
 
     private void Drop(){
-        if(playerPhysics.Grounded && !playerPhysics.Jumping)
-            numOfLayerToPassThrough = 1;
+        if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
+            playerPhysics.AllowPassThroughLayer = true;
     }
 }

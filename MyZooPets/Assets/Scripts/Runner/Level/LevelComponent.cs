@@ -46,7 +46,7 @@ public class LevelComponent : MonoBehaviour {
 
 	// Use this for initialization.
 	void Start() {
-		FindBottomLayers();
+		// FindBottomLayers();
 	}
 
 	// Update is called once per frame.
@@ -154,21 +154,21 @@ public class LevelComponent : MonoBehaviour {
         }
     }
 	
-	private void FindBottomLayers(){
-		mBottomLayers.Clear();
-		FindBottomLayers(transform);
-	}
+	// private void FindBottomLayers(){
+	// 	mBottomLayers.Clear();
+	// 	FindBottomLayers(transform);
+	// }
 	
-	private void FindBottomLayers(Transform inCurrentTransform){
-		if (inCurrentTransform != null){
-			LevelManager levelManager = LevelManager.Instance;
-			foreach (Transform currentChild in inCurrentTransform) {
-				if (currentChild.gameObject.layer == levelManager.BottomLayer)
-					mBottomLayers.Add(currentChild.gameObject);
-				FindBottomLayers(currentChild);
-			}
-		}
-	}
+	// private void FindBottomLayers(Transform inCurrentTransform){
+	// 	if (inCurrentTransform != null){
+	// 		LevelManager levelManager = LevelManager.Instance;
+	// 		foreach (Transform currentChild in inCurrentTransform) {
+	// 			if (currentChild.gameObject.layer == levelManager.BottomLayer)
+	// 				mBottomLayers.Add(currentChild.gameObject);
+	// 			FindBottomLayers(currentChild);
+	// 		}
+	// 	}
+	// }
 }
 
 [System.Serializable]

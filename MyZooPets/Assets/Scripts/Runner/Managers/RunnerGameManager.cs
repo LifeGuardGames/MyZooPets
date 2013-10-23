@@ -88,8 +88,8 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {
-        //Limit timescale to 2. Beyond 2 the game becomes too fast to be playable
-        if(Time.timeScale != 2){
+        //Limit timescale to 2.5. Beyond 2.5 the game becomes too fast to be playable
+        if(Time.timeScale != 2.5){
             Time.timeScale += inIncreaseTime;
         }
     }

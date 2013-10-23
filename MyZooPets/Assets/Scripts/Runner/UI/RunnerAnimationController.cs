@@ -1,40 +1,62 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class RunnerAnimationController : TK2DAnimationController {
-    //private bool mbStarted = false;
-
-	void Start(){
-		base.Initialize();
-        //mbStarted = true;
-	}
-
-	public void onPlayerJumpBegin(){
-		animator.Play("Jump");
-	}
-
-	public void onPlayerJumpEnd(){
-		animator.Play("Run");
-	}
-
-	public void onPlayerFallBegin(){
-		animator.Play("Fall");
-	}
-
-	public void onPlayerFallEnd(){
-		animator.Play("Run");
-	}
-
-    public void onPlayerGrounded() {
-        animator.Play("Run");
+public class RunnerAnimationController : LgCharacterAnimator {
+    // key of the pet's "species" -- i.e. what kind of pet it is
+    // this will eventually be set in save data probably
+    public string strKeySpecies;
+    public string GetSpeciesKey() {
+        return strKeySpecies;   
+    }
+    
+    // key of the pet's color
+    // this will eventually be set in save data probably
+    public string strKeyColor;
+    public string GetColorKey() {
+        return strKeyColor; 
     }
 
-    public void onPlayerFreeFall() {
-        animator.Play("Fall");
+    // key that tells where the animation is used -- i.e runner, bedroom, trigger ninja
+    public string strKeyAnimType;
+    public string GetAnimTypeKey(){
+        return strKeyAnimType;
     }
 
-    public void Reset() {
-        if (animator != null)
-            animator.Play("Run");
+    new void Start(){
+        // set the LWFAnimator loading data based on the pet's attributes
+        string strSpecies = GetSpeciesKey();
+        string strColor = GetColorKey();
+        animName = strSpecies + strColor;
+        folderPath = "LWF/" + strKeyAnimType + "/" + animName + "/";
+        
+        // only call this AFTER we have set our loading data
+        base.Start();
+        Flip(true);
     }
+
+    void OnGrounded(){
+        Run();
+    }
+
+    void OnFalling(){
+        Fall();
+    }
+
+    void OnJumping(){
+        Jump();
+    }
+
+    private void Jump(){
+        PlayClip("jump");
+    }
+
+    private void Run(){
+        PlayClip("run");
+    }
+
+    private void Fall(){
+        PlayClip("fall");
+    }
+
 }

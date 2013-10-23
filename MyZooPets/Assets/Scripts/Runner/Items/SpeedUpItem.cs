@@ -16,10 +16,10 @@ public class SpeedUpItem : RunnerItem {
 	}
 
     public override void OnPickup() {
-        PlayerRunner player = PlayerRunner.Instance;
-        player.TriggerSpeedBoost(ItemDuration, SpeedBoostAmmount);
-        player.TriggerInvincibility(ItemDuration);
+        // PlayerRunner player = PlayerRunner.Instance;
+        // player.TriggerSpeedBoost(ItemDuration, SpeedBoostAmmount);
+        // player.TriggerInvincibility(ItemDuration);
 
-        GameObject.Destroy(gameObject);
+        // GameObject.Destroy(gameObject);
     }
 }

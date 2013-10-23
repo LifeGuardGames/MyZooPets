@@ -414,15 +414,15 @@ public class RunnerLevelEditor : EditorWindow
         }
 
         // Also display each point
-        Handles.CircleCap(0, inA, Quaternion.LookRotation(Vector3.right), 0.75f);
-        Handles.DrawSolidDisc(inA, Vector3.right, 0.1f);
-        Handles.CircleCap(0, inB, Quaternion.LookRotation(Vector3.right), 0.75f);
-        Handles.DrawSolidDisc(inB, Vector3.right, 0.1f);
-        Handles.CircleCap(0, inC, Quaternion.LookRotation(Vector3.right), 0.75f);
-        Handles.DrawSolidDisc(inC, Vector3.right, 0.1f);
+        Handles.CircleCap(0, inA, Quaternion.identity, 0.75f);
+        Handles.DrawSolidDisc(inA, Vector3.forward, 0.1f);
+        Handles.CircleCap(0, inB, Quaternion.identity, 0.75f);
+        Handles.DrawSolidDisc(inB, Vector3.forward, 0.1f);
+        Handles.CircleCap(0, inC, Quaternion.identity, 0.75f);
+        Handles.DrawSolidDisc(inC, Vector3.forward, 0.1f);
         if (!inbQuadratic) {
-            Handles.CircleCap(0, inD, Quaternion.LookRotation(Vector3.right), 0.75f);
-            Handles.DrawSolidDisc(inD, Vector3.right, 0.1f);
+            Handles.CircleCap(0, inD, Quaternion.identity, 0.75f);
+            Handles.DrawSolidDisc(inD, Vector3.forward, 0.1f);
         }
 
     }

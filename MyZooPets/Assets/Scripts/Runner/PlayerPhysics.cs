@@ -130,11 +130,16 @@ public class PlayerPhysics : MonoBehaviour {
                 //We only care about the colliding physic for the bottom rays
                 if(dir == -1){
                     //If the layer can be pass through than break and ignore collision
-                    if(hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("PassThroughLayer") &&
+                    int hitLayer = hit.collider.transform.gameObject.layer;
+                    if(hitLayer == LayerMask.NameToLayer("PassThroughLayer") &&
                         AllowPassThroughLayer){
                         AllowPassThroughLayer = false;
                         break;
                     }
+
+                    //Items on ItemsLayer handle their own collision, so ignore collision here
+                    if(hitLayer == LayerMask.NameToLayer("ItemsLayer"))
+                        break;
 
                     AllowPassThroughLayer = false;
 
@@ -180,7 +185,7 @@ public class PlayerPhysics : MonoBehaviour {
                 int hitLayer = hit.collider.transform.gameObject.layer;
                 if(hitLayer == LayerMask.NameToLayer("PassThroughLayer") ||
                     hitLayer == LayerMask.NameToLayer("ItemsLayer"))
-                    return;
+                    break;
 
                 // Stop player's movement after coming within skin width of a collider
                 if (dst > skin)

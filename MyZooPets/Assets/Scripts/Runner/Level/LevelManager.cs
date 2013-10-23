@@ -117,20 +117,12 @@ public class LevelManager : Singleton<LevelManager> {
         // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
         nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
         PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
-        //PopulateLevelComponent(PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent));
-        // PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        // nextLevel = PushAndInstantiateRandomComponent();
-        // PopulateLevelComponent(nextLevel);
-        // nextLevel = PushAndInstantiateRandomComponent();
-        // PopulateLevelComponent(nextLevel);
-        // nextLevel = PushAndInstantiateRandomComponent();
-        // PopulateLevelComponent(nextLevel);
     }
 	
 	//@HACK there is a lot of room for optimization here. IF it needs to be.

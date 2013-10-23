@@ -77,7 +77,7 @@ public class PlayerController : Singleton<PlayerController> {
 
 #if UNITY_EDITOR
         if(Input.GetKey("up")) Jump();
-        if(Input.GetKey("down")) Drop();
+        if(Input.GetKey("down") && !playerPhysics.Falling) Drop();
 #endif
 
         if(playerPhysics.Grounded && !playerPhysics.Jumping)

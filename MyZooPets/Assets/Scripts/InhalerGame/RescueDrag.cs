@@ -58,6 +58,7 @@ public class RescueDrag : InhalerPart{
         base.NextStep();
         Destroy(targetCollider);
         transform.collider.enabled = false;
+        targetCollider.SetActive(true);
         doneWithDrag = true;
     }
 }

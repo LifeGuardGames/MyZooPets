@@ -12,7 +12,7 @@ public class RescueCap : InhalerPart{
 
     void OnSwipe(SwipeGesture gesture) { 
        FingerGestures.SwipeDirection direction = gesture.Direction; 
-
+       print("swipe");
        if(direction == FingerGestures.SwipeDirection.Left || 
             direction == FingerGestures.SwipeDirection.LowerLeftDiagonal){
 

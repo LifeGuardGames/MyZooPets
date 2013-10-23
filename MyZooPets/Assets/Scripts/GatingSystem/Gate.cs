@@ -85,6 +85,13 @@ public class Gate : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
+	// GetGateHP()
+	//---------------------------------------------------		
+	public int GetGateHP() {
+		return DataManager.Instance.GameData.GatingProgress.GetGateHP( strID );
+	}
+	
+	//---------------------------------------------------
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	

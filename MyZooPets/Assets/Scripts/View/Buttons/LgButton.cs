@@ -8,11 +8,11 @@ using System.Collections;
 // and makes sure that the button can process a click.
 //---------------------------------------------------
 
-public class LgButton : MonoBehaviour {
+public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
-	
+
 	// the sound resource this button plays when it is clicked
 	public string strSoundProcess;
 	public string GetProcessSound() {
@@ -34,6 +34,22 @@ public class LgButton : MonoBehaviour {
 		return strAnalytics;
 	}	
 	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------		
+	void Start() {
+		_Start();
+	}
+	protected virtual void _Start() {}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------		
+	void OnDestroy() {
+		_OnDestroy();
+	}	
+	protected virtual void _OnDestroy() {}
+	
 	void Awake() {
 		_Awake();	
 	}
@@ -42,7 +58,7 @@ public class LgButton : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// OnPress()
+	// OnClick()
 	// 2D sprite buttons will receive this event, which
 	// will click the button.  At the moment 3D objects
 	// also happen to receive this event, but it's possible
@@ -52,7 +68,7 @@ public class LgButton : MonoBehaviour {
 		if ( enabled && bSprite )
 			ButtonClicked();
 	}
-
+	
 	//---------------------------------------------------
 	// OnTap()
 	// 3D gameObjects will receive this event.

@@ -12,6 +12,12 @@ public class CameraManager : Singleton<CameraManager> {
 	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
 	protected Vector3 initFaceDirection;	
 	
+	// pan to move script
+	public PanToMoveCamera scriptPan;
+	public PanToMoveCamera GetPanScript() {
+		return scriptPan;	
+	}
+	
 	// is the camera zoomed?
 	private bool bZoomed;
 	
@@ -20,7 +26,19 @@ public class CameraManager : Singleton<CameraManager> {
 	//---------------------------------------------------	
 	protected virtual void Start(){
 	}	
-
+	
+	//---------------------------------------------------
+	// IsPartitionChanging()
+	// Returns true if the camera is currently moving (i.e.
+	// changing partitions).
+	//---------------------------------------------------		
+	public bool IsPartitionChanging() {
+		GameObject goParent = transform.parent.gameObject;
+		bool bChanging = LeanTween.isTweening( goParent );
+		
+		return bChanging;
+	}
+	
 	//---------------------------------------------------
 	// ZoomToTarget()
 	// Moves the camera to a target position with a 

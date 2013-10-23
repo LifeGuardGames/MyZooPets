@@ -15,6 +15,9 @@ public class AttackGate : MonoBehaviour {
 	// damage to deal
 	private int nDamage;
 	
+	// the pet
+	private PetAnimator attacker;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------
@@ -26,6 +29,7 @@ public class AttackGate : MonoBehaviour {
 		PetAnimator.OnAnimDone += DoneAnimating;
 		
 		// kick off attack animation
+		this.attacker = attacker;
 		attacker.BreathFire();
 	}
 	
@@ -42,8 +46,19 @@ public class AttackGate : MonoBehaviour {
 	// For when the pet is done animating.
 	//---------------------------------------------------	
 	private void DoneAnimating( object sender, PetAnimArgs args ) {
-		if ( args.GetAnimState() == PetAnimStates.BreathingFire ) 
+		if ( args.GetAnimState() == PetAnimStates.BreathingFire ) {
 			StartCoroutine(DoneAttacking());
+		}
+	}
+	
+	public void FinishAttack() {
+		StartCoroutine( attacker.FinishFire() );	
+	}
+	
+	public void Cancel() {
+		attacker.CancelFire();
+		
+		Destroy( this );
 	}
 	
 	//---------------------------------------------------

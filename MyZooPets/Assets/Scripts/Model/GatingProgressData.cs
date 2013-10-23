@@ -29,6 +29,23 @@ public class GatingProgressData{
 	}
 	
 	//---------------------------------------------------
+	// GetGateHP()
+	// This is probably just a temp function until the
+	// gating system gets finished.
+	//---------------------------------------------------		
+	public int GetGateHP( string strID ) {
+		int nHP = 0;
+		
+		// if the gate's HP is > 0, it hasn't been opened yet
+		if ( GatingProgress.ContainsKey( strID ) )
+			nHP = GatingProgress[strID];
+		else
+			Debug.Log("Attempting to access a non-exitant gate from GatingProgressData");
+		
+		return nHP;		
+	}
+	
+	//---------------------------------------------------
 	// DamageGate()
 	// Alters a gate's hp.
 	//---------------------------------------------------		

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -35,6 +36,9 @@ public class GatingManager : Singleton<GatingManager> {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// listen for partition changing event
+		scriptPan.OnPartitionChanged += EnteredRoom;
+		
 		// once the manager is loaded, spawn all appropriate, active gates
 		Hashtable hashGates = DataGateLoader.GetAreaGates( strArea );
 		foreach ( DictionaryEntry entry in hashGates ) {
@@ -104,7 +108,10 @@ public class GatingManager : Singleton<GatingManager> {
 	// EnteredRoom()
 	// When the player enters a room.
 	//---------------------------------------------------	
-	public void EnteredRoom( int nLeaving, int nEntering ) {
+	public void EnteredRoom( object sender, PartitionChangedArgs args ) {
+		int nLeaving = args.nOld;
+		int nEntering = args.nNew;
+		
 		bool bGateLeaving = DataGateLoader.HasActiveGate( strArea, nLeaving );
 		bool bGateEntering = DataGateLoader.HasActiveGate( strArea, nEntering );
 		
@@ -122,11 +129,53 @@ public class GatingManager : Singleton<GatingManager> {
 			
 			// also, move the player to a specific location
 			MovePlayer( nEntering );
+			
+			// we neeed to listen to when the player is done moving to handle other gate related stuff
+			ListenForMovementFinished( true );
 		}
 		else if ( bGateLeaving && !bGateEntering ) {
 			// if they are entering a non-gated room from a gated room, show that ui and unlock click manager
 			EnableUI();
 		}
+		else {
+			// if the pet is leaving a gated room, destroy the fire UI and stop listening for a callback
+			ListenForMovementFinished( false );
+		}
+	}
+	
+	//---------------------------------------------------
+	// ListenForMovementFinished()
+	// Subscribes/unsubscribes to pet movemvent callback.
+	//---------------------------------------------------	
+	private void ListenForMovementFinished( bool bListen ) {
+		if ( bListen )
+			PetMovement.Instance.OnReachedDest += PetReachedDest;
+		else
+			PetMovement.Instance.OnReachedDest -= PetReachedDest;
+	}
+	
+	//---------------------------------------------------
+	// PetReachedDest()
+	// Callback for when the pet reaches moving to its
+	// destination.  It is critical this function is only
+	// called if the pet is entering a gated room.
+	//---------------------------------------------------	
+	private void PetReachedDest( object sender, EventArgs args ) {
+		// the pet has reached its destination (in front of the monster) so show the fire UI
+		GameObject resourceFireButton = Resources.Load( "FireButton" ) as GameObject;
+		GameObject goFireButton = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceFireButton );	
+		
+		// get the gate in this room
+		Gate gate = (Gate) hashActiveGates[scriptPan.currentPartition];
+		if ( gate ) {
+			ButtonMonster script = goFireButton.GetComponent<ButtonMonster>();
+			script.SetGate( gate );
+		}
+		else
+			Debug.Log("Destination callback being called for non gated room");
+		
+		// regardless, stop listening for the callback now that we've received it
+		ListenForMovementFinished( false );
 	}
 	
 	//---------------------------------------------------

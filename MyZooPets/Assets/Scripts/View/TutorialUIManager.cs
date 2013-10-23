@@ -145,6 +145,31 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
         CalendarTutorialHelper.Instance.CleanUpTutorial();
         GA.API.Design.NewEvent("Tutorial:Calendar:End");
     }
+	
+    //============Time Mood Decay tutorial=================
+    public void StartTimeMoodDecayTutorial(){
+        AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( "TMD_1" ), "Skull", null, true, true, "Tutorial:MoodDecay:Intro" );
+		AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( "TMD_2" ), "guiPanelStatsHealth", null, false, false, "Tutorial:MoodDecay:End" );
+    
+		// this doesn't do what it thinks it does...it will just mark it as played right away, not when the tut is finished
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add( DegradationLogic.TIME_DECAY_TUT );
+	}	
+
+	private void AddStandardTutTip( NotificationPopupType eType, string strText, string strSprite, PopupNotificationNGUI.HashEntry button1cb, bool bStartsHidden, bool bHideImmediately, string strAnalytics ) {
+		/////// Send Notication ////////
+		// Populate notification entry table
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, eType);
+		notificationEntry.Add(NotificationPopupFields.Message, strText);
+		notificationEntry.Add(NotificationPopupFields.SpriteName, strSprite);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1cb);
+		notificationEntry.Add(NotificationPopupFields.StartsHidden, bStartsHidden);
+		notificationEntry.Add(NotificationPopupFields.HideImmediately, bHideImmediately);
+		// Place notification entry table in static queue
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		
+        GA.API.Design.NewEvent( strAnalytics );		
+	}	
 
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){

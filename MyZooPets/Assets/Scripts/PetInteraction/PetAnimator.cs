@@ -38,8 +38,8 @@ public class PetAnimator : LgCharacterAnimator {
 	// related to fire blowing
 	public GameObject goBlow;		// where to parent the fire particle
 	private GameObject goFire;		// actual fire particle game object
-	public float fFireDelay;		// delay before the particle effect starts, to account for the "windup" portion of the pet animation
-	
+	private FireBlowParticleController scriptFire;
+	 
 	// queue of animations the pet should be doing
 	private Queue<DataPetAnimation> queueAnims = new Queue<DataPetAnimation>();
 	
@@ -80,15 +80,6 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// the animator starts off empty, so immediately pick the animation we want to play (idle)
 		Idle();
-		
-		// testing
-		/*
-		DataPetAnimation data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
-		data = DataLoaderPetAnimations.GetRestrictedData( "Walk" );
-		*/
 	}
 	
 	//---------------------------------------------------
@@ -149,26 +140,81 @@ public class PetAnimator : LgCharacterAnimator {
 		goFire.transform.localPosition = new Vector3(0,0,0);
 		
 		// actually kick off the effect
+		scriptFire = goFire.GetComponent<FireBlowParticleController>();
+		
+		// start a coroutine to pause the animation, for timing purposes.
+		// it is resumed from the FireMeter script.
+		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
+		StartCoroutine( PauseAnim( fFireWait ) );
+	}
+	
+	//---------------------------------------------------
+	// PauseAnim()
+	// A helper function that basically just pauses the
+	// current animation after a short duration.  Used
+	// for timing purposes.
+	//---------------------------------------------------		
+	private IEnumerator PauseAnim( float fWait ) {
+		yield return new WaitForSeconds( fWait );
+		Pause();
+	}
+	
+	//---------------------------------------------------
+	// FinishFire()
+	// The pet is stopped mid-animation when breathing
+	// fire.  This function will finish the animation.
+	//---------------------------------------------------		
+	public IEnumerator FinishFire() {
+		// resume the animation
+		Resume();
+		
+		// pause it again once the pet begins to exhale
+		float fUntilExhale = Constants.GetConstant<float>( "UntilExhale" );
+		yield return new WaitForSeconds( fUntilExhale );
+		
+		// the pet is now exhaling, so pause
+		Pause();
+		
+		// play the actual particle effect
+		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
+		float fFireDelay = Constants.GetConstant<float>( "FireDelay" );
+		scriptFire.Play( fFireDelay - fFireWait - fUntilExhale );		
+		
+		// then wait another amount of time
+		float fHoldExhale = Constants.GetConstant<float>( "HoldExhale" );
+		yield return new WaitForSeconds( fHoldExhale );
+		
+		// done holding exhale
+		Resume();
+		
+		// stop the game object of the fire
 		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
-		script.Play( fFireDelay );
+		script.Stop();		
 	}
 	
 	//---------------------------------------------------
 	// DoneBreathingFire()
 	//---------------------------------------------------	
-	private void DoneBreathingFire() {
-		// stop the game object of the fire
-		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
-		script.Stop();
+	public void DoneBreathingFire( bool bFinished ) {
+		if ( !bFinished )
+			Resume();
 		
 		// idle
-		Idle();
+		Idle( !bFinished );
+	}
+	
+	//---------------------------------------------------
+	// CancelFire()
+	// Cancels the whole fire breathing animation.
+	//---------------------------------------------------		
+	public void CancelFire() {
+		DoneBreathingFire( false );
 	}
 
 	//---------------------------------------------------
 	// Idle()
 	//---------------------------------------------------
-	private void Idle() {
+	private void Idle( bool bImmediate = false ) {
 		// if the pet's animation queue is not empty, we should not kick off an idle
 		if ( queueAnims.Count > 0 )
 			return;
@@ -176,8 +222,12 @@ public class PetAnimator : LgCharacterAnimator {
 		// get a random idle based on pet's attributes
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
 		
-		// queue the anim
-		QueueAnim( dataAnim );
+		if ( bImmediate )
+			PlayAnimation( dataAnim );
+		else {
+			// queue the anim
+			QueueAnim( dataAnim );
+		}
 	}
 	
 	//---------------------------------------------------
@@ -286,7 +336,7 @@ public class PetAnimator : LgCharacterAnimator {
 				Idle();
 				break;
 			case PetAnimStates.BreathingFire:
-				DoneBreathingFire();
+				DoneBreathingFire( true );
 				break;				
 			case PetAnimStates.Walking:
 				// do nothing; the anim will loop

@@ -65,7 +65,7 @@ public class ClickManager : Singleton<ClickManager> {
 	//---------------------------------------------------------
 	public bool CanRespondToTap( ClickLockExceptions eException = ClickLockExceptions.None ){
 		// hard stop (for now): If the partition is transitioning, don't allow anything
-		if ( CameraManager.Instance.IsPartitionChanging() )
+		if ( CameraManager.Instance && CameraManager.Instance.IsPartitionChanging() )
 			return false;
 		
 		// if there is an Exception in effect for the incoming action, then it is okay regardless

@@ -80,4 +80,12 @@ public class Analytics : Singleton<Analytics>{
         if(!String.IsNullOrEmpty(miniGameName))
             GA.API.Design.NewEvent(miniGameName + "TimeSpent:" + timeSpentInGame);
     }
+
+    //Badges unlock
+    public void BadgeUnlocked(string badgeName){
+        if(!String.IsNullOrEmpty(badgeName))
+            GA.API.Design.NewEvent("Badge:Unlocked:" + badgeName);
+    }
+
+    
 }

@@ -73,13 +73,15 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
 
         RunnerUIManager.Instance.ActivateGameOverPanel();
 
+        UpdateBadgeProgress();
+
         // Disable the player
         PlayerController.Instance.gameObject.SetActive(false);
 		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "runnerGameOver" );
 
-        print("game over");
+        //Reset level items
         ItemManager.Instance.Reset();
     }
 
@@ -98,5 +100,11 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
         Time.timeScale /= inTimeDivisor;
         if (Time.timeScale < 1f)
             Time.timeScale = 1f;
+    }
+
+    //Check if player unlocks any badges
+    private void UpdateBadgeProgress(){
+        int distance = (int)PlayerController.Instance.transform.position.x;
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, distance, false);
     }
 }

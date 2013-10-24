@@ -55,7 +55,7 @@ public class PetMovement : Singleton<PetMovement> {
     // Update is called once per frame
     void Update () {
         if (moving && petSprite != null){
-            if (ClickManager.Instance.CanRespondToTap( ClickLockExceptions.Moving )){ //move the pet location if allowed
+            if (ClickManager.Instance.CanRespondToTap( null, ClickLockExceptions.Moving )){ //move the pet location if allowed
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint, fSpeed * Time.deltaTime);
             }else
@@ -79,7 +79,7 @@ public class PetMovement : Singleton<PetMovement> {
 			return;
 		
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap( ClickLockExceptions.Moving ) || IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
+        if(!ClickManager.Instance.CanRespondToTap( null, ClickLockExceptions.Moving ) || IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
 		
 		AudioManager.Instance.PlayClip( strSoundMove );
 

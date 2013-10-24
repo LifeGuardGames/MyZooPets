@@ -84,7 +84,7 @@ public abstract class LgButton : MonoBehaviour {
 	public void ButtonClicked ()
 	{
 		// if the button needs to check the click manager before proceding, do so and return if necessary
-		if ( ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap() ) {
+		if ( ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap( gameObject ) ) {
 			return;
 		}
 			

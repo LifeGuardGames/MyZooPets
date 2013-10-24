@@ -24,8 +24,8 @@ public class TutorialMessage : MonoBehaviour {
 	}
 	
 	// minigame tutorial that this message belongs to
-	private MinigameTutorial scriptTutorial;
-	public void SetTutorial( MinigameTutorial tut ) {
+	private Tutorial scriptTutorial;
+	public void SetTutorial( Tutorial tut ) {
 		scriptTutorial = tut;	
 	}
 	

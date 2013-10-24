@@ -34,16 +34,16 @@ public class ParticleSystemController : MonoBehaviour {
 		// Overridden in child
 	}
 	
+	public void ReachedTarget() {
+		Play();
+	}
+	
 	public void Play(){
 		pSystem.Play();
 		_Play();
 	}
 	
-	public void Play(float fDelay){
-		StartCoroutine(PlayAfterDelay(fDelay));
-	}
-	
-	IEnumerator PlayAfterDelay(float fDelay){
+	public IEnumerator PlayAfterDelay(float fDelay){
 		yield return new WaitForSeconds(fDelay);
 		Play();
 	}	

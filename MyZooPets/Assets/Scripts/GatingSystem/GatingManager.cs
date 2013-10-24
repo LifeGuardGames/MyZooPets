@@ -161,6 +161,24 @@ public class GatingManager : Singleton<GatingManager> {
 	// called if the pet is entering a gated room.
 	//---------------------------------------------------	
 	private void PetReachedDest( object sender, EventArgs args ) {
+		// if the pet is happy and healthy, add the fire button
+		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
+		if ( eState == PetHealthStates.Healthy && eMood == PetMoods.Happy ) 
+			ShowFireButton();
+		else {
+			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
+		}
+		
+		// regardless, stop listening for the callback now that we've received it
+		ListenForMovementFinished( false );
+	}
+	
+	//---------------------------------------------------
+	// ShowFireButton()
+	// Shows the fire button to attack the gate.
+	//---------------------------------------------------		
+	private void ShowFireButton() {
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load( "FireButton" ) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceFireButton );	
@@ -172,10 +190,7 @@ public class GatingManager : Singleton<GatingManager> {
 			script.SetGate( gate );
 		}
 		else
-			Debug.Log("Destination callback being called for non gated room");
-		
-		// regardless, stop listening for the callback now that we've received it
-		ListenForMovementFinished( false );
+			Debug.Log("Destination callback being called for non gated room");		
 	}
 	
 	//---------------------------------------------------

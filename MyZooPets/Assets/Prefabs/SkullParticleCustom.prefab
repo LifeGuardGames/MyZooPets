@@ -156,6 +156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pSystem: {fileID: 19800000}
+  destroyAfterStop: 0
+  destroyAfterStopDelay: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,7 +174,7 @@ MonoBehaviour:
   isDestroyOnTouch: 1
   destroyDelay: 1.5
   touchCallbackTarget: {fileID: 100002}
-  touchCallbackFunctionName: Play
+  touchCallbackFunctionName: ReachedTarget
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1

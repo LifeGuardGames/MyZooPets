@@ -16,7 +16,6 @@ public class PlayerController : Singleton<PlayerController> {
     private float targetSpeed;
     private Vector2 amountToMove; //How much you want the player to move
     private PlayerPhysics playerPhysics; //Reference to physics
-    private int numOfLayerToPassThrough = 0; //How many layers are the player allowed to fall through
     private float speedIncreaseCounter = 0f; //Time till we speed up the game
     private Vector2 initialPosition; //Where the player start
 
@@ -62,7 +61,6 @@ public class PlayerController : Singleton<PlayerController> {
     public void Reset(){
         speedIncreaseCounter = speedIncreaseTime;
         transform.position = initialPosition;
-        numOfLayerToPassThrough = 0;
     }
 
     //Slow down the game and decrease the distance between player and megahazard

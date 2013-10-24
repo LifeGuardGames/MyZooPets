@@ -4,18 +4,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// MinigameTutorial
-// Parent class for all minigame tutorials.
+// Tutorial
+// Parent class for all tutorials.
 //---------------------------------------------------
 
-public class MinigameTutorial {
+public abstract class Tutorial {
+	// ----------- Abstract functions -------------------
+	protected abstract void SetKey();
+	protected abstract void ProcessStep( int nStep );
+	protected abstract void _End( bool bFinished );
+	// --------------------------------------------------
 	
 	// step the tutorial is currently on
 	private int nCurrentStep;
 	protected void SetStep( int num ) {
 		nCurrentStep = num;
 		
-		// if we have exceeded max steps in this tutorial, etnd it
+		// if we have exceeded max steps in this tutorial, end it
 		if ( nCurrentStep > nMaxSteps )
 			End( true );
 		else
@@ -36,9 +41,6 @@ public class MinigameTutorial {
 		
 		return strKey;	
 	}
-	protected virtual void SetKey() {
-		// children should implement this	
-	}
 	
 	// the UI element used to show the tutorial message
 	private TutorialMessage scriptMessage;
@@ -49,7 +51,7 @@ public class MinigameTutorial {
 	public EventHandler<TutorialEndEventArgs> OnTutorialEnd; // when the tutorial ends
 	//=====================================================		
 	
-	public MinigameTutorial() {
+	public Tutorial() {
 		SetStep( 0 );
 	}
 	
@@ -98,22 +100,13 @@ public class MinigameTutorial {
 		int nStep = GetStep();
 		nStep++;
 		SetStep( nStep );
-	}
-	
-	//---------------------------------------------------
-	// ProcessStep()
-	// Children classes implement this as a way to do
-	// the actual behavior on a tutorial step.
-	//---------------------------------------------------		
-	protected virtual void ProcessStep( int nStep ) {
-		Debug.Log("Base tutorial should not be processing a step.");	
-	}
+	}	
 	
 	//---------------------------------------------------
 	// End()
 	// When this tutorial is finished.
 	//---------------------------------------------------		
-	private void End( bool bFinished ) {
+	protected virtual void End( bool bFinished ) {
 		// let children know the tutorial is over
 		_End( bFinished );
 		
@@ -136,12 +129,5 @@ public class MinigameTutorial {
 	//---------------------------------------------------		
 	public void Abort() {
 		End( false );	
-	}
-	
-	//---------------------------------------------------
-	// _End()
-	//---------------------------------------------------		
-	protected virtual void _End( bool bFinished ) {
-		Debug.Log("Base tutorial _End() should not be getting called");	
 	}
 }

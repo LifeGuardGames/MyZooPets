@@ -133,6 +133,12 @@ public class DataManager : Singleton<DataManager>{
     //Serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
         if(paused){
+			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
+			if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() ) {
+				Debug.Log("Auto save canceled because we are in a tutorial");
+				return;
+			}
+			
             string loadedLevelName = Application.loadedLevelName;
             if(loadedLevelName != "MenuScene" && loadedLevelName != "LoadScene"){
                 // special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
@@ -192,6 +198,14 @@ public class DataManager : Singleton<DataManager>{
 
     //serialize data into byte array and store locally in PlayerPrefs
     public void SaveGameData(){
+		// hopefully we are safe here, but do an absolute check if a tutorial is playing
+		if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() ) {
+			Debug.Log("Something trying to save the game while a tutorial is playing.  Investigate.");
+			return;
+		}
+		
+		Debug.Log("Game is saving");
+		
         //JSON serializer setting
         JSON.Instance.Parameters.UseExtensions = false;
 

@@ -36,7 +36,7 @@ public class DegradTrigger : MonoBehaviour {
 			return;
 		
         //when trigger is touched remove from DataManager and destroy GameObject
-        if(ClickManager.Instance.CanRespondToTap()){
+        if(ClickManager.Instance.CanRespondToTap( gameObject )){
 			// play sound associated with cleaning the trigger
 			AudioManager.Instance.PlayClip( strSoundClean );
 			

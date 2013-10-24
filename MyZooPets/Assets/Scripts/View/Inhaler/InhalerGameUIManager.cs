@@ -193,6 +193,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
         for (int i = 0; i < slider.numberOfSteps; i++){
             GameObject node = NGUITools.AddChild(progressBarObject, progressStep);
+            node.layer = LayerMask.NameToLayer("NGUI");
             node.transform.localPosition = new Vector3(i * increment, 0, 0);
 
             UILabel label = node.transform.Find("Label").GetComponent<UILabel>();

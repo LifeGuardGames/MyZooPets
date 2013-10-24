@@ -35,8 +35,7 @@ public class LevelManager : Singleton<LevelManager> {
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 	// private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
-
-    private LevelComponent lastQueuedComponent;
+    // private LevelComponent lastQueuedComponent;
 
 	// Use this for initialization
 	void Start() {
@@ -276,7 +275,7 @@ public class LevelManager : Singleton<LevelManager> {
 			mLastCenterPosition = maxAnchor.position;
 			
 			mLevelComponentQueue.Enqueue(newComponent);
-            lastQueuedComponent = newComponent;
+            // lastQueuedComponent = newComponent;
 
 			return newComponent;
 		}

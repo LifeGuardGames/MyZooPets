@@ -6,6 +6,8 @@ using System.Collections;
     Handles inhale (swipe up) action
 */
 public class Inhale : InhalerPart {
+    public InhalerAnimationController animationController;
+
     protected override void Awake(){
         gameStepID = 7;
     }
@@ -14,7 +16,11 @@ public class Inhale : InhalerPart {
        FingerGestures.SwipeDirection direction = gesture.Direction; 
 
        if(direction == FingerGestures.SwipeDirection.Up){
-            NextStep();
+            //Attach handler. so game can move on to next step after animation is done
+            InhalerAnimationController.OnAnimDone += OnAnimationDone;
+
+            animationController.Inhale();
+            AudioManager.Instance.PlayClip( "inhalerInhale" );      
        }
     }
 
@@ -27,10 +33,12 @@ public class Inhale : InhalerPart {
     }
 
     protected override void NextStep(){
-		// play sound here
-		AudioManager.Instance.PlayClip( "inhalerInhale" );		
-		
         base.NextStep();
+        InhalerAnimationController.OnAnimDone -= OnAnimationDone;
         Destroy(gameObject);
+    }
+
+    private void OnAnimationDone(object sender, EventArgs args){
+        NextStep(); 
     }
 }

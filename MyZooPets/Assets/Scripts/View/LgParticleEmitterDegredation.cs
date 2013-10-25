@@ -60,7 +60,7 @@ public class LgParticleEmitterDegredation : LgParticleEmitter {
 		bool bGated = false;
 		
 		if ( GatingManager.Instance )
-			GatingManager.Instance.HasActiveGate( nEntering );		
+			bGated = GatingManager.Instance.HasActiveGate( nEntering );		
 		
 		if ( bGated ) {
 			// if there is a gate in this room, turn off the spawning of skulls

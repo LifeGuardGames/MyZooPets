@@ -35,6 +35,14 @@ public class MoveTowards : MonoBehaviour {
 		}
 	}
 	
+    ///////////////////////////////////////////////////
+    // FlashToTarget()
+	// Moves this object instantly to the target.
+    ///////////////////////////////////////////////////	
+	public void FlashToTarget() {
+		transform.position = target.position;	
+	}
+	
 	// Code executed when the gameobject touches target
 	private void DoCallback(){
 		

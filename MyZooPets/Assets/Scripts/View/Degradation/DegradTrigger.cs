@@ -31,34 +31,11 @@ public class DegradTrigger : MonoBehaviour {
 		
 		// Attach the particle end location to the pet's hit position
 		emitter.targetDestination = DegradationUIManager.Instance.petHitLocation;
-		
-		// listen for when the player changes partitions, as this trigger may need to act
-		CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;
 	}
 
     void OnDestroy(){
         DegradationUIManager.OnActivateParticleEffects -= ActivateParticleEffects;
-		
-		// stop listening to the partition changed event
-		if ( CameraManager.Instance )
-			CameraManager.Instance.GetPanScript().OnPartitionChanging -= OnPartitionChanging;
     }
-	
-	private void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
-		// find out if the room being changed to has a gate or not
-		int nEntering = args.nNew;
-		bool bGated = GatingManager.Instance.HasActiveGate( nEntering );		
-		
-		if ( bGated ) {
-			// if there is a gate in this room, turn off the spawning of skulls
-			emitter.Disable();
-		}
-		else {
-			// if there is no gated in this room, we can spawn skulls again (but only if the tut is through)
-			if ( !TutorialLogic.Instance.FirstTimeDegradTrigger )
-				emitter.Enable();
-		}
-	}
 
     //Listen to OnTap event from FingerGesture
     void OnTap(TapGesture gesture){

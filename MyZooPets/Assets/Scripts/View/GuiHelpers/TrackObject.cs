@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // it is created, and removes it when it is destroyed.
 /////////////////////////////////////////////////// 
 
-public class TrackSprite : MonoBehaviour {
+public class TrackObject : MonoBehaviour {
 	// list that keeps track of the objects
 	private List<GameObject> listObjects;
 	

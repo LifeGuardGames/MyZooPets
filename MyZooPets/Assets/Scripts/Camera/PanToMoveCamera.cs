@@ -71,7 +71,7 @@ public class PanToMoveCamera : MonoBehaviour {
                     startTime = Time.time;
 
                     // Cancel touch if finger is touching undesirable objects while panning or the click manager is locked
-                    if(!ClickManager.Instance.CanRespondToTap() || CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
+                    if( !ClickManager.Instance.CanRespondToTap( null, ClickLockExceptions.Moving ) || CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
                         touchCancelled = true;
                 break;
 
@@ -106,6 +106,8 @@ public class PanToMoveCamera : MonoBehaviour {
 					int nTargetPartition = GetTargetPartition( 1, panDirection );
 					if ( CanMoveToPartition( nTargetPartition, panDirection, swipeTime ) )
 						ChangePartition( nTargetPartition );
+					else
+						SnapCamera( currentPartition );
 	
                     touchCancelled = false;
                 break;
@@ -140,6 +142,10 @@ public class PanToMoveCamera : MonoBehaviour {
 	private void OnCameraSnapped( Hashtable hash ) {
 		int nOldPartition = (int) hash["Old"];
 		
+		// if we were snapping back, don't send anything
+		if ( nOldPartition == currentPartition )
+			return;
+
 		// camera is done snapping, so send the partition changed callback
 		if ( OnPartitionChanged != null )
 			OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );		

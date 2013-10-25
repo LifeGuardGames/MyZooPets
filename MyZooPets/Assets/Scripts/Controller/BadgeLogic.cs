@@ -61,9 +61,11 @@ public class BadgeLogic : Singleton<BadgeLogic> {
             latestProgress = progress += currentProgress;
         }
 
-        //Check if a new badge can be unlocked
+        //Check if a new badge can be unlocked. Multiple badges of the same type 
+        //can be unlock at the same time
         foreach(Badge badge in sortedBadgesType)
-            if(CheckUnlockProgress(badge, latestProgress)) break;
+            // if(CheckUnlockProgress(badge, latestProgress)) break;
+            CheckUnlockProgress(badge, latestProgress);
 
         //Check if all badges of the same type have been unlocked
         foreach(Badge badge in sortedBadgesType){
@@ -82,6 +84,8 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     public void CheckSingleUnlockProgress(string badgeID, int currentProgress, bool overrideProgress){
         int latestProgress;
         Badge badge = DataBadges.GetBadge(badgeID);
+
+        //TO DO: return if badge unlock already.
 
         //Decides to override or add to recorded progress from DataManager
         if(overrideProgress){
@@ -106,6 +110,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
             if(!isUnlocked){ //Unlock new badges
                 DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);
+                Debug.Log("Unlock: " + badge.Name);
 
                 if(OnNewBadgeUnlocked != null){
                     BadgeEventArgs arg = new BadgeEventArgs(badge);

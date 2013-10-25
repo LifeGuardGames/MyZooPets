@@ -28,6 +28,7 @@ public class BadgeMutableData{
                                                                 //at level 1, 5, 10, 15, 20. Even though all the level badges have their own
                                                                 //badge id they are considered as the same type
 
+    //Change badge status. locked or unlocked
     public void UpdateBadgeStatus(string badgeID, bool isUnlocked, bool isNew){
         if(BadgeStatus.ContainsKey(badgeID)){
             Status status = BadgeStatus[badgeID];
@@ -40,6 +41,7 @@ public class BadgeMutableData{
         }
     }
 
+    //Update the latest progress for a single badge
     public void UpdateSingleUnlockProgress(string badgeID, int progress){
         if(SingleUnlockProgress.ContainsKey(badgeID)){
             SingleUnlockProgress[badgeID] = progress;
@@ -48,6 +50,7 @@ public class BadgeMutableData{
         }
     }
 
+    //Update the latest progress for a badge type
     public void UpdateSeriesUnlockProgress(BadgeType type, int progress){
         if(SeriesBadgeUnlockProgress.ContainsKey(type)){
             SeriesBadgeUnlockProgress[type] = progress;

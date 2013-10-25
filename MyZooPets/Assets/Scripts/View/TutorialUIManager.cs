@@ -39,9 +39,9 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     private void UpdateTutorial(){
         if(TutorialLogic.Instance.FirstTimeRealInhaler){
-            realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
+            // realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeCalendar){
-            calendar.GetComponent<TutorialHighlighting>().ShowArrow();
+            // calendar.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeDegradTrigger){
             //start trigger tutorial after others are done
             DegradationUIManager.Instance.ActivateParticleEffects();

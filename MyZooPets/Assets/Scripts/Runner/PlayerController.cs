@@ -46,7 +46,8 @@ public class PlayerController : Singleton<PlayerController> {
 
     //Listen to tap gesture from finger gesture plugin
     void OnTap(TapGesture gesture) { 
-        Jump();
+        if(RunnerGameManager.Instance.GameRunning)
+            Jump();
     }
 
     //Listen to swipe down gesture
@@ -106,6 +107,8 @@ public class PlayerController : Singleton<PlayerController> {
 
     private void Jump(){
         if(playerPhysics.Grounded){
+            AudioManager.Instance.PlayClip( "runnerJumpUp" );
+
             amountToMove.y = jumpHeight;
             playerPhysics.Jumping = true;
         }
@@ -113,6 +116,8 @@ public class PlayerController : Singleton<PlayerController> {
 
     private void Drop(){
         if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
+            AudioManager.Instance.PlayClip( "runnerJumpDown" );
+
             playerPhysics.AllowPassThroughLayer = true;
     }
 }

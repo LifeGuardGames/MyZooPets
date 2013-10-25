@@ -34,8 +34,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	public float fFirstHoursPenalty;
 	public float fSecondHoursPenalty;
 
-    private float timer = 0;
-    private float timeInterval = 5f; //time interval for trigger to affect health
     private const int NUMBER_OF_LOC = 6;
     private const int NUMBBER_OF_PREFABS = 6;
 
@@ -134,15 +132,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
 	}
 
-    void Update(){
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger) return; //no degradation during tutorial phase
-        timer -= Time.deltaTime;
-        if (timer <= 0){
-            TriggerDegradesHealth();
-            timer = timeInterval;
-        }
-    }
-
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(int id){
 		Vector3 triggerPos = Vector3.zero;
@@ -154,15 +143,4 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             50, UIUtility.Instance.mainCameraWorld2Screen(triggerPos), 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
     }
-
-    //Calculate health degration
-    private void TriggerDegradesHealth(){
-        int triggerCount = DataManager.Instance.GameData.Degradation.DegradationTriggers.Count;
-        int minusHealth = 2;
-        Debug.Log("degrad health");
-
-        minusHealth = minusHealth * triggerCount; 
-        StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, minusHealth * -1, Vector3.zero, 0, Vector3.zero);	// Convert to negative
-    }
-
 }

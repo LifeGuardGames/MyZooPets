@@ -6,12 +6,21 @@ public class DegradTrigger : MonoBehaviour {
     public int ID{get; set;} 		//the id of this specific degradation trigger
 	public string strSoundClean;	// sound this degrade trigger makes when the player cleans it up
 	public GameObject LgDegredationEmitter;		// The custom emittor emitter that emits skulls that fly towards pet
+	private LgParticleEmitterDegredation emitter;
 	
 	// has this trigger been cleaned yet?
 	private bool bCleaned = false;
 	
 	// Use this for initialization
 	void Start(){
+		// set the emitter
+		emitter = LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>();
+		
+		// set emitter values
+		float fTime = Constants.GetConstant<float>( "DegradTickTime" );
+		int nDamage = Constants.GetConstant<int>( "DegradDamage" );
+		emitter.InitDegradEmitter( fTime, nDamage );
+		
         DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
             
         //Disable particle effects when other tutorials are not finished yet
@@ -21,7 +30,6 @@ public class DegradTrigger : MonoBehaviour {
         }
 		
 		// Attach the particle end location to the pet's hit position
-		LgParticleEmitterDegredation emitter = LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>();
 		emitter.targetDestination = DegradationUIManager.Instance.petHitLocation;
 	}
 
@@ -56,6 +64,6 @@ public class DegradTrigger : MonoBehaviour {
         transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
 		
 		// Enable the skull flying to pet
-		LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>().Enable();
+		emitter.Enable();
     }
 }

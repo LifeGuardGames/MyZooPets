@@ -178,7 +178,7 @@ public class PetAnimator : LgCharacterAnimator {
 		// play the actual particle effect
 		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
 		float fFireDelay = Constants.GetConstant<float>( "FireDelay" );
-		scriptFire.Play( fFireDelay - fFireWait - fUntilExhale );		
+		scriptFire.PlayAfterDelay( fFireDelay - fFireWait - fUntilExhale );		
 		
 		// then wait another amount of time
 		float fHoldExhale = Constants.GetConstant<float>( "HoldExhale" );

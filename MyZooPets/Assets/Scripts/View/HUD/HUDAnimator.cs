@@ -274,7 +274,7 @@ public class HUDAnimator : MonoBehaviour {
 		
 		// also add a component that keeps track of this UI element (if it's xp or starts)
 		if ( type == HUDElementType.Stars || type == HUDElementType.Points ) {
-			TrackSprite scriptTrack = go.AddComponent<TrackSprite>();
+			TrackObject scriptTrack = go.AddComponent<TrackObject>();
 			scriptTrack.Init( listMovingSprites );
 		}
 		

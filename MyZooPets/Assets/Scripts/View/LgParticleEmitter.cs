@@ -34,6 +34,14 @@ public class LgParticleEmitter : MonoBehaviour {
 		// Override in child
 	}
 	
+	void OnDestroy() {
+		_OnDestroy();	
+	}
+	
+	protected virtual void _OnDestroy() {
+		
+	}
+	
 	void Update(){
 		if(isActive){	
 			if(Time.time > timeBegin + generatedValue){

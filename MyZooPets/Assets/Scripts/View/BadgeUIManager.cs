@@ -12,7 +12,7 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
-	public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
+	// public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
 	
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
@@ -55,16 +55,16 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 			foreach(var badge in group.Elements){
 				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
 				badgeGO.name = badge.ID;
+				string textureName = "";
 				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
 
 				//TO DO: Update this after you have all the art for badges
 				if(badge.IsUnlocked){
-
+					textureName = badge.TextureName;
 				}else{
-
+					textureName = badge.TextureName + "Dark";
 				}
-				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeBlank";
-
+				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = textureName;
 			}
 		}
 
@@ -77,14 +77,14 @@ public class BadgeUIManager : SingletonUI<BadgeUIManager> {
 		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
 
 		//TO DO: Update this after you have all the art for badges
-		if(badge.IsUnlocked){
+		// if(badge.IsUnlocked){
 
-		}else{
+		// }else{
 
-		}
+		// }
 
 		if(badgeTrans != null)
-			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = "badgeBlank";
+			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
 
 		badgeBase.GetComponent<UIGrid>().Reposition();
 	}

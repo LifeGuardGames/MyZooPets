@@ -83,9 +83,7 @@ public enum NotificationPopupFields{
 }
 public enum BadgeType{
     Level,
-    RunnerGame,
     RunnerDistance,
-    DiagnoseGame,
     PatientNumber,
     Decoration
 }

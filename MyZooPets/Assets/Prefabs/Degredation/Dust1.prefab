@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400012}
+  - 114: {fileID: 11400016}
   m_Layer: 0
   m_Name: Dust1
   m_TagString: Untagged
@@ -102,9 +103,8 @@ GameObject:
   - 33: {fileID: 3300006}
   - 23: {fileID: 2300006}
   - 114: {fileID: 11400020}
-  - 114: {fileID: 11400018}
   m_Layer: 0
-  m_Name: AnimatedSprite
+  m_Name: SpriteOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,9 +121,8 @@ GameObject:
   - 33: {fileID: 3300008}
   - 23: {fileID: 2300008}
   - 114: {fileID: 11400022}
-  - 114: {fileID: 11400024}
   m_Layer: 0
-  m_Name: AnimatedSprite
+  m_Name: SpriteOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,9 +139,8 @@ GameObject:
   - 33: {fileID: 3300010}
   - 23: {fileID: 2300010}
   - 114: {fileID: 11400028}
-  - 114: {fileID: 11400026}
   m_Layer: 0
-  m_Name: AnimatedSprite
+  m_Name: SpriteOutline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,7 +169,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -11.0309134, y: .139634848, z: 12.8733206}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400016}
@@ -559,20 +557,25 @@ MonoBehaviour:
   minInterval: 1
   maxInterval: 3
   targetDestination: {fileID: 0}
---- !u!114 &11400018
+--- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e54113e5604435b8ae87c7754f2725, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b57cd56f38586a409a58529709c2a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  library: {fileID: 11400000, guid: 9f015e582f190b14aa57c9e04c13c9a9, type: 2}
-  defaultClipId: 2
-  playAutomatically: 1
+  spriteList:
+  - {fileID: 11400028}
+  - {fileID: 11400022}
+  - {fileID: 11400020}
+  isloop: 1
+  cycleTime: .5
+  toValue: 1
+  fromValue: 0
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -613,34 +616,6 @@ MonoBehaviour:
   meshColliderPositions: []
   meshColliderMesh: {fileID: 0}
   renderLayer: 0
---- !u!114 &11400024
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e54113e5604435b8ae87c7754f2725, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  library: {fileID: 11400000, guid: 9f015e582f190b14aa57c9e04c13c9a9, type: 2}
-  defaultClipId: 1
-  playAutomatically: 1
---- !u!114 &11400026
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e54113e5604435b8ae87c7754f2725, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  library: {fileID: 11400000, guid: 9f015e582f190b14aa57c9e04c13c9a9, type: 2}
-  defaultClipId: 0
-  playAutomatically: 1
 --- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1

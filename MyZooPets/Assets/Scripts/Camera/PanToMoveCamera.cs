@@ -120,6 +120,12 @@ public class PanToMoveCamera : MonoBehaviour {
 	// Snaps the camera to the current partition.
 	///////////////////////////////////////////		
 	private void SnapCamera( int nOldPartition ) {
+        float moveTo = partitionOffset * currentPartition;
+		
+		// if the camera is actually already in this position, don't bother doing anything	
+		if ( gameObject.transform.position.x == moveTo )
+			return;
+		
 		// prepare the hashtables for the camera snap callback
         Hashtable optional = new Hashtable();
 		optional.Add ("onComplete", "OnCameraSnapped");
@@ -128,8 +134,7 @@ public class PanToMoveCamera : MonoBehaviour {
 		Hashtable completeParamHash = new Hashtable();
 		completeParamHash.Add("Old", nOldPartition);			
 		optional.Add("onCompleteParam", completeParamHash);
-		
-        float moveTo = partitionOffset * currentPartition;
+			
         LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
         normalizedTouchPosX = 0;		
 	}

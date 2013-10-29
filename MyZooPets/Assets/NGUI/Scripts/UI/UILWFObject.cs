@@ -6,6 +6,7 @@ public class UILWFObject : UIWidget
 {
     public GameObject showCasePrefab;
     private GameObject showCaseAnimator;
+	public string strClip;
 
     override protected void OnStart()
     {
@@ -31,7 +32,7 @@ public class UILWFObject : UIWidget
     private IEnumerator StartAnimation(){
         yield return 0;
 
-        showCaseAnimator.GetComponent<LWFAnimator>().PlayClip("happyIdle");
+        showCaseAnimator.GetComponent<LWFAnimator>().PlayClip(strClip);
     }
 
 }

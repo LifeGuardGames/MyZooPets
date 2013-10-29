@@ -171,6 +171,7 @@ public class GA {
 	#if UNITY_EDITOR
 	public static void HierarchyWindowCallback (int instanceID, Rect selectionRect)
 	{
+		/*
 		GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
 		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null))
 		{
@@ -180,6 +181,7 @@ public class GA {
 				
 			Graphics.DrawTexture(new Rect(GUILayoutUtility.GetLastRect().width - selectionRect.height - 5 - addX, selectionRect.y, selectionRect.height, selectionRect.height), GA.SettingsGA.Logo);
 		}
+		*/
 	}
 	#endif
 }

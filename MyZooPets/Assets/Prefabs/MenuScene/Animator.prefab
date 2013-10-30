@@ -9,8 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  m_Layer: 0
-  m_Name: SelectionUIManager
+  m_Layer: 10
+  m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0457151234, y: -.789327502, z: -.00124999997}
+  m_LocalPosition: {x: -40, y: 105.832779, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -35,14 +35,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43d2e34060b1e4cd3a08359e7644ff23, type: 3}
+  m_Script: {fileID: 11500000, guid: f5ed5ba6cd76a495a9193781df52b891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionGrid: {fileID: 0}
-  petSelectionPrefab: {fileID: 100002, guid: b17988e14b5054605a1b7de6aae42097, type: 2}
-  animatorPrefab: {fileID: 100000, guid: 48a4a3d165cb843a581ceccdeee3fb1a, type: 2}
-  eggPrefab: {fileID: 100000, guid: 90b833fe3582b4ff78dde1455eb52d63, type: 2}
-  scriptTransition: {fileID: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  showCasePrefab: {fileID: 100000, guid: cfb12fd63cd79443198c3bcb625b284c, type: 2}
+  strClip: happyIdle
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

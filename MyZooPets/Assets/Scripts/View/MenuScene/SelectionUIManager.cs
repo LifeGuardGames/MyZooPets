@@ -4,7 +4,9 @@ using System;
 
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
-    public GameObject petSelectionPrefab;
+    public GameObject petSelectionPrefab; //Prefab that holds the basic structure for pet display layout
+    public GameObject animatorPrefab; //LWF animator that plays pet animation
+    public GameObject eggPrefab; //Egg sprite that is used before pet hatches;
 	
 	// transition
 	public SceneTransition scriptTransition;
@@ -24,7 +26,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         if(petStatus == "Egg"){
             //Open CustomizationUIManager to create/initiate new pet game data
             DataManager.Instance.CurrentPetID = selectedPetID;
-            CustomizationUIManager.Instance.selectedEgg = selectedPetGO.transform.parent.Find("Sprite_Egg").gameObject;
+            CustomizationUIManager.Instance.selectedEgg = selectedPetGO.transform.parent.Find("egg").gameObject;
             CustomizationUIManager.Instance.OpenUI();
         }else{
             //Load game data only if the selected pet is different from the current pet
@@ -48,11 +50,15 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             //Turn show case animation on or off
             string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
             if(petStatus == "Egg"){
-                petSelectionGO.transform.Find("Animator").gameObject.SetActive(false);
-                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(true);
+                GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
+                eggGO.name = "egg";
+                eggGO.transform.localScale = eggPrefab.transform.localScale;
+                eggGO.transform.localPosition = eggPrefab.transform.localPosition;
             }else{
-                petSelectionGO.transform.Find("Animator").gameObject.SetActive(true);
-                petSelectionGO.transform.Find("Sprite_Egg").gameObject.SetActive(false);
+                GameObject animator = NGUITools.AddChild(petSelectionGO, animatorPrefab);
+                animator.name = "animator";
+                animator.transform.localScale = animatorPrefab.transform.localScale;
+                animator.transform.localPosition = animatorPrefab.transform.localPosition;
             }
         }
 

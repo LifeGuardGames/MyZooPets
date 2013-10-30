@@ -65,7 +65,7 @@ public class ClickManager : Singleton<ClickManager> {
 	//---------------------------------------------------------
 	public bool CanRespondToTap( GameObject goCaller = null, ClickLockExceptions eException = ClickLockExceptions.None ){
 		// hard stop (for now): If the partition is transitioning, don't allow anything
-		if ( CameraManager.Instance && CameraManager.Instance.IsPartitionChanging() )
+		if ( CameraManager.Instance && CameraManager.Instance.IsCameraMoving() )
 			return false;
 		
 		// if a tutorial is playing, check with that tutorial

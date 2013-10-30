@@ -29,14 +29,22 @@ public class CameraManager : Singleton<CameraManager> {
 	
 	//---------------------------------------------------
 	// IsPartitionChanging()
-	// Returns true if the camera is currently moving (i.e.
-	// changing partitions).
+	// Returns true if the camera is currently moving.
+	// NOTE: I used to check for a lean tween, but we
+	// sometimes move the camera without using lean tween.
+	// So now I just look at the X of the camera and see if
+	// is where it should be.
 	//---------------------------------------------------		
-	public bool IsPartitionChanging() {
+	public bool IsCameraMoving() {
 		GameObject goParent = transform.parent.gameObject;
-		bool bChanging = LeanTween.isTweening( goParent );
 		
-		return bChanging;
+		PanToMoveCamera script = GetPanScript();
+		float fTargetX = script.partitionOffset * script.currentPartition;
+		float fX = goParent.transform.position.x;
+		
+		bool bMoving = fTargetX != fX;
+		
+		return bMoving;
 	}
 	
 	//---------------------------------------------------

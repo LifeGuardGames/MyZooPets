@@ -91,6 +91,12 @@ public class PanToMoveCamera : MonoBehaviour {
 					if ( bMovingLeft || bMovingRight ) {
 						panDirection = bMovingLeft ? RoomDirection.Left : RoomDirection.Right;
 					
+						// before panning the camera, check to see if it's legal to move to the place where the player is panning
+						int nTargetPartition = GetTargetPartition( 1, panDirection );
+						bool bCanMove = CanMoveToPartition( nTargetPartition, panDirection, -1 );
+						if ( !bCanMove )
+							return;
+					
 					    if(normalizedTouchPosX >= minNormalizedPanDistance) {
                             //With the normalize position figure out how much the camera will have to move
                             float normalizedPartitionX = normalizedTouchPosX * partitionOffset;

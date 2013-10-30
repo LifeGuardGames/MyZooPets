@@ -7,6 +7,10 @@ using System.Collections;
 //---------------------------------------------------
 
 public abstract class LgButtonHold : LgButton {
+	
+	// pure abstract functions
+	protected abstract void _Update();
+	//------------------------
 
 	// is this button being held?
 	private bool bHeld;
@@ -51,6 +55,9 @@ public abstract class LgButtonHold : LgButton {
 				ButtonReleased();
 			}
 		}
+		
+		// let children do their updating
+		_Update();
 	}	
 	
 	//---------------------------------------------------

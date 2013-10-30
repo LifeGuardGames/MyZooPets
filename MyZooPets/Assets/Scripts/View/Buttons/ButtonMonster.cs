@@ -17,6 +17,9 @@ public class ButtonMonster : LgButtonHold {
 	// fire meter script
 	private FireMeter scriptFireMeter;
 	
+	// the sprite icon of this button
+	public GameObject goIcon;
+	
 	// actual fire meter object created when this button is pressed
 	public GameObject goFireMeter;
 	
@@ -33,6 +36,26 @@ public class ButtonMonster : LgButtonHold {
 		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
 		scriptPan.OnPartitionChanging += OnPartitionChanging;
 	}
+	
+	//---------------------------------------------------
+	// _Update()
+	//---------------------------------------------------		
+	protected override void _Update() {
+		if ( !CameraManager.Instance )
+			return;
+		
+		bool bActive = NGUITools.GetActive( goIcon );
+		bool bCamMoving = CameraManager.Instance.IsCameraMoving();
+
+		if ( bActive && bCamMoving ) {
+			NGUITools.SetActive( goIcon, false );	// if the button is on and the camera is moving, deactivate it
+			Debug.Log("off");
+		}
+		else if ( !bActive && !bCamMoving ) {
+			Debug.Log("On");
+			NGUITools.SetActive( goIcon, true );	// if the button is off and the camera isn't moving, activate it
+		}
+	}	
 	
 	//---------------------------------------------------
 	// _OnDestroy()

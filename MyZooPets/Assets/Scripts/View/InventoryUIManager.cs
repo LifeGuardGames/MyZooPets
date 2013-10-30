@@ -147,8 +147,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     // Image button clicked receiver
     public void ExpandToggled(){
         // Local aux to keep track of toggles
-        isGuiShowing = !isGuiShowing;
-        uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+        if(InventoryLogic.Instance.AllInventoryItems.Count > 0)
+            isGuiShowing = !isGuiShowing;
+            uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
     }
 
 	public void ShowPanel(){

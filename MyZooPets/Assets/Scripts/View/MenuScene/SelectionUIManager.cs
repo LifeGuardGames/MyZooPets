@@ -5,8 +5,6 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab; //Prefab that holds the basic structure for pet display layout
-    public GameObject animatorPrefab; //LWF animator that plays pet animation
-    public GameObject eggPrefab; //Egg sprite that is used before pet hatches;
 	
 	// transition
 	public SceneTransition scriptTransition;
@@ -50,11 +48,13 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             //Turn show case animation on or off
             string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
             if(petStatus == "Egg"){
+                GameObject eggPrefab = Instantiate(Resources.Load("Sprite_Egg")) as GameObject;
                 GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
                 eggGO.name = "egg";
                 eggGO.transform.localScale = eggPrefab.transform.localScale;
                 eggGO.transform.localPosition = eggPrefab.transform.localPosition;
             }else{
+                GameObject animatorPrefab = Instantiate(Resources.Load("Animator")) as GameObject;
                 GameObject animator = NGUITools.AddChild(petSelectionGO, animatorPrefab);
                 animator.name = "animator";
                 animator.transform.localScale = animatorPrefab.transform.localScale;

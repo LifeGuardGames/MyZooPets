@@ -149,7 +149,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         // Local aux to keep track of toggles
         if(InventoryLogic.Instance.AllInventoryItems.Count > 0)
             isGuiShowing = !isGuiShowing;
-            uiSprite.spriteName = isGuiShowing ? "InventoryContract" : "InventoryExpand";
+            uiSprite.spriteName = isGuiShowing ? "iconItemsMinus" : "iconItemsPlus";
     }
 
 	public void ShowPanel(){

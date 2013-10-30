@@ -107,6 +107,8 @@ public class GatingManager : Singleton<GatingManager> {
 	//---------------------------------------------------
 	// EnteredRoom()
 	// When the player enters a room.
+	// NOTE: Currently, exiting a gated room into another
+	// gated room is not by design, and also not supported.	
 	//---------------------------------------------------	
 	public void EnteredRoom( object sender, PartitionChangedArgs args ) {
 		int nLeaving = args.nOld;
@@ -133,14 +135,15 @@ public class GatingManager : Singleton<GatingManager> {
 			// we neeed to listen to when the player is done moving to handle other gate related stuff
 			ListenForMovementFinished( true );
 		}
-		else if ( bGateLeaving && !bGateEntering ) {
-			// if they are entering a non-gated room from a gated room, show that ui and unlock click manager
-			EnableUI();
-		}
 		else {
 			// if the pet is leaving a gated room, destroy the fire UI and stop listening for a callback
 			ListenForMovementFinished( false );
 		}
+		
+		// if they are entering a non-gated room from a gated room, show that ui and unlock click manager
+		if ( bGateLeaving && !bGateEntering ) 
+			EnableUI();
+
 	}
 	
 	//---------------------------------------------------
@@ -151,7 +154,7 @@ public class GatingManager : Singleton<GatingManager> {
 		if ( bListen )
 			PetMovement.Instance.OnReachedDest += PetReachedDest;
 		else
-			PetMovement.Instance.OnReachedDest -= PetReachedDest;
+			PetMovement.Instance.OnReachedDest -= PetReachedDest;			
 	}
 	
 	//---------------------------------------------------

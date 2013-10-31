@@ -12,6 +12,6 @@
 
 @interface P31Unity : NSObject
 
-+ (void)unityPause:(NSNumber*)shouldPause;
++ (void)unityPause:(BOOL)shouldPause;
 
 @end

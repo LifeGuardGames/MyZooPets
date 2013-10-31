@@ -12,14 +12,12 @@ public class DataManager : Singleton<DataManager>{
 
     public bool removeDataOnApplicationQuit; //delete all from PlayerPrefs
     public bool isDebug = false; //turn isDebug to true if working on independent scene
+    public string currentPetID; //The id that will be used for pet serialization
 
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change (needs to be static)
     private bool firstTime; //Is the user playing for the first time
     private int numOfPets; //Number of pets saved on this device
-    public string currentPetID; //The id that will be used for pet serialization
-    //private bool loaded = false; //Has the data been deserialized
-
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
     public PetGameData GameData{
@@ -34,6 +32,9 @@ public class DataManager : Singleton<DataManager>{
     public int NumOfPets{
         get{return numOfPets;}
     }
+    
+    //Save temporary data when transitioning to new scene
+    public LoadSceneData SceneData{get; set;} 
 
     //TO Do: hash the pin before saving
     public string ParentPortalPin{

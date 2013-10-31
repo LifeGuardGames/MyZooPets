@@ -22,6 +22,10 @@ public class ButtonChangeScene : LgButton {
 	
 	// what loading screen to show after the transition?  This is a prefab's name
 	public string strLoadingScreen = "LoadingScreen";
+
+	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
+	public GameObject cameraGO; //needs the camera to record partition # before scene change
+	public GameObject petLWF; //needs to record pet position before scene change
 	
 	//public CameraMove cameraMove;
 	//public ZoomItem zoomItem;
@@ -33,6 +37,10 @@ public class ButtonChangeScene : LgButton {
 		// lock the click manager
 		ClickManager.Instance.ClickLock();
 		ClickManager.Instance.ModeLock( UIModeTypes.None );
+
+		//Save some basic data for current scene
+		if(shouldSaveSceneData)
+			RememberCurrentScene();
 		
 		// if there is a camera move, do it -- otherwise, just skip to the move being complete
 		if ( fTime > 0 ) {
@@ -54,5 +62,17 @@ public class ButtonChangeScene : LgButton {
 			scriptTransition.StartTransition( strScene, strLoadingScreen );
 		else
 			Debug.Log("No transition script for a scene change button!");
+	}
+
+	//---------------------------------------------------
+	// RememberCurrentScene()
+	// Record the pet's position and camera's partition before
+	// switching to new scene.  
+	//---------------------------------------------------
+	private void RememberCurrentScene(){
+		int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
+		Vector3 petPos = petLWF.transform.position;
+		print("remember");
+		DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
 	}
 }

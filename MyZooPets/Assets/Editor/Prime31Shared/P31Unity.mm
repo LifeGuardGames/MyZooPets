@@ -24,10 +24,9 @@ void UnityPause( bool pause );
 
 @implementation P31Unity
 
-+ (void)unityPause:(NSNumber*)shouldPause
++ (void)unityPause:(BOOL)shouldPause
 {
-	BOOL shouldPauseBool = [shouldPause boolValue];
-	UnityPause( shouldPauseBool );
+	UnityPause( shouldPause );
 }
 
 @end

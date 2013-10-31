@@ -21,33 +21,29 @@ public class PartitionChangedArgs : EventArgs{
 //---------------------------------------------------
 
 public class PanToMoveCamera : MonoBehaviour {
+    //=======================Events========================
+    public EventHandler<PartitionChangedArgs> OnPartitionChanged;   // when the partition has changed (and the camera has finished moving)
+    public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
+
     public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
     public int numOfPartitions = 4; //number of partitions allowed
     public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
                                     //on the left of the starting partition(always 0)
     public int lastPartition = 2;
     public float partitionOffset = 80.0f; //How big each partition is in world position
+    public int currentPartition = 0;
+    public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
+    public float panDistanceToChange = 0.5f;    // distance to pan before the camera will snap to the next partition
+    public HUDAnimator scriptHudAnim; //link to hud animator
 
     private Vector2 startTouchPos; //Position of touch when finger touches the screen
     private Vector2 currentTouchPos; //Position of touch right now
-    public int currentPartition = 0;
     private float startTime; //Time at when finger touches screen
     private RoomDirection panDirection; //direction of the last finger gesture
     private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
     private bool touchCancelled = false; //True: touch shouldn't be handled
-    public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
-	public float panDistanceToChange = 0.5f;	// distance to pan before the camera will snap to the next partition
-	
-	// link to hud animator
-	public HUDAnimator scriptHudAnim;
-
     private Camera nguiCamera; 
     private Camera mainCamera;
-	
-	//=======================Events========================
-	public EventHandler<PartitionChangedArgs> OnPartitionChanged; 	// when the partition has changed (and the camera has finished moving)
-	public EventHandler<PartitionChangedArgs> OnPartitionChanging;	// when the partition is changing (i.e. camera is still moving)
-	//=====================================================			
 
     // Use this for initialization
     void Start () {
@@ -56,6 +52,12 @@ public class PanToMoveCamera : MonoBehaviour {
        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
         
        D.Assert(nguiCamera != null, "NGUI camera not found");
+
+       //Move camera to the last saved partition
+       LoadSceneData sceneData = DataManager.Instance.SceneData;
+       if(sceneData != null)
+            if(sceneData.LastScene == Application.loadedLevelName)
+                ChangePartition(sceneData.LastCameraPartition);
     }
     
     void Update(){

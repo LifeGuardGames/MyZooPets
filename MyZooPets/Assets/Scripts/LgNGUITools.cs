@@ -16,6 +16,7 @@ public static class LgNGUITools{
        {
                Transform t = go.transform;
                t.localPosition = prefab.transform.localPosition;
+				t.localScale = prefab.transform.localScale;
        }
        
        return go;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Prime31;
 
 
-#if UNITY_IPHONE
+#if UNITY_IPHONE || UNITY_EDITOR
 public class StoreKitProduct
 {
     public string productIdentifier { get; private set; }

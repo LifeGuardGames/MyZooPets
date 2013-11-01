@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 
-#if UNITY_IPHONE
+#if UNITY_IPHONE || UNITY_EDITOR
 public class StoreKitBinding
 {
 	[DllImport("__Internal")]

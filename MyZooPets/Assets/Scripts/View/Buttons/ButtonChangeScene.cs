@@ -39,8 +39,7 @@ public class ButtonChangeScene : LgButton {
 		ClickManager.Instance.ModeLock( UIModeTypes.None );
 
 		//Save some basic data for current scene
-		if(shouldSaveSceneData)
-			RememberCurrentScene();
+		RememberCurrentScene();
 		
 		// if there is a camera move, do it -- otherwise, just skip to the move being complete
 		if ( fTime > 0 ) {
@@ -70,8 +69,12 @@ public class ButtonChangeScene : LgButton {
 	// switching to new scene.  
 	//---------------------------------------------------
 	private void RememberCurrentScene(){
-		int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
-		Vector3 petPos = petLWF.transform.position;
-		DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
+		if(shouldSaveSceneData){
+			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
+			Vector3 petPos = petLWF.transform.position;
+			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
+		}else{
+			DataManager.Instance.SceneData = null;
+		}
 	}
 }

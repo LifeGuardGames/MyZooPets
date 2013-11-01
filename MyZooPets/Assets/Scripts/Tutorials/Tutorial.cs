@@ -10,10 +10,27 @@ using System.Collections.Generic;
 
 public abstract class Tutorial {
 	// ----------- Abstract functions -------------------
-	protected abstract void SetKey();
-	protected abstract void ProcessStep( int nStep );
-	protected abstract void _End( bool bFinished );
+	protected abstract void SetKey();						// the tutorial key is used to mark a lot of lists
+	protected abstract void SetMaxSteps();					// set the max steps of the tutorial
+	protected abstract void ProcessStep( int nStep );		// the meat of a tutorial is processing its steps and doing things
+	protected abstract void _End( bool bFinished );			// when the tutorial is finishd
 	// --------------------------------------------------
+	
+	// list of objects that can be processed as input
+	private List<GameObject> listCanProcess = new List<GameObject>();
+	protected void AddToProcessList( GameObject go ) {
+		listCanProcess.Add( go );
+	}
+	protected void RemoveFromProcessList( GameObject go ) {
+		listCanProcess.Remove( go );	
+	}
+	public bool CanProcess( GameObject go ) {
+		bool bCan = listCanProcess.Contains( go );
+		return bCan;
+	}
+	
+	// current (and only) spotlight object this tutorial is highlighting
+	private GameObject goSpotlight;	
 	
 	// step the tutorial is currently on
 	private int nCurrentStep;
@@ -21,7 +38,7 @@ public abstract class Tutorial {
 		nCurrentStep = num;
 		
 		// if we have exceeded max steps in this tutorial, end it
-		if ( nCurrentStep > nMaxSteps )
+		if ( nCurrentStep >= nMaxSteps )
 			End( true );
 		else
 			ProcessStep( nCurrentStep );
@@ -52,6 +69,7 @@ public abstract class Tutorial {
 	//=====================================================		
 	
 	public Tutorial() {
+		SetMaxSteps();
 		SetStep( 0 );
 	}
 	
@@ -130,4 +148,47 @@ public abstract class Tutorial {
 	public void Abort() {
 		End( false );	
 	}
+	
+	//---------------------------------------------------
+	// SpotlightObject()
+	// Puts a spotlight around the incoming object to
+	// draw attention to it.
+	//---------------------------------------------------	
+	protected void SpotlightObject( GameObject goTarget ) {
+		// if the spotlight object already exists, then we want to just move it to the new location
+		if ( goSpotlight != null ) {
+			MoveSpotlight( goTarget );
+			return;
+		}
+
+		// get the proper location of the object we are going to focus on
+		Vector3 vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
+		
+		// create the object
+		GameObject goResource = Resources.Load( "TutorialSpotlight" ) as GameObject;
+		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
+		vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
+		goSpotlight.transform.localPosition = vPos;
+	}
+	
+	//---------------------------------------------------
+	// MoveSpotlight()
+	// Moves the spotlight object to focus on goTarget.
+	//---------------------------------------------------		
+	private void MoveSpotlight( GameObject goTarget ) {
+		Debug.Log("Moving spotlight code not yet implemented.  Sorry bro.");
+	}
+	
+	//---------------------------------------------------
+	// RemoveSpotlight()
+	// Removes the current spotlight object.
+	//---------------------------------------------------		
+	protected void RemoveSpotlight() {
+		if ( goSpotlight == null ) {
+			Debug.Log("Trying to destroy a spotlight that doesn't exist!");
+			return;
+		}
+		
+		GameObject.Destroy( goSpotlight );
+	}	
 }

@@ -141,7 +141,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     */
     public void ShowCalendarTipConclude(){		
         TutorialLogic.Instance.FirstTimeCalendar = false;
-        calendar.GetComponent<TutorialHighlighting>().HideArrow();
+
         CalendarTutorialHelper.Instance.CleanUpTutorial();
         GA.API.Design.NewEvent("Tutorial:Calendar:End");
     }
@@ -155,7 +155,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add( DegradationLogic.TIME_DECAY_TUT );
 	}	
 
-	private void AddStandardTutTip( NotificationPopupType eType, string strText, string strSprite, PopupNotificationNGUI.HashEntry button1cb, bool bStartsHidden, bool bHideImmediately, string strAnalytics ) {
+	public static void AddStandardTutTip( NotificationPopupType eType, string strText, string strSprite, PopupNotificationNGUI.HashEntry button1cb, bool bStartsHidden, bool bHideImmediately, string strAnalytics ) {
 		/////// Send Notication ////////
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
@@ -234,8 +234,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
-        TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
-        highlight.HideArrow();
+       // TutorialHighlighting highlight = realInhaler.GetComponent<TutorialHighlighting>();
+        //highlight.HideArrow();
         TutorialLogic.Instance.FirstTimeRealInhaler = false;
         GA.API.Design.NewEvent("Tutorial:Inhaler:Intro");
         GA.API.Design.NewEvent("Tutorial:Inhaler:End");

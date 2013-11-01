@@ -9,7 +9,15 @@ using System.Collections.Generic;
 // track of game tutorials.
 //---------------------------------------------------
 
-public class TutorialManager : Singleton<TutorialManager> {
+public abstract class TutorialManager : Singleton<TutorialManager> {
+	// pure abstract functions ------------------
+	protected abstract void _Start();	// start function
+	protected abstract void _Check();		// forces the tutorial manager to do a check to see if any tutorials should be launched
+	// ------------------------------------------
+	
+	// public on/off switch for testing while in development
+	public bool bOn;
+	
 	// tutorial that is currently active
 	private GameTutorial tutorial;
 	public bool IsTutorialActive() {
@@ -24,22 +32,32 @@ public class TutorialManager : Singleton<TutorialManager> {
 		}
 		
 		this.tutorial = tutorial;
+		
+		// if the incoming tutorial is null, do a check to see if any new tutorials should be happening
+		//if ( tutorial == null )
+		//	Check();
 	}
-	
-	// current (and only) spotlight object
-	private GameObject goSpotlight;
-	
-	// list of objects that can be processed as input
-	private List<GameObject> listCanProcess = new List<GameObject>();
-	
-	public GameObject goSpotTest;
 	
 	void Start() {
 		//Debug.Log("Starting tutorial manager, running a test");
 		//GameTutTest tutTest = new GameTutTest();
 		
-		Debug.Log("Starting tut manager, running spotlight test");
-		SpotlightObject( goSpotTest );
+		//Debug.Log("Starting tut manager, running spotlight test");
+		//SpotlightObject( goSpotTest );
+		
+		_Start();
+	}
+	
+	//---------------------------------------------------
+	// Check()
+	// Checks which tutorial should play based on certain
+	// game conditions.
+	//---------------------------------------------------	
+	protected void Check() {
+		if ( !bOn )
+			return;
+		else
+			_Check();
 	}
 	
 	//---------------------------------------------------
@@ -58,67 +76,8 @@ public class TutorialManager : Singleton<TutorialManager> {
 			return true;
 		
 		// otherwise we have a valid object and a valid tutorial, so let's get to checkin'
-		bool bCanProcess = listCanProcess.Contains( go );
+		bool bCanProcess = tutorial.CanProcess( go );
 		
 		return bCanProcess;
-	}
-	
-	//---------------------------------------------------
-	// SpotlightObject()
-	// Puts a spotlight around the incoming object to
-	// draw attention to it.
-	//---------------------------------------------------	
-	public void SpotlightObject( GameObject goTarget ) {
-		// if the spotlight object already exists, then we want to just move it to the new location
-		if ( goSpotlight != null ) {
-			MoveSpotlight( goTarget );
-			return;
-		}
-		
-		//goTarget.transform.position = Camera.main.ScreenToWorldPoint( new Vector3( 512f, 384f, 20f ) );
-		
-		// get the proper location of the object we are going to focus on
-		Vector3 vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
-		Debug.Log("Main " + vPos);
-		//Vector3 vGui = CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, vPos );
-		//Debug.Log("NGUI: " + vGui);
-		
-		Debug.Log("What about reversing it: " + Camera.main.ScreenToWorldPoint( vPos ) );
-		
-		//Debug.Log("Using utility: " + UIUtility.Instance.nguiCameraWorld2Screen( goTarget.transform.position) );
-		
-		//Debug.Log("And the normal way: " + CameraManager.Instance.cameraNGUI.WorldToScreenPoint( goTarget.transform.position));
-		
-		// create the object
-		GameObject goResource = Resources.Load( "TutorialSpotlight" ) as GameObject;
-		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
-		vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
-		//vPos.x = vPos.x * CameraManager.Instance.ratioX;
-		//vPos.y = vPos.y * CameraManager.Instance.ratioY;
-		goSpotlight.transform.localPosition = vPos;
-		Debug.Log("Wtf: " + vPos);
-		Debug.Log(goSpotlight.transform.localPosition);
-		Debug.Log(goSpotlight.transform.position);
-	}
-	
-	//---------------------------------------------------
-	// MoveSpotlight()
-	// Moves the spotlight object to focus on goTarget.
-	//---------------------------------------------------		
-	private void MoveSpotlight( GameObject goTarget ) {
-		
-	}
-	
-	//---------------------------------------------------
-	// RemoveSpotlight()
-	// Removes the current spotlight object.
-	//---------------------------------------------------		
-	public void RemoveSpotlight() {
-		if ( goSpotlight == null ) {
-			Debug.Log("Trying to destroy a spotlight that doesn't exist!");
-			return;
-		}
-		
-		Destroy( goSpotlight );
 	}
 }

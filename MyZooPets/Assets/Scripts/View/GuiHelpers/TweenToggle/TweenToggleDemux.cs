@@ -134,7 +134,7 @@ public class TweenToggleDemux : MonoBehaviour {
 				TweenToggle toggle = go.GetComponent<TweenToggle>();
 				if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
 					if(hideImmediately){
-						Debug.Log(" -- - - HIDE BOOLEAN TRUE");
+						//Debug.Log(" -- - - HIDE BOOLEAN TRUE");
 						// TODO Need to call last hide object last!!!!
 						toggle.hideDuration = 0f;
 						toggle.hideDelay = 0f;

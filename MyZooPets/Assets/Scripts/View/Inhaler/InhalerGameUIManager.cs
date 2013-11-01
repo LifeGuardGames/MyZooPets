@@ -137,6 +137,11 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 			return;	
 		}
 		
+		// I hate to do this here, but I'm not sure where else to put it...if the player had not completed the tutorial, mark it as
+		// completed
+		if ( !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER ) )
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
+		
 		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
         // Add scene transition as well
         Application.LoadLevel("NewBedRoom");

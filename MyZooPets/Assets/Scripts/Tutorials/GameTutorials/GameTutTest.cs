@@ -6,6 +6,13 @@ public class GameTutTest : GameTutorial {
 		strKey = "GameTutTest";
 	}
 	
+	//---------------------------------------------------
+	// SetMaxSteps()
+	//---------------------------------------------------		
+	protected override void SetMaxSteps() {
+		nMaxSteps = 3;
+	}	
+	
 	protected override void _End( bool bFinished ) {
 		Debug.Log("Tut test is ending");
 	}

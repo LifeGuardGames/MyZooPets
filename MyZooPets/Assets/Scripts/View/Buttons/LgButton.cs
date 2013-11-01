@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // LgButton (Lifeguard Button)
@@ -9,6 +11,10 @@ using System.Collections;
 //---------------------------------------------------
 
 public abstract class LgButton : MonoBehaviour {
+	
+	//=======================Events========================
+	public EventHandler<EventArgs> OnProcessed; 	// when this button is processed
+	//=====================================================		
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
@@ -95,6 +101,10 @@ public abstract class LgButton : MonoBehaviour {
 		
 		// play the sound
 		PlayProcessSound();
+		
+		// let anything listening know that this button has been processed
+		if ( OnProcessed != null )
+			OnProcessed( this, EventArgs.Empty );
 		
 		// process the click
 		ProcessClick();

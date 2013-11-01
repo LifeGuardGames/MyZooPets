@@ -57,7 +57,7 @@ public class PanToMoveCamera : MonoBehaviour {
        LoadSceneData sceneData = DataManager.Instance.SceneData;
        if(sceneData != null)
             if(sceneData.LastScene == Application.loadedLevelName)
-                ChangePartition(sceneData.LastCameraPartition);
+                SetCameraToPartition(sceneData.LastCameraPartition);
     }
     
     void Update(){
@@ -261,4 +261,14 @@ public class PanToMoveCamera : MonoBehaviour {
 		
 		return nTarget;
 	}
+
+    ///////////////////////////////////////////
+    // SetCameraToPartition()
+    // Set the camera position to the partition position
+    ///////////////////////////////////////////     
+    private void SetCameraToPartition(int partition){
+        currentPartition = partition;
+        float cameraX = partition * partitionOffset;
+        transform.position = new Vector3(cameraX, transform.position.y, transform.position.z);
+    }
 }

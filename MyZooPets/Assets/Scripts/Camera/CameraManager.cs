@@ -8,6 +8,14 @@ using System.Collections;
 //---------------------------------------------------
 
 public class CameraManager : Singleton<CameraManager> {
+	// cameras
+	public Camera cameraMain;
+	public Camera cameraNGUI;
+	
+	// ratios
+	public float ratioX;
+	public float ratioY;
+	
 	// default positoin/rotation of the camera
 	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
 	protected Vector3 initFaceDirection;	
@@ -24,7 +32,9 @@ public class CameraManager : Singleton<CameraManager> {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	protected virtual void Start(){
+	void Awake(){
+		ratioX = 1280f/(Screen.width * 1.0f);
+		ratioY = 800f/(Screen.height * 1.0f);		
 	}	
 	
 	//---------------------------------------------------
@@ -104,5 +114,15 @@ public class CameraManager : Singleton<CameraManager> {
 		// kick of the move and rotation tweens
 		LeanTween.moveLocal(gameObject, vPos, fTime, hashMove);
 		LeanTween.rotateLocal(gameObject, vRotation, fTime, hashRotation);		
+	}
+	
+	//---------------------------------------------------
+	// WorldToScreen()
+	//---------------------------------------------------		
+	public Vector3 WorldToScreen( Camera cam, Vector3 vPos ){
+		// Accomodate for screen ratio scale
+		Vector3 trueRatioScreenPos = cam.WorldToScreenPoint(vPos);
+		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
+		return scaledRatioScreenPos;
 	}
 }

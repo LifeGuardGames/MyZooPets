@@ -12,8 +12,8 @@ public class DGTTutorial : MinigameTutorial {
 	// key
 	public static string TUT_KEY = "DGT_TUT";
 	
-	// constants
-	private const int NUM_TO_SPAWN = 3;		// number of characters to spawn per tutorial step
+	// consts
+	private const int NUM_TO_SPAWN = 3;
 	
 	// stack of pre-determined character types to be spawned; used in tutorial
 	private Stack<AsthmaStage> stackStages = new Stack<AsthmaStage>();	
@@ -30,13 +30,17 @@ public class DGTTutorial : MinigameTutorial {
 		return eCurrentStage;	
 	}
 	
-	public DGTTutorial() {
-		// set the max steps for this tutorial
-		nMaxSteps = 3;
-		
+	public DGTTutorial() {		
 		// listen for character scoring
 		DGTCharacter.OnCharacterScored += CharacterScored;
 	}
+	
+	//---------------------------------------------------
+	// SetMaxSteps()
+	//---------------------------------------------------		
+	protected override void SetMaxSteps() {
+		nMaxSteps = 4;
+	}	
 	
 	//---------------------------------------------------
 	// SetKey()

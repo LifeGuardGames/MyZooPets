@@ -69,7 +69,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         }
 		
 		// calculate changes in the pets mood
-		Debug.Log("About to calc mood loss...what's this?: " + sinceLastPlayed);
+		//Debug.Log("About to calc mood loss...what's this?: " + sinceLastPlayed);
 		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
 
         //create triggers

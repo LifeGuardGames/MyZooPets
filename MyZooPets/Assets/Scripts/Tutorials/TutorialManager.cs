@@ -9,7 +9,15 @@ using System.Collections.Generic;
 // track of game tutorials.
 //---------------------------------------------------
 
-public class TutorialManager : Singleton<TutorialManager> {
+public abstract class TutorialManager : Singleton<TutorialManager> {
+	// pure abstract functions ------------------
+	protected abstract void _Start();	// start function
+	protected abstract void _Check();		// forces the tutorial manager to do a check to see if any tutorials should be launched
+	// ------------------------------------------
+	
+	// public on/off switch for testing while in development
+	public bool bOn;
+	
 	// tutorial that is currently active
 	private GameTutorial tutorial;
 	public bool IsTutorialActive() {
@@ -24,14 +32,32 @@ public class TutorialManager : Singleton<TutorialManager> {
 		}
 		
 		this.tutorial = tutorial;
+		
+		// if the incoming tutorial is null, do a check to see if any new tutorials should be happening
+		//if ( tutorial == null )
+		//	Check();
 	}
-	
-	// list of objects that can be processed as input
-	private List<GameObject> listCanProcess = new List<GameObject>();
 	
 	void Start() {
 		//Debug.Log("Starting tutorial manager, running a test");
 		//GameTutTest tutTest = new GameTutTest();
+		
+		//Debug.Log("Starting tut manager, running spotlight test");
+		//SpotlightObject( goSpotTest );
+		
+		_Start();
+	}
+	
+	//---------------------------------------------------
+	// Check()
+	// Checks which tutorial should play based on certain
+	// game conditions.
+	//---------------------------------------------------	
+	protected void Check() {
+		if ( !bOn )
+			return;
+		else
+			_Check();
 	}
 	
 	//---------------------------------------------------
@@ -50,7 +76,7 @@ public class TutorialManager : Singleton<TutorialManager> {
 			return true;
 		
 		// otherwise we have a valid object and a valid tutorial, so let's get to checkin'
-		bool bCanProcess = listCanProcess.Contains( go );
+		bool bCanProcess = tutorial.CanProcess( go );
 		
 		return bCanProcess;
 	}

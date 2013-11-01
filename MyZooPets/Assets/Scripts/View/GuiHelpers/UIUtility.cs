@@ -7,8 +7,8 @@ public class UIUtility : Singleton<UIUtility> {
 	private Camera mainCamera;
 	public GameObject nguiCameraObject;
 	private Camera nguiCamera;
-	private float ratioX;
-	private float ratioY;
+	public float ratioX;
+	public float ratioY;
 
 	void Start(){
 		mainCamera = mainCameraObject.GetComponent<Camera>();

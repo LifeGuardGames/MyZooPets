@@ -5,7 +5,7 @@ using Prime31;
 
 
 
-#if UNITY_IPHONE
+#if UNITY_IPHONE || UNITY_EDITOR
 public enum StoreKitDownloadState
 {
 	Waiting,

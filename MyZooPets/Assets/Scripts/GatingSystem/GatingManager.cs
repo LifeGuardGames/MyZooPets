@@ -47,7 +47,7 @@ public class GatingManager : Singleton<GatingManager> {
 			// if the gate is activate, spawn the monster at an offset 
 			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive( dataGate.GetGateID() );
 			if ( bActive ) {
-				int nStartingRoom = scriptPan.currentPartition;				// room the player is starting in
+				int nStartingRoom = 0;										// room the player is starting in
 				float fDistance = scriptPan.partitionOffset;				// the distance between each room
 				int nDistance = dataGate.GetPartition() - nStartingRoom;	// the distance between the starting room and this gate's room
 				float fOffset = nDistance * fDistance;						// offset of the gate

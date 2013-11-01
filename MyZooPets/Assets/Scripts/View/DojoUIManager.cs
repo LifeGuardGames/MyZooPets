@@ -23,7 +23,7 @@ public class DojoUIManager : Singleton<DojoUIManager> {
             GameObject skillGO = NGUITools.AddChild(skillGrid, skillPrefab);
             skillGO.name = skill.ID;
 
-            // skillGO.transform.Find("Sprite_ActionImage").GetComponent<UISprite>().sprite = skill.TextureName;
+            skillGO.transform.Find("Sprite_ActionImage").GetComponent<UISprite>().spriteName = skill.TextureName;
             skillGO.transform.Find("Label_Damage").GetComponent<UILabel>().text = skill.GetDamagePointString();
             skillGO.transform.Find("Label_Name").GetComponent<UILabel>().text = skill.Name;
             skillGO.transform.Find("Label_UnlockLevel").GetComponent<UILabel>().text = skill.GetUnlockLevelString();

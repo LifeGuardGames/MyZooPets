@@ -72,7 +72,6 @@ public class ButtonChangeScene : LgButton {
 	private void RememberCurrentScene(){
 		int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
 		Vector3 petPos = petLWF.transform.position;
-		print("remember");
 		DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
 	}
 }

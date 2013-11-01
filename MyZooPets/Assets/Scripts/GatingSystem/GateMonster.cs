@@ -67,7 +67,7 @@ public class GateMonster : Gate {
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
 		
 		// play a hurt animation on the monster
-		controller.playHurtAnimation();
+		controller.PlayHurtAnimation();
 		
 		// update our ideal position with where we are moving too
 		vIdealPos = vNewLocWorld;

@@ -14,32 +14,32 @@ public class SmokeMonsterController : MonoBehaviour {
 	
 	void Start () {
 		anim = face.animation;
-		setNormalAnimation("eyes1", "mouth1");
+		SetNormalAnimation("eyes1", "mouth1");
 	}
 	
-	public void setNormalAnimation(string eyesSpriteName, string mouthSpriteName){
+	public void SetNormalAnimation(string eyesSpriteName, string mouthSpriteName){
 		currentEyesSpritesName = eyesSpriteName;
 		currentMouthSpritesName = mouthSpriteName;
 	}
 	
-	public void playNormalAnimation(){
+	public void PlayNormalAnimation(){
 		anim.Play("hoverUpDownSmokeMonster");
-		playAnimation(currentEyesSpritesName, currentMouthSpritesName);
+		PlayAnimation(currentEyesSpritesName, currentMouthSpritesName);
 	}
 	
-	public void playHurtAnimation(){
+	public void PlayHurtAnimation(){
 		anim.Play("shakeSmokeMonster");
-		playAnimation(HURT_EYES_SPRITE_NAME, currentMouthSpritesName);
+		PlayAnimation(HURT_EYES_SPRITE_NAME, currentMouthSpritesName);
 	}
 	
-	private void playAnimation(string eyesSpriteName, string mouthSpriteName){
+	private void PlayAnimation(string eyesSpriteName, string mouthSpriteName){
 		eyesSprite.SetSprite(eyesSpriteName);
 		mouthSprite.SetSprite(mouthSpriteName);
 	}
 	
 	// void OnGUI(){
 	// 	if(GUI.Button(new Rect(10f, 10f, 20f, 20f), "1")){
-	// 		playHurtAnimation();
+	// 		PlayHurtAnimation();
 	// 	}
 	// 	if(GUI.Button(new Rect(30f, 10f, 20f, 20f), "2")){
 	// 		playNormalAnimation();

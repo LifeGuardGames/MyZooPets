@@ -50,10 +50,11 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //========================Calendar Tutorial======================
     private void StartCalendarTutorial(){
-        EnqueueCalendarTipIntro();
+        /*EnqueueCalendarTipIntro();
 		EnqueueCalendarTipGreenStamp();
 		EnqueueCalendarTipRedStamp();
-		EnqueueCalendarTipBonus();
+		EnqueueCalendarTipBonus();*/
+		TutorialLogic.Instance.FirstTimeCalendar = false;
     }
 
 	private void EnqueueCalendarTipIntro(){
@@ -173,10 +174,12 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 
     //============Trigger tutorial=================
     public void StartDegradTriggerTutorial(){
-        if(TutorialLogic.Instance.FirstTimeDegradTrigger){
+        /*if(TutorialLogic.Instance.FirstTimeDegradTrigger){
             AddDegradTipIntro();
 			AddDegradTipConclude();
-		}
+		}*/
+		TutorialLogic.Instance.FirstTimeDegradTrigger = false;
+		DegradationUIManager.Instance.ActivateParticleEffects();
     }
 
     private void AddDegradTipIntro(){

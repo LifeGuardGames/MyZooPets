@@ -16,6 +16,10 @@ public abstract class Tutorial {
 	protected abstract void _End( bool bFinished );			// when the tutorial is finishd
 	// --------------------------------------------------
 	
+	// ----------- Tutorial Popup types -------------------
+	protected const string POPUP_STD = "TutorialPopup_Standard";
+	// ----------------------------------------------------
+	
 	// list of objects that can be processed as input
 	private List<GameObject> listCanProcess = new List<GameObject>();
 	protected void AddToProcessList( GameObject go ) {
@@ -31,6 +35,9 @@ public abstract class Tutorial {
 	
 	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goSpotlight;	
+	
+	// current (and only) tutorial popup
+	private GameObject goPopup;
 	
 	// step the tutorial is currently on
 	private int nCurrentStep;
@@ -191,4 +198,42 @@ public abstract class Tutorial {
 		
 		GameObject.Destroy( goSpotlight );
 	}	
+	
+	//---------------------------------------------------
+	// RemovePopup()
+	// Removes the current popup object.
+	//---------------------------------------------------		
+	protected void RemovePopup() {
+		if ( goPopup == null ) {
+			Debug.Log("Trying to destroy a popup that doesn't exist!");
+			return;
+		}
+		
+		GameObject.Destroy( goPopup );
+	}	
+	
+	//---------------------------------------------------
+	// ShowPopup()
+	//---------------------------------------------------	
+	protected void ShowPopup( string strPopupKey, Vector3 vLoc ) {
+		// if there was already a popup, just destroy it
+		if ( goPopup )
+			GameObject.Destroy( goPopup );
+		
+		// get text to display from tutorial key + step
+		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
+		
+		// transform viewport location to screen position
+		Vector3 vPos = Camera.main.ViewportToScreenPoint( vLoc );
+		Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		
+		// create the popup
+		GameObject goResource = Resources.Load( strPopupKey ) as GameObject;
+		goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
+		vPos.z = goPopup.transform.position.z; // keep the default z-value
+		goPopup.transform.localPosition = vPos;	
+		
+		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
+		script.Init( strText );
+	}
 }

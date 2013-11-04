@@ -26,7 +26,7 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	// SetKey()
 	//---------------------------------------------------		
 	protected override void SetKey() {
-		strKey = TutorialManager_Bedroom.TUT_INTRO;
+		strKey = TutorialManager_Bedroom.TUT_INHALER;
 	}
 	
 	//---------------------------------------------------
@@ -35,6 +35,9 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	protected override void _End( bool bFinished ) {
 		// destroy the spotlight we created for the inhaler
 		RemoveSpotlight();
+		
+		// destroy the popup we created
+		RemovePopup();
 	}
 	
 	//---------------------------------------------------
@@ -45,6 +48,10 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 			case 0:
 				// the start of the focus inhaler tutorial
 				FocusInhaler();
+			
+				// show a little popup message
+				Vector3 vLoc = Constants.GetConstant<Vector3>( "InhalerPopupLoc" );
+				ShowPopup( Tutorial.POPUP_STD, vLoc );
 				break;
 		}
 	}

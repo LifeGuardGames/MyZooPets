@@ -43,9 +43,17 @@ public class GameTutorial_FocusCalendar : GameTutorial {
 			case 0:
 				// the start of the focus inhaler tutorial
 				FocusCalendar();
+			
+				// show a little popup message
+				Vector3 vLoc = Constants.GetConstant<Vector3>( "CalendarPopupLoc" );
+				ShowPopup( Tutorial.POPUP_STD, vLoc );
+			
 				break;
 		case 1:
 				// user clicked on the calendar, so let the calendar tutorial take over
+			
+				// remove the popup
+				RemovePopup();
 			
 				// remove the spotlight on the calendar
 				RemoveSpotlight();

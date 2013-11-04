@@ -11,8 +11,8 @@ using System.Collections;
 public class TutorialManager_Bedroom : TutorialManager {
 	// tutorial consts
 	public const string TUT_INTRO = "IntroNotification";
-	public const string TUT_INHALER = "FocusInhaler";
-	public const string TUT_CALENDAR = "FocusCalendar";
+	public const string TUT_INHALER = "FOCUS_INHALER";
+	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
 	
 	//---------------------------------------------------
 	// _Start()
@@ -25,7 +25,6 @@ public class TutorialManager_Bedroom : TutorialManager {
 	// _Check()
 	//---------------------------------------------------		
 	protected override void _Check() {
-		Debug.Log("Checking for tutorials");
 		bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
 		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR);

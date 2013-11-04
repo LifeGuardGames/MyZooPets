@@ -12,7 +12,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject popupTitle;
     public UILabel nameField;
     public GameObject selectedEgg;
-
+	
+	public Camera NGUICamera;
     private string petColor;
     private string petName;
 
@@ -42,6 +43,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     
     public void ChangeEggColor( string strSprite, string strColor ) {
         if (!finishClicked){
+			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
             selectedEgg.GetComponent<UISprite>().spriteName = strSprite;
             petColor = strColor;
         }       

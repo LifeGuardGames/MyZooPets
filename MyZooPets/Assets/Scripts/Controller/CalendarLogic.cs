@@ -117,8 +117,8 @@ public class CalendarLogic : Singleton<CalendarLogic>{
 
     //Give bonus when user collects
     public void ClaimReward(Vector3 screenPos){
-		StatsController.Instance.ChangeStats(50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos),
-         50, UIUtility.Instance.nguiCameraWorld2Screen(screenPos), 0, Vector3.zero, 0, Vector3.zero);
+		StatsController.Instance.ChangeStats(50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos),
+         50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos), 0, Vector3.zero, 0, Vector3.zero);
     }
 
     //Check if the user can play the inhaler game

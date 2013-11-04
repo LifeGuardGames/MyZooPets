@@ -200,9 +200,22 @@ public abstract class Tutorial {
 	}	
 	
 	//---------------------------------------------------
+	// RemovePopup()
+	// Removes the current popup object.
+	//---------------------------------------------------		
+	protected void RemovePopup() {
+		if ( goPopup == null ) {
+			Debug.Log("Trying to destroy a popup that doesn't exist!");
+			return;
+		}
+		
+		GameObject.Destroy( goPopup );
+	}	
+	
+	//---------------------------------------------------
 	// ShowPopup()
 	//---------------------------------------------------	
-	protected void ShowPopup( string strPopupKey ) {
+	protected void ShowPopup( string strPopupKey, Vector3 vLoc ) {
 		// if there was already a popup, just destroy it
 		if ( goPopup )
 			GameObject.Destroy( goPopup );
@@ -210,11 +223,15 @@ public abstract class Tutorial {
 		// get text to display from tutorial key + step
 		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
 		
+		// transform viewport location to screen position
+		Vector3 vPos = Camera.main.ViewportToScreenPoint( vLoc );
+		Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		
 		// create the popup
 		GameObject goResource = Resources.Load( strPopupKey ) as GameObject;
 		goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
-		//vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
-		//goSpotlight.transform.localPosition = vPos;	
+		vPos.z = goPopup.transform.position.z; // keep the default z-value
+		goPopup.transform.localPosition = vPos;	
 		
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 		script.Init( strText );

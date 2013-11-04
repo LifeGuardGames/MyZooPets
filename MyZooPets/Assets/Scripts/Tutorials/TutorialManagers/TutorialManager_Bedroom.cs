@@ -25,7 +25,6 @@ public class TutorialManager_Bedroom : TutorialManager {
 	// _Check()
 	//---------------------------------------------------		
 	protected override void _Check() {
-		Debug.Log("Checking for tutorials");
 		bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
 		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR);

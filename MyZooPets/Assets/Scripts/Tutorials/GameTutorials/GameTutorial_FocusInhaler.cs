@@ -35,6 +35,9 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	protected override void _End( bool bFinished ) {
 		// destroy the spotlight we created for the inhaler
 		RemoveSpotlight();
+		
+		// destroy the popup we created
+		RemovePopup();
 	}
 	
 	//---------------------------------------------------
@@ -47,7 +50,8 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 				FocusInhaler();
 			
 				// show a little popup message
-				ShowPopup( Tutorial.POPUP_STD );
+				Vector3 vLoc = Constants.GetConstant<Vector3>( "InhalerPopupLoc" );
+				ShowPopup( Tutorial.POPUP_STD, vLoc );
 				break;
 		}
 	}

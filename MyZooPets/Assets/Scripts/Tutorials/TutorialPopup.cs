@@ -23,7 +23,10 @@ public class TutorialPopup : MonoBehaviour {
 	// arbitrary border to make the bg look a little nicer
 	public float fBorder;
 	
-	public void Init( string strLabelText, ) {
+	// where the popup should appear
+	private Vector3 vLoc;
+	
+	public void Init( string strLabelText ) {
 		label.text = strLabelText;
 	}
 	

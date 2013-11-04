@@ -26,7 +26,7 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	// SetKey()
 	//---------------------------------------------------		
 	protected override void SetKey() {
-		strKey = TutorialManager_Bedroom.TUT_INTRO;
+		strKey = TutorialManager_Bedroom.TUT_INHALER;
 	}
 	
 	//---------------------------------------------------
@@ -45,6 +45,9 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 			case 0:
 				// the start of the focus inhaler tutorial
 				FocusInhaler();
+			
+				// show a little popup message
+				ShowPopup( Tutorial.POPUP_STD );
 				break;
 		}
 	}

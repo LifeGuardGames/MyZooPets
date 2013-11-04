@@ -16,6 +16,10 @@ public abstract class Tutorial {
 	protected abstract void _End( bool bFinished );			// when the tutorial is finishd
 	// --------------------------------------------------
 	
+	// ----------- Tutorial Popup types -------------------
+	protected const string POPUP_STD = "TutorialPopup_Standard";
+	// ----------------------------------------------------
+	
 	// list of objects that can be processed as input
 	private List<GameObject> listCanProcess = new List<GameObject>();
 	protected void AddToProcessList( GameObject go ) {
@@ -31,6 +35,9 @@ public abstract class Tutorial {
 	
 	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goSpotlight;	
+	
+	// current (and only) tutorial popup
+	private GameObject goPopup;
 	
 	// step the tutorial is currently on
 	private int nCurrentStep;
@@ -191,4 +198,25 @@ public abstract class Tutorial {
 		
 		GameObject.Destroy( goSpotlight );
 	}	
+	
+	//---------------------------------------------------
+	// ShowPopup()
+	//---------------------------------------------------	
+	protected void ShowPopup( string strPopupKey ) {
+		// if there was already a popup, just destroy it
+		if ( goPopup )
+			GameObject.Destroy( goPopup );
+		
+		// get text to display from tutorial key + step
+		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
+		
+		// create the popup
+		GameObject goResource = Resources.Load( strPopupKey ) as GameObject;
+		goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
+		//vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
+		//goSpotlight.transform.localPosition = vPos;	
+		
+		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
+		script.Init( strText );
+	}
 }

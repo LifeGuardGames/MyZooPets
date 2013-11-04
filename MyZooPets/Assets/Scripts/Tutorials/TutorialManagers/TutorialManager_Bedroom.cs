@@ -11,8 +11,8 @@ using System.Collections;
 public class TutorialManager_Bedroom : TutorialManager {
 	// tutorial consts
 	public const string TUT_INTRO = "IntroNotification";
-	public const string TUT_INHALER = "FocusInhaler";
-	public const string TUT_CALENDAR = "FocusCalendar";
+	public const string TUT_INHALER = "FOCUS_INHALER";
+	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
 	
 	//---------------------------------------------------
 	// _Start()

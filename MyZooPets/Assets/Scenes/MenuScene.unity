@@ -937,7 +937,7 @@ GameObject:
   - 4: {fileID: 152428299}
   - 198: {fileID: 152428302}
   - 199: {fileID: 152428301}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Stars Colored 4
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -2690,7 +2690,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 224555673}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1068, y: 791, z: 0}
   m_Children: []
   m_Father: {fileID: 184894894}
@@ -2987,7 +2987,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 271676205}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Input_PinConfirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3017,7 +3017,7 @@ GameObject:
   - 4: {fileID: 313413973}
   - 198: {fileID: 313413976}
   - 199: {fileID: 313413975}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Smoke Colored 3
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -4160,7 +4160,7 @@ GameObject:
   - 4: {fileID: 353775533}
   - 198: {fileID: 353775536}
   - 199: {fileID: 353775535}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Stars Colored 2
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -5541,13 +5541,26 @@ GameObject:
   - 4: {fileID: 404668548}
   - 198: {fileID: 404668547}
   - 199: {fileID: 404668546}
-  m_Layer: 17
+  - 114: {fileID: 404668545}
+  m_Layer: 10
   m_Name: PoofEffect
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &404668545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 404668544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab0a3a6dbe040646bd4abb4dff9d3b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderQueueLevel: 5000
 --- !u!199 &404668546
 ParticleSystemRenderer:
   m_ObjectHideFlags: 0
@@ -6822,6 +6835,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: dcd4c5a6e6ff44becadec26b1bb43ce7, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dcd4c5a6e6ff44becadec26b1bb43ce7, type: 2}
   m_RootGameObject: {fileID: 1508788779}
@@ -7010,70 +7027,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!1 &525473253
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 525473258}
-  - 20: {fileID: 525473257}
-  - 92: {fileID: 525473255}
-  m_Layer: 17
-  m_Name: Main Camera
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!92 &525473255
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 525473253}
-  m_Enabled: 1
---- !u!20 &525473257
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 525473253}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 5
-  field of view: 60
-  orthographic: 1
-  orthographic size: 1
-  m_Depth: 1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 131072
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_HDR: 0
---- !u!4 &525473258
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 525473253}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1595644706}
-  m_Father: {fileID: 0}
 --- !u!1 &533212806
 GameObject:
   m_ObjectHideFlags: 0
@@ -7082,7 +7035,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 533212807}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Input_Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7307,47 +7260,47 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100010, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100014, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100016, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100018, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: m_Layer
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: f95fadd30ab230c489b15a7002692c9c, type: 2}
       propertyPath: InitialModule.startSpeed.scalar
@@ -7875,7 +7828,7 @@ GameObject:
   - 4: {fileID: 591646238}
   - 198: {fileID: 591646241}
   - 199: {fileID: 591646240}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Stars Yellow
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -10049,7 +10002,7 @@ GameObject:
   - 4: {fileID: 769326675}
   - 198: {fileID: 769326678}
   - 199: {fileID: 769326677}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Smoke Colored 2
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -11465,6 +11418,7 @@ Transform:
   - {fileID: 1508849905}
   - {fileID: 1876011762}
   - {fileID: 812610675}
+  - {fileID: 1595644706}
   m_Father: {fileID: 1856043663}
 --- !u!20 &797955372
 Camera:
@@ -12758,7 +12712,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1027519127}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Input_Email
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12998,6 +12952,10 @@ Prefab:
     - target: {fileID: 11400008, guid: e4813042c669d4124bc50814850666e8, type: 2}
       propertyPath: mSpriteName
       value: box30
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: e4813042c669d4124bc50814850666e8, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4813042c669d4124bc50814850666e8, type: 2}
@@ -14744,7 +14702,7 @@ GameObject:
   - 4: {fileID: 1302209093}
   - 198: {fileID: 1302209096}
   - 199: {fileID: 1302209095}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Stars Colored 3
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -16242,7 +16200,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1365981907}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Input_PinNew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17049,7 +17007,7 @@ GameObject:
   - 4: {fileID: 1502712596}
   - 198: {fileID: 1502712599}
   - 199: {fileID: 1502712598}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Smoke Colored 4
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -18299,6 +18257,22 @@ Prefab:
       propertyPath: mSpriteName
       value: box30
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 30af5698f57f742fcba1ac772575ea7c, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: 30af5698f57f742fcba1ac772575ea7c, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 100038, guid: 30af5698f57f742fcba1ac772575ea7c, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: 30af5698f57f742fcba1ac772575ea7c, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 30af5698f57f742fcba1ac772575ea7c, type: 2}
   m_RootGameObject: {fileID: 1867569953}
@@ -18581,7 +18555,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1595644706}
   - 114: {fileID: 1595644707}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: ParticlePlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18595,11 +18569,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1595644705}
   m_LocalRotation: {x: -.712022543, y: 0, z: 0, w: .702156663}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .567804217, y: .333774567, z: .333774567}
+  m_LocalPosition: {x: 1.5, y: 1150.5, z: 0}
+  m_LocalScale: {x: 218.036819, y: 128.169434, z: 128.169418}
   m_Children:
   - {fileID: 404668548}
-  m_Father: {fileID: 525473258}
+  m_Father: {fileID: 797955371}
 --- !u!114 &1595644707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18611,8 +18585,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c77a453e2142b49af08aca61427cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 797955372}
   particleObject: {fileID: 404668544}
-  zDepth: 1
+  zDepth: -.5
 --- !u!1 &1603895353
 GameObject:
   m_ObjectHideFlags: 0
@@ -19016,7 +18991,7 @@ GameObject:
   - 4: {fileID: 1705054690}
   - 198: {fileID: 1705054693}
   - 199: {fileID: 1705054692}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Smoke Colored
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -21117,7 +21092,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1867569954}
   - 114: {fileID: 1867569955}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PortalReset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22474,7 +22449,7 @@ GameObject:
   - 4: {fileID: 2068426871}
   - 198: {fileID: 2068426874}
   - 199: {fileID: 2068426873}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Stars Colored
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -23616,7 +23591,7 @@ GameObject:
   - 4: {fileID: 2078472015}
   - 198: {fileID: 2078472018}
   - 199: {fileID: 2078472017}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: White Lines
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -24959,7 +24934,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2129812673}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Input_PinOld
   m_TagString: Untagged
   m_Icon: {fileID: 0}

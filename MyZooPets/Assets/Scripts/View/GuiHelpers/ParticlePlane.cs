@@ -9,13 +9,14 @@ using System.Collections;
 /// </summary>
 public class ParticlePlane : Singleton<ParticlePlane>{
 	
+	public Camera camera;
 	public GameObject particleObject;
 	public float zDepth = 0.5f;
 	
 	public void PlayParticle(Vector3 screenPosition){
 		
 		// Move the object to the intended position
-		Vector3 worldAux = Camera.main.ScreenToWorldPoint(screenPosition);
+		Vector3 worldAux = camera.ScreenToWorldPoint(screenPosition);
 		particleObject.transform.position = new Vector3(worldAux.x, worldAux.y, zDepth);
 		
 		// Play the particle system

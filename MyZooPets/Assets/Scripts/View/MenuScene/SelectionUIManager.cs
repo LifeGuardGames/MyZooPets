@@ -48,13 +48,13 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             //Turn show case animation on or off
             string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
             if(petStatus == "Egg"){
-                GameObject eggPrefab = Instantiate(Resources.Load("Sprite_Egg")) as GameObject;
+                GameObject eggPrefab = Resources.Load("Sprite_Egg") as GameObject;
                 GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
                 eggGO.name = "egg";
                 eggGO.transform.localScale = eggPrefab.transform.localScale;
                 eggGO.transform.localPosition = eggPrefab.transform.localPosition;
             }else{
-                GameObject animatorPrefab = Instantiate(Resources.Load("Animator")) as GameObject;
+                GameObject animatorPrefab = Resources.Load("Animator") as GameObject;
                 GameObject animator = NGUITools.AddChild(petSelectionGO, animatorPrefab);
                 animator.name = "animator";
                 animator.transform.localScale = animatorPrefab.transform.localScale;

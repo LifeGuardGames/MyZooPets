@@ -13,13 +13,10 @@ public class ButtonMonster : LgButtonHold {
 	private AttackGate scriptAttack;
 	
 	// fire meter script
-	private FireMeter scriptFireMeter;
+	public FireMeter scriptFireMeter;
 	
 	// the sprite icon of this button
 	public GameObject goIcon;
-	
-	// actual fire meter object created when this button is pressed
-	public GameObject goFireMeter;
 	
 	// the gate that this button is for
 	private Gate gate;
@@ -82,6 +79,9 @@ public class ButtonMonster : LgButtonHold {
 	
 	//---------------------------------------------------
 	// ProcessClick()
+	// When the user presses down on the fire meter button.
+	// This will begin some pet animation prep and start
+	// to fill the attached meter.
 	//---------------------------------------------------	
 	protected override void ProcessClick() {	
 		bLegal = false;
@@ -97,15 +97,13 @@ public class ButtonMonster : LgButtonHold {
 		// get the gate for this monster
 		Gate scriptGate = gate;		
 		
-		// otherwise, add the attack script
+		// kick off the attack script
 		int nDamage = GetDamage();
 		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
 		scriptAttack.Init( scriptPetAnimator, scriptGate, nDamage );
 		
-		// create the fire meter
-		//GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
-		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), this.goFireMeter );
-		scriptFireMeter = goFireMeter.GetComponent<FireMeter>();
+		// turn the fire meter on
+		scriptFireMeter.StartFilling();
 	}
 	
 	//---------------------------------------------------
@@ -139,14 +137,14 @@ public class ButtonMonster : LgButtonHold {
 			// if the monster is dead or the pet can't breathe fire any more, destroy the button
 			int nDamage = GetDamage();
 			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.CanBreathFire() )
-				Destroy( gameObject );			
+				Destroy( gameObject );		
 		}
 		else {
 			// if the meter was not full, cancel the attack
 			scriptAttack.Cancel();
 		}	
 		
-		// either way, the meter should be destroyed
-		Destroy( scriptFireMeter.gameObject );
+		// regardless we want to empty the meter
+		scriptFireMeter.Empty();
 	}
 }

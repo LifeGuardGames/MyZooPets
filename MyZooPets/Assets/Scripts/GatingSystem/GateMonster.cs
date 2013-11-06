@@ -4,6 +4,9 @@ using System.Collections;
 //---------------------------------------------------
 // GateMonster
 // This is a gate that is a monster.
+// If we ever change which direction a monster is
+// blocking, be sure to update the code where MOVE_DIR
+// is placed.
 //---------------------------------------------------
 
 public class GateMonster : Gate {
@@ -44,6 +47,25 @@ public class GateMonster : Gate {
 		// when a monster is damaged, it physically moves
 		// for now, they will always move to the left...
 		Move( nDamage );
+	}	
+	
+	//---------------------------------------------------
+	// OnGateDestroyed()
+	//---------------------------------------------------	
+	protected override void OnGateDestroyed() {
+		// for monsters, just move them fast and far away MOVE_DIR
+		float fTime = Constants.GetConstant<float>( "MonsterDeath_MoveTime" );
+		float fDistance = CameraManager.Instance.GetPanScript().partitionOffset;
+		
+		// add hashtable params for alerting the parent object when the move anim is complete
+        Hashtable optional = new Hashtable();
+        optional.Add("onCompleteTarget", gameObject);
+        optional.Add("onComplete", "OnDestroyAnimComplete");
+		
+		Vector3 vTarget = gameObject.transform.position;
+		vTarget.x += fDistance;
+		
+		LeanTween.moveLocal(gameObject, vTarget, fTime, optional );	
 	}	
 	
 	//---------------------------------------------------

@@ -132,7 +132,9 @@ public class PetAnimator : LgCharacterAnimator {
 		PlayAnimation( dataAnim );	
 		
 		// spawn the particle effect
-		GameObject resource = Resources.Load( "FireBlow1" ) as GameObject;
+		Skill curSkill = DataManager.Instance.GameData.Dojo.GetCurrentSkill();
+		string strResource = curSkill.FlameResource;
+		GameObject resource = Resources.Load( strResource ) as GameObject;
 		goFire = Instantiate( resource, new Vector3(0,0,0), resource.transform.rotation ) as GameObject;
 		
 		// parent it to the right position

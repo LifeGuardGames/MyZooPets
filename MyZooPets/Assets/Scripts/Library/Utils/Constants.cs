@@ -100,6 +100,9 @@ public class Constants {
 				case "Int":
 					hashConstants[ strKey ] = int.Parse( strValue );
 					break;
+				case "Bool":
+					hashConstants[ strKey ] = bool.Parse( strValue );
+					break;
 				case "Float":
 					hashConstants[ strKey ] = float.Parse( strValue );
 					break;

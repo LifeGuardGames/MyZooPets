@@ -22,11 +22,16 @@ public class StatsController : Singleton<StatsController> {
 	// the pet animator
 	public PetAnimator scriptPetAnim;
 	
+	// this is a bit hacky...but some levels don't have the pet, so we don't want to do pet related stuff
+	private bool bCheckPet;
+	
 	void Start(){
 		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
 			D.Assert(hudAnimator != null, "No HUDAnimator script attached");
 		}
+		
+		bCheckPet = scriptPetAnim != null;
 	}	
 	
 	// Locations are on screen space
@@ -60,7 +65,8 @@ public class StatsController : Singleton<StatsController> {
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
-			CheckForMoodTransition( eOld, eNew );
+			if ( bCheckPet )
+				CheckForMoodTransition( eOld, eNew );
 		}		
 		
 		if(deltaHealth != 0){
@@ -71,7 +77,8 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
-			CheckForHealthTransition( eOldHealth, eNewHealth );
+			if ( bCheckPet )
+				CheckForHealthTransition( eOldHealth, eNewHealth );
 		}
 		
 		// Tell HUDAnimator to animate and change

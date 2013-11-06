@@ -26,7 +26,7 @@ public class StatsData{
         Health = 80;
         Mood = 80;
         Points = 250;
-        Stars = 100;
+        Stars = 300;
     }
 	
 	public int GetStat( HUDElementType eStat ) {

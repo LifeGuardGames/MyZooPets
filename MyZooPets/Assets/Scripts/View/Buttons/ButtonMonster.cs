@@ -9,8 +9,6 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class ButtonMonster : LgButtonHold {
-	public int nDamage;
-	
 	// attack gate script
 	private AttackGate scriptAttack;
 	
@@ -100,6 +98,7 @@ public class ButtonMonster : LgButtonHold {
 		Gate scriptGate = gate;		
 		
 		// otherwise, add the attack script
+		int nDamage = GetDamage();
 		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
 		scriptAttack.Init( scriptPetAnimator, scriptGate, nDamage );
 		
@@ -107,6 +106,17 @@ public class ButtonMonster : LgButtonHold {
 		//GameObject resourceFireMeter = Resources.Load( "FireMeter" ) as GameObject;
 		GameObject goFireMeter = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), this.goFireMeter );
 		scriptFireMeter = goFireMeter.GetComponent<FireMeter>();
+	}
+	
+	//---------------------------------------------------
+	// GetDamage()
+	// Returns the amount of damage the pet will currently
+	// attack with.
+	//---------------------------------------------------		
+	private int GetDamage() {
+		Skill curSkill = DataManager.Instance.GameData.Dojo.GetCurrentSkill();
+		int nDamage = curSkill.DamagePoint;
+		return nDamage;
 	}
 	
 	//---------------------------------------------------
@@ -122,9 +132,14 @@ public class ButtonMonster : LgButtonHold {
 			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();
 			
+			// and decrement the user's fire breaths
+			DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( -1 );
+			
 			// just kind of a hack for now until the gating system is complete
-			if ( gate.GetGateHP() == nDamage )
-				Destroy( gameObject );
+			// if the monster is dead or the pet can't breathe fire any more, destroy the button
+			int nDamage = GetDamage();
+			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.CanBreathFire() )
+				Destroy( gameObject );			
 		}
 		else {
 			// if the meter was not full, cancel the attack

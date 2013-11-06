@@ -14,6 +14,9 @@ public class DataSkills{
     } 
 
     public static Skill GetSkill(string skillID){
+		if ( allSkills.Count == 0 )
+			SetupData();
+		
         Skill skill = null;
         if(allSkills.ContainsKey(skillID)){
             skill = allSkills[skillID];

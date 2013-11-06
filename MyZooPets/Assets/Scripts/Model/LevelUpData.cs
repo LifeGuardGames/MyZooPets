@@ -8,7 +8,10 @@ public class LevelUpData{
     public double LevelUpAverageCum {get; set;}//cumulative average of level up meter
                                         //use this to decide what trophy to give when
                                         //leveling up
-    public Level CurrentLevel {get; set;} //pets current level                                    
+    public Level CurrentLevel {get; set;} //pets current level 
+	public int GetCurrentLevel() {
+		return (int)CurrentLevel;
+	}
 
     //================Initialization============
     public LevelUpData(){}

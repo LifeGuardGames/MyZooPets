@@ -8,7 +8,12 @@ using System.Collections;
 // gate data as a game object.
 //---------------------------------------------------
 
-public class Gate : MonoBehaviour {
+public abstract class Gate : MonoBehaviour {
+	// ----- Pure Abstract -------------------------
+	protected abstract void _DamageGate( int nDamage );	// when a gate is damaged
+	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
+	// ---------------------------------------------
+	
 	// id and resource of this gate
 	protected string strID;
 	protected string strResource;
@@ -106,28 +111,32 @@ public class Gate : MonoBehaviour {
 		_DamageGate( nDamage );
 		
 		if ( bDestroyed )
-			DestroyGate();
+			PrepGateDestruction();
 	}
 	
 	//---------------------------------------------------
-	// DestroyGate()
-	// Remove this gate.
+	// PrepGateDestruction()
+	// Starts the process of removing this gate.
 	//---------------------------------------------------		
-	private void DestroyGate() {
+	private void PrepGateDestruction() {
 		// play a sound
 		AudioManager.Instance.PlayClip( "Defeat_" + strResource );
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
 		
-		// destroy the object
-		Destroy( gameObject );		
+		// gates might do their own thing upon destruction
+		OnGateDestroyed();	
 	}
 	
 	//---------------------------------------------------
-	// _DamageGate()
-	//---------------------------------------------------	
-	protected virtual void _DamageGate( int nDamage ) {
-		// children should implement this	
+	// OnDestroyAnimComplete()
+	// It's up for child gates to properly call this 
+	// function when their destroy animation is complete.
+	//---------------------------------------------------		
+	private void OnDestroyAnimComplete() {
+		// destroy the object
+		Destroy( gameObject );			
 	}
+	
 }

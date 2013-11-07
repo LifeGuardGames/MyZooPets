@@ -92,8 +92,11 @@ public class DataItems{
 						item = new DecorationItem(itemID, itemType, hashItemData);
                     break;
                 }
-
-                categoryItem.Add(itemID, item);
+				
+				if ( !categoryItem.ContainsKey( itemID ) )
+                	categoryItem.Add(itemID, item);
+				else
+					Debug.Log( itemID + " already in items dict" );
             }
 
             //Store dictionary into allItems

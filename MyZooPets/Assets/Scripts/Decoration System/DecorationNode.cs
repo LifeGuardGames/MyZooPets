@@ -35,6 +35,25 @@ public class DecorationNode : MonoBehaviour {
 		
 		// by default, decoration nodes are not visible/interactable
 		ToggleNode( false );
+		
+		// set the node's label
+		SetNodeLabel();
+	}
+	
+	//---------------------------------------------------
+	// SetNodeLabel()
+	// Sets the node's label, based on what kind of node
+	// it is.
+	//---------------------------------------------------		
+	private void SetNodeLabel() {
+		DecorationTypes eType = GetDecoType();
+		string strType = eType.ToString();
+		string strKey = "NODE_" + strType;
+		string strText = Localization.Localize( strKey );
+		
+		Transform transLabel = transform.Find( "Label" );
+		UILabel label = transLabel.gameObject.GetComponent<UILabel>();
+		label.text = strText;
 	}
 
 	// listen for when this node is tapped/clicked -- if we change nodes to 2D, use OnPress instead

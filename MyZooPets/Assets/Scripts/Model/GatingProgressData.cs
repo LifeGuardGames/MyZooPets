@@ -19,6 +19,10 @@ public class GatingProgressData{
 		// start off optimistic
 		bool bActive = false;
 		
+		// if the gating system is not enabled, just bail now
+		if ( !IsEnabled() )
+			return bActive;
+		
 		// if the gate's HP is > 0, it hasn't been opened yet
 		if ( GatingProgress.ContainsKey( strID ) )
 			bActive = GatingProgress[strID] > 0;
@@ -26,6 +30,15 @@ public class GatingProgressData{
 			Debug.Log("Attempting to access a non-exitant gate from GatingProgressData");
 		
 		return bActive;
+	}
+	
+	//---------------------------------------------------
+	// IsEnabled()
+	// Used for testing purposes.
+	//---------------------------------------------------	
+	public bool IsEnabled() {
+		bool bEnabled = Constants.GetConstant<bool>( "GatingEnabled" );
+		return bEnabled;	
 	}
 	
 	//---------------------------------------------------

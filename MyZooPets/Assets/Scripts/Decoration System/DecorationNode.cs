@@ -7,7 +7,10 @@ using System.Collections;
 // the type of decoration node.
 //---------------------------------------------------
 
-public class DecorationNode : MonoBehaviour {
+public abstract class DecorationNode : MonoBehaviour {
+	// ------ Pure Abstract --------------------------
+	protected abstract void _SetDefaultDeco( string strDecoID );		// sets the default deco properly
+	//------------------------------------------------
 	
 	// what type of decorations can go on this node?
 	public DecorationTypes eType;
@@ -20,13 +23,20 @@ public class DecorationNode : MonoBehaviour {
 //	public UISprite buttonImage;
 	
 	// the ID of this decoration node -- changing this will corrupt the save data
-	// should be unique
-	public string strNodeID;
+	// should be unique.  This will be set to the game object's name.
+	private string strNodeID;
+	
+	// default decoration that is on this node (optional); note that this is a "soft" setting...we must make sure that this public
+	// variable actually matches the decoration ID of whatever place in the scene
+	public string strDefaultDecoID;
 	
 	// the decoration currently being displayed on this node
 	private string strDecoID = string.Empty;
 
 	void Start () {
+		// set the node ID to the game object name
+		strNodeID = gameObject.name;
+		
 		// check save data to see if something was on this node
 		CheckSaveData();
 		
@@ -73,6 +83,26 @@ public class DecorationNode : MonoBehaviour {
 			string strSavedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[ strNodeID ];
 			SetDecoration( strSavedDeco );
 		}
+		else {
+			// there was no decoration placed here -- however, there could be a default decoration, in which case, we just want
+			// to set it so that when it is replaced, the user gets that default decoration in their inventory
+			if ( !string.IsNullOrEmpty( strDefaultDecoID ) )
+				SetDefaultDeco( strDefaultDecoID );
+		}
+	}
+	
+	//---------------------------------------------------
+	// SetDefaultDeco()
+	// Setting the default decoration of a node is a little
+	// complicated because there are different types of
+	// nodes.
+	//---------------------------------------------------	
+	private void SetDefaultDeco( string strDecoID ) {
+		// set the string ID of the decoration -- this will place the item in the user's inventory when it is replaced
+		this.strDecoID = strDecoID;	
+		
+		// now call children function so that certain node can do additional stuff
+		_SetDefaultDeco( strDecoID );
 	}
 	
     //Event listener. listening to when decoration mode is enabled/disabled

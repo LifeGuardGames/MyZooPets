@@ -113,7 +113,8 @@ public enum DecorationTypes {
 	FloorItem,
 	Wallpaper,
 	Rug,
-	Floor
+	Floor,
+	TallFloorItem
 }
 
 // mini game states

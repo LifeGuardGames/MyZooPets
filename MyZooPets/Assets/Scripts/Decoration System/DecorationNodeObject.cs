@@ -7,9 +7,14 @@ using System.Collections;
 //---------------------------------------------------
 
 public class DecorationNodeObject : DecorationNode {
+	// default object that may exist on this node
+	public GameObject goDefaultDeco;
 	
 	// instantiated game object decoration
 	private GameObject goDeco;
+	
+	// override for where the instantiated objects should go
+	public Vector3 vOverridePos;
 	
 	//---------------------------------------------------
 	// _SetDecoration()
@@ -18,8 +23,16 @@ public class DecorationNodeObject : DecorationNode {
 		// build the prefab from the id of the decoration
 		string strResource = "GO_" + strID;
 		GameObject goPrefab = Resources.Load(strResource) as GameObject;
+		
+		// find the right position -- most likely every object will have this override
 		Vector3 vPos = transform.position;
-		goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;			
+		if ( vOverridePos != Vector3.zero )
+			vPos = vOverridePos;
+		
+		if ( goPrefab )
+			goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;	
+		else
+			Debug.Log("No such prefab for " + strResource);
 	}
 	
 	//---------------------------------------------------
@@ -37,4 +50,16 @@ public class DecorationNodeObject : DecorationNode {
 	public override bool HasRemoveOption() {
 		return goDeco != null;
 	}		
+	
+	//---------------------------------------------------
+	// _SetDefaultDeco()
+	//---------------------------------------------------	
+	protected override void _SetDefaultDeco( string strDecoID ) {
+		if ( goDefaultDeco == null ) {
+			Debug.Log("Default deco ID set but no default deco object!?!!?");
+			return;
+		}
+		
+		goDeco = goDefaultDeco;
+	}	
 }

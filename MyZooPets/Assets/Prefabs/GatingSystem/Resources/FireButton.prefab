@@ -76,6 +76,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400008}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400014}
   m_Layer: 10
   m_Name: Progress Bar
   m_TagString: Untagged
@@ -206,9 +207,8 @@ MonoBehaviour:
   strSoundProcess: 
   bCheckClickManager: 0
   strAnalytics: 
-  nDamage: 50
+  scriptFireMeter: {fileID: 11400014}
   goIcon: {fileID: 100002}
-  goFireMeter: {fileID: 100002, guid: 8771a005b75af45e9aaa037aeac9d67d, type: 2}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -286,17 +286,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 1
+    e00: 384
     e01: 0
     e02: 0
     e03: -77.1594925
     e10: 0
-    e11: 1
+    e11: 384
     e12: 0
-    e13: -4.00293159
+    e13: -7684.00293
     e20: 0
     e21: 0
-    e22: 1
+    e22: 384
     e23: 64.5514374
     e30: 0
     e31: 0
@@ -307,6 +307,19 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
+--- !u!114 &11400014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5088a2216ce1e49b385a9767c590720b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 11400006}
+  fFillRate: .00999999978
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

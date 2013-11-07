@@ -111,7 +111,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			}
 		}
 		else{
-			Debug.Log ("No notification detected");
+			//Debug.Log ("No notification detected");
 			backDrop.SetActive(false);
 			isNotificationActive = false;
 		}

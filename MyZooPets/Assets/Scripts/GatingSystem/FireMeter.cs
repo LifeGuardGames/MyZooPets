@@ -15,6 +15,12 @@ public class FireMeter : MonoBehaviour {
 	// every frame, the meter will fill this %
 	public float fFillRate;
 	
+	// should this meter be filling?
+	private bool bShouldFill = false;
+	private void SetFillStatus( bool bStatus ) {
+		bShouldFill = bStatus;	
+	}	
+	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
@@ -24,9 +30,31 @@ public class FireMeter : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
+	// StartFilling()
+	// Call this function when the meter should start
+	// filling.
+	//---------------------------------------------------		
+	public void StartFilling() {
+		SetFillStatus( true );
+	}
+	
+	//---------------------------------------------------
+	// Empty()
+	// Stops filling the meter and empties it.
+	//---------------------------------------------------	
+	public void Empty() {
+		SetFillStatus( false );
+		slider.sliderValue = 0;
+	}
+	
+	//---------------------------------------------------
 	// Update()
 	//---------------------------------------------------
 	void Update () {
+		// if the meter shouldn't be filling, don't run the update
+		if ( !bShouldFill )
+			return;
+		
 		// fill the slider by the fill rate
 		slider.sliderValue += fFillRate;
 	}

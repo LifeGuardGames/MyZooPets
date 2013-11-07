@@ -167,14 +167,55 @@ public class GatingManager : Singleton<GatingManager> {
 		// if the pet is happy and healthy, add the fire button
 		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
-		if ( eState == PetHealthStates.Healthy && eMood == PetMoods.Happy ) 
+		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+		
+		if ( eState == PetHealthStates.Healthy && eMood == PetMoods.Happy && bCanBreath ) 
 			ShowFireButton();
 		else {
 			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
+			ShowNoFireNotification();
 		}
 		
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished( false );
+	}
+	
+	//---------------------------------------------------
+	// ShowNoFireNotification()
+	// Shows the player a notification explaining why
+	// they cannot breath fire at this time.
+	// Calling this function assumes the player cannot
+	// breath fire.
+	//---------------------------------------------------		
+	private void ShowNoFireNotification() {
+		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
+		
+		string strKey;			// key of text to show
+		string strImage;		// image to appear on notification
+		string strAnalytics;	// analytics tracker
+		
+		if ( eState != PetHealthStates.Healthy ) {
+			// pet is not healthy enough
+			strKey = "NO_FIRE_SICK";
+			strImage = "Skull";
+			strAnalytics = "BreathFire:Fail:Sick";
+		}
+		else if ( eMood != PetMoods.Happy ) {
+			// pet is not happy enough
+			strKey = "NO_FIRE_UNHAPPY";
+			strImage = "Skull";
+			strAnalytics = "BreathFire:Fail:Unhappy";
+		}
+		else {
+			// out of flame charges
+			strKey = "NO_FIRE_INHALER";
+			strImage = "guiPanelStatsHealth";
+			strAnalytics = "BreathFire:Fail:NoCharges";
+		}
+			
+		// show the standard popup
+		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( strKey ), strImage, null, true, true, strAnalytics );		
 	}
 	
 	//---------------------------------------------------
@@ -211,6 +252,11 @@ public class GatingManager : Singleton<GatingManager> {
 	// MovePlayer()
 	// Moves the player to the appropriate location in
 	// relation to the gate in the incoming room.
+	// If you're wondering, there is some semi-duplicate
+	// code in DoneAttacking script.  I did that because
+	// I didn't want to use quite want to use the same
+	// paths so I could easily tell when the player was
+	// entering the room and when they were already in it.
 	//---------------------------------------------------	
 	private void MovePlayer( int nRoom ) {
 		// then get the id of the gate and get that gate object from our list of active gates

@@ -22,6 +22,10 @@ public class SkillMutableData{
 
     public Dictionary<string, Status> SkillStatus {get; set;} //Key: Skill ID, Value: Instance of Status
     public string CurrentSkillID {get; set;} //The current skill that the pet has
+	public Skill GetCurrentSkill() {
+		Skill curSkill = DataSkills.GetSkill( CurrentSkillID );
+		return curSkill;
+	}
 
 
     public void UpdateSkillStatus(string skillID, bool isUnlocked, bool isPurchased){
@@ -34,6 +38,17 @@ public class SkillMutableData{
             Status status = new Status(isUnlocked, isPurchased);
             SkillStatus.Add(skillID, status);
         }
+		
+		// replace this incoming skill as our current skill if it is better (or current skill is null)
+		if ( string.IsNullOrEmpty( CurrentSkillID ) )
+			CurrentSkillID = skillID;
+		else {
+			Skill newSkill = DataSkills.GetSkill( skillID );
+			Skill curSkill = DataSkills.GetSkill( CurrentSkillID );
+			
+			if ( newSkill.DamagePoint > curSkill.DamagePoint )
+				CurrentSkillID = skillID;
+		}
     }
 
     public bool GetIsUnlocked(string skillID){
@@ -57,6 +72,6 @@ public class SkillMutableData{
 
     public void Init(){
         SkillStatus = new Dictionary<string, Status>();
-        UpdateSkillStatus("Skill0", true, false);
+        UpdateSkillStatus("Skill0", true, true);
     }
 }

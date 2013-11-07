@@ -36,6 +36,10 @@ public class GatingManager : Singleton<GatingManager> {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// see if the gating system is enabled
+		if ( !DataManager.Instance.GameData.GatingProgress.IsEnabled() )
+			return;
+		
 		// listen for partition changing event
 		scriptPan.OnPartitionChanged += EnteredRoom;
 		

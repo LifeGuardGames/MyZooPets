@@ -39,4 +39,11 @@ public class DecorationNodeMaterial : DecorationNode {
 	public override bool HasRemoveOption() {
 		return false;
 	}		
+	
+	//---------------------------------------------------
+	// _SetDefaultDeco()
+	//---------------------------------------------------	
+	protected override void _SetDefaultDeco( string strDecoID ) {
+		// material nodes don't need to do anything special for setting a default deco
+	}	
 }

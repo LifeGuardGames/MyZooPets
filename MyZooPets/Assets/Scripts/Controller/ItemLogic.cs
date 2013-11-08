@@ -10,6 +10,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> foodList; //list with only FoodItem. sorted by cost
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
+	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
 
 	public List<Item> FoodList{
 		get{
@@ -39,9 +40,23 @@ public class ItemLogic : Singleton<ItemLogic>{
 				decorationList = new List<Item>();
 				Dictionary<string, Item> decorationDict = DataItems.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
+
+				// further sort into category Dict<decor category, list<Item>> 
 			}
 			return decorationList;
 		}		
+	}
+
+	public Dictionary<DecorationTypes, List<DecorationItem>> DecorationSubCatList{
+		get{
+			if(decorationSubCatList == null){
+				decorationSubCatList = new Dictionary<DecorationTypes, List<Item>>();	
+				decorationSubCatList = (from item in DecorationList
+										group item by item.DecorationType into groupedClass
+										select groupedClass).ToDictionary(i => i.Key, i => i.ToList());
+			}
+			return decorationSubCatList;
+		}
 	}
 
 	void Awake(){

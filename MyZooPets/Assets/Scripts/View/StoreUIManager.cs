@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
-	public GameObject ItemPrefab;
-	public GameObject ItemSpritePrefab;
+	public GameObject itemStorePrefab;
+	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storePanel;
 	public GameObject storeBackground;
 	public GameObject ItemArea;
-	public GameObject FirstPageTag;
+	// public GameObject FirstPageTag;
 	
 	// store related sounds
 	public string strSoundChangeTab;
@@ -25,7 +25,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	void Start (){
-		CreateItems(FirstPageTag);
+		// CreateItems(FirstPageTag);
 	}
 
 	protected override void _OpenUI(){
@@ -120,7 +120,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 	// Drawing function
 	// Draw according to ItemLogic.Instance 
-	private void CreateItems(GameObject page){
+	private void CreateCategoryItems(GameObject page){
 		if(currentPage != page.name){
 			// Destory first
 			foreach(Transform child in grid.transform){
@@ -154,8 +154,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Populates the store UI with the incoming list
 	// of items and bg atlas.
 	//---------------------------------------------------	
-	private void CreateItemsTab( Color colorBG, List<Item> listItems ) {
-		// reset the clip range for the item area so that 
+	private void CreateCategoryItemsTab( Color colorBG, List<Item> listItems ) {
+		// reset the clip range for the item area so that the scrolling get rest 
 		Vector4 clipRange = ItemArea.GetComponent<UIPanel>().clipRange;
 		ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
 		ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
@@ -167,6 +167,17 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		foreach(Item itemData in listItems)
 			SetUpItemObject(itemData);
 	}
+
+	//Get all the sub category from ItemType from itemlogic
+	//create the tabs for those sub category
+	private void CreateSubCategoryItems(){
+
+	}
+
+	//create item list for sub category tabs
+	private void CreateSubCategoryItemsTab(){
+
+	}
 	
 	//---------------------------------------------------
 	// SetUpItemObject()
@@ -175,7 +186,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//---------------------------------------------------	
 	private void SetUpItemObject(Item itemData) {
 		// create and add our UI entry to NGUI
-		GameObject itemUIObject = NGUITools.AddChild(grid, ItemPrefab);
+		GameObject itemUIObject = NGUITools.AddChild(grid, itemStorePrefab);
 		
 		// set the proper values on the entry
 		itemUIObject.name = itemData.ID;

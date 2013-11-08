@@ -6,11 +6,18 @@ using System.Collections.Generic;
 public class PetMovement : Singleton<PetMovement> {
     public Camera mainCamera;
     public GameObject runWay; //Where the pet is allowed to move
-    public GameObject petSprite;
 	public GameObject shadowObject;
+	
+	public GameObject petSprite;
+	public GameObject GetPetGameObject() {
+		return petSprite;	
+	}
 	
 	// lwf animator
 	public PetAnimator scriptAnim;
+	public PetAnimator GetPetAnimatorScript() {
+		return scriptAnim;	
+	}
 	
 	// sound for when the pet moves
 	public string strSoundMove;
@@ -71,7 +78,7 @@ public class PetMovement : Singleton<PetMovement> {
 			}
         }
     }
-
+	
     //Listen to OnTap Event from FingerGesture
     void OnTap(TapGesture gesture) { 
 		// if the player is in a gated room, moving on tap is not allowed

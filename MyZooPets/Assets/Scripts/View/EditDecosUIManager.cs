@@ -46,6 +46,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// hide the edit button
 		HideNavButton();
+		
+		// hide the pet so it doesn't get in the way
+		GameObject goPet = PetMovement.Instance.GetPetGameObject();
+		goPet.SetActive( false );
 	}
 	
 	//---------------------------------------------------
@@ -66,6 +70,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// show the edit button again
 		ShowNavButton();
+		
+		// show the pet again
+		GameObject goPet = PetMovement.Instance.GetPetGameObject();
+		goPet.SetActive( true );		
 	}
 	
 	public void ShowNavButton(){

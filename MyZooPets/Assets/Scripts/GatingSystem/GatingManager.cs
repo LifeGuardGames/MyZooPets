@@ -23,12 +23,6 @@ public class GatingManager : Singleton<GatingManager> {
 	// the pan to movement script; it's got constants we need...
 	public PanToMoveCamera scriptPan;
 	
-	// the player's pet animator -- maybe not the best place for this
-	public PetAnimator scriptPetAnimator;
-	public PetAnimator GetPlayerPetAnimator() {
-		return scriptPetAnimator;	
-	}
-	
 	// hash of active gates that the manager is currently managing
 	private Hashtable hashActiveGates = new Hashtable();
 	

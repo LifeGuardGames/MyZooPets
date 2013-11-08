@@ -89,7 +89,7 @@ public class ButtonMonster : LgButtonHold {
 	protected override void ProcessClick() {	
 		bLegal = false;
 		
-		PetAnimator scriptPetAnimator = GatingManager.Instance.GetPlayerPetAnimator();
+		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		
 		// if the pet is currently busy, forgetaboutit
 		if ( scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking )

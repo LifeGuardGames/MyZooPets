@@ -30,12 +30,17 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 			Debug.Log("Tutorial Warning: " + tutorial + " is trying to override " + this.tutorial + " ABORTING!");
 			return;	
 		}
-		
+	
 		this.tutorial = tutorial;
 		
-		// if the incoming tutorial is null, do a check to see if any new tutorials should be happening
-		//if ( tutorial == null )
-		//	Check();
+		// if the incoming tutorial is null...
+		if ( tutorial == null ) {
+			// now that the tutorial is over, force a save
+			DataManager.Instance.SaveGameData();
+			
+			// then check for a new tutorial
+			Check();
+		}
 	}
 	
 	void Start() {

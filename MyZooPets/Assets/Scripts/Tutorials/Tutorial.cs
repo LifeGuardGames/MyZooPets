@@ -134,6 +134,9 @@ public abstract class Tutorial {
 	// When this tutorial is finished.
 	//---------------------------------------------------		
 	protected virtual void End( bool bFinished ) {
+		// debug message
+		Debug.Log("Tutorial Ending: " + GetKey());
+		
 		// let children know the tutorial is over
 		_End( bFinished );
 		

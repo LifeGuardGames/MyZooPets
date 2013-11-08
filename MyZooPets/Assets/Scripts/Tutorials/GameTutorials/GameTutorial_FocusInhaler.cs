@@ -19,7 +19,7 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 1;
+		nMaxSteps = 2;
 	}
 	
 	//---------------------------------------------------
@@ -33,11 +33,7 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 	// _End()
 	//---------------------------------------------------		
 	protected override void _End( bool bFinished ) {
-		// destroy the spotlight we created for the inhaler
-		RemoveSpotlight();
-		
-		// destroy the popup we created
-		RemovePopup();
+		// note that this tutorial never actually ends, because it just goes into the inhaler game
 	}
 	
 	//---------------------------------------------------
@@ -52,6 +48,16 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 				// show a little popup message
 				Vector3 vLoc = Constants.GetConstant<Vector3>( "InhalerPopupLoc" );
 				ShowPopup( Tutorial.POPUP_STD, vLoc );
+				
+				break;
+			
+			case 1:
+				// destroy the spotlight we created for the inhaler
+				RemoveSpotlight();
+				
+				// destroy the popup we created
+				RemovePopup();			
+			
 				break;
 		}
 	}

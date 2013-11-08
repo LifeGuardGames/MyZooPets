@@ -32,8 +32,5 @@ public abstract class GameTutorial : Tutorial {
 		
 		// have the tut manager set right
 		TutorialManager.Instance.SetTutorial( null );
-		
-		// now that the tutorial is over, force a save
-		DataManager.Instance.SaveGameData();
 	}
 }

@@ -15,6 +15,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 	public const string TUT_INTRO = "IntroNotification";
 	public const string TUT_INHALER = "FOCUS_INHALER";
 	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
+	public const string TUT_SMOKE_INTRO = "TUT_SMOKE_INTRO";
 	public const string TUT_FLAME = "TUT_FLAME";
 	
 	//---------------------------------------------------
@@ -35,6 +36,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 		bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
 		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR );
+		bool bSmokeIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_SMOKE_INTRO );
 		
 		// these tutorials occur in quick succession
 		if ( !bIntro ) {
@@ -48,6 +50,10 @@ public class TutorialManager_Bedroom : TutorialManager {
 		else if ( !bFocusCalendar ) {
 			// next check to see if the focus calendar tutorial should display
 			new GameTutorial_FocusCalendar();
+		}
+		else if ( !bSmokeIntro ) {
+			// play the smoke monster intro tutorial
+			new GameTutorial_SmokeIntro();
 		}
 	}
 	

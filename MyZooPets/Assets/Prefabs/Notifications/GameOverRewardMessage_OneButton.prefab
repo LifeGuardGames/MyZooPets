@@ -42,10 +42,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400024}
   m_Layer: 10
-  m_Name: Title
+  m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,8 +76,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400014}
   - 114: {fileID: 11400008}
+  - 114: {fileID: 11400004}
   m_Layer: 10
-  m_Name: Message
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,8 +219,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 235.015106, z: 0}
-  m_LocalScale: {x: 473.999969, y: 136, z: 0}
+  m_LocalPosition: {x: 0, y: -24.3306885, z: -5}
+  m_LocalScale: {x: 96, y: 96, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
 --- !u!4 &400010
@@ -230,7 +230,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400018}
@@ -253,8 +253,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -24.3306885, z: -5}
-  m_LocalScale: {x: 96, y: 96, z: 1}
+  m_LocalPosition: {x: 0, y: 123.699997, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
 --- !u!4 &400016
@@ -281,11 +281,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400016}
+  - {fileID: 400008}
   - {fileID: 400014}
   - {fileID: 400012}
   - {fileID: 400002}
   - {fileID: 400000}
-  - {fileID: 400008}
   m_Father: {fileID: 400010}
 --- !u!65 &6500000
 BoxCollider:
@@ -313,7 +313,7 @@ MonoBehaviour:
   mColor: {r: 0, g: 0, b: 0, a: .392156869}
   mPivot: 4
   mDepth: 1
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: starBlank
   mFillCenter: 1
   mType: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   mColor: {r: 0, g: 0, b: 0, a: .392156869}
   mPivot: 4
   mDepth: 2
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: starBlank
   mFillCenter: 1
   mType: 0
@@ -346,22 +346,35 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
+  m_GameObject: {fileID: 100008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mDepth: 10
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
-  mSpriteName: Great
-  mFillCenter: 1
-  mType: 0
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 1
+  blockUI: 1
+  startsHidden: 0
+  hideDeltaX: 0
+  hideDeltaY: 300
+  hideDeltaZ: 0
+  showDuration: .200000003
+  hideDuration: .200000003
+  showDelay: .400000006
+  hideDelay: 0
+  easeHide: 26
+  easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -376,7 +389,7 @@ MonoBehaviour:
   mColor: {r: 0, g: 0, b: 0, a: .392156869}
   mPivot: 4
   mDepth: 3
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: starBlank
   mFillCenter: 1
   mType: 0
@@ -397,9 +410,9 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
-  mFont: {fileID: 11400000, guid: 1b51db08d2a14f243815c19835bfc982, type: 2}
-  mText: testsdfsdfsdfsd
-  mMaxLineWidth: 500
+  mFont: {fileID: 11400000, guid: 8b2c55d5657b57d4eb03e9a7f7978db9, type: 2}
+  mText: Good Job!
+  mMaxLineWidth: 600
   mMaxLineHeight: 300
   mEncoding: 1
   mMaxLineCount: 3
@@ -409,7 +422,7 @@ MonoBehaviour:
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 1
+  mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
 --- !u!114 &11400010
@@ -455,7 +468,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 9
-  mAtlas: {fileID: 11400000, guid: e3a99ac7b886e4df3b56fe0be5727f03, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: buttonLong
   mFillCenter: 1
   mType: 0
@@ -503,7 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef4d95a2e5f74b07bec52ce40a9d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textArea: {fileID: 11400008}
+  textArea: {fileID: 11400024}
   button1: {fileID: 11400010}
   button2: {fileID: 0}
   numOfButtons: 1
@@ -538,6 +551,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400022
@@ -564,30 +579,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 100004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  blockUI: 1
-  startsHidden: 0
-  hideDeltaX: 0
-  hideDeltaY: 300
-  hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .400000006
-  hideDelay: 0
-  easeHide: 26
-  easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mFont: {fileID: 11400000, guid: 1b51db08d2a14f243815c19835bfc982, type: 2}
+  mText: testsdfsdfsdfsd
+  mMaxLineWidth: 500
+  mMaxLineHeight: 300
+  mEncoding: 1
+  mMaxLineCount: 3
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 1
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -604,7 +616,7 @@ MonoBehaviour:
   - {fileID: 100000}
   - {fileID: 100002}
   - {fileID: 100006}
-  - {fileID: 100004}
+  - {fileID: 100008}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
@@ -649,6 +661,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400030
@@ -681,6 +695,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400032
@@ -713,6 +729,8 @@ MonoBehaviour:
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
 --- !u!1001 &100100000

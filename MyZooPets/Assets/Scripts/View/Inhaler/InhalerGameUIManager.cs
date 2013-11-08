@@ -96,8 +96,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private void StartGame(){
         HideHUD();
         ShowQuitButton();
-        ShowIntro();
+        // ShowIntro();
         SetUpHintTimer();
+
+        //Start the first hint
+        if(OnShowHint != null)
+            OnShowHint(this, EventArgs.Empty);
     }
 
     private void SetUpHintTimer(){

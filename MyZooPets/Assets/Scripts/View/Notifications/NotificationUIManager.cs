@@ -12,28 +12,31 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public GameObject cameraObject;
 	public GameObject centerPanel;
 	public GameObject leftPanel;
-	public GameObject backDrop;						// This class will handle the backdrop as well
+	public GameObject backDrop;							// This class will handle the backdrop as well
 	public GameObject popupTextureGreatNGUI;
 	public GameObject popupTextureNiceTryNGUI;
 	public GameObject popupTextureUseTheInhalerNGUI;
 	public GameObject popupTexturePracticeInhalerNGUI;
 	public GameObject popupTextureDiagnoseSymptomsNGUI;
 
-	public GameObject popupNotificationOneButton; // NGUI as well
-	public GameObject popupNotificationTwoButtons; // NGUI as well
+	public GameObject popupNotificationOneButton; 		// NGUI as well
+	public GameObject popupNotificationTwoButtons; 		// NGUI as well
 	public GameObject levelUpMessageNGUI;
 	public GameObject popupTipWithImageNGUI;
-	public GameObject gameOverRewardMessageOneButton; // NGUI as well
-	public GameObject gameOverRewardMessageTwoButtons; // NGUI as well
+	public GameObject gameOverRewardMessageOneButton; 	// NGUI as well
+	public GameObject gameOverRewardMessageTwoButtons; 	// NGUI as well
 	public GameObject popupNotificiationTutorialLeft;
 
 	private bool isNotificationActive = false;
 
 	void Start(){
-		backDrop.SetActive(false);
-		
-		// Check the static queue to see if anything is there on level load
-		TryNextNotification();
+		// Start is called after some notifications pushed!!! Check beforehand
+		if(!isNotificationActive){
+			backDrop.SetActive(false);
+			
+			// Check the static queue to see if anything is there on level load
+			TryNextNotification();
+		}
 	}
 
 	/////////////// QUEUE HANDLERS /////////////////

@@ -186,7 +186,7 @@ public abstract class Tutorial {
 		// create the object
 		GameObject goResource = Resources.Load( strSpotlightPrefab ) as GameObject;
 		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
-		vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
+		vPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = vPos;
 	}
 	

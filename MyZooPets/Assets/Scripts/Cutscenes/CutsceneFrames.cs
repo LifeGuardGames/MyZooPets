@@ -79,7 +79,7 @@ public class CutsceneFrames : MonoBehaviour {
 	private void Next() {
 		nFrame++;
 		
-		if ( nFrame >= 0 && nFrame <= nSize )
+		if ( nFrame > 0 && nFrame <= nSize )
 			UpdateFrame();
 		else 
 			Done();		
@@ -90,11 +90,11 @@ public class CutsceneFrames : MonoBehaviour {
 	
 	private void Previous() {
 		nFrame--;
-		
-		if ( nFrame >= 0 && nFrame <= nSize )
+		Debug.Log("frame is " + nFrame);
+		if ( nFrame > 0 && nFrame <= nSize )
 			UpdateFrame();	
 		
-		if ( nFrame == 0 )
+		if ( nFrame == 1 )
 			goPrevious.SetActive( false );
 	}
 }

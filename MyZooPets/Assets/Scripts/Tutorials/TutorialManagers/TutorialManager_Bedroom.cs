@@ -43,14 +43,14 @@ public class TutorialManager_Bedroom : TutorialManager {
 			// first, check to see if that initial notification has been shown
 			TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( "TUT_BEDROOM_INTRO" ), "guiPanelStatsHealth", IntroDone, true, true, "Tutorial:Bedroom:Intro" );	
 		}
-		else if ( !bFocusInhaler )  {
+		/*else if ( !bFocusInhaler )  {
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorial_FocusInhaler();
 		}
 		else if ( !bFocusCalendar ) {
 			// next check to see if the focus calendar tutorial should display
 			new GameTutorial_FocusCalendar();
-		}
+		}*/
 		else if ( !bSmokeIntro ) {
 			// play the smoke monster intro tutorial
 			new GameTutorial_SmokeIntro();

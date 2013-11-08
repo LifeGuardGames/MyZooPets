@@ -67,6 +67,9 @@ public class TutorialManager_Bedroom : TutorialManager {
 	// OnReachedGate()
 	//---------------------------------------------------	
 	public void OnReachedGate( object sender, EventArgs args ) {
+		if ( !bOn )
+			return;
+		
 		bool bFlameTut = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_FLAME );
 		
 		// if the player reached a gated room and has not yet seen the flame tutorial, start it

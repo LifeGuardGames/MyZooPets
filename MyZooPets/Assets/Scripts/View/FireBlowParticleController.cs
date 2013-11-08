@@ -46,12 +46,12 @@ public class FireBlowParticleController : ParticleSystemController {
 		pSystem2.Stop();
 	}
 	
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Start")){
-//			Play();
-//		}
-//		if(GUI.Button(new Rect(300, 100, 100, 100), "Stop")){
-//			Stop();
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Start")){
+			Play();
+		}
+		if(GUI.Button(new Rect(300, 100, 100, 100), "Stop")){
+			Stop();
+		}
+	}
 }

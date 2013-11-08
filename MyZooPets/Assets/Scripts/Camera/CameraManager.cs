@@ -125,4 +125,22 @@ public class CameraManager : Singleton<CameraManager> {
 		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
 		return scaledRatioScreenPos;
 	}
+	
+	//---------------------------------------------------
+	// BottomLeftToCenter()
+	// This function is specifically for tranforming NGUI
+	// coordinates from the bottom left anchor to the 
+	// center anchor.  This is because the bottom left
+	// anchor matches screen position (bottom left = 0,0),
+	// whereas the center anchor is 0,0 in the center.
+	// We may need to change this a little bit more to
+	// accomodate Android devices.
+	//---------------------------------------------------	
+	public Vector3 BottomLeftToCenter( Vector3 vPos ) {
+		Vector3 vCenter = vPos;
+		vCenter.x -= Screen.width / 2;
+		vCenter.y -= Screen.height / 2;
+		
+		return vCenter;
+	}
 }

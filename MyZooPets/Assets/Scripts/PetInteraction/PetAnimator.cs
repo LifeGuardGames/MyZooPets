@@ -57,6 +57,7 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
+	public static EventHandler<EventArgs> OnBreathStarted;	// when pet starts to breath fire
 	//=====================================================		
 
 	//---------------------------------------------------
@@ -169,6 +170,10 @@ public class PetAnimator : LgCharacterAnimator {
 	public IEnumerator FinishFire() {
 		// resume the animation
 		Resume();
+		
+		// process any callbacks for when the pet starts to breath fire
+		if ( OnBreathStarted != null )
+			OnBreathStarted( this, EventArgs.Empty );			
 		
 		// pause it again once the pet begins to exhale
 		float fUntilExhale = Constants.GetConstant<float>( "UntilExhale" );

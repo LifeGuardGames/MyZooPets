@@ -32,6 +32,9 @@ public class GatingManager : Singleton<GatingManager> {
 	// hash of active gates that the manager is currently managing
 	private Hashtable hashActiveGates = new Hashtable();
 	
+	//=======================Events========================
+    public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
+	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
@@ -173,6 +176,10 @@ public class GatingManager : Singleton<GatingManager> {
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
 		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		
+		// process any callbacks for when the pet reaches a gate
+		if ( OnReachedGate != null )
+			OnReachedGate( this, EventArgs.Empty );		
+		
 		if ( eState == PetHealthStates.Healthy && eMood == PetMoods.Happy && bCanBreath ) 
 			ShowFireButton();
 		else {
@@ -228,13 +235,18 @@ public class GatingManager : Singleton<GatingManager> {
 	//---------------------------------------------------		
 	private void ShowFireButton() {
 		// the pet has reached its destination (in front of the monster) so show the fire UI
-		GameObject resourceFireButton = Resources.Load( "FireButton" ) as GameObject;
-		GameObject goFireButton = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceFireButton );	
+		GameObject resourceFireButton = Resources.Load( ButtonMonster.FIRE_BUTTON ) as GameObject;
+		GameObject goFireButton = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceFireButton );
+		
+		// rename the button so that other things can find it
+		goFireButton.name = ButtonMonster.FIRE_BUTTON;
 		
 		// get the gate in this room
 		Gate gate = (Gate) hashActiveGates[scriptPan.currentPartition];
 		if ( gate ) {
-			ButtonMonster script = goFireButton.GetComponent<ButtonMonster>();
+			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
+			Transform transButton = goFireButton.transform.Find( "Button" );
+			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
 			script.SetGate( gate );
 		}
 		else

@@ -4,11 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
-	public GameObject itemStorePrefab;
+	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storePanel;
 	public GameObject storeBackground;
-	public GameObject ItemArea;
+
+
+	public GameObject storeBasePanel; //Where you choose item category
+	public GameObject storeSubPanel; //Where you choose item sub category
+	public GameObject itemArea; //Where the items will be display
+	public GameObject tabArea; //Where all the tabs for sub category are
 	// public GameObject FirstPageTag;
 	
 	// store related sounds
@@ -16,12 +21,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public string strSoundBuy;
 	
 	private bool changePage;
-	private string currentPage;
-	private int page;
+	private string currentPage; //The current category. i.e food, usable, decorations
+	private string currentTab; //The current sub category. only decorations have sub cat right now
+
 	private GameObject grid;
 
 	void Awake(){
-		grid = GameObject.Find("Grid");
+		grid = itemArea.transform.Find("Grid").gameObject;
 	}
 
 	void Start (){
@@ -32,16 +38,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		BGController.Instance.Show("black");
-		storePanel.GetComponent<TweenToggle>().Show();
-		//EditDecosUIManager.Instance.HideNavButton();
+		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
+		// storePanel.GetComponent<TweenToggle>().Show();
+		// EditDecosUIManager.Instance.HideNavButton();
 	}
 
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();		
 		BGController.Instance.Hide();
-		storePanel.GetComponent<TweenToggle>().Hide();
-		//EditDecosUIManager.Instance.ShowNavButton();
+		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
+		// storePanel.GetComponent<TweenToggle>().Hide();
+		// EditDecosUIManager.Instance.ShowNavButton();
 	}
 
 	//This function is called when buying an item
@@ -75,7 +83,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		path[3] = itemPosition;
 
 		Hashtable optional = new Hashtable();
-		GameObject animationSprite = NGUITools.AddChild(storePanel, ItemSpritePrefab);
+		GameObject animationSprite = NGUITools.AddChild(storePanel, itemSpritePrefab);
 		
 		// hashtable for completion params for the callback (stash the icon we are animating)
 		Hashtable completeParamHash = new Hashtable();
@@ -118,35 +126,38 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}
 	}
 
-	// Drawing function
+	//--------------------------------------------------
+	// CreateCategoryItems() 
 	// Draw according to ItemLogic.Instance 
+	//--------------------------------------------------
 	private void CreateCategoryItems(GameObject page){
-		if(currentPage != page.name){
-			// Destory first
-			foreach(Transform child in grid.transform){
-				Destroy(child.gameObject);
-			}
+		// if(currentPage != page.name){
+		// 	// Destory first
+		// 	foreach(Transform child in grid.transform){
+		// 		Destroy(child.gameObject);
+		// 	}
 			
-			// if the current page is not null, we are switching pages, so play a sound
-			if ( currentPage != null )
-				AudioManager.Instance.PlayClip( strSoundChangeTab );	
+		// 	// if the current page is not null, we are switching pages, so play a sound
+		// 	if ( currentPage != null )
+		// 		AudioManager.Instance.PlayClip( strSoundChangeTab );	
 			
-			// cache our new page name
-			currentPage = page.name;
+		// 	// cache our new page name
+		// 	currentPage = page.name;
 			
-			// based on the page, create the proper set of item in the store
-			if(page == null || page.name == "Food")
-				CreateItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
-			else if(page.name == "Item")
-				CreateItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
-			else if(page.name == "Decoration")
-				CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
-			else
-				Debug.Log("Illegal store UI page: " + page.name);
+		// 	// based on the page, create the proper set of item in the store
+		// 	if(page == null || page.name == "Food")
+		// 		CreateCategoryItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
+		// 	else if(page.name == "Item")
+		// 		CreateCategoryItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
+		// 	else if(page.name == "Decoration")
+		// 		CreateSubCategoryItems();
+		// 		// CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
+		// 	else
+		// 		Debug.Log("Illegal store UI page: " + page.name);
 			
-			grid.GetComponent<UIGrid>().Reposition();
-			Invoke("Reposition",0.00000001f);
-		}
+		// 	grid.GetComponent<UIGrid>().Reposition();
+		// 	Invoke("Reposition",0.00000001f);
+		// }
 	}
 	
 	//---------------------------------------------------
@@ -156,27 +167,139 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//---------------------------------------------------	
 	private void CreateCategoryItemsTab( Color colorBG, List<Item> listItems ) {
 		// reset the clip range for the item area so that the scrolling get rest 
-		Vector4 clipRange = ItemArea.GetComponent<UIPanel>().clipRange;
-		ItemArea.transform.localPosition = new Vector3(ItemArea.transform.localPosition.x, -56f, ItemArea.transform.localPosition.z);
-		ItemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+		// Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
+		// itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -56f, itemArea.transform.localPosition.z);
+		// itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
 		
-		// set the proper bg
-		storeBackground.GetComponent<UISprite>().color = colorBG;
+		// // set the proper bg
+		// storeBackground.GetComponent<UISprite>().color = colorBG;
 		
-		// go through our list of items and create an entry for each one
-		foreach(Item itemData in listItems)
-			SetUpItemObject(itemData);
+		// // go through our list of items and create an entry for each one
+		// foreach(Item itemData in listItems)
+		// 	SetUpItemObject(itemData);
 	}
 
-	//Get all the sub category from ItemType from itemlogic
-	//create the tabs for those sub category
-	private void CreateSubCategoryItems(){
+	//----------------------------------------------------
+	// CreateSubCategoryItems()
+	// Create tabs for sub category if sub category exists. 
+	// Then call other methods to create the items
+	//----------------------------------------------------
+	public void CreateSubCategoryItems(GameObject page){
+
+		currentPage = page.name;
+
+		//create the tabs for those sub category
+		if(currentPage == "Food"){
+			//No tabs so turn them all off
+			foreach(Transform tab in tabArea.transform){
+				tab.gameObject.SetActive(false);
+			}
+
+			CreateSubCategoryItemsTab("");
+		}
+		else if(currentPage == "Items"){
+			foreach(Transform tab in tabArea.transform){
+				tab.gameObject.SetActive(false);
+			}
+
+			CreateSubCategoryItemsTab("");
+		}
+		else if(currentPage == "Decorations"){
+			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
+			int counter = 0;
+			string defaultTabName = "";
+
+			//Rename the tab to reflect the sub category name
+			foreach(Transform tab in tabArea.transform){
+				if(counter < decorationEnums.Length){
+					tab.name = decorationEnums[counter];
+
+					if(counter == 0) defaultTabName = tab.name;
+				}else{
+					tab.name = "";
+					// tab.gameObject.SetActive(false);
+				}
+				counter++;
+			}
+
+			//After tabs have been set up create items for the first/default tab
+			CreateSubCategoryItemsTab(defaultTabName);
+		}
+
+		ShowStoreSubPanel();
+	}
+
+	//By not calling the Open() of SingletonUI we by pass the clickmanager lock so it will
+	//remain lock 
+	private void ShowStoreSubPanel(){
+		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
+		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
+	}
+
+	//Return to the StoreBasePanel
+	public void HideStoreSubPanel(){
+		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
+		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 
 	}
 
-	//create item list for sub category tabs
-	private void CreateSubCategoryItemsTab(){
+	//----------------------------------------------------
+	// CreateSubCategoryItemsTab()
+	// Create items for sub category.
+	// public method to be called by button
+	//----------------------------------------------------
+	public void CreateSubCategoryItemsTab(GameObject tab){
+		CreateSubCategoryItemsTab(tab.name);
+	}
 
+	//----------------------------------------------------
+	// CreateSubCategoryItemsTab()
+	// Create items for sub category 
+	//----------------------------------------------------
+	private void CreateSubCategoryItemsTab(string tabName){
+		if(currentTab != tabName){
+			//Destroy existing items first
+			foreach(Transform child in grid.transform)
+				Destroy(child.gameObject);
+
+			//if the current page is not null, we are switching tabs, so play a sound
+			if(currentTab != null)
+				AudioManager.Instance.PlayClip(strSoundChangeTab);
+
+			currentTab = tabName;
+
+			//base on the tab name and the page name, create proper set of item in the store
+			if(currentPage == "Food"){
+				//No sub category so retrieve a list of all food
+				List<Item> foodList = ItemLogic.Instance.FoodList;
+
+				foreach(Item itemData in foodList)
+					SetUpItemObject(itemData);
+
+			}
+			else if(currentPage == "Items"){
+				//No sub category so retrieve a list of all item
+				List<Item> usableList = ItemLogic.Instance.UsableList;
+
+				foreach(Item itemData in usableList)
+					SetUpItemObject(itemData);
+
+			}
+			else if(currentPage == "Decorations"){
+				//Retrieve decoration items base on the tab name (sub category)
+				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
+				DecorationTypes decoType = (DecorationTypes) Enum.Parse(typeof(DecorationTypes), tabName);
+
+				if(decoDict.ContainsKey(decoType)){
+					List<DecorationItem> decoList = decoDict[decoType];
+					foreach(DecorationItem decoItemData in decoList)
+						SetUpItemObject((Item)decoItemData);
+				}
+			}
+
+			grid.GetComponent<UIGrid>().Reposition();
+			Invoke("Reposition",0.00000001f);
+		}
 	}
 	
 	//---------------------------------------------------

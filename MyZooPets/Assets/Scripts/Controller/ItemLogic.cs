@@ -41,7 +41,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 				Dictionary<string, Item> decorationDict = DataItems.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
 
-				// further sort into category Dict<decor category, list<Item>> 
 			}
 			return decorationList;
 		}		
@@ -50,9 +49,13 @@ public class ItemLogic : Singleton<ItemLogic>{
 	public Dictionary<DecorationTypes, List<DecorationItem>> DecorationSubCatList{
 		get{
 			if(decorationSubCatList == null){
-				decorationSubCatList = new Dictionary<DecorationTypes, List<Item>>();	
-				decorationSubCatList = (from item in DecorationList
-										group item by item.DecorationType into groupedClass
+				//Cast the whole arrow to type DecorationItem so we can sort the list by DecorationTypes
+				List<DecorationItem> decoItems = DecorationList.Cast<DecorationItem>().ToList();
+				decorationSubCatList = new Dictionary<DecorationTypes, List<DecorationItem>>();	
+
+				//Sort and DecorationTypes and store into a dictionary
+				decorationSubCatList = (from decoItem in decoItems
+										group decoItem by decoItem.DecorationType into groupedClass
 										select groupedClass).ToDictionary(i => i.Key, i => i.ToList());
 			}
 			return decorationSubCatList;

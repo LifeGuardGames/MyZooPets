@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class PetMovement : Singleton<PetMovement> {
     public Camera mainCamera;
     public GameObject runWay; //Where the pet is allowed to move
-	public GameObject shadowObject;
+	public GameObject shadowObject; //pet's shadow
+    public PanToMoveCamera scriptPan; //script that pan the camera
 	
 	public GameObject petSprite;
 	public GameObject GetPetGameObject() {
@@ -57,6 +58,7 @@ public class PetMovement : Singleton<PetMovement> {
 
     void Start(){
        destinationPoint = petSprite.transform.position;
+       scriptPan.OnPartitionChanged += MovePetWithCamera;
     }
 
     // Update is called once per frame
@@ -93,8 +95,9 @@ public class PetMovement : Singleton<PetMovement> {
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
     }
 
-	public void MovePetWithCamera(){
-		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/3, 80, 0)));
+    //Pet will follow the camera when the partition has been changed
+	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
+		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, 80, 0)));
 	}
 	
 	public void StopMoving() {

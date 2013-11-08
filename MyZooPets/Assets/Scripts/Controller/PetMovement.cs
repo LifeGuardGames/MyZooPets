@@ -97,7 +97,10 @@ public class PetMovement : Singleton<PetMovement> {
 
     //Pet will follow the camera when the partition has been changed
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
-		MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, 80, 0)));
+        //Transform pet position to screen point first so we can move the pet to the right y position
+  //       Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
+
+		// MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, petPosInScreenPoint.y, 0)));
 	}
 	
 	public void StopMoving() {
@@ -118,7 +121,7 @@ public class PetMovement : Singleton<PetMovement> {
 	public void MovePet( Vector3 vLoc ) {
         destinationPoint = vLoc;
 		
-		// tell the pet animator script to tart moving (but only if we aren't already moving)
+		// tell the pet animator script to start moving (but only if we aren't already moving)
 		if ( !moving )
         	scriptAnim.StartMoving();
 		

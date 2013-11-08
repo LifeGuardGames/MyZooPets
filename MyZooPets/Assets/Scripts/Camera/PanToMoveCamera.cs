@@ -161,6 +161,7 @@ public class PanToMoveCamera : MonoBehaviour {
 
 		// camera is done snapping, so send the partition changed callback
 		if ( OnPartitionChanged != null )
+            print("partition changed");
 			OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );		
 	}
 	

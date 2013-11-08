@@ -79,11 +79,12 @@ public class TutorialManager_Bedroom : TutorialManager {
 		bool bFlameTut = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_FLAME );
 		
 		// if the player reached a gated room and has not yet seen the flame tutorial, start it
-		if ( !bFlameTut )
+		if ( !bFlameTut ) {
 			// unsub from callback
 			GatingManager.Instance.OnReachedGate -= OnReachedGate;
 		
 			// start the tut
 			new GameTutorial_Flame();
+		}
 	}
 }

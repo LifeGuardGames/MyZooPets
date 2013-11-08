@@ -176,7 +176,7 @@ public abstract class Tutorial {
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
 		if ( bGUI )
-			vPos = goTarget.transform.position;
+			vPos = goTarget.transform.localPosition;
 		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );

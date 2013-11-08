@@ -18,6 +18,7 @@ public abstract class Tutorial {
 	
 	// ----------- Tutorial Popup types -------------------
 	protected const string POPUP_STD = "TutorialPopup_Standard";
+	protected const string POPUP_LONG = "TutorialPopup_Long";
 	// ----------------------------------------------------
 	
 	// list of objects that can be processed as input
@@ -76,6 +77,7 @@ public abstract class Tutorial {
 	//=====================================================		
 	
 	public Tutorial() {
+		Debug.Log("Starting tutorial " + GetKey());
 		SetMaxSteps();
 		SetStep( 0 );
 	}
@@ -161,19 +163,26 @@ public abstract class Tutorial {
 	// Puts a spotlight around the incoming object to
 	// draw attention to it.
 	//---------------------------------------------------	
-	protected void SpotlightObject( GameObject goTarget ) {
+	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, string strSpotlightPrefab = "TutorialSpotlight" ) {
 		// if the spotlight object already exists, then we want to just move it to the new location
 		if ( goSpotlight != null ) {
 			MoveSpotlight( goTarget );
 			return;
 		}
-
+	
 		// get the proper location of the object we are going to focus on
-		Vector3 vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
+		Vector3 vPos;
+		if ( bGUI )
+			vPos = goTarget.transform.position;
+		else {
+			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
+			vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
+			vPos = CameraManager.Instance.BottomLeftToCenter( vPos );
+		}
 		
 		// create the object
-		GameObject goResource = Resources.Load( "TutorialSpotlight" ) as GameObject;
-		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
+		GameObject goResource = Resources.Load( strSpotlightPrefab ) as GameObject;
+		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
 		vPos.z = goSpotlight.transform.position.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = vPos;
 	}
@@ -223,13 +232,14 @@ public abstract class Tutorial {
 		// get text to display from tutorial key + step
 		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
 		
-		// transform viewport location to screen position
+		// transform viewport location to screen position, then from bottom left to center
 		Vector3 vPos = Camera.main.ViewportToScreenPoint( vLoc );
-		Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		vPos = CameraManager.Instance.BottomLeftToCenter( vPos );
+		//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
 		
 		// create the popup
 		GameObject goResource = Resources.Load( strPopupKey ) as GameObject;
-		goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-BottomLeft"), goResource );
+		goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
 		vPos.z = goPopup.transform.position.z; // keep the default z-value
 		goPopup.transform.localPosition = vPos;	
 		

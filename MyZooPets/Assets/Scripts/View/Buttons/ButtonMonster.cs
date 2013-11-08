@@ -24,6 +24,9 @@ public class ButtonMonster : LgButtonHold {
 	// is this button being pressed legally?  Mainly used as a stopgap for now
 	private bool bLegal;
 	
+	// const variable for the name of the fire button
+	public const string FIRE_BUTTON = "FireButton";
+	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
@@ -128,7 +131,7 @@ public class ButtonMonster : LgButtonHold {
 		
 		if ( scriptFireMeter.IsFull() ) {
 			// if the meter was full on release, complete the attack!
-			scriptAttack.FinishAttack();
+			scriptAttack.FinishAttack();			
 			
 			// and decrement the user's fire breaths
 			DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( -1 );

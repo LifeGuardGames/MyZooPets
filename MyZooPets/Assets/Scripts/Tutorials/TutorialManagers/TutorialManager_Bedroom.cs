@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // TutorialManager_Bedroom
@@ -13,11 +15,16 @@ public class TutorialManager_Bedroom : TutorialManager {
 	public const string TUT_INTRO = "IntroNotification";
 	public const string TUT_INHALER = "FOCUS_INHALER";
 	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
+	public const string TUT_FLAME = "TUT_FLAME";
 	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {
+		// listen for partition changing event; used for flame tutorial
+		GatingManager.Instance.OnReachedGate += OnReachedGate;
+		
+		// do the first check for tutorials
 		Check();
 	}
 	
@@ -27,8 +34,9 @@ public class TutorialManager_Bedroom : TutorialManager {
 	protected override void _Check() {
 		bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
-		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR);
+		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR );
 		
+		// these tutorials occur in quick succession
 		if ( !bIntro ) {
 			// first, check to see if that initial notification has been shown
 			TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( "TUT_BEDROOM_INTRO" ), "guiPanelStatsHealth", IntroDone, true, true, "Tutorial:Bedroom:Intro" );	
@@ -53,5 +61,20 @@ public class TutorialManager_Bedroom : TutorialManager {
 		
 		// and check to see what the next tut should be
 		Check();
+	}
+	
+	//---------------------------------------------------
+	// OnReachedGate()
+	//---------------------------------------------------	
+	public void OnReachedGate( object sender, EventArgs args ) {
+		bool bFlameTut = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_FLAME );
+		
+		// if the player reached a gated room and has not yet seen the flame tutorial, start it
+		if ( !bFlameTut )
+			// unsub from callback
+			GatingManager.Instance.OnReachedGate -= OnReachedGate;
+		
+			// start the tut
+			new GameTutorial_Flame();
 	}
 }

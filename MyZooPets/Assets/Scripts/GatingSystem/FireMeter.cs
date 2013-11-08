@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // FireMeter
@@ -20,6 +22,9 @@ public class FireMeter : MonoBehaviour {
 	private void SetFillStatus( bool bStatus ) {
 		bShouldFill = bStatus;	
 	}	
+	
+	//=======================Events========================
+    public static EventHandler<EventArgs> OnMeterFilled;   // when the meter is 100% full
 	
 	//---------------------------------------------------
 	// Start()
@@ -57,6 +62,15 @@ public class FireMeter : MonoBehaviour {
 		
 		// fill the slider by the fill rate
 		slider.sliderValue += fFillRate;
+		
+		if ( slider.sliderValue >= 1 ) {
+			// process any callbacks for when the meter is full
+			if ( OnMeterFilled != null )
+				OnMeterFilled( this, EventArgs.Empty );
+			
+			// stop filling
+			SetFillStatus( false );
+		}
 	}
 	
 	//---------------------------------------------------

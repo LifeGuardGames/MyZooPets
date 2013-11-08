@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class GameTutorial_FocusInhaler : GameTutorial {
 	// inhaler object
-	private GameObject goInhaler = GameObject.Find( "GO_RealInhaler" );
+	private GameObject goInhaler = GameObject.Find( "Entrance_Inhaler" );
 	
 	public GameTutorial_FocusInhaler() : base() {	
 	}	

@@ -132,10 +132,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void QuitInhalerGame(){
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
+		/*if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_PostInhaler") == false ) {
 			ShowCutscene();
 			return;	
-		}
+		}*/
 		
 		// I hate to do this here, but I'm not sure where else to put it...if the player had not completed the tutorial, mark it as
 		// completed

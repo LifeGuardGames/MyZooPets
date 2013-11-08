@@ -15,11 +15,11 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		//Start tutorial if first time; otherwise, open inhaler game
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
-			ShowCutscene();
+		//if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
+		//	ShowCutscene();
 		//else if(TutorialLogic.Instance.FirstTimeRealInhaler)
 		//	TutorialUIManager.Instance.StartRealInhalerTutorial();
-		else
+		//else
 			CheckToOpenInhaler();
 	}
 	

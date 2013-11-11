@@ -47,7 +47,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         get{return triggerPrefabs;}
     }
 
-    void Awake(){
+    void Awake(){		
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;
@@ -80,13 +80,21 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             //random location and prefab
             int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
             int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
+			
+			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
+			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
+			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_TRIGGERS );
+			if ( !bTriggers ) {
+				locationIndex = 0;
+				objectIndex = 3;
+			}
 
             Location triggerLocation = triggerLocations[locationIndex];
             if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
                 locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
             }
             triggerLocation.isTaken = true;
-            
+           
             //spawn them at a pre define location
             //ID is the order in which the data are created
             DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));

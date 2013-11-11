@@ -9,7 +9,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class GameTutorial_FocusCalendar : GameTutorial {
-	// inhaler object
+	// calendar object
 	private GameObject goCalendar = GameObject.Find( "Calendar" );
 	
 	public GameTutorial_FocusCalendar() : base() {	

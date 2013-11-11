@@ -38,6 +38,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
     }
 
     private void UpdateTutorial(){
+		/*
         if(TutorialLogic.Instance.FirstTimeRealInhaler){
             // realInhaler.GetComponent<TutorialHighlighting>().ShowArrow();
         }else if(TutorialLogic.Instance.FirstTimeCalendar){
@@ -46,6 +47,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
             //start trigger tutorial after others are done
             DegradationUIManager.Instance.ActivateParticleEffects();
         }
+        */
     }
 
     //========================Calendar Tutorial======================
@@ -178,8 +180,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
             AddDegradTipIntro();
 			AddDegradTipConclude();
 		}*/
-		TutorialLogic.Instance.FirstTimeDegradTrigger = false;
-		DegradationUIManager.Instance.ActivateParticleEffects();
+		//TutorialLogic.Instance.FirstTimeDegradTrigger = false;
+		//DegradationUIManager.Instance.ActivateParticleEffects();
     }
 
     private void AddDegradTipIntro(){

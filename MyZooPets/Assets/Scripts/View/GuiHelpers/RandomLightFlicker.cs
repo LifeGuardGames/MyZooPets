@@ -11,7 +11,7 @@ public class RandomLightFlicker : MonoBehaviour {
 	public bool flashingFlicker = true;
 	
 	private Light thisLight;
-	private bool loop = true;
+	//private bool loop = true;
 	
 	void Start(){
 		thisLight = gameObject.GetComponent<Light>();

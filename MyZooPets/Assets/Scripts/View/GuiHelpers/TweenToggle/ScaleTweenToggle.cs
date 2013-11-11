@@ -51,6 +51,7 @@ public class ScaleTweenToggle : TweenToggle {
 			if (ignoreTimeScale){
 				optional.Add("useEstimatedTime", true);
 			}
+
 			LeanTween.scale(gameObject, showingPos, time, optional);
 		}
 	}

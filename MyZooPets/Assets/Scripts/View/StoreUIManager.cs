@@ -6,15 +6,10 @@ using System.Collections.Generic;
 public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemSpritePrefab; // item sprite for inventory
-	public GameObject storePanel;
-	public GameObject storeBackground;
-
-
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
-	// public GameObject FirstPageTag;
 	
 	// store related sounds
 	public string strSoundChangeTab;
@@ -23,15 +18,17 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-
 	private GameObject grid;
+
+	private Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
+	private Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
+	private Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
+	private Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
+	private Color green = new Color(0, 0.71f, 0.31f, 0.78f);
+	private Color orange = new Color(1, 0.6f, 0, 0.78f);
 
 	void Awake(){
 		grid = itemArea.transform.Find("Grid").gameObject;
-	}
-
-	void Start (){
-		// CreateItems(FirstPageTag);
 	}
 
 	protected override void _OpenUI(){
@@ -52,9 +49,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// EditDecosUIManager.Instance.ShowNavButton();
 	}
 
-	//This function is called when buying an item
-	//It creates a icon for the item and move it to Inventory
-	//TODO Scales are a little mess up
+	//---------------------------------------------------
+	// OnBuyAnimation()
+	// This function is called when buying an item
+	// It creates a icon for the item and move it to Inventory
+	// TODO Scales are a little mess up
+	//---------------------------------------------------
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string itemID = sprite.transform.parent.name;
@@ -83,7 +83,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		path[3] = itemPosition;
 
 		Hashtable optional = new Hashtable();
-		GameObject animationSprite = NGUITools.AddChild(storePanel, itemSpritePrefab);
+		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);
 		
 		// hashtable for completion params for the callback (stash the icon we are animating)
 		Hashtable completeParamHash = new Hashtable();
@@ -112,7 +112,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}	
 	}
 
-	//Called when "Buy" is clicked
+	//---------------------------------------------------
+	// OnBuyButton()
+	// Called when "Buy" is clicked
+	//---------------------------------------------------
 	public void OnBuyButton(GameObject button){
 		string itemID = button.transform.parent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
@@ -126,59 +129,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}
 	}
 
-	//--------------------------------------------------
-	// CreateCategoryItems() 
-	// Draw according to ItemLogic.Instance 
-	//--------------------------------------------------
-	private void CreateCategoryItems(GameObject page){
-		// if(currentPage != page.name){
-		// 	// Destory first
-		// 	foreach(Transform child in grid.transform){
-		// 		Destroy(child.gameObject);
-		// 	}
-			
-		// 	// if the current page is not null, we are switching pages, so play a sound
-		// 	if ( currentPage != null )
-		// 		AudioManager.Instance.PlayClip( strSoundChangeTab );	
-			
-		// 	// cache our new page name
-		// 	currentPage = page.name;
-			
-		// 	// based on the page, create the proper set of item in the store
-		// 	if(page == null || page.name == "Food")
-		// 		CreateCategoryItemsTab( new Color(0.5529f, 0.6863f, 1f, .784f), ItemLogic.Instance.FoodList);
-		// 	else if(page.name == "Item")
-		// 		CreateCategoryItemsTab( new Color(1f, 0.6196f, 0.6196f, .784f), ItemLogic.Instance.UsableList);
-		// 	else if(page.name == "Decoration")
-		// 		CreateSubCategoryItems();
-		// 		// CreateItemsTab( new Color(0.639f, 1, 0.7529f, .784f), ItemLogic.Instance.DecorationList);
-		// 	else
-		// 		Debug.Log("Illegal store UI page: " + page.name);
-			
-		// 	grid.GetComponent<UIGrid>().Reposition();
-		// 	Invoke("Reposition",0.00000001f);
-		// }
-	}
-	
-	//---------------------------------------------------
-	// CreateItemsTab()
-	// Populates the store UI with the incoming list
-	// of items and bg atlas.
-	//---------------------------------------------------	
-	private void CreateCategoryItemsTab( Color colorBG, List<Item> listItems ) {
-		// reset the clip range for the item area so that the scrolling get rest 
-		// Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-		// itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -56f, itemArea.transform.localPosition.z);
-		// itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
-		
-		// // set the proper bg
-		// storeBackground.GetComponent<UISprite>().color = colorBG;
-		
-		// // go through our list of items and create an entry for each one
-		// foreach(Item itemData in listItems)
-		// 	SetUpItemObject(itemData);
-	}
-
 	//----------------------------------------------------
 	// CreateSubCategoryItems()
 	// Create tabs for sub category if sub category exists. 
@@ -190,22 +140,23 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			//No tabs so turn them all off
 			foreach(Transform tab in tabArea.transform){
-				tab.gameObject.SetActive(false);
+				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("");
-		}
-		else if(currentPage == "Items"){
+			CreateSubCategoryItemsTab("foodDefaultTab");
+
+		}else if(currentPage == "Items"){
 			foreach(Transform tab in tabArea.transform){
-				tab.gameObject.SetActive(false);
+				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("");
-		}
-		else if(currentPage == "Decorations"){
+			CreateSubCategoryItemsTab("itemsDefaultTab");
+
+		}else if(currentPage == "Decorations"){
+			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
+			//use to count the decorationEnums with the tabs in tabArea
 			int counter = 0;
 			string defaultTabName = "";
 
@@ -214,10 +165,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
 
+					ShowUseTab(tab);
 					if(counter == 0) defaultTabName = tab.name;
 				}else{
 					tab.name = "";
-					// tab.gameObject.SetActive(false);
+
+					HideUnuseTab(tab);
 				}
 				counter++;
 			}
@@ -229,14 +182,21 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		ShowStoreSubPanel();
 	}
 
-	//By not calling the Open() of SingletonUI we by pass the clickmanager lock so it will
-	//remain lock 
+	//------------------------------------------
+	// ShowStoreSubPanel()
+	// By not calling the Open() of SingletonUI we 
+	// by pass the clickmanager lock so it will
+	// remain lock 
+	//------------------------------------------
 	private void ShowStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	//Return to the StoreBasePanel
+	//------------------------------------------
+	// HideStoreSubPanel()
+	// Return to the StoreBasePanel
+	//------------------------------------------
 	public void HideStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
@@ -262,6 +222,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			foreach(Transform child in grid.transform)
 				Destroy(child.gameObject);
 
+			//Reset clip range so scrolling will start from beginning again
+			// ResetUIPanelClipRange();
+
 			//if the current page is not null, we are switching tabs, so play a sound
 			if(currentTab != null)
 				AudioManager.Instance.PlayClip(strSoundChangeTab);
@@ -276,16 +239,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				foreach(Item itemData in foodList)
 					SetUpItemObject(itemData);
 
-			}
-			else if(currentPage == "Items"){
+			}else if(currentPage == "Items"){
 				//No sub category so retrieve a list of all item
 				List<Item> usableList = ItemLogic.Instance.UsableList;
 
 				foreach(Item itemData in usableList)
 					SetUpItemObject(itemData);
 
-			}
-			else if(currentPage == "Decorations"){
+			}else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)
 				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
 				DecorationTypes decoType = (DecorationTypes) Enum.Parse(typeof(DecorationTypes), tabName);
@@ -319,6 +280,35 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		itemUIObject.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemData.TextureName;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
 		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
+	}
+
+	//-----------------------------------------
+	// HideUnuseTab()
+	// If the tab is not used. turn the UISprite 
+	// script and the collider off
+	//------------------------------------------
+	private void HideUnuseTab(Transform tab){
+		tab.GetComponent<UISprite>().enabled = false;
+		tab.collider.enabled = false;
+	}
+
+	//-----------------------------------------
+	// UseTab()
+	//	If tab is used. Show 
+	//------------------------------------------
+	private void ShowUseTab(Transform tab){
+		tab.GetComponent<UISprite>().enabled = true;
+		tab.collider.enabled = true;
+	}
+
+	//------------------------------------------
+	// ResetUIPanelClipRange()
+	// reset the clip range for the item area so that scrolling starts from the beginning
+	//------------------------------------------
+	private void ResetUIPanelClipRange(){
+        Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
+        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -56f, itemArea.transform.localPosition.z);
+        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
 	}
 
 	//Delay calling reposition due to async problem Destroying/Repositionoing.

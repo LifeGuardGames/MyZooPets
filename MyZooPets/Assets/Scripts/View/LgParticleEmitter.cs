@@ -13,6 +13,10 @@ public class LgParticleEmitter : MonoBehaviour {
 	
 	//Timer stuff
 	public bool isActive;
+	private void SetActive( bool bActive ){
+		isActive = bActive;	
+	}
+	
 	public float delayBeforeStart;
 	public float minInterval;
 	public float maxInterval;
@@ -60,11 +64,15 @@ public class LgParticleEmitter : MonoBehaviour {
 	}
 	
 	// Note: If some script enables a bunch of buttons at the same time they will all instantiate at once the first time
-	public void Enable(){
-		isActive = true;
+	public void Enable( bool bImmediate = false ){
+		SetActive( true );
+		
+		// if we are to fire this trigger immediately, override the generated value
+		if ( bImmediate )
+			generatedValue = 0;
 	}
 	
 	public void Disable(){
-		isActive = false;
+		SetActive( false );
 	}
 }

@@ -8,6 +8,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
+	public GameObject storeSubPanelBg; 
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	
@@ -20,15 +21,25 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private string currentTab; //The current sub category. only decorations have sub cat right now
 	private GameObject grid;
 
-	private Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
-	private Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
-	private Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
-	private Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
-	private Color green = new Color(0, 0.71f, 0.31f, 0.78f);
-	private Color orange = new Color(1, 0.6f, 0, 0.78f);
+	private List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		grid = itemArea.transform.Find("Grid").gameObject;
+
+		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
+		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
+		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
+		Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
+		Color green = new Color(0, 0.71f, 0.31f, 0.78f);
+		Color orange = new Color(1, 0.6f, 0, 0.78f);
+
+		colors = new List<Color>();
+		colors.Add(pink);
+		colors.Add(purple);
+		colors.Add(blue);
+		colors.Add(teel);
+		colors.Add(green);
+		colors.Add(orange);
 	}
 
 	protected override void _OpenUI(){
@@ -144,29 +155,33 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("foodDefaultTab");
+			CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);
 
 		}else if(currentPage == "Items"){
 			foreach(Transform tab in tabArea.transform){
 				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("itemsDefaultTab");
+			CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);
 
 		}else if(currentPage == "Decorations"){
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
-			//use to count the decorationEnums with the tabs in tabArea
 			int counter = 0;
 			string defaultTabName = "";
+			Color defaultColor = new Color(0, 0, 0, 0);
 
 			//Rename the tab to reflect the sub category name
 			foreach(Transform tab in tabArea.transform){
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
+					tab.GetComponent<UISprite>().color = colors[counter];
 
 					ShowUseTab(tab);
-					if(counter == 0) defaultTabName = tab.name;
+					if(counter == 0){
+						defaultTabName = tab.name;
+						defaultColor = colors[counter];
+					}
 				}else{
 					tab.name = "";
 
@@ -176,7 +191,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			}
 
 			//After tabs have been set up create items for the first/default tab
-			CreateSubCategoryItemsTab(defaultTabName);
+			CreateSubCategoryItemsTab(defaultTabName, defaultColor);
 		}
 
 		ShowStoreSubPanel();
@@ -209,14 +224,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// public method to be called by button
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(GameObject tab){
-		CreateSubCategoryItemsTab(tab.name);
+		Color tabColor = tab.GetComponent<UISprite>().color;
+		CreateSubCategoryItemsTab(tab.name, tabColor);
 	}
 
 	//----------------------------------------------------
 	// CreateSubCategoryItemsTab()
 	// Create items for sub category 
 	//----------------------------------------------------
-	private void CreateSubCategoryItemsTab(string tabName){
+	private void CreateSubCategoryItemsTab(string tabName, Color tabColor){
 		if(currentTab != tabName){
 			//Destroy existing items first
 			foreach(Transform child in grid.transform)
@@ -229,7 +245,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			if(currentTab != null)
 				AudioManager.Instance.PlayClip(strSoundChangeTab);
 
+			//set current tab
 			currentTab = tabName;
+
+			//set panel background color
+			storeSubPanelBg.GetComponent<UISprite>().color = tabColor; 
 
 			//base on the tab name and the page name, create proper set of item in the store
 			if(currentPage == "Food"){

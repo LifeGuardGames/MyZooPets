@@ -51,11 +51,13 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         InhalerLogic.OnNextStep -= OnNextStep;
     }
 
-    /*
-        If runShowHintTimer is true, hints will be hidden at first, and shown only when the user has not made the correct move
-        after a specified period of time (timeBeforeHints).
-        If it is false, that means the hints should be shown throughout the game (for someone's first time playing this).
-    */
+    //---------------------------------------------
+    // If runShowHintTimer is true, hints will be hidden at first, 
+    // and shown only when the user has not made the correct move
+    // after a specified period of time (timeBeforeHints).
+    // If it is false, that means the hints should be shown 
+    // throughout the game (for someone's first time playing this).
+    //----------------------------------------------
     void Update(){
         if(runShowHintTimer){
             ShowHintTimer(); // This checks and shows hints if necessary.
@@ -96,7 +98,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private void StartGame(){
         HideHUD();
         ShowQuitButton();
-        // ShowIntro();
         SetUpHintTimer();
 
         //Start the first hint
@@ -145,10 +146,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 		// completed
 		if ( !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER ) )
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
-		
-		// TODO-s Call notificationUIManager.Instance.UnlockQueue();?????
-        // Add scene transition as well
-        Application.LoadLevel("NewBedRoom");
     }
 	
 	//---------------------------------------------------
@@ -230,17 +227,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         }
     }
     //========================================================================
-
-    //Display game introduction popup texture
-    private void ShowIntro(){
-        HideProgressBar();
-        float messageDuration;
-   
-        NotificationUIManager.Instance.PopupTexture("intro");
-        messageDuration = introMessageDuration;
-
-        Invoke("ShowGameUI", messageDuration);
-    }
 
     private void ShowGameOverMessage(){
         // Assign delegate functions to be passed in hashtable

@@ -136,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 33164406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.5, z: 0}
+  m_LocalPosition: {x: .710144043, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1759701212}
@@ -2334,7 +2334,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 591515949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.5, z: 0}
+  m_LocalPosition: {x: .710144043, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1137665733}
@@ -3541,11 +3541,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.710144043
     e10: 0
     e11: 384
     e12: 0
-    e13: .0115089417
+    e13: 1.2212944
     e20: 0
     e21: 0
     e22: 384
@@ -4305,11 +4305,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.710144043
     e10: 0
     e11: 384
     e12: 0
-    e13: -349.5
+    e13: -349
     e20: 0
     e21: 0
     e22: 384
@@ -5356,7 +5356,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1358462900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .5, z: 0}
+  m_LocalPosition: {x: .710144043, y: -.709785461, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1947923335}
@@ -6566,8 +6566,9 @@ GameObject:
   - 65: {fileID: 1759701216}
   - 114: {fileID: 1759701215}
   - 114: {fileID: 1759701214}
-  - 114: {fileID: 1759701213}
   - 114: {fileID: 1759701217}
+  - 114: {fileID: 1759701213}
+  - 114: {fileID: 1759701218}
   m_Layer: 10
   m_Name: BackButton
   m_TagString: Untagged
@@ -6590,19 +6591,27 @@ Transform:
 --- !u!114 &1759701213
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400006, guid: 4ff20fb2a96b5184091aa749338b2393,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1759701211}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f8cf9a5438004f38888249a95898ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 323448808}
-  functionName: QuitInhalerGame
-  trigger: 0
-  includeChildren: 0
+  bSprite: 1
+  strSoundProcess: 
+  bCheckClickManager: 1
+  strAnalytics: 
+  strScene: NewBedRoom
+  scriptTransition: {fileID: 1599354325}
+  vOffset: {x: 0, y: 0, z: 0}
+  vFinalRotation: {x: 0, y: 0, z: 0}
+  fTime: 0
+  strLoadingScreen: LoadingScreen
+  shouldSaveSceneData: 0
+  cameraGO: {fileID: 0}
+  petLWF: {fileID: 0}
 --- !u!114 &1759701214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6684,6 +6693,21 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &1759701218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1759701211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 323448808}
+  functionName: QuitInhalerGame
+  trigger: 0
+  includeChildren: 0
 --- !u!1 &1766533294
 GameObject:
   m_ObjectHideFlags: 0

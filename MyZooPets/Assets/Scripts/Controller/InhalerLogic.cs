@@ -37,10 +37,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
             // if(D.Assert(OnWrongStep != null, "OnWrongStep has no listeners"))
             //     OnWrongStep(this, EventArgs.Empty);
         // }
-        //TO DO: Add game analytics here
-        /*
-            GA.API.Design.NewEvent("InhalerGame:" + currentInhalerType + ":" + currentStep + ":" + wrongstep);
-        */
         return retVal; 
     }
 

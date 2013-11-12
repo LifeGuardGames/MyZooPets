@@ -841,6 +841,10 @@ Prefab:
       propertyPath: progressBar
       value: 
       objectReference: {fileID: 1137665732}
+    - target: {fileID: 11400000, guid: cd3abd5e13f604a588f9751372e768bb, type: 2}
+      propertyPath: scriptTransition
+      value: 
+      objectReference: {fileID: 1599354325}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cd3abd5e13f604a588f9751372e768bb, type: 2}
   m_RootGameObject: {fileID: 323448808}
@@ -1431,6 +1435,7 @@ MonoBehaviour:
   quitButton: {fileID: 1759701211}
   progressStep: {fileID: 100004, guid: 334bafa69c01448069875607defa6d4b, type: 2}
   slider: {fileID: 757663631}
+  scriptTransition: {fileID: 1599354325}
 --- !u!1001 &329076905
 Prefab:
   m_ObjectHideFlags: 0
@@ -6568,7 +6573,6 @@ GameObject:
   - 114: {fileID: 1759701214}
   - 114: {fileID: 1759701217}
   - 114: {fileID: 1759701213}
-  - 114: {fileID: 1759701218}
   m_Layer: 10
   m_Name: BackButton
   m_TagString: Untagged
@@ -6596,7 +6600,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1759701211}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f8cf9a5438004f38888249a95898ca9, type: 3}
+  m_Script: {fileID: 11500000, guid: 40d5bc10967664d8fb41d40942caa36d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
@@ -6693,21 +6697,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &1759701218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1759701211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 323448808}
-  functionName: QuitInhalerGame
-  trigger: 0
-  includeChildren: 0
 --- !u!1 &1766533294
 GameObject:
   m_ObjectHideFlags: 0

@@ -166,36 +166,32 @@ public abstract class Tutorial {
 	// Puts a spotlight around the incoming object to
 	// draw attention to it.
 	//---------------------------------------------------	
-	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, string strSpotlightPrefab = "TutorialSpotlight" ) {
-		// if the spotlight object already exists, then we want to just move it to the new location
-		if ( goSpotlight != null ) {
-			MoveSpotlight( goTarget );
-			return;
-		}
-	
+	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight" ) {
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
-		if ( bGUI )
+		if ( bGUI ) {
 			vPos = goTarget.transform.localPosition;
+			
+			// it's possible we might need to transform this position if it's not already in the center panel
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, eAnchor, InterfaceAnchors.Center );
+		}
 		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
-			vPos = CameraManager.Instance.BottomLeftToCenter( vPos );
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
 		}
 		
-		// create the object
+		// destroy the old object if it existed
+		if ( goSpotlight != null )
+			GameObject.Destroy( goSpotlight );
+		
+		// create the spotlight
 		GameObject goResource = Resources.Load( strSpotlightPrefab ) as GameObject;
 		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
+		
+		// move the spotlight into position
 		vPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = vPos;
-	}
-	
-	//---------------------------------------------------
-	// MoveSpotlight()
-	// Moves the spotlight object to focus on goTarget.
-	//---------------------------------------------------		
-	private void MoveSpotlight( GameObject goTarget ) {
-		Debug.Log("Moving spotlight code not yet implemented.  Sorry bro.");
 	}
 	
 	//---------------------------------------------------
@@ -237,7 +233,7 @@ public abstract class Tutorial {
 		
 		// transform viewport location to screen position, then from bottom left to center
 		Vector3 vPos = Camera.main.ViewportToScreenPoint( vLoc );
-		vPos = CameraManager.Instance.BottomLeftToCenter( vPos );
+		vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
 		//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
 		
 		// create the popup

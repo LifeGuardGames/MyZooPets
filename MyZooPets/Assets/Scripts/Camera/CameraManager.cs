@@ -127,20 +127,38 @@ public class CameraManager : Singleton<CameraManager> {
 	}
 	
 	//---------------------------------------------------
-	// BottomLeftToCenter()
-	// This function is specifically for tranforming NGUI
-	// coordinates from the bottom left anchor to the 
-	// center anchor.  This is because the bottom left
-	// anchor matches screen position (bottom left = 0,0),
-	// whereas the center anchor is 0,0 in the center.
-	// We may need to change this a little bit more to
-	// accomodate Android devices.
+	// TransformAnchorPosition()
+	// Strictly for use with NGUI, takes a vector and the
+	// anchor that vector is in (eAnchorIn) and transforms
+	// that position to coordinates as if the position were
+	// in the eAnchorOut anchor.
 	//---------------------------------------------------	
-	public Vector3 BottomLeftToCenter( Vector3 vPos ) {
-		Vector3 vCenter = vPos;
-		vCenter.x -= Screen.width / 2;
-		vCenter.y -= Screen.height / 2;
+	public Vector3 TransformAnchorPosition( Vector3 vPos, InterfaceAnchors eAnchorIn, InterfaceAnchors eAnchorOut ) {
+		// no need to do any transforming if the two anchors are the same
+		if ( eAnchorIn == eAnchorOut )
+			return vPos;
 		
-		return vCenter;
+		// right now I'm just supporting going to the center anchor
+		if ( eAnchorOut != InterfaceAnchors.Center ) {
+			Debug.Log("Sorry future team, Joe did not implement this yet");
+			return vPos;
+		}
+		
+		Vector3 vTransformed = vPos;
+		
+		switch ( eAnchorIn ) {
+			case InterfaceAnchors.BottomLeft:
+				vTransformed.x -= Screen.width / 2;
+				vTransformed.y -= Screen.height / 2;
+				break;
+			case InterfaceAnchors.Bottom:
+				vTransformed.y -= Screen.height / 2;
+				break;
+			default:
+				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
+				break;
+		}
+		
+		return vTransformed;
 	}
 }

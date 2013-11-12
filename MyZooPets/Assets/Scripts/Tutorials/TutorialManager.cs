@@ -50,7 +50,19 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 		//Debug.Log("Starting tut manager, running spotlight test");
 		//SpotlightObject( goSpotTest );
 		
+		// listen for partition changing event
+		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
+		
 		_Start();
+	}
+	
+	//---------------------------------------------------
+	// EnteredRoom()
+	// When the player switches rooms.
+	//---------------------------------------------------	
+	public void EnteredRoom( object sender, PartitionChangedArgs args ) {
+		// do a check in case a tutorial was in a different room
+		Check();
 	}
 	
 	//---------------------------------------------------
@@ -59,7 +71,7 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	// game conditions.
 	//---------------------------------------------------	
 	protected void Check() {
-		if ( !bOn )
+		if ( !bOn || tutorial != null )
 			return;
 		else
 			_Check();

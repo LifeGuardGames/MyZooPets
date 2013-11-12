@@ -29,6 +29,15 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
 	
+	// save the 0th item in the deco menu for using in tutorials
+	private GameObject goTutorialEntry;
+	public GameObject GetTutorialEntry() {
+		return goTutorialEntry;	
+	}
+	
+	//=======================Events========================
+    public EventHandler<EventArgs> OnDecoPlaced;   // when a decoration is placed	
+	
 	//---------------------------------------------------
 	// UpdateItems()
 	// This function updates the choose decoration menu
@@ -117,6 +126,10 @@ public class ChooseDecorationUI : MonoBehaviour {
 				// color the box bg appropriately
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().color = new Color32(201,201,201,255);
 			}
+			
+			// save the tutorial entry (a bit hacky)
+			if ( i == 0 )
+				goTutorialEntry = item;
 		}		
 	}
 	
@@ -166,6 +179,10 @@ public class ChooseDecorationUI : MonoBehaviour {
 		
 		// close this menu
 		EditDecosUIManager.Instance.CloseChooseMenu();
+		
+		// send a callback
+		if ( OnDecoPlaced != null )
+			OnDecoPlaced( this, EventArgs.Empty );			
 	}
 	
 	//---------------------------------------------------

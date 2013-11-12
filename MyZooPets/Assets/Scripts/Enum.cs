@@ -221,3 +221,14 @@ public enum ButtonClickTypes {
 	Tap,
 	Hold
 }
+
+// types of NGUI interface anchors
+public enum InterfaceAnchors {
+	Bottom,
+	BottomLeft,
+	BottomRight,
+	Center,
+	Left,
+	Right,
+	Top
+}

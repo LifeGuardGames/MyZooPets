@@ -1,0 +1,146 @@
+﻿using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+//---------------------------------------------------
+// GameTutorial_Decorations
+// Tutorial to explain decoration system.
+//---------------------------------------------------
+
+public class GameTutorial_Decorations : GameTutorial {
+	// decoration node for tutorial
+	private GameObject goNode;
+	
+	public GameTutorial_Decorations() : base() {	
+	}	
+	
+	//---------------------------------------------------
+	// SetMaxSteps()
+	//---------------------------------------------------		
+	protected override void SetMaxSteps() {
+		nMaxSteps = 3;
+	}
+	
+	//---------------------------------------------------
+	// SetKey()
+	//---------------------------------------------------		
+	protected override void SetKey() {
+		strKey = TutorialManager_Bedroom.TUT_DECOS;
+	}
+	
+	//---------------------------------------------------
+	// _End()
+	//---------------------------------------------------		
+	protected override void _End( bool bFinished ) {
+	}
+	
+	//---------------------------------------------------
+	// ProcessStep()
+	//---------------------------------------------------		
+	protected override void ProcessStep( int nStep ) {
+		switch ( nStep ) {
+			case 0:
+				TutorialManager.Instance.StartCoroutine( FocusOnEditButton() );
+				break;
+		case 1:
+				FocusOnNode();
+				break;
+		case 2:
+				TutorialManager.Instance.StartCoroutine( FocusOnDecorationUI() );
+				break;			
+		}
+	}
+	
+	//---------------------------------------------------
+	// FocusOnEditButton()
+	// This part of the tutorial highlights the edit
+	// decos button so that the user presses it.
+	//---------------------------------------------------		
+	private IEnumerator FocusOnEditButton() {
+		// wait a brief moment
+		float fWait = Constants.GetConstant<float>( "DecoIntroWait" );
+		yield return new WaitForSeconds( fWait );
+		
+		// find and spotlight the edit button
+		GameObject goEditButton = GameObject.Find( "EditRoom" );
+		SpotlightObject( goEditButton, true, InterfaceAnchors.BottomLeft );
+		
+		// add the button to the process list so the user can click it
+		AddToProcessList( goEditButton );
+		
+		// sign up for a callback for when the button is clicked
+		EditDecosUIManager.Instance.OnManagerOpen += OnEditDecos;
+	}	
+	
+	//---------------------------------------------------
+	// OnEditDecos()
+	//---------------------------------------------------		
+	private void OnEditDecos( object sender, UIManagerEventArgs args ) {
+		// stop listening for callback
+		EditDecosUIManager.Instance.OnManagerOpen -= OnEditDecos;
+		
+		// advance the tutorial
+		Advance();		
+	}
+	
+	//---------------------------------------------------
+	// FocusOnNode()
+	//---------------------------------------------------		
+	private void FocusOnNode() {
+		// find and spotlight the tutorial node
+		goNode = GameObject.Find( "DecoNode_Dojo_Rug" );
+		SpotlightObject( goNode );
+		
+		// add the node to the process list so the user can click it
+		AddToProcessList( goNode );
+		
+		// listen for when the node is clicked
+		LgButton button = goNode.GetComponent<LgButton>();
+		button.OnProcessed += OnNodeClicked;		
+		
+		// at this point, also give the user an item for the node they are about to click
+		InventoryLogic.Instance.AddItem( "RUG_BLUE", 1 );
+	}
+	
+	//---------------------------------------------------
+	// OnNodeClicked()
+	//---------------------------------------------------		
+	private void OnNodeClicked( object sender, EventArgs args ) {
+		// stop listening for the node to be clicked
+		LgButton button = goNode.GetComponent<LgButton>();
+		button.OnProcessed -= OnNodeClicked;
+		
+		// advance the tutorial
+		Advance();
+	}
+	
+	//---------------------------------------------------
+	// FocusOnDecorationUI()
+	//---------------------------------------------------		
+	private IEnumerator FocusOnDecorationUI() {
+		// wait one frame for the UI to appear
+		yield return 0;
+		
+		// find and spotlight the decoration in the user's inventory/UI
+		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
+		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom );
+		
+		// listen for when that decoration is actually clicked
+		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced += OnDecorationPlaced;
+	}
+	
+	//---------------------------------------------------
+	// OnDecorationPlaced()
+	//---------------------------------------------------		
+	private void OnDecorationPlaced( object sender, EventArgs args ) {
+		// stop listening for the decoration clicked callback
+		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced -= OnDecorationPlaced;
+		
+		// remove the spotlight
+		RemoveSpotlight();
+		
+		// advance the tutorial
+		Advance();
+	}
+}

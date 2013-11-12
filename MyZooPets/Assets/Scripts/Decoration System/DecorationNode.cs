@@ -7,7 +7,7 @@ using System.Collections;
 // the type of decoration node.
 //---------------------------------------------------
 
-public abstract class DecorationNode : MonoBehaviour {
+public abstract class DecorationNode : LgButton {
 	// ------ Pure Abstract --------------------------
 	protected abstract void _SetDefaultDeco( string strDecoID );		// sets the default deco properly
 	//------------------------------------------------
@@ -33,7 +33,9 @@ public abstract class DecorationNode : MonoBehaviour {
 	// the decoration currently being displayed on this node
 	private string strDecoID = string.Empty;
 
-	void Start () {
+	protected override void _Start() {
+		bCheckClickManager = false;
+
 		// set the node ID to the game object name
 		strNodeID = gameObject.name;
 		
@@ -64,11 +66,6 @@ public abstract class DecorationNode : MonoBehaviour {
 		Transform transLabel = transform.Find( "Label" );
 		UILabel label = transLabel.gameObject.GetComponent<UILabel>();
 		label.text = strText;
-	}
-
-	// listen for when this node is tapped/clicked -- if we change nodes to 2D, use OnPress instead
-	void OnTap(TapGesture gesture) { 
-		NodeClicked();	
 	}
 
 	//---------------------------------------------------
@@ -141,10 +138,10 @@ public abstract class DecorationNode : MonoBehaviour {
 //	}
 	
 	//---------------------------------------------------
-	// NodeClicked()
+	// ProcessClick()
 	// Called when this node is clicked.
 	//---------------------------------------------------	
-	private void NodeClicked() {
+	protected override void ProcessClick() {
 		// have the deco UI manager update itself based on this node being selected
 		EditDecosUIManager.Instance.UpdateChooseMenu( this );
 	}

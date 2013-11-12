@@ -122,7 +122,30 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		// we possibly want to Resources.UnloadUnusedAssets() here because the menu is instantiated
 	}
 	
+	//---------------------------------------------------
+	// GetEditButtonPosition()
+	// Returns the position of the edit button.  Used for
+	// tutorials.
+	//---------------------------------------------------		
 	public Vector3 GetEditButtonPosition() {
 		return goEdit.transform.position;	
+	}
+	
+	//---------------------------------------------------
+	// GetTutorialEntry()
+	// Returns the special tutorial entry in the choose
+	// menu.  Used for tutorials.
+	//---------------------------------------------------		
+	public GameObject GetTutorialEntry() {
+		GameObject goEntry = scriptChooseUI.GetTutorialEntry();
+		return goEntry;
+	}
+	
+	//---------------------------------------------------
+	// GetChooseScript()
+	// Returns the choose menu script.  Used for tutorials.
+	//---------------------------------------------------		
+	public ChooseDecorationUI GetChooseScript() {
+		return scriptChooseUI;
 	}
 }

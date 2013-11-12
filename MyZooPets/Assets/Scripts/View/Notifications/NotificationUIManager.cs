@@ -199,7 +199,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
 		if(demux != null){
 			demux.startsHidden = startsHidden;
-			Debug.Log("STARTS HIDDEN" + startsHidden);
+			//Debug.Log("STARTS HIDDEN" + startsHidden);
 			demux.Reset();
 		}
 		

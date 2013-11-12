@@ -93,6 +93,10 @@ public abstract class LgButton : MonoBehaviour {
 		if ( ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap( gameObject ) ) {
 			return;
 		}
+		
+		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
+		if ( ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess( gameObject ) )
+			return;
 			
 		// if there is an analytic event on this button, let's process that
 		string strAnalytics = GetAnalyticsKey();

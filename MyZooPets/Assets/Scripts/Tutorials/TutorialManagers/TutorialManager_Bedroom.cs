@@ -18,6 +18,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 	public const string TUT_SMOKE_INTRO = "TUT_SMOKE_INTRO";
 	public const string TUT_FLAME = "TUT_FLAME";
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
+	public const string TUT_DECOS = "TUT_DECOS";
 	
 	//---------------------------------------------------
 	// _Start()
@@ -39,6 +40,8 @@ public class TutorialManager_Bedroom : TutorialManager {
 		bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR );
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_TRIGGERS );
 		bool bSmokeIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_SMOKE_INTRO );
+		bool bDecos = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_DECOS );
+		bool bFlameTut = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_FLAME );
 		
 		// these tutorials occur in quick succession
 		if ( !bIntro ) {
@@ -60,6 +63,10 @@ public class TutorialManager_Bedroom : TutorialManager {
 		else if ( !bSmokeIntro ) {
 			// play the smoke monster intro tutorial
 			new GameTutorial_SmokeIntro();
+		}
+		else if ( bFlameTut && !bDecos && CameraManager.Instance.GetPanScript().currentPartition == 1 ) {
+			// play the deco tutorial
+			new GameTutorial_Decorations();
 		}
 	}
 	

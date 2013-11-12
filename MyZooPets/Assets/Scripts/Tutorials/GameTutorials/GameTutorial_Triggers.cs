@@ -56,7 +56,6 @@ public class GameTutorial_Triggers : GameTutorial {
 	// SpawnDust()
 	//---------------------------------------------------		
 	private void SpawnDust() {
-		Debug.Log("Spawning dust");
 		// immediately create the dust triger for the tutorial.  Hopefully this happens just as the calendar is closing, so the player
 		// doesn't see it pop onto the screen.
 		scriptTrigger = DegradationUIManager.Instance.PlaceTutorialTrigger();
@@ -73,7 +72,6 @@ public class GameTutorial_Triggers : GameTutorial {
 		yield return new WaitForSeconds( fWait );
 		
 		// have the dust attack the player
-		Debug.Log("Turning on the emitter");
 		TutorialManager.Instance.StartCoroutine( scriptTrigger.FireOneSkull() );
 		
 		// wait another brief moment	

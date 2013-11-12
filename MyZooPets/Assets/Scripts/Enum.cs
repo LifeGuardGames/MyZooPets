@@ -109,12 +109,14 @@ public enum UIModeTypes {
 
 // decoration node anchor types
 public enum DecorationTypes {
-	WallItem,
-	FloorItem,
-	Wallpaper,
-	Rug,
-	Floor,
-	TallFloorItem
+    Poster,
+    Wallpaper,
+    Carpet,
+    FloorTile,
+    TallFurniture,
+    BigFurniture,
+    SmallPlant,
+    BigPlant,
 }
 
 // mini game states

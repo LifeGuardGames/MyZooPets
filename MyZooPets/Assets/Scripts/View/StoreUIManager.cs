@@ -32,6 +32,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
 		Color green = new Color(0, 0.71f, 0.31f, 0.78f);
 		Color orange = new Color(1, 0.6f, 0, 0.78f);
+		Color limeGreen = new Color(0.53f, 0.92f, 0, 0.78f);
+		Color purpleish = new Color(0.44f, 0.04f, 0.67f, 0.78f);
+		Color yellow = new Color(1, 0.91f, 0f, 0.78f);
 
 		colors = new List<Color>();
 		colors.Add(pink);
@@ -40,6 +43,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		colors.Add(teel);
 		colors.Add(green);
 		colors.Add(orange);
+		colors.Add(limeGreen);
+		colors.Add(purpleish);
+		colors.Add(yellow);
 	}
 
 	protected override void _OpenUI(){
@@ -175,7 +181,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			foreach(Transform tab in tabArea.transform){
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
-					tab.GetComponent<UISprite>().color = colors[counter];
+					UISprite tabSprite = tab.GetComponent<UISprite>();
+					tabSprite.color = colors[counter];
+					tabSprite.spriteName = "iconDeco" + tab.name;
 
 					ShowUseTab(tab);
 					if(counter == 0){

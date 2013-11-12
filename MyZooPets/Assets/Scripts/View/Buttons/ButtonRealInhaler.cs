@@ -49,14 +49,22 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			/////// Send Notication ////////
 			// Assign delegate functions to be passed in hashtable
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){};
+
+			//Get next play time
+			TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
+        	int countDownTime = timeSpan.Hours + 1;
 			
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
-			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"));
+			notificationEntry.Add(NotificationPopupFields.Message, 
+				StringUtils.Replace(Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"), 
+					StringUtils.NUM,
+					countDownTime.ToString())
+			);
 			notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			
+		
 			// Place notification entry table in static queue
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);			
 		}

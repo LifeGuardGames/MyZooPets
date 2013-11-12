@@ -119,8 +119,12 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         calendarPanel.GetComponent<TweenToggleDemux>().Hide();
     }
 
-    //Called when a checked calendar slot is clicked. Reward the player and turn the
-    //slot off until the next bonus time
+    //-----------------------------------------------
+    // ClaimReward()
+    // Called when a checked calendar slot is clicked. 
+    // Reward the player and turn the slot off until 
+    // the next bonus time
+    //-----------------------------------------------
     public void ClaimReward(GameObject calendarSlot){
         UIImageButton button = calendarSlot.GetComponent<UIImageButton>();
 
@@ -153,24 +157,25 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             //Add reward
             CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
 
-            numberOfGreenStamps--; //keep track of the rewards claimed
-            if(numberOfGreenStamps == 0){ //all rewards have been claimed
+            //keep track of the rewards claimed
+            numberOfGreenStamps--; 
+
+            //all rewards have been claimed
+            if(numberOfGreenStamps == 0){ 
                 CalendarLogic.Instance.IsRewardClaimed = true;
-                ResetTimer();
             }
-            GA.API.Design.NewEvent("UserTouch:Calendar:Green");
-        }else{ //No bonuses for blank for red ex
+
+        }else{ 
+            //No bonuses for blank for red ex
             //shake the calendar slot
             Hashtable optional = new Hashtable();
             optional.Add("ease", LeanTweenType.punch);
             LeanTween.moveX(calendarSlot, 0.01f, 0.5f, optional);
             if(button.normalSprite == RED_EX){
-                GA.API.Design.NewEvent("UserTouch:Calendar:Red");
 			
 				// play a sound for the box being red
 				AudioManager.Instance.PlayClip( strSoundMissedReward, Preferences.Sound );				
             }else{
-                GA.API.Design.NewEvent("UserTouch:Calendar:Gray");
 				
 				// play a sound for the box being empty
 				AudioManager.Instance.PlayClip( strSoundBlankDay, Preferences.Sound );				
@@ -178,34 +183,37 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         }
     }
 
-    private void ResetTimer(){
-        TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
-        countDownTime = (float) timeSpan.TotalSeconds;
-        //Next Reward timer
-        if(CalendarLogic.Instance.IsRewardClaimed){
-            //next reward time
-            timerActive = true;
+    // private void ResetTimer(){
+    //     TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
+    //     countDownTime = (float) timeSpan.TotalSeconds;
+    //     //Next Reward timer
+    //     if(CalendarLogic.Instance.IsRewardClaimed){
+    //         //next reward time
+    //         timerActive = true;
             
-        }else{
-            //claim reward now!!!!
-            rewardLabel.text = Localization.Localize( "CALENDAR_NOW" );
-            timerActive = false;
-        }
-    }
+    //     }else{
+    //         //claim reward now!!!!
+    //         rewardLabel.text = Localization.Localize( "CALENDAR_NOW" );
+    //         timerActive = false;
+    //     }
+    // }
 
     private void SetSpriteOfUIImageButton(UIImageButton imageButton, string sprite){
         imageButton.normalSprite = sprite;
         imageButton.hoverSprite = sprite;
         imageButton.pressedSprite = sprite; 
     }
-	
-    //Populate the calendar based on the data stored in DataManager
+
+    //-----------------------------------------------
+    // ResetCalendar()
+    // Event listener that populates the calendar based 
+    // on the data stored in DataManager
+    //-----------------------------------------------
     private void ResetCalendar(object sender, EventArgs args){
         currentWeekData = CalendarLogic.Instance.GetCalendarEntriesThisWeek;
         pastWeekData = CalendarLogic.Instance.GetCalendarEntriesLastWeek;
         numberOfGreenStamps = CalendarLogic.Instance.GreenStampCount;
 
-        ResetTimer();
         //Populate calendar for this week
         for(int i=0; i<currentWeekData.Count; i++){
             CalendarEntry entry = currentWeekData[i]; //Data day
@@ -298,7 +306,11 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
         }
     }  
 
-    //Get all UI reference from the Hierarchy and store them in an array
+    //-----------------------------------------------
+    // InitWeekUIReference()
+    // Get all UI reference from the Hierarchy and store 
+    // them in an array
+    //-----------------------------------------------
     private void InitWeekUIReference(bool isThisWeek){
         Transform week = isThisWeek ? thisWeek : lastWeek;
 

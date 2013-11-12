@@ -58,7 +58,7 @@ public abstract class DecorationNode : MonoBehaviour {
 	private void SetNodeLabel() {
 		DecorationTypes eType = GetDecoType();
 		string strType = eType.ToString();
-		string strKey = "NODE_" + strType;
+		string strKey = "NODE_" + strType.ToUpper();
 		string strText = Localization.Localize( strKey );
 		
 		Transform transLabel = transform.Find( "Label" );

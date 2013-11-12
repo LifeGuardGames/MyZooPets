@@ -88,38 +88,7 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     public bool IsRewardClaimed{
         get{return DataManager.Instance.GameData.Calendar.IsRewardClaimed;}
         set{DataManager.Instance.GameData.Calendar.IsRewardClaimed = value;}
-    }
-
-    //Based on the time now return the next reward time
-    public static DateTime CalculateNextPlayPeriod(){
-        DateTime nextPlayTime;
-        if(DateTime.Now.Hour < 12){ //next reward time at noon
-            nextPlayTime = DateTime.Today.AddHours(12);
-        }else{ //next reward time at midnight
-            nextPlayTime = DateTime.Today.AddDays(1);
-            // nextPlayTime = new DateTime(2013, 7, 23, 17, 17, 0);
-        }
-        return nextPlayTime;
-    }
-
-    // If dateTime is a Sunday, return dateTime itself. Else, return the DateTime of the next Sunday.
-    // only used here, and in DataManager to initialize DataManager.DateOfSunday
-    public static DateTime GetDateOfSunday(DateTime dateTime){
-        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
-            return dateTime;
-        }
-        else {
-            int dayOfWeek = (int) dateTime.DayOfWeek;
-            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
-            return nextSunday;
-        }
-    }
-
-    //Give bonus when user collects
-    public void ClaimReward(Vector3 screenPos){
-		StatsController.Instance.ChangeStats(50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos),
-         50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos), 0, Vector3.zero, 0, Vector3.zero);
-    }
+    } 
 
     //Check if the user can play the inhaler game
     public static bool CanUseRealInhaler{
@@ -135,8 +104,55 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         }
     }
 
+    //-----------------------------------------------
+    // CalculateNextPlayPeriod()
+    // Based on the time now return the next reward time
+    //-----------------------------------------------
+    public static DateTime CalculateNextPlayPeriod(){
+        DateTime nextPlayTime;
+        if(DateTime.Now.Hour < 12){ 
+            //next reward time at noon
+            nextPlayTime = DateTime.Today.AddHours(12);
+        }else{ 
+            //next reward time at midnight
+            nextPlayTime = DateTime.Today.AddDays(1);
+            // nextPlayTime = new DateTime(2013, 7, 23, 17, 17, 0);
+        }
+        return nextPlayTime;
+    }
+
+    //-----------------------------------------------
+    // GetDateOfSunday()
+    // If dateTime is a Sunday, return dateTime itself. 
+    // Else, return the DateTime of the next Sunday.
+    // only used here, and in DataManager to initialize DataManager.DateOfSunday
+    //-----------------------------------------------
+    public static DateTime GetDateOfSunday(DateTime dateTime){
+        DateTime dateOfSunday;
+        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
+            dateOfSunday = dateTime;
+        }else {
+            int dayOfWeek = (int) dateTime.DayOfWeek;
+            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
+            dateOfSunday = nextSunday;
+        }
+        return dateOfSunday;
+    }
+
+    //-----------------------------------------------
+    // ClaimReward()
+    // Give bonus when user collects
+    //-----------------------------------------------
+    public void ClaimReward(Vector3 screenPos){
+		StatsController.Instance.ChangeStats(50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos),
+         50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos), 0, Vector3.zero, 0, Vector3.zero);
+    }
+
+    //-----------------------------------------------
+    // RecrodGivingInhaler()
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
+    //-----------------------------------------------
     public void RecordGivingInhaler(){
         DateTime now = DateTime.Now;
         if (now.Hour < 12) {
@@ -144,20 +160,26 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         }else if (now.Hour >= 12) {
             todaysEntry.NightTime = DosageRecord.Hit;
         }
-
     }
 
+    //-----------------------------------------------
+    // CalendarOpened()
     // call whenever opening calendar
+    //-----------------------------------------------
     public void CalendarOpened(){
         DateTime now = DateTime.Now;
         UpdateCalendar(now);
         DataManager.Instance.GameData.Calendar.LastCalendarOpenedTime = now;
 
-        if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
+        if(OnCalendarReset != null) 
             OnCalendarReset(this, EventArgs.Empty);
     }
 
-    //Reset the week back to blank entries
+
+    //-----------------------------------------------
+    // ResetWeekAfterTutorialFinish()
+    // Reset the week back to blank entries
+    //-----------------------------------------------
     public void ResetWeekAfterTutorialFinish(){
         if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
             OnCalendarReset(this, EventArgs.Empty);
@@ -165,21 +187,28 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     //================================================
     
     void Awake(){
-       UpdateCalendar(DateTime.Now);
+        UpdateCalendar(DateTime.Now);
     }
 
     void Update(){
         ResetForNextPlayPeriod(DateTime.Now);
     }
 
-    //Run a check to see if calendar needs to be updated and reset
+    //-----------------------------------------------
+    // UpdateCalendar()
+    // Run a check to see if calendar needs to be updated and reset
+    //-----------------------------------------------
     private void UpdateCalendar(DateTime now){
        UpdateWeekReference(now);
        FillInMissedEntries(now);
        ResetForNextPlayPeriod(now);
     }
 
-     //Check if it is a new week. Figure out how many weeks need to be re-generated (1 or 2)
+    //-----------------------------------------------
+    // UpdateWeekReference()
+    // Check if it is a new week. Figure out how many weeks 
+    // need to be re-generated (1 or 2)
+    //-----------------------------------------------
     private void UpdateWeekReference(DateTime now){
         if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){ //today's date is later than Sunday
 
@@ -214,7 +243,10 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         }
     }
 
-    //Fill in the missed entries for this week
+    //-----------------------------------------------
+    // FillInMissedEntries()
+    // Fill in the missed entries for this week
+    //-----------------------------------------------
     private void FillInMissedEntries(DateTime now){
         // assume that DateOfSunday is updated by this point
 
@@ -241,7 +273,10 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         FillInMissesForToday(now);
     }
 
-     //Fill in the missed entry for today.
+    //-----------------------------------------------
+    // FillInMissesForToday()
+    // Fill in the missed entry for today.
+    //-----------------------------------------------
     private void FillInMissesForToday(DateTime now){
         if (now.Hour >= 12) { //PM
             if (todaysEntry.DayTime == DosageRecord.Null){
@@ -250,7 +285,11 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         }
     }
 
-    //Play period is every 12 hr. Reward and punishment renews every play period
+    //-----------------------------------------------
+    // ResetForNextPlayPeriod()
+    // Play period is every 12 hr. Reward and punishment 
+    // renews every play period
+    //-----------------------------------------------
     private void ResetForNextPlayPeriod(DateTime now){
         if(now < DataManager.Instance.GameData.Calendar.NextPlayPeriod) return; //not next play period yet return
         //reset green stamps

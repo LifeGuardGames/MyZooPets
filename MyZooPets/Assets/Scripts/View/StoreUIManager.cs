@@ -152,7 +152,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Then call other methods to create the items
 	//----------------------------------------------------
 	public void CreateSubCategoryItems(GameObject page){
-
 		currentPage = page.name;
 
 		//create the tabs for those sub category
@@ -178,12 +177,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			Color defaultColor = new Color(0, 0, 0, 0);
 
 			//Rename the tab to reflect the sub category name
-			foreach(Transform tab in tabArea.transform){
+			foreach(Transform tab in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
-					UISprite tabSprite = tab.GetComponent<UISprite>();
-					tabSprite.color = colors[counter];
-					tabSprite.spriteName = "iconDeco" + tab.name;
+					
+					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
+					backgroundSprite.color = colors[counter];
+					
+					UISprite imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<UISprite>();
+					imageSprite.spriteName = "iconDeco" + tab.name;
 
 					ShowUseTab(tab);
 					if(counter == 0){
@@ -232,7 +234,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// public method to be called by button
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(GameObject tab){
-		Color tabColor = tab.GetComponent<UISprite>().color;
+		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
+		Color tabColor = backgroundSprite.color;
 		CreateSubCategoryItemsTab(tab.name, tabColor);
 	}
 
@@ -316,7 +319,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// script and the collider off
 	//------------------------------------------
 	private void HideUnuseTab(Transform tab){
-		tab.GetComponent<UISprite>().enabled = false;
+		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = false;
+		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = false;
 		tab.collider.enabled = false;
 	}
 
@@ -325,7 +329,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//	If tab is used. Show 
 	//------------------------------------------
 	private void ShowUseTab(Transform tab){
-		tab.GetComponent<UISprite>().enabled = true;
+		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
+		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
+		
 		tab.collider.enabled = true;
 	}
 

@@ -75,7 +75,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     //TO DO:remove from here and use the speech class instead
     // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
     private void ShowPetReceivedFoodAnimation(){
-        SpeechController.Instance.TalkWithImage("speechImageHeart");
+        Hashtable message = new Hashtable();
+        message.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+        PetSpeechController.Instance.Talk(message);
     }
 
     //Event listener. listening to when new item is added to the inventory

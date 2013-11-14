@@ -97,10 +97,12 @@ public class PetMovement : Singleton<PetMovement> {
 
     //Pet will follow the camera when the partition has been changed
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
-        //Transform pet position to screen point first so we can move the pet to the right y position
-  //       Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
-
-		// MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, petPosInScreenPoint.y, 0)));
+        bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
+        if(!hasActiveGate){
+            //Transform pet position to screen point first so we can move the pet to the right y position
+            Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
+            MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, petPosInScreenPoint.y, 0)));
+        }
 	}
 	
 	public void StopMoving() {

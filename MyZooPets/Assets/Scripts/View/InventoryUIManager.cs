@@ -10,7 +10,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public GameObject uiButtonToggleObject;
     public GameObject uiButtonSpriteObject;
     public GameObject spritePet;
-    public GameObject speechBubblePrefab;
     public GameObject inventoryItemPrefab;
 
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
@@ -47,11 +46,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         bool dropOnTarget = false;
         if(isDebug){
             if(e.TargetCollider && e.TargetCollider.name == "Cube") dropOnTarget = true;
-        }else{
-             if(e.TargetCollider && 
-				( e.TargetCollider.name == "SpritePet" ||
-                e.TargetCollider.name == "Head" ||
-                e.TargetCollider.name == "Tummy") ) dropOnTarget = true;
+        }
+        else{
+            if(e.TargetCollider && e.TargetCollider.name == "Pet_LWF")
+                dropOnTarget = true;
         }
 
         if(dropOnTarget){
@@ -66,7 +64,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
             InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
             if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
                 e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-            }else{ //destroy object if it has been used up
+            }
+            else{ //destroy object if it has been used up
                 Destroy(e.ParentTransform.gameObject);
                 UpdateBarPosition();
             }
@@ -76,12 +75,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     //TO DO:remove from here and use the speech class instead
     // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
     private void ShowPetReceivedFoodAnimation(){
-        GameObject speechBubble = Instantiate(speechBubblePrefab, spritePet.transform.position, Quaternion.identity) as GameObject;
-        speechBubble.transform.parent = spritePet.transform;
-        speechBubble.transform.localPosition = new Vector3(3.5f, 9, 0);
-        speechBubble.transform.localScale = new Vector3(2, 2, 1);
-
-        Destroy(speechBubble, 1.5f);
+        SpeechController.Instance.TalkWithImage("speechImageHeart");
     }
 
     //Event listener. listening to when new item is added to the inventory
@@ -93,7 +87,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 		
        if(e.IsItemNew){
             SpawnInventoryItemInPanel(e.InvItem);
-        }else{
+        }
+        else{
             Transform invItem = uiGridObject.transform.Find(e.InvItem.ItemID);
             invItem.Find("Label_Amount").GetComponent<UILabel>().text = e.InvItem.Amount.ToString();
         }

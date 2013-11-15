@@ -5,12 +5,11 @@ using System.Collections.Generic;
 
 public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     public static EventHandler<EventArgs> OnShowHint; //Fire this event when hints need to display 
-    public static float introMessageDuration = 3.0f; //duration of popup message
-
     public GameObject progressBarObject;
     public GameObject quitButton;
     public GameObject progressStep; //Prefabs for thesliderNodes 
     public UISlider slider; //Reference of UISlider
+    public SceneTransition scriptTransition;
 
     private List<GameObject> sliderNodes; //list of nodes to show game steps
     private int stepCompleted;
@@ -87,11 +86,13 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void ShowQuitButton(){
-        quitButton.GetComponent<PositionTweenToggle>().Show();
+        if(DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER))
+            quitButton.GetComponent<PositionTweenToggle>().Show();
     }
 
     private void HideQuitButton(){
-        quitButton.GetComponent<PositionTweenToggle>().Hide();
+        if(DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER))
+            quitButton.GetComponent<PositionTweenToggle>().Hide();
     }
 
 
@@ -142,10 +143,16 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 			return;	
 		}*/
 		
-		// I hate to do this here, but I'm not sure where else to put it...if the player had not completed the tutorial, mark it as
-		// completed
-		if ( !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER ) )
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
+        CompleteTutorial();
+
+        scriptTransition.StartTransition("NewBedRoom", "LoadingScreen");
+    }
+
+    public void CompleteTutorial(){
+        // I hate to do this here, but I'm not sure where else to put it...if the player had not completed the tutorial, mark it as
+        // completed
+        if ( !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER ) )
+            DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
     }
 	
 	//---------------------------------------------------

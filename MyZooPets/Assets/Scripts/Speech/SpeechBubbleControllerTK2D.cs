@@ -2,26 +2,26 @@
 using System.Collections;
 
 /// <summary>
-/// Speech bubble controller NGUI
+/// Speech bubble controller Tk2d.
 /// NOTE: Make sure the anchor is semantically set!
-/// NOTE: Please keep high level queue implementations symmetrical with SpeechBubbleControllerTK2D.cs
+/// NOTE: Please keep high level queue implementations symmetrical with SpeechBubbleControllerNGUI.cs
 /// </summary>
 
-public class SpeechBubbleControllerNGUI : Singleton<SpeechBubbleControllerNGUI> {
+public class SpeechBubbleControllerTK2D : Singleton<SpeechBubbleControllerTK2D> {
 
 	// Constant maximum dimension of the speech bubbles width and height
 	const float MAX_WIDTH = 450f;
 	const float MAX_HEIGHT = 270f;
 
-	public GameObject textObject;
-	public GameObject spriteBubbleObject;
+	public GameObject textObject; //where the text appears
+	public GameObject spriteBubbleObject; //though bubble icon
 
 	public Vector3 selfOffset = new Vector3(0f, 0f, 0f);
 
 	public bool isFollowTarget;
 	public GameObject followTarget;
 
-	public float speechDuration = .7f;
+	public float speechDuration = .7f; //how long the speech bubble lasts
 
 	public bool isDebug = false;
 
@@ -31,11 +31,6 @@ public class SpeechBubbleControllerNGUI : Singleton<SpeechBubbleControllerNGUI> 
 
 	void Start(){
 		SetInactive();
-	}
-
-	public void Talk(string text){
-		SetActive();
-		q.Enqueue(text);
 	}
 
 	void Update(){
@@ -55,6 +50,11 @@ public class SpeechBubbleControllerNGUI : Singleton<SpeechBubbleControllerNGUI> 
 				SetInactive();
 			}
 		}
+	}
+
+	public void Talk(string text){
+		SetActive();
+		q.Enqueue(text);
 	}
 
 	// Queue handlers ////////////////////////////////
@@ -83,10 +83,9 @@ public class SpeechBubbleControllerNGUI : Singleton<SpeechBubbleControllerNGUI> 
 		spriteBubbleObject.SetActive(false);
 	}
 
-
 	public void SetText(string text){
-		UILabel label = textObject.GetComponent<UILabel>();
-		label.text = text;
+		textObject.GetComponent<tk2dTextMesh>().text = text;
+        textObject.GetComponent<tk2dTextMesh>().Commit();
 	}
 
 	public void SetBubbleSize(float width, float height){

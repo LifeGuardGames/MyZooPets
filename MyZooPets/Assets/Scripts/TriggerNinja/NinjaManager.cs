@@ -273,4 +273,12 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		
 		//Debug.Log("Combo ended: " + nCombo);
 	}
+	
+	//---------------------------------------------------
+	// GetReward()
+	//---------------------------------------------------		
+	public override int GetReward( MinigameRewardTypes eType ) {
+		// for now, just use the standard way
+		return GetStandardReward( eType );
+	}	
 }

@@ -232,3 +232,9 @@ public enum InterfaceAnchors {
 	Right,
 	Top
 }
+
+// reward types for minigames
+public enum MinigameRewardTypes {
+	XP,
+	Money
+}

@@ -46,9 +46,14 @@ public class CameraManager : Singleton<CameraManager> {
 	// is where it should be.
 	//---------------------------------------------------		
 	public bool IsCameraMoving() {
+		PanToMoveCamera script = GetPanScript();
+		
+		// ahhhhhhhhh....hack for screens that do not have panning....
+		if ( script == null )
+			return false;
+		
 		GameObject goParent = transform.parent.gameObject;
 		
-		PanToMoveCamera script = GetPanScript();
 		float fTargetX = script.partitionOffset * script.currentPartition;
 		float fX = goParent.transform.position.x;
 		
@@ -138,12 +143,24 @@ public class CameraManager : Singleton<CameraManager> {
 		if ( eAnchorIn == eAnchorOut )
 			return vPos;
 		
-		// right now I'm just supporting going to the center anchor
-		if ( eAnchorOut != InterfaceAnchors.Center ) {
-			Debug.Log("Sorry future team, Joe did not implement this yet");
-			return vPos;
+		Vector3 vTransformed = vPos;
+		
+		switch ( eAnchorOut ) {
+			case InterfaceAnchors.Center:
+				vTransformed = TransformAnchor_Center( vPos, eAnchorIn );
+				break;
+			case InterfaceAnchors.Top:
+				vTransformed = TransformAnchor_Top( vPos, eAnchorIn );
+				break;
+			default:
+				Debug.Log("Sorry, anchor not supported yet");
+				break;
 		}
 		
+		return vTransformed;
+	}
+	
+	private Vector3 TransformAnchor_Center( Vector3 vPos, InterfaceAnchors eAnchorIn ) {
 		Vector3 vTransformed = vPos;
 		
 		switch ( eAnchorIn ) {
@@ -154,11 +171,34 @@ public class CameraManager : Singleton<CameraManager> {
 			case InterfaceAnchors.Bottom:
 				vTransformed.y -= Screen.height / 2;
 				break;
+			case InterfaceAnchors.Top:
+				vTransformed.x -= Screen.width / 2;
+				vTransformed.y += Screen.height / 2;
+				break;
 			default:
 				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
 				break;
 		}
 		
-		return vTransformed;
+		return vTransformed;		
 	}
+	
+	private Vector3 TransformAnchor_Top( Vector3 vPos, InterfaceAnchors eAnchorIn ) {
+		Vector3 vTransformed = vPos;
+		
+		switch ( eAnchorIn ) {
+			case InterfaceAnchors.Center:
+				vTransformed.x += Screen.width / 2;
+				vTransformed.y -= Screen.height / 2;
+				break;
+			case InterfaceAnchors.BottomLeft:
+				vTransformed.y -= Screen.height;
+				break;			
+			default:
+				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
+				break;
+		}
+		
+		return vTransformed;		
+	}	
 }

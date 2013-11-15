@@ -25,6 +25,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	//----------- Pure Abstract -----------------------------
 	public abstract int GetReward( MinigameRewardTypes eType );		// returns the reward the player got for playing this minigame
 	protected abstract string GetMinigameKey();						// returns string key for this minigame
+	protected abstract void _Start();								// when the manager is started
 	//-------------------------------------------------------
 	
 	// reference to the UI controller
@@ -35,7 +36,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 
 	// player score
 	private int nScore;	
-	public int GetScore() {
+	public virtual int GetScore() {
 		return nScore;	
 	}
 	
@@ -122,10 +123,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			ShowCutscene();		
 		
 		_Start();
-	}
-	
-	protected virtual void _Start() {
-		// children implement	
 	}
 	
 	//---------------------------------------------------
@@ -264,8 +261,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		
 		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
 			ui.TogglePopup( MinigamePopups.Pause, false );		
-			
-		scriptTransition.StartTransition( SceneUtils.BEDROOM );
+		
+		string strKey = GetMinigameKey();
+		string strScene = Constants.GetConstant<string>( strKey + "_QuitScene" );
+		scriptTransition.StartTransition( strScene );
 	}
 	
 	//---------------------------------------------------
@@ -326,9 +325,13 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	
 	//---------------------------------------------------
 	// PauseGame()
-	// The game is being paused.
+	// The game is being paused.  There are two functions
+	// because Unity is dumb, and because we use SendMessage.
 	//---------------------------------------------------	
 	protected void PauseGame() {
+		PauseGameWithPopup( true );	
+	}
+	protected void PauseGameWithPopup( bool bShowPopup ) {
 		// if the game isn't playing, pause shouldn't do anything
 		if ( GetGameState() != MinigameStates.Playing )
 				return;
@@ -336,8 +339,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		// update the game state
 		SetGameState( MinigameStates.Paused );
 		
-		// show the pause game UI
-		ui.TogglePopup( MinigamePopups.Pause, true );
+		// show the pause game UI if appropriate
+		if ( bShowPopup ) 
+			ui.TogglePopup( MinigamePopups.Pause, true );
 	}	
 	
 	//---------------------------------------------------

@@ -57,7 +57,7 @@ public class ScoreManager : Singleton<ScoreManager> {
 
 	// Use this for initialization
     void Start() {
-        AddCoins(0);
+        Reset();
 	}
 	
 	// Update is called once per frame
@@ -90,6 +90,7 @@ public class ScoreManager : Singleton<ScoreManager> {
         mPlayerPoints = 0;
 		SetCoinStreakCountdown( 0 );
 		SetCoinStreak( 0 );
+		AddCoins(0);
     }
 
     public void AddCoins(int inNumCoinsToAdd) {
@@ -103,7 +104,9 @@ public class ScoreManager : Singleton<ScoreManager> {
     }
 
     public void AddPoints(int inNumPointsToAdd) {
-        mPlayerPoints += inNumPointsToAdd;
+		// score can't go below 0
+        mPlayerPoints = Mathf.Max( mPlayerPoints + inNumPointsToAdd, 0 );
+		
         if (ScoreLabel != null)
             ScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + (mPlayerDistancePoints + mPlayerPoints);
     }
@@ -114,7 +117,7 @@ public class ScoreManager : Singleton<ScoreManager> {
             ScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + (mPlayerDistancePoints + mPlayerPoints);
     }
 
-    public float GetScore() {
+    public int GetScore() {
         return (mPlayerDistancePoints + mPlayerPoints);
     }
 }

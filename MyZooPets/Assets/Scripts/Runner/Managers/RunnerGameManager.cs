@@ -15,42 +15,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RunnerGameManager : Singleton<RunnerGameManager> {
-    public SceneTransition scriptTransition;
+public class RunnerGameManager : MinigameManager<RunnerGameManager> {
+    //public SceneTransition scriptTransition;
     public bool GameRunning{
-        get; 
-        protected set;
+        get { return GetGameState() == MinigameStates.Playing; } 
+        //protected set;
     }
 	
+	//---------------------------------------------------
+	// GetMinigameKey()
+	//---------------------------------------------------	
+	protected override string GetMinigameKey() {
+		return "Runner";	
+	}	
+	
 	// Use this for initialization
-	void Start() {
-		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Runner") == false ) {
-			ShowCutscene();
-			GameRunning = false;	
-		}else
-            GameRunning = true;
+	protected override void _Start() {
+	}
+	
+	public override int GetScore() {
+		return ScoreManager.Instance.GetScore();	
 	}
 	
 	//---------------------------------------------------
-	// ShowCutscene()
+	// _NewGame()
 	//---------------------------------------------------	
-	private void ShowCutscene() {
-		GameObject resourceMovie = Resources.Load("Cutscene_Runner") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-	}
-	
-    private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Runner");	
-		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-        GameRunning = true;
-    }	
+	protected override void _NewGame() {	
+		ResetGame();
+	}	
 	
     public void ResetGame() {
         Time.timeScale = 1f;
-
-        RunnerUIManager.Instance.DeActivateGameOverPanel();
-        GameRunning = true;
 
         PlayerController.Instance.gameObject.SetActive(true);
         PlayerController.Instance.Reset();
@@ -59,19 +54,17 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
         MegaHazard.Instance.Reset();
         ParallaxingBackgroundManager.Instance.Reset();
     }
-
-    public void PauseGame(){
-        GameRunning = false;
-    }
+	
+	public void ShowAlert() {
+		PauseGameWithPopup( false );	
+	}
 
     public void UnPauseGame(){
-        GameRunning = true;
+        ResumeGame();	// what is calling this...
     }
 
     public void ActivateGameOver() {
-        GameRunning = false;
-
-        RunnerUIManager.Instance.ActivateGameOverPanel();
+		GameOver();	// what is calling this...
 
         UpdateBadgeProgress();
 
@@ -83,10 +76,6 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
 
         //Reset level items
         ItemManager.Instance.Reset();
-    }
-
-    public void QuitGame(){
-        scriptTransition.StartTransition( SceneUtils.YARD );
     }
 
     public void IncreaseTimeSpeed(float inIncreaseTime) {
@@ -107,4 +96,12 @@ public class RunnerGameManager : Singleton<RunnerGameManager> {
         int distance = (int)PlayerController.Instance.transform.position.x;
         BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, distance, false);
     }
+	
+	//---------------------------------------------------
+	// GetReward()
+	//---------------------------------------------------		
+	public override int GetReward( MinigameRewardTypes eType ) {
+		// for now, just use the standard way
+		return GetStandardReward( eType );
+	}	
 }

@@ -48,7 +48,11 @@ public class MinigameUI : MonoBehaviour {
 	//---------------------------------------------------	
 	public void SetLabel( MinigameLabels eLabel, string strText ) {
 		UILabel label = (UILabel) hashLabels[eLabel];	
-
+		
+		// minigame may not have label (I'm looking at you, runner)
+		if ( label == null )
+			return;
+		
 		// update text
 		label.text = strText;
 		

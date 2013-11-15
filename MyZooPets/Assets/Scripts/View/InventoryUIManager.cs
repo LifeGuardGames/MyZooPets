@@ -105,6 +105,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
         itemWrapper.name = invItem.ItemID;
         inventoryItemObject.name = invItem.ItemID;
+        print(invItem.ItemTextureName);
         itemSprite.spriteName = invItem.ItemTextureName;
         itemAmountLabel.text = invItem.Amount.ToString();
         itemWrapper.GetComponent<InventoryDragDrop>().OnItemDrop += OnItemDrop;

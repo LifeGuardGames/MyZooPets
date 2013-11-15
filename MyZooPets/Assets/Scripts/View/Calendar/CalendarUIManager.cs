@@ -5,7 +5,6 @@ using System;
 
 public class CalendarUIManager : SingletonUI<CalendarUIManager> {
     public bool isDebug; //developing option
-    public GameObject calendarTutorialHelperPrefab;
 	public GameObject calendarPanel;
 	public Transform thisWeek; //reference to the ThisWeek gameObject
     public Transform lastWeek; //reference to the LastWeek gameObject
@@ -67,15 +66,6 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 
     void Start(){
         CalendarLogic.OnCalendarReset += ResetCalendar;
-
-        //Instantiate CalendarTutorialHelper
-        if(TutorialLogic.Instance.FirstTimeCalendar){
-            GameObject tutorialHelper = (GameObject)Instantiate(calendarTutorialHelperPrefab);
-            tutorialHelper.name = "CalendarTutorialHelper";
-            tutorialHelper.transform.parent = transform.parent;
-
-            CalendarTutorialHelper.Instance.SetUpForTutorial(currentWeek[6].AM, currentWeek[6].PM, calendarPanel);
-        }
     }
 
     void OnDestroy(){
@@ -182,21 +172,6 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
             }
         }
     }
-
-    // private void ResetTimer(){
-    //     TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
-    //     countDownTime = (float) timeSpan.TotalSeconds;
-    //     //Next Reward timer
-    //     if(CalendarLogic.Instance.IsRewardClaimed){
-    //         //next reward time
-    //         timerActive = true;
-            
-    //     }else{
-    //         //claim reward now!!!!
-    //         rewardLabel.text = Localization.Localize( "CALENDAR_NOW" );
-    //         timerActive = false;
-    //     }
-    // }
 
     private void SetSpriteOfUIImageButton(UIImageButton imageButton, string sprite){
         imageButton.normalSprite = sprite;

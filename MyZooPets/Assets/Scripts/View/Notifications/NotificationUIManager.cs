@@ -33,8 +33,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	
 	// the actual instantiated backdrop object
 	private GameObject goBackdrop;
-
+	private GameObject anchorCenter;
+	
+	void OnAwake(){
+	}
+	
 	void Start(){
+		//anchorCenter = GameObject.Find("Anchor-Center");
 		// Start is called after some notifications pushed!!! Check beforehand
 		if(!isNotificationActive){		
 			// Check the static queue to see if anything is there on level load
@@ -59,14 +64,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
 				case NotificationPopupType.OneButton:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupNotificationOneButton(	(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Button1Label]);
 					break;
 				
 				case NotificationPopupType.TwoButtons:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupNotificationTwoButtons((string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback],
@@ -75,14 +80,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.GameOverRewardOneButton:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]);
 					break;
 				
 				case NotificationPopupType.GameOverRewardTwoButton:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -90,7 +95,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.TipWithImage:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//				Debug.Log (anchorCenter);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupTipWithImage(			(string)						entry[NotificationPopupFields.Message],
 													(string)						entry[NotificationPopupFields.SpriteName],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -99,14 +105,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.LevelUp:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowLevelUpMessage(				(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Sound]);
 					break;
 				
 				case NotificationPopupType.TutorialLeft:
-					goBackdrop = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), backDrop);
+//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowTutorialMessage(			(TutorialImageType)				entry[NotificationPopupFields.TutorialImageType],
 													(PopupNotificationNGUI.HashEntry)	entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Button1Label]);
@@ -336,6 +342,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	// Displaying after one frame, make sure the notification is loaded nicely
 	IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){
 		yield return 0;
+		
+		// Slap on the backdrop here
+		LgNGUITools.AddChildWithPosition(notification.gameObject, backDrop);
+		
 		notification.Display();
 	}
 }

@@ -75,7 +75,7 @@ public class LgParticleEmitterDegredation : LgParticleEmitter {
 		}
 		else {
 			// if there is no gated in this room, we can spawn skulls again (but only if the tut is through)
-			if ( !TutorialLogic.Instance.FirstTimeDegradTrigger && !isActive )
+			if ( !isActive )
 				Enable();
 		}
 	}	

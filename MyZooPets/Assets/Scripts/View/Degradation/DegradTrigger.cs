@@ -59,8 +59,8 @@ public class DegradTrigger : MonoBehaviour {
 			// play sound associated with cleaning the trigger
 			AudioManager.Instance.PlayClip( strSoundClean );
 			
-            if(TutorialLogic.Instance.FirstTimeDegradTrigger)
-               TutorialUIManager.Instance.StartDegradTriggerTutorial();
+            // if(TutorialLogic.Instance.FirstTimeDegradTrigger)
+            //    TutorialUIManager.Instance.StartDegradTriggerTutorial();
             CleanTriggerAndDestroy();
         }
     }

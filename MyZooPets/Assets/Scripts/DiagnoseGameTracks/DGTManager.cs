@@ -94,7 +94,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		SetWaveCountdown( nCharactersPerWave );
 		
 		// if the play hasn't played the tutorial yet, start it
-		if ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) )
+		if ( TutorialOK() && ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) ) )
 			StartTutorial();		
 		
 		// set the spawn timer to 0
@@ -165,11 +165,6 @@ public class DGTManager : MinigameManager<DGTManager> {
 		
 		// update spawn timer for spawning new characters
 		UpdateSpawnTimer(-Time.deltaTime);
-		
-		if (Input.GetKeyDown ("space")) {
-			Debug.Log("Let's turn up the heat!");
-			ChangeTrackSpeed( fSpeedIncrease );
-		}
 	}	
 	
 	//---------------------------------------------------
@@ -314,6 +309,14 @@ public class DGTManager : MinigameManager<DGTManager> {
 		}
 		
 		return bLocked;
+	}
+	
+	//---------------------------------------------------
+	// GetReward()
+	//---------------------------------------------------		
+	public override int GetReward( MinigameRewardTypes eType ) {
+		// for now, just use the standard way
+		return GetStandardReward( eType );
 	}
 	
 	////////----------------- Tutorial code	

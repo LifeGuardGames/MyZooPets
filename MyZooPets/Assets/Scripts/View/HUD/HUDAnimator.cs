@@ -76,6 +76,25 @@ public class HUDAnimator : MonoBehaviour {
 		bool b = listMovingSprites.Count > 0;
 		return b;
 	}
+	
+	// there may be an override for how many of a given sprite we spawn when animating the HUD
+	private float fModifierOverride = 0;
+	public void SetModifierOverride( float fOverride ) {
+		fModifierOverride = fOverride;	
+	}
+	public float GetModifierOverride() {
+		return fModifierOverride;	
+	}
+	private float GetModifier( HUDElementType eType ) {
+		float fModifier = Constants.GetConstant<float>( eType + "_Modifier" );
+		
+		// if there is an override, use that instead
+		float fOverride = GetModifierOverride();
+		if ( fOverride > 0 )
+			fModifier = fOverride;
+		
+		return fModifier;
+	}
 
 	//---------------------------------------------------
 	// Start()
@@ -174,18 +193,21 @@ public class HUDAnimator : MonoBehaviour {
 	// function will start a curve of visual elements for
 	// it.
 	//---------------------------------------------------	
-	public IEnumerator StartCurveStats( List<StatPair> listStat, bool bPlaySounds ){
+	public IEnumerator StartCurveStats( List<StatPair> listStat, bool bPlaySounds, bool bAtOnce ){
 		for ( int i = 0; i < listStat.Count; ++i ) {
 			StatPair pair = listStat[i];
 			HUDElementType eType = pair.eType;
 			
 			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 			Vector3 vHUD = Constants.GetConstant<Vector3>( eType + "_HUD" );
-			Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y - 800, 0);
+			Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
 			StartCurve( eType, pair.nPoints, vOrigin, pair.strSound );
 			
-			float fModifier = Constants.GetConstant<float>( eType + "_Modifier" );
-			yield return new WaitForSeconds( fModifier * pair.nPoints );			
+			// some places might want to do all the stat curves at once
+			if ( bAtOnce == false ) {
+				float fModifier = GetModifier( eType );
+				yield return new WaitForSeconds( fModifier * pair.nPoints );	
+			}
 		}
 	}
 	
@@ -217,7 +239,7 @@ public class HUDAnimator : MonoBehaviour {
 		
 		string strImageUp = Constants.GetConstant<string>( type + "_Up" );
 		string strImageDown = Constants.GetConstant<string>( type + "_Down" );
-		float fModifier = Constants.GetConstant<float>( type + "_Modifier" );
+		float fModifier = GetModifier( type );
 		Vector3 vHUD = Constants.GetConstant<Vector3>( type + "_HUD" );
 		
 		modifier = Math.Abs( fModifier * amount );
@@ -277,7 +299,6 @@ public class HUDAnimator : MonoBehaviour {
 			TrackObject scriptTrack = go.AddComponent<TrackObject>();
 			scriptTrack.Init( listMovingSprites );
 		}
-		
 		
 		Hashtable optional = new Hashtable();
 		optional.Add("ease", LeanTweenType.easeInOutQuad);

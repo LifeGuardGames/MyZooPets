@@ -147,8 +147,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         if(degradData != null)
             triggerPos = triggerLocations[degradData.PositionId].position;
         
-		StatsController.Instance.ChangeStats(nPoints, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), 
-            50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), 0, Vector3.zero, 0, Vector3.zero);
+		// do a little magic here: get the world position of the trigger, turn that into screen coords, then take those coords (that are
+		// BottomLeft NGUI coords) and turn them into NGUI top coords.
+		Vector3 vTriggerPos = CameraManager.Instance.TransformAnchorPosition( CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), InterfaceAnchors.BottomLeft, InterfaceAnchors.Top );
+		
+		StatsController.Instance.ChangeStats(nPoints, vTriggerPos, 50, vTriggerPos, 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
     }
 }

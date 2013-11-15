@@ -21,7 +21,13 @@ public class GameStateArgs : EventArgs{
 // Generic manager of a minigame.
 //---------------------------------------------------
 
-public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {	
+public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {	
+	//----------- Pure Abstract -----------------------------
+	public abstract int GetReward( MinigameRewardTypes eType );		// returns the reward the player got for playing this minigame
+	protected abstract string GetMinigameKey();						// returns string key for this minigame
+	protected abstract void _Start();								// when the manager is started
+	//-------------------------------------------------------
+	
 	// reference to the UI controller
 	public MinigameUI ui;
 	
@@ -30,7 +36,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 
 	// player score
 	private int nScore;	
-	public int GetScore() {
+	public virtual int GetScore() {
 		return nScore;	
 	}
 	
@@ -39,6 +45,7 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	public int nStartingLives;
 	
 	// tutorial stuff
+	public bool bRunTut = true;			// used for debug/testing
 	private MinigameTutorial tutorial;
 	public bool IsTutorial() {
 		return tutorial != null;
@@ -51,11 +58,8 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	protected MinigameTutorial GetTutorial() {
 		return tutorial;	
 	}
-	
-	// the key of this minigame
-	protected virtual string GetMinigameKey() {
-		// children should implement this
-		return null;	
+	protected bool TutorialOK() {
+		return bRunTut;	
 	}
 	
 	// is there a tutorial override? i.e. tutorial has already been played but the user wants to see it again
@@ -119,10 +123,6 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 			ShowCutscene();		
 		
 		_Start();
-	}
-	
-	protected virtual void _Start() {
-		// children implement	
 	}
 	
 	//---------------------------------------------------
@@ -255,7 +255,16 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void QuitGame() {
-		scriptTransition.StartTransition( SceneUtils.BEDROOM );
+		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
+		if ( ui.IsPopupShowing( MinigamePopups.GameOver ) )
+			ui.TogglePopup( MinigamePopups.GameOver, false );
+		
+		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
+			ui.TogglePopup( MinigamePopups.Pause, false );		
+		
+		string strKey = GetMinigameKey();
+		string strScene = Constants.GetConstant<string>( strKey + "_QuitScene" );
+		scriptTransition.StartTransition( strScene );
 	}
 	
 	//---------------------------------------------------
@@ -316,9 +325,13 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	
 	//---------------------------------------------------
 	// PauseGame()
-	// The game is being paused.
+	// The game is being paused.  There are two functions
+	// because Unity is dumb, and because we use SendMessage.
 	//---------------------------------------------------	
 	protected void PauseGame() {
+		PauseGameWithPopup( true );	
+	}
+	protected void PauseGameWithPopup( bool bShowPopup ) {
 		// if the game isn't playing, pause shouldn't do anything
 		if ( GetGameState() != MinigameStates.Playing )
 				return;
@@ -326,8 +339,9 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 		// update the game state
 		SetGameState( MinigameStates.Paused );
 		
-		// show the pause game UI
-		ui.TogglePopup( MinigamePopups.Pause, true );
+		// show the pause game UI if appropriate
+		if ( bShowPopup ) 
+			ui.TogglePopup( MinigamePopups.Pause, true );
 	}	
 	
 	//---------------------------------------------------
@@ -376,5 +390,39 @@ public class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	protected virtual bool HasCutscene() {
 		// children implement this
 		return false;
+	}
+	
+	//---------------------------------------------------
+	// GetStandardReward()
+	// Returns the standard reward for a minigame, which
+	// is the player's score divided by some constant.
+	//---------------------------------------------------	
+	protected int GetStandardReward( MinigameRewardTypes eType ) {
+		int nReward = 0;
+		string strConstant = null;
+		string strKey = GetMinigameKey();
+		
+		switch ( eType ) {
+		case MinigameRewardTypes.Money:
+			strConstant = strKey + "_StandardMoney";
+			break;
+			
+		case MinigameRewardTypes.XP:
+			strConstant = strKey + "_StandardXP";
+			break;
+			
+		default:
+			Debug.Log("Unhandled minigame reward type: " + eType);
+			break;
+		}
+		
+		if ( !string.IsNullOrEmpty( strConstant ) ) {
+			// the standard reward is the player's score divided by some constant
+			int nStandard = Constants.GetConstant<int>( strConstant );
+			int nScore = GetScore();
+			nReward = nScore / nStandard;
+		}
+		
+		return nReward;
 	}
 }

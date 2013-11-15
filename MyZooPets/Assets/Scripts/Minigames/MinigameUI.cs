@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // MinigameUI
@@ -9,9 +11,9 @@ using System.Collections;
 
 public class MinigameUI : MonoBehaviour {
 	// popups
-	public GameObject goOpening;
-	public GameObject goGameOver;
-	public GameObject goPaused;
+	public MinigamePopup popupOpening;
+	public MinigamePopup popupGameOver;
+	public MinigamePopup popupPaused;
 	
 	// player score
 	public UILabel labelScore;
@@ -21,7 +23,7 @@ public class MinigameUI : MonoBehaviour {
 	
 	// hashes
 	private Hashtable hashLabels;
-	private Hashtable hashPopups;
+	private Dictionary<MinigamePopups, MinigamePopup> hashPopups;
 	
 	//---------------------------------------------------
 	// Start()
@@ -33,10 +35,10 @@ public class MinigameUI : MonoBehaviour {
 		hashLabels[MinigameLabels.Lives] = labelLives;
 		
 		// set up hash of popups
-		hashPopups = new Hashtable();
-		hashPopups[MinigamePopups.Opening] = goOpening;
-		hashPopups[MinigamePopups.Pause] = goPaused;
-		hashPopups[MinigamePopups.GameOver] = goGameOver;
+		hashPopups = new Dictionary<MinigamePopups, MinigamePopup>();
+		hashPopups[MinigamePopups.Opening] = popupOpening;
+		hashPopups[MinigamePopups.Pause] = popupPaused;
+		hashPopups[MinigamePopups.GameOver] = popupGameOver;
 	}
 	
 	//---------------------------------------------------
@@ -46,7 +48,11 @@ public class MinigameUI : MonoBehaviour {
 	//---------------------------------------------------	
 	public void SetLabel( MinigameLabels eLabel, string strText ) {
 		UILabel label = (UILabel) hashLabels[eLabel];	
-
+		
+		// minigame may not have label (I'm looking at you, runner)
+		if ( label == null )
+			return;
+		
 		// update text
 		label.text = strText;
 		
@@ -63,31 +69,16 @@ public class MinigameUI : MonoBehaviour {
 	// Shows or hides a UI popup.
 	//---------------------------------------------------		
 	public void TogglePopup( MinigamePopups ePopup, bool bShow ) {
-		GameObject goUI = (GameObject) hashPopups[ePopup];
-		
-		PositionTweenToggle script = goUI.GetComponent<PositionTweenToggle>();
-		if ( bShow ) {
-			script.Show();
-			
-			// lock clicks
-			ClickManager.Instance.ClickLock();
-			ClickManager.SetActiveGUIModeLock( true );
-		}
-		else {
-			script.Hide();
-			
-			// clicks are ok
-			ClickManager.Instance.ReleaseClickLock();
-			ClickManager.SetActiveGUIModeLock( false );
-		}
+		MinigamePopup popup = hashPopups[ePopup];
+		popup.Toggle( bShow );
 	}
 	
 	//---------------------------------------------------
 	// IsPopupShowing()
 	//---------------------------------------------------	
 	public bool IsPopupShowing( MinigamePopups ePopup ) {
-		GameObject goUI = (GameObject) hashPopups[ePopup];
-		bool bShowing = goUI.GetComponent<PositionTweenToggle>().IsShowing;
+		MinigamePopup popup = hashPopups[ePopup];
+		bool bShowing = popup.IsShowing();
 		
 		return bShowing;
 	}

@@ -34,6 +34,9 @@ public class TweenToggle : MonoBehaviour {
 
 	protected Vector3 hiddenPos;
 	protected Vector3 showingPos;
+	public Vector3 GetShowPos() {
+		return showingPos;
+	}
 	protected bool positionSet;
 	
 	//////////////////////////////////////////////////////

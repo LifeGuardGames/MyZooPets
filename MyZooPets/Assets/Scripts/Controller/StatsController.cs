@@ -36,9 +36,9 @@ public class StatsController : Singleton<StatsController> {
 	
 	// Locations are on screen space
 	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
-		ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true );
+		ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true, false );
 	}
-	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, bool bPlaySounds){
+	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, bool bPlaySounds, bool bAtOnce = false){
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
@@ -87,7 +87,7 @@ public class StatsController : Singleton<StatsController> {
 		listStats.Add( new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ?  hudAnimator.strSoundStars : null ) );
 		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
 		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
-		StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds ) );
+		StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds, bAtOnce ) );
 	}	
 	
 	//---------------------------------------------------

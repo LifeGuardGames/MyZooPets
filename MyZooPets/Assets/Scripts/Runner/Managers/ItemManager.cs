@@ -141,7 +141,7 @@ public class ItemManager : Singleton<ItemManager> {
             tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().functionName = "DestroyTutorial";
             tutorialGO.transform.Find("Label").GetComponent<UILabel>().text = hintMessage;
 
-            RunnerGameManager.Instance.PauseGame();
+            RunnerGameManager.Instance.ShowAlert();
             DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
     }

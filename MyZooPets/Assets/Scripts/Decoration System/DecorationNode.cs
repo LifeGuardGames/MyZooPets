@@ -10,6 +10,8 @@ using System.Collections;
 public abstract class DecorationNode : LgButton {
 	// ------ Pure Abstract --------------------------
 	protected abstract void _SetDefaultDeco( string strDecoID );		// sets the default deco properly
+	protected abstract void _RemoveDecoration();						// removes the decoration
+	public abstract bool HasRemoveOption();								// can this deco be removed?
 	//------------------------------------------------
 	
 	// what type of decorations can go on this node?
@@ -164,15 +166,6 @@ public abstract class DecorationNode : LgButton {
 	}	
 	
 	//---------------------------------------------------
-	// HasRemoveOption()
-	// Can this decoration be removed by the user?
-	//---------------------------------------------------	
-	public virtual bool HasRemoveOption() {
-		// children implement this
-		return false;
-	}		
-	
-	//---------------------------------------------------
 	// SetDecoration()
 	// Sets this node's decoration to the incoming
 	// decoration.
@@ -238,9 +231,5 @@ public abstract class DecorationNode : LgButton {
 		
 		// reset the deco id on this node
 		strDecoID = string.Empty;
-	}
-	
-	protected virtual void _RemoveDecoration() {
-		// children implement this	
 	}
 }

@@ -20,6 +20,10 @@ public class DecorationNodeObject : DecorationNode {
 	// _SetDecoration()
 	//---------------------------------------------------	
 	protected override void _SetDecoration( string strID ) {
+		// first, if our defeat deco exists, destroy it
+		if ( goDefaultDeco )
+			Destroy( goDefaultDeco );
+		
 		// build the prefab from the id of the decoration
 		string strResource = "GO_" + strID;
 		GameObject goPrefab = Resources.Load(strResource) as GameObject;
@@ -29,8 +33,10 @@ public class DecorationNodeObject : DecorationNode {
 		if ( vOverridePos != Vector3.zero )
 			vPos = vOverridePos;
 		
-		if ( goPrefab )
-			goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;	
+		if ( goPrefab ) {
+			goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;
+			goDeco.transform.parent = transform.parent;	// put it in the hierachy of decorations in this room	
+		}
 		else
 			Debug.Log("No such prefab for " + strResource);
 	}

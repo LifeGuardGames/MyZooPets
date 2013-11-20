@@ -28,13 +28,19 @@ public class CameraManager : Singleton<CameraManager> {
 	
 	// is the camera zoomed?
 	private bool bZoomed;
+
+	private int nativeWidth;
+	private int nativeHeight;
 	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
 	void Awake(){
-		ratioX = 1280f/(Screen.width * 1.0f);
-		ratioY = 800f/(Screen.height * 1.0f);		
+		nativeWidth = Constants.GetConstant<int>("NativeWidth");
+		nativeHeight = Constants.GetConstant<int>("NativeHeight");
+
+		ratioX = nativeWidth/(Screen.width * 1.0f);
+		ratioY = nativeHeight/(Screen.height * 1.0f);		
 	}	
 	
 	//---------------------------------------------------
@@ -123,11 +129,25 @@ public class CameraManager : Singleton<CameraManager> {
 	
 	//---------------------------------------------------
 	// WorldToScreen()
+	// Transform world position to screen position.
+	// Only use this to transform world position for use with NGUI! 
 	//---------------------------------------------------		
 	public Vector3 WorldToScreen( Camera cam, Vector3 vPos ){
 		// Accomodate for screen ratio scale
 		Vector3 trueRatioScreenPos = cam.WorldToScreenPoint(vPos);
 		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
+		return scaledRatioScreenPos;
+	}
+
+	public Vector3 ViewportToScreen( Camera cam, Vector3 vPos ){
+		// Accomodate for screen ratio scale
+		Vector3 trueRatioScreenPos = cam.ViewportToScreenPoint(vPos);
+		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
+		return scaledRatioScreenPos;
+	}
+
+	private Vector3 ScalePositionForNGUI(Vector3 vPos){
+		Vector3 scaledRatioScreenPos = new Vector3(vPos.x * ratioX, vPos.y * ratioY, 0);
 		return scaledRatioScreenPos;
 	}
 	
@@ -165,15 +185,15 @@ public class CameraManager : Singleton<CameraManager> {
 		
 		switch ( eAnchorIn ) {
 			case InterfaceAnchors.BottomLeft:
-				vTransformed.x -= Screen.width / 2;
-				vTransformed.y -= Screen.height / 2;
+				vTransformed.x -= nativeWidth / 2;
+				vTransformed.y -= nativeHeight / 2;
 				break;
 			case InterfaceAnchors.Bottom:
-				vTransformed.y -= Screen.height / 2;
+				vTransformed.y -= nativeHeight / 2;
 				break;
 			case InterfaceAnchors.Top:
-				vTransformed.x -= Screen.width / 2;
-				vTransformed.y += Screen.height / 2;
+				vTransformed.x -= nativeWidth / 2;
+				vTransformed.y += nativeHeight / 2;
 				break;
 			default:
 				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
@@ -188,11 +208,11 @@ public class CameraManager : Singleton<CameraManager> {
 		
 		switch ( eAnchorIn ) {
 			case InterfaceAnchors.Center:
-				vTransformed.x += Screen.width / 2;
-				vTransformed.y -= Screen.height / 2;
+				vTransformed.x += nativeWidth / 2;
+				vTransformed.y -= nativeHeight / 2;
 				break;
 			case InterfaceAnchors.BottomLeft:
-				vTransformed.y -= Screen.height;
+				vTransformed.y -= nativeHeight;
 				break;			
 			default:
 				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");

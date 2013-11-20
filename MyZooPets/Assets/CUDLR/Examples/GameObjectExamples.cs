@@ -94,6 +94,12 @@ public static class GameObjectCommands {
     }
     Application.LoadLevel(args[0]);
   }
+
+
+  [CUDLR.Command("Screen Resolution", "display screen resolution")]
+  public static void ShowScreenWidthAndHeight(){
+    CUDLR.Console.Log("Screen Width: " + Screen.width + " Screen Height: " + Screen.height);
+  }
 }
 
 

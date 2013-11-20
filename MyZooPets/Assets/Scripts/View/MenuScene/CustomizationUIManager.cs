@@ -85,24 +85,24 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
-		if(showMovie){
-        	Invoke("ShowIntroMovie", 1);
-		}
+		// if(showMovie){
+  //       	Invoke("ShowIntroMovie", 1);
+		// }
     }
 	
 	private void ShowIntroMovie() {
 		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Intro") )
 			LoadScene();
 		
-		GameObject resourceMovie = Resources.Load("LWF_Cutscene_Intro") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		LgLwfCutscene.OnCutsceneDone += IntroMovieDone;
+		// GameObject resourceMovie = Resources.Load("LWF_Cutscene_Intro") as GameObject;
+		// LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		// LgLwfCutscene.OnCutsceneDone += IntroMovieDone;
 	}
 	
     private void IntroMovieDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Intro");
-		LgLwfCutscene.OnCutsceneDone -= IntroMovieDone;
-		LoadScene();
+		// DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Intro");
+		// LgLwfCutscene.OnCutsceneDone -= IntroMovieDone;
+		// LoadScene();
     }
 	
 	private void LoadScene() {

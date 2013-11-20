@@ -40,6 +40,7 @@ namespace CUDLR {
 
     [SerializeField]
     public int Port = 55055;
+    public bool persistant = true;
 
     private static Thread mainThread;
     private static string fileRoot;
@@ -63,6 +64,10 @@ namespace CUDLR {
     };
 
     public virtual void Awake() {
+      if(persistant){
+        DontDestroyOnLoad(this);
+      }
+      
       mainThread = Thread.CurrentThread;
       fileRoot = Path.Combine(Application.streamingAssetsPath, "CUDLR");
 

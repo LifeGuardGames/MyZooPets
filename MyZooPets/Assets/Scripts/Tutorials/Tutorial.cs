@@ -177,8 +177,12 @@ public abstract class Tutorial {
 		}
 		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
-			vPos = Camera.main.WorldToScreenPoint( goTarget.transform.position );
+			vPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
+			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
+
+			Debug.Log("position before transform " + vPos);
 			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+			Debug.Log("position after transform " + vPos);
 		}
 		
 		// destroy the old object if it existed
@@ -232,7 +236,7 @@ public abstract class Tutorial {
 		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
 		
 		// transform viewport location to screen position, then from bottom left to center
-		Vector3 vPos = Camera.main.ViewportToScreenPoint( vLoc );
+		Vector3 vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
 		vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
 		//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
 		

@@ -11,8 +11,8 @@ public class CalendarEntry{
     //=====================================
 
     public CalendarEntry(){
-        DayTime = DosageRecord.Null;
-        NightTime = DosageRecord.Null;
+        DayTime = DosageRecord.Unknown;
+        NightTime = DosageRecord.Unknown;
         BonusCollectedDayTime = false;
         BonusCollectedNightTime = false;
     }

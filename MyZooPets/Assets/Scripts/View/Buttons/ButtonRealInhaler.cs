@@ -43,7 +43,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	// Open if yes or show notification	
 	//--------------------------------------------------
 	private void CheckToOpenInhaler(){
-		if(CalendarLogic.CanUseRealInhaler){
+		if(CalendarLogic.Instance.CanUseRealInhaler){
 			OpenRealInhaler();
 		}else{
 			/////// Send Notication ////////

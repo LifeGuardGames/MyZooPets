@@ -82,7 +82,7 @@ public class ComicPlayer : MonoBehaviour{
             currentPageNum++;
         }
         catch(ArgumentOutOfRangeException outOfRange){
-            Debug.Log("page index out of range");
+            Debug.Log("page index out of range " + outOfRange.Message);
         }
     }
 

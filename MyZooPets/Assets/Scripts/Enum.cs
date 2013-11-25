@@ -27,9 +27,9 @@ public enum Level{
 
 public enum DosageRecord{
     Hit,
-    Null,
+    Unknown,
     Miss,
-    LeaveBlank, // for those parts that should be
+    Null, //before pet is hatched 
 }
 
 public enum InhalerType{

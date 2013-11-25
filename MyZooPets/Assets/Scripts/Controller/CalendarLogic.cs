@@ -7,71 +7,11 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     //called when calendar opened or calendar resets
     public static event EventHandler<EventArgs> OnCalendarReset; 
 
-    private static CalendarEntry todaysEntry; //today's entry
+    private CalendarEntry todaysEntry; //today's entry
 
-    //====================API (use this for generating weeks)=======================
-    //Generate a week of empty CalendarEntry
-    public static List<CalendarEntry> EmptyWeek(){
-        List<CalendarEntry> list = new List<CalendarEntry>();
-        for (int i = 0; i < 7; i++){
-            list.Add(new CalendarEntry());
-        }
-        return list;
-    }
-
-    //Generate a week of CalendarEntry with blank dosage record
-    public static List<CalendarEntry> LeaveBlankWeek(){ // for those parts that should remain empty
-        List<CalendarEntry> list = new List<CalendarEntry>();
-        for (int i = 0; i < 7; i++){
-            list.Add(new CalendarEntry(DosageRecord.LeaveBlank, DosageRecord.LeaveBlank));
-        }
-        return list;
-    }
-
-    // All entries should be DosageRecord.LeaveBlank up to today's first entry (either day time or night time)
-    public static List<CalendarEntry> LeaveBlankUntilNowWeek(DateTime now){ // for those parts that should remain empty
-        List<CalendarEntry> list = EmptyWeek();
-        // assume that DateOfSunday is updated by this point
-
-        // get days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(-7).Date);
-        int daysPassed = timePassed.Days;
-
-        // set all values of entries before today to DosageRecord.Miss
-        // (except today's)
-        for (int i = 0; i < daysPassed - 1; i++){
-            CalendarEntry entry = list[i];
-            entry.DayTime = DosageRecord.LeaveBlank;
-            entry.NightTime = DosageRecord.LeaveBlank;
-        }
-
-        todaysEntry = list[daysPassed - 1];
-        // fill in specifically for today
-        if (now.Hour >= 12) {
-            todaysEntry.DayTime = DosageRecord.LeaveBlank;
-        }
-
-        return list;
-    }
-
-    public static List<CalendarEntry> MissedWeek(){
-        List<CalendarEntry> list = new List<CalendarEntry>();
-        for (int i = 0; i < 7; i++){
-            list.Add(new CalendarEntry(DosageRecord.Miss, DosageRecord.Miss));
-        }
-        return list;
-    }
-
-    //====================API=======================
     //Week in a list. In order from Monday to Sunday
     public List<CalendarEntry> GetCalendarEntriesThisWeek{
         get{return DataManager.Instance.GameData.Calendar.EntriesThisWeek;}
-    }
-
-    //Last week entries. In order from Monday to Sunday. Possible dosage records are
-    //Hit, Miss, and LeaveBlank
-    public List<CalendarEntry> GetCalendarEntriesLastWeek{
-        get{return DataManager.Instance.GameData.Calendar.EntriesLastWeek;}
     }
 
     //Return the count of all the checks for this week
@@ -85,23 +25,58 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         get{return DataManager.Instance.GameData.Calendar.NextPlayPeriod;}
     }
 
-    public bool IsRewardClaimed{
-        get{return DataManager.Instance.GameData.Calendar.IsRewardClaimed;}
-        set{DataManager.Instance.GameData.Calendar.IsRewardClaimed = value;}
-    } 
+    // public bool IsRewardClaimed{
+        // get{return DataManager.Instance.GameData.Calendar.IsRewardClaimed;}
+        // set{DataManager.Instance.GameData.Calendar.IsRewardClaimed = value;}
+    // } 
 
     //Check if the user can play the inhaler game
-    public static bool CanUseRealInhaler{
+    public bool CanUseRealInhaler{
         get {
             bool retVal = false;
-            if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Null) {
+            if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Unknown) {
                 retVal = true;
             }
-            else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Null ) {
+            else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Unknown ) {
                 retVal = true;
             }
             return retVal;
         }
+    } 
+
+    //Generate a week of empty CalendarEntry
+    public static List<CalendarEntry> DosageRecordUnknownWeek(){
+        List<CalendarEntry> list = new List<CalendarEntry>();
+        for (int i = 0; i < 7; i++){
+            list.Add(new CalendarEntry());
+        }
+        return list;
+    }
+
+    // All entries should be DosageRecord.Null up to today's first entry (either day time or night time)
+    public static List<CalendarEntry> NullUntilTodayWeek(DateTime now){ // for those parts that should remain empty
+        List<CalendarEntry> list = DosageRecordUnknownWeek();
+
+        // get days passed since last Sunday
+        DateTime dateOfSunday = GetDateOfSunday(now);
+        TimeSpan timePassed = now.Date.Subtract(dateOfSunday.AddDays(-7).Date);
+        int daysPassed = timePassed.Days;
+
+        // set all values of entries before today toDosageRecord.Null 
+        // (except today's)
+        for (int i = 0; i < daysPassed - 1; i++){
+            CalendarEntry entry = list[i];
+            entry.DayTime = DosageRecord.Null;
+            entry.NightTime = DosageRecord.Null;
+        }
+
+        CalendarEntry today = list[daysPassed - 1];
+        // fill in specifically for today
+        if (now.Hour >= 12) {
+            today.DayTime = DosageRecord.Null;
+        }
+
+        return list;
     }
 	
     //-----------------------------------------------
@@ -194,18 +169,14 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // ResetWeekAfterTutorialFinish()
     // Reset the week back to blank entries
     //-----------------------------------------------
-    public void ResetWeekAfterTutorialFinish(){
-        if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
-            OnCalendarReset(this, EventArgs.Empty);
-    }
+    // public void ResetWeekAfterTutorialFinish(){
+    //     if(D.Assert(OnCalendarReset != null, "OnCalendarReset has no listeners"))
+    //         OnCalendarReset(this, EventArgs.Empty);
+    // }
     //================================================
     
     void Awake(){
         UpdateCalendar(DateTime.Now);
-    }
-
-    void Update(){
-        ResetForNextPlayPeriod(DateTime.Now);
     }
 
     //-----------------------------------------------
@@ -213,9 +184,14 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // Run a check to see if calendar needs to be updated and reset
     //-----------------------------------------------
     private void UpdateCalendar(DateTime now){
-       UpdateWeekReference(now);
+        if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){
+            DataManager.Instance.GameData.Calendar.EntriesThisWeek = DosageRecordUnknownWeek(); 
+
+            DataManager.Instance.GameData.Calendar.DateOfSunday = GetDateOfSunday(now);
+        }
+       // UpdateWeekReference(now);
        FillInMissedEntries(now);
-       ResetForNextPlayPeriod(now);
+       // ResetForNextPlayPeriod(now);
     }
 
     //-----------------------------------------------
@@ -223,38 +199,48 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // Check if it is a new week. Figure out how many weeks 
     // need to be re-generated (1 or 2)
     //-----------------------------------------------
-    private void UpdateWeekReference(DateTime now){
-        if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){ //today's date is later than Sunday
+    // private void UpdateWeekReference(DateTime now){
+    //     if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){ //today's date is later than Sunday
 
-            // If today's date is later than a week past Sunday (two Sundays), then
-            // throw away everything and start anew.
-            if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(7)){
-                DataManager.Instance.GameData.Calendar.EntriesLastWeek = MissedWeek();
-                DataManager.Instance.GameData.Calendar.EntriesThisWeek = EmptyWeek();
-            }
-            // Else, we want to move everything up by one week. Move this week array to last week
-            // array and create an empty array of entries for this week.
-            else {
-                // if there are any missed entries fill them with misses before moving
-                // them to last week array. 
-                for (int i = 0; i < 7; i++){
-                    CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
-                    if (entry.DayTime == DosageRecord.Null){
-                        entry.DayTime = DosageRecord.Miss;
-                    }
-                    if (entry.NightTime == DosageRecord.Null){
-                        entry.NightTime = DosageRecord.Miss;
-                    }
-                }
+    //         // If today's date is later than a week past Sunday (two Sundays), then
+    //         // throw away everything and start anew.
+    //         if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(7)){
+    //             DataManager.Instance.GameData.Calendar.EntriesLastWeek = MissedWeek();
+    //             DataManager.Instance.GameData.Calendar.EntriesThisWeek = DosageRecordUnknownWeek();
+    //         }
+    //         // Else, we want to move everything up by one week. Move this week array to last week
+    //         // array and create an empty array of entries for this week.
+    //         else {
+    //             // if there are any missed entries fill them with misses before moving
+    //             // them to last week array. 
+    //             for (int i = 0; i < 7; i++){
+    //                 CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
+    //                 if (entry.DayTime == DosageRecord.Unknown){
+    //                     entry.DayTime = DosageRecord.Miss;
+    //                 }
+    //                 if (entry.NightTime == DosageRecord.Unknown){
+    //                     entry.NightTime = DosageRecord.Miss;
+    //                 }
+    //             }
 
-                //move this week array to last week array
-                DataManager.Instance.GameData.Calendar.EntriesLastWeek = DataManager.Instance.GameData.Calendar.EntriesThisWeek;
-                //create new list for the new week
-                DataManager.Instance.GameData.Calendar.EntriesThisWeek = EmptyWeek();
-            }
+    //             //move this week array to last week array
+    //             DataManager.Instance.GameData.Calendar.EntriesLastWeek = DataManager.Instance.GameData.Calendar.EntriesThisWeek;
+    //             //create new list for the new week
+    //             DataManager.Instance.GameData.Calendar.EntriesThisWeek = DosageRecordUnknownWeek();
+    //         }
 
-            DataManager.Instance.GameData.Calendar.DateOfSunday = GetDateOfSunday(now);
-        }
+    //         DataManager.Instance.GameData.Calendar.DateOfSunday = GetDateOfSunday(now);
+    //     }
+    // }
+
+    //-----------------------------------------------
+    // DaysPassedSinceLastSunday()
+    //  
+    //-----------------------------------------------
+    private int DaysPassedSinceLastSunday(DateTime now){
+        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(-7).Date);
+        int daysPassed = timePassed.Days;
+        return daysPassed;
     }
 
     //-----------------------------------------------
@@ -265,17 +251,16 @@ public class CalendarLogic : Singleton<CalendarLogic>{
         // assume that DateOfSunday is updated by this point
 
         // days passed since last Sunday
-        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(-7).Date);
-        int daysPassed = timePassed.Days;
+        int daysPassed = DaysPassedSinceLastSunday(now);
 
-        // replace all the DosageRecord.Null values with DosageRecord.Miss
+        // replace all the DosageRecord.Unknown values with DosageRecord.Miss
         // (except today's)
         for (int i = 0; i < daysPassed - 1; i++){
             CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
-            if (entry.DayTime == DosageRecord.Null){
+            if (entry.DayTime == DosageRecord.Unknown){
                 entry.DayTime = DosageRecord.Miss;
             }
-            if (entry.NightTime == DosageRecord.Null){
+            if (entry.NightTime == DosageRecord.Unknown){
                 entry.NightTime = DosageRecord.Miss;
             }
         }
@@ -293,7 +278,7 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     //-----------------------------------------------
     private void FillInMissesForToday(DateTime now){
         if (now.Hour >= 12) { //PM
-            if (todaysEntry.DayTime == DosageRecord.Null){
+            if (todaysEntry.DayTime == DosageRecord.Unknown){
                 todaysEntry.DayTime = DosageRecord.Miss;
             }
         }

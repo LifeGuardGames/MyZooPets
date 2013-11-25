@@ -4,6 +4,7 @@ using UnityEngine;
     Class that contains all the game data of a pet
 */
 public class PetGameData{
+	public WellapadData Wellapad {get; set;}
     public PetInfoData PetInfo {get; set;}
     public CutsceneData Cutscenes {get; set;} 
     public DecorationSystemData Decorations {get; set;}
@@ -22,6 +23,8 @@ public class PetGameData{
     public PetGameData(){}
 
     public void Init(){
+		Wellapad = new WellapadData();
+		Wellapad.Init();
         PetInfo = new PetInfoData();
         PetInfo.Init();
         Cutscenes = new CutsceneData();

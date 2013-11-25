@@ -188,9 +188,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         ShowGameOverMessage();
         ShowHUD();
         HideQuitButton();
-		
-		// if the user gets here, it means they completed the inhaler game, so they can no breath some fire!
-		DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( 1 );
     }
 
     //=================================Progress Bar=============================

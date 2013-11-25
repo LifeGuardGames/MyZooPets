@@ -9,14 +9,18 @@ using System;
 // manager.
 //---------------------------------------------------
 
-public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
+public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
+	//------------------ Pure Abstract ----------------------------
+	protected abstract void _OpenUI();		// when the UI manager is opened
+	protected abstract void _CloseUI();		// when the UI manager is closed
+	//------------------------------------------------------------- 
+	
 	// event that fires when the user enters or exits a UI mode
 	public event EventHandler<UIManagerEventArgs> OnManagerOpen;	
 	
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
 	public bool blockGUI;	
-	protected bool ShouldLockUI()
-	{
+	protected bool ShouldLockUI() {
 		return blockGUI;
 	}
 	
@@ -28,6 +32,12 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	public bool IsOpen() {
 		return bOpen;	
 	}
+	
+	void Start() {
+		_Start();	
+	}
+	
+	protected virtual void _Start() {}
 	
 	//---------------------------------------------------
 	// OpenUI()
@@ -57,15 +67,6 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// _OpenUI()
-	// Children classes implement this to do their own
-	// unique behaviour when a UI is opened.
-	//---------------------------------------------------		
-	protected virtual void _OpenUI() {
-		Debug.Log("Children should implement _OpenUI()");
-	}
-	
-	//---------------------------------------------------
 	// CloseUI()
 	// From a high level, releases all appropriate locks
 	// on the UI.
@@ -92,14 +93,5 @@ public class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		bOpen = false;
 		
 		_CloseUI();
-	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	// Child classes implement this to do their own
-	// unique thing when a UI is closed.
-	//---------------------------------------------------		
-	protected virtual void _CloseUI() {
-		Debug.Log("Children should implement _CloseUI()");
 	}
 }

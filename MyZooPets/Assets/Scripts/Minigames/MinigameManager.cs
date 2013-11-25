@@ -316,6 +316,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// The player lost.
 	//---------------------------------------------------	
 	protected void GameOver() {
+		// send out a completion task
+		WellapadMissionController.Instance.TaskCompleted( "Play" + GetMinigameKey() );
+		//WellapadUIManager.Instance.TaskCompleted( "Play" + GetMinigameKey() );
+		
 		// update the game state
 		SetGameState( MinigameStates.GameOver );
 		

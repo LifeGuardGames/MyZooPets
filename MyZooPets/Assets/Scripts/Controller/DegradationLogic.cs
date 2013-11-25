@@ -56,7 +56,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             DataManager.Instance.GameData.Degradation.MorningTrigger = true;
             DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
         }
-        if(now.Hour > 12){ //morning
+        if( CalendarLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
             if(DataManager.Instance.GameData.Degradation.MorningTrigger){
                 numberOfTriggersToInit = 3;
                 DataManager.Instance.GameData.Degradation.MorningTrigger = false;
@@ -153,5 +153,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
 		StatsController.Instance.ChangeStats(nPoints, vTriggerPos, 50, vTriggerPos, 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
+		
+		// if there are no degradation triggers left, send out a task completion message
+		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
+		if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
+			WellapadMissionController.Instance.TaskCompleted( "CleanRoom" );
     }
 }

@@ -69,6 +69,12 @@ public class AttackGate : MonoBehaviour {
 		// damage the gate
 		gateTarget.DamageGate( nDamage );
 		
+		// and decrement the user's fire breaths
+		DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( -1 );
+		
+		// also mark the player as having attack the monster (for wellapad tasks)
+		WellapadMissionController.Instance.TaskCompleted( "FightMonster" );
+		
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
 		

@@ -105,13 +105,16 @@ public class DataGateLoader {
             //Go through all child node of xmlElement (the parent of the file)
             for(int i=0; i<xmlElement.Children.Count; i++){
                 IXMLNode childNode = xmlElement.Children[i];
-
+				
+             	// Get  properties from xml node
+                Hashtable hashElements = XMLUtils.GetChildren(childNode);				
+				
                 //Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
 				string strError = strErrorFile + "(" + id + "): ";
 				
-				DataGate data = new DataGate( id, hashAttr, strError );
+				DataGate data = new DataGate( id, hashAttr, hashElements, strError );
 				
 	           	// store the data
 				if ( dictData.ContainsKey( id ) )

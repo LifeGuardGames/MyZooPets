@@ -39,7 +39,13 @@ public class DataGate {
 		return this.eSwipeDirection == eSwipeDirection;
 	}
 	
-	public DataGate( string id, Hashtable hashData, string strError ) {
+	// list of wellapad unlocks removing this makes available
+	private string[] arrayUnlocks;
+	public string[] GetTaskUnlocks() {
+		return arrayUnlocks;	
+	}
+	
+	public DataGate( string id, Hashtable hashData, Hashtable hashElements, string strError ) {
 		strID = id;	
 
 		// get location
@@ -54,6 +60,10 @@ public class DataGate {
 		// get the direction the gate is blocking
 		eSwipeDirection = (RoomDirection) System.Enum.Parse( typeof(RoomDirection), 
 														HashUtils.GetHashValue<string>( hashData, "Blocking", null, strError ) );
+		
+		// get list of wellapad unlocks
+		string strUnlocks = XMLUtils.GetString( hashElements["TaskUnlocks"] as IXMLNode );
+		arrayUnlocks = strUnlocks.Split( ","[0] );
 		
 		//Debug.Log("Loading gate " + strID + " in loc " + strArea + " in partition " + nPartition + " and monster " + strMonsterID);
 	}

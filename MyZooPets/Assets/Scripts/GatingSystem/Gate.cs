@@ -25,6 +25,11 @@ public abstract class Gate : MonoBehaviour {
 		
 		strResource = monster.GetResourceKey();
 	}
+	
+	protected DataGate GetGateData() {
+		DataGate data = DataGateLoader.GetData( strID );
+		return data;
+	}
 
 	// the % in screen space that the player should walk in front of the gate when approaching it
 	public float fPlayerBuffer;	
@@ -127,14 +132,24 @@ public abstract class Gate : MonoBehaviour {
 		
 		// gates might do their own thing upon destruction
 		OnGateDestroyed();	
+		
+		// add any appropriate task unlocks
+		DataGate data = GetGateData();
+		string[] arrayUnlocks = data.GetTaskUnlocks();
+		for ( int i = 0; i < arrayUnlocks.Length; ++i )
+			WellapadMissionController.Instance.UnlockTask( arrayUnlocks[i] );		
 	}
 	
 	//---------------------------------------------------
 	// OnDestroyAnimComplete()
 	// It's up for child gates to properly call this 
 	// function when their destroy animation is complete.
+	// NOTE: I don't think anything important should go
+	// here because at present, the game could exit before
+	// the animation is complete, but the gate is already
+	// marked as destroyed.
 	//---------------------------------------------------		
-	private void OnDestroyAnimComplete() {
+	private void OnDestroyAnimComplete() {		
 		// destroy the object
 		Destroy( gameObject );			
 	}

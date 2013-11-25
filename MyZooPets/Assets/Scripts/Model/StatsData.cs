@@ -96,10 +96,20 @@ public class StatsData{
         return (0.5*Mood + 0.5*Health);
     }
     public void AddMood(int val){
+		// cache old mood
+		//int nOldMood = Mood;
+		
+		// update mood
         Mood += val;
+		
+		// max mood out at 100%
         if (Mood > 100){
             Mood = 100;
         }
+		
+		// do a completion check for the pet's hunger (mood) level
+		if ( Mood == 100 )
+			WellapadMissionController.Instance.TaskCompleted( "FeedPet" );
     }
     public void SubtractMood(int val){
         Mood -= val;

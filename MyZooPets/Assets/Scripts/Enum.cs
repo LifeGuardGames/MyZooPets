@@ -238,3 +238,16 @@ public enum MinigameRewardTypes {
 	XP,
 	Money
 }
+
+// reward statuses for wellapad missions
+public enum RewardStatuses {
+	Unearned,
+	Unclaimed,
+	Claimed
+}
+
+// time frames
+public enum TimeFrames {
+	Morning,
+	Evening
+}

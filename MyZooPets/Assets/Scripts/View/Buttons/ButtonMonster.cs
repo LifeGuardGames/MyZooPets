@@ -133,9 +133,6 @@ public class ButtonMonster : LgButtonHold {
 			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();			
 			
-			// and decrement the user's fire breaths
-			DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( -1 );
-			
 			// just kind of a hack for now until the gating system is complete
 			// if the monster is dead or the pet can't breathe fire any more, destroy the button
 			int nDamage = GetDamage();

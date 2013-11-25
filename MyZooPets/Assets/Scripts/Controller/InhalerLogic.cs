@@ -50,6 +50,11 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     }
     //======================================================
 	
+	//---------------------------------------------------
+	// GameDone()
+	// Put anything in here that should happen as a result
+	// of the pet using the daily inhaler.
+	//---------------------------------------------------		
 	private void GameDone() {		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "inhalerDone" );
@@ -57,8 +62,11 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         IsFirstTimeRescue = false;
         CalendarLogic.Instance.RecordGivingInhaler(); 
         if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
-            OnGameOver(this, EventArgs.Empty);		
-	}
+            OnGameOver(this, EventArgs.Empty);
+		
+		// send out a task completion event for the wellapad
+		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
+	}	
 	
     public void ResetGame(){
         currentStep = 1;

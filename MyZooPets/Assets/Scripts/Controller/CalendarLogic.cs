@@ -103,6 +103,20 @@ public class CalendarLogic : Singleton<CalendarLogic>{
             return retVal;
         }
     }
+	
+    //-----------------------------------------------
+    // GetTimeFrame()
+    // Given a time, will return whether or not that
+	// time is considered morning or evening.  All
+	// parts of the code should use this to determine
+	// what time of day it is.
+    //-----------------------------------------------	
+	public static TimeFrames GetTimeFrame( DateTime time ) {
+		if ( time.Hour > 12 )
+			return TimeFrames.Evening;
+		else
+			return TimeFrames.Morning;
+	}
 
     //-----------------------------------------------
     // CalculateNextPlayPeriod()

@@ -35,11 +35,12 @@ public class WellapadData {
 		ResetMissions();
 		
 		// testing
+		/*
 		DateMissionsCreated = DateTime.Now;
 		Dictionary<string, bool> test = new Dictionary<string, bool>();
 		test["FightMonster"] = false;
 		CurrentTasks["Side"] = new Mission("Side", test);
-		
+		*/
 		
     }	
 }

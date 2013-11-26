@@ -45,19 +45,12 @@ public class GameTutorial_FocusInhaler : GameTutorial {
 				// the start of the focus inhaler tutorial
 				FocusInhaler();
 			
-				// show a little popup message
-				Vector3 vLoc = Constants.GetConstant<Vector3>( "InhalerPopupLoc" );
-				ShowPopup( Tutorial.POPUP_STD, vLoc );
-				
 				break;
 			
 			case 1:
 				// destroy the spotlight we created for the inhaler
 				RemoveSpotlight();
-				
-				// destroy the popup we created
-				RemovePopup();			
-			
+
 				break;
 		}
 	}

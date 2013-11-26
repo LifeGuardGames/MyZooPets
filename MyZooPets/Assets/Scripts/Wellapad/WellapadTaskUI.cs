@@ -32,8 +32,11 @@ public class WellapadTaskUI : MonoBehaviour {
 		// set the checkbox sprite appropriately
 		SetCheckboxSprite();
 		
-		// listen for when a task is complete so the UI can react
-		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;
+		// listen for various messages
+		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;			// when a task is complete so the UI can react
+		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
+		
+		
 	}
 	
 	//---------------------------------------------------
@@ -60,6 +63,21 @@ public class WellapadTaskUI : MonoBehaviour {
 		// if the IDs match, update our checkbox sprite
 		if ( args.ID == task.GetID() )
 			SetCheckboxSprite();
+	}
+	
+	//---------------------------------------------------
+	// OnTaskHighlighted()
+	// Callback for when a task is highlighted
+	//---------------------------------------------------	
+	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
+		if ( args.ID == task.GetID() ) {
+			// this task is being highlighted -- change the text to black
+			label.color = Color.black;
+		}
+		else {
+			// this task is not being highlighted, so grey it out
+			label.color = Color.gray;
+		}
 	}
 	
 	//---------------------------------------------------

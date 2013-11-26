@@ -39,14 +39,53 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		switch ( nStep ) {
 			case 0:
-				TutorialManager.Instance.StartCoroutine( BeginIntro() );
+				// actually place the tutorial trigger dust behind the smoke monster now, even though this is for a later
+				// tutorial...it's so the user can actually see it with the smoke monster
+				DegradationUIManager.Instance.PlaceTutorialTrigger();
+			
+				// begin the panning "cut scene"
+				TutorialManager.Instance.StartCoroutine( BeginPanRight() );
 				break;
 			
 			case 1:
-				TutorialManager.Instance.StartCoroutine( BeginPanRight() );
+				// open the wellapad to show the user what to do next
+				ShowWellapad();
 				break;
 		}
 	}
+	
+	//---------------------------------------------------
+	// ShowWellapad()
+	//---------------------------------------------------		
+	private void ShowWellapad() {
+		// highlight the fight task
+		WellapadMissionController.Instance.HighlightTask( "FightMonster" );
+	
+		// show the wellapad
+		WellapadUIManager.Instance.OpenUI();
+	
+		// enable the close button		
+		GameObject goBack = GameObject.Find( "WellapadBackButton" );
+		AddToProcessList( goBack );
+		
+		// listen for wellapad closing
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;			
+		
+	}
+	
+	//---------------------------------------------------
+	// OnWellapadClosed()
+	// Callback for when the wellapad is closed.
+	//---------------------------------------------------	
+	private void OnWellapadClosed( object sender, UIManagerEventArgs args ) {
+		if ( args.Opening == false ) {
+			// wellapad is closing, so stop listening
+			WellapadUIManager.Instance.OnManagerOpen -= OnWellapadClosed;
+			
+			// advance to next step
+			Advance();
+		}
+	}	
 	
 	//---------------------------------------------------
 	// BeginIntro()
@@ -59,11 +98,6 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 		
 		// play sound
 		AudioManager.Instance.PlayClip( "tutorialSmokeIntro" );
-		
-		// show the comic & listen for callback when it is done
-		GameObject resourceMovie = Resources.Load("Cutscene_SmokeIntro" ) as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		CutsceneFrames.OnCutsceneDone += CutsceneDone;
 	}
 	
 	//---------------------------------------------------
@@ -82,7 +116,7 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 	// This function handles the slight pan to view the
 	// smoke monster in the next room over.
 	//---------------------------------------------------		
-	private IEnumerator BeginPanRight() {
+	private IEnumerator BeginPanRight() {	
 		// wait a brief moment
 		float fWait = Constants.GetConstant<float>( "SmokeIntroWaitBetweenPans" );
 		yield return new WaitForSeconds( fWait );

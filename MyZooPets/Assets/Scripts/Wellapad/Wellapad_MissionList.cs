@@ -24,12 +24,15 @@ public class Wellapad_MissionList : MonoBehaviour {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start() {
+	void Start() {		
 		// set up immutable task data
 		DataLoader_WellapadTasks.SetupData();
 		
+		// listen for refresh message
+		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;
+
 		// create missions UI
-		CreateMissions();
+		StartCoroutine( DisplayMissions() );
 	}
 	
 	//---------------------------------------------------
@@ -41,7 +44,7 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// so they are sorted properly.
 	//---------------------------------------------------		
 	private void SetNameForGrid( GameObject go ) {
-		go.name = "" + nCount;
+		go.name = nCount + "_WellapadTask";
 		nCount += 1;
 	}
 	
@@ -60,13 +63,14 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// CreateMissions()
 	// Creates the mission entries for the Wellapad.
 	//---------------------------------------------------	
-	private void CreateMissions() {
-		// prior to creating our missions, see if we need to wipe the slate clean
-		WellapadMissionController.Instance.RefreshCheck();
+	private void CreateMissions() {		
+		List<string> listCurrentMissions = WellapadMissionController.Instance.GetCurrentMissions();
 		
-		// create our missions -- right now we just have critical and side
-		CreateMission( "Critical" );
-		CreateMission( "Side" );
+		// create our missions
+		foreach ( string strMission in listCurrentMissions )
+			CreateMission( strMission );
+		
+		goGrid.GetComponent<UIGrid>().Reposition();
 	}
 	
 	//---------------------------------------------------
@@ -98,11 +102,6 @@ public class Wellapad_MissionList : MonoBehaviour {
 		GameObject goReward = NGUITools.AddChild(goGrid, prefabReward);
 		SetNameForGrid( goReward );
 		
-		// alter the Z so that it stays above the UI
-		//Vector3 vPos = goReward.transform.localPosition;
-		//vPos.z = prefabReward.transform.localPosition.z;
-		//goReward.transform.position = vPos;
-		
 		// init the reward UI
 		goReward.GetComponent<WellapadRewardUI>().Init( strMissionType );			
 	}
@@ -117,5 +116,37 @@ public class Wellapad_MissionList : MonoBehaviour {
 		string strKey = "MissionTitle_" + strMissionType;
 		string strText = Localization.Localize( strKey );
 		return strText;
+	}
+	
+	//---------------------------------------------------
+	// OnMissionsRefreshed()
+	// When the user's current missions expire and must
+	// be refreshed, this function will take care of the
+	// UI behind it.
+	//---------------------------------------------------		
+	private void OnMissionsRefreshed( object sender, EventArgs args ) {
+		StartCoroutine( DisplayMissions() );
+	}
+	
+	//---------------------------------------------------
+	// DisplayMissions()
+	//---------------------------------------------------		
+	private IEnumerator DisplayMissions() {
+		// reset the count for our grid labeling
+		nCount = 0;
+		
+		// destroy all children in the grid
+		foreach (Transform child in goGrid.transform) {
+			Destroy( child.gameObject );
+		}
+		
+		// wait a frame so the objects actually get destroyed
+		yield return 0;
+		
+		// and create the missions anew
+		CreateMissions();
+		
+		// reposition the elements since we just added a bunch
+		goGrid.GetComponent<UIGrid>().Reposition();
 	}
 }

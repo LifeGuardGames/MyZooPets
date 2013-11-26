@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
 public class DegradationUIManager : Singleton<DegradationUIManager>{
+	// constants
+	public const string TUT_TRIGGER = "TutorialTrigger";
+	
     //When particle effects need to be turned on
     public static event EventHandler<EventArgs> OnActivateParticleEffects;
     public GameObject cleanTriggerParticleDrop;
@@ -37,7 +40,10 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	// trigger.
 	//---------------------------------------------------	
 	public DegradTrigger PlaceTutorialTrigger() {
-		return PlaceTrigger( 0 );	
+		DegradTrigger trigger = PlaceTrigger( 0 );
+		trigger.gameObject.name = TUT_TRIGGER;
+		
+		return trigger;
 	}
 	
 	//---------------------------------------------------

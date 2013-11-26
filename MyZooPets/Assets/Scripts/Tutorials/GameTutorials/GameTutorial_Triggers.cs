@@ -58,7 +58,11 @@ public class GameTutorial_Triggers : GameTutorial {
 	private void SpawnDust() {
 		// immediately create the dust triger for the tutorial.  Hopefully this happens just as the calendar is closing, so the player
 		// doesn't see it pop onto the screen.
-		scriptTrigger = DegradationUIManager.Instance.PlaceTutorialTrigger();
+		
+		// NOTE - a change in the tutorial caused us to spawn the actual dust in the smoke intro tutorial, but we find/set the 
+		// game object here.
+		GameObject goTrigger = GameObject.Find( DegradationUIManager.TUT_TRIGGER );
+		scriptTrigger = goTrigger.GetComponent<DegradTrigger>();
 				
 		Advance();
 	}
@@ -68,14 +72,14 @@ public class GameTutorial_Triggers : GameTutorial {
 	//---------------------------------------------------		
 	private IEnumerator AttackPlayer() {
 		// wait a brief moment
-		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait" );
+		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreAttack" );
 		yield return new WaitForSeconds( fWait );
 		
 		// have the dust attack the player
 		TutorialManager.Instance.StartCoroutine( scriptTrigger.FireOneSkull() );
 		
 		// wait another brief moment	
-		fWait = Constants.GetConstant<float>( "TriggerTutorialWait_Attack" );
+		fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PostAttack" );
 		yield return new WaitForSeconds( fWait );
 		
 		Advance();
@@ -116,7 +120,10 @@ public class GameTutorial_Triggers : GameTutorial {
 	
 		// wait a brief moment because the player is earning points and stuff
 		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PostCleanup" );
-		yield return new WaitForSeconds( fWait );		
+		yield return new WaitForSeconds( fWait );	
+		
+		// send out completion message here, because for tutorial, the normal way won't proc
+		WellapadMissionController.Instance.TaskCompleted( "CleanRoom" );
 		
 		// advance the tutorial
 		Advance();			

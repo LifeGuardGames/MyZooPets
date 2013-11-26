@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   m_Layer: 10
-  m_Name: BackButton
+  m_Name: WellapadBackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
-  - 114: {fileID: 11400028}
+  - 114: {fileID: 11400030}
   m_Layer: 10
   m_Name: WellapadUI
   m_TagString: Untagged
@@ -48,7 +48,7 @@ GameObject:
   - 114: {fileID: 11400012}
   - 114: {fileID: 11400010}
   m_Layer: 10
-  m_Name: Title
+  m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,15 +88,15 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &100010
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400010}
-  - 114: {fileID: 11400018}
+  - 114: {fileID: 11400028}
   m_Layer: 10
-  m_Name: TaskList
+  m_Name: MissionList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,6 +137,69 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100016
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400016}
+  m_Layer: 0
+  m_Name: MissionsDone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400018}
+  - 114: {fileID: 11400018}
+  m_Layer: 0
+  m_Name: WellapadElements
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100020
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400020}
+  - 114: {fileID: 11400034}
+  - 114: {fileID: 11400032}
+  m_Layer: 10
+  m_Name: Title
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100022
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400022}
+  m_Layer: 0
+  m_Name: StaticElements
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -144,11 +207,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -333.731445, y: 295.494141, z: 0}
+  m_LocalPosition: {x: -301.992981, y: 308.071045, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
-  m_Father: {fileID: 400010}
+  m_Father: {fileID: 400022}
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -156,10 +219,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -232.161133, y: -787.334473, z: -100}
+  m_LocalPosition: {x: -242.157181, y: -787.334473, z: -100.000008}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
-  - {fileID: 400010}
+  - {fileID: 400018}
   m_Father: {fileID: 0}
 --- !u!4 &400004
 Transform:
@@ -168,10 +231,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 108.98439, y: 266.47998, z: -4.99968004}
+  m_LocalPosition: {x: 140, y: 97, z: -5}
   m_LocalScale: {x: 64, y: 64, z: 1}
   m_Children: []
-  m_Father: {fileID: 400010}
+  m_Father: {fileID: 400016}
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -190,10 +253,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 108, y: 48, z: 0}
-  m_LocalScale: {x: 1000, y: 442, z: 1}
+  m_LocalPosition: {x: 139.71022, y: 60.5922852, z: -0}
+  m_LocalScale: {x: 1000, y: 442.000031, z: 1}
   m_Children: []
-  m_Father: {fileID: 400010}
+  m_Father: {fileID: 400022}
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -201,14 +264,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 131.725571, y: 712.641357, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: .0825914145, y: .0327998474, z: -0}
+  m_LocalScale: {x: .00260400004, y: .00260400004, z: .00260400004}
   m_Children:
-  - {fileID: 400000}
   - {fileID: 400014}
-  - {fileID: 400008}
-  - {fileID: 400004}
-  m_Father: {fileID: 400002}
+  m_Father: {fileID: 400018}
 --- !u!4 &400012
 Transform:
   m_ObjectHideFlags: 1
@@ -232,6 +292,57 @@ Transform:
   m_Children:
   - {fileID: 400012}
   m_Father: {fileID: 400010}
+--- !u!4 &400016
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.30585935e-05, y: -.000233317391, z: -0}
+  m_LocalScale: {x: .00260400004, y: .00260400004, z: .00260400004}
+  m_Children:
+  - {fileID: 400004}
+  m_Father: {fileID: 400018}
+--- !u!4 &400018
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 100, y: 700, z: 0}
+  m_LocalScale: {x: 384.024567, y: 384.024567, z: 384.024567}
+  m_Children:
+  - {fileID: 400010}
+  - {fileID: 400022}
+  - {fileID: 400016}
+  m_Father: {fileID: 400002}
+--- !u!4 &400020
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 140.69455, y: 279.05835, z: -4.99935913}
+  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400022}
+--- !u!4 &400022
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.66882328e-05, y: -.000116976567, z: -0}
+  m_LocalScale: {x: .00260400004, y: .00260400004, z: .00260400004}
+  m_Children:
+  - {fileID: 400008}
+  - {fileID: 400020}
+  - {fileID: 400000}
+  m_Father: {fileID: 400018}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -319,18 +430,18 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 400
+    e00: 384
     e01: 0
     e02: 0
-    e03: 232.161133
+    e03: 240.886734
     e10: 0
-    e11: 400
+    e11: 384
     e12: 0
-    e13: -10068.8164
+    e13: -6892.66553
     e20: 0
     e21: 0
-    e22: 400
-    e23: 100
+    e22: 384
+    e23: 100.000008
     e30: 0
     e31: 0
     e32: 0
@@ -352,12 +463,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GoList:
-  - {fileID: 100010}
+  - {fileID: 100018}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100010}
-  lastFinishedHideObject: {fileID: 100010}
+  lastFinishedShowObject: {fileID: 100018}
+  lastFinishedHideObject: {fileID: 100018}
   isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -378,7 +489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: WELLAPAD_TITLE
+  key: WELLAPAD_NO_MISSIONS
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -394,11 +505,11 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
-  mText: WellaPad
+  mText: Great job, come back later
   mMaxLineWidth: 700
-  mMaxLineHeight: 0
+  mMaxLineHeight: 128
   mEncoding: 1
-  mMaxLineCount: 1
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
@@ -455,7 +566,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
+  m_GameObject: {fileID: 100018}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
@@ -556,18 +667,18 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 400
+    e00: 383.999969
     e01: 0
     e02: 0
-    e03: -7.70141602
+    e03: 1.03263855
     e10: 0
-    e11: 400
+    e11: 383.999969
     e12: 0
-    e13: -10812.126
+    e13: -7635.92969
     e20: 0
     e21: 0
-    e22: 400
-    e23: 101.00013
+    e22: 383.999969
+    e23: 101.000137
     e30: 0
     e31: 0
     e32: 0
@@ -582,7 +693,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
+  m_GameObject: {fileID: 100010}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8059e9a0d0f1549289007439744b2a3d, type: 3}
@@ -592,6 +703,60 @@ MonoBehaviour:
   prefabTitle: {fileID: 100002, guid: 156b0fc50d1d2458baf688857658abfc, type: 2}
   prefabTask: {fileID: 100004, guid: fbe50b46772644e8d8ee2ebe67047d51, type: 2}
   prefabReward: {fileID: 100000, guid: 1fc9b54e571e6457b8975512848b8afc, type: 2}
+--- !u!114 &11400030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1efd12a53dd7f4f899f397ef755f45e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goMissionsList: {fileID: 100010}
+  goNoMissions: {fileID: 100016}
+--- !u!114 &11400032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: WELLAPAD_TITLE
+--- !u!114 &11400034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: .198529422, g: .198529422, b: .198529422, a: 1}
+  mPivot: 4
+  mDepth: 4
+  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mText: WellaPad
+  mMaxLineWidth: 700
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 1
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 1
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

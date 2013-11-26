@@ -6,6 +6,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 // GameTutorial_FocusCalendar
 // Tutorial to alert the user to use their calendar.
+// CURRENTLY NO LONGER USED
 //---------------------------------------------------
 
 public class GameTutorial_FocusCalendar : GameTutorial {

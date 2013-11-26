@@ -182,7 +182,10 @@ public class ChooseDecorationUI : MonoBehaviour {
 		
 		// send a callback
 		if ( OnDecoPlaced != null )
-			OnDecoPlaced( this, EventArgs.Empty );			
+			OnDecoPlaced( this, EventArgs.Empty );		
+		
+		// send out a task completion event (probably just going to be used for tutorial...)
+		WellapadMissionController.Instance.TaskCompleted( "Decorate" );
 	}
 	
 	//---------------------------------------------------

@@ -9,6 +9,7 @@ using System.Collections;
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	// the actual game object of the wellapad
 	private GameObject goWellapadUI;
+	private WellapadScreenManager scriptScreenManager;
 	
 	//---------------------------------------------------
 	// _Start()
@@ -17,7 +18,8 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// instantiate the actual wellapad object
 		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
 		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
-
+		
+		scriptScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
 	}
 	
 	//---------------------------------------------------
@@ -29,6 +31,8 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggleDemux>().Show();
+		
+		scriptScreenManager.SetScreen();
 	}
 	
 	//---------------------------------------------------

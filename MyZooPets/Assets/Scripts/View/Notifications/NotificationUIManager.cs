@@ -32,7 +32,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 	
 	// the actual instantiated backdrop object
-	private GameObject goBackdrop;
+	//private GameObject goBackdrop;
 	private GameObject anchorCenter;
 	
 	void OnAwake(){
@@ -124,7 +124,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		}
 		else{
 			//Debug.Log ("No notification detected");
-			Destroy( goBackdrop );
+			//Destroy( goBackdrop );
 			isNotificationActive = false;
 		}
 	}

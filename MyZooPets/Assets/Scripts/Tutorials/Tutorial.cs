@@ -180,9 +180,7 @@ public abstract class Tutorial {
 			vPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
-			Debug.Log("position before transform " + vPos);
 			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-			Debug.Log("position after transform " + vPos);
 		}
 		
 		// destroy the old object if it existed

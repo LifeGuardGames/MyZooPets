@@ -60,8 +60,12 @@ public class GameTutorial_Triggers : GameTutorial {
 		// doesn't see it pop onto the screen.
 		
 		// NOTE - a change in the tutorial caused us to spawn the actual dust in the smoke intro tutorial, but we find/set the 
-		// game object here.
+		// game object here.  However, it's possible that the game has been shut off in between, so we may need to spawn it after all...
 		GameObject goTrigger = GameObject.Find( DegradationUIManager.TUT_TRIGGER );
+		
+		if ( goTrigger == null )
+			goTrigger = DegradationUIManager.Instance.PlaceTutorialTrigger().gameObject;
+			
 		scriptTrigger = goTrigger.GetComponent<DegradTrigger>();
 				
 		Advance();

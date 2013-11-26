@@ -11,6 +11,7 @@ public abstract class DecorationNode : LgButton {
 	// ------ Pure Abstract --------------------------
 	protected abstract void _SetDefaultDeco( string strDecoID );		// sets the default deco properly
 	protected abstract void _RemoveDecoration();						// removes the decoration
+	protected abstract void _SetDecoration( string strID );				// set the deco to this node
 	public abstract bool HasRemoveOption();								// can this deco be removed?
 	//------------------------------------------------
 	
@@ -20,10 +21,6 @@ public abstract class DecorationNode : LgButton {
 		return eType;
 	}
 	
-//	const string BUTTON_INACTIVE = "buildIcon";
-//	const string BUTTON_ACTIVE = "buildIconActive";
-//	public UISprite buttonImage;
-	
 	// the ID of this decoration node -- changing this will corrupt the save data
 	// should be unique.  This will be set to the game object's name.
 	private string strNodeID;
@@ -32,11 +29,23 @@ public abstract class DecorationNode : LgButton {
 	// variable actually matches the decoration ID of whatever place in the scene
 	public string strDefaultDecoID;
 	
+	// icons that change based on the state of the node
+	private UISprite spriteIconBG;
+	private UISprite spriteIcon;
+	
 	// the decoration currently being displayed on this node
 	private string strDecoID = string.Empty;
 
 	protected override void _Start() {
+		// init node icons
+		InitIcons();
+		
+		// set the graphics for this node
+		SetNodeArt( false );
+		
+		// these variables would normally be set on the game object in the scene, but it is more convenient to set them here
 		bCheckClickManager = false;
+		strSoundProcess = "shopOpen";
 
 		// set the node ID to the game object name
 		strNodeID = gameObject.name;
@@ -44,32 +53,64 @@ public abstract class DecorationNode : LgButton {
 		// check save data to see if something was on this node
 		CheckSaveData();
 		
-		// use event handler to listen for when the player goes into edit deco mode
-		EditDecosUIManager.Instance.OnManagerOpen += OnDecoMode;
+		// listen for callbacks
+		EditDecosUIManager.Instance.OnManagerOpen += OnDecoMode;			// player opens edit mode
+		EditDecosUIManager.Instance.OnNodeSelected += OnNodeSelected;		// player selects a node
 		
 		// by default, decoration nodes are not visible/interactable
 		ToggleNode( false );
-		
-		// set the node's label
-		SetNodeLabel();
 	}
 	
 	//---------------------------------------------------
-	// SetNodeLabel()
-	// Sets the node's label, based on what kind of node
-	// it is.
+	// InitIcons()
+	// Sets some icon variables that will be used later.
 	//---------------------------------------------------		
-	private void SetNodeLabel() {
-		DecorationTypes eType = GetDecoType();
-		string strType = eType.ToString();
-		string strKey = "NODE_" + strType.ToUpper();
-		string strText = Localization.Localize( strKey );
+	private void InitIcons() {
+		GameObject goNode = gameObject.FindInChildren( "NodeIcon_Type" );
+		if ( goNode )
+			spriteIcon = goNode.GetComponent<UISprite>();
 		
-		Transform transLabel = transform.Find( "Label" );
-		UILabel label = transLabel.gameObject.GetComponent<UILabel>();
-		label.text = strText;
+		GameObject goBG = gameObject.FindInChildren( "NodeIcon_BG" );
+		if ( goBG )
+			spriteIconBG = goBG.GetComponent<UISprite>();
+		
+		if ( spriteIcon == null || spriteIconBG == null )
+			Debug.Log("Icons not properly set up for deco node.", gameObject);
 	}
-
+	
+	//---------------------------------------------------
+	// SetNodeArt()
+	// A node is really just a box collider -- this function
+	// sets the visual art for the node.
+	//---------------------------------------------------		
+	private void SetNodeArt( bool bSelected ) {	
+		// set art for the icon based on the type of decoration this node represents
+		if ( spriteIcon ) {
+			string strIcon = "iconDeco" + GetDecoType();
+			spriteIcon.spriteName = strIcon;
+		}
+		
+		// set the art for the button bg based on if the node is selected or not
+		if ( spriteIconBG ) {
+			// build the constant name that will tell us which sprite to use
+			string strState = bSelected ? "Selected" : "Unselected";
+			string strConstant = "Node_" + strState;
+			string strSprite = Constants.GetConstant<string>( strConstant );
+			spriteIconBG.spriteName = strSprite;
+		}
+	}
+	
+	//---------------------------------------------------
+	// OnNodeSelected()
+	// Callback for when the player clicks on a node.
+	//---------------------------------------------------	
+	private void OnNodeSelected( object sender, NodeSelectedArgs args ) {
+		bool bSelected = args.Node == gameObject;
+		
+		// set the art with selection flag
+		SetNodeArt( bSelected );
+	}
+	
 	//---------------------------------------------------
 	// CheckSaveData()
 	// Checks save data to see if this node has any
@@ -130,15 +171,7 @@ public abstract class DecorationNode : LgButton {
 			}
 		}
 	}
-	
-//	//---------------------------------------------------
-//	// SetNodeImageActive()
-//	// Called from editDecosUiManager to set color
-//	//---------------------------------------------------
-//	public void SetNodeImageActive(bool isActive){
-//		buttonImage.spriteName = isActive ? BUTTON_ACTIVE : BUTTON_INACTIVE;
-//	}
-	
+
 	//---------------------------------------------------
 	// ProcessClick()
 	// Called when this node is clicked.
@@ -189,10 +222,6 @@ public abstract class DecorationNode : LgButton {
 		
 		// actually create/set the decoration
 		_SetDecoration( strDecoID );
-	}
-	
-	protected virtual void _SetDecoration( string strID ) {
-		// children implement this
 	}
 	
 	//---------------------------------------------------

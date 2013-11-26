@@ -9,7 +9,16 @@ using System.Collections.Generic;
 // decoration mode/system.
 //---------------------------------------------------
 
+
+public class NodeSelectedArgs : EventArgs {
+	public GameObject Node{get; set;}
+}
+
 public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {	
+	//------------ Event Handlers ----------------------------------
+	public event EventHandler<NodeSelectedArgs> OnNodeSelected;		// when a deco node is selected
+	//--------------------------------------------------------------
+	
 	// temp boolean to control whetehr or not edit mode is accessible
 	public bool bDisableEditMode = false;
 	
@@ -104,6 +113,13 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// update the menu based on the incoming deco node
 		scriptChooseUI.UpdateItems( decoNode );
+		
+		// send out a callback for deco nodes to update their highlight state
+		if ( OnNodeSelected != null ) {
+			NodeSelectedArgs args = new NodeSelectedArgs();
+			args.Node = decoNode.gameObject;
+			OnNodeSelected( this, args );
+		}
 	}
 	
 	//---------------------------------------------------

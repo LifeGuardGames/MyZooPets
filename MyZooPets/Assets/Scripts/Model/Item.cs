@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Item {
-	private string id; //id of item
-	private string name; //name of item
-	private string textureName; //name of texture in the atlas
-	private ItemType type;
-	private int cost; //cost of item
-	private string description;
-	private int unlockAtLevel = 0; //the level when item is unlocked
+	protected string id; //id of item
+	protected string name; //name of item
+	protected string textureName; //name of texture in the atlas
+	protected ItemType type;
+	protected int cost; //cost of item
+	protected string description;
+	protected int unlockAtLevel = 0; //the level when item is unlocked
 	
 	// sound item makes when it is used
 	private string strSoundUsed;
@@ -18,10 +18,10 @@ public class Item {
 	public string ID{
 		get{return id;}
 	}
-	public string Name{ 
+	public virtual string Name{ 
 		get{return Localization.Localize( name );} 
 	}
-	public string TextureName{
+	public virtual string TextureName{
 		get{return textureName;}
 	}
 	public ItemType Type{
@@ -30,7 +30,7 @@ public class Item {
 	public int Cost{
 		get{return cost;}
 	}
-	public string Description{
+	public virtual string Description{
 		get{return Localization.Localize( description );}
 	}
 	public int UnlockAtLevel{
@@ -70,12 +70,4 @@ public class Item {
         }
         return statsDict;
     }
-	
-	//---------------------------------------------------
-	// GetDesc()
-	// Returns this item's description.
-	//---------------------------------------------------	
-	public virtual string GetDesc() {
-		return Description;
-	}
 }

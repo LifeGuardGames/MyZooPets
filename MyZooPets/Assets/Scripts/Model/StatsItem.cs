@@ -24,25 +24,27 @@ public class StatsItem : Item{
 	// Food items build their description off of their
 	// stats.
 	//---------------------------------------------------	
-	public override string GetDesc() {
-		string strDesc = "";
-		
-		int nCount = 0;
-		foreach(KeyValuePair<StatType, int> entry in Stats) {
-			if ( nCount > 0 )
-				strDesc += ", ";	// add comma to separate stats
+	public override string Description {
+		get {
+			string strDesc = "";
 			
-			// add the localized stat
-		    strDesc += StatsController.Instance.GetStatText( entry.Key );
+			int nCount = 0;
+			foreach(KeyValuePair<StatType, int> entry in Stats) {
+				if ( nCount > 0 )
+					strDesc += ", ";	// add comma to separate stats
+				
+				// add the localized stat
+			    strDesc += StatsController.Instance.GetStatText( entry.Key );
+				
+				// use a + or - modifier
+				string strModifier = entry.Value > 0 ? "+" : "";
+				strDesc += " " + strModifier;
+				
+				// add the value
+				strDesc += entry.Value;
+			}
 			
-			// use a + or - modifier
-			string strModifier = entry.Value > 0 ? "+" : "";
-			strDesc += " " + strModifier;
-			
-			// add the value
-			strDesc += entry.Value;
+			return strDesc;
 		}
-		
-		return strDesc;
 	}	
 }

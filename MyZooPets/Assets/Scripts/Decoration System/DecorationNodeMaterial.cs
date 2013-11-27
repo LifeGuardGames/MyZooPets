@@ -16,9 +16,9 @@ public class DecorationNodeMaterial : DecorationNode {
 	//---------------------------------------------------	
 	protected override void _SetDecoration( string strID ) {
 		// build the prefab from the id of the decoration
-		string strResource = "MAT_" + strID;
+		string strResource = "Mat_" + strID;
 		Material matPrefab = Resources.Load(strResource) as Material;
-		
+	
 		for ( int i = 0; i < arrayObjects.Length; ++i ) {
 			GameObject go = arrayObjects[i];
 			if ( go.renderer )

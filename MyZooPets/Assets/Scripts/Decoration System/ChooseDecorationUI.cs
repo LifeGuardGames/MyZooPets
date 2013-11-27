@@ -129,7 +129,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			
 			// save the tutorial entry (a bit hacky)
 			if ( i == 0 )
-				goTutorialEntry = item;
+				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
 		}		
 	}
 	

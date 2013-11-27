@@ -89,7 +89,7 @@ public class GameTutorial_Decorations : GameTutorial {
 	//---------------------------------------------------		
 	private void FocusOnNode() {
 		// find and spotlight the tutorial node
-		goNode = GameObject.Find( "DecoNode_Dojo_Rug" );
+		goNode = GameObject.Find( "DecoNode_Dojo_WallItem_1" );
 		SpotlightObject( goNode );
 		
 		// add the node to the process list so the user can click it
@@ -100,7 +100,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		button.OnProcessed += OnNodeClicked;		
 		
 		// at this point, also give the user an item for the node they are about to click
-		InventoryLogic.Instance.AddItem( "RUG_BLUE", 1 );
+		InventoryLogic.Instance.AddItem( "WallPoster1", 1 );
 	}
 	
 	//---------------------------------------------------

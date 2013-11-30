@@ -1,116 +1,354 @@
 // LABELS
 // store
-STORE_TAB_DECO = Decoration
-STORE_TAB_FOOD = Food
-STORE_TAB_ITEM = Item
+STORE_TAB_DECO = Decoración
+STORE_TAB_FOOD = Alimentación
+STORE_TAB_ITEM = Punto
+
+// Wellapad
+
+WELLAPAD_TITLE = WellaPad
+
+no missions screen
+WELLAPAD_NO_MISSIONS = ¡Buen trabajo! Vuelve en $ TIME $ .
+
+// Wellapad missions
+
+Task_DailyInhaler = Tome inhalador
+Task_CleanRoom = Limpiar disparadores
+Task_FeedPet = Alimentación de mascotas
+Task_Decorate = Lugar Decoración
+Task_FightMonster = Monster Fight Humo
+Task_PlayNinja = Limpiar Cucarachas
+Task_PlayRunner = Jugar Runner
+Task_PlayClinic = Clínica de reproducción
+
+MissionTitle_Critical = Misión Crítica
+MissionTitle_TutorialCritical = Misión Crítica ( Tutorial )
+MissionTitle_Side = Misión Side
+MissionTitle_TutorialSide = Side Misión ( Tutorial )
+
+RewardFire = Recompensa: Fuego
 
 // misc -- these words are used throughout the game
 // NOTE: supply context for Level
-LEVEL = Level
+LEVEL = Nivel
 BUY = Buy
-PREVIEW = Preview
-LOADING = Loading...
-OKAY = Okay
+TRY = Pruebe
+LOADING = Cargando ...
+OKAY = Bueno
 OK = Ok
-IGNORE = Ignore
-START = Start
-BACK = Back
-PLAY = Play
-QUIT = Quit
+SELECT = Seleccionar
+CANCEL = Cancelar
+IGNORE = Ignorar
+START = Inicio
+BACK = Atrás
+PLAY = Juego
+QUIT = Salir
 TIP = Tip
-NEXT = Next
-DONE = Done
+NEXT = Siguiente
+DONE = Hecho
+RESTART = Restart
+RESUME = Reanudar
+HOW_TO_PLAY = ¿Cómo?
+NUMBER_DELIMETER = ,
+UNKNOWN = ???
+
+// asthma chart
+ASTHMA_CHART_TITLE = Plan de Acción para el Asma Gráfico
+GREEN = Verde
+YELLOW = Amarillo
+RED = Rojo
+GREEN_DESC = me siento muy bien!
+YELLOW_DESC = me siento enfermo
+RED_DESC = me siento horrible
+
+// generic minigame
+MG_PAUSED = juego está en pausa
+MG_GAME_OVER = Game Over !
+
+// time mood decay tut
+TMD_1 = En su ausencia , su mascota se pierde y se convierte en triste !
+TMD_2 = Asegúrese de que para alimentar a su mascota con frecuencia para que se mantenga feliz!
+
+// runner game
+RUNNER_OPENING = Welome al juego corredor!
+
+// trigger ninja minigame
+DGT_OPENING = El doctor está fuera - ahora le toca a usted para ayudar a estos animales!
+DGT_GAME_OVER = Game Over!
+DGT_PAUSED = juego está en pausa
+DGT_TUT_0 = saludables están listos para salir a jugar . Toque en el patio verde para enviar en su camino!
+DGT_TUT_1 = Algunas mascotas son un poco enfermo . Toque en el inhalador amarilla a que ellos tomen alguna medicina .
+DGT_TUT_2 = Cuando una mascota es realmente enfermo , deben ir al hospital. Toque en el hospital roja para ayudar a estos animales!
+DGT_TUT_3 = Si envía demasiados animales en el lugar equivocado , el médico va a volver. Mientras más juegue , más rápido las cosas consiguen. ¡Buena suerte!
+
+// trigger ninja minigame
+NINJA_OPENING = Slash, los ácaros del polvo , cuando aparecen en la pantalla , pero no roza el inhalador !
+
+// minigame related
+MG_SCORE = Puntuación:
+MG_LIVES = Vives :
 
 // notifications
-NOTIFICATION_DIAGNOSE = Something unusual is happening to your pet! Help it out!
-NOTIFICATION_DONT_NEED_INHALER = I don't need this right now.
-NOTIFICATION_SLOT_COST = -$NUM$ stars to play
-NOTIFICATION_SLOT_COST_ERROR = You need at least $NUM$ stars to play!
+NOTIFICATION_DIAGNOSE = Algo inusual está sucediendo a su mascota ! Ayuda un vistazo!
+NOTIFICATION_DONT_NEED_INHALER = no necesito esto ahora mismo. Vuelve dentro de $ $ NUM horas .
+NOTIFICATION_SLOT_COST = - $ $ NUM estrellas para jugar
+NOTIFICATION_SLOT_COST_ERROR = Se necesita al menos $ $ NUM estrellas para jugar !
 
 // pet creation screen
-CREATE_NAME = Name
-CREATE_COLOR = Color
-CREATE_FINISH = Finish
+CREATE_NAME = Nombre
+CREATE_COLOR = color
+CREATE_FINISH = Finalizar
 
 // calendar
-CALENDAR_TITLE = My Inhaler Calendar
-CALENDAR_LAST_WEEK = Last Week
-CALENDAR_REWARD = Next Reward
-CALENDAR_SUNDAY = Sunday
-CALENDAR_MONDAY = Monday
-CALENDAR_TUESDAY = Tuesday
-CALENDAR_WEDNESDAY = Wednesday
-CALENDAR_THURSDAY = Thursday
-CALENDAR_FRIDAY = Friday
-CALENDAR_SATURDAY = Saturday
+CALENDAR_TITLE = Mi inhalador Calendario
+CALENDAR_LAST_WEEK = Última Semana
+CALENDAR_REWARD = Siguiente Recompensa
+CALENDAR_SUNDAY = Domingo
+CALENDAR_MONDAY = Lunes
+CALENDAR_TUESDAY = Martes
+CALENDAR_WEDNESDAY = Miércoles
+CALENDAR_THURSDAY = Jueves
+CALENDAR_FRIDAY = Viernes
+CALENDAR_SATURDAY = Sábado
 CALENDAR_SUNDAY_SHORT = Sun
-CALENDAR_MONDAY_SHORT = Mon
-CALENDAR_TUESDAY_SHORT = Tue
-CALENDAR_WEDNESDAY_SHORT = Wed
-CALENDAR_THURSDAY_SHORT = Thu
-CALENDAR_FRIDAY_SHORT = Fri
+CALENDAR_MONDAY_SHORT = lun
+CALENDAR_TUESDAY_SHORT = mar
+CALENDAR_WEDNESDAY_SHORT = Mier
+CALENDAR_THURSDAY_SHORT = jue
+CALENDAR_FRIDAY_SHORT = vie
 CALENDAR_SATURDAY_SHORT = Sat
-CALENDAR_MORNING = Morning
-CALENDAR_NIGHT = Night
+CALENDAR_MORNING = Mañana
+CALENDAR_NIGHT = Noche
 CALENDAR_NOW = NOW
 
 // stats -- NOTE what comes after the _ is the enum of the stat
 STAT_Mood = Mood
-STAT_Health = Health
+STAT_Health = Salud
 
 // food items
 NAME_APPLE = Red Apple
 NAME_GREEN_APPLE = Green Apple
 NAME_SANDWICH = Sandwich
-NAME_BREAD = Bread
+NAME_BREAD = Pan
 NAME_DONUT = Frosted Donut
 NAME_CHOC_DONUT = Choco Donut
-NAME_MILK = Milk
+NAME_MILK = Leche
 
 // usable items
-NAME_INHALER = Inhaler
+NAME_INHALER = inhalador
 
 // decorations
-DECO_REMOVE = Remove
-DECO_REMOVE_DESC = Remove this decoration.
-DECO_PLACE = Place
 
-NAME_POSTER = Poster
-DESC_POSTER = This is a neat poster.
+// node names
+NODE_POSTER = Poster
+NODE_WALLPAPER = Wallpaper
+NODE_CARPET = Alfombra
+NODE_FLOORTILE = Floor Tile
+NODE_TALLFURNITURE = muebles altos
+NODE_BIGFURNITURE = Gran Muebles
+NODE_SMALLPLANT = Pequeña Planta
+NODE_BIGPLANT = Gran Planta
+
+// ui labels
+DECO_REMOVE = Remove
+DECO_REMOVE_DESC = Eliminar esta decoración.
+DECO_PLACE = Lugar
+
+// actual decorations in shop
+NameWallpaperSolidBlue = Azul Wallpaper (Solid )
+DescWallpaperSolidBlue = Algunos fondo de pantalla azul dulce.
+
+NameWallpaperSolidPink = Pink Wallpaper (Solid )
+DescWallpaperSolidPink = Algunos dulces fondo de pantalla de color rosa.
+
+NameWallpaperSolidAqua = aguamarina Wallpaper (Solid )
+DescWallpaperSolidAqua = Algunos wallpaper aqua dulce.
+
+NameWallpaperSolidYellow = Yellow Wallpaper (Solid )
+DescWallpaperSolidYellow = Algunos wallpaper dulce.
+
+NameWallpaperSquareGreen = Verde Wallpaper (cuadrados)
+DescWallpaperSquareGreen = Algunos papel tapiz verde dulce.
+
+NameWallpaperSquareAqua = aguamarina Wallpaper (cuadrados)
+DescWallpaperSquareAqua = Algunos wallpaper aqua dulce.
+
+NameWallpaperSquareBlue = Azul Wallpaper (cuadrados)
+DescWallpaperSquareBlue = Algunos fondo de pantalla azul dulce.
+
+NameWallpaperSquarePink = Pink Wallpaper (cuadrados)
+DescWallpaperSquarePink = Algunos dulces fondo de pantalla de color rosa.
+
+NameWallpaperSquarePeach = Peach Wallpaper (cuadrados)
+DescWallpaperSquarePeach = Algunos wallpaper melocotón dulce.
+
+NAME_FLOOR_BLUE = Azul Floor
+DESC_FLOOR_BLUE = Algunos suelo azul dulce.
+
+NAME_FLOOR_RED = Planta Rojo
+DESC_FLOOR_RED = Algunos suelo rojo dulce.
+
+NAME_FLOOR_GREEN = Green Floor
+DESC_FLOOR_GREEN = Algunos planta verde dulce.
+
+NAME_FLOOR_YELLOW = Planta Amarillo
+DESC_FLOOR_YELLOW = Algunos planta amarilla dulce.
+
+NAME_RUG_BLUE = Alfombra azul
+DESC_RUG_BLUE = Algunos alfombra azul dulce.
+
+NAME_RUG_RED = Alfombra Rosa
+DESC_RUG_RED = Algunos alfombra de color rosa dulce.
+
+NAME_RUG_GREEN = Alfombra verde
+DESC_RUG_GREEN = Algunos alfombra verde dulce.
+
+NAME_RUG_GRAY = Gray alfombra
+DESC_RUG_GRAY = Algunos alfombra gris dulce.
+
+NAME_RUG_LIME = alfombra Lime
+DESC_RUG_LIME = Algunos alfombra lima dulce.
+
+NameWallPoster1 = Poster Retro
+DescWallPoster1 = Este es un viejo Wellapet .
+
+NameWallPoster2 = WellaShark
+DescWallPoster2 = Este es un cartel de los tiburones.
+
+NameWallPoster3 = WellaCupid
+DescWallPoster3 = Este es un Wellapet como Cupido .
+ 
+NameWallPoster4 = Tiempo del partido!
+DescWallPoster4 = Roca hacia fuera con este cartel .
+
+NameWallPoster5 = Sports Poster
+DescWallPoster5 = Celebre el campeonato!
+
+NameWallPoster6 = Retrato friendly
+DescWallPoster6 = Este wellapet dice " hola" .
+ 
+NAME_TORCH_1 = Enfriamiento de la antorcha
+DESC_TORCH_1 = Esta es una antorcha cool.
+
+NAME_TORCH_2 = Thin Antorcha
+DESC_TORCH_2 = Esto es una linterna delgada.
+
+NAME_PILLAR_1 = Stone Pillar
+DESC_PILLAR_1 = Este es un pilar de piedra .
 
 NAME_COUCH = Couch
-DESC_COUCH = This is a cool couch.
+DESC_COUCH = Este es un sofá fresco .
 
-NAME_PAINTING = Painting
-DESC_PAINTING = This is a nice painting.
+NAME_PAINTING = Pintura
+DESC_PAINTING = Este es un cuadro bonito .
 
-NAME_TABLE = Table
-DESC_TABLE = This is a wood table.
+NAME_TABLE = Tabla
+DESC_TABLE = Esta es una mesa de madera .
 
-// dojo moves
-SKILL_Sit = Sit
-SKILL_Wave = Wave
-SKILL_Backflip = Backflip
-SKILL_HighFive = Highfive
-SKILL_DiscoMove = Disco Dance
-SKILL_SadFace = Sad Face
-SKILL_Konfu = Konfu
-SKILL_Chilling = Chilling
-SKILL_HighJump = High Jump
+// dojo skills
+NAME_WEAK_FLAME = Llama Débil
+NAME_RED_FLAME = Rojo Fuego
+NAME_BLUE_FLAME = Llama Azul
+NAME_VIOLET_FLAME = Llama Violeta
+NAME_JET_BLACK_FLAME = Flame- Jet negro
+OWNED = Owned
+EQUIPPED = Equipado
 
-// localization
-ENGLISH = English
+DAMAGE = Daños : $ NUM $
+UNLOCK = Desbloquear: lv $ NUM $
+
+// badges
+NAME_LEVEL_1 = Nivel 1
+NAME_LEVEL_5 = Nivel 5
+NAME_LEVEL_10 = Nivel 10
+NAME_LEVEL_15 = Nivel 15
+NAME_LEVEL_20 = Nivel 20
+
+NAME_FOREST_RUNNER = Bosque Runner
+NAME_SPRINTER = Sprinter
+NAME_SUPER_RUNNER = Súper Corredor
+NAME_DOCTOR_IN_TRAINING = Doctor- En-Entrenamiento
+NAME_JUNIOR_DOCTOR = Júnior Médico
+NAME_EXPERT_DOCTOR = Experto Médico
+NAME_STYLE_ROOKIE = Style Rookie
+NAME_OFFICIALLY_STYLIN = Oficialmente Stylin
+NAME_COOLEST_PET = Wellapet El más fresco
+
+DESC_LEVEL = Alcanza el nivel $ NUM $
+DESC_RUNNER_DISTANCE = Survive $ NUM $ m en el juego favorito en una carrera
+DESC_PATIENTS = Diagnose $ $ NUM pacientes correctamente en un juego
+DESC_DECORATION = $ Ponga NUM $ decoración de la habitación
+
+// Options Menu
+PARENTS = Padres
+SETTINGS = Ajustes
+AUDIO = Audio
+LANGUAGE = Idioma
+
+//Parent Portal in Menu Scene
+PARENT_PORTAL = Portal para Padres
+PORTAL_SETUP = Configuración
+EMAIL = Correo electrónico
+PIN_PASSWORD = Contraseña Clave
+PIN_CONFIRM = Confirmar Pin
+
+ERROR_EMAIL_EMPTY = El correo electrónico no puede estar vacío
+ERROR_EMAIL_INVALID = Formato Email inválido
+ERROR_PIN_EMPTY = Pin no puede estar vacío
+ERROR_PIN_INVALID = Pin debe tener 4 caracteres
+ERROR_PIN_CONFIRM_EMPTY = Confirmar pin no puede estar vacío
+ERROR_PIN_NO_MATCH = Confirmar pin no coincide con la contraseña del PIN
+ERROR_EMAIL_RECIPIENT_INVALID = mensaje no puede ser enviado a la siguiente dirección de correo electrónico
+ERROR_SMTP_BAD_CONNECTION = mensaje no puede ser entregado. Compruebe la conexión a Internet
+ERROR_WRONG_PIN = pin incorrecto . Por favor, inténtalo de nuevo
+
+MSG_PIN_CREATED = Pin y el correo electrónico se ha establecido
+MSG_PIN_RESET = Pin ha restablecerán
+MSG_PIN_RECOVERY_SENT = Pin ha sido enviada a su correo electrónico
+
+// Localization
+ENGLISH = Inglés
 FRENCH = Français
-CHINESE = 中国的
-JAPANESE = 日本人
+CHINESE =中文 
+JAPNESE = 日本语
 GERMAN = Deutsch
 SPANISH = Español
 ITALIAN = Italiano
 
 // runner game
-RUNNER_SCORE = Score: 
-RUNNER_COINS = Coins: 
-RUNNER_DISTANCE = Distance: 
+RUNNER_SCORE = Puntuación:
+RUNNER_COINS = monedas :
+RUNNER_DISTANCE = Distancia:
+RUNNER_RESTART = Restart
+RUNNER_QUIT = Salir
+POLLEN_HINT_MESSAGE = polen . Malo. evitar
+SMOKE_HINT_MESSAGE = Humo. También es malo . evitar
+EXTRA_POINTS_HINT_MESSAGE = 100 puntos! !
+
+// Tutorials
+// Bedroom
+
+// intro notifiation
+TUT_BEDROOM_INTRO = Es el momento de aprender a cuidar de su Wellapet !
+
+// inhaler tutorial
+FOCUS_INHALER_0 = Asegúrese de usar su inhalador de todos los días , es muy importante!
+
+// calendar tutorial
+FOCUS_CALENDAR_0 = Después de tomar su inhalador, haga clic en el calendario para una recompensa !
+
+// flame tutorial
+TUT_FLAME_0 = Para asustar al monstruo de humo , presione y mantenga presionado el botón de la llama para llenar el medidor.
+TUT_FLAME_1 = Ahora vamos a ir a ver a su mascota aliento de fuego !
+
+// triggers tutorial
+TUT_TRIGGERS_2 = habitación de la mascota puede causar problemas. Limpie cualquier cosa que pueda hacer que su mascota enferma !
+
+// gating notifications
+NO_FIRE_SICK = Su mascota no puede respirar fuego cuando está enfermo . Hacer que se sienta mejor primero !
+NO_FIRE_UNHAPPY = Su mascota no puede respirar fuego cuando está infeliz. Anímelo primero !
+NO_FIRE_INHALER = Su mascota sólo puede respirar el fuego después de usar su inhalador de mantenimiento.
 
 // SPRITES
 // sprite values are what the image in the atlas is
@@ -119,3 +357,4 @@ NAV_ICON_NOTES = iconNotes
 NAV_ICON_STORE = iconStore
 
 INV_ICON = iconItemsMinus
+

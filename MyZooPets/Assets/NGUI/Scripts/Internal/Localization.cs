@@ -130,7 +130,7 @@ public class Localization : MonoBehaviour
 			mInstance = this;
 			DontDestroyOnLoad(gameObject);
 
-			currentLanguage = PlayerPrefs.GetString("Language", startingLanguage);
+			currentLanguage = PlayerPrefs.GetString(null, startingLanguage);
 
 			if (string.IsNullOrEmpty(mLanguage) && (languages != null && languages.Length > 0))
 			{

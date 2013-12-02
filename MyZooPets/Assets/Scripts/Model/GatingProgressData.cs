@@ -33,6 +33,20 @@ public class GatingProgressData{
 	}
 	
 	//---------------------------------------------------
+	// RefreshGate()
+	// Refreshes the incoming gate's HP.
+	//---------------------------------------------------	
+	public void RefreshGate( DataGate data ) {
+		string strID = data.GetGateID();
+		if ( GatingProgress.ContainsKey( strID ) ) {
+			int nHP = data.GetMonster().GetMonsterHealth();
+			GatingProgress[strID] = nHP;
+		}
+		else
+			Debug.Log("Trying to refresh a gate not in data...is this even possible!?");
+	}	
+	
+	//---------------------------------------------------
 	// IsEnabled()
 	// Used for testing purposes.
 	//---------------------------------------------------	

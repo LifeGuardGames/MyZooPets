@@ -45,6 +45,12 @@ public class DataGate {
 		return arrayUnlocks;	
 	}
 	
+	// is this gate recurring? i.e. comes back to life after a set amount of time
+	private bool bRecurring;
+	public bool IsRecurring() {
+		return bRecurring;	
+	}
+	
 	public DataGate( string id, Hashtable hashData, Hashtable hashElements, string strError ) {
 		strID = id;	
 
@@ -56,6 +62,9 @@ public class DataGate {
 		
 		// get monster
 		strMonsterID = HashUtils.GetHashValue<string>( hashData, "Monster", null, strError );
+		
+		// get whether or not the gate recurs
+		bRecurring = bool.Parse( HashUtils.GetHashValue<string>( hashData, "Recurring", "false" ) );
 		
 		// get the direction the gate is blocking
 		eSwipeDirection = (RoomDirection) System.Enum.Parse( typeof(RoomDirection), 

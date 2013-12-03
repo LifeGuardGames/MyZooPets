@@ -1,6 +1,5 @@
-﻿/* Sean Duane
+﻿/* 
  * ParallaxingBackgroundManager.cs
- * 8:26:2013   14:44
  * Description:
  * Handles the transitions of backgrounds, holds the list of a;ll backgrounds, and keeps track
  * of the current and next bg's.

@@ -1,6 +1,4 @@
-﻿/* Sean Duane
- * RunnerGameManager.cs
- * 8:26:2013   14:36
+﻿/* 
  * Description:
  * The sort of 'center' of the game.
  * However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
@@ -28,42 +26,85 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 	protected override string GetMinigameKey() {
 		return "Runner";	
 	}	
+
+    public override int GetScore() {
+        return ScoreManager.Instance.Score;    
+    }
 	
 	// Use this for initialization
 	protected override void _Start() {
-	}
-	
-	public override int GetScore() {
-		return ScoreManager.Instance.GetScore();	
 	}
 	
 	//---------------------------------------------------
 	// _NewGame()
 	//---------------------------------------------------	
 	protected override void _NewGame() {	
-		ResetGame();
+        //check for tutorial here.
+        if(TutorialOK() && (IsTutorialOverride() || 
+            !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(RunnerTutorial.TUT_KEY))){
+            
+            StartTutorial();
+            ResetGameTutorial();
+        }else{
+
+            ResetGame();
+        }
+
 	}	
 	
+    //---------------------------------------------------
+    // ResetGame()
+    // Set all game components to initial state
+    //---------------------------------------------------
     public void ResetGame() {
         Time.timeScale = 1f;
 
         PlayerController.Instance.gameObject.SetActive(true);
         PlayerController.Instance.Reset();
         ScoreManager.Instance.Reset();
+        ScoreUIManager.Instance.Show();
+
         LevelManager.Instance.Reset();
         MegaHazard.Instance.Reset();
         ParallaxingBackgroundManager.Instance.Reset();
     }
-	
-	public void ShowAlert() {
-		PauseGameWithPopup( false );	
-	}
 
-    public void UnPauseGame(){
-        ResumeGame();	// what is calling this...
+    public void ResetGameTutorial(){
+        Time.timeScale = 1f;
+
+        PlayerController.Instance.gameObject.SetActive(true);
+        PlayerController.Instance.Reset();
+        ScoreManager.Instance.Reset();
+        LevelManager.Instance.ResetTutorial();
+        MegaHazard.Instance.Reset();
+        ParallaxingBackgroundManager.Instance.Reset();
     }
 
-    public void ActivateGameOver() {
+    public void PauseGameWithoutPopup(){
+        PauseGameWithPopup(false);   
+    }
+
+    //---------------------------------------------------
+    // ResumeGame()
+    // wrapper class to ResumeGame from parent class
+    // yield one frame before calling the actual resume
+    // so the click on the resume button will not be picked up
+    // by the gesture listener
+    //---------------------------------------------------
+    public void UnPauseGame(){
+        StartCoroutine(ResumeGameHelper());
+    }
+
+    private IEnumerator ResumeGameHelper(){
+        yield return 0;
+        base.ResumeGame();  
+    }
+
+    //---------------------------------------------------
+    // ActivateGameOver()
+    // Stop the game and resets the game
+    //---------------------------------------------------
+    public void ActivateGameOver(){
 		GameOver();	// what is calling this...
 
         UpdateBadgeProgress();
@@ -78,6 +119,11 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         ItemManager.Instance.Reset();
     }
 
+    //---------------------------------------------------
+    // IncreaseTimeSpeed()
+    // Increase the time scale to make it looks like the
+    // player is running faster
+    //---------------------------------------------------
     public void IncreaseTimeSpeed(float inIncreaseTime) {
         //Limit timescale to 2.5. Beyond 2.5 the game becomes too fast to be playable
         if(Time.timeScale != 2.5){
@@ -91,17 +137,28 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
             Time.timeScale = 1f;
     }
 
-    //Check if player unlocks any badges
+    //---------------------------------------------------
+    // GetReward()
+    //---------------------------------------------------       
+    public override int GetReward( MinigameRewardTypes eType ) {
+        // for now, just use the standard way
+        return GetStandardReward( eType );
+    }   
+
+    //---------------------------------------------------
+    // UpdateBadgeProgress()
+    // Check with BadgeLogic to see if any badge can be unlocked
+    //---------------------------------------------------
     private void UpdateBadgeProgress(){
         int distance = (int)PlayerController.Instance.transform.position.x;
         BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, distance, false);
     }
 	
-	//---------------------------------------------------
-	// GetReward()
-	//---------------------------------------------------		
-	public override int GetReward( MinigameRewardTypes eType ) {
-		// for now, just use the standard way
-		return GetStandardReward( eType );
-	}	
+    //---------------------------------------------------
+    // StartTutorial()
+    // Begin runner game tutorial
+    //---------------------------------------------------       
+    private void StartTutorial(){
+        SetTutorial(new RunnerTutorial());
+    }
 }

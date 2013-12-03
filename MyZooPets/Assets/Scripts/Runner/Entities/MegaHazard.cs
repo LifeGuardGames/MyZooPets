@@ -25,7 +25,7 @@ public class MegaHazard : Singleton<MegaHazard> {
 
 	// Use this for initialization
 	void Start() {
-		Reset();
+		// Reset();
 	}
 	
 	// Update is called once per frame

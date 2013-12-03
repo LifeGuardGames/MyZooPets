@@ -11,7 +11,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: RunnerGameManager
   m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,6 +39,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adeb7739daf14ee4eb97e270871fcf73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 0}
+  scriptTransition: {fileID: 0}
+  nStartingLives: 0
+  bRunTut: 1
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -50,9 +54,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelName: Yard
-  optionalLoadingScreen: {fileID: 0}
-  transitionToggleObject: {fileID: 0}
+  demux: {fileID: 0}
+  toggle: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

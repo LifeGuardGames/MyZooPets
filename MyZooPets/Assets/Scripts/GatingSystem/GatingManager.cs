@@ -40,7 +40,42 @@ public class GatingManager : Singleton<GatingManager> {
 		// listen for partition changing event
 		scriptPan.OnPartitionChanged += EnteredRoom;
 		
-		// once the manager is loaded, spawn all appropriate, active gates
+		// prior to spawning gates, we need to do some work to see if any recurring gates need to be refreshed
+		RecurringGateCheck();
+		
+		// now spawn the gates
+		SpawnGates();
+	}
+	
+	//---------------------------------------------------
+	// RecurringGateCheck()
+	// Some gates recur -- that is, if they have been
+	// destroyed, after a set amount of time, the gate
+	// will be refreshed for the player to clear again.
+	// Note that this function just sets up the data for
+	// the SpawnGates() function to work with.
+	//---------------------------------------------------	
+	private void RecurringGateCheck() {
+		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
+		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
+		// but it works for our initial design of the gate...can be changed later
+		Hashtable hashGates = DataGateLoader.GetAreaGates( strArea );
+		foreach ( DictionaryEntry entry in hashGates ) {
+			DataGate dataGate = (DataGate) entry.Value;
+			
+			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive( dataGate.GetGateID() );
+			bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			
+			if ( !bActive && bCanBreath )
+				DataManager.Instance.GameData.GatingProgress.RefreshGate( dataGate );
+		}
+	}
+	
+	//---------------------------------------------------
+	// SpawnGates()
+	// Creates all gates that are alive in the save data.
+	//---------------------------------------------------	
+	private void SpawnGates() {
 		Hashtable hashGates = DataGateLoader.GetAreaGates( strArea );
 		foreach ( DictionaryEntry entry in hashGates ) {
 			DataGate dataGate = (DataGate) entry.Value;
@@ -70,7 +105,7 @@ public class GatingManager : Singleton<GatingManager> {
 				int nRoom = dataGate.GetPartition();
 				hashActiveGates[nRoom] = scriptGate;
 			}
-		}
+		}		
 	}
 	
 	//---------------------------------------------------

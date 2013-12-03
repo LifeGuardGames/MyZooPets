@@ -112,11 +112,11 @@ public enum DecorationTypes {
     Poster,
     Wallpaper,
     Carpet,
-    FloorTile,
-    TallFurniture,
-    BigFurniture,
-    SmallPlant,
-    BigPlant,
+    // FloorTile,
+    // TallFurniture,
+    // BigFurniture,
+    // SmallPlant,
+    // BigPlant,
 }
 
 // mini game states

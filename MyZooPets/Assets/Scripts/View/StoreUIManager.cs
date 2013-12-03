@@ -250,7 +250,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				Destroy(child.gameObject);
 
 			//Reset clip range so scrolling will start from beginning again
-			// ResetUIPanelClipRange();
+			ResetUIPanelClipRange();
 
 			//if the current page is not null, we are switching tabs, so play a sound
 			if(currentTab != null)
@@ -341,8 +341,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
         Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -56f, itemArea.transform.localPosition.z);
-        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 30.5f, clipRange.z, clipRange.w);
+        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -45f, itemArea.transform.localPosition.z);
+        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 20.0f, clipRange.z, clipRange.w);
 	}
 
 	//Delay calling reposition due to async problem Destroying/Repositionoing.

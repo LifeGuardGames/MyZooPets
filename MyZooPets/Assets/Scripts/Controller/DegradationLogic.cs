@@ -8,6 +8,7 @@ using System;
 //TO DO: need to store diff types of trigger and distinct between room and yard
 public class DegradationLogic : Singleton<DegradationLogic> {
     public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
+	public event EventHandler<EventArgs> OnPetHit;
     
     [System.Serializable]
     public class Location{ //make it serializable 
@@ -159,4 +160,18 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
 			WellapadMissionController.Instance.TaskCompleted( "CleanRoom" );
     }
+	
+	//---------------------------------------------------
+	// TriggerHitPet()
+	// When a trigger particle effect hits the pet.
+	//---------------------------------------------------		
+	public void TriggerHitPet( DegradParticle trigger ) {
+		// send out a callback
+		if ( OnPetHit != null )
+			OnPetHit( this, EventArgs.Empty );
+		
+		// damage the pet
+		int nDamage = trigger.GetDamage();
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -nDamage, Vector3.zero, 0, Vector3.zero);		
+	}
 }

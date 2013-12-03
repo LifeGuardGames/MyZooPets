@@ -51,6 +51,12 @@ public class DataGate {
 		return bRecurring;	
 	}
 	
+	// item box id this gate leaves behind once destroyed
+	private string strItemBoxID;
+	public string GetItemBoxID() {
+		return strItemBoxID;	
+	}
+	
 	public DataGate( string id, Hashtable hashData, Hashtable hashElements, string strError ) {
 		strID = id;	
 
@@ -65,6 +71,9 @@ public class DataGate {
 		
 		// get whether or not the gate recurs
 		bRecurring = bool.Parse( HashUtils.GetHashValue<string>( hashData, "Recurring", "false" ) );
+		
+		// get an item box id gate leaves behind (if any)
+		strItemBoxID = XMLUtils.GetString( hashElements["ItemBox"] as IXMLNode );
 		
 		// get the direction the gate is blocking
 		eSwipeDirection = (RoomDirection) System.Enum.Parse( typeof(RoomDirection), 

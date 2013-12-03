@@ -14,6 +14,9 @@ public abstract class Gate : MonoBehaviour {
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 	
+	// the item box this gate is blocking (if any)
+	ItemBoxLogic scriptItemBox;
+	
 	// id and resource of this gate
 	protected string strID;
 	protected string strResource;
@@ -24,6 +27,21 @@ public abstract class Gate : MonoBehaviour {
 			Debug.Log("Something trying to set id on gate twice " + strID);
 		
 		strResource = monster.GetResourceKey();
+		
+		// since this gate is getting created, if it is guarding an item box, create the box
+		DataGate dataGate = GetGateData();
+		string strItemBoxID = dataGate.GetItemBoxID();
+		if ( !string.IsNullOrEmpty( strItemBoxID ) ) {
+			GameObject goResource = Resources.Load( "ItemBox_Monster" ) as GameObject;
+			GameObject goBox = Instantiate( goResource, transform.position, Quaternion.identity ) as GameObject;
+			goBox = goBox.FindInChildren( "Button" );
+			
+			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
+			if ( scriptItemBox )
+				scriptItemBox.SetItemBoxID( strItemBoxID );
+			else
+				Debug.Log("No logic script on box", goBox);
+		}		
 	}
 	
 	protected DataGate GetGateData() {
@@ -129,6 +147,10 @@ public abstract class Gate : MonoBehaviour {
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
+		
+		// if there is an item box behind this gate, let it know it is now unclaimed
+		if ( scriptItemBox )
+			scriptItemBox.NowAvailable();
 		
 		// gates might do their own thing upon destruction
 		OnGateDestroyed();	

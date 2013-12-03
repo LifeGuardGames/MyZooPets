@@ -9,6 +9,17 @@ using System.Collections.Generic;
 ///////////////////////////////////////////
 
 public static class ListUtils {
+	
+	///////////////////////////////////////////
+	// GetRandomElement()
+	// Given a list, will return one element
+	// at random from the list.
+	///////////////////////////////////////////	
+	public static T GetRandomElement<T>( List<T> list ) {
+		List<T> listOne = GetRandomElements<T>( list, 1 );
+		return listOne[0];
+	}	
+	
 	///////////////////////////////////////////
 	// GetRandomElements()
 	// Given a list, will return another list

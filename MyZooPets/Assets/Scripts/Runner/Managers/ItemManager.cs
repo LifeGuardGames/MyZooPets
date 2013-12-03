@@ -141,7 +141,7 @@ public class ItemManager : Singleton<ItemManager> {
             tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().functionName = "DestroyTutorial";
             tutorialGO.transform.Find("Label").GetComponent<UILabel>().text = hintMessage;
 
-            RunnerGameManager.Instance.ShowAlert();
+            RunnerGameManager.Instance.PauseGameWithoutPopup();
             DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
     }
@@ -149,12 +149,12 @@ public class ItemManager : Singleton<ItemManager> {
     public void DestroyTutorial(GameObject tutorialGO){
         Destroy(tutorialGO.transform.parent.gameObject);
 
-        StartCoroutine(UnPauseGame());
+        StartCoroutine(ResumeGame());
     }
 
     //Yield for a frame before unpausing the game. The only way to avoid OnTap being called when resume
     //button is clicked
-    private IEnumerator UnPauseGame(){
+    private IEnumerator ResumeGame(){
         yield return 0;
         RunnerGameManager.Instance.UnPauseGame();
     }

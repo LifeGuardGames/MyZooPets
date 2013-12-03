@@ -1,6 +1,4 @@
-/* Sean Duane
- * LevelManager.cs
- * 8:26:2013   12:00
+/* 
  * Description:
  * Handles the pushing, popping, and management of all levelcomponents.
  * This works mainly off 'levelgroups'. These groups contain a level ID, and a list of components.
@@ -41,8 +39,6 @@ public class LevelManager : Singleton<LevelManager> {
 	void Start() {
 		if (LevelGroups.Count <= 0)
 			Debug.LogError("No level groups found.");
-
-        Reset();
 	}
 	
 	// Update is called once per frame
@@ -52,7 +48,7 @@ public class LevelManager : Singleton<LevelManager> {
 		
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
-        // print(mLevelComponentQueue.Count);
+
 		if (mLevelComponentQueue.Count > 0 && playerController != null) {
 			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
@@ -61,6 +57,7 @@ public class LevelManager : Singleton<LevelManager> {
 
 			// Different between the runner position and the min anchor of the first component in queue 
 			float distanceBetween = Mathf.Abs(currentRunnerPosition.x - frontLevelPosition.x);
+
 			// float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
             float distanceToUpdateLevel = (frontLevelComponent.transform.FindChild("AnchorMax").position.x -
                 frontLevelComponent.transform.FindChild("AnchorMin").position.x) * 2f;
@@ -79,10 +76,13 @@ public class LevelManager : Singleton<LevelManager> {
 				// Destroy it
                 removedLevelComponent.DestroyAndCache();
 
-				// GameObject.Destroy(removedLevelComponent.gameObject);
 				// Push a new one
-				LevelComponent nextLevel = PushAndInstantiateRandomComponent();
-				PopulateLevelComponent(nextLevel);
+                if(!RunnerGameManager.Instance.IsTutorial()){
+                    LevelComponent nextLevel = PushAndInstantiateRandomComponent();
+                    PopulateLevelComponent(nextLevel);
+                }else{
+                    PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+                }
 			}
 		}
 
@@ -92,11 +92,39 @@ public class LevelManager : Singleton<LevelManager> {
 
             TransitionToRandomNewLevelGroup();
 		}
-		
-		// UpdateInvincibility();
     }
 
     public void Reset() {
+        CleanUpLevelComponent();
+
+        LevelComponent nextLevel;
+        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+        nextLevel = PushAndInstantiateRandomComponent();
+        PopulateLevelComponent(nextLevel);
+    }
+
+    //---------------------------------------------------
+    // ResetTutorial()
+    // Create levels suitable for tutorial
+    //---------------------------------------------------
+    public void ResetTutorial(){
+        CleanUpLevelComponent();
+
+        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+    }
+
+    //---------------------------------------------------
+    // CleanUpLevelComponent()
+    // Reset values and remove any spawned level components
+    //---------------------------------------------------
+    private void CleanUpLevelComponent(){
         // Reset to default values
         mLevelSwitchPulse = LevelGroupSwitchTime;
         mCurrentLevelGroup = StartingLevelGroup;
@@ -112,88 +140,7 @@ public class LevelManager : Singleton<LevelManager> {
             currentComponent.DestroyAndCache();
         }
 
-        LevelComponent nextLevel;
-        // @HACK shove some default components in there. @TODO Better way to do it w/ screen size or something..?
-        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
-        nextLevel = PushAndInstantiateRandomComponent();
-        PopulateLevelComponent(nextLevel);
     }
-	
-	//@HACK there is a lot of room for optimization here. IF it needs to be.
-	// The bottom layers can be cached out
-	// The order of them can be cached out and manag
-	// The function can be handled through messages, not glued to the player. That removes the need for constant updates, only update when needed!
-	private void UpdateInvincibility() {
-		// PlayerRunner player = PlayerRunner.Instance;
-		// if (player.Invincible) {
-		// 	Debug.Log("asfafas");
-		// 	// Get all lowest components
-		// 	List<GameObject> allLowestObjects = new List<GameObject>();
-		// 	foreach (LevelComponent currentComponent in mLevelComponentQueue) {
-		// 		List<GameObject> currentLowestObjects = currentComponent.BottomLayers;
-		// 		allLowestObjects.AddRange(currentLowestObjects);
-		// 	}
-			
-		// 	if (allLowestObjects.Count > 1) {
-		// 		// Sort
-		// 		allLowestObjects.Sort(delegate(GameObject g1, GameObject g2) {
-		// 			if (g1.transform.position.z < g2.transform.position.z)
-		// 				return -1;
-		// 			else if (g1.transform.position.z > g2.transform.position.z)
-		// 				return 1;
-		// 			else
-		// 				return 0;
-		// 		});
-				
-		// 		// Attempt to spawn items between it all
-		// 		for (int lowestIndex = 1; lowestIndex < allLowestObjects.Count; lowestIndex++) {
-		// 			GameObject leftObject = allLowestObjects[lowestIndex - 1];
-		// 			GameObject rightObject = allLowestObjects[lowestIndex];
-		// 			Vector3 leftObjectRightPoint = leftObject.collider.ClosestPointOnBounds(rightObject.collider.bounds.max);
-		// 			Vector3 rightObjectRightPoint = rightObject.collider.ClosestPointOnBounds(leftObject.collider.bounds.max);
-					
-		// 			// Vector that goes between the points
-		// 			Vector3 betweenVector = rightObjectRightPoint - leftObjectRightPoint;
-		// 			Vector3 midPoint = leftObjectRightPoint + (betweenVector * 0.5f);
-					
-		// 			if (!mBetweenInvinciblePlatforms.ContainsKey(midPoint)) {
-		// 				// No object exists, create one
-		// 				GameObject betweenPlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		// 				// Position
-		// 				betweenPlatform.transform.position = midPoint;
-						
-		// 				// Scale
-		// 				//BoxCollider collider = (BoxCollider)betweenPlatform.collider;
-		// 				//Vector3 colliderSize = collider.size;
-		// 				//colliderSize.z = betweenVector.magnitude;
-		// 				//collider.size = colliderSize;
-		// 				Vector3 scale = betweenPlatform.transform.localScale;
-		// 				scale.z = betweenVector.magnitude;
-		// 				betweenPlatform.transform.localScale = scale;
-						
-		// 				// Angle
-		// 				float angleBetween = Vector3.Angle(betweenVector, Vector3.forward);
-		// 				Quaternion newAngle = new Quaternion();
-		// 				newAngle.eulerAngles = new Vector3(angleBetween, 0f, 0f);
-		// 				betweenPlatform.transform.rotation = newAngle;
-						
-		// 				// Add to the list
-		// 				mBetweenInvinciblePlatforms[midPoint] = betweenPlatform;
-		// 			}
-		// 		}
-		// 	}
-		// } else {
-		// 	foreach (GameObject currentObject in mBetweenInvinciblePlatforms.Values) {
-		// 		GameObject.Destroy(currentObject);
-		// 	}
-		// 	mBetweenInvinciblePlatforms.Clear();
-		// }
-	}
 
     private void TransitionToRandomNewLevelGroup() {
         // Cut to a new, different level that has the proper level ID.
@@ -255,7 +202,6 @@ public class LevelManager : Singleton<LevelManager> {
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
-
 			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
             newComponent.ParentGroup = mCurrentLevelGroup;
             newComponent.name = nextlevelComponent.name;
@@ -304,7 +250,7 @@ public class LevelManager : Singleton<LevelManager> {
                     bundlePointGroups.Add(currentGroup);
             }
 
-            // Phew. Now spawn all those itams! 
+            // Phew. Now spawn all those items! 
             foreach (PointGroup spawningGroup in bundlePointGroups) {
                 SpawnItemsInLevel(inLevelComponent, spawningGroup);
             }

@@ -229,18 +229,21 @@ public abstract class Tutorial {
 	//---------------------------------------------------
 	// ShowPopup()
 	//---------------------------------------------------	
-	protected void ShowPopup( string strPopupKey, Vector3 vLoc ) {
+	protected void ShowPopup( string strPopupKey, Vector3 vLoc, bool useViewPort=true ) {
 		// if there was already a popup, just destroy it
 		if ( goPopup )
 			GameObject.Destroy( goPopup );
 		
 		// get text to display from tutorial key + step
 		string strText = Localization.Localize( GetKey() + "_" + GetStep() );
-		
-		// transform viewport location to screen position, then from bottom left to center
-		Vector3 vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
-		vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-		//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		Vector3 vPos = vLoc;
+	
+		if(useViewPort)	{
+			// transform viewport location to screen position, then from bottom left to center
+			vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		}
 		
 		// create the popup
 		GameObject goResource = Resources.Load( strPopupKey ) as GameObject;

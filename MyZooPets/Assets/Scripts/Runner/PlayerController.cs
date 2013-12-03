@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerPhysics))]
 public class PlayerController : Singleton<PlayerController> {
+    public static EventHandler<EventArgs> OnJump;
+    public static EventHandler<EventArgs> OnDrop;
+
     public float speedIncrease = 0.1f; //The amount the game will be speed up by
     public float speedIncreaseTime = 5; //How long before the next game speed increment 
 
@@ -46,8 +50,12 @@ public class PlayerController : Singleton<PlayerController> {
 
     //Listen to tap gesture from finger gesture plugin
     void OnTap(TapGesture gesture) { 
-        if(RunnerGameManager.Instance.GameRunning)
+        if(RunnerGameManager.Instance.GameRunning){
             Jump();
+            
+            if(OnJump != null)
+                OnJump(this, EventArgs.Empty);
+        }
     }
 
     //Listen to swipe down gesture
@@ -55,23 +63,36 @@ public class PlayerController : Singleton<PlayerController> {
         FingerGestures.SwipeDirection direction = gesture.Direction;
         if(direction == FingerGestures.SwipeDirection.Down){
             Drop();
+
+            if(OnDrop != null)
+                OnDrop(this, EventArgs.Empty);
         }
     } 
 
-    //Setup player for a new game
+    //---------------------------------------------------
+    // Reset()
+    // Setup player for a new game
+    //---------------------------------------------------
     public void Reset(){
         speedIncreaseCounter = speedIncreaseTime;
         transform.position = initialPosition;
     }
 
-    //Slow down the game and decrease the distance between player and megahazard
+    //---------------------------------------------------
+    // TriggerSlowdown()
+    // Slow down the game and decrease the distance between 
+    // player and megahazard
+    //---------------------------------------------------
     public void TriggerSlowdown(float inDivisor) {
         RunnerGameManager.Instance.SlowTimeSpeed(inDivisor);
         MegaHazard.Instance.TriggerPlayerSlowdown();
     }
 
-    //Moves the player along the x axis with default speed. Check for jumping and
-    //falling physics as well.
+    //---------------------------------------------------
+    // UpdateMovement()
+    // Moves the player along the x axis with default speed. 
+    // Check for jumping and falling physics as well.
+    //---------------------------------------------------
     private void UpdateMovement(){
 
 #if UNITY_EDITOR
@@ -87,7 +108,10 @@ public class PlayerController : Singleton<PlayerController> {
         playerPhysics.Move(amountToMove * Time.deltaTime);
     }
 
-    //Increase the pace of the game
+    //---------------------------------------------------
+    // UpdateSpeed()
+    // Increase the pace of the game
+    //---------------------------------------------------
     private void UpdateSpeed(){
         speedIncreaseCounter -= Time.deltaTime / Time.timeScale;
         if(speedIncreaseCounter <= 0){
@@ -96,7 +120,10 @@ public class PlayerController : Singleton<PlayerController> {
         }
     }
 
-    //If player falls below the "Dead line" than the player dies
+    //---------------------------------------------------
+    // CheckAndActOnDeath()
+    // If player falls below the "Dead line" than the player dies
+    //---------------------------------------------------
     private void CheckAndActOnDeath(){
        LevelManager levelManager = LevelManager.Instance;
         if(transform.position.y < levelManager.LevelTooLowYValueGameOver){

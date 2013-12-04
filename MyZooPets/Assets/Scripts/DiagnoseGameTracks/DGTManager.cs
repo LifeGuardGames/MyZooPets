@@ -65,16 +65,16 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {		
-		// listen for character scoring
-		DGTCharacter.OnCharacterScored += CharacterScored;
+		// sign up for callbacks
+		DGTCharacter.OnCharacterScored += CharacterScored;	// character scoring
 	}	
 	
 	//---------------------------------------------------
 	// _OnDestroy()
 	//---------------------------------------------------	
 	protected override void _OnDestroy() {
-		// stop listening for character scoring	
-		DGTCharacter.OnCharacterScored -= CharacterScored;
+		// stop listening for callbacks
+		DGTCharacter.OnCharacterScored -= CharacterScored;	// character scoring	
 	}
 	
 	//---------------------------------------------------
@@ -91,7 +91,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		fSpawnRate = fStartSpawnRate;
 		
 		// set the wave countdown
-		SetWaveCountdown( nCharactersPerWave );
+		ResetWaveCountdown();
 		
 		// if the play hasn't played the tutorial yet, start it
 		if ( TutorialOK() && ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) ) )
@@ -172,13 +172,67 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// When a character reaches a zone (regardless of if
 	// it's the correct zone).
 	//---------------------------------------------------		
-	public void CharacterScored( object sender, EventArgs args ) {
-		// if there is a tutorial going on, we don't really care about updating the wave count
-		if ( IsTutorial() )
+	public void CharacterScored( object sender, CharacterScoredEventArgs args ) {	
+		// if the game is over, don't do anything
+		if ( GetGameState() == MinigameStates.GameOver )
 			return;
 		
-		// update the wave count
-		UpdateWaveCountdown(-1);
+		// get relevant variables from the args
+		DGTCharacter characterScored = args.character;
+		DGTZone zoneTarget = args.zone;
+		
+		// get the asthma stages of the character and variable
+		AsthmaStage eZoneStage = zoneTarget.GetStage();
+		AsthmaStage eCharStage = characterScored.GetStage();
+
+		if ( eZoneStage == eCharStage )
+			CharacterScored_Right( characterScored );
+		else 
+			CharacterScored_Wrong( characterScored );		
+	}
+	
+	//---------------------------------------------------
+	// CharacterScored_Right()
+	// Called whenever a character reaches the right
+	// zone.
+	//---------------------------------------------------		
+	private void CharacterScored_Right( DGTCharacter character ) {
+		// character was sent to the right zone -- get some points!
+		int nVal = character.GetPointValue();
+		UpdateScore( nVal );
+		
+		// set sound
+		string strSound = "clinicCorrect";
+		
+		// update the wave count (if it's not a tutorial)
+		if ( IsTutorial() == false )
+			UpdateWaveCountdown(-1);
+		
+		// every X points the player gets an additional life
+		int nExtraLife = Constants.GetConstant<int>( "Clinic_ExtraLife" );
+		int nScore = GetScore();
+		if ( nScore % nExtraLife == 0 ) {
+			strSound = "PointSingle";		// set the sound to something different
+			UpdateLives( 1 );
+		}
+		
+		// play appropriate sound
+		AudioManager.Instance.PlayClip( strSound );
+	}
+	
+	//---------------------------------------------------
+	// CharacterScored_Wrong()
+	// Called whenever a character reaches the wrong zone.
+	//---------------------------------------------------		
+	private void CharacterScored_Wrong( DGTCharacter character ) {
+		// character was sent to wrong zone...lose a life!
+		UpdateLives( -1 );
+		
+		// play an incorrect sound
+		AudioManager.Instance.PlayClip( "clinicWrong" );
+		
+		// also slow down the game
+		SlowGameDown();
 	}
 	
 	//---------------------------------------------------
@@ -193,11 +247,18 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}
 	
 	//---------------------------------------------------
+	// ResetWaveCountdown()
+	//---------------------------------------------------		
+	private void ResetWaveCountdown() {
+		SetWaveCountdown( nCharactersPerWave );
+	}
+	
+	//---------------------------------------------------
 	// NextWave()
 	//---------------------------------------------------		
 	private void NextWave() {
 		// reset the countdown
-		SetWaveCountdown( nCharactersPerWave );
+		ResetWaveCountdown();
 		
 		// increases the speed of the game
 		ChangeTrackSpeed( fSpeedIncrease );
@@ -232,6 +293,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 	private void SetTrackSpeed( float fNewSpeed ) {
 		fCurrentSpeed = fNewSpeed;
 		
+		if ( fCurrentSpeed < fStartingSpeed )
+			fCurrentSpeed = fStartingSpeed;
+		
 		// send out a message to all things on the track letting them know their speed needs to change
        if( OnSpeedChange != null )
             OnSpeedChange(this, EventArgs.Empty);		
@@ -241,15 +305,34 @@ public class DGTManager : MinigameManager<DGTManager> {
 	}
 	
 	//---------------------------------------------------
+	// SlowGameDown()
+	// This function is called when the player incorrectly
+	// diagnoses a pet, so we slow the game down to help
+	// them out.
+	//---------------------------------------------------	
+	private void SlowGameDown() {
+		// roll back the speed x 2
+		ChangeTrackSpeed( fSpeedIncrease * -2 );
+		
+		// also roll back the spawn timer
+		ChangeSpawnRate( fSpawnChange * -2 );
+		
+		// also reset the wave countdown so the game doesn't speed up right away
+		ResetWaveCountdown();
+	}
+	
+	//---------------------------------------------------
 	// ChangeSpawnSpeed()
 	// Changees the rate at which characters spawn.
 	//---------------------------------------------------	
 	private void ChangeSpawnRate( float fChange ) {
 		fSpawnRate += fChange;
 		
-		// set a floor
+		// set a floor & ceiling
 		if ( fSpawnRate < 1 )
 			fSpawnRate = 1;
+		else if ( fSpawnRate > fStartSpawnRate )
+			fSpawnRate = fStartSpawnRate;
 	}
 	
 	//---------------------------------------------------

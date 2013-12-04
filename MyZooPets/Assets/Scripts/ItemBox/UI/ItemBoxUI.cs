@@ -44,25 +44,17 @@ public class ItemBoxUI : SingletonUI<ItemBoxUI> {
 	//---------------------------------------------------
 	// InitBox()
 	//---------------------------------------------------		
-	public IEnumerator InitBox( string strItemBoxID ) {
+	public IEnumerator InitBox( List<KeyValuePair<Item, int>> items ) {
 		// wait a frame because of NGUI grid stuff
 		yield return 0;
 		
-		// get items to add based on this item box
-		Data_ItemBox dataBox = DataLoader_ItemBoxes.GetItemBox( strItemBoxID );
-		
-		// null check
-		if ( dataBox != null ) {
-			List<KeyValuePair<Item, int>> items = dataBox.GetItems();
+		// loop through items in the list and add them to the grid
+		foreach( KeyValuePair<Item,int> item in items ) {
+			GameObject goEntry = NGUITools.AddChild(goGrid, prefabEntry);
+			SetNameForGrid( goEntry );
 			
-			// loop through items in the list and add them to the grid
-			foreach( KeyValuePair<Item,int> item in items ) {
-				GameObject goEntry = NGUITools.AddChild(goGrid, prefabEntry);
-				SetNameForGrid( goEntry );
-				
-				// init the individual items inside the grid
-				goEntry.GetComponent<ItemBoxEntry>().Init( item.Key, item.Value );
-			}
+			// init the individual items inside the grid
+			goEntry.GetComponent<ItemBoxEntry>().Init( item.Key, item.Value );
 		}
 		
 		goGrid.GetComponent<UIGrid>().Reposition();

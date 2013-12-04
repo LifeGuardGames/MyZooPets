@@ -29,8 +29,6 @@ public class DegradParticle : MonoBehaviour {
 	// the target.
 	///////////////////////////////////////////		
 	private void ReachedTarget() {
-		// deal damage to the pet's health
-		int nDamage = GetDamage();
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -nDamage, Vector3.zero, 0, Vector3.zero);
+		DegradationLogic.Instance.TriggerHitPet( this );
 	}	
 }

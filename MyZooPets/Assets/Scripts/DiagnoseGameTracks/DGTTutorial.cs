@@ -118,7 +118,7 @@ public class DGTTutorial : MinigameTutorial {
 	// When a character reaches a zone (regardless of if
 	// it's the correct zone).
 	//---------------------------------------------------		
-	public void CharacterScored( object sender, EventArgs args ) {
+	public void CharacterScored( object sender, CharacterScoredEventArgs args ) {
 		// increment pets scored
 		nScored++;
 		

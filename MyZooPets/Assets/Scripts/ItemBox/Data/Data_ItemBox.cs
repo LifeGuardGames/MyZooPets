@@ -69,8 +69,6 @@ public class Data_ItemBox {
 		
 		strError += "(" + id + ")";
 		
-		Debug.Log("Loading item box " + id);
-		
 		// set the variations for this item box
 		listVariations = new List<ItemBoxVariation>();
 		foreach( IXMLNode node in listData ) {

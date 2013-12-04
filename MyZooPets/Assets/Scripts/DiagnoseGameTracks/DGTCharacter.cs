@@ -10,6 +10,19 @@ using System.Collections.Generic;
 // a zone.
 //---------------------------------------------------
 
+public class CharacterScoredEventArgs : EventArgs {
+	// character that is scoring
+	public DGTCharacter character;
+	
+	// zone which the character scored
+	public DGTZone zone;
+	
+	public CharacterScoredEventArgs ( DGTCharacter character, DGTZone zone ) : base()  {
+		this.character = character;
+		this.zone = zone;
+	}
+}
+
 public class DGTCharacter : MonoBehaviour {	
 	
 	// Sprite scale
@@ -33,7 +46,7 @@ public class DGTCharacter : MonoBehaviour {
 	private bool bSet = false;
 	
 	// how many points is this character worth?
-	public int nPoints;
+	private int nPoints;
 	public int GetPointValue() {
 		return nPoints;	
 	}
@@ -45,7 +58,7 @@ public class DGTCharacter : MonoBehaviour {
 	private bool bScored = false;
 	
 	//=======================Events========================
-	public static EventHandler<EventArgs> OnCharacterScored; // when a character scores
+	public static EventHandler<CharacterScoredEventArgs> OnCharacterScored; // when a character scores
 	//=====================================================	
 
 	//---------------------------------------------------
@@ -56,6 +69,9 @@ public class DGTCharacter : MonoBehaviour {
 		DGTManager.OnSpeedChange += OnSpeedChange;			// speed change events
 		DGTManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
 		DGTManager.OnNewGame += OnNewGame;					// new game
+		
+		// set character point value from constants
+		nPoints = Constants.GetConstant<int>( "Clinic_ScoredCharacterValue" );
 		
 		// set this characters' attributes (if it wasn't set externally)
 		if ( !bSet )
@@ -263,36 +279,17 @@ public class DGTCharacter : MonoBehaviour {
 		// set this to avoid updating on speed once the character has been scored
 		bScored = true;
 		
-		if ( goTarget == null || goTarget.GetComponent<DGTZone>() == null ) {
+		DGTZone scriptZone = goTarget.GetComponent<DGTZone>();
+		if ( goTarget == null || scriptZone == null ) {
 			Debug.Log("Character unable to score because of null component");
 			return;
 		}
 		
 		// let the game know a character has scored
 		// it's important this happens BEFORE anything else or the game may get into a weird state
-       if( OnCharacterScored != null )
-            OnCharacterScored(this, EventArgs.Empty);		
-		
-		DGTZone scriptZone = goTarget.GetComponent<DGTZone>();
-		
-		// score the interaction -- for now, if the character type matches the zone type, award some points
-		AsthmaStage eZoneStage = scriptZone.GetStage();
-		AsthmaStage eCharStage = GetStage();
-
-		if ( eZoneStage == eCharStage ) {
-			// character was sent to the right zone -- get some points!
-			int nVal = GetPointValue();
-			DGTManager.Instance.UpdateScore( nVal );
-			
-			// play a good sound
-			AudioManager.Instance.PlayClip( "clinicCorrect" );
-		}
-		else {
-			// character was sent to wrong zone...lose a life!
-			DGTManager.Instance.UpdateLives( -1 );
-			
-			// play an incorrect sound
-			AudioManager.Instance.PlayClip( "clinicWrong" );
+       if( OnCharacterScored != null ) {
+			CharacterScoredEventArgs args = new CharacterScoredEventArgs( this, scriptZone );
+            OnCharacterScored(this, args);	
 		}
 	}	
 }

@@ -22,6 +22,9 @@ public class DegradAlert : MonoBehaviour {
 	void Start() {
 		// begin listening for the callback for when the pet gets hit
 		DegradationLogic.Instance.OnPetHit += OnPetHit;
+		
+		// because the tween is playing at start, stop it right away
+		tweenAnimation.Play( false );
 	}
 	
 	//---------------------------------------------------

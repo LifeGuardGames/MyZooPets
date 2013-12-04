@@ -39,7 +39,7 @@ public class SceneTransition : MonoBehaviour {
 		
 		// wow, this is dumb...thanks for not updating public default variables, Unity
 		if ( string.IsNullOrEmpty(strLoadingPrefab) )
-			strLoadingPrefab = "LoadingScreen";
+			strLoadingPrefab = DataLoadScene.GetRandomLoadScreen();
 		
 		// load the loading prefab (it will start inactive)
 		GameObject goLoading = Resources.Load( strLoadingPrefab ) as GameObject;

@@ -40,6 +40,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		// if edit mode is currently disabled, destroy the button
 		if ( bDisableEditMode )
 			Destroy( goEdit );
+		
+		// listen for partition change event
+		CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;
 	}
 	
 	//---------------------------------------------------
@@ -163,5 +166,27 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------		
 	public ChooseDecorationUI GetChooseScript() {
 		return scriptChooseUI;
+	}
+	
+	//---------------------------------------------------
+	// GetClickLockExceptions()
+	// Edit decos UI actually allows moving.
+	//---------------------------------------------------
+	protected override List<ClickLockExceptions> GetClickLockExceptions() {
+		List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
+		listExceptions.Add( ClickLockExceptions.Moving );
+		
+		return listExceptions;
+	}	
+	
+	//---------------------------------------------------
+	// OnPartitionChanging()
+	// When the player is changing rooms.
+	//---------------------------------------------------	
+	public void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
+		// if the user is changing rooms in deco mode, close the choose deco UI if it is open
+		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		if ( tween.IsShowing )
+			CloseChooseMenu();
 	}
 }

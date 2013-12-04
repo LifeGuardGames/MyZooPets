@@ -25,7 +25,7 @@ public class LgButtonMessage : LgButton {
         }
 
         if(target == null){
-            Debug.LogError("LgButtonMessage target in parent (" + gameObject + ") cannot be null");
+            Debug.LogError("LgButtonMessage target in parent (" + gameObject + ") cannot be null", this);
             return;
         }
 

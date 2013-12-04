@@ -28,6 +28,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
+	public DecorationNode GetNode() {
+		return decoNodeCurrent;	
+	}
 	
 	// save the 0th item in the deco menu for using in tutorials
 	private GameObject goTutorialEntry;

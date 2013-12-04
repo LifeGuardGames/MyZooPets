@@ -21,7 +21,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private string currentTab; //The current sub category. only decorations have sub cat right now
 	private GameObject grid;
 
-	private List<Color> colors; //colors for the tab;
+	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		grid = itemArea.transform.Find("Grid").gameObject;
@@ -47,7 +47,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		colors.Add(purpleish);
 		colors.Add(yellow);
 	}
-
+	
+	//---------------------------------------------------
+	// _OpenUI()
+	//---------------------------------------------------	
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -56,7 +59,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// storePanel.GetComponent<TweenToggle>().Show();
 		// EditDecosUIManager.Instance.HideNavButton();
 	}
-
+	
+	//---------------------------------------------------
+	// OpenToSubCategory()
+	// Special function used to open the store UI 
+	// straight up to a certain category.
+	//---------------------------------------------------	
+	public void OpenToSubCategory( string strCat ) {
+		BGController.Instance.Show("black");
+		CreateSubCategoryItemsWithString( strCat );
+	}
+	
+	//---------------------------------------------------
+	// _CloseUI()
+	//---------------------------------------------------	
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();		
@@ -152,7 +168,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Then call other methods to create the items
 	//----------------------------------------------------
 	public void CreateSubCategoryItems(GameObject page){
-		currentPage = page.name;
+		CreateSubCategoryItemsWithString( page.name );
+	}
+	
+	public void CreateSubCategoryItemsWithString( string strPage ) {
+		if ( strPage != "Items" && strPage != "Food" && strPage != "Decorations" ) {
+			Debug.Log("Illegal sore sub category: " + strPage );
+			return;
+		}
+		
+		currentPage = strPage;
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
@@ -224,8 +249,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//------------------------------------------
 	public void HideStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
-		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
-
+		
+		// this is a little hacky, but our demux system is kind of difficult to get around, so...
+		// before doing anything else, check to see if the deco system has a saved node...
+		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
+		// store doesn't apply...otherwise just show the store base panel like normal
+		if ( EditDecosUIManager.Instance.IsNodeSaved() ) {
+			// close the store bg
+			BGController.Instance.Hide();
+			
+			// tell the deco manager to reopen its choose menu
+			EditDecosUIManager.Instance.ReopenChooseMenu();
+		}
+		else
+			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 	}
 
 	//----------------------------------------------------
@@ -243,7 +280,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// CreateSubCategoryItemsTab()
 	// Create items for sub category 
 	//----------------------------------------------------
-	private void CreateSubCategoryItemsTab(string tabName, Color tabColor){
+	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
 		if(currentTab != tabName){
 			//Destroy existing items first
 			foreach(Transform child in grid.transform)

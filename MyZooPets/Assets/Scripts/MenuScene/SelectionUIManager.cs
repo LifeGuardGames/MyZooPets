@@ -5,9 +5,8 @@ using System;
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab; //Prefab that holds the basic structure for pet display layout
-	
-	// transition
-	public SceneTransition scriptTransition;
+    public GameObject spotLight; //spotlight to shine on the egg when chosen	
+	public SceneTransition scriptTransition; //transition
 	
     private string selectedPetID;
 
@@ -16,10 +15,17 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         InitializeSelection();	
 	}
 
-    //Call when select button is clicked. Decides to start a new pet or load existing game data
+    //---------------------------------------------------
+    // PetSelected()
+    // Call when select button is clicked. Decides to start 
+    // a new pet or load existing game data
+    //---------------------------------------------------
     public void PetSelected(GameObject selectedPetGO){
         selectedPetID = selectedPetGO.transform.parent.name;
         string petStatus = DataManager.Instance.GetPetStatus(selectedPetID);
+
+        ToggleEggAnimation(false);
+        ToggleSpotLight(true, selectedPetGO);
 
         if(petStatus == "Egg"){
             //Open CustomizationUIManager to create/initiate new pet game data
@@ -34,6 +40,38 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
                 DataManager.Instance.LoadGameData();
             }else{
                 LoadScene();
+            }
+        }
+    }
+
+    //---------------------------------------------------
+    // ToggleSpotLight()
+    // Turn spot light on the egg or pet animation off
+    //---------------------------------------------------
+    public void ToggleSpotLight(bool isOn, GameObject selectedGO = null){
+        if(isOn){
+            spotLight.SetActive(true);
+            spotLight.transform.position = selectedGO.transform.position;
+        }
+        else{
+            spotLight.SetActive(false);
+        }
+    }
+
+    //---------------------------------------------------
+    // ToggleEggAnimation()
+    // Turn egg wiggle animation on/off
+    //---------------------------------------------------
+    public void ToggleEggAnimation(bool isOn){
+        foreach(Transform child in selectionGrid.transform){
+            string petStatus = DataManager.Instance.GetPetStatus(child.name);
+
+            if(petStatus == "Egg"){
+                Transform egg = child.Find("egg");
+                if(isOn)
+                    egg.GetComponent<RandomAnimation>().Enable();
+                else
+                    egg.GetComponent<RandomAnimation>().Disable();
             }
         }
     }
@@ -52,13 +90,18 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
                 GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
                 eggGO.name = "egg";
                 eggGO.transform.localScale = eggPrefab.transform.localScale;
-                eggGO.transform.localPosition = eggPrefab.transform.localPosition;
+
+                eggGO.GetComponent<LgButtonMessage>().target = this.gameObject;
+                eggGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
+
             }else{
                 GameObject animatorPrefab = Resources.Load("Animator") as GameObject;
                 GameObject animator = NGUITools.AddChild(petSelectionGO, animatorPrefab);
                 animator.name = "animator";
                 animator.transform.localScale = animatorPrefab.transform.localScale;
-                animator.transform.localPosition = animatorPrefab.transform.localPosition;
+
+                animator.GetComponent<LgButtonMessage>().target = this.gameObject;
+                animator.GetComponent<LgButtonMessage>().functionName = "PetSelected";
             }
         }
 

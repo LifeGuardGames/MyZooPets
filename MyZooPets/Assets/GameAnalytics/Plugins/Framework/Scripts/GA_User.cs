@@ -6,6 +6,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public class GA_User
 {
 	public enum Gender { Unknown, Male, Female }
@@ -14,7 +18,17 @@ public class GA_User
 	
 	public void NewUser(Gender gender, int? birth_year, int? friend_count)
 	{
-		CreateNewUser(gender, birth_year, friend_count);
+		CreateNewUser(gender, birth_year, friend_count, null, null, null, null, null, null, null, null, null, null, null, null, null);
+	}
+	
+	public void NewUser(Gender gender, int? birth_year, int? friend_count, string ios_id, string android_id, string platform, string device, string os, string osVersion, string sdk)
+	{
+		CreateNewUser(gender, birth_year, friend_count, ios_id, android_id, platform, device, os, osVersion, sdk, null, null, null, null, null, null);
+	}
+	
+	public void NewUser(Gender gender, int? birth_year, int? friend_count, string ios_id, string android_id, string platform, string device, string os, string osVersion, string sdk, string installPublisher, string installSite, string installCampaign, string installAdgroup, string installAd, string installKeyword)
+	{
+		CreateNewUser(gender, birth_year, friend_count, ios_id, android_id, platform, device, os, osVersion, sdk, installPublisher, installSite, installCampaign, installAdgroup, installAd, installKeyword);
 	}
 	
 	#endregion
@@ -39,7 +53,7 @@ public class GA_User
 	/// /// <param name="friend_count">
 	/// The number of friends in the user's network. Set to "null" if unknown.
 	/// </param>
-	private void CreateNewUser(Gender gender, int? birth_year, int? friend_count)
+	private void CreateNewUser(Gender gender, int? birth_year, int? friend_count, string ios_id, string android_id, string platform, string device, string os, string osVersion, string sdk, string installPublisher, string installSite, string installCampaign, string installAdgroup, string installAd, string installKeyword)
 	{
 		Hashtable parameters = new Hashtable();
 		
@@ -60,6 +74,71 @@ public class GA_User
 		if (friend_count.HasValue)
 		{
 			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Friend_Count], friend_count.ToString());
+		}
+		
+		if (ios_id != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Ios_id], ios_id);
+		}
+		
+		if (android_id != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Android_id], android_id);
+		}
+		
+		if (platform != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Platform], platform);
+		}
+		
+		if (device != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Device], device);
+		}
+		
+		if (os != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Os], os);
+		}
+		
+		if (osVersion != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.OsVersion], osVersion);
+		}
+		
+		if (sdk != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Sdk], sdk);
+		}
+		
+		if (installPublisher != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallPublisher], installPublisher);
+		}
+		
+		if (installSite != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallSite], installSite);
+		}
+		
+		if (installCampaign != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallCampaign], installCampaign);
+		}
+		
+		if (installAdgroup != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallAdgroup], installAdgroup);
+		}
+		
+		if (installAd != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallAd], installAd);
+		}
+		
+		if (installKeyword != null)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.InstallKeyword], installKeyword);
 		}
 		
 		if (parameters.Count == 0)

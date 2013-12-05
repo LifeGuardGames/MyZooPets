@@ -221,9 +221,11 @@ public class GA_Gui : MonoBehaviour
 					target = GA.SettingsGA.TrackTarget.position;
 				
 				if (_popUpError)
-					GA.API.Debugging.SubmitError("Crash Report:"+_topic, _details);
+				{
+					GA.API.Quality.NewEvent("Crash Report:"+_topic, _details, target);
+				}
 				else
-					GA.API.Quality.NewEvent("Bug Report:"+_topic, _details, target.x, target.y, target.z);
+					GA.API.Quality.NewEvent("Bug Report:"+_topic, _details, target);
 				
 				_topic = "";
 				_details = "";

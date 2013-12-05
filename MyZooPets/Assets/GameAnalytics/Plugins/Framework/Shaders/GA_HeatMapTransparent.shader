@@ -56,7 +56,7 @@ Shader "Custom/GA_HeatMapTransparent"
 				v.normal = normalize(_WorldSpaceCameraPos - (float3)v.vertex);
 				float3 up = float3(0,1,0);
 				float3 side = normalize(cross(v.normal, up));
-				float radius = v.color.x/2;
+				float radius = v.color.x;///2;
 				float RangeMax = _RangeMin + _RangeWidth;
 				if(radius >= _RangeMin && radius <= RangeMax )
 				{
@@ -78,22 +78,22 @@ Shader "Custom/GA_HeatMapTransparent"
 				half4 col = half4(0,0,0,0);
 				float radius = IN.normal.x;
 				float RangeMax = _RangeMin + _RangeWidth;
-				if(radius >= _RangeMin && radius <= RangeMax )
-				{
+				//if(radius >= _RangeMin && radius <= RangeMax )
+				//{
 					if (_RangeZero > 0)
 					{
 						if (radius <= _RangeZero)
 						{
 							radius -= _RangeMin;
-							radius /= (RangeMax - _RangeMin);
+							//radius /= (RangeMax - _RangeMin);
 							float newNorm = radius / _RangeZero;
 							col = newNorm * _ColZero + (1.0-newNorm)*_Cold;
 							col.a *= cos(max(r*3.14, 0.0));
 						}
 						else
 						{
-							radius -= _RangeMin;
-							radius /= (RangeMax - _RangeMin);
+							radius /= RangeMax;
+							//radius /= (RangeMax - _RangeMin);
 							float newNorm = _RangeZero / radius;
 							newNorm = newNorm;
 							col = newNorm * _ColZero + (1.0-newNorm)*_Warm;
@@ -107,7 +107,7 @@ Shader "Custom/GA_HeatMapTransparent"
 						col = radius * _Warm + (1.0-radius)*_Cold;
 						col.a *= cos(max(r*3.14, 0.0));
 					}
-				}
+				//}
 				return col;
 			}
 			ENDCG 

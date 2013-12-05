@@ -33,8 +33,6 @@ public class GA_SetupWizard : EditorWindow
 	
 	void OnGUI ()
 	{
-		position = new Rect(position.x, position.y, 420, 340);
-		
 		switch(_tourStep)
 		{
 		case 0:

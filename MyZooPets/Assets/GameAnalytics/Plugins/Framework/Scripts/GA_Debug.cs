@@ -7,6 +7,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public class GA_Debug
 {
 	public bool SubmitErrors;
@@ -16,7 +20,7 @@ public class GA_Debug
 	
 	private int _errorCount = 0;
 	
-	private bool _showLogOnGUI = true;
+	private bool _showLogOnGUI = false;
 	public List<string> Messages;
 	
 	/// <summary>
@@ -44,20 +48,21 @@ public class GA_Debug
 		}
 		
 		//We only submit exceptions and errors
-        if (SubmitErrors && _errorCount < MaxErrorCount && (type == LogType.Exception || type == LogType.Error))
+        if (SubmitErrors && _errorCount < MaxErrorCount && type != LogType.Log)
 		{
 			// Might be worth looking into: http://www.doogal.co.uk/exception.php
 			
 			_errorCount++;
 			
-			bool errorSubmitted = false;
-			
 			string eventID = "Exception";
 			
 			if (SubmitErrorStackTrace)
 			{
-				SubmitError(eventID, logString + " " + stackTrace);
-				errorSubmitted = true;
+				SubmitError(eventID, logString.Replace('"', '\'').Replace('\n', ' ').Replace('\r', ' ') + " " + stackTrace.Replace('"', '\'').Replace('\n', ' ').Replace('\r', ' '), type);
+			}
+			else
+			{
+				SubmitError(eventID, null, type);
 			}
 			
 			if (SubmitErrorSystemInfo)
@@ -68,23 +73,38 @@ public class GA_Debug
 				{
 					GA_Queue.AddItem(spec, GA_Submit.CategoryType.GA_Log, false);
 				}
-				
-				errorSubmitted = true;
-			}
-			
-			if (!errorSubmitted)
-			{
-				SubmitError(eventID, null);
 			}
 		}
     }
 	
-	public void SubmitError(string eventName, string message)
+	public void SubmitError(string eventName, string message, LogType type)
 	{
 		Vector3 target = Vector3.zero;
 		if (GA.SettingsGA.TrackTarget != null)
 			target = GA.SettingsGA.TrackTarget.position;
 		
-		GA.API.Quality.NewErrorEvent(eventName, message, target.x, target.y, target.z);
+		//GA.API.Quality.NewErrorEvent(eventName, message, target.x, target.y, target.z);
+		
+		GA_Error.SeverityType severity = GA_Error.SeverityType.info;
+		switch (type)
+		{
+		case LogType.Assert:
+			severity = GA_Error.SeverityType.info;
+			break;
+		case LogType.Error:
+			severity = GA_Error.SeverityType.error;
+			break;
+		case LogType.Exception:
+			severity = GA_Error.SeverityType.critical;
+			break;
+		case LogType.Log:
+			severity = GA_Error.SeverityType.debug;
+			break;
+		case LogType.Warning:
+			severity = GA_Error.SeverityType.warning;
+			break;
+		}
+		
+		GA.API.Error.NewErrorEvent(severity, message, target.x, target.y, target.z);
 	}
 }

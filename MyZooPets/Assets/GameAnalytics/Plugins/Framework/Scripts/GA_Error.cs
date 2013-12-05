@@ -11,43 +11,30 @@ using System;
 using GA_Compatibility.Collections;
 #endif
 
-public class GA_Quality 
+public class GA_Error 
 {
+	public enum SeverityType { critical, error, warning, info, debug }
+	
 	#region public methods
 	
-	public void NewEvent(string eventName, string message, Vector3 trackPosition)
+	public void NewEvent(SeverityType severity, string message, Vector3 trackPosition)
 	{
-		CreateNewEvent(eventName, message, trackPosition.x, trackPosition.y, trackPosition.z, false);
+		CreateNewEvent(severity, message, trackPosition.x, trackPosition.y, trackPosition.z, false);
 	}
 	
-	public void NewEvent(string eventName, string message, float x, float y, float z)
+	public void NewEvent(SeverityType severity, string message, float x, float y, float z)
 	{
-		CreateNewEvent(eventName, message, x, y, z, false);
+		CreateNewEvent(severity, message, x, y, z, false);
 	}
 	
-	public void NewEvent(string eventName, string message)
+	public void NewEvent(SeverityType severity, string message)
 	{
-		CreateNewEvent(eventName, message, null, null, null, false);
+		CreateNewEvent(severity, message, null, null, null, false);
 	}
 	
-	public void NewEvent(string eventName)
+	public void NewErrorEvent(SeverityType severity, string message, float x, float y, float z)
 	{
-		CreateNewEvent(eventName, null, null, null, null, false);
-	}
-	
-	public void NewEvent(string eventName, Vector3 trackPosition)
-	{
-		CreateNewEvent(eventName, null, trackPosition.x, trackPosition.y, trackPosition.z, false);
-	}
-	
-	public void NewEvent(string eventName, float x, float y, float z)
-	{
-		CreateNewEvent(eventName, null, x, y, z, false);
-	}
-	
-	public void NewErrorEvent(string eventName, string message, float x, float y, float z)
-	{
-		CreateNewEvent(eventName, message, x, y, z, true);
+		CreateNewEvent(severity, message, x, y, z, true);
 	}
 	
 	#endregion
@@ -66,18 +53,14 @@ public class GA_Quality
 	/// <param name="stack">
 	/// If true any identical messages in the queue will be merged/stacked as a single message, to save server load
 	/// </param>
-	private  void CreateNewEvent(string eventName, string message, float? x, float? y, float? z, bool stack)
+	private  void CreateNewEvent(SeverityType severity, string message, float? x, float? y, float? z, bool stack)
 	{
 		Hashtable parameters = new Hashtable()
 		{
-			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.EventID], eventName },
+			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Severity], severity.ToString() },
+			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Message], message },
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Level], GA.SettingsGA.CustomArea.Equals(string.Empty)?Application.loadedLevelName:GA.SettingsGA.CustomArea }
 		};
-		
-		if (message != null && message.Length > 0)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Message], message);
-		}
 		
 		if (x.HasValue)
 		{
@@ -94,7 +77,7 @@ public class GA_Quality
 			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Z], (z*GA.SettingsGA.HeatmapGridSize.z).ToString());
 		}
 		
-		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Log, stack);
+		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Error, stack);
 	}
 	
 	#endregion

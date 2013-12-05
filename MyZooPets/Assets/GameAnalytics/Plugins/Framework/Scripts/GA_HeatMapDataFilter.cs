@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 [RequireComponent(typeof(GA_HeatMapRenderer))]
 [ExecuteInEditMode]
 public class GA_HeatMapDataFilter : GA_HeatMapDataFilterBase
@@ -27,6 +31,7 @@ public class GA_HeatMapDataFilter : GA_HeatMapDataFilterBase
 	public bool RedownloadDataOnPlay;
 	
 	public bool IgnoreDates = true;
+	public bool IgnoreBuilds = true;
 	
 	public bool DownloadingData = false;
 	public bool BuildingHeatmap = false;
@@ -316,10 +321,18 @@ public class GA_HeatMapDataFilter : GA_HeatMapDataFilterBase
 			cancel = true;
 		}
 		
-		if(CurrentBuildIndex>=AvailableBuilds.Count)
+		string build = "";
+		if (!IgnoreBuilds)
 		{
-			GA.LogWarning("GameAnalytics: Warning: Build selected is out of bounds. Not downloading data.");
-			cancel = true;
+			if(CurrentBuildIndex>=AvailableBuilds.Count)
+			{
+				GA.LogWarning("GameAnalytics: Warning: Build selected is out of bounds. Not downloading data.");
+				cancel = true;
+			}
+			else
+			{
+				build = AvailableBuilds[CurrentBuildIndex];
+			}
 		}
 		
 		if (cancel)
@@ -330,7 +343,7 @@ public class GA_HeatMapDataFilter : GA_HeatMapDataFilterBase
 		
 		
 #if UNITY_EDITOR || !UNITY_FLASH
-		GA.API.Request.RequestHeatmapData(events, AvailableAreas[CurrentAreaIndex],IgnoreDates?null:StartDateTime,IgnoreDates?null:EndDateTime, OnSuccessDownload, OnErrorDownload);
+		GA.API.Request.RequestHeatmapData(events, AvailableAreas[CurrentAreaIndex], build,IgnoreDates?null:StartDateTime,IgnoreDates?null:EndDateTime, OnSuccessDownload, OnErrorDownload);
 #endif
 	}
 	

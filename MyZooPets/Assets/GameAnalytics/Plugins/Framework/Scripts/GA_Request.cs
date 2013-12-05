@@ -12,6 +12,10 @@ using System.Text;
 using System;
 //using LitJson;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public class GA_Request
 {
 	/// <summary>
@@ -55,24 +59,39 @@ public class GA_Request
 		
 		url += "/?" + requestInfo;
 		
+		WWW www = null;
+		
+		#if !UNITY_WP8 && !UNITY_METRO
+		
 		//Set the authorization header to contain an MD5 hash of the JSON array string + the private key
 		Hashtable headers = new Hashtable();
 		headers.Add("Authorization", GA.API.Submit.CreateMD5Hash(requestInfo + GA.SettingsGA.ApiKey));
 		
 		//Try to send the data
-		WWW www = new WWW(url, new byte[] { 0 }, headers);
-
+		www = new WWW(url, new byte[] { 0 }, headers);
+		
+		#else
+		
+		//Set the authorization header to contain an MD5 hash of the JSON array string + the private key
+		Dictionary<string, string> headers = new Dictionary<string, string>();
+		headers.Add("Authorization", GA.API.Submit.CreateMD5Hash(requestInfo + GA.SettingsGA.ApiKey));
+		
+		//Try to send the data
+		www = new WWW(url, new byte[] { 0 }, headers);
+		
+		#endif
+		
 		GA.RunCoroutine(Request(www, RequestType.GA_GetHeatmapGameInfo, successEvent, errorEvent),()=>www.isDone);
 		
 		return www;
 	}
 	
-	public WWW RequestHeatmapData(List<string> events, string area, SubmitSuccessHandler successEvent, SubmitErrorHandler errorEvent)
+	public WWW RequestHeatmapData(List<string> events, string area, string build, SubmitSuccessHandler successEvent, SubmitErrorHandler errorEvent)
 	{
-		return RequestHeatmapData(events, area, null, null, successEvent, errorEvent);
+		return RequestHeatmapData(events, area, build, null, null, successEvent, errorEvent);
 	}
 	
-	public WWW RequestHeatmapData(List<string> events, string area, DateTime? startDate, DateTime? endDate, SubmitSuccessHandler successEvent, SubmitErrorHandler errorEvent)
+	public WWW RequestHeatmapData(List<string> events, string area, string build, DateTime? startDate, DateTime? endDate, SubmitSuccessHandler successEvent, SubmitErrorHandler errorEvent)
 	{
 		string game_key = GA.SettingsGA.GameKey;
 		string event_ids = "";
@@ -86,6 +105,9 @@ public class GA_Request
 		}
 		
 		string requestInfo = "game_key=" + game_key + "&event_ids=" + event_ids + "&area=" + area;
+		
+		if (!build.Equals(""))
+			requestInfo += "&build=" + build;
 		
 		requestInfo = requestInfo.Replace(" ", "%20");
 
@@ -102,13 +124,28 @@ public class GA_Request
 		
 		url += "/?" + requestInfo;
 		
+		WWW www = null;
+		
+		#if !UNITY_WP8 && !UNITY_METRO
+		
 		//Set the authorization header to contain an MD5 hash of the JSON array string + the private key
 		Hashtable headers = new Hashtable();
 		headers.Add("Authorization", GA.API.Submit.CreateMD5Hash(requestInfo + GA.SettingsGA.ApiKey));
 		
 		//Try to send the data
-		WWW www = new WWW(url, new byte[] { 0 }, headers);
+		www = new WWW(url, new byte[] { 0 }, headers);
+		
+		#else
+		
+		//Set the authorization header to contain an MD5 hash of the JSON array string + the private key
+		Dictionary<string, string> headers = new Dictionary<string, string>();
+		headers.Add("Authorization", GA.API.Submit.CreateMD5Hash(requestInfo + GA.SettingsGA.ApiKey));
+		
+		//Try to send the data
+		www = new WWW(url, new byte[] { 0 }, headers);
 
+		#endif
+		
 		GA.RunCoroutine(Request(www, RequestType.GA_GetHeatmapData, successEvent, errorEvent),()=>www.isDone);
 				
 		return www;
@@ -139,7 +176,7 @@ public class GA_Request
 			//Get the JSON object from the response
 			string text = www.text;
 			text = text.Replace("null","0");
-			Hashtable returnParam = (Hashtable)MiniJSON.JsonDecode(text);
+			Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(text);
 			
 			if (returnParam != null)
 			{

@@ -13,7 +13,7 @@ public class GA_HeatMapRenderer : MonoBehaviour
 	//Points are just vertice points colored from blue to red based on density
 	//Billboards are triangles that are expanded from shader and colored based on density 
 	
-	public enum RenderModel {Transparent, TransparentOverlay,Solid, SolidOverlay}
+	public enum RenderModel { Transparent, TransparentOverlay } //, Solid, SolidOverlay }
 	public RenderModel CurrentRenderModel = RenderModel.TransparentOverlay;
 	
 	public Color MinColor = Color.yellow;
@@ -57,6 +57,11 @@ public class GA_HeatMapRenderer : MonoBehaviour
 		RenderModelChanged ();
 		 
 		//Create meshes
+		
+		if(datafilter == null)
+		{
+			datafilter = GetComponent<GA_HeatMapDataFilterBase>();
+		}
 		
 		if(datafilter != null)
 		{
@@ -159,12 +164,12 @@ public class GA_HeatMapRenderer : MonoBehaviour
 				}
 				switch(CurrentRenderModel)
 				{
-					case RenderModel.Solid:
+					/*case RenderModel.Solid:
 						m.sharedMaterial.shader = Shader.Find("Custom/GA_HeatMapSolid");
 						break;
 					case RenderModel.SolidOverlay:
 						m.sharedMaterial.shader = Shader.Find("Custom/GA_HeatMapSolidOverlay");
-						break;
+						break;*/
 					case RenderModel.TransparentOverlay:
 						m.sharedMaterial.shader = Shader.Find("Custom/GA_HeatMapTransparentOverlay");
 						break;

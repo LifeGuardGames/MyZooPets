@@ -161,14 +161,18 @@ public class GA_HeatMapRendererInspector : Editor
 						else
 						{
 							float zeroNorm = (0 - render.Histogram.RealDataMin) / (render.Histogram.RealDataMax - render.Histogram.RealDataMin);
-							if (rangePct <= zeroNorm)
+							if (pct >= zeroNorm * 0.9f && pct <= zeroNorm * 1.1f)
 							{
-								float newNorm = rangePct / zeroNorm;
+								color = Color.white;
+							}
+							else if (pct < zeroNorm)
+							{
+								float newNorm = pct / zeroNorm * (1 - render.RangeMin / zeroNorm);
 								color = Color.Lerp(render.MinColor,Color.white,newNorm);
 							}
 							else
 							{
-								float newNorm = zeroNorm / rangePct;
+								float newNorm = zeroNorm / pct * render.RangeMax;
 								color = Color.Lerp(Color.white,render.MaxColor,1 - newNorm);
 							}
 						}
@@ -181,8 +185,8 @@ public class GA_HeatMapRendererInspector : Editor
 				}
 			}
 		}
-			
-			
+		
+		
 		/// 0% label
 		Vector2 label = new Vector2(lastrect.xMin,lastrect.yMax+10);
 		GUIUtility.RotateAroundPivot(50f,label);

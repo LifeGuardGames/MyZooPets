@@ -32,10 +32,6 @@ public enum DosageRecord{
     Null, //before pet is hatched 
 }
 
-public enum InhalerType{
-    Rescue,
-}
-
 public enum AsthmaStage{
     OK,
     Sick,

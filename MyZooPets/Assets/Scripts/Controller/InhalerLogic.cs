@@ -9,7 +9,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
     public const int RESCUE_NUM_STEPS = 8;
 
-    private InhalerType currentInhalerType; //either Advair or Rescue inhaler
     private int currentStep = 1; //current step that user is on
     private bool canPlayGame; //true: play game, false: exit game
 

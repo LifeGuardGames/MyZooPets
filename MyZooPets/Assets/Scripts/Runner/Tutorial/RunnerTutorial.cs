@@ -40,12 +40,15 @@ public class RunnerTutorial : MinigameTutorial {
         switch ( nStep ) {
             case 0:
                 PlayerController.OnJump += TutorialJump;
+                ShowPopup( strResourceKey, vPos, false );            
                 break;
             case 1:
                 PlayerController.OnDrop += TutorialDrop;
+                ShowPopup( strResourceKey, vPos, false );            
                 break;
             case 2:
                 strResourceKey = "TutorialMessageEnd";
+                ShowMessage( strResourceKey, vPos);            
                 break;
             default:
                 Debug.Log("Runner tutorial has an unhandled step: " + nStep );
@@ -53,7 +56,6 @@ public class RunnerTutorial : MinigameTutorial {
         }       
             
         // show the proper tutorial message
-        ShowPopup( strResourceKey, vPos, false );            
     }
 
     public void TutorialJump(object sender, EventArgs args){

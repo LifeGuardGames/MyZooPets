@@ -51,7 +51,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public void ToggleSpotLight(bool isOn, GameObject selectedGO = null){
         if(isOn){
             spotLight.SetActive(true);
-            spotLight.transform.position = selectedGO.transform.position;
+            Vector3 selectedPos = selectedGO.transform.position;
+            spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotlight.transform.position.z);
         }
         else{
             spotLight.SetActive(false);

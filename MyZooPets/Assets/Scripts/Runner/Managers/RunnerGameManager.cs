@@ -85,7 +85,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     }
 
     //---------------------------------------------------
-    // ResumeGame()
+    // UnPauseGame()
     // wrapper class to ResumeGame from parent class
     // yield one frame before calling the actual resume
     // so the click on the resume button will not be picked up
@@ -96,7 +96,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     }
 
     private IEnumerator ResumeGameHelper(){
-        yield return 0;
+        yield return 0; 
         base.ResumeGame();  
     }
 

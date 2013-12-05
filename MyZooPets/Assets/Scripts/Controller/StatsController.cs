@@ -15,7 +15,9 @@ using System.Collections.Generic;
 /// </summary>
 
 public class StatsController : Singleton<StatsController> {
-	
+	public static EventHandler<EventArgs> OnHappyToSad;
+	public static EventHandler<EventArgs> OnSadToHappy;
+
 	public GameObject hudAnimatorObject;
 	public HUDAnimator hudAnimator;
 	
@@ -105,10 +107,18 @@ public class StatsController : Singleton<StatsController> {
 		if ( eOld == PetMoods.Happy && eNew == PetMoods.Sad ) {
 			// pet is going from happy to sad
 			scriptPetAnim.Transition( "Transition_HappySad" );
+
+			// fire event to notify listeners
+			if(OnHappyToSad != null)
+				OnHappyToSad(this, EventArgs.Empty);
 		}
 		else if ( eOld == PetMoods.Sad && eNew == PetMoods.Happy ) {
 			// pet is going from sad to happy	
 			scriptPetAnim.Transition( "Transition_SadHappy" );
+
+			// fire event
+			if(OnSadToHappy != null)
+				OnSadToHappy(this, EventArgs.Empty);
 		}
 	}
 	

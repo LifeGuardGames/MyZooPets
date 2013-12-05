@@ -34,7 +34,6 @@ public class PanToMoveCamera : MonoBehaviour {
     public int currentPartition = 0;
     public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
     public float panDistanceToChange = 0.5f;    // distance to pan before the camera will snap to the next partition
-    public HUDAnimator scriptHudAnim; //link to hud animator
 
     private Vector2 startTouchPos; //Position of touch when finger touches the screen
     private Vector2 currentTouchPos; //Position of touch right now
@@ -203,7 +202,7 @@ public class PanToMoveCamera : MonoBehaviour {
 			return false;
 			
 		// also check to make sure that the HUD animator is not animating
-		if ( scriptHudAnim && scriptHudAnim.AreSpawnedSprites() )
+		if ( HUDUIManager.Instance && HUDUIManager.Instance.hudAnimator && HUDUIManager.Instance.hudAnimator.AreSpawnedSprites() )
 			return false;
 		
 		// if the user is in deco mode and the room they are moving to has an active gate, illegal move

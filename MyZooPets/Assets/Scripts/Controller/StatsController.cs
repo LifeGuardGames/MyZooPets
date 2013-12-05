@@ -15,9 +15,12 @@ using System.Collections.Generic;
 /// </summary>
 
 public class StatsController : Singleton<StatsController> {
+	//----------- Events ------------------------------
+	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
+	//-------------------------------------------------	
 	
-	public GameObject hudAnimatorObject;
-	public HUDAnimator hudAnimator;
+	private GameObject hudAnimatorObject;
+	private HUDAnimator hudAnimator;
 	
 	// the pet animator
 	public PetAnimator scriptPetAnim;
@@ -26,6 +29,9 @@ public class StatsController : Singleton<StatsController> {
 	private bool bCheckPet;
 	
 	void Start(){
+		hudAnimatorObject = GameObject.Find( "HUDPanel" );
+		hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
+		
 		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
 			D.Assert(hudAnimator != null, "No HUDAnimator script attached");
@@ -152,5 +158,17 @@ public class StatsController : Singleton<StatsController> {
 		string strLocalizedStat = Localization.Localize( strKey );
 		
 		return strLocalizedStat;
+	}
+	
+	//---------------------------------------------------
+	// ChangeFireBreaths()
+	// Changes the # of breaths the pet has.
+	//---------------------------------------------------		
+	public void ChangeFireBreaths( int nAmount ) {
+		DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( nAmount );
+		
+		// send out an event that fire breaths have changed
+		if ( OnBreathsChanged != null )
+			OnBreathsChanged( this, EventArgs.Empty );
 	}
 }

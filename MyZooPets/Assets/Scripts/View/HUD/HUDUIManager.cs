@@ -2,10 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class HUDUIManager : Singleton<HUDUIManager> {
-
-	public GameObject HUDPanel;
-
-    private HUDAnimator hudAnimator;
+    public HUDAnimator hudAnimator;
     private float points;
     private float mood;
     private float health;
@@ -26,10 +23,20 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 	public UILabel moodLabel;
 
 	public UILabel starLabel;
+	
+	// Icon pulsing
+	public AnimationControl animHealth;
+	public AnimationControl animMood;
+	public AnimationControl animMoney;
+	public AnimationControl animXP;
+	public AnimationControl animFire;	
+	
+	// Parent for tweening
+	public GameObject tweenParent;	
     
 	// Use this for initialization
 	void Start () {
-	  hudAnimator = GetComponent<HUDAnimator>();
+	  	hudAnimator = GetComponent<HUDAnimator>();
 	}
 	
 	// Update is called once per frame
@@ -59,10 +66,10 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 	}
 
 	public void ShowPanel(){
-		HUDPanel.GetComponent<TweenToggleDemux>().Show();
+		gameObject.GetComponent<TweenToggleDemux>().Show();
 	}
 
 	public void HidePanel(){
-		HUDPanel.GetComponent<TweenToggleDemux>().Hide();
+		gameObject.GetComponent<TweenToggleDemux>().Hide();
 	}
 }

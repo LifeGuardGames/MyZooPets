@@ -27,7 +27,6 @@ public abstract class MinigamePopup_GameOver : MinigamePopup {
 	public PositionTweenToggle tweenButtons;
 	private bool bCheckToShowButtons = false;
 	
-	public HUDAnimator hudAnimator;
 	public int nFreebie; // used for testing purposes
 	
 	//---------------------------------------------------
@@ -35,8 +34,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup {
 	//---------------------------------------------------	
 	protected override void _OnUpdate() {
 		if ( bCheckToShowButtons ) {
-			if ( hudAnimator.GetDisplayValue( HUDElementType.Points ) == DataManager.Instance.GameData.Stats.Points &&
-					hudAnimator.GetDisplayValue( HUDElementType.Stars ) == DataManager.Instance.GameData.Stats.Stars ) {
+			if ( HUDUIManager.Instance.hudAnimator.GetDisplayValue( HUDElementType.Points ) == DataManager.Instance.GameData.Stats.Points &&
+					HUDUIManager.Instance.hudAnimator.GetDisplayValue( HUDElementType.Stars ) == DataManager.Instance.GameData.Stats.Stars ) {
 				
 				bCheckToShowButtons = false;
 				

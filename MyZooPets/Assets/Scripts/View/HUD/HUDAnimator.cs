@@ -50,16 +50,18 @@ public class HUDAnimator : MonoBehaviour {
 	// private HUD hud;
 
 	// Icon pulsing
-	public GameObject healthIconAnim;
-	public GameObject moodIconAnim;
-	public GameObject starIconAnim;
+	private AnimationControl healthIconAnim;
+	private AnimationControl moodIconAnim;
+	private AnimationControl starIconAnim;
+	private AnimationControl xpIconAnim;
+	private AnimationControl animFire;
 
 	// Tweening
 	public UIAtlas commonAtlas;
 	private GameObject toDestroy;
 
 	// Parent for tweening
-	public GameObject tweenParent;
+	private GameObject tweenParent;
 	
 	// sounds for animations
 	public float fSoundFadeTime;
@@ -99,10 +101,22 @@ public class HUDAnimator : MonoBehaviour {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	void Start(){		
-		// store all the relevant elements in hashes...kind of annoying
+	void Start(){
+		healthIconAnim = HUDUIManager.Instance.animHealth;
+		moodIconAnim = HUDUIManager.Instance.animMood;
+		starIconAnim = HUDUIManager.Instance.animMoney;
+		xpIconAnim = HUDUIManager.Instance.animXP;
+		animFire = HUDUIManager.Instance.animFire;
+		tweenParent = HUDUIManager.Instance.tweenParent;		
 		
-		hashAnimControls[HUDElementType.Points] = null;
+		// turn on/off the fire icon depending on if the pet can currently breath fire
+		UpdateBreathUI();
+		
+		// also sign up for an event for when the breaths change
+		StatsController.Instance.OnBreathsChanged += OnBreathsChanged;
+		
+		// store all the relevant elements in hashes...kind of annoying
+		hashAnimControls[HUDElementType.Points] = xpIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Stars] = starIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Mood] = moodIconAnim.GetComponent<AnimationControl>();		
@@ -119,6 +133,22 @@ public class HUDAnimator : MonoBehaviour {
 
 	void FixedUpdate(){
 		LevelUpEventCheck(); // Check if progress bar reach level max
+	}
+	
+	//---------------------------------------------------
+	// UpdateBreathUI()
+	// Controls the fire breath animations on the HUD
+	// based on whether or not the pet can breath fire.
+	//---------------------------------------------------		
+	private void UpdateBreathUI() {
+		bool bFireOn = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+		NGUITools.SetActive( animFire.gameObject, bFireOn );
+		if ( bFireOn )
+			animFire.Play();	
+	}
+	
+	private void OnBreathsChanged( object sender, EventArgs args ) {
+		UpdateBreathUI();	
 	}
 	
 	//---------------------------------------------------

@@ -173,7 +173,10 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// process any callbacks for when the pet starts to breath fire
 		if ( OnBreathStarted != null )
-			OnBreathStarted( this, EventArgs.Empty );			
+			OnBreathStarted( this, EventArgs.Empty );
+		
+		// the pet is actually breathing fire, so play the fire breathing sound
+		LgAudioSource audioFire = AudioManager.Instance.PlayClip( "petFire" );
 		
 		// pause it again once the pet begins to exhale
 		float fUntilExhale = Constants.GetConstant<float>( "UntilExhale" );
@@ -197,6 +200,10 @@ public class PetAnimator : LgCharacterAnimator {
 		// stop the game object of the fire
 		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
 		script.Stop();		
+		
+		// fire breathing portion of the animation is over, so fade out the sound
+		float fFade = Constants.GetConstant<float>( "FireSoundFadeTime" );
+		StartCoroutine( audioFire.FadeOut( fFade ) );
 	}
 	
 	//---------------------------------------------------

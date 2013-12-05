@@ -47,6 +47,7 @@ namespace CUDLR {
     private static HttpListener listener = new HttpListener();
     private static List<RouteAttribute> registeredRoutes;
     private static Queue<RequestContext> mainRequests = new Queue<RequestContext>();
+    private static bool isCreated = false;
 
     // List of supported files
     // FIXME add an api to register new types
@@ -64,9 +65,17 @@ namespace CUDLR {
     };
 
     public virtual void Awake() {
+      //Make Object persistent
+      if(isCreated){
+          //If There is a duplicate in the scene. delete the object and jump Awake
+          Destroy(gameObject);
+          return;
+      }
       if(persistant){
         DontDestroyOnLoad(this);
       }
+      isCreated = true;
+
       
       mainThread = Thread.CurrentThread;
       fileRoot = Path.Combine(Application.streamingAssetsPath, "CUDLR");

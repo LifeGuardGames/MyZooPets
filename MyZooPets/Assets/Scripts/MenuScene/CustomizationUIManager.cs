@@ -88,6 +88,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		if(showMovie){
         	Invoke("ShowIntroMovie", 1);
 		}
+        //since we turn on spotlight and turn off animation for customization UI
+        //need to reverse them 
+        else{
+            SelectionUIManager.Instance.ToggleEggAnimation(true);
+            SelectionUIManager.Instance.ToggleSpotLight(false);
+        }
     }
 	
 	private void ShowIntroMovie() {

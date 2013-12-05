@@ -38,8 +38,8 @@ public class WellapadData {
 		
 		/*DateMissionsCreated = DateTime.Now;
 		Dictionary<string, bool> test = new Dictionary<string, bool>();
-		test["FightMonster"] = false;
-		CurrentTasks["Side"] = new Mission("Side", test);
+		test["DailyInhaler"] = true;
+		CurrentTasks["Critical"] = new Mission("Critical", test, RewardStatuses.Unclaimed);
 		*/
 		
     }	

@@ -13,6 +13,12 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
     public GameObject cleanTriggerParticleDrop;
 	
 	public GameObject petHitLocation;	// Used for triggers to attach as end destination
+	
+	// turn this on so that triggers spawn no matter what...used for testing
+	public bool bTesting = false;
+	public bool IsTesting() {
+		return bTesting;	
+	}
 
     void Start(){
 		// place the triggers that were created in DegradationLogic
@@ -25,7 +31,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	private void PlaceTriggers() {
 		// if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_TRIGGERS );
-		if ( !bTriggers )
+		if ( !bTriggers && !IsTesting() )
 			return;
 		
 		// loop through and place all defined triggers

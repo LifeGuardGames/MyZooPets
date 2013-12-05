@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 //---------------------------------------------------
 // PetInfoData 
 // Save data for PetInfo. Mutable data 
 //---------------------------------------------------
-public class PetInfoData{
+public class PetInfoData{	
     public string PetID {get; set;}
     public string PetName {get; set;}
     public string PetColor {get; set;}

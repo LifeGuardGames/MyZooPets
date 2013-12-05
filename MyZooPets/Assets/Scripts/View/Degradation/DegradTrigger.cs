@@ -40,7 +40,7 @@ public class DegradTrigger : MonoBehaviour {
 		
 		// if the trigger tutorial has been played, activate the trigger
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_TRIGGERS );
-		if ( bTriggers )
+		if ( bTriggers || DegradationUIManager.Instance.IsTesting() )
 			ActivateParticles();		
 	}
 

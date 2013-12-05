@@ -33,6 +33,13 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	public GameObject goChoosePanel;
 	public ChooseDecorationUI scriptChooseUI;
 	
+	// "saved" deco node for when the user is in the choose menu and opens the shop
+	private DecorationNode nodeSaved;
+	public bool IsNodeSaved() {
+		bool bSaved = nodeSaved != null;
+		return bSaved;
+	}
+	
 	void Start() {
 		// cache the tween on the edit button for easier use
 		tweenEdit = goEdit.GetComponent<PositionTweenToggle>();
@@ -85,7 +92,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// show the pet again
 		GameObject goPet = PetMovement.Instance.GetPetGameObject();
-		goPet.SetActive( true );		
+		goPet.SetActive( true );	
+		
+		// clear any saved node
+		nodeSaved = null;
 	}
 	
 	public void ShowNavButton(){
@@ -97,6 +107,45 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	
 	public void HideNavButton(){
 		tweenEdit.Hide();
+	}
+	
+	//---------------------------------------------------
+	// OpenShop()
+	// Opens the store leading to decorations for the
+	// current category the playing is trying to place.
+	// This is a little messy/complicated, because we are
+	// basically faking the deco UI closing and the
+	// shop UI opening.  It's not legit because all the
+	// tweening and demux make it diffcult to do legitly.
+	//---------------------------------------------------	
+	private void OpenShop() {
+		// save the node the player was trying to use
+		nodeSaved = scriptChooseUI.GetNode();
+		
+		// close this UI and show the edit decos button
+		CloseChooseMenu_( false );
+		tweenEdit.Show();
+		
+		// open the shop
+		StoreUIManager.Instance.OpenToSubCategory( "Decorations" );
+		
+		// open the specific sub category in the shop
+		string strCat = nodeSaved.GetDecoType().ToString();
+		StoreUIManager.Instance.CreateSubCategoryItemsTab( strCat, StoreUIManager.Instance.colors[(int)nodeSaved.GetDecoType()]);
+	}
+	
+	//---------------------------------------------------
+	// ReopenChooseMenu()
+	// This function is called from the store UI when the
+	// store closes and the user had opened the store
+	// from the deco system.
+	//---------------------------------------------------	
+	public void ReopenChooseMenu() {
+		// hide the edit button
+		tweenEdit.Hide();
+		
+		// update the menu
+		UpdateChooseMenu( nodeSaved );	
 	}
 	
 	//---------------------------------------------------
@@ -128,15 +177,23 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------
 	// CloseChooseMenu()
 	// Closes the choose decoration menu -- note that
-	// this does not exit deco mode.
-	//---------------------------------------------------	
+	// this does not exit deco mode.  The _ version of
+	// this function is because "SendMessage" does not
+	// like default parameters...
+	//---------------------------------------------------
 	public void CloseChooseMenu() {
+		CloseChooseMenu_();	
+	}
+	
+	public void CloseChooseMenu_( bool bShowExit = true ) {
 		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
 		if (!tween.IsShowing)
 			Debug.Log("Something trying to close an already closed choose menu for deco edit.");
 		else{
 			tween.Hide();
-			tweenExit.Show();
+			
+			if ( bShowExit )
+				tweenExit.Show();
 		}
 		// we possibly want to Resources.UnloadUnusedAssets() here because the menu is instantiated
 	}

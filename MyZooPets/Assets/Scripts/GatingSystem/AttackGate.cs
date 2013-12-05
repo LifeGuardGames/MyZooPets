@@ -70,7 +70,7 @@ public class AttackGate : MonoBehaviour {
 		gateTarget.DamageGate( nDamage );
 		
 		// and decrement the user's fire breaths
-		DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( -1 );
+		StatsController.Instance.ChangeFireBreaths( -1 );
 		
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted( "FightMonster" );

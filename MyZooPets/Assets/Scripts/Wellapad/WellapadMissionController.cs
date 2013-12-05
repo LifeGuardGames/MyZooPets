@@ -23,10 +23,10 @@ public class Mission{
 
     public Mission(){}
 
-    public Mission(string id, Dictionary<string, bool> tasks){
+    public Mission(string id, Dictionary<string, bool> tasks, RewardStatuses eReward = RewardStatuses.Unearned ){
         ID = id;
 		Tasks = tasks;
-		RewardStatus = RewardStatuses.Unearned;
+		RewardStatus = eReward;
     }
 }
 
@@ -91,7 +91,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			// one final check just to be safe
 			if ( DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus == RewardStatuses.Unclaimed ) {
 				// for now the only reward is breathing fire
-				DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( 1 );
+				StatsController.Instance.ChangeFireBreaths( 1 );
 				
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 				

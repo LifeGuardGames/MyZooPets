@@ -52,7 +52,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         if(isOn){
             spotLight.SetActive(true);
             Vector3 selectedPos = selectedGO.transform.position;
-            spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotlight.transform.position.z);
+            spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotLight.transform.position.z);
         }
         else{
             spotLight.SetActive(false);

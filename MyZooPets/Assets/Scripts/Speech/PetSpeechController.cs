@@ -3,11 +3,15 @@ using System.Collections;
 
 public class PetSpeechController : SpeechController<PetSpeechController>{
     // Message options keys
-    // messageText:
-    // imageTextureName: (use the sprite name in the atlas)
+    // MessageText:
+    // ImageTextureName: (use the sprite name in the atlas)
+    // ImageClicktarget: (use this if image is clickable. target of the image click)
+    // ImageClickFunctionName: (the function name that the image click should call)
     public enum Keys{
         MessageText,
         ImageTextureName,
+        ImageClickTarget,
+        ImageClickFunctionName
     } 
 
     private GameObject petSpeechWithTextPrefab;
@@ -29,7 +33,18 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 
             currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImageAndTextPrefab);
             currentMessage.transform.Find("Label_Message").GetComponent<UILabel>().text = (string) message[Keys.MessageText];
-            currentMessage.transform.Find("Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
+            currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
+
+            //also check if the image should be make clickable. 
+            if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
+                GameObject imageGO = currentMessage.transform.Find("Image").gameObject;
+                LgButtonMessage buttonMessage = imageGO.AddComponent<LgButtonMessage>();
+
+                buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
+                buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
+                imageGO.AddComponent<BoxCollider>();
+            }
+
         }
         //Use SpeechWithText prefab
         else if(message.ContainsKey(Keys.MessageText)){
@@ -67,6 +82,14 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
             if(GUI.Button(new Rect(80, 20, 20, 20), "3")){
                 Hashtable msgOption = new Hashtable();
                 msgOption.Add(Keys.MessageText, "fit as many words in this text box as possible. let's go");
+                Talk(msgOption);
+            }
+            if(GUI.Button(new Rect(110, 20, 20, 20), "4")){
+                Hashtable msgOption = new Hashtable();
+                msgOption.Add(Keys.MessageText, "Give me food!");
+                msgOption.Add(Keys.ImageTextureName, "iconStore");
+                msgOption.Add(Keys.ImageClickTarget, this.gameObject);
+                msgOption.Add(Keys.ImageClickFunctionName, "");
                 Talk(msgOption);
             }
         }

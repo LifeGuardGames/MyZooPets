@@ -247,3 +247,8 @@ public enum TimeFrames {
 	Morning,
 	Evening
 }
+
+public enum PetSpeechTransitions{
+    HappySad,
+    SadHappy,
+}

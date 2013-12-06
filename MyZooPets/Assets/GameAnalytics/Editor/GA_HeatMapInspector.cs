@@ -47,17 +47,22 @@ public class GA_HeatMapInspector : Editor
 		
 		//Version
 		
-		/* Removed until implemented on backend
-		 * 
-		 * GUILayout.BeginHorizontal();
+		GUILayout.BeginHorizontal();
+		EditorGUILayout.PrefixLabel("Select for all builds:");
+		heatmap.IgnoreBuilds = EditorGUILayout.Toggle(heatmap.IgnoreBuilds);
+		GUILayout.EndHorizontal();
+		
+		GUILayout.BeginHorizontal();
 		EditorGUILayout.PrefixLabel("Build:");
 		
-		heatmap.CurrentBuildIndex = EditorGUILayout.Popup(heatmap.CurrentBuildIndex, heatmap.AvailableBuilds.ToArray());
+		if (heatmap.IgnoreBuilds)
+			EditorGUILayout.Popup(0, new string[] { "All" });
+		else
+			heatmap.CurrentBuildIndex = EditorGUILayout.Popup(heatmap.CurrentBuildIndex, heatmap.AvailableBuilds.ToArray());
 
 		GUILayout.EndHorizontal();
 		
-		
-		EditorGUILayout.Space();*/
+		EditorGUILayout.Space();
 		
 		//Area
 		

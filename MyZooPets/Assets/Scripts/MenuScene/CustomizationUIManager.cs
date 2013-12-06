@@ -31,7 +31,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------	
 	protected override void _OpenUI(){
-        HideTitle();
+        //HideTitle();
         ShowChooseGUI();	
 	}
 	

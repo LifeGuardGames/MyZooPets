@@ -21,16 +21,18 @@ public class GA_Inspector : Editor
 	private GUIContent _heatmapSizeLabel		= new GUIContent("Heatmap Grid Size", "The size in Unity units of each heatmap grid space. Data visualized as a heatmap must use the same grid size as was used when the data was collected, otherwise the visualization will be wrong.");
 	private GUIContent _build					= new GUIContent("Build", "The current version of the game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website.");
 	private GUIContent _debugMode				= new GUIContent("Debug Mode", "Show additional debug messages from GA in the unity editor console.");
+	private GUIContent _sendExampleToMyGame		= new GUIContent("Get Example Game Data", "If enabled data collected while playing the example tutorial game will be sent to your game (using your game key and secret key). Otherwise data will be sent to a premade GA test game, to prevent it from polluting your data.");
 	private GUIContent _runInEditor				= new GUIContent("Run In Editor Play Mode", "Submit data to the GameAnalytics server while playing your game in the Unity editor.");
 	private GUIContent _customUserID			= new GUIContent("Custom User ID", "If enabled no data will be submitted until a custom user ID is provided. This is useful if you have your own log-in system, which ensures you have a unique user ID.");
 	private GUIContent _interval				= new GUIContent("Data Submit Interval", "This option determines how often (in seconds) data is sent to GameAnalytics.");
 	private GUIContent _allowRoaming			= new GUIContent("Submit While Roaming", "If enabled and using a mobile device (iOS or Android), data will be submitted to the GameAnalytics servers while the mobile device is roaming (internet connection via carrier data network).");
-	private GUIContent _archiveData				= new GUIContent("Archive Data", "If enabled data will be archived when an internet connection is not available. When an internet connection is established again, any archived data will be sent.");
+	private GUIContent _archiveData				= new GUIContent("Archive Data", "If enabled data will be archived when an internet connection is not available. When an internet connection is established again, any archived data will be sent. Not supported on: Webplayer, Google Native Client, Flash, Windows Store Apps.");
 	private GUIContent _archiveMaxSize			= new GUIContent("Size<", "Indicates the maximum disk space used for archiving data in bytes.");
 	private GUIContent _newSessionOnResume		= new GUIContent("New Session On Resume", "If enabled and using a mobile device (iOS or Android), a new play session ID will be generated whenever the game is resumed from background.");
 	private GUIContent _basic					= new GUIContent("Basic", "This tab shows general options which are relevant for a wide variety of messages sent to GameAnalytics.");
 	private GUIContent _debug					= new GUIContent("Debug", "This tab shows options which determine how the GameAnalytics wrapper behaves in the Unity3D editor.");
 	private GUIContent _preferences				= new GUIContent("Advanced", "This tab shows advanced and misc. options for the GameAnalytics wrapper.");
+	private GUIContent _autoSubmitUserInfo		= new GUIContent("Auto Submit User Info", "If enabled information about platform, device, os, and os version is automatically submitted at the start of each session.");
 	
 	void OnEnable()
 	{
@@ -39,6 +41,10 @@ public class GA_Inspector : Editor
 		if(ga.Logo == null)
 		{
 			ga.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/GameAnalytics/Plugins/Examples/gaLogo.png", typeof(Texture2D));
+			
+			if (ga.Logo == null)
+				ga.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
+			
 			//http://www.base64-image.de
 			/*String d = "";
 			d += "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAA";
@@ -120,7 +126,7 @@ public class GA_Inspector : Editor
 		}
 		if (GUILayout.Button(_checkForUpdates, GUILayout.MaxWidth(65)))
 		{
-			Application.OpenURL("http://easy.gameanalytics.com/DownloadSetup"); //http://u3d.as/content/game-analytics/game-analytics-unity-package
+			Application.OpenURL("http://easy.gameanalytics.com/DownloadSetup");
 		}
 		
 		GUILayout.EndHorizontal();
@@ -216,6 +222,12 @@ public class GA_Inspector : Editor
 		    GUILayout.Label(_runInEditor, GUILayout.Width(150));
 		    ga.RunInEditorPlayMode = EditorGUILayout.Toggle("", ga.RunInEditorPlayMode);
 			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+		    GUILayout.Label("", GUILayout.Width(7));
+		    GUILayout.Label(_sendExampleToMyGame, GUILayout.Width(150));
+		    ga.SendExampleGameDataToMyGame = EditorGUILayout.Toggle("", ga.SendExampleGameDataToMyGame);
+			GUILayout.EndHorizontal();
 		}
 		
 		if(ga.CurrentInspectorState == GA_Settings.InspectorStates.Pref)
@@ -234,7 +246,11 @@ public class GA_Inspector : Editor
 		    GUILayout.Label("", GUILayout.Width(7));
 		    GUILayout.Label(_heatmapSizeLabel, GUILayout.Width(150));
 			GUILayout.EndHorizontal();
+			
+			#if UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0
 			GUILayout.Space(-15);
+			#endif
+			
 			ga.HeatmapGridSize = EditorGUILayout.Vector3Field("", ga.HeatmapGridSize);
 			if (ga.HeatmapGridSize != Vector3.one)
 			{
@@ -290,6 +306,12 @@ public class GA_Inspector : Editor
 		    GUILayout.Label("", GUILayout.Width(7));
 		    GUILayout.Label(_newSessionOnResume, GUILayout.Width(150));
 		    ga.NewSessionOnResume = EditorGUILayout.Toggle("", ga.NewSessionOnResume);
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+		    GUILayout.Label("", GUILayout.Width(7));
+		    GUILayout.Label(_autoSubmitUserInfo, GUILayout.Width(150));
+		    ga.AutoSubmitUserInfo = EditorGUILayout.Toggle("", ga.AutoSubmitUserInfo);
 			GUILayout.EndHorizontal();
 			
 			EditorGUILayout.Space();

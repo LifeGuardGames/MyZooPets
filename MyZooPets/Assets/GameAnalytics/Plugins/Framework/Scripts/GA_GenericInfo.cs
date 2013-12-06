@@ -9,19 +9,18 @@ using System.Runtime.InteropServices;
 using System;
 using System.Net;
 
-#if !UNITY_WEBPLAYER && !UNITY_NACL && !UNITY_FLASH
+#if !UNITY_WEBPLAYER && !UNITY_NACL && !UNITY_FLASH && !UNITY_WP8 && !UNITY_METRO && !UNITY_PS3
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 #endif
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public  class GA_GenericInfo
 {
-	/*#if UNITY_IPHONE && !UNITY_EDITOR
-	[DllImport ("__Internal")]
-	private static extern string GetUserID ();
-	#endif*/
-	
 	#region public values
 	
 	/// <summary>
@@ -32,16 +31,7 @@ public  class GA_GenericInfo
 		get {
 			if ((_userID == null || _userID == string.Empty) && !GA.SettingsGA.CustomUserID)
 			{
-				if (PlayerPrefs.HasKey("GA_uid"))
-				{
-					_userID = PlayerPrefs.GetString("GA_uid");
-				}
-				else
-				{
-					_userID = GetUserUUID();
-					PlayerPrefs.SetString("GA_uid", _userID);
-					PlayerPrefs.Save();
-				}
+				_userID = GetUserUUID();
 			}
 			return _userID;
 		}
@@ -145,18 +135,18 @@ public  class GA_GenericInfo
 	/// </returns>
 	public  string GetUserUUID()
 	{
-		/*#if UNITY_IPHONE && !UNITY_EDITOR
+		#if UNITY_IPHONE && !UNITY_EDITOR
 		
-		string uid = GetUserID();
+		string uid = GA.SettingsGA.GetUniqueIDiOS();
 		
-		if (uid != null && uid != "")
+		if (uid == null)
+			return "";
+		else if (uid != "OLD")
 			return uid;
-		else
-			return GetSessionUUID();
 		
-		#endif*/
+		#endif
 		
-		#if UNITY_WEBPLAYER || UNITY_NACL
+		#if UNITY_WEBPLAYER || UNITY_NACL || UNITY_WP8 || UNITY_METRO || UNITY_PS3
 		
 		return SystemInfo.deviceUniqueIdentifier;
 		
@@ -259,7 +249,7 @@ public  class GA_GenericInfo
 	/// <returns>
 	/// String determining the system the user is currently running <see cref="System.String"/>
 	/// </returns>
-	private  string GetSystem()
+	public  string GetSystem()
 	{
 		#if UNITY_STANDALONE_OSX
 		return "MAC";
@@ -292,10 +282,19 @@ public  class GA_GenericInfo
 		return "LINUX";
 		
 		#elif UNITY_NACL
-		return "NACL"
+		return "NACL";
 			
 		#elif UNITY_DASHBOARD_WIDGET
-		return "DASHBOARD_WIDGET"
+		return "DASHBOARD_WIDGET";
+		
+		#elif UNITY_METRO
+		return "WINDOWS_STORE_APP";
+		
+		#elif UNITY_WP8
+		return "WINDOWS_PHONE_8";
+		
+		#elif UNITY_BLACKBERRY
+		return "BLACKBERRY";
 		
 		#else
 		return "UNKNOWN";

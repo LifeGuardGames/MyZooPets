@@ -32,10 +32,6 @@ public enum DosageRecord{
     Null, //before pet is hatched 
 }
 
-public enum InhalerType{
-    Rescue,
-}
-
 public enum AsthmaStage{
     OK,
     Sick,
@@ -250,4 +246,9 @@ public enum RewardStatuses {
 public enum TimeFrames {
 	Morning,
 	Evening
+}
+
+public enum PetSpeechTransitions{
+    HappySad,
+    SadHappy,
 }

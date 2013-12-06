@@ -7,7 +7,7 @@ using System.Collections;
 
 public static class MD5Wrapper
 {
-
+	#if !UNITY_WP8 && !UNITY_METRO
 	[NotRenamed]
 
 	public static string Md5Sum (string strToEncrypt)
@@ -41,4 +41,5 @@ public static class MD5Wrapper
 
 		return hashString.PadLeft (32, '0');
 	}
+	#endif
 }

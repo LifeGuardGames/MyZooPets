@@ -39,6 +39,14 @@ public class Item {
 	public string SoundUsed{
 		get{return strSoundUsed;}	
 	}
+	
+	public bool IsLocked() {
+		bool bLocked = GetLockedLevel() > 0;
+		return bLocked;
+	}
+	public int GetLockedLevel() {
+		return unlockAtLevel;	
+	}
 
 	public Item(string id, ItemType type, Hashtable hashItemData){
 		this.id = id;

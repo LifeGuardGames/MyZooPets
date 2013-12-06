@@ -26,33 +26,14 @@
 		<Health>Healthy</Health>
 		<Categories>Idle</Categories>
 	</Anim>		
-	
-	<Anim ID="happySpitFire" state="BreathingFire">
+
+	<Anim ID="sadIdle" state="Idling">
 		<Weight>1</Weight>
-		<Mood>Any</Mood>
+		<Mood>Sad</Mood>
 		<Health>Healthy</Health>
-		<CanInterrupt>False</CanInterrupt>
-		<Categories>Fire</Categories>
-	</Anim>		
-	
-	<Anim ID="sickSpitFire" state="BreathingFire">
-		<Clip>happySpitFire</Clip>
-		<Weight>1</Weight>
-		<Mood>Any</Mood>
-		<Health>Sick</Health>
-		<CanInterrupt>False</CanInterrupt>
-		<Categories>Fire</Categories>
+		<Categories>Idle</Categories>
 	</Anim>	
 	
-	<Anim ID="verySickSpitFire" state="BreathingFire">
-		<Clip>happySpitFire</Clip>
-		<Weight>1</Weight>
-		<Mood>Any</Mood>
-		<Health>VerySick</Health>
-		<CanInterrupt>False</CanInterrupt>
-		<Categories>Fire</Categories>
-	</Anim>		
-
 	<Anim ID="sadGestureKick" state="Idling">
 		<Weight>1</Weight>
 		<Mood>Sad</Mood>
@@ -73,8 +54,29 @@
 		<Health>Healthy</Health>
 		<Categories>Idle</Categories>
 	</Anim>	
+
+	<Anim ID="sadGestureHands" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>	
 	
 	<Anim ID="sick1Idle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Sick</Health>
+		<Categories>Idle</Categories>
+	</Anim>		
+
+	<Anim ID="sick1GestureLongBreath" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Sick</Health>
+		<Categories>Idle</Categories>
+	</Anim>		
+
+	<Anim ID="sick1GestureLightCough" state="Idling">
 		<Weight>1</Weight>
 		<Mood>Sad</Mood>
 		<Health>Sick</Health>
@@ -87,7 +89,56 @@
 		<Health>VerySick</Health>
 		<Categories>Idle</Categories>
 	</Anim>	
-	
+
+	<Anim ID="sick2GesturePatOnChest" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="sick2GestureNearlyFainting" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="sick2GestureHandsOnThroat" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="celebrate" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="chew" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="tickle" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Happy</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
+	<Anim ID="sadPoke" state="Idling">
+		<Weight>1</Weight>
+		<Mood>Sad</Mood>
+		<Health>Healthy</Health>
+		<Categories>Idle</Categories>
+	</Anim>
+
 	<Anim ID="happyWalk" state="Walking">
 		<Weight>1</Weight>
 		<Mood>Happy</Mood>
@@ -187,4 +238,30 @@
 		<CanInterrupt>False</CanInterrupt>
 		<Categories>Transition_VerySickSick</Categories>
 	</Anim>	
+
+	<Anim ID="happySpitFire" state="BreathingFire">
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>Healthy</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Fire</Categories>
+	</Anim>		
+	
+	<Anim ID="sickSpitFire" state="BreathingFire">
+		<Clip>happySpitFire</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>Sick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Fire</Categories>
+	</Anim>	
+	
+	<Anim ID="verySickSpitFire" state="BreathingFire">
+		<Clip>happySpitFire</Clip>
+		<Weight>1</Weight>
+		<Mood>Any</Mood>
+		<Health>VerySick</Health>
+		<CanInterrupt>False</CanInterrupt>
+		<Categories>Fire</Categories>
+	</Anim>		
 </PetAnims>

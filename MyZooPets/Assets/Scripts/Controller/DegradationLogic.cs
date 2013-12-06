@@ -9,22 +9,10 @@ using System;
 public class DegradationLogic : Singleton<DegradationLogic> {
     public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
 	public event EventHandler<EventArgs> OnPetHit;
-    
-    [System.Serializable]
-    public class Location{ //make it serializable 
-        public bool isTaken; //if the position has been taken or not
-        public Vector3 position; //the position of the degradation trigger
-        
-        public Location(bool isTaken, Vector3 position){
-            this.isTaken = isTaken;
-            this.position = position;
-        }
-    }
 	
 	// tut key
 	public static string TIME_DECAY_TUT = "TimeMoodDecay";
 
-    public List<Location> triggerLocations = new List<Location>(); //a list of predefined locations
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 	
 	public int nPoints;
@@ -34,15 +22,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	public float fHealthMoodThreshold;
 	public float fFirstHoursPenalty;
 	public float fSecondHoursPenalty;
-
-    private const int NUMBER_OF_LOC = 6;
-    private const int NUMBBER_OF_PREFABS = 6;
+	
+	private const int MAX_TRIGGERS = 6;
 
     public List<DegradData> DegradationTriggers{
         get{return DataManager.Instance.GameData.Degradation.DegradationTriggers;}
-    }
-    public List<Location> TriggerLocations{
-        get{return triggerLocations;}
     }
     public List<GameObject> TriggerPrefabs{
         get{return triggerPrefabs;}
@@ -72,33 +56,34 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// calculate changes in the pets mood
 		//Debug.Log("About to calc mood loss...what's this?: " + sinceLastPlayed);
 		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
-
+		
+		// get list of available locations to spawn triggers
+		List<Data_TriggerLocation> listAvailable = DataLoader_TriggerLocations.GetAvailableTriggerLocations( "Bedroom" );
+		
+		int numToSpawn = Mathf.Max( 0, MAX_TRIGGERS - numberOfTriggersToInit );
+		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>( listAvailable, numToSpawn );
+		
         //create triggers
-        for(int i=0; i<numberOfTriggersToInit; i++){
-            //don't add anymore triggers if there are already 6
-            if(DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == NUMBER_OF_LOC) break;
-
-            //random location and prefab
-            int locationIndex = UnityEngine.Random.Range(0, NUMBER_OF_LOC);
-            int objectIndex = UnityEngine.Random.Range(0, NUMBBER_OF_PREFABS);
+        for(int i = 0; i < listChosen.Count; i++){
+			Data_TriggerLocation location = listChosen[i];
+			
+            // random prefab
+            int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
 			
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
 			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_TRIGGERS );
 			if ( !bTriggers ) {
-				locationIndex = 0;
+				location = DataLoader_TriggerLocations.GetTriggerLocation( "TrigLoc_0", "Bedroom" );
+				if ( location == null )
+					Debug.Log("Tutorial trigger location not set up correctly");
+				
 				objectIndex = 3;
 			}
 
-            Location triggerLocation = triggerLocations[locationIndex];
-            if(triggerLocation.isTaken){ //if spot is already taken find the next empty in the list
-                locationIndex = triggerLocations.FindIndex(x => x.isTaken == false);
-            }
-            triggerLocation.isTaken = true;
-           
             //spawn them at a pre define location
             //ID is the order in which the data are created
-            DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, locationIndex, objectIndex));
+            DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
             
         }                
 
@@ -142,12 +127,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	}
 
     //use the method when a trigger has been destroyed by user
-    public void ClearDegradationTrigger(int id){
-		Vector3 triggerPos = Vector3.zero;
-        DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == id);
-        if(degradData != null)
-            triggerPos = triggerLocations[degradData.PositionId].position;
-        
+    public void ClearDegradationTrigger(DegradTrigger trigger){
+		Vector3 triggerPos = trigger.gameObject.transform.position;
+        DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
+		
 		// do a little magic here: get the world position of the trigger, turn that into screen coords, then take those coords (that are
 		// BottomLeft NGUI coords) and turn them into NGUI top coords.
 		Vector3 vTriggerPos = CameraManager.Instance.TransformAnchorPosition( CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), InterfaceAnchors.BottomLeft, InterfaceAnchors.Top );

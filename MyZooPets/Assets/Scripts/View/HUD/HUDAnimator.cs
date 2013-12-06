@@ -107,7 +107,7 @@ public class HUDAnimator : MonoBehaviour {
 		starIconAnim = HUDUIManager.Instance.animMoney;
 		xpIconAnim = HUDUIManager.Instance.animXP;
 		animFire = HUDUIManager.Instance.animFire;
-		tweenParent = HUDUIManager.Instance.tweenParent;		
+		tweenParent = HUDUIManager.Instance.GetTweenParent();		
 		
 		// turn on/off the fire icon depending on if the pet can currently breath fire
 		UpdateBreathUI();

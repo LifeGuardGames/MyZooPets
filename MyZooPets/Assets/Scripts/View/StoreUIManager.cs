@@ -11,6 +11,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject storeSubPanelBg; 
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
+	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
 	
 	// store related sounds
 	public string strSoundChangeTab;
@@ -56,8 +57,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		BGController.Instance.Show("black");
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
-		// storePanel.GetComponent<TweenToggle>().Show();
-		// EditDecosUIManager.Instance.HideNavButton();
+		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
 	
 	//---------------------------------------------------
@@ -78,8 +78,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		NavigationUIManager.Instance.ShowPanel();		
 		BGController.Instance.Hide();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
-		// storePanel.GetComponent<TweenToggle>().Hide();
-		// EditDecosUIManager.Instance.ShowNavButton();
+		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 
 	//---------------------------------------------------
@@ -90,7 +90,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//---------------------------------------------------
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
-		string itemID = sprite.transform.parent.name;
+		string itemID = sprite.transform.parent.transform.parent.name;
 		Vector3 itemPosition = origin;
 
 		//-0.22
@@ -155,7 +155,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
-			OnBuyAnimation(itemData, button.transform.parent.FindChild("ItemTexture").gameObject);
+			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
 			
 			// play a sound since an item was bought
 			AudioManager.Instance.PlayClip( strSoundBuy );
@@ -305,14 +305,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				List<Item> foodList = ItemLogic.Instance.FoodList;
 
 				foreach(Item itemData in foodList)
-					SetUpItemObject(itemData);
+					StoreItemEntry.CreateEntry( grid, itemStorePrefab, itemData );
 
 			}else if(currentPage == "Items"){
 				//No sub category so retrieve a list of all item
 				List<Item> usableList = ItemLogic.Instance.UsableList;
 
 				foreach(Item itemData in usableList)
-					SetUpItemObject(itemData);
+					StoreItemEntry.CreateEntry( grid, itemStorePrefab, itemData );
 
 			}else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)
@@ -322,32 +322,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
 					foreach(DecorationItem decoItemData in decoList)
-						SetUpItemObject((Item)decoItemData);
+						StoreItemEntry.CreateEntry( grid, itemStorePrefab, (Item)decoItemData );
 				}
 			}
 
 			grid.GetComponent<UIGrid>().Reposition();
 			Invoke("Reposition",0.00000001f);
 		}
-	}
-	
-	//---------------------------------------------------
-	// SetUpItemObject()
-	// Creates an individual store UI entry for the
-	// incoming item data.
-	//---------------------------------------------------	
-	private void SetUpItemObject(Item itemData) {
-		// create and add our UI entry to NGUI
-		GameObject itemUIObject = NGUITools.AddChild(grid, itemStorePrefab);
-		
-		// set the proper values on the entry
-		itemUIObject.name = itemData.ID;
-		itemUIObject.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemData.Description;
-		itemUIObject.transform.FindChild("BuyButton/L_Cost").GetComponent<UILabel>().text = itemData.Cost.ToString();
-		itemUIObject.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemData.Name;
-		itemUIObject.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemData.TextureName;
-		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().target = gameObject;
-		itemUIObject.transform.FindChild("BuyButton").GetComponent<UIButtonMessage>().functionName = "OnBuyButton";
 	}
 
 	//-----------------------------------------
@@ -378,7 +359,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
         Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -45f, itemArea.transform.localPosition.z);
+        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -76.897f, itemArea.transform.localPosition.z);
         itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 20.0f, clipRange.z, clipRange.w);
 	}
 

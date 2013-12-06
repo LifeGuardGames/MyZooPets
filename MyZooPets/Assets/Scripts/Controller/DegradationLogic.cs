@@ -129,11 +129,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(DegradTrigger trigger){
 		Vector3 triggerPos = trigger.gameObject.transform.position;
-		//Vector3 triggerPos = Vector3.zero;
         DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
-        //if(degradData != null)
-        //    triggerPos = triggerLocations[degradData.PositionId].position;
-        
+		
 		// do a little magic here: get the world position of the trigger, turn that into screen coords, then take those coords (that are
 		// BottomLeft NGUI coords) and turn them into NGUI top coords.
 		Vector3 vTriggerPos = CameraManager.Instance.TransformAnchorPosition( CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), InterfaceAnchors.BottomLeft, InterfaceAnchors.Top );

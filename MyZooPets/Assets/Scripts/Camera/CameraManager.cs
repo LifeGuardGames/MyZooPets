@@ -212,6 +212,7 @@ public class CameraManager : Singleton<CameraManager> {
 				vTransformed.y -= nativeHeight / 2;
 				break;
 			case InterfaceAnchors.BottomLeft:
+				vTransformed.x -= nativeWidth / 2;
 				vTransformed.y -= nativeHeight;
 				break;			
 			default:

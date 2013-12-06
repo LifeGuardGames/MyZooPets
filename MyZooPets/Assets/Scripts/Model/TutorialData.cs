@@ -19,6 +19,6 @@ public class TutorialData{
 		ListPlayed = new List<string>();
 		
 		// testing
-		ListPlayed.Add( TutorialManager_Bedroom.TUT_TRIGGERS );
+		//ListPlayed.Add( TutorialManager_Bedroom.TUT_TRIGGERS );
     }
 }

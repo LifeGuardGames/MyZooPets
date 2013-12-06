@@ -4,14 +4,18 @@ using System;
 
 public class DegradData{
     public int ID {get; set;}
-    public int PositionId {get; set;}
     public int PrefabId {get; set;}
-
+	
+	private string strPosition;
+	public Vector3 GetPosition() {
+		return Constants.ParseVector3( strPosition );	
+	}
+	
     public DegradData(){}
 
-    public DegradData(int id, int positionId, int prefabId){
+    public DegradData(int id, string position, int prefabId){
         ID = id;
-        PositionId = positionId;
+        strPosition = position;
         PrefabId = prefabId;
     }
 }

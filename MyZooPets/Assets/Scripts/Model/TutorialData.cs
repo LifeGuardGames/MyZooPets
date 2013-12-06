@@ -17,5 +17,8 @@ public class TutorialData{
         FirstTimeDegradTrigger = true;
 		
 		ListPlayed = new List<string>();
+		
+		// testing
+		//ListPlayed.Add( TutorialManager_Bedroom.TUT_TRIGGERS );
     }
 }

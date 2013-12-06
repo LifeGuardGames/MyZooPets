@@ -14,11 +14,15 @@ public class Analytics : Singleton<Analytics>{
     public const string STEP_STATUS_INCORRECT = "incorrect";
     public const string STEP_STATUS_QUIT = "quit";
 
+    public const string ITEM_STATUS_BOUGHT = "bought";
+    public const string ITEM_STATUS_USED = "used";
+
     private static bool isCreated = false;
 
     private const string INHALER_CATEGORY = "MiniGame:Inhaler:";
     private const string RUNNER_CATEGORY = "MiniGame:Runner:";
     private const string DIAGNOSE_CATEGORY = "MiniGame:Diagnose:";
+    private const string NINJA_CATEGORY = "MiniGame:Ninja:";
 
     private DateTime playTime;
 
@@ -86,6 +90,19 @@ public class Analytics : Singleton<Analytics>{
         if(!String.IsNullOrEmpty(badgeName))
             GA.API.Design.NewEvent("Badge:Unlocked:" + badgeName);
     }
+
+    //Items used or purchased
+    public void ItemEvent(string itemStatus, string itemType, string itemName){
+        if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemType) && !String.IsNullOrEmpty(itemName)){
+            GA.API.Design.NewEvent("Items:" + itemStatus + ":" + itemType + ":" + itemName);
+        }
+    }
+
+    //Level up
+
+    //Trigger cleaned
+
+    //Wellapad task completed
 
     
 }

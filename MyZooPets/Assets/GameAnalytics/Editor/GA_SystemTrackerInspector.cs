@@ -41,7 +41,7 @@ public class GA_SystemTrackerInspector : Editor
 		
 		if (GUILayout.Button(_documentationLink, GUILayout.MaxWidth(60)))
 		{
-			Application.OpenURL("https://beta.gameanalytics.com/docs/unity3d.html");
+			Application.OpenURL("http://easy.gameanalytics.com/SupportDocu");
 		}
 		
 		GUILayout.EndHorizontal();

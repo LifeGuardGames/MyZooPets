@@ -15,10 +15,12 @@ using System.Collections.Generic;
 /// </summary>
 
 public class StatsController : Singleton<StatsController> {
-	public static EventHandler<EventArgs> OnHappyToSad;
-	public static EventHandler<EventArgs> OnSadToHappy;
 	//----------- Events ------------------------------
 	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
+	public static EventHandler<EventArgs> OnHappyToSad; //when mood changes
+	public static EventHandler<EventArgs> OnSadToHappy;
+	public static EventHandler<EventArgs> OnHealthyToVerySick;
+	public static EventHandler<EventArgs> OnSickToVerySick;
 	//-------------------------------------------------	
 
 	private GameObject hudAnimatorObject;
@@ -140,6 +142,9 @@ public class StatsController : Singleton<StatsController> {
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
 			scriptPetAnim.Transition( "Transition_HealthySick" );	
 			scriptPetAnim.Transition( "Transition_HealthyVerySick" );
+			if(OnHealthyToVerySick != null){
+				OnHealthyToVerySick(this, EventArgs.Empty);
+			}
 		}
 		else if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick )
 			scriptPetAnim.Transition( "Transition_HealthySick" );
@@ -150,8 +155,13 @@ public class StatsController : Singleton<StatsController> {
 		}
 		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.Healthy )
 			scriptPetAnim.Transition( "Transition_SickHealthy" );
-		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick )
+		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick ){
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
+
+			if(OnSickToVerySick != null){
+				OnSickToVerySick(this, EventArgs.Empty);
+			}
+		}
 		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Sick )
 			scriptPetAnim.Transition( "Transition_VerySickSick" );
 		

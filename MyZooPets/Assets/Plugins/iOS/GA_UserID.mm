@@ -8,7 +8,7 @@ extern "C"
         
         if (!NSClassFromString(@"ASIdentifierManager"))
         {
-            uidString = NULL;
+            uidString = @"OLD";
         }
         else
         { //iOS6+

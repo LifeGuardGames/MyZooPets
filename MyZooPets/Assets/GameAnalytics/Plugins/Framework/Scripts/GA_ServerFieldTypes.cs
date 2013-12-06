@@ -31,7 +31,21 @@ public static class GA_ServerFieldTypes
 		Birth_year,
 		Country,
 		State,
-		Friend_Count
+		Friend_Count,
+		Ios_id,
+		Android_id,
+		Platform,
+		Device,
+		Os,
+		OsVersion,
+		Sdk,
+		InstallPublisher,
+		InstallSite,
+		InstallCampaign,
+		InstallAdgroup,
+		InstallAd,
+		InstallKeyword,
+		Severity
 	}
 	
 	/// <summary>
@@ -59,6 +73,20 @@ public static class GA_ServerFieldTypes
 		{ FieldType.Birth_year, "birth_year" },
 		{ FieldType.Country, "country" },
 		{ FieldType.State, "state" },
-		{ FieldType.Friend_Count, "friend_count" }
+		{ FieldType.Friend_Count, "friend_count" },
+		{ FieldType.Ios_id, "ios_id" },
+		{ FieldType.Android_id, "android_id" },
+		{ FieldType.Platform, "platform" },
+		{ FieldType.Device, "device" },
+		{ FieldType.Os, "os_major" },
+		{ FieldType.OsVersion, "os_minor" },
+		{ FieldType.Sdk, "sdk_version" },
+		{ FieldType.InstallPublisher, "install_publisher" },
+		{ FieldType.InstallSite, "install_site" },
+		{ FieldType.InstallCampaign, "install_campaign" },
+		{ FieldType.InstallAdgroup, "install_adgroup" },
+		{ FieldType.InstallAd, "install_ad" },
+		{ FieldType.InstallKeyword, "install_keyword" },
+		{ FieldType.Severity, "severity" }
 	};
 }

@@ -24,7 +24,7 @@ public class Constants {
 		return data;
 	}
 	
-	private static Vector3 ParseVector3( string i_str ) {
+	public static Vector3 ParseVector3( string i_str ) {
 		Vector3 vector = new Vector3(0,0,0);
 		String[] arrayVector3 = i_str.Split(","[0]);
 		if ( arrayVector3.Length == 3 ) {

@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Text;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 /* Based on the JSON parser from 
  * http://techblog.procurios.nl/k/618/news/view/14605/14863/How-do-I-write-my-own-parser-for-JSON.html
  * 
@@ -16,7 +20,7 @@ using System.Text;
 /// JSON uses Arrays and Objects. These correspond here to the datatypes ArrayList and Hashtable.
 /// All numbers are parsed to floats.
 /// </summary>
-public class MiniJSON
+public class GA_MiniJSON
 {
 	public const int TOKEN_NONE = 0; 
 	public const int TOKEN_CURLY_OPEN = 1;
@@ -33,7 +37,7 @@ public class MiniJSON
 
 	private const int BUILDER_CAPACITY = 2000;
 
-	protected static MiniJSON instance = new MiniJSON();
+	protected static GA_MiniJSON instance = new GA_MiniJSON();
 
 	/// <summary>
 	/// On decoding, this value holds the position at which the parse failed (-1 = no error).
@@ -49,18 +53,18 @@ public class MiniJSON
 	public static object JsonDecode(string json)
 	{
 		// save the string for debug information
-		MiniJSON.instance.lastDecode = json;
+		GA_MiniJSON.instance.lastDecode = json;
 
 		if (json != null) {
             char[] charArray = json.ToCharArray();
 			
             int index = 0;
 			bool success = true;
-			object value = MiniJSON.instance.ParseValue(charArray, ref index, ref success);
+			object value = GA_MiniJSON.instance.ParseValue(charArray, ref index, ref success);
 			if (success) {
-				MiniJSON.instance.lastErrorIndex = -1;
+				GA_MiniJSON.instance.lastErrorIndex = -1;
 			} else {
-				MiniJSON.instance.lastErrorIndex = index;
+				GA_MiniJSON.instance.lastErrorIndex = index;
 			}
 			return value;
         } else {
@@ -76,7 +80,7 @@ public class MiniJSON
 	public static string JsonEncode(object json)
 	{
 		StringBuilder builder = new StringBuilder(BUILDER_CAPACITY);
-		bool success = MiniJSON.instance.SerializeValue(json, builder);
+		bool success = GA_MiniJSON.instance.SerializeValue(json, builder);
 		return (success ? builder.ToString() : null);
 	}
 
@@ -86,7 +90,7 @@ public class MiniJSON
 	/// <returns></returns>
 	public static bool LastDecodeSuccessful()
 	{
-		return (MiniJSON.instance.lastErrorIndex == -1);
+		return (GA_MiniJSON.instance.lastErrorIndex == -1);
 	}
 
 	/// <summary>
@@ -95,7 +99,7 @@ public class MiniJSON
 	/// <returns></returns>
 	public static int GetLastErrorIndex()
 	{
-		return MiniJSON.instance.lastErrorIndex;
+		return GA_MiniJSON.instance.lastErrorIndex;
 	}
 
 	/// <summary>
@@ -105,19 +109,19 @@ public class MiniJSON
 	/// <returns></returns>
 	public static string GetLastErrorSnippet()
 	{
-		if (MiniJSON.instance.lastErrorIndex == -1) {
+		if (GA_MiniJSON.instance.lastErrorIndex == -1) {
 			return "";
 		} else {
-			int startIndex = MiniJSON.instance.lastErrorIndex - 5;
-			int endIndex = MiniJSON.instance.lastErrorIndex + 15;
+			int startIndex = GA_MiniJSON.instance.lastErrorIndex - 5;
+			int endIndex = GA_MiniJSON.instance.lastErrorIndex + 15;
 			if (startIndex < 0) {
 				startIndex = 0;
 			}
-			if (endIndex >= MiniJSON.instance.lastDecode.Length) {
-				endIndex = MiniJSON.instance.lastDecode.Length - 1;
+			if (endIndex >= GA_MiniJSON.instance.lastDecode.Length) {
+				endIndex = GA_MiniJSON.instance.lastDecode.Length - 1;
 			}
 
-			return MiniJSON.instance.lastDecode.Substring(startIndex, endIndex - startIndex + 1);
+			return GA_MiniJSON.instance.lastDecode.Substring(startIndex, endIndex - startIndex + 1);
 		}
 	}
 
@@ -132,11 +136,11 @@ public class MiniJSON
 		bool done = false;
 		while (!done) {
 			token = LookAhead(json, index);
-			if (token == MiniJSON.TOKEN_NONE) {
+			if (token == GA_MiniJSON.TOKEN_NONE) {
 				return null;
-			} else if (token == MiniJSON.TOKEN_COMMA) {
+			} else if (token == GA_MiniJSON.TOKEN_COMMA) {
 				NextToken(json, ref index);
-			} else if (token == MiniJSON.TOKEN_CURLY_CLOSE) {
+			} else if (token == GA_MiniJSON.TOKEN_CURLY_CLOSE) {
 				NextToken(json, ref index);
 				return table;
 			} else {
@@ -149,7 +153,7 @@ public class MiniJSON
 
 				// :
 				token = NextToken(json, ref index);
-				if (token != MiniJSON.TOKEN_COLON) {
+				if (token != GA_MiniJSON.TOKEN_COLON) {
 					return null;
 				}
 
@@ -177,11 +181,11 @@ public class MiniJSON
 		bool done = false;
 		while (!done) {
 			int token = LookAhead(json, index);
-			if (token == MiniJSON.TOKEN_NONE) {
+			if (token == GA_MiniJSON.TOKEN_NONE) {
 				return null;
-			} else if (token == MiniJSON.TOKEN_COMMA) {
+			} else if (token == GA_MiniJSON.TOKEN_COMMA) {
 				NextToken(json, ref index);
-			} else if (token == MiniJSON.TOKEN_SQUARED_CLOSE) {
+			} else if (token == GA_MiniJSON.TOKEN_SQUARED_CLOSE) {
 				NextToken(json, ref index);
 				break;
 			} else {
@@ -201,24 +205,24 @@ public class MiniJSON
 	protected object ParseValue(char[] json, ref int index, ref bool success)
 	{
 		switch (LookAhead(json, index)) {
-			case MiniJSON.TOKEN_STRING:
+			case GA_MiniJSON.TOKEN_STRING:
 				return ParseString(json, ref index);
-			case MiniJSON.TOKEN_NUMBER:
+			case GA_MiniJSON.TOKEN_NUMBER:
 				return ParseNumber(json, ref index);
-			case MiniJSON.TOKEN_CURLY_OPEN:
+			case GA_MiniJSON.TOKEN_CURLY_OPEN:
 				return ParseObject(json, ref index);
-			case MiniJSON.TOKEN_SQUARED_OPEN:
+			case GA_MiniJSON.TOKEN_SQUARED_OPEN:
 				return ParseArray(json, ref index);
-//			case MiniJSON.TOKEN_TRUE:
+//			case GA_MiniJSON.TOKEN_TRUE:
 //				NextToken(json, ref index);
 //				return Boolean.Parse("TRUE");
-//			case MiniJSON.TOKEN_FALSE:
+//			case GA_MiniJSON.TOKEN_FALSE:
 //				NextToken(json, ref index);
 //				return Boolean.Parse("FALSE");
-			case MiniJSON.TOKEN_NULL:
+			case GA_MiniJSON.TOKEN_NULL:
 				NextToken(json, ref index);
 				return null;
-			case MiniJSON.TOKEN_NONE:
+			case GA_MiniJSON.TOKEN_NONE:
 				break;
 		}
 
@@ -359,30 +363,30 @@ public class MiniJSON
 		EatWhitespace(json, ref index);
 
 		if (index == json.Length) {
-			return MiniJSON.TOKEN_NONE;
+			return GA_MiniJSON.TOKEN_NONE;
 		}
 		
 		char c = json[index];
 		index++;
 		switch (c) {
 			case '{':
-				return MiniJSON.TOKEN_CURLY_OPEN;
+				return GA_MiniJSON.TOKEN_CURLY_OPEN;
 			case '}':
-				return MiniJSON.TOKEN_CURLY_CLOSE;
+				return GA_MiniJSON.TOKEN_CURLY_CLOSE;
 			case '[':
-				return MiniJSON.TOKEN_SQUARED_OPEN;
+				return GA_MiniJSON.TOKEN_SQUARED_OPEN;
 			case ']':
-				return MiniJSON.TOKEN_SQUARED_CLOSE;
+				return GA_MiniJSON.TOKEN_SQUARED_CLOSE;
 			case ',':
-				return MiniJSON.TOKEN_COMMA;
+				return GA_MiniJSON.TOKEN_COMMA;
 			case '"':
-				return MiniJSON.TOKEN_STRING;
+				return GA_MiniJSON.TOKEN_STRING;
 			case '0': case '1': case '2': case '3': case '4': 
 			case '5': case '6': case '7': case '8': case '9':
 			case '-': 
-				return MiniJSON.TOKEN_NUMBER;
+				return GA_MiniJSON.TOKEN_NUMBER;
 			case ':':
-				return MiniJSON.TOKEN_COLON;
+				return GA_MiniJSON.TOKEN_COLON;
 		}
 		index--;
 
@@ -396,7 +400,7 @@ public class MiniJSON
 				json[index + 3] == 's' &&
 				json[index + 4] == 'e') {
 				index += 5;
-				return MiniJSON.TOKEN_FALSE;
+				return GA_MiniJSON.TOKEN_FALSE;
 			}
 		}
 
@@ -407,7 +411,7 @@ public class MiniJSON
 				json[index + 2] == 'u' &&
 				json[index + 3] == 'e') {
 				index += 4;
-				return MiniJSON.TOKEN_TRUE;
+				return GA_MiniJSON.TOKEN_TRUE;
 			}
 		}
 
@@ -418,11 +422,11 @@ public class MiniJSON
 				json[index + 2] == 'l' &&
 				json[index + 3] == 'l') {
 				index += 4;
-				return MiniJSON.TOKEN_NULL;
+				return GA_MiniJSON.TOKEN_NULL;
 			}
 		}
 
-		return MiniJSON.TOKEN_NONE;
+		return GA_MiniJSON.TOKEN_NONE;
 	}
 
 	protected bool SerializeObjectOrArray(object objectOrArray, StringBuilder builder)

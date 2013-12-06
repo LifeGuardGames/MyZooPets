@@ -7,6 +7,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public class GA_Quality 
 {
 	#region public methods

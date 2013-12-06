@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 [RequireComponent(typeof(GA_SpecialEvents))]
 [RequireComponent(typeof(GA_Gui))]
 
@@ -16,22 +20,22 @@ public class GA_SystemTracker : MonoBehaviour {
 	
 	public static GA_SystemTracker GA_SYSTEMTRACKER;
 	
-	public bool UseForSubsequentLevels;
+	public bool UseForSubsequentLevels = true;
 	
-	public bool IncludeSystemSpecs;
-	public bool IncludeSceneChange;
-	public bool SubmitErrors;
+	public bool IncludeSystemSpecs = true;
+	public bool IncludeSceneChange = true;
+	public bool SubmitErrors = true;
 	public int MaxErrorCount = 10;
-	public bool SubmitErrorStackTrace;
-	public bool SubmitErrorSystemInfo;
-	public bool SubmitFpsAverage;
-	public bool SubmitFpsCritical;
+	public bool SubmitErrorStackTrace = true;
+	public bool SubmitErrorSystemInfo = true;
+	public bool SubmitFpsAverage = true;
+	public bool SubmitFpsCritical = true;
 	public int FpsCriticalThreshold = 30;
 	public int FpsCirticalSubmitInterval = 10;
 	public bool GuiEnabled;
 	public bool GuiAllowScreenshot;
 
-	public bool ErrorFoldOut;
+	public bool ErrorFoldOut = true;
 	
 	#endregion
 	

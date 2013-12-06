@@ -10,6 +10,10 @@ using System;
 using System.IO;
 //using LitJson;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public  class GA_Archive
 {
 	public  string FILE_NAME = "GA_archive";
@@ -25,7 +29,7 @@ public  class GA_Archive
 	/// </param>
 	public  void ArchiveData(string json, GA_Submit.CategoryType serviceType)
 	{
-		#if !UNITY_WEBPLAYER && !UNITY_NACL && !UNITY_FLASH
+		#if !UNITY_WEBPLAYER && !UNITY_NACL && !UNITY_FLASH && !UNITY_METRO
 		
 		StreamWriter fileWriter = null;
 		string fileName = Application.persistentDataPath + "/" + FILE_NAME;
@@ -60,7 +64,7 @@ public  class GA_Archive
 	/// </returns>
 	public  List<GA_Submit.Item> GetArchivedData()
 	{
-		#if UNITY_WEBPLAYER || UNITY_NACL || UNITY_FLASH
+		#if UNITY_WEBPLAYER || UNITY_NACL || UNITY_FLASH || UNITY_METRO
 		
 		return null;
 		
@@ -101,7 +105,7 @@ public  class GA_Archive
 					
 					if (saveData)
 					{
-						ArrayList itemsParameters = (ArrayList)MiniJSON.JsonDecode(json);//JsonMapper.ToObject<List<Dictionary<string, object>>>(json);
+						ArrayList itemsParameters = (ArrayList)GA_MiniJSON.JsonDecode(json);//JsonMapper.ToObject<List<Dictionary<string, object>>>(json);
 						
 						foreach (Hashtable parameters in itemsParameters)
 						{

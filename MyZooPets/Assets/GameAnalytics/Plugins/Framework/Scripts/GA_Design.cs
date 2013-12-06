@@ -4,6 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public class GA_Design
 {
 	#region public methods

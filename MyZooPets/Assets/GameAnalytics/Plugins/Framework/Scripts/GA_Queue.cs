@@ -8,8 +8,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+#if UNITY_METRO && !UNITY_EDITOR
+using GA_Compatibility.Collections;
+#endif
+
 public static class GA_Queue
 {
+	public delegate void EventSuccess();
+	public static event EventSuccess OnSuccess;
+	
 	/// <summary>
 	/// The maximum length of the submit queue. When messages are not submitted due to an error they are put back
 	/// into the queue and another attempt at submitting them is made during the next submit interval. When the queue
@@ -174,8 +181,18 @@ public static class GA_Queue
 			
 			GA.Log("GameAnalytics: Queue submit started");
 			
-			GA.API.Submit.SubmitQueue(_queue, Submitted, SubmitError);
+			GA.API.Submit.SubmitQueue(_queue, Submitted, SubmitError, false, string.Empty, string.Empty);
 		}
+	}
+	
+	/// <summary>
+	/// No more data will be sent after this timer interval
+	/// </summary>
+	public static void EndSubmit()
+	{
+		GA.Log("GA: Ending all data submission after this timer interval");
+		
+		_endsubmit = true;
 	}
 	
 	#endregion
@@ -225,6 +242,9 @@ public static class GA_Queue
 		// Update GA_Status
 		if (success)
 		{
+			if (OnSuccess != null)
+				OnSuccess();
+			
 			GA.SettingsGA.TotalMessagesSubmitted += items.Count;
 			
 			foreach (GA_Submit.Item it in items)
@@ -236,6 +256,9 @@ public static class GA_Queue
 					break;
 				case GA_Submit.CategoryType.GA_Log:
 					GA.SettingsGA.QualityMessagesSubmitted++;
+					break;
+				case GA_Submit.CategoryType.GA_Error:
+					GA.SettingsGA.ErrorMessagesSubmitted++;
 					break;
 				case GA_Submit.CategoryType.GA_Purchase:
 					GA.SettingsGA.BusinessMessagesSubmitted++;
@@ -310,6 +333,9 @@ public static class GA_Queue
 					break;
 				case GA_Submit.CategoryType.GA_Log:
 					GA.SettingsGA.QualityMessagesFailed++;
+					break;
+				case GA_Submit.CategoryType.GA_Error:
+					GA.SettingsGA.ErrorMessagesFailed++;
 					break;
 				case GA_Submit.CategoryType.GA_Purchase:
 					GA.SettingsGA.BusinessMessagesFailed++;

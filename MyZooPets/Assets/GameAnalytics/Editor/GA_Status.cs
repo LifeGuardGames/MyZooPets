@@ -76,6 +76,18 @@ public class GA_Status : EditorWindow
 		EditorGUILayout.Space();
 		
 		GUILayout.BeginHorizontal();
+	    GUILayout.Label("Error Succeeded:", GUILayout.Width(145));
+		GUILayout.Label(GA.SettingsGA.ErrorMessagesSubmitted.ToString());
+		GUILayout.EndHorizontal();
+		
+		GUILayout.BeginHorizontal();
+	    GUILayout.Label("Error Failed:", GUILayout.Width(145));
+		GUILayout.Label(GA.SettingsGA.ErrorMessagesFailed.ToString());
+		GUILayout.EndHorizontal();
+		
+		EditorGUILayout.Space();
+		
+		GUILayout.BeginHorizontal();
 	    GUILayout.Label("Business Succeeded:", GUILayout.Width(145));
 		GUILayout.Label(GA.SettingsGA.BusinessMessagesSubmitted.ToString());
 		GUILayout.EndHorizontal();
@@ -108,6 +120,8 @@ public class GA_Status : EditorWindow
 			GA.SettingsGA.DesignMessagesFailed = 0;
 			GA.SettingsGA.QualityMessagesSubmitted = 0;
 			GA.SettingsGA.QualityMessagesFailed = 0;
+			GA.SettingsGA.ErrorMessagesSubmitted = 0;
+			GA.SettingsGA.ErrorMessagesFailed = 0;
 			GA.SettingsGA.BusinessMessagesSubmitted = 0;
 			GA.SettingsGA.BusinessMessagesFailed = 0;
 			GA.SettingsGA.UserMessagesSubmitted = 0;

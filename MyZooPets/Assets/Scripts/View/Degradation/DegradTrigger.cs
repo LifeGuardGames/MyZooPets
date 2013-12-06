@@ -67,7 +67,7 @@ public class DegradTrigger : MonoBehaviour {
 
     private void CleanTriggerAndDestroy(){
 		bCleaned = true;
-        DegradationLogic.Instance.ClearDegradationTrigger(ID);
+        DegradationLogic.Instance.ClearDegradationTrigger(this);
 		
 		// send out callback
 		if ( OnTriggerCleaned != null )

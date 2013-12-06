@@ -97,12 +97,4 @@ public class Analytics : Singleton<Analytics>{
             GA.API.Design.NewEvent("Items:" + itemStatus + ":" + itemType + ":" + itemName);
         }
     }
-
-    //Level up
-
-    //Trigger cleaned
-
-    //Wellapad task completed
-
-    
 }

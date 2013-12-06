@@ -87,7 +87,6 @@ public class PanToRotate : MonoBehaviour {
             Touch touch = Input.touches[0];
             switch (touch.phase) {
                 case TouchPhase.Began:
-                    GA.API.Design.NewEvent("Finger", 1, touch.position); //record every position that the user touched
                     startTouchPos = touch.position;                 
                     
                     //Cancel touch if finger is touching on undesirable objects

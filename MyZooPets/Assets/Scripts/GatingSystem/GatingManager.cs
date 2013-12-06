@@ -233,25 +233,25 @@ public class GatingManager : Singleton<GatingManager> {
 		
 		string strKey;			// key of text to show
 		string strImage;		// image to appear on notification
-		string strAnalytics;	// analytics tracker
+		string strAnalytics="";	// analytics tracker
 		
 		if ( eState != PetHealthStates.Healthy ) {
 			// pet is not healthy enough
 			strKey = "NO_FIRE_SICK";
 			strImage = "Skull";
-			strAnalytics = "BreathFire:Fail:Sick";
+			// strAnalytics = "BreathFire:Fail:Sick";
 		}
 		else if ( eMood != PetMoods.Happy ) {
 			// pet is not happy enough
 			strKey = "NO_FIRE_UNHAPPY";
 			strImage = "Skull";
-			strAnalytics = "BreathFire:Fail:Unhappy";
+			// strAnalytics = "BreathFire:Fail:Unhappy";
 		}
 		else {
 			// out of flame charges
 			strKey = "NO_FIRE_INHALER";
 			strImage = "guiPanelStatsHealth";
-			strAnalytics = "BreathFire:Fail:NoCharges";
+			// strAnalytics = "BreathFire:Fail:NoCharges";
 		}
 			
 		// show the standard popup

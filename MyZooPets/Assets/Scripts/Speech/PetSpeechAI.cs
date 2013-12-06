@@ -2,6 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+//---------------------------------------------------
+// PetSpeechAI
+// Controls when the pet will speak
+//---------------------------------------------------
 public class PetSpeechAI : MonoBehaviour{
 
 

@@ -30,7 +30,5 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.HideImmediately, bHideImmediately);
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-		
-        GA.API.Design.NewEvent( strAnalytics );		
 	}	
 }

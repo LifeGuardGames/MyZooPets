@@ -97,12 +97,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") )
+		// if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") )
 			LoadScene();
 		
-		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-        ComicPlayer.OnComicPlayerDone += IntroComicDone;
+		// GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
+		// LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+  //       ComicPlayer.OnComicPlayerDone += IntroComicDone;
 	}
 	
     private void IntroComicDone(object sender, EventArgs args){

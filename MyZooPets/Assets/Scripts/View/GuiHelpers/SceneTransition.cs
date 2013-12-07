@@ -34,7 +34,7 @@ public class SceneTransition : MonoBehaviour {
 	// Begins fancy transition.  Will send a callback to
 	// goCaller when the transition is complete.
 	//---------------------------------------------------
-	public void StartTransition( string strScene, string strLoadingPrefab = "LoadingScreen" ){
+	public void StartTransition( string strScene, string strLoadingPrefab = "" ){
 		gameObject.SetActive(true);
 		
 		// wow, this is dumb...thanks for not updating public default variables, Unity

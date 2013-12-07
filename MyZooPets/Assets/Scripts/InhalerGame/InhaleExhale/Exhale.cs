@@ -20,6 +20,9 @@ public class Exhale : InhalerPart {
             //Attach handler. so game can move on to next step after animation is done
             InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
+            //Disable hint when swipe gesture is registered. 
+            GetComponent<HintController>().DisableHint();
+
             animationController.Exhale();
             AudioManager.Instance.PlayClip( "inhalerExhale" );      
        }

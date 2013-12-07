@@ -145,7 +145,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 		
         CompleteTutorial();
 
-        scriptTransition.StartTransition("NewBedRoom", "LoadingScreen");
+        scriptTransition.StartTransition(SceneUtils.BEDROOM);
     }
 
     public void CompleteTutorial(){

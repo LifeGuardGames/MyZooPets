@@ -53,7 +53,7 @@ public class HintController : MonoBehaviour {
     }
 
     //Turn off hint 
-    private void DisableHint(){
+    public void DisableHint(){
 		if(fingerAnimation != null){
 			if(fingerAnimation.IsPlaying(clipToPlay))
 	            fingerAnimation.Stop(clipToPlay);

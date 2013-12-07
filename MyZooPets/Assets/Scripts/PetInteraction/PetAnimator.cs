@@ -310,7 +310,7 @@ public class PetAnimator : LgCharacterAnimator {
 		// if we have a queued animation, play it
 		if ( !IsAnimating() && queueAnims.Count > 0 ) {
 			DataPetAnimation dataAnim = queueAnims.Dequeue();
-						
+
 			PlayAnimation( dataAnim );
 			
 			// put the anim system back to normal if we are done testing
@@ -326,8 +326,9 @@ public class PetAnimator : LgCharacterAnimator {
         if( Input.GetKeyDown( KeyCode.Space ) ) {
 			// just queue up every anim
 			Hashtable hashData = DataLoaderPetAnimations.GetAllData();
-			
+			int counter = 0;
 			foreach ( DictionaryEntry entry in hashData ) {
+				print(counter++);
 				DataPetAnimation dataAnim = (DataPetAnimation) entry.Value;
 				QueueAnim( dataAnim );
 			}			

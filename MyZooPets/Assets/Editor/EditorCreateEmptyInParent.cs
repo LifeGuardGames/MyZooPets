@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class EditorCreateEmptyInParent : MonoBehaviour {
 	
-	[MenuItem ("GameObject/Create Empty in Parent %#c")]
+	[MenuItem ("GameObject/Create Empty in Parent %#&c")]
 	static void CreateEmptyInParent(){
 		GameObject parent = Selection.activeTransform.gameObject;
 		GameObject go = new GameObject();
@@ -19,7 +19,7 @@ public class EditorCreateEmptyInParent : MonoBehaviour {
 		go.layer = parent.layer;
 	}
 	
-	[MenuItem ("GameObject/Create Empty in Parent %#c", true)]
+	[MenuItem ("GameObject/Create Empty in Parent %#&c", true)]
 	static bool ValidateCreateEmptyInParent(){
 		return Selection.activeTransform != null;
 	}

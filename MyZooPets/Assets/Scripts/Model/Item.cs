@@ -66,7 +66,7 @@ public class Item {
 	}
 
 	//Returns all attributes of all the children of a IXMLNode in a hastable
-    protected Dictionary<StatType, int> GetStats(IXMLNode node){
+    protected Dictionary<StatType, int> LoadStats(IXMLNode node){
         Dictionary<StatType, int> statsDict = new Dictionary<StatType, int>();
         List<IXMLNode> childrenList = XMLUtils.GetChildrenList(node);
 

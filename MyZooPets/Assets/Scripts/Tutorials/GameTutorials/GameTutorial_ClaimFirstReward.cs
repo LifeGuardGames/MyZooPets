@@ -60,6 +60,12 @@ public class GameTutorial_ClaimFirstReward : GameTutorial {
 		// add the reward button to list of clickables
 		// this is a bit hacky...
 		GameObject goReward = GameObject.Find( "2_WellapadTask" );
+		while ( goReward == null ) {
+			Debug.Log("wellapad not inited during tut...if you see this, please tell joe!");
+			yield return 0;
+			goReward = GameObject.Find( "2_WellapadTask" );
+		}
+		
 		WellapadRewardUI scriptReward = goReward.GetComponent<WellapadRewardUI>();
 		if ( scriptReward )
 			AddToProcessList( scriptReward.buttonReward.gameObject );

@@ -33,6 +33,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     }
 
     void Awake(){		
+		// reset the degrad trigger list each time this logic runs, because we are no longer actually saving the triggers.
+		// I (Joe) left this structure in because we might want to say something like, "X triggers remain" across all areas, or
+		// something like that
+		DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
+		
         DateTime now = DateTime.Now;
         TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;
@@ -54,13 +59,19 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         }
 		
 		// calculate changes in the pets mood
-		//Debug.Log("About to calc mood loss...what's this?: " + sinceLastPlayed);
 		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
 		
 		// get list of available locations to spawn triggers
 		List<Data_TriggerLocation> listAvailable = DataLoader_TriggerLocations.GetAvailableTriggerLocations( "Bedroom" );
 		
-		int numToSpawn = Mathf.Max( 0, MAX_TRIGGERS - numberOfTriggersToInit );
+		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
+		int numToSpawn = Mathf.Min( MAX_TRIGGERS, numberOfTriggersToInit + DataManager.Instance.GameData.Degradation.UncleanedTriggers );
+		if ( numToSpawn < 0 ) {
+			numToSpawn = 0;
+			Debug.Log("Number of triggers to spawn somehow < 0...");
+		}
+		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
+		
 		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>( listAvailable, numToSpawn );
 		
         //create triggers
@@ -137,6 +148,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
 		StatsController.Instance.ChangeStats(nPoints, vTriggerPos, 50, vTriggerPos, 0, Vector3.zero, 0, Vector3.zero);
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
+		
+		// subtract one from the triggers left to clean
+		DataManager.Instance.GameData.Degradation.UncleanedTriggers -= 1;
 		
 		// if there are no degradation triggers left, send out a task completion message
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)

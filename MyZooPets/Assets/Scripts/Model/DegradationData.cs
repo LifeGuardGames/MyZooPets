@@ -14,6 +14,7 @@ public class DegradationData{
     public bool FirstTimeDegradTrigger {get; set;} //first time the user has clicked on an asthma trigger
     public bool MorningTrigger {get; set;} //True: spawn asthma trigger in morning, False: don't
     public bool AfternoonTrigger {get; set;} //True: spawn asthma trigger in afternoon, False: don't
+	public int UncleanedTriggers {get; set;}
 
     //================Initialization============
     public DegradationData(){}
@@ -24,5 +25,6 @@ public class DegradationData{
         FirstTimeDegradTrigger = true;
         MorningTrigger = true;
         AfternoonTrigger = true; 
+		UncleanedTriggers = 0;
     }
 }

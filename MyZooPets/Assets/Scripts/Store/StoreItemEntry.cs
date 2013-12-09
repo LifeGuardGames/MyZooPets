@@ -33,12 +33,14 @@ public class StoreItemEntry : MonoBehaviour {
 	public void Init( Item itemData ) {
 		// set the proper values on the entry
 		gameObject.name = itemData.ID;
-		labelDesc.text = itemData.Description;
 		labelCost.text = itemData.Cost.ToString();
 		labelName.text = itemData.Name;
 		spriteIcon.spriteName = itemData.TextureName;
 		buttonMessage.target = StoreUIManager.Instance.gameObject;
 		buttonMessage.functionName = "OnBuyButton";		
+		
+		// set the description
+		SetDesc( itemData );
 		
 		// if this item is currently locked...
 		if ( itemData.IsLocked() ) {
@@ -48,5 +50,13 @@ public class StoreItemEntry : MonoBehaviour {
 			// delete the buy button
 			Destroy( buttonMessage.gameObject );
 		}
+	}
+	
+	//---------------------------------------------------
+	// SetDesc()
+	// Set the description for this item.
+	//---------------------------------------------------		
+	protected virtual void SetDesc( Item itemData ) {
+		labelDesc.text = itemData.Description;
 	}
 }

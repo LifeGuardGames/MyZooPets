@@ -16,7 +16,7 @@ public class StatsItem : Item{
 
     public StatsItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){
         if(hashItemData.ContainsKey("Stats"))
-            stats = GetStats(hashItemData["Stats"] as IXMLNode);
+            stats = LoadStats(hashItemData["Stats"] as IXMLNode);
     }
 	
 	//---------------------------------------------------

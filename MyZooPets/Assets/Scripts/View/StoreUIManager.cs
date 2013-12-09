@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
+	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
@@ -305,14 +306,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				List<Item> foodList = ItemLogic.Instance.FoodList;
 
 				foreach(Item itemData in foodList)
-					StoreItemEntry.CreateEntry( grid, itemStorePrefab, itemData );
+					StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
 
 			}else if(currentPage == "Items"){
 				//No sub category so retrieve a list of all item
 				List<Item> usableList = ItemLogic.Instance.UsableList;
 
 				foreach(Item itemData in usableList)
-					StoreItemEntry.CreateEntry( grid, itemStorePrefab, itemData );
+					StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
 
 			}else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)

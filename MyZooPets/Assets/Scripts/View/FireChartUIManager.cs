@@ -16,8 +16,7 @@ public class FireChartUIManager : MonoBehaviour {
 	public Color activeColor;
 	public Color inactiveColor;
 	
-	
-	public int currentFlameLevel;
+	public int currentFlameLevel;	 //TODO: make get set for this variable
 	
 	void Start(){
 		// Check fire levels

@@ -30,7 +30,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 
 		// show the UI itself
-		goWellapadUI.GetComponent<TweenToggleDemux>().Show();
+		goWellapadUI.GetComponent<TweenToggle>().Show();
 		
 		scriptScreenManager.SetScreen();
 	}
@@ -43,6 +43,6 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		NavigationUIManager.Instance.ShowPanel();		
 		
 		// hide the UI
-		goWellapadUI.GetComponent<TweenToggleDemux>().Hide();
+		goWellapadUI.GetComponent<TweenToggle>().Hide();
 	}
 }

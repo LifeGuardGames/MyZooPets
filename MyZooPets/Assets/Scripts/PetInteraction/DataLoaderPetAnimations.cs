@@ -30,6 +30,7 @@ public class DataLoaderPetAnimations {
 	//---------------------------------------------------
 	// GetUnrestrictedData()
 	// Get a random unrestricted animation for a type of category.
+	// unrestricted meaning the animation does not depend on mood or health
 	// The boolean is used for determining if weighting
 	// should still be used.
 	//---------------------------------------------------

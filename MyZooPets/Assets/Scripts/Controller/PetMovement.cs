@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PetMovement : Singleton<PetMovement> {
+    //=======================Events========================
+    public EventHandler<EventArgs> OnReachedDest;   // when the pet reaches its destination
+    //=====================================================     
+
     public Camera mainCamera;
     public GameObject runWay; //Where the pet is allowed to move
 	public GameObject shadowObject; //pet's shadow
@@ -23,37 +27,30 @@ public class PetMovement : Singleton<PetMovement> {
 	// sound for when the pet moves
 	public string strSoundMove;
 
-    private tk2dSpriteAnimator anim; //2D sprite animator
     private Vector3 destinationPoint; //destination that the pet is going to move to
 	private bool moving; //Is Pet moving now or not
-	private float moveToX;
-	private float moveToZ;
     private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
                                 //be moved when clicking on NGUI
 	
-	public float fMagic;
-	public float fSpeedNormal;
-	public float fSpeedFast;
-	public float fViewX;
-	public float fViewY;
-	public bool bFreeze;
+	// public float fMagic;
+	// public float fSpeedNormal;
+	// public float fSpeedFast;
+	// public float fViewX;
+	// public float fViewY;
+	// public bool bFreeze;
 	
 	// how fast the pet moves
-	private float fSpeed;
+	private float fNormalSpeed;
+    private float fSickSpeed;
 	
-	//=======================Events========================
-	public EventHandler<EventArgs> OnReachedDest; 	// when the pet reaches its destination
-	//=====================================================		
 
     void Awake(){
-        D.Assert(mainCamera != null, "Camera missing in " + this);
-        D.Assert(petSprite != null, "PetSprite missing in " + this);
-        // anim = petSprite.GetComponent<tk2dSpriteAnimator>();
         int layerNGUI = LayerMask.NameToLayer("NGUI");
         nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
 		
 		// get speed from constants
-		fSpeed = Constants.GetConstant<float>( "MoveSpeed" );
+		fNormalSpeed = Constants.GetConstant<float>( "NormalMoveSpeed" );
+        fSickSpeed = Constants.GetConstant<float>("SickMoveSpeed");
     }
 
     void Start(){
@@ -64,10 +61,22 @@ public class PetMovement : Singleton<PetMovement> {
     // Update is called once per frame
     void Update () {
         if (moving && petSprite != null){
-            if (ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving )){ //move the pet location if allowed
+            //move the pet location if allowed
+            if (ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving )){ 
+
+                PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();             
+                PetHealthStates health = DataManager.Instance.GameData.Stats.GetHealthState();
+                float fSpeed = fNormalSpeed;
+
+                //show pet movement down if pet is sick
+                if(health != PetHealthStates.Healthy || mood != PetMoods.Happy){
+                    fSpeed = fSickSpeed;
+                }
+
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint, fSpeed * Time.deltaTime);
-            }else
+            }
+            else
 				StopMoving();
 
             //when the sprite reaches destination. stop transform and animation

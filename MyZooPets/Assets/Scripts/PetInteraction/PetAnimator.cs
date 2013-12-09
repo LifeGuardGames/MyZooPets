@@ -120,6 +120,17 @@ public class PetAnimator : LgCharacterAnimator {
 		if ( dataAnim != null )
 			queueAnims.Enqueue( dataAnim );			
 	}
+
+	//---------------------------------------------------
+	// Chew()
+	//---------------------------------------------------
+	public void ChewFood(){
+		// get anim w/o looking at pet's attributes
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData( "Eat" );
+
+		// then start playing the anim immediately
+		PlayAnimation( dataAnim );	
+	}
 	
 	//---------------------------------------------------
 	// BreathFire()

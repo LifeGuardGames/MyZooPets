@@ -11,6 +11,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public GameObject uiButtonSpriteObject;
     public GameObject spritePet;
     public GameObject inventoryItemPrefab;
+    public PetAnimator petAnimator;
 
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
@@ -75,9 +76,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     //TO DO:remove from here and use the speech class instead
     // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
     private void ShowPetReceivedFoodAnimation(){
-        Hashtable message = new Hashtable();
-        message.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
-        PetSpeechController.Instance.Talk(message);
+        // Hashtable message = new Hashtable();
+        // message.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+        // PetSpeechController.Instance.Talk(message);
+
+        petAnimator.ChewFood();
     }
 
     //Event listener. listening to when new item is added to the inventory

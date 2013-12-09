@@ -69,9 +69,8 @@ public class PetMovement : Singleton<PetMovement> {
                 float fSpeed = fNormalSpeed;
 
                 //show pet movement down if pet is sick
-                if(health != PetHealthStates.Healthy || mood != PetMoods.Happy){
+                if(health != PetHealthStates.Healthy || mood != PetMoods.Happy)
                     fSpeed = fSickSpeed;
-                }
 
                 petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint, fSpeed * Time.deltaTime);

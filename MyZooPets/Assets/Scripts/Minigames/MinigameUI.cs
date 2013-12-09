@@ -25,6 +25,7 @@ public class MinigameUI : MonoBehaviour {
 	private Hashtable hashLabels;
 	private Dictionary<MinigamePopups, MinigamePopup> hashPopups;
 	
+	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		

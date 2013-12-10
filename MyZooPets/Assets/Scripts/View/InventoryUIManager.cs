@@ -80,7 +80,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         // message.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
         // PetSpeechController.Instance.Talk(message);
 
-        petAnimator.ChewFood();
+        // petAnimator.ChewFood();
+        petAnimator.PlayUnrestrictedAnim("Eat");
     }
 
     //Event listener. listening to when new item is added to the inventory

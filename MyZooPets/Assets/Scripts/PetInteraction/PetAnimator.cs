@@ -122,12 +122,24 @@ public class PetAnimator : LgCharacterAnimator {
 	}
 
 	//---------------------------------------------------
-	// Chew()
+	// PlayUnrestrictedAnim()
+	// Play animation in a category without consideration 
+	// of the pet mood or health stats
 	//---------------------------------------------------
-	public void ChewFood(){
-		// get anim w/o looking at pet's attributes
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData( "Eat" );
+	public void PlayUnrestrictedAnim(string strCat){
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData(strCat);
 
+		PlayAnimation(dataAnim);
+	}
+
+	//---------------------------------------------------
+	// PlayRestrictedAnim
+	// Play anim based on pet's attributes
+	//---------------------------------------------------
+	public void PlayRestrictedAnim(string strCat){
+		// get anim based on pet's attributes
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData(strCat);
+		
 		// then start playing the anim immediately
 		PlayAnimation( dataAnim );	
 	}
@@ -137,11 +149,7 @@ public class PetAnimator : LgCharacterAnimator {
 	// The player is attacking a gate!
 	//---------------------------------------------------	
 	public void BreathFire() {
-		// get anim based on pet's attributes
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Fire" );
-		
-		// then start playing the anim immediately
-		PlayAnimation( dataAnim );	
+		PlayRestrictedAnim("Fire");
 		
 		// spawn the particle effect
 		Skill curSkill = DataManager.Instance.GameData.Dojo.GetCurrentSkill();

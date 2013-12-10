@@ -35,8 +35,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	//private GameObject goBackdrop;
 	private GameObject anchorCenter;
 	
-	void OnAwake(){
-	}
 	
 	void Start(){
 		//anchorCenter = GameObject.Find("Anchor-Center");

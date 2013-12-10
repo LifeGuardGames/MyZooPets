@@ -30,6 +30,7 @@ GameObject:
   - 114: {fileID: 11400018}
   - 114: {fileID: 11400014}
   - 65: {fileID: 6500000}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: Pet_LWF
   m_TagString: Untagged
@@ -135,7 +136,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.27292252, y: .347236633, z: 23.9283352}
+  m_LocalPosition: {x: -5.63899994, y: .347236633, z: 13.8411589}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
@@ -335,6 +336,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speechDuration: 1
   isDebug: 0
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60839863765ef4e9994e85432f78d595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  petAnimator: {fileID: 11400000}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,7 +405,7 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: -2.27292252
+    e03: 5.63899994
     e10: 0
     e11: 1
     e12: 0
@@ -400,7 +413,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 1
-    e23: -23.9283352
+    e23: -13.8411589
     e30: 0
     e31: 0
     e32: 0

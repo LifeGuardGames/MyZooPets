@@ -327,6 +327,7 @@ public class HUDAnimator : MonoBehaviour {
 			alphaScript.startAlpha = 1f;
 			alphaScript.endAlpha = 0f;
 			alphaScript.duration = 0.7f;
+			alphaScript.StartAlphaTween();
 		}
 		
 		// also add a component that keeps track of this UI element (if it's xp or starts)

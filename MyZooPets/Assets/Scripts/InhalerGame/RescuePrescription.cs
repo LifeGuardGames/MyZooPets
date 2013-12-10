@@ -11,6 +11,7 @@ public class RescuePrescription : InhalerPart{
 
    protected override void Awake(){
         gameStepID = 6;
+        floatyText = "INHALER_FLOATY_ROCKIT";
    } 
 
     void OnPinch(PinchGesture gesture){ 

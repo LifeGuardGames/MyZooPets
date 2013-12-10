@@ -10,6 +10,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     public GameObject progressStep; //Prefabs for thesliderNodes 
     public UISlider slider; //Reference of UISlider
     public SceneTransition scriptTransition;
+    public bool tutOn;
 
     private List<GameObject> sliderNodes; //list of nodes to show game steps
     private int stepCompleted;
@@ -86,12 +87,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void ShowQuitButton(){
-        if(DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER))
+        if(InhalerLogic.Instance.IsTutorialCompleted)
             quitButton.GetComponent<PositionTweenToggle>().Show();
     }
 
     private void HideQuitButton(){
-        if(DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER))
+        if(InhalerLogic.Instance.IsTutorialCompleted)
             quitButton.GetComponent<PositionTweenToggle>().Hide();
     }
 
@@ -108,7 +109,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void SetUpHintTimer(){
         //Show hint right away if it's users' first time
-        if(InhalerLogic.Instance.IsFirstTimeRescue){ 
+        if(InhalerLogic.Instance.IsFirstTimeRescue && tutOn){ 
             runShowHintTimer = false;
             showHint = true;
         }else{
@@ -143,36 +144,29 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 			return;	
 		}*/
 		
-        CompleteTutorial();
+        InhalerLogic.Instance.CompleteTutorial();
 
         scriptTransition.StartTransition(SceneUtils.BEDROOM);
-    }
-
-    public void CompleteTutorial(){
-        // I hate to do this here, but I'm not sure where else to put it...if the player had not completed the tutorial, mark it as
-        // completed
-        if ( !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER ) )
-            DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
     }
 	
 	//---------------------------------------------------
 	// ShowCutscene()
 	//---------------------------------------------------	
-	private void ShowCutscene() {
-		GameObject resourceMovie = Resources.Load("Cutscene_PostInhaler") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-	}
+	// private void ShowCutscene() {
+	// 	GameObject resourceMovie = Resources.Load("Cutscene_PostInhaler") as GameObject;
+	// 	LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+	// 	CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+	// }
 	
-    private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
-		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-		QuitInhalerGame();
-    }	
+ //    private void CutsceneDone(object sender, EventArgs args){
+	// 	DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_PostInhaler");	
+	// 	CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+	// 	QuitInhalerGame();
+ //    }	
 
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){
-        if(!InhalerLogic.Instance.IsFirstTimeRescue)
+        if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn)
             ResetHintTimer();
 
         if(OnShowHint != null)

@@ -18,6 +18,7 @@ public class RescueSpacer : InhalerPart{
         gameStepID = 2;
         startDragPos = transform.position;
         targetDragPos = new Vector3(8, -3, 13);
+        floatyText = "INHALER_FLOATY_GREATJOB";
     }
 
     void OnDrag(DragGesture gesture) { 

@@ -9,7 +9,7 @@ public class ButtonExitInhalerGame : ButtonChangeScene{
     // ProcessClick()
     //---------------------------------------------------   
     protected override void ProcessClick() {
-        InhalerGameUIManager.Instance.CompleteTutorial();
+        InhalerLogic.Instance.CompleteTutorial();
         
         base.ProcessClick(); 
     }

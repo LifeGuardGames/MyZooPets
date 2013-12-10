@@ -10,6 +10,7 @@ public class Inhale : InhalerPart {
 
     protected override void Awake(){
         gameStepID = 7;
+        floatyText = "INHALER_FLOATY_GREATJOB";
     }
 
     void OnSwipe(SwipeGesture gesture){

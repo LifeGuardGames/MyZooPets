@@ -9,6 +9,7 @@ using System.Collections;
 */
 public class InhalerPart : MonoBehaviour {
     protected int gameStepID; //The step in which the part will be activated
+    protected string floatyText = "INHALER_FLOATY_NICE";
 
     protected virtual void Awake(){}
 
@@ -35,6 +36,13 @@ public class InhalerPart : MonoBehaviour {
 
     //Move to the next step of the inhaler game
     protected virtual void NextStep(){
+        // spawn floaty text
+        Hashtable option = new Hashtable();
+        option.Add("parent", GameObject.Find("Anchor-Center"));
+        option.Add("text", Localization.Localize(floatyText)); 
+        option.Add("textSize", 128);
+        FloatyUtil.SpawnFloatyText(option);
+
         InhalerLogic.Instance.NextStep();
     }
 }

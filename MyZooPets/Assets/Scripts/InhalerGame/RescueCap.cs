@@ -34,8 +34,8 @@ public class RescueCap : InhalerPart{
 
     protected override void NextStep(){
 		// play sound here
-		AudioManager.Instance.PlayClip( "inhalerRemoveCap" );		
-		
+		AudioManager.Instance.PlayClip( "inhalerRemoveCap" );
+
        base.NextStep();
        Destroy(gameObject);
     }

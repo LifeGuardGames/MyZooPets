@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NGUIAlphaTween : MonoBehaviour {
 
-	private float currentAlpha;
 	public float startAlpha = 1.0f;	// range [0-1]
 	public float endAlpha = 0.0f;
 	public float delay = 0;
 	public float duration = 2f;
+	public List<UIWidget> widgets; //list of widgets that will be affected by alpha tween
 
-	private UIWidget widget;
+	private float currentAlpha;
 
 	// Use this for initialization
-	void Start () {
-		widget = gameObject.GetComponent<UISprite>();
+	void Awake () {
 
 		if(startAlpha > 1f){
 			startAlpha = 1f;
@@ -21,7 +21,10 @@ public class NGUIAlphaTween : MonoBehaviour {
 		else if(startAlpha < 0){
 			startAlpha = 0f;
 		}
-		widget.alpha = startAlpha;
+
+		foreach(UIWidget widget in widgets){
+			widget.alpha = startAlpha;
+		}
 
 		if(endAlpha > 1f){
 			endAlpha = 1f;
@@ -32,11 +35,12 @@ public class NGUIAlphaTween : MonoBehaviour {
 
 		currentAlpha = startAlpha;
 
-		StartAlphaTween();
 	}
 
 	void FixedUpdate(){
-		widget.alpha = currentAlpha;
+		foreach(UIWidget widget in widgets){
+			widget.alpha = currentAlpha;
+		}
 	}
 
 	// LeanTween to update its own value

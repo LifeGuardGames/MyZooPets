@@ -6,13 +6,9 @@ using System;
 public class InhalerLogic : Singleton<InhalerLogic>{
     public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
     public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-
     public const int RESCUE_NUM_STEPS = 8;
-
     private int currentStep = 1; //current step that user is on
-    private bool canPlayGame; //true: play game, false: exit game
 
-    //=================API (use this for UI)==================
     /*
         call the api in this order
         1)IsCurrentStepCorrect
@@ -29,13 +25,13 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         set{DataManager.Instance.GameData.Inhaler.FirstTimeRescue = value;}
     }
 
+    public bool IsTutorialCompleted{
+        get{return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);}
+    }
+
     //True: the step that the user is currently on is correct, False: wrong step
     public bool IsCurrentStepCorrect(int step){
         bool retVal = step == currentStep;
-        // if(!retVal){
-            // if(D.Assert(OnWrongStep != null, "OnWrongStep has no listeners"))
-            //     OnWrongStep(this, EventArgs.Empty);
-        // }
         return retVal; 
     }
 
@@ -46,8 +42,16 @@ public class InhalerLogic : Singleton<InhalerLogic>{
                 OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame())
 			GameDone();
+    } 
+
+    public void ResetGame(){
+        currentStep = 1;
     }
-    //======================================================
+
+    public void CompleteTutorial(){
+        if(!IsTutorialCompleted)
+            DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
+    }
 	
 	//---------------------------------------------------
 	// GameDone()
@@ -60,16 +64,15 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		
         IsFirstTimeRescue = false;
         CalendarLogic.Instance.RecordGivingInhaler(); 
-        if(D.Assert(OnGameOver != null, "OnGameOver has no listeners"))
+        
+        if(OnGameOver != null)
             OnGameOver(this, EventArgs.Empty);
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
 	}	
 	
-    public void ResetGame(){
-        currentStep = 1;
-    }
+   
 
     /*
         Ending sequence is one more than the total number of sequences

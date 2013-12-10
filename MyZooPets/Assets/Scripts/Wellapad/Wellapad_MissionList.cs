@@ -87,15 +87,15 @@ public class Wellapad_MissionList : MonoBehaviour {
 		title.transform.FindChild("Title").GetComponent<UILabel>().text = strMissionTitle;			
 		
 		// find the available tasks for the mission and add them
-		List<Data_WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks( strMissionType );
+		List<WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks( strMissionType );
 		for ( int i = 0; i < listTasks.Count; i++ ) {
-			Data_WellapadTask dataTask = listTasks[i];
+			WellapadTask task = listTasks[i];
 			
 			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
 			SetNameForGrid( goTask );
 			
 			// init this task UI with the task itself
-			goTask.GetComponent<WellapadTaskUI>().Init( dataTask );
+			goTask.GetComponent<WellapadTaskUI>().Init( task );
 		}
 		
 		// add the reward for completing the mission

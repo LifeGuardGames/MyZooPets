@@ -10,7 +10,7 @@ using System.Collections;
 
 public class WellapadTaskUI : MonoBehaviour {	
 	// task belonging to this UI
-	private Data_WellapadTask task;
+	private WellapadTask task;
 	
 	// task text
 	public UILabel label;
@@ -21,13 +21,12 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
-	public void Init( Data_WellapadTask task ) {
+	public void Init( WellapadTask task ) {
 		// cache the task
 		this.task = task;
 		
-		// set the label showing what the task entails
-		string strTask = task.GetText();
-		label.text = strTask;	
+		// set the description for this task
+		SetDesc();
 		
 		// set the checkbox sprite appropriately
 		SetCheckboxSprite();
@@ -35,8 +34,16 @@ public class WellapadTaskUI : MonoBehaviour {
 		// listen for various messages
 		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;			// when a task is complete so the UI can react
 		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
-		
-		
+	}
+	
+	//---------------------------------------------------
+	// SetDesc()
+	// Sets the description for this task.
+	//---------------------------------------------------	
+	private void SetDesc() {
+		// set the label showing what the task entails
+		string strTask = task.GetDesc();
+		label.text = strTask;			
 	}
 	
 	//---------------------------------------------------
@@ -61,7 +68,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------		
 	private void OnTaskUpdated( object sender, TaskUpdatedArgs args ) {
 		// if the IDs match, update our checkbox sprite
-		if ( args.ID == task.GetID() )
+		if ( args.ID == task.TaskID )
 			SetCheckboxSprite();
 	}
 	
@@ -70,7 +77,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	// Callback for when a task is highlighted
 	//---------------------------------------------------	
 	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
-		if ( args.ID == task.GetID() ) {
+		if ( args.ID == task.TaskID ) {
 			// this task is being highlighted -- change the text to black
 			label.color = Color.black;
 		}

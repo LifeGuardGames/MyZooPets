@@ -52,6 +52,19 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 
 	}	
 	
+	//---------------------------------------------------
+	// _GameOver()
+	//---------------------------------------------------		
+	protected override void _GameOver() {
+		// send out distance task
+		int nDistance = ScoreManager.Instance.Distance;
+		WellapadMissionController.Instance.TaskCompleted( "Distance" + GetMinigameKey(), nDistance );
+		
+		// send out coins task
+		int nCoins = ScoreManager.Instance.Coins;
+		WellapadMissionController.Instance.TaskCompleted( "Coins" + GetMinigameKey(), nCoins );
+	}		
+	
     //---------------------------------------------------
     // ResetGame()
     // Set all game components to initial state

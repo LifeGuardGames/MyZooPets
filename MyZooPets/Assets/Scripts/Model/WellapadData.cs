@@ -8,7 +8,9 @@ using System.Collections.Generic;
 // Save data for all things Wellapad related.
 //---------------------------------------------------
 
-public class WellapadData {		
+public class WellapadData {	
+	public const string ALWAYS_UNLOCKED = "Always";
+	
 	// when the wellapad missions were created; used to determine if a refresh is necessary
 	public DateTime DateMissionsCreated { get; set; }
 	
@@ -30,11 +32,13 @@ public class WellapadData {
     //Populate with dummy data
     public void Init(){
         TasksUnlocked = new List<string>();
-		TasksUnlocked.Add("PlayClinic");
-		
+		TasksUnlocked.Add( ALWAYS_UNLOCKED );
+	
 		ResetMissions();
 		
 		// testing
+		//TasksUnlocked.Add("Ninja");
+		//TasksUnlocked.Add("Clinic");
 		
 		/*DateMissionsCreated = DateTime.Now;
 		Dictionary<string, bool> test = new Dictionary<string, bool>();

@@ -16,6 +16,12 @@ public class Data_WellapadTask {
 		return strID;	
 	}
 	
+	// the category this task belongs to
+	private string strCategory;
+	public string GetCategory() {
+		return strCategory;	
+	}
+	
 	// the type of mission this is
 	private string strTaskType;
 	public string GetTaskType() {
@@ -28,11 +34,15 @@ public class Data_WellapadTask {
 		return Localization.Localize( strKey );	
 	}
 	
-	// key to check for inclusion (optional)
-	// if this is TRUE, then this task will not be added to a mission unless this key is present in the player's unlocked task data
-	private string strInclusionKey;
-	public string GetInclusionKey() {
-		return strInclusionKey;	
+	// optional amount parameter this task may have
+	private List<int> listAmounts;
+	public int GetRandomAmount() {
+		int nAmount = 0;
+		
+		if ( listAmounts.Count > 0 )
+			nAmount = ListUtils.GetRandomElement<int>( listAmounts );
+		
+		return nAmount;	
 	}
 	
 	// key to check for completion event
@@ -48,9 +58,14 @@ public class Data_WellapadTask {
 		// get the mission type
 		strTaskType = HashUtils.GetHashValue<string>( hashAttr, "Type", "Side", strError );
 		
-		// get the inclusion key (optional)
-		bool bInclusion = XMLUtils.GetBool(hashData["InclusionCheck"] as IXMLNode, false);
-		if ( bInclusion )
-			strInclusionKey = id;
+		// get the category of this task
+		strCategory = HashUtils.GetHashValue<string>( hashAttr, "Category", "" );
+		
+		// get the amounts(optional)
+		listAmounts = new List<int>();
+		string strAmounts = XMLUtils.GetString(hashData["Amounts"] as IXMLNode, "10");
+		string[] arrayAmounts = strAmounts.Split( ","[0] );
+		for ( int i = 0; i < arrayAmounts.Length; ++i )
+			listAmounts.Add( int.Parse( arrayAmounts[i] ) );
 	}
 }

@@ -14,6 +14,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	public float fComboMaxTime;		// max time between cuts for a combo
 	private float fComboTime = 0;	// time counter
 	private int nCombo = 0;			// the current combo level of the player
+	private int nBestCombo = 0;		// player's best combo in one run
 	
 	// used to count time between groups and between entries within a group
 	private float fTime = 0;
@@ -43,9 +44,19 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		// reset variables
 		fComboTime = 0;
 		nCombo = 0;
+		nBestCombo = 0;
 		fTime = 0;
 		listCurrentEntries = null;
 	}
+	
+	//---------------------------------------------------
+	// _GameOver()
+	//---------------------------------------------------		
+	protected override void _GameOver() {
+		// send out combo task
+		int nBestCombo = GetCombo_Best();
+		WellapadMissionController.Instance.TaskCompleted( "Combo" + GetMinigameKey(), nBestCombo );
+	}		
 	
 	//---------------------------------------------------
 	// GetMinigameKey()
@@ -209,6 +220,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	public int GetCombo() {
 		return nCombo;	
 	}
+	public int GetCombo_Best() {
+		return nBestCombo;	
+	}
 	
 	//---------------------------------------------------
 	// IncreaseCombo()
@@ -230,6 +244,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	//---------------------------------------------------	
 	private void SetCombo( int num ) {
 		nCombo = num;	
+	}
+	private void SetCombo_Best( int num ) {
+		nBestCombo = num;	
 	}
 	
 	//---------------------------------------------------
@@ -267,6 +284,11 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		int nCombo = GetCombo();
 		if ( nCombo > 1 )
 			UpdateScore( nCombo );
+		
+		// if the current combo was better than their best, update it
+		int nBest = GetCombo_Best();
+		if ( nCombo > nBest )
+			SetCombo_Best( nCombo );
 		
 		// reset the combo down to 0
 		SetCombo( 0 );

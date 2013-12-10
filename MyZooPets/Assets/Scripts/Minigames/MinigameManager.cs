@@ -318,14 +318,24 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	protected void GameOver() {
 		// send out a completion task
 		WellapadMissionController.Instance.TaskCompleted( "Play" + GetMinigameKey() );
-		//WellapadUIManager.Instance.TaskCompleted( "Play" + GetMinigameKey() );
+		
+		// send out score task
+		int nScore = GetScore();
+		WellapadMissionController.Instance.TaskCompleted( "Score" + GetMinigameKey(), nScore );
 		
 		// update the game state
 		SetGameState( MinigameStates.GameOver );
 		
+		// call children function
+		_GameOver();
+		
 		// show the game over UI
 		ui.TogglePopup( MinigamePopups.GameOver, true );
 	}
+	
+	protected virtual void _GameOver() {
+		// children implement this
+	}	
 	
 	//---------------------------------------------------
 	// PauseGame()

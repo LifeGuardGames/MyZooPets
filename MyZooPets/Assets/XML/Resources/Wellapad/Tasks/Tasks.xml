@@ -1,17 +1,29 @@
 <Tasks>
-	<Task ID="DailyInhaler" Type="Critical"> </Task>
+	<Task ID="DailyInhaler" Type="Critical" Category="Always"> </Task>
 	
-	<Task ID="CleanRoom" Type="Side"> </Task>	
-	<Task ID="FightMonster" Type="Side"> </Task>		
-	<Task ID="FeedPet" Type="Side"> </Task>	
-	<Task ID="PlayNinja" Type="Side">
-		<InclusionCheck>True</InclusionCheck>
+	<Task ID="CleanRoom" Type="Side" Category="Always"> </Task>	
+	<Task ID="FightMonster" Type="Side" Category="Always"> </Task>		
+	<Task ID="FeedPet" Type="Side" Category="Always"> </Task>	
+	
+	<Task ID="ScoreNinja" Type="Side" Category="Ninja">
+		<Amounts>10,20,30,40,50</Amounts>
 	</Task>	
-	<Task ID="PlayClinic" Type="Side">
-		<InclusionCheck>True</InclusionCheck>
+	<Task ID="ComboNinja" Type="Side" Category="Ninja">
+		<Amounts>2,3,4</Amounts>
+	</Task>		
+	
+	<Task ID="ScoreClinic" Type="Side" Category="Clinic">
+		<Amounts>1000,1500,2000</Amounts>
+	</Task>			
+		
+	<Task ID="DistanceRunner" Type="Side" Category="Runner">
+		<Amounts>250,800,1000</Amounts>
+	</Task>		
+	<Task ID="CoinsRunner" Type="Side" Category="Runner">
+		<Amounts>50,100,150</Amounts>
 	</Task>	
-	<Task ID="PlayRunner" Type="Side">
-		<InclusionCheck>True</InclusionCheck>
+	<Task ID="ScoreRunner" Type="Side" Category="Runner">
+		<Amounts>100,500,1000</Amounts>
 	</Task>		
 	
 </Tasks>

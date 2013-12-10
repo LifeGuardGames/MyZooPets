@@ -18,28 +18,38 @@ public class DataLoader_WellapadTasks {
 	//---------------------------------------------------
 	// GetTasks()
 	// Returns all available tasks for a given mission
-	// type.
+	// type.  For multiple tasks within a category, only
+	// one such task is added.
 	//---------------------------------------------------	
 	public static List<Data_WellapadTask> GetTasks( string strMissionType ) {
-		List<Data_WellapadTask> listTasks = new List<Data_WellapadTask>();
+		List<Data_WellapadTask> listTasksFinal = new List<Data_WellapadTask>();
 		
-		if ( hashData.ContainsKey( strMissionType ) )
-			listTasks = (List<Data_WellapadTask>) hashData[strMissionType];
-		else
-			Debug.Log("Error...no missions for " + strMissionType);
-		
-		// loop through the list of all data and prune the ones that are not currently available to the player
-		List<Data_WellapadTask> listFinal = new List<Data_WellapadTask>();
-		for ( int i = 0; i < listTasks.Count; ++i ) {
-			Data_WellapadTask task = listTasks[i];
-			string strInclude = task.GetInclusionKey();
+		if ( hashData.ContainsKey( strMissionType ) ) {
+			// get the hashtable of categories->tasks for this mission
+			Hashtable hashCategories = (Hashtable) hashData[strMissionType];
 			
-			// if the list of unlocked tasks includes our key (or doesn't have an inclusion key), it is good to go
-			if ( string.IsNullOrEmpty( strInclude ) || DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains( strInclude ) )
-				listFinal.Add( task );
+			// now go through each category in this hash and pick one task at random and add it to our list of tasks
+			// (but also check to make sure the category is unlocked)
+			foreach ( DictionaryEntry pair in hashCategories ) {
+				string strCategory = (string)pair.Key;
+				
+				if ( DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains( strCategory ) ) {
+					List<Data_WellapadTask> listTasks = (List<Data_WellapadTask>) pair.Value;
+					
+					// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
+					// otherwise we just want to pick 1 at random
+					int nTasks = strCategory == WellapadData.ALWAYS_UNLOCKED ? listTasks.Count : 1;
+					List<Data_WellapadTask> tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
+					
+					foreach ( Data_WellapadTask task in tasks )
+						listTasksFinal.Add( task );
+				}
+			}
 		}
-		
-		return listFinal;
+		else
+			Debug.Log("Error...no missions for " + strMissionType);		
+
+		return listTasksFinal;
 	}
 	
 	//---------------------------------------------------
@@ -47,7 +57,7 @@ public class DataLoader_WellapadTasks {
 	// Returns a specific task based on a mission type
 	// and id.
 	//---------------------------------------------------		
-	public static Data_WellapadTask GetTask( string strMissionType, string strID ) {
+	/*public static Data_WellapadTask GetTask( string strMissionType, string strID ) {
 		List<Data_WellapadTask> listTasks = GetTasks( strMissionType );
 		
 		for ( int i = 0; i < listTasks.Count; ++i ) {
@@ -61,6 +71,7 @@ public class DataLoader_WellapadTasks {
 		Debug.Log("Tried to find a specific task: " + strID + " of " + strMissionType + " -- but could not");
 		return null;
 	}
+	*/
 
     public static void SetupData(){
         if(dataLoaded) return; //Don't load from xml if data already loaded
@@ -104,11 +115,19 @@ public class DataLoader_WellapadTasks {
 	// Store the task based on its mission type.
 	//---------------------------------------------------		
 	private static void StoreData( Data_WellapadTask data ) {
-		string strType = data.GetTaskType();
-		if ( !hashData.ContainsKey( strType ) )
-			hashData[strType] = new List<Data_WellapadTask>();
+		string strMission = data.GetTaskType();
+		if ( !hashData.ContainsKey( strMission ) )
+			hashData[strMission] = new Hashtable();
 		
-		List<Data_WellapadTask> tasks = (List<Data_WellapadTask>) hashData[strType];
+		// this is the hashtable of tasks in a mission
+		Hashtable hashTasks = (Hashtable) hashData[strMission];
+		
+		// now drill deeper -- we want to sort by categories
+		string strCategory = data.GetCategory();
+		if ( !hashTasks.ContainsKey( strCategory ) )
+			hashTasks[strCategory] = new List<Data_WellapadTask>();
+		
+		List<Data_WellapadTask> tasks = (List<Data_WellapadTask>) hashTasks[strCategory];
 		tasks.Add( data );
 	}
 }

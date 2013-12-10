@@ -56,7 +56,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
-		BGController.Instance.Show("black");
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
@@ -77,7 +76,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();		
-		BGController.Instance.Hide();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();

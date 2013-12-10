@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //-----------------------------------------
 // Starts the floating tween and alpha tween
@@ -8,16 +9,13 @@ using System.Collections;
 public class FloatyController : MonoBehaviour {
     public Vector3 floatingUpPos;
     public float floatingTime;
-
-    private NGUIAlphaTween alphaTween; 
-
-    void Awake(){
-        alphaTween = GetComponent<NGUIAlphaTween>();
-    }
+    public List<NGUIAlphaTween> alphaScripts = new List<NGUIAlphaTween>(); //all the alpha script in this floaty prefab
 
 	void Start () {
         FloatUp();
-        alphaTween.StartAlphaTween();
+        foreach(NGUIAlphaTween alphaScript in alphaScripts){
+            alphaScript.StartAlphaTween();
+        }
 	}
 
     private void FloatUp(){

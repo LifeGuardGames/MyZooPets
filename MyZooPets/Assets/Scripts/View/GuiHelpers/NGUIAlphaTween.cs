@@ -8,13 +8,14 @@ public class NGUIAlphaTween : MonoBehaviour {
 	public float endAlpha = 0.0f;
 	public float delay = 0;
 	public float duration = 2f;
-	public List<UIWidget> widgets; //list of widgets that will be affected by alpha tween
+	private UIWidget widget;
 
 	private float currentAlpha;
 
 	// Use this for initialization
 	void Awake () {
-
+		widget = GetComponent<UIWidget>();
+		
 		if(startAlpha > 1f){
 			startAlpha = 1f;
 		}
@@ -22,9 +23,7 @@ public class NGUIAlphaTween : MonoBehaviour {
 			startAlpha = 0f;
 		}
 
-		foreach(UIWidget widget in widgets){
-			widget.alpha = startAlpha;
-		}
+		widget.alpha = startAlpha;
 
 		if(endAlpha > 1f){
 			endAlpha = 1f;
@@ -34,13 +33,10 @@ public class NGUIAlphaTween : MonoBehaviour {
 		}
 
 		currentAlpha = startAlpha;
-
 	}
 
 	void FixedUpdate(){
-		foreach(UIWidget widget in widgets){
-			widget.alpha = currentAlpha;
-		}
+		widget.alpha = currentAlpha;
 	}
 
 	// LeanTween to update its own value

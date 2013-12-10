@@ -21,6 +21,8 @@ public class DataSkills{
         if(allSkills.ContainsKey(skillID)){
             skill = allSkills[skillID];
         }
+		else
+			Debug.Log("No skill data for " + skillID);
         return skill;
     }
 

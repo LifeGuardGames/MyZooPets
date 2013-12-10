@@ -44,10 +44,10 @@ public class Constants {
 		String[] arrayColor = i_str.Split(","[0]);
 		if ( arrayColor.Length == 4 ) {
 			color = new Color( 
-				float.Parse( arrayColor[0] ), 
-				float.Parse( arrayColor[1] ), 
-				float.Parse( arrayColor[2] ), 
-				float.Parse( arrayColor[3] ) );
+				float.Parse( arrayColor[0] ) / 255, 
+				float.Parse( arrayColor[1] ) / 255, 
+				float.Parse( arrayColor[2] ) / 255, 
+				float.Parse( arrayColor[3] ) / 255 );
 		}	
 		else
 			Debug.Log("Illegal color parsing...reverting to white");

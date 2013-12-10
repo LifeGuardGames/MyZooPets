@@ -188,9 +188,9 @@ public class GA {
 		GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
 		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null))
 		{
-			float addX = 0;
-			if (go.GetComponent("PlayMakerFSM") != null)
-				addX = selectionRect.height + 2;
+			//float addX = 0;
+			//if (go.GetComponent("PlayMakerFSM") != null)
+			//	addX = selectionRect.height + 2;
 			
 			if (GA.SettingsGA.Logo == null)
 			{

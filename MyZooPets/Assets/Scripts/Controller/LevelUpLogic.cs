@@ -20,9 +20,10 @@ public class LevelUpLogic : Singleton<LevelUpLogic> {
 
     //Check if the pet is ready to level up
     private void LevelUp(object senders, EventArgs args){
-        int nextLevelIndex = (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
-        DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevelIndex;
+        // now done in hud animator
+		//int nextLevelIndex = (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
+        //DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevelIndex;
 
-        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, nextLevelIndex, true);
+        //BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, nextLevelIndex, true);
     }
 }

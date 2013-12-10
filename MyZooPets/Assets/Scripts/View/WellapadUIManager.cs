@@ -28,6 +28,8 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
@@ -40,7 +42,9 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
 		//Show other UI object
-		NavigationUIManager.Instance.ShowPanel();		
+		NavigationUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		
 		// hide the UI
 		goWellapadUI.GetComponent<TweenToggle>().Hide();

@@ -12,6 +12,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject popupTitle;
     public UILabel nameField;
     public GameObject selectedEgg;
+    public bool bSkipComic;
 	
 	public Camera NGUICamera;
     private string petColor;
@@ -62,8 +63,13 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 
             //Set the PetInfo
             DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;
-            DataManager.Instance.GameData.PetInfo.PetName = petName;
-            DataManager.Instance.GameData.PetInfo.PetColor = petColor;
+
+            if(!String.IsNullOrEmpty(petName))
+                DataManager.Instance.GameData.PetInfo.PetName = petName;
+
+            if(!String.IsNullOrEmpty(petColor))
+                DataManager.Instance.GameData.PetInfo.PetColor = petColor;
+
             DataManager.Instance.GameData.PetInfo.IsHatched = true;
 
             HideChooseGUI(true);
@@ -97,7 +103,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") )
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || bSkipComic)
 			LoadScene();
 		
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;

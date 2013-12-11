@@ -45,16 +45,40 @@ public class StatsController : Singleton<StatsController> {
 	}	
 	
 	// Locations are on screen space
-	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
+	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
+		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
 		ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true, false );
 	}
-	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, bool bPlaySounds, bool bAtOnce = false){
+
+	//-------------------------------------------------------------------
+	// ChangeStats()
+	// Use this function to change pet stats
+	// Param:
+	//	deltaPoints: (needs refactoring) change in level
+	//	pointsLoc: starting location of the points animation 
+	//	deltaStars: (needs refactoring) change in coin #
+	//	starsLoc: starting location of the coins animation 
+	//	deltaHealth: change in health level
+	//	healthLoc: starting location of the health animation
+	//	deltaMood: change in mood
+	//	moodLoc: starting location of the mood animation
+	//	bPlaySounds: T/F To place sound when stats changing
+	//	bAtOnce: T/F To play more than one animation at once (Joe what is this?)
+	//	bFloaty: T/F To show floaty text to show stats change
+	//-------------------------------------------------------------------
+	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
+		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, 
+		bool bPlaySounds, bool bAtOnce = false, bool bFloaty = true){
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
 				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+
+			if(bFloaty){
+				PetFloatyUIManager.Instance.CreatePointsFloaty(deltaPoints);
+			}
 		}
 	
 		if(deltaStars != 0){
@@ -68,13 +92,19 @@ public class StatsController : Singleton<StatsController> {
 		if(deltaMood != 0){
 			
 			PetMoods eOld = DataManager.Instance.GameData.Stats.GetMoodState();
-			if(deltaMood > 0)
+
+			if(deltaMood > 0){
 				DataManager.Instance.GameData.Stats.AddMood(deltaMood);
-			else if(deltaMood < 0)
+			}
+			else if(deltaMood < 0){
 				DataManager.Instance.GameData.Stats.SubtractMood(-1 * deltaMood);
+			}
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
+			if(bFloaty)
+				PetFloatyUIManager.Instance.CreateMoodFloaty(deltaMood);
+
 			if ( bCheckPet )
 				CheckForMoodTransition( eOld, eNew );
 		}		
@@ -87,6 +117,9 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
+			if(bFloaty)
+				PetFloatyUIManager.Instance.CreateHealthFloaty(deltaHealth);
+
 			if ( bCheckPet )
 				CheckForHealthTransition( eOldHealth, eNewHealth );
 		}

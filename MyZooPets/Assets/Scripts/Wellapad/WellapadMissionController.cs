@@ -118,8 +118,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		foreach ( KeyValuePair<string, Mission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks ) {
 			foreach ( KeyValuePair<string, WellapadTask> task in mission.Value.Tasks ) {
 				if ( task.Value.WillComplete( strCompleted, nAmount ) ) {
-					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[strCompleted].Completed = true;
-					
+					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[strCompleted].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
+
 					// because the task was completed, we may have to update our reward status...
 					// got to do this before sending the event or the reward will not be displayed right
 					RewardCheck( mission.Key );						
@@ -231,7 +231,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		
 		// loop through all tasks to see their status...if we run into a task that is not completed, just return
 		foreach ( KeyValuePair<string, WellapadTask> task in mission.Tasks ) {
-			if ( task.Value.Completed == false )
+			if ( task.Value.Completed == WellapadTaskCompletionStates.RecentlyCompleted || 
+					task.Value.Completed == WellapadTaskCompletionStates.Completed )
 				return;
 		}
 		
@@ -244,19 +245,25 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// Returns whether the user has completed the
 	// incoming task or not.
 	//---------------------------------------------------	
-	public bool GetTaskStatus( WellapadTask task ) {
-		bool bStatus = false;
+	public WellapadTaskCompletionStates GetTaskStatus( WellapadTask task, bool bPop = false ) {
+		WellapadTaskCompletionStates eStatus = WellapadTaskCompletionStates.Uncompleted;
 		
 		string strMission = task.MissionID;
 		string strID = task.TaskID;
 		
 		if ( DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey( strMission ) && 
-				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks.ContainsKey( strID ) ) 
-			bStatus = DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks[strID].Completed;
+				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks.ContainsKey( strID ) ) {
+			eStatus = DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks[strID].Completed;
+		
+			
+			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
+			if ( bPop && eStatus == WellapadTaskCompletionStates.RecentlyCompleted )
+				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks[strID].Completed = WellapadTaskCompletionStates.Completed;
+		}
 		else
 			Debug.Log("Can't find task " + strID + " in saved data");
 		
-		return bStatus;
+		return eStatus;
 	}
 	
 	//---------------------------------------------------

@@ -13,9 +13,9 @@ public class WellapadTask {
 	public string MissionID {get {return data.GetTaskType();}}		// mission this task is a part of
 	public string TaskID {get { return data.GetID();}}		// ID of this task
 	public int Amount {get; set;}			// amount for this task
-	public bool Completed {get; set;}		// has this task been completed?
-	
-	private Data_WellapadTask data;		// the raw, immutable data for this task
+	public WellapadTaskCompletionStates Completed {get; set;}		// has this task been completed?
+
+	private Data_WellapadTask data;		// the raw, immutable data for this task 
 	
 	//---------------------------------------------------
 	// WillComplete()
@@ -25,7 +25,7 @@ public class WellapadTask {
 	public bool WillComplete( string strID, int nAmount ) {
 		bool bWillComplete = false;
 		
-		if ( Completed == false && TaskID == strID && nAmount >= Amount )
+		if ( Completed == WellapadTaskCompletionStates.Uncompleted && TaskID == strID && nAmount >= Amount )
 			bWillComplete = true;
 		
 		return bWillComplete;
@@ -47,9 +47,9 @@ public class WellapadTask {
 	
 	public WellapadTask() {}
 	
-	public WellapadTask( Data_WellapadTask data, bool bCompleted = false ) {
+	public WellapadTask( Data_WellapadTask data, WellapadTaskCompletionStates eCompleted = WellapadTaskCompletionStates.Uncompleted ) {
 		this.data = data;
 		Amount = data.GetRandomAmount();
-		Completed = bCompleted;
+		Completed = eCompleted;
 	}
 }

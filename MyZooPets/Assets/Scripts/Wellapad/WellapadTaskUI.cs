@@ -18,6 +18,9 @@ public class WellapadTaskUI : MonoBehaviour {
 	// checkbox sprite
 	public UISprite spriteBox;
 	
+	// tween object for when the task is completed
+	public TweenToggle tweenCheck;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
@@ -29,11 +32,11 @@ public class WellapadTaskUI : MonoBehaviour {
 		SetDesc();
 		
 		// set the checkbox sprite appropriately
-		SetCheckboxSprite();
+		SetCheckboxSprite( false );
 		
 		// listen for various messages
-		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;			// when a task is complete so the UI can react
 		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
+		WellapadUIManager.Instance.OnTweenDone += OnTweenDone;						// whent he ui finishes tweening
 	}
 	
 	//---------------------------------------------------
@@ -51,26 +54,27 @@ public class WellapadTaskUI : MonoBehaviour {
 	// Sets the sprite on this UI's checkbox based on
 	// the status of the task.
 	//---------------------------------------------------	
-	private void SetCheckboxSprite() {
+	private void SetCheckboxSprite( bool bPop ) {
 		// get the status
-		bool bStatus = WellapadMissionController.Instance.GetTaskStatus( task );
+		WellapadTaskCompletionStates eStatus = WellapadMissionController.Instance.GetTaskStatus( task, bPop );
 		
-		if ( bStatus ) {
+		// show the tween only if the status is complete OR the status is recently completed and we are popping the task status
+		if ( eStatus == WellapadTaskCompletionStates.Completed ||
+				( eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop ) ) {
 			// mark this task as done
-			string strSprite = Constants.GetConstant<string>( "CheckedSprite" );
-			spriteBox.spriteName = strSprite;
+			tweenCheck.Show();
 		}		
 	}
 	
 	//---------------------------------------------------
-	// OnTaskUpdated()
-	// Callback for when a task's status gets updated.
+	// OnTweenDone()
+	// Callback for when the wellapad UI is done tweening.
 	//---------------------------------------------------		
-	private void OnTaskUpdated( object sender, TaskUpdatedArgs args ) {
-		// if the IDs match, update our checkbox sprite
-		if ( args.ID == task.TaskID )
-			SetCheckboxSprite();
-	}
+	private void OnTweenDone( object sender, UIManagerEventArgs args ) {
+		// if the UI is opening, update our task
+		if ( args.Opening )
+			SetCheckboxSprite( true );
+	}	
 	
 	//---------------------------------------------------
 	// OnTaskHighlighted()
@@ -93,6 +97,9 @@ public class WellapadTaskUI : MonoBehaviour {
 	void OnDestroy() {
 		// stop listening for task completion data
 		if ( WellapadMissionController.Instance )
-			WellapadMissionController.Instance.OnTaskUpdated -= OnTaskUpdated;
+			WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;
+		
+		if ( WellapadUIManager.Instance )
+			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;		
 	}
 }

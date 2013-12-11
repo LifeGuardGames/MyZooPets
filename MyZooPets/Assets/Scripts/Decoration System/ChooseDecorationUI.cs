@@ -19,6 +19,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// sound that gets played when a decoration is placed
 	public string strSoundPlace;
 	
+	// the remove button game object
+	public GameObject goRemoveButton;
+	
 	// prefab of the area that items are populated to -- this exists because if we don't instantiate it, the list "remembers" where it was last scrolled to
 	public GameObject prefabChooseArea;
 	private GameObject goChooseArea;
@@ -60,28 +63,12 @@ public class ChooseDecorationUI : MonoBehaviour {
 		// create the decoration entries in the UI
 		CreateEntries( goGrid );	
 		
-		// the last item in the list (so it shows up first) is the removal option (if there is a decoration at this node)
-		if ( decoNodeCurrent.HasRemoveOption() )
-			AddRemoveEntry( goGrid );
+		// show or hide the remove button as appropriate
+		bool bShowRemove = decoNodeCurrent.HasRemoveOption();
+		NGUITools.SetActive( goRemoveButton, bShowRemove );
 		
 		goGrid.GetComponent<UIGrid>().Reposition();
 		Invoke("Reposition",0.00000001f);		
-	}
-	
-	//---------------------------------------------------
-	// AddRemoveEntry()
-	// Adds an entry for a removal option to goGrid.
-	//---------------------------------------------------		
-	private void AddRemoveEntry( GameObject goGrid ) {
-		GameObject itemRemove = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
-		
-		itemRemove.name = "_item_remove";	// DO NOT CHANGE its used for sorting
-		itemRemove.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE_DESC" );
-		itemRemove.transform.FindChild("ItemName").GetComponent<UILabel>().text = Localization.Localize( "DECO_REMOVE" );
-		itemRemove.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = "apple";
-		itemRemove.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_REMOVE");
-		itemRemove.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>().target = gameObject;
-		itemRemove.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>().functionName = "OnRemoveButton";			
 	}
 	
 	//---------------------------------------------------
@@ -112,8 +99,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
-			item.transform.FindChild("PlaceButton").transform.FindChild("Label").GetComponent<UILabel>().text = Localization.Localize("DECO_PLACE");
-			
+		
 			// depending on if the deco can be placed or not, set certain attributes on the entry
 			UIButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>();
 			if ( bDecoOK ) {

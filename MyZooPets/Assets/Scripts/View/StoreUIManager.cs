@@ -13,6 +13,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
+	private GameObject goExitButton;	// exit button on sub panel
 	
 	// store related sounds
 	public string strSoundChangeTab;
@@ -48,6 +49,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		colors.Add(limeGreen);
 		colors.Add(purpleish);
 		colors.Add(yellow);
+		
+		goExitButton = storeSubPanel.FindInChildren( "ExitButton" );
+		if ( goExitButton == null )
+			Debug.Log("Exit button is null...please set");
 	}
 	
 	//---------------------------------------------------
@@ -65,9 +70,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Special function used to open the store UI 
 	// straight up to a certain category.
 	//---------------------------------------------------	
-	public void OpenToSubCategory( string strCat ) {
-		BGController.Instance.Show("black");
-		CreateSubCategoryItemsWithString( strCat );
+	public void OpenToSubCategory( string strCat, bool bShortcut = false  ) {		
+		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
+		// bypasses the normal means of opening a shop, so we need to do some special things in this case
+		if ( bShortcut ) {
+			// if we are shortcutting, we have to tween the bg in now	
+			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+		}	
+		
+		CreateSubCategoryItemsWithString( strCat, bShortcut );		
 	}
 	
 	//---------------------------------------------------
@@ -170,11 +181,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		CreateSubCategoryItemsWithString( page.name );
 	}
 	
-	public void CreateSubCategoryItemsWithString( string strPage ) {
+	public void CreateSubCategoryItemsWithString( string strPage, bool bShortcut = false ) {
 		if ( strPage != "Items" && strPage != "Food" && strPage != "Decorations" ) {
 			Debug.Log("Illegal sore sub category: " + strPage );
 			return;
 		}
+		
+		// we also need to hide the exit button's active state based on whether or not we are shortcutting
+		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
+		string strFunction = bShortcut ? "HideStoreSubPanel" : "CloseUI";
+		goExitButton.GetComponent<UIButtonMessage>().functionName = strFunction;		
 		
 		currentPage = strPage;
 
@@ -255,7 +271,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// store doesn't apply...otherwise just show the store base panel like normal
 		if ( EditDecosUIManager.Instance.IsNodeSaved() ) {
 			// close the store bg
-			BGController.Instance.Hide();
+			storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 			
 			// tell the deco manager to reopen its choose menu
 			EditDecosUIManager.Instance.ReopenChooseMenu();

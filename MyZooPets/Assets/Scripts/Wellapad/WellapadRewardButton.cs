@@ -15,6 +15,9 @@ public class WellapadRewardButton : LgButton {
 	// reward icon that changes based on the state of the reward
 	public UISprite spriteIcon;
 	
+	// the NGUI button script for this button
+	public UIImageButton nguiButton;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
@@ -34,6 +37,9 @@ public class WellapadRewardButton : LgButton {
 	// state the reward is in.
 	//---------------------------------------------------		
 	private void SetSprites() {
+		// state of the actual button (not the image on the button)
+		bool bEnabled = true;
+		
 		// get the mission associated with this reward
 		Mission mission = WellapadMissionController.Instance.GetMission( strMissionID );
 		
@@ -44,14 +50,22 @@ public class WellapadRewardButton : LgButton {
 			if ( eStatus == RewardStatuses.Claimed ) {
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
+				
+				// if the reward is claimed, the button is not enabled
+				bEnabled = false;
 			}
 			else {
 				// the reward is either unclaimed or unearned -- show the proper icon	
 				string strKey = "Reward" + eStatus;
 				string strSprite = Constants.GetConstant<string>( strKey );
 				spriteIcon.spriteName = strSprite;
+				
+				// the button is not enabled if the reward is unearned
+				bEnabled = eStatus == RewardStatuses.Unclaimed;
 			}
 		}
+		
+		nguiButton.isEnabled = bEnabled;
 	}
 	
 	//---------------------------------------------------

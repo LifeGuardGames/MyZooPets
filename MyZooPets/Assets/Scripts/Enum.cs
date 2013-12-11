@@ -252,3 +252,10 @@ public enum PetSpeechTransitions{
     HappySad,
     SadHappy,
 }
+
+// status of checkmarks on the wellapad
+public enum WellapadTaskCompletionStates {
+	Uncompleted,		// not done
+	Completed,			// done
+	RecentlyCompleted	// done, but not yet seen on the wellapad
+}

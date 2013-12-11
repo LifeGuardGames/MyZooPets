@@ -19,6 +19,9 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
 		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
 		
+		// set the tween target on the wellapad object to this object
+		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
+		
 		scriptScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
 	}
 	

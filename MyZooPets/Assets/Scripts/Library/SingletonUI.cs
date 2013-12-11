@@ -15,8 +15,10 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	protected abstract void _CloseUI();		// when the UI manager is closed
 	//------------------------------------------------------------- 
 	
-	// event that fires when the user enters or exits a UI mode
-	public event EventHandler<UIManagerEventArgs> OnManagerOpen;	
+	// =======================Events========================
+    public EventHandler<UIManagerEventArgs> OnTweenDone;   	// event that fires when the UI finishes a tween
+	public EventHandler<UIManagerEventArgs> OnManagerOpen;	// event that fires when the user enters or exits a UI mode
+	// =====================================================	
 	
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
 	public bool blockGUI;	
@@ -66,6 +68,19 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		bOpen = true;
 		
 		_OpenUI();
+	}
+	
+	//---------------------------------------------------
+	// OnShow()
+	// Tween callback for when this UI finishes its 
+	// show tween.
+	//---------------------------------------------------	
+	private void OnShow() {
+		// send callback
+		UIManagerEventArgs args = new UIManagerEventArgs();
+		args.Opening = true;
+        if( OnTweenDone != null )
+            OnTweenDone(this, args);			
 	}
 	
 	//---------------------------------------------------

@@ -63,7 +63,7 @@ public class Data_WellapadTask {
 		
 		// get the amounts(optional)
 		listAmounts = new List<int>();
-		string strAmounts = XMLUtils.GetString(hashData["Amounts"] as IXMLNode, "10");
+		string strAmounts = XMLUtils.GetString(hashData["Amounts"] as IXMLNode, "0");
 		string[] arrayAmounts = strAmounts.Split( ","[0] );
 		for ( int i = 0; i < arrayAmounts.Length; ++i )
 			listAmounts.Add( int.Parse( arrayAmounts[i] ) );

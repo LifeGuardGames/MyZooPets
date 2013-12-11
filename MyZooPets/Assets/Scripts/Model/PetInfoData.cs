@@ -42,7 +42,7 @@ public class PetInfoData{
     public void Init(){
         PetID = "";
         PetName = "LazyWinkle";
-        PetColor = "whiteBlue";
+        PetColor = "OrangeYellow";
         IsHatched = false;
 		
 		nFireBreaths = 0;

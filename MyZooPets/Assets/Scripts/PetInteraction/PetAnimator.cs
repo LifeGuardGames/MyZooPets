@@ -72,7 +72,10 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// set the LWFAnimator loading data based on the pet's attributes
 		string strSpecies = GetSpeciesKey();
-		string strColor = GetColorKey();
+
+		// string strColor = GetColorKey();
+		string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
+
 		animName = strSpecies + strColor;
 		folderPath = "LWF/" + animName + "/";
 		

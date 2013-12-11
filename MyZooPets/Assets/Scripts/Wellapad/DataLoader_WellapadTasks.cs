@@ -38,7 +38,8 @@ public class DataLoader_WellapadTasks {
 					
 					// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
 					// otherwise we just want to pick 1 at random
-					int nTasks = strCategory == WellapadData.ALWAYS_UNLOCKED ? listTasks.Count : 1;
+					// int nTasks = strCategory == WellapadData.ALWAYS_UNLOCKED ? listTasks.Count : 1;
+                    int nTasks = strCategory == "Always" ? listTasks.Count : 1;
 					List<Data_WellapadTask> tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
 					
 					foreach ( Data_WellapadTask task in tasks )

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class WellapadData {	
-	public const string ALWAYS_UNLOCKED = "Always";
-	
 	// when the wellapad missions were created; used to determine if a refresh is necessary
 	public DateTime DateMissionsCreated { get; set; }
 	
@@ -20,6 +18,8 @@ public class WellapadData {
 	// list of current tasks/missions the user has
 	public Dictionary< string, Mission > CurrentTasks {get; set;}
 	
+	public WellapadData(){}
+
 	//---------------------------------------------------
 	// ResetMissions()
 	// Wipes out save data for the player's mission.  Used
@@ -32,7 +32,7 @@ public class WellapadData {
     //Populate with dummy data
     public void Init(){
         TasksUnlocked = new List<string>();
-		TasksUnlocked.Add( ALWAYS_UNLOCKED );
+		TasksUnlocked.Add( "Always" );
 	
 		ResetMissions();
 		

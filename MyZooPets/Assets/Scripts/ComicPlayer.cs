@@ -63,9 +63,13 @@ public class ComicPlayer : MonoBehaviour{
         GameObject loadedPage = null; 
         int pageIndex = currentPageNum - 1;
 
+        //TO DO - Load these from DataManager once we have all the comics
+        string petSpecies = "Basic";
+        string petColor = "OrangeYellow";
+
         try{
             //Get the comic page name
-            string pageName = pages[pageIndex];
+            string pageName = petSpecies + petColor + pages[pageIndex];
             //Load comic prefab from resource and instantiate
             GameObject pagePrefab = (GameObject) Resources.Load(pageName);
             loadedPage = NGUITools.AddChild(this.gameObject, pagePrefab);

@@ -8,6 +8,7 @@ using System;
 public class PetInfoData{	
     public string PetID {get; set;}
     public string PetName {get; set;}
+    public string PetSpecies {get; set;}
     public string PetColor {get; set;}
     public bool IsHatched {get; set;}
 	
@@ -42,6 +43,7 @@ public class PetInfoData{
     public void Init(){
         PetID = "";
         PetName = "LazyWinkle";
+        PetSpecies = "Basic";
         PetColor = "OrangeYellow";
         IsHatched = false;
 		

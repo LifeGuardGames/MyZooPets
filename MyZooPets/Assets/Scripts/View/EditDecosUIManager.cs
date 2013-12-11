@@ -127,7 +127,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		tweenEdit.Show();
 		
 		// open the shop
-		StoreUIManager.Instance.OpenToSubCategory( "Decorations" );
+		StoreUIManager.Instance.OpenToSubCategory( "Decorations", true );
 		
 		// open the specific sub category in the shop
 		string strCat = nodeSaved.GetDecoType().ToString();

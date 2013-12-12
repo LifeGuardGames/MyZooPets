@@ -259,3 +259,11 @@ public enum WellapadTaskCompletionStates {
 	Completed,			// done
 	RecentlyCompleted	// done, but not yet seen on the wellapad
 }
+
+// states of dropped items on the ground
+public enum DroppedItemStates {
+	UnInit,
+	Dropped,
+	PickedUp,
+	Awarded
+}

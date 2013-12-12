@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class GetFireAnimationController : MonoBehaviour {
-	
+	public static EventHandler<EventArgs> OnGetFireAnimationDone;
+
 	public ParticleSystemController petFireBackgroundParticle;
 	private ParticleSystem petFireBackgroundParticleSystem;
 	
@@ -57,17 +59,23 @@ public class GetFireAnimationController : MonoBehaviour {
 		petFireBackgroundParticleSystem.startSpeed = fireStartSpeed;
 	}
 	
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Joe's button!")){
-			PlaySequence();
-		}
-	}
-	
 	public void PlaySequence(){
 		petFireBackgroundParticle.Play();
 		
 		tweenColorScript.StartTween();
 		Invoke("PlaySecondSequence", fireWait);
+	}
+
+	//--------------------------------------------------	
+	// PlayGetFireAnimation()
+	// Callback method for when the fire animation is done
+	//--------------------------------------------------	
+	public void PlayGetFireAnimation(){
+		fireActivateParticle.Play();
+
+		//Fire event
+		if(OnGetFireAnimationDone != null)
+			OnGetFireAnimationDone(this, EventArgs.Empty);
 	}
 	
 	private void PlaySecondSequence(){
@@ -81,8 +89,10 @@ public class GetFireAnimationController : MonoBehaviour {
 		petFireBackgroundParticleSystem.startSize = fireStartSize - (fireSizeDiff * factor);
 		petFireBackgroundParticleSystem.startSpeed = fireStartSpeed - (fireSpeedDiff * factor);
 	}
-	
-	public void PlayGetFireAnimation(){
-		fireActivateParticle.Play();
-	}
+
+	// void OnGUI(){
+	// 	if(GUI.Button(new Rect(100, 100, 100, 100), "Joe's button!")){
+	// 		PlaySequence();
+	// 	}
+	// }
 }

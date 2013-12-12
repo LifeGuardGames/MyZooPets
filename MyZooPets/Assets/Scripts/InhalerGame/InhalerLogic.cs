@@ -61,10 +61,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	private void GameDone() {		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "inhalerDone" );
-		
         IsFirstTimeRescue = false;
-        CalendarLogic.Instance.RecordGivingInhaler(); 
-        
+
         if(OnGameOver != null)
             OnGameOver(this, EventArgs.Empty);
 		
@@ -72,8 +70,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
 	}	
 	
-   
-
     /*
         Ending sequence is one more than the total number of sequences
         True: done with the game , False: have more steps to go

@@ -31,8 +31,10 @@ public class RescuePrescription : InhalerPart{
 #if UNITY_EDITOR
     void Update(){
        if(Input.GetKeyDown(KeyCode.P)){
-            PrescriptionAnimation();
-            NextStep();
+            if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+                PrescriptionAnimation();
+                NextStep();
+            }
        }
     }
 #endif

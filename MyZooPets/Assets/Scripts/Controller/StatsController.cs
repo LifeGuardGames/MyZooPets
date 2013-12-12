@@ -63,7 +63,7 @@ public class StatsController : Singleton<StatsController> {
 	//	deltaMood: change in mood
 	//	moodLoc: starting location of the mood animation
 	//	bPlaySounds: T/F To place sound when stats changing
-	//	bAtOnce: T/F To play more than one animation at once (Joe what is this?)
+	//	bAtOnce: T/F To play more than one animation at once (Joe is this right?)
 	//	bFloaty: T/F To show floaty text to show stats change
 	//-------------------------------------------------------------------
 	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 

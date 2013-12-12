@@ -42,23 +42,18 @@ public class ItemBoxLogic : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// IsValid()
-	// Is this item box valid to open?
-	//---------------------------------------------------		
-	public bool IsValid() {
-		bool bValid =  !string.IsNullOrEmpty( strItemBoxID );	
-		return bValid;
-	}
-	
-	//---------------------------------------------------
 	// OpenBox()
-	// Returns the items to be granted by this item box.
-	// This is a "chain reaction" function because calling
-	// it will also award the items.  Only call this function
-	// when the box has been opened.
+	// Opens this item box and sends all the items inside
+	// it flying out.
 	//---------------------------------------------------	
-	public List<KeyValuePair<Item, int>> OpenBox() {
+	public void OpenBox() {
 		List<KeyValuePair<Item, int>> items = new List<KeyValuePair<Item, int>>();
+		
+		// do a null check
+		if ( string.IsNullOrEmpty( strItemBoxID ) ) {
+			Debug.Log("Attempting to open an item box with an unset id...defaulting to Box_0", gameObject);
+			strItemBoxID = "Box_0";
+		}
 			
 		// get data for this box
 		Data_ItemBox dataBox = DataLoader_ItemBoxes.GetItemBox( strItemBoxID );
@@ -68,24 +63,32 @@ public class ItemBoxLogic : MonoBehaviour {
 		else
 			Debug.Log("No valid item box data for item box", this);
 		
-		// award the items
-		AwardItems( items );
-		
-		return items;
+		// create all the items to be obtained from this box
+		BurstItems( items );
 	}
 	
 	//---------------------------------------------------
-	// AwardItems()
-	// Puts the incoming list of items into the player's
-	// inventory.
+	// BurstItems()
+	// Instantiates all the items to be gained from this
+	// box and then "bursts" them out onto the bedroom
+	// floor.
 	//---------------------------------------------------		
-	private void AwardItems( List<KeyValuePair<Item, int>> items ) {
-		// loop through and add the items to the user's inventory
-		foreach ( KeyValuePair<Item, int> item in items )
-			InventoryLogic.Instance.AddItem( item.Key.ID, item.Value);
-		
-		// since items are being awarded, remove this entry from the save data
-		DataManager.Instance.GameData.Inventory.UnopenedItemBoxes.Remove( strItemBoxID );
-	}
-		
+	private void BurstItems( List<KeyValuePair<Item, int>> items ) {
+		foreach ( KeyValuePair<Item, int> item in items ) {
+			int nValue = item.Value;
+			for ( int i = 0; i < nValue; ++i ) {
+				// spawn the item to be coming out of this box
+				GameObject goPrefab = Resources.Load( "DroppedItem" ) as GameObject;
+				GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
+				goDroppedItem.GetComponent<DroppedItem>().Init( item.Key );
+				
+				// set the position of the newly spawned item to be wherever this item box is
+				Vector3 vPosition = gameObject.transform.position;
+				goDroppedItem.transform.position = vPosition;
+				
+				// make the item "burst" out
+				goDroppedItem.GetComponent<DroppedItem>().Burst();
+			}
+		}
+	}	
 }

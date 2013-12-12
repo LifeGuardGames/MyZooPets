@@ -10,6 +10,8 @@ using System.Linq;
 */
 public class InventoryLogic : Singleton<InventoryLogic> {
 	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
+	public EventHandler<EventArgs> OnInventoryBeingDestroyed;					// call when this class is about to be destroyed
+	
 	public class InventoryEventArgs : EventArgs{
 		private bool isItemNew = false;
 		private InventoryItem invItem = null;
@@ -102,6 +104,15 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		}		
 		
 		return inventory;
+	}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------	
+	private void OnDestroy() {
+		// if item logic is being destroyed, send out a callback to add any unawarded dropped items to the player's inventory
+		if(OnInventoryBeingDestroyed != null) 
+			OnInventoryBeingDestroyed(this, EventArgs.Empty);
 	}
 	
 	//Use item from inventory

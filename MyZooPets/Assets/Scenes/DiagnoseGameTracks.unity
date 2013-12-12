@@ -1770,7 +1770,7 @@ Prefab:
     - target: {fileID: 11400000, guid: 438475f9c24804801992e61878cc9de9, type: 2}
       propertyPath: popupGameOver
       value: 
-      objectReference: {fileID: 2095608906}
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 438475f9c24804801992e61878cc9de9, type: 2}
       propertyPath: popupPaused
       value: 
@@ -2383,7 +2383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &575402174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3957,7 +3957,7 @@ Transform:
   m_GameObject: {fileID: 895980511}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1500, y: 1500, z: 1}
+  m_LocalScale: {x: 1500, y: 1000, z: 1}
   m_Children: []
   m_Father: {fileID: 1072524222}
 --- !u!114 &895980513
@@ -4831,7 +4831,7 @@ MonoBehaviour:
   blockUI: 1
   startsHidden: 1
   hideDeltaX: 0
-  hideDeltaY: -800
+  hideDeltaY: -1000
   hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .200000003
@@ -5160,7 +5160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupOpening: {fileID: 1228308470}
-  popupGameOver: {fileID: 2095608906}
+  popupGameOver: {fileID: 0}
   popupPaused: {fileID: 889925892}
   labelScore: {fileID: 1065766152}
   labelLives: {fileID: 499481550}
@@ -8797,7 +8797,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnDestroy
@@ -12546,7 +12546,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 2095608905}
   - 114: {fileID: 2095608907}
-  - 114: {fileID: 2095608906}
   m_Layer: 10
   m_Name: MinigameGameOverNEW
   m_TagString: Untagged
@@ -12567,27 +12566,6 @@ Transform:
   - {fileID: 1288328155}
   - {fileID: 1072524222}
   m_Father: {fileID: 2035032514}
---- !u!114 &2095608906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400056, guid: f1d55b0051f004bcbb7ea2d1b958a782,
-    type: 2}
-  m_PrefabInternal: {fileID: 1723354357}
-  m_GameObject: {fileID: 2095608904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e05f21c33ad3241e4bce74f410c010e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tween: {fileID: 1072524223}
-  demuxHUD: {fileID: 792511251}
-  labelXP: {fileID: 1942312934}
-  labelStars: {fileID: 2055739479}
-  labelScore: {fileID: 851490575}
-  goIconStars: {fileID: 1566827203}
-  goIconXP: {fileID: 1574997531}
-  tweenButtons: {fileID: 1288328156}
-  nFreebie: 0
 --- !u!114 &2095608907
 MonoBehaviour:
   m_ObjectHideFlags: 0

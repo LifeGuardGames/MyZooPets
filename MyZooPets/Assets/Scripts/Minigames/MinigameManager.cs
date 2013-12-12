@@ -201,6 +201,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		// minigame is starting, so hide the opening
 		ui.TogglePopup( MinigamePopups.Opening, false );
 		
+		Analytics.Instance.StartPlayTimeTracker();		
+
 		// init stuff
 		NewGame();
 	}
@@ -261,7 +263,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		
 		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
 			ui.TogglePopup( MinigamePopups.Pause, false );		
-		
+	
+		Analytics.Instance.EndPlayTimeTracker();
+
 		string strKey = GetMinigameKey();
 		string strScene = Constants.GetConstant<string>( strKey + "_QuitScene" );
 		scriptTransition.StartTransition( strScene );

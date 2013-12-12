@@ -123,6 +123,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 					// because the task was completed, we may have to update our reward status...
 					// got to do this before sending the event or the reward will not be displayed right
 					RewardCheck( mission.Key );						
+
+					//Analytics
+					Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_COMPLETE, task.Value.MissionID, task.Value.TaskID);
 					
 					// send event for the task update
 					if ( OnTaskUpdated != null ) {
@@ -160,6 +163,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if ( bRefresh ) {
+			
+			//Before reseting mission. Go through current mission and send failed tasks to analytics server
+			foreach ( KeyValuePair<string, Mission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks ) {
+				foreach ( KeyValuePair<string, WellapadTask> task in mission.Value.Tasks ) {
+					if(task.Value.Completed == WellapadTaskCompletionStates.Uncompleted){
+						Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, task.Value.MissionID, task.Value.TaskID);
+					}
+				}
+			}
+
 			DataManager.Instance.GameData.Wellapad.ResetMissions();
 			
 			AddDefaultMissions();

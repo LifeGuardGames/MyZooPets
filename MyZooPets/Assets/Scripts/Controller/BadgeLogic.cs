@@ -112,6 +112,10 @@ public class BadgeLogic : Singleton<BadgeLogic> {
                 DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);
                 Debug.Log("Unlock: " + badge.Name);
 
+                //Send analytics 
+                Analytics.Instance.BadgeUnlocked(badge.ID);
+
+                //Fire event for UI update
                 if(OnNewBadgeUnlocked != null){
                     BadgeEventArgs arg = new BadgeEventArgs(badge);
                     OnNewBadgeUnlocked(this, arg);

@@ -96,6 +96,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         ShowQuitButton();
         SetUpHintTimer();
 
+        Analytics.Instance.StartPlayTimeTracker();
+
         //Start the first hint
         if(OnShowHint != null)
             OnShowHint(this, EventArgs.Empty);
@@ -127,6 +129,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         timer += Time.deltaTime;
         if (timer > timeBeforeHints){
             showHint = true;
+
+            Analytics.Instance.InhalerHintRequired(InhalerLogic.Instance.CurrentStep);
+
             if(OnShowHint != null)
                 OnShowHint(this, EventArgs.Empty);
         }
@@ -143,9 +148,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void QuitInhalerGame(){
         InhalerLogic.Instance.CompleteTutorial();
+        Analytics.Instance.EndPlayTimeTracker();
         scriptTransition.StartTransition(SceneUtils.BEDROOM);
     }
-
 
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){

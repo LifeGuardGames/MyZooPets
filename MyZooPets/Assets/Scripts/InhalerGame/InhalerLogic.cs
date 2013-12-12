@@ -37,9 +37,12 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
     //Use this function to move on to the next step
     public void NextStep(){
+        Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
+
         currentStep++;
+
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
-                OnNextStep(this, EventArgs.Empty);
+            OnNextStep(this, EventArgs.Empty);
         if(IsDoneWithGame())
 			GameDone();
     } 

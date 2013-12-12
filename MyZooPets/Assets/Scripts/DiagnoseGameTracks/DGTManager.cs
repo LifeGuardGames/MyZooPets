@@ -186,9 +186,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 		AsthmaStage eCharStage = characterScored.GetStage();
 
 		if ( eZoneStage == eCharStage )
-			CharacterScored_Right( characterScored );
+			CharacterScored_Right( characterScored, zoneTarget);
 		else 
-			CharacterScored_Wrong( characterScored );		
+			CharacterScored_Wrong( characterScored, zoneTarget );		
 	}
 	
 	//---------------------------------------------------
@@ -196,7 +196,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// Called whenever a character reaches the right
 	// zone.
 	//---------------------------------------------------		
-	private void CharacterScored_Right( DGTCharacter character ) {
+	private void CharacterScored_Right( DGTCharacter character, DGTZone zone) {
 		// character was sent to the right zone -- get some points!
 		int nVal = character.GetPointValue();
 		UpdateScore( nVal );
@@ -218,18 +218,26 @@ public class DGTManager : MinigameManager<DGTManager> {
 		
 		// play appropriate sound
 		AudioManager.Instance.PlayClip( strSound );
+
+		// Analytics
+		Analytics.Instance.DiagnoseResult(Analytics.DIAGNOSE_RESULT_CORRECT, 
+			character.GetStage(), zone.GetStage());
 	}
 	
 	//---------------------------------------------------
 	// CharacterScored_Wrong()
 	// Called whenever a character reaches the wrong zone.
 	//---------------------------------------------------		
-	private void CharacterScored_Wrong( DGTCharacter character ) {
+	private void CharacterScored_Wrong( DGTCharacter character, DGTZone zone ) {
 		// character was sent to wrong zone...lose a life!
 		UpdateLives( -1 );
 		
 		// play an incorrect sound
 		AudioManager.Instance.PlayClip( "clinicWrong" );
+
+		//Analytics
+		Analytics.Instance.DiagnoseResult(Analytics.DIAGNOSE_RESULT_INCORRECT,
+			character.GetStage(), zone.GetStage());
 		
 		// also slow down the game
 		SlowGameDown();

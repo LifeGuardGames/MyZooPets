@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-public class Analytics : Singleton<Analytics>{
+public class Analytics : MonoBehaviour {
     public const string DIAGNOSE_RESULT_CORRECT = "correct";
     public const string DIAGNOSE_RESULT_INCORRECT = "incorrect";
 
@@ -29,6 +29,25 @@ public class Analytics : Singleton<Analytics>{
 
     private DateTime playTime;
     private bool isGameTimerOn = false;
+
+    private static Analytics instance;
+
+    //This instance creates itself if it's not in the scene.
+    //Mainly for debugging purpose
+    public static Analytics Instance{
+        get{
+            if(instance == null){
+
+                instance = (Analytics) FindObjectOfType(typeof(Analytics));
+                
+                if(instance == null){
+                    GameObject analyticsGO = (GameObject) Instantiate((GameObject) Resources.Load("Analytics"));
+                    instance = analyticsGO.GetComponent<Analytics>();
+                }
+            }
+            return instance;
+        }
+    }
 
     void Awake(){
         if(isCreated){

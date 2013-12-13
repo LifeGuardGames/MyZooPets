@@ -125,12 +125,26 @@ public class NotificationTest : MonoBehaviour {
 
 
             Hashtable notificationEntry = new Hashtable();
-            notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Badge);
+            notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.BadgeUnlocked);
             notificationEntry.Add(NotificationPopupFields.Message, "You got a new badge!");
             notificationEntry.Add(NotificationPopupFields.SpriteName, "badgeLevel20");
             notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
 
             NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
+
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*6, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "Fire Level Up")){
+
+            Hashtable notificationEntry = new Hashtable();
+            notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.FireLevelUp);
+            notificationEntry.Add(NotificationPopupFields.Message, "You got a new fire!");
+            notificationEntry.Add(NotificationPopupFields.SpriteName, "iconFireBlue");
+            notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+
+            NotificationUIManager.Instance.AddToQueue(notificationEntry);
+        }
+
+
     }
 }

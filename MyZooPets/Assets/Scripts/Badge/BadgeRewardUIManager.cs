@@ -16,7 +16,7 @@ public class BadgeRewardUIManager : MonoBehaviour {
         Badge badge = args.UnlockedBadge;
         Hashtable notificationEntry = new Hashtable();
 
-        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Badge);
+        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.BadgeUnlocked);
         notificationEntry.Add(NotificationPopupFields.Message, "You got a new badge!");
         notificationEntry.Add(NotificationPopupFields.SpriteName, badge.TextureName);
         notificationEntry.Add(NotificationPopupFields.Button1Callback, null);

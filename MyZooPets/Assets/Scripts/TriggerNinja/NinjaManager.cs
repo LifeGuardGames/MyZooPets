@@ -20,6 +20,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	private float fTime = 0;
 	public float fMax;			// time between spawn groups
 	
+	// the gesture trail that follows the user's finger around
+	public GestureTrail trail;
+	
 	// current list of entrie to spawn triggers from
 	private List<NinjaDataEntry> listCurrentEntries;
 	
@@ -169,8 +172,8 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		if ( GetGameState() != MinigameStates.Playing )
 			return;
 		
-		// current gesture phase (Started/Updated/Ended)
-		//ContinuousGesturePhase phase = gesture.Phase;
+		// update the ninja gesture cut trail
+		UpdateTrail( gesture );
 		
 		GameObject go = gesture.Selection;
 		if ( go ) {
@@ -190,6 +193,34 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		
 		// Total drag motion from initial to current position
 		//Vector2 totalMove = gesture.TotalMove;
+	}
+	
+	//---------------------------------------------------
+	// UpdateTrail()
+	// Updates the trail renderer that follows the
+	// user's finger/mouse around.
+	// I'm not sure how/why FingerGestures only calls
+	// drag events on this class; otherwise I would have
+	// had the trail itself take these messages...
+	//---------------------------------------------------	
+	private void UpdateTrail( DragGesture gesture ) {
+   		ContinuousGesturePhase ePhase = gesture.Phase;
+		
+	    // the screen position the user's finger is at currently
+	    Vector2 vPos = gesture.Position;
+	    
+	    // based on phase of the gesture, call certain functions
+	    switch ( ePhase ) {
+	    	case ContinuousGesturePhase.Started:
+	    		trail.DragStarted( vPos );
+	    		break;
+	    	case ContinuousGesturePhase.Updated:
+	    		trail.DragUpdated( vPos );
+	    		break;		
+	    	case ContinuousGesturePhase.Ended:
+	    		trail.DragEnded();
+	    		break;
+	    }		
 	}
 	
 	//---------------------------------------------------

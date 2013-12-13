@@ -64,7 +64,6 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         //Check if a new badge can be unlocked. Multiple badges of the same type 
         //can be unlock at the same time
         foreach(Badge badge in sortedBadgesType)
-            // if(CheckUnlockProgress(badge, latestProgress)) break;
             CheckUnlockProgress(badge, latestProgress);
 
         //Check if all badges of the same type have been unlocked

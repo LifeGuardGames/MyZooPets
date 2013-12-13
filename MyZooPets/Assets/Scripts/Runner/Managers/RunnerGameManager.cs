@@ -59,6 +59,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 		// send out distance task
 		int nDistance = ScoreManager.Instance.Distance;
 		WellapadMissionController.Instance.TaskCompleted( "Distance" + GetMinigameKey(), nDistance );
+        Analytics.Instance.RunnerPlayerDistanceRan(nDistance);
 		
 		// send out coins task
 		int nCoins = ScoreManager.Instance.Coins;

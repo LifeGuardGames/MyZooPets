@@ -118,7 +118,10 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 			//need to use the stats effect from item
 			ItemLogic.Instance.StatsEffect(itemID);
-			
+		
+			//analytics
+			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+
 			// play the item's sound, if it has one
 			string strSound = invItem.ItemData.SoundUsed;
 			if ( !string.IsNullOrEmpty(strSound) )

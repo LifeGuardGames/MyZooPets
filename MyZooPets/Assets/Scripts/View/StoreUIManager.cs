@@ -166,6 +166,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+
+			//Analytics
+			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 			
 			// play a sound since an item was bought
 			AudioManager.Instance.PlayClip( strSoundBuy );

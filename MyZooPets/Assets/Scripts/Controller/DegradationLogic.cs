@@ -139,14 +139,27 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(DegradTrigger trigger){
-		Vector3 triggerPos = trigger.gameObject.transform.position;
         DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
 		
 		// do a little magic here: get the world position of the trigger, turn that into screen coords, then take those coords (that are
 		// BottomLeft NGUI coords) and turn them into NGUI top coords.
-		Vector3 vTriggerPos = CameraManager.Instance.TransformAnchorPosition( CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), InterfaceAnchors.BottomLeft, InterfaceAnchors.Top );
+		// DEPRECATED: We no longer spawn stats from the trigger, we instead "burst" the stat items out of the object
+		//Vector3 triggerPos = trigger.gameObject.transform.position;
+		//Vector3 vTriggerPos = CameraManager.Instance.TransformAnchorPosition( CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraMain, triggerPos), InterfaceAnchors.BottomLeft, InterfaceAnchors.Top );
+		//StatsController.Instance.ChangeStats(nPoints, vTriggerPos, 50, vTriggerPos, 0, Vector3.zero, 0, Vector3.zero);
 		
-		StatsController.Instance.ChangeStats(nPoints, vTriggerPos, 50, vTriggerPos, 0, Vector3.zero, 0, Vector3.zero);
+		// instantiate a stats item from the trigger
+		GameObject goPrefab = Resources.Load( "DroppedStat" ) as GameObject;
+		GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
+		goDroppedItem.GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, 50 );
+		
+		// set the position of the newly spawned item to be wherever this item box is
+		Vector3 vPosition = new Vector3( trigger.gameObject.transform.position.x, trigger.gameObject.transform.position.y+5, trigger.gameObject.transform.position.z );
+		goDroppedItem.transform.position = vPosition;
+		
+		// make the stats "burst" out
+		goDroppedItem.GetComponent<DroppedObject>().Burst();		
+		
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
 		
 		// subtract one from the triggers left to clean

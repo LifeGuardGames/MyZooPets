@@ -56,7 +56,6 @@ public enum NotificationPopupType{
 	TwoButtons,
 	GameOverRewardOneButton,
 	GameOverRewardTwoButton,
-	TutorialLeft,
 	TipWithImage,
 	LevelUp,
 }
@@ -74,7 +73,6 @@ public enum NotificationPopupFields{
 	StartsHidden,
 	HideImmediately,
 	Badge,
-	TutorialImageType,
 	Sound
 }
 public enum BadgeType{
@@ -87,13 +85,6 @@ public enum BadgeType{
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
 public enum TalkImageType{
     Heart,
-}
-
-public enum TutorialImageType{
-    CalendarIntro,
-    CalendarGreenStamp,
-    CalendarRedStamp,
-    CalendarBonus
 }
 
 // various type of modes the UI could be in

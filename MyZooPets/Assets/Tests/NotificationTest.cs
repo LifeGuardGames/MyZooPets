@@ -74,15 +74,9 @@ public class NotificationTest : MonoBehaviour {
 			
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
-
-        //popup texture "great"
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
-            "great")){
-            NotificationUIManager.Instance.PopupTexture("great");	// Textures are not queued
-        }
 		
         //game over reward
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT),
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
             "GG 2 Button")){
 			
 			/////// Send Notication ////////
@@ -106,7 +100,7 @@ public class NotificationTest : MonoBehaviour {
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
 		
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*5, BUTTON_WIDTH, BUTTON_HEIGHT),
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT),
             "GG 1 Button")){
 			
 			/////// Send Notication ////////
@@ -122,26 +116,6 @@ public class NotificationTest : MonoBehaviour {
 			notificationEntry.Add(NotificationPopupFields.DeltaPoints, 1000);
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			
-			// Place notification entry table in static queue
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-        }
-
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*6, BUTTON_WIDTH, BUTTON_HEIGHT),
-            "tutorial test")){
-			
-			/////// Send Notication ////////
-			// Assign delegate functions to be passed in hashtable
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
-	               //;
-	            };
-			// Populate notification entry table
-			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TutorialLeft);
-			notificationEntry.Add(NotificationPopupFields.Message, "TESTTTT");
-			notificationEntry.Add(NotificationPopupFields.SpriteName, "advairPurple");
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.StartsHidden, true);
-			notificationEntry.Add(NotificationPopupFields.HideImmediately, false);
 			// Place notification entry table in static queue
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }

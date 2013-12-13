@@ -31,13 +31,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		return isNotificationActive;	
 	}
 	
-	// the actual instantiated backdrop object
-	//private GameObject goBackdrop;
 	private GameObject anchorCenter;
 	
+	void Awake(){
+		anchorCenter = GameObject.Find("Anchor-Center");
+	}
 	
 	void Start(){
-		//anchorCenter = GameObject.Find("Anchor-Center");
 		// Start is called after some notifications pushed!!! Check beforehand
 		if(!isNotificationActive){		
 			// Check the static queue to see if anything is there on level load
@@ -62,14 +62,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
 				case NotificationPopupType.OneButton:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupNotificationOneButton(	(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Button1Label]);
 					break;
 				
 				case NotificationPopupType.TwoButtons:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupNotificationTwoButtons((string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback],
@@ -78,14 +76,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.GameOverRewardOneButton:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]);
 					break;
 				
 				case NotificationPopupType.GameOverRewardTwoButton:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowGameOverRewardMessage(		(int)							entry[NotificationPopupFields.DeltaStars],
 													(int)							entry[NotificationPopupFields.DeltaPoints],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -93,8 +89,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.TipWithImage:
-//				Debug.Log (anchorCenter);
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowPopupTipWithImage(			(string)						entry[NotificationPopupFields.Message],
 													(string)						entry[NotificationPopupFields.SpriteName],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
@@ -103,119 +97,22 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				
 				case NotificationPopupType.LevelUp:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
 					ShowLevelUpMessage(				(string)						entry[NotificationPopupFields.Message],
 													(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
 													(string)						entry[NotificationPopupFields.Sound]);
 					break;
 				
-				case NotificationPopupType.TutorialLeft:
-//					goBackdrop = LgNGUITools.AddChildWithPosition(anchorCenter, backDrop);
-					ShowTutorialMessage(			(TutorialImageType)				entry[NotificationPopupFields.TutorialImageType],
-													(PopupNotificationNGUI.HashEntry)	entry[NotificationPopupFields.Button1Callback],
-													(string)						entry[NotificationPopupFields.Button1Label]);
-					break;
 				default:
 					Debug.LogError("Invalid Notification");
 					break;
 			}
 		}
 		else{
-			//Debug.Log ("No notification detected");
-			//Destroy( goBackdrop );
 			isNotificationActive = false;
 		}
 	}
 
-	////////////////////////////////////////////////////////////////
-
-	/*
-		Desc: creates a popup with only a texture
-		Params: notificationType
-	*/
-	public void PopupTexture(string notificationType){
-		GameObject prefab = null;
-		switch(notificationType){
-			case "great":
-				prefab = popupTextureGreatNGUI;
-			break;
-
-			case "practice intro":
-				prefab = popupTexturePracticeInhalerNGUI;
-			break;
-
-			case "intro":
-				prefab = popupTextureUseTheInhalerNGUI;
-			break;
-
-			case "nice try":
-				prefab = popupTextureNiceTryNGUI;
-			break;
-
-			case "diagnose":
-				prefab = popupTextureDiagnoseSymptomsNGUI;
-			break;
-		}
-		if(prefab == popupTexturePracticeInhalerNGUI){
-			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-			GameObject go = ShowPopupTexture(prefab);
-			Destroy(go, 3.0f);
-
-			// show regular intro after announcing that it is a practice game
-			Invoke("ShowIntro", 3.0f);
-		}
-		else if(prefab != null){
-			// GameObject go = Instantiate(prefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-			GameObject go = ShowPopupTexture(prefab);
-			Destroy(go, 3.0f);
-		}
-	}
-
-	GameObject ShowPopupTexture(GameObject prefab){
-		GameObject obj = NGUITools.AddChild(GameObject.Find("Anchor-Center"), prefab);
-		obj.GetComponent<PositionTweenToggle>().Reset();
-		obj.GetComponent<PositionTweenToggle>().Show(1.0f);
-		return obj;
-	}
-
-	// used to show regular intro after announcing that it is a practice game
-	private void ShowIntro () {
-		// GameObject intro = Instantiate(popupTextureUseTheInhaler, gameObject.transform.position, Quaternion.identity) as GameObject;
-		// Destroy(intro, 3.0f);
-		GameObject go = ShowPopupTexture(popupTextureUseTheInhalerNGUI);
-		Destroy(go, 3.0f);
-	}
-
 	/////////////// PREFAB CREATION /////////////////
-
-	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ // doesn't call Show(). Show() is called in Display()
-		return CreatePopupNotificationNGUI(prefab, true);
-	}
-
-	PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab, bool startsHidden){ // doesn't call Show(). Show() is called in Display()
-		// save z-value, because it gets reset when using NGUITools.AddChild(...)
-		float zVal = prefab.transform.localPosition.z;
-		GameObject obj = NGUITools.AddChild(GameObject.Find("Anchor-Center"), prefab);
-		obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, obj.transform.localPosition.y, zVal);
-//		MoveTweenToggle mtt = obj.GetComponent<MoveTweenToggle>();
-//		if(mtt != null){
-//			mtt.startsHidden = startsHidden;
-//			mtt.Reset();
-//		}
-		//TODO /// REMOVE^^
-		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
-		if(demux != null){
-			demux.startsHidden = startsHidden;
-			//Debug.Log("STARTS HIDDEN" + startsHidden);
-			demux.Reset();
-		}
-		
-		
-		PopupNotificationNGUI popup = obj.GetComponent<PopupNotificationNGUI>();
-		return popup;
-	}
-
-	/////////////// ENQUEUE FUNCTIONS /////////////////
 
 	/*
 		Desc: creates popup that has a popup texture and 2 buttons
@@ -316,34 +213,32 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
-
-	/*
-		Desc: creates a popup for tutorial
-		Param: tutorial sprite name, the target for call back, the function name for call back
-	*/
-	public void ShowTutorialMessage(TutorialImageType imageType, PopupNotificationNGUI.HashEntry buttonCallBack, string buttonText){
-		//Spawn tutorial prefab
-		Vector3 prefabPosition = popupNotificiationTutorialLeft.transform.localPosition;
-		GameObject obj = NGUITools.AddChild(leftPanel, popupNotificiationTutorialLeft);
-		obj.transform.localPosition = prefabPosition;
-
-		//Set content
-		PopupNotificationTutorial script = obj.GetComponent<PopupNotificationTutorial>();
-		script.SetContent(imageType);
-		if(buttonText != "") script.SetButtonText(buttonText);
-		script.Button1Callback = buttonCallBack;
-		script.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		
-		StartCoroutine(DisplayAfterInit(script));
-	}
 	
 	// Displaying after one frame, make sure the notification is loaded nicely
-	IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){
+	private IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){
 		yield return 0;
 		
 		// Slap on the backdrop here
 		LgNGUITools.AddChildWithPosition(notification.gameObject, backDrop);
 		
 		notification.Display();
+	}
+
+	private PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ 
+		return CreatePopupNotificationNGUI(prefab, true);
+	}
+
+	private PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab, bool startsHidden){ 
+		GameObject obj = LgNGUITools.AddChildWithPosition(anchorCenter, prefab);
+
+		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
+		if(demux != null){
+			demux.startsHidden = startsHidden;
+			demux.Reset();
+		}
+		
+		PopupNotificationNGUI popup = obj.GetComponent<PopupNotificationNGUI>();
+		
+		return popup;
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BadgeRewardUIManager : MonoBehaviour {
+public class BadgeUnlockNotificationListener : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

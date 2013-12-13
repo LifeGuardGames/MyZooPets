@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class LevelUpGUI : MonoBehaviour {
+public class LevelUpRewardUIManager : MonoBehaviour {
 	// audio to play when notification is shown
 	public string sound;
 	

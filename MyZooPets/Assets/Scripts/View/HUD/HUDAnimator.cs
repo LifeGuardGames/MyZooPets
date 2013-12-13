@@ -208,6 +208,8 @@ public class HUDAnimator : MonoBehaviour {
 			// increment level
         	int nextLevelIndex = (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
        		DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevelIndex;	
+
+       		//Check for Unlock badge
 			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, nextLevelIndex, true);
 			
 			if(OnLevelUp != null)

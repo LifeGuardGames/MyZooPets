@@ -58,6 +58,7 @@ public enum NotificationPopupType{
 	GameOverRewardTwoButton,
 	TipWithImage,
 	LevelUp,
+    Badge
 }
 
 public enum NotificationPopupFields{

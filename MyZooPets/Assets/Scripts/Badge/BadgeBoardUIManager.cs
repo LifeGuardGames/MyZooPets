@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class BadgeUIManager : SingletonUI<BadgeUIManager> {
+public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public AnimationClip pulseClip;
 	public GameObject backButton;
 	public GameObject badgeBoard;

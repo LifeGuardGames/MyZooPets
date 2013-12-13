@@ -119,5 +119,18 @@ public class NotificationTest : MonoBehaviour {
 			// Place notification entry table in static queue
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
+
+        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*5, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "Badge Reward")){
+
+
+            Hashtable notificationEntry = new Hashtable();
+            notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Badge);
+            notificationEntry.Add(NotificationPopupFields.Message, "You got a new badge!");
+            notificationEntry.Add(NotificationPopupFields.SpriteName, "badgeLevel20");
+            notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
+
+            NotificationUIManager.Instance.AddToQueue(notificationEntry);
+        }
     }
 }

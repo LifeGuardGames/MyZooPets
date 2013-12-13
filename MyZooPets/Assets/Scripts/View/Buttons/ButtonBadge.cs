@@ -9,6 +9,6 @@ using System.Collections;
 public class ButtonBadge : LgButton {
 	
 	protected override void ProcessClick() {
-		BadgeUIManager.Instance.BadgeClicked( gameObject );
+		BadgeBoardUIManager.Instance.BadgeClicked( gameObject );
 	}
 }

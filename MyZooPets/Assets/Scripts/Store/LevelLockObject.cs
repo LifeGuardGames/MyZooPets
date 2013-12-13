@@ -41,7 +41,15 @@ public class LevelLockObject : MonoBehaviour {
 		
 		// if this lock breaks, it needs to listen for level up messages
 		HUDAnimator.OnLevelUp += LevelUp;		
-	}	
+	}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------	
+	void OnDestroy() {
+		// stop listening for callbacks
+		HUDAnimator.OnLevelUp -= LevelUp;	
+	}
 	
 	//---------------------------------------------------
 	// LevelUp()

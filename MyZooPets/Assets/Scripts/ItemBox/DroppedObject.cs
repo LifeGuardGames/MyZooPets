@@ -4,61 +4,28 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// DroppedItem
-// This is an item that is on the ground, in the
+// DroppedObject
+// This is an object that is on the ground, in the
 // 3D world (although it may be 2D) that the player
 // can pick up to obtain.
 //---------------------------------------------------	
 
-public class DroppedItem : LgButton {
-	// sprite associated with this dropped item
-	public UISprite sprite;
+public abstract class DroppedObject : LgButton {
+	// --------------- Pure Abstract ---------------------------
+	protected abstract void _ObtainObject();			// give the user the object
+	protected abstract void OnObjectDestroyed();		// when this game object is destroyed
+	// ---------------------------------------------------------
 	
-	// the item that this object represents
-	private Item dataItem;
+	// sprite associated with this dropped object
+	public UISprite sprite;
 	
 	// state of this dropped item
 	private DroppedItemStates eState = DroppedItemStates.UnInit;
-	private void SetState( DroppedItemStates eState ) {
+	protected void SetState( DroppedItemStates eState ) {
 		this.eState = eState;	
 	}
 	public DroppedItemStates GetState() {
 		return eState;	
-	}
-	
-	//---------------------------------------------------
-	// Init()
-	// Inits this dropped item with 
-	//---------------------------------------------------	
-	public void Init( Item item ) {
-		// set the state of this item to dropped
-		SetState( DroppedItemStates.Dropped );
-		
-		// set the texture of this dropped item
-		if ( sprite != null ) {
-			string strSprite = item.TextureName;
-			sprite.spriteName = strSprite;
-			
-			dataItem = item;
-		}
-		else
-			Debug.Log("No sprite", gameObject);
-		
-		// also listen for when the inventory logic is being destroyed
-		InventoryLogic.Instance.OnInventoryBeingDestroyed += OnInventoryBeingDestroyed;
-	}
-	
-	//---------------------------------------------------
-	// OnInventoryBeingDestroyed()
-	// Callback sent from the inventory logic because it
-	// is being destroyed (likely because the scene is
-	// changing).
-	//---------------------------------------------------	
-	private void OnInventoryBeingDestroyed( object sender, EventArgs args ) {
-		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
-		DroppedItemStates eState = GetState();
-		if ( eState != DroppedItemStates.Awarded )
-			AwardItem();
 	}
 	
 	//---------------------------------------------------
@@ -75,7 +42,8 @@ public class DroppedItem : LgButton {
 		// the burst is actually a lean tween move along a path
 		
 		// the starting location is the object's current location
-		Vector3 vStart = gameObject.transform.position;
+		GameObject go = GetGameObject();
+		Vector3 vStart = go.transform.position;
 		
 		// the end location is some random X length away
 		float fEndX = UnityEngine.Random.Range(-nRangeX, nRangeX);
@@ -87,7 +55,7 @@ public class DroppedItem : LgButton {
 		
 		// set the path
 		Vector3[] path = new Vector3[4];
-		path[0] = gameObject.transform.position;
+		path[0] = go.transform.position;
 		path[1] = vMid;
 		path[2] = vMid;
 		path[3] = vEnd;
@@ -96,7 +64,7 @@ public class DroppedItem : LgButton {
 		optional.Add("ease", LeanTweenType.linear);		
 		
 		// and send the object on its way!
-		LeanTweenUtils.MoveAlongPathWithSpeed( gameObject, path, fTime, optional );		
+		LeanTweenUtils.MoveAlongPathWithSpeed( go, path, fTime, optional );		
 		
 		/* // saving this for now just in case we want to go back to it, so I don't have to rewrite it...
 		// tried bursting with add force and rigidbody...
@@ -116,6 +84,18 @@ public class DroppedItem : LgButton {
 	}
 	
 	//---------------------------------------------------
+	// GetGameObject()
+	// This function is necessary because some dropped
+	// objects have different hierarchies.  This function
+	// should return the upper most level of the dropped
+	// object's game object, to destory, apply movement
+	// to, etc.
+	//---------------------------------------------------		
+	protected virtual GameObject GetGameObject() {
+		return gameObject;
+	}
+	
+	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------		
 	protected override void ProcessClick() {
@@ -132,9 +112,10 @@ public class DroppedItem : LgButton {
 	        Hashtable optional = new Hashtable();
 			optional.Add ("onComplete", "OnDoneAnimating");			
 			
-	        LeanTween.moveY(gameObject, fUp, fTime, optional);			
-			TweenAlpha.Begin( gameObject, fTime, 0 );
-			LeanTween.rotate(gameObject, vSpin, fTime);
+			GameObject go = GetGameObject();
+	        LeanTween.moveY(go, fUp, fTime, optional);			
+			TweenAlpha.Begin( go, fTime, 0 );
+			LeanTween.rotate(go, vSpin, fTime);
 			
 		}
 	}
@@ -144,39 +125,22 @@ public class DroppedItem : LgButton {
 	// The object is done doing its little pickup anim.
 	//---------------------------------------------------	
 	private void OnDoneAnimating() {
-		// animation done -- award the item
-		AwardItem();
+		// animation done -- award the object
+		ObtainObject();
 	}
 	
 	//---------------------------------------------------
-	// OnDestroy()
+	// _OnDestroy()
 	//---------------------------------------------------		
-	private void OnDestroy() {
-		// if this dropped item is being destroyed, has not yet been awarded, AND the inventory still exists, award it
-		DroppedItemStates eState = GetState();
-		if ( eState != DroppedItemStates.Awarded && InventoryLogic.Instance != null )
-			AwardItem();
+	protected override void _OnDestroy() {
+		OnObjectDestroyed();
 	}
 	
 	//---------------------------------------------------
-	// AwardItem()
-	// Places the item in the player's inventory and
-	// then destroys itself.
-	//---------------------------------------------------		
-	private void AwardItem() {
-		DroppedItemStates eState = GetState();
-		
-		// if this item isn't in the right state, return
-		if ( eState != DroppedItemStates.Dropped && eState != DroppedItemStates.PickedUp )
-			return;
-
-		// set the state to being awarded
-		SetState( DroppedItemStates.Awarded );
-		
-		// add it to the player's inventory
-		InventoryLogic.Instance.AddItem( dataItem.ID, 1);
-		
-		// destroy the object
-		Destroy( gameObject );		
+	// ObtainObject()
+	// Gives the user the object.
+	//---------------------------------------------------
+	protected void ObtainObject() {
+		_ObtainObject();	
 	}
 }

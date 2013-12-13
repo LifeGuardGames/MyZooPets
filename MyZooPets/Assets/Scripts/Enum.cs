@@ -196,6 +196,7 @@ public enum MinigamePopups {
 	GameOver
 }
 
+// if you refactor these, look for the names in xml, because they are referenced there as well
 public enum HUDElementType{
 	Points, 
 	Stars, 

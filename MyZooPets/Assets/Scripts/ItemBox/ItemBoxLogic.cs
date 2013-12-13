@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,14 +80,14 @@ public class ItemBoxLogic : MonoBehaviour {
 				// spawn the item to be coming out of this box
 				GameObject goPrefab = Resources.Load( "DroppedItem" ) as GameObject;
 				GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
-				goDroppedItem.GetComponent<DroppedItem>().Init( item.Key );
+				goDroppedItem.GetComponent<DroppedObject_Item>().Init( item.Key );
 				
 				// set the position of the newly spawned item to be wherever this item box is
 				Vector3 vPosition = gameObject.transform.position;
 				goDroppedItem.transform.position = vPosition;
 				
 				// make the item "burst" out
-				goDroppedItem.GetComponent<DroppedItem>().Burst();
+				goDroppedItem.GetComponent<DroppedObject>().Burst();
 			}
 		}
 	}	

@@ -76,7 +76,7 @@ public class StatsController : Singleton<StatsController> {
 			else if(deltaPoints < 0)
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 
-			if(bFloaty){
+			if(bFloaty && !bBeingDestroyed){
 				PetFloatyUIManager.Instance.CreatePointsFloaty(deltaPoints);
 			}
 		}
@@ -102,7 +102,7 @@ public class StatsController : Singleton<StatsController> {
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
-			if(bFloaty)
+			if(bFloaty && !bBeingDestroyed)
 				PetFloatyUIManager.Instance.CreateMoodFloaty(deltaMood);
 
 			if ( bCheckPet )
@@ -117,7 +117,7 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
-			if(bFloaty)
+			if(bFloaty && !bBeingDestroyed)
 				PetFloatyUIManager.Instance.CreateHealthFloaty(deltaHealth);
 
 			if ( bCheckPet )
@@ -130,7 +130,9 @@ public class StatsController : Singleton<StatsController> {
 		listStats.Add( new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ?  hudAnimator.strSoundStars : null ) );
 		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
 		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
-		StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds, bAtOnce ) );
+		
+		if ( hudAnimator != null && !bBeingDestroyed )
+			StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds, bAtOnce ) );
 	}	
 	
 	//---------------------------------------------------
@@ -139,6 +141,9 @@ public class StatsController : Singleton<StatsController> {
 	// and if so, kicks it off on the pet animator.
 	//---------------------------------------------------		
 	private void CheckForMoodTransition( PetMoods eOld, PetMoods eNew ) {
+		if ( bBeingDestroyed )
+			return;
+		
 		// if, at this moment, the pet is not healthy, there will be no mood transitions
 		PetHealthStates eHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 		if ( eHealth != PetHealthStates.Healthy )
@@ -211,6 +216,17 @@ public class StatsController : Singleton<StatsController> {
 		string strLocalizedStat = Localization.Localize( strKey );
 		
 		return strLocalizedStat;
+	}
+	
+	//---------------------------------------------------
+	// GetStatIconName()
+	// Returns the sprite name of the icon for the 
+	// incoming stat.
+	//---------------------------------------------------	
+	public string GetStatIconName( HUDElementType eStat ) {
+		string strKey = "PetStatsIcon_" + eStat;
+		string strSprite = Constants.GetConstant<string>( strKey );
+		return strSprite;
 	}
 	
 	//---------------------------------------------------

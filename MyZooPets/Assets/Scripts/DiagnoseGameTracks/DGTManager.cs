@@ -56,6 +56,8 @@ public class DGTManager : MinigameManager<DGTManager> {
 	
 	// the zone that is currently selected
 	private GameObject goSelectedZone;
+
+	private int numOfCorrectDiagnose; //keep track of the number of correct diagnose
 	
 	//=======================Events========================
 	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
@@ -92,6 +94,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 		
 		// set the wave countdown
 		ResetWaveCountdown();
+
+		// set num of correct diagnose for each new game
+		numOfCorrectDiagnose = 0;
 		
 		// if the play hasn't played the tutorial yet, start it
 		if ( TutorialOK() && ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) ) )
@@ -100,6 +105,13 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// set the spawn timer to 0
 		// NOTE this must come after the tutorial starts because setting spawn timer to 0 immediately spawns a character
 		SetSpawnTimer( 0 );
+	}
+
+	//---------------------------------------------------
+	// _GameOver()
+	//---------------------------------------------------		
+	protected override void _GameOver(){
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
 	
 	//---------------------------------------------------
@@ -205,8 +217,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		string strSound = "clinicCorrect";
 		
 		// update the wave count (if it's not a tutorial)
-		if ( IsTutorial() == false )
+		if ( IsTutorial() == false ){
 			UpdateWaveCountdown(-1);
+			numOfCorrectDiagnose++; //increment if not tutorial
+		}
 		
 		// every X points the player gets an additional life
 		int nExtraLife = Constants.GetConstant<int>( "Clinic_ExtraLife" );

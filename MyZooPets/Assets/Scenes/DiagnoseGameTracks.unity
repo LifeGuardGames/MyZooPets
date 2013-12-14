@@ -2169,29 +2169,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraObject: {fileID: 157260445}
-  notificationPanel: {fileID: 0}
-  backDrop: {fileID: 100000, guid: 12abd2ff6f58e42ea8556efcaa3855e3, type: 2}
-  popupTextureGreatNGUI: {fileID: 100000, guid: 12ef9b1e3b2c14e41ae9088527803573,
-    type: 2}
-  popupTextureNiceTryNGUI: {fileID: 100000, guid: 339c0cfdd55b948279d1c42949bcd1ee,
-    type: 2}
-  popupTextureUseTheInhalerNGUI: {fileID: 100000, guid: e32c1ad5687c04f60b8e272876f40602,
-    type: 2}
-  popupTexturePracticeInhalerNGUI: {fileID: 100000, guid: 8908fe222a84643a595d6a2ebc3c5629,
-    type: 2}
-  popupTextureDiagnoseSymptomsNGUI: {fileID: 0}
   popupNotificationOneButton: {fileID: 100002, guid: c14970312f58b4eabb9a8001cd302301,
     type: 2}
   popupNotificationTwoButtons: {fileID: 100010, guid: 278b6181febe14a8cb7b36dcfc2b3c03,
     type: 2}
-  levelUpMessageNGUI: {fileID: 100010, guid: 2e895b7f645c443b4b95f44d009d70ac, type: 2}
-  popupTipWithImageNGUI: {fileID: 100018, guid: 20b24d0f00c8f42e5b9271cac467cf5f,
+  popupLevelUpMessage: {fileID: 100010, guid: 2e895b7f645c443b4b95f44d009d70ac, type: 2}
+  popupTipWithImage: {fileID: 100018, guid: 20b24d0f00c8f42e5b9271cac467cf5f, type: 2}
+  popupGameOverRewardMessageOneButton: {fileID: 100010, guid: 2e5dcbccf55824c2f9134bc8951e56c6,
     type: 2}
-  gameOverRewardMessageOneButton: {fileID: 100010, guid: 2e5dcbccf55824c2f9134bc8951e56c6,
+  popupGameOverRewardMessageTwoButtons: {fileID: 100008, guid: fdfa4d242fb104649af77ae7ee863c64,
     type: 2}
-  gameOverRewardMessageTwoButtons: {fileID: 100008, guid: fdfa4d242fb104649af77ae7ee863c64,
+  popupBadgeUnlockedMessage: {fileID: 100026, guid: 1b87621769c84a94f86752cc164d37e6,
     type: 2}
-  popupBadge: {fileID: 100026, guid: 1b87621769c84a94f86752cc164d37e6, type: 2}
+  popupFireLevelUpMessage: {fileID: 100024, guid: 5d1d250f16abafa4c86e31fc5550f5d8,
+    type: 2}
 --- !u!1 &195608346
 GameObject:
   m_ObjectHideFlags: 0
@@ -11014,7 +11005,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &575402174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11027,7 +11018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c235dfeba71374033b791cbf28056a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removeDataOnApplicationQuit: 0
+  removeDataOnApplicationQuit: 1
   isDebug: 1
   currentPetID: 
 --- !u!4 &575402175
@@ -11576,7 +11567,7 @@ MonoBehaviour:
   ui: {fileID: 1134181637}
   scriptTransition: {fileID: 1430107267}
   nStartingLives: 3
-  bRunTut: 1
+  bRunTut: 0
   goArrow: {fileID: 195608346}
   fStartingSpeed: 100
   fMaxSpeed: 500
@@ -13084,11 +13075,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -11.460022
+    e03: -11.960022
     e10: 0
     e11: 384
     e12: 0
-    e13: -354.947418
+    e13: -354.447418
     e20: 0
     e21: 0
     e22: 384
@@ -15131,11 +15122,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -.5
+    e13: 0
     e20: 0
     e21: 0
     e22: 384
@@ -15479,7 +15470,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1040511978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: 384.5, z: 0}
+  m_LocalPosition: {x: -512, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 792511250}
@@ -15553,8 +15544,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1057985020}
   - 114: {fileID: 1057985021}
+  - 114: {fileID: 1057985022}
   m_Layer: 0
-  m_Name: BadgeLogic
+  m_Name: BadgeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15581,6 +15573,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e43148787fe56455c9773804fca33c43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1057985022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 8a7148f4fcb2e4cb09f1f62e2b34004a,
+    type: 2}
+  m_PrefabInternal: {fileID: 493664367}
+  m_GameObject: {fileID: 1057985019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335c9fd7f0bb14a71859dd7380674388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1065766149
@@ -15663,7 +15667,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1071829514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: 384.5, z: 0}
+  m_LocalPosition: {x: -512, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1738275096}
@@ -16177,46 +16181,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!1 &1148192123
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-  m_PrefabInternal: {fileID: 1822140993}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1148192124}
-  - 114: {fileID: 1148192125}
-  m_Layer: 0
-  m_Name: LevelUpRewardUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1148192124
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-  m_PrefabInternal: {fileID: 1822140993}
-  m_GameObject: {fileID: 1148192123}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1593759658}
---- !u!114 &1148192125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: ef2c637c1e7774e5995a054107ed1fe9,
-    type: 2}
-  m_PrefabInternal: {fileID: 1822140993}
-  m_GameObject: {fileID: 1148192123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 182c0a2d4c9aa46cbb8fcb9e05add9b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sound: LevelUp
 --- !u!1 &1149615759
 GameObject:
   m_ObjectHideFlags: 0
@@ -16240,7 +16204,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1149615759}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.5, z: 0}
+  m_LocalPosition: {x: -512, y: -384, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 944873719}
@@ -20328,8 +20292,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1404599047}
   - 114: {fileID: 1404599048}
+  - 114: {fileID: 1404599049}
   m_Layer: 0
-  m_Name: LevelUpLogic
+  m_Name: LevelUpManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20358,6 +20323,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4f162e78cdb4edab2ef49c3b681f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1404599049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 31a1e8345d16c44ea9fa163fd6cfb4c2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1854484255}
+  m_GameObject: {fileID: 1404599046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 182c0a2d4c9aa46cbb8fcb9e05add9b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: LevelUp
 --- !u!1 &1410992038
 GameObject:
   m_ObjectHideFlags: 0
@@ -25030,10 +25008,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnDestroy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
+      propertyPath: removeDataOnApplicationQuit
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -25168,7 +25150,6 @@ Transform:
   - {fileID: 1134181636}
   - {fileID: 1616286171}
   - {fileID: 1489484690}
-  - {fileID: 1148192124}
   - {fileID: 187725539}
   - {fileID: 1040664947}
   m_Father: {fileID: 0}
@@ -30318,46 +30299,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1821419726}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &1822140993
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1593759658}
-    m_Modifications:
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: ef2c637c1e7774e5995a054107ed1fe9, type: 2}
-  m_RootGameObject: {fileID: 1148192123}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &1837835546
 GameObject:
   m_ObjectHideFlags: 0
@@ -33068,7 +33009,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b782c6acd48544364b424a599b3562a1, type: 2}
       propertyPath: bRunTut
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b782c6acd48544364b424a599b3562a1, type: 2}
       propertyPath: nCharactersPerWave
@@ -34626,7 +34567,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2035032513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 889925890}
@@ -37131,11 +37072,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -384.5
+    e13: -384
     e20: 0
     e21: 0
     e22: 384

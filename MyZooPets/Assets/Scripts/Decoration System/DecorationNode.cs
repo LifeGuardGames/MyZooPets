@@ -219,6 +219,9 @@ public abstract class DecorationNode : LgButton {
 		
 		// update the save data with the new decoration id
 		DataManager.Instance.GameData.Decorations.PlacedDecorations[strNodeID] = strID;		
+
+		//Check for badge unlockk
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, 1, false);
 		
 		// actually create/set the decoration
 		_SetDecoration( strDecoID );

@@ -127,7 +127,7 @@ public class HUDAnimator : MonoBehaviour {
 		hashDisplays[HUDElementType.Mood] = DataManager.Instance.GameData.Stats.Mood;
 		
 		
-		lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
+		lastLevel = LevelUpLogic.Instance.CurrentLevel; 
 		nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints();
 	}
 
@@ -206,11 +206,11 @@ public class HUDAnimator : MonoBehaviour {
 			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			// increment level
-        	int nextLevelIndex = (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
-       		DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevelIndex;	
+       		LevelUpLogic.Instance.IncrementLevel();
 
        		//Check for Unlock badge
-			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, nextLevelIndex, true);
+			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, 
+				(int) LevelUpLogic.Instance.CurrentLevel, true);
 			
 			if(OnLevelUp != null)
                 OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners
@@ -218,9 +218,10 @@ public class HUDAnimator : MonoBehaviour {
 			//reset the progress bar for next level
 			DataManager.Instance.GameData.Stats.ResetPoints();
 			nextLevelPoints = LevelUpLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
+			StatsController.Instance.ChangeStats(remainderPoints, Vector3.zero, 
+				0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false);
 			hashDisplays[HUDElementType.Points] = 0;
-			lastLevel = DataManager.Instance.GameData.Level.CurrentLevel;
+			lastLevel = LevelUpLogic.Instance.CurrentLevel;
 		}
 	}
 	

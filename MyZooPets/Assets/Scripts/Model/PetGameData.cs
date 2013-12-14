@@ -9,7 +9,7 @@ public class PetGameData{
     public CutsceneData Cutscenes {get; set;} 
     public DecorationSystemData Decorations {get; set;}
     public StatsData Stats {get; set;}
-    public LevelUpData Level {get; set;}
+    public PetLevelMutableData Level {get; set;}
     public CalendarData Calendar {get; set;}
     public DegradationData Degradation {get; set;}
     public InhalerData Inhaler {get; set;}
@@ -33,7 +33,7 @@ public class PetGameData{
         Decorations.Init();
         Stats = new StatsData();
         Stats.Init();
-        Level = new LevelUpData();
+        Level = new PetLevelMutableData();
         Level.Init();
         Calendar = new CalendarData();
         Calendar.Init();

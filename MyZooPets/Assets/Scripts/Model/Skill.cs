@@ -43,8 +43,13 @@ public class Skill{
     public int DamagePoint{
         get{return damagePoint;}
     }
+
+    //shouldn't do this. isunlock field is in skillmutable data
     public bool IsUnlocked{
-        get { return DataManager.Instance.GameData.Level.GetCurrentLevel() >= UnlockLevel; } 
+        get { 
+            return true;
+            // DataManager.Instance.GameData.Level.GetCurrentLevel() >= UnlockLevel; 
+        } 
     }
     public bool IsPurchased{
         get{return DataManager.Instance.GameData.Dojo.GetIsPurchased(id);}

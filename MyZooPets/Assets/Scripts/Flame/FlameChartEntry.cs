@@ -26,10 +26,9 @@ public class FlameChartEntry : MonoBehaviour {
 	//---------------------------------------------------	
 	void Start() {		
 		// listen for level up messages
-		HUDAnimator.OnLevelUp += LevelUp;
-		
+		FlameLevelLogic.OnFlameLevelUp += OnFlameLevelUp;
 		// we need the fire skill to set some visuals
-		skill = FlameChartLogic.Instance.GetSkillData( strSkillID );
+		skill = FlameLevelLogic.Instance.GetSkillData( strSkillID );
 		
 		if ( skill != null ) {
 			// set the texture based on id
@@ -47,6 +46,11 @@ public class FlameChartEntry : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnDestroy(){
+		FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;
+	}
+
 	
 	//---------------------------------------------------
 	// SetPathColors()
@@ -66,8 +70,9 @@ public class FlameChartEntry : MonoBehaviour {
 	//---------------------------------------------------
 	// LevelUp()
 	//---------------------------------------------------		
-	private void LevelUp(object senders, EventArgs args){
+	private void OnFlameLevelUp(object senders, FlameLevelLogic.FlameLevelEventArgs args){
 		// we got a level up event, so just set the colors in case anything has changed
+		Debug.Log(senders);
         SetPathColors();
 	}		
 }

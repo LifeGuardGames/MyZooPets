@@ -115,7 +115,7 @@ public class ButtonMonster : LgButtonHold {
 	// attack with.
 	//---------------------------------------------------		
 	private int GetDamage() {
-		Skill curSkill = DataManager.Instance.GameData.Dojo.GetCurrentSkill();
+		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		int nDamage = curSkill.DamagePoint;
 		return nDamage;
 	}

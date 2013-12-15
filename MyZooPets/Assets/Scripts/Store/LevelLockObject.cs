@@ -57,7 +57,7 @@ public class LevelLockObject : MonoBehaviour {
 	// messages and destroys itself if appropriate.
 	//---------------------------------------------------		
 	private void LevelUp(object senders, EventArgs args){
-        int nNewLevel = (int) DataManager.Instance.GameData.Level.CurrentLevel;
+        int nNewLevel = (int) LevelLogic.Instance.CurrentLevel; 
 		if ( nNewLevel >= nLevel )
 			Destroy( gameObject );
 	}	

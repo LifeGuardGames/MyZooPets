@@ -10,47 +10,21 @@ using System.Collections.Generic;
 public class SkillMutableData{
     public class Status{
         public bool IsUnlocked {get; set;}
-        public bool IsPurchased {get; set;}
 
         public Status(){}
 
-        public Status(bool isUnlocked, bool isPurchased){
+        public Status(bool isUnlocked){
             IsUnlocked = isUnlocked;
-            IsPurchased = isPurchased;
         }
     }
 
     public Dictionary<string, Status> SkillStatus {get; set;} //Key: Skill ID, Value: Instance of Status
     public string CurrentSkillID {get; set;} //The current skill that the pet has
-	public Skill GetCurrentSkill() {
-		Skill curSkill = DataSkills.GetSkill( CurrentSkillID );
-		return curSkill;
-	}
 
-
-    public void UpdateSkillStatus(string skillID, bool isUnlocked, bool isPurchased){
-        if(SkillStatus.ContainsKey(skillID)){
-            Status status = SkillStatus[skillID];
-            status.IsUnlocked = isUnlocked;
-            status.IsPurchased = isPurchased;
-            SkillStatus[skillID] = status;
-        }else{
-            Status status = new Status(isUnlocked, isPurchased);
-            SkillStatus.Add(skillID, status);
-        }
-		
-		// replace this incoming skill as our current skill if it is better (or current skill is null)
-		if ( string.IsNullOrEmpty( CurrentSkillID ) )
-			CurrentSkillID = skillID;
-		else {
-			Skill newSkill = DataSkills.GetSkill( skillID );
-			Skill curSkill = DataSkills.GetSkill( CurrentSkillID );
-			
-			if ( newSkill.DamagePoint > curSkill.DamagePoint )
-				CurrentSkillID = skillID;
-		}
-    }
-
+    //---------------------------------------------------
+    // GetIsUnlocked()
+    // Check if skill with skillID has been unlocked 
+    //---------------------------------------------------
     public bool GetIsUnlocked(string skillID){
         bool retVal = false;
         if(SkillStatus.ContainsKey(skillID)){
@@ -59,19 +33,28 @@ public class SkillMutableData{
         return retVal;
     }
 
-    public bool GetIsPurchased(string skillID){
-        bool retVal = false;
+    //---------------------------------------------------
+    // UpdateSkillStatus
+    // Change skill with skillID from locked to unlocked
+    //---------------------------------------------------
+    public void UpdateSkillStatus(string skillID, bool isUnlocked){
         if(SkillStatus.ContainsKey(skillID)){
-            retVal = SkillStatus[skillID].IsPurchased;
+            Status status = SkillStatus[skillID];
+            status.IsUnlocked = isUnlocked;
+            SkillStatus[skillID] = status;
+        }else{
+            Status status = new Status(isUnlocked);
+            SkillStatus.Add(skillID, status);
         }
-        return retVal;
     }
+
 
     //========================Initialization===================================
     public SkillMutableData(){}
 
     public void Init(){
         SkillStatus = new Dictionary<string, Status>();
-        UpdateSkillStatus("Skill0", true, true);
+        UpdateSkillStatus("Flame_1", true);
+        CurrentSkillID = "Flame_1";
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class LevelUpLogic : Singleton<LevelUpLogic> {
+public class LevelLogic : Singleton<LevelLogic> {
     //Move this to xml. 
     private int maxLevel;
 
@@ -49,10 +49,10 @@ public class LevelUpLogic : Singleton<LevelUpLogic> {
             DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevel;
     }
 
-    // void OnGUI(){
-    //     if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
-    //         StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
-    //             0, Vector3.zero, 0, Vector3.zero);
-    //     }
-    // }
+    void OnGUI(){
+        if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
+            StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
+                0, Vector3.zero, 0, Vector3.zero);
+        }
+    }
 }

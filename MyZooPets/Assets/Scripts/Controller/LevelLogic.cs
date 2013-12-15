@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+//---------------------------------------------------
+// LevelLogic
+// Controller that deals with modifying pet's level
+//---------------------------------------------------
 public class LevelLogic : Singleton<LevelLogic> {
-    //Move this to xml. 
     private int maxLevel;
 
     public Level CurrentLevel{
@@ -49,10 +52,10 @@ public class LevelLogic : Singleton<LevelLogic> {
             DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevel;
     }
 
-    void OnGUI(){
-        if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
-            StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
-                0, Vector3.zero, 0, Vector3.zero);
-        }
-    }
+    // void OnGUI(){
+    //     if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
+    //         StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
+    //             0, Vector3.zero, 0, Vector3.zero);
+    //     }
+    // }
 }

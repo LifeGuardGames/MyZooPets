@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 //---------------------------------------------------
 // FlameLevelUpLogic 
-// Manager layer for the fire levelup
+// Controller that checks for flame level up whenever
+// the pet levels up 
 //---------------------------------------------------
 public class FlameLevelLogic : Singleton<FlameLevelLogic> {
     public static EventHandler<FlameLevelEventArgs> OnFlameLevelUp;
@@ -50,6 +51,11 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
         return currentSkill;
     }
 
+    //---------------------------------------------------
+    // CheckFlameLevelUp()
+    // Event listener. Listens to Pet level up and check
+    // for flame level up
+    //---------------------------------------------------
     private void CheckFlameLevelUp(object sender, EventArgs args){
         if(allSkills == null){
             allSkills = SelectListFromDictionaryAndSort(DataSkills.GetAllSkills());
@@ -79,8 +85,6 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
                                 select skill).ToList();
         return skillList;
     }
-
-
 }
 
         // replace this incoming skill as our current skill if it is better (or current skill is null)

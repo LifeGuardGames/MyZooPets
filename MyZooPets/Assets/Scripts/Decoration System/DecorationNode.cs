@@ -219,9 +219,10 @@ public abstract class DecorationNode : LgButton {
 		
 		// update the save data with the new decoration id
 		DataManager.Instance.GameData.Decorations.PlacedDecorations[strNodeID] = strID;		
-
-		//Check for badge unlockk
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, 1, false);
+		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
+		
+		//Check for badge unlock
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
 		
 		// actually create/set the decoration
 		_SetDecoration( strDecoID );
@@ -260,7 +261,7 @@ public abstract class DecorationNode : LgButton {
 		
 		// update the save data since this node is now empty
 		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove( strNodeID );
-		
+
 		// reset the deco id on this node
 		strDecoID = string.Empty;
 	}

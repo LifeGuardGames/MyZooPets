@@ -169,6 +169,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 		// close this menu
 		EditDecosUIManager.Instance.CloseChooseMenu();
 		
+		// play an FX
+		Vector3 vPosFX = decoNodeCurrent.gameObject.transform.position;
+		string strFX = Constants.GetConstant<string>( "Deco_PlaceFX" );
+		ParticleUtils.CreateParticle( strFX, vPosFX );		
+		
 		// send a callback
 		if ( OnDecoPlaced != null )
 			OnDecoPlaced( this, EventArgs.Empty );		

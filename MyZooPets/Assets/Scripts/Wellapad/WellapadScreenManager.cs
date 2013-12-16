@@ -22,6 +22,7 @@ public class WellapadScreenManager : MonoBehaviour {
 	public void SetScreen() {
 		// for now, just check to see if the player has any outstanding missions.
 		bool bActive = WellapadMissionController.Instance.HasActiveTasks();
+		
 		if ( bActive ) {
 			// user has active tasks/missions, so show the task list
 			NGUITools.SetActive( goMissionsList, true );

@@ -33,6 +33,7 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     //Check if the user can play the inhaler game
     public bool CanUseRealInhaler{
         get {
+			/*
             bool retVal = false;
             if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Unknown) {
                 retVal = true;
@@ -40,6 +41,10 @@ public class CalendarLogic : Singleton<CalendarLogic>{
             else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Unknown ) {
                 retVal = true;
             }
+            */
+			
+			bool retVal = DateTime.Now.Ticks >= NextPlayPeriod.Ticks;
+			
             return retVal;
         }
     } 

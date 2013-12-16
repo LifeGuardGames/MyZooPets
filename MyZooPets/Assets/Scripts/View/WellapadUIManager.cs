@@ -37,6 +37,15 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
 		
+		// set the right screen
+		RefreshScreen();
+	}
+	
+	//---------------------------------------------------
+	// RefreshScreen()
+	// Sets the proper screen on the wellapad.
+	//---------------------------------------------------	
+	public void RefreshScreen() {
 		scriptScreenManager.SetScreen();
 	}
 	

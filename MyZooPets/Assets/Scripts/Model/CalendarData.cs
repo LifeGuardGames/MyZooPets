@@ -29,7 +29,8 @@ public class CalendarData{
 
         // IsRewardClaimed = false;
         NextPlayPeriod = CalendarLogic.CalculateNextPlayPeriod();
-
+		//NextPlayPeriod = DateTime.Now.AddSeconds(70);
+		
         // set to one day before today so that the entry will be generated for the first day
         LastCalendarOpenedTime = DateTime.Today.AddDays(-1);
     }

@@ -11,6 +11,7 @@ public class StringUtils {
 	public static string NUM = "NUM";
 	public static string NUM_2 = "NUM2";
 	public static string NUM_3 = "NUM3";
+	public static string TIME = "TIME";
 	
 	//---------------------------------------------------
 	// Replace()

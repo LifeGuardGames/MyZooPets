@@ -185,14 +185,8 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 				trigger = go.transform.parent.gameObject.GetComponent<NinjaTrigger>();
 				
 			if ( trigger )
-				trigger.OnCut();
+				trigger.OnCut( gesture.Position );
 		}
-		
-		// Drag/displacement since last frame
-		//Vector2 deltaMove = gesture.DeltaMove;
-		
-		// Total drag motion from initial to current position
-		//Vector2 totalMove = gesture.TotalMove;
 	}
 	
 	//---------------------------------------------------

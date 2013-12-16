@@ -3,22 +3,22 @@ using System;
 using System.Collections;
 
 public class Analytics : MonoBehaviour {
-    public const string DIAGNOSE_RESULT_CORRECT = "correct";
-    public const string DIAGNOSE_RESULT_INCORRECT = "incorrect";
+    public const string DIAGNOSE_RESULT_CORRECT = "Correct";
+    public const string DIAGNOSE_RESULT_INCORRECT = "Incorrect";
 
-    public const string PET_STATUS_OK = "ok";
-    public const string PET_STATUS_SICK = "sick";
-    public const string PET_STATUS_EMERGENCY = "attack";
+    public const string PET_STATUS_OK = "Ok";
+    public const string PET_STATUS_SICK = "Sick";
+    public const string PET_STATUS_EMERGENCY = "Attack";
 
-    public const string STEP_STATUS_COMPLETE = "complete";
-    public const string STEP_STATUS_QUIT = "quit";
+    public const string STEP_STATUS_COMPLETE = "Complete";
+    public const string STEP_STATUS_QUIT = "Quit";
 
-    public const string ITEM_STATUS_BOUGHT = "bought";
-    public const string ITEM_STATUS_USED = "used";
-    public const string ITEM_STATUS_RECEIVED = "received";
+    public const string ITEM_STATUS_BOUGHT = "Bought";
+    public const string ITEM_STATUS_USED = "Used";
+    public const string ITEM_STATUS_RECEIVED = "Received";
 
-    public const string TASK_STATUS_COMPLETE = "complete";
-    public const string TASK_STATUS_FAIL = "fail";
+    public const string TASK_STATUS_COMPLETE = "Complete";
+    public const string TASK_STATUS_FAIL = "Fail";
 
     private static bool isCreated = false;
 
@@ -156,5 +156,17 @@ public class Analytics : MonoBehaviour {
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
         if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && !String.IsNullOrEmpty(taskID))
             GA.API.Design.NewEvent(taskStatus + ":" + missionID + ":" + taskID);
+    }
+
+    //Gating
+    public void GateUnlocked(string gateID){
+        if(!String.IsNullOrEmpty(gateID))
+            GA.API.Design.NewEvent("Gate:Unlocked:" + gateID);
+    }
+
+    //Tutorial completed
+    public void TutorialCompleted(string tutorialID){
+        if(!String.IsNullOrEmpty(tutorialID))
+            GA.API.Design.NewEvent("Tutorial:Completed:" + tutorialID);
     }
 }

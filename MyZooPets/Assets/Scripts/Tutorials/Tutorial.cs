@@ -141,8 +141,10 @@ public abstract class Tutorial {
 		_End( bFinished );
 		
 		// save the fact that the user completed this tutorial
-		if ( bFinished )
+		if ( bFinished ){
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add( GetKey() );
+			Analytics.Instance.TutorialCompleted(GetKey());
+		}
 		
 		// if there are any messages showing, destroy them
 		if ( scriptMessage != null )

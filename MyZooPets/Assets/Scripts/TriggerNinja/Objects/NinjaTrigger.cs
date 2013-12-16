@@ -69,7 +69,7 @@ public class NinjaTrigger : MonoBehaviour {
 		// also create a little explosion particle FX where the user's finger was
 		Vector3 vPosWorld = Camera.main.ScreenToWorldPoint( new Vector3(vHit.x, vHit.y, 10) );
 		vPosWorld.z = goHitFX.transform.position.z;
-		Instantiate( goHitFX, vPosWorld, Quaternion.identity );		
+		ParticleUtils.CreateParticle( goHitFX, vPosWorld );
 		
 		// call child behaviour
 		_OnCut();

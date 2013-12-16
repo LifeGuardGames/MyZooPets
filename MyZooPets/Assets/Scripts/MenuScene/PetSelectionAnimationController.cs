@@ -9,10 +9,10 @@ public class PetSelectionAnimationController : LgCharacterAnimator {
     } // key of the pet's "species" -- i.e. what kind of pet it is
 
     new void Start(){
-        string strSpecies = "Basic";
-        string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
-
-        animName = strSpecies + strColor;
+        // string strSpecies = "Basic";
+        // string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
+        //DataManager.Instance.GetPetSpeciesColor("");
+        // animName = strSpecies + strColor;
         folderPath = "LWF/" + strKeyAnimType + "/" + animName + "/";
 
         base.Start();

@@ -15,7 +15,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public bool bSkipComic;
 	
 	public Camera NGUICamera;
-    private string petColor;
+    private string petColor = "OrangeYellow";
     private string petName;
 
     private Color currentRenderColor;
@@ -59,7 +59,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             petName = nameField.text;
 
             //Initialize data for new pet
-            DataManager.Instance.InitializeGameDataForNewPet();
+            DataManager.Instance.InitializeGameDataForNewPet("Basic" + petColor);
 
             //Set the PetInfo
             DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;

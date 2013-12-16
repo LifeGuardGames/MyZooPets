@@ -33,7 +33,7 @@ public class DroppedObject_Item : DroppedObject {
 			Debug.Log("No sprite", gameObject);
 		
 		// also listen for when the inventory logic is being destroyed
-		InventoryLogic.Instance.OnBeingDestroyed += OnInventoryBeingDestroyed;
+		InventoryLogic.Instance.OnBeingDestroyed += OnManagerDestroyed;
 	}
 	
 	//---------------------------------------------------
@@ -71,12 +71,12 @@ public class DroppedObject_Item : DroppedObject {
 	}	
 	
 	//---------------------------------------------------
-	// OnInventoryBeingDestroyed()
+	// _OnManagerDestroyed()
 	// Callback sent from the inventory logic because it
 	// is being destroyed (likely because the scene is
 	// changing).
 	//---------------------------------------------------	
-	private void OnInventoryBeingDestroyed( object sender, EventArgs args ) {
+	protected override void _OnManagerDestroyed() {
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if ( eState != DroppedItemStates.Awarded )

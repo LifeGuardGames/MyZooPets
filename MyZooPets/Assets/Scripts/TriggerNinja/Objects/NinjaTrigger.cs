@@ -23,6 +23,9 @@ public class NinjaTrigger : MonoBehaviour {
 	// is this object in the process of being cut?  Necessary because we use multiple colliders on some objects
 	private bool bCut = false;
 	
+	// particle effect that will play when this object gets hit
+	public GameObject goHitFX;
+	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
@@ -48,9 +51,10 @@ public class NinjaTrigger : MonoBehaviour {
 	
 	//---------------------------------------------------
 	// OnCut()
-	// When this trigger gets cut.
+	// When this trigger gets cut. vHit is the 2d location
+	// where the trigger was precisely hit.
 	//---------------------------------------------------	
-	public void OnCut() {
+	public void OnCut( Vector2 vHit ) {
 		// if this object was already cut, return.  This is possible because some objects use multiple primitive colliders
 		if ( bCut )
 			return;
@@ -60,7 +64,12 @@ public class NinjaTrigger : MonoBehaviour {
 		
 		// play a sound (if it exists)
 		if ( !string.IsNullOrEmpty( strSoundHit ) )
-			AudioManager.Instance.PlayClip( strSoundHit );		
+			AudioManager.Instance.PlayClip( strSoundHit );	
+		
+		// also create a little explosion particle FX where the user's finger was
+		Vector3 vPosWorld = Camera.main.ScreenToWorldPoint( new Vector3(vHit.x, vHit.y, 10) );
+		vPosWorld.z = goHitFX.transform.position.z;
+		Instantiate( goHitFX, vPosWorld, Quaternion.identity );		
 		
 		// call child behaviour
 		_OnCut();

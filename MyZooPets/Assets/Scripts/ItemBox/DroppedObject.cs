@@ -14,6 +14,7 @@ public abstract class DroppedObject : LgButton {
 	// --------------- Pure Abstract ---------------------------
 	protected abstract void _ObtainObject();			// give the user the object
 	protected abstract void OnObjectDestroyed();		// when this game object is destroyed
+	protected abstract void _OnManagerDestroyed();		// when related managers are destroyed
 	// ---------------------------------------------------------
 	
 	// sprite associated with this dropped object
@@ -27,6 +28,22 @@ public abstract class DroppedObject : LgButton {
 	public DroppedItemStates GetState() {
 		return eState;	
 	}
+	
+	void Start() {
+		DataManager.Instance.OnBeingDestroyed += OnManagerDestroyed;
+	}
+	
+	//---------------------------------------------------
+	// OnManagerDestroyed()
+	// This is a generic function that is called when a
+	// dependent manager is destroyed.  It basically 
+	// forces the item to be picked up right away, because
+	// the item requires the dependent manager in order to
+	// actual process the picking up.
+	//---------------------------------------------------	
+	protected void OnManagerDestroyed( object sender, EventArgs args ) {
+		_OnManagerDestroyed();
+	}		
 	
 	//---------------------------------------------------
 	// Burst()
@@ -64,7 +81,7 @@ public abstract class DroppedObject : LgButton {
 		optional.Add("ease", LeanTweenType.linear);		
 		
 		// and send the object on its way!
-		LeanTweenUtils.MoveAlongPathWithSpeed( go, path, fTime, optional );		
+		LeanTweenUtils.MoveAlongPathWithSpeed( go, path, fTime, optional );
 		
 		/* // saving this for now just in case we want to go back to it, so I don't have to rewrite it...
 		// tried bursting with add force and rigidbody...

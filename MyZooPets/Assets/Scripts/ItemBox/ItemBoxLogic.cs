@@ -65,6 +65,10 @@ public class ItemBoxLogic : MonoBehaviour {
 		
 		// create all the items to be obtained from this box
 		BurstItems( items );
+		
+		// also play a particle effect!
+		GameObject goResource = Resources.Load( "DecorationPoof" ) as GameObject;
+		GameObject.Instantiate( goResource, transform.position, Quaternion.identity );		
 	}
 	
 	//---------------------------------------------------

@@ -19,11 +19,13 @@ public class UILWFObject : UIWidget
         showCaseAnimator = (GameObject)Instantiate(showCasePrefab);
         showCaseAnimator.name = "ShowCaseAnimator";
         showCaseAnimator.layer = gameObject.layer;
+        showCaseAnimator.GetComponent<LWFAnimator>().animName = 
+            DataManager.Instance.GetPetSpeciesColor(this.transform.parent.name);
 
-        Transform transform = showCaseAnimator.transform;
-        transform.parent = gameObject.transform;
-        transform.localPosition = showCasePrefab.transform.localPosition;
-        transform.localScale = showCasePrefab.transform.localScale; 
+        Transform showCaseAnimTransform = showCaseAnimator.transform;
+        showCaseAnimTransform.parent = gameObject.transform;
+        showCaseAnimTransform.localPosition = showCasePrefab.transform.localPosition;
+        showCaseAnimTransform.localScale = showCasePrefab.transform.localScale; 
 
         StartCoroutine(StartAnimation());
     }

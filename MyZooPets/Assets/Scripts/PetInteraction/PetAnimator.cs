@@ -155,7 +155,7 @@ public class PetAnimator : LgCharacterAnimator {
 		PlayRestrictedAnim("Fire");
 		
 		// spawn the particle effect
-		Skill curSkill = DataManager.Instance.GameData.Dojo.GetCurrentSkill();
+		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		string strResource = curSkill.FlameResource;
 		GameObject resource = Resources.Load( strResource ) as GameObject;
 		goFire = Instantiate( resource, new Vector3(0,0,0), resource.transform.rotation ) as GameObject;

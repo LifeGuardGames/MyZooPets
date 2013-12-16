@@ -38,6 +38,6 @@ public class ScoreUIManager : Singleton<ScoreUIManager> {
     }
 
     public void UpdateScore(){
-        scoreLabel.text = Localization.Localize("RUNNER_SCORE") + ScoreManager.Instance.Score;
+        // scoreLabel.text = Localization.Localize("RUNNER_SCORE") + ScoreManager.Instance.Score;
     }
 }

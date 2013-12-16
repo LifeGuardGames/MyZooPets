@@ -11,18 +11,6 @@ public enum Level{
     Level6,
     Level7,
     Level8,
-    Level9,
-    Level10,
-    Level11,
-    Level12,
-    Level13,
-    Level14,
-    Level15,
-    Level16,
-    Level17,
-    Level18,
-    Level19,
-    Level20,
 }
 
 public enum DosageRecord{
@@ -56,9 +44,10 @@ public enum NotificationPopupType{
 	TwoButtons,
 	GameOverRewardOneButton,
 	GameOverRewardTwoButton,
-	TutorialLeft,
 	TipWithImage,
 	LevelUp,
+    BadgeUnlocked,
+    FireLevelUp
 }
 
 public enum NotificationPopupFields{
@@ -74,7 +63,6 @@ public enum NotificationPopupFields{
 	StartsHidden,
 	HideImmediately,
 	Badge,
-	TutorialImageType,
 	Sound
 }
 public enum BadgeType{
@@ -87,13 +75,6 @@ public enum BadgeType{
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
 public enum TalkImageType{
     Heart,
-}
-
-public enum TutorialImageType{
-    CalendarIntro,
-    CalendarGreenStamp,
-    CalendarRedStamp,
-    CalendarBonus
 }
 
 // various type of modes the UI could be in

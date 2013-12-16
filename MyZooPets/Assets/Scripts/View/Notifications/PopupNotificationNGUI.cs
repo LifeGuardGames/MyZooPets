@@ -51,22 +51,16 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
-		//Debug.Log("Button1");
         Hide();
         if (Button1Callback != null) Button1Callback();
     }
     protected void Button2Action(){
-		//Debug.Log("Button2");
         Hide();
         if (Button2Callback != null) Button2Callback();
     }
 
     // Display the popup panel
     public void Display(){
-        Display(true);
-    }
-
-    public void Display(bool pauseGame){
         ClickManager.Instance.ClickLock();
 		TryShowDemuxThenToggle(-1);
 		
@@ -85,7 +79,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // Hide the popup panel
     protected void Hide(){
-//		Debug.Log("Moved out! gonna destroy");
         if (HideImmediately){
 			TryHideDemuxThenToggle(0f);
             Destroy(gameObject, 1.0f);

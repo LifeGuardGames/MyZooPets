@@ -12,6 +12,6 @@ public class ButtonBadges : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		BadgeUIManager.Instance.OpenUI();
+		BadgeBoardUIManager.Instance.OpenUI();
 	}
 }

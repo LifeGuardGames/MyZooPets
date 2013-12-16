@@ -82,25 +82,33 @@ public class DataManager : Singleton<DataManager>{
 
         //First time opening the game, so need to initialize the first 3 pets
         if(firstTime && numOfPets == 0){ 
-            PlayerPrefs.SetString("Pet0", "Egg");
-            PlayerPrefs.SetString("Pet1", "Egg");
-            PlayerPrefs.SetString("Pet2", "Egg");
-
-            //Turn off first time
-            firstTime = false;
-            PlayerPrefs.SetInt("FirstTime", 0);
-
-            //Reset num of pets
-            numOfPets = 3;
-            PlayerPrefs.SetInt("NumOfPets", 3);
+            InitDataForFirstTimeInstall();
         }
 
         //Use this when developing on an independent scene. Will initialize all the data
         //before other classes call DataManager
         if(isDebug){
             currentPetID = "Pet0";
-            InitializeGameDataForNewPet();
+            InitializeGameDataForNewPet("BasicOrangeYellow");
         }
+    }
+
+    //----------------------------------------------------
+    // InitDataForFirstTimeInstall()
+    // 
+    //----------------------------------------------------
+    private void InitDataForFirstTimeInstall(){
+        PlayerPrefs.SetString("Pet0_PetStatus", "Egg");
+        PlayerPrefs.SetString("Pet1_PetStatus", "Egg");
+        PlayerPrefs.SetString("Pet2_PetStatus", "Egg");
+
+        //Turn off first time
+        firstTime = false;
+        PlayerPrefs.SetInt("FirstTime", 0);
+
+        //Reset num of pets
+        numOfPets = 3;
+        PlayerPrefs.SetInt("NumOfPets", 3);
     }
 
     //This function gets called before the script variables are ready so don't try
@@ -150,29 +158,24 @@ public class DataManager : Singleton<DataManager>{
         }
     }
 
-    //called when game data has be deserialized and ready to be used
-    private void Deserialized(){
-        Debug.Log("Deserialized");
-        if(OnGameDataLoaded != null)
-            OnGameDataLoaded(this, EventArgs.Empty);
-    }
-
-    //called when game data has been serialized
-    private void Serialized(){
-        Debug.Log("Serialized");
-        if(OnGameDataSaved != null)
-            OnGameDataSaved(this, EventArgs.Empty);
-    }
-
-    //"Egg" not born yet (needs to be initialize), "Hatch" borned
+     //"Egg" not born yet (needs to be initialize), "Hatch" borned
     public string GetPetStatus(string petID){
-        return PlayerPrefs.GetString(petID);
+        return PlayerPrefs.GetString(petID + "_PetStatus");
+    }
+
+    //Return the species and the color of the pet so the selection
+    //pet animation can be displayed correctly
+    public string GetPetSpeciesColor(string petID){
+        return PlayerPrefs.GetString(petID + "_SpeciesColor");
     }
 
     //Initalize New PetGameData
-    public void InitializeGameDataForNewPet(){
+    public void InitializeGameDataForNewPet(string speciesColor){
         if(!String.IsNullOrEmpty(currentPetID)){
-            PlayerPrefs.SetString(currentPetID, "Hatch");
+
+            //Set basic pet data that will be used in MenuScene
+            PlayerPrefs.SetString(currentPetID + "_PetStatus", "Hatch");
+            PlayerPrefs.SetString(currentPetID + "_SpeciesColor", speciesColor);
 
             gameData = new PetGameData();
             gameData.Init();
@@ -199,14 +202,14 @@ public class DataManager : Singleton<DataManager>{
 
     //serialize data into byte array and store locally in PlayerPrefs
     public void SaveGameData(){
-		// hopefully we are safe here, but do an absolute check if a tutorial is playing
-		if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() ) {
-			Debug.Log("Something trying to save the game while a tutorial is playing.  Investigate.");
-			return;
-		}
-		
-		Debug.Log("Game is saving");
-		
+        // hopefully we are safe here, but do an absolute check if a tutorial is playing
+        if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() ) {
+            Debug.Log("Something trying to save the game while a tutorial is playing.  Investigate.");
+            return;
+        }
+        
+        Debug.Log("Game is saving");
+        
         //JSON serializer setting
         JSON.Instance.Parameters.UseExtensions = false;
 
@@ -223,5 +226,19 @@ public class DataManager : Singleton<DataManager>{
         }else{
             Debug.LogError("PetID is null or empty, so data cannot be serialized");
         }
+    }
+
+    //called when game data has be deserialized and ready to be used
+    private void Deserialized(){
+        Debug.Log("Deserialized");
+        if(OnGameDataLoaded != null)
+            OnGameDataLoaded(this, EventArgs.Empty);
+    }
+
+    //called when game data has been serialized
+    private void Serialized(){
+        Debug.Log("Serialized");
+        if(OnGameDataSaved != null)
+            OnGameDataSaved(this, EventArgs.Empty);
     }
 }

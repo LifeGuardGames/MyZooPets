@@ -9,13 +9,15 @@ public class PetGameData{
     public CutsceneData Cutscenes {get; set;} 
     public DecorationSystemData Decorations {get; set;}
     public StatsData Stats {get; set;}
-    public LevelUpData Level {get; set;}
+    public PetLevelMutableData Level {get; set;}
+
     public CalendarData Calendar {get; set;}
+    
     public DegradationData Degradation {get; set;}
     public InhalerData Inhaler {get; set;}
     public TutorialData Tutorial {get; set;}
     public InventoryData Inventory {get; set;}
-    public SkillMutableData Dojo {get; set;}
+    public SkillMutableData Flame {get; set;}
     public BadgeMutableData Badge {get; set;}
     public GatingProgressData GatingProgress {get; set;}
     public RunnerGameData RunnerGame {get; set;}
@@ -33,7 +35,7 @@ public class PetGameData{
         Decorations.Init();
         Stats = new StatsData();
         Stats.Init();
-        Level = new LevelUpData();
+        Level = new PetLevelMutableData();
         Level.Init();
         Calendar = new CalendarData();
         Calendar.Init();
@@ -45,8 +47,8 @@ public class PetGameData{
         Tutorial.Init();
         Inventory = new InventoryData();
         Inventory.Init();
-        Dojo = new SkillMutableData(); 
-        Dojo.Init();
+        Flame = new SkillMutableData(); 
+        Flame.Init();
         Badge = new BadgeMutableData();
         Badge.Init();
         GatingProgress = new GatingProgressData();

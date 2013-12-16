@@ -26,6 +26,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	// current list of entrie to spawn triggers from
 	private List<NinjaDataEntry> listCurrentEntries;
 	
+	// array of ninja lives
+	public NinjaLife[] arrayLives;
+	
 	void Awake(){
 		//TO DO - not sure if this is the best place to set frame rate
 		Application.targetFrameRate = 60;

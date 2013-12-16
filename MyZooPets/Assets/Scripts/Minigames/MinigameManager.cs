@@ -14,6 +14,18 @@ public class GameStateArgs : EventArgs{
 		this.eState = eState;
 	}
 }	
+
+// event arguments for lives updated callback
+public class LivesChangedArgs : EventArgs {
+	private int nChange;
+	public int GetChange() {
+		return nChange;	
+	}
+	
+	public LivesChangedArgs( int nChange ) {
+		this.nChange = nChange;
+	}
+}
 	
 
 //---------------------------------------------------
@@ -43,6 +55,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// player lives
 	private int nLives;
 	public int nStartingLives;
+	public int GetLives() {
+		return nLives;	
+	}
 	
 	// tutorial stuff
 	public bool bRunTut = true;			// used for debug/testing
@@ -97,8 +112,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	}
 	
 	//=======================Events========================
-	public static EventHandler<GameStateArgs> OnStateChanged; 	//when the game state changes
-	public static EventHandler<EventArgs> OnNewGame; 		//when a new game starts
+	public static EventHandler<GameStateArgs> OnStateChanged; 		//when the game state changes
+	public static EventHandler<EventArgs> OnNewGame; 				//when a new game starts
+	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
 	//=====================================================	
 	
 	//---------------------------------------------------
@@ -313,6 +329,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	public void UpdateLives( int num ) {
 		int nNew = nLives + num;
 		SetLives( nNew );
+		
+		// send callback because lives are chaning
+		if ( OnLivesChanged != null )
+			OnLivesChanged( this, new LivesChangedArgs(num) );		
 	}		
 	
 	//---------------------------------------------------

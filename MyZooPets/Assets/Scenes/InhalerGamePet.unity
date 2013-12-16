@@ -83,8 +83,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 5402397}
   - 114: {fileID: 5402398}
+  - 114: {fileID: 5402399}
   m_Layer: 0
-  m_Name: LevelUpLogic
+  m_Name: LevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,6 +114,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4f162e78cdb4edab2ef49c3b681f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5402399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 31a1e8345d16c44ea9fa163fd6cfb4c2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1176515501}
+  m_GameObject: {fileID: 5402396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 182c0a2d4c9aa46cbb8fcb9e05add9b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: LevelUp
 --- !u!1 &33164406
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +150,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 33164406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .726257324, y: 384, z: 0}
+  m_LocalPosition: {x: 0, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1759701212}
@@ -1964,6 +1978,10 @@ MonoBehaviour:
   pSystem: {fileID: 233134851}
   destroyAfterStop: 0
   destroyAfterStopDelay: 0
+  randomActive: 0
+  delayBeforeStart: 0
+  minInterval: 0
+  maxInterval: 0
 --- !u!114 &233134855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3291,7 +3309,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 591515949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .726257324, y: -384, z: 0}
+  m_LocalPosition: {x: 0, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1137665733}
@@ -3603,29 +3621,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraObject: {fileID: 361685015}
-  leftPanel: {fileID: 0}
-  backDrop: {fileID: 100000, guid: 12abd2ff6f58e42ea8556efcaa3855e3, type: 2}
-  popupTextureGreatNGUI: {fileID: 100000, guid: 12ef9b1e3b2c14e41ae9088527803573,
-    type: 2}
-  popupTextureNiceTryNGUI: {fileID: 100000, guid: 339c0cfdd55b948279d1c42949bcd1ee,
-    type: 2}
-  popupTextureUseTheInhalerNGUI: {fileID: 100000, guid: e32c1ad5687c04f60b8e272876f40602,
-    type: 2}
-  popupTexturePracticeInhalerNGUI: {fileID: 100000, guid: 8908fe222a84643a595d6a2ebc3c5629,
-    type: 2}
-  popupTextureDiagnoseSymptomsNGUI: {fileID: 0}
   popupNotificationOneButton: {fileID: 100002, guid: c14970312f58b4eabb9a8001cd302301,
     type: 2}
   popupNotificationTwoButtons: {fileID: 100010, guid: 278b6181febe14a8cb7b36dcfc2b3c03,
     type: 2}
-  levelUpMessageNGUI: {fileID: 100010, guid: 2e895b7f645c443b4b95f44d009d70ac, type: 2}
-  popupTipWithImageNGUI: {fileID: 100018, guid: 20b24d0f00c8f42e5b9271cac467cf5f,
+  popupLevelUpMessage: {fileID: 100010, guid: 2e895b7f645c443b4b95f44d009d70ac, type: 2}
+  popupTipWithImage: {fileID: 100018, guid: 20b24d0f00c8f42e5b9271cac467cf5f, type: 2}
+  popupGameOverRewardMessageOneButton: {fileID: 100010, guid: 2e5dcbccf55824c2f9134bc8951e56c6,
     type: 2}
-  gameOverRewardMessageOneButton: {fileID: 100010, guid: 2e5dcbccf55824c2f9134bc8951e56c6,
+  popupGameOverRewardMessageTwoButtons: {fileID: 100008, guid: fdfa4d242fb104649af77ae7ee863c64,
     type: 2}
-  gameOverRewardMessageTwoButtons: {fileID: 100008, guid: fdfa4d242fb104649af77ae7ee863c64,
+  popupBadgeUnlockedMessage: {fileID: 100026, guid: 1b87621769c84a94f86752cc164d37e6,
     type: 2}
-  popupNotificiationTutorialLeft: {fileID: 100014, guid: d0cac8f2171928445b4e6994e9972e1c,
+  popupFireLevelUpMessage: {fileID: 100024, guid: 5d1d250f16abafa4c86e31fc5550f5d8,
     type: 2}
 --- !u!1001 &667010820
 Prefab:
@@ -4085,11 +4093,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -.726257324
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: .725898743
+    e13: -.707199097
     e20: 0
     e21: 0
     e22: 384
@@ -6098,7 +6106,7 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -.726257324
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
@@ -7233,7 +7241,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1358462900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .726257324, y: -.725898743, z: 0}
+  m_LocalPosition: {x: 0, y: .707199097, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1947923335}
@@ -7410,8 +7418,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1415178915}
   - 114: {fileID: 1415178914}
+  - 114: {fileID: 1415178916}
   m_Layer: 0
-  m_Name: BadgeLogic
+  m_Name: BadgeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7440,6 +7449,18 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1977117186}
+--- !u!114 &1415178916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 8a7148f4fcb2e4cb09f1f62e2b34004a,
+    type: 2}
+  m_PrefabInternal: {fileID: 812929412}
+  m_GameObject: {fileID: 1415178913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335c9fd7f0bb14a71859dd7380674388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1432171096
 GameObject:
   m_ObjectHideFlags: 0
@@ -10198,6 +10219,10 @@ MonoBehaviour:
   pSystem: {fileID: 1656513230}
   destroyAfterStop: 0
   destroyAfterStopDelay: 0
+  randomActive: 0
+  delayBeforeStart: 0
+  minInterval: 0
+  maxInterval: 0
 --- !u!1001 &1675250450
 Prefab:
   m_ObjectHideFlags: 0

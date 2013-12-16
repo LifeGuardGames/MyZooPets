@@ -78,7 +78,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         ScoreManager.Instance.Reset();
         ScoreUIManager.Instance.Show();
 
-        LevelManager.Instance.Reset();
+        RunnerLevelManager.Instance.Reset();
         MegaHazard.Instance.Reset();
         ParallaxingBackgroundManager.Instance.Reset();
     }
@@ -89,7 +89,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         PlayerController.Instance.gameObject.SetActive(true);
         PlayerController.Instance.Reset();
         ScoreManager.Instance.Reset();
-        LevelManager.Instance.ResetTutorial();
+        RunnerLevelManager.Instance.ResetTutorial();
         MegaHazard.Instance.Reset();
         ParallaxingBackgroundManager.Instance.Reset();
     }

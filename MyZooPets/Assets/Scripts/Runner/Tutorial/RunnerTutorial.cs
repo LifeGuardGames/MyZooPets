@@ -40,11 +40,11 @@ public class RunnerTutorial : MinigameTutorial {
         switch ( nStep ) {
             case 0:
                 PlayerController.OnJump += TutorialJump;
-                ShowPopup( strResourceKey, vPos, false );            
+                SpawnTutorial("tutorialRunnerTap");
                 break;
             case 1:
                 PlayerController.OnDrop += TutorialDrop;
-                ShowPopup( strResourceKey, vPos, false );            
+                SpawnTutorial("tutorialRunnerSwipeDown");
                 break;
             case 2:
                 strResourceKey = "TutorialMessageEnd";
@@ -56,6 +56,17 @@ public class RunnerTutorial : MinigameTutorial {
         }       
             
         // show the proper tutorial message
+    }
+
+    private void SpawnTutorial(string spriteName){
+        GameObject tutPrefab = (GameObject) Resources.Load("TutorialPopup_Runner");
+        GameObject tutGO = (GameObject) GameObject.Instantiate(tutPrefab);
+
+        tutGO.transform.Find("Label_Message").GetComponent<UILabel>().text = 
+            Localization.Localize(GetKey() + "_" + GetStep());
+        tutGO.transform.Find("Sprite_Hint").GetComponent<UISprite>().spriteName = spriteName; 
+
+        ShowPopup( tutGO, POS_TOP, false );            
     }
 
     public void TutorialJump(object sender, EventArgs args){

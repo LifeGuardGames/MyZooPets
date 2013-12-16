@@ -125,8 +125,8 @@ public class PlayerController : Singleton<PlayerController> {
     // If player falls below the "Dead line" than the player dies
     //---------------------------------------------------
     private void CheckAndActOnDeath(){
-       LevelManager levelManager = LevelManager.Instance;
-        if(transform.position.y < levelManager.LevelTooLowYValueGameOver){
+       RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
+        if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
             AudioManager.Instance.PlayClip("runnerDie");
             RunnerGameManager.Instance.ActivateGameOver();
         } 

@@ -19,6 +19,10 @@ public abstract class Tutorial {
 	// ----------- Tutorial Popup types -------------------
 	protected const string POPUP_STD = "TutorialPopup_Standard";
 	protected const string POPUP_LONG = "TutorialPopup_Long";
+
+	//add popup prefab here
+	protected const string POPUP_RUNNER = "TutorialPopup_Runner";
+
 	// ----------------------------------------------------
 	
 	// list of objects that can be processed as input
@@ -255,5 +259,25 @@ public abstract class Tutorial {
 		
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 		script.Init( strText );
+	}
+
+	protected void ShowPopup(GameObject tutorialPopup, Vector3 vLoc, bool useViewPort=true){
+		// if there was already a popup, just destroy it
+		if ( goPopup )
+			GameObject.Destroy( goPopup );
+		
+		Vector3 vPos = vLoc;
+	
+		if(useViewPort)	{
+			// transform viewport location to screen position, then from bottom left to center
+			vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+		}
+
+		tutorialPopup.transform.parent = GameObject.Find("Anchor-Center").transform;
+		vPos.z = -42; //quick hack to make sure the GO is closer to camera
+		tutorialPopup.transform.localPosition = vPos;
+		tutorialPopup.transform.localScale = new Vector3(1, 1, 1);
+		goPopup = tutorialPopup;
 	}
 }

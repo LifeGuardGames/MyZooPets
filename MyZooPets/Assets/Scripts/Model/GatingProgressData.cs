@@ -96,6 +96,11 @@ public class GatingProgressData{
 		
 		// then return whether or not the gate has been destroyed
 		bool bDestroyed = nHP <= 0;
+
+		//Send analytics event
+		if(bDestroyed)
+			Analytics.Instance.GateUnlocked(strID);
+
 		return bDestroyed;
 	}
 

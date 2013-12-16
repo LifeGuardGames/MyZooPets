@@ -248,6 +248,9 @@ public class DGTCharacter : MonoBehaviour {
 			
 			// set the character moving again
 			Move();
+			
+			// Play the spring animations
+			DGTManager.Instance.GetArrow().GetComponent<MultiAnimationController>().PlayAnimations();
 		}
 	}
 	

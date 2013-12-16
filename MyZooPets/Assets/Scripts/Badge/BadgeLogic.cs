@@ -84,8 +84,6 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         int latestProgress;
         Badge badge = DataBadges.GetBadge(badgeID);
 
-        //TO DO: return if badge unlock already.
-
         //Decides to override or add to recorded progress from DataManager
         if(overrideProgress){
             latestProgress = currentProgress;

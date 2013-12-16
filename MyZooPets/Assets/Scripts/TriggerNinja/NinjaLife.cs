@@ -17,10 +17,10 @@ public class NinjaLife : MonoBehaviour {
 	public UISprite sprite;
 	
 	// particle system for this object
-	public ParticleSystemController particleSystem;
+	public ParticleSystemController systemOff;
 	
 	// the state of this life
-	private bool bOn;
+	//private bool bOn;
 	
 	void Start() {
 		MinigameManager<NinjaManager>.OnNewGame += OnNewGame;
@@ -55,7 +55,7 @@ public class NinjaLife : MonoBehaviour {
 	//---------------------------------------------------	
 	public void Toggle( bool bOn ) {
 		// cache the state of this life
-		this.bOn = bOn;
+		//this.bOn = bOn;
 		
 		// change the tint based on on/off
 		Color tint = bOn ? new Color(255,255,255,255) : new Color(0,0,0,255);
@@ -63,6 +63,6 @@ public class NinjaLife : MonoBehaviour {
 		
 		// if the life is toggling off, play a particle fx
 		if ( !bOn )
-			particleSystem.Play();
+			systemOff.Play();
 	}
 }

@@ -301,7 +301,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// ChangeTrackSpeed()
 	// Changes the speed of the characters/track.
 	//---------------------------------------------------		
-	private void ChangeTrackSpeed( float fChange ) {
+	private void ChangeTrackSpeed( float fChange) {
 		float fCurSpeed = GetSpeed();
 		float fNewSpeed = fCurSpeed + fChange;	
 		
@@ -312,10 +312,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// set the speed
 		SetTrackSpeed( fNewSpeed );
 	}
-	private void SetTrackSpeed( float fNewSpeed ) {
+	private void SetTrackSpeed( float fNewSpeed, bool bPausing = false ) {
 		fCurrentSpeed = fNewSpeed;
 		
-		if ( fCurrentSpeed < fStartingSpeed )
+		if ( fCurrentSpeed < fStartingSpeed && !bPausing )
 			fCurrentSpeed = fStartingSpeed;
 		
 		// send out a message to all things on the track letting them know their speed needs to change
@@ -323,7 +323,7 @@ public class DGTManager : MinigameManager<DGTManager> {
             OnSpeedChange(this, EventArgs.Empty);		
 	}
 	public void StopTrack() {
-		SetTrackSpeed( 0 );	
+		SetTrackSpeed( 0, true );	
 	}
 	
 	//---------------------------------------------------

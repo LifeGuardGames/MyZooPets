@@ -21,6 +21,10 @@ public class DGTTutorial : MinigameTutorial {
 	// how many pets have scored during this step of the tutorial?
 	private int nScored;
 	
+	// the FX playing over the zone that needs to be clicked
+	private GameObject goZoneFX;
+	private GameObject[] arrayZones;
+	
 	// the current stage this tutorial is highlighting
 	private AsthmaStage eCurrentStage;
 	private void SetCurrentStage( AsthmaStage eStage ) {
@@ -55,6 +59,10 @@ public class DGTTutorial : MinigameTutorial {
 	protected override void _End( bool bFinished ) {
 		// stop listen for character scoring
 		DGTCharacter.OnCharacterScored -= CharacterScored;	
+		
+		// delete the particle effect we create if it still exists
+		if ( goZoneFX != null )
+			GameObject.Destroy( goZoneFX );
 	}
 	
 	//---------------------------------------------------
@@ -67,23 +75,40 @@ public class DGTTutorial : MinigameTutorial {
 		
 		switch ( nStep ) {
 			case 0:				
+				arrayZones = new GameObject[3];
+				arrayZones[0] = GameObject.Find( "ZoneGreen" );
+				arrayZones[1] = GameObject.Find( "ZoneYellow" );
+				arrayZones[2] = GameObject.Find( "ZoneRed" );
+			
 				// send healthy pets out
 				vPos = POS_BOT;
 				QueueCharacters( AsthmaStage.OK );
+				Vector3 vPosFX = arrayZones[0].transform.position;
+				vPosFX.z = -50;
+				goZoneFX = ParticleUtils.CreateParticle( "ClinicZoneTutorialFX", vPosFX );
 				break;
 			case 1:
 				// send sick pets out
 				vPos = POS_TOP;
 				QueueCharacters( AsthmaStage.Sick );
+				GameObject.Destroy( goZoneFX );
+				vPosFX = arrayZones[1].transform.position;
+				vPosFX.z = -50;			
+				goZoneFX = ParticleUtils.CreateParticle( "ClinicZoneTutorialFX", vPosFX );
 				break;	
 			case 2:
 				// send very sick pets out
 				vPos = POS_TOP;
 				QueueCharacters( AsthmaStage.Attack );
+				vPosFX = arrayZones[2].transform.position;
+				vPosFX.z = -50;		
+				GameObject.Destroy( goZoneFX );
+				goZoneFX = ParticleUtils.CreateParticle( "ClinicZoneTutorialFX", vPosFX );
 				break;				
 			case 3:
 				// this part of the tutorial is just text		
 				strResourceKey = "TutorialMessageEnd";
+				GameObject.Destroy( goZoneFX );
 				break;
 			default:
 				Debug.Log("Clinic tutorial has an unhandled step: " + nStep );

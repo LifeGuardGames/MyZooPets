@@ -136,6 +136,10 @@ public class DGTCharacter : MonoBehaviour {
 		bool bMax = IsAfterPivot();
 		float fSpeed = DGTManager.Instance.GetSpeed( bMax );
 		
+		// if the speed is 0, the track is not moving, so....don't do anything more
+		if ( fSpeed == 0 )
+			return;
+		
 		//Change the 3 V3 to where icon should move
 		Vector3 vTarget = new Vector3(goTarget.transform.position.x, goTarget.transform.position.y, gameObject.transform.position.z); // the target location (keep this object's z position, though)
 		Vector3[] path = new Vector3[4];

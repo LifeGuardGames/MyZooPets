@@ -327,6 +327,11 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// Adds num points to the player's current lives.
 	//---------------------------------------------------	
 	public void UpdateLives( int num ) {
+		// for now, current lives cannot go above the starting value...
+		int nCurLives = GetLives();
+		if ( num > 0 && nCurLives == nStartingLives )
+			return;
+		
 		int nNew = nLives + num;
 		SetLives( nNew );
 		

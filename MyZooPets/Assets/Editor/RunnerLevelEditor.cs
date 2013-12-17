@@ -402,9 +402,9 @@ public class RunnerLevelEditor : EditorWindow
 
             Vector3 nextCurvePoint;
             if (inbQuadratic)
-                nextCurvePoint = LevelManager.CalculateQuadtraticPoint(currentTime, inA, inB, inC);
+                nextCurvePoint = RunnerLevelManager.CalculateQuadtraticPoint(currentTime, inA, inB, inC);
             else
-                nextCurvePoint = LevelManager.CalculateBezierPoint(currentTime, inA, inB, inC, inD);
+                nextCurvePoint = RunnerLevelManager.CalculateBezierPoint(currentTime, inA, inB, inC, inD);
 
             if (bOnNext)
                 Handles.DrawLine(nextCurvePoint, lastCurvePoint);

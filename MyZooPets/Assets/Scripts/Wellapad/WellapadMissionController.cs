@@ -91,7 +91,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			// one final check just to be safe
 			if ( DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus == RewardStatuses.Unclaimed ) {
 				// for now the only reward is breathing fire
-				StatsController.Instance.ChangeFireBreaths( 1 );
+				//StatsController.Instance.ChangeFireBreaths( 1 );
 				
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 				

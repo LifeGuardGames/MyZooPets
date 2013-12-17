@@ -61,7 +61,6 @@ public class GameTutorial_ClaimFirstReward : GameTutorial {
 		// this is a bit hacky...
 		GameObject goReward = GameObject.Find( "2_WellapadTask" );
 		while ( goReward == null ) {
-			Debug.Log("wellapad not inited during tut...if you see this, please tell joe!");
 			yield return 0;
 			goReward = GameObject.Find( "2_WellapadTask" );
 		}

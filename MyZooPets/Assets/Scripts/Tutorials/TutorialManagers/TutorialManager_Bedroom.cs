@@ -50,7 +50,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 		
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
 		bool bFocusWellapad = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_WELLAPAD );	
-		bool bClaimFirst = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CLAIM_FIRST ); 
+		//bool bClaimFirst = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CLAIM_FIRST ); 
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_TRIGGERS );
 		bool bSmokeIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_SMOKE_INTRO );
 		bool bDecos = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_DECOS );
@@ -65,9 +65,6 @@ public class TutorialManager_Bedroom : TutorialManager {
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorial_FocusInhaler();
 		}	
-		else if ( !bClaimFirst ) {
-			new GameTutorial_ClaimFirstReward();	
-		}
 		else if ( !bSmokeIntro ) {
 			// play the smoke monster intro tutorial
 			new GameTutorial_SmokeIntro();

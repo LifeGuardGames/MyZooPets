@@ -107,6 +107,7 @@ public class PetMovement : Singleton<PetMovement> {
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
         bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
         if(!hasActiveGate){
+            print("moving pet");
             //Transform pet position to screen point first so we can move the pet to the right y position
             Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
             MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, petPosInScreenPoint.y, 0)));

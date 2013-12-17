@@ -64,7 +64,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 		else if ( !bFocusInhaler )  {
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorial_FocusInhaler();
-		}	
+		}			
 		else if ( !bSmokeIntro ) {
 			// play the smoke monster intro tutorial
 			new GameTutorial_SmokeIntro();

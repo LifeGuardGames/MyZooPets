@@ -92,6 +92,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			if ( DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus == RewardStatuses.Unclaimed ) {
 				// for now the only reward is breathing fire
 				//StatsController.Instance.ChangeFireBreaths( 1 );
+				StatsController.Instance.ChangeStats( 100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 				
@@ -194,7 +195,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		DataManager.Instance.GameData.Wellapad.ResetMissions();
 		
 		AddMission( "TutorialCritical" );
-		AddMission( "TutorialSide" );
+		//AddMission( "TutorialSide" );
 		
 		// send event
 		if ( OnMissionsRefreshed != null ) 
@@ -244,8 +245,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		
 		// loop through all tasks to see their status...if we run into a task that is not completed, just return
 		foreach ( KeyValuePair<string, WellapadTask> task in mission.Tasks ) {
-			if ( task.Value.Completed == WellapadTaskCompletionStates.RecentlyCompleted || 
-					task.Value.Completed == WellapadTaskCompletionStates.Completed )
+			if ( task.Value.Completed != WellapadTaskCompletionStates.RecentlyCompleted && 
+					task.Value.Completed != WellapadTaskCompletionStates.Completed )
 				return;
 		}
 		
@@ -302,7 +303,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	//---------------------------------------------------		
 	private void AddDefaultMissions() {
 		AddMission( "Critical" );
-		AddMission( "Side" );		
+		//AddMission( "Side" );		
 	}
 	
 	//---------------------------------------------------

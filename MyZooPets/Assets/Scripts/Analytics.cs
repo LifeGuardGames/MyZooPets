@@ -24,7 +24,7 @@ public class Analytics : MonoBehaviour {
 
     public const string INHALER_CATEGORY = "MiniGame:Inhaler:";
     public const string RUNNER_CATEGORY = "MiniGame:Runner:";
-    public const string DIAGNOSE_CATEGORY = "MiniGame:Diagnose:";
+    public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 
     private DateTime playTime;

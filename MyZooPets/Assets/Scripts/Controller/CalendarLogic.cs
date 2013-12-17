@@ -5,20 +5,20 @@ using System;
 
 public class CalendarLogic : Singleton<CalendarLogic>{
     //called when calendar opened or calendar resets
-    public static event EventHandler<EventArgs> OnCalendarReset; 
+    // public static event EventHandler<EventArgs> OnCalendarReset; 
 
-    private CalendarEntry todaysEntry; //today's entry
+    // private CalendarEntry todaysEntry; //today's entry
 
     //Week in a list. In order from Monday to Sunday
-    public List<CalendarEntry> GetCalendarEntriesThisWeek{
-        get{return DataManager.Instance.GameData.Calendar.EntriesThisWeek;}
-    }
+    // public List<CalendarEntry> GetCalendarEntriesThisWeek{
+    //     get{return DataManager.Instance.GameData.Calendar.EntriesThisWeek;}
+    // }
 
     //Return the count of all the checks for this week
-    public int GreenStampCount{
-        get{return DataManager.Instance.GameData.Calendar.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
-            entry.NightTime.Equals(DosageRecord.Hit))).Count;}
-    }
+    // public int GreenStampCount{
+    //     get{return DataManager.Instance.GameData.Calendar.EntriesThisWeek.FindAll(entry => (entry.DayTime.Equals(DosageRecord.Hit) ||
+    //         entry.NightTime.Equals(DosageRecord.Hit))).Count;}
+    // }
 
     //Return the next time the user can collect bonuses
     public DateTime NextPlayPeriod{
@@ -33,56 +33,46 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     //Check if the user can play the inhaler game
     public bool CanUseRealInhaler{
         get {
-			/*
-            bool retVal = false;
-            if (DateTime.Now.Hour < 12 && todaysEntry.DayTime == DosageRecord.Unknown) {
-                retVal = true;
-            }
-            else if (DateTime.Now.Hour >= 12 && todaysEntry.NightTime == DosageRecord.Unknown ) {
-                retVal = true;
-            }
-            */
-			
-			bool retVal = DateTime.Now.Ticks >= NextPlayPeriod.Ticks;
+			bool retVal = DateTime.Now >= NextPlayPeriod;
 			
             return retVal;
         }
     } 
 
     //Generate a week of empty CalendarEntry
-    public static List<CalendarEntry> DosageRecordUnknownWeek(){
-        List<CalendarEntry> list = new List<CalendarEntry>();
-        for (int i = 0; i < 7; i++){
-            list.Add(new CalendarEntry());
-        }
-        return list;
-    }
+    // public static List<CalendarEntry> DosageRecordUnknownWeek(){
+    //     List<CalendarEntry> list = new List<CalendarEntry>();
+    //     for (int i = 0; i < 7; i++){
+    //         list.Add(new CalendarEntry());
+    //     }
+    //     return list;
+    // }
 
     // All entries should be DosageRecord.Null up to today's first entry (either day time or night time)
-    public static List<CalendarEntry> NullUntilTodayWeek(DateTime now){ // for those parts that should remain empty
-        List<CalendarEntry> list = DosageRecordUnknownWeek();
+    // public static List<CalendarEntry> NullUntilTodayWeek(DateTime now){ // for those parts that should remain empty
+    //     List<CalendarEntry> list = DosageRecordUnknownWeek();
 
-        // get days passed since last Sunday
-        DateTime dateOfSunday = GetDateOfSunday(now);
-        TimeSpan timePassed = now.Date.Subtract(dateOfSunday.AddDays(-7).Date);
-        int daysPassed = timePassed.Days;
+    //     // get days passed since last Sunday
+    //     DateTime dateOfSunday = GetDateOfSunday(now);
+    //     TimeSpan timePassed = now.Date.Subtract(dateOfSunday.AddDays(-7).Date);
+    //     int daysPassed = timePassed.Days;
 
-        // set all values of entries before today toDosageRecord.Null 
-        // (except today's)
-        for (int i = 0; i < daysPassed - 1; i++){
-            CalendarEntry entry = list[i];
-            entry.DayTime = DosageRecord.Null;
-            entry.NightTime = DosageRecord.Null;
-        }
+    //     // set all values of entries before today toDosageRecord.Null 
+    //     // (except today's)
+    //     for (int i = 0; i < daysPassed - 1; i++){
+    //         CalendarEntry entry = list[i];
+    //         entry.DayTime = DosageRecord.Null;
+    //         entry.NightTime = DosageRecord.Null;
+    //     }
 
-        CalendarEntry today = list[daysPassed - 1];
-        // fill in specifically for today
-        if (now.Hour >= 12) {
-            today.DayTime = DosageRecord.Null;
-        }
+    //     CalendarEntry today = list[daysPassed - 1];
+    //     // fill in specifically for today
+    //     if (now.Hour >= 12) {
+    //         today.DayTime = DosageRecord.Null;
+    //     }
 
-        return list;
-    }
+    //     return list;
+    // }
 	
     //-----------------------------------------------
     // GetTimeFrame()
@@ -121,53 +111,53 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // Else, return the DateTime of the next Sunday.
     // only used here, and in DataManager to initialize DataManager.DateOfSunday
     //-----------------------------------------------
-    public static DateTime GetDateOfSunday(DateTime dateTime){
-        DateTime dateOfSunday;
-        if (dateTime.DayOfWeek == DayOfWeek.Sunday){
-            dateOfSunday = dateTime;
-        }else {
-            int dayOfWeek = (int) dateTime.DayOfWeek;
-            DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
-            dateOfSunday = nextSunday;
-        }
-        return dateOfSunday;
-    }
+    // public static DateTime GetDateOfSunday(DateTime dateTime){
+    //     DateTime dateOfSunday;
+    //     if (dateTime.DayOfWeek == DayOfWeek.Sunday){
+    //         dateOfSunday = dateTime;
+    //     }else {
+    //         int dayOfWeek = (int) dateTime.DayOfWeek;
+    //         DateTime nextSunday = dateTime.AddDays(7 - dayOfWeek).Date;
+    //         dateOfSunday = nextSunday;
+    //     }
+    //     return dateOfSunday;
+    // }
 
     //-----------------------------------------------
     // ClaimReward()
     // Give bonus when user collects
     //-----------------------------------------------
-    public void ClaimReward(Vector3 screenPos){
-		StatsController.Instance.ChangeStats(50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos),
-         50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos), 0, Vector3.zero, 0, Vector3.zero);
-    }
+  //   public void ClaimReward(Vector3 screenPos){
+		// StatsController.Instance.ChangeStats(50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos),
+  //        50, CameraManager.Instance.WorldToScreen( CameraManager.Instance.cameraNGUI, screenPos), 0, Vector3.zero, 0, Vector3.zero);
+  //   }
 
     //-----------------------------------------------
     // RecrodGivingInhaler()
     // call after giving inhaler to pet
     // assume that we can only give an inhaler to the pet if it missed it
     //-----------------------------------------------
-    public void RecordGivingInhaler(){
-        DateTime now = DateTime.Now;
-        if (now.Hour < 12) {
-            todaysEntry.DayTime = DosageRecord.Hit;
-        }else if (now.Hour >= 12) {
-            todaysEntry.NightTime = DosageRecord.Hit;
-        }
-    }
+    // public void RecordGivingInhaler(){
+    //     DateTime now = DateTime.Now;
+    //     if (now.Hour < 12) {
+    //         todaysEntry.DayTime = DosageRecord.Hit;
+    //     }else if (now.Hour >= 12) {
+    //         todaysEntry.NightTime = DosageRecord.Hit;
+    //     }
+    // }
 
     //-----------------------------------------------
     // CalendarOpened()
     // call whenever opening calendar
     //-----------------------------------------------
-    public void CalendarOpened(){
-        DateTime now = DateTime.Now;
-        UpdateCalendar(now);
-        DataManager.Instance.GameData.Calendar.LastCalendarOpenedTime = now;
+    // public void CalendarOpened(){
+    //     DateTime now = DateTime.Now;
+    //     UpdateCalendar(now);
+    //     DataManager.Instance.GameData.Calendar.LastCalendarOpenedTime = now;
 
-        if(OnCalendarReset != null) 
-            OnCalendarReset(this, EventArgs.Empty);
-    }
+    //     if(OnCalendarReset != null) 
+    //         OnCalendarReset(this, EventArgs.Empty);
+    // }
 
 
     //-----------------------------------------------
@@ -180,24 +170,24 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // }
     //================================================
     
-    void Awake(){
-        UpdateCalendar(DateTime.Now);
-    }
+    // void Awake(){
+    //     UpdateCalendar(DateTime.Now);
+    // }
 
     //-----------------------------------------------
     // UpdateCalendar()
     // Run a check to see if calendar needs to be updated and reset
     //-----------------------------------------------
-    private void UpdateCalendar(DateTime now){
-        if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){
-            DataManager.Instance.GameData.Calendar.EntriesThisWeek = DosageRecordUnknownWeek(); 
+    // private void UpdateCalendar(DateTime now){
+    //     if(now.Date > DataManager.Instance.GameData.Calendar.DateOfSunday){
+    //         DataManager.Instance.GameData.Calendar.EntriesThisWeek = DosageRecordUnknownWeek(); 
 
-            DataManager.Instance.GameData.Calendar.DateOfSunday = GetDateOfSunday(now);
-        }
-       // UpdateWeekReference(now);
-       FillInMissedEntries(now);
-       // ResetForNextPlayPeriod(now);
-    }
+    //         DataManager.Instance.GameData.Calendar.DateOfSunday = GetDateOfSunday(now);
+    //     }
+    //    // UpdateWeekReference(now);
+    //    FillInMissedEntries(now);
+    //    // ResetForNextPlayPeriod(now);
+    // }
 
     //-----------------------------------------------
     // UpdateWeekReference()
@@ -242,85 +232,85 @@ public class CalendarLogic : Singleton<CalendarLogic>{
     // DaysPassedSinceLastSunday()
     //  
     //-----------------------------------------------
-    private int DaysPassedSinceLastSunday(DateTime now){
-        TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(-7).Date);
-        int daysPassed = timePassed.Days;
-        return daysPassed;
-    }
+    // private int DaysPassedSinceLastSunday(DateTime now){
+    //     TimeSpan timePassed = now.Date.Subtract(DataManager.Instance.GameData.Calendar.DateOfSunday.AddDays(-7).Date);
+    //     int daysPassed = timePassed.Days;
+    //     return daysPassed;
+    // }
 
-    //-----------------------------------------------
-    // FillInMissedEntries()
-    // Fill in the missed entries for this week
-    //-----------------------------------------------
-    private void FillInMissedEntries(DateTime now){
-        // assume that DateOfSunday is updated by this point
+    // //-----------------------------------------------
+    // // FillInMissedEntries()
+    // // Fill in the missed entries for this week
+    // //-----------------------------------------------
+    // private void FillInMissedEntries(DateTime now){
+    //     // assume that DateOfSunday is updated by this point
 
-        // days passed since last Sunday
-        int daysPassed = DaysPassedSinceLastSunday(now);
+    //     // days passed since last Sunday
+    //     int daysPassed = DaysPassedSinceLastSunday(now);
 
-        // replace all the DosageRecord.Unknown values with DosageRecord.Miss
-        // (except today's)
-        for (int i = 0; i < daysPassed - 1; i++){
-            CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
-            if (entry.DayTime == DosageRecord.Unknown){
-                entry.DayTime = DosageRecord.Miss;
-            }
-            if (entry.NightTime == DosageRecord.Unknown){
-                entry.NightTime = DosageRecord.Miss;
-            }
-        }
+    //     // replace all the DosageRecord.Unknown values with DosageRecord.Miss
+    //     // (except today's)
+    //     for (int i = 0; i < daysPassed - 1; i++){
+    //         CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
+    //         if (entry.DayTime == DosageRecord.Unknown){
+    //             entry.DayTime = DosageRecord.Miss;
+    //         }
+    //         if (entry.NightTime == DosageRecord.Unknown){
+    //             entry.NightTime = DosageRecord.Miss;
+    //         }
+    //     }
 
-        // update reference to todaysEntry
-        todaysEntry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[daysPassed - 1];
+    //     // update reference to todaysEntry
+    //     todaysEntry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[daysPassed - 1];
 
-        // fill in specifically for today
-        FillInMissesForToday(now);
-    }
+    //     // fill in specifically for today
+    //     FillInMissesForToday(now);
+    // }
 
-    //-----------------------------------------------
-    // FillInMissesForToday()
-    // Fill in the missed entry for today.
-    //-----------------------------------------------
-    private void FillInMissesForToday(DateTime now){
-        if (now.Hour >= 12) { //PM
-            if (todaysEntry.DayTime == DosageRecord.Unknown){
-                todaysEntry.DayTime = DosageRecord.Miss;
-            }
-        }
-    }
+    // //-----------------------------------------------
+    // // FillInMissesForToday()
+    // // Fill in the missed entry for today.
+    // //-----------------------------------------------
+    // private void FillInMissesForToday(DateTime now){
+    //     if (now.Hour >= 12) { //PM
+    //         if (todaysEntry.DayTime == DosageRecord.Unknown){
+    //             todaysEntry.DayTime = DosageRecord.Miss;
+    //         }
+    //     }
+    // }
 
-    //-----------------------------------------------
-    // ResetForNextPlayPeriod()
-    // Play period is every 12 hr. Reward and punishment 
-    // renews every play period
-    //-----------------------------------------------
-    private void ResetForNextPlayPeriod(DateTime now){
-        if(now < DataManager.Instance.GameData.Calendar.NextPlayPeriod) return; //not next play period yet return
-        //reset green stamps
-        for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
-            CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
-            if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
-            if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
-        }
+    // //-----------------------------------------------
+    // // ResetForNextPlayPeriod()
+    // // Play period is every 12 hr. Reward and punishment 
+    // // renews every play period
+    // //-----------------------------------------------
+    // private void ResetForNextPlayPeriod(DateTime now){
+    //     if(now < DataManager.Instance.GameData.Calendar.NextPlayPeriod) return; //not next play period yet return
+    //     //reset green stamps
+    //     for(int i = 0; i < 7; i++){ //new play period so reward can be collected again
+    //         CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
+    //         if(entry.BonusCollectedDayTime) entry.BonusCollectedDayTime = false;
+    //         if(entry.BonusCollectedNightTime) entry.BonusCollectedNightTime = false;
+    //     }
 
-        //punish for ex stamps
-        int punishmentCounter = 0; // max 2
-        for(int i = 0;i < 7; i++){
-            CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
-            if(entry.DayTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
-                punishmentCounter++;
-            }
-            if(entry.NightTime.Equals(DosageRecord.Miss)){
-                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
-                punishmentCounter++;
-            }
-            if(punishmentCounter == 2) break;
-        }
+    //     //punish for ex stamps
+    //     int punishmentCounter = 0; // max 2
+    //     for(int i = 0;i < 7; i++){
+    //         CalendarEntry entry = DataManager.Instance.GameData.Calendar.EntriesThisWeek[i];
+    //         if(entry.DayTime.Equals(DosageRecord.Miss)){
+    //             StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
+    //             punishmentCounter++;
+    //         }
+    //         if(entry.NightTime.Equals(DosageRecord.Miss)){
+    //             StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -20, Vector3.zero, -20, Vector3.zero);
+    //             punishmentCounter++;
+    //         }
+    //         if(punishmentCounter == 2) break;
+    //     }
 
-        //set NextPlayPeriod
-        DataManager.Instance.GameData.Calendar.NextPlayPeriod = CalculateNextPlayPeriod();
-    }
+    //     //set NextPlayPeriod
+    //     DataManager.Instance.GameData.Calendar.NextPlayPeriod = CalculateNextPlayPeriod();
+    // }
 
    
 }

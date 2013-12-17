@@ -65,7 +65,7 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 		WellapadUIManager.Instance.OpenUI();
 	
 		// enable the close button		
-		GameObject goBack = GameObject.Find( "WellapadBackButton" );
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
 		AddToProcessList( goBack );
 		
 		// listen for wellapad closing

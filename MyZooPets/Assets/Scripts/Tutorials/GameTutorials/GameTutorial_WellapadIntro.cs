@@ -100,7 +100,7 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		button.OnProcessed -= ButtonClicked;
 		
 		// we have to allow the wellapad back button to be clicked
-		GameObject goBack = GameObject.Find( "WellapadBackButton" );
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
 		AddToProcessList( goBack );
 		
 		// go to the next step

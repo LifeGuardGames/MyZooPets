@@ -12,6 +12,12 @@ public class WellapadScreenManager : MonoBehaviour {
 	// screens of the wellapad (as game objects)
 	public GameObject goMissionsList;
 	public GameObject goNoMissions;
+	
+	// the back button -- exposed for tutorials
+	public GameObject goWellapadBack;
+	public GameObject GetBackButton() {
+		return goWellapadBack;	
+	}
 
 	//---------------------------------------------------
 	// SetScreen()

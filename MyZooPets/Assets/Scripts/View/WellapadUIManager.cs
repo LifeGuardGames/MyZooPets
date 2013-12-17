@@ -10,6 +10,9 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	// the actual game object of the wellapad
 	private GameObject goWellapadUI;
 	private WellapadScreenManager scriptScreenManager;
+	public WellapadScreenManager GetScreenManager() {
+		return scriptScreenManager;	
+	}
 	
 	//---------------------------------------------------
 	// _Start()

@@ -119,7 +119,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		foreach ( KeyValuePair<string, Mission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks ) {
 			foreach ( KeyValuePair<string, WellapadTask> task in mission.Value.Tasks ) {
 				if ( task.Value.WillComplete( strCompleted, nAmount ) ) {
-					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[strCompleted].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
+					string strID = task.Value.TaskID;
+					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[strID].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
 
 					// because the task was completed, we may have to update our reward status...
 					// got to do this before sending the event or the reward will not be displayed right
@@ -339,7 +340,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		
 		for ( int i = 0; i < listTasks.Count; ++i ) {
 			Data_WellapadTask task = listTasks[i];
-			string strID = task.GetID();
+			string strID = task.GetTaskID();
 			
 			savedTasks[strID] = new WellapadTask( task );
 		}

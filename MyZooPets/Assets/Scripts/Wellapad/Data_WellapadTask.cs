@@ -10,10 +10,16 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class Data_WellapadTask {
-	// id for the mission
+	// id for the task
 	private string strID;
-	public string GetID() {
+	public string GetTaskID() {
 		return strID;	
+	}
+	
+	// the actual value that the task looks for when a task is completed
+	private string strTask;
+	public string GetTaskName() {
+		return strTask;	
 	}
 	
 	// the category this task belongs to
@@ -30,7 +36,7 @@ public class Data_WellapadTask {
 	
 	// mission text
 	public string GetText() {
-		string strKey = "Task_" + GetID();
+		string strKey = "Task_" + GetTaskName();
 		return Localization.Localize( strKey );	
 	}
 	
@@ -47,13 +53,16 @@ public class Data_WellapadTask {
 	
 	// key to check for completion event
 	public string GetCompletionKey() {
-		string strKey = "TaskComplete_" + GetID();
+		string strKey = "TaskComplete_" + GetTaskName();
 		return strKey;	
 	}	
 
 	public Data_WellapadTask( string id, Hashtable hashAttr, Hashtable hashData, string strError ) {
 		// set id
 		strID = id;
+		
+		// get the task completion name -- fallback to the id
+		strTask = HashUtils.GetHashValue<string>( hashAttr, "Task", id );
 		
 		// get the mission type
 		strTaskType = HashUtils.GetHashValue<string>( hashAttr, "Type", "Side", strError );

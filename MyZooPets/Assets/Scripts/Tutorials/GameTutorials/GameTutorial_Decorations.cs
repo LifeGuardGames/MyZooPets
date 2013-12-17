@@ -63,7 +63,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		yield return new WaitForSeconds( fWait );
 		
 		// find and spotlight the edit button
-		GameObject goEditButton = GameObject.Find( "EditRoom" );
+		GameObject goEditButton = NavigationUIManager.Instance.GetEditDecoButton();
 		SpotlightObject( goEditButton, true, InterfaceAnchors.BottomLeft );
 		
 		// add the button to the process list so the user can click it

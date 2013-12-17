@@ -5,6 +5,12 @@ public class NavigationUIManager : Singleton<NavigationUIManager> {
 	public GameObject navigationPanel;
     public ClickManager clickManager;
 	
+	// used with tutorials
+	public GameObject goEditDecos;
+	public GameObject GetEditDecoButton() {
+		return goEditDecos;	
+	}
+	
 	/*
     public void NavigationButtonClicked(GameObject button){
        switch(button.name){

@@ -66,6 +66,9 @@ public class ItemBoxLogic : MonoBehaviour {
 		// create all the items to be obtained from this box
 		BurstItems( items );
 		
+		// remove the box from save data now that it has been opened
+		DataManager.Instance.GameData.Inventory.UnopenedItemBoxes.Remove( strItemBoxID );
+		
 		// also play a particle effect!
 		GameObject goResource = Resources.Load( "DecorationPoof" ) as GameObject;
 		GameObject.Instantiate( goResource, transform.position, Quaternion.identity );		

@@ -72,7 +72,9 @@ public class PanToMoveCamera : MonoBehaviour {
                     startTime = Time.time;
 
                     // Cancel touch if finger is touching undesirable objects while panning or the click manager is locked
-                    if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
+                    if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+                        CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || 
+                        CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
                         touchCancelled = true;
                 break;
 
@@ -225,14 +227,22 @@ public class PanToMoveCamera : MonoBehaviour {
     private void CheckArrowKeys()
     {
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
-			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
-				ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
-			}
+            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
+
+                if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
+                    ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
+                }
+            // }
 		}
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
-			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
-				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
-			}
+            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
+
+    			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
+    				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
+    			}
+            // }
 		}
     }
 

@@ -25,8 +25,11 @@ public class RunnerAnimationController : LgCharacterAnimator {
 
     new void Start(){
         // set the LWFAnimator loading data based on the pet's attributes
-        string strSpecies = GetSpeciesKey();
-        string strColor = GetColorKey();
+        string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
+
+        // string strColor = GetColorKey();
+        string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
+        
         animName = strSpecies + strColor;
         folderPath = "LWF/" + strKeyAnimType + "/" + animName + "/";
         

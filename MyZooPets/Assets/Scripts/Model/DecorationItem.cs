@@ -29,12 +29,12 @@ public class DecorationItem : Item {
 	
 	public override string Description{
 		get { 
-			string strDesc = description;
-			if ( string.IsNullOrEmpty( strDesc ) ) {
-				strDesc =  "Desc" + ID;
-			}
-			
-			return Localization.Localize( strDesc );
+			// string strDesc = description;
+			// if ( string.IsNullOrEmpty( strDesc ) ) {
+			// 	strDesc =  "Desc" + ID;
+			// }
+			// return Localization.Localize( strDesc );
+			return "";
 		}
 	}	
 	

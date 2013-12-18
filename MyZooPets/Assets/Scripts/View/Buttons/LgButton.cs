@@ -100,8 +100,8 @@ public abstract class LgButton : MonoBehaviour {
 			
 		// if there is an analytic event on this button, let's process that
 		string strAnalytics = GetAnalyticsKey();
-		if ( strAnalytics != null )
-			GA.API.Design.NewEvent( strAnalytics );
+		// if ( strAnalytics != null )
+		// 	GA.API.Design.NewEvent( strAnalytics );
 		
 		// play the sound
 		PlayProcessSound();

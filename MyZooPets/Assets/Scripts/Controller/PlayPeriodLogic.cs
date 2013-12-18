@@ -7,6 +7,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     //Return the next time the user can collect bonuses
     public DateTime NextPlayPeriod{
         get{return DataManager.Instance.GameData.Calendar.NextPlayPeriod;}
+		set{DataManager.Instance.GameData.Calendar.NextPlayPeriod = value;}
     }
 
     // public bool IsRewardClaimed{
@@ -41,7 +42,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     // CalculateNextPlayPeriod()
     // Based on the time now return the next reward time
     //-----------------------------------------------
-    public static DateTime CalculateNextPlayPeriod(){
+    public void CalculateNextPlayPeriod(){
         DateTime nextPlayTime;
         if(DateTime.Now.Hour < 12){ 
             //next reward time at noon
@@ -51,6 +52,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
             nextPlayTime = DateTime.Today.AddDays(1);
             // nextPlayTime = new DateTime(2013, 7, 23, 17, 17, 0);
         }
-        return nextPlayTime;
+
+        NextPlayPeriod = nextPlayTime;
     }
 }

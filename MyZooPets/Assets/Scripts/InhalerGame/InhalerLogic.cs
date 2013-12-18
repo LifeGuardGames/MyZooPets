@@ -73,7 +73,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
 		
 		// calculate the next play period for the inhaler
-		CalendarLogic.Instance.CalculateNextPlayPeriod();
+		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();
 	}	
 	
     /*

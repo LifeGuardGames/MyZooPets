@@ -99,7 +99,7 @@ public abstract class LgButton : MonoBehaviour {
 			return;
 			
 		// if there is an analytic event on this button, let's process that
-		string strAnalytics = GetAnalyticsKey();
+		//string strAnalytics = GetAnalyticsKey();
 		// if ( strAnalytics != null )
 		// 	GA.API.Design.NewEvent( strAnalytics );
 		

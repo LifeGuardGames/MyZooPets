@@ -380,6 +380,11 @@ public class PetAnimator : LgCharacterAnimator {
 		if ( bTesting )
 			return;
 		
+		// send out a message to anyone listening that the anim is done
+		// NOTE: moving this callback will cause a bug; the pet won't celebrate after beating a smoke monster
+		if ( OnAnimDone != null )
+			OnAnimDone( this, new PetAnimArgs(eState) );		
+		
 		switch ( eState ) {
 			case PetAnimStates.Idling:
 				Idle();
@@ -399,10 +404,6 @@ public class PetAnimator : LgCharacterAnimator {
 				Debug.Log("Unhandled pet anim state finishing: " + eState);
 				Idle();
 				break;
-		}
-		
-		// send out a message to anyone listening that the anim is done
-		if ( OnAnimDone != null )
-			OnAnimDone( this, new PetAnimArgs(eState) );		
+		}		
 	}
 }

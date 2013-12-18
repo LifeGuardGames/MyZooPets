@@ -123,7 +123,7 @@ public abstract class Gate : MonoBehaviour {
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public void DamageGate( int nDamage ) {
+	public bool DamageGate( int nDamage ) {
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
 		bool bDestroyed = DataManager.Instance.GameData.GatingProgress.DamageGate( strID, nDamage );
 		
@@ -135,6 +135,8 @@ public abstract class Gate : MonoBehaviour {
 		
 		if ( bDestroyed )
 			PrepGateDestruction();
+		
+		return bDestroyed;
 	}
 	
 	//---------------------------------------------------

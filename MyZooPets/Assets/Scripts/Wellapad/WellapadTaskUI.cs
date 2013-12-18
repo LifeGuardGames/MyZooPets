@@ -81,9 +81,9 @@ public class WellapadTaskUI : MonoBehaviour {
 	// Callback for when a task is highlighted
 	//---------------------------------------------------	
 	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
-		if ( args.ID == task.TaskID ) {
+		if ( args.ID == task.TaskName ) {
 			// this task is being highlighted -- change the text to black
-			label.color = Color.black;
+			label.color = Color.green;
 		}
 		else {
 			// this task is not being highlighted, so grey it out

@@ -46,7 +46,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             DataManager.Instance.GameData.Degradation.MorningTrigger = true;
             DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
         }
-        if( CalendarLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
+        if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
             if(DataManager.Instance.GameData.Degradation.MorningTrigger){
                 numberOfTriggersToInit = 3;
                 DataManager.Instance.GameData.Degradation.MorningTrigger = false;

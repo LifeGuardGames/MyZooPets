@@ -157,7 +157,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		
 		// the list needs to be refreshed if it has been more than 12 hours from creation OR the creation time frame (morning/evening)
 		// is different than the current time frame (morning/evening)
-		bool bRefresh = sinceCreated.Hours >= 12 || CalendarLogic.GetTimeFrame( now ) != CalendarLogic.GetTimeFrame( DataManager.Instance.GameData.Wellapad.DateMissionsCreated );
+		bool bRefresh = sinceCreated.Hours >= 12 || PlayPeriodLogic.GetTimeFrame( now ) != PlayPeriodLogic.GetTimeFrame( DataManager.Instance.GameData.Wellapad.DateMissionsCreated );
 		
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
 		if ( DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_LAST ) == false )

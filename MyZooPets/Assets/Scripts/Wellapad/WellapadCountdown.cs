@@ -23,7 +23,7 @@ public class WellapadCountdown : MonoBehaviour {
 	//---------------------------------------------------
 	void Update() {
 		// if the player can use their inhaler, there is no countdown, so bail out
-		if ( CalendarLogic.Instance.CanUseRealInhaler ) {
+		if ( PlayPeriodLogic.Instance.CanUseRealInhaler ) {
 			// okay, so the player can use their inhaler...but were we previously counting down?
 			if ( bCounting ) {
 				// if we were, stop
@@ -43,7 +43,7 @@ public class WellapadCountdown : MonoBehaviour {
 		bCounting = true;
 		
 		// otherwise the user CAN'T use their inhaler and the wellapad is open, so there is a countdown showing
-		DateTime next = CalendarLogic.Instance.NextPlayPeriod;
+		DateTime next = PlayPeriodLogic.Instance.NextPlayPeriod;
 		DateTime now = DateTime.Now;
 		TimeSpan left = next - now;
 		

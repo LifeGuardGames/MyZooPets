@@ -67,11 +67,11 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 	// }
 
  //    void Start(){
- //        CalendarLogic.OnCalendarReset += ResetCalendar;
+ //        PlayPeriodLogic.OnCalendarReset += ResetCalendar;
  //    }
 
  //    void OnDestroy(){
- //        CalendarLogic.OnCalendarReset -= ResetCalendar;
+ //        PlayPeriodLogic.OnCalendarReset -= ResetCalendar;
  //    }
         
 	// // Update is called once per frame
@@ -96,7 +96,7 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
 		
 		// BGController.Instance.Show("blue");
 		
-  //       CalendarLogic.Instance.CalendarOpened();
+  //       PlayPeriodLogic.Instance.CalendarOpened();
   //       calendarPanel.GetComponent<TweenToggleDemux>().Show();
     }
 
@@ -147,14 +147,14 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
  //    //         button.isEnabled = true;
 			
  //    //         //Add reward
- //    //         CalendarLogic.Instance.ClaimReward(calendarSlot.transform.position);
+ //    //         PlayPeriodLogic.Instance.ClaimReward(calendarSlot.transform.position);
 
  //    //         //keep track of the rewards claimed
  //    //         numberOfGreenStamps--; 
 
  //    //         //all rewards have been claimed
  //    //         if(numberOfGreenStamps == 0){ 
- //    //             CalendarLogic.Instance.IsRewardClaimed = true;
+ //    //             PlayPeriodLogic.Instance.IsRewardClaimed = true;
  //    //         }
 
  //    //     }else{ 
@@ -187,9 +187,9 @@ public class CalendarUIManager : SingletonUI<CalendarUIManager> {
  //    // on the data stored in DataManager
  //    //-----------------------------------------------
  //    private void ResetCalendar(object sender, EventArgs args){
- //        currentWeekData = CalendarLogic.Instance.GetCalendarEntriesThisWeek;
- //        // pastWeekData = CalendarLogic.Instance.GetCalendarEntriesLastWeek;
- //        // numberOfGreenStamps = CalendarLogic.Instance.GreenStampCount;
+ //        currentWeekData = PlayPeriodLogic.Instance.GetCalendarEntriesThisWeek;
+ //        // pastWeekData = PlayPeriodLogic.Instance.GetCalendarEntriesLastWeek;
+ //        // numberOfGreenStamps = PlayPeriodLogic.Instance.GreenStampCount;
 
  //        //Populate calendar for this week
  //        for(int i=0; i<currentWeekData.Count; i++){

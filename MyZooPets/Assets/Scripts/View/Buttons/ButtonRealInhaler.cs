@@ -43,7 +43,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	// Open if yes or show notification	
 	//--------------------------------------------------
 	private void CheckToOpenInhaler(){
-		if(CalendarLogic.Instance.CanUseRealInhaler){
+		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
 			OpenRealInhaler();
 		}else{
 			/////// Send Notication ////////
@@ -51,7 +51,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){};
 
 			//Get next play time
-			TimeSpan timeSpan = CalendarLogic.Instance.NextPlayPeriod - DateTime.Now;
+			TimeSpan timeSpan = PlayPeriodLogic.Instance.NextPlayPeriod - DateTime.Now;
         	int countDownTime = timeSpan.Hours + 1;
 			
 			// Populate notification entry table

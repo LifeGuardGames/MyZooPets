@@ -22,10 +22,10 @@ public class CalendarData{
     public CalendarData(){}
 
     public void Init(){
-        // DateOfSunday = CalendarLogic.GetDateOfSunday(DateTime.Now);
+        // DateOfSunday = PlayPeriodLogic.GetDateOfSunday(DateTime.Now);
 
         //initialize this week with sample data to be used for tutorial
-        // EntriesThisWeek = CalendarLogic.NullUntilTodayWeek(DateTime.Now);
+        // EntriesThisWeek = PlayPeriodLogic.NullUntilTodayWeek(DateTime.Now);
 
         NextPlayPeriod = DateTime.Now; 
 		//NextPlayPeriod = DateTime.Now.AddSeconds(70);

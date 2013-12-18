@@ -71,6 +71,9 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
+		
+		// calculate the next play period for the inhaler
+		CalendarLogic.Instance.CalculateNextPlayPeriod();
 	}	
 	
     /*

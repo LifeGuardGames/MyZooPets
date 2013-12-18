@@ -30,9 +30,12 @@ public class InhalerAnimationController : LgCharacterAnimator {
     private string lastPlayedAnimation; //Animation clip name that was last played
 
     new void Start(){
-        // set the LWFAnimator loading data based on the pet's attributes
-        string strSpecies = GetSpeciesKey();
-        string strColor = GetColorKey();
+       // set the LWFAnimator loading data based on the pet's attributes
+        string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
+
+        // string strColor = GetColorKey();
+        string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
+        
         animName = strSpecies + strColor;
         folderPath = "LWF/" + strKeyAnimType + "/" + animName + "/";
         
@@ -79,7 +82,7 @@ public class InhalerAnimationController : LgCharacterAnimator {
     //Implement callback for when a clip is finish playing
     protected override void _ClipFinished(){
         if(lastPlayedAnimation != "idle"){
-            Idle();
+            // Idle();
 
             if(OnAnimDone != null)
                 OnAnimDone(this, EventArgs.Empty);

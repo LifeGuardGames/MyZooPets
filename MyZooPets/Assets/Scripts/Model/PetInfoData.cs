@@ -44,7 +44,7 @@ public class PetInfoData{
         PetID = "";
         PetName = "LazyWinkle";
         PetSpecies = "Basic";
-        PetColor = "OrangeYellow";
+        PetColor = "PurpleLime";
         IsHatched = false;
 		
 		nFireBreaths = 0;

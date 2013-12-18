@@ -71,7 +71,7 @@ public class PetAnimator : LgCharacterAnimator {
 		SetClipList();
 		
 		// set the LWFAnimator loading data based on the pet's attributes
-		string strSpecies = GetSpeciesKey();
+		string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
 
 		// string strColor = GetColorKey();
 		string strColor = DataManager.Instance.GameData.PetInfo.PetColor;

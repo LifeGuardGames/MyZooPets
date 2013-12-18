@@ -129,22 +129,27 @@ public class PetAnimator : LgCharacterAnimator {
 	// Play animation in a category without consideration 
 	// of the pet mood or health stats
 	//---------------------------------------------------
-	public void PlayUnrestrictedAnim(string strCat){
+	public void PlayUnrestrictedAnim(string strCat, bool bImmediate = false){
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData(strCat);
 
-		PlayAnimation(dataAnim);
+		if(bImmediate)	
+			 PlayAnimation(dataAnim);
+		else
+			QueueAnim(dataAnim);
 	}
 
 	//---------------------------------------------------
 	// PlayRestrictedAnim
 	// Play anim based on pet's attributes
 	//---------------------------------------------------
-	public void PlayRestrictedAnim(string strCat){
+	public void PlayRestrictedAnim(string strCat, bool bImmediate = false){
 		// get anim based on pet's attributes
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData(strCat);
-		
-		// then start playing the anim immediately
-		PlayAnimation( dataAnim );	
+	
+		if(bImmediate)	
+			PlayAnimation(dataAnim);
+		else
+			QueueAnim(dataAnim);
 	}
 	
 	//---------------------------------------------------
@@ -152,7 +157,7 @@ public class PetAnimator : LgCharacterAnimator {
 	// The player is attacking a gate!
 	//---------------------------------------------------	
 	public void BreathFire() {
-		PlayRestrictedAnim("Fire");
+		PlayRestrictedAnim("Fire", true);
 		
 		// spawn the particle effect
 		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
@@ -234,9 +239,16 @@ public class PetAnimator : LgCharacterAnimator {
 	public void DoneBreathingFire( bool bFinished ) {
 		if ( !bFinished )
 			Resume();
-		
-		// idle
-		Idle( !bFinished );
+		else{
+			//If the smoke monster has been defeated play celebrate animation, else
+			//go back to idle
+			if(!GatingManager.Instance.IsInGatedRoom()){
+				PlayRestrictedAnim("Celebrate");
+
+			}
+			else
+				Idle( !bFinished );
+		}	
 	}
 	
 	//---------------------------------------------------

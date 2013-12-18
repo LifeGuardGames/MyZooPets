@@ -7,7 +7,7 @@ public class PetTouchListener : MonoBehaviour {
     void OnTap(TapGesture gesture){
         string colliderName = gesture.Hit.collider.name;
         if(colliderName == "Pet_LWF"){
-            petAnimator.PlayRestrictedAnim("Poke");
+            petAnimator.PlayRestrictedAnim("Poke", true);
         }
     } 
 }

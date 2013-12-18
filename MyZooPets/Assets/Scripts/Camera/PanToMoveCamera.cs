@@ -227,22 +227,22 @@ public class PanToMoveCamera : MonoBehaviour {
     private void CheckArrowKeys()
     {
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
-            if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
-                CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
+            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
 
                 if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
                     ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
                 }
-            }
+            // }
 		}
         else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
-            if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
-                CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
+            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
 
     			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
     				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
     			}
-            }
+            // }
 		}
     }
 

@@ -38,6 +38,10 @@ public class ButtonChangeScene : LgButton {
 		ClickManager.Instance.ClickLock();
 		ClickManager.Instance.ModeLock( UIModeTypes.None );
 
+		//Assuming that HUD is present at all scenes, so need to be hidden before scene change
+		if(HUDUIManager.Instance != null)
+			HUDUIManager.Instance.HidePanel();
+
 		//Save some basic data for current scene
 		RememberCurrentScene();
 		

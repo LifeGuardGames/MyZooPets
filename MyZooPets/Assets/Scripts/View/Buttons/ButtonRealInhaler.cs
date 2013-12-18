@@ -80,6 +80,6 @@ public class ButtonRealInhaler : ButtonChangeScene {
 
 		//Hide other UI Objects
 		NavigationUIManager.Instance.HidePanel();
-		HUDUIManager.Instance.HidePanel();
+		// HUDUIManager.Instance.HidePanel();
 	}	
 }

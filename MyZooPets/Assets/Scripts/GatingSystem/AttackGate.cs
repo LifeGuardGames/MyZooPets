@@ -67,7 +67,7 @@ public class AttackGate : MonoBehaviour {
 	//---------------------------------------------------		
 	private IEnumerator DoneAttacking() {
 		// damage the gate
-		gateTarget.DamageGate( nDamage );
+		bool bDestroyed = gateTarget.DamageGate( nDamage );
 		
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths( -1 );
@@ -79,7 +79,7 @@ public class AttackGate : MonoBehaviour {
 		yield return 0;
 		
 		// move the player because the gate just got pushed back (if it still exists)
-		if ( gateTarget != null ) {
+		if ( gateTarget != null && !bDestroyed ) {
 			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
 			PetMovement.Instance.MovePet( vNewLoc );
 		}

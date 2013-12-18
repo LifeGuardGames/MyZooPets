@@ -12,8 +12,19 @@ using System.Collections.Generic;
 public class DataLoader_WellapadTasks {
 	// hashtable that contains all task data
 	private static Hashtable hashData = new Hashtable();
+	private static Hashtable hashAllData = new Hashtable();
 	
     private static bool dataLoaded = false; //Prohibit double loading data
+	
+	public static Data_WellapadTask GetTask( string strTaskID ) {
+		Data_WellapadTask data = null;
+		if ( hashAllData.ContainsKey( strTaskID ) ) 
+			data = (Data_WellapadTask) hashAllData[strTaskID];
+		else
+			Debug.Log("Could not find task data with id: " + strTaskID);
+		
+		return data;
+	}
 	
 	//---------------------------------------------------
 	// GetTasks()
@@ -130,6 +141,13 @@ public class DataLoader_WellapadTasks {
 		
 		List<Data_WellapadTask> tasks = (List<Data_WellapadTask>) hashTasks[strCategory];
 		tasks.Add( data );
+		
+		// also add it to the all data hash (for easy individual access)
+		string strID = data.GetTaskID();
+		if ( hashAllData.ContainsKey( strID ) )
+			Debug.Log("Duplicate task id: " + strID);
+		else
+			hashAllData[strID] = data;
 	}
 }
 

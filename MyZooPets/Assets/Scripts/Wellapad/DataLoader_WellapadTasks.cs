@@ -51,10 +51,16 @@ public class DataLoader_WellapadTasks {
 					// otherwise we just want to pick 1 at random
 					// int nTasks = strCategory == WellapadData.ALWAYS_UNLOCKED ? listTasks.Count : 1;
                     int nTasks = strCategory == "Always" ? listTasks.Count : 1;
-					List<Data_WellapadTask> tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
 					
-					foreach ( Data_WellapadTask task in tasks )
-						listTasksFinal.Add( task );
+					// this is a little weird...the random element thing is messing up the ordering of the tasks
+					if ( nTasks != listTasks.Count ) {
+						List<Data_WellapadTask> tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
+						
+						foreach ( Data_WellapadTask task in tasks )
+							listTasksFinal.Add( task );
+					}
+					else
+						listTasksFinal = new List<Data_WellapadTask>( listTasks );
 				}
 			}
 		}

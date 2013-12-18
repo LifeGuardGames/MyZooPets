@@ -34,5 +34,6 @@ public class LevelGroup : MonoBehaviour {
     public enum eLevelGroupID{
         Forest,
         City,
+        CityNight,
     }
 }

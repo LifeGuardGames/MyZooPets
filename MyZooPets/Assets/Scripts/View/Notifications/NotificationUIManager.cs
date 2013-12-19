@@ -201,10 +201,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImage, startsHidden) as PopupNotificationWithImageNGUI;
 		tip.HideImmediately = hideImmediately;
 		tip.Message = message;
-		tip.Title = Localization.Localize("TIP");
+//		tip.Title = Localization.Localize("TIP");	//TODO-s Refactor to new layout!
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;
-		tip.Button1Text = Localization.Localize("OK");
+//		tip.Button1Text = Localization.Localize("OK");		//TODO-s Refactor to new layout!
 		tip.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(tip));

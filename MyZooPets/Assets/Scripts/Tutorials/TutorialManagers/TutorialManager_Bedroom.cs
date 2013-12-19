@@ -27,7 +27,7 @@ public class TutorialManager_Bedroom : TutorialManager {
 	public const string TUT_DECOS = "TUT_DECOS";
 	
 	// last tutorial
-	public const string TUT_LAST = "FOCUS_NINJA";
+	public const string TUT_LAST = TUT_DECOS;
 	
 	//---------------------------------------------------
 	// _Start()

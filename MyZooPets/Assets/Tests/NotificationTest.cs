@@ -30,7 +30,7 @@ public class NotificationTest : MonoBehaviour {
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
 			notificationEntry.Add(NotificationPopupFields.Message, "You need at least 99999999 stars to play!");
-			notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
+			// notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			
 			// Place notification entry table in static queue
@@ -38,29 +38,29 @@ public class NotificationTest : MonoBehaviour {
         }
 		
 		//2 BUTTON POPUP
-		if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
-            "two button")){
+		// if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
+  //           "two button")){
 			
-			// Assign delegate functions to be passed in hashtable
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
-	            	//
-	            };
-			PopupNotificationNGUI.HashEntry button2Function = delegate() {
-					//
-				};
+		// 	// Assign delegate functions to be passed in hashtable
+		// 	PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	 //            	//
+	 //            };
+		// 	PopupNotificationNGUI.HashEntry button2Function = delegate() {
+		// 			//
+		// 		};
 			
-			// Populate notification entry table
-			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-			notificationEntry.Add(NotificationPopupFields.Message, "testing");
-			notificationEntry.Add(NotificationPopupFields.Button1Label, "Yessir");
-			notificationEntry.Add(NotificationPopupFields.Button2Label, "No way");
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+		// 	// Populate notification entry table
+		// 	Hashtable notificationEntry = new Hashtable();
+		// 	notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+		// 	notificationEntry.Add(NotificationPopupFields.Message, "testing");
+		// 	notificationEntry.Add(NotificationPopupFields.Button1Label, "Yessir");
+		// 	notificationEntry.Add(NotificationPopupFields.Button2Label, "No way");
+		// 	notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		// 	notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
 			
-			// Place notification entry table in static queue
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-        }
+		// 	// Place notification entry table in static queue
+		// 	NotificationUIManager.Instance.AddToQueue(notificationEntry);
+  //       }
 
         //LEVEL UP
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*2, BUTTON_WIDTH, BUTTON_HEIGHT),
@@ -75,30 +75,30 @@ public class NotificationTest : MonoBehaviour {
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
 		
-        //game over reward
-        if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
-            "GG 2 Button")){
+   //      //game over reward
+   //      if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*3, BUTTON_WIDTH, BUTTON_HEIGHT),
+   //          "GG 2 Button")){
 			
-			/////// Send Notication ////////
-			// Assign delegate functions to be passed in hashtable
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
-	                //
-	            };
-			PopupNotificationNGUI.HashEntry button2Function = delegate() {
-					//
-				};
+			// /////// Send Notication ////////
+			// // Assign delegate functions to be passed in hashtable
+			// PopupNotificationNGUI.HashEntry button1Function = delegate(){
+	  //               //
+	  //           };
+			// PopupNotificationNGUI.HashEntry button2Function = delegate() {
+			// 		//
+			// 	};
 			
-			// Populate notification entry table
-			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardTwoButton);
-			notificationEntry.Add(NotificationPopupFields.DeltaStars, 10);
-			notificationEntry.Add(NotificationPopupFields.DeltaPoints, 10);
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+			// // Populate notification entry table
+			// Hashtable notificationEntry = new Hashtable();
+			// notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardTwoButton);
+			// notificationEntry.Add(NotificationPopupFields.DeltaStars, 10);
+			// notificationEntry.Add(NotificationPopupFields.DeltaPoints, 10);
+			// notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			// // notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
 			
-			// Place notification entry table in static queue
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-        }
+			// // Place notification entry table in static queue
+			// NotificationUIManager.Instance.AddToQueue(notificationEntry);
+   //      }
 		
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*4, BUTTON_WIDTH, BUTTON_HEIGHT),
             "GG 1 Button")){

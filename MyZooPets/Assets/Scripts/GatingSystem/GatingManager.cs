@@ -250,7 +250,7 @@ public class GatingManager : Singleton<GatingManager> {
 		else {
 			// out of flame charges
 			strKey = "NO_FIRE_INHALER";
-			strImage = "guiPanelStatsHealth";
+			strImage = "itemInhalerMain";
 			// strAnalytics = "BreathFire:Fail:NoCharges";
 		}
 			

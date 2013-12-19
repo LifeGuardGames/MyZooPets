@@ -106,8 +106,10 @@ public class PetMovement : Singleton<PetMovement> {
     //Pet will follow the camera when the partition has been changed
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
         bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
-        if(!hasActiveGate){
-            print("moving pet");
+        if(!hasActiveGate){		
+			// first add a temporary exception so the pet can move freely
+			ClickManager.Instance.AddTemporaryException( ClickLockExceptions.Moving );
+			
             //Transform pet position to screen point first so we can move the pet to the right y position
             Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
             MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, petPosInScreenPoint.y, 0)));
@@ -124,7 +126,7 @@ public class PetMovement : Singleton<PetMovement> {
         RaycastHit hit;
         // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
         if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == runWay.collider)
+            if (hit.collider == runWay.collider) 
 				MovePet( hit.point );
         }
     }

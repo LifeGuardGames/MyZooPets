@@ -184,23 +184,23 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
             starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, bFloaty: false);
 
-        ShowGameOverMessage();    
+        // ShowGameOverMessage();    
     }
 
-    private void ShowGameOverMessage(){
-        // Assign delegate functions to be passed in hashtable
-        PopupNotificationNGUI.HashEntry button1Function = delegate(){
-                QuitInhalerGame();
-            };
+    // private void ShowGameOverMessage(){
+    //     // Assign delegate functions to be passed in hashtable
+    //     PopupNotificationNGUI.HashEntry button1Function = delegate(){
+    //             QuitInhalerGame();
+    //         };
         
-        // Populate notification entry table
-        Hashtable notificationEntry = new Hashtable();
-        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardOneButton);
-        notificationEntry.Add(NotificationPopupFields.DeltaStars, starIncrement);
-        notificationEntry.Add(NotificationPopupFields.DeltaPoints, pointIncrement);
-        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+    //     // Populate notification entry table
+    //     Hashtable notificationEntry = new Hashtable();
+    //     notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GameOverRewardOneButton);
+    //     notificationEntry.Add(NotificationPopupFields.DeltaStars, starIncrement);
+    //     notificationEntry.Add(NotificationPopupFields.DeltaPoints, pointIncrement);
+    //     notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 
-        // Place notification entry table in static queue
-        NotificationUIManager.Instance.AddToQueue(notificationEntry);
-    }
+    //     // Place notification entry table in static queue
+    //     NotificationUIManager.Instance.AddToQueue(notificationEntry);
+    // }
 }

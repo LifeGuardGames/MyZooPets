@@ -4,47 +4,22 @@ using System.Collections;
 public class PopupNotificationNGUI : MonoBehaviour {
 
     public UILabel textArea;
-    public UILabel button1;
-    public UILabel button2;
-
-    // set the following
-    public int numOfButtons = 1;
     public bool HideImmediately = false;
-
 	public delegate void HashEntry(); // Used for notification entry
     public HashEntry Button1Callback;
-    public HashEntry Button2Callback;
 	public HashEntry OnHideFinished;
 
     public string Message{
         get{return textArea.text;}
         set{textArea.text = value;}
     }
-    public string Button1Text{
-        get{return button1.text;}
-        set{button1.text = value;}
-    }
-    public string Button2Text{
-        get {
-            if (numOfButtons < 2){
-                Debug.LogError("Number of buttons is set to less than 2.");
-                return null;
-            }
-            return button2.text;
-        }
-        set{
-            if (numOfButtons < 2){
-                Debug.LogError("Number of buttons is set to less than 2.");
-            }
-            button2.text = value;
-        }
-    }
-	
+
 	// sound this notification should play when it opens
 	private string soundOpen;
 	public void SetSound( string sound ) {
 		soundOpen = sound;	
 	}
+
 	public string GetSound() {
 		return soundOpen;
 	}
@@ -53,10 +28,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
     protected void Button1Action(){
         Hide();
         if (Button1Callback != null) Button1Callback();
-    }
-    protected void Button2Action(){
-        Hide();
-        if (Button2Callback != null) Button2Callback();
     }
 
     // Display the popup panel
@@ -148,10 +119,5 @@ public class PopupNotificationNGUI : MonoBehaviour {
 		// Unassign all listeners
 		OnHideFinished = null;
 		Button1Callback = null;
-		Button2Callback = null;
 	}
-	
-	protected virtual void Testing(){
-
-    }
 }

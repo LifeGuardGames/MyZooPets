@@ -62,7 +62,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 					StringUtils.NUM,
 					countDownTime.ToString())
 			);
-			notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
+			// notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		
 			// Place notification entry table in static queue

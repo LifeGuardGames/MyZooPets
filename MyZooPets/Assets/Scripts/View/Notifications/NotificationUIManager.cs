@@ -67,18 +67,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 				case NotificationPopupType.OneButton:
 					ShowPopupNotificationOneButton(
 						(string) entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(string) entry[NotificationPopupFields.Button1Label]
-					);
-					break;
-				
-				case NotificationPopupType.TwoButtons:
-					ShowPopupNotificationTwoButtons(
-						(string) entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button2Callback],
-						(string) entry[NotificationPopupFields.Button1Label],
-						(string) entry[NotificationPopupFields.Button2Label]
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
 					);
 					break;
 				
@@ -87,15 +76,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 						(int) entry[NotificationPopupFields.DeltaStars],
 						(int) entry[NotificationPopupFields.DeltaPoints],
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-				
-				case NotificationPopupType.GameOverRewardTwoButton:
-					ShowGameOverRewardMessage(
-						(int) entry[NotificationPopupFields.DeltaStars],
-						(int) entry[NotificationPopupFields.DeltaPoints],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button2Callback]
 					);
 					break;
 				
@@ -143,34 +123,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	//----------------------------------------------------------	
-	// ShowPopupNotificationTwoButtons()
-	// Desc: creates popup that has a popup texture and 2 buttons
-	//Params: notificationType, call back for yes button, call back for no button
-	//----------------------------------------------------------	
-	public void ShowPopupNotificationTwoButtons(string message, PopupNotificationNGUI.HashEntry button1CallBack,
-		PopupNotificationNGUI.HashEntry button2Callback, string button1, string button2){
-		
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
-		twoButtonMessage.Message = message;
-		twoButtonMessage.Button1Callback = button1CallBack;
-		twoButtonMessage.Button2Callback = button2Callback;
-		twoButtonMessage.Button1Text = button1;
-		twoButtonMessage.Button2Text = button2;
-		twoButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
-	}
-
-	//----------------------------------------------------------	
 	// ShowPopupNotificationOneButton
 	// Desc: creates popup that has a popup texture and 1 button
 	//Params: notificationType, call back for button
 	//----------------------------------------------------------	
-	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.HashEntry okCallBack, string button){
+	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.HashEntry okCallBack){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
-		oneButtonMessage.Button1Text = button;
+		// oneButtonMessage.Button1Text = button;
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
@@ -201,34 +162,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImage, startsHidden) as PopupNotificationWithImageNGUI;
 		tip.HideImmediately = hideImmediately;
 		tip.Message = message;
-//		tip.Title = Localization.Localize("TIP");	//TODO-s Refactor to new layout!
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;
-//		tip.Button1Text = Localization.Localize("OK");		//TODO-s Refactor to new layout!
 		tip.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(tip));
-	}
-
-	//----------------------------------------------------------	
-	// ShowGameOverRewardMessage()
-	// Desc: creates a popup that can be used at the end of a game to show points rewarded
-	// Params: stars, points, yes button call back, no button call back
-	// Note: pass in 0 for stars or points will result in the gui not showing up
-	//----------------------------------------------------------	
-	public void ShowGameOverRewardMessage(int deltaStars, int deltaPoints,
-		PopupNotificationNGUI.HashEntry yesButtonCallBack,
-		PopupNotificationNGUI.HashEntry noButtonCallBack){
-
-		GameOverRewardMessageNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupGameOverRewardMessageTwoButtons) as GameOverRewardMessageNGUI;
-		twoButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
-		twoButtonMessage.Button1Callback = yesButtonCallBack;
-		twoButtonMessage.Button2Callback = noButtonCallBack;
-		twoButtonMessage.Button1Text = Localization.Localize("PLAY");
-		twoButtonMessage.Button2Text = Localization.Localize("QUIT");
-		twoButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	//----------------------------------------------------------	
@@ -241,7 +179,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		GameOverRewardMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupGameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
 		oneButtonMessage.SetRewardMessage(deltaStars, deltaPoints);
 		oneButtonMessage.Button1Callback = buttonCallBack;
-		oneButtonMessage.Button1Text = Localization.Localize("QUIT");
+		// oneButtonMessage.Button1Text = Localization.Localize("QUIT");
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));

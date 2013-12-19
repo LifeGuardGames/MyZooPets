@@ -14,7 +14,6 @@ public class LevelLogic : Singleton<LevelLogic> {
     }
 
     void Awake(){
-        DataPetLevels.SetupData();
         maxLevel = Enum.GetNames(typeof(Level)).Length - 1;
     }
 

@@ -29,8 +29,6 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     }
 
     void Awake(){
-        DataBadges.SetupData();
-
         Dictionary<string, Badge> badgesDict = DataBadges.GetAllBadges();
         allBadges = SelectListFromDictionary(badgesDict);
     }

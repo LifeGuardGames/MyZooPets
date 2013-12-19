@@ -10,11 +10,13 @@ using System.Collections.Generic;
 
 public class DataMonsterLoader {
 
-    private static Dictionary<string, DataMonster> dictData = new Dictionary<string, DataMonster>();
-    private static bool dataLoaded = false; //Prohibit double loading data
+    private static Dictionary<string, DataMonster> dictData;
 
     // Get monster with incoming id
     public static DataMonster GetData(string id){
+		if ( dictData == null )
+			SetupData();
+		
         DataMonster data = null;
 
         if(dictData.ContainsKey(id))
@@ -26,7 +28,7 @@ public class DataMonsterLoader {
 	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
+        dictData = new Dictionary<string, DataMonster>();
 		
         //Load all data xml files
          UnityEngine.Object[] files = Resources.LoadAll("Monsters", typeof(TextAsset));
@@ -60,7 +62,6 @@ public class DataMonsterLoader {
 	            	dictData.Add(id, data);		
             }
          }
-         dataLoaded = true;
     }
 }
 

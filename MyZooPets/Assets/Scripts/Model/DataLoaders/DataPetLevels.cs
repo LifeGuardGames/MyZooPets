@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataPetLevels{
-    private static Dictionary<Level, PetLevel> allLevels =
-        new Dictionary<Level, PetLevel>(); //Key: LevelID, Value: instance of PetLevel.cs
-    private static bool dataLoaded = false;
+    private static Dictionary<Level, PetLevel> allLevels; //Key: LevelID, Value: instance of PetLevel.cs
 
     public static PetLevel GetLevel(Level id){
+		Dictionary<Level, PetLevel> allLevels = GetData();
+		
         PetLevel petLv = null;
 
         if(allLevels.ContainsKey(id)){
@@ -17,10 +17,17 @@ public class DataPetLevels{
 
         return petLv;
     }
+	
+	private static Dictionary<Level, PetLevel> GetData() {
+		if ( allLevels == null )
+			SetupData();
+		
+		return allLevels;
+	}
 
     public static void SetupData(){
-        if(dataLoaded) return;
-
+		allLevels = new Dictionary<Level, PetLevel>();
+		
          //Load from xml
         TextAsset file = (TextAsset) Resources.Load("PetLevels", typeof(TextAsset));
         string xmlString = file.text;
@@ -47,7 +54,5 @@ public class DataPetLevels{
 
             allLevels.Add(petLevelID, petLevel);
         }
-
-        dataLoaded = true;
     }
 }

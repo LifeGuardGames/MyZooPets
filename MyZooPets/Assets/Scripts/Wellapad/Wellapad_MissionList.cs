@@ -25,9 +25,6 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {		
-		// set up immutable task data
-		DataLoader_WellapadTasks.SetupData();
-		
 		// listen for refresh message
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;
 

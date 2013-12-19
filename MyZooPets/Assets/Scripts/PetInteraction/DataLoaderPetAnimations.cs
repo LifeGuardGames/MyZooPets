@@ -16,16 +16,14 @@ public class DataLoaderPetAnimations {
 	// second hash: pet mood
 	// third hash: animation categories
 	// and the final list is of animations that fit the bill
-	private static Hashtable hashData = new Hashtable();
+	private static Hashtable hashData;
 	
 	// this is another hash of just categories to lists, in case we ever want to just get a random animation in a category
 	// without all the restrictions
-	private static Hashtable hashDataUnrestricted = new Hashtable();
+	private static Hashtable hashDataUnrestricted;
 	
 	// this is just a hash of IDs to data
-	private static Hashtable hashDataList = new Hashtable();
-	
-    private static bool dataLoaded = false; //Prohibit double loading data
+	private static Hashtable hashDataList;
 
 	//---------------------------------------------------
 	// GetUnrestrictedData()
@@ -35,6 +33,9 @@ public class DataLoaderPetAnimations {
 	// should still be used.
 	//---------------------------------------------------
     public static DataPetAnimation GetUnrestrictedData( string strCat, bool bUseWeights = false ) {
+		if ( hashDataUnrestricted == null )
+			SetupData();
+		
         DataPetAnimation data = null;
 		
 		if ( hashDataUnrestricted.ContainsKey(strCat) ) {
@@ -54,6 +55,9 @@ public class DataLoaderPetAnimations {
 	// Returns the hash of all anim data.
 	//---------------------------------------------------	
 	public static Hashtable GetAllData() {
+		if ( hashDataList == null )
+			SetupData();
+		
 		return hashDataList;
 	}
 	
@@ -64,6 +68,9 @@ public class DataLoaderPetAnimations {
 	// health, etc.
 	//---------------------------------------------------	
 	public static DataPetAnimation GetRestrictedData( string strCat, bool bUseWeights = true ) {
+		if ( hashData == null )
+			SetupData();
+		
 		// get the pet's mood and health states
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
 		PetHealthStates eHealth = DataManager.Instance.GameData.Stats.GetHealthState();
@@ -127,7 +134,9 @@ public class DataLoaderPetAnimations {
 	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
+		hashDataList = new Hashtable();
+		hashDataUnrestricted = new Hashtable();
+		hashData = new Hashtable();
 
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("PetAnimations", typeof(TextAsset));
@@ -153,15 +162,14 @@ public class DataLoaderPetAnimations {
 				string strError = strErrorFile + "(" + id + "): ";
 				
                 // Get  properties from xml node
-                Hashtable hashData = XMLUtils.GetChildren(childNode);				
+                Hashtable hashNode = XMLUtils.GetChildren(childNode);				
 				
-				DataPetAnimation data = new DataPetAnimation( id, hashAttr, hashData, strError );
+				DataPetAnimation data = new DataPetAnimation( id, hashAttr, hashNode, strError );
 				
 				// store the data for later access
 				StoreData( data );
             }
          }
-         dataLoaded = true;
     }
 	
 	//---------------------------------------------------

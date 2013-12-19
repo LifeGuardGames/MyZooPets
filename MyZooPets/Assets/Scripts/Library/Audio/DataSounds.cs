@@ -9,12 +9,13 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class DataSounds {
-
-    private static Dictionary<string, DataSound> dictSounds = new Dictionary<string, DataSound>();
-    private static bool dataLoaded = false; //Prohibit double loading data
+    private static Dictionary<string, DataSound> dictSounds;
 
     //Look for sound with id in the dictionary
     public static DataSound GetSoundData(string id){
+		if ( dictSounds == null )
+			SetupData();
+		
         DataSound sound = null;
 
         if(dictSounds.ContainsKey(id))
@@ -28,8 +29,8 @@ public class DataSounds {
 	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
-
+		dictSounds = new Dictionary<string, DataSound>();
+		
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("Sounds", typeof(TextAsset));
          foreach(TextAsset file in files){
@@ -55,7 +56,6 @@ public class DataSounds {
 	            dictSounds.Add(id, sound);		
             }
          }
-         dataLoaded = true;
     }
 }
 

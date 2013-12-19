@@ -64,9 +64,6 @@ public class PetAnimator : LgCharacterAnimator {
 	// Start()
 	//---------------------------------------------------	
 	new void Start() {
-		// load up our animation data from xml
-		DataLoaderPetAnimations.SetupData();
-		
 		// then go through all the anim data and create out clip list from that
 		SetClipList();
 		

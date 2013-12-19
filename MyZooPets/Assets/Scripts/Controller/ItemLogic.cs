@@ -63,7 +63,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 	}
 
 	void Awake(){
-		DataItems.SetupData();
 	}
 
 	//Returns Item with itemID

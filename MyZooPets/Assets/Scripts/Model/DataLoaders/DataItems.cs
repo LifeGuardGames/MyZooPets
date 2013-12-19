@@ -13,20 +13,20 @@ using System.Collections.Generic;
 public class DataItems{
     //Key: itemtype, Value: dictionary of items
     //Key: itemID, Value: instance of Item.cs
-    private static Dictionary<ItemType, Dictionary<string, Item>> allItems = 
-        new Dictionary<ItemType, Dictionary<string, Item>>();
-    private static bool dataLoaded = false; //Prohibit double loading data
+    private static Dictionary<ItemType, Dictionary<string, Item>> allItems;
 
     //Look for item with itemID in the dictionary
     public static Item GetItem(string itemID){
+		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();
+		
         Item item = null;
 
-        if(allItems[ItemType.Foods].ContainsKey(itemID)){
-            item = allItems[ItemType.Foods][itemID];
-        }else if(allItems[ItemType.Usables].ContainsKey(itemID)){
-            item = allItems[ItemType.Usables][itemID];
-        }else if(allItems[ItemType.Decorations].ContainsKey(itemID)){
-            item = allItems[ItemType.Decorations][itemID];
+        if(dictItems[ItemType.Foods].ContainsKey(itemID)){
+            item = dictItems[ItemType.Foods][itemID];
+        }else if(dictItems[ItemType.Usables].ContainsKey(itemID)){
+            item = dictItems[ItemType.Usables][itemID];
+        }else if(dictItems[ItemType.Decorations].ContainsKey(itemID)){
+            item = dictItems[ItemType.Decorations][itemID];
         }
 
         return item;
@@ -46,12 +46,20 @@ public class DataItems{
 
     //Returns all the data for a specific item type
     public static Dictionary<string, Item> GetAllItemsOfType(ItemType type){
-        return allItems[type];
+		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();
+        return dictItems[type];
     }
+	
+	private static Dictionary<ItemType, Dictionary<string, Item>> GetAllItems() {
+		if ( allItems == null )
+			SetupData();
+		
+		return allItems;
+	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
-
+		allItems = new Dictionary<ItemType, Dictionary<string, Item>>();
+		
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("Items", typeof(TextAsset));
          foreach(TextAsset file in files){
@@ -102,7 +110,6 @@ public class DataItems{
             //Store dictionary into allItems
             allItems.Add(itemType, categoryItem);
          }
-         dataLoaded = true;
     }
 }
 

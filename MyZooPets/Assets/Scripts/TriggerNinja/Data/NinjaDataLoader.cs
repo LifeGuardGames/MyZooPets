@@ -11,9 +11,7 @@ using System.Collections.Generic;
 public class NinjaDataLoader {
 	
 	// hash of data
-    private static Hashtable hashData = new Hashtable();
-	
-    private static bool dataLoaded = false; //Prohibit double loading data
+    private static Hashtable hashData;
 	
 	//---------------------------------------------------
 	// GetGroupToSpawn()
@@ -21,6 +19,9 @@ public class NinjaDataLoader {
 	// a mode and a scoring key.
 	//---------------------------------------------------	
 	public static NinjaData GetGroupToSpawn( NinjaModes eMode, NinjaScoring eScoring ) {
+		if ( hashData == null )
+			SetupData();
+		
 		NinjaData data = null;
 		
 		// get the mode data
@@ -63,7 +64,7 @@ public class NinjaDataLoader {
 	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
+        hashData = new Hashtable();
 		
         //Load all data xml files
          UnityEngine.Object[] files = Resources.LoadAll("Ninja", typeof(TextAsset));
@@ -111,7 +112,6 @@ public class NinjaDataLoader {
 				}
             }
          }
-         dataLoaded = true;
     }
 }
 

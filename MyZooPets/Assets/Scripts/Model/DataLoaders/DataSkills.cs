@@ -4,16 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataSkills{
-    private static Dictionary<string, Skill> allSkills = 
-        new Dictionary<string, Skill>(); //Key: skillID, Value: instance of Skill.cs
-    private static bool dataLoaded = false;
+    private static Dictionary<string, Skill> allSkills; //Key: skillID, Value: instance of Skill.cs
    
     //Return all the data for all Skills 
     public static Dictionary<string, Skill> GetAllSkills(){
+		if ( allSkills == null )
+			SetupData();
+		
         return allSkills;
     } 
 
     public static Skill GetSkill(string skillID){
+		Dictionary<string, Skill> allSkills = GetAllSkills();
+			
         Skill skill = null;
         
         if(allSkills.ContainsKey(skillID)){
@@ -26,8 +29,8 @@ public class DataSkills{
     }
 
     public static void SetupData(){
-        if(dataLoaded) return;
-
+		allSkills = new Dictionary<string, Skill>();
+		
         //Load from xml
         TextAsset file = (TextAsset) Resources.Load("Skills", typeof(TextAsset));
         string xmlString = file.text;
@@ -54,6 +57,5 @@ public class DataSkills{
 
             allSkills.Add(skillID, skill);
         }
-        dataLoaded = true;
     }
 }

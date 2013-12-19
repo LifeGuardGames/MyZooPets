@@ -4,27 +4,28 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataBadges{
-    private static Dictionary<string, Badge> allBadges =
-        new Dictionary<string, Badge>(); //Key: badgeID, Value: instance of Badge.cs
-    private static bool dataLoaded = false; //Prohibit double loading data
+    private static Dictionary<string, Badge> allBadges; //Key: badgeID, Value: instance of Badge.cs
 
     //Return all the data for all badges
     public static Dictionary<string, Badge> GetAllBadges(){
+		if ( allBadges == null )
+			SetupData();
+		
         return allBadges;
     }
 
     //Return the Badge with badgeID
     public static Badge GetBadge(string badgeID){
+		Dictionary<string, Badge> dictAllBadges = GetAllBadges();
         Badge badge = null;
-        if(allBadges.ContainsKey(badgeID)){
-            badge = allBadges[badgeID];
+        if(dictAllBadges.ContainsKey(badgeID)){
+            badge = dictAllBadges[badgeID];
         }
         return badge;
     }
 
     public static void SetupData(){
-        if(dataLoaded) return;
-
+		allBadges = new Dictionary<string, Badge>();
         //Load from xml
         TextAsset file = (TextAsset) Resources.Load("Badges", typeof(TextAsset));
         string xmlString = file.text;
@@ -51,6 +52,5 @@ public class DataBadges{
 
             allBadges.Add(badgeID, badge);
         }
-        dataLoaded = true;
     } 
 }

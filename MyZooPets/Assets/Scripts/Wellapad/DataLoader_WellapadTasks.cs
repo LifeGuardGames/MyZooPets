@@ -11,12 +11,13 @@ using System.Collections.Generic;
 
 public class DataLoader_WellapadTasks {
 	// hashtable that contains all task data
-	private static Hashtable hashData = new Hashtable();
-	private static Hashtable hashAllData = new Hashtable();
-	
-    private static bool dataLoaded = false; //Prohibit double loading data
+	private static Hashtable hashData;
+	private static Hashtable hashAllData;
 	
 	public static Data_WellapadTask GetTask( string strTaskID ) {
+		if ( hashAllData == null )
+			SetupData();
+		
 		Data_WellapadTask data = null;
 		if ( hashAllData.ContainsKey( strTaskID ) ) 
 			data = (Data_WellapadTask) hashAllData[strTaskID];
@@ -33,6 +34,9 @@ public class DataLoader_WellapadTasks {
 	// one such task is added.
 	//---------------------------------------------------	
 	public static List<Data_WellapadTask> GetTasks( string strMissionType ) {
+		if ( hashData == null )
+			SetupData();
+		
 		List<Data_WellapadTask> listTasksFinal = new List<Data_WellapadTask>();
 		
 		if ( hashData.ContainsKey( strMissionType ) ) {
@@ -92,7 +96,8 @@ public class DataLoader_WellapadTasks {
 	*/
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
+		hashData = new Hashtable();
+		hashAllData = new Hashtable();       	
 
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("Wellapad/Tasks", typeof(TextAsset));
@@ -118,14 +123,13 @@ public class DataLoader_WellapadTasks {
 				string strError = strErrorFile + "(" + id + "): ";
 				
                 // Get  properties from xml node
-                Hashtable hashData = XMLUtils.GetChildren(childNode);				
+                Hashtable hashNode = XMLUtils.GetChildren(childNode);				
 				
-				Data_WellapadTask data = new Data_WellapadTask( id, hashAttr, hashData, strError );
+				Data_WellapadTask data = new Data_WellapadTask( id, hashAttr, hashNode, strError );
 				
 				StoreData( data );
             }
          }
-         dataLoaded = true;
     }
 	
 	//---------------------------------------------------

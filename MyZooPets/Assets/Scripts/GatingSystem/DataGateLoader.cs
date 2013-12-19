@@ -11,12 +11,10 @@ using System.Collections.Generic;
 public class DataGateLoader {
 	
 	// dictionary of all gates
-    private static Dictionary<string, DataGate> dictData = new Dictionary<string, DataGate>();
+    private static Dictionary<string, DataGate> dictData;
 	
 	// hash of areas to rooms to gates
-	private static Hashtable hashData = new Hashtable();
-	
-    private static bool dataLoaded = false; //Prohibit double loading data
+	private static Hashtable hashData;
 
 	//---------------------------------------------------
 	// GetData()
@@ -24,6 +22,8 @@ public class DataGateLoader {
 	// isn't very useful.
 	//---------------------------------------------------
     public static DataGate GetData(string id){
+		Dictionary<string, DataGate> dictData = GetAllData();
+		
         DataGate data = null;
 
         if(dictData.ContainsKey(id))
@@ -40,6 +40,9 @@ public class DataGateLoader {
 	// Will be null if there is no gate.
 	//---------------------------------------------------
 	public static DataGate GetData( string strArea, int nRoom ) {
+		if ( hashData == null )
+			SetupData();
+		
 		DataGate dataGate = null;
 		
 		if ( hashData.ContainsKey( strArea ) ) {
@@ -76,17 +79,21 @@ public class DataGateLoader {
 		if ( hashData.ContainsKey( strArea ) )
 			hashGates = (Hashtable) hashData[strArea];
 		else
-			Debug.Log("No such area in the gates hash!!!");
+			Debug.Log("No such area in the gates hash: " + strArea);
 		
 		return hashGates;
 	}
 	
 	public static Dictionary<string, DataGate> GetAllData() {
+		if ( dictData == null )
+			SetupData();
+		
 		return dictData;	
 	}
 
     public static void SetupData(){
-        if(dataLoaded) return; //Don't load from xml if data already loaded
+		dictData = new Dictionary<string, DataGate>();
+		hashData = new Hashtable();
 		
         //Load all data xml files
          UnityEngine.Object[] files = Resources.LoadAll("Gates", typeof(TextAsset));
@@ -128,7 +135,6 @@ public class DataGateLoader {
 				}
             }
          }
-         dataLoaded = true;
     }
 	
 	//---------------------------------------------------

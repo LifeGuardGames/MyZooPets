@@ -111,10 +111,6 @@ public class GatingProgressData{
     public void Init(){
         GatingProgress = new Dictionary<string, int>();
 		
-		// load data from xml
-		DataGateLoader.SetupData();
-		DataMonsterLoader.SetupData();
-		
 		// init the data by filling the dictionary with xml data
 		Dictionary<string, DataGate> dictGates = DataGateLoader.GetAllData();
 		foreach(KeyValuePair<string, DataGate> entry in dictGates) {

@@ -35,8 +35,6 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {
-		// load xml data
-		NinjaDataLoader.SetupData();
 	}	
 	
 	//---------------------------------------------------

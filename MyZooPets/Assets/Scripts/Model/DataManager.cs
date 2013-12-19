@@ -189,7 +189,7 @@ public class DataManager : Singleton<DataManager>{
         if(!String.IsNullOrEmpty(currentPetID)){
             PetGameData newGameData = null;
 
-            string jsonString = PlayerPrefs.GetString(currentPetID + "GameData", "");
+            string jsonString = PlayerPrefs.GetString(currentPetID + "_GameData", "");
             if(!String.IsNullOrEmpty(jsonString)){
                 newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
                 gameData = newGameData;
@@ -220,7 +220,7 @@ public class DataManager : Singleton<DataManager>{
     Debug.Log(jsonString);
 #endif
 
-            PlayerPrefs.SetString(currentPetID + "GameData", jsonString); 
+            PlayerPrefs.SetString(currentPetID + "_GameData", jsonString); 
             Serialized();
 
         }else{

@@ -68,7 +68,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             string petStatus = DataManager.Instance.GetPetStatus(child.name);
 
             if(petStatus == "Egg"){
-                Transform egg = child.Find("egg");
+                Transform egg = child.Find("egg/Sprite");
                 if(isOn)
                     egg.GetComponent<RandomAnimation>().Enable();
                 else

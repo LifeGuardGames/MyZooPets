@@ -17,6 +17,7 @@ public class DecorationNodeMaterial : DecorationNode {
 	protected override void _SetDecoration( string strID ) {
 		// build the prefab from the id of the decoration
 		string strResource = "Mat_" + strID;
+		print(strResource);
 		Material matPrefab = Resources.Load(strResource) as Material;
 	
 		for ( int i = 0; i < arrayObjects.Length; ++i ) {

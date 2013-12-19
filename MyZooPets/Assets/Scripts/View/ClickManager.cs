@@ -25,7 +25,10 @@ public class ClickManager : Singleton<ClickManager> {
 	private UIModeTypes eCurMode;
 	
 	// list of things that can still happen despite a click lock being in effect...this may be a bad idea...(Joe)
-	private List<ClickLockExceptions> listExceptions;
+	private List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
+	
+	// list of TEMPORARY exceptions; these exceptions go away whenever the screen is LOCKED
+	private List<ClickLockExceptions> listTempExceptions = new List<ClickLockExceptions>();
 	
     //bool trophyMessageShowing = false;
 
@@ -73,7 +76,11 @@ public class ClickManager : Singleton<ClickManager> {
 			return false;
 		
 		// if there is an Exception in effect for the incoming action, then it is okay regardless
-		if ( listExceptions != null && listExceptions.Contains( eException ) )
+		if ( listExceptions.Contains( eException ) )
+			return true;
+		
+		// check temporary exceptions
+		if ( listTempExceptions.Contains( eException ) )
 			return true;
 		
 		bool bIsTweening = IsTweeningUI();
@@ -82,10 +89,21 @@ public class ClickManager : Singleton<ClickManager> {
 		}
 		return false;
 	}
+	
+	///////////////////////////////////////////
+	// AddTemporaryException()
+	// Adds an exception temporarily.
+	///////////////////////////////////////////		
+	public void AddTemporaryException( ClickLockExceptions eException ) {
+		listTempExceptions.Add( eException );
+	}
 
 	// Disable clicking when transitioning between modes
 	public void ClickLock( List<ClickLockExceptions> listExceptions = null){
 		isClickLocked = true;
+		
+		// because the screen is being locked, we must now reset temporary exceptions
+		listTempExceptions = new List<ClickLockExceptions>();
 		
 		if ( listExceptions != null )
 			this.listExceptions = listExceptions;
@@ -94,7 +112,7 @@ public class ClickManager : Singleton<ClickManager> {
 	// Enable clicking after the transitioning is done, usually called from LeanTween callback
 	public void ReleaseClickLock(){
 		// clear our exceptions
-		listExceptions = null;
+		listExceptions = new List<ClickLockExceptions>();
 		
 		isClickLocked = false;
 	}

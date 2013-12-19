@@ -13,7 +13,7 @@ public class PetInfoData{
     public bool IsHatched {get; set;}
 	
 	// fire breathing status of the pet
-	private int nFireBreaths;
+	public int nFireBreaths {get; set;}
 	public void ChangeFireBreaths( int nAmount ) {
 		nFireBreaths += nAmount;
 		

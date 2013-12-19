@@ -74,12 +74,16 @@ public class GameTutorial_Flame : GameTutorial {
 		
 		// find and spotlight the fire button
 		GameObject goFlameButton = GameObject.Find( ButtonMonster.FIRE_BUTTON );
-		SpotlightObject( goFlameButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton" );
-		
-		// add the fire button to the processable list
-		// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
-		GameObject goButton = goFlameButton.transform.Find( "Button" ).gameObject;
-		AddToProcessList( goButton );
+		if ( goFlameButton != null ) {
+			SpotlightObject( goFlameButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton" );
+			
+			// add the fire button to the processable list
+			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
+			GameObject goButton = goFlameButton.transform.Find( "Button" ).gameObject;
+			AddToProcessList( goButton );
+		}
+		else
+			Debug.Log("No flame button...that means the game is going to break");
 	}
 	
 	//---------------------------------------------------

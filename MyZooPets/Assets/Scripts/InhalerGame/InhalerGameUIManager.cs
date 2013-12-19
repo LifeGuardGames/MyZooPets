@@ -184,6 +184,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
             starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, bFloaty: false);
 
+        Invoke("QuitInhalerGame", 2.0f);
         // ShowGameOverMessage();    
     }
 

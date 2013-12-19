@@ -116,9 +116,11 @@ public class PetMovement : Singleton<PetMovement> {
         }
 	}
 	
-	public void StopMoving() {
+	public void StopMoving(bool stopAnimation = true) {
     	moving = false;
-		scriptAnim.StopMoving();
+
+        if(stopAnimation)
+		  scriptAnim.StopMoving();
 	}
 	
     //Check if the touch is in walkable area then move/animate pet

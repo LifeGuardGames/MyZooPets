@@ -17,7 +17,6 @@ public class PlistEditor : EditorWindow
         GUILayout.Label ("Base Settings", EditorStyles.boldLabel);
         GUILayout.BeginArea(new Rect(0, 0, 100, 40));
             if (GUILayout.Button("Delete Plist")){
-                Debug.Log("what");
                 PlayerPrefs.DeleteAll();
                 PlayerPrefs.Save();
             }

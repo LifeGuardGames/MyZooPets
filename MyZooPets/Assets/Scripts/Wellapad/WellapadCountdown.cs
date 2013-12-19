@@ -44,7 +44,7 @@ public class WellapadCountdown : MonoBehaviour {
 		
 		// otherwise the user CAN'T use their inhaler and the wellapad is open, so there is a countdown showing
 		DateTime next = PlayPeriodLogic.Instance.NextPlayPeriod;
-		DateTime now = DateTime.Now;
+		DateTime now = LgDateTime.GetTimeNow();
 		TimeSpan left = next - now;
 		
 		// format the time remaining

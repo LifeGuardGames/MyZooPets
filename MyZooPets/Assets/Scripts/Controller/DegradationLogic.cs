@@ -38,7 +38,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// something like that
 		DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
 		
-        DateTime now = DateTime.Now;
+        DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
         int numberOfTriggersToInit = 0;
 
@@ -98,7 +98,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             
         }                
 
-        DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now; //update last played time         
+        DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time         
     }
 		
 	//---------------------------------------------------

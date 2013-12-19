@@ -21,7 +21,7 @@ public class WindowController : MonoBehaviour {
 	}
 
 	private void CheckTime(){
-		DateTime now = DateTime.Now;
+		DateTime now = LgDateTime.GetTimeNow();
 		if(now.Hour	< 12)
 			SetTime(true);
 		else

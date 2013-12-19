@@ -22,13 +22,13 @@ public class CalendarData{
     public CalendarData(){}
 
     public void Init(){
-        // DateOfSunday = PlayPeriodLogic.GetDateOfSunday(DateTime.Now);
+        // DateOfSunday = PlayPeriodLogic.GetDateOfSunday(LgDateTime.GetTimeNow());
 
         //initialize this week with sample data to be used for tutorial
-        // EntriesThisWeek = PlayPeriodLogic.NullUntilTodayWeek(DateTime.Now);
+        // EntriesThisWeek = PlayPeriodLogic.NullUntilTodayWeek(LgDateTime.GetTimeNow());
 
-        NextPlayPeriod = DateTime.Now; 
-		//NextPlayPeriod = DateTime.Now.AddSeconds(70);
+        NextPlayPeriod = LgDateTime.GetTimeNow(); 
+		//NextPlayPeriod = LgDateTime.GetTimeNow().AddSeconds(70);
 		
         // set to one day before today so that the entry will be generated for the first day
         // LastCalendarOpenedTime = DateTime.Today.AddDays(-1);

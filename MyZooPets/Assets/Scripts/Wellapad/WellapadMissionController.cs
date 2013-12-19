@@ -152,7 +152,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// delete the current save data.
 	//---------------------------------------------------		
 	public void RefreshCheck() {
-        DateTime now = DateTime.Now;
+        DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
 		
 		// the list needs to be refreshed if it has been more than 12 hours from creation OR the creation time frame (morning/evening)
@@ -348,6 +348,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission] = new Mission( strMission, savedTasks );
 		
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
-		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = DateTime.Now;
+		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
 	}	
 }

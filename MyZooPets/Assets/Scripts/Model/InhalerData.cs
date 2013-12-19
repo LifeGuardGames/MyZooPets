@@ -19,7 +19,7 @@ public class InhalerData{
 
     public void Init(){
         FirstTimeRescue = true;
-        LastInhalerPlayTime = DateTime.Now;
+        LastInhalerPlayTime = LgDateTime.GetTimeNow();
         PlayedInMorning = false;
         PlayedInAfternoon = false;
     }

@@ -40,7 +40,7 @@ public class WellapadData {
 		//TasksUnlocked.Add("Ninja");
 		//TasksUnlocked.Add("Clinic");
 		
-		/*DateMissionsCreated = DateTime.Now;
+		/*DateMissionsCreated = LgDateTime.GetTimeNow();
 		Dictionary<string, bool> test = new Dictionary<string, bool>();
 		test["DailyInhaler"] = true;
 		CurrentTasks["Critical"] = new Mission("Critical", test, RewardStatuses.Unclaimed);

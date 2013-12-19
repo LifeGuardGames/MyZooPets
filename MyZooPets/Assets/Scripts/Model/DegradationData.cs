@@ -20,7 +20,7 @@ public class DegradationData{
     public DegradationData(){}
 
     public void Init(){
-        LastTimeUserPlayedGame = DateTime.Now;
+        LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
         DegradationTriggers = new List<DegradData>();
         FirstTimeDegradTrigger = true;
         MorningTrigger = true;

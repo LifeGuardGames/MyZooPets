@@ -107,7 +107,7 @@ public class Analytics : MonoBehaviour {
 
     //Start tracking playtime 
     public void StartPlayTimeTracker(){
-        playTime = DateTime.Now;
+        playTime = LgDateTime.GetTimeNow();
         isGameTimerOn = true;
     } 
 
@@ -129,7 +129,7 @@ public class Analytics : MonoBehaviour {
             break;
         }
         isGameTimerOn = false;
-        TimeSpan timeSpentInGame = DateTime.Now - playTime; //minutes
+        TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
         GA.API.Design.NewEvent(levelName + "TimeSpent:" + timeSpentInGame.Minutes);
     }
 

@@ -51,7 +51,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){};
 
 			//Get next play time
-			TimeSpan timeSpan = PlayPeriodLogic.Instance.NextPlayPeriod - DateTime.Now;
+			TimeSpan timeSpan = PlayPeriodLogic.Instance.NextPlayPeriod - LgDateTime.GetTimeNow();
         	int countDownTime = timeSpan.Hours + 1;
 			
 			// Populate notification entry table

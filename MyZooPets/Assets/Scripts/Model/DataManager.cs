@@ -151,7 +151,7 @@ public class DataManager : Singleton<DataManager>{
             string loadedLevelName = Application.loadedLevelName;
             if(loadedLevelName != "MenuScene" && loadedLevelName != "LoadScene"){
                 // special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-                DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = DateTime.Now;
+                DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
                 SaveGameData();
             }
@@ -212,6 +212,7 @@ public class DataManager : Singleton<DataManager>{
         
         //JSON serializer setting
         JSON.Instance.Parameters.UseExtensions = false;
+        JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now
 
         if(!String.IsNullOrEmpty(currentPetID)){
             string jsonString = JSON.Instance.ToJSON(gameData);

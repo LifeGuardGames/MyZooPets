@@ -18,7 +18,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     //Check if the user can play the inhaler game
     public bool CanUseRealInhaler{
         get {
-			bool retVal = DateTime.Now >= NextPlayPeriod;
+			bool retVal = LgDateTime.GetTimeNow() >= NextPlayPeriod;
 			
             return retVal;
         }
@@ -43,8 +43,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     // Based on the time now return the next reward time
     //-----------------------------------------------
     public void CalculateNextPlayPeriod(){
+        Debug.Log(LgDateTime.GetTimeNow());
         DateTime nextPlayTime;
-        if(DateTime.Now.Hour < 12){ 
+        if(LgDateTime.GetTimeNow().Hour < 12){ 
             //next reward time at noon
             nextPlayTime = DateTime.Today.AddHours(12);
         }else{ 

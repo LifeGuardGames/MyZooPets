@@ -478,7 +478,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 20
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Wednesday
   mMaxLineWidth: 135
   mMaxLineHeight: 0
@@ -2647,7 +2647,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 15
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Monday
   mMaxLineWidth: 125
   mMaxLineHeight: 0
@@ -3350,7 +3350,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 5
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Fri
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -4079,7 +4079,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 10
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Tue
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -8858,7 +8858,7 @@ MonoBehaviour:
   mColor: {r: .198529422, g: .198529422, b: .198529422, a: 1}
   mPivot: 4
   mDepth: 1
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mFont: {fileID: 0}
   mText: Last Week
   mMaxLineWidth: 400
   mMaxLineHeight: 0
@@ -9891,7 +9891,7 @@ MonoBehaviour:
   mColor: {r: .173226655, g: .335834116, b: .654411793, a: 1}
   mPivot: 4
   mDepth: 12
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Morning
   mMaxLineWidth: 120
   mMaxLineHeight: 0
@@ -11495,7 +11495,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 19
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Tuesday
   mMaxLineWidth: 125
   mMaxLineHeight: 0
@@ -11614,7 +11614,7 @@ MonoBehaviour:
   mColor: {r: 0, g: 0, b: 0, a: 1}
   mPivot: 4
   mDepth: 3
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mFont: {fileID: 0}
   mText: 00:00:00
   mMaxLineWidth: 0
   mMaxLineHeight: 0
@@ -13693,7 +13693,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 11
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Wed
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -14192,7 +14192,7 @@ MonoBehaviour:
   mColor: {r: .173226655, g: .335834116, b: .654411793, a: 1}
   mPivot: 4
   mDepth: 13
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Night
   mMaxLineWidth: 120
   mMaxLineHeight: 0
@@ -14514,7 +14514,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 14
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Friday
   mMaxLineWidth: 125
   mMaxLineHeight: 0
@@ -14782,6 +14782,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1598993218}
+  - {fileID: 1291971758}
   m_Father: {fileID: 715680922}
 --- !u!114 &965812792
 MonoBehaviour:
@@ -14828,10 +14829,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1598993219}
-  normalSprite: buttonBack
-  hoverSprite: buttonBack
-  pressedSprite: buttonBackDown
-  disabledSprite: buttonBack
+  normalSprite: ButtonUpBlue
+  hoverSprite: ButtonUpBlue
+  pressedSprite: buttonDownBlue
+  disabledSprite: ButtonUpBlue
 --- !u!65 &965812795
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14840,11 +14841,11 @@ BoxCollider:
   m_PrefabInternal: {fileID: 1816186500}
   m_GameObject: {fileID: 965812790}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 106.999992, y: 107, z: 0}
-  m_Center: {x: .5, y: .5, z: 0}
+  m_Size: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &967329648
 GameObject:
   m_ObjectHideFlags: 0
@@ -15072,7 +15073,7 @@ MonoBehaviour:
   mColor: {r: .198529422, g: .198529422, b: .198529422, a: 1}
   mPivot: 4
   mDepth: 4
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mFont: {fileID: 0}
   mText: My Inhaler Calendar
   mMaxLineWidth: 700
   mMaxLineHeight: 0
@@ -15544,7 +15545,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 7
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Sat
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -15706,7 +15707,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 17
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Sunday
   mMaxLineWidth: 125
   mMaxLineHeight: 0
@@ -16075,7 +16076,7 @@ MonoBehaviour:
   mColor: {r: 1, g: .97606492, b: .132352948, a: 1}
   mPivot: 4
   mDepth: 2
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
+  mFont: {fileID: 0}
   mText: Next Reward
   mMaxLineWidth: 240
   mMaxLineHeight: 0
@@ -16362,7 +16363,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 16
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Saturday
   mMaxLineWidth: 125
   mMaxLineHeight: 0
@@ -19208,6 +19209,54 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!1 &1291971757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1291971758}
+  - 114: {fileID: 1291971759}
+  m_Layer: 0
+  m_Name: Sprite (buttonSymbolArrowLeft)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1291971758
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1291971757}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .5, y: 0, z: 0}
+  m_LocalScale: {x: 59, y: 54, z: 1}
+  m_Children: []
+  m_Father: {fileID: 965812791}
+--- !u!114 &1291971759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1291971757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 3
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
+  mSpriteName: buttonSymbolArrowLeft
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1001 &1302224310
 Prefab:
   m_ObjectHideFlags: 0
@@ -19602,7 +19651,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 9
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Thu
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -24520,7 +24569,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 6
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Mon
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -25095,8 +25144,8 @@ Transform:
   m_PrefabInternal: {fileID: 1816186500}
   m_GameObject: {fileID: 1598993217}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .5, y: .5, z: 0}
-  m_LocalScale: {x: 107, y: 107, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 965812791}
 --- !u!114 &1598993219
@@ -25115,7 +25164,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonBack
+  mSpriteName: ButtonUpBlue
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -26261,7 +26310,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 8
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Sun
   mMaxLineWidth: 60
   mMaxLineHeight: 0
@@ -27917,6 +27966,66 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660,
         type: 2}
+    - target: {fileID: 11400078, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: normalSprite
+      value: ButtonUpBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_Size.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_Size.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400068, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400068, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400068, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 400068, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400076, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: mSpriteName
+      value: ButtonUpBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400078, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: hoverSprite
+      value: ButtonUpBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400078, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: pressedSprite
+      value: buttonDownBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400078, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: disabledSprite
+      value: ButtonUpBlue
+      objectReference: {fileID: 0}
+    - target: {fileID: 100070, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b33a3e209c77ed4296def589fd0b007, type: 2}
   m_RootGameObject: {fileID: 715680921}
@@ -29737,7 +29846,7 @@ MonoBehaviour:
   mColor: {r: 0, g: .627586365, b: 1, a: 1}
   mPivot: 4
   mDepth: 18
-  mFont: {fileID: 11400000, guid: 86ebc8d5e4c686d4988515c75ccc41c1, type: 2}
+  mFont: {fileID: 0}
   mText: Thursday
   mMaxLineWidth: 125
   mMaxLineHeight: 0

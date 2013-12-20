@@ -15,7 +15,7 @@ GameObject:
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400022}
   m_Layer: 0
-  m_Name: Rescue
+  m_Name: InhalerMainParts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -345,7 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5a5d364f1a3494ea763abc29cd512c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCollider: {fileID: 0}
+  targetColliders:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -371,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1882c8b25bb4f48b09434997f2667f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shakerConstraintPlane: {fileID: 0}
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1

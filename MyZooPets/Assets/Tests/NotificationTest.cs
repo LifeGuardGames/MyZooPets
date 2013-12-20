@@ -6,16 +6,6 @@ public class NotificationTest : MonoBehaviour {
     private const int BUTTON_HEIGHT = 50;
     private const int BUTTON_WIDTH = 100;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
     void OnGUI(){
         //1 BUTTON POPUP
         if(GUI.Button(new Rect(10, 10, BUTTON_WIDTH, BUTTON_HEIGHT), "one button")){

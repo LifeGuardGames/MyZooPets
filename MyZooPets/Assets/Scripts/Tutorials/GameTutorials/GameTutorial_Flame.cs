@@ -13,7 +13,7 @@ public class GameTutorial_Flame : GameTutorial {
 	
 	public GameTutorial_Flame() : base() {		
 		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
-		PetAnimator.OnBreathStarted += OnBreathStarted;		// callback for when the pet starts to actually breath fire
+		PetAnimator.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
 	
 	//---------------------------------------------------
@@ -94,17 +94,20 @@ public class GameTutorial_Flame : GameTutorial {
 		// unsub from callback
 		FireMeter.OnMeterFilled -= OnMeterFilled;
 		
+		// remove the spotlight so the user can see the resulting flame attack
+		RemoveSpotlight();
+		
 		// fire meter is full, so advance the tut
 		Advance();
 	}
 	
 	//---------------------------------------------------
-	// OnBreathStarted()
-	// Callback for when the pet beginst to breath fire.
+	// OnBreathEnded()
+	// Callback for when the pet finishes breathing fire.
 	//---------------------------------------------------		
-	private void OnBreathStarted( object sender, EventArgs args ) {
+	private void OnBreathEnded( object sender, EventArgs args ) {
 		// unsub from callback
-		PetAnimator.OnBreathStarted -= OnBreathStarted;
+		PetAnimator.OnBreathEnded -= OnBreathEnded;
 		
 		// pet began to breath fire, so advance the tut
 		Advance();

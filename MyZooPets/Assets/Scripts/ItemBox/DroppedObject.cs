@@ -46,6 +46,16 @@ public abstract class DroppedObject : LgButton {
 	}		
 	
 	//---------------------------------------------------
+	// FadeIn()
+	// This function sets the object's alpha to 0, and then
+	// fades it in.  It's an attempt at a bit more stable
+	// and controllable than bursting it.
+	//---------------------------------------------------	
+	public void FadeIn() {
+		
+	}
+	
+	//---------------------------------------------------
 	// Burst()
 	// Call this function when you want this item to
 	// burst out of wherever it currently is.

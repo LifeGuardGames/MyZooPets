@@ -57,7 +57,7 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
-	public static EventHandler<EventArgs> OnBreathStarted;	// when pet starts to breath fire
+	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
 	//=====================================================		
 
 	//---------------------------------------------------
@@ -195,10 +195,6 @@ public class PetAnimator : LgCharacterAnimator {
 		// resume the animation
 		Resume();
 		
-		// process any callbacks for when the pet starts to breath fire
-		if ( OnBreathStarted != null )
-			OnBreathStarted( this, EventArgs.Empty );
-		
 		// the pet is actually breathing fire, so play the fire breathing sound
 		LgAudioSource audioFire = AudioManager.Instance.PlayClip( "petFire" );
 		
@@ -237,6 +233,10 @@ public class PetAnimator : LgCharacterAnimator {
 		if ( !bFinished )
 			Resume();
 		else{
+			// process any callbacks for when the pet finishes breathing fire
+			if ( OnBreathEnded != null )
+				OnBreathEnded( this, EventArgs.Empty );
+			
 			//If the smoke monster has been defeated play celebrate animation, else
 			//go back to idle
 			if(!GatingManager.Instance.IsInGatedRoom()){

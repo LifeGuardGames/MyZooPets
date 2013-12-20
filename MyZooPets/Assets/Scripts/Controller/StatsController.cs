@@ -76,7 +76,7 @@ public class StatsController : Singleton<StatsController> {
 			else if(deltaPoints < 0)
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
 
-			if(bFloaty && !bBeingDestroyed){
+			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
 				PetFloatyUIManager.Instance.CreatePointsFloaty(deltaPoints);
 			}
 		}
@@ -102,7 +102,7 @@ public class StatsController : Singleton<StatsController> {
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
-			if(bFloaty && !bBeingDestroyed)
+			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance)
 				PetFloatyUIManager.Instance.CreateMoodFloaty(deltaMood);
 
 			if ( bCheckPet )
@@ -117,7 +117,7 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
-			if(bFloaty && !bBeingDestroyed)
+			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance)
 				PetFloatyUIManager.Instance.CreateHealthFloaty(deltaHealth);
 
 			if ( bCheckPet )

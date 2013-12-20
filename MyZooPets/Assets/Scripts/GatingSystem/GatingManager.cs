@@ -63,10 +63,11 @@ public class GatingManager : Singleton<GatingManager> {
 		foreach ( DictionaryEntry entry in hashGates ) {
 			DataGate dataGate = (DataGate) entry.Value;
 			
+			bool bRecurring = dataGate.IsRecurring();
 			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive( dataGate.GetGateID() );
 			bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 			
-			if ( !bActive && bCanBreath )
+			if ( bRecurring && !bActive && bCanBreath )
 				DataManager.Instance.GameData.GatingProgress.RefreshGate( dataGate );
 		}
 	}

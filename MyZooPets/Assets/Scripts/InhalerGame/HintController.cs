@@ -77,6 +77,7 @@ public class HintController : MonoBehaviour {
     private void EnableHint(){
 		if(finger != null){
 	        finger.renderer.enabled = true;
+            finger.transform.localScale = new Vector3(1, 1, 1);
 			fingerAnimation.Play(clipToPlay);
 		}
 

@@ -43,7 +43,6 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     // Based on the time now return the next reward time
     //-----------------------------------------------
     public void CalculateNextPlayPeriod(){
-        Debug.Log(LgDateTime.GetTimeNow());
         DateTime nextPlayTime;
         if(LgDateTime.GetTimeNow().Hour < 12){ 
             //next reward time at noon

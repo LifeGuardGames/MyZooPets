@@ -7,7 +7,8 @@ using System.Collections;
     inhaler
 */
 public class RescueShaker : InhalerPart {
-    
+    public GameObject shakerConstraintPlane; //the plane that restricts the drag motion
+
     private Vector3 startDragPos;
     private bool doneWithShake = true; //disable shake after it's done
     private float elapsed;
@@ -58,11 +59,13 @@ public class RescueShaker : InhalerPart {
    
    protected override void Disable(){
         transform.collider.enabled = false;
+        shakerConstraintPlane.SetActive(false);
         doneWithShake = true;
    }
 
    protected override void Enable(){
         transform.collider.enabled = true;
+        shakerConstraintPlane.SetActive(true);
         doneWithShake = false;
    }
 

@@ -1,21 +1,22 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /*
     Dragging the whole inhaler (step 5)
     Listens to drag. gameobject will be snapback if it doesn't land on the target collider
 */
 public class RescueDrag : InhalerPart{
-    public GameObject targetCollider; //Target position of the inhaler
+    public List<GameObject> targetColliders = new List<GameObject>();
 
     private Vector3 startDragPos; //Original position of the inhaler
-    private Vector3 targetDragPos;
+    private Vector3 targetDragPos; //Final position of the inhaler after drag
     private bool doneWithDrag = true;
 
     protected override void Awake(){
         gameStepID = 5;
         startDragPos = transform.position;
-        targetDragPos = new Vector3(6.3f, 2.7f, 16.8f);
+        targetDragPos = new Vector3(8.4f, 2.4f, 16.8f);
     }
 
     void OnDrag(DragGesture gesture){
@@ -30,11 +31,15 @@ public class RescueDrag : InhalerPart{
 
             //Snap to position if spacer is at target position or revert to start pos
             if(Physics.Raycast(ray, out hit, 100, maskLayer)){
-                if(hit.collider.gameObject == targetCollider){ 
-                    transform.position = targetDragPos;
-                    if(!doneWithDrag){
-                        NextStep();
-                        snapBack = false;
+                foreach(GameObject targetCollider in targetColliders){
+                    if(hit.collider.gameObject == targetCollider){ 
+                        Debug.Log(hit.collider.gameObject);
+                        transform.position = targetDragPos;
+
+                        if(!doneWithDrag){
+                            NextStep();
+                            snapBack = false;
+                        }
                     }
                 }
             }
@@ -45,9 +50,17 @@ public class RescueDrag : InhalerPart{
         }
     }
 
+    protected override void Disable(){
+        foreach(GameObject targetCollider in targetColliders)
+            targetCollider.SetActive(false);
+    }
+
     protected override void Enable(){
         transform.collider.enabled = true;
-        targetCollider.SetActive(true);
+
+        foreach(GameObject targetCollider in targetColliders)
+            targetCollider.SetActive(true);
+
         doneWithDrag = false;
     }
 
@@ -56,9 +69,11 @@ public class RescueDrag : InhalerPart{
 		AudioManager.Instance.PlayClip( "inhalerToMouth" );
 		
         base.NextStep();
-        Destroy(targetCollider);
         transform.collider.enabled = false;
-        targetCollider.SetActive(true);
+
+        foreach(GameObject targetCollider in targetColliders)
+            targetCollider.SetActive(false);
+
         doneWithDrag = true;
     }
 }

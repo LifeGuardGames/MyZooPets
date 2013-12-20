@@ -23,6 +23,7 @@ public class CoinItem : RunnerItem {
 		float fPitch = GetCoinStreakPitch();
 		Hashtable hashOverride = new Hashtable();
 		hashOverride["Pitch"] = fPitch;
+        hashOverride["Volume"] = 0.5f;
 		AudioManager.Instance.PlayClip( "StarSingle", hashOverride );
 		
         ScoreManager.Instance.AddCoins(CoinValue);

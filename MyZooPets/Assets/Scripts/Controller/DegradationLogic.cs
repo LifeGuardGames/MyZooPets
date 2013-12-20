@@ -38,43 +38,31 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// something like that
 		DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
 		
-        DateTime now = LgDateTime.GetTimeNow();
-        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
-        int numberOfTriggersToInit = 0;
-
-        if(sinceLastPlayed.Days > 0){ //reset if new day
-            DataManager.Instance.GameData.Degradation.MorningTrigger = true;
-            DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
-        }
-        if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
-            if(DataManager.Instance.GameData.Degradation.MorningTrigger){
-                numberOfTriggersToInit = 3;
-                DataManager.Instance.GameData.Degradation.MorningTrigger = false;
-            }
-        }else{ //afternoon
-            if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
-                numberOfTriggersToInit = 3; 
-                DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
-            }
-        }
-		
 		// calculate changes in the pets mood
+		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
 		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
 		
+		// set up triggers to be spawned by the UI manager
+		SetUpTriggers();       
+    }
+	
+	//---------------------------------------------------
+	// SetUpTriggers()
+	// This function just SETS UP the triggers and
+	// where they should spawn.  The actual triggers are
+	// spawned from the DegradationUIManager.
+	//---------------------------------------------------	
+	private void SetUpTriggers() {		
 		// get list of available locations to spawn triggers
 		List<Data_TriggerLocation> listAvailable = DataLoader_TriggerLocations.GetAvailableTriggerLocations( "Bedroom" );
 		
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
-		int numToSpawn = Mathf.Min( MAX_TRIGGERS, numberOfTriggersToInit + DataManager.Instance.GameData.Degradation.UncleanedTriggers );
-		if ( numToSpawn < 0 ) {
-			numToSpawn = 0;
-			Debug.Log("Number of triggers to spawn somehow < 0...");
-		}
+		int numToSpawn = GetNumTriggersToSpawn();
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 		
 		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>( listAvailable, numToSpawn );
 		
-        //create triggers
+        //create trigger data to be spawned
         for(int i = 0; i < listChosen.Count; i++){
 			Data_TriggerLocation location = listChosen[i];
 			
@@ -92,14 +80,66 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 				objectIndex = 3;
 			}
 
-            //spawn them at a pre define location
-            //ID is the order in which the data are created
+            //spawn them at a pre define location ID is the order in which the data are created
             DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
-            
         }                
 
-        DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time         
-    }
+        DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time  		
+	}
+	
+	//---------------------------------------------------
+	// GetNumTriggersToSpawn()
+	// Returns the correct number of triggers that should
+	// spawn based.
+	//---------------------------------------------------		
+	private int GetNumTriggersToSpawn() {
+		// get the new number of triggers to spawn based on how long the player has been absent
+      	int nNewTriggers = GetNewTriggerCount();
+		
+		// get the number of triggers the player did not clean
+		int nUncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
+		if ( nUncleanedTriggers < 0 )
+			nUncleanedTriggers = 0;	// this is a safeguard...I think this will eventually be changed a bit though
+		
+		// add them together but check min/maxes
+		int numToSpawn = Mathf.Min( MAX_TRIGGERS, nNewTriggers + nUncleanedTriggers );
+		if ( numToSpawn < 0 ) {
+			numToSpawn = 0;
+			Debug.Log("Number of triggers to spawn somehow < 0...");
+		}	
+		
+		return numToSpawn;
+	}
+	
+	//---------------------------------------------------
+	// GetNewTriggerCount()
+	// Depending on how long the player has been away
+	// and what time of day it is, return the number of
+	// new triggers that should spawn.
+	//---------------------------------------------------		
+	private int GetNewTriggerCount() {
+ 		DateTime now = LgDateTime.GetTimeNow();
+        TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
+        int nNew = 0;
+
+        if(sinceLastPlayed.Days > 0){ //reset if new day
+            DataManager.Instance.GameData.Degradation.MorningTrigger = true;
+            DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
+        }
+        if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
+            if(DataManager.Instance.GameData.Degradation.MorningTrigger){
+                nNew = 3;
+                DataManager.Instance.GameData.Degradation.MorningTrigger = false;
+            }
+        }else{ //afternoon
+            if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
+                nNew = 3; 
+                DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
+            }
+        }		
+		
+		return nNew;
+	}
 		
 	//---------------------------------------------------
 	// CalculateMoodDegradation()

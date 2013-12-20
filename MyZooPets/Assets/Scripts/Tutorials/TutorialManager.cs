@@ -16,7 +16,7 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	// ------------------------------------------
 	
 	// public on/off switch for testing while in development
-	public bool bOn;
+	protected bool bOn;
 	
 	// tutorial that is currently active
 	private GameTutorial tutorial;
@@ -41,6 +41,10 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 			// then check for a new tutorial
 			Check();
 		}
+	}
+	
+	void Awake() {
+		bOn = Constants.GetConstant<bool>( "IntroTutorialsEnabled" );
 	}
 	
 	void Start() {

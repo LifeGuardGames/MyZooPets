@@ -15,6 +15,20 @@ public class DegradationData{
     public bool MorningTrigger {get; set;} //True: spawn asthma trigger in morning, False: don't
     public bool AfternoonTrigger {get; set;} //True: spawn asthma trigger in afternoon, False: don't
 	public int UncleanedTriggers {get; set;}
+	
+	/* // work in progress: supporting triggers in multiple areas (house, yard, etc)
+	public Hashtable UncleanedTriggers {get; set;}
+	public int GetUncleanedTriggers( string strArea ) {
+		int nTriggers = 0;
+		
+		if ( UncleanedTriggers.ContainsKey( strArea ) )
+			nTriggers = (int) UncleanedTriggers[strArea];
+		else
+			Debug.Log("No uncleaned triggers found for area: " + strArea);
+		
+		return nTriggers;
+	}
+	*/
 
     //================Initialization============
     public DegradationData(){}

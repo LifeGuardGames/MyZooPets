@@ -25,11 +25,15 @@ public static class ListUtils {
 	// Given a list, will return another list
 	// comprised of random, unique elements of
 	// the incoming list.
+	// Note that I am not throwing an error if
+	// 0 comes in as nCount.  I decided it's up
+	// to whomever is calling this function to
+	// care about that, if they do.
 	///////////////////////////////////////////
 	public static List<T> GetRandomElements<T>( List<T> list, int nCount )
 	{
 		// simple check to make sure we aren't trying to get more elements than are in the array
-		if ( nCount <= 0 || nCount > list.Count )
+		if ( nCount < 0 || nCount > list.Count )
 		{
 			Debug.Log("Attempted to get random # of elements from an array too small!  Shrinking elements to match array length.");
 			nCount = list.Count;
@@ -39,7 +43,7 @@ public static class ListUtils {
 		List<T> listCopy = new List<T>(list);		// a copy of the list, since we manipulate it
 		
 		// while we haven't reached our number of results...
-		while ( listResults.Count < nCount )
+		while ( listResults.Count < nCount && nCount > 0 )
 		{
 			// get a random element from the remaining elements in arrayCopy
 			// and then stick it in the results

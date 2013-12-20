@@ -1497,8 +1497,8 @@ Transform:
   m_PrefabInternal: {fileID: 1919037954}
   m_GameObject: {fileID: 113679502}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 80, y: 80, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 90, y: 90, z: 1}
   m_Children: []
   m_Father: {fileID: 191920561}
 --- !u!114 &113679504
@@ -1516,8 +1516,8 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
-  mSpriteName: iconItemsMinus
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
+  mSpriteName: buttonNavInventoryUp
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -2991,8 +2991,8 @@ MonoBehaviour:
   tweenGroup: 0
   eventReceiver: {fileID: 191920560}
   callWhenFinished: Unlock
-  from: {x: -164, y: 50, z: 0}
-  to: {x: -164, y: 50, z: 0}
+  from: {x: -164, y: 50, z: -10}
+  to: {x: -164, y: 50, z: -10}
 --- !u!114 &188946395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3072,7 +3072,7 @@ Transform:
   m_PrefabInternal: {fileID: 1919037954}
   m_GameObject: {fileID: 191920560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 117.591064, y: 1, z: 0}
+  m_LocalPosition: {x: 115, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 113679503}
@@ -3694,6 +3694,36 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
+    - target: {fileID: 11400014, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
+    - target: {fileID: 11400022, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
+    - target: {fileID: 11400018, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
+    - target: {fileID: 11400020, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
+    - target: {fileID: 11400016, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
   m_RootGameObject: {fileID: 839786048}
@@ -6721,7 +6751,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: e648d2c3a423b44d0be0b748689c23b8, type: 2}
       propertyPath: bOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e648d2c3a423b44d0be0b748689c23b8, type: 2}
@@ -7163,7 +7193,7 @@ MonoBehaviour:
   mColor: {r: .536764741, g: .635801196, b: 1, a: 1}
   mPivot: 4
   mDepth: -1
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -7813,7 +7843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4758dcade324828a7006faf3cda0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bOn: 1
+  bOn: 0
 --- !u!1 &515071381
 GameObject:
   m_ObjectHideFlags: 0
@@ -10412,7 +10442,7 @@ Transform:
   m_PrefabInternal: {fileID: 1919037954}
   m_GameObject: {fileID: 674538518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 570.591003, y: .000244140625, z: 0}
+  m_LocalPosition: {x: 613.820374, y: .000244140625, z: 0}
   m_LocalScale: {x: 1011.00018, y: 103, z: .999935985}
   m_Children: []
   m_Father: {fileID: 188946391}
@@ -10428,10 +10458,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .862745106}
+  mColor: {r: .911764681, g: .970791042, b: 1, a: .862745106}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -11763,7 +11793,7 @@ MonoBehaviour:
   mColor: {r: .25, g: .25, b: .25, a: .160784319}
   mPivot: 4
   mDepth: 6
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -12463,7 +12493,7 @@ Prefab:
     - target: {fileID: 11400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: mAtlas
       value: 
-      objectReference: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430,
+      objectReference: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
@@ -21333,7 +21363,7 @@ MonoBehaviour:
   mColor: {r: .933823526, g: .933823526, b: .933823526, a: 1}
   mPivot: 4
   mDepth: 5
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -22125,7 +22155,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: .419607848}
   mPivot: 4
   mDepth: 4
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -26797,7 +26827,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: .870588243}
   mPivot: 4
   mDepth: 3
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -26841,7 +26871,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnApplicationQuit
@@ -27823,7 +27853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1814776892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27966,7 +27996,7 @@ MonoBehaviour:
   mColor: {r: .933823526, g: .933823526, b: .933823526, a: 1}
   mPivot: 4
   mDepth: 5
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -29540,13 +29570,73 @@ Prefab:
     - target: {fileID: 11400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
       propertyPath: mAtlas
       value: 
-      objectReference: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430,
+      objectReference: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660,
         type: 2}
     - target: {fileID: 11400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
       propertyPath: mAtlas
       value: 
-      objectReference: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430,
+      objectReference: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660,
         type: 2}
+    - target: {fileID: 11400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: mSpriteName
+      value: buttonNavInventoryUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 613.820374
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: from.z
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: to.z
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: mColor.r
+      value: .911764681
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: mColor.g
+      value: .970791042
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: mColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: mColor.a
+      value: .862745106
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64e035934b17248dc9d849312715c109, type: 2}
   m_RootGameObject: {fileID: 188946390}
@@ -32411,7 +32501,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: .419607848}
   mPivot: 4
   mDepth: 4
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1

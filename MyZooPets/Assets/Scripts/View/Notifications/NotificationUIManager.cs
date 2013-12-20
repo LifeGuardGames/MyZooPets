@@ -83,9 +83,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					ShowPopupTipWithImage(
 						(string) entry[NotificationPopupFields.Message],
 						(string) entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(bool) entry[NotificationPopupFields.StartsHidden],
-						(bool) entry[NotificationPopupFields.HideImmediately]
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
 					);
 					break;
 				
@@ -157,10 +155,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	// Desc: creates popup that shows a tip, along with an image on the left and a message on the right.
 	// Params: message to display, tipImage, call back for button, starts hidden?, kill after used?
 	//----------------------------------------------------------	
-	public void ShowPopupTipWithImage(string message, string spriteName, PopupNotificationNGUI.HashEntry okCallBack, bool startsHidden, bool hideImmediately){
+	public void ShowPopupTipWithImage(string message, string spriteName, 
+		PopupNotificationNGUI.HashEntry okCallBack, bool startsHidden = true, bool hideImmediately = true){
 
-		PopupNotificationWithImageNGUI tip = CreatePopupNotificationNGUI(popupTipWithImage, startsHidden) as PopupNotificationWithImageNGUI;
-		tip.HideImmediately = hideImmediately;
+		PopupNotificationWithImageNGUI tip = 
+			CreatePopupNotificationNGUI(popupTipWithImage, startsHidden) as PopupNotificationWithImageNGUI;
+		// tip.HideImmediately = hideImmediately;
 		tip.Message = message;
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;

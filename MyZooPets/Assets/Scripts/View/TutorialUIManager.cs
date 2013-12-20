@@ -26,8 +26,8 @@ public class TutorialUIManager : Singleton<TutorialUIManager> {
 		notificationEntry.Add(NotificationPopupFields.Message, strText);
 		notificationEntry.Add(NotificationPopupFields.SpriteName, strSprite);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1cb);
-		notificationEntry.Add(NotificationPopupFields.StartsHidden, bStartsHidden);
-		notificationEntry.Add(NotificationPopupFields.HideImmediately, bHideImmediately);
+		// notificationEntry.Add(NotificationPopupFields.StartsHidden, bStartsHidden);
+		// notificationEntry.Add(NotificationPopupFields.HideImmediately, bHideImmediately);
 		// Place notification entry table in static queue
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 	}	

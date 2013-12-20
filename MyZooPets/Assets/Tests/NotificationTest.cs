@@ -37,30 +37,24 @@ public class NotificationTest : MonoBehaviour {
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
 		
-		//2 BUTTON POPUP
-		// if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
-  //           "two button")){
+		// 2 BUTTON POPUP
+		if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
+            "image button")){
+
+            PopupNotificationNGUI.HashEntry button1Function = delegate(){
+                    //
+                };
+
+            Hashtable notificationEntry = new Hashtable();
+            notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
+            notificationEntry.Add(NotificationPopupFields.Message, "You need at least 99999999 stars to play!");
+            notificationEntry.Add(NotificationPopupFields.SpriteName, "itemInhalerMain");
+            notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+            
 			
-		// 	// Assign delegate functions to be passed in hashtable
-		// 	PopupNotificationNGUI.HashEntry button1Function = delegate(){
-	 //            	//
-	 //            };
-		// 	PopupNotificationNGUI.HashEntry button2Function = delegate() {
-		// 			//
-		// 		};
-			
-		// 	// Populate notification entry table
-		// 	Hashtable notificationEntry = new Hashtable();
-		// 	notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-		// 	notificationEntry.Add(NotificationPopupFields.Message, "testing");
-		// 	notificationEntry.Add(NotificationPopupFields.Button1Label, "Yessir");
-		// 	notificationEntry.Add(NotificationPopupFields.Button2Label, "No way");
-		// 	notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		// 	notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-			
-		// 	// Place notification entry table in static queue
-		// 	NotificationUIManager.Instance.AddToQueue(notificationEntry);
-  //       }
+			// Place notification entry table in static queue
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+        }
 
         //LEVEL UP
         if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*2, BUTTON_WIDTH, BUTTON_HEIGHT),

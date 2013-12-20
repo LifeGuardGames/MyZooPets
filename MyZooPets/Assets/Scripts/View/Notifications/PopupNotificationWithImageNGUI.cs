@@ -7,6 +7,7 @@ public class PopupNotificationWithImageNGUI : PopupNotificationNGUI {
 
     public void SetSprite(string name){
         imageSprite.spriteName = name;
+        imageSprite.MakePixelPerfect();
     }
 
 }

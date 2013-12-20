@@ -36,6 +36,5 @@ public class RescueCap : InhalerPart{
 		AudioManager.Instance.PlayClip( "inhalerRemoveCap" );
 
        base.NextStep();
-       Destroy(gameObject);
     }
 }

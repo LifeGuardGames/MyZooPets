@@ -29,7 +29,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         InhalerLogic.OnNextStep += OnNextStep;
         GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;
 
-        StartGame();
+        StartCoroutine(StartGame());
     }
 
     void OnDestroy(){
@@ -74,12 +74,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void ShowQuitButton(){
-        if(InhalerLogic.Instance.IsTutorialCompleted)
+        if(InhalerLogic.Instance.IsTutorialCompleted || !tutOn)
             quitButton.GetComponent<PositionTweenToggle>().Show();
     }
 
     private void HideQuitButton(){
-        if(InhalerLogic.Instance.IsTutorialCompleted)
+        if(InhalerLogic.Instance.IsTutorialCompleted || !tutOn)
             quitButton.GetComponent<PositionTweenToggle>().Hide();
     }
 
@@ -91,7 +91,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         inhalerBody.SetActive(true);
     }
 
-    private void StartGame(){
+    private IEnumerator StartGame(){
+        yield return 0;
+
         HideHUD();
         ShowQuitButton();
         SetUpHintTimer();

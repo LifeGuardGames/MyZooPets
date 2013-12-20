@@ -9,15 +9,15 @@ public class ProgressBarUIManager : MonoBehaviour {
 
     private List<GameObject> sliderNodes; //list of nodes to show game steps
     private int stepCompleted;
-    private float increment; //How much to incement the slider by
+    private float increment; //How much to increment the slider by
 
     void Awake(){
         //Set up the progress slider
         slider.sliderValue = 0;
         slider.numberOfSteps = InhalerLogic.RESCUE_NUM_STEPS;
         increment = 1.0f / (slider.numberOfSteps - 1);
-
         stepCompleted = 0;
+
         sliderNodes = new List<GameObject>();
         SetUpProgressSteps();
         UpdateNodeColors();
@@ -26,8 +26,8 @@ public class ProgressBarUIManager : MonoBehaviour {
     void Start(){
         InhalerLogic.OnNextStep += UpdateProgressBar;
     }
-
-    void OnDestory(){
+    
+    void OnDestroy(){
         InhalerLogic.OnNextStep -= UpdateProgressBar;
     }
 
@@ -36,7 +36,7 @@ public class ProgressBarUIManager : MonoBehaviour {
         stepCompleted = InhalerLogic.Instance.CurrentStep -1;
         slider.sliderValue = stepCompleted * increment;
         UpdateNodeColors();
-    }
+    } 
 
     // Set up the sliderNodes, based on how the slider is set up.
     private void SetUpProgressSteps(){
@@ -59,6 +59,7 @@ public class ProgressBarUIManager : MonoBehaviour {
     private void UpdateNodeColors(){
         for (int i = 0; i < sliderNodes.Count; i++){
             GameObject stepObject = sliderNodes[i].transform.Find("Sprite").gameObject;
+
             if (i <= stepCompleted){
                 stepObject.GetComponent<UISprite>().spriteName="circleRed";
                 if(i == stepCompleted){

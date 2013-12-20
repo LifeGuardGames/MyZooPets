@@ -163,13 +163,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     //Event listener. Listens to game over message. Play fire animation 
     private void OnGameEnd(object sender, EventArgs args){
-        // Record having given the pet the inhaler, if this was the real game.
-        fireAnimationController.PlaySequence();
-
         ShowHUD();
         HideQuitButton();
         HideInhaler();
         HideProgressBar();
+
+        fireAnimationController.PlaySequence();
     }
 
     //Event listener. continue the game after GetFireAnimation is done
@@ -182,8 +181,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     //Reward player after the animation is done
     private void GiveReward(){
         StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
-            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, bFloaty: false);
-
+            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
         Invoke("QuitInhalerGame", 2.0f);
         // ShowGameOverMessage();    
     }

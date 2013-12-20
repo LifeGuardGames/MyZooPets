@@ -33,7 +33,6 @@ public class RescueDrag : InhalerPart{
             if(Physics.Raycast(ray, out hit, 100, maskLayer)){
                 foreach(GameObject targetCollider in targetColliders){
                     if(hit.collider.gameObject == targetCollider){ 
-                        Debug.Log(hit.collider.gameObject);
                         transform.position = targetDragPos;
 
                         if(!doneWithDrag){

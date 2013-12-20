@@ -2,6 +2,13 @@ using UnityEngine;
 using System;
 
 public class LgDateTime{
+	
+	public static TimeSpan GetTimeSinceLastPlayed() {
+ 		DateTime now = GetTimeNow();
+        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
+		
+		return sinceLastPlayed;
+	}
 
     public static DateTime GetTimeNow(){
         DateTime now = DateTime.Now; 

@@ -58,6 +58,10 @@ public class DataManager : Singleton<DataManager>{
     }
 
     void Awake(){
+        //JSON serializer setting
+        JSON.Instance.Parameters.UseExtensions = false;
+        JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now
+		
         //Make Object persistent
         if(isCreated){
             //If There is a duplicate in the scene. delete the object and jump Awake
@@ -209,10 +213,6 @@ public class DataManager : Singleton<DataManager>{
         }
         
         Debug.Log("Game is saving");
-        
-        //JSON serializer setting
-        JSON.Instance.Parameters.UseExtensions = false;
-        JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now
 
         if(!String.IsNullOrEmpty(currentPetID)){
             string jsonString = JSON.Instance.ToJSON(gameData);

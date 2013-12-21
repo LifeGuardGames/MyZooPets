@@ -63,9 +63,8 @@ public class ComicPlayer : MonoBehaviour{
         GameObject loadedPage = null; 
         int pageIndex = currentPageNum - 1;
 
-        //TO DO - Load these from DataManager once we have all the comics
-        string petSpecies = "Basic";
-        string petColor = "OrangeYellow";
+        string petSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies;
+        string petColor = DataManager.Instance.GameData.PetInfo.PetColor; 
 
         try{
             //Get the comic page name
@@ -86,7 +85,7 @@ public class ComicPlayer : MonoBehaviour{
             currentPageNum++;
         }
         catch(ArgumentOutOfRangeException outOfRange){
-            Debug.Log("page index out of range " + outOfRange.Message);
+            Debug.LogError("page index out of range " + outOfRange.Message);
         }
     }
 

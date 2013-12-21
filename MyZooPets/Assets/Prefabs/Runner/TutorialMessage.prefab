@@ -9,9 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400000}
   m_Layer: 10
-  m_Name: Label
+  m_Name: Sprite (buttonSymbolCheck)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +44,7 @@ GameObject:
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400006}
   - 65: {fileID: 6500000}
+  - 114: {fileID: 11400000}
   m_Layer: 10
   m_Name: Button_Continue
   m_TagString: Untagged
@@ -108,8 +108,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
-  m_LocalScale: {x: 50, y: 50, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 73, y: 65, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!4 &400002
@@ -119,8 +119,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .5, z: 0}
-  m_LocalScale: {x: 224, y: 99, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!4 &400004
@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -76.7140732, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .800000012, y: .800000012, z: 1}
   m_Children:
   - {fileID: 400002}
   - {fileID: 400000}
@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 118, z: -5}
-  m_LocalScale: {x: 64, y: 64, z: 1}
+  m_LocalScale: {x: 82, y: 82, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
 --- !u!4 &400008
@@ -165,7 +165,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 752.562012, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -182,20 +182,23 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 299, y: 98, z: 0}
-  m_Center: {x: .5, y: 0, z: -3.75}
+  m_Size: {x: 128, y: 127.999878, z: 0}
+  m_Center: {x: 0, y: .000549316406, z: -4}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
+  m_GameObject: {fileID: 100004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: RESUME
+  tweenTarget: {fileID: 400000}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  duration: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,27 +207,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 14
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
-  mText: Resume
-  mMaxLineWidth: 200
-  mMaxLineHeight: 0
-  mEncoding: 1
-  mMaxLineCount: 1
-  mPassword: 0
-  mShowLastChar: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 0
-  mLineWidth: 0
-  mMultiline: 1
+  mDepth: 15
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
+  mSpriteName: buttonSymbolCheck
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -240,7 +235,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonShort
+  mSpriteName: buttonUpGreen
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -288,10 +283,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400004}
-  normalSprite: buttonShort
-  hoverSprite: buttonShort
-  pressedSprite: buttonShortDown
-  disabledSprite: buttonShortInactive
+  normalSprite: buttonUpGreen
+  hoverSprite: buttonUpGreen
+  pressedSprite: buttonDownGreen
+  disabledSprite: ButtonUpGray
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -306,12 +301,12 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 1
   mDepth: 14
-  mFont: {fileID: 11400000, guid: 790670f85543c424b925196f2969d67c, type: 2}
-  mText: 
-  mMaxLineWidth: 600
-  mMaxLineHeight: 0
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: sdfsfsdfsdfsdfsdfsdf
+  mMaxLineWidth: 900
+  mMaxLineHeight: 130
   mEncoding: 1
-  mMaxLineCount: 2
+  mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 0
@@ -393,17 +388,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 400
+    e00: 384
     e01: 0
     e02: 0
-    e03: -40000
+    e03: .5
     e10: 0
-    e11: 400
+    e11: 384
     e12: 0
-    e13: 0
+    e13: -8433.0625
     e20: 0
     e21: 0
-    e22: 400
+    e22: 384
     e23: 0
     e30: 0
     e31: 0

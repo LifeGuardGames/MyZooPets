@@ -46,13 +46,20 @@ public abstract class DroppedObject : LgButton {
 	}		
 	
 	//---------------------------------------------------
-	// FadeIn()
+	// Appear()
 	// This function sets the object's alpha to 0, and then
 	// fades it in.  It's an attempt at a bit more stable
 	// and controllable than bursting it.
 	//---------------------------------------------------	
-	public void FadeIn() {
+	public void Appear() {
+		GameObject go = GetGameObject();
+			
+		// turn the object completely invis
+		TweenAlpha.Begin( go, 0, 0 );
 		
+		// then fade in over time
+		float fInTime = Constants.GetConstant<float>( "ItemBoxAppear_Time" );
+		TweenAlpha.Begin( go, fInTime, 1 );
 	}
 	
 	//---------------------------------------------------

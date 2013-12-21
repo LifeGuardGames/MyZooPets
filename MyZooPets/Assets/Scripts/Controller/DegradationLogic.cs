@@ -189,11 +189,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			goDroppedItem.GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, 50 );
 			
 			// set the position of the newly spawned item to be wherever this item box is
-			Vector3 vPosition = new Vector3( trigger.gameObject.transform.position.x, trigger.gameObject.transform.position.y+5, trigger.gameObject.transform.position.z );
+			float fOFfsetY = Constants.GetConstant<float>( "ItemBoxTrigger_OffsetY" );
+			Vector3 vPosition = new Vector3( trigger.gameObject.transform.position.x, trigger.gameObject.transform.position.y+fOFfsetY, trigger.gameObject.transform.position.z );
 			goDroppedItem.transform.position = vPosition;
 			
 			// make the stats "burst" out
-			goDroppedItem.GetComponent<DroppedObject>().Burst();			
+			goDroppedItem.GetComponent<DroppedObject>().Appear();			
 		}	
 		
         DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);

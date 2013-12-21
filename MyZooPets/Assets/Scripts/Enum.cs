@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public enum Level{
-    Level0,
-    Level1,
+    Level1 = 1,
     Level2,
     Level3,
     Level4,
@@ -11,6 +10,7 @@ public enum Level{
     Level6,
     Level7,
     Level8,
+    Level9,
 }
 
 public enum DosageRecord{

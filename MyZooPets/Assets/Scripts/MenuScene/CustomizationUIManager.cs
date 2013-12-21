@@ -12,17 +12,18 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject popupTitle;
     public UILabel nameField;
     public GameObject selectedEgg;
-    public bool bSkipComic;
-	
 	public Camera NGUICamera;
-    private string petColor = "OrangeYellow";
-    private string petName;
+    public SceneTransition scriptTransition;
 
+    private string petColor = "OrangeYellow"; //Default pet color
+    private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
+    private bool skipComic = false;
 	
-	// transition
-	public SceneTransition scriptTransition;
+    void Awake(){
+        skipComic = Constants.GetConstant<bool>("SkipIntroComic");
+    }
 
     void Start(){
     	Invoke ("ShowTitle", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
@@ -103,7 +104,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || bSkipComic)
+		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 		
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;

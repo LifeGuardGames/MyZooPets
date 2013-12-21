@@ -18,6 +18,9 @@ public class ButtonMonster : LgButtonHold {
 	// the sprite icon of this button
 	public GameObject goIcon;
 	
+	// The parent panel for this button, to be destroyed when needed
+	public GameObject parentPanel;
+	
 	// the gate that this button is for
 	private Gate gate;
 	
@@ -25,7 +28,7 @@ public class ButtonMonster : LgButtonHold {
 	private bool bLegal;
 	
 	// const variable for the name of the fire button
-	public const string FIRE_BUTTON = "FireButton";
+	public const string FIRE_BUTTON = "FireButtonPanel";
 	
 	//---------------------------------------------------
 	// _Start()
@@ -70,7 +73,7 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------	
 	public void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
 		// if the partition is changing at all, destroy this UI
-		Destroy( gameObject );
+		Destroy( parentPanel );
 	}
 	
 	//---------------------------------------------------
@@ -137,7 +140,7 @@ public class ButtonMonster : LgButtonHold {
 			// if the monster is dead or the pet can't breathe fire any more, destroy the button
 			int nDamage = GetDamage();
 			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.CanBreathFire() )
-				Destroy( gameObject );		
+				Destroy( parentPanel );		
 		}
 		else {
 			// if the meter was not full, cancel the attack

@@ -15,9 +15,10 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	public GameObject petHitLocation;	// Used for triggers to attach as end destination
 	
 	// turn this on so that triggers spawn no matter what...used for testing
-	public bool bTesting = false;
+	public bool bTesting;
 	public bool IsTesting() {
-		return bTesting;	
+		bool bTesting = Constants.GetConstant<bool>( "TestingDegrad" );
+		return bTesting;
 	}
 
     void Start(){

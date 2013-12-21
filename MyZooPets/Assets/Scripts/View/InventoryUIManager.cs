@@ -12,15 +12,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public GameObject spritePet;
     public GameObject inventoryItemPrefab;
     public PetAnimator petAnimator;
-
+	
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
-    private UISprite uiSprite;
     
     void Awake(){
         uiButtonToggle = uiButtonToggleObject.GetComponent<UIButtonToggle>();
-        uiSprite = uiButtonSpriteObject.GetComponent<UISprite>();
     }
 
     void Start(){
@@ -73,15 +71,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
     }
 
-    //TO DO:remove from here and use the speech class instead
-    // Spawn a speech bubble where the pet is, and destroy the speech bubble within a certain time limit.
+    //play chew animation from pet animator
     private void ShowPetReceivedFoodAnimation(){
-        // Hashtable message = new Hashtable();
-        // message.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
-        // PetSpeechController.Instance.Talk(message);
-
-        // petAnimator.ChewFood();
-        petAnimator.PlayUnrestrictedAnim("Eat");
+        if(!petAnimator.IsBusy())
+            petAnimator.PlayUnrestrictedAnim("Eat", true);
     }
 
     //Event listener. listening to when new item is added to the inventory
@@ -151,7 +144,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         // Local aux to keep track of toggles
         if(InventoryLogic.Instance.AllInventoryItems.Count > 0)
             isGuiShowing = !isGuiShowing;
-            uiSprite.spriteName = isGuiShowing ? "iconItemsMinus" : "iconItemsPlus";
+            
+		// Switch images based on item box status implement here
+		//uiSprite.spriteName = isGuiShowing ? inventoryOpenSpriteName : inventoryCloseSpriteName;
     }
 
 	public void ShowPanel(){

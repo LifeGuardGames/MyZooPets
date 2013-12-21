@@ -101,6 +101,8 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
+		if(!ClickManager.Instance.CanRespondToTap()) return;
+		
 		if (enabled && UICamera.currentTouchID > -2)
 		{
 			if (!mIsDragging && delta.y > 0 && !isScrolling)	// If the delta has positive Y, pick up
@@ -146,6 +148,8 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnPress (bool isPressed)
 	{
+		if(!ClickManager.Instance.CanRespondToTap()) return;
+
 		if(!mIsDragging)
 			isClickLock = true;
 		

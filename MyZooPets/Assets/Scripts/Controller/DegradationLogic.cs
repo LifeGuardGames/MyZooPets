@@ -72,7 +72,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
 			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_TRIGGERS );
-			if ( !bTriggers ) {
+			if ( !bTriggers && i == 0 ) {
 				location = DataLoader_TriggerLocations.GetTriggerLocation( "TrigLoc_0", "Bedroom" );
 				if ( location == null )
 					Debug.Log("Tutorial trigger location not set up correctly");

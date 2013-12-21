@@ -9,6 +9,6 @@ public class PetLevelMutableData{
     public PetLevelMutableData(){}
 
     public void Init(){
-        CurrentLevel = Level.Level0;
+        CurrentLevel = Level.Level1;
     } 
 }

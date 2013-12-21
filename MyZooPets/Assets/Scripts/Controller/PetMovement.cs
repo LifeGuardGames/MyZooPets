@@ -8,10 +8,10 @@ public class PetMovement : Singleton<PetMovement> {
     public EventHandler<EventArgs> OnReachedDest;   // when the pet reaches its destination
     //=====================================================     
 
-    public Camera mainCamera;
+    private Camera mainCamera;
     public GameObject runWay; //Where the pet is allowed to move
 	public GameObject shadowObject; //pet's shadow
-    public PanToMoveCamera scriptPan; //script that pan the camera
+    private PanToMoveCamera scriptPan; //script that pan the camera
 	
 	public GameObject petSprite;
 	public GameObject GetPetGameObject() {
@@ -45,6 +45,10 @@ public class PetMovement : Singleton<PetMovement> {
 	
 
     void Awake(){
+		// set up camera variables
+		scriptPan = CameraManager.Instance.GetPanScript();
+		mainCamera = CameraManager.Instance.cameraMain;
+		
         int layerNGUI = LayerMask.NameToLayer("NGUI");
         nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
 		

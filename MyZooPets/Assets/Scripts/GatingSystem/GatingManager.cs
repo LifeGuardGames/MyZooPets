@@ -21,7 +21,7 @@ public class GatingManager : Singleton<GatingManager> {
 	public Vector3 vStartingLoc;
 	
 	// the pan to movement script; it's got constants we need...
-	public PanToMoveCamera scriptPan;
+	private PanToMoveCamera scriptPan;
 	
 	// hash of active gates that the manager is currently managing
 	private Hashtable hashActiveGates = new Hashtable();
@@ -33,6 +33,9 @@ public class GatingManager : Singleton<GatingManager> {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// set pan script
+		scriptPan = CameraManager.Instance.GetPanScript();
+		
 		// see if the gating system is enabled
 		if ( !DataManager.Instance.GameData.GatingProgress.IsEnabled() )
 			return;
@@ -267,6 +270,14 @@ public class GatingManager : Singleton<GatingManager> {
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load( ButtonMonster.FIRE_BUTTON ) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceFireButton );
+		
+		// set location of the button based on if it is a tutorial or not
+		string strConstant = "FireLoc_Normal";
+		if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
+			strConstant = "FireLoc_Tutorial";
+		
+		Vector3 vLoc = Constants.GetConstant<Vector3>( strConstant );
+		goFireButton.transform.localPosition = vLoc;
 		
 		// rename the button so that other things can find it
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;

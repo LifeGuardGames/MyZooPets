@@ -29,7 +29,6 @@ public class SceneTransition : MonoBehaviour {
 		// it again.  But how did it work before then...
 	}
 
-	//working on this	thiste
 	//---------------------------------------------------
 	// StartTransition()
 	// Begins fancy transition.  Will send a callback to

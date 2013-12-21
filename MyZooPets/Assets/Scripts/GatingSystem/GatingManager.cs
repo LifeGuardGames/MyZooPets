@@ -164,6 +164,7 @@ public class GatingManager : Singleton<GatingManager> {
 			ClickManager.Instance.ClickLock( listExceptions );
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
+			InventoryUIManager.Instance.HidePanel();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate) hashActiveGates[nEntering];
@@ -303,6 +304,7 @@ public class GatingManager : Singleton<GatingManager> {
 		ClickManager.Instance.ReleaseClickLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
+		InventoryUIManager.Instance.ShowPanel();
 	}
 	
 	//---------------------------------------------------

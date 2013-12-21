@@ -28,7 +28,8 @@ public class SceneTransition : MonoBehaviour {
 		// JOE commented this out....because somehow I think Start() is called after the object is set active, so it was just deactivating
 		// it again.  But how did it work before then...
 	}
-	
+
+	//working on this	
 	//---------------------------------------------------
 	// StartTransition()
 	// Begins fancy transition.  Will send a callback to

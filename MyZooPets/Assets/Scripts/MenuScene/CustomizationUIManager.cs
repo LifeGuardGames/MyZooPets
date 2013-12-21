@@ -119,6 +119,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void LoadScene() {
-        scriptTransition.StartTransition( SceneUtils.BEDROOM );
+        scriptTransition.StartTransition( SceneUtils.BEDROOM);
 	}
 }

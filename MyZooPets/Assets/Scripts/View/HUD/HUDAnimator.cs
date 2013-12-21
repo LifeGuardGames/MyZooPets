@@ -318,7 +318,7 @@ public class HUDAnimator : MonoBehaviour {
 		sprite.depth = 30;	// TODO-s make this dynamic?
 		GameObject go = sprite.gameObject;
 		go.transform.localPosition = fromPos;
-		go.transform.localScale = new Vector3(33f, 33f, 1f);
+		go.transform.localScale = new Vector3(59f, 59f, 1f);
 		go.AddComponent<DestroyOnCall>();
 		if(isScaleUpDown){
 			ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();

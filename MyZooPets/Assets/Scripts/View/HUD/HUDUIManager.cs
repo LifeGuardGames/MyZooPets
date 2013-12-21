@@ -32,14 +32,13 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 	public AnimationControl animFire;	
 	
 	// Parent for tweening
-	private GameObject tweenParent;	
+	public GameObject tweenParent;	
 	public GameObject GetTweenParent() {
 		return tweenParent;	
 	}
     
 	// Use this for initialization
 	void Awake () {
-		tweenParent = GameObject.Find( "Anchor-Top" );
 	  	hudAnimator = GetComponent<HUDAnimator>();
 	}
 	

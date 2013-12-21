@@ -30,7 +30,7 @@ GameObject:
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400028}
   m_Layer: 10
-  m_Name: Inventory
+  m_Name: InventoryPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,8 +113,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 80, y: 80, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 90, y: 90, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
 --- !u!4 &400002
@@ -124,7 +124,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -164, y: 50, z: 0}
+  m_LocalPosition: {x: -164, y: 50, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -138,7 +138,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 570.591003, y: .000244140625, z: 0}
+  m_LocalPosition: {x: 613.820374, y: .000244140625, z: 0}
   m_LocalScale: {x: 1011.00018, y: 103, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -172,7 +172,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 117.591064, y: 1, z: 0}
+  m_LocalPosition: {x: 115, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -215,8 +215,8 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
-  mAtlas: {fileID: 11400000, guid: 8abc7c4caeaecda4680ebedd42a8405f, type: 2}
-  mSpriteName: iconItemsMinus
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
+  mSpriteName: buttonNavInventoryDown
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -257,8 +257,8 @@ MonoBehaviour:
   tweenGroup: 0
   eventReceiver: {fileID: 100010}
   callWhenFinished: Unlock
-  from: {x: -164, y: 50, z: 0}
-  to: {x: -164, y: 50, z: 0}
+  from: {x: -164, y: 50, z: -10}
+  to: {x: -164, y: 50, z: -10}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -270,10 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .862745106}
+  mColor: {r: .911764681, g: .970791042, b: 1, a: .862745106}
   mPivot: 4
   mDepth: 0
-  mAtlas: {fileID: 11400000, guid: 8abc7c4caeaecda4680ebedd42a8405f, type: 2}
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -338,7 +338,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 1
+    e23: 11
     e30: 0
     e31: 0
     e32: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 0
+    e23: 10
     e30: 0
     e31: 0
     e32: 0

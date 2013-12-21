@@ -12,15 +12,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public GameObject spritePet;
     public GameObject inventoryItemPrefab;
     public PetAnimator petAnimator;
-
+	
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
     private UIButtonToggle uiButtonToggle;
-    private UISprite uiSprite;
     
     void Awake(){
         uiButtonToggle = uiButtonToggleObject.GetComponent<UIButtonToggle>();
-        uiSprite = uiButtonSpriteObject.GetComponent<UISprite>();
     }
 
     void Start(){
@@ -151,7 +149,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         // Local aux to keep track of toggles
         if(InventoryLogic.Instance.AllInventoryItems.Count > 0)
             isGuiShowing = !isGuiShowing;
-            uiSprite.spriteName = isGuiShowing ? "iconItemsMinus" : "iconItemsPlus";
+            
+		// Switch images based on item box status implement here
+		//uiSprite.spriteName = isGuiShowing ? inventoryOpenSpriteName : inventoryCloseSpriteName;
     }
 
 	public void ShowPanel(){

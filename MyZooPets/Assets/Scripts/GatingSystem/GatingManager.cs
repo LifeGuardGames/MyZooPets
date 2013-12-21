@@ -21,7 +21,7 @@ public class GatingManager : Singleton<GatingManager> {
 	public Vector3 vStartingLoc;
 	
 	// the pan to movement script; it's got constants we need...
-	public PanToMoveCamera scriptPan;
+	private PanToMoveCamera scriptPan;
 	
 	// hash of active gates that the manager is currently managing
 	private Hashtable hashActiveGates = new Hashtable();
@@ -33,6 +33,9 @@ public class GatingManager : Singleton<GatingManager> {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// set pan script
+		scriptPan = CameraManager.Instance.GetPanScript();
+		
 		// see if the gating system is enabled
 		if ( !DataManager.Instance.GameData.GatingProgress.IsEnabled() )
 			return;

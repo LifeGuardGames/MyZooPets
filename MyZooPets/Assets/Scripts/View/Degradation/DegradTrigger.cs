@@ -71,7 +71,7 @@ public class DegradTrigger : MonoBehaviour {
 		if ( OnTriggerCleaned != null )
 			OnTriggerCleaned( this, EventArgs.Empty );			
 		
-        Destroy(this.gameObject, 0.5f);
+        Destroy(this.gameObject);
     }
 
     private void ActivateParticleEffects(object senders, EventArgs args){

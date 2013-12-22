@@ -86,10 +86,10 @@ public enum DecorationTypes {
     Poster,
     Wallpaper,
     Carpet,
+	SmallPlant,
     // FloorTile,
     // TallFurniture,
     // BigFurniture,
-    // SmallPlant,
     // BigPlant,
 }
 

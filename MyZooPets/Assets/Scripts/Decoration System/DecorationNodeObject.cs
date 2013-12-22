@@ -16,6 +16,10 @@ public class DecorationNodeObject : DecorationNode {
 	// override for where the instantiated objects should go
 	public Vector3 vOverridePos;
 	
+	// this is different than override pos; instead of setting the pos it adds this offset to the current pos.
+	// this was probably a better idea from the start, but I didn't think of it...
+	public Vector3 vOffsetPos;
+	
 	//---------------------------------------------------
 	// _SetDecoration()
 	//---------------------------------------------------	
@@ -32,6 +36,8 @@ public class DecorationNodeObject : DecorationNode {
 		Vector3 vPos = transform.position;
 		if ( vOverridePos != Vector3.zero )
 			vPos = vOverridePos;
+		else if ( vOffsetPos != Vector3.zero )
+			vPos += vOffsetPos;
 		
 		if ( goPrefab ) {
 			goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;

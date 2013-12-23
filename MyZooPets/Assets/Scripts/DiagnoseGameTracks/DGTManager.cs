@@ -121,12 +121,12 @@ public class DGTManager : MinigameManager<DGTManager> {
 		return "Clinic";	
 	}	
 	
-	//---------------------------------------------------
-	// HasCutscene()
-	//---------------------------------------------------		
-	protected override bool HasCutscene() {
-		return true;
-	}	
+	// //---------------------------------------------------
+	// // HasCutscene()
+	// //---------------------------------------------------		
+	// protected override bool HasCutscene() {
+	// 	return true;
+	// }	
 	
 	//---------------------------------------------------
 	// SetSelectedZone()

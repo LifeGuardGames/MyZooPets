@@ -208,7 +208,10 @@ public class CameraManager : Singleton<CameraManager> {
 		
 		switch ( eAnchorIn ) {
 			case InterfaceAnchors.Center:
-				vTransformed.x += nativeWidth / 2;
+				// vTransformed.x += nativeWidth / 2; //Jason: This doesn't make sense for center to top conversion
+													 // so i commented it out. center to top has the same x only the
+													 //Y change...not sure why this was here in the beginning. hope i
+													 //didn't break more code
 				vTransformed.y -= nativeHeight / 2;
 				break;
 			case InterfaceAnchors.BottomLeft:

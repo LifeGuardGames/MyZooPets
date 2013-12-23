@@ -17,7 +17,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private bool runShowHintTimer = true; //True: start running hint timer
     private float timer = 0; //hint timer
     private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
-    private int pointIncrement = 250;
     private int starIncrement = 0;
 
     public bool ShowHint{
@@ -182,7 +181,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     //Reward player after the animation is done
     private void GiveReward(){
-        StatsController.Instance.ChangeStats(pointIncrement, Vector3.zero, 
+		int nXP = DataLoader_XpRewards.GetXP( "DailyInhaler", new Hashtable() );
+        StatsController.Instance.ChangeStats(nXP, Vector3.zero, 
             starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
         Invoke("QuitInhalerGame", 2.0f);
         // ShowGameOverMessage();    

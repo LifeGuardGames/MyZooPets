@@ -186,7 +186,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		if ( bTut == false ) {
 			GameObject goPrefab = Resources.Load( "DroppedStat" ) as GameObject;
 			GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
-			goDroppedItem.GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, 50 );
+			
+			int nXP = DataLoader_XpRewards.GetXP( "CleanTrigger", new Hashtable() );
+			goDroppedItem.GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, nXP );
 			
 			// set the position of the newly spawned item to be wherever this item box is
 			float fOFfsetY = Constants.GetConstant<float>( "ItemBoxTrigger_OffsetY" );

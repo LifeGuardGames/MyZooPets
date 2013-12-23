@@ -12,6 +12,11 @@ public class LevelLogic : Singleton<LevelLogic> {
     public Level CurrentLevel{
         get{return DataManager.Instance.GameData.Level.CurrentLevel;}
     }
+	
+	public bool IsAtMaxLevel() {
+		bool bMax = (int)CurrentLevel == maxLevel;
+		return bMax;
+	}
 
     void Awake(){
         maxLevel = Enum.GetNames(typeof(Level)).Length - 1;

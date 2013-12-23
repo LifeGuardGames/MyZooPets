@@ -92,7 +92,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			if ( DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus == RewardStatuses.Unclaimed ) {
 				// for now the only reward is breathing fire
 				//StatsController.Instance.ChangeFireBreaths( 1 );
-				StatsController.Instance.ChangeStats( 100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
+				
+				int nXP = DataLoader_XpRewards.GetXP( "WellapadBonus", new Hashtable() );
+				StatsController.Instance.ChangeStats( nXP, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 				

@@ -14,9 +14,20 @@ public class DataPetLevels{
         if(allLevels.ContainsKey(id)){
             petLv = allLevels[id];
         }
+		else
+			Debug.Log("No pet level data for " + id);
 
         return petLv;
     }
+	public static PetLevel GetLevel( int nLevel ) {
+		PetLevel petLevel = null;
+		
+		Level level = (Level) nLevel;
+		
+		petLevel = GetLevel( level );
+		
+		return petLevel;
+	}
 	
 	private static Dictionary<Level, PetLevel> GetData() {
 		if ( allLevels == null )

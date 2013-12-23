@@ -459,12 +459,22 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			break;
 		}
 		
-		if ( !string.IsNullOrEmpty( strConstant ) ) {
+		int nScore = GetScore();
+		
+		if ( eType == MinigameRewardTypes.XP ) {
+			// whoops, things changed, so I'm implementing this as a quick hack for now...
+			// to get xp we now use another system
+			Hashtable hashBonus = new Hashtable();
+			hashBonus["Score"] = nScore.ToString();
+			nReward = DataLoader_XpRewards.GetXP( strKey, hashBonus );
+		}
+		else if ( !string.IsNullOrEmpty( strConstant ) ) {
 			// the standard reward is the player's score divided by some constant
-			int nStandard = Constants.GetConstant<int>( strConstant );
-			int nScore = GetScore();
+			int nStandard = Constants.GetConstant<int>( strConstant );			
 			nReward = nScore / nStandard;
 		}
+		
+		Debug.Log("Reward for " + eType + " is " + nReward);
 		
 		return nReward;
 	}

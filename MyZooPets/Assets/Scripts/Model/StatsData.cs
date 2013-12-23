@@ -25,7 +25,7 @@ public class StatsData{
     public void Init(){
         Health = 80;
         Mood = 80;
-        Points = 250;
+        Points = 0;
         Stars = 300;
     }
 	

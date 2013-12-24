@@ -468,11 +468,11 @@ Transform:
   m_PrefabParentObject: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
   m_PrefabInternal: {fileID: 1965836978}
   m_GameObject: {fileID: 34192726}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.8544388, y: 10.1342163, z: 190.712189}
+  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.8544388, y: 10.1342163, z: 184.220154}
   m_LocalScale: {x: 44.5771713, y: 21.9544716, z: 21.9544716}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 393925048}
 --- !u!1 &42086407
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +723,7 @@ MonoBehaviour:
   mColor: {r: .933823526, g: .933823526, b: .933823526, a: 1}
   mPivot: 4
   mDepth: 5
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -1592,7 +1592,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1680633971}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &157121542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,7 +2429,7 @@ Transform:
   m_GameObject: {fileID: 261344321}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -42.2966309, z: -228.247925}
-  m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 773688641}
   - {fileID: 1337595258}
@@ -3324,7 +3324,7 @@ MonoBehaviour:
   mColor: {r: .25, g: .25, b: .25, a: .160784319}
   mPivot: 4
   mDepth: 6
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -4011,6 +4011,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 6.49202728}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 34192730}
   - {fileID: 704549588}
   - {fileID: 1239692218}
   - {fileID: 357711636}
@@ -4179,7 +4180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -4262,7 +4263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -4778,7 +4779,7 @@ GameObject:
   - 114: {fileID: 455972751}
   - 114: {fileID: 455972750}
   m_Layer: 10
-  m_Name: InventoryRoot
+  m_Name: InventoryDragPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4791,7 +4792,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 455972748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 0, y: 0, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 942641576}
@@ -4836,7 +4837,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 2
+    e23: 30
     e30: 0
     e31: 0
     e32: 0
@@ -5059,7 +5060,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: .419607848}
   mPivot: 4
   mDepth: 4
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -6153,7 +6154,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 809025763}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &608757178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8499,7 +8500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -8624,7 +8625,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 51
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: arrow
+  mSpriteName: buttonSymbolArrowLeft
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -9694,7 +9695,13 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1228667332}
+  - {fileID: 157121541}
+  - {fileID: 1928894076}
+  - {fileID: 1089682466}
+  - {fileID: 942641576}
+  - {fileID: 988943289}
+  - {fileID: 608757177}
+  - {fileID: 1646132846}
   m_Father: {fileID: 112235958}
 --- !u!1 &824976680
 GameObject:
@@ -10360,7 +10367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .894117653}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -10639,7 +10646,7 @@ GameObject:
   - 114: {fileID: 900012146}
   - 114: {fileID: 900012145}
   m_Layer: 0
-  m_Name: FireLevelManager
+  m_Name: FlameLevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10858,7 +10865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -10893,7 +10900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -11267,7 +11274,7 @@ Transform:
   - {fileID: 897721865}
   - {fileID: 1196253059}
   - {fileID: 1448367743}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!1001 &961898817
 Prefab:
   m_ObjectHideFlags: 0
@@ -11350,7 +11357,7 @@ MonoBehaviour:
   mColor: {r: .536764741, g: .635801196, b: 1, a: 1}
   mPivot: 4
   mDepth: -1
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -11644,7 +11651,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1093589301}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &988943290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11911,7 +11918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -12149,7 +12156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: 0
   hideDeltaY: -700
@@ -12532,7 +12539,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1236153880}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &1089682467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14170,79 +14177,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!1 &1228667331
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100002, guid: d0610c1287e2b4566a69be4b9197ec44, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1228667332}
-  - 114: {fileID: 1228667333}
-  m_Layer: 10
-  m_Name: Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1228667332
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400002, guid: d0610c1287e2b4566a69be4b9197ec44, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1228667331}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1928894076}
-  - {fileID: 1089682466}
-  - {fileID: 988943289}
-  - {fileID: 608757177}
-  - {fileID: 1646132846}
-  - {fileID: 157121541}
-  - {fileID: 942641576}
-  m_Father: {fileID: 824936003}
---- !u!114 &1228667333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400010, guid: d0610c1287e2b4566a69be4b9197ec44,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1228667331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 0
-  cullWhileDragging: 0
-  worldToLocal:
-    e00: 384
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 384
-    e12: 0
-    e13: -10421.9043
-    e20: 0
-    e21: 0
-    e22: 384
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
 --- !u!1 &1230384398
 GameObject:
   m_ObjectHideFlags: 0
@@ -14285,7 +14219,7 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: .419607848}
   mPivot: 4
   mDepth: 4
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -15781,7 +15715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -16638,7 +16572,7 @@ MonoBehaviour:
   mColor: {r: .933823526, g: .933823526, b: .933823526, a: 1}
   mPivot: 4
   mDepth: 5
-  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box30
   mFillCenter: 1
   mType: 1
@@ -17509,7 +17443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .894117653}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -19045,7 +18979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 261344322}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &1646132847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19359,7 +19293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: .894117653}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 3
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -22665,7 +22599,7 @@ Transform:
   m_Children:
   - {fileID: 10334981}
   - {fileID: 400916687}
-  m_Father: {fileID: 1228667332}
+  m_Father: {fileID: 824936003}
 --- !u!114 &1928894077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22951,7 +22885,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 393925048}
     m_Modifications:
     - target: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
       propertyPath: m_LocalPosition.x
@@ -22963,7 +22897,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 190.712189
+      value: 184.220154
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
       propertyPath: m_LocalRotation.x
@@ -22975,7 +22909,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ebc561b2aea80463b972484ba2d11394, type: 2}
       propertyPath: m_LocalRotation.w
@@ -23806,7 +23740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1
@@ -24299,7 +24233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 0
+  blockUI: 1
   startsHidden: 0
   hideDeltaX: -1
   hideDeltaY: -1

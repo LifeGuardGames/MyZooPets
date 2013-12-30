@@ -87,6 +87,15 @@ public class ChooseDecorationUI : MonoBehaviour {
 		// get the ordered list of decorations to be displayed
 		List<InventoryItem> listDecos = GetDecorationList( eType );
 		
+		// also edit the size of the grid's box collider based on how many things are in this list
+		/* // this seemed to fail, because the box collider was not being recentered or something, so it was still just too small...
+		UIGrid scriptGrid = goGrid.GetComponent<UIGrid>();
+		float fWidth = scriptGrid.cellWidth;
+		Vector3 vSize = goGrid.GetComponent<BoxCollider>().size;
+		vSize.x = ( listDecos.Count + 5 ) * fWidth;	// add +1 just for a little padding
+		goGrid.GetComponent<BoxCollider>().size = vSize;
+		*/
+		
 		// loop through the list and create an entry for each decoration
 		for ( int i = 0; i < listDecos.Count; i++ ) {
 			DecorationItem itemDeco = (DecorationItem) listDecos[i].ItemData;
@@ -95,7 +104,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 			GameObject item = NGUITools.AddChild(goGrid, prefabChooseDecoEntry);
 			ChooseDecorationUIEntry scriptEntry = item.GetComponent<ChooseDecorationUIEntry>();
 			scriptEntry.SetDecoID( itemDeco.ID );
-			item.name = (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
+			
+			// sorting in a grid is a pain in the ass...trying to use _ for decos that are OK and an X for those that are not to sort it
+			string strPrefix = bDecoOK ? "_" : "X_";
+			
+			item.name = strPrefix + (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
 			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
@@ -103,7 +116,6 @@ public class ChooseDecorationUI : MonoBehaviour {
 			// depending on if the deco can be placed or not, set certain attributes on the entry
 			UIButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>();
 			if ( bDecoOK ) {
-				
 				// set up place button callbacks
 				button.target = gameObject;
 				button.functionName = "OnPlaceButton";

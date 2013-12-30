@@ -224,8 +224,11 @@ public class PanToMoveCamera : MonoBehaviour {
     // Checks arrow key input for moving around the
     // area.  Only use for UNITY_EDITOR
     /////////////////////////////////////////////////// 
-    private void CheckArrowKeys()
-    {
+    private void CheckArrowKeys() {
+		// do a check here to see if the clickmanager can respond to movement, if it can't, don't move
+		if ( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) )
+			return;
+			
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
             // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
             //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){

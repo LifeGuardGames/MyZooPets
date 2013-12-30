@@ -149,7 +149,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
         // Pull out all levels that are 'legal' to switch to
         List<LevelGroup> potentialLevels = new List<LevelGroup>();
-        print(potentialLevels.Count);
         
         foreach (LevelGroup levelGroup in LevelGroups) {
             if (levelGroup != mCurrentLevelGroup  // Don't switch to the current group

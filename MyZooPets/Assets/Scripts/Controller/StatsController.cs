@@ -182,7 +182,7 @@ public class StatsController : Singleton<StatsController> {
 		if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.VerySick ) {
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
 			scriptPetAnim.Transition( "Transition_HealthySick" );	
-			scriptPetAnim.Transition( "Transition_HealthyVerySick" );
+			scriptPetAnim.Transition( "Transition_SickVerySick" );
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}

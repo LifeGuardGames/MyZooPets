@@ -19,7 +19,7 @@ public class LevelUpNotificationListener : MonoBehaviour {
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
-		notificationEntry.Add(NotificationPopupFields.Message, "Good Work!"); //TODO-s needs to be localized
+		notificationEntry.Add(NotificationPopupFields.Message, LevelLogic.Instance.GetLevelUpMessage()); 
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
 		notificationEntry.Add(NotificationPopupFields.Sound, sound );
 		

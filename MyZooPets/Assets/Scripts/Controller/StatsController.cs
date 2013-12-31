@@ -21,6 +21,7 @@ public class StatsController : Singleton<StatsController> {
 	public static EventHandler<EventArgs> OnSadToHappy;
 	public static EventHandler<EventArgs> OnHealthyToVerySick;
 	public static EventHandler<EventArgs> OnSickToVerySick;
+	public static EventHandler<EventArgs> OnZeroHealth;
 	//-------------------------------------------------	
 
 	private GameObject hudAnimatorObject;
@@ -63,7 +64,7 @@ public class StatsController : Singleton<StatsController> {
 	//	deltaMood: change in mood
 	//	moodLoc: starting location of the mood animation
 	//	bPlaySounds: T/F To place sound when stats changing
-	//	bAtOnce: T/F To play more than one animation at once (Joe is this right?)
+	//	bAtOnce: T/F To play more than one animation at once 
 	//	bFloaty: T/F To show floaty text to show stats change
 	//-------------------------------------------------------------------
 	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
@@ -120,8 +121,10 @@ public class StatsController : Singleton<StatsController> {
 			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance)
 				PetFloatyUIManager.Instance.CreateHealthFloaty(deltaHealth);
 
-			if ( bCheckPet )
+			if(bCheckPet){
 				CheckForHealthTransition( eOldHealth, eNewHealth );
+				CheckForZeroHealth();
+			}
 		}
 		
 		// Tell HUDAnimator to animate and change
@@ -179,7 +182,7 @@ public class StatsController : Singleton<StatsController> {
 		if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.VerySick ) {
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
 			scriptPetAnim.Transition( "Transition_HealthySick" );	
-			scriptPetAnim.Transition( "Transition_HealthyVerySick" );
+			scriptPetAnim.Transition( "Transition_SickVerySick" );
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
@@ -196,13 +199,26 @@ public class StatsController : Singleton<StatsController> {
 		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick ){
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
 
-			if(OnSickToVerySick != null){
+			if(OnSickToVerySick != null)
 				OnSickToVerySick(this, EventArgs.Empty);
-			}
+
 		}
 		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Sick )
 			scriptPetAnim.Transition( "Transition_VerySickSick" );
 		
+	}
+
+	//---------------------------------------------------	
+	// CheckForZeroHealth()
+	// Check to see if pet's health reaches zero. fire event
+	// if so 
+	//---------------------------------------------------	
+	private void CheckForZeroHealth(){
+		int health = DataManager.Instance.GameData.Stats.Health;
+
+		if(health <= 0)
+			if(OnZeroHealth != null)
+				OnZeroHealth(this, EventArgs.Empty);
 	}
 	
 	

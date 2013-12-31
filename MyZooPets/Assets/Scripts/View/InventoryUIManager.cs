@@ -73,8 +73,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
     //play chew animation from pet animator
     private void ShowPetReceivedFoodAnimation(){
-        if(!petAnimator.IsBusy())
+        if(!petAnimator.IsBusy()){
             petAnimator.PlayUnrestrictedAnim("Eat", true);
+            PetMovement.Instance.StopMoving(false);
+        }
     }
 
     //Event listener. listening to when new item is added to the inventory

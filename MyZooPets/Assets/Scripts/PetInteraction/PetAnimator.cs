@@ -106,7 +106,7 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------	
 	public void Transition( string strTransitionType ) {
 		// get a random transition based on the type
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( strTransitionType );
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData( strTransitionType );
 		
 		// queue the anim
 		QueueAnim( dataAnim );	

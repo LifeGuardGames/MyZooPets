@@ -42,7 +42,7 @@ public class LevelLogic : Singleton<LevelLogic> {
         Level currentLevel = DataManager.Instance.GameData.Level.CurrentLevel;
         PetLevel petLevel = DataPetLevels.GetLevel(currentLevel);
 
-        return petLevel.LevelUpMessage;
+        return Localization.Localize(petLevel.LevelUpMessage);
     }
 
     //------------------------------------------------

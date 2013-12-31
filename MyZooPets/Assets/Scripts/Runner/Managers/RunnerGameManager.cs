@@ -140,9 +140,10 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     //---------------------------------------------------
     public void IncreaseTimeSpeed(float inIncreaseTime) {
         //Limit timescale to 2.5. Beyond 2.5 the game becomes too fast to be playable
-        if(Time.timeScale != 2.5){
+        // if(Time.timeScale != 2.5){
             Time.timeScale += inIncreaseTime;
-        }
+            print(Time.timeScale);
+        // }
     }
 
     public void SlowTimeSpeed(float inTimeDivisor) {

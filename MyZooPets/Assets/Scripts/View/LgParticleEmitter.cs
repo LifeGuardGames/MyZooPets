@@ -70,9 +70,20 @@ public class LgParticleEmitter : MonoBehaviour {
 		// if we are to fire this trigger immediately, override the generated value
 		if ( bImmediate )
 			generatedValue = 0;
+		
+		OnEnabled( bImmediate );
+	}
+	
+	protected virtual void OnEnabled( bool bImmediate ) {
+		
 	}
 	
 	public void Disable(){
 		SetActive( false );
+		
+		OnDisabled();
+	}
+	
+	protected virtual void OnDisabled() {
 	}
 }

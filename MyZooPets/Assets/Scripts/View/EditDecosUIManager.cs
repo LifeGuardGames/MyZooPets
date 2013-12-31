@@ -183,6 +183,12 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------
 	public void CloseChooseMenu() {
 		CloseChooseMenu_();	
+		
+		// send out a callback for deco nodes to update their highlight state (the menu is closing so none should be highlighted)
+		if ( OnNodeSelected != null ) {
+			NodeSelectedArgs args = new NodeSelectedArgs();
+			OnNodeSelected( this, args );
+		}		
 	}
 	
 	public void CloseChooseMenu_( bool bShowExit = true ) {

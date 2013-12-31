@@ -109,6 +109,9 @@ public class GameTutorial_Flame : GameTutorial {
 		// unsub from callback
 		PetAnimator.OnBreathEnded -= OnBreathEnded;
 		
+		// at this point the user has done battle with the smoke monster, so I'm going to call highlight on a bogus task here just to unhighlight everything
+		WellapadMissionController.Instance.HighlightTask( "" );
+		
 		// pet began to breath fire, so advance the tut
 		Advance();
 	}	

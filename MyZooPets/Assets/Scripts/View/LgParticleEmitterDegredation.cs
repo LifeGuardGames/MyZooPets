@@ -8,21 +8,41 @@ public class LgParticleEmitterDegredation : LgParticleEmitter {
 	
 	public GameObject targetDestination;
 	
+	// is this trigger subscribed to the partition changing event?
+	private bool bSubscribed = false;
+	
 	// amount of damage the emitter particles cause the pet's health when they collide
 	private int nDamage;
 	private int GetDamage() {
 		return nDamage;	
 	}
 	
-	protected override void _Start() {
-		// listen for when the player changes partitions, as this emitter may need to act
-		CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;		
+	protected override void OnEnabled( bool bImmediate ) {
+		// since the emitter is being enabled, it now needs to subscribe to events
+		Subscribe( true );
+	}
+	
+	///////////////////////////////////////////
+	// Subscribe()
+	// This function handles the subscription
+	// and unsubscription for whatever events
+	// this emitter should listen to.
+	// Right now it is just partition changing.
+	///////////////////////////////////////////	
+	private void Subscribe( bool bSub ) {
+		if ( bSub && !bSubscribed ) {
+			bSubscribed = true; 	
+			CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;	
+		}
+		else if ( !bSub && bSubscribed && CameraManager.Instance ) {
+			bSubscribed = false;	
+			CameraManager.Instance.GetPanScript().OnPartitionChanging -= OnPartitionChanging;
+		}
 	}
 	
     protected override void _OnDestroy(){
-		// stop listening to the partition changed event
-		if ( CameraManager.Instance )
-			CameraManager.Instance.GetPanScript().OnPartitionChanging -= OnPartitionChanging;
+		// since the emitter is being destroyed, time to unsubscribe to events
+		Subscribe( false );
     }
 	
 	protected override void _ExtendedAction(GameObject emittedObject){
@@ -74,7 +94,7 @@ public class LgParticleEmitterDegredation : LgParticleEmitter {
 			}
 		}
 		else {
-			// if there is no gated in this room, we can spawn skulls again (but only if the tut is through)
+			// if there is no gate in this room, we can spawn skulls again (but only if the tut is through)
 			if ( !isActive )
 				Enable();
 		}

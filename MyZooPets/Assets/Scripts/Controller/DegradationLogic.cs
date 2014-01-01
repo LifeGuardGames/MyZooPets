@@ -38,12 +38,24 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// something like that
 		DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
 		
-		// calculate changes in the pets mood
-		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
-		StartCoroutine( CalculateMoodDegradation( sinceLastPlayed ) );
-		
+    	RefreshDegradationCheck();
+
 		// set up triggers to be spawned by the UI manager
 		SetUpTriggers();       
+    }
+
+    void OnApplicationPause(bool isPaused){
+    	//Refresh logic
+    	if(!isPaused){
+    		RefreshDegradationCheck();
+    	}
+    }
+
+    private void RefreshDegradationCheck(){
+		// calculate changes in the pets mood
+		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
+		StartCoroutine(CalculateMoodDegradation(sinceLastPlayed));
+    	StartCoroutine(CalculateHealthDegradation());
     }
 	
 	//---------------------------------------------------
@@ -175,6 +187,32 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
 		if ( nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TIME_DECAY_TUT ) )
 			TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
+	}
+
+	private IEnumerator CalculateHealthDegradation(){
+		// wait a frame, or else the notification manager won't work properly
+		yield return 0;
+
+		//get next play period
+		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+		
+		//different in hours between now and next play period
+		TimeSpan timeSinceLastPlayPeriod = LgDateTime.GetTimeNow() - nextPlayPeriod;
+
+		//if within 12 hours no punishment
+		//if > 12 hrs punishment for every 12 hrs miss
+		int numOfMissedPlayPeriod = (int)timeSinceLastPlayPeriod.TotalHours / 12;
+
+		if(numOfMissedPlayPeriod > 0){
+			//max punishment is 2 play period
+			if(numOfMissedPlayPeriod > 2) numOfMissedPlayPeriod = 2;
+
+			StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
+				numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
+
+			//after punishment move next play period
+			PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
+		}
 	}
 
     //use the method when a trigger has been destroyed by user

@@ -17,6 +17,9 @@ public class Analytics : MonoBehaviour {
     public const string ITEM_STATUS_USED = "Used";
     public const string ITEM_STATUS_RECEIVED = "Received";
 
+    public const string ITEM_STATS_HEALTH = "Health";
+    public const string ITEM_STATS_MOOD = "Mood";
+
     public const string TASK_STATUS_COMPLETE = "Complete";
     public const string TASK_STATUS_FAIL = "Fail";
 
@@ -149,6 +152,14 @@ public class Analytics : MonoBehaviour {
         if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID)){
             GA.API.Design.NewEvent("Items:" + itemStatus + ":" + 
                 Enum.GetName(typeof(ItemType), itemType) + ":" + itemID);
+        }
+    }
+
+    //What is the pet's health or mood when an item is used
+    public void ItemEventWithPetStats(string itemID, string statsType, int statsValue){
+        if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType)){
+            GA.API.Design.NewEvent("Items:" + ITEM_STATUS_USED + ":" + itemID + ":" +
+                statsType, (float) statsValue);
         }
     }
 

@@ -64,7 +64,28 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
+
+
 	
+	//---------------------------------------------------
+	// _CloseUI()
+	//---------------------------------------------------	
+	protected override void _CloseUI(){
+		//Show other UI object
+		NavigationUIManager.Instance.ShowPanel();		
+		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
+		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
+	}
+
+	public void OpenToSubCategoryFood(){
+		OpenToSubCategory("Food", true);
+	}
+
+	public void OpenToSubCategoryItems(){
+		OpenToSubCategory("Items", true);
+	}
+
 	//---------------------------------------------------
 	// OpenToSubCategory()
 	// Special function used to open the store UI 
@@ -79,17 +100,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}	
 		
 		CreateSubCategoryItemsWithString( strCat, bShortcut );		
-	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
-	protected override void _CloseUI(){
-		//Show other UI object
-		NavigationUIManager.Instance.ShowPanel();		
-		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
-		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 
 	//---------------------------------------------------

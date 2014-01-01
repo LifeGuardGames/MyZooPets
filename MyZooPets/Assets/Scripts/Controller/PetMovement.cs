@@ -100,8 +100,9 @@ public class PetMovement : Singleton<PetMovement> {
 			return;
 		
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
-        if(!ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving ) || IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
-		
+        if(!ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving ) || 
+            IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
+	   
 		AudioManager.Instance.PlayClip( strSoundMove );
 
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    

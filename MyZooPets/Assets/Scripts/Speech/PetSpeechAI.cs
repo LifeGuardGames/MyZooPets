@@ -30,9 +30,9 @@ public class PetSpeechAI : MonoBehaviour{
     public void ShowHappyToSadMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HAPPY_TO_SAD_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "iconStore");
+        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenUI");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryFood");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
@@ -45,18 +45,18 @@ public class PetSpeechAI : MonoBehaviour{
     public void ShowSickToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "iconStore");
+        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenUI");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryItems");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
     public void ShowHealthyToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "iconStore");
+        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenUI");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryItems");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 

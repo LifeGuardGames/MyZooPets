@@ -29,6 +29,8 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	
 	// Update is called once per frame
     void LateUpdate() {
+    	// if(!RunnerGameManager.Instance.GameRunning) return;
+    	
 		if (mNextGroup != null) {
             mTransitionPulse -= Time.deltaTime / Time.timeScale;
 			if (mTransitionPulse <= 0) {

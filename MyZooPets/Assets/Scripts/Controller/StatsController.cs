@@ -67,7 +67,7 @@ public class StatsController : Singleton<StatsController> {
 	//  Optional Param:
 	//	bPlaySounds: T/F To place sound when stats changing
 	//	bAtOnce: T/F To play more than one animation at once 
-	//	bFloaty: T/F To show floaty text to show stats change on the pet only
+	//	bFloaty: T/F To show floaty text to show stats change on the pet only, REMOVES TWEEN ANIMATION!
 	//-------------------------------------------------------------------
 	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
 		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, 
@@ -136,8 +136,8 @@ public class StatsController : Singleton<StatsController> {
 		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
 		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
 		
-		if ( hudAnimator != null && !bBeingDestroyed )
-			StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds, bAtOnce ) );
+		if (hudAnimator != null && !bBeingDestroyed)
+			StartCoroutine(hudAnimator.StartCurveStats(listStats, bPlaySounds, bAtOnce, bFloaty));
 	}	
 	
 	//---------------------------------------------------

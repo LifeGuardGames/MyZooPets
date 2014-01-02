@@ -5637,7 +5637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d1d080b98af4c98a6851da3b62495b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechDuration: 1
+  speechDuration: 5
   isDebug: 0
 --- !u!1001 &456859732
 Prefab:
@@ -7849,10 +7849,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a1bdca6d4c780241a731016c0439cc4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
-  m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
   m_EditorClassIdentifier: 
 --- !u!114 &606378165
@@ -11170,6 +11166,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 872707278}
   - 114: {fileID: 455285603}
+  - 114: {fileID: 872707275}
   m_Layer: 0
   m_Name: Speech
   m_TagString: Untagged
@@ -11177,6 +11174,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &872707275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: 166a2eeed8813427aab068d31c780e04,
+    type: 2}
+  m_PrefabInternal: {fileID: 319079335}
+  m_GameObject: {fileID: 872707274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5494d49ce30466388017771bd24d1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &872707278
 Transform:
   m_ObjectHideFlags: 0
@@ -20851,7 +20860,7 @@ MonoBehaviour:
   strAnalytics: 
   strScene: Yard
   scriptTransition: {fileID: 1183442117}
-  vOffset: {x: -5, y: 0, z: -10}
+  vOffset: {x: 0, y: 0, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
   fTime: 2
   strLoadingScreen: LoadingScreen
@@ -28666,6 +28675,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9dd3ca79b3e6bba488366cfd6b0b3410, type: 2}
+    - target: {fileID: 11400004, guid: 5198dfe55690d4f48872746d2e14a2d3, type: 2}
+      propertyPath: vOffset.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5198dfe55690d4f48872746d2e14a2d3, type: 2}
   m_RootGameObject: {fileID: 1540616565}

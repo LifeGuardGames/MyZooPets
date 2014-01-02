@@ -30,14 +30,14 @@ public class ScoreUIManager : Singleton<ScoreUIManager> {
     }
 
     public void UpdateCoins(){
-        coinLabel.text = Localization.Localize("RUNNER_COINS") + ScoreManager.Instance.Coins;
+        coinLabel.text = ScoreManager.Instance.Coins.ToString();
     }
 
     public void UpdateDistance(){
-        distanceLabel.text = Localization.Localize("RUNNER_DISTANCE") + ScoreManager.Instance.Distance;
+        distanceLabel.text = ScoreManager.Instance.Distance.ToString();
     }
 
     public void UpdateScore(){
-        // scoreLabel.text = Localization.Localize("RUNNER_SCORE") + ScoreManager.Instance.Score;
+        // scoreLabel.text = ScoreManager.Instance.Score;
     }
 }

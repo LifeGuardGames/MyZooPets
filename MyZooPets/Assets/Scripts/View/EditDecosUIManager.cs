@@ -125,8 +125,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		// close this UI and show the edit decos button
 		CloseChooseMenu_( false );
 		tweenEdit.Show();
-		
+	
 		// open the shop
+		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
 		StoreUIManager.Instance.OpenToSubCategory( "Decorations", true );
 		
 		// open the specific sub category in the shop
@@ -140,12 +141,14 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	// store closes and the user had opened the store
 	// from the deco system.
 	//---------------------------------------------------	
-	public void ReopenChooseMenu() {
+	private void ReopenChooseMenu(object sender, EventArgs args) {
 		// hide the edit button
 		tweenEdit.Hide();
 		
 		// update the menu
 		UpdateChooseMenu( nodeSaved );	
+
+		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}
 	
 	//---------------------------------------------------

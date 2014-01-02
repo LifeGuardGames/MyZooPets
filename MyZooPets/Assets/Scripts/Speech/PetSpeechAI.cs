@@ -32,7 +32,8 @@ public class PetSpeechAI : MonoBehaviour{
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HAPPY_TO_SAD_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryFood");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+            "OpenToSubCategoryFoodWithLockAndCallBack");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
@@ -47,7 +48,8 @@ public class PetSpeechAI : MonoBehaviour{
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryItems");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+            "OpenToSubCategoryItemsWithLockAndCallBack");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
@@ -56,7 +58,8 @@ public class PetSpeechAI : MonoBehaviour{
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, "OpenToSubCategoryItems");
+        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+            "OpenToSubCategoryItemsWithLockAndCallBack");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 

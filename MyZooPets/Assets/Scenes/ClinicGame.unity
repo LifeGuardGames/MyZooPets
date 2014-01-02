@@ -5732,7 +5732,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 325853044}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rewards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13289,7 +13289,7 @@ Transform:
   m_GameObject: {fileID: 792511249}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 523.960022, y: -29.5525818, z: -116.351273}
-  m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 545594379}
   - {fileID: 2082923397}
@@ -16024,7 +16024,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1072524222}
   - 114: {fileID: 1072524223}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: _Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18054,7 +18054,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1288328155}
   - 114: {fileID: 1288328156}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: _Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31240,7 +31240,7 @@ GameObject:
   - 4: {fileID: 1942312932}
   - 114: {fileID: 1942312934}
   m_Layer: 10
-  m_Name: LabelXP
+  m_Name: LabelGold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31582,8 +31582,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 2018245887}
   - 114: {fileID: 2018245888}
+  - 114: {fileID: 2018245889}
   m_Layer: 0
-  m_Name: StatsController
+  m_Name: StatsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31613,6 +31614,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scriptPetAnim: {fileID: 0}
+--- !u!114 &2018245889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 3ca82d4420cde4250a558273287d784b,
+    type: 2}
+  m_PrefabInternal: {fileID: 408994932}
+  m_GameObject: {fileID: 2018245886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87a87ec6f2074492b6eb363caf485b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hospitalBillCost: 300
 --- !u!1 &2031593292
 GameObject:
   m_ObjectHideFlags: 0
@@ -32728,7 +32742,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2035032513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .679931641, y: -.679641724, z: 0}
+  m_LocalPosition: {x: 1.25183105, y: 1.25079346, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 889925890}
@@ -34063,7 +34077,7 @@ GameObject:
   - 4: {fileID: 2055739477}
   - 114: {fileID: 2055739479}
   m_Layer: 10
-  m_Name: LabelStar
+  m_Name: LabelXP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34504,8 +34518,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tween: {fileID: 1072524223}
   demuxHUD: {fileID: 792511251}
-  labelXP: {fileID: 1942312934}
-  labelStars: {fileID: 2055739479}
+  labelXP: {fileID: 2055739479}
+  labelStars: {fileID: 1942312934}
   labelScore: {fileID: 851490575}
   goIconStars: {fileID: 1566827203}
   goIconXP: {fileID: 1574997531}

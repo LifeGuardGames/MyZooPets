@@ -29,7 +29,11 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 	}	
 
     public override int GetScore() {
-        return ScoreManager.Instance.Score;    
+		// the score was previously being calculated in that variable as some kind of weird distance traveled / stuff...
+       // return ScoreManager.Instance.Score;    
+		
+		// just changing it to distance run + coins
+		return ScoreManager.Instance.Distance + ScoreManager.Instance.Coins;
     }
 	
 	// Use this for initialization

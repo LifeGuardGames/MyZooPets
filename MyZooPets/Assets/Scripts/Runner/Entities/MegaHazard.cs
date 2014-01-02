@@ -16,6 +16,7 @@ public class MegaHazard : Singleton<MegaHazard> {
 	public float DistanceRegainTime = 1f;
 	public float GapClosingIncrement = 0.01f;
 	public float SlowDownStayDuration = 1.0f;
+	public ParticleSystem hazardParticle;
 
 	private float mSlowDownStayPulse = 0f;
 	private float mDistanceUntilTarget = 0f;
@@ -23,9 +24,12 @@ public class MegaHazard : Singleton<MegaHazard> {
 	private float mCurrentDistanceFromPlayer = 0f;
 	private Vector3 mDestinationPosition = Vector3.zero;
 
-	// Use this for initialization
 	void Start() {
-		// Reset();
+		RunnerGameManager.OnStateChanged += GameStateChanged;
+	}
+
+	void OnDestroy(){
+		RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 	
 	// Update is called once per frame
@@ -65,6 +69,16 @@ public class MegaHazard : Singleton<MegaHazard> {
 
 	public float GetCurrentOffsetDistance() {
 		return mCurrentDistanceFromPlayer - mDistanceUntilTarget;
+	}
+
+	private void GameStateChanged(object sender, GameStateArgs args){
+		MinigameStates gameState = args.GetGameState();
+		if(gameState == MinigameStates.Paused){
+			hazardParticle.Pause();
+		}else if(gameState == MinigameStates.Playing){
+			hazardParticle.Play();
+
+		}
 	}
 
 	//Make hazard move with the player

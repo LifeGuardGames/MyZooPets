@@ -36,6 +36,23 @@ public class RunnerAnimationController : LgCharacterAnimator {
         // only call this AFTER we have set our loading data
         base.Start();
         Flip(true);
+
+        RunnerGameManager.OnStateChanged += GameStateChanged;
+    }
+
+    new void OnDestroy(){
+        RunnerGameManager.OnStateChanged -= GameStateChanged;
+
+        base.OnDestroy();
+    }
+
+    private void GameStateChanged(object sender, GameStateArgs args){
+        MinigameStates gameState = args.GetGameState();
+        if(gameState == MinigameStates.Paused){
+            Pause();
+        }else if(gameState == MinigameStates.Playing){
+            Resume();
+        }
     }
 
     void OnGrounded(){
@@ -61,5 +78,11 @@ public class RunnerAnimationController : LgCharacterAnimator {
     private void Fall(){
         PlayClip("fall");
     }
+
+    // void OnGUI(){
+    //     if(GUI.Button(new Rect(0, 0, 100, 100), "pause anim")){
+    //         Pause();
+    //     }
+    // }
 
 }

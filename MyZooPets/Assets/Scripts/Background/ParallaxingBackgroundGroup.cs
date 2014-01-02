@@ -13,13 +13,11 @@ using System.Collections.Generic;
 public class ParallaxingBackgroundGroup : MonoBehaviour {
     public string GroupID = "";
     public List<ParallaxingBackground> ParralaxingTextures = new List<ParallaxingBackground>();
-
-	// Use this for initialization
-	void Start() {
-	}
 	
 	// Update is called once per frame
     void LateUpdate() {
+        if(!RunnerGameManager.Instance.GameRunning) return;
+
         foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
         {
             float currentSpeed = currentParallax.ScrollSpeed * Time.time;

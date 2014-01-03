@@ -23,6 +23,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	
     void Awake(){
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
+        Debug.Log("skipComic: " + skipComic);
     }
 
     void Start(){

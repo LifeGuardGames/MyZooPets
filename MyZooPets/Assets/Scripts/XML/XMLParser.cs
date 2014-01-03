@@ -505,6 +505,7 @@ public class XMLParser
 				// What kind of tag start?
 				switch (xmlString[i + 1]) {
 				case '?':
+					Debug.Log("declaration");
 					currentToken = XMLTokenType.Declaration;
 					i++;
 				break;

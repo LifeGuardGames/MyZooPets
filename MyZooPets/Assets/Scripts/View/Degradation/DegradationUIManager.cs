@@ -23,6 +23,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 
     void Start(){
         DegradationLogic.OnRefreshTriggers += PlaceTriggers;
+        PlaceTriggers(this, EventArgs.Empty); //required for first initialization
     }
 
     void OnDestroy(){

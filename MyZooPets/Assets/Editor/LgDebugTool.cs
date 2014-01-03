@@ -21,7 +21,9 @@ public class LgDebugTool : EditorWindow
                 PlayerPrefs.Save();
             }
 
-        GUILayout.EndVertical(); 
+        GUILayout.Label("Critical Constants Editor", EditorStyles.boldLabel);
+
+        EditorGUILayout.EndVertical(); 
 
         // groupEnabled = EditorGUILayout.BeginToggleGroup ("Optional Settings", groupEnabled);
         //     myBool = EditorGUILayout.Toggle ("Toggle", myBool);

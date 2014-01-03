@@ -12,7 +12,9 @@ public class SmokeMonsterController : MonoBehaviour {
 	private string currentMouthSpritesName;
 	private const string HURT_EYES_SPRITE_NAME = "eyesHurt";
 	
-	void Start () {
+	// Joe -- I changed this from Start() to Awake() because the gating manager's Start() was being called before this Start() which was leading
+	// to problems because anim had not yet been initialized.
+	void Awake () {
 		anim = face.animation;
 		SetNormalAnimation("eyes1", "mouth1");
 	}

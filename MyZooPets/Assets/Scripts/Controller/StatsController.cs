@@ -46,10 +46,10 @@ public class StatsController : Singleton<StatsController> {
 	}	
 	
 	// Locations are on screen space
-	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
-		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
-		ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true, false );
-	}
+	// public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
+	// 	Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
+	// 	ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true);
+	// }
 
 	//-------------------------------------------------------------------
 	// ChangeStats()
@@ -63,13 +63,15 @@ public class StatsController : Singleton<StatsController> {
 	//	healthLoc: starting location of the health animation
 	//	deltaMood: change in mood
 	//	moodLoc: starting location of the mood animation
+
+	//  Optional Param:
 	//	bPlaySounds: T/F To place sound when stats changing
 	//	bAtOnce: T/F To play more than one animation at once 
-	//	bFloaty: T/F To show floaty text to show stats change
+	//	bFloaty: T/F To show floaty text to show stats change on the pet only, REMOVES TWEEN ANIMATION!
 	//-------------------------------------------------------------------
 	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
 		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, 
-		bool bPlaySounds, bool bAtOnce = false, bool bFloaty = true){
+		bool bPlaySounds = true, bool bAtOnce = false, bool bFloaty = false){
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
@@ -134,8 +136,8 @@ public class StatsController : Singleton<StatsController> {
 		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
 		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
 		
-		if ( hudAnimator != null && !bBeingDestroyed )
-			StartCoroutine( hudAnimator.StartCurveStats( listStats, bPlaySounds, bAtOnce ) );
+		if (hudAnimator != null && !bBeingDestroyed)
+			StartCoroutine(hudAnimator.StartCurveStats(listStats, bPlaySounds, bAtOnce, bFloaty));
 	}	
 	
 	//---------------------------------------------------

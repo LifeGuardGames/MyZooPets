@@ -115,7 +115,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 
 		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero,
-			healthAmount, Vector3.zero, moodAmount, Vector3.zero);	
+			healthAmount, Vector3.zero, moodAmount, Vector3.zero, true, bFloaty:true);	
 	}
 
 	//Get list sorted by cost in ascending order from the item dictionary

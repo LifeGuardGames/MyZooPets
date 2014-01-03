@@ -7,13 +7,8 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     //Return the next time the user can collect bonuses
     public DateTime NextPlayPeriod{
         get{return DataManager.Instance.GameData.Calendar.NextPlayPeriod;}
-		set{DataManager.Instance.GameData.Calendar.NextPlayPeriod = value;}
+		// set{DataManager.Instance.GameData.Calendar.NextPlayPeriod = value;}
     }
-
-    // public bool IsRewardClaimed{
-        // get{return DataManager.Instance.GameData.Calendar.IsRewardClaimed;}
-        // set{DataManager.Instance.GameData.Calendar.IsRewardClaimed = value;}
-    // } 
 
     //Check if the user can play the inhaler game
     public bool CanUseRealInhaler{
@@ -44,16 +39,28 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     // Based on the time now return the next reward time
     //-----------------------------------------------
     public void CalculateNextPlayPeriod(){
-        DateTime nextPlayTime;
+        DateTime nextPlayPeriod;
         if(LgDateTime.GetTimeNow().Hour < 12){ 
             //next reward time at noon
-            nextPlayTime = DateTime.Today.AddHours(12);
+            nextPlayPeriod = LgDateTime.Today.AddHours(12);
         }else{ 
             //next reward time at midnight
-            nextPlayTime = DateTime.Today.AddDays(1);
-            // nextPlayTime = new DateTime(2013, 7, 23, 17, 17, 0);
+            nextPlayPeriod = LgDateTime.Today.AddDays(1);
         }
 
-        NextPlayPeriod = nextPlayTime;
+        DataManager.Instance.GameData.Calendar.NextPlayPeriod = nextPlayPeriod;
+    }
+
+    public void CalculateCurrentPlayPeriod(){
+        DateTime currentPlayPeriod;
+        if(LgDateTime.GetTimeNow().Hour < 12){ 
+            //next reward time at noon
+            currentPlayPeriod = LgDateTime.Today;
+        }else{ 
+            //next reward time at midnight
+            currentPlayPeriod = LgDateTime.Today.AddHours(12);
+        }
+
+        DataManager.Instance.GameData.Calendar.NextPlayPeriod = currentPlayPeriod;
     }
 }

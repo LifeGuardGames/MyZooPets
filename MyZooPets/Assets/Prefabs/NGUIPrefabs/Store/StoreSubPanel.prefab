@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 10
@@ -127,7 +126,6 @@ GameObject:
   - 114: {fileID: 11400062}
   - 114: {fileID: 11400060}
   - 114: {fileID: 11400058}
-  - 114: {fileID: 11400056}
   - 114: {fileID: 11400018}
   m_Layer: 10
   m_Name: BackButton
@@ -145,7 +143,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400016}
   - 65: {fileID: 6500002}
-  - 114: {fileID: 11400024}
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400022}
   m_Layer: 10
@@ -164,7 +161,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400018}
   - 65: {fileID: 6500004}
-  - 114: {fileID: 11400026}
   - 114: {fileID: 11400030}
   - 114: {fileID: 11400028}
   m_Layer: 10
@@ -233,7 +229,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400026}
   - 65: {fileID: 6500006}
-  - 114: {fileID: 11400034}
   - 114: {fileID: 11400032}
   - 114: {fileID: 11400036}
   m_Layer: 10
@@ -316,7 +311,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400036}
   - 65: {fileID: 6500008}
-  - 114: {fileID: 11400052}
   - 114: {fileID: 11400048}
   - 114: {fileID: 11400050}
   m_Layer: 10
@@ -401,7 +395,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400046}
   - 65: {fileID: 6500010}
-  - 114: {fileID: 11400084}
   - 114: {fileID: 11400078}
   - 114: {fileID: 11400080}
   m_Layer: 10
@@ -469,7 +462,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400054}
   - 65: {fileID: 6500012}
-  - 114: {fileID: 11400096}
   - 114: {fileID: 11400090}
   - 114: {fileID: 11400094}
   m_Layer: 10
@@ -504,7 +496,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400058}
   - 65: {fileID: 6500014}
-  - 114: {fileID: 11400106}
   - 114: {fileID: 11400102}
   - 114: {fileID: 11400104}
   m_Layer: 10
@@ -735,7 +726,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -.200000003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400014}
@@ -1185,8 +1176,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .349999994
-  hideDelay: .25
+  showDelay: .289999992
+  hideDelay: .150000006
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1199,21 +1190,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1340,9 +1316,9 @@ MonoBehaviour:
   showDuration: .200000003
   hideDuration: .200000003
   showDelay: 0
-  hideDelay: .200000003
-  easeHide: 26
-  easeShow: 27
+  hideDelay: .100000001
+  easeHide: 4
+  easeShow: 4
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -1422,8 +1398,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .5
-  hideDelay: .100000001
+  showDelay: .379999995
+  hideDelay: .0599999987
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1436,36 +1412,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &11400024
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
---- !u!114 &11400026
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1487,7 +1433,7 @@ MonoBehaviour:
   showDuration: .100000001
   hideDuration: .100000001
   showDelay: .200000003
-  hideDelay: .400000006
+  hideDelay: .239999995
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1530,21 +1476,6 @@ MonoBehaviour:
   functionName: CreateSubCategoryItemsTab
   trigger: 0
   includeChildren: 0
---- !u!114 &11400034
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1565,8 +1496,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .25
-  hideDelay: .349999994
+  showDelay: .230000004
+  hideDelay: .209999993
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1691,7 +1622,7 @@ MonoBehaviour:
   isDebug: 0
   startsHidden: 1
   lastFinishedShowObject: {fileID: 100054}
-  lastFinishedHideObject: {fileID: 100024}
+  lastFinishedHideObject: {fileID: 100018}
   isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -1736,8 +1667,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .400000006
-  hideDelay: .200000003
+  showDelay: .319999993
+  hideDelay: .119999997
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -1750,21 +1681,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &11400052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1786,19 +1702,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &11400056
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae49b51f26ad45c4981e9497f68bf686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  demux: {fileID: 0}
-  toggle: {fileID: 0}
 --- !u!114 &11400058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1936,7 +1839,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 0
+    e23: .200000003
     e30: 0
     e31: 0
     e32: 0
@@ -1985,8 +1888,8 @@ MonoBehaviour:
   hideDeltaX: -1
   hideDeltaY: -1
   hideDeltaZ: 0
-  showDuration: 0
-  hideDuration: 0
+  showDuration: .200000003
+  hideDuration: .200000003
   showDelay: 0
   hideDelay: 0
   easeHide: 26
@@ -2057,8 +1960,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .300000012
-  hideDelay: .300000012
+  showDelay: .25999999
+  hideDelay: .180000007
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -2084,21 +1987,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   draggablePanel: {fileID: 11400092}
   panel: {fileID: 0}
---- !u!114 &11400084
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2148,7 +2036,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 0
+    e23: .200000003
     e30: 0
     e31: 0
     e32: 0
@@ -2217,8 +2105,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .550000012
-  hideDelay: .0500000007
+  showDelay: .409999996
+  hideDelay: .0299999993
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -2231,21 +2119,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &11400096
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2320,8 +2193,8 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .100000001
   hideDuration: .100000001
-  showDelay: .449999988
-  hideDelay: .150000006
+  showDelay: .349999994
+  hideDelay: .0900000036
   easeHide: 26
   easeShow: 27
   ShowTarget: {fileID: 0}
@@ -2334,21 +2207,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!114 &11400106
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .899999976, y: .899999976, z: .899999976}
-  duration: 0
 --- !u!114 &11400108
 MonoBehaviour:
   m_ObjectHideFlags: 1

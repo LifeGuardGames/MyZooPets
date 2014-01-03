@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class RunnerGameManager : MinigameManager<RunnerGameManager> {
+    
     //public SceneTransition scriptTransition;
     public bool GameRunning{
         get { return GetGameState() == MinigameStates.Playing; } 
@@ -28,7 +29,11 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 	}	
 
     public override int GetScore() {
-        return ScoreManager.Instance.Score;    
+		// the score was previously being calculated in that variable as some kind of weird distance traveled / stuff...
+       // return ScoreManager.Instance.Score;    
+		
+		// just changing it to distance run + coins
+		return ScoreManager.Instance.Distance + ScoreManager.Instance.Coins;
     }
 	
 	// Use this for initialization
@@ -64,6 +69,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 		// send out coins task
 		int nCoins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted( "Coins" + GetMinigameKey(), nCoins );
+
+        ResetGame();
 	}		
 	
     //---------------------------------------------------
@@ -141,8 +148,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     public void IncreaseTimeSpeed(float inIncreaseTime) {
         //Limit timescale to 2.5. Beyond 2.5 the game becomes too fast to be playable
         // if(Time.timeScale != 2.5){
-            Time.timeScale += inIncreaseTime;
-            print(Time.timeScale);
+        Time.timeScale += inIncreaseTime;
         // }
     }
 

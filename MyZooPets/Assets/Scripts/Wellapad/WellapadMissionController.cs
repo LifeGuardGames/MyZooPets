@@ -164,15 +164,19 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
 		if ( DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_LAST ) == false )
 			bRefresh = false;
-		
+
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if ( bRefresh ) {
-			
+
 			//Before reseting mission. Go through current mission and send failed tasks to analytics server
 			foreach ( KeyValuePair<string, Mission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks ) {
-				foreach ( KeyValuePair<string, WellapadTask> task in mission.Value.Tasks ) {
-					if(task.Value.Completed == WellapadTaskCompletionStates.Uncompleted){
-						Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, task.Value.MissionID, task.Value.TaskID);
+				foreach ( KeyValuePair<string, WellapadTask> taskKeyValuePair in mission.Value.Tasks ) {
+					WellapadTask task = taskKeyValuePair.Value;
+
+					//task is incomplete
+					if(task.Completed == WellapadTaskCompletionStates.Uncompleted){
+						Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, 
+							task.MissionID, task.TaskID);
 					}
 				}
 			}

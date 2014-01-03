@@ -26,11 +26,12 @@ public class CalendarData{
 
         //initialize this week with sample data to be used for tutorial
         // EntriesThisWeek = PlayPeriodLogic.NullUntilTodayWeek(LgDateTime.GetTimeNow());
-
-        NextPlayPeriod = LgDateTime.GetTimeNow(); 
-		//NextPlayPeriod = LgDateTime.GetTimeNow().AddSeconds(70);
-		
-        // set to one day before today so that the entry will be generated for the first day
-        // LastCalendarOpenedTime = DateTime.Today.AddDays(-1);
+        if(LgDateTime.GetTimeNow().Hour < 12){ 
+            //next reward time at noon
+            NextPlayPeriod = LgDateTime.Today;
+        }else{ 
+            //next reward time at midnight
+            NextPlayPeriod = LgDateTime.Today.AddHours(12);
+        }
     }
 }

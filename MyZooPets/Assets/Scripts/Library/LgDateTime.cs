@@ -28,5 +28,11 @@ public class LgDateTime{
         return now;
     }
 
+    public static DateTime Today{
+        get{
+            return DateTime.Today;
+        }
+    }
+
     
 }

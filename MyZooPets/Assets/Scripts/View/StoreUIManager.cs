@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
+	public static EventHandler<EventArgs> OnShortcutModeEnd;
+
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
@@ -18,7 +20,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// store related sounds
 	public string strSoundChangeTab;
 	public string strSoundBuy;
-	
+
+	private bool bShortcutMode; //True: open store directly to specific item category
+								//False: open the store base panel first	
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
@@ -66,22 +70,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 	
 	//---------------------------------------------------
-	// OpenToSubCategory()
-	// Special function used to open the store UI 
-	// straight up to a certain category.
-	//---------------------------------------------------	
-	public void OpenToSubCategory( string strCat, bool bShortcut = false  ) {		
-		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
-		// bypasses the normal means of opening a shop, so we need to do some special things in this case
-		if ( bShortcut ) {
-			// if we are shortcutting, we have to tween the bg in now	
-			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
-		}	
-		
-		CreateSubCategoryItemsWithString( strCat, bShortcut );		
-	}
-	
-	//---------------------------------------------------
 	// _CloseUI()
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
@@ -90,6 +78,50 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
+	}
+
+	//----------------Hacky code to fix store shortcut problems. need a better solution
+	public void OpenToSubCategoryFoodWithLockAndCallBack(){
+		NavigationUIManager.Instance.HidePanel();
+		ClickManager.Instance.ClickLock(GetClickLockExceptions());
+		ClickManager.Instance.ModeLock(eModeType);
+		OnShortcutModeEnd += ShortcutModeEnded;	
+
+		OpenToSubCategory("Food", true);
+	}
+
+	public void OpenToSubCategoryItemsWithLockAndCallBack(){
+		NavigationUIManager.Instance.HidePanel();
+		ClickManager.Instance.ClickLock(GetClickLockExceptions());
+		ClickManager.Instance.ModeLock(eModeType);
+		OnShortcutModeEnd += ShortcutModeEnded;	
+
+		OpenToSubCategory("Items", true);
+	}
+
+	private void ShortcutModeEnded(object sender, EventArgs args){
+		NavigationUIManager.Instance.ShowPanel();
+		ClickManager.Instance.ReleaseClickLock();
+		ClickManager.Instance.ReleaseModeLock();
+		OnShortcutModeEnd -= ShortcutModeEnded;
+	}
+	//---------------------------------------------------
+
+	//---------------------------------------------------
+	// OpenToSubCategory()
+	// Special function used to open the store UI 
+	// straight up to a certain category.
+	//---------------------------------------------------	
+	public void OpenToSubCategory( string strCat, bool bShortcut = false  ) {		
+		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
+		// bypasses the normal means of opening a shop, so we need to do some special things in this case
+		bShortcutMode = bShortcut;
+		if (bShortcutMode) {
+			// if we are shortcutting, we have to tween the bg in now	
+			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+		}	
+		
+		CreateSubCategoryItemsWithString(strCat); 
 	}
 
 	//---------------------------------------------------
@@ -184,7 +216,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		CreateSubCategoryItemsWithString( page.name );
 	}
 	
-	public void CreateSubCategoryItemsWithString( string strPage, bool bShortcut = false ) {
+	public void CreateSubCategoryItemsWithString(string strPage) {
 		if ( strPage != "Items" && strPage != "Food" && strPage != "Decorations" ) {
 			Debug.Log("Illegal sore sub category: " + strPage );
 			return;
@@ -192,7 +224,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		
 		// we also need to hide the exit button's active state based on whether or not we are shortcutting
 		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
-		string strFunction = bShortcut ? "HideStoreSubPanel" : "CloseUI";
+		string strFunction = bShortcutMode ? "HideStoreSubPanel" : "CloseUI";
 		goExitButton.GetComponent<UIButtonMessage>().functionName = strFunction;		
 		
 		currentPage = strPage;
@@ -272,12 +304,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// before doing anything else, check to see if the deco system has a saved node...
 		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
 		// store doesn't apply...otherwise just show the store base panel like normal
-		if ( EditDecosUIManager.Instance.IsNodeSaved() ) {
+		if(bShortcutMode){
 			// close the store bg
 			storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-			
-			// tell the deco manager to reopen its choose menu
-			EditDecosUIManager.Instance.ReopenChooseMenu();
+		
+			if(OnShortcutModeEnd != null)
+				OnShortcutModeEnd(this, EventArgs.Empty);
+
+			bShortcutMode = false;
 		}
 		else
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();

@@ -30,7 +30,8 @@ public class LgDateTime{
 
     public static DateTime Today{
         get{
-            return DateTime.Today;
+            DateTime now = GetTimeNow(); 
+            return now.Date;
         }
     }
 

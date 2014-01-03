@@ -49,9 +49,11 @@ public class RunnerAnimationController : LgCharacterAnimator {
     private void GameStateChanged(object sender, GameStateArgs args){
         MinigameStates gameState = args.GetGameState();
         if(gameState == MinigameStates.Paused){
-            Pause();
+            if(resumeCount == 1)
+                Pause();
         }else if(gameState == MinigameStates.Playing){
-            Resume();
+            if(resumeCount == 0)
+                Resume();
         }
     }
 

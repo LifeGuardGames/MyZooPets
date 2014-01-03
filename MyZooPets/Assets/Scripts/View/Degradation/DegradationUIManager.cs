@@ -22,14 +22,17 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	}
 
     void Start(){
-		// place the triggers that were created in DegradationLogic
-		PlaceTriggers();
+        DegradationLogic.OnRefreshTriggers += PlaceTriggers;
+    }
+
+    void OnDestroy(){
+        DegradationLogic.OnRefreshTriggers -= PlaceTriggers;
     }
 	
 	//---------------------------------------------------
 	// PlaceTriggers()
 	//---------------------------------------------------		
-	private void PlaceTriggers() {
+	private void PlaceTriggers(object sender, EventArgs args) {
 		// if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_LAST );
 		if ( !bTriggers && !IsTesting() )

@@ -57,14 +57,13 @@ public class DataLoader_WellapadTasks {
                     int nTasks = strCategory == "Always" ? listTasks.Count : 1;
 					
 					// this is a little weird...the random element thing is messing up the ordering of the tasks
-					if ( nTasks != listTasks.Count ) {
-						List<Data_WellapadTask> tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
-						
-						foreach ( Data_WellapadTask task in tasks )
-							listTasksFinal.Add( task );
-					}
-					else
-						listTasksFinal = new List<Data_WellapadTask>( listTasks );
+					List<Data_WellapadTask> tasks = listTasks;
+					if ( nTasks != listTasks.Count )
+						tasks = ListUtils.GetRandomElements<Data_WellapadTask>( listTasks, nTasks );
+					
+					// add each of our tasks to the final list
+					foreach ( Data_WellapadTask task in tasks )
+						listTasksFinal.Add( task );
 				}
 			}
 		}

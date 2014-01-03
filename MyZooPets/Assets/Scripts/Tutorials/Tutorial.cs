@@ -178,12 +178,8 @@ public abstract class Tutorial {
 		if ( bGUI ) {
 			vPos = LgNGUITools.GetScreenPosition( goTarget );
 			
-			Debug.Log("Local pos of object is " + vPos);
-			
 			// it's possible we might need to transform this position if it's not already in the center panel
 			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, eAnchor, InterfaceAnchors.Center );
-			
-			Debug.Log("After transformation, pos is: " + vPos);
 		}
 		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center

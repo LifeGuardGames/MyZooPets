@@ -129,7 +129,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			}
 			
 			// save the tutorial entry (a bit hacky)
-			if ( i == 0 )
+			if ( itemDeco.ID == "WallPoster1" )
 				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
 		}		
 	}

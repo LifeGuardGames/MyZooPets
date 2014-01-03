@@ -136,10 +136,10 @@ public class ButtonMonster : LgButtonHold {
 			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();			
 			
-			// just kind of a hack for now until the gating system is complete
-			// if the monster is dead or the pet can't breathe fire any more, destroy the button
+			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
+			// fire mode cheat is active and the gate is still alive
 			int nDamage = GetDamage();
-			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.CanBreathFire() )
+			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.IsInfiniteFire() )
 				Destroy( parentPanel );		
 		}
 		else {

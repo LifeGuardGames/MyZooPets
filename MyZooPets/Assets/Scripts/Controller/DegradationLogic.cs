@@ -21,8 +21,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
 	public float fHealthMoodThreshold;
-	public float fFirstHoursPenalty;
-	public float fSecondHoursPenalty;
 	
 	private const int MAX_TRIGGERS = 6;
 
@@ -218,11 +216,15 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         // amount to degrade mood by
         int nMoodLoss = 0;
         
+		// penalties
+		float fFirstHoursPenalty = Constants.GetConstant<float>( "HungerDamage_Short" );
+		float fSecondHoursPenalty = Constants.GetConstant<float>( "HungerDamage_Long" );
+		
         // get the pet's health %, because it affects how their mood changes
         float fHP = (float) ( DataManager.Instance.GameData.Stats.Health / 100.0f );
-        float fMultiplier = 1;
+		float fMultiplier = Constants.GetConstant<float>( "HungerMultiplier_Healthy");
         if ( fHP < fHealthMoodThreshold )
-            fMultiplier = 2;
+			fMultiplier = Constants.GetConstant<float>( "HungerMultiplier_Sick");
         
         // first part of the mood degradation -- the first 24 hours of not playing
         int nFirstHours = timeSinceLastPlayed.TotalHours > 24 ? 24 : (int) timeSinceLastPlayed.TotalHours;

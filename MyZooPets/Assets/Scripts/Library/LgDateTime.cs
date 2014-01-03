@@ -5,7 +5,8 @@ public class LgDateTime{
 	
 	public static TimeSpan GetTimeSinceLastPlayed() {
  		DateTime now = GetTimeNow();
-        TimeSpan sinceLastPlayed = now.Date - DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame.Date;
+		DateTime last = DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame;
+        TimeSpan sinceLastPlayed = now - last;
 		
 		return sinceLastPlayed;
 	}

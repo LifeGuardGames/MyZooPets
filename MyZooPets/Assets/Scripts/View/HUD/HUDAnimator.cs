@@ -121,6 +121,7 @@ public class HUDAnimator : MonoBehaviour {
 		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Mood] = moodIconAnim.GetComponent<AnimationControl>();		
 		
+		// Model > View, exception!
 		hashDisplays[HUDElementType.Points] = DataManager.Instance.GameData.Stats.Points;
 		hashDisplays[HUDElementType.Stars] = DataManager.Instance.GameData.Stats.Stars;
 		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
@@ -157,47 +158,6 @@ public class HUDAnimator : MonoBehaviour {
 	public int GetDisplayValue( HUDElementType eType ) {
 		return hashDisplays[eType];	
 	}
-	
-	//---------------------------------------------------
-	// AnimateStatBar()
-	// Animates the stat bar for eStat.
-	//---------------------------------------------------	
-	private IEnumerator AnimateStatBar( HUDElementType eStat, float fDelay ) {
-		// wait X seconds
-		yield return new WaitForSeconds(fDelay);
-		
-		// required data for animating the bar
-		int nStep = Constants.GetConstant<int>( eStat + "_Step" );
-		AnimationControl anim = hashAnimControls[eStat];
-		int nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
-		
-		// while the display number is not where we want to be...
-		while( hashDisplays[eStat] != nTarget ){
-			// add proper signage to the step
-			if ( hashDisplays[eStat] > nTarget )
-				nStep *= -1;			
-			
-			// animate by altering the display amount, but don't go over/under the target
-			if ( nStep > 0 )
-				hashDisplays[eStat] = Mathf.Min( hashDisplays[eStat] + nStep, nTarget );
-			else
-				hashDisplays[eStat] = Mathf.Max( hashDisplays[eStat] + nStep, nTarget );
-				
-			// if there is a controller, play it
-			if ( anim )
-				anim.Play();
-			
-			// wait one frame
-			yield return 0;
-			
-			// update our target in case it changed
-			nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
-		}
-		
-		// animating is finished, so stop the control if it exists
-		if ( anim )
-			anim.Stop();
-	}
 
     //Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar
@@ -231,20 +191,34 @@ public class HUDAnimator : MonoBehaviour {
 	// function will start a curve of visual elements for
 	// it.
 	//---------------------------------------------------	
-	public IEnumerator StartCurveStats( List<StatPair> listStat, bool bPlaySounds, bool bAtOnce ){
+	public IEnumerator StartCurveStats(List<StatPair> listStat, bool bPlaySounds, bool bAtOnce, bool bFloaty){
 		for ( int i = 0; i < listStat.Count; ++i ) {
 			StatPair pair = listStat[i];
 			HUDElementType eType = pair.eType;
 			
-			//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
-			Vector3 vHUD = Constants.GetConstant<Vector3>( eType + "_HUD" );
-			Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
-			StartCurve( eType, pair.nPoints, vOrigin, pair.strSound );
-			
-			// some places might want to do all the stat curves at once
-			if ( bAtOnce == false ) {
-				float fModifier = GetModifier( eType );
-				yield return new WaitForSeconds( fModifier * pair.nPoints );	
+			// If it is a floaty text, just increment values instantaneously
+			if(bFloaty){
+				// Account of min/max overflow
+				if(pair.nPoints >= 0){
+					int nTarget = DataManager.Instance.GameData.Stats.GetStat(eType);	// Get the maximum
+					hashDisplays[eType] = Mathf.Min(hashDisplays[eType] + pair.nPoints, nTarget);	// Take the min when maxed out
+				}
+				else{
+					hashDisplays[eType] = Mathf.Max(hashDisplays[eType] + pair.nPoints, 0);	// Take the max when min-ed out
+				}
+			}
+			// If not floaty text, play tween sprite animation to HUD
+			else{
+				//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
+				Vector3 vHUD = Constants.GetConstant<Vector3>( eType + "_HUD" );
+				Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
+				StartCurve( eType, pair.nPoints, vOrigin, pair.strSound );
+				
+				// some places might want to do all the stat curves at once
+				if ( bAtOnce == false ) {
+					float fModifier = GetModifier( eType );
+					yield return new WaitForSeconds( fModifier * pair.nPoints );	
+				}
 			}
 		}
 	}
@@ -349,5 +323,46 @@ public class HUDAnimator : MonoBehaviour {
 		// Hopefully Invoke matches up with LeanTween time
 		if ( waitTime == 0 )
 			StartCoroutine( AnimateStatBar( type, duration ) );
+	}
+	
+	//---------------------------------------------------
+	// AnimateStatBar()
+	// Animates the stat bar for eStat.
+	//---------------------------------------------------	
+	private IEnumerator AnimateStatBar( HUDElementType eStat, float fDelay ) {
+		// wait X seconds
+		yield return new WaitForSeconds(fDelay);
+		
+		// required data for animating the bar
+		int nStep = Constants.GetConstant<int>( eStat + "_Step" );
+		AnimationControl anim = hashAnimControls[eStat];
+		int nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
+		
+		// while the display number is not where we want to be...
+		while( hashDisplays[eStat] != nTarget ){
+			// add proper signage to the step
+			if ( hashDisplays[eStat] > nTarget )
+				nStep *= -1;			
+			
+			// animate by altering the display amount, but don't go over/under the target
+			if ( nStep > 0 )
+				hashDisplays[eStat] = Mathf.Min( hashDisplays[eStat] + nStep, nTarget );
+			else
+				hashDisplays[eStat] = Mathf.Max( hashDisplays[eStat] + nStep, nTarget );
+				
+			// if there is a controller, play it
+			if ( anim )
+				anim.Play();
+			
+			// wait one frame
+			yield return 0;
+			
+			// update our target in case it changed
+			nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
+		}
+		
+		// animating is finished, so stop the control if it exists
+		if ( anim )
+			anim.Stop();
 	}
 }

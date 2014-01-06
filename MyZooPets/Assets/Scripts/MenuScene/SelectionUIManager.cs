@@ -68,11 +68,11 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             string petStatus = DataManager.Instance.GetPetStatus(child.name);
 
             if(petStatus == "Egg"){
-                Transform egg = child.Find("egg/Sprite");
+                Transform eggParent = child.Find("egg/SpriteGrandparent/SpriteParent (Animation)");
                 if(isOn)
-                    egg.GetComponent<RandomAnimation>().Enable();
+                    eggParent.GetComponent<RandomAnimation>().Enable();
                 else
-                    egg.GetComponent<RandomAnimation>().Disable();
+                    eggParent.GetComponent<RandomAnimation>().Disable();
             }
         }
     }

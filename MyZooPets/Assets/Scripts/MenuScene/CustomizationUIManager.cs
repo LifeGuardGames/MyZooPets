@@ -42,7 +42,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public void ChangeEggColor( string strSprite, string strColor ) {
         if (!finishClicked){
 			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
-            selectedEgg.transform.FindChild("Sprite").GetComponent<UISprite>().spriteName = strSprite;
+            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = strSprite;
             petColor = strColor;
         }       
     }

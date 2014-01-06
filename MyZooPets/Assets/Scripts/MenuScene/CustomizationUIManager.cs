@@ -3,10 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-/*
-    
-*/
-
 public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject customizationPanel;
     public GameObject popupTitle;
@@ -23,7 +19,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	
     void Awake(){
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
-        Debug.Log("skipComic: " + skipComic);
     }
 
     void Start(){

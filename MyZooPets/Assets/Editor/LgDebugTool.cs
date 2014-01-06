@@ -71,12 +71,8 @@ public class LgDebugTool : EditorWindow
             serializer.Serialize(writer, XmlData);
         }  
         constants = Deserialize();
-        // Object file = Resources.Load("Constants/_Critical", typeof(TextAsset));
-        // EditorUtility.SetDirty( file );
 
         AssetDatabase.Refresh();
-        // bool skipComic = Constants.GetConstant<bool>("SkipIntroComic");
-        // Debug.Log("skipComic: " + skipComic);
     }
 
     private List<CriticalConstant> Deserialize(){

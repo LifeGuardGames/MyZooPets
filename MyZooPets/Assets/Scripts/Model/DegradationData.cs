@@ -10,12 +10,10 @@ using System.Collections.Generic;
 
 public class DegradationData{
     public DateTime LastTimeUserPlayedGame {get; set;} //last time that the user opened the game
-    public List<DegradData> DegradationTriggers {get; set;} //list of degradation triggers that are currently in game
-    public bool FirstTimeDegradTrigger {get; set;} //first time the user has clicked on an asthma trigger
-    public bool MorningTrigger {get; set;} //True: spawn asthma trigger in morning, False: don't
-    public bool AfternoonTrigger {get; set;} //True: spawn asthma trigger in afternoon, False: don't
+    public DateTime LastTriggerSpawnedPlayPeriod {get; set;}
+    public bool IsTriggerSpawned {get; set;} //True: triggers for this play period has been spawned
 	public int UncleanedTriggers {get; set;}
-	
+
 	/* // work in progress: supporting triggers in multiple areas (house, yard, etc)
 	public Hashtable UncleanedTriggers {get; set;}
 	public int GetUncleanedTriggers( string strArea ) {
@@ -35,10 +33,8 @@ public class DegradationData{
 
     public void Init(){
         LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
-        DegradationTriggers = new List<DegradData>();
-        FirstTimeDegradTrigger = true;
-        MorningTrigger = true;
-        AfternoonTrigger = true; 
+        LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+        IsTriggerSpawned = false;
 		UncleanedTriggers = 0;
     }
 }

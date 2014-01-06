@@ -7,7 +7,6 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
     //Return the next time the user can collect bonuses
     public DateTime NextPlayPeriod{
         get{return DataManager.Instance.GameData.Calendar.NextPlayPeriod;}
-		// set{DataManager.Instance.GameData.Calendar.NextPlayPeriod = value;}
     }
 
     //Check if the user can play the inhaler game
@@ -51,16 +50,27 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
         DataManager.Instance.GameData.Calendar.NextPlayPeriod = nextPlayPeriod;
     }
 
+    //-----------------------------------------------
+    // CalculateCurrentPlayPeriod()
+    // Reset NextPlayPeriod to the current play period
+    // this is usually only use if user misses play period
+    // so at the start of the game (after degradation logic)
+    // we reset that play period to now
+    //-----------------------------------------------
     public void CalculateCurrentPlayPeriod(){
-        DateTime currentPlayPeriod;
-        if(LgDateTime.GetTimeNow().Hour < 12){ 
-            //next reward time at noon
-            currentPlayPeriod = LgDateTime.Today;
-        }else{ 
-            //next reward time at midnight
-            currentPlayPeriod = LgDateTime.Today.AddHours(12);
-        }
+        DataManager.Instance.GameData.Calendar.NextPlayPeriod = GetCurrentPlayPeriod(); 
+    }
 
-        DataManager.Instance.GameData.Calendar.NextPlayPeriod = currentPlayPeriod;
+    public static DateTime GetCurrentPlayPeriod(){
+        DateTime currentPlayPeriod;
+
+        //if the time now is in the morning the current play period is 12 am
+        if(LgDateTime.GetTimeNow().Hour < 12)
+            currentPlayPeriod = LgDateTime.Today;
+        //if the time now is in the afternoon the current play period is 12pm
+        else
+            currentPlayPeriod = LgDateTime.Today.AddHours(12);
+
+        return currentPlayPeriod;
     }
 }

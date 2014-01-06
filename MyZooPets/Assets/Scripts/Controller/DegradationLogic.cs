@@ -13,19 +13,20 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	
 	// tut key
 	public static string TIME_DECAY_TUT = "TimeMoodDecay";
-
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
-	
 	public int nPoints;
-
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
 	public float fHealthMoodThreshold;
 	
 	private const int MAX_TRIGGERS = 6;
+    private List<DegradData> degradationTriggers;
 
+    // public List<DegradData> DegradationTriggers{
+    //     get{return DataManager.Instance.GameData.Degradation.DegradationTriggers;}
+    // }
     public List<DegradData> DegradationTriggers{
-        get{return DataManager.Instance.GameData.Degradation.DegradationTriggers;}
+        get{return degradationTriggers;} 
     }
     public List<GameObject> TriggerPrefabs{
         get{return triggerPrefabs;}
@@ -35,26 +36,32 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// reset the degrad trigger list each time this logic runs, because we are no longer actually saving the triggers.
 		// I (Joe) left this structure in because we might want to say something like, "X triggers remain" across all areas, or
 		// something like that
-		DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
+		// DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
+        degradationTriggers = new List<DegradData>();
 		
     	RefreshDegradationCheck();
 
 		// set up triggers to be spawned by the UI manager
 		SetUpTriggers();       
+
+        UpdateNextPlayPeriodTime();
     }
 
     void OnApplicationPause(bool isPaused){
     	//Refresh logic
     	if(!isPaused){
-            DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
+            // DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
+            degradationTriggers = new List<DegradData>();
     		RefreshDegradationCheck();
             SetUpTriggers();       
+            UpdateNextPlayPeriodTime();
     	}
     }
 
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(DegradTrigger trigger){
-        DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
+        // DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
+        DegradData degradData = degradationTriggers.Find(x => x.ID == trigger.ID);
 		
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
@@ -74,14 +81,16 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			goDroppedItem.GetComponent<DroppedObject>().Appear();			
 		}	
 		
-        DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
+        // DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
+        degradationTriggers.Remove(degradData);
 		
 		// subtract one from the triggers left to clean
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers -= 1;
 		
 		// if there are no degradation triggers left, send out a task completion message
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
-		if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
+		// if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
+        if (degradationTriggers.Count == 0 )
 			WellapadMissionController.Instance.TaskCompleted( "CleanRoom" );
     }
 	
@@ -141,7 +150,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             }
 
             //spawn them at a pre define location ID is the order in which the data are created
-            DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
+            // DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
+            degradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
         }                
 
         DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
@@ -181,25 +191,61 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     // new triggers that should spawn.
     //---------------------------------------------------       
     private int GetNewTriggerCount() {
-        DateTime now = LgDateTime.GetTimeNow();
-        TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
         int nNew = 0;
+        int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
 
-        if(sinceLastPlayed.Days > 0){ //reset if new day
-            DataManager.Instance.GameData.Degradation.MorningTrigger = true;
-            DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
+        //There are missed play periods
+        if(numOfMissedPlayPeriod > 0){
+            //max of 2 missed play period will be accounted
+            if(numOfMissedPlayPeriod > 2) numOfMissedPlayPeriod = 2;
+
+            nNew = numOfMissedPlayPeriod * 3;
+
         }
-        if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
-            if(DataManager.Instance.GameData.Degradation.MorningTrigger){
-                nNew = 3;
-                DataManager.Instance.GameData.Degradation.MorningTrigger = false;
+        //No missed play periods. Next Play Period
+        else{
+            DateTime now = LgDateTime.GetTimeNow();
+            DegradationData degradationData = DataManager.Instance.GameData.Degradation;
+            DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastTriggerSpawnedPlayPeriod;
+            TimeSpan timeSinceLastTriggerSpawned = now - lastTriggerSpawnedPlayPeriod;
+
+            if(lastTriggerSpawnedPlayPeriod <= now){
+                //new play period need to refresh variable
+                if(timeSinceLastTriggerSpawned.TotalHours >= 12){
+                    degradationData.IsTriggerSpawned = false;
+                }
+
+                if(!degradationData.IsTriggerSpawned){
+                    nNew = 3;
+                    degradationData.IsTriggerSpawned = true;
+                    degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+                }
+            }else{
+                Debug.LogError("Clock might have been modified. Current time is less than LastTriggerSpawnedPlayPeriod");
             }
-        }else{ //afternoon
-            if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
-                nNew = 3; 
-                DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
-            }
-        }       
+        }
+
+
+        //LgDateTime.GetTimeNow() - PlayPeriod.NextPlayPeriod
+        // if(timeSinceStartOfPlayPeriod.TotalHours < 12){
+
+        // }
+        // if(sinceLastPlayed.Days > 0){ //reset if new day
+        //     DataManager.Instance.GameData.Degradation.MorningTrigger = true;
+        //     DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
+        // }
+
+        // if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
+        //     if(DataManager.Instance.GameData.Degradation.MorningTrigger){
+        //         nNew = 3;
+        //         DataManager.Instance.GameData.Degradation.MorningTrigger = false;
+        //     }
+        // }else{ //afternoon
+        //     if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
+        //         nNew = 3; 
+        //         DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
+        //     }
+        // }       
         
         return nNew;
     }
@@ -244,35 +290,61 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
     }
 
+    //---------------------------------------------------   
+    // CalculateHealthDegradation()
+    // Health degrads each time user misses inhaler or a 
+    // play period
+    //---------------------------------------------------   
     private IEnumerator CalculateHealthDegradation(){
         // wait a frame, or else the notification manager won't work properly
         yield return 0;
 
-        //get next play period
+        int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+
+        if(numOfMissedPlayPeriod > 0){
+            //max punishment is 2 play period
+            if(numOfMissedPlayPeriod > 2) numOfMissedPlayPeriod = 2;
+
+            StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
+                numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
+        }
+    }
+
+    //-------------------------------------------------------------------------- 
+    // UpdateNextPlayPeriodTime()
+    // Health Degradation and Trigger Degradation both depends on NextPlayPeriod
+    // for timing logic, so if we ever need to update NextPlayPeriod it needs to be
+    // done only after both functions run their logic with the same NextPlayPeriod value
+    //-------------------------------------------------------------------------- 
+    private void UpdateNextPlayPeriodTime(){
+        int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+
+        if(numOfMissedPlayPeriod > 0){
+            PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
+            // Debug.Log("current play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
+        }
+    }
+
+    //-------------------------------------------------------------------------- 
+    // GetNumOfMissedPlayPeriod()
+    //
+    //-------------------------------------------------------------------------- 
+    private int GetNumOfMissedPlayPeriod(){
+        int missedPlayPeriod = 0;
         DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
-        
+
         //different in hours between now and next play period
         //check only if nextplayperiod is less than the time now
         if(nextPlayPeriod <= LgDateTime.GetTimeNow()){
-            TimeSpan timeSinceLastPlayPeriod = LgDateTime.GetTimeNow() - nextPlayPeriod;
-            Debug.Log("health degrade timeSinceLastPlayPeriod: " + timeSinceLastPlayPeriod);
+            TimeSpan timeSinceStartOfPlayPeriod = LgDateTime.GetTimeNow() - nextPlayPeriod;
+            // Debug.Log("health degrade timeSinceStartOfPlayPeriod: " + timeSinceStartOfPlayPeriod);
 
             //if within 12 hours no punishment
             //if > 12 hrs punishment for every 12 hrs miss
-            int numOfMissedPlayPeriod = (int)timeSinceLastPlayPeriod.TotalHours / 12;
-            Debug.Log("health degrade numOfMissedPlayPeriod: " + numOfMissedPlayPeriod);
-
-            if(numOfMissedPlayPeriod > 0){
-                //max punishment is 2 play period
-                if(numOfMissedPlayPeriod > 2) numOfMissedPlayPeriod = 2;
-
-                StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-                    numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
-
-                //after punishment move next play period
-                PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
-                Debug.Log("current play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
-            }
+            missedPlayPeriod = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
+            // Debug.Log("health degrade numOfMissedPlayPeriod: " + missedPlayPeriod);
         }
+
+        return missedPlayPeriod;
     }
 }

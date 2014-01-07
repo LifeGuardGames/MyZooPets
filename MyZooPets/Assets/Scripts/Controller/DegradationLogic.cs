@@ -220,8 +220,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
                     degradationData.IsTriggerSpawned = true;
                     degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
                 }
-            }else{
-                Debug.LogError("Clock might have been modified. Current time is less than LastTriggerSpawnedPlayPeriod");
             }
         }
 

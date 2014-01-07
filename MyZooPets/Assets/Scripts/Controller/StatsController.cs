@@ -43,6 +43,9 @@ public class StatsController : Singleton<StatsController> {
 		}
 		
 		bCheckPet = scriptPetAnim != null;
+		
+		// listen for refresh message
+		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
 	}	
 	
 	// Locations are on screen space
@@ -252,10 +255,25 @@ public class StatsController : Singleton<StatsController> {
 	// Changes the # of breaths the pet has.
 	//---------------------------------------------------		
 	public void ChangeFireBreaths( int nAmount ) {
-		DataManager.Instance.GameData.PetInfo.ChangeFireBreaths( nAmount );
+		int nBreaths = DataManager.Instance.GameData.PetInfo.nFireBreaths;
+		int nBreathsNew = nBreaths + nAmount;
+		SetFireBreaths( nBreathsNew );
+	}
+	private void SetFireBreaths( int nAmount ) {
+		DataManager.Instance.GameData.PetInfo.SetFireBreaths( nAmount );
 		
 		// send out an event that fire breaths have changed
 		if ( OnBreathsChanged != null )
-			OnBreathsChanged( this, EventArgs.Empty );
+			OnBreathsChanged( this, EventArgs.Empty );		
 	}
+	
+	//---------------------------------------------------
+	// OnMissionsRefreshed()
+	// When the user's current missions expire and must
+	// be refreshed.
+	//---------------------------------------------------		
+	private void OnMissionsRefreshed( object sender, EventArgs args ) {
+		// if the missions are refreshing, make sure the player can no longer breath fire
+		SetFireBreaths( 0 );
+	}	
 }

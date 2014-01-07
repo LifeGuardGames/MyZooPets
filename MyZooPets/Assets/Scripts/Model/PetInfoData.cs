@@ -15,8 +15,12 @@ public class PetInfoData{
 	// fire breathing status of the pet
 	public int nFireBreaths {get; set;}
 	public void ChangeFireBreaths( int nAmount ) {
-		nFireBreaths += nAmount;
-		
+		int nBreathsNew = nFireBreaths + nAmount;
+		SetFireBreaths( nBreathsNew );
+	}
+	public void SetFireBreaths( int nAmount ) {
+		nFireBreaths = nAmount;	
+	
 		// for now, we are capping the max breaths at 1
 		bool bInfiniteMode = IsInfiniteFire();
 		if ( nFireBreaths > 1 )

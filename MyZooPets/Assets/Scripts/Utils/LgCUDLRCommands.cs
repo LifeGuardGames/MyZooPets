@@ -100,6 +100,17 @@ public static class LgCUDLRCommands {
   public static void ShowScreenWidthAndHeight(){
     CUDLR.Console.Log("Screen Width: " + Screen.width + " Screen Height: " + Screen.height);
   }
+
+  [CUDLR.Command("DateMissionsCreated", "display date mission created")]
+  public static void GetDateMissionsCreated(){
+    CUDLR.Console.Log("Date Mission are Created: " + DataManager.Instance.GameData.Wellapad.DateMissionsCreated);
+  }
+
+  [CUDLR.Command("LgDateTimeNow", "get LgDateTime.GetTimeNow()")]
+  public static void TimeNow(){
+    CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());
+  }
+
 }
 
 

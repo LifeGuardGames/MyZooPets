@@ -92,7 +92,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// OnDestory()
+	// OnDestroy()
 	//---------------------------------------------------		
 	void OnDestroy() {
 		// stop listening for task completion data

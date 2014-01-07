@@ -95,7 +95,7 @@ public class WellapadRewardButton : LgButton {
 	}
 	
 	//---------------------------------------------------
-	// OnDestory()
+	// OnDestroy()
 	//---------------------------------------------------		
 	void OnDestroy() {
 		// stop listening for task completion data

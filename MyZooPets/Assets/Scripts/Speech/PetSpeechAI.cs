@@ -20,7 +20,7 @@ public class PetSpeechAI : MonoBehaviour{
         StatsController.OnHealthyToVerySick += ShowHealthyToVerySickMsg;
     }
 
-    void OnDestory(){
+    void OnDestroy(){
         StatsController.OnHappyToSad -= ShowHappyToSadMsg;
         StatsController.OnSadToHappy -= ShowSadToHappyMsg;
         StatsController.OnSickToVerySick -= ShowSickToVerySickMsg;

@@ -8,7 +8,7 @@ public class FlameLevelUpNotificationListener : MonoBehaviour {
         FlameLevelLogic.OnFlameLevelUp += OnFlameLevelUp;	
 	}
 
-    void OnDestory(){
+    void OnDestroy(){
         FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;   
     }
 

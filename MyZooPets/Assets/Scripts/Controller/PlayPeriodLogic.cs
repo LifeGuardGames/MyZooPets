@@ -34,6 +34,23 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
     //-----------------------------------------------
+    // GetCurrentPlayPeriod()
+    //
+    //-----------------------------------------------
+    public static DateTime GetCurrentPlayPeriod(){
+        DateTime currentPlayPeriod;
+
+        //if the time now is in the morning the current play period is 12 am
+        if(LgDateTime.GetTimeNow().Hour < 12)
+            currentPlayPeriod = LgDateTime.Today;
+        //if the time now is in the afternoon the current play period is 12pm
+        else
+            currentPlayPeriod = LgDateTime.Today.AddHours(12);
+
+        return currentPlayPeriod;
+    }
+
+    //-----------------------------------------------
     // CalculateNextPlayPeriod()
     // Based on the time now return the next reward time
     //-----------------------------------------------
@@ -61,16 +78,4 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
         DataManager.Instance.GameData.Calendar.NextPlayPeriod = GetCurrentPlayPeriod(); 
     }
 
-    public static DateTime GetCurrentPlayPeriod(){
-        DateTime currentPlayPeriod;
-
-        //if the time now is in the morning the current play period is 12 am
-        if(LgDateTime.GetTimeNow().Hour < 12)
-            currentPlayPeriod = LgDateTime.Today;
-        //if the time now is in the afternoon the current play period is 12pm
-        else
-            currentPlayPeriod = LgDateTime.Today.AddHours(12);
-
-        return currentPlayPeriod;
-    }
 }

@@ -40,7 +40,9 @@ namespace CUDLR {
 
     [SerializeField]
     public int Port = 55055;
-    public bool persistant = true;
+
+    //making cudlr persistent screw up with the handler registration in OnEnable so
+    //don't do it
 
     private static Thread mainThread;
     private static string fileRoot;
@@ -65,16 +67,16 @@ namespace CUDLR {
     };
 
     public virtual void Awake() {
-      //Make Object persistent
-      if(isCreated){
-          //If There is a duplicate in the scene. delete the object and jump Awake
-          Destroy(gameObject);
-          return;
-      }
-      if(persistant){
-        DontDestroyOnLoad(this);
-      }
-      isCreated = true;
+      // //Make Object persistent
+      // if(isCreated){
+      //     //If There is a duplicate in the scene. delete the object and jump Awake
+      //     Destroy(gameObject);
+      //     return;
+      // }
+      // if(persistant){
+      //   DontDestroyOnLoad(this);
+      // }
+      // isCreated = true;
 
       
       mainThread = Thread.CurrentThread;

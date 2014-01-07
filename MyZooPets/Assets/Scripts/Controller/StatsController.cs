@@ -81,10 +81,6 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
 			else if(deltaPoints < 0)
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
-
-			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
-				PetFloatyUIManager.Instance.CreatePointsFloaty(deltaPoints);
-			}
 		}
 	
 		if(deltaStars != 0){
@@ -108,9 +104,6 @@ public class StatsController : Singleton<StatsController> {
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
-			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance)
-				PetFloatyUIManager.Instance.CreateMoodFloaty(deltaMood);
-
 			if ( bCheckPet )
 				CheckForMoodTransition( eOld, eNew );
 		}		
@@ -123,15 +116,16 @@ public class StatsController : Singleton<StatsController> {
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
-			if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance)
-				PetFloatyUIManager.Instance.CreateHealthFloaty(deltaHealth);
-
 			if(bCheckPet){
 				CheckForHealthTransition( eOldHealth, eNewHealth );
 				CheckForZeroHealth();
 			}
 		}
 		
+		if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
+			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood);
+		}
+			
 		// Tell HUDAnimator to animate and change
 		List<StatPair> listStats = new List<StatPair>();
 		listStats.Add( new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ?  hudAnimator.strSoundXP : null ) );

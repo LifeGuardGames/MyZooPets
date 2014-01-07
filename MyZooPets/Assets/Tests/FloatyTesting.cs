@@ -16,28 +16,28 @@ public class FloatyTesting : MonoBehaviour {
 	}
 
     void OnGUI(){
-        if(GUI.Button(new Rect(0, 0, 100, 100), "FloatyText")){
-            Hashtable option = new Hashtable();
-            option.Add("parent", anchor);
-            option.Add("text", "testing123");
-            option.Add("textSize", 128);
-            FloatyUtil.SpawnFloatyText(option);
-        }
+//        if(GUI.Button(new Rect(0, 0, 100, 100), "FloatyText")){
+//            Hashtable option = new Hashtable();
+//            option.Add("parent", anchor);
+//            option.Add("text", "testing123");
+//            option.Add("textSize", 128);
+//            FloatyUtil.SpawnFloatyText(option);
+//        }
+//
+//        if(GUI.Button(new Rect(0, 150, 100, 100), "StatsFloatyImageText")){
+//            Hashtable option = new Hashtable();
+//            option.Add("parent", anchor2);
+//            option.Add("text", "+50");
+//            option.Add("spriteName", "iconHunger");
+//            FloatyUtil.SpawnFloatyImageText(option);
+//
+//            Hashtable option2 = new Hashtable();
+//            option2.Add("parent", anchor2);
+//            option2.Add("text", "+50");
+//            option2.Add("spriteName", "iconHeart");
+//            FloatyUtil.SpawnFloatyImageText(option2);
 
-        if(GUI.Button(new Rect(0, 150, 100, 100), "StatsFloatyImageText")){
-            Hashtable option = new Hashtable();
-            option.Add("parent", anchor2);
-            option.Add("text", "+50");
-            option.Add("spriteName", "iconHunger");
-            FloatyUtil.SpawnStatsFloatyImageText(option);
 
-            Hashtable option2 = new Hashtable();
-            option2.Add("parent", anchor2);
-            option2.Add("text", "+50");
-            option2.Add("spriteName", "iconHeart");
-            FloatyUtil.SpawnStatsFloatyImageText(option2);
-
-
-        }
+//        }
     }
 }

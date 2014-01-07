@@ -3,23 +3,39 @@ using System.Collections;
 
 public class PetFloatyUIManager : Singleton<PetFloatyUIManager> {
     public GameObject petFloatyPosition;
-
-    public void CreateMoodFloaty(int deltaMood){
-        CreateFloaty(deltaMood, "iconHunger");
-    }
-
-    public void CreateHealthFloaty(int deltaHealth){
-        CreateFloaty(deltaHealth, "iconHeart");
-    }
-
-    public void CreatePointsFloaty(int deltaPoints){
-        CreateFloaty(deltaPoints, "iconStar");
-    }
-
+	
+	//-------------------------------------------------------
+    // CreateStatsFloaty()
+    // Use the FloatyUtil class to spawn the floaty image text
+    // on top of the pet's head, FOR STATS ONLY!
+    //-------------------------------------------------------
+	public void CreateStatsFloaty(int deltaPoints, int deltaHealth, int deltaMood){
+		Hashtable option = new Hashtable();
+		option.Add("parent", petFloatyPosition);
+		
+		if(deltaPoints != 0){
+			string strDeltaPoints = (deltaPoints > 0) ? "+" + deltaPoints : deltaPoints.ToString();
+			option.Add("spritePoints", "iconStar");
+			option.Add("deltaPoints", strDeltaPoints);
+		}
+		if(deltaHealth != 0){
+			string strDeltaHealth = (deltaHealth > 0) ? "+" + deltaHealth : deltaHealth.ToString();
+			option.Add("spriteHealth", "iconHeart");
+			option.Add("deltaHealth", strDeltaHealth);
+		}
+		if(deltaMood != 0){
+			string strDeltaMood = (deltaMood > 0) ? "+" + deltaMood : deltaMood.ToString();
+			option.Add("spriteHunger", "iconHunger");
+			option.Add("deltaMood", strDeltaMood);
+		}
+		
+		FloatyUtil.SpawnFloatyStats(option);
+	}
+	
     //-------------------------------------------------------
     // CreateFloaty()
     // Use the FloatyUtil class to spawn the floaty image text
-    // on top of the pet's head
+    // on top of the pet's head, general single picture
     //-------------------------------------------------------
     private void CreateFloaty(int deltaValue, string spriteName){
         string strDeltaValue = "";
@@ -34,7 +50,6 @@ public class PetFloatyUIManager : Singleton<PetFloatyUIManager> {
         option.Add("text", strDeltaValue);
         option.Add("spriteName", spriteName);
 
-        FloatyUtil.SpawnStatsFloatyImageText(option);
+        FloatyUtil.SpawnFloatyImageText(option);
     }
-
 }

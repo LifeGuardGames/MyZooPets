@@ -14,7 +14,9 @@ public class FloatyController : MonoBehaviour {
 	void Start () {
         FloatUp();
         foreach(NGUIAlphaTween alphaScript in alphaScripts){
-            alphaScript.StartAlphaTween();
+			if(alphaScript.gameObject.activeSelf){	// NOTE: Floaty stats will bypass this funtion call
+            	alphaScript.StartAlphaTween();
+			}
         }
 	}
 

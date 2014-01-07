@@ -8,6 +8,11 @@ public class TutorialData{
     // public bool FirstTimeDegradTrigger {get; set;}
     public List<string> ListPlayed {get; set;}	// list of tutorials that have been played	
 	
+	public bool AreTutorialsFinished() {
+		bool bTutsDone = ListPlayed.Contains( TutorialManager_Bedroom.TUT_LAST );
+		return bTutsDone;	
+	}
+	
     //================Initialization============
     public TutorialData(){}
 

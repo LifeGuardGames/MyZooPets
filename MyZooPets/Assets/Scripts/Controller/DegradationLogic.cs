@@ -109,6 +109,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	}
 
     private void RefreshDegradationCheck(){
+		// don't do these checks if the player has not yet finished the tutorials (we don't want them losing health/hunger)
+		bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		if ( !bTutsDone )
+			return;
+		
         // calculate changes in the pets mood
         TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
         StartCoroutine(CalculateMoodDegradation(sinceLastPlayed));
@@ -254,6 +259,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     // last played, the pet will suffer some mood loss.
     //---------------------------------------------------   
     private IEnumerator CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
+		Debug.Log("Doing mood degrads");
+		
         // wait a frame, or else the notification manager won't work properly
         yield return 0;
         

@@ -15,6 +15,12 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			DateTime now = LgDateTime.GetTimeNow();
 			bool retVal = now >= NextPlayPeriod;
 			
+			// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
+			bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+			bool bInhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER );
+			if ( !bTutsDone && bInhalerTutDone )
+				retVal = false;
+			
             return retVal;
         }
     } 

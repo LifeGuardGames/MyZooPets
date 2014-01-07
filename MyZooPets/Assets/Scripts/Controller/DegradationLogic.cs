@@ -105,7 +105,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
 		// damage the pet
 		int nDamage = trigger.GetDamage();
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -nDamage, Vector3.zero, 0, Vector3.zero);		
+		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -nDamage, Vector3.zero, 0, Vector3.zero, bFloaty: true);		
 	}
 
     private void RefreshDegradationCheck(){

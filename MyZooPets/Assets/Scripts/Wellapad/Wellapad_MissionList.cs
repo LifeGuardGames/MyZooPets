@@ -49,17 +49,6 @@ public class Wellapad_MissionList : MonoBehaviour {
 	}
 	
 	//---------------------------------------------------
-	// OnApplicationPause()
-	// Unity callback function.
-	//---------------------------------------------------		
-	void OnApplicationPause( bool bPaused ) {
-		if ( !bPaused ) {
-			// if the game is unpausing, we need to do a check to refresh the mission list	
-			WellapadMissionController.Instance.RefreshCheck();
-		}
-	}
-	
-	//---------------------------------------------------
 	// CreateMissions()
 	// Creates the mission entries for the Wellapad.
 	//---------------------------------------------------	

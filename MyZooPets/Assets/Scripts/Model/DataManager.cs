@@ -154,6 +154,14 @@ public class DataManager : Singleton<DataManager>{
 				if(Debug.isDebugBuild) Debug.Log("Auto save canceled because we are in a tutorial");
 				return;
 			}
+			
+			// also early out if we happen to be in the inhaler game.  Ultimately we may want to create a more elaborate hash/list
+			// of scenes it is okay to save in, if we ever create more scenes that shouldn't serialize data
+			string loadedLevelName = Application.loadedLevelName;
+			if ( loadedLevelName == "InhalerGamePet" ) {
+				Debug.Log("Not saving the game because its inhaler scene");
+				return;
+			}
 
             //game can be paused at anytime and sometimes MenuScene doesn't have
             //any thing that needs saving, so check before saving

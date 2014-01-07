@@ -90,13 +90,8 @@ public class GatingProgressData{
 		}
 		
 		// otherwise, calculate and save the new hp
-		Debug.Log("incoming damage: " + nDamage);
-		
 		int nHP = GatingProgress[strID];
 		nHP = Mathf.Max( nHP - nDamage, 0 );
-
-		Debug.Log("damage result: " + nHP);
-
 		GatingProgress[strID] = nHP;
 		
 		// then return whether or not the gate has been destroyed

@@ -355,11 +355,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		// update the game state
 		SetGameState( MinigameStates.GameOver );
 		
+		// show the game over UI
+		// make sure this is above _GameOver() because children  may do stuff that messes with the stats of the game
+		ui.TogglePopup( MinigamePopups.GameOver, true );		
+		
 		// call children function
 		_GameOver();
-		
-		// show the game over UI
-		ui.TogglePopup( MinigamePopups.GameOver, true );
 	}
 	
 	protected virtual void _GameOver() {

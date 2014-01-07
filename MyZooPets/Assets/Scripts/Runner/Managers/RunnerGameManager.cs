@@ -33,7 +33,11 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
        // return ScoreManager.Instance.Score;    
 		
 		// just changing it to distance run + coins
-		return ScoreManager.Instance.Distance + ScoreManager.Instance.Coins;
+		int nDistance = ScoreManager.Instance.Distance;
+		int nCoins = ScoreManager.Instance.Coins;
+		int nScore = nDistance + nCoins;
+		
+		return  nScore;
     }
 	
 	// Use this for initialization
@@ -69,7 +73,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 		// send out coins task
 		int nCoins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted( "Coins" + GetMinigameKey(), nCoins );
-
+		
+		// reset the game here so that time scale is returned to normal (for when the user exits the game)
         ResetGame();
 	}		
 	

@@ -259,8 +259,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     // last played, the pet will suffer some mood loss.
     //---------------------------------------------------   
     private IEnumerator CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
-		Debug.Log("Doing mood degrads");
-		
         // wait a frame, or else the notification manager won't work properly
         yield return 0;
         

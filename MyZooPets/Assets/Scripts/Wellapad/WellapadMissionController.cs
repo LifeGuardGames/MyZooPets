@@ -148,6 +148,17 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	}
 	
 	//---------------------------------------------------
+	// OnApplicationPause()
+	// Unity callback function.
+	//---------------------------------------------------		
+	void OnApplicationPause( bool bPaused ) {
+		if ( !bPaused ) {
+			// if the game is unpausing, we need to do a check to refresh the mission list	
+			RefreshCheck();
+		}
+	}	
+	
+	//---------------------------------------------------
 	// RefreshCheck()
 	// Function that checks to see if the wellapad missions
 	// list should be refreshed.  If it should, it will

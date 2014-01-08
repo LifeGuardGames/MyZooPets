@@ -15,6 +15,20 @@ public class DGTZone : LgButton {
 	public AsthmaStage GetStage() {
 		return eStage;	
 	}
+
+	//---------------------------------------------------
+	// OnFingerMove()
+	// The way a zone should work is, if the user's finger
+	// touches a zone at all, it should be as if the
+	// zone was clicked.
+	//---------------------------------------------------		
+	void OnFingerMove( FingerMotionEvent e ) {
+		ButtonClicked();
+	}
+	void OnFingerStationary( FingerMotionEvent e ) {
+		if ( e.Phase == FingerMotionPhase.Started )
+			ButtonClicked();
+	}
 	
 	//---------------------------------------------------
 	// ProcessClick()

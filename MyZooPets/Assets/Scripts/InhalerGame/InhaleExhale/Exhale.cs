@@ -17,14 +17,21 @@ public class Exhale : InhalerPart {
        FingerGestures.SwipeDirection direction = gesture.Direction; 
 
        if(direction == FingerGestures.SwipeDirection.Down){
-            //Attach handler. so game can move on to next step after animation is done
-            InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
-            //Disable hint when swipe gesture is registered. 
-            GetComponent<HintController>().DisableHint();
+            //Only proceed with this step if no listener is registered to OnAnimDone
+            //This is to fix the problem when the user swipes really fast during exhale
+            //the same listener is registered to the same event multiple time, causing
+            //skipping game steps
+            if(InhalerAnimationController.OnAnimDone == null){
+                //Attach handler. so game can move on to next step after animation is done
+                InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
-            animationController.Exhale();
-            AudioManager.Instance.PlayClip( "inhalerExhale" );      
+                //Disable hint when swipe gesture is registered. 
+                GetComponent<HintController>().DisableHint();
+
+                animationController.Exhale();
+                AudioManager.Instance.PlayClip( "inhalerExhale" );      
+            }
        }
     }
 

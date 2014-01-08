@@ -17,14 +17,17 @@ public class Inhale : InhalerPart {
        FingerGestures.SwipeDirection direction = gesture.Direction; 
 
        if(direction == FingerGestures.SwipeDirection.Up){
-            //Attach handler. so game can move on to next step after animation is done
-            InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
-            //Disable hint when swipe gesture is registered. 
-            GetComponent<HintController>().DisableHint();
+            if(InhalerAnimationController.OnAnimDone == null){
+                //Attach handler. so game can move on to next step after animation is done
+                InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
-            animationController.Inhale();
-            AudioManager.Instance.PlayClip( "inhalerInhale" );      
+                //Disable hint when swipe gesture is registered. 
+                GetComponent<HintController>().DisableHint();
+
+                animationController.Inhale();
+                AudioManager.Instance.PlayClip( "inhalerInhale" );      
+            }
        }
     }
 

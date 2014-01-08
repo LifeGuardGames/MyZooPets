@@ -26,7 +26,6 @@ public class WellapadScreenManager : MonoBehaviour {
 	// this function (for now) will set the proper screen.
 	//---------------------------------------------------		
 	public void SetScreen() {
-		Debug.Log("Trying to set the correct wellapad screen");
 		// for now, just check to see if the player has any outstanding missions.
 		bool bActive = WellapadMissionController.Instance.HasActiveTasks();
 		

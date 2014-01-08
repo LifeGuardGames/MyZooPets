@@ -26,7 +26,6 @@ public class WellapadData {
 	// when the missions have expired.
 	//---------------------------------------------------		
 	public void ResetMissions() {
-		Debug.Log("Resetting missions in the wellapad");
 		CurrentTasks = new Dictionary< string, Mission >();
 	}
 	

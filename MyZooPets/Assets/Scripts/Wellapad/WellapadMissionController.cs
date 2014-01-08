@@ -59,7 +59,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// unearned reward.
 	//---------------------------------------------------		
 	public bool HasActiveTasks() {
-		Debug.Log("Checking for active tasks.");
 		// start off assuming inactive
 		bool bActive = false;
 		
@@ -69,7 +68,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			if ( thisMission.RewardStatus == RewardStatuses.Unearned || thisMission.RewardStatus == RewardStatuses.Unclaimed )
 				bActive = true;
 		}
-		Debug.Log("Are there active tasks?: " + bActive);
+
 		return bActive;
 	}
 	
@@ -154,7 +153,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	//---------------------------------------------------		
 	void OnApplicationPause( bool bPaused ) {
 		if ( !bPaused ) {
-			Debug.Log("Application is un-pausing, checking for a refresh from the mission controller");
 			// if the game is unpausing, we need to do a check to refresh the mission list	
 			RefreshCheck();
 		}
@@ -167,7 +165,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// delete the current save data.
 	//---------------------------------------------------		
 	public void RefreshCheck() {
-		Debug.Log("Beginning refresh check");
         DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
 		
@@ -181,7 +178,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if ( bRefresh ) {
-			Debug.Log("A refresh is necessary");
 			//Before reseting mission. Go through current mission and send failed tasks to analytics server
 			foreach ( KeyValuePair<string, Mission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks ) {
 				foreach ( KeyValuePair<string, WellapadTask> taskKeyValuePair in mission.Value.Tasks ) {
@@ -285,7 +281,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// incoming task or not.
 	//---------------------------------------------------	
 	public WellapadTaskCompletionStates GetTaskStatus( WellapadTask task, bool bPop = false ) {
-		Debug.Log("Trying to get task status for " + task.TaskID);
 		WellapadTaskCompletionStates eStatus = WellapadTaskCompletionStates.Uncompleted;
 		
 		string strMission = task.MissionID;
@@ -328,7 +323,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// AddDefaultMissions()
 	//---------------------------------------------------		
 	private void AddDefaultMissions() {
-		Debug.Log("Adding default missions");
 		AddMission( "Critical" );
 		//AddMission( "Side" );		
 	}
@@ -369,7 +363,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			string strID = task.GetTaskID();
 			
 			savedTasks[strID] = new WellapadTask( task );
-			Debug.Log("Adding task " + task.GetTaskID());
 		}
 		
 		DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission] = new Mission( strMission, savedTasks );

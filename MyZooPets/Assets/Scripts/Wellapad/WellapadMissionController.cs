@@ -198,6 +198,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			DataManager.Instance.GameData.Wellapad.ResetMissions();
 			
 			AddDefaultMissions();
+			
+			// have the screens of the wellapad refresh before we send out the event below, because we want to make sure the
+			// missions screen is active
+			WellapadUIManager.Instance.RefreshScreen();
 		
 			// send event
 			if ( OnMissionsRefreshed != null ) 

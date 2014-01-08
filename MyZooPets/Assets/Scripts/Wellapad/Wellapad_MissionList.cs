@@ -25,6 +25,7 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {		
+		Debug.Log("Running Start() for MissionList");
 		// before doing anything check to see if we need to refresh our tasks
 		WellapadMissionController.Instance.RefreshCheck();
 		

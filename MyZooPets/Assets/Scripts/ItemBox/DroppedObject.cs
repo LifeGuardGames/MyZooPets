@@ -177,4 +177,15 @@ public abstract class DroppedObject : LgButton {
 	protected void ObtainObject() {
 		_ObtainObject();	
 	}
+	
+	//---------------------------------------------------
+	// OnApplicationPause()
+	// Unity callback function.
+	//---------------------------------------------------		
+	void OnApplicationPause( bool bPaused ) {
+		if ( bPaused ) {
+			// if the game is pausing, obtain this item
+			ObtainObject();
+		}
+	}	
 }

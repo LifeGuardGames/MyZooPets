@@ -19,6 +19,8 @@ public class LevelLogic : Singleton<LevelLogic> {
 	}
 
     void Awake(){
+		// Note that this is making the max level actually 1 below what it is in the enum -- this is intentional.
+		// This definition of max level is the one the game will use to correctly determine data stored in xml.
         maxLevel = Enum.GetNames(typeof(Level)).Length - 1;
     }
 

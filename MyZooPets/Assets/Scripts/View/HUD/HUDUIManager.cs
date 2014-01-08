@@ -53,7 +53,11 @@ public class HUDUIManager : Singleton<HUDUIManager> {
         //points progress bar data
         level = ((int)hudAnimator.LastLevel).ToString();
         nextLevelPoints = hudAnimator.NextLevelPoints;
-        levelText = points + "/" + nextLevelPoints;
+		
+		if ( LevelLogic.Instance && LevelLogic.Instance.IsAtMaxLevel() )
+			levelText = Localization.Localize( "MAX_LEVEL" );
+		else
+        	levelText = points + "/" + nextLevelPoints;
 
         //Star data
         starCount = hudAnimator.GetDisplayValue( HUDElementType.Stars).ToString();

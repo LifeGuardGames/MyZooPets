@@ -28,8 +28,6 @@ public class WellapadTaskUI : MonoBehaviour {
 		// cache the task
 		this.task = task;
 		
-		Debug.Log("Initing task UI " + task.TaskID);
-		
 		// set the description for this task
 		SetDesc();
 		
@@ -57,7 +55,6 @@ public class WellapadTaskUI : MonoBehaviour {
 	// the status of the task.
 	//---------------------------------------------------	
 	private void SetCheckboxSprite( bool bPop ) {
-		Debug.Log("Checking the status of " + task.TaskID);
 		// get the status
 		WellapadTaskCompletionStates eStatus = WellapadMissionController.Instance.GetTaskStatus( task, bPop );
 		

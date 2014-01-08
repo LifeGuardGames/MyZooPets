@@ -25,7 +25,6 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {		
-		Debug.Log("Running Start() for MissionList");
 		// before doing anything check to see if we need to refresh our tasks
 		WellapadMissionController.Instance.RefreshCheck();
 		
@@ -122,13 +121,11 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// DisplayMissions()
 	//---------------------------------------------------		
 	private IEnumerator DisplayMissions() {
-		Debug.Log("Starting to display missions for the mission list");
 		// reset the count for our grid labeling
 		nCount = 0;
 		
 		// destroy all children in the grid
 		foreach (Transform child in goGrid.transform) {
-			Debug.Log("Destroying child in mission list");
 			Destroy( child.gameObject );
 		}
 		

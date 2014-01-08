@@ -29,6 +29,8 @@ public class WellapadCountdown : MonoBehaviour {
 				// if we were, stop
 				bCounting = false;
 				
+				Debug.Log("Updating the countdown -- about to do a refresh");
+				
 				// and then refresh the wellapad screen
 				WellapadUIManager.Instance.RefreshScreen();
 			}

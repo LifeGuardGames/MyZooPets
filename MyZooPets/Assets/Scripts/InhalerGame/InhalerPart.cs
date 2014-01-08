@@ -11,8 +11,10 @@ public class InhalerPart : MonoBehaviour {
     protected int gameStepID; //The step in which the part will be activated
     protected string floatyText = "INHALER_FLOATY_NICE";
 
+    //Initialize any protected variables here
     protected virtual void Awake(){}
 
+    //Set up basic event handler. and disable inhaler part
     protected virtual void Start(){
         InhalerLogic.OnNextStep += CheckAndEnable;
         Disable();
@@ -28,7 +30,8 @@ public class InhalerPart : MonoBehaviour {
             Enable();
     }
 
-    //Hide Inhaler Part
+    //Hide Inhaler Part. don't override this function if you don't want the inhaler part
+    //to be disabled on start
     protected virtual void Disable(){}
 
     //Enable inhaler game part. 

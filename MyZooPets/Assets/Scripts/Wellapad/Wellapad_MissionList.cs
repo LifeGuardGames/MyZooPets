@@ -121,11 +121,13 @@ public class Wellapad_MissionList : MonoBehaviour {
 	// DisplayMissions()
 	//---------------------------------------------------		
 	private IEnumerator DisplayMissions() {
+		Debug.Log("Starting to display missions for the mission list");
 		// reset the count for our grid labeling
 		nCount = 0;
 		
 		// destroy all children in the grid
 		foreach (Transform child in goGrid.transform) {
+			Debug.Log("Destroying child in mission list");
 			Destroy( child.gameObject );
 		}
 		

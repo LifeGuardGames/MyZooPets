@@ -49,7 +49,7 @@ namespace CUDLR {
     private static HttpListener listener = new HttpListener();
     private static List<RouteAttribute> registeredRoutes;
     private static Queue<RequestContext> mainRequests = new Queue<RequestContext>();
-    private static bool isCreated = false;
+    // private static bool isCreated = false;
 
     // List of supported files
     // FIXME add an api to register new types

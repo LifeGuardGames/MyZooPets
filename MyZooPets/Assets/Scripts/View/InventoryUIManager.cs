@@ -156,6 +156,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 	}
 
 	public void HidePanel(){
-		inventoryPanel.GetComponent<TweenToggle>().Hide();
+		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
 	}
 }

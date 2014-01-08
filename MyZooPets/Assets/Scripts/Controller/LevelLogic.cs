@@ -19,9 +19,7 @@ public class LevelLogic : Singleton<LevelLogic> {
 	}
 
     void Awake(){
-		// Note that this is making the max level actually 1 below what it is in the enum -- this is intentional.
-		// This definition of max level is the one the game will use to correctly determine data stored in xml.
-        maxLevel = Enum.GetNames(typeof(Level)).Length - 1;
+        maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
     }
 
     //------------------------------------------------
@@ -30,6 +28,11 @@ public class LevelLogic : Singleton<LevelLogic> {
     //------------------------------------------------
     public int NextLevelPoints(){
         int nextLevel = (int) DataManager.Instance.GameData.Level.CurrentLevel + 1;
+		
+		// check for max level, because there may not be data that exists after it
+		if ( IsAtMaxLevel() )
+			nextLevel -= 1;
+		
         PetLevel petLevel = DataPetLevels.GetLevel((Level) nextLevel);
 
         return petLevel.LevelUpCondition;

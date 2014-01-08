@@ -19,7 +19,7 @@ public class LevelLogic : Singleton<LevelLogic> {
 	}
 
     void Awake(){
-        maxLevel = Enum.GetNames(typeof(Level)).Length - 1;
+        maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
     }
 
     //------------------------------------------------
@@ -28,6 +28,11 @@ public class LevelLogic : Singleton<LevelLogic> {
     //------------------------------------------------
     public int NextLevelPoints(){
         int nextLevel = (int) DataManager.Instance.GameData.Level.CurrentLevel + 1;
+		
+		// check for max level, because there may not be data that exists after it
+		if ( IsAtMaxLevel() )
+			nextLevel -= 1;
+		
         PetLevel petLevel = DataPetLevels.GetLevel((Level) nextLevel);
 
         return petLevel.LevelUpCondition;

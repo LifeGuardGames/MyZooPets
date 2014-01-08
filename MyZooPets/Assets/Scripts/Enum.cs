@@ -9,8 +9,7 @@ public enum Level{
     Level5,
     Level6,
     Level7,
-    Level8,
-    Level9,
+    Level8
 }
 
 public enum DosageRecord{

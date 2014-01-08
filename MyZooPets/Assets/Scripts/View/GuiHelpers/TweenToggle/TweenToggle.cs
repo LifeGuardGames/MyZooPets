@@ -96,11 +96,19 @@ public class TweenToggle : MonoBehaviour {
 		
 		Show(showDuration);
 	}
-
+	
 	public virtual void Show(float time){
 		// Implement in child
 	}
-
+	
+	// Since Hide() only saves its show/hide position in the beginning,
+	// 	if something has a dynamically changing position (inventory),
+	//	this will update the new positions before tweening
+	public void HideWithUpdatedPosition(){
+		RememberPositions();
+		Hide();
+	}
+	
 	public void Hide(){
 		// play sound (if it exists)
 		if ( !string.IsNullOrEmpty(strSoundHide) )

@@ -106,6 +106,9 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log("Date Mission are Created: " + DataManager.Instance.GameData.Wellapad.DateMissionsCreated);
   }
 
+  public static void GetWellapadCurrentTasks(){
+  }
+
   [CUDLR.Command("LgDateTimeNow", "get LgDateTime.GetTimeNow()")]
   public static void TimeNow(){
     CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());

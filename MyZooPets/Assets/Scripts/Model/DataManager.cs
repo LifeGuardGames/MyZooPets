@@ -151,7 +151,7 @@ public class DataManager : Singleton<DataManager>{
         if(paused){
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() ) {
-				if(Debug.isDebugBuild) Debug.Log("Auto save canceled because we are in a tutorial");
+				Debug.Log("Auto save canceled because we are in a tutorial");
 				return;
 			}
 			
@@ -227,12 +227,14 @@ public class DataManager : Singleton<DataManager>{
             return;
         }
         
-        if(Debug.isDebugBuild) Debug.Log("Game is saving");
+        Debug.Log("Game is saving");
 
         if(!String.IsNullOrEmpty(currentPetID)){
             string jsonString = JSON.Instance.ToJSON(gameData);
 
-        if(Debug.isDebugBuild) Debug.Log(jsonString);
+#if UNITY_EDITOR
+        Debug.Log(jsonString);
+#endif
 
             PlayerPrefs.SetString(currentPetID + "_GameData", jsonString); 
             Serialized();
@@ -244,7 +246,7 @@ public class DataManager : Singleton<DataManager>{
 
     //called when game data has be deserialized and ready to be used
     private void Deserialized(){
-        if(Debug.isDebugBuild) Debug.Log("Deserialized");
+        Debug.Log("Deserialized");
 
         if(OnGameDataLoaded != null)
             OnGameDataLoaded(this, EventArgs.Empty);
@@ -252,7 +254,7 @@ public class DataManager : Singleton<DataManager>{
 
     //called when game data has been serialized
     private void Serialized(){
-        if(Debug.isDebugBuild) Debug.Log("Serialized");
+        Debug.Log("Serialized");
 
         if(OnGameDataSaved != null)
             OnGameDataSaved(this, EventArgs.Empty);

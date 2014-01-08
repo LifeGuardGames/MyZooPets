@@ -22,9 +22,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	private const int MAX_TRIGGERS = 6;
     private List<DegradData> degradationTriggers;
 
-    // public List<DegradData> DegradationTriggers{
-    //     get{return DataManager.Instance.GameData.Degradation.DegradationTriggers;}
-    // }
     public List<DegradData> DegradationTriggers{
         get{return degradationTriggers;} 
     }
@@ -116,8 +113,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
         // calculate changes in the pets mood
         TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
-        StartCoroutine(CalculateMoodDegradation(sinceLastPlayed));
-        StartCoroutine(CalculateHealthDegradation());
+        // StartCoroutine(CalculateMoodDegradation(sinceLastPlayed));
+        // StartCoroutine(CalculateHealthDegradation());
+        CalculateMoodDegradation(sinceLastPlayed);
+        CalculateHealthDegradation();
     }
     
     //---------------------------------------------------
@@ -149,13 +148,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             if ( !bTriggers && i == 0 ) {
                 location = DataLoader_TriggerLocations.GetTriggerLocation( "TrigLoc_0", "Bedroom" );
                 if ( location == null )
-                    Debug.Log("Tutorial trigger location not set up correctly");
+                    Debug.LogError("Tutorial trigger location not set up correctly");
                 
                 objectIndex = 3;
             }
 
             //spawn them at a pre define location ID is the order in which the data are created
-            // DataManager.Instance.GameData.Degradation.DegradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
             degradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
         }                
 
@@ -183,7 +181,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         int numToSpawn = Mathf.Min( MAX_TRIGGERS, nNewTriggers + nUncleanedTriggers );
         if ( numToSpawn < 0 ) {
             numToSpawn = 0;
-            Debug.Log("Number of triggers to spawn somehow < 0...");
+            Debug.LogError("Number of triggers to spawn somehow < 0...");
         }   
         
         return numToSpawn;
@@ -198,22 +196,28 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     private int GetNewTriggerCount() {
         int nNew = 0;
         int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+        DegradationData degradationData = DataManager.Instance.GameData.Degradation;
 
         //There are missed play periods
         if(numOfMissedPlayPeriod > 0){
             //max of 2 missed play period will be accounted
             if(numOfMissedPlayPeriod > 2) numOfMissedPlayPeriod = 2;
 
+            //calculate num of new triggers
             nNew = numOfMissedPlayPeriod * 3;
 
+            //update lastTriggerSpawnedPlayPeriod. Important that we update it here
+            //otherwise more triggers will be spawned if user return from pause
+            degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+
         }
-        //No missed play periods. Next Play Period
+        //No missed play periods. spawn triggers for Next Play Period
         else{
             DateTime now = LgDateTime.GetTimeNow();
-            DegradationData degradationData = DataManager.Instance.GameData.Degradation;
             DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastTriggerSpawnedPlayPeriod;
             TimeSpan timeSinceLastTriggerSpawned = now - lastTriggerSpawnedPlayPeriod;
 
+            //only spawn new trigger if time hasn't been rewind somehow
             if(lastTriggerSpawnedPlayPeriod <= now){
                 //new play period need to refresh variable
                 if(timeSinceLastTriggerSpawned.TotalHours >= 12){
@@ -228,28 +232,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             }
         }
 
-
-        //LgDateTime.GetTimeNow() - PlayPeriod.NextPlayPeriod
-        // if(timeSinceStartOfPlayPeriod.TotalHours < 12){
-
-        // }
-        // if(sinceLastPlayed.Days > 0){ //reset if new day
-        //     DataManager.Instance.GameData.Degradation.MorningTrigger = true;
-        //     DataManager.Instance.GameData.Degradation.AfternoonTrigger = true;
-        // }
-
-        // if( PlayPeriodLogic.GetTimeFrame( now ) == TimeFrames.Morning ){ //morning
-        //     if(DataManager.Instance.GameData.Degradation.MorningTrigger){
-        //         nNew = 3;
-        //         DataManager.Instance.GameData.Degradation.MorningTrigger = false;
-        //     }
-        // }else{ //afternoon
-        //     if(DataManager.Instance.GameData.Degradation.AfternoonTrigger){
-        //         nNew = 3; 
-        //         DataManager.Instance.GameData.Degradation.AfternoonTrigger = false;
-        //     }
-        // }       
-        
         return nNew;
     }
         
@@ -258,9 +240,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     // Depending on how long it has been since the user
     // last played, the pet will suffer some mood loss.
     //---------------------------------------------------   
-    private IEnumerator CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
+    private void CalculateMoodDegradation( TimeSpan timeSinceLastPlayed ) {
         // wait a frame, or else the notification manager won't work properly
-        yield return 0;
         
         // amount to degrade mood by
         int nMoodLoss = 0;
@@ -290,7 +271,18 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         
         // if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
         if ( nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TIME_DECAY_TUT ) )
-            TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
+            StartCoroutine(MoodDegradTutorial());
+    }
+
+    //-----------------------------------------------
+    // MoodDeradTutorial()
+    // Yield one frame before calling a separate class
+    // because CalculateMoodDeradation is called in Awake()
+    // and Awake() execution order is not guaranteed between classes 
+    //-----------------------------------------------
+    private IEnumerator MoodDegradTutorial(){
+        yield return 0;
+        TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
     }
 
     //---------------------------------------------------   
@@ -298,9 +290,8 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     // Health degrads each time user misses inhaler or a 
     // play period
     //---------------------------------------------------   
-    private IEnumerator CalculateHealthDegradation(){
+    private void CalculateHealthDegradation(){
         // wait a frame, or else the notification manager won't work properly
-        yield return 0;
 
         int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
 
@@ -345,6 +336,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             //if within 12 hours no punishment
             //if > 12 hrs punishment for every 12 hrs miss
             missedPlayPeriod = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
+
             // Debug.Log("health degrade numOfMissedPlayPeriod: " + missedPlayPeriod);
         }
 

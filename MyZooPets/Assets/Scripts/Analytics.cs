@@ -70,10 +70,10 @@ public class Analytics : MonoBehaviour {
 
     //Which triggers does the user have difficulty recognizing as bad triggers?
     //Number of times crashed into trigger. 
-    // public void RunnerPlayerCrashIntoTrigger(string triggerName){
-    //     if(!String.IsNullOrEmpty(triggerName))
-    //         GA.API.Design.NewEvent(RUNNER_CATEGORY + "TriggerCrashed:" + triggerName);
-    // }
+    public void RunnerPlayerCrashIntoTrigger(string triggerName){
+        if(!String.IsNullOrEmpty(triggerName))
+            GA.API.Design.NewEvent(RUNNER_CATEGORY + "TriggerCrashed:" + triggerName);
+    }
 
     public void RunnerPlayerItemPickUp(string itemName){
         if(!String.IsNullOrEmpty(itemName))
@@ -133,7 +133,7 @@ public class Analytics : MonoBehaviour {
         }
         isGameTimerOn = false;
         TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
-        GA.API.Design.NewEvent(levelName + "TimeSpent:" + timeSpentInGame.Minutes);
+        GA.API.Design.NewEvent(levelName + "TimeSpent", (float) timeSpentInGame.Minutes);
     }
 
     void OnApplicationPause(bool isPaused){

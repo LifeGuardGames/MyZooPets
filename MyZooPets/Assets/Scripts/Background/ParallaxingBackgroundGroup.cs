@@ -15,7 +15,7 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
     public List<ParallaxingBackground> ParralaxingTextures = new List<ParallaxingBackground>();
 	
 	// Update is called once per frame
-    void LateUpdate() {
+    void Update() {
         if(!RunnerGameManager.Instance.GameRunning) return;
 
         foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
@@ -24,7 +24,8 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 
             Vector2 newOffset = new Vector2(currentSpeed, 0f);
             UITexture theTexture = currentParallax.GetComponent<UITexture>();
-            theTexture.material.SetTextureOffset("_MainTex", newOffset);
+            theTexture.uvRect = new Rect(currentSpeed, 0f, 0.3f, 1f);
+			//theTexture.material.SetTextureOffset("_MainTex", newOffset);
         }
 	}
 

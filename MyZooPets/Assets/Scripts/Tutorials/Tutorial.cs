@@ -171,16 +171,17 @@ public abstract class Tutorial {
 	// SpotlightObject()
 	// Puts a spotlight around the incoming object to
 	// draw attention to it.
+	// eAnchor is the incoming anchor of the object/where
+	// the spotlight should be created.  For 3D objects
+	// the anchor should be center, and for GUI elements
+	// the anchor should be whatever anchor the element
+	// is in.
 	//---------------------------------------------------	
 	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight" ) {
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
-		if ( bGUI ) {
+		if ( bGUI )
 			vPos = LgNGUITools.GetScreenPosition( goTarget );
-			
-			// it's possible we might need to transform this position if it's not already in the center panel
-			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, eAnchor, InterfaceAnchors.Center );
-		}
 		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			vPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
@@ -195,7 +196,8 @@ public abstract class Tutorial {
 		
 		// create the spotlight
 		GameObject goResource = Resources.Load( strSpotlightPrefab ) as GameObject;
-		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
+		string strAnchor = "Anchor-" + eAnchor.ToString();
+		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find(strAnchor), goResource );
 		
 		// move the spotlight into position
 		vPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight

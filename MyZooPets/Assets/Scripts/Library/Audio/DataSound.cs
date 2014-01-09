@@ -16,7 +16,7 @@ public class DataSound {
 	}
 	
 	// volume of the sound
-	private float fVolume = 1.0f;
+	private float fVolume = 0.5f;
 	public float GetVolume() {
 		return fVolume;	
 	}

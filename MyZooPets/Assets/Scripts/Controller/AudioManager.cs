@@ -58,7 +58,7 @@ public class AudioManager : Singleton<AudioManager>{
 				backgroundClip = Resources.Load( strBgMusic ) as AudioClip;
 
 			D.Assert(backgroundClip != null, "Null audioclip");
-			backgroundSource.volume = .2f;
+			backgroundSource.volume = 0.5f;
 			backgroundSource.loop = true;
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();
@@ -114,13 +114,13 @@ public class AudioManager : Singleton<AudioManager>{
 		return PlaySound( sound, hashOverrides );	
 	}
 	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
-		return PlayClip( strClip, eType, 1.0f, new Hashtable() );	
+		return PlayClip( strClip, eType, 0.2f, new Hashtable() );	
 	}	
 	public LgAudioSource PlayClip( string strClip ) {
-		return PlayClip( strClip, Preferences.Sound, 1.0f, new Hashtable() );	
+		return PlayClip( strClip, Preferences.Sound, 0.2f, new Hashtable() );	
 	}
 	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides ) {
-		return PlayClip( strClip, Preferences.Sound, 1.0f, hashOverrides );	
+		return PlayClip( strClip, Preferences.Sound, 0.2f, hashOverrides );	
 	}
 	
 	///////////////////////////////////////////

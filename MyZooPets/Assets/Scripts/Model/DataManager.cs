@@ -140,8 +140,11 @@ public class DataManager : Singleton<DataManager>{
 
             //Serialize current pet data when loading into MenuScene
             if(!firstTime && canSaveData == "Yes"){
-                SaveGameData();
-                PlayerPrefs.SetString("CanSaveData", "No");
+                //check there is actually data to be saved before saving
+                if(!String.IsNullOrEmpty(currentPetID) && gameData != null){
+                    SaveGameData();
+                    PlayerPrefs.SetString("CanSaveData", "No");
+                }
             }
         }
     }
@@ -227,9 +230,11 @@ public class DataManager : Singleton<DataManager>{
             return;
         }
         
+#if UNITY_EDITOR
         Debug.Log("Game is saving");
+#endif
 
-        if(!String.IsNullOrEmpty(currentPetID)){
+        if(!String.IsNullOrEmpty(currentPetID) && gameData != null){
             string jsonString = JSON.Instance.ToJSON(gameData);
 
 #if UNITY_EDITOR

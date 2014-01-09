@@ -23,7 +23,6 @@ public class Analytics : MonoBehaviour {
     public const string TASK_STATUS_COMPLETE = "Complete";
     public const string TASK_STATUS_FAIL = "Fail";
 
-    private static bool isCreated = false;
 
     public const string INHALER_CATEGORY = "MiniGame:Inhaler:";
     public const string RUNNER_CATEGORY = "MiniGame:Runner:";
@@ -33,6 +32,7 @@ public class Analytics : MonoBehaviour {
     private DateTime playTime;
     private bool isGameTimerOn = false;
 
+    private static bool isCreated = false;
     private static Analytics instance;
 
     //This instance creates itself if it's not in the scene.
@@ -166,7 +166,7 @@ public class Analytics : MonoBehaviour {
     //Wellapad
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
         if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && !String.IsNullOrEmpty(taskID))
-            GA.API.Design.NewEvent(taskStatus + ":" + missionID + ":" + taskID);
+            GA.API.Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
     }
 
     //Gating
@@ -179,5 +179,20 @@ public class Analytics : MonoBehaviour {
     public void TutorialCompleted(string tutorialID){
         if(!String.IsNullOrEmpty(tutorialID))
             GA.API.Design.NewEvent("Tutorial:Completed:" + tutorialID);
+    }
+
+    //Flame unlocked
+    public void FlameUnlocked(string flameID){
+        if(!String.IsNullOrEmpty(flameID))
+            GA.API.Design.NewEvent("Flame:Unlocked:" + flameID);
+    }
+
+    //Pet level up
+    public void LevelUnlocked(Level levelID){
+        GA.API.Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
+    }
+
+    public void ZeroHealth(){
+        GA.API.Design.NewEvent("ZeroHealth");
     }
 }

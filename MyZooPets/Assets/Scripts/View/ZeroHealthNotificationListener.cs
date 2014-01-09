@@ -34,5 +34,8 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
         notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function); 
         
         NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+        //Send analytics event
+        Analytics.Instance.ZeroHealth();
     }
 }

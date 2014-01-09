@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
-
+	
+	public GameObject grid;
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
@@ -26,13 +27,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-	private GameObject grid;
 
 	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
-		grid = itemArea.transform.Find("Grid").gameObject;
-
 		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
 		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
 		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
@@ -411,8 +409,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
         Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-        itemArea.transform.localPosition = new Vector3(itemArea.transform.localPosition.x, -76.897f, itemArea.transform.localPosition.z);
-        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(clipRange.x, 20.0f, clipRange.z, clipRange.w);
+		
+		// Stop the springing action when switching
+		SpringPanel spring = itemArea.GetComponent<SpringPanel>();
+		if(spring != null){
+			spring.enabled = false;	
+		}
+		
+		// Reset the localposition and clipping position
+        itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
+        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
 
 	//Delay calling reposition due to async problem Destroying/Repositionoing.

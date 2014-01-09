@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: Sprite (BloodOutline)
   m_TagString: Untagged
@@ -52,7 +53,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -152,15 +153,15 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 0
+    e03: .599999964
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680
+    e13: -7680.59961
     e20: 0
     e21: 0
     e22: 384
-    e23: 10
+    e23: -5
     e30: 0
     e31: 0
     e32: 0
@@ -170,6 +171,18 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a44f3ea48b1b8348aa85dff9719d964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iPhone5Scale: {x: 1363, y: 768, z: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

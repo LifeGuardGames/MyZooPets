@@ -39,7 +39,9 @@ public class DGTManager : MinigameManager<DGTManager> {
 	// characters are spawned here
 	public Vector3 vSpawnLocation;	
 	private Vector3 GetSpawnLocation() {
-		return vSpawnLocation;	
+		// the location is in viewport coordinates, so translate it
+		Vector3 vRealLoc = CameraManager.Instance.cameraMain.ViewportToWorldPoint( vSpawnLocation );
+		return vRealLoc;	
 	}
 	
 	// prefab for character to be created

@@ -195,4 +195,8 @@ public class Analytics : MonoBehaviour {
     public void ZeroHealth(){
         GA.API.Design.NewEvent("ZeroHealth");
     }
+
+    public void TriggerHitPet(){
+        GA.API.Design.NewEvent("TriggerHitPet");
+    }
 }

@@ -103,6 +103,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// damage the pet
 		int nDamage = trigger.GetDamage();
 		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, -nDamage, Vector3.zero, 0, Vector3.zero, bFloaty: true);		
+
+        //Send analytics event
+        Analytics.Instance.TriggerHitPet();    
 	}
 
     private void RefreshDegradationCheck(){
@@ -113,8 +116,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
         // calculate changes in the pets mood
         TimeSpan sinceLastPlayed = LgDateTime.GetTimeSinceLastPlayed();
-        // StartCoroutine(CalculateMoodDegradation(sinceLastPlayed));
-        // StartCoroutine(CalculateHealthDegradation());
         CalculateMoodDegradation(sinceLastPlayed);
         CalculateHealthDegradation();
     }

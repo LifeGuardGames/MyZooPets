@@ -17,7 +17,8 @@ public class MegaHazard : Singleton<MegaHazard> {
 	public float GapClosingIncrement = 0.01f;
 	public float SlowDownStayDuration = 1.0f;
 	public ParticleSystem hazardParticle;
-
+	public ParticleSystem hazardParticle2;
+	
 	private float mSlowDownStayPulse = 0f;
 	private float mDistanceUntilTarget = 0f;
 	private float mDistanceRegainPulse = 0f;
@@ -75,9 +76,10 @@ public class MegaHazard : Singleton<MegaHazard> {
 		MinigameStates gameState = args.GetGameState();
 		if(gameState == MinigameStates.Paused){
 			hazardParticle.Pause();
+			hazardParticle2.Pause();
 		}else if(gameState == MinigameStates.Playing){
 			hazardParticle.Play();
-
+			hazardParticle2.Play();
 		}
 	}
 

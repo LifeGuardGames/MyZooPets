@@ -78,6 +78,7 @@ GameObject:
   - 114: {fileID: 11400014}
   - 114: {fileID: 11400016}
   - 65: {fileID: 6500000}
+  - 114: {fileID: 11400046}
   m_Layer: 10
   m_Name: QuitButton
   m_TagString: Untagged
@@ -147,6 +148,7 @@ GameObject:
   - 114: {fileID: 11400030}
   - 114: {fileID: 11400032}
   - 65: {fileID: 6500002}
+  - 114: {fileID: 11400050}
   m_Layer: 10
   m_Name: RestartButton
   m_TagString: Untagged
@@ -199,6 +201,7 @@ GameObject:
   - 114: {fileID: 11400042}
   - 114: {fileID: 11400044}
   - 65: {fileID: 6500004}
+  - 114: {fileID: 11400048}
   m_Layer: 10
   m_Name: ResumeButton
   m_TagString: Untagged
@@ -240,7 +243,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 260, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400016}
@@ -251,7 +254,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 260, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -276,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1363.38489, y: 300, z: 1}
+  m_LocalScale: {x: 1791.50061, y: 300, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
 --- !u!4 &400012
@@ -820,6 +823,51 @@ MonoBehaviour:
   functionName: ResumeGame
   trigger: 0
   includeChildren: 0
+--- !u!114 &11400046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 400014}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  duration: 0
+--- !u!114 &11400048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 400020}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  duration: 0
+--- !u!114 &11400050
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 400012}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  duration: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

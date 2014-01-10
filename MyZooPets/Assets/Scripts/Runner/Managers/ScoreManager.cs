@@ -90,7 +90,10 @@ public class ScoreManager : Singleton<ScoreManager> {
 
     public void AddPoints(int inNumPointsToAdd){
 		// score can't go below 0
-        mPlayerPoints = Mathf.Max( mPlayerPoints + inNumPointsToAdd, 0 );
+        //mPlayerPoints = Mathf.Max( mPlayerPoints + inNumPointsToAdd, 0 );
+		
+		// points is now being absorbed into coins...should probably be the other way around...
+		AddCoins( inNumPointsToAdd );
     }
 
     public void SetDistancePoints(int inDistancePoints){

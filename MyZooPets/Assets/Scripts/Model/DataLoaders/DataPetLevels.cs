@@ -15,7 +15,7 @@ public class DataPetLevels{
             petLv = allLevels[id];
         }
 		else
-			Debug.Log("No pet level data for " + id);
+			Debug.LogError("No pet level data for " + id);
 
         return petLv;
     }

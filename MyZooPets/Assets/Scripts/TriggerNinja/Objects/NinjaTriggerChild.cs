@@ -21,6 +21,6 @@ public class NinjaTriggerChild : MonoBehaviour {
 		if ( triggerParent )
 			triggerParent.ChildBecameInvis();
 		else
-			Debug.Log("Trigger child does not have a parent...");
+			Debug.LogError("Trigger child does not have a parent...");
 	}
 }

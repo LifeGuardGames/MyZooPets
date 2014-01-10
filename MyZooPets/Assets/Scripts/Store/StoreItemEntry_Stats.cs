@@ -22,7 +22,7 @@ public class StoreItemEntry_Stats : StoreItemEntry {
 		// do some bounds and null checking
 		StatsItem item = (StatsItem) itemData;
 		if ( item == null ) {
-			Debug.Log("Stats item not actually a stats item...", this);
+			Debug.LogError("Stats item not actually a stats item...", this);
 			return;
 		}
 		

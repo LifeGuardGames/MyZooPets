@@ -22,7 +22,7 @@ public class DestroyThis : MonoBehaviour {
 	public float m_fStartLife = 0;
 	public void SetLife( float i_float ) {
 		if ( IsSet() ) {
-			Debug.Log("Life already set on DestroyThis...not intended.");
+			Debug.LogError("Life already set on DestroyThis...not intended.");
 			return;
 		}
 		

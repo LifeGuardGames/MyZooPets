@@ -35,7 +35,7 @@ public class SpawnGroup_Split : SpawnGroup {
 		
 		// just in case
 		if ( nCount < 2 ) {
-			Debug.Log("Illegal index for spawning split group");	
+			Debug.LogError("Illegal index for spawning split group");	
 		}
 		
 		// for splits we want something kind of close to the center of the screen, so trim the first and last 2

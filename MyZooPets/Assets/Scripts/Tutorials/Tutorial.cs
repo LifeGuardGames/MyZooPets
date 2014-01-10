@@ -210,7 +210,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------		
 	protected void RemoveSpotlight() {
 		if ( goSpotlight == null ) {
-			Debug.Log("Trying to destroy a spotlight that doesn't exist!");
+			Debug.LogError("Trying to destroy a spotlight that doesn't exist!");
 			return;
 		}
 		
@@ -223,7 +223,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------		
 	protected void RemovePopup() {
 		if ( goPopup == null ) {
-			Debug.Log("Trying to destroy a popup that doesn't exist!");
+			Debug.LogError("Trying to destroy a popup that doesn't exist!");
 			return;
 		}
 		

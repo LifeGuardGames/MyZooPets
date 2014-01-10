@@ -182,7 +182,7 @@ public class CameraManager : Singleton<CameraManager> {
 				vTransformed = TransformAnchor_Top( vPos, eAnchorIn );
 				break;
 			default:
-				Debug.Log("Sorry, anchor not supported yet");
+				Debug.LogError("Sorry, anchor not supported yet");
 				break;
 		}
 		
@@ -205,7 +205,7 @@ public class CameraManager : Singleton<CameraManager> {
 				vTransformed.y += nativeHeight / 2;
 				break;
 			default:
-				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
+				Debug.LogError("Sorry future team, Joe did not implement the feature you're looking for yet.");
 				break;
 		}
 		
@@ -228,7 +228,7 @@ public class CameraManager : Singleton<CameraManager> {
 				vTransformed.y -= nativeHeight;
 				break;			
 			default:
-				Debug.Log("Sorry future team, Joe did not implement the feature you're looking for yet.");
+				Debug.LogError("Sorry future team, Joe did not implement the feature you're looking for yet.");
 				break;
 		}
 		

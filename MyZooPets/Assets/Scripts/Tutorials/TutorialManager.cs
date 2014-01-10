@@ -27,7 +27,7 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	public void SetTutorial( GameTutorial tutorial ) {
 		// check to make sure there are not overlapping tutorials
 		if ( tutorial != null && this.tutorial != null ) {
-			Debug.Log("Tutorial Warning: " + tutorial + " is trying to override " + this.tutorial + " ABORTING!");
+			Debug.LogError("Tutorial Warning: " + tutorial + " is trying to override " + this.tutorial + " ABORTING!");
 			return;	
 		}
 	

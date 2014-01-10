@@ -16,7 +16,7 @@ public static class HashUtils  {
 		if ( hash.Contains(strKey) ) 
 			val = (T)hash[strKey];
 		else if ( !string.IsNullOrEmpty(strError) )
-			Debug.Log(strError + "Can't find key " + strKey);
+			Debug.LogError(strError + "Can't find key " + strKey);
 		
 		return val;
     }

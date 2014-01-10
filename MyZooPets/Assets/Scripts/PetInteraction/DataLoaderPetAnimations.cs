@@ -45,7 +45,7 @@ public class DataLoaderPetAnimations {
 		}
 		
 		if ( data == null )
-			Debug.Log("A query for an unrestricted animation in category " + strCat + " came up with nothing!");
+			Debug.LogError("A query for an unrestricted animation in category " + strCat + " came up with nothing!");
 		
         return data;
 	}
@@ -98,7 +98,7 @@ public class DataLoaderPetAnimations {
 		}
 		
 		if ( data == null )
-			Debug.Log("A query for a restricted animation(" + eMood + ", " + eHealth + ", " + strCat + ") came up with nothing!");
+			Debug.LogError("A query for a restricted animation(" + eMood + ", " + eHealth + ", " + strCat + ") came up with nothing!");
 		
 		return data;
 	}
@@ -184,7 +184,7 @@ public class DataLoaderPetAnimations {
 		// second store the data in a plain hash table for a list of all animations
 		string strID = data.GetID();
 		if ( hashDataList.ContainsKey(strID ) )
-			Debug.Log("Warning!  Multiple pet animations with the same ID!");
+			Debug.LogError("Warning!  Multiple pet animations with the same ID!");
 		else
 			hashDataList[strID] = data;
 		

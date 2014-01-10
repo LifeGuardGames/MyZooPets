@@ -80,7 +80,7 @@ public class LWFAnimator : LWFObject {
 				//_movie = lwf.rootMovie.AttachMovie(_clipName, _clipName, enterFrame: EnterFrameCallback);
 				
 				// but I'd rather just show some debug message and not do anything
-				Debug.Log("No such clip as " + _clipName + " on " + gameObject.name);
+				Debug.LogError("No such clip as " + _clipName + " on " + gameObject.name);
 			}
 			
 			if (_movie != null && _clip != null) {

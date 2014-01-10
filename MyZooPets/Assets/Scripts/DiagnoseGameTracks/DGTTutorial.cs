@@ -111,7 +111,7 @@ public class DGTTutorial : MinigameTutorial {
 				GameObject.Destroy( goZoneFX );
 				break;
 			default:
-				Debug.Log("Clinic tutorial has an unhandled step: " + nStep );
+				Debug.LogError("Clinic tutorial has an unhandled step: " + nStep );
 				break;		
 		}		
 			
@@ -172,7 +172,7 @@ public class DGTTutorial : MinigameTutorial {
 		if ( stackStages.Count > 0 )
 			eStage = stackStages.Pop();
 		else
-			Debug.Log("Clinic tutorial trying to pop a stage that doesn't exist.");
+			Debug.LogError("Clinic tutorial trying to pop a stage that doesn't exist.");
 		
 		return eStage;
 	}

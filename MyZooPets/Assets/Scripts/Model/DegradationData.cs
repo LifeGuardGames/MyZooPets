@@ -22,7 +22,7 @@ public class DegradationData{
 		if ( UncleanedTriggers.ContainsKey( strArea ) )
 			nTriggers = (int) UncleanedTriggers[strArea];
 		else
-			Debug.Log("No uncleaned triggers found for area: " + strArea);
+			Debug.LogError("No uncleaned triggers found for area: " + strArea);
 		
 		return nTriggers;
 	}

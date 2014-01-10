@@ -58,7 +58,7 @@ public class AudioManager : Singleton<AudioManager>{
 				backgroundClip = Resources.Load( strBgMusic ) as AudioClip;
 
 			D.Assert(backgroundClip != null, "Null audioclip");
-			backgroundSource.volume = 0.5f;
+			backgroundSource.volume = 0.3f;
 			backgroundSource.loop = true;
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();
@@ -100,14 +100,14 @@ public class AudioManager : Singleton<AudioManager>{
 	///////////////////////////////////////////	
 	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume, Hashtable hashOverrides ) {
 		if ( strClip == "" ) {
-			Debug.Log("Something trying to play a sound with an empty sound id...");
+			Debug.LogError("Something trying to play a sound with an empty sound id...");
 			return null;
 		}
 		
 		DataSound sound = DataSounds.GetSoundData( strClip );
 		
 		if ( sound == null ) {
-			Debug.Log("No such sound with id " + strClip );
+			Debug.LogError("No such sound with id " + strClip );
 			return null;
 		}
 			

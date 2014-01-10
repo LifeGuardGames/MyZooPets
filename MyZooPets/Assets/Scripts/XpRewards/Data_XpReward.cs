@@ -84,7 +84,7 @@ public class Data_XpReward {
 		}
 		
 		if ( rangeCorrect == null )
-			Debug.Log("Attempted to get range data for " + GetID() + " for level " + nLevel + " but it did not exist...");
+			Debug.LogError("Attempted to get range data for " + GetID() + " for level " + nLevel + " but it did not exist...");
 		
 		return rangeCorrect;
 	}
@@ -114,7 +114,7 @@ public class Data_XpReward {
 		}
 		
 		if ( !bOK )
-			Debug.Log( strError + "Something going wrong in range data");
+			Debug.LogError( strError + "Something going wrong in range data");
 		
 		return bOK;
 	}

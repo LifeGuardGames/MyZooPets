@@ -26,7 +26,7 @@ public class PetInfoData{
 		if ( nFireBreaths > 1 )
 			nFireBreaths = 1;
 		else if ( nFireBreaths < 0 && !bInfiniteMode ) {
-			Debug.Log("Fire breaths somehow going negative.");
+			Debug.LogError("Fire breaths somehow going negative.");
 			nFireBreaths = 0;
 		}
 	}

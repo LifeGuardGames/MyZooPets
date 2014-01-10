@@ -22,7 +22,7 @@ public class DataLoader_WellapadTasks {
 		if ( hashAllData.ContainsKey( strTaskID ) ) 
 			data = (Data_WellapadTask) hashAllData[strTaskID];
 		else
-			Debug.Log("Could not find task data with id: " + strTaskID);
+			Debug.LogError("Could not find task data with id: " + strTaskID);
 		
 		return data;
 	}
@@ -68,7 +68,7 @@ public class DataLoader_WellapadTasks {
 			}
 		}
 		else
-			Debug.Log("Error...no missions for " + strMissionType);		
+			Debug.LogError("Error...no missions for " + strMissionType);		
 
 		return listTasksFinal;
 	}
@@ -89,7 +89,7 @@ public class DataLoader_WellapadTasks {
 		}
 		
 		// if we get here, we did not find the task...
-		Debug.Log("Tried to find a specific task: " + strID + " of " + strMissionType + " -- but could not");
+		Debug.LogError("Tried to find a specific task: " + strID + " of " + strMissionType + " -- but could not");
 		return null;
 	}
 	*/
@@ -154,7 +154,7 @@ public class DataLoader_WellapadTasks {
 		// also add it to the all data hash (for easy individual access)
 		string strID = data.GetTaskID();
 		if ( hashAllData.ContainsKey( strID ) )
-			Debug.Log("Duplicate task id: " + strID);
+			Debug.LogError("Duplicate task id: " + strID);
 		else
 			hashAllData[strID] = data;
 	}

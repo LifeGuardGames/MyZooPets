@@ -32,7 +32,7 @@ public class XpRewardBonus {
 		
 		// to save me from myself...
 		if ( fBonus >= 1 ) {
-			Debug.Log(strError + "Bonus is >= 1...I really don't think you meant this...making it .01 instead");
+			Debug.LogError(strError + "Bonus is >= 1...I really don't think you meant this...making it .01 instead");
 			fBonus = .01f;
 		}
 	}

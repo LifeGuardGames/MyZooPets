@@ -104,7 +104,7 @@ public class DataItems{
 				if ( !categoryItem.ContainsKey( itemID ) )
                 	categoryItem.Add(itemID, item);
 				else
-					Debug.Log( itemID + " already in items dict" );
+					Debug.LogError( itemID + " already in items dict" );
             }
 
             //Store dictionary into allItems

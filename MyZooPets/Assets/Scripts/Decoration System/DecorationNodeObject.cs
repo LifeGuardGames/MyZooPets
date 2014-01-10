@@ -44,7 +44,7 @@ public class DecorationNodeObject : DecorationNode {
 			goDeco.transform.parent = transform.parent;	// put it in the hierachy of decorations in this room	
 		}
 		else
-			Debug.Log("No such prefab for " + strResource);
+			Debug.LogError("No such prefab for " + strResource);
 	}
 	
 	//---------------------------------------------------
@@ -68,7 +68,7 @@ public class DecorationNodeObject : DecorationNode {
 	//---------------------------------------------------	
 	protected override void _SetDefaultDeco( string strDecoID ) {
 		if ( goDefaultDeco == null ) {
-			Debug.Log("Default deco ID set but no default deco object!?!!?");
+			Debug.LogError("Default deco ID set but no default deco object!?!!?");
 			return;
 		}
 		

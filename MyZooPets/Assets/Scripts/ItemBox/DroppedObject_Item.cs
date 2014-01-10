@@ -30,7 +30,7 @@ public class DroppedObject_Item : DroppedObject {
 			dataItem = item;
 		}
 		else
-			Debug.Log("No sprite", gameObject);
+			Debug.LogError("No sprite", gameObject);
 		
 		// also listen for when the inventory logic is being destroyed
 		InventoryLogic.Instance.OnBeingDestroyed += OnManagerDestroyed;

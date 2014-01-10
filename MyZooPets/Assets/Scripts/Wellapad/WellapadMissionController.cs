@@ -97,6 +97,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				StatsController.Instance.ChangeStats( nXP, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
+
+				//Send analytics event
+				Analytics.Instance.ClaimWellapadBonusXP();
 				
 				if ( OnRewardClaimed != null )
 					OnRewardClaimed( this, EventArgs.Empty );

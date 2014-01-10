@@ -128,7 +128,7 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------	
 	protected override void ButtonReleased() {
 		if ( !bLegal )  {
-			Debug.LogError("Something going wrong with the fire button.  Aborting");
+			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
 		

@@ -52,6 +52,10 @@ public class PetAnimator : LgCharacterAnimator {
 		return eAnimState;
 	}
 	
+	// in order to fix a bug, we need to track if the user is canceling fire breathing or not so callbacks don't fire.
+	// technically the animation always finishes because of the way LWF works
+	private bool bCancelFire = false;
+	
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
 	
@@ -154,6 +158,9 @@ public class PetAnimator : LgCharacterAnimator {
 	// The player is attacking a gate!
 	//---------------------------------------------------	
 	public void BreathFire() {
+		// we need to keep track of whether or not fire was canceled ourselves
+		bCancelFire = false;
+		
 		PlayRestrictedAnim("Fire", true);
 		
 		// spawn the particle effect
@@ -232,7 +239,7 @@ public class PetAnimator : LgCharacterAnimator {
 	public void DoneBreathingFire( bool bFinished ) {
 		if ( !bFinished )
 			Resume();
-		else{
+		else if ( bCancelFire == false ) {
 			// process any callbacks for when the pet finishes breathing fire
 			if ( OnBreathEnded != null )
 				OnBreathEnded( this, EventArgs.Empty );
@@ -245,7 +252,9 @@ public class PetAnimator : LgCharacterAnimator {
 			}
 			else
 				Idle( !bFinished );
-		}	
+		}
+		else
+			Idle( !bFinished );
 	}
 	
 	//---------------------------------------------------
@@ -254,6 +263,7 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------		
 	public void CancelFire() {
 		DoneBreathingFire( false );
+		bCancelFire = true;	// we need to keep track of whether or not fire was canceled ourselves
 	}
 
 	//---------------------------------------------------

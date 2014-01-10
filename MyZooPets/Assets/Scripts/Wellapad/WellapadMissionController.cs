@@ -101,7 +101,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				if ( OnRewardClaimed != null )
 					OnRewardClaimed( this, EventArgs.Empty );
 				
-				Debug.LogError("Reward claimed for mission: " + strMissionID);
+				Debug.Log("Reward claimed for mission: " + strMissionID);
 			}
 			else
 				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + strMissionID);

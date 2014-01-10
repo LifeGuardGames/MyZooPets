@@ -36,11 +36,13 @@ public class CameraManager : Singleton<CameraManager> {
 	// Start()
 	//---------------------------------------------------	
 	void Awake(){
-		nativeWidth = Constants.GetConstant<int>("NativeWidth");
+		// native height is a fixed constant that we define for NGUI
 		nativeHeight = Constants.GetConstant<int>("NativeHeight");
-
+		ratioY = nativeHeight/(Screen.height * 1.0f);
+		
+		// native width is not a constant -- it is a thing created by NGUI based on the height
+		nativeWidth = (int) ( Screen.width * ratioY );
 		ratioX = nativeWidth/(Screen.width * 1.0f);
-		ratioY = nativeHeight/(Screen.height * 1.0f);		
 	}	
 	
 	//---------------------------------------------------

@@ -58,7 +58,7 @@ public class AudioManager : Singleton<AudioManager>{
 				backgroundClip = Resources.Load( strBgMusic ) as AudioClip;
 
 			D.Assert(backgroundClip != null, "Null audioclip");
-			backgroundSource.volume = 0.5f;
+			backgroundSource.volume = 0.3f;
 			backgroundSource.loop = true;
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();

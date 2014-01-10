@@ -90,7 +90,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	private MinigameStates eCurrentState = MinigameStates.Opening;
 	private void SetGameState( MinigameStates eNewState ) {
 		if ( eCurrentState == eNewState ) {
-			Debug.Log("Minigame is getting set to a state it's already at: " + eNewState);
+			Debug.LogError("Minigame is getting set to a state it's already at: " + eNewState);
 			return;
 		}
 		
@@ -456,7 +456,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			break;
 			
 		default:
-			Debug.Log("Unhandled minigame reward type: " + eType);
+			Debug.LogError("Unhandled minigame reward type: " + eType);
 			break;
 		}
 		
@@ -475,7 +475,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			nReward = nScore / nStandard;
 		}
 		
-		Debug.Log("Reward for " + eType + " is " + nReward);
+		Debug.LogError("Reward for " + eType + " is " + nReward);
 		
 		return nReward;
 	}

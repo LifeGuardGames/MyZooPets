@@ -15,7 +15,7 @@ public class ItemBoxLogic : MonoBehaviour {
 		if ( string.IsNullOrEmpty( strItemBoxID ) )
 			strItemBoxID = strID;
 		else
-			Debug.Log("Something trying to double set item box id", this);
+			Debug.LogError("Something trying to double set item box id", this);
 	}
 	
 	// is this item box available to be opened?
@@ -30,7 +30,7 @@ public class ItemBoxLogic : MonoBehaviour {
 	//---------------------------------------------------		
 	public void NowAvailable() {
 		if ( bAvailable ) {
-			Debug.Log("Item box being made available twice...", this);
+			Debug.LogError("Item box being made available twice...", this);
 			return;
 		}
 		
@@ -51,7 +51,7 @@ public class ItemBoxLogic : MonoBehaviour {
 		
 		// do a null check
 		if ( string.IsNullOrEmpty( strItemBoxID ) ) {
-			Debug.Log("Attempting to open an item box with an unset id...defaulting to Box_0", gameObject);
+			Debug.LogError("Attempting to open an item box with an unset id...defaulting to Box_0", gameObject);
 			strItemBoxID = "Box_0";
 		}
 			
@@ -61,7 +61,7 @@ public class ItemBoxLogic : MonoBehaviour {
 		if ( dataBox != null )
 			items = dataBox.GetItems();
 		else
-			Debug.Log("No valid item box data for item box", this);
+			Debug.LogError("No valid item box data for item box", this);
 		
 		// create all the items to be obtained from this box
 		BurstItems( items );

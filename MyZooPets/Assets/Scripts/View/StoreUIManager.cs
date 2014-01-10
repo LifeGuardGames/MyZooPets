@@ -54,7 +54,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		
 		goExitButton = storeSubPanel.FindInChildren( "ExitButton" );
 		if ( goExitButton == null )
-			Debug.Log("Exit button is null...please set");
+			Debug.LogError("Exit button is null...please set");
 	}
 	
 	//---------------------------------------------------
@@ -216,7 +216,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	
 	public void CreateSubCategoryItemsWithString(string strPage) {
 		if ( strPage != "Items" && strPage != "Food" && strPage != "Decorations" ) {
-			Debug.Log("Illegal sore sub category: " + strPage );
+			Debug.LogError("Illegal sore sub category: " + strPage );
 			return;
 		}
 		

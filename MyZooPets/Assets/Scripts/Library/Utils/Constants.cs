@@ -19,7 +19,7 @@ public class Constants {
 		if ( hashConstants.ContainsKey( strKey ) )
 			data = (T) hashConstants[strKey];
 		else
-			Debug.Log("No such constant for key " + strKey);
+			Debug.LogError("No such constant for key " + strKey);
 		
 		return data;
 	}
@@ -34,7 +34,7 @@ public class Constants {
 				float.Parse( arrayVector3[2] ) );
 		}	
 		else
-			Debug.Log("Illegal vector3 parsing, reverting to 0,0,0");
+			Debug.LogError("Illegal vector3 parsing, reverting to 0,0,0");
 			
 		return vector;
 	}
@@ -50,7 +50,7 @@ public class Constants {
 				float.Parse( arrayColor[3] ) / 255 );
 		}	
 		else
-			Debug.Log("Illegal color parsing...reverting to white");
+			Debug.LogError("Illegal color parsing...reverting to white");
 			
 		return color;
 	}
@@ -83,14 +83,14 @@ public class Constants {
 	
 	private static void AddData( string i_strError, Hashtable hashAttributes ) {
 		if ( !hashAttributes.Contains("Name") || !hashAttributes.Contains("Type") || !hashAttributes.Contains("Value" ) )
-			Debug.Log("Illegal constant in Constants.xml");
+			Debug.LogError("Illegal constant in Constants.xml");
 		else {
 			string strKey = (string) hashAttributes["Name"];
 			string strType = (string) hashAttributes["Type"];
 			string strValue = (string) hashAttributes["Value"];
 			
 			if ( hashConstants.Contains(strKey) )
-				Debug.Log(i_strError + "Repeat constant: " + strKey);
+				Debug.LogError(i_strError + "Repeat constant: " + strKey);
 			
 			// get the type and switch on it so we know what kind of value the constant is
 			switch ( strType ) {
@@ -113,7 +113,7 @@ public class Constants {
 					hashConstants[ strKey ] = ParseVector3( strValue );				
 					break;
 				default:
-					Debug.Log("Illegal constant type for " + strKey);
+					Debug.LogError("Illegal constant type for " + strKey);
 					break;
 			}
 		}	

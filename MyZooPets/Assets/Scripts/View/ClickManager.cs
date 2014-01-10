@@ -150,7 +150,7 @@ public class ClickManager : Singleton<ClickManager> {
 	//---------------------------------------------------	
 	public void DecrementTweenCount() {
 		if ( nTweenCount <= 0 ) {
-			Debug.Log("Warning...something decrementing tween count when it is 0");
+			Debug.LogError("Warning...something decrementing tween count when it is 0");
 			return;
 		}
 		

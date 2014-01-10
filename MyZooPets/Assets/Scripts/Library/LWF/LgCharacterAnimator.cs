@@ -65,7 +65,7 @@ public class LgCharacterAnimator : LWFAnimator {
 	// PlayClip()
 	//---------------------------------------------------		
 	public override void PlayClip(string _clipName, bool _stopAllPrevMovies){
-		Debug.Log("LgAnimator does not support this kind of clip playing.");
+		Debug.LogError("LgAnimator does not support this kind of clip playing.");
 	}
 	
 	//---------------------------------------------------

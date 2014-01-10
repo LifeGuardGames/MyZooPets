@@ -17,7 +17,7 @@ public static class Helper
 			goParent = go.transform.parent.gameObject;
 		
 		if ( goParent == null )
-			Debug.Log("Something trying to get a game object's parent that doesn't have one...");
+			Debug.LogError("Something trying to get a game object's parent that doesn't have one...");
 		
 		return goParent;
 	}

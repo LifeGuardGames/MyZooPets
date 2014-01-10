@@ -12,7 +12,7 @@ public abstract class GameTutorial : Tutorial {
 	public GameTutorial() : base() {
 		// let the tutorial manager know that this tutorial has been created
 		if ( !TutorialManager.Instance ) {
-			Debug.Log("Game tutorial being created but no tutorial manager!?");
+			Debug.LogError("Game tutorial being created but no tutorial manager!?");
 			return;
 		}
 		

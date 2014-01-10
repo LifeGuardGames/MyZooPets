@@ -24,7 +24,7 @@ public abstract class Gate : MonoBehaviour {
 		if ( string.IsNullOrEmpty( strID ) )
 			strID = id;	
 		else
-			Debug.Log("Something trying to set id on gate twice " + strID);
+			Debug.LogError("Something trying to set id on gate twice " + strID);
 		
 		strResource = monster.GetResourceKey();
 		
@@ -40,7 +40,7 @@ public abstract class Gate : MonoBehaviour {
 			if ( scriptItemBox )
 				scriptItemBox.SetItemBoxID( strItemBoxID );
 			else
-				Debug.Log("No logic script on box", goBox);
+				Debug.LogError("No logic script on box", goBox);
 		}		
 	}
 	

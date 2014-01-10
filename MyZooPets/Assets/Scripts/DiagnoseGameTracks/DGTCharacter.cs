@@ -288,7 +288,7 @@ public class DGTCharacter : MonoBehaviour {
 		
 		DGTZone scriptZone = goTarget.GetComponent<DGTZone>();
 		if ( goTarget == null || scriptZone == null ) {
-			Debug.Log("Character unable to score because of null component");
+			Debug.LogError("Character unable to score because of null component");
 			return;
 		}
 		

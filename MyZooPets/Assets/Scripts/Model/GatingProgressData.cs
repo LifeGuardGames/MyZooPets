@@ -27,7 +27,7 @@ public class GatingProgressData{
 		if ( GatingProgress.ContainsKey( strID ) )
 			bActive = GatingProgress[strID] > 0;
 		else
-			Debug.Log("Attempting to access a non-exitant gate from GatingProgressData");
+			Debug.LogError("Attempting to access a non-exitant gate from GatingProgressData");
 		
 		return bActive;
 	}
@@ -43,7 +43,7 @@ public class GatingProgressData{
 			GatingProgress[strID] = nHP;
 		}
 		else
-			Debug.Log("Trying to refresh a gate not in data...is this even possible!?");
+			Debug.LogError("Trying to refresh a gate not in data...is this even possible!?");
 	}	
 	
 	//---------------------------------------------------
@@ -67,7 +67,7 @@ public class GatingProgressData{
 		if ( GatingProgress.ContainsKey( strID ) )
 			nHP = GatingProgress[strID];
 		else
-			Debug.Log("Attempting to access a non-exitant gate from GatingProgressData");
+			Debug.LogError("Attempting to access a non-exitant gate from GatingProgressData");
 		
 		return nHP;		
 	}
@@ -79,13 +79,13 @@ public class GatingProgressData{
 	public bool DamageGate( string strID, int nDamage ) {
 		// check to make sure the gate exists
 		if ( !GatingProgress.ContainsKey( strID ) ) {
-			Debug.Log("Something trying to access a non-existant gate " + strID);
+			Debug.LogError("Something trying to access a non-existant gate " + strID);
 			return true;
 		}
 		
 		// check to make sure the gate is active
 		if ( !IsGateActive( strID ) ) {
-			Debug.Log("Something trying to damage an inactive gate " + strID);
+			Debug.LogError("Something trying to damage an inactive gate " + strID);
 			return true;
 		}
 		

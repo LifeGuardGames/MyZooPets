@@ -44,7 +44,7 @@ public class SpawnGroup_Meet : SpawnGroup {
 		
 		// because i'm kind of paranoid at this point
 		if ( nRandom + nBuffer >= listLocations.Count ) {
-			Debug.Log("Something going wrong in spawning a Meet group.");
+			Debug.LogError("Something going wrong in spawning a Meet group.");
 			return;
 		}
 		
@@ -66,7 +66,7 @@ public class SpawnGroup_Meet : SpawnGroup {
 	protected override void SpawnObjects( List<string> listObjects, List<float> listSpawnLocs ) {
 		// just in case
 		if ( listObjects.Count != listSpawnLocs.Count && listObjects.Count != 2 ) {
-			Debug.Log("Something wrong with Meet group spawn count");
+			Debug.LogError("Something wrong with Meet group spawn count");
 			return;
 		}
 		

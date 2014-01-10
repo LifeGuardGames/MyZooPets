@@ -17,7 +17,7 @@ public class LgAudioSource : MonoBehaviour {
 		AudioClip clip = Resources.Load(strResource) as AudioClip;
 		
 		if ( clip == null ) {
-			Debug.Log("No such sound clip for resource " + strResource);
+			Debug.LogError("No such sound clip for resource " + strResource);
 			Destroy( gameObject );
 			return;
 		}

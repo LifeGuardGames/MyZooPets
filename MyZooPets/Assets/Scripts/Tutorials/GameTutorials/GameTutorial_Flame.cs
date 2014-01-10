@@ -83,7 +83,7 @@ public class GameTutorial_Flame : GameTutorial {
 			AddToProcessList( goButton );
 		}
 		else
-			Debug.Log("No flame button...that means the game is going to break");
+			Debug.LogError("No flame button...that means the game is going to break");
 	}
 	
 	//---------------------------------------------------

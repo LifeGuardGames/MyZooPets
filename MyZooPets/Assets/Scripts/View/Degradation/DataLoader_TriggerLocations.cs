@@ -28,10 +28,10 @@ public class DataLoader_TriggerLocations {
 			if ( hashScene.ContainsKey( strID ) )
 				data = (Data_TriggerLocation) hashScene[strID];
 			else
-				Debug.Log("No such trigger id " + strID + " for scene " + strScene);
+				Debug.LogError("No such trigger id " + strID + " for scene " + strScene);
 		}
 		else
-			Debug.Log("No such scene for trigger ids: " + strScene);
+			Debug.LogError("No such scene for trigger ids: " + strScene);
 		
 		return data;		
 	}
@@ -59,7 +59,7 @@ public class DataLoader_TriggerLocations {
 			}
 		}
 		else
-			Debug.Log("No such trigger loc data for " + strScene);
+			Debug.LogError("No such trigger loc data for " + strScene);
 		
 		return list;		
 	}
@@ -100,7 +100,7 @@ public class DataLoader_TriggerLocations {
 				
 				Hashtable hashScenes = (Hashtable) hashData[strScene];
 				if ( hashScenes.ContainsKey( id ) )
-					Debug.Log("Duplicate trigger location id: " + id + " for " + strScene);
+					Debug.LogError("Duplicate trigger location id: " + id + " for " + strScene);
 				else
 					hashScenes[id] = data;
             }

@@ -36,7 +36,7 @@ public class NinjaDataLoader {
 		}
 		
 		if ( data == null )
-			Debug.Log("Something going wrong with picking a group for the ninja game to spawn");
+			Debug.LogError("Something going wrong with picking a group for the ninja game to spawn");
 		
 		return data;
 	}

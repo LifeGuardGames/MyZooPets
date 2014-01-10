@@ -41,7 +41,7 @@ public class DroppedObject_Stat : DroppedObject {
 			sprite.spriteName = strSprite;
 		}
 		else
-			Debug.Log("No sprite", gameObject);
+			Debug.LogError("No sprite", gameObject);
 		
 		// also listen for when the stats controller is being destroyed
 		StatsController.Instance.OnBeingDestroyed += OnManagerDestroyed;

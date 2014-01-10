@@ -25,7 +25,7 @@ public class DataLoader_ItemBoxes {
 		if ( hashData.ContainsKey( strID ) ) 
 			data = (Data_ItemBox) hashData[strID];
 		else
-			Debug.Log("No such item box with id: " + strID);
+			Debug.LogError("No such item box with id: " + strID);
 		
 		return data;		
 	}
@@ -64,7 +64,7 @@ public class DataLoader_ItemBoxes {
 				Data_ItemBox data = new Data_ItemBox( id, hashAttr, listChildren, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.Log("Duplicate item box id: " + id);
+					Debug.LogError("Duplicate item box id: " + id);
 				else
 					hashData[id] = data;
             }

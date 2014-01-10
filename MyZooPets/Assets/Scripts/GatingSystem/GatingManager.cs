@@ -292,7 +292,7 @@ public class GatingManager : Singleton<GatingManager> {
 			script.SetGate( gate );
 		}
 		else
-			Debug.Log("Destination callback being called for non gated room");		
+			Debug.LogError("Destination callback being called for non gated room");		
 	}
 	
 	//---------------------------------------------------

@@ -40,7 +40,7 @@ public class SpawnGroup_Cross : SpawnGroup {
 		
 		// because i'm kind of paranoid at this point
 		if ( nRandom + nBuffer >= listLocations.Count ) {
-			Debug.Log("Something going wrong in spawning a Cross group.");
+			Debug.LogError("Something going wrong in spawning a Cross group.");
 			return;
 		}
 		
@@ -59,7 +59,7 @@ public class SpawnGroup_Cross : SpawnGroup {
 	protected override void SpawnObjects( List<string> listObjects, List<float> listSpawnLocs ) {
 		// just in case
 		if ( listObjects.Count != listSpawnLocs.Count && listObjects.Count != 2 ) {
-			Debug.Log("Something wrong with Cross group spawn count");
+			Debug.LogError("Something wrong with Cross group spawn count");
 			return;
 		}
 		

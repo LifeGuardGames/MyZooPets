@@ -62,10 +62,10 @@ public static class XMLUtils{
             if(node.Children.Count != 0)
                 retVal = node.Children[0].value;
             else
-                Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
+                Debug.LogError("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
 		else if ( strError != null )
-			Debug.Log(strError + "Required data is missing.");
+			Debug.LogError(strError + "Required data is missing.");
 		
         return retVal;
     }
@@ -81,10 +81,10 @@ public static class XMLUtils{
             if(node.Children.Count == 1)
                 retVal = Convert.ToInt32(node.Children[0].value);
             else
-                Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
+                Debug.LogError("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
 		else if ( strError != null )
-			Debug.Log(strError + "Required data is missing.");
+			Debug.LogError(strError + "Required data is missing.");
 		
         return retVal;
     }
@@ -99,10 +99,10 @@ public static class XMLUtils{
             if(node.Children.Count == 1)
                 retVal = float.Parse(node.Children[0].value);
             else
-                Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
+                Debug.LogError("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
 		else if ( strError != null )
-			Debug.Log(strError + "Required data is missing.");
+			Debug.LogError(strError + "Required data is missing.");
 		
         return retVal;		
 	}
@@ -113,7 +113,7 @@ public static class XMLUtils{
             if(node.Children.Count == 1)
                 retVal = node.Children[0].value == "True";
             else
-                Debug.Log("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
+                Debug.LogError("Incoming element has more than one child...can't get value: " + node + "(" + node.Children.Count + ")");
         }
         return retVal;
 

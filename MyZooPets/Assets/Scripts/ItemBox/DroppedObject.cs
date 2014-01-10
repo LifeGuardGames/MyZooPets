@@ -113,7 +113,7 @@ public abstract class DroppedObject : LgButton {
 		gameObject.rigidbody.isKinematic = false;
 		gameObject.rigidbody.AddForce( vForce );
 		
-		Debug.Log("Bursitng " + gameObject + " with " + vForce, gameObject);*/
+		Debug.LogError("Bursitng " + gameObject + " with " + vForce, gameObject);*/
 		
 	}
 	

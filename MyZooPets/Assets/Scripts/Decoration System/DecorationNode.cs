@@ -75,7 +75,7 @@ public abstract class DecorationNode : LgButton {
 			spriteIconBG = goBG.GetComponent<UISprite>();
 		
 		if ( spriteIcon == null || spriteIconBG == null )
-			Debug.Log("Icons not properly set up for deco node.", gameObject);
+			Debug.LogError("Icons not properly set up for deco node.", gameObject);
 	}
 	
 	//---------------------------------------------------
@@ -206,7 +206,7 @@ public abstract class DecorationNode : LgButton {
 	public void SetDecoration( string strID ) {
 		// do one last check
 		if ( !CanPlaceDecoration( strID ) ) {
-			Debug.Log("Illegal deco placement for " + strID + " on node " + gameObject);
+			Debug.LogError("Illegal deco placement for " + strID + " on node " + gameObject);
 			return;
 		}
 		
@@ -257,7 +257,7 @@ public abstract class DecorationNode : LgButton {
 		if ( strDecoID != null )
 			InventoryLogic.Instance.AddItem(strDecoID, 1);
 		else
-			Debug.Log("Just removed an illegal decoration?");		
+			Debug.LogError("Just removed an illegal decoration?");		
 		
 		// update the save data since this node is now empty
 		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove( strNodeID );

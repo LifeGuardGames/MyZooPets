@@ -22,7 +22,7 @@ public class DataMonsterLoader {
         if(dictData.ContainsKey(id))
             data = dictData[id];
 		else
-			Debug.Log("No such monster with id " + id + " -- creating one with default values");
+			Debug.LogError("No such monster with id " + id + " -- creating one with default values");
 
         return data;
 	}
@@ -57,7 +57,7 @@ public class DataMonsterLoader {
 				
 	           	// store the data
 				if ( dictData.ContainsKey( id ) )
-					Debug.Log(strError + "Duplicate keys!");
+					Debug.LogError(strError + "Duplicate keys!");
 				else
 	            	dictData.Add(id, data);		
             }

@@ -23,7 +23,7 @@ public class DataSkills{
             skill = allSkills[skillID];
         }
 		else
-			Debug.Log("No skill data for " + skillID);
+			Debug.LogError("No skill data for " + skillID);
 
         return skill;
     }

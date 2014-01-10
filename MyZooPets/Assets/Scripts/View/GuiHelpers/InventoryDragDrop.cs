@@ -24,11 +24,6 @@ public class InventoryDragDrop : MonoBehaviour {
 	private Vector3 savedLocalPosition;
 	private UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
 
-	private int nativeWidth;
-	private int nativeHeight;
-	private float ratioX;
-	private float ratioY;
-
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
@@ -83,12 +78,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	}
 
 	void Awake () { 
-		mTrans = transform; 
-		nativeWidth = Constants.GetConstant<int>("NativeWidth");
-		nativeHeight = Constants.GetConstant<int>("NativeHeight");
-
-		ratioX = nativeWidth/(Screen.width * 1.0f);
-		ratioY = nativeHeight/(Screen.height * 1.0f);		
+		mTrans = transform; 	
 	}
 
 	void Start(){
@@ -128,10 +118,8 @@ public class InventoryDragDrop : MonoBehaviour {
 				// Joe: Reverting these changes to fix the drag on PC and iOS.  If something is still wrong on Android, and this change fixed it,
 				// Jason: reverting joe's changes cause it seem to be working.....kabooya
 				// we may just want to ifdef these code chunks
-				// float ratioX = 1280f/(Screen.width * 1.0f);
-				// float ratioY = 800f/(Screen.height * 1.0f);
 				//Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
-				Vector3 newDelta = new Vector3(delta.x * ratioX, delta.y * ratioY, 0f);
+				Vector3 newDelta = new Vector3(delta.x * CameraManager.Instance.ratioX, delta.y * CameraManager.Instance.ratioY, 0f);
 				
 				// Vector3 newDelta = new Vector3(delta.x, delta.y, 0);
 				mTrans.localPosition += newDelta;

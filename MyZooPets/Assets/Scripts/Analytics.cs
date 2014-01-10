@@ -169,6 +169,11 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
     }
 
+    //Wellapad xp reward claim
+    public void ClaimWellapadBonusXP(){
+        GA.API.Design.NewEvent("Wellapad:Collect:BonusXP");
+    }
+
     //Gating
     public void GateUnlocked(string gateID){
         if(!String.IsNullOrEmpty(gateID))

@@ -27,7 +27,7 @@ public abstract class SpawnGroup {
 		
 		// check the number of objects to be spawned
 		if ( !CheckCount( listObjects ) ) {
-			Debug.Log("Incorrect number of objects to be spawned for " + this);
+			Debug.LogError("Incorrect number of objects to be spawned for " + this);
 			return;
 		}
 		
@@ -81,7 +81,7 @@ public abstract class SpawnGroup {
 	protected virtual void SpawnObjects( List<string> listObjects, List<float> listSpawnLocs ) {
 		// just in case
 		if ( listObjects.Count != listSpawnLocs.Count ) {
-			Debug.Log("Spawn location and count don't match");
+			Debug.LogError("Spawn location and count don't match");
 			return;
 		}
 		

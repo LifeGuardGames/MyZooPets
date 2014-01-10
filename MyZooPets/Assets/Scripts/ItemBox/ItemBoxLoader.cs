@@ -35,7 +35,7 @@ public class ItemBoxLoader : MonoBehaviour {
 					listBoxes.Add( scriptBox );
 				}
 				else
-					Debug.Log("No box script!", this);
+					Debug.LogError("No box script!", this);
 			}
 		}
 		

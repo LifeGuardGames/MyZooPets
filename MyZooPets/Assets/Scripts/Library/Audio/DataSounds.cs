@@ -21,7 +21,7 @@ public class DataSounds {
         if(dictSounds.ContainsKey(id))
             sound = dictSounds[id];
 		else {
-			Debug.Log("No such sound with id " + id + " -- creating one with default values");
+			Debug.LogError("No such sound with id " + id + " -- creating one with default values");
 			sound = new DataSound(id);
 		}
 

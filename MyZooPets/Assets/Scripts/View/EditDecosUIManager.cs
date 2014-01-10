@@ -197,7 +197,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	public void CloseChooseMenu_( bool bShowExit = true ) {
 		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
 		if (!tween.IsShowing)
-			Debug.Log("Something trying to close an already closed choose menu for deco edit.");
+			Debug.LogError("Something trying to close an already closed choose menu for deco edit.");
 		else{
 			tween.Hide();
 			

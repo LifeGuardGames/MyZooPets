@@ -64,7 +64,7 @@ public class ButtonChangeScene : LgButton {
 		if ( scriptTransition != null )
 			scriptTransition.StartTransition( strScene, strLoadingScreen );
 		else
-			Debug.Log("No transition script for a scene change button!");
+			Debug.LogError("No transition script for a scene change button!");
 	}
 
 	//---------------------------------------------------

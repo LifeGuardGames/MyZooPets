@@ -31,7 +31,7 @@ public class DataLoader_XpRewards {
 			nXP = data.CalculateXP( hashBonusData );
 		}
 		else
-			Debug.Log("No such xp data for " + strKey);			
+			Debug.LogError("No such xp data for " + strKey);			
 		
 		return nXP;
 	}
@@ -67,7 +67,7 @@ public class DataLoader_XpRewards {
 				Data_XpReward data = new Data_XpReward( id, childNode, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.Log("Duplicate xp reward id: " + id);
+					Debug.LogError("Duplicate xp reward id: " + id);
 				else
 					hashData[id] = data;
             }

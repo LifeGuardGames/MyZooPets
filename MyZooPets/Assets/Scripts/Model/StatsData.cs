@@ -46,7 +46,7 @@ public class StatsData{
 			nStat = Stars;
 			break;
 		default:
-			Debug.Log("No such display target for " + eStat);
+			Debug.LogError("No such display target for " + eStat);
 			break;
 		}	
 		

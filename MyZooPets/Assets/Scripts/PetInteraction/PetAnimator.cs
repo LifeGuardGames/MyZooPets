@@ -308,7 +308,7 @@ public class PetAnimator : LgCharacterAnimator {
 	private void PlayAnimation( DataPetAnimation dataAnim ) {
 		// there is a slim possibility that the data was set up wrong and the incoming animation is null
 		if ( dataAnim == null ) {
-			Debug.Log("Trying to play a null animation on the pet!");
+			Debug.LogError("Trying to play a null animation on the pet!");
 			return;
 		}
 		
@@ -398,7 +398,7 @@ public class PetAnimator : LgCharacterAnimator {
 				Idle();
 				break;
 			default:
-				Debug.Log("Unhandled pet anim state finishing: " + eState);
+				Debug.LogError("Unhandled pet anim state finishing: " + eState);
 				Idle();
 				break;
 		}		

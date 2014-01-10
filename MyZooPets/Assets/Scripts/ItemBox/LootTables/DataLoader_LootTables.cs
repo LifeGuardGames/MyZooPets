@@ -25,7 +25,7 @@ public class DataLoader_LootTables {
 		if ( hashData.ContainsKey( strID ) ) 
 			dataTable = (Data_LootTable) hashData[strID];
 		else
-			Debug.Log("No such loot table with id: " + strID);
+			Debug.LogError("No such loot table with id: " + strID);
 		
 		return dataTable;
 	}
@@ -64,7 +64,7 @@ public class DataLoader_LootTables {
 				Data_LootTable data = new Data_LootTable( id, hashAttr, listChildren, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.Log("Duplicate loot table id: " + id);
+					Debug.LogError("Duplicate loot table id: " + id);
 				else
 					hashData[id] = data;
             }

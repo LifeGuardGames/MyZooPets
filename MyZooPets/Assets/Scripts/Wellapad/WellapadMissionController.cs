@@ -47,7 +47,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		if ( DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey( strID ) )
 			return DataManager.Instance.GameData.Wellapad.CurrentTasks[strID];
 		else {
-			Debug.Log("No such mission in current tasks: " + strID);
+			Debug.LogError("No such mission in current tasks: " + strID);
 			return null;
 		}
 	}
@@ -101,13 +101,13 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				if ( OnRewardClaimed != null )
 					OnRewardClaimed( this, EventArgs.Empty );
 				
-				Debug.Log("Reward claimed for mission: " + strMissionID);
+				Debug.LogError("Reward claimed for mission: " + strMissionID);
 			}
 			else
-				Debug.Log("Something trying to claim an unclaimable reward for mission: " + strMissionID);
+				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + strMissionID);
 		}
 		else 
-			Debug.Log("Something trying to claim a reward for non-current mission: " + strMissionID);
+			Debug.LogError("Something trying to claim a reward for non-current mission: " + strMissionID);
 	}	
 	
 	//---------------------------------------------------
@@ -253,14 +253,14 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 
 		// mission exists
 		if ( !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey( strMissionID ) ) {
-			Debug.Log("Reward is attempted to be check for an illegal mission: " + strMissionID);
+			Debug.LogError("Reward is attempted to be check for an illegal mission: " + strMissionID);
 			return;
 		}
 		
 		// reward is currently unearned
 		Mission mission = DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID];
 		if ( mission.RewardStatus != RewardStatuses.Unearned ) {
-			Debug.Log("Reward check revealed illegal state for reward for mission " + strMissionID);
+			Debug.LogError("Reward check revealed illegal state for reward for mission " + strMissionID);
 			return;
 		}
 		
@@ -296,7 +296,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMission].Tasks[strID].Completed = WellapadTaskCompletionStates.Completed;
 		}
 		else
-			Debug.Log("Can't find task " + strID + " in saved data");
+			Debug.LogError("Can't find task " + strID + " in saved data");
 		
 		return eStatus;
 	}
@@ -346,7 +346,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 					listTasks.Add( pair.Value );
 		}
 		else
-			Debug.Log("Something trying to create a mission in the UI that the user does not have...give it to them first!");
+			Debug.LogError("Something trying to create a mission in the UI that the user does not have...give it to them first!");
 
 		return listTasks;
 	}	

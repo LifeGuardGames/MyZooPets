@@ -34,7 +34,7 @@ public class SpawnGroup_Cluster : SpawnGroup {
 		
 		// just in case
 		if ( nMax < 0 ) {
-			Debug.Log("Illegal index for spawning cluster group");	
+			Debug.LogError("Illegal index for spawning cluster group");	
 		}
 		
 		// get the range of spawn locations

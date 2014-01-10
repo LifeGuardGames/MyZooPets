@@ -29,7 +29,7 @@ public class DataGateLoader {
         if(dictData.ContainsKey(id))
             data = dictData[id];
 		else
-			Debug.Log("No such gate with id " + id + " -- creating one with default values");
+			Debug.LogError("No such gate with id " + id + " -- creating one with default values");
 
         return data;
 	}
@@ -79,7 +79,7 @@ public class DataGateLoader {
 		if ( hashData.ContainsKey( strArea ) )
 			hashGates = (Hashtable) hashData[strArea];
 		else
-			Debug.Log("No such area in the gates hash: " + strArea);
+			Debug.LogError("No such area in the gates hash: " + strArea);
 		
 		return hashGates;
 	}
@@ -125,7 +125,7 @@ public class DataGateLoader {
 				
 	           	// store the data
 				if ( dictData.ContainsKey( id ) )
-					Debug.Log(strError + "Duplicate keys!");
+					Debug.LogError(strError + "Duplicate keys!");
 				else {
 					// add to dictionary of all gates
 	            	dictData.Add(id, data);	
@@ -153,7 +153,7 @@ public class DataGateLoader {
 		Hashtable hashArea = (Hashtable) hashData[strArea];
 		
 		if ( hashArea.ContainsKey( nRoom ) )
-			Debug.Log("Duplicate gate for room " + nRoom + " in area " + strArea);
+			Debug.LogError("Duplicate gate for room " + nRoom + " in area " + strArea);
 		else
 			hashArea[nRoom] = dataGate;
 	}

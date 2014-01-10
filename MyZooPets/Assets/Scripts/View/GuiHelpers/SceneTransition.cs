@@ -79,7 +79,7 @@ public class SceneTransition : MonoBehaviour {
 			if ( script )
 				script.Init( strScene );
 			else
-				Debug.Log("No loading screen on " + goLoadScreen);
+				Debug.LogError("No loading screen on " + goLoadScreen);
 		}	
 	}	
 }

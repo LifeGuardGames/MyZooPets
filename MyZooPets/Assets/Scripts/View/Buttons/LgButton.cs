@@ -128,6 +128,6 @@ public abstract class LgButton : MonoBehaviour {
 	// the click (i.e., UI is not locked, etc).
 	//---------------------------------------------------	
 	protected virtual void ProcessClick() {
-		Debug.Log("Children should implement ProcessClick!");	
+		Debug.LogError("Children should implement ProcessClick!");	
 	}
 }

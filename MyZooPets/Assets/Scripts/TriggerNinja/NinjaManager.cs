@@ -156,7 +156,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 				new SpawnGroup_Split( listObjects );
 				break;			
 			default:
-				Debug.Log("Unhandled group type: " + eType);
+				Debug.LogError("Unhandled group type: " + eType);
 				break;
 		}		
 	}

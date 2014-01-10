@@ -52,15 +52,17 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
 
         if(dropOnTarget){
-            ShowPetReceivedFoodAnimation();
             e.IsValidTarget = true;
 
             string invItemID = e.ItemTransform.name; //get id from listener args
 			
+			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			if ( invItem != null && invItem.ItemType == ItemType.Foods )
+				ShowPetReceivedFoodAnimation();		
+			
 			//notify inventory logic that this item is being used
-            InventoryLogic.Instance.UseItem(invItemID); 
-
-            InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+            InventoryLogic.Instance.UseItem(invItemID);
+			
             if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
                 e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
             }

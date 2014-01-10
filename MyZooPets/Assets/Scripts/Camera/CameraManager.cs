@@ -30,7 +30,14 @@ public class CameraManager : Singleton<CameraManager> {
 	private bool bZoomed;
 
 	private int nativeWidth;
+	public int GetNativeWidth() {
+		return nativeWidth;	
+	}
+	
 	private int nativeHeight;
+	public int GetNativeHeight() {
+		return nativeHeight;	
+	}
 	
 	//---------------------------------------------------
 	// Start()

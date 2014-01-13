@@ -62,6 +62,11 @@ public class MegaHazard : Singleton<MegaHazard> {
 		UpdatePositionRelativeToPlayer();
 	}
 
+    //---------------------------------------------------
+    // TriggerPlayerSlowdown()
+    // The idea behind this function seems to be to
+	// move the megahazard closer to the player.
+    //---------------------------------------------------	
 	public void TriggerPlayerSlowdown() {
 		mSlowDownStayPulse = SlowDownStayDuration;
 		mDistanceUntilTarget -= (XDefaultDistanceFromPlayer / DistanceDivisor);

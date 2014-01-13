@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // WellapadScreenManager
@@ -18,6 +20,23 @@ public class WellapadScreenManager : MonoBehaviour {
 	public GameObject GetBackButton() {
 		return goWellapadBack;	
 	}
+	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------	
+	void Start() {
+		// listen for reward claimed callback
+		WellapadMissionController.Instance.OnRewardClaimed += OnRewardClaimed;		
+	}
+	
+	//---------------------------------------------------
+	// OnRewardClaimed()
+	// Callback for when the user claims a wellapad reward.
+	//---------------------------------------------------	
+	private void OnRewardClaimed( object sender, EventArgs args ) {
+		// update the screen
+		SetScreen();
+	}	
 
 	//---------------------------------------------------
 	// SetScreen()

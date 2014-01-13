@@ -475,7 +475,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			nReward = nScore / nStandard;
 		}
 		
-		Debug.LogError("Reward for " + eType + " is " + nReward);
+		//Debug.Log("Reward for " + eType + " is " + nReward);
 		
 		return nReward;
 	}

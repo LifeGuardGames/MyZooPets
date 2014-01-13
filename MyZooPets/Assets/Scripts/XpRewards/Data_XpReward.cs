@@ -63,7 +63,7 @@ public class Data_XpReward {
 		// multiple this total by percentage to be awarded -- this is our total xp
 		int nXP = Mathf.RoundToInt( nTotalXP * fXP );
 		
-		Debug.Log("Awarding " + nXP + " xp(" + fXP + " of " + nTotalXP +")");
+		//Debug.Log("Awarding " + nXP + " xp(" + fXP + " of " + nTotalXP +")");
 		
 		return nXP;
 	}

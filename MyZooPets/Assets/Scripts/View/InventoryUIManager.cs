@@ -133,13 +133,23 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     //Find the position of Inventory Item game object with invItemID
     //Used for animation position in StoreUIManager
     public Vector3 GetPositionOfInvItem(string invItemID){
-        Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-        InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-        Vector3 invItemPosition = invItemTrans.position;
-
-        //Offset position if the item is just added to the inventory
-        if(invItem.Amount == 1) invItemPosition += new Vector3(-0.22f, 0, 0);
-
+		// position to use
+		Vector3 invItemPosition;
+			
+		if ( !isGuiShowing ) {
+			// if the inventory is minimized, use the position of the inventory sprite object
+			invItemPosition = uiButtonSpriteObject.transform.position;
+		}
+		else {
+			// otherwise use the position of the item in the inventory panel
+	        Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+	        InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+	        invItemPosition = invItemTrans.position;
+	
+	        //Offset position if the item is just added to the inventory
+	        if(invItem.Amount == 1) invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
+		
         return invItemPosition;
     }
 

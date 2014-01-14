@@ -152,7 +152,7 @@ public class RunnerLevelEditor : EditorWindow
                 GUILayout.EndArea();
 				
                 // Individual object spawn %
-                GUILayout.BeginArea(new Rect(300, 100, 200, 75));
+                GUILayout.BeginArea(new Rect(300, 110, 200, 75));
                 GUILayout.BeginVertical();
                 GUILayout.Label("Object Spawn %");
                 mCurrentSelectedGroup.mSpawnChance = (int)GUILayout.HorizontalSlider(mCurrentSelectedGroup.mSpawnChance, 0, 100);

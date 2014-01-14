@@ -150,6 +150,14 @@ public class RunnerLevelEditor : EditorWindow
                 mCurrentSelectedGroup.mBundleID = (int)GUILayout.HorizontalSlider(mCurrentSelectedGroup.mBundleID, 0, 100);
                 GUILayout.EndVertical();
                 GUILayout.EndArea();
+				
+                // Individual object spawn %
+                GUILayout.BeginArea(new Rect(300, 100, 200, 75));
+                GUILayout.BeginVertical();
+                GUILayout.Label("Object Spawn %");
+                mCurrentSelectedGroup.mSpawnChance = (int)GUILayout.HorizontalSlider(mCurrentSelectedGroup.mSpawnChance, 0, 100);
+                GUILayout.EndVertical();
+                GUILayout.EndArea();				
 
                 // Curve Type area
                 GUILayout.BeginArea(new Rect(300, 150, 200, 75));
@@ -224,6 +232,7 @@ public class RunnerLevelEditor : EditorWindow
 			GUILayout.Label("#pts");
 			GUILayout.Label("Bundle");
             GUILayout.Label("SpawnType");
+			GUILayout.Label("Spawn Chance");
             GUILayout.Label("CurveType");
 			EditorGUILayout.EndHorizontal();
 
@@ -234,7 +243,7 @@ public class RunnerLevelEditor : EditorWindow
 
                 string purposes = currentPointGroup.mSpawnType.ToString();
 				string newItem = "index" + groupIndex + " | " + currentPointGroup.mPoints.Count.ToString() + " | "
-                    + currentPointGroup.mBundleID + " | " + purposes + " | " + currentPointGroup.mCurveType.ToString();
+                    + currentPointGroup.mBundleID + " | " + purposes + " | " + currentPointGroup.mSpawnChance + " | " + currentPointGroup.mCurveType.ToString();
 				gridItems.Add(newItem);
 			}
 

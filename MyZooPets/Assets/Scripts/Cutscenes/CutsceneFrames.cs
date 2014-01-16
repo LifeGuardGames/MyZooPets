@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ public class CutsceneFrames : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		ClickManager.Instance.ClickLock();
+		ClickManager.Instance.Lock();
 		
 		frame.atlas = atlas;
 		frame.spriteName = strSceneID + "-1";
@@ -60,7 +60,7 @@ public class CutsceneFrames : MonoBehaviour {
 	}
 	
 	private void Done() {
-		ClickManager.Instance.ReleaseClickLock();
+		ClickManager.Instance.ReleaseLock();
 		
 		if( OnCutsceneDone != null )
     		OnCutsceneDone(this, EventArgs.Empty);				

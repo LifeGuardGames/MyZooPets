@@ -35,8 +35,7 @@ public class ButtonChangeScene : LgButton {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		// lock the click manager
-		ClickManager.Instance.ClickLock();
-		ClickManager.Instance.ModeLock( UIModeTypes.None );
+		ClickManager.Instance.Lock();
 
 		//Assuming that HUD is present at all scenes, so need to be hidden before scene change
 		if(HUDUIManager.Instance != null)

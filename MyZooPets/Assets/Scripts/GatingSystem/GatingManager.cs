@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -161,7 +161,7 @@ public class GatingManager : Singleton<GatingManager> {
 			// if the player is entering a gated room, hide some ui and lock the click manager
 			List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 			listExceptions.Add( ClickLockExceptions.Moving );
-			ClickManager.Instance.ClickLock( listExceptions );
+			ClickManager.Instance.Lock( UIModeTypes.Generic, listExceptions );
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.HidePanel();
@@ -301,7 +301,7 @@ public class GatingManager : Singleton<GatingManager> {
 	// been locked.
 	//---------------------------------------------------	
 	private void EnableUI() {
-		ClickManager.Instance.ReleaseClickLock();
+		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
 		InventoryUIManager.Instance.ShowPanel();

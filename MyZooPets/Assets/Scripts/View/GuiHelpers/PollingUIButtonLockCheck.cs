@@ -8,7 +8,7 @@ using System.Collections;
 /// // DEPRECATED
 
 public class PollingUIButtonLockCheck : MonoBehaviour {
-	
+	/*
 	public bool checkClickManager = false;
 	public bool isClickManagerModeLocked = false;
 	public bool isClickManagerClickLocked = false;
@@ -38,5 +38,5 @@ public class PollingUIButtonLockCheck : MonoBehaviour {
 			// Nothing to check, suicide
 			this.enabled = false;
 		}
-	}
+	}*/
 }

@@ -31,6 +31,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
+		eModeType = UIModeTypes.Store;
+		
 		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
 		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
 		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
@@ -79,19 +81,17 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	//----------------Hacky code to fix store shortcut problems. need a better solution
+	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		ClickManager.Instance.ClickLock(GetClickLockExceptions());
-		ClickManager.Instance.ModeLock(eModeType);
+		ClickManager.Instance.Lock( UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Food", true);
 	}
-
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		ClickManager.Instance.ClickLock(GetClickLockExceptions());
-		ClickManager.Instance.ModeLock(eModeType);
+		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Items", true);
@@ -99,8 +99,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
-		ClickManager.Instance.ReleaseClickLock();
-		ClickManager.Instance.ReleaseModeLock();
+		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
 	//---------------------------------------------------

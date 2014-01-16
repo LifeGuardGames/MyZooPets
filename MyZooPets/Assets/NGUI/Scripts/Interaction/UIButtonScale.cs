@@ -49,6 +49,9 @@ public class UIButtonScale : MonoBehaviour
 
 	void OnPress (bool isPressed)
 	{
+		if ( !ClickManager.Instance.CanRespondToTap( gameObject ) )
+			return;
+			
 		if (enabled)
 		{
 			if (!mStarted) Start();

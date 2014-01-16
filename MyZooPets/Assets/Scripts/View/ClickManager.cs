@@ -84,13 +84,15 @@ public class ClickManager : Singleton<ClickManager> {
 		
 		// get the mode key from the incoming object, if it is an LgButton.
 		// it's possible goCaller is not an LgButton, which should be fine.
-		UIModeTypes eCallingMode = UIModeTypes.NotInited;
+		UIModeTypes eCallingMode = UIModeTypes.None;
 		if ( goCaller != null ) {
 			LgButton button = goCaller.GetComponent<LgButton>();
 			if ( button )
 				eCallingMode = button.GetMode();
-			else if ( button == null && eException == ClickLockExceptions.None )
-				Debug.LogError( "Non-button is checking click manager without an exception...not sure what to do", goCaller);
+			
+			// removing this because I wasn't sure if it was really necessary
+			//else if ( button == null && eException == ClickLockExceptions.None )
+			//	Debug.LogError( "Non-button is checking click manager without an exception...not sure what to do", goCaller);
 		}
 		
 		// get the current mode

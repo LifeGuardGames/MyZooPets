@@ -52,24 +52,33 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
 
         if(dropOnTarget){
-            e.IsValidTarget = true;
-
-            string invItemID = e.ItemTransform.name; //get id from listener args
+			string invItemID = e.ItemTransform.name; //get id from listener args
 			
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			if ( invItem != null && invItem.ItemType == ItemType.Foods )
-				ShowPetReceivedFoodAnimation();		
-			
-			//notify inventory logic that this item is being used
-            InventoryLogic.Instance.UseItem(invItemID);
-			
-            if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-                e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-            }
-            else{ //destroy object if it has been used up
-                Destroy(e.ParentTransform.gameObject);
-                UpdateBarPosition();
-            }
+			// check to make sure the item can be used
+			if ( ItemLogic.Instance.CanUseItem( invItemID ) ) {
+	            e.IsValidTarget = true;
+				
+				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+				if ( invItem != null && invItem.ItemType == ItemType.Foods )
+					ShowPetReceivedFoodAnimation();		
+				
+				//notify inventory logic that this item is being used
+	            InventoryLogic.Instance.UseItem(invItemID);
+				
+	            if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+	                e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
+	            }
+	            else{ //destroy object if it has been used up
+	                Destroy(e.ParentTransform.gameObject);
+	                UpdateBarPosition();
+	            }
+			}
+			else {
+				// else the drop was valid, but the item could not be used...show a message
+		        Hashtable hashSpeech = new Hashtable();
+		        hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
+		        PetSpeechController.Instance.Talk(hashSpeech);				
+			}
         }
     }
 

@@ -79,27 +79,76 @@ public class ItemLogic : Singleton<ItemLogic>{
 	public string GetItemTextureName(string itemID){
 		return DataItems.GetItemTextureName(itemID);
 	}
-
-	//Apply the stats effect that the Item with itemID has to the appropriate stats
-	public void StatsEffect(string itemID){
-		Item item = GetItem(itemID);
-		Dictionary<StatType, int> statDict = null;
+	
+	//---------------------------------------------------
+	// CanUseItem()
+	// For the player's own good, we stop them if they
+	// try to use an item that will buff a stat that is
+	// already at max.  This function returns whether or
+	// not the user can use an item due to this.
+	//---------------------------------------------------		
+	public bool CanUseItem( string strItemID ) {
+		// start off with true
+		bool bCanUse = true;
+		
+		// get the stats dictionary for the item
+		Dictionary<StatType, int> statsDict = GetStatsDict( strItemID );
+		
+		// if the stats dictionary is not null, we want to be sure that the stats aren't already at max
+		if ( statsDict != null ) {		
+			int moodAmount = 0;
+			int healthAmount = 0;
+	
+			if(statsDict.ContainsKey(StatType.Mood))
+				moodAmount = statsDict[StatType.Mood];
+		
+			if(statsDict.ContainsKey(StatType.Health))
+				healthAmount = statsDict[StatType.Health];
+			
+			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
+			// the item, because it would be a waste.
+			int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
+			int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			
+			if ( moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100 )
+				bCanUse = false;
+			else if ( moodAmount > 0 && nCurMood == 100 )
+				bCanUse = false;
+			else if ( healthAmount > 0 && nCurHealth == 100 )
+				bCanUse = false;
+		}
+		
+		return bCanUse;
+	}
+	
+	//---------------------------------------------------
+	// GetStasDict()
+	// Returns a dictionary of stats info on the incoming
+	// item.  May return null.
+	//---------------------------------------------------		
+	private Dictionary<StatType, int> GetStatsDict( string strItemID ) {
+		Item item = GetItem(strItemID);
+		Dictionary<StatType, int> dictStats = null;
 		switch(item.Type){
 			case ItemType.Foods:
 				FoodItem foodItem = (FoodItem) item;
-				statDict = foodItem.Stats;
-
-				if(statDict != null)
-					StatsEffect(statDict);
+				dictStats = foodItem.Stats;
 			break;
 			case ItemType.Usables:
 				UsableItem usableItem = (UsableItem) item;
-				statDict = usableItem.Stats;
-
-				if(statDict != null)
-					StatsEffect(statDict);
+				dictStats = usableItem.Stats;
 			break;
-		}
+		}		
+		
+		return dictStats;
+	}
+
+	//Apply the stats effect that the Item with itemID has to the appropriate stats
+	public void StatsEffect(string itemID){
+		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
+		
+		if(statDict != null)
+			StatsEffect(statDict);
 	}
 
 	//StatsEffect helper method

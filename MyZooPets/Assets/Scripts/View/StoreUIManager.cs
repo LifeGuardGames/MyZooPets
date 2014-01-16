@@ -59,6 +59,24 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			Debug.LogError("Exit button is null...please set");
 	}
 	
+	void Start(){
+		// Reposition all the things nicely to stretch to the end of the screen
+		
+		// Position the UIPanel clipping range
+		UIPanel itemAreaPanel = itemArea.GetComponent<UIPanel>();
+		Vector4 oldRange = itemAreaPanel.clipRange;
+		
+		// The 52 comes from some wierd scaling issue.. not sure what it is but compensate now
+		itemAreaPanel.transform.localPosition = new Vector3(52f, itemAreaPanel.transform.localPosition.y, 0f);
+		itemAreaPanel.clipRange = new Vector4(52f, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		
+		// Position the grid origin to the left of the screen
+		Vector3 gridPosition = grid.transform.localPosition;
+		grid.transform.localPosition = new Vector3(
+			(-1f * (CameraManager.Instance.GetNativeWidth()/2)) - itemArea.transform.localPosition.x,
+			gridPosition.y, gridPosition.z);
+	}
+	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	

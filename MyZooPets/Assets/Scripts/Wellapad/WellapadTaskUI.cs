@@ -45,8 +45,14 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------	
 	private void SetDesc() {
 		// set the label showing what the task entails
-		string strTask = task.GetDesc();
-		label.text = strTask;			
+		Data_WellapadTask data = DataLoader_WellapadTasks.GetTask( task.TaskID );
+		string strDesc = data.GetText();
+		
+		// if the task has an amount, we want to integrate that into the string
+		if ( task.Amount > 0 )
+			strDesc = StringUtils.Replace( strDesc, StringUtils.NUM, task.Amount );	
+
+		label.text = strDesc;			
 	}
 	
 	//---------------------------------------------------

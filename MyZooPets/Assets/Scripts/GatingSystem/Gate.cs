@@ -125,7 +125,7 @@ public abstract class Gate : MonoBehaviour {
 	//---------------------------------------------------	
 	public bool DamageGate( int nDamage ) {
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DataManager.Instance.GameData.GatingProgress.DamageGate( strID, nDamage );
+		bool bDestroyed = DamageGate_SaveData( strID, nDamage );
 		
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip( "Damage_" + strResource );
@@ -133,11 +133,44 @@ public abstract class Gate : MonoBehaviour {
 		// let children know that the gate was damaged so they can react in their own way
 		_DamageGate( nDamage );
 		
-		if ( bDestroyed )
+		if ( bDestroyed ) {
+			Analytics.Instance.GateUnlocked(strID);	
 			PrepGateDestruction();
+		}
 		
 		return bDestroyed;
 	}
+	
+	//---------------------------------------------------
+	// DamageGate_SaveData()
+	// Damages a gate with strID for nDamage, and handles
+	// the save data side of things.  This used to be in
+	// the actual save data class for gates, but was moved
+	// out to here.
+	//---------------------------------------------------		
+	public bool DamageGate_SaveData( string strID, int nDamage ) {
+		// check to make sure the gate exists
+		if ( !DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey( strID ) ) {
+			Debug.LogError("Something trying to access a non-existant gate " + strID);
+			return true;
+		}
+		
+		// check to make sure the gate is active
+		if ( !DataManager.Instance.GameData.GatingProgress.IsGateActive( strID ) ) {
+			Debug.LogError("Something trying to damage an inactive gate " + strID);
+			return true;
+		}
+		
+		// otherwise, calculate and save the new hp
+		int nHP = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
+		nHP = Mathf.Max( nHP - nDamage, 0 );
+		DataManager.Instance.GameData.GatingProgress.GatingProgress[strID] = nHP;
+		
+		// then return whether or not the gate has been destroyed
+		bool bDestroyed = nHP <= 0;
+
+		return bDestroyed;
+	}	
 	
 	//---------------------------------------------------
 	// PrepGateDestruction()

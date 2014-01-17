@@ -15,21 +15,6 @@ public class TaskUpdatedArgs : EventArgs {
 	public bool Status{get; set;}
 }
 
-// this is save date for a given mission
-public class Mission {
-    public string ID {get; set;}						// id of the mission
-	public RewardStatuses RewardStatus {get; set;}		// status of the mission's reward
-	public Dictionary<string, WellapadTask> Tasks {get; set;}	// all the tasks and their status for this mission
-
-    public Mission(){}
-
-    public Mission(string id, Dictionary<string, WellapadTask> tasks, RewardStatuses eReward = RewardStatuses.Unearned ){
-        ID = id;
-		Tasks = tasks;
-		RewardStatus = eReward;
-    }
-}
-
 public class WellapadMissionController : Singleton<WellapadMissionController> {
 	//=======================Events========================
     public EventHandler<TaskUpdatedArgs> OnTaskUpdated;   	// when a task's status is updated

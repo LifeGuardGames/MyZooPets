@@ -33,6 +33,9 @@ public class GatingManager : Singleton<GatingManager> {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// set up the user's save data iniitially
+		InitSaveData();
+		
 		// set pan script
 		scriptPan = CameraManager.Instance.GetPanScript();
 		
@@ -48,6 +51,28 @@ public class GatingManager : Singleton<GatingManager> {
 		
 		// now spawn the gates
 		SpawnGates();
+	}
+	
+	//---------------------------------------------------
+	// InitSaveData()
+	// Inits the user's save data, if necessary.  This was
+	// moved from the GatingProgressData class.  It is 
+	// useful to have it in the GatingManager because as
+	// we add new gates to XML, this function will init
+	// those gates properly.
+	//---------------------------------------------------	
+	private void InitSaveData() {
+		// init the data by filling the dictionary with xml data
+		Dictionary<string, DataGate> dictGates = DataGateLoader.GetAllData();
+		foreach(KeyValuePair<string, DataGate> entry in dictGates) {
+			string strKey = entry.Key;
+		    DataGate dataGate = entry.Value;
+			int nHP = dataGate.GetMonster().GetMonsterHealth();
+			
+			// maps gate key to monster's max hp (i.e. no progress)
+			if ( !DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey( strKey ) )
+				DataManager.Instance.GameData.GatingProgress.GatingProgress[strKey] = nHP;
+		}		
 	}
 	
 	//---------------------------------------------------

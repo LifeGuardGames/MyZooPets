@@ -31,6 +31,10 @@ public class CameraManager : Singleton<CameraManager> {
 	
 	// is the camera zoomed?
 	private bool bZoomed;
+	private bool bZooming;
+	public void SetZooming( bool b ) {
+		bZooming = b;	
+	}
 
 	private int nativeWidth;
 	public int GetNativeWidth() {
@@ -75,7 +79,8 @@ public class CameraManager : Singleton<CameraManager> {
 		float fTargetX = script.partitionOffset * script.currentPartition;
 		float fX = goParent.transform.position.x;
 		
-		bool bMoving = fTargetX != fX;
+		// check if the camera is moving horizontally or zooming
+		bool bMoving = fTargetX != fX || bZooming;
 		
 		return bMoving;
 	}
@@ -84,6 +89,9 @@ public class CameraManager : Singleton<CameraManager> {
 	// ZoomToTarget()
 	// Moves the camera to a target position with a 
 	// target rotation over a set time.
+	// NOTE: If this function can ever "fail", be sure to
+	// check ZoomHelper because it assumes this function
+	// will always work.
 	//---------------------------------------------------	
 	public void ZoomToTarget( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
 		// before zooming, cache the camera position
@@ -116,6 +124,7 @@ public class CameraManager : Singleton<CameraManager> {
 	// MoveCamera()
 	//---------------------------------------------------	
 	private void MoveCamera( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
+		Debug.Log("Moving camera");
 		// set up the movement hash
 		Hashtable hashMove = new Hashtable();
 		

@@ -24,6 +24,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         selectedPetID = selectedPetGO.transform.parent.name;
         string petStatus = DataManager.Instance.GetPetStatus(selectedPetID);
 
+        //probably shoudn't use spot light right away. should toggle spot light
+        //after some logic check for the data
         ToggleEggAnimation(false);
         ToggleSpotLight(true, selectedPetGO);
 
@@ -39,7 +41,9 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
                 DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
                 DataManager.Instance.LoadGameData();
             }else{
-                LoadScene();
+
+                if(DataManager.Instance.IsGameDataLoaded())
+                    LoadScene();
             }
         }
     }
@@ -110,11 +114,13 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }	
 
     //After existing game data has been loaded. Enter the game
-    private void EnterGameAfterGameDataDeserialized(object sender, EventArgs args){
-        LoadScene();
+    private void EnterGameAfterGameDataDeserialized(object sender, DataManager.SerializerEventArgs args){
+        if(args.IsSuccessful){
+            LoadScene();
         
-        //Unregister itself from the event
-        DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
+            //Unregister itself from the event
+            DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
+        }
     }
 
     private void LoadScene(){

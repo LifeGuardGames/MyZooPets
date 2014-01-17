@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // PetInfoData 
@@ -11,13 +12,17 @@ public class PetInfoData{
     public string PetSpecies {get; set;}
     public string PetColor {get; set;}
     public bool IsHatched {get; set;}
-	
-	// fire breathing status of the pet
-	public int nFireBreaths {get; set;}
+	public int nFireBreaths {get; set;} // fire breathing status of the pet
+
+    public string TestString{get; set;}
+    public List<string> TestListString{get; set;}
+    public Dictionary<string, int> TestDict{get; set;}
+
 	public void ChangeFireBreaths( int nAmount ) {
 		int nBreathsNew = nFireBreaths + nAmount;
 		SetFireBreaths( nBreathsNew );
 	}
+
 	public void SetFireBreaths( int nAmount ) {
 		nFireBreaths = nAmount;	
 	
@@ -30,29 +35,39 @@ public class PetInfoData{
 			nFireBreaths = 0;
 		}
 	}
+
 	public bool CanBreathFire() {
 		int nBreaths = GetFireBreaths();
 		bool bInfiniteMode = IsInfiniteFire();
 		bool bCan = nBreaths > 0 || bInfiniteMode;
 		return bCan;
 	}
+
 	private int GetFireBreaths() {
 		return nFireBreaths;	
 	}
+
 	public bool IsInfiniteFire() {
 		bool bInfinite = Constants.GetConstant<bool>( "InfiniteFireMode" );
 		return bInfinite;
 	}
 
-    public PetInfoData(){}
-
-    public void Init(){
+    public PetInfoData(){
         PetID = "";
         PetName = "LazyWinkle";
         PetSpecies = "Basic";
         PetColor = "OrangeYellow";
         IsHatched = false;
+        nFireBreaths = 0;
+    }
+
+    public void Init(){
+  //       PetID = "";
+  //       PetName = "LazyWinkle";
+  //       PetSpecies = "Basic";
+  //       PetColor = "OrangeYellow";
+  //       IsHatched = false;
 		
-		nFireBreaths = 0;
+		// nFireBreaths = 0;
     }
 }

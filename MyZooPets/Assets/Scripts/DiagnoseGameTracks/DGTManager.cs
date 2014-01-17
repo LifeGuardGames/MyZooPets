@@ -255,8 +255,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		Analytics.Instance.DiagnoseResult(Analytics.DIAGNOSE_RESULT_INCORRECT,
 			character.GetStage(), zone.GetStage());
 		
-		// also slow down the game
-		SlowGameDown();
+		// also slow down the game, if this didn't cause us to have a game over
+		MinigameStates eState = GetGameState();
+		if ( eState == MinigameStates.Playing )
+			SlowGameDown();
 	}
 	
 	//---------------------------------------------------

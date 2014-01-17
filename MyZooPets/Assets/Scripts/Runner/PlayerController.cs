@@ -23,6 +23,11 @@ public class PlayerController : Singleton<PlayerController> {
     private float speedIncreaseCounter = 0f; //Time till we speed up the game
     private Vector2 initialPosition; //Where the player start
 
+#if UNITY_EDITOR	
+	// used just for testing keyboard input in unity editor
+	private bool bDelay = false;
+#endif
+	
     void Start () {
         playerPhysics = GetComponent<PlayerPhysics>();
         initialPosition = transform.position;
@@ -97,7 +102,12 @@ public class PlayerController : Singleton<PlayerController> {
 
 #if UNITY_EDITOR
         if(Input.GetKey("up")) Jump();
-        if(Input.GetKey("down") && !playerPhysics.Falling) Drop();
+        if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
+			bDelay = true;
+			Drop();
+		}
+		else
+			bDelay = false;
 #endif
 
         if(playerPhysics.Grounded && !playerPhysics.Jumping)

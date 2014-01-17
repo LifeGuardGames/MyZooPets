@@ -36,7 +36,6 @@ public class GameTutorial_Flame : GameTutorial {
 	protected override void _End( bool bFinished ) {
 		// clean up various things this tutorial created
 		RemovePopup();
-		RemoveSpotlight();
 	}
 	
 	//---------------------------------------------------

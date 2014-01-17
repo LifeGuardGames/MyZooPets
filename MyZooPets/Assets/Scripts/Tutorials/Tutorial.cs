@@ -210,7 +210,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------		
 	protected void RemoveSpotlight() {
 		if ( goSpotlight == null ) {
-			Debug.LogError("Trying to destroy a spotlight that doesn't exist!");
+			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() +")");
 			return;
 		}
 		

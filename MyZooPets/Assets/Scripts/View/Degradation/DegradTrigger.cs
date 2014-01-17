@@ -69,7 +69,12 @@ public class DegradTrigger : MonoBehaviour {
 		
 		// send out callback
 		if ( OnTriggerCleaned != null )
-			OnTriggerCleaned( this, EventArgs.Empty );			
+			OnTriggerCleaned( this, EventArgs.Empty );		
+		
+		// play an FX
+		Vector3 vPosFX = gameObject.transform.position;
+		string strFX = Constants.GetConstant<string>( "Degrad_CleanFX" );
+		ParticleUtils.CreateParticle( strFX, vPosFX );		
 		
         Destroy(this.gameObject);
     }

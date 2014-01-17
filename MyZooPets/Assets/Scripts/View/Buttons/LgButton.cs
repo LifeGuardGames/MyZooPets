@@ -18,6 +18,12 @@ public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
+	
+	// the mode that this button will check for to make sure it can be clicked
+	public UIModeTypes eMode = UIModeTypes.NotInited;
+	public UIModeTypes GetMode() {
+		return eMode;	
+	}
 
 	// the sound resource this button plays when it is clicked
 	public string strSoundProcess;
@@ -44,6 +50,12 @@ public abstract class LgButton : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// do a check for a valid mode
+		if ( eMode == UIModeTypes.NotInited ) {
+			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
+			eMode = UIModeTypes.None;	
+		}
+		
 		_Start();
 	}
 	protected virtual void _Start() {}

@@ -52,24 +52,33 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
 
         if(dropOnTarget){
-            e.IsValidTarget = true;
-
-            string invItemID = e.ItemTransform.name; //get id from listener args
+			string invItemID = e.ItemTransform.name; //get id from listener args
 			
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			if ( invItem != null && invItem.ItemType == ItemType.Foods )
-				ShowPetReceivedFoodAnimation();		
-			
-			//notify inventory logic that this item is being used
-            InventoryLogic.Instance.UseItem(invItemID);
-			
-            if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-                e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-            }
-            else{ //destroy object if it has been used up
-                Destroy(e.ParentTransform.gameObject);
-                UpdateBarPosition();
-            }
+			// check to make sure the item can be used
+			if ( ItemLogic.Instance.CanUseItem( invItemID ) ) {
+	            e.IsValidTarget = true;
+				
+				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+				if ( invItem != null && invItem.ItemType == ItemType.Foods )
+					ShowPetReceivedFoodAnimation();		
+				
+				//notify inventory logic that this item is being used
+	            InventoryLogic.Instance.UseItem(invItemID);
+				
+	            if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+	                e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
+	            }
+	            else{ //destroy object if it has been used up
+	                Destroy(e.ParentTransform.gameObject);
+	                UpdateBarPosition();
+	            }
+			}
+			else {
+				// else the drop was valid, but the item could not be used...show a message
+		        Hashtable hashSpeech = new Hashtable();
+		        hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
+		        PetSpeechController.Instance.Talk(hashSpeech);				
+			}
         }
     }
 
@@ -133,13 +142,23 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     //Find the position of Inventory Item game object with invItemID
     //Used for animation position in StoreUIManager
     public Vector3 GetPositionOfInvItem(string invItemID){
-        Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-        InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-        Vector3 invItemPosition = invItemTrans.position;
-
-        //Offset position if the item is just added to the inventory
-        if(invItem.Amount == 1) invItemPosition += new Vector3(-0.22f, 0, 0);
-
+		// position to use
+		Vector3 invItemPosition;
+			
+		if ( !isGuiShowing ) {
+			// if the inventory is minimized, use the position of the inventory sprite object
+			invItemPosition = uiButtonSpriteObject.transform.position;
+		}
+		else {
+			// otherwise use the position of the item in the inventory panel
+	        Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+	        InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+	        invItemPosition = invItemTrans.position;
+	
+	        //Offset position if the item is just added to the inventory
+	        if(invItem.Amount == 1) invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
+		
         return invItemPosition;
     }
 

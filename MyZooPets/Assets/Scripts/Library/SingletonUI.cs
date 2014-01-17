@@ -27,7 +27,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	}
 
 	// the mode type of this manager
-	public UIModeTypes eModeType;
+	protected UIModeTypes eModeType = UIModeTypes.Generic;
 	
 	// is this ui open?
 	private bool bOpen = false;
@@ -52,8 +52,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		
 		// a ui is opening, so we need to lock things down
 		List<ClickLockExceptions> listExceptions = GetClickLockExceptions();
-		ClickManager.Instance.ClickLock( listExceptions );
-		ClickManager.Instance.ModeLock( eModeType );
+		ClickManager.Instance.Lock( eModeType, listExceptions );
 		
 		if ( ShouldLockUI() )
 			ClickManager.SetActiveGUIModeLock(true);
@@ -94,8 +93,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 			return;
 		
 		// a ui is closing, so release our locks
-		ClickManager.Instance.ReleaseClickLock();
-		ClickManager.Instance.ReleaseModeLock();
+		ClickManager.Instance.ReleaseLock();
 		
 		if ( ShouldLockUI() )
 			ClickManager.SetActiveGUIModeLock(false);

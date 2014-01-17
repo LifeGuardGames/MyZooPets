@@ -41,6 +41,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	}
 	
 	void Start() {
+		eModeType = UIModeTypes.EditDecos;
+		
 		// cache the tween on the edit button for easier use
 		tweenEdit = goEdit.GetComponent<PositionTweenToggle>();
 		
@@ -125,6 +127,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		// close this UI and show the edit decos button
 		CloseChooseMenu_( false );
 		tweenEdit.Show();
+		
+		// push the shop mode type onto the click manager stack
+		ClickManager.Instance.Lock( UIModeTypes.Store );
 	
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
@@ -147,6 +152,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// update the menu
 		UpdateChooseMenu( nodeSaved );	
+		
+		// pop the mode we pushed earlier from the click manager
+		ClickManager.Instance.ReleaseLock();
 
 		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}

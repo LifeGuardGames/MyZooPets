@@ -90,7 +90,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	private MinigameStates eCurrentState = MinigameStates.Opening;
 	private void SetGameState( MinigameStates eNewState ) {
 		if ( eCurrentState == eNewState ) {
-			Debug.LogError("Minigame is getting set to a state it's already at: " + eNewState);
+			Debug.LogError("Minigame(" + GetMinigameKey() + ") is getting set to a state it's already at: " + eNewState);
 			return;
 		}
 		
@@ -475,7 +475,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			nReward = nScore / nStandard;
 		}
 		
-		Debug.LogError("Reward for " + eType + " is " + nReward);
+		//Debug.Log("Reward for " + eType + " is " + nReward);
 		
 		return nReward;
 	}

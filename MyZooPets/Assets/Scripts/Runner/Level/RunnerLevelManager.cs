@@ -247,8 +247,14 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             //@OPTIMIZE cache this out in a dictionary when we generate the group. prefab. somehow. Then just pull from the dictionary.
             List<PointGroup> bundlePointGroups = new List<PointGroup>();
 		    foreach (PointGroup currentGroup in inLevelComponent.PointGroups) {
-                if (currentGroup.mBundleID == chosenBundle.mBundleID)
-                    bundlePointGroups.Add(currentGroup);
+				// make sure the bundle ID of this point group matches the chosen bundle ID
+                if (currentGroup.mBundleID == chosenBundle.mBundleID) {
+					// now do another roll to see if the point group should be spawning
+					bool bSpawnGroup = (Random.value < ( currentGroup.mSpawnChance / 100f));
+					
+					if ( bSpawnGroup )
+                    	bundlePointGroups.Add(currentGroup);
+				}
             }
 
             // Phew. Now spawn all those items! 

@@ -15,6 +15,9 @@ public class CameraManager : Singleton<CameraManager> {
 	// ratios
 	public float ratioX;
 	public float ratioY;
+	public float GetRatioDifference(){
+		return ratioY;
+	}
 	
 	// default positoin/rotation of the camera
 	protected Vector3 initPosition;	// Default position: 0, 5.7, -23

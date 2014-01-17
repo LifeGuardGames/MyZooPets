@@ -18,6 +18,18 @@ public class ZoomHelper : MonoBehaviour {
 	//---------------------------------------------------	
 	public void Zoom() {
 		Vector3 vPos = gameObject.transform.position + vOffset;
-		CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );		
+		CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, gameObject );	
+		
+		// set zooming to true 
+		CameraManager.Instance.SetZooming( true );
 	}
+	
+	//---------------------------------------------------
+	// CameraMoveDone()
+	// Callback for when the camera is done tweening to
+	// its target.
+	//---------------------------------------------------	
+	private void CameraMoveDone() {
+		CameraManager.Instance.SetZooming( false );
+	}	
 }

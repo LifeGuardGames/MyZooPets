@@ -443,6 +443,7 @@ GameObject:
   - 114: {fileID: 11400080}
   - 114: {fileID: 11400082}
   - 114: {fileID: 11400044}
+  - 114: {fileID: 11400058}
   m_Layer: 0
   m_Name: BackButton
   m_TagString: Untagged
@@ -1321,7 +1322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockGUI: 0
-  eModeType: 0
   zoomHelper: {fileID: 11400074}
   goBackButton: {fileID: 100070}
 --- !u!114 &11400044
@@ -1504,6 +1504,24 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 0
+  eMode: 2
+  strSoundProcess: 
+  bCheckClickManager: 1
+  strAnalytics: 
+  target: {fileID: 100038}
+  functionName: CloseUI
 --- !u!114 &11400060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1686,7 +1704,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
@@ -1707,6 +1725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  eMode: 0
   strSoundProcess: 
   bCheckClickManager: 1
   strAnalytics: 

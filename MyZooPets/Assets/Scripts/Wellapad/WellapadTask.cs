@@ -32,21 +32,6 @@ public class WellapadTask {
 		return bWillComplete;
 	}
 	
-	//---------------------------------------------------
-	// GetDesc()
-	// Returns the string description for this task.
-	//---------------------------------------------------		
-	public string GetDesc() {
-		Data_WellapadTask data = DataLoader_WellapadTasks.GetTask( TaskID );
-		string strDesc = data.GetText();
-		
-		// if the task has an amount, we want to integrate that into the string
-		if ( Amount > 0 )
-			strDesc = StringUtils.Replace( strDesc, StringUtils.NUM, Amount );
-		
-		return strDesc;
-	}
-	
 	public WellapadTask() {}
 	
 	public WellapadTask( Data_WellapadTask data, WellapadTaskCompletionStates eCompleted = WellapadTaskCompletionStates.Uncompleted ) {

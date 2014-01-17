@@ -92,9 +92,11 @@ public class BadgeMutableData{
     }
 
     //============================Initialization===============================
-    public BadgeMutableData(){}
+    public BadgeMutableData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
         BadgeStatus = new Dictionary<string, Status>();
         SingleUnlockProgress = new Dictionary<string, int>();
         SeriesBadgeUnlockProgress = new Dictionary<BadgeType, int>();

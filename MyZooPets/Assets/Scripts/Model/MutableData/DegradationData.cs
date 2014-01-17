@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 //---------------------------------------------------
 // DegradationData 
-// Save data for degradation. Mutable data 
+// Save data for degradation. 
+// Mutable data 
 //---------------------------------------------------
 
 public class DegradationData{
@@ -29,9 +30,11 @@ public class DegradationData{
 	*/
 
     //================Initialization============
-    public DegradationData(){}
+    public DegradationData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
         LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
         LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
         IsTriggerSpawned = false;

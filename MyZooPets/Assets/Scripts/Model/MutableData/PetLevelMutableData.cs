@@ -2,13 +2,19 @@
 using System;
 using System.Collections;
 
+//---------------------------------------------------
+// PetLevelMutableData
+// Mutable data.
+//---------------------------------------------------
 public class PetLevelMutableData{
     public Level CurrentLevel {get; set;} //pets current level 
 
     //================Initialization============
-    public PetLevelMutableData(){}
+    public PetLevelMutableData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
         CurrentLevel = Level.Level1;
     } 
 }

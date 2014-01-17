@@ -73,12 +73,13 @@ public class GatingProgressData{
 	}
 
     //=======================Initialization==================
-    public GatingProgressData(){}
+    public GatingProgressData(){
+    	Init();
+    }
 
     //Populate with dummy data
-    public void Init(){
+    private void Init(){
         GatingProgress = new Dictionary<string, int>();		
-		
 		GatingManager.InitSaveData();
     }
 }

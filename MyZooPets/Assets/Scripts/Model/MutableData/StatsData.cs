@@ -2,6 +2,11 @@
 using System;
 using System.Collections;
 
+//---------------------------------------------------
+// StatsData 
+// Save data for stats 
+// Mutable data.
+//---------------------------------------------------
 public class StatsData{
     public int Points {get; set;} //evolution Points
     public int Stars {get; set;} //currency of the game
@@ -19,10 +24,11 @@ public class StatsData{
 	private static int VERY_SICK_THRESH = 30;	
 
     //=======================Initialization==================
-    public StatsData(){}
+    public StatsData(){
+        Init();
+    }
 
-    //Populate with dummy data
-    public void Init(){
+    private void Init(){
         Health = 80;
         Mood = 80;
         Points = 0;

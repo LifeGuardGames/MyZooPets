@@ -4,9 +4,11 @@ using System.Collections.Generic;
 public class RunnerGameData{
     public List<string> RunnerItemCollided {get; set;}
 
-    public RunnerGameData(){}
+    public RunnerGameData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
         RunnerItemCollided = new List<string>();
     }
 }

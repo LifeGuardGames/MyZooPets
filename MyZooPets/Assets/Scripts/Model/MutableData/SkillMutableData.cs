@@ -50,9 +50,11 @@ public class SkillMutableData{
 
 
     //========================Initialization===================================
-    public SkillMutableData(){}
+    public SkillMutableData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
         SkillStatus = new Dictionary<string, Status>();
         UpdateSkillStatus("Flame_1", true);
         CurrentSkillID = "Flame_1";

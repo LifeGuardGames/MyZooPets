@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 //---------------------------------------------------
 // PetInfoData 
-// Save data for PetInfo. Mutable data 
+// Save data for PetInfo. 
+// Mutable data.
 //---------------------------------------------------
 public class PetInfoData{	
     public string PetID {get; set;}
@@ -53,21 +54,15 @@ public class PetInfoData{
 	}
 
     public PetInfoData(){
+        Init();        
+    }
+
+    private void Init(){
         PetID = "";
         PetName = "LazyWinkle";
         PetSpecies = "Basic";
         PetColor = "OrangeYellow";
         IsHatched = false;
         nFireBreaths = 0;
-    }
-
-    public void Init(){
-  //       PetID = "";
-  //       PetName = "LazyWinkle";
-  //       PetSpecies = "Basic";
-  //       PetColor = "OrangeYellow";
-  //       IsHatched = false;
-		
-		// nFireBreaths = 0;
     }
 }

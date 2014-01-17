@@ -22,38 +22,40 @@ public class PetGameData{
     public GatingProgressData GatingProgress {get; set;}
     public RunnerGameData RunnerGame {get; set;}
 
-    public PetGameData(){}
+    public PetGameData(){
+        Init();
+    }
 
-    public void Init(){
+    private void Init(){
 		Wellapad = new WellapadData();
-		Wellapad.Init();
+		// Wellapad.Init();
         PetInfo = new PetInfoData();
-        PetInfo.Init();
+        // PetInfo.Init();
         Cutscenes = new CutsceneData();
-        Cutscenes.Init();
+        // Cutscenes.Init();
         Decorations = new DecorationSystemData();
-        Decorations.Init();
+        // Decorations.Init();
         Stats = new StatsData();
-        Stats.Init();
+        // Stats.Init();
         Level = new PetLevelMutableData();
-        Level.Init();
+        // Level.Init();
         Calendar = new CalendarData();
-        Calendar.Init();
+        // Calendar.Init();
         Degradation = new DegradationData();
-        Degradation.Init();
+        // Degradation.Init();
         Inhaler = new InhalerData();
-        Inhaler.Init();
+        // Inhaler.Init();
         Tutorial = new TutorialData();
-        Tutorial.Init();
+        // Tutorial.Init();
         Inventory = new InventoryData();
-        Inventory.Init();
+        // Inventory.Init();
         Flame = new SkillMutableData(); 
-        Flame.Init();
+        // Flame.Init();
         Badge = new BadgeMutableData();
-        Badge.Init();
+        // Badge.Init();
         GatingProgress = new GatingProgressData();
-        GatingProgress.Init();
+        // GatingProgress.Init();
         RunnerGame = new RunnerGameData();
-        RunnerGame.Init();
+        // RunnerGame.Init();
     }
 }

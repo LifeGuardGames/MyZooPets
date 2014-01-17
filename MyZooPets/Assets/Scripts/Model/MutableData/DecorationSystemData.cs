@@ -5,6 +5,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 // DecorationSystemData
 // Save data script for the decoration system.
+// Mutable data.
 //---------------------------------------------------
 
 public class DecorationSystemData{
@@ -12,10 +13,12 @@ public class DecorationSystemData{
 	
 
     //=======================Initialization==================
-    public DecorationSystemData(){}
+    public DecorationSystemData(){
+        Init();    
+    }
 
     //Populate with dummy data
-    public void Init(){
+    private void Init(){
         PlacedDecorations = new Dictionary<string, string>();
     }
 }

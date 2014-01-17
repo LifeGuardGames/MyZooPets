@@ -6,6 +6,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 // WellapadData
 // Save data for all things Wellapad related.
+// Mutable data
 //---------------------------------------------------
 
 public class WellapadData {	
@@ -18,7 +19,9 @@ public class WellapadData {
 	// list of current tasks/missions the user has
 	public Dictionary< string, Mission > CurrentTasks {get; set;}
 	
-	public WellapadData(){}
+	public WellapadData(){
+		Init();
+	}
 
 	//---------------------------------------------------
 	// ResetMissions()
@@ -30,7 +33,7 @@ public class WellapadData {
 	}
 	
     //Populate with dummy data
-    public void Init(){
+    private void Init(){
         TasksUnlocked = new List<string>();
 		TasksUnlocked.Add( "Always" );
 	

@@ -11,7 +11,7 @@ public class ButtonWellapad : LgButton {
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
-	protected override void _Start() {
+	protected override void _Start() {		
 		// for debug/testing -- we may have the wellapad disabled
 		bool bOK = Constants.GetConstant<bool>( "WellapadOn" );
 		if ( !bOK )

@@ -18,10 +18,16 @@ public class WellapadRewardButton : LgButton {
 	// the NGUI button script for this button
 	public UIImageButton nguiButton;
 	
+	// wellapad button, used in pulsing to alert the player
+	private UIImageButton buttonWellapad;	
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
 	public void Init( string strMissionID ) {
+		// set wellapad sprite object
+		buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
+			
 		this.strMissionID = strMissionID;	
 		
 		// set the sprites for this button appropriately on init
@@ -47,9 +53,16 @@ public class WellapadRewardButton : LgButton {
 			// get status of reward
 			RewardStatuses eStatus = mission.RewardStatus;
 			
+			// get blink script on the wellapad button
+			BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
+			
 			if ( eStatus == RewardStatuses.Claimed ) {
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
+				
+				// remove the blink script from the gameobject, if it existed
+				if ( scriptBlink )
+					Destroy( scriptBlink );
 				
 				// if the reward is claimed, the button is not enabled
 				bEnabled = false;
@@ -62,6 +75,15 @@ public class WellapadRewardButton : LgButton {
 				
 				// the button is not enabled if the reward is unearned
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
+				
+				// if the status is unclaimed, add a pulse to the wellapad icon (if it doesn't have one)
+				if ( eStatus == RewardStatuses.Unclaimed && scriptBlink == null ) {
+					scriptBlink = buttonWellapad.gameObject.AddComponent<BlinkButton>();
+					string strBlink = Constants.GetConstant<string>("Wellapad_BlinkSprite");
+					float fBlink = Constants.GetConstant<float>("Wellapad_BlinkTime");
+					
+					scriptBlink.Init(buttonWellapad, strBlink, fBlink);
+				}
 			}
 		}
 		

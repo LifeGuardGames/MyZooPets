@@ -32,10 +32,7 @@ public class GatingManager : Singleton<GatingManager> {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start() {
-		// set up the user's save data iniitially
-		InitSaveData();
-		
+	void Start() {		
 		// set pan script
 		scriptPan = CameraManager.Instance.GetPanScript();
 		
@@ -61,7 +58,7 @@ public class GatingManager : Singleton<GatingManager> {
 	// we add new gates to XML, this function will init
 	// those gates properly.
 	//---------------------------------------------------	
-	private void InitSaveData() {
+	public static void InitSaveData() {
 		// init the data by filling the dictionary with xml data
 		Dictionary<string, DataGate> dictGates = DataGateLoader.GetAllData();
 		foreach(KeyValuePair<string, DataGate> entry in dictGates) {

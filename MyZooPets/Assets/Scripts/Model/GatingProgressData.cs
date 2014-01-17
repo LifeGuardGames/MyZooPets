@@ -27,7 +27,7 @@ public class GatingProgressData{
 		if ( GatingProgress.ContainsKey( strID ) )
 			bActive = GatingProgress[strID] > 0;
 		else
-			Debug.LogError("Attempting to access a non-exitant gate from GatingProgressData");
+			Debug.LogError("Attempting to access a non-exitant gate from GatingProgressData: " + strID);
 		
 		return bActive;
 	}
@@ -78,5 +78,7 @@ public class GatingProgressData{
     //Populate with dummy data
     public void Init(){
         GatingProgress = new Dictionary<string, int>();		
+		
+		GatingManager.InitSaveData();
     }
 }

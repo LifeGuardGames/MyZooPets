@@ -34,7 +34,8 @@ public class ProgressBarUIManager : MonoBehaviour {
     //Event listener. listens to OnNext Step and Fill progress bar by one node
     private void UpdateProgressBar(object sender, EventArgs args){
         stepCompleted = InhalerLogic.Instance.CurrentStep;
-        slider.sliderValue = stepCompleted * increment;
+        int sliderStep = stepCompleted - 1; //actual slider step is one less than inhaler step
+        slider.sliderValue = sliderStep * increment;
         UpdateNodeColors();
     } 
 

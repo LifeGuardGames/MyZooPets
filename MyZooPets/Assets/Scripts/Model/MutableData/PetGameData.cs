@@ -58,4 +58,15 @@ public class PetGameData{
         RunnerGame = new RunnerGameData();
         // RunnerGame.Init();
     }
+	
+	//---------------------------------------------------
+	// VersionCheck()
+	// This function is called after the game data has
+	// been loaded.  It will call individual game data
+	// version checks so that save data can properly
+	// be updated when the app is updated.
+	//---------------------------------------------------	
+	public void VersionCheck() {
+		GatingProgress.VersionCheck();
+	}
 }

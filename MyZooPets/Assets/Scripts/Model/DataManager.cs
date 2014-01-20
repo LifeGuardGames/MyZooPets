@@ -240,6 +240,7 @@ public class DataManager : Singleton<DataManager>{
 #endif
 
                 gameData = newGameData;
+				gameData.VersionCheck();
                 Deserialized(true);
             }else{
                 Deserialized(false);

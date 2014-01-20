@@ -107,7 +107,10 @@ public class PetMovement : Singleton<PetMovement> {
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
     }
 
+    //---------------------------------------------------
+    // MovePetWithCamera()
     //Pet will follow the camera when the partition has been changed
+    //---------------------------------------------------
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
         bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
         if(!hasActiveGate){		
@@ -133,7 +136,7 @@ public class PetMovement : Singleton<PetMovement> {
     //---------------------------------------------------
     private void MovePet(Ray myRay){
         RaycastHit hit;
-        Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
+        // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
 
         if(Physics.Raycast(myRay, out hit)){
             foreach(Collider walkingPathCollider in walkingPathColliders){

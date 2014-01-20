@@ -79,8 +79,13 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				//StatsController.Instance.ChangeFireBreaths( 1 );
 				
 				int nXP = DataLoader_XpRewards.GetXP( "WellapadBonus", new Hashtable() );
-				StatsController.Instance.ChangeStats( nXP, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				
+				// get the position of the actual reward object because we want to stream the XP from it
+				GameObject goReward = GameObject.Find("WellapadRewardButton");				
+				Vector3 vPos = LgNGUITools.GetScreenPosition( goReward );
+				vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.Center, InterfaceAnchors.Top );
+
+				StatsController.Instance.ChangeStats( nXP, vPos, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event

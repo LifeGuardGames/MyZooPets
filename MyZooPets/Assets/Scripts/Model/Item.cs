@@ -41,7 +41,9 @@ public class Item {
 	}
 	
 	public bool IsLocked() {
-		bool bLocked = GetLockedLevel() > 0;
+		int nLockLevel = GetLockedLevel();
+		int nPetLevel = (int) ( LevelLogic.Instance.CurrentLevel );
+		bool bLocked = nLockLevel > 0 && nLockLevel > nPetLevel;
 		return bLocked;
 	}
 	public int GetLockedLevel() {

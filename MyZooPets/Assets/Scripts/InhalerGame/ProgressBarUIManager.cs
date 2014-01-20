@@ -33,7 +33,7 @@ public class ProgressBarUIManager : MonoBehaviour {
 
     //Event listener. listens to OnNext Step and Fill progress bar by one node
     private void UpdateProgressBar(object sender, EventArgs args){
-        stepCompleted = InhalerLogic.Instance.CurrentStep -1;
+        stepCompleted = InhalerLogic.Instance.CurrentStep;
         slider.sliderValue = stepCompleted * increment;
         UpdateNodeColors();
     } 
@@ -48,9 +48,10 @@ public class ProgressBarUIManager : MonoBehaviour {
             GameObject node = NGUITools.AddChild(this.gameObject, progressStep);
             node.layer = LayerMask.NameToLayer("NGUI");
             node.transform.localPosition = new Vector3(i * increment, 0, 0);
+            string stepNumber = (i + 1).ToString();
 
             UILabel label = node.transform.Find("Label").GetComponent<UILabel>();
-            label.text = i.ToString();
+            label.text = stepNumber; 
             sliderNodes.Add(node);
         }
     }

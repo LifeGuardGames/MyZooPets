@@ -47,6 +47,14 @@ public class StatsController : Singleton<StatsController> {
 		// listen for refresh message
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
 	}	
+
+#if UNITY_EDITOR
+	void OnGUI(){
+		// if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
+		// 	ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
+		// }
+	}
+#endif
 	
 	// Locations are on screen space
 	// public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 

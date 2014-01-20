@@ -8,10 +8,9 @@ public class PetMovement : Singleton<PetMovement> {
     public EventHandler<EventArgs> OnReachedDest;   // when the pet reaches its destination
     //=====================================================     
 
-    private Camera mainCamera;
-    public GameObject runWay; //Where the pet is allowed to move
+
+    public List<Collider> walkingPathColliders; //Areas that the pet is allowed to move
 	public GameObject shadowObject; //pet's shadow
-    private PanToMoveCamera scriptPan; //script that pan the camera
 	
 	public GameObject petSprite;
 	public GameObject GetPetGameObject() {
@@ -26,18 +25,14 @@ public class PetMovement : Singleton<PetMovement> {
 	
 	// sound for when the pet moves
 	public string strSoundMove;
+    public float fShadow = .6f;
 
     private Vector3 destinationPoint; //destination that the pet is going to move to
 	private bool moving; //Is Pet moving now or not
+    private Camera mainCamera;
     private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
                                 //be moved when clicking on NGUI
-	
-	// public float fMagic;
-	// public float fSpeedNormal;
-	// public float fSpeedFast;
-	// public float fViewX;
-	// public float fViewY;
-	// public bool bFreeze;
+    private PanToMoveCamera scriptPan; //script that pan the camera
 	
 	// how fast the pet moves
 	private float fNormalSpeed;
@@ -92,23 +87,30 @@ public class PetMovement : Singleton<PetMovement> {
 			}
         }
     }
-	
-    //Listen to OnTap Event from FingerGesture
-    void OnTap(TapGesture gesture) { 
-		// if the player is in a gated room, moving on tap is not allowed
-		if ( GatingManager.Instance.IsInGatedRoom() )
-			return;
-		
+
+    //---------------------------------------------------
+    // ProcessTap()
+    // This function is called by PetMovementListener when user taps on an area
+    // that the pet can move to.
+    //---------------------------------------------------
+    public void ProcessTap(TapGesture gesture){
+        // if the player is in a gated room, moving on tap is not allowed
+        if ( GatingManager.Instance.IsInGatedRoom() )
+            return;
+        
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if(!ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving ) || 
             IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
-	   
-		AudioManager.Instance.PlayClip( strSoundMove );
+       
+        AudioManager.Instance.PlayClip( strSoundMove );
 
         MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
     }
 
+    //---------------------------------------------------
+    // MovePetWithCamera()
     //Pet will follow the camera when the partition has been changed
+    //---------------------------------------------------
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
         bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
         if(!hasActiveGate){		
@@ -128,13 +130,20 @@ public class PetMovement : Singleton<PetMovement> {
 		  scriptAnim.StopMoving();
 	}
 	
-    //Check if the touch is in walkable area then move/animate pet
+    //---------------------------------------------------
+    // MovePet()
+    // Check if the touch is in walkable area then move/animate pet
+    //---------------------------------------------------
     private void MovePet(Ray myRay){
         RaycastHit hit;
         // Debug.DrawRay(myRay.origin, myRay.direction * 50, Color.green, 50f);
-        if(Physics.Raycast(myRay,out hit)){
-            if (hit.collider == runWay.collider) 
-				MovePet( hit.point );
+
+        if(Physics.Raycast(myRay, out hit)){
+            foreach(Collider walkingPathCollider in walkingPathColliders){
+                if(hit.collider == walkingPathCollider){
+                    MovePet( hit.point );
+                }
+            }
         }
     }
 	
@@ -170,10 +179,12 @@ public class PetMovement : Singleton<PetMovement> {
 		ChangePetFacingDirection();
 	}
 	
-	public float fShadow = .6f;
 	
-    //Decides when to flip sprite by comparing the screen position of the sprite and
-    //the last tap screen position
+    //---------------------------------------------------
+    // ChangePetFacingDirection()
+    // Decides when to flip sprite by comparing the screen position of the sprite and
+    // the last tap screen position
+    //---------------------------------------------------
     private void ChangePetFacingDirection(){
 		// if the pet hasn't actually moved, then we don't have to worry about flipping anything
 		if ( destinationPoint == petSprite.transform.position ) 

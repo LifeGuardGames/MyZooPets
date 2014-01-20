@@ -44,7 +44,8 @@ public abstract class DecorationNode : LgButton {
 		SetNodeArt( false );
 		
 		// these variables would normally be set on the game object in the scene, but it is more convenient to set them here
-		bCheckClickManager = false;
+		bCheckClickManager = true;
+		eMode = UIModeTypes.EditDecos;
 		strSoundProcess = "shopOpen";
 
 		// set the node ID to the game object name

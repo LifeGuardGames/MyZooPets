@@ -34,9 +34,21 @@ public class WellapadScreenManager : MonoBehaviour {
 	// Callback for when the user claims a wellapad reward.
 	//---------------------------------------------------	
 	private void OnRewardClaimed( object sender, EventArgs args ) {
-		// update the screen
-		SetScreen();
+		StartCoroutine( SetScreen_Delay() );
 	}	
+
+	//---------------------------------------------------
+	// SetScreen_Delay()
+	// In order to make the transition from the missions
+	// to the done screen more appealing, I creating this
+	// function to kick off the set screen on a delay.
+	//---------------------------------------------------		
+	private IEnumerator SetScreen_Delay() {
+		float fDelay = Constants.GetConstant<float>( "Wellapad_DoneDelay" );
+		yield return new WaitForSeconds( fDelay );
+		
+		SetScreen();
+	}
 
 	//---------------------------------------------------
 	// SetScreen()

@@ -58,7 +58,7 @@ public static class LgNGUITools{
 	//---------------------------------------------------	
 	static private Vector3 GetPosition( GameObject go ) {
 		Vector3 vPos = go.transform.localPosition;
-		TweenToggle scriptTween = go.GetComponent<TweenToggle>();
+		PositionTweenToggle scriptTween = go.GetComponent<PositionTweenToggle>();
 		if ( scriptTween )
 			vPos = scriptTween.GetShowPos();
 		

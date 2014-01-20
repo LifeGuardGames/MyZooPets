@@ -20,20 +20,10 @@ public class PetAnimArgs : EventArgs{
 //---------------------------------------------------
 
 public class PetAnimator : LgCharacterAnimator {
-	
-	// key of the pet's "species" -- i.e. what kind of pet it is
-	// this will eventually be set in save data probably
-	public string strKeySpecies;
-	public string GetSpeciesKey() {
-		return strKeySpecies;	
-	}
-	
-	// key of the pet's color
-	// this will eventually be set in save data probably
-	public string strKeyColor;
-	public string GetColorKey() {
-		return strKeyColor;	
-	}
+	//=======================Events========================
+	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
+	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
+	//=====================================================		
 	
 	// related to fire blowing
 	public GameObject goBlow;		// where to parent the fire particle
@@ -59,10 +49,6 @@ public class PetAnimator : LgCharacterAnimator {
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
 	
-	//=======================Events========================
-	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
-	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
-	//=====================================================		
 
 	//---------------------------------------------------
 	// Start()

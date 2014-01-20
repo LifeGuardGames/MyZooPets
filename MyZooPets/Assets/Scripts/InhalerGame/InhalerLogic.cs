@@ -6,7 +6,7 @@ using System;
 public class InhalerLogic : Singleton<InhalerLogic>{
     public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
     public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-    public const int RESCUE_NUM_STEPS = 7;
+    public const int RESCUE_NUM_STEPS = 8;
     private int currentStep = 1; //current step that user is on
 
     /*

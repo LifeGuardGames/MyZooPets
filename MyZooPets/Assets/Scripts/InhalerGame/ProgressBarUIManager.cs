@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ProgressBarUIManager : MonoBehaviour {
-    public GameObject progressStep;
+    public GameObject progressStep; //prefab that will be initiated for each steps
     public UISlider slider;
 
     private List<GameObject> sliderNodes; //list of nodes to show game steps
-    private int stepCompleted;
+    private int stepCompleted; //the step that the user is currently on
     private float increment; //How much to increment the slider by
 
     void Awake(){
@@ -16,7 +16,7 @@ public class ProgressBarUIManager : MonoBehaviour {
         slider.sliderValue = 0;
         slider.numberOfSteps = InhalerLogic.RESCUE_NUM_STEPS;
         increment = 1.0f / (slider.numberOfSteps - 1);
-        stepCompleted = 0;
+        stepCompleted = 1;
 
         sliderNodes = new List<GameObject>();
         SetUpProgressSteps();
@@ -61,7 +61,7 @@ public class ProgressBarUIManager : MonoBehaviour {
         for (int i = 0; i < sliderNodes.Count; i++){
             GameObject stepObject = sliderNodes[i].transform.Find("Sprite").gameObject;
 
-            if (i <= stepCompleted){
+            if (i <= stepCompleted - 1){
                 stepObject.GetComponent<UISprite>().spriteName="circleRed";
                 if(i == stepCompleted){
                     stepObject.transform.parent.GetComponent<AnimationControl>().Play();

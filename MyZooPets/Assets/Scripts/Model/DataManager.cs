@@ -219,7 +219,7 @@ public class DataManager : Singleton<DataManager>{
             PlayerPrefs.SetString(currentPetID + "_SpeciesColor", speciesColor);
 
             gameData = new PetGameData();
-            // gameData.Init();
+            
         }else{
             Debug.LogError("PetID is null or empty. Can't initialize pet with ID. Check  currentPetID");
         }
@@ -241,6 +241,7 @@ public class DataManager : Singleton<DataManager>{
 
                 gameData = newGameData;
 				gameData.VersionCheck();
+
                 Deserialized(true);
             }else{
                 Deserialized(false);

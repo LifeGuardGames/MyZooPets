@@ -32,7 +32,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     // Display the popup panel
     public void Display(){
-        ClickManager.Instance.Lock();
 		TryShowDemuxThenToggle(-1);
 		
 		// play sound if there is one
@@ -58,7 +57,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
             TryHideDemuxThenToggle(0.5f);
             Destroy(gameObject, 3.0f);
         }
-        ClickManager.Instance.ReleaseLock();
     }
 
 	/// <summary>

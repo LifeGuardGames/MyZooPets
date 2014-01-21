@@ -202,7 +202,11 @@ public class DGTManager : MinigameManager<DGTManager> {
 		if ( eZoneStage == eCharStage )
 			CharacterScored_Right( characterScored, zoneTarget);
 		else 
-			CharacterScored_Wrong( characterScored, zoneTarget );		
+			CharacterScored_Wrong( characterScored, zoneTarget );	
+		
+		// regardless of whether the character scored right or wrong, show a poof FX
+		Vector3 vPosFX = characterScored.gameObject.transform.position;
+		ParticleUtils.CreateParticle( "ClinicZonePuff", vPosFX );
 	}
 	
 	//---------------------------------------------------

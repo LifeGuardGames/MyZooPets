@@ -128,6 +128,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
         if(inventoryPanel.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
             int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+
             inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
 
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open

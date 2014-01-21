@@ -167,12 +167,11 @@ public class NinjaTrigger : MonoBehaviour {
 	// This trigger is no longer on the screen.
 	//---------------------------------------------------	
 	private void TriggerOffScreen() {
-#if UNITY_EDITOR
-		// check to make sure the game is playing, because this function is called in the editor
+		// check to make sure the proper managers exist.  This check is necessary because this function will be triggered when the editor
+		// quits the game, and also when the user quits the game into another scene.
 		if ( !AudioManager.Instance || !NinjaManager.Instance )
 			return;
-#endif
-		
+
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
 		MinigameStates eState = NinjaManager.Instance.GetGameState();

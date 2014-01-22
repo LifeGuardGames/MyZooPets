@@ -22,6 +22,10 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	
 	// the gesture trail that follows the user's finger around
 	public GestureTrail trail;
+	private Vector2 trailDeltaMove;
+	public Vector2 GetTrailDeltaMove(){
+		return trailDeltaMove;
+	}
 	
 	// current list of entrie to spawn triggers from
 	private List<NinjaDataEntry> listCurrentEntries;
@@ -212,7 +216,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	    	case ContinuousGesturePhase.Ended:
 	    		trail.DragEnded();
 	    		break;
-	    }		
+	    }
+		
+		trailDeltaMove = gesture.DeltaMove;
 	}
 	
 	//---------------------------------------------------

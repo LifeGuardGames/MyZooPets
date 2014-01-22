@@ -196,7 +196,7 @@ public class LWFAnimator : LWFObject {
 	//-----------------------------------------------------------------
 	
 	// Use this for initialization
-	protected void Start () {
+	protected virtual void Start () {
 		SetLoader();
 		
 		Load(folderPath + animName, folderPath);

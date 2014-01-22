@@ -22,6 +22,10 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	
 	// the gesture trail that follows the user's finger around
 	public GestureTrail trail;
+	private Vector2 trailDeltaMove;
+	public Vector2 GetTrailDeltaMove(){
+		return trailDeltaMove;
+	}
 	
 	// the last position of the user's trail
 	private Vector3 vLastPos = new Vector3(0,0,0);
@@ -215,10 +219,12 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	    	case ContinuousGesturePhase.Ended:
 	    		trail.DragEnded();
 	    		break;
-	    }	
+		}
 		
 		// save the last position for use with displaying combo
 		vLastPos = vPos;
+		
+		trailDeltaMove = gesture.DeltaMove;
 	}
 	
 	//---------------------------------------------------

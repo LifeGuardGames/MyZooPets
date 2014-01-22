@@ -108,17 +108,32 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
     //Create the NGUI object and populate the fields with InventoryItem data
     private void SpawnInventoryItemInPanel(InventoryItem invItem){
+        //Create inventory item
         GameObject inventoryItemObject = NGUITools.AddChild(uiGridObject, inventoryItemPrefab);
+
+        //get reference to all the GO and scripts
         Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
         UISprite itemSprite = inventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
         UILabel itemAmountLabel = inventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
+        InventoryItemStatsHintController statsHint = itemWrapper.GetComponent<InventoryItemStatsHintController>();
+        InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
 
+        //Set value to UI element
         itemWrapper.name = invItem.ItemID;
         inventoryItemObject.name = invItem.ItemID;
-        // print(invItem.ItemTextureName);
         itemSprite.spriteName = invItem.ItemTextureName;
         itemAmountLabel.text = invItem.Amount.ToString();
-        itemWrapper.GetComponent<InventoryDragDrop>().OnItemDrop += OnItemDrop;
+
+        //Create stats hint
+        statsHint.PopulateStatsHints((StatsItem) invItem.ItemData);
+
+        //Listen to on press and on drop
+        invDragDrop.OnItemPress += statsHint.OnItemPress;
+        invDragDrop.OnItemDrop += statsHint.OnItemDrop;
+
+        //listen to on drop event
+        invDragDrop.OnItemDrop += OnItemDrop;
+
 
         UpdateBarPosition();
     }

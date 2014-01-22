@@ -40,7 +40,7 @@ public class Data_LootTable {
 		Data_Loot lootPicked = ListUtils.GetRandomElement<Data_Loot>( listWeighted );
 		
 		// create a key value pair based on the item and its quantity
-		Item dataItem = DataItems.GetItem( lootPicked.GetID() );
+		Item dataItem = ItemLogic.Instance.GetItem( lootPicked.GetID() );
 		int nQuantity = lootPicked.GetQuantity();
 		KeyValuePair<Item, int> item = new KeyValuePair<Item, int>( dataItem, nQuantity );
 		

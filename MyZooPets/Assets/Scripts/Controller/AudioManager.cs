@@ -98,7 +98,10 @@ public class AudioManager : Singleton<AudioManager>{
 	// Plays a sound with the name strClip
 	// from resources.
 	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume, Hashtable hashOverrides ) {
+	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides = null ) {
+		if ( hashOverrides == null )
+			hashOverrides = new Hashtable();
+		
 		if ( strClip == "" ) {
 			Debug.LogError("Something trying to play a sound with an empty sound id...");
 			return null;
@@ -112,15 +115,6 @@ public class AudioManager : Singleton<AudioManager>{
 		}
 			
 		return PlaySound( sound, hashOverrides );	
-	}
-	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
-		return PlayClip( strClip, eType, 0.2f, new Hashtable() );	
-	}	
-	public LgAudioSource PlayClip( string strClip ) {
-		return PlayClip( strClip, Preferences.Sound, 0.2f, new Hashtable() );	
-	}
-	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides ) {
-		return PlayClip( strClip, Preferences.Sound, 0.2f, hashOverrides );	
 	}
 	
 	///////////////////////////////////////////

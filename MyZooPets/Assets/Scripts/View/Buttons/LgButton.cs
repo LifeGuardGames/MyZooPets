@@ -130,7 +130,7 @@ public abstract class LgButton : MonoBehaviour {
 		string strSound = GetProcessSound();
 		
 		if ( !string.IsNullOrEmpty(strSound) )
-			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
+			AudioManager.Instance.PlayClip( strSound );	
 	}
 	
 	//---------------------------------------------------

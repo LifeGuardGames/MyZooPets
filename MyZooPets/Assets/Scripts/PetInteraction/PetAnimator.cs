@@ -53,18 +53,9 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	new void Start() {
+	protected override void Start() {
 		// then go through all the anim data and create out clip list from that
 		SetClipList();
-		
-		// set the LWFAnimator loading data based on the pet's attributes
-		string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
-
-		// string strColor = GetColorKey();
-		string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
-
-		animName = strSpecies + strColor;
-		folderPath = "LWF/" + animName + "/";
 		
 		// only call this AFTER we have set our loading data
 		base.Start();	

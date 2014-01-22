@@ -325,28 +325,27 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		if ( nCombo > 2 ) {
 			UpdateScore( nCombo );
 				        	
+			// get the right text for combo
+			string strText = Localization.Localize("NINJA_COMBO");
+			strText = StringUtils.Replace( strText, StringUtils.NUM, nCombo );
 			
-		}
-
-		// get the right text for combo
-		string strText = Localization.Localize("NINJA_COMBO");
-		strText = StringUtils.Replace( strText, StringUtils.NUM, nCombo );
-		
-		// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
-		Vector3 vPos = CameraManager.Instance.TransformAnchorPosition( vLastPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-		//vPos.y *= CameraManager.Instance.GetRatioDifference();
-		//vPos.x *= CameraManager.Instance.GetRatioDifference();
-
-		// set up the hashtable full of options
-        Hashtable option = new Hashtable();
-        option.Add("parent", GameObject.Find("Anchor-Center"));
-        option.Add("text", strText);
-		option.Add("Prefab", "NinjaComboFloatyText");
-		option.Add("Position", vPos);
-        option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
-		
-		// spawn floaty text
-        FloatyUtil.SpawnFloatyText(option);			
+			// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
+			Vector3 vPos = vLastPos;
+			vPos.y *= CameraManager.Instance.GetRatioDifference();
+			vPos.x *= CameraManager.Instance.GetRatioDifference();
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+	
+			// set up the hashtable full of options
+	        Hashtable option = new Hashtable();
+	        option.Add("parent", GameObject.Find("Anchor-Center"));
+	        option.Add("text", strText);
+			option.Add("Prefab", "NinjaComboFloatyText");
+			option.Add("Position", vPos);
+	        option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
+			
+			// spawn floaty text
+	        FloatyUtil.SpawnFloatyText(option);				
+		}		
 		
 		// if the current combo was better than their best, update it
 		int nBest = GetCombo_Best();

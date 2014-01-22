@@ -341,8 +341,8 @@ public class NinjaManager : MinigameManager<NinjaManager> {
         Hashtable option = new Hashtable();
         option.Add("parent", GameObject.Find("Anchor-Center"));
         option.Add("text", strText);
-		option.Add("Prefab", "NinjaComboFloatyText");
-		option.Add("Position", vPos);
+		option.Add("prefab", "NinjaComboFloatyText");
+		option.Add("position", vPos);
         option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
 		
 		// spawn floaty text

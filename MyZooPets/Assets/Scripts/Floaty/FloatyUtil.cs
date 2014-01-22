@@ -13,11 +13,16 @@ public class FloatyUtil {
     //---------------------------------------------------- 
     // SpawnFloatyText()
     // This spawns a floaty text that disappears in FLOAT_TIME
-    // Params: parent, textSize, text 
+    // Params:
+    //  prefab (GameObject): gameObject that you want to be spawned
+    //  parent (GameObject): the parent/location that you want the float to spawn under
+    //  position (Vector3): the position that you want to spawn the floaty 
+    //  textSize (int): size of the floaty
+    //  text (string): the text to be displayed
     //---------------------------------------------------- 
     public static void SpawnFloatyText(Hashtable option){
-		if ( option.ContainsKey("Prefab") ) {
-			string strPrefab = (string) option["Prefab"];
+		if ( option.ContainsKey("prefab") ) {
+			string strPrefab = (string) option["prefab"];
 			floatyText = (GameObject) Resources.Load( strPrefab );
 		}
         else
@@ -27,14 +32,13 @@ public class FloatyUtil {
 
         if(option.ContainsKey("parent")){
             floaty = LgNGUITools.AddChildWithPosition((GameObject) option["parent"], floatyText);
-        }
-        else{
-            Debug.Log("SpawnFloatyText requires a parent");
+        }else{
+            Debug.LogError("SpawnfloatyText needs a parent");
             return;
         }
-		
-		if ( option.ContainsKey("Position") ) {
-			Vector3 vPos = (Vector3) option["Position"];
+
+        if(option.ContainsKey("position")){
+			Vector3 vPos = (Vector3) option["position"];
 			floaty.transform.localPosition = vPos;
 		}
 
@@ -47,7 +51,7 @@ public class FloatyUtil {
             floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
         }
 		
-		if ( !option.ContainsKey("Prefab") ) {
+		if ( !option.ContainsKey("prefab") ) {
 	        floaty.GetComponent<FloatyController>().floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
 	        floaty.GetComponent<FloatyController>().floatingTime = FLOAT_TIME;
 		}
@@ -57,6 +61,11 @@ public class FloatyUtil {
     // SpawnFloatyStats()
     // Spawns floaty image and text above pet's head to show
     // change in stats
+    // Params:
+    //  parent (GameObject): the parent/location that you want the floaty to spawn under
+    //  deltaPoints (string): changes in points
+    //  deltaHealth (string): changes in health
+    //  deltaMood (string): changes in mood
     //---------------------------------------------------- 
 	public static void SpawnFloatyStats(Hashtable option){
 		if(floatyStats == null)

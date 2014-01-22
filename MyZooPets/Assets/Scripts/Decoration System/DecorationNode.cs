@@ -238,7 +238,7 @@ public abstract class DecorationNode : LgButton {
 		bool bOK = true;	// start optimistic
 		
 		// compare the node type to the decoration type
-		DecorationItem itemDeco = (DecorationItem) DataItems.GetItem( strID );
+		DecorationItem itemDeco = (DecorationItem) ItemLogic.Instance.GetItem( strID );
 		DecorationTypes eNodeType = GetDecoType();
 		DecorationTypes eDecoType = itemDeco.DecorationType;
 		bOK = eNodeType == eDecoType;

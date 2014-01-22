@@ -3,14 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-/*
-    This class loads constant item data from a xml file. Only ItemLogic should
-    be interfacing with this class
+//---------------------------------------------------
+// This class loads constant item data from a xml file. 
 
-    An immutable class, meaning that no other classes should be modifying the data
-    from this class
-*/
-public class DataItems{
+//  An immutable class, meaning that no other classes should be modifying the data
+//  from this class
+//---------------------------------------------------
+public class DataLoader_Items{
     //Key: itemtype, Value: dictionary of items
     //Key: itemID, Value: instance of Item.cs
     private static Dictionary<ItemType, Dictionary<string, Item>> allItems;

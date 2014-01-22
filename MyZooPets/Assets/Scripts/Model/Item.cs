@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//---------------------------------------------------
+// Items
+// Immutable data
+//---------------------------------------------------
 public class Item {
 	protected string id; //id of item
 	protected string name; //name of item

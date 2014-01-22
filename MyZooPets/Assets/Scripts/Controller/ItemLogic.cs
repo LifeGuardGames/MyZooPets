@@ -16,7 +16,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(foodList == null){
 				foodList = new List<Item>();
-				Dictionary<string, Item> foodDict = DataItems.GetAllItemsOfType(ItemType.Foods);
+				Dictionary<string, Item> foodDict = DataLoader_Items.GetAllItemsOfType(ItemType.Foods);
 				foodList = SelectListFromDictionaryAndSort(foodDict);
 			}
 			return foodList;
@@ -27,7 +27,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(usableList == null){
 				usableList = new List<Item>();
-				Dictionary<string, Item> usableDict = DataItems.GetAllItemsOfType(ItemType.Usables);
+				Dictionary<string, Item> usableDict = DataLoader_Items.GetAllItemsOfType(ItemType.Usables);
 				usableList = SelectListFromDictionaryAndSort(usableDict);
 			}
 			return usableList;
@@ -38,7 +38,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(decorationList == null){
 				decorationList = new List<Item>();
-				Dictionary<string, Item> decorationDict = DataItems.GetAllItemsOfType(ItemType.Decorations);
+				Dictionary<string, Item> decorationDict = DataLoader_Items.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
 
 			}
@@ -67,17 +67,17 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
-		return DataItems.GetItem(itemID);
+		return DataLoader_Items.GetItem(itemID);
 	}
 
 	//Returns the type of item with itemID
 	public ItemType GetItemType(string itemID){
-		return DataItems.GetItemType(itemID);
+		return DataLoader_Items.GetItemType(itemID);
 	}
 
 	//Returns the texture name of item with itemID
 	public string GetItemTextureName(string itemID){
-		return DataItems.GetItemTextureName(itemID);
+		return DataLoader_Items.GetItemTextureName(itemID);
 	}
 	
 	//---------------------------------------------------

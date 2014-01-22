@@ -3,7 +3,8 @@ using System.Collections;
 
 //---------------------------------------------------
 // InventoryItem
-// Items that are stored in the inventory. Mutable data 
+// Items that are stored in the inventory. 
+// Mutable data but contains reference to immutable data
 //---------------------------------------------------
 public class InventoryItem{
     public string ItemID {get; set;}
@@ -11,10 +12,9 @@ public class InventoryItem{
     public ItemType ItemType {get; set;}
     public int Amount {get; set;}
 
-    //TO DO: should problem just use ItemLogic.Instance.GetItem(itemID)	
-    //redundant method
+    //Shortcut to return the immutable data of item with ItemID
 	public Item ItemData{
-		get{return DataItems.GetItem(ItemID);}
+		get{return ItemLogic.Instance.GetItem(ItemID);}
 	}
 
     public InventoryItem(string itemID, ItemType itemType, string textureName){

@@ -23,6 +23,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	// the gesture trail that follows the user's finger around
 	public GestureTrail trail;
 	
+	// the last position of the user's trail
+	private Vector3 vLastPos = new Vector3(0,0,0);
+	
 	// current list of entrie to spawn triggers from
 	private List<NinjaDataEntry> listCurrentEntries;
 	
@@ -212,7 +215,10 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	    	case ContinuousGesturePhase.Ended:
 	    		trail.DragEnded();
 	    		break;
-	    }		
+	    }	
+		
+		// save the last position for use with displaying combo
+		vLastPos = vPos;
 	}
 	
 	//---------------------------------------------------
@@ -310,8 +316,31 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	private void OnComboEnd() {
 		// give the player an additional point for each level of their combo
 		int nCombo = GetCombo();
-		if ( nCombo > 1 )
+		if ( nCombo > 2 ) {
 			UpdateScore( nCombo );
+				        	
+			
+		}
+
+		// get the right text for combo
+		string strText = Localization.Localize("NINJA_COMBO");
+		strText = StringUtils.Replace( strText, StringUtils.NUM, nCombo );
+		
+		// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
+		Vector3 vPos = CameraManager.Instance.TransformAnchorPosition( vLastPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+		//vPos.y *= CameraManager.Instance.GetRatioDifference();
+		//vPos.x *= CameraManager.Instance.GetRatioDifference();
+
+		// set up the hashtable full of options
+        Hashtable option = new Hashtable();
+        option.Add("parent", GameObject.Find("Anchor-Center"));
+        option.Add("text", strText);
+		option.Add("Prefab", "NinjaComboFloatyText");
+		option.Add("Position", vPos);
+        option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
+		
+		// spawn floaty text
+        FloatyUtil.SpawnFloatyText(option);			
 		
 		// if the current combo was better than their best, update it
 		int nBest = GetCombo_Best();
@@ -319,7 +348,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 			SetCombo_Best( nCombo );
 		
 		// reset the combo down to 0
-		SetCombo( 0 );
+		SetCombo( 0 );	
 		
 		//Debug.Log("Combo ended: " + nCombo);
 	}

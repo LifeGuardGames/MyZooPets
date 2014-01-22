@@ -16,7 +16,11 @@ public class FloatyUtil {
     // Params: parent, textSize, text 
     //---------------------------------------------------- 
     public static void SpawnFloatyText(Hashtable option){
-        if(floatyText == null)
+		if ( option.ContainsKey("Prefab") ) {
+			string strPrefab = (string) option["Prefab"];
+			floatyText = (GameObject) Resources.Load( strPrefab );
+		}
+        else
             floatyText = (GameObject) Resources.Load("FloatyText");
 
         GameObject floaty;
@@ -28,6 +32,11 @@ public class FloatyUtil {
             Debug.Log("SpawnFloatyText requires a parent");
             return;
         }
+		
+		if ( option.ContainsKey("Position") ) {
+			Vector3 vPos = (Vector3) option["Position"];
+			floaty.transform.localPosition = vPos;
+		}
 
         if(option.ContainsKey("textSize")){
             int textSize = (int) option["textSize"];
@@ -37,9 +46,11 @@ public class FloatyUtil {
         if(option.ContainsKey("text")){
             floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
         }
-
-        floaty.GetComponent<FloatyController>().floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
-        floaty.GetComponent<FloatyController>().floatingTime = FLOAT_TIME;
+		
+		if ( !option.ContainsKey("Prefab") ) {
+	        floaty.GetComponent<FloatyController>().floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
+	        floaty.GetComponent<FloatyController>().floatingTime = FLOAT_TIME;
+		}
     }
 	
 	//---------------------------------------------------- 

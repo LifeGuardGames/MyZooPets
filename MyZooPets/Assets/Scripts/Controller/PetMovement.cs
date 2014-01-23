@@ -101,6 +101,10 @@ public class PetMovement : Singleton<PetMovement> {
         // if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
         if(!ClickManager.Instance.CanRespondToTap( scriptAnim.gameObject, ClickLockExceptions.Moving ) || 
             IsTouchingNGUI(gesture.Position) || scriptAnim.IsBusy()) return;
+		
+		// bit of a hack...remove if this causes any issues -- prevent pet movement if the edit decos UI is open
+		if ( EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen() )
+			return;
        
         AudioManager.Instance.PlayClip( strSoundMove );
 

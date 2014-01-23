@@ -199,13 +199,18 @@ public class HUDAnimator : MonoBehaviour {
 			// If it is a floaty text, just increment values instantaneously
 			if(bFloaty){
 				// Account of min/max overflow
-				if(pair.nPoints >= 0){
+				// this code sets the HUD stat to the max right away
+				/*if(pair.nPoints >= 0){
 					int nTarget = DataManager.Instance.GameData.Stats.GetStat(eType);	// Get the maximum
 					hashDisplays[eType] = Mathf.Min(hashDisplays[eType] + pair.nPoints, nTarget);	// Take the min when maxed out
 				}
 				else{
 					hashDisplays[eType] = Mathf.Max(hashDisplays[eType] + pair.nPoints, 0);	// Take the max when min-ed out
-				}
+				}*/
+				
+				// this code will instead animate the bar
+				// leaving old code in since this is one of the last things I do; in case things backfire, just uncomment and delete
+				StartCoroutine( AnimateStatBar( eType, 0 ) );
 			}
 			// If not floaty text, play tween sprite animation to HUD
 			else{

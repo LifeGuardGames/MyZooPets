@@ -71,7 +71,10 @@ public class MinigameUI : MonoBehaviour {
 	//---------------------------------------------------		
 	public void TogglePopup( MinigamePopups ePopup, bool bShow ) {
 		MinigamePopup popup = hashPopups[ePopup];
-		popup.Toggle( bShow );
+		
+		// only do the toggle if appropriate
+		if ( ( bShow && popup.IsShowing() == false ) || ( !bShow && popup.IsShowing() == true ) )
+			popup.Toggle( bShow );
 	}
 	
 	//---------------------------------------------------

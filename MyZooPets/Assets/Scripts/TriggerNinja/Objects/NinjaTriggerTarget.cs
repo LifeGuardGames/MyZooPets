@@ -15,6 +15,37 @@ public class NinjaTriggerTarget : NinjaTrigger {
 		return nPoints;	
 	}
 	
+	// renderer for cockroach face
+	public Renderer rendererFace;
+	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------	
+	protected override void Start() {
+		base.Start();	
+		
+		// pick a face for this roach
+		int nFaces = Constants.GetConstant<int> ("Ninja_NumFaces" );
+		string strFaceKey = Constants.GetConstant<string> ("Ninja_FaceKey" );
+		int nFace = Random.Range( 1, nFaces ); // faces index starts at 1, so get 1-max inclusive
+		string strFace = strFaceKey + nFace;
+		SetFace( strFace );
+	}
+	
+	//---------------------------------------------------
+	// SetFace()
+	// Sets this roach's face to the incoming string
+	// referenced material.
+	//---------------------------------------------------	
+	private void SetFace( string strFace ) {
+		Material matPrefab = Resources.Load(strFace) as Material;
+		
+		if ( matPrefab != null )
+			rendererFace.material = matPrefab;	
+		else
+			Debug.LogError( "Attempting to set cockroach face to non-existant material with face " + strFace );
+	}
+	
 	//---------------------------------------------------
 	// _OnCut()
 	//---------------------------------------------------		
@@ -36,6 +67,10 @@ public class NinjaTriggerTarget : NinjaTrigger {
 		
 		// apply said force
 		gameObject.rigidbody.AddForce( vForce );
+		
+		// set the cockroach's face to dead
+		string strFaceKey = Constants.GetConstant<string>( "Ninja_FaceKey" );
+		SetFace( strFaceKey + "Dead" );	
 	}
 	
 	//---------------------------------------------------

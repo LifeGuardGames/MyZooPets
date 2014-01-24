@@ -30,7 +30,7 @@ public class NinjaTrigger : MonoBehaviour {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	void Start() {
+	protected virtual void Start() {
 		// count the number of children that have NinjaTriggerChildren scripts -- this will be used when determining if the
 		// trigger is being shown by the camera or not.
 		NinjaTriggerChild[] children = gameObject.GetComponentsInChildren<NinjaTriggerChild>();

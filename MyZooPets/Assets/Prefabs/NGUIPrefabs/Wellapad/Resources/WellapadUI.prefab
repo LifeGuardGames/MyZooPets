@@ -394,6 +394,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100094
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400094}
+  - 114: {fileID: 11400116}
+  m_Layer: 10
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -463,7 +479,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400012}
+  - {fileID: 400094}
   - {fileID: 400014}
   m_Father: {fileID: 400018}
 --- !u!4 &400012
@@ -473,10 +489,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 918.360596, y: 595.624756, z: 9.31975937}
+  m_LocalPosition: {x: .000159919262, y: .000411987305, z: -.000159978867}
+  m_LocalScale: {x: 918.360657, y: 595.624634, z: 9.31967926}
   m_Children: []
-  m_Father: {fileID: 400010}
+  m_Father: {fileID: 400016}
 --- !u!4 &400014
 Transform:
   m_ObjectHideFlags: 1
@@ -499,6 +515,7 @@ Transform:
   m_LocalPosition: {x: 0, y: -.000274658203, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 400012}
   - {fileID: 400042}
   - {fileID: 400040}
   - {fileID: 400004}
@@ -681,6 +698,17 @@ Transform:
   m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+--- !u!4 &400094
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 918.360596, y: 595.624756, z: 9.31975937}
+  m_Children: []
+  m_Father: {fileID: 400010}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -716,9 +744,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: .75, g: .834482789, b: 1, a: 1}
+  mColor: {r: .191710442, g: .160034612, b: .272058845, a: 1}
   mPivot: 4
-  mDepth: 2
+  mDepth: -1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: box20
   mFillCenter: 1
@@ -774,17 +802,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 320
     e01: 0
     e02: 0
-    e03: .5
+    e03: .49999997
     e10: 0
-    e11: 384
+    e11: 320
     e12: 0
     e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 320
     e23: 0
     e30: 0
     e31: 0
@@ -992,17 +1020,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 320
     e01: 0
     e02: 0
-    e03: .5
+    e03: .49999997
     e10: 0
-    e11: 384
+    e11: 320
     e12: 0
     e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 320
     e23: 1.50012803
     e30: 0
     e31: 0
@@ -1267,17 +1295,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 320
     e01: 0
     e02: 0
-    e03: .5
+    e03: .49999997
     e10: 0
-    e11: 384
+    e11: 320
     e12: 0
     e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 320
     e23: .5
     e30: 0
     e31: 0
@@ -1395,6 +1423,27 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .850000024, y: .850000024, z: .850000024}
   duration: 0
+--- !u!114 &11400116
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: .659736335, g: .595588207, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 2
+  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
+  mSpriteName: box20
+  mFillCenter: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

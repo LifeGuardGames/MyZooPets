@@ -145,7 +145,6 @@ public class ItemManager : Singleton<ItemManager> {
             Hashtable option = new Hashtable();
             option.Add(TutorialPopupFields.Message, hintMessage);
             option.Add(TutorialPopupFields.Button1Callback, button1Fucntion);
-            option.Add(TutorialPopupFields.Button1Label, Localization.Localize("OK"));
 
             TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
             script.Init(option);

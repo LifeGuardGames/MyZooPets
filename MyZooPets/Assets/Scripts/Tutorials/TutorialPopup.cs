@@ -17,7 +17,6 @@ public class TutorialPopup : MonoBehaviour {
 	public UILabel label; // the text label for the popup
 	public UISprite sprite;
 	public LgButtonMessage button1;
-	public UILabel button1Label;
 	public UISlicedSprite bg; // sprite bg
 	public float fBorder; // arbitrary border to make the bg look a little nicer
 	public delegate void Callback();
@@ -66,10 +65,6 @@ public class TutorialPopup : MonoBehaviour {
 
 		if(option.ContainsKey(TutorialPopupFields.Button1Callback)){
 			Button1Callback = (Callback) option[TutorialPopupFields.Button1Callback];
-		}
-
-		if(option.ContainsKey(TutorialPopupFields.Button1Label)){
-			button1Label.text = (string) option[TutorialPopupFields.Button1Label];
 		}
 
 		if(option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText)){

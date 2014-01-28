@@ -67,7 +67,6 @@ public enum TutorialPopupFields{
     SpriteAtlas, 
     SpriteName, //requires SpriteAtlas
     Button1Callback,
-    Button1Label,
     ShrinkBgToFitText //T: background will shrink to fit the text size
 }
 

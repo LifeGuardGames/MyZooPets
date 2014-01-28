@@ -42,7 +42,6 @@ public class NinjaTutorial : MinigameTutorial {
         };
         option.Add(TutorialPopupFields.SpriteAtlas, "TriggerNinjaAtlas");
         option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
-        option.Add(TutorialPopupFields.Button1Label, Localization.Localize("OK"));
 
         switch(nStep){
             case 0:

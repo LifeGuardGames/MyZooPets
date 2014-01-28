@@ -22,17 +22,19 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
         {
             float currentSpeed = currentParallax.ScrollSpeed * Time.time;
 
-            // Vector2 newOffset = new Vector2(currentSpeed, 0f);
-            UITexture theTexture = currentParallax.GetComponent<UITexture>();
-            theTexture.uvRect = new Rect(currentSpeed, 0f, 0.3f, 1f);
-			// theTexture.material.SetTextureOffset("_MainTex", newOffset);
+   //          // Vector2 newOffset = new Vector2(currentSpeed, 0f);
+   //          UITexture theTexture = currentParallax.GetComponent<UITexture>();
+   //          theTexture.uvRect = new Rect(currentSpeed, 0f, 0.3f, 1f);
+			// // theTexture.material.SetTextureOffset("_MainTex", newOffset);
+
+            currentParallax.renderer.material.mainTextureOffset = new Vector2(currentSpeed, 0f);
         }
 	}
 
     public void SetAlpha(float inAlpha) {
          foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
-             UITexture theTexture = currentParallax.GetComponent<UITexture>();
-			theTexture.alpha = inAlpha;
+   //           UITexture theTexture = currentParallax.GetComponent<UITexture>();
+			// theTexture.alpha = inAlpha;
 			
 //             Color currentColor = theTexture.material.color;
 //             currentColor.a = inAlpha;

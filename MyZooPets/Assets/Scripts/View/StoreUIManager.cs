@@ -240,7 +240,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// we also need to hide the exit button's active state based on whether or not we are shortcutting
 		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
 		string strFunction = bShortcutMode ? "HideStoreSubPanel" : "CloseUI";
-		goExitButton.GetComponent<UIButtonMessage>().functionName = strFunction;		
+		goExitButton.GetComponent<LgButtonMessage>().functionName = strFunction;		
 		
 		currentPage = strPage;
 

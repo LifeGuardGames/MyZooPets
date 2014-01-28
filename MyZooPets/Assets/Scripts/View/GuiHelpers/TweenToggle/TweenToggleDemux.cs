@@ -31,7 +31,9 @@ public class TweenToggleDemux : MonoBehaviour {
 	public bool hideImmediately = false;
 	
 	private bool isShown; // Active lock
+	public bool IsShowing{ get { return isShown; } }
 	private bool isMoving; // Move lock
+	public bool IsMoving{ get { return isMoving; } }
 
 	void Awake(){
 		if(startsHidden){
@@ -86,6 +88,7 @@ public class TweenToggleDemux : MonoBehaviour {
 				return;
 			}
 			if(!isShown && lastFinishedHideObjectScript != null && !lastFinishedHideObjectScript.IsMoving){
+				//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 				isMoving = false;
 				
 				// If option set for finish hide callback, call it now!
@@ -98,55 +101,64 @@ public class TweenToggleDemux : MonoBehaviour {
 	}
 	
 	public void Show(){
-		StartCoroutine(SetNextFrameShow());
+		if(!isShown && !isMoving){
+			isShown = true;
+			isMoving = true;
+			StartCoroutine(SetNextFrameShow());
+		}
+		else{
+			//Debug.Log(isShown + " + " + isMoving);
+			//Debug.Log("Demux in locked state already");
+		}
 	}
 	
 	public void Hide(){
-		StartCoroutine(SetNextFrameHide());
+		if(isShown && !isMoving){
+			isShown = false;
+			isMoving = true;
+			StartCoroutine(SetNextFrameHide());
+		}
+		else{
+			//Debug.Log(isShown + " + " + isMoving);
+			//Debug.Log("Demux in locked state already");
+		}
 	}
 	
 	IEnumerator SetNextFrameShow(){
 		yield return 0;
-		if(!isShown && !isMoving){
-			isShown = true;
-			isMoving = true;
-			
-			foreach(GameObject go in GoList){
-				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
-					toggle.Show();
-				}
+		
+		foreach(GameObject go in GoList){
+			TweenToggle toggle = go.GetComponent<TweenToggle>();
+			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
+				toggle.Show();
 			}
-			
-			// If set to begin show callback, call it now!
-			if(!isShowFinishedCallback){
-				ShowSendCallback();
-			}
+		}
+		
+		// If set to begin show callback, call it now!
+		if(!isShowFinishedCallback){
+			ShowSendCallback();
 		}
 	}
 	
 	IEnumerator SetNextFrameHide(){
 		yield return 0;
-		if(isShown && !isMoving){
-			isShown = false;
-			isMoving = true;
-			foreach(GameObject go in GoList){
-				TweenToggle toggle = go.GetComponent<TweenToggle>();
-				if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
-					if(hideImmediately){
-						//Debug.Log(" -- - - HIDE BOOLEAN TRUE");
-						// TODO Need to call last hide object last!!!!
-						toggle.hideDuration = 0f;
-						toggle.hideDelay = 0f;
-					}
-					toggle.Hide();
+		
+		foreach(GameObject go in GoList){
+			TweenToggle toggle = go.GetComponent<TweenToggle>();
+			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
+				if(hideImmediately){
+					//Debug.Log(" -- - - HIDE BOOLEAN TRUE");
+					// TODO Need to call last hide object last!!!!
+					toggle.hideDuration = 0f;
+					toggle.hideDelay = 0f;
 				}
+				toggle.Hide();
 			}
-			
-			// If set to begin hide callback, call it now!
-			if(!isHideFinishedCallback){
-				HideSendCallback();
-			}
+		}
+		
+		// If set to begin hide callback, call it now!
+		if(!isHideFinishedCallback){
+			HideSendCallback();
 		}
 	}
 

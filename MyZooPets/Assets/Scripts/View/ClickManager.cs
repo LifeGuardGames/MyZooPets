@@ -30,11 +30,23 @@ public class ClickManager : Singleton<ClickManager> {
 	// stack of modes that have locked the click manager
 	private Stack<UIModeTypes> stackModes = new Stack<UIModeTypes>();
 	
-    //bool trophyMessageShowing = false;
-
+    public string stackPeek;
+	public int count;
+	
     void Awake(){
     }
-
+	
+	void Update(){
+		count = stackModes.Count;
+		if(count != 0){
+			UIModeTypes eCurrentMode = stackModes.Peek();
+			stackPeek = eCurrentMode.ToString();
+		}
+		else{
+			stackPeek = null;
+		}
+	}
+	
 	//Clean all event listeners and static references
 	void OnDestroy(){
 		UIRoot = null;
@@ -131,9 +143,13 @@ public class ClickManager : Singleton<ClickManager> {
 			if ( listExceptions != null )
 				this.listExceptions = listExceptions;			
 		}
-		else if ( stackModes.Count > 0 && listExceptions != null )
+		else if ( stackModes.Count > 0 && listExceptions != null ){
 			Debug.Log("Something is trying to lock the click manager without an empty stack but with exceptions...this is not currently supported");	
-		
+			foreach(ClickLockExceptions e in listExceptions){
+				print(e);
+			}
+		}
+			
 		// push this latest mode
 		stackModes.Push( eMode );
 	}

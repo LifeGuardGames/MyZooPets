@@ -547,8 +547,7 @@ GameObject:
   - 4: {fileID: 400064}
   - 65: {fileID: 6500016}
   - 114: {fileID: 11400112}
-  - 114: {fileID: 11400114}
-  - 114: {fileID: 11400116}
+  - 114: {fileID: 11400056}
   - 114: {fileID: 11400118}
   - 114: {fileID: 11400124}
   m_Layer: 10
@@ -1079,7 +1078,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.300000072, y: .299560547, z: 3.06963921e-06}
+  m_LocalPosition: {x: -.0999999642, y: .099609375, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
@@ -1092,7 +1091,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100072}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.700012, y: 384.299561, z: 3.06963921e-06}
+  m_LocalPosition: {x: 681.5, y: 384.099609, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400064}
@@ -1104,7 +1103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.299988, y: 384.299561, z: 3.06963921e-06}
+  m_LocalPosition: {x: -681.699951, y: 384.099609, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400014}
@@ -1116,7 +1115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100076}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.300000072, y: 384.299561, z: 3.06963921e-06}
+  m_LocalPosition: {x: -.0999999642, y: 384.099609, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400052}
@@ -1317,7 +1316,6 @@ MonoBehaviour:
   eMode: 3
   strSoundProcess: 
   bCheckClickManager: 1
-  strAnalytics: 
   target: {fileID: 0}
   functionName: HideStoreSubPanel
 --- !u!114 &11400006
@@ -1908,6 +1906,23 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  eMode: 3
+  strSoundProcess: button-21
+  bCheckClickManager: 1
+  target: {fileID: 0}
+  functionName: CloseUI
 --- !u!114 &11400060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2219,11 +2234,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .800000072
+    e03: .599999964
     e10: 0
     e11: 384
     e12: 0
-    e13: -7584.66357
+    e13: -7584.46338
     e20: 0
     e21: 0
     e22: 384
@@ -2456,36 +2471,6 @@ MonoBehaviour:
   hoverSprite: buttonUpRed
   pressedSprite: buttonDownRed
   disabledSprite: ButtonUpGray
---- !u!114 &11400114
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: ef3b2e8846f361049b7098f74bae37a1, type: 3}
-  trigger: 3
-  volume: 1
-  pitch: 1
---- !u!114 &11400116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: CloseUI
-  trigger: 0
-  includeChildren: 0
 --- !u!114 &11400118
 MonoBehaviour:
   m_ObjectHideFlags: 1

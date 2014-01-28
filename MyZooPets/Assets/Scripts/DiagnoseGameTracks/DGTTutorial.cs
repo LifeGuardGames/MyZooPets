@@ -71,8 +71,12 @@ public class DGTTutorial : MinigameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		// location and type of the tutorial message
 		Vector3 vPos = new Vector3();
-		string strResourceKey = "TutorialMessage";
-		
+		string strResourceKey = Tutorial.POPUP_LONG; 
+		Hashtable option = new Hashtable();
+
+        //Tutorial popup options 
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
+
 		switch ( nStep ) {
 			case 0:				
 				arrayZones = new GameObject[3];
@@ -106,8 +110,12 @@ public class DGTTutorial : MinigameTutorial {
 				goZoneFX = ParticleUtils.CreateParticle( "ClinicZoneTutorialFX", vPosFX );
 				break;				
 			case 3:
-				// this part of the tutorial is just text		
-				strResourceKey = "TutorialMessageEnd";
+				TutorialPopup.Callback button1Fuction = delegate(){
+					Advance();
+				};
+
+				option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
+				strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON;
 				GameObject.Destroy( goZoneFX );
 				break;
 			default:
@@ -116,7 +124,7 @@ public class DGTTutorial : MinigameTutorial {
 		}		
 			
 		// show the proper tutorial message
-		ShowMessage( strResourceKey, vPos );			
+		ShowPopup(strResourceKey, vPos, false, option);			
 	}
 	
 	//---------------------------------------------------

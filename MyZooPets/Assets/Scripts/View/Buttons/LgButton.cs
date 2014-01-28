@@ -40,12 +40,6 @@ public abstract class LgButton : MonoBehaviour {
 		return bCheckClickManager;	
 	}
 	
-	public string strAnalytics;	// string key for analytics on this button
-	protected string GetAnalyticsKey()
-	{
-		return strAnalytics;
-	}	
-	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
@@ -109,11 +103,6 @@ public abstract class LgButton : MonoBehaviour {
 		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
 		if ( ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess( gameObject ) )
 			return;
-			
-		// if there is an analytic event on this button, let's process that
-		//string strAnalytics = GetAnalyticsKey();
-		// if ( strAnalytics != null )
-		// 	GA.API.Design.NewEvent( strAnalytics );
 		
 		// play the sound
 		PlayProcessSound();

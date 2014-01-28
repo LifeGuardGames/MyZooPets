@@ -61,6 +61,16 @@ public enum NotificationPopupFields{
 	Badge,
 	Sound
 }
+
+public enum TutorialPopupFields{
+    Message,
+    SpriteAtlas, 
+    SpriteName, //requires SpriteAtlas
+    Button1Callback,
+    Button1Label,
+    ShrinkBgToFitText //T: background will shrink to fit the text size
+}
+
 public enum BadgeType{
     Level,
     RunnerDistance,
@@ -79,7 +89,8 @@ public enum UIModeTypes {
 	None,		// means there is no lock on the click manager
 	Generic,	// used by most things that will lock the click manager; this is just a generic lock
 	Store,
-	EditDecos
+	EditDecos,
+    Tutorial
 }
 
 // decoration node anchor types

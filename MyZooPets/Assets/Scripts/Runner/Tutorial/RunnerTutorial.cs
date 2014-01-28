@@ -35,47 +35,47 @@ public class RunnerTutorial : MinigameTutorial {
     protected override void ProcessStep( int nStep ) {
         // location and type of the tutorial message
         Vector3 vPos = new Vector3();
-        string strResourceKey = Tutorial.POPUP_STD;
+        string strResourceKey = Tutorial.POPUP_STD_WITH_IMAGE;
         vPos = POS_TOP; 
+        Hashtable option = new Hashtable();
+
+        //Tutorial popup options 
+        option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
+
         switch ( nStep ) {
             case 0:
                 PlayerController.OnJump += TutorialJump;
-                SpawnTutorial("tutorialRunnerTap");
+                option.Add(TutorialPopupFields.SpriteAtlas, "RunnerAtlas");
+                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerTap");
                 break;
             case 1:
                 PlayerController.OnDrop += TutorialDrop;
-                SpawnTutorial("tutorialRunnerSwipeDown");
+                option.Add(TutorialPopupFields.SpriteAtlas, "RunnerAtlas");
+                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerSwipeDown");
                 break;
             case 2:
-                strResourceKey = "TutorialMessageEnd";
-                ShowMessage( strResourceKey, vPos);            
+                TutorialPopup.Callback button1Fuction = delegate(){
+                    Advance();
+                };
+
+                option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
+                strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON;      
                 break;
             default:
                 Debug.Log("Runner tutorial has an unhandled step: " + nStep );
                 break;      
         }       
-            
-        // show the proper tutorial message
+
+        ShowPopup(strResourceKey, vPos, false, option);
     }
 
-    private void SpawnTutorial(string spriteName){
-        GameObject tutPrefab = (GameObject) Resources.Load("TutorialPopup_Runner");
-        GameObject tutGO = (GameObject) GameObject.Instantiate(tutPrefab);
-
-        tutGO.transform.Find("Label_Message").GetComponent<UILabel>().text = 
-            Localization.Localize(GetKey() + "_" + GetStep());
-        tutGO.transform.Find("Sprite_Hint").GetComponent<UISprite>().spriteName = spriteName; 
-
-        ShowPopup( tutGO, POS_TOP, false );            
-    }
-
-    public void TutorialJump(object sender, EventArgs args){
+    private void TutorialJump(object sender, EventArgs args){
         PlayerController.OnJump -= TutorialJump;
         RemovePopup();
         RunnerGameManager.Instance.StartCoroutine(WaitBeforeAdvance());
     }
 
-    public void TutorialDrop(object sender, EventArgs args){
+    private void TutorialDrop(object sender, EventArgs args){
         PlayerController.OnDrop -= TutorialDrop;
         RemovePopup();
         RunnerGameManager.Instance.StartCoroutine(WaitBeforeAdvance());

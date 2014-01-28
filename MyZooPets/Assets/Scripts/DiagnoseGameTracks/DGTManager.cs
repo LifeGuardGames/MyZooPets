@@ -432,7 +432,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		return GetStandardReward( eType );
 	}
 	
-	////////----------------- Tutorial code	
+	//---------------------------------------------------
+	// StartTutorial()
+	// Tutorial code	
+	//---------------------------------------------------
 	private void StartTutorial() {
 		// set our tutorial
 		SetTutorial( new DGTTutorial() );

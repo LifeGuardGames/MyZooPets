@@ -91,6 +91,11 @@ public class AudioManager : Singleton<AudioManager>{
 	public void Pause( bool bPausing ) {
 		if ( OnGamePaused != null )
 			OnGamePaused( this, new PauseArgs(bPausing) );		
+
+		if(bPausing)
+			backgroundSource.Pause();
+		else
+			backgroundSource.Play();
 	}
 	
 	///////////////////////////////////////////

@@ -131,7 +131,7 @@ public class ItemManager : Singleton<ItemManager> {
         //         GameObject.Destroy(inItem.gameObject);
         // }
     }
-    // private GameObject test;
+
     public void DisplayTutorial(string itemID){
         if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)){
             string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
@@ -144,8 +144,8 @@ public class ItemManager : Singleton<ItemManager> {
 
             Hashtable option = new Hashtable();
             option.Add(TutorialPopupFields.Message, hintMessage);
-            option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
             option.Add(TutorialPopupFields.Button1Callback, button1Fucntion);
+            option.Add(TutorialPopupFields.Button1Label, Localization.Localize("OK"));
 
             TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
             script.Init(option);
@@ -154,12 +154,6 @@ public class ItemManager : Singleton<ItemManager> {
             DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
     }
-
-    // public void DestroyTutorial(GameObject tutorialGO){
-    //     Destroy(tutorialGO.transform.parent.gameObject);
-
-    //     StartCoroutine(ResumeGame());
-    // }
 
     //Yield for a frame before unpausing the game. The only way to avoid OnTap being called when resume
     //button is clicked

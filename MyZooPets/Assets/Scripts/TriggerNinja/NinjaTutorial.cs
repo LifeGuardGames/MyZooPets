@@ -33,29 +33,29 @@ public class NinjaTutorial : MinigameTutorial {
     //---------------------------------------------------       
     protected override void ProcessStep(int nStep){
         Vector3 vPos = new Vector3();
+        string strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON_AND_IMAGE; 
         vPos = POS_TOP;
-        string strResourceKey = "TutorialMessageWithButton";
+        Hashtable option = new Hashtable();
+
+        TutorialPopup.Callback button1Fuction = delegate(){
+            Advance();
+        };
+        option.Add(TutorialPopupFields.SpriteAtlas, "TriggerNinjaAtlas");
+        option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
+        option.Add(TutorialPopupFields.Button1Label, Localization.Localize("OK"));
+
         switch(nStep){
             case 0:
-                ShowMessage(strResourceKey, vPos);
+                option.Add(TutorialPopupFields.SpriteName, "tutorialNinjaSwipe");
                 break;
             case 1:
-                ShowMessage(strResourceKey, vPos);
+                option.Add(TutorialPopupFields.SpriteName, "tutorialNinjaAvoid");
                 break;
             default:
                 Debug.LogError("Ninja tutorial has an unhandled step: " + nStep);
                 break;
         }
-    }
 
-    private void SpawnTutorial(string spriteName){
-        GameObject tutPrefab = (GameObject) Resources.Load("TutorialMessage_Ninja");
-        GameObject tutGO = (GameObject) GameObject.Instantiate(tutPrefab);
-
-        tutGO.transform.Find("Label_Message").GetComponent<UILabel>().text = 
-            Localization.Localize(GetKey() + "_" + GetStep());
-        tutGO.transform.Find("Sprite_Hint").GetComponent<UISprite>().spriteName = spriteName; 
-
-        ShowMessage(tutGO, POS_TOP);
+        ShowPopup(strResourceKey, vPos, false, option);
     }
 }

@@ -61,6 +61,7 @@ public class TutorialPopup : MonoBehaviour {
 
 		if(option.ContainsKey(TutorialPopupFields.SpriteName)){
 			sprite.spriteName = (string) option[TutorialPopupFields.SpriteName];
+			sprite.MakePixelPerfect();	
 		}
 
 		if(option.ContainsKey(TutorialPopupFields.Button1Callback)){

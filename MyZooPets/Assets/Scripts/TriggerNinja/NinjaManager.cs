@@ -89,7 +89,6 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		fTime = 0;
 		listCurrentEntries = null;
 
-		//TO DO: add tutorial here
 		if(TutorialOK() && (IsTutorialOverride() || 
 			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
 			StartTutorial();

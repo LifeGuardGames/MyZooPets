@@ -39,9 +39,6 @@ public class RunnerTutorial : MinigameTutorial {
         vPos = POS_TOP; 
         Hashtable option = new Hashtable();
 
-        //Tutorial popup options 
-        option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
-
         switch ( nStep ) {
             case 0:
                 PlayerController.OnJump += TutorialJump;

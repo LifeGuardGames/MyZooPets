@@ -77,7 +77,9 @@ public class NinjaTriggerTarget : NinjaTrigger {
 	// _OnMissed()
 	//---------------------------------------------------	
 	protected override void _OnMissed() {
-		// the player loses a life
-		NinjaManager.Instance.UpdateLives( -1 );	
+		if(!NinjaManager.Instance.IsTutorial()){
+			// the player loses a life
+			NinjaManager.Instance.UpdateLives(-1);	
+		}
 	}	
 }

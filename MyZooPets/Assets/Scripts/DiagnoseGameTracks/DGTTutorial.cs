@@ -74,9 +74,6 @@ public class DGTTutorial : MinigameTutorial {
 		string strResourceKey = Tutorial.POPUP_LONG; 
 		Hashtable option = new Hashtable();
 
-        //Tutorial popup options 
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
-
 		switch ( nStep ) {
 			case 0:				
 				arrayZones = new GameObject[3];

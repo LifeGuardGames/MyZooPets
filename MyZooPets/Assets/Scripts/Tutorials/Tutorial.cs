@@ -142,7 +142,8 @@ public abstract class Tutorial {
 			vPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
-			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, 
+				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
 		}
 		
 		// destroy the old object if it existed
@@ -186,6 +187,51 @@ public abstract class Tutorial {
 	}	
 
 	//---------------------------------------------------
+	// ShowPopup()
+	// Display the tutorial popup
+	// Params:
+	//	Message(string): the text you want to display
+	//	SpriteAtlas(string): name of the atlas that the sprite is from. Required if loading an image
+	//	SpriteName(string): name of the image
+	//	Button1Callback(function): action to do when button is clicked
+	//	Button1Label(string): what does the button say
+	//	ShrinkBgToFitText(bool): default to T. background size is automatically adjusted to fit label
+	//---------------------------------------------------
+	protected void ShowPopup(string popupKey, Vector3 vLoc, bool useViewPort=true, Hashtable option=null){
+		if(goPopup)
+			GameObject.Destroy(goPopup);
+
+		if(option == null)
+			option = new Hashtable();
+
+		// get text to display from tutorial key + step
+		string strText = Localization.Localize(GetKey() + "_" + GetStep());
+		Vector3 vPos = vLoc;
+
+		option.Add(TutorialPopupFields.Message, strText);
+
+		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
+			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
+
+		if(useViewPort)	{
+			// transform viewport location to screen position, then from bottom left to center
+			vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
+		}
+
+		// create the popup
+		GameObject goResource = Resources.Load(popupKey) as GameObject;
+		goPopup = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), goResource);
+	 	vPos.z = goPopup.transform.position.z; // keep the default z-value
+		goPopup.transform.localPosition = vPos;				
+		
+		//feed the script the option hashtable		
+		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
+		script.Init(option);
+	}
+
+	//---------------------------------------------------
 	// ShowMessage()
 	// Shows message for this part of the tutorial.
 	// This function is different from ShowPopup() in that it cannot be closed
@@ -194,7 +240,7 @@ public abstract class Tutorial {
 	// TO DO-j: this function is kind of redundant. Can probably be combined with
 	// ShowPopup()
 	//---------------------------------------------------	
-	protected void ShowMessage( string strResourceKey, Vector3 vPos ) {
+	// protected void ShowMessage( string strResourceKey, Vector3 vPos ) {
 		// // get the text to display based on the current step and the tutorial's key
 		// int nStep = GetStep();
 		// string strTutKey = GetKey();
@@ -224,10 +270,10 @@ public abstract class Tutorial {
 		
 		// // set text
 		// scriptMessage.SetLabel( strText );
-	}
+	// }
 
 	//quick hack.. need to be refactored
-	protected void ShowMessage(GameObject tutorialMessage, Vector3 vPos){
+	// protected void ShowMessage(GameObject tutorialMessage, Vector3 vPos){
 		// // get the text to display based on the current step and the tutorial's key
 		// int nStep = GetStep();
 		// string strTutKey = GetKey();
@@ -248,7 +294,7 @@ public abstract class Tutorial {
 			
 		// 	scriptMessage = tutorialMessage.GetComponent<TutorialMessage>();
 		// }
-	}
+	// }
 	
 	//---------------------------------------------------
 	// ShowPopup()
@@ -283,42 +329,6 @@ public abstract class Tutorial {
 	// 	TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 	// 	script.Init( strText );
 	// }
-
-
-
-	protected void ShowPopup(string popupKey, Vector3 vLoc, bool useViewPort=true, Hashtable option=null){
-		if(goPopup)
-			GameObject.Destroy(goPopup);
-
-		if(option == null)
-			option = new Hashtable();
-
-		// get text to display from tutorial key + step
-		string strText = Localization.Localize(GetKey() + "_" + GetStep());
-		Vector3 vPos = vLoc;
-
-		option.Add(TutorialPopupFields.Message, strText);
-
-		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
-			option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-
-		if(useViewPort)	{
-			// transform viewport location to screen position, then from bottom left to center
-			vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
-			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
-		}
-
-		// create the popup
-		GameObject goResource = Resources.Load(popupKey) as GameObject;
-		goPopup = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), goResource);
-	 	vPos.z = goPopup.transform.position.z; // keep the default z-value
-		goPopup.transform.localPosition = vPos;				
-		
-		//feed the script the option hashtable		
-		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
-		script.Init(option);
-	}
 
 	// //---------------------------------------------------	
 	// // ShowPopup()

@@ -95,7 +95,10 @@ public class GameTutorial_Triggers : GameTutorial {
 	private void TeachCleanup() {
 		// show a message
 		Vector3 vLoc = Constants.GetConstant<Vector3>( "TriggerPopupLoc" );
-		ShowPopup( Tutorial.POPUP_STD, vLoc );
+		Hashtable option = new Hashtable();
+        option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+
+		ShowPopup( Tutorial.POPUP_STD, vLoc, option:option);
 	
 		// spotlight the dust
 		SpotlightObject( scriptTrigger.gameObject );

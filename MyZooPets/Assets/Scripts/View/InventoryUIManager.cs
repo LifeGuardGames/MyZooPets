@@ -122,6 +122,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         itemWrapper.name = invItem.ItemID;
         inventoryItemObject.name = invItem.ItemID;
         itemSprite.spriteName = invItem.ItemTextureName;
+		SpriteUtils.MaxSquarifyNGUI(itemSprite, 100);
+		
         itemAmountLabel.text = invItem.Amount.ToString();
 
         //Create stats hint

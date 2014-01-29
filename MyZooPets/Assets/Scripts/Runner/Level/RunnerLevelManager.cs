@@ -77,7 +77,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 removedLevelComponent.DestroyAndCache();
 
 				// Push a new one
-                if(!RunnerGameManager.Instance.IsTutorial()){
+                if(!RunnerGameManager.Instance.IsTutorialRunning()){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
                     PopulateLevelComponent(nextLevel);
                 }else{

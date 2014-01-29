@@ -12,11 +12,13 @@ public class NinjaTriggerBomb : NinjaTrigger {
 	// _OnCut()
 	//---------------------------------------------------		
 	protected override void _OnCut() {
-		// take lives from the player
-		int nLives = GetDamageValue();
-		NinjaManager.Instance.UpdateLives( -nLives );
-		
-		// then destroy the object
-		Destroy( gameObject );		
+		if(!NinjaManager.Instance.IsTutorialRunning()){
+			// take lives from the player
+			int nLives = GetDamageValue();
+			NinjaManager.Instance.UpdateLives( -nLives );
+			
+			// then destroy the object
+			Destroy( gameObject );		
+		}
 	}
 }

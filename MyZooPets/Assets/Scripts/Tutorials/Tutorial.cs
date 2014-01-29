@@ -30,7 +30,6 @@ public abstract class Tutorial {
 	protected Vector3 POS_TOP = new Vector3( 0, 242, 0 ); //top position to spawn the popup (NGUI)
 	protected Vector3 POS_BOT = new Vector3( 0, -242, 0 ); //bottom position to spawn the popup (NGUI)
 
-	// private TutorialMessage scriptMessage; 	// the UI element used to show the tutorial message
 	private List<GameObject> listCanProcess = new List<GameObject>(); // list of objects that can be processed as input
 	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goPopup; // current (and only) tutorial popup
@@ -47,6 +46,11 @@ public abstract class Tutorial {
 		return bCan;
 	}
 
+	//Return the current step that the tutorial is on
+	public int GetStep() {
+		return nCurrentStep;	
+	}
+
 	//Set the tutorial to a specific step
 	protected void SetStep( int num ) {
 		nCurrentStep = num;
@@ -56,11 +60,6 @@ public abstract class Tutorial {
 			End( true );
 		else
 			ProcessStep( nCurrentStep );
-	}
-
-	//Return the current step that the tutorial is one
-	protected int GetStep() {
-		return nCurrentStep;	
 	}
 
 	//Return the key of this tutorial
@@ -230,131 +229,4 @@ public abstract class Tutorial {
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 		script.Init(option);
 	}
-
-	//---------------------------------------------------
-	// ShowMessage()
-	// Shows message for this part of the tutorial.
-	// This function is different from ShowPopup() in that it cannot be closed
-	// by RemovePopup(). It can only be closed when the TutorialMessage.Advance()
-	// is called from an UIButton. 
-	// TO DO-j: this function is kind of redundant. Can probably be combined with
-	// ShowPopup()
-	//---------------------------------------------------	
-	// protected void ShowMessage( string strResourceKey, Vector3 vPos ) {
-		// // get the text to display based on the current step and the tutorial's key
-		// int nStep = GetStep();
-		// string strTutKey = GetKey();
-		// string strKey = strTutKey + "_" + nStep;
-		// string strText = Localization.Localize( strKey );
-		
-		// // if there was an existing message but its key does not match the incoming key, destroy its game object
-		// if ( scriptMessage != null && scriptMessage.GetResourceKey() != strResourceKey ) {
-		// 	GameObject.Destroy( scriptMessage.gameObject );
-		// 	scriptMessage = null;
-		// }
-		
-		// // if the panel doesn't exist, create it
-		// if ( scriptMessage == null ) {
-		// 	GameObject anchorCenter = GameObject.Find("Anchor-Center");
-		// 	GameObject prefab = Resources.Load(strResourceKey) as GameObject;
-		// 	GameObject goMessage = LgNGUITools.AddChildWithPosition( anchorCenter, prefab );
-		// 	scriptMessage = goMessage.GetComponent<TutorialMessage>();
-			
-		// 	// set variables
-		// 	scriptMessage.SetTutorial( this );
-		// 	scriptMessage.SetResourceKey( strResourceKey );			
-		// }
-		
-		// // set the position
-		// scriptMessage.SetPosition( vPos );
-		
-		// // set text
-		// scriptMessage.SetLabel( strText );
-	// }
-
-	//quick hack.. need to be refactored
-	// protected void ShowMessage(GameObject tutorialMessage, Vector3 vPos){
-		// // get the text to display based on the current step and the tutorial's key
-		// int nStep = GetStep();
-		// string strTutKey = GetKey();
-		// string strKey = strTutKey + "_" + nStep;
-		// string strText = Localization.Localize( strKey );
-
-		// // if there was an existing message but its key does not match the incoming key, destroy its game object
-		// if ( scriptMessage != null && scriptMessage.GetResourceKey() != strResourceKey ) {
-		// 	GameObject.Destroy( scriptMessage.gameObject );
-		// 	scriptMessage = null;
-		// }
-
-		// if(scriptMessage == null){
-		// 	tutorialMessage.transform.parent = GameObject.Find("Anchor-Center").transform;
-		// 	vPos.z = -42; //quick hack to make sure the GO is closer to camera
-		// 	tutorialMessage.transform.localPosition = vPos;
-		// 	tutorialMessage.transform.localScale = new Vector3(1, 1, 1);
-			
-		// 	scriptMessage = tutorialMessage.GetComponent<TutorialMessage>();
-		// }
-	// }
-	
-	//---------------------------------------------------
-	// ShowPopup()
-	// Spawns a popup for tutorial
-	// Params:
-	//  strPopupKey(string): the string key that will be used to load a prefab
-	//	vLoc(Vector3): the position that the popup will be spawned (use the constant provided by this class)
-	//	useViewPort(bool): is vLoc a view port coordinate or not
-	//---------------------------------------------------	
-	// protected void ShowPopup( string strPopupKey, Vector3 vLoc, bool useViewPort=true ) {
-	// 	// if there was already a popup, just destroy it
-	// 	if ( goPopup )
-	// 		GameObject.Destroy( goPopup );
-		
-	// 	// get text to display from tutorial key + step
-	// 	string strText = Localization.Localize( GetKey() + "_" + GetStep() );
-	// 	Vector3 vPos = vLoc;
-	
-	// 	if(useViewPort)	{
-	// 		// transform viewport location to screen position, then from bottom left to center
-	// 		vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
-	// 		vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-	// 		//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
-	// 	}
-		
-	// 	// create the popup
-	// 	GameObject goResource = Resources.Load( strPopupKey ) as GameObject;
-	// 	goPopup = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), goResource );
-	// 	// vPos.z = goPopup.transform.position.z; // keep the default z-value
-	// 	// goPopup.transform.localPosition = vPos;	
-		
-	// 	TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
-	// 	script.Init( strText );
-	// }
-
-	// //---------------------------------------------------	
-	// // ShowPopup()
-	// // Spawns a popup for tutorial
-	// // Params:
-	// //  tutorialPopup(GameObject): the prefab that will be spawned
-	// //	vLoc(Vector3): the position that the popup will be spawned (use the constant provided by this class)
-	// //	useViewPort(bool): is vLoc a view port coordinate or not
-	// //---------------------------------------------------	
-	// protected void ShowPopup(GameObject tutorialPopup, Vector3 vLoc, bool useViewPort=true){
-	// 	// if there was already a popup, just destroy it
-	// 	if ( goPopup )
-	// 		GameObject.Destroy( goPopup );
-		
-	// 	Vector3 vPos = vLoc;
-	
-	// 	if(useViewPort)	{
-	// 		// transform viewport location to screen position, then from bottom left to center
-	// 		vPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, vLoc);
-	// 		vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
-	// 	}
-
-	// 	tutorialPopup.transform.parent = GameObject.Find("Anchor-Center").transform;
-	// 	vPos.z = -42; //quick hack to make sure the GO is closer to camera
-	// 	tutorialPopup.transform.localPosition = vPos;
-	// 	tutorialPopup.transform.localScale = new Vector3(1, 1, 1);
-	// 	goPopup = tutorialPopup;
-	// }
 }

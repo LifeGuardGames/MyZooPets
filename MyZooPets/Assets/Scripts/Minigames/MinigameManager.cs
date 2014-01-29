@@ -34,60 +34,71 @@ public class LivesChangedArgs : EventArgs {
 //---------------------------------------------------
 
 public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {	
-	//----------- Pure Abstract -----------------------------
+	//----------------- Abstract -----------------------------
 	public abstract int GetReward( MinigameRewardTypes eType );		// returns the reward the player got for playing this minigame
 	protected abstract string GetMinigameKey();						// returns string key for this minigame
 	protected abstract void _Start();								// when the manager is started
-	//-------------------------------------------------------
-	
-	// reference to the UI controller
-	public MinigameUI ui;
-	
-	// scene transition
-	public SceneTransition scriptTransition;
 
-	// player score
-	private int nScore;	
+	//=======================Events========================
+	public static EventHandler<GameStateArgs> OnStateChanged; 		//when the game state changes
+	public static EventHandler<EventArgs> OnNewGame; 				//when a new game starts
+	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
+	
+	public MinigameUI ui; // reference to the UI controlle
+	public SceneTransition scriptTransition; // scene transition
+	public int nStartingLives;
+	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
+
+	private int nScore;	// player score
+	private int nLives; // player lives
+	private bool bTutorialOverride; // is there a tutorial override? 
+									//i.e. tutorial has already been played but the user wants to see it again
+	private MinigameStates eCurrentState = MinigameStates.Opening; // the state of this minigame
+	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
+
+	//Return player score
 	public virtual int GetScore() {
 		return nScore;	
 	}
-	
-	// player lives
-	private int nLives;
-	public int nStartingLives;
+
+	//Return player lives	
 	public int GetLives() {
 		return nLives;	
 	}
-	
-	// tutorial stuff
-	public bool bRunTut = true;			// used for debug/testing
-	private MinigameTutorial tutorial;
-	public bool IsTutorial() {
+
+	//T: tutorial is active, F: tutorial is not running
+	public bool IsTutorialRunning() {
 		return tutorial != null;
 	}
+
+	//Set reference to the tutorial
 	protected void SetTutorial( MinigameTutorial tutorial ) {
 		this.tutorial = tutorial;
 		
 		this.tutorial.OnTutorialEnd += TutorialEnded;
 	}	
+
+	//Return the reference to tutorial
 	protected MinigameTutorial GetTutorial() {
 		return tutorial;	
 	}
-	protected bool TutorialOK() {
+
+	//T: Tutorial is on so play tutorial, F: Tutorial off so don't play tutorial
+	protected bool TutorialOn() {
 		return bRunTut;	
 	}
-	
-	// is there a tutorial override? i.e. tutorial has already been played but the user wants to see it again
-	private bool bTutorialOverride;
+
+	//T: Play tutorial again even if it has already been played	
 	protected bool IsTutorialOverride() {
 		return bTutorialOverride;	
 	}
+
+	//Toggle bTutorialOverride
 	protected void SetTutorialOverride( bool bOverride ) {
 		bTutorialOverride = bOverride;
 	}	
-	
-	// the state of this minigame
-	private MinigameStates eCurrentState = MinigameStates.Opening;
+
+	//Change the game state	
 	private void SetGameState( MinigameStates eNewState ) {
 		if ( eCurrentState == eNewState ) {
 			Debug.LogError("Minigame(" + GetMinigameKey() + ") is getting set to a state it's already at: " + eNewState);
@@ -107,15 +118,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		if ( OnStateChanged != null )
 			OnStateChanged( this, new GameStateArgs(eCurrentState) );
 	}
+
+	//Return the game state
 	public MinigameStates GetGameState() {
 		return eCurrentState;
 	}
 	
-	//=======================Events========================
-	public static EventHandler<GameStateArgs> OnStateChanged; 		//when the game state changes
-	public static EventHandler<EventArgs> OnNewGame; 				//when a new game starts
-	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
-	//=====================================================	
 	
 	//---------------------------------------------------
 	// Start()
@@ -235,7 +243,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
 			ui.TogglePopup( MinigamePopups.Pause, false );
 		
-		if ( IsTutorial() ) {
+		if ( IsTutorialRunning() ) {
 			tutorial.Abort();
 			tutorial = null;	
 		}

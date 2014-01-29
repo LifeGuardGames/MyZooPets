@@ -273,7 +273,7 @@ public class DGTCharacter : MonoBehaviour {
 	private bool IsHeadingToIncorrectZone() {
 		bool bWrong = false;
 		
-		if ( DGTManager.Instance.IsTutorial() ) {
+		if ( DGTManager.Instance.IsTutorialRunning() ) {
 			GameObject goZone = DGTManager.Instance.GetSelectedZone();
 			DGTZone script = goZone.GetComponent<DGTZone>();
 			AsthmaStage eCharStage = GetStage();

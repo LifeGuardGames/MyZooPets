@@ -89,7 +89,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		fTime = 0;
 		listCurrentEntries = null;
 
-		if(TutorialOK() && (IsTutorialOverride() || 
+		if(TutorialOn() && (IsTutorialOverride() || 
 			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
 			StartTutorial();
 
@@ -147,10 +147,19 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 			}
 		}
 		else if ( fTime <= 0 ) {
-			// otherwise, there is no current group and it is time to start one, so figure out which one to begin
-			NinjaScoring eScore = GetScoringKey();
-			NinjaData data = NinjaDataLoader.GetGroupToSpawn( NinjaModes.Classic, eScore );
-			
+			// otherwise, there is no current group and it is time to start one, 
+			// so figure out which one to begin
+			NinjaScoring eScore;
+			NinjaData data = null;
+
+			if(!IsTutorialRunning()){
+				eScore = GetScoringKey();
+				data = NinjaDataLoader.GetGroupToSpawn( NinjaModes.Classic, eScore );
+			}
+			//Tutorial mode spawns specific NinjaData
+			else{
+				data = GetTutorialSpawnGroup();
+			}
 			//Debug.Log("STARTING GROUP " + data.GetID() + " of length " + data.GetEntries().Count);
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
@@ -159,7 +168,36 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		else
 			fTime -= fDelta;	// otherwise, there is no group and we still need to countdown before spawning the next group
 	}	
-	
+
+	//---------------------------------------------------
+	// GetTutorialSpawnGroup()
+	// Return the appropriate NinjaDataEntry for each tutorial step
+	//---------------------------------------------------
+	private NinjaData GetTutorialSpawnGroup(){
+		//get tutorial class
+		NinjaTutorial tutorial = (NinjaTutorial) GetTutorial();
+
+		//get current step id
+		int currentTutStep = tutorial.GetStep(); 
+
+		NinjaScoring eScore = NinjaScoring.Start_1;
+		NinjaData data = null;
+
+		//Different tutorial step spawns different NinjaData	
+		switch(currentTutStep){
+			case 0:
+				eScore = NinjaScoring.Start_1;
+			break;
+			case 1:
+				eScore = NinjaScoring.Start_3;
+			break;
+		}
+
+		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
+
+		return data;
+
+	}	
 	
 	
 	//---------------------------------------------------

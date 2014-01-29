@@ -188,7 +188,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------
 	// ShowPopup()
 	// Display the tutorial popup
-	// Params:
+	// Option Params:
 	//	Message(string): the text you want to display
 	//	SpriteAtlas(string): name of the atlas that the sprite is from. Required if loading an image
 	//	SpriteName(string): name of the image

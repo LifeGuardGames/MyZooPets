@@ -13,7 +13,7 @@ public class FloatyUtil {
     //---------------------------------------------------- 
     // SpawnFloatyText()
     // This spawns a floaty text that disappears in FLOAT_TIME
-    // Params:
+    // Option Params:
     //  prefab (GameObject): gameObject that you want to be spawned
     //  parent (GameObject): the parent/location that you want the float to spawn under
     //  position (Vector3): the position that you want to spawn the floaty 
@@ -61,7 +61,7 @@ public class FloatyUtil {
     // SpawnFloatyStats()
     // Spawns floaty image and text above pet's head to show
     // change in stats
-    // Params:
+    // Option Params:
     //  parent (GameObject): the parent/location that you want the floaty to spawn under
     //  deltaPoints (string): changes in points
     //  deltaHealth (string): changes in health

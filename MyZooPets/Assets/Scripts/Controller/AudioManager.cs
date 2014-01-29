@@ -16,6 +16,9 @@ public class PauseArgs : EventArgs{
 }
 
 public class AudioManager : Singleton<AudioManager>{
+	//=======================Events========================
+	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
+	//=====================================================		
 
 	/** Types of Audio Clips
 	*	background	:	only one playing at a time, if any (ie. music)
@@ -27,20 +30,14 @@ public class AudioManager : Singleton<AudioManager>{
 
 	private AudioClip backgroundClip;
 	private AudioClip effectClip;
-
 	private AudioSource backgroundSource;
-//	private AudioSource effectSource;
 
 	public bool isMusicOn = true; // Thank me(Sean) later, devs
 	
-	//=======================Events========================
-	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
-	//=====================================================		
 
 	void Awake(){
 		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
-//		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
 		
 		// load sound xml data
 		DataSounds.SetupData();
@@ -102,6 +99,9 @@ public class AudioManager : Singleton<AudioManager>{
 	// PlayClip()
 	// Plays a sound with the name strClip
 	// from resources.
+	// hashOverrides Params:
+	//	Volume(float)
+	//	Pitch(float)
 	///////////////////////////////////////////	
 	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides = null ) {
 		if ( hashOverrides == null )

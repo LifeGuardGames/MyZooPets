@@ -13,14 +13,15 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	
 	// tut key
 	public static string TIME_DECAY_TUT = "TimeMoodDecay";
+    private const int MAX_TRIGGERS = 6;
+
     public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
-	public int nPoints;
+	// public int nPoints; //250
+
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
 	public float fHealthMoodThreshold;
-	
-	private const int MAX_TRIGGERS = 6;
-    private List<DegradData> degradationTriggers;
+    private List<DegradData> degradationTriggers; //list of triggers spawned
 
     public List<DegradData> DegradationTriggers{
         get{return degradationTriggers;} 

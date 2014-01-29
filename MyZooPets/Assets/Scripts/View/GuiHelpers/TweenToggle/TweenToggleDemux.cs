@@ -34,7 +34,9 @@ public class TweenToggleDemux : MonoBehaviour {
 	public bool IsShowing{ get { return isShown; } }
 	private bool isMoving; // Move lock
 	public bool IsMoving{ get { return isMoving; } }
-
+	
+	private bool pollingFirstFrameLock = false;	// Since we are polling & setting show/hide next frame, need to stop current frame check for callbacks
+	
 	void Awake(){
 		if(startsHidden){
 			isShown = false;
@@ -75,27 +77,34 @@ public class TweenToggleDemux : MonoBehaviour {
 		}
 	}
 	
+	// Polling for lock released
 	void Update(){
-		// Polling for lock released
-		if(isMoving){
-			if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
-				//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
-				isMoving = false;
-				// If option set for finish show callback, call it now!
-				if(isShowFinishedCallback){
-					ShowSendCallback();
+		// Stop polling check for the current frame tween starts!
+		if(pollingFirstFrameLock){
+			pollingFirstFrameLock = false;
+		}
+		// Do regular polling
+		else{	
+			if(isMoving){
+				if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
+					//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
+					isMoving = false;
+					// If option set for finish show callback, call it now!
+					if(isShowFinishedCallback){
+						ShowSendCallback();
+					}
+					return;
 				}
-				return;
-			}
-			if(!isShown && lastFinishedHideObjectScript != null && !lastFinishedHideObjectScript.IsMoving){
-				//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
-				isMoving = false;
-				
-				// If option set for finish hide callback, call it now!
-				if(isHideFinishedCallback){
-					HideSendCallback();
+				else if(!isShown && lastFinishedHideObjectScript != null && !lastFinishedHideObjectScript.IsMoving){
+					//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
+					isMoving = false;
+					
+					// If option set for finish hide callback, call it now!
+					if(isHideFinishedCallback){
+						HideSendCallback();
+					}
+					return;
 				}
-				return;
 			}
 		}
 	}
@@ -104,6 +113,8 @@ public class TweenToggleDemux : MonoBehaviour {
 		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;
+			
+			pollingFirstFrameLock = true;
 			StartCoroutine(SetNextFrameShow());
 		}
 		else{
@@ -116,6 +127,8 @@ public class TweenToggleDemux : MonoBehaviour {
 		if(isShown && !isMoving){
 			isShown = false;
 			isMoving = true;
+			
+			pollingFirstFrameLock = true;
 			StartCoroutine(SetNextFrameHide());
 		}
 		else{
@@ -163,18 +176,17 @@ public class TweenToggleDemux : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		// if(isDebug){
-		// 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
-		// 		Show();
-		// 	}
-		// 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
-		// 		Hide();
-		// 	}
-		// }
+		 if(isDebug){
+		 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
+		 		Show();
+		 	}
+		 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
+		 		Hide();
+		 	}
+		 }
 	}
 	
 	void ShowSendCallback(){
-		
 		if (string.IsNullOrEmpty(ShowFunctionName)) return;
 		if (ShowTarget == null) ShowTarget = gameObject;
 

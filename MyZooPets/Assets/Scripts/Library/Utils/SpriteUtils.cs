@@ -21,13 +21,4 @@ public static class SpriteUtils  {
 		optional.Add("ease", LeanTweenType.linear);
 		LeanTween.rotateZ(goFrom, fAngle, fTime, optional);		
 	}
-	
-	//---------------------------------------------------
-	// Returns the maximum square dimensions while maintaining sprite proportions
-	//---------------------------------------------------
-	static public Vector2 MaxSquarifyNGUI(UISprite sprite, int max){
-		Bounds b = NGUIMath.CalculateRelativeWidgetBounds(sprite.gameObject.transform);
-		Debug.Log(b.size);
-		return new Vector2();
-	}
 }

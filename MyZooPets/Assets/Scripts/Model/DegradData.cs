@@ -2,20 +2,22 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+//----------------------------------------------------
+// DegradData
+// Only use for temp storage while the game is running.
+// Not serialize
+// Mutable data
+//----------------------------------------------------
 public class DegradData{
-    public int ID {get; set;}
-    public int PrefabId {get; set;}
+    public string TriggerID {get; set;}
 	
 	private string strPosition;
 	public Vector3 GetPosition() {
 		return Constants.ParseVector3( strPosition );	
 	}
-	
-    public DegradData(){}
 
-    public DegradData(int id, string position, int prefabId){
-        ID = id;
+    public DegradData(string triggerID, string position){
         strPosition = position;
-        PrefabId = prefabId;
+        TriggerID = triggerID;
     }
 }

@@ -44,6 +44,10 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 	protected override void _Start() {
         Application.targetFrameRate = 60;
 	}
+
+    protected override void _OnDestroy(){
+        Application.targetFrameRate = 30;
+    }
 	
 	//---------------------------------------------------
 	// _NewGame()

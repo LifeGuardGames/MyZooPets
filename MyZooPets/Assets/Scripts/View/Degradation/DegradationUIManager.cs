@@ -62,18 +62,22 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	// Note that this function assumes it is okay to be
 	// spawning triggers.
 	//---------------------------------------------------		
-	private DegradTrigger PlaceTrigger( int nIndex ) {		
+	private DegradTrigger PlaceTrigger(int nIndex) {		
         List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;
-        List<GameObject> triggerPrefabs = DegradationLogic.Instance.TriggerPrefabs;
-		
-        int prefabId = degradTriggers[nIndex].PrefabId;
+
+        string triggerID = degradTriggers[nIndex].TriggerID;
         Vector3 position = degradTriggers[nIndex].GetPosition();
+        ImmutableData_Trigger triggerData = DataLoader_Triggers.GetTrigger(triggerID);
+
+        //Load trigger prefab
+        GameObject triggerPrefab = (GameObject) Resources.Load(triggerData.PrefabName);
+
         //instantiate all the triggers save in DataManager
-        GameObject trigger = (GameObject)Instantiate(triggerPrefabs[prefabId], position, Quaternion.identity);
+        GameObject trigger = (GameObject)Instantiate(triggerPrefab, position, Quaternion.identity);
 		
 		// set the trigger's ID
         DegradTrigger scriptTrigger = trigger.GetComponent<DegradTrigger>();
-		scriptTrigger.ID = nIndex;
+		scriptTrigger.ID = triggerID;
 		
 		return scriptTrigger;
 	}

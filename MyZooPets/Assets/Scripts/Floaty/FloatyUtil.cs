@@ -21,12 +21,16 @@ public class FloatyUtil {
     //  text (string): the text to be displayed
     //---------------------------------------------------- 
     public static void SpawnFloatyText(Hashtable option){
+        //if you pass in a prefab you need to make sure the floatingUpPos, floatingUpTime is
+        //set in the prefab
 		if ( option.ContainsKey("prefab") ) {
 			string strPrefab = (string) option["prefab"];
 			floatyText = (GameObject) Resources.Load( strPrefab );
 		}
-        else
+        else{
             floatyText = (GameObject) Resources.Load("FloatyText");
+
+        }
 
         GameObject floaty;
 
@@ -50,10 +54,20 @@ public class FloatyUtil {
         if(option.ContainsKey("text")){
             floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
         }
+
 		
-		if ( !option.ContainsKey("prefab") ) {
-	        floaty.GetComponent<FloatyController>().floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
-	        floaty.GetComponent<FloatyController>().floatingTime = FLOAT_TIME;
+		if(!option.ContainsKey("prefab")){
+            FloatyController floatyController = floaty.GetComponent<FloatyController>();
+
+            if(option.ContainsKey("floatingUpPos"))
+                floatyController.floatingUpPos = (Vector3) option["floatingUpPos"];
+            else
+                floatyController.floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
+
+            if(option.ContainsKey("floatingTime"))
+                floatyController.floatingTime = (float) option["floatingTime"];
+            else
+    	        floatyController.floatingTime = FLOAT_TIME;
 		}
     }
 	

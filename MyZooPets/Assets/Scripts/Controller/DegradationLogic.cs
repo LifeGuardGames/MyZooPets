@@ -14,8 +14,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	// tut key
 	public static string TIME_DECAY_TUT = "TimeMoodDecay";
     private const int MAX_TRIGGERS = 6;
-
-    public List<GameObject> triggerPrefabs = new List<GameObject>(); //list of trigger objects
 	// public int nPoints; //250
 
 	// --- mood related degradation variables
@@ -25,9 +23,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
     public List<DegradData> DegradationTriggers{
         get{return degradationTriggers;} 
-    }
-    public List<GameObject> TriggerPrefabs{
-        get{return triggerPrefabs;}
     }
 
     void Awake(){		
@@ -59,16 +54,28 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     //use the method when a trigger has been destroyed by user
     public void ClearDegradationTrigger(DegradTrigger trigger){
         // DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
-        DegradData degradData = degradationTriggers.Find(x => x.ID == trigger.ID);
-		
+        DegradData degradData = degradationTriggers.Find(x => x.TriggerID == trigger.ID);
+	    ImmutableData_Trigger triggerData = DataLoader_Triggers.GetTrigger(degradData.TriggerID);
+
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
 		if ( bTut == false ) {
 			GameObject goPrefab = Resources.Load( "DroppedStat" ) as GameObject;
 			GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
 			
+            //Spawn floaty text to indicate trigger has been cleaned
+            Hashtable option = new Hashtable();
+            Vector3 floatUpPos = new Vector3(0, 2, 0);
+            option.Add("parent", goDroppedItem);
+            option.Add("textSize", 1);
+            option.Add("text", triggerData.FloatyDesc);
+            option.Add("floatingUpPos", floatUpPos);
+
+            FloatyUtil.SpawnFloatyText(option);
+
+            //Init dropped item
 			int nXP = DataLoader_XpRewards.GetXP( "CleanTrigger", new Hashtable() );
-			goDroppedItem.GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, nXP );
+			goDroppedItem.transform.Find("Star").GetComponent<DroppedObject_Stat>().Init( HUDElementType.Points, nXP );
 			
 			// set the position of the newly spawned item to be wherever this item box is
 			float fOFfsetY = Constants.GetConstant<float>( "ItemBoxTrigger_OffsetY" );
@@ -76,7 +83,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			goDroppedItem.transform.position = vPosition;
 			
 			// make the stats "burst" out
-			goDroppedItem.GetComponent<DroppedObject>().Appear();			
+			goDroppedItem.transform.Find("Star").GetComponent<DroppedObject>().Appear();			
 		}	
 		
         // DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
@@ -141,8 +148,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         for(int i = 0; i < listChosen.Count; i++){
             Data_TriggerLocation location = listChosen[i];
             
+            ImmutableData_Trigger randomTrigger = DataLoader_Triggers.GetRandomSceneTrigger("Bedroom");
+
             // random prefab
-            int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
+            // int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
             
             // to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
             // also, use the dust prefab...this is a soft setting...hopefully no one changes that array
@@ -152,11 +161,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
                 if ( location == null )
                     Debug.LogError("Tutorial trigger location not set up correctly");
                 
-                objectIndex = 3;
+                // objectIndex = 3;
+                randomTrigger = DataLoader_Triggers.GetTrigger("Trigger_3");
             }
 
             //spawn them at a pre define location ID is the order in which the data are created
-            degradationTriggers.Add(new DegradData(i, location.GetPosition(), objectIndex));
+            degradationTriggers.Add(new DegradData(randomTrigger.ID, location.GetPosition()));
         }                
 
         DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       

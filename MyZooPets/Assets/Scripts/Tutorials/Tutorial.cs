@@ -203,11 +203,13 @@ public abstract class Tutorial {
 		if(option == null)
 			option = new Hashtable();
 
-		// get text to display from tutorial key + step
-		string strText = Localization.Localize(GetKey() + "_" + GetStep());
 		Vector3 vPos = vLoc;
 
-		option.Add(TutorialPopupFields.Message, strText);
+		if(!option.ContainsKey(TutorialPopupFields.Message)){
+			// get text to display from tutorial key + step
+			string strText = Localization.Localize(GetKey() + "_" + GetStep());
+			option.Add(TutorialPopupFields.Message, strText);
+		}
 
 		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
 			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);

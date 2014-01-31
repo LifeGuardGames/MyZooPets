@@ -185,6 +185,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400022}
   - 114: {fileID: 11400022}
+  - 114: {fileID: 11400056}
   m_Layer: 10
   m_Name: Frame14
   m_TagString: Untagged
@@ -217,6 +218,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400026}
   - 114: {fileID: 11400026}
+  - 114: {fileID: 11400058}
   m_Layer: 10
   m_Name: Frame13
   m_TagString: Untagged
@@ -368,6 +370,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400044}
   - 114: {fileID: 11400054}
+  - 114: {fileID: 11400060}
   m_Layer: 10
   m_Name: Frame17
   m_TagString: Untagged
@@ -968,8 +971,8 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100022}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -1036,8 +1039,8 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100026}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -1294,11 +1297,11 @@ MonoBehaviour:
     e00: .192000002
     e01: 0
     e02: 0
-    e03: .00115570077
+    e03: .000400756835
     e10: 0
     e11: .384000003
     e12: 0
-    e13: -.000688156171
+    e13: -.00150000001
     e20: 0
     e21: 0
     e22: 384
@@ -1391,8 +1394,8 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100044}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -1401,6 +1404,42 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: cantBlowFire
+--- !u!114 &11400058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: inhaleBeforeFailing
+--- !u!114 &11400060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: receivesWellapad
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

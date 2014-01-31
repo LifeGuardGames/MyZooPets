@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -50,7 +51,7 @@ public class WellapadTaskUI : MonoBehaviour {
 		
 		// if the task has an amount, we want to integrate that into the string
 		if ( task.Amount > 0 )
-			strDesc = StringUtils.Replace( strDesc, StringUtils.NUM, task.Amount );	
+			strDesc = String.Format(strDesc, task.Amount);	
 
 		label.text = strDesc;			
 	}

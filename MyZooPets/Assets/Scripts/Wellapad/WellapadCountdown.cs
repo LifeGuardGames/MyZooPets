@@ -52,6 +52,6 @@ public class WellapadCountdown : MonoBehaviour {
 		
 		// set the label
 		string strLabel = Localization.Localize( "WELLAPAD_NO_MISSIONS_2" );
-		labelTimer.text = StringUtils.Replace( strLabel, StringUtils.TIME, strTime );
+		labelTimer.text = String.Format(strLabel, strTime );
 	}
 }

@@ -375,7 +375,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 				        	
 			// get the right text for combo
 			string strText = Localization.Localize("NINJA_COMBO");
-			strText = StringUtils.Replace( strText, StringUtils.NUM, nCombo );
+			strText = String.Format(strText, nCombo);
 			
 			// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
 			Vector3 vPos = vLastPos;

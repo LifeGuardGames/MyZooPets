@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //----------------------------------------------------------
@@ -24,7 +25,7 @@ public class ImmutableData_Trigger{
     }
     public string FloatyDesc{
         get{
-            return StringUtils.Replace(Localization.Localize(floatyDesc), StringUtils.NUM, Name);
+            return String.Format(Localization.Localize(floatyDesc), Name);
         }
     }
     public string Scene{

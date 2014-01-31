@@ -56,14 +56,4 @@ public class Skill{
         unlockLevel = XMLUtils.GetInt(hashItemData["UnlockLevel"] as IXMLNode);
         damagePoint = XMLUtils.GetInt(hashItemData["DamagePoints"] as IXMLNode);
     }
-
-    // public string GetUnlockLevelString(){
-    //     return StringUtils.Replace(Localization.Localize("UNLOCK"), StringUtils.NUM,
-    //             unlockLevel.ToString());
-    // }
-
-    // public string GetDamagePointString(){
-    //     return StringUtils.Replace(Localization.Localize("DAMAGE"), StringUtils.NUM,
-    //             damagePoint.ToString());
-    // }
 }

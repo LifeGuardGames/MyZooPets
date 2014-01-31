@@ -62,6 +62,10 @@ public class AudioManager : Singleton<AudioManager>{
 		}
 	}
 
+	public void LowerBackgroundVolume(float newVolume){
+		backgroundSource.volume = newVolume;
+	}
+
 	// Pass in null if don't want new music
 	public void FadeOutPlayNewBg(string newAudioClipName){
 		StartCoroutine(FadeOutPlayNewBgHelper(newAudioClipName));

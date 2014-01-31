@@ -31,8 +31,7 @@ public class Badge{
     }
     public string Description{
         get{
-            return StringUtils.Replace(Localization.Localize(description), StringUtils.NUM, 
-                unlockCondition.ToString());
+            return String.Format(Localization.Localize(description), unlockCondition);
         }
     }
     //How to unlock this badge

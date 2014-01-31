@@ -25,8 +25,10 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
             //Register the handler again after the notification has been cleared
             StatsController.OnZeroHealth += OnZeroHealthNotification;
         };
-        string message = StringUtils.Replace(Localization.Localize("ZERO_HEALTH"), 
-            StringUtils.NUM, hospitalBillCost.ToString());
+
+        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+        string message = String.Format(Localization.Localize("ZERO_HEALTH"), 
+            petName, hospitalBillCost.ToString());
 
         Hashtable notificationEntry = new Hashtable();
         notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);

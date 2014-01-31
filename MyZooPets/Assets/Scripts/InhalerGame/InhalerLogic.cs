@@ -73,6 +73,9 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
+
+        // Check for badge reward
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
 		
 		// calculate the next play period for the inhaler
 		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();

@@ -74,7 +74,9 @@ public enum BadgeType{
     Level,
     RunnerDistance,
     PatientNumber,
-    Decoration
+    Decoration,
+    Inhaler,
+    Coin
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!

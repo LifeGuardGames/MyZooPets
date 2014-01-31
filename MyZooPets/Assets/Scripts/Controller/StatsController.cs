@@ -53,6 +53,10 @@ public class StatsController : Singleton<StatsController> {
 		// if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
 		// 	ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
 		// }
+		if(GUI.Button(new Rect(0, 0, 100, 100), "get money")){
+			ChangeStats(0, Vector3.zero, 100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+		}
+
 	}
 #endif
 	
@@ -92,8 +96,13 @@ public class StatsController : Singleton<StatsController> {
 		}
 	
 		if(deltaStars != 0){
-			if(deltaStars > 0)
+			if(deltaStars > 0){
 				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
+
+				//Check if there are enough coins/stars to unlock badge
+				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, 
+					DataManager.Instance.GameData.Stats.GetStat(HUDElementType.Stars), true);
+			}
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
 		}

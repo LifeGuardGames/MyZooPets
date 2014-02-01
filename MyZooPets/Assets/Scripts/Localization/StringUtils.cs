@@ -46,6 +46,19 @@ public class StringUtils {
 		return StringUtils.Replace( i_str, i_strKey, strVal );
 	}
 	*/
+
+	public static string FormatStringPossession(string oldString){
+		string subString = oldString.Substring(oldString.Length - 1);
+		string newString = "";
+
+		if(subString == "s")
+			newString = oldString + "'";
+		else
+			newString = oldString + "'s";
+
+		return newString;
+	}
+
 	
 	public static string FormatNumber( int i_nVal ) {
 		string strDelim = Localization.Localize( "NUMBER_DELIMETER" );

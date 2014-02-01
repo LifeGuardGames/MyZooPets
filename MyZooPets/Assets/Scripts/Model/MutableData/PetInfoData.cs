@@ -59,7 +59,7 @@ public class PetInfoData{
 
     private void Init(){
         PetID = "";
-        PetName = "LazyWinkle";
+        PetName = "LazyWinkles";
         PetSpecies = "Basic";
         PetColor = "OrangeYellow";
         IsHatched = false;

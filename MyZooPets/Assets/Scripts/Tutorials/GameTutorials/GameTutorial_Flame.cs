@@ -59,6 +59,11 @@ public class GameTutorial_Flame : GameTutorial {
 			
 				break;
 		case 1:
+		        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+				string stringKey = GetKey() + "_" + GetStep();
+				string tutMessage = String.Format(Localization.Localize(stringKey), petName);
+
+				option.Add(TutorialPopupFields.Message, tutMessage);
 				// show a little popup message telling the user to let go to breath fire
 				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
 			

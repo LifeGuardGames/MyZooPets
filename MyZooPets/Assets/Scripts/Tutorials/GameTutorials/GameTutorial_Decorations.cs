@@ -35,11 +35,15 @@ public class GameTutorial_Decorations : GameTutorial {
 	protected override void _End( bool bFinished ) {
 		// since this is the last tutorial, show a little notification
 		string strKey = "TUTS_FINISHED";											// key of text to show
-		string strImage = Constants.GetConstant<string>( "Tutorial_Finished");		// image to appear on notification
+		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
 		string strAnalytics="";														// analytics tracker
 			
 		// show the standard popup
-		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( strKey ), strImage, null, true, true, strAnalytics );			
+        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
+			String.Format(Localization.Localize(strKey), petName, 
+			StringUtils.FormatStringPossession(petName)),
+			strImage, null, true, true, strAnalytics );			
 	}
 	
 	//---------------------------------------------------

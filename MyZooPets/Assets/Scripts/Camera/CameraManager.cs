@@ -124,7 +124,6 @@ public class CameraManager : Singleton<CameraManager> {
 	// MoveCamera()
 	//---------------------------------------------------	
 	private void MoveCamera( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
-		Debug.Log("Moving camera");
 		// set up the movement hash
 		Hashtable hashMove = new Hashtable();
 		

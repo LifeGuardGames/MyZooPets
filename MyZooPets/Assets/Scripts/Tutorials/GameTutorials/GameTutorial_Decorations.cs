@@ -135,7 +135,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		
 		// find and spotlight the decoration in the user's inventory/UI
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
-		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom );
+		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
 		
 		// listen for when that decoration is actually clicked
 		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced += OnDecorationPlaced;

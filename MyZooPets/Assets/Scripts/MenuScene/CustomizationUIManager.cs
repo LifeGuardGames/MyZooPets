@@ -103,7 +103,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 	
-        AudioManager.Instance.LowerBackgroundVolume(0.2f);
+        AudioManager.Instance.LowerBackgroundVolume(0.1f);
 
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
 		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );

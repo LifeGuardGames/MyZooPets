@@ -169,13 +169,15 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HideInhaler();
         HideProgressBar();
 
+        AudioManager.Instance.PlayClip("inhalerFireFlow");
         fireAnimationController.PlaySequence();
     }
 
     //Event listener. continue the game after GetFireAnimation is done
     private void OnGetFireAnimationDone(object sender, EventArgs args){
         StatsController.Instance.ChangeFireBreaths(1);
-
+        AudioManager.Instance.PlayClip("inhalerShiningFireIcon");
+        
         Invoke("GiveReward", 1.0f);
     }
 

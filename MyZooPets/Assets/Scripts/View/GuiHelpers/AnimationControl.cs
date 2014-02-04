@@ -8,6 +8,8 @@ using System.Collections;
 
 public class AnimationControl : MonoBehaviour {
 	
+	public bool debug = false;
+	
 	private bool isPlay = false;
 	public bool isLooping;
 
@@ -32,4 +34,27 @@ public class AnimationControl : MonoBehaviour {
 		isPlay = false;
 		animation.Stop();
 	}
+	
+	// Rewinds the frame to original position
+	public void StopAndResetFrame(string resetName){
+		Play(resetName);
+		StartCoroutine(stopNextFrame());
+	}
+	
+	private IEnumerator stopNextFrame(){
+		yield return 0;
+		Stop();
+	}
+	
+//	void OnGUI(){
+//		if(debug){
+//			if(GUI.Button(new Rect(100, 100, 100, 100), "start")){
+//				Play();
+//			}
+//			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
+//				//Play("smallBounceSoftWellapad");
+//				StopAndResetFrame("zero");
+//			}
+//		}
+//	}
 }

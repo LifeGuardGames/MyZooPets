@@ -17,7 +17,8 @@ public class BadgeUnlockNotificationListener : MonoBehaviour {
         Hashtable notificationEntry = new Hashtable();
 
         notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.BadgeUnlocked);
-        notificationEntry.Add(NotificationPopupFields.Message, badge.Description); 
+		notificationEntry.Add(NotificationPopupFields.Badge, badge.Name);
+        notificationEntry.Add(NotificationPopupFields.Message, badge.Description);
         notificationEntry.Add(NotificationPopupFields.SpriteName, badge.TextureName);
         notificationEntry.Add(NotificationPopupFields.Button1Callback, null);
         

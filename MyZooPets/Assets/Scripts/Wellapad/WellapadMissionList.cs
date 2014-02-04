@@ -121,6 +121,7 @@ public class WellapadMissionList : MonoBehaviour {
 	// DisplayMissions()
 	//---------------------------------------------------		
 	private IEnumerator DisplayMissions() {
+		Debug.Log("REFERESHING");
 		// reset the count for our grid labeling
 		nCount = 0;
 		

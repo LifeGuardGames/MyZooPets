@@ -222,10 +222,21 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// strTask, and dim out any other tasks.
 	//---------------------------------------------------		
 	public void HighlightTask( string strTask ) {
+		StartCoroutine(HighlightTaskWait(strTask));
+	}
+	
+	// TODO-REFACTOR
+	// We wait for 2 frames here because when wellapad is opened, to make sure evrything "OnHighlightTask()" registered from MissionTaskUI
+	// Wellapad_MissionList.cs:DisplayMissions() waits a frame already
+	// Also take a look at GameTutorial_WellapadIntro.cs:OpeningWellapad(), that waits a frame before calling this!
+	//				I think the ^ one can be removed
+	private IEnumerator HighlightTaskWait(string strTask){
+		yield return 0;
+		yield return 0;
 		if ( OnHighlightTask != null ) {
 			TaskUpdatedArgs args = new TaskUpdatedArgs();
 			args.ID = strTask;
-			OnHighlightTask( this, args );			
+			OnHighlightTask( this, args );
 		}
 	}
 	

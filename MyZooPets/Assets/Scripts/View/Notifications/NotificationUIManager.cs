@@ -96,6 +96,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				case NotificationPopupType.BadgeUnlocked:
 					ShowBadgeRewardMessage(
+						(string) entry[NotificationPopupFields.Badge],
 						(string) entry[NotificationPopupFields.Message],
 						(string) entry[NotificationPopupFields.SpriteName],
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
@@ -188,11 +189,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	//----------------------------------------------------------	
 	// ShowBadgeRewardMessage()
 	// Desc: creates a popup reward for new unlocked badge
-	// Param: message, spriteName, button callback
+	// Param: badgeName, message, spriteName, button callback
 	//----------------------------------------------------------	
-	public void ShowBadgeRewardMessage(string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
-		PopupNotificationWithImageNGUI spawnedPopupBadge = CreatePopupNotificationNGUI(popupBadgeUnlockedMessage) as PopupNotificationWithImageNGUI;
-		spawnedPopupBadge.Message = message;
+	public void ShowBadgeRewardMessage(string badgeName, string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
+		PopupNotificationBadge spawnedPopupBadge = CreatePopupNotificationNGUI(popupBadgeUnlockedMessage) as PopupNotificationBadge;
+		spawnedPopupBadge.setTitle(badgeName);
+		spawnedPopupBadge.setDescription(message);
 		spawnedPopupBadge.SetSprite(spriteName);
 		spawnedPopupBadge.Button1Callback = buttonCallBack;
 		spawnedPopupBadge.OnHideFinished += TryNextNotification;

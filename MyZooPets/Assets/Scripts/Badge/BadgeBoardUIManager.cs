@@ -110,8 +110,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			
 			// Play pulsing animation in current badge
 			Animation anim = go.AddComponent<Animation>();
-			anim.AddClip(pulseClip, "scaleUpDown");
-			anim.Play("scaleUpDown");
+			anim.AddClip(pulseClip, "scaleUpDownBadge");
+			anim.Play("scaleUpDownBadge");
 			
 			// Hide callback, show last badge info
 			TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();

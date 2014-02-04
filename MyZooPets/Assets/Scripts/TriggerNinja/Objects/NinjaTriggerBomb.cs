@@ -17,8 +17,8 @@ public class NinjaTriggerBomb : NinjaTrigger {
 			int nLives = GetDamageValue();
 			NinjaManager.Instance.UpdateLives( -nLives );
 			
-			// then destroy the object
-			Destroy( gameObject );		
 		}
+		// then destroy the object
+		Destroy(gameObject);		
 	}
 }

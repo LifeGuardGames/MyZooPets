@@ -43,6 +43,7 @@ public class InhalerPart : MonoBehaviour {
         Hashtable option = new Hashtable();
         option.Add("parent", GameObject.Find("Anchor-Center"));
         option.Add("text", Localization.Localize(floatyText)); 
+		option.Add("prefab", "FloatyTextInhalerGame");
         option.Add("textSize", 128);
         FloatyUtil.SpawnFloatyText(option);
 

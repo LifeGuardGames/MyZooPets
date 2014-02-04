@@ -29,7 +29,6 @@ public class FloatyUtil {
 		}
         else{
             floatyText = (GameObject) Resources.Load("FloatyText");
-
         }
 
         GameObject floaty;
@@ -54,8 +53,12 @@ public class FloatyUtil {
         if(option.ContainsKey("text")){
             floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
         }
-
 		
+		if(option.ContainsKey("color")){
+			floaty.transform.Find("Label").GetComponent<UILabel>().color = (Color) option["color"];
+		}
+		
+		// If NOT prefab
 		if(!option.ContainsKey("prefab")){
             FloatyController floatyController = floaty.GetComponent<FloatyController>();
 

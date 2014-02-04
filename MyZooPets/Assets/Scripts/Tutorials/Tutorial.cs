@@ -71,7 +71,7 @@ public abstract class Tutorial {
 	}
 	
 	public Tutorial() {
-		Debug.Log("Starting tutorial " + GetKey());
+		// Debug.Log("Starting tutorial " + GetKey());
 		SetMaxSteps();
 		SetStep( 0 );
 	}
@@ -101,7 +101,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------		
 	protected virtual void End( bool bFinished ) {
 		// debug message
-		Debug.Log("Tutorial Ending: " + GetKey());
+		// Debug.Log("Tutorial Ending: " + GetKey());
 		
 		// let children know the tutorial is over
 		_End( bFinished );

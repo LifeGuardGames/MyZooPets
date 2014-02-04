@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -16,6 +17,10 @@ public class ButtonWellapad : LgButton {
 		bool bOK = Constants.GetConstant<bool>( "WellapadOn" );
 		if ( !bOK )
 			NGUITools.SetActive( gameObject, false );
+
+		//Listens to update event from wellapad mission controller
+		WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
+		WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
 	}
 	
 	//---------------------------------------------------
@@ -24,7 +29,21 @@ public class ButtonWellapad : LgButton {
 	protected override void ProcessClick() {
 		if ( WellapadUIManager.Instance.IsOpen() )
 			WellapadUIManager.Instance.CloseUI();
-		else
+		else{
 			WellapadUIManager.Instance.OpenUI();
+			DisableButtonBounce();
+		}
+	}
+
+	private void EnableButtonBounce(object sender, EventArgs args){
+		AnimationControl animControl = GetComponent<AnimationControl>();
+		if(animControl != null)
+			animControl.Play("smallBounceSoftWellapad");
+	}
+
+	private void DisableButtonBounce(){
+		AnimationControl animControl = GetComponent<AnimationControl>();
+		if(animControl.IsPlaying("smallBounceSoftWellapad"))
+			animControl.StopAndResetFrame("zero");
 	}
 }

@@ -40,7 +40,6 @@ public class WellapadTaskUI : MonoBehaviour {
 		
 		// listen for various messages
 		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
-		print ("333");
 		WellapadUIManager.Instance.OnTweenDone += OnTweenDone;						// whent he ui finishes tweening
 	}
 	
@@ -92,7 +91,6 @@ public class WellapadTaskUI : MonoBehaviour {
 	// Callback for when a task is highlighted
 	//---------------------------------------------------	
 	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
-		print ("sfsf");
 		if ( args.ID == task.TaskName ) {
 			// this task is being highlighted -- change the text to black
 			label.color = tutTextHighlightOn;

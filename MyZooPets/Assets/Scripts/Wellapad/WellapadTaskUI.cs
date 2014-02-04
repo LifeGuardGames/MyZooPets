@@ -22,6 +22,9 @@ public class WellapadTaskUI : MonoBehaviour {
 	// tween object for when the task is completed
 	public TweenToggle tweenCheck;
 	
+	public Color tutTextHighlightOn;
+	public Color tutTextHighlightOff;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
@@ -37,6 +40,7 @@ public class WellapadTaskUI : MonoBehaviour {
 		
 		// listen for various messages
 		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
+		print ("333");
 		WellapadUIManager.Instance.OnTweenDone += OnTweenDone;						// whent he ui finishes tweening
 	}
 	
@@ -88,13 +92,14 @@ public class WellapadTaskUI : MonoBehaviour {
 	// Callback for when a task is highlighted
 	//---------------------------------------------------	
 	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
+		print ("sfsf");
 		if ( args.ID == task.TaskName ) {
 			// this task is being highlighted -- change the text to black
-			label.color = Color.green;
+			label.color = tutTextHighlightOn;
 		}
 		else {
 			// this task is not being highlighted, so grey it out
-			label.color = Color.gray;
+			label.color = tutTextHighlightOff;
 		}
 	}
 	
@@ -104,7 +109,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	void OnDestroy() {
 		// stop listening for task completion data
 		if ( WellapadMissionController.Instance )
-			WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;
+			WellapadMissionController.Instance.OnHighlightTask -= OnTaskHighlighted;
 		
 		if ( WellapadUIManager.Instance )
 			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;		

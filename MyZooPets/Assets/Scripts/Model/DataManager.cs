@@ -102,24 +102,7 @@ public class DataManager : Singleton<DataManager>{
         }
     }
 
-    //----------------------------------------------------
-    // InitDataForFirstTimeInstall()
-    // First time starting the game, so initialize some basic
-    // variables 
-    //----------------------------------------------------
-    private void InitDataForFirstTimeInstall(){
-        PlayerPrefs.SetString("Pet0_PetStatus", "Egg");
-        PlayerPrefs.SetString("Pet1_PetStatus", "Egg");
-        PlayerPrefs.SetString("Pet2_PetStatus", "Egg");
-
-        //Turn off first time
-        firstTime = false;
-        PlayerPrefs.SetInt("FirstTime", 0);
-
-        //Reset num of pets
-        numOfPets = 3;
-        PlayerPrefs.SetInt("NumOfPets", 3);
-    }
+   
 
     //----------------------------------------------------
     //This function gets called before the script variables are ready so don't try
@@ -184,6 +167,19 @@ public class DataManager : Singleton<DataManager>{
                 
                 SaveGameData();
             }
+        }
+    }
+
+    //----------------------------------------------------
+    // RemovePetData()
+    // delete json data
+    //----------------------------------------------------
+    public void RemovePetData(string petID){
+        if(!String.IsNullOrEmpty(petID)){
+            string keyString = petID + "_PetStatus";
+            PlayerPrefs.SetString(keyString, "Egg");
+
+            gameData = null;
         }
     }
 
@@ -280,6 +276,25 @@ public class DataManager : Singleton<DataManager>{
         }else{
             Debug.LogError("PetID is null or empty, so data cannot be serialized");
         }
+    }
+
+    //----------------------------------------------------
+    // InitDataForFirstTimeInstall()
+    // First time starting the game, so initialize some basic
+    // variables 
+    //----------------------------------------------------
+    private void InitDataForFirstTimeInstall(){
+        PlayerPrefs.SetString("Pet0_PetStatus", "Egg");
+        PlayerPrefs.SetString("Pet1_PetStatus", "Egg");
+        PlayerPrefs.SetString("Pet2_PetStatus", "Egg");
+
+        //Turn off first time
+        firstTime = false;
+        PlayerPrefs.SetInt("FirstTime", 0);
+
+        //Reset num of pets
+        numOfPets = 3;
+        PlayerPrefs.SetInt("NumOfPets", 3);
     }
 
     //called when game data has be deserialized. could be successful or failure 

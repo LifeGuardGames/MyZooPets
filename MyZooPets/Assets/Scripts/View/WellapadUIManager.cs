@@ -7,11 +7,14 @@ using System.Collections;
 //---------------------------------------------------
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-	// the actual game object of the wellapad
-	private GameObject goWellapadUI;
-	private WellapadScreenManager scriptScreenManager;
+	public GameObject wellapadButton; //wellapad button in navigation
+
+	private GameObject goWellapadUI; // the actual game object of the wellapad
+	private WellapadScreenManager wellapadScreenManager; //script that handles wellapad screen state
+
+	//Return WellapadScreenManager script
 	public WellapadScreenManager GetScreenManager() {
-		return scriptScreenManager;	
+		return wellapadScreenManager;	
 	}
 	
 	//---------------------------------------------------
@@ -25,7 +28,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// set the tween target on the wellapad object to this object
 		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
 		
-		scriptScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
+		wellapadScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
 	}
 	
 	//---------------------------------------------------
@@ -49,7 +52,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	// Sets the proper screen on the wellapad.
 	//---------------------------------------------------	
 	public void RefreshScreen() {
-		scriptScreenManager.SetScreen();
+		wellapadScreenManager.SetScreen();
 	}
 	
 	//---------------------------------------------------

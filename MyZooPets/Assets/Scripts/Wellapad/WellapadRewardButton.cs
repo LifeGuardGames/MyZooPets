@@ -10,7 +10,7 @@ using System.Collections;
 
 public class WellapadRewardButton : LgButton {
 	// mission ID associated with this reward
-	private string strMissionID;
+	private string missionID;
 	
 	// reward icon that changes based on the state of the reward
 	public UISprite spriteIcon;
@@ -19,16 +19,18 @@ public class WellapadRewardButton : LgButton {
 	public UIImageButton nguiButton;
 	
 	// wellapad button, used in pulsing to alert the player
-	private UIImageButton buttonWellapad;	
+	// Jason- need to move this to some where else. since this button is
+	// unrelated to this reward button
+	// private UIImageButton buttonWellapad;	
 	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
-	public void Init( string strMissionID ) {
+	public void Init( string missionID ) {
 		// set wellapad sprite object
-		buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
+		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
 			
-		this.strMissionID = strMissionID;	
+		this.missionID = missionID;	
 		
 		// set the sprites for this button appropriately on init
 		SetSprites();		
@@ -47,22 +49,22 @@ public class WellapadRewardButton : LgButton {
 		bool bEnabled = true;
 		
 		// get the mission associated with this reward
-		Mission mission = WellapadMissionController.Instance.GetMission( strMissionID );
+		Mission mission = WellapadMissionController.Instance.GetMission( missionID );
 		
 		if ( mission != null ) {
 			// get status of reward
 			RewardStatuses eStatus = mission.RewardStatus;
 			
 			// get blink script on the wellapad button
-			BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
+			// BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
 			
 			if ( eStatus == RewardStatuses.Claimed ) {
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
 				
 				// remove the blink script from the gameobject, if it existed
-				if ( scriptBlink )
-					Destroy( scriptBlink );
+				// if ( scriptBlink )
+				// 	Destroy( scriptBlink );
 				
 				// if the reward is claimed, the button is not enabled
 				bEnabled = false;
@@ -77,13 +79,13 @@ public class WellapadRewardButton : LgButton {
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
 				
 				// if the status is unclaimed, add a pulse to the wellapad icon (if it doesn't have one)
-				if ( eStatus == RewardStatuses.Unclaimed && scriptBlink == null ) {
-					scriptBlink = buttonWellapad.gameObject.AddComponent<BlinkButton>();
-					string strBlink = Constants.GetConstant<string>("Wellapad_BlinkSprite");
-					float fBlink = Constants.GetConstant<float>("Wellapad_BlinkTime");
+				// if ( eStatus == RewardStatuses.Unclaimed && scriptBlink == null ) {
+				// 	scriptBlink = buttonWellapad.gameObject.AddComponent<BlinkButton>();
+				// 	string strBlink = Constants.GetConstant<string>("Wellapad_BlinkSprite");
+				// 	float fBlink = Constants.GetConstant<float>("Wellapad_BlinkTime");
 					
-					scriptBlink.Init(buttonWellapad, strBlink, fBlink);
-				}
+				// 	scriptBlink.Init(buttonWellapad, strBlink, fBlink);
+				// }
 			}
 		}
 		
@@ -96,7 +98,7 @@ public class WellapadRewardButton : LgButton {
 	//---------------------------------------------------		
 	private void OnTaskUpdated( object sender, TaskUpdatedArgs args ) {
 		// if the mission IDs match, update our sprite (maybe)
-		if ( args.Mission == strMissionID )
+		if ( args.Mission == missionID )
 			SetSprites();
 	}	
 	
@@ -105,11 +107,11 @@ public class WellapadRewardButton : LgButton {
 	//---------------------------------------------------		
 	protected override void ProcessClick() {
 		// first check to make sure that the reward is unclaimed -- if it is, claim that bad boy...they've earned it
-		Mission mission = WellapadMissionController.Instance.GetMission( strMissionID );
+		Mission mission = WellapadMissionController.Instance.GetMission( missionID );
 		
 		if ( mission != null && mission.RewardStatus == RewardStatuses.Unclaimed ) {
 			// claim the reward
-			WellapadMissionController.Instance.ClaimReward( strMissionID );
+			WellapadMissionController.Instance.ClaimReward( missionID );
 			
 			// update the sprite
 			SetSprites();
@@ -121,7 +123,8 @@ public class WellapadRewardButton : LgButton {
 	//---------------------------------------------------		
 	void OnDestroy() {
 		// stop listening for task completion data
-		if ( WellapadMissionController.Instance )
-			WellapadMissionController.Instance.OnTaskUpdated -= OnTaskUpdated;
+		// Jason- Don't need to dereference if event handler is not static
+		// if ( WellapadMissionController.Instance )
+		// 	WellapadMissionController.Instance.OnTaskUpdated -= OnTaskUpdated;
 	}	
 }

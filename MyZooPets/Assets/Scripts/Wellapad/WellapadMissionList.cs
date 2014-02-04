@@ -9,7 +9,7 @@ using System.Collections.Generic;
 // that appears on the Wellapad.
 //---------------------------------------------------
 
-public class Wellapad_MissionList : MonoBehaviour {
+public class WellapadMissionList : MonoBehaviour {
 	// the NGUI grid that the missions are put in to
 	public GameObject goGrid;
 	

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 // The wellapad is an electronic device with many
 // screens.  This script decides which screens to
 // show and hide.
+
+// TO DO- Jason combine this with wellpadUIManager
 //---------------------------------------------------
 
 public class WellapadScreenManager : MonoBehaviour {

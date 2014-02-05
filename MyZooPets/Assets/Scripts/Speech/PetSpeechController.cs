@@ -66,32 +66,32 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
         }
     }
 
-    void OnGUI(){
-        if(isDebug){
-            if(GUI.Button(new Rect(20, 20, 20, 20), "1")){
-                Hashtable msgOption = new Hashtable();
-                msgOption.Add(Keys.MessageText, "Give me food!");
-                msgOption.Add(Keys.ImageTextureName, "iconStore");
-                Talk(msgOption);
-            }
-            if(GUI.Button(new Rect(50, 20, 20, 20), "2")){
-                Hashtable msgOption = new Hashtable();
-                msgOption.Add(Keys.ImageTextureName, "speechImageHeart");
-                Talk(msgOption);
-            }
-            if(GUI.Button(new Rect(80, 20, 20, 20), "3")){
-                Hashtable msgOption = new Hashtable();
-                msgOption.Add(Keys.MessageText, "fit as many words in this text box as possible. let's go");
-                Talk(msgOption);
-            }
-            if(GUI.Button(new Rect(110, 20, 20, 20), "4")){
-                Hashtable msgOption = new Hashtable();
-                msgOption.Add(Keys.MessageText, "Give me food!");
-                msgOption.Add(Keys.ImageTextureName, "iconStore");
-                msgOption.Add(Keys.ImageClickTarget, this.gameObject);
-                msgOption.Add(Keys.ImageClickFunctionName, "");
-                Talk(msgOption);
-            }
-        }
-    }
+    // void OnGUI(){
+    //     if(isDebug){
+    //         if(GUI.Button(new Rect(20, 20, 20, 20), "1")){
+    //             Hashtable msgOption = new Hashtable();
+    //             msgOption.Add(Keys.MessageText, "Give me food!");
+    //             msgOption.Add(Keys.ImageTextureName, "iconStore");
+    //             Talk(msgOption);
+    //         }
+    //         if(GUI.Button(new Rect(50, 20, 20, 20), "2")){
+    //             Hashtable msgOption = new Hashtable();
+    //             msgOption.Add(Keys.ImageTextureName, "speechImageHeart");
+    //             Talk(msgOption);
+    //         }
+    //         if(GUI.Button(new Rect(80, 20, 20, 20), "3")){
+    //             Hashtable msgOption = new Hashtable();
+    //             msgOption.Add(Keys.MessageText, "fit as many words in this text box as possible. let's go");
+    //             Talk(msgOption);
+    //         }
+    //         if(GUI.Button(new Rect(110, 20, 20, 20), "4")){
+    //             Hashtable msgOption = new Hashtable();
+    //             msgOption.Add(Keys.MessageText, "Give me food!");
+    //             msgOption.Add(Keys.ImageTextureName, "iconStore");
+    //             msgOption.Add(Keys.ImageClickTarget, this.gameObject);
+    //             msgOption.Add(Keys.ImageClickFunctionName, "");
+    //             Talk(msgOption);
+    //         }
+    //     }
+    // }
 }

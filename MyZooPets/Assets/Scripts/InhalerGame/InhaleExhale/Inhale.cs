@@ -9,8 +9,10 @@ public class Inhale : InhalerPart {
     public InhalerAnimationController animationController;
 
     protected override void Awake(){
+        base.Awake();
         gameStepID = 7;
-        floatyText = "INHALER_FLOATY_GREATJOB";
+        floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+        floatyOptions.Add("textSize", 100);
     }
 
     void OnSwipe(SwipeGesture gesture){

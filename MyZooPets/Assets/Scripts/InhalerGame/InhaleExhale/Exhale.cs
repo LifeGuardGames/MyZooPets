@@ -10,6 +10,7 @@ public class Exhale : InhalerPart {
     public InhalerAnimationController animationController;
 
     protected override void Awake(){
+        base.Awake();
         gameStepID = 4;
     }
 

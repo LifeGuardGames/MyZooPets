@@ -15,10 +15,11 @@ public class RescueSpacer : InhalerPart{
     private Vector3 targetDragPos;
 
     protected override void Awake(){
+        base.Awake();
         gameStepID = 2;
         startDragPos = transform.position;
         targetDragPos = new Vector3(8, -3, 13);
-        floatyText = "INHALER_FLOATY_GREATJOB";
+        floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_GREATJOB"));
     }
 
     void OnDrag(DragGesture gesture) { 

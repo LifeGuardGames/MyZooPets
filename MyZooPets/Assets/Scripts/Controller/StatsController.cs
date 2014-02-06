@@ -203,8 +203,15 @@ public class StatsController : Singleton<StatsController> {
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
 		}
-		else if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick )
-			scriptPetAnim.Transition( "Transition_HealthySick" );
+		else if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick ){
+			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
+
+			if(mood == PetMoods.Happy)
+				scriptPetAnim.Transition( "Transition_HealthyHappySick" );
+			else if(mood == PetMoods.Sad)
+				scriptPetAnim.Transition( "Transition_HealthySadSick" );
+				
+		}
 		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Healthy ) {
 			// pet is going from very sick to healthy; play both transitions
 			scriptPetAnim.Transition( "Transition_VerySickSick" );

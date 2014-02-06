@@ -231,10 +231,12 @@ public class DataManager : Singleton<DataManager>{
             gameData.PetInfo.PetColor = petColor;
             gameData.PetInfo.IsHatched = true;
             gameData.PetInfo.PetID = petID;
-            
-            MutableData_PetMenuInfo petMenuInfo = 
-                new MutableData_PetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
-            menuSceneData.Add(petID, petMenuInfo);
+           
+            if(!isDebug){
+                MutableData_PetMenuInfo petMenuInfo = 
+                    new MutableData_PetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
+                menuSceneData.Add(petID, petMenuInfo);
+            }
 
         }else{
             Debug.LogError("PetID is null or empty. Can't initialize pet with ID. Check  currentPetID");

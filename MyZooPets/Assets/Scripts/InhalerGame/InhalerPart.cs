@@ -9,10 +9,12 @@ using System.Collections;
 */
 public class InhalerPart : MonoBehaviour {
     protected int gameStepID; //The step in which the part will be activated
-    protected string floatyText = "INHALER_FLOATY_NICE";
+    protected Hashtable floatyOptions;
 
     //Initialize any protected variables here
-    protected virtual void Awake(){}
+    protected virtual void Awake(){
+        floatyOptions = new Hashtable();    
+    }
 
     //Set up basic event handler. and disable inhaler part
     protected virtual void Start(){
@@ -40,12 +42,13 @@ public class InhalerPart : MonoBehaviour {
     //Move to the next step of the inhaler game
     protected virtual void NextStep(){
         // spawn floaty text
-        Hashtable option = new Hashtable();
-        option.Add("parent", GameObject.Find("Anchor-Center"));
-        option.Add("text", Localization.Localize(floatyText)); 
-		option.Add("prefab", "FloatyTextInhalerGame");
-        option.Add("textSize", 128);
-        FloatyUtil.SpawnFloatyText(option);
+        floatyOptions.Add("parent", GameObject.Find("Anchor-Center"));
+		floatyOptions.Add("prefab", "FloatyTextInhalerGame");
+        if(!floatyOptions.ContainsKey("text"))
+            floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_NICE")); 
+        if(!floatyOptions.ContainsKey("textSize"))
+            floatyOptions.Add("textSize", 128);
+        FloatyUtil.SpawnFloatyText(floatyOptions);
 
         InhalerLogic.Instance.NextStep();
     }

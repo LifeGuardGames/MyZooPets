@@ -10,8 +10,9 @@ public class RescuePrescription : InhalerPart{
                                         //gap distance is <= minGapDistance when the gesture ended
 
    protected override void Awake(){
+        base.Awake();
         gameStepID = 6;
-        floatyText = "INHALER_FLOATY_ROCKIT";
+        floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_ROCKIT"));
    } 
 
     void OnPinch(PinchGesture gesture){ 

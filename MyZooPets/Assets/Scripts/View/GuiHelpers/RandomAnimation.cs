@@ -33,6 +33,7 @@ public class RandomAnimation : MonoBehaviour {
 				
 				// Do the action here
 				animation.Play();
+				AudioManager.Instance.PlayClip("introEggBounce");
 			}
 		}
 	}

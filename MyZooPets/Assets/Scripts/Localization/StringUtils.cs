@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Reflection;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // StringUtils
@@ -9,43 +11,6 @@ using System.Collections;
 //---------------------------------------------------
 
 public class StringUtils {
-
-	// public static string NUM = "NUM";
-	// public static string NUM_2 = "NUM2";
-	// public static string NUM_3 = "NUM3";
-	// public static string TIME = "TIME";
-	// // public static string PLURAL_S = "$PLURAL_S$";
-	// // public static string PLURAL_ES = "$PLURAL_ES$";
-	
-	// //---------------------------------------------------
-	// // Replace()
-	// // Replaces a tag in a string with a value.
-	// //---------------------------------------------------	
-	// public static string Replace( string i_str, string i_strKey, string i_strVal) {
-	// 	string str = i_str;
-	// 	string key = "$" + i_strKey + "$";	
-	// 	string strResult = str.Replace(key, i_strVal);
-
-	// 		// int amount = Int32.Parse(i_strVal);
-	// 		// if(amount > 1){
-	// 		// 	strResult = strResult.Replace(PLURAL_S, "s");
-	// 		// 	strResult = strResult.Replace(PLURAL_ES, "es");
-	// 		// }
-		
-	// 	return strResult;
-	// }
-	
-	// public static string Replace( string i_str, string i_strKey, int i_nVal ) {
-	// 	string strVal = FormatNumber( i_nVal );
-	// 	return StringUtils.Replace( i_str, i_strKey, strVal );
-	// }
-	
-	/*
-	static string Replace( string i_str, string i_strKey, float i_fVal ) {
-		string strVal = FormatNumber( i_fVal );
-		return StringUtils.Replace( i_str, i_strKey, strVal );
-	}
-	*/
 
 	public static string FormatStringPossession(string oldString){
 		string subString = oldString.Substring(oldString.Length - 1);
@@ -59,7 +24,6 @@ public class StringUtils {
 		return newString;
 	}
 
-	
 	public static string FormatNumber( int i_nVal ) {
 		string strDelim = Localization.Localize( "NUMBER_DELIMETER" );
 		string strVal = i_nVal.ToString("n0");
@@ -67,5 +31,41 @@ public class StringUtils {
 		strVal = strVal.Replace(",", strDelim);
 	
 		return strVal;
+	}
+
+    // <Description StringFormat="">
+    // <Binding Path=""></Binding>
+    // </Description>
+    // working progress......probably need type information for each binding
+    // how to handle plural, and possession cases.
+	public static string FormatString(Type classType, IXMLNode stringBindings){
+	 	List<PropertyInfo> propertyInfo= new List<PropertyInfo>();
+        string retValue = "";
+
+        Hashtable hashAttr = XMLUtils.GetAttributes(stringBindings);
+        string stringFormat = "";
+
+        if(hashAttr.ContainsKey("StringFormat"))
+        	stringFormat = (string) hashAttr["StringFormat"];
+        else
+        	Debug.LogError("string to be formatted can't be found for class " + classType);
+
+        //Localize the string	
+        string baseString = Localization.Localize(stringFormat);
+
+        //Get all the bindings
+        List<IXMLNode> childrenList = XMLUtils.GetChildrenList(stringBindings);
+
+        foreach(IXMLNode node in childrenList){
+            Hashtable bindingAttr = XMLUtils.GetAttributes(node);
+            string binding = (string) bindingAttr["Path"];
+
+            propertyInfo.Add(classType.GetProperty(binding));
+        }
+
+        //format the base string with the format items
+        retValue = String.Format(baseString, propertyInfo);
+
+        return retValue;	
 	}
 }

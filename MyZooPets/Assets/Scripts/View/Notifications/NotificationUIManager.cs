@@ -70,6 +70,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
 					);
 					break;
+
+				case NotificationPopupType.TwoButtons:
+					ShowPopupNotificationTwoButtons(
+						(string) entry[NotificationPopupFields.Message],
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button2Callback]
+					);
+					break;
 				
 				case NotificationPopupType.GameOverRewardOneButton:
 					ShowGameOverRewardMessage(
@@ -123,8 +131,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 	//----------------------------------------------------------	
 	// ShowPopupNotificationOneButton
-	// Desc: creates popup that has a popup texture and 1 button
-	//Params: notificationType, call back for button
+	// Desc: creates popup that has a message and 1 button
+	//Params: notificationType, call back for button1
 	//----------------------------------------------------------	
 	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.HashEntry okCallBack){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
@@ -134,6 +142,24 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	//----------------------------------------------------------	
+	// ShowPopupNotificationTwoButtons
+	// Desc: creates popup that has a message and 2 button
+	//Params: message , call back for button1, callback for button2
+	//----------------------------------------------------------	
+	public void ShowPopupNotificationTwoButtons(string message, PopupNotificationNGUI.HashEntry okCallBack,
+		PopupNotificationNGUI.HashEntry cancelCallBack){
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
+
+		twoButtonMessage.Message = message;
+		twoButtonMessage.Button1Callback = okCallBack;
+		twoButtonMessage.Button2Callback = cancelCallBack;
+
+		twoButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	//----------------------------------------------------------	

@@ -56,18 +56,19 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             petName = nameField.text;
 
             //Initialize data for new pet
-            DataManager.Instance.InitializeGameDataForNewPet("Basic" + petColor);
+            DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 
+                petName, "Basic", petColor);
 
-            //Set the PetInfo
-            DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;
+            // //Set the PetInfo
+            // DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;
 
-            if(!String.IsNullOrEmpty(petName))
-                DataManager.Instance.GameData.PetInfo.PetName = petName;
+            // if(!String.IsNullOrEmpty(petName))
+            //     DataManager.Instance.GameData.PetInfo.PetName = petName;
 
-            if(!String.IsNullOrEmpty(petColor))
-                DataManager.Instance.GameData.PetInfo.PetColor = petColor;
+            // if(!String.IsNullOrEmpty(petColor))
+            //     DataManager.Instance.GameData.PetInfo.PetColor = petColor;
 
-            DataManager.Instance.GameData.PetInfo.IsHatched = true;
+            // DataManager.Instance.GameData.PetInfo.IsHatched = true;
 
             HideChooseGUI(true);
         }

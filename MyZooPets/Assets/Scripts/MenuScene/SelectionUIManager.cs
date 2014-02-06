@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
     public GameObject petSelectionPrefab; //Prefab that holds the basic structure for pet display layout
     public GameObject spotLight; //spotlight to shine on the egg when chosen	
+    public GameObject petSelectionOption; //reference to UI element 
 	public SceneTransition scriptTransition; //transition
 	
     private string selectedPetID;
 
 	// Use this for initialization
 	void Start () {
-        InitializeSelection();	
+        RefreshUI();	
 	}
 
     //---------------------------------------------------
@@ -21,31 +23,83 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // a new pet or load existing game data
     //---------------------------------------------------
     public void PetSelected(GameObject selectedPetGO){
+        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
         selectedPetID = selectedPetGO.transform.parent.name;
-        string petStatus = DataManager.Instance.GetPetStatus(selectedPetID);
+        bool isHatched = petMenuInfoDict.ContainsKey(selectedPetID);
 
         //probably shoudn't use spot light right away. should toggle spot light
         //after some logic check for the data
         ToggleEggAnimation(false);
         ToggleSpotLight(true, selectedPetGO);
 
-        if(petStatus == "Egg"){
+        if(!isHatched){
+            HideSelectionOption();
+
             //Open CustomizationUIManager to create/initiate new pet game data
             DataManager.Instance.CurrentPetID = selectedPetID;
             CustomizationUIManager.Instance.selectedEgg = selectedPetGO.transform.parent.Find("egg").gameObject;
             CustomizationUIManager.Instance.OpenUI();
         }else{
-            //Load game data only if the selected pet is different from the current pet
-            if(DataManager.Instance.CurrentPetID != selectedPetID){
-                DataManager.Instance.CurrentPetID = selectedPetID;
-                DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
-                DataManager.Instance.LoadGameData();
-            }else{
+            //open up pet start panel
+            ShowSelectionOption();
 
-                if(DataManager.Instance.IsGameDataLoaded())
-                    LoadScene();
-            }
         }
+    }
+
+    private void ShowSelectionOption(){
+        petSelectionOption.GetComponent<TweenToggleDemux>().Show();
+    }
+
+    private void HideSelectionOption(){
+        TweenToggleDemux tweenToggleDemux = petSelectionOption.GetComponent<TweenToggleDemux>();
+
+        if(tweenToggleDemux.IsShowing)
+            tweenToggleDemux.Hide();
+    }
+
+    public void LoadGame(){
+        //Load game data only if the selected pet is different from the current pet
+        if(DataManager.Instance.CurrentPetID != selectedPetID){
+            DataManager.Instance.CurrentPetID = selectedPetID;
+            DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
+            DataManager.Instance.LoadGameData();
+        }else{
+            if(DataManager.Instance.IsGameDataLoaded())
+                LoadScene();
+        }
+    }
+
+    public void DeleteGameData(){
+        //need to do double confirmation first
+        PopupNotificationNGUI.HashEntry button1Function = delegate(){
+            HideSelectionOption();
+
+            //Delete from DataManager
+            DataManager.Instance.RemovePetData(selectedPetID);
+
+            //Update UI
+            ToggleSpotLight(false);
+            RefreshUI();
+        };
+
+        PopupNotificationNGUI.HashEntry button2Function = delegate(){
+        };
+
+        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
+        string petName = "";
+        if(petMenuInfoDict.ContainsKey(selectedPetID))
+            petName = petMenuInfoDict[selectedPetID].PetName;
+
+        string deleteMessage = String.Format(Localization.Localize("DELETE_CONFIRM"),
+            petName, StringUtils.FormatStringPossession(petName));
+
+        Hashtable notificationEntry = new Hashtable();
+        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+        notificationEntry.Add(NotificationPopupFields.Message, deleteMessage);
+        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+        notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+
+        NotificationUIManager.Instance.AddToQueue(notificationEntry);
     }
 
     //---------------------------------------------------
@@ -68,10 +122,13 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // Turn egg wiggle animation on/off
     //---------------------------------------------------
     public void ToggleEggAnimation(bool isOn){
-        foreach(Transform child in selectionGrid.transform){
-            string petStatus = DataManager.Instance.GetPetStatus(child.name);
+        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
 
-            if(petStatus == "Egg"){
+        foreach(Transform child in selectionGrid.transform){
+            string petID = child.name;
+            bool isHatched = petMenuInfoDict.ContainsKey(petID);
+
+            if(!isHatched){
                 Transform eggParent = child.Find("egg/SpriteGrandparent/SpriteParent (Animation)");
                 if(isOn)
                     eggParent.GetComponent<RandomAnimation>().Enable();
@@ -82,15 +139,26 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
     
     //First initialization of the PetSelectionArea
-    private void InitializeSelection(){
+    private void RefreshUI(){
+        //Remove old data
+        foreach(Transform childTransform in selectionGrid.transform){
+            Destroy(childTransform.gameObject);
+        }
+
+        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
         int numOfPets = DataManager.Instance.NumOfPets;
         for(int i = 0; i < numOfPets; i++){
             GameObject petSelectionGO = NGUITools.AddChild(selectionGrid, petSelectionPrefab);
-            petSelectionGO.name = "Pet" + i;
+            string petID = "Pet" + i;
+
+            //If pet info data can't be found then it's not hatched yet
+            bool isHatched = petMenuInfoDict.ContainsKey(petID);
+
+            //assign id to NGUI GameObject
+            petSelectionGO.name = petID; 
 
             //Turn show case animation on or off
-            string petStatus = DataManager.Instance.GetPetStatus(petSelectionGO.name);
-            if(petStatus == "Egg"){
+            if(!isHatched){
                 GameObject eggPrefab = Resources.Load("Sprite_Egg") as GameObject;
                 GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
                 eggGO.name = "egg";

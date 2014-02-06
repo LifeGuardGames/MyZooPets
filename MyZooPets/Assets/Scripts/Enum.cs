@@ -53,6 +53,7 @@ public enum NotificationPopupFields{
 	Type,
 	Message,
 	Button1Callback,
+    Button2Callback,
 	DeltaStars,
 	DeltaPoints,
 	SpriteName,
@@ -259,3 +260,4 @@ public enum DroppedItemStates {
 	PickedUp,
 	Awarded
 }
+

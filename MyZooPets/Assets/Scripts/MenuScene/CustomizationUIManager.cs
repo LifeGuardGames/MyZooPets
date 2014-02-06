@@ -33,10 +33,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         ShowChooseGUI();	
 	}
 	
-	// Used when pressing back button in the panel, NOT finished
+	// Used when pressing back button in the panel
 	protected override void _CloseUI(){
-		ShowTitle();
-		HideChooseGUI(false);
 	}
     
     public void ChangeEggColor( string strSprite, string strColor ) {
@@ -47,10 +45,17 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         }       
     }
 
+    public void ButtonClicked_Back(){
+        base.CloseUI();
+        HideChooseGUI(false);
+    }
+
     public void ButtonClicked_Finish(){
         if (!finishClicked){
             // play sound
-            AudioManager.Instance.PlayClip( "introDoneNaming" );
+
+            // HideChooseGUI(true);
+             AudioManager.Instance.PlayClip( "introDoneNaming" );
             
             finishClicked = true;
             petName = nameField.text;
@@ -59,19 +64,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 
                 petName, "Basic", petColor);
 
-            // //Set the PetInfo
-            // DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;
-
-            // if(!String.IsNullOrEmpty(petName))
-            //     DataManager.Instance.GameData.PetInfo.PetName = petName;
-
-            // if(!String.IsNullOrEmpty(petColor))
-            //     DataManager.Instance.GameData.PetInfo.PetColor = petColor;
-
-            // DataManager.Instance.GameData.PetInfo.IsHatched = true;
-
-            HideChooseGUI(true);
         }
+        base.CloseUI();
+        HideChooseGUI(true);
     }
 
     public void ShowTitle(){

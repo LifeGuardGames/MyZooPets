@@ -73,7 +73,7 @@ public class ComicPlayer : MonoBehaviour{
             GameObject pagePrefab = (GameObject) Resources.Load(pageName);
             loadedPage = NGUITools.AddChild(this.gameObject, pagePrefab);
 
-            UIButtonMessage buttonMessage = loadedPage.transform.Find("NextButton").GetComponent<UIButtonMessage>();
+            LgButtonMessage buttonMessage = loadedPage.transform.Find("NextButton").GetComponent<LgButtonMessage>();
             buttonMessage.target = this.gameObject;
             buttonMessage.functionName = "NextPage";
 

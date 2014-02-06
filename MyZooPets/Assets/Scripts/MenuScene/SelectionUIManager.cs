@@ -24,7 +24,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     //---------------------------------------------------
     public void PetSelected(GameObject selectedPetGO){
         Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
-        selectedPetID = selectedPetGO.transform.parent.name;
+        selectedPetID = selectedPetGO.transform.parent.parent.name;
         bool isHatched = petMenuInfoDict.ContainsKey(selectedPetID);
 
         //probably shoudn't use spot light right away. should toggle spot light
@@ -110,6 +110,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         if(isOn){
             spotLight.SetActive(true);
             Vector3 selectedPos = selectedGO.transform.position;
+            //offset is hardcoded
             spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotLight.transform.position.z);
         }
         else{
@@ -159,7 +160,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 
             //Turn show case animation on or off
             if(!isHatched){
-                GameObject eggPrefab = Resources.Load("Sprite_Egg") as GameObject;
+                GameObject eggPrefab = Resources.Load("MenuSceneEgg") as GameObject;
                 GameObject eggGO = NGUITools.AddChild(petSelectionGO, eggPrefab);
                 eggGO.name = "egg";
                 eggGO.transform.localScale = eggPrefab.transform.localScale;
@@ -168,13 +169,19 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
                 eggGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
 
             }else{
-                GameObject animatorPrefab = Resources.Load("Animator") as GameObject;
-                GameObject animator = NGUITools.AddChild(petSelectionGO, animatorPrefab);
-                animator.name = "animator";
-                animator.transform.localScale = animatorPrefab.transform.localScale;
+                GameObject menuScenePetPrefab = Resources.Load("MenuScenePet") as GameObject;
+                GameObject menuScenePetGO = NGUITools.AddChild(petSelectionGO, menuScenePetPrefab);
 
-                animator.GetComponent<LgButtonMessage>().target = this.gameObject;
-                animator.GetComponent<LgButtonMessage>().functionName = "PetSelected";
+                // GameObject lwfObjectPrefab = Resources.Load("UILWFObject") as GameObject;
+                GameObject lwfObject = menuScenePetGO.transform.Find("UILWFObject").gameObject;
+
+                UILabel petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<UILabel>();
+
+                petNameLabel.text = petMenuInfoDict[petID].PetName;
+
+                // lwfObject.transform.localScale = menuScenePetPrefab.transform.localScale;
+                lwfObject.GetComponent<LgButtonMessage>().target = this.gameObject;
+                lwfObject.GetComponent<LgButtonMessage>().functionName = "PetSelected";
             }
         }
 

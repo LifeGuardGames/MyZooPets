@@ -25,10 +25,12 @@ public class DataManager : Singleton<DataManager>{
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
     private Dictionary<string, MutableData_PetMenuInfo> menuSceneData; //basic info data of all the pet that are only used in this scene
 
+    //Return menu scene data used in MenuScene
     public Dictionary<string, MutableData_PetMenuInfo> MenuSceneData{
         get{return menuSceneData;}
     }
 
+    //Return the current game datda
     public PetGameData GameData{
         get{return gameData;}
     }

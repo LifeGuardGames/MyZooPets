@@ -23,12 +23,12 @@ public class UILWFObject : UIWidget
         showCaseAnimator.layer = gameObject.layer;
 
         //Get pet species and color information from DataManager
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
-        string petID = this.transform.parent.name;
-        if(petMenuInfoDict.ContainsKey(petID)){
-            string speciesColor = petMenuInfoDict[petID].PetSpecies + petMenuInfoDict[petID].PetColor;
-            showCaseAnimator.GetComponent<LWFAnimator>().animName = speciesColor; 
-        }
+        // Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
+        // string petID = this.transform.parent.name;
+        // if(petMenuInfoDict.ContainsKey(petID)){
+        //     string speciesColor = petMenuInfoDict[petID].PetSpecies + petMenuInfoDict[petID].PetColor;
+        //     showCaseAnimator.GetComponent<LWFAnimator>().animName = speciesColor; 
+        // }
 
         Transform showCaseAnimTransform = showCaseAnimator.transform;
         showCaseAnimTransform.parent = gameObject.transform;

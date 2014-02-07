@@ -19,7 +19,7 @@ public class GameTutorial_Triggers : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 3;
+		nMaxSteps = 4;
 	}
 	
 	//---------------------------------------------------
@@ -43,14 +43,51 @@ public class GameTutorial_Triggers : GameTutorial {
 			case 0:
 				SpawnDust();
 				break;
-		case 1:
-				TutorialManager.Instance.StartCoroutine( AttackPlayer() );
+			case 1:
+				TutorialManager.Instance.StartCoroutine(ShowWellapad());
 				break;
-		case 2:
+			case 2:
+				TutorialManager.Instance.StartCoroutine(AttackPlayer());
+				break;
+			case 3:
 				TeachCleanup();
 				break;			
 		}
 	}
+
+	//---------------------------------------------------
+	// ShowWellapad()
+	//---------------------------------------------------		
+	private IEnumerator ShowWellapad() {
+		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreShowWellapad" );
+		yield return new WaitForSeconds(fWait);
+		// highlight the fight task
+		WellapadMissionController.Instance.HighlightTask("CleanRoom");
+	
+		// show the wellapad
+		WellapadUIManager.Instance.OpenUI();
+	
+		// enable the close button		
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
+		AddToProcessList( goBack );
+		
+		// listen for wellapad closing
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;			
+	}
+
+	//---------------------------------------------------
+	// OnWellapadClosed()
+	// Callback for when the wellapad is closed.
+	//---------------------------------------------------	
+	private void OnWellapadClosed(object sender, UIManagerEventArgs args) {
+		if (args.Opening == false) {
+			// wellapad is closing, so stop listening
+			WellapadUIManager.Instance.OnManagerOpen -= OnWellapadClosed;
+			
+			// advance to next step
+			Advance();
+		}
+	}	
 	
 	//---------------------------------------------------
 	// SpawnDust()
@@ -76,14 +113,14 @@ public class GameTutorial_Triggers : GameTutorial {
 	//---------------------------------------------------		
 	private IEnumerator AttackPlayer() {
 		// wait a brief moment
-		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreAttack" );
-		yield return new WaitForSeconds( fWait );
+		// float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreAttack" );
+		// yield return new WaitForSeconds( fWait );
 		
 		// have the dust attack the player
 		TutorialManager.Instance.StartCoroutine( scriptTrigger.FireOneSkull() );
 		
 		// wait another brief moment	
-		fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PostAttack" );
+		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PostAttack" );
 		yield return new WaitForSeconds( fWait );
 		
 		Advance();

@@ -19,7 +19,7 @@ public class GameTutorial_Decorations : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 3;
+		nMaxSteps = 4;
 	}
 	
 	//---------------------------------------------------
@@ -52,16 +52,53 @@ public class GameTutorial_Decorations : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		switch ( nStep ) {
 			case 0:
+				ShowWellapad();
+				break;
+			case 1:
 				TutorialManager.Instance.StartCoroutine( FocusOnEditButton() );
 				break;
-		case 1:
+			case 2:
 				FocusOnNode();
 				break;
-		case 2:
+			case 3:
 				TutorialManager.Instance.StartCoroutine( FocusOnDecorationUI() );
 				break;			
 		}
 	}
+
+	//---------------------------------------------------
+	// ShowWellapad()
+	//---------------------------------------------------		
+	private void ShowWellapad() {
+		// float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreShowWellapad" );
+		// yield return new WaitForSeconds(fWait);
+		// highlight the fight task
+		WellapadMissionController.Instance.HighlightTask("Decorate");
+	
+		// show the wellapad
+		WellapadUIManager.Instance.OpenUI();
+	
+		// enable the close button		
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
+		AddToProcessList( goBack );
+		
+		// listen for wellapad closing
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;			
+	}
+
+	//---------------------------------------------------
+	// OnWellapadClosed()
+	// Callback for when the wellapad is closed.
+	//---------------------------------------------------	
+	private void OnWellapadClosed(object sender, UIManagerEventArgs args) {
+		if (args.Opening == false) {
+			// wellapad is closing, so stop listening
+			WellapadUIManager.Instance.OnManagerOpen -= OnWellapadClosed;
+			
+			// advance to next step
+			Advance();
+		}
+	}	
 	
 	//---------------------------------------------------
 	// FocusOnEditButton()

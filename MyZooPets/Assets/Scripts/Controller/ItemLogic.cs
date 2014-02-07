@@ -80,8 +80,13 @@ public class ItemLogic : Singleton<ItemLogic>{
 		return DataLoader_Items.GetItemTextureName(itemID);
 	}
 
+	//Returns the prefab name of item with itemID
 	public string GetDecoItemPrefabName(string itemID){
 		return DataLoader_Items.GetDecoItemPrefabName(itemID);
+	}
+
+	public string GetDecoItemMaterialName(string itemID){
+		return DataLoader_Items.GetDecoItemMaterialName(itemID);
 	}
 	
 	//---------------------------------------------------

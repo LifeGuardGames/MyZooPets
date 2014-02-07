@@ -126,7 +126,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			string strPrefix = bDecoOK ? "_" : "X_";
 			
 			item.name = strPrefix + (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
-			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
+			// item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
 		

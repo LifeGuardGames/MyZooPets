@@ -11,6 +11,7 @@ public class DecorationItem : Item {
     // the type of decoration this is
 	private DecorationTypes eType;	
 	private string prefabName;
+	private string materialName;
 	
 	// decoration type property
     public DecorationTypes DecorationType {
@@ -20,39 +21,10 @@ public class DecorationItem : Item {
     public string PrefabName{
     	get{return prefabName;}
     }
-	
-	// public override string TextureName{
-	// 	get { 
-	// 		string strName = base.TextureName;
-	// 		if ( string.IsNullOrEmpty( strName ) ) {
-	// 			strName = "item" + ID;	
-	// 		}
-			
-	// 		return strName;
-	// 	}
-	// }	
-	
-	// public override string Description{
-	// 	get { 
-	// 		// string strDesc = description;
-	// 		// if ( string.IsNullOrEmpty( strDesc ) ) {
-	// 		// 	strDesc =  "Desc" + ID;
-	// 		// }
-	// 		// return Localization.Localize( strDesc );
-	// 		return "";
-	// 	}
-	// }	
-	
-	// public override string Name{
-	// 	get { 
-	// 		string strName = name;
-	// 		if ( string.IsNullOrEmpty( strName ) ) {
-	// 			strName = "Name" + ID;
-	// 		}
-			
-	// 		return Localization.Localize( strName );
-	// 	}
-	// }	
+
+    public string MaterialName{
+    	get{return materialName;}
+    }
 	
     public DecorationItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){
 		
@@ -62,5 +34,8 @@ public class DecorationItem : Item {
 
 		if(hashItemData.Contains("PrefabName"))
 			prefabName = XMLUtils.GetString(hashItemData["PrefabName"] as IXMLNode);
+
+		if(hashItemData.Contains("MaterialName"))
+			materialName = XMLUtils.GetString(hashItemData["MaterialName"] as IXMLNode);
     }
 }

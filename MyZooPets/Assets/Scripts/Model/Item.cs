@@ -35,7 +35,8 @@ public class Item {
 		get{return cost;}
 	}
 	public virtual string Description{
-		get{return Localization.Localize( description );}
+		// get{return Localization.Localize( description );}
+        get{return "";}
 	}
 	public int UnlockAtLevel{
 		get{return unlockAtLevel;}
@@ -61,7 +62,8 @@ public class Item {
 		name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
         textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
         cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
-        description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
+        // description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
+        description = "";
 		
 		// optional for now
 		if ( hashItemData.Contains("UnlockAtLevel") )

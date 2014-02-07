@@ -43,9 +43,16 @@ public class DataLoader_Items{
         return item.TextureName;
     }
 
+    //Returns the prefab name of item with itemID
     public static string GetDecoItemPrefabName(string itemID){
         DecorationItem item = (DecorationItem) GetItem(itemID);
         return item.PrefabName;
+    }
+
+    //Returns the material name of item with itemID
+    public static string GetDecoItemMaterialName(string itemID){
+        DecorationItem item = (DecorationItem) GetItem(itemID);
+        return item.MaterialName;
     }
 
     //Returns all the data for a specific item type

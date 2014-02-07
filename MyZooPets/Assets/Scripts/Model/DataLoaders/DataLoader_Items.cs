@@ -43,6 +43,11 @@ public class DataLoader_Items{
         return item.TextureName;
     }
 
+    public static string GetDecoItemPrefabName(string itemID){
+        DecorationItem item = (DecorationItem) GetItem(itemID);
+        return item.PrefabName;
+    }
+
     //Returns all the data for a specific item type
     public static Dictionary<string, Item> GetAllItemsOfType(ItemType type){
 		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();

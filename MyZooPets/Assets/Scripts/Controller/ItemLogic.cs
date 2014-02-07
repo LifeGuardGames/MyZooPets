@@ -79,6 +79,10 @@ public class ItemLogic : Singleton<ItemLogic>{
 	public string GetItemTextureName(string itemID){
 		return DataLoader_Items.GetItemTextureName(itemID);
 	}
+
+	public string GetDecoItemPrefabName(string itemID){
+		return DataLoader_Items.GetDecoItemPrefabName(itemID);
+	}
 	
 	//---------------------------------------------------
 	// CanUseItem()

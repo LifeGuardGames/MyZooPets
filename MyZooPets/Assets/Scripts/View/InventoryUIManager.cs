@@ -141,7 +141,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public void UpdateBarPosition(){
         uiGridObject.GetComponent<UIGrid>().Reposition();
 
-        if(inventoryPanel.GetComponent<TweenPosition>().from.x > -1064){  // Limit Move after x items     // TODO make const
+        if(inventoryPanel.GetComponent<TweenPosition>().from.x > -974){  // Limit Move after x items     // TODO make const
             int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
 
             inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;

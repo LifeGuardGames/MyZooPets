@@ -128,7 +128,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         statsHint.PopulateStatsHints((StatsItem) invItem.ItemData);
 
         //Listen to on press and on drop
-        invDragDrop.OnItemPress += statsHint.OnItemPress;
+        invDragDrop.OnItemDrag += statsHint.OnItemDrag;
         invDragDrop.OnItemDrop += statsHint.OnItemDrop;
 
         //listen to on drop event

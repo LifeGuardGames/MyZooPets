@@ -183,7 +183,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
-						orderby item.GetLockedLevel()
+						orderby item.UnlockAtLevel, item.Cost ascending
 						select item).ToList();
 		return itemList;
 	}

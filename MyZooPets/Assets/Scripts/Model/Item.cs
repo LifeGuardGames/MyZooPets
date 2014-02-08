@@ -46,14 +46,14 @@ public class Item {
 	}
 	
 	public bool IsLocked() {
-		int nLockLevel = GetLockedLevel();
+		int nLockLevel = UnlockAtLevel;
 		int nPetLevel = (int) ( LevelLogic.Instance.CurrentLevel );
 		bool bLocked = nLockLevel > 0 && nLockLevel > nPetLevel;
 		return bLocked;
 	}
-	public int GetLockedLevel() {
-		return unlockAtLevel;	
-	}
+	// public int GetLockedLevel() {
+	// 	return unlockAtLevel;	
+	// }
 
 	public Item(string id, ItemType type, Hashtable hashItemData){
 		this.id = id;

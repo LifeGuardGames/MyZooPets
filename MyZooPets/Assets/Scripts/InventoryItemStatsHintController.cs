@@ -53,7 +53,7 @@ public class InventoryItemStatsHintController : MonoBehaviour{
     // OnItemPress()
     // turn on the stats hints when the item is pressed
     //-----------------------------------------------------------------    
-    public void OnItemPress(object sender, EventArgs args){
+    public void OnItemDrag(object sender, EventArgs args){
         foreach(GameObject hint in statsHints){
             hint.SetActive(true);
         }

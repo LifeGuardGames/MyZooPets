@@ -16,6 +16,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	public event EventHandler<EventArgs> OnItemPress; //Event will be fired when item is pressed
+	public event EventHandler<EventArgs> OnItemDrag;
 
 	private Transform mTrans;
 	private bool mIsDragging = false;
@@ -125,6 +126,9 @@ public class InventoryDragDrop : MonoBehaviour {
 				Vector3 newDelta = new Vector3(delta.x * CameraManager.Instance.ratioX, delta.y * CameraManager.Instance.ratioY, 0f);
 				
 				mTrans.localPosition += newDelta;
+
+				if(OnItemDrag != null)
+					OnItemDrag(this, EventArgs.Empty);
 			}
 			else{
 				isScrolling = true;

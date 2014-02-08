@@ -45,7 +45,7 @@ public class StoreItemEntry : MonoBehaviour {
 		// if this item is currently locked...
 		if ( itemData.IsLocked() ) {
 			// show the UI
-			LevelLockObject.CreateLock( spriteIcon.gameObject.transform.parent.gameObject, itemData.GetLockedLevel() );
+			LevelLockObject.CreateLock( spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
 			
 			// delete the buy button
 			Destroy( buttonMessage.gameObject );

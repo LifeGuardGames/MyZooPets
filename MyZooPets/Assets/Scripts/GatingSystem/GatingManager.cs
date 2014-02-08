@@ -258,9 +258,12 @@ public class GatingManager : Singleton<GatingManager> {
 			strImage = "itemInhalerMain";
 			// strAnalytics = "BreathFire:Fail:NoCharges";
 		}
-			
+		
+		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
+		string message = String.Format(Localization.Localize(strKey), petName);
 		// show the standard popup
-		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( strKey ), strImage, null, true, true, strAnalytics );		
+		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
+			message, strImage, null, true, true, strAnalytics );		
 	}
 	
 	//---------------------------------------------------

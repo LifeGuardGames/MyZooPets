@@ -82,6 +82,19 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
     }
 
+    private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
+        // bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_FEED_PET);
+        // if(!isTutDone){
+        //     Vector3 hintPos = transform.TransformPoint(e.ParentTransform.localPosition);
+        //     GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
+        //     GameObject fingerHintGO = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-BottomRight"), fingerHintResource);
+
+        //     fingerHintGO.transform.position = hintPos; 
+        //     DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManager_Bedroom.TUT_FEED_PET);
+        // }
+    }
+
+
     //play chew animation from pet animator
     private void ShowPetReceivedFoodAnimation(){
         if(!petAnimator.IsBusy()){
@@ -133,6 +146,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 
         //listen to on drop event
         invDragDrop.OnItemDrop += OnItemDrop;
+        invDragDrop.OnItemPress += OnItemPress;
 
 
         UpdateBarPosition();

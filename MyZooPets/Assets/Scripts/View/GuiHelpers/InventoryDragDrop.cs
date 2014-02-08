@@ -15,7 +15,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	}
 
 	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
-	public event EventHandler<EventArgs> OnItemPress; //Event will be fired when item is pressed
+	public event EventHandler<InvDragDropArgs> OnItemPress; //Event will be fired when item is pressed
 	public event EventHandler<EventArgs> OnItemDrag;
 
 	private Transform mTrans;
@@ -156,7 +156,14 @@ public class InventoryDragDrop : MonoBehaviour {
 					mSticky = true;
 					UICamera.current.stickyPress = true;
 				}
-				if(OnItemPress != null) OnItemPress(this, EventArgs.Empty);
+
+				//send on press event	
+				if(OnItemPress != null){
+					InvDragDropArgs args = new InvDragDropArgs();
+					args.ParentTransform = mTrans.parent;
+
+					OnItemPress(this, args);
+				}
 			}
 			else if (mSticky)
 			{

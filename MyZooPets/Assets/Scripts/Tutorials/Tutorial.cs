@@ -33,6 +33,7 @@ public abstract class Tutorial {
 	private List<GameObject> listCanProcess = new List<GameObject>(); // list of objects that can be processed as input
 	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goPopup; // current (and only) tutorial popup
+	private GameObject goFingerHint; //current finger hint
 	private int nCurrentStep; // step the tutorial is currently on
 
 	protected void AddToProcessList( GameObject go ) {
@@ -131,7 +132,8 @@ public abstract class Tutorial {
 	// is in.
 	//---------------------------------------------------	
 	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, 
-		InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight" ) {
+		InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight",
+		bool fingerHint = false, float fingerHintOffsetFromSpotlighCenter = 60.0f){
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
 		if ( bGUI )
@@ -146,8 +148,11 @@ public abstract class Tutorial {
 		}
 		
 		// destroy the old object if it existed
-		if ( goSpotlight != null )
-			GameObject.Destroy( goSpotlight );
+		if (goSpotlight != null)
+			GameObject.Destroy(goSpotlight);
+
+		if(goFingerHint != null)
+			GameObject.Destroy(goFingerHint);
 		
 		// create the spotlight
 		GameObject goResource = Resources.Load( strSpotlightPrefab ) as GameObject;
@@ -157,6 +162,24 @@ public abstract class Tutorial {
 		// move the spotlight into position
 		vPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = vPos;
+
+		// spawn finger hint
+		if(fingerHint){
+			GameObject fingerHintResource = (GameObject) Resources.Load("DegradationPressTut");
+			goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(strAnchor), fingerHintResource);
+			vPos.z = goFingerHint.transform.localPosition.z;
+			vPos.y = vPos.y + fingerHintOffsetFromSpotlighCenter; //offset in Y so the finger hint doesn't overlap the image
+			goFingerHint.transform.localPosition = vPos;
+		}
+	}
+
+	protected void RemoveFingerHint(){
+		if(goFingerHint == null){
+			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() +")");
+			return;
+		}
+
+		GameObject.Destroy(goFingerHint);
 	}
 	
 	//---------------------------------------------------

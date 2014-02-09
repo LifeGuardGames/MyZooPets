@@ -148,7 +148,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		button.OnProcessed += OnNodeClicked;		
 		
 		// at this point, also give the user an item for the node they are about to click
-		InventoryLogic.Instance.AddItem( "WallPoster1", 1 );
+		InventoryLogic.Instance.AddItem( "WallPoster8", 1 );
 	}
 	
 	//---------------------------------------------------

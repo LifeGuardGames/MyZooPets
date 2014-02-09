@@ -132,6 +132,9 @@ public class GameTutorial_Triggers : GameTutorial {
 	private void TeachCleanup() {
 		// show a message
 		Vector3 vLoc = Constants.GetConstant<Vector3>( "TriggerPopupLoc" );
+		// GameObject fingerTut = (GameObject) Resources.Load("DegradationPressTut");
+		// TutorialManager.Instance.Instantiate(fingerTut, vLoc, Quaternion.identity);
+
         string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		string stringKey = GetKey() + "_" + GetStep();
 		string tutMessage = String.Format(Localization.Localize(stringKey), 
@@ -144,7 +147,7 @@ public class GameTutorial_Triggers : GameTutorial {
 		ShowPopup( Tutorial.POPUP_STD, vLoc, option:option);
 	
 		// spotlight the dust
-		SpotlightObject( scriptTrigger.gameObject );
+		SpotlightObject( scriptTrigger.gameObject, fingerHint:true);
 	
 		// add the dust to clickable objects
 		AddToProcessList( scriptTrigger.gameObject );
@@ -167,6 +170,7 @@ public class GameTutorial_Triggers : GameTutorial {
 		// clean up spotlight and popup
 		RemoveSpotlight();
 		RemovePopup();
+		RemoveFingerHint();
 	
 		// wait a brief moment because the player is earning points and stuff
 		float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PostCleanup" );

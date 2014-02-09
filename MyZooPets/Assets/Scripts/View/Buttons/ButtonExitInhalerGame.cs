@@ -12,7 +12,7 @@ public class ButtonExitInhalerGame : ButtonChangeScene{
         InhalerLogic.Instance.CompleteTutorial();
 
         Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_QUIT, InhalerLogic.Instance.CurrentStep);
-        Analytics.Instance.EndPlayTimeTracker();
+        // Analytics.Instance.EndPlayTimeTracker();
 
         base.ProcessClick(); 
     }

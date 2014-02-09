@@ -97,7 +97,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         ShowQuitButton();
         SetUpHintTimer();
 
-        Analytics.Instance.StartPlayTimeTracker();
+        // Analytics.Instance.StartPlayTimeTracker();
 
         //Start the first hint
         if(OnShowHint != null)
@@ -149,7 +149,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void QuitInhalerGame(){
         InhalerLogic.Instance.CompleteTutorial();
-        Analytics.Instance.EndPlayTimeTracker();
+        // Analytics.Instance.EndPlayTimeTracker();
         scriptTransition.StartTransition(SceneUtils.BEDROOM);
     }
 

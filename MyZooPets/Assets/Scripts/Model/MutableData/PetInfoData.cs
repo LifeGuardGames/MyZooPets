@@ -15,10 +15,6 @@ public class PetInfoData{
     public bool IsHatched {get; set;}
 	public int nFireBreaths {get; set;} // fire breathing status of the pet
 
-    public string TestString{get; set;}
-    public List<string> TestListString{get; set;}
-    public Dictionary<string, int> TestDict{get; set;}
-
 	public void ChangeFireBreaths( int nAmount ) {
 		int nBreathsNew = nFireBreaths + nAmount;
 		SetFireBreaths( nBreathsNew );

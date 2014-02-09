@@ -12,7 +12,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	public event EventHandler<EventArgs> OnPetHit;
 	
 	// tut key
-	public static string TIME_DECAY_TUT = "TimeMoodDecay";
+	public static string TIME_DECAY_TUT = "TUT_TIME_DECAY";
     private const int MAX_TRIGGERS = 6;
 	// public int nPoints; //250
 
@@ -140,8 +140,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         
         // get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
         int numToSpawn = GetNumTriggersToSpawn();
-        DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
+        Debug.Log("num of triggers to spawn: " + numToSpawn);
         
+        DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
+
         List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>( listAvailable, numToSpawn );
         
         //create trigger data to be spawned

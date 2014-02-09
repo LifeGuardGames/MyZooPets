@@ -140,7 +140,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
         
         // get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
         int numToSpawn = GetNumTriggersToSpawn();
-        Debug.Log("num of triggers to spawn: " + numToSpawn);
         
         DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 

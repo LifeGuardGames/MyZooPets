@@ -45,7 +45,14 @@ public class GameTutorial_Decorations : GameTutorial {
 			StringUtils.FormatStringPossession(petName)),
 			strImage, null, true, true, strAnalytics );
 
-						
+		GameObject wellapadButton = (GameObject) GameObject.Find("WellapadButton");
+		if(wellapadButton != null){
+			ButtonWellapad buttonWellapadScript = wellapadButton.GetComponent<ButtonWellapad>();
+			buttonWellapadScript.SetListenersToWellapadMissionController();
+		}else{
+			Debug.LogError("wellapad button can't be found: " + this);
+		}
+
 	}
 	
 	//---------------------------------------------------

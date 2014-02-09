@@ -8,7 +8,6 @@ using System.Collections;
 //---------------------------------------------------
 
 public class ButtonWellapad : LgButton {
-	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
@@ -23,6 +22,10 @@ public class ButtonWellapad : LgButton {
 			//Listens to update event from wellapad mission controller
 			WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
 			WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
+
+			//Start bouncing if there are active tasks
+			if(WellapadMissionController.Instance.HasActiveTasks())
+				EnableButtonBounce(this, EventArgs.Empty);
 		}
 	}
 	

@@ -171,14 +171,15 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     public void UpdateBarPosition(){
         uiGridObject.GetComponent<UIGrid>().Reposition();
 
-        if(inventoryPanel.GetComponent<TweenPosition>().from.x > -974){  // Limit Move after x items     // TODO make const
-            int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-
+		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+		
+		// Adjust the bar length based on how many items we want showing at all times
+		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
             inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
-
-            if(uiButtonToggle.isActive){    // Animate the move if inventory is open
+			
+			// Update position of the bar if inventory is open
+            if(uiButtonToggle.isActive){
                 Hashtable optional = new Hashtable();
-
                 optional.Add("ease", LeanTweenType.easeOutBounce);
                 LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
             }

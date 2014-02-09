@@ -178,7 +178,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Get list sorted by cost in ascending order from the item dictionary
 	//Select and sort need to be done in two steps because IOS doesn't support 
-	//OrderBy for value types, ex string. but works fine if use on class.
+	//OrderBy for value types, ex int. but works fine if use on class.
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;

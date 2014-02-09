@@ -43,7 +43,9 @@ public class GameTutorial_Decorations : GameTutorial {
 		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
 			String.Format(Localization.Localize(strKey), petName, 
 			StringUtils.FormatStringPossession(petName)),
-			strImage, null, true, true, strAnalytics );			
+			strImage, null, true, true, strAnalytics );
+
+						
 	}
 	
 	//---------------------------------------------------

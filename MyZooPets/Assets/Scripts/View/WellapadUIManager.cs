@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -7,8 +8,6 @@ using System.Collections;
 //---------------------------------------------------
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-	public GameObject wellapadButton; //wellapad button in navigation
-
 	private GameObject goWellapadUI; // the actual game object of the wellapad
 	private WellapadScreenManager wellapadScreenManager; //script that handles wellapad screen state
 
@@ -16,19 +15,23 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	public WellapadScreenManager GetScreenManager() {
 		return wellapadScreenManager;	
 	}
+
+	void Awake(){
+		// instantiate the actual wellapad object
+		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
+		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
+	}
 	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {
-		// instantiate the actual wellapad object
-		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
-		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
-		
 		// set the tween target on the wellapad object to this object
 		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
-		
 		wellapadScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
+
+		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
+		RefreshScreen();
 	}
 	
 	//---------------------------------------------------
@@ -44,9 +47,13 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		goWellapadUI.GetComponent<TweenToggle>().Show();
 		
 		// set the right screen
+		// RefreshScreen();
+	}
+
+	private void RefreshScreen(object sender, EventArgs args){
 		RefreshScreen();
 	}
-	
+
 	//---------------------------------------------------
 	// RefreshScreen()
 	// Sets the proper screen on the wellapad.

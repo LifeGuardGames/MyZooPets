@@ -20,17 +20,15 @@ public class WellapadMissionList : MonoBehaviour {
 	
 	// the number of elements in the mission list...this is used for helping to sort elements in the grid
 	private int nCount = 0;
-	
+
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
 	void Start() {		
 		// before doing anything check to see if we need to refresh our tasks
-		WellapadMissionController.Instance.RefreshCheck();
+		// WellapadMissionController.Instance.RefreshCheck();
 		
-		// listen for refresh message
-		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;
-
+		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed; 
 		// create missions UI
 		StartCoroutine( DisplayMissions() );
 	}

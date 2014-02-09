@@ -18,9 +18,12 @@ public class ButtonWellapad : LgButton {
 		if ( !bOK )
 			NGUITools.SetActive( gameObject, false );
 
-		//Listens to update event from wellapad mission controller
-		WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
-		WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
+		bool tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		if(tutDone){
+			//Listens to update event from wellapad mission controller
+			WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
+			WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
+		}
 	}
 	
 	//---------------------------------------------------
@@ -33,6 +36,12 @@ public class ButtonWellapad : LgButton {
 			WellapadUIManager.Instance.OpenUI();
 			DisableButtonBounce();
 		}
+	}
+
+	public void SetListenersToWellapadMissionController(){
+		WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
+		WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
+		EnableButtonBounce(this, EventArgs.Empty);
 	}
 
 	private void EnableButtonBounce(object sender, EventArgs args){

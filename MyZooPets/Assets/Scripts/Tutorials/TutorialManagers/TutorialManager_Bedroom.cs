@@ -11,7 +11,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class TutorialManager_Bedroom : TutorialManager {
-	// tutorial consts
+	public ButtonWellapad buttonWellapad; 
 	
 	// old and unused
 	public const string TUT_INTRO = "IntroNotification";
@@ -79,6 +79,9 @@ public class TutorialManager_Bedroom : TutorialManager {
 		else if ( bFlameTut && !bDecos && CameraManager.Instance.GetPanScript().currentPartition == 1 ) {
 			// play the deco tutorial
 			new GameTutorial_Decorations();
+		}
+		else if(DataManager.Instance.GameData.Tutorial.AreTutorialsFinished()){
+			buttonWellapad.SetListenersToWellapadMissionController();
 		}
 	}
 	

@@ -171,7 +171,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }else{
                 GameObject menuScenePetPrefab = Resources.Load("MenuScenePet") as GameObject;
                 GameObject menuScenePetGO = NGUITools.AddChild(petSelectionGO, menuScenePetPrefab);
-                GameObject lwfObject = menuScenePetGO.transform.Find("UILWFObject").gameObject;
+                // GameObject lwfObject = menuScenePetGO.transform.Find("UILWFObject").gameObject;
 
                 menuScenePetGO.name = "MenuScenePet";
                 UILabel petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<UILabel>();

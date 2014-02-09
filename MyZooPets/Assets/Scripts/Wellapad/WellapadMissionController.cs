@@ -139,6 +139,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			}
 		}
 	}
+
+	void Awake(){
+		RefreshCheck();
+	}
 	
 	//---------------------------------------------------
 	// OnApplicationPause()
@@ -157,7 +161,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// list should be refreshed.  If it should, it will
 	// delete the current save data.
 	//---------------------------------------------------		
-	public void RefreshCheck() {
+	private void RefreshCheck() {
         DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
 		
@@ -190,11 +194,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			
 			// have the screens of the wellapad refresh before we send out the event below, because we want to make sure the
 			// missions screen is active
-			WellapadUIManager.Instance.RefreshScreen();
+			// WellapadUIManager.Instance.RefreshScreen();
 		
 			// send event
-			if ( OnMissionsRefreshed != null ) 
-				OnMissionsRefreshed( this, EventArgs.Empty );		
+			if (OnMissionsRefreshed != null) 
+				OnMissionsRefreshed(this, EventArgs.Empty);		
 		}
 	}
 	

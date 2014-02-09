@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class InventoryUIManager : Singleton<InventoryUIManager> {
 	public GameObject inventoryPanel;
     public bool isDebug;
+	public UIPanel gridPanel;
     public GameObject uiGridObject;
-    public GameObject uiButtonToggleObject;
     public GameObject uiButtonSpriteObject;
     public GameObject spritePet;
     public GameObject inventoryItemPrefab;
@@ -15,12 +15,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
 	
     private bool isGuiShowing = true;   // Aux to keep track, not synced!!
     private float collapsedPos;
-    private UIButtonToggle uiButtonToggle;
     private GameObject fingerHintGO;
-    
-    void Awake(){
-        uiButtonToggle = uiButtonToggleObject.GetComponent<UIButtonToggle>();
-    }
 
     void Start(){
         collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
@@ -110,7 +105,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         }
     }
 
-
     //play chew animation from pet animator
     private void ShowPetReceivedFoodAnimation(){
         if(!petAnimator.IsBusy()){
@@ -164,12 +158,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
         invDragDrop.OnItemDrop += OnItemDrop;
         invDragDrop.OnItemPress += OnItemPress;
 
-
         UpdateBarPosition();
     }
 
     public void UpdateBarPosition(){
-        uiGridObject.GetComponent<UIGrid>().Reposition();
+        
 
 		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
 		
@@ -178,12 +171,20 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
             inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
 			
 			// Update position of the bar if inventory is open
-            if(uiButtonToggle.isActive){
+			if(isGuiShowing){
                 Hashtable optional = new Hashtable();
                 optional.Add("ease", LeanTweenType.easeOutBounce);
                 LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
             }
         }
+		
+		uiGridObject.GetComponent<UIGrid>().Reposition();
+		
+		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
+		Vector3 oldPanelPos = gridPanel.transform.localPosition;
+		gridPanel.transform.localPosition = new Vector3(363f, oldPanelPos.y, oldPanelPos.z);
+		Vector4 oldClipRange = gridPanel.clipRange;
+		gridPanel.clipRange = new Vector4(206f, oldClipRange.y, oldClipRange.z, oldClipRange.w);
     }
 
     //Find the position of Inventory Item game object with invItemID
@@ -212,11 +213,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     // Image button clicked receiver
     public void ExpandToggled(){
         // Local aux to keep track of toggles
-        if(InventoryLogic.Instance.AllInventoryItems.Count > 0)
-            isGuiShowing = !isGuiShowing;
-            
-		// Switch images based on item box status implement here
-		//uiSprite.spriteName = isGuiShowing ? inventoryOpenSpriteName : inventoryCloseSpriteName;
+		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
+        isGuiShowing = !isGuiShowing;
     }
 
 	public void ShowPanel(){

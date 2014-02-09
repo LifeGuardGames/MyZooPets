@@ -96,7 +96,6 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400024}
-  - 114: {fileID: 11400022}
   - 114: {fileID: 11400010}
   m_Layer: 10
   m_Name: Image Button
@@ -112,7 +111,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 90, y: 90, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
@@ -159,7 +158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 364, y: 1, z: -1}
+  m_LocalPosition: {x: 364, y: 1, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -350,11 +349,11 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -7347.5
+    e13: -10089.4043
     e20: 0
     e21: 0
     e22: 384
-    e23: 11
+    e23: 30
     e30: 0
     e31: 0
     e32: 0
@@ -362,7 +361,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 2
-  mClipRange: {x: 1132.09998, y: 0, z: 2663.1001, w: 100}
+  mClipRange: {x: 206, y: 0, z: 810, w: 100}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &11400014
 MonoBehaviour:
@@ -403,22 +402,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
   duration: 0
---- !u!114 &11400022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e62a21748a152d4394cc9d4f6e122e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isActive: 1
-  enforceLock: 0
-  target: {fileID: 0}
-  functionName: 
-  includeChildren: 0
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -498,7 +481,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.5
+    e13: -10088.4043
     e20: 0
     e21: 0
     e22: 384

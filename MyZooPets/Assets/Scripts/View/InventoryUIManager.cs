@@ -139,16 +139,16 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     }
 
     public void UpdateBarPosition(){
+		Debug.Log("UpdateBARPOSTIION");
         uiGridObject.GetComponent<UIGrid>().Reposition();
 
-        if(inventoryPanel.GetComponent<TweenPosition>().from.x > -974){  // Limit Move after x items     // TODO make const
-            int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-
+		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+        //if(inventoryPanel.GetComponent<TweenPosition>().from.x > -974){  // Limit Move after x items     // TODO make const
+		if(allInventoryItemsCount <= 9){
             inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
 
             if(uiButtonToggle.isActive){    // Animate the move if inventory is open
                 Hashtable optional = new Hashtable();
-
                 optional.Add("ease", LeanTweenType.easeOutBounce);
                 LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
             }

@@ -83,9 +83,5 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	public void OpenRealInhaler(){
 		// use parent
 		base.ProcessClick();
-
-		//Hide other UI Objects
-		NavigationUIManager.Instance.HidePanel();
-		// HUDUIManager.Instance.HidePanel();
 	}	
 }

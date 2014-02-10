@@ -37,9 +37,20 @@ public class ButtonChangeScene : LgButton {
 		// lock the click manager
 		ClickManager.Instance.Lock();
 
+		//Hide other UI Objects
 		//Assuming that HUD is present at all scenes, so need to be hidden before scene change
-		if(HUDUIManager.Instance != null)
+		if(HUDUIManager.Instance != null){
 			HUDUIManager.Instance.HidePanel();
+		}
+		if(NavigationUIManager.Instance != null){
+			NavigationUIManager.Instance.HidePanel();	
+		}
+		if(InventoryUIManager.Instance != null){
+			InventoryUIManager.Instance.HidePanel();
+		}
+		if(EditDecosUIManager.Instance != null){
+			EditDecosUIManager.Instance.HideNavButton();
+		}
 
 		//Save some basic data for current scene
 		RememberCurrentScene();

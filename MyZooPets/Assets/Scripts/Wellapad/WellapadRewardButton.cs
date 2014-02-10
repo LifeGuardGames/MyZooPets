@@ -97,16 +97,11 @@ public class WellapadRewardButton : LgButton {
 			
 			// update the sprite
 			SetSprites();
+
+			//Refresh Check
+			//Case: User plays pass the playperiod and collects the reward
+			//past the playperiod.
+			WellapadMissionController.Instance.RefreshCheck();
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnDestroy()
-	//---------------------------------------------------		
-	void OnDestroy() {
-		// stop listening for task completion data
-		// Jason- Don't need to dereference if event handler is not static
-		// if ( WellapadMissionController.Instance )
-		// 	WellapadMissionController.Instance.OnTaskUpdated -= OnTaskUpdated;
-	}	
 }

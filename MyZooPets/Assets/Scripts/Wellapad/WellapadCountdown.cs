@@ -29,7 +29,7 @@ public class WellapadCountdown : MonoBehaviour {
 				// if we were, stop
 				bCounting = false;
 				
-				// and then refresh the wellapad screen
+				// and then do a refresh check for the Missions 
 				WellapadMissionController.Instance.RefreshCheck();
 			}
 			return;

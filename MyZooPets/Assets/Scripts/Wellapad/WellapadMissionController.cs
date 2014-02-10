@@ -155,13 +155,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		}
 	}	
 	
+	private void RefreshCheck(object sender, EventArgs args){
+		RefreshCheck();	
+	}
 	//---------------------------------------------------
 	// RefreshCheck()
 	// Function that checks to see if the wellapad missions
 	// list should be refreshed.  If it should, it will
 	// delete the current save data.
 	//---------------------------------------------------		
-	private void RefreshCheck() {
+	public void RefreshCheck() {
         DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
 		

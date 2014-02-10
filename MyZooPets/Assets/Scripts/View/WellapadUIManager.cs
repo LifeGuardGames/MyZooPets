@@ -45,9 +45,14 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
-		
-		// set the right screen
-		// RefreshScreen();
+
+		//Refresh check
+		//Case: User finishes before play period but never home out of the game.
+		//When the user comes back to play the game user is in new play period so
+		//do a refresh check when the wellapad is opened and there are no active tasks
+		// bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+		// if(!hasActiveTasks)	
+		// 	WellapadMissionController.Instance.RefreshCheck();
 	}
 
 	private void RefreshScreen(object sender, EventArgs args){

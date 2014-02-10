@@ -23,20 +23,20 @@ public class WellapadCountdown : MonoBehaviour {
 	//---------------------------------------------------
 	void Update() {
 		// if the player can use their inhaler, there is no countdown, so bail out
-		if ( PlayPeriodLogic.Instance.CanUseRealInhaler ) {
+		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
 			// okay, so the player can use their inhaler...but were we previously counting down?
-			if ( bCounting ) {
+			if (bCounting){
 				// if we were, stop
 				bCounting = false;
 				
-				// and then refresh the wellapad screen
-				WellapadUIManager.Instance.RefreshScreen();
+				// and then do a refresh check for the Missions 
+				WellapadMissionController.Instance.RefreshCheck();
 			}
 			return;
 		}
 		
 		// also bail if the wellpaid isn't open
-		if ( WellapadUIManager.Instance.IsOpen() == false )
+		if(WellapadUIManager.Instance.IsOpen() == false)
 			return;
 		
 		// if we make it here, we are counting down

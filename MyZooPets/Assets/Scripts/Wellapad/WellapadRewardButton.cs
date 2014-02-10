@@ -28,7 +28,6 @@ public class WellapadRewardButton : LgButton {
 	public void Init( string missionID ) {
 		// Save the current active label color
 		activeLabelColor = buttonLabel.color;
-		Debug.Log ("SETTING COLOR "  + buttonLabel.color);
 		
 		// set wellapad sprite object
 		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
@@ -54,52 +53,36 @@ public class WellapadRewardButton : LgButton {
 		bool bEnabled = true;
 		
 		// get the mission associated with this reward
-		Mission mission = WellapadMissionController.Instance.GetMission( missionID );
+		Mission mission = WellapadMissionController.Instance.GetMission(missionID);
 		
-		if ( mission != null ) {
+		if(mission != null){
 			// get status of reward
 			RewardStatuses eStatus = mission.RewardStatus;
 			
-			// get blink script on the wellapad button
-			// BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
-			
-			if ( eStatus == RewardStatuses.Claimed ) {
-				Debug.Log ("CLAIMEDDD");
+			if(eStatus == RewardStatuses.Claimed){
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
-				
-				// remove the blink script from the gameobject, if it existed
-				// if ( scriptBlink )
-				// 	Destroy( scriptBlink );
 				
 				// if the reward is claimed, the button is not enabled
 				bEnabled = false;
 			}
-			else {
-				Debug.Log ("UNCLAIMEDDD");
-				buttonLabel.color = activeLabelColor;
+			else{
 				// the reward is either unclaimed or unearned -- show the proper icon	
 				string strKey = "Reward" + eStatus;
 				string strSprite = Constants.GetConstant<string>( strKey );
 				spriteIcon.spriteName = strSprite;
-				NGUITools.SetActive( spriteIcon.gameObject, true );
 				
 				// the button is not enabled if the reward is unearned
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
-				
-				// if the status is unclaimed, add a pulse to the wellapad icon (if it doesn't have one)
-				// if ( eStatus == RewardStatuses.Unclaimed && scriptBlink == null ) {
-				// 	scriptBlink = buttonWellapad.gameObject.AddComponent<BlinkButton>();
-				// 	string strBlink = Constants.GetConstant<string>("Wellapad_BlinkSprite");
-				// 	float fBlink = Constants.GetConstant<float>("Wellapad_BlinkTime");
-					
-				// 	scriptBlink.Init(buttonWellapad, strBlink, fBlink);
-				// }
 			}
 		}
-		
-		nguiButton.isEnabled = bEnabled;
-		buttonLabel.color = bEnabled ? activeLabelColor : inactiveLabelColor;
+	
+		//Jason - Null exception gets thrown here if we don't check if nguiButton is null	
+		//This exception doesn't happen every time. 
+		if(nguiButton){	
+			nguiButton.isEnabled = bEnabled;
+			buttonLabel.color = bEnabled ? activeLabelColor : inactiveLabelColor;
+		}
 	}
 	
 	//---------------------------------------------------
@@ -125,16 +108,11 @@ public class WellapadRewardButton : LgButton {
 			
 			// update the sprite
 			SetSprites();
+
+			//Refresh Check
+			//Case: User plays pass the playperiod and collects the reward
+			//past the playperiod.
+			WellapadMissionController.Instance.RefreshCheck();
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnDestroy()
-	//---------------------------------------------------		
-	void OnDestroy() {
-		// stop listening for task completion data
-		// Jason- Don't need to dereference if event handler is not static
-		// if ( WellapadMissionController.Instance )
-		// 	WellapadMissionController.Instance.OnTaskUpdated -= OnTaskUpdated;
-	}	
 }

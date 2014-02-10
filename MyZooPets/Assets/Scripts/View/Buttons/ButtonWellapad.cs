@@ -33,7 +33,7 @@ public class ButtonWellapad : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		if ( WellapadUIManager.Instance.IsOpen() )
+		if(WellapadUIManager.Instance.IsOpen())
 			WellapadUIManager.Instance.CloseUI();
 		else{
 			WellapadUIManager.Instance.OpenUI();
@@ -41,6 +41,11 @@ public class ButtonWellapad : LgButton {
 		}
 	}
 
+	//---------------------------------------------------
+	// SetListenersToWellapadMissionController()
+	// Listens to when tasks are completed or the mission 
+	// has been refreshed
+	//---------------------------------------------------
 	public void SetListenersToWellapadMissionController(){
 		WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
 		WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;

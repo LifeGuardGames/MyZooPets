@@ -59,7 +59,6 @@ public class DegradTrigger : MonoBehaviour {
 			// play sound associated with cleaning the trigger
 			AudioManager.Instance.PlayClip( strSoundClean );
 	        
-
             CleanTriggerAndDestroy();
         }
     }
@@ -69,7 +68,7 @@ public class DegradTrigger : MonoBehaviour {
         DegradationLogic.Instance.ClearDegradationTrigger(this);
 		
 		// send out callback
-		if ( OnTriggerCleaned != null )
+		if (OnTriggerCleaned != null)
 			OnTriggerCleaned( this, EventArgs.Empty );		
 		
 		// play an FX

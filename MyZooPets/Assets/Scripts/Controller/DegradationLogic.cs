@@ -26,24 +26,28 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     }
 
     void Awake(){		
-        degradationTriggers = new List<DegradData>();
-		
-    	RefreshDegradationCheck();
+        RefreshCheck();
+    }
 
-		// set up triggers to be spawned by the UI manager
-		SetUpTriggers();       
-
-        UpdateNextPlayPeriodTime();
+    void Start(){
+        WellapadMissionController.Instance.OnMissionsRefreshed += RefreshCheck;
     }
 
     void OnApplicationPause(bool isPaused){
     	//Refresh logic
-    	if(!isPaused){
-            degradationTriggers = new List<DegradData>(); //this doesnt seem right. cleaning trigger data on pause
-    		RefreshDegradationCheck();
-            SetUpTriggers();       
-            UpdateNextPlayPeriodTime();
-    	}
+    	if(!isPaused)
+            RefreshCheck();
+    }
+
+    private void RefreshCheck(object sender, EventArgs args){
+        RefreshCheck();
+    }
+
+    private void RefreshCheck(){
+        degradationTriggers = new List<DegradData>(); //this doesnt seem right. cleaning trigger data on pause
+        RefreshDegradationCheck();
+        SetUpTriggers();       
+        UpdateNextPlayPeriodTime();
     }
 
     //use the method when a trigger has been destroyed by user
@@ -91,7 +95,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
 		// if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
         if (degradationTriggers.Count == 0 )
-			WellapadMissionController.Instance.TaskCompleted( "CleanRoom" );
+			WellapadMissionController.Instance.TaskCompleted("CleanRoom");
     }
 	
 	//---------------------------------------------------

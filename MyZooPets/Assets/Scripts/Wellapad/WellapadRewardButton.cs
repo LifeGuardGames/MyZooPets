@@ -44,27 +44,20 @@ public class WellapadRewardButton : LgButton {
 		bool bEnabled = true;
 		
 		// get the mission associated with this reward
-		Mission mission = WellapadMissionController.Instance.GetMission( missionID );
+		Mission mission = WellapadMissionController.Instance.GetMission(missionID);
 		
-		if ( mission != null ) {
+		if(mission != null){
 			// get status of reward
 			RewardStatuses eStatus = mission.RewardStatus;
 			
-			// get blink script on the wellapad button
-			// BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
-			
-			if ( eStatus == RewardStatuses.Claimed ) {
+			if(eStatus == RewardStatuses.Claimed){
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
-				
-				// remove the blink script from the gameobject, if it existed
-				// if ( scriptBlink )
-				// 	Destroy( scriptBlink );
 				
 				// if the reward is claimed, the button is not enabled
 				bEnabled = false;
 			}
-			else {
+			else{
 				// the reward is either unclaimed or unearned -- show the proper icon	
 				string strKey = "Reward" + eStatus;
 				string strSprite = Constants.GetConstant<string>( strKey );
@@ -72,19 +65,13 @@ public class WellapadRewardButton : LgButton {
 				
 				// the button is not enabled if the reward is unearned
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
-				
-				// if the status is unclaimed, add a pulse to the wellapad icon (if it doesn't have one)
-				// if ( eStatus == RewardStatuses.Unclaimed && scriptBlink == null ) {
-				// 	scriptBlink = buttonWellapad.gameObject.AddComponent<BlinkButton>();
-				// 	string strBlink = Constants.GetConstant<string>("Wellapad_BlinkSprite");
-				// 	float fBlink = Constants.GetConstant<float>("Wellapad_BlinkTime");
-					
-				// 	scriptBlink.Init(buttonWellapad, strBlink, fBlink);
-				// }
 			}
 		}
-		
-		nguiButton.isEnabled = bEnabled;
+	
+		//Jason - Null exception gets thrown here if we don't check if nguiButton is null	
+		//This exception doesn't happen every time. 
+		if(nguiButton)	
+			nguiButton.isEnabled = bEnabled;
 	}
 	
 	//---------------------------------------------------

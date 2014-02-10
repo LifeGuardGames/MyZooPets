@@ -18,10 +18,17 @@ public class WellapadRewardButton : LgButton {
 	// the NGUI button script for this button
 	public UIImageButton nguiButton;
 	
+	public UILabel buttonLabel;
+	public Color inactiveLabelColor = new Color();
+	private Color activeLabelColor;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
 	public void Init( string missionID ) {
+		// Save the current active label color
+		activeLabelColor = buttonLabel.color;
+		
 		// set wellapad sprite object
 		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
 			
@@ -32,7 +39,9 @@ public class WellapadRewardButton : LgButton {
 		
 		// listen for when a task is complete so the UI can react
 		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
-	}	
+		
+		
+	}
 	
 	//---------------------------------------------------
 	// SetSprites()
@@ -70,8 +79,10 @@ public class WellapadRewardButton : LgButton {
 	
 		//Jason - Null exception gets thrown here if we don't check if nguiButton is null	
 		//This exception doesn't happen every time. 
-		if(nguiButton)	
+		if(nguiButton){	
 			nguiButton.isEnabled = bEnabled;
+			buttonLabel.color = bEnabled ? activeLabelColor : inactiveLabelColor;
+		}
 	}
 	
 	//---------------------------------------------------

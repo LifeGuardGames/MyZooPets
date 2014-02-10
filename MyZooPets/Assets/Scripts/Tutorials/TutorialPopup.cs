@@ -34,15 +34,15 @@ public class TutorialPopup : MonoBehaviour {
 			//Vector3 offset = label.transform.localPosition;	// not sure what this was supposed to do...
 			//Debug.Log("And the local scale of the text is " + textScale);
 			
-			vSize.x *= textScale.x;
-			vSize.y *= textScale.y;
-			vSize.x += fBorder;
-			vSize.y += fBorder;
-			//vSize.x += bg.border.x + bg.border.z + ( offset.x - bg.border.x) * 2f;
-			//vSize.y += bg.border.y + bg.border.w + (-offset.y - bg.border.y) * 2f;
-			vSize.z = 1f;
+			float sizeX = vSize.x * textScale.x;
+			float sizeY = vSize.y * textScale.y;
+			
+			sizeX += fBorder;
+			sizeY += fBorder;
 
-			bg.transform.localScale = vSize;		
+			float sizeZ = 1f;
+
+			bg.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);		
 		}
 	}
 

@@ -24,6 +24,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     void Start(){
+        Input.multiTouchEnabled = true;
         InhalerLogic.OnGameOver += OnGameEnd;
         InhalerLogic.OnNextStep += OnNextStep;
         GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;

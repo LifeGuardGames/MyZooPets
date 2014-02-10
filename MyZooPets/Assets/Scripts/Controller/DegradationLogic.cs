@@ -13,12 +13,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	
 	// tut key
 	public static string TIME_DECAY_TUT = "TUT_TIME_DECAY";
-    private const int MAX_TRIGGERS = 6;
-	// public int nPoints; //250
 
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
 	public float fHealthMoodThreshold;
+
+    private const int MAX_TRIGGERS = 6;
     private List<DegradData> degradationTriggers; //list of triggers spawned
 
     public List<DegradData> DegradationTriggers{
@@ -26,10 +26,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     }
 
     void Awake(){		
-		// reset the degrad trigger list each time this logic runs, because we are no longer actually saving the triggers.
-		// I (Joe) left this structure in because we might want to say something like, "X triggers remain" across all areas, or
-		// something like that
-		// DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
         degradationTriggers = new List<DegradData>();
 		
     	RefreshDegradationCheck();
@@ -43,8 +39,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     void OnApplicationPause(bool isPaused){
     	//Refresh logic
     	if(!isPaused){
-            // DataManager.Instance.GameData.Degradation.DegradationTriggers = new List<DegradData>();
-            degradationTriggers = new List<DegradData>();
+            degradationTriggers = new List<DegradData>(); //this doesnt seem right. cleaning trigger data on pause
     		RefreshDegradationCheck();
             SetUpTriggers();       
             UpdateNextPlayPeriodTime();
@@ -169,23 +164,6 @@ public class DegradationLogic : Singleton<DegradationLogic> {
             //spawn them at a pre define location ID is the order in which the data are created
             degradationTriggers.Add(new DegradData(randomTrigger.ID, location.GetPosition()));
         }                
-
-        // Data_TriggerLocation location1 = DataLoader_TriggerLocations.GetTriggerLocation("TrigLoc_6", "Bedroom");
-        // ImmutableData_Trigger trig1 = DataLoader_Triggers.GetTrigger("Trigger_0");
-        // degradationTriggers.Add(new DegradData(trig1.ID, location1.GetPosition()));
-
-        // Data_TriggerLocation location2 = DataLoader_TriggerLocations.GetTriggerLocation("TrigLoc_7", "Bedroom");
-        // ImmutableData_Trigger trig2 = DataLoader_Triggers.GetTrigger("Trigger_2");
-        // degradationTriggers.Add(new DegradData(trig2.ID, location2.GetPosition()));
-
-        // Data_TriggerLocation location3 = DataLoader_TriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
-        // ImmutableData_Trigger trig3 = DataLoader_Triggers.GetTrigger("Trigger_6");
-        // degradationTriggers.Add(new DegradData(trig3.ID, location3.GetPosition()));
-
-        // Data_TriggerLocation location4 = DataLoader_TriggerLocations.GetTriggerLocation("TrigLoc_9", "Bedroom");
-        // ImmutableData_Trigger trig4 = DataLoader_Triggers.GetTrigger("Trigger_7");
-        // degradationTriggers.Add(new DegradData(trig4.ID, location4.GetPosition()));
-
 
         DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
 

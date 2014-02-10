@@ -18,11 +18,6 @@ public class WellapadRewardButton : LgButton {
 	// the NGUI button script for this button
 	public UIImageButton nguiButton;
 	
-	// wellapad button, used in pulsing to alert the player
-	// Jason- need to move this to some where else. since this button is
-	// unrelated to this reward button
-	// private UIImageButton buttonWellapad;	
-	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	

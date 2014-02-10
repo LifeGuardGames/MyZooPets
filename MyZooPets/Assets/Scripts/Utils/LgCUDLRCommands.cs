@@ -114,6 +114,24 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());
   }
 
+  [CUDLR.Command("MenuSceneData", "get MenuSceneData in json")]
+  public static void MenuSceneData(){
+    string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
+    CUDLR.Console.Log(jsonString);
+  }
+
+  [CUDLR.Command("GameData", "get of pet in json")]
+  public static void GameData(string[] args){
+    if(args.Length < 1){
+      CUDLR.Console.Log("expect a petID");
+      return;
+    }
+
+    string key = args[0] + "_GameData";
+    string jsonString = PlayerPrefs.GetString(key, "");
+    CUDLR.Console.Log(jsonString);
+  }
+
 }
 
 

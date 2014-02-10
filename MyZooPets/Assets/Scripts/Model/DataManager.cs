@@ -154,6 +154,9 @@ public class DataManager : Singleton<DataManager>{
     //Serialize the data whenever the game is paused
     void OnApplicationPause(bool paused){
         if(paused){
+            //Save menu scene data. doesn't depend on if tutorial is finished or not
+            SaveMenuSceneData();
+
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if (TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()) {
 				Debug.Log("Auto save canceled because we are in a tutorial");
@@ -163,7 +166,7 @@ public class DataManager : Singleton<DataManager>{
 			// also early out if we happen to be in the inhaler game.  Ultimately we may want to create a more elaborate hash/list
 			// of scenes it is okay to save in, if we ever create more scenes that shouldn't serialize data
 			string loadedLevelName = Application.loadedLevelName;
-			if (loadedLevelName == "InhalerGamePet") {
+			if(loadedLevelName == "InhalerGamePet"){
 				Debug.Log("Not saving the game because its inhaler scene");
 				return;
 			}
@@ -176,11 +179,11 @@ public class DataManager : Singleton<DataManager>{
                 
                 SaveGameData();
             }
+
         }
     }
 
     void OnDestroy(){
-        SaveMenuSceneData();
     }
 
     //----------------------------------------------------

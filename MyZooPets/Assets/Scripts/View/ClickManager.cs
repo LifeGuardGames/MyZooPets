@@ -160,8 +160,13 @@ public class ClickManager : Singleton<ClickManager> {
 	// locking.
 	//---------------------------------------------------	
 	public void ReleaseLock() {
-		// lock is being released, so pop the stack
-		stackModes.Pop();
+		try{
+			// lock is being released, so pop the stack
+			stackModes.Pop();
+		}
+		catch(InvalidOperationException e){
+			Debug.LogError("Trying to pop an empty stack. (ClickManager) " + e.Message);
+		}
 		
 		// if the stack is empty, reset our exceptions
 		if ( stackModes.Count == 0 )

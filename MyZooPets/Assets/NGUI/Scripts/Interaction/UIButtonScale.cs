@@ -13,10 +13,11 @@ using UnityEngine;
 public class UIButtonScale : MonoBehaviour
 {
 	public Transform tweenTarget;
-	public Vector3 hover = new Vector3(1.1f, 1.1f, 1.1f);
-	public Vector3 pressed = new Vector3(1.05f, 1.05f, 1.05f);
-	public float duration = 0.2f;
-
+	public Vector3 hover = new Vector3(1f, 1f, 1f);
+	public Vector3 pressed = new Vector3(0.9f, 0.9f, 0.9f);
+	public float duration = 0f;
+	
+	
 	Vector3 mScale;
 	bool mStarted = false;
 	bool mHighlighted = false;
@@ -49,8 +50,11 @@ public class UIButtonScale : MonoBehaviour
 
 	void OnPress (bool isPressed)
 	{
-		if ( !ClickManager.Instance.CanRespondToTap( gameObject ) )
-			return;
+		if (gameObject.GetComponent<LgButtonMessage>() != null){	// TODO-s TAKE THIS OUTTTT!
+			if(!ClickManager.Instance.CanRespondToTap(gameObject)){
+				return;
+			}
+		}
 			
 		if (enabled)
 		{

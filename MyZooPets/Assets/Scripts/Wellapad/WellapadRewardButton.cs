@@ -18,10 +18,18 @@ public class WellapadRewardButton : LgButton {
 	// the NGUI button script for this button
 	public UIImageButton nguiButton;
 	
+	public UILabel buttonLabel;
+	public Color inactiveLabelColor = new Color();
+	private Color activeLabelColor;
+	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
 	public void Init( string missionID ) {
+		// Save the current active label color
+		activeLabelColor = buttonLabel.color;
+		Debug.Log ("SETTING COLOR "  + buttonLabel.color);
+		
 		// set wellapad sprite object
 		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
 			
@@ -32,7 +40,9 @@ public class WellapadRewardButton : LgButton {
 		
 		// listen for when a task is complete so the UI can react
 		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
-	}	
+		
+		
+	}
 	
 	//---------------------------------------------------
 	// SetSprites()
@@ -54,6 +64,7 @@ public class WellapadRewardButton : LgButton {
 			// BlinkButton scriptBlink = buttonWellapad.gameObject.GetComponent<BlinkButton>();
 			
 			if ( eStatus == RewardStatuses.Claimed ) {
+				Debug.Log ("CLAIMEDDD");
 				// if the reward was claimed, just hide the icon sprite
 				NGUITools.SetActive( spriteIcon.gameObject, false );
 				
@@ -65,10 +76,13 @@ public class WellapadRewardButton : LgButton {
 				bEnabled = false;
 			}
 			else {
+				Debug.Log ("UNCLAIMEDDD");
+				buttonLabel.color = activeLabelColor;
 				// the reward is either unclaimed or unearned -- show the proper icon	
 				string strKey = "Reward" + eStatus;
 				string strSprite = Constants.GetConstant<string>( strKey );
 				spriteIcon.spriteName = strSprite;
+				NGUITools.SetActive( spriteIcon.gameObject, true );
 				
 				// the button is not enabled if the reward is unearned
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
@@ -85,6 +99,7 @@ public class WellapadRewardButton : LgButton {
 		}
 		
 		nguiButton.isEnabled = bEnabled;
+		buttonLabel.color = bEnabled ? activeLabelColor : inactiveLabelColor;
 	}
 	
 	//---------------------------------------------------

@@ -49,6 +49,7 @@ public class PanToMoveCamera : MonoBehaviour {
        mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
        int layerNGUI = LayerMask.NameToLayer("NGUI");
        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
+       Input.multiTouchEnabled = false;
         
        D.Assert(nguiCamera != null, "NGUI camera not found");
 
@@ -57,7 +58,7 @@ public class PanToMoveCamera : MonoBehaviour {
        if(sceneData != null)
             if(sceneData.LastScene == Application.loadedLevelName)
                 SetCameraToPartition(sceneData.LastCameraPartition);
-    }
+}
     
     void Update(){
 #if UNITY_EDITOR

@@ -12,6 +12,10 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 	
     private string selectedPetID;
 
+    void Awake(){
+        Input.multiTouchEnabled = false;
+    }
+    
 	// Use this for initialization
 	void Start () {
         RefreshUI();	

@@ -18,6 +18,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private bool skipComic = false;
 	
     void Awake(){
+        eModeType = UIModeTypes.ChoosePet;
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
@@ -96,7 +97,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
+		if (DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 	
         AudioManager.Instance.LowerBackgroundVolume(0.1f);

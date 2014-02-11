@@ -366,8 +366,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
 		if(currentTab != tabName){
 			//Destroy existing items first
-			foreach(Transform child in grid.transform)
+			foreach(Transform child in grid.transform){
+				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
+			}
 
 			//Reset clip range so scrolling will start from beginning again
 			ResetUIPanelClipRange();
@@ -410,7 +412,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			}
 
 			grid.GetComponent<UIGrid>().Reposition();
-			Invoke("Reposition",0.00000001f);
 		}
 	}
 
@@ -454,10 +455,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
         itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
 
-	//Delay calling reposition due to async problem Destroying/Repositionoing.
-	//TODO Maybe change later when we have moreItems 
-	private void Reposition(){
-		grid.GetComponent<UIGrid>().Reposition();
+	// //Delay calling reposition due to async problem Destroying/Repositionoing.
+	// //TODO Maybe change later when we have moreItems 
+	// private void Reposition(){
+	// 	grid.GetComponent<UIGrid>().Reposition();
 
-	}
+	// }
 }

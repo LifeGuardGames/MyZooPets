@@ -231,9 +231,18 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// every X points the player gets an additional life
 		int nExtraLife = Constants.GetConstant<int>( "Clinic_ExtraLife" );
 		int nScore = GetScore();
-		if ( nScore % nExtraLife == 0 ) {
+		if (nScore % nExtraLife == 0) {
 			strSound = "PointSingle";		// set the sound to something different
 			UpdateLives( 1 );
+
+			//spawn a floaty
+			Hashtable option = new Hashtable();
+			option.Add("parent", GameObject.Find("Anchor-Center"));
+			option.Add("text", Localization.Localize("DGT_EXTRA_LIFE"));
+			option.Add("textSize", 100);
+			option.Add("color", Color.magenta);
+
+			FloatyUtil.SpawnFloatyText(option);
 		}
 		
 		// play appropriate sound
@@ -342,7 +351,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------	
 	private void SlowGameDown() {
 		// roll back the speed x 2
-		ChangeTrackSpeed( fSpeedIncrease * -2 );
+		ChangeTrackSpeed( fSpeedIncrease * -1 );
 		
 		// also roll back the spawn timer
 		ChangeSpawnRate( fSpawnChange * -2 );

@@ -78,6 +78,9 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 		// send out coins task
 		int nCoins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted( "Coins" + GetMinigameKey(), nCoins );
+
+        // check for badge unlock;
+        UpdateBadgeProgress();
 		
 		// reset the game here so that time scale is returned to normal (for when the user exits the game)
         ResetGame();
@@ -136,9 +139,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     // Stop the game and resets the game
     //---------------------------------------------------
     public void ActivateGameOver(){
-		GameOver();	// what is calling this...
-
-        UpdateBadgeProgress();
+		GameOver();	
 
         // Disable the player
         PlayerController.Instance.gameObject.SetActive(false);
@@ -156,10 +157,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     // player is running faster
     //---------------------------------------------------
     public void IncreaseTimeSpeed(float inIncreaseTime) {
-        //Limit timescale to 2.5. Beyond 2.5 the game becomes too fast to be playable
-        // if(Time.timeScale != 2.5){
         Time.timeScale += inIncreaseTime;
-        // }
     }
 
     public void SlowTimeSpeed(float inTimeDivisor) {
@@ -181,8 +179,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     // Check with BadgeLogic to see if any badge can be unlocked
     //---------------------------------------------------
     private void UpdateBadgeProgress(){
-        int distance = (int)PlayerController.Instance.transform.position.x;
-        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, distance, false);
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, 
+            ScoreManager.Instance.Distance, true);
     }
 	
     //---------------------------------------------------

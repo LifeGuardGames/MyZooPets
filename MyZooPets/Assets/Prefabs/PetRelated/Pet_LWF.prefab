@@ -33,7 +33,7 @@ GameObject:
   m_Layer: 0
   m_Name: Pet_LWF
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1203168336, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -63,6 +63,7 @@ GameObject:
   - 4: {fileID: 400008}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400008}
+  - 114: {fileID: 11400016}
   m_Layer: 0
   m_Name: Speech
   m_TagString: Untagged
@@ -152,7 +153,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.63899994, y: .347236633, z: 13.8411589}
+  m_LocalPosition: {x: -.175427437, y: .347236633, z: 23.7611961}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
@@ -361,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d1d080b98af4c98a6851da3b62495b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechDuration: 300
+  speechDuration: 5
   isDebug: 0
 --- !u!114 &11400006
 MonoBehaviour:
@@ -443,7 +444,7 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: 5.63899994
+    e03: .175427437
     e10: 0
     e11: 1
     e12: 0
@@ -451,7 +452,45 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 1
-    e23: -13.7411585
+    e23: -23.6611958
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: .175427437
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: -8.84723663
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: -23.7611961
     e30: 0
     e31: 0
     e32: 0

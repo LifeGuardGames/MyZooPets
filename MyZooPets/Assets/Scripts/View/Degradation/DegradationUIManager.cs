@@ -38,9 +38,8 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 
     void OnApplicationPause(bool isPaused){
         //need to remove 
-        if(isPaused)
-            foreach(GameObject spawnedTrigger in currentSpawnTriggers)
-                Destroy(spawnedTrigger);
+        // if(isPaused)
+        //     CleanupExistingTriggers();
     }
 	
     //Use this to turn on all particle effects in triggers
@@ -66,6 +65,18 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		return trigger;
 	}
 
+    private void CleanupExistingTriggers(){
+        foreach(GameObject spawnedTrigger in currentSpawnTriggers){
+            //check null first because some of the triggers might be cleaned up
+            //by the user already
+            if(spawnedTrigger){
+                spawnedTrigger.SetActive(false);
+                Destroy(spawnedTrigger);
+            }
+        }
+        currentSpawnTriggers = new List<GameObject>();
+    }
+
     //---------------------------------------------------
     // PlaceTriggers()
     //---------------------------------------------------       
@@ -74,6 +85,9 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
         bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_LAST);
         if (!bTriggers && !IsTesting())
             return;
+
+        //to make sure no left over triggers exists. clean up first
+        CleanupExistingTriggers();
         
         // loop through and place all defined triggers
         List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;

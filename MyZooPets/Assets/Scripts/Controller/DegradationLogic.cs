@@ -44,7 +44,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
     }
 
     private void RefreshCheck(){
-        degradationTriggers = new List<DegradData>(); //this doesnt seem right. cleaning trigger data on pause
+        degradationTriggers = new List<DegradData>(); 
         RefreshDegradationCheck();
         SetUpTriggers();       
         UpdateNextPlayPeriodTime();

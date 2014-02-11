@@ -175,7 +175,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         option.Add("parent", GameObject.Find("Anchor-Center"));
         option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
         option.Add("textSize", 100);
-        option.Add("color", Color.magenta);
+        option.Add("color", Color.white);
 
         FloatyUtil.SpawnFloatyText(option);
 

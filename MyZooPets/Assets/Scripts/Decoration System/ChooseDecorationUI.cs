@@ -58,6 +58,14 @@ public class ChooseDecorationUI : MonoBehaviour {
 			gridPosition.y, gridPosition.z);	
 	}
 	
+	void Update(){
+		// TODO-s THIS IS A MISBEHAVING VARIABLE PUT A DEBUG TO PRINT WHEN REFACTORING TO CATCH THIS!!
+		if(gridPanel.clipRange.y != 0){
+			//Debug.Log("CAUGHT YOU!");
+			gridPanel.clipRange = new Vector4(gridPanel.clipRange.x, 0, gridPanel.clipRange.z, gridPanel.clipRange.w);
+		}
+	}
+	
 	//---------------------------------------------------
 	// UpdateItems()
 	// This function updates the choose decoration menu

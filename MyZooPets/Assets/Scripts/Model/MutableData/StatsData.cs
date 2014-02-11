@@ -33,6 +33,7 @@ public class StatsData{
         Mood = 80;
         Points = 0;
         Stars = 300;
+        // Stars = 8888;
     }
 	
 	public int GetStat( HUDElementType eStat ) {

@@ -183,6 +183,8 @@ public class GameTutorial_Decorations : GameTutorial {
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
 		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
 		
+		AddToProcessList(goEntry);
+		
 		// listen for when that decoration is actually clicked
 		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced += OnDecorationPlaced;
 	}

@@ -131,7 +131,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
 		
 			// depending on if the deco can be placed or not, set certain attributes on the entry
-			UIButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>();
+			LgButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<LgButtonMessage>();
 			if ( bDecoOK ) {
 				// set up place button callbacks
 				button.target = gameObject;

@@ -76,7 +76,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400012}
-  - 114: {fileID: 11400014}
+  - 114: {fileID: 11400024}
   m_Layer: 10
   m_Name: PlaceButton
   m_TagString: Untagged
@@ -409,23 +409,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 400014}
   hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
-  trigger: 0
-  includeChildren: 0
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -499,6 +484,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strConstant: SpriteSize_DecoEntry
+--- !u!114 &11400024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  eMode: 4
+  strSoundProcess: button-21
+  bCheckClickManager: 1
+  target: {fileID: 0}
+  functionName: Button1Action
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

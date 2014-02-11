@@ -45,14 +45,12 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 	//---------------------------------------------------
 	// CheckForWallpaper()
-	// Check if wallpaper is already in decoration inventory
+	// Check if wallpaper is already bought 
 	//---------------------------------------------------
 	public bool CheckForWallpaper(string itemID){
 		bool isWallpaperBought = false;
-		Dictionary<string, InventoryItem> invItems = DataManager.Instance.GameData.Inventory.DecorationItems;
-
-		if(invItems.ContainsKey(itemID))
-			isWallpaperBought = true;
+		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+		isWallpaperBought = oneTimePurchasedInv.Contains(itemID);
 
 		return isWallpaperBought;
 	}
@@ -71,7 +69,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 	//Add items to inventory
 	public void AddItem(string itemID, int count){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem( itemID );
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		
 		InventoryItem invItem = null;
 		bool itemNew = false;
@@ -84,12 +82,20 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 			invItems[itemID] = invItem;
 		}else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
-			ItemType itemType = DataLoader_Items.GetItemType(itemID);
-			
-			string itemTextureName = DataLoader_Items.GetItemTextureName(itemID);
+			Item itemData = DataLoader_Items.GetItem(itemID);
 
-			invItem = new InventoryItem(itemID, itemType, itemTextureName);
+			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
 			invItems[itemID] = invItem;
+
+			//special case: keep track of bought wallpaper in another list.
+			if(itemData.Type == ItemType.Decorations){
+				DecorationItem decoItem = (DecorationItem) itemData;
+
+				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+					List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+					oneTimePurchasedInv.Add(itemData.ID);
+				}
+			}
 		}
 
 		InventoryEventArgs args = new InventoryEventArgs(itemNew, invItem);

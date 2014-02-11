@@ -86,13 +86,15 @@ public enum TalkImageType{
 }
 
 // various type of modes the UI could be in
+// ONLY add enums to the end. Inserting enum will break existing LgButtonMessageClass
 public enum UIModeTypes {
 	NotInited,	// the variable was not initialized; should throw an error
 	None,		// means there is no lock on the click manager
 	Generic,	// used by most things that will lock the click manager; this is just a generic lock
 	Store,
 	EditDecos,
-    Tutorial
+    Tutorial,
+    ChoosePet
 }
 
 // decoration node anchor types

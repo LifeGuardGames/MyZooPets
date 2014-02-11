@@ -20,8 +20,6 @@ public class DataManager : Singleton<DataManager>{
     private const int NUM_OF_PETS = 3;
     private static bool isCreated = false; //prevent DataManager from being loaded
                                             //again during scene change (needs to be static)
-    // private bool firstTime; //Is the user playing for the first time
-    // private int numOfPets; //Number of pets saved on this device
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
     private Dictionary<string, MutableData_PetMenuInfo> menuSceneData; //basic info data of all the pet that are only used in this scene
 
@@ -75,7 +73,7 @@ public class DataManager : Singleton<DataManager>{
         JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now
         JSON.Instance.Parameters.UseOptimizedDatasetSchema = true;
 		
-        //Make Object persistent
+        //--------------------Make Object persistent---------------------------
         if(isCreated){
             //If There is a duplicate in the scene. delete the object and jump Awake
             Destroy(gameObject);
@@ -83,24 +81,9 @@ public class DataManager : Singleton<DataManager>{
         }
         DontDestroyOnLoad(gameObject);
         isCreated = true;
-
-
-        //Retrieve data from PlayerPrefs
-        // firstTime = PlayerPrefs.GetInt("FirstTime", 1) > 0;
-        // numOfPets = PlayerPrefs.GetInt("NumOfPets", 0);
-
-
-        //First time opening the game, so need to initialize the first 3 pets
-        //Don't really need first time inititalization anymore
-        // if(firstTime && numOfPets == 0){ 
-            // InitDataForFirstTimeInstall();
-        // }
+        //---------------------------------------------------------------------
 
         LoadMenuSceneData();
-
-        // firstTime = 
-        // PlayerPrefs.SetInt("FirstTime", 0);
-        //if not first time deserialize basic menu data
 
         //Use this when developing on an independent scene. Will initialize all the data
         //before other classes call DataManager
@@ -109,9 +92,6 @@ public class DataManager : Singleton<DataManager>{
             InitializeGameDataForNewPet(currentPetID, "", "Basic", "OrangeYellow");
         }
     }
-
-
-   
 
     //----------------------------------------------------
     //This function gets called before the script variables are ready so don't try
@@ -194,19 +174,9 @@ public class DataManager : Singleton<DataManager>{
         if(!String.IsNullOrEmpty(petID)){
             menuSceneData.Remove(petID);
             gameData = null;
+            PlayerPrefs.DeleteKey(petID + "_GameData");
         }
     }
-
-     //"Egg" not born yet (needs to be initialize), "Hatch" borned
-    // public string GetPetStatus(string petID){
-    //     return PlayerPrefs.GetString(petID + "_PetStatus");
-    // }
-
-    // //Return the species and the color of the pet so the selection
-    // //pet animation can be displayed correctly
-    // public string GetPetSpeciesColor(string petID){
-    //     return PlayerPrefs.GetString(petID + "_SpeciesColor");
-    // }
 
     //----------------------------------------------------
     // IsGameDataLoaded()
@@ -223,10 +193,6 @@ public class DataManager : Singleton<DataManager>{
     //Initalize New PetGameData
     public void InitializeGameDataForNewPet(string petID, string petName, string petSpecies, string petColor){
         if(!String.IsNullOrEmpty(currentPetID)){
-
-            //Set basic pet data that will be used in MenuScene
-            // PlayerPrefs.SetString(currentPetID + "_PetStatus", "Hatch");
-            // PlayerPrefs.SetString(currentPetID + "_SpeciesColor", speciesColor);
 
             gameData = new PetGameData();
             if(!String.IsNullOrEmpty(petName))
@@ -325,25 +291,6 @@ public class DataManager : Singleton<DataManager>{
             string jsonString = JSON.Instance.ToJSON(menuSceneData);
             PlayerPrefs.SetString("MenuSceneData", jsonString);
         }
-    }
-
-    //----------------------------------------------------
-    // InitDataForFirstTimeInstall()
-    // First time starting the game, so initialize some basic
-    // variables 
-    //----------------------------------------------------
-    private void InitDataForFirstTimeInstall(){
-        // PlayerPrefs.SetString("Pet0_PetStatus", "Egg");
-        // PlayerPrefs.SetString("Pet1_PetStatus", "Egg");
-        // PlayerPrefs.SetString("Pet2_PetStatus", "Egg");
-
-        // //Turn off first time
-        // firstTime = false;
-        // PlayerPrefs.SetInt("FirstTime", 0);
-
-        // //Reset num of pets
-        // numOfPets = 3;
-        // PlayerPrefs.SetInt("NumOfPets", 3);
     }
 
     //called when game data has be deserialized. could be successful or failure 

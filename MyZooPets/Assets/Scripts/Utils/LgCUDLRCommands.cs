@@ -16,6 +16,15 @@ public static class LgCUDLRCommands {
       CUDLR.Console.Log(obj.name);
     }
   }
+	
+  [CUDLR.Command("active object list positions", "all the game objects in the scene: relative + absolute position")]
+  public static void ListActiveGameObjectsPositions() {
+    UnityEngine.Object[] objects = UnityEngine.Object.FindObjectsOfType(typeof(GameObject));
+    foreach (UnityEngine.Object obj in objects) {
+	  UnityEngine.GameObject go = obj as UnityEngine.GameObject;
+      CUDLR.Console.Log(go.name + " relPos:" + go.transform.localPosition + "  absPos:" + go.transform.position);
+    }
+  }
 
   [CUDLR.Command("object list", "lists all the game objects in the scene")]
   public static void ListGameObjects(){

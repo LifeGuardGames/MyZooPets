@@ -214,7 +214,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		
 		GameObject go = gesture.Selection;
 		if ( go ) {
-			//Debug.Log("Touching " + go.name);
+			Debug.Log("Touching " + go.name);
 			NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
 			
 			// if the trigger is null, check the parent...a little hacky, but sue me!

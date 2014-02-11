@@ -43,8 +43,19 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		}
 	}	
 
-	// public List<InventoryItem> FoodInventoryItems{}
-	// public List<InventoryItem> UsableInventoryItems{}
+	//---------------------------------------------------
+	// CheckForWallpaper()
+	// Check if wallpaper is already in decoration inventory
+	//---------------------------------------------------
+	public bool CheckForWallpaper(string itemID){
+		bool isWallpaperBought = false;
+		Dictionary<string, InventoryItem> invItems = DataManager.Instance.GameData.Inventory.DecorationItems;
+
+		if(invItems.ContainsKey(itemID))
+			isWallpaperBought = true;
+
+		return isWallpaperBought;
+	}
 
 	//Return InventoryItem with itemID
 	//Return null if inventory item has been removed
@@ -67,6 +78,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		listNeedsUpdate = true;
 
 		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
+
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
 			invItems[itemID] = invItem;

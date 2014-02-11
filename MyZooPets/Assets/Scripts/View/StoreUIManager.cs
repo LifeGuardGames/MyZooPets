@@ -209,7 +209,23 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void OnBuyButton(GameObject button){
 		string itemID = button.transform.parent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
+
+
 		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
+			//Special case to handle here. Since only one wallpaper can be used at anytime
+			//There is no point for the user to buy more than one of each diff wallpaper
+			if(itemData.Type == ItemType.Decorations){
+				DecorationItem decoItem = (DecorationItem) itemData;
+
+				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+					UIImageButton buyButton = button.GetComponent<UIImageButton>();
+		
+					//Disable the buy button so user can't buy the same wallpaper anymore 
+					if(buyButton)
+						buyButton.isEnabled = false;
+				}
+			}
+
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));

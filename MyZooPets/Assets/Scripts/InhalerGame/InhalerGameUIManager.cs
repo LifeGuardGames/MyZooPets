@@ -150,7 +150,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void QuitInhalerGame(){
         InhalerLogic.Instance.CompleteTutorial();
-        // Analytics.Instance.EndPlayTimeTracker();
+        NotificationUIManager.Instance.CleanupNotification();
         scriptTransition.StartTransition(SceneUtils.BEDROOM);
     }
 
@@ -170,7 +170,19 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HideInhaler();
         HideProgressBar();
 
+        //Spawn floaty
+        Hashtable option = new Hashtable();
+        option.Add("parent", GameObject.Find("Anchor-Center"));
+        option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+        option.Add("textSize", 100);
+        option.Add("color", Color.magenta);
+
+        FloatyUtil.SpawnFloatyText(option);
+
+        //play sound
         AudioManager.Instance.PlayClip("inhalerFireFlow");
+
+        //play animation
         fireAnimationController.PlaySequence();
     }
 

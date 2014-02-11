@@ -41,6 +41,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	//---------------------------------------------
+	// CleanupNotification()
+	// Will destroy all currently spawned notifications
+	//---------------------------------------------
+	public void CleanupNotification(){
+		if(notificationCenterPanel != null)
+			Destroy(notificationCenterPanel);
+	}
+
+	//---------------------------------------------
 	// AddToQueue()
 	// Use this method to add new notification to the queue
 	//---------------------------------------------

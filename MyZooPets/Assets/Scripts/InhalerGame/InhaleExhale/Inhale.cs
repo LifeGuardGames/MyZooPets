@@ -11,8 +11,7 @@ public class Inhale : InhalerPart {
     protected override void Awake(){
         base.Awake();
         gameStepID = 7;
-        floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-        floatyOptions.Add("textSize", 100);
+        floatyOptions.Add("text", ""); 
     }
 
     void OnSwipe(SwipeGesture gesture){

@@ -143,7 +143,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     private void RefreshUI(){
         //Remove old data
         foreach(Transform childTransform in selectionGrid.transform){
-            Destroy(childTransform.gameObject);
+            childTransform.gameObject.SetActive(false);
+			Destroy(childTransform.gameObject);
         }
 
         Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 
+#if UNITY_EDITOR
+using UnityEditor;
+using System.Xml.Serialization;
 public class LgDebugTool : EditorWindow
 {
     private List<CriticalConstant> constants;
@@ -33,13 +34,6 @@ public class LgDebugTool : EditorWindow
         GUILayout.Label("Critical Constants Editor", EditorStyles.boldLabel);
 
         EditorGUILayout.EndVertical(); 
-
-        // groupEnabled = EditorGUILayout.BeginToggleGroup ("Optional Settings", groupEnabled);
-        //     myBool = EditorGUILayout.Toggle ("Toggle", myBool);
-        //     myFloat = EditorGUILayout.Slider ("Slider", myFloat, -3, 3);
-        // EditorGUILayout.EndToggleGroup ();
-        // string typeName = typeof (string).FullName;
-        // Debug.Log(typeName);
 
         if(constants != null){
             foreach(CriticalConstant constant in constants){
@@ -84,5 +78,5 @@ public class LgDebugTool : EditorWindow
         reader.Close(); 
         return XmlData.criticalConstantList;
     }
-
 }
+#endif

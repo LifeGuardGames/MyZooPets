@@ -15,7 +15,7 @@ public class PetLevelMutableData{
     }
 
     private void Init(){
-        // CurrentLevel = Level.Level1;
-        CurrentLevel = Level.Level7;
+        CurrentLevel = Level.Level1;
+        // CurrentLevel = Level.Level7;
     } 
 }

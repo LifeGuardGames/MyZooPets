@@ -195,14 +195,25 @@ public class StatsController : Singleton<StatsController> {
 	//---------------------------------------------------	
 	private void CheckForHealthTransition( PetHealthStates eOld, PetHealthStates eNew ) {
 		// there are a bunch of cases here
+
+		//HealthyHappySick --> SickVerySick or HealthySadSick --> SickVerySick
 		if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.VerySick ) {
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
-			scriptPetAnim.Transition( "Transition_HealthySick" );	
+			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
+
+			if(mood == PetMoods.Happy)
+				scriptPetAnim.Transition( "Transition_HealthyHappySick" );
+			else if(mood == PetMoods.Sad)
+				scriptPetAnim.Transition( "Transition_HealthySadSick" );
+
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
+			
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
 		}
+
+		// Healthy --> HappySick or Healthy --> SadSick
 		else if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick ){
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
@@ -212,13 +223,31 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_HealthySadSick" );
 				
 		}
+
+		// VerySick --> HealthyHappy or VerySick --> HealthySad
 		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Healthy ) {
 			// pet is going from very sick to healthy; play both transitions
 			scriptPetAnim.Transition( "Transition_VerySickSick" );
+
+			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
+
+			if(mood == PetMoods.Happy)
+				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
+			else if(mood == PetMoods.Sad)
+				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+		}
+
+		// Sick --> HealthyHappy or Sick --> HealthySad
+		else if(eOld == PetHealthStates.Sick && eNew == PetHealthStates.Healthy){
+			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
+
+			if(mood == PetMoods.Happy)
+				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
+			else if(mood == PetMoods.Sad)
+				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+
 			scriptPetAnim.Transition( "Transition_SickHealthy" );
 		}
-		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.Healthy )
-			scriptPetAnim.Transition( "Transition_SickHealthy" );
 		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick ){
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
 

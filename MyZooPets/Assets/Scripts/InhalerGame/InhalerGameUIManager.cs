@@ -137,7 +137,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
             if(OnShowHint != null)
                 OnShowHint(this, EventArgs.Empty);
 
-            ResetHintTimer();
+            runShowHintTimer = false;
         }
     }
 
@@ -148,6 +148,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private void ResetHintTimer(){
         timer = 0;
         showHint = false; 
+        runShowHintTimer = true;
     }
 
     private void QuitInhalerGame(){

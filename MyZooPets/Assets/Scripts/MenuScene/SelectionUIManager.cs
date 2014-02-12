@@ -62,6 +62,10 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     public void LoadGame(){
+
+        //Lock it while loading
+        ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+
         //Load game data only if the selected pet is different from the current pet
         if(DataManager.Instance.CurrentPetID != selectedPetID){
             DataManager.Instance.CurrentPetID = selectedPetID;

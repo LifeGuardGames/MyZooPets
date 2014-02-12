@@ -18,7 +18,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private bool skipComic = false;
 	
     void Awake(){
-        eModeType = UIModeTypes.ChoosePet;
+        eModeType = UIModeTypes.CustomizePet;
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
@@ -86,8 +86,10 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
 		if(showMovie){
+            ClickManager.Instance.Lock(UIModeTypes.IntroComic);
         	Invoke("ShowIntroMovie", 1);
 		}
+
         //since we turn on spotlight and turn off animation for customization UI
         //need to reverse them 
         else{

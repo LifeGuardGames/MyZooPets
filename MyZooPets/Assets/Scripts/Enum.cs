@@ -94,7 +94,8 @@ public enum UIModeTypes {
 	Store,
 	EditDecos,
     Tutorial,
-    ChoosePet
+    CustomizePet,
+    IntroComic
 }
 
 // decoration node anchor types

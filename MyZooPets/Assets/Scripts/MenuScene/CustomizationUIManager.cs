@@ -54,12 +54,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public void ButtonClicked_Finish(){
         if (!finishClicked){
             // play sound
-
-            // HideChooseGUI(true);
-             AudioManager.Instance.PlayClip( "introDoneNaming" );
+             AudioManager.Instance.PlayClip("introDoneNaming");
             
             finishClicked = true;
             petName = nameField.text;
+
+            Analytics.Instance.PetColorChosen(petColor);
 
             //Initialize data for new pet
             DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 

@@ -23,7 +23,6 @@ public class Analytics : MonoBehaviour {
     public const string TASK_STATUS_COMPLETE = "Complete";
     public const string TASK_STATUS_FAIL = "Fail";
 
-
     public const string INHALER_CATEGORY = "MiniGame:Inhaler:";
     public const string RUNNER_CATEGORY = "MiniGame:Runner:";
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
@@ -107,6 +106,10 @@ public class Analytics : MonoBehaviour {
 
     //=======================General Analytics==================================
     //Will be use in different mini games
+    public void PetColorChosen(string petColor){
+        if(!String.IsNullOrEmpty(petColor))
+            GA.API.Design.NewEvent("PetColorChosen:" + petColor);
+    }
 
     //Start tracking playtime 
     public void StartPlayTimeTracker(){

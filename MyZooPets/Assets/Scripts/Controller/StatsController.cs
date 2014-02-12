@@ -207,7 +207,7 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_HealthySadSick" );
 
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
-			
+
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
@@ -248,6 +248,8 @@ public class StatsController : Singleton<StatsController> {
 
 			scriptPetAnim.Transition( "Transition_SickHealthy" );
 		}
+
+		// Sick --> VerySick
 		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick ){
 			scriptPetAnim.Transition( "Transition_SickVerySick" );
 
@@ -255,6 +257,8 @@ public class StatsController : Singleton<StatsController> {
 				OnSickToVerySick(this, EventArgs.Empty);
 
 		}
+
+		// VerySick --> Sick
 		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Sick )
 			scriptPetAnim.Transition( "Transition_VerySickSick" );
 		

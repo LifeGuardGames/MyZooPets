@@ -19,7 +19,7 @@ public class GameTutorial_Decorations : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 3;
+		nMaxSteps = 4;
 	}
 	
 	//---------------------------------------------------
@@ -33,6 +33,26 @@ public class GameTutorial_Decorations : GameTutorial {
 	// _End()
 	//---------------------------------------------------		
 	protected override void _End( bool bFinished ) {
+		// since this is the last tutorial, show a little notification
+		string strKey = "TUTS_FINISHED";											// key of text to show
+		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
+		string strAnalytics="";														// analytics tracker
+			
+		// show the standard popup
+        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
+			String.Format(Localization.Localize(strKey), petName, 
+			StringUtils.FormatStringPossession(petName)),
+			strImage, null, true, true, strAnalytics );
+
+		GameObject wellapadButton = (GameObject) GameObject.Find("WellapadButton");
+		if(wellapadButton != null){
+			ButtonWellapad buttonWellapadScript = wellapadButton.GetComponent<ButtonWellapad>();
+			buttonWellapadScript.SetListenersToWellapadMissionController();
+		}else{
+			Debug.LogError("wellapad button can't be found: " + this);
+		}
+
 	}
 	
 	//---------------------------------------------------
@@ -41,16 +61,53 @@ public class GameTutorial_Decorations : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		switch ( nStep ) {
 			case 0:
+				ShowWellapad();
+				break;
+			case 1:
 				TutorialManager.Instance.StartCoroutine( FocusOnEditButton() );
 				break;
-		case 1:
+			case 2:
 				FocusOnNode();
 				break;
-		case 2:
+			case 3:
 				TutorialManager.Instance.StartCoroutine( FocusOnDecorationUI() );
 				break;			
 		}
 	}
+
+	//---------------------------------------------------
+	// ShowWellapad()
+	//---------------------------------------------------		
+	private void ShowWellapad() {
+		// float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreShowWellapad" );
+		// yield return new WaitForSeconds(fWait);
+		// highlight the fight task
+		WellapadMissionController.Instance.HighlightTask("Decorate");
+	
+		// show the wellapad
+		WellapadUIManager.Instance.OpenUI();
+	
+		// enable the close button		
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
+		AddToProcessList( goBack );
+		
+		// listen for wellapad closing
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;			
+	}
+
+	//---------------------------------------------------
+	// OnWellapadClosed()
+	// Callback for when the wellapad is closed.
+	//---------------------------------------------------	
+	private void OnWellapadClosed(object sender, UIManagerEventArgs args) {
+		if (args.Opening == false) {
+			// wellapad is closing, so stop listening
+			WellapadUIManager.Instance.OnManagerOpen -= OnWellapadClosed;
+			
+			// advance to next step
+			Advance();
+		}
+	}	
 	
 	//---------------------------------------------------
 	// FocusOnEditButton()
@@ -100,7 +157,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		button.OnProcessed += OnNodeClicked;		
 		
 		// at this point, also give the user an item for the node they are about to click
-		InventoryLogic.Instance.AddItem( "WallPoster1", 1 );
+		InventoryLogic.Instance.AddItem( "WallPoster8", 1 );
 	}
 	
 	//---------------------------------------------------
@@ -124,7 +181,9 @@ public class GameTutorial_Decorations : GameTutorial {
 		
 		// find and spotlight the decoration in the user's inventory/UI
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
-		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom );
+		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
+		
+		AddToProcessList(goEntry);
 		
 		// listen for when that decoration is actually clicked
 		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced += OnDecorationPlaced;

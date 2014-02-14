@@ -41,6 +41,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	}
 	
 	void Start() {
+		eModeType = UIModeTypes.EditDecos;
+		
 		// cache the tween on the edit button for easier use
 		tweenEdit = goEdit.GetComponent<PositionTweenToggle>();
 		
@@ -76,7 +78,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
 		// if the choose menu was open, close it
-		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
 		if (tween.IsShowing)
 			tween.Hide();		
 		
@@ -125,6 +127,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		// close this UI and show the edit decos button
 		CloseChooseMenu_( false );
 		tweenEdit.Show();
+		
+		// push the shop mode type onto the click manager stack
+		ClickManager.Instance.Lock( UIModeTypes.Store );
 	
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
@@ -147,6 +152,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 		
 		// update the menu
 		UpdateChooseMenu( nodeSaved );	
+		
+		// pop the mode we pushed earlier from the click manager
+		ClickManager.Instance.ReleaseLock();
 
 		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}
@@ -160,10 +168,11 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------	
 	public void UpdateChooseMenu( DecorationNode decoNode ) {
 		// if the menu is not showing, show it
-		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
 		if (!tween.IsShowing){
 			tween.Show();
 			tweenExit.Hide();
+			//ClickManager.Instance.Lock( UIModeTypes.EditDecos, GetClickLockExceptions());
 		}
 		
 		// update the menu based on the incoming deco node
@@ -195,7 +204,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	}
 	
 	public void CloseChooseMenu_( bool bShowExit = true ) {
-		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
 		if (!tween.IsShowing)
 			Debug.LogError("Something trying to close an already closed choose menu for deco edit.");
 		else{
@@ -251,7 +260,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager> {
 	//---------------------------------------------------	
 	public void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
 		// if the user is changing rooms in deco mode, close the choose deco UI if it is open
-		PositionTweenToggle tween = goChoosePanel.GetComponent<PositionTweenToggle>();
+		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
 		if ( tween.IsShowing )
 			CloseChooseMenu();
 	}

@@ -18,6 +18,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private bool skipComic = false;
 	
     void Awake(){
+        eModeType = UIModeTypes.CustomizePet;
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
@@ -33,10 +34,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         ShowChooseGUI();	
 	}
 	
-	// Used when pressing back button in the panel, NOT finished
+	// Used when pressing back button in the panel
 	protected override void _CloseUI(){
-		ShowTitle();
-		HideChooseGUI(false);
 	}
     
     public void ChangeEggColor( string strSprite, string strColor ) {
@@ -47,30 +46,28 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         }       
     }
 
+    public void ButtonClicked_Back(){
+        base.CloseUI();
+        HideChooseGUI(false);
+    }
+
     public void ButtonClicked_Finish(){
         if (!finishClicked){
             // play sound
-            AudioManager.Instance.PlayClip( "introDoneNaming" );
+             AudioManager.Instance.PlayClip("introDoneNaming");
             
             finishClicked = true;
             petName = nameField.text;
 
+            Analytics.Instance.PetColorChosen(petColor);
+
             //Initialize data for new pet
-            DataManager.Instance.InitializeGameDataForNewPet("Basic" + petColor);
+            DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 
+                petName, "Basic", petColor);
 
-            //Set the PetInfo
-            DataManager.Instance.GameData.PetInfo.PetID = selectedEgg.transform.parent.name;
-
-            if(!String.IsNullOrEmpty(petName))
-                DataManager.Instance.GameData.PetInfo.PetName = petName;
-
-            if(!String.IsNullOrEmpty(petColor))
-                DataManager.Instance.GameData.PetInfo.PetColor = petColor;
-
-            DataManager.Instance.GameData.PetInfo.IsHatched = true;
-
-            HideChooseGUI(true);
         }
+        base.CloseUI();
+        HideChooseGUI(true);
     }
 
     public void ShowTitle(){
@@ -89,8 +86,10 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
 		if(showMovie){
+            ClickManager.Instance.Lock(UIModeTypes.IntroComic);
         	Invoke("ShowIntroMovie", 1);
 		}
+
         //since we turn on spotlight and turn off animation for customization UI
         //need to reverse them 
         else{
@@ -100,9 +99,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
+		if (DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
-		
+	
+        AudioManager.Instance.LowerBackgroundVolume(0.1f);
+
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
 		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
         ComicPlayer.OnComicPlayerDone += IntroComicDone;

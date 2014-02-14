@@ -12,6 +12,7 @@ public class CFX_AutoDestructShuriken : MonoBehaviour
 {
 	// If true, deactivate the object instead of destroying it
 	public bool OnlyDeactivate;
+	public GameObject parentToDestroy;
 	
 	void OnEnable()
 	{
@@ -33,8 +34,14 @@ public class CFX_AutoDestructShuriken : MonoBehaviour
 						this.gameObject.SetActive(false);
 					#endif
 				}
-				else
-					GameObject.Destroy(this.gameObject);
+				else{
+					if(parentToDestroy != null){
+						GameObject.Destroy(parentToDestroy);
+					}
+					else{
+						GameObject.Destroy(this.gameObject);
+					}
+				}
 				break;
 			}
 		}

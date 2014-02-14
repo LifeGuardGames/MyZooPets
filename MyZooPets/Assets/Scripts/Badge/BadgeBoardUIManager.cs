@@ -110,8 +110,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			
 			// Play pulsing animation in current badge
 			Animation anim = go.AddComponent<Animation>();
-			anim.AddClip(pulseClip, "scaleUpDown");
-			anim.Play("scaleUpDown");
+			anim.AddClip(pulseClip, "scaleUpDownBadge");
+			anim.Play("scaleUpDownBadge");
 			
 			// Hide callback, show last badge info
 			TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
@@ -166,7 +166,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	//The back button on the left top corner is clicked to zoom out of the badge board
 	protected override void _CloseUI(){
-		if(isActive && !ClickManager.Instance.isClickLocked){
+		if(isActive){
 			HideDescriptionPanel();
 			if(lastClickedBadge != null){
 				Destroy(lastClickedBadge.GetComponent<Animation>());

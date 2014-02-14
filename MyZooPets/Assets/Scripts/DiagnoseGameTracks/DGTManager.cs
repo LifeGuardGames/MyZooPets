@@ -101,7 +101,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		numOfCorrectDiagnose = 0;
 		
 		// if the play hasn't played the tutorial yet, start it
-		if ( TutorialOK() && ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) ) )
+		if ( TutorialOn() && ( IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( DGTTutorial.TUT_KEY ) ) )
 			StartTutorial();		
 		
 		// set the spawn timer to 0
@@ -141,7 +141,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		
 		// if a tutorial is happening, just set the speed to starting speed...this is in case the track was stopped
 		// because the player didn't switch the tracks quick enough
-		if ( IsTutorial() )
+		if ( IsTutorialRunning() )
 			SetTrackSpeed( fStartingSpeed );
 		
 		// the zone changed, so play a sound (only if there was a valid zone before though)
@@ -202,7 +202,11 @@ public class DGTManager : MinigameManager<DGTManager> {
 		if ( eZoneStage == eCharStage )
 			CharacterScored_Right( characterScored, zoneTarget);
 		else 
-			CharacterScored_Wrong( characterScored, zoneTarget );		
+			CharacterScored_Wrong( characterScored, zoneTarget );	
+		
+		// regardless of whether the character scored right or wrong, show a poof FX
+		Vector3 vPosFX = characterScored.gameObject.transform.position;
+		ParticleUtils.CreateParticle( "ClinicZonePuff", vPosFX );
 	}
 	
 	//---------------------------------------------------
@@ -219,7 +223,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		string strSound = "clinicCorrect";
 		
 		// update the wave count (if it's not a tutorial)
-		if ( IsTutorial() == false ){
+		if ( IsTutorialRunning() == false ){
 			UpdateWaveCountdown(-1);
 			numOfCorrectDiagnose++; //increment if not tutorial
 		}
@@ -227,9 +231,18 @@ public class DGTManager : MinigameManager<DGTManager> {
 		// every X points the player gets an additional life
 		int nExtraLife = Constants.GetConstant<int>( "Clinic_ExtraLife" );
 		int nScore = GetScore();
-		if ( nScore % nExtraLife == 0 ) {
+		if (nScore % nExtraLife == 0) {
 			strSound = "PointSingle";		// set the sound to something different
 			UpdateLives( 1 );
+
+			//spawn a floaty
+			Hashtable option = new Hashtable();
+			option.Add("parent", GameObject.Find("Anchor-Center"));
+			option.Add("text", Localization.Localize("DGT_EXTRA_LIFE"));
+			option.Add("textSize", 100);
+			option.Add("color", Color.magenta);
+
+			FloatyUtil.SpawnFloatyText(option);
 		}
 		
 		// play appropriate sound
@@ -255,8 +268,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		Analytics.Instance.DiagnoseResult(Analytics.DIAGNOSE_RESULT_INCORRECT,
 			character.GetStage(), zone.GetStage());
 		
-		// also slow down the game
-		SlowGameDown();
+		// also slow down the game, if this didn't cause us to have a game over
+		MinigameStates eState = GetGameState();
+		if ( eState == MinigameStates.Playing )
+			SlowGameDown();
 	}
 	
 	//---------------------------------------------------
@@ -336,7 +351,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	//---------------------------------------------------	
 	private void SlowGameDown() {
 		// roll back the speed x 2
-		ChangeTrackSpeed( fSpeedIncrease * -2 );
+		ChangeTrackSpeed( fSpeedIncrease * -1 );
 		
 		// also roll back the spawn timer
 		ChangeSpawnRate( fSpawnChange * -2 );
@@ -375,7 +390,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	private void SpawnCharacter() {
 		// if a tutorial is going on, and the stage stack is empty, it means we need to wait to spawn more characters
 		DGTTutorial tutorial = GetTutorial() as DGTTutorial;
-		if ( IsTutorial() && tutorial.ShouldWait() )
+		if ( IsTutorialRunning() && tutorial.ShouldWait() )
 			return;
 		
 		// first, reset our spawn timer
@@ -386,7 +401,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 		GameObject goChar = Instantiate( prefabCharacter, vLoc, Quaternion.identity ) as GameObject;
 		
 		// if there is something in the stages stack, it means that the newly spawned character should have a specific type
-		if ( IsTutorial() ) {
+		if ( IsTutorialRunning() ) {
 			AsthmaStage eStage = tutorial.GetStageToSpawn();
 			DGTCharacter script = goChar.GetComponent<DGTCharacter>();
 			script.SetAttributes( eStage );
@@ -409,7 +424,7 @@ public class DGTManager : MinigameManager<DGTManager> {
 	public bool IsZoneLocked( AsthmaStage eZoneStage ) {
 		bool bLocked = false;
 		
-		if ( IsTutorial() ) {
+		if ( IsTutorialRunning() ) {
 			DGTTutorial tutorial = GetTutorial() as DGTTutorial;
 			AsthmaStage eCurrentStage = tutorial.GetCurrentStage();
 			bLocked = eCurrentStage != eZoneStage;
@@ -426,7 +441,10 @@ public class DGTManager : MinigameManager<DGTManager> {
 		return GetStandardReward( eType );
 	}
 	
-	////////----------------- Tutorial code	
+	//---------------------------------------------------
+	// StartTutorial()
+	// Tutorial code	
+	//---------------------------------------------------
 	private void StartTutorial() {
 		// set our tutorial
 		SetTutorial( new DGTTutorial() );

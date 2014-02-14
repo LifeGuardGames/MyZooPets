@@ -15,6 +15,9 @@ public class CameraManager : Singleton<CameraManager> {
 	// ratios
 	public float ratioX;
 	public float ratioY;
+	public float GetRatioDifference(){
+		return ratioY;
+	}
 	
 	// default positoin/rotation of the camera
 	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
@@ -28,6 +31,10 @@ public class CameraManager : Singleton<CameraManager> {
 	
 	// is the camera zoomed?
 	private bool bZoomed;
+	private bool bZooming;
+	public void SetZooming( bool b ) {
+		bZooming = b;	
+	}
 
 	private int nativeWidth;
 	public int GetNativeWidth() {
@@ -72,7 +79,8 @@ public class CameraManager : Singleton<CameraManager> {
 		float fTargetX = script.partitionOffset * script.currentPartition;
 		float fX = goParent.transform.position.x;
 		
-		bool bMoving = fTargetX != fX;
+		// check if the camera is moving horizontally or zooming
+		bool bMoving = fTargetX != fX || bZooming;
 		
 		return bMoving;
 	}
@@ -81,6 +89,9 @@ public class CameraManager : Singleton<CameraManager> {
 	// ZoomToTarget()
 	// Moves the camera to a target position with a 
 	// target rotation over a set time.
+	// NOTE: If this function can ever "fail", be sure to
+	// check ZoomHelper because it assumes this function
+	// will always work.
 	//---------------------------------------------------	
 	public void ZoomToTarget( Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject ) {
 		// before zooming, cache the camera position
@@ -217,7 +228,7 @@ public class CameraManager : Singleton<CameraManager> {
 		
 		switch ( eAnchorIn ) {
 			case InterfaceAnchors.Center:
-				// vTransformed.x += nativeWidth / 2; //Jason: This doesn't make sense for center to top conversion
+				 //vTransformed.x += nativeWidth / 2; //Jason: This doesn't make sense for center to top conversion
 													 // so i commented it out. center to top has the same x only the
 													 //Y change...not sure why this was here in the beginning. hope i
 													 //didn't break more code

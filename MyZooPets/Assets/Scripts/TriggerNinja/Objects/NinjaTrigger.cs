@@ -25,11 +25,12 @@ public class NinjaTrigger : MonoBehaviour {
 	
 	// particle effect that will play when this object gets hit
 	public GameObject goHitFX;
+	public GameObject goHitDirectionFX;
 	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	void Start() {
+	protected virtual void Start() {
 		// count the number of children that have NinjaTriggerChildren scripts -- this will be used when determining if the
 		// trigger is being shown by the camera or not.
 		NinjaTriggerChild[] children = gameObject.GetComponentsInChildren<NinjaTriggerChild>();
@@ -70,6 +71,14 @@ public class NinjaTrigger : MonoBehaviour {
 		Vector3 vPosWorld = Camera.main.ScreenToWorldPoint( new Vector3(vHit.x, vHit.y, 10) );
 		vPosWorld.z = goHitFX.transform.position.z;
 		ParticleUtils.CreateParticle( goHitFX, vPosWorld );
+		
+		// Directional particle spawn
+		if(goHitDirectionFX != null){
+			GameObject dirParticle = ParticleUtils.CreateParticle( goHitDirectionFX, vPosWorld);
+			Vector2 trailMoveDelta = NinjaManager.Instance.GetTrailDeltaMove();
+			dirParticle.GetComponent<XYComponentRotateObject>().x = trailMoveDelta.x;
+			dirParticle.GetComponent<XYComponentRotateObject>().y = trailMoveDelta.y;	
+		}
 		
 		// call child behaviour
 		_OnCut();
@@ -167,12 +176,11 @@ public class NinjaTrigger : MonoBehaviour {
 	// This trigger is no longer on the screen.
 	//---------------------------------------------------	
 	private void TriggerOffScreen() {
-#if UNITY_EDITOR
-		// check to make sure the game is playing, because this function is called in the editor
+		// check to make sure the proper managers exist.  This check is necessary because this function will be triggered when the editor
+		// quits the game, and also when the user quits the game into another scene.
 		if ( !AudioManager.Instance || !NinjaManager.Instance )
 			return;
-#endif
-		
+
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
 		MinigameStates eState = NinjaManager.Instance.GetGameState();

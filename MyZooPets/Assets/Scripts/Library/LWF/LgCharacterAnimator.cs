@@ -11,10 +11,13 @@ public class LgCharacterAnimator : LWFAnimator {
 	public bool IsAnimating() {
 		return bAnimating;	
 	}
-	protected
-	void SetAnimating( bool b ) {
+
+	protected void SetAnimating( bool b ) {
 		bAnimating = b;	
 	}
+
+    // key that tells where the animation is used -- i.e runner, bedroom, trigger ninja
+	public string animType;
 	
 	//---------------------------------------------------
 	// IsBusy()
@@ -80,6 +83,25 @@ public class LgCharacterAnimator : LWFAnimator {
 		else
 			transform.parent.localScale = new Vector3(1f, 1f, 1f);	
 	}	
+
+
+	//---------------------------------------------------		
+	// Start()
+	// Override start method to set the path of the animation
+	// according to the pet species and pet color name
+	//---------------------------------------------------		
+	protected override void Start(){
+		// set the LWFAnimator loading data based on the pet's attributes
+		string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
+
+		// string strColor = GetColorKey();
+		string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
+
+		animName = strSpecies + strColor;
+		folderPath = "LWF/" + animType + "/" + animName + "/";
+
+		base.Start();
+	}
 	
 	//---------------------------------------------------
 	// ClipFinished()

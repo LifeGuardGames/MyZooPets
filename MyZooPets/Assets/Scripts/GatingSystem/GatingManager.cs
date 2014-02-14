@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ public class GatingManager : Singleton<GatingManager> {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start() {
+	void Start() {		
 		// set pan script
 		scriptPan = CameraManager.Instance.GetPanScript();
 		
@@ -49,7 +49,7 @@ public class GatingManager : Singleton<GatingManager> {
 		// now spawn the gates
 		SpawnGates();
 	}
-	
+		
 	//---------------------------------------------------
 	// RecurringGateCheck()
 	// Some gates recur -- that is, if they have been
@@ -161,7 +161,7 @@ public class GatingManager : Singleton<GatingManager> {
 			// if the player is entering a gated room, hide some ui and lock the click manager
 			List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 			listExceptions.Add( ClickLockExceptions.Moving );
-			ClickManager.Instance.ClickLock( listExceptions );
+			ClickManager.Instance.Lock( UIModeTypes.Generic, listExceptions );
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.HidePanel();
@@ -258,9 +258,12 @@ public class GatingManager : Singleton<GatingManager> {
 			strImage = "itemInhalerMain";
 			// strAnalytics = "BreathFire:Fail:NoCharges";
 		}
-			
+		
+		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
+		string message = String.Format(Localization.Localize(strKey), petName);
 		// show the standard popup
-		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, Localization.Localize( strKey ), strImage, null, true, true, strAnalytics );		
+		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
+			message, strImage, null, true, true, strAnalytics );		
 	}
 	
 	//---------------------------------------------------
@@ -301,7 +304,7 @@ public class GatingManager : Singleton<GatingManager> {
 	// been locked.
 	//---------------------------------------------------	
 	private void EnableUI() {
-		ClickManager.Instance.ReleaseClickLock();
+		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
 		InventoryUIManager.Instance.ShowPanel();

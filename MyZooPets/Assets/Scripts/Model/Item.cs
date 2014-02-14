@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+//---------------------------------------------------
+// Items
+// Immutable data
+//---------------------------------------------------
 public class Item {
 	protected string id; //id of item
 	protected string name; //name of item
@@ -31,7 +35,8 @@ public class Item {
 		get{return cost;}
 	}
 	public virtual string Description{
-		get{return Localization.Localize( description );}
+		// get{return Localization.Localize( description );}
+        get{return "";}
 	}
 	public int UnlockAtLevel{
 		get{return unlockAtLevel;}
@@ -41,12 +46,14 @@ public class Item {
 	}
 	
 	public bool IsLocked() {
-		bool bLocked = GetLockedLevel() > 0;
+		int nLockLevel = UnlockAtLevel;
+		int nPetLevel = (int) ( LevelLogic.Instance.CurrentLevel );
+		bool bLocked = nLockLevel > 0 && nLockLevel > nPetLevel;
 		return bLocked;
 	}
-	public int GetLockedLevel() {
-		return unlockAtLevel;	
-	}
+	// public int GetLockedLevel() {
+	// 	return unlockAtLevel;	
+	// }
 
 	public Item(string id, ItemType type, Hashtable hashItemData){
 		this.id = id;
@@ -55,7 +62,8 @@ public class Item {
 		name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
         textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
         cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
-        description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
+        // description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
+        description = "";
 		
 		// optional for now
 		if ( hashItemData.Contains("UnlockAtLevel") )

@@ -53,6 +53,7 @@ public enum NotificationPopupFields{
 	Type,
 	Message,
 	Button1Callback,
+    Button2Callback,
 	DeltaStars,
 	DeltaPoints,
 	SpriteName,
@@ -61,11 +62,22 @@ public enum NotificationPopupFields{
 	Badge,
 	Sound
 }
+
+public enum TutorialPopupFields{
+    Message,
+    SpriteAtlas, 
+    SpriteName, //requires SpriteAtlas
+    Button1Callback,
+    ShrinkBgToFitText //T: background will shrink to fit the text size
+}
+
 public enum BadgeType{
     Level,
     RunnerDistance,
     PatientNumber,
-    Decoration
+    Decoration,
+    Inhaler,
+    Coin
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
@@ -74,10 +86,16 @@ public enum TalkImageType{
 }
 
 // various type of modes the UI could be in
+// ONLY add enums to the end. Inserting enum will break existing LgButtonMessageClass
 public enum UIModeTypes {
-	None,
+	NotInited,	// the variable was not initialized; should throw an error
+	None,		// means there is no lock on the click manager
+	Generic,	// used by most things that will lock the click manager; this is just a generic lock
 	Store,
-	EditDecos
+	EditDecos,
+    Tutorial,
+    CustomizePet,
+    IntroComic
 }
 
 // decoration node anchor types
@@ -245,3 +263,4 @@ public enum DroppedItemStates {
 	PickedUp,
 	Awarded
 }
+

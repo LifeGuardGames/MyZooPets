@@ -28,7 +28,7 @@ public class MinigamePopup : MonoBehaviour {
 				demuxHUD.Show();
 			
 			// lock clicks
-			ClickManager.Instance.ClickLock();
+			ClickManager.Instance.Lock();
 			ClickManager.SetActiveGUIModeLock( true );
 		}
 		else {
@@ -40,7 +40,7 @@ public class MinigamePopup : MonoBehaviour {
 				demuxHUD.Hide();
 			
 			// clicks are ok
-			ClickManager.Instance.ReleaseClickLock();
+			ClickManager.Instance.ReleaseLock();
 			ClickManager.SetActiveGUIModeLock( false );
 		}		
 	}

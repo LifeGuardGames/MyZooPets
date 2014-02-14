@@ -16,6 +16,15 @@ public static class LgCUDLRCommands {
       CUDLR.Console.Log(obj.name);
     }
   }
+	
+  [CUDLR.Command("active object list positions", "all the game objects in the scene: relative + absolute position")]
+  public static void ListActiveGameObjectsPositions() {
+    UnityEngine.Object[] objects = UnityEngine.Object.FindObjectsOfType(typeof(GameObject));
+    foreach (UnityEngine.Object obj in objects) {
+	  UnityEngine.GameObject go = obj as UnityEngine.GameObject;
+      CUDLR.Console.Log(go.name + " relPos:" + go.transform.localPosition + "  absPos:" + go.transform.position);
+    }
+  }
 
   [CUDLR.Command("object list", "lists all the game objects in the scene")]
   public static void ListGameObjects(){
@@ -112,6 +121,24 @@ public static class LgCUDLRCommands {
   [CUDLR.Command("LgDateTimeNow", "get LgDateTime.GetTimeNow()")]
   public static void TimeNow(){
     CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());
+  }
+
+  [CUDLR.Command("MenuSceneData", "get MenuSceneData in json")]
+  public static void MenuSceneData(){
+    string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
+    CUDLR.Console.Log(jsonString);
+  }
+
+  [CUDLR.Command("GameData", "get of pet in json")]
+  public static void GameData(string[] args){
+    if(args.Length < 1){
+      CUDLR.Console.Log("expect a petID");
+      return;
+    }
+
+    string key = args[0] + "_GameData";
+    string jsonString = PlayerPrefs.GetString(key, "");
+    CUDLR.Console.Log(jsonString);
   }
 
 }

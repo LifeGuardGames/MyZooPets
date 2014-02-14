@@ -36,7 +36,6 @@ public class GameTutorial_Flame : GameTutorial {
 	protected override void _End( bool bFinished ) {
 		// clean up various things this tutorial created
 		RemovePopup();
-		RemoveSpotlight();
 	}
 	
 	//---------------------------------------------------
@@ -45,19 +44,28 @@ public class GameTutorial_Flame : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		// location of flame popups
 		Vector3 vPopup = Constants.GetConstant<Vector3>( "FlamePopup" );
-		
+        Hashtable option = new Hashtable();
+
+        //Tutorial popup options 
+        option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+
 		switch ( nStep ) {
 			case 0:
 				// hack central...use a "surrogate" to run the coroutine since this tutorial is not a monobehaviour
 				GatingManager.Instance.StartCoroutine( FocusOnFlameButton() );
 			
 				// show a little popup message telling the user to hold down the flame button
-				ShowPopup( Tutorial.POPUP_LONG, vPopup );
+				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
 			
 				break;
 		case 1:
+		        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+				string stringKey = GetKey() + "_" + GetStep();
+				string tutMessage = String.Format(Localization.Localize(stringKey), petName);
+
+				option.Add(TutorialPopupFields.Message, tutMessage);
 				// show a little popup message telling the user to let go to breath fire
-				ShowPopup( Tutorial.POPUP_LONG, vPopup );
+				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
 			
 				break;
 		}

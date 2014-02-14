@@ -14,6 +14,7 @@ public class RescueDrag : InhalerPart{
     private bool doneWithDrag = true;
 
     protected override void Awake(){
+        base.Awake();
         gameStepID = 5;
         startDragPos = transform.position;
         targetDragPos = new Vector3(8.4f, 2.4f, 16.8f);

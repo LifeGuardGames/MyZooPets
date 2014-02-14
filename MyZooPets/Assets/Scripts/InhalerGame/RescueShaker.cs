@@ -14,6 +14,7 @@ public class RescueShaker : InhalerPart {
     private float elapsed;
 
    protected override void Awake(){
+        base.Awake();
         gameStepID = 3;
         startDragPos = transform.position;
    }

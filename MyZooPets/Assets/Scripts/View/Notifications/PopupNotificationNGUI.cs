@@ -7,6 +7,7 @@ public class PopupNotificationNGUI : MonoBehaviour {
     public bool HideImmediately = false;
 	public delegate void HashEntry(); // Used for notification entry
     public HashEntry Button1Callback;
+    public HashEntry Button2Callback;
 	public HashEntry OnHideFinished;
 
     public string Message{
@@ -27,12 +28,16 @@ public class PopupNotificationNGUI : MonoBehaviour {
     // These two functions are called when the buttons are clicked.
     protected void Button1Action(){
         Hide();
-        if (Button1Callback != null) Button1Callback();
+        if(Button1Callback != null) Button1Callback();
+    }
+
+    protected void Button2Action(){
+        Hide();
+        if(Button2Callback != null) Button2Callback();
     }
 
     // Display the popup panel
     public void Display(){
-        ClickManager.Instance.ClickLock();
 		TryShowDemuxThenToggle(-1);
 		
 		// play sound if there is one
@@ -58,7 +63,6 @@ public class PopupNotificationNGUI : MonoBehaviour {
             TryHideDemuxThenToggle(0.5f);
             Destroy(gameObject, 3.0f);
         }
-        ClickManager.Instance.ReleaseClickLock();
     }
 
 	/// <summary>

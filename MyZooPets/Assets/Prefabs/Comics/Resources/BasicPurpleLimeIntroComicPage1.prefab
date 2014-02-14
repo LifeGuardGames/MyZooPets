@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400066}
   m_Layer: 10
   m_Name: Frame1
   m_TagString: Untagged
@@ -59,6 +60,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400010}
+  - 114: {fileID: 11400062}
   m_Layer: 10
   m_Name: Frame3
   m_TagString: Untagged
@@ -75,6 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400008}
   - 114: {fileID: 11400014}
+  - 114: {fileID: 11400060}
   m_Layer: 10
   m_Name: Frame4
   m_TagString: Untagged
@@ -139,6 +142,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400064}
   m_Layer: 10
   m_Name: Frame2
   m_TagString: Untagged
@@ -156,10 +160,9 @@ GameObject:
   - 4: {fileID: 400016}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400030}
-  - 114: {fileID: 11400032}
   - 114: {fileID: 11400034}
-  - 114: {fileID: 11400036}
   - 114: {fileID: 11400038}
+  - 114: {fileID: 11400032}
   m_Layer: 10
   m_Name: NextButton
   m_TagString: Untagged
@@ -320,6 +323,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400038}
   - 114: {fileID: 11400048}
+  - 114: {fileID: 11400058}
   m_Layer: 10
   m_Name: Frame8
   m_TagString: Untagged
@@ -352,6 +356,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400042}
   - 114: {fileID: 11400052}
+  - 114: {fileID: 11400056}
   m_Layer: 10
   m_Name: Frame9
   m_TagString: Untagged
@@ -734,8 +739,8 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100004}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -785,12 +790,12 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 0
+  showDelay: 1
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100016}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -844,8 +849,8 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100006}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -895,12 +900,12 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 4
+  showDelay: 3
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100008}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -950,7 +955,7 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 6
+  showDelay: 4
   hideDelay: 0
   easeHide: 26
   easeShow: 27
@@ -1005,7 +1010,7 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 6
+  showDelay: 4
   hideDelay: 0
   easeHide: 26
   easeShow: 27
@@ -1060,7 +1065,7 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 8
+  showDelay: 5
   hideDelay: 0
   easeHide: 26
   easeShow: 27
@@ -1119,13 +1124,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 44fd33048e3e32f4687659755cd4e8e5, type: 3}
-  trigger: 0
-  volume: 1
-  pitch: 1
+  bSprite: 1
+  eMode: 7
+  strSoundProcess: effectXylophoneTing
+  bCheckClickManager: 1
+  target: {fileID: 0}
+  functionName: 
 --- !u!114 &11400034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1141,21 +1148,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0
---- !u!114 &11400036
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
-  trigger: 0
-  includeChildren: 0
 --- !u!114 &11400038
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1176,7 +1168,7 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 9.5
+  showDelay: 7.5
   hideDelay: 0
   easeHide: 26
   easeShow: 27
@@ -1252,11 +1244,11 @@ MonoBehaviour:
     e00: .192000002
     e01: 0
     e02: 0
-    e03: .00115563057
+    e03: .00106404722
     e10: 0
     e11: .384000003
     e12: 0
-    e13: -.00068806007
+    e13: -.00212836778
     e20: 0
     e21: 0
     e22: 384
@@ -1311,12 +1303,12 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 8
+  showDelay: 6
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100038}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -1366,12 +1358,12 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
-  showDelay: 9
+  showDelay: 7
   hideDelay: 0
   easeHide: 26
   easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
+  ShowTarget: {fileID: 100042}
+  ShowFunctionName: PlaySound
   ShowIncludeChildren: 0
   HideTarget: {fileID: 0}
   HideFunctionName: 
@@ -1401,6 +1393,78 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: comicExplosionSuperwella
+--- !u!114 &11400058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: comicPetCoughs
+--- !u!114 &11400060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: seeSmogFactory
+--- !u!114 &11400062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: comicPetSeesMonster
+--- !u!114 &11400064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: comicPetBurstsOut
+--- !u!114 &11400066
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d1745c6aedc4352bbfbc54ab87b98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioFile: comicEggCracks
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

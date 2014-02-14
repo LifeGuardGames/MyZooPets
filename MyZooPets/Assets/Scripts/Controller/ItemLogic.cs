@@ -16,7 +16,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(foodList == null){
 				foodList = new List<Item>();
-				Dictionary<string, Item> foodDict = DataItems.GetAllItemsOfType(ItemType.Foods);
+				Dictionary<string, Item> foodDict = DataLoader_Items.GetAllItemsOfType(ItemType.Foods);
 				foodList = SelectListFromDictionaryAndSort(foodDict);
 			}
 			return foodList;
@@ -27,7 +27,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(usableList == null){
 				usableList = new List<Item>();
-				Dictionary<string, Item> usableDict = DataItems.GetAllItemsOfType(ItemType.Usables);
+				Dictionary<string, Item> usableDict = DataLoader_Items.GetAllItemsOfType(ItemType.Usables);
 				usableList = SelectListFromDictionaryAndSort(usableDict);
 			}
 			return usableList;
@@ -38,7 +38,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(decorationList == null){
 				decorationList = new List<Item>();
-				Dictionary<string, Item> decorationDict = DataItems.GetAllItemsOfType(ItemType.Decorations);
+				Dictionary<string, Item> decorationDict = DataLoader_Items.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
 
 			}
@@ -67,39 +67,97 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
-		return DataItems.GetItem(itemID);
+		return DataLoader_Items.GetItem(itemID);
 	}
 
 	//Returns the type of item with itemID
 	public ItemType GetItemType(string itemID){
-		return DataItems.GetItemType(itemID);
+		return DataLoader_Items.GetItemType(itemID);
 	}
 
 	//Returns the texture name of item with itemID
 	public string GetItemTextureName(string itemID){
-		return DataItems.GetItemTextureName(itemID);
+		return DataLoader_Items.GetItemTextureName(itemID);
+	}
+
+	//Returns the prefab name of item with itemID
+	public string GetDecoItemPrefabName(string itemID){
+		return DataLoader_Items.GetDecoItemPrefabName(itemID);
+	}
+
+	public string GetDecoItemMaterialName(string itemID){
+		return DataLoader_Items.GetDecoItemMaterialName(itemID);
+	}
+	
+	//---------------------------------------------------
+	// CanUseItem()
+	// For the player's own good, we stop them if they
+	// try to use an item that will buff a stat that is
+	// already at max.  This function returns whether or
+	// not the user can use an item due to this.
+	//---------------------------------------------------		
+	public bool CanUseItem( string strItemID ) {
+		// start off with true
+		bool bCanUse = true;
+		
+		// get the stats dictionary for the item
+		Dictionary<StatType, int> statsDict = GetStatsDict( strItemID );
+		
+		// if the stats dictionary is not null, we want to be sure that the stats aren't already at max
+		if ( statsDict != null ) {		
+			int moodAmount = 0;
+			int healthAmount = 0;
+	
+			if(statsDict.ContainsKey(StatType.Mood))
+				moodAmount = statsDict[StatType.Mood];
+		
+			if(statsDict.ContainsKey(StatType.Health))
+				healthAmount = statsDict[StatType.Health];
+			
+			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
+			// the item, because it would be a waste.
+			int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
+			int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			
+			if ( moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100 )
+				bCanUse = false;
+			else if ( moodAmount > 0 && nCurMood == 100 )
+				bCanUse = false;
+			else if ( healthAmount > 0 && nCurHealth == 100 )
+				bCanUse = false;
+		}
+		
+		return bCanUse;
+	}
+	
+	//---------------------------------------------------
+	// GetStasDict()
+	// Returns a dictionary of stats info on the incoming
+	// item.  May return null.
+	//---------------------------------------------------		
+	private Dictionary<StatType, int> GetStatsDict( string strItemID ) {
+		Item item = GetItem(strItemID);
+		Dictionary<StatType, int> dictStats = null;
+		switch(item.Type){
+			case ItemType.Foods:
+				FoodItem foodItem = (FoodItem) item;
+				dictStats = foodItem.Stats;
+			break;
+			case ItemType.Usables:
+				UsableItem usableItem = (UsableItem) item;
+				dictStats = usableItem.Stats;
+			break;
+		}		
+		
+		return dictStats;
 	}
 
 	//Apply the stats effect that the Item with itemID has to the appropriate stats
 	public void StatsEffect(string itemID){
-		Item item = GetItem(itemID);
-		Dictionary<StatType, int> statDict = null;
-		switch(item.Type){
-			case ItemType.Foods:
-				FoodItem foodItem = (FoodItem) item;
-				statDict = foodItem.Stats;
-
-				if(statDict != null)
-					StatsEffect(statDict);
-			break;
-			case ItemType.Usables:
-				UsableItem usableItem = (UsableItem) item;
-				statDict = usableItem.Stats;
-
-				if(statDict != null)
-					StatsEffect(statDict);
-			break;
-		}
+		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
+		
+		if(statDict != null)
+			StatsEffect(statDict);
 	}
 
 	//StatsEffect helper method
@@ -120,12 +178,12 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Get list sorted by cost in ascending order from the item dictionary
 	//Select and sort need to be done in two steps because IOS doesn't support 
-	//OrderBy for value types, ex string. but works fine if use on class.
+	//OrderBy for value types, ex int. but works fine if use on class.
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
-						orderby item.GetLockedLevel()
+						orderby item.UnlockAtLevel ascending, item.Cost.ToString() ascending
 						select item).ToList();
 		return itemList;
 	}

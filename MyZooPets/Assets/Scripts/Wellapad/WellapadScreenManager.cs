@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // WellapadScreenManager
 // The wellapad is an electronic device with many
 // screens.  This script decides which screens to
 // show and hide.
+
+// TO DO- Jason combine this with wellpadUIManager
 //---------------------------------------------------
 
 public class WellapadScreenManager : MonoBehaviour {
@@ -17,6 +21,35 @@ public class WellapadScreenManager : MonoBehaviour {
 	public GameObject goWellapadBack;
 	public GameObject GetBackButton() {
 		return goWellapadBack;	
+	}
+	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------	
+	void Start() {
+		// listen for reward claimed callback
+		WellapadMissionController.Instance.OnRewardClaimed += OnRewardClaimed;		
+	}
+	
+	//---------------------------------------------------
+	// OnRewardClaimed()
+	// Callback for when the user claims a wellapad reward.
+	//---------------------------------------------------	
+	private void OnRewardClaimed( object sender, EventArgs args ) {
+		StartCoroutine( SetScreen_Delay() );
+	}	
+
+	//---------------------------------------------------
+	// SetScreen_Delay()
+	// In order to make the transition from the missions
+	// to the done screen more appealing, I creating this
+	// function to kick off the set screen on a delay.
+	//---------------------------------------------------		
+	private IEnumerator SetScreen_Delay() {
+		float fDelay = Constants.GetConstant<float>( "Wellapad_DoneDelay" );
+		yield return new WaitForSeconds( fDelay );
+		
+		SetScreen();
 	}
 
 	//---------------------------------------------------

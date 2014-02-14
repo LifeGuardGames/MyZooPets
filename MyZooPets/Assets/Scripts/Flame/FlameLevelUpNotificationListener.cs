@@ -17,7 +17,9 @@ public class FlameLevelUpNotificationListener : MonoBehaviour {
         FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;
 
         PopupNotificationNGUI.HashEntry button1Function = delegate(){
-            //Register handler again after notification has been cleared
+            //unregister before registering listener to prevent multiple registering
+            //when using spam click the button
+            FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;
             FlameLevelLogic.OnFlameLevelUp += OnFlameLevelUp;
         };
 

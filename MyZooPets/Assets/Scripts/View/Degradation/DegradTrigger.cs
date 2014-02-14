@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DegradTrigger : MonoBehaviour {
-    public int ID{get; set;} 		//the id of this specific degradation trigger
+    public string ID{get; set;} 		//the id of this specific degradation trigger
 	public string strSoundClean;	// sound this degrade trigger makes when the player cleans it up
 	public GameObject LgDegredationEmitter;		// The custom emittor emitter that emits skulls that fly towards pet
 	private LgParticleEmitterDegredation emitter;
@@ -58,7 +58,7 @@ public class DegradTrigger : MonoBehaviour {
         if(ClickManager.Instance.CanRespondToTap( gameObject )){
 			// play sound associated with cleaning the trigger
 			AudioManager.Instance.PlayClip( strSoundClean );
-			
+	        
             CleanTriggerAndDestroy();
         }
     }
@@ -68,8 +68,13 @@ public class DegradTrigger : MonoBehaviour {
         DegradationLogic.Instance.ClearDegradationTrigger(this);
 		
 		// send out callback
-		if ( OnTriggerCleaned != null )
-			OnTriggerCleaned( this, EventArgs.Empty );			
+		if (OnTriggerCleaned != null)
+			OnTriggerCleaned( this, EventArgs.Empty );		
+		
+		// play an FX
+		Vector3 vPosFX = gameObject.transform.position;
+		string strFX = Constants.GetConstant<string>( "Degrad_CleanFX" );
+		ParticleUtils.CreateParticle( strFX, vPosFX );		
 		
         Destroy(this.gameObject);
     }

@@ -24,6 +24,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     void Start(){
+        Input.multiTouchEnabled = true;
         InhalerLogic.OnGameOver += OnGameEnd;
         InhalerLogic.OnNextStep += OnNextStep;
         GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;
@@ -97,7 +98,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         ShowQuitButton();
         SetUpHintTimer();
 
-        Analytics.Instance.StartPlayTimeTracker();
+        // Analytics.Instance.StartPlayTimeTracker();
 
         //Start the first hint
         if(OnShowHint != null)
@@ -135,6 +136,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
             if(OnShowHint != null)
                 OnShowHint(this, EventArgs.Empty);
+
+            runShowHintTimer = false;
         }
     }
 
@@ -145,11 +148,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private void ResetHintTimer(){
         timer = 0;
         showHint = false; 
+        runShowHintTimer = true;
     }
 
     private void QuitInhalerGame(){
         InhalerLogic.Instance.CompleteTutorial();
-        Analytics.Instance.EndPlayTimeTracker();
+        NotificationUIManager.Instance.CleanupNotification();
         scriptTransition.StartTransition(SceneUtils.BEDROOM);
     }
 
@@ -169,13 +173,27 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HideInhaler();
         HideProgressBar();
 
+        //Spawn floaty
+        Hashtable option = new Hashtable();
+        option.Add("parent", GameObject.Find("Anchor-Center"));
+        option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+        option.Add("textSize", 100);
+        option.Add("color", Color.white);
+
+        FloatyUtil.SpawnFloatyText(option);
+
+        //play sound
+        AudioManager.Instance.PlayClip("inhalerFireFlow");
+
+        //play animation
         fireAnimationController.PlaySequence();
     }
 
     //Event listener. continue the game after GetFireAnimation is done
     private void OnGetFireAnimationDone(object sender, EventArgs args){
         StatsController.Instance.ChangeFireBreaths(1);
-
+        AudioManager.Instance.PlayClip("inhalerShiningFireIcon");
+        
         Invoke("GiveReward", 1.0f);
     }
 

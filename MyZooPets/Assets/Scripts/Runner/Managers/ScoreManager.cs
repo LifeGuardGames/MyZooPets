@@ -85,7 +85,8 @@ public class ScoreManager : Singleton<ScoreManager> {
         ChangeCoinStreak(1);
 
 		// the player picked up a coin, so increment their streak and reset the countdown
-        mPlayerCoins += inNumCoinsToAdd;
+		// can't go below 0 coins -- this sounds silly, but coins right now is the new "points"
+        mPlayerCoins = Mathf.Max( mPlayerCoins + inNumCoinsToAdd, 0 );
     }
 
     public void AddPoints(int inNumPointsToAdd){

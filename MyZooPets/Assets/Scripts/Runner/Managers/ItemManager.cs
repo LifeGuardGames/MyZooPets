@@ -136,20 +136,22 @@ public class ItemManager : Singleton<ItemManager> {
         if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)){
             string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
             GameObject tutorialGO = NGUITools.AddChild(itemTutorialParent, itemTutorialPrefab);
-            tutorialGO.GetComponent<PositionTweenToggle>().Show();
-            tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().target = this.gameObject;
-            tutorialGO.transform.Find("Button_Continue").GetComponent<UIButtonMessage>().functionName = "DestroyTutorial";
-            tutorialGO.transform.Find("Label").GetComponent<UILabel>().text = hintMessage;
+
+            TutorialPopup.Callback button1Fucntion = delegate(){
+                Destroy(tutorialGO);
+                StartCoroutine(ResumeGame());
+            };
+
+            Hashtable option = new Hashtable();
+            option.Add(TutorialPopupFields.Message, hintMessage);
+            option.Add(TutorialPopupFields.Button1Callback, button1Fucntion);
+
+            TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
+            script.Init(option);
 
             RunnerGameManager.Instance.PauseGameWithoutPopup();
             DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
-    }
-
-    public void DestroyTutorial(GameObject tutorialGO){
-        Destroy(tutorialGO.transform.parent.gameObject);
-
-        StartCoroutine(ResumeGame());
     }
 
     //Yield for a frame before unpausing the game. The only way to avoid OnTap being called when resume

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -20,6 +21,9 @@ public class WellapadTaskUI : MonoBehaviour {
 	
 	// tween object for when the task is completed
 	public TweenToggle tweenCheck;
+	
+	public Color tutTextHighlightOn;
+	public Color tutTextHighlightOff;
 	
 	//---------------------------------------------------
 	// Init()
@@ -45,8 +49,14 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------	
 	private void SetDesc() {
 		// set the label showing what the task entails
-		string strTask = task.GetDesc();
-		label.text = strTask;			
+		Data_WellapadTask data = DataLoader_WellapadTasks.GetTask( task.TaskID );
+		string strDesc = data.GetText();
+		
+		// if the task has an amount, we want to integrate that into the string
+		if ( task.Amount > 0 )
+			strDesc = String.Format(strDesc, task.Amount);	
+
+		label.text = strDesc;			
 	}
 	
 	//---------------------------------------------------
@@ -83,11 +93,11 @@ public class WellapadTaskUI : MonoBehaviour {
 	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
 		if ( args.ID == task.TaskName ) {
 			// this task is being highlighted -- change the text to black
-			label.color = Color.green;
+			label.color = tutTextHighlightOn;
 		}
 		else {
 			// this task is not being highlighted, so grey it out
-			label.color = Color.gray;
+			label.color = tutTextHighlightOff;
 		}
 	}
 	
@@ -97,7 +107,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	void OnDestroy() {
 		// stop listening for task completion data
 		if ( WellapadMissionController.Instance )
-			WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;
+			WellapadMissionController.Instance.OnHighlightTask -= OnTaskHighlighted;
 		
 		if ( WellapadUIManager.Instance )
 			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;		

@@ -105,7 +105,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
             if(!isUnlocked){ //Unlock new badges
                 DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);
-                Debug.Log("Unlock: " + badge.Name);
+                // Debug.Log("Unlock: " + badge.Name);
 
                 //Send analytics 
                 Analytics.Instance.BadgeUnlocked(badge.ID);

@@ -132,6 +132,13 @@ public class DGTCharacter : MonoBehaviour {
 	//  Moves the character towards their current target.
 	//---------------------------------------------------		
 	private void Move() {
+		// do an error check to make sure the game is playing...if it's not, something is wrong
+		MinigameStates eState = DGTManager.Instance.GetGameState();
+		if ( eState != MinigameStates.Playing ) {
+			Debug.LogError("Something trying to move a clinic game character when the game is not in a playing state.");
+			return;
+		}
+		
 		// if the character is moving past the pivot, they should go at max speed
 		bool bMax = IsAfterPivot();
 		float fSpeed = DGTManager.Instance.GetSpeed( bMax );
@@ -266,7 +273,7 @@ public class DGTCharacter : MonoBehaviour {
 	private bool IsHeadingToIncorrectZone() {
 		bool bWrong = false;
 		
-		if ( DGTManager.Instance.IsTutorial() ) {
+		if ( DGTManager.Instance.IsTutorialRunning() ) {
 			GameObject goZone = DGTManager.Instance.GetSelectedZone();
 			DGTZone script = goZone.GetComponent<DGTZone>();
 			AsthmaStage eCharStage = GetStage();

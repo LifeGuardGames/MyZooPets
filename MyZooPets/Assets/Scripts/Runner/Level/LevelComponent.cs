@@ -176,6 +176,8 @@ public class PointGroup {
 	[SerializeField]
 	public int mBundleID;
 	[SerializeField]
+	public int mSpawnChance;	
+	[SerializeField]
 	public List<PointInfo> mPoints;
 	[SerializeField]
     public eSpawnType mSpawnType;
@@ -185,6 +187,7 @@ public class PointGroup {
     public PointGroup() {
         // mID = inID;
         mBundleID = 0;
+		mSpawnChance = 100;
         mPoints = new List<PointInfo>();
         mSpawnType = eSpawnType.None;
         mCurveType = eCurveType.Linear;

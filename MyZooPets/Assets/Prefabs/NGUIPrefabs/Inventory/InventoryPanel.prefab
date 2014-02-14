@@ -96,8 +96,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400020}
   - 114: {fileID: 11400024}
-  - 114: {fileID: 11400022}
-  - 114: {fileID: 11400016}
+  - 114: {fileID: 11400010}
   m_Layer: 10
   m_Name: Image Button
   m_TagString: Untagged
@@ -112,7 +111,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 90, y: 90, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
@@ -159,7 +158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 364, y: 1, z: -1}
+  m_LocalPosition: {x: 364, y: 1, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
@@ -309,6 +308,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   springStrength: 8
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  eMode: 0
+  strSoundProcess: 
+  bCheckClickManager: 0
+  target: {fileID: 0}
+  functionName: ExpandToggled
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -337,15 +353,15 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 11
+    e23: 30
     e30: 0
     e31: 0
     e32: 0
     e33: 1
   mAlpha: 1
   mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 250.899994, y: 0, z: 900, w: 100}
+  mClipping: 2
+  mClipRange: {x: 206, y: 0, z: 810, w: 100}
   mClipSoftness: {x: 10, y: 10}
 --- !u!114 &11400014
 MonoBehaviour:
@@ -371,21 +387,6 @@ MonoBehaviour:
   horizontalScrollBar: {fileID: 0}
   verticalScrollBar: {fileID: 0}
   showScrollBars: 1
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d9ddd6213a44e979f6297bf45518d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bSprite: 1
-  strSoundProcess: invSound
-  bCheckClickManager: 0
-  strAnalytics: 
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -401,22 +402,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
   duration: 0
---- !u!114 &11400022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e62a21748a152d4394cc9d4f6e122e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isActive: 1
-  enforceLock: 0
-  target: {fileID: 0}
-  functionName: 
-  includeChildren: 0
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -470,7 +455,7 @@ MonoBehaviour:
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
-  isDebug: 0
+  isDebug: 1
   testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400032
 MonoBehaviour:

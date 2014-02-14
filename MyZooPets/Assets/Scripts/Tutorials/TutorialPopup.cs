@@ -14,39 +14,67 @@ using System.Collections;
 //---------------------------------------------------
 
 public class TutorialPopup : MonoBehaviour {
-	// the text label for the popup
-	public UILabel label;
+	public UILabel label; // the text label for the popup
+	public UISprite sprite;
+	public LgButtonMessage button1;
+	public UISlicedSprite bg; // sprite bg
+	public float fBorder; // arbitrary border to make the bg look a little nicer
+	public delegate void Callback();
 	
-	// sprite bg
-	public UISlicedSprite bg;
-	
-	// arbitrary border to make the bg look a little nicer
-	public float fBorder;
-	
-	// where the popup should appear
-	private Vector3 vLoc;
-	
-	public void Init( string strLabelText ) {
-		label.text = strLabelText;
-	}
+	private Callback Button1Callback;
+	private bool shrinkBgToFitText;
 	
 	void Start() {
-		Vector3 vSize = label.relativeSize;
-		//Debug.Log("Okay, here we go...");
-		//Debug.Log("Relative size: " + vSize);
-		
-		Vector3 textScale = label.transform.localScale;
-		//Vector3 offset = label.transform.localPosition;	// not sure what this was supposed to do...
-		//Debug.Log("And the local scale of the text is " + textScale);
-		
-		vSize.x *= textScale.x;
-		vSize.y *= textScale.y;
-		vSize.x += fBorder;
-		vSize.y += fBorder;
-		//vSize.x += bg.border.x + bg.border.z + ( offset.x - bg.border.x) * 2f;
-		//vSize.y += bg.border.y + bg.border.w + (-offset.y - bg.border.y) * 2f;
-		vSize.z = 1f;
+		if(shrinkBgToFitText){
+			Vector3 vSize = label.relativeSize;
+			//Debug.Log("Okay, here we go...");
+			//Debug.Log("Relative size: " + vSize);
+			
+			Vector3 textScale = label.transform.localScale;
+			//Vector3 offset = label.transform.localPosition;	// not sure what this was supposed to do...
+			//Debug.Log("And the local scale of the text is " + textScale);
+			
+			float sizeX = vSize.x * textScale.x;
+			float sizeY = vSize.y * textScale.y;
+			
+			sizeX += fBorder;
+			sizeY += fBorder;
 
-		bg.transform.localScale = vSize;		
+			float sizeZ = 1f;
+
+			bg.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);		
+		}
 	}
+
+	public void Init(Hashtable option) {
+		// label.text = strLabelText;
+		if(option.ContainsKey(TutorialPopupFields.Message)){
+			label.text = (string) option[TutorialPopupFields.Message];
+		}
+
+		if(option.ContainsKey(TutorialPopupFields.SpriteAtlas)){
+			string atlastName = (string) option[TutorialPopupFields.SpriteAtlas];
+			GameObject atlasObject = (GameObject) Resources.Load(atlastName);
+			sprite.atlas = atlasObject.GetComponent<UIAtlas>();
+		}
+
+		if(option.ContainsKey(TutorialPopupFields.SpriteName)){
+			sprite.spriteName = (string) option[TutorialPopupFields.SpriteName];
+			sprite.MakePixelPerfect();	
+		}
+
+		if(option.ContainsKey(TutorialPopupFields.Button1Callback)){
+			Button1Callback = (Callback) option[TutorialPopupFields.Button1Callback];
+		}
+
+		if(option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText)){
+			shrinkBgToFitText = (bool) option[TutorialPopupFields.ShrinkBgToFitText];
+		}
+	}
+
+	public void Button1Action(){
+		if(Button1Callback != null)
+			Button1Callback();
+	}
+	
 }

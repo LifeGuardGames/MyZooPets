@@ -78,7 +78,7 @@ public class TweenToggle : MonoBehaviour {
 		// Implement in child
 	}
 
-	void OnGUI(){
+	// void OnGUI(){
 		// if(isDebug){
 		// 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
 		// 		Show();
@@ -87,7 +87,7 @@ public class TweenToggle : MonoBehaviour {
 		// 		Hide();
 		// 	}
 		// }
-	}
+	// }
 
 	public void Show(){
 		// play sound (if it exists)

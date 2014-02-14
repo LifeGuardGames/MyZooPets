@@ -24,7 +24,6 @@ public class DataSounds {
 			Debug.LogError("No such sound with id " + id + " -- creating one with default values");
 			sound = new DataSound(id);
 		}
-
         return sound;
 	}
 

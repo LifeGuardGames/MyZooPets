@@ -20,20 +20,10 @@ public class PetAnimArgs : EventArgs{
 //---------------------------------------------------
 
 public class PetAnimator : LgCharacterAnimator {
-	
-	// key of the pet's "species" -- i.e. what kind of pet it is
-	// this will eventually be set in save data probably
-	public string strKeySpecies;
-	public string GetSpeciesKey() {
-		return strKeySpecies;	
-	}
-	
-	// key of the pet's color
-	// this will eventually be set in save data probably
-	public string strKeyColor;
-	public string GetColorKey() {
-		return strKeyColor;	
-	}
+	//=======================Events========================
+	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
+	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
+	//=====================================================		
 	
 	// related to fire blowing
 	public GameObject goBlow;		// where to parent the fire particle
@@ -59,26 +49,13 @@ public class PetAnimator : LgCharacterAnimator {
 	// just for testing and seeing what anim is play
 	private bool bTesting = false;
 	
-	//=======================Events========================
-	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
-	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
-	//=====================================================		
 
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	new void Start() {
+	protected override void Start() {
 		// then go through all the anim data and create out clip list from that
 		SetClipList();
-		
-		// set the LWFAnimator loading data based on the pet's attributes
-		string strSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies; 
-
-		// string strColor = GetColorKey();
-		string strColor = DataManager.Instance.GameData.PetInfo.PetColor;
-
-		animName = strSpecies + strColor;
-		folderPath = "LWF/" + animName + "/";
 		
 		// only call this AFTER we have set our loading data
 		base.Start();	

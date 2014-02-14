@@ -33,7 +33,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	// what time of day it is.
     //-----------------------------------------------	
 	public static TimeFrames GetTimeFrame( DateTime time ) {
-		if ( time.Hour > 12 )
+		if (time.Hour >= 12)
 			return TimeFrames.Evening;
 		else
 			return TimeFrames.Morning;

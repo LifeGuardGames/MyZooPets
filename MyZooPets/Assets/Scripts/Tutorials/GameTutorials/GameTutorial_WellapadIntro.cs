@@ -71,7 +71,7 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		WellapadMissionController.Instance.HighlightTask( "DailyInhaler" );
 	
 		// listen for when the wellapad is closed
-		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;		
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
 	}
 
 	//---------------------------------------------------

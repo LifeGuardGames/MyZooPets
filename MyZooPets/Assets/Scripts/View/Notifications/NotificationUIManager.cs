@@ -41,6 +41,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	}
 
 	//---------------------------------------------
+	// CleanupNotification()
+	// Will destroy all currently spawned notifications
+	//---------------------------------------------
+	public void CleanupNotification(){
+		if(notificationCenterPanel != null)
+			Destroy(notificationCenterPanel);
+	}
+
+	//---------------------------------------------
 	// AddToQueue()
 	// Use this method to add new notification to the queue
 	//---------------------------------------------
@@ -70,6 +79,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
 					);
 					break;
+
+				case NotificationPopupType.TwoButtons:
+					ShowPopupNotificationTwoButtons(
+						(string) entry[NotificationPopupFields.Message],
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
+						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button2Callback]
+					);
+					break;
 				
 				case NotificationPopupType.GameOverRewardOneButton:
 					ShowGameOverRewardMessage(
@@ -96,6 +113,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 					break;
 				case NotificationPopupType.BadgeUnlocked:
 					ShowBadgeRewardMessage(
+						(string) entry[NotificationPopupFields.Badge],
 						(string) entry[NotificationPopupFields.Message],
 						(string) entry[NotificationPopupFields.SpriteName],
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
@@ -122,8 +140,8 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 	//----------------------------------------------------------	
 	// ShowPopupNotificationOneButton
-	// Desc: creates popup that has a popup texture and 1 button
-	//Params: notificationType, call back for button
+	// Desc: creates popup that has a message and 1 button
+	//Params: notificationType, call back for button1
 	//----------------------------------------------------------	
 	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.HashEntry okCallBack){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
@@ -133,6 +151,24 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	//----------------------------------------------------------	
+	// ShowPopupNotificationTwoButtons
+	// Desc: creates popup that has a message and 2 button
+	//Params: message , call back for button1, callback for button2
+	//----------------------------------------------------------	
+	public void ShowPopupNotificationTwoButtons(string message, PopupNotificationNGUI.HashEntry okCallBack,
+		PopupNotificationNGUI.HashEntry cancelCallBack){
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
+
+		twoButtonMessage.Message = message;
+		twoButtonMessage.Button1Callback = okCallBack;
+		twoButtonMessage.Button2Callback = cancelCallBack;
+
+		twoButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	//----------------------------------------------------------	
@@ -188,11 +224,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	//----------------------------------------------------------	
 	// ShowBadgeRewardMessage()
 	// Desc: creates a popup reward for new unlocked badge
-	// Param: message, spriteName, button callback
+	// Param: badgeName, message, spriteName, button callback
 	//----------------------------------------------------------	
-	public void ShowBadgeRewardMessage(string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
-		PopupNotificationWithImageNGUI spawnedPopupBadge = CreatePopupNotificationNGUI(popupBadgeUnlockedMessage) as PopupNotificationWithImageNGUI;
-		spawnedPopupBadge.Message = message;
+	public void ShowBadgeRewardMessage(string badgeName, string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
+		PopupNotificationBadge spawnedPopupBadge = CreatePopupNotificationNGUI(popupBadgeUnlockedMessage) as PopupNotificationBadge;
+		spawnedPopupBadge.setTitle(badgeName);
+		spawnedPopupBadge.setDescription(message);
 		spawnedPopupBadge.SetSprite(spriteName);
 		spawnedPopupBadge.Button1Callback = buttonCallBack;
 		spawnedPopupBadge.OnHideFinished += TryNextNotification;

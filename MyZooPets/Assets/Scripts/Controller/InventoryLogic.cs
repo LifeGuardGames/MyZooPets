@@ -43,8 +43,17 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 		}
 	}	
 
-	// public List<InventoryItem> FoodInventoryItems{}
-	// public List<InventoryItem> UsableInventoryItems{}
+	//---------------------------------------------------
+	// CheckForWallpaper()
+	// Check if wallpaper is already bought 
+	//---------------------------------------------------
+	public bool CheckForWallpaper(string itemID){
+		bool isWallpaperBought = false;
+		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+		isWallpaperBought = oneTimePurchasedInv.Contains(itemID);
+
+		return isWallpaperBought;
+	}
 
 	//Return InventoryItem with itemID
 	//Return null if inventory item has been removed
@@ -60,24 +69,33 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 	//Add items to inventory
 	public void AddItem(string itemID, int count){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem( itemID );
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		
 		InventoryItem invItem = null;
 		bool itemNew = false;
 		listNeedsUpdate = true;
 
 		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
+
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
 			invItems[itemID] = invItem;
 		}else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
-			ItemType itemType = DataItems.GetItemType(itemID);
-			
-			string itemTextureName = DataItems.GetItemTextureName(itemID);
+			Item itemData = DataLoader_Items.GetItem(itemID);
 
-			invItem = new InventoryItem(itemID, itemType, itemTextureName);
+			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
 			invItems[itemID] = invItem;
+
+			//special case: keep track of bought wallpaper in another list.
+			if(itemData.Type == ItemType.Decorations){
+				DecorationItem decoItem = (DecorationItem) itemData;
+
+				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+					List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+					oneTimePurchasedInv.Add(itemData.ID);
+				}
+			}
 		}
 
 		InventoryEventArgs args = new InventoryEventArgs(itemNew, invItem);
@@ -91,7 +109,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	//---------------------------------------------------	
 	private Dictionary<string, InventoryItem> GetInventoryForItem( string strItemID ) {
 		// what list the item is placed in depends on what kind of item it is
-		ItemType eType = DataItems.GetItemType( strItemID );
+		ItemType eType = DataLoader_Items.GetItemType( strItemID );
 		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
 		switch ( eType ) {

@@ -7,13 +7,16 @@ using System;
 /// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 /// </summary>
 public class InventoryDragDrop : MonoBehaviour {
-	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	public class InvDragDropArgs : EventArgs{
 		public bool IsValidTarget{get; set;}
 		public Transform ItemTransform{get; set;}
 		public Transform ParentTransform{get; set;}
 		public Collider TargetCollider{get; set;}
 	}
+
+	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
+	public event EventHandler<InvDragDropArgs> OnItemPress; //Event will be fired when item is pressed
+	public event EventHandler<EventArgs> OnItemDrag;
 
 	private Transform mTrans;
 	private bool mIsDragging = false;
@@ -51,6 +54,7 @@ public class InventoryDragDrop : MonoBehaviour {
 			args.ItemTransform = gameObject.transform; 
 			args.ParentTransform = mParent;
 			args.TargetCollider = UICamera.lastHit.collider;
+
 			if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
 			
 			if(!args.IsValidTarget){
@@ -121,8 +125,10 @@ public class InventoryDragDrop : MonoBehaviour {
 				//Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
 				Vector3 newDelta = new Vector3(delta.x * CameraManager.Instance.ratioX, delta.y * CameraManager.Instance.ratioY, 0f);
 				
-				// Vector3 newDelta = new Vector3(delta.x, delta.y, 0);
 				mTrans.localPosition += newDelta;
+
+				if(OnItemDrag != null)
+					OnItemDrag(this, EventArgs.Empty);
 			}
 			else{
 				isScrolling = true;
@@ -149,6 +155,14 @@ public class InventoryDragDrop : MonoBehaviour {
 				{
 					mSticky = true;
 					UICamera.current.stickyPress = true;
+				}
+
+				//send on press event	
+				if(OnItemPress != null){
+					InvDragDropArgs args = new InvDragDropArgs();
+					args.ParentTransform = mTrans.parent;
+
+					OnItemPress(this, args);
 				}
 			}
 			else if (mSticky)

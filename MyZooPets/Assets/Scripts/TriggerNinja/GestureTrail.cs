@@ -42,47 +42,6 @@ public class GestureTrail : MonoBehaviour
 	}
 	
 	///////////////////////////////////////////
-	// OnDrag()
-	// The FingerGesture's callback for when
-	// the user drags on the screen.
-	///////////////////////////////////////////		
-	void OnDrag( DragGesture i_gesture )  {		
-		// if combat isn't playing, we don't want to do any updating
-		if ( !CanGesture() )  {
-			// because this could be happening mid-draw, do a check
-			if ( GetTrail() != null )
-				DragEnded();
-				
-			return;	
-		}
-				
-	    // current gesture phase (Started/Updated/Ended)
-	    ContinuousGesturePhase ePhase = i_gesture.Phase;
-	 
-	    // Drag/displacement since last frame
-	    //Vector2 vDeltaMove = i_gesture.DeltaMove;
-	 
-	    // Total drag motion from initial to current position
-	    //Vector2 vTotalMove = i_gesture.TotalMove;
-	    
-	    // the screen position the user's finger is at currently
-	    Vector2 vPos = i_gesture.Position;
-	    
-	    // based on phase of the gesture, call certain functions
-	    switch ( ePhase ) {
-	    	case ContinuousGesturePhase.Started:
-	    		DragStarted( vPos );
-	    		break;
-	    	case ContinuousGesturePhase.Updated:
-	    		DragUpdated( vPos );
-	    		break;		
-	    	case ContinuousGesturePhase.Ended:
-	    		DragEnded();
-	    		break;
-	    }
-	}
-	
-	///////////////////////////////////////////
 	// DragStarted()
 	// Function called when the user begins 
 	// to drag their finger.

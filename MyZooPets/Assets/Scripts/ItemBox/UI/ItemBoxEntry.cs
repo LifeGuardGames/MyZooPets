@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -22,7 +23,7 @@ public class ItemBoxEntry : MonoBehaviour {
 		string strIcon = item.TextureName;
 		string strName = item.Name;
 		string strQuantity = Localization.Localize( "ITEMBOX_QUANTITY" );
-		strQuantity = StringUtils.Replace( strQuantity, StringUtils.NUM, nQuantity );
+		strQuantity = String.Format(strQuantity, nQuantity);
 		
 		// set the icon sprite, name, and quantity
 		spriteIcon.spriteName = strIcon;

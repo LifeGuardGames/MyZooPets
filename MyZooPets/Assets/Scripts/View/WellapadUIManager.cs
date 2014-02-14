@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -7,25 +8,30 @@ using System.Collections;
 //---------------------------------------------------
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-	// the actual game object of the wellapad
-	private GameObject goWellapadUI;
-	private WellapadScreenManager scriptScreenManager;
+	private GameObject goWellapadUI; // the actual game object of the wellapad
+	private WellapadScreenManager wellapadScreenManager; //script that handles wellapad screen state
+
+	//Return WellapadScreenManager script
 	public WellapadScreenManager GetScreenManager() {
-		return scriptScreenManager;	
+		return wellapadScreenManager;	
+	}
+
+	void Awake(){
+		// instantiate the actual wellapad object
+		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
+		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
 	}
 	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {
-		// instantiate the actual wellapad object
-		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
-		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
-		
 		// set the tween target on the wellapad object to this object
 		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
-		
-		scriptScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
+		wellapadScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
+
+		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
+		RefreshScreen();
 	}
 	
 	//---------------------------------------------------
@@ -39,17 +45,26 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
-		
-		// set the right screen
+
+		//Refresh check
+		//Case: User finishes before play period but never home out of the game.
+		//When the user comes back to play the game user is in new play period so
+		//do a refresh check when the wellapad is opened and there are no active tasks
+		// bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+		// if(!hasActiveTasks)	
+		// 	WellapadMissionController.Instance.RefreshCheck();
+	}
+
+	private void RefreshScreen(object sender, EventArgs args){
 		RefreshScreen();
 	}
-	
+
 	//---------------------------------------------------
 	// RefreshScreen()
 	// Sets the proper screen on the wellapad.
 	//---------------------------------------------------	
 	public void RefreshScreen() {
-		scriptScreenManager.SetScreen();
+		wellapadScreenManager.SetScreen();
 	}
 	
 	//---------------------------------------------------

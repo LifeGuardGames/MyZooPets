@@ -18,16 +18,15 @@ public class NotificationTest : MonoBehaviour {
 			
 			// Populate notification entry table
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
 			notificationEntry.Add(NotificationPopupFields.Message, "You need at least 99999999 stars to play!");
-			// notificationEntry.Add(NotificationPopupFields.Button1Label, "Back");
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+            notificationEntry.Add(NotificationPopupFields.Button2Callback, button1Function);
 			
 			// Place notification entry table in static queue
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
         }
 		
-		// 2 BUTTON POPUP
 		if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
             "image button")){
 

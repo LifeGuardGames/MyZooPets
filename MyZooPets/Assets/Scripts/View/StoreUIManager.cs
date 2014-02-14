@@ -31,6 +31,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
+		eModeType = UIModeTypes.Store;
+		
 		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
 		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
 		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
@@ -57,6 +59,24 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			Debug.LogError("Exit button is null...please set");
 	}
 	
+	void Start(){
+		// Reposition all the things nicely to stretch to the end of the screen
+		
+		// Position the UIPanel clipping range
+		UIPanel itemAreaPanel = itemArea.GetComponent<UIPanel>();
+		Vector4 oldRange = itemAreaPanel.clipRange;
+		
+		// The 52 comes from some wierd scaling issue.. not sure what it is but compensate now
+		itemAreaPanel.transform.localPosition = new Vector3(52f, itemAreaPanel.transform.localPosition.y, 0f);
+		itemAreaPanel.clipRange = new Vector4(52f, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		
+		// Position the grid origin to the left of the screen
+		Vector3 gridPosition = grid.transform.localPosition;
+		grid.transform.localPosition = new Vector3(
+			(-1f * (CameraManager.Instance.GetNativeWidth()/2)) - itemArea.transform.localPosition.x,
+			gridPosition.y, gridPosition.z);
+	}
+	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	
@@ -79,19 +99,17 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	}
 
 	//----------------Hacky code to fix store shortcut problems. need a better solution
+	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		ClickManager.Instance.ClickLock(GetClickLockExceptions());
-		ClickManager.Instance.ModeLock(eModeType);
+		ClickManager.Instance.Lock( UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Food", true);
 	}
-
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		ClickManager.Instance.ClickLock(GetClickLockExceptions());
-		ClickManager.Instance.ModeLock(eModeType);
+		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Items", true);
@@ -99,8 +117,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
-		ClickManager.Instance.ReleaseClickLock();
-		ClickManager.Instance.ReleaseModeLock();
+		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
 	//---------------------------------------------------
@@ -192,7 +209,23 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void OnBuyButton(GameObject button){
 		string itemID = button.transform.parent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
+
+
 		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
+			//Special case to handle here. Since only one wallpaper can be used at anytime
+			//There is no point for the user to buy more than one of each diff wallpaper
+			if(itemData.Type == ItemType.Decorations){
+				DecorationItem decoItem = (DecorationItem) itemData;
+
+				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+					UIImageButton buyButton = button.GetComponent<UIImageButton>();
+		
+					//Disable the buy button so user can't buy the same wallpaper anymore 
+					if(buyButton)
+						buyButton.isEnabled = false;
+				}
+			}
+
 			InventoryLogic.Instance.AddItem(itemID, 1);
 			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
@@ -223,7 +256,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// we also need to hide the exit button's active state based on whether or not we are shortcutting
 		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
 		string strFunction = bShortcutMode ? "HideStoreSubPanel" : "CloseUI";
-		goExitButton.GetComponent<UIButtonMessage>().functionName = strFunction;		
+		goExitButton.GetComponent<LgButtonMessage>().functionName = strFunction;		
 		
 		currentPage = strPage;
 
@@ -333,8 +366,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
 		if(currentTab != tabName){
 			//Destroy existing items first
-			foreach(Transform child in grid.transform)
+			foreach(Transform child in grid.transform){
+				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
+			}
 
 			//Reset clip range so scrolling will start from beginning again
 			ResetUIPanelClipRange();
@@ -377,7 +412,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			}
 
 			grid.GetComponent<UIGrid>().Reposition();
-			Invoke("Reposition",0.00000001f);
 		}
 	}
 
@@ -421,10 +455,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
         itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
 
-	//Delay calling reposition due to async problem Destroying/Repositionoing.
-	//TODO Maybe change later when we have moreItems 
-	private void Reposition(){
-		grid.GetComponent<UIGrid>().Reposition();
+	// //Delay calling reposition due to async problem Destroying/Repositionoing.
+	// //TODO Maybe change later when we have moreItems 
+	// private void Reposition(){
+	// 	grid.GetComponent<UIGrid>().Reposition();
 
-	}
+	// }
 }

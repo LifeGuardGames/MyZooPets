@@ -15,21 +15,6 @@ public class TaskUpdatedArgs : EventArgs {
 	public bool Status{get; set;}
 }
 
-// this is save date for a given mission
-public class Mission {
-    public string ID {get; set;}						// id of the mission
-	public RewardStatuses RewardStatus {get; set;}		// status of the mission's reward
-	public Dictionary<string, WellapadTask> Tasks {get; set;}	// all the tasks and their status for this mission
-
-    public Mission(){}
-
-    public Mission(string id, Dictionary<string, WellapadTask> tasks, RewardStatuses eReward = RewardStatuses.Unearned ){
-        ID = id;
-		Tasks = tasks;
-		RewardStatus = eReward;
-    }
-}
-
 public class WellapadMissionController : Singleton<WellapadMissionController> {
 	//=======================Events========================
     public EventHandler<TaskUpdatedArgs> OnTaskUpdated;   	// when a task's status is updated
@@ -94,8 +79,13 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				//StatsController.Instance.ChangeFireBreaths( 1 );
 				
 				int nXP = DataLoader_XpRewards.GetXP( "WellapadBonus", new Hashtable() );
-				StatsController.Instance.ChangeStats( nXP, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				
+				// get the position of the actual reward object because we want to stream the XP from it
+				GameObject goReward = GameObject.Find("WellapadRewardButton");				
+				Vector3 vPos = LgNGUITools.GetScreenPosition( goReward );
+				vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.Center, InterfaceAnchors.Top );
+
+				StatsController.Instance.ChangeStats( nXP, vPos, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero );
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event
@@ -104,7 +94,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 				if ( OnRewardClaimed != null )
 					OnRewardClaimed( this, EventArgs.Empty );
 				
-				Debug.Log("Reward claimed for mission: " + strMissionID);
+				//Debug.Log("Reward claimed for mission: " + strMissionID);
 			}
 			else
 				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + strMissionID);
@@ -149,6 +139,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			}
 		}
 	}
+
+	void Awake(){
+		RefreshCheck();
+	}
 	
 	//---------------------------------------------------
 	// OnApplicationPause()
@@ -161,6 +155,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 		}
 	}	
 	
+	private void RefreshCheck(object sender, EventArgs args){
+		RefreshCheck();	
+	}
 	//---------------------------------------------------
 	// RefreshCheck()
 	// Function that checks to see if the wellapad missions
@@ -200,11 +197,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 			
 			// have the screens of the wellapad refresh before we send out the event below, because we want to make sure the
 			// missions screen is active
-			WellapadUIManager.Instance.RefreshScreen();
+			// WellapadUIManager.Instance.RefreshScreen();
 		
 			// send event
-			if ( OnMissionsRefreshed != null ) 
-				OnMissionsRefreshed( this, EventArgs.Empty );		
+			if (OnMissionsRefreshed != null) 
+				OnMissionsRefreshed(this, EventArgs.Empty);		
 		}
 	}
 	
@@ -232,10 +229,21 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// strTask, and dim out any other tasks.
 	//---------------------------------------------------		
 	public void HighlightTask( string strTask ) {
+		StartCoroutine(HighlightTaskWait(strTask));
+	}
+	
+	// TODO-REFACTOR
+	// We wait for 2 frames here because when wellapad is opened, to make sure evrything "OnHighlightTask()" registered from MissionTaskUI
+	// Wellapad_MissionList.cs:DisplayMissions() waits a frame already
+	// Also take a look at GameTutorial_WellapadIntro.cs:OpeningWellapad(), that waits a frame before calling this!
+	//				I think the ^ one can be removed
+	private IEnumerator HighlightTaskWait(string strTask){
+		yield return 0;
+		yield return 0;
 		if ( OnHighlightTask != null ) {
 			TaskUpdatedArgs args = new TaskUpdatedArgs();
 			args.ID = strTask;
-			OnHighlightTask( this, args );			
+			OnHighlightTask( this, args );
 		}
 	}
 	

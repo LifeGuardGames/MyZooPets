@@ -22,12 +22,11 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// the remove button game object
 	public GameObject goRemoveButton;
 	
-	// prefab of the area that items are populated to -- this exists because if we don't instantiate it, the list "remembers" where it was last scrolled to
-	public GameObject prefabChooseArea;
-	private GameObject goChooseArea;
+	// Panel of the grid
+	public UIPanel gridPanel;
 	
 	// the grid this UI places its items in
-	private GameObject goGrid;	
+	public GameObject goGrid;	
 	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
@@ -44,6 +43,29 @@ public class ChooseDecorationUI : MonoBehaviour {
 	//=======================Events========================
     public EventHandler<EventArgs> OnDecoPlaced;   // when a decoration is placed	
 	
+	void Start(){
+		// Reposition all the things nicely to stretch to the end of the screen
+		Vector4 oldRange = gridPanel.clipRange;
+		
+		// The 52 comes from some wierd scaling issue.. not sure what it is but compensate now
+		gridPanel.transform.localPosition = new Vector3(0f, gridPanel.transform.localPosition.y, 0f);
+		gridPanel.clipRange = new Vector4(0f, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		
+		// Position the grid origin to the left of the screen
+		Vector3 gridPosition = goGrid.transform.localPosition;
+		goGrid.transform.localPosition = new Vector3(
+			(-1f * (CameraManager.Instance.GetNativeWidth()/2)) - gridPanel.transform.localPosition.x + 10,
+			gridPosition.y, gridPosition.z);	
+	}
+	
+	void Update(){
+		// TODO-s THIS IS A MISBEHAVING VARIABLE PUT A DEBUG TO PRINT WHEN REFACTORING TO CATCH THIS!!
+		if(gridPanel.clipRange.y != 0){
+			//Debug.Log("CAUGHT YOU!");
+			gridPanel.clipRange = new Vector4(gridPanel.clipRange.x, 0, gridPanel.clipRange.z, gridPanel.clipRange.w);
+		}
+	}
+	
 	//---------------------------------------------------
 	// UpdateItems()
 	// This function updates the choose decoration menu
@@ -54,21 +76,24 @@ public class ChooseDecorationUI : MonoBehaviour {
 		// set our current deco node
 		decoNodeCurrent = decoNode;
 		
-		// instantiate the item area
-		if ( goChooseArea )
-			Destroy( goChooseArea );	// destroy the section of the UI with all the entries if it existed already
-		goChooseArea = LgNGUITools.AddChildWithPosition( gameObject, prefabChooseArea );
-		goGrid = goChooseArea.transform.Find("Grid").gameObject;
+		// Destroy all child within grid
+		// NOTE: cant enumerate (skipping), destroying backwards!
+		int childs = goGrid.transform.childCount;
+		for (int i = childs - 1; i > 0; i--){
+			Destroy(goGrid.transform.GetChild(i).gameObject);
+		}
 		
 		// create the decoration entries in the UI
-		CreateEntries( goGrid );	
+		CreateEntries( goGrid );
 		
 		// show or hide the remove button as appropriate
 		bool bShowRemove = decoNodeCurrent.HasRemoveOption();
 		NGUITools.SetActive( goRemoveButton, bShowRemove );
 		
 		goGrid.GetComponent<UIGrid>().Reposition();
-		Invoke("Reposition",0.00000001f);		
+		Invoke("Reposition",0.00000001f);
+		
+		ResetUIPanelClipRange();
 	}
 	
 	//---------------------------------------------------
@@ -109,12 +134,12 @@ public class ChooseDecorationUI : MonoBehaviour {
 			string strPrefix = bDecoOK ? "_" : "X_";
 			
 			item.name = strPrefix + (listDecos.Count - i - 1) + "-" + itemDeco.ID;	// DO NOT CHANGE...this is what sorts it
-			item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
+			// item.transform.FindChild("ItemDescription").GetComponent<UILabel>().text = itemDeco.Description;
 			item.transform.FindChild("ItemName").GetComponent<UILabel>().text = itemDeco.Name;
 			item.transform.FindChild("ItemTexture").GetComponent<UISprite>().spriteName = itemDeco.TextureName;
 		
 			// depending on if the deco can be placed or not, set certain attributes on the entry
-			UIButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<UIButtonMessage>();
+			LgButtonMessage button = item.transform.FindChild("PlaceButton").GetComponent<LgButtonMessage>();
 			if ( bDecoOK ) {
 				// set up place button callbacks
 				button.target = gameObject;
@@ -129,7 +154,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 			}
 			
 			// save the tutorial entry (a bit hacky)
-			if ( itemDeco.ID == "WallPoster1" )
+			if ( itemDeco.ID == "WallPoster8" )
 				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
 		}		
 	}
@@ -155,8 +180,26 @@ public class ChooseDecorationUI : MonoBehaviour {
 	//TODO Maybe change later when we have moreItems 
 	private void Reposition(){
 		goGrid.GetComponent<UIGrid>().Reposition();
-
-	}	
+	}
+	
+	//------------------------------------------
+	// ResetUIPanelClipRange()
+	// reset the clip range for the item area so that scrolling starts from the beginning
+	//------------------------------------------
+	private void ResetUIPanelClipRange(){
+        Vector4 clipRange = gridPanel.GetComponent<UIPanel>().clipRange;
+		
+		// Stop the springing action when switching
+		SpringPanel spring = gridPanel.GetComponent<SpringPanel>();
+		if(spring != null){
+			spring.enabled = false;	
+		}
+		
+		// Reset the localposition and clipping position
+        gridPanel.transform.localPosition = new Vector3(0f, gridPanel.transform.localPosition.y, gridPanel.transform.localPosition.z);
+        gridPanel.gameObject.GetComponent<UIPanel>().clipRange = new Vector4(0f, clipRange.y, clipRange.z, clipRange.w);
+	}
+	
 	
 	//---------------------------------------------------
 	// OnPlaceButton()

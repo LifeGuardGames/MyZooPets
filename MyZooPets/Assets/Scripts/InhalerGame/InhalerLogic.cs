@@ -6,7 +6,7 @@ using System;
 public class InhalerLogic : Singleton<InhalerLogic>{
     public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
     public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-    public const int RESCUE_NUM_STEPS = 8;
+    public const int RESCUE_NUM_STEPS = 7;
     private int currentStep = 1; //current step that user is on
 
     /*
@@ -37,14 +37,16 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
     //Use this function to move on to the next step
     public void NextStep(){
+        if(IsDoneWithGame())
+            GameDone();
+
+        //Send analytics event
         Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
 
         currentStep++;
 
         if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
             OnNextStep(this, EventArgs.Empty);
-        if(IsDoneWithGame())
-			GameDone();
     } 
 
     public void ResetGame(){
@@ -71,15 +73,18 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );
+
+        // Check for badge reward
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
 		
 		// calculate the next play period for the inhaler
 		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();
 	}	
 	
-    /*
-        Ending sequence is one more than the total number of sequences
-        True: done with the game , False: have more steps to go
-    */
+    //---------------------------------------------------       
+    // IsDoneWithGame()
+    // True: done with the game , False: have more steps to go
+    //---------------------------------------------------       
     private bool IsDoneWithGame(){
         return currentStep == RESCUE_NUM_STEPS;
     }

@@ -44,7 +44,8 @@ public abstract class DecorationNode : LgButton {
 		SetNodeArt( false );
 		
 		// these variables would normally be set on the game object in the scene, but it is more convenient to set them here
-		bCheckClickManager = false;
+		bCheckClickManager = true;
+		eMode = UIModeTypes.EditDecos;
 		strSoundProcess = "shopOpen";
 
 		// set the node ID to the game object name
@@ -237,7 +238,7 @@ public abstract class DecorationNode : LgButton {
 		bool bOK = true;	// start optimistic
 		
 		// compare the node type to the decoration type
-		DecorationItem itemDeco = (DecorationItem) DataItems.GetItem( strID );
+		DecorationItem itemDeco = (DecorationItem) ItemLogic.Instance.GetItem( strID );
 		DecorationTypes eNodeType = GetDecoType();
 		DecorationTypes eDecoType = itemDeco.DecorationType;
 		bOK = eNodeType == eDecoType;

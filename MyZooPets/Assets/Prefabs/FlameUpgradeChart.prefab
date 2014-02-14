@@ -65,6 +65,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400008}
+  - 114: {fileID: 11400062}
+  - 114: {fileID: 11400068}
+  m_Layer: 0
+  m_Name: L_Title
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100010
 GameObject:
   m_ObjectHideFlags: 1
@@ -190,7 +207,7 @@ GameObject:
   - 114: {fileID: 11400028}
   - 114: {fileID: 11400094}
   m_Layer: 0
-  m_Name: L_Title
+  m_Name: L_Caption
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -443,6 +460,7 @@ GameObject:
   - 114: {fileID: 11400080}
   - 114: {fileID: 11400082}
   - 114: {fileID: 11400044}
+  - 114: {fileID: 11400058}
   m_Layer: 0
   m_Name: BackButton
   m_TagString: Untagged
@@ -494,6 +512,17 @@ Transform:
   m_LocalScale: {x: 59, y: 54, z: 1}
   m_Children: []
   m_Father: {fileID: 400070}
+--- !u!4 &400008
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 176.288742, z: -2.09999847}
+  m_LocalScale: {x: 80, y: 80, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400038}
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -523,8 +552,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -13.8239861, z: -1.14537811}
-  m_LocalScale: {x: 830.569397, y: 512.996033, z: 10.5830488}
+  m_LocalPosition: {x: 0, y: -18, z: -1}
+  m_LocalScale: {x: 830, y: 522, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
 --- !u!4 &400016
@@ -581,8 +610,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 190.786316, z: -2.0999999}
-  m_LocalScale: {x: 80, y: 80, z: 1}
+  m_LocalPosition: {x: 0, y: -208.846527, z: -2.09999847}
+  m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 400038}
 --- !u!4 &400028
@@ -628,13 +657,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.36489773, y: 11.3469296, z: 45.0746231}
+  m_LocalPosition: {x: -5.9031601, y: 11.3469296, z: 45.0746231}
   m_LocalScale: {x: .0199999996, y: .0199999996, z: 1}
   m_Children:
   - {fileID: 400070}
-  - {fileID: 400024}
+  - {fileID: 400008}
   - {fileID: 400054}
   - {fileID: 400014}
+  - {fileID: 400024}
   - {fileID: 400066}
   m_Father: {fileID: 0}
 --- !u!4 &400042
@@ -693,7 +723,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 33.4559441, z: -1}
+  m_LocalPosition: {x: 0, y: 64.0619278, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400044}
@@ -1168,13 +1198,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .931034446, b: 0, a: 1}
+  mColor: {r: 1, g: .264705896, b: .264705896, a: 1}
   mPivot: 4
   mDepth: 0
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: Flame Level
-  mMaxLineWidth: 0
-  mMaxLineHeight: 0
+  mText: Unlock more powerful flames!
+  mMaxLineWidth: 700
+  mMaxLineHeight: 100
   mEncoding: 1
   mMaxLineCount: 0
   mPassword: 0
@@ -1183,7 +1213,7 @@ MonoBehaviour:
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mShrinkToFit: 0
+  mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
 --- !u!114 &11400030
@@ -1321,7 +1351,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockGUI: 0
-  eModeType: 0
   zoomHelper: {fileID: 11400074}
   goBackButton: {fileID: 100070}
 --- !u!114 &11400044
@@ -1337,7 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 400006}
   hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0
 --- !u!114 &11400046
 MonoBehaviour:
@@ -1504,6 +1533,23 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 1
+  eMode: 2
+  strSoundProcess: 
+  bCheckClickManager: 1
+  target: {fileID: 100038}
+  functionName: CloseUI
 --- !u!114 &11400060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1538,6 +1584,35 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: .931034446, b: 0, a: 1}
+  mPivot: 4
+  mDepth: 0
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: Flame Level
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400064
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1593,6 +1668,18 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400068
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: FLAME_CHART_TITLE
 --- !u!114 &11400070
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1686,7 +1773,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
@@ -1707,9 +1794,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
+  eMode: 0
   strSoundProcess: 
   bCheckClickManager: 1
-  strAnalytics: 
   target: {fileID: 100038}
   functionName: OpenUI
 --- !u!114 &11400094
@@ -1723,7 +1810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: FLAME_CHART_TITLE
+  key: FLAME_CHART_CAPTION
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

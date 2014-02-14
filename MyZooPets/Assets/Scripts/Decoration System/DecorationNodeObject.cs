@@ -29,7 +29,7 @@ public class DecorationNodeObject : DecorationNode {
 			Destroy( goDefaultDeco );
 		
 		// build the prefab from the id of the decoration
-		string strResource = "GO_" + strID;
+		string strResource = ItemLogic.Instance.GetDecoItemPrefabName(strID);
 		GameObject goPrefab = Resources.Load(strResource) as GameObject;
 		
 		// find the right position -- most likely every object will have this override

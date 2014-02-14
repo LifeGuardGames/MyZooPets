@@ -13,21 +13,37 @@ public class FloatyUtil {
     //---------------------------------------------------- 
     // SpawnFloatyText()
     // This spawns a floaty text that disappears in FLOAT_TIME
-    // Params: parent, textSize, text 
+    // Option Params:
+    //  prefab (GameObject): gameObject that you want to be spawned
+    //  parent (GameObject): the parent/location that you want the float to spawn under
+    //  position (Vector3): the position that you want to spawn the floaty 
+    //  textSize (int): size of the floaty
+    //  text (string): the text to be displayed
     //---------------------------------------------------- 
     public static void SpawnFloatyText(Hashtable option){
-        if(floatyText == null)
+        //if you pass in a prefab you need to make sure the floatingUpPos, floatingUpTime is
+        //set in the prefab
+		if ( option.ContainsKey("prefab") ) {
+			string strPrefab = (string) option["prefab"];
+			floatyText = (GameObject) Resources.Load( strPrefab );
+		}
+        else{
             floatyText = (GameObject) Resources.Load("FloatyText");
+        }
 
         GameObject floaty;
 
         if(option.ContainsKey("parent")){
             floaty = LgNGUITools.AddChildWithPosition((GameObject) option["parent"], floatyText);
-        }
-        else{
-            Debug.Log("SpawnFloatyText requires a parent");
+        }else{
+            Debug.LogError("SpawnfloatyText needs a parent");
             return;
         }
+
+        if(option.ContainsKey("position")){
+			Vector3 vPos = (Vector3) option["position"];
+			floaty.transform.localPosition = vPos;
+		}
 
         if(option.ContainsKey("textSize")){
             int textSize = (int) option["textSize"];
@@ -37,15 +53,36 @@ public class FloatyUtil {
         if(option.ContainsKey("text")){
             floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
         }
+		
+		if(option.ContainsKey("color")){
+			floaty.transform.Find("Label").GetComponent<UILabel>().color = (Color) option["color"];
+		}
+		
+		// If NOT prefab
+		if(!option.ContainsKey("prefab")){
+            FloatyController floatyController = floaty.GetComponent<FloatyController>();
 
-        floaty.GetComponent<FloatyController>().floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
-        floaty.GetComponent<FloatyController>().floatingTime = FLOAT_TIME;
+            if(option.ContainsKey("floatingUpPos"))
+                floatyController.floatingUpPos = (Vector3) option["floatingUpPos"];
+            else
+                floatyController.floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
+
+            if(option.ContainsKey("floatingTime"))
+                floatyController.floatingTime = (float) option["floatingTime"];
+            else
+    	        floatyController.floatingTime = FLOAT_TIME;
+		}
     }
 	
 	//---------------------------------------------------- 
     // SpawnFloatyStats()
     // Spawns floaty image and text above pet's head to show
     // change in stats
+    // Option Params:
+    //  parent (GameObject): the parent/location that you want the floaty to spawn under
+    //  deltaPoints (string): changes in points
+    //  deltaHealth (string): changes in health
+    //  deltaMood (string): changes in mood
     //---------------------------------------------------- 
 	public static void SpawnFloatyStats(Hashtable option){
 		if(floatyStats == null)

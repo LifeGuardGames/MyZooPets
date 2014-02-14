@@ -60,7 +60,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			string strMessage;
 			bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
 			if ( bTutsDone ) 
-				strMessage = StringUtils.Replace(Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"), StringUtils.NUM, countDownTime.ToString());
+				strMessage = String.Format(Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"), countDownTime.ToString());
 			else
 				strMessage = Localization.Localize("NOTIFICATION_DONT_NEED_INHALER_TUT");
 			
@@ -83,9 +83,5 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	public void OpenRealInhaler(){
 		// use parent
 		base.ProcessClick();
-
-		//Hide other UI Objects
-		NavigationUIManager.Instance.HidePanel();
-		// HUDUIManager.Instance.HidePanel();
 	}	
 }

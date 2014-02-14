@@ -7,11 +7,12 @@ STORE_TAB_ITEM = Item
 // item box
 
 ITEMBOX_TITLE = Item Box!
-ITEMBOX_QUANTITY = x$NUM$
+ITEMBOX_QUANTITY = x{0}
 
 // flame chart
 
 FLAME_CHART_TITLE = Flame Level
+FLAME_CHART_CAPTION = Unlock more powerful flames!
 
 // badge board
 
@@ -22,37 +23,38 @@ BADGE_BOARD_TITLE = Badges
 WELLAPAD_TITLE = WellaPad
 
 // no missions screen
-WELLAPAD_NO_MISSIONS_1 = Great job! Come back in
-WELLAPAD_NO_MISSIONS_2 = $TIME$
-WELLAPAD_NO_MISSIONS_3 = for more missions.
+WELLAPAD_NO_MISSIONS_1 = Great job! Next Mission in:
+WELLAPAD_NO_MISSIONS_2 = {0}
+WELLAPAD_NO_MISSIONS_3 = Try decorating your room!!
 
 // wellapad missions
 
 Task_DailyInhaler = Take Inhaler
-Task_CleanRoom = Clean Triggers
-Task_FeedPet = Feed Pet
+Task_CleanRoom = Clean up triggers
+Task_FeedPet = Feed Pet to 100%
 Task_Decorate = Place Decoration
-Task_FightMonster = Fight Smoke Monster
+Task_FightMonster = Fight Smog Monster
 
 Task_PlayNinja = Clear Cockroaches
-Task_ScoreNinja = Trigger: Score $NUM$ points
-Task_ComboNinja = Trigger: Get a $NUM$x combo
+Task_ScoreNinja = Trigger: Slash {0} triggers
+Task_ComboNinja = Trigger: Slash a {0}x combo
 
 Task_PlayRunner = Play Runner
-Task_DistanceRunner = Runner: Reach $NUM$ meters
-Task_CoinsRunner = Runner: Collect $NUM$ coins in one run
-Task_ItemsRunner = Runner: Collect $NUM items in one run
-Task_ScoreRunner = Runner: Get $NUM$ points
+Task_DistanceRunner = Runner: Reach {0} meters
+Task_CoinsRunner = Runner: Collect {0} points in one run
+Task_ItemsRunner = Runner: Collect {0} items in one run
+Task_ScoreRunner = Runner: Get {0} points
 
 Task_PlayClinic = Play Clinic
-Task_ScoreClinic = Clinic: Score $NUM$ points
+Task_ScoreClinic = Clinic: Score {0} points
 
 MissionTitle_Critical = Critical Mission
 MissionTitle_TutorialCritical = Critical Mission
 MissionTitle_Side = Side Mission
 MissionTitle_TutorialSide = Side Mission
 
-WellapadReward = Bonus XP!
+WellapadReward = Reward!
+WellapadClose = Okay
 
 // misc -- these words are used throughout the game
 // NOTE: supply context for Level
@@ -93,60 +95,42 @@ MG_PAUSED = Game is paused
 MG_GAME_OVER = Game Over!
 
 // time mood decay tut
-TMD_1 = While you are away, your pet misses you and can become sad.
-TMD_2 = Make sure to feed your pet often so it stays happy!
+TMD_1 = While you are away, {0} misses you and can become sad.
+TMD_2 = Make sure to feed {0} often so it stays happy!
 
 // runner game
-RUNNER_OPENING = Welome to the runner game!
+RUNNER_OPENING = Avoid the triggers and collect the other items!
+
+// tutorials done
+TUTS_FINISHED = You've learned how to take care of {0}. Now become stronger and kick the Smog Monster out of {1} home!
 
 // diagnose game (tracks) (clinic game)
-DGT_OPENING = The doctor is out - now it's up to you to help these pets!
+DGT_OPENING = The doctor is out - now it's up to you to diagnose these pets' asthma symptoms!
 DGT_GAME_OVER = Game Over!
 DGT_PAUSED = Game is paused
 DGT_TUT_0 = Healthy pets are ready to go out and play. Tap the green playground to send them on their way!
 DGT_TUT_1 = Some pets are a little sick. Tap the yellow inhaler to have them take some medicine.
 DGT_TUT_2 = When pets are really sick, they should go to the hospital. Tap the red hospital to help these pets!
 DGT_TUT_3 = If you send too many pets to the wrong place, it is game over! The longer you play, the faster things get. Good luck!
+DGT_EXTRA_LIFE = Extra Life!!!
 
 // trigger ninja minigame
-NINJA_OPENING = Slash the dust mites when they appear on screen, but don't slash the inhaler!
+NINJA_OPENING = Slash the asthma triggers, but don't slash the inhalers!
+NINJA_COMBO = Combo\n    x{0}
+NINJA_TUT_0 = Slash the asthma triggers to remove them
+NINJA_TUT_1 = Don't slash the inhalers!!
 
 // minigame related
 MG_SCORE = Score:
 MG_LIVES = Lives:
 
 // notifications
-NOTIFICATION_DIAGNOSE = Something unusual is happening to your pet! Help it out!
-NOTIFICATION_DONT_NEED_INHALER = I don't need this right now. Come back in $NUM$ hours.
+NOTIFICATION_DONT_NEED_INHALER = I don't need this right now. Come back in {0} hours.
 NOTIFICATION_DONT_NEED_INHALER_TUT = I don't need this right now. Play more first!
-NOTIFICATION_SLOT_COST = -$NUM$ stars to play
-NOTIFICATION_SLOT_COST_ERROR = You need at least $NUM$ stars to play!
 
 // pet creation screen
 CREATE_NAME = Name:
 CREATE_COLOR = Color:
-
-// calendar
-CALENDAR_TITLE = My Inhaler Calendar
-CALENDAR_LAST_WEEK = Last Week
-CALENDAR_REWARD = Next Reward
-CALENDAR_SUNDAY = Sunday
-CALENDAR_MONDAY = Monday
-CALENDAR_TUESDAY = Tuesday
-CALENDAR_WEDNESDAY = Wednesday
-CALENDAR_THURSDAY = Thursday
-CALENDAR_FRIDAY = Friday
-CALENDAR_SATURDAY = Saturday
-CALENDAR_SUNDAY_SHORT = Sun
-CALENDAR_MONDAY_SHORT = Mon
-CALENDAR_TUESDAY_SHORT = Tue
-CALENDAR_WEDNESDAY_SHORT = Wed
-CALENDAR_THURSDAY_SHORT = Thu
-CALENDAR_FRIDAY_SHORT = Fri
-CALENDAR_SATURDAY_SHORT = Sat
-CALENDAR_MORNING = Morning
-CALENDAR_NIGHT = Night
-CALENDAR_NOW = NOW
 
 // stats -- NOTE what comes after the _ is the enum of the stat
 STAT_Mood = Mood
@@ -160,6 +144,13 @@ NAME_BREAD = Bread
 NAME_DONUT = Frosted Donut
 NAME_CHOC_DONUT = Choco Donut
 NAME_MILK = Milk
+NAME_ORANGE = Orange
+NAME_WATERMELON = Watermelon
+NAME_PURPLE_CANDY = Purple Candy
+NAME_BROWN_CANDY = Crown Candy
+NAME_STRAWBERRY_SMOOTHIE = Strawberry Shake
+NAME_BLUEBERRY_SMOOTHIE = Blueberry Shake
+NAME_BANANA_SMOOTHIE = Banana Shake
 
 // usable items
 NAME_INHALER = Inhaler
@@ -177,49 +168,29 @@ NODE_SMALLPLANT = Small Plant
 NODE_BIGPLANT = Big Plant
 
 // ui labels
+DECO_ENTRY = Decoration mode
 DECO_REMOVE = Remove
-DECO_REMOVE_DESC = Remove this decoration.
+DECO_REMOVE_DESC = Remove this decoration
 DECO_PLACE = Place
 
 // actual decorations in shop
-NameWallpaperSolidBlue = Blue Wallpaper 
-DescWallpaperSolidBlue = Some sweet blue wallpaper.
-
-NameWallpaperSolidPink = Pink Wallpaper 
-DescWallpaperSolidPink = Some sweet pink wallpaper.
-
-NameWallpaperSolidAqua = Aqua Wallpaper 
-DescWallpaperSolidAqua = Some sweet aqua wallpaper.
-
-NameWallpaperSolidYellow = Yellow Wallpaper
-DescWallpaperSolidYellow = Some sweet yellow wallpaper.
-
-NameWallpaperSquareGreen = Green Wallpaper
-DescWallpaperSquareGreen = Some sweet green wallpaper.
-
-NameWallpaperSquareAqua = Aqua Wallpaper 
-DescWallpaperSquareAqua = Some sweet aqua wallpaper.
-
-NameWallpaperSquareBlue = Blue Wallpaper
-DescWallpaperSquareBlue = Some sweet blue wallpaper.
-
-NameWallpaperSquarePink = Pink Wallpaper 
-DescWallpaperSquarePink = Some sweet pink wallpaper.
-
-NameWallpaperSquarePeach = Peach Wallpaper
-DescWallpaperSquarePeach = Some sweet peach wallpaper.
-
+NameWallpaperSolidBlue = Blue Wall
+NameWallpaperSolidPink = Pink Wall
+NameWallpaperSolidAqua = Aqua Wall
+NameWallpaperSolidYellow = Yellow Wall
+NameWallpaperSquareGreen = Green Wall
+NameWallpaperSquareAqua = Aqua Wall
+NameWallpaperSquareBlue = Blue Wall
+NameWallpaperSquarePink = Pink Wall
+NameWallpaperSquarePeach = Peach Wall
+NameWallpaperCustomDotBlue = Dot Wall
+NameWallpaperCustomHeartRed = Heart Wall
+NameWallpaperCustomHoneycombYellow = Honeycomb Wall
+NameWallpaperCustomZigzagGreen = Zigzag Wall
 NameFlowerBulbBlue = Blue Flower
-DescFlowerBulbBlue = A blue flower.
-
 NameFlowerBulbRed = Red Flower
-DescFlowerBulbRed = A red flower.
-
 NameFlowerBulbYellow = Yellow Flower
-DescFlowerBulbYellow = A yellow flower.
-
 NameFlowerBulbPurple = Purple Flower
-DescFlowerBulbPurple = A purple flower.
 
 NAME_FLOOR_BLUE = Blue Floor
 DESC_FLOOR_BLUE = Some sweet blue floor.
@@ -233,38 +204,30 @@ DESC_FLOOR_GREEN = Some sweet green floor.
 NAME_FLOOR_YELLOW = Yellow Floor
 DESC_FLOOR_YELLOW = Some sweet yellow floor.
 
-NameRugBlue = Blue carpet
-DescRugBlue = Some sweet blue carpet.
+NameRugBasicBlue = Blue carpet
+NameRugBasicRed = Pink carpet
+NameRugBasicGreen = Green carpet
+NameRugBasicYellow = Yellow carpet
 
-NameRugRed = Pink carpet
-DescRugRed = Some sweet pink carpet.
+NameRugCircleBlue = Blue circles carpet 
+NameRugCircleRed = Red circles carpet
+NameRugCircleGreen = Green circles carpet 
+NameRugCirclePurple = Purple circles carpet 
 
-NameRugGreen = Green carpet
-DescRugGreen = Some sweet green carpet.
-
-NameRugGray = Gray carpet
-DescRugGray = Some sweet gray carpet.
-
-NameRugLime = Lime carpet
-DescRugLime = Some sweet lime carpet.
+NameRugSquareBlue = Blue squares carpet 
+NameRugSquareRed = Red squares carpet 
+NameRugSquareGreen = Green squares carpet
+NameRugSquareYellow = Yellow squares carpet 
 
 NameWallPoster1 = Retro Poster
-DescWallPoster1 = This is an old Wellapet.
-
 NameWallPoster2 = WellaShark
-DescWallPoster2 = This is a shark poster.
-
 NameWallPoster3 = WellaCupid
-DescWallPoster3 = This is a Wellapet as Cupid.
- 
 NameWallPoster4 = Party Time!
-DescWallPoster4 = Rock out with this poster.
-
 NameWallPoster5 = Sports Poster
-DescWallPoster5 = Celebrate the championship!
-
 NameWallPoster6 = Friendly Portrait
-DescWallPoster6 = This wellapet says "hi".
+NameWallPoster7 = Lakeside Painting
+NameWallPoster8 = Mysterious Egg
+NameWallPoster9 = Wellapets Crest
  
 NAME_TORCH_1 = Cool Torch
 DESC_TORCH_1 = This is a cool torch.
@@ -303,26 +266,43 @@ DESC_FLAME4 = You've unlocked the violet flame!
 DESC_FLAME5 = You've unlocked the powerful black flame!
 
 // badges
-NAME_LEVEL_1 = Level 1
+BADGE_UNLOCK = New badge unlocked!
+
+NAME_LEVEL_2 = Level 2
 NAME_LEVEL_5 = Level 5
-NAME_LEVEL_10 = Level 10
-NAME_LEVEL_15 = Level 15
-NAME_LEVEL_20 = Level 20
+NAME_LEVEL_8 = Level 8
 
 NAME_FOREST_RUNNER = Forest Runner
 NAME_SPRINTER = Sprinter
 NAME_SUPER_RUNNER = Super Runner
+
 NAME_DOCTOR_IN_TRAINING = Doctor-In-Training
 NAME_JUNIOR_DOCTOR = Junior Doctor
 NAME_EXPERT_DOCTOR = Expert Doctor
+
 NAME_STYLE_ROOKIE = Style Rookie
 NAME_OFFICIALLY_STYLIN = Officially Stylin
 NAME_COOLEST_PET = The coolest Wellapet
 
-DESC_LEVEL = Reach Level $NUM$
-DESC_RUNNER_DISTANCE = Survive $NUM$ m in runner game in one run
-DESC_PATIENTS = Diagnose $NUM$ patients correctly in one game play
-DESC_DECORATION = Place $NUM$ decoration
+NAME_INHALER_BADGE_1 = Wella smarty 
+NAME_INHALER_BADGE_2 = Wella expert
+NAME_INHALER_BADGE_3 = Wella genius 
+
+NAME_COIN_BADGE_1 = Saver Wella
+NAME_COIN_BADGE_2 = Wealthy Wella 
+NAME_COIN_BADGE_3 = Wella CEO 
+
+DESC_LEVEL = Reach Level {0}
+DESC_RUNNER_DISTANCE = Survive {0} m in runner game in one run
+DESC_PATIENTS = Diagnose {0} patients correctly in one game play
+DESC_DECORATION = Place {0} decoration(s)
+DESC_INHALER = Use maintenance inhaler {0} times
+DESC_COIN = Save up {0} Coins
+
+// Menuscene startPanel
+MENUSTART_START = Start!
+MENUSTART_ERASE = Erase
+DELETE_CONFIRM = Are you sure you want to remove {0}? {1} data will be permanently removed.
 
 // Options Menu
 PARENTS = Parents
@@ -372,6 +352,7 @@ INHALER_TIP_7 = Breathe in
 INHALER_FLOATY_NICE = Nice!
 INHALER_FLOATY_GREATJOB = Great Job!
 INHALER_FLOATY_ROCKIT = Rocking it!
+INHALER_FLOATY_HOLD_BREATH = Hold for 10 seconds
 
 // runner game
 RUNNER_SCORE = Score: 
@@ -382,7 +363,7 @@ RUNNER_QUIT = Quit
 POLLEN_HINT_MESSAGE = Avoid pollen!
 SMOKE_HINT_MESSAGE = Avoid smoke!
 APPLE_HINT_MESSAGE = +100 points!
-RAINBOW_COIN_HINT_MESSAGE = +100 coins!
+RAINBOW_COIN_HINT_MESSAGE = +100 points!
 SOCCER_HINT_MESSAGE = +150 points!
 WELLA_BANDANA_HINT_MESSAGE = +200 points!
 
@@ -395,25 +376,25 @@ RUNNER_TUT_2 = Now you are ready!
 // Bedroom
 
 // intro notification
-TUT_BEDROOM_INTRO = It's time to learn how to take care of your Wellapet!
+// TUT_BEDROOM_INTRO = It's time to learn how to take care of your Wellapet!
 
 // inhaler tutorial
-FOCUS_INHALER_0 = Be sure to use your inhaler every day, it's really important!
+// FOCUS_INHALER_0 = Be sure to use your inhaler every day, it's really important!
 
 // calendar tutorial
-FOCUS_CALENDAR_0 = After taking your inhaler, click the calendar for a reward!
+// FOCUS_CALENDAR_0 = After taking your inhaler, click the calendar for a reward!
 
 // flame tutorial
-TUT_FLAME_0 = To scare the Smoke Monster off, press and hold the Flame Button to fill the meter.
-TUT_FLAME_1 = Now let go and watch your pet breath fire!
+TUT_FLAME_0 = To scare the Smog Monster off, press and hold the Flame Button to fill the meter.
+TUT_FLAME_1 = Now let go and watch {0} breathe fire!
 
 // triggers tutorial
-TUT_TRIGGERS_2 = The pet's room can get messy. Clean up anything that might make your pet sick!
+TUT_TRIGGERS_3 = {0} room can get messy. Clean up anything that might make {1} sick!
 
 // gating notifications
-NO_FIRE_SICK = Your pet can't breath fire when he is sick. Make him feel better first!
-NO_FIRE_UNHAPPY = Your pet can't breath fire when he is unhappy.  Cheer him up first!
-NO_FIRE_INHALER = Your pet can only breath fire after using his maintenance inhaler.
+NO_FIRE_SICK = {0} can't breathe fire when it is sick. Make {0} feel better first!
+NO_FIRE_UNHAPPY = {0} can't breathe fire when it is unhappy.  Cheer {0} up first!
+NO_FIRE_INHALER = {0} can only breathe fire after using maintenance inhaler.
 
 // SPRITES
 // sprite values are what the image in the atlas is
@@ -425,10 +406,21 @@ NAV_ICON_STORE = iconStore
 HAPPY_TO_SAD_0 = Can I have some food?
 SICK_TO_VERYSICK_0 = Not feeling so well...
 HEALTHY_TO_VERYSICK_0 = cough cough cough....
+ITEM_NO_THANKS = I don't need that right now!
 
 //Level Message
 LEVEL1_MESSAGE = Well Done!
 LEVEL2_MESSAGE = Feeling Stronger!
 
 //Zero Health
-ZERO_HEALTH = Your pet got really sick and had to go to the hospital. It costs you $NUM$ coins 
+ZERO_HEALTH = {0} got really sick and had to go to the hospital. It costs {0} {1} coins 
+
+//Triggers
+CLEANED = {0} cleaned
+REMOVED = {0} removed 
+
+DUST = Dust
+COCKROACH = Cockroach
+CIGARETTE = Cigarette
+MOLD = Mold
+

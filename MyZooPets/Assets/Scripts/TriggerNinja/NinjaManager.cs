@@ -12,19 +12,53 @@ using System.Collections.Generic;
 public class NinjaManager : MinigameManager<NinjaManager> {
 	// combo related
 	public float fComboMaxTime;		// max time between cuts for a combo
+	public GestureTrail trail; // the gesture trail that follows the user's finger around
+	public float fMax;			// time between spawn groups
+
 	private float fComboTime = 0;	// time counter
 	private int nCombo = 0;			// the current combo level of the player
 	private int nBestCombo = 0;		// player's best combo in one run
+	private float fTime = 0; // used to count time between groups and between entries within a group
+	private Vector2 trailDeltaMove;
+	private Vector3 vLastPos = new Vector3(0,0,0); // the last position of the user's trail
+	private List<NinjaDataEntry> listCurrentEntries; // current list of entrie to spawn triggers from
+
+	public Vector2 GetTrailDeltaMove(){
+		return trailDeltaMove;
+	}
+
+	//---------------------------------------------------
+	// GetReward()
+	//---------------------------------------------------		
+	public override int GetReward( MinigameRewardTypes eType ) {
+		// for now, just use the standard way
+		return GetStandardReward( eType );
+	}
+
+	//---------------------------------------------------
+	// GetCombo()
+	// Returns the player's current combo level.
+	//---------------------------------------------------		
+	public int GetCombo() {
+		return nCombo;	
+	}
+	public int GetCombo_Best() {
+		return nBestCombo;	
+	}
 	
-	// used to count time between groups and between entries within a group
-	private float fTime = 0;
-	public float fMax;			// time between spawn groups
-	
-	// the gesture trail that follows the user's finger around
-	public GestureTrail trail;
-	
-	// current list of entrie to spawn triggers from
-	private List<NinjaDataEntry> listCurrentEntries;
+	//---------------------------------------------------
+	// IncreaseCombo()
+	// Increases the player's combo level by num.
+	//---------------------------------------------------	
+	public void IncreaseCombo( int num ) {
+		// increase the combo
+		int nCombo = GetCombo();
+		nCombo += num;
+		SetCombo( nCombo );
+		
+		// by default, increasing the combo resets the countdown before the combo expires
+		fComboTime = GetMaxComboTime();
+	}
 	
 	void Awake(){
 		//TO DO - not sure if this is the best place to set frame rate
@@ -41,6 +75,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	// _OnDestroy()
 	//---------------------------------------------------	
 	protected override void _OnDestroy() {
+		Application.targetFrameRate = 30;
 	}
 	
 	//---------------------------------------------------
@@ -53,6 +88,11 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		nBestCombo = 0;
 		fTime = 0;
 		listCurrentEntries = null;
+
+		if(TutorialOn() && (IsTutorialOverride() || 
+			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
+			StartTutorial();
+
 	}
 	
 	//---------------------------------------------------
@@ -107,10 +147,19 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 			}
 		}
 		else if ( fTime <= 0 ) {
-			// otherwise, there is no current group and it is time to start one, so figure out which one to begin
-			NinjaScoring eScore = GetScoringKey();
-			NinjaData data = NinjaDataLoader.GetGroupToSpawn( NinjaModes.Classic, eScore );
-			
+			// otherwise, there is no current group and it is time to start one, 
+			// so figure out which one to begin
+			NinjaScoring eScore;
+			NinjaData data = null;
+
+			if(!IsTutorialRunning()){
+				eScore = GetScoringKey();
+				data = NinjaDataLoader.GetGroupToSpawn( NinjaModes.Classic, eScore );
+			}
+			//Tutorial mode spawns specific NinjaData
+			else{
+				data = GetTutorialSpawnGroup();
+			}
 			//Debug.Log("STARTING GROUP " + data.GetID() + " of length " + data.GetEntries().Count);
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
@@ -119,47 +168,37 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		else
 			fTime -= fDelta;	// otherwise, there is no group and we still need to countdown before spawning the next group
 	}	
-	
+
 	//---------------------------------------------------
-	// SpawnGroup()
-	//---------------------------------------------------		
-	private void SpawnGroup( NinjaDataEntry entry ) {
-		// create the proper list of objects to spawn
-		int nCount = entry.GetTriggers();
-		int nBombs = entry.GetBombs();
-		List<string> listObjects = new List<string>();
-		for ( int i = 0; i < nCount; ++i ) 
-			listObjects.Add("NinjaTrigger");
-		
-		for ( int i = 0; i < nBombs; ++i )
-			listObjects.Add("NinjaBomb");
-		
-		// shuffle the list so everything is nice and mixed up
-		listObjects.Shuffle();
-		
-		// create the proper object based off the entry's pattern
-		NinjaPatterns eType = entry.GetPattern();
-		switch ( eType ) {
-			case NinjaPatterns.Separate:
-				new SpawnGroup_Separate( listObjects );
-				break;
-			case NinjaPatterns.Clustered:
-				new SpawnGroup_Cluster( listObjects );
-				break;
-			case NinjaPatterns.Meet:
-				new SpawnGroup_Meet( listObjects );
-				break;
-			case NinjaPatterns.Cross:
-				new SpawnGroup_Cross( listObjects );
-				break;
-			case NinjaPatterns.Split:
-				new SpawnGroup_Split( listObjects );
-				break;			
-			default:
-				Debug.LogError("Unhandled group type: " + eType);
-				break;
-		}		
-	}
+	// GetTutorialSpawnGroup()
+	// Return the appropriate NinjaDataEntry for each tutorial step
+	//---------------------------------------------------
+	private NinjaData GetTutorialSpawnGroup(){
+		//get tutorial class
+		NinjaTutorial tutorial = (NinjaTutorial) GetTutorial();
+
+		//get current step id
+		int currentTutStep = tutorial.GetStep(); 
+
+		NinjaScoring eScore = NinjaScoring.Start_1;
+		NinjaData data = null;
+
+		//Different tutorial step spawns different NinjaData	
+		switch(currentTutStep){
+			case 0:
+				eScore = NinjaScoring.Start_1;
+			break;
+			case 1:
+				eScore = NinjaScoring.Start_3;
+			break;
+		}
+
+		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
+
+		return data;
+
+	}	
+	
 	
 	//---------------------------------------------------
 	// OnDrag()
@@ -212,9 +251,55 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	    	case ContinuousGesturePhase.Ended:
 	    		trail.DragEnded();
 	    		break;
-	    }		
+		}
+		
+		// save the last position for use with displaying combo
+		vLastPos = vPos;
+		
+		trailDeltaMove = gesture.DeltaMove;
 	}
-	
+
+	//---------------------------------------------------
+	// SpawnGroup()
+	//---------------------------------------------------		
+	private void SpawnGroup( NinjaDataEntry entry ) {
+		// create the proper list of objects to spawn
+		int nCount = entry.GetTriggers();
+		int nBombs = entry.GetBombs();
+		List<string> listObjects = new List<string>();
+		for ( int i = 0; i < nCount; ++i ) 
+			listObjects.Add("NinjaTrigger");
+		
+		for ( int i = 0; i < nBombs; ++i )
+			listObjects.Add("NinjaBomb");
+		
+		// shuffle the list so everything is nice and mixed up
+		listObjects.Shuffle();
+		
+		// create the proper object based off the entry's pattern
+		NinjaPatterns eType = entry.GetPattern();
+		switch ( eType ) {
+			case NinjaPatterns.Separate:
+				new SpawnGroup_Separate( listObjects );
+				break;
+			case NinjaPatterns.Clustered:
+				new SpawnGroup_Cluster( listObjects );
+				break;
+			case NinjaPatterns.Meet:
+				new SpawnGroup_Meet( listObjects );
+				break;
+			case NinjaPatterns.Cross:
+				new SpawnGroup_Cross( listObjects );
+				break;
+			case NinjaPatterns.Split:
+				new SpawnGroup_Split( listObjects );
+				break;			
+			default:
+				Debug.LogError("Unhandled group type: " + eType);
+				break;
+		}		
+	}
+
 	//---------------------------------------------------
 	// GetScoringKey()
 	// Returns the current scoring key, based on the
@@ -239,31 +324,6 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		//Debug.Log("Current score key: " + eScore);
 		
 		return eScore;
-	}
-	
-	//---------------------------------------------------
-	// GetCombo()
-	// Returns the player's current combo level.
-	//---------------------------------------------------		
-	public int GetCombo() {
-		return nCombo;	
-	}
-	public int GetCombo_Best() {
-		return nBestCombo;	
-	}
-	
-	//---------------------------------------------------
-	// IncreaseCombo()
-	// Increases the player's combo level by num.
-	//---------------------------------------------------	
-	public void IncreaseCombo( int num ) {
-		// increase the combo
-		int nCombo = GetCombo();
-		nCombo += num;
-		SetCombo( nCombo );
-		
-		// by default, increasing the combo resets the countdown before the combo expires
-		fComboTime = GetMaxComboTime();
 	}
 	
 	//---------------------------------------------------
@@ -310,8 +370,30 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	private void OnComboEnd() {
 		// give the player an additional point for each level of their combo
 		int nCombo = GetCombo();
-		if ( nCombo > 1 )
+		if ( nCombo > 2 ) {
 			UpdateScore( nCombo );
+				        	
+			// get the right text for combo
+			string strText = Localization.Localize("NINJA_COMBO");
+			strText = String.Format(strText, nCombo);
+			
+			// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
+			Vector3 vPos = vLastPos;
+			vPos.y *= CameraManager.Instance.GetRatioDifference();
+			vPos.x *= CameraManager.Instance.GetRatioDifference();
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+	
+			// set up the hashtable full of options
+	        Hashtable option = new Hashtable();
+	        option.Add("parent", GameObject.Find("Anchor-Center"));
+	        option.Add("text", strText);
+			option.Add("prefab", "NinjaComboFloatyText");
+			option.Add("position", vPos);
+	        option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
+			
+			// spawn floaty text
+	        FloatyUtil.SpawnFloatyText(option);				
+		}		
 		
 		// if the current combo was better than their best, update it
 		int nBest = GetCombo_Best();
@@ -319,16 +401,13 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 			SetCombo_Best( nCombo );
 		
 		// reset the combo down to 0
-		SetCombo( 0 );
+		SetCombo( 0 );	
 		
 		//Debug.Log("Combo ended: " + nCombo);
 	}
 	
-	//---------------------------------------------------
-	// GetReward()
-	//---------------------------------------------------		
-	public override int GetReward( MinigameRewardTypes eType ) {
-		// for now, just use the standard way
-		return GetStandardReward( eType );
+	
+	private void StartTutorial(){
+		SetTutorial(new NinjaTutorial());
 	}	
 }

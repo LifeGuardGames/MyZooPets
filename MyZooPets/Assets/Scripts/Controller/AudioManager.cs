@@ -16,6 +16,9 @@ public class PauseArgs : EventArgs{
 }
 
 public class AudioManager : Singleton<AudioManager>{
+	//=======================Events========================
+	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
+	//=====================================================		
 
 	/** Types of Audio Clips
 	*	background	:	only one playing at a time, if any (ie. music)
@@ -27,20 +30,14 @@ public class AudioManager : Singleton<AudioManager>{
 
 	private AudioClip backgroundClip;
 	private AudioClip effectClip;
-
 	private AudioSource backgroundSource;
-//	private AudioSource effectSource;
 
 	public bool isMusicOn = true; // Thank me(Sean) later, devs
 	
-	//=======================Events========================
-	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
-	//=====================================================		
 
 	void Awake(){
 		// Spawns components itself
 		backgroundSource = gameObject.AddComponent("AudioSource") as AudioSource;
-//		effectSource = gameObject.AddComponent("AudioSource") as AudioSource;
 		
 		// load sound xml data
 		DataSounds.SetupData();
@@ -63,6 +60,10 @@ public class AudioManager : Singleton<AudioManager>{
 			backgroundSource.clip = backgroundClip;
 			backgroundSource.Play();
 		}
+	}
+
+	public void LowerBackgroundVolume(float newVolume){
+		backgroundSource.volume = newVolume;
 	}
 
 	// Pass in null if don't want new music
@@ -91,14 +92,25 @@ public class AudioManager : Singleton<AudioManager>{
 	public void Pause( bool bPausing ) {
 		if ( OnGamePaused != null )
 			OnGamePaused( this, new PauseArgs(bPausing) );		
+
+		if(bPausing)
+			backgroundSource.Pause();
+		else
+			backgroundSource.Play();
 	}
 	
 	///////////////////////////////////////////
 	// PlayClip()
 	// Plays a sound with the name strClip
 	// from resources.
+	// hashOverrides Params:
+	//	Volume(float)
+	//	Pitch(float)
 	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( string strClip, Preferences eType, float fVolume, Hashtable hashOverrides ) {
+	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides = null ) {
+		if ( hashOverrides == null )
+			hashOverrides = new Hashtable();
+		
 		if ( strClip == "" ) {
 			Debug.LogError("Something trying to play a sound with an empty sound id...");
 			return null;
@@ -112,15 +124,6 @@ public class AudioManager : Singleton<AudioManager>{
 		}
 			
 		return PlaySound( sound, hashOverrides );	
-	}
-	public LgAudioSource PlayClip( string strClip, Preferences eType ) {
-		return PlayClip( strClip, eType, 0.2f, new Hashtable() );	
-	}	
-	public LgAudioSource PlayClip( string strClip ) {
-		return PlayClip( strClip, Preferences.Sound, 0.2f, new Hashtable() );	
-	}
-	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides ) {
-		return PlayClip( strClip, Preferences.Sound, 0.2f, hashOverrides );	
 	}
 	
 	///////////////////////////////////////////

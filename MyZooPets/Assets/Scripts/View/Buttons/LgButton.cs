@@ -18,6 +18,12 @@ public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
+	
+	// the mode that this button will check for to make sure it can be clicked
+	public UIModeTypes eMode = UIModeTypes.NotInited;
+	public UIModeTypes GetMode() {
+		return eMode;	
+	}
 
 	// the sound resource this button plays when it is clicked
 	public string strSoundProcess;
@@ -34,16 +40,16 @@ public abstract class LgButton : MonoBehaviour {
 		return bCheckClickManager;	
 	}
 	
-	public string strAnalytics;	// string key for analytics on this button
-	protected string GetAnalyticsKey()
-	{
-		return strAnalytics;
-	}	
-	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
 	void Start() {
+		// do a check for a valid mode
+		if ( eMode == UIModeTypes.NotInited ) {
+			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
+			eMode = UIModeTypes.None;	
+		}
+		
 		_Start();
 	}
 	protected virtual void _Start() {}
@@ -97,11 +103,6 @@ public abstract class LgButton : MonoBehaviour {
 		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
 		if ( ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess( gameObject ) )
 			return;
-			
-		// if there is an analytic event on this button, let's process that
-		//string strAnalytics = GetAnalyticsKey();
-		// if ( strAnalytics != null )
-		// 	GA.API.Design.NewEvent( strAnalytics );
 		
 		// play the sound
 		PlayProcessSound();
@@ -118,7 +119,7 @@ public abstract class LgButton : MonoBehaviour {
 		string strSound = GetProcessSound();
 		
 		if ( !string.IsNullOrEmpty(strSound) )
-			AudioManager.Instance.PlayClip( strSound, Preferences.Sound );	
+			AudioManager.Instance.PlayClip( strSound );	
 	}
 	
 	//---------------------------------------------------

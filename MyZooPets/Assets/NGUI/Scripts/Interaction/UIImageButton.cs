@@ -48,7 +48,10 @@ public class UIImageButton : MonoBehaviour
 		{
 			if (isEnabled)
 			{
-				target.spriteName = UICamera.IsHighlighted(gameObject) ? hoverSprite : normalSprite;
+				string strSpriteName = UICamera.IsHighlighted(gameObject) ? hoverSprite : normalSprite;
+				
+				if ( strSpriteName != null )
+					target.spriteName = strSpriteName;
 			}
 			else
 			{
@@ -60,7 +63,7 @@ public class UIImageButton : MonoBehaviour
 
 	void OnHover (bool isOver)
 	{
-		if (isEnabled && target != null)
+		if (isEnabled && target != null && hoverSprite != null)
 		{
 			target.spriteName = isOver ? hoverSprite : normalSprite;
 			target.MakePixelPerfect();
@@ -69,7 +72,7 @@ public class UIImageButton : MonoBehaviour
 
 	void OnPress (bool pressed)
 	{
-		if (pressed)
+		if (pressed && pressedSprite != null)
 		{
 			target.spriteName = pressedSprite;
 			target.MakePixelPerfect();

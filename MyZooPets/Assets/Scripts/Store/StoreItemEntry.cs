@@ -38,14 +38,27 @@ public class StoreItemEntry : MonoBehaviour {
 		spriteIcon.spriteName = itemData.TextureName;
 		buttonMessage.target = StoreUIManager.Instance.gameObject;
 		buttonMessage.functionName = "OnBuyButton";		
-		
+	
+		//Check if wallpaper has already been bought. Disable the buy button
+		//if so	
+		if(itemData.Type == ItemType.Decorations){
+			DecorationItem decoItem = (DecorationItem) itemData;
+
+			if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+				bool isWallpaperBought = InventoryLogic.Instance.CheckForWallpaper(decoItem.ID);
+
+				if(isWallpaperBought)
+					buttonMessage.gameObject.GetComponent<UIImageButton>().isEnabled = false;
+			}
+		}
+
 		// set the description
 		SetDesc( itemData );
 		
 		// if this item is currently locked...
 		if ( itemData.IsLocked() ) {
 			// show the UI
-			LevelLockObject.CreateLock( spriteIcon.gameObject.transform.parent.gameObject, itemData.GetLockedLevel() );
+			LevelLockObject.CreateLock( spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
 			
 			// delete the buy button
 			Destroy( buttonMessage.gameObject );

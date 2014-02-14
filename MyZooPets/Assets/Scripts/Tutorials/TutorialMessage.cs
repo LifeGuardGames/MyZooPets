@@ -7,24 +7,22 @@ using System.Collections.Generic;
 // TutorialMessage
 // Gameobject on NGUI panels designed for showing
 // messages to the player during tutorials.
+// Visually different from TutorialPopup
 //---------------------------------------------------	
-
 public class TutorialMessage : MonoBehaviour {
+	public UILabel label; // the label used to hold the message
 
-	// the label used to hold the message
-	public UILabel label;
-	
-	// the resource key that this object was created with
-	private string strResourceKey;
+	private string strResourceKey; // the resource key that this object was created with
+	private Tutorial scriptTutorial; // minigame tutorial that this message belongs to
+
 	public void SetResourceKey( string strKey ) {
 		strResourceKey = strKey;	
 	}
+
 	public string GetResourceKey() {
 		return strResourceKey;	
 	}
 	
-	// minigame tutorial that this message belongs to
-	private Tutorial scriptTutorial;
 	public void SetTutorial( Tutorial tut ) {
 		scriptTutorial = tut;	
 	}
@@ -44,7 +42,6 @@ public class TutorialMessage : MonoBehaviour {
 	//---------------------------------------------------		
 	private void Advance() {
 		scriptTutorial.Advance();	
-		Destroy( gameObject );
 	}
 	
 	//---------------------------------------------------

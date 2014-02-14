@@ -12,9 +12,6 @@ public class WellapadRewardUI : MonoBehaviour {
 	// mission ID of this reward
 	private string strMissionID;
 	
-	// task text
-	public UILabel label;
-	
 	// button for the reward
 	public WellapadRewardButton buttonReward;
 	
@@ -24,9 +21,6 @@ public class WellapadRewardUI : MonoBehaviour {
 	public void Init( string strMissionID ) {
 		// cache the task
 		this.strMissionID = strMissionID;
-		
-		// set the label showing what the task entails
-		label.text = Localization.Localize( "WellapadReward" );	
 		
 		// init the button belonging to this reward -- the button code will take care of the rest
 		buttonReward.Init( this.strMissionID );

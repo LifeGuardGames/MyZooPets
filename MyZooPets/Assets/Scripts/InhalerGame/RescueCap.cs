@@ -7,6 +7,7 @@ using System.Collections;
 */
 public class RescueCap : InhalerPart{
     protected override void Awake(){
+        base.Awake();
         gameStepID = 1;
     }
 

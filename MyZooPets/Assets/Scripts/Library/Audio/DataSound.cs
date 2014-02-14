@@ -27,6 +27,12 @@ public class DataSound {
 		return fPitch;	
 	}
 	
+	// type of the sound (will probably always be sound)
+	private Preferences ePref;
+	public Preferences GetPreference() {
+		return ePref;	
+	}
+	
 	public DataSound( string id ) {
 		strID = id;	
 	}
@@ -41,5 +47,11 @@ public class DataSound {
 		// get the pitch if it exists
 		if ( hashData.Contains("Pitch") )
 			fPitch = float.Parse((string)hashData["Pitch"]);	 
+		
+		// get the preference of the sound if it exists
+		string strPref = "Sound";
+		if ( hashData.Contains("Preference") )
+			strPref = (string)hashData["Preference"];
+		ePref = (Preferences) System.Enum.Parse( typeof( Preferences ), strPref );
 	}
 }

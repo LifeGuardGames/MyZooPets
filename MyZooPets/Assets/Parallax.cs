@@ -1,47 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Parallax. By Sean Chung
+/// This is used for infinite looping for parallax backgrounds
+/// NOTE:Make sure to tile the shader to 2!
+/// </summary>
 public class Parallax : MonoBehaviour {
-  public bool horizontalMovement;           //TODO-s vertical movement untested
     public float moveTime;
-    
-    public Vector3 startPosition;
-    public Vector3 spawnNewObjectPosition;  // Also the initial case startPosition
-    public Vector3 endPosition;
-
-    private bool canSpawnNew;
-    
+    public Vector3 endLocalPos;
+	
+	private bool isPauseCheck = false;
+	
     void Start(){
-        canSpawnNew = true;
-        if(horizontalMovement){
-            LeanTween.moveLocal(gameObject, spawnNewObjectPosition, moveTime, new Hashtable());  // Move to spawn Position
-        }
-        else{   // Vertical movement
-            // LeanTween.moveY(gameObject, spawnNewObjectPosition.y, moveTime, null);  // Move to spawn Position
-        }
-    }
-    
-    void Update(){
-        if(canSpawnNew && gameObject.transform.position == spawnNewObjectPosition){
-            //Debug.Log("spawning " + gameObject + " - ");
-            GameObject clone = Instantiate(gameObject, startPosition, transform.rotation) as GameObject;
-            clone.name = gameObject.name;
-            if(horizontalMovement){
-                
-
-                
-            }
-            else{   // Vertical movement
-                // LeanTween.moveY(gameObject, endPosition.y, moveTime, null);
-            }
-            LeanTween.moveLocal(this.gameObject, endPosition, moveTime, new Hashtable());
-            Debug.Log("tweening " + endPosition.x + " " + moveTime);
-            canSpawnNew = false;
-        }
-        
-        if(gameObject.transform.position == endPosition){
-            Debug.Log("destroying");
-            Destroy(gameObject);
-        }
-    } 
+		ResetSelf();
+	}
+	
+	private void ResetSelf(){
+		Hashtable optional = new Hashtable();
+		optional.Add("repeat", -1);
+		LeanTween.moveLocal(gameObject, endLocalPos, moveTime * 2f, optional);  // Move to spawn Position and reset
+	}
+	
+	public void Pause(){
+		// NOTE: LT breaks if you call it twice directly
+		if(!isPauseCheck){
+			isPauseCheck = true;
+			LeanTween.pause(gameObject);
+		}
+	}
+	
+	public void Resume(){
+		if(isPauseCheck){
+			isPauseCheck = false;
+			LeanTween.resume(gameObject);
+		}
+	}
 }

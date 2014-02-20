@@ -16,22 +16,22 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 	
 	// Update is called once per frame
     void Update() {
-        if(!RunnerGameManager.Instance.GameRunning) return;
+        // if(!RunnerGameManager.Instance.GameRunning) return;
 
-        foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
-        {
-            float currentSpeed = currentParallax.ScrollSpeed * Time.time;
+        // foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
+        // {
+        //     float currentSpeed = currentParallax.ScrollSpeed * Time.time;
 
-            currentParallax.renderer.material.mainTextureOffset = new Vector2(currentSpeed, 0f);
-        }
+        //     currentParallax.renderer.material.mainTextureOffset = new Vector2(currentSpeed, 0f);
+        // }
 	  }
 
     public void SetAlpha(float alpha) {
-         foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
+         // foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
 			
-            Color currentColor = currentParallax.renderer.material.color;
-            currentColor.a = alpha;
-            currentParallax.renderer.material.color = currentColor;
-         }
+         //    Color currentColor = currentParallax.renderer.material.color;
+         //    currentColor.a = alpha;
+         //    currentParallax.renderer.material.color = currentColor;
+         // }
     }
 }

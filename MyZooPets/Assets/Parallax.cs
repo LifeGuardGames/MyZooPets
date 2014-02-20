@@ -9,11 +9,14 @@ using System.Collections;
 public class Parallax : MonoBehaviour {
     public float moveTime;
     public Vector3 endLocalPos;
+	public bool isStartOnAwake = true;
 	
 	private bool isPauseCheck = false;
 	
     void Start(){
-		ResetSelf();
+		if(isStartOnAwake){
+			ResetSelf();
+		}
 	}
 	
 	private void ResetSelf(){
@@ -30,10 +33,23 @@ public class Parallax : MonoBehaviour {
 		}
 	}
 	
-	public void Resume(){
-		if(isPauseCheck){
+	public void Play(){
+		if(!isStartOnAwake){
+			isStartOnAwake = true; 	// Lock the init start functionality
+			ResetSelf();
+		}
+		else if(isPauseCheck){
 			isPauseCheck = false;
 			LeanTween.resume(gameObject);
 		}
 	}
+	
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(10, 10, 150, 20), "Play")){
+//			Play();
+//		}
+//		if(GUI.Button(new Rect(10, 30, 150, 20), "Pause")){
+//			Pause();
+//		}
+//	}
 }

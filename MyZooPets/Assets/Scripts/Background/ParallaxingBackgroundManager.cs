@@ -29,12 +29,16 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	
 	// Update is called once per frame
     void LateUpdate() {
-    	// if(!RunnerGameManager.Instance.GameRunning) return;
     	
+    	//if there is a next group already start counting down for transition	
 		if (mNextGroup != null) {
             mTransitionPulse -= Time.deltaTime / Time.timeScale;
+
+            //When timer is zero. Transition background to a new background
 			if (mTransitionPulse <= 0) {
 				SetNextGroupAsCurrentAndDeleteCurrent();
+
+				//If there is a queue of background waiting, get it from the queue
 				if (mNextTransition.Count > 0)
 					SpawnAndSetNextGroup(mNextTransition.Dequeue());
 			} else {

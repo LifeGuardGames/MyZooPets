@@ -12,26 +12,45 @@ using System.Collections.Generic;
 
 public class ParallaxingBackgroundGroup : MonoBehaviour {
     public string GroupID = "";
-    public List<ParallaxingBackground> ParralaxingTextures = new List<ParallaxingBackground>();
+    public List<Parallax> ParralaxingTextures = new List<Parallax>();
 	
-	// Update is called once per frame
-    void Update() {
-        // if(!RunnerGameManager.Instance.GameRunning) return;
+    void Start(){
+        RunnerGameManager.OnStateChanged += GameStateChange;
+        if(RunnerGameManager.Instance.GameRunning)
+            PlayParallax();
 
-        // foreach (ParallaxingBackground currentParallax in ParralaxingTextures)
-        // {
-        //     float currentSpeed = currentParallax.ScrollSpeed * Time.time;
+    }
 
-        //     currentParallax.renderer.material.mainTextureOffset = new Vector2(currentSpeed, 0f);
-        // }
-	  }
+    void OnDestroy(){
+        RunnerGameManager.OnStateChanged -= GameStateChange;
+    }
 
     public void SetAlpha(float alpha) {
-         // foreach (ParallaxingBackground currentParallax in ParralaxingTextures) {
-			
-         //    Color currentColor = currentParallax.renderer.material.color;
-         //    currentColor.a = alpha;
-         //    currentParallax.renderer.material.color = currentColor;
-         // }
+         foreach(Parallax currentParallax in ParralaxingTextures) {
+            Color currentColor = currentParallax.renderer.material.color;
+            currentColor.a = alpha;
+            currentParallax.renderer.material.color = currentColor;
+         }
+    }
+
+    private void GameStateChange(object sender, GameStateArgs args){
+        switch(args.GetGameState()){
+            case MinigameStates.Paused:
+                PauseParallax();
+            break;
+            case MinigameStates.Playing:
+                PlayParallax();
+            break;
+        }
+    }
+
+    private void PlayParallax(){
+        foreach(Parallax currentParallax in ParralaxingTextures)
+            currentParallax.Play();
+    }
+
+    private void PauseParallax(){
+        foreach(Parallax currentParallax in ParralaxingTextures)
+            currentParallax.Pause();
     }
 }

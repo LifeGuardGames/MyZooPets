@@ -22,7 +22,7 @@ public static class LgCUDLRCommands {
     UnityEngine.Object[] objects = UnityEngine.Object.FindObjectsOfType(typeof(GameObject));
     foreach (UnityEngine.Object obj in objects) {
 	  UnityEngine.GameObject go = obj as UnityEngine.GameObject;
-      CUDLR.Console.Log(go.name + " relPos:" + go.transform.localPosition + "  absPos:" + go.transform.position);
+      CUDLR.Console.Log(go.name + " || relPos:" + go.transform.localPosition + "  || absPos:" + go.transform.position + "  || relScale:" + go.transform.localScale);
     }
   }
 

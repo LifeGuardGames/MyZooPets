@@ -3403,7 +3403,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 1}
+  m_LocalPosition: {x: 5, y: 0, z: 2}
   m_LocalScale: {x: 20, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -4733,8 +4733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e99558de057a432c97763dc54c9a375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTime: 5
+  moveTime: 4
   endLocalPos: {x: -5, y: 0, z: 1}
+  isStartOnAwake: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4746,8 +4747,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e99558de057a432c97763dc54c9a375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTime: 4
-  endLocalPos: {x: -5, y: 0, z: 1}
+  moveTime: 5
+  endLocalPos: {x: -5, y: 0, z: 2}
+  isStartOnAwake: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4761,8 +4763,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GroupID: ForestBG
   ParralaxingTextures:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400002}
+  - {fileID: 11400000}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1

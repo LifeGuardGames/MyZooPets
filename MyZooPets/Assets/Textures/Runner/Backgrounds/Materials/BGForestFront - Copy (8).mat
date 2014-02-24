@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: BGCityDayFront
-  m_Shader: {fileID: 4800000, guid: 383babe7164756545a891bc380fb1b00, type: 3}
+  m_Name: BGForestFront - Copy (8)
+  m_Shader: {fileID: 4800000, guid: 88907f689cb94014980290b8ee139c22, type: 3}
   m_ShaderKeywords: []
   m_SavedProperties:
     serializedVersion: 2
@@ -16,14 +16,36 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 60830f2120b754f4fa8b35b6d260e398, type: 3}
-          m_Scale: {x: 2, y: 1}
+          m_Texture: {fileID: 2800000, guid: ea00973edf5153f4cbeddb6f24a4ba20, type: 3}
+          m_Scale: {x: .5, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ParallaxMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
           name: _Shininess
         second: .699999988
+      data:
+        first:
+          name: _Parallax
+        second: .0199999996
     m_Colors:
       data:
         first:

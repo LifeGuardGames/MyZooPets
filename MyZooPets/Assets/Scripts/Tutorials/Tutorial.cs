@@ -133,7 +133,7 @@ public abstract class Tutorial {
 	//---------------------------------------------------	
 	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, 
 		InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight",
-		bool fingerHint = false, float fingerHintOffsetFromSpotlighCenter = 60.0f){
+		bool fingerHint = false, float fingerHintOffsetFromSpotlighCenter = 60.0f, float delay = -1f){
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
 		if ( bGUI )
@@ -159,13 +159,18 @@ public abstract class Tutorial {
 		string strAnchor = "Anchor-" + eAnchor.ToString();
 		goSpotlight = LgNGUITools.AddChildWithPosition( GameObject.Find(strAnchor), goResource );
 		
+		// Set the delay if defined
+		if(delay > 0){
+			goSpotlight.GetComponent<TweenAlpha>().delay = delay;
+		}
+		
 		// move the spotlight into position
 		vPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = vPos;
 
 		// spawn finger hint
 		if(fingerHint){
-			GameObject fingerHintResource = (GameObject) Resources.Load("DegradationPressTut");
+			GameObject fingerHintResource = (GameObject) Resources.Load("PressTut");
 			goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(strAnchor), fingerHintResource);
 			vPos.z = goFingerHint.transform.localPosition.z;
 			vPos.y = vPos.y + fingerHintOffsetFromSpotlighCenter; //offset in Y so the finger hint doesn't overlap the image

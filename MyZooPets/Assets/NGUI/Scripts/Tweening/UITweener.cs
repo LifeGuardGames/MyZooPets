@@ -136,8 +136,13 @@ public abstract class UITweener : IgnoreTimeScale
 	/// Update as soon as it's started so that there is no delay.
 	/// </summary>
 
-	void Start () { Update(); }
-
+	void Start(){ 
+		_Start();
+		Update();
+	}
+	
+	protected virtual void _Start(){}
+	
 	/// <summary>
 	/// Update the tweening factor and call the virtual update function.
 	/// </summary>

@@ -31,7 +31,7 @@ public class StatsData{
         Health = 80;
         Mood = 80;
         Points = 0;
-        Stars = 300;
+        Stars = 30000;
         // Stars = 1000;
     }
 	

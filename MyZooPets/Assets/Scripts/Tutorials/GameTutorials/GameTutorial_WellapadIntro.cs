@@ -77,16 +77,16 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 	//---------------------------------------------------
 	// FocusWellapadButton()
 	//---------------------------------------------------		
-	private void FocusWellapadButton() {
+	private void FocusWellapadButton(){
 		// begin listening for when the button is clicked
 		LgButton button = goWellapadButton.GetComponent<LgButton>();
 		button.OnProcessed += ButtonClicked;
 		
-		// the inhaler is the only object that can be clicked
-		AddToProcessList( goWellapadButton );
+		// the wellapad is the only object that can be clicked
+		AddToProcessList(goWellapadButton);
 	
-		// spotlight the inhaler
-		SpotlightObject( goWellapadButton, true, InterfaceAnchors.BottomLeft );
+		// spotlight the wellapad
+		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, delay:2f);
 	}
 	
 	//---------------------------------------------------

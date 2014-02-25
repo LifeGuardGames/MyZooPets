@@ -64,7 +64,7 @@ public class WellapadMissionList : MonoBehaviour {
 	// CreateMission()
 	// Given a mission type, this function will add
 	// entries to the Wellapad for the mission; the mission
-	// title, tasks, and reward.
+	// title, reward, and tasks.
 	//---------------------------------------------------	
 	private void CreateMission( string strMissionType ) {		
 		// add a title for the mission
@@ -77,6 +77,9 @@ public class WellapadMissionList : MonoBehaviour {
 		GameObject goReward = NGUITools.AddChild(goGrid, prefabReward);
 		SetNameForGrid( goReward );
 		
+		// init the reward UI
+		goReward.GetComponent<WellapadRewardUI>().Init( strMissionType );	
+		
 		// find the available tasks for the mission and add them
 		List<WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks( strMissionType );
 		for ( int i = 0; i < listTasks.Count; i++ ) {
@@ -88,10 +91,6 @@ public class WellapadMissionList : MonoBehaviour {
 			// init this task UI with the task itself
 			goTask.GetComponent<WellapadTaskUI>().Init( task );
 		}
-		
-		
-		// init the reward UI
-		goReward.GetComponent<WellapadRewardUI>().Init( strMissionType );			
 	}
 	
 	//---------------------------------------------------

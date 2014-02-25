@@ -120,7 +120,9 @@ public abstract class Tutorial {
 		if( OnTutorialEnd != null )
         	OnTutorialEnd(this, new TutorialEndEventArgs( bFinished ) );	
 	}
-	
+
+	//TO DO-jason: maybe use a hashtable for all the params since it's growing kind
+	//of long	
 	//---------------------------------------------------
 	// SpotlightObject()
 	// Puts a spotlight around the incoming object to
@@ -130,10 +132,22 @@ public abstract class Tutorial {
 	// the anchor should be center, and for GUI elements
 	// the anchor should be whatever anchor the element
 	// is in.
+	// Params:
+	//	goTarget (GameObject): the target that you want the spotlight to spawn on
+	// Optional Params:
+	// 	bGUI (bool): is it a UI element.
+	//  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
+	//  strSpotlightPrefab (string): the string name of the spotlight prefab
+	//  fingerHint (bool): show finger hint or not
+	//  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
+	//  delay (float): how long does it take the spot light to fade in
 	//---------------------------------------------------	
 	protected void SpotlightObject( GameObject goTarget, bool bGUI = false, 
 		InterfaceAnchors eAnchor = InterfaceAnchors.Center, string strSpotlightPrefab = "TutorialSpotlight",
-		bool fingerHint = false, float fingerHintOffsetFromSpotlighCenter = 60.0f, float delay = -1f){
+		bool fingerHint = false, string fingerHintPrefab = "PressTut",
+		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f, 
+		bool fingerHintFlip = false, float delay = -1f){
+
 		// get the proper location of the object we are going to focus on
 		Vector3 vPos;
 		if ( bGUI )
@@ -170,12 +184,52 @@ public abstract class Tutorial {
 
 		// spawn finger hint
 		if(fingerHint){
-			GameObject fingerHintResource = (GameObject) Resources.Load("PressTut");
+			GameObject fingerHintResource = (GameObject) Resources.Load(fingerHintPrefab);
 			goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(strAnchor), fingerHintResource);
 			vPos.z = goFingerHint.transform.localPosition.z;
-			vPos.y = vPos.y + fingerHintOffsetFromSpotlighCenter; //offset in Y so the finger hint doesn't overlap the image
+			vPos.y = vPos.y + fingerHintOffsetY; //offset in Y so the finger hint doesn't overlap the image
+			vPos.x = vPos.x + fingerHintOffsetX; //offset in X if necessary
 			goFingerHint.transform.localPosition = vPos;
+
+			if(fingerHintFlip)
+				goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
 		}
+	}
+
+	//--------------------------------------------------------------
+	// ShowFingerHint()
+	// Use this function if you only want to spawn finger hint
+	//--------------------------------------------------------------
+	protected void ShowFingerHint(GameObject goTarget, bool bGUI = false, 
+		InterfaceAnchors eAnchor = InterfaceAnchors.Center, string fingerHintPrefab = "PressTut",
+		float offsetFromCenter = 60.0f, bool flipX = false){
+		string strAnchor = "Anchor-" + eAnchor.ToString();
+
+		// get the proper location of the object we are going to focus on
+		Vector3 vPos;
+		if ( bGUI )
+			vPos = LgNGUITools.GetScreenPosition( goTarget );
+		else {
+			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
+			vPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
+			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
+
+			vPos = CameraManager.Instance.TransformAnchorPosition( vPos, 
+				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center );
+		}
+
+		if(goFingerHint != null)
+			GameObject.Destroy(goFingerHint);
+
+		GameObject fingerHintResource = (GameObject) Resources.Load(fingerHintPrefab);
+		goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(strAnchor), fingerHintResource);
+		vPos.z = goFingerHint.transform.localPosition.z;
+		vPos.y = vPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
+		goFingerHint.transform.localPosition = vPos;
+
+		if(flipX)
+			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
+
 	}
 
 	protected void RemoveFingerHint(){

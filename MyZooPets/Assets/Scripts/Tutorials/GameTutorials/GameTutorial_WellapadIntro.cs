@@ -42,7 +42,7 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		switch ( nStep ) {
 			case 0:
-				// start by focusingon the wellapad button
+				// start by focusing on the wellapad button
 				FocusWellapadButton();
 				
 				break;
@@ -84,9 +84,22 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		
 		// the wellapad is the only object that can be clicked
 		AddToProcessList(goWellapadButton);
+
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+
+		// show popup message
+		Vector3 vLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");
+
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
 	
 		// spotlight the wellapad
-		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, delay:2f);
+		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
+			fingerHint:true, fingerHintFlip:true, delay:0.5f);
 	}
 	
 	//---------------------------------------------------
@@ -102,6 +115,11 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		// we have to allow the wellapad back button to be clicked
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
 		AddToProcessList( goBack );
+
+		// clean message and spotlight
+		RemoveSpotlight();
+		RemoveFingerHint();
+		RemovePopup();
 		
 		// go to the next step
 		Advance();

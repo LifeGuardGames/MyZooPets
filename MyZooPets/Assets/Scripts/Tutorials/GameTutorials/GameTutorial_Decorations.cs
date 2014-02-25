@@ -79,8 +79,6 @@ public class GameTutorial_Decorations : GameTutorial {
 	// ShowWellapad()
 	//---------------------------------------------------		
 	private void ShowWellapad() {
-		// float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreShowWellapad" );
-		// yield return new WaitForSeconds(fWait);
 		// highlight the fight task
 		WellapadMissionController.Instance.HighlightTask("Decorate");
 	
@@ -116,12 +114,24 @@ public class GameTutorial_Decorations : GameTutorial {
 	//---------------------------------------------------		
 	private IEnumerator FocusOnEditButton() {
 		// wait a brief moment
-		float fWait = Constants.GetConstant<float>( "DecoIntroWait" );
-		yield return new WaitForSeconds( fWait );
+		float fWait = Constants.GetConstant<float>("DecoIntroWait");
+		yield return new WaitForSeconds(fWait);
+
+		//show message
+		Vector3 location = Constants.GetConstant<Vector3>("DecorationPopupLoc");
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, location, option:option);
 		
 		// find and spotlight the edit button
 		GameObject goEditButton = NavigationUIManager.Instance.GetEditDecoButton();
-		SpotlightObject( goEditButton, true, InterfaceAnchors.BottomLeft );
+		SpotlightObject(goEditButton, true, InterfaceAnchors.BottomLeft, fingerHint:true,
+			fingerHintFlip:true, delay:0.5f);
 		
 		// add the button to the process list so the user can click it
 		AddToProcessList( goEditButton );
@@ -136,7 +146,12 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void OnEditDecos( object sender, UIManagerEventArgs args ) {
 		// stop listening for callback
 		EditDecosUIManager.Instance.OnManagerOpen -= OnEditDecos;
-		
+
+		// clean up
+		RemoveSpotlight();
+		RemovePopup();
+		RemoveFingerHint();	
+
 		// advance the tutorial
 		Advance();		
 	}
@@ -147,7 +162,8 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void FocusOnNode() {
 		// find and spotlight the tutorial node
 		goNode = GameObject.Find( "DecoNode_Dojo_WallItem_1" );
-		SpotlightObject( goNode );
+		// SpotlightObject( goNode );
+		ShowFingerHint(goNode, flipX:true);
 		
 		// add the node to the process list so the user can click it
 		AddToProcessList( goNode );
@@ -167,7 +183,10 @@ public class GameTutorial_Decorations : GameTutorial {
 		// stop listening for the node to be clicked
 		LgButton button = goNode.GetComponent<LgButton>();
 		button.OnProcessed -= OnNodeClicked;
-		
+
+		// clean up	
+		RemoveFingerHint();
+
 		// advance the tutorial
 		Advance();
 	}
@@ -181,8 +200,9 @@ public class GameTutorial_Decorations : GameTutorial {
 		
 		// find and spotlight the decoration in the user's inventory/UI
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
-		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
-		
+		// SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
+		ShowFingerHint(goEntry, true, InterfaceAnchors.Bottom, flipX:true);
+
 		AddToProcessList(goEntry);
 		
 		// listen for when that decoration is actually clicked
@@ -195,9 +215,9 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void OnDecorationPlaced( object sender, EventArgs args ) {
 		// stop listening for the decoration clicked callback
 		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced -= OnDecorationPlaced;
-		
-		// remove the spotlight
-		RemoveSpotlight();
+
+		// clean up
+		RemoveFingerHint();
 		
 		// advance the tutorial
 		Advance();

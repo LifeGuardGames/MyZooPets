@@ -9,7 +9,8 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class GameTutorial_SmokeIntro : GameTutorial {
-	
+	private GameObject swipeGO; //reference to the swipe listener
+
 	public GameTutorial_SmokeIntro() : base() {		
 	}
 	
@@ -17,7 +18,7 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 2;
+		nMaxSteps = 3;
 	}
 	
 	//---------------------------------------------------
@@ -51,8 +52,14 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 				// open the wellapad to show the user what to do next
 				ShowWellapad();
 				break;
+
+			case 2:
+				SetupSwipeListener();
+				break;
 		}
 	}
+
+	
 	
 	//---------------------------------------------------
 	// ShowWellapad()
@@ -99,17 +106,6 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 		// play sound
 		AudioManager.Instance.PlayClip( "tutorialSmokeIntro" );
 	}
-	
-	//---------------------------------------------------
-	// CutsceneDone()
-	//---------------------------------------------------		
-    private void CutsceneDone(object sender, EventArgs args){	
-		// unsub from callback
-		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-				
-		// advance the tutorial
-		Advance();
-    }	
 	
 	//---------------------------------------------------
 	// BeginPanRight()
@@ -164,5 +160,37 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 	
 	private void OnLeftPanDone() {
 		Advance();	
+	}
+
+	//---------------------------------------------------	
+	// SetupSwipeListener()
+	// Creates a giant collider on the screen that listens to
+	// the swipe event. 
+	// This is an easier way to do swipe during tutorial.
+	//---------------------------------------------------	
+	private void SetupSwipeListener(){
+		//check for right anchor
+		GameObject anchorRight = GameObject.Find("Anchor-Right");
+		if(anchorRight == null)
+			Debug.LogError(GetKey() + " -- " + GetStep() + " Needs anchor right");
+
+		//spawn the giant collider
+		GameObject swipeResource = (GameObject) Resources.Load("TutorialSwipeListener");
+		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
+		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
+
+		//show finger hint
+		ShowFingerHint(anchorRight, true, fingerHintPrefab:"PressHoldSwipeTut");
+	}
+
+	private void OnTutorialSwiped(object sender, EventArgs args){
+		//clean up
+		RemoveFingerHint();
+
+		if(swipeGO != null)
+			GameObject.Destroy(swipeGO);
+
+		//advance in tutorial
+		Advance();
 	}
 }

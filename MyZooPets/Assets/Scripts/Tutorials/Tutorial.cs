@@ -188,7 +188,7 @@ public abstract class Tutorial {
 			goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(strAnchor), fingerHintResource);
 			vPos.z = goFingerHint.transform.localPosition.z;
 			vPos.y = vPos.y + fingerHintOffsetY; //offset in Y so the finger hint doesn't overlap the image
-			vPos.x = vPos.x + fingerHintOffsetX; //offset in X if necessary
+			vPos.x = vPos.x + fingerHintOffsetX;
 			goFingerHint.transform.localPosition = vPos;
 
 			if(fingerHintFlip)

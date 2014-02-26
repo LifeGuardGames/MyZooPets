@@ -25,6 +25,7 @@ public class FireMeter : MonoBehaviour {
 	
 	//=======================Events========================
     public static EventHandler<EventArgs> OnMeterFilled;   // when the meter is 100% full
+    public static EventHandler<EventArgs> OnMeterStartFilling;   // when meter is filling up 
 	
 	//---------------------------------------------------
 	// Start()
@@ -60,6 +61,9 @@ public class FireMeter : MonoBehaviour {
 		if ( !bShouldFill )
 			return;
 		
+		if(OnMeterStartFilling != null)
+			OnMeterStartFilling(this, EventArgs.Empty);
+
 		// fill the slider by the fill rate
 		slider.sliderValue += fFillRate;
 		

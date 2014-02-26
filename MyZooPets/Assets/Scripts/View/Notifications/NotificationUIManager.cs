@@ -45,8 +45,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	// Will destroy all currently spawned notifications
 	//---------------------------------------------
 	public void CleanupNotification(){
-		if(notificationCenterPanel != null)
+		if(notificationCenterPanel != null){
 			Destroy(notificationCenterPanel);
+			isNotificationActive = false;
+		}
 	}
 
 	//---------------------------------------------

@@ -19,7 +19,7 @@ public class GameTutorial_Decorations : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 4;
+		nMaxSteps = 5;
 	}
 	
 	//---------------------------------------------------
@@ -37,7 +37,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		string strKey = "TUTS_FINISHED";											// key of text to show
 		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
 		string strAnalytics="";														// analytics tracker
-			
+
 		// show the standard popup
         string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
@@ -64,14 +64,17 @@ public class GameTutorial_Decorations : GameTutorial {
 				ShowWellapad();
 				break;
 			case 1:
-				TutorialManager.Instance.StartCoroutine( FocusOnEditButton() );
+				TutorialManager.Instance.StartCoroutine(FocusOnEditButton());
 				break;
 			case 2:
 				FocusOnNode();
 				break;
 			case 3:
-				TutorialManager.Instance.StartCoroutine( FocusOnDecorationUI() );
+				TutorialManager.Instance.StartCoroutine(FocusOnDecorationUI());
 				break;			
+			case 4:
+				TutorialManager.Instance.StartCoroutine(FocusOnDecoExitButton());
+				break;
 		}
 	}
 
@@ -184,6 +187,9 @@ public class GameTutorial_Decorations : GameTutorial {
 		LgButton button = goNode.GetComponent<LgButton>();
 		button.OnProcessed -= OnNodeClicked;
 
+		//Remove button from the clickable list
+		RemoveFromProcessList(goNode);
+
 		// clean up	
 		RemoveFingerHint();
 
@@ -200,7 +206,8 @@ public class GameTutorial_Decorations : GameTutorial {
 		
 		// find and spotlight the decoration in the user's inventory/UI
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
-		// SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
+
+		//Show finger hint
 		ShowFingerHint(goEntry, true, InterfaceAnchors.Bottom, flipX:true);
 
 		AddToProcessList(goEntry);
@@ -220,6 +227,44 @@ public class GameTutorial_Decorations : GameTutorial {
 		RemoveFingerHint();
 		
 		// advance the tutorial
+		Advance();
+	}
+
+	private IEnumerator FocusOnDecoExitButton(){
+		float fWait = Constants.GetConstant<float>("DecoExitWait");
+		yield return new WaitForSeconds(fWait);
+
+		// clean up notification from the previous step before proceeding
+		NotificationUIManager.Instance.CleanupNotification();
+
+		GameObject decoExitButton = GameObject.Find("DecoExitButton");
+
+		// show finger hint
+		ShowFingerHint(decoExitButton, true, InterfaceAnchors.BottomRight);
+
+		// show message
+		Vector3 vLoc = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+		Hashtable option = new Hashtable();
+
+        option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+        option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
+
+		//permit exit button to be clicked
+		AddToProcessList(decoExitButton);
+
+		// listen for when the node is clicked
+		LgButton button = decoExitButton.GetComponent<LgButton>();
+		button.OnProcessed += OnDecoModeExit;		
+	}
+
+	private void OnDecoModeExit(object sender, EventArgs args){
+		RemoveFingerHint();
+		RemovePopup();
+
 		Advance();
 	}
 }

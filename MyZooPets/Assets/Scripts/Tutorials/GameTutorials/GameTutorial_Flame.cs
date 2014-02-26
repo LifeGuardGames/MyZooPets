@@ -13,6 +13,7 @@ public class GameTutorial_Flame : GameTutorial {
 	
 	public GameTutorial_Flame() : base() {		
 		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
+		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
 		PetAnimator.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
 	
@@ -64,6 +65,7 @@ public class GameTutorial_Flame : GameTutorial {
 				string tutMessage = String.Format(Localization.Localize(stringKey), petName);
 
 				option.Add(TutorialPopupFields.Message, tutMessage);
+				
 				// show a little popup message telling the user to let go to breath fire
 				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
 			
@@ -106,10 +108,15 @@ public class GameTutorial_Flame : GameTutorial {
 		
 		// remove the spotlight so the user can see the resulting flame attack
 		RemoveSpotlight();
-		RemoveFingerHint();
 		
 		// fire meter is full, so advance the tut
 		Advance();
+	}
+
+	private void OnMeterStartFilling(object sender, EventArgs args){
+		FireMeter.OnMeterStartFilling -= OnMeterStartFilling;
+
+		RemoveFingerHint();
 	}
 	
 	//---------------------------------------------------

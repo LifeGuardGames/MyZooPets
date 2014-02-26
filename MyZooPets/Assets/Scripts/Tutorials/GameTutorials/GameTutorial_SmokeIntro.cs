@@ -171,8 +171,10 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 	private void SetupSwipeListener(){
 		//check for right anchor
 		GameObject anchorRight = GameObject.Find("Anchor-Right");
+		string tutKey = GetKey() + "_"	+ GetStep();
+
 		if(anchorRight == null)
-			Debug.LogError(GetKey() + " -- " + GetStep() + " Needs anchor right");
+			Debug.LogError(tutKey + " Needs anchor right");
 
 		//spawn the giant collider
 		GameObject swipeResource = (GameObject) Resources.Load("TutorialSwipeListener");
@@ -181,6 +183,16 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 
 		//show finger hint
 		ShowFingerHint(anchorRight, true, fingerHintPrefab:"PressHoldSwipeTut");
+
+		// show message
+		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
+		string tutMessage = Localization.Localize(tutKey);
+		Hashtable option = new Hashtable();
+
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, location, option:option);
 	}
 
 	private void OnTutorialSwiped(object sender, EventArgs args){

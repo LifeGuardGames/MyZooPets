@@ -82,7 +82,22 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		LgButton button = goWellapadButton.GetComponent<LgButton>();
 		button.OnProcessed += ButtonClicked;
 		
+
+	
+		// spotlight the wellapad
+		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
+			fingerHint:true, fingerHintFlip:true, delay:2f);
+
+		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
+	}
+
+	//using this to deplay ShowPopup call for 2 seconds
+	private IEnumerator CreateWellapadButtonTutMessage(){
+		yield return new WaitForSeconds(2f);
+
 		// the wellapad is the only object that can be clicked
+		// only allow the button to be clicked after all the tutorial components
+		// fade in
 		AddToProcessList(goWellapadButton);
 
 		string tutKey = GetKey() + "_" + GetStep();
@@ -96,10 +111,6 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
 		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
-	
-		// spotlight the wellapad
-		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
-			fingerHint:true, fingerHintFlip:true, delay:0.5f);
 	}
 	
 	//---------------------------------------------------

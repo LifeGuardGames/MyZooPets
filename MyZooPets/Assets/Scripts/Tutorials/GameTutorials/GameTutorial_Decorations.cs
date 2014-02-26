@@ -11,6 +11,7 @@ using System.Collections.Generic;
 public class GameTutorial_Decorations : GameTutorial {
 	// decoration node for tutorial
 	private GameObject goNode;
+	private GameObject goExitButton; //reference to deco mode exit button
 	
 	public GameTutorial_Decorations() : base() {	
 	}	
@@ -237,10 +238,10 @@ public class GameTutorial_Decorations : GameTutorial {
 		// clean up notification from the previous step before proceeding
 		NotificationUIManager.Instance.CleanupNotification();
 
-		GameObject decoExitButton = GameObject.Find("DecoExitButton");
+		goExitButton = GameObject.Find("DecoExitButton");
 
 		// show finger hint
-		ShowFingerHint(decoExitButton, true, InterfaceAnchors.BottomRight);
+		ShowFingerHint(goExitButton, true, InterfaceAnchors.BottomRight);
 
 		// show message
 		Vector3 vLoc = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
@@ -254,14 +255,17 @@ public class GameTutorial_Decorations : GameTutorial {
 		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
 
 		//permit exit button to be clicked
-		AddToProcessList(decoExitButton);
+		AddToProcessList(goExitButton);
 
 		// listen for when the node is clicked
-		LgButton button = decoExitButton.GetComponent<LgButton>();
+		LgButton button = goExitButton.GetComponent<LgButton>();
 		button.OnProcessed += OnDecoModeExit;		
 	}
 
 	private void OnDecoModeExit(object sender, EventArgs args){
+		LgButton button = goExitButton.GetComponent<LgButton>();
+		button.OnProcessed -= OnDecoModeExit;		
+
 		RemoveFingerHint();
 		RemovePopup();
 

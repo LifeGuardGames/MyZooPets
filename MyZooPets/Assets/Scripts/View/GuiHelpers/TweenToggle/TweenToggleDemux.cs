@@ -36,6 +36,7 @@ public class TweenToggleDemux : MonoBehaviour {
 	public bool IsMoving{ get { return isMoving; } }
 	
 	private bool pollingFirstFrameLock = false;	// Since we are polling & setting show/hide next frame, need to stop current frame check for callbacks
+	private bool pollingSecondFrameLock = false;	// Check for two frames, dumb implementation to enforce order (update gets called before show)
 	
 	void Awake(){
 		if(startsHidden){
@@ -83,11 +84,14 @@ public class TweenToggleDemux : MonoBehaviour {
 		if(pollingFirstFrameLock){
 			pollingFirstFrameLock = false;
 		}
+		else if(pollingSecondFrameLock){
+			pollingSecondFrameLock = false;
+		}
 		// Do regular polling
 		else{	
 			if(isMoving){
 				if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
-					//print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
+//					print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 					isMoving = false;
 					// If option set for finish show callback, call it now!
 					if(isShowFinishedCallback){
@@ -115,6 +119,7 @@ public class TweenToggleDemux : MonoBehaviour {
 			isMoving = true;
 			
 			pollingFirstFrameLock = true;
+			pollingSecondFrameLock = true;
 			StartCoroutine(SetNextFrameShow());
 		}
 		else{
@@ -129,6 +134,7 @@ public class TweenToggleDemux : MonoBehaviour {
 			isMoving = true;
 			
 			pollingFirstFrameLock = true;
+			pollingSecondFrameLock = true;
 			StartCoroutine(SetNextFrameHide());
 		}
 		else{

@@ -28,6 +28,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// the grid this UI places its items in
 	public GameObject goGrid;	
 	
+	// Show the status of available items, else tell user to go to store
+	public UILabel statusLabel;
+	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
 	public DecorationNode GetNode() {
@@ -102,6 +105,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	// that are in this UI.
 	//---------------------------------------------------		
 	private void CreateEntries( GameObject goGrid ) {
+		// Keep track if there is something we can play, changes status text
+		bool isDecoItemsAvailable = false;
+		
 		// Destory all items in the list first (these may exist from the prefab)
 		foreach(Transform child in goGrid.transform)
 			Destroy(child.gameObject);
@@ -144,6 +150,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 				// set up place button callbacks
 				button.target = gameObject;
 				button.functionName = "OnPlaceButton";
+				
+				// Tell status bar there is something available
+				isDecoItemsAvailable = true;
 			}
 			else {
 				// destroy the place button
@@ -156,7 +165,14 @@ public class ChooseDecorationUI : MonoBehaviour {
 			// save the tutorial entry (a bit hacky)
 			if ( itemDeco.ID == "WallPoster8" )
 				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
-		}		
+		}
+		
+		// Update the status label with formatted type name
+		string formattedTypeKey = "DECO_TYPE_" + eType.ToString().ToUpper();
+		// Choose which preformatted text to use
+		statusLabel.text = isDecoItemsAvailable ?
+			String.Format(Localization.Localize("DECO_CHOOSE_ITEM"), Localization.Localize(formattedTypeKey)) :
+			String.Format(Localization.Localize("DECO_CHOOSE_NO_ITEM"), Localization.Localize(formattedTypeKey));
 	}
 	
 	//---------------------------------------------------

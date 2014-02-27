@@ -42,7 +42,7 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 	protected override void ProcessStep( int nStep ) {
 		switch ( nStep ) {
 			case 0:
-				// start by focusingon the wellapad button
+				// start by focusing on the wellapad button
 				FocusWellapadButton();
 				
 				break;
@@ -77,16 +77,38 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 	//---------------------------------------------------
 	// FocusWellapadButton()
 	//---------------------------------------------------		
-	private void FocusWellapadButton() {
+	private void FocusWellapadButton(){
 		// begin listening for when the button is clicked
 		LgButton button = goWellapadButton.GetComponent<LgButton>();
 		button.OnProcessed += ButtonClicked;
 		
-		// the inhaler is the only object that can be clicked
-		AddToProcessList( goWellapadButton );
-	
-		// spotlight the inhaler
-		SpotlightObject( goWellapadButton, true, InterfaceAnchors.BottomLeft );
+		// spotlight the wellapad
+		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
+			fingerHint:true, fingerHintPrefab:"PressTutWithDelay", fingerHintFlip:true, delay:2f);
+
+		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
+	}
+
+	//using this to deplay ShowPopup call for 2 seconds
+	private IEnumerator CreateWellapadButtonTutMessage(){
+		yield return new WaitForSeconds(2f);
+
+		// the wellapad is the only object that can be clicked
+		// only allow the button to be clicked after all the tutorial components
+		// fade in
+		AddToProcessList(goWellapadButton);
+
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+
+		// show popup message
+		Vector3 vLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");
+
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
 	}
 	
 	//---------------------------------------------------
@@ -102,6 +124,11 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		// we have to allow the wellapad back button to be clicked
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
 		AddToProcessList( goBack );
+
+		// clean message and spotlight
+		RemoveSpotlight();
+		RemoveFingerHint();
+		RemovePopup();
 		
 		// go to the next step
 		Advance();

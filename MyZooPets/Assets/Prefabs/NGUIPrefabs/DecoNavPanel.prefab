@@ -148,7 +148,7 @@ GameObject:
   - 114: {fileID: 11400026}
   - 114: {fileID: 11400022}
   m_Layer: 10
-  m_Name: L_DecoMode
+  m_Name: L_DecoModeSubText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,6 +347,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100042
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400042}
+  - 114: {fileID: 11400010}
+  - 114: {fileID: 11400062}
+  - 114: {fileID: 11400064}
+  m_Layer: 10
+  m_Name: L_DecoMode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -450,8 +468,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 72.590332, z: -5}
-  m_LocalScale: {x: 70, y: 70, z: 1}
+  m_LocalPosition: {x: 3.20076942e-05, y: 39.0585938, z: -4.99995041}
+  m_LocalScale: {x: 50, y: 50, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400038}
 --- !u!4 &400018
@@ -567,7 +585,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 681, y: -383.400146, z: -1.82986259e-05}
+  m_LocalPosition: {x: 511.5, y: -383.499756, z: -1.82986259e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -579,11 +597,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.599999964, y: -383.400146, z: -1.82986259e-05}
+  m_LocalPosition: {x: -.5, y: -383.499756, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400028}
   - {fileID: 400014}
+  - {fileID: 400042}
   - {fileID: 400016}
   m_Father: {fileID: 400000}
 --- !u!4 &400040
@@ -593,11 +612,22 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -682.199951, y: -383.400146, z: -1.82986259e-05}
+  m_LocalPosition: {x: -512.5, y: -383.499756, z: -1.82986259e-05}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400008}
   m_Father: {fileID: 400000}
+--- !u!4 &400042
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 99.4160156, z: -5}
+  m_LocalScale: {x: 70, y: 70, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400038}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -748,6 +778,35 @@ MonoBehaviour:
   hoverSprite: buttonUpRed
   pressedSprite: buttonDownRed
   disabledSprite: ButtonUpGray
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 3
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: Decorate your room!
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -879,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: DECO_ENTRY
+  key: DECO_ENTRYSUB
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -895,7 +954,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: panelRed
+  mSpriteName: panelBlue
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -921,7 +980,7 @@ MonoBehaviour:
   hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .150000006
-  showDelay: .100000001
+  showDelay: .150000006
   hideDelay: 0
   easeHide: 4
   easeShow: 27
@@ -946,11 +1005,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .976876259, g: 1, b: .580882311, a: 1}
   mPivot: 4
   mDepth: 3
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: Decorate your room!
+  mText: Pick a node
   mMaxLineWidth: 0
   mMaxLineHeight: 0
   mEncoding: 1
@@ -978,12 +1037,13 @@ MonoBehaviour:
   GoList:
   - {fileID: 100002}
   - {fileID: 100014}
-  - {fileID: 100016}
+  - {fileID: 100042}
   - {fileID: 100028}
+  - {fileID: 100016}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100016}
+  lastFinishedShowObject: {fileID: 100042}
   lastFinishedHideObject: {fileID: 100014}
   isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
@@ -1050,11 +1110,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -681
+    e03: -511.5
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.59961
+    e13: -7296.5
     e20: 0
     e21: 0
     e22: 384
@@ -1079,7 +1139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1100,7 +1160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1121,7 +1181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1142,7 +1202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1172,24 +1232,24 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .599999964
+    e03: .5
     e10: 0
     e11: 384
     e12: 0
-    e13: -7732.50293
+    e13: -7732.40332
     e20: 0
     e21: 0
     e22: 384
-    e23: .400018334
+    e23: .400000036
     e30: 0
     e31: 0
     e32: 0
     e33: 1
   mAlpha: 1
   mDebugInfo: 1
-  mClipping: 2
+  mClipping: 3
   mClipRange: {x: 0, y: -451.339996, z: 1566.03003, w: 313.369995}
-  mClipSoftness: {x: 40, y: 40}
+  mClipSoftness: {x: 1, y: 1}
 --- !u!114 &11400048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1201,7 +1261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1222,7 +1282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1243,7 +1303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .887931049, b: .522058845, a: .427450985}
+  mColor: {r: .522058845, g: .920892477, b: 1, a: .427450985}
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -1344,6 +1404,52 @@ MonoBehaviour:
   runOnlyOnce: 0
   relativeOffset: {x: 0, y: 0}
   pixelOffset: {x: 0, y: 0}
+--- !u!114 &11400062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 1
+  blockUI: 1
+  startsHidden: 0
+  hideDeltaX: 0
+  hideDeltaY: -150
+  hideDeltaZ: 0
+  showDuration: .200000003
+  hideDuration: .150000006
+  showDelay: .100000001
+  hideDelay: 0
+  easeHide: 4
+  easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: DECO_ENTRY
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

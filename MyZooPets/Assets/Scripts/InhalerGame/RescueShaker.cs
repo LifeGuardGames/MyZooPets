@@ -30,7 +30,7 @@ public class RescueShaker : InhalerPart {
         else if(phase == ContinuousGesturePhase.Updated){
             elapsed = gesture.ElapsedTime; 
 
-            if(!doneWithShake && elapsed >= 1.5f){ //Shake inhaler for 3 seconds
+            if(!doneWithShake && elapsed >= 1f){ //Shake inhaler for 1 second
                 NextStep();
             }
         }

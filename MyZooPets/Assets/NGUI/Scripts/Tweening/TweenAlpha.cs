@@ -14,7 +14,8 @@ public class TweenAlpha : UITweener
 {
 	public float from = 1f;
 	public float to = 1f;
-
+	public bool isInitializeWithFromAlpha = false;
+	
 	Transform mTrans;
 	UIWidget mWidget;
 	UIPanel mPanel;
@@ -46,6 +47,13 @@ public class TweenAlpha : UITweener
 	{
 		mPanel = GetComponent<UIPanel>();
 		if (mPanel == null) mWidget = GetComponentInChildren<UIWidget>();
+	}
+	
+	protected override void _Start(){
+		if(isInitializeWithFromAlpha){
+			if (mWidget != null) mWidget.alpha = from;
+			else if (mPanel != null) mPanel.alpha = from;
+		}
 	}
 
 	/// <summary>

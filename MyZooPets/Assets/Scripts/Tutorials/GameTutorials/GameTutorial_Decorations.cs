@@ -11,6 +11,7 @@ using System.Collections.Generic;
 public class GameTutorial_Decorations : GameTutorial {
 	// decoration node for tutorial
 	private GameObject goNode;
+	private GameObject goExitButton; //reference to deco mode exit button
 	
 	public GameTutorial_Decorations() : base() {	
 	}	
@@ -19,7 +20,7 @@ public class GameTutorial_Decorations : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 4;
+		nMaxSteps = 5;
 	}
 	
 	//---------------------------------------------------
@@ -37,11 +38,11 @@ public class GameTutorial_Decorations : GameTutorial {
 		string strKey = "TUTS_FINISHED";											// key of text to show
 		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
 		string strAnalytics="";														// analytics tracker
-			
+
 		// show the standard popup
         string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
-			String.Format(Localization.Localize(strKey), petName, 
+			String.Format(Localization.Localize(strKey), 
 			StringUtils.FormatStringPossession(petName)),
 			strImage, null, true, true, strAnalytics );
 
@@ -64,14 +65,17 @@ public class GameTutorial_Decorations : GameTutorial {
 				ShowWellapad();
 				break;
 			case 1:
-				TutorialManager.Instance.StartCoroutine( FocusOnEditButton() );
+				TutorialManager.Instance.StartCoroutine(FocusOnEditButton());
 				break;
 			case 2:
 				FocusOnNode();
 				break;
 			case 3:
-				TutorialManager.Instance.StartCoroutine( FocusOnDecorationUI() );
+				TutorialManager.Instance.StartCoroutine(FocusOnDecorationUI());
 				break;			
+			case 4:
+				TutorialManager.Instance.StartCoroutine(FocusOnDecoExitButton());
+				break;
 		}
 	}
 
@@ -79,8 +83,6 @@ public class GameTutorial_Decorations : GameTutorial {
 	// ShowWellapad()
 	//---------------------------------------------------		
 	private void ShowWellapad() {
-		// float fWait = Constants.GetConstant<float>( "TriggerTutorialWait_PreShowWellapad" );
-		// yield return new WaitForSeconds(fWait);
 		// highlight the fight task
 		WellapadMissionController.Instance.HighlightTask("Decorate");
 	
@@ -116,12 +118,24 @@ public class GameTutorial_Decorations : GameTutorial {
 	//---------------------------------------------------		
 	private IEnumerator FocusOnEditButton() {
 		// wait a brief moment
-		float fWait = Constants.GetConstant<float>( "DecoIntroWait" );
-		yield return new WaitForSeconds( fWait );
+		float fWait = Constants.GetConstant<float>("DecoIntroWait");
+		yield return new WaitForSeconds(fWait);
+
+		//show message
+		Vector3 location = Constants.GetConstant<Vector3>("DecorationPopupLoc");
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, location, option:option);
 		
 		// find and spotlight the edit button
 		GameObject goEditButton = NavigationUIManager.Instance.GetEditDecoButton();
-		SpotlightObject( goEditButton, true, InterfaceAnchors.BottomLeft );
+		SpotlightObject(goEditButton, true, InterfaceAnchors.BottomLeft, fingerHint:true,
+			fingerHintFlip:true, delay:0.5f);
 		
 		// add the button to the process list so the user can click it
 		AddToProcessList( goEditButton );
@@ -136,7 +150,12 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void OnEditDecos( object sender, UIManagerEventArgs args ) {
 		// stop listening for callback
 		EditDecosUIManager.Instance.OnManagerOpen -= OnEditDecos;
-		
+
+		// clean up
+		RemoveSpotlight();
+		RemovePopup();
+		RemoveFingerHint();	
+
 		// advance the tutorial
 		Advance();		
 	}
@@ -147,7 +166,8 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void FocusOnNode() {
 		// find and spotlight the tutorial node
 		goNode = GameObject.Find( "DecoNode_Dojo_WallItem_1" );
-		SpotlightObject( goNode );
+		// SpotlightObject( goNode );
+		ShowFingerHint(goNode, flipX:true);
 		
 		// add the node to the process list so the user can click it
 		AddToProcessList( goNode );
@@ -167,7 +187,13 @@ public class GameTutorial_Decorations : GameTutorial {
 		// stop listening for the node to be clicked
 		LgButton button = goNode.GetComponent<LgButton>();
 		button.OnProcessed -= OnNodeClicked;
-		
+
+		//Remove button from the clickable list
+		RemoveFromProcessList(goNode);
+
+		// clean up	
+		RemoveFingerHint();
+
 		// advance the tutorial
 		Advance();
 	}
@@ -181,8 +207,10 @@ public class GameTutorial_Decorations : GameTutorial {
 		
 		// find and spotlight the decoration in the user's inventory/UI
 		GameObject goEntry = EditDecosUIManager.Instance.GetTutorialEntry();
-		SpotlightObject( goEntry, true, InterfaceAnchors.Bottom, "TutorialSpotlightDeco" );
-		
+
+		//Show finger hint
+		ShowFingerHint(goEntry, true, InterfaceAnchors.Bottom, flipX:true);
+
 		AddToProcessList(goEntry);
 		
 		// listen for when that decoration is actually clicked
@@ -195,11 +223,52 @@ public class GameTutorial_Decorations : GameTutorial {
 	private void OnDecorationPlaced( object sender, EventArgs args ) {
 		// stop listening for the decoration clicked callback
 		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced -= OnDecorationPlaced;
-		
-		// remove the spotlight
-		RemoveSpotlight();
+
+		// clean up
+		RemoveFingerHint();
 		
 		// advance the tutorial
+		Advance();
+	}
+
+	private IEnumerator FocusOnDecoExitButton(){
+		float fWait = Constants.GetConstant<float>("DecoExitWait");
+		yield return new WaitForSeconds(fWait);
+
+		// clean up notification from the previous step before proceeding
+		NotificationUIManager.Instance.CleanupNotification();
+
+		goExitButton = GameObject.Find("DecoExitButton");
+
+		// show finger hint
+		ShowFingerHint(goExitButton, true, InterfaceAnchors.BottomRight);
+
+		// show message
+		Vector3 vLoc = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
+		Hashtable option = new Hashtable();
+
+        option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+        option.Add(TutorialPopupFields.Message, tutMessage);
+
+		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
+
+		//permit exit button to be clicked
+		AddToProcessList(goExitButton);
+
+		// listen for when the node is clicked
+		LgButton button = goExitButton.GetComponent<LgButton>();
+		button.OnProcessed += OnDecoModeExit;		
+	}
+
+	private void OnDecoModeExit(object sender, EventArgs args){
+		LgButton button = goExitButton.GetComponent<LgButton>();
+		button.OnProcessed -= OnDecoModeExit;		
+
+		RemoveFingerHint();
+		RemovePopup();
+
 		Advance();
 	}
 }

@@ -13,6 +13,7 @@ public class GameTutorial_Flame : GameTutorial {
 	
 	public GameTutorial_Flame() : base() {		
 		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
+		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
 		PetAnimator.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
 	
@@ -64,6 +65,7 @@ public class GameTutorial_Flame : GameTutorial {
 				string tutMessage = String.Format(Localization.Localize(stringKey), petName);
 
 				option.Add(TutorialPopupFields.Message, tutMessage);
+				
 				// show a little popup message telling the user to let go to breath fire
 				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
 			
@@ -81,9 +83,11 @@ public class GameTutorial_Flame : GameTutorial {
 		yield return 0;
 		
 		// find and spotlight the fire button
-		GameObject goFlameButton = GameObject.Find( ButtonMonster.FIRE_BUTTON );
-		if ( goFlameButton != null ) {
-			SpotlightObject( goFlameButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton" );
+		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
+		if (goFlameButton != null){
+			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton",
+				fingerHint:true, fingerHintPrefab:"PressHoldTut", 
+				fingerHintOffsetX:-160f, delay:0.5f);
 			
 			// add the fire button to the processable list
 			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
@@ -107,6 +111,12 @@ public class GameTutorial_Flame : GameTutorial {
 		
 		// fire meter is full, so advance the tut
 		Advance();
+	}
+
+	private void OnMeterStartFilling(object sender, EventArgs args){
+		FireMeter.OnMeterStartFilling -= OnMeterStartFilling;
+
+		RemoveFingerHint();
 	}
 	
 	//---------------------------------------------------

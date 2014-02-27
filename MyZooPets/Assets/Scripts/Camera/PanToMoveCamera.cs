@@ -220,6 +220,15 @@ public class PanToMoveCamera : MonoBehaviour {
 		return true;
 	}
 
+    //This method can only be used in GameTutorial_SmokeIntro
+    //It doesn't check click manager because we need the user to swipe left during
+    //the tutorial. 
+    public void TutorialSwipeLeft(){
+        if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
+            ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
+            }
+    }
+
     ///////////////////////////////////////////////////
     // CheckArrowKeys() 
     // Checks arrow key input for moving around the
@@ -231,22 +240,14 @@ public class PanToMoveCamera : MonoBehaviour {
 			return;
 			
         if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
-            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
-            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
-
-                if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
-                    ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
+            if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Left ), RoomDirection.Left, -1 ) ) {
+                ChangePartition( GetTargetPartition( 1, RoomDirection.Left ) );
                 }
-            // }
 		}
-        else if ( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
-            // if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
-            //     CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || CameraUtils.IsTouchingPet(mainCamera, startTouchPos)){
-
-    			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
-    				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
-    			}
-            // }
+        else if( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
+			if ( CanMoveToPartition( GetTargetPartition( 1, RoomDirection.Right ), RoomDirection.Right, -1 ) ) {
+				ChangePartition( GetTargetPartition( 1, RoomDirection.Right ) );       
+			}
 		}
     }
 

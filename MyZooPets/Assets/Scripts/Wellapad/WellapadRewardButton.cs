@@ -26,6 +26,7 @@ public class WellapadRewardButton : LgButton {
 	// Init()
 	//---------------------------------------------------	
 	public void Init( string missionID ) {
+		
 		// Save the current active label color
 		activeLabelColor = buttonLabel.color;
 		
@@ -49,6 +50,7 @@ public class WellapadRewardButton : LgButton {
 	// state the reward is in.
 	//---------------------------------------------------		
 	private void SetSprites() {
+		
 		// state of the actual button (not the image on the button)
 		bool bEnabled = true;
 		
@@ -75,13 +77,22 @@ public class WellapadRewardButton : LgButton {
 				// the button is not enabled if the reward is unearned
 				bEnabled = eStatus == RewardStatuses.Unclaimed;
 			}
+			
 		}
 	
 		//Jason - Null exception gets thrown here if we don't check if nguiButton is null	
 		//This exception doesn't happen every time. 
 		if(nguiButton){	
 			nguiButton.isEnabled = bEnabled;
-			buttonLabel.color = bEnabled ? activeLabelColor : inactiveLabelColor;
+			
+			if(bEnabled){
+				buttonLabel.color = activeLabelColor;
+				nguiButton.gameObject.GetComponent<AnimationControl>().Play();
+			}
+			else{
+				buttonLabel.color = inactiveLabelColor;
+				nguiButton.gameObject.GetComponent<AnimationControl>().Stop();
+			}
 		}
 	}
 	

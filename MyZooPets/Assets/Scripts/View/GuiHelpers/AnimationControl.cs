@@ -8,11 +8,23 @@ using System.Collections;
 
 public class AnimationControl : MonoBehaviour {
 	
+	public bool resetAfterStop = false;
+	private Vector3 originalPostion;
+	private Quaternion originalRotation;
+	private Vector3 originalScale;
+	
 	public bool debug = false;
 	
 	private bool isPlay = false;
 	public bool isLooping;
-
+	
+	void Awake(){
+		// Remember the original position if we need to reset it after playing, (Must be in awake, something killing it)
+		originalPostion = gameObject.transform.localPosition;
+		originalRotation = gameObject.transform.localRotation;
+		originalScale = gameObject.transform.localScale;
+	}
+	
 	void Update(){
 		if(isLooping && isPlay && !animation.isPlaying){
 			animation.Play();
@@ -37,6 +49,12 @@ public class AnimationControl : MonoBehaviour {
 	public void Stop(){
 		isPlay = false;
 		animation.Stop();
+		
+		if(resetAfterStop){
+			gameObject.transform.localPosition = originalPostion;
+			gameObject.transform.localRotation = originalRotation;
+			gameObject.transform.localScale = originalScale;
+		}
 	}
 	
 	// Rewinds the frame to original position

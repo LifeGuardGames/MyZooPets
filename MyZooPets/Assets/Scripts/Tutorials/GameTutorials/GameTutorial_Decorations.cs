@@ -42,7 +42,7 @@ public class GameTutorial_Decorations : GameTutorial {
 		// show the standard popup
         string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		TutorialUIManager.AddStandardTutTip( NotificationPopupType.TipWithImage, 
-			String.Format(Localization.Localize(strKey), petName, 
+			String.Format(Localization.Localize(strKey), 
 			StringUtils.FormatStringPossession(petName)),
 			strImage, null, true, true, strAnalytics );
 

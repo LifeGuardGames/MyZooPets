@@ -39,6 +39,9 @@ public abstract class LgButton : MonoBehaviour {
 	private bool ShouldCheckClickManager() {
 		return bCheckClickManager;	
 	}
+
+	// if button is clicked when mode is locked, play a negative feedback sound
+	// public bool playNotProcessSound = false;
 	
 	//---------------------------------------------------
 	// Start()
@@ -97,7 +100,8 @@ public abstract class LgButton : MonoBehaviour {
 	{
 		// if the button needs to check the click manager before proceding, do so and return if necessary
 		if (ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
-			PlayNotProcessSound();
+
+			if(bSprite) PlayNotProcessSound();
 			return;
 		}
 		
@@ -105,7 +109,7 @@ public abstract class LgButton : MonoBehaviour {
 		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
 			!TutorialManager.Instance.CanProcess(gameObject)){
 
-			PlayNotProcessSound();
+			if(bSprite) PlayNotProcessSound();
 			return;
 		}
 		

@@ -82,11 +82,9 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		LgButton button = goWellapadButton.GetComponent<LgButton>();
 		button.OnProcessed += ButtonClicked;
 		
-
-	
 		// spotlight the wellapad
 		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
-			fingerHint:true, fingerHintFlip:true, delay:2f);
+			fingerHint:true, fingerHintPrefab:"PressTutWithDelay", fingerHintFlip:true, delay:2f);
 
 		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
 	}

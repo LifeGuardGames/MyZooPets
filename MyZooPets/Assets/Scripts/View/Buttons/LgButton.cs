@@ -96,13 +96,18 @@ public abstract class LgButton : MonoBehaviour {
 	public void ButtonClicked ()
 	{
 		// if the button needs to check the click manager before proceding, do so and return if necessary
-		if ( ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap( gameObject ) ) {
+		if (ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
+			PlayNotProcessSound();
 			return;
 		}
 		
 		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
-		if ( ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess( gameObject ) )
+		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
+			!TutorialManager.Instance.CanProcess(gameObject)){
+
+			PlayNotProcessSound();
 			return;
+		}
 		
 		// play the sound
 		PlayProcessSound();
@@ -120,6 +125,13 @@ public abstract class LgButton : MonoBehaviour {
 		
 		if ( !string.IsNullOrEmpty(strSound) )
 			AudioManager.Instance.PlayClip( strSound );	
+	}
+
+	private void PlayNotProcessSound(){
+		string sound = "buttonDontClick";
+
+		if(!string.IsNullOrEmpty(sound))
+			AudioManager.Instance.PlayClip(sound);
 	}
 	
 	//---------------------------------------------------

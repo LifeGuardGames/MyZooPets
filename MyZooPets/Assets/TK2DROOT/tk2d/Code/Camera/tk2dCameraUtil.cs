@@ -23,9 +23,10 @@ public class tk2dCameraSettings {
 
 	public ProjectionType projection = ProjectionType.Orthographic;
 	public float orthographicSize = 10.0f;
-	public float orthographicPixelsPerMeter = 20;
+	public float orthographicPixelsPerMeter = 100;
 	public OrthographicOrigin orthographicOrigin = OrthographicOrigin.Center;
 	public OrthographicType orthographicType = OrthographicType.PixelsPerMeter;
+	public TransparencySortMode transparencySortMode = TransparencySortMode.Default;
 	public float fieldOfView = 60.0f;
 	public Rect rect = new Rect( 0, 0, 1, 1 );
 }
@@ -89,6 +90,7 @@ public class tk2dCameraResolutionOverride {
 		StretchToFit, // stretch to fit, could be non-uniform and/or very ugly
 		ClosestMultipleOfTwo, // fits to the closest power of two
 		PixelPerfect, // keeps this pixel perfect always
+		Fill, // crop to fit
 	};
 	public AutoScaleMode autoScaleMode = AutoScaleMode.None;
 	

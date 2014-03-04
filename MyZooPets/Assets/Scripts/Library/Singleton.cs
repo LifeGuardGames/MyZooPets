@@ -27,12 +27,12 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
       }
    }
 
-   void OnDestroy(){
-		// if this singleton is being destroyed, send out a callback to anything that may care
-		bBeingDestroyed = true;
-		if(OnBeingDestroyed != null) 
-			OnBeingDestroyed(this, EventArgs.Empty);		
+  //  void OnDestroy(){
+		// // if this singleton is being destroyed, send out a callback to anything that may care
+		// bBeingDestroyed = true;
+		// if(OnBeingDestroyed != null) 
+		// 	OnBeingDestroyed(this, EventArgs.Empty);		
 		
-      instance = null;
-   }
+  //     instance = null;
+  //  }
 }

@@ -14,7 +14,7 @@ public abstract class DroppedObject : LgButton {
 	// --------------- Pure Abstract ---------------------------
 	protected abstract void _ObtainObject();			// give the user the object
 	protected abstract void OnObjectDestroyed();		// when this game object is destroyed
-	protected abstract void _OnManagerDestroyed();		// when related managers are destroyed
+	protected abstract void _AutoCollectAndDestroy();	// collect the dropped object and destroy itself 
 	// ---------------------------------------------------------
 	
 	// sprite associated with this dropped object
@@ -30,19 +30,24 @@ public abstract class DroppedObject : LgButton {
 	}
 	
 	void Start() {
-		DataManager.Instance.OnBeingDestroyed += OnManagerDestroyed;
+		// DataManager.Instance.OnBeingDestroyed += AutoCollectAndDestroy;
+		ButtonChangeScene.OnChangeScene += AutoCollectAndDestroy;
+	}
+
+	void OnDestroy(){
+		ButtonChangeScene.OnChangeScene -= AutoCollectAndDestroy;
 	}
 	
 	//---------------------------------------------------
-	// OnManagerDestroyed()
+	// AutoCollectAndDestroy()
 	// This is a generic function that is called when a
 	// dependent manager is destroyed.  It basically 
 	// forces the item to be picked up right away, because
 	// the item requires the dependent manager in order to
 	// actual process the picking up.
 	//---------------------------------------------------	
-	protected void OnManagerDestroyed( object sender, EventArgs args ) {
-		_OnManagerDestroyed();
+	protected void AutoCollectAndDestroy( object sender, EventArgs args ) {
+		_AutoCollectAndDestroy();
 	}		
 	
 	//---------------------------------------------------
@@ -167,7 +172,7 @@ public abstract class DroppedObject : LgButton {
 	// _OnDestroy()
 	//---------------------------------------------------		
 	protected override void _OnDestroy() {
-		OnObjectDestroyed();
+		// OnObjectDestroyed();
 	}
 	
 	//---------------------------------------------------

@@ -67,7 +67,7 @@ public class NinjaDataLoader {
         hashData = new Hashtable();
 		
         //Load all data xml files
-         UnityEngine.Object[] files = Resources.LoadAll("Ninja", typeof(TextAsset));
+         UnityEngine.Object[] files = Resources.LoadAll("Ninja/Modes", typeof(TextAsset));
          foreach(TextAsset file in files){
             string xmlString = file.text;
 			

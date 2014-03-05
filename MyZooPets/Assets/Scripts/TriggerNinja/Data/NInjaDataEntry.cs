@@ -11,25 +11,25 @@ public class NinjaDataEntry {
 	// group type
 	private NinjaPatterns ePattern;
 	public NinjaPatterns GetPattern() {
-		return ePattern;	
+		return ePattern;
 	}
 	
 	// # of normal triggers
 	private int nTriggers;
 	public int GetTriggers() {
-		return nTriggers;	
+		return nTriggers;
 	}
 	
 	// # of bombs in the entry
 	private int nBombs;
 	public int GetBombs() {
-		return nBombs;	
+		return nBombs;
 	}
 	
 	// time this entry should go off
 	private float fTime;
 	public float GetTime() {
-		return fTime;	
+		return fTime;
 	}
 
 	public NinjaDataEntry( Hashtable hashAttr, string strError ) {

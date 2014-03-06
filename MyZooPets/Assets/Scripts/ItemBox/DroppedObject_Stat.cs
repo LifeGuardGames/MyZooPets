@@ -44,7 +44,7 @@ public class DroppedObject_Stat : DroppedObject {
 			Debug.LogError("No sprite", gameObject);
 		
 		// also listen for when the stats controller is being destroyed
-		StatsController.Instance.OnBeingDestroyed += OnManagerDestroyed;
+		// StatsController.Instance.OnBeingDestroyed += OnManagerDestroyed;
 	}
 	
 	//---------------------------------------------------
@@ -84,12 +84,12 @@ public class DroppedObject_Stat : DroppedObject {
 	}	
 	
 	//---------------------------------------------------
-	// _OnManagerDestroyed()
+	// _AutoCollectAndDestroy()
 	// Callback sent from the stats logic because it
 	// is being destroyed (likely because the scene is
 	// changing).
 	//---------------------------------------------------	
-	protected override void _OnManagerDestroyed() {
+	protected override void _AutoCollectAndDestroy() {
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if ( eState != DroppedItemStates.Awarded )

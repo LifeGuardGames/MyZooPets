@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 //---------------------------------------------------
@@ -9,6 +10,8 @@ using System.Collections;
 //---------------------------------------------------
 
 public class ButtonChangeScene : LgButton {
+	public static EventHandler<EventArgs> OnChangeScene; //Event when changing scene on user input
+
 	// name of the scene to be loaded
 	public string strScene;
 	
@@ -51,6 +54,10 @@ public class ButtonChangeScene : LgButton {
 		if(EditDecosUIManager.Instance != null){
 			EditDecosUIManager.Instance.HideNavButton();
 		}
+
+		//Sent an change scene event out, so other objects can run appropriate logic before scene change
+		if(OnChangeScene != null)
+			OnChangeScene(this, EventArgs.Empty);
 
 		//Save some basic data for current scene
 		RememberCurrentScene();

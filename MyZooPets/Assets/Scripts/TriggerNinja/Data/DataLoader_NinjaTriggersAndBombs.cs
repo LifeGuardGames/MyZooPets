@@ -50,7 +50,6 @@ public class DataLoader_NinjaTriggersAndBombs{
 			TextAsset file = Resources.Load("Ninja/NinjaTriggersAndBombs", typeof(TextAsset)) as TextAsset;
 			string xmlString = file.text;
 
-			Debug.Log(xmlString);
 			//Create XMLParser instance
 			XMLParser xmlParser = new XMLParser(xmlString);
 
@@ -58,13 +57,9 @@ public class DataLoader_NinjaTriggersAndBombs{
 			XMLElement xmlElement = xmlParser.Parse();
 
 			foreach(IXMLNode childNode in xmlElement.Children){
-				Debug.Log("SDFSDFDS");
-
 				// Dont need ID for anything...
 				Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
 				string id = (string) hashAttr["ID"];
-				Debug.Log("SDFSDFDS");
-				Debug.Log(id);
 
 				//Get trigger properties from xml node
 				Hashtable hashTriggerData = XMLUtils.GetChildren(childNode);

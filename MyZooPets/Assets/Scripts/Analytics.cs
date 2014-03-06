@@ -58,6 +58,22 @@ public class Analytics : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
         isCreated = true;
+
+        //start facebook sdk
+        FB.Init(OnInitComplete);
+    }
+
+    private void OnInitComplete(){
+        //tell facebook this is the first install.
+        //i think facebook sdk only sends the first ever publish install so we
+        //don't have to do the first install check ourself
+        FB.PublishInstall(PublishComplete);
+    }
+
+    private void PublishComplete(FBResult result){
+        Debug.Log("publish response: " + result.Text);
+        // if(result.Text == "true")
+            // DataManager.Instance.FirstInstall = false;
     }
 
     //=========================Runner Game======================================
@@ -207,4 +223,6 @@ public class Analytics : MonoBehaviour {
     public void TriggerHitPet(){
         GA.API.Design.NewEvent("TriggerHitPet");
     }
+
+
 }

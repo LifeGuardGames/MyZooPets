@@ -102,13 +102,13 @@ public class tk2dSpriteCollectionDefinition
 		SolidOnly,
 		TransparentOnly,
 	}
-	
+
 	public string name = "";
 	
 	public bool disableTrimming = false;
     public bool additive = false;
     public Vector3 scale = new Vector3(1,1,1);
-    
+
     public Texture2D texture = null;
 	
 	[System.NonSerialized]
@@ -417,7 +417,7 @@ public class tk2dSpriteSheetSource
 public class tk2dSpriteCollectionFont
 {
 	public bool active = false;
-	public Object bmFont;
+	public TextAsset bmFont;
 	public Texture2D texture;
     public bool dupeCaps = false; // duplicate lowercase into uc, or vice-versa, depending on which exists
 	public bool flipTextureY = false;
@@ -510,6 +510,7 @@ public class tk2dSpriteCollection : MonoBehaviour
 	public bool managedSpriteCollection = false; // true when generated and managed by system, eg. platform specific data
 	public bool HasPlatformData { get { return platforms.Count > 1; } }
 	public bool loadable = false;
+	public AtlasFormat atlasFormat = AtlasFormat.UnityTexture;
 	
 	public int maxTextureSize = 2048;
 	
@@ -524,6 +525,11 @@ public class tk2dSpriteCollection : MonoBehaviour
 		Compressed,
 		Dithered16Bit_Alpha,
 		Dithered16Bit_NoAlpha,
+	}
+
+	public enum AtlasFormat {
+		UnityTexture, // Normal Unity texture
+		Png,
 	}
 
 	public TextureCompression textureCompression = TextureCompression.Uncompressed;
@@ -542,6 +548,7 @@ public class tk2dSpriteCollection : MonoBehaviour
 	public Material[] altMaterials;
 	public Material[] atlasMaterials;
 	public Texture2D[] atlasTextures;
+	public TextAsset[] atlasTextureFiles = new TextAsset[0];
 	
 	[SerializeField] private bool useTk2dCamera = false;
 	[SerializeField] private int targetHeight = 640;
@@ -579,9 +586,12 @@ public class tk2dSpriteCollection : MonoBehaviour
 	public bool mipmapEnabled = false;
 	public int anisoLevel = 1;
 
+	// Starts off with Unity Physics 3D for current platforms
+	public tk2dSpriteDefinition.PhysicsEngine physicsEngine = tk2dSpriteDefinition.PhysicsEngine.Physics3D;
 	public float physicsDepth = 0.1f;
 	
 	public bool disableTrimming = false;
+	public bool disableRotation = false;
 	
 	public NormalGenerationMode normalGenerationMode = NormalGenerationMode.None;
 	

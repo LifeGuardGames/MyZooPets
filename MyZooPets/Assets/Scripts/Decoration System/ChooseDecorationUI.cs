@@ -153,6 +153,8 @@ public class ChooseDecorationUI : MonoBehaviour {
 				
 				// Tell status bar there is something available
 				isDecoItemsAvailable = true;
+
+				item.transform.FindChild("XMark").GetComponent<UISprite>().enabled = false;
 			}
 			else {
 				// destroy the place button
@@ -160,6 +162,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 				
 				// color the box bg appropriately
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().color = new Color32(201,201,201,255);
+
+				// Show "X" over it
+				item.transform.FindChild("XMark").GetComponent<UISprite>().enabled = true;
 			}
 			
 			// save the tutorial entry (a bit hacky)

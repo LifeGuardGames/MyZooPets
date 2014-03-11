@@ -58,8 +58,8 @@ public class DataLoader_NinjaTriggersAndBombs{
 
 			foreach(IXMLNode childNode in xmlElement.Children){
 				// Dont need ID for anything...
-				Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
-				string id = (string) hashAttr["ID"];
+//				Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
+//				string id = (string) hashAttr["ID"];
 
 				//Get trigger properties from xml node
 				Hashtable hashTriggerData = XMLUtils.GetChildren(childNode);

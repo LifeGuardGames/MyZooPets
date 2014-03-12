@@ -8032,50 +8032,6 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
---- !u!1001 &603006683
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1362516100}
-    m_Modifications:
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-      propertyPath: m_Name
-      value: SelectionSpotlight
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-  m_RootGameObject: {fileID: 1163545190}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &608002791
 GameObject:
   m_ObjectHideFlags: 0
@@ -10931,13 +10887,12 @@ MonoBehaviour:
 --- !u!1 &1163545190
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-  m_PrefabInternal: {fileID: 603006683}
+  m_PrefabParentObject: {fileID: 100000, guid: 49d2bd92879ec4c08b5f499688357831, type: 2}
+  m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1163545191}
   - 114: {fileID: 1163545192}
-  - 114: {fileID: 1163545193}
   m_Layer: 10
   m_Name: SelectionSpotlight
   m_TagString: Untagged
@@ -10948,8 +10903,8 @@ GameObject:
 --- !u!4 &1163545191
 Transform:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: d32c4603012a89c44be708476a18b4bc, type: 2}
-  m_PrefabInternal: {fileID: 603006683}
+  m_PrefabParentObject: {fileID: 400000, guid: 49d2bd92879ec4c08b5f499688357831, type: 2}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1163545190}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
@@ -10959,9 +10914,9 @@ Transform:
 --- !u!114 &1163545192
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: d32c4603012a89c44be708476a18b4bc,
+  m_PrefabParentObject: {fileID: 11400002, guid: 49d2bd92879ec4c08b5f499688357831,
     type: 2}
-  m_PrefabInternal: {fileID: 603006683}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1163545190}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -10978,45 +10933,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &1163545193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: d32c4603012a89c44be708476a18b4bc,
-    type: 2}
-  m_PrefabInternal: {fileID: 603006683}
-  m_GameObject: {fileID: 1163545190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 0
-  cullWhileDragging: 0
-  worldToLocal:
-    e00: .158743277
-    e01: 0
-    e02: 0
-    e03: .000826787902
-    e10: 0
-    e11: .0963180587
-    e12: 0
-    e13: -.000501656556
-    e20: 0
-    e21: 0
-    e22: .185138389
-    e23: .000530344376
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
 --- !u!1 &1208854861
 GameObject:
   m_ObjectHideFlags: 0
@@ -16523,6 +16439,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1876011762}
   - 114: {fileID: 1876011763}
+  - 114: {fileID: 1876011764}
   m_Layer: 10
   m_Name: Anchor-Top
   m_TagString: Untagged
@@ -16561,6 +16478,44 @@ MonoBehaviour:
   runOnlyOnce: 0
   relativeOffset: {x: 0, y: 0}
   pixelOffset: {x: 0, y: 0}
+--- !u!114 &1876011764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1876011761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 384
+    e01: 0
+    e02: 0
+    e03: 2.22012329
+    e10: 0
+    e11: 384
+    e12: 0
+    e13: -385.5
+    e20: 0
+    e21: 0
+    e22: 384
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
 --- !u!1001 &1878905922
 Prefab:
   m_ObjectHideFlags: 0

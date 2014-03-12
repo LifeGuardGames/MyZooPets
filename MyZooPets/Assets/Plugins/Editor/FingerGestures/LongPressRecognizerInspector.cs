@@ -17,7 +17,7 @@ public class LongPressRecognizerInspector : GestureRecognizerInspector<LongPress
         base.OnSettingsUI();
 
         Gesture.Duration = EditorGUILayout.FloatField( LABEL_Duration, Gesture.Duration );
-        Gesture.MoveTolerance = EditorGUILayout.FloatField( LABEL_MoveTolerance, Gesture.MoveTolerance );
+        Gesture.MoveTolerance = DistanceField( LABEL_MoveTolerance, Gesture.MoveTolerance );
     }
 
     protected override void ValidateValues()

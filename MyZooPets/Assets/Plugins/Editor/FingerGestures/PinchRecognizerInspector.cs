@@ -21,7 +21,7 @@ public class PinchRecognizerInspector : GestureRecognizerInspector<PinchRecogniz
     {
         base.OnSettingsUI();
         Gesture.MinDOT = EditorGUILayout.FloatField( LABEL_MinDOT, Gesture.MinDOT );
-        Gesture.MinDistance = EditorGUILayout.FloatField( LABEL_MinDistance, Gesture.MinDistance ); 
+        Gesture.MinDistance = DistanceField( LABEL_MinDistance, Gesture.MinDistance ); 
     }
 
     protected override void ValidateValues()

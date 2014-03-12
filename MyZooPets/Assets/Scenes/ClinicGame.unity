@@ -20851,6 +20851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredFingerCount: 1
+  DistanceUnit: 2
   MaxSimultaneousGestures: 1
   ResetMode: 0
   Raycaster: {fileID: 0}
@@ -20862,7 +20863,7 @@ MonoBehaviour:
   SendMessageToSelection: 0
   IsExclusive: 0
   RequiredTaps: 1
-  MoveTolerance: 20
+  MoveTolerance: .5
   MaxDuration: 0
   MaxDelayBetweenTaps: .5
 --- !u!114 &1489484692
@@ -20882,6 +20883,7 @@ MonoBehaviour:
     m_Bits: 0
   RayThickness: 0
   VisualizeRaycasts: 0
+  UsePhysics2D: 1
 --- !u!114 &1489484693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24635,8 +24637,6 @@ MonoBehaviour:
     type: 2}
   touchInputProviderPrefab: {fileID: 11400000, guid: 7e371fba69d7cea42a0d86fb48257c47,
     type: 2}
-  adjustPixelScaleForRetinaDisplay: 1
-  retinaPixelScale: .5
 --- !u!4 &1616286171
 Transform:
   m_ObjectHideFlags: 0

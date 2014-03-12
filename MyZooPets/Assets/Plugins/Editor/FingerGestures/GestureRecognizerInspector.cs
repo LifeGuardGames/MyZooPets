@@ -51,8 +51,9 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
 
         gesture = (T)target;
         
+#if UNITY_3_5
         EditorGUIUtility.LookLikeInspector();
-
+#endif
         GUILayout.Space( 5 );
 
         OnSettingsUI();
@@ -67,6 +68,10 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
 
         GUILayout.Space( 10 );
 
+        DisplayNotices();
+
+        GUILayout.Space( 10 );
+
         OnToolbar();            
 
         GUILayout.Space( 5 );
@@ -76,7 +81,20 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
             ValidateValues();
             EditorUtility.SetDirty( target );
         }
-                
+    }
+
+    void DisplayNotices()
+    {
+        GUILayout.Space( 5 );
+        EditorGUI.indentLevel--;
+        OnNotices();
+        EditorGUI.indentLevel++;
+    }
+
+    protected virtual void OnNotices()
+    {
+        if( Gesture.RequiredFingerCount > 1 && !Gesture.SupportFingerClustering )
+            EditorGUILayout.HelpBox( "This recognizer can only track a single multi-finger gesture at once. Simultaneous multi-finger recognition is not supported with the current configuration.", MessageType.Info );
     }
 
     protected void UISectionTitle( string title )
@@ -88,7 +106,48 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
     {
         GUILayout.Label( title, SectionTitleStyle );
     }
+
+    string GetUnitAbreviation( DistanceUnit unit )
+    {
+        switch( unit )
+        {
+            case DistanceUnit.Centimeters:
+                return "cm";
+
+            case DistanceUnit.Inches:
+                return "inches";
+
+            case DistanceUnit.Pixels:
+                return "pixels";
+        }
+
+        return string.Empty;
+    }
+
+    public static readonly Color DistanceFieldColor = new Color( 0.5f, 0.9f, 1.0f );
+
+    static Color GetUnitColor( DistanceUnit unit )
+    {
+        return DistanceFieldColor;
+    }
+
+    public float DistanceField( GUIContent content, float value, string suffix = "" )
+    {
+        GUILayout.BeginHorizontal();
+        Color oldColor = GUI.contentColor;
+        GUI.contentColor = GetUnitColor( gesture.DistanceUnit );
         
+        float val = EditorGUILayout.FloatField( content, value );
+        gesture.DistanceUnit = (DistanceUnit)EditorGUILayout.EnumPopup( gesture.DistanceUnit, GUILayout.Width( 125 ) );
+        
+        GUI.contentColor = oldColor;
+        GUILayout.EndHorizontal();
+
+        return val;
+    }
+
+    protected static readonly GUIContent NotAvailable = new GUIContent( "-" );
+
     protected virtual void OnSettingsUI() 
     {
         UISectionTitle( "Settings" );
@@ -102,11 +161,18 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
         Gesture.IsExclusive = EditorGUILayout.Toggle( LABEL_Exclusive, Gesture.IsExclusive );
 
         GUI.enabled = Gesture.SupportFingerClustering && !Gesture.IsExclusive;
-        Gesture.MaxSimultaneousGestures = EditorGUILayout.IntField( LABEL_MaxSimultaneousGestures, Gesture.MaxSimultaneousGestures );
+
+        if( GUI.enabled )
+            Gesture.MaxSimultaneousGestures = EditorGUILayout.IntField( LABEL_MaxSimultaneousGestures, Gesture.MaxSimultaneousGestures );
+        else
+            EditorGUILayout.LabelField( LABEL_MaxSimultaneousGestures, NotAvailable );
+
         GUI.enabled = true;
 
         Gesture.ResetMode = (GestureResetMode)EditorGUILayout.EnumPopup( LABEL_ResetMode, Gesture.ResetMode );
 
+        
+        
         /*
         GUI.enabled = ShowRequiredFingerCount;
         Gesture.RequiredFingerCount = EditorGUILayout.IntField( LABEL_RequiredFingerCount, Gesture.RequiredFingerCount );
@@ -131,6 +197,7 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
     {
         UISectionTitle( "Components" );
         Gesture.Raycaster = EditorGUILayout.ObjectField( LABEL_Raycaster, Gesture.Raycaster, typeof( ScreenRaycaster ), true ) as ScreenRaycaster;
+        Gesture.Delegate = EditorGUILayout.ObjectField( LABEL_Delegate, Gesture.Delegate, typeof( GestureRecognizerDelegate ), true ) as GestureRecognizerDelegate;
 
         GUI.enabled = Gesture.SupportFingerClustering;
         if( Gesture.SupportFingerClustering )
@@ -139,7 +206,6 @@ public abstract class GestureRecognizerInspector<T> : Editor where T:GestureReco
             EditorGUILayout.ObjectField( LABEL_ClusterManager, Gesture.ClusterManager, typeof( FingerClusterManager ), true );
         GUI.enabled = true;
 
-        Gesture.Delegate = EditorGUILayout.ObjectField( LABEL_Delegate, Gesture.Delegate, typeof( GestureRecognizerDelegate ), true ) as GestureRecognizerDelegate;
     }
 
     protected virtual void OnToolbar()

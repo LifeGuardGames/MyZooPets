@@ -13,7 +13,12 @@ public class ButtonSetHighlight : MonoBehaviour {
 		foreach(LgButton button in buttonList){
 			button.OnProcessed += ChangePosition;
 		}
+
+		_Start();
 	}
+
+	// Override this in child, used for conditional position changes
+	protected virtual void _Start(){}
 	
 	private void ChangePosition(object sender, EventArgs args){
 		LgButton button = (LgButton)sender;

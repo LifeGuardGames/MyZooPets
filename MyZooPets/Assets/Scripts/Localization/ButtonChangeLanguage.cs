@@ -16,7 +16,6 @@ public class ButtonChangeLanguage : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		Debug.Log("Changing language to: " + strLanguageKey);
-		Localization.instance.currentLanguage = strLanguageKey;
+		SettingsUIManager.Instance.SetLocalization(strLanguageKey);
 	}
 }

@@ -25,20 +25,29 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 		//tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
 		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------
+
+	void Awake(){
+		eModeType = UIModeTypes.MenuSettings;
+	}
+
 	protected override void _OpenUI(){
 		// show the panel holding all settings
-		tweenSettings.Show();		
+		tweenSettings.Show();
+		MenuSceneNavigationUIManager.Instance.HidePanel();
 	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+
 	protected override void _CloseUI(){
 		// hide the panel holding all settings
-		tweenSettings.Hide();		
+		tweenSettings.Hide();
+
+		MenuSceneNavigationUIManager.Instance.ShowPanel();
+	}
+
+	public string GetLocalization(){
+		return SettingsManager.Instance.GetCurrentLanguage();
+	}
+
+	public void SetLocalization(string language){
+		SettingsManager.Instance.SetCurrentLanguage(language);
 	}
 }

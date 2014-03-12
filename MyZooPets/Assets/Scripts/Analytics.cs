@@ -30,9 +30,9 @@ public class Analytics : MonoBehaviour {
 
     private static bool isCreated = false;
     private static Analytics instance;
-    private DateTime playTime;
-    private bool isGameTimerOn = false;
-    private bool isAnalyticsEnabled = true;
+    // private DateTime playTime;
+    // private bool isGameTimerOn = false;
+    private bool isAnalyticsEnabled = false;
 
     //This instance creates itself if it's not in the scene.
     //Mainly for debugging purpose
@@ -76,8 +76,6 @@ public class Analytics : MonoBehaviour {
 
     private void PublishComplete(FBResult result){
         Debug.Log("publish response: " + result.Text);
-        // if(result.Text == "true")
-            // DataManager.Instance.FirstInstall = false;
     }
 
     //=========================Runner Game======================================

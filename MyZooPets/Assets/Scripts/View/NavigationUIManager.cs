@@ -3,7 +3,6 @@ using System.Collections;
 
 public class NavigationUIManager : Singleton<NavigationUIManager> {
 	public GameObject navigationPanel;
-    public ClickManager clickManager;
 	
 	// used with tutorials
 	public GameObject goEditDecos;

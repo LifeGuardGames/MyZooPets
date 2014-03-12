@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+// WARNING: ONLY ADD NEW ENTRIES INTO THE LIST OR IT WILL BREAK ALL ENTRIES!!!
+// 			DO NOT DELETE ANY ENTRIES!!!
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 public enum Level{
     Level1 = 1,
     Level2,
@@ -95,7 +100,8 @@ public enum UIModeTypes {
 	EditDecos,
     Tutorial,
     CustomizePet,
-    IntroComic
+    IntroComic,
+	MenuSettings
 }
 
 // decoration node anchor types

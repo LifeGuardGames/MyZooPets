@@ -7,7 +7,9 @@ public class FingerGesturesInspector : Editor
 {
     public override void OnInspectorGUI()
     {
+#if UNITY_3_5
         EditorGUIUtility.LookLikeInspector();
+#endif
 
         base.OnInspectorGUI();
 

@@ -111,6 +111,26 @@ public class GA_Design
 		}
 
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Event, false);
+		
+		#if UNITY_EDITOR
+		
+		if (GA.SettingsGA.DebugAddEvent)
+		{
+			string options = "";
+			if (eventValue.HasValue)
+			{
+				options = ", value: " + eventValue;
+			}
+			
+			if (x.HasValue && y.HasValue && z.HasValue)
+			{
+				options += ", x: " + x + ", y: " + y + ", z: " + z;
+			}
+			
+			GA.Log("GA Design Event added: " + eventName + options, true);
+		}
+		
+		#endif
 	}
 	
 	#endregion

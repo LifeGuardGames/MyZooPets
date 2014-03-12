@@ -168,7 +168,7 @@ public class GA_Request
 		
 		try
 		{
-			if (www.error != null)
+			if (!string.IsNullOrEmpty(www.error))
 			{
 				throw new Exception(www.error);
 			}

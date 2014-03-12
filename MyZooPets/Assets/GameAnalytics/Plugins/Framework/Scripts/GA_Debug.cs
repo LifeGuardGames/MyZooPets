@@ -50,8 +50,6 @@ public class GA_Debug
 		//We only submit exceptions and errors
         if (SubmitErrors && _errorCount < MaxErrorCount && type != LogType.Log)
 		{
-			// Might be worth looking into: http://www.doogal.co.uk/exception.php
-			
 			_errorCount++;
 			
 			string eventID = "Exception";

@@ -95,6 +95,22 @@ public class GA_Quality
 		}
 		
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Log, stack);
+		
+		#if UNITY_EDITOR
+		
+		if (true || GA.SettingsGA.DebugAddEvent)
+		{
+			string options = "";
+			
+			if (x.HasValue && y.HasValue && z.HasValue)
+			{
+				options = ", x: " + x + ", y: " + y + ", z: " + z;
+			}
+			
+			GA.Log("GA Quality Event added: " + eventName + ", message: " + message + options, true);
+		}
+		
+		#endif
 	}
 	
 	#endregion

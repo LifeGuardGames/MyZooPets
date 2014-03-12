@@ -161,14 +161,20 @@ public class GA {
 #endif
 		}
 		else
-		{	
+		{
 			GA_controller.RunCoroutine(routine);
 		}
 	}
 	
+	public static void Log(object msg, bool addEvent)
+	{
+		if (GA.SettingsGA.DebugMode || (addEvent && GA.SettingsGA.DebugAddEvent))
+			Debug.Log(msg);
+	}
+	
 	public static void Log(object msg)
 	{
-		if(GA.SettingsGA.DebugMode)
+		if (GA.SettingsGA.DebugMode)
 			Debug.Log(msg);
 	}
 	
@@ -183,14 +189,15 @@ public class GA {
 	}
 	
 	#if UNITY_EDITOR
+	
 	public static void HierarchyWindowCallback (int instanceID, Rect selectionRect)
 	{
 		GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
 		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null))
 		{
-			//float addX = 0;
-			//if (go.GetComponent("PlayMakerFSM") != null)
-			//	addX = selectionRect.height + 2;
+			float addX = 0;
+			if (go.GetComponent("PlayMakerFSM") != null)
+				addX = selectionRect.height + 2;
 			
 			if (GA.SettingsGA.Logo == null)
 			{
@@ -199,7 +206,7 @@ public class GA {
 					GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
 			}
 			
-			// Graphics.DrawTexture(new Rect(GUILayoutUtility.GetLastRect().width - selectionRect.height - 5 - addX, selectionRect.y, selectionRect.height, selectionRect.height), GA.SettingsGA.Logo);
+			Graphics.DrawTexture(new Rect(GUILayoutUtility.GetLastRect().width - selectionRect.height - 5 - addX, selectionRect.y, selectionRect.height, selectionRect.height), GA.SettingsGA.Logo);
 		}
 	}
 	

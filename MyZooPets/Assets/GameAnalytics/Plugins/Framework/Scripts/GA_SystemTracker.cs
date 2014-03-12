@@ -45,6 +45,9 @@ public class GA_SystemTracker : MonoBehaviour {
 	void OnEnable ()
 	{
 		EditorApplication.hierarchyWindowItemOnGUI += GA.HierarchyWindowCallback;
+		
+		if (Application.isPlaying)
+			GA_SYSTEMTRACKER = this;
 	}
 	
 	void OnDisable ()

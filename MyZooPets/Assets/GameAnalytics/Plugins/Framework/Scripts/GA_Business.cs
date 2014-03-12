@@ -71,6 +71,22 @@ public class GA_Business
 		}
 		
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Purchase, false);
+		
+		#if UNITY_EDITOR
+		
+		if (GA.SettingsGA.DebugAddEvent)
+		{
+			string options = "";
+			
+			if (x.HasValue && y.HasValue && z.HasValue)
+			{
+				options = ", x: " + x + ", y: " + y + ", z: " + z;
+			}
+			
+			GA.Log("GA Business Event added: " + eventName + ", currency: " + currency + ", amount: " + amount + options, true);
+		}
+		
+		#endif
 	}
 	
 	#endregion

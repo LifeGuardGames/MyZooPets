@@ -138,7 +138,7 @@ public class GA_Submit
 				
 				if (!item.Parameters.ContainsKey(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.SessionID]))
 					item.Parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.SessionID], GA.API.GenericInfo.SessionID);
-				
+
 				if (!item.Parameters.ContainsKey(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Build]))
 					item.Parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Build], GA.SettingsGA.Build);
 				
@@ -281,7 +281,7 @@ public class GA_Submit
 			//Set the authorization header to contain an MD5 hash of the JSON array string + the private key
 			Hashtable headers = new Hashtable();
 			headers.Add("Authorization", CreateMD5Hash(json + priKey));
-			headers.Add("Content-Length", data.Length);
+			//headers.Add("Content-Length", data.Length);
 			
 			//Try to send the data
 			www = new WWW(url, data, headers);
@@ -292,7 +292,7 @@ public class GA_Submit
 			
 			Dictionary<string, string> headers = new Dictionary<string, string>();
 			headers.Add("Authorization", CreateMD5Hash(json + priKey));
-			headers.Add("Content-Length", data.Length.ToString());
+			//headers.Add("Content-Length", data.Length.ToString());
 			
 			//Try to send the data
 			www = new WWW(url, data, headers);
@@ -316,7 +316,7 @@ public class GA_Submit
 			
 			try
 			{
-				if (www.error != null && !CheckServerReply(www))
+				if (!string.IsNullOrEmpty(www.error) && !CheckServerReply(www))
 				{
 					throw new Exception(www.error);
 				}
@@ -554,7 +554,7 @@ public class GA_Submit
 	{
 		try
 		{
-			if (www.error != null)
+			if (!string.IsNullOrEmpty(www.error))
 			{
 				string errStart = www.error.Substring(0, 3);
 				if (errStart.Equals("201") || errStart.Equals("202") || errStart.Equals("203") || errStart.Equals("204") || errStart.Equals("205") || errStart.Equals("206"))

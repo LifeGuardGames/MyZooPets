@@ -9,17 +9,16 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 65: {fileID: 6500000}
-  - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400100}
   - 114: {fileID: 11400098}
+  - 114: {fileID: 11400002}
   m_Layer: 10
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,11 +452,27 @@ GameObject:
   - 4: {fileID: 400052}
   - 65: {fileID: 6500004}
   - 114: {fileID: 11400066}
-  - 114: {fileID: 11400058}
   - 114: {fileID: 11400064}
   - 111: {fileID: 11100000}
+  - 114: {fileID: 11400004}
   m_Layer: 10
-  m_Name: WellapadRewardButton
+  m_Name: RewardButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!1 &100056
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400056}
+  - 114: {fileID: 11400058}
+  m_Layer: 10
+  m_Name: ActionButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -519,11 +534,11 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -300, z: -1}
-  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
+  m_LocalScale: {x: .699999928, y: .699999928, z: 1}
   m_Children:
   - {fileID: 400084}
   - {fileID: 400006}
-  m_Father: {fileID: 400022}
+  m_Father: {fileID: 400056}
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -664,10 +679,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 400056}
   - {fileID: 400082}
   - {fileID: 400008}
-  - {fileID: 400000}
-  - {fileID: 400052}
   m_Father: {fileID: 400002}
 --- !u!4 &400024
 Transform:
@@ -832,12 +846,12 @@ Transform:
   m_GameObject: {fileID: 100054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -300, z: -1}
-  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
+  m_LocalScale: {x: .699999928, y: .699999928, z: 1}
   m_Children:
   - {fileID: 400048}
   - {fileID: 400050}
   - {fileID: 400054}
-  m_Father: {fileID: 400022}
+  m_Father: {fileID: 400056}
 --- !u!4 &400054
 Transform:
   m_ObjectHideFlags: 1
@@ -849,6 +863,19 @@ Transform:
   m_LocalScale: {x: 80, y: 80, z: 1}
   m_Children: []
   m_Father: {fileID: 400052}
+--- !u!4 &400056
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100056}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400000}
+  - {fileID: 400052}
+  m_Father: {fileID: 400022}
 --- !u!4 &400082
 Transform:
   m_ObjectHideFlags: 1
@@ -930,7 +957,7 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: 46641fa9ba9fe1c45b0abe09c105041d, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &11400000
@@ -962,28 +989,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: ef3b2e8846f361049b7098f74bae37a1, type: 3}
-  trigger: 3
-  volume: 1
-  pitch: 1
+  bSprite: 1
+  eMode: 2
+  strSoundProcess: button-21
+  bCheckClickManager: 1
+  target: {fileID: 100056}
+  functionName: BackButtonClicked
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
+  m_GameObject: {fileID: 100054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 790dfc356173d49b39d808832bea5c8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 1
   eMode: 2
-  strSoundProcess: 
+  strSoundProcess: button-21
   bCheckClickManager: 1
+  target: {fileID: 100056}
+  functionName: RewardButtonClicked
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1001,17 +1032,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 330
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
-    e11: 384
+    e11: 330
     e12: 0
-    e13: 30.5617371
+    e13: 31.0617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 330
     e23: 0
     e30: 0
     e31: 0
@@ -1210,17 +1241,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 330
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
-    e11: 384
+    e11: 330
     e12: 0
-    e13: 30.5617371
+    e13: 31.0617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 330
     e23: 1.50012803
     e30: 0
     e31: 0
@@ -1535,20 +1566,14 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100054}
+  m_GameObject: {fileID: 100056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bf0dd7a29c69437ea4250d8f964e4bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 18009a2bf304042f482806bdfd94546b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 0
-  strSoundProcess: 
-  bCheckClickManager: 0
-  spriteIcon: {fileID: 11400060}
-  nguiButton: {fileID: 11400066}
-  buttonLabel: {fileID: 11400068}
-  inactiveLabelColor: {r: .235294104, g: .235294104, b: .235294104, a: 1}
+  backButton: {fileID: 100000}
+  rewardButton: {fileID: 100054}
 --- !u!114 &11400060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1667,17 +1692,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 384
+    e00: 330
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
-    e11: 384
+    e11: 330
     e12: 0
-    e13: 30.5617371
+    e13: 31.0617371
     e20: 0
     e21: 0
-    e22: 384
+    e22: 330
     e23: .5
     e30: 0
     e31: 0

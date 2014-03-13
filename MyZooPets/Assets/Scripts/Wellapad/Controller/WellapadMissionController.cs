@@ -344,13 +344,13 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// If there are no tasks in save data, it means they
 	// must be created first.
 	//---------------------------------------------------		
-	public List<WellapadTask> GetTasks( string strMissionType ) {
+	public List<WellapadTask> GetTasks( string missionID ) {
 		List<WellapadTask> listTasks = new List<WellapadTask>();
 			
 		// before creating the missions from scratch, check to see if the user has any save data
-		if ( DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey( strMissionType ) ) {
+		if ( DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey( missionID ) ) {
 			// user has saved tasks...use those	
-			Dictionary<string, WellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionType].Tasks;
+			Dictionary<string, WellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks;
 			
 			// loop through all saved tasks and add them to the list
 			foreach (KeyValuePair<string, WellapadTask> pair in savedTasks)

@@ -4,15 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// WellapadScreenManager
+// WellapadScreenUIManager
 // The wellapad is an electronic device with many
 // screens.  This script decides which screens to
 // show and hide.
-
-// TO DO- Jason combine this with wellpadUIManager
 //---------------------------------------------------
 
-public class WellapadScreenManager : MonoBehaviour {
+public class WellapadScreenUIController : MonoBehaviour {
 	// screens of the wellapad (as game objects)
 	public GameObject goMissionsList;
 	public GameObject goNoMissions;
@@ -36,16 +34,16 @@ public class WellapadScreenManager : MonoBehaviour {
 	// Callback for when the user claims a wellapad reward.
 	//---------------------------------------------------	
 	private void OnRewardClaimed( object sender, EventArgs args ) {
-		StartCoroutine( SetScreen_Delay() );
+		StartCoroutine( SetScreenDelay() );
 	}	
 
 	//---------------------------------------------------
-	// SetScreen_Delay()
+	// SetScreenDelay()
 	// In order to make the transition from the missions
 	// to the done screen more appealing, I creating this
 	// function to kick off the set screen on a delay.
 	//---------------------------------------------------		
-	private IEnumerator SetScreen_Delay() {
+	private IEnumerator SetScreenDelay() {
 		float fDelay = Constants.GetConstant<float>( "Wellapad_DoneDelay" );
 		yield return new WaitForSeconds( fDelay );
 		

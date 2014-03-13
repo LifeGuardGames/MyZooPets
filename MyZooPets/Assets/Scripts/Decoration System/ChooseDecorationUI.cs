@@ -30,6 +30,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	
 	// Show the status of available items, else tell user to go to store
 	public UILabel statusLabel;
+
+	// Animation for shop button if there is no deco
+	public AnimationControl shopAnimControl;
 	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
@@ -178,6 +181,14 @@ public class ChooseDecorationUI : MonoBehaviour {
 		statusLabel.text = isDecoItemsAvailable ?
 			String.Format(Localization.Localize("DECO_CHOOSE_ITEM"), Localization.Localize(formattedTypeKey)) :
 			String.Format(Localization.Localize("DECO_CHOOSE_NO_ITEM"), Localization.Localize(formattedTypeKey));
+
+		// Bounch the shop button is there is nothing in your inventory
+		if(isDecoItemsAvailable){
+			shopAnimControl.Stop();
+		}
+		else{
+			shopAnimControl.Play();
+		}
 	}
 	
 	//---------------------------------------------------

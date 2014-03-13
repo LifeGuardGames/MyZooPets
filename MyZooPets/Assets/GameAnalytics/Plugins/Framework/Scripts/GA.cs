@@ -201,9 +201,10 @@ public class GA {
 			
 			if (GA.SettingsGA.Logo == null)
 			{
-				GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/GameAnalytics/Plugins/Examples/gaLogo.png", typeof(Texture2D));
-				if (GA.SettingsGA.Logo == null)
-					GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
+				//Edited by Sean
+				GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/GameAnalytics/gaLogo.png", typeof(Texture2D));
+//				if (GA.SettingsGA.Logo == null)		// Sean - DUMB CRAP FROM GA WHY USING EXAMPLE FOLDER??
+//					GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
 			}
 			
 			Graphics.DrawTexture(new Rect(GUILayoutUtility.GetLastRect().width - selectionRect.height - 5 - addX, selectionRect.y, selectionRect.height, selectionRect.height), GA.SettingsGA.Logo);

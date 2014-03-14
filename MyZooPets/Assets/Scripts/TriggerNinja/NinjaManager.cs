@@ -102,6 +102,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		// send out combo task
 		int nBestCombo = GetCombo_Best();
 		WellapadMissionController.Instance.TaskCompleted( "Combo" + GetMinigameKey(), nBestCombo );
+
+		//check for badge unlock
+		UpdateBadgeProgress();
 	}		
 	
 	//---------------------------------------------------
@@ -411,6 +414,14 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		//Debug.Log("Combo ended: " + nCombo);
 	}
 	
+    //---------------------------------------------------
+    // UpdateBadgeProgress()
+    // Check with BadgeLogic to see if any badge can be unlocked
+    //---------------------------------------------------
+    private void UpdateBadgeProgress(){
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.NinjaScore, 
+            GetScore(), true);
+    }
 	
 	private void StartTutorial(){
 		SetTutorial(new NinjaTutorial());

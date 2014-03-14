@@ -245,8 +245,6 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
 			else if(mood == PetMoods.Sad)
 				scriptPetAnim.Transition( "Transition_SickHealthySad" );
-
-			scriptPetAnim.Transition( "Transition_SickHealthy" );
 		}
 
 		// Sick --> VerySick

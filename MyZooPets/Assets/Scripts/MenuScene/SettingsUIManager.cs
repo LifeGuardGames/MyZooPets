@@ -33,14 +33,11 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	protected override void _OpenUI(){
 		// show the panel holding all settings
 		tweenSettings.Show();
-		MenuSceneNavigationUIManager.Instance.HidePanel();
 	}
 
 	protected override void _CloseUI(){
 		// hide the panel holding all settings
 		tweenSettings.Hide();
-
-		MenuSceneNavigationUIManager.Instance.ShowPanel();
 	}
 
 	public string GetLocalization(){

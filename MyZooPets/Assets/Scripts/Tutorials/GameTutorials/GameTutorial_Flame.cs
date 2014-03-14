@@ -56,7 +56,7 @@ public class GameTutorial_Flame : GameTutorial {
 				GatingManager.Instance.StartCoroutine( FocusOnFlameButton() );
 			
 				// show a little popup message telling the user to hold down the flame button
-				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
+				ShowPopup( Tutorial.POPUP_STD, vPopup, option:option);
 			
 				break;
 		case 1:
@@ -67,7 +67,7 @@ public class GameTutorial_Flame : GameTutorial {
 				option.Add(TutorialPopupFields.Message, tutMessage);
 				
 				// show a little popup message telling the user to let go to breath fire
-				ShowPopup( Tutorial.POPUP_LONG, vPopup, option:option);
+				ShowPopup( Tutorial.POPUP_STD, vPopup, option:option);
 			
 				break;
 		}

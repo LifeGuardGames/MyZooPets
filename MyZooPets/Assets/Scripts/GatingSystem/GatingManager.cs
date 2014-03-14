@@ -277,8 +277,8 @@ public class GatingManager : Singleton<GatingManager> {
 		
 		// set location of the button based on if it is a tutorial or not
 		string strConstant = "FireLoc_Normal";
-		if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
-			strConstant = "FireLoc_Tutorial";
+		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
+		// 	strConstant = "FireLoc_Tutorial";
 		
 		Vector3 vLoc = Constants.GetConstant<Vector3>( strConstant );
 		goFireButton.transform.localPosition = vLoc;

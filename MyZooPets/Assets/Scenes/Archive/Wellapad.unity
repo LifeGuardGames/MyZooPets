@@ -434,6 +434,18 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100054, guid: 2a1cb453ea7bf4daebfac047d6a17cf0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400052, guid: 2a1cb453ea7bf4daebfac047d6a17cf0, type: 2}
+      propertyPath: m_LocalScale.x
+      value: .699999988
+      objectReference: {fileID: 0}
+    - target: {fileID: 400052, guid: 2a1cb453ea7bf4daebfac047d6a17cf0, type: 2}
+      propertyPath: m_LocalScale.y
+      value: .699999988
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2a1cb453ea7bf4daebfac047d6a17cf0, type: 2}
   m_RootGameObject: {fileID: 1626883784}
@@ -511,17 +523,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 330
+    e00: 384
     e01: 0
     e02: 0
-    e03: 0
+    e03: .5
     e10: 0
-    e11: 330
+    e11: 384
     e12: 0
-    e13: 31.0617371
+    e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 330
+    e22: 384
     e23: 1.50012803
     e30: 0
     e31: 0
@@ -973,7 +985,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 985750953}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -.5, y: .5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1626883785}
@@ -1097,17 +1109,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 330
+    e00: 384
     e01: 0
     e02: 0
-    e03: 0
+    e03: .5
     e10: 0
-    e11: 330
+    e11: 384
     e12: 0
-    e13: 31.0617371
+    e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 330
+    e22: 384
     e23: .5
     e30: 0
     e31: 0
@@ -1572,7 +1584,6 @@ MonoBehaviour:
   goGrid: {fileID: 1868127877}
   prefabTitle: {fileID: 100002, guid: 156b0fc50d1d2458baf688857658abfc, type: 2}
   prefabTask: {fileID: 100004, guid: fbe50b46772644e8d8ee2ebe67047d51, type: 2}
-  prefabReward: {fileID: 100000, guid: 1fc9b54e571e6457b8975512848b8afc, type: 2}
 --- !u!1 &1443182771
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,7 +1608,7 @@ Transform:
   m_GameObject: {fileID: 1443182771}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00303030293, y: .00303030293, z: .00303030293}
+  m_LocalScale: {x: .00260416674, y: .00260416674, z: .00260416674}
   m_Children:
   - {fileID: 709130741}
   m_Father: {fileID: 0}
@@ -1765,17 +1776,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 330
+    e00: 384
     e01: 0
     e02: 0
-    e03: 0
+    e03: .5
     e10: 0
-    e11: 330
+    e11: 384
     e12: 0
-    e13: 31.0617371
+    e13: 30.5617371
     e20: 0
     e21: 0
-    e22: 330
+    e22: 384
     e23: 0
     e30: 0
     e31: 0
@@ -1854,7 +1865,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1721069381
 Transform:
   m_ObjectHideFlags: 0
@@ -1863,7 +1874,7 @@ Transform:
   m_GameObject: {fileID: 1721069380}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -300, z: -1}
-  m_LocalScale: {x: .699999928, y: .699999928, z: 1}
+  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
   m_Children:
   - {fileID: 551516269}
   - {fileID: 133356686}

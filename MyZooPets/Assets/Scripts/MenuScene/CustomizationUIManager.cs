@@ -22,10 +22,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
-    void Start(){
-    	Invoke ("ShowTitle", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
-	}
-	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	
@@ -68,15 +64,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         }
         base.CloseUI();
         HideChooseGUI(true);
-    }
-
-    public void ShowTitle(){
-        // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<PositionTweenToggle>().Show();
-    }
-    
-	public void HideTitle(){
-        popupTitle.GetComponent<PositionTweenToggle>().Hide();
     }
 	
     private void ShowChooseGUI(){

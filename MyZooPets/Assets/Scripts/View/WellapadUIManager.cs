@@ -31,7 +31,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		wellapadScreenUIController = goWellapadUI.GetComponent<WellapadScreenUIController>();
 
 		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
-		// RefreshScreen();
+		RefreshScreen();
 	}
 	
 	//---------------------------------------------------

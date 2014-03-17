@@ -17,8 +17,8 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			
 			// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
 			bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-			bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_INHALER );
-			if ( !tutsDone && inhalerTutDone )
+			bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
+			if (!tutsDone && inhalerTutDone)
 				retVal = false;
 			
             return retVal;
@@ -73,12 +73,15 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
             nextPlayPeriod = LgDateTime.Today.AddDays(1);
         }
 
-        //register local notification.
-        localNotificationFireDate = nextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
-        string petName = DataManager.Instance.GameData.PetInfo.PetName;
-        string notifText = String.Format(Localization.Localize("NOTIFICATION_1"), petName);
-        LgNotificationServices.RemoveIconBadgeNumber();
-        LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
+        bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
+        if(isInhalerTutDone){
+            //register local notification.
+            localNotificationFireDate = nextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
+            string petName = DataManager.Instance.GameData.PetInfo.PetName;
+            string notifText = String.Format(Localization.Localize("NOTIFICATION_1"), petName);
+            LgNotificationServices.RemoveIconBadgeNumber();
+            LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
+        }
 
         //update next playperiod in DM so it gets serialized
         DataManager.Instance.GameData.Calendar.NextPlayPeriod = nextPlayPeriod;

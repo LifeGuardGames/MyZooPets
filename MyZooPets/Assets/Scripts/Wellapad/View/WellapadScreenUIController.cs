@@ -44,8 +44,8 @@ public class WellapadScreenUIController : MonoBehaviour {
 	// function to kick off the set screen on a delay.
 	//---------------------------------------------------		
 	private IEnumerator SetScreenDelay() {
-		float fDelay = Constants.GetConstant<float>( "Wellapad_DoneDelay" );
-		yield return new WaitForSeconds( fDelay );
+		float fDelay = Constants.GetConstant<float>("Wellapad_DoneDelay");
+		yield return new WaitForSeconds(fDelay);
 		
 		SetScreen();
 	}
@@ -58,17 +58,17 @@ public class WellapadScreenUIController : MonoBehaviour {
 	//---------------------------------------------------		
 	public void SetScreen() {
 		// for now, just check to see if the player has any outstanding missions.
-		bool bActive = WellapadMissionController.Instance.HasActiveTasks();
+		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
 		
-		if ( bActive ) {
+		if(hasActiveTasks){
 			// user has active tasks/missions, so show the task list
 			NGUITools.SetActive( goMissionsList, true );
 			NGUITools.SetActive( goNoMissions, false );
 		}
-		else {
+		else{
 			// otherwise, show the "come back later" screen
-			NGUITools.SetActive( goMissionsList, false );
-			NGUITools.SetActive( goNoMissions, true );			
+			NGUITools.SetActive(goMissionsList, false);
+			NGUITools.SetActive(goNoMissions, true);			
 		}
 	}
 }

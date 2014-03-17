@@ -11,11 +11,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class SettingsUIManager : SingletonUI<SettingsUIManager> {
-	
-	// the NavPanel that launches this manager
-	public GameObject firstTimeNavPanel;
-	//private TweenToggleDemux tweenNav;	// TODO move this out later, this has parent portal too
-	
+
 	// SettingsPanel holding all settings
 	public GameObject settingsPanel;
 	private TweenToggleDemux tweenSettings;

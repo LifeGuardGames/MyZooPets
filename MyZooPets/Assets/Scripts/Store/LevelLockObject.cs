@@ -21,13 +21,20 @@ public class LevelLockObject : MonoBehaviour {
 	// Instantiates and inits the UI with the incoming
 	// lock data.
 	//---------------------------------------------------	
-	public static void CreateLock( GameObject goParent, int nLevel, bool bBreaks = false, string strPrefab = "LevelLockUI" ) {
-		GameObject goPrefab = Resources.Load( strPrefab ) as GameObject;
-		GameObject lockObject = NGUITools.AddChild( goParent, goPrefab );
-		lockObject.GetComponent<LevelLockObject>().Init( nLevel, bBreaks );
+	public static void CreateLock(GameObject goParent, int nLevel, bool bBreaks = false, string strPrefab = "LevelLockUI"){
+		GameObject goPrefab = Resources.Load(strPrefab) as GameObject;
+		GameObject lockObject = NGUITools.AddChild(goParent, goPrefab);
+
+		// UI change if lite version
+		if(VersionManager.Instance.IsLite()){
+			lockObject.GetComponent<LevelLockObject>().InitLiteVersion();
+		}
+		else{
+			lockObject.GetComponent<LevelLockObject>().Init(nLevel, bBreaks);
 
 		//loads a different prefab for Lite version
-	}	
+		}
+	}
 	
 	//---------------------------------------------------
 	// Init()
@@ -35,7 +42,7 @@ public class LevelLockObject : MonoBehaviour {
 	// UI labels, sprites, etc for this UI based on the
 	// incoming data.
 	//---------------------------------------------------	
-	public void Init( int nLevel, bool bBreaks ) {
+	public void Init(int nLevel, bool bBreaks){
 		// set the proper values on the entry
 		labelLevel.text = "" + nLevel;		
 		
@@ -45,11 +52,20 @@ public class LevelLockObject : MonoBehaviour {
 		if(!VersionManager.IsLite())
 			HUDAnimator.OnLevelUp += LevelUp;		
 	}
+
+	//---------------------------------------------------
+	// InitLiteVersion()
+	// Alternative to the real version init
+	// Dont set any listeners or anything
+	//---------------------------------------------------
+	public void InitLiteVersion(){
+		labelLevel.text = "Pro";
+	}
 	
 	//---------------------------------------------------
 	// OnDestroy()
 	//---------------------------------------------------	
-	void OnDestroy() {
+	void OnDestroy(){
 		// stop listening for callbacks
 		if(!VersionManager.IsLite())
 			HUDAnimator.OnLevelUp -= LevelUp;	
@@ -62,7 +78,8 @@ public class LevelLockObject : MonoBehaviour {
 	//---------------------------------------------------		
 	private void LevelUp(object senders, EventArgs args){
         int nNewLevel = (int) LevelLogic.Instance.CurrentLevel; 
-		if ( nNewLevel >= nLevel )
-			Destroy( gameObject );
-	}	
+		if (nNewLevel >= nLevel){
+			Destroy(gameObject);
+		}
+	}
 }

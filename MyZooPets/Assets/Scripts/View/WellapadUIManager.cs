@@ -25,7 +25,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );
 
 		// Change the text according to Lite version detection
-		if(VersionManager.Instance.IsLite()){
+		if(VersionManager.IsLite()){
 			messagePro.SetActive(false);
 			messageLite.SetActive(true);
 		}

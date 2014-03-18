@@ -7,7 +7,7 @@ using System.Collections;
 /// </summary>
 public class LiteCheckDestroySelf : MonoBehaviour{
 	void Awake(){
-		if(VersionManager.Instance.IsLite()){
+		if(VersionManager.IsLite()){
 			// Destroy this gameobject
 			Destroy(gameObject);
 		}else{

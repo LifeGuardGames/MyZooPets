@@ -53,7 +53,7 @@ public class PanToMoveCamera : MonoBehaviour {
        Input.multiTouchEnabled = false;
 
        //Change the swipe setting if this is a lite build
-       if(VersionManager.Instance.IsLite()){
+       if(VersionManager.IsLite()){
             numOfPartitions = Constants.GetConstant<int>("LiteBedroomNumOfPartitions");
             firstPartition = Constants.GetConstant<int>("LiteBedroomFirstPartition");
             lastPartition = Constants.GetConstant<int>("LiteBedroomLastPartition");

@@ -25,6 +25,8 @@ public class LevelLockObject : MonoBehaviour {
 		GameObject goPrefab = Resources.Load( strPrefab ) as GameObject;
 		GameObject lockObject = NGUITools.AddChild( goParent, goPrefab );
 		lockObject.GetComponent<LevelLockObject>().Init( nLevel, bBreaks );
+
+		//loads a different prefab for Lite version
 	}	
 	
 	//---------------------------------------------------
@@ -40,7 +42,8 @@ public class LevelLockObject : MonoBehaviour {
 		this.nLevel = nLevel;
 		
 		// if this lock breaks, it needs to listen for level up messages
-		HUDAnimator.OnLevelUp += LevelUp;		
+		if(!VersionManager.IsLite())
+			HUDAnimator.OnLevelUp += LevelUp;		
 	}
 	
 	//---------------------------------------------------
@@ -48,7 +51,8 @@ public class LevelLockObject : MonoBehaviour {
 	//---------------------------------------------------	
 	void OnDestroy() {
 		// stop listening for callbacks
-		HUDAnimator.OnLevelUp -= LevelUp;	
+		if(!VersionManager.IsLite())
+			HUDAnimator.OnLevelUp -= LevelUp;	
 	}
 	
 	//---------------------------------------------------

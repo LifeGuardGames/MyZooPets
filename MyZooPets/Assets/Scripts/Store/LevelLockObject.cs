@@ -26,7 +26,7 @@ public class LevelLockObject : MonoBehaviour {
 		GameObject lockObject = NGUITools.AddChild(goParent, goPrefab);
 
 		// UI change if lite version
-		if(VersionManager.Instance.IsLite()){
+		if(VersionManager.IsLite()){
 			lockObject.GetComponent<LevelLockObject>().InitLiteVersion();
 		}
 		else{
@@ -41,16 +41,12 @@ public class LevelLockObject : MonoBehaviour {
 	// incoming data.
 	//---------------------------------------------------	
 	public void Init(int nLevel, bool bBreaks){
-		if(VersionManager.IsLite())
-			InitLiteVersion()
-		else{
-			// if this lock breaks, it needs to listen for level up messages
-			labelLevel.text = "" + nLevel;		
+		// if this lock breaks, it needs to listen for level up messages
+		labelLevel.text = "" + nLevel;		
 
-			// set the proper values on the entry
-			this.nLevel = nLevel;
-			HUDAnimator.OnLevelUp += LevelUp;		
-		}
+		// set the proper values on the entry
+		this.nLevel = nLevel;
+		HUDAnimator.OnLevelUp += LevelUp;		
 	}
 
 	//---------------------------------------------------

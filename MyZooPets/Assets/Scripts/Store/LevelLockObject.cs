@@ -31,8 +31,6 @@ public class LevelLockObject : MonoBehaviour {
 		}
 		else{
 			lockObject.GetComponent<LevelLockObject>().Init(nLevel, bBreaks);
-
-		//loads a different prefab for Lite version
 		}
 	}
 	
@@ -43,14 +41,16 @@ public class LevelLockObject : MonoBehaviour {
 	// incoming data.
 	//---------------------------------------------------	
 	public void Init(int nLevel, bool bBreaks){
-		// set the proper values on the entry
-		labelLevel.text = "" + nLevel;		
-		
-		this.nLevel = nLevel;
-		
-		// if this lock breaks, it needs to listen for level up messages
-		if(!VersionManager.IsLite())
+		if(VersionManager.IsLite())
+			InitLiteVersion()
+		else{
+			// if this lock breaks, it needs to listen for level up messages
+			labelLevel.text = "" + nLevel;		
+
+			// set the proper values on the entry
+			this.nLevel = nLevel;
 			HUDAnimator.OnLevelUp += LevelUp;		
+		}
 	}
 
 	//---------------------------------------------------

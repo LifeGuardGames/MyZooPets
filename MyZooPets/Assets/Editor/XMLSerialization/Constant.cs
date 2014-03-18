@@ -1,14 +1,7 @@
-using System.Xml; 
+﻿using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 
-[XmlRoot("Constants")]
-public class CriticalConstants{
-    [XmlElement("Constant")]
-    public List<CriticalConstant> criticalConstantList = new List<CriticalConstant>();
-}
-
-public class CriticalConstant{
+public class Constant{
     [XmlAttribute("Name")]
     public string Name{get; set;}    
 
@@ -23,4 +16,8 @@ public class CriticalConstant{
     //<constant />
     [XmlText]
     public string Filler{get; set;}
+
+    public Constant(){
+        Filler = " ";
+    }
 }

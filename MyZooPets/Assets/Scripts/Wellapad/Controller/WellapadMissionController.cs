@@ -165,12 +165,17 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// delete the current save data.
 	//---------------------------------------------------		
 	public void RefreshCheck() {
+		//do not refresh wellapad task for lite version
+		if(VersionManager.IsLite()) return;
+
         DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
 		
 		// the list needs to be refreshed if it has been more than 12 hours from creation OR the creation time frame (morning/evening)
 		// is different than the current time frame (morning/evening)
-		bool bRefresh = sinceCreated.TotalHours >= 12 || PlayPeriodLogic.GetTimeFrame( now ) != PlayPeriodLogic.GetTimeFrame( DataManager.Instance.GameData.Wellapad.DateMissionsCreated );
+		DateTime dateMissionsCreated = DataManager.Instance.GameData.Wellapad.DateMissionsCreated;	
+		bool bRefresh = sinceCreated.TotalHours >= 12 || 
+			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);
 		
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
 		if ( DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManager_Bedroom.TUT_LAST ) == false )

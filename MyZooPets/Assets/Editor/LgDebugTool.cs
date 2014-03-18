@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,8 +9,14 @@ using UnityEditor;
 using System.Xml.Serialization;
 public class LgDebugTool : EditorWindow
 {
-    private List<CriticalConstant> constants;
-    private CriticalConstants XmlData;
+    private List<Constant> criticalList;
+    private List<Constant> buildSettingList;
+    private CriticalConstants criticalConstants;
+    private BuildSettingConstants buildSettingConstants;
+
+    private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";
+    private const string BUILDSETTING_PATH = "/XML/Resources/Constants/_BuildSetting.xml";
+
     // Add menu item named "My Window" to the Window menu
     [MenuItem("Window/LgDebugTool")]
     public static void ShowWindow()
@@ -19,12 +26,16 @@ public class LgDebugTool : EditorWindow
     }
 
     void OnFocus(){
-        constants = Deserialize();
+        criticalConstants = Deserialize<CriticalConstants>(CRITICAL_PATH);
+        criticalList = criticalConstants.CriticalConstantList;
+
+        buildSettingConstants = Deserialize<BuildSettingConstants>(BUILDSETTING_PATH);
+        buildSettingList = buildSettingConstants.BuildSettingConstantList;
     }
 
     void OnGUI()
     {
-        EditorGUILayout.BeginVertical();
+        // EditorGUILayout.BeginVertical();
         GUILayout.Label ("Plist Editor", EditorStyles.boldLabel);
             if (GUILayout.Button("Delete Plist")){
                 PlayerPrefs.DeleteAll();
@@ -33,10 +44,10 @@ public class LgDebugTool : EditorWindow
 
         GUILayout.Label("Critical Constants Editor", EditorStyles.boldLabel);
 
-        EditorGUILayout.EndVertical(); 
+        // EditorGUILayout.EndVertical(); 
 
-        if(constants != null){
-            foreach(CriticalConstant constant in constants){
+        if(criticalList != null){
+            foreach(Constant constant in criticalList){
                 switch(constant.ConstantType){
                     case "Bool":
                         bool toggleState = EditorGUILayout.Toggle(constant.Name, bool.Parse(constant.ConstantValue));
@@ -46,37 +57,88 @@ public class LgDebugTool : EditorWindow
                         constant.ConstantValue = EditorGUILayout.TextField(constant.Name, constant.ConstantValue);
                     break;
                 }
-                constant.Filler = " ";
+                // constant.Filler = " ";
             }
 
 
             if(GUILayout.Button("Save")){
-                Serialize();
+                Serialize<CriticalConstants>(CRITICAL_PATH, criticalConstants);
+            }
+        }
+
+        string liteBundleID = "";
+        string proBundleID = "";
+        GUILayout.Label("Build Setting Editor", EditorStyles.boldLabel);
+        if(buildSettingList != null){
+            foreach(Constant constant in buildSettingList){
+                switch(constant.Name){
+                    case "LiteBundleID":
+                        constant.ConstantValue = EditorGUILayout.TextField("Lite Bundle ID", constant.ConstantValue);
+                        liteBundleID = constant.ConstantValue;
+                    break;
+                    case "ProBundleID":
+                        constant.ConstantValue = EditorGUILayout.TextField("Pro Bundle ID", constant.ConstantValue);
+                        proBundleID = constant.ConstantValue;
+                    break;
+                    case "IsLiteVersion":
+                        bool toggleState = EditorGUILayout.Toggle("Is Lite Version", bool.Parse(constant.ConstantValue));
+                        constant.ConstantValue = toggleState.ToString();
+                        if(toggleState)
+                            PlayerSettings.bundleIdentifier = liteBundleID;
+                        else
+                            PlayerSettings.bundleIdentifier = proBundleID;
+                    break;
+                }
+            }
+
+            if(GUILayout.Button("Save")){
+                Serialize<BuildSettingConstants>(BUILDSETTING_PATH, buildSettingConstants);
             }
         }
     }
 
-    private void Serialize(){
-        XmlSerializer serializer = new XmlSerializer(typeof(CriticalConstants));
-        string path = Application.dataPath + "/XML/Resources/Constants/_Critical.xml";
+    private void Serialize<T>(string filePath, object xmlData){
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
+        string path = Application.dataPath + filePath;
 
-        using(TextWriter writer = new StreamWriter(path, false))
-        {
-            serializer.Serialize(writer, XmlData);
+        using(TextWriter writer = new StreamWriter(path, false)){
+            serializer.Serialize(writer, (T) xmlData);
         }  
-        constants = Deserialize();
 
         AssetDatabase.Refresh();
     }
 
-    private List<CriticalConstant> Deserialize(){
-        XmlSerializer deserializer = new XmlSerializer(typeof(CriticalConstants));
-        string path = Application.dataPath + "/XML/Resources/Constants/_Critical.xml";
+    private T Deserialize<T>(string filePath){
+        XmlSerializer deserializer = new XmlSerializer(typeof(T));
+        string path = Application.dataPath + filePath; 
         TextReader reader = new StreamReader(path);
         object obj = deserializer.Deserialize(reader);
-        XmlData = (CriticalConstants)obj;
+        // XmlData = (T) obj;
         reader.Close(); 
-        return XmlData.criticalConstantList;
+        return (T) obj;
     }
+
+  // private void Serialize(){
+    //     XmlSerializer serializer = new XmlSerializer(typeof(CriticalConstants));
+    //     string path = Application.dataPath + "/XML/Resources/Constants/_Critical.xml";
+
+    //     using(TextWriter writer = new StreamWriter(path, false))
+    //     {
+    //         serializer.Serialize(writer, XmlData);
+    //     }  
+    //     criticalList = Deserialize();
+
+    //     AssetDatabase.Refresh();
+    // }
+
+    // private List<Constant> Deserialize(){
+    //     XmlSerializer deserializer = new XmlSerializer(typeof(CriticalConstants));
+    //     string path = Application.dataPath + "/XML/Resources/Constants/_Critical.xml";
+    //     TextReader reader = new StreamReader(path);
+    //     object obj = deserializer.Deserialize(reader);
+    //     XmlData = (CriticalConstants)obj;
+    //     reader.Close(); 
+    //     return XmlData.CriticalConstantList;
+    // }
 }
 #endif

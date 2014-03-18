@@ -19,7 +19,7 @@ public class VersionManager : MonoBehaviour {
         }
     } 
 
-    void OnAwake(){
+    void Awake(){
         if(instance == null){
             instance = this;
             DontDestroyOnLoad(gameObject);

@@ -138,7 +138,7 @@ public class GA_Menu : MonoBehaviour
 			Debug.Log("Disabled PlayMaker Scripts.");
 	}
 	
-	private static bool ReplaceInFile (string filePath, string searchText, string replaceText)
+	public static bool ReplaceInFile (string filePath, string searchText, string replaceText)
 	{
 		bool enabled = false;
 		

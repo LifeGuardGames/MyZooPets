@@ -211,7 +211,8 @@ public class GatingManager : Singleton<GatingManager> {
 			OnReachedGate( this, EventArgs.Empty );		
 	
 		//Check if version is Lite. spawn cross promo ads if so
-		if(VersionManager.IsLite())
+		bool tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		if(tutDone && VersionManager.IsLite())
 			GateLiteLogic();
 		else
 			GateProLogic();

@@ -61,7 +61,7 @@ namespace Chartboost {
 		
 		void Awake()
 		{
-			// gameObject.name = "ChartBoostManager";
+			gameObject.name = "ChartBoostManager";
 			// DontDestroyOnLoad( gameObject ); //Jason - not sure about this cause this plugin doesn't remove duplicates
 		}
 	

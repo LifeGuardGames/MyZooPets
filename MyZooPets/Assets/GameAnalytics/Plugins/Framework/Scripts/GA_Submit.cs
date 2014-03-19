@@ -15,10 +15,6 @@ using System.Linq;
 using System.Security.Cryptography;
 #endif
 
-#if UNITY_METRO && !UNITY_EDITOR
-using GA_Compatibility.Collections;
-#endif
-
 public class GA_Submit
 {	
 	/// <summary>
@@ -72,15 +68,18 @@ public class GA_Submit
 	{
 		_publicKey = publicKey;
 		_privateKey = privateKey;
-		
-		Categories = new Dictionary<CategoryType, string>()
+
+		if (Categories == null)
 		{
-			{ CategoryType.GA_User, "user" },
-			{ CategoryType.GA_Event, "design" },
-			{ CategoryType.GA_Log, "quality" },
-			{ CategoryType.GA_Purchase, "business" },
-			{ CategoryType.GA_Error, "error" }
-		};
+			Categories = new Dictionary<CategoryType, string>()
+			{
+				{ CategoryType.GA_User, "user" },
+				{ CategoryType.GA_Event, "design" },
+				{ CategoryType.GA_Log, "quality" },
+				{ CategoryType.GA_Purchase, "business" },
+				{ CategoryType.GA_Error, "error" }
+			};
+		}
 	}
 	
 	/// <summary>

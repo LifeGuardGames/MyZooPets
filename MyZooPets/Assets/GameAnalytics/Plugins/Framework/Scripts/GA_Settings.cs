@@ -1,13 +1,9 @@
-//#define IOS_ID
+#define IOS_ID
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
-#if UNITY_METRO && !UNITY_EDITOR
-using GA_Compatibility.Collections;
-#endif
 
 /// <summary>
 /// The GA_Settings object contains an array of options which allows you to customize your use of GameAnalytics. Most importantly you will need to fill in your Game Key and Secret Key on the GA_Settings object to use the service.
@@ -42,7 +38,7 @@ public class GA_Settings : ScriptableObject
 	/// The version of the GA Unity Wrapper plugin
 	/// </summary>
 	[HideInInspector]
-	public static string VERSION = "0.5.9";
+	public static string VERSION = "0.6.0";
 	
 	#endregion
 	
@@ -93,15 +89,46 @@ public class GA_Settings : ScriptableObject
 	public float SubmitInterval = 10;
 	
 	public bool InternetConnectivity;
+
+	//ad support
+	public bool Start_AlwaysShowAds = true;
+	public bool Start_TimePlayed = false;
+	public bool Start_Sessions = false;
+	
+	public int TimePlayed = 300;
+	public int Sessions = 1;
+	
+	public bool Trigger_AdsEnabled = false;
+	public GA_AdSupport.GAAdNetwork Trigger_AdsEnabled_network = GA_AdSupport.GAAdNetwork.Any;
+	
+	public bool Trigger_SceneChange = true;
+	public GA_AdSupport.GAAdNetwork Trigger_SceneChange_network = GA_AdSupport.GAAdNetwork.Any;
+	
+	public bool IAD_foldout = true;
+	public bool IAD_enabled = true;
+	#if !UNITY_ANDROID || UNITY_EDITOR
+	public ADBannerView.Type IAD_type = ADBannerView.Type.Banner;
+	public ADBannerView.Layout IAD_layout = ADBannerView.Layout.Top;
+	#endif
+	public Vector2 IAD_position = Vector2.zero;
+	public float IAD_Duration = 10;
+
+	public bool CB_foldout = true;
+	public bool CB_enabled = false;
+	public string CB_appID;
+	public string CB_appSig;
 	
 	//These values are used for the GA_Inspector only
-	public enum InspectorStates { Basic, QA, Debugging, Data, Pref }
+	public enum InspectorStates { Basic, Debugging, Pref, Ads }
 	public InspectorStates CurrentInspectorState;
 	public List<HelpTypes> ClosedHints = new List<HelpTypes>();
 	public bool DisplayHints;
 	public Vector2 DisplayHintsScrollState;
 	public Texture2D Logo;
 	public Texture2D UpdateIcon;
+	
+	[SerializeField]
+	public List<GA_CustomAdTrigger> CustomAdTriggers = new List<GA_CustomAdTrigger>();
 
 	#endregion
 	
@@ -397,6 +424,13 @@ public class GA_Settings : ScriptableObject
 	public void SetCustomArea(string customArea)
 	{
 		CustomArea = customArea;
+	}
+
+	public void SetKeys (string gamekey, string secretkey)
+	{
+		GA.API.Submit.SetupKeys(gamekey, secretkey);
+		GameKey = gamekey;
+		SecretKey = secretkey;
 	}
 	
 	#endregion

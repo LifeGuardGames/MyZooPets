@@ -35,10 +35,40 @@ public class GA_Inspector : Editor
 	private GUIContent _basic					= new GUIContent("Basic", "This tab shows general options which are relevant for a wide variety of messages sent to GameAnalytics.");
 	private GUIContent _debug					= new GUIContent("Debug", "This tab shows options which determine how the GameAnalytics SDK behaves in the Unity3D editor.");
 	private GUIContent _preferences				= new GUIContent("Advanced", "This tab shows advanced and misc. options for the GameAnalytics SDK.");
+	private GUIContent _ads						= new GUIContent("Ad Support", "This tab shows options for handling ads in your game.");
 	private GUIContent _autoSubmitUserInfo		= new GUIContent("Auto Submit User Info", "If enabled information about platform, device, os, and os version is automatically submitted at the start of each session.");
 	
 	private GUIStyle _orangeUpdateLabelStyle;
 	private GUIStyle _orangeUpdateIconStyle;
+
+	private GUIContent _startShowingAds			= new GUIContent("Ad Display Options", "When should your game start showing ads? If no conditions are enabled you must manually call the EnableAds() method to start showing ads.");
+	private GUIContent _autoTriggers			= new GUIContent("Automatic Ad Triggers", "Automatic GA/Unity events which trigger ads.");
+	private GUIContent _customTriggers			= new GUIContent("Custom Ad Triggers", "Custom GA events which trigger ads.");
+	private GUIContent _startAlwaysShowAds		= new GUIContent("Always show ads", "Always show ads.");
+	private GUIContent _startTimePlayed			= new GUIContent("Time Played", "Start showing ads after a period of time played (in seconds).");
+	private GUIContent _startTime				= new GUIContent("Time:", "The number of seconds to wait until ads are enabled.");
+	private GUIContent _startSessions			= new GUIContent("Sessions Played", "Start showing ads when the player returns after having played a number of sessions.");
+	private GUIContent _startSes				= new GUIContent("Sessions:", "The number of sessions to wait until ads are enabled.");
+	private GUIContent _triggerAdsEnabled		= new GUIContent("Ads Enabled", "Trigger an ad as soon as you want to start showing ads (enabled by the selected condition(s) under Start Showing Ads).");
+	private GUIContent _triggerSceneChange		= new GUIContent("Level Change", "Trigger an ad when a new scene is loaded.");
+	private GUIContent _triggerCustomCat		= new GUIContent("Category:", "The event category of the custom event which should trigger an ad.");
+	private GUIContent _triggerCustomID			= new GUIContent("Event ID:", "The event ID (event name) of the custom event which should trigger an ad.");
+	private GUIContent _triggerAdNetwork		= new GUIContent("Network:", "The ad network which should show an ad when the event is triggered. 'Any' will show an ad from one of the available ad networks.");
+	private GUIContent _triggerAdNotEnabled		= new GUIContent("!", "You must enable the selected ad network, otherwise this event trigger will have no effect.");
+	//private GUIContent _iAd						= new GUIContent("iAd:", "This fold out contains options for using iOS iAd banner ads.");
+	private GUIContent _iAdenabled				= new GUIContent("iAd", "Enable/diable iOS iAd banner ads.");
+	private GUIContent _iAdDuration				= new GUIContent("iAd Duration:", "The duration to show triggered iAds (in seconds).");
+	private GUIContent _iAdtype					= new GUIContent("iAd Type:", "Type of the iOS iAd banner. Medium Rect only works on iPad with iOS 6+.");
+	private GUIContent _iAdlayout				= new GUIContent("iAd Layout:", "Layout of the iOS iAd banner ads. Set layout to manual to customize position.");
+	private GUIContent _iAdposition				= new GUIContent("iAd Position:", "Position of the iOS iAd banner ads using Unity GUI coords and conventions. Set layout to manual to customize position.");
+	//private GUIContent _CB						= new GUIContent("Chartboost:", "This fold out contains options for using Chartboost ads.");
+	private GUIContent _CBenabled				= new GUIContent("Chartboost", "Enable/diable Chartboost ads.");
+	#if !UNITY_ANDROID
+	private GUIContent _CBappID					= new GUIContent("App ID:", "Your App ID. You can find this in under your app in Chartboost.");
+	private GUIContent _CBappSig				= new GUIContent("App Signature:", "Your App Signature. You can find this in under your app in Chartboost.");
+	#endif
+
+	private static Texture2D _triggerAdNotEnabledTexture = new Texture2D(1, 1);
 	
 	void OnEnable()
 	{
@@ -224,10 +254,17 @@ public class GA_Inspector : Editor
 		{
 			ga.CurrentInspectorState = GA_Settings.InspectorStates.Debugging;
 		}
-		if (GUILayout.Button(_preferences,ga.CurrentInspectorState==GA_Settings.InspectorStates.Pref?activeTabStyleRight:inactiveTabStyleRight))
+
+		if (GUILayout.Button(_preferences,ga.CurrentInspectorState==GA_Settings.InspectorStates.Pref?activeTabStyle:inactiveTabStyle))
 		{
 			ga.CurrentInspectorState = GA_Settings.InspectorStates.Pref;
 		}
+
+		if (GUILayout.Button(_ads, ga.CurrentInspectorState==GA_Settings.InspectorStates.Ads?activeTabStyleRight:inactiveTabStyleRight))
+		{
+			ga.CurrentInspectorState = GA_Settings.InspectorStates.Ads;
+		}
+
 		GUILayout.EndHorizontal();
 		
 		if(ga.CurrentInspectorState == GA_Settings.InspectorStates.Basic)
@@ -253,7 +290,31 @@ public class GA_Inspector : Editor
 		    GUILayout.Label(_build, GUILayout.Width(75));
 			ga.Build = EditorGUILayout.TextField("", ga.Build);
 			GUILayout.EndHorizontal();
+
+			#if UNITY_ANDROID
+
+			EditorGUILayout.Space();
 			
+			if (ga.CB_enabled)
+			{
+				EditorGUILayout.HelpBox("Ads are enabled (see the Ad Support tab).", MessageType.Info);
+			}
+
+			#endif
+
+			#if UNITY_IPHONE
+
+			EditorGUILayout.Space();
+
+			EditorGUILayout.HelpBox("Please refer to the iOS_Readme in the GameAnalytics/Plugins/iOS folder for information on how to setup the GA Unity SDK for iOS.", MessageType.Info);
+
+			if (ga.IAD_enabled || ga.CB_enabled)
+			{
+				EditorGUILayout.HelpBox("Ads are enabled (see the Ad Support tab).", MessageType.Info);
+			}
+
+			#endif
+
 			/*GUILayout.BeginHorizontal();
 		    GUILayout.Label("", GUILayout.Width(7));
 		    GUILayout.Label(_useBundleVersion, GUILayout.Width(150));
@@ -377,6 +438,289 @@ public class GA_Inspector : Editor
 			EditorGUILayout.Space();
 			
 		}
+
+		if (ga.CurrentInspectorState == GA_Settings.InspectorStates.Ads)
+		{
+			EditorGUILayout.Space();
+
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("GameAnalytics Ad Support",EditorStyles.largeLabel);
+			if (GUILayout.Button(_documentationLink, GUILayout.MaxWidth(60)))
+			{
+				Application.OpenURL("http://support.gameanalytics.com/hc/en-us/articles/200841376-The-GA-Settings-object#ad");
+			}
+			GUILayout.EndHorizontal();
+
+			GUILayout.Label("GameAnalytics Ad Support helps you show ads from different ad networks in your mobile games.", EditorStyles.miniLabel);
+
+			EditorGUILayout.Space();
+			Splitter(new Color(0.35f, 0.35f, 0.35f));
+
+			//ga.IAD_foldout = EditorGUILayout.Foldout(ga.IAD_foldout, _iAd);
+
+			GUILayout.BeginHorizontal();
+			//GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label("", GUILayout.Width(-18));
+			ga.IAD_enabled = EditorGUILayout.Toggle("", ga.IAD_enabled, GUILayout.Width(27));
+			GUILayout.Label(_iAdenabled, GUILayout.Width(150));
+			GUILayout.EndHorizontal();
+			
+			if (ga.IAD_enabled)
+			{
+				/*GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_iAdenabled, GUILayout.Width(150));
+				ga.IAD_enabled = EditorGUILayout.Toggle("", ga.IAD_enabled);
+				GUILayout.EndHorizontal();
+				
+				GUI.enabled = ga.IAD_enabled;*/
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_iAdDuration, GUILayout.Width(150));
+				ga.IAD_Duration = EditorGUILayout.FloatField(ga.IAD_Duration, GUILayout.Width(60));
+				ga.IAD_Duration = Mathf.Max(0, ga.IAD_Duration);
+				GUILayout.EndHorizontal();
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_iAdtype, GUILayout.Width(150));
+				ga.IAD_type = (ADBannerView.Type)EditorGUILayout.EnumPopup(ga.IAD_type, GUILayout.Width(125));
+				GUILayout.EndHorizontal();
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_iAdlayout, GUILayout.Width(150));
+				ga.IAD_layout = (ADBannerView.Layout)EditorGUILayout.EnumPopup(ga.IAD_layout, GUILayout.Width(125));
+				GUILayout.EndHorizontal();
+				
+				GUI.enabled = ga.IAD_enabled && ga.IAD_layout == ADBannerView.Layout.Manual;
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_iAdposition, GUILayout.Width(150));
+				ga.IAD_position = EditorGUILayout.Vector2Field("", ga.IAD_position, GUILayout.Width(125));
+				GUILayout.EndHorizontal();
+				
+				GUI.enabled = true;
+			}
+
+			Splitter(new Color(0.35f, 0.35f, 0.35f));
+			
+			//ga.CB_foldout = EditorGUILayout.Foldout(ga.CB_foldout, _CB);
+
+			bool cb_status = ga.CB_enabled;
+			
+			GUILayout.BeginHorizontal();
+			//GUILayout.Label("", GUILayout.Width(27));
+			GUILayout.Label("", GUILayout.Width(-18));
+			ga.CB_enabled = EditorGUILayout.Toggle("", ga.CB_enabled, GUILayout.Width(27));
+			GUILayout.Label(_CBenabled, GUILayout.Width(150));
+			GUILayout.EndHorizontal();
+			
+			if (cb_status != ga.CB_enabled)
+			{
+				if (ga.CB_enabled != ToggleCB())
+				{
+					ga.CB_enabled = cb_status;
+				}
+			}
+
+			if (ga.CB_enabled)
+			{
+				//GUI.enabled = ga.CB_enabled;
+
+				#if UNITY_ANDROID
+
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(-5));
+				EditorGUILayout.HelpBox("To setup Chartboost on Android please add your App ID and App Signature to the strings.xml file found in Plugins/Android/res/values/.", MessageType.Info);
+				GUILayout.EndHorizontal();
+
+				#else
+
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_CBappID, GUILayout.Width(150));
+				ga.CB_appID = EditorGUILayout.TextField(ga.CB_appID);
+				GUILayout.EndHorizontal();
+				
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("", GUILayout.Width(7));
+				GUILayout.Label(_CBappSig, GUILayout.Width(150));
+				ga.CB_appSig = EditorGUILayout.TextField(ga.CB_appSig);
+				GUILayout.EndHorizontal();
+
+				#endif
+				
+				//GUI.enabled = true;
+			}
+
+			Splitter(new Color(0.35f, 0.35f, 0.35f));
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(_startShowingAds, EditorStyles.largeLabel);
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label(_startAlwaysShowAds, GUILayout.Width(150));
+			ga.Start_AlwaysShowAds = EditorGUILayout.Toggle("", ga.Start_AlwaysShowAds);
+			GUILayout.EndHorizontal();
+			
+			GUI.enabled = !ga.Start_AlwaysShowAds;
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label(_startTimePlayed, GUILayout.Width(150));
+			ga.Start_TimePlayed = EditorGUILayout.Toggle("", ga.Start_TimePlayed, GUILayout.Width(27));
+			GUILayout.Label("", GUILayout.Width(5));
+			GUILayout.Label(_startTime, GUILayout.Width(55));
+			ga.TimePlayed = EditorGUILayout.IntField(ga.TimePlayed, GUILayout.Width(60));
+			ga.TimePlayed = Mathf.Max(0, ga.TimePlayed);
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label(_startSessions, GUILayout.Width(150));
+			ga.Start_Sessions = EditorGUILayout.Toggle("", ga.Start_Sessions, GUILayout.Width(27));
+			GUILayout.Label("", GUILayout.Width(5));
+			GUILayout.Label(_startSes, GUILayout.Width(55));
+			ga.Sessions = EditorGUILayout.IntField(ga.Sessions, GUILayout.Width(60));
+			ga.Sessions = Mathf.Max(0, ga.Sessions);
+			GUILayout.EndHorizontal();
+			
+			GUI.enabled = true;
+			
+			EditorGUILayout.Space();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(_autoTriggers, EditorStyles.largeLabel);
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label(_triggerAdsEnabled, GUILayout.Width(150));
+			ga.Trigger_AdsEnabled = EditorGUILayout.Toggle("", ga.Trigger_AdsEnabled, GUILayout.Width(27));
+			GUI.enabled = ga.Trigger_AdsEnabled;
+			GUILayout.Label("", GUILayout.Width(1));
+			GUILayout.Label(_triggerAdNetwork, GUILayout.Width(55));
+			if (ga.IAD_enabled && ga.CB_enabled)
+			{
+				ga.Trigger_AdsEnabled_network = (GA_AdSupport.GAAdNetwork)EditorGUILayout.EnumPopup(ga.Trigger_AdsEnabled_network, GUILayout.Width(80));
+			}
+			else
+			{
+				if (ga.IAD_enabled)
+					ga.Trigger_AdsEnabled_network = GA_AdSupport.GAAdNetwork.iAd;
+				else if (ga.CB_enabled)
+					ga.Trigger_AdsEnabled_network = GA_AdSupport.GAAdNetwork.Chartboost;
+				else
+					ga.Trigger_AdsEnabled_network = GA_AdSupport.GAAdNetwork.Any;
+				
+				GUILayout.Label("", GUILayout.Width(10));
+				GUILayout.Label(ga.Trigger_AdsEnabled_network.ToString());
+			}
+			//GUILayout.Label("", GUILayout.Width(4));
+			//CheckAdNetwork(ga, ga.Trigger_AdsEnabled_network);
+			GUI.enabled = true;
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			GUILayout.Label(_triggerSceneChange, GUILayout.Width(150));
+			ga.Trigger_SceneChange = EditorGUILayout.Toggle("", ga.Trigger_SceneChange, GUILayout.Width(27));
+			GUI.enabled = ga.Trigger_SceneChange;
+			GUILayout.Label("", GUILayout.Width(1));
+			GUILayout.Label(_triggerAdNetwork, GUILayout.Width(55));
+			if (ga.IAD_enabled && ga.CB_enabled)
+			{
+				ga.Trigger_SceneChange_network = (GA_AdSupport.GAAdNetwork)EditorGUILayout.EnumPopup(ga.Trigger_SceneChange_network, GUILayout.Width(80));
+			}
+			else
+			{
+				if (ga.IAD_enabled)
+					ga.Trigger_SceneChange_network = GA_AdSupport.GAAdNetwork.iAd;
+				else if (ga.CB_enabled)
+					ga.Trigger_SceneChange_network = GA_AdSupport.GAAdNetwork.Chartboost;
+				else
+					ga.Trigger_SceneChange_network = GA_AdSupport.GAAdNetwork.Any;
+
+				GUILayout.Label("", GUILayout.Width(10));
+				GUILayout.Label(ga.Trigger_SceneChange_network.ToString());
+			}
+			//GUILayout.Label("", GUILayout.Width(4));
+			//CheckAdNetwork(ga, ga.Trigger_SceneChange_network);
+			GUI.enabled = true;
+			GUILayout.EndHorizontal();
+			
+			EditorGUILayout.Space();
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(_customTriggers, EditorStyles.largeLabel);
+			GUILayout.EndHorizontal();
+			
+			List<GA_CustomAdTrigger> triggersToRemove = new List<GA_CustomAdTrigger>();
+
+			foreach (GA_CustomAdTrigger trigger in ga.CustomAdTriggers)
+			{
+				if (trigger != null)
+				{
+					GUILayout.BeginHorizontal();
+					GUILayout.Label("", GUILayout.Width(7));
+					if (GUILayout.Button("x", GUILayout.Width(19), GUILayout.Height(15)))
+					{
+						triggersToRemove.Add(trigger);
+					}
+					//GUILayout.Label("", GUILayout.Width(7));
+					GUILayout.Label(_triggerCustomID, GUILayout.Width(55));
+					trigger.eventID = EditorGUILayout.TextField(trigger.eventID);//, GUILayout.Width(125));
+					GUILayout.Label("", GUILayout.Width(1));
+					GUILayout.Label(_triggerCustomCat, GUILayout.Width(60));
+					trigger.eventCat = (GA_AdSupport.GAEventCat)EditorGUILayout.EnumPopup(trigger.eventCat, GUILayout.Width(80));
+					GUILayout.Label("", GUILayout.Width(1));
+					GUILayout.Label(_triggerAdNetwork, GUILayout.Width(55));
+					if (ga.IAD_enabled && ga.CB_enabled)
+					{
+						trigger.AdNetwork = (GA_AdSupport.GAAdNetwork)EditorGUILayout.EnumPopup(trigger.AdNetwork, GUILayout.Width(80));
+					}
+					else
+					{
+						if (ga.IAD_enabled)
+							trigger.AdNetwork = GA_AdSupport.GAAdNetwork.iAd;
+						else if (ga.CB_enabled)
+							trigger.AdNetwork = GA_AdSupport.GAAdNetwork.Chartboost;
+						else
+							trigger.AdNetwork = GA_AdSupport.GAAdNetwork.Any;
+						
+						GUILayout.Label("", GUILayout.Width(10));
+						GUILayout.Label(trigger.AdNetwork.ToString());
+					}
+					//GUILayout.Label("", GUILayout.Width(4));
+					//CheckAdNetwork(ga, trigger.AdNetwork);
+					GUILayout.EndHorizontal();
+				}
+			}
+			
+			foreach (GA_CustomAdTrigger trigger in triggersToRemove)
+			{
+				ga.CustomAdTriggers.Remove(trigger);
+				//ScriptableObject.DestroyImmediate(trigger);
+			}
+			
+			GUILayout.Space(2);
+			
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("", GUILayout.Width(7));
+			if (GUILayout.Button("Add Trigger", GUILayout.Width(85)))
+			{
+				ga.CustomAdTriggers.Add( new GA_CustomAdTrigger() );
+				//ga.CustomAdTriggers.Add(ScriptableObject.CreateInstance<GA_CustomAdTrigger>());
+			}
+			GUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+		}
 		
 		if (GUI.changed)
 		{
@@ -470,5 +814,68 @@ public class GA_Inspector : Editor
 		GA_UpdateWindow updateWindow = ScriptableObject.CreateInstance<GA_UpdateWindow> ();
 		updateWindow.ShowUtility ();
 		updateWindow.position = new Rect (150, 150, 420, 340);
+	}
+
+	private void CheckAdNetwork (GA_Settings ga, GA_AdSupport.GAAdNetwork AdNetwork)
+	{
+		if (AdNetwork == GA_AdSupport.GAAdNetwork.iAd && !ga.IAD_enabled ||
+		    AdNetwork == GA_AdSupport.GAAdNetwork.Chartboost && !ga.CB_enabled)
+		{
+			Rect lastrect = GUILayoutUtility.GetLastRect();
+			Color tmpColor = GUI.color;
+			int tmpSize = GUI.skin.label.fontSize;
+			GUI.color = Color.red;
+			GUI.DrawTexture(new Rect(lastrect.x - 2, lastrect.y - 1, 5, 17), _triggerAdNotEnabledTexture);
+			GUI.color = Color.white;
+			GUI.skin.label.fontSize = 20;
+			GUI.Label(new Rect(lastrect.x - 5, lastrect.y - 7, 20, 30), _triggerAdNotEnabled);
+			GUI.skin.label.fontSize = tmpSize;
+			GUI.color = tmpColor;
+		}
+	}
+
+	static bool ToggleCB ()
+	{
+		bool enabled = false;
+		bool fail = false;
+		
+		string searchText = "//#define CB_ON";
+		string replaceText = "#define CB_ON";
+		
+		string filePath = Application.dataPath + "/GameAnalytics/Plugins/Framework/Scripts/GA_AdSupport.cs";
+		string filePathJS = Application.dataPath + "/Plugins/GameAnalytics/Framework/Scripts/GA_AdSupport.cs";
+		try {
+			enabled = GA_Menu.ReplaceInFile (filePath, searchText, replaceText);
+		} catch {
+			try {
+				enabled = GA_Menu.ReplaceInFile (filePathJS, searchText, replaceText);
+			} catch {
+				fail = true;
+			}
+		}
+		
+		AssetDatabase.Refresh();
+		
+		if (fail)
+			Debug.Log("Failed to toggle CB.");
+		
+		return enabled;
+	}
+
+	static void Splitter(Color rgb, float thickness = 1)
+	{
+		GUIStyle splitter = new GUIStyle();
+		splitter.normal.background = EditorGUIUtility.whiteTexture;
+		splitter.stretchWidth = true;
+		splitter.margin = new RectOffset(0, 0, 7, 7);
+
+		Rect position = GUILayoutUtility.GetRect(GUIContent.none, splitter, GUILayout.Height(thickness));
+		
+		if (Event.current.type == EventType.Repaint) {
+			Color restoreColor = GUI.color;
+			GUI.color = rgb;
+			splitter.Draw(position, false, false, false, false);
+			GUI.color = restoreColor;
+		}
 	}
 }

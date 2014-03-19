@@ -12,10 +12,6 @@ using System.Text;
 using System;
 //using LitJson;
 
-#if UNITY_METRO && !UNITY_EDITOR
-using GA_Compatibility.Collections;
-#endif
-
 public class GA_Request
 {
 	/// <summary>

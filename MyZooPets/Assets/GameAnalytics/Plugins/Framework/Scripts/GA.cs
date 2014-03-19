@@ -71,7 +71,7 @@ public class GA {
 	{
 		try
 		{
-			_settings = (GA_Settings)Resources.Load("GameAnalytics/GA_Settings",typeof(GA_Settings));
+			_settings = (GA_Settings)Resources.Load("GameAnalytics/GA_Settings", typeof(GA_Settings));
 			
 			#if UNITY_EDITOR
 	 		if (_settings == null)
@@ -123,8 +123,8 @@ public class GA {
 	/// </summary>
 	private static void InitializeQueue ()
 	{
-		GA.API.Submit.SetupKeys(GA.SettingsGA.GameKey, GA.SettingsGA.SecretKey);
-		
+		SettingsGA.SetKeys(GA.SettingsGA.GameKey, GA.SettingsGA.SecretKey);
+
 		if(!Application.isPlaying)
 			return; // no need to setup anything else, if we are in the editor and not playing
 		
@@ -133,7 +133,12 @@ public class GA {
 			Debug.LogWarning("GA UserID not set. No data will be sent.");
 			return;
 		}
-		
+
+		#if UNITY_IPHONE || UNITY_ANDROID
+		GameObject go = new GameObject("GA AdSupport");
+		go.AddComponent<GA_AdSupport>();
+		#endif
+
 		GA.RunCoroutine(GA.SettingsGA.CheckInternetConnectivity(true));
 	}
 	
@@ -193,7 +198,7 @@ public class GA {
 	public static void HierarchyWindowCallback (int instanceID, Rect selectionRect)
 	{
 		GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
-		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null))
+		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null || go.GetComponent<GA_AdSupport>() != null))
 		{
 			float addX = 0;
 			if (go.GetComponent("PlayMakerFSM") != null)
@@ -201,10 +206,9 @@ public class GA {
 			
 			if (GA.SettingsGA.Logo == null)
 			{
-				//Edited by Sean
-				GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/GameAnalytics/gaLogo.png", typeof(Texture2D));
-//				if (GA.SettingsGA.Logo == null)		// Sean - DUMB CRAP FROM GA WHY USING EXAMPLE FOLDER??
-//					GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
+				GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/GameAnalytics/Plugins/Examples/gaLogo.png", typeof(Texture2D));
+				if (GA.SettingsGA.Logo == null)
+					GA.SettingsGA.Logo = (Texture2D)Resources.LoadAssetAtPath("Assets/Plugins/GameAnalytics/Examples/gaLogo.png", typeof(Texture2D));
 			}
 			
 			Graphics.DrawTexture(new Rect(GUILayoutUtility.GetLastRect().width - selectionRect.height - 5 - addX, selectionRect.y, selectionRect.height, selectionRect.height), GA.SettingsGA.Logo);

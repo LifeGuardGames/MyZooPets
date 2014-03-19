@@ -4,10 +4,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-#if UNITY_METRO && !UNITY_EDITOR
-using GA_Compatibility.Collections;
-#endif
-
 public class GA_Design
 {
 	#region public methods
@@ -111,6 +107,8 @@ public class GA_Design
 		}
 
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Event, false);
+
+		GA_AdSupport.ShowAdStatic(GA_AdSupport.GAEventType.Custom, GA_AdSupport.GAEventCat.Design, eventName);
 		
 		#if UNITY_EDITOR
 		

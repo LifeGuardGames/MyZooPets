@@ -17,6 +17,13 @@ public class LgDebugTool : EditorWindow
     private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";
     private const string BUILDSETTING_PATH = "/XML/Resources/Constants/_BuildSetting.xml";
 
+        string liteBundleID = "";
+        string proBundleID = "";
+        string liteGameKey= "";
+        string liteSecretKey = "";
+        string proGameKey = "";
+        string proSecretKey = "";
+        bool isLiteVersion = false;
     // Add menu item named "My Window" to the Window menu
     [MenuItem("Window/LgDebugTool")]
     public static void ShowWindow()
@@ -57,7 +64,6 @@ public class LgDebugTool : EditorWindow
                         constant.ConstantValue = EditorGUILayout.TextField(constant.Name, constant.ConstantValue);
                     break;
                 }
-                // constant.Filler = " ";
             }
 
 
@@ -66,8 +72,8 @@ public class LgDebugTool : EditorWindow
             }
         }
 
-        string liteBundleID = "";
-        string proBundleID = "";
+        
+
         GUILayout.Label("Build Setting Editor", EditorStyles.boldLabel);
         if(buildSettingList != null){
             foreach(Constant constant in buildSettingList){
@@ -81,12 +87,44 @@ public class LgDebugTool : EditorWindow
                         proBundleID = constant.ConstantValue;
                     break;
                     case "IsLiteVersion":
-                        bool toggleState = EditorGUILayout.Toggle("Is Lite Version", bool.Parse(constant.ConstantValue));
-                        constant.ConstantValue = toggleState.ToString();
-                        if(toggleState)
+                        isLiteVersion = EditorGUILayout.Toggle(
+                            new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite bundle ID will also be set"),
+                            bool.Parse(constant.ConstantValue));
+                        constant.ConstantValue = isLiteVersion.ToString();
+                        if(isLiteVersion)
                             PlayerSettings.bundleIdentifier = liteBundleID;
                         else
                             PlayerSettings.bundleIdentifier = proBundleID;
+                    break;
+                    case "WellapetsLiteGameKey":
+                        constant.ConstantValue = EditorGUILayout.TextField("Lite GA Game Key", constant.ConstantValue);
+                        liteGameKey = constant.ConstantValue;
+                    break;
+                    case "WellapetsLiteSecretKey":
+                        constant.ConstantValue = EditorGUILayout.TextField("Lite GA Secret Key", constant.ConstantValue);
+                        liteSecretKey = constant.ConstantValue;
+                    break;
+                    case "WellapetsProGameKey":
+                        constant.ConstantValue = EditorGUILayout.TextField("Pro GA Game Key", constant.ConstantValue);
+                        proGameKey = constant.ConstantValue;
+                    break;
+                    case "WellapetsProSecretKey":
+                        constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
+                        proSecretKey = constant.ConstantValue;
+                    break;
+                    case "AnalyticsEnabled":
+                        bool toggleState = EditorGUILayout.Toggle(
+                            new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
+                            bool.Parse(constant.ConstantValue));
+                        constant.ConstantValue = toggleState.ToString();
+
+                        if(toggleState){
+                            if(isLiteVersion)
+                                GA.SettingsGA.SetKeys(liteGameKey, liteSecretKey);
+                            else
+                                GA.SettingsGA.SetKeys(proGameKey, proSecretKey);
+                        }else
+                            GA.SettingsGA.SetKeys("", "");
                     break;
                 }
             }

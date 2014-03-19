@@ -31,7 +31,15 @@ public sealed class FB : ScriptableObject
         }
     }
 
-    public static string AppId { get { return FBSettings.AppId; } }
+    public static string AppId 
+    {
+        get 
+        {
+            // appId might be different from FBSettings.AppId
+            // if using the programmatic version of FB.Init()
+            return appId;
+        } 
+    }
     public static string UserId
     {
         get
@@ -44,6 +52,14 @@ public sealed class FB : ScriptableObject
         get
         {
             return (facebook != null) ? facebook.AccessToken : "";
+        }
+    }
+
+    public static DateTime AccessTokenExpiresAt
+    {
+        get
+        {
+            return (facebook != null) ? facebook.AccessTokenExpiresAt : DateTime.MinValue;
         }
     }
 
@@ -105,7 +121,15 @@ public sealed class FB : ScriptableObject
         if (!isInitCalled)
         {
             var versionInfo = FBBuildVersionAttribute.GetVersionAttributeOfType(typeof (IFacebook));
-            FbDebug.Info(String.Format("Using SDK {0}, Build {1}", versionInfo.Version, versionInfo.ToString()));
+
+            if (versionInfo == null)
+            {
+                FbDebug.Warn("Cannot find Facebook SDK Version");
+            }
+            else
+            {
+                FbDebug.Info(String.Format("Using SDK {0}, Build {1}", versionInfo.SdkVersion, versionInfo.BuildVersion));
+            }
 
 #if UNITY_EDITOR
             FBComponentFactory.GetComponent<EditorFacebookLoader>();
@@ -133,7 +157,15 @@ public sealed class FB : ScriptableObject
 
     private static void OnDllLoaded()
     {
-        FbDebug.Log("Finished loading Facebook dll. Build " + FBBuildVersionAttribute.GetBuildVersionOfType(FacebookImpl.GetType()));
+        var versionInfo = FBBuildVersionAttribute.GetVersionAttributeOfType(FacebookImpl.GetType());
+        if (versionInfo == null)
+        {
+            FbDebug.Warn("Finished loading Facebook dll, but could not find version info");
+        }
+        else
+        {
+            FbDebug.Log(string.Format("Finished loading Facebook dll. Version {0} Build {1}", versionInfo.SdkVersion, versionInfo.BuildVersion));
+        }
         FacebookImpl.Init(
             OnInitComplete,
             appId,

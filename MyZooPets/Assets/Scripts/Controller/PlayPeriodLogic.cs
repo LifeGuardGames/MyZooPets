@@ -78,7 +78,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
             //register local notification.
             localNotificationFireDate = nextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
             string petName = DataManager.Instance.GameData.PetInfo.PetName;
-            string notifText = String.Format(Localization.Localize("NOTIFICATION_1"), petName);
+            string rawText = "NOTIFICATION_1_PRO";
+            if(VersionManager.IsLite()) rawText = "NOTIFICATION_1_LITE";
+            string notifText = String.Format(Localization.Localize(rawText), petName);
             LgNotificationServices.RemoveIconBadgeNumber();
             LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
         }

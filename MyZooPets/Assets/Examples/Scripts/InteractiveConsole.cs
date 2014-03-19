@@ -39,8 +39,13 @@ public sealed class InteractiveConsole : MonoBehaviour
     {
         if (result.Error != null)
             lastResponse = "Error Response:\n" + result.Error;
-        else if (!FB.IsLoggedIn) {
+        else if (!FB.IsLoggedIn)
+        {
             lastResponse = "Login cancelled by Player";
+        }
+        else
+        {
+            lastResponse = "Login was successful!";
         }
     }
 
@@ -496,12 +501,13 @@ public sealed class InteractiveConsole : MonoBehaviour
         GUI.TextArea(
             textAreaSize,
             string.Format(
-                " AppId: {0} \n Facebook Dll: {1} \n UserId: {2}\n IsLoggedIn: {3}\n AccessToken: {4}\n\n {5}",
+                " AppId: {0} \n Facebook Dll: {1} \n UserId: {2}\n IsLoggedIn: {3}\n AccessToken: {4}\n AccessTokenExpiresAt: {5}\n {6}",
                 FB.AppId,
                 (isInit) ? "Loaded Successfully" : "Not Loaded",
                 FB.UserId,
                 FB.IsLoggedIn,
                 FB.AccessToken,
+                FB.AccessTokenExpiresAt,
                 lastResponse
             ), textStyle);
 
@@ -524,7 +530,8 @@ public sealed class InteractiveConsole : MonoBehaviour
     void Callback(FBResult result)
     {
         lastResponseTexture = null;
-        if (result.Error != null)
+        // Some platforms return the empty string instead of null.
+        if (!String.IsNullOrEmpty(result.Error))
             lastResponse = "Error Response:\n" + result.Error;
         else if (!ApiQuery.Contains("/picture"))
             lastResponse = "Success Response:\n" + result.Text;

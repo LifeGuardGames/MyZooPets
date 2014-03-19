@@ -22,6 +22,9 @@ public class WellapadCountdown : MonoBehaviour {
 	// Update()
 	//---------------------------------------------------
 	void Update() {
+		//stop countdown if game is lite version
+		if(VersionManager.IsLite()) return;
+
 		// if the player can use their inhaler, there is no countdown, so bail out
 		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
 			// okay, so the player can use their inhaler...but were we previously counting down?
@@ -51,7 +54,7 @@ public class WellapadCountdown : MonoBehaviour {
 		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", left.Hours, left.Minutes, left.Seconds);
 		
 		// set the label
-		string strLabel = Localization.Localize( "WELLAPAD_NO_MISSIONS_2" );
-		labelTimer.text = String.Format(strLabel, strTime );
+		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
+		labelTimer.text = String.Format(strLabel, strTime);
 	}
 }

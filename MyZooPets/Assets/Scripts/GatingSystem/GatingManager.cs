@@ -205,24 +205,37 @@ public class GatingManager : Singleton<GatingManager> {
 	// called if the pet is entering a gated room.
 	//---------------------------------------------------	
 	private void PetReachedDest( object sender, EventArgs args ) {
-		// if the pet is happy and healthy, add the fire button
-		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
-		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
-		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		
 		// process any callbacks for when the pet reaches a gate
 		if ( OnReachedGate != null )
 			OnReachedGate( this, EventArgs.Empty );		
+	
+		//Check if version is Lite. spawn cross promo ads if so
+		if(VersionManager.IsLite())
+			GateLiteLogic();
+		else
+			GateProLogic();
 		
+		// regardless, stop listening for the callback now that we've received it
+		ListenForMovementFinished( false );
+	}
+
+	private void GateLiteLogic(){
+		LgCrossPromo.ShowInterstitial(LgCrossPromo.LAST_GATE);
+	}
+
+	private void GateProLogic(){
+		// if the pet is happy and healthy, add the fire button
+		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
+		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+
 		if ( eState == PetHealthStates.Healthy && eMood == PetMoods.Happy && bCanBreath ) 
 			ShowFireButton();
 		else {
 			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
 			ShowNoFireNotification();
 		}
-		
-		// regardless, stop listening for the callback now that we've received it
-		ListenForMovementFinished( false );
 	}
 	
 	//---------------------------------------------------

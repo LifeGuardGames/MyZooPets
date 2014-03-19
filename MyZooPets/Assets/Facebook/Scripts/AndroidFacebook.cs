@@ -166,6 +166,7 @@ namespace Facebook
                 isLoggedIn = true;
                 userId = (string)parameters["user_id"];
                 accessToken = (string)parameters["access_token"];
+                accessTokenExpiresAt = FromTimestamp(int.Parse((string)parameters["expiration_timestamp"]));
             }
 
             if (parameters.ContainsKey("key_hash"))
@@ -174,6 +175,17 @@ namespace Facebook
             }
 
             OnAuthResponse(new FBResult(message));
+        }
+
+        //TODO: move into AbstractFacebook
+        public void OnAccessTokenRefresh(string message)
+        {
+            var parameters = (Dictionary<string, object>)MiniJSON.Json.Deserialize(message);
+            if (parameters.ContainsKey("access_token"))
+            {
+                accessToken = (string)parameters["access_token"];
+                accessTokenExpiresAt = FromTimestamp(int.Parse((string)parameters["expiration_timestamp"]));
+            }
         }
 
         public override void Logout()
@@ -286,6 +298,11 @@ namespace Facebook
             Dictionary<string, object> paramsDict = new Dictionary<string, object>();
             // Marshal all the above into the thing
 
+            if (callback != null)
+            {
+                paramsDict["callback_id"] = AddFacebookDelegate(callback);
+            }
+
             if (!string.IsNullOrEmpty(toId))
             {
                 paramsDict.Add("to", toId);
@@ -368,6 +385,28 @@ namespace Facebook
 
         public void OnFeedRequestComplete(string message)
         {
+            var rawResult = (Dictionary<string, object>)MiniJSON.Json.Deserialize(message);
+            if (rawResult.ContainsKey(CallbackIdKey))
+            {
+                var result = new Dictionary<string, object>();
+                var callbackId = (string)rawResult[CallbackIdKey];
+                rawResult.Remove(CallbackIdKey);
+                if (rawResult.Count > 0)
+                {
+                    foreach (string key in rawResult.Keys)
+                    {
+                        result[key] = rawResult[key];
+                    }
+                    rawResult.Clear();
+                    OnFacebookResponse(callbackId, new FBResult(MiniJSON.Json.Serialize(result)));
+                }
+                else
+                {
+                    //if we make it here java returned a callback message with only a callback id
+                    //this isnt supposed to happen
+                    OnFacebookResponse(callbackId, new FBResult(MiniJSON.Json.Serialize(result), "Malformed request response.  Please file a bug with facebook here: https://developers.facebook.com/bugs/create"));
+                }
+            }
         }
 
         public override void Pay(
@@ -473,6 +512,12 @@ namespace Facebook
                 newDict[kvp.Key] = kvp.Value.ToString();
             }
             return newDict;
+        }
+
+        //TODO: move into AbstractFacebook
+        private DateTime FromTimestamp(int timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
         }
 
         #endregion

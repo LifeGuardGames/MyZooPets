@@ -6,7 +6,6 @@ public class ButtonSetHighlightLanguages : ButtonSetHighlight {
 
 	protected override void _Start(){
 		string currentLanguage = SettingsUIManager.Instance.GetLocalization();
-		Debug.Log("Current language " + currentLanguage);
 
 		if(currentLanguage == "English"){
 			gameObject.transform.position = buttonList[0].transform.position;

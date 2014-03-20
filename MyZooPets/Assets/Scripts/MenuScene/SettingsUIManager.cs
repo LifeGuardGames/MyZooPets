@@ -20,6 +20,8 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 		// cache the tweens for easier use
 		//tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
 		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
+
+
 	}
 
 	void Awake(){

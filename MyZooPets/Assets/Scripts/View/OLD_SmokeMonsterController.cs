@@ -35,6 +35,7 @@ public class SmokeMonsterController : MonoBehaviour {
 	}
 	
 	private void PlayAnimation(string eyesSpriteName, string mouthSpriteName){
+		Debug.Log("SFD");
 		eyesSprite.SetSprite(eyesSpriteName);
 		mouthSprite.SetSprite(mouthSpriteName);
 	}

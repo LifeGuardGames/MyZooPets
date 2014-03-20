@@ -53,11 +53,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
         currentStep = 1;
     }
 
-    public void CompleteTutorial(){
-        if(!IsTutorialCompleted)
-            DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
-    }
-	
 	//---------------------------------------------------
 	// GameDone()
 	// Put anything in here that should happen as a result
@@ -70,6 +65,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
         if(OnGameOver != null)
             OnGameOver(this, EventArgs.Empty);
+
+        //finish inhaler tutorial 
+        if(!IsTutorialCompleted)
+            DataManager.Instance.GameData.Tutorial.ListPlayed.Add( TutorialManager_Bedroom.TUT_INHALER );
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted( "DailyInhaler" );

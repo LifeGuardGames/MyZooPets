@@ -72,7 +72,6 @@ public class LgDebugTool : EditorWindow
             }
         }
 
-        
 
         GUILayout.Label("Build Setting Editor", EditorStyles.boldLabel);
         if(buildSettingList != null){
@@ -85,16 +84,6 @@ public class LgDebugTool : EditorWindow
                     case "ProBundleID":
                         constant.ConstantValue = EditorGUILayout.TextField("Pro Bundle ID", constant.ConstantValue);
                         proBundleID = constant.ConstantValue;
-                    break;
-                    case "IsLiteVersion":
-                        isLiteVersion = EditorGUILayout.Toggle(
-                            new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite bundle ID will also be set"),
-                            bool.Parse(constant.ConstantValue));
-                        constant.ConstantValue = isLiteVersion.ToString();
-                        if(isLiteVersion)
-                            PlayerSettings.bundleIdentifier = liteBundleID;
-                        else
-                            PlayerSettings.bundleIdentifier = proBundleID;
                     break;
                     case "WellapetsLiteGameKey":
                         constant.ConstantValue = EditorGUILayout.TextField("Lite GA Game Key", constant.ConstantValue);
@@ -111,6 +100,16 @@ public class LgDebugTool : EditorWindow
                     case "WellapetsProSecretKey":
                         constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
                         proSecretKey = constant.ConstantValue;
+                    break;
+                    case "IsLiteVersion":
+                        isLiteVersion = EditorGUILayout.Toggle(
+                            new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite Lite or Pro build setting for the fields above will also be set"),
+                            bool.Parse(constant.ConstantValue));
+                        constant.ConstantValue = isLiteVersion.ToString();
+                        if(isLiteVersion)
+                            PlayerSettings.bundleIdentifier = liteBundleID;
+                        else
+                            PlayerSettings.bundleIdentifier = proBundleID;
                     break;
                     case "AnalyticsEnabled":
                         bool toggleState = EditorGUILayout.Toggle(
@@ -132,7 +131,30 @@ public class LgDebugTool : EditorWindow
             if(GUILayout.Button("Save")){
                 Serialize<BuildSettingConstants>(BUILDSETTING_PATH, buildSettingConstants);
             }
+
+            if(GUILayout.Button("Load Lite App Icon")){
+                LoadAppIcon("WellaPetsIconLite");
+            }
+            if(GUILayout.Button("Load Pro App Icon")){
+                LoadAppIcon("WellaPetsIcon");
+            }
         }
+    }
+
+    private void LoadAppIcon(string iconPrefix){
+        string filePath = "Assets/Textures/MobileIcons/";
+        int[] textureSizes = PlayerSettings.GetIconSizesForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+        Texture2D[] icons = new Texture2D[textureSizes.Length];
+
+        for(int i=0; i<textureSizes.Length; i++){
+            string assetFilePath = filePath + iconPrefix + textureSizes[i] + ".png";
+            Debug.Log(assetFilePath);
+            Texture2D appIcon = AssetDatabase.LoadAssetAtPath(assetFilePath, typeof(Texture2D)) as Texture2D;
+            Debug.Log(appIcon);
+            icons[i] = appIcon;
+        }
+
+        PlayerSettings.SetIconsForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup, icons);
     }
 
     private void Serialize<T>(string filePath, object xmlData){

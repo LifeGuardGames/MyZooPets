@@ -26,15 +26,13 @@ public class LgNotificationServices{
     //removes icon badge number and removed the notifications delivered to user
     public static void RemoveIconBadgeNumber(){
 #if UNITY_IPHONE && !UNITY_EDITOR 
-        if(NotificationServices.localNotificationCount > 0){
-            var notif = new LocalNotification();
-            notif.hasAction = false;
-            notif.applicationIconBadgeNumber = -1;
+        var notif = new LocalNotification();
+        notif.hasAction = false;
+        notif.applicationIconBadgeNumber = -1;
 
-            NotificationServices.PresentLocalNotificationNow(notif);
-            NotificationServices.ClearLocalNotifications();
-            NotificationServices.CancelAllLocalNotifications();
-        }
+        NotificationServices.PresentLocalNotificationNow(notif);
+        NotificationServices.ClearLocalNotifications();
+        NotificationServices.CancelAllLocalNotifications();
 #endif        
     }
 }

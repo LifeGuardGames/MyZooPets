@@ -73,8 +73,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
 		if(showMovie){
-            ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-        	Invoke("ShowIntroMovie", 1);
+            if(VersionManager.IsLite()){
+                LoadScene();
+            }else{
+                ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+                Invoke("ShowIntroMovie", 1);
+            }
 		}
 
         //since we turn on spotlight and turn off animation for customization UI
@@ -86,7 +90,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if (DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 	
         AudioManager.Instance.LowerBackgroundVolume(0.1f);
@@ -102,7 +106,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		LoadScene();
     }
 	
-	private void LoadScene() {
+	private void LoadScene(){
         scriptTransition.StartTransition( SceneUtils.BEDROOM);
 	}
 }

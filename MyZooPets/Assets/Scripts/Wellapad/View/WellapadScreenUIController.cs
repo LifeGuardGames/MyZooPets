@@ -12,15 +12,21 @@ using System.Collections.Generic;
 
 public class WellapadScreenUIController : MonoBehaviour {
 	// screens of the wellapad (as game objects)
-	public GameObject goMissionsList;
-	public GameObject goNoMissions;
-	
-	// the back button -- exposed for tutorials
-	public GameObject goWellapadBack;
+	public GameObject goWellapadScreen;
+	public GameObject goWellapadBack; // the back button -- exposed for tutorials
+
+	private string missionDonePrefabName;
+	private string missionListPrefabName = "MissionList";
+	private GameObject missionListGO;
+	private GameObject missionDoneGO;
+
 	public GameObject GetBackButton() {
 		return goWellapadBack;	
 	}
-	
+
+	void Awake(){
+		missionDonePrefabName = VersionManager.IsLite() ? "MissionDoneLite" : "MissionDonePro";
+	}	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
@@ -28,7 +34,39 @@ public class WellapadScreenUIController : MonoBehaviour {
 		// listen for reward claimed callback
 		WellapadMissionController.Instance.OnRewardClaimed += OnRewardClaimed;		
 	}
-	
+
+	//---------------------------------------------------
+	// SetScreen()
+	// Called when the wellapad is opening.  The wellapad
+	// is an electronic device with numerous screens --
+	// this function (for now) will set the proper screen.
+	//---------------------------------------------------		
+	public void SetScreen() {
+		// for now, just check to see if the player has any outstanding missions.
+		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+
+		foreach(Transform child in goWellapadScreen.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
+		}
+		
+		if(hasActiveTasks){
+			// user has active tasks/missions, so show the task list
+			if(missionListGO == null){
+				GameObject missionListPrefab = (GameObject) Resources.Load(missionListPrefabName);
+				missionListGO = LgNGUITools.AddChildWithPosition(goWellapadScreen, missionListPrefab);
+			}
+
+			missionListGO.GetComponent<WellapadMissionUIController>().DisplayMissions();
+		}else{
+			// otherwise, show the "come back later" screen
+			if(missionDoneGO == null){
+				GameObject missionDonePrefab = (GameObject) Resources.Load(missionDonePrefabName);
+				missionDoneGO = LgNGUITools.AddChildWithPosition(goWellapadScreen, missionDonePrefab);
+			}
+		}
+	}
+
 	//---------------------------------------------------
 	// OnRewardClaimed()
 	// Callback for when the user claims a wellapad reward.
@@ -48,27 +86,5 @@ public class WellapadScreenUIController : MonoBehaviour {
 		yield return new WaitForSeconds(fDelay);
 		
 		SetScreen();
-	}
-
-	//---------------------------------------------------
-	// SetScreen()
-	// Called when the wellapad is opening.  The wellapad
-	// is an electronic device with numerous screens --
-	// this function (for now) will set the proper screen.
-	//---------------------------------------------------		
-	public void SetScreen() {
-		// for now, just check to see if the player has any outstanding missions.
-		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
-		
-		if(hasActiveTasks){
-			// user has active tasks/missions, so show the task list
-			NGUITools.SetActive( goMissionsList, true );
-			NGUITools.SetActive( goNoMissions, false );
-		}
-		else{
-			// otherwise, show the "come back later" screen
-			NGUITools.SetActive(goMissionsList, false);
-			NGUITools.SetActive(goNoMissions, true);			
-		}
 	}
 }

@@ -106,10 +106,10 @@ public class DataLoader_WellapadTasks {
 			string strErrorFile = "Error in file " + file.name; //error message
 
 			//don't load unnecessary missions
-			if(VersionManager.IsLite())
-				if(file.name == "Tasks") break;
-			else
-				if(file.name == "LiteVersionTasks") break;
+			// if(VersionManager.IsLite())
+			// 	if(file.name == "Tasks") break;
+			// else
+			// 	if(file.name == "LiteVersionTasks") break;
 			
             //Create XMLParser instance
             XMLParser xmlParser = new XMLParser(xmlString);

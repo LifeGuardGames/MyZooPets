@@ -11,19 +11,30 @@ using System.Collections.Generic;
 // the time remaining until new missions are available.
 //---------------------------------------------------
 
-public class WellapadCountdown : MonoBehaviour {
+public class WellapadMissionDoneUIController : MonoBehaviour {
 	//	label to update the timer
 	public UILabel labelTimer;
+	public UILabel message1;
 	
 	// bit of a hack - if this is true, the countdown was counting down
 	private bool bCounting = false;
+
+	void Awake(){
+		//pet's name
+		if(message1 != null && VersionManager.IsLite()){
+			string petName = DataManager.Instance.GameData.PetInfo.PetName;
+			string rawText = Localization.Localize("WELLAPAD_LITE_INHALER");
+			string message = String.Format(rawText, petName);
+			message1.text = message;
+		}
+	}
 	
 	//---------------------------------------------------
 	// Update()
 	//---------------------------------------------------
 	void Update() {
 		//stop countdown if game is lite version
-		if(VersionManager.IsLite()) return;
+		// if(VersionManager.IsLite()) return;
 
 		// if the player can use their inhaler, there is no countdown, so bail out
 		if(PlayPeriodLogic.Instance.CanUseRealInhaler){

@@ -49,11 +49,12 @@ public class Item {
         bool isLocked = true;
 		int lockLevel = UnlockAtLevel;
 		int currentPetLevel = (int) (LevelLogic.Instance.CurrentLevel);
-		isLocked = lockLevel > 0 && lockLevel > currentPetLevel;
 
         //Don't allow item unlock in lite version
-        if(VersionManager.IsLite() && LevelLogic.Instance.IsAtMaxLevel())
-            isLocked = true;
+        if(VersionManager.IsLite()) 
+            isLocked = lockLevel >= LevelLogic.Instance.MaxLevel;
+        else
+            isLocked = lockLevel > 0 && lockLevel > currentPetLevel;
 
 		return isLocked;
 	}

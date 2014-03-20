@@ -9,6 +9,11 @@ using System;
 public class LevelLogic : Singleton<LevelLogic> {
     private int maxLevel;
 
+    public int MaxLevel{
+        get{
+            return maxLevel;
+        }
+    }
     public Level CurrentLevel{
         get{return DataManager.Instance.GameData.Level.CurrentLevel;}
     }

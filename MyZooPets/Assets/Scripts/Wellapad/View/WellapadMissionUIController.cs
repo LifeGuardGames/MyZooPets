@@ -12,11 +12,10 @@ using System.Collections.Generic;
 public class WellapadMissionUIController : MonoBehaviour {
 	// the NGUI grid that the missions are put in to
 	public GameObject goGrid;
-	
 	// prefabs for individual parts of a mission
 	public GameObject prefabTitle;		// mission title
 	public GameObject prefabTask;		// mission task (dynamic amount in each mission)
-	// public GameObject prefabReward;		// reward for completing all tasks
+	public GameObject prefabLiteLabel;
 	
 	// the number of elements in the mission list...this is used for helping to sort elements in the grid
 	private int nCount = 0;
@@ -25,12 +24,6 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// Start()
 	//---------------------------------------------------		
 	void Start() {		
-		// before doing anything check to see if we need to refresh our tasks
-		// WellapadMissionController.Instance.RefreshCheck();
-		
-		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed; 
-		// create missions UI
-		DisplayMissions();
 	}
 	
 	//---------------------------------------------------
@@ -65,30 +58,28 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// entries to the Wellapad for the mission; the mission
 	// title, reward, and tasks.
 	//---------------------------------------------------	
-	private void CreateMission( string strMissionType ) {		
+	private void CreateMission(string missionType){		
 		// add a title for the mission
 		GameObject title = NGUITools.AddChild(goGrid, prefabTitle);
 		SetNameForGrid( title );
-		string strMissionTitle = GetMissionTitle( strMissionType );
+		string strMissionTitle = GetMissionTitle( missionType );
 		title.transform.FindChild("Title").GetComponent<UILabel>().text = strMissionTitle;			
 		
-		// // add the reward for completing the mission
-		// GameObject goReward = NGUITools.AddChild(goGrid, prefabReward);
-		// SetNameForGrid( goReward );
-		
-		// // init the reward UI
-		// goReward.GetComponent<WellapadRewardUI>().Init( strMissionType );	
-		
 		// find the available tasks for the mission and add them
-		List<WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks( strMissionType );
-		for ( int i = 0; i < listTasks.Count; i++ ) {
+		List<WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
+		for ( int i = 0; i < listTasks.Count; i++ ){
 			WellapadTask task = listTasks[i];
 			
 			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
 			SetNameForGrid( goTask );
 			
 			// init this task UI with the task itself
-			goTask.GetComponent<WellapadTaskUI>().Init( task );
+			goTask.GetComponent<WellapadTaskUI>().Init(task);
+		}
+
+		if(VersionManager.IsLite() && missionType == "LiteCritical"){
+			GameObject liteLabel = NGUITools.AddChild(goGrid, prefabLiteLabel);
+			SetNameForGrid(liteLabel);
 		}
 	}
 	
@@ -97,9 +88,9 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// Returns the string text of the mission title for
 	// the incoming mission type.
 	//---------------------------------------------------		
-	private string GetMissionTitle( string strMissionType ) {
+	private string GetMissionTitle( string missionType ) {
 		// build the key from the mission type
-		string strKey = "MissionTitle_" + strMissionType;
+		string strKey = "MissionTitle_" + missionType;
 		string strText = Localization.Localize( strKey );
 		return strText;
 	}
@@ -118,7 +109,7 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------
 	// DisplayMissions()
 	//---------------------------------------------------		
-	private void DisplayMissions() {
+	public void DisplayMissions() {
 		// reset the count for our grid labeling
 		nCount = 0;
 		

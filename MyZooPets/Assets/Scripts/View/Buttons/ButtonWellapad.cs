@@ -45,7 +45,6 @@ public class ButtonWellapad : LgButton {
 			WellapadUIManager.Instance.OpenUI();
 			DisableButtonBounce();
 		}
-		// }
 	}
 
 	//---------------------------------------------------

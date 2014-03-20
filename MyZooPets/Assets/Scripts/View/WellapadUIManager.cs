@@ -9,8 +9,6 @@ using System.Collections;
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	public GameObject goWellapadUI; // the actual game object of the wellapad
-	public GameObject messagePro;	// Switching between pro and lite versions
-	public GameObject messageLite;
 
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
@@ -20,19 +18,6 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	}
 
 	void Awake(){
-		// instantiate the actual wellapad object
-		// GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
-		// goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );
-
-		// Change the text according to Lite version detection
-		if(VersionManager.IsLite()){
-			messagePro.SetActive(false);
-			messageLite.SetActive(true);
-		}
-		else{
-			messagePro.SetActive(true);
-			messageLite.SetActive(false);
-		}
 	}
 
 	//---------------------------------------------------
@@ -58,6 +43,10 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
+
+		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+		if(VersionManager.IsLite() && !hasActiveTasks) 
+			Invoke("DisplayPromoAd", 0.5f);
 	}
 
 	//---------------------------------------------------
@@ -83,6 +72,10 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 	private void RefreshScreen(object sender, EventArgs args){
 		RefreshScreen();
+	}
+
+	private void DisplayPromoAd(){
+		LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
 	}
 
 	

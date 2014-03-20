@@ -10,26 +10,25 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class Data_WellapadTask {
-	// id for the task
-	private string strID;
+	
+	private string strID; // id for the task
+	private string strTask; // the actual value that the task looks for when a task is completed
+	private string strCategory; // the category this task belongs to
+	private string strTaskType; // the type of mission this is
+	private List<int> listAmounts; // optional amount parameter this task may have
+
 	public string GetTaskID() {
 		return strID;	
 	}
 	
-	// the actual value that the task looks for when a task is completed
-	private string strTask;
 	public string GetTaskName() {
 		return strTask;	
 	}
 	
-	// the category this task belongs to
-	private string strCategory;
 	public string GetCategory() {
 		return strCategory;	
 	}
 	
-	// the type of mission this is
-	private string strTaskType;
 	public string GetTaskType() {
 		return strTaskType;
 	}
@@ -40,8 +39,6 @@ public class Data_WellapadTask {
 		return Localization.Localize( strKey );	
 	}
 	
-	// optional amount parameter this task may have
-	private List<int> listAmounts;
 	public int GetRandomAmount() {
 		int nAmount = 0;
 		

@@ -166,7 +166,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	//---------------------------------------------------		
 	public void RefreshCheck() {
 		//do not refresh wellapad task for lite version
-		if(VersionManager.IsLite()) return;
+		// if(VersionManager.IsLite()) return;
 
         DateTime now = LgDateTime.GetTimeNow();
         TimeSpan sinceCreated = now - DataManager.Instance.GameData.Wellapad.DateMissionsCreated;
@@ -339,8 +339,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController> {
 	// AddDefaultMissions()
 	//---------------------------------------------------		
 	private void AddDefaultMissions() {
-		AddMission( "Critical" );
-		//AddMission( "Side" );		
+		if(VersionManager.IsLite())
+			AddMission("LiteCritical");
+		else
+			AddMission("Critical");
 	}
 	
 	//---------------------------------------------------

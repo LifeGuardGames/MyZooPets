@@ -45,11 +45,17 @@ public class Item {
 		get{return strSoundUsed;}	
 	}
 	
-	public bool IsLocked() {
-		int nLockLevel = UnlockAtLevel;
-		int nPetLevel = (int) ( LevelLogic.Instance.CurrentLevel );
-		bool bLocked = nLockLevel > 0 && nLockLevel > nPetLevel;
-		return bLocked;
+	public bool IsLocked(){
+        bool isLocked = true;
+		int lockLevel = UnlockAtLevel;
+		int currentPetLevel = (int) (LevelLogic.Instance.CurrentLevel);
+		isLocked = lockLevel > 0 && lockLevel > currentPetLevel;
+
+        //Don't allow item unlock in lite version
+        if(VersionManager.IsLite() && LevelLogic.Instance.IsAtMaxLevel())
+            isLocked = true;
+
+		return isLocked;
 	}
 	// public int GetLockedLevel() {
 	// 	return unlockAtLevel;	

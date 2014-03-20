@@ -100,11 +100,16 @@ public class DataLoader_WellapadTasks {
 
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("Wellapad/Tasks", typeof(TextAsset));
+
          foreach(TextAsset file in files){
             string xmlString = file.text;
-			
-			// error message
-			string strErrorFile = "Error in file " + file.name;				
+			string strErrorFile = "Error in file " + file.name; //error message
+
+			//don't load unnecessary missions
+			if(VersionManager.IsLite())
+				if(file.name == "Tasks") break;
+			else
+				if(file.name == "LiteVersionTasks") break;
 			
             //Create XMLParser instance
             XMLParser xmlParser = new XMLParser(xmlString);

@@ -36,16 +36,16 @@ public class ButtonWellapad : LgButton {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		//if game is lite version show promo add when button is clicked after tutorial is done
-		if(tutDone && VersionManager.IsLite()){
-			LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
-		}else{
-			if(WellapadUIManager.Instance.IsOpen())
-				WellapadUIManager.Instance.CloseUI();
-			else{
-				WellapadUIManager.Instance.OpenUI();
-				DisableButtonBounce();
-			}
+		// if(tutDone && VersionManager.IsLite()){
+		// 	LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
+		// }else{
+		if(WellapadUIManager.Instance.IsOpen())
+			WellapadUIManager.Instance.CloseUI();
+		else{
+			WellapadUIManager.Instance.OpenUI();
+			DisableButtonBounce();
 		}
+		// }
 	}
 
 	//---------------------------------------------------

@@ -30,11 +30,13 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
     }	
 
     void Start(){
-        HUDAnimator.OnLevelUp += CheckFlameLevelUp;
+        if(!VersionManager.IsLite())
+            HUDAnimator.OnLevelUp += CheckFlameLevelUp;
     }
 
     void OnDestroy(){
-        HUDAnimator.OnLevelUp -= CheckFlameLevelUp;
+        if(!VersionManager.IsLite())
+           HUDAnimator.OnLevelUp -= CheckFlameLevelUp;
     }
 
 	//---------------------------------------------------

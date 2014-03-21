@@ -18,16 +18,16 @@ public class SwipeRecognizerInspector : GestureRecognizerInspector<SwipeRecogniz
     {
         base.OnSettingsUI();
 
-        Gesture.MinDistance = EditorGUILayout.FloatField( LABEL_MinDistance, Gesture.MinDistance );
-        Gesture.MaxDistance = EditorGUILayout.FloatField( LABEL_MaxDistance, Gesture.MaxDistance );
-        Gesture.MinVelocity = EditorGUILayout.FloatField( LABEL_MinVelocity, Gesture.MinVelocity );
+        Gesture.MinDistance = DistanceField( LABEL_MinDistance, Gesture.MinDistance );
+        Gesture.MaxDistance = DistanceField( LABEL_MaxDistance, Gesture.MaxDistance );
+        Gesture.MinVelocity = DistanceField( LABEL_MinVelocity, Gesture.MinVelocity, "/s" );
         Gesture.MaxDeviation = EditorGUILayout.FloatField( LABEL_MaxDeviation, Gesture.MaxDeviation );
     }
 
     protected override void ValidateValues()
     {
         base.ValidateValues();
-        Gesture.MinDistance = Mathf.Max( 1, Gesture.MinDistance );
+        Gesture.MinDistance = Mathf.Max( 0.01f, Gesture.MinDistance );
         Gesture.MaxDistance = Mathf.Max( 0, Gesture.MaxDistance );
         Gesture.MinVelocity = Mathf.Max( 0, Gesture.MinVelocity );
         Gesture.MaxDeviation = Mathf.Max( 0, Gesture.MaxDeviation );

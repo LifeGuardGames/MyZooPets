@@ -28,11 +28,11 @@ public class Analytics : MonoBehaviour {
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 
-    private DateTime playTime;
-    private bool isGameTimerOn = false;
-
     private static bool isCreated = false;
     private static Analytics instance;
+    // private DateTime playTime;
+    // private bool isGameTimerOn = false;
+    private bool isAnalyticsEnabled = false;
 
     //This instance creates itself if it's not in the scene.
     //Mainly for debugging purpose
@@ -52,12 +52,16 @@ public class Analytics : MonoBehaviour {
     }
 
     void Awake(){
+        //make persistent
         if(isCreated){
             Destroy(gameObject);
             return;
         }
         DontDestroyOnLoad(gameObject);
         isCreated = true;
+
+        //Get constants and check if analytics event should be sent
+        isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
 
         //start facebook sdk
         FB.Init(OnInitComplete);
@@ -72,42 +76,42 @@ public class Analytics : MonoBehaviour {
 
     private void PublishComplete(FBResult result){
         Debug.Log("publish response: " + result.Text);
-        // if(result.Text == "true")
-            // DataManager.Instance.FirstInstall = false;
     }
 
     //=========================Runner Game======================================
     //Where did the user die most often in the runner game?
     public void RunnerPlayerDied(string levelComponentName){
-        if(!String.IsNullOrEmpty(levelComponentName))
+        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
     }
 
     //Which triggers does the user have difficulty recognizing as bad triggers?
     //Number of times crashed into trigger. 
     public void RunnerPlayerCrashIntoTrigger(string triggerName){
-        if(!String.IsNullOrEmpty(triggerName))
+        if(!String.IsNullOrEmpty(triggerName) && isAnalyticsEnabled)
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "TriggerCrashed:" + triggerName);
     }
 
     public void RunnerPlayerItemPickUp(string itemName){
-        if(!String.IsNullOrEmpty(itemName))
+        if(!String.IsNullOrEmpty(itemName) && isAnalyticsEnabled)
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "ItemPickedUp:" + itemName);
     }
 
     public void RunnerPlayerDistanceRan(int distanceRan){
-        GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
     }
 
     //==========================Inhaler Game====================================
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
-        GA.API.Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
     }
 
     //Number of missed vs correct inhaler swipe sequences
     public void InhalerSwipeSequences(string stepStatus, int stepID){
-        if(!String.IsNullOrEmpty(stepStatus))
+        if(!String.IsNullOrEmpty(stepStatus) && isAnalyticsEnabled)
             GA.API.Design.NewEvent(INHALER_CATEGORY + "Inhaler:" + stepStatus + ":" + stepID);
     }
 
@@ -115,7 +119,7 @@ public class Analytics : MonoBehaviour {
     //Number of correct diagnose. 
     //Which symptom is the user having trouble identifying
     public void DiagnoseResult(string diagnoseResult, AsthmaStage petStatus, AsthmaStage zone){
-        if(!String.IsNullOrEmpty(diagnoseResult))
+        if(!String.IsNullOrEmpty(diagnoseResult) && isAnalyticsEnabled)
             GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
                 Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
     }
@@ -123,52 +127,52 @@ public class Analytics : MonoBehaviour {
     //=======================General Analytics==================================
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
-        if(!String.IsNullOrEmpty(petColor))
+        if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);
     }
 
-    //Start tracking playtime 
-    public void StartPlayTimeTracker(){
-        playTime = LgDateTime.GetTimeNow();
-        isGameTimerOn = true;
-    } 
+    // //Start tracking playtime 
+    // public void StartPlayTimeTracker(){
+    //     playTime = LgDateTime.GetTimeNow();
+    //     isGameTimerOn = true;
+    // } 
 
-    //Stop tracking and submit playtime
-    public void EndPlayTimeTracker(){
-        string levelName = "";
-        switch(Application.loadedLevelName){
-            case "InhalerGamePet":
-                levelName = INHALER_CATEGORY;
-            break;
-            case "Runner":
-                levelName = RUNNER_CATEGORY;
-            break;
-            case "DiagnoseGameTracks":
-                levelName = DIAGNOSE_CATEGORY;
-            break;
-            case "TriggerNinja":
-                levelName = NINJA_CATEGORY;
-            break;
-        }
-        isGameTimerOn = false;
-        TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
-        GA.API.Design.NewEvent(levelName + "TimeSpent", (float) timeSpentInGame.Minutes);
-    }
+    // //Stop tracking and submit playtime
+    // public void EndPlayTimeTracker(){
+    //     string levelName = "";
+    //     switch(Application.loadedLevelName){
+    //         case "InhalerGamePet":
+    //             levelName = INHALER_CATEGORY;
+    //         break;
+    //         case "Runner":
+    //             levelName = RUNNER_CATEGORY;
+    //         break;
+    //         case "DiagnoseGameTracks":
+    //             levelName = DIAGNOSE_CATEGORY;
+    //         break;
+    //         case "TriggerNinja":
+    //             levelName = NINJA_CATEGORY;
+    //         break;
+    //     }
+    //     isGameTimerOn = false;
+    //     TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
+    //     GA.API.Design.NewEvent(levelName + "TimeSpent", (float) timeSpentInGame.Minutes);
+    // }
 
-    void OnApplicationPause(bool isPaused){
-        if(isPaused && isGameTimerOn)
-            EndPlayTimeTracker();
-    }
+    // void OnApplicationPause(bool isPaused){
+    //     if(isPaused && isGameTimerOn)
+    //         EndPlayTimeTracker();
+    // }
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
-        if(!String.IsNullOrEmpty(badgeID))
+        if(!String.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Badge:Unlocked:" + badgeID);
     }
 
     //Items used or purchased
     public void ItemEvent(string itemStatus, ItemType itemType, string itemID){
-        if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID)){
+        if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled){
             GA.API.Design.NewEvent("Items:" + itemStatus + ":" + 
                 Enum.GetName(typeof(ItemType), itemType) + ":" + itemID);
         }
@@ -176,7 +180,7 @@ public class Analytics : MonoBehaviour {
 
     //What is the pet's health or mood when an item is used
     public void ItemEventWithPetStats(string itemID, string statsType, int statsValue){
-        if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType)){
+        if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
             GA.API.Design.NewEvent("Items:" + ITEM_STATUS_USED + ":" + itemID + ":" +
                 statsType, (float) statsValue);
         }
@@ -184,44 +188,49 @@ public class Analytics : MonoBehaviour {
 
     //Wellapad
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
-        if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && !String.IsNullOrEmpty(taskID))
+        if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
+            !String.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
     }
 
     //Wellapad xp reward claim
     public void ClaimWellapadBonusXP(){
-        GA.API.Design.NewEvent("Wellapad:Collect:BonusXP");
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("Wellapad:Collect:BonusXP");
     }
 
     //Gating
     public void GateUnlocked(string gateID){
-        if(!String.IsNullOrEmpty(gateID))
+        if(!String.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Gate:Unlocked:" + gateID);
     }
 
     //Tutorial completed
     public void TutorialCompleted(string tutorialID){
-        if(!String.IsNullOrEmpty(tutorialID))
+        if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Tutorial:Completed:" + tutorialID);
     }
 
     //Flame unlocked
     public void FlameUnlocked(string flameID){
-        if(!String.IsNullOrEmpty(flameID))
+        if(!String.IsNullOrEmpty(flameID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Flame:Unlocked:" + flameID);
     }
 
     //Pet level up
     public void LevelUnlocked(Level levelID){
-        GA.API.Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
     }
 
     public void ZeroHealth(){
-        GA.API.Design.NewEvent("ZeroHealth");
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("ZeroHealth");
     }
 
     public void TriggerHitPet(){
-        GA.API.Design.NewEvent("TriggerHitPet");
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("TriggerHitPet");
     }
 
 

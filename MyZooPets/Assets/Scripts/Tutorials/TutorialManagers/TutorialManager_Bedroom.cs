@@ -51,12 +51,14 @@ public class TutorialManager_Bedroom : TutorialManager {
 		
 		bool bFocusInhaler = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INHALER );
 		bool bFocusWellapad = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_WELLAPAD );	
-		//bool bClaimFirst = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CLAIM_FIRST ); 
 		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_TRIGGERS );
 		bool bSmokeIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_SMOKE_INTRO );
 		bool bDecos = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_DECOS );
 		bool bFlameTut = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_FLAME );
 		
+		// bFocusWellapad = true;
+		// bFocusInhaler = true;		
+
 		// these tutorials occur in quick succession
 		if ( !bFocusWellapad ) {
 			// start by highlighting the wellapad button

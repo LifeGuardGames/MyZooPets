@@ -68,7 +68,7 @@ public class FingerHoverDetector : FingerEventDetector<FingerHoverEvent>
             if( newSelection )
             {
                 e.Selection = newSelection;
-                e.Hit = LastHit;
+                e.Raycast = Raycast;
 
                 FireEvent( e, FingerHoverPhase.Enter );
             }

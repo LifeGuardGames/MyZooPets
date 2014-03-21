@@ -21,7 +21,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	private float fTime = 0; // used to count time between groups and between entries within a group
 	private Vector2 trailDeltaMove;
 	private Vector3 vLastPos = new Vector3(0,0,0); // the last position of the user's trail
-	private List<NinjaDataEntry> listCurrentEntries; // current list of entrie to spawn triggers from
+	private List<NinjaDataEntry> listCurrentEntries; // current list of entries to spawn triggers from
 
 	public Vector2 GetTrailDeltaMove(){
 		return trailDeltaMove;
@@ -102,6 +102,9 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		// send out combo task
 		int nBestCombo = GetCombo_Best();
 		WellapadMissionController.Instance.TaskCompleted( "Combo" + GetMinigameKey(), nBestCombo );
+
+		//check for badge unlock
+		UpdateBadgeProgress();
 	}		
 	
 	//---------------------------------------------------
@@ -264,14 +267,19 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	//---------------------------------------------------		
 	private void SpawnGroup( NinjaDataEntry entry ) {
 		// create the proper list of objects to spawn
-		int nCount = entry.GetTriggers();
+		int nTriggers = entry.GetTriggers();
 		int nBombs = entry.GetBombs();
 		List<string> listObjects = new List<string>();
-		for ( int i = 0; i < nCount; ++i ) 
-			listObjects.Add("NinjaTrigger");
-		
-		for ( int i = 0; i < nBombs; ++i )
-			listObjects.Add("NinjaBomb");
+		for(int i = 0; i < nTriggers; ++i){
+			// NOTE: if want to add variation over time, use GetRandomTrigger(n to choose from)
+			string randomTrigger = DataLoader_NinjaTriggersAndBombs.GetRandomTrigger(DataLoader_NinjaTriggersAndBombs.numTriggers);
+			listObjects.Add(randomTrigger);
+		}
+		for(int i = 0; i < nBombs; ++i){
+			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
+			string randomBomb = DataLoader_NinjaTriggersAndBombs.GetRandomBomb(DataLoader_NinjaTriggersAndBombs.numBombs);
+			listObjects.Add(randomBomb);
+		}
 		
 		// shuffle the list so everything is nice and mixed up
 		listObjects.Shuffle();
@@ -406,6 +414,14 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		//Debug.Log("Combo ended: " + nCombo);
 	}
 	
+    //---------------------------------------------------
+    // UpdateBadgeProgress()
+    // Check with BadgeLogic to see if any badge can be unlocked
+    //---------------------------------------------------
+    private void UpdateBadgeProgress(){
+        BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.NinjaScore, 
+            GetScore(), true);
+    }
 	
 	private void StartTutorial(){
 		SetTutorial(new NinjaTutorial());

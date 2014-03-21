@@ -30,6 +30,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 	
 	// Show the status of available items, else tell user to go to store
 	public UILabel statusLabel;
+
+	// Animation for shop button if there is no deco
+	public AnimationControl shopAnimControl;
 	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
@@ -153,6 +156,8 @@ public class ChooseDecorationUI : MonoBehaviour {
 				
 				// Tell status bar there is something available
 				isDecoItemsAvailable = true;
+
+				item.transform.FindChild("XMark").GetComponent<UISprite>().enabled = false;
 			}
 			else {
 				// destroy the place button
@@ -160,6 +165,9 @@ public class ChooseDecorationUI : MonoBehaviour {
 				
 				// color the box bg appropriately
 				item.transform.FindChild("ItemBackground").GetComponent<UISprite>().color = new Color32(201,201,201,255);
+
+				// Show "X" over it
+				item.transform.FindChild("XMark").GetComponent<UISprite>().enabled = true;
 			}
 			
 			// save the tutorial entry (a bit hacky)
@@ -173,6 +181,14 @@ public class ChooseDecorationUI : MonoBehaviour {
 		statusLabel.text = isDecoItemsAvailable ?
 			String.Format(Localization.Localize("DECO_CHOOSE_ITEM"), Localization.Localize(formattedTypeKey)) :
 			String.Format(Localization.Localize("DECO_CHOOSE_NO_ITEM"), Localization.Localize(formattedTypeKey));
+
+		// Bounch the shop button is there is nothing in your inventory
+		if(isDecoItemsAvailable){
+			shopAnimControl.Stop();
+		}
+		else{
+			shopAnimControl.Play();
+		}
 	}
 	
 	//---------------------------------------------------

@@ -76,7 +76,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 		Badge badge = arg.UnlockedBadge;
 		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
 
-		//TO DO: Update this after you have all the art for badges
+		//TODO: Update this after you have all the art for badges
 		// if(badge.IsUnlocked){
 
 		// }else{
@@ -144,7 +144,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	}
 
 	//When the badge board is clicked and zoomed into
-	protected override void _OpenUI(){		
+	protected override void _OpenUI(){
 		if(!isActive){
 			// zoom into the board
 			Vector3 vPos = badgeBoard.transform.position + vOffset;
@@ -189,5 +189,4 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				backButton.SetActive(false);
 		}
 	}
-
 }

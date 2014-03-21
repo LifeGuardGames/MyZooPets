@@ -11,11 +11,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class SettingsUIManager : SingletonUI<SettingsUIManager> {
-	
-	// the NavPanel that launches this manager
-	public GameObject firstTimeNavPanel;
-	//private TweenToggleDemux tweenNav;	// TODO move this out later, this has parent portal too
-	
+
 	// SettingsPanel holding all settings
 	public GameObject settingsPanel;
 	private TweenToggleDemux tweenSettings;
@@ -25,20 +21,26 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 		//tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
 		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------
+
+	void Awake(){
+		eModeType = UIModeTypes.MenuSettings;
+	}
+
 	protected override void _OpenUI(){
 		// show the panel holding all settings
-		tweenSettings.Show();		
+		tweenSettings.Show();
 	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+
 	protected override void _CloseUI(){
 		// hide the panel holding all settings
-		tweenSettings.Hide();		
+		tweenSettings.Hide();
+	}
+
+	public string GetLocalization(){
+		return SettingsManager.Instance.GetCurrentLanguage();
+	}
+
+	public void SetLocalization(string language){
+		SettingsManager.Instance.SetCurrentLanguage(language);
 	}
 }

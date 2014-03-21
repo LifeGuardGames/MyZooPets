@@ -68,7 +68,7 @@ public abstract class LgButton : MonoBehaviour {
 	void Awake() {
 		_Awake();	
 	}
-	
+
 	protected virtual void _Awake() {
 	}
 	
@@ -83,6 +83,16 @@ public abstract class LgButton : MonoBehaviour {
 		if ( enabled && bSprite )
 			ButtonClicked();
 	}
+
+	//---------------------------------------------------
+	// OnPress()
+	// 2D sprite buttons - Play the sound when the button is pressed
+	//---------------------------------------------------	
+	void OnPress( bool bPressed ) {
+		if(bPressed){
+			CheckSoundToPlay();
+		}
+	}
 	
 	//---------------------------------------------------
 	// OnTap()
@@ -91,30 +101,32 @@ public abstract class LgButton : MonoBehaviour {
 	void OnTap(TapGesture gesture) { 
 		ButtonClicked();
 	}
+
+	//---------------------------------------------------
+	// OnFingerStationary()
+	// 3D objects - Play the sound when the object is pressed down
+	//---------------------------------------------------	
+	void OnFingerStationary( FingerMotionEvent e ) {
+		if ( e.Phase == FingerMotionPhase.Started ) {
+			CheckSoundToPlay();
+		}
+	}
 	
 	//---------------------------------------------------
 	// ButtonClicked()
-	// When the button is actually clicked/pressed.
+	// When the button is actually clicked.
 	//---------------------------------------------------	
 	public void ButtonClicked ()
 	{
 		// if the button needs to check the click manager before proceding, do so and return if necessary
 		if (ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
-
-			if(bSprite) PlayNotProcessSound();
 			return;
 		}
 		
 		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
-		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
-			!TutorialManager.Instance.CanProcess(gameObject)){
-
-			if(bSprite) PlayNotProcessSound();
+		if(ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess(gameObject)){
 			return;
 		}
-		
-		// play the sound
-		PlayProcessSound();
 		
 		// let anything listening know that this button has been processed
 		if ( OnProcessed != null )
@@ -123,7 +135,28 @@ public abstract class LgButton : MonoBehaviour {
 		// process the click
 		ProcessClick();
 	}
-	
+
+	private void CheckSoundToPlay(){
+		if (ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
+			if(bSprite){
+				// Play the bad sound
+				PlayNotProcessSound();
+			}
+			return;
+		}
+		
+		if(ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess(gameObject)){
+			if(bSprite){
+				// Play the bad sound
+				PlayNotProcessSound();
+			}
+			return;
+		}
+		
+		// Play the good sound
+		PlayProcessSound();
+	}
+
 	private void PlayProcessSound() {
 		string strSound = GetProcessSound();
 		

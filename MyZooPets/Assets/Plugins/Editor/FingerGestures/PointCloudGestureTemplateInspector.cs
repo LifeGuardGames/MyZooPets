@@ -17,9 +17,9 @@ public class PointCloudGestureTemplateInspector : Editor
 
     public override void OnInspectorGUI()
     {
+#if UNITY_3_5
         EditorGUIUtility.LookLikeInspector();
-
-        //base.OnInspectorGUI();
+#endif
 
         PointCloudGestureTemplate template = target as PointCloudGestureTemplate;
 

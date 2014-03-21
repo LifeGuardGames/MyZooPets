@@ -166,10 +166,11 @@ namespace Facebook
         }
 
         private FacebookDelegate deepLinkDelegate;
-        
+
         #region Init
         protected override void OnAwake()
         {
+            accessToken = "NOT_USED_ON_IOS_FACEBOOK";
         }
 
         public override void Init(
@@ -352,16 +353,47 @@ namespace Facebook
 
         public void OnLogin(string msg)
         {
-            int delimIdx = msg.IndexOf(":");
-
-            if (delimIdx > 0)
+            var parameters = (Dictionary<string, object>)MiniJSON.Json.Deserialize(msg);
+            if (parameters.ContainsKey ("user_id"))
             {
                 isLoggedIn = true;
-                userId = msg.Substring(0, delimIdx);
-                accessToken = msg.Substring(delimIdx + 1);
             }
 
+            //pull userId, access token and expiration time out of the response
+            ParseLoginDict (parameters);
+
             OnAuthResponse(new FBResult(msg));
+        }
+
+        public void ParseLoginDict(Dictionary<string, object>parameters)
+        {
+            if (parameters.ContainsKey ("user_id"))
+            {
+                userId = (string)parameters ["user_id"];
+            }
+
+            if (parameters.ContainsKey ("access_token"))
+            {
+                accessToken = (string)parameters ["access_token"];
+            }
+
+            if(parameters.ContainsKey ("expiration_timestamp"))
+            {
+                accessTokenExpiresAt = FromTimestamp(int.Parse((string)parameters["expiration_timestamp"]));
+            }
+        }
+
+        //TODO: move into AbstractFacebook
+        public void OnAccessTokenRefresh(string message)
+        {
+            var parameters = (Dictionary<string, object>)MiniJSON.Json.Deserialize(message);
+            ParseLoginDict (parameters);
+        }
+
+        //TODO: move into AbstractFacebook
+        private DateTime FromTimestamp(int timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
         }
 
         public void OnLogout(string msg)

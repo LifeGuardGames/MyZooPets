@@ -22,10 +22,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
-    void Start(){
-    	Invoke ("ShowTitle", 1f);	// TODO-s DIRTY HACK GET THIS WORKING, MAYBE NEXT FRAME CALL?
-	}
-	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	
@@ -69,15 +65,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         base.CloseUI();
         HideChooseGUI(true);
     }
-
-    public void ShowTitle(){
-        // Splash finished, Drop down the title and the egg sprite, only called once
-        popupTitle.GetComponent<PositionTweenToggle>().Show();
-    }
-    
-	public void HideTitle(){
-        popupTitle.GetComponent<PositionTweenToggle>().Hide();
-    }
 	
     private void ShowChooseGUI(){
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
@@ -86,8 +73,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
 		if(showMovie){
-            ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-        	Invoke("ShowIntroMovie", 1);
+            if(VersionManager.IsLite()){
+                LoadScene();
+            }else{
+                ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+                Invoke("ShowIntroMovie", 1);
+            }
 		}
 
         //since we turn on spotlight and turn off animation for customization UI
@@ -99,7 +90,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	private void ShowIntroMovie() {
-		if (DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 	
         AudioManager.Instance.LowerBackgroundVolume(0.1f);
@@ -115,7 +106,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		LoadScene();
     }
 	
-	private void LoadScene() {
+	private void LoadScene(){
         scriptTransition.StartTransition( SceneUtils.BEDROOM);
 	}
 }

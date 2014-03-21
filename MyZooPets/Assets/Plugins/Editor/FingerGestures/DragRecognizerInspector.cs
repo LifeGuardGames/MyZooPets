@@ -15,7 +15,7 @@ public class DragRecognizerInspector : GestureRecognizerInspector<DragRecognizer
     protected override void OnSettingsUI()
     {
         base.OnSettingsUI();
-        Gesture.MoveTolerance = EditorGUILayout.FloatField( LABEL_MoveTolerance, Gesture.MoveTolerance );
+        Gesture.MoveTolerance = DistanceField( LABEL_MoveTolerance, Gesture.MoveTolerance ); //EditorGUILayout.FloatField( LABEL_MoveTolerance, Gesture.MoveTolerance );
 
         GUI.enabled = ( Gesture.RequiredFingerCount > 1 );
         Gesture.ApplySameDirectionConstraint = EditorGUILayout.Toggle( LABEL_ApplySameDirectionConstraint, Gesture.ApplySameDirectionConstraint );

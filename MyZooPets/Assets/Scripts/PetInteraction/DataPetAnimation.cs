@@ -10,50 +10,48 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class DataPetAnimation {
-	// id for the animation
-	private string strID;
+	private string strID; // id for the animation
+	private string strClipName; // clip name of the animation; used to play the LWF
+	private string soundClip; // the sound effect for this animation clip
+	private bool bCanInterrupt; // can this clip be interrupted?
+	private int nWeight; // weight of the animation; used when randomly picking an animation
+	private PetMoods eMood; // mood associated with this animation
+	private PetHealthStates eHealthState; // health associated with this animation
+	private PetAnimStates eAnimState; // the animation state that this pet is put into when the animation plays
+	private List<string> listCategories = new List<string>(); // categories this animation belongs to
+
 	public string GetID() {
 		return strID;	
 	}
 	
-	// clip name of the animation; used to play the LWF
-	private string strClipName;
 	public string GetClipName() {
 		return strClipName;	
 	}
+
+	public string GetSoundClip(){
+		return soundClip;
+	}
 	
-	// can this clip be interrupted?
-	private bool bCanInterrupt;
 	public bool CanInterrupt() {
 		return bCanInterrupt;	
 	}
 	
-	// the animation state that this pet is put into when the animation plays
-	private PetAnimStates eAnimState;
 	public PetAnimStates GetAnimState() {
 		return eAnimState;	
 	}
 	
-	// weight of the animation; used when randomly picking an animation
-	private int nWeight;
 	public int GetWeight() {
 		return nWeight;	
 	}
 	
-	// mood associated with this animation
-	private PetMoods eMood;
 	public PetMoods GetMood() {
 		return eMood;	
 	}
 	
-	// health associated with this animation
-	private PetHealthStates eHealthState;
 	public PetHealthStates GetHealth() {
 		return eHealthState;	
 	}
 	
-	// categories this animation belongs to
-	private List<string> listCategories = new List<string>();
 	public List<string> GetCategories() {
 		return listCategories;	
 	}
@@ -68,6 +66,9 @@ public class DataPetAnimation {
 		
 		// get the clip name
 		strClipName = XMLUtils.GetString(hashData["Clip"] as IXMLNode, id);
+
+		if(hashData.ContainsKey("Sound"))
+			soundClip = XMLUtils.GetString(hashData["Sound"] as IXMLNode, strError);
 		
 		// get whether or not this animation can be interrupted
 		bCanInterrupt = XMLUtils.GetBool(hashData["CanInterrupt"] as IXMLNode, true);

@@ -13,7 +13,6 @@ public class ButtonOpenSettings : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		print ("SFSDF");	// DOESNT GET CALLED THE SECOND TIME
 		SettingsUIManager.Instance.OpenUI();
 	}
 }

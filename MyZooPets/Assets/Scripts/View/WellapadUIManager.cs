@@ -8,27 +8,25 @@ using System.Collections;
 //---------------------------------------------------
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-	private GameObject goWellapadUI; // the actual game object of the wellapad
-	private WellapadScreenManager wellapadScreenManager; //script that handles wellapad screen state
+	public GameObject goWellapadUI; // the actual game object of the wellapad
 
-	//Return WellapadScreenManager script
-	public WellapadScreenManager GetScreenManager() {
-		return wellapadScreenManager;	
+	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
+
+	//Return WellapadScreenUIController script
+	public WellapadScreenUIController GetScreenManager() {
+		return wellapadScreenUIController;
 	}
 
 	void Awake(){
-		// instantiate the actual wellapad object
-		GameObject resourceWellapad = Resources.Load( "WellapadUI" ) as GameObject;
-		goWellapadUI = LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceWellapad );	
 	}
-	
+
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------	
 	protected override void _Start() {
 		// set the tween target on the wellapad object to this object
 		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
-		wellapadScreenManager = goWellapadUI.GetComponent<WellapadScreenManager>();
+		wellapadScreenUIController = goWellapadUI.GetComponent<WellapadScreenUIController>();
 
 		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
 		RefreshScreen();
@@ -46,27 +44,11 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// show the UI itself
 		goWellapadUI.GetComponent<TweenToggle>().Show();
 
-		//Refresh check
-		//Case: User finishes before play period but never home out of the game.
-		//When the user comes back to play the game user is in new play period so
-		//do a refresh check when the wellapad is opened and there are no active tasks
-		// bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
-		// if(!hasActiveTasks)	
-		// 	WellapadMissionController.Instance.RefreshCheck();
+		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+		if(VersionManager.IsLite() && !hasActiveTasks) 
+			Invoke("DisplayPromoAd", 0.5f);
 	}
 
-	private void RefreshScreen(object sender, EventArgs args){
-		RefreshScreen();
-	}
-
-	//---------------------------------------------------
-	// RefreshScreen()
-	// Sets the proper screen on the wellapad.
-	//---------------------------------------------------	
-	public void RefreshScreen() {
-		wellapadScreenManager.SetScreen();
-	}
-	
 	//---------------------------------------------------
 	// _CloseUI()
 	//---------------------------------------------------	
@@ -79,4 +61,22 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// hide the UI
 		goWellapadUI.GetComponent<TweenToggle>().Hide();
 	}
+
+	//---------------------------------------------------
+	// RefreshScreen()
+	// Sets the proper screen on the wellapad.
+	//---------------------------------------------------	
+	public void RefreshScreen() {
+		wellapadScreenUIController.SetScreen();
+	}
+
+	private void RefreshScreen(object sender, EventArgs args){
+		RefreshScreen();
+	}
+
+	private void DisplayPromoAd(){
+		LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
+	}
+
+	
 }

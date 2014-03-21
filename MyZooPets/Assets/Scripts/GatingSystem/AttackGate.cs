@@ -27,10 +27,10 @@ public class AttackGate : MonoBehaviour {
 		
 		// listen for anim complete message on pet
 		PetAnimator.OnAnimDone += DoneAnimating;
+		FireMeter.OnFireReady += Attack;
 		
 		// kick off attack animation
 		this.attacker = attacker;
-		attacker.BreathFire();
 	}
 	
 	//---------------------------------------------------
@@ -39,6 +39,11 @@ public class AttackGate : MonoBehaviour {
 	private void OnDestroy() {
 		// stop listening
 		PetAnimator.OnAnimDone -= DoneAnimating;	
+	}
+
+	private void Attack(object sender, EventArgs args){
+		attacker.BreathFire();
+		FireMeter.OnFireReady -= Attack;
 	}
 	
 	//---------------------------------------------------

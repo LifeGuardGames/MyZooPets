@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+// WARNING: ONLY ADD NEW ENTRIES INTO THE LIST OR IT WILL BREAK ALL ENTRIES!!!
+// 			DO NOT DELETE ANY ENTRIES!!!
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 public enum Level{
     Level1 = 1,
     Level2,
@@ -77,7 +82,8 @@ public enum BadgeType{
     PatientNumber,
     Decoration,
     Inhaler,
-    Coin
+    Coin,
+	NinjaScore
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
@@ -95,7 +101,8 @@ public enum UIModeTypes {
 	EditDecos,
     Tutorial,
     CustomizePet,
-    IntroComic
+    IntroComic,
+	MenuSettings
 }
 
 // decoration node anchor types

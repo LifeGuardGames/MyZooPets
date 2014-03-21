@@ -44,8 +44,10 @@ public abstract class FingerEventDetectorInspector<T> : Editor where T : FingerE
         }
 
         detector = (T)target;
-        
+
+#if UNITY_3_5
         EditorGUIUtility.LookLikeInspector();
+#endif
 
         GUILayout.Space( 5 );
 

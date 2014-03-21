@@ -8,16 +8,18 @@ using System.Collections;
 //---------------------------------------------------
 
 public class ButtonWellapad : LgButton {
+	private bool tutDone = false;
+
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
 	protected override void _Start() {		
 		// for debug/testing -- we may have the wellapad disabled
-		bool bOK = Constants.GetConstant<bool>( "WellapadOn" );
-		if ( !bOK )
+		bool isWellapadOn = Constants.GetConstant<bool>("WellapadOn");
+		if(!isWellapadOn)
 			NGUITools.SetActive( gameObject, false );
 
-		bool tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
 		if(tutDone){
 			//Listens to update event from wellapad mission controller
 			WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
@@ -33,6 +35,10 @@ public class ButtonWellapad : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
+		//if game is lite version show promo add when button is clicked after tutorial is done
+		// if(tutDone && VersionManager.IsLite()){
+		// 	LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
+		// }else{
 		if(WellapadUIManager.Instance.IsOpen())
 			WellapadUIManager.Instance.CloseUI();
 		else{
@@ -55,12 +61,12 @@ public class ButtonWellapad : LgButton {
 	private void EnableButtonBounce(object sender, EventArgs args){
 		AnimationControl animControl = GetComponent<AnimationControl>();
 		if(animControl != null)
-			animControl.Play("smallBounceSoftWellapad");
+			animControl.Play("smallBounceSoftNav");
 	}
 
 	private void DisableButtonBounce(){
 		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceSoftWellapad"))
+		if(animControl.IsPlaying("smallBounceSoftNav"))
 			animControl.StopAndResetFrame("zero");
 	}
 }

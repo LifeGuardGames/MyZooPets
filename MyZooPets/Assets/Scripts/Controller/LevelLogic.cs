@@ -9,17 +9,25 @@ using System;
 public class LevelLogic : Singleton<LevelLogic> {
     private int maxLevel;
 
+    public int MaxLevel{
+        get{
+            return maxLevel;
+        }
+    }
     public Level CurrentLevel{
         get{return DataManager.Instance.GameData.Level.CurrentLevel;}
     }
 	
 	public bool IsAtMaxLevel() {
-		bool bMax = (int)CurrentLevel == maxLevel;
-		return bMax;
+		bool isMaxLevel = (int)CurrentLevel == maxLevel;
+		return isMaxLevel;
 	}
 
     void Awake(){
-        maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
+        if(VersionManager.IsLite())
+            maxLevel = (int) Level.Level3;
+        else
+            maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
     }
 
     //------------------------------------------------

@@ -307,7 +307,12 @@ public class PetAnimator : LgCharacterAnimator {
 		
 		// get the clip name and play it!
 		string strClip = dataAnim.GetClipName();
-		
+
+		//if the animation also has sound. play the sound
+		string soundClip = dataAnim.GetSoundClip();
+		if(!String.IsNullOrEmpty(soundClip))
+			AudioManager.Instance.PlayClip(soundClip);
+
 		if ( bTesting )
 			Debug.Log("Playing clip " + strClip);	
 		
@@ -346,10 +351,12 @@ public class PetAnimator : LgCharacterAnimator {
 			Hashtable hashData = DataLoaderPetAnimations.GetAllData();
 			int counter = 0;
 			foreach ( DictionaryEntry entry in hashData ) {
-				print(counter++);
+				counter++;
 				DataPetAnimation dataAnim = (DataPetAnimation) entry.Value;
 				QueueAnim( dataAnim );
 			}			
+
+			Debug.Log("Num of animations: " + counter);
 			bTesting = true;
 		}
 	}

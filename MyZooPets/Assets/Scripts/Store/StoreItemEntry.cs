@@ -30,7 +30,7 @@ public class StoreItemEntry : MonoBehaviour {
 	// UI labels, sprites, etc for this entry based on
 	// the incoming item data.
 	//---------------------------------------------------	
-	public void Init( Item itemData ) {
+	public void Init(Item itemData){
 		// set the proper values on the entry
 		gameObject.name = itemData.ID;
 		labelCost.text = itemData.Cost.ToString();
@@ -53,15 +53,15 @@ public class StoreItemEntry : MonoBehaviour {
 		}
 
 		// set the description
-		SetDesc( itemData );
+		SetDesc(itemData);
 		
 		// if this item is currently locked...
-		if ( itemData.IsLocked() ) {
+		if(itemData.IsLocked()){
 			// show the UI
-			LevelLockObject.CreateLock( spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
+			LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
 			
 			// delete the buy button
-			Destroy( buttonMessage.gameObject );
+			Destroy(buttonMessage.gameObject);
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class StoreItemEntry : MonoBehaviour {
 	// SetDesc()
 	// Set the description for this item.
 	//---------------------------------------------------		
-	protected virtual void SetDesc( Item itemData ) {
+	protected virtual void SetDesc(Item itemData){
 		labelDesc.text = itemData.Description;
 	}
 }

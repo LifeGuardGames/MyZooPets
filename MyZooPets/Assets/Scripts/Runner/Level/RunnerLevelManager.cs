@@ -32,8 +32,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     private Vector3 mLastCenterPosition;
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
-	// private Dictionary<Vector3, GameObject> mBetweenInvinciblePlatforms = new Dictionary<Vector3, GameObject>();
-    // private LevelComponent lastQueuedComponent;
 
 	// Use this for initialization
 	void Start() {
@@ -43,7 +41,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	
 	// Update is called once per frame
 	void Update() {
-		if ( !RunnerGameManager.Instance.GameRunning )
+		if (!RunnerGameManager.Instance.GameRunning)
 			return;
 		
 		// Assuming there is a runner and a level.
@@ -58,16 +56,15 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 			// Different between the runner position and the min anchor of the first component in queue 
 			float distanceBetween = Mathf.Abs(currentRunnerPosition.x - frontLevelPosition.x);
 
-			// float distanceToUpdateLevel = GetLengthWithChildren(frontLevelComponent.gameObject, xExtent) * 2.0f;
             float distanceToUpdateLevel = (frontLevelComponent.transform.FindChild("AnchorMax").position.x -
                 frontLevelComponent.transform.FindChild("AnchorMin").position.x) * 2f;
 
             if (minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
-				// Dequeue the first
+
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
-                // Find the new first
                 LevelComponent newFront = mLevelComponentQueue.Peek();
 
+                //change parallax background if transitioning into new level group 
                 if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
                     ParallaxingBackgroundManager parallaxManager = ParallaxingBackgroundManager.Instance;
                     parallaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
@@ -76,7 +73,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 				// Destroy it
                 removedLevelComponent.DestroyAndCache();
 
-				// Push a new one
+				// Push a new one if not in tutorial mode
                 if(!RunnerGameManager.Instance.IsTutorialRunning()){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
                     PopulateLevelComponent(nextLevel);
@@ -86,12 +83,15 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 			}
 		}
 
-    	mLevelSwitchPulse -= Time.deltaTime / Time.timeScale;
-		if (mLevelSwitchPulse <= 0f) {
-            mLevelSwitchPulse = LevelGroupSwitchTime;
+        //only allow level group switching if not in tutorial mode
+        if(!RunnerGameManager.Instance.IsTutorialRunning()){
+            mLevelSwitchPulse -= Time.deltaTime / Time.timeScale;
 
-            TransitionToRandomNewLevelGroup();
-		}
+            if (mLevelSwitchPulse <= 0f) {
+                mLevelSwitchPulse = LevelGroupSwitchTime;
+                TransitionToRandomNewLevelGroup();
+            }
+        }
     }
 
     public void Reset() {
@@ -186,24 +186,21 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     }
 
 	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
+        LevelComponent newComponent = null;
+
 		if (mCurrentLevelGroup.LevelComponents.Count > 0) {
 			LevelComponent nextlevelComponent = null;
 
 			if (inForceUseThisComponent == null) {
-                //Only queue new component that is different from the previous ona
-                // while(true){
-                    int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
+                int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
 
-                    nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
-                    // if(lastQueuedComponent.name != nextlevelComponent.name) break;
-                // }
+                nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
 				// Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
 			} else {
-				// Debug.Log("Pushing default");
 				nextlevelComponent = inForceUseThisComponent;
 			}
 
-			LevelComponent newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
+			newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
             newComponent.ParentGroup = mCurrentLevelGroup;
             newComponent.name = nextlevelComponent.name;
 			
@@ -222,13 +219,15 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 			mLastCenterPosition = maxAnchor.position;
 			
 			mLevelComponentQueue.Enqueue(newComponent);
-            // lastQueuedComponent = newComponent;
-
-			return newComponent;
 		}
-		return null;
+
+        return newComponent;
 	}
 
+    //--------------------------------------------------
+    // PopulateLevelComponent()
+    // Given the level component create the coins, hazard, and items 
+    //--------------------------------------------------
 	private void PopulateLevelComponent(LevelComponent inLevelComponent) {
         // See what groups we could spawn.
         List<Bundle> possibleSpawns = new List<Bundle>();

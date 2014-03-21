@@ -153,7 +153,7 @@ public class NinjaTrigger : MonoBehaviour {
 	// invisible, it will not become visible again.  This
 	// is currently the case.
 	//---------------------------------------------------	
-	public void ChildBecameInvis() {
+	public void ChildBecameInvis(){
 		nChildrenVis--;
 		
 		// if there are no more children visible...
@@ -166,8 +166,9 @@ public class NinjaTrigger : MonoBehaviour {
 	// Nifty callback function that will tell us when
 	// the trigger is no longer being rendered by the
 	// camera.
+	// NOTE: REQUIRES RENDERER COMPONENT!
 	//---------------------------------------------------		
-	void OnBecameInvisible() {
+	void OnBecameInvisible(){
 		TriggerOffScreen();
 	}
 	
@@ -175,7 +176,7 @@ public class NinjaTrigger : MonoBehaviour {
 	// TriggerOffScreen()
 	// This trigger is no longer on the screen.
 	//---------------------------------------------------	
-	private void TriggerOffScreen() {
+	private void TriggerOffScreen(){
 		// check to make sure the proper managers exist.  This check is necessary because this function will be triggered when the editor
 		// quits the game, and also when the user quits the game into another scene.
 		if ( !AudioManager.Instance || !NinjaManager.Instance )

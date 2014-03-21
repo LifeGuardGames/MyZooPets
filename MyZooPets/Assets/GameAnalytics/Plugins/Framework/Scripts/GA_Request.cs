@@ -12,10 +12,6 @@ using System.Text;
 using System;
 //using LitJson;
 
-#if UNITY_METRO && !UNITY_EDITOR
-using GA_Compatibility.Collections;
-#endif
-
 public class GA_Request
 {
 	/// <summary>
@@ -168,7 +164,7 @@ public class GA_Request
 		
 		try
 		{
-			if (www.error != null)
+			if (!string.IsNullOrEmpty(www.error))
 			{
 				throw new Exception(www.error);
 			}

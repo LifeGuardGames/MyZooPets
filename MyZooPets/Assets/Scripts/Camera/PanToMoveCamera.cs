@@ -24,6 +24,7 @@ public class PanToMoveCamera : MonoBehaviour {
     //=======================Events========================
     public EventHandler<PartitionChangedArgs> OnPartitionChanged;   // when the partition has changed (and the camera has finished moving)
     public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
+    //========================================================
 
     public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
     public int numOfPartitions = 4; //number of partitions allowed
@@ -44,15 +45,23 @@ public class PanToMoveCamera : MonoBehaviour {
     private Camera nguiCamera; 
     private Camera mainCamera;
 
-    // Use this for initialization
-    void Start () {
+    void Awake(){
        mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
        int layerNGUI = LayerMask.NameToLayer("NGUI");
        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
-       Input.multiTouchEnabled = false;
-        
        D.Assert(nguiCamera != null, "NGUI camera not found");
+       Input.multiTouchEnabled = false;
 
+       //Change the swipe setting if this is a lite build
+       if(VersionManager.IsLite()){
+            numOfPartitions = Constants.GetConstant<int>("LiteBedroomNumOfPartitions");
+            firstPartition = Constants.GetConstant<int>("LiteBedroomFirstPartition");
+            lastPartition = Constants.GetConstant<int>("LiteBedroomLastPartition");
+       }
+    }
+
+    // Use this for initialization
+    void Start () {
        //Move camera to the last saved partition
        LoadSceneData sceneData = DataManager.Instance.SceneData;
        if(sceneData != null)
@@ -73,7 +82,7 @@ public class PanToMoveCamera : MonoBehaviour {
                     startTime = Time.time;
 
                     // Cancel touch if finger is touching undesirable objects while panning or the click manager is locked
-                    if( !ClickManager.Instance.CanRespondToTap( mainCamera.gameObject, ClickLockExceptions.Moving ) || 
+                    if(!ClickManager.Instance.CanRespondToTap(mainCamera.gameObject, ClickLockExceptions.Moving) || 
                         CameraUtils.IsTouchingNGUI(nguiCamera, startTouchPos) || 
                         CameraUtils.IsTouchingPet(mainCamera, startTouchPos))
                         touchCancelled = true;
@@ -89,22 +98,22 @@ public class PanToMoveCamera : MonoBehaviour {
                     normalizedTouchPosX = GetNormalizedPosition();
 				
 					// see if we are moving in either direction
-					bool bMovingLeft = currentTouchPos.x < startTouchPos.x && currentPartition != lastPartition;
-					bool bMovingRight = currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition;
+					bool movingLeft = currentTouchPos.x < startTouchPos.x && currentPartition != lastPartition;
+					bool movingRight = currentTouchPos.x > startTouchPos.x && currentPartition != firstPartition;
 				
-					if ( bMovingLeft || bMovingRight ) {
-						panDirection = bMovingLeft ? RoomDirection.Left : RoomDirection.Right;
+					if (movingLeft || movingRight) {
+						panDirection = movingLeft ? RoomDirection.Left : RoomDirection.Right;
 					
 						// before panning the camera, check to see if it's legal to move to the place where the player is panning
-						int nTargetPartition = GetTargetPartition( 1, panDirection );
-						bool bCanMove = CanMoveToPartition( nTargetPartition, panDirection, -1 );
+						int targetPartition = GetTargetPartition(1, panDirection);
+						bool bCanMove = CanMoveToPartition( targetPartition, panDirection, -1 );
 						if ( !bCanMove )
 							return;
 					
 					    if(normalizedTouchPosX >= minNormalizedPanDistance) {
                             //With the normalize position figure out how much the camera will have to move
                             float normalizedPartitionX = normalizedTouchPosX * partitionOffset;
-                            float newPosX = bMovingLeft ? currentPosX + normalizedPartitionX : currentPosX - normalizedPartitionX;
+                            float newPosX = movingLeft ? currentPosX + normalizedPartitionX : currentPosX - normalizedPartitionX;
 
                             transform.localPosition = new Vector3(newPosX, 0, 0);
                         }
@@ -113,11 +122,11 @@ public class PanToMoveCamera : MonoBehaviour {
 
                 case TouchPhase.Ended:
 					float swipeTime = Time.time - startTime;
-					int nTargetPartition = GetTargetPartition( 1, panDirection );
-					if ( CanMoveToPartition( nTargetPartition, panDirection, swipeTime ) )
-						ChangePartition( nTargetPartition );
+					int targetPartition = GetTargetPartition( 1, panDirection );
+					if(CanMoveToPartition(targetPartition, panDirection, swipeTime))
+						ChangePartition(targetPartition);
 					else
-						SnapCamera( currentPartition );
+						SnapCamera(currentPartition);
 	
                     touchCancelled = false;
                 break;
@@ -129,11 +138,11 @@ public class PanToMoveCamera : MonoBehaviour {
 	// SnapCamera()
 	// Snaps the camera to the current partition.
 	///////////////////////////////////////////		
-	private void SnapCamera( int nOldPartition ) {
+	private void SnapCamera(int oldPartition) {
         float moveTo = partitionOffset * currentPartition;
 		
 		// if the camera is actually already in this position, don't bother doing anything	
-		if ( gameObject.transform.position.x == moveTo )
+		if (gameObject.transform.position.x == moveTo)
 			return;
 		
 		// prepare the hashtables for the camera snap callback
@@ -142,7 +151,7 @@ public class PanToMoveCamera : MonoBehaviour {
 		optional.Add("onCompleteTarget", gameObject);
 		
 		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Old", nOldPartition);			
+		completeParamHash.Add("Old", oldPartition);			
 		optional.Add("onCompleteParam", completeParamHash);
 			
         LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
@@ -154,35 +163,35 @@ public class PanToMoveCamera : MonoBehaviour {
 	// Callback for when the camera is done
 	// snapping.
 	///////////////////////////////////////////		
-	private void OnCameraSnapped( Hashtable hash ) {
-		int nOldPartition = (int) hash["Old"];
+	private void OnCameraSnapped(Hashtable hash) {
+		int oldPartition = (int) hash["Old"];
 		
 		// if we were snapping back, don't send anything
-		if ( nOldPartition == currentPartition )
+		if ( oldPartition == currentPartition )
 			return;
 
 		// camera is done snapping, so send the partition changed callback
 		if ( OnPartitionChanged != null )
-			OnPartitionChanged( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );		
+			OnPartitionChanged( this, new PartitionChangedArgs( oldPartition, currentPartition ) );		
 	}
 	
 	///////////////////////////////////////////
 	// ChangePartition()
-	// Changes the current partition by nMoves
-	// in eSwipeDirection (if it's legal).
+	// Changes the current partition by moves 
+	// in swipeDirection (if it's legal).
 	///////////////////////////////////////////		
-	private void ChangePartition( int nTargetPartition) {
+	private void ChangePartition( int targetPartition) {
 		// check to make sure the move is legal (i.e. within bounds)
-		if ( nTargetPartition >= firstPartition && nTargetPartition <= lastPartition ) {
-			int nOldPartition = currentPartition;
-			currentPartition = nTargetPartition;
+		if (targetPartition >= firstPartition && targetPartition <= lastPartition){
+			int oldPartition = currentPartition;
+			currentPartition = targetPartition;
 			
 			// the partition changed, so snap the camera
-			SnapCamera( nOldPartition );
+			SnapCamera( oldPartition );
 			
 			// also send a callback that the partition is in the process of changing
 			if ( OnPartitionChanging != null )
-				OnPartitionChanging( this, new PartitionChangedArgs( nOldPartition, currentPartition ) );			
+				OnPartitionChanging( this, new PartitionChangedArgs( oldPartition, currentPartition ) );			
 		}
 	}	
 
@@ -192,32 +201,37 @@ public class PanToMoveCamera : MonoBehaviour {
 	// partition; this function makes sure that it is
 	// a legal move.
     /////////////////////////////////////////////////// 
-	private bool CanMoveToPartition( int nTargetPartition, RoomDirection panDirection, float swipeTime ) {	
+	private bool CanMoveToPartition( int targetPartition, RoomDirection panDirection, float swipeTime ) {	
+        bool retVal = true;
+
 		// first check that the user siped long and hard enough
-		if ( swipeTime > 0 ) {
-			bool bSwipedRight = ( swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance ) || normalizedTouchPosX >= panDistanceToChange;
-	        if( bSwipedRight == false ) 			
-				return false;
+		if(swipeTime > 0) {
+			bool swipedRight = (swipeTime <= maxSwipeTime && normalizedTouchPosX >= minNormalizedPanDistance) || 
+                                normalizedTouchPosX >= panDistanceToChange;
+	        if(swipedRight == false) 			
+                retVal = false;
 		}
 			
 		// then check to make sure the gating manager is okay with the move
-		if ( GatingManager.Instance.CanEnterRoom( currentPartition, panDirection ) == false )
-			return false;
+		if(GatingManager.Instance.CanEnterRoom(currentPartition, panDirection) == false)
+            retVal = false;
 			
 		// also check to make sure that the HUD animator is not animating
-		if ( HUDUIManager.Instance && HUDUIManager.Instance.hudAnimator && HUDUIManager.Instance.hudAnimator.AreSpawnedSprites() )
-			return false;
+		if(HUDUIManager.Instance && HUDUIManager.Instance.hudAnimator && 
+            HUDUIManager.Instance.hudAnimator.AreSpawnedSprites())
+            retVal = false;
 		
 		// if the user is in deco mode and the room they are moving to has an active gate, illegal move
-		if ( EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen()  && GatingManager.Instance.HasActiveGate( nTargetPartition ) )
-			return false;
+		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen() && 
+            GatingManager.Instance.HasActiveGate(targetPartition))
+            retVal = false;
 		
 		// if the shop is open, no movement allowed
-		if ( StoreUIManager.Instance && StoreUIManager.Instance.IsOpen() )
-			return false;
+		if(StoreUIManager.Instance && StoreUIManager.Instance.IsOpen())
+            retVal = false;
 		
 		// if we get here, the move is valid
-		return true;
+		return retVal;
 	}
 
     //This method can only be used in GameTutorial_SmokeIntro
@@ -269,11 +283,11 @@ public class PanToMoveCamera : MonoBehaviour {
 	// Given a direction and a distance, what
 	// partition is the target?
 	///////////////////////////////////////////		
-	private int GetTargetPartition( int nMoves, RoomDirection eSwipeDirection ) {
-		int nChange = eSwipeDirection == RoomDirection.Left ? nMoves : -nMoves;
-		int nTarget = currentPartition + nChange;
+	private int GetTargetPartition(int moves, RoomDirection swipeDirection) {
+		int change = swipeDirection == RoomDirection.Left ?  moves : -moves;
+		int target = currentPartition + change;
 		
-		return nTarget;
+		return target;
 	}
 
     ///////////////////////////////////////////

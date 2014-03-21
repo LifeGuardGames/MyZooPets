@@ -36,7 +36,7 @@ public class GameTutorial_Flame : GameTutorial {
 	//---------------------------------------------------		
 	protected override void _End( bool bFinished ) {
 		// clean up various things this tutorial created
-		RemovePopup();
+		// RemovePopup();
 	}
 	
 	//---------------------------------------------------
@@ -68,9 +68,14 @@ public class GameTutorial_Flame : GameTutorial {
 				
 				// show a little popup message telling the user to let go to breath fire
 				ShowPopup( Tutorial.POPUP_STD, vPopup, option:option);
-			
+				GatingManager.Instance.StartCoroutine(RemovePopupDelay());
 				break;
 		}
+	}
+
+	private IEnumerator RemovePopupDelay(){
+		yield return new WaitForSeconds(1f);
+		RemovePopup();	
 	}
 	
 	//---------------------------------------------------

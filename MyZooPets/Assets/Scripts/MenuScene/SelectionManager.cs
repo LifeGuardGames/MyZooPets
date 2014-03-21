@@ -39,6 +39,7 @@ public class SelectionManager : Singleton<SelectionManager> {
     }
 
     public void RemovePetData(string petID){
+        LgNotificationServices.RemoveIconBadgeNumber(); //make sure no notification exists if pet data is removed
         DataManager.Instance.RemovePetData(petID);
     }
 

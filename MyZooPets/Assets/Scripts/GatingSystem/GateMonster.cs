@@ -17,7 +17,7 @@ public class GateMonster : Gate {
 	public float fTweenTime;
 	
 	// script that controls the anims for this monster
-	public SmokeMonsterController controller;
+	public Animator smokeMonsterAnimator;
 	
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
 	private Vector3 vIdealPos;
@@ -38,6 +38,8 @@ public class GateMonster : Gate {
 		// if the monster is missing hp, it needs to move
 		if ( nDamage > 0 )
 			Move( nDamage );
+
+		smokeMonsterAnimator.Play("smokeMonsterNormal");
 	}	
 	
 	//---------------------------------------------------
@@ -87,10 +89,11 @@ public class GateMonster : Gate {
 		Vector3 vNewLoc = vScreenLoc;
 		vNewLoc.x += fMoveWidth;
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
-		
+
 		// play a hurt animation on the monster
-		controller.PlayHurtAnimation();
-		
+		//controller.PlayHurtAnimation();
+		smokeMonsterAnimator.Play("smokeMonsterHurt");
+
 		// update our ideal position with where we are moving too
 		vIdealPos = vNewLocWorld;
 		

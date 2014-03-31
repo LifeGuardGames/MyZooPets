@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 public class PetAnimArgs : EventArgs{
 	private PetAnimStates eState;
-	public PetAnimStates GetAnimState() {
+
+	public PetAnimStates GetAnimState(){
 		return eState;	
 	}
 
-	public PetAnimArgs( PetAnimStates eState){
+	public PetAnimArgs(PetAnimStates eState){
 		this.eState = eState;
 	}
 }
@@ -19,7 +20,7 @@ public class PetAnimArgs : EventArgs{
 // Script that controls all the pet's animations.
 //---------------------------------------------------
 
-public class PetAnimator : LgCharacterAnimator {
+public class PetAnimator : LgCharacterAnimator{
 	//=======================Events========================
 	public static EventHandler<PetAnimArgs> OnAnimDone; 	// when the pet finishes an anim
 	public static EventHandler<EventArgs> OnBreathEnded;	// when pet finishes fire breath
@@ -35,10 +36,12 @@ public class PetAnimator : LgCharacterAnimator {
 	
 	// pet's animation state; used to decide what to do after an animation finishes
 	private PetAnimStates eAnimState;
-	private void SetAnimState( PetAnimStates eState ) {
+
+	private void SetAnimState(PetAnimStates eState){
 		eAnimState = eState;	
 	}
-	public PetAnimStates GetAnimState() {
+
+	public PetAnimStates GetAnimState(){
 		return eAnimState;
 	}
 	
@@ -53,7 +56,7 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	protected override void Start() {
+	protected override void Start(){
 		// then go through all the anim data and create out clip list from that
 		SetClipList();
 		
@@ -69,37 +72,37 @@ public class PetAnimator : LgCharacterAnimator {
 	// Sets the clip list for the LWF animator based on
 	// the animation xml data.
 	//---------------------------------------------------	
-	private void SetClipList() {
+	private void SetClipList(){
 		// clear the one we have set up through the inspector
 		clips = new List<FlashMovieClip>();
 		
 		// get all the animations
 		Hashtable hashData = DataLoaderPetAnimations.GetAllData();
 		
-		foreach ( DictionaryEntry entry in hashData ) {
-			DataPetAnimation dataAnim = (DataPetAnimation) entry.Value;
-			clips.Add( new FlashMovieClip( dataAnim ) );
+		foreach(DictionaryEntry entry in hashData){
+			DataPetAnimation dataAnim = (DataPetAnimation)entry.Value;
+			clips.Add(new FlashMovieClip(dataAnim));
 		}
 	}
 	
 	//---------------------------------------------------
 	// Transition()
 	//---------------------------------------------------	
-	public void Transition( string strTransitionType ) {
+	public void Transition(string strTransitionType){
 		// get a random transition based on the type
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData( strTransitionType );
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData(strTransitionType);
 		
 		// queue the anim
-		QueueAnim( dataAnim );	
+		QueueAnim(dataAnim);	
 	}
 	
 	//---------------------------------------------------
 	// QueueAnim()
 	//---------------------------------------------------	
-	private void QueueAnim( DataPetAnimation dataAnim ) {
+	private void QueueAnim(DataPetAnimation dataAnim){
 		// don't queue if the anim is null
-		if ( dataAnim != null )
-			queueAnims.Enqueue( dataAnim );			
+		if(dataAnim != null)
+			queueAnims.Enqueue(dataAnim);			
 	}
 
 	//---------------------------------------------------
@@ -111,7 +114,7 @@ public class PetAnimator : LgCharacterAnimator {
 		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetUnrestrictedData(strCat);
 
 		if(bImmediate)	
-			 PlayAnimation(dataAnim);
+			PlayAnimation(dataAnim);
 		else
 			QueueAnim(dataAnim);
 	}
@@ -134,7 +137,7 @@ public class PetAnimator : LgCharacterAnimator {
 	// BreathFire()
 	// The player is attacking a gate!
 	//---------------------------------------------------	
-	public void BreathFire() {
+	public void BreathFire(){
 		// we need to keep track of whether or not fire was canceled ourselves
 		bCancelFire = false;
 		
@@ -143,20 +146,20 @@ public class PetAnimator : LgCharacterAnimator {
 		// spawn the particle effect
 		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		string strResource = curSkill.FlameResource;
-		GameObject resource = Resources.Load( strResource ) as GameObject;
-		goFire = Instantiate( resource, new Vector3(0,0,0), resource.transform.rotation ) as GameObject;
+		GameObject resource = Resources.Load(strResource) as GameObject;
+		goFire = Instantiate(resource, new Vector3(0, 0, 0), resource.transform.rotation) as GameObject;
 		
 		// parent it to the right position
 		goFire.transform.parent = goBlow.transform;				
-		goFire.transform.localPosition = new Vector3(0,0,0);
+		goFire.transform.localPosition = new Vector3(0, 0, 0);
 		
 		// actually kick off the effect
 		scriptFire = goFire.GetComponent<FireBlowParticleController>();
 		
 		// start a coroutine to pause the animation, for timing purposes.
 		// it is resumed from the FireMeter script.
-		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
-		StartCoroutine( PauseAnim( fFireWait ) );
+		float fFireWait = Constants.GetConstant<float>("FireInhale");
+		StartCoroutine(PauseAnim(fFireWait));
 	}
 	
 	//---------------------------------------------------
@@ -165,8 +168,8 @@ public class PetAnimator : LgCharacterAnimator {
 	// current animation after a short duration.  Used
 	// for timing purposes.
 	//---------------------------------------------------		
-	private IEnumerator PauseAnim( float fWait ) {
-		yield return new WaitForSeconds( fWait );
+	private IEnumerator PauseAnim(float fWait){
+		yield return new WaitForSeconds(fWait);
 		Pause();
 	}
 	
@@ -175,28 +178,28 @@ public class PetAnimator : LgCharacterAnimator {
 	// The pet is stopped mid-animation when breathing
 	// fire.  This function will finish the animation.
 	//---------------------------------------------------		
-	public IEnumerator FinishFire() {
+	public IEnumerator FinishFire(){
 		// resume the animation
 		Resume();
 		
 		// the pet is actually breathing fire, so play the fire breathing sound
-		LgAudioSource audioFire = AudioManager.Instance.PlayClip( "petFire" );
+		LgAudioSource audioFire = AudioManager.Instance.PlayClip("petFire");
 		
 		// pause it again once the pet begins to exhale
-		float fUntilExhale = Constants.GetConstant<float>( "UntilExhale" );
-		yield return new WaitForSeconds( fUntilExhale );
+		float fUntilExhale = Constants.GetConstant<float>("UntilExhale");
+		yield return new WaitForSeconds(fUntilExhale);
 		
 		// the pet is now exhaling, so pause
 		Pause();
 		
 		// play the actual particle effect
-		float fFireWait = Constants.GetConstant<float>( "FireInhale" );
-		float fFireDelay = Constants.GetConstant<float>( "FireDelay" );
-		StartCoroutine( scriptFire.PlayAfterDelay( fFireDelay - fFireWait - fUntilExhale ) );		
+		float fFireWait = Constants.GetConstant<float>("FireInhale");
+		float fFireDelay = Constants.GetConstant<float>("FireDelay");
+		StartCoroutine(scriptFire.PlayAfterDelay(fFireDelay - fFireWait - fUntilExhale));		
 		
 		// then wait another amount of time
-		float fHoldExhale = Constants.GetConstant<float>( "HoldExhale" );
-		yield return new WaitForSeconds( fHoldExhale );
+		float fHoldExhale = Constants.GetConstant<float>("HoldExhale");
+		yield return new WaitForSeconds(fHoldExhale);
 		
 		// done holding exhale
 		Resume();
@@ -206,20 +209,20 @@ public class PetAnimator : LgCharacterAnimator {
 		script.Stop();		
 		
 		// fire breathing portion of the animation is over, so fade out the sound
-		float fFade = Constants.GetConstant<float>( "FireSoundFadeTime" );
-		StartCoroutine( audioFire.FadeOut( fFade ) );
+		float fFade = Constants.GetConstant<float>("FireSoundFadeTime");
+		StartCoroutine(audioFire.FadeOut(fFade));
 	}
 	
 	//---------------------------------------------------
 	// DoneBreathingFire()
 	//---------------------------------------------------	
-	public void DoneBreathingFire( bool bFinished ) {
-		if ( !bFinished )
+	public void DoneBreathingFire(bool bFinished){
+		if(!bFinished)
 			Resume();
-		else if ( bCancelFire == false ) {
+		else if(bCancelFire == false){
 			// process any callbacks for when the pet finishes breathing fire
-			if ( OnBreathEnded != null )
-				OnBreathEnded( this, EventArgs.Empty );
+			if(OnBreathEnded != null)
+				OnBreathEnded(this, EventArgs.Empty);
 			
 			//If the smoke monster has been defeated play celebrate animation, else
 			//go back to idle
@@ -228,61 +231,61 @@ public class PetAnimator : LgCharacterAnimator {
 
 			}
 			else
-				Idle( !bFinished );
+				Idle(!bFinished);
 		}
 		else
-			Idle( !bFinished );
+			Idle(!bFinished);
 	}
 	
 	//---------------------------------------------------
 	// CancelFire()
 	// Cancels the whole fire breathing animation.
 	//---------------------------------------------------		
-	public void CancelFire() {
-		DoneBreathingFire( false );
+	public void CancelFire(){
+		DoneBreathingFire(false);
 		bCancelFire = true;	// we need to keep track of whether or not fire was canceled ourselves
 	}
 
 	//---------------------------------------------------
 	// Idle()
 	//---------------------------------------------------
-	private void Idle( bool bImmediate = false ) {
+	private void Idle(bool bImmediate = false){
 		// if the pet's animation queue is not empty, we should not kick off an idle
-		if ( queueAnims.Count > 0 )
+		if(queueAnims.Count > 0)
 			return;
 		
 		// get a random idle based on pet's attributes
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Idle" );
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData("Idle");
 		
-		if ( bImmediate )
-			PlayAnimation( dataAnim );
-		else {
+		if(bImmediate)
+			PlayAnimation(dataAnim);
+		else{
 			// queue the anim
-			QueueAnim( dataAnim );
+			QueueAnim(dataAnim);
 		}
 	}
 	
 	//---------------------------------------------------
 	// StartMoving()
 	//---------------------------------------------------		
-	public void StartMoving() {
+	public void StartMoving(){
 		// get a random walk based on pet's attributes
-		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData( "Walk" );
+		DataPetAnimation dataAnim = DataLoaderPetAnimations.GetRestrictedData("Walk");
 		
 		// then start playing the anim immediately
-		PlayAnimation( dataAnim );
+		PlayAnimation(dataAnim);
 	}
 	
 	//---------------------------------------------------
 	// StopMoving()
 	//---------------------------------------------------		
-	public void StopMoving() {
+	public void StopMoving(){
 		// we have to do this ourselves here because walking is on a loop...kind of annoying, but so is LWF
-		SetAnimating( false );
+		SetAnimating(false);
 		
 		// I hate to do this here, but there seems to be a bug where the walk animation is finishing precisely as the pet is
 		// supposed to stop moving, and so the pet enters an endless walk-cycle.  This is definitely hacky.
-		SetAnimState( PetAnimStates.Idling );
+		SetAnimState(PetAnimStates.Idling);
 		
 		// now that we're done moving, idle
 		Idle();
@@ -292,9 +295,9 @@ public class PetAnimator : LgCharacterAnimator {
 	// PlayAnimation()
 	// Plays the incoming animation.
 	//---------------------------------------------------	
-	private void PlayAnimation( DataPetAnimation dataAnim ) {
+	private void PlayAnimation(DataPetAnimation dataAnim){
 		// there is a slim possibility that the data was set up wrong and the incoming animation is null
-		if ( dataAnim == null ) {
+		if(dataAnim == null){
 			Debug.LogError("Trying to play a null animation on the pet!");
 			return;
 		}
@@ -302,8 +305,8 @@ public class PetAnimator : LgCharacterAnimator {
 		// change the pet's state if appropriate
 		PetAnimStates eNewState = dataAnim.GetAnimState();
 		PetAnimStates eOldState = GetAnimState();
-		if ( eOldState != eNewState )
-			SetAnimState( eNewState );		
+		if(eOldState != eNewState)
+			SetAnimState(eNewState);		
 		
 		// get the clip name and play it!
 		string strClip = dataAnim.GetClipName();
@@ -313,16 +316,16 @@ public class PetAnimator : LgCharacterAnimator {
 		if(!String.IsNullOrEmpty(soundClip))
 			AudioManager.Instance.PlayClip(soundClip);
 
-		if ( bTesting )
+		if(bTesting)
 			Debug.Log("Playing clip " + strClip);	
 		
-		PlayClip( strClip );		
+		PlayClip(strClip);		
 	}
 	
 	//---------------------------------------------------
 	// Update()
 	//---------------------------------------------------		
-	new void Update() {
+	new void Update(){
 		// call base update so that LWF can do it's thing
 		base.Update();
 		
@@ -331,13 +334,13 @@ public class PetAnimator : LgCharacterAnimator {
 #endif 		
 		
 		// if we have a queued animation, play it
-		if ( !IsAnimating() && queueAnims.Count > 0 ) {
+		if(!IsAnimating() && queueAnims.Count > 0){
 			DataPetAnimation dataAnim = queueAnims.Dequeue();
 
-			PlayAnimation( dataAnim );
+			PlayAnimation(dataAnim);
 			
 			// put the anim system back to normal if we are done testing
-			if ( queueAnims.Count == 0 && bTesting )
+			if(queueAnims.Count == 0 && bTesting)
 				bTesting = false;
 		}
 	}
@@ -345,15 +348,15 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// CheckForAnimTest()
 	//---------------------------------------------------		
-	private void CheckForAnimTest() {
-        if( Input.GetKeyDown( KeyCode.Space ) ) {
+	private void CheckForAnimTest(){
+		if(Input.GetKeyDown(KeyCode.Space)){
 			// just queue up every anim
 			Hashtable hashData = DataLoaderPetAnimations.GetAllData();
 			int counter = 0;
-			foreach ( DictionaryEntry entry in hashData ) {
+			foreach(DictionaryEntry entry in hashData){
 				counter++;
-				DataPetAnimation dataAnim = (DataPetAnimation) entry.Value;
-				QueueAnim( dataAnim );
+				DataPetAnimation dataAnim = (DataPetAnimation)entry.Value;
+				QueueAnim(dataAnim);
 			}			
 
 			Debug.Log("Num of animations: " + counter);
@@ -364,37 +367,37 @@ public class PetAnimator : LgCharacterAnimator {
 	//---------------------------------------------------
 	// _ClipFinished()
 	//---------------------------------------------------		
-	protected override void _ClipFinished() {
+	protected override void _ClipFinished(){
 		PetAnimStates eState = GetAnimState();
 		
 		// don't do anything if we are in the middle of testing the anims
-		if ( bTesting )
+		if(bTesting)
 			return;
 		
 		// send out a message to anyone listening that the anim is done
 		// NOTE: moving this callback will cause a bug; the pet won't celebrate after beating a smoke monster
-		if ( OnAnimDone != null )
-			OnAnimDone( this, new PetAnimArgs(eState) );		
+		if(OnAnimDone != null)
+			OnAnimDone(this, new PetAnimArgs(eState));		
 		
-		switch ( eState ) {
-			case PetAnimStates.Idling:
-				Idle();
-				break;
-			case PetAnimStates.BreathingFire:
-				DoneBreathingFire( true );
-				break;				
-			case PetAnimStates.Walking:
+		switch(eState){
+		case PetAnimStates.Idling:
+			Idle();
+			break;
+		case PetAnimStates.BreathingFire:
+			DoneBreathingFire(true);
+			break;				
+		case PetAnimStates.Walking:
 				// do nothing; the anim will loop
 				// but we actually have to mark that we are still animating, because parent object set it to false
-				SetAnimating( true );
-				break;
-			case PetAnimStates.Transitioning:
-				Idle();
-				break;
-			default:
-				Debug.LogError("Unhandled pet anim state finishing: " + eState);
-				Idle();
-				break;
+			SetAnimating(true);
+			break;
+		case PetAnimStates.Transitioning:
+			Idle();
+			break;
+		default:
+			Debug.LogError("Unhandled pet anim state finishing: " + eState);
+			Idle();
+			break;
 		}		
 	}
 }

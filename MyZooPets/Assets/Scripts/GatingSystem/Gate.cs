@@ -8,9 +8,9 @@ using System.Collections;
 // gate data as a game object.
 //---------------------------------------------------
 
-public abstract class Gate : MonoBehaviour {
+public abstract class Gate : MonoBehaviour{
 	// ----- Pure Abstract -------------------------
-	protected abstract void _DamageGate( int nDamage );	// when a gate is damaged
+	protected abstract void _DamageGate(int nDamage);	// when a gate is damaged
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 	
@@ -20,9 +20,10 @@ public abstract class Gate : MonoBehaviour {
 	// id and resource of this gate
 	protected string strID;
 	protected string strResource;
-	public void Init( string id, DataMonster monster ) {
-		if ( string.IsNullOrEmpty( strID ) )
-			strID = id;	
+
+	public void Init(string id, DataMonster monster){
+		if(string.IsNullOrEmpty(strID))
+			strID = id;
 		else
 			Debug.LogError("Something trying to set id on gate twice " + strID);
 		
@@ -31,21 +32,21 @@ public abstract class Gate : MonoBehaviour {
 		// since this gate is getting created, if it is guarding an item box, create the box
 		DataGate dataGate = GetGateData();
 		string strItemBoxID = dataGate.GetItemBoxID();
-		if ( !string.IsNullOrEmpty( strItemBoxID ) ) {
-			GameObject goResource = Resources.Load( "ItemBox_Monster" ) as GameObject;
-			GameObject goBox = Instantiate( goResource, transform.position, Quaternion.identity ) as GameObject;
-			goBox = goBox.FindInChildren( "Button" );
+		if(!string.IsNullOrEmpty(strItemBoxID)){
+			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
+			GameObject goBox = Instantiate(goResource, transform.position, Quaternion.identity) as GameObject;
+			goBox = goBox.FindInChildren("Button");
 			
 			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
-			if ( scriptItemBox )
-				scriptItemBox.SetItemBoxID( strItemBoxID );
+			if(scriptItemBox)
+				scriptItemBox.SetItemBoxID(strItemBoxID);
 			else
 				Debug.LogError("No logic script on box", goBox);
 		}		
 	}
 	
-	protected DataGate GetGateData() {
-		DataGate data = DataGateLoader.GetData( strID );
+	protected DataGate GetGateData(){
+		DataGate data = DataGateLoader.GetData(strID);
 		return data;
 	}
 
@@ -58,14 +59,14 @@ public abstract class Gate : MonoBehaviour {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start() {
+	void Start(){
 		_Start();
 	}
 	
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
-	protected virtual void _Start() {
+	protected virtual void _Start(){
 		// children implement this
 	}
 	
@@ -73,9 +74,9 @@ public abstract class Gate : MonoBehaviour {
 	// GreetPlayer()
 	// For when the player enters a room with this gate.
 	//---------------------------------------------------		
-	public void GreetPlayer() {
+	public void GreetPlayer(){
 		// play a sound
-		AudioManager.Instance.PlayClip( "Enter_" + strResource );
+		AudioManager.Instance.PlayClip("Enter_" + strResource);
 	}
 	
 	//---------------------------------------------------
@@ -83,11 +84,11 @@ public abstract class Gate : MonoBehaviour {
 	// Returns where the pet should be standing when
 	// approaching the gate.
 	//---------------------------------------------------	
-	public Vector3 GetPlayerPosition() {
+	public Vector3 GetPlayerPosition(){
 		// get the screen location of the gate and find out where the player should be with the buffer
 		Vector3 vPos = GetIdealPosition();
-		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint( vPos );
-		float fMoveWidth = Screen.width * ( fPlayerBuffer / 100 );
+		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint(vPos);
+		float fMoveWidth = Screen.width * (fPlayerBuffer / 100);
 		
 		// get the target location and then transform it into world coordinates MOVE_DIR
 		Vector3 vNewLoc = vScreenLoc;
@@ -96,7 +97,7 @@ public abstract class Gate : MonoBehaviour {
 		vNewLocWorld.y = fPlayerY;
 		
 		// we need to apply a Z offset to the pet so that the pet is kind of in front of the monster
-		float fOffsetZ = Constants.GetConstant<float>( "PetOffsetZ" );
+		float fOffsetZ = Constants.GetConstant<float>("PetOffsetZ");
 		vNewLocWorld.z -= fOffsetZ;
 		
 		return vNewLocWorld;		
@@ -108,32 +109,32 @@ public abstract class Gate : MonoBehaviour {
 	// this may not always be the transform position in
 	// some children.
 	//---------------------------------------------------		
-	protected virtual Vector3 GetIdealPosition() {
+	protected virtual Vector3 GetIdealPosition(){
 		return transform.position;	
 	}
 	
 	//---------------------------------------------------
 	// GetGateHP()
 	//---------------------------------------------------		
-	public int GetGateHP() {
-		return DataManager.Instance.GameData.GatingProgress.GetGateHP( strID );
+	public int GetGateHP(){
+		return DataManager.Instance.GameData.GatingProgress.GetGateHP(strID);
 	}
 	
 	//---------------------------------------------------
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public bool DamageGate( int nDamage ) {
+	public bool DamageGate(int nDamage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DamageGate_SaveData( strID, nDamage );
+		bool bDestroyed = DamageGate_SaveData(strID, nDamage);
 		
 		// because the gate was damaged, play a sound
-		AudioManager.Instance.PlayClip( "Damage_" + strResource );
+		AudioManager.Instance.PlayClip("Damage_" + strResource);
 		
 		// let children know that the gate was damaged so they can react in their own way
-		_DamageGate( nDamage );
+		_DamageGate(nDamage);
 		
-		if ( bDestroyed ) {
+		if(bDestroyed){
 			Analytics.Instance.GateUnlocked(strID);	
 			PrepGateDestruction();
 		}
@@ -148,22 +149,22 @@ public abstract class Gate : MonoBehaviour {
 	// the actual save data class for gates, but was moved
 	// out to here.
 	//---------------------------------------------------		
-	public bool DamageGate_SaveData( string strID, int nDamage ) {
+	public bool DamageGate_SaveData(string strID, int nDamage){
 		// check to make sure the gate exists
-		if ( !DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey( strID ) ) {
+		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(strID)){
 			Debug.LogError("Something trying to access a non-existant gate " + strID);
 			return true;
 		}
 		
 		// check to make sure the gate is active
-		if ( !DataManager.Instance.GameData.GatingProgress.IsGateActive( strID ) ) {
+		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(strID)){
 			Debug.LogError("Something trying to damage an inactive gate " + strID);
 			return true;
 		}
 		
 		// otherwise, calculate and save the new hp
 		int nHP = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
-		nHP = Mathf.Max( nHP - nDamage, 0 );
+		nHP = Mathf.Max(nHP - nDamage, 0);
 		DataManager.Instance.GameData.GatingProgress.GatingProgress[strID] = nHP;
 		
 		// then return whether or not the gate has been destroyed
@@ -176,15 +177,15 @@ public abstract class Gate : MonoBehaviour {
 	// PrepGateDestruction()
 	// Starts the process of removing this gate.
 	//---------------------------------------------------		
-	private void PrepGateDestruction() {
+	private void PrepGateDestruction(){
 		// play a sound
-		AudioManager.Instance.PlayClip( "Defeat_" + strResource );
+		AudioManager.Instance.PlayClip("Defeat_" + strResource);
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
 		
 		// if there is an item box behind this gate, let it know it is now unclaimed
-		if ( scriptItemBox )
+		if(scriptItemBox)
 			scriptItemBox.NowAvailable();
 		
 		// gates might do their own thing upon destruction
@@ -193,8 +194,8 @@ public abstract class Gate : MonoBehaviour {
 		// add any appropriate task unlocks
 		DataGate data = GetGateData();
 		string[] arrayUnlocks = data.GetTaskUnlocks();
-		for ( int i = 0; i < arrayUnlocks.Length; ++i )
-			WellapadMissionController.Instance.UnlockTask( arrayUnlocks[i] );		
+		for(int i = 0; i < arrayUnlocks.Length; ++i)
+			WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
 	}
 	
 	//---------------------------------------------------
@@ -206,9 +207,8 @@ public abstract class Gate : MonoBehaviour {
 	// the animation is complete, but the gate is already
 	// marked as destroyed.
 	//---------------------------------------------------		
-	private void OnDestroyAnimComplete() {		
+	private void OnDestroyAnimComplete(){		
 		// destroy the object
-		Destroy( gameObject );			
+		Destroy(gameObject);			
 	}
-	
 }

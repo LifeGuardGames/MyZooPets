@@ -131,38 +131,18 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);
     }
 
-    // //Start tracking playtime 
-    // public void StartPlayTimeTracker(){
-    //     playTime = LgDateTime.GetTimeNow();
-    //     isGameTimerOn = true;
-    // } 
-
-    // //Stop tracking and submit playtime
-    // public void EndPlayTimeTracker(){
-    //     string levelName = "";
-    //     switch(Application.loadedLevelName){
-    //         case "InhalerGamePet":
-    //             levelName = INHALER_CATEGORY;
-    //         break;
-    //         case "Runner":
-    //             levelName = RUNNER_CATEGORY;
-    //         break;
-    //         case "DiagnoseGameTracks":
-    //             levelName = DIAGNOSE_CATEGORY;
-    //         break;
-    //         case "TriggerNinja":
-    //             levelName = NINJA_CATEGORY;
-    //         break;
-    //     }
-    //     isGameTimerOn = false;
-    //     TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
-    //     GA.API.Design.NewEvent(levelName + "TimeSpent", (float) timeSpentInGame.Minutes);
+    // //record when a user changes to another scene. Can be used to track how many
+    // //times user plays mini game 
+    // public void ChangeSceneButtonClicked(string miniGameCatName){
+    //     if(!String.IsNullOrEmpty(miniGameCatName))
+    //         GA.API.Design.NewEvent(miniGameCatName + "StartGame");
     // }
 
-    // void OnApplicationPause(bool isPaused){
-    //     if(isPaused && isGameTimerOn)
-    //         EndPlayTimeTracker();
-    // }
+    //when the user clean the triggers
+    public void TriggersCleaned(String triggerID){
+        if(!String.IsNullOrEmpty(triggerID))
+            GA.API.Design.NewEvent("TriggersCleaned:" + triggerID);
+    }
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){

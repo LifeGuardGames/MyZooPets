@@ -83,6 +83,9 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			
 			// make the stats "burst" out
 			goDroppedItem.transform.Find("Star").GetComponent<DroppedObject>().Appear();			
+
+            //send analytics event
+            Analytics.Instance.TriggersCleaned(triggerData.ID);
 		}	
 		
         // DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
@@ -90,7 +93,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		
 		// subtract one from the triggers left to clean
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers -= 1;
-		
+
 		// if there are no degradation triggers left, send out a task completion message
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
 		// if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )

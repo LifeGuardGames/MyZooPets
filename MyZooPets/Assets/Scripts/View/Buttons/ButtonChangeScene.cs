@@ -29,9 +29,8 @@ public class ButtonChangeScene : LgButton {
 	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
 	public GameObject cameraGO; //needs the camera to record partition # before scene change
 	public GameObject petLWF; //needs to record pet position before scene change
-	
-	//public CameraMove cameraMove;
-	//public ZoomItem zoomItem;
+
+	public string analyticsEvent;	
 	
 	//---------------------------------------------------
 	// ProcessClick()

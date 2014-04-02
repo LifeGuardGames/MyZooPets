@@ -77,6 +77,10 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
 
+			//if in the inventory already check if it's wallpaper
+			//if it's wallpaper don't increment count just return
+			if(CheckForWallpaper(itemID)) return;
+
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
 			invItems[itemID] = invItem;

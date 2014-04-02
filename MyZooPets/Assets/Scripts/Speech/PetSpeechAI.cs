@@ -7,7 +7,9 @@ using System.Collections;
 // Controls when the pet will speak
 //---------------------------------------------------
 public class PetSpeechAI : MonoBehaviour{
-
+    private bool enableAutoSpeech = false;
+    private float timer = 0; 
+    private float timeBeforeSpeech = 30; //30 seconds interval
 
     void Awake(){
         //load pet speech from xml
@@ -17,17 +19,45 @@ public class PetSpeechAI : MonoBehaviour{
         StatsController.OnHappyToSad += ShowHappyToSadMsg;
         StatsController.OnSadToHappy += ShowSadToHappyMsg;
         StatsController.OnSickToVerySick += ShowSickToVerySickMsg;
+
         StatsController.OnHealthyToVerySick += ShowHealthyToVerySickMsg;
+        StatsController.OnHealthyToSick += ShowHealthyToVerySickMsg;
+
+        StatsController.OnSickToHealthy += StopAutoSpeech;
+        StatsController.OnVerySickToHealthy += StopAutoSpeech;
     }
 
     void OnDestroy(){
         StatsController.OnHappyToSad -= ShowHappyToSadMsg;
         StatsController.OnSadToHappy -= ShowSadToHappyMsg;
         StatsController.OnSickToVerySick -= ShowSickToVerySickMsg;
+
         StatsController.OnHealthyToVerySick -= ShowHealthyToVerySickMsg;
+        StatsController.OnHealthyToSick -= ShowHealthyToVerySickMsg;
+
+        StatsController.OnSickToHealthy -= StopAutoSpeech;
+        StatsController.OnVerySickToHealthy -= StopAutoSpeech;
     }
 
-    public void ShowHappyToSadMsg(object sender, EventArgs args){
+    void Update(){
+        if(enableAutoSpeech){
+            timer += Time.deltaTime;
+            if(timer > timeBeforeSpeech){
+
+                //say sth here
+                ShowHealthyToVerySickMsg(this, EventArgs.Empty);
+
+                timer = 0;
+            }
+        }
+    }
+
+    private void StopAutoSpeech(object sender, EventArgs args){
+        enableAutoSpeech = false;
+        timer = 0;
+    }
+
+    private void ShowHappyToSadMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HAPPY_TO_SAD_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
@@ -37,13 +67,13 @@ public class PetSpeechAI : MonoBehaviour{
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
-    public void ShowSadToHappyMsg(object sender, EventArgs args){
+    private void ShowSadToHappyMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
-    public void ShowSickToVerySickMsg(object sender, EventArgs args){
+    private void ShowSickToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
@@ -53,7 +83,7 @@ public class PetSpeechAI : MonoBehaviour{
         GetComponent<PetSpeechController>().Talk(msgOption);
     }
 
-    public void ShowHealthyToVerySickMsg(object sender, EventArgs args){
+    private void ShowHealthyToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
@@ -61,6 +91,8 @@ public class PetSpeechAI : MonoBehaviour{
         msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryItemsWithLockAndCallBack");
         GetComponent<PetSpeechController>().Talk(msgOption);
+
+        enableAutoSpeech = true;
     }
 
 }

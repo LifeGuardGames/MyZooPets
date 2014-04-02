@@ -341,7 +341,7 @@ public class HUDAnimator : MonoBehaviour {
 		// required data for animating the bar
 		int nStep = Constants.GetConstant<int>( eStat + "_Step" );
 		AnimationControl anim = hashAnimControls[eStat];
-		int nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
+		int nTarget = StatsController.Instance.GetStat(eStat);
 		
 		// while the display number is not where we want to be...
 		while( hashDisplays[eStat] != nTarget ){
@@ -363,7 +363,7 @@ public class HUDAnimator : MonoBehaviour {
 			yield return 0;
 			
 			// update our target in case it changed
-			nTarget = DataManager.Instance.GameData.Stats.GetStat( eStat );
+			nTarget = StatsController.Instance.GetStat(eStat);
 		}
 		
 		// animating is finished, so stop the control if it exists

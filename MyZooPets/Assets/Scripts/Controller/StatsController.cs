@@ -19,8 +19,15 @@ public class StatsController : Singleton<StatsController> {
 	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
 	public static EventHandler<EventArgs> OnHappyToSad; //when mood changes
 	public static EventHandler<EventArgs> OnSadToHappy;
+
 	public static EventHandler<EventArgs> OnHealthyToVerySick;
+	public static EventHandler<EventArgs> OnHealthyToSick;
+
+	public static EventHandler<EventArgs> OnSickToHealthy;
+	public static EventHandler<EventArgs> OnVerySickToHealthy;
+
 	public static EventHandler<EventArgs> OnSickToVerySick;
+
 	public static EventHandler<EventArgs> OnZeroHealth;
 	//-------------------------------------------------	
 
@@ -59,7 +66,30 @@ public class StatsController : Singleton<StatsController> {
 
 	}
 #endif
-	
+
+	public int GetStat(HUDElementType stat){
+		int statNumber = 0;
+		switch(stat){
+			case HUDElementType.Points:
+				statNumber = DataManager.Instance.GameData.Stats.Points;
+				break;
+			case HUDElementType.Health:
+				statNumber = DataManager.Instance.GameData.Stats.Health;
+				break;
+			case HUDElementType.Mood:
+				statNumber = DataManager.Instance.GameData.Stats.Mood;
+				break;
+			case HUDElementType.Stars:
+				statNumber = DataManager.Instance.GameData.Stats.Stars;
+				break;
+			default:
+				Debug.LogError("No such display target for " + stat);
+				break;
+		}
+
+		return statNumber;
+	}
+
 	// Locations are on screen space
 	// public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
 	// 	Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
@@ -101,7 +131,7 @@ public class StatsController : Singleton<StatsController> {
 
 				//Check if there are enough coins/stars to unlock badge
 				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, 
-					DataManager.Instance.GameData.Stats.GetStat(HUDElementType.Stars), true);
+					GetStat(HUDElementType.Stars), true);
 			}
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
@@ -153,7 +183,7 @@ public class StatsController : Singleton<StatsController> {
 		if (hudAnimator != null && !bBeingDestroyed)
 			StartCoroutine(hudAnimator.StartCurveStats(listStats, bPlaySounds, bAtOnce, bFloaty));
 	}	
-	
+
 	//---------------------------------------------------
 	// CheckForMoodTransition()
 	// Checks to see if a mood transition is appropriate,
@@ -221,6 +251,9 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_HealthyHappySick" );
 			else if(mood == PetMoods.Sad)
 				scriptPetAnim.Transition( "Transition_HealthySadSick" );
+
+			if(OnHealthyToSick != null)
+				OnHealthyToSick(this, EventArgs.Empty);
 				
 		}
 
@@ -235,6 +268,9 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
 			else if(mood == PetMoods.Sad)
 				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+
+			if(OnVerySickToHealthy != null)
+				OnVerySickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> HealthyHappy or Sick --> HealthySad
@@ -245,6 +281,9 @@ public class StatsController : Singleton<StatsController> {
 				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
 			else if(mood == PetMoods.Sad)
 				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+
+			if(OnSickToHealthy != null)
+				OnSickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> VerySick

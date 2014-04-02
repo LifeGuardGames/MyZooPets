@@ -8,16 +8,17 @@ using System.Collections.Generic;
 // Immutable data
 //---------------------------------------------------
 public class Item {
-	protected string id; //id of item
-	protected string name; //name of item
-	protected string textureName; //name of texture in the atlas
-	protected ItemType type;
-	protected int cost; //cost of item
-	protected string description;
-	protected int unlockAtLevel = 0; //the level when item is unlocked
-	
-	// sound item makes when it is used
-	private string strSoundUsed;
+	private string id; //id of item
+	private string name; //name of item
+	private string textureName; //name of texture in the atlas
+	private ItemType type;
+	private int cost; //cost of item
+	private string description;
+	private int unlockAtLevel = 0; //the level when item is unlocked
+    private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
+                                        //F: available in store as well
+                                        //default to false
+	private string strSoundUsed; // sound item makes when it is used
 
 	public string ID{
 		get{return id;}
@@ -44,6 +45,9 @@ public class Item {
 	public string SoundUsed{
 		get{return strSoundUsed;}	
 	}
+    public bool ItemBoxOnly{
+        get{return itemBoxOnly;}
+    }
 	
 	public bool IsLocked(){
         bool isLocked = true;
@@ -73,11 +77,14 @@ public class Item {
         description = "";
 		
 		// optional for now
-		if ( hashItemData.Contains("UnlockAtLevel") )
+		if(hashItemData.Contains("UnlockAtLevel"))
        		unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode);
 		
-		if ( hashItemData.Contains("Sound") )
+		if(hashItemData.Contains("Sound"))
 			strSoundUsed = XMLUtils.GetString(hashItemData["Sound"] as IXMLNode);
+
+        if(hashItemData.Contains("ItemBoxOnly"))
+            itemBoxOnly = XMLUtils.GetBool(hashItemData["ItemBoxOnly"] as IXMLNode);
 	}
 
 	//Returns all attributes of all the children of a IXMLNode in a hastable

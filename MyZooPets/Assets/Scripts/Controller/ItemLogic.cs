@@ -116,8 +116,10 @@ public class ItemLogic : Singleton<ItemLogic>{
 			
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
-			int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
-			int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			// int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
+			int nCurHealth = StatsController.Instance.GetStat( HUDElementType.Health );
+			// int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			int nCurMood = StatsController.Instance.GetStat( HUDElementType.Mood );
 			
 			if ( moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100 )
 				bCanUse = false;

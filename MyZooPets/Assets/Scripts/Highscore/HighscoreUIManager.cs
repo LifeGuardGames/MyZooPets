@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class HighscoreUIManager : SingletonUI<HighscoreUIManager> {
+public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 	public GameObject backButton;
 	public GameObject highscoreBoard;
+	public UIGrid scoreBoardGrid;
 	
 	// related to zooming into the badge board
 	public float fZoomTime;
@@ -11,6 +13,21 @@ public class HighscoreUIManager : SingletonUI<HighscoreUIManager> {
 	public Vector3 vRotation;
 
 	private bool isActive = false;
+
+	void Start(){
+		RefreshScoreBoard();
+	}
+
+	//Refresh high score
+	private void RefreshScoreBoard(){
+		GameObject highScoreEntryPrefab = (GameObject) Resources.Load("HighScoreEntry");
+		Dictionary<string, int> highScoreDict = HighScoreManager.Instance.MinigameHighScore;
+
+		foreach(KeyValuePair<string, int> score in highScoreDict){
+			GameObject highScoreEntryGO = NGUITools.AddChild(scoreBoardGrid.gameObject, highScoreEntryPrefab);
+			highScoreEntryGO.GetComponent<HighScoreEntryUIController>().Init(score.Key, score.Value);
+		}
+	}
 
 	//When the highscore board is clicked and zoomed into
 	protected override void _OpenUI(){

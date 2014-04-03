@@ -108,6 +108,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		OpenToSubCategory("Food", true);
 	}
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
+		//send analytics
+		Analytics.Instance.StoreItemShortCutClicked();
+
 		NavigationUIManager.Instance.HidePanel();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	

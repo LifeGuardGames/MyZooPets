@@ -359,6 +359,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		// send out score task
 		int nScore = GetScore();
 		WellapadMissionController.Instance.TaskCompleted( "Score" + GetMinigameKey(), nScore );
+
+		// record highest score
+		HighScoreManager.Instance.UpdateMinigameHighScore(GetMinigameKey(), GetScore());
 		
 		// update the game state
 		SetGameState( MinigameStates.GameOver );

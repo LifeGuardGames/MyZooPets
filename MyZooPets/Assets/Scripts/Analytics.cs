@@ -140,7 +140,7 @@ public class Analytics : MonoBehaviour {
 
     //when the user clean the triggers
     public void TriggersCleaned(String triggerID){
-        if(!String.IsNullOrEmpty(triggerID))
+        if(!String.IsNullOrEmpty(triggerID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("TriggersCleaned:" + triggerID);
     }
 
@@ -213,5 +213,10 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("TriggerHitPet");
     }
 
+    //store short cup clicked. (from pet thought bubble)
+    public void StoreItemShortCutClicked(){
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("Button:StoreItemShortCut");
+    }
 
 }

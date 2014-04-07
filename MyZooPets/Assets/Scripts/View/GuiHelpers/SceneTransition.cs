@@ -63,7 +63,18 @@ public class SceneTransition : MonoBehaviour {
 		else{
 			Debug.LogError("No toggle detected");
 		}
+
+		// StartCoroutine(Load());
 	}
+
+	// private IEnumerator Load(){
+	// 	AsyncOperation async = Application.LoadLevelAsync(strScene);
+
+	// 	while(!async.isDone){
+	// 		print(async.progress);
+	// 		yield return null;
+	// 	}
+	// }
 	
 	//---------------------------------------------------
 	// TransitionDone()

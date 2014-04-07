@@ -12,6 +12,11 @@ public class SceneMemoryCleaner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Resources.UnloadUnusedAssets();
+        StartCoroutine(CleanUp());
 	}
+
+    private IEnumerator CleanUp(){
+        yield return new WaitForSeconds(1.0f);
+        Resources.UnloadUnusedAssets();
+    }
 }

@@ -44,10 +44,11 @@ public class AudioManager : Singleton<AudioManager>{
 	}
 	
 	void Start() {
-		PlayBackground();	
+		StartCoroutine(PlayBackground());
 	}
 
-	public void PlayBackground(){
+	public IEnumerator PlayBackground(){
+		yield return new WaitForSeconds(0.5f);
 		if(isMusicOn){
 			if ( background1 )
 				backgroundClip = background1;

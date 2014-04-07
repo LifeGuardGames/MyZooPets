@@ -302,7 +302,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 //					backgroundSprite.color = colors[counter];
 					
 					UISprite imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<UISprite>();
-					imageSprite.spriteName = "iconDeco" + tab.name;
+					imageSprite.spriteName = "iconDeco" + tab.name + "2";
 
 					ShowUseTab(tab);
 					if(counter == 0){
@@ -393,7 +393,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			currentTab = tabName;
 
 			//set panel background color
-			storeSubPanelBg.GetComponent<UISprite>().color = tabColor; 
+			storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
 
 			//base on the tab name and the page name, create proper set of item in the store
 			if(currentPage == "Food"){

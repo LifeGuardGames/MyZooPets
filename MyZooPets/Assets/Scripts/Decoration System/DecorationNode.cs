@@ -87,7 +87,7 @@ public abstract class DecorationNode : LgButton {
 	private void SetNodeArt( bool bSelected ) {	
 		// set art for the icon based on the type of decoration this node represents
 		if ( spriteIcon ) {
-			string strIcon = "iconDeco" + GetDecoType();
+			string strIcon = "iconDeco" + GetDecoType() + "2";	// Parsed! version 2 for a few icons for now
 			spriteIcon.spriteName = strIcon;
 		}
 		

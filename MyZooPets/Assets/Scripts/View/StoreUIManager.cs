@@ -28,11 +28,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
 
+
+
 	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
-		
+
+		// Disabling custom colors
+		/*
 		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
 		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
 		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
@@ -53,6 +57,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		colors.Add(limeGreen);
 		colors.Add(purpleish);
 		colors.Add(yellow);
+		*/
 		
 		goExitButton = storeSubPanel.FindInChildren( "ExitButton" );
 		if ( goExitButton == null )
@@ -269,14 +274,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);
+			CreateSubCategoryItemsTab("foodDefaultTab", Color.white);
+			//CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);	// Disabling custom colors
 
 		}else if(currentPage == "Items"){
 			foreach(Transform tab in tabArea.transform){
 				HideUnuseTab(tab);
 			}
 
-			CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);
+			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white);
+			//CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);	// Disabling custom colors
 
 		}else if(currentPage == "Decorations"){
 			//Get a list of decoration types from Enum
@@ -289,17 +296,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			foreach(Transform tab in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
-					
-					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
-					backgroundSprite.color = colors[counter];
+
+					// Disabling custom colors
+//					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
+//					backgroundSprite.color = colors[counter];
 					
 					UISprite imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<UISprite>();
-					imageSprite.spriteName = "iconDeco" + tab.name;
+					imageSprite.spriteName = "iconDeco" + tab.name + "2";
 
 					ShowUseTab(tab);
 					if(counter == 0){
 						defaultTabName = tab.name;
-						defaultColor = colors[counter];
+//						defaultColor = colors[counter];
 					}
 				}else{
 					tab.name = "";
@@ -385,7 +393,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			currentTab = tabName;
 
 			//set panel background color
-			storeSubPanelBg.GetComponent<UISprite>().color = tabColor; 
+			storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
 
 			//base on the tab name and the page name, create proper set of item in the store
 			if(currentPage == "Food"){

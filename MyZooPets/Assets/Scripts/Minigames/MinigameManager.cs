@@ -281,18 +281,36 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void QuitGame() {
-		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
-		if ( ui.IsPopupShowing( MinigamePopups.GameOver ) )
-			ui.TogglePopup( MinigamePopups.GameOver, false );
-		
-		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
-			ui.TogglePopup( MinigamePopups.Pause, false );		
-	
-		// Analytics.Instance.EndPlayTimeTracker();
-
 		string strKey = GetMinigameKey();
 		string strScene = Constants.GetConstant<string>( strKey + "_QuitScene" );
-		scriptTransition.StartTransition( strScene );
+
+		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
+		if(ui.IsPopupShowing(MinigamePopups.GameOver)){
+			ui.TogglePopup(MinigamePopups.GameOver, false);
+
+			scriptTransition.StartTransition(strScene);
+		}
+		
+		//double confirm quit game
+		if(ui.IsPopupShowing(MinigamePopups.Pause)){
+
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+				ui.TogglePopup(MinigamePopups.Pause, false);
+
+				scriptTransition.StartTransition(strScene);
+			};
+
+			PopupNotificationNGUI.HashEntry button2Function = delegate(){
+			};
+
+			Hashtable notificationEntry = new Hashtable();
+	        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+	        notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
+	        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+	        notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+
+	        NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		}
 	}
 	
 	//---------------------------------------------------

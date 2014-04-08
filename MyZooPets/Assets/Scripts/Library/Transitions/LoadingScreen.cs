@@ -11,15 +11,16 @@ public class LoadingScreen : MonoBehaviour {
 	public float fWait = 0;
 	
 	// scene this screen should load
-	private string strScene;
+	private string sceneName;
 	
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
-	public void Init( string strScene ) {
-		this.strScene = strScene;
+	public void Init( string sceneName ) {
+		this.sceneName = sceneName;
 		
-		StartCoroutine( WaitAndLoad() );
+		Analytics.Instance.ChangeScene(sceneName);
+		StartCoroutine(WaitAndLoad());
 	}
 
 	//---------------------------------------------------
@@ -28,9 +29,9 @@ public class LoadingScreen : MonoBehaviour {
 	// the next scene.
 	//---------------------------------------------------	
 	private IEnumerator WaitAndLoad() {
-		yield return new WaitForSeconds( fWait );
+		yield return new WaitForSeconds(fWait);
 		
 		// then load the scene
-		Application.LoadLevel( strScene );	
+		Application.LoadLevel(sceneName);	
 	}
 }

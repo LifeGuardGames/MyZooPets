@@ -400,15 +400,19 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 				//No sub category so retrieve a list of all food
 				List<Item> foodList = ItemLogic.Instance.FoodList;
 
-				foreach(Item itemData in foodList)
-					StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+				foreach(Item itemData in foodList){
+					if(!itemData.ItemBoxOnly)
+						StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+				}
 
 			}else if(currentPage == "Items"){
 				//No sub category so retrieve a list of all item
 				List<Item> usableList = ItemLogic.Instance.UsableList;
 
-				foreach(Item itemData in usableList)
-					StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+				foreach(Item itemData in usableList){
+					if(!itemData.ItemBoxOnly)
+						StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+				}
 
 			}else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)
@@ -417,8 +421,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
-					foreach(DecorationItem decoItemData in decoList)
-						StoreItemEntry.CreateEntry( grid, itemStorePrefab, (Item)decoItemData );
+					foreach(DecorationItem decoItemData in decoList){
+						if(!decoItemData.ItemBoxOnly)
+							StoreItemEntry.CreateEntry( grid, itemStorePrefab, (Item)decoItemData );
+					}
 				}
 			}
 

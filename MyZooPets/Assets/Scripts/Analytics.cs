@@ -133,10 +133,16 @@ public class Analytics : MonoBehaviour {
 
     // //record when a user changes to another scene. Can be used to track how many
     // //times user plays mini game 
-    // public void ChangeSceneButtonClicked(string miniGameCatName){
-    //     if(!String.IsNullOrEmpty(miniGameCatName))
-    //         GA.API.Design.NewEvent(miniGameCatName + "StartGame");
-    // }
+    public void ChangeScene(string newSceneName){
+        if(!String.IsNullOrEmpty(newSceneName))
+            GA.API.Design.NewEvent("SceneChanged:" + newSceneName);
+    }
+
+    //track which button is most clicked by users
+    public void LgButtonClicked(string buttonName){
+        if(!String.IsNullOrEmpty(buttonName))
+            GA.API.Design.NewEvent("ButtonClicked:" + buttonName);
+    }
 
     //when the user clean the triggers
     public void TriggersCleaned(String triggerID){

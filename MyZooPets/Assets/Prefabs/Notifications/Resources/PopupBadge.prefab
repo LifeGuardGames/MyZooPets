@@ -179,7 +179,6 @@ GameObject:
   - 114: {fileID: 11400036}
   - 114: {fileID: 11400038}
   - 114: {fileID: 11400040}
-  - 114: {fileID: 11400000}
   m_Layer: 10
   m_Name: ImageButton
   m_TagString: Untagged
@@ -280,6 +279,22 @@ GameObject:
   - 114: {fileID: 11400054}
   m_Layer: 10
   m_Name: Badge title
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100034
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400034}
+  - 114: {fileID: 11400000}
+  m_Layer: 10
+  m_Name: ImageButtonParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -402,12 +417,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -164.063568, z: 0}
+  m_LocalPosition: {x: 0, y: -218.759766, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400022}
   - {fileID: 400018}
-  m_Father: {fileID: 400028}
+  m_Father: {fileID: 400034}
 --- !u!4 &400022
 Transform:
   m_ObjectHideFlags: 1
@@ -461,8 +476,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
-  - {fileID: 400020}
   - {fileID: 400032}
+  - {fileID: 400034}
   - {fileID: 400000}
   - {fileID: 400030}
   m_Father: {fileID: 400026}
@@ -488,6 +503,18 @@ Transform:
   m_LocalScale: {x: 73, y: 73, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
+--- !u!4 &400034
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100034}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 54.6961975, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400020}
+  m_Father: {fileID: 400028}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -505,7 +532,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100020}
+  m_GameObject: {fileID: 100034}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
@@ -1112,11 +1139,11 @@ MonoBehaviour:
   - {fileID: 100006}
   - {fileID: 100004}
   - {fileID: 100002}
-  - {fileID: 100020}
+  - {fileID: 100034}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100020}
+  lastFinishedShowObject: {fileID: 100034}
   lastFinishedHideObject: {fileID: 100026}
   isShowFinishedCallback: 0
   ShowTarget: {fileID: 0}

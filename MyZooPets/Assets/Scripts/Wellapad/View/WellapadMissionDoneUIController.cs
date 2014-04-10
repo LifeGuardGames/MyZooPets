@@ -43,10 +43,11 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 	private void RefreshLevelProgress(){
 		int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
-		int points = StatsController.Instance.GetStat(HUDElementType.Points);
+		float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
 		sliderLevel.sliderValue = points/nextLevelPoints;
 
-		labelStartLevel.text = LevelLogic.Instance.CurrentLevel.ToString();
+		int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
+		labelStartLevel.text = currentLevel.ToString();
 		labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
 	}
 
@@ -58,16 +59,15 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
 		if(badge != null){
-			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasBadge; 
 			sprite.spriteName = badge.TextureName;
-			print(go.transform.localScale);
 		}
 
 		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
 		if(skill != null)	{
-			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasBedroom; 
 			sprite.spriteName = skill.TextureName;
@@ -75,7 +75,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
 		foreach(Item item in items){
-			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasItem;
 			sprite.spriteName = item.TextureName;

@@ -25,7 +25,6 @@ public class SpriteResizer : MonoBehaviour {
 		
 		// get the size that we want to resize the sprite to
 		int nSizeTo = Constants.GetConstant<int>( strConstant );
-		print(nSizeTo);
 		// then make the sprite pixel perfect so we can easily get the width and height
 		sprite.MakePixelPerfect();
 		
@@ -46,9 +45,6 @@ public class SpriteResizer : MonoBehaviour {
 			float fRatio = (float) nSizeTo / (float) fPerfectWidth;
 			float fHeight = fPerfectHeight * fRatio;
 			Vector3 vScale = new Vector3( nSizeTo, fHeight, 0 );
-			print(fRatio);
-			print(fHeight);
-			print(fPerfectHeight);
 			gameObject.transform.localScale = vScale;
 
 		}

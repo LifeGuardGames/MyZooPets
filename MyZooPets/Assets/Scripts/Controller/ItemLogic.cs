@@ -140,6 +140,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 	public List<Item> GetItemsUnlockAtNextLevel(){
 		int nextLevel = LevelLogic.Instance.NextLevel;
 		List<Item> itemsUnlock = new List<Item>();
+		List<Item> retList;
 
 		//ItemBoxOnly == false
 		//UnlockAtLevel == nextLevel
@@ -155,7 +156,12 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 		//check how many items are selected
 		//select only 3 by random
-		return ListUtils.GetRandomElements<Item>(itemsUnlock, 3);
+		if(itemsUnlock.Count > 3)
+			retList = ListUtils.GetRandomElements<Item>(itemsUnlock, 3);
+		else
+			retList = itemsUnlock;
+
+		return retList; 
 	}
 	
 	//---------------------------------------------------

@@ -27,6 +27,7 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 
     void Awake(){
         DataSkills.SetupData();
+        allSkills = SelectListFromDictionaryAndSort(DataSkills.GetAllSkills());
     }	
 
     void Start(){

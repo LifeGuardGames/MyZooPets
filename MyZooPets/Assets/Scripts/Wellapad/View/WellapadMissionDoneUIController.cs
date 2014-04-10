@@ -14,18 +14,71 @@ using System.Collections.Generic;
 public class WellapadMissionDoneUIController : MonoBehaviour {
 	//	label to update the timer
 	public UILabel labelTimer;
-	public UILabel message1;
+	public UILabel labelTimerMessage;
+	public UILabel labelStartLevel;
+	public UILabel labelEndLevel;
+	public UIAtlas atlasBadge;
+	public UIAtlas atlasBedroom;
+	public UIAtlas atlasItem;
+
+	public UISlider sliderLevel;
+	public GameObject gridUnlockPredictions;
+	public GameObject unlockPredictionEntryPrefab;
 	
 	// bit of a hack - if this is true, the countdown was counting down
 	private bool bCounting = false;
 
 	void Awake(){
 		//pet's name
-		if(message1 != null && VersionManager.IsLite()){
+		if(labelTimerMessage != null && VersionManager.IsLite()){
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
 			string rawText = Localization.Localize("WELLAPAD_LITE_INHALER");
 			string message = String.Format(rawText, petName);
-			message1.text = message;
+			labelTimerMessage.text = message;
+		}
+
+		RefreshLevelProgress();
+		RefreshUnlockPredictions();
+	}
+
+	private void RefreshLevelProgress(){
+		int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
+		int points = StatsController.Instance.GetStat(HUDElementType.Points);
+		sliderLevel.sliderValue = points/nextLevelPoints;
+
+		labelStartLevel.text = LevelLogic.Instance.CurrentLevel.ToString();
+		labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
+	}
+
+	private void RefreshUnlockPredictions(){
+		foreach(Transform child in gridUnlockPredictions.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
+		}
+
+		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
+		if(badge != null){
+			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasBadge; 
+			sprite.spriteName = badge.TextureName;
+			print(go.transform.localScale);
+		}
+
+		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
+		if(skill != null)	{
+			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasBedroom; 
+			sprite.spriteName = skill.TextureName;
+		}
+
+		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
+		foreach(Item item in items){
+			GameObject go = NGUITools.AddChild(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasItem;
+			sprite.spriteName = item.TextureName;
 		}
 	}
 	
@@ -68,4 +121,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
 		labelTimer.text = String.Format(strLabel, strTime);
 	}
+
+
 }

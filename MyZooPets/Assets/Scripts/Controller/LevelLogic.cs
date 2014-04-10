@@ -6,72 +6,82 @@ using System;
 // LevelLogic
 // Controller that deals with modifying pet's level
 //---------------------------------------------------
-public class LevelLogic : Singleton<LevelLogic> {
-    private int maxLevel;
+public class LevelLogic : Singleton<LevelLogic>{
+	private int maxLevel;
 
-    public int MaxLevel{
-        get{
-            return maxLevel;
-        }
-    }
-    public Level CurrentLevel{
-        get{return DataManager.Instance.GameData.Level.CurrentLevel;}
-    }
-	
-	public bool IsAtMaxLevel() {
-		bool isMaxLevel = (int)CurrentLevel == maxLevel;
-		return isMaxLevel;
+    //what is the max level of the game
+	public int MaxLevel{
+		get{
+			return maxLevel;
+		}
 	}
 
-    void Awake(){
-        if(VersionManager.IsLite())
-            maxLevel = (int) Level.Level3;
-        else
-            maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
+    //Return current level
+	public Level CurrentLevel{
+		get{
+			return DataManager.Instance.GameData.Level.CurrentLevel;
+		}
+	}
+
+    //Return next level
+	public int NextLevel{
+		get{
+			return (int)DataManager.Instance.GameData.Level.CurrentLevel + 1;
+		}
+	}
+
+	void Awake(){
+		if(VersionManager.IsLite())
+			maxLevel = (int)Level.Level3;
+		else
+			maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
+	}
+
+    public bool IsAtMaxLevel(){
+        bool isMaxLevel = (int)CurrentLevel == maxLevel;
+        return isMaxLevel;
     }
 
-    //------------------------------------------------
-    // NextLevelPoints()
-    // Return the required points for next level up
-    //------------------------------------------------
-    public int NextLevelPoints(){
-        int nextLevel = (int) DataManager.Instance.GameData.Level.CurrentLevel + 1;
-		
+	//------------------------------------------------
+	// NextLevelPoints()
+	// Return the required points for next level up
+	//------------------------------------------------
+	public int NextLevelPoints(){
+        int adjustedNextLevel = NextLevel;
+
 		// check for max level, because there may not be data that exists after it
-		if ( IsAtMaxLevel() )
-			nextLevel -= 1;
+		if(IsAtMaxLevel())
+            adjustedNextLevel -= 1;
 		
-        PetLevel petLevel = DataPetLevels.GetLevel((Level) nextLevel);
+		PetLevel petLevel = DataPetLevels.GetLevel((Level)adjustedNextLevel);
 
-        return petLevel.LevelUpCondition;
-    }
+		return petLevel.LevelUpCondition;
+	}
 
-    //------------------------------------------------
-    // GetLevelUpMessage()
-    // Return the message to be displayed in notification when
-    // level up
-    //------------------------------------------------
-    public string GetLevelUpMessage(){
-        Level currentLevel = DataManager.Instance.GameData.Level.CurrentLevel;
-        PetLevel petLevel = DataPetLevels.GetLevel(currentLevel);
-        return petLevel.LevelUpMessage;
-    }
+	//------------------------------------------------
+	// GetLevelUpMessage()
+	// Return the message to be displayed in notification when
+	// level up
+	//------------------------------------------------
+	public string GetLevelUpMessage(){
+		Level currentLevel = DataManager.Instance.GameData.Level.CurrentLevel;
+		PetLevel petLevel = DataPetLevels.GetLevel(currentLevel);
+		return petLevel.LevelUpMessage;
+	}
 
-    //------------------------------------------------
-    // IncrementLevel()
-    // Levelup
-    //------------------------------------------------
-    public void IncrementLevel(){
-        int nextLevel = (int) DataManager.Instance.GameData.Level.CurrentLevel + 1;
+	//------------------------------------------------
+	// IncrementLevel()
+	// Levelup
+	//------------------------------------------------
+	public void IncrementLevel(){
+		if(NextLevel <= maxLevel)
+			DataManager.Instance.GameData.Level.CurrentLevel = (Level)NextLevel;
+	}
 
-        if(nextLevel <= maxLevel)
-            DataManager.Instance.GameData.Level.CurrentLevel = (Level)nextLevel;
-    }
-
-    // void OnGUI(){
-    //     if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
-    //         StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
-    //             0, Vector3.zero, 0, Vector3.zero);
-    //     }
-    // }
+	// void OnGUI(){
+	//     if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
+	//         StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
+	//             0, Vector3.zero, 0, Vector3.zero);
+	//     }
+	// }
 }

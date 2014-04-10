@@ -49,6 +49,9 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -86,6 +89,9 @@ MonoBehaviour:
   _color: {r: 1, g: 1, b: 1, a: 1}
   _scale: {x: -1, y: 1, z: 1}
   _spriteId: 5
+  boxCollider2D: {fileID: 0}
+  polygonCollider2D: []
+  edgeCollider2D: []
   boxCollider: {fileID: 0}
   meshCollider: {fileID: 0}
   meshColliderPositions: []
@@ -106,12 +112,18 @@ MonoBehaviour:
   arrayOK:
   - happy_1
   - happy_2
+  - happy_3
+  - happy_4
   arraySick:
   - sick1_1
   - sick1_2
+  - sick1_3
+  - sick1_4
   arrayAttack:
   - sick2_1
   - sick2_2
+  - sick2_3
+  - sick2_4
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

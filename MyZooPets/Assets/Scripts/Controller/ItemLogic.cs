@@ -62,9 +62,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 	}
 
-	void Awake(){
-	}
-
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
 		return DataLoader_Items.GetItem(itemID);
@@ -131,6 +128,35 @@ public class ItemLogic : Singleton<ItemLogic>{
 		
 		return bCanUse;
 	}
+
+	//Apply the stats effect that the Item with itemID has to the appropriate stats
+	public void StatsEffect(string itemID){
+		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
+		
+		if(statDict != null)
+			StatsEffect(statDict);
+	}
+
+	public List<Item> GetItemsUnlockAtNextLevel(){
+		int nextLevel = LevelLogic.Instance.NextLevel;
+		List<Item> itemsUnlock = new List<Item>();
+
+		//ItemBoxOnly == false
+		//UnlockAtLevel == nextLevel
+		foreach(Item item in FoodList){
+			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+				itemsUnlock.Add(item);
+		}
+
+		foreach(Item item in DecorationList){
+			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+				itemsUnlock.Add(item);
+		}
+
+		//check how many items are selected
+		//select only 3 by random
+		return ListUtils.GetRandomElements<Item>(itemsUnlock, 3);
+	}
 	
 	//---------------------------------------------------
 	// GetStasDict()
@@ -152,14 +178,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}		
 		
 		return dictStats;
-	}
-
-	//Apply the stats effect that the Item with itemID has to the appropriate stats
-	public void StatsEffect(string itemID){
-		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
-		
-		if(statDict != null)
-			StatsEffect(statDict);
 	}
 
 	//StatsEffect helper method

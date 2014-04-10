@@ -53,6 +53,18 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
         return currentSkill;
     }
 
+    public Skill GetSkillUnlockAtNextLevel(){
+        int nextLevel = LevelLogic.Instance.NextLevel;
+        Skill selectedSkill = null;
+
+        foreach(Skill skill in allSkills){
+            if(skill.UnlockLevel == nextLevel)
+                selectedSkill = skill;
+        }
+
+        return selectedSkill;
+    }
+
     //---------------------------------------------------
     // CheckFlameLevelUp()
     // Event listener. Listens to Pet level up and check

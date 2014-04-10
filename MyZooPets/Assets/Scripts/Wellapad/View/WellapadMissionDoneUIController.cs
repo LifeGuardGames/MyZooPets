@@ -20,7 +20,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UIAtlas atlasBadge;
 	public UIAtlas atlasBedroom;
 	public UIAtlas atlasItem;
-
 	public UISlider sliderLevel;
 	public GameObject gridUnlockPredictions;
 	public GameObject unlockPredictionEntryPrefab;
@@ -36,50 +35,18 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			string message = String.Format(rawText, petName);
 			labelTimerMessage.text = message;
 		}
-
-		RefreshLevelProgress();
-		RefreshUnlockPredictions();
 	}
 
-	private void RefreshLevelProgress(){
-		int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
-		float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
-		sliderLevel.sliderValue = points/nextLevelPoints;
-
-		int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
-		labelStartLevel.text = currentLevel.ToString();
-		labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
+	void Start(){
+		HUDAnimator.OnLevelUp += RefreshLevelProgress;
+		HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
+		RefreshLevelProgress(this, EventArgs.Empty);
+		RefreshUnlockPredictions(this, EventArgs.Empty);
 	}
 
-	private void RefreshUnlockPredictions(){
-		foreach(Transform child in gridUnlockPredictions.transform){
-			child.gameObject.SetActive(false);
-			Destroy(child.gameObject);
-		}
-
-		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
-		if(badge != null){
-			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasBadge; 
-			sprite.spriteName = badge.TextureName;
-		}
-
-		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
-		if(skill != null)	{
-			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasBedroom; 
-			sprite.spriteName = skill.TextureName;
-		}
-
-		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
-		foreach(Item item in items){
-			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasItem;
-			sprite.spriteName = item.TextureName;
-		}
+	void OnDestroy(){
+		HUDAnimator.OnLevelUp -= RefreshLevelProgress;
+		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 	}
 	
 	//---------------------------------------------------
@@ -122,5 +89,54 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		labelTimer.text = String.Format(strLabel, strTime);
 	}
 
+	//----------------------------------------------
+	// RefreshLevelProgress
+	// Update the level progress bar
+	//----------------------------------------------
+	private void RefreshLevelProgress(object sender, EventArgs args){
+		int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
+		float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
+		sliderLevel.sliderValue = points/nextLevelPoints;
 
+		int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
+		labelStartLevel.text = currentLevel.ToString();
+		labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
+	}
+
+	//----------------------------------------------
+	// RefreshUnlockPredictions()
+	// Update the items/badge/flame that will be unlocked for next level
+	//----------------------------------------------
+	private void RefreshUnlockPredictions(object sender, EventArgs args){
+		foreach(Transform child in gridUnlockPredictions.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
+		}
+
+		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
+		if(badge != null){
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasBadge; 
+			sprite.spriteName = badge.TextureName;
+		}
+
+		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
+		if(skill != null)	{
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasBedroom; 
+			sprite.spriteName = skill.TextureName;
+		}
+
+		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
+		foreach(Item item in items){
+			GameObject go = LgNGUITools.AddChildWithPosition(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			UISprite sprite = go.GetComponent<UISprite>();
+			sprite.atlas = atlasItem;
+			sprite.spriteName = item.TextureName;
+		}
+
+		gridUnlockPredictions.GetComponent<UIGrid>().Reposition();
+	}
 }

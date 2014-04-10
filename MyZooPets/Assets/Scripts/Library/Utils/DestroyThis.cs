@@ -9,19 +9,23 @@ using System.Collections;
 // easy and universal task.
 ///////////////////////////////////////////
 
-public class DestroyThis : MonoBehaviour {
+public class DestroyThis : MonoBehaviour{
+
+	public GameObject optionalParent;
 
 	// has this had life set on it yet?
 	private bool m_bSet = false;
-	private bool IsSet() {
+
+	private bool IsSet(){
 		return m_bSet;
 	}
 	
 	// the life of whatever this is
 	private float m_fLife = 0;
 	public float m_fStartLife = 0;
-	public void SetLife( float i_float ) {
-		if ( IsSet() ) {
+
+	public void SetLife(float i_float){
+		if(IsSet()){
 			Debug.LogError("Life already set on DestroyThis...not intended.");
 			return;
 		}
@@ -30,33 +34,38 @@ public class DestroyThis : MonoBehaviour {
 		m_bSet = true;
 	}
 	
-	void Start() {
+	void Start(){
 		// shortcut -- if the start life is negative, it means just destroy this object right away.
 		// used as a way to keep things from getting into the build that aren't totally ready
-		if ( m_fStartLife < 0 ) {
-			Destroy( gameObject );
+		if(m_fStartLife < 0){
+			Destroy(gameObject);
 			return;
 		}
 		
 		// life may be set on the script itself
-		if ( !IsSet() && m_fStartLife > 0 )
-			SetLife( m_fStartLife );
+		if(!IsSet() && m_fStartLife > 0)
+			SetLife(m_fStartLife);
 	}
 	
-	void Update() {
+	void Update(){
 		// if combat isn't playing, we don't want to do any updating
 		//if ( CombatManager.Exists() && CombatManager.instance.GetCombatState() != CombatStates.PLAYING ) 
 		//	return;	
 	
 		// if life has been set, let the countdown begin
-		if ( IsSet() )
-		{
+		if(IsSet()){
 			float fDelta = Time.deltaTime;
 			
 			m_fLife -= fDelta;
 			
-			if ( m_fLife <= 0 )
-				Destroy(gameObject);
+			if(m_fLife <= 0){
+				if(optionalParent != null){
+					Destroy(optionalParent);
+				}
+				else{
+					Destroy(gameObject);
+				}
+			}
 		}
 	}
 }

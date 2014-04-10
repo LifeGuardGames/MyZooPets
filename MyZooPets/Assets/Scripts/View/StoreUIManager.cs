@@ -270,16 +270,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			foreach(Transform tab in tabArea.transform){
-				HideUnuseTab(tab);
+			foreach(Transform tabParent in tabArea.transform){
+				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
 
 			CreateSubCategoryItemsTab("foodDefaultTab", Color.white);
 			//CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);	// Disabling custom colors
 
 		}else if(currentPage == "Items"){
-			foreach(Transform tab in tabArea.transform){
-				HideUnuseTab(tab);
+			foreach(Transform tabParent in tabArea.transform){
+				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
 
 			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white);
@@ -290,35 +290,34 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
 			string defaultTabName = "";
-			Color defaultColor = new Color(0, 0, 0, 0);
 
 			//Rename the tab to reflect the sub category name
-			foreach(Transform tab in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
+			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
-					tab.name = decorationEnums[counter];
+					tabParent.name = decorationEnums[counter];
 
 					// Disabling custom colors
 //					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
 //					backgroundSprite.color = colors[counter];
 					
-					UISprite imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<UISprite>();
-					imageSprite.spriteName = "iconDeco" + tab.name + "2";
+					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
+					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
 
-					ShowUseTab(tab);
+					ShowUseTab(tabParent.FindChild("Tab"));
 					if(counter == 0){
-						defaultTabName = tab.name;
+						defaultTabName = tabParent.name;
 //						defaultColor = colors[counter];
 					}
 				}else{
-					tab.name = "";
+					tabParent.name = "";
 
-					HideUnuseTab(tab);
+					HideUnuseTab(tabParent.FindChild("Tab"));
 				}
 				counter++;
 			}
 
 			//After tabs have been set up create items for the first/default tab
-			CreateSubCategoryItemsTab(defaultTabName, defaultColor);
+			CreateSubCategoryItemsTab(defaultTabName, Color.white);
 		}
 
 		ShowStoreSubPanel();
@@ -367,7 +366,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	public void CreateSubCategoryItemsTab(GameObject tab){
 		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
 		Color tabColor = backgroundSprite.color;
-		CreateSubCategoryItemsTab(tab.name, tabColor);
+		CreateSubCategoryItemsTab(tab.GetParent().name, tabColor);
 	}
 
 	//----------------------------------------------------
@@ -450,7 +449,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	private void ShowUseTab(Transform tab){
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		
 		tab.collider.enabled = true;
 	}
 

@@ -20,6 +20,7 @@ public abstract class LgButton : MonoBehaviour {
 	public bool bSprite;
 	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
 	public string strSoundProcess; // the sound resource this button plays when it is clicked
+	public string buttonName; //the name that will be used for analytics event if not empty
 
 	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
 	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
@@ -178,6 +179,8 @@ public abstract class LgButton : MonoBehaviour {
 	// the click (i.e., UI is not locked, etc).
 	//---------------------------------------------------	
 	protected virtual void ProcessClick() {
+		Analytics.Instance.LgButtonClicked(buttonName);
+		
 		Debug.LogError("Children should implement ProcessClick!");	
 	}
 }

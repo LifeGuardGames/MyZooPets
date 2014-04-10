@@ -306,7 +306,7 @@ public abstract class Tutorial {
 		// create the popup
 		GameObject goResource = Resources.Load(popupKey) as GameObject;
 		goPopup = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), goResource);
-	 	vPos.z = goPopup.transform.position.z; // keep the default z-value
+//		vPos.z = goPopup.transform.position.z; // keep the default z-value
 		goPopup.transform.localPosition = vPos;				
 		
 		//feed the script the option hashtable		

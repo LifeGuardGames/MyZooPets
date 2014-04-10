@@ -192,7 +192,7 @@ public class GameTutorial_SmokeIntro : GameTutorial {
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, location, option:option);
+		ShowPopup(Tutorial.POPUP_STD, location, useViewPort:false, option:option);
 	}
 
 	private void OnTutorialSwiped(object sender, EventArgs args){

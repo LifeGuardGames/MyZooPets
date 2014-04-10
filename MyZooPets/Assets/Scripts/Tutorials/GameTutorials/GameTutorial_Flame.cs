@@ -56,10 +56,10 @@ public class GameTutorial_Flame : GameTutorial {
 				GatingManager.Instance.StartCoroutine( FocusOnFlameButton() );
 			
 				// show a little popup message telling the user to hold down the flame button
-				ShowPopup( Tutorial.POPUP_STD, vPopup, option:option);
+				ShowPopup( Tutorial.POPUP_STD, vPopup, useViewPort:false, option:option);
 			
 				break;
-		case 1:
+			case 1:
 		        string petName = DataManager.Instance.GameData.PetInfo.PetName;
 				string stringKey = GetKey() + "_" + GetStep();
 				string tutMessage = String.Format(Localization.Localize(stringKey), petName);
@@ -67,7 +67,7 @@ public class GameTutorial_Flame : GameTutorial {
 				option.Add(TutorialPopupFields.Message, tutMessage);
 				
 				// show a little popup message telling the user to let go to breath fire
-				ShowPopup( Tutorial.POPUP_STD, vPopup, option:option);
+				ShowPopup( Tutorial.POPUP_STD, vPopup, useViewPort:false, option:option);
 				GatingManager.Instance.StartCoroutine(RemovePopupDelay());
 				break;
 		}

@@ -23,6 +23,6 @@ public class HighScoreMutableData{
 	//============================Initialization===============================
 	public HighScoreMutableData(){
 		MinigameHighScore = new Dictionary<string, int>();
-		MinigameHighScore.Add("Runner", 14000);
+		//MinigameHighScore.Add("Runner", 14000);
 	}
 }

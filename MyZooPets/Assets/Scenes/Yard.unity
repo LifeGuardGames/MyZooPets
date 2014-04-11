@@ -316,6 +316,30 @@ Prefab:
       propertyPath: disabledSprite
       value: button4BlueDeco
       objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 170.199951
+      objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -.599853516
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 682.199951
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -.599853516
+      objectReference: {fileID: 0}
+    - target: {fileID: 400036, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1194.19995
+      objectReference: {fileID: 0}
+    - target: {fileID: 400036, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -.599853516
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
   m_RootGameObject: {fileID: 10334980}
@@ -371,7 +395,7 @@ Transform:
   m_PrefabInternal: {fileID: 1127927966}
   m_GameObject: {fileID: 69512317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.500244, z: 0}
+  m_LocalPosition: {x: 0, y: 384, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 2086846627}
@@ -478,6 +502,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: HideStoreSubPanel
@@ -589,6 +614,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: decoEnter
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &75130990
 MonoBehaviour:
@@ -861,11 +887,11 @@ Prefab:
       objectReference: {fileID: 1702393783}
     - target: {fileID: 400070, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .500244141
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -873,11 +899,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 511.5
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 384.500244
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -885,11 +911,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400074, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -512.5
+      value: -512
       objectReference: {fileID: 0}
     - target: {fileID: 400074, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 384.500244
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 400074, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1599,6 +1625,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 217706644}
   functionName: RewardButtonClicked
@@ -2024,6 +2051,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 4
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   eType: 3
   strDefaultDecoID: 
@@ -2374,11 +2402,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -10766.4043
+    e13: -10765.9043
     e20: 0
     e21: 0
     e22: 384
@@ -3234,7 +3262,7 @@ Transform:
   m_PrefabInternal: {fileID: 37520403}
   m_GameObject: {fileID: 378519474}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 169.699951, y: -.099609375, z: -3.05175781e-05}
+  m_LocalPosition: {x: 170.199951, y: -.599853516, z: -3.05175781e-05}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 1241686003}
@@ -3306,6 +3334,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: CreateSubCategoryItems
@@ -3705,11 +3734,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -10038.4043
+    e13: -10037.9043
     e20: 0
     e21: 0
     e22: 384
@@ -3766,7 +3795,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: iconDecoSmallPlants2
+  mSpriteName: iconDecoPoster2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -4005,6 +4034,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 4
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1093962662}
   functionName: OpenShop
@@ -4145,7 +4175,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnApplicationQuit
@@ -4370,6 +4400,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 0
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   strScene: NewBedRoom
   scriptTransition: {fileID: 1448367746}
@@ -4716,11 +4747,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -711.5
+    e03: -712
     e10: 0
     e11: 384
     e12: 0
-    e13: -10089.4043
+    e13: -10088.9043
     e20: 0
     e21: 0
     e22: 384
@@ -4757,7 +4788,7 @@ Transform:
   m_PrefabInternal: {fileID: 741086225}
   m_GameObject: {fileID: 534025899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: -512, y: -384, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 2128974388}
@@ -4908,7 +4939,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: iconDecoSmallPlants2
+  mSpriteName: iconDecoPoster2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -4930,7 +4961,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: iconDecoSmallPlants2
+  mSpriteName: iconDecoPoster2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -6855,6 +6886,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 217706644}
   functionName: BackButtonClicked
@@ -8701,11 +8733,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -511.5
+    e03: -512
     e10: 0
     e11: 384
     e12: 0
-    e13: -10038.4043
+    e13: -10037.9043
     e20: 0
     e21: 0
     e22: 384
@@ -8772,19 +8804,19 @@ Prefab:
       objectReference: {fileID: 824936002}
     - target: {fileID: 400014, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -512.5
+      value: -512
       objectReference: {fileID: 0}
     - target: {fileID: 400014, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -383.499756
+      value: -384
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 511.5
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -383.499756
+      value: -384
       objectReference: {fileID: 0}
     - target: {fileID: 11400040, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: worldToLocal.e03
@@ -8804,11 +8836,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400028, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400028, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -383.499756
+      value: -384
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
@@ -9590,6 +9622,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 0
   target: {fileID: 786289021}
   functionName: ExpandToggled
@@ -9798,6 +9831,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 4
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1093962662}
   functionName: CloseChooseMenu
@@ -11167,7 +11201,7 @@ Transform:
   m_PrefabInternal: {fileID: 37520403}
   m_GameObject: {fileID: 955793980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 681.699951, y: -.099609375, z: -3.05175781e-05}
+  m_LocalPosition: {x: 682.199951, y: -.599853516, z: -3.05175781e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1192665300}
@@ -12626,7 +12660,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 988943288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: -512, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1093589301}
@@ -13124,6 +13158,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 4
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   eType: 3
   strDefaultDecoID: 
@@ -13248,6 +13283,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: CloseUI
@@ -13411,7 +13447,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1089682465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: 512, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1236153880}
@@ -13582,11 +13618,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -10422.4043
+    e13: -10421.9043
     e20: 0
     e21: 0
     e22: 384
@@ -13708,19 +13744,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 384.500244
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .500244141
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: uiCamera
@@ -16244,11 +16280,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -347.5
+    e03: -348
     e10: 0
     e11: 384
     e12: 0
-    e13: -10088.4043
+    e13: -10087.9043
     e20: 0
     e21: 0
     e22: 384
@@ -17076,6 +17112,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 4
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   eType: 3
   strDefaultDecoID: 
@@ -17105,7 +17142,7 @@ Transform:
   m_PrefabInternal: {fileID: 128300301}
   m_GameObject: {fileID: 1341863784}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .500244141, z: 3.06963921e-06}
+  m_LocalPosition: {x: 0, y: 0, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1049488507}
@@ -17179,6 +17216,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: CreateSubCategoryItems
@@ -17714,11 +17752,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -10326.2676
+    e13: -10325.7676
     e20: 0
     e21: 0
     e22: 384
@@ -18320,7 +18358,7 @@ Transform:
   m_PrefabInternal: {fileID: 1127927966}
   m_GameObject: {fileID: 1451687639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 372924901}
@@ -18492,7 +18530,7 @@ Transform:
   m_PrefabInternal: {fileID: 741086225}
   m_GameObject: {fileID: 1475652259}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: 0, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1900249665}
@@ -18590,7 +18628,7 @@ Transform:
   m_PrefabInternal: {fileID: 741086225}
   m_GameObject: {fileID: 1478067880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: 512, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 900718039}
@@ -18978,6 +19016,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 4
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   eType: 3
   strDefaultDecoID: 
@@ -19244,11 +19283,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -10158.4043
+    e13: -10157.9043
     e20: 0
     e21: 0
     e22: 384
@@ -19412,6 +19451,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: shopOpen
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &1536915833
 MonoBehaviour:
@@ -19511,11 +19551,11 @@ Prefab:
       objectReference: {fileID: 1702393783}
     - target: {fileID: 400038, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400038, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .500244141
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400038, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.z
@@ -19523,11 +19563,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400040, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 511.5
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 400040, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 384.500244
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 400040, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
       propertyPath: m_LocalPosition.z
@@ -19990,6 +20030,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: shopOpen
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &1585121615
 MonoBehaviour:
@@ -20547,7 +20588,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1646132845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.500244, z: 0}
+  m_LocalPosition: {x: 0, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 261344322}
@@ -20691,7 +20732,7 @@ Transform:
   m_PrefabInternal: {fileID: 37520403}
   m_GameObject: {fileID: 1659383422}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1193.69995, y: -.099609375, z: -3.05175781e-05}
+  m_LocalPosition: {x: 1194.19995, y: -.599853516, z: -3.05175781e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 739605182}
@@ -20868,7 +20909,7 @@ Transform:
   m_PrefabInternal: {fileID: 1546308652}
   m_GameObject: {fileID: 1677144845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .500244141, z: -2.1353364e-05}
+  m_LocalPosition: {x: 0, y: 0, z: -2.1353364e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2061085001}
@@ -22548,6 +22589,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 4
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   eType: 3
   strDefaultDecoID: 
@@ -22773,7 +22815,7 @@ Transform:
   m_PrefabInternal: {fileID: 128300301}
   m_GameObject: {fileID: 1767450016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: 384.500244, z: 3.06963921e-06}
+  m_LocalPosition: {x: 512, y: 384, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1750484105}
@@ -22867,6 +22909,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 4
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1093962662}
   functionName: CloseUI
@@ -23664,6 +23707,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 4
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1680633970}
   functionName: OnRemoveButton
@@ -23852,6 +23896,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 0
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   strScene: Runner
   scriptTransition: {fileID: 1448367746}
@@ -23926,7 +23971,7 @@ Transform:
   m_PrefabInternal: {fileID: 1546308652}
   m_GameObject: {fileID: 1884282529}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: 384.500244, z: -2.1353364e-05}
+  m_LocalPosition: {x: 512, y: 384, z: -2.1353364e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1385354383}
@@ -24035,7 +24080,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: iconDecoSmallPlants2
+  mSpriteName: iconDecoPoster2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -24262,7 +24307,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1928894075}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: -512, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400916687}
@@ -24571,7 +24616,7 @@ Transform:
   m_PrefabInternal: {fileID: 128300301}
   m_GameObject: {fileID: 1973491820}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: 384.500244, z: 3.06963921e-06}
+  m_LocalPosition: {x: -512, y: 384, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1301416373}
@@ -24739,6 +24784,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: CloseUI
@@ -24757,6 +24803,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 3
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 1702393783}
   functionName: CreateSubCategoryItems
@@ -25296,6 +25343,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 0
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
   strScene: Runner
   scriptTransition: {fileID: 1448367746}
@@ -25382,7 +25430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2081998767
 MonoBehaviour:
   m_ObjectHideFlags: 0

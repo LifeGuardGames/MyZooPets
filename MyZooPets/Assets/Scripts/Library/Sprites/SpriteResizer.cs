@@ -8,45 +8,57 @@ using System.Collections;
 // the value of the public variable.
 //---------------------------------------------------	
 
-public class SpriteResizer : MonoBehaviour {
+public class SpriteResizer : MonoBehaviour{
 	// public variable holding the size to be resized to
 	public string strConstant;
-	
+
+	public bool resizeNow = false;
+
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	void Start () {
+	void Start(){
+		Resize();
+	}
+
+	public void Resize(){
 		// get the sprite
 		UISprite sprite = gameObject.GetComponent<UISprite>();
-		if ( sprite == null ) {
-			Debug.Log( "Sprite resizer on an object that does not have a sprite.", gameObject );
+		if(sprite == null){
+			Debug.Log("Sprite resizer on an object that does not have a sprite.", gameObject);
 			return;
 		}
 		
 		// get the size that we want to resize the sprite to
-		int nSizeTo = Constants.GetConstant<int>( strConstant );
+		int nSizeTo = Constants.GetConstant<int>(strConstant);
 		// then make the sprite pixel perfect so we can easily get the width and height
 		sprite.MakePixelPerfect();
 		
 		// get width and height
 		float fPerfectHeight = gameObject.transform.localScale.y;
 		float fPerfectWidth = gameObject.transform.localScale.x;
-		
+
 		// this is purposefully a little inefficient code-wise because I found this to be a little complicated
-		if ( fPerfectHeight > fPerfectWidth ) {
+		if(fPerfectHeight > fPerfectWidth){
 			// if the perfect height is > perfect width, we want to scale the width based on the ratio
-			float fRatio = (float) nSizeTo / (float) fPerfectHeight;
+			float fRatio = (float)nSizeTo / (float)fPerfectHeight;
 			float fWidth = fPerfectWidth * fRatio;
-			Vector3 vScale = new Vector3( fWidth, nSizeTo, 0 );
+			Vector3 vScale = new Vector3(fWidth, nSizeTo, 0);
 			gameObject.transform.localScale = vScale;
 		}
-		else {
+		else{
 			// otherwise, the exact opposite: scale height based on the ratio of the desired size to perfect width
-			float fRatio = (float) nSizeTo / (float) fPerfectWidth;
+			float fRatio = (float)nSizeTo / (float)fPerfectWidth;
 			float fHeight = fPerfectHeight * fRatio;
-			Vector3 vScale = new Vector3( nSizeTo, fHeight, 0 );
+			Vector3 vScale = new Vector3(nSizeTo, fHeight, 0);
 			gameObject.transform.localScale = vScale;
-
 		}
 	}
+
+//	void Update(){
+//		if (resizeNow){
+//			resizeNow = false;
+//			Resize();
+//		}
+//	}
 }

@@ -9,7 +9,7 @@ using System.Collections;
 public class PetSpeechAI : MonoBehaviour{
     private bool enableAutoSpeech = false;
     private float timer = 0; 
-    private float timeBeforeSpeech = 30; //30 seconds interval
+    private float timeBeforeSpeech = 15; //30 seconds interval
 
     void Awake(){
         //load pet speech from xml

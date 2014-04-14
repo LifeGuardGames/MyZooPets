@@ -13,7 +13,7 @@ public class Item {
 	private string textureName; //name of texture in the atlas
 	private ItemType type;
 	private int cost; //cost of item
-	private string description;
+	// private string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
     private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
                                         //F: available in store as well
@@ -74,7 +74,7 @@ public class Item {
         textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
         cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
         // description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode);
-        description = "";
+        // description = "";
 		
 		// optional for now
 		if(hashItemData.Contains("UnlockAtLevel"))

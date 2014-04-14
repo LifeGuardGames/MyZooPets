@@ -18,8 +18,7 @@ public class DataManager : Singleton<DataManager>{
     public string currentPetID; //The id that will be used for pet serialization
 
     private const int NUM_OF_PETS = 3;
-    private static bool isCreated = false; //prevent DataManager from being loaded
-                                            //again during scene change (needs to be static)
+    private static bool isCreated;
     private PetGameData gameData; //Super class that stores all the game data related to a specific petID
     private Dictionary<string, MutableData_PetMenuInfo> menuSceneData; //basic info data of all the pet that are only used in this scene
 
@@ -46,24 +45,30 @@ public class DataManager : Singleton<DataManager>{
     //Save temporary data when transitioning to new scene
     public LoadSceneData SceneData{get; set;} 
 
-    //TO Do: hash the pin before saving
-    public string ParentPortalPin{
+    //Use to tell if it's users' first time launching the app
+    public bool IsFirstTime{
         get{
-            return PlayerPrefs.GetString("ParentPortalPin", "");
-        }
+            bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 
-        set{
-            PlayerPrefs.SetString("ParentPortalPin", value);
-        }
-    }
+            //IsFirstTime is implemented in later versions so this chunk of code
+            //is used to single out all the existing users prior to the implementation
+            //of IsFirstTime 
+            if(firstTime){
+                for(int petIndex=0; petIndex < NumOfPets; petIndex++){
+                    string jsonSavedData = PlayerPrefs.GetString("Pet" + petIndex + "_GameData", "");
 
-    public string ParentEmail{
-        get{
-            return PlayerPrefs.GetString("ParentEmail", "");
-        }
+                    if(!String.IsNullOrEmpty(jsonSavedData)){
+                        firstTime = false;
+                        break;
+                    }
+                }
 
-        set{
-            PlayerPrefs.SetString("ParentEmail", value);
+                //not first time anymore after this property is called
+                PlayerPrefs.SetInt("IsFirstTime", 0);
+            }
+
+
+            return firstTime;
         }
     }
 
@@ -163,9 +168,6 @@ public class DataManager : Singleton<DataManager>{
         }
     }
 
-    void OnDestroy(){
-    }
-
     //----------------------------------------------------
     // RemovePetData()
     // delete json data
@@ -222,9 +224,9 @@ public class DataManager : Singleton<DataManager>{
             if(!String.IsNullOrEmpty(jsonString)){
                 newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
 
-#if UNITY_EDITOR
-            Debug.Log("Deserialized: " + jsonString);
-#endif
+            #if UNITY_EDITOR
+                Debug.Log("Deserialized: " + jsonString);
+            #endif
 
                 gameData = newGameData;
 				gameData.VersionCheck();
@@ -249,17 +251,17 @@ public class DataManager : Singleton<DataManager>{
             return;
         }
         
-#if UNITY_EDITOR
-        Debug.Log("Game is saving");
-#endif
+        #if UNITY_EDITOR
+            Debug.Log("Game is saving");
+        #endif
 
         //Data will not be saved if petID and gameData is empty
         if(!String.IsNullOrEmpty(currentPetID) && gameData != null){
             string jsonString = JSON.Instance.ToJSON(gameData);
 
-#if UNITY_EDITOR
-        Debug.Log("SERIALIZED: " + jsonString);
-#endif
+        #if UNITY_EDITOR
+            Debug.Log("SERIALIZED: " + jsonString);
+        #endif
 
             PlayerPrefs.SetString(currentPetID + "_GameData", jsonString); 
             Serialized();

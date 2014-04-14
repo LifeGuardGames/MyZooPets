@@ -17,6 +17,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UILabel labelTimerMessage;
 	public UILabel labelStartLevel;
 	public UILabel labelEndLevel;
+	public UILabel labelMaxLevel;
 	public UIAtlas atlasBadge;
 	public UIAtlas atlasBedroom;
 	public UIAtlas atlasItem;
@@ -38,14 +39,16 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	}
 
 	void Start(){
-		HUDAnimator.OnLevelUp += RefreshLevelProgress;
+		// HUDAnimator.OnLevelUp += RefreshLevelProgress;
+		WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
 		HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
-		RefreshLevelProgress(this, EventArgs.Empty);
+
+		RefreshLevelProgress();
 		RefreshUnlockPredictions(this, EventArgs.Empty);
 	}
 
 	void OnDestroy(){
-		HUDAnimator.OnLevelUp -= RefreshLevelProgress;
+		// HUDAnimator.OnLevelUp -= RefreshLevelProgress;
 		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 	}
 	
@@ -89,18 +92,30 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		labelTimer.text = String.Format(strLabel, strTime);
 	}
 
+	private void RefreshLevelProgress(){
+		if(!LevelLogic.Instance.IsAtMaxLevel()){
+			int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
+			float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
+			sliderLevel.sliderValue = points/nextLevelPoints;
+
+			int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
+			labelStartLevel.text = currentLevel.ToString();
+			labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
+		}else{
+			labelMaxLevel.gameObject.SetActive(true);
+			labelStartLevel.text = "";
+			labelEndLevel.text = "";
+			sliderLevel.sliderValue = 1.0f;
+		}
+	}
 	//----------------------------------------------
 	// RefreshLevelProgress
 	// Update the level progress bar
 	//----------------------------------------------
-	private void RefreshLevelProgress(object sender, EventArgs args){
-		int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
-		float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
-		sliderLevel.sliderValue = points/nextLevelPoints;
-
-		int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
-		labelStartLevel.text = currentLevel.ToString();
-		labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
+	private void RefreshLevelProgress(object sender, UIManagerEventArgs args){
+		if(args != null && args.Opening){
+			RefreshLevelProgress();	
+		}
 	}
 
 	//----------------------------------------------

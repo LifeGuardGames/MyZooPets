@@ -60,9 +60,9 @@ public class StatsController : Singleton<StatsController> {
 		// if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
 		// 	ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
 		// }
-		// if(GUI.Button(new Rect(0, 0, 100, 100), "get money")){
-		// 	ChangeStats(0, Vector3.zero, 100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
-		// }
+		if(GUI.Button(new Rect(0, 0, 100, 100), "get pt")){
+			ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+		}
 
 	}
 #endif

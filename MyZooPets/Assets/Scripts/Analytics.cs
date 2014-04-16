@@ -102,7 +102,7 @@ public class Analytics : MonoBehaviour {
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
 
-        #if UNITY_ANDROID || UNITY_IPHONE
+        #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
             //start facebook sdk
             FB.Init(OnInitComplete);
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -8,8 +9,6 @@ using System.Collections;
 /// </summary>
 
 public class NotificationUIManager : Singleton<NotificationUIManager> {
-	// References
-	public GameObject cameraObject;
 
 	public GameObject popupNotificationOneButton; 		
 	public GameObject popupNotificationTwoButtons; 	
@@ -21,18 +20,22 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public GameObject popupFireLevelUpMessage;
 
 	private bool isNotificationActive = false;
-	public bool IsNotificationActive() {
-		return isNotificationActive;	
-	}
-	
 	private GameObject anchorCenter; //parent of notificationCenterPanel
 	private GameObject mainCamera;
 	private GameObject notificationCenterPanel; //where all the notifications will be created.
 	private GameObject notificationBackDrop3D; //a giant collider put infront of the 3d camera to prevent 3D scene from clicked
 	
+	public bool IsNotificationActive() {
+		return isNotificationActive;	
+	}
+
 	void Awake(){
 		anchorCenter = GameObject.Find("Anchor-Center");
-		mainCamera = Camera.main.transform.gameObject;
+
+		//not every scene has a main camera
+		if(Camera.main != null){
+			mainCamera = Camera.main.transform.gameObject;
+		}
 	}
 	
 	void Start(){
@@ -82,7 +85,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			}
 
 			//load the 3D click blocker	
-			if(notificationBackDrop3D == null){
+			if(notificationBackDrop3D == null && mainCamera != null){
 				GameObject notificationBackDrop3DPrefab = (GameObject) Resources.Load("NotificationBackDrop3D");
 				notificationBackDrop3D = LgNGUITools.AddChildWithPosition(mainCamera, notificationBackDrop3DPrefab);
 			}

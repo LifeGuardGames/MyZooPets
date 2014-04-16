@@ -12,7 +12,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class WellapadMissionDoneUIController : MonoBehaviour {
-	//	label to update the timer
+	// label to update the timer
 	public UILabel labelTimer;
 	public UILabel labelTimerMessage;
 	public UILabel labelStartLevel;
@@ -24,6 +24,10 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UISlider sliderLevel;
 	public GameObject gridUnlockPredictions;
 	public GameObject unlockPredictionEntryPrefab;
+
+	// Sprite set color on max level
+	public UISprite startCircle;	// For reference
+	public UISprite endCircle;		// For setting
 	
 	// bit of a hack - if this is true, the countdown was counting down
 	private bool bCounting = false;
@@ -106,6 +110,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			labelStartLevel.text = "";
 			labelEndLevel.text = "";
 			sliderLevel.sliderValue = 1.0f;
+			endCircle.color = startCircle.color;
 		}
 	}
 	//----------------------------------------------

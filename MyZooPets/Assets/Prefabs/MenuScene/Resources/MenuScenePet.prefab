@@ -59,7 +59,7 @@ GameObject:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400006}
   m_Layer: 10
-  m_Name: Sprite (starBlank)
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8, y: -165, z: -5}
+  m_LocalPosition: {x: 8, y: -78.4451904, z: -5}
   m_LocalScale: {x: 48, y: 48, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
@@ -83,7 +83,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: -4}
+  m_LocalPosition: {x: 10, y: -32.086441, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
@@ -98,8 +98,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
-  - {fileID: 400002}
   - {fileID: 400006}
+  - {fileID: 400002}
   m_Father: {fileID: 0}
 --- !u!4 &400006
 Transform:
@@ -108,8 +108,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -97, y: -158, z: 0}
-  m_LocalScale: {x: 105, y: 101, z: 1.36414182}
+  m_LocalPosition: {x: 0, y: -146, z: -1}
+  m_LocalScale: {x: 160, y: 40, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
 --- !u!65 &6500000
@@ -146,10 +146,10 @@ MonoBehaviour:
   mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 1
+  mEffectColor: {r: .25, g: .25, b: .25, a: 1}
   mSymbols: 1
-  mEffectDistance: {x: 1, y: 1}
+  mEffectDistance: {x: 8, y: 8}
   mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
@@ -198,11 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: .299994171, g: .281033754, b: .83088237, a: 1}
+  mColor: {r: 0, g: 0, b: 0, a: .509803951}
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: starBlank
+  mSpriteName: circle128
   mFillCenter: 1
   mType: 0
   mFillDirection: 4

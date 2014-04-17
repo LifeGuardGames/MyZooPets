@@ -19,6 +19,10 @@ public class ButtonSetHighlight : MonoBehaviour {
 
 	// Override this in child, used for conditional position changes
 	protected virtual void _Start(){}
+
+	public void SetFirstButton(){
+		gameObject.transform.position = firstButton.transform.position;
+	}
 	
 	private void ChangePosition(object sender, EventArgs args){
 		LgButton button = (LgButton)sender;

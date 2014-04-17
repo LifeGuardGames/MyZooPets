@@ -10,6 +10,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject selectedEgg;
 	public Camera NGUICamera;
     public SceneTransition scriptTransition;
+    public ButtonSetHighlight buttonHighLight;
 
     private string petColor = "OrangeYellow"; //Default pet color
     private string petName; //Default pet name
@@ -68,6 +69,24 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	
     private void ShowChooseGUI(){
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
+
+        //find out what color is the egg and change the color selection button
+        string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName;
+        LgButton colorButton = null;
+
+        switch(defaultEggColor){
+            case "eggOrangeYellow":
+                colorButton = buttonHighLight.buttonList[0];
+                petColor = "OrangeYellow";
+            break;
+            case "eggPurpleLime":
+                colorButton = buttonHighLight.buttonList[1];
+                petColor = "PurpleLime";
+            break;
+        }
+
+        buttonHighLight.firstButton = colorButton;
+        buttonHighLight.SetFirstButton();
     }
 
     private void HideChooseGUI(bool showMovie){

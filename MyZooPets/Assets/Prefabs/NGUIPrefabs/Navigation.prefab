@@ -18,7 +18,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &100002
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -28,7 +28,7 @@ GameObject:
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400014}
   - 114: {fileID: 11400006}
-  - 114: {fileID: 11400020}
+  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: StoreButton
   m_TagString: Untagged
@@ -65,6 +65,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 111: {fileID: 11100000}
   - 114: {fileID: 11400012}
+  - 114: {fileID: 11400026}
   m_Layer: 10
   m_Name: WellapadButton
   m_TagString: Untagged
@@ -83,6 +84,22 @@ GameObject:
   - 114: {fileID: 11400022}
   m_Layer: 10
   m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400010}
+  - 114: {fileID: 11400020}
+  m_Layer: 10
+  m_Name: StoreButtonParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,10 +142,10 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 50, y: 150, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .800000072, y: .800000072, z: 1}
   m_Children:
   - {fileID: 400004}
-  m_Father: {fileID: 400018}
+  m_Father: {fileID: 400010}
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -137,7 +154,7 @@ Transform:
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 90, y: 90, z: 1}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
 --- !u!4 &400006
@@ -148,7 +165,7 @@ Transform:
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: .800000012, y: .800000012, z: 1}
   m_Children:
   - {fileID: 400008}
   m_Father: {fileID: 400000}
@@ -160,9 +177,21 @@ Transform:
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 90, y: 90, z: 1}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
+--- !u!4 &400010
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400002}
+  m_Father: {fileID: 400018}
 --- !u!4 &400018
 Transform:
   m_ObjectHideFlags: 1
@@ -173,8 +202,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 400010}
   - {fileID: 400000}
-  - {fileID: 400002}
   m_Father: {fileID: 0}
 --- !u!65 &6500000
 BoxCollider:
@@ -183,11 +212,11 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 90, y: 90, z: 0}
-  m_Center: {x: 0, y: 0, z: -1}
+  m_Size: {x: 127.999977, y: 127.999863, z: 0}
+  m_Center: {x: -7.62939453e-06, y: 9.91821289e-05, z: -10.750001}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -195,11 +224,11 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 90, y: 90, z: 0}
-  m_Center: {x: 0, y: 0, z: -1}
+  m_Size: {x: 127.999992, y: 127.999878, z: 0}
+  m_Center: {x: -1.90734863e-05, y: 0, z: -10.750001}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -208,17 +237,14 @@ Animation:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: c62de74244b274d4ebc0fc7d708a6764, type: 2}
+  m_Animation: {fileID: 7400000, guid: 1f63ad4cb6506fb4a8d8977b34999151, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: c62de74244b274d4ebc0fc7d708a6764, type: 2}
+  - {fileID: 7400000, guid: 1f63ad4cb6506fb4a8d8977b34999151, type: 2}
   - {fileID: 7400000, guid: 331b051572cace540b4a23ac8a76a8a4, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
-  m_UserAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -267,6 +293,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: shopOpen
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &11400004
 MonoBehaviour:
@@ -288,11 +315,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512
     e10: 0
     e11: 384
     e12: 0
-    e13: -10038.4043
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -320,6 +347,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: shopOpen
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &11400008
 MonoBehaviour:
@@ -333,10 +361,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400024}
-  normalSprite: buttonNavStoreUp
-  hoverSprite: buttonNavStoreUp
-  pressedSprite: buttonNavStoreDown
-  disabledSprite: buttonNavStoreUp
+  normalSprite: button4BlueStore
+  hoverSprite: button4BlueStore
+  pressedSprite: button4BlueStore
+  disabledSprite: button4BlueStore
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -349,10 +377,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400022}
-  normalSprite: buttonNavWellapadUp
-  hoverSprite: buttonNavWellapadUp
-  pressedSprite: buttonNavWellapadDown
-  disabledSprite: buttonNavWellapadUp
+  normalSprite: button4BlueWellapad
+  hoverSprite: button4BlueWellapad
+  pressedSprite: button4BlueWellapad
+  disabledSprite: button4BlueWellapad
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -364,7 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdd644b33569cf4f877f42007da8649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  resetAfterStop: 0
+  debug: 0
   isLooping: 1
 --- !u!114 &11400014
 MonoBehaviour:
@@ -381,6 +410,21 @@ MonoBehaviour:
   trigger: 0
   volume: 1
   pitch: 1
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 0}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .899999976, y: .899999976, z: 1}
+  duration: 0
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -393,13 +437,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GoList:
-  - {fileID: 100002}
+  - {fileID: 100010}
   - {fileID: 100000}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 0
-  lastFinishedShowObject: {fileID: 100002}
-  lastFinishedHideObject: {fileID: 100002}
+  lastFinishedShowObject: {fileID: 100010}
+  lastFinishedHideObject: {fileID: 100010}
   isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -414,7 +458,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
+  m_GameObject: {fileID: 100010}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
@@ -458,7 +502,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
-  mSpriteName: buttonNavWellapadUp
+  mSpriteName: button4BlueWellapad
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -479,12 +523,27 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
-  mSpriteName: buttonNavStoreUp
+  mSpriteName: button4BlueStore
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 0}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .899999976, y: .899999976, z: 1}
+  duration: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

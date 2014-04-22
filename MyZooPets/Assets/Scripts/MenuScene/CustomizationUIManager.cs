@@ -10,16 +10,17 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject selectedEgg;
 	public Camera NGUICamera;
     public SceneTransition scriptTransition;
+    public ButtonSetHighlight buttonHighLight;
 
     private string petColor = "OrangeYellow"; //Default pet color
     private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
-    private bool skipComic = false;
+    // private bool skipComic = false;
 	
     void Awake(){
         eModeType = UIModeTypes.CustomizePet;
-        skipComic = Constants.GetConstant<bool>("SkipIntroComic");
+        // skipComic = Constants.GetConstant<bool>("SkipIntroComic");
     }
 
 	//---------------------------------------------------
@@ -68,6 +69,24 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	
     private void ShowChooseGUI(){
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
+
+        //find out what color is the egg and change the color selection button
+        string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName;
+        LgButton colorButton = null;
+
+        switch(defaultEggColor){
+            case "eggOrangeYellow":
+                colorButton = buttonHighLight.buttonList[0];
+                petColor = "OrangeYellow";
+            break;
+            case "eggPurpleLime":
+                colorButton = buttonHighLight.buttonList[1];
+                petColor = "PurpleLime";
+            break;
+        }
+
+        buttonHighLight.firstButton = colorButton;
+        buttonHighLight.SetFirstButton();
     }
 
     private void HideChooseGUI(bool showMovie){
@@ -88,22 +107,23 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             SelectionUIManager.Instance.ToggleSpotLight(false);
         }
     }
-	
+
+    //Jason - disabling intro movie because that seems to turn away users	
 	private void ShowIntroMovie() {
-		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
+		// if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro") || skipComic)
 			LoadScene();
 	
-        AudioManager.Instance.LowerBackgroundVolume(0.1f);
+        // AudioManager.Instance.LowerBackgroundVolume(0.1f);
 
-		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-        ComicPlayer.OnComicPlayerDone += IntroComicDone;
-	}
+		// GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
+		// LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+  //       ComicPlayer.OnComicPlayerDone += IntroComicDone;
+	// }
 	
-    private void IntroComicDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Comic_Intro");
-        ComicPlayer.OnComicPlayerDone -= IntroComicDone;
-		LoadScene();
+  //   private void IntroComicDone(object sender, EventArgs args){
+		// DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Comic_Intro");
+  //       ComicPlayer.OnComicPlayerDone -= IntroComicDone;
+		// LoadScene();
     }
 	
 	private void LoadScene(){

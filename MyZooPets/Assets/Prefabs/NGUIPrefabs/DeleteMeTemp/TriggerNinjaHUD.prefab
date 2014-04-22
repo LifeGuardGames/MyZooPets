@@ -9,6 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400008}
+  - 114: {fileID: 11400004}
   m_Layer: 10
   m_Name: Sprite (itemInhalerBlue)
   m_TagString: Untagged
@@ -176,9 +178,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400020}
-  - 114: {fileID: 11400004}
+  - 114: {fileID: 11400022}
   m_Layer: 10
-  m_Name: Sprite (panelGray)
+  m_Name: LabelScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,25 +280,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400032}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400010}
+  - 114: {fileID: 11400020}
   m_Layer: 10
   m_Name: Sprite (itemInhalerBlue)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100034
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400034}
-  - 114: {fileID: 11400010}
-  - 114: {fileID: 11400008}
-  m_Layer: 10
-  m_Name: LabelDistance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +300,7 @@ GameObject:
   - 114: {fileID: 11400014}
   - 114: {fileID: 11400012}
   m_Layer: 10
-  m_Name: LabelDistanceTitle
+  m_Name: LabelScoreTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,6 +434,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400052}
   - 114: {fileID: 11400016}
+  - 114: {fileID: 11400024}
+  - 114: {fileID: 11400026}
   m_Layer: 10
   m_Name: Sprite (itemInhalerBlue)
   m_TagString: Untagged
@@ -545,8 +534,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.450073, y: -127.168762, z: 0}
-  m_LocalScale: {x: 33.1000328, y: 52.3065605, z: .408575982}
+  m_LocalPosition: {x: 115.77594, y: -149.757751, z: -2}
+  m_LocalScale: {x: 51, y: 86, z: 1}
   m_Children:
   - {fileID: 400046}
   - {fileID: 400022}
@@ -624,7 +613,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: -73.0571518}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400026}
@@ -663,8 +652,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -54.0241699, y: -128.068909, z: 0}
-  m_LocalScale: {x: 279.579041, y: 113.688339, z: .999935985}
+  m_LocalPosition: {x: 208.912659, y: -54.7058716, z: -5.0000639}
+  m_LocalScale: {x: 60, y: 60, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400056}
 --- !u!4 &400022
@@ -730,22 +719,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 159.368317, y: -127.168762, z: 0}
-  m_LocalScale: {x: 33.1000328, y: 52.3065605, z: .408575982}
+  m_LocalPosition: {x: 185.776398, y: -149.757751, z: -2}
+  m_LocalScale: {x: 51, y: 86, z: 1}
   m_Children:
   - {fileID: 400048}
   - {fileID: 400018}
-  m_Father: {fileID: 400056}
---- !u!4 &400034
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 390, y: -52.0001526, z: -5}
-  m_LocalScale: {x: 39, y: 39, z: 1}
-  m_Children: []
   m_Father: {fileID: 400056}
 --- !u!4 &400036
 Transform:
@@ -754,8 +732,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.7314453, y: -52.3894348, z: -5}
-  m_LocalScale: {x: 40, y: 40, z: 1}
+  m_LocalPosition: {x: 16.7314148, y: -54.947937, z: -5}
+  m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 400056}
 --- !u!4 &400038
@@ -852,8 +830,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 47.5320435, y: -127.168762, z: 0}
-  m_LocalScale: {x: 33.1002083, y: 52.3064842, z: .408644408}
+  m_LocalPosition: {x: 45.7758179, y: -149.757751, z: -2}
+  m_LocalScale: {x: 51, y: 86, z: 1}
   m_Children:
   - {fileID: 400014}
   - {fileID: 400062}
@@ -879,13 +857,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400034}
   - {fileID: 400036}
+  - {fileID: 400020}
   - {fileID: 400052}
   - {fileID: 400000}
   - {fileID: 400032}
   - {fileID: 400008}
-  - {fileID: 400020}
   m_Father: {fileID: 0}
 --- !u!4 &400058
 Transform:
@@ -916,7 +893,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100062}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -80.4291077}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400054}
@@ -936,7 +913,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: 2028f479d3c666f4a94eb9cc2873b70a, type: 2}
-  mSpriteName: itemInhalerBlue
+  mSpriteName: inhalerMain
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -957,7 +934,7 @@ MonoBehaviour:
   mPivot: 3
   mDepth: 10
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: panelGray
+  mSpriteName: banner2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -968,22 +945,19 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100020}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Script: {fileID: 11500000, guid: 451fcfab9bd2c164dbc8c074f1cdbd8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 2
-  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: panelGray
-  mFillCenter: 1
-  mType: 1
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
+  pSystem: {fileID: 19800016}
+  destroyAfterStop: 0
+  destroyAfterStopDelay: 0
+  randomActive: 0
+  delayBeforeStart: 0
+  minInterval: 0
+  maxInterval: 0
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -995,11 +969,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: 2028f479d3c666f4a94eb9cc2873b70a, type: 2}
-  mSpriteName: itemInhalerBlue
+  mSpriteName: inhalerMain
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -1010,42 +984,31 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Script: {fileID: 11500000, guid: ed8849cbdfa7c4924984cf624d873474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: RUNNER_DISTANCE
+  nIndex: 2
+  sprite: {fileID: 11400000}
+  systemOff: {fileID: 11400004}
+  systemOn: {fileID: 0}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
+  m_GameObject: {fileID: 100032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Script: {fileID: 11500000, guid: ed8849cbdfa7c4924984cf624d873474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 5
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: 1234561
-  mMaxLineWidth: 180
-  mMaxLineHeight: 40
-  mEncoding: 1
-  mMaxLineCount: 0
-  mPassword: 0
-  mShowLastChar: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 10, y: 5}
-  mShrinkToFit: 1
-  mLineWidth: 0
-  mMultiline: 1
+  nIndex: 3
+  sprite: {fileID: 11400006}
+  systemOff: {fileID: 11400020}
+  systemOn: {fileID: 0}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1073,17 +1036,17 @@ MonoBehaviour:
   mPivot: 3
   mDepth: 0
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: 'Distance:'
+  mText: 'Score:'
   mMaxLineWidth: 0
   mMaxLineHeight: 0
   mEncoding: 1
   mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 1
+  mEffectColor: {r: .270588249, g: .576470613, b: .270588249, a: 1}
   mSymbols: 1
-  mEffectDistance: {x: 10, y: 5}
+  mEffectDistance: {x: 8, y: 8}
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
@@ -1102,7 +1065,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: 2028f479d3c666f4a94eb9cc2873b70a, type: 2}
-  mSpriteName: itemInhalerBlue
+  mSpriteName: inhalerMain
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -1146,6 +1109,86 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
+--- !u!114 &11400020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451fcfab9bd2c164dbc8c074f1cdbd8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pSystem: {fileID: 19800014}
+  destroyAfterStop: 0
+  destroyAfterStopDelay: 0
+  randomActive: 0
+  delayBeforeStart: 0
+  minInterval: 0
+  maxInterval: 0
+--- !u!114 &11400022
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 3
+  mDepth: 0
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: 0
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 1
+  mEffectColor: {r: .270588249, g: .576470613, b: .270588249, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 8, y: 8}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
+--- !u!114 &11400024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8849cbdfa7c4924984cf624d873474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nIndex: 1
+  sprite: {fileID: 11400016}
+  systemOff: {fileID: 11400026}
+  systemOn: {fileID: 0}
+--- !u!114 &11400026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451fcfab9bd2c164dbc8c074f1cdbd8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pSystem: {fileID: 19800046}
+  destroyAfterStop: 0
+  destroyAfterStopDelay: 0
+  randomActive: 0
+  delayBeforeStart: 0
+  minInterval: 0
+  maxInterval: 0
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -25047,6 +25090,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25077,6 +25123,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25107,6 +25156,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25137,6 +25189,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25167,6 +25222,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25197,6 +25255,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25227,6 +25288,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25257,6 +25321,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25287,6 +25354,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25317,6 +25387,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25347,6 +25420,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25377,6 +25453,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25407,6 +25486,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25437,6 +25519,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25467,6 +25552,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25497,6 +25585,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
@@ -25527,6 +25618,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25557,6 +25651,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25587,6 +25684,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25617,6 +25717,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
@@ -25647,6 +25750,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0
@@ -25677,6 +25783,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25707,6 +25816,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 0
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0
@@ -25737,6 +25849,9 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
   m_RenderMode: 1
   m_MaxParticleSize: .100000001
   m_CameraVelocityScale: 0

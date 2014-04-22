@@ -145,7 +145,6 @@ GameObject:
   - 114: {fileID: 11400028}
   - 114: {fileID: 11400030}
   - 114: {fileID: 11400032}
-  - 114: {fileID: 11400024}
   m_Layer: 10
   m_Name: ImageButton
   m_TagString: Untagged
@@ -252,6 +251,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100030
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400030}
+  - 114: {fileID: 11400024}
+  m_Layer: 10
+  m_Name: ImageButtonParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -325,8 +340,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .5, y: .5, z: 0}
-  m_LocalScale: {x: 73, y: 65, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400016}
 --- !u!4 &400014
@@ -347,12 +362,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -164.063568, z: 0}
+  m_LocalPosition: {x: 0, y: -164.049408, z: -1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400006}
   - {fileID: 400012}
-  m_Father: {fileID: 400026}
+  m_Father: {fileID: 400030}
 --- !u!4 &400018
 Transform:
   m_ObjectHideFlags: 1
@@ -416,8 +431,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -54.6964417, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400016}
   - {fileID: 400022}
+  - {fileID: 400030}
   - {fileID: 400014}
   m_Father: {fileID: 400024}
 --- !u!4 &400028
@@ -431,6 +446,18 @@ Transform:
   m_LocalScale: {x: 82, y: 79, z: .435964793}
   m_Children: []
   m_Father: {fileID: 400024}
+--- !u!4 &400030
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100030}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400016}
+  m_Father: {fileID: 400026}
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -441,8 +468,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 128, z: 0}
-  m_Center: {x: 0, y: 0, z: -5}
+  m_Size: {x: 127.991806, y: 127.991821, z: 0}
+  m_Center: {x: 0, y: .0139923096, z: -2.75000381}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -623,7 +650,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonUpGreen
+  mSpriteName: button4Green
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -720,7 +747,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 10
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonSymbolCheck
+  mSpriteName: button4SymbolCheck
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -741,7 +768,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 11
   mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
-  mSpriteName: iconFireBlack
+  mSpriteName: iconFireBlue
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -752,7 +779,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100016}
+  m_GameObject: {fileID: 100030}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
@@ -793,10 +820,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400012}
-  normalSprite: buttonUpGreen
-  hoverSprite: buttonUpGreen
-  pressedSprite: buttonDownGreen
-  disabledSprite: ButtonUpGray
+  normalSprite: button4Green
+  hoverSprite: button4Green
+  pressedSprite: button4Green
+  disabledSprite: button4Green
 --- !u!114 &11400028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -825,7 +852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 400012}
   hover: {x: 1, y: 1, z: 1}
-  pressed: {x: .850000024, y: .850000024, z: .850000024}
+  pressed: {x: .899999976, y: .899999976, z: 1}
   duration: 0
 --- !u!114 &11400032
 MonoBehaviour:
@@ -912,7 +939,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: panelRed
+  mSpriteName: panel2
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -929,7 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .477941185, g: .407364905, b: .281141788, a: 1}
   mPivot: 4
   mDepth: 5
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
@@ -966,11 +993,11 @@ MonoBehaviour:
   - {fileID: 100000}
   - {fileID: 100010}
   - {fileID: 100028}
-  - {fileID: 100016}
+  - {fileID: 100030}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100016}
+  lastFinishedShowObject: {fileID: 100030}
   lastFinishedHideObject: {fileID: 100024}
   isShowFinishedCallback: 0
   ShowTarget: {fileID: 0}
@@ -1082,12 +1109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textArea: {fileID: 11400040}
-  button1: {fileID: 0}
-  button2: {fileID: 0}
-  numOfButtons: 1
   HideImmediately: 0
   imageSprite: {fileID: 11400022}
-  title: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

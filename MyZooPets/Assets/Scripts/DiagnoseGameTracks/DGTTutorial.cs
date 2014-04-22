@@ -90,7 +90,7 @@ public class DGTTutorial : MinigameTutorial {
 				break;
 			case 1:
 				// send sick pets out
-				vPos = POS_TOP;
+				vPos = POS_BOT;
 				QueueCharacters( AsthmaStage.Sick );
 				GameObject.Destroy( goZoneFX );
 				vPosFX = arrayZones[1].transform.position;

@@ -27,8 +27,8 @@ public class NinjaTriggerTarget : NinjaTrigger {
 		// pick a face for this roach
 		int nFaces = Constants.GetConstant<int> ("Ninja_NumFaces" );
 		string strFaceKey = Constants.GetConstant<string> ("Ninja_FaceKey" );
-		int nFace = Random.Range( 1, nFaces ); // faces index starts at 1, so get 1-max inclusive
-		string strFace = strFaceKey + nFace;
+		int nFace = Random.Range( 1, nFaces + 1); // faces index starts at 1, so get 1-max inclusive (exclusive??)
+ 		string strFace = strFaceKey + nFace;
 		SetFace( strFace );
 	}
 	

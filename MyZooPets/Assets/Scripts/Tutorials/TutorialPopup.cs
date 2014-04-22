@@ -18,7 +18,7 @@ public class TutorialPopup : MonoBehaviour {
 	public UISprite sprite;
 	public LgButtonMessage button1;
 	public UISlicedSprite bg; // sprite bg
-	public float fBorder; // arbitrary border to make the bg look a little nicer
+	public float fBorder = -1; // arbitrary border to make the bg look a little nicer
 	public delegate void Callback();
 	
 	private Callback Button1Callback;
@@ -33,16 +33,18 @@ public class TutorialPopup : MonoBehaviour {
 			Vector3 textScale = label.transform.localScale;
 			//Vector3 offset = label.transform.localPosition;	// not sure what this was supposed to do...
 			//Debug.Log("And the local scale of the text is " + textScale);
-			
-			float sizeX = vSize.x * textScale.x;
-			float sizeY = vSize.y * textScale.y;
-			
-			sizeX += fBorder;
-			sizeY += fBorder;
 
-			float sizeZ = 1f;
+			if(fBorder > 0){
+				float sizeX = vSize.x * textScale.x;
+				float sizeY = vSize.y * textScale.y;
+				
+				sizeX += fBorder;
+				sizeY += fBorder;
 
-			bg.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);		
+				float sizeZ = 1f;
+
+				bg.transform.localScale = new Vector3(sizeX, sizeY, sizeZ);
+			}
 		}
 	}
 

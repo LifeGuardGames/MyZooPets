@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 public class Analytics : MonoBehaviour {
     public const string DIAGNOSE_RESULT_CORRECT = "Correct";
@@ -28,11 +29,15 @@ public class Analytics : MonoBehaviour {
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 
+    private const string MAT_ADVERTISER_ID = "17900";
+    private const string MAT_CONVERSION_KEY = "757d356bf92419b36822e14a62ebedee";
+
     private static bool isCreated = false;
     private static Analytics instance;
     // private DateTime playTime;
     // private bool isGameTimerOn = false;
     private bool isAnalyticsEnabled = false;
+
 
     //This instance creates itself if it's not in the scene.
     //Mainly for debugging purpose
@@ -51,6 +56,40 @@ public class Analytics : MonoBehaviour {
         }
     }
 
+    //---------------------- important methods from MAT SDK --------------------
+    #if UNITY_ANDROID
+        // Pass the name of the plugin's dynamic library.
+        // Import any functions we will be using from the MAT lib.
+        // (I've listed them all here)
+        [DllImport ("mobileapptracker")]
+        private static extern void initNativeCode(string advertiserId, string conversionKey);
+
+        [DllImport ("mobileapptracker")]
+        private static extern void setExistingUser(bool isExisting);
+
+        // Tracking functions
+        [DllImport ("mobileapptracker")]
+        private static extern int measureSession();
+    #endif
+
+     #if UNITY_IPHONE
+        // Main initializer method for MAT
+        [DllImport ("__Internal")]
+        private static extern void initNativeCode(string advertiserId, string conversionKey);
+
+        // Methods for setting Apple related id
+        [DllImport ("__Internal")]
+        private static extern void setAppleAdvertisingIdentifier(string appleAdvertisingIdentifier, bool trackingEnabled);
+
+        [DllImport ("__Internal")] 
+        private static extern void setExistingUser(bool isExisting);
+
+        // Methods to track install, update events
+        [DllImport ("__Internal")]
+        private static extern void measureSession();
+    #endif
+    //--------------------------------------------------------------------------
+
     void Awake(){
         //make persistent
         if(isCreated){
@@ -63,8 +102,24 @@ public class Analytics : MonoBehaviour {
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
 
-        //start facebook sdk
-        FB.Init(OnInitComplete);
+        #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
+            //start facebook sdk
+            FB.Init(OnInitComplete);
+
+            //start MAT sdk
+            initNativeCode(MAT_ADVERTISER_ID, MAT_CONVERSION_KEY);
+
+            #if UNITY_IPHONE
+                setAppleAdvertisingIdentifier(iPhone.advertisingIdentifier, iPhone.advertisingTrackingEnabled);
+            #endif
+
+            // For existing users prior to MAT SDK implementation, call setExistingUser(true) before measureSession.
+            // Otherwise, existing users will be counted as new installs the first time they run your app.
+            if(!DataManager.Instance.IsFirstTime)
+                setExistingUser(true);
+
+            measureSession();
+        #endif
     }
 
     private void OnInitComplete(){
@@ -131,38 +186,24 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);
     }
 
-    // //Start tracking playtime 
-    // public void StartPlayTimeTracker(){
-    //     playTime = LgDateTime.GetTimeNow();
-    //     isGameTimerOn = true;
-    // } 
+    // //record when a user changes to another scene. Can be used to track how many
+    // //times user plays mini game 
+    public void ChangeScene(string newSceneName){
+        if(!String.IsNullOrEmpty(newSceneName))
+            GA.API.Design.NewEvent("SceneChanged:" + newSceneName);
+    }
 
-    // //Stop tracking and submit playtime
-    // public void EndPlayTimeTracker(){
-    //     string levelName = "";
-    //     switch(Application.loadedLevelName){
-    //         case "InhalerGamePet":
-    //             levelName = INHALER_CATEGORY;
-    //         break;
-    //         case "Runner":
-    //             levelName = RUNNER_CATEGORY;
-    //         break;
-    //         case "DiagnoseGameTracks":
-    //             levelName = DIAGNOSE_CATEGORY;
-    //         break;
-    //         case "TriggerNinja":
-    //             levelName = NINJA_CATEGORY;
-    //         break;
-    //     }
-    //     isGameTimerOn = false;
-    //     TimeSpan timeSpentInGame = LgDateTime.GetTimeNow() - playTime; //minutes
-    //     GA.API.Design.NewEvent(levelName + "TimeSpent", (float) timeSpentInGame.Minutes);
-    // }
+    //track which button is most clicked by users
+    public void LgButtonClicked(string buttonName){
+        if(!String.IsNullOrEmpty(buttonName))
+            GA.API.Design.NewEvent("ButtonClicked:" + buttonName);
+    }
 
-    // void OnApplicationPause(bool isPaused){
-    //     if(isPaused && isGameTimerOn)
-    //         EndPlayTimeTracker();
-    // }
+    //when the user clean the triggers
+    public void TriggersCleaned(String triggerID){
+        if(!String.IsNullOrEmpty(triggerID) && isAnalyticsEnabled)
+            GA.API.Design.NewEvent("TriggersCleaned:" + triggerID);
+    }
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
@@ -233,5 +274,10 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("TriggerHitPet");
     }
 
+    //store short cup clicked. (from pet thought bubble)
+    public void StoreItemShortCutClicked(){
+        if(isAnalyticsEnabled)
+            GA.API.Design.NewEvent("Button:StoreItemShortCut");
+    }
 
 }

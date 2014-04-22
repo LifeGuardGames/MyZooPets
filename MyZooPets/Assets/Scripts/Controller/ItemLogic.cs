@@ -62,9 +62,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 	}
 
-	void Awake(){
-	}
-
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
 		return DataLoader_Items.GetItem(itemID);
@@ -116,8 +113,10 @@ public class ItemLogic : Singleton<ItemLogic>{
 			
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
-			int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
-			int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			// int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
+			int nCurHealth = StatsController.Instance.GetStat( HUDElementType.Health );
+			// int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
+			int nCurMood = StatsController.Instance.GetStat( HUDElementType.Mood );
 			
 			if ( moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100 )
 				bCanUse = false;
@@ -128,6 +127,41 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 		
 		return bCanUse;
+	}
+
+	//Apply the stats effect that the Item with itemID has to the appropriate stats
+	public void StatsEffect(string itemID){
+		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
+		
+		if(statDict != null)
+			StatsEffect(statDict);
+	}
+
+	public List<Item> GetItemsUnlockAtNextLevel(){
+		int nextLevel = LevelLogic.Instance.NextLevel;
+		List<Item> itemsUnlock = new List<Item>();
+		List<Item> retList;
+
+		//ItemBoxOnly == false
+		//UnlockAtLevel == nextLevel
+		foreach(Item item in FoodList){
+			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+				itemsUnlock.Add(item);
+		}
+
+		foreach(Item item in DecorationList){
+			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+				itemsUnlock.Add(item);
+		}
+
+		//check how many items are selected
+		//select only 3 by random
+		if(itemsUnlock.Count > 3)
+			retList = ListUtils.GetRandomElements<Item>(itemsUnlock, 3);
+		else
+			retList = itemsUnlock;
+
+		return retList; 
 	}
 	
 	//---------------------------------------------------
@@ -150,14 +184,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}		
 		
 		return dictStats;
-	}
-
-	//Apply the stats effect that the Item with itemID has to the appropriate stats
-	public void StatsEffect(string itemID){
-		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
-		
-		if(statDict != null)
-			StatsEffect(statDict);
 	}
 
 	//StatsEffect helper method

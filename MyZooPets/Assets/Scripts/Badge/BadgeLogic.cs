@@ -38,6 +38,25 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         return DataBadges.GetBadge(badgeID);
     }
 
+    public Badge GetBadgeUnlockAtNextLevel(){
+        int nextLevel = LevelLogic.Instance.NextLevel;
+        Badge selectedBadge = null;
+        
+        foreach(Badge badge in allBadges){
+            if(badge.Type == BadgeType.Level && badge.UnlockCondition == nextLevel){
+                selectedBadge = badge;
+                break;
+            }
+        }
+        
+        // selectedBadge = (from badge in allBadges
+        //                 where badge.Type == BadgeType.Level &&
+        //                     badge.UnlockCondition == nextLevel 
+        //                 select badge).First();
+
+        return selectedBadge;
+    }
+
     //Use this function to check which one of the badges with badgeType can be unlocked
     //PARAMETERS: badgeType, currentProgress, overrideProgress.
     //            overrideProgress is used to specify whether currentProgress should replace

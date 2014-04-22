@@ -7,7 +7,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     public static EventHandler<EventArgs> OnShowHint; //Fire this event when hints need to display 
 
     public GameObject progressBarObject;
-    public GameObject quitButton;
     public GameObject inhalerBody;
     public SceneTransition scriptTransition; 
     public GetFireAnimationController fireAnimationController; //The script that plays the fire animation at the end of the inhaler game
@@ -73,16 +72,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HUDUIManager.Instance.HidePanel();
     }
 
-    private void ShowQuitButton(){
-        if(InhalerLogic.Instance.IsTutorialCompleted || !tutOn)
-            quitButton.GetComponent<PositionTweenToggle>().Show();
-    }
-
-    private void HideQuitButton(){
-        if(InhalerLogic.Instance.IsTutorialCompleted || !tutOn)
-            quitButton.GetComponent<PositionTweenToggle>().Hide();
-    }
-
     private void HideInhaler(){
         inhalerBody.SetActive(false); 
     }
@@ -95,7 +84,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         yield return 0;
 
         HideHUD();
-        ShowQuitButton();
         SetUpHintTimer();
 
         // Analytics.Instance.StartPlayTimeTracker();
@@ -168,7 +156,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     //Event listener. Listens to game over message. Play fire animation 
     private void OnGameEnd(object sender, EventArgs args){
         ShowHUD();
-        HideQuitButton();
         HideInhaler();
         HideProgressBar();
 

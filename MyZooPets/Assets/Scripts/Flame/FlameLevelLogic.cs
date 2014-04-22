@@ -27,6 +27,7 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 
     void Awake(){
         DataSkills.SetupData();
+        allSkills = SelectListFromDictionaryAndSort(DataSkills.GetAllSkills());
     }	
 
     void Start(){
@@ -51,6 +52,18 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
     public Skill GetCurrentSkill(){
         Skill currentSkill = DataSkills.GetSkill(DataManager.Instance.GameData.Flame.CurrentSkillID);
         return currentSkill;
+    }
+
+    public Skill GetSkillUnlockAtNextLevel(){
+        int nextLevel = LevelLogic.Instance.NextLevel;
+        Skill selectedSkill = null;
+
+        foreach(Skill skill in allSkills){
+            if(skill.UnlockLevel == nextLevel)
+                selectedSkill = skill;
+        }
+
+        return selectedSkill;
     }
 
     //---------------------------------------------------

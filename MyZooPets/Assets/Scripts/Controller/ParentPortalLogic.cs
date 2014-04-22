@@ -9,13 +9,13 @@ using System.Security.Cryptography.X509Certificates;
 
 public class ParentPortalLogic : Singleton<ParentPortalLogic> {
 
-    public string ParentEmail{
-        get{return DataManager.Instance.ParentEmail;}
-    }
+    // public string ParentEmail{
+    //     get{return DataManager.Instance.ParentEmail;}
+    // }
 
-    public string ParentPortalPin{
-        get{return DataManager.Instance.ParentPortalPin;}
-    }
+    // public string ParentPortalPin{
+    //     get{return DataManager.Instance.ParentPortalPin;}
+    // }
 
     /*
         Check if email is valid and if confirmPassword matches with password
@@ -34,8 +34,8 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
         if(result.Count == 0){ //No errors, so save the data
             result.Add("Completed", true);
 
-            DataManager.Instance.ParentEmail = email;
-            DataManager.Instance.ParentPortalPin = password;
+            // DataManager.Instance.ParentEmail = email;
+            // DataManager.Instance.ParentPortalPin = password;
         }else
             result.Add("Completed", false);
 
@@ -55,8 +55,8 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
         VerifyEmail(email, ref result);
 
         if(!result.Contains("EmailErrorMsg")){
-            string pin = DataManager.Instance.ParentPortalPin;
-            SendPinToEmail(email, pin, ref result);
+            // string pin = DataManager.Instance.ParentPortalPin;
+            // SendPinToEmail(email, pin, ref result);
         }
 
         if(result.Count == 0)
@@ -102,7 +102,7 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
         if(result.Count == 0){ //No errors. Reset pin
             result.Add("Completed", true);
 
-            DataManager.Instance.ParentPortalPin = newPin;
+            // DataManager.Instance.ParentPortalPin = newPin;
         }else{
             result.Add("Completed", false);
         }
@@ -115,15 +115,17 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
             InputErrorMsg
     */
     private void VerifyInputPinWithSavedPin(string inputPin, ref Hashtable result){
-        string savedPin = DataManager.Instance.ParentPortalPin;
+        // string savedPin = DataManager.Instance.ParentPortalPin;
 
-        //Pin can't be empty
-        if(String.IsNullOrEmpty(inputPin))
-            result.Add("InputPinErrorMsg", Localization.Localize("ERROR_PIN_EMPTY"));
-        else
-            //Check if pin is correct
-            if(savedPin != inputPin)
-                result.Add("InputPinErrorMsg", Localization.Localize("ERROR_WRONG_PIN"));
+            //not first time anymore after this property is called
+            PlayerPrefs.SetInt("IsFirstTime", 0);
+        // //Pin can't be empty
+        // if(String.IsNullOrEmpty(inputPin))
+        //     result.Add("InputPinErrorMsg", Localization.Localize("ERROR_PIN_EMPTY"));
+        // else
+        //     //Check if pin is correct
+        //     if(savedPin != inputPin)
+        //         result.Add("InputPinErrorMsg", Localization.Localize("ERROR_WRONG_PIN"));
     }
 
     /*

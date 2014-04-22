@@ -61,12 +61,12 @@ public class ButtonWellapad : LgButton {
 	private void EnableButtonBounce(object sender, EventArgs args){
 		AnimationControl animControl = GetComponent<AnimationControl>();
 		if(animControl != null)
-			animControl.Play("smallBounceSoftNav");
+			animControl.Play("smallBounceSoftNavWellapad");
 	}
 
 	private void DisableButtonBounce(){
 		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceSoftNav"))
+		if(animControl.IsPlaying("smallBounceSoftNavWellapad"))
 			animControl.StopAndResetFrame("zero");
 	}
 }

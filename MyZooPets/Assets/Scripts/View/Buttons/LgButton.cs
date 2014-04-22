@@ -18,24 +18,25 @@ public abstract class LgButton : MonoBehaviour {
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
-	
-	// the mode that this button will check for to make sure it can be clicked
-	public UIModeTypes eMode = UIModeTypes.NotInited;
-	public UIModeTypes GetMode() {
-		return eMode;	
-	}
+	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
+	public string strSoundProcess; // the sound resource this button plays when it is clicked
+	public string buttonName; //the name that will be used for analytics event if not empty
 
-	// the sound resource this button plays when it is clicked
-	public string strSoundProcess;
-	public string GetProcessSound() {
-		return strSoundProcess;	
-	}
-	
 	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
 	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
 	// which buttons have a mode, opening a UI pushes a mode (and closing a UI pops a mode) and this class should
 	// actually check the button's mode against the latest mode in the queue.
 	public bool bCheckClickManager = true;
+
+
+	public UIModeTypes GetMode() {
+		return eMode;	
+	}
+
+	public string GetProcessSound() {
+		return strSoundProcess;	
+	}
+	
 	private bool ShouldCheckClickManager() {
 		return bCheckClickManager;	
 	}
@@ -131,7 +132,7 @@ public abstract class LgButton : MonoBehaviour {
 		// let anything listening know that this button has been processed
 		if ( OnProcessed != null )
 			OnProcessed( this, EventArgs.Empty );
-		
+
 		// process the click
 		ProcessClick();
 	}
@@ -178,6 +179,8 @@ public abstract class LgButton : MonoBehaviour {
 	// the click (i.e., UI is not locked, etc).
 	//---------------------------------------------------	
 	protected virtual void ProcessClick() {
+		Analytics.Instance.LgButtonClicked(buttonName);
+		
 		Debug.LogError("Children should implement ProcessClick!");	
 	}
 }

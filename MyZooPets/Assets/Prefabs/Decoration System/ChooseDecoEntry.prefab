@@ -142,7 +142,7 @@ GameObject:
   - 4: {fileID: 400016}
   - 114: {fileID: 11400018}
   m_Layer: 10
-  m_Name: ItemBackground
+  m_Name: SpriteBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,6 +159,22 @@ GameObject:
   - 114: {fileID: 11400014}
   m_Layer: 10
   m_Name: XMark
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400020}
+  - 114: {fileID: 11400026}
+  m_Layer: 10
+  m_Name: ItemBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +199,7 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 100, y: 83, z: -1}
-  m_LocalScale: {x: 140, y: 140, z: 1.36000001}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
 --- !u!4 &400004
@@ -239,16 +255,17 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400016}
+  - {fileID: 400020}
   - {fileID: 400018}
   - {fileID: 400006}
   - {fileID: 400010}
   - {fileID: 400000}
   - {fileID: 400002}
   - {fileID: 400008}
+  - {fileID: 400016}
   m_Father: {fileID: 0}
 --- !u!4 &400014
 Transform:
@@ -257,8 +274,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.4363842, z: 0}
-  m_LocalScale: {x: 64, y: 67, z: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
 --- !u!4 &400016
@@ -268,8 +285,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 200, y: 200, z: 1}
+  m_LocalPosition: {x: 98, y: 85, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: .910989344}
   m_Children: []
   m_Father: {fileID: 400012}
 --- !u!4 &400018
@@ -279,8 +296,19 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 100, z: -12}
-  m_LocalScale: {x: 100, y: 100, z: 1}
+  m_LocalPosition: {x: 101.5, y: 85, z: -12}
+  m_LocalScale: {x: 55, y: 56, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400012}
+--- !u!4 &400020
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 200, y: 200, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
 --- !u!65 &6500000
@@ -293,8 +321,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 128, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 128, y: 128.000137, z: 0}
+  m_Center: {x: 3.81469727e-06, y: .000854492188, z: -1.24999809}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -360,7 +388,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 2
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonUpGreen
+  mSpriteName: button4Green
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -399,10 +427,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400004}
-  normalSprite: buttonUpGreen
-  hoverSprite: buttonUpGreen
-  pressedSprite: buttonDownGreen
-  disabledSprite: ButtonUpGray
+  normalSprite: button4Green
+  hoverSprite: button4Green
+  pressedSprite: button4Green
+  disabledSprite: button4Green
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -418,7 +446,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonSymbolPlaceDeco
+  mSpriteName: button4SymbolPlaceDeco
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -450,7 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: .41911763, g: 0, b: 0, a: 1}
+  mColor: {r: .397058845, g: .14344053, b: .00583910616, a: 1}
   mPivot: 4
   mDepth: 5
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -500,11 +528,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 1, g: .948884368, b: .735294104, a: 1}
-  mPivot: 6
+  mColor: {r: .477941185, g: .407364905, b: .281141788, a: .403921574}
+  mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
-  mSpriteName: box30
+  mSpriteName: box20
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -533,6 +561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strConstant: SpriteSize_DecoEntry
+  resizeNow: 0
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -547,9 +576,31 @@ MonoBehaviour:
   bSprite: 1
   eMode: 4
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 0}
   functionName: Button1Action
+--- !u!114 &11400026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 6
+  mDepth: 1
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
+  mSpriteName: panel2sub
+  mFillCenter: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

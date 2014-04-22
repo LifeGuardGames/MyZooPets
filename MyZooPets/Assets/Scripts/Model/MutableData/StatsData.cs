@@ -34,30 +34,30 @@ public class StatsData{
         Stars = 300;
         // Stars = 1000;
     }
-	
-	public int GetStat( HUDElementType eStat ) {
-		int nStat = 0;
+
+	// public int GetStat( HUDElementType eStat ) {
+	// 	int nStat = 0;
 		
-		switch ( eStat ) {
-		case HUDElementType.Points:
-			nStat = Points;
-			break;
-		case HUDElementType.Health:
-			nStat = Health;
-			break;
-		case HUDElementType.Mood:
-			nStat = Mood;
-			break;
-		case HUDElementType.Stars:
-			nStat = Stars;
-			break;
-		default:
-			Debug.LogError("No such display target for " + eStat);
-			break;
-		}	
+	// 	switch ( eStat ) {
+	// 	case HUDElementType.Points:
+	// 		nStat = Points;
+	// 		break;
+	// 	case HUDElementType.Health:
+	// 		nStat = Health;
+	// 		break;
+	// 	case HUDElementType.Mood:
+	// 		nStat = Mood;
+	// 		break;
+	// 	case HUDElementType.Stars:
+	// 		nStat = Stars;
+	// 		break;
+	// 	default:
+	// 		Debug.LogError("No such display target for " + eStat);
+	// 		break;
+	// 	}	
 		
-		return nStat;
-	}
+	// 	return nStat;
+	// }
 
     //==============StatsModifiers================
     //Points
@@ -98,9 +98,9 @@ public class StatsData{
     }
 
     //Mood
-    public double GetWeightedMood(){
-        return (0.5*Mood + 0.5*Health);
-    }
+    // public double GetWeightedMood(){
+    //     return (0.5*Mood + 0.5*Health);
+    // }
     public void AddMood(int val){
 		// cache old mood
 		//int nOldMood = Mood;

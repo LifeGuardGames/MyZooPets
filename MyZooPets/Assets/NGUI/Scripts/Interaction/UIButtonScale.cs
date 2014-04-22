@@ -14,7 +14,7 @@ public class UIButtonScale : MonoBehaviour
 {
 	public Transform tweenTarget;
 	public Vector3 hover = new Vector3(1f, 1f, 1f);
-	public Vector3 pressed = new Vector3(0.9f, 0.9f, 0.9f);
+	public Vector3 pressed = new Vector3(0.9f, 0.9f, 1f);
 	public float duration = 0f;
 	
 	

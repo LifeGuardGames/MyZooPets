@@ -163,6 +163,7 @@ GameObject:
   - 114: {fileID: 11400004}
   - 111: {fileID: 11100000}
   - 114: {fileID: 11400064}
+  - 114: {fileID: 11400000}
   m_Layer: 10
   m_Name: WellapadRewardButton
   m_TagString: Untagged
@@ -226,7 +227,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -300, z: -1}
-  m_LocalScale: {x: .699999928, y: .699999928, z: 1}
+  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
   m_Children:
   - {fileID: 400084}
   - {fileID: 400006}
@@ -321,7 +322,7 @@ Transform:
   m_GameObject: {fileID: 100054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -300, z: -1}
-  m_LocalScale: {x: .699999928, y: .699999928, z: 1}
+  m_LocalScale: {x: .699999988, y: .699999988, z: 1}
   m_Children:
   - {fileID: 400048}
   - {fileID: 400050}
@@ -334,7 +335,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46, y: -4, z: -5}
+  m_LocalPosition: {x: 40, y: -2, z: -5}
   m_LocalScale: {x: 80, y: 80, z: 1}
   m_Children: []
   m_Father: {fileID: 400052}
@@ -383,8 +384,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 312.100006, y: 128.000015, z: 0}
-  m_Center: {x: 0, y: 0, z: -1.5}
+  m_Size: {x: 314, y: 128, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6500004
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -395,8 +396,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 606, y: 127.999992, z: 0}
-  m_Center: {x: 0, y: 0, z: -2.99999976}
+  m_Size: {x: 580, y: 128.000153, z: 0}
+  m_Center: {x: 0, y: -.000907897949, z: -3.00000381}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -412,6 +413,21 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 0}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .899999976, y: .899999976, z: .899999976}
+  duration: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -466,11 +482,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -.751831055
+    e03: .5
     e10: 0
     e11: 384
     e12: 0
-    e13: -7649.68994
+    e13: -7649.43848
     e20: 0
     e21: 0
     e22: 384
@@ -541,7 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mColor: {r: .264705896, g: .15882355, b: 0, a: 1}
   mPivot: 4
   mDepth: 5
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
@@ -620,7 +636,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonUpRed
+  mSpriteName: button4Red
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -652,10 +668,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400062}
-  normalSprite: buttonUpRed
-  hoverSprite: buttonUpRed
-  pressedSprite: buttonDownRed
-  disabledSprite: ButtonUpGray
+  normalSprite: button4Red
+  hoverSprite: button4Red
+  pressedSprite: button4Red
+  disabledSprite: button4Red
 --- !u!114 &11400068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -667,7 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: .986206889, g: 1, b: 0, a: 1}
+  mColor: {r: .990770757, g: 1, b: .33088237, a: 1}
   mPivot: 4
   mDepth: 1
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
@@ -678,10 +694,10 @@ MonoBehaviour:
   mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 1
+  mEffectColor: {r: .639705896, g: .0188148972, b: .0188148972, a: 1}
   mSymbols: 1
-  mEffectDistance: {x: 1, y: 1}
+  mEffectDistance: {x: 6, y: 6}
   mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
@@ -705,11 +721,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -.751831055
+    e03: .5
     e10: 0
     e11: 384
     e12: 0
-    e13: -7649.68994
+    e13: -7649.43848
     e20: 0
     e21: 0
     e22: 384
@@ -793,7 +809,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: buttonUpYellow
+  mSpriteName: button4Yellow
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -811,10 +827,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 11400096}
-  normalSprite: buttonUpYellow
-  hoverSprite: buttonUpYellow
-  pressedSprite: buttonDownYellow
-  disabledSprite: ButtonUpGray
+  normalSprite: button4Yellow
+  hoverSprite: button4Yellow
+  pressedSprite: button4Yellow
+  disabledSprite: button4Yellow
 --- !u!114 &11400100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -826,7 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 400006}
+  tweenTarget: {fileID: 0}
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: .899999976}
   duration: 0

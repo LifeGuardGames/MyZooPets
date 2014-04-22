@@ -108,7 +108,7 @@ public class GameTutorial_WellapadIntro : GameTutorial {
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, vLoc, option:option);
+		ShowPopup(Tutorial.POPUP_STD, vLoc, useViewPort:false, option:option);
 	}
 	
 	//---------------------------------------------------

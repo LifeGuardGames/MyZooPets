@@ -174,6 +174,10 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
                 menuSceneEggGO.GetComponent<LgButtonMessage>().target = this.gameObject;
                 menuSceneEggGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
 
+                if(petID == "Pet1"){
+                    menuSceneEggGO.transform.Find("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = "eggPurpleLime";
+                }
+
             }else{
                 GameObject menuScenePetPrefab = Resources.Load("MenuScenePet") as GameObject;
                 GameObject menuScenePetGO = NGUITools.AddChild(petSelectionGO, menuScenePetPrefab);

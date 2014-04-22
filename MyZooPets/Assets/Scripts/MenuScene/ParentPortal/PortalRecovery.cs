@@ -8,37 +8,37 @@ public class PortalRecovery : PortalContent {
     protected override void OnEnable(){
         base.OnEnable();
 
-        emailInput.GetComponent<UIInput>().text = ParentPortalLogic.Instance.ParentEmail;;
+        // emailInput.GetComponent<UIInput>().text = ParentPortalLogic.Instance.ParentEmail;;
     }
 
     protected override void OkButtonClicked(){
-        string email = emailInput.GetComponent<UIInput>().text;
+        // string email = emailInput.GetComponent<UIInput>().text;
 
-        Hashtable result = ParentPortalLogic.Instance.VerifyAndSendPinToEmail(email);
+        // Hashtable result = ParentPortalLogic.Instance.VerifyAndSendPinToEmail(email);
 
-        if(result != null){
-            emailError.SetActive(false);
+        // if(result != null){
+        //     emailError.SetActive(false);
 
-            if(result.Contains("Completed")){
-                bool isEmailSent = (bool)result["Completed"];
+        //     if(result.Contains("Completed")){
+        //         bool isEmailSent = (bool)result["Completed"];
 
-                if(!isEmailSent){ //Display the errors
-                    if(result.Contains("EmailErrorMsg")){
-                        string emailErrorMsg = (string)result["EmailErrorMsg"];
-                        emailError.SetActive(true);
-                        emailError.GetComponent<UILabel>().text = emailErrorMsg;
-                    }
-                    if(result.Contains("SendMailErrorMsg")){
-                        string sendEmailErrorMsg = (string)result["SendMailErrorMsg"];
-                        emailError.SetActive(true);
-                        emailError.GetComponent<UILabel>().text = sendEmailErrorMsg;
-                    }
-                }else{
-                    ParentPortalUIManager.Instance.DisplayGeneralMessage("MSG_PIN_RECOVERY_SENT");
-                    ParentPortalUIManager.Instance.ShowPortalLogin(this.gameObject);
-                }
-            }
-        }
+        //         if(!isEmailSent){ //Display the errors
+        //             if(result.Contains("EmailErrorMsg")){
+        //                 string emailErrorMsg = (string)result["EmailErrorMsg"];
+        //                 emailError.SetActive(true);
+        //                 emailError.GetComponent<UILabel>().text = emailErrorMsg;
+        //             }
+        //             if(result.Contains("SendMailErrorMsg")){
+        //                 string sendEmailErrorMsg = (string)result["SendMailErrorMsg"];
+        //                 emailError.SetActive(true);
+        //                 emailError.GetComponent<UILabel>().text = sendEmailErrorMsg;
+        //             }
+        //         }else{
+        //             ParentPortalUIManager.Instance.DisplayGeneralMessage("MSG_PIN_RECOVERY_SENT");
+        //             ParentPortalUIManager.Instance.ShowPortalLogin(this.gameObject);
+        //         }
+        //     }
+        // }
     }
 
     protected override void CancelButtonClicked(){}

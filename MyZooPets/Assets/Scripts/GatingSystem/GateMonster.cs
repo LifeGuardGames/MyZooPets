@@ -10,14 +10,9 @@ using System.Collections;
 //---------------------------------------------------
 
 public class GateMonster : Gate{
-	// the screen % this monster moves per % of health
-	public float fMove;
-	
-	// time it takes the monster to tween to its new position after taking damage
-	public float fTweenTime;
-	
-	// script that controls the anims for this monster
-	public Animator smokeMonsterAnimator;
+	public float fMove; // the screen % this monster moves per % of health
+	public float fTweenTime; // time it takes the monster to tween to its new position after taking damage
+	public Animator smokeMonsterAnimator; // script that controls the anims for this monster
 	
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
 	private Vector3 vIdealPos;
@@ -33,7 +28,11 @@ public class GateMonster : Gate{
 		DataGate data = DataGateLoader.GetData(strID);
 		int nMax = data.GetMonster().GetMonsterHealth();
 		int nCurrent = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
-		int nDamage = nMax - nCurrent;
+
+		//We did a smog monster HP adjustment for v1.2.6. We lower the HP for each gate
+		//so the users can go through the gates faster. This may result in negative nDamage
+		//if nCurrent is greater than nMax. Need to get abs value to make sure this doesn't happen
+		int nDamage = Mathf.Abs(nMax - nCurrent); 
 		
 		// if the monster is missing hp, it needs to move
 		if(nDamage > 0)

@@ -43,8 +43,8 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	}
 
 	void Start(){
-		// HUDAnimator.OnLevelUp += RefreshLevelProgress;
 		WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
+		// HUDAnimator.OnLevelUp += RefreshLevelProgressOnLevelUp;
 		HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
 
 		RefreshLevelProgress();
@@ -52,7 +52,8 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		// HUDAnimator.OnLevelUp -= RefreshLevelProgress;
+		WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
+		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
 		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 	}
 	
@@ -121,6 +122,10 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		if(args != null && args.Opening){
 			RefreshLevelProgress();	
 		}
+	}
+
+	private void RefreshLevelProgressOnLevelUp(object sender, EventArgs args){
+		RefreshLevelProgress();	
 	}
 
 	//----------------------------------------------

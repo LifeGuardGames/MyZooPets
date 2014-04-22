@@ -9,20 +9,18 @@ using System.Collections;
 
 public class DataMonster {
 
-	// id of the monster
-	private string strID;
+	private string strID; // id of the monster
+	private int nHP; // hp of the monster
+	private string strResourceKey; // key for the monster, used to buid resources
+
 	public string GetMonsterID() {
 		return strID;	
 	}
 	
-	// hp of the monster
-	private int nHP;
 	public int GetMonsterHealth() {
 		return nHP;	
 	}
 	
-	// key for the monster, used to buid resources
-	private string strResourceKey;
 	public string GetResourceKey() {
 		return strResourceKey;	
 	}

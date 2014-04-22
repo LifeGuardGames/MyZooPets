@@ -48,6 +48,8 @@ public class WellapadScreenUIController : MonoBehaviour {
 		foreach(Transform child in goWellapadScreen.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
+			missionListGO = null;
+			missionDoneGO = null;
 		}
 		
 		if(hasActiveTasks){

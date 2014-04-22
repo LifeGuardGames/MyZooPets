@@ -9,50 +9,43 @@ using System.Collections;
 
 public class DataGate {
 	
-	// id of the gate
-	private string strID;
+	private string strID; // id of the gate
+	private string strArea; // location of the gate
+	private int nPartition; // partition id of the gate
+	private string strMonsterID; // id of the monster at this gate
+	private RoomDirection eSwipeDirection; // the swipe direction that this monster is blocking
+	private string[] arrayUnlocks; // list of wellapad unlocks removing this makes available
+	private bool bRecurring; // is this gate recurring? i.e. comes back to life after a set amount of time
+	private string strItemBoxID; // item box id this gate leaves behind once destroyed
+
 	public string GetGateID() {
 		return strID;	
 	}
 	
-	// location of the gate
-	private string strArea;
 	public string GetArea() {
 		return strArea;	
 	}
 	
-	// partition id of the gate
-	private int nPartition;
 	public int GetPartition() {
 		return nPartition;	
 	}
 	
-	// id of the monster at this gate
-	private string strMonsterID;
 	public DataMonster GetMonster() {
 		return DataMonsterLoader.GetData( strMonsterID );	
 	}
 	
-	// the swipe direction that this monster is blocking
-	private RoomDirection eSwipeDirection;
 	public bool DoesBlock( RoomDirection eSwipeDirection ) {
 		return this.eSwipeDirection == eSwipeDirection;
 	}
 	
-	// list of wellapad unlocks removing this makes available
-	private string[] arrayUnlocks;
 	public string[] GetTaskUnlocks() {
 		return arrayUnlocks;	
 	}
 	
-	// is this gate recurring? i.e. comes back to life after a set amount of time
-	private bool bRecurring;
 	public bool IsRecurring() {
 		return bRecurring;	
 	}
 	
-	// item box id this gate leaves behind once destroyed
-	private string strItemBoxID;
 	public string GetItemBoxID() {
 		return strItemBoxID;	
 	}

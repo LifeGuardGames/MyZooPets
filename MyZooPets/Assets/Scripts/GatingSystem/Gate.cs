@@ -13,13 +13,35 @@ public abstract class Gate : MonoBehaviour{
 	protected abstract void _DamageGate(int nDamage);	// when a gate is damaged
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
+
+	public float fPlayerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
+	public float fPlayerY; // the y value the player should move to when approaching the gate
 	
-	// the item box this gate is blocking (if any)
-	ItemBoxLogic scriptItemBox;
+	private ItemBoxLogic scriptItemBox; // the item box this gate is blocking (if any)
 	
 	// id and resource of this gate
 	protected string strID;
 	protected string strResource;
+
+	
+	protected DataGate GetGateData(){
+		DataGate data = DataGateLoader.GetData(strID);
+		return data;
+	}
+	
+	//---------------------------------------------------
+	// Start()
+	//---------------------------------------------------		
+	void Start(){
+		_Start();
+	}
+	
+	//---------------------------------------------------
+	// _Start()
+	//---------------------------------------------------		
+	protected virtual void _Start(){
+		// children implement this
+	}
 
 	public void Init(string id, DataMonster monster){
 		if(string.IsNullOrEmpty(strID))
@@ -44,31 +66,7 @@ public abstract class Gate : MonoBehaviour{
 				Debug.LogError("No logic script on box", goBox);
 		}		
 	}
-	
-	protected DataGate GetGateData(){
-		DataGate data = DataGateLoader.GetData(strID);
-		return data;
-	}
 
-	// the % in screen space that the player should walk in front of the gate when approaching it
-	public float fPlayerBuffer;	
-	
-	// the y value the player should move to when approaching the gate
-	public float fPlayerY;
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
-	void Start(){
-		_Start();
-	}
-	
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------		
-	protected virtual void _Start(){
-		// children implement this
-	}
 	
 	//---------------------------------------------------
 	// GreetPlayer()

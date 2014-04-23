@@ -10,7 +10,7 @@ using System.Collections.Generic;
 // can pick up to obtain.
 //---------------------------------------------------
 
-public class DroppedObject_Item : DroppedObject {
+public class DroppedObject_Item : DroppedObject{
 	// the item that this object represents
 	private Item dataItem;
 	
@@ -18,12 +18,12 @@ public class DroppedObject_Item : DroppedObject {
 	// Init()
 	// Inits this dropped object with an item.
 	//---------------------------------------------------	
-	public void Init( Item item ) {
+	public void Init(Item item){
 		// set the state of this item to dropped
-		SetState( DroppedItemStates.Dropped );
+		SetState(DroppedItemStates.Dropped);
 		
 		// set the texture of this dropped item
-		if ( sprite != null ) {
+		if(sprite != null){
 			string strSprite = item.TextureName;
 			sprite.spriteName = strSprite;
 			
@@ -37,27 +37,40 @@ public class DroppedObject_Item : DroppedObject {
 	}
 	
 	//---------------------------------------------------
-	// _ObtainObject()
+	// ObtainObject()
 	// Puts the item into the player's inventory.
 	//---------------------------------------------------	
-	protected override void _ObtainObject() {
+	protected override void ObtainObject(){
 		DroppedItemStates eState = GetState();
 		
 		// if this item isn't in the right state, return
-		if ( eState != DroppedItemStates.Dropped && eState != DroppedItemStates.PickedUp )
+		if(eState != DroppedItemStates.Dropped && eState != DroppedItemStates.PickedUp)
 			return;
 
 		// set the state to being awarded
-		SetState( DroppedItemStates.Awarded );
+		SetState(DroppedItemStates.Awarded);
 		
 		// Analytics
 		Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_RECEIVED, dataItem.Type, dataItem.ID);
 
 		// add it to the player's inventory
-		InventoryLogic.Instance.AddItem( dataItem.ID, 1);
+		InventoryLogic.Instance.AddItem(dataItem.ID, 1);
 		
 		// destroy the object
-		Destroy( gameObject );		
+		Destroy(gameObject);		
+	}	
+	
+	//---------------------------------------------------
+	// AutoCollectAndDestroy()
+	// Callback sent from the inventory logic because it
+	// is being destroyed (likely because the scene is
+	// changing).
+	//---------------------------------------------------	
+	protected override void AutoCollectAndDestroy(){
+		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
+		DroppedItemStates eState = GetState();
+		if(eState != DroppedItemStates.Awarded)
+			ObtainObject();
 	}	
 
 	// *note: bad idea to wait until the scene is cleaning up to collect the object
@@ -65,23 +78,10 @@ public class DroppedObject_Item : DroppedObject {
 	//---------------------------------------------------
 	// OnObjectDestroyed()
 	//---------------------------------------------------		
-	protected override void OnObjectDestroyed() {
+	// protected override void OnObjectDestroyed(){
 		// if this dropped item is being destroyed, has not yet been awarded, AND the inventory still exists, obtain it
-		DroppedItemStates eState = GetState();
-		if ( eState != DroppedItemStates.Awarded && InventoryLogic.Instance != null )
-			ObtainObject();
-	}	
-	
-	//---------------------------------------------------
-	// _AutoCollectAndDestroy()
-	// Callback sent from the inventory logic because it
-	// is being destroyed (likely because the scene is
-	// changing).
-	//---------------------------------------------------	
-	protected override void _AutoCollectAndDestroy() {
-		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
-		DroppedItemStates eState = GetState();
-		if ( eState != DroppedItemStates.Awarded )
-			ObtainObject();
-	}	
+		// DroppedItemStates eState = GetState();
+		// if(eState != DroppedItemStates.Awarded && InventoryLogic.Instance != null)
+		// 	ObtainObject();
+	// }	
 }

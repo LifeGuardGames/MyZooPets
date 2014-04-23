@@ -52,7 +52,9 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
+		if(WellapadUIManager.Instance)
+			WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
+			
 		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
 		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 	}

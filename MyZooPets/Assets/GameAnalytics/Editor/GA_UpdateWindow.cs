@@ -90,11 +90,16 @@ public class GA_UpdateWindow : EditorWindow
 	
 	public static string UpdateStatus (string currentVersion)
 	{
-		if (NewVersion.Equals(currentVersion))
+		try {
+			int newV = int.Parse(NewVersion.Replace(".",""));
+			int oldV = int.Parse(currentVersion.Replace(".",""));
+
+			if (newV > oldV)
+				return "New update available";
+			else
+				return "";
+		} catch {
 			return "";
-		else if (NewVersion.Equals(string.Empty))
-			return "";
-		else
-			return "New update available";
+		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
-
+	public ThreadPriority threadPriority;
 	public SceneTransitionController transitionController;
 
 	private string levelName = null;	// Aux to store scene to be loaded
@@ -15,6 +15,9 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	/// <param name="levelName">Level to be loaded</param>
 	/// <param name="loadingScreen">Loading screen to use</param>
 	public void StartLoadTransition(string levelName, string loadingScreen){
+
+		Application.backgroundLoadingPriority = threadPriority;
+
 		if(async == null){
 			this.levelName = levelName;
 			Debug.Log(levelName);
@@ -50,5 +53,15 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	/// </summary>
 	public void ActivateScene(){
 		async.allowSceneActivation = true;
+	}
+
+	/// <summary>
+	/// Remove the transition when the new level is loaded
+	/// NOTE: There will be 2 of this, loading into a new scene without deleting the persistent duplicate
+	/// 	Though one will be destroyed immediately
+	/// </summary>
+	void OnLevelWasLoaded(){
+		transitionController.EndLoadingScreen();
+		async = null;
 	}
 }

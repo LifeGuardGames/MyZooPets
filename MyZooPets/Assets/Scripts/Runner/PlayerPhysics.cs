@@ -10,6 +10,8 @@ using System.Collections;
 
 [RequireComponent (typeof(BoxCollider))]
 public class PlayerPhysics : MonoBehaviour {
+    public Animator anim;
+
     private Vector3 colliderSize;
     private Vector3 colliderCenter;
     private float skin = .005f; //Padding for collider
@@ -34,8 +36,10 @@ public class PlayerPhysics : MonoBehaviour {
             if(value != grounded){
                 grounded = value;
                 // print("grounded: " + grounded);
-                if(grounded)
-                    BroadcastMessage("OnGrounded", SendMessageOptions.DontRequireReceiver);
+                anim.SetBool("Grounded", grounded);
+
+                // if(grounded)
+                //     BroadcastMessage("OnGrounded", SendMessageOptions.DontRequireReceiver);
             }
         }
     }
@@ -47,8 +51,9 @@ public class PlayerPhysics : MonoBehaviour {
             if(value != falling){
                 falling = value;
                 // print("falling: " + falling);
-                if(falling)
-                    BroadcastMessage("OnFalling", SendMessageOptions.DontRequireReceiver);
+                anim.SetBool("Falling", falling);
+                // if(falling)
+                //     BroadcastMessage("OnFalling", SendMessageOptions.DontRequireReceiver);
             }
         }
     }
@@ -59,8 +64,9 @@ public class PlayerPhysics : MonoBehaviour {
             if(value != jumping){
                 jumping = value;
                 // print("jumping: " + jumping);
-                if(jumping)
-                    BroadcastMessage("OnJumping", SendMessageOptions.DontRequireReceiver);
+                anim.SetBool("Jumping", jumping);
+                // if(jumping)
+                //     BroadcastMessage("OnJumping", SendMessageOptions.DontRequireReceiver);
             }
         }
     }

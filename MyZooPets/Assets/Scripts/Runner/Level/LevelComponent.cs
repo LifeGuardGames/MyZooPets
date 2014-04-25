@@ -16,7 +16,6 @@
  * 
  * Besides that... Almost everything here is for the level editor to work more easily with.
  */
-
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -24,217 +23,202 @@ using System.Collections.Generic;
 #pragma warning disable 0168
 
 [System.Serializable]
-public class LevelComponent : MonoBehaviour {
+public class LevelComponent : MonoBehaviour{
 	[SerializeField]
-    private List<PointGroup> mPointGroups = new List<PointGroup>();
-    [SerializeField]
-    private List<Bundle> mBundles = new List<Bundle>();
-
-	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
+	private List<PointGroup> mPointGroups = new List<PointGroup>();
+	[SerializeField]
+	private List<Bundle> mBundles = new List<Bundle>();
+	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>(); //all the spawned items in this component
 	
-	// When the game runs and spawns a group, each group will grab a list of bottom most layers.
-	//@TODO do this once, for the group templates, at runtime.
-	private List<GameObject> mBottomLayers = new List<GameObject>();
 
 	public List<PointGroup> PointGroups { get { return mPointGroups; } }
-    public List<Bundle> Bundles { get { return mBundles; } }
-	public LevelGroup ParentGroup {
-		get;
-		set;
-	}
-	public List<GameObject> BottomLayers { get { return mBottomLayers; } }
+	public List<Bundle> Bundles { get { return mBundles; } }
+	public LevelGroup ParentGroup { get; set; }
 
-	// Use this for initialization.
-	void Start() {
-		// FindBottomLayers();
-	}
-
-	// Update is called once per frame.
-	void Update() {
+	//Destroy all the items for this component
+	public void DestroyItems(){
+		ItemManager itemManager = ItemManager.Instance; 
+		foreach(RunnerItem currentItem in mSpawnedItems){
+			if(currentItem != null){
+				itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
+			}
+		}
 	}
 
-    public void DestroyAndCache(){
-        ItemManager itemManager = ItemManager.Instance; 
-        foreach (RunnerItem currentItem in mSpawnedItems) {
-            if (currentItem != null) {
-                itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
-            }
-        }
-        GameObject.Destroy(this.gameObject);
+	//Destroys this level component and all its items
+    public void Destroy(){
+    	DestroyItems();
+        Destroy(this.gameObject);
     }
 
-    public PointGroup GetGroup(int index){
-        PointGroup pointGroup = null;
-        try{
-            pointGroup = mPointGroups[index];
-        }catch(ArgumentOutOfRangeException e){
-            pointGroup = null;
-        }
-        return pointGroup;
-    }
+	public PointGroup GetGroup(int index){
+		PointGroup pointGroup = null;
+		try{
+			pointGroup = mPointGroups[index];
+		} catch(ArgumentOutOfRangeException e){
+			pointGroup = null;
+		}
+		return pointGroup;
+	}
 
-	public void SetPointGroupInfo(PointGroup inGroup) {
+	public void SetPointGroupInfo(PointGroup inGroup){
 		mPointGroups.Add(inGroup);
 	}
 
-	public PointInfo AddNewPoint(int groupIndex, Vector3 inNewPoint) {
+	public PointInfo AddNewPoint(int groupIndex, Vector3 inNewPoint){
 		PointGroup currentGroup = GetGroup(groupIndex);
-        return AddNewPoint(currentGroup, inNewPoint);
+		return AddNewPoint(currentGroup, inNewPoint);
 	}
 
-    public PointInfo AddNewPoint(PointGroup currentGroup, Vector3 inNewPoint){
-        if (currentGroup != null) {
-            PointInfo newPoint = new PointInfo(inNewPoint);
-            currentGroup.mPoints.Add(newPoint);
-            return newPoint;
-        }
-        return null;
-    }
-
-	public int GetNextPointNum(int groupIndex) {
-		PointGroup currentGroup = GetGroup(groupIndex);
-        return GetNextPointNum(currentGroup);
+	public PointInfo AddNewPoint(PointGroup currentGroup, Vector3 inNewPoint){
+		if(currentGroup != null){
+			PointInfo newPoint = new PointInfo(inNewPoint);
+			currentGroup.mPoints.Add(newPoint);
+			return newPoint;
+		}
+		return null;
 	}
 
-    public int GetNextPointNum(PointGroup currentGroup) {
-        if (currentGroup != null)
-            return currentGroup.mPoints.Count;
-        return -1;
-    }
+	public int GetNextPointNum(int groupIndex){
+		PointGroup currentGroup = GetGroup(groupIndex);
+		return GetNextPointNum(currentGroup);
+	}
 
-	public void AddLevelItem(RunnerItem inItemToAdd) {
+	public int GetNextPointNum(PointGroup currentGroup){
+		if(currentGroup != null)
+			return currentGroup.mPoints.Count;
+		return -1;
+	}
+
+	public void AddLevelItem(RunnerItem inItemToAdd){
 		mSpawnedItems.Add(inItemToAdd);
 	}
 
-	public void DeletePointGroup(PointGroup inGroupToDelete) {
+	public void DeletePointGroup(PointGroup inGroupToDelete){
 		// Remove the group from our list
-		if (mPointGroups.Contains(inGroupToDelete)) {
+		if(mPointGroups.Contains(inGroupToDelete)){
 			mPointGroups.Remove(inGroupToDelete);
 		}
 	}
 
-	public void DeletePointInfo(PointGroup inParentPointGroup, PointInfo inInfoToDelete) {
-		if (mPointGroups.Contains(inParentPointGroup)
-			&& inParentPointGroup.mPoints.Contains(inInfoToDelete))
-		{
+	public void DeletePointInfo(PointGroup inParentPointGroup, PointInfo inInfoToDelete){
+		if(mPointGroups.Contains(inParentPointGroup)
+			&& inParentPointGroup.mPoints.Contains(inInfoToDelete)){
 			inParentPointGroup.mPoints.Remove(inInfoToDelete);
 		}
 	}
 
-    public Bundle GetBundle(int inBundleID) {
-        foreach (Bundle currentBundle in mBundles) {
-            if (currentBundle.mBundleID == inBundleID) {
-                return currentBundle;
-            }
-        }
-        return null;
-    }
+	public Bundle GetBundle(int inBundleID){
+		foreach(Bundle currentBundle in mBundles){
+			if(currentBundle.mBundleID == inBundleID){
+				return currentBundle;
+			}
+		}
+		return null;
+	}
 
-    public void RemoveBundle(int inBundleID) {
-        foreach (Bundle currentBundle in mBundles) {
-            if (currentBundle.mBundleID == inBundleID) {
-                mBundles.Remove(currentBundle);
-            }
-        }
-    }
+	public void RemoveBundle(int inBundleID){
+		foreach(Bundle currentBundle in mBundles){
+			if(currentBundle.mBundleID == inBundleID){
+				mBundles.Remove(currentBundle);
+			}
+		}
+	}
 
-    public void SetBundleChance(int inBundleID, float inChance) {
-        // @Unity doesnt do dictionaries idk
-        if (inBundleID < 0) {
-            Debug.LogError("You can only use positive numbers as bundle IDs.");
-            return;
-        }
+	public void SetBundleChance(int inBundleID, float inChance){
+		// @Unity doesnt do dictionaries idk
+		if(inBundleID < 0){
+			Debug.LogError("You can only use positive numbers as bundle IDs.");
+			return;
+		}
 
-        Bundle bundleToModify = GetBundle(inBundleID);
-        if (bundleToModify != null)
-            bundleToModify.mSpawnChance = inChance;
-        else {
-            bundleToModify = new Bundle(inBundleID, inChance);
-            mBundles.Add(bundleToModify);
-        }
-    }
-	
-	// private void FindBottomLayers(){
-	// 	mBottomLayers.Clear();
-	// 	FindBottomLayers(transform);
-	// }
-	
-	// private void FindBottomLayers(Transform inCurrentTransform){
-	// 	if (inCurrentTransform != null){
-	// 		LevelManager levelManager = LevelManager.Instance;
-	// 		foreach (Transform currentChild in inCurrentTransform) {
-	// 			if (currentChild.gameObject.layer == levelManager.BottomLayer)
-	// 				mBottomLayers.Add(currentChild.gameObject);
-	// 			FindBottomLayers(currentChild);
-	// 		}
-	// 	}
-	// }
+		Bundle bundleToModify = GetBundle(inBundleID);
+		if(bundleToModify != null)
+			bundleToModify.mSpawnChance = inChance;
+		else{
+			bundleToModify = new Bundle(inBundleID, inChance);
+			mBundles.Add(bundleToModify);
+		}
+	}
 }
 
-[System.Serializable]
-public class PointGroup {
-	[SerializeField]
-	public int mBundleID;
-	[SerializeField]
-	public int mSpawnChance;	
-	[SerializeField]
-	public List<PointInfo> mPoints;
-	[SerializeField]
-    public eSpawnType mSpawnType;
-    [SerializeField]
-    public eCurveType mCurveType;
+//====================================================================
+// Classes use to specify how items within a component should be spawn
+//====================================================================
 
-    public PointGroup() {
-        // mID = inID;
-        mBundleID = 0;
+[System.Serializable]
+public class PointGroup{
+	[SerializeField]
+	public int
+		mBundleID;
+	[SerializeField]
+	public int
+		mSpawnChance;
+	[SerializeField]
+	public List<PointInfo>
+		mPoints;
+	[SerializeField]
+	public eSpawnType
+		mSpawnType;
+	[SerializeField]
+	public eCurveType
+		mCurveType;
+
+	public PointGroup(){
+		// mID = inID;
+		mBundleID = 0;
 		mSpawnChance = 100;
-        mPoints = new List<PointInfo>();
-        mSpawnType = eSpawnType.None;
-        mCurveType = eCurveType.Linear;
-    }
+		mPoints = new List<PointInfo>();
+		mSpawnType = eSpawnType.None;
+		mCurveType = eCurveType.Linear;
+	}
 }
 
 [System.Serializable]
-public class PointInfo {
+public class PointInfo{
 	[SerializeField]
-	public Vector3 mPosition;
+	public Vector3
+		mPosition;
 	[SerializeField]
-	public Vector3 mLocalPosition;
+	public Vector3
+		mLocalPosition;
 
-	public PointInfo() {
+	public PointInfo(){
 		mPosition = Vector3.zero;
 	}
 
-	public PointInfo(Vector3 inPosition) {
+	public PointInfo(Vector3 inPosition){
 		mPosition = inPosition;
 	}
 }
 
 [System.Serializable]
-public class Bundle {
-    [SerializeField]
-    public int mBundleID;
-    [SerializeField]
-    public float mSpawnChance;
+public class Bundle{
+	[SerializeField]
+	public int
+		mBundleID;
+	[SerializeField]
+	public float
+		mSpawnChance;
 
-    public Bundle(int inID, float inChance) {
-        mBundleID = inID;
-        mSpawnChance = inChance;
-    }
+	public Bundle(int inID, float inChance){
+		mBundleID = inID;
+		mSpawnChance = inChance;
+	}
 }
 
 [System.Serializable]
-public enum eCurveType {
-    Point,
+public enum eCurveType{
+	Point,
 	Linear,
 	Quadratic,
 	Cubic,
 
-    Max
+	Max
 }
 
 [System.Serializable]
-public enum eSpawnType {
+public enum eSpawnType{
 	None = -1,
 	Coins = 0,
 	Hazards,

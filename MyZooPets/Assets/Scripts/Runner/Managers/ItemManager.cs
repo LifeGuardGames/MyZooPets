@@ -103,8 +103,10 @@ public class ItemManager : Singleton<ItemManager> {
     public void StoreOrDisposeItem(RunnerItem inItem, LevelGroup.eLevelGroupID levelGroupID) {
 		
 		// Disable it. If its queued, then it will 'disapaear' off the map. If its deleted well who cares!
-		if (inItem != null)
-			inItem.gameObject.SetActive(false);
+		if (inItem != null){
+            inItem.gameObject.SetActive(false);
+            Destroy(inItem.gameObject);
+        }
 
         // Type itemType = inItem.GetType();
 

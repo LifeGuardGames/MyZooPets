@@ -33,6 +33,10 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
+
+    //pooling level components
+    private Queue<LevelComponent> levelComponentPool = new Queue<LevelComponent>(); 
+
 	// Use this for initialization
 	void Start() {
 		if (LevelGroups.Count <= 0)
@@ -71,7 +75,9 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 }
 
 				// Destroy it
-                removedLevelComponent.DestroyAndCache();
+                // removedLevelComponent.DestroyAndCache();
+                // CacheComponentThenDestoryItems(removedLevelComponent);
+                removedLevelComponent.ParentGroup.DestroyAndCache(removedLevelComponent.gameObject);
 
 				// Push a new one if not in tutorial mode
                 if(!RunnerGameManager.Instance.IsTutorialRunning()){
@@ -137,7 +143,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
         LevelComponent currentComponent;
         while (mLevelComponentQueue.Count > 0) { 
             currentComponent = mLevelComponentQueue.Dequeue();
-            currentComponent.DestroyAndCache();
+            currentComponent.Destroy();
         }
 
     }
@@ -187,22 +193,34 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
 	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
         LevelComponent newComponent = null;
+        int randomIndex = 0; 
 
-		if (mCurrentLevelGroup.LevelComponents.Count > 0) {
-			LevelComponent nextlevelComponent = null;
+		// if (mCurrentLevelGroup.LevelComponents.Count > 0) {
+			// LevelComponent nextlevelComponent = null;
 
-			if (inForceUseThisComponent == null) {
-                int randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
+			// if (inForceUseThisComponent == null) {
+   //              randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
+			// 	// Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
+   //              newComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
+			// } else {
+			// 	// nextlevelComponent = inForceUseThisComponent;
+   //              newComponent = inForceUseThisComponent;
+			// }
 
-                nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
-				// Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
-			} else {
-				nextlevelComponent = inForceUseThisComponent;
-			}
+            // if(levelComponentPool.Count > 0){
+            //     newComponent = levelComponentPool.Dequeue();
+            //     newComponent.gameObject.SetActive(true);
+                
+            // }else{
+            //     nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
 
-			newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
+            //     newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
+            //     newComponent.name = nextlevelComponent.name;
+            // }     
+
+            newComponent = mCurrentLevelGroup.GetRandomComponent();
+
             newComponent.ParentGroup = mCurrentLevelGroup;
-            newComponent.name = nextlevelComponent.name;
 			
 			// Set its position to the last max point (I hope).
 			newComponent.transform.position = mLastCenterPosition;
@@ -217,9 +235,16 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 			// Update the next position as this ones max anchor
 			Transform maxAnchor = newComponent.transform.FindChild("AnchorMax");
 			mLastCenterPosition = maxAnchor.position;
+
+            // show tile map
+            // note: this step is necessary to force the tile map to draw itself
+            // if tile map is set active all the time it's mesh data might be 
+            // deleted when its duplicate is destroyed
+            newComponent.transform.FindChild("TileMap").gameObject.SetActive(true);
+            newComponent.transform.FindChild("TileMap").gameObject.SetActive(false);
 			
 			mLevelComponentQueue.Enqueue(newComponent);
-		}
+		// }
 
         return newComponent;
 	}

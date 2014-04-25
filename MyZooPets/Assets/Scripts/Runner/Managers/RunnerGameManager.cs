@@ -83,7 +83,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         UpdateBadgeProgress();
 		
 		// reset the game here so that time scale is returned to normal (for when the user exits the game)
-        ResetGame();
+        Time.timeScale = 1f;
+        // ResetGame();
 	}		
 	
     //---------------------------------------------------

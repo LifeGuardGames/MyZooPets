@@ -15,7 +15,7 @@ public class PlayerController : Singleton<PlayerController> {
     public float defaultSpeed = 8;
     public float acceleration = 30;
     public float jumpHeight = 12;
-    
+
     private float currentSpeed;
     private float targetSpeed;
     private Vector2 amountToMove; //How much you want the player to move
@@ -115,6 +115,7 @@ public class PlayerController : Singleton<PlayerController> {
         
         amountToMove.x = currentSpeed;
         amountToMove.y -= gravity * Time.deltaTime;
+
         playerPhysics.Move(amountToMove * Time.deltaTime);
     }
 

@@ -19,17 +19,44 @@ public class LevelGroup : MonoBehaviour {
     public int LevelGroupNumber = 0;
     public ParallaxingBackgroundGroup ParallaxingBackground;
     public LevelComponent StartingLevelComponent;
-    public List<LevelComponent> LevelComponents;
+    public List<GameObject> LevelComponentPrefabs; //list of prefab reference
 
-	// Use this for initialization
-	void Start() {
-	
-	}
-	
-	// Update is called once per frame
-	void Update() {
-	
-	}
+    public Dictionary<string, GameObject> componentCache = new Dictionary<string, GameObject>();
+
+
+    public LevelComponent GetRandomComponent(){
+        int randomIndex = Random.Range(0, LevelComponentPrefabs.Count);
+
+        //get the prefab
+        GameObject lvComponentPrefab = LevelComponentPrefabs[randomIndex];
+
+        //check for it in the cache
+        GameObject lvComponentObj = null;
+        if(componentCache.ContainsKey(lvComponentPrefab.name)){
+            lvComponentObj = componentCache[lvComponentPrefab.name];
+            lvComponentObj.SetActive(true);
+        }
+        else{
+            //instantiate if not in cache
+            lvComponentObj = (GameObject) GameObject.Instantiate(lvComponentPrefab);
+            lvComponentObj.name = lvComponentPrefab.name;
+        }
+
+        return lvComponentObj.GetComponent<LevelComponent>();
+    }
+
+    //if GO is not in the cache add it else destroy. Component items
+    //are destroyed in both cases
+    public void DestroyAndCache(GameObject lvComponentObj){
+        lvComponentObj.GetComponent<LevelComponent>().DestroyItems();
+
+        if(!componentCache.ContainsKey(lvComponentObj.name)){
+            componentCache.Add(lvComponentObj.name, lvComponentObj);
+            lvComponentObj.SetActive(false);
+        }else{
+            GameObject.Destroy(lvComponentObj);
+        }
+    }
 
     public enum eLevelGroupID{
         Forest,

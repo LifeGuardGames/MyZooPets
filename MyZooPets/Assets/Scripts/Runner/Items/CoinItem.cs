@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CoinItem : RunnerItem {
     public int CoinValue = 1;
@@ -25,7 +26,9 @@ public class CoinItem : RunnerItem {
 		hashOverride["Pitch"] = fPitch;
         hashOverride["Volume"] = 0.5f;
 		AudioManager.Instance.PlayClip( "StarSingle", hashOverride );
-		
+
+
+
         ScoreManager.Instance.AddCoins(CoinValue);
         GameObject.Destroy(gameObject);
     }

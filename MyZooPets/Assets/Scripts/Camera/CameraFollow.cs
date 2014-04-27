@@ -15,7 +15,7 @@ public class CameraFollow : MonoBehaviour {
 	void Start () {
 
 		//just hard set this value so that the player is always at the end of the camera
-		cameraPositionOffset = new Vector3(20, 0, 0); //this value takes acount of the mega hazard offset
+		cameraPositionOffset = new Vector3(30, 0, 0); //this value takes acount of the mega hazard offset
 	}
 
 	void FixedUpdate(){
@@ -30,7 +30,7 @@ public class CameraFollow : MonoBehaviour {
 
 
 		//Camera only follows the players' x position
-		newPosition = new Vector3(newPosition.x, 12, -12);
+		newPosition = new Vector3(newPosition.x, 16, -12);
 
 //		FollowingCamera.transform.position = Vector3.Lerp(oldPosition, newPosition, Time.deltaTime * 2f);
 		transform.position = newPosition;

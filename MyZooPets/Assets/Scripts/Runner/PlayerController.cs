@@ -6,8 +6,7 @@ using System.Collections;
 public class PlayerController : Singleton<PlayerController> {
     public static EventHandler<EventArgs> OnJump;
     public static EventHandler<EventArgs> OnDrop;
-
-    // public float speedIncrease = 0.1f; //The amount the game will be speed up by
+	
     // public float speedIncreaseTime = 5; //How long before the next game speed increment 
 
     [System.Serializable]
@@ -41,22 +40,29 @@ public class PlayerController : Singleton<PlayerController> {
         }
     }
 
-
     public PlatformerControllerMovement movement = new PlatformerControllerMovement();
 
     private Vector2 amountToMove; //How much you want the player to move
     private PlayerPhysics playerPhysics; //Reference to physics
-    // private float speedIncreaseCounter = 0f; //Time till we speed up the game
+    private float speedIncreaseCounter = 0f; //Time till we speed up the game
     private Vector2 initialPosition; //Where the player start
+	private GameObject floatyLocation;
 
 #if UNITY_EDITOR	
 	// used just for testing keyboard input in unity editor
 	private bool bDelay = false;
 #endif
+
+	public GameObject FloatyLocation{
+		get{
+			return floatyLocation;
+		}
+	}
 	
     void Start () {
         playerPhysics = GetComponent<PlayerPhysics>();
-        initialPosition = transform.position;
+        initialPosition = this.transform.position;
+		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
         Reset();
     }
     

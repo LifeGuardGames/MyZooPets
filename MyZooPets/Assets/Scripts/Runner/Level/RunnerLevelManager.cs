@@ -86,7 +86,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 				// Push a new one if not in tutorial mode
                 if(!RunnerGameManager.Instance.IsTutorialRunning()){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
-//                    PopulateLevelComponent(nextLevel);
+                    PopulateLevelComponent(nextLevel);
                 }else{
                     PushAndInstantiateRandomComponent(useStartingComponent:true);
                 }

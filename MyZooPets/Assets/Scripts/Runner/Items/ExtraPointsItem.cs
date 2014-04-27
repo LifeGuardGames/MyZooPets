@@ -14,6 +14,9 @@ public class ExtraPointsItem : RunnerItem {
 	}
 
     public override void OnPickup() {
+
+		SpawnFloatyText();
+
         GameObject.Destroy(gameObject);
     }
 }

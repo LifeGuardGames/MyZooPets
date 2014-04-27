@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Parallax. By Sean Chung
 /// This is used for infinite looping for parallax backgrounds
-/// NOTE:Make sure to tile the shader to 2!
+/// NOTE: Make sure to tile the shader to 2!
 /// </summary>
 public class Parallax : MonoBehaviour {
     public float moveTime;

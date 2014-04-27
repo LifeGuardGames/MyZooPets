@@ -9,6 +9,7 @@ using System.Collections;
 //---------------------------------------------------
 
 public class SceneTransition : MonoBehaviour {
+
 	// toggles that could be a part of the transition
 	public TweenToggleDemux demux;
 	public TweenToggle toggle;
@@ -92,5 +93,6 @@ public class SceneTransition : MonoBehaviour {
 			else
 				Debug.LogError("No loading screen on " + goLoadScreen);
 		}	
-	}	
+	}
 }
+

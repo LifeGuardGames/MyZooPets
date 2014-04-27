@@ -288,7 +288,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		if(ui.IsPopupShowing(MinigamePopups.GameOver)){
 			ui.TogglePopup(MinigamePopups.GameOver, false);
 
-			scriptTransition.StartTransition(strScene);
+			LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 		}
 		
 		//double confirm quit game
@@ -297,7 +297,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){
 				ui.TogglePopup(MinigamePopups.Pause, false);
 
-				scriptTransition.StartTransition(strScene);
+				LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 			};
 
 			PopupNotificationNGUI.HashEntry button2Function = delegate(){

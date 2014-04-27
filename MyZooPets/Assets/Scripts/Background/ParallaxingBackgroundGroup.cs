@@ -20,7 +20,7 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
             PlayParallax();
 
     }
-
+	
     void OnDestroy(){
         RunnerGameManager.OnStateChanged -= GameStateChange;
     }

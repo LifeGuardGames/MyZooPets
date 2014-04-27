@@ -13,25 +13,30 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	public Vector3 BackgroundCameraOffset;
 	public Camera BackgroundCamera;
     public GameObject BackgroundParent;
-	public string FirstGroupID = "";
+	// public string FirstGroupID = "";
+	public LevelGroup startingLevelGroup;
+
 	public float TransitionLengthSeconds = 1.0f;
-	public List<ParallaxingBackgroundGroup> ParralaxingGroups = new List<ParallaxingBackgroundGroup>();
+
+	// public List<GameObject> ParralaxingGroups = new List<GameObject>();
 
 	private float mTransitionPulse;
-	private ParallaxingBackgroundGroup mCurrentGroup = null;
-	private ParallaxingBackgroundGroup mNextGroup = null;
+
+	private ParallaxingBackgroundGroup mCurrentBackground = null;
+	private ParallaxingBackgroundGroup mNextBackground = null;
+
 	private Queue<ParallaxingBackgroundGroup> mNextTransition = new Queue<ParallaxingBackgroundGroup>();
 
 	// Use this for initialization
 	void Start() {
-		TransitionToGroup(FirstGroupID);
+		TransitionToBackground(startingLevelGroup.parallaxBackgroundPrefab);
 	}
 	
 	// Update is called once per frame
     void LateUpdate() {
     	
     	//if there is a next group already start counting down for transition	
-		if (mNextGroup != null) {
+		if (mNextBackground != null) {
             mTransitionPulse -= Time.deltaTime / Time.timeScale;
 
             //When timer is zero. Transition background to a new background
@@ -40,54 +45,58 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 
 				//If there is a queue of background waiting, get it from the queue
 				if (mNextTransition.Count > 0)
-					SpawnAndSetNextGroup(mNextTransition.Dequeue());
+					SpawnAndSetNextBackground(mNextTransition.Dequeue());
+
 			} else {
 				float currentAlpha = mTransitionPulse / TransitionLengthSeconds;
 				float inverseAlpha = 1f - currentAlpha;
                 
-				if (mCurrentGroup != null)
-                    mCurrentGroup.SetAlpha(currentAlpha);
-				if (mNextGroup != null)
-                    mNextGroup.SetAlpha(inverseAlpha);
+				if (mCurrentBackground != null)
+                    mCurrentBackground.SetAlpha(currentAlpha);
+				if (mNextBackground != null)
+                    mNextBackground.SetAlpha(inverseAlpha);
 			}
 		}
 	}
 
     public void Reset() {
-        TransitionToGroup(FirstGroupID);
+        TransitionToBackground(startingLevelGroup.parallaxBackgroundPrefab);
     }
 
-	public void TransitionToGroup(string inGroupID) {
-		ParallaxingBackgroundGroup nextGroup = null;
-		foreach (ParallaxingBackgroundGroup currentGroup in ParralaxingGroups) {
-			if (currentGroup.GroupID == inGroupID) {
-				nextGroup = currentGroup;
-				break;
-			}
-		}
+	public void TransitionToBackground(ParallaxingBackgroundGroup parallaxingBackgroundPrefab) {
+		// ParallaxingBackgroundGroup nextGroup = null;
+		// foreach (ParallaxingBackgroundGroup currentGroup in ParralaxingGroups) {
+		// 	if (currentGroup.GroupID == inGroupID) {
+		// 		nextGroup = currentGroup;
+		// 		break;
+		// 	}
+		// }
 
-		if (nextGroup != null) {
+		if (parallaxingBackgroundPrefab != null) {
 			if (mNextTransition.Count == 0) {
-				SpawnAndSetNextGroup(nextGroup);
+				SpawnAndSetNextBackground(parallaxingBackgroundPrefab);
 			} else {
-				mNextTransition.Enqueue(nextGroup);
+				mNextTransition.Enqueue(parallaxingBackgroundPrefab);
 			}
-		} else
-			Debug.LogError("No parralaxing bg named " + inGroupID);
+		} 
+
+		// else
+		// 	Debug.LogError("No parralaxing bg named " + inGroupID);
 	}
 
-	private void SpawnAndSetNextGroup(ParallaxingBackgroundGroup inNextGroup) {
+	private void SpawnAndSetNextBackground(ParallaxingBackgroundGroup nextBackground) {
 		mTransitionPulse = TransitionLengthSeconds;
-		mNextGroup = (ParallaxingBackgroundGroup)GameObject.Instantiate(inNextGroup);
-        mNextGroup.transform.parent = BackgroundParent.transform;
-        mNextGroup.transform.position = BackgroundParent.transform.position + BackgroundCameraOffset;
+		mNextBackground = (ParallaxingBackgroundGroup)GameObject.Instantiate(nextBackground);
+        mNextBackground.transform.parent = BackgroundParent.transform;
+        mNextBackground.transform.position = BackgroundParent.transform.position + BackgroundCameraOffset;
 	}
 
 	private void SetNextGroupAsCurrentAndDeleteCurrent() {
-		if (mCurrentGroup != null)
-			GameObject.Destroy(mCurrentGroup.gameObject);
-		mCurrentGroup = mNextGroup;
-		mCurrentGroup.SetAlpha(1f);
-		mNextGroup = null;
+		if (mCurrentBackground != null)
+			GameObject.Destroy(mCurrentBackground.gameObject);
+
+		mCurrentBackground = mNextBackground;
+		mCurrentBackground.SetAlpha(1f);
+		mNextBackground = null;
 	}
 }

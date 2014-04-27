@@ -48,7 +48,8 @@ public class LevelComponent : MonoBehaviour{
 	//Destroys this level component and all its items
     public void Destroy(){
     	DestroyItems();
-        Destroy(this.gameObject);
+		this.gameObject.SetActive(false);
+        
     }
 
 	public PointGroup GetGroup(int index){

@@ -20,16 +20,19 @@ public class PlayerPhysics : MonoBehaviour {
     private float deltaX;
     private Vector2 pos;
 
-    private bool grounded;
-    private bool falling;
-    private bool jumping;
+    private bool grounded; //is player on the ground?
+    private bool falling; //is player falling?
+    private bool jumping; //is player jumpingn
     private bool movementStopped;
     private Ray ray;
     private RaycastHit hit;
 
     public bool AllowPassThroughLayer{get; set;}
   
-    //When player is touching the ground  
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="PlayerPhysics"/> is grounded.
+    /// </summary>
+    /// <value><c>true</c> if grounded; otherwise, <c>false</c>.</value>
     public bool Grounded{
         get{return grounded;}
         set{
@@ -44,7 +47,10 @@ public class PlayerPhysics : MonoBehaviour {
         }
     }
 
-    //When player is falling
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="PlayerPhysics"/> is falling.
+    /// </summary>
+    /// <value><c>true</c> if falling; otherwise, <c>false</c>.</value>
     public bool Falling{
         get{return falling;}
         set{
@@ -58,6 +64,10 @@ public class PlayerPhysics : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Gets or sets a value indicating whether this <see cref="PlayerPhysics"/> is jumping.
+	/// </summary>
+	/// <value><c>true</c> if jumping; otherwise, <c>false</c>.</value>
     public bool Jumping{
         get{return jumping;}
         set{
@@ -71,6 +81,10 @@ public class PlayerPhysics : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Gets or sets a value indicating whether this <see cref="PlayerPhysics"/> movement stopped.
+	/// </summary>
+	/// <value><c>true</c> if movement stopped; otherwise, <c>false</c>.</value>
     public bool MovementStopped{
         get{return movementStopped;}   
         set{
@@ -93,8 +107,12 @@ public class PlayerPhysics : MonoBehaviour {
         jumping = false;
         AllowPassThroughLayer = false;
     }
-
-    //This functions calls the collision functions and actually move the player
+	
+	/// <summary>
+	/// This function calls the collision dedection functions and actually move
+	/// the player
+	/// </summary>
+	/// <param name="moveAmount">Move amount.</param>
     public void Move(Vector2 moveAmount) {
         
         deltaY = moveAmount.y;
@@ -114,9 +132,11 @@ public class PlayerPhysics : MonoBehaviour {
         Vector2 finalTransform = new Vector2(deltaX,deltaY);
         transform.Translate(finalTransform);
     }
-
-    //Check for collision above and below the player
-    //Currently we don't really care about the collision above so we just ignore it
+	
+	/// <summary>
+	/// Checks the collisions above and below.
+	/// Currently we don't really care about the collision above so we just ignore it
+	/// </summary>
     private void CheckCollisionsAboveAndBelow(){
         float dir = Mathf.Sign(deltaY);
         // Grounded = false;
@@ -169,6 +189,9 @@ public class PlayerPhysics : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Checks the collisions lef and right.
+	/// </summary>
     private void CheckCollisionsLefAndRight(){
         float dir = Mathf.Sign(deltaX);
         // MovementStopped = false;

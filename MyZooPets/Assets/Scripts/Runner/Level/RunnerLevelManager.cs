@@ -63,6 +63,11 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             float distanceToUpdateLevel = (frontLevelComponent.transform.FindChild("AnchorMax").position.x -
                 frontLevelComponent.transform.FindChild("AnchorMin").position.x) * 2f;
 
+            //if the minimum anchor position is behind the player position and the distance between the player
+            //and the minimum anchor is greater than the preset distance to update
+            // 1) remove component from level component queue
+            // 2) transition the background if transitioning to a new level group
+            // 3) add a new component into the game
             if (minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
 
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
@@ -71,20 +76,19 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 //change parallax background if transitioning into new level group 
                 if (removedLevelComponent.ParentGroup.LevelGroupID != newFront.ParentGroup.LevelGroupID) {
                     ParallaxingBackgroundManager parallaxManager = ParallaxingBackgroundManager.Instance;
-                    parallaxManager.TransitionToGroup(newFront.ParentGroup.ParallaxingBackground.GroupID);
+
+                    parallaxManager.TransitionToBackground(newFront.ParentGroup.parallaxBackgroundPrefab);
                 }
 
 				// Destroy it
-                // removedLevelComponent.DestroyAndCache();
-                // CacheComponentThenDestoryItems(removedLevelComponent);
                 removedLevelComponent.ParentGroup.DestroyAndCache(removedLevelComponent.gameObject);
 
 				// Push a new one if not in tutorial mode
                 if(!RunnerGameManager.Instance.IsTutorialRunning()){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
-                    PopulateLevelComponent(nextLevel);
+//                    PopulateLevelComponent(nextLevel);
                 }else{
-                    PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+                    PushAndInstantiateRandomComponent(useStartingComponent:true);
                 }
 			}
 		}
@@ -101,10 +105,10 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     }
 
     public void Reset() {
-        CleanUpLevelComponent();
+        CleanUp();
 
         LevelComponent nextLevel;
-        nextLevel = PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+        nextLevel = PushAndInstantiateRandomComponent(useStartingComponent:true);
         PopulateLevelComponent(nextLevel);
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
@@ -113,24 +117,23 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
         nextLevel = PushAndInstantiateRandomComponent();
         PopulateLevelComponent(nextLevel);
     }
-
-    //---------------------------------------------------
-    // ResetTutorial()
-    // Create levels suitable for tutorial
-    //---------------------------------------------------
+	
+	/// <summary>
+	/// Resets the tutorial.
+	/// </summary>
     public void ResetTutorial(){
-        CleanUpLevelComponent();
+        CleanUp();
 
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
     }
 
     //---------------------------------------------------
     // CleanUpLevelComponent()
     // Reset values and remove any spawned level components
     //---------------------------------------------------
-    private void CleanUpLevelComponent(){
+    private void CleanUp(){
         // Reset to default values
         mLevelSwitchPulse = LevelGroupSwitchTime;
         mCurrentLevelGroup = StartingLevelGroup;
@@ -146,8 +149,16 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             currentComponent.Destroy();
         }
 
+		// go through all level groups and reset
+		foreach(LevelGroup lvGroup in LevelGroups){
+			lvGroup.Reset();
+		}
+
     }
 
+	/// <summary>
+	/// Transitions to random new level group.
+	/// </summary>
     private void TransitionToRandomNewLevelGroup() {
         // Cut to a new, different level that has the proper level ID.
         // Update our level switches
@@ -158,7 +169,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
         
         foreach (LevelGroup levelGroup in LevelGroups) {
             if (levelGroup != mCurrentLevelGroup  // Don't switch to the current group
-                && levelGroup.LevelGroupNumber <= mNumLevelSwitches) // Dont switch to a group that is a higher 'level' then us
+                && levelGroup.levelGroupDifficulty <= mNumLevelSwitches) // Dont switch to a group that is a higher 'level' then us
             {
                 potentialLevels.Add(levelGroup);
             }
@@ -191,60 +202,38 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
         }
     }
 
-	private LevelComponent PushAndInstantiateRandomComponent(LevelComponent inForceUseThisComponent = null) {
+	/// <summary>
+	/// Pushs the and instantiate random component.
+	/// </summary>
+	/// <returns>The instantiated random component.</returns>
+	/// <param name="useStartingComponent">True will load the first component of the level group</param>
+	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false) {
         LevelComponent newComponent = null;
-        int randomIndex = 0; 
 
-		// if (mCurrentLevelGroup.LevelComponents.Count > 0) {
-			// LevelComponent nextlevelComponent = null;
+		if(useStartingComponent)
+			newComponent = mCurrentLevelGroup.GetStartLevelComponent();
+		else
+			newComponent = mCurrentLevelGroup.GetRandomComponent();
 
-			// if (inForceUseThisComponent == null) {
-   //              randomIndex = Random.Range(0, mCurrentLevelGroup.LevelComponents.Count);
-			// 	// Debug.Log("Pushing Next Level Component " + nextlevelComponent.name + " from group " + mCurrentLevelGroup.LevelGroupID);
-   //              newComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
-			// } else {
-			// 	// nextlevelComponent = inForceUseThisComponent;
-   //              newComponent = inForceUseThisComponent;
-			// }
+        newComponent.ParentGroup = mCurrentLevelGroup;
+		
+		// Set its position to the last max point (I hope).
+		newComponent.transform.position = mLastCenterPosition;
 
-            // if(levelComponentPool.Count > 0){
-            //     newComponent = levelComponentPool.Dequeue();
-            //     newComponent.gameObject.SetActive(true);
-                
-            // }else{
-            //     nextlevelComponent = mCurrentLevelGroup.LevelComponents[randomIndex];
+		// Get the min of the new component
+		Transform minAnchor = newComponent.transform.FindChild("AnchorMin");
 
-            //     newComponent = (LevelComponent)GameObject.Instantiate(nextlevelComponent);
-            //     newComponent.name = nextlevelComponent.name;
-            // }     
+		// Determine the vector that we need to push the center by
+		Vector3 pushVector = newComponent.transform.position - minAnchor.position;
 
-            newComponent = mCurrentLevelGroup.GetRandomComponent();
-
-            newComponent.ParentGroup = mCurrentLevelGroup;
+		// And push it
+		newComponent.transform.position += pushVector;
+		
+		// Update the next position as this ones max anchor
+		Transform maxAnchor = newComponent.transform.FindChild("AnchorMax");
+		mLastCenterPosition = maxAnchor.position;
 			
-			// Set its position to the last max point (I hope).
-			newComponent.transform.position = mLastCenterPosition;
-
-			// Get the min of the new component
-			Transform minAnchor = newComponent.transform.FindChild("AnchorMin");
-			// Determine the vector that we need to push the center by
-			Vector3 pushVector = newComponent.transform.position - minAnchor.position;
-			// And push it
-			newComponent.transform.position += pushVector;
-			
-			// Update the next position as this ones max anchor
-			Transform maxAnchor = newComponent.transform.FindChild("AnchorMax");
-			mLastCenterPosition = maxAnchor.position;
-
-            // show tile map
-            // note: this step is necessary to force the tile map to draw itself
-            // if tile map is set active all the time it's mesh data might be 
-            // deleted when its duplicate is destroyed
-            newComponent.transform.FindChild("TileMap").gameObject.SetActive(true);
-            newComponent.transform.FindChild("TileMap").gameObject.SetActive(false);
-			
-			mLevelComponentQueue.Enqueue(newComponent);
-		// }
+		mLevelComponentQueue.Enqueue(newComponent);
 
         return newComponent;
 	}

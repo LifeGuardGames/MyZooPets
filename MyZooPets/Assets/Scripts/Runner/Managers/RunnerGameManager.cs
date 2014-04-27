@@ -21,9 +21,10 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         //protected set;
     }
 	
-	//---------------------------------------------------
-	// GetMinigameKey()
-	//---------------------------------------------------	
+	/// <summary>
+	/// Gets the minigame key.
+	/// </summary>
+	/// <returns>The minigame key.</returns>
 	protected override string GetMinigameKey() {
 		return "Runner";	
 	}	
@@ -49,9 +50,9 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
         Application.targetFrameRate = 30;
     }
 	
-	//---------------------------------------------------
-	// _NewGame()
-	//---------------------------------------------------	
+	/// <summary>
+	/// Starts a new game.
+	/// </summary>
 	protected override void _NewGame() {	
         //check for tutorial here.
         if(TutorialOn() && (IsTutorialOverride() || 
@@ -158,13 +159,13 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     // player is running faster
     //---------------------------------------------------
     public void IncreaseTimeSpeed(float inIncreaseTime) {
-        Time.timeScale += inIncreaseTime;
+//        Time.timeScale += inIncreaseTime;
     }
 
     public void SlowTimeSpeed(float inTimeDivisor) {
-        Time.timeScale /= inTimeDivisor;
-        if (Time.timeScale < 1f)
-            Time.timeScale = 1f;
+//        Time.timeScale /= inTimeDivisor;
+//        if (Time.timeScale < 1f)
+//            Time.timeScale = 1f;
     }
 
     //---------------------------------------------------

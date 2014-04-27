@@ -11,51 +11,95 @@
  */
 
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class LevelGroup : MonoBehaviour {
     public eLevelGroupID LevelGroupID;
-    public int LevelGroupNumber = 0;
-    public ParallaxingBackgroundGroup ParallaxingBackground;
-    public LevelComponent StartingLevelComponent;
-    public List<GameObject> LevelComponentPrefabs; //list of prefab reference
+    public int levelGroupDifficulty = 0; //spawning timing or difficulty. Higher number = more difficult
+    // public LevelComponent startingLevelComponent; //the component to start the level group
+    // public int startLevelComponentIndex;
+    public ParallaxingBackgroundGroup parallaxBackgroundPrefab; 
 
-    public Dictionary<string, GameObject> componentCache = new Dictionary<string, GameObject>();
+    public List<GameObject> levelComponentsGO; //list of ready to use components
+  
+    //components currently in the scene. should not be spawned again
+    //because we don't want duplicates in the cache
+    private HashSet<string> componentsInScene = new HashSet<string>(); 
 
+	/// <summary>
+	/// Reset the cached components
+	/// </summary>
+	public void Reset(){
+		componentsInScene = new HashSet<string>();
+	}
 
-    public LevelComponent GetRandomComponent(){
-        int randomIndex = Random.Range(0, LevelComponentPrefabs.Count);
+	/// <summary>
+	/// Gets the start level component.
+	/// </summary>
+	/// <returns>The start level component.</returns>
+    public LevelComponent GetStartLevelComponent(){
+		LevelComponent retVal = null;
 
-        //get the prefab
-        GameObject lvComponentPrefab = LevelComponentPrefabs[randomIndex];
+		retVal = GetComponent(0);
 
-        //check for it in the cache
-        GameObject lvComponentObj = null;
-        if(componentCache.ContainsKey(lvComponentPrefab.name)){
-            lvComponentObj = componentCache[lvComponentPrefab.name];
-            lvComponentObj.SetActive(true);
-        }
-        else{
-            //instantiate if not in cache
-            lvComponentObj = (GameObject) GameObject.Instantiate(lvComponentPrefab);
-            lvComponentObj.name = lvComponentPrefab.name;
-        }
-
-        return lvComponentObj.GetComponent<LevelComponent>();
+		return retVal;
     }
 
-    //if GO is not in the cache add it else destroy. Component items
-    //are destroyed in both cases
+	/// <summary>
+	/// Gets the component.
+	/// </summary>
+	/// <returns>level component</returns>
+	/// <param name="index">arrya index</param>
+	private LevelComponent GetComponent(int index){
+		GameObject lvComponentObj = null;
+		LevelComponent retVal = null;
+
+		try{
+			lvComponentObj = levelComponentsGO[index];
+			
+			if(componentsInScene.Contains(lvComponentObj.name)){
+				lvComponentObj = levelComponentsGO.Find(component => componentsInScene.Contains(component.name) == false);
+			}
+			
+			lvComponentObj.SetActive(true);
+			
+			if(lvComponentObj != null){
+				componentsInScene.Add(lvComponentObj.name);
+				retVal = lvComponentObj.GetComponent<LevelComponent>();
+			}
+		}
+		catch(ArgumentOutOfRangeException e){
+			Debug.Log("Error message: " + e.Message);
+		}
+
+		return retVal;
+	}
+
+	/// <summary>
+	/// Gets the random component.
+	/// </summary>
+	/// <returns>The random component.</returns>
+    public LevelComponent GetRandomComponent(){
+		LevelComponent retVal = null;
+		int randomIndex = UnityEngine.Random.Range(0, levelComponentsGO.Count); //get a random index
+
+		retVal = GetComponent(randomIndex);
+
+        return retVal; 
+    }
+	
+    /// <summary>
+	/// If GameObject is not in cache add it; otherwise, remove
+    /// </summary>
+    /// <param name="lvComponentObj">Lv component object.</param>
     public void DestroyAndCache(GameObject lvComponentObj){
         lvComponentObj.GetComponent<LevelComponent>().DestroyItems();
+        componentsInScene.Remove(lvComponentObj.name);
 
-        if(!componentCache.ContainsKey(lvComponentObj.name)){
-            componentCache.Add(lvComponentObj.name, lvComponentObj);
-            lvComponentObj.SetActive(false);
-        }else{
-            GameObject.Destroy(lvComponentObj);
-        }
+		lvComponentObj.SetActive(false);
+
     }
 
     public enum eLevelGroupID{
@@ -63,4 +107,26 @@ public class LevelGroup : MonoBehaviour {
         City,
         CityNight,
     }
+
+	/// <summary>
+	/// Checks the cache or instantiate.
+	/// </summary>
+	/// <returns>The cache or instantiated GameObject</returns>
+	/// <param name="lvComponentPrefab">Lv component prefab.</param>
+	//    private GameObject CheckCacheOrInstantiate(GameObject lvComponentPrefab){
+	//		GameObject obj = null;
+	//        //check for it in the cache
+	//        if(componentCache.ContainsKey(lvComponentPrefab.name)){
+	//            obj = componentCache[lvComponentPrefab.name];
+	//            obj.SetActive(true);
+	//        }
+	//        //instantiate if not in cache
+	//        else{
+	//            // obj = (GameObject) GameObject.Instantiate(lvComponentPrefab);
+	//            obj = lvComponentPrefab;
+	//            obj.name = lvComponentPrefab.name;
+	//        }
+	//
+	//        return obj;
+	//    }
 }

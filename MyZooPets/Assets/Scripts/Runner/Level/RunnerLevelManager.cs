@@ -45,13 +45,13 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	
 	// Update is called once per frame
 	void Update() {
-		if (!RunnerGameManager.Instance.GameRunning)
+		if(!RunnerGameManager.Instance.GameRunning)
 			return;
 		
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
 
-		if (mLevelComponentQueue.Count > 0 && playerController != null) {
+		if(mLevelComponentQueue.Count > 0 && playerController != null) {
 			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
             Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
@@ -68,7 +68,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             // 1) remove component from level component queue
             // 2) transition the background if transitioning to a new level group
             // 3) add a new component into the game
-            if (minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
+            if(minAnchor.position.x < currentRunnerPosition.x && distanceBetween >= distanceToUpdateLevel) {
 
 				LevelComponent removedLevelComponent = mLevelComponentQueue.Dequeue();
                 LevelComponent newFront = mLevelComponentQueue.Peek();
@@ -328,7 +328,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 }
             }
             break;
-
             case eCurveType.Quadratic:
             case eCurveType.Cubic: {
                 float lineLength = CalculateCurveLength(inSpawnGroup);

@@ -11,36 +11,54 @@ public class PlayerController : Singleton<PlayerController> {
 
     [System.Serializable]
     public class PlatformerControllerMovement{
-        //The default running speed
-        public float defaultTargetSpeed = 15f;
-
-        //currvent movement speed after it gets smoothed by acceleration
+        
+		public float defaultTargetSpeed = 15f; //The default running speed
         [System.NonSerialized]
-        public float currentSpeed = 0f;
+		public float currentSpeed = 0f; //currvent movement speed after it gets smoothed by acceleration
+		public float targetSpeed; //The speed you want the character to reach to
+		public float acceleration = 5f; //How fast does the character change speed? higher is faster
+		public float jumpHeight = 9;
+		[System.NonSerialized]
+		public float verticalSpeed = 0f;
+		public float maxFallSpeed = 100f; //maximum speed the player is allowed to fall
 
-        //The speed you want the character to reach to
-        public float targetSpeed;
+        private float gravity = 130f; //gravity is calculated based on the target speed
+       
+		/// <summary>
+		/// Gets the gravity. Dependent on the target speed
+		/// </summary>
+		/// <value>The gravity.</value>
+		public float Gravity{
+			get{
+				return this.targetSpeed * 10;
+			}
+		}
 
-        //How fast does the character change speed? higher is faster
-        public float acceleration = 5f;
+		/// <summary>
+		/// Increases the target speed.
+		/// </summary>
+		/// <param name="isNormal">If set to <c>true</c> is normal.</param>
+		public void IncreaseTargetSpeed(bool isNormal){
+			if(isNormal)
+				this.targetSpeed += 5; //speed increases by an increment of 5
+			else
+				this.targetSpeed += 10;
 
-        //gravity for the character
-        public float gravity = 130f;
-        public float maxFallSpeed = 100f;
+			//cap the speed at 45
+			if(this.targetSpeed >= 45)
+				this.targetSpeed = 45;
+		}
 
-        //Jump variables
-        public float jumpHeight = 9;
-
-		//the jump speed
-        [System.NonSerialized]
-        public float verticalSpeed = 0f;
-
+		/// <summary>
+		/// Resets the target speed.
+		/// </summary>
         public void ResetTargetSpeed(){
             targetSpeed = defaultTargetSpeed; 
         }
     }
 
     public PlatformerControllerMovement movement = new PlatformerControllerMovement();
+	public float timeUntilTargetSpeedIncrease = 30f;
 
     private Vector2 amountToMove; //How much you want the player to move
     private PlayerPhysics playerPhysics; //Reference to physics
@@ -73,14 +91,21 @@ public class PlayerController : Singleton<PlayerController> {
 #if UNITY_EDITOR    
         CheckKeyMovement();
 #endif
+
+		UpdateSpeed();
         CheckAndActOnDeath();
     }
 	
 	void OnGUI(){
 		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
 			movement.targetSpeed += 5;
-			movement.gravity += 10;
 		 }
+
+		if(GUI.Button(new Rect(100, 0, 100, 100), "-speed")){
+			movement.targetSpeed -= 5;
+		}
+
+		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
 	}
 
     void FixedUpdate(){
@@ -127,11 +152,11 @@ public class PlayerController : Singleton<PlayerController> {
 
         //if grounded just set speed to gravity speed
         if(playerPhysics.Grounded && !playerPhysics.Jumping){
-            movement.verticalSpeed = -movement.gravity * Time.deltaTime;
+            movement.verticalSpeed = -movement.Gravity * Time.deltaTime;
         }
         //if jumping keep decreasing the vertical speed by gravity
         else{
-            movement.verticalSpeed -= movement.gravity * Time.deltaTime;
+            movement.verticalSpeed -= movement.Gravity * Time.deltaTime;
         }
 
         //make sure we don't fall nay faster than maxFallSpeed
@@ -146,7 +171,7 @@ public class PlayerController : Singleton<PlayerController> {
     private float CalculateJumpVerticalSpeed(float targetJumpHeight){
         // from jump height and gravity we deduce the upwards speed for character
         // at apex
-        return Mathf.Sqrt(2 * targetJumpHeight * movement.gravity);
+        return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
     }
 
     private void Jump(){
@@ -214,7 +239,9 @@ public class PlayerController : Singleton<PlayerController> {
     //---------------------------------------------------
     public void TriggerSlowdown(float inDivisor) {
 //        RunnerGameManager.Instance.SlowTimeSpeed(inDivisor);
+		movement.ResetTargetSpeed();
         MegaHazard.Instance.TriggerPlayerSlowdown();
+
     }
 	
     //---------------------------------------------------
@@ -222,12 +249,14 @@ public class PlayerController : Singleton<PlayerController> {
     // Increase the pace of the game
     //---------------------------------------------------
     private void UpdateSpeed(){
-//        speedIncreaseCounter -= Time.deltaTime / Time.timeScale;
-//        if(speedIncreaseCounter <= 0){
-//            RunnerGameManager.Instance.IncreaseTimeSpeed(speedIncrease);
-//            speedIncreaseCounter = speedIncreaseTime;
-//        }
+		speedIncreaseCounter += Time.deltaTime;
+		if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
+			//increase time
+			movement.IncreaseTargetSpeed(true);
+			speedIncreaseCounter = 0;
+		}
     }
+
 
     //---------------------------------------------------
     // CheckAndActOnDeath()

@@ -107,26 +107,4 @@ public class LevelGroup : MonoBehaviour {
         City,
         CityNight,
     }
-
-	/// <summary>
-	/// Checks the cache or instantiate.
-	/// </summary>
-	/// <returns>The cache or instantiated GameObject</returns>
-	/// <param name="lvComponentPrefab">Lv component prefab.</param>
-	//    private GameObject CheckCacheOrInstantiate(GameObject lvComponentPrefab){
-	//		GameObject obj = null;
-	//        //check for it in the cache
-	//        if(componentCache.ContainsKey(lvComponentPrefab.name)){
-	//            obj = componentCache[lvComponentPrefab.name];
-	//            obj.SetActive(true);
-	//        }
-	//        //instantiate if not in cache
-	//        else{
-	//            // obj = (GameObject) GameObject.Instantiate(lvComponentPrefab);
-	//            obj = lvComponentPrefab;
-	//            obj.name = lvComponentPrefab.name;
-	//        }
-	//
-	//        return obj;
-	//    }
 }

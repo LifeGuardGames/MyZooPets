@@ -20,20 +20,19 @@ using System.Collections.Generic;
 
 public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     // public int BottomLayer = 31;
-	public float LevelTooLowYValueGameOver = -80.0f;
-	public float LevelGroupSwitchTime = 40.0f;
+	public float LevelTooLowYValueGameOver = -80.0f; //Game over if player drops below
+	public float LevelGroupSwitchTime = 40.0f; //How long it takes until the switch to a next group
     public float CoinSpawnDistance = 1f;
     public LevelGroup StartingLevelGroup;
-    public List<LevelGroup> LevelGroups;
-    public List<LevelTransitionComponent> LevelTransitionGroups;
+    public List<LevelGroup> LevelGroups; //Reference to all the LevelGroups
+    public List<LevelTransitionComponent> LevelTransitionGroups; 
 
     private int mNumLevelSwitches;
     private float mLevelSwitchPulse;
     private Vector3 mLastCenterPosition;
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
-
-
+	
     //pooling level components
     private Queue<LevelComponent> levelComponentPool = new Queue<LevelComponent>(); 
 
@@ -95,7 +94,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
         //only allow level group switching if not in tutorial mode
         if(!RunnerGameManager.Instance.IsTutorialRunning()){
-            mLevelSwitchPulse -= Time.deltaTime / Time.timeScale;
+            mLevelSwitchPulse -= Time.deltaTime;
 
             if (mLevelSwitchPulse <= 0f) {
                 mLevelSwitchPulse = LevelGroupSwitchTime;
@@ -119,20 +118,22 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     }
 	
 	/// <summary>
-	/// Resets the tutorial.
+	/// Resets the tutorial. The first 3 level components of forest group are
+	/// used for tutorial because they don't have any jumping gap. The tutorial
+	/// will break if these 3 components are changed in the future
 	/// </summary>
     public void ResetTutorial(){
         CleanUp();
 
-//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
-//        PushAndInstantiateRandomComponent(StartingLevelGroup.StartingLevelComponent);
+		//load three components in the game for tutorial
+		PushAndInstantiateRandomComponent(useStartingComponent:true);
+		PushAndInstantiateRandomComponent(useStartingComponent:true);
+		PushAndInstantiateRandomComponent(useStartingComponent:true);
     }
-
-    //---------------------------------------------------
-    // CleanUpLevelComponent()
-    // Reset values and remove any spawned level components
-    //---------------------------------------------------
+	
+	/// <summary>
+	/// Reset values and remove any spawned level components
+	/// </summary>
     private void CleanUp(){
         // Reset to default values
         mLevelSwitchPulse = LevelGroupSwitchTime;
@@ -207,11 +208,13 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	/// </summary>
 	/// <returns>The instantiated random component.</returns>
 	/// <param name="useStartingComponent">True will load the first component of the level group</param>
-	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false) {
+	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false, bool tutMode = false) {
         LevelComponent newComponent = null;
 
 		if(useStartingComponent)
 			newComponent = mCurrentLevelGroup.GetStartLevelComponent();
+		else if(tutMode)
+			newComponent = mCurrentLevelGroup.GetTutorialLevelComponent();
 		else
 			newComponent = mCurrentLevelGroup.GetRandomComponent();
 
@@ -237,11 +240,11 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
         return newComponent;
 	}
-
-    //--------------------------------------------------
-    // PopulateLevelComponent()
-    // Given the level component create the coins, hazard, and items 
-    //--------------------------------------------------
+	
+	/// <summary>
+	/// Populates the level component. create the coins, hazard and items
+	/// </summary>
+	/// <param name="inLevelComponent">In level component.</param>
 	private void PopulateLevelComponent(LevelComponent inLevelComponent) {
         // See what groups we could spawn.
         List<Bundle> possibleSpawns = new List<Bundle>();

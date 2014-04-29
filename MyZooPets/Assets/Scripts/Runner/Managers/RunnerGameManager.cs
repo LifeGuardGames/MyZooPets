@@ -64,7 +64,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 
             ResetGame();
         }
-
 	}	
 	
 	//---------------------------------------------------
@@ -82,10 +81,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 
         // check for badge unlock;
         UpdateBadgeProgress();
-		
-		// reset the game here so that time scale is returned to normal (for when the user exits the game)
-        Time.timeScale = 1f;
-        // ResetGame();
+
 	}		
 	
     //---------------------------------------------------
@@ -93,9 +89,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     // Set all game components to initial state
     //---------------------------------------------------
     public void ResetGame() {
-        Time.timeScale = 1f;
-
-        PlayerController.Instance.gameObject.SetActive(true);
+        PlayerController.Instance.MakePlayerVisible(true);
         PlayerController.Instance.Reset();
         ScoreManager.Instance.Reset();
         ScoreUIManager.Instance.Show();
@@ -106,10 +100,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
     }
 
     public void ResetGameTutorial(){
-        Time.timeScale = 1f;
-
-        PlayerController.Instance.gameObject.SetActive(true);
-        PlayerController.Instance.Reset();
+		PlayerController.Instance.MakePlayerVisible(true);
+		PlayerController.Instance.Reset();
         ScoreManager.Instance.Reset();
         RunnerLevelManager.Instance.ResetTutorial();
         MegaHazard.Instance.Reset();
@@ -144,28 +136,13 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager> {
 		GameOver();	
 
         // Disable the player
-        PlayerController.Instance.gameObject.SetActive(false);
+        PlayerController.Instance.MakePlayerVisible(false);
 		
 		// play game over sound
 		AudioManager.Instance.PlayClip( "runnerGameOver" );
 
         //Reset level items
         ItemManager.Instance.Reset();
-    }
-
-    //---------------------------------------------------
-    // IncreaseTimeSpeed()
-    // Increase the time scale to make it looks like the
-    // player is running faster
-    //---------------------------------------------------
-    public void IncreaseTimeSpeed(float inIncreaseTime) {
-//        Time.timeScale += inIncreaseTime;
-    }
-
-    public void SlowTimeSpeed(float inTimeDivisor) {
-//        Time.timeScale /= inTimeDivisor;
-//        if (Time.timeScale < 1f)
-//            Time.timeScale = 1f;
     }
 
     //---------------------------------------------------

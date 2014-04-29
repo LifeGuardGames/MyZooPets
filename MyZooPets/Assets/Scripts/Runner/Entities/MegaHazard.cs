@@ -49,9 +49,13 @@ public class MegaHazard : Singleton<MegaHazard> {
 	//When megahazard collides with the player. End the game
 	void OnTriggerEnter(Collider inOther){
 		if(inOther.gameObject.tag == "Player") {
-			RunnerGameManager gameManager = RunnerGameManager.Instance;
-			gameManager.ActivateGameOver();
+			GameOver();
+//			Invoke("GameOver", 1.0f);
 		}
+	}
+
+	private void GameOver(){
+		RunnerGameManager.Instance.ActivateGameOver();
 	}
 
 	/// <summary>
@@ -107,9 +111,9 @@ public class MegaHazard : Singleton<MegaHazard> {
 		else {
 			if (mSlowDownStayPulse > 0f) {
 				// When we get hit, we must stay at our slowed-down locaiton until the time elapses.
-				mSlowDownStayPulse -= Time.deltaTime / Time.timeScale;         
+				mSlowDownStayPulse -= Time.deltaTime;         
 			} else if (mCurrentDistanceFromPlayer > XDefaultDistanceFromPlayer) {
-				mDistanceRegainPulse -= Time.deltaTime / Time.timeScale;
+				mDistanceRegainPulse -= Time.deltaTime;
 				if (mDistanceRegainPulse <= 0f) {
 					mDistanceRegainPulse = DistanceRegainTime;
 					mCurrentDistanceFromPlayer += DistanceRegainIncrement;

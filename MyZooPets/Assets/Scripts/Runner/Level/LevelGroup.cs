@@ -36,6 +36,29 @@ public class LevelGroup : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Gets the tutorial level component. Usually the first component of the list
+	/// </summary>
+	/// <returns>The tutorial level component.</returns>
+	public LevelComponent GetTutorialLevelComponent(){
+		LevelComponent retVal = null;
+
+		try{
+			GameObject tutComponent = levelComponentsGO[0];
+			GameObject newTutComponent = (GameObject) Instantiate(tutComponent);
+			retVal = newTutComponent.GetComponent<LevelComponent>();
+		}
+		catch(ArgumentOutOfRangeException e){
+			Debug.Log("Error message: " + e.Message);
+		}
+		catch(ArgumentNullException e){
+			Debug.Log("Error message: " + e.Message);
+		}
+
+
+		return retVal;
+	}
+
+	/// <summary>
 	/// Gets the start level component.
 	/// </summary>
 	/// <returns>The start level component.</returns>

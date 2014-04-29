@@ -97,13 +97,14 @@ public class PlayerController : Singleton<PlayerController> {
     }
 	
 	void OnGUI(){
-		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
-			movement.targetSpeed += 5;
-		 }
-
-		if(GUI.Button(new Rect(100, 0, 100, 100), "-speed")){
-			movement.targetSpeed -= 5;
-		}
+		GUI.contentColor = Color.black;
+//		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
+//			movement.targetSpeed += 5;
+//		 }
+//
+//		if(GUI.Button(new Rect(100, 0, 100, 100), "-speed")){
+//			movement.targetSpeed -= 5;
+//		}
 
 		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
 	}
@@ -126,11 +127,32 @@ public class PlayerController : Singleton<PlayerController> {
         playerPhysics.Move(amountToMove);
     }
 
+	//Listen to tap gesture from finger gesture plugin
+	void OnTap(TapGesture gesture) { 
+		if(RunnerGameManager.Instance.GameRunning){
+			Jump();
+			
+			if(OnJump != null)
+				OnJump(this, EventArgs.Empty);
+		}
+	}
+	
+	//Listen to swipe down gesture
+	void OnSwipe(SwipeGesture gesture) { 
+		FingerGestures.SwipeDirection direction = gesture.Direction;
+		if(direction == FingerGestures.SwipeDirection.Down){
+			Drop();
+			
+			if(OnDrop != null)
+				OnDrop(this, EventArgs.Empty);
+		}
+	} 
+	
 	/// <summary>
 	/// Reset player position and physics
 	/// </summary>
-    public void Reset(){
-        // speedIncreaseCounter = speedIncreaseTime;
+	public void Reset(){
+		speedIncreaseCounter = 0f;
         transform.position = initialPosition;
 
         movement.verticalSpeed = 0f;
@@ -138,7 +160,26 @@ public class PlayerController : Singleton<PlayerController> {
         movement.ResetTargetSpeed();
     }
 
-    private void UpdateHorizontalMovement(){
+	//---------------------------------------------------
+	// TriggerSlowdown()
+	// Slow down the game and decrease the distance between 
+	// player and megahazard
+	//---------------------------------------------------
+	public void TriggerSlowdown(float inDivisor) {
+		movement.ResetTargetSpeed();
+		MegaHazard.Instance.TriggerPlayerSlowdown();
+		
+	}
+
+	/// <summary>
+	/// Makes the player visible.
+	/// </summary>
+	/// <param name="isVisible">If set to <c>true</c> is visible.</param>
+	public void MakePlayerVisible(bool isVisible){
+		this.transform.Find("Body").gameObject.SetActive(isVisible);
+	}
+	
+	private void UpdateHorizontalMovement(){
         movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, 
             movement.acceleration * Time.deltaTime); 
     }
@@ -191,72 +232,22 @@ public class PlayerController : Singleton<PlayerController> {
 
         playerPhysics.AllowPassThroughLayer = true;
     }
-   
-
-#if UNITY_EDITOR
-     //---------------------------------------------------
-    // UpdateMovement()
-    // Moves the player along the x axis with default speed. 
-    // Check for jumping and falling physics as well.
-    //---------------------------------------------------
-    private void CheckKeyMovement(){
-
-        if(Input.GetKey("up")) Jump();
-        if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
-            bDelay = true;
-            Drop();
-        }
-        else
-            bDelay = false;
-    }
-#endif
-
-    //Listen to tap gesture from finger gesture plugin
-    void OnTap(TapGesture gesture) { 
-        if(RunnerGameManager.Instance.GameRunning){
-            Jump();
-            
-            if(OnJump != null)
-                OnJump(this, EventArgs.Empty);
-        }
-    }
-
-    //Listen to swipe down gesture
-    void OnSwipe(SwipeGesture gesture) { 
-        FingerGestures.SwipeDirection direction = gesture.Direction;
-        if(direction == FingerGestures.SwipeDirection.Down){
-            Drop();
-
-            if(OnDrop != null)
-                OnDrop(this, EventArgs.Empty);
-        }
-    } 
-   
-    //---------------------------------------------------
-    // TriggerSlowdown()
-    // Slow down the game and decrease the distance between 
-    // player and megahazard
-    //---------------------------------------------------
-    public void TriggerSlowdown(float inDivisor) {
-//        RunnerGameManager.Instance.SlowTimeSpeed(inDivisor);
-		movement.ResetTargetSpeed();
-        MegaHazard.Instance.TriggerPlayerSlowdown();
-
-    }
 	
     //---------------------------------------------------
     // UpdateSpeed()
     // Increase the pace of the game
     //---------------------------------------------------
     private void UpdateSpeed(){
-		speedIncreaseCounter += Time.deltaTime;
-		if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
-			//increase time
-			movement.IncreaseTargetSpeed(true);
-			speedIncreaseCounter = 0;
+		if(!RunnerGameManager.Instance.IsTutorialRunning()){
+			speedIncreaseCounter += Time.deltaTime;
+
+			if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
+				//increase time
+				movement.IncreaseTargetSpeed(true);
+				speedIncreaseCounter = 0;
+			}
 		}
     }
-
 
     //---------------------------------------------------
     // CheckAndActOnDeath()
@@ -266,7 +257,27 @@ public class PlayerController : Singleton<PlayerController> {
        RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
         if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
             AudioManager.Instance.PlayClip("runnerDie");
-            RunnerGameManager.Instance.ActivateGameOver();
+			RunnerGameManager.Instance.ActivateGameOver();    
+
         } 
     }
+
+	#if UNITY_EDITOR
+	//---------------------------------------------------
+	// UpdateMovement()
+	// Moves the player along the x axis with default speed. 
+	// Check for jumping and falling physics as well.
+	//---------------------------------------------------
+	private void CheckKeyMovement(){
+		
+		if(Input.GetKey("up")) Jump();
+		if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
+			bDelay = true;
+			Drop();
+		}
+		else
+			bDelay = false;
+	}
+	#endif
+
 }

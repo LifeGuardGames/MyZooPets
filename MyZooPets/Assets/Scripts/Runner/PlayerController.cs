@@ -3,17 +3,15 @@ using System;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerPhysics))]
-public class PlayerController : Singleton<PlayerController> {
-    public static EventHandler<EventArgs> OnJump;
-    public static EventHandler<EventArgs> OnDrop;
-	
-    // public float speedIncreaseTime = 5; //How long before the next game speed increment 
+public class PlayerController : Singleton<PlayerController>{
+	public static EventHandler<EventArgs> OnJump;
+	public static EventHandler<EventArgs> OnDrop;
 
-    [System.Serializable]
-    public class PlatformerControllerMovement{
+	[System.Serializable]
+	public class PlatformerControllerMovement{
         
 		public float defaultTargetSpeed = 15f; //The default running speed
-        [System.NonSerialized]
+		[System.NonSerialized]
 		public float currentSpeed = 0f; //currvent movement speed after it gets smoothed by acceleration
 		public float targetSpeed; //The speed you want the character to reach to
 		public float acceleration = 5f; //How fast does the character change speed? higher is faster
@@ -22,7 +20,7 @@ public class PlayerController : Singleton<PlayerController> {
 		public float verticalSpeed = 0f;
 		public float maxFallSpeed = 100f; //maximum speed the player is allowed to fall
 
-        private float gravity = 130f; //gravity is calculated based on the target speed
+		private float gravity = 130f; //gravity is calculated based on the target speed
        
 		/// <summary>
 		/// Gets the gravity. Dependent on the target speed
@@ -52,18 +50,17 @@ public class PlayerController : Singleton<PlayerController> {
 		/// <summary>
 		/// Resets the target speed.
 		/// </summary>
-        public void ResetTargetSpeed(){
-            targetSpeed = defaultTargetSpeed; 
-        }
-    }
+		public void ResetTargetSpeed(){
+			targetSpeed = defaultTargetSpeed; 
+		}
+	}
 
-    public PlatformerControllerMovement movement = new PlatformerControllerMovement();
+	public PlatformerControllerMovement movement = new PlatformerControllerMovement();
 	public float timeUntilTargetSpeedIncrease = 30f;
-
-    private Vector2 amountToMove; //How much you want the player to move
-    private PlayerPhysics playerPhysics; //Reference to physics
-    private float speedIncreaseCounter = 0f; //Time till we speed up the game
-    private Vector2 initialPosition; //Where the player start
+	private Vector2 amountToMove; //How much you want the player to move
+	private PlayerPhysics playerPhysics; //Reference to physics
+	private float speedIncreaseCounter = 0f; //Time till we speed up the game
+	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
 
 #if UNITY_EDITOR	
@@ -77,24 +74,24 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 	
-    void Start () {
-        playerPhysics = GetComponent<PlayerPhysics>();
-        initialPosition = this.transform.position;
+	void Start(){
+		playerPhysics = GetComponent<PlayerPhysics>();
+		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
-        Reset();
-    }
+		Reset();
+	}
     
-    void Update () {
-        if(!RunnerGameManager.Instance.GameRunning)
-            return;
+	void Update(){
+		if(!RunnerGameManager.Instance.GameRunning)
+			return;
 
 #if UNITY_EDITOR    
         CheckKeyMovement();
 #endif
 
 		UpdateSpeed();
-        CheckAndActOnDeath();
-    }
+		CheckAndActOnDeath();
+	}
 	
 	void OnGUI(){
 		GUI.contentColor = Color.black;
@@ -109,26 +106,26 @@ public class PlayerController : Singleton<PlayerController> {
 		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
 	}
 
-    void FixedUpdate(){
-        if(!RunnerGameManager.Instance.GameRunning)
-            return;
+	void FixedUpdate(){
+		if(!RunnerGameManager.Instance.GameRunning)
+			return;
 
 		//update runner horizontal movement
-        UpdateHorizontalMovement();
+		UpdateHorizontalMovement();
 
 		//apply game gravity
-        ApplyGravity(); 
+		ApplyGravity(); 
 
-        amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
+		amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
 
-        //always want movement to be framerate independent
-        amountToMove *= Time.deltaTime;
+		//always want movement to be framerate independent
+		amountToMove *= Time.deltaTime;
 
-        playerPhysics.Move(amountToMove);
-    }
+		playerPhysics.Move(amountToMove);
+	}
 
 	//Listen to tap gesture from finger gesture plugin
-	void OnTap(TapGesture gesture) { 
+	void OnTap(TapGesture gesture){ 
 		if(RunnerGameManager.Instance.GameRunning){
 			Jump();
 			
@@ -138,7 +135,7 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 	
 	//Listen to swipe down gesture
-	void OnSwipe(SwipeGesture gesture) { 
+	void OnSwipe(SwipeGesture gesture){ 
 		FingerGestures.SwipeDirection direction = gesture.Direction;
 		if(direction == FingerGestures.SwipeDirection.Down){
 			Drop();
@@ -153,19 +150,19 @@ public class PlayerController : Singleton<PlayerController> {
 	/// </summary>
 	public void Reset(){
 		speedIncreaseCounter = 0f;
-        transform.position = initialPosition;
+		transform.position = initialPosition;
 
-        movement.verticalSpeed = 0f;
-        movement.currentSpeed = 0f;
-        movement.ResetTargetSpeed();
-    }
+		movement.verticalSpeed = 0f;
+		movement.currentSpeed = 0f;
+		movement.ResetTargetSpeed();
+	}
 
 	//---------------------------------------------------
 	// TriggerSlowdown()
 	// Slow down the game and decrease the distance between 
 	// player and megahazard
 	//---------------------------------------------------
-	public void TriggerSlowdown(float inDivisor) {
+	public void TriggerSlowdown(float inDivisor){
 		movement.ResetTargetSpeed();
 		MegaHazard.Instance.TriggerPlayerSlowdown();
 		
@@ -180,64 +177,64 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 	
 	private void UpdateHorizontalMovement(){
-        movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, 
+		movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, 
             movement.acceleration * Time.deltaTime); 
-    }
+	}
 
 	/// <summary>
 	/// Applies the gravity.
 	/// gravity will be changed manually depending on the speed of the horizontal
 	/// movement
 	/// </summary>
-    private void ApplyGravity(){
+	private void ApplyGravity(){
 
-        //if grounded just set speed to gravity speed
-        if(playerPhysics.Grounded && !playerPhysics.Jumping){
-            movement.verticalSpeed = -movement.Gravity * Time.deltaTime;
-        }
+		//if grounded just set speed to gravity speed
+		if(playerPhysics.Grounded && !playerPhysics.Jumping){
+			movement.verticalSpeed = -movement.Gravity * Time.deltaTime;
+		}
         //if jumping keep decreasing the vertical speed by gravity
         else{
-            movement.verticalSpeed -= movement.Gravity * Time.deltaTime;
-        }
+			movement.verticalSpeed -= movement.Gravity * Time.deltaTime;
+		}
 
-        //make sure we don't fall nay faster than maxFallSpeed
-        movement.verticalSpeed = Mathf.Max(movement.verticalSpeed, -movement.maxFallSpeed);
-    }
+		//make sure we don't fall nay faster than maxFallSpeed
+		movement.verticalSpeed = Mathf.Max(movement.verticalSpeed, -movement.maxFallSpeed);
+	}
 
 	/// <summary>
 	/// Calculates the jump vertical speed.
 	/// </summary>
 	/// <returns>The vertical speed.</returns>
 	/// <param name="targetJumpHeight">Target jump height.</param>
-    private float CalculateJumpVerticalSpeed(float targetJumpHeight){
-        // from jump height and gravity we deduce the upwards speed for character
-        // at apex
-        return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
-    }
+	private float CalculateJumpVerticalSpeed(float targetJumpHeight){
+		// from jump height and gravity we deduce the upwards speed for character
+		// at apex
+		return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
+	}
 
-    private void Jump(){
-        if(playerPhysics.Grounded){
+	private void Jump(){
+		if(playerPhysics.Grounded){
 //            AudioManager.Instance.PlayClip( "runnerJumpUp" );
 
-            // amountToMove.y = jumpHeight;
-            movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
+			// amountToMove.y = jumpHeight;
+			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
 
-            playerPhysics.Jumping = true;
-        }
-    }  
+			playerPhysics.Jumping = true;
+		}
+	}
 
-    private void Drop(){
-        if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
-            AudioManager.Instance.PlayClip( "runnerJumpDown" );
+	private void Drop(){
+		if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
+			AudioManager.Instance.PlayClip("runnerJumpDown");
 
-        playerPhysics.AllowPassThroughLayer = true;
-    }
+		playerPhysics.AllowPassThroughLayer = true;
+	}
 	
-    //---------------------------------------------------
-    // UpdateSpeed()
-    // Increase the pace of the game
-    //---------------------------------------------------
-    private void UpdateSpeed(){
+	//---------------------------------------------------
+	// UpdateSpeed()
+	// Increase the pace of the game
+	//---------------------------------------------------
+	private void UpdateSpeed(){
 		if(!RunnerGameManager.Instance.IsTutorialRunning()){
 			speedIncreaseCounter += Time.deltaTime;
 
@@ -247,20 +244,20 @@ public class PlayerController : Singleton<PlayerController> {
 				speedIncreaseCounter = 0;
 			}
 		}
-    }
+	}
 
-    //---------------------------------------------------
-    // CheckAndActOnDeath()
-    // If player falls below the "Dead line" than the player dies
-    //---------------------------------------------------
-    private void CheckAndActOnDeath(){
-       RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
-        if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
-            AudioManager.Instance.PlayClip("runnerDie");
+	//---------------------------------------------------
+	// CheckAndActOnDeath()
+	// If player falls below the "Dead line" than the player dies
+	//---------------------------------------------------
+	private void CheckAndActOnDeath(){
+		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
+		if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
+			AudioManager.Instance.PlayClip("runnerDie");
 			RunnerGameManager.Instance.ActivateGameOver();    
 
-        } 
-    }
+		} 
+	}
 
 	#if UNITY_EDITOR
 	//---------------------------------------------------

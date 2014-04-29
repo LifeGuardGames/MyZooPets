@@ -9,12 +9,15 @@ public class FloatyUtil {
     private static GameObject floatyText = null;
     private static GameObject floatyStats = null;
 	private static GameObject floatyImageText = null;
-	
+
+
+	// NOTE: using a hashtable is actually a pretty bad idea. No type check so hard
+	// for other ppl to use
     //---------------------------------------------------- 
     // SpawnFloatyText()
     // This spawns a floaty text that disappears in FLOAT_TIME
     // Option Params:
-    //  prefab (GameObject): gameObject that you want to be spawned
+    //  prefab (string): gameObject that you want to be spawned
     //  parent (GameObject): the parent/location that you want the float to spawn under
     //  position (Vector3): the position that you want to spawn the floaty 
     //  textSize (int): size of the floaty

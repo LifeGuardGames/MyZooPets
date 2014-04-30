@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Script put on a pet when it is to attack a gate.
 //---------------------------------------------------
 
-public class AttackGate : MonoBehaviour {
+public class AttackGate : MonoBehaviour{
 	// gate to attack
 	private Gate gateTarget;
 	
@@ -21,7 +21,7 @@ public class AttackGate : MonoBehaviour {
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------
-	public void Init( PetAnimator attacker, Gate gateTarget, int nDamage ) {
+	public void Init(PetAnimator attacker, Gate gateTarget, int nDamage){
 		this.gateTarget = gateTarget;
 		this.nDamage = nDamage;
 		
@@ -36,7 +36,7 @@ public class AttackGate : MonoBehaviour {
 	//---------------------------------------------------
 	// OnDestroy()
 	//---------------------------------------------------	
-	private void OnDestroy() {
+	private void OnDestroy(){
 		// stop listening
 		PetAnimator.OnAnimDone -= DoneAnimating;	
 	}
@@ -50,46 +50,46 @@ public class AttackGate : MonoBehaviour {
 	// DoneAnimating()
 	// For when the pet is done animating.
 	//---------------------------------------------------	
-	private void DoneAnimating( object sender, PetAnimArgs args ) {
-		if ( args.GetAnimState() == PetAnimStates.BreathingFire ) {
+	private void DoneAnimating(object sender, PetAnimArgs args){
+		if(args.GetAnimState() == PetAnimStates.BreathingFire){
 			StartCoroutine(DoneAttacking());
 		}
 	}
 	
-	public void FinishAttack() {
-		StartCoroutine( attacker.FinishFire() );	
+	public void FinishAttack(){
+		StartCoroutine(attacker.FinishFire());	
 	}
 	
-	public void Cancel() {
+	public void Cancel(){
 		attacker.CancelFire();
 		
-		Destroy( this );
+		Destroy(this);
 	}
 	
 	//---------------------------------------------------
 	// DoneAttacking()
 	// For when the pet is done breathing fire.
 	//---------------------------------------------------		
-	private IEnumerator DoneAttacking() {
+	private IEnumerator DoneAttacking(){
 		// damage the gate
-		bool bDestroyed = gateTarget.DamageGate( nDamage );
+		bool bDestroyed = gateTarget.GateDamaged(nDamage);
 		
 		// and decrement the user's fire breaths
-		StatsController.Instance.ChangeFireBreaths( -1 );
+		StatsController.Instance.ChangeFireBreaths(-1);
 		
 		// also mark the player as having attack the monster (for wellapad tasks)
-		WellapadMissionController.Instance.TaskCompleted( "FightMonster" );
+		WellapadMissionController.Instance.TaskCompleted("FightMonster");
 		
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
 		
 		// move the player because the gate just got pushed back (if it still exists)
-		if ( gateTarget != null && !bDestroyed ) {
+		if(gateTarget != null && !bDestroyed){
 			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
-			PetMovement.Instance.MovePet( vNewLoc );
+			PetMovement.Instance.MovePet(vNewLoc);
 		}
 		
 		// then we're done -- destroy ourselves
-		Destroy( this );		
+		Destroy(this);		
 	}
 }

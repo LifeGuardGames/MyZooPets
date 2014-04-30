@@ -205,6 +205,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     private void LoadScene(){
-        scriptTransition.StartTransition( SceneUtils.BEDROOM );
+        LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");
     }
 }

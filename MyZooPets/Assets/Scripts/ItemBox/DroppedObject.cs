@@ -89,7 +89,7 @@ public abstract class DroppedObject : LgButton{
 		int nRangeX = Constants.GetConstant<int>("ItemBoxBurst_RangeX");
 		int nRangeY = Constants.GetConstant<int>("ItemBoxBurst_RangeY");	
 		float fTime = Constants.GetConstant<float>("ItemBoxBurst_Time");
-		
+	
 		// the burst is actually a lean tween move along a path
 		
 		// the starting location is the object's current location

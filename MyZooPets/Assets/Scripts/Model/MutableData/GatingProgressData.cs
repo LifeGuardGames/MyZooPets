@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -36,7 +36,7 @@ public class GatingProgressData{
 	// RefreshGate()
 	// Refreshes the incoming gate's HP.
 	//---------------------------------------------------	
-	public void RefreshGate(DataGate data){
+	public void RefreshGate(ImmutableDataGate data){
 		string strID = data.GetGateID();
 		if(GatingProgress.ContainsKey(strID)){
 			int nHP = data.GetMonster().GetMonsterHealth();
@@ -101,10 +101,10 @@ public class GatingProgressData{
 	//---------------------------------------------------	
 	private void LoadFromXML(){
 		// init the data by filling the dictionary with xml data
-		Dictionary<string, DataGate> dictGates = DataGateLoader.GetAllData();
-		foreach(KeyValuePair<string, DataGate> entry in dictGates){
+		Dictionary<string, ImmutableDataGate> dictGates = DataLoaderGate.GetAllData();
+		foreach(KeyValuePair<string, ImmutableDataGate> entry in dictGates){
 			string strKey = entry.Key;
-			DataGate dataGate = entry.Value;
+			ImmutableDataGate dataGate = entry.Value;
 			int nHP = dataGate.GetMonster().GetMonsterHealth();
 			
 			// maps gate key to monster's max hp (i.e. no progress)

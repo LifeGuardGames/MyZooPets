@@ -15,14 +15,21 @@ public class GatingManager : Singleton<GatingManager>{
 	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
 	//=====================================================
     
-	public string strArea; // area that this manager is in
-	public Vector3 vStartingLoc; // starting location for the gates -- might differ from area to area
+	public string currentArea; // area that this manager is in
+	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
+
+	/// <summary>
+	/// The starting screen position. The Gates' position is decided by percentage of screen
+	/// need a base point to calculate the actual screen position for all the gates
+	/// before converting them to world point
+	/// </summary>
+	public Vector3 startingScreenPosition; 
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
 	private Hashtable hashActiveGates = new Hashtable(); // hash of active gates that the manager is currently managing
 	
 	public string GetArea(){
-		return strArea;	
+		return currentArea;	
 	}
 	
 	//---------------------------------------------------
@@ -58,15 +65,15 @@ public class GatingManager : Singleton<GatingManager>{
 		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
 		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
 		// but it works for our initial design of the gate...can be changed later
-		Hashtable hashGates = DataGateLoader.GetAreaGates(strArea);
+		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
-			DataGate dataGate = (DataGate)entry.Value;
+			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 			
-			bool bRecurring = dataGate.IsRecurring();
-			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			bool isRecurring = dataGate.IsRecurring();
+			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 			
-			if(bRecurring && !bActive && bCanBreath)
+			if(isRecurring && !isGateActive && canBreatheFire)
 				DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
 		}
 	}
@@ -76,34 +83,49 @@ public class GatingManager : Singleton<GatingManager>{
 	// Creates all gates that are alive in the save data.
 	//---------------------------------------------------	
 	private void SpawnGates(){
-		Hashtable hashGates = DataGateLoader.GetAreaGates(strArea);
+		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
-			DataGate dataGate = (DataGate)entry.Value;
+			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 			
 			// if the gate is activate, spawn the monster at an offset 
-			bool bActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			if(bActive){
-				int nStartingRoom = 0;										// room the player is starting in
-				float fDistance = scriptPan.partitionOffset;				// the distance between each room
-				int nDistance = dataGate.GetPartition() - nStartingRoom;	// the distance between the starting room and this gate's room
-				float fOffset = nDistance * fDistance;						// offset of the gate
-				
+			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+			if(isGateActive){
+				int startingPartition = scriptPan.currentPartition;										// room the player is in
+				float roomPartitionOffset = scriptPan.partitionOffset;				// the distance between each room
+				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
+				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
+
+				// calculate the starting location base on the screen percentage
+//				Vector3 startingScreenPosition = Camera.main.WorldToScreenPoint(startingLocation);
+//				print(startingScreenPosition);
+				// how much screen space should the gate be moved by
+				float screenOffset = Screen.width * dataGate.GetScreenPercentage();
+				Vector3 newScreenPosition = new Vector3(screenOffset, startingScreenPosition.y, startingScreenPosition.z);
+
+				float maxScreenSpace = Screen.width - screenOffset;
+
+				// convert screen space back to world space
+				Vector3 gateLocation = Camera.main.ScreenToWorldPoint(newScreenPosition);
+
 				// get the position of the gate by adding the offset to the starting location MOVE_DIR
-				Vector3 vPos = vStartingLoc;
-				vPos.x += fOffset;
+//				Vector3 vPos = startingLocation;
+//				vPos.x += distanceFromStartingPartition;
+
+				// move the offsetted gate to the proper partition
+				gateLocation.x += distanceFromStartingPartition;
 				
 				// create the gate at the location and set its id
 				string strPrefab = dataGate.GetMonster().GetResourceKey();
 				GameObject prefab = Resources.Load(strPrefab) as GameObject;
-				GameObject goGate = Instantiate(prefab, vPos, Quaternion.identity) as GameObject;
+				GameObject goGate = Instantiate(prefab, gateLocation, Quaternion.identity) as GameObject;
 				Gate scriptGate = goGate.GetComponent<Gate>();
 				
-				string strID = dataGate.GetGateID();
-				scriptGate.Init(strID, dataGate.GetMonster());
+				string gateID = dataGate.GetGateID();
+				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
 				
 				// hash the gate based on the room, for easier access
-				int nRoom = dataGate.GetPartition();
-				hashActiveGates[nRoom] = scriptGate;
+				int partition = dataGate.GetPartition();
+				hashActiveGates[partition] = scriptGate;
 			}
 		}		
 	}
@@ -123,10 +145,10 @@ public class GatingManager : Singleton<GatingManager>{
 	// in a gated room.
 	//---------------------------------------------------	
 	public bool IsInGatedRoom(){
-		int nRoom = scriptPan.currentPartition;
-		bool bGated = DataGateLoader.HasActiveGate(strArea, nRoom);
+		int currentPartition = scriptPan.currentPartition;
+		bool isGated = DataLoaderGate.HasActiveGate(currentArea, currentPartition);
 		
-		return bGated;
+		return isGated;
 	}
 	
 	//---------------------------------------------------
@@ -135,11 +157,34 @@ public class GatingManager : Singleton<GatingManager>{
 	// Note this assumes the area that this gating manager
 	// is in.
 	//---------------------------------------------------		
-	public bool HasActiveGate(int nPartition){
-		bool bHasGate = DataGateLoader.HasActiveGate(strArea, nPartition);
-		return bHasGate;
+	public bool HasActiveGate(int partition){
+		bool hasGate = DataLoaderGate.HasActiveGate(currentArea, partition);
+		return hasGate;
 	}
-	
+
+	//---------------------------------------------------
+	// CanEnterRoom()
+	// Returns whether the player can enter the incoming
+	// room from the incoming direction.
+	//---------------------------------------------------	
+	public bool CanEnterRoom(int currentRoom, RoomDirection eSwipeDirection){
+		// early out if click manager is tweening
+		if(ClickManager.Instance.IsTweeningUI())
+			return false;
+		
+		// start off optimistic
+		bool isAllowed = true;
+		
+		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
+		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
+		if(dataGate != null && 
+		   DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
+		   dataGate.DoesBlock(eSwipeDirection))
+			isAllowed = false;
+		
+		return isAllowed; 
+	}
+
 	//---------------------------------------------------
 	// EnteredRoom()
 	// When the player enters a room.
@@ -150,8 +195,8 @@ public class GatingManager : Singleton<GatingManager>{
 		int nLeaving = args.nOld;
 		int nEntering = args.nNew;
 		
-		bool bGateLeaving = DataGateLoader.HasActiveGate(strArea, nLeaving);
-		bool bGateEntering = DataGateLoader.HasActiveGate(strArea, nEntering);
+		bool bGateLeaving = DataLoaderGate.HasActiveGate(currentArea, nLeaving);
+		bool bGateEntering = DataLoaderGate.HasActiveGate(currentArea, nEntering);
 		
 		if(bGateEntering){
 			// if the player is entering a gated room, hide some ui and lock the click manager
@@ -341,24 +386,5 @@ public class GatingManager : Singleton<GatingManager>{
 		PetMovement.Instance.MovePet(vPos);		
 	}
 	
-	//---------------------------------------------------
-	// CanEnterRoom()
-	// Returns whether the player can enter the incoming
-	// room from the incoming direction.
-	//---------------------------------------------------	
-	public bool CanEnterRoom(int nCurrentRoom, RoomDirection eSwipeDirection){
-		// early out if click manager is tweening
-		if(ClickManager.Instance.IsTweeningUI())
-			return false;
-		
-		// start off optimistic
-		bool bOK = true;
-		
-		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
-		DataGate dataGate = DataGateLoader.GetData(strArea, nCurrentRoom);
-		if(dataGate != null && DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && dataGate.DoesBlock(eSwipeDirection))
-			bOK = false;
-		
-		return bOK; 
-	}
+
 }

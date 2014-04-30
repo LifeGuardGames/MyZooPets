@@ -10,49 +10,42 @@ using System.Collections;
 
 public abstract class Gate : MonoBehaviour{
 	// ----- Pure Abstract -------------------------
-	protected abstract void _DamageGate(int nDamage);	// when a gate is damaged
+	protected abstract void OnGateDamaged(int nDamage);	// when a gate is damaged
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
 	public float fPlayerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
 	public float fPlayerY; // the y value the player should move to when approaching the gate
 	
+	// id and resource of this gate
+	protected string gateID;
+	protected string gateResource;
+	protected float maxScreenSpace; // the max screen space the gate covers with 100% HP
+
 	private ItemBoxLogic scriptItemBox; // the item box this gate is blocking (if any)
 	
-	// id and resource of this gate
-	protected string strID;
-	protected string strResource;
-
-	
-	protected DataGate GetGateData(){
-		DataGate data = DataGateLoader.GetData(strID);
+	protected ImmutableDataGate GetGateData(){
+		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
 		return data;
 	}
 	
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start(){
-		_Start();
-	}
-	
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------		
-	protected virtual void _Start(){
-		// children implement this
-	}
+	public virtual void Start(){}
 
-	public void Init(string id, DataMonster monster){
-		if(string.IsNullOrEmpty(strID))
-			strID = id;
+	public void Init(string id, ImmutableDataMonster monster, float maxScreenSpace){
+		if(string.IsNullOrEmpty(gateID))
+			gateID = id;
 		else
-			Debug.LogError("Something trying to set id on gate twice " + strID);
+			Debug.LogError("Something trying to set id on gate twice " + gateID);
 		
-		strResource = monster.GetResourceKey();
+		gateResource = monster.GetResourceKey();
+
+		this.maxScreenSpace = maxScreenSpace;
 		
 		// since this gate is getting created, if it is guarding an item box, create the box
-		DataGate dataGate = GetGateData();
+		ImmutableDataGate dataGate = GetGateData();
 		string strItemBoxID = dataGate.GetItemBoxID();
 		if(!string.IsNullOrEmpty(strItemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
@@ -74,7 +67,7 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------		
 	public void GreetPlayer(){
 		// play a sound
-		AudioManager.Instance.PlayClip("Enter_" + strResource);
+		AudioManager.Instance.PlayClip("Enter_" + gateResource);
 	}
 	
 	//---------------------------------------------------
@@ -115,25 +108,25 @@ public abstract class Gate : MonoBehaviour{
 	// GetGateHP()
 	//---------------------------------------------------		
 	public int GetGateHP(){
-		return DataManager.Instance.GameData.GatingProgress.GetGateHP(strID);
+		return DataManager.Instance.GameData.GatingProgress.GetGateHP(gateID);
 	}
 	
 	//---------------------------------------------------
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public bool DamageGate(int nDamage){
+	public bool GateDamaged(int nDamage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DamageGate_SaveData(strID, nDamage);
+		bool bDestroyed = DamageGate_SaveData(gateID, nDamage);
 		
 		// because the gate was damaged, play a sound
-		AudioManager.Instance.PlayClip("Damage_" + strResource);
+		AudioManager.Instance.PlayClip("Damage_" + gateResource);
 		
 		// let children know that the gate was damaged so they can react in their own way
-		_DamageGate(nDamage);
+		OnGateDamaged(nDamage);
 		
 		if(bDestroyed){
-			Analytics.Instance.GateUnlocked(strID);	
+			Analytics.Instance.GateUnlocked(gateID);	
 			PrepGateDestruction();
 		}
 		
@@ -177,7 +170,7 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------		
 	private void PrepGateDestruction(){
 		// play a sound
-		AudioManager.Instance.PlayClip("Defeat_" + strResource);
+		AudioManager.Instance.PlayClip("Defeat_" + gateResource);
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
@@ -190,7 +183,7 @@ public abstract class Gate : MonoBehaviour{
 		OnGateDestroyed();	
 		
 		// add any appropriate task unlocks
-		DataGate data = GetGateData();
+		ImmutableDataGate data = GetGateData();
 		string[] arrayUnlocks = data.GetTaskUnlocks();
 		for(int i = 0; i < arrayUnlocks.Length; ++i)
 			WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		

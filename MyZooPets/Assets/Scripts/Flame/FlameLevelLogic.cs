@@ -40,20 +40,29 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
            HUDAnimator.OnLevelUp -= CheckFlameLevelUp;
     }
 
-	//---------------------------------------------------
-	// GetSkillData()
-	// Returns the skill data for the incoming skill id.
-	//---------------------------------------------------
-	public Skill GetSkillData( string strID ) {
-		Skill data = DataSkills.GetSkill( strID );
+	/// <summary>
+	/// Gets the skill data.
+	/// </summary>
+	/// <returns>The skill data.</returns>
+	/// <param name="skillID">Skill ID.</param>
+	public Skill GetSkillData( string skillID ) {
+		Skill data = DataSkills.GetSkill( skillID );
 		return data;
 	}
 
+	/// <summary>
+	/// Gets the current skill.
+	/// </summary>
+	/// <returns>The current skill.</returns>
     public Skill GetCurrentSkill(){
         Skill currentSkill = DataSkills.GetSkill(DataManager.Instance.GameData.Flame.CurrentSkillID);
         return currentSkill;
     }
 
+	/// <summary>
+	/// Gets the skill unlock at next level.
+	/// </summary>
+	/// <returns>The skill unlock at next level.</returns>
     public Skill GetSkillUnlockAtNextLevel(){
         int nextLevel = LevelLogic.Instance.NextLevel;
         Skill selectedSkill = null;
@@ -65,12 +74,12 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 
         return selectedSkill;
     }
-
-    //---------------------------------------------------
-    // CheckFlameLevelUp()
-    // Event listener. Listens to Pet level up and check
-    // for flame level up
-    //---------------------------------------------------
+	
+	/// <summary>
+	/// Listen to pet level up and Checks the flame level up.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
     private void CheckFlameLevelUp(object sender, EventArgs args){
         if(allSkills == null){
             allSkills = SelectListFromDictionaryAndSort(DataSkills.GetAllSkills());
@@ -92,6 +101,11 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
         }
     }
 
+	/// <summary>
+	/// Selects the list from dictionary and sort.
+	/// </summary>
+	/// <returns>The list from dictionary and sorted.</returns>
+	/// <param name="skillDict">Skill dict.</param>
     private List<Skill> SelectListFromDictionaryAndSort(Dictionary<string, Skill> skillDict){
         var skills = from keyValuePair in skillDict
                         select keyValuePair.Value;
@@ -101,14 +115,3 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
         return skillList;
     }
 }
-
-        // replace this incoming skill as our current skill if it is better (or current skill is null)
-        // if ( string.IsNullOrEmpty( CurrentSkillID ) )
-        //  CurrentSkillID = skillID;
-        // else {
-        //  Skill newSkill = DataSkills.GetSkill( skillID );
-        //  Skill curSkill = DataSkills.GetSkill( CurrentSkillID );
-            
-        //  if ( newSkill.DamagePoint > curSkill.DamagePoint )
-        //      CurrentSkillID = skillID;
-        // }

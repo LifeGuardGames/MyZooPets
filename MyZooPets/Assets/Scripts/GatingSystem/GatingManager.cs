@@ -90,14 +90,11 @@ public class GatingManager : Singleton<GatingManager>{
 			// if the gate is activate, spawn the monster at an offset 
 			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
 			if(isGateActive){
-				int startingPartition = scriptPan.currentPartition;										// room the player is in
-				float roomPartitionOffset = scriptPan.partitionOffset;				// the distance between each room
+				int startingPartition = scriptPan.currentPartition;	// room the player is in
+				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
 				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
 				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
 
-				// calculate the starting location base on the screen percentage
-//				Vector3 startingScreenPosition = Camera.main.WorldToScreenPoint(startingLocation);
-//				print(startingScreenPosition);
 				// how much screen space should the gate be moved by
 				float screenOffset = Screen.width * dataGate.GetScreenPercentage();
 				Vector3 newScreenPosition = new Vector3(screenOffset, startingScreenPosition.y, startingScreenPosition.z);
@@ -105,11 +102,10 @@ public class GatingManager : Singleton<GatingManager>{
 				float maxScreenSpace = Screen.width - screenOffset;
 
 				// convert screen space back to world space
-				Vector3 gateLocation = Camera.main.ScreenToWorldPoint(newScreenPosition);
+				Vector3 worldLocation = Camera.main.ScreenToWorldPoint(newScreenPosition);
 
-				// get the position of the gate by adding the offset to the starting location MOVE_DIR
-//				Vector3 vPos = startingLocation;
-//				vPos.x += distanceFromStartingPartition;
+				//we only want the x position from worldLocation. y and z should stay the same
+				Vector3 gateLocation = new Vector3(worldLocation.x, startingLocation.y, startingLocation.z);
 
 				// move the offsetted gate to the proper partition
 				gateLocation.x += distanceFromStartingPartition;

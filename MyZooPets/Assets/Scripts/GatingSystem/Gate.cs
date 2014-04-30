@@ -49,7 +49,9 @@ public abstract class Gate : MonoBehaviour{
 		string strItemBoxID = dataGate.GetItemBoxID();
 		if(!string.IsNullOrEmpty(strItemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
-			GameObject goBox = Instantiate(goResource, transform.position, Quaternion.identity) as GameObject;
+			GameObject goBox = Instantiate(goResource, 
+			                               new Vector3(transform.position.x, transform.position.y, goResource.transform.position.z), 
+			                               Quaternion.identity) as GameObject;
 			goBox = goBox.FindInChildren("Button");
 			
 			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
@@ -67,7 +69,7 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------		
 	public void GreetPlayer(){
 		// play a sound
-		AudioManager.Instance.PlayClip("Enter_" + gateResource);
+		AudioManager.Instance.PlayClip("EnterSmokeMonster");
 	}
 	
 	//---------------------------------------------------
@@ -120,7 +122,7 @@ public abstract class Gate : MonoBehaviour{
 		bool bDestroyed = DamageGate_SaveData(gateID, nDamage);
 		
 		// because the gate was damaged, play a sound
-		AudioManager.Instance.PlayClip("Damage_" + gateResource);
+		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
 		OnGateDamaged(nDamage);
@@ -170,7 +172,7 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------		
 	private void PrepGateDestruction(){
 		// play a sound
-		AudioManager.Instance.PlayClip("Defeat_" + gateResource);
+		AudioManager.Instance.PlayClip("DefeatSmokeMonster");
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();

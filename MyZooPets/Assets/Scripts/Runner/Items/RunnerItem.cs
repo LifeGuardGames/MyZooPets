@@ -57,7 +57,7 @@ public abstract class RunnerItem : MonoBehaviour {
 		floatyOption.Add("parent", PlayerController.Instance.FloatyLocation);
 		floatyOption.Add("floatingUpPos", new Vector3(0, 4, 0));
 		floatyOption.Add("floatingTime", 0.5f);
-		floatyOption.Add("textSize", 2);
+		floatyOption.Add("textSize", 2f);
 		floatyOption.Add("text", "+" + coinValue);
 
 		FloatyUtil.SpawnFloatyText(floatyOption);

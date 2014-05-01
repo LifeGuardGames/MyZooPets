@@ -17,7 +17,7 @@ public static class DiagnoseGameLogic{
     }
 
     public static void ClaimReward(int deltaPoints, int deltaStars){
-		StatsController.Instance.ChangeStats(deltaPoints, Vector3.zero, deltaStars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+//		StatsController.Instance.ChangeStats(deltaPoints, Vector3.zero, deltaStars, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
     }
 
     //generate the sick stages randomly

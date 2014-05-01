@@ -198,7 +198,7 @@ public class GatingManager : Singleton<GatingManager>{
 			// if the player is entering a gated room, hide some ui and lock the click manager
 			List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 			listExceptions.Add(ClickLockExceptions.Moving);
-			ClickManager.Instance.Lock(UIModeTypes.Generic, listExceptions);
+			ClickManager.Instance.Lock(UIModeTypes.GatingSystem, listExceptions);
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.HidePanel();

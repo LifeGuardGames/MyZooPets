@@ -18,6 +18,7 @@ public class ImmutableDataGate{
 	private string[] arrayUnlocks; // list of wellapad unlocks removing this makes available
 	private bool isRecurring; // is this gate recurring? i.e. comes back to life after a set amount of time
 	private string itemBoxID; // item box id this gate leaves behind once destroyed
+	private float itemBoxPositionOffset; // offset from the position of the gate
 
 	public string GetGateID(){
 		return gateID;	
@@ -74,6 +75,10 @@ public class ImmutableDataGate{
 	public string GetItemBoxID(){
 		return itemBoxID;	
 	}
+
+	public float GetItemBoxPositionOffset(){
+		return itemBoxPositionOffset;
+	}
 	
 	public ImmutableDataGate(string id, Hashtable hashElements, string error){
 		gateID = id;	
@@ -95,6 +100,8 @@ public class ImmutableDataGate{
 		
 		// get an item box id gate leaves behind (if any)
 		itemBoxID = XMLUtils.GetString(hashElements["ItemBoxID"] as IXMLNode, null, error);
+
+		itemBoxPositionOffset = XMLUtils.GetFloat(hashElements["ItemBoxPositionOffset"] as IXMLNode, 0, error);
 		
 		// get the direction the gate is blocking
 		eSwipeDirection = (RoomDirection)System.Enum.Parse(typeof(RoomDirection), 

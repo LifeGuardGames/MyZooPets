@@ -65,7 +65,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			Hashtable option = new Hashtable();
 			Vector3 floatUpPos = new Vector3(0, 2, 0);
 			option.Add("parent", goDroppedItem);
-			option.Add("textSize", 1);
+			option.Add("textSize", 0.4f);
 			option.Add("text", triggerData.FloatyDesc);
 			option.Add("floatingUpPos", floatUpPos);
 
@@ -73,7 +73,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 			//Init dropped item
 			int nXP = DataLoader_XpRewards.GetXP("CleanTrigger", new Hashtable());
-			goDroppedItem.transform.Find("Star").GetComponent<DroppedObject_Stat>().Init(HUDElementType.Points, nXP);
+			goDroppedItem.GetComponent<DroppedObjectStat>().Init(HUDElementType.Points, nXP);
 			
 			// set the position of the newly spawned item to be wherever this item box is
 			float fOFfsetY = Constants.GetConstant<float>("ItemBoxTrigger_OffsetY");
@@ -83,7 +83,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			goDroppedItem.transform.position = vPosition;
 			
 			// make the stats "burst" out
-			goDroppedItem.transform.Find("Star").GetComponent<DroppedObject>().Appear();			
+			goDroppedItem.GetComponent<DroppedObject>().Appear();			
 
 			//send analytics event
 			Analytics.Instance.TriggersCleaned(triggerData.ID);
@@ -113,9 +113,10 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		
 		// damage the pet
 		int nDamage = trigger.GetDamage();
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-		                                     -nDamage, Vector3.zero, 0, Vector3.zero, 
-		                                     bFloaty: true);		
+//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
+//		                                     -nDamage, Vector3.zero, 0, Vector3.zero, 
+//		                                     bFloaty: true);
+		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, bFloaty: true);
 
 		//Send analytics event
 		Analytics.Instance.TriggerHitPet();    
@@ -286,7 +287,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			nMoodLoss += (int)(nSecondHours * (fSecondHoursPenalty * fMultiplier));
 
 		// actually change the pet's mood
-		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
+//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
+		StatsController.Instance.ChangeStats(deltaMood: -nMoodLoss);
         
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
 		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TIME_DECAY_TUT))
@@ -319,8 +321,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			if(numOfMissedPlayPeriod > 2)
 				numOfMissedPlayPeriod = 2;
 
-			StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-                numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
+//			StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
+//                numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
+			StatsController.Instance.ChangeStats(deltaHealth: numOfMissedPlayPeriod * -20);
 		}
 	}
 

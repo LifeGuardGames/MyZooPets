@@ -50,7 +50,7 @@ public abstract class Gate : MonoBehaviour{
 		if(!string.IsNullOrEmpty(strItemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 			GameObject goBox = Instantiate(goResource, 
-			                               new Vector3(transform.position.x, transform.position.y, goResource.transform.position.z), 
+			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
 			                               Quaternion.identity) as GameObject;
 			goBox = goBox.FindInChildren("Button");
 			

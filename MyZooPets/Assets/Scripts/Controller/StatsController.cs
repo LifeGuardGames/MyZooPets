@@ -55,16 +55,17 @@ public class StatsController : Singleton<StatsController> {
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
 	}	
 
-	#if UNITY_EDITOR
+//	#if UNITY_EDITOR
 	void OnGUI(){
 		// if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
 			// ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
 		// }
 		 if(GUI.Button(new Rect(0, 0, 100, 100), "get pt")){
-		 	ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+//		 	ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+			ChangeStats(deltaPoints: 100);
 		 }
 	}
-	#endif
+//	#endif
 
 	public int GetStat(HUDElementType stat){
 		int statNumber = 0;
@@ -94,28 +95,27 @@ public class StatsController : Singleton<StatsController> {
 	// 	Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
 	// 	ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true);
 	// }
+	
+	/// <summary>
+	/// Changes the stats.
+	/// </summary>
+	/// <param name="deltaPoints">Delta points.</param>
+	/// <param name="pointsLoc">Points location.</param>
+	/// <param name="deltaStars">Delta stars.</param>
+	/// <param name="starsLoc">Stars location.</param>
+	/// <param name="deltaHealth">Delta health.</param>
+	/// <param name="healthLoc">Health location.</param>
+	/// <param name="deltaMood">Delta mood.</param>
+	/// <param name="moodLoc">Mood location.</param>
+	/// <param name="bPlaySounds">If set to <c>true</c> play sounds.</param>
+	/// <param name="bAtOnce">If set to <c>true</c> animate all stats at once.</param>
+	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
+	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3), 
+	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3), 
+	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
+	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3), 
+							bool bPlaySounds = true, bool bAtOnce = false, bool bFloaty = false){
 
-	//-------------------------------------------------------------------
-	// ChangeStats()
-	// Use this function to change pet stats
-	// Param:
-	//	deltaPoints: (needs refactoring) change in level
-	//	pointsLoc: starting location of the points animation 
-	//	deltaStars: (needs refactoring) change in coin #
-	//	starsLoc: starting location of the coins animation 
-	//	deltaHealth: change in health level
-	//	healthLoc: starting location of the health animation
-	//	deltaMood: change in mood
-	//	moodLoc: starting location of the mood animation
-
-	//  Optional Param:
-	//	bPlaySounds: T/F To place sound when stats changing
-	//	bAtOnce: T/F To play more than one animation at once 
-	//	bFloaty: T/F To show floaty text to show stats change on the pet only, REMOVES TWEEN ANIMATION!
-	//-------------------------------------------------------------------
-	public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
-		Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc, 
-		bool bPlaySounds = true, bool bAtOnce = false, bool bFloaty = false){
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0)
@@ -169,7 +169,7 @@ public class StatsController : Singleton<StatsController> {
 		}
 		
 		if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
-			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood);
+			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
 		}
 			
 		// Tell HUDAnimator to animate and change

@@ -237,7 +237,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			}
 
 			InventoryLogic.Instance.AddItem(itemID, 1);
-			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
+//			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
+			StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
 			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
 
 			//Analytics

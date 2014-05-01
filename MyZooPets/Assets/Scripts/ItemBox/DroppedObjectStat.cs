@@ -11,40 +11,40 @@ using System.Collections.Generic;
 // gold) that the play can get by picking it up.
 //---------------------------------------------------
 
-public class DroppedObject_Stat : DroppedObject{
+public class DroppedObjectStat : DroppedObject{
 	// label for displaying the amount of points on this object
 	public UILabel labelPoints;
 	
 	// the stat that this object represents
-	private HUDElementType eStat;
+	private HUDElementType hudElementType;
 	
 	// amount that this object gives for the stat
-	private int nAmount;
+	private int amount;
 	
 	//---------------------------------------------------
 	// Init()
 	// Inits this dropped object with a stat.
-	//---------------------------------------------------	
-	public void Init(HUDElementType eStat, int nAmount){
+	//---------------------------------------------------
+	/// <summary>
+	/// Init the DroppedObject
+	/// </summary>
+	/// <param name="eStat">Hud element type</param>
+	/// <param name="amount">amount this object gives for the stat</param>
+	public void Init(HUDElementType hudElementType, int amount){
 		// set the state of this object to dropped
 		SetState(DroppedItemStates.Dropped);
 		
-		this.eStat = eStat;
-		this.nAmount = nAmount;
-		
-		// set the label
-		//labelPoints.text = "" + nAmount;
+		this.hudElementType = hudElementType;
+		this.amount = amount;
 		
 		// set the texture of this dropped item
 		if(sprite != null){
-			string strSprite = StatsController.Instance.GetStatIconName(eStat);
+			string strSprite = StatsController.Instance.GetStatIconName(hudElementType);
 			sprite.spriteName = strSprite;
 		}
 		else
 			Debug.LogError("No sprite", gameObject);
-		
-		// also listen for when the stats controller is being destroyed
-		// StatsController.Instance.OnBeingDestroyed += OnManagerDestroyed;
+
 	}
 	
 	//---------------------------------------------------
@@ -62,37 +62,28 @@ public class DroppedObject_Stat : DroppedObject{
 		SetState(DroppedItemStates.Awarded);
 		
 		// add the stat...I really need to refactor StatsController...
-		int nXP = eStat == HUDElementType.Points ? nAmount : 0;
-		int nCoins = eStat == HUDElementType.Stars ? nAmount : 0;
-		int nHealth = eStat == HUDElementType.Health ? nAmount : 0;
-		int nMood = eStat == HUDElementType.Mood ? nAmount : 0;
-		StatsController.Instance.ChangeStats(nXP, Vector3.zero, nCoins, Vector3.zero, nHealth, Vector3.zero, nMood, Vector3.zero, false, false, true);
-		
+		int nXP = hudElementType == HUDElementType.Points ? amount : 0;
+		int nCoins = hudElementType == HUDElementType.Stars ? amount : 0;
+		int nHealth = hudElementType == HUDElementType.Health ? amount : 0;
+		int nMood = hudElementType == HUDElementType.Mood ? amount : 0;
+
+		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: nCoins, 
+		                                     deltaHealth: nHealth, deltaMood: nMood);
+
 		// destroy the object
 		GameObject go = GetGameObject();
 		Destroy(go);		
 	}	
-	
-	//---------------------------------------------------
-	// AutoCollectAndDestroy()
-	// Callback sent from the stats logic because it
-	// is being destroyed (likely because the scene is
-	// changing).
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Callback sent from the stats logic because it
+	/// is being destroyed (likely because the scene is
+	/// changing).
+	/// </summary>
 	protected override void AutoCollectAndDestroy(){
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if(eState != DroppedItemStates.Awarded)
 			ObtainObject();
 	}	
-
-	//---------------------------------------------------
-	// OnObjectDestroyed()
-	//---------------------------------------------------		
-	// protected override void OnObjectDestroyed(){
-		// if this dropped object is being destroyed, has not yet been awarded, AND the inventory still exists, obtain it
-		// DroppedItemStates eState = GetState();
-		// if ( eState != DroppedItemStates.Awarded && StatsController.Instance != null )
-		// 	ObtainObject();
-	// }	
 }

@@ -3,13 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DroppedObject
-// This is an object that is on the ground, in the
-// 3D world (although it may be 2D) that the player
-// can pick up to obtain.
-//---------------------------------------------------	
-
+/// <summary>
+/// This is an object that is on the ground, in the
+/// 3D world (although it may be 2D) that the player
+/// can pick up to obtain.
+/// </summary>
 public abstract class DroppedObject : LgButton{
 	// --------------- Pure Abstract ---------------------------
 	protected abstract void ObtainObject();			// give the user the object
@@ -21,15 +19,16 @@ public abstract class DroppedObject : LgButton{
 	
 	private DroppedItemStates eState = DroppedItemStates.UnInit; // state of this dropped item
 	private float timer = 0;
-	private float timeBeforeAutoCollect = 2.0f;
+	private float timeBeforeAutoCollect = 5.0f;
 	private bool runTimer = true;
 
-	protected void SetState(DroppedItemStates eState){
-		this.eState = eState;	
-	}
 
 	public DroppedItemStates GetState(){
 		return eState;	
+	}
+
+	protected void SetState(DroppedItemStates eState){
+		this.eState = eState;	
 	}
 	
 	void Start(){
@@ -41,7 +40,7 @@ public abstract class DroppedObject : LgButton{
 
 		timer += Time.deltaTime;
 		if(timer > timeBeforeAutoCollect){
-			ButtonClicked();
+			ProcessClick(); //by pass the click manager, so the droppedobject self collect regardless
 			runTimer = false;
 		}
 
@@ -50,24 +49,19 @@ public abstract class DroppedObject : LgButton{
 	void OnDestroy(){
 		ButtonChangeScene.OnChangeScene -= OnChangeScene;
 	}
-
-	//---------------------------------------------------
-	// OnApplicationPause()
-	// Unity callback function.
-	//---------------------------------------------------		
+			
 	void OnApplicationPause(bool bPaused){
 		if(bPaused){
 			// if the game is pausing, obtain this item
 			ObtainObject();
 		}
 	}	
-	
-	//---------------------------------------------------
-	// Appear()
-	// This function sets the object's alpha to 0, and then
-	// fades it in.  It's an attempt at a bit more stable
-	// and controllable than bursting it.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// his function sets the object's alpha to 0, and then
+	/// fades it in.  It's an attempt at a bit more stable
+	/// and controllable than bursting it.
+	/// </summary>
 	public void Appear(){
 		GameObject go = GetGameObject();
 			
@@ -78,13 +72,13 @@ public abstract class DroppedObject : LgButton{
 		float fInTime = Constants.GetConstant<float>("ItemBoxAppear_Time");
 		TweenAlpha.Begin(go, fInTime, 1);
 	}
-	
-	//---------------------------------------------------
-	// Burst()
-	// Call this function when you want this item to
-	// burst out of wherever it currently is.
-	//---------------------------------------------------	
-	public void Burst(){
+
+	/// <summary>
+	/// Call this function when you want this item to
+	/// burst out of wherever it currently is.
+	/// </summary>
+	/// <param name="burstToLeftOnly">If set to <c>true</c> burst to left only.</param>
+	public void Burst(bool burstToLeftOnly = false){
 		// get constants that control the burst
 		int nRangeX = Constants.GetConstant<int>("ItemBoxBurst_RangeX");
 		int nRangeY = Constants.GetConstant<int>("ItemBoxBurst_RangeY");	
@@ -97,7 +91,10 @@ public abstract class DroppedObject : LgButton{
 		Vector3 vStart = go.transform.position;
 		
 		// the end location is some random X length away
-		float fEndX = UnityEngine.Random.Range(-nRangeX, nRangeX);
+		int positiveRangeX = nRangeX;
+		if(burstToLeftOnly)
+			positiveRangeX = 0;
+		float fEndX = UnityEngine.Random.Range(-nRangeX, positiveRangeX);
 		Vector3 vEnd = new Vector3(vStart.x + fEndX, vStart.y, vStart.z);
 		
 		// the midpoint for the path is basically just 1/2 the x movement and some Y height

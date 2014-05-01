@@ -10,7 +10,7 @@ using System.Collections.Generic;
 // can pick up to obtain.
 //---------------------------------------------------
 
-public class DroppedObject_Item : DroppedObject{
+public class DroppedObjectItem : DroppedObject{
 	// the item that this object represents
 	private Item dataItem;
 	

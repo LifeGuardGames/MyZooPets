@@ -87,7 +87,7 @@ public class ItemBoxLogic : MonoBehaviour {
 				// spawn the item to be coming out of this box
 				GameObject goPrefab = Resources.Load( "DroppedItem" ) as GameObject;
 				GameObject goDroppedItem = Instantiate( goPrefab, new Vector3(0, 0, 0), Quaternion.identity ) as GameObject;
-				goDroppedItem.GetComponent<DroppedObject_Item>().Init( item.Key );
+				goDroppedItem.GetComponent<DroppedObjectItem>().Init( item.Key );
 				
 				// set the position of the newly spawned item to be wherever this item box is
 				Vector3 vPosition = gameObject.transform.position;

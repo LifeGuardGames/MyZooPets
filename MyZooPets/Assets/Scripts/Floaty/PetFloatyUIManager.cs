@@ -9,7 +9,7 @@ public class PetFloatyUIManager : Singleton<PetFloatyUIManager> {
     // Use the FloatyUtil class to spawn the floaty image text
     // on top of the pet's head, FOR STATS ONLY!
     //-------------------------------------------------------
-	public void CreateStatsFloaty(int deltaPoints, int deltaHealth, int deltaMood){
+	public void CreateStatsFloaty(int deltaPoints, int deltaHealth, int deltaMood, int deltaStars){
 		Hashtable option = new Hashtable();
 		option.Add("parent", petFloatyPosition);
 		
@@ -27,6 +27,11 @@ public class PetFloatyUIManager : Singleton<PetFloatyUIManager> {
 			string strDeltaMood = (deltaMood > 0) ? "+" + deltaMood : deltaMood.ToString();
 			option.Add("spriteHunger", "iconHunger");
 			option.Add("deltaMood", strDeltaMood);
+		}
+		if(deltaStars != 0){
+			string strDeltaStars = (deltaStars > 0) ? "+" + deltaStars : deltaStars.ToString();
+			option.Add("spriteStars", "iconCoin");
+			option.Add("deltaStars", strDeltaStars);
 		}
 		
 		FloatyUtil.SpawnFloatyStats(option);

@@ -87,7 +87,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				Vector3 vPos = LgNGUITools.GetScreenPosition(goReward);
 				vPos = CameraManager.Instance.TransformAnchorPosition(vPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
 
-				StatsController.Instance.ChangeStats(nXP, vPos, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+//				StatsController.Instance.ChangeStats(nXP, vPos, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+				StatsController.Instance.ChangeStats(deltaPoints: nXP, pointsLoc: vPos);
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event

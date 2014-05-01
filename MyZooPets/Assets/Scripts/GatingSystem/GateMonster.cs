@@ -46,11 +46,13 @@ public class GateMonster : Gate{
 
 		//drop some coins when the gate monster is attacked
 		AudioManager.Instance.PlayClip("coinDrop");
-		for(int i = 0; i < 5; ++i){
+		int randomNumberOfCoins = Random.Range(2, 6);
+		for(int i = 0; i < randomNumberOfCoins; ++i){
 			// spawn the item to be coming out of this box
 			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
 			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
 			DroppedObjectStat droppedObjectStat = goDroppedItem.GetComponent<DroppedObjectStat>();
+
 			droppedObjectStat.Init(HUDElementType.Stars, 5);
 			droppedObjectStat.eMode = UIModeTypes.GatingSystem;
 			

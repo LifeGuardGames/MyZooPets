@@ -68,7 +68,7 @@ public class DroppedObjectStat : DroppedObject{
 		int nMood = hudElementType == HUDElementType.Mood ? amount : 0;
 
 		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: nCoins, 
-		                                     deltaHealth: nHealth, deltaMood: nMood);
+		                                     deltaHealth: nHealth, deltaMood: nMood, bFloaty: true);
 
 		// destroy the object
 		GameObject go = GetGameObject();

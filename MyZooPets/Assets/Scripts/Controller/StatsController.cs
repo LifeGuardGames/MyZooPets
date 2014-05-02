@@ -55,17 +55,16 @@ public class StatsController : Singleton<StatsController> {
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
 	}	
 
-//	#if UNITY_EDITOR
+	#if UNITY_EDITOR || DEVELOPMENT_BUILD
 	void OnGUI(){
-		// if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
-			// ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
-		// }
-		 if(GUI.Button(new Rect(0, 0, 100, 100), "get pt")){
-//		 	ChangeStats(100, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);
+		 if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
+			 ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
+		 }
+		 if(GUI.Button(new Rect(100, 0, 100, 100), "get pt")){
 			ChangeStats(deltaPoints: 100);
 		 }
 	}
-//	#endif
+	#endif
 
 	public int GetStat(HUDElementType stat){
 		int statNumber = 0;

@@ -96,7 +96,7 @@ public class ImmutableDataGate{
 		monsterID = XMLUtils.GetString(hashElements["MonsterID"] as IXMLNode, null, error);
 		
 		// get whether or not the gate recurs
-		isRecurring = XMLUtils.GetBool(hashElements["Reucrring"] as IXMLNode, false);
+		isRecurring = XMLUtils.GetBool(hashElements["Recurring"] as IXMLNode, false);
 		
 		// get an item box id gate leaves behind (if any)
 		itemBoxID = XMLUtils.GetString(hashElements["ItemBoxID"] as IXMLNode, null, error);

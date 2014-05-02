@@ -20,7 +20,6 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 
 		if(async == null){
 			this.levelName = levelName;
-			Debug.Log(levelName);
 			this.loadingScreen = loadingScreen;
 			transitionController.StartTransition();
 		}
@@ -42,7 +41,9 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 		}
 	}
 	private IEnumerator Load(){
+#if UNITY_EDITOR
 		Debug.LogWarning("ASYNC LOAD STARTED - " + "DO NOT EXIT PLAY MODE UNTIL SCENE LOADS... UNITY WILL CRASH");
+#endif
 		async = Application.LoadLevelAsync(levelName);
 		async.allowSceneActivation = true;
 		yield return async;

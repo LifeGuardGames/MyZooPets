@@ -19,7 +19,7 @@ public class GatingManager : Singleton<GatingManager>{
 	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
 
 	/// <summary>
-	/// The starting screen position. The Gates' position is decided by percentage of screen
+	/// The starting screen position. The Gates' position is decided by percentage of screen.
 	/// need a base point to calculate the actual screen position for all the gates
 	/// before converting them to world point
 	/// </summary>
@@ -65,8 +65,8 @@ public class GatingManager : Singleton<GatingManager>{
 		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
 		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
 		// but it works for our initial design of the gate...can be changed later
-		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
-		foreach(DictionaryEntry entry in hashGates){
+		Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
+		foreach(DictionaryEntry entry in gates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 			
 			bool isRecurring = dataGate.IsRecurring();

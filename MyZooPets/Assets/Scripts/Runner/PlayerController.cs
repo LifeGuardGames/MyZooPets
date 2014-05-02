@@ -79,6 +79,7 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics = GetComponent<PlayerPhysics>();
 		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
+		RunnerGameManager.OnStateChanged += GameStateChanged;
 
 		Reset();
 	}
@@ -93,6 +94,10 @@ public class PlayerController : Singleton<PlayerController>{
 
 		UpdateSpeed();
 		CheckAndActOnDeath();
+	}
+
+	void OnDestroy(){
+		RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 
 #if UNITY_EDITOR    
@@ -249,6 +254,20 @@ public class PlayerController : Singleton<PlayerController>{
 				anim.speed += 0.2f;
 				speedIncreaseCounter = 0; 
 			}
+		}
+	}
+
+	/// <summary>
+	/// Listen to when game state change. Disable runner animation when game is paused.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void GameStateChanged(object sender, GameStateArgs args){
+		MinigameStates gameState = args.GetGameState();
+		if(gameState == MinigameStates.Paused){
+			MakePlayerVisible(false);
+		}else if(gameState == MinigameStates.Playing){
+			MakePlayerVisible(true);
 		}
 	}
 

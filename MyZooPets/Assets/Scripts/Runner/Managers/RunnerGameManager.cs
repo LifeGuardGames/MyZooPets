@@ -17,7 +17,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
     
 	//public SceneTransition scriptTransition;
 	public bool GameRunning{
-		get { return GetGameState() == MinigameStates.Playing; } 
+		get { return GetGameState() == MinigameStates.Playing; }
 	}
 	
 	/// <summary>

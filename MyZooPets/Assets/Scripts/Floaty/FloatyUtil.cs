@@ -49,7 +49,14 @@ public class FloatyUtil {
 		}
 
         if(option.ContainsKey("textSize")){
-            float textSize = (float) option["textSize"];
+			float textSize = 5f;
+			try{
+				textSize = (float) option["textSize"];
+			}
+			catch(InvalidCastException e){
+				Debug.LogError("textSize cast invalid error: " + e.Message);
+			}
+            
             floaty.transform.Find("Label").localScale = new Vector3(textSize, textSize, 1);
         }
 

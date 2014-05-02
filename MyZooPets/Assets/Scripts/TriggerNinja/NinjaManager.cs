@@ -397,7 +397,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	        option.Add("text", strText);
 			option.Add("prefab", "NinjaComboFloatyText");
 			option.Add("position", vPos);
-	        option.Add("textSize", Constants.GetConstant<int>("Ninja_ComboTextSize"));
+	        option.Add("textSize", Constants.GetConstant<float>("Ninja_ComboTextSize"));
 			
 			// spawn floaty text
 	        FloatyUtil.SpawnFloatyText(option);				

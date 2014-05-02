@@ -20,7 +20,7 @@ public class PlayerController : Singleton<PlayerController>{
 		public float verticalSpeed = 0f;
 		public float maxFallSpeed = 100f; //maximum speed the player is allowed to fall
 
-		private float gravity = 130f; //gravity is calculated based on the target speed
+//		private float gravity = 130f; //gravity is calculated based on the target speed
        
 		/// <summary>
 		/// Gets the gravity. Dependent on the target speed
@@ -57,6 +57,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	public PlatformerControllerMovement movement = new PlatformerControllerMovement();
 	public float timeUntilTargetSpeedIncrease = 30f;
+	public Animator anim;
 	private Vector2 amountToMove; //How much you want the player to move
 	private PlayerPhysics playerPhysics; //Reference to physics
 	private float speedIncreaseCounter = 0f; //Time till we speed up the game
@@ -78,6 +79,7 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics = GetComponent<PlayerPhysics>();
 		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
+
 		Reset();
 	}
     
@@ -92,7 +94,8 @@ public class PlayerController : Singleton<PlayerController>{
 		UpdateSpeed();
 		CheckAndActOnDeath();
 	}
-	
+
+#if UNITY_EDITOR    
 	void OnGUI(){
 		GUI.contentColor = Color.black;
 //		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
@@ -105,6 +108,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
 	}
+#endif
 
 	void FixedUpdate(){
 		if(!RunnerGameManager.Instance.GameRunning)
@@ -164,6 +168,7 @@ public class PlayerController : Singleton<PlayerController>{
 	//---------------------------------------------------
 	public void TriggerSlowdown(float inDivisor){
 		movement.ResetTargetSpeed();
+		anim.speed = 1; //reset animation playback speed to normal
 		MegaHazard.Instance.TriggerPlayerSlowdown();
 		
 	}
@@ -214,7 +219,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	private void Jump(){
 		if(playerPhysics.Grounded){
-//            AudioManager.Instance.PlayClip( "runnerJumpUp" );
+            AudioManager.Instance.PlayClip("runnerJumpUp");
 
 			// amountToMove.y = jumpHeight;
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
@@ -241,7 +246,8 @@ public class PlayerController : Singleton<PlayerController>{
 			if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
 				//increase time
 				movement.IncreaseTargetSpeed(true);
-				speedIncreaseCounter = 0;
+				anim.speed += 0.2f;
+				speedIncreaseCounter = 0; 
 			}
 		}
 	}

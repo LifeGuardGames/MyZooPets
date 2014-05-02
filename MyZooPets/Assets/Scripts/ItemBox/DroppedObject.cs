@@ -151,6 +151,9 @@ public abstract class DroppedObject : LgButton{
 		DroppedItemStates eState = GetState();
 		if(eState == DroppedItemStates.Dropped){
 			SetState(DroppedItemStates.PickedUp);
+
+			// play pick up audio
+			AudioManager.Instance.PlayClip(strSoundProcess);
 			
 			// animate the object by applying a rotation, translation, and fade
 			float fTime = Constants.GetConstant<float>("ItemPickup_Time");

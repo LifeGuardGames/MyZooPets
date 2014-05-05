@@ -11,15 +11,15 @@ using System.Collections;
 /// </summary>
 public class MaterialRenderQueue : MonoBehaviour {
 
-	public int renderQueueLevel;
+	public int renderQueueLevel = 5000;
 	
 	void Start () {
 		ParticleSystem pSystem = gameObject.GetComponent<ParticleSystem>();
-		pSystem.renderer.material.renderQueue = 5000;
+		pSystem.renderer.material.renderQueue = renderQueueLevel;
 		
 		ParticleSystem[] pSystemList = gameObject.GetComponentsInChildren<ParticleSystem>();
 		foreach(ParticleSystem pSys in pSystemList){
-			pSys.renderer.material.renderQueue = 5000;
+			pSys.renderer.material.renderQueue = renderQueueLevel;
 		}
 	}
 }

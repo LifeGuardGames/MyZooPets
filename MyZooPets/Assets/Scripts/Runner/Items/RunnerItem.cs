@@ -20,7 +20,7 @@ public abstract class RunnerItem : MonoBehaviour {
 	
 	// Update is called once per frame
 	public virtual void Update() { }
-
+	
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player") {
 			OnPickup();
@@ -40,7 +40,26 @@ public abstract class RunnerItem : MonoBehaviour {
 				AudioManager.Instance.PlayClip( strSoundPickup );
 		}
 	}
-
-	// Define what you want the item to do on pickup here
+	
+	/// <summary>
+	/// Raises the pickup event.
+	/// </summary>
 	public abstract void OnPickup();
+
+	/// <summary>
+	/// Spawns the floaty text. Replace the tutorial messages
+	/// </summary>
+	protected void SpawnFloatyText(int coinValue = 0){
+		Hashtable floatyOption = new Hashtable();
+//		string hintMessage = Localization.Localize(ID + "_HINT_MESSAGE");
+
+		floatyOption.Add("prefab", "FloatyTextRunner");
+		floatyOption.Add("parent", PlayerController.Instance.FloatyLocation);
+		floatyOption.Add("floatingUpPos", new Vector3(0, 4, 0));
+		floatyOption.Add("floatingTime", 0.5f);
+		floatyOption.Add("textSize", 2f);
+		floatyOption.Add("text", "+" + coinValue);
+
+		FloatyUtil.SpawnFloatyText(floatyOption);
+	}
 }

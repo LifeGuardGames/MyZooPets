@@ -112,16 +112,16 @@ public class WellapadMissionUIController : MonoBehaviour {
 	public void DisplayMissions() {
 		// reset the count for our grid labeling
 		nCount = 0;
-		
+
 		// destroy all children in the grid
 		foreach (Transform child in goGrid.transform) {
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
 		}
-		
+
 		// and create the missions anew
 		CreateMissions();
-		
+	
 		StartCoroutine(GridRepo());
 	}
 

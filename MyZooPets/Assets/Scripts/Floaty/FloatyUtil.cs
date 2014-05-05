@@ -9,12 +9,15 @@ public class FloatyUtil {
     private static GameObject floatyText = null;
     private static GameObject floatyStats = null;
 	private static GameObject floatyImageText = null;
-	
+
+
+	// NOTE: using a hashtable is actually a pretty bad idea. No type check so hard
+	// for other ppl to use
     //---------------------------------------------------- 
     // SpawnFloatyText()
     // This spawns a floaty text that disappears in FLOAT_TIME
     // Option Params:
-    //  prefab (GameObject): gameObject that you want to be spawned
+    //  prefab (string): gameObject that you want to be spawned
     //  parent (GameObject): the parent/location that you want the float to spawn under
     //  position (Vector3): the position that you want to spawn the floaty 
     //  textSize (int): size of the floaty
@@ -46,7 +49,14 @@ public class FloatyUtil {
 		}
 
         if(option.ContainsKey("textSize")){
-            int textSize = (int) option["textSize"];
+			float textSize = 5f;
+			try{
+				textSize = (float) option["textSize"];
+			}
+			catch(InvalidCastException e){
+				Debug.LogError("textSize cast invalid error: " + e.Message);
+			}
+            
             floaty.transform.Find("Label").localScale = new Vector3(textSize, textSize, 1);
         }
 
@@ -145,6 +155,19 @@ public class FloatyUtil {
 			offsetTracker++;
 		}
 		// Add more stats here in the future if needed
+		if(option.ContainsKey("deltaStars")){
+			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			label.gameObject.SetActive(true);
+			label.text = (string)option["deltaStars"];
+			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
+			
+			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			sprite.gameObject.SetActive(true);
+			sprite.spriteName = (string) option["spriteStars"];
+			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
+			
+			offsetTracker++;
+		}
 		
 		if(offsetTracker != 4){	// Check if every stat was modified, else need to hide them
 			

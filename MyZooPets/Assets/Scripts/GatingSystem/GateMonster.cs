@@ -10,45 +10,64 @@ using System.Collections;
 //---------------------------------------------------
 
 public class GateMonster : Gate{
-	// the screen % this monster moves per % of health
-	public float fMove;
-	
-	// time it takes the monster to tween to its new position after taking damage
-	public float fTweenTime;
-	
-	// script that controls the anims for this monster
-	public Animator smokeMonsterAnimator;
+//	public float fMove; // the screen % this monster moves per % of health
+	public float fTweenTime; // time it takes the monster to tween to its new position after taking damage
+	public Animator smokeMonsterAnimator; // script that controls the anims for this monster
 	
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
-	private Vector3 vIdealPos;
-	
+	private Vector3 idealPos;
+
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
-	protected override void _Start(){
+	public override void Start(){
+		base.Start();
 		// the ideal position of the monster is its transform at the outset
-		vIdealPos = transform.position;
-		
+		idealPos = transform.position;
+
 		// the monster's position should be set relative to its hp
-		DataGate data = DataGateLoader.GetData(strID);
-		int nMax = data.GetMonster().GetMonsterHealth();
-		int nCurrent = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
-		int nDamage = nMax - nCurrent;
+		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
+		int maxHealth = data.GetMonster().GetMonsterHealth();
+		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+		int damage = maxHealth - currentHealth; 
 		
 		// if the monster is missing hp, it needs to move
-		if(nDamage > 0)
-			Move(nDamage);
+		if(damage > 0)
+			Move(damage);
 
 		PlayNormalAnimation();
 	}	
 	
-	//---------------------------------------------------
-	// _DamageGate()
-	//---------------------------------------------------	
-	protected override void _DamageGate(int nDamage){
+	/// <summary>
+	/// Damages the gate.
+	/// </summary>
+	/// <param name="damage">Damage.</param>
+	protected override void OnGateDamaged(int damage){
+
+		//drop some coins when the gate monster is attacked
+		AudioManager.Instance.PlayClip("coinDrop");
+		int randomNumberOfCoins = Random.Range(2, 6);
+		for(int i = 0; i < randomNumberOfCoins; ++i){
+			// spawn the item to be coming out of this box
+			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
+			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+			DroppedObjectStat droppedObjectStat = goDroppedItem.GetComponent<DroppedObjectStat>();
+
+			droppedObjectStat.Init(HUDElementType.Stars, 5);
+			droppedObjectStat.eMode = UIModeTypes.GatingSystem;
+			
+			// set the position of the newly spawned item to be wherever this item box is
+			Vector3 vPosition = gameObject.transform.position;
+			vPosition.y -= 8; //drop the stat underneath the smoke monster
+			goDroppedItem.transform.position = new Vector3(vPosition.x, vPosition.y, 20);
+			
+			// make the item "burst" out
+			droppedObjectStat.Burst(burstToLeftOnly:true);
+		}
+
 		// when a monster is damaged, it physically moves
-		// for now, they will always move to the left...
-		Move(nDamage);
+		// for now, they will always move to the right...
+		Move(damage);
 	}	
 	
 	//---------------------------------------------------
@@ -72,33 +91,41 @@ public class GateMonster : Gate{
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
 		LeanTween.moveLocal(gameObject, vTarget, fTime, optional);	
+	}
+
+	//---------------------------------------------------
+	// GetIdealPosition()
+	//---------------------------------------------------		
+	protected override Vector3 GetIdealPosition(){
+		// because monsters move via tweens, we really want to return the position the monster is moving to in some cases	
+		return idealPos;
 	}	
 	
 	//---------------------------------------------------
 	// Move()
 	// Moves this monster based on the incoming damage.
 	//---------------------------------------------------	
-	private void Move(int nDamage){
+	private void Move(int damage){
 		// get the monster's data and find out how far it should move based on the damage it just received
-		DataGate data = DataGateLoader.GetData(strID);
-		int nMax = data.GetMonster().GetMonsterHealth();
-		float fPercent = ((float)nDamage / (float)nMax) * 100;
-		float fMovePercent = fPercent * fMove;
+		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
+		int maxHealth = data.GetMonster().GetMonsterHealth();
+		float damagePercentage = ((float)damage / (float)maxHealth);
 		
 		// get the screen location of the monster and find out where it should move based on the width of the screen
-		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint(transform.position);
-		float fMoveWidth = Screen.width * (fMovePercent / 100);
-		
+		Vector3 screenLoc = Camera.main.WorldToScreenPoint(transform.position);
+
+		float moveWidth = maxScreenSpace * damagePercentage;
+
 		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
-		Vector3 vNewLoc = vScreenLoc;
-		vNewLoc.x += fMoveWidth;
-		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
+		Vector3 newLoc = screenLoc;
+		newLoc.x += moveWidth;
+		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
 
 		// play a hurt animation on the monster
 		PlayHurtAnimation();
 
 		// update our ideal position with where we are moving too
-		vIdealPos = vNewLocWorld;
+		idealPos = vNewLocWorld;
 		
 		LeanTween.cancel(gameObject);
 		// phew...now move this bad boy!
@@ -116,11 +143,5 @@ public class GateMonster : Gate{
 		smokeMonsterAnimator.Play("smokeMonsterHurt");
 	}
 	
-	//---------------------------------------------------
-	// GetIdealPosition()
-	//---------------------------------------------------		
-	protected override Vector3 GetIdealPosition(){
-		// because monsters move via tweens, we really want to return the position the monster is moving to in some cases	
-		return vIdealPos;
-	}	
+
 }

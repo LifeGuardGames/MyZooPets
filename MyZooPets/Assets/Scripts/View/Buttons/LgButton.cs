@@ -125,7 +125,8 @@ public abstract class LgButton : MonoBehaviour {
 		}
 		
 		// special case hack here...if we are in a tutorial, regardless of if we are supposed to check the click manager, check it
-		if(ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess(gameObject)){
+		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
+			!TutorialManager.Instance.CanProcess(gameObject)){
 			return;
 		}
 		
@@ -146,7 +147,8 @@ public abstract class LgButton : MonoBehaviour {
 			return;
 		}
 		
-		if(ShouldCheckClickManager() == false && TutorialManager.Instance && !TutorialManager.Instance.CanProcess(gameObject)){
+		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
+			!TutorialManager.Instance.CanProcess(gameObject)){
 			if(bSprite){
 				// Play the bad sound
 				PlayNotProcessSound();

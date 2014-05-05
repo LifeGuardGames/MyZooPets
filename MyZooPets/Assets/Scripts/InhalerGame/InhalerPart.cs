@@ -47,7 +47,7 @@ public class InhalerPart : MonoBehaviour {
         if(!floatyOptions.ContainsKey("text"))
             floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_NICE")); 
         if(!floatyOptions.ContainsKey("textSize"))
-            floatyOptions.Add("textSize", 128);
+            floatyOptions.Add("textSize", 128f);
         FloatyUtil.SpawnFloatyText(floatyOptions);
 
         InhalerLogic.Instance.NextStep();

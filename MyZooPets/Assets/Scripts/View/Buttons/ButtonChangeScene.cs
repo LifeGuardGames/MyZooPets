@@ -15,9 +15,6 @@ public class ButtonChangeScene : LgButton {
 	// name of the scene to be loaded
 	public string strScene;
 	
-	// fancy effect that plays before loading the scene
-	public SceneTransition scriptTransition;
-	
 	// related to the camera move
 	public Vector3 vOffset;			// offset of camera on the target
 	public Vector3 vFinalRotation;	// how the camera should rotate
@@ -77,10 +74,7 @@ public class ButtonChangeScene : LgButton {
 	//---------------------------------------------------	
 	private void CameraMoveDone() {
 		// the camera move is complete, so now let's start the transition (if it exists)
-		if ( scriptTransition != null )
-			scriptTransition.StartTransition( strScene, strLoadingScreen );
-		else
-			Debug.LogError("No transition script for a scene change button!");
+		LoadLevelUIManager.Instance.StartLoadTransition(strScene, strLoadingScreen);
 	}
 
 	//---------------------------------------------------

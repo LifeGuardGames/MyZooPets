@@ -19,8 +19,12 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
         StatsController.OnZeroHealth -= OnZeroHealthNotification;    
 
         PopupNotificationNGUI.HashEntry button1Function = delegate(){
-            StatsController.Instance.ChangeStats(0, Vector3.zero, -1 * hospitalBillCost, 
-                Vector3.zero, 100, Vector3.zero, -30, Vector3.zero, true, bFloaty: false);
+//            StatsController.Instance.ChangeStats(0, Vector3.zero, -1 * hospitalBillCost, 
+//                Vector3.zero, 100, Vector3.zero, -30, Vector3.zero, true, bFloaty: false);
+
+			StatsController.Instance.ChangeStats(deltaStars: -1 * hospitalBillCost,
+			                                     deltaHealth: 100, deltaMood: -30,
+			                                     bPlaySounds: true, bFloaty: false);
 
             //Register the handler again after the notification has been cleared
             StatsController.OnZeroHealth += OnZeroHealthNotification;

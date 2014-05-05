@@ -760,13 +760,20 @@ public class GA_Inspector : Editor
 		yield return www;
 		
 		try {
-			Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(www.text);
-			string newVersion = ((Hashtable)returnParam["unity"])["version"].ToString();
-			
-			GA_UpdateWindow.SetNewVersion(newVersion);
-			if (newVersion != GA_Settings.VERSION)
+			if (string.IsNullOrEmpty(www.error))
 			{
-				GetUpdateChanges();
+				Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(www.text);
+				string newVersion = ((Hashtable)returnParam["unity"])["version"].ToString();
+				
+				GA_UpdateWindow.SetNewVersion(newVersion);
+
+				int newV = int.Parse(newVersion.Replace(".",""));
+				int oldV = int.Parse(GA_Settings.VERSION.Replace(".",""));
+
+				if (newV > oldV)
+				{
+					GetUpdateChanges();
+				}
 			}
 		}
 		catch {}
@@ -777,31 +784,34 @@ public class GA_Inspector : Editor
 		yield return www;
 		
 		try {
-			Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(www.text);
-			
-			ArrayList unity = ((ArrayList)returnParam["unity"]);
-			for (int i = 0; i < unity.Count; i++)
+			if (string.IsNullOrEmpty(www.error))
 			{
-				Hashtable unityHash = (Hashtable)unity[i];
-				if (unityHash["version"].ToString() == GA_UpdateWindow.GetNewVersion())
+				Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(www.text);
+				
+				ArrayList unity = ((ArrayList)returnParam["unity"]);
+				for (int i = 0; i < unity.Count; i++)
 				{
-					i = unity.Count;
-					ArrayList changes = ((ArrayList)unityHash["changes"]);
-					string newChanges = "";
-					for (int u = 0; u < changes.Count; u++)
+					Hashtable unityHash = (Hashtable)unity[i];
+					if (unityHash["version"].ToString() == GA_UpdateWindow.GetNewVersion())
 					{
-						if (string.IsNullOrEmpty(newChanges))
-							newChanges = "- " + changes[u].ToString();
-						else
-							newChanges += "\n- " + changes[u].ToString();
-					}
-					
-					GA_UpdateWindow.SetChanges(newChanges);
-					string skippedVersion = EditorPrefs.GetString("ga_skip_version", "");
-					
-					if (!skippedVersion.Equals(GA_UpdateWindow.GetNewVersion()))
-					{
-						OpenUpdateWindow();
+						i = unity.Count;
+						ArrayList changes = ((ArrayList)unityHash["changes"]);
+						string newChanges = "";
+						for (int u = 0; u < changes.Count; u++)
+						{
+							if (string.IsNullOrEmpty(newChanges))
+								newChanges = "- " + changes[u].ToString();
+							else
+								newChanges += "\n- " + changes[u].ToString();
+						}
+						
+						GA_UpdateWindow.SetChanges(newChanges);
+						string skippedVersion = EditorPrefs.GetString("ga_skip_version", "");
+						
+						if (!skippedVersion.Equals(GA_UpdateWindow.GetNewVersion()))
+						{
+							OpenUpdateWindow();
+						}
 					}
 				}
 			}

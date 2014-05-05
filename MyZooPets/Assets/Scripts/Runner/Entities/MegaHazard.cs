@@ -25,6 +25,8 @@ public class MegaHazard : Singleton<MegaHazard> {
 	private float mCurrentDistanceFromPlayer = 0f;
 	private Vector3 mDestinationPosition = Vector3.zero;
 
+	private float animationSmoothing = 2.0f;
+
 	void Start() {
 		RunnerGameManager.OnStateChanged += GameStateChanged;
 	}
@@ -39,25 +41,38 @@ public class MegaHazard : Singleton<MegaHazard> {
 			return;
 			
 		UpdatePositionRelativeToPlayer();
-		transform.position = Vector3.Lerp(transform.position, mDestinationPosition, Time.deltaTime);
+
+		//Smoothly move mega hazard to its new position
+//		transform.position = Vector3.Lerp(transform.position, mDestinationPosition, animationSmoothing * Time.deltaTime);
 	}
 
 	//When megahazard collides with the player. End the game
 	void OnTriggerEnter(Collider inOther){
 		if(inOther.gameObject.tag == "Player") {
-			RunnerGameManager gameManager = RunnerGameManager.Instance;
-			gameManager.ActivateGameOver();
+			GameOver();
+//			Invoke("GameOver", 1.0f);
 		}
 	}
 
+	private void GameOver(){
+		RunnerGameManager.Instance.ActivateGameOver();
+	}
+
+	/// <summary>
+	/// Reset the distance between the player and the mega hazard to default
+	/// </summary>
 	public void Reset() {
 		mCurrentDistanceFromPlayer = XDefaultDistanceFromPlayer;
 		mDistanceRegainPulse = DistanceRegainTime;
 		mDistanceUntilTarget = 0f;
 
-		//Set the hazards y position to the players y position
-		transform.position = new Vector3(PlayerController.Instance.transform.position.x, transform.position.y, transform.position.z);
-		mDestinationPosition = transform.position;
+
+//		mDestinationPosition = transform.position;
+//		float currentDistance = GetCurrentOffsetDistance();
+//		mDestinationPosition.x = PlayerController.Instance.transform.position.x + currentDistance;
+//
+//		//Set the hazard to be a default distance away from the player
+//		transform.position = new Vector3(mDestinationPosition.x, transform.position.y, transform.position.z);
 
 		UpdatePositionRelativeToPlayer();
 	}
@@ -96,9 +111,9 @@ public class MegaHazard : Singleton<MegaHazard> {
 		else {
 			if (mSlowDownStayPulse > 0f) {
 				// When we get hit, we must stay at our slowed-down locaiton until the time elapses.
-				mSlowDownStayPulse -= Time.deltaTime / Time.timeScale;         
+				mSlowDownStayPulse -= Time.deltaTime;         
 			} else if (mCurrentDistanceFromPlayer > XDefaultDistanceFromPlayer) {
-				mDistanceRegainPulse -= Time.deltaTime / Time.timeScale;
+				mDistanceRegainPulse -= Time.deltaTime;
 				if (mDistanceRegainPulse <= 0f) {
 					mDistanceRegainPulse = DistanceRegainTime;
 					mCurrentDistanceFromPlayer += DistanceRegainIncrement;
@@ -108,11 +123,8 @@ public class MegaHazard : Singleton<MegaHazard> {
 
 		float currentDistance = GetCurrentOffsetDistance();
 		mDestinationPosition.x = PlayerController.Instance.transform.position.x + currentDistance;
-		transform.position = new Vector3(mDestinationPosition.x, transform.position.y, transform.position.z);
 
-		// Update the Y distance
-		// Vector3 currentPosition = transform.position;
-		// currentPosition.y = PlayerController.Instance.transform.position.y + 5;
-		// transform.position = currentPosition;
+		//Set the hazard to be a default distance away from the player
+		transform.position = new Vector3(mDestinationPosition.x, transform.position.y, transform.position.z);
 	}
 }

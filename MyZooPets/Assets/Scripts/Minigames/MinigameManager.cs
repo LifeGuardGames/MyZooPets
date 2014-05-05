@@ -6,23 +6,25 @@ using System.Collections.Generic;
 // event arguments for game state callback
 public class GameStateArgs : EventArgs{
 	private MinigameStates eState;
-	public MinigameStates GetGameState() {
+
+	public MinigameStates GetGameState(){
 		return eState;	
 	}
 
-	public GameStateArgs( MinigameStates eState){
+	public GameStateArgs(MinigameStates eState){
 		this.eState = eState;
 	}
 }	
 
 // event arguments for lives updated callback
-public class LivesChangedArgs : EventArgs {
+public class LivesChangedArgs : EventArgs{
 	private int nChange;
-	public int GetChange() {
+
+	public int GetChange(){
 		return nChange;	
 	}
 	
-	public LivesChangedArgs( int nChange ) {
+	public LivesChangedArgs(int nChange){
 		this.nChange = nChange;
 	}
 }
@@ -33,9 +35,9 @@ public class LivesChangedArgs : EventArgs {
 // Generic manager of a minigame.
 //---------------------------------------------------
 
-public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour {	
+public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{	
 	//----------------- Abstract -----------------------------
-	public abstract int GetReward( MinigameRewardTypes eType );		// returns the reward the player got for playing this minigame
+	public abstract int GetReward(MinigameRewardTypes eType);		// returns the reward the player got for playing this minigame
 	protected abstract string GetMinigameKey();						// returns string key for this minigame
 	protected abstract void _Start();								// when the manager is started
 
@@ -52,55 +54,55 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	private int nScore;	// player score
 	private int nLives; // player lives
 	private bool bTutorialOverride; // is there a tutorial override? 
-									//i.e. tutorial has already been played but the user wants to see it again
+	//i.e. tutorial has already been played but the user wants to see it again
 	private MinigameStates eCurrentState = MinigameStates.Opening; // the state of this minigame
 	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
 
 	//Return player score
-	public virtual int GetScore() {
+	public virtual int GetScore(){
 		return nScore;	
 	}
 
 	//Return player lives	
-	public int GetLives() {
+	public int GetLives(){
 		return nLives;	
 	}
 
 	//T: tutorial is active, F: tutorial is not running
-	public bool IsTutorialRunning() {
+	public bool IsTutorialRunning(){
 		return tutorial != null;
 	}
 
 	//Set reference to the tutorial
-	protected void SetTutorial( MinigameTutorial tutorial ) {
+	protected void SetTutorial(MinigameTutorial tutorial){
 		this.tutorial = tutorial;
 		
 		this.tutorial.OnTutorialEnd += TutorialEnded;
 	}	
 
 	//Return the reference to tutorial
-	protected MinigameTutorial GetTutorial() {
+	protected MinigameTutorial GetTutorial(){
 		return tutorial;	
 	}
 
 	//T: Tutorial is on so play tutorial, F: Tutorial off so don't play tutorial
-	protected bool TutorialOn() {
+	protected bool TutorialOn(){
 		return bRunTut;	
 	}
 
 	//T: Play tutorial again even if it has already been played	
-	protected bool IsTutorialOverride() {
+	protected bool IsTutorialOverride(){
 		return bTutorialOverride;	
 	}
 
 	//Toggle bTutorialOverride
-	protected void SetTutorialOverride( bool bOverride ) {
+	protected void SetTutorialOverride(bool bOverride){
 		bTutorialOverride = bOverride;
 	}	
 
 	//Change the game state	
-	private void SetGameState( MinigameStates eNewState ) {
-		if ( eCurrentState == eNewState ) {
+	private void SetGameState(MinigameStates eNewState){
+		if(eCurrentState == eNewState){
 			Debug.LogError("Minigame(" + GetMinigameKey() + ") is getting set to a state it's already at: " + eNewState);
 			return;
 		}
@@ -109,18 +111,18 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		eCurrentState = eNewState;
 		
 		// if the game is being paused, let the audio manager know so it can pause sounds
-		if ( eCurrentState == MinigameStates.Paused )
+		if(eCurrentState == MinigameStates.Paused)
 			AudioManager.Instance.Pause(true);
-		else if ( eCurrentState == MinigameStates.Playing && eOldState == MinigameStates.Paused )
+		else if(eCurrentState == MinigameStates.Playing && eOldState == MinigameStates.Paused)
 			AudioManager.Instance.Pause(false);
 		
 		// send out a message to everything that cares about the game state
-		if ( OnStateChanged != null )
-			OnStateChanged( this, new GameStateArgs(eCurrentState) );
+		if(OnStateChanged != null)
+			OnStateChanged(this, new GameStateArgs(eCurrentState));
 	}
 
 	//Return the game state
-	public MinigameStates GetGameState() {
+	public MinigameStates GetGameState(){
 		return eCurrentState;
 	}
 	
@@ -131,12 +133,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// in this function.  See NewGame() for stuff that
 	// should be done whenever the minigame starts.
 	//---------------------------------------------------
-	IEnumerator Start () {
+	IEnumerator Start(){
 		// have to yield at start because popup UIs need to run Start()
 		yield return 0;
 		
 		// show the opening UI
-		ui.TogglePopup( MinigamePopups.Opening, true );
+		ui.TogglePopup(MinigamePopups.Opening, true);
 		
 		// reset labels
 		ResetLabels();
@@ -152,11 +154,11 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	//---------------------------------------------------
 	// OnDestroy()
 	//---------------------------------------------------	
-	void OnDestroy() {
+	void OnDestroy(){
 		_OnDestroy();	
 	}
 	
-	protected virtual void _OnDestroy() {
+	protected virtual void _OnDestroy(){
 		// children implement	
 	}
 	
@@ -164,13 +166,13 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// Update()
 	// Only call children update if the game is playing.
 	//---------------------------------------------------	
-	void Update() {
+	void Update(){
 		MinigameStates eState = GetGameState();
-		if ( eState == MinigameStates.Playing )
+		if(eState == MinigameStates.Playing)
 			_Update();
 	}
 	
-	protected virtual void _Update() {
+	protected virtual void _Update(){
 		// children implement this
 	}
 	
@@ -178,16 +180,16 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// NewGame()
 	// Game init stuff should go here.
 	//---------------------------------------------------	
-	private void NewGame() {
+	private void NewGame(){
 		// alert anything that may care about a new game starting
-		if ( OnNewGame != null )
-			OnNewGame( this, EventArgs.Empty );
+		if(OnNewGame != null)
+			OnNewGame(this, EventArgs.Empty);
 		
 		// wait one frame so that cleanup from the previous game can happen properly
 		StartCoroutine(NewGameAfterFrame());
 	}
 	
-	private IEnumerator NewGameAfterFrame() {
+	private IEnumerator NewGameAfterFrame(){
 		yield return 0;	
 		
 		// reset labels
@@ -196,12 +198,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		// the game is now playing!
 		// this is potentially not the best place to put this...
 		// right now I'd say NewGame() means the game is starting
-		SetGameState( MinigameStates.Playing );		
+		SetGameState(MinigameStates.Playing);		
 		
 		_NewGame();		
 	}
 	
-	protected virtual void _NewGame() {
+	protected virtual void _NewGame(){
 		// children implement this
 	}
 	
@@ -209,21 +211,21 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// ResetLabels()
 	// Resets UI labels to their base value.
 	//---------------------------------------------------		
-	private void ResetLabels() {
+	private void ResetLabels(){
 		// reset score
-		SetScore( 0 );
+		SetScore(0);
 		
 		// reset levels
-		SetLives( nStartingLives );		
+		SetLives(nStartingLives);		
 	}
 	
 	//---------------------------------------------------
 	// StartGame()
 	// This comes from clicking a button.
 	//---------------------------------------------------	
-	public void StartGame() {
+	public void StartGame(){
 		// minigame is starting, so hide the opening
-		ui.TogglePopup( MinigamePopups.Opening, false );
+		ui.TogglePopup(MinigamePopups.Opening, false);
 		
 		// Analytics.Instance.StartPlayTimeTracker();		
 
@@ -235,20 +237,20 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// RestartGame()
 	// This comes from clicking a button.
 	//---------------------------------------------------		
-	public void RestartGame() {
+	public void RestartGame(){
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
-		if ( ui.IsPopupShowing( MinigamePopups.GameOver ) )
-			ui.TogglePopup( MinigamePopups.GameOver, false );
+		if(ui.IsPopupShowing(MinigamePopups.GameOver))
+			ui.TogglePopup(MinigamePopups.GameOver, false);
 		
-		if ( ui.IsPopupShowing( MinigamePopups.Pause ) )
-			ui.TogglePopup( MinigamePopups.Pause, false );
+		if(ui.IsPopupShowing(MinigamePopups.Pause))
+			ui.TogglePopup(MinigamePopups.Pause, false);
 		
-		if ( IsTutorialRunning() ) {
+		if(IsTutorialRunning()){
 			tutorial.Abort();
 			tutorial = null;	
 		}
 		
-		SetGameState( MinigameStates.Restarting );
+		SetGameState(MinigameStates.Restarting);
 		
 		NewGame();
 	}
@@ -257,10 +259,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// TutorialEnded()
 	// When the tutorial for this minigame ends.
 	//---------------------------------------------------	
-	private void TutorialEnded( object sender, TutorialEndEventArgs args ) {
+	private void TutorialEnded(object sender, TutorialEndEventArgs args){
 		// if the tutorial did not get finished; don't do anything 
-		if ( !args.DidFinish() )
-				return;
+		if(!args.DidFinish())
+			return;
 		
 		// set the game to over so that it restarts properly
 		// cheat a little bit and DONT use SetGameState() because we don't want the usual stuff to happen
@@ -270,7 +272,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		tutorial = null;
 		
 		// turn the override off (in case it was on)
-		SetTutorialOverride( false );
+		SetTutorialOverride(false);
 		
 		// then just restart the game
 		RestartGame();
@@ -280,15 +282,15 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// Quit()
 	// This comes from clicking a button.
 	//---------------------------------------------------		
-	public void QuitGame() {
+	public void QuitGame(){
 		string strKey = GetMinigameKey();
-		string strScene = Constants.GetConstant<string>( strKey + "_QuitScene" );
+		string strScene = Constants.GetConstant<string>(strKey + "_QuitScene");
 
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 		if(ui.IsPopupShowing(MinigamePopups.GameOver)){
 			ui.TogglePopup(MinigamePopups.GameOver, false);
 
-			scriptTransition.StartTransition(strScene);
+			LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 		}
 		
 		//double confirm quit game
@@ -297,19 +299,19 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 			PopupNotificationNGUI.HashEntry button1Function = delegate(){
 				ui.TogglePopup(MinigamePopups.Pause, false);
 
-				scriptTransition.StartTransition(strScene);
+				LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 			};
 
 			PopupNotificationNGUI.HashEntry button2Function = delegate(){
 			};
 
 			Hashtable notificationEntry = new Hashtable();
-	        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-	        notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
-	        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-	        notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
 
-	        NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		}
 	}
 	
@@ -317,34 +319,34 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// SetScore()
 	// Sets the player's score and updates the label.
 	//---------------------------------------------------	
-	private void SetScore( int num ) {
+	private void SetScore(int num){
 		nScore = num;
 		
 		// update ui
-		ui.SetLabel( MinigameLabels.Score, num.ToString() );
+		ui.SetLabel(MinigameLabels.Score, num.ToString());
 	}
 	
 	//---------------------------------------------------
 	// UpdateScore()
 	// Adds num points to the player's current score.
 	//---------------------------------------------------	
-	public void UpdateScore( int num ) {
+	public void UpdateScore(int num){
 		int nNewScore = nScore + num;
-		SetScore( nNewScore );
+		SetScore(nNewScore);
 	}	
 	
 	//---------------------------------------------------
 	// SetLives()
 	// Sets the player's lives and updates the label.
 	//---------------------------------------------------	
-	private void SetLives( int num ) {		
+	private void SetLives(int num){		
 		nLives = num;
 		
 		// update ui
-		ui.SetLabel( MinigameLabels.Lives, num.ToString() );
+		ui.SetLabel(MinigameLabels.Lives, num.ToString());
 		
 		// check for game over
-		if ( nLives <= 0 )
+		if(nLives <= 0)
 			GameOver();
 	}
 	
@@ -352,47 +354,47 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// UpdateLives()
 	// Adds num points to the player's current lives.
 	//---------------------------------------------------	
-	public void UpdateLives( int num ) {
+	public void UpdateLives(int num){
 		// for now, current lives cannot go above the starting value...
 		int nCurLives = GetLives();
-		if ( num > 0 && nCurLives == nStartingLives )
+		if(num > 0 && nCurLives == nStartingLives)
 			return;
 		
 		int nNew = nLives + num;
-		SetLives( nNew );
+		SetLives(nNew);
 		
 		// send callback because lives are chaning
-		if ( OnLivesChanged != null )
-			OnLivesChanged( this, new LivesChangedArgs(num) );		
+		if(OnLivesChanged != null)
+			OnLivesChanged(this, new LivesChangedArgs(num));		
 	}		
 	
 	//---------------------------------------------------
 	// GameOver()
 	// The player lost.
 	//---------------------------------------------------	
-	protected void GameOver() {
+	protected void GameOver(){
 		// send out a completion task
-		WellapadMissionController.Instance.TaskCompleted( "Play" + GetMinigameKey() );
+		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
 		
 		// send out score task
 		int nScore = GetScore();
-		WellapadMissionController.Instance.TaskCompleted( "Score" + GetMinigameKey(), nScore );
+		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), nScore);
 
 		// record highest score
 		HighScoreManager.Instance.UpdateMinigameHighScore(GetMinigameKey(), GetScore());
 		
 		// update the game state
-		SetGameState( MinigameStates.GameOver );
+		SetGameState(MinigameStates.GameOver);
 		
 		// show the game over UI
 		// make sure this is above _GameOver() because children  may do stuff that messes with the stats of the game
-		ui.TogglePopup( MinigamePopups.GameOver, true );		
+		ui.TogglePopup(MinigamePopups.GameOver, true);		
 		
 		// call children function
 		_GameOver();
 	}
 	
-	protected virtual void _GameOver() {
+	protected virtual void _GameOver(){
 		// children implement this
 	}	
 	
@@ -401,47 +403,48 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// The game is being paused.  There are two functions
 	// because Unity is dumb, and because we use SendMessage.
 	//---------------------------------------------------	
-	protected void PauseGame() {
-		PauseGameWithPopup( true );	
+	protected void PauseGame(){
+		PauseGameWithPopup(true);	
 	}
-	protected void PauseGameWithPopup( bool bShowPopup ) {
+
+	protected void PauseGameWithPopup(bool bShowPopup){
 		// if the game isn't playing, pause shouldn't do anything
-		if ( GetGameState() != MinigameStates.Playing )
-				return;
+		if(GetGameState() != MinigameStates.Playing)
+			return;
 		
 		// update the game state
-		SetGameState( MinigameStates.Paused );
+		SetGameState(MinigameStates.Paused);
 		
 		// show the pause game UI if appropriate
-		if ( bShowPopup ) 
-			ui.TogglePopup( MinigamePopups.Pause, true );
+		if(bShowPopup) 
+			ui.TogglePopup(MinigamePopups.Pause, true);
 	}	
 	
 	//---------------------------------------------------
 	// ResumeGame()
 	// The game is being unpaused.
 	//---------------------------------------------------	
-	protected void ResumeGame() {
+	protected void ResumeGame(){
 		// update the game state
-		SetGameState( MinigameStates.Playing );
+		SetGameState(MinigameStates.Playing);
 		
 		// hide the game paused UI
-		ui.TogglePopup( MinigamePopups.Pause, false );
+		ui.TogglePopup(MinigamePopups.Pause, false);
 	}	
 	
 	//---------------------------------------------------
 	// HowToPlay()
 	// The user has manually turned the tutorial back on.
 	//---------------------------------------------------		
-	private void HowToPlay() {
-		SetTutorialOverride( true );
+	private void HowToPlay(){
+		SetTutorialOverride(true);
 		StartGame();
 	}
 	
 	//---------------------------------------------------
 	// ShowCutscene()
 	//---------------------------------------------------	
-	private void ShowCutscene() {
+	private void ShowCutscene(){
 		// string strKey = GetMinigameKey();
 		// GameObject resourceMovie = Resources.Load("Cutscene_" + strKey) as GameObject;
 		// LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
@@ -451,16 +454,16 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	//---------------------------------------------------
 	// CutsceneDone()
 	//---------------------------------------------------		
-    private void CutsceneDone(object sender, EventArgs args){
+	private void CutsceneDone(object sender, EventArgs args){
 		// string strKey = GetMinigameKey();
 		// DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_" + strKey);	
 		// CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-    }	
+	}	
 	
 	//---------------------------------------------------
 	// HasCutscene()
 	//---------------------------------------------------		
-	protected virtual bool HasCutscene() {
+	protected virtual bool HasCutscene(){
 		// children implement this
 		return false;
 	}
@@ -470,12 +473,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 	// Returns the standard reward for a minigame, which
 	// is the player's score divided by some constant.
 	//---------------------------------------------------	
-	protected int GetStandardReward( MinigameRewardTypes eType ) {
+	protected int GetStandardReward(MinigameRewardTypes eType){
 		int nReward = 0;
 		string strConstant = null;
 		string strKey = GetMinigameKey();
 		
-		switch ( eType ) {
+		switch(eType){
 		case MinigameRewardTypes.Money:
 			strConstant = strKey + "_StandardMoney";
 			break;
@@ -491,16 +494,16 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour 
 		
 		int nScore = GetScore();
 		
-		if ( eType == MinigameRewardTypes.XP ) {
+		if(eType == MinigameRewardTypes.XP){
 			// whoops, things changed, so I'm implementing this as a quick hack for now...
 			// to get xp we now use another system
 			Hashtable hashBonus = new Hashtable();
 			hashBonus["Score"] = nScore.ToString();
-			nReward = DataLoader_XpRewards.GetXP( strKey, hashBonus );
+			nReward = DataLoader_XpRewards.GetXP(strKey, hashBonus);
 		}
-		else if ( !string.IsNullOrEmpty( strConstant ) ) {
+		else if(!string.IsNullOrEmpty(strConstant)){
 			// the standard reward is the player's score divided by some constant
-			int nStandard = Constants.GetConstant<int>( strConstant );			
+			int nStandard = Constants.GetConstant<int>(strConstant);			
 			nReward = nScore / nStandard;
 		}
 		

@@ -3,81 +3,87 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DroppedObject
-// This is an object that is on the ground, in the
-// 3D world (although it may be 2D) that the player
-// can pick up to obtain.
-//---------------------------------------------------	
-
-public abstract class DroppedObject : LgButton {
+/// <summary>
+/// This is an object that is on the ground, in the
+/// 3D world (although it may be 2D) that the player
+/// can pick up to obtain.
+/// </summary>
+public abstract class DroppedObject : LgButton{
 	// --------------- Pure Abstract ---------------------------
-	protected abstract void _ObtainObject();			// give the user the object
-	protected abstract void OnObjectDestroyed();		// when this game object is destroyed
-	protected abstract void _AutoCollectAndDestroy();	// collect the dropped object and destroy itself 
+	protected abstract void ObtainObject();			// give the user the object
+	protected abstract void AutoCollectAndDestroy();	// collect the dropped object and destroy itself 
 	// ---------------------------------------------------------
 	
 	// sprite associated with this dropped object
 	public UISprite sprite;
 	
-	// state of this dropped item
-	private DroppedItemStates eState = DroppedItemStates.UnInit;
-	protected void SetState( DroppedItemStates eState ) {
-		this.eState = eState;	
-	}
-	public DroppedItemStates GetState() {
+	private DroppedItemStates eState = DroppedItemStates.UnInit; // state of this dropped item
+	private float timer = 0;
+	private float timeBeforeAutoCollect = 5.0f;
+	private bool runTimer = true;
+
+
+	public DroppedItemStates GetState(){
 		return eState;	
 	}
+
+	protected void SetState(DroppedItemStates eState){
+		this.eState = eState;	
+	}
 	
-	void Start() {
-		// DataManager.Instance.OnBeingDestroyed += AutoCollectAndDestroy;
-		ButtonChangeScene.OnChangeScene += AutoCollectAndDestroy;
+	void Start(){
+		ButtonChangeScene.OnChangeScene += OnChangeScene;
+	}
+
+	void Update(){
+		if(!runTimer) return;
+
+		timer += Time.deltaTime;
+		if(timer > timeBeforeAutoCollect){
+			ProcessClick(); //by pass the click manager, so the droppedobject self collect regardless
+			runTimer = false;
+		}
+
 	}
 
 	void OnDestroy(){
-		ButtonChangeScene.OnChangeScene -= AutoCollectAndDestroy;
+		ButtonChangeScene.OnChangeScene -= OnChangeScene;
 	}
-	
-	//---------------------------------------------------
-	// AutoCollectAndDestroy()
-	// This is a generic function that is called when a
-	// dependent manager is destroyed.  It basically 
-	// forces the item to be picked up right away, because
-	// the item requires the dependent manager in order to
-	// actual process the picking up.
-	//---------------------------------------------------	
-	protected void AutoCollectAndDestroy( object sender, EventArgs args ) {
-		_AutoCollectAndDestroy();
-	}		
-	
-	//---------------------------------------------------
-	// Appear()
-	// This function sets the object's alpha to 0, and then
-	// fades it in.  It's an attempt at a bit more stable
-	// and controllable than bursting it.
-	//---------------------------------------------------	
-	public void Appear() {
+			
+	void OnApplicationPause(bool bPaused){
+		if(bPaused){
+			// if the game is pausing, obtain this item
+			ObtainObject();
+		}
+	}	
+
+	/// <summary>
+	/// his function sets the object's alpha to 0, and then
+	/// fades it in.  It's an attempt at a bit more stable
+	/// and controllable than bursting it.
+	/// </summary>
+	public void Appear(){
 		GameObject go = GetGameObject();
 			
 		// turn the object completely invis
-		TweenAlpha.Begin( go, 0, 0 );
+		TweenAlpha.Begin(go, 0, 0);
 		
 		// then fade in over time
-		float fInTime = Constants.GetConstant<float>( "ItemBoxAppear_Time" );
-		TweenAlpha.Begin( go, fInTime, 1 );
+		float fInTime = Constants.GetConstant<float>("ItemBoxAppear_Time");
+		TweenAlpha.Begin(go, fInTime, 1);
 	}
-	
-	//---------------------------------------------------
-	// Burst()
-	// Call this function when you want this item to
-	// burst out of wherever it currently is.
-	//---------------------------------------------------	
-	public void Burst() {
+
+	/// <summary>
+	/// Call this function when you want this item to
+	/// burst out of wherever it currently is.
+	/// </summary>
+	/// <param name="burstToLeftOnly">If set to <c>true</c> burst to left only.</param>
+	public void Burst(bool burstToLeftOnly = false){
 		// get constants that control the burst
-		int nRangeX = Constants.GetConstant<int>( "ItemBoxBurst_RangeX" );
-		int nRangeY = Constants.GetConstant<int>( "ItemBoxBurst_RangeY" );	
-		float fTime = Constants.GetConstant<float>( "ItemBoxBurst_Time" );
-		
+		int nRangeX = Constants.GetConstant<int>("ItemBoxBurst_RangeX");
+		int nRangeY = Constants.GetConstant<int>("ItemBoxBurst_RangeY");	
+		float fTime = Constants.GetConstant<float>("ItemBoxBurst_Time");
+	
 		// the burst is actually a lean tween move along a path
 		
 		// the starting location is the object's current location
@@ -85,12 +91,15 @@ public abstract class DroppedObject : LgButton {
 		Vector3 vStart = go.transform.position;
 		
 		// the end location is some random X length away
-		float fEndX = UnityEngine.Random.Range(-nRangeX, nRangeX);
-		Vector3 vEnd = new Vector3( vStart.x + fEndX, vStart.y, vStart.z );
+		int positiveRangeX = nRangeX;
+		if(burstToLeftOnly)
+			positiveRangeX = 0;
+		float fEndX = UnityEngine.Random.Range(-nRangeX, positiveRangeX);
+		Vector3 vEnd = new Vector3(vStart.x + fEndX, vStart.y, vStart.z);
 		
 		// the midpoint for the path is basically just 1/2 the x movement and some Y height
 		float fY = UnityEngine.Random.Range(0, nRangeY);
-		Vector3 vMid = new Vector3( vStart.x + ( fEndX / 2 ), vStart.y + fY, vStart.z );
+		Vector3 vMid = new Vector3(vStart.x + (fEndX / 2), vStart.y + fY, vStart.z);
 		
 		// set the path
 		Vector3[] path = new Vector3[4];
@@ -103,7 +112,7 @@ public abstract class DroppedObject : LgButton {
 		optional.Add("ease", LeanTweenType.linear);		
 		
 		// and send the object on its way!
-		LeanTweenUtils.MoveAlongPathWithSpeed( go, path, fTime, optional );
+		LeanTweenUtils.MoveAlongPathWithSpeed(go, path, fTime, optional);
 		
 		/* // saving this for now just in case we want to go back to it, so I don't have to rewrite it...
 		// tried bursting with add force and rigidbody...
@@ -130,30 +139,33 @@ public abstract class DroppedObject : LgButton {
 	// object's game object, to destory, apply movement
 	// to, etc.
 	//---------------------------------------------------		
-	protected virtual GameObject GetGameObject() {
+	protected virtual GameObject GetGameObject(){
 		return gameObject;
 	}
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------		
-	protected override void ProcessClick() {
+	protected override void ProcessClick(){
 		// only do something if the user hasn't already started picking up this item
 		DroppedItemStates eState = GetState();
-		if ( eState == DroppedItemStates.Dropped ) {
-			SetState( DroppedItemStates.PickedUp );
+		if(eState == DroppedItemStates.Dropped){
+			SetState(DroppedItemStates.PickedUp);
+
+			// play pick up audio
+			AudioManager.Instance.PlayClip(strSoundProcess);
 			
 			// animate the object by applying a rotation, translation, and fade
-			float fTime = Constants.GetConstant<float>( "ItemPickup_Time" );
-			float fUp = Constants.GetConstant<float>( "ItemPickup_UpY" );
-			Vector3 vSpin = Constants.GetConstant<Vector3>( "ItemPickup_Spin" );
+			float fTime = Constants.GetConstant<float>("ItemPickup_Time");
+			float fUp = Constants.GetConstant<float>("ItemPickup_UpY");
+			Vector3 vSpin = Constants.GetConstant<Vector3>("ItemPickup_Spin");
 
-	        Hashtable optional = new Hashtable();
-			optional.Add ("onComplete", "OnDoneAnimating");			
+			Hashtable optional = new Hashtable();
+			optional.Add("onComplete", "OnDoneAnimating");			
 			
 			GameObject go = GetGameObject();
-	        LeanTween.moveY(go, fUp, fTime, optional);			
-			TweenAlpha.Begin( go, fTime, 0 );
+			LeanTween.moveY(go, fUp, fTime, optional);			
+			TweenAlpha.Begin(go, fTime, 0);
 			LeanTween.rotate(go, vSpin, fTime);
 			
 		}
@@ -163,34 +175,42 @@ public abstract class DroppedObject : LgButton {
 	// OnDoneAnimating()
 	// The object is done doing its little pickup anim.
 	//---------------------------------------------------	
-	private void OnDoneAnimating() {
+	private void OnDoneAnimating(){
 		// animation done -- award the object
 		ObtainObject();
+	}
+
+	//----------------------------------------------------
+	// Force object to be picked up on scene change
+	//----------------------------------------------------
+	private void OnChangeScene(object sender, EventArgs args){
+		AutoCollectAndDestroy();
 	}
 	
 	//---------------------------------------------------
 	// _OnDestroy()
 	//---------------------------------------------------		
-	protected override void _OnDestroy() {
-		// OnObjectDestroyed();
-	}
+	// protected override void _OnDestroy() {
+	// OnObjectDestroyed();
+	// }
 	
 	//---------------------------------------------------
 	// ObtainObject()
 	// Gives the user the object.
 	//---------------------------------------------------
-	protected void ObtainObject() {
-		_ObtainObject();	
-	}
-	
+	// protected void ObtainObject() {
+	// 	_ObtainObject();	
+	// }
+
 	//---------------------------------------------------
-	// OnApplicationPause()
-	// Unity callback function.
-	//---------------------------------------------------		
-	void OnApplicationPause( bool bPaused ) {
-		if ( bPaused ) {
-			// if the game is pausing, obtain this item
-			ObtainObject();
-		}
-	}	
+	// AutoCollectAndDestroy()
+	// This is a generic function that is called when a
+	// dependent manager is destroyed.  It basically 
+	// forces the item to be picked up right away, because
+	// the item requires the dependent manager in order to
+	// actual process the picking up.
+	//---------------------------------------------------	
+	// protected void AutoCollectAndDestroy( object sender, EventArgs args ) {
+	// _AutoCollectAndDestroy();
+	// }		
 }

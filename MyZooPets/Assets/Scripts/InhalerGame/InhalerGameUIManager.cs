@@ -141,7 +141,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void QuitInhalerGame(){
         NotificationUIManager.Instance.CleanupNotification();
-        scriptTransition.StartTransition(SceneUtils.BEDROOM);
+        LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");
     }
 
     //Event listener. Listens to when user moves on to the next step
@@ -163,7 +163,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         Hashtable option = new Hashtable();
         option.Add("parent", GameObject.Find("Anchor-Center"));
         option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-        option.Add("textSize", 100);
+        option.Add("textSize", 100f);
         option.Add("color", Color.white);
 
         FloatyUtil.SpawnFloatyText(option);
@@ -186,8 +186,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     //Reward player after the animation is done
     private void GiveReward(){
 		int nXP = DataLoader_XpRewards.GetXP( "DailyInhaler", new Hashtable() );
-        StatsController.Instance.ChangeStats(nXP, Vector3.zero, 
-            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
+//        StatsController.Instance.ChangeStats(nXP, Vector3.zero, 
+//            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
+		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
         Invoke("QuitInhalerGame", 2.0f);
     }
 }

@@ -11,8 +11,8 @@ GameObject:
   - 114: {fileID: 11400004}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400006}
+  - 114: {fileID: 11400002}
   m_Layer: 21
   m_Name: DroppedItem
   m_TagString: Untagged
@@ -89,12 +89,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eb394e0065a84e1ab9b349afe14b6f6, type: 3}
+  m_Script: {fileID: 11500000, guid: b95830dba7d7b4837926fd3409c19e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bSprite: 0
   eMode: 0
-  strSoundProcess: 
+  strSoundProcess: droppedObjectCollected
+  buttonName: 
   bCheckClickManager: 1
   sprite: {fileID: 11400004}
 --- !u!114 &11400004
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strConstant: SpriteSize_DroppedItem
+  resizeNow: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -16,10 +16,7 @@ public class HazardItem : RunnerItem {
         base.Update();
 	}
 
-	public override void OnPickup()
-	{
-		Debug.Log("Hazard Hit!");
-
+	public override void OnPickup(){
         // Player, sloooooowwww downnnnnnnn
         PlayerController.Instance.TriggerSlowdown(SlowdownDivisor);
 

@@ -38,7 +38,7 @@ public class GA_Settings : ScriptableObject
 	/// The version of the GA Unity Wrapper plugin
 	/// </summary>
 	[HideInInspector]
-	public static string VERSION = "0.6.0";
+	public static string VERSION = "0.6.1";
 	
 	#endregion
 	
@@ -106,7 +106,7 @@ public class GA_Settings : ScriptableObject
 	
 	public bool IAD_foldout = true;
 	public bool IAD_enabled = true;
-	#if !UNITY_ANDROID || UNITY_EDITOR
+	#if UNITY_IPHONE || UNITY_EDITOR
 	public ADBannerView.Type IAD_type = ADBannerView.Type.Banner;
 	public ADBannerView.Layout IAD_layout = ADBannerView.Layout.Top;
 	#endif

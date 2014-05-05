@@ -221,7 +221,7 @@ public class DGTManager : MinigameManager<DGTManager>{
 			Hashtable option = new Hashtable();
 			option.Add("parent", GameObject.Find("Anchor-Center"));
 			option.Add("text", Localization.Localize("DGT_EXTRA_LIFE"));
-			option.Add("textSize", 100);
+			option.Add("textSize", 100f);
 			option.Add("color", Color.magenta);
 
 			FloatyUtil.SpawnFloatyText(option);

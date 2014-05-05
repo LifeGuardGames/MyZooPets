@@ -4,39 +4,45 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// DataLoader_LootTables
-// Loads loot tables from XML.
+// DataLoader_XpRewards
+// Loads xp rewards from XML.
 //---------------------------------------------------
 
-public class DataLoader_LootTables {
-	// hashtable that contains all loot table data
+public class DataLoaderXpRewards {
+	// hashtable that contains all reward data
 	private static Hashtable hashData;
 	
 	//---------------------------------------------------
-	// GetLootTable()
-	// Returns loot table data for the incoming id.
-	//---------------------------------------------------	
-	public static Data_LootTable GetLootTable( string strID ) {
-		if ( hashData == null ) 
+	// GetXP()
+	// For the incoming parameters, returns how much xp
+	// the user should get.
+	//---------------------------------------------------
+	public static int GetXP( string strKey, Hashtable hashBonusData ) {
+		// the total xp will be calculated by the data
+		int nXP = 0;
+		
+		// set up data if it hasn't been loaded yet
+		if ( hashData == null )
 			SetupData();
 		
-		Data_LootTable dataTable = null;
-		
-		if ( hashData.ContainsKey( strID ) ) 
-			dataTable = (Data_LootTable) hashData[strID];
+		// get the data for the incoming key
+		if ( hashData.ContainsKey( strKey ) ) {
+			Data_XpReward data = (Data_XpReward) hashData[strKey];
+			nXP = data.CalculateXP( hashBonusData );
+		}
 		else
-			Debug.LogError("No such loot table with id: " + strID);
+			Debug.LogError("No such xp data for " + strKey);			
 		
-		return dataTable;
+		return nXP;
 	}
 
     public static void SetupData(){
         if(hashData != null) return; //Don't load from xml if data already loaded
 		
 		hashData = new Hashtable();
-
+		
         //Load all item xml files
-         UnityEngine.Object[] files = Resources.LoadAll("LootTables", typeof(TextAsset));
+         UnityEngine.Object[] files = Resources.LoadAll("XP_Rewards", typeof(TextAsset));
          foreach(TextAsset file in files){
             string xmlString = file.text;
 			
@@ -56,15 +62,12 @@ public class DataLoader_LootTables {
                 // Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
-				string strError = strErrorFile + "(" + id + "): ";
+				string strError = strErrorFile + "(" + id + "): ";			
 				
-                // Get children from xml node
-                List<IXMLNode> listChildren = XMLUtils.GetChildrenList(childNode);				
-				
-				Data_LootTable data = new Data_LootTable( id, hashAttr, listChildren, strError );
+				Data_XpReward data = new Data_XpReward( id, childNode, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.LogError("Duplicate loot table id: " + id);
+					Debug.LogError("Duplicate xp reward id: " + id);
 				else
 					hashData[id] = data;
             }

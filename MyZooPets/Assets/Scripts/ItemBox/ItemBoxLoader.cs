@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ public class ItemBoxLoader : MonoBehaviour {
 		GameObject goResource = Resources.Load( "ItemBox" ) as GameObject;
 		
 		foreach ( string strSavedBoxID in DataManager.Instance.GameData.Inventory.UnopenedItemBoxes ) {
-			Data_ItemBox dataBox = DataLoader_ItemBoxes.GetItemBox( strSavedBoxID );
+			Data_ItemBox dataBox = DataLoaderItemBoxes.GetItemBox( strSavedBoxID );
 			if ( dataBox != null ) {
 				GameObject goBox = Instantiate( goResource, transform.position, Quaternion.identity ) as GameObject;
 				ItemBoxLogic scriptBox = goBox.GetComponent<ItemBoxLogic>();

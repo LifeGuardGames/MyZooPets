@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DataLoader_Triggers{
+public class DataLoaderTriggers{
     //Key: scene name, value: dictionary of ImmutableData_Trigger
     //Key: triggerID, value: instance of ImmutableData_Trigger.cs
     private static Dictionary<string, Dictionary<string, ImmutableData_Trigger>> allTriggers;

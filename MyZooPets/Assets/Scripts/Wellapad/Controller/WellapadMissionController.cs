@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,7 +80,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				// for now the only reward is breathing fire
 				//StatsController.Instance.ChangeFireBreaths( 1 );
 				
-				int nXP = DataLoader_XpRewards.GetXP("WellapadBonus", new Hashtable());
+				int nXP = DataLoaderXpRewards.GetXP("WellapadBonus", new Hashtable());
 				
 				// get the position of the actual reward object because we want to stream the XP from it
 				GameObject goReward = GameObject.Find("WellapadRewardButton");				
@@ -376,7 +376,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	// AddMission()
 	//---------------------------------------------------		
 	public void AddMission(string strMission){
-		List<Data_WellapadTask> listTasks = DataLoader_WellapadTasks.GetTasks(strMission);
+		List<Data_WellapadTask> listTasks = DataLoaderWellapadTasks.GetTasks(strMission);
 		Dictionary<string, WellapadTask> savedTasks = new Dictionary<string, WellapadTask>();
 		
 		for(int i = 0; i < listTasks.Count; ++i){

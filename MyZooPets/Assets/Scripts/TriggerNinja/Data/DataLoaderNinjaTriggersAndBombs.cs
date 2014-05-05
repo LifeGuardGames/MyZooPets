@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DataLoader_NinjaTriggersAndBombs{
+public class DataLoaderNinjaTriggersAndBombs{
 
 	// Hashtable that contains all the NinjaTriggersAndBombs.xml data
 	private static ArrayList triggerList = null;

@@ -16,7 +16,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(foodList == null){
 				foodList = new List<Item>();
-				Dictionary<string, Item> foodDict = DataLoader_Items.GetAllItemsOfType(ItemType.Foods);
+				Dictionary<string, Item> foodDict = DataLoaderItems.GetAllItemsOfType(ItemType.Foods);
 				foodList = SelectListFromDictionaryAndSort(foodDict);
 			}
 			return foodList;
@@ -27,7 +27,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(usableList == null){
 				usableList = new List<Item>();
-				Dictionary<string, Item> usableDict = DataLoader_Items.GetAllItemsOfType(ItemType.Usables);
+				Dictionary<string, Item> usableDict = DataLoaderItems.GetAllItemsOfType(ItemType.Usables);
 				usableList = SelectListFromDictionaryAndSort(usableDict);
 			}
 			return usableList;
@@ -38,7 +38,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		get{
 			if(decorationList == null){
 				decorationList = new List<Item>();
-				Dictionary<string, Item> decorationDict = DataLoader_Items.GetAllItemsOfType(ItemType.Decorations);
+				Dictionary<string, Item> decorationDict = DataLoaderItems.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
 
 			}
@@ -64,26 +64,26 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Returns Item with itemID
 	public Item GetItem(string itemID){
-		return DataLoader_Items.GetItem(itemID);
+		return DataLoaderItems.GetItem(itemID);
 	}
 
 	//Returns the type of item with itemID
 	public ItemType GetItemType(string itemID){
-		return DataLoader_Items.GetItemType(itemID);
+		return DataLoaderItems.GetItemType(itemID);
 	}
 
 	//Returns the texture name of item with itemID
 	public string GetItemTextureName(string itemID){
-		return DataLoader_Items.GetItemTextureName(itemID);
+		return DataLoaderItems.GetItemTextureName(itemID);
 	}
 
 	//Returns the prefab name of item with itemID
 	public string GetDecoItemPrefabName(string itemID){
-		return DataLoader_Items.GetDecoItemPrefabName(itemID);
+		return DataLoaderItems.GetDecoItemPrefabName(itemID);
 	}
 
 	public string GetDecoItemMaterialName(string itemID){
-		return DataLoader_Items.GetDecoItemMaterialName(itemID);
+		return DataLoaderItems.GetDecoItemMaterialName(itemID);
 	}
 	
 	//---------------------------------------------------

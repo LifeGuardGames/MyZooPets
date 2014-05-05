@@ -4,30 +4,30 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// DataLoader_ItemBoxes
-// Loads item boxes from XML.
+// DataLoader_LootTables
+// Loads loot tables from XML.
 //---------------------------------------------------
 
-public class DataLoader_ItemBoxes {
-	// hashtable that contains all item box data
+public class DataLoaderLootTables {
+	// hashtable that contains all loot table data
 	private static Hashtable hashData;
 	
 	//---------------------------------------------------
-	// GetItemBox()
-	// Returns an item box data with the incoming id.
+	// GetLootTable()
+	// Returns loot table data for the incoming id.
 	//---------------------------------------------------	
-	public static Data_ItemBox GetItemBox( string strID ) {
+	public static Data_LootTable GetLootTable( string strID ) {
 		if ( hashData == null ) 
 			SetupData();
 		
-		Data_ItemBox data = null;
+		Data_LootTable dataTable = null;
 		
 		if ( hashData.ContainsKey( strID ) ) 
-			data = (Data_ItemBox) hashData[strID];
+			dataTable = (Data_LootTable) hashData[strID];
 		else
-			Debug.LogError("No such item box with id: " + strID);
+			Debug.LogError("No such loot table with id: " + strID);
 		
-		return data;		
+		return dataTable;
 	}
 
     public static void SetupData(){
@@ -36,7 +36,7 @@ public class DataLoader_ItemBoxes {
 		hashData = new Hashtable();
 
         //Load all item xml files
-         UnityEngine.Object[] files = Resources.LoadAll("ItemBoxes", typeof(TextAsset));
+         UnityEngine.Object[] files = Resources.LoadAll("LootTables", typeof(TextAsset));
          foreach(TextAsset file in files){
             string xmlString = file.text;
 			
@@ -61,10 +61,10 @@ public class DataLoader_ItemBoxes {
                 // Get children from xml node
                 List<IXMLNode> listChildren = XMLUtils.GetChildrenList(childNode);				
 				
-				Data_ItemBox data = new Data_ItemBox( id, hashAttr, listChildren, strError );
+				Data_LootTable data = new Data_LootTable( id, hashAttr, listChildren, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.LogError("Duplicate item box id: " + id);
+					Debug.LogError("Duplicate loot table id: " + id);
 				else
 					hashData[id] = data;
             }

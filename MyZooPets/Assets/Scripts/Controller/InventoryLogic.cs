@@ -86,7 +86,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 			invItems[itemID] = invItem;
 		}else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
-			Item itemData = DataLoader_Items.GetItem(itemID);
+			Item itemData = DataLoaderItems.GetItem(itemID);
 
 			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
 			invItems[itemID] = invItem;
@@ -113,7 +113,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	//---------------------------------------------------	
 	private Dictionary<string, InventoryItem> GetInventoryForItem( string strItemID ) {
 		// what list the item is placed in depends on what kind of item it is
-		ItemType eType = DataLoader_Items.GetItemType( strItemID );
+		ItemType eType = DataLoaderItems.GetItemType( strItemID );
 		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
 		switch ( eType ) {

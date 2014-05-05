@@ -19,14 +19,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	public bool GameRunning{
 		get { return GetGameState() == MinigameStates.Playing; }
 	}
-	
-	/// <summary>
-	/// Gets the minigame key.
-	/// </summary>
-	/// <returns>The minigame key.</returns>
-	protected override string GetMinigameKey(){
-		return "Runner";	
-	}
 
 	public override int GetScore(){
 		// the score was previously being calculated in that variable as some kind of weird distance traveled / stuff...
@@ -38,6 +30,18 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		int nScore = nDistance + nCoins;
 		
 		return  nScore;
+	}
+	
+	/// <summary>
+	/// Gets the minigame key.
+	/// </summary>
+	/// <returns>The minigame key.</returns>
+	protected override string GetMinigameKey(){
+		return "Runner";	
+	}
+
+	protected override bool IsTutorialOn(){
+		return Constants.GetConstant<bool>("IsRunnerTutorialOn");
 	}
 	
 	// Use this for initialization
@@ -54,7 +58,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// </summary>
 	protected override void _NewGame(){	
 		//check for tutorial here.
-		if(TutorialOn() && (IsTutorialOverride() || 
+		if(IsTutorialOn() && (IsTutorialOverride() || 
 			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(RunnerTutorial.TUT_KEY))){
             
 			StartTutorial();

@@ -101,8 +101,8 @@ public class PlayerController : Singleton<PlayerController>{
 	}
 
 #if UNITY_EDITOR    
-	void OnGUI(){
-		GUI.contentColor = Color.black;
+//	void OnGUI(){
+//		GUI.contentColor = Color.black;
 //		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
 //			movement.targetSpeed += 5;
 //		 }
@@ -111,8 +111,8 @@ public class PlayerController : Singleton<PlayerController>{
 //			movement.targetSpeed -= 5;
 //		}
 
-		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
-	}
+//		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
+//	}
 #endif
 
 	void FixedUpdate(){

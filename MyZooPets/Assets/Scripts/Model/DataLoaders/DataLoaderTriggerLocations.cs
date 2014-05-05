@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Loads trigger locations from XML.
 //---------------------------------------------------
 
-public class DataLoader_TriggerLocations {
+public class DataLoaderTriggerLocations {
 	// hashtable that contains all trigger location data
 	// it's a hash of a hash -- scenes to trigger locations for that scene
 	private static Hashtable hashData;

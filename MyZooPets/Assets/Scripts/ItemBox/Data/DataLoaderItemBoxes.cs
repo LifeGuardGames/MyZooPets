@@ -4,45 +4,39 @@ using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
-// DataLoader_XpRewards
-// Loads xp rewards from XML.
+// DataLoader_ItemBoxes
+// Loads item boxes from XML.
 //---------------------------------------------------
 
-public class DataLoader_XpRewards {
-	// hashtable that contains all reward data
+public class DataLoaderItemBoxes {
+	// hashtable that contains all item box data
 	private static Hashtable hashData;
 	
 	//---------------------------------------------------
-	// GetXP()
-	// For the incoming parameters, returns how much xp
-	// the user should get.
-	//---------------------------------------------------
-	public static int GetXP( string strKey, Hashtable hashBonusData ) {
-		// the total xp will be calculated by the data
-		int nXP = 0;
-		
-		// set up data if it hasn't been loaded yet
-		if ( hashData == null )
+	// GetItemBox()
+	// Returns an item box data with the incoming id.
+	//---------------------------------------------------	
+	public static Data_ItemBox GetItemBox( string strID ) {
+		if ( hashData == null ) 
 			SetupData();
 		
-		// get the data for the incoming key
-		if ( hashData.ContainsKey( strKey ) ) {
-			Data_XpReward data = (Data_XpReward) hashData[strKey];
-			nXP = data.CalculateXP( hashBonusData );
-		}
-		else
-			Debug.LogError("No such xp data for " + strKey);			
+		Data_ItemBox data = null;
 		
-		return nXP;
+		if ( hashData.ContainsKey( strID ) ) 
+			data = (Data_ItemBox) hashData[strID];
+		else
+			Debug.LogError("No such item box with id: " + strID);
+		
+		return data;		
 	}
 
     public static void SetupData(){
         if(hashData != null) return; //Don't load from xml if data already loaded
 		
 		hashData = new Hashtable();
-		
+
         //Load all item xml files
-         UnityEngine.Object[] files = Resources.LoadAll("XP_Rewards", typeof(TextAsset));
+         UnityEngine.Object[] files = Resources.LoadAll("ItemBoxes", typeof(TextAsset));
          foreach(TextAsset file in files){
             string xmlString = file.text;
 			
@@ -62,12 +56,15 @@ public class DataLoader_XpRewards {
                 // Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
-				string strError = strErrorFile + "(" + id + "): ";			
+				string strError = strErrorFile + "(" + id + "): ";
 				
-				Data_XpReward data = new Data_XpReward( id, childNode, strError );
+                // Get children from xml node
+                List<IXMLNode> listChildren = XMLUtils.GetChildrenList(childNode);				
+				
+				Data_ItemBox data = new Data_ItemBox( id, hashAttr, listChildren, strError );
 				
 				if ( hashData.ContainsKey( id ) )
-					Debug.LogError("Duplicate xp reward id: " + id);
+					Debug.LogError("Duplicate item box id: " + id);
 				else
 					hashData[id] = data;
             }

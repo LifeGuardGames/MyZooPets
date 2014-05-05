@@ -9,7 +9,7 @@ using System.Collections.Generic;
 // or more tasks make up a mission.
 //---------------------------------------------------
 
-public class DataLoader_WellapadTasks {
+public class DataLoaderWellapadTasks {
 	// hashtable that contains all task data
 	private static Hashtable hashData;
 	private static Hashtable hashAllData;

@@ -53,7 +53,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public void ClearDegradationTrigger(DegradTrigger trigger){
 		// DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
 		DegradData degradData = degradationTriggers.Find(x => x.TriggerID == trigger.ID);
-		ImmutableData_Trigger triggerData = DataLoader_Triggers.GetTrigger(degradData.TriggerID);
+		ImmutableData_Trigger triggerData = DataLoaderTriggers.GetTrigger(degradData.TriggerID);
 
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
@@ -72,7 +72,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			FloatyUtil.SpawnFloatyText(option);
 
 			//Init dropped item
-			int nXP = DataLoader_XpRewards.GetXP("CleanTrigger", new Hashtable());
+			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
 			goDroppedItem.GetComponent<DroppedObjectStat>().Init(HUDElementType.Points, nXP);
 			
 			// set the position of the newly spawned item to be wherever this item box is
@@ -142,7 +142,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	//---------------------------------------------------   
 	private void SetUpTriggers(){      
 		// get list of available locations to spawn triggers
-		List<Data_TriggerLocation> listAvailable = DataLoader_TriggerLocations.GetAvailableTriggerLocations("Bedroom");
+		List<Data_TriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
@@ -155,7 +155,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		for(int i = 0; i < listChosen.Count; i++){
 			Data_TriggerLocation location = listChosen[i];
             
-			ImmutableData_Trigger randomTrigger = DataLoader_Triggers.GetRandomSceneTrigger("Bedroom");
+			ImmutableData_Trigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 
 			// random prefab
 			// int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
@@ -164,12 +164,12 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
 			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_TRIGGERS);
 			if(!bTriggers && i == 0){
-				location = DataLoader_TriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
+				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
 				if(location == null)
 					Debug.LogError("Tutorial trigger location not set up correctly");
                 
 				// objectIndex = 3;
-				randomTrigger = DataLoader_Triggers.GetTrigger("Trigger_3");
+				randomTrigger = DataLoaderTriggers.GetTrigger("Trigger_3");
 			}
 
 			//spawn them at a pre define location ID is the order in which the data are created

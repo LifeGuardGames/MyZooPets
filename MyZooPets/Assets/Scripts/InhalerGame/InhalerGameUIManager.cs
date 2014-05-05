@@ -185,7 +185,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     //Reward player after the animation is done
     private void GiveReward(){
-		int nXP = DataLoader_XpRewards.GetXP( "DailyInhaler", new Hashtable() );
+		int nXP = DataLoaderXpRewards.GetXP( "DailyInhaler", new Hashtable() );
 //        StatsController.Instance.ChangeStats(nXP, Vector3.zero, 
 //            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
 		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 //  An immutable class, meaning that no other classes should be modifying the data
 //  from this class
 //---------------------------------------------------
-public class DataLoader_Items{
+public class DataLoaderItems{
     //Key: itemtype, Value: dictionary of items
     //Key: itemID, Value: instance of Item.cs
     private static Dictionary<ItemType, Dictionary<string, Item>> allItems;

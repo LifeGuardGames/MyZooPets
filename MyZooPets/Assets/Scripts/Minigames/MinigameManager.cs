@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public MinigameUI ui; // reference to the UI controlle
 	public SceneTransition scriptTransition; // scene transition
 	public int nStartingLives;
-	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
+//	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
 
 	private int nScore;	// player score
 	private int nLives; // player lives
@@ -86,8 +86,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 
 	//T: Tutorial is on so play tutorial, F: Tutorial off so don't play tutorial
-	protected bool TutorialOn(){
-		return bRunTut;	
+	protected virtual bool IsTutorialOn(){
+		return true;	
 	}
 
 	//T: Play tutorial again even if it has already been played	
@@ -499,7 +499,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			// to get xp we now use another system
 			Hashtable hashBonus = new Hashtable();
 			hashBonus["Score"] = nScore.ToString();
-			nReward = DataLoader_XpRewards.GetXP(strKey, hashBonus);
+			nReward = DataLoaderXpRewards.GetXP(strKey, hashBonus);
 		}
 		else if(!string.IsNullOrEmpty(strConstant)){
 			// the standard reward is the player's score divided by some constant

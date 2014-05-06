@@ -3,16 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StoreUIManager : SingletonUI<StoreUIManager> {
+public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
-	
 	public GameObject grid;
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
-	public GameObject storeSubPanelBg; 
+	public GameObject storeSubPanelBg;
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
@@ -21,9 +20,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// store related sounds
 	public string strSoundChangeTab;
 	public string strSoundBuy;
-
 	private bool bShortcutMode; //True: open store directly to specific item category
-								//False: open the store base panel first	
+	//False: open the store base panel first	
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
@@ -59,8 +57,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		colors.Add(yellow);
 		*/
 		
-		goExitButton = storeSubPanel.FindInChildren( "ExitButton" );
-		if ( goExitButton == null )
+		goExitButton = storeSubPanel.FindInChildren("ExitButton");
+		if(goExitButton == null)
 			Debug.LogError("Exit button is null...please set");
 	}
 	
@@ -78,7 +76,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		// Position the grid origin to the left of the screen
 		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(
-			(-1f * (CameraManager.Instance.GetNativeWidth()/2)) - itemArea.transform.localPosition.x,
+			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);
 	}
 	
@@ -107,11 +105,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		ClickManager.Instance.Lock( UIModeTypes.Store, GetClickLockExceptions());
+		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Food", true);
 	}
+
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		//send analytics
 		Analytics.Instance.StoreItemShortCutClicked();
@@ -135,11 +134,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Special function used to open the store UI 
 	// straight up to a certain category.
 	//---------------------------------------------------	
-	public void OpenToSubCategory( string strCat, bool bShortcut = false  ) {		
+	public void OpenToSubCategory(string strCat, bool bShortcut = false){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
 		bShortcutMode = bShortcut;
-		if (bShortcutMode) {
+		if(bShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now	
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 		}	
@@ -161,7 +160,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		//-0.22
 		// depending on what type of item the user bought, the animation has the item going to different places
 		ItemType eType = itemData.Type;
-		switch ( eType ) {
+		switch(eType){
 		case ItemType.Decorations:
 			itemPosition = EditDecosUIManager.Instance.GetEditButtonPosition();
 			break;
@@ -190,7 +189,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		completeParamHash.Add("Icon", animationSprite);		
 
 		optional.Add("ease", LeanTweenType.easeOutQuad);
-		optional.Add ("onComplete", "DestroySprite");
+		optional.Add("onComplete", "DestroySprite");
 		optional.Add("onCompleteTarget", gameObject);
 		optional.Add("onCompleteParam", completeParamHash);
 		animationSprite.transform.position = origin;
@@ -204,10 +203,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Callback for buy animation -- will destroy the
 	// sprite icon clone we create and animated.
 	//---------------------------------------------------
-	public void DestroySprite( Hashtable hash ){
+	public void DestroySprite(Hashtable hash){
 		// delete the icon we moved
-		if ( hash.ContainsKey("Icon") ) {
-			GameObject goSprite = (GameObject) hash["Icon"];
+		if(hash.ContainsKey("Icon")){
+			GameObject goSprite = (GameObject)hash["Icon"];
 			Destroy(goSprite);
 		}	
 	}
@@ -225,7 +224,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			//Special case to handle here. Since only one wallpaper can be used at anytime
 			//There is no point for the user to buy more than one of each diff wallpaper
 			if(itemData.Type == ItemType.Decorations){
-				DecorationItem decoItem = (DecorationItem) itemData;
+				DecorationItem decoItem = (DecorationItem)itemData;
 
 				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
 					UIImageButton buyButton = button.GetComponent<UIImageButton>();
@@ -245,7 +244,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 			
 			// play a sound since an item was bought
-			AudioManager.Instance.PlayClip( strSoundBuy );
+			AudioManager.Instance.PlayClip(strSoundBuy);
 		}
 	}
 
@@ -255,12 +254,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// Then call other methods to create the items
 	//----------------------------------------------------
 	public void CreateSubCategoryItems(GameObject page){
-		CreateSubCategoryItemsWithString( page.name );
+		CreateSubCategoryItemsWithString(page.name);
 	}
 	
-	public void CreateSubCategoryItemsWithString(string strPage) {
-		if ( strPage != "Items" && strPage != "Food" && strPage != "Decorations" ) {
-			Debug.LogError("Illegal sore sub category: " + strPage );
+	public void CreateSubCategoryItemsWithString(string strPage){
+		if(strPage != "Items" && strPage != "Food" && strPage != "Decorations"){
+			Debug.LogError("Illegal sore sub category: " + strPage);
 			return;
 		}
 		
@@ -280,7 +279,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			CreateSubCategoryItemsTab("foodDefaultTab", Color.white);
 			//CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);	// Disabling custom colors
 
-		}else if(currentPage == "Items"){
+		}
+		else if(currentPage == "Items"){
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -288,7 +288,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white);
 			//CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);	// Disabling custom colors
 
-		}else if(currentPage == "Decorations"){
+		}
+		else if(currentPage == "Decorations"){
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
@@ -311,7 +312,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 						defaultTabName = tabParent.name;
 //						defaultColor = colors[counter];
 					}
-				}else{
+				}
+				else{
 					tabParent.name = "";
 
 					HideUnuseTab(tabParent.FindChild("Tab"));
@@ -404,28 +406,30 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 
 				foreach(Item itemData in foodList){
 					if(!itemData.ItemBoxOnly)
-						StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
 
-			}else if(currentPage == "Items"){
+			}
+			else if(currentPage == "Items"){
 				//No sub category so retrieve a list of all item
 				List<Item> usableList = ItemLogic.Instance.UsableList;
 
 				foreach(Item itemData in usableList){
 					if(!itemData.ItemBoxOnly)
-						StoreItemEntry.CreateEntry( grid, itemStorePrefabStats, itemData );
+						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
 
-			}else if(currentPage == "Decorations"){
+			}
+			else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)
 				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
-				DecorationTypes decoType = (DecorationTypes) Enum.Parse(typeof(DecorationTypes), tabName);
+				DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
 					foreach(DecorationItem decoItemData in decoList){
 						if(!decoItemData.ItemBoxOnly)
-							StoreItemEntry.CreateEntry( grid, itemStorePrefab, (Item)decoItemData );
+							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
 					}
 				}
 			}
@@ -460,7 +464,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 	// reset the clip range for the item area so that scrolling starts from the beginning
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
-        Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
+		Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
 		
 		// Stop the springing action when switching
 		SpringPanel spring = itemArea.GetComponent<SpringPanel>();
@@ -469,8 +473,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager> {
 		}
 		
 		// Reset the localposition and clipping position
-        itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
-        itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
+		itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
+		itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
 
 	// //Delay calling reposition due to async problem Destroying/Repositionoing.

@@ -1,21 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// StatPairUI
-// This is a single stat pair (icon + text) that
-// appears on items for the item's description.
-//---------------------------------------------------
-
-public class StatPairUI : MonoBehaviour {
+/// <summary>
+/// Stat pair user interface controller.
+/// </summary>
+public class StatPairUIController : MonoBehaviour {
 	// the sprite and label for this stat pair
 	public UISprite spriteIcon;
 	public UILabel labelAmount;
-	
-	//---------------------------------------------------
-	// Init()
-	// Set the description for this item.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Init the specified eStat and nAmount.
+	/// </summary>
+	/// <param name="eStat">E stat.</param>
+	/// <param name="nAmount">N amount.</param>
 	public void Init( StatType eStat, int nAmount ) {
 		// set the icon of the stat (a little hacky unless we need to expand further)
 		if ( eStat == StatType.Mood )

@@ -37,6 +37,7 @@ public enum ItemType{
 public enum StatType{
     Mood,
     Health,
+	Fire,
 }
 public enum ChallengeType{
     Weekly,

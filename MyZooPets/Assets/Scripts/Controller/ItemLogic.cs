@@ -34,7 +34,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 	}
 	
-	public List<Item> DecorationList {
+	public List<Item> DecorationList{
 		get{
 			if(decorationList == null){
 				decorationList = new List<Item>();
@@ -93,15 +93,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 	// already at max.  This function returns whether or
 	// not the user can use an item due to this.
 	//---------------------------------------------------		
-	public bool CanUseItem( string strItemID ) {
+	public bool CanUseItem(string strItemID){
 		// start off with true
 		bool bCanUse = true;
 		
 		// get the stats dictionary for the item
-		Dictionary<StatType, int> statsDict = GetStatsDict( strItemID );
+		Dictionary<StatType, int> statsDict = GetStatsDict(strItemID);
 		
 		// if the stats dictionary is not null, we want to be sure that the stats aren't already at max
-		if ( statsDict != null ) {		
+		if(statsDict != null){		
 			int moodAmount = 0;
 			int healthAmount = 0;
 	
@@ -114,15 +114,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
 			// int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
-			int nCurHealth = StatsController.Instance.GetStat( HUDElementType.Health );
+			int nCurHealth = StatsController.Instance.GetStat(HUDElementType.Health);
 			// int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
-			int nCurMood = StatsController.Instance.GetStat( HUDElementType.Mood );
+			int nCurMood = StatsController.Instance.GetStat(HUDElementType.Mood);
 			
-			if ( moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100 )
+			if(moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100)
 				bCanUse = false;
-			else if ( moodAmount > 0 && nCurMood == 100 )
+			else if(moodAmount > 0 && nCurMood == 100)
 				bCanUse = false;
-			else if ( healthAmount > 0 && nCurHealth == 100 )
+			else if(healthAmount > 0 && nCurHealth == 100)
 				bCanUse = false;
 		}
 		
@@ -131,7 +131,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 	//Apply the stats effect that the Item with itemID has to the appropriate stats
 	public void StatsEffect(string itemID){
-		Dictionary<StatType, int> statDict = GetStatsDict( itemID );
+		Dictionary<StatType, int> statDict = GetStatsDict(itemID);
 		
 		if(statDict != null)
 			StatsEffect(statDict);
@@ -169,17 +169,17 @@ public class ItemLogic : Singleton<ItemLogic>{
 	// Returns a dictionary of stats info on the incoming
 	// item.  May return null.
 	//---------------------------------------------------		
-	private Dictionary<StatType, int> GetStatsDict( string strItemID ) {
+	private Dictionary<StatType, int> GetStatsDict(string strItemID){
 		Item item = GetItem(strItemID);
 		Dictionary<StatType, int> dictStats = null;
 		switch(item.Type){
-			case ItemType.Foods:
-				FoodItem foodItem = (FoodItem) item;
-				dictStats = foodItem.Stats;
+		case ItemType.Foods:
+			FoodItem foodItem = (FoodItem)item;
+			dictStats = foodItem.Stats;
 			break;
-			case ItemType.Usables:
-				UsableItem usableItem = (UsableItem) item;
-				dictStats = usableItem.Stats;
+		case ItemType.Usables:
+			UsableItem usableItem = (UsableItem)item;
+			dictStats = usableItem.Stats;
 			break;
 		}		
 		
@@ -191,15 +191,18 @@ public class ItemLogic : Singleton<ItemLogic>{
 		int moodAmount = 0;
 		int healthAmount = 0;
 
-		if(statDict.ContainsKey(StatType.Mood))	{
+		if(statDict.ContainsKey(StatType.Mood)){
 			moodAmount = statDict[StatType.Mood];
 		}
 		if(statDict.ContainsKey(StatType.Health)){
 			healthAmount = statDict[StatType.Health];
 		}
+		if(statDict.ContainsKey(StatType.Fire)){
+			//add one more fire blow here
+			int fireBreath = statDict[StatType.Fire];
+			StatsController.Instance.ChangeFireBreaths(fireBreath);
+		}
 
-//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero,
-//			healthAmount, Vector3.zero, moodAmount, Vector3.zero, true, bFloaty:true);
 		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, bFloaty: true);
 	}
 

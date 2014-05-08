@@ -19,7 +19,12 @@ public class FireBlowParticleController : ParticleSystemController {
 		} 
 		set{
 			fireballSize = value;
-			pSystem2.startLifetime = fireballSize; // Change the "size" of the fireball particle
+			if(pSystem2 != null){
+				pSystem2.startLifetime = fireballSize; // Change the "size" of the fireball particle
+			}
+			else{
+				Debug.Log("No fireball found");
+			}
 		}
 	}
 	
@@ -33,7 +38,9 @@ public class FireBlowParticleController : ParticleSystemController {
 	
 	IEnumerator PlaySecondParticle(float delay){
 		yield return new WaitForSeconds(delay);
-		pSystem2.Play();
+		if(pSystem2 != null){
+			pSystem2.Play();
+		}
 	}
 	
 	protected override void _Stop(){
@@ -43,15 +50,17 @@ public class FireBlowParticleController : ParticleSystemController {
 	
 	IEnumerator StopSecondParticle(float delay){
 		yield return new WaitForSeconds(delay);
-		pSystem2.Stop();
+		if(pSystem2 != null){
+			pSystem2.Stop();
+		}
 	}
 	
-	// void OnGUI(){
-	// 	if(GUI.Button(new Rect(100, 100, 100, 100), "Start")){
-	// 		Play();
-	// 	}
-	// 	if(GUI.Button(new Rect(300, 100, 100, 100), "Stop")){
-	// 		Stop();
-	// 	}
-	// }
+//	 void OnGUI(){
+//	 	if(GUI.Button(new Rect(100, 100, 100, 100), "Start")){
+//	 		Play();
+//	 	}
+//	 	if(GUI.Button(new Rect(300, 100, 100, 100), "Stop")){
+//	 		Stop();
+//	 	}
+//	 }
 }

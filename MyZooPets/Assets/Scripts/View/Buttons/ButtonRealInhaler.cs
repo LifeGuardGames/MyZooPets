@@ -10,9 +10,9 @@ using System.Collections.Generic;
 
 public class ButtonRealInhaler : ButtonChangeScene {
 	
-	//---------------------------------------------------
-	// ProcessClick()
-	//---------------------------------------------------	
+	/// <summary>
+	/// Processes the click.
+	/// </summary>
 	protected override void ProcessClick() {
 		//Start tutorial if first time; otherwise, open inhaler game
 		//if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
@@ -23,27 +23,27 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			CheckToOpenInhaler();
 	}
 	
-	//---------------------------------------------------
-	// ShowCutscene()
-	//---------------------------------------------------	
-	private void ShowCutscene() {
-		GameObject resourceMovie = Resources.Load("Cutscene_Inhaler") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-	}
-	
-    private void CutsceneDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
-		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-		ProcessClick();
-    }	
+//	/// <summary>
+//	/// Shows the cutscene.
+//	/// </summary>
+//	private void ShowCutscene() {
+//		GameObject resourceMovie = Resources.Load("Cutscene_Inhaler") as GameObject;
+//		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+//		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
+//	}
+//	
+//    private void CutsceneDone(object sender, EventArgs args){
+//		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
+//		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
+//		ProcessClick();
+//    }	
 
 	//--------------------------------------------------
 	// Check if inhaler can be used at the current time. 
 	// Open if yes or show notification	
 	//--------------------------------------------------
 	private void CheckToOpenInhaler(){
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
+		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
 			OpenRealInhaler();
 		}else{
 			/////// Send Notication ////////
@@ -75,11 +75,10 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);			
 		}
 	}
-	
-	//---------------------------------------------------
-	// OpenRealInhaler()
-	// Also called from tutorial as a callback.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Opens the real inhaler.
+	/// </summary>
 	public void OpenRealInhaler(){
 		// use parent
 		base.ProcessClick();

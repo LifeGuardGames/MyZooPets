@@ -49,6 +49,9 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		RefreshLevelProgress();
 		RefreshUnlockPredictions(this, EventArgs.Empty);
+
+		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
+		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 	}
 
 	void OnDestroy(){
@@ -57,6 +60,9 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			
 		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
 		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
+
+		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
+		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 	
 	//---------------------------------------------------
@@ -66,33 +72,47 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		//stop countdown if game is lite version
 		// if(VersionManager.IsLite()) return;
 
-		// if the player can use their inhaler, there is no countdown, so bail out
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
-			// okay, so the player can use their inhaler...but were we previously counting down?
-			if (bCounting){
-				// if we were, stop
-				bCounting = false;
-				
-				// and then do a refresh check for the Missions 
-				WellapadMissionController.Instance.RefreshCheck();
-			}
-			return;
-		}
-		
-		// also bail if the wellpaid isn't open
-		if(WellapadUIManager.Instance.IsOpen() == false)
-			return;
-		
-		// if we make it here, we are counting down
-		bCounting = true;
-		
-		// otherwise the user CAN'T use their inhaler and the wellapad is open, so there is a countdown showing
-		DateTime next = PlayPeriodLogic.Instance.NextPlayPeriod;
-		DateTime now = LgDateTime.GetTimeNow();
-		TimeSpan left = next - now;
+//		// if the player can use their inhaler, there is no countdown, so bail out
+//		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
+//			// okay, so the player can use their inhaler...but were we previously counting down?
+//			if (bCounting){
+//				// if we were, stop
+//				bCounting = false;
+//				
+//				// and then do a refresh check for the Missions 
+//				WellapadMissionController.Instance.RefreshCheck();
+//			}
+//			return;
+//		}
+//		
+//		// also bail if the wellpaid isn't open
+//		if(WellapadUIManager.Instance.IsOpen() == false)
+//			return;
+//		
+//		// if we make it here, we are counting down
+//		bCounting = true;
+//		
+//		// otherwise the user CAN'T use their inhaler and the wellapad is open, so there is a countdown showing
+//		DateTime next = PlayPeriodLogic.Instance.NextPlayPeriod;
+//		DateTime now = LgDateTime.GetTimeNow();
+//		TimeSpan left = next - now;
+//		TimeSpan left = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
 		
 		// format the time remaining
-		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", left.Hours, left.Minutes, left.Seconds);
+//		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", left.Hours, left.Minutes, left.Seconds);
+//		
+//		// set the label
+//		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
+//		labelTimer.text = String.Format(strLabel, strTime);
+	}
+
+	private void OnNextPlayPeriod(object sender, EventArgs args){
+		WellapadMissionController.Instance.RefreshCheck();
+	}
+
+	private void OnUpdateTimeLeft(object sender, PlayPeriodEventArgs args){
+		TimeSpan timeLeft = args.TimeLeft;
+		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
 		
 		// set the label
 		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");

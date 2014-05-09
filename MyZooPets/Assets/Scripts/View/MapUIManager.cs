@@ -13,11 +13,17 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	
 	// back button for the chart
 	public GameObject goBackButton;
-	
+
+	public BoxCollider draggableCollider;	// The collider that is dragged, to be enabled only when zoomed in
+
+	protected override void _Start(){
+		draggableCollider.enabled = false;
+	}
+
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------
-	protected override void _OpenUI(){		
+	protected override void _OpenUI(){
 		// zoom into the chart
 		zoomHelper.Zoom();
 		
@@ -32,6 +38,7 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		
 		// enable the back button for the user to back out
 		goBackButton.SetActive(true);
+		draggableCollider.enabled = true;
 	}
 	
 	//---------------------------------------------------
@@ -52,5 +59,6 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		
 		// deactivate the back button
 		goBackButton.SetActive(false);
+		draggableCollider.enabled = false;
 	}	
 }

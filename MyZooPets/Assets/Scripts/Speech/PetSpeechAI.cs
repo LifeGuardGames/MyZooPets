@@ -11,10 +11,6 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private float timer = 0; 
     private float timeBeforeSpeech = 15; //30 seconds interval
 
-    void Awake(){
-        //load pet speech from xml
-    }
-
     void Start(){
         StatsController.OnHappyToSad += ShowHappyToSadMsg;
         StatsController.OnSadToHappy += ShowSadToHappyMsg;
@@ -55,21 +51,27 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 	public void ShowFireOrbMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemFireOrb");
+		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		              "OpenToSubCategoryItemsWithLockAndCallBack");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 
 	public void ShowInhalerMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 
 	public void ShowNoFireSickMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_SICK"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
+		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		              "OpenToSubCategoryItemsWithLockAndCallBack");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 
@@ -77,6 +79,9 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_HUNGRY"));
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
+		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		              "OpenToSubCategoryFoodWithLockAndCallBack");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 	
@@ -104,7 +109,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private void ShowSickToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
+        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
         msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryItemsWithLockAndCallBack");
@@ -114,7 +119,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private void ShowHealthyToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
+        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
         msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryItemsWithLockAndCallBack");

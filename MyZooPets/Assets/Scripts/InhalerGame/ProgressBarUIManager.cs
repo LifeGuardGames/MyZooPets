@@ -63,9 +63,10 @@ public class ProgressBarUIManager : MonoBehaviour {
             GameObject stepObject = sliderNodes[i].transform.Find("Sprite").gameObject;
 
             if (i <= stepCompleted - 1){
-                stepObject.GetComponent<UISprite>().spriteName="circleRed";
-                if(i == stepCompleted){
-                    stepObject.transform.parent.GetComponent<AnimationControl>().Play();
+				stepObject.GetComponent<UISprite>().spriteName="greenCircle";
+                if(i == stepCompleted - 1){
+//					Debug.Log(stepObject.transform.parent.name);
+//					stepObject.transform.parent.animation.Play();	// TODO i dont know why this isnt working...
                 }
             }
             else {

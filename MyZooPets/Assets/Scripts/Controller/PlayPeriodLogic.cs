@@ -4,43 +4,53 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayPeriodEventArgs : EventArgs{
-	public TimeSpan TimeLeft {get; set;}	
+	public TimeSpan TimeLeft { get; set; }	
 }
 
 public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	public static EventHandler<PlayPeriodEventArgs> OnUpdateTimeLeftTillNextPlayPeriod;
 	public static EventHandler<EventArgs> OnNextPlayPeriod;
-
 	public const float PLAYPERIOD_LENGTH = 12f;
-
-	private bool isCountingDown;
+	private bool isCountingDown = false;
 
 	//Return the next time the user can collect bonuses
 	public DateTime NextPlayPeriod{
-		get{ return DataManager.Instance.GameData.Calendar.NextPlayPeriod;}
+		get{ 
+			return DataManager.Instance.GameData.Calendar.NextPlayPeriod;
+		}
+	}
+
+	/// <summary>
+	/// Gets the total time remain.
+	/// </summary>
+	/// <value>The total time remain.</value>
+	public TimeSpan TotalTimeRemain{
+		get{
+			return DataManager.Instance.GameData.Calendar.GetTotalTimeRemain();
+		}
 	}
 
 	//Check if the user can play the inhaler game
 	public bool CanUseRealInhaler(){
 
-			DateTime now = LgDateTime.GetTimeNow();
-			bool retVal = now >= NextPlayPeriod;
+		DateTime now = LgDateTime.GetTimeNow();
+		bool retVal = now >= NextPlayPeriod;
 			
-			// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
-			bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-			bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
-			if(!tutsDone && inhalerTutDone)
-				retVal = false;
+		// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
+		bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
+		if(!tutsDone && inhalerTutDone)
+			retVal = false;
 			
-			return retVal;
+		return retVal;
 
-	} 
+	}
 
 	void Update(){
 
 		if(CanUseRealInhaler()){
 			// okay, so the player can use their inhaler...but were we previously counting down?
-			if (isCountingDown){
+			if(isCountingDown){
 				// if we were, stop
 				isCountingDown = false;
 				
@@ -151,6 +161,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 
 		//update next playperiod in DM so it gets serialized
 		DataManager.Instance.GameData.Calendar.NextPlayPeriod = nextPlayPeriod;
+
+		TimeSpan totalTimeRemainTillNextPlayPeriod = nextPlayPeriod - LgDateTime.GetTimeNow();
+		DataManager.Instance.GameData.Calendar.SetTotalTimeRemain(totalTimeRemainTillNextPlayPeriod);
 	}
 	
 	/// <summary>

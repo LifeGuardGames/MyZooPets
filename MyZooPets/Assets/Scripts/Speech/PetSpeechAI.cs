@@ -6,7 +6,7 @@ using System.Collections;
 // PetSpeechAI
 // Controls when the pet will speak
 //---------------------------------------------------
-public class PetSpeechAI : MonoBehaviour{
+public class PetSpeechAI : Singleton<PetSpeechAI>{
     private bool enableAutoSpeech = false;
     private float timer = 0; 
     private float timeBeforeSpeech = 15; //30 seconds interval
@@ -52,6 +52,34 @@ public class PetSpeechAI : MonoBehaviour{
         }
     }
 
+	public void ShowFireOrbMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void ShowInhalerMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER"));
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void ShowNoFireSickMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_SICK"));
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonItems");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void ShowNoFireHungryMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_HUNGRY"));
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+	
     private void StopAutoSpeech(object sender, EventArgs args){
         enableAutoSpeech = false;
         timer = 0;

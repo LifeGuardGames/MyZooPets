@@ -62,12 +62,20 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 	/// <param name="args">Arguments.</param>
 	private void OnUpdateTimeLeft(object sender, PlayPeriodEventArgs args){
 		TimeSpan timeLeft = args.TimeLeft;
-		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+		string displayTime = "";
+
+		if(timeLeft.Hours > 0)
+			displayTime = string.Format("{0}H {1}M", timeLeft.Hours, timeLeft.Minutes);
+		else if(timeLeft.Minutes > 0)
+			displayTime = string.Format("{0}M {1}S", timeLeft.Minutes, timeLeft.Seconds);
+		else
+			displayTime = string.Format("{0}S", timeLeft.Seconds);
 		
 		// set the label
-		coolDownLabel.text = strTime;
+		coolDownLabel.text = displayTime;
 
-		float completePercentage = (PlayPeriodLogic.PLAYPERIOD_LENGTH - timeLeft.Hours) / PlayPeriodLogic.PLAYPERIOD_LENGTH;
+		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemain;
+		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
 		coolDownSlider.sliderValue = completePercentage;
 	}
 }

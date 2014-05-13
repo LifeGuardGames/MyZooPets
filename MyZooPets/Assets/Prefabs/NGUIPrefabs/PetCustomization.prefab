@@ -168,7 +168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100020
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,6 +259,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400030}
+  - 114: {fileID: 11400064}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400058}
   - 114: {fileID: 11400060}
@@ -569,7 +570,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 364.943451, z: -5.00000191}
+  m_LocalPosition: {x: -1, y: 366.671478, z: -5.00000191}
   m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 400030}
@@ -1276,13 +1277,13 @@ MonoBehaviour:
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
   mText: New pet
   mMaxLineWidth: 300
-  mMaxLineHeight: 70
+  mMaxLineHeight: 60
   mEncoding: 1
   mMaxLineCount: 0
   mPassword: 0
   mShowLastChar: 0
   mEffectStyle: 1
-  mEffectColor: {r: .252082109, g: .544117689, b: .11202424, a: 1}
+  mEffectColor: {r: .0509803928, g: 0, b: .376470596, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 6, y: 8}
   mShrinkToFit: 1
@@ -1354,7 +1355,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: banner
+  mSpriteName: bannerBlue
   mFillCenter: 1
   mType: 1
   mFillDirection: 4
@@ -1461,6 +1462,21 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43d2e34060b1e4cd3a08359e7644ff23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spotLight: {fileID: 0}
+  petSelectionOption: {fileID: 0}
+  selectionGrid: {fileID: 0}
+  scriptTransition: {fileID: 0}
 --- !u!114 &11400066
 MonoBehaviour:
   m_ObjectHideFlags: 1

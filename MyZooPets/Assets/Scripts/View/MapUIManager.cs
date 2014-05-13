@@ -16,6 +16,12 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 
 	public BoxCollider draggableCollider;	// The collider that is dragged, to be enabled only when zoomed in
 
+	public Color bedroomActiveColor;
+	public Color bedroomInactiveColor;
+
+	public Color yardActiveColor;
+	public Color yardInactiveColor;
+
 	protected override void _Start(){
 		draggableCollider.enabled = false;
 	}

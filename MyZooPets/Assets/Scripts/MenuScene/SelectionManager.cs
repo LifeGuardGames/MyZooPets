@@ -1,26 +1,26 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class SelectionManager : Singleton<SelectionManager> {
 
-    public string CurrentPetID{
-        get{
-            return DataManager.Instance.CurrentPetID;
-        }
-        set{
-            DataManager.Instance.CurrentPetID = value;
-        }
-    }
+//    public string CurrentPetID{
+//        get{
+//            return DataManager.Instance.CurrentPetID;
+//        }
+//        set{
+//            DataManager.Instance.CurrentPetID = value;
+//        }
+//    }
 
-    public int NumOfPets{
-        get{
-            return DataManager.Instance.NumOfPets;
-        }
-    }
+//    public int NumOfPets{
+//        get{
+//            return DataManager.Instance.NumOfPets;
+//        }
+//    }
 
     //Return PetMenuInfo serialized data
-    public Dictionary<string, MutableData_PetMenuInfo> PetMenuInfo{
+    public MutableDataPetMenuInfo PetMenuInfo{
         get{
             return DataManager.Instance.MenuSceneData;
         }
@@ -38,9 +38,9 @@ public class SelectionManager : Singleton<SelectionManager> {
         DataManager.Instance.LoadGameData();
     }
 
-    public void RemovePetData(string petID){
-        LgNotificationServices.RemoveIconBadgeNumber(); //make sure no notification exists if pet data is removed
-        DataManager.Instance.RemovePetData(petID);
-    }
+//    public void RemovePetData(string petID){
+//        LgNotificationServices.RemoveIconBadgeNumber(); //make sure no notification exists if pet data is removed
+//        DataManager.Instance.RemovePetData(petID);
+//    }
 
 }

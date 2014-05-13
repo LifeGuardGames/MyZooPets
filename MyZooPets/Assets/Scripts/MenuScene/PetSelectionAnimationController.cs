@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,13 +7,13 @@ public class PetSelectionAnimationController : LWFAnimator {
     public string animType;
 
     protected override void Start(){
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = DataManager.Instance.MenuSceneData;
-        string petID = this.transform.parent.parent.parent.name;
-        if(petMenuInfoDict.ContainsKey(petID)){
-            string speciesColor = petMenuInfoDict[petID].PetSpecies + petMenuInfoDict[petID].PetColor;
+        	MutableDataPetMenuInfo petMenuInfo = DataManager.Instance.MenuSceneData;
+//        string petID = this.transform.parent.parent.parent.name;
+//        if(petMenuInfoDict.ContainsKey(petID)){
+            string speciesColor = petMenuInfo.PetSpecies + petMenuInfo.PetColor;
             // showCaseAnimator.GetComponent<LWFAnimator>().animName = speciesColor; 
             animName = speciesColor;
-        }
+//        }
 
         folderPath = "LWF/" + animType + "/" + animName + "/";
         base.Start();

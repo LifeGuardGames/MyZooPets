@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,9 +26,9 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // a new pet or load existing game data
     //---------------------------------------------------
     public void PetSelected(GameObject selectedPetGO){
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
-        selectedPetID = selectedPetGO.transform.parent.name;
-        bool isHatched = petMenuInfoDict.ContainsKey(selectedPetID);
+        MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
+//        selectedPetID = selectedPetGO.transform.parent.name;
+        bool isHatched = petMenuInfo != null;
 
         //probably shoudn't use spot light right away. should toggle spot light
         //after some logic check for the data
@@ -39,7 +39,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             HideSelectionOption();
 
             //Open CustomizationUIManager to create/initiate new pet game data
-            SelectionManager.Instance.CurrentPetID = selectedPetID;
+//            SelectionManager.Instance.CurrentPetID = selectedPetID;
             CustomizationUIManager.Instance.selectedEgg = selectedPetGO;
             CustomizationUIManager.Instance.OpenUI();
         }else{
@@ -66,47 +66,47 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         ClickManager.Instance.Lock(UIModeTypes.IntroComic);
 
         //Load game data only if the selected pet is different from the current pet
-        if(SelectionManager.Instance.CurrentPetID != selectedPetID){
-            SelectionManager.Instance.CurrentPetID = selectedPetID;
+//        if(SelectionManager.Instance.CurrentPetID != selectedPetID){
+//            SelectionManager.Instance.CurrentPetID = selectedPetID;
             DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
             SelectionManager.Instance.LoadPetGameData();
-        }else{
-            if(SelectionManager.Instance.IsGameDataLoaded)
-                LoadScene();
-        }
+//        }else{
+//            if(SelectionManager.Instance.IsGameDataLoaded)
+//                LoadScene();
+//        }
     }
 
     public void DeleteGameData(){
         //need to do double confirmation first
-        PopupNotificationNGUI.HashEntry button1Function = delegate(){
-            HideSelectionOption();
-
-            //Delete game data 
-            SelectionManager.Instance.RemovePetData(selectedPetID);
-
-            //Update UI
-            ToggleSpotLight(false);
-            RefreshUI();
-        };
-
-        PopupNotificationNGUI.HashEntry button2Function = delegate(){
-        };
-
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
-        string petName = "";
-        if(petMenuInfoDict.ContainsKey(selectedPetID))
-            petName = petMenuInfoDict[selectedPetID].PetName;
-
-        string deleteMessage = String.Format(Localization.Localize("DELETE_CONFIRM"),
-            petName, StringUtils.FormatStringPossession(petName));
-
-        Hashtable notificationEntry = new Hashtable();
-        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
-        notificationEntry.Add(NotificationPopupFields.Message, deleteMessage);
-        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-        notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-
-        NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//        PopupNotificationNGUI.HashEntry button1Function = delegate(){
+//            HideSelectionOption();
+//
+//            //Delete game data 
+//            SelectionManager.Instance.RemovePetData(selectedPetID);
+//
+//            //Update UI
+//            ToggleSpotLight(false);
+//            RefreshUI();
+//        };
+//
+//        PopupNotificationNGUI.HashEntry button2Function = delegate(){
+//        };
+//
+//        Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+//        string petName = "";
+//        if(petMenuInfoDict.ContainsKey(selectedPetID))
+//            petName = petMenuInfoDict[selectedPetID].PetName;
+//
+//        string deleteMessage = String.Format(Localization.Localize("DELETE_CONFIRM"),
+//            petName, StringUtils.FormatStringPossession(petName));
+//
+//        Hashtable notificationEntry = new Hashtable();
+//        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+//        notificationEntry.Add(NotificationPopupFields.Message, deleteMessage);
+//        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+//        notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+//
+//        NotificationUIManager.Instance.AddToQueue(notificationEntry);
     }
 
     //---------------------------------------------------
@@ -130,7 +130,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // Turn egg wiggle animation on/off
     //---------------------------------------------------
     public void ToggleEggAnimation(bool isOn){
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+        Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
 
         foreach(Transform child in selectionGrid.transform){
             string petID = child.name;
@@ -157,7 +157,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }
         }
 
-        Dictionary<string, MutableData_PetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+        Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
 
         foreach(Transform petSelectionTransform  in selectionGrid.transform){
             GameObject petSelectionGO = petSelectionTransform.gameObject;

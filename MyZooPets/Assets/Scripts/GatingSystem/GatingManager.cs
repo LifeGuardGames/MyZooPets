@@ -314,7 +314,9 @@ public class GatingManager : Singleton<GatingManager>{
 			if(PlayPeriodLogic.Instance.CanUseRealInhaler())
 				PetSpeechAI.Instance.ShowInhalerMsg();
 			else
-				PetSpeechAI.Instance.ShowFireOrbMsg();
+				//TODO: enable FireOrbMsg once it's ready to integrate
+				PetSpeechAI.Instance.ShowInhalerMsg();
+//				PetSpeechAI.Instance.ShowFireOrbMsg();
 			// out of flame charges
 //			strKey = "NO_FIRE_INHALER";
 //			strImage = "itemInhalerMain";

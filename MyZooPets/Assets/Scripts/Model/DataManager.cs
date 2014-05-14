@@ -139,7 +139,7 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-			}
+			}    
 		}
 	}
 

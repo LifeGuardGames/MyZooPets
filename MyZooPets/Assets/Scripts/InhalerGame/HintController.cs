@@ -6,32 +6,28 @@ using System.Collections;
     This generic class controls the hint arrows and message for inhaler parts
 */
 public class HintController : MonoBehaviour {
+//	static bool isPlayingAnimation = false;
+	static int currentStepAux = 1;
+
     public bool startHidden = true; //Hide hint when game loads
     public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
-    public GameObject finger; //Game object that contains the hint animation
+	public Animator fingerAnimator; //Animator that contains the hint animation
+	private bool animatorPlaying = false;
+
 	public string clipToPlay; //The animation that you want to play
 	public GameObject outlineTexture;	// Texture of outline if applicable
 	public GameObject textObject;	// NGUI label of the text
-	public GameObject customPlayFinger;	// Used for pinch, just enable the gameobject
-	
-	private Animation fingerAnimation;
 
     void Awake(){
-		if(finger != null)
-			fingerAnimation = finger.GetComponent<Animation>();
-
         if(startHidden){
-            if(finger != null)
-				finger.renderer.enabled = false;
+			if(fingerAnimator != null)
+				fingerAnimator.gameObject.SetActive(false);
 			
 			if(outlineTexture != null)
 				outlineTexture.SetActive(false);
 			
 			if(textObject != null)
 				textObject.SetActive(false);
-			
-			if(customPlayFinger != null)
-				customPlayFinger.SetActive(false);
 		}
 			
         InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
@@ -44,41 +40,52 @@ public class HintController : MonoBehaviour {
     //Event Listener. Check if hint for the next step is necessary and disable hint for
     //current step 
     private void CheckAndEnableHint(object sender, EventArgs args){
-        if(showOnStep == InhalerLogic.Instance.CurrentStep && 
-            InhalerGameUIManager.Instance.ShowHint){
-            EnableHint();            
-        }else{
-            DisableHint();
-        }
+
+		// Check if the event sender is from nextStep, need different behavior
+		// HACK Hacky shit right here... contact sean. Need to change
+		if(args is InhalerNextStepEventArgs && !InhalerGameUIManager.Instance.tutOn){
+			DisableHint(false);
+		}
+		else{
+			bool isSkipAnimation = true;
+			// Reset the animation if there current animation is not valid
+			if(currentStepAux != InhalerLogic.Instance.CurrentStep){
+				isSkipAnimation = false;
+				currentStepAux = InhalerLogic.Instance.CurrentStep;
+			}
+
+			// NOTE: Since the animator is shared thru all objects, we want to take care not to overwrite with separate scripts
+			// The outline texture and the text object can be treated normally
+			DisableHint(isSkipAnimation);
+
+			if(InhalerGameUIManager.Instance.ShowHint && showOnStep == InhalerLogic.Instance.CurrentStep){
+	            EnableHint();
+			}
+		}
     }
 
-    //Turn off hint 
-    public void DisableHint(){
-		if(fingerAnimation != null){
-			if(fingerAnimation.IsPlaying(clipToPlay))
-	            fingerAnimation.Stop(clipToPlay);
-			
-        //If no animation is currently playing turn the renderer off so no hints will be in the game
-        if(!fingerAnimation.isPlaying)
-            finger.renderer.enabled = false;
+    // Turn off hint
+	// NOTE: Since the animator is shared thru all objects, we want to take care not to overwrite with separate scripts
+	// The outline texture and the text object can be treated normally
+    public void DisableHint(bool skipAnimation){
+		if(!skipAnimation){
+			if(fingerAnimator != null){
+				fingerAnimator.gameObject.SetActive(false);
+			}
 		}
-		
+
 		if(outlineTexture != null)
 				outlineTexture.SetActive(false);
 		
 		if(textObject != null)
 				textObject.SetActive(false);
-		
-		if(customPlayFinger != null)
-				customPlayFinger.SetActive(false);
     }
 
     //Turn on hint
     private void EnableHint(){
-		if(finger != null){
-	        finger.renderer.enabled = true;
-            finger.transform.localScale = new Vector3(1, 1, 1);
-			fingerAnimation.Play(clipToPlay);
+		if(fingerAnimator != null){
+			fingerAnimator.gameObject.SetActive(true);
+			fingerAnimator.Play(clipToPlay);
 		}
 
 		if(outlineTexture != null)
@@ -86,8 +93,5 @@ public class HintController : MonoBehaviour {
 		
 		if(textObject != null)
 				textObject.SetActive(true);
-		
-		if(customPlayFinger != null)
-				customPlayFinger.SetActive(true);
     }
 }

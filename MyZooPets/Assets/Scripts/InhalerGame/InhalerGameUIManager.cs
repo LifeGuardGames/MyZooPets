@@ -150,7 +150,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
             ResetHintTimer();
 
         if(OnShowHint != null)
-            OnShowHint(this, EventArgs.Empty);
+			OnShowHint(this, new InhalerNextStepEventArgs());
     }
 
     //Event listener. Listens to game over message. Play fire animation 
@@ -191,4 +191,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
         Invoke("QuitInhalerGame", 2.0f);
     }
+}
+
+/// <summary>
+/// Custom argument to differentiate between event arguments.
+/// This should only be sent onNextStep!
+/// </summary>
+public class InhalerNextStepEventArgs : EventArgs
+{
 }

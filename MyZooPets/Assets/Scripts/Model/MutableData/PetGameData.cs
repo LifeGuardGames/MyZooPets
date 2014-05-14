@@ -53,5 +53,6 @@ public class PetGameData{
 	//---------------------------------------------------	
 	public void VersionCheck() {
 		GatingProgress.VersionCheck();
+		Calendar.VersionCheck();
 	}
 }

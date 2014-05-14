@@ -28,9 +28,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	// Sprite set color on max level
 	public UISprite startCircle;	// For reference
 	public UISprite endCircle;		// For setting
-	
-	// bit of a hack - if this is true, the countdown was counting down
-	private bool bCounting = false;
 
 	void Awake(){
 		//pet's name
@@ -63,47 +60,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
-	}
-	
-	//---------------------------------------------------
-	// Update()
-	//---------------------------------------------------
-	void Update() {
-		//stop countdown if game is lite version
-		// if(VersionManager.IsLite()) return;
-
-//		// if the player can use their inhaler, there is no countdown, so bail out
-//		if(PlayPeriodLogic.Instance.CanUseRealInhaler){
-//			// okay, so the player can use their inhaler...but were we previously counting down?
-//			if (bCounting){
-//				// if we were, stop
-//				bCounting = false;
-//				
-//				// and then do a refresh check for the Missions 
-//				WellapadMissionController.Instance.RefreshCheck();
-//			}
-//			return;
-//		}
-//		
-//		// also bail if the wellpaid isn't open
-//		if(WellapadUIManager.Instance.IsOpen() == false)
-//			return;
-//		
-//		// if we make it here, we are counting down
-//		bCounting = true;
-//		
-//		// otherwise the user CAN'T use their inhaler and the wellapad is open, so there is a countdown showing
-//		DateTime next = PlayPeriodLogic.Instance.NextPlayPeriod;
-//		DateTime now = LgDateTime.GetTimeNow();
-//		TimeSpan left = next - now;
-//		TimeSpan left = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
-		
-		// format the time remaining
-//		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", left.Hours, left.Minutes, left.Seconds);
-//		
-//		// set the label
-//		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
-//		labelTimer.text = String.Format(strLabel, strTime);
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){

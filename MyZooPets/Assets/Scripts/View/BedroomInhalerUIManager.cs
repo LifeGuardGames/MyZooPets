@@ -78,4 +78,5 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
 		coolDownSlider.sliderValue = completePercentage;
 	}
+	
 }

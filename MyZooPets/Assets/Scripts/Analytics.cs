@@ -280,4 +280,9 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("Button:StoreItemShortCut");
     }
 
+	public void UserAge(int age){
+		if(isAnalyticsEnabled)
+			GA.API.Design.NewEvent("UserInfo:Age", (float) age);
+	}
+
 }

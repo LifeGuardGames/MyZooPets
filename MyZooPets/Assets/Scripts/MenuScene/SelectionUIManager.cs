@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject spotLight; //spotlight to shine on the egg when chosen	
-    public GameObject petSelectionOption; //reference to UI element 
+//    public GameObject petSelectionOption; //reference to UI element 
     public GameObject selectionGrid;
-	public SceneTransition scriptTransition; //transition
 	
-    private string selectedPetID;
+//    private string selectedPetID;
 
     void Awake(){
         Input.multiTouchEnabled = false;
@@ -27,7 +26,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     //---------------------------------------------------
     public void PetSelected(GameObject selectedPetGO){
         MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-//        selectedPetID = selectedPetGO.transform.parent.name;
         bool isHatched = petMenuInfo != null;
 
         //probably shoudn't use spot light right away. should toggle spot light
@@ -39,25 +37,24 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             HideSelectionOption();
 
             //Open CustomizationUIManager to create/initiate new pet game data
-//            SelectionManager.Instance.CurrentPetID = selectedPetID;
             CustomizationUIManager.Instance.selectedEgg = selectedPetGO;
             CustomizationUIManager.Instance.OpenUI();
         }else{
             //open up pet start panel
-            ShowSelectionOption();
+			LoadGame();
 
         }
     }
 
     private void ShowSelectionOption(){
-        petSelectionOption.GetComponent<TweenToggleDemux>().Show();
+//        petSelectionOption.GetComponent<TweenToggleDemux>().Show();
     }
 
     private void HideSelectionOption(){
-        TweenToggleDemux tweenToggleDemux = petSelectionOption.GetComponent<TweenToggleDemux>();
-
-        if(tweenToggleDemux.IsShowing)
-            tweenToggleDemux.Hide();
+//        TweenToggleDemux tweenToggleDemux = petSelectionOption.GetComponent<TweenToggleDemux>();
+//
+//        if(tweenToggleDemux.IsShowing)
+//            tweenToggleDemux.Hide();
     }
 
     public void LoadGame(){
@@ -65,15 +62,9 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         //Lock it while loading
         ClickManager.Instance.Lock(UIModeTypes.IntroComic);
 
-        //Load game data only if the selected pet is different from the current pet
-//        if(SelectionManager.Instance.CurrentPetID != selectedPetID){
-//            SelectionManager.Instance.CurrentPetID = selectedPetID;
-            DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
-            SelectionManager.Instance.LoadPetGameData();
-//        }else{
-//            if(SelectionManager.Instance.IsGameDataLoaded)
-//                LoadScene();
-//        }
+        //Load game data 
+        DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
+        SelectionManager.Instance.LoadPetGameData();
     }
 
     public void DeleteGameData(){
@@ -130,11 +121,10 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // Turn egg wiggle animation on/off
     //---------------------------------------------------
     public void ToggleEggAnimation(bool isOn){
-        Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+        MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
 
         foreach(Transform child in selectionGrid.transform){
-            string petID = child.name;
-            bool isHatched = petMenuInfoDict.ContainsKey(petID);
+            bool isHatched = petMenuInfo != null;
 
             if(!isHatched){
                 Transform eggParent = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
@@ -157,12 +147,12 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }
         }
 
-        Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+        MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
 
         foreach(Transform petSelectionTransform  in selectionGrid.transform){
             GameObject petSelectionGO = petSelectionTransform.gameObject;
             string petID = petSelectionTransform.name;
-            bool isHatched = petMenuInfoDict.ContainsKey(petID);
+            bool isHatched = petMenuInfo != null;
 
             //Turn show case animation on or off
             if(!isHatched){
@@ -185,7 +175,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 
                 menuScenePetGO.name = "MenuScenePet";
                 UILabel petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<UILabel>();
-                petNameLabel.text = petMenuInfoDict[petID].PetName;
+                petNameLabel.text = petMenuInfo.PetName;
 
                 // lwfObject.transform.localScale = menuScenePetPrefab.transform.localScale;
                 menuScenePetGO.GetComponent<LgButtonMessage>().target = this.gameObject;

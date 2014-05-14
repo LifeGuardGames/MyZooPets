@@ -64,13 +64,14 @@ GameObject:
   - 114: {fileID: 11400010}
   - 114: {fileID: 11400054}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400036}
   m_Layer: 10
   m_Name: ChooseLanguagesPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100008
 GameObject:
   m_ObjectHideFlags: 1
@@ -360,7 +361,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 0, z: -100}
+  m_LocalPosition: {x: -.5, y: 0, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400014}
@@ -648,6 +649,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 8
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 0}
   functionName: CloseUI
@@ -897,6 +899,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: introSelectLanguage
+  buttonName: 
   bCheckClickManager: 0
   strLanguageKey: English
 --- !u!114 &11400030
@@ -988,6 +991,19 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d1f44153dc848dbbfcd209bb753aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockGUI: 0
+  settingsPanel: {fileID: 100006}
 --- !u!114 &11400042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1191,6 +1207,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: introSelectLanguage
+  buttonName: 
   bCheckClickManager: 0
   strLanguageKey: Spanish
 --- !u!114 &11400136

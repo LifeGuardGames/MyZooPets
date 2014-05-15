@@ -206,9 +206,6 @@ public class DataManager : Singleton<DataManager>{
 
 		//Set single mode to true
 		PlayerPrefs.SetInt("IsSinglePetMode", 1);
-
-		string savedJson = PlayerPrefs.GetString("GameData", "");
-		Debug.Log(savedJson);
 	}
 
 	/// <summary>
@@ -228,8 +225,6 @@ public class DataManager : Singleton<DataManager>{
 				existingData.Add(newGameData);
 			}
 		}
-
-		Debug.Log("deserialized all existing data");
 		
 		//find the data with the highest level and use that one
 		Level highestLevel = Level.Level1;
@@ -244,7 +239,6 @@ public class DataManager : Singleton<DataManager>{
 			}
 		}
 
-		Debug.Log("Found data w the highest level");
 		
 		//serialize the game data into a new player pref
 		if(gameDataToKeep != null)
@@ -255,7 +249,6 @@ public class DataManager : Singleton<DataManager>{
 		if(!String.IsNullOrEmpty(serializedString))
 			PlayerPrefs.SetString("GameData", serializedString);
 
-		Debug.Log("serialized to new player pref");
 		//delete everything from the old player pref. ex Pet0_GameData
 		for(int index=0; index < 3; index++){
 			PlayerPrefs.DeleteKey("Pet" + index + "_GameData");

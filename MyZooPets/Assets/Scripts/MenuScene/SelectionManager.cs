@@ -34,9 +34,17 @@ public class SelectionManager : Singleton<SelectionManager> {
         }
     }
 
+	public bool IsFirstTime{
+		get{
+			return DataManager.Instance.IsFirstTime;
+		}
+	}
+
     public void LoadPetGameData(){
         DataManager.Instance.LoadGameData();
     }
+
+
 
 //    public void RemovePetData(string petID){
 //        LgNotificationServices.RemoveIconBadgeNumber(); //make sure no notification exists if pet data is removed

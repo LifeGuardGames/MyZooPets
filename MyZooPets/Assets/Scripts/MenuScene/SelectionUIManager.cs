@@ -7,8 +7,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject spotLight; //spotlight to shine on the egg when chosen	
 //    public GameObject petSelectionOption; //reference to UI element 
     public GameObject selectionGrid;
-	
 //    private string selectedPetID;
+
 
     void Awake(){
         Input.multiTouchEnabled = false;
@@ -31,7 +31,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         //probably shoudn't use spot light right away. should toggle spot light
         //after some logic check for the data
         ToggleEggAnimation(false);
-        ToggleSpotLight(true, selectedPetGO);
+//        ToggleSpotLight(true, selectedPetGO);
 
         if(!isHatched){
             HideSelectionOption();
@@ -104,17 +104,17 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // ToggleSpotLight()
     // Turn spot light on the egg or pet animation off
     //---------------------------------------------------
-    public void ToggleSpotLight(bool isOn, GameObject selectedGO = null){
-        if(isOn){
-            spotLight.SetActive(true);
-            Vector3 selectedPos = selectedGO.transform.position;
-            //offset is hardcoded
-            spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotLight.transform.position.z);
-        }
-        else{
-            spotLight.SetActive(false);
-        }
-    }
+//    public void ToggleSpotLight(bool isOn, GameObject selectedGO = null){
+//        if(isOn){
+//            spotLight.SetActive(true);
+//            Vector3 selectedPos = selectedGO.transform.position;
+//            //offset is hardcoded
+//            spotLight.transform.position = new Vector3(selectedPos.x, selectedPos.y, spotLight.transform.position.z);
+//        }
+//        else{
+//            spotLight.SetActive(false);
+//        }
+//    }
 
     //---------------------------------------------------
     // ToggleEggAnimation()

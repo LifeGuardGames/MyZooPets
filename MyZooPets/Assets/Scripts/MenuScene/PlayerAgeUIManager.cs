@@ -9,6 +9,7 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 	public UISlider slider;
 	public UILabel label;
 	public TweenToggle finishButtonTweenToggle;
+	public ParticleSystemController leafParticle;
 
 	private int age;
 	private bool hasMovedSlider = false;
@@ -51,10 +52,12 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 	}
 
 	protected override void _OpenUI(){
+		leafParticle.Stop();
 		gameObject.GetComponent<TweenToggle>().Show();
 	}
 
 	protected override void _CloseUI(){
+		leafParticle.Play();
 		gameObject.GetComponent<TweenToggle>().Hide();
 	}
 }

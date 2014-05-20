@@ -11,6 +11,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	public Camera NGUICamera;
     public SceneTransition scriptTransition;
     public ButtonSetHighlight buttonHighLight;
+	public ParticleSystemController leafParticle;
 
     private string petColor = "OrangeYellow"; //Default pet color
     private string petName; //Default pet name
@@ -68,6 +69,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
     private void ShowChooseGUI(){
+		SelectionUIManager.Instance.ToggleEggAnimation(true);
+		leafParticle.Stop();
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
 
         //find out what color is the egg and change the color selection button
@@ -102,8 +105,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         //since we turn on spotlight and turn off animation for customization UI
         //need to reverse them 
         else{
+			leafParticle.Play();
             SelectionUIManager.Instance.ToggleEggAnimation(true);
-            SelectionUIManager.Instance.ToggleSpotLight(false);
+//            SelectionUIManager.Instance.ToggleSpotLight(false);
         }
     }
 	

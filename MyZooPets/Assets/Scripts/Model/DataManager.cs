@@ -271,18 +271,27 @@ public class DataManager : Singleton<DataManager>{
 			new Dictionary<string, MutableDataPetMenuInfo>();
 		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
 		
-		if(!String.IsNullOrEmpty(jsonString))
+		if(!String.IsNullOrEmpty(jsonString)){
 			oldMenuSceneData = JSON.Instance.ToObject<Dictionary<string, MutableDataPetMenuInfo>>(jsonString);
-		
-		foreach(KeyValuePair<string, MutableDataPetMenuInfo> petMenuInfo in oldMenuSceneData){
-			if(petMenuInfo.Key != petIDToKeep){
-				oldMenuSceneData.Remove(petMenuInfo.Key);
-			}else{
-				menuSceneData = petMenuInfo.Value;
+			List<string> keysToBeRemoved = new List<string>();
+
+			foreach(KeyValuePair<string, MutableDataPetMenuInfo> petMenuInfo in oldMenuSceneData){
+				if(petMenuInfo.Key != petIDToKeep){
+					keysToBeRemoved.Add(petMenuInfo.Key);
+				}else{
+					menuSceneData = petMenuInfo.Value;
+				}
 			}
+
+			//remove unwanted data
+			foreach(string key in keysToBeRemoved){
+				if(oldMenuSceneData.ContainsKey(key))
+					oldMenuSceneData.Remove(key);
+			}
+			
+			SaveMenuSceneData();
 		}
-		
-		SaveMenuSceneData();
+
 	}
 
 

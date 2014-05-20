@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ public struct ItemBoxVariation {
 		// loop through each loot table and get the item and quantity from that loot table
 		foreach ( string strLootTableKey in listLootTables ) {
 			// get the loot table from the id
-			Data_LootTable dataTable = DataLoader_LootTables.GetLootTable( strLootTableKey );
+			Data_LootTable dataTable = DataLoaderLootTables.GetLootTable( strLootTableKey );
 			
 			// null check
 			if ( dataTable != null ) {

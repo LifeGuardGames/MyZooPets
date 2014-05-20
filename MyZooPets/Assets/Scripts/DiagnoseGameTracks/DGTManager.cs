@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,17 +41,96 @@ public class DGTManager : MinigameManager<DGTManager>{
 	public GameObject GetArrow(){
 		return goArrow;
 	}
-
-	private Vector3 GetSpawnLocation(){
-		// the location is in viewport coordinates, so translate it
-		Vector3 vRealLoc = CameraManager.Instance.cameraMain.ViewportToWorldPoint(vSpawnLocation);
-		return vRealLoc;	
-	}
-
+		
 	public float GetSpeed(bool bMax = false){
 		float fSpeed = bMax ? fMaxSpeed : fCurrentSpeed;
 		
 		return fSpeed;	
+	}
+
+	//---------------------------------------------------
+	// GetSelectedZone()
+	//---------------------------------------------------	
+	public GameObject GetSelectedZone(){
+		return goSelectedZone;	
+	}
+
+	//---------------------------------------------------
+	// IsZoneLocked()
+	// A zone may be locked (user can't select it) if
+	// the tutorial is going on.
+	//---------------------------------------------------		
+	public bool IsZoneLocked(AsthmaStage eZoneStage){
+		bool bLocked = false;
+		
+		if(IsTutorialRunning()){
+			DGTTutorial tutorial = GetTutorial() as DGTTutorial;
+			AsthmaStage eCurrentStage = tutorial.GetCurrentStage();
+			bLocked = eCurrentStage != eZoneStage;
+		}
+		
+		return bLocked;
+	}
+
+	//---------------------------------------------------
+	// SetSelectedZone()
+	// Sets the currently selected zone to the incoming
+	// goZone.
+	//---------------------------------------------------		
+	public void SetSelectedZone(GameObject goZone){
+		if(goZone == goSelectedZone)
+			return;
+		
+		// if a tutorial is happening, just set the speed to starting speed...this is in case the track was stopped
+		// because the player didn't switch the tracks quick enough
+		if(IsTutorialRunning())
+			SetTrackSpeed(fStartingSpeed);
+		
+		// the zone changed, so play a sound (only if there was a valid zone before though)
+		if(goSelectedZone != null)
+			AudioManager.Instance.PlayClip("clinicSwitchTracks");		
+		
+		// change the zone
+		goSelectedZone = goZone;
+		
+		// update the graphics indicating which zone is selected
+		UpdatePathVisuals();
+	}
+
+	//---------------------------------------------------
+	// CharacterScored()
+	// When a character reaches a zone (regardless of if
+	// it's the correct zone).
+	//---------------------------------------------------		
+	public void CharacterScored(object sender, CharacterScoredEventArgs args){	
+		// if the game is over, don't do anything
+		if(GetGameState() == MinigameStates.GameOver)
+			return;
+		
+		// get relevant variables from the args
+		DGTCharacter characterScored = args.character;
+		DGTZone zoneTarget = args.zone;
+		
+		// get the asthma stages of the character and variable
+		AsthmaStage eZoneStage = zoneTarget.GetStage();
+		AsthmaStage eCharStage = characterScored.GetStage();
+		
+		if(eZoneStage == eCharStage)
+			CharacterScoredRight(characterScored, zoneTarget);
+		else 
+			CharacterScoredWrong(characterScored, zoneTarget);	
+		
+		// regardless of whether the character scored right or wrong, show a poof FX
+		Vector3 vPosFX = characterScored.gameObject.transform.position;
+		ParticleUtils.CreateParticle("ClinicZonePuff", vPosFX);
+	}
+	
+	//---------------------------------------------------
+	// GetReward()
+	//---------------------------------------------------		
+	public override int GetReward(MinigameRewardTypes eType){
+		// for now, just use the standard way
+		return GetStandardReward(eType);
 	}
 
 	//---------------------------------------------------
@@ -90,7 +169,7 @@ public class DGTManager : MinigameManager<DGTManager>{
 		numOfCorrectDiagnose = 0;
 		
 		// if the play hasn't played the tutorial yet, start it
-		if(TutorialOn() && (IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(DGTTutorial.TUT_KEY)))
+		if(IsTutorialOn() && (IsTutorialOverride() || !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(DGTTutorial.TUT_KEY)))
 			StartTutorial();		
 		
 		// set the spawn timer to 0
@@ -104,46 +183,33 @@ public class DGTManager : MinigameManager<DGTManager>{
 	protected override void _GameOver(){
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
-	
+
+	//---------------------------------------------------
+	// _Update()
+	//---------------------------------------------------
+	protected override void _Update(){
+		
+		// update spawn timer for spawning new characters
+		UpdateSpawnTimer(-Time.deltaTime);
+	}
+
 	//---------------------------------------------------
 	// GetMinigameKey()
 	//---------------------------------------------------	
 	protected override string GetMinigameKey(){
 		return "Clinic";	
 	}	
-	
-	//---------------------------------------------------
-	// SetSelectedZone()
-	// Sets the currently selected zone to the incoming
-	// goZone.
-	//---------------------------------------------------		
-	public void SetSelectedZone(GameObject goZone){
-		if(goZone == goSelectedZone)
-			return;
-		
-		// if a tutorial is happening, just set the speed to starting speed...this is in case the track was stopped
-		// because the player didn't switch the tracks quick enough
-		if(IsTutorialRunning())
-			SetTrackSpeed(fStartingSpeed);
-		
-		// the zone changed, so play a sound (only if there was a valid zone before though)
-		if(goSelectedZone != null)
-			AudioManager.Instance.PlayClip("clinicSwitchTracks");		
-		
-		// change the zone
-		goSelectedZone = goZone;
-		
-		// update the graphics indicating which zone is selected
-		UpdatePathVisuals();
+
+	protected override bool IsTutorialOn(){
+		return Constants.GetConstant<bool>("IsClinicTutorialOn");
 	}
 	
-	//---------------------------------------------------
-	// GetSelectedZone()
-	//---------------------------------------------------	
-	public GameObject GetSelectedZone(){
-		return goSelectedZone;	
+	private Vector3 GetSpawnLocation(){
+		// the location is in viewport coordinates, so translate it
+		Vector3 vRealLoc = CameraManager.Instance.cameraMain.ViewportToWorldPoint(vSpawnLocation);
+		return vRealLoc;	
 	}
-	
+
 	//---------------------------------------------------
 	// UpdatePathVisuals()
 	// Updates various sprites on the screen to indicate
@@ -152,43 +218,6 @@ public class DGTManager : MinigameManager<DGTManager>{
 	private void UpdatePathVisuals(){
 		// for now, just point the arrow at the selected zone
 		SpriteUtils.PointTo(goArrow, goSelectedZone, 0);
-	}
-	
-	//---------------------------------------------------
-	// _Update()
-	//---------------------------------------------------
-	protected override void _Update(){
-		
-		// update spawn timer for spawning new characters
-		UpdateSpawnTimer(-Time.deltaTime);
-	}	
-	
-	//---------------------------------------------------
-	// CharacterScored()
-	// When a character reaches a zone (regardless of if
-	// it's the correct zone).
-	//---------------------------------------------------		
-	public void CharacterScored(object sender, CharacterScoredEventArgs args){	
-		// if the game is over, don't do anything
-		if(GetGameState() == MinigameStates.GameOver)
-			return;
-		
-		// get relevant variables from the args
-		DGTCharacter characterScored = args.character;
-		DGTZone zoneTarget = args.zone;
-		
-		// get the asthma stages of the character and variable
-		AsthmaStage eZoneStage = zoneTarget.GetStage();
-		AsthmaStage eCharStage = characterScored.GetStage();
-
-		if(eZoneStage == eCharStage)
-			CharacterScoredRight(characterScored, zoneTarget);
-		else 
-			CharacterScoredWrong(characterScored, zoneTarget);	
-		
-		// regardless of whether the character scored right or wrong, show a poof FX
-		Vector3 vPosFX = characterScored.gameObject.transform.position;
-		ParticleUtils.CreateParticle("ClinicZonePuff", vPosFX);
 	}
 	
 	//---------------------------------------------------
@@ -399,32 +428,7 @@ public class DGTManager : MinigameManager<DGTManager>{
 		float fNew = fSpawnTimer + fTime;
 		SetSpawnTimer(fNew);
 	}
-	
-	//---------------------------------------------------
-	// IsZoneLocked()
-	// A zone may be locked (user can't select it) if
-	// the tutorial is going on.
-	//---------------------------------------------------		
-	public bool IsZoneLocked(AsthmaStage eZoneStage){
-		bool bLocked = false;
-		
-		if(IsTutorialRunning()){
-			DGTTutorial tutorial = GetTutorial() as DGTTutorial;
-			AsthmaStage eCurrentStage = tutorial.GetCurrentStage();
-			bLocked = eCurrentStage != eZoneStage;
-		}
-		
-		return bLocked;
-	}
-	
-	//---------------------------------------------------
-	// GetReward()
-	//---------------------------------------------------		
-	public override int GetReward(MinigameRewardTypes eType){
-		// for now, just use the standard way
-		return GetStandardReward(eType);
-	}
-	
+
 	//---------------------------------------------------
 	// StartTutorial()
 	// Tutorial code	

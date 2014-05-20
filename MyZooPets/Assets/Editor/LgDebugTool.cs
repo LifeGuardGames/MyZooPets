@@ -9,10 +9,12 @@ using UnityEditor;
 using System.Xml.Serialization;
 public class LgDebugTool : EditorWindow
 {
-
+	#region constant values
     private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";
     private const string BUILDSETTING_PATH = "/XML/Resources/Constants/_BuildSetting.xml";
+	#endregion
 
+	#region private values
     private List<Constant> criticalList;
     private List<Constant> buildSettingList;
     private CriticalConstants criticalConstants;
@@ -26,6 +28,8 @@ public class LgDebugTool : EditorWindow
     private bool isLiteVersion = false;
     private string liteProductName;
     private string proProductName;
+	private string gaBuildVersion;
+	#endregion
 
     // Add menu item named "My Window" to the Window menu
     [MenuItem("Window/LgDebugTool")]
@@ -108,6 +112,10 @@ public class LgDebugTool : EditorWindow
                         constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
                         proSecretKey = constant.ConstantValue;
                     break;
+					case "GABuildVersion":
+						constant.ConstantValue = EditorGUILayout.TextField("GA Build Version", constant.ConstantValue);
+						gaBuildVersion = constant.ConstantValue;
+					break;
                     case "IsLiteVersion":
                         isLiteVersion = EditorGUILayout.Toggle(
                             new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite Lite or Pro build setting for the fields above will also be set"),
@@ -129,6 +137,10 @@ public class LgDebugTool : EditorWindow
                         constant.ConstantValue = toggleState.ToString();
 
                         if(toggleState){
+							//set the build version
+							GA.SettingsGA.Build = gaBuildVersion;
+
+							//set the api keys
                             if(isLiteVersion)
                                 GA.SettingsGA.SetKeys(liteGameKey, liteSecretKey);
                             else

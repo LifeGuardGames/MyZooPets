@@ -89,7 +89,7 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		fTime = 0;
 		listCurrentEntries = null;
 
-		if(TutorialOn() && (IsTutorialOverride() || 
+		if(IsTutorialOn() && (IsTutorialOverride() || 
 			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
 			StartTutorial();
 
@@ -112,7 +112,11 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 	//---------------------------------------------------	
 	protected override string GetMinigameKey() {
 		return "Ninja";	
-	}	
+	}
+
+	protected override bool IsTutorialOn(){
+		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
+	}
 	
 	//---------------------------------------------------
 	// HasCutscene()
@@ -272,12 +276,12 @@ public class NinjaManager : MinigameManager<NinjaManager> {
 		List<string> listObjects = new List<string>();
 		for(int i = 0; i < nTriggers; ++i){
 			// NOTE: if want to add variation over time, use GetRandomTrigger(n to choose from)
-			string randomTrigger = DataLoader_NinjaTriggersAndBombs.GetRandomTrigger(DataLoader_NinjaTriggersAndBombs.numTriggers);
+			string randomTrigger = DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
 			listObjects.Add(randomTrigger);
 		}
 		for(int i = 0; i < nBombs; ++i){
 			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
-			string randomBomb = DataLoader_NinjaTriggersAndBombs.GetRandomBomb(DataLoader_NinjaTriggersAndBombs.numBombs);
+			string randomBomb = DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
 		}
 		

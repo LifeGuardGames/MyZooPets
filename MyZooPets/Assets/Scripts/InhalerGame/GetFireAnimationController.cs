@@ -9,8 +9,6 @@ public class GetFireAnimationController : MonoBehaviour {
 	private ParticleSystem petFireBackgroundParticleSystem;
 	
 	public Transform hudFireIconObject;
-	public ParticleSystemController fireActivateParticle;
-	
 	public TweenAmbientColor tweenColorScript;
 	
 	public Camera m_Camera;
@@ -39,7 +37,7 @@ public class GetFireAnimationController : MonoBehaviour {
 	void Start(){
 		
 		// Place the particle over the HudFireIconObject
-		fireActivateParticle.gameObject.transform.position = hudFireIconObject.position;
+//		fireActivateParticle.gameObject.transform.position = hudFireIconObject.position;
 		
 		petFireBackgroundParticleSystem = petFireBackgroundParticle.gameObject.GetComponent<ParticleSystem>();
 		
@@ -71,8 +69,6 @@ public class GetFireAnimationController : MonoBehaviour {
 	// Callback method for when the fire animation is done
 	//--------------------------------------------------	
 	public void PlayGetFireAnimation(){
-		fireActivateParticle.Play();
-
 		//Fire event
 		if(OnGetFireAnimationDone != null)
 			OnGetFireAnimationDone(this, EventArgs.Empty);

@@ -28,7 +28,7 @@ public class Exhale : InhalerPart {
                 InhalerAnimationController.OnAnimDone += OnAnimationDone;
 
                 //Disable hint when swipe gesture is registered. 
-                GetComponent<HintController>().DisableHint();
+                GetComponent<HintController>().DisableHint(false);
 
                 animationController.Exhale();
                 AudioManager.Instance.PlayClip( "inhalerExhale" );      

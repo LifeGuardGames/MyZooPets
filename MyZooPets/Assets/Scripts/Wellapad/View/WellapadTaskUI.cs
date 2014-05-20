@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -49,7 +49,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------	
 	private void SetDesc() {
 		// set the label showing what the task entails
-		Data_WellapadTask data = DataLoader_WellapadTasks.GetTask( task.TaskID );
+		Data_WellapadTask data = DataLoaderWellapadTasks.GetTask( task.TaskID );
 		string strDesc = data.GetText();
 		
 		// if the task has an amount, we want to integrate that into the string

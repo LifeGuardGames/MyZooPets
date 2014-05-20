@@ -32,9 +32,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     private Vector3 mLastCenterPosition;
     private LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
-	
-    //pooling level components
-    private Queue<LevelComponent> levelComponentPool = new Queue<LevelComponent>(); 
 
 	// Use this for initialization
 	void Start() {

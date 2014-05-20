@@ -56,7 +56,7 @@ public class ItemBoxLogic : MonoBehaviour {
 		}
 			
 		// get data for this box
-		Data_ItemBox dataBox = DataLoader_ItemBoxes.GetItemBox( strItemBoxID );
+		Data_ItemBox dataBox = DataLoaderItemBoxes.GetItemBox( strItemBoxID );
 		
 		if ( dataBox != null )
 			items = dataBox.GetItems();

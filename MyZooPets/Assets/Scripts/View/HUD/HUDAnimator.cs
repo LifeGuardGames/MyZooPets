@@ -54,7 +54,7 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl moodIconAnim;
 	private AnimationControl starIconAnim;
 	private AnimationControl xpIconAnim;
-	private AnimationControl animFire;
+	private ParticleSystemController animFire;
 
 	// Tweening
 	public UIAtlas commonAtlas;
@@ -146,10 +146,11 @@ public class HUDAnimator : MonoBehaviour{
 	// based on whether or not the pet can breath fire.
 	//---------------------------------------------------		
 	private void UpdateBreathUI(){
-		bool bFireOn = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		NGUITools.SetActive(animFire.gameObject, bFireOn);
-		if(bFireOn)
-			animFire.Play();	
+		bool isFireOn = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+		NGUITools.SetActive(animFire.gameObject, isFireOn);
+		if(isFireOn){
+			animFire.Play();
+		}
 	}
 	
 	private void OnBreathsChanged(object sender, EventArgs args){

@@ -284,37 +284,50 @@ public class GatingManager : Singleton<GatingManager>{
 	// breath fire.
 	//---------------------------------------------------		
 	private void ShowNoFireNotification(){
+		//use thought bubble instead. try to stay away from notification
+
+
+
+
 		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
 		
-		string strKey;			// key of text to show
-		string strImage;		// image to appear on notification
-		string strAnalytics = "";	// analytics tracker
+//		string strKey;			// key of text to show
+//		string strImage;		// image to appear on notification
+//		string strAnalytics = "";	// analytics tracker
 		
 		if(eState != PetHealthStates.Healthy){
 			// pet is not healthy enough
-			strKey = "NO_FIRE_SICK";
-			strImage = "Skull";
+//			strKey = "NO_FIRE_SICK";
+//			strImage = "Skull";
 			// strAnalytics = "BreathFire:Fail:Sick";
+			PetSpeechAI.Instance.ShowNoFireSickMsg();
 		}
 		else if(eMood != PetMoods.Happy){
 			// pet is not happy enough
-			strKey = "NO_FIRE_UNHAPPY";
-			strImage = "Skull";
+//			strKey = "NO_FIRE_UNHAPPY";
+//			strImage = "Skull";
 			// strAnalytics = "BreathFire:Fail:Unhappy";
+			PetSpeechAI.Instance.ShowNoFireHungryMsg();
 		}
 		else{
+			if(PlayPeriodLogic.Instance.CanUseRealInhaler())
+				PetSpeechAI.Instance.ShowInhalerMsg();
+			else
+				//TODO: enable FireOrbMsg once it's ready to integrate
+				PetSpeechAI.Instance.ShowInhalerMsg();
+//				PetSpeechAI.Instance.ShowFireOrbMsg();
 			// out of flame charges
-			strKey = "NO_FIRE_INHALER";
-			strImage = "itemInhalerMain";
+//			strKey = "NO_FIRE_INHALER";
+//			strImage = "itemInhalerMain";
 			// strAnalytics = "BreathFire:Fail:NoCharges";
 		}
 		
-		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
-		string message = String.Format(Localization.Localize(strKey), petName);
-		// show the standard popup
-		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
-			message, strImage, null, true, true, strAnalytics);		
+//		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
+//		string message = String.Format(Localization.Localize(strKey), petName);
+//		// show the standard popup
+//		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
+//			message, strImage, null, true, true, strAnalytics);		
 	}
 	
 	//---------------------------------------------------

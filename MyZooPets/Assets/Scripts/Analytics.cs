@@ -115,8 +115,8 @@ public class Analytics : MonoBehaviour {
 
             // For existing users prior to MAT SDK implementation, call setExistingUser(true) before measureSession.
             // Otherwise, existing users will be counted as new installs the first time they run your app.
-            if(!DataManager.Instance.IsFirstTime)
-                setExistingUser(true);
+//            if(!DataManager.Instance.IsFirstTime)
+//                setExistingUser(true);
 
             measureSession();
         #endif
@@ -279,5 +279,10 @@ public class Analytics : MonoBehaviour {
         if(isAnalyticsEnabled)
             GA.API.Design.NewEvent("Button:StoreItemShortCut");
     }
+
+	public void UserAge(int age){
+		if(isAnalyticsEnabled)
+			GA.API.Design.NewEvent("UserInfo:Age", (float) age);
+	}
 
 }

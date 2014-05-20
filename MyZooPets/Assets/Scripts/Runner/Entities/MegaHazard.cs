@@ -25,8 +25,6 @@ public class MegaHazard : Singleton<MegaHazard> {
 	private float mCurrentDistanceFromPlayer = 0f;
 	private Vector3 mDestinationPosition = Vector3.zero;
 
-	private float animationSmoothing = 2.0f;
-
 	void Start() {
 		RunnerGameManager.OnStateChanged += GameStateChanged;
 	}

@@ -129,17 +129,27 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log(jsonString);
   }
 
-  [CUDLR.Command("GameData", "get of pet in json")]
-  public static void GameData(string[] args){
-    if(args.Length < 1){
-      CUDLR.Console.Log("expect a petID");
-      return;
-    }
-
-    string key = args[0] + "_GameData";
-    string jsonString = PlayerPrefs.GetString(key, "");
+  [CUDLR.Command("GameData", "get data of pet in json")]
+  public static void GameData(){
+    string jsonString = PlayerPrefs.GetString("GameData", "");
     CUDLR.Console.Log(jsonString);
   }
+
+	[CUDLR.Command("TimeRemainTillNextPlayPeriod", "get time until next playperiod")]
+	public static void TotalTimeRemain(){
+		TimeSpan timeRemain = DataManager.Instance.GameData.Calendar.GetTotalTimeRemain();
+		CUDLR.Console.Log(timeRemain.Hours + "H " + timeRemain.Minutes + "M ");
+	}
+
+	[CUDLR.Command("GetPlayerPrefString", "")]
+	public static void GetPlayerPrefString(string[] args){
+		CUDLR.Console.Log(PlayerPrefs.GetString(args[0], ""));
+	}
+
+	[CUDLR.Command("GetPlayerPrefInt", "")]
+	public static void GetPlayerPrefInt(string[] args){
+		CUDLR.Console.Log(PlayerPrefs.GetInt(args[0]) + "");
+	}
 
 }
 

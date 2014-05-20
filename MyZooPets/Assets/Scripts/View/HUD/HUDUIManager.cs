@@ -21,7 +21,6 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 
 	public UISlider moodSlider;
 	public UILabel moodLabel;
-
 	public UILabel starLabel;
 	
 	// Icon pulsing
@@ -29,7 +28,7 @@ public class HUDUIManager : Singleton<HUDUIManager> {
 	public AnimationControl animMood;
 	public AnimationControl animMoney;
 	public AnimationControl animXP;
-	public AnimationControl animFire;	
+	public ParticleSystemController animFire;
 	
 	// Parent for tweening
 	public GameObject tweenParent;	

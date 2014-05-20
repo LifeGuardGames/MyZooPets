@@ -103,7 +103,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	private DegradTrigger PlaceTrigger(DegradData degradData) {		
         string triggerID = degradData.TriggerID;
         Vector3 position = degradData.GetPosition();
-        ImmutableData_Trigger triggerData = DataLoader_Triggers.GetTrigger(triggerID);
+        ImmutableData_Trigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
 
         //Load trigger prefab
         GameObject triggerPrefab = (GameObject) Resources.Load(triggerData.PrefabName);

@@ -57,12 +57,21 @@ public class StatsController : Singleton<StatsController> {
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
 	void OnGUI(){
-		 if(GUI.Button(new Rect(0, 0, 100, 100), "decrease health")){
-			 ChangeStats(0, Vector3.zero, 0, Vector3.zero, -5, Vector3.zero, 0, Vector3.zero);
+		if(GUI.Button(new Rect(0, 0, 100, 100), "+health")){
+			ChangeStats(deltaHealth: -10);
+	 	}
+		 if(GUI.Button(new Rect(100, 0, 100, 100), "-health")){
+			ChangeStats(deltaHealth: 10);
 		 }
-		 if(GUI.Button(new Rect(100, 0, 100, 100), "get pt")){
+		if(GUI.Button(new Rect(200, 0, 100, 100), "+mood")){
+			ChangeStats(deltaMood: -10);
+		}
+		if(GUI.Button(new Rect(300, 0, 100, 100), "-mood")){
+			ChangeStats(deltaMood: 10);
+		}
+		if(GUI.Button(new Rect(400, 0, 100, 100), "+xp")){
 			ChangeStats(deltaPoints: 100);
-		 }
+		}
 	}
 	#endif
 

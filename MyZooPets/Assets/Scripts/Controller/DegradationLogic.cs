@@ -53,7 +53,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public void ClearDegradationTrigger(DegradTrigger trigger){
 		// DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
 		DegradData degradData = degradationTriggers.Find(x => x.TriggerID == trigger.ID);
-		ImmutableData_Trigger triggerData = DataLoaderTriggers.GetTrigger(degradData.TriggerID);
+		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(degradData.TriggerID);
 
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
@@ -155,7 +155,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		for(int i = 0; i < listChosen.Count; i++){
 			Data_TriggerLocation location = listChosen[i];
             
-			ImmutableData_Trigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
+			ImmutableDataTrigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 
 			// random prefab
 			// int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
@@ -215,7 +215,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private int GetNewTriggerCount(){
 		int nNew = 0;
 		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
-		DegradationData degradationData = DataManager.Instance.GameData.Degradation;
+		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
 		//There are missed play periods
 		if(numOfMissedPlayPeriod > 0){

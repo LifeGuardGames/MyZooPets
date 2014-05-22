@@ -42,13 +42,13 @@ public class InhalerPart : MonoBehaviour {
     //Move to the next step of the inhaler game
     protected virtual void NextStep(){
         // spawn floaty text
-        floatyOptions.Add("parent", GameObject.Find("Anchor-Center"));
-		floatyOptions.Add("prefab", "FloatyTextInhalerGame");
-        if(!floatyOptions.ContainsKey("text"))
-            floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_NICE")); 
-        if(!floatyOptions.ContainsKey("textSize"))
-            floatyOptions.Add("textSize", 128f);
-        FloatyUtil.SpawnFloatyText(floatyOptions);
+//        floatyOptions.Add("parent", GameObject.Find("Anchor-Center"));
+//		floatyOptions.Add("prefab", "FloatyTextInhalerGame");
+//        if(!floatyOptions.ContainsKey("text"))
+//            floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_NICE")); 
+//        if(!floatyOptions.ContainsKey("textSize"))
+//            floatyOptions.Add("textSize", 128f);
+//        FloatyUtil.SpawnFloatyText(floatyOptions);
 
         InhalerLogic.Instance.NextStep();
     }

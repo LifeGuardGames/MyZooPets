@@ -8,36 +8,40 @@ using System.Collections;
 // trail that follows a user's finger.
 ///////////////////////////////////////////
 
-public class GestureTrail : MonoBehaviour
-{	
+public class GestureTrail : MonoBehaviour{	
 	// the resource name of the trail
-	public string m_strTrail;
-	public string GetTrailName() {
-		return m_strTrail;
+	public string trailResourceName;
+
+	public string GetTrailName(){
+		return trailResourceName;
 	}
 	
 	// the Z value the trail should be set to
-	public float m_fZ;
-	private float GetZ() {
-		return m_fZ;
+	public float trailZValue;
+
+	private float GetZ(){
+		return trailZValue;
 	}
 	
 	// the actual trail that is created
-	private GameObject m_goTrail;
-	private GameObject GetTrail() {
-		return m_goTrail;
+	private GameObject goTrail;
+
+	private GameObject GetTrail(){
+		return goTrail;
 	}
 	
 	// the last position of the trail
-	private Vector3 m_vLastTouch;
-	private void SetLastPosition( Vector3 i_vec ) {
-		m_vLastTouch = i_vec;
+	private Vector3 lastTouch;
+
+	private void SetLastPosition(Vector3 vec){
+		lastTouch = vec;
 	}
-	public Vector3 GetLastPosition() {
-		return m_vLastTouch;
+
+	public Vector3 GetLastPosition(){
+		return lastTouch;
 	}
 	
-	private bool CanGesture() {
+	private bool CanGesture(){
 		return true;	
 	}
 	
@@ -48,14 +52,14 @@ public class GestureTrail : MonoBehaviour
 	// i_vPos is a Vector2 that contains the
 	// screen coordinate where the user touched.
 	///////////////////////////////////////////		
-	public void DragStarted( Vector2 i_vPos ) {
+	public void DragStarted(Vector2 i_vPos){
 		// get the trail resource to create
 		string strTrail = GetTrailName();
 				
 		// get the proper vector3 position of the trail based on where the user is touching
-		Vector3 vPos = TranslateScreenPos( i_vPos );
+		Vector3 vPos = TranslateScreenPos(i_vPos);
 		
-		m_goTrail = Instantiate( Resources.Load( strTrail ) as GameObject, vPos, Quaternion.identity ) as GameObject;			
+		goTrail = Instantiate(Resources.Load(strTrail) as GameObject, vPos, Quaternion.identity) as GameObject;
 	}
 	
 	///////////////////////////////////////////
@@ -71,13 +75,13 @@ public class GestureTrail : MonoBehaviour
 	// do the play the proper color/sound based
 	// on that result.
 	///////////////////////////////////////////
-	public void DragEnded() {
+	public void DragEnded(){
 		//StartCoroutine( OnDragEnded() );
 		// for now, just destroy the trail immediately
 		GameObject goTrail = GetTrail();
 		
-		if ( goTrail ) 
-			Destroy( goTrail );	
+		if(goTrail) 
+			Destroy(goTrail);	
 	}
 	/*private IEnumerator OnDragEnded() {
 		Debug.Log("Drag ended");
@@ -99,16 +103,16 @@ public class GestureTrail : MonoBehaviour
 	// i_vPos is a Vector2 that contains the
 	// screen coordinate where the user touched.	
 	///////////////////////////////////////////		
-	public void DragUpdated( Vector2 i_vPos ) {
+	public void DragUpdated(Vector2 userTouchPos){
 		// update the trail by setting the trail's position to wherever the user is currently touching the screen
 		GameObject goTrail = GetTrail(); 
-		if ( goTrail ) {			
+		if(goTrail){			
 			// get the proper vector3 position of the trail based on where the user is touching
-			Vector3 vPos = TranslateScreenPos( i_vPos );	
-							
-			goTrail.transform.position = vPos;
+			Vector3 pos = TranslateScreenPos(userTouchPos);
+
+			goTrail.transform.position = pos;
 			
-			SetLastPosition( goTrail.transform.position );
+			SetLastPosition(goTrail.transform.position);
 		}
 	}
 	
@@ -118,8 +122,8 @@ public class GestureTrail : MonoBehaviour
 	// position of a drag and turns it into
 	// a 3d position for the trail.	
 	///////////////////////////////////////////		
-	private Vector3 TranslateScreenPos( Vector2 i_vPos ) {
-		Vector3 vPos = Camera.main.ScreenToWorldPoint( new Vector3(i_vPos.x, i_vPos.y, 10) );
+	private Vector3 TranslateScreenPos(Vector2 screenPos){
+		Vector3 vPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 10));
 		
 		// we are setting the Z manually because the translation from screen to world sets the Z to the camera's Z
 		vPos.z = GetZ();

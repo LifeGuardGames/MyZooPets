@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,11 +8,11 @@ using System.Collections.Generic;
 // Spawns a bunch of triggers all nearby each other.
 //---------------------------------------------------
 
-public class SpawnGroup_Cluster : SpawnGroup {
+public class SpawnGroupCluster : SpawnGroup {
 	//---------------------------------------------------
 	// SpawnGroup_Cluster()
 	//---------------------------------------------------	
-	public SpawnGroup_Cluster( List<string> listObjects ) : base(listObjects){
+	public SpawnGroupCluster( List<string> listObjects ) : base(listObjects){
 	}
 	
 	//---------------------------------------------------

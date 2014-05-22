@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +9,11 @@ using System.Collections.Generic;
 // that then spread out.
 //---------------------------------------------------
 
-public class SpawnGroup_Split : SpawnGroup {
+public class SpawnGroupSplit : SpawnGroup {
 	//---------------------------------------------------
 	// SpawnGroup_Split()
 	//---------------------------------------------------	
-	public SpawnGroup_Split( List<string> listObjects ) : base(listObjects){
+	public SpawnGroupSplit( List<string> listObjects ) : base(listObjects){
 	}
 	
 	//---------------------------------------------------

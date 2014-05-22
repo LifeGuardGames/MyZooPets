@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +9,11 @@ using System.Collections.Generic;
 // locations.
 //---------------------------------------------------
 
-public class SpawnGroup_Separate : SpawnGroup {
+public class SpawnGroupSeparate : SpawnGroup {
 	//---------------------------------------------------
 	// SpawnGroup_Separate()
 	//---------------------------------------------------	
-	public SpawnGroup_Separate( List<string> listObjects ) : base(listObjects){
+	public SpawnGroupSeparate( List<string> listObjects ) : base(listObjects){
 	}
 	
 	//---------------------------------------------------

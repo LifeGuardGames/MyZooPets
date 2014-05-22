@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,11 +11,11 @@ using System.Collections.Generic;
 // same parent quite yet.
 //---------------------------------------------------
 
-public class SpawnGroup_Cross : SpawnGroup {
+public class SpawnGroupCross : SpawnGroup {
 	//---------------------------------------------------
 	// SpawnGroup_Cross()
 	//---------------------------------------------------	
-	public SpawnGroup_Cross( List<string> listObjects ) : base(listObjects){
+	public SpawnGroupCross( List<string> listObjects ) : base(listObjects){
 	}
 	
 	//---------------------------------------------------

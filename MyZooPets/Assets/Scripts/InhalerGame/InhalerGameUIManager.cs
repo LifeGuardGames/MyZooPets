@@ -18,6 +18,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
     private int starIncrement = 0;
 
+	public GameObject[] lightsToTurnOff;
+	public ParticleSystemController[] particlesToTurnOff;
+
+
     public bool ShowHint{
         get {return showHint;}
     }
@@ -173,6 +177,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
         //play animation
         fireAnimationController.PlaySequence();
+		foreach(GameObject light in lightsToTurnOff){
+			light.SetActive(false);
+		}
+		foreach(ParticleSystemController fireParticle in particlesToTurnOff){
+			fireParticle.Stop();
+		}
     }
 
     //Event listener. continue the game after GetFireAnimation is done

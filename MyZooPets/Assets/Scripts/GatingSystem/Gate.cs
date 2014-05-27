@@ -117,22 +117,22 @@ public abstract class Gate : MonoBehaviour{
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public bool GateDamaged(int nDamage){
+	public bool GateDamaged(int damage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DamageGate_SaveData(gateID, nDamage);
+		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
 		
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
-		OnGateDamaged(nDamage);
+		OnGateDamaged(damage);
 		
-		if(bDestroyed){
+		if(isDestroyed){
 			Analytics.Instance.GateUnlocked(gateID);	
 			PrepGateDestruction();
 		}
 		
-		return bDestroyed;
+		return isDestroyed;
 	}
 	
 	//---------------------------------------------------
@@ -142,29 +142,29 @@ public abstract class Gate : MonoBehaviour{
 	// the actual save data class for gates, but was moved
 	// out to here.
 	//---------------------------------------------------		
-	public bool DamageGate_SaveData(string strID, int nDamage){
-		// check to make sure the gate exists
-		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(strID)){
-			Debug.LogError("Something trying to access a non-existant gate " + strID);
-			return true;
-		}
-		
-		// check to make sure the gate is active
-		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(strID)){
-			Debug.LogError("Something trying to damage an inactive gate " + strID);
-			return true;
-		}
-		
-		// otherwise, calculate and save the new hp
-		int nHP = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
-		nHP = Mathf.Max(nHP - nDamage, 0);
-		DataManager.Instance.GameData.GatingProgress.GatingProgress[strID] = nHP;
-		
-		// then return whether or not the gate has been destroyed
-		bool bDestroyed = nHP <= 0;
-
-		return bDestroyed;
-	}	
+//	public bool DamageGateSaveData(string gateID, int damage){
+//		// check to make sure the gate exists
+//		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(gateID)){
+//			Debug.LogError("Something trying to access a non-existant gate " + gateID);
+//			return true;
+//		}
+//		
+//		// check to make sure the gate is active
+//		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(gateID)){
+//			Debug.LogError("Something trying to damage an inactive gate " + gateID);
+//			return true;
+//		}
+//		
+//		// otherwise, calculate and save the new hp
+//		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+//		hp = Mathf.Max(hp - damage, 0);
+//		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
+//		
+//		// then return whether or not the gate has been destroyed
+//		bool isDestroyed = hp <= 0;
+//
+//		return isDestroyed;
+//	}	
 	
 	//---------------------------------------------------
 	// PrepGateDestruction()

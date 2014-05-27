@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 //---------------------------------------------------
 // MapUIManager
@@ -8,22 +10,25 @@ using System.Collections;
 //---------------------------------------------------
 
 public class MapUIManager : SingletonUI<MapUIManager> {
-	// zoom helper
-	public ZoomHelper zoomHelper;
-	
-	// back button for the chart
-	public GameObject goBackButton;
 
-	public BoxCollider draggableCollider;	// The collider that is dragged, to be enabled only when zoomed in
-
+	public ZoomHelper zoomHelper; // zoom helper
+	public GameObject goBackButton; // back button for the chart
+	public BoxCollider draggableCollider; // The collider that is dragged, to be enabled only when zoomed in
 	public Color bedroomActiveColor;
 	public Color bedroomInactiveColor;
-
 	public Color yardActiveColor;
 	public Color yardInactiveColor;
+	public List<MapEntry> mapEntries = new List<MapEntry>();
 
 	protected override void _Start(){
 		draggableCollider.enabled = false;
+
+		GatingManager.OnDamageGate += RefreshMapEntry;
+		RefreshMapEntry(this, EventArgs.Empty);
+	}
+
+	void OnDestroy(){
+		GatingManager.OnDamageGate -= RefreshMapEntry;
 	}
 
 	//---------------------------------------------------
@@ -66,5 +71,16 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		// deactivate the back button
 		goBackButton.SetActive(false);
 		draggableCollider.enabled = false;
-	}	
+	}
+
+	private void RefreshMapEntry(object sender, EventArgs args){
+		foreach(MapEntry entry in mapEntries){
+			bool hasActiveGate = GatingManager.Instance.HasActiveGate(entry.Area, entry.RoomPartition);
+			
+			if(hasActiveGate)
+				entry.Lock();
+			else
+				entry.Unlock();
+		}
+	}
 }

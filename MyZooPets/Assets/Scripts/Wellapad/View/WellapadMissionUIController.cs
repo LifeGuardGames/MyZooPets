@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,9 +66,9 @@ public class WellapadMissionUIController : MonoBehaviour {
 		title.transform.FindChild("Title").GetComponent<UILabel>().text = strMissionTitle;			
 		
 		// find the available tasks for the mission and add them
-		List<WellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
+		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
 		for ( int i = 0; i < listTasks.Count; i++ ){
-			WellapadTask task = listTasks[i];
+			MutableDataWellapadTask task = listTasks[i];
 			
 			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
 			SetNameForGrid( goTask );

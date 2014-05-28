@@ -17,7 +17,7 @@ public class MutableDataWellapad {
 	public List<string> TasksUnlocked {get; set;}
 	
 	// list of current tasks/missions the user has
-	public Dictionary< string, Mission > CurrentTasks {get; set;}
+	public Dictionary< string, MutableDataMission > CurrentTasks {get; set;}
 	
 	public MutableDataWellapad(){
 		Init();
@@ -29,7 +29,7 @@ public class MutableDataWellapad {
 	// when the missions have expired.
 	//---------------------------------------------------		
 	public void ResetMissions() {
-		CurrentTasks = new Dictionary< string, Mission >();
+		CurrentTasks = new Dictionary< string, MutableDataMission >();
 	}
 	
     //Populate with dummy data

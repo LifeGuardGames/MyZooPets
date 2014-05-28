@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //---------------------------------------------------
@@ -55,7 +55,7 @@ public class WellapadRewardButton : LgButton {
 		bool bEnabled = true;
 		
 		// get the mission associated with this reward
-		Mission mission = WellapadMissionController.Instance.GetMission(missionID);
+		MutableDataMission mission = WellapadMissionController.Instance.GetMission(missionID);
 		
 		if(mission != null){
 			// get status of reward
@@ -111,7 +111,7 @@ public class WellapadRewardButton : LgButton {
 	//---------------------------------------------------		
 	protected override void ProcessClick() {
 		// first check to make sure that the reward is unclaimed -- if it is, claim that bad boy...they've earned it
-		Mission mission = WellapadMissionController.Instance.GetMission( missionID );
+		MutableDataMission mission = WellapadMissionController.Instance.GetMission( missionID );
 		
 		if ( mission != null && mission.RewardStatus == RewardStatuses.Unclaimed ) {
 			// claim the reward

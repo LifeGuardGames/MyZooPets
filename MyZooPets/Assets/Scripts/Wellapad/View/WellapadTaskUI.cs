@@ -11,7 +11,7 @@ using System.Collections;
 
 public class WellapadTaskUI : MonoBehaviour {	
 	// task belonging to this UI
-	private WellapadTask task;
+	private MutableDataWellapadTask task;
 	
 	// task text
 	public UILabel label;
@@ -28,7 +28,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
-	public void Init( WellapadTask task ) {
+	public void Init( MutableDataWellapadTask task ) {
 		// cache the task
 		this.task = task;
 		
@@ -49,7 +49,7 @@ public class WellapadTaskUI : MonoBehaviour {
 	//---------------------------------------------------	
 	private void SetDesc() {
 		// set the label showing what the task entails
-		Data_WellapadTask data = DataLoaderWellapadTasks.GetTask( task.TaskID );
+		ImmutableDataWellapadTask data = DataLoaderWellapadTasks.GetTask( task.TaskID );
 		string strDesc = data.GetText();
 		
 		// if the task has an amount, we want to integrate that into the string

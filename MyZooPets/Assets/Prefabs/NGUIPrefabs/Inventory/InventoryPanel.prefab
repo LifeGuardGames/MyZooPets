@@ -28,6 +28,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400028}
+  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -79,7 +80,7 @@ GameObject:
   - 114: {fileID: 11400012}
   - 114: {fileID: 11400014}
   m_Layer: 10
-  m_Name: UIPanel (Clippled View)
+  m_Name: UIPanel (Clipped View)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,8 +323,9 @@ MonoBehaviour:
   bSprite: 1
   eMode: 0
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 0
-  target: {fileID: 0}
+  target: {fileID: 100002}
   functionName: ExpandToggled
 --- !u!114 &11400012
 MonoBehaviour:
@@ -345,11 +347,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -711.5
+    e03: -712
     e10: 0
     e11: 384
     e12: 0
-    e13: -7347.5
+    e13: -10088.9043
     e20: 0
     e21: 0
     e22: 384
@@ -387,6 +389,25 @@ MonoBehaviour:
   horizontalScrollBar: {fileID: 0}
   verticalScrollBar: {fileID: 0}
   showScrollBars: 1
+--- !u!114 &11400016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e745fe6221e6e4da7b8fcf573260e49c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryPanel: {fileID: 100002}
+  isDebug: 0
+  gridPanel: {fileID: 11400012}
+  uiGridObject: {fileID: 100006}
+  uiButtonSpriteObject: {fileID: 100000}
+  spritePet: {fileID: 0}
+  inventoryItemPrefab: {fileID: 100000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  petAnimator: {fileID: 0}
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -477,11 +498,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -347.5
+    e03: -348
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.5
+    e13: -10087.9043
     e20: 0
     e21: 0
     e22: 384

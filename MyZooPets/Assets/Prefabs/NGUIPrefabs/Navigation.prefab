@@ -115,6 +115,7 @@ GameObject:
   - 4: {fileID: 400018}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400018}
+  - 114: {fileID: 11400028}
   m_Layer: 10
   m_Name: Navigation
   m_TagString: Untagged
@@ -544,6 +545,19 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: 1}
   duration: 0
+--- !u!114 &11400028
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fe4255d6d9c40ddb89dbebb7b02e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navigationPanel: {fileID: 100018}
+  goEditDecos: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

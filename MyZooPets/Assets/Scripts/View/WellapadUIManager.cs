@@ -2,13 +2,12 @@
 using System;
 using System.Collections;
 
-//---------------------------------------------------
-// WellapadUIManager
-// Manager for the Wellapad UI.
-//---------------------------------------------------
+/// <summary>
+/// Wellapad user interface manager.
+/// </summary>
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-	public GameObject goWellapadUI; // the actual game object of the wellapad
+//	public GameObject goWellapadUI; // the actual game object of the wellapad
 
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
@@ -16,25 +15,16 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	public WellapadScreenUIController GetScreenManager() {
 		return wellapadScreenUIController;
 	}
-
-	void Awake(){
-	}
-
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------	
+	
 	protected override void _Start() {
 		// set the tween target on the wellapad object to this object
-		goWellapadUI.GetComponent<TweenToggle>().ShowTarget = gameObject;
-		wellapadScreenUIController = goWellapadUI.GetComponent<WellapadScreenUIController>();
+		GetComponent<TweenToggle>().ShowTarget = gameObject;
+		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();
 
 		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
 		RefreshScreen();
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------	
+
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -42,7 +32,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		EditDecosUIManager.Instance.HideNavButton();
 
 		// show the UI itself
-		goWellapadUI.GetComponent<TweenToggle>().Show();
+		GetComponent<TweenToggle>().Show();
 
 		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
 		if(VersionManager.IsLite() && !hasActiveTasks) 
@@ -59,14 +49,14 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		EditDecosUIManager.Instance.ShowNavButton();
 		
 		// hide the UI
-		goWellapadUI.GetComponent<TweenToggle>().Hide();
+		GetComponent<TweenToggle>().Hide();
 	}
 
 	//---------------------------------------------------
 	// RefreshScreen()
 	// Sets the proper screen on the wellapad.
 	//---------------------------------------------------	
-	public void RefreshScreen() {
+	public void RefreshScreen(){
 		wellapadScreenUIController.SetScreen();
 	}
 
@@ -76,7 +66,5 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 
 	private void DisplayPromoAd(){
 		LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
-	}
-
-	
+	}	
 }

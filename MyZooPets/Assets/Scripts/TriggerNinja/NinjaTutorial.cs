@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class NinjaTutorial : MinigameTutorial {
@@ -12,14 +12,14 @@ public class NinjaTutorial : MinigameTutorial {
     // SetMaxSteps()
     //---------------------------------------------------       
     protected override void SetMaxSteps(){
-        nMaxSteps = 2;
+        maxSteps = 2;
     }
 
     //---------------------------------------------------
     // SetKey()
     //---------------------------------------------------       
     protected override void SetKey(){
-        strKey = TUT_KEY;
+        tutorialKey = TUT_KEY;
     }
 
     //---------------------------------------------------       

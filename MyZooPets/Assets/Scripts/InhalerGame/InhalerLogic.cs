@@ -26,7 +26,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	}
 
 	public bool IsTutorialCompleted{
-		get{ return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);}
+		get{ return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);}
 	}
 
 	//True: the step that the user is currently on is correct, False: wrong step
@@ -68,7 +68,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
 		//finish inhaler tutorial 
 		if(!IsTutorialCompleted)
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManager_Bedroom.TUT_INHALER);
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted("DailyInhaler");

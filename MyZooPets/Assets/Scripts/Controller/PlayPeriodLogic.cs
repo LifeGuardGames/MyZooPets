@@ -38,7 +38,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			
 		// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
 		bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
+		bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
 		if(!tutsDone && inhalerTutDone)
 			retVal = false;
 			
@@ -140,7 +140,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			nextPlayPeriod = LgDateTime.Today.AddDays(1);
 		}
 
-		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_INHALER);
+		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
 		if(isInhalerTutDone){
 			//register local notification.
 			localNotificationFireDate = nextPlayPeriod.AddHours(7); //set notif to 7am and 7pm

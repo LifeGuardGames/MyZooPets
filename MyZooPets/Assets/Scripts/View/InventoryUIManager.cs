@@ -86,7 +86,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
     }
 
     private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
-        bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_FEED_PET);
+        bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
 
         //remove drag hint on the next time user press on any item 
         if(fingerHintGO != null)
@@ -101,7 +101,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager> {
             fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
 
             // fingerHintGO.transform.position = hintPos; 
-            DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManager_Bedroom.TUT_FEED_PET);
+            DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
         }
     }
 

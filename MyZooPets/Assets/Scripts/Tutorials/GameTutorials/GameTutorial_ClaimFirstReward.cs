@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,14 +18,14 @@ public class GameTutorial_ClaimFirstReward : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 1;
+		maxSteps = 1;
 	}
 	
 	//---------------------------------------------------
 	// SetKey()
 	//---------------------------------------------------		
 	protected override void SetKey() {
-		strKey = TutorialManager_Bedroom.TUT_CLAIM_FIRST;
+		tutorialKey = TutorialManagerBedroom.TUT_CLAIM_FIRST;
 	}
 	
 	//---------------------------------------------------

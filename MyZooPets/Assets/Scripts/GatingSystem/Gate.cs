@@ -14,8 +14,8 @@ public abstract class Gate : MonoBehaviour{
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
-	public float fPlayerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
-	public float fPlayerY; // the y value the player should move to when approaching the gate
+	public float playerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
+	public float playerY; // the y value the player should move to when approaching the gate
 	
 	// id and resource of this gate
 	protected string gateID;
@@ -46,8 +46,8 @@ public abstract class Gate : MonoBehaviour{
 		
 		// since this gate is getting created, if it is guarding an item box, create the box
 		ImmutableDataGate dataGate = GetGateData();
-		string strItemBoxID = dataGate.GetItemBoxID();
-		if(!string.IsNullOrEmpty(strItemBoxID)){
+		string itemBoxID = dataGate.GetItemBoxID();
+		if(!string.IsNullOrEmpty(itemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 			GameObject goBox = Instantiate(goResource, 
 			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
@@ -56,7 +56,7 @@ public abstract class Gate : MonoBehaviour{
 			
 			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
 			if(scriptItemBox)
-				scriptItemBox.SetItemBoxID(strItemBoxID);
+				scriptItemBox.SetItemBoxID(itemBoxID);
 			else
 				Debug.LogError("No logic script on box", goBox);
 		}		
@@ -79,21 +79,21 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------	
 	public Vector3 GetPlayerPosition(){
 		// get the screen location of the gate and find out where the player should be with the buffer
-		Vector3 vPos = GetIdealPosition();
-		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint(vPos);
-		float fMoveWidth = Screen.width * (fPlayerBuffer / 100);
+		Vector3 idealPos = GetIdealPosition();
+		Vector3 screenLoc = Camera.main.WorldToScreenPoint(idealPos);
+		float moveWidth = Screen.width * (playerBuffer / 100);
 		
 		// get the target location and then transform it into world coordinates MOVE_DIR
-		Vector3 vNewLoc = vScreenLoc;
-		vNewLoc.x -= fMoveWidth;
-		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
-		vNewLocWorld.y = fPlayerY;
+		Vector3 newScreenLoc = screenLoc;
+		newScreenLoc.x -= moveWidth;
+		Vector3 newWorldLoc = Camera.main.ScreenToWorldPoint(newScreenLoc);
+		newWorldLoc.y = playerY;
 		
 		// we need to apply a Z offset to the pet so that the pet is kind of in front of the monster
 		float fOffsetZ = Constants.GetConstant<float>("PetOffsetZ");
-		vNewLocWorld.z -= fOffsetZ;
+		newWorldLoc.z -= fOffsetZ;
 		
-		return vNewLocWorld;		
+		return newWorldLoc;		
 	}
 	
 	//---------------------------------------------------

@@ -3,24 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DataGateLoader
-// Loads gate data from xml.
-//---------------------------------------------------
 
+/// <summary>
+/// Data loader gate.
+/// </summary>
 public class DataLoaderGate{
-	
-	// dictionary of all gates
-	private static Dictionary<string, ImmutableDataGate> dictData;
-	
-	// hash of areas to rooms to gates
-	private static Hashtable hashData;
 
-	//---------------------------------------------------
-	// GetData()
-	// Returns the gate with incoming id.  This probably
-	// isn't very useful.
-	//---------------------------------------------------
+	private static Dictionary<string, ImmutableDataGate> allGates; //Key: gateID, Value: ImmutableDataGate
+	private static Hashtable hashData; // hash of areas to rooms to gates
+	
+	/// <summary>
+	/// Gets the gate data.
+	/// </summary>
+	/// <returns>The data.</returns>
+	/// <param name="id">Identifier.</param>
 	public static ImmutableDataGate GetData(string id){
 		Dictionary<string, ImmutableDataGate> dictData = GetAllData();
 		
@@ -33,12 +29,13 @@ public class DataLoaderGate{
 
 		return data;
 	}
-	
-	//---------------------------------------------------
-	// GetData()
-	// Returns the gate data for a given area & room.
-	// Will be null if there is no gate.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Gets the gate data. Will be null if there is no gate
+	/// </summary>
+	/// <returns>The data.</returns>
+	/// <param name="area">Area.</param>
+	/// <param name="roomPartition">Room partition.</param>
 	public static ImmutableDataGate GetData(string area, int roomPartition){
 		if(hashData == null)
 			SetupData();
@@ -53,27 +50,12 @@ public class DataLoaderGate{
 		
 		return dataGate;
 	}
-	
-	//---------------------------------------------------
-	// IsActiveGate()
-	// Returns whether or not the incoming room in the
-	// incoming area has an active gate.
-	//---------------------------------------------------	
-//	public static bool HasActiveGate(string area, int roomPartition){
-//		bool isActive = false;
-//		
-//		ImmutableDataGate data = GetData(area, roomPartition);
-//		if(data != null) 
-//			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GetGateID());
-//		
-//		return isActive;
-//	}
-	
-	//---------------------------------------------------
-	// GetAreaGates()
-	// Returns all the gates for the incoming area.
-	//---------------------------------------------------
-	//
+
+	/// <summary>
+	/// Gets the area gates.
+	/// </summary>
+	/// <returns>The area gates.</returns>
+	/// <param name="area">Area.</param>
 	public static Hashtable GetAreaGates(string area){
 		Hashtable hashGates = new Hashtable();
 		
@@ -86,14 +68,14 @@ public class DataLoaderGate{
 	}
 	
 	public static Dictionary<string, ImmutableDataGate> GetAllData(){
-		if(dictData == null)
+		if(allGates == null)
 			SetupData();
 		
-		return dictData;	
+		return allGates;	
 	}
 
 	public static void SetupData(){
-		dictData = new Dictionary<string, ImmutableDataGate>();
+		allGates = new Dictionary<string, ImmutableDataGate>();
 		hashData = new Hashtable();
 		
 		//Load all data xml files
@@ -125,11 +107,11 @@ public class DataLoaderGate{
 				ImmutableDataGate data = new ImmutableDataGate(id, hashElements, strError);
 				
 				// store the data
-				if(dictData.ContainsKey(id))
+				if(allGates.ContainsKey(id))
 					Debug.LogError(strError + "Duplicate keys!");
 				else{
 					// add to dictionary of all gates
-					dictData.Add(id, data);	
+					allGates.Add(id, data);	
 					
 					// we also want to store the gates in a more elaborate hashtable for easy access
 					StoreGate(data);

@@ -9,24 +9,26 @@ using System.Collections.Generic;
 // track of game tutorials.
 //---------------------------------------------------
 
-public abstract class TutorialManager : Singleton<TutorialManager> {
+public abstract class TutorialManager : Singleton<TutorialManager>{
 	// pure abstract functions ------------------
 	protected abstract void _Start();	// start function
-	protected abstract void _Check();		// forces the tutorial manager to do a check to see if any tutorials should be launched
+	protected abstract void _Check();	// forces the tutorial manager to do a check to see if any tutorials should be launched
 	// ------------------------------------------
 	
 	// public on/off switch for testing while in development
-	protected bool bOn;
+	protected bool isTutorialEnabled;
 	
 	// tutorial that is currently active
 	private GameTutorial tutorial;
-	public bool IsTutorialActive() {
-		bool bActive = tutorial != null;
-		return bActive;
+
+	public bool IsTutorialActive(){
+		bool isActive = tutorial != null;
+		return isActive;
 	}
-	public void SetTutorial( GameTutorial tutorial ) {
+
+	public void SetTutorial(GameTutorial tutorial){
 		// check to make sure there are not overlapping tutorials
-		if ( tutorial != null && this.tutorial != null ) {
+		if(tutorial != null && this.tutorial != null){
 			Debug.LogError("Tutorial Warning: " + tutorial + " is trying to override " + this.tutorial + " ABORTING!");
 			return;	
 		}
@@ -34,7 +36,7 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 		this.tutorial = tutorial;
 		
 		// if the incoming tutorial is null...
-		if ( tutorial == null ) {
+		if(tutorial == null){
 			// now that the tutorial is over, force a save
 			DataManager.Instance.SaveGameData();
 			
@@ -43,11 +45,11 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 		}
 	}
 	
-	void Awake() {
-		bOn = Constants.GetConstant<bool>( "IntroTutorialsEnabled" );
+	void Awake(){
+		isTutorialEnabled = Constants.GetConstant<bool>("IntroTutorialsEnabled");
 	}
 	
-	void Start() {
+	void Start(){
 		//Debug.Log("Starting tutorial manager, running a test");
 		//GameTutTest tutTest = new GameTutTest();
 		
@@ -64,7 +66,7 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	// EnteredRoom()
 	// When the player switches rooms.
 	//---------------------------------------------------	
-	public void EnteredRoom( object sender, PartitionChangedArgs args ) {
+	public void EnteredRoom(object sender, PartitionChangedArgs args){
 		// do a check in case a tutorial was in a different room
 		Check();
 	}
@@ -74,8 +76,8 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	// Checks which tutorial should play based on certain
 	// game conditions.
 	//---------------------------------------------------	
-	protected void Check() {
-		if ( !bOn || tutorial != null )
+	protected void Check(){
+		if(!isTutorialEnabled || tutorial != null)
 			return;
 		else
 			_Check();
@@ -86,19 +88,19 @@ public abstract class TutorialManager : Singleton<TutorialManager> {
 	// Used in scenes like the yard and bedroom to keep
 	// track of game tutorials.
 	//---------------------------------------------------	
-	public bool CanProcess( GameObject go ) {
+	public bool CanProcess(GameObject go){
 		// if the gameobject is null, then tutorial doesn't care (at the moment)
-		if ( go == null )
+		if(go == null)
 			return true;
 		
 		// if there is no tutorial currently going on right now, the tutorial doesn't care (obviously)
-		bool bActive = IsTutorialActive();
-		if ( !bActive )
+		bool isActive = IsTutorialActive();
+		if(!isActive)
 			return true;
 		
 		// otherwise we have a valid object and a valid tutorial, so let's get to checkin'
-		bool bCanProcess = tutorial.CanProcess( go );
+		bool canProcess = tutorial.CanProcess(go);
 		
-		return bCanProcess;
+		return canProcess;
 	}
 }

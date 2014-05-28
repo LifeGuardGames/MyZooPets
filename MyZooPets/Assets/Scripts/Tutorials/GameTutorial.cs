@@ -8,10 +8,10 @@ using System.Collections;
 // teaching the player about the inhaler, or triggers, etc.
 //---------------------------------------------------
 
-public abstract class GameTutorial : Tutorial {
-	public GameTutorial() : base() {
+public abstract class GameTutorial : Tutorial{
+	public GameTutorial() : base(){
 		// let the tutorial manager know that this tutorial has been created
-		if ( !TutorialManager.Instance ) {
+		if(!TutorialManager.Instance){
 			Debug.LogError("Game tutorial being created but no tutorial manager!?");
 			return;
 		}
@@ -20,17 +20,17 @@ public abstract class GameTutorial : Tutorial {
 		DataManager.Instance.SaveGameData();
 		
 		// set the tutorial manager variable
-		TutorialManager.Instance.SetTutorial( this );
+		TutorialManager.Instance.SetTutorial(this);
 	}
 	
 	//---------------------------------------------------
 	// End()
 	//---------------------------------------------------		
-	protected override void End( bool bFinished ) {
+	protected override void End(bool isFinished){
 		// call super
-		base.End( bFinished );
+		base.End(isFinished);
 		
 		// have the tut manager set right
-		TutorialManager.Instance.SetTutorial( null );
+		TutorialManager.Instance.SetTutorial(null);
 	}
 }

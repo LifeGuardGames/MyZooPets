@@ -41,7 +41,7 @@ public class DataLoaderItemBoxes {
             string xmlString = file.text;
 			
 			// error message
-			string strErrorFile = "Error in file " + file.name;				
+			string fileError = "Error in file " + file.name;				
 			
             //Create XMLParser instance
             XMLParser xmlParser = new XMLParser(xmlString);
@@ -56,12 +56,12 @@ public class DataLoaderItemBoxes {
                 // Get id
                 Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
                 string id = (string)hashAttr["ID"];
-				string strError = strErrorFile + "(" + id + "): ";
+				string errorMessage = fileError + "(" + id + "): ";
 				
                 // Get children from xml node
                 List<IXMLNode> listChildren = XMLUtils.GetChildrenList(childNode);				
 				
-				Data_ItemBox data = new Data_ItemBox( id, hashAttr, listChildren, strError );
+				Data_ItemBox data = new Data_ItemBox( id, hashAttr, listChildren, errorMessage );
 				
 				if ( hashData.ContainsKey( id ) )
 					Debug.LogError("Duplicate item box id: " + id);

@@ -3,12 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// GatingManager
-// This manager is in charge of behavior related to
-// the smoke monster and blocking access for the
-// player.
-//---------------------------------------------------
+/// <summary>
+/// Gating manager. This manager is in charge of behavior related to
+/// the smoke monster and blocking access for the
+/// player.
+/// </summary>
 
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
@@ -36,10 +35,7 @@ public class GatingManager : Singleton<GatingManager>{
 //	public string GetArea{
 //		get{ return currentArea; }
 //	}
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
+
 	void Start(){		
 		// set pan script
 		scriptPan = CameraManager.Instance.GetPanScript();
@@ -58,14 +54,14 @@ public class GatingManager : Singleton<GatingManager>{
 		SpawnGates();
 	}
 		
-	//---------------------------------------------------
-	// RecurringGateCheck()
-	// Some gates recur -- that is, if they have been
-	// destroyed, after a set amount of time, the gate
-	// will be refreshed for the player to clear again.
-	// Note that this function just sets up the data for
-	// the SpawnGates() function to work with.
-	//---------------------------------------------------	
+	/// <summary>
+	/// Recurrings the gate check.
+	/// Some gates recur -- that is, if they have been
+	/// destroyed, after a set amount of time, the gate
+	/// will be refreshed for the player to clear again.
+	/// Note that this function just sets up the data for
+	/// the SpawnGates() function to work with.
+	/// </summary>
 	private void RecurringGateCheck(){
 		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
 		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
@@ -82,11 +78,10 @@ public class GatingManager : Singleton<GatingManager>{
 				DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
 		}
 	}
-	
-	//---------------------------------------------------
-	// SpawnGates()
-	// Creates all gates that are alive in the save data.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Spawns the gates.
+	/// </summary>
 	private void SpawnGates(){
 		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
@@ -130,39 +125,42 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 		}		
 	}
-	
-	//---------------------------------------------------
-	// GateCleared()
-	// When the player clears a gate.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// When player clears the gate.
+	/// </summary>
 	public void GateCleared(){
 		// enable the player to do stuff in the room
 		EnableUI();
 	}
-	
-	//---------------------------------------------------
-	// IsInGatedRoom()
-	// Returns whether or not the player is currently
-	// in a gated room.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Determines whether this instance is in gated room.
+	/// </summary>
+	/// <returns><c>true</c> if this instance is in gated room; otherwise, <c>false</c>.</returns>
 	public bool IsInGatedRoom(){
 		int currentPartition = scriptPan.currentPartition;
 		bool isGated = HasActiveGate(currentArea, currentPartition);
 		
 		return isGated;
 	}
-	
-	//---------------------------------------------------
-	// HasActiveGate()
-	// Returns if the incoming partition has a gate in it.
-	// Note this assumes the area that this gating manager
-	// is in.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Determines whether partition has active gate
+	/// </summary>
+	/// <returns><c>true</c> if there is active gate the specified partition; otherwise, <c>false</c>.</returns>
+	/// <param name="partition">Partition.</param>
 	public bool HasActiveGate(int partition){
 		bool hasGate = HasActiveGate(currentArea, partition);
 		return hasGate;
 	}
 
+	/// <summary>
+	/// Determines whether area roomPartition has active gate.
+	/// </summary>
+	/// <returns><c>true</c> if there is active gate at the specified area roomPartition; otherwise, <c>false</c>.</returns>
+	/// <param name="area">Area.</param>
+	/// <param name="roomPartition">Room partition.</param>
 	public bool HasActiveGate(string area, int roomPartition){
 		bool isActive = false;
 		
@@ -172,13 +170,14 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		return isActive;
 	}
-
-	//---------------------------------------------------
-	// CanEnterRoom()
-	// Returns whether the player can enter the incoming
-	// room from the incoming direction.
-	//---------------------------------------------------	
-	public bool CanEnterRoom(int currentRoom, RoomDirection eSwipeDirection){
+	
+	/// <summary>
+	/// Determines whether the player can enter room.
+	/// </summary>
+	/// <returns><c>true</c> if player can enter room ; otherwise, <c>false</c>.</returns>
+	/// <param name="currentRoom">Current room.</param>
+	/// <param name="eSwipeDirection">E swipe direction.</param>
+	public bool CanEnterRoom(int currentRoom, RoomDirection swipeDirection){
 		// early out if click manager is tweening
 		if(ClickManager.Instance.IsTweeningUI())
 			return false;
@@ -190,18 +189,19 @@ public class GatingManager : Singleton<GatingManager>{
 		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
 		if(dataGate != null && 
 		   DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
-		   dataGate.DoesBlock(eSwipeDirection))
+		   dataGate.DoesBlock(swipeDirection))
 			isAllowed = false;
 		
 		return isAllowed; 
 	}
-
-	//---------------------------------------------------
-	// EnteredRoom()
-	// When the player enters a room.
-	// NOTE: Currently, exiting a gated room into another
-	// gated room is not by design, and also not supported.	
-	//---------------------------------------------------	
+	
+	/// <summary>
+	/// Entereds the room.
+	/// NOTE: Currently, exiting a gated room into another gated room is not by design,
+	/// and also not supported
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	public void EnteredRoom(object sender, PartitionChangedArgs args){
 		int leavingPartitionNumber = args.nOld;
 		int enteringPartitionNumber = args.nNew;
@@ -274,24 +274,24 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		return isDestroyed;
 	}	
-	
-	//---------------------------------------------------
-	// ListenForMovementFinished()
-	// Subscribes/unsubscribes to pet movemvent callback.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Listens for movement finished.
+	/// </summary>
+	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
 	private void ListenForMovementFinished(bool isFinished){
 		if(isFinished)
 			PetMovement.Instance.OnReachedDest += PetReachedDest;
 		else
 			PetMovement.Instance.OnReachedDest -= PetReachedDest;			
 	}
-	
-	//---------------------------------------------------
-	// PetReachedDest()
-	// Callback for when the pet reaches moving to its
-	// destination.  It is critical this function is only
-	// called if the pet is entering a gated room.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Pets the reached destination. It is critical this function is only
+	/// called if the pet is entering a gated room.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void PetReachedDest(object sender, EventArgs args){
 		
 		// process any callbacks for when the pet reaches a gate
@@ -326,19 +326,13 @@ public class GatingManager : Singleton<GatingManager>{
 			ShowNoFireNotification();
 		}
 	}
-	
-	//---------------------------------------------------
-	// ShowNoFireNotification()
-	// Shows the player a notification explaining why
-	// they cannot breath fire at this time.
-	// Calling this function assumes the player cannot
-	// breath fire.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Shows the no fire notification. Calling this function assumes the player
+	/// cannot breathe fire
+	/// </summary>
 	private void ShowNoFireNotification(){
 		//use thought bubble instead. try to stay away from notification
-
-
-
 
 		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
@@ -380,23 +374,21 @@ public class GatingManager : Singleton<GatingManager>{
 //		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
 //			message, strImage, null, true, true, strAnalytics);		
 	}
-	
-	//---------------------------------------------------
-	// ShowFireButton()
-	// Shows the fire button to attack the gate.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Shows the fire button.
+	/// </summary>
 	private void ShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
-		
-		// set location of the button based on if it is a tutorial or not
-		string strConstant = "FireLoc_Normal";
+
 		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
 		// 	strConstant = "FireLoc_Tutorial";
-		
-		Vector3 vLoc = Constants.GetConstant<Vector3>(strConstant);
-		goFireButton.transform.localPosition = vLoc;
+	
+		// set location of the button based on if it is a tutorial or not
+		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
+		goFireButton.transform.localPosition = fireButtonLoc;
 		
 		// rename the button so that other things can find it
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;
@@ -412,12 +404,10 @@ public class GatingManager : Singleton<GatingManager>{
 		else
 			Debug.LogError("Destination callback being called for non gated room");		
 	}
-	
-	//---------------------------------------------------
-	// EnableUI()
-	// Enables the UI for the player that had previously
-	// been locked.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Enables the UI.
+	/// </summary>
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
@@ -435,15 +425,15 @@ public class GatingManager : Singleton<GatingManager>{
 	// paths so I could easily tell when the player was
 	// entering the room and when they were already in it.
 	//---------------------------------------------------	
-	private void MovePlayer(int nRoom){
+	private void MovePlayer(int roomPartition){
 		// then get the id of the gate and get that gate object from our list of active gates
-		Gate gate = (Gate)activeGates[nRoom];
+		Gate gate = (Gate)activeGates[roomPartition];
 		
 		// get the position the player should approach
-		Vector3 vPos = gate.GetPlayerPosition();
+		Vector3 playerPosition = gate.GetPlayerPosition();
 		
 		// phew...now tell the player to move
-		PetMovement.Instance.MovePet(vPos);		
+		PetMovement.Instance.MovePet(playerPosition);		
 	}
 	
 

@@ -77,6 +77,10 @@ public class DataManager : Singleton<DataManager>{
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){
 		if(paused){
+			#if DEVELOPMENT_BUILD
+				return;
+			#endif
+
 			//Save menu scene data. doesn't depend on if tutorial is finished or not
 			SaveMenuSceneData();
 

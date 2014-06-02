@@ -3,40 +3,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// Data_ItemBox
-// An individual item box.  An item box is a list of
-// a list of loot tables and weights.  One of the
-// lists is picked, and then all the items within
-// the loot tables are picked.
-// This is immutable data.
-//---------------------------------------------------
+/// <summary>
+/// An individual item box.  An item box is a list of
+/// a list of loot tables and weights.  One of the
+/// lists is picked, and then all the items within
+/// the loot tables are picked.
+/// </summary>
 
 // within the data of an item box, are multiple item box variations, so that one box could reward different things
 public struct ItemBoxVariation{
 	// weight that this particular variation will be selected
-	public int nWeight;
+	public int weight;
 	
 	// list of loot tables in this variation
 	public List<string> listLootTables;
 	
-	public ItemBoxVariation(int nWeight, List<string> listLootTables){
-		this.nWeight = nWeight;
+	public ItemBoxVariation(int weight, List<string> listLootTables){
+		this.weight = weight;
 		this.listLootTables = listLootTables;
 	}
-	
-	//---------------------------------------------------
-	// GetItems()
-	// Returns list of items for this variation's loot
-	// tables.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Gets the items.
+	/// </summary>
+	/// <returns>List of Items for this variation's look tables</returns>
 	public List<KeyValuePair<Item, int>> GetItems(){
 		List<KeyValuePair<Item, int>> items = new List<KeyValuePair<Item, int>>();
 		
 		// loop through each loot table and get the item and quantity from that loot table
 		foreach(string strLootTableKey in listLootTables){
 			// get the loot table from the id
-			Data_LootTable dataTable = DataLoaderLootTables.GetLootTable(strLootTableKey);
+			ImmutableDataLootTable dataTable = DataLoaderLootTables.GetLootTable(strLootTableKey);
 			
 			// null check
 			if(dataTable != null){
@@ -53,22 +50,22 @@ public struct ItemBoxVariation{
 	}	
 }
 
-public class Data_ItemBox{
+public class ImmutableDataItemBox{
 	// id for the item box
-	private string strID;
+	private string itemBoxID;
 
 	public string GetID(){
-		return strID;	
+		return itemBoxID;	
 	}
 	
 	// list of all potential variations on this item box
 	List<ItemBoxVariation> listVariations;
 
-	public Data_ItemBox(string id, Hashtable hashAttr, List<IXMLNode> listData, string strError){
+	public ImmutableDataItemBox(string id, Hashtable hashAttr, List<IXMLNode> listData, string errorMessage){
 		// set id
-		strID = id;
+		itemBoxID = id;
 		
-		strError += "(" + id + ")";
+		errorMessage += "(" + id + ")";
 		
 		// set the variations for this item box
 		listVariations = new List<ItemBoxVariation>();
@@ -82,7 +79,7 @@ public class Data_ItemBox{
 			List<string> listLootTables = new List<string>();
 			List<IXMLNode> listLootTableNodes = XMLUtils.GetChildrenList(node);
 			foreach(IXMLNode nodeLootTable in listLootTableNodes){
-				string strLootTable = XMLUtils.GetString(nodeLootTable, "", strError);
+				string strLootTable = XMLUtils.GetString(nodeLootTable, "", errorMessage);
 				listLootTables.Add(strLootTable);
 			}
 			
@@ -90,18 +87,17 @@ public class Data_ItemBox{
 			listVariations.Add(variation);
 		}
 	}
-	
-	//---------------------------------------------------
-	// GetItems()
-	// This function will return a list of items and their
-	// quantities as determined by one of the variations
-	// in this item box.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Gets the items.
+	/// </summary>
+	/// <returns>Return a list of items and their quantities as determined by
+	/// one of the variations in this item box.</returns>
 	public List<KeyValuePair<Item, int>> GetItems(){
 		// first, create a weighted list of our variations
 		List<ItemBoxVariation> listWeighted = new List<ItemBoxVariation>();
 		foreach(ItemBoxVariation variation in listVariations){
-			int nWeight = variation.nWeight;
+			int nWeight = variation.weight;
 			for(int i = 0; i < nWeight; i++)
 				listWeighted.Add(variation);
 		}

@@ -16,10 +16,8 @@ public class WellapadTaskUI : MonoBehaviour {
 	// task text
 	public UILabel label;
 	
-	// checkbox sprite
-	public UISprite spriteBox;
-	
 	// tween object for when the task is completed
+	public TweenToggle slash;
 	public TweenToggle tweenCheck;
 	
 	public Color tutTextHighlightOn;
@@ -73,6 +71,8 @@ public class WellapadTaskUI : MonoBehaviour {
 				( eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop ) ) {
 			// mark this task as done
 			tweenCheck.Show();
+			slash.gameObject.SetActive(true);
+			slash.Show();
 		}		
 	}
 	

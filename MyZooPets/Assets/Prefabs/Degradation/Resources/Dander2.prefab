@@ -731,7 +731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strSoundClean: CleanDust
-  LgDegredationEmitter: {fileID: 100008}
+  LgDegradationEmitter: {fileID: 100008}
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -746,7 +746,6 @@ MonoBehaviour:
   spriteList:
   - {fileID: 11400020}
   - {fileID: 11400026}
-  - {fileID: 0}
   isloop: 1
   cycleTime: .5
   toValue: 1
@@ -762,6 +761,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062ab4d3b5a0ae44f9050d20c24e39ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleObject: {fileID: 100000, guid: c8ab7dd5411b3394eb87b14d9d0648a2, type: 2}
+  isActive: 0
+  delayBeforeStart: 0
+  minInterval: 1
+  maxInterval: 3
+  targetDestination: {fileID: 0}
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1

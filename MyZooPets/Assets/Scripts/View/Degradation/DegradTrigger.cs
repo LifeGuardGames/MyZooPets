@@ -3,14 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DegradTrigger : MonoBehaviour {
-    public string ID{get; set;} 		//the id of this specific degradation trigger
+public class DegradTrigger : MonoBehaviour{
+	public string ID{ get; set; } 		//the id of this specific degradation trigger
 	public string strSoundClean;	// sound this degrade trigger makes when the player cleans it up
-	public GameObject LgDegredationEmitter;		// The custom emittor emitter that emits skulls that fly towards pet
-	private LgParticleEmitterDegredation emitter;
+	public GameObject LgDegradationEmitter;		// The custom emittor emitter that emits skulls that fly towards pet
+	private LgParticleEmitterDegradation emitter;
 	
-    //=======================Events========================
-    public EventHandler<EventArgs> OnTriggerCleaned;   // when this trigger gets cleaned
+	//=======================Events========================
+	public EventHandler<EventArgs> OnTriggerCleaned;   // when this trigger gets cleaned
 	
 	// has this trigger been cleaned yet?
 	private bool bCleaned = false;
@@ -18,19 +18,19 @@ public class DegradTrigger : MonoBehaviour {
 	// Use this for initialization
 	void Start(){
 		// set the emitter
-		emitter = LgDegredationEmitter.GetComponent<LgParticleEmitterDegredation>();
+		emitter = LgDegradationEmitter.GetComponent<LgParticleEmitterDegradation>();
 		
 		// set emitter values
-		float fTime = Constants.GetConstant<float>( "DegradTickTime" );
-		int nDamage = Constants.GetConstant<int>( "DegradDamage" );
-		emitter.InitDegradEmitter( fTime, nDamage );
+		float fTime = Constants.GetConstant<float>("DegradTickTime");
+		int nDamage = Constants.GetConstant<int>("DegradDamage");
+		emitter.InitDegradEmitter(fTime, nDamage);
 		
 		// deprecated stuff below...with the new tutorials, we activate particle effects differently for triggers.
 		// remove this when it seems safe to so.
-        //DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
+		//DegradationUIManager.OnActivateParticleEffects += ActivateParticleEffects;
             
-        //Disable particle effects when other tutorials are not finished yet
-        /*if(TutorialLogic.Instance.FirstTimeRealInhaler || 
+		//Disable particle effects when other tutorials are not finished yet
+		/*if(TutorialLogic.Instance.FirstTimeRealInhaler || 
             TutorialLogic.Instance.FirstTimeCalendar){
             transform.Find("SkullParticle").GetComponent<ParticleSystem>().Stop();
         }*/
@@ -39,52 +39,52 @@ public class DegradTrigger : MonoBehaviour {
 		emitter.targetDestination = DegradationUIManager.Instance.petHitLocation;
 		
 		// if the trigger tutorial has been played, activate the trigger
-		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TutorialManagerBedroom.TUT_LAST );
-		if ( bTriggers || DegradationUIManager.Instance.IsTesting() )
+		bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST);
+		if(bTriggers || DegradationUIManager.Instance.IsTesting())
 			ActivateParticles();		
 	}
 
-    void OnDestroy(){
-        DegradationUIManager.OnActivateParticleEffects -= ActivateParticleEffects;
-    }
+	void OnDestroy(){
+		DegradationUIManager.OnActivateParticleEffects -= ActivateParticleEffects;
+	}
 
-    //Listen to OnTap event from FingerGesture
-    void OnTap(TapGesture gesture){
+	//Listen to OnTap event from FingerGesture
+	void OnTap(TapGesture gesture){
 		// check if this trigger has been cleaned yet
-		if ( bCleaned )
+		if(bCleaned)
 			return;
 		
-        //when trigger is touched remove from DataManager and destroy GameObject
-        if(ClickManager.Instance.CanRespondToTap( gameObject )){
+		//when trigger is touched remove from DataManager and destroy GameObject
+		if(ClickManager.Instance.CanRespondToTap(gameObject)){
 			// play sound associated with cleaning the trigger
-			AudioManager.Instance.PlayClip( strSoundClean );
+			AudioManager.Instance.PlayClip(strSoundClean);
 	        
-            CleanTriggerAndDestroy();
-        }
-    }
+			CleanTriggerAndDestroy();
+		}
+	}
 
-    private void CleanTriggerAndDestroy(){
+	private void CleanTriggerAndDestroy(){
 		bCleaned = true;
-        DegradationLogic.Instance.ClearDegradationTrigger(this);
+		DegradationLogic.Instance.ClearDegradationTrigger(this);
 		
 		// send out callback
-		if (OnTriggerCleaned != null)
-			OnTriggerCleaned( this, EventArgs.Empty );		
+		if(OnTriggerCleaned != null)
+			OnTriggerCleaned(this, EventArgs.Empty);		
 		
 		// play an FX
 		Vector3 vPosFX = gameObject.transform.position;
-		string strFX = Constants.GetConstant<string>( "Degrad_CleanFX" );
-		ParticleUtils.CreateParticle( strFX, vPosFX );		
+		string strFX = Constants.GetConstant<string>("Degrad_CleanFX");
+		ParticleUtils.CreateParticle(strFX, vPosFX);		
 		
-        Destroy(this.gameObject);
-    }
+		Destroy(this.gameObject);
+	}
 
-    private void ActivateParticleEffects(object senders, EventArgs args){
+	private void ActivateParticleEffects(object senders, EventArgs args){
 		ActivateParticles();
-    }
+	}
 
-	private void ActivateParticles() {
-       transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
+	private void ActivateParticles(){
+		transform.Find("SkullParticle").GetComponent<ParticleSystem>().Play();
 		
 		// Enable the skull flying to pet
 		emitter.Enable();		
@@ -96,9 +96,9 @@ public class DegradTrigger : MonoBehaviour {
 	// trigger tutorial that just fires one skull object,
 	// then turns off.
 	//---------------------------------------------------	
-	public IEnumerator FireOneSkull() {
+	public IEnumerator FireOneSkull(){
 		// enable the emitter so it shoots a skull
-		emitter.Enable( true );
+		emitter.Enable(true);
 		
 		// wait a frame
 		yield return 0;

@@ -7,13 +7,14 @@ using System.Collections;
 /// Just instantiates it, the behaviour of the particle is up to itself
 /// Note: Requires NGUITools for add child
 /// </summary>
-public class LgParticleEmitter : MonoBehaviour {
+public class LgParticleEmitter : MonoBehaviour{
 	
 	public GameObject particleObject;
 	
 	//Timer stuff
 	public bool isActive;
-	private void SetActive( bool bActive ){
+
+	private void SetActive(bool bActive){
 		isActive = bActive;	
 	}
 	
@@ -23,27 +24,16 @@ public class LgParticleEmitter : MonoBehaviour {
 	private float generatedValue;
 	private float timeBegin;
 	
-	void Start(){
+	protected virtual void Start(){
 		if(maxInterval < minInterval){
 			Debug.LogError("Max interval is less than min interval, clamping to min");
 			maxInterval = minInterval;
 		}
 		generatedValue = Random.Range(minInterval, maxInterval);
 		timeBegin = Time.time;
-		
-		_Start();
 	}
 	
-	protected virtual void _Start(){
-		// Override in child
-	}
-	
-	void OnDestroy() {
-		_OnDestroy();	
-	}
-	
-	protected virtual void _OnDestroy() {
-		
+	protected virtual void OnDestroy(){
 	}
 	
 	void Update(){
@@ -54,36 +44,37 @@ public class LgParticleEmitter : MonoBehaviour {
 				
 				// Do the action here
 				GameObject emittedObject = NGUITools.AddChild(gameObject, particleObject);
-				_ExtendedAction(emittedObject);
+				ExtendedAction(emittedObject);
 			}
 		}
 	}
-	
-	protected virtual void _ExtendedAction(GameObject emittedObject){
-		// Override in child	
+
+	// Override in child	
+	protected virtual void ExtendedAction(GameObject emittedObject){
+
 	}
 	
 	// Note: If some script enables a bunch of buttons at the same time they will all instantiate at once the first time
-	public void Enable( bool bImmediate = false ){
-		SetActive( true );
+	public void Enable(bool isImmediate = false){
+		SetActive(true);
 		
 		// if we are to fire this trigger immediately, override the generated value
-		if ( bImmediate )
+		if(isImmediate)
 			generatedValue = 0;
 		
-		OnEnabled( bImmediate );
+		OnEnabled(isImmediate);
 	}
 	
-	protected virtual void OnEnabled( bool bImmediate ) {
+	protected virtual void OnEnabled(bool isImmediate){
 		
 	}
 	
 	public void Disable(){
-		SetActive( false );
+		SetActive(false);
 		
 		OnDisabled();
 	}
 	
-	protected virtual void OnDisabled() {
+	protected virtual void OnDisabled(){
 	}
 }

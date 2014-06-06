@@ -14,10 +14,6 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	public ZoomHelper zoomHelper; // zoom helper
 	public GameObject goBackButton; // back button for the chart
 	public BoxCollider draggableCollider; // The collider that is dragged, to be enabled only when zoomed in
-	public Color bedroomActiveColor;
-	public Color bedroomInactiveColor;
-	public Color yardActiveColor;
-	public Color yardInactiveColor;
 	public List<MapEntry> mapEntries = new List<MapEntry>();
 
 	protected override void _Start(){

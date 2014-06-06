@@ -13,6 +13,11 @@ public class MapEntry : MonoBehaviour {
 	[SerializeField]
 	private int roomPartition; //Partition in Gates.xml
 
+	public Color bedroomActiveColor;
+	public Color bedroomInactiveColor;
+	public Color yardActiveColor;
+	public Color yardInactiveColor;
+
 	private Color roomIconLockColor;
 	private Color roomIconUnlockColor;
 	private Color roomBoxAndStripLockColor;
@@ -27,8 +32,15 @@ public class MapEntry : MonoBehaviour {
 	}
 
 	void Awake(){
-		roomBoxAndStripUnlockColor = new Color32(46, 71, 161, 255);
-		roomBoxAndStripLockColor = Color.gray;
+		if(Area == "Bedroom"){
+			roomBoxAndStripUnlockColor = bedroomActiveColor;
+			roomBoxAndStripLockColor = bedroomInactiveColor;
+		}
+		else if(Area == "Yard"){
+			roomBoxAndStripUnlockColor = yardActiveColor;
+			roomBoxAndStripLockColor = yardInactiveColor;
+		}
+
 		roomIconUnlockColor = Color.white;
 		roomIconLockColor = Color.black;
 
@@ -36,6 +48,7 @@ public class MapEntry : MonoBehaviour {
 	}
 
 	public void Unlock(){
+		Debug.Log(roomBoxAndStripUnlockColor);
 		roomBox.color = roomBoxAndStripUnlockColor;
 		roomStrip.color = roomBoxAndStripUnlockColor;
 		roomIcon.color = roomIconUnlockColor;

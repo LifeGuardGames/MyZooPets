@@ -5,48 +5,49 @@ using System.Collections;
 /*
     Handles inhale (swipe up) action
 */
-public class Inhale : InhalerPart {
-    public InhalerAnimationController animationController;
+public class Inhale : InhalerPart{
+	public InhalerAnimationController animationController;
 
-    protected override void Awake(){
-        base.Awake();
-        gameStepID = 7;
-        floatyOptions.Add("text", ""); 
-    }
+	protected override void Awake(){
+		base.Awake();
+		gameStepID = 7;
+		floatyOptions.Add("text", ""); 
+	}
 
-    void OnSwipe(SwipeGesture gesture){
-       FingerGestures.SwipeDirection direction = gesture.Direction; 
+	void OnSwipe(SwipeGesture gesture){
+		FingerGestures.SwipeDirection direction = gesture.Direction; 
 
-       if(direction == FingerGestures.SwipeDirection.Up){
+		if(direction == FingerGestures.SwipeDirection.Up){
 
-            if(InhalerAnimationController.OnAnimDone == null){
-                //Attach handler. so game can move on to next step after animation is done
-                InhalerAnimationController.OnAnimDone += OnAnimationDone;
+			if(InhalerAnimationController.OnAnimDone == null){
 
-                //Disable hint when swipe gesture is registered. 
-                GetComponent<HintController>().DisableHint(false);
 
-                animationController.Inhale();
-                AudioManager.Instance.PlayClip( "inhalerInhale" );      
-            }
-       }
-    }
+				//Disable hint when swipe gesture is registered. 
+				GetComponent<HintController>().DisableHint(false);
 
-    protected override void Disable(){
-        gameObject.SetActive(false);
-    }
+				animationController.Inhale();
+				AudioManager.Instance.PlayClip("inhalerInhale"); 
 
-    protected override void Enable(){
-        gameObject.SetActive(true);
-    }
+				//using invoke instead of listening to animationController callback
+				//because LWFAnimator sometimes sends callback prematurely. Don't
+				//want to debug LWFAnimator since we are switching away from it soon
+				Invoke("NextStep", 3.5f);
+			}
+		}
+	}
 
-    protected override void NextStep(){
-        base.NextStep();
-        InhalerAnimationController.OnAnimDone -= OnAnimationDone;
-        Destroy(gameObject);
-    }
+	protected override void Disable(){
+		gameObject.SetActive(false);
+	}
 
-    private void OnAnimationDone(object sender, EventArgs args){
-        NextStep(); 
-    }
+	protected override void Enable(){
+		gameObject.SetActive(true);
+	}
+
+	protected override void NextStep(){
+		base.NextStep();
+		Destroy(gameObject);
+
+	}
+
 }

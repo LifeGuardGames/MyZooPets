@@ -39,14 +39,16 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	public void NextStep(){
 		if(IsDoneWithGame())
 			GameDone();
+		else{
+			currentStep++;
+			
+			if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
+				OnNextStep(this, EventArgs.Empty);
+		}
+//		//Send analytics event
+//		Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
 
-		//Send analytics event
-		Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
 
-		currentStep++;
-
-		if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
-			OnNextStep(this, EventArgs.Empty);
 	}
 
 	public void ResetGame(){

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 // and makes sure that the button can process a click.
 //---------------------------------------------------
 
-public abstract class LgButton : MonoBehaviour{
+public class LgButton : MonoBehaviour{
 	
 	//=======================Events========================
 	public EventHandler<EventArgs> OnProcessed; 	// when this button is processed

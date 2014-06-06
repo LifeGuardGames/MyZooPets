@@ -8,24 +8,14 @@ using System.Linq;
 	Inventory class for Pet
 	Contains all items the pet owns.
 */
-public class InventoryLogic : Singleton<InventoryLogic> {
+public class InventoryLogic : Singleton<InventoryLogic>{
 	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
+	public static event EventHandler<InventoryEventArgs> OnItemUsed; //Call when an item has been used
 	
 	public class InventoryEventArgs : EventArgs{
-		private bool isItemNew = false;
-		private InventoryItem invItem = null;
+		public bool IsItemNew{ get; set; }
 
-		public bool IsItemNew{
-			get{return isItemNew;}
-		}
-		public InventoryItem InvItem{
-			get{return invItem;}
-		}
-
-		public InventoryEventArgs(bool isItemNew, InventoryItem invItem){
-			this.isItemNew = isItemNew;
-			this.invItem = invItem;
-		}
+		public InventoryItem InvItem{ get; set; }
 	}
 
 	private bool listNeedsUpdate = true;
@@ -79,12 +69,14 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 			//if in the inventory already check if it's wallpaper
 			//if it's wallpaper don't increment count just return
-			if(CheckForWallpaper(itemID)) return;
+			if(CheckForWallpaper(itemID))
+				return;
 
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
 			invItems[itemID] = invItem;
-		}else{ //Add InventoryItem into dict if key doesn't exist
+		}
+		else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
 			Item itemData = DataLoaderItems.GetItem(itemID);
 
@@ -93,7 +85,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 
 			//special case: keep track of bought wallpaper in another list.
 			if(itemData.Type == ItemType.Decorations){
-				DecorationItem decoItem = (DecorationItem) itemData;
+				DecorationItem decoItem = (DecorationItem)itemData;
 
 				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
 					List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
@@ -102,8 +94,13 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 			}
 		}
 
-		InventoryEventArgs args = new InventoryEventArgs(itemNew, invItem);
-		if(OnItemAddedToInventory != null) OnItemAddedToInventory(this, args);
+		if(OnItemAddedToInventory != null){
+			InventoryEventArgs args = new InventoryEventArgs();
+			args.IsItemNew = itemNew;
+			args.InvItem = invItem;
+
+			OnItemAddedToInventory(this, args);
+		}
 	}
 	
 	//---------------------------------------------------
@@ -111,18 +108,18 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	// Based on the item type of strItemID, this function
 	// will return the proper inventory for it.
 	//---------------------------------------------------	
-	private Dictionary<string, InventoryItem> GetInventoryForItem( string strItemID ) {
+	private Dictionary<string, InventoryItem> GetInventoryForItem(string strItemID){
 		// what list the item is placed in depends on what kind of item it is
-		ItemType eType = DataLoaderItems.GetItemType( strItemID );
+		ItemType eType = DataLoaderItems.GetItemType(strItemID);
 		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
-		switch ( eType ) {
-			case ItemType.Decorations:
-				inventory = DataManager.Instance.GameData.Inventory.DecorationItems;
-				break;
-			default:
-				inventory = DataManager.Instance.GameData.Inventory.InventoryItems;
-				break;
+		switch(eType){
+		case ItemType.Decorations:
+			inventory = DataManager.Instance.GameData.Inventory.DecorationItems;
+			break;
+		default:
+			inventory = DataManager.Instance.GameData.Inventory.InventoryItems;
+			break;
 		}		
 		
 		return inventory;
@@ -130,7 +127,7 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 	
 	//Use item from inventory
 	public void UseItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem( itemID );
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
 
@@ -149,13 +146,22 @@ public class InventoryLogic : Singleton<InventoryLogic> {
 				Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
 
 			// play the item's sound, if it has one
-			string strSound = invItem.ItemData.SoundUsed;
-			if ( !string.IsNullOrEmpty(strSound) )
-				AudioManager.Instance.PlayClip( strSound );
-		}
+			string itemSound = invItem.ItemData.SoundUsed;
+			if(!string.IsNullOrEmpty(itemSound))
+				AudioManager.Instance.PlayClip(itemSound);
 
-		if(invItem.Amount == 0)
-			invItems.Remove(itemID);
+			//remove inv item if there is none left
+			if(invItem.Amount == 0)
+				invItems.Remove(itemID);
+
+			// fire item used event
+			if(OnItemUsed != null){
+				InventoryEventArgs args = new InventoryEventArgs();
+
+				args.InvItem = invItem;
+				OnItemUsed(this, args);
+			}
+		}
 	}
 	//=================================================
 }

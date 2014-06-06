@@ -12,7 +12,7 @@ public class ImmutableDataMiniPet{
 	private MiniPetTypes type; // type of miniPet
 	private string prefabName; // prefab to spawn for the miniPet
 	// private string UnlockAtGateID; // at which gate should the miniPet be unlocked
-	private string spawnLocation; // the location that the miniPet should be spawned at
+	private Vector3 spawnLocation; // the location that the miniPet should be spawned at
 
 	public string ID{
 		get{ return id;}
@@ -35,7 +35,7 @@ public class ImmutableDataMiniPet{
 	// }
 
 	public Vector3 SpawnLocation{
-		get{ return Constants.ParseVector3(spawnLocation);}
+		get{ return spawnLocation;}
 	}
 
 //	private Dictionary<Level, int> levelUpConditions;
@@ -54,6 +54,7 @@ public class ImmutableDataMiniPet{
 		// UnlockAtGateID = XMLUtils.GetInt(hashElements["UnlockAtGateID"] as IXMLNode,
 		//                                     0, error);
 
-		spawnLocation = XMLUtils.GetString(hashElements["SpawnLocation"] as IXMLNode, null, error);
+		string rawLocation = XMLUtils.GetString(hashElements["SpawnLocation"] as IXMLNode, null, error);
+		spawnLocation = Constants.ParseVector3(rawLocation);
 	}
 }

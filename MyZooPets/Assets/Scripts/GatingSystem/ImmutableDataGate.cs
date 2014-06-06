@@ -116,7 +116,8 @@ public class ImmutableDataGate{
 		string strUnlocks = XMLUtils.GetString(hashElements["TaskUnlocks"] as IXMLNode);
 		arrayUnlocks = strUnlocks.Split(","[0]);
 
-		miniPetID = XMLUtils.GetString(hashElements["MiniPetID"] as IXMLNode, null, error);
+		if(hashElements.ContainsKey("MiniPetID"))
+			miniPetID = XMLUtils.GetString(hashElements["MiniPetID"] as IXMLNode, null, error);
 		
 		//Debug.Log("Loading gate " + strID + " in loc " + strArea + " in partition " + nPartition + " and monster " + strMonsterID);
 	}

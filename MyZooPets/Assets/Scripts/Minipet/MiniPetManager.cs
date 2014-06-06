@@ -16,7 +16,7 @@ public class MiniPetManager : MonoBehaviour {
 
 		foreach(KeyValuePair<string, MutableDataMiniPetStatus> progress in miniPetProgress){
 			string miniPetID = progress.Key;
-			string miniPetStatus = progress.Value;
+			MutableDataMiniPetStatus miniPetStatus = progress.Value;
 
 			//use the id to get the immutable data
 			ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
@@ -31,7 +31,7 @@ public class MiniPetManager : MonoBehaviour {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
-	private void OnDestroyedGateHanlder(object this, DestroyedGateEventArgs args){
+	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){
 		string gateID = args.DestroyedGateID;
 		string miniPetID = args.MiniPetID;
 

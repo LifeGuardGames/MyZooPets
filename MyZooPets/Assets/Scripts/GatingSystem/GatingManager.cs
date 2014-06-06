@@ -18,7 +18,7 @@ public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
 	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
 	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-	public static EventHandler<EventArgs> OnDestroyedGate; // When a specific gate has been destroyed
+	public static EventHandler<DestroyedGateEventArgs> OnDestroyedGate; // When a specific gate has been destroyed
 	//=====================================================
     
 	public string currentArea; // area that this manager is in

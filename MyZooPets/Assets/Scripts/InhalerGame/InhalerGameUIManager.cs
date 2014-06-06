@@ -8,6 +8,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     public GameObject progressBarObject;
     public GameObject inhalerBody;
+	public Animator inhalerWholeObject;
     public SceneTransition scriptTransition; 
     public GetFireAnimationController fireAnimationController; //The script that plays the fire animation at the end of the inhaler game
     public bool tutOn; //turn tutorial on or off. for debuggin
@@ -77,7 +78,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void HideInhaler(){
-        inhalerBody.SetActive(false); 
+		inhalerWholeObject.Play("InhalerFade");
+        //inhalerBody.SetActive(false);
     }
 
     private void ShowInhaler(){

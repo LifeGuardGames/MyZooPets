@@ -7,6 +7,7 @@ using System.Collections;
 */
 public class Inhale : InhalerPart{
 	public InhalerAnimationController animationController;
+	public Animation InhalerBodyMoveAnimation;
 
 	protected override void Awake(){
 		base.Awake();
@@ -27,6 +28,8 @@ public class Inhale : InhalerPart{
 
 				animationController.Inhale();
 				AudioManager.Instance.PlayClip("inhalerInhale"); 
+
+				InhalerBodyMoveAnimation.Play();
 
 				//using invoke instead of listening to animationController callback
 				//because LWFAnimator sometimes sends callback prematurely. Don't

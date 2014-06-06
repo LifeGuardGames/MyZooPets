@@ -36,6 +36,8 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		case 1:
 				// destroy the spotlight we created for the inhaler
 			RemoveSpotlight();
+			RemoveFingerHint();
+			RemovePopup();
 
 			break;
 		}
@@ -50,7 +52,27 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		AddToProcessList(goInhaler);
 	
 		// spotlight the inhaler
-		SpotlightObject(goInhaler);
+		SpotlightObject(goInhaler, fingerHint: true, fingerHintFlip: true);
+
+		TutorialManager.Instance.StartCoroutine(CreateFocusInhalerTutMessage());
+	}
+
+	private IEnumerator CreateFocusInhalerTutMessage(){
+		yield return new WaitForSeconds(0.5f);
+
+		string tutKey = GetKey() + "_" + GetStep();
+		string petName = DataManager.Instance.GameData.PetInfo.PetName;
+		string message = String.Format(Localization.Localize(tutKey),
+		                               StringUtils.FormatStringPossession(petName));
+		
+		// show popup message
+		Vector3 popupLoc = Constants.GetConstant<Vector3>("InhalerPopupLoc");
+		
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, message);
+		
+		ShowPopup(Tutorial.POPUP_STD, popupLoc, useViewPort: false, option: option);
 	}
 
 	/// <summary>

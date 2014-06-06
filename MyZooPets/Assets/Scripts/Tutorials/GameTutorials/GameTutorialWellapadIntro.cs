@@ -58,10 +58,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		// listen for when the wellapad is closed
 		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
 	}
-
-	//---------------------------------------------------
-	// FocusWellapadButton()
-	//---------------------------------------------------		
+	
 	private void FocusWellapadButton(){
 		// begin listening for when the button is clicked
 		LgButton button = goWellapadButton.GetComponent<LgButton>();

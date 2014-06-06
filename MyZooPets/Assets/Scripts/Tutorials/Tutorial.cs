@@ -297,6 +297,7 @@ public abstract class Tutorial{
 		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
 			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
 
+		//viewport kind of broken..... don't use
 		if(useViewPort){
 			// transform viewport location to screen position, then from bottom left to center
 			newPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, location);
@@ -307,7 +308,7 @@ public abstract class Tutorial{
 		// create the popup
 		GameObject goResource = Resources.Load(popupKey) as GameObject;
 		goPopup = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), goResource);
-//		vPos.z = goPopup.transform.position.z; // keep the default z-value
+//		newPos.z = goPopup.transform.position.z; // keep the default z-value
 		goPopup.transform.localPosition = newPos;				
 		
 		//feed the script the option hashtable		

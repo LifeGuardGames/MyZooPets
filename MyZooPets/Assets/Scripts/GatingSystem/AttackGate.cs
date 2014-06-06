@@ -60,7 +60,7 @@ public class AttackGate : MonoBehaviour{
 	/// </summary> 
 	private IEnumerator DoneAttacking(){
 		// damage the gate
-		bool isDestroyed = gateTarget.GateDamaged(damage);
+		bool isDestroyed = gateTarget.DamageGate(damage);
 		
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);

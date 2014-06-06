@@ -142,18 +142,18 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	//---------------------------------------------------   
 	private void SetUpTriggers(){      
 		// get list of available locations to spawn triggers
-		List<Data_TriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
+		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
         
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 
-		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>(listAvailable, numToSpawn);
+		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
 		//create trigger data to be spawned
 		for(int i = 0; i < listChosen.Count; i++){
-			Data_TriggerLocation location = listChosen[i];
+			ImmutableDataTriggerLocation location = listChosen[i];
             
 			ImmutableDataTrigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 

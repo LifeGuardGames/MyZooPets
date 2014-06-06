@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,16 +17,16 @@ public class DataLoaderTriggerLocations {
 	// GetTriggerLocation()
 	// Returns a trigger location based on an id.
 	//---------------------------------------------------	
-	public static Data_TriggerLocation GetTriggerLocation( string strID, string strScene ) {
+	public static ImmutableDataTriggerLocation GetTriggerLocation( string strID, string strScene ) {
 		if ( hashData == null ) 
 			SetupData();
 		
-		Data_TriggerLocation data = null;
+		ImmutableDataTriggerLocation data = null;
 		
 		if ( hashData.ContainsKey( strScene ) ) {
 			Hashtable hashScene = (Hashtable) hashData[strScene];
 			if ( hashScene.ContainsKey( strID ) )
-				data = (Data_TriggerLocation) hashScene[strID];
+				data = (ImmutableDataTriggerLocation) hashScene[strID];
 			else
 				Debug.LogError("No such trigger id " + strID + " for scene " + strScene);
 		}
@@ -41,16 +41,16 @@ public class DataLoaderTriggerLocations {
 	// Returns a list of available trigger locations for
 	// a scene.
 	//---------------------------------------------------	
-	public static List<Data_TriggerLocation> GetAvailableTriggerLocations( string strScene ) {
+	public static List<ImmutableDataTriggerLocation> GetAvailableTriggerLocations( string strScene ) {
 		if ( hashData == null ) 
 			SetupData();
 		
-		List<Data_TriggerLocation> list = new List<Data_TriggerLocation>();
+		List<ImmutableDataTriggerLocation> list = new List<ImmutableDataTriggerLocation>();
 		
 		if ( hashData.ContainsKey( strScene ) ) {
 			Hashtable hashScene = (Hashtable) hashData[strScene];
 			foreach ( DictionaryEntry entry in hashScene ) {
-				Data_TriggerLocation location = (Data_TriggerLocation) entry.Value;
+				ImmutableDataTriggerLocation location = (ImmutableDataTriggerLocation) entry.Value;
 				
 				// check to make sure the partition of this trigger is unlocked; if it is, it's okay to add to the list
 				int nPartition = location.GetPartition();
@@ -92,7 +92,7 @@ public class DataLoaderTriggerLocations {
                 string id = (string)hashAttr["ID"];
 				string strError = strErrorFile + "(" + id + "): ";
 				
-				Data_TriggerLocation data = new Data_TriggerLocation( id, hashAttr, strError );
+				ImmutableDataTriggerLocation data = new ImmutableDataTriggerLocation( id, hashAttr, strError );
 				
 				string strScene = data.GetScene();	
 				if ( !hashData.ContainsKey( strScene ) )

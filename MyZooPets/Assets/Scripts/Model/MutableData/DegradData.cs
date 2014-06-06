@@ -9,15 +9,16 @@ using System;
 // Mutable data
 //----------------------------------------------------
 public class DegradData{
-    public string TriggerID {get; set;}
-	
-	private string strPosition;
-	public Vector3 GetPosition() {
-		return Constants.ParseVector3( strPosition );	
+	private string position;
+
+	public string TriggerID { get; set; }
+
+	public Vector3 GetPosition(){
+		return Constants.ParseVector3(position);	
 	}
 
-    public DegradData(string triggerID, string position){
-        strPosition = position;
-        TriggerID = triggerID;
-    }
+	public DegradData(string triggerID, string position){
+		position = position;
+		TriggerID = triggerID;
+	}
 }

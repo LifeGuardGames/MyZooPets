@@ -40,7 +40,7 @@ public class GateMonster : Gate{
 	/// Damages the gate.
 	/// </summary>
 	/// <param name="damage">Damage.</param>
-	protected override void OnGateDamaged(int damage){
+	protected override void GateDamaged(int damage){
 
 		//drop some coins when the gate monster is attacked
 		AudioManager.Instance.PlayClip("coinDrop");
@@ -68,7 +68,7 @@ public class GateMonster : Gate{
 		Move(damage);
 	}	
 
-	protected override void OnGateDestroyed(){
+	protected override void GateDestroyed(){
 		// for monsters, just move them fast and far away MOVE_DIR
 		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
 		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;

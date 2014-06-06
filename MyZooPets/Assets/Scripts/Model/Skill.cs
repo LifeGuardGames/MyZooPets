@@ -3,11 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// Skill 
-// skill data that is used during game. Contains a mix
-// of mutable and immutable data 
-//---------------------------------------------------
+/// <summary>
+/// Skill. Constains a mix of mutable and immutable data
+/// </summary>
 public class Skill{
     private string id;
     private string name;

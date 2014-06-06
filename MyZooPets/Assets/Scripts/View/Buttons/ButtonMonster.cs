@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Button that is on a gating monster.
 //---------------------------------------------------
 
-public class ButtonMonster : LgButtonHold {
+public class ButtonMonster : LgButtonHold{
 	// attack gate script
 	private AttackGate scriptAttack;
 	
@@ -33,7 +33,7 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
-	protected override void _Start() {
+	protected override void _Start(){
 		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
 		scriptPan.OnPartitionChanging += OnPartitionChanging;
 	}
@@ -41,28 +41,28 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------
 	// _Update()
 	//---------------------------------------------------		
-	protected override void _Update() {
-		if ( !CameraManager.Instance )
+	protected override void _Update(){
+		if(!CameraManager.Instance)
 			return;
 		
-		bool bActive = NGUITools.GetActive( goIcon );
+		bool bActive = NGUITools.GetActive(goIcon);
 		bool bCamMoving = CameraManager.Instance.IsCameraMoving();
 
-		if ( bActive && bCamMoving ) {
-			NGUITools.SetActive( goIcon, false );	// if the button is on and the camera is moving, deactivate it
+		if(bActive && bCamMoving){
+			NGUITools.SetActive(goIcon, false);	// if the button is on and the camera is moving, deactivate it
 			Debug.Log("off");
 		}
-		else if ( !bActive && !bCamMoving ) {
+		else if(!bActive && !bCamMoving){
 			Debug.Log("On");
-			NGUITools.SetActive( goIcon, true );	// if the button is off and the camera isn't moving, activate it
+			NGUITools.SetActive(goIcon, true);	// if the button is off and the camera isn't moving, activate it
 		}
 	}	
 	
 	//---------------------------------------------------
 	// _OnDestroy()
 	//---------------------------------------------------		
-	protected override void _OnDestroy() {
-		if ( CameraManager.Instance ) {
+	protected override void _OnDestroy(){
+		if(CameraManager.Instance){
 			PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
 			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
 		}
@@ -71,15 +71,15 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------
 	// OnPartitionChanged()
 	//---------------------------------------------------	
-	public void OnPartitionChanging( object sender, PartitionChangedArgs args ) {
+	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
 		// if the partition is changing at all, destroy this UI
-		Destroy( parentPanel );
+		Destroy(parentPanel);
 	}
 	
 	//---------------------------------------------------
 	// SetGate()
 	//---------------------------------------------------	
-	public void SetGate( Gate gate ) {
+	public void SetGate(Gate gate){
 		this.gate = gate;
 	}
 	
@@ -89,13 +89,13 @@ public class ButtonMonster : LgButtonHold {
 	// This will begin some pet animation prep and start
 	// to fill the attached meter.
 	//---------------------------------------------------	
-	protected override void ProcessClick() {	
+	protected override void ProcessClick(){	
 		bLegal = false;
 		
 		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		
 		// if the pet is currently busy, forgetaboutit
-		if ( scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking )
+		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
 			return;
 		
 		bLegal = true;
@@ -106,7 +106,7 @@ public class ButtonMonster : LgButtonHold {
 		// kick off the attack script
 		int nDamage = GetDamage();
 		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-		scriptAttack.Init( scriptPetAnimator, scriptGate, nDamage );
+		scriptAttack.Init(scriptPetAnimator, scriptGate, nDamage);
 		
 		// turn the fire meter on
 		scriptFireMeter.StartFilling();
@@ -117,7 +117,7 @@ public class ButtonMonster : LgButtonHold {
 	// Returns the amount of damage the pet will currently
 	// attack with.
 	//---------------------------------------------------		
-	private int GetDamage() {
+	private int GetDamage(){
 		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		int nDamage = curSkill.DamagePoint;
 		return nDamage;
@@ -126,23 +126,23 @@ public class ButtonMonster : LgButtonHold {
 	//---------------------------------------------------
 	// ButtonReleased()
 	//---------------------------------------------------	
-	protected override void ButtonReleased() {
-		if ( !bLegal )  {
+	protected override void ButtonReleased(){
+		if(!bLegal){
 			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
 		
-		if ( scriptFireMeter.IsFull() ) {
+		if(scriptFireMeter.IsFull()){
 			// if the meter was full on release, complete the attack!
 			scriptAttack.FinishAttack();			
 			
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
 			int nDamage = GetDamage();
-			if ( gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.IsInfiniteFire() )
-				Destroy( parentPanel );		
+			if(gate.GetGateHP() <= nDamage || !DataManager.Instance.GameData.PetInfo.IsInfiniteFire())
+				Destroy(parentPanel);		
 		}
-		else {
+		else{
 			// if the meter was not full, cancel the attack
 			scriptAttack.Cancel();
 		}	

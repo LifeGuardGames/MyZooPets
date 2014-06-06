@@ -9,11 +9,16 @@ using System.Collections.Generic;
 /// player.
 /// </summary>
 
+public class DestroyedGateEventArgs : EventArgs{
+	public string DestroyedGateID{ get; set; }
+	public string MiniPetID{ get; set; }
+}
+
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
 	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
 	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-//	public static EventHandler<EventArgs> OnGateDestroyed; // When a specific gate has been destroyed
+	public static EventHandler<EventArgs> OnDestroyedGate; // When a specific gate has been destroyed
 	//=====================================================
     
 	public string currentArea; // area that this manager is in
@@ -24,18 +29,13 @@ public class GatingManager : Singleton<GatingManager>{
 	/// need a base point to calculate the actual screen position for all the gates
 	/// before converting them to world point
 	/// </summary>
-	public Vector3 startingScreenPosition; 
-
+	public Vector3 startingScreenPosition;
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
 	private Hashtable activeGates = new Hashtable(); // hash of active gates that the manager is currently managing
 
 	public Hashtable ActiveGates{
 		get{ return activeGates; }
 	}
-	
-//	public string GetArea{
-//		get{ return currentArea; }
-//	}
 
 	void Start(){		
 		// set pan script
@@ -189,8 +189,8 @@ public class GatingManager : Singleton<GatingManager>{
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
 		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
 		if(dataGate != null && 
-		   DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
-		   dataGate.DoesBlock(swipeDirection))
+			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
+			dataGate.DoesBlock(swipeDirection))
 			isAllowed = false;
 		
 		return isAllowed; 
@@ -259,8 +259,6 @@ public class GatingManager : Singleton<GatingManager>{
 			return true;
 		}
 
-
-		
 		// otherwise, calculate and save the new hp
 		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		hp = Mathf.Max(hp - damage, 0);
@@ -272,7 +270,19 @@ public class GatingManager : Singleton<GatingManager>{
 		// Fire event to notify any UI that GatinProgress data may have been changed
 		if(OnDamageGate != null)
 			OnDamageGate(this, EventArgs.Empty);
-		
+
+		// Fire event to notify gate with gateID has been destroyed
+		if(isDestroyed){
+			if(OnDestroyedGate != null){
+				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
+				
+				args.DestroyedGateID = gateID;
+				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
+
+				OnDestroyedGate(this, args);
+			}
+		}
+			
 		return isDestroyed;
 	}	
 

@@ -48,7 +48,7 @@ public class MapEntry : MonoBehaviour {
 	}
 
 	public void Unlock(){
-		Debug.Log(roomBoxAndStripUnlockColor);
+//		Debug.Log(roomBoxAndStripUnlockColor);
 		roomBox.color = roomBoxAndStripUnlockColor;
 		roomStrip.color = roomBoxAndStripUnlockColor;
 		roomIcon.color = roomIconUnlockColor;

@@ -74,47 +74,13 @@ public class DataManager : Singleton<DataManager>{
 		LoadMenuSceneData();
 	}
 
-	//----------------------------------------------------
-	//This function gets called before the script variables are ready so don't try
-	//to use class variables here
-	//----------------------------------------------------
-	void OnLevelWasLoaded(){
-
-		/*
-            Game data should be serialized whenever user return to MenuScene because
-            from the MenuScene user can switch to a different pet, so the previous game
-            data need to be saved
-        */
-//		if(Application.loadedLevelName == "MenuScene"){
-//			PlayerPrefs.SetString("CanSaveData", "Yes");
-//		}
-	}
-
-	//----------------------------------------------------
-	//Since DateManager is persistent, update is the only method that we can use
-	//to check if user data need to be saved right away when user comes back
-	//to menu scene
-	//----------------------------------------------------
-	void Update(){
-//		string loadedLevelName = Application.loadedLevelName;
-
-//		if(loadedLevelName == "MenuScene"){
-//			string canSaveData = PlayerPrefs.GetString("CanSaveData", "");
-//
-//			//Serialize current pet data when loading into MenuScene
-//			if(canSaveData == "Yes"){
-//				//check there is actually data to be saved before saving
-//				if(!String.IsNullOrEmpty(currentPetID) && gameData != null){
-//					SaveGameData();
-//					PlayerPrefs.SetString("CanSaveData", "No");
-//				}
-//			}
-//		}
-	}
-
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){
 		if(paused){
+			#if DEVELOPMENT_BUILD
+				return;
+			#endif
+
 			//Save menu scene data. doesn't depend on if tutorial is finished or not
 			SaveMenuSceneData();
 
@@ -142,19 +108,7 @@ public class DataManager : Singleton<DataManager>{
 			}    
 		}
 	}
-
-//	//----------------------------------------------------
-//	// RemovePetData()
-//	// delete json data
-//	//----------------------------------------------------
-//	public void RemovePetData(string petID){
-//		if(!String.IsNullOrEmpty(petID)){
-//			menuSceneData.Remove(petID);
-//			gameData = null;
-//			PlayerPrefs.DeleteKey(petID + "_GameData");
-//		}
-//	}
-
+	
 	//----------------------------------------------------
 	// IsGameDataLoaded()
 	// Use this to check if there is data loaded into gameData at anypoint
@@ -168,8 +122,6 @@ public class DataManager : Singleton<DataManager>{
 	public void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
-//		if(!String.IsNullOrEmpty(currentPetID)){
-
 		gameData = new PetGameData();
 		if(!String.IsNullOrEmpty(petName))
 			gameData.PetInfo.PetName = petName;
@@ -181,11 +133,6 @@ public class DataManager : Singleton<DataManager>{
 			menuSceneData = 
                 new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
 		}
-
-//		}
-//		else{
-//			Debug.LogError("PetID is null or empty. Can't initialize pet with ID. Check  currentPetID");
-//		}
 	}
 
 	/// <summary>
@@ -357,7 +304,6 @@ public class DataManager : Singleton<DataManager>{
 	// Deserialize menu scene data
 	//----------------------------------------------------
 	private void LoadMenuSceneData(){
-//		menuSceneData = new MutableDataPetMenuInfo();
 		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
 
 		//Check if json string is actually loaded and not empty

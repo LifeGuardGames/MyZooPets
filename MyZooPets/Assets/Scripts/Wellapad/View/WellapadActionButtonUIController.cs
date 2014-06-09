@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -21,7 +21,7 @@ public class WellapadActionButtonUIController : MonoBehaviour {
         missionID = currentMissionIDs[0];
 
         //use GetMission(missionid) to get the mission data
-        Mission mission = WellapadMissionController.Instance.GetMission(missionID);
+        MutableDataMission mission = WellapadMissionController.Instance.GetMission(missionID);
 
         if(mission != null){
             RewardStatuses status = mission.RewardStatus;

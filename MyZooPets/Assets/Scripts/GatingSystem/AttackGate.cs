@@ -3,27 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// AttackGate
-// Script put on a pet when it is to attack a gate.
-//---------------------------------------------------
-
+/// <summary>
+/// Attack gate. Script put on a pet when it is ready to attack a gate
+/// </summary>
 public class AttackGate : MonoBehaviour{
-	// gate to attack
-	private Gate gateTarget;
-	
-	// damage to deal
-	private int nDamage;
-	
-	// the pet
-	private PetAnimator attacker;
-	
-	//---------------------------------------------------
-	// Init()
-	//---------------------------------------------------
-	public void Init(PetAnimator attacker, Gate gateTarget, int nDamage){
+
+	private Gate gateTarget; // gate to attack
+	private int damage; // damage to deal
+	private PetAnimator attacker; // the pet
+
+	public void Init(PetAnimator attacker, Gate gateTarget, int damage){
 		this.gateTarget = gateTarget;
-		this.nDamage = nDamage;
+		this.damage = damage;
 		
 		// listen for anim complete message on pet
 		PetAnimator.OnAnimDone += DoneAnimating;
@@ -32,30 +23,7 @@ public class AttackGate : MonoBehaviour{
 		// kick off attack animation
 		this.attacker = attacker;
 	}
-	
-	//---------------------------------------------------
-	// OnDestroy()
-	//---------------------------------------------------	
-	private void OnDestroy(){
-		// stop listening
-		PetAnimator.OnAnimDone -= DoneAnimating;	
-	}
 
-	private void Attack(object sender, EventArgs args){
-		attacker.BreathFire();
-		FireMeter.OnFireReady -= Attack;
-	}
-	
-	//---------------------------------------------------
-	// DoneAnimating()
-	// For when the pet is done animating.
-	//---------------------------------------------------	
-	private void DoneAnimating(object sender, PetAnimArgs args){
-		if(args.GetAnimState() == PetAnimStates.BreathingFire){
-			StartCoroutine(DoneAttacking());
-		}
-	}
-	
 	public void FinishAttack(){
 		StartCoroutine(attacker.FinishFire());	
 	}
@@ -65,14 +33,34 @@ public class AttackGate : MonoBehaviour{
 		
 		Destroy(this);
 	}
+
+	void OnDestroy(){
+		// stop listening
+		PetAnimator.OnAnimDone -= DoneAnimating;	
+	}
+
+	private void Attack(object sender, EventArgs args){
+		attacker.BreathFire();
+		FireMeter.OnFireReady -= Attack;
+	}
+
+	/// <summary>
+	/// When pet is done animating
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void DoneAnimating(object sender, PetAnimArgs args){
+		if(args.GetAnimState() == PetAnimStates.BreathingFire){
+			StartCoroutine(DoneAttacking());
+		}
+	}
 	
-	//---------------------------------------------------
-	// DoneAttacking()
-	// For when the pet is done breathing fire.
-	//---------------------------------------------------		
+	/// <summary>
+	/// Pet done attacking. 
+	/// </summary> 
 	private IEnumerator DoneAttacking(){
 		// damage the gate
-		bool bDestroyed = gateTarget.GateDamaged(nDamage);
+		bool isDestroyed = gateTarget.GateDamaged(damage);
 		
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);
@@ -84,7 +72,7 @@ public class AttackGate : MonoBehaviour{
 		yield return 0;
 		
 		// move the player because the gate just got pushed back (if it still exists)
-		if(gateTarget != null && !bDestroyed){
+		if(gateTarget != null && !isDestroyed){
 			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
 			PetMovement.Instance.MovePet(vNewLoc);
 		}

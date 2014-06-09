@@ -64,6 +64,7 @@ GameObject:
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400022}
+  - 114: {fileID: 11400026}
   m_Layer: 0
   m_Name: GO_HousePlaque
   m_TagString: Untagged
@@ -367,8 +368,9 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: 
+  buttonName: 
   bCheckClickManager: 1
-  target: {fileID: 0}
+  target: {fileID: 100006}
   functionName: CloseUI
 --- !u!114 &11400002
 MonoBehaviour:
@@ -433,6 +435,7 @@ MonoBehaviour:
   bSprite: 0
   eMode: 0
   strSoundProcess: badgesView
+  buttonName: 
   bCheckClickManager: 1
 --- !u!114 &11400010
 MonoBehaviour:
@@ -612,6 +615,28 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4bdcbb0793cb843988b6a6ac0296ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockGUI: 0
+  pulseClip: {fileID: 7400000, guid: 4fb471a2233f9e24bb828bbd3eee0aa5, type: 2}
+  backButton: {fileID: 100002}
+  badgeBoard: {fileID: 100006}
+  descriptionObject: {fileID: 0}
+  badgePrefab: {fileID: 100002, guid: 28823d561bbc6449fa474f11d010c531, type: 2}
+  badgeBase: {fileID: 100000}
+  badgeCommonAtlas: {fileID: 11400000, guid: 48f0d7582fa85e042b2b7ca833b4d145, type: 2}
+  fZoomTime: .400000006
+  vOffset: {x: 0, y: -1.79999995, z: -20}
+  vRotation: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

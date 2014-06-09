@@ -14,8 +14,8 @@ public abstract class Gate : MonoBehaviour{
 	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
-	public float fPlayerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
-	public float fPlayerY; // the y value the player should move to when approaching the gate
+	public float playerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
+	public float playerY; // the y value the player should move to when approaching the gate
 	
 	// id and resource of this gate
 	protected string gateID;
@@ -46,8 +46,8 @@ public abstract class Gate : MonoBehaviour{
 		
 		// since this gate is getting created, if it is guarding an item box, create the box
 		ImmutableDataGate dataGate = GetGateData();
-		string strItemBoxID = dataGate.GetItemBoxID();
-		if(!string.IsNullOrEmpty(strItemBoxID)){
+		string itemBoxID = dataGate.GetItemBoxID();
+		if(!string.IsNullOrEmpty(itemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 			GameObject goBox = Instantiate(goResource, 
 			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
@@ -56,7 +56,7 @@ public abstract class Gate : MonoBehaviour{
 			
 			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
 			if(scriptItemBox)
-				scriptItemBox.SetItemBoxID(strItemBoxID);
+				scriptItemBox.SetItemBoxID(itemBoxID);
 			else
 				Debug.LogError("No logic script on box", goBox);
 		}		
@@ -79,21 +79,21 @@ public abstract class Gate : MonoBehaviour{
 	//---------------------------------------------------	
 	public Vector3 GetPlayerPosition(){
 		// get the screen location of the gate and find out where the player should be with the buffer
-		Vector3 vPos = GetIdealPosition();
-		Vector3 vScreenLoc = Camera.main.WorldToScreenPoint(vPos);
-		float fMoveWidth = Screen.width * (fPlayerBuffer / 100);
+		Vector3 idealPos = GetIdealPosition();
+		Vector3 screenLoc = Camera.main.WorldToScreenPoint(idealPos);
+		float moveWidth = Screen.width * (playerBuffer / 100);
 		
 		// get the target location and then transform it into world coordinates MOVE_DIR
-		Vector3 vNewLoc = vScreenLoc;
-		vNewLoc.x -= fMoveWidth;
-		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(vNewLoc);
-		vNewLocWorld.y = fPlayerY;
+		Vector3 newScreenLoc = screenLoc;
+		newScreenLoc.x -= moveWidth;
+		Vector3 newWorldLoc = Camera.main.ScreenToWorldPoint(newScreenLoc);
+		newWorldLoc.y = playerY;
 		
 		// we need to apply a Z offset to the pet so that the pet is kind of in front of the monster
 		float fOffsetZ = Constants.GetConstant<float>("PetOffsetZ");
-		vNewLocWorld.z -= fOffsetZ;
+		newWorldLoc.z -= fOffsetZ;
 		
-		return vNewLocWorld;		
+		return newWorldLoc;		
 	}
 	
 	//---------------------------------------------------
@@ -117,22 +117,22 @@ public abstract class Gate : MonoBehaviour{
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public bool GateDamaged(int nDamage){
+	public bool GateDamaged(int damage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool bDestroyed = DamageGate_SaveData(gateID, nDamage);
+		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
 		
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
-		OnGateDamaged(nDamage);
+		OnGateDamaged(damage);
 		
-		if(bDestroyed){
+		if(isDestroyed){
 			Analytics.Instance.GateUnlocked(gateID);	
 			PrepGateDestruction();
 		}
 		
-		return bDestroyed;
+		return isDestroyed;
 	}
 	
 	//---------------------------------------------------
@@ -142,29 +142,29 @@ public abstract class Gate : MonoBehaviour{
 	// the actual save data class for gates, but was moved
 	// out to here.
 	//---------------------------------------------------		
-	public bool DamageGate_SaveData(string strID, int nDamage){
-		// check to make sure the gate exists
-		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(strID)){
-			Debug.LogError("Something trying to access a non-existant gate " + strID);
-			return true;
-		}
-		
-		// check to make sure the gate is active
-		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(strID)){
-			Debug.LogError("Something trying to damage an inactive gate " + strID);
-			return true;
-		}
-		
-		// otherwise, calculate and save the new hp
-		int nHP = DataManager.Instance.GameData.GatingProgress.GatingProgress[strID];
-		nHP = Mathf.Max(nHP - nDamage, 0);
-		DataManager.Instance.GameData.GatingProgress.GatingProgress[strID] = nHP;
-		
-		// then return whether or not the gate has been destroyed
-		bool bDestroyed = nHP <= 0;
-
-		return bDestroyed;
-	}	
+//	public bool DamageGateSaveData(string gateID, int damage){
+//		// check to make sure the gate exists
+//		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(gateID)){
+//			Debug.LogError("Something trying to access a non-existant gate " + gateID);
+//			return true;
+//		}
+//		
+//		// check to make sure the gate is active
+//		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(gateID)){
+//			Debug.LogError("Something trying to damage an inactive gate " + gateID);
+//			return true;
+//		}
+//		
+//		// otherwise, calculate and save the new hp
+//		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+//		hp = Mathf.Max(hp - damage, 0);
+//		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
+//		
+//		// then return whether or not the gate has been destroyed
+//		bool isDestroyed = hp <= 0;
+//
+//		return isDestroyed;
+//	}	
 	
 	//---------------------------------------------------
 	// PrepGateDestruction()

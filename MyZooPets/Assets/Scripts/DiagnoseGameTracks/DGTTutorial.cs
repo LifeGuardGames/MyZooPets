@@ -43,14 +43,14 @@ public class DGTTutorial : MinigameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 4;
+		maxSteps = 4;
 	}	
 	
 	//---------------------------------------------------
 	// SetKey()
 	//---------------------------------------------------	
 	protected override void SetKey() {
-		strKey = TUT_KEY;
+		tutorialKey = TUT_KEY;
 	}
 	
 	//---------------------------------------------------

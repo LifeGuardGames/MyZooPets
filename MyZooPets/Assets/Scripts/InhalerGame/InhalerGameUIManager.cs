@@ -8,6 +8,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     public GameObject progressBarObject;
     public GameObject inhalerBody;
+	public Animator inhalerWholeObject;
     public SceneTransition scriptTransition; 
     public GetFireAnimationController fireAnimationController; //The script that plays the fire animation at the end of the inhaler game
     public bool tutOn; //turn tutorial on or off. for debuggin
@@ -17,6 +18,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     private float timer = 0; //hint timer
     private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
     private int starIncrement = 0;
+
+	public GameObject[] lightsToTurnOff;
+	public ParticleSystemController[] particlesToTurnOff;
+
 
     public bool ShowHint{
         get {return showHint;}
@@ -73,7 +78,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 
     private void HideInhaler(){
-        inhalerBody.SetActive(false); 
+		inhalerWholeObject.Play("InhalerFade");
+        //inhalerBody.SetActive(false);
     }
 
     private void ShowInhaler(){
@@ -173,6 +179,12 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
         //play animation
         fireAnimationController.PlaySequence();
+		foreach(GameObject light in lightsToTurnOff){
+			light.SetActive(false);
+		}
+		foreach(ParticleSystemController fireParticle in particlesToTurnOff){
+			fireParticle.Stop();
+		}
     }
 
     //Event listener. continue the game after GetFireAnimation is done

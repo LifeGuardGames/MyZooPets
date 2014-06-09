@@ -4,44 +4,44 @@ using UnityEngine;
 // All mutable data
 //---------------------------------------------------
 public class PetGameData{
-	public WellapadData Wellapad {get; set;}
-    public PetInfoData PetInfo {get; set;}
-    public CutsceneData Cutscenes {get; set;} 
-    public DecorationSystemData Decorations {get; set;}
-    public StatsData Stats {get; set;}
-    public PetLevelMutableData Level {get; set;}
-    public CalendarData Calendar {get; set;}
-    public DegradationData Degradation {get; set;}
-    public InhalerData Inhaler {get; set;}
-    public TutorialData Tutorial {get; set;}
-    public InventoryData Inventory {get; set;}
-    public SkillMutableData Flame {get; set;}
-    public BadgeMutableData Badge {get; set;}
-    public GatingProgressData GatingProgress {get; set;}
-    public RunnerGameData RunnerGame {get; set;}
-    public HighScoreMutableData HighScore {get; set;}
-
+	public MutableDataWellapad Wellapad {get; set;}
+    public MutableDataPetInfo PetInfo {get; set;}
+    public MutableDataCutscene Cutscenes {get; set;} //no longer in use
+    public MutableDataDecorationSystem Decorations {get; set;}
+    public MutableDataStats Stats {get; set;}
+    public MutableDataPetLevel Level {get; set;}
+    public MutableDataCalendar Calendar {get; set;}
+    public MutableDataDegradation Degradation {get; set;}
+    public MutableDataInhaler Inhaler {get; set;}
+    public MutableDataTutorial Tutorial {get; set;}
+    public MutableDataInventory Inventory {get; set;}
+    public MutableDataSkill Flame {get; set;}
+    public MutableDataBadge Badge {get; set;}
+    public MutableDataGatingProgress GatingProgress {get; set;}
+    public MutableDataRunnerGame RunnerGame {get; set;}
+    public MutableDataHighScore HighScore {get; set;}
+	
     public PetGameData(){
         Init();
     }
 
     private void Init(){
-		Wellapad = new WellapadData();
-        PetInfo = new PetInfoData();
-        Cutscenes = new CutsceneData();
-        Decorations = new DecorationSystemData();
-        Stats = new StatsData();
-        Level = new PetLevelMutableData();
-        Calendar = new CalendarData();
-        Degradation = new DegradationData();
-        Inhaler = new InhalerData();
-        Tutorial = new TutorialData();
-        Inventory = new InventoryData();
-        Flame = new SkillMutableData(); 
-        Badge = new BadgeMutableData();
-        GatingProgress = new GatingProgressData();
-        RunnerGame = new RunnerGameData();
-        HighScore = new HighScoreMutableData();
+		Wellapad = new MutableDataWellapad();
+        PetInfo = new MutableDataPetInfo();
+        Cutscenes = new MutableDataCutscene();
+        Decorations = new MutableDataDecorationSystem();
+        Stats = new MutableDataStats();
+        Level = new MutableDataPetLevel();
+        Calendar = new MutableDataCalendar();
+        Degradation = new MutableDataDegradation();
+        Inhaler = new MutableDataInhaler();
+        Tutorial = new MutableDataTutorial();
+        Inventory = new MutableDataInventory();
+        Flame = new MutableDataSkill(); 
+        Badge = new MutableDataBadge();
+        GatingProgress = new MutableDataGatingProgress();
+        RunnerGame = new MutableDataRunnerGame();
+        HighScore = new MutableDataHighScore();
     }
 	
 	//---------------------------------------------------

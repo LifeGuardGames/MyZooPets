@@ -47,25 +47,25 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
 	
 	public MinigameUI ui; // reference to the UI controlle
-	public SceneTransition scriptTransition; // scene transition
+//	public SceneTransition scriptTransition; // scene transition
 	public int nStartingLives;
 //	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
 
-	private int nScore;	// player score
-	private int nLives; // player lives
-	private bool bTutorialOverride; // is there a tutorial override? 
+	private int score;	// player score
+	private int lives; // player lives
+	private bool tutorialOverride; // is there a tutorial override? 
 	//i.e. tutorial has already been played but the user wants to see it again
-	private MinigameStates eCurrentState = MinigameStates.Opening; // the state of this minigame
+	private MinigameStates currentState = MinigameStates.Opening; // the state of this minigame
 	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
 
 	//Return player score
 	public virtual int GetScore(){
-		return nScore;	
+		return score;	
 	}
 
 	//Return player lives	
 	public int GetLives(){
-		return nLives;	
+		return lives;	
 	}
 
 	//T: tutorial is active, F: tutorial is not running
@@ -92,38 +92,38 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 
 	//T: Play tutorial again even if it has already been played	
 	protected bool IsTutorialOverride(){
-		return bTutorialOverride;	
+		return tutorialOverride;	
 	}
 
 	//Toggle bTutorialOverride
 	protected void SetTutorialOverride(bool bOverride){
-		bTutorialOverride = bOverride;
+		tutorialOverride = bOverride;
 	}	
 
 	//Change the game state	
 	private void SetGameState(MinigameStates eNewState){
-		if(eCurrentState == eNewState){
+		if(currentState == eNewState){
 			Debug.LogError("Minigame(" + GetMinigameKey() + ") is getting set to a state it's already at: " + eNewState);
 			return;
 		}
 		
-		MinigameStates eOldState = eCurrentState;
-		eCurrentState = eNewState;
+		MinigameStates eOldState = currentState;
+		currentState = eNewState;
 		
 		// if the game is being paused, let the audio manager know so it can pause sounds
-		if(eCurrentState == MinigameStates.Paused)
+		if(currentState == MinigameStates.Paused)
 			AudioManager.Instance.Pause(true);
-		else if(eCurrentState == MinigameStates.Playing && eOldState == MinigameStates.Paused)
+		else if(currentState == MinigameStates.Playing && eOldState == MinigameStates.Paused)
 			AudioManager.Instance.Pause(false);
 		
 		// send out a message to everything that cares about the game state
 		if(OnStateChanged != null)
-			OnStateChanged(this, new GameStateArgs(eCurrentState));
+			OnStateChanged(this, new GameStateArgs(currentState));
 	}
 
 	//Return the game state
 	public MinigameStates GetGameState(){
-		return eCurrentState;
+		return currentState;
 	}
 	
 	
@@ -266,7 +266,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		
 		// set the game to over so that it restarts properly
 		// cheat a little bit and DONT use SetGameState() because we don't want the usual stuff to happen
-		eCurrentState = MinigameStates.GameOver;
+		currentState = MinigameStates.GameOver;
 		
 		// set the tutorial to null
 		tutorial = null;
@@ -320,7 +320,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Sets the player's score and updates the label.
 	//---------------------------------------------------	
 	private void SetScore(int num){
-		nScore = num;
+		score = num;
 		
 		// update ui
 		ui.SetLabel(MinigameLabels.Score, num.ToString());
@@ -331,7 +331,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Adds num points to the player's current score.
 	//---------------------------------------------------	
 	public void UpdateScore(int num){
-		int nNewScore = nScore + num;
+		int nNewScore = score + num;
 		SetScore(nNewScore);
 	}	
 	
@@ -340,13 +340,13 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Sets the player's lives and updates the label.
 	//---------------------------------------------------	
 	private void SetLives(int num){		
-		nLives = num;
+		lives = num;
 		
 		// update ui
 		ui.SetLabel(MinigameLabels.Lives, num.ToString());
 		
 		// check for game over
-		if(nLives <= 0)
+		if(lives <= 0)
 			GameOver();
 	}
 	
@@ -360,7 +360,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		if(num > 0 && nCurLives == nStartingLives)
 			return;
 		
-		int nNew = nLives + num;
+		int nNew = lives + num;
 		SetLives(nNew);
 		
 		// send callback because lives are chaning

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,14 +20,14 @@ public class GameTutorial_FocusCalendar : GameTutorial {
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 2;
+		maxSteps = 2;
 	}
 	
 	//---------------------------------------------------
 	// SetKey()
 	//---------------------------------------------------		
 	protected override void SetKey() {
-		strKey = TutorialManager_Bedroom.TUT_CALENDAR;
+		tutorialKey = TutorialManagerBedroom.TUT_CALENDAR;
 	}
 	
 	//---------------------------------------------------

@@ -22,7 +22,7 @@ public class ItemBoxLoader : MonoBehaviour {
 		GameObject goResource = Resources.Load( "ItemBox" ) as GameObject;
 		
 		foreach ( string strSavedBoxID in DataManager.Instance.GameData.Inventory.UnopenedItemBoxes ) {
-			Data_ItemBox dataBox = DataLoaderItemBoxes.GetItemBox( strSavedBoxID );
+			ImmutableDataItemBox dataBox = DataLoaderItemBoxes.GetItemBox( strSavedBoxID );
 			if ( dataBox != null ) {
 				GameObject goBox = Instantiate( goResource, transform.position, Quaternion.identity ) as GameObject;
 				ItemBoxLogic scriptBox = goBox.GetComponent<ItemBoxLogic>();

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,14 +16,14 @@ public class DataLoaderLootTables {
 	// GetLootTable()
 	// Returns loot table data for the incoming id.
 	//---------------------------------------------------	
-	public static Data_LootTable GetLootTable( string strID ) {
+	public static ImmutableDataLootTable GetLootTable( string strID ) {
 		if ( hashData == null ) 
 			SetupData();
 		
-		Data_LootTable dataTable = null;
+		ImmutableDataLootTable dataTable = null;
 		
 		if ( hashData.ContainsKey( strID ) ) 
-			dataTable = (Data_LootTable) hashData[strID];
+			dataTable = (ImmutableDataLootTable) hashData[strID];
 		else
 			Debug.LogError("No such loot table with id: " + strID);
 		
@@ -61,7 +61,7 @@ public class DataLoaderLootTables {
                 // Get children from xml node
                 List<IXMLNode> listChildren = XMLUtils.GetChildrenList(childNode);				
 				
-				Data_LootTable data = new Data_LootTable( id, hashAttr, listChildren, strError );
+				ImmutableDataLootTable data = new ImmutableDataLootTable( id, hashAttr, listChildren, strError );
 				
 				if ( hashData.ContainsKey( id ) )
 					Debug.LogError("Duplicate loot table id: " + id);

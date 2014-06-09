@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,20 +6,20 @@ using System.Collections.Generic;
 public class DataLoaderTriggers{
     //Key: scene name, value: dictionary of ImmutableData_Trigger
     //Key: triggerID, value: instance of ImmutableData_Trigger.cs
-    private static Dictionary<string, Dictionary<string, ImmutableData_Trigger>> allTriggers;
+    private static Dictionary<string, Dictionary<string, ImmutableDataTrigger>> allTriggers;
 
     //------------------------------------------------------------------
     // GetRandomSceneTrigger()
     // Return a random trigger from a specific scene
     //------------------------------------------------------------------
-    public static ImmutableData_Trigger GetRandomSceneTrigger(string scene){
-        ImmutableData_Trigger randomTrigger = null;
+    public static ImmutableDataTrigger GetRandomSceneTrigger(string scene){
+        ImmutableDataTrigger randomTrigger = null;
 
         if(allTriggers == null)
             SetupData();
 
         if(allTriggers.ContainsKey(scene)){
-            Dictionary<string, ImmutableData_Trigger> sceneTriggers = allTriggers[scene];
+            Dictionary<string, ImmutableDataTrigger> sceneTriggers = allTriggers[scene];
 
             //Get random element from the dictionary
             randomTrigger = sceneTriggers.ElementAt(UnityEngine.Random.Range(0, sceneTriggers.Count)).Value;
@@ -32,15 +32,15 @@ public class DataLoaderTriggers{
     // GetTrigger()
     // Return the trigger data of with id = triggerID
     //------------------------------------------------------------------
-    public static ImmutableData_Trigger GetTrigger(string triggerID){
-        ImmutableData_Trigger triggerData = null;
+    public static ImmutableDataTrigger GetTrigger(string triggerID){
+        ImmutableDataTrigger triggerData = null;
 
         if(allTriggers == null)
             SetupData();
 
         //loop through all the values of allTriggers Dict
-        Dictionary<string, Dictionary<string, ImmutableData_Trigger>>.ValueCollection valueColl = allTriggers.Values;
-        foreach(Dictionary<string, ImmutableData_Trigger> sceneTriggers in valueColl){
+        Dictionary<string, Dictionary<string, ImmutableDataTrigger>>.ValueCollection valueColl = allTriggers.Values;
+        foreach(Dictionary<string, ImmutableDataTrigger> sceneTriggers in valueColl){
             if(sceneTriggers.ContainsKey(triggerID)){
                 triggerData = sceneTriggers[triggerID];
                 break;
@@ -59,7 +59,7 @@ public class DataLoaderTriggers{
     }
 
     private static void SetupData(){
-        allTriggers = new Dictionary<string, Dictionary<string, ImmutableData_Trigger>>();
+        allTriggers = new Dictionary<string, Dictionary<string, ImmutableDataTrigger>>();
 
         //Load all item xml files
          UnityEngine.Object[] files = Resources.LoadAll("Triggers", typeof(TextAsset));
@@ -81,13 +81,13 @@ public class DataLoaderTriggers{
                 //Get trigger properties from xml node
                 Hashtable hashTriggerData = XMLUtils.GetChildren(childNode);
 
-                ImmutableData_Trigger triggerData = new ImmutableData_Trigger(id, hashTriggerData);
+                ImmutableDataTrigger triggerData = new ImmutableDataTrigger(id, hashTriggerData);
 
                 string scene = triggerData.Scene;
                 if(!allTriggers.ContainsKey(scene))
-                    allTriggers.Add(scene, new Dictionary<string, ImmutableData_Trigger>());
+                    allTriggers.Add(scene, new Dictionary<string, ImmutableDataTrigger>());
 
-                Dictionary<string, ImmutableData_Trigger> sceneTriggers = allTriggers[scene];
+                Dictionary<string, ImmutableDataTrigger> sceneTriggers = allTriggers[scene];
                 if(sceneTriggers.ContainsKey(id))
                     Debug.LogError("Duplicate trigger id: " + id + " for " + scene);
                 else

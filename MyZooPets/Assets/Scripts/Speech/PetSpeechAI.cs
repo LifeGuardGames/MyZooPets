@@ -60,7 +60,14 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 
 	public void ShowInhalerMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER"));
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void ShowOutOfFireMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}

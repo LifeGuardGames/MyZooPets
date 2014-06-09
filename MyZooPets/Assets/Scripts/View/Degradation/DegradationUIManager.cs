@@ -82,7 +82,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
     //---------------------------------------------------       
     private void PlaceTriggers(object sender, EventArgs args) {
         // if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
-        bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManager_Bedroom.TUT_LAST);
+        bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST);
         if (!bTriggers && !IsTesting())
             return;
 
@@ -103,7 +103,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	private DegradTrigger PlaceTrigger(DegradData degradData) {		
         string triggerID = degradData.TriggerID;
         Vector3 position = degradData.GetPosition();
-        ImmutableData_Trigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
+        ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
 
         //Load trigger prefab
         GameObject triggerPrefab = (GameObject) Resources.Load(triggerData.PrefabName);

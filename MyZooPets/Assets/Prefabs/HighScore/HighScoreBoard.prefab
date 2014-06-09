@@ -58,6 +58,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400016}
+  - 114: {fileID: 11400006}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
   m_Layer: 0
@@ -369,7 +370,7 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
-  target: {fileID: 0}
+  target: {fileID: 100016}
   functionName: OpenUI
 --- !u!114 &11400002
 MonoBehaviour:
@@ -430,6 +431,24 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 696dabcc8d1fe0642bf203eb46a50b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockGUI: 0
+  backButton: {fileID: 100020}
+  highscoreBoard: {fileID: 100016}
+  scoreBoardGrid: {fileID: 11400046}
+  fZoomTime: .200000003
+  vOffset: {x: 0, y: 0, z: -15}
+  vRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -467,7 +486,7 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
-  target: {fileID: 0}
+  target: {fileID: 100016}
   functionName: CloseUI
 --- !u!114 &11400022
 MonoBehaviour:

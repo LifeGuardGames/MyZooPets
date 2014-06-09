@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -13,14 +13,14 @@ public class RunnerTutorial : MinigameTutorial {
     // SetMaxSteps()
     //---------------------------------------------------       
     protected override void SetMaxSteps() {
-        nMaxSteps = 3;
+        maxSteps = 3;
     }   
     
     //---------------------------------------------------
     // SetKey()
     //---------------------------------------------------   
     protected override void SetKey() {
-        strKey = TUT_KEY;
+        tutorialKey = TUT_KEY;
     }
     
     //---------------------------------------------------

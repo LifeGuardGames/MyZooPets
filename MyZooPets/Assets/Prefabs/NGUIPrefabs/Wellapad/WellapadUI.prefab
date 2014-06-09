@@ -27,8 +27,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400002}
-  - 114: {fileID: 11400006}
+  - 114: {fileID: 11400008}
   - 114: {fileID: 11400030}
+  - 114: {fileID: 11400006}
   - 114: {fileID: 11400092}
   m_Layer: 10
   m_Name: WellapadUI
@@ -442,6 +443,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 100056}
   functionName: BackButtonClicked
@@ -459,6 +461,7 @@ MonoBehaviour:
   bSprite: 1
   eMode: 2
   strSoundProcess: button-21
+  buttonName: 
   bCheckClickManager: 1
   target: {fileID: 100056}
   functionName: RewardButtonClicked
@@ -482,11 +485,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -7649.43848
+    e13: -10390.8428
     e20: 0
     e21: 0
     e22: 384
@@ -500,6 +503,18 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63658378797ac442bb41bb6e316b5ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockGUI: 0
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -721,11 +736,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: 0
     e10: 0
     e11: 384
     e12: 0
-    e13: -7649.43848
+    e13: -10390.8428
     e20: 0
     e21: 0
     e22: 384

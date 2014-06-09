@@ -11,15 +11,13 @@ using System.Collections;
 
 public class GateMonster : Gate{
 //	public float fMove; // the screen % this monster moves per % of health
-	public float fTweenTime; // time it takes the monster to tween to its new position after taking damage
+	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
 	public Animator smokeMonsterAnimator; // script that controls the anims for this monster
 	
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
 	private Vector3 idealPos;
 
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------		
+
 	public override void Start(){
 		base.Start();
 		// the ideal position of the monster is its transform at the outset
@@ -69,42 +67,40 @@ public class GateMonster : Gate{
 		// for now, they will always move to the right...
 		Move(damage);
 	}	
-	
-	//---------------------------------------------------
-	// OnGateDestroyed()
-	//---------------------------------------------------	
+
 	protected override void OnGateDestroyed(){
 		// for monsters, just move them fast and far away MOVE_DIR
-		float fTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
-		float fDistance = CameraManager.Instance.GetPanScript().partitionOffset;
+		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
+		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
 		
 		// add hashtable params for alerting the parent object when the move anim is complete
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
 		optional.Add("onComplete", "OnDestroyAnimComplete");
 		
-		Vector3 vTarget = gameObject.transform.position;
-		vTarget.x += fDistance;
+		Vector3 targetPos = gameObject.transform.position;
+		targetPos.x += monsterMoveDistance;
 
 		smokeMonsterAnimator.Play("smokeMonsterHurt");
 
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
-		LeanTween.moveLocal(gameObject, vTarget, fTime, optional);	
+		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
 	}
-
-	//---------------------------------------------------
-	// GetIdealPosition()
-	//---------------------------------------------------		
+	
+	/// <summary>
+	/// Gets the ideal position.
+	/// </summary>
+	/// <returns>The ideal position.</returns>
 	protected override Vector3 GetIdealPosition(){
 		// because monsters move via tweens, we really want to return the position the monster is moving to in some cases	
 		return idealPos;
 	}	
-	
-	//---------------------------------------------------
-	// Move()
-	// Moves this monster based on the incoming damage.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Move the specified damage.
+	/// </summary>
+	/// <param name="damage">Damage.</param>
 	private void Move(int damage){
 		// get the monster's data and find out how far it should move based on the damage it just received
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
@@ -132,7 +128,7 @@ public class GateMonster : Gate{
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
 		optional.Add("onComplete", "PlayNormalAnimation");
-		LeanTween.moveLocal(gameObject, vNewLocWorld, fTweenTime, optional);	
+		LeanTween.moveLocal(gameObject, vNewLocWorld, tweenTime, optional);	
 	}
 
 	private void PlayNormalAnimation(){

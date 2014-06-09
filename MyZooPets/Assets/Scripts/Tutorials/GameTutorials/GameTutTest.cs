@@ -1,16 +1,16 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GameTutTest : GameTutorial {
 	protected override void SetKey() {
-		strKey = "GameTutTest";
+		tutorialKey = "GameTutTest";
 	}
 	
 	//---------------------------------------------------
 	// SetMaxSteps()
 	//---------------------------------------------------		
 	protected override void SetMaxSteps() {
-		nMaxSteps = 3;
+		maxSteps = 3;
 	}	
 	
 	protected override void _End( bool bFinished ) {

@@ -398,7 +398,7 @@ public class GatingManager : Singleton<GatingManager>{
 		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
-			Transform transButton = goFireButton.transform.Find("Button");
+			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
 			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
 			script.SetGate(gate);
 		}

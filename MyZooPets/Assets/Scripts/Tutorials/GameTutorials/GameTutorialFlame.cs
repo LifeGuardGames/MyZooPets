@@ -96,7 +96,7 @@ public class GameTutorialFlame : GameTutorial{
 			
 			// add the fire button to the processable list
 			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
-			GameObject goButton = goFlameButton.transform.Find("Button").gameObject;
+			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
 			AddToProcessList(goButton);
 		}
 		else

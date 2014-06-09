@@ -15,7 +15,7 @@ public class PetInteractionManager : MonoBehaviour{
 
 	void OnTap(TapGesture gesture){
 		string colliderName = gesture.Selection.collider.name;
-		if(colliderName == "Pet_LWF"){
+		if(colliderName == this.gameObject.name){
 			if(ClickManager.Instance.CanRespondToTap() && !petAnimator.IsBusy()){
 				petAnimator.PlayRestrictedAnim("Poke", true);
 				PetMovement.Instance.StopMoving(false);
@@ -24,12 +24,12 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	/// <summary>
-	/// Items the dropped on target event handler.
+	/// Items dropped on target event handler.
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		if(args.TargetCollider.name == gameObject.name){
+		if(args.TargetCollider.name == this.gameObject.name){
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 			

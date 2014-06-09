@@ -32,9 +32,49 @@ public class MiniPet : MonoBehaviour {
 
 	//On tap handler. do a funny dance or sth
 
+	void Start(){
+		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
+	}
+	
+	void OnDestroy(){
+		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
+	}
+
+	void OnTap(TapGesture gesture){
+		string colliderName = gesture.Selection.collider.name;
+		Debug.Log("drop on minipet");
+		if(colliderName == this.gameObject.name){
+			//need to check clickmanager if can respond to tap
+			if(ClickManager.Instance.CanRespondToTap()){
+				//do some
+				Debug.Log("Minipet does some funny animation here");
+			}
+		}
+	}
+
 	//
 	public void Init(string id, ImmutableDataMiniPet miniPet){
 
+	}
+
+	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
+		if(args.TargetCollider.name == this.gameObject.name){
+			string invItemID = args.ItemTransform.name; //get id from listener args
+			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+
+			//check if minipet needs food
+
+			//use item if so
+			args.IsValidTarget = true;
+			Debug.Log("item dropped on mini pet");
+
+			//notify inventory logic that this item is being used
+			//need a new function in InventoryLogic. MiniPetUseItem
+//			InventoryLogic.Instance.UseItem(invItemID);
+		}
+		else{
+			//say sth if minipet doesn't want food anymore
+		}
 	}
 
 }

@@ -38,6 +38,7 @@ public class MiniPetManager : MonoBehaviour {
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+		goMiniPet.name = prefab.name;
 
 		//unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);

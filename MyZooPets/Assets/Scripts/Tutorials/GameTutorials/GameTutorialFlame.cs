@@ -90,9 +90,10 @@ public class GameTutorialFlame : GameTutorial{
 		// find and spotlight the fire button
 		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
 		if(goFlameButton != null){
-			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton",
-				fingerHint: true, fingerHintPrefab: "PressHoldTut", 
-				fingerHintOffsetX: -40f, delay: 0.5f);
+			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
+			                "TutorialSpotlightFlameButton", fingerHint: true, 
+			                fingerHintPrefab: "PressHoldTut", fingerHintOffsetY: 0f, 
+			                fingerHintFlip: true, delay: 0.5f);
 			
 			// add the fire button to the processable list
 			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...

@@ -359,9 +359,11 @@ public class GatingManager : Singleton<GatingManager>{
 		else{
 			if(PlayPeriodLogic.Instance.CanUseRealInhaler())
 				PetSpeechAI.Instance.ShowInhalerMsg();
+				
 			else
+				PetSpeechAI.Instance.ShowOutOfFireMsg();
 				//TODO: enable FireOrbMsg once it's ready to integrate
-				PetSpeechAI.Instance.ShowInhalerMsg();
+
 //				PetSpeechAI.Instance.ShowFireOrbMsg();
 			// out of flame charges
 //			strKey = "NO_FIRE_INHALER";
@@ -384,11 +386,21 @@ public class GatingManager : Singleton<GatingManager>{
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
 
+		// Find the position of the pet and transform that position into NGUI screen space.
+		// The fire button will always be spawned at the pet's location
+		GameObject petLocation = GameObject.Find("Pet_LWF");
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		                                                             petLocation.transform.position);
+		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
+		                                                          InterfaceAnchors.BottomLeft, 
+		                                                               InterfaceAnchors.Center);
+
+
 		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
 		// 	strConstant = "FireLoc_Tutorial";
 	
 		// set location of the button based on if it is a tutorial or not
-		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
+//		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
 		goFireButton.transform.localPosition = fireButtonLoc;
 		
 		// rename the button so that other things can find it

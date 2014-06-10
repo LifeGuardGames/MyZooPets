@@ -54,7 +54,7 @@ public class MiniPet : MonoBehaviour {
 
 	//
 	public void Init(string id, ImmutableDataMiniPet miniPet){
-
+		Debug.Log(miniPet.ID);
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){

@@ -31,6 +31,7 @@ public class MiniPet : MonoBehaviour {
 	//On item drop handler. if the correct food modify current food xp
 
 	//On tap handler. do a funny dance or sth
+	
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -51,10 +52,9 @@ public class MiniPet : MonoBehaviour {
 			}
 		}
 	}
+	
+	public void Init(string id, ImmutableDataMiniPet data){
 
-	//
-	public void Init(string id, ImmutableDataMiniPet miniPet){
-		Debug.Log(miniPet.ID);
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
@@ -71,6 +71,8 @@ public class MiniPet : MonoBehaviour {
 			//notify inventory logic that this item is being used
 			//need a new function in InventoryLogic. MiniPetUseItem
 //			InventoryLogic.Instance.UseItem(invItemID);
+			InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			MiniPetManager.Instance.IncreaseLevelMeter(id);
 		}
 		else{
 			//say sth if minipet doesn't want food anymore

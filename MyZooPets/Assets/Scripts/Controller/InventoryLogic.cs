@@ -21,7 +21,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	private bool listNeedsUpdate = true;
 	private List<InventoryItem> inventoryItemList;
 
-	//====================API===========================
+
 	public List<InventoryItem> AllInventoryItems{ //TO DO: cache data
 		get{
 			if(inventoryItemList == null || listNeedsUpdate){
@@ -32,11 +32,12 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			return inventoryItemList;
 		}
 	}	
-
-	//---------------------------------------------------
-	// CheckForWallpaper()
-	// Check if wallpaper is already bought 
-	//---------------------------------------------------
+	
+	/// <summary>
+	/// Checks if wallpaper is already bought
+	/// </summary>
+	/// <returns><c>true</c>, if for wallpaper was checked, <c>false</c> otherwise.</returns>
+	/// <param name="itemID">Item I.</param>
 	public bool CheckForWallpaper(string itemID){
 		bool isWallpaperBought = false;
 		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
@@ -44,9 +45,12 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 		return isWallpaperBought;
 	}
-
-	//Return InventoryItem with itemID
-	//Return null if inventory item has been removed
+	
+	/// <summary>
+	/// Gets the inv item. Return null if inventory item has been removed
+	/// </summary>
+	/// <returns>The inv item.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public InventoryItem GetInvItem(string itemID){
 		Dictionary<string, InventoryItem> invItems = DataManager.Instance.GameData.Inventory.InventoryItems;
 		InventoryItem invItem = null;
@@ -56,8 +60,12 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 		return invItem;
 	}
-
-	//Add items to inventory
+	
+	/// <summary>
+	/// Adds the item.
+	/// </summary>
+	/// <param name="itemID">Item ID.</param>
+	/// <param name="count">Count.</param>
 	public void AddItem(string itemID, int count){
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		
@@ -103,14 +111,94 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		}
 	}
 	
-	//---------------------------------------------------
-	// GetInventoryForItem()
-	// Based on the item type of strItemID, this function
-	// will return the proper inventory for it.
-	//---------------------------------------------------	
-	private Dictionary<string, InventoryItem> GetInventoryForItem(string strItemID){
+	/// <summary>
+	/// Uses the pet item.
+	/// </summary>
+	/// <param name="itemID">Item ID.</param>
+	public void UsePetItem(string itemID){
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
+		InventoryItem invItem = null;
+		listNeedsUpdate = true;
+		
+		if(invItems.ContainsKey(itemID)){
+			invItem = invItems[itemID];
+			invItem.Amount--;
+			
+			//need to use the stats effect from item
+			ItemLogic.Instance.StatsEffect(itemID);
+			
+			//analytics
+			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
+			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+			                                         Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
+			
+			// play the item's sound, if it has one
+			string itemSound = invItem.ItemData.SoundUsed;
+			if(!string.IsNullOrEmpty(itemSound))
+				AudioManager.Instance.PlayClip(itemSound);
+			
+			//remove inv item if there is none left
+			if(invItem.Amount == 0)
+				invItems.Remove(itemID);
+			
+			// fire item used event
+			if(OnItemUsed != null){
+				InventoryEventArgs args = new InventoryEventArgs();
+				
+				args.InvItem = invItem;
+				OnItemUsed(this, args);
+			}
+		}
+	}
+
+	public void UseMiniPetItem(string itemID){
+		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
+		InventoryItem invItem = null;
+		listNeedsUpdate = true;
+
+		if(invItems.ContainsKey(itemID)){
+			invItem = invItems[itemID];
+			invItem.Amount--;
+
+			//analytics
+			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+//			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+//			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
+//			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+//			                                         Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
+			
+			// play the item's sound, if it has one
+//			string itemSound = invItem.ItemData.SoundUsed;
+//			if(!string.IsNullOrEmpty(itemSound))
+//				AudioManager.Instance.PlayClip(itemSound);
+			
+			//remove inv item if there is none left
+			if(invItem.Amount == 0)
+				invItems.Remove(itemID);
+			
+			// fire item used event
+			if(OnItemUsed != null){
+				InventoryEventArgs args = new InventoryEventArgs();
+				
+				args.InvItem = invItem;
+				OnItemUsed(this, args);
+			}
+		}
+
+		Debug.Log("MiniPet receives item");
+	}
+
+	/// <summary>
+	/// Gets the inventory for item. Based on the item type of itemID, this function
+	/// will return the proper inventory for it
+	/// </summary>
+	/// <returns>The inventory for item.</returns>
+	/// <param name="itemID">Item I.</param>
+	private Dictionary<string, InventoryItem> GetInventoryForItem(string itemID){
 		// what list the item is placed in depends on what kind of item it is
-		ItemType eType = DataLoaderItems.GetItemType(strItemID);
+		ItemType eType = DataLoaderItems.GetItemType(itemID);
 		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
 		switch(eType){
@@ -124,44 +212,4 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		
 		return inventory;
 	}
-	
-	//Use item from inventory
-	public void UseItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
-		InventoryItem invItem = null;
-		listNeedsUpdate = true;
-
-		if(invItems.ContainsKey(itemID)){
-			invItem = invItems[itemID];
-			invItem.Amount--;
-
-			//need to use the stats effect from item
-			ItemLogic.Instance.StatsEffect(itemID);
-		
-			//analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
-			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
-				Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
-			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
-				Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
-
-			// play the item's sound, if it has one
-			string itemSound = invItem.ItemData.SoundUsed;
-			if(!string.IsNullOrEmpty(itemSound))
-				AudioManager.Instance.PlayClip(itemSound);
-
-			//remove inv item if there is none left
-			if(invItem.Amount == 0)
-				invItems.Remove(itemID);
-
-			// fire item used event
-			if(OnItemUsed != null){
-				InventoryEventArgs args = new InventoryEventArgs();
-
-				args.InvItem = invItem;
-				OnItemUsed(this, args);
-			}
-		}
-	}
-	//=================================================
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //change this to PetInteraction Manager to handle item drop as well
@@ -41,7 +41,7 @@ public class PetInteractionManager : MonoBehaviour{
 					ShowPetReceivedFoodAnimation();		
 				
 				//notify inventory logic that this item is being used
-				InventoryLogic.Instance.UseItem(invItemID);
+				InventoryLogic.Instance.UsePetItem(invItemID);
 				
 				
 			}

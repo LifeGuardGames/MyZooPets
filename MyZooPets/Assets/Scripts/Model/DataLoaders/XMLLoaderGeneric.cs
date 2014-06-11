@@ -18,12 +18,12 @@ public class XMLLoaderGeneric{
 	public delegate void XmlNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage);
 	public XmlNodeHandler xmlNodeHandler; // the handler that binds xml element to a class property and add it to the hashData
 
-	private Hashtable hashData;
+	private Hashtable hashData; // where the xml data will be loaded into
 
 	public string XmlFileFolderPath{ get; set;} // the loader will load all the xml from this folder
 
 	/// <summary>
-	/// Gets the data.
+	/// Gets the data of type T.
 	/// </summary>
 	public T GetData<T>(string id){
 		if(hashData == null)

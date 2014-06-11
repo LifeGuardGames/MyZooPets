@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -251,7 +251,7 @@ public class ChooseDecorationUI : MonoBehaviour {
 		AudioManager.Instance.PlayClip( strSoundPlace );
 		
 		//notify inventory logic that this item is being used
-        InventoryLogic.Instance.UseItem(strID);		
+        InventoryLogic.Instance.UsePetItem(strID);		
 		
 		// close this menu
 		EditDecosUIManager.Instance.CloseChooseMenu();

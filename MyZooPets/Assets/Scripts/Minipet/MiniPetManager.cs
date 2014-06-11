@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MiniPetManager : MonoBehaviour {
+public class MiniPetManager : Singleton<MiniPetManager> {
 	
 	// Use this for initialization
 	void Start(){
@@ -29,6 +29,14 @@ public class MiniPetManager : MonoBehaviour {
 
 	void OnDestroy(){
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
+	}
+
+	public bool CanModifyLevelMeter(string miniPetID){
+
+	}
+
+	public void IncreaseLevelMeter(string miniPetID){
+		//
 	}
 
 	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){

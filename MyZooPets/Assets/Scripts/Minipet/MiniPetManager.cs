@@ -81,6 +81,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		 * about mini pet level up as well otherwise returning boolean is the more straight forward
 		 * way.
 		 */
+
+		/*
+		 * As for reward just spawn 1 gem and randomize coin numbers for now. dont' think we need
+		 * a xml for that yet
+		 */
 	}
 
 	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){

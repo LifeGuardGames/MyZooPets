@@ -54,5 +54,7 @@ public class ImmutableDataMiniPet{
 
 		string rawLocation = XMLUtils.GetString(hashElements["SpawnLocation"] as IXMLNode, null, error);
 		spawnLocation = Constants.ParseVector3(rawLocation);
+
+		levelUpConditionID = XMLUtils.GetString(hashElements["LevelUpConditionID"] as IXMLNode, null, error);
 	}
 }

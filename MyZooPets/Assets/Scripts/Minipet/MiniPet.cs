@@ -31,7 +31,8 @@ public class MiniPet : MonoBehaviour {
 	//On item drop handler. if the correct food modify current food xp
 
 	//On tap handler. do a funny dance or sth
-	
+
+	private string id;
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -52,9 +53,14 @@ public class MiniPet : MonoBehaviour {
 			}
 		}
 	}
-	
-	public void Init(string id, ImmutableDataMiniPet data){
 
+	/// <summary>
+	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
+	/// with the proper information.
+	/// </summary>
+	/// <param name="data">ImmutableDataMiniPet.</param>
+	public void Init(ImmutableDataMiniPet data){
+		this.id = data.ID;
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
@@ -63,16 +69,16 @@ public class MiniPet : MonoBehaviour {
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 
 			//check if minipet needs food
+			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+				//use item if so
+				args.IsValidTarget = true;
+				Debug.Log("item dropped on mini pet");
+				
+				//notify inventory logic that this item is being used
+				InventoryLogic.Instance.UseMiniPetItem(invItemID);
+				MiniPetManager.Instance.IncreaseFoodXP(id);
+			}
 
-			//use item if so
-			args.IsValidTarget = true;
-			Debug.Log("item dropped on mini pet");
-
-			//notify inventory logic that this item is being used
-			//need a new function in InventoryLogic. MiniPetUseItem
-//			InventoryLogic.Instance.UseItem(invItemID);
-			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseLevelMeter(id);
 		}
 		else{
 			//say sth if minipet doesn't want food anymore

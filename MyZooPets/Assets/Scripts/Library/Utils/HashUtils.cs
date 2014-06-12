@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -17,11 +18,17 @@ public static class HashUtils{
 	/// <typeparam name="T">The 1st type parameter.</typeparam>
 	public static T GetHashValue<T>(Hashtable hash, string key, T defaultVal, string strError = null){
 		T val = defaultVal;
-		if(hash.Contains(key)) 
-			val = (T)hash[key];
-		else if(!string.IsNullOrEmpty(strError))
-			Debug.LogError(strError + "Can't find key " + key);
-		
+
+		try{
+			if(hash.Contains(key)) 
+				val = (T)hash[key];
+			else if(!string.IsNullOrEmpty(strError))
+				Debug.LogError(strError + "Can't find key " + key);
+		}
+		catch(ArgumentNullException e){
+			Debug.LogException(e);
+		}
+
 		return val;
 	}
 }

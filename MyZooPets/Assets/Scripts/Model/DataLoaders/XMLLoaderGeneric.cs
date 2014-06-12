@@ -30,10 +30,16 @@ public class XMLLoaderGeneric{
 			SetupData();
 		
 		T data = default(T);
-		if(hashData.ContainsKey(id))
-			data = (T)hashData[id];
-		else
-			Debug.LogError("No such data for ID: " + id);
+
+		try{
+			if(hashData.ContainsKey(id))
+				data = (T)hashData[id];
+			else
+				Debug.LogError("No such data for ID: " + id);
+		}
+		catch(ArgumentNullException e){
+			Debug.LogException(e);
+		}
 		
 		return data;
 	}

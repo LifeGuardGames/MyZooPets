@@ -7,7 +7,26 @@ public class ImmutableDataMiniPetLevelUpConditions{
 	private string id;
 	private Dictionary<Level, int> levelUpConditions;
 
+	/// <summary>
+	/// Gets the level up condition. Returns -1 if no level up condition found
+	/// </summary>
+	/// <returns>The level up condition.</returns>
+	/// <param name="level">Level.</param>
+	public int GetLevelUpCondition(Level level){
+		int retVal = -1;
+
+		if(levelUpConditions.ContainsKey(level)){
+			retVal = levelUpConditions[level];
+		}
+		else{
+			Debug.LogError("Level: " + level + " doesn't exist");
+		}
+
+		return retVal;
+	}
+
 	public ImmutableDataMiniPetLevelUpConditions(string id, IXMLNode xmlNode, string errorMsg){
+		levelUpConditions = new Dictionary<Level, int>();
 		List<IXMLNode> elements = XMLUtils.GetChildrenList(xmlNode);
 
 		this.id = id;
@@ -18,7 +37,7 @@ public class ImmutableDataMiniPetLevelUpConditions{
 			string rawLevel = HashUtils.GetHashValue<string>(attributes, "Level", "", errorMsg);
 			Level level = (Level)Enum.Parse(typeof(Level), rawLevel);
 
-			int condition = HashUtils.GetHashValue<int>(attributes, "Value", -1, errorMsg);
+			int condition = int.Parse(HashUtils.GetHashValue<string>(attributes, "Value", "-1", errorMsg));
 
 			levelUpConditions.Add(level, condition);
 		}

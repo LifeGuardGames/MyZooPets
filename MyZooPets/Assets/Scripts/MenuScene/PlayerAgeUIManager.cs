@@ -20,7 +20,13 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 
 	void Start(){
 		if(SelectionManager.Instance.IsFirstTime)
-			Invoke("OpenUI", 1.5f);
+			StartCoroutine(ShowAgeSelector());
+//			Invoke("OpenUI", f);
+	}
+
+	private IEnumerator ShowAgeSelector(){
+		yield return new WaitForSeconds(1.5f);
+		OpenUI();
 	}
 
 	/// <summary>

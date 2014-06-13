@@ -13,21 +13,28 @@ public class RescuePrescription : InhalerPart{
         base.Awake();
         gameStepID = 6;
         floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_ROCKIT"));
-   } 
+   }
 
-    void OnPinch(PinchGesture gesture){ 
-        // current gesture phase (Started/Updated/Ended)
-        ContinuousGesturePhase phase = gesture.Phase;
+	void OnTap(TapGesture gesture){
+		PrescriptionAnimation();
+		NextStep();
+	}
 
-        if(phase == ContinuousGesturePhase.Ended){
-            // Current gap distance between the two fingers
-            float gap = gesture.Gap;
-            if(gap <= minGapDistance){
-                PrescriptionAnimation();
-                NextStep();
-            }
-        }
-    }
+//    void OnPinch(PinchGesture gesture){ 
+//        // current gesture phase (Started/Updated/Ended)
+//        ContinuousGesturePhase phase = gesture.Phase;
+//
+//        if(phase == ContinuousGesturePhase.Ended){
+//            // Current gap distance between the two fingers
+//            float gap = gesture.Gap;
+//				NOTE: gap is in pixel. need to be change to an adjusted unit so it
+	//			 stays the same across all devices
+//            if(gap <= minGapDistance){
+//                PrescriptionAnimation();
+//                NextStep();
+//            }
+//        }
+//    }
     
 #if UNITY_EDITOR
     void Update(){

@@ -20,7 +20,7 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 
 	void Start(){
 		if(SelectionManager.Instance.IsFirstTime)
-			Invoke("OpenUI", 0.5f);
+			Invoke("OpenUI", 1.5f);
 	}
 
 	/// <summary>

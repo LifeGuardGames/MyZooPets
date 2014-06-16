@@ -124,8 +124,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void RefreshDegradationCheck(){
 		// don't do these checks if the player has not yet finished the tutorials (we don't want them losing health/hunger)
-		bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(!bTutsDone)
+		bool isTutotrialDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		if(!isTutotrialDone)
 			return;
 		
 		// calculate changes in the pets mood
@@ -142,18 +142,18 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	//---------------------------------------------------   
 	private void SetUpTriggers(){      
 		// get list of available locations to spawn triggers
-		List<Data_TriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
+		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
         
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 
-		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>(listAvailable, numToSpawn);
+		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
 		//create trigger data to be spawned
 		for(int i = 0; i < listChosen.Count; i++){
-			Data_TriggerLocation location = listChosen[i];
+			ImmutableDataTriggerLocation location = listChosen[i];
             
 			ImmutableDataTrigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 
@@ -162,9 +162,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
             
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
-			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
-			if(!bTriggers && i == 0){
+			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
+
+			if(!isTriggerTutDone && i == 0){
 				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
+
 				if(location == null)
 					Debug.LogError("Tutorial trigger location not set up correctly");
                 
@@ -173,7 +175,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			}
 
 			//spawn them at a pre define location ID is the order in which the data are created
-			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.GetPosition()));
+			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Position));
 		}                
 
 		DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       

@@ -273,3 +273,7 @@ public enum DroppedItemStates {
 	Awarded
 }
 
+public enum MiniPetTypes{
+    Basic,
+}
+

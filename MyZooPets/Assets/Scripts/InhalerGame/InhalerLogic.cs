@@ -25,6 +25,11 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		set{ DataManager.Instance.GameData.Inhaler.FirstTimeRescue = value;}
 	}
 
+	public bool IsNewToTapPrescriptionHint{
+		get{ return DataManager.Instance.GameData.Inhaler.IsNewToTapPrescriptionHint;}
+		set{ DataManager.Instance.GameData.Inhaler.IsNewToTapPrescriptionHint = value;}
+	}
+
 	public bool IsTutorialCompleted{
 		get{ return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);}
 	}
@@ -64,6 +69,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
 		IsFirstTimeRescue = false;
+		IsNewToTapPrescriptionHint = false;
 
 		if(OnGameOver != null)
 			OnGameOver(this, EventArgs.Empty);

@@ -30,20 +30,18 @@ public class HintController : MonoBehaviour {
 				textObject.SetActive(false);
 		}
 			
-        InhalerGameUIManager.OnShowHint += CheckAndEnableHint;
+        InhalerGameUIManager.HintEvent += CheckAndEnableHint;
     }
 
     void OnDestroy(){
-        InhalerGameUIManager.OnShowHint -= CheckAndEnableHint;
+        InhalerGameUIManager.HintEvent -= CheckAndEnableHint;
     }
 
     //Event Listener. Check if hint for the next step is necessary and disable hint for
     //current step 
-    private void CheckAndEnableHint(object sender, EventArgs args){
+    private void CheckAndEnableHint(object sender, InhalerHintEventArgs args){
 
-		// Check if the event sender is from nextStep, need different behavior
-		// HACK Hacky shit right here... contact sean. Need to change
-		if(args is InhalerNextStepEventArgs && !InhalerGameUIManager.Instance.tutOn){
+		if(!args.IsDisplayingHint && !InhalerGameUIManager.Instance.tutOn){
 			DisableHint(false);
 		}
 		else{
@@ -58,7 +56,8 @@ public class HintController : MonoBehaviour {
 			// The outline texture and the text object can be treated normally
 			DisableHint(isSkipAnimation);
 
-			if(InhalerGameUIManager.Instance.ShowHint && showOnStep == InhalerLogic.Instance.CurrentStep){
+			if(InhalerGameUIManager.Instance.ShowHint && 
+			   showOnStep == InhalerLogic.Instance.CurrentStep){
 	            EnableHint();
 			}
 		}
@@ -75,10 +74,10 @@ public class HintController : MonoBehaviour {
 		}
 
 		if(outlineTexture != null)
-				outlineTexture.SetActive(false);
+			outlineTexture.SetActive(false);
 		
 		if(textObject != null)
-				textObject.SetActive(false);
+			textObject.SetActive(false);
     }
 
     //Turn on hint
@@ -89,9 +88,9 @@ public class HintController : MonoBehaviour {
 		}
 
 		if(outlineTexture != null)
-				outlineTexture.SetActive(true);
+			outlineTexture.SetActive(true);
 		
 		if(textObject != null)
-				textObject.SetActive(true);
+			textObject.SetActive(true);
     }
 }

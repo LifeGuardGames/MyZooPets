@@ -1,9 +1,11 @@
 using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class InventoryUIManager : Singleton<InventoryUIManager>{
+	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
+
 	public GameObject inventoryPanel;
 	public bool isDebug;
 	public UIPanel gridPanel;
@@ -15,10 +17,12 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	private bool isGuiShowing = true;   // Aux to keep track, not synced!!
 	private float collapsedPos;
 	private GameObject fingerHintGO;
+	private Transform currentDragDropItem;
 
 	void Start(){
 		collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
-		InventoryLogic.OnItemAddedToInventory += OnItemAdded;
+		InventoryLogic.OnItemAddedToInventory += OnItemAddedHandler;
+		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
 		//Spawn items in the inventory for the first time
 		List<InventoryItem> allInvItems = InventoryLogic.Instance.AllInventoryItems;
@@ -31,7 +35,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	void OnDestroy(){
-		InventoryLogic.OnItemAddedToInventory -= OnItemAdded;
+		InventoryLogic.OnItemAddedToInventory -= OnItemAddedHandler;
+		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	//Event listener. listening to when item is dragged out of the inventory on drop
@@ -44,53 +49,77 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 			Destroy(fingerHintGO);
 
 		//some debug check
-		if(isDebug){
-			if(e.TargetCollider && e.TargetCollider.name == "Cube")
-				dropOnTarget = true;
+//		if(isDebug){
+//			if(e.TargetCollider && e.TargetCollider.name == "Cube")
+//				dropOnTarget = true;
+//		}
+//		else{
+		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
+			currentDragDropItem = e.ParentTransform;
+
+			if(ItemDroppedOnTargetEvent != null)
+				ItemDroppedOnTargetEvent(this, e);
 		}
-		else{
-			if(e.TargetCollider && e.TargetCollider.name == "Pet_LWF")
-				dropOnTarget = true;
-		}
+//			dropOnTarget = true;
+//		}
 
 		//logic for when item is dropped on target
-		if(dropOnTarget){
-			string invItemID = e.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+//		if(dropOnTarget){
+//			string invItemID = e.ItemTransform.name; //get id from listener args
+//			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+//
+//			// check to make sure the item can be used
+//			if(ItemLogic.Instance.CanUseItem(invItemID)){
+//				e.IsValidTarget = true;
+//				
+//
+//				if(invItem != null && invItem.ItemType == ItemType.Foods)
+//					ShowPetReceivedFoodAnimation();		
+//				
+//				//notify inventory logic that this item is being used
+//				InventoryLogic.Instance.UseItem(invItemID);
+//				
+//				if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+//					e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
+//				}
+//				else{ //destroy object if it has been used up
+//					Destroy(e.ParentTransform.gameObject);
+//					UpdateBarPosition();
+//				}
+//			}
+//			else{
+//				// else the drop was valid or the item could not be used...show a message
+//				Hashtable hashSpeech = new Hashtable();
+//
+//				if(invItem.ItemType == ItemType.Foods)
+//					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
+//				else
+//					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
+//
+//				PetSpeechController.Instance.Talk(hashSpeech);				
+//			}
+//		}
+	}
 
-			// check to make sure the item can be used
-			if(ItemLogic.Instance.CanUseItem(invItemID)){
-				e.IsValidTarget = true;
-				
-
-				if(invItem != null && invItem.ItemType == ItemType.Foods)
-					ShowPetReceivedFoodAnimation();		
-				
-				//notify inventory logic that this item is being used
-				InventoryLogic.Instance.UseItem(invItemID);
-				
-				if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-					e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-				}
-				else{ //destroy object if it has been used up
-					Destroy(e.ParentTransform.gameObject);
-					UpdateBarPosition();
-				}
+	/// <summary>
+	/// Items the used event handler.
+	/// </summary>
+	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+		if(currentDragDropItem != null){
+			InventoryItem invItem = args.InvItem;
+			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
-			else{
-				// else the drop was valid or the item could not be used...show a message
-				Hashtable hashSpeech = new Hashtable();
-
-				if(invItem.ItemType == ItemType.Foods)
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
-				else
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
-
-				PetSpeechController.Instance.Talk(hashSpeech);				
+			else{ //destroy object if it has been used up
+				Destroy(currentDragDropItem.gameObject);
+				UpdateBarPosition();
 			}
 		}
 	}
 
+	/// <summary>
+	/// Handles the item press event.
+	/// </summary>
 	private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
 		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
 
@@ -112,15 +141,15 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	//play chew animation from pet animator
-	private void ShowPetReceivedFoodAnimation(){
-		if(!petAnimator.IsBusy()){
-			petAnimator.PlayUnrestrictedAnim("Eat", true);
-			PetMovement.Instance.StopMoving(false);
-		}
-	}
+//	private void ShowPetReceivedFoodAnimation(){
+//		if(!petAnimator.IsBusy()){
+//			petAnimator.PlayUnrestrictedAnim("Eat", true);
+//			PetMovement.Instance.StopMoving(false);
+//		}
+//	}
 
 	//Event listener. listening to when new item is added to the inventory
-	private void OnItemAdded(object sender, InventoryLogic.InventoryEventArgs e){
+	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
 		
 		// inventory doesn't currently care about decorations
 		if(e.InvItem.ItemType == ItemType.Decorations)

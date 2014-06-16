@@ -3,8 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public class InhalerHintEventArgs : EventArgs{
+	public bool IsDisplayingHint {get; set;}
+
+	public InhalerHintEventArgs(bool isDisplayingHint = true){
+		IsDisplayingHint = isDisplayingHint;
+	}
+}
+
 public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
-    public static EventHandler<EventArgs> OnShowHint; //Fire this event when hints need to display 
+    public static EventHandler<InhalerHintEventArgs> HintEvent; //Fire this event when hints need to display 
 
     public GameObject progressBarObject;
     public GameObject inhalerBody;
@@ -24,7 +32,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
 
     public bool ShowHint{
-        get {return showHint;}
+        get{
+			//take into consideration if user has seen the new gesture introduced in v1.2.8
+			return showHint || InhalerLogic.Instance.IsNewToTapPrescriptionHint;
+		}
     }
 
     void Start(){
@@ -59,15 +70,15 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         progressBarObject.SetActive(false);
     }
 
-    private void ShowProgressBar(){
-        progressBarObject.SetActive(true);
-    }
-
-    private void ShowGameUI(){
-        ShowProgressBar();
-        if(OnShowHint != null)
-            OnShowHint(this, EventArgs.Empty);
-    }
+//    private void ShowProgressBar(){
+//        progressBarObject.SetActive(true);
+//    }
+//
+//    private void ShowGameUI(){
+//        ShowProgressBar();
+//        if(HintEvent != null)
+//            HintEvent(this, EventArgs.Empty);
+//    }
 
     private void ShowHUD(){
         HUDUIManager.Instance.ShowPanel();
@@ -95,8 +106,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         // Analytics.Instance.StartPlayTimeTracker();
 
         //Start the first hint
-        if(OnShowHint != null)
-            OnShowHint(this, EventArgs.Empty);
+        if(HintEvent != null)
+            HintEvent(this, new InhalerHintEventArgs(isDisplayingHint:true));
     }
 
     //----------------------------------------------------------
@@ -105,14 +116,19 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     // for the hint count down timer
     //----------------------------------------------------------
     private void SetUpHintTimer(){
-        //Show hint right away if it's users' first time
-        if(InhalerLogic.Instance.IsFirstTimeRescue && tutOn){ 
+		bool isFirstTimeUsingRescueInhaler = InhalerLogic.Instance.IsFirstTimeRescue;
+		//User is new to the tap gesture we introduce in v1.2.8 force the tutorial to run again
+		bool isNewToTapPrescriptionHint = InhalerLogic.Instance.IsNewToTapPrescriptionHint;
+
+		//Show hint right away if it's users' first time
+        if((isFirstTimeUsingRescueInhaler && tutOn) || (isNewToTapPrescriptionHint && tutOn)){ 
             runShowHintTimer = false;
             showHint = true;
-        }else{
-            runShowHintTimer = true;
-            showHint = false;
-            timer = 0;
+        }
+		else{
+			runShowHintTimer = true;
+			showHint = false;
+			timer = 0;
         }
     }
 
@@ -128,8 +144,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
             Analytics.Instance.InhalerHintRequired(InhalerLogic.Instance.CurrentStep);
 
-            if(OnShowHint != null)
-                OnShowHint(this, EventArgs.Empty);
+            if(HintEvent != null)
+                HintEvent(this, new InhalerHintEventArgs(isDisplayingHint:true));
 
             runShowHintTimer = false;
         }
@@ -155,8 +171,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn)
             ResetHintTimer();
 
-        if(OnShowHint != null)
-			OnShowHint(this, new InhalerNextStepEventArgs());
+        if(HintEvent != null)
+			HintEvent(this, new InhalerHintEventArgs(isDisplayingHint:false));
     }
 
     //Event listener. Listens to game over message. Play fire animation 
@@ -205,10 +221,3 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     }
 }
 
-/// <summary>
-/// Custom argument to differentiate between event arguments.
-/// This should only be sent onNextStep!
-/// </summary>
-public class InhalerNextStepEventArgs : EventArgs
-{
-}

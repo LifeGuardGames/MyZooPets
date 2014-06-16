@@ -38,8 +38,8 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 
     void OnApplicationPause(bool isPaused){
         //need to remove 
-        // if(isPaused)
-        //     CleanupExistingTriggers();
+//         if(isPaused)
+//             CleanupExistingTriggers();
     }
 	
     //Use this to turn on all particle effects in triggers
@@ -58,10 +58,11 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	//---------------------------------------------------	
 	public DegradTrigger PlaceTutorialTrigger() {
         List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;
-        DegradData degradTrigger = (DegradData) degradTriggers.First();
+
+        DegradData degradTrigger = degradTriggers.First();
 		DegradTrigger trigger = PlaceTrigger(degradTrigger);
 		trigger.gameObject.name = TUT_TRIGGER;
-		
+
 		return trigger;
 	}
 
@@ -102,7 +103,8 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	//---------------------------------------------------		
 	private DegradTrigger PlaceTrigger(DegradData degradData) {		
         string triggerID = degradData.TriggerID;
-        Vector3 position = degradData.GetPosition();
+        Vector3 position = degradData.Position;
+		Debug.Log("Place trigger..pos: " + position);
         ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
 
         //Load trigger prefab

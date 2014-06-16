@@ -85,20 +85,21 @@ public class ItemLogic : Singleton<ItemLogic>{
 	public string GetDecoItemMaterialName(string itemID){
 		return DataLoaderItems.GetDecoItemMaterialName(itemID);
 	}
-	
-	//---------------------------------------------------
-	// CanUseItem()
-	// For the player's own good, we stop them if they
-	// try to use an item that will buff a stat that is
-	// already at max.  This function returns whether or
-	// not the user can use an item due to this.
-	//---------------------------------------------------		
-	public bool CanUseItem(string strItemID){
+
+	/// <summary>
+	/// For the player's own good, we stop them if they
+	/// try to use an item that will buff a stat that is
+	/// already at max.  This function returns whether or
+	/// not the user can use an item due to this.
+	/// </summary>
+	/// <returns><c>true</c> if this instance can use item the specified itemID; otherwise, <c>false</c>.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public bool CanUseItem(string itemID){
 		// start off with true
-		bool bCanUse = true;
+		bool isUsable = true;
 		
 		// get the stats dictionary for the item
-		Dictionary<StatType, int> statsDict = GetStatsDict(strItemID);
+		Dictionary<StatType, int> statsDict = GetStatsDict(itemID);
 		
 		// if the stats dictionary is not null, we want to be sure that the stats aren't already at max
 		if(statsDict != null){		
@@ -113,23 +114,24 @@ public class ItemLogic : Singleton<ItemLogic>{
 			
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
-			// int nCurHealth = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Health );
-			int nCurHealth = StatsController.Instance.GetStat(HUDElementType.Health);
-			// int nCurMood = DataManager.Instance.GameData.Stats.GetStat( HUDElementType.Mood );
-			int nCurMood = StatsController.Instance.GetStat(HUDElementType.Mood);
+			int currentHealth = StatsController.Instance.GetStat(HUDElementType.Health);
+			int currentMood = StatsController.Instance.GetStat(HUDElementType.Mood);
 			
-			if(moodAmount > 0 && healthAmount > 0 && nCurMood == 100 && nCurHealth == 100)
-				bCanUse = false;
-			else if(moodAmount > 0 && nCurMood == 100)
-				bCanUse = false;
-			else if(healthAmount > 0 && nCurHealth == 100)
-				bCanUse = false;
+			if(moodAmount > 0 && healthAmount > 0 && currentMood == 100 && currentHealth == 100)
+				isUsable = false;
+			else if(moodAmount > 0 && currentMood == 100)
+				isUsable = false;
+			else if(healthAmount > 0 && currentHealth == 100)
+				isUsable = false;
 		}
 		
-		return bCanUse;
+		return isUsable;
 	}
 
-	//Apply the stats effect that the Item with itemID has to the appropriate stats
+	/// <summary>
+	/// Apply the stats effect that the Item with itemID has to the appropriate stats
+	/// </summary>
+	/// <param name="itemID">Item ID.</param>
 	public void StatsEffect(string itemID){
 		Dictionary<StatType, int> statDict = GetStatsDict(itemID);
 		
@@ -163,12 +165,13 @@ public class ItemLogic : Singleton<ItemLogic>{
 
 		return retList; 
 	}
-	
-	//---------------------------------------------------
-	// GetStasDict()
-	// Returns a dictionary of stats info on the incoming
-	// item.  May return null.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Returns a dictionary of stats info on the incoming
+	/// item.  May return null.
+	/// </summary>
+	/// <returns>The stats dict.</returns>
+	/// <param name="strItemID">String item ID.</param>
 	private Dictionary<StatType, int> GetStatsDict(string strItemID){
 		Item item = GetItem(strItemID);
 		Dictionary<StatType, int> dictStats = null;

@@ -10,8 +10,8 @@ using System.Collections;
 
 public abstract class Gate : MonoBehaviour{
 	// ----- Pure Abstract -------------------------
-	protected abstract void OnGateDamaged(int nDamage);	// when a gate is damaged
-	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
+	protected abstract void GateDamaged(int nDamage);	// when a gate is damaged
+	protected abstract void GateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
 	public float playerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
@@ -28,12 +28,15 @@ public abstract class Gate : MonoBehaviour{
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
 		return data;
 	}
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
+
 	public virtual void Start(){}
 
+	/// <summary>
+	/// Init the specified id, monster and maxScreenSpace.
+	/// </summary>
+	/// <param name="id">Identifier.</param>
+	/// <param name="monster">Monster.</param>
+	/// <param name="maxScreenSpace">Max screen space.</param>
 	public void Init(string id, ImmutableDataMonster monster, float maxScreenSpace){
 		if(string.IsNullOrEmpty(gateID))
 			gateID = id;
@@ -61,7 +64,6 @@ public abstract class Gate : MonoBehaviour{
 				Debug.LogError("No logic script on box", goBox);
 		}		
 	}
-
 	
 	//---------------------------------------------------
 	// GreetPlayer()
@@ -105,10 +107,7 @@ public abstract class Gate : MonoBehaviour{
 	protected virtual Vector3 GetIdealPosition(){
 		return transform.position;	
 	}
-	
-	//---------------------------------------------------
-	// GetGateHP()
-	//---------------------------------------------------		
+
 	public int GetGateHP(){
 		return DataManager.Instance.GameData.GatingProgress.GetGateHP(gateID);
 	}
@@ -117,7 +116,7 @@ public abstract class Gate : MonoBehaviour{
 	// DamageGate()
 	// The user has done something to damage the gate.
 	//---------------------------------------------------	
-	public bool GateDamaged(int damage){
+	public bool DamageGate(int damage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
 		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
 		
@@ -125,7 +124,7 @@ public abstract class Gate : MonoBehaviour{
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
-		OnGateDamaged(damage);
+		GateDamaged(damage);
 		
 		if(isDestroyed){
 			Analytics.Instance.GateUnlocked(gateID);	
@@ -133,38 +132,7 @@ public abstract class Gate : MonoBehaviour{
 		}
 		
 		return isDestroyed;
-	}
-	
-	//---------------------------------------------------
-	// DamageGate_SaveData()
-	// Damages a gate with strID for nDamage, and handles
-	// the save data side of things.  This used to be in
-	// the actual save data class for gates, but was moved
-	// out to here.
-	//---------------------------------------------------		
-//	public bool DamageGateSaveData(string gateID, int damage){
-//		// check to make sure the gate exists
-//		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(gateID)){
-//			Debug.LogError("Something trying to access a non-existant gate " + gateID);
-//			return true;
-//		}
-//		
-//		// check to make sure the gate is active
-//		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(gateID)){
-//			Debug.LogError("Something trying to damage an inactive gate " + gateID);
-//			return true;
-//		}
-//		
-//		// otherwise, calculate and save the new hp
-//		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-//		hp = Mathf.Max(hp - damage, 0);
-//		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
-//		
-//		// then return whether or not the gate has been destroyed
-//		bool isDestroyed = hp <= 0;
-//
-//		return isDestroyed;
-//	}	
+	} 
 	
 	//---------------------------------------------------
 	// PrepGateDestruction()
@@ -182,7 +150,7 @@ public abstract class Gate : MonoBehaviour{
 			scriptItemBox.NowAvailable();
 		
 		// gates might do their own thing upon destruction
-		OnGateDestroyed();	
+		GateDestroyed();	
 		
 		// add any appropriate task unlocks
 		ImmutableDataGate data = GetGateData();

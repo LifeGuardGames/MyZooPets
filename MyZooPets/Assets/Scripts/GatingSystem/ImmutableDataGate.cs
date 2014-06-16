@@ -19,9 +19,14 @@ public class ImmutableDataGate{
 	private bool isRecurring; // is this gate recurring? i.e. comes back to life after a set amount of time
 	private string itemBoxID; // item box id this gate leaves behind once destroyed
 	private float itemBoxPositionOffset; // offset from the position of the gate
+	private string miniPetID; // id of the miniPet that will be unlocked when this gate is destroyed
 
 	public string GetGateID(){
 		return gateID;	
+	}
+
+	public string GetMiniPetID(){
+		return miniPetID;
 	}
 
 	/// <summary>
@@ -110,6 +115,9 @@ public class ImmutableDataGate{
 		// get list of wellapad unlocks
 		string strUnlocks = XMLUtils.GetString(hashElements["TaskUnlocks"] as IXMLNode);
 		arrayUnlocks = strUnlocks.Split(","[0]);
+
+		if(hashElements.ContainsKey("MiniPetID"))
+			miniPetID = XMLUtils.GetString(hashElements["MiniPetID"] as IXMLNode, null, error);
 		
 		//Debug.Log("Loading gate " + strID + " in loc " + strArea + " in partition " + nPartition + " and monster " + strMonsterID);
 	}

@@ -179,7 +179,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		path[2] = origin;
 		path[3] = itemPosition;
 
-		Debug.Log(itemPosition);
 
 		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);

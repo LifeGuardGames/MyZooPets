@@ -6,7 +6,7 @@ using System.Collections;
     Listens to pinch gesture. 
 */
 public class RescuePrescription : InhalerPart{
-    private float minGapDistance = 220.0f; //Pinch will only be registered if the 
+//    private float minGapDistance = 220.0f; //Pinch will only be registered if the 
                                         //gap distance is <= minGapDistance when the gesture ended
 
    protected override void Awake(){

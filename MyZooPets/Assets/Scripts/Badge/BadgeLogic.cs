@@ -1,13 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-//-----------------------
-//Provide data for BadgeUIManager
-//Checks and manages when a badge should be unlocked
-//-----------------------
+/// <summary>
+/// Badge logic.Checks and manages when a badge should be unlocked
+/// </summary>
 public class BadgeLogic : Singleton<BadgeLogic> {
     public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
     public class BadgeEventArgs : EventArgs{
@@ -29,15 +28,22 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     }
 
     void Awake(){
-        Dictionary<string, Badge> badgesDict = DataBadges.GetAllBadges();
-        allBadges = SelectListFromDictionary(badgesDict);
+        allBadges = DataLoaderBadges.GetDataList();
     }
 
-    //Return badge with badgeID
+    /// <summary>
+    /// Gets the badge.
+    /// </summary>
+    /// <returns>The badge.</returns>
+    /// <param name="badgeID">Badge ID.</param>
     public Badge GetBadge(string badgeID){
-        return DataBadges.GetBadge(badgeID);
+        return DataLoaderBadges.GetData(badgeID);
     }
 
+	/// <summary>
+	/// Gets the badge unlock at next level.
+	/// </summary>
+	/// <returns>The badge unlock at next level.</returns>
     public Badge GetBadgeUnlockAtNextLevel(){
         int nextLevel = LevelLogic.Instance.NextLevel;
         Badge selectedBadge = null;
@@ -56,11 +62,13 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         return selectedBadge;
     }
-
-    //Use this function to check which one of the badges with badgeType can be unlocked
-    //PARAMETERS: badgeType, currentProgress, overrideProgress.
-    //            overrideProgress is used to specify whether currentProgress should replace
-    //            the recorded progress from DataManager or add to the recorded progress.
+	
+	/// <summary>
+	/// Checks the series unlock progress.
+	/// </summary>
+	/// <param name="badgeType">Badge type.</param>
+	/// <param name="currentProgress">Current progress.</param>
+	/// <param name="overrideProgress">If set to <c>true</c> override progress from DataManager. else add to the record progress</param>
     public void CheckSeriesUnlockProgress(BadgeType badgeType, int currentProgress, bool overrideProgress){
         int latestProgress;
         bool unlockedAllSeriesBadges = true;
@@ -95,11 +103,16 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         if(!unlockedAllSeriesBadges)
             DataManager.Instance.GameData.Badge.UpdateSeriesUnlockProgress(badgeType, latestProgress);
     }
-
-    //Use this function to check if badge with badgeID can be unlocked
+	
+	/// <summary>
+	/// Checks the single unlock progress.
+	/// </summary>
+	/// <param name="badgeID">Badge I.</param>
+	/// <param name="currentProgress">Current progress.</param>
+	/// <param name="overrideProgress">If set to <c>true</c> override progress.</param>
     public void CheckSingleUnlockProgress(string badgeID, int currentProgress, bool overrideProgress){
         int latestProgress;
-        Badge badge = DataBadges.GetBadge(badgeID);
+        Badge badge = DataLoaderBadges.GetData(badgeID);
 
         //Decides to override or add to recorded progress from DataManager
         if(overrideProgress){
@@ -113,9 +126,13 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         if(!CheckUnlockProgress(badge, latestProgress))
             DataManager.Instance.GameData.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
     }
-
-    //Check if badge unlock progress meets the unlock condition
-    //True: new badge unlocked
+	
+	/// <summary>
+	/// Checks the unlock progress meets the unlock condition
+	/// </summary>
+	/// <returns><c>true</c>, if new badge unlocked.</returns>
+	/// <param name="badge">Badge.</param>
+	/// <param name="progress">Progress.</param>
     private bool CheckUnlockProgress(Badge badge, int progress){
         bool unlockNewBadge = false;
 
@@ -143,9 +160,9 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     }
 
     //Return a list from dictionary. 
-    private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
-        List<Badge> badgeList = (from keyValuePair in badgeDict
-                                    select keyValuePair.Value).ToList();
-        return badgeList;
-    }
+//    private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
+//        List<Badge> badgeList = (from keyValuePair in badgeDict
+//                                    select keyValuePair.Value).ToList();
+//        return badgeList;
+//    }
 }

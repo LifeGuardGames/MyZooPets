@@ -37,7 +37,7 @@ public class MutableDataGatingProgress{
 	public void RefreshGate(ImmutableDataGate data){
 		string gateID = data.GetGateID();
 		if(GatingProgress.ContainsKey(gateID)){
-			int hp = data.GetMonster().GetMonsterHealth();
+			int hp = data.GetMonster().MonsterHealth;
 			GatingProgress[gateID] = hp;
 		}
 		else
@@ -95,11 +95,11 @@ public class MutableDataGatingProgress{
 	/// </summary>
 	private void LoadFromXML(){
 		// init the data by filling the dictionary with xml data
-		Dictionary<string, ImmutableDataGate> dictGates = DataLoaderGate.GetAllData();
-		foreach(KeyValuePair<string, ImmutableDataGate> entry in dictGates){
-			string gateID = entry.Key;
-			ImmutableDataGate dataGate = entry.Value;
-			int hp = dataGate.GetMonster().GetMonsterHealth();
+		List<ImmutableDataGate> gates = DataLoaderGate.GetAllData();
+		foreach(ImmutableDataGate gate in gates){
+			string gateID = gate.GetGateID();
+
+			int hp = gate.GetMonster().MonsterHealth;
 			
 			// maps gate key to monster's max hp (i.e. no progress)
 			// don't map it if it already exists; it means that the data for that key was already loaded and contains mutable save data

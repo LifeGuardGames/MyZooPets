@@ -1,12 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// DataGate
-// Individual piece of gate data as loaded from xml.
-// This is considered immutable.
-//---------------------------------------------------
-
 public class ImmutableDataGate{
 	
 	private string gateID; // id of the gate
@@ -85,7 +79,9 @@ public class ImmutableDataGate{
 		return itemBoxPositionOffset;
 	}
 	
-	public ImmutableDataGate(string id, Hashtable hashElements, string error){
+	public ImmutableDataGate(string id, IXMLNode xmlNode, string error){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
+
 		gateID = id;	
 
 		// get location

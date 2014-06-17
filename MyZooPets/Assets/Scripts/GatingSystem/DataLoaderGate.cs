@@ -6,11 +6,12 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Data loader gate.
+/// Hash -- Key: GateID, Value: ImmutableDataGate
 /// </summary>
-public class DataLoaderGate{
-
-	private static Dictionary<string, ImmutableDataGate> allGates; //Key: gateID, Value: ImmutableDataGate
-	private static Hashtable hashData; // hash of areas to rooms to gates
+public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
+	//Key: area name (Bedroom, yard), Value: Dictionary
+	//Key: room partition number, Value: instance of ImmutableDataGate
+	private static Hashtable areaPartitionGates;
 	
 	/// <summary>
 	/// Gets the gate data.
@@ -18,16 +19,9 @@ public class DataLoaderGate{
 	/// <returns>The data.</returns>
 	/// <param name="id">Identifier.</param>
 	public static ImmutableDataGate GetData(string id){
-		Dictionary<string, ImmutableDataGate> dictData = GetAllData();
-		
-		ImmutableDataGate data = null;
+		instance.InitXMLLoader();
 
-		if(dictData.ContainsKey(id))
-			data = dictData[id];
-		else
-			Debug.LogError("No such gate with id " + id + " -- creating one with default values");
-
-		return data;
+		return instance.GetData<ImmutableDataGate>(id);;
 	}
 
 	/// <summary>
@@ -36,16 +30,15 @@ public class DataLoaderGate{
 	/// <returns>The data.</returns>
 	/// <param name="area">Area.</param>
 	/// <param name="roomPartition">Room partition.</param>
-	public static ImmutableDataGate GetData(string area, int roomPartition){
-		if(hashData == null)
-			SetupData();
+	public static ImmutableDataGate GetData(string areaID, int roomPartition){
+		instance.ForceSetup();
 		
 		ImmutableDataGate dataGate = null;
 		
-		if(hashData.ContainsKey(area)){
-			Hashtable hashArea = (Hashtable)hashData[area];
-			if(hashArea.ContainsKey(roomPartition))
-				dataGate = (ImmutableDataGate)hashArea[roomPartition];
+		if(areaPartitionGates.ContainsKey(areaID)){
+			Hashtable area = (Hashtable) areaPartitionGates[areaID];
+			if(area.ContainsKey(roomPartition))
+				dataGate = (ImmutableDataGate) area[roomPartition];
 		}
 		
 		return dataGate;
@@ -56,89 +49,63 @@ public class DataLoaderGate{
 	/// </summary>
 	/// <returns>The area gates.</returns>
 	/// <param name="area">Area.</param>
-	public static Hashtable GetAreaGates(string area){
-		Hashtable hashGates = new Hashtable();
+	public static Hashtable GetAreaGates(string areaID){
+		Hashtable area = new Hashtable();
 		
-		if(hashData.ContainsKey(area))
-			hashGates = (Hashtable)hashData[area];
+		if(areaPartitionGates.ContainsKey(areaID))
+			area = (Hashtable) areaPartitionGates[areaID];
 		else
-			Debug.LogError("No such area in the gates hash: " + area);
+			Debug.LogError("No such area in the gates hash: " + areaID);
 		
-		return hashGates;
+		return area;
 	}
 	
-	public static Dictionary<string, ImmutableDataGate> GetAllData(){
-		if(allGates == null)
-			SetupData();
+	public static List<ImmutableDataGate> GetAllData(){
+		instance.InitXMLLoader();
 		
-		return allGates;	
+		return instance.GetDataList<ImmutableDataGate>();	
 	}
 
-	public static void SetupData(){
-		allGates = new Dictionary<string, ImmutableDataGate>();
-		hashData = new Hashtable();
-		
-		//Load all data xml files
-		UnityEngine.Object[] files = Resources.LoadAll("Gates", typeof(TextAsset));
-		foreach(TextAsset file in files){
-			string xmlString = file.text;
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+		ImmutableDataGate data = new ImmutableDataGate(id, xmlNode, errorMessage);
+
+		if(hashData.ContainsKey(id))
+			Debug.LogError(errorMessage + "Duplicate keys!");
+		else{
+			// add to dictionary of all gates
+			hashData.Add(id, data);	
 			
-			// error message
-			string errorMessage = "Error in file " + file.name;			
-
-			//Create XMLParser instance
-			XMLParser xmlParser = new XMLParser(xmlString);
-
-			//Call the parser to build the IXMLNode objects
-			XMLElement xmlElement = xmlParser.Parse();
-
-			//Go through all child node of xmlElement (the parent of the file)
-			for(int i=0; i<xmlElement.Children.Count; i++){
-				IXMLNode childNode = xmlElement.Children[i];
-				
-				// Get  properties from xml node
-				Hashtable hashElements = XMLUtils.GetChildren(childNode);				
-				
-				//Get id
-				Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
-				string id = (string)hashAttr["ID"];
-				string strError = errorMessage + "(" + id + "): ";
-				
-				ImmutableDataGate data = new ImmutableDataGate(id, hashElements, strError);
-				
-				// store the data
-				if(allGates.ContainsKey(id))
-					Debug.LogError(strError + "Duplicate keys!");
-				else{
-					// add to dictionary of all gates
-					allGates.Add(id, data);	
-					
-					// we also want to store the gates in a more elaborate hashtable for easy access
-					StoreGate(data);
-				}
-			}
+			// we also want to store the gates in a more elaborate hashtable for easy access
+			StoreGate(data);
 		}
 	}
 
+	protected override void InitXMLLoader(){
+		xmlFileFolderPath = "Gates";
+	}
+
 	/// <summary>
-	/// tores the gate in a hash of areas to partition 
+	/// Stores the gate in a hash of areas to partition 
 	/// ids to the actual data.
 	/// </summary>
 	/// <param name="dataGate">Data gate.</param>
-	private static void StoreGate(ImmutableDataGate dataGate){
-		string area = dataGate.GetArea();
+	private void StoreGate(ImmutableDataGate dataGate){
+		if(areaPartitionGates == null)
+			areaPartitionGates = new Hashtable();
+
+		string areaID = dataGate.GetArea();
 		int roomPartition = dataGate.GetPartition();
 		
 		// if the area isn't in the hash yet, create it
-		if(!hashData.ContainsKey(area))
-			hashData[area] = new Hashtable();
+		if(!areaPartitionGates.ContainsKey(areaID))
+			areaPartitionGates[areaID] = new Hashtable();
 		
-		Hashtable hashArea = (Hashtable)hashData[area];
+		Hashtable area = (Hashtable) areaPartitionGates[areaID];
 		
-		if(hashArea.ContainsKey(roomPartition))
-			Debug.LogError("Duplicate gate for room " + roomPartition + " in area " + area);
+		if(area.ContainsKey(roomPartition))
+			Debug.LogError("Duplicate gate for room " + roomPartition + " in area " + areaID);
 		else
-			hashArea[roomPartition] = dataGate;
+			area[roomPartition] = dataGate;
 	}
 }
 

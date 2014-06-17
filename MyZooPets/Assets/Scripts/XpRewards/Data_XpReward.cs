@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ public class Data_XpReward {
 		
 		// now get the total xp a pet of this level requires
 		int nTotalXP = 0;
-		PetLevel dataLevel = DataPetLevels.GetLevel( nLevel+1 );
+		ImmutableDataPetLevel dataLevel = DataLoaderPetLevels.GetLevel( nLevel+1 );
 		if ( dataLevel != null )
 			nTotalXP = dataLevel.LevelUpCondition;
 		

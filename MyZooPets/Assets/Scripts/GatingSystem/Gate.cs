@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //---------------------------------------------------
@@ -43,7 +43,7 @@ public abstract class Gate : MonoBehaviour{
 		else
 			Debug.LogError("Something trying to set id on gate twice " + gateID);
 		
-		gateResource = monster.GetResourceKey();
+		gateResource = monster.ResourceKey;
 
 		this.maxScreenSpace = maxScreenSpace;
 		

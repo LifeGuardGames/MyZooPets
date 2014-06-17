@@ -82,6 +82,14 @@ public abstract class XMLLoaderGeneric<T> where T : new() {
 
 		return dataList;
 	}
+
+	/// <summary>
+	/// Forces the setup.
+	/// </summary>
+	protected void ForceSetup(){
+		if(hashData == null)
+			SetupData();
+	}
 	
 	private void SetupData(){
 		hashData = new Hashtable();

@@ -30,7 +30,7 @@ namespace Jemast.LocalCache {
 				// Make lz4 process executable
 				process = new System.Diagnostics.Process();
 				process.StartInfo.FileName = "chmod";
-				process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.UtilsPaths + "lz4\"";
+				process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "lz4\"";
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.CreateNoWindow = true;
@@ -38,11 +38,12 @@ namespace Jemast.LocalCache {
 				
 				// Wait for process to end
 				process.WaitForExit();
+				process.Dispose();
 			}
 			
 			// Start lz4 process
 			process = new System.Diagnostics.Process();
-			process.StartInfo.FileName = LocalCache.Shared.UtilsPaths + "lz4" + (Application.platform == RuntimePlatform.WindowsEditor ? ".exe" : "");
+			process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "lz4" + (Application.platform == RuntimePlatform.WindowsEditor ? ".exe" : "");
 			process.StartInfo.Arguments = string.Format("-{0} \"{1}\" \"{2}\"", LocalCache.Preferences.CompressionQualityLZ4 == 0 ? "1" : "9", path + ".jcf", compressedFilePath);
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = false;
@@ -51,6 +52,7 @@ namespace Jemast.LocalCache {
 			
 			// Wait for process to end
 			process.WaitForExit();
+			process.Dispose();
 			
 			// Fix times
 			File.SetCreationTime(compressedFilePath, Directory.GetCreationTime(path));
@@ -58,7 +60,7 @@ namespace Jemast.LocalCache {
 			File.SetLastWriteTime(compressedFilePath, Directory.GetLastWriteTime(path));
 			
 			// Cleanup
-			Directory.Delete(path, true);
+			LocalCache.Shared.DeleteDirectory(path);
 			File.Delete(path + ".jcf");
 			
 			if (!silent)
@@ -72,7 +74,7 @@ namespace Jemast.LocalCache {
 				return;
 			
 			if (Directory.Exists(path))
-				Directory.Delete(path, true);
+				LocalCache.Shared.DeleteDirectory(path);
 			
 			if (!silent)
 				EditorUtility.DisplayProgressBar("Hold on", "Decompressing cache...", 0.5f);
@@ -83,7 +85,7 @@ namespace Jemast.LocalCache {
 				// Make lz4 process executable
 				process = new System.Diagnostics.Process();
 				process.StartInfo.FileName = "chmod";
-				process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.UtilsPaths + "lz4\"";
+				process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath +  LocalCache.Shared.UtilsPaths + "lz4\"";
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.CreateNoWindow = true;
@@ -91,11 +93,12 @@ namespace Jemast.LocalCache {
 				
 				// Wait for process to end
 				process.WaitForExit();
+				process.Dispose();
 			}
 			
 			// Start lz4 process
 			process = new System.Diagnostics.Process();
-			process.StartInfo.FileName = LocalCache.Shared.UtilsPaths + "lz4" + (Application.platform == RuntimePlatform.WindowsEditor ? ".exe" : "");
+			process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "lz4" + (Application.platform == RuntimePlatform.WindowsEditor ? ".exe" : "");
 			process.StartInfo.Arguments = string.Format("-d \"{0}\" \"{1}\"", compressedPath, path + ".jcf");
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = false;
@@ -104,6 +107,7 @@ namespace Jemast.LocalCache {
 			
 			// Wait for process to end
 			process.WaitForExit();
+			process.Dispose();
 			
 			// Unconcatenate
 			Jemast.Utils.JCF.Unconcatenate(path + ".jcf", path);

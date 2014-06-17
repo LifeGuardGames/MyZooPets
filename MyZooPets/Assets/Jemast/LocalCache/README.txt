@@ -1,6 +1,6 @@
 ------------------------------------------
 Fast Platform Switch
-v1.3.1
+v1.5.2
 Codename: JLocalCachePlugin
 Product Page: http://jemast.com/unity/fast-platform-switch/
 Copyright (c) 2013-2014 jemast software.
@@ -44,6 +44,90 @@ Feel free to contact us at contact@jemast.com for personal support
 -------------------------------------------
 Release Notes
 -------------------------------------------
+
+-------------------
+v1.5.2 (06/01/2014)
+-------------------
+
+- NEW: Added generic texture compression option (aka Don't override) for Android and BlackBerry
+- FIX: Workaround for an issue in Unity Free to force texture reimport in build subtargets (texture compression options)
+
+-------------------
+v1.5.1 (05/29/2014)
+-------------------
+
+- FIX: API switch requests are now properly persisted and will go through after calling BuildPipeline.BuildPlayer
+- FIX: When a platform switch fails, cleanup will now happen immediately (cache being in an unknown state, it has to be cleared for that platform)
+- UPDATE: Tightened the overall checks regarding the current editor state
+
+-------------------
+v1.5 (05/18/2014)
+-------------------
+
+- IMPORTANT: Please Clear all cache and do a Reimport all on your projects due to a breaking change in cache manager
+- IMPORTANT: Dropped support for Unity 3.5.7 (Unity 4.0 is the minimal requirement now)
+
+- UPDATE: Improved cache manager that should prevent small issues reported by some users
+- UPDATE: Now using StartAssetEditing and StopAssetEditing to batch reimports
+- UPDATE: Tweaked the UI a bit for readability and clarity
+
+-------------------
+v1.4.5 (04/18/2014)
+-------------------
+
+- NEW: Support for Unity 4.5 new platforms (removed deprecated ones as well)
+
+-------------------
+v1.4.4 (04/14/2014)
+-------------------
+
+- FIX: Fixed the Mercurial rule for preventing the cache to go into version control
+- FIX: Removed Flash platform for Unity 4.3 (not available anymore)
+- FIX: Support for ISO-8859-1 paths with hard links on Windows
+
+-------------------
+v1.4.3 (03/31/2014)
+-------------------
+
+- FIX: Fixed a critical regression in v1.4.1 with directory asset reimport
+
+-------------------
+v1.4.2 (03/28/2014)
+-------------------
+
+- FIX: Prevent issues when accidentaly switching with default Build settings and hard links are enabled
+
+-------------------
+v1.4.1 (03/27/2014)
+-------------------
+
+- FIX: Do not attempt to import directories as assets
+- FIX: Fixed directory delete issues and related cleanup tasks
+- FIX: No more issues if you cancel a platform change
+- FIX: Proper disposal of external processes after they exit
+- FIX: Better indication of platform switch start (progress bar when persisting assets to disk)
+
+-------------------
+v1.4 (03/21/2014)
+-------------------
+
+- NEW: Experimental hard links support! No more moving the cache around, only folder links are changed. Feature is marked as experimental because hard links can fail under certain conditions (network shares, unsupported file systems, ...).
+- FIX: When reimporting assets, progress bar will output asset file names.
+- FIX: Prevent import of files inside hidden folders (as Unity ignores them).
+- FIX: Prevent import of Thumbs.db files (sorry about that).
+- FIX: Fixed path issues with compression. We are also now logging failed compressions and doing some cleanup.
+
+-------------------
+v1.3.3 (03/10/2014)
+-------------------
+
+- FIX: Ignore hidden files when trying to persist asset settings (props to Glauber)
+
+-------------------
+v1.3.2 (03/07/2014)
+-------------------
+
+- FIX: Fixed namespaces issues (props to Larry)
 
 -------------------
 v1.3.1 (01/19/2014)

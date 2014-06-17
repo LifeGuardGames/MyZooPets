@@ -17,13 +17,14 @@ namespace Jemast.LocalCache {
 			compressionQualityLZ4 = CompressionQualityLZ4;
 			localCacheVersion = LocalCacheVersion;
 			enableLogFile = EnableLogFile;
+			enableHardLinks = EnableHardLinks;
 		}
 		
 		private static int? localCacheVersion;
 		public static int LocalCacheVersion {
 			get {
 				if (!localCacheVersion.HasValue)
-					localCacheVersion = EditorPrefs.GetInt("Jemast_LocalCache_Version", -1);
+					localCacheVersion = EditorPrefs.GetInt("Jemast_LocalCache_Version", 2);
 				
 				return localCacheVersion.Value;
 			}
@@ -47,6 +48,22 @@ namespace Jemast.LocalCache {
 				if (enableLogFile != value) {
 					enableLogFile = value;
 					EditorPrefs.SetBool("Jemast_LocalCache_Enable_Log_File", value);
+				}
+			}
+		}
+		
+		private static bool? enableHardLinks;
+		public static bool EnableHardLinks { 
+			get {
+				if (!enableHardLinks.HasValue)
+					enableHardLinks = EditorPrefs.GetBool("Jemast_LocalCache_Enable_Hard_Links", false);
+				
+				return enableHardLinks.Value;
+			}
+			set {
+				if (enableHardLinks != value) {
+					enableHardLinks = value;
+					EditorPrefs.SetBool("Jemast_LocalCache_Enable_Hard_Links", value);
 				}
 			}
 		}

@@ -13,6 +13,26 @@ using System.Collections.Generic;
 namespace Jemast.LocalCache {
 	public class CacheManager {
 		
+		static public LocalCache.Shared.CacheTarget? CurrentCacheTarget {
+			get {
+				return LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
+			}
+		}
+		
+		static public Jemast.LocalCache.Shared.CacheSubtarget? CurrentCacheSubtarget {
+			get {
+				if (CurrentCacheTarget == Jemast.LocalCache.Shared.CacheTarget.Android)
+					return Jemast.LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
+				else if (CurrentCacheTarget == Jemast.LocalCache.Shared.CacheTarget.BlackBerry)
+					 return Jemast.LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
+#endif
+				else
+					return null;
+			}
+		}
+		
+		
 		static string progressTitle = null;
 		static string progressDescription = null;
 		static float progress = 0f;
@@ -56,6 +76,27 @@ namespace Jemast.LocalCache {
 				}
 				
 				switchOperationInProgress = value;
+			}
+		}
+		
+		private static bool? switchOperationIsAPI = null;
+		public static bool SwitchOperationIsAPI {
+			get {
+				if (switchOperationIsAPI == null) {
+					switchOperationIsAPI = File.Exists(LocalCache.Shared.CachePath + "SwitchOperationIsAPI");
+				}
+				
+				return switchOperationIsAPI.Value;
+			}
+			set {
+				if (value == true) {
+					FileStream s = File.Create(LocalCache.Shared.CachePath + "SwitchOperationIsAPI");
+					s.Dispose();
+				} else {
+					File.Delete(LocalCache.Shared.CachePath + "SwitchOperationIsAPI");
+				}
+				
+				switchOperationIsAPI = value;
 			}
 		}
 		
@@ -114,15 +155,22 @@ namespace Jemast.LocalCache {
 		}
 		
 		public static bool ShouldRefreshUI = false;
+		public static bool ShouldSerializeAssets = false;
+		public static bool ShouldSerializeAssetsFrameSkip = false;
 		public static bool ShouldSwitchPlatform = false;
 		
-		public static void SwitchPlatform(LocalCache.Shared.CacheTarget? previousCacheTarget, LocalCache.Shared.CacheSubtarget? previousCacheSubtarget, LocalCache.Shared.CacheTarget? newCacheTarget, LocalCache.Shared.CacheSubtarget? newCacheSubtarget, bool silent) {
-			BuildTarget? newBuildTarget = LocalCache.Shared.BuildTargetForCacheTarget(newCacheTarget);
+		public static bool HasCheckedHardLinkStatus = false;
+		
+		private static LocalCache.Shared.CacheTarget? newCacheTarget;
+		private static LocalCache.Shared.CacheSubtarget? newCacheSubtarget;
+		
+		public static void SwitchPlatform(LocalCache.Shared.CacheTarget? cacheTarget, LocalCache.Shared.CacheSubtarget? cacheSubtarget, bool apiSwitch) {
+			BuildTarget? newBuildTarget = LocalCache.Shared.BuildTargetForCacheTarget(cacheTarget);
 			
-			if (previousCacheTarget == null || newBuildTarget == null || newCacheTarget == null || (newBuildTarget == EditorUserBuildSettings.activeBuildTarget && previousCacheSubtarget == newCacheSubtarget))
+			if (CurrentCacheTarget == null || newBuildTarget == null || cacheTarget == null || (newBuildTarget == EditorUserBuildSettings.activeBuildTarget && CurrentCacheSubtarget == cacheSubtarget))
 				return;
 			
-			if (silent == false) {
+			if (apiSwitch == false) {
 				int option = EditorUtility.DisplayDialogComplex("Do you want to save the changes you made in the scene " + (string.IsNullOrEmpty(EditorApplication.currentScene) ? "Untitled" : EditorApplication.currentScene) + "?", "Platform switching requires closing the current scene to process cache. Your changes will be lost if you don't save them.", "Save", "Don't Save", "Cancel");
 				switch (option) {
 				case 0:
@@ -138,64 +186,76 @@ namespace Jemast.LocalCache {
 			}
 			
 			LocalCache.LogUtility.LogImmediate("-------------------------------------------------------");
-			LocalCache.LogUtility.LogImmediate("Switching from {0} ({1}) to {2} ({3})", previousCacheTarget.ToString(), previousCacheSubtarget.HasValue ? previousCacheSubtarget.Value.ToString() : "Base", newCacheTarget, newCacheSubtarget.HasValue ? newCacheSubtarget.Value.ToString() : "Base");
-				
+			LocalCache.LogUtility.LogImmediate("Switching from {0} ({1}) to {2} ({3})", CurrentCacheTarget.ToString(), CurrentCacheSubtarget.HasValue ? CurrentCacheSubtarget.Value.ToString() : "Base", cacheTarget, cacheSubtarget.HasValue ? cacheSubtarget.Value.ToString() : "Base");
+			
+			EditorUtility.DisplayProgressBar("Hold on", "Persisting assets and import settings to disk...", 0.5f);
+			
+			PlatformRefreshCurrentScene = EditorApplication.currentScene;
+			EditorApplication.NewScene();
+			
+			newCacheTarget = cacheTarget;
+			newCacheSubtarget = cacheSubtarget;
+			
+			SwitchOperationInProgress = true;
+			SwitchOperationIsAPI = apiSwitch;
+			PlatformRefreshInProgress = true;
+			ShouldSerializeAssets = true;
+			ShouldSerializeAssetsFrameSkip = false;
+		}
+
+		public static void SerializeAssetsOperation() {
+			ShouldSerializeAssets = false;
+			ShouldSerializeAssetsFrameSkip = false;
+
+			// Save assets
+			AssetDatabase.Refresh();
+			AssetDatabase.SaveAssets();
+			
 			// Save all import manager timestamps
 			string assetsPath = Application.dataPath;
-			int assetsPathLength = assetsPath.Length - 6;
 			
 			string cachePath = assetsPath.Remove(assetsPath.Length - 6, 6) + "LocalCache";
 			Directory.CreateDirectory(cachePath);
 			
-			string[] assetFiles = Directory.GetFiles(assetsPath, "*.*", SearchOption.AllDirectories);
-			//string[] assetDirectories = Directory.GetDirectories(assetsPath, "*.*", SearchOption.AllDirectories);
+			string[] assetPaths = AssetDatabase.GetAllAssetPaths();
 			
 			LocalCache.LogUtility.LogImmediate("Writing import settings to disk and fetching assets timestamps");
 			
 			Dictionary<string,ulong> timestamps = new Dictionary<string, ulong>();
 			
-			foreach (var file in assetFiles) {
-				if (file.EndsWith(".meta"))
-					continue;
-				if (file.EndsWith(".DS_Store"))
-					continue;
+			foreach (var path in assetPaths) {
+				AssetDatabase.WriteImportSettingsIfDirty(path);
 				
-				string assetPath = file.Remove(0, assetsPathLength);
-				
-				AssetDatabase.WriteImportSettingsIfDirty(assetPath);
-				
-				AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath);
+				AssetImporter assetImporter = AssetImporter.GetAtPath(path);
 				if (assetImporter != null) {
-					timestamps.Add(assetPath, assetImporter.assetTimeStamp);
+					timestamps.Add(path, assetImporter.assetTimeStamp);
 				}
 			}
 			
 			LocalCache.LogUtility.LogImmediate("Serializing asset timestamps to disk");
 			
-			string currentTargetMetadataTimestampsPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)previousCacheTarget] + (previousCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)previousCacheSubtarget] : "") + "timestamps";
+			string currentTargetMetadataTimestampsPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)CurrentCacheTarget] + (CurrentCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)CurrentCacheSubtarget] : "") + "timestamps";
 			using (FileStream destFileStream = File.Create(currentTargetMetadataTimestampsPath)) {
 				SerializeTimestamps(timestamps, destFileStream);
 			}
-			
-			SwitchOperationInProgress = true;
-			PlatformRefreshInProgress = true;
+
 			ShouldSwitchPlatform = true;
 		}
 		
-		public static void SwitchPlatformOperation(LocalCache.Shared.CacheTarget? previousCacheTarget, LocalCache.Shared.CacheSubtarget? previousCacheSubtarget, LocalCache.Shared.CacheTarget? newCacheTarget, LocalCache.Shared.CacheSubtarget? newCacheSubtarget) {
+		public static void SwitchPlatformOperation() {
 			ShouldSwitchPlatform = false;
 			ShouldRefreshUI = true;
 			
 			BuildTarget? newBuildTarget = LocalCache.Shared.BuildTargetForCacheTarget(newCacheTarget);
-			PlatformRefreshCurrentScene = EditorApplication.currentScene;
+			BuildTargetGroup? newBuildTargetGroup = LocalCache.Shared.BuildTargetGroupForCacheTarget(newCacheTarget);
+			
 			EditorApplication.NewScene();
 
-			if (newCacheSubtarget != null && previousCacheTarget == newCacheTarget && previousCacheSubtarget != newCacheSubtarget) {
+			if (newCacheSubtarget != null && CurrentCacheTarget == newCacheTarget && CurrentCacheSubtarget != newCacheSubtarget) {
 				PlatformRefreshShouldBustCache = true;
 			}
 
 			string assetsPath = Application.dataPath;
-			int assetsPathLength = assetsPath.Length - 6;
 			
 			string libraryPath = assetsPath.Remove(assetsPath.Length - 6, 6) + "Library";
 			string cachePath = assetsPath.Remove(assetsPath.Length - 6, 6) + "LocalCache";
@@ -204,10 +264,10 @@ namespace Jemast.LocalCache {
 			
 			string metadataPath = libraryPath + "/metadata";
 			
-			string currentTargetMetadataDirectoryPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)previousCacheTarget] + (previousCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)previousCacheSubtarget] : "") + "metadata";
+			string currentTargetMetadataDirectoryPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)CurrentCacheTarget] + (CurrentCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)CurrentCacheSubtarget] : "") + "metadata";
 			string newTargetMetadataDirectoryPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)newCacheTarget] + (newCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)newCacheSubtarget] : "") + "metadata";
 
-			string currentTargetMetadataTimestampsPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)previousCacheTarget] + (previousCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)previousCacheSubtarget] : "") + "timestamps";
+			string currentTargetMetadataTimestampsPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)CurrentCacheTarget] + (CurrentCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)CurrentCacheSubtarget] : "") + "timestamps";
 			string newTargetMetadataTimestampsPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)newCacheTarget] + (newCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)newCacheSubtarget] : "") + "timestamps";
 			
 			LocalCache.LogUtility.LogImmediate("Attempting to perform switch operation");
@@ -215,82 +275,105 @@ namespace Jemast.LocalCache {
 			try
 			{
 				// Preemptively get a list of assets
-				string[] assetFiles = Directory.GetFiles(assetsPath, "*.*", SearchOption.AllDirectories);
-				string[] assetDirectories = Directory.GetDirectories(assetsPath, "*.*", SearchOption.AllDirectories);
+				string[] assetPaths = AssetDatabase.GetAllAssetPaths();
 				
 				LocalCache.LogUtility.LogImmediate("Performing decompression of current build target if required");
-				
-				// Save current platform
 				LocalCache.CompressionManager.PerformDecompression(currentTargetMetadataDirectoryPath);
 				
-				LocalCache.LogUtility.LogImmediate("Merging current build target to cache");
-				
-				// Perform save
-				progressTitle = "Hold on";
-				progressDescription = "Saving current platform to cache...";
-				progress = 0f;
-				DirectoryMerge(metadataPath, currentTargetMetadataDirectoryPath);
-				
 				LocalCache.LogUtility.LogImmediate("Performing decompression of new build target if required");
-				
-				// Override with new platform
 				LocalCache.CompressionManager.PerformDecompression(newTargetMetadataDirectoryPath);
-				
-				LocalCache.LogUtility.LogImmediate("Merging new build target to cache");
-				
-				// Perform override
-				progressTitle = "Hold on";
-				progressDescription = "Attempting to load previous platform from cache...";
-				progress = 0f;
-				DirectoryMerge(newTargetMetadataDirectoryPath, metadataPath);
+
+				if (LocalCache.Preferences.EnableHardLinks) {
+					EditorUtility.DisplayProgressBar("Hold on", "Swapping hard links...", 0.5f);
+					LocalCache.LogUtility.LogImmediate("Swapping hard links");
+
+					// If platform is not cached copy data from current platform
+					if (System.IO.Directory.Exists(newTargetMetadataDirectoryPath) == false) {
+						LocalCache.Shared.DirectoryCopy(metadataPath, newTargetMetadataDirectoryPath, true);
+					}
+
+					// Swap hard link
+					if (Application.platform == RuntimePlatform.OSXEditor) {
+						// Make hardlink process executable
+						System.Diagnostics.Process process = null;
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = "chmod";
+						process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+						
+						// Delete current hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "-u \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+
+						// Make new hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "\"" + newTargetMetadataDirectoryPath + "\" \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+					} else {
+						// Delete current hard link
+						System.Diagnostics.Process process = null;
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula -d \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+
+						// Make new hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula \"" + metadataPath + "\" \"" + newTargetMetadataDirectoryPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+					}
+				} else {
+					// Save current platform
+					LocalCache.LogUtility.LogImmediate("Merging current build target to cache");
+
+					progressTitle = "Hold on";
+					progressDescription = "Saving current platform to cache...";
+					progress = 0f;
+					DirectoryMerge(metadataPath, currentTargetMetadataDirectoryPath);
+					
+					LocalCache.LogUtility.LogImmediate("Performing decompression of new build target if required");
+					
+					// Override with new platform
+					LocalCache.LogUtility.LogImmediate("Merging new build target to cache");
+
+					progressTitle = "Hold on";
+					progressDescription = "Attempting to load previous platform from cache...";
+					progress = 0f;
+					DirectoryMerge(newTargetMetadataDirectoryPath, metadataPath);
+				}
 				
 				// Chmod/Chown metadata
-				if (Application.platform == RuntimePlatform.OSXEditor) {
-					LocalCache.LogUtility.LogImmediate("Setting correct permissions on metadata");
-						
-					System.Diagnostics.Process process;
-					
-					process = new System.Diagnostics.Process();
-					process.StartInfo.FileName = "find";
-					process.StartInfo.Arguments = "\"" + metadataPath + "\" -type d -exec chmod 755 {} +";
-					process.StartInfo.UseShellExecute = false;
-					process.StartInfo.RedirectStandardOutput = true;
-					process.StartInfo.CreateNoWindow = true;
-					process.Start();
-					
-					process.WaitForExit();
-					
-					process = new System.Diagnostics.Process();
-					process.StartInfo.FileName = "find";
-					process.StartInfo.Arguments = "\"" + metadataPath + "\" -type f -exec chmod 644 {} +";
-					process.StartInfo.UseShellExecute = false;
-					process.StartInfo.RedirectStandardOutput = true;
-					process.StartInfo.CreateNoWindow = true;
-					process.Start();
-					
-					process.WaitForExit();
-					
-					process = new System.Diagnostics.Process();
-					process.StartInfo.FileName = "whoami";
-					process.StartInfo.UseShellExecute = false;
-					process.StartInfo.RedirectStandardOutput = true;
-					process.StartInfo.CreateNoWindow = true;
-					process.Start();
-				
-					process.WaitForExit();
-					
-					string whoami = process.StandardOutput.ReadLine();
-					
-					process = new System.Diagnostics.Process();
-					process.StartInfo.FileName = "chown";
-					process.StartInfo.Arguments = "-RH \""+whoami+":staff\" \"" + metadataPath + "\"";
-					process.StartInfo.UseShellExecute = false;
-					process.StartInfo.RedirectStandardOutput = true;
-					process.StartInfo.CreateNoWindow = true;
-					process.Start();
-					
-					process.WaitForExit();
-				}
+				LocalCache.LogUtility.LogImmediate("Setting correct permissions on metadata");
+				FixPermissions();
 				
 				LocalCache.LogUtility.LogImmediate("Deleting excess metadata files");
 				
@@ -298,7 +381,7 @@ namespace Jemast.LocalCache {
 				string[] metadataFiles = Directory.GetFiles(metadataPath, "*.*", SearchOption.AllDirectories);
 				foreach (var file in metadataFiles) {
 					string assetPath = AssetDatabase.GUIDToAssetPath(System.IO.Path.GetFileName(file));
-					if (string.IsNullOrEmpty (assetPath) || (!File.Exists(LocalCache.Shared.ProjectPath + assetPath) && !Directory.Exists(LocalCache.Shared.ProjectPath + assetPath))) {
+					if (assetPath.StartsWith("Assets") && (string.IsNullOrEmpty (assetPath) || (!File.Exists(LocalCache.Shared.ProjectPath + assetPath) && !Directory.Exists(LocalCache.Shared.ProjectPath + assetPath)))) {
 						File.Delete(file);
 					}
 				}
@@ -335,7 +418,7 @@ namespace Jemast.LocalCache {
 						EditorUserBuildSettings.androidBuildSubtarget = androidSubtarget.Value;
 				}
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-				else if (newCacheTarget == LocalCache.Shared.CacheTarget.BB10) {
+				else if (newCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry) {
 					BlackBerryBuildSubtarget? blackberrySubtarget = LocalCache.Shared.BlackBerryBuildSubtargetForCacheSubtarget(newCacheSubtarget);
 					if (blackberrySubtarget.HasValue)
 						EditorUserBuildSettings.blackberryBuildSubtarget = blackberrySubtarget.Value;
@@ -348,7 +431,6 @@ namespace Jemast.LocalCache {
 					throw new System.Exception();
 				
 				// Make as selected build target group
-				BuildTargetGroup? newBuildTargetGroup = LocalCache.Shared.BuildTargetGroupForCacheTarget(newCacheTarget);
 				if (newBuildTargetGroup.HasValue)
 					EditorUserBuildSettings.selectedBuildTargetGroup = newBuildTargetGroup.Value;
 				
@@ -360,29 +442,24 @@ namespace Jemast.LocalCache {
 				
 				// Look for missing metadata files
 				int currentAsset = 0;
-				int assetCount = assetFiles.Length + assetDirectories.Length;
-				foreach (var file in assetFiles) {
-					if (file.EndsWith(".meta"))
-						continue;
-					if (file.EndsWith(".DS_Store"))
-						continue;
-					
+				int assetCount = assetPaths.Length;
+				
+				AssetDatabase.StartAssetEditing();
+				
+				foreach (var path in assetPaths) {
 					EditorUtility.DisplayProgressBar("Hold on", "Reimporting changed assets...", (float)currentAsset/(float)assetCount);
-					string assetPath = file.Remove(0, assetsPathLength);
-					string guid = AssetDatabase.AssetPathToGUID(assetPath);
-					if (!string.IsNullOrEmpty(guid) && !File.Exists(metadataPath + "/" + guid.Substring(0,2) + "/" + guid))
-						AssetDatabase.ImportAsset (assetPath, ImportAssetOptions.ForceUpdate);
+					
+					string filename = System.IO.Path.GetFileName(path);
+					string guid = AssetDatabase.AssetPathToGUID(path);
+					if (path.StartsWith("Assets") && !string.IsNullOrEmpty(guid) && !File.Exists(metadataPath + "/" + guid.Substring(0,2) + "/" + guid)) {
+						EditorUtility.DisplayProgressBar("Hold on", "Reimporting changed assets... (" + filename + ")", (float)currentAsset/(float)assetCount);
+						AssetDatabase.ImportAsset (path, ImportAssetOptions.ForceUpdate);
+					}
 					currentAsset++;
 				}
 				
-				foreach (var directory in assetDirectories) {
-					EditorUtility.DisplayProgressBar("Hold on", "Reimporting changed assets...", (float)currentAsset/(float)assetCount);
-					string assetPath = directory.Remove(0, assetsPathLength);
-					string guid = AssetDatabase.AssetPathToGUID(assetPath);
-					if (!string.IsNullOrEmpty(guid) && !File.Exists(metadataPath + "/" + guid.Substring(0,2) + "/" + guid))
-						AssetDatabase.ImportAsset (assetPath, ImportAssetOptions.ForceUpdate);
-					currentAsset++;
-				}
+				EditorUtility.DisplayProgressBar("Hold on", "Reimporting changed assets... (processing batch)", 1.0f);
+				AssetDatabase.StopAssetEditing();
 				
 				EditorUtility.ClearProgressBar();
 				
@@ -399,11 +476,92 @@ namespace Jemast.LocalCache {
 				EditorUtility.ClearProgressBar();
 				
 				SwitchOperationInProgress = false;
-				LocalCache.LogUtility.LogImmediate("Switch operation error: " + e.Message);
-				
-				// Cleanup
-				if (Directory.Exists(currentTargetMetadataDirectoryPath))
-					Directory.Delete(currentTargetMetadataDirectoryPath, true);
+
+				if (LocalCache.Preferences.EnableHardLinks) {
+					// Check if platform switch happened -- Get current target
+					LocalCache.Shared.CacheTarget? currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
+					LocalCache.Shared.CacheSubtarget? currentCacheSubtarget = null;
+					
+					if (currentCacheTarget == LocalCache.Shared.CacheTarget.Android)
+						currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
+					#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
+					else if (currentCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
+						currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
+					#endif
+
+					// Revert hard links
+					if (currentCacheTarget != newCacheTarget || currentCacheSubtarget != newCacheSubtarget) {
+						if (Application.platform == RuntimePlatform.OSXEditor) {
+							// Make hardlink process executable
+							System.Diagnostics.Process process = null;
+							process = new System.Diagnostics.Process();
+							process.StartInfo.FileName = "chmod";
+							process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink\"";
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.RedirectStandardOutput = true;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							process.WaitForExit();
+							process.Dispose();
+							
+							// Delete current hard link
+							process = new System.Diagnostics.Process();
+							process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+							process.StartInfo.Arguments = "-u \"" + metadataPath + "\"";
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.RedirectStandardOutput = true;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							
+							// Wait for process to end
+							process.WaitForExit();
+							process.Dispose();
+	
+							// Make new hard link
+							process = new System.Diagnostics.Process();
+							process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+							process.StartInfo.Arguments = "\"" + currentTargetMetadataDirectoryPath + "\" \"" + metadataPath + "\"";
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.RedirectStandardOutput = true;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							
+							// Wait for process to end
+							process.WaitForExit();
+							process.Dispose();
+						} else {
+							// Delete current hard link
+							System.Diagnostics.Process process = null;
+							process = new System.Diagnostics.Process();
+							process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+							process.StartInfo.Arguments = "/accepteula -d \"" + metadataPath + "\"";
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.RedirectStandardOutput = true;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							
+							// Wait for process to end
+							process.WaitForExit();
+							process.Dispose();
+	
+							// Make new hard link
+							process = new System.Diagnostics.Process();
+							process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+							process.StartInfo.Arguments = "/accepteula \"" + metadataPath + "\" \"" + currentTargetMetadataDirectoryPath + "\"";
+							process.StartInfo.UseShellExecute = false;
+							process.StartInfo.RedirectStandardOutput = true;
+							process.StartInfo.CreateNoWindow = true;
+							process.Start();
+							
+							// Wait for process to end
+							process.WaitForExit();
+							process.Dispose();
+						}
+	
+						// Mark for cleanup
+						System.IO.File.Create(newTargetMetadataDirectoryPath + ".cleanup");
+					}
+				}
 				
 				return;
 			}
@@ -460,7 +618,7 @@ namespace Jemast.LocalCache {
 			string metadataCacheTimestampsFile = LocalCache.Shared.CachePath + LocalCache.Shared.CacheTargetPrefixes[(int)target.Value] + (subtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)subtarget.Value] : "") + "timestamps";
 			
 			if (Directory.Exists(metadataCacheFolder))
-				Directory.Delete(metadataCacheFolder, true);
+				LocalCache.Shared.DeleteDirectory(metadataCacheFolder);
 			if (File.Exists(metadataCacheLZ4File))
 				File.Delete(metadataCacheLZ4File);
 			if (File.Exists(metadataCacheTimestampsFile))
@@ -470,9 +628,33 @@ namespace Jemast.LocalCache {
 		}
 		
 		public static void ClearAllCache() {
-			// Delete local cache folder
-			if (Directory.Exists(LocalCache.Shared.CachePath))
-				Directory.Delete(LocalCache.Shared.CachePath, true);
+			string assetsPath = Application.dataPath;
+			string cachePath = assetsPath.Remove(assetsPath.Length - 6, 6) + "LocalCache";
+			Directory.CreateDirectory(cachePath);
+
+			// Get current target
+			LocalCache.Shared.CacheTarget? currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
+			LocalCache.Shared.CacheSubtarget? currentCacheSubtarget = null;
+			
+			if (currentCacheTarget == LocalCache.Shared.CacheTarget.Android)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
+			#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
+			else if (currentCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
+			#endif
+			
+			string currentTargetMetadataDirectoryPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)currentCacheTarget] + (currentCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)currentCacheSubtarget] : "") + "metadata";
+
+			foreach (var directory in System.IO.Directory.GetDirectories(cachePath)) {
+				if (LocalCache.Preferences.EnableHardLinks && directory.Replace("\\","/").Equals(currentTargetMetadataDirectoryPath))
+					continue;
+
+				LocalCache.Shared.DeleteDirectory(directory);
+			}
+
+			foreach (var file in System.IO.Directory.GetFiles(cachePath)) {
+				System.IO.File.Delete(file);
+			}
 		}
 		
 		public static void CompressCache(LocalCache.Shared.CacheTarget? target, LocalCache.Shared.CacheSubtarget? subtarget, bool silent = false) {
@@ -499,6 +681,17 @@ namespace Jemast.LocalCache {
 		}
 		
 		public static void CompressAllCache(bool background) {
+			// Get current target
+			LocalCache.Shared.CacheTarget? currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
+			LocalCache.Shared.CacheSubtarget? currentCacheSubtarget = null;
+			
+			if (currentCacheTarget == LocalCache.Shared.CacheTarget.Android)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
+			#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
+			else if (currentCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
+			#endif
+
 			if (background) {
 				Directory.CreateDirectory(LocalCache.Shared.CachePath);
 				
@@ -507,18 +700,29 @@ namespace Jemast.LocalCache {
 				stream.Dispose();
 				
 				System.Threading.ThreadPool.QueueUserWorkItem(delegate {
-					CompressAllCacheOperation(true);
-					
-					File.Delete(backgroundLockFilePath);
-					
-					ShouldRefreshUI = true;
+					try {
+						CompressAllCacheOperation(true, currentCacheTarget, currentCacheSubtarget);
+					}
+					catch (System.Exception e) {
+						Debug.LogError(e.Message);
+
+						// Cleanup
+						foreach (var file in System.IO.Directory.GetFiles(LocalCache.Shared.CachePath)) {
+							if (file.EndsWith(".jcf"))
+								System.IO.File.Delete(file);
+						}
+					}
+					finally {
+						File.Delete(backgroundLockFilePath);
+						ShouldRefreshUI = true;
+					}
 				});
 			} else {
-				CompressAllCacheOperation(false);
+				CompressAllCacheOperation(false, currentCacheTarget, currentCacheSubtarget);
 			}
 		}
 		
-		private static void CompressAllCacheOperation(bool background) {
+		private static void CompressAllCacheOperation(bool background, LocalCache.Shared.CacheTarget? currentCacheTarget, LocalCache.Shared.CacheSubtarget? currentCacheSubtarget) {
 			// Process all targets & subtargets
 			for (int i = 0; i < (int)LocalCache.Shared.CacheTarget.Count; i++) {
 				var target = (LocalCache.Shared.CacheTarget)i;
@@ -526,21 +730,21 @@ namespace Jemast.LocalCache {
 				if (target == LocalCache.Shared.CacheTarget.Android) {
 					for (int j = (int)LocalCache.Shared.CacheSubtarget.Android_First + 1; j < (int)LocalCache.Shared.CacheSubtarget.Android_Last; j++) {
 						var subtarget = (LocalCache.Shared.CacheSubtarget)j;
-						if (GetCacheStatus(target, subtarget) && !GetCacheCompression(target, subtarget))
+						if (GetCacheStatus(target, subtarget) && !GetCacheCompression(target, subtarget) && !(LocalCache.Preferences.EnableHardLinks && target == currentCacheTarget && subtarget == currentCacheSubtarget))
 							CompressCache(target, subtarget, background);
 					}
 				}
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-				else if (target == LocalCache.Shared.CacheTarget.BB10) {
-					for (int j = (int)LocalCache.Shared.CacheSubtarget.BB10_First + 1; j < (int)LocalCache.Shared.CacheSubtarget.BB10_Last; j++) {
+				else if (target == LocalCache.Shared.CacheTarget.BlackBerry) {
+					for (int j = (int)LocalCache.Shared.CacheSubtarget.BlackBerry_First + 1; j < (int)LocalCache.Shared.CacheSubtarget.BlackBerry_Last; j++) {
 						var subtarget = (LocalCache.Shared.CacheSubtarget)j;
-						if (GetCacheStatus(target, subtarget) && !GetCacheCompression(target, subtarget))
+						if (GetCacheStatus(target, subtarget) && !GetCacheCompression(target, subtarget) && !(LocalCache.Preferences.EnableHardLinks && target == currentCacheTarget && subtarget == currentCacheSubtarget))
 							CompressCache(target, subtarget, background);
 					}
 				}
 #endif
 				else {
-					if (GetCacheStatus(target, null) && !GetCacheCompression(target, null))
+					if (GetCacheStatus(target, null) && !GetCacheCompression(target, null) && !(LocalCache.Preferences.EnableHardLinks && target == currentCacheTarget && null == currentCacheSubtarget))
 						CompressCache(target, null, background);
 				}
 			}
@@ -559,8 +763,8 @@ namespace Jemast.LocalCache {
 					}
 				}
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-				else if (target == LocalCache.Shared.CacheTarget.BB10) {
-					for (int j = (int)LocalCache.Shared.CacheSubtarget.BB10_First + 1; j < (int)LocalCache.Shared.CacheSubtarget.BB10_Last; j++) {
+				else if (target == LocalCache.Shared.CacheTarget.BlackBerry) {
+					for (int j = (int)LocalCache.Shared.CacheSubtarget.BlackBerry_First + 1; j < (int)LocalCache.Shared.CacheSubtarget.BlackBerry_Last; j++) {
 						var subtarget = (LocalCache.Shared.CacheSubtarget)j;
 						if (GetCacheStatus(target, subtarget) && !GetCacheCompression(target, subtarget))
 							CompressCache(target, subtarget);
@@ -581,17 +785,19 @@ namespace Jemast.LocalCache {
 		}
 		
 		public static void FixIssues() {
-			//ClearAllCache();
-			
+			// Disable hard links
+			LocalCache.Preferences.EnableHardLinks = false;
+			CheckHardLinkStatus();
+
 			// Delete local cache folder
 			if (Directory.Exists(LocalCache.Shared.CachePath))
-				Directory.Delete(LocalCache.Shared.CachePath, true);
+				LocalCache.Shared.DeleteDirectory(LocalCache.Shared.CachePath);
 			
 			// Delete metadata folder
 			string assetsPath = Application.dataPath;
 			string libraryPath = assetsPath.Remove(assetsPath.Length - 6, 6) + "Library";
 			if (Directory.Exists(libraryPath + "/metadata"))
-				Directory.Delete(libraryPath + "/metadata", true);
+				LocalCache.Shared.DeleteDirectory(libraryPath + "/metadata");
 			
 			// Reimport all
 			EditorApplication.ExecuteMenuItem("Assets/Reimport All");
@@ -667,7 +873,7 @@ namespace Jemast.LocalCache {
 					continue;
 				
 				// Create subdirs if needed
-				Directory.CreateDirectory(Path.GetDirectoryName(destFile));
+				Directory.CreateDirectory(System.IO.Path.GetDirectoryName(destFile));
 				
 				// Copy file
 				//File.Delete(destFile);
@@ -707,6 +913,385 @@ namespace Jemast.LocalCache {
 		        dictionary.Add(key, value);
 		    }
 		    return dictionary;                
+		}
+		
+		public static void CheckHardLinkStatus() {
+			bool metadataIsHardLink = false;
+			bool hardLinkIsValid = false;
+			string hardLinkDirectory = null;
+			
+			string assetsPath = Application.dataPath;
+			
+			string libraryPath = assetsPath.Remove(assetsPath.Length - 6, 6) + "Library";
+			string cachePath = assetsPath.Remove(assetsPath.Length - 6, 6) + "LocalCache";
+			Directory.CreateDirectory(cachePath);
+			
+			string metadataPath = libraryPath + "/metadata";
+
+			
+			// Get current target
+			LocalCache.Shared.CacheTarget? currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
+			LocalCache.Shared.CacheSubtarget? currentCacheSubtarget = null;
+
+			if (currentCacheTarget == LocalCache.Shared.CacheTarget.Android)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
+			#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
+			else if (currentCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
+				currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
+			#endif
+			
+			string currentTargetMetadataDirectoryPath = cachePath + "/" + LocalCache.Shared.CacheTargetPrefixes[(int)currentCacheTarget] + (currentCacheSubtarget.HasValue ? LocalCache.Shared.CacheSubtargetPrefixes[(int)currentCacheSubtarget] : "") + "metadata";
+			
+			
+			if (Application.platform == RuntimePlatform.OSXEditor) {
+				// Get inum value
+				string inum = null;
+				System.Diagnostics.Process process;
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "ls";
+				process.StartInfo.Arguments = "-id \"" + metadataPath + "\"";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				
+				using (StreamReader reader = process.StandardOutput)
+				{
+					string result = reader.ReadToEnd();
+					inum = result.Split(' ')[0];
+				}
+				
+				process.Dispose();
+				
+				// Find by inum in cache
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "find";
+				process.StartInfo.Arguments = "\"" + cachePath + "\" -inum " + inum;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				
+				using (StreamReader reader = process.StandardOutput)
+				{
+					string result = reader.ReadToEnd().Trim();
+					if (!string.IsNullOrEmpty(result)) {
+						metadataIsHardLink = true;
+						hardLinkDirectory = result;
+						hardLinkIsValid = result.Equals(currentTargetMetadataDirectoryPath);
+					}
+				}
+				
+				process.Dispose();
+			} else {
+				System.Diagnostics.Process process;
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+				process.StartInfo.Arguments = "/accepteula \"" + metadataPath + "\"";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+        		process.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
+				process.Start();
+				
+				// Wait for process to end
+				process.WaitForExit();
+				
+				using (StreamReader reader = process.StandardOutput)
+				{
+					string result = reader.ReadToEnd();
+					int indexOfSubstituteName = result.IndexOf("Substitute Name: ");
+					if (indexOfSubstituteName != -1) {
+						metadataIsHardLink = true;
+						hardLinkDirectory = result.Substring(indexOfSubstituteName + 17).Split('\n')[0].Trim ().Replace("\\", "/");
+						hardLinkIsValid = hardLinkDirectory.Equals(currentTargetMetadataDirectoryPath);
+					}
+				}
+				
+				process.Dispose();
+			}
+			
+			if (LocalCache.Preferences.EnableHardLinks) {
+				if (metadataIsHardLink == false) {
+					EditorUtility.DisplayProgressBar("Hold on", "Enabling hard links...", 0.5f);
+					
+					// Cleanup
+					if (System.IO.File.Exists(currentTargetMetadataDirectoryPath + ".jcf"))
+						File.Delete(currentTargetMetadataDirectoryPath + ".jcf");
+
+					if (System.IO.File.Exists(currentTargetMetadataDirectoryPath + ".jcf.lz4"))
+						File.Delete(currentTargetMetadataDirectoryPath + ".jcf.lz4");
+					
+					if (System.IO.Directory.Exists(currentTargetMetadataDirectoryPath))
+						LocalCache.Shared.DeleteDirectory(currentTargetMetadataDirectoryPath);
+					
+					FixPermissions();
+					
+					System.IO.Directory.Move(metadataPath, currentTargetMetadataDirectoryPath);
+				
+					System.Diagnostics.Process process = new System.Diagnostics.Process();
+					if (Application.platform == RuntimePlatform.OSXEditor) {
+						// Make hardlink process executable
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = "chmod";
+						process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+						
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "\"" + currentTargetMetadataDirectoryPath + "\" \"" + metadataPath + "\"";
+					} else {
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula \"" + metadataPath + "\" \"" + currentTargetMetadataDirectoryPath + "\"";
+					}
+
+					// Wait for process to end
+					process.StartInfo.UseShellExecute = false;
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.CreateNoWindow = true;
+					process.Start();
+					process.WaitForExit();
+					process.Dispose();
+					
+					EditorUtility.ClearProgressBar();
+				} else if (hardLinkIsValid == false) {
+					// Cleanup current target directories & files
+					if (System.IO.Directory.Exists(currentTargetMetadataDirectoryPath))
+						LocalCache.Shared.DeleteDirectory(currentTargetMetadataDirectoryPath);
+					if (System.IO.File.Exists(currentTargetMetadataDirectoryPath + ".jcf"))
+						System.IO.File.Delete(currentTargetMetadataDirectoryPath + ".jcf");
+					if (System.IO.File.Exists(currentTargetMetadataDirectoryPath + ".jcf.lz4"))
+						System.IO.File.Delete(currentTargetMetadataDirectoryPath + ".jcf.lz4");
+					if (System.IO.File.Exists(currentTargetMetadataDirectoryPath.Substring(0, currentTargetMetadataDirectoryPath.Length - 9) + "_timestamps"))
+						System.IO.File.Delete(currentTargetMetadataDirectoryPath.Substring(0, currentTargetMetadataDirectoryPath.Length - 9) + "_timestamps");
+					
+					// Copy current data to new metadata path
+					LocalCache.Shared.DirectoryCopy(hardLinkDirectory, currentTargetMetadataDirectoryPath, true);
+					
+					System.Diagnostics.Process process = new System.Diagnostics.Process();
+					if (Application.platform == RuntimePlatform.OSXEditor) {
+						// Make hardlink process executable
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = "chmod";
+						process.StartInfo.Arguments = "+x \"" + LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+						
+						// Delete current hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "-u \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+
+						// Make new hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "\"" + currentTargetMetadataDirectoryPath + "\" \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+					} else {
+						// Delete current hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula -d \"" + metadataPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+						
+						// Make new hard link
+						process = new System.Diagnostics.Process();
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula \"" + metadataPath + "\" \"" + currentTargetMetadataDirectoryPath + "\"";
+						process.StartInfo.UseShellExecute = false;
+						process.StartInfo.RedirectStandardOutput = true;
+						process.StartInfo.CreateNoWindow = true;
+						process.Start();
+						process.WaitForExit();
+						process.Dispose();
+					}
+					
+					// Cleanup previous target directories & files
+					if (System.IO.Directory.Exists(hardLinkDirectory))
+						LocalCache.Shared.DeleteDirectory(hardLinkDirectory);
+					if (System.IO.File.Exists(hardLinkDirectory + ".jcf"))
+						System.IO.File.Delete(hardLinkDirectory + ".jcf");
+					if (System.IO.File.Exists(hardLinkDirectory + ".jcf.lz4"))
+						System.IO.File.Delete(hardLinkDirectory + ".jcf.lz4");
+					if (System.IO.File.Exists(hardLinkDirectory.Substring(0, hardLinkDirectory.Length - 9) + "_timestamps"))
+						System.IO.File.Delete(hardLinkDirectory.Substring(0, hardLinkDirectory.Length - 9) + "_timestamps");
+				}
+			} else {
+				if (metadataIsHardLink == true) {
+					EditorUtility.DisplayProgressBar("Hold on", "Disabling hard links...", 0.5f);
+					
+					System.Diagnostics.Process process = new System.Diagnostics.Process();
+					if (Application.platform == RuntimePlatform.OSXEditor) {
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "hardlink";
+						process.StartInfo.Arguments = "-u \"" + metadataPath + "\"";
+					} else {
+						process.StartInfo.FileName = LocalCache.Shared.ProjectPath + LocalCache.Shared.UtilsPaths + "junction.exe";
+						process.StartInfo.Arguments = "/accepteula -d \"" + metadataPath + "\"";
+					}
+					
+					// Wait for process to end
+					process.StartInfo.UseShellExecute = false;
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.CreateNoWindow = true;
+					process.Start();
+					process.WaitForExit();
+					process.Dispose();
+					
+					FixPermissions();
+					
+					if (System.IO.Directory.Exists(metadataPath))
+						LocalCache.Shared.DeleteDirectory(metadataPath);
+					
+					LocalCache.Shared.DirectoryCopy(hardLinkDirectory, metadataPath, true);
+					
+					// Cleanup previous target directories & files if hard link was invalid
+					if (hardLinkIsValid == false) {
+						if (System.IO.Directory.Exists(hardLinkDirectory))
+							LocalCache.Shared.DeleteDirectory(hardLinkDirectory);
+						if (System.IO.File.Exists(hardLinkDirectory + ".jcf"))
+							System.IO.File.Delete(hardLinkDirectory + ".jcf");
+						if (System.IO.File.Exists(hardLinkDirectory + ".jcf.lz4"))
+							System.IO.File.Delete(hardLinkDirectory + ".jcf.lz4");
+						if (System.IO.File.Exists(hardLinkDirectory.Substring(0, hardLinkDirectory.Length - 9) + "_timestamps"))
+							System.IO.File.Delete(hardLinkDirectory.Substring(0, hardLinkDirectory.Length - 9) + "_timestamps");
+					}
+					
+					EditorUtility.ClearProgressBar();
+				}
+			}
+		}
+		
+		public static void FixPermissions() {
+			string assetsPath = Application.dataPath;
+			string libraryPath = assetsPath.Remove(assetsPath.Length - 6, 6) + "Library";
+			string cachePath = assetsPath.Remove(assetsPath.Length - 6, 6) + "LocalCache";
+			string metadataPath = libraryPath + "/metadata";
+			Directory.CreateDirectory(cachePath);
+			
+			if (Application.platform == RuntimePlatform.OSXEditor) {
+				// Chmod/Chown metadata
+				System.Diagnostics.Process process;
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "whoami";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				
+				string whoami = process.StandardOutput.ReadLine();
+
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "find";
+				process.StartInfo.Arguments = "\"" + metadataPath + "\" -type d -exec chmod 755 {} +";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "find";
+				process.StartInfo.Arguments = "\"" + metadataPath + "\" -type f -exec chmod 644 {} +";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "chown";
+				process.StartInfo.Arguments = "-RH \""+whoami+":staff\" \"" + metadataPath + "\"";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "find";
+				process.StartInfo.Arguments = "\"" + cachePath + "\" -type d -exec chmod 755 {} +";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "find";
+				process.StartInfo.Arguments = "\"" + cachePath + "\" -type f -exec chmod 644 {} +";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+				
+				process = new System.Diagnostics.Process();
+				process.StartInfo.FileName = "chown";
+				process.StartInfo.Arguments = "-RH \""+whoami+":staff\" \"" + cachePath + "\"";
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.CreateNoWindow = true;
+				process.Start();
+				process.WaitForExit();
+				process.Dispose();
+			}
+		}
+		
+		public static void Cleanup() {
+			System.IO.Directory.CreateDirectory(LocalCache.Shared.CachePath);
+			
+			string[] cleanupFiles = Directory.GetFiles(LocalCache.Shared.CachePath, "*.cleanup", SearchOption.TopDirectoryOnly);
+			
+			foreach (var file in cleanupFiles) {
+				var directory = file.Remove(file.Length - 8, 8);
+				if (System.IO.Directory.Exists(directory))
+					LocalCache.Shared.DeleteDirectory(directory);
+				if (System.IO.File.Exists(directory + ".jcf"))
+					System.IO.File.Delete(directory + ".jcf");
+				if (System.IO.File.Exists(directory + ".jcf.lz4"))
+					System.IO.File.Delete(directory + ".jcf.lz4");
+				if (System.IO.File.Exists(directory.Substring(0, directory.Length - 9) + "_timestamps"))
+					System.IO.File.Delete(directory.Substring(0, directory.Length - 9) + "_timestamps");
+				
+				System.IO.File.Delete(file);
+			}
 		}
 	}
 }

@@ -29,6 +29,7 @@ public class LgDebugTool : EditorWindow
     private string liteProductName;
     private string proProductName;
 	private string gaBuildVersion;
+	private Vector2 scrollPos;
 	#endregion
 
     // Add menu item named "My Window" to the Window menu
@@ -49,6 +50,7 @@ public class LgDebugTool : EditorWindow
 
     void OnGUI()
     {
+		scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         GUILayout.Label ("Plist Editor", EditorStyles.boldLabel);
             if (GUILayout.Button("Delete Plist")){
                 PlayerPrefs.DeleteAll();
@@ -166,6 +168,7 @@ public class LgDebugTool : EditorWindow
                 }
             EditorGUILayout.EndHorizontal(); 
         }
+		EditorGUILayout.EndScrollView();
     }
 
     private void LoadAppIcon(string iconPrefix){

@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class DataLoaderMiniPet{
-	private static XMLLoaderGeneric xmlLoader;
+/// <summary>
+/// Data loader mini pet.
+/// Hash -- Key: MiniPetID, Value: ImmutableDataMiniPet
+/// </summary>
+public class DataLoaderMiniPet : XMLLoaderGeneric<DataLoaderMiniPet>{
 
+	/// <summary>
+	/// Gets the data.
+	/// </summary>
+	/// <returns>The data.</returns>
+	/// <param name="id">Identifier.</param>
     public static ImmutableDataMiniPet GetData(string id){
-		if(xmlLoader == null){
-			xmlLoader = new XMLLoaderGeneric();
-			xmlLoader.XmlFileFolderPath = "MiniPets";
-			xmlLoader.xmlNodeHandler = NodeHandler;
-		}
+		instance.InitXMLLoader();
 
-		return xmlLoader.GetData<ImmutableDataMiniPet>(id);
+		return instance.GetData<ImmutableDataMiniPet>(id);
     }
 
-	public static void NodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
 		ImmutableDataMiniPet data = new ImmutableDataMiniPet(id, xmlNode, errorMessage); 
 		            
         // store the data
@@ -23,6 +26,10 @@ public class DataLoaderMiniPet{
             Debug.LogError(errorMessage + "Duplicate keys!");
         else
             hashData.Add(id, data); 
+	}
+
+	protected override void InitXMLLoader(){
+		xmlFileFolderPath = "MiniPets";
 	}
 }
 

@@ -267,19 +267,19 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	// this way because our save system needs ot save
 	// primitives.
 	//---------------------------------------------------		
-	private void RewardCheck(string strMissionID){
+	private void RewardCheck(string missionID){
 		// do some legality checks
 
 		// mission exists
-		if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(strMissionID)){
-			Debug.LogError("Reward is attempted to be check for an illegal mission: " + strMissionID);
+		if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
+			Debug.LogError("Reward is attempted to be check for an illegal mission: " + missionID);
 			return;
 		}
 		
 		// reward is currently unearned
-		MutableDataMission mission = DataManager.Instance.GameData.Wellapad.CurrentTasks[strMissionID];
+		MutableDataMission mission = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID];
 		if(mission.RewardStatus != RewardStatuses.Unearned){
-			Debug.LogError("Reward check revealed illegal state for reward for mission " + strMissionID);
+			Debug.LogError("Reward check revealed illegal state for reward for mission " + missionID);
 			return;
 		}
 		
@@ -376,7 +376,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	// AddMission()
 	//---------------------------------------------------		
 	public void AddMission(string missionID){
-		List<ImmutableDataWellapadTask> listTasks = DataLoaderWellapadTasks.GetTasks(missionID);
+		List<ImmutableDataWellapadTask> listTasks = GetUnlockedTasks(missionID);
 		Dictionary<string, MutableDataWellapadTask> savedTasks = new Dictionary<string, MutableDataWellapadTask>();
 		
 		for(int i = 0; i < listTasks.Count; ++i){
@@ -390,5 +390,36 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
 		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
-	}	
+	}
+
+	private List<ImmutableDataWellapadTask> GetUnlockedTasks(string missionID){
+		Hashtable taskHash = DataLoaderWellapadTasks.GetTasks(missionID);
+		List<ImmutableDataWellapadTask> taskListFinal = new List<ImmutableDataWellapadTask>();
+
+		// now go through each category in this hash and pick one task at random and add it to our list of tasks
+		// (but also check to make sure the category is unlocked)
+		foreach(DictionaryEntry pair in taskHash){
+			string category = (string)pair.Key;
+			
+			if(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains(category)){
+				List<ImmutableDataWellapadTask> listTasks = (List<ImmutableDataWellapadTask>) pair.Value;
+				
+				// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
+				// otherwise we just want to pick 1 at random
+				// int nTasks = strCategory == WellapadData.ALWAYShashDataD ? listTasks.Count : 1;
+				int numberOfTasks = category == "Always" ? listTasks.Count : 1;
+				
+				// this is a little weird...the random element thing is messing up the ordering of the tasks
+				List<ImmutableDataWellapadTask> tasks = listTasks;
+				if(numberOfTasks != listTasks.Count)
+					tasks = ListUtils.GetRandomElements<ImmutableDataWellapadTask>(listTasks, numberOfTasks);
+				
+				// add each of our tasks to the final list
+				foreach(ImmutableDataWellapadTask task in tasks)
+					taskListFinal.Add(task);
+			}
+		}
+
+		return taskListFinal;
+	}
 }

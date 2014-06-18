@@ -3,18 +3,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// This class loads constant item data from a xml file. 
-
-//  An immutable class, meaning that no other classes should be modifying the data
-//  from this class
-//---------------------------------------------------
+/// <summary>
+/// Data loader items.
+/// Doesn't inherit from XMLLoaderGeneric like other DataLoader class because
+/// this class require a specific way of parsing xml. It needs to node the parent
+/// tag as well not just the child tags
+/// </summary>
 public class DataLoaderItems{
     //Key: itemtype, Value: dictionary of items
     //Key: itemID, Value: instance of Item.cs
     private static Dictionary<ItemType, Dictionary<string, Item>> allItems;
-
-    //Look for item with itemID in the dictionary
+	
+	/// <summary>
+	/// Gets the item.
+	/// </summary>
+	/// <returns>The item.</returns>
+	/// <param name="itemID">Item ID.</param>
     public static Item GetItem(string itemID){
 		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();
 		
@@ -30,32 +34,52 @@ public class DataLoaderItems{
 
         return item;
     }
-
-    //Return the ItemType of the item with itemID
+	
+	/// <summary>
+	/// Gets the type of the item.
+	/// </summary>
+	/// <returns>The item type.</returns>
+	/// <param name="itemID">Item ID.</param>
     public static ItemType GetItemType(string itemID){
        Item item = GetItem(itemID);
        return item.Type;
     }
-
-    //Returns the texture name of item with itemID
+	
+	/// <summary>
+	/// Gets the name of the item texture.
+	/// </summary>
+	/// <returns>The item texture name.</returns>
+	/// <param name="itemID">Item ID.</param>
     public static string GetItemTextureName(string itemID){
         Item item = GetItem(itemID);
         return item.TextureName;
     }
-
-    //Returns the prefab name of item with itemID
+	
+	/// <summary>
+	/// Gets the name of the deco item prefab.
+	/// </summary>
+	/// <returns>The deco item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
     public static string GetDecoItemPrefabName(string itemID){
         DecorationItem item = (DecorationItem) GetItem(itemID);
         return item.PrefabName;
     }
-
-    //Returns the material name of item with itemID
+	
+	/// <summary>
+	/// Gets the name of the deco item material.
+	/// </summary>
+	/// <returns>The deco item material name.</returns>
+	/// <param name="itemID">Item ID.</param>
     public static string GetDecoItemMaterialName(string itemID){
         DecorationItem item = (DecorationItem) GetItem(itemID);
         return item.MaterialName;
     }
-
-    //Returns all the data for a specific item type
+	
+	/// <summary>
+	/// Gets Items of type
+	/// </summary>
+	/// <returns>The all items of type.</returns>
+	/// <param name="type">Type.</param>
     public static Dictionary<string, Item> GetAllItemsOfType(ItemType type){
 		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();
         return dictItems[type];

@@ -1,20 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DataLoaderLevelUpConditions{
-	private static XMLLoaderGeneric xmlLoader;
-	
+/// <summary>
+/// Data loader level up conditions.
+/// Hash -- Key: LevelUpConditionID, Value: ImmutableDataMiniPetLevelUpConditions
+/// </summary>
+public class DataLoaderLevelUpConditions : XMLLoaderGeneric<DataLoaderLevelUpConditions>{
+
+	/// <summary>
+	/// Gets the data.
+	/// </summary>
+	/// <returns>The data.</returns>
+	/// <param name="id">Identifier.</param>
 	public static ImmutableDataMiniPetLevelUpConditions GetData(string id){
-		if(xmlLoader == null){
-			xmlLoader = new XMLLoaderGeneric();
-			xmlLoader.XmlFileFolderPath = "MiniPetLevels";
-			xmlLoader.xmlNodeHandler = NodeHandler;
-		}
+		instance.InitXMLLoader();
 		
-		return xmlLoader.GetData<ImmutableDataMiniPetLevelUpConditions>(id);
+		return instance.GetData<ImmutableDataMiniPetLevelUpConditions>(id);
 	}
 	
-	public static void NodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
 		ImmutableDataMiniPetLevelUpConditions data = new ImmutableDataMiniPetLevelUpConditions(id, xmlNode, errorMessage); 
 		
 		// store the data
@@ -22,5 +26,9 @@ public class DataLoaderLevelUpConditions{
 			Debug.LogError(errorMessage + "Duplicate keys!");
 		else
 			hashData.Add(id, data); 
+	}
+
+	protected override void InitXMLLoader(){
+		xmlFileFolderPath = "MiniPetLevels";
 	}
 }

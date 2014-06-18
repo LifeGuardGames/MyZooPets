@@ -47,14 +47,15 @@ public class Badge{
         get{return DataManager.Instance.GameData.Badge.GetIsNew(id);}
     }
 
-    public Badge(string id, Hashtable hashItemData){
+	public Badge(string id, IXMLNode xmlNode, string error){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
         this.id = id;
 
-        name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
-        textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
-        unlockCondition = XMLUtils.GetInt(hashItemData["UnlockCondition"] as IXMLNode);
-        description = XMLUtils.GetString(hashItemData["Description"] as IXMLNode);
-        string typeString = XMLUtils.GetString(hashItemData["Type"] as IXMLNode);
+        name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);
+        textureName = XMLUtils.GetString(hashElements["TextureName"] as IXMLNode, null, error);
+        unlockCondition = XMLUtils.GetInt(hashElements["UnlockCondition"] as IXMLNode, -1, error);
+        description = XMLUtils.GetString(hashElements["Description"] as IXMLNode, null, error);
+        string typeString = XMLUtils.GetString(hashElements["Type"] as IXMLNode, null, error);
         this.type = (BadgeType)Enum.Parse(typeof(BadgeType), typeString);
     }
 

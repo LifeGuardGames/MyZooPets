@@ -42,8 +42,9 @@ public class ImmutableDataTriggerLocation{
 		}
 	}
 
-	public ImmutableDataTriggerLocation(string id, Hashtable hashAttr, string errorMsg){
-		// set id
+	public ImmutableDataTriggerLocation(string id, IXMLNode xmlNode, string errorMsg){
+		Hashtable hashAttr = XMLUtils.GetAttributes(xmlNode);
+
 		this.id = id;
 		
 		errorMsg += "(" + id + ")";

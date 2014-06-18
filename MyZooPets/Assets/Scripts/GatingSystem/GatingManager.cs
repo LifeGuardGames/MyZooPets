@@ -112,7 +112,7 @@ public class GatingManager : Singleton<GatingManager>{
 				gateLocation.x += distanceFromStartingPartition;
 				
 				// create the gate at the location and set its id
-				string strPrefab = dataGate.GetMonster().GetResourceKey();
+				string strPrefab = dataGate.GetMonster().ResourceKey;
 				GameObject prefab = Resources.Load(strPrefab) as GameObject;
 				GameObject goGate = Instantiate(prefab, gateLocation, Quaternion.identity) as GameObject;
 				Gate scriptGate = goGate.GetComponent<Gate>();

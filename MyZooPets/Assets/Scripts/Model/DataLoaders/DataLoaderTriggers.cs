@@ -3,96 +3,69 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DataLoaderTriggers{
-    //Key: scene name, value: dictionary of ImmutableData_Trigger
-    //Key: triggerID, value: instance of ImmutableData_Trigger.cs
-    private static Dictionary<string, Dictionary<string, ImmutableDataTrigger>> allTriggers;
-
-    //------------------------------------------------------------------
-    // GetRandomSceneTrigger()
-    // Return a random trigger from a specific scene
-    //------------------------------------------------------------------
+/// <summary>
+/// Data loader triggers.
+/// Hash -- Key: scene name, Value: (Dictionary<string, ImmutableDataTrigger> -- Key: TriggerID, Value: ImmutableDataTrigger)
+/// </summary>
+public class DataLoaderTriggers : XMLLoaderGeneric<DataLoaderTriggers>{
+	
+	/// <summary>
+	/// Gets the random scene trigger.
+	/// </summary>
+	/// <returns>The random scene trigger.</returns>
+	/// <param name="scene">Scene.</param>
     public static ImmutableDataTrigger GetRandomSceneTrigger(string scene){
+		instance.InitXMLLoader();
         ImmutableDataTrigger randomTrigger = null;
 
-        if(allTriggers == null)
-            SetupData();
+        Dictionary<string, ImmutableDataTrigger> sceneTriggers = 
+			instance.GetData<Dictionary<string, ImmutableDataTrigger>>(scene);
 
-        if(allTriggers.ContainsKey(scene)){
-            Dictionary<string, ImmutableDataTrigger> sceneTriggers = allTriggers[scene];
-
-            //Get random element from the dictionary
-            randomTrigger = sceneTriggers.ElementAt(UnityEngine.Random.Range(0, sceneTriggers.Count)).Value;
-        }
+        //Get random element from the dictionary
+        randomTrigger = sceneTriggers.ElementAt(UnityEngine.Random.Range(0, sceneTriggers.Count)).Value;
+        
         return randomTrigger;
     }
 
-
-    //------------------------------------------------------------------
-    // GetTrigger()
-    // Return the trigger data of with id = triggerID
-    //------------------------------------------------------------------
+	/// <summary>
+	/// Gets the trigger.
+	/// </summary>
+	/// <returns>The trigger.</returns>
+	/// <param name="triggerID">Trigger ID.</param>
     public static ImmutableDataTrigger GetTrigger(string triggerID){
-        ImmutableDataTrigger triggerData = null;
+ 		instance.InitXMLLoader();
+		ImmutableDataTrigger triggerData = null;
 
-        if(allTriggers == null)
-            SetupData();
+		List<Dictionary<string, ImmutableDataTrigger>> scenes = 
+			instance.GetDataList<Dictionary<string, ImmutableDataTrigger>>();
 
-        //loop through all the values of allTriggers Dict
-        Dictionary<string, Dictionary<string, ImmutableDataTrigger>>.ValueCollection valueColl = allTriggers.Values;
-        foreach(Dictionary<string, ImmutableDataTrigger> sceneTriggers in valueColl){
+        foreach(Dictionary<string, ImmutableDataTrigger> sceneTriggers in scenes){
             if(sceneTriggers.ContainsKey(triggerID)){
                 triggerData = sceneTriggers[triggerID];
                 break;
             }
         }
 
-        // if(allTriggers.ContainsKey(scene)){
-        //     Dictionary<string, ImmutableData_Trigger> sceneTriggers = allTriggers[scene];
-
-        //     if(sceneTriggers.ContainsKey(triggerID))
-        //         triggerData = sceneTriggers[triggerID];
-
-        // }
-
         return triggerData;
     }
 
-    private static void SetupData(){
-        allTriggers = new Dictionary<string, Dictionary<string, ImmutableDataTrigger>>();
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+		ImmutableDataTrigger data = new ImmutableDataTrigger(id, xmlNode, errorMessage);
 
-        //Load all item xml files
-         UnityEngine.Object[] files = Resources.LoadAll("Triggers", typeof(TextAsset));
-         foreach(TextAsset file in files){
-            string xmlString = file.text;
+		string scene = data.Scene;
+        if(!hashData.ContainsKey(scene))
+            hashData.Add(scene, new Dictionary<string, ImmutableDataTrigger>());
 
-            //Create XMLParser instance
-            XMLParser xmlParser = new XMLParser(xmlString);
+        Dictionary<string, ImmutableDataTrigger> sceneTriggers = 
+			(Dictionary<string, ImmutableDataTrigger>)hashData[scene];
 
-            //Call the parser to build the IXMLNode objects
-            XMLElement xmlElement = xmlParser.Parse();
+        if(sceneTriggers.ContainsKey(id))
+            Debug.LogError("Duplicate trigger id: " + id + " for " + scene);
+        else
+            sceneTriggers.Add(id, data);
+	}
 
-            foreach(IXMLNode childNode in xmlElement.Children){
-
-                //Get id
-                Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
-                string id = (string) hashAttr["ID"];
-
-                //Get trigger properties from xml node
-                Hashtable hashTriggerData = XMLUtils.GetChildren(childNode);
-
-                ImmutableDataTrigger triggerData = new ImmutableDataTrigger(id, hashTriggerData);
-
-                string scene = triggerData.Scene;
-                if(!allTriggers.ContainsKey(scene))
-                    allTriggers.Add(scene, new Dictionary<string, ImmutableDataTrigger>());
-
-                Dictionary<string, ImmutableDataTrigger> sceneTriggers = allTriggers[scene];
-                if(sceneTriggers.ContainsKey(id))
-                    Debug.LogError("Duplicate trigger id: " + id + " for " + scene);
-                else
-                    sceneTriggers.Add(id, triggerData);
-            }
-        }
-    }
+	protected override void InitXMLLoader(){
+		xmlFileFolderPath = "Triggers";
+	}
 }

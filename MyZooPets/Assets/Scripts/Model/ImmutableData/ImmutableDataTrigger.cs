@@ -32,13 +32,14 @@ public class ImmutableDataTrigger{
         get{return scene;}
     }
 
-    public ImmutableDataTrigger(string id, Hashtable hashTriggerData){
-        this.id = id;
+	public ImmutableDataTrigger(string id, IXMLNode xmlNode, string errorMsg){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
-        name = XMLUtils.GetString(hashTriggerData["Name"] as IXMLNode);
-        prefabName = XMLUtils.GetString(hashTriggerData["PrefabName"] as IXMLNode);
-        floatyDesc = XMLUtils.GetString(hashTriggerData["FloatyDesc"] as IXMLNode);
-        scene = XMLUtils.GetString(hashTriggerData["Scene"] as IXMLNode);
+        this.id = id;
+        name = XMLUtils.GetString(hashElements["Name"] as IXMLNode);
+        prefabName = XMLUtils.GetString(hashElements["PrefabName"] as IXMLNode);
+        floatyDesc = XMLUtils.GetString(hashElements["FloatyDesc"] as IXMLNode);
+        scene = XMLUtils.GetString(hashElements["Scene"] as IXMLNode);
     }
 
 }

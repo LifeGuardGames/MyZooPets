@@ -44,14 +44,16 @@ public class Skill{
         } 
     }
 
-    public Skill(string id, Hashtable hashItemData){
-        this.id = id;
+	public Skill(string id, IXMLNode xmlNode, string error){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
-        name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
-        textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
-		strFlameResource = XMLUtils.GetString(hashItemData["ParticleResource"] as IXMLNode);
-        description = XMLUtils.GetString(hashItemData["Description"] as IXMLNode);
-        unlockLevel = XMLUtils.GetInt(hashItemData["UnlockLevel"] as IXMLNode);
-        damagePoint = XMLUtils.GetInt(hashItemData["DamagePoints"] as IXMLNode);
-    }
+		this.id = id;
+
+		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);
+		textureName = XMLUtils.GetString(hashElements["TextureName"] as IXMLNode, null, error);
+		strFlameResource = XMLUtils.GetString(hashElements["ParticleResource"] as IXMLNode, null, error);
+		description = XMLUtils.GetString(hashElements["Description"] as IXMLNode, null, error);
+		unlockLevel = XMLUtils.GetInt(hashElements["UnlockLevel"] as IXMLNode, 0, error);
+		damagePoint = XMLUtils.GetInt(hashElements["DamagePoints"] as IXMLNode, 0, error);
+	}
 }

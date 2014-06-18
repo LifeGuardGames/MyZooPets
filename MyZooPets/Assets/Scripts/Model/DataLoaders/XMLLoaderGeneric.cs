@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,26 +15,45 @@ using System.Collections.Generic;
 /// You can also define the elements however you want since you will also need to
 /// provide a xmlNodeHandler to deinfe how you want to bind the xml element to a object property
 /// </summary>
-public class XMLLoaderGeneric{
-	public delegate void XmlNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage);
-	public XmlNodeHandler xmlNodeHandler; // the handler that binds xml element to a class property and add it to the hashData
+public abstract class XMLLoaderGeneric<T> where T : new() {
+	//Handles what kind of data structure to store the xml node in
+	//Will be called for every node.
+	protected abstract void XMLNodeHandler(string id, IXMLNode xmlNode, 
+	                                       Hashtable hashData, string errorMessage);
+	//Initialize the loader. Usually just the xmlFileFolderPath
+	protected abstract void InitXMLLoader();
 
-	private Hashtable hashData; // where the xml data will be loaded into
+	protected static T mInstance; // caching an instance of T
+		
+	protected string xmlFileFolderPath; // file path
 
-	public string XmlFileFolderPath{ get; set;} // the loader will load all the xml from this folder
+	private Hashtable hashData; // storing all the xml data
+
+	/// <summary>
+	/// instance of T class. Will create one if doesn't exist
+	/// </summary>
+	/// <value>The instance.</value>
+	protected static T instance{
+		get{
+			if(mInstance == null)
+				mInstance = new T();
+			
+			return mInstance;
+		}
+	}
 
 	/// <summary>
 	/// Gets the data of type T.
 	/// </summary>
-	public T GetData<T>(string id){
+	protected U GetData<U>(string id){
 		if(hashData == null)
 			SetupData();
 		
-		T data = default(T);
+		U data = default(U);
 
 		try{
 			if(hashData.ContainsKey(id))
-				data = (T)hashData[id];
+				data = (U)hashData[id];
 			else
 				Debug.LogError("No such data for ID: " + id);
 		}
@@ -43,12 +63,40 @@ public class XMLLoaderGeneric{
 		
 		return data;
 	}
+
+	/// <summary>
+	/// Gets the data list.
+	/// </summary>
+	protected List<U> GetDataList<U>(){
+		if(hashData == null)
+			SetupData();
+
+		U data = default(U);
+		List<U> dataList = new List<U>();
+
+		try{
+			dataList = hashData.Values.OfType<U>().ToList();
+		}
+		catch(Exception e){
+			Debug.LogException(e);
+		}
+
+		return dataList;
+	}
+
+	/// <summary>
+	/// Forces the setup.
+	/// </summary>
+	protected void ForceSetup(){
+		if(hashData == null)
+			SetupData();
+	}
 	
 	private void SetupData(){
 		hashData = new Hashtable();
 		
 		//Load all files from the folder
-		UnityEngine.Object[] files = Resources.LoadAll(XmlFileFolderPath, typeof(TextAsset));
+		UnityEngine.Object[] files = Resources.LoadAll(xmlFileFolderPath, typeof(TextAsset));
 		foreach(TextAsset file in files){
 			string xmlString = file.text;
 
@@ -75,11 +123,7 @@ public class XMLLoaderGeneric{
 					Debug.LogError("XML format error. Node needs to have ID. Read class summary for more explanation");
 				}
 
-				if(xmlNodeHandler != null)
-					xmlNodeHandler(id, childNode, hashData, errorMessage);
-				else
-					Debug.LogError("xmlNodeHandler is not defined. This method implementation is required" +
-						"to match the correct xml element to correct c# object");	
+				XMLNodeHandler(id, childNode, hashData, errorMessage);
 			}
 		}				
 	}

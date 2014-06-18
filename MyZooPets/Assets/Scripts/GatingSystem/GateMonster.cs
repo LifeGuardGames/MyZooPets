@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //---------------------------------------------------
@@ -25,7 +25,7 @@ public class GateMonster : Gate{
 
 		// the monster's position should be set relative to its hp
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-		int maxHealth = data.GetMonster().GetMonsterHealth();
+		int maxHealth = data.GetMonster().MonsterHealth;
 		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		int damage = maxHealth - currentHealth; 
 		
@@ -104,7 +104,7 @@ public class GateMonster : Gate{
 	private void Move(int damage){
 		// get the monster's data and find out how far it should move based on the damage it just received
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-		int maxHealth = data.GetMonster().GetMonsterHealth();
+		int maxHealth = data.GetMonster().MonsterHealth;
 		float damagePercentage = ((float)damage / (float)maxHealth);
 		
 		// get the screen location of the monster and find out where it should move based on the width of the screen

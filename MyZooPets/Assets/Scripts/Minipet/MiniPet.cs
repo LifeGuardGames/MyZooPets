@@ -6,32 +6,7 @@ using System.Collections;
 /// Should attach this script to the highest parent in the minipet prefab
 /// </summary>
 public class MiniPet : MonoBehaviour {
-
-	/*
-	 * Attributes:
-	 * Immutable
-	 * ID
-	 * Type
-	 * Dict of amount of food required to lv up
-	 * Dict of lv up reward (gems, coins, special decos)
-	 * 
-	 * prefab name
-	 * startiing position
-	 * walking pattern?
-	 * 
-	 * ------------------
-	 * Mutable
-	 * current lv
-	 * current food xp
-	 * isUnlocked
-	 * 
-	 * cannot use DM directly from here so connect to MinipetManager for any mutable data
-	 */
-
-	//On item drop handler. if the correct food modify current food xp
-
-	//On tap handler. do a funny dance or sth
-
+	public Animator animator;
 	private string id;
 
 	void Start(){
@@ -50,6 +25,7 @@ public class MiniPet : MonoBehaviour {
 			if(ClickManager.Instance.CanRespondToTap()){
 				//do some
 				Debug.Log("Minipet does some funny animation here");
+				animator.SetTrigger("gestureWiggle");
 			}
 		}
 	}
@@ -77,6 +53,8 @@ public class MiniPet : MonoBehaviour {
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);
 				MiniPetManager.Instance.IncreaseFoodXP(id);
+
+				animator.SetTrigger("happy");
 			}
 
 		}

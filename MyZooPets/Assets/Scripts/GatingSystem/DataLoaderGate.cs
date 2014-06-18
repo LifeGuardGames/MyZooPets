@@ -31,6 +31,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	/// <param name="area">Area.</param>
 	/// <param name="roomPartition">Room partition.</param>
 	public static ImmutableDataGate GetData(string areaID, int roomPartition){
+		instance.InitXMLLoader();
 		instance.ForceSetup();
 		
 		ImmutableDataGate dataGate = null;
@@ -76,7 +77,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 			hashData.Add(id, data);	
 			
 			// we also want to store the gates in a more elaborate hashtable for easy access
-			StoreGate(data);
+			SortGate(data);
 		}
 	}
 
@@ -89,7 +90,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	/// ids to the actual data.
 	/// </summary>
 	/// <param name="dataGate">Data gate.</param>
-	private void StoreGate(ImmutableDataGate dataGate){
+	private void SortGate(ImmutableDataGate dataGate){
 		if(areaPartitionGates == null)
 			areaPartitionGates = new Hashtable();
 

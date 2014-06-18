@@ -16,7 +16,8 @@ using System.Collections.Generic;
 /// provide a xmlNodeHandler to deinfe how you want to bind the xml element to a object property
 /// </summary>
 public abstract class XMLLoaderGeneric<T> where T : new() {
-	//Handles what kind of data structure to score the xml node in
+	//Handles what kind of data structure to store the xml node in
+	//Will be called for every node.
 	protected abstract void XMLNodeHandler(string id, IXMLNode xmlNode, 
 	                                       Hashtable hashData, string errorMessage);
 	//Initialize the loader. Usually just the xmlFileFolderPath

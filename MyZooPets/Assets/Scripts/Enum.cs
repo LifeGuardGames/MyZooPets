@@ -214,7 +214,8 @@ public enum HUDElementType{
 	Points, 
 	Stars, 
 	Health, 
-	Mood
+	Mood,
+	Gems
 }
 
 // types of button clicks

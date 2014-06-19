@@ -7,7 +7,7 @@ using System.Collections;
 /// </summary>
 public class MiniPet : MonoBehaviour {
 	public Animator animator;
-	private string id;
+	private string id; 
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;

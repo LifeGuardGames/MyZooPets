@@ -18,45 +18,19 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private GameObject goExitButton;	// exit button on sub panel
 	
 	// store related sounds
-	public string strSoundChangeTab;
-	public string strSoundBuy;
-	private bool bShortcutMode; //True: open store directly to specific item category
+	public string soundChangeTab;
+	public string soundBuy;
+	private bool isShortcutMode; //True: open store directly to specific item category
 	//False: open the store base panel first	
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-
-
-
-	public List<Color> colors; //colors for the tab;
+	
+//	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
 
-		// Disabling custom colors
-		/*
-		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
-		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
-		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
-		Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
-		Color green = new Color(0, 0.71f, 0.31f, 0.78f);
-		Color orange = new Color(1, 0.6f, 0, 0.78f);
-		Color limeGreen = new Color(0.53f, 0.92f, 0, 0.78f);
-		Color purpleish = new Color(0.44f, 0.04f, 0.67f, 0.78f);
-		Color yellow = new Color(1, 0.91f, 0f, 0.78f);
-
-		colors = new List<Color>();
-		colors.Add(pink);
-		colors.Add(purple);
-		colors.Add(blue);
-		colors.Add(teel);
-		colors.Add(green);
-		colors.Add(orange);
-		colors.Add(limeGreen);
-		colors.Add(purpleish);
-		colors.Add(yellow);
-		*/
-		
 		goExitButton = storeSubPanel.FindInChildren("ExitButton");
 		if(goExitButton == null)
 			Debug.LogError("Exit button is null...please set");
@@ -137,8 +111,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OpenToSubCategory(string strCat, bool bShortcut = false){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
-		bShortcutMode = bShortcut;
-		if(bShortcutMode){
+		isShortcutMode = bShortcut;
+		if(isShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now	
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 		}	
@@ -235,7 +209,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			InventoryLogic.Instance.AddItem(itemID, 1);
-//			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
 			StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
 			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
 
@@ -243,7 +216,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 			
 			// play a sound since an item was bought
-			AudioManager.Instance.PlayClip(strSoundBuy);
+			AudioManager.Instance.PlayClip(soundBuy);
 		}
 	}
 
@@ -256,18 +229,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		CreateSubCategoryItemsWithString(page.name);
 	}
 	
-	public void CreateSubCategoryItemsWithString(string strPage){
-		if(strPage != "Items" && strPage != "Food" && strPage != "Decorations"){
-			Debug.LogError("Illegal sore sub category: " + strPage);
+	public void CreateSubCategoryItemsWithString(string page){
+		if(page != "Items" && page != "Food" && page != "Decorations"){
+			Debug.LogError("Illegal sore sub category: " + page);
 			return;
 		}
 		
 		// we also need to hide the exit button's active state based on whether or not we are shortcutting
 		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
-		string strFunction = bShortcutMode ? "HideStoreSubPanel" : "CloseUI";
+		string strFunction = isShortcutMode ? "HideStoreSubPanel" : "CloseUI";
 		goExitButton.GetComponent<LgButtonMessage>().functionName = strFunction;		
 		
-		currentPage = strPage;
+		currentPage = page;
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
@@ -349,14 +322,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		// before doing anything else, check to see if the deco system has a saved node...
 		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
 		// store doesn't apply...otherwise just show the store base panel like normal
-		if(bShortcutMode){
+		if(isShortcutMode){
 			// close the store bg
 			storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		
 			if(OnShortcutModeEnd != null)
 				OnShortcutModeEnd(this, EventArgs.Empty);
 
-			bShortcutMode = false;
+			isShortcutMode = false;
 		}
 		else
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
@@ -390,7 +363,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			//if the current page is not null, we are switching tabs, so play a sound
 			if(currentTab != null)
-				AudioManager.Instance.PlayClip(strSoundChangeTab);
+				AudioManager.Instance.PlayClip(soundChangeTab);
 
 			//set current tab
 			currentTab = tabName;
@@ -475,11 +448,4 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
 		itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
-
-	// //Delay calling reposition due to async problem Destroying/Repositionoing.
-	// //TODO Maybe change later when we have moreItems 
-	// private void Reposition(){
-	// 	grid.GetComponent<UIGrid>().Reposition();
-
-	// }
 }

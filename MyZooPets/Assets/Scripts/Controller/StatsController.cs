@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
@@ -14,20 +14,16 @@ using System.Collections.Generic;
 /// 					  HUDAnimator (view)
 /// </summary>
 
-public class StatsController : Singleton<StatsController> {
+public class StatsController : Singleton<StatsController>{
 	//----------- Events ------------------------------
 	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
 	public static EventHandler<EventArgs> OnHappyToSad; //when mood changes
 	public static EventHandler<EventArgs> OnSadToHappy;
-
 	public static EventHandler<EventArgs> OnHealthyToVerySick;
 	public static EventHandler<EventArgs> OnHealthyToSick;
-
 	public static EventHandler<EventArgs> OnSickToHealthy;
 	public static EventHandler<EventArgs> OnVerySickToHealthy;
-
 	public static EventHandler<EventArgs> OnSickToVerySick;
-
 	public static EventHandler<EventArgs> OnZeroHealth;
 	//-------------------------------------------------	
 
@@ -41,7 +37,7 @@ public class StatsController : Singleton<StatsController> {
 	private bool bCheckPet;
 	
 	void Start(){
-		hudAnimatorObject = GameObject.Find( "HUDPanel" );
+		hudAnimatorObject = GameObject.Find("HUDPanel");
 		hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
 		
 		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
@@ -57,42 +53,52 @@ public class StatsController : Singleton<StatsController> {
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
 	void OnGUI(){
-		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
-			ChangeStats(deltaHealth: -10);
-	 	}
-		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
-			ChangeStats(deltaHealth: 10);
-		 }
-		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
-			ChangeStats(deltaMood: -10);
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
+//			ChangeStats(deltaHealth: 10);
+//	 	}
+//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
+//			ChangeStats(deltaHealth: -10);
+//		 }
+//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
+//			ChangeStats(deltaMood: 10);
+//		}
+//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
+//			ChangeStats(deltaMood: -10);
+//		}
+//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
+//			ChangeStats(deltaPoints: 100);
+//		}
+		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
+			ChangeStats(deltaGems: 5);
 		}
-		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
-			ChangeStats(deltaMood: 10);
+		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
+			ChangeStats(deltaStars: 5);
 		}
-		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
-			ChangeStats(deltaPoints: 100);
-		}
+
 	}
 	#endif
 
 	public int GetStat(HUDElementType stat){
 		int statNumber = 0;
 		switch(stat){
-			case HUDElementType.Points:
-				statNumber = DataManager.Instance.GameData.Stats.Points;
-				break;
-			case HUDElementType.Health:
-				statNumber = DataManager.Instance.GameData.Stats.Health;
-				break;
-			case HUDElementType.Mood:
-				statNumber = DataManager.Instance.GameData.Stats.Mood;
-				break;
-			case HUDElementType.Stars:
-				statNumber = DataManager.Instance.GameData.Stats.Stars;
-				break;
-			default:
-				Debug.LogError("No such display target for " + stat);
-				break;
+		case HUDElementType.Points:
+			statNumber = DataManager.Instance.GameData.Stats.Points;
+			break;
+		case HUDElementType.Health:
+			statNumber = DataManager.Instance.GameData.Stats.Health;
+			break;
+		case HUDElementType.Mood:
+			statNumber = DataManager.Instance.GameData.Stats.Mood;
+			break;
+		case HUDElementType.Stars:
+			statNumber = DataManager.Instance.GameData.Stats.Stars;
+			break;
+		case HUDElementType.Gems:
+			statNumber = DataManager.Instance.GameData.Stats.Gems;
+			break;
+		default:
+			Debug.LogError("No such display target for " + stat);
+			break;
 		}
 
 		return statNumber;
@@ -111,6 +117,8 @@ public class StatsController : Singleton<StatsController> {
 	/// <param name="pointsLoc">Points location.</param>
 	/// <param name="deltaStars">Delta stars.</param>
 	/// <param name="starsLoc">Stars location.</param>
+	/// <param name="deltaGems">Delta gems.</param>
+	/// <param name="gemsLoc">Gems location.</param>
 	/// <param name="deltaHealth">Delta health.</param>
 	/// <param name="healthLoc">Health location.</param>
 	/// <param name="deltaMood">Delta mood.</param>
@@ -119,7 +127,8 @@ public class StatsController : Singleton<StatsController> {
 	/// <param name="bAtOnce">If set to <c>true</c> animate all stats at once.</param>
 	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
 	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3), 
-	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3), 
+	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3),
+	                        int deltaGems = 0, Vector3 gemsLoc = default(Vector3),
 	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
 	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3), 
 							bool bPlaySounds = true, bool bAtOnce = false, bool bFloaty = false){
@@ -143,6 +152,15 @@ public class StatsController : Singleton<StatsController> {
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
 		}
+
+		if(deltaGems != 0){
+			if(deltaGems > 0){
+				DataManager.Instance.GameData.Stats.AddGems(deltaGems);
+			}
+			else if(deltaGems < 0){
+				DataManager.Instance.GameData.Stats.SubstractGems(-1 * deltaGems);
+			}
+		}
 		
 		// so that the pet animations play properly, make sure to change and check mood BEFORE health
 		if(deltaMood != 0){
@@ -158,8 +176,8 @@ public class StatsController : Singleton<StatsController> {
 			
 			PetMoods eNew = DataManager.Instance.GameData.Stats.GetMoodState();
 			
-			if ( bCheckPet )
-				CheckForMoodTransition( eOld, eNew );
+			if(bCheckPet)
+				CheckForMoodTransition(eOld, eNew);
 		}		
 		
 		if(deltaHealth != 0){
@@ -171,7 +189,7 @@ public class StatsController : Singleton<StatsController> {
 			PetHealthStates eNewHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
 			if(bCheckPet){
-				CheckForHealthTransition( eOldHealth, eNewHealth );
+				CheckForHealthTransition(eOldHealth, eNewHealth);
 				CheckForZeroHealth();
 			}
 		}
@@ -182,12 +200,13 @@ public class StatsController : Singleton<StatsController> {
 			
 		// Tell HUDAnimator to animate and change
 		List<StatPair> listStats = new List<StatPair>();
-		listStats.Add( new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ?  hudAnimator.strSoundXP : null ) );
-		listStats.Add( new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ?  hudAnimator.strSoundStars : null ) );
-		listStats.Add( new StatPair(HUDElementType.Health, deltaHealth, healthLoc ) );
-		listStats.Add( new StatPair(HUDElementType.Mood, deltaMood, moodLoc ) );
+		listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
+		listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
+		listStats.Add(new StatPair(HUDElementType.Gems, deltaGems, gemsLoc, deltaGems > 0 ? hudAnimator.soundStars : null));
+		listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
+		listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
 		
-		if (hudAnimator != null && !bBeingDestroyed)
+		if(hudAnimator != null && !bBeingDestroyed)
 			StartCoroutine(hudAnimator.StartCurveStats(listStats, bPlaySounds, bAtOnce, bFloaty));
 	}	
 
@@ -196,27 +215,27 @@ public class StatsController : Singleton<StatsController> {
 	// Checks to see if a mood transition is appropriate,
 	// and if so, kicks it off on the pet animator.
 	//---------------------------------------------------		
-	private void CheckForMoodTransition( PetMoods eOld, PetMoods eNew ) {
-		if ( bBeingDestroyed )
+	private void CheckForMoodTransition(PetMoods eOld, PetMoods eNew){
+		if(bBeingDestroyed)
 			return;
 		
 		// if, at this moment, the pet is not healthy, there will be no mood transitions
 		PetHealthStates eHealth = DataManager.Instance.GameData.Stats.GetHealthState();
-		if ( eHealth != PetHealthStates.Healthy )
+		if(eHealth != PetHealthStates.Healthy)
 			return;
 		
 		// otherwise, let's actually check for a transition
-		if ( eOld == PetMoods.Happy && eNew == PetMoods.Sad ) {
+		if(eOld == PetMoods.Happy && eNew == PetMoods.Sad){
 			// pet is going from happy to sad
-			scriptPetAnim.Transition( "Transition_HappySad" );
+			scriptPetAnim.Transition("Transition_HappySad");
 
 			// fire event to notify listeners
 			if(OnHappyToSad != null)
 				OnHappyToSad(this, EventArgs.Empty);
 		}
-		else if ( eOld == PetMoods.Sad && eNew == PetMoods.Happy ) {
+		else if(eOld == PetMoods.Sad && eNew == PetMoods.Happy){
 			// pet is going from sad to happy	
-			scriptPetAnim.Transition( "Transition_SadHappy" );
+			scriptPetAnim.Transition("Transition_SadHappy");
 
 			// fire event
 			if(OnSadToHappy != null)
@@ -230,20 +249,20 @@ public class StatsController : Singleton<StatsController> {
 	// and if so, kicks it off on the pet animator.  This
 	// is kind of messy.
 	//---------------------------------------------------	
-	private void CheckForHealthTransition( PetHealthStates eOld, PetHealthStates eNew ) {
+	private void CheckForHealthTransition(PetHealthStates eOld, PetHealthStates eNew){
 		// there are a bunch of cases here
 
 		//HealthyHappySick --> SickVerySick or HealthySadSick --> SickVerySick
-		if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.VerySick ) {
+		if(eOld == PetHealthStates.Healthy && eNew == PetHealthStates.VerySick){
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
 			if(mood == PetMoods.Happy)
-				scriptPetAnim.Transition( "Transition_HealthyHappySick" );
+				scriptPetAnim.Transition("Transition_HealthyHappySick");
 			else if(mood == PetMoods.Sad)
-				scriptPetAnim.Transition( "Transition_HealthySadSick" );
+				scriptPetAnim.Transition("Transition_HealthySadSick");
 
-			scriptPetAnim.Transition( "Transition_SickVerySick" );
+			scriptPetAnim.Transition("Transition_SickVerySick");
 
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
@@ -251,13 +270,13 @@ public class StatsController : Singleton<StatsController> {
 		}
 
 		// Healthy --> HappySick or Healthy --> SadSick
-		else if ( eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick ){
+		else if(eOld == PetHealthStates.Healthy && eNew == PetHealthStates.Sick){
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
 			if(mood == PetMoods.Happy)
-				scriptPetAnim.Transition( "Transition_HealthyHappySick" );
+				scriptPetAnim.Transition("Transition_HealthyHappySick");
 			else if(mood == PetMoods.Sad)
-				scriptPetAnim.Transition( "Transition_HealthySadSick" );
+				scriptPetAnim.Transition("Transition_HealthySadSick");
 
 			if(OnHealthyToSick != null)
 				OnHealthyToSick(this, EventArgs.Empty);
@@ -265,16 +284,16 @@ public class StatsController : Singleton<StatsController> {
 		}
 
 		// VerySick --> HealthyHappy or VerySick --> HealthySad
-		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Healthy ) {
+		else if(eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Healthy){
 			// pet is going from very sick to healthy; play both transitions
-			scriptPetAnim.Transition( "Transition_VerySickSick" );
+			scriptPetAnim.Transition("Transition_VerySickSick");
 
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
 			if(mood == PetMoods.Happy)
-				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
+				scriptPetAnim.Transition("Transition_SickHealthyHappy");
 			else if(mood == PetMoods.Sad)
-				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+				scriptPetAnim.Transition("Transition_SickHealthySad");
 
 			if(OnVerySickToHealthy != null)
 				OnVerySickToHealthy(this, EventArgs.Empty);
@@ -285,17 +304,17 @@ public class StatsController : Singleton<StatsController> {
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
 			if(mood == PetMoods.Happy)
-				scriptPetAnim.Transition( "Transition_SickHealthyHappy" );
+				scriptPetAnim.Transition("Transition_SickHealthyHappy");
 			else if(mood == PetMoods.Sad)
-				scriptPetAnim.Transition( "Transition_SickHealthySad" );
+				scriptPetAnim.Transition("Transition_SickHealthySad");
 
 			if(OnSickToHealthy != null)
 				OnSickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> VerySick
-		else if ( eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick ){
-			scriptPetAnim.Transition( "Transition_SickVerySick" );
+		else if(eOld == PetHealthStates.Sick && eNew == PetHealthStates.VerySick){
+			scriptPetAnim.Transition("Transition_SickVerySick");
 
 			if(OnSickToVerySick != null)
 				OnSickToVerySick(this, EventArgs.Empty);
@@ -303,8 +322,8 @@ public class StatsController : Singleton<StatsController> {
 		}
 
 		// VerySick --> Sick
-		else if ( eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Sick )
-			scriptPetAnim.Transition( "Transition_VerySickSick" );
+		else if(eOld == PetHealthStates.VerySick && eNew == PetHealthStates.Sick)
+			scriptPetAnim.Transition("Transition_VerySickSick");
 		
 	}
 
@@ -317,8 +336,8 @@ public class StatsController : Singleton<StatsController> {
 		int health = DataManager.Instance.GameData.Stats.Health;
 
 		if(health <= 0)
-			if(OnZeroHealth != null)
-				OnZeroHealth(this, EventArgs.Empty);
+		if(OnZeroHealth != null)
+			OnZeroHealth(this, EventArgs.Empty);
 	}
 	
 	
@@ -327,9 +346,9 @@ public class StatsController : Singleton<StatsController> {
 	// Returns the localized stat text for incoming
 	// stat id.
 	//---------------------------------------------------	
-	public string GetStatText( StatType eStat ) {
+	public string GetStatText(StatType eStat){
 		string strKey = "STAT_" + eStat;
-		string strLocalizedStat = Localization.Localize( strKey );
+		string strLocalizedStat = Localization.Localize(strKey);
 		
 		return strLocalizedStat;
 	}
@@ -339,9 +358,9 @@ public class StatsController : Singleton<StatsController> {
 	// Returns the sprite name of the icon for the 
 	// incoming stat.
 	//---------------------------------------------------	
-	public string GetStatIconName( HUDElementType eStat ) {
+	public string GetStatIconName(HUDElementType eStat){
 		string strKey = "PetStatsIcon_" + eStat;
-		string strSprite = Constants.GetConstant<string>( strKey );
+		string strSprite = Constants.GetConstant<string>(strKey);
 		return strSprite;
 	}
 	
@@ -349,17 +368,18 @@ public class StatsController : Singleton<StatsController> {
 	// ChangeFireBreaths()
 	// Changes the # of breaths the pet has.
 	//---------------------------------------------------		
-	public void ChangeFireBreaths( int nAmount ) {
+	public void ChangeFireBreaths(int nAmount){
 		int nBreaths = DataManager.Instance.GameData.PetInfo.nFireBreaths;
 		int nBreathsNew = nBreaths + nAmount;
-		SetFireBreaths( nBreathsNew );
+		SetFireBreaths(nBreathsNew);
 	}
-	private void SetFireBreaths( int nAmount ) {
-		DataManager.Instance.GameData.PetInfo.SetFireBreaths( nAmount );
+
+	private void SetFireBreaths(int nAmount){
+		DataManager.Instance.GameData.PetInfo.SetFireBreaths(nAmount);
 		
 		// send out an event that fire breaths have changed
-		if ( OnBreathsChanged != null )
-			OnBreathsChanged( this, EventArgs.Empty );		
+		if(OnBreathsChanged != null)
+			OnBreathsChanged(this, EventArgs.Empty);		
 	}
 	
 	//---------------------------------------------------
@@ -367,8 +387,8 @@ public class StatsController : Singleton<StatsController> {
 	// When the user's current missions expire and must
 	// be refreshed.
 	//---------------------------------------------------		
-	private void OnMissionsRefreshed( object sender, EventArgs args ) {
+	private void OnMissionsRefreshed(object sender, EventArgs args){
 		// if the missions are refreshing, make sure the player can no longer breath fire
-		SetFireBreaths( 0 );
+		SetFireBreaths(0);
 	}	
 }

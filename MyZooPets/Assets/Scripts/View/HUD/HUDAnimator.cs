@@ -300,7 +300,7 @@ public class HUDAnimator : MonoBehaviour{
 	//---------------------------------------------------	
 	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade, string strSound, Hashtable hashSoundOverrides){
 		yield return new WaitForSeconds(waitTime);
-		
+
 		if(!string.IsNullOrEmpty(strSound))
 			AudioManager.Instance.PlayClip(strSound, hashSoundOverrides);
 
@@ -352,25 +352,34 @@ public class HUDAnimator : MonoBehaviour{
 		
 		// required data for animating the bar
 		int nStep = Constants.GetConstant<int>(eStat + "_Step");
+		bool firstFrame = true;
 		AnimationControl anim = hashAnimControls[eStat];
 		int nTarget = StatsController.Instance.GetStat(eStat);
-		
+
+		int count = 0;
+
 		// while the display number is not where we want to be...
 		while(hashDisplays[eStat] != nTarget){
-			// add proper signage to the step
-			if(hashDisplays[eStat] > nTarget)
-				nStep *= -1;			
+
+			// add proper signage to the step, Only on first frame!
+			if(hashDisplays[eStat] > nTarget && firstFrame){
+				firstFrame = false;
+				nStep *= -1;
+			}
 			
 			// animate by altering the display amount, but don't go over/under the target
-			if(nStep > 0)
+			if(nStep > 0){
 				hashDisplays[eStat] = Mathf.Min(hashDisplays[eStat] + nStep, nTarget);
-			else
+			}
+			else{
 				hashDisplays[eStat] = Mathf.Max(hashDisplays[eStat] + nStep, nTarget);
-				
+			}
+
 			// if there is a controller, play it
-			if(anim)
+			if(anim){
 				anim.Play();
-			
+			}
+
 			// wait one frame
 			yield return 0;
 			
@@ -379,7 +388,8 @@ public class HUDAnimator : MonoBehaviour{
 		}
 		
 		// animating is finished, so stop the control if it exists
-		if(anim)
+		if(anim){
 			anim.Stop();
+		}
 	}
 }

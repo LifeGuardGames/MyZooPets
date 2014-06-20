@@ -33,11 +33,13 @@ public enum ItemType{
 	Foods,
 	Usables,
 	Decorations,
+	Premiums
 }
 public enum StatType{
     Mood,
     Health,
 	Fire,
+	Gems
 }
 public enum ChallengeType{
     Weekly,

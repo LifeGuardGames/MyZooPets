@@ -10,8 +10,13 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> foodList; //list with only FoodItem. sorted by cost
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
+	private List<Item> premiumList;
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
 
+	/// <summary>
+	/// Gets the food list. Sorted by cost
+	/// </summary>
+	/// <value>The food list.</value>
 	public List<Item> FoodList{
 		get{
 			if(foodList == null){
@@ -23,6 +28,10 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 	}
 
+	/// <summary>
+	/// Gets the usable list. Sorted by cost
+	/// </summary>
+	/// <value>The usable list.</value>
 	public List<Item> UsableList{
 		get{
 			if(usableList == null){
@@ -33,7 +42,11 @@ public class ItemLogic : Singleton<ItemLogic>{
 			return usableList;
 		}
 	}
-	
+
+	/// <summary>
+	/// Gets the decoration list. Sorted by cost
+	/// </summary>
+	/// <value>The decoration list.</value>
 	public List<Item> DecorationList{
 		get{
 			if(decorationList == null){
@@ -44,6 +57,28 @@ public class ItemLogic : Singleton<ItemLogic>{
 			}
 			return decorationList;
 		}		
+	}
+
+	/// <summary>
+	/// Gets the premium list. Sorted by cost
+	/// </summary>
+	/// <value>The premium list.</value>
+	public List<Item> PremiumList{
+		get{
+			if(premiumList == null){
+				premiumList = new List<Item>();
+				Dictionary<string, Item> premiumDict = DataLoaderItems.GetAllItemsOfType(ItemType.Premiums);
+				premiumList = SelectListFromDictionaryAndSort(premiumDict);
+
+//				var items = from keyValuePair in premiumDict 
+//					select keyValuePair.Value;
+//				premiumList = (from item in items 
+//				                       orderby item.Cost.ToString() ascending
+//				                       select item).ToList();
+			}
+
+			return premiumList;
+		}
 	}
 
 	public Dictionary<DecorationTypes, List<DecorationItem>> DecorationSubCatList{
@@ -61,27 +96,48 @@ public class ItemLogic : Singleton<ItemLogic>{
 			return decorationSubCatList;
 		}
 	}
-
-	//Returns Item with itemID
+	
+	/// <summary>
+	/// Gets the item.
+	/// </summary>
+	/// <returns>The item.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public Item GetItem(string itemID){
 		return DataLoaderItems.GetItem(itemID);
 	}
-
-	//Returns the type of item with itemID
+	
+	/// <summary>
+	/// Gets the type of the item.
+	/// </summary>
+	/// <returns>The item type.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public ItemType GetItemType(string itemID){
 		return DataLoaderItems.GetItemType(itemID);
 	}
-
-	//Returns the texture name of item with itemID
+	
+	/// <summary>
+	/// Gets the name of the item texture.
+	/// </summary>
+	/// <returns>The item texture name.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public string GetItemTextureName(string itemID){
 		return DataLoaderItems.GetItemTextureName(itemID);
 	}
-
-	//Returns the prefab name of item with itemID
+	
+	/// <summary>
+	/// Gets the name of the deco item prefab.
+	/// </summary>
+	/// <returns>The deco item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public string GetDecoItemPrefabName(string itemID){
 		return DataLoaderItems.GetDecoItemPrefabName(itemID);
 	}
 
+	/// <summary>
+	/// Gets the name of the deco item material.
+	/// </summary>
+	/// <returns>The deco item material name.</returns>
+	/// <param name="itemID">Item ID.</param>
 	public string GetDecoItemMaterialName(string itemID){
 		return DataLoaderItems.GetDecoItemMaterialName(itemID);
 	}
@@ -209,14 +265,18 @@ public class ItemLogic : Singleton<ItemLogic>{
 		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, bFloaty: true);
 	}
 
-	//Get list sorted by cost in ascending order from the item dictionary
-	//Select and sort need to be done in two steps because IOS doesn't support 
-	//OrderBy for value types, ex int. but works fine if use on class.
+	/// <summary>
+	/// Get list sorted by cost in ascending order from the item dictionary
+	/// Select and sort need to be done in two steps because IOS doesn't support 
+	/// OrderBy for value types, ex int. but works fine if use on class.
+	/// </summary>
+	/// <returns>The list from dictionary and sort.</returns>
+	/// <param name="itemDict">Item dict.</param>
 	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
-						orderby item.UnlockAtLevel ascending, item.Cost.ToString() ascending
+						orderby item.UnlockAtLevel ascending, item.Cost ascending
 						select item).ToList();
 		return itemList;
 	}

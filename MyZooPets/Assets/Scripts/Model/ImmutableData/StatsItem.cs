@@ -2,11 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// StatsItem
-// This is an item that has stat modifiers.
-//---------------------------------------------------
-
+/// <summary>
+/// Stats item. This is an item that has stat modifiers
+/// </summary>
 public class StatsItem : Item{
     private Dictionary<StatType, int> stats; //item's effect on stats. Optional
 

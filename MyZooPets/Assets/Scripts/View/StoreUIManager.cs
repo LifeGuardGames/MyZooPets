@@ -8,6 +8,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject grid;
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
+	public GameObject itemStorePrefabPremium; // premium item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
@@ -230,7 +231,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 	
 	public void CreateSubCategoryItemsWithString(string page){
-		if(page != "Items" && page != "Food" && page != "Decorations"){
+		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
 			Debug.LogError("Illegal sore sub category: " + page);
 			return;
 		}
@@ -295,6 +296,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			//After tabs have been set up create items for the first/default tab
 			CreateSubCategoryItemsTab(defaultTabName, Color.white);
+		}
+		else if(currentPage == "Premiums"){
+			foreach(Transform tabParent in tabArea.transform){
+				HideUnuseTab(tabParent.FindChild("Tab"));
+			}
+			
+			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
 		}
 
 		ShowStoreSubPanel();
@@ -403,6 +411,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 						if(!decoItemData.ItemBoxOnly)
 							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
 					}
+				}
+			}
+			else if(currentPage == "Premiums"){
+				//TODO: temporary implementation for IAP. This will need to be connected with iOS/Android
+				//IAP stuff laterr
+
+				List<Item> premiumList = ItemLogic.Instance.PremiumList;
+
+				foreach(Item itemData in premiumList){
+					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData);
 				}
 			}
 

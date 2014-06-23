@@ -18,6 +18,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	public GameObject popupGameOverRewardMessageTwoButtons;
 	public GameObject popupBadgeUnlockedMessage;
 	public GameObject popupFireLevelUpMessage;
+	public GameObject popupPremiumMessage;
 
 	private bool isNotificationActive = false;
 	private GameObject anchorCenter; //parent of notificationCenterPanel
@@ -45,11 +46,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 			TryNextNotification();
 		}
 	}
-
-	//---------------------------------------------
-	// CleanupNotification()
-	// Will destroy all currently spawned notifications
-	//---------------------------------------------
+	
+	/// <summary>
+	/// Cleanups all currently spawned the notification.
+	/// </summary>
 	public void CleanupNotification(){
 		if(notificationCenterPanel != null){
 			Destroy(notificationCenterPanel);
@@ -59,11 +59,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		if(notificationBackDrop3D != null)
 			Destroy(notificationBackDrop3D);
 	}
-
-	//---------------------------------------------
-	// AddToQueue()
-	// Use this method to add new notification to the queue
-	//---------------------------------------------
+	
+	/// <summary>
+	/// Adds new notification to queue.
+	/// </summary>
+	/// <param name="notificationEntry">Notification entry.</param>
 	public void AddToQueue(Hashtable notificationEntry){
 		NotificationQueueData.AddNotification(notificationEntry);
 		
@@ -144,6 +144,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
 					);
 					break;
+				case NotificationPopupType.Premium:
+					ShowBuyPremiumMessage();
+				break;
 				default:
 					Debug.LogError("Invalid Notification");
 					break;
@@ -158,11 +161,12 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		}
 	}
 
-	//----------------------------------------------------------	
-	// ShowPopupNotificationOneButton
-	// Desc: creates popup that has a message and 1 button
-	//Params: notificationType, call back for button1
-	//----------------------------------------------------------	
+
+	/// <summary>
+	/// Shows the popup notification one button.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="okCallBack">Ok call back.</param>
 	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.HashEntry okCallBack){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
 		oneButtonMessage.Message = message;
@@ -172,12 +176,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
-
-	//----------------------------------------------------------	
-	// ShowPopupNotificationTwoButtons
-	// Desc: creates popup that has a message and 2 button
-	//Params: message , call back for button1, callback for button2
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the popup notification two buttons.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="okCallBack">Ok call back.</param>
+	/// <param name="cancelCallBack">Cancel call back.</param>
 	public void ShowPopupNotificationTwoButtons(string message, PopupNotificationNGUI.HashEntry okCallBack,
 		PopupNotificationNGUI.HashEntry cancelCallBack){
 		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
@@ -190,12 +195,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
-
-	//----------------------------------------------------------	
-	// ShowLevelUpMessage()
-	// Desc: creates popup that shows an image of the badge, along with a corresponding message
-	// Params: badge, call back for button
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the level up message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="okCallBack">Ok call back.</param>
+	/// <param name="sound">Sound.</param>
 	public void ShowLevelUpMessage(string message, PopupNotificationNGUI.HashEntry okCallBack, string sound){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupLevelUpMessage);
 		oneButtonMessage.Message = message;
@@ -205,12 +211,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
-
-	//----------------------------------------------------------	
-	// ShowPopupTipWithImage()
-	// Desc: creates popup that shows a tip, along with an image on the left and a message on the right.
-	// Params: message to display, tipImage, call back for button, starts hidden?, kill after used?
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the popup tip with image.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="spriteName">Sprite name.</param>
+	/// <param name="okCallBack">Ok call back.</param>
+	/// <param name="startsHidden">If set to <c>true</c> starts hidden.</param>
+	/// <param name="hideImmediately">If set to <c>true</c> hide immediately.</param>
 	public void ShowPopupTipWithImage(string message, string spriteName, 
 		PopupNotificationNGUI.HashEntry okCallBack, bool startsHidden = true, bool hideImmediately = true){
 
@@ -224,12 +233,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		
 		StartCoroutine(DisplayAfterInit(tip));
 	}
-
-	//----------------------------------------------------------	
-	// ShowGameOverRewardMessage()
-	// Desc: creates a popup reward message that only has one button(exiting button)
-	// Param: stars, points, button call back
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the game over reward message.
+	/// </summary>
+	/// <param name="deltaStars">Delta stars.</param>
+	/// <param name="deltaPoints">Delta points.</param>
+	/// <param name="buttonCallBack">Button call back.</param>
 	public void ShowGameOverRewardMessage(int deltaStars, int deltaPoints, PopupNotificationNGUI.HashEntry buttonCallBack){
 
 		GameOverRewardMessageNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupGameOverRewardMessageOneButton) as GameOverRewardMessageNGUI;
@@ -240,12 +250,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
-
-	//----------------------------------------------------------	
-	// ShowBadgeRewardMessage()
-	// Desc: creates a popup reward for new unlocked badge
-	// Param: badgeName, message, spriteName, button callback
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the badge reward message.
+	/// </summary>
+	/// <param name="badgeName">Badge name.</param>
+	/// <param name="message">Message.</param>
+	/// <param name="spriteName">Sprite name.</param>
+	/// <param name="buttonCallBack">Button call back.</param>
 	public void ShowBadgeRewardMessage(string badgeName, string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
 		PopupNotificationBadge spawnedPopupBadge = CreatePopupNotificationNGUI(popupBadgeUnlockedMessage) as PopupNotificationBadge;
 		spawnedPopupBadge.setTitle(badgeName);
@@ -256,17 +268,26 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 		StartCoroutine(DisplayAfterInit(spawnedPopupBadge));
 	}
-
-	//----------------------------------------------------------	
-	// ShowFireLevelUpMessage()
-	// Desc: creates a popup to show unlocked fire
-	// Param: message, spriteName, button callback
-	//----------------------------------------------------------	
+	
+	/// <summary>
+	/// Shows the fire level up message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="spriteName">Sprite name.</param>
+	/// <param name="buttonCallBack">Button call back.</param>
 	private void ShowFireLevelUpMessage(string message, string spriteName, PopupNotificationNGUI.HashEntry buttonCallBack){
 		PopupNotificationWithImageNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupFireLevelUpMessage) as PopupNotificationWithImageNGUI;
 		oneButtonMessage.Message = message;
 		oneButtonMessage.SetSprite(spriteName);
 		oneButtonMessage.Button1Callback = buttonCallBack;
+		oneButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	private void ShowBuyPremiumMessage(){
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupPremiumMessage);
+
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));

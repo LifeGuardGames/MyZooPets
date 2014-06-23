@@ -221,7 +221,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			}
 			else{
+				Debug.Log("hii");
+				Hashtable notificationEntry = new Hashtable();
+				
+				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
 
+				
+				NotificationUIManager.Instance.AddToQueue(notificationEntry);
 			}
 			break;
 		case CurrencyTypes.IAP:

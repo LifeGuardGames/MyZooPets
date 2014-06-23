@@ -54,7 +54,8 @@ public enum NotificationPopupType{
 	TipWithImage,
 	LevelUp,
     BadgeUnlocked,
-    FireLevelUp
+    FireLevelUp,
+	Premium
 }
 
 public enum NotificationPopupFields{

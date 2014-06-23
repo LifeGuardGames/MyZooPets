@@ -280,3 +280,9 @@ public enum MiniPetTypes{
     Basic,
 }
 
+public enum CurrencyTypes{
+	WellaCoin,
+	Gem,
+	IAP
+}
+

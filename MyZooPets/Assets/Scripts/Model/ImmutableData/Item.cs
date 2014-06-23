@@ -11,7 +11,8 @@ public class Item{
 	private string name; //name of item
 	private string textureName; //name of texture in the atlas
 	private ItemType type;
-	private int cost; //cost of item
+	private double cost; //cost of item
+	private CurrencyTypes currencyType;
 	protected string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
 	private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
@@ -35,8 +36,12 @@ public class Item{
 		get{ return type;}
 	}
 
-	public int Cost{
+	public double Cost{
 		get{ return cost;}
+	}
+
+	public CurrencyTypes CurrencyType{
+		get{ return currencyType;}
 	}
 
 	public virtual string Description{
@@ -82,7 +87,16 @@ public class Item{
 
 		name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
 		textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
-		cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
+
+		Hashtable costAttributes = XMLUtils.GetAttributes(hashItemData["Cost"] as IXMLNode);
+
+//		cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
+
+		currencyType = (CurrencyTypes) Enum.Parse(typeof(CurrencyTypes), 
+		                  HashUtils.GetHashValue<string>(costAttributes, "CurrencyType", ""));
+
+		cost = (double)Double.Parse(HashUtils.GetHashValue<string>(costAttributes, "Amount", ""));
+
 		description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode, "");
     
 		// optional for now

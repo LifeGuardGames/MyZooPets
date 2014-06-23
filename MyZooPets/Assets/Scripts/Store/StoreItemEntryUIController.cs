@@ -10,6 +10,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	public UILabel labelDesc;
 	public UILabel labelCost;
 	public UISprite spriteIcon;
+	public UISprite buttonIcon;
 	public UIButtonMessage buttonMessage;
 
 	/// <summary>
@@ -50,6 +51,12 @@ public class StoreItemEntryUIController : MonoBehaviour{
 		string costText = itemData.Cost.ToString();
 		if(itemData.Type == ItemType.Premiums)
 			costText = "$" + costText;
+
+		if(itemData.CurrencyType == CurrencyTypes.Gem)
+			buttonIcon.spriteName = "iconGem";
+//		else
+//			buttonIcon.spriteName = "iconCoin";
+
 		labelCost.text = costText;
 
 		labelName.text = itemData.Name;

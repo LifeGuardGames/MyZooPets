@@ -54,20 +54,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------	
+
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();		
@@ -103,12 +97,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
 	//---------------------------------------------------
-
-	//---------------------------------------------------
-	// OpenToSubCategory()
-	// Special function used to open the store UI 
-	// straight up to a certain category.
-	//---------------------------------------------------	
+	
+	/// <summary>
+	/// Opens to sub category. Special function used to pen the store UI straight
+	/// up to a certain category
+	/// </summary>
+	/// <param name="category">Category.</param>
+	/// <param name="isShortCut">If set to <c>true</c> is short cut.</param>
 	public void OpenToSubCategory(string category, bool isShortCut = false){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
@@ -120,13 +115,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		CreateSubCategoryItemsWithString(category); 
 	}
-
-	//---------------------------------------------------
-	// OnBuyAnimation()
-	// This function is called when buying an item
-	// It creates a icon for the item and move it to Inventory
-	// TODO Scales are a little mess up
-	//---------------------------------------------------
+	
+	/// <summary>
+	/// This function is called when buying an item. I creates an icon for the item
+	/// and move it to Inventory
+	/// </summary>
+	/// <param name="itemData">Item data.</param>
+	/// <param name="sprite">Sprite.</param>
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string itemID = sprite.transform.parent.transform.parent.name;
@@ -185,51 +180,76 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}	
 	}
 
-	//---------------------------------------------------
-	// OnBuyButton()
-	// Called when "Buy" is clicked
-	//---------------------------------------------------
+	/// <summary>
+	/// Raises the buy button event.
+	/// </summary>
+	/// <param name="button">Button.</param>
 	public void OnBuyButton(GameObject button){
 		string itemID = button.transform.parent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
 
-
-		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
-			//Special case to handle here. Since only one wallpaper can be used at anytime
-			//There is no point for the user to buy more than one of each diff wallpaper
-			if(itemData.Type == ItemType.Decorations){
-				DecorationItem decoItem = (DecorationItem)itemData;
-
-				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-					UIImageButton buyButton = button.GetComponent<UIImageButton>();
-		
-					//Disable the buy button so user can't buy the same wallpaper anymore 
-					if(buyButton)
-						buyButton.isEnabled = false;
+		switch(itemData.CurrencyType){
+		case CurrencyTypes.WellaCoin:
+			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
+				//Special case to handle here. Since only one wallpaper can be used at anytime
+				//There is no point for the user to buy more than one of each diff wallpaper
+				if(itemData.Type == ItemType.Decorations){
+					DecorationItem decoItem = (DecorationItem)itemData;
+					
+					if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+						UIImageButton buyButton = button.GetComponent<UIImageButton>();
+						
+						//Disable the buy button so user can't buy the same wallpaper anymore 
+						if(buyButton)
+							buyButton.isEnabled = false;
+					}
 				}
+				
+				InventoryLogic.Instance.AddItem(itemID, 1);
+				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
+				OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+				
+				//Analytics
+				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
+				
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
 			}
+			break;
+		case CurrencyTypes.Gem:
+			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
 
-			InventoryLogic.Instance.AddItem(itemID, 1);
-			StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
-			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+			}
+			else{
 
-			//Analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-			
-			// play a sound since an item was bought
-			AudioManager.Instance.PlayClip(soundBuy);
+			}
+			break;
+		case CurrencyTypes.IAP:
+			break;
 		}
+
+
+
 	}
 
-	//----------------------------------------------------
-	// CreateSubCategoryItems()
-	// Create tabs for sub category if sub category exists. 
-	// Then call other methods to create the items
-	//----------------------------------------------------
+	public void OnBuyPremium(GameObject button){
+		Debug.Log("Premium currency bought");
+//		StatsController.Instance.ChangeStats(deltaGems:)
+	}
+	
+	/// <summary>
+	/// Creates the sub category items. Create tabs for sub category if sub category exists.
+	/// Then call other methods to create the items
+	/// </summary>
+	/// <param name="page">Page.</param>
 	public void CreateSubCategoryItems(GameObject page){
 		CreateSubCategoryItemsWithString(page.name);
 	}
-	
+
+	/// <summary>
+	/// Creates the sub category items with string.
+	/// </summary>
+	/// <param name="page">Page.</param>
 	public void CreateSubCategoryItemsWithString(string page){
 		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
 			Debug.LogError("Illegal sore sub category: " + page);
@@ -309,11 +329,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	//------------------------------------------
-	// ShowStoreSubPanel()
-	// By not calling the Open() of SingletonUI we 
-	// by pass the clickmanager lock so it will
-	// remain lock 
-	//------------------------------------------
+	/// <summary>
+	/// Shows the store sub panel. By not calling the Open() of SingletonUI
+	/// we bypass the clickmanager lock so it will remain lock
+	/// </summary>
 	private void ShowStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
@@ -420,7 +439,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				List<Item> premiumList = ItemLogic.Instance.PremiumList;
 
 				foreach(Item itemData in premiumList){
-					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData);
+					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData, 
+					                                       this.gameObject, "OnBuyPremium");
 				}
 			}
 

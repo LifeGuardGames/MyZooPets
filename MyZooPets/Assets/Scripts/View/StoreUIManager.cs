@@ -109,16 +109,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Special function used to open the store UI 
 	// straight up to a certain category.
 	//---------------------------------------------------	
-	public void OpenToSubCategory(string strCat, bool bShortcut = false){		
+	public void OpenToSubCategory(string category, bool isShortCut = false){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
-		isShortcutMode = bShortcut;
+		isShortcutMode = isShortCut;
 		if(isShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now	
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 		}	
 		
-		CreateSubCategoryItemsWithString(strCat); 
+		CreateSubCategoryItemsWithString(category); 
 	}
 
 	//---------------------------------------------------

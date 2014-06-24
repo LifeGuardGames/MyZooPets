@@ -203,7 +203,8 @@ public abstract class Tutorial{
 	//--------------------------------------------------------------
 	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string fingerHintPrefab = "PressTut",
-		float offsetFromCenter = 60.0f, bool flipX = false){
+		float offsetFromCenter = 60.0f, float offsetFromCenterX = 0.0f, bool flipX = false){
+
 		string anchorName = "Anchor-" + anchor.ToString();
 
 		// get the proper location of the object we are going to focus on
@@ -224,8 +225,9 @@ public abstract class Tutorial{
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
 		goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(anchorName), fingerHintResource);
-		focusPos.z = goFingerHint.transform.localPosition.z;
+		focusPos.x = focusPos.x + offsetFromCenterX;
 		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
+		focusPos.z = goFingerHint.transform.localPosition.z;
 		goFingerHint.transform.localPosition = focusPos;
 
 		if(flipX)

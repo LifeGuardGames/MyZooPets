@@ -228,6 +228,10 @@ MonoBehaviour:
   strSoundProcess: houseEntrance
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: houseEntrance
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: MenuScene
   vOffset: {x: 0, y: 0, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
@@ -579,11 +583,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7416.5
+    e13: -7416
     e20: 0
     e21: 0
     e22: 384
@@ -980,6 +984,56 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1 &47668907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100008, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 47668908}
+  - 114: {fileID: 47668909}
+  m_Layer: 10
+  m_Name: Sprite_Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &47668908
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400008, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 47668907}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 80, y: 80, z: .999935985}
+  m_Children: []
+  m_Father: {fileID: 2003660554}
+  m_RootOrder: 3
+--- !u!114 &47668909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 47668907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 0, g: 0, b: 0, a: .458823532}
+  mPivot: 4
+  mDepth: 2
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
+  mSpriteName: box10
+  mFillCenter: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &51425605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1178,6 +1232,113 @@ Prefab:
   m_RootGameObject: {fileID: 1659069131}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &60527611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100002, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 60527612}
+  - 65: {fileID: 60527617}
+  - 114: {fileID: 60527616}
+  - 114: {fileID: 60527615}
+  - 114: {fileID: 60527614}
+  - 114: {fileID: 60527613}
+  m_Layer: 10
+  m_Name: Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &60527612
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400002, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 83982637}
+  m_Father: {fileID: 2003660554}
+  m_RootOrder: 1
+--- !u!114 &60527613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400016, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6534a01dfc540f381d2d01ed80f56a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSprite: 0
+  eMode: 0
+  strSoundProcess: 
+  buttonName: 
+  bCheckClickManager: 1
+  modeTypes: 0100000009000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
+--- !u!114 &60527614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400010, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2509c81f593343e68640c4aef4e2b97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryStatsHintPrefab: {fileID: 100004, guid: 8a4b1a7b975dc4ee3ab6c33830bcc38b,
+    type: 2}
+--- !u!114 &60527615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8a54b3dbfed264bbb3f81b3de365d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &60527616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggablePanel: {fileID: 0}
+  panel: {fileID: 0}
+--- !u!65 &60527617
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 6500000, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 60527611}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 90, y: 90, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &63828956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,7 +1362,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 63828956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: .582679451, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1357933893}
@@ -2492,6 +2653,71 @@ Prefab:
   m_RootGameObject: {fileID: 2117295853}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &83982636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100004, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 83982637}
+  - 114: {fileID: 83982639}
+  - 114: {fileID: 83982638}
+  m_Layer: 10
+  m_Name: Sprite_Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &83982637
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400004, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 83982636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalScale: {x: 60, y: 60, z: 1}
+  m_Children: []
+  m_Father: {fileID: 60527612}
+  m_RootOrder: 0
+--- !u!114 &83982638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 83982636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1efd0da3b804247709a1fb6bfbde2f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strConstant: SpriteSize_Inventory
+  resizeNow: 0
+--- !u!114 &83982639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 83982636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 3
+  mAtlas: {fileID: 11400000, guid: b0f0f3cc318ae0a4f8741cbda87a0430, type: 2}
+  mSpriteName: itemApple
+  mFillCenter: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &93381687
 GameObject:
   m_ObjectHideFlags: 0
@@ -3039,6 +3265,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -4213,7 +4443,7 @@ Transform:
   m_PrefabInternal: {fileID: 1741593388}
   m_GameObject: {fileID: 123871476}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: -383.499756, z: -1.82986259e-05}
+  m_LocalPosition: {x: 512.194214, y: -384, z: -1.82986259e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1639265623}
@@ -4291,6 +4521,10 @@ MonoBehaviour:
   strSoundProcess: button-21
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: button-21
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 728772033}
   functionName: RewardButtonClicked
 --- !u!114 &128938062
@@ -4681,7 +4915,7 @@ Transform:
   m_PrefabInternal: {fileID: 990674031}
   m_GameObject: {fileID: 151246072}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .000244140625, z: -2.13608146e-05}
+  m_LocalPosition: {x: 1.08267951, y: .0830078125, z: -2.13608146e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2074267354}
@@ -4891,7 +5125,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2003660554}
   m_Father: {fileID: 797955371}
   m_RootOrder: 9
 --- !u!114 &160765351
@@ -5114,6 +5349,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 4
   strDefaultDecoID: TORCH_1
   goDefaultDeco: {fileID: 0}
@@ -5232,6 +5471,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 599627655}
   functionName: CloseUI
 --- !u!1 &170105719
@@ -6012,11 +6255,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -347.5
+    e03: -348.194214
     e10: 0
     e11: 384
     e12: 0
-    e13: -7346.5
+    e13: -7346
     e20: 0
     e21: 0
     e22: 384
@@ -6093,6 +6336,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 0
+  modeTypes: 0000000009000000
+  buttonSound: 
+  isCheckingClickManager: 0
+  isSprite: 1
   target: {fileID: 188946390}
   functionName: ExpandToggled
 --- !u!114 &191920564
@@ -6385,6 +6632,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 2
   strDefaultDecoID: Rug1
   arrayObjects:
@@ -6412,7 +6663,7 @@ Transform:
   m_PrefabInternal: {fileID: 1432322959}
   m_GameObject: {fileID: 199532347}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: .582679451, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1793399388}
@@ -8461,6 +8712,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 453147152}
   functionName: CloseUI
 --- !u!114 &270063096
@@ -8733,6 +8988,54 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!1001 &296511070
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 160765350}
+    m_Modifications:
+    - target: {fileID: 11400016, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: modeTypes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+      propertyPath: m_RootMapOrder
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_RootGameObject: {fileID: 2003660553}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &297664939
 GameObject:
   m_ObjectHideFlags: 0
@@ -9256,11 +9559,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -9736,7 +10039,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400010, guid: c2e3a38bee3957d4aa57ec595d5ea663, type: 2}
   m_PrefabInternal: {fileID: 1545795495}
   m_GameObject: {fileID: 351257430}
-  m_LocalRotation: {x: .712719858, y: .701231539, z: .00598510588, w: -.0164038911}
+  m_LocalRotation: {x: .712719798, y: .70123148, z: .00598510494, w: -.0164038893}
   m_LocalPosition: {x: -.052387543, y: .00137260859, z: 4.90284765e-05}
   m_LocalScale: {x: .00836903322, y: .00530430861, z: .00577577855}
   m_Children: []
@@ -9987,7 +10290,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400008, guid: c2e3a38bee3957d4aa57ec595d5ea663, type: 2}
   m_PrefabInternal: {fileID: 1545795495}
   m_GameObject: {fileID: 357958857}
-  m_LocalRotation: {x: -.702507615, y: .71146208, z: -.0164141115, w: -.00595610868}
+  m_LocalRotation: {x: -.702507615, y: .71146208, z: -.0164141115, w: -.00595610822}
   m_LocalPosition: {x: .000300796964, y: .00137260871, z: -.00112231262}
   m_LocalScale: {x: .00836903416, y: .00530430907, z: .00500970474}
   m_Children: []
@@ -10401,6 +10704,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 388452861}
   functionName: CloseUI
 --- !u!114 &390781795
@@ -10559,6 +10866,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -10835,6 +11146,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: HideStoreSubPanel
 --- !u!114 &418183431
@@ -11072,6 +11387,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 2
   strDefaultDecoID: Rug1
   arrayObjects:
@@ -11279,7 +11598,7 @@ Transform:
   m_PrefabInternal: {fileID: 1306142934}
   m_GameObject: {fileID: 444192984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512, y: 384, z: 3.06963921e-06}
+  m_LocalPosition: {x: -511.694214, y: 383.499756, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2129172049}
@@ -11355,6 +11674,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
 --- !u!114 &446879694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11699,6 +12022,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   target: {fileID: 453147152}
   functionName: OpenUI
 --- !u!65 &453147158
@@ -12098,6 +12425,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 1100696769}
   functionName: CloseUI
 --- !u!114 &477418511
@@ -12843,7 +13174,7 @@ Transform:
   m_PrefabInternal: {fileID: 1741593388}
   m_GameObject: {fileID: 509591385}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: -383.499756, z: -1.82986259e-05}
+  m_LocalPosition: {x: .582679451, y: -384, z: -1.82986259e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 164969355}
@@ -13138,7 +13469,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400018, guid: c2e3a38bee3957d4aa57ec595d5ea663, type: 2}
   m_PrefabInternal: {fileID: 1545795495}
   m_GameObject: {fileID: 521007824}
-  m_LocalRotation: {x: .0107056582, y: .707130551, z: -.00359717058, w: -.706992924}
+  m_LocalRotation: {x: .0107056573, y: .707130492, z: -.00359717011, w: -.706992865}
   m_LocalPosition: {x: -.000904446468, y: .00874390546, z: .0695847049}
   m_LocalScale: {x: .0083690295, y: .00621915422, z: .00486348616}
   m_Children: []
@@ -13699,6 +14030,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 4
   strDefaultDecoID: PILLAR_1
   goDefaultDeco: {fileID: 0}
@@ -14161,6 +14496,10 @@ MonoBehaviour:
   strSoundProcess: badgesView
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: badgesView
+  isCheckingClickManager: 1
+  isSprite: 0
 --- !u!1001 &604255560
 Prefab:
   m_ObjectHideFlags: 0
@@ -14617,11 +14956,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -14658,7 +14997,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 643400508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: -512.194214, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1613790791}
@@ -15108,6 +15447,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: TriggerNinja
   vOffset: {x: 0, y: 3, z: -10}
   vFinalRotation: {x: 10, y: 0, z: 0}
@@ -15631,6 +15974,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CreateSubCategoryItems
 --- !u!1 &690693702
@@ -15806,6 +16153,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 1
   strDefaultDecoID: 
   arrayObjects:
@@ -16088,6 +16439,64 @@ Transform:
   m_Children: []
   m_Father: {fileID: 979821114}
   m_RootOrder: 0
+--- !u!1 &713201550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100006, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 713201551}
+  - 114: {fileID: 713201552}
+  m_Layer: 10
+  m_Name: Label_Amount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &713201551
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400006, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 713201550}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.6299992, y: -18.6000004, z: -5}
+  m_LocalScale: {x: 40, y: 40, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2003660554}
+  m_RootOrder: 2
+--- !u!114 &713201552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400006, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 713201550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 10
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: 1
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &714488607
 GameObject:
   m_ObjectHideFlags: 0
@@ -16425,11 +16834,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -16586,6 +16995,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   target: {fileID: 737520537}
   functionName: OpenUI
 --- !u!1 &738700463
@@ -18240,6 +18653,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CloseUI
 --- !u!1 &790427718
@@ -18906,7 +19323,7 @@ Transform:
   m_PrefabInternal: {fileID: 1306142934}
   m_GameObject: {fileID: 829525176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 512, y: 384, z: 3.06963921e-06}
+  m_LocalPosition: {x: 512.694214, y: 383.499756, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 698391410}
@@ -19077,11 +19494,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: .582679451
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .5
+      value: .582687378
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_IsActive
@@ -19698,6 +20115,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 737520537}
   functionName: CloseUI
 --- !u!114 &868722606
@@ -20099,7 +20520,7 @@ Transform:
   m_PrefabInternal: {fileID: 1306142934}
   m_GameObject: {fileID: 887625256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.06963921e-06}
+  m_LocalPosition: {x: 1.08267951, y: .0827636719, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1739046288}
@@ -21317,6 +21738,10 @@ MonoBehaviour:
   strSoundProcess: shopOpen
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: shopOpen
+  isCheckingClickManager: 1
+  isSprite: 1
 --- !u!114 &897338623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22594,7 +23019,7 @@ Transform:
   m_PrefabInternal: {fileID: 836346770}
   m_GameObject: {fileID: 909916949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .5, z: 0}
+  m_LocalPosition: {x: .582679451, y: .582687378, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1216949198}
@@ -22928,7 +23353,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 938998348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: -512.194214, y: .583007812, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1445519630}
@@ -23226,6 +23651,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1064487671}
     m_Modifications:
+    - target: {fileID: 11400010, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: modeTypes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 64e035934b17248dc9d849312715c109, type: 2}
       propertyPath: m_LocalPosition.x
       value: -164
@@ -23270,6 +23699,10 @@ Prefab:
       propertyPath: petAnimator
       value: 
       objectReference: {fileID: 1480351567}
+    - target: {fileID: 11400010, guid: 64e035934b17248dc9d849312715c109, type: 2}
+      propertyPath: modeTypes.Array.data[1]
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64e035934b17248dc9d849312715c109, type: 2}
   m_RootGameObject: {fileID: 188946390}
@@ -23484,6 +23917,22 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 5364011}
+    - target: {fileID: 400038, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.08267951
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: .0830078125
+      objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 512.694214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 383.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ffc815bd03d0afd4a8c8c2a48a56e3bb, type: 2}
   m_RootGameObject: {fileID: 182119181}
@@ -24162,6 +24611,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: InhalerGamePet
   vOffset: {x: -2.79999995, y: 1, z: -8}
   vFinalRotation: {x: 0, y: 23, z: 6}
@@ -24288,6 +24741,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e05714002e354116b04d99779fb5584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1033592097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1033592098}
+  - 114: {fileID: 1033592099}
+  m_Layer: 10
+  m_Name: Padding
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1033592098
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 1033592097}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 90, y: 90, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2003660554}
+  m_RootOrder: 0
+--- !u!114 &1033592099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400014, guid: e40a594589ec042ab9c09257d042e280,
+    type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 1033592097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 0, g: 0, b: 0, a: 0}
+  mPivot: 4
+  mDepth: 2
+  mAtlas: {fileID: 11400000, guid: e59ac52fd8dfb6c45b3a29a01f1a6660, type: 2}
+  mSpriteName: box10
+  mFillCenter: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
 --- !u!1 &1034544236
 GameObject:
   m_ObjectHideFlags: 0
@@ -24463,6 +24966,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -24999,7 +25506,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1064487670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: 512.194214, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 188946391}
@@ -25270,7 +25777,7 @@ Transform:
   m_PrefabInternal: {fileID: 990674031}
   m_GameObject: {fileID: 1091788290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 512, y: 384.000244, z: -2.13608146e-05}
+  m_LocalPosition: {x: 512.694214, y: 383.5, z: -2.13608146e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1382364194}
@@ -28844,6 +29351,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -29104,11 +29615,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -.5
+    e13: -.582687378
     e20: 0
     e21: 0
     e22: 384
@@ -29302,11 +29813,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -8024.5
+    e13: -8024
     e20: 0
     e21: 0
     e22: 384
@@ -29911,7 +30422,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400002, guid: 5198dfe55690d4f48872746d2e14a2d3, type: 2}
   m_PrefabInternal: {fileID: 300574883}
   m_GameObject: {fileID: 1261220987}
-  m_LocalRotation: {x: 0, y: -.707143724, z: 0, w: .707069933}
+  m_LocalRotation: {x: 0, y: -.707143664, z: 0, w: .707069874}
   m_LocalPosition: {x: -8.16716003, y: -7.66664314, z: 39.553112}
   m_LocalScale: {x: 308.582581, y: 308.582581, z: 308.582581}
   m_Children: []
@@ -30617,6 +31128,30 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 5364011}
+    - target: {fileID: 400074, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -511.694214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400074, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 383.499756
+      objectReference: {fileID: 0}
+    - target: {fileID: 400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 512.694214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400072, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 383.499756
+      objectReference: {fileID: 0}
+    - target: {fileID: 400070, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.08267951
+      objectReference: {fileID: 0}
+    - target: {fileID: 400070, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: .0827636719
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0058485a3a3aac044913f74de9f15c9e, type: 2}
   m_RootGameObject: {fileID: 1136389497}
@@ -31609,11 +32144,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.5
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -31685,7 +32220,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1362516099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: .582679451, y: .583007812, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 641376765}
@@ -32137,19 +32672,19 @@ Prefab:
       objectReference: {fileID: 797955372}
     - target: {fileID: 400012, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: .582679451
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: .500244141
+      value: .583007812
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.5
+      value: .582679451
       objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 384.500244
+      value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: 0aa6a6157e9f20b46b3e8dcea238ab2b, type: 2}
       propertyPath: hideDeltaY
@@ -32677,6 +33212,30 @@ Prefab:
       propertyPath: uiCamera
       value: 
       objectReference: {fileID: 797955372}
+    - target: {fileID: 400028, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: .582679451
+      objectReference: {fileID: 0}
+    - target: {fileID: 400028, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 512.194214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -512.194214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1c4b828cd786f4900a447b4ef757dffc, type: 2}
   m_RootGameObject: {fileID: 493377551}
@@ -32975,6 +33534,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 1
   strDefaultDecoID: 
   arrayObjects:
@@ -33069,11 +33632,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512.194214
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -33137,6 +33700,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CreateSubCategoryItems
 --- !u!114 &1446339726
@@ -33522,11 +34089,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -33621,6 +34188,10 @@ MonoBehaviour:
   strSoundProcess: shopOpen
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: shopOpen
+  isCheckingClickManager: 1
+  isSprite: 1
   sunBeam: {fileID: 1338768373}
 --- !u!111 &1471511951
 Animation:
@@ -34312,6 +34883,10 @@ MonoBehaviour:
   strSoundProcess: decoEnter
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: decoEnter
+  isCheckingClickManager: 1
+  isSprite: 1
 --- !u!114 &1515320960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34537,6 +35112,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 2
   strDefaultDecoID: Rug1
   arrayObjects:
@@ -34607,6 +35186,10 @@ MonoBehaviour:
   strSoundProcess: houseEntrance
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: houseEntrance
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: Yard
   vOffset: {x: 0, y: 0, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
@@ -35081,6 +35664,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 2
   strDefaultDecoID: Rug1
   arrayObjects:
@@ -35508,6 +36095,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CreateSubCategoryItems
 --- !u!1 &1580896150
@@ -35644,7 +36235,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1581779195}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: 512.194214, y: .583007812, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 797955371}
@@ -36026,11 +36617,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 512.5
+    e03: 512.194214
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.5
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -36246,11 +36837,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -511.5
+    e03: -512.194214
     e10: 0
     e11: 384
     e12: 0
-    e13: -7296.5
+    e13: -7296
     e20: 0
     e21: 0
     e22: 384
@@ -37371,7 +37962,7 @@ Transform:
   m_PrefabInternal: {fileID: 1397333790}
   m_GameObject: {fileID: 1695576434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: .500244141, z: 0}
+  m_LocalPosition: {x: .582679451, y: .583007812, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 751529994}
@@ -37894,6 +38485,30 @@ Prefab:
       propertyPath: uiCamera
       value: 
       objectReference: {fileID: 797955372}
+    - target: {fileID: 400036, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 512.194214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400036, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: .582679451
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -512.194214
+      objectReference: {fileID: 0}
+    - target: {fileID: 400040, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -384
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 70c2631948db3424b8f166712c8444c5, type: 2}
   m_RootGameObject: {fileID: 2007499535}
@@ -38031,6 +38646,10 @@ MonoBehaviour:
   strSoundProcess: shopOpen
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: shopOpen
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 388452861}
   functionName: OpenShop
 --- !u!114 &1744352313
@@ -38091,7 +38710,7 @@ Transform:
   m_PrefabInternal: {fileID: 1432322959}
   m_GameObject: {fileID: 1746354806}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: 512.194214, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2141504839}
@@ -38213,6 +38832,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -38438,6 +39061,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 388452861}
   functionName: CloseChooseMenu
 --- !u!1 &1763106080
@@ -39781,11 +40408,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.582679451
     e10: 0
     e11: 384
     e12: 0
-    e13: -7680.5
+    e13: -7680.58301
     e20: 0
     e21: 0
     e22: 384
@@ -39959,7 +40586,7 @@ Transform:
   m_PrefabInternal: {fileID: 1432322959}
   m_GameObject: {fileID: 1783793182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.499756, z: 0}
+  m_LocalPosition: {x: -512.194214, y: -384, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 289082625}
@@ -40400,6 +41027,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 2
   strDefaultDecoID: Rug1
   arrayObjects:
@@ -40885,7 +41516,7 @@ Transform:
   m_PrefabInternal: {fileID: 1741593388}
   m_GameObject: {fileID: 1846217217}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.5, y: -383.499756, z: -1.82986259e-05}
+  m_LocalPosition: {x: -512.194214, y: -384, z: -1.82986259e-05}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 2030835461}
@@ -41188,11 +41819,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .5
+    e03: -.58267951
     e10: 0
     e11: 384
     e12: 0
-    e13: -7584.36377
+    e13: -7584.44678
     e20: 0
     e21: 0
     e22: 384
@@ -41389,7 +42020,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1876011761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.500244, z: 0}
+  m_LocalPosition: {x: .582679451, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1223414674}
@@ -41610,6 +42241,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 493377551}
   functionName: OnRemoveButton
 --- !u!114 &1884620210
@@ -41804,6 +42439,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 4
   strDefaultDecoID: TORCH_1
   goDefaultDeco: {fileID: 0}
@@ -41881,7 +42520,7 @@ Transform:
   m_PrefabInternal: {fileID: 1397333790}
   m_GameObject: {fileID: 1889332899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 384.500244, z: 0}
+  m_LocalPosition: {x: .582679451, y: 384, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 363851157}
@@ -42520,6 +43159,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 728772033}
   functionName: BackButtonClicked
 --- !u!114 &1944495074
@@ -42680,6 +43323,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: ClinicGame
   vOffset: {x: -5, y: 3, z: -10}
   vFinalRotation: {x: 10, y: 23, z: 6}
@@ -43228,6 +43875,37 @@ Prefab:
   m_RootGameObject: {fileID: 1005111120}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &2003660553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2003660554}
+  m_Layer: 10
+  m_Name: InventoryItem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2003660554
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
+  m_PrefabInternal: {fileID: 296511070}
+  m_GameObject: {fileID: 2003660553}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1033592098}
+  - {fileID: 60527612}
+  - {fileID: 713201551}
+  - {fileID: 47668908}
+  m_Father: {fileID: 160765350}
+  m_RootOrder: 0
 --- !u!1 &2006277594
 GameObject:
   m_ObjectHideFlags: 0
@@ -44790,6 +45468,10 @@ MonoBehaviour:
   strSoundProcess: buttonGeneric2
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: buttonGeneric2
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CloseUI
 --- !u!1 &2029847892
@@ -45224,11 +45906,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -711.5
+    e03: -712.194214
     e10: 0
     e11: 384
     e12: 0
-    e13: -7347.5
+    e13: -7347
     e20: 0
     e21: 0
     e22: 384
@@ -45934,6 +46616,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 03000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 5364011}
   functionName: CreateSubCategoryItems
 --- !u!1 &2084945890
@@ -46182,6 +46868,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 04000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 0
   strDefaultDecoID: 
   goDefaultDeco: {fileID: 0}
@@ -46574,6 +47264,10 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: 
+  isCheckingClickManager: 1
+  isSprite: 0
   eType: 4
   strDefaultDecoID: PILLAR_1
   goDefaultDeco: {fileID: 0}
@@ -46798,6 +47492,9 @@ MonoBehaviour:
   popupBadgeUnlockedMessage: {fileID: 100026, guid: 1b87621769c84a94f86752cc164d37e6,
     type: 2}
   popupFireLevelUpMessage: {fileID: 100024, guid: 5d1d250f16abafa4c86e31fc5550f5d8,
+    type: 2}
+  popupPremiumMessage: {fileID: 100018, guid: ae69da5b25cf4144e8f7ed82711b13f1, type: 2}
+  popupInhalerRechargeMessage: {fileID: 100012, guid: a18cca9c6872f304aa47f59786db23e5,
     type: 2}
 --- !u!1 &2141293020
 GameObject:

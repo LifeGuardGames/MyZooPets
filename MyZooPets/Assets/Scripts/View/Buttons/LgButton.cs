@@ -33,6 +33,10 @@ public class LgButton : MonoBehaviour{
 		return eMode;	
 	}
 
+	public List<UIModeTypes> GetModes(){
+		return modeTypes;
+	}
+
 	public string GetProcessSound(){
 		return strSoundProcess;	
 	}
@@ -42,11 +46,17 @@ public class LgButton : MonoBehaviour{
 	}
 	
 	void Start(){
-		// do a check for a valid mode
+		//TODO: remove this
 		if(eMode == UIModeTypes.NotInited){
 			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
 			eMode = UIModeTypes.None;	
 		}
+
+		for(int i=0; i<modeTypes.Count; i++){
+			if(modeTypes[i] == UIModeTypes.NotInited)
+				modeTypes[i] = UIModeTypes.None;
+		}
+
 		
 		_Start();
 	}

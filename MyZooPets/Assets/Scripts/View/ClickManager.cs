@@ -96,20 +96,26 @@ public class ClickManager : Singleton<ClickManager>{
 		bool isTweening = IsTweeningUI();
 		if(isTweening)
 			return false;
-		
+
+		// get the current mode
+		UIModeTypes currentUIMode = UIModeTypes.None;
+		if(stackModes.Count > 0)
+			currentUIMode = stackModes.Peek();
+
 		// get the mode key from the incoming object, if it is an LgButton.
 		// it's possible goCaller is not an LgButton, which should be fine.
 		UIModeTypes callingMode = UIModeTypes.None;
 		if(goCaller != null){
 			LgButton button = goCaller.GetComponent<LgButton>();
-			if(button)
-				callingMode = button.GetMode();
+			if(button){
+				List<UIModeTypes> modeTypes = button.GetModes();
+				foreach(UIModeTypes mode in modeTypes){
+					if(currentUIMode == UIModeTypes.None || mode == currentUIMode || 
+					  (mode == UIModeTypes.None && currentUIMode == UIModeTypes.None))
+						return true;
+				}
+			}
 		}
-		
-		// get the current mode
-		UIModeTypes currentUIMode = UIModeTypes.None;
-		if(stackModes.Count > 0)
-			currentUIMode = stackModes.Peek();
 		
 		// we are at the end of our checks now, so if we have made it this far, if the click manager is not actually locked
 		// (current mode is None), the current mode is equal to the incoming button's mode, or the incoming button's mode is none,

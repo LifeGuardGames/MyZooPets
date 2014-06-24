@@ -95,7 +95,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
-		if(!ClickManager.Instance.CanRespondToTap()) return;
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
 		
 		if (enabled && UICamera.currentTouchID > -2)
 		{
@@ -142,7 +142,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnPress (bool isPressed)
 	{
-		if(!ClickManager.Instance.CanRespondToTap()) return;
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
 
 		if(!mIsDragging)
 			isClickLock = true;

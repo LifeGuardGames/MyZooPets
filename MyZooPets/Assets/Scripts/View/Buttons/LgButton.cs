@@ -19,10 +19,15 @@ public class LgButton : MonoBehaviour{
 	public bool bSprite;
 	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
 
-	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
+
 	public string strSoundProcess; // the sound resource this button plays when it is clicked
 	public string buttonName; //the name that will be used for analytics event if not empty
 	public bool bCheckClickManager = true;
+
+	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
+	public string buttonSound;
+	public bool isCheckingClickManager;
+	public bool isSprite;
 
 	public UIModeTypes GetMode(){
 		return eMode;	

@@ -17,6 +17,8 @@ public class MoveVariableData : EditorWindow {
 				component.isSprite = component.bSprite;
 				component.isCheckingClickManager = component.bCheckClickManager;
 				component.buttonSound = component.strSoundProcess;
+
+				EditorUtility.SetDirty(component.gameObject);
 			}
 		}
 	}

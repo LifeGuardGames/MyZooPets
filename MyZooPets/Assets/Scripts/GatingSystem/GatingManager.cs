@@ -215,9 +215,10 @@ public class GatingManager : Singleton<GatingManager>{
 			List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 			listExceptions.Add(ClickLockExceptions.Moving);
 			ClickManager.Instance.Lock(UIModeTypes.GatingSystem, listExceptions);
+
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
-			InventoryUIManager.Instance.HidePanel();
+//			InventoryUIManager.Instance.HidePanel();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate)activeGates[enteringPartitionNumber];
@@ -348,45 +349,45 @@ public class GatingManager : Singleton<GatingManager>{
 		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
 		
-//		string strKey;			// key of text to show
-//		string strImage;		// image to appear on notification
-//		string strAnalytics = "";	// analytics tracker
-		
 		if(eState != PetHealthStates.Healthy){
-			// pet is not healthy enough
-//			strKey = "NO_FIRE_SICK";
-//			strImage = "Skull";
-			// strAnalytics = "BreathFire:Fail:Sick";
+
 			PetSpeechAI.Instance.ShowNoFireSickMsg();
 		}
 		else if(eMood != PetMoods.Happy){
-			// pet is not happy enough
-//			strKey = "NO_FIRE_UNHAPPY";
-//			strImage = "Skull";
-			// strAnalytics = "BreathFire:Fail:Unhappy";
+
 			PetSpeechAI.Instance.ShowNoFireHungryMsg();
 		}
 		else{
-			if(PlayPeriodLogic.Instance.CanUseRealInhaler())
+			if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
 				PetSpeechAI.Instance.ShowInhalerMsg();
-				
-			else
-				PetSpeechAI.Instance.ShowOutOfFireMsg();
-				//TODO: enable FireOrbMsg once it's ready to integrate
+			}
+			else{
 
-//				PetSpeechAI.Instance.ShowFireOrbMsg();
-			// out of flame charges
-//			strKey = "NO_FIRE_INHALER";
-//			strImage = "itemInhalerMain";
-			// strAnalytics = "BreathFire:Fail:NoCharges";
-		}
+				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+
+					ClickManager.Instance.Lock(UIModeTypes.Store);
+					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+				};
+
+				Hashtable notificationEntry = new Hashtable();
+				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+				
+				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+				
+			}
 		
-//		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
-//		string message = String.Format(Localization.Localize(strKey), petName);
-//		// show the standard popup
-//		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
-//			message, strImage, null, true, true, strAnalytics);		
+		    //				PetSpeechAI.Instance.ShowOutOfFireMsg();
+			//TODO: enable FireOrbMsg once it's ready to integrate
+		}
 	}
+
+	private void ReturnToGatingSystemUIMode(object sender, EventArgs args){
+		ClickManager.Instance.ReleaseLock();
+
+		StoreUIManager.OnShortcutModeEnd -= ReturnToGatingSystemUIMode;
+	} 
 
 	/// <summary>
 	/// Shows the fire button.

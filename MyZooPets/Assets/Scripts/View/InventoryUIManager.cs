@@ -48,57 +48,12 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		if(fingerHintGO != null)
 			Destroy(fingerHintGO);
 
-		//some debug check
-//		if(isDebug){
-//			if(e.TargetCollider && e.TargetCollider.name == "Cube")
-//				dropOnTarget = true;
-//		}
-//		else{
 		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 
 			if(ItemDroppedOnTargetEvent != null)
 				ItemDroppedOnTargetEvent(this, e);
 		}
-//			dropOnTarget = true;
-//		}
-
-		//logic for when item is dropped on target
-//		if(dropOnTarget){
-//			string invItemID = e.ItemTransform.name; //get id from listener args
-//			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-//
-//			// check to make sure the item can be used
-//			if(ItemLogic.Instance.CanUseItem(invItemID)){
-//				e.IsValidTarget = true;
-//				
-//
-//				if(invItem != null && invItem.ItemType == ItemType.Foods)
-//					ShowPetReceivedFoodAnimation();		
-//				
-//				//notify inventory logic that this item is being used
-//				InventoryLogic.Instance.UseItem(invItemID);
-//				
-//				if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-//					e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-//				}
-//				else{ //destroy object if it has been used up
-//					Destroy(e.ParentTransform.gameObject);
-//					UpdateBarPosition();
-//				}
-//			}
-//			else{
-//				// else the drop was valid or the item could not be used...show a message
-//				Hashtable hashSpeech = new Hashtable();
-//
-//				if(invItem.ItemType == ItemType.Foods)
-//					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
-//				else
-//					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
-//
-//				PetSpeechController.Instance.Talk(hashSpeech);				
-//			}
-//		}
 	}
 
 	/// <summary>
@@ -139,14 +94,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
 		}
 	}
-
-	//play chew animation from pet animator
-//	private void ShowPetReceivedFoodAnimation(){
-//		if(!petAnimator.IsBusy()){
-//			petAnimator.PlayUnrestrictedAnim("Eat", true);
-//			PetMovement.Instance.StopMoving(false);
-//		}
-//	}
 
 	//Event listener. listening to when new item is added to the inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){

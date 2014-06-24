@@ -54,10 +54,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		// listen for partition change event
 		CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------	
+
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -73,10 +70,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		GameObject goPet = PetMovement.Instance.GetPetGameObject();
 		goPet.SetActive(false);
 	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+
 	protected override void _CloseUI(){
 		// if the choose menu was open, close it
 		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
@@ -111,16 +105,15 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	public void HideNavButton(){
 		tweenEdit.Hide();
 	}
-	
-	//---------------------------------------------------
-	// OpenShop()
-	// Opens the store leading to decorations for the
-	// current category the playing is trying to place.
-	// This is a little messy/complicated, because we are
-	// basically faking the deco UI closing and the
-	// shop UI opening.  It's not legit because all the
-	// tweening and demux make it diffcult to do legitly.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Opens the store leading to decorations for the
+	/// current category the playing is trying to place.
+	/// This is a little messy/complicated, because we are
+	/// basically faking the deco UI closing and the
+	/// shop UI opening.  It's not legit because all the
+	/// tweening and demux make it diffcult to do legitly.
+	/// </summary>
 	private void OpenShop(){
 		// save the node the player was trying to use
 		nodeSaved = scriptChooseUI.GetNode();
@@ -137,16 +130,17 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
 		
 		// open the specific sub category in the shop
-		string strCat = nodeSaved.GetDecoType().ToString();
-		StoreUIManager.Instance.CreateSubCategoryItemsTab(strCat, Color.white);
+		string category = nodeSaved.GetDecoType().ToString();
+		StoreUIManager.Instance.CreateSubCategoryItemsTab(category, Color.white);
 	}
-	
-	//---------------------------------------------------
-	// ReopenChooseMenu()
-	// This function is called from the store UI when the
-	// store closes and the user had opened the store
-	// from the deco system.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// This function is called from the store UI when the
+	/// store closes and the user had opened the store
+	/// from the deco system.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void ReopenChooseMenu(object sender, EventArgs args){
 		// hide the edit button
 		tweenEdit.Hide();
@@ -159,14 +153,15 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 
 		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}
-	
-	//---------------------------------------------------
-	// UpdateChooseMenu()
-	// Called when a decoration node is selected, this
-	// function kicks off the process of displaying a 
-	// menu for showing the user which decorations they
-	// may place.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Updates the choose menu.
+	/// Called when a decoration node is selected, this
+	/// function kicks off the process of displaying a 
+	/// menu for showing the user which decorations they
+	/// may place.
+	/// </summary>
+	/// <param name="decoNode">Deco node.</param>
 	public void UpdateChooseMenu(DecorationNode decoNode){
 		// if the menu is not showing, show it
 		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();
@@ -186,14 +181,14 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 			OnNodeSelected(this, args);
 		}
 	}
-	
-	//---------------------------------------------------
-	// CloseChooseMenu()
-	// Closes the choose decoration menu -- note that
-	// this does not exit deco mode.  The _ version of
-	// this function is because "SendMessage" does not
-	// like default parameters...
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Closes the choose menu.
+	/// Closes the choose decoration menu -- note that
+	/// this does not exit deco mode.  The _ version of
+	/// this function is because "SendMessage" does not
+	/// like default parameters...
+	/// </summary>
 	public void CloseChooseMenu(){
 		CloseChooseMenu_();	
 		
@@ -216,49 +211,48 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		}
 		// we possibly want to Resources.UnloadUnusedAssets() here because the menu is instantiated
 	}
-	
-	//---------------------------------------------------
-	// GetEditButtonPosition()
-	// Returns the position of the edit button.  Used for
-	// tutorials.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the edit button position. Used for tutorials
+	/// </summary>
+	/// <returns>The edit button position.</returns>
 	public Vector3 GetEditButtonPosition(){
 		return goEdit.transform.position;	
 	}
-	
-	//---------------------------------------------------
-	// GetTutorialEntry()
-	// Returns the special tutorial entry in the choose
-	// menu.  Used for tutorials.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the special tutorial entry. Used for tutorials
+	/// </summary>
+	/// <returns>The tutorial entry.</returns>
 	public GameObject GetTutorialEntry(){
 		GameObject goEntry = scriptChooseUI.GetTutorialEntry();
 		return goEntry;
 	}
-	
-	//---------------------------------------------------
-	// GetChooseScript()
-	// Returns the choose menu script.  Used for tutorials.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the choose menu script. Used for tutorials
+	/// </summary>
+	/// <returns>The choose script.</returns>
 	public ChooseDecorationUI GetChooseScript(){
 		return scriptChooseUI;
 	}
-	
-	//---------------------------------------------------
-	// GetClickLockExceptions()
-	// Edit decos UI actually allows moving.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Gets the click lock exceptions. Edit decos UI actualy allows moving
+	/// </summary>
+	/// <returns>The click lock exceptions.</returns>
 	protected override List<ClickLockExceptions> GetClickLockExceptions(){
 		List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 		listExceptions.Add(ClickLockExceptions.Moving);
 		
 		return listExceptions;
 	}	
-	
-	//---------------------------------------------------
-	// OnPartitionChanging()
-	// When the player is changing rooms.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Raises the partition changing event. When the player is changing room
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
 		// if the user is changing rooms in deco mode, close the choose deco UI if it is open
 		TweenToggleDemux tween = goChoosePanel.GetComponent<TweenToggleDemux>();

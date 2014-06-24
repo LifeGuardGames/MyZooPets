@@ -8,17 +8,18 @@ using System.Collections;
 /// This is persistent throughout the scene.
 /// </summary>
 
-public class NotificationUIManager : Singleton<NotificationUIManager> {
+public class NotificationUIManager : Singleton<NotificationUIManager>{
 
-	public GameObject popupNotificationOneButton; 		
-	public GameObject popupNotificationTwoButtons; 	
+	public GameObject popupNotificationOneButton;
+	public GameObject popupNotificationTwoButtons;
 	public GameObject popupLevelUpMessage;
 	public GameObject popupTipWithImage;
-	public GameObject popupGameOverRewardMessageOneButton; 	
+	public GameObject popupGameOverRewardMessageOneButton;
 	public GameObject popupGameOverRewardMessageTwoButtons;
 	public GameObject popupBadgeUnlockedMessage;
 	public GameObject popupFireLevelUpMessage;
 	public GameObject popupPremiumMessage;
+	public GameObject popupInhalerRechargeMessage;
 
 	private bool isNotificationActive = false;
 	private GameObject anchorCenter; //parent of notificationCenterPanel
@@ -26,7 +27,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 	private GameObject notificationCenterPanel; //where all the notifications will be created.
 	private GameObject notificationBackDrop3D; //a giant collider put infront of the 3d camera to prevent 3D scene from clicked
 	
-	public bool IsNotificationActive() {
+	public bool IsNotificationActive(){
 		return isNotificationActive;	
 	}
 
@@ -79,77 +80,82 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 			//Check if notification panel exist. load it if not
 			if(notificationCenterPanel == null){
-				GameObject notificationPanelPrefab = (GameObject) Resources.Load("NotificationCenterPanel");
+				GameObject notificationPanelPrefab = (GameObject)Resources.Load("NotificationCenterPanel");
 				notificationCenterPanel = LgNGUITools.AddChildWithPosition(anchorCenter, notificationPanelPrefab);
 
 			}
 
 			//load the 3D click blocker	
 			if(notificationBackDrop3D == null && mainCamera != null){
-				GameObject notificationBackDrop3DPrefab = (GameObject) Resources.Load("NotificationBackDrop3D");
+				GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
 				notificationBackDrop3D = LgNGUITools.AddChildWithPosition(mainCamera, notificationBackDrop3DPrefab);
 			}
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
-				case NotificationPopupType.OneButton:
-					ShowPopupNotificationOneButton(
-						(string) entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-
-				case NotificationPopupType.TwoButtons:
-					ShowPopupNotificationTwoButtons(
-						(string) entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button2Callback]
-					);
-					break;
-				
-				case NotificationPopupType.GameOverRewardOneButton:
-					ShowGameOverRewardMessage(
-						(int) entry[NotificationPopupFields.DeltaStars],
-						(int) entry[NotificationPopupFields.DeltaPoints],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-				
-				case NotificationPopupType.TipWithImage:
-					ShowPopupTipWithImage(
-						(string) entry[NotificationPopupFields.Message],
-						(string) entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-				
-				case NotificationPopupType.LevelUp:
-					ShowLevelUpMessage(
-						(string) entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback],
-						(string) entry[NotificationPopupFields.Sound]
-					);
-					break;
-				case NotificationPopupType.BadgeUnlocked:
-					ShowBadgeRewardMessage(
-						(string) entry[NotificationPopupFields.Badge],
-						(string) entry[NotificationPopupFields.Message],
-						(string) entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-				case NotificationPopupType.FireLevelUp:
-					ShowFireLevelUpMessage(
-						(string) entry[NotificationPopupFields.Message],
-						(string) entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.HashEntry) entry[NotificationPopupFields.Button1Callback]
-					);
-					break;
-				case NotificationPopupType.Premium:
-					ShowBuyPremiumMessage();
+			case NotificationPopupType.OneButton:
+				ShowPopupNotificationOneButton(
+						(string)entry[NotificationPopupFields.Message],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
 				break;
-				default:
-					Debug.LogError("Invalid Notification");
-					break;
+
+			case NotificationPopupType.TwoButtons:
+				ShowPopupNotificationTwoButtons(
+						(string)entry[NotificationPopupFields.Message],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
+				);
+				break;
+				
+			case NotificationPopupType.GameOverRewardOneButton:
+				ShowGameOverRewardMessage(
+						(int)entry[NotificationPopupFields.DeltaStars],
+						(int)entry[NotificationPopupFields.DeltaPoints],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+				
+			case NotificationPopupType.TipWithImage:
+				ShowPopupTipWithImage(
+						(string)entry[NotificationPopupFields.Message],
+						(string)entry[NotificationPopupFields.SpriteName],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+				
+			case NotificationPopupType.LevelUp:
+				ShowLevelUpMessage(
+						(string)entry[NotificationPopupFields.Message],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
+						(string)entry[NotificationPopupFields.Sound]
+				);
+				break;
+			case NotificationPopupType.BadgeUnlocked:
+				ShowBadgeRewardMessage(
+						(string)entry[NotificationPopupFields.Badge],
+						(string)entry[NotificationPopupFields.Message],
+						(string)entry[NotificationPopupFields.SpriteName],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			case NotificationPopupType.FireLevelUp:
+				ShowFireLevelUpMessage(
+						(string)entry[NotificationPopupFields.Message],
+						(string)entry[NotificationPopupFields.SpriteName],
+						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			case NotificationPopupType.Premium:
+				ShowBuyPremiumMessage();
+				break;
+			case NotificationPopupType.InhalerRecharging:
+				ShowInhalerRechargingMessage(
+					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			default:
+				Debug.LogError("Invalid Notification");
+				break;
 			}
 		}
 		else{
@@ -206,7 +212,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupLevelUpMessage);
 		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okCallBack;
-		oneButtonMessage.SetSound( sound );
+		oneButtonMessage.SetSound(sound);
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
@@ -225,7 +231,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 
 		PopupNotificationWithImageNGUI tip = 
 			CreatePopupNotificationNGUI(popupTipWithImage, startsHidden) as PopupNotificationWithImageNGUI;
-		// tip.HideImmediately = hideImmediately;
+
 		tip.Message = message;
 		tip.SetSprite(spriteName);
 		tip.Button1Callback = okCallBack;
@@ -285,12 +291,28 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 
+	/// <summary>
+	/// Shows the buy premium message.
+	/// </summary>
 	private void ShowBuyPremiumMessage(){
 		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupPremiumMessage);
 
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	/// <summary>
+	/// Shows the inhaler recharging message.
+	/// </summary>
+	/// <param name="okButtonCallBack">Ok button call back.</param>
+	private void ShowInhalerRechargingMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupInhalerRechargeMessage);
+
+		twoButtonMessage.Button1Callback = okButtonCallBack;
+		twoButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 	
 	// Displaying after one frame, make sure the notification is loaded nicely

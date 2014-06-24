@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// LgButton (Lifeguard Button)
-// Generic button class that other buttons derive from.
-// This class handles high level input restrictions
-// and makes sure that the button can process a click.
-//---------------------------------------------------
-
+/// <summary>
+/// Lg button (Lifeguard Button)
+/// Generic button class that other buttons derive from.
+/// This class handles high level input restrictions
+/// and makes sure that the button can process a click.
+/// </summary>
 public class LgButton : MonoBehaviour{
 	
 	//=======================Events========================
@@ -19,13 +18,10 @@ public class LgButton : MonoBehaviour{
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
 	public bool bSprite;
 	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
+
+	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
 	public string strSoundProcess; // the sound resource this button plays when it is clicked
 	public string buttonName; //the name that will be used for analytics event if not empty
-
-	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
-	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
-	// which buttons have a mode, opening a UI pushes a mode (and closing a UI pops a mode) and this class should
-	// actually check the button's mode against the latest mode in the queue.
 	public bool bCheckClickManager = true;
 
 	public UIModeTypes GetMode(){
@@ -39,13 +35,7 @@ public class LgButton : MonoBehaviour{
 	private bool ShouldCheckClickManager(){
 		return bCheckClickManager;	
 	}
-
-	// if button is clicked when mode is locked, play a negative feedback sound
-	// public bool playNotProcessSound = false;
 	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
 	void Start(){
 		// do a check for a valid mode
 		if(eMode == UIModeTypes.NotInited){
@@ -55,62 +45,57 @@ public class LgButton : MonoBehaviour{
 		
 		_Start();
 	}
-
-	protected virtual void _Start(){
-	}
 	
-	//---------------------------------------------------
-	// OnDestroy()
-	//---------------------------------------------------		
 	void OnDestroy(){
 		_OnDestroy();
-	}
-
-	protected virtual void _OnDestroy(){
 	}
 	
 	void Awake(){
 		_Awake();	
 	}
 
-	protected virtual void _Awake(){
-	}
-	
-	//---------------------------------------------------
-	// OnClick()
-	// 2D sprite buttons will receive this event, which
-	// will click the button.  At the moment 3D objects
-	// also happen to receive this event, but it's possible
-	// they won't in the future, so this is for 2D only.
-	//---------------------------------------------------	
+	protected virtual void _Start(){}
+	protected virtual void _OnDestroy(){}
+	protected virtual void _Awake(){}
+
+	/// <summary>
+	/// Raises the click event.
+	/// 2D sprite buttons will receive this event, which
+	/// will click the button.  At the moment 3D objects
+	/// also happen to receive this event, but it's possible
+	/// they won't in the future, so this is for 2D only.
+	/// </summary>
 	void OnClick(){
 		if(enabled && bSprite)
 			ButtonClicked();
 	}
 
-	//---------------------------------------------------
-	// OnPress()
-	// 2D sprite buttons - Play the sound when the button is pressed
-	//---------------------------------------------------	
-	void OnPress(bool bPressed){
-		if(bPressed){
+	/// <summary>
+	/// Raises the press event.
+	/// 2D sprite buttons - Play the sound when the button is pressed
+	/// </summary>
+	/// <param name="bPressed">If set to <c>true</c> is pressed.</param>
+	void OnPress(bool isPressed){
+		if(isPressed){
 			CheckSoundToPlay();
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnTap()
-	// 3D gameObjects will receive this event.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Raises the tap event. 
+	/// 3D gameObjects will receive this event.
+	/// </summary>
+	/// <param name="gesture">Gesture.</param>
 	void OnTap(TapGesture gesture){ 
 		ButtonClicked();
 		CheckSoundToPlay();
 	}
 
-	//---------------------------------------------------
-	// OnFingerStationary()
-	// 3D objects - Play the sound when the object is pressed down
-	//---------------------------------------------------	
+	/// <summary>
+	/// Raises the finger stationary event.
+	/// 3D objects - Play the sound when the object is pressed down
+	/// </summary>
+	/// <param name="e">E.</param>
 	void OnFingerStationary(FingerMotionEvent e){
 		if(e.Phase == FingerMotionPhase.Started){
 			CheckSoundToPlay();

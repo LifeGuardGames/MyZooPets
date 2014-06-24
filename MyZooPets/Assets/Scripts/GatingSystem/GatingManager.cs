@@ -436,7 +436,7 @@ public class GatingManager : Singleton<GatingManager>{
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
-		InventoryUIManager.Instance.ShowPanel();
+//		InventoryUIManager.Instance.ShowPanel();
 	}
 	
 	//---------------------------------------------------

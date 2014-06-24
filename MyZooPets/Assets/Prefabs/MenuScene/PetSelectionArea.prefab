@@ -126,6 +126,7 @@ Transform:
   m_Children:
   - {fileID: 400024}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -138,6 +139,7 @@ Transform:
   m_Children:
   - {fileID: 400006}
   m_Father: {fileID: 400036}
+  m_RootOrder: 0
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -150,6 +152,7 @@ Transform:
   m_Children:
   - {fileID: 400018}
   m_Father: {fileID: 400004}
+  m_RootOrder: 0
 --- !u!4 &400018
 Transform:
   m_ObjectHideFlags: 1
@@ -161,6 +164,7 @@ Transform:
   m_LocalScale: {x: 231, y: 290, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
+  m_RootOrder: 0
 --- !u!4 &400024
 Transform:
   m_ObjectHideFlags: 1
@@ -173,6 +177,7 @@ Transform:
   m_Children:
   - {fileID: 400036}
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!4 &400028
 Transform:
   m_ObjectHideFlags: 1
@@ -184,6 +189,7 @@ Transform:
   m_LocalScale: {x: 215.411377, y: 63.4310303, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400036}
+  m_RootOrder: 1
 --- !u!4 &400036
 Transform:
   m_ObjectHideFlags: 1
@@ -197,6 +203,7 @@ Transform:
   - {fileID: 400004}
   - {fileID: 400028}
   m_Father: {fileID: 400024}
+  m_RootOrder: 0
 --- !u!65 &6500004
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -236,7 +243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spotLight: {fileID: 0}
-  petSelectionOption: {fileID: 0}
   selectionGrid: {fileID: 100000}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -299,6 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 1
+  childGameObject: {fileID: 0}
   delayBeforeStart: 0
   minInterval: 1.5
   maxInterval: 4
@@ -360,6 +367,10 @@ MonoBehaviour:
   strSoundProcess: introClickEgg
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 02000000
+  buttonSound: introClickEgg
+  isCheckingClickManager: 1
+  isSprite: 1
   target: {fileID: 0}
   functionName: PetSelected
 --- !u!1001 &100100000

@@ -180,6 +180,7 @@ Transform:
   m_LocalScale: {x: 70.0761414, y: 93.0000153, z: 98.3158722}
   m_Children: []
   m_Father: {fileID: 400016}
+  m_RootOrder: 1
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -191,6 +192,7 @@ Transform:
   m_LocalScale: {x: 790.484375, y: 573.800049, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
+  m_RootOrder: 1
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -202,6 +204,7 @@ Transform:
   m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 0
 --- !u!4 &400016
 Transform:
   m_ObjectHideFlags: 1
@@ -215,6 +218,7 @@ Transform:
   - {fileID: 400028}
   - {fileID: 400000}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400020
 Transform:
   m_ObjectHideFlags: 1
@@ -228,6 +232,7 @@ Transform:
   - {fileID: 400006}
   - {fileID: 400026}
   m_Father: {fileID: 400028}
+  m_RootOrder: 0
 --- !u!4 &400026
 Transform:
   m_ObjectHideFlags: 1
@@ -239,6 +244,7 @@ Transform:
   m_LocalScale: {x: 61, y: 55, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 1
 --- !u!4 &400028
 Transform:
   m_ObjectHideFlags: 1
@@ -255,6 +261,7 @@ Transform:
   - {fileID: 400036}
   - {fileID: 400032}
   m_Father: {fileID: 400016}
+  m_RootOrder: 0
 --- !u!4 &400032
 Transform:
   m_ObjectHideFlags: 1
@@ -266,6 +273,7 @@ Transform:
   m_LocalScale: {x: 553.001404, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
+  m_RootOrder: 4
 --- !u!4 &400036
 Transform:
   m_ObjectHideFlags: 1
@@ -277,6 +285,7 @@ Transform:
   m_LocalScale: {x: 60, y: 60, z: .639999986}
   m_Children: []
   m_Father: {fileID: 400028}
+  m_RootOrder: 3
 --- !u!4 &400038
 Transform:
   m_ObjectHideFlags: 1
@@ -288,6 +297,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
+  m_RootOrder: 2
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -306,9 +316,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -342,7 +351,7 @@ BoxCollider:
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &9500000
 Animator:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -351,8 +360,8 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: be3587c5a8c33da44b50b93550ce02f9, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 1
-  m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -514,7 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: ef3b2e8846f361049b7098f74bae37a1, type: 3}
+  audioClip: {fileID: 8300000, guid: 9a715057c02f55f41ae704b808005c8c, type: 3}
   trigger: 3
   volume: 1
   pitch: 1

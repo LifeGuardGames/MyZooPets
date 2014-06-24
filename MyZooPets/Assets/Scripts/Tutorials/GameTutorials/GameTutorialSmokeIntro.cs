@@ -164,7 +164,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
 
 		//show finger hint
-		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut");
+		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
 
 		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");

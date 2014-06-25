@@ -32,9 +32,13 @@ public class ClickManager : Singleton<ClickManager>{
 	public string stackPeek;
 	public int count;
 	
-	void Awake(){
+
+	public UIModeTypes CurrentMode{
+		get{
+			return stackModes.Peek();
+		}
 	}
-	
+
 	void Update(){
 		count = stackModes.Count;
 		if(count != 0){

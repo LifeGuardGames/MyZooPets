@@ -21,6 +21,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupPremiumMessage;
 	public GameObject popupInhalerRechargeMessage;
 
+	//TODO: need to be removed
+	public GameObject popupPremiumTest;
+
 	private bool isNotificationActive = false;
 	private GameObject anchorCenter; //parent of notificationCenterPanel
 	private GameObject mainCamera;
@@ -151,6 +154,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 			case NotificationPopupType.InhalerRecharging:
 				ShowInhalerRechargingMessage(
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			case NotificationPopupType.PremiumTest:
+				ShowPremiumTestMessage(
+					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
 				);
 				break;
 			default:
@@ -314,6 +322,18 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
+
+	//TODO: need to be removed after IAP test
+	private void ShowPremiumTestMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
+		Debug.Log("show premiumtest message");
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupPremiumTest);
+		
+		twoButtonMessage.Button2Callback = okButtonCallBack;
+		twoButtonMessage.OnHideFinished += TryNextNotification;
+		
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
+	}
+
 	
 	// Displaying after one frame, make sure the notification is loaded nicely
 	private IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){

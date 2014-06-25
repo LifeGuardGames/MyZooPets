@@ -362,6 +362,7 @@ public class GatingManager : Singleton<GatingManager>{
 				PetSpeechAI.Instance.ShowInhalerMsg();
 			}
 			else{
+				//TODO: Missing logic here. If the user already has fire orb need a diff message
 
 				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
 					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
@@ -378,11 +379,12 @@ public class GatingManager : Singleton<GatingManager>{
 				
 			}
 		
-		    //				PetSpeechAI.Instance.ShowOutOfFireMsg();
+//		    				PetSpeechAI.Instance.ShowOutOfFireMsg();
 			//TODO: enable FireOrbMsg once it's ready to integrate
 		}
 	}
 
+	//TODO: need fix up
 	private void ReturnToGatingSystemUIMode(object sender, EventArgs args){
 		ClickManager.Instance.ReleaseLock();
 
@@ -392,7 +394,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <summary>
 	/// Shows the fire button.
 	/// </summary>
-	private void ShowFireButton(){
+	public void ShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);

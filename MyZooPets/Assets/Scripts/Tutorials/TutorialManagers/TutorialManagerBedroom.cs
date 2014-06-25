@@ -28,7 +28,9 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
 	
 	// last tutorial
-	public const string TUT_LAST = TUT_DECOS;
+	// TODO: need to be reviewed
+//	public const string TUT_LAST = TUT_DECOS;
+	public const string TUT_LAST = TUT_TRIGGERS;
 	
 	//---------------------------------------------------
 	// _Start()
@@ -76,10 +78,10 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the trigger tutorial
 			new GameTutorialTriggers();
 		}
-		else if(isFlameTutorialDone && !isDecoTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
-			// play the deco tutorial
-			new GameTutorialDecorations();
-		}
+//		else if(isFlameTutorialDone && !isDecoTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
+//			// play the deco tutorial
+//			new GameTutorialDecorations();
+//		}
 	}
 	
 	//---------------------------------------------------

@@ -22,7 +22,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public string soundChangeTab;
 	public string soundBuy;
 	private bool isShortcutMode; //True: open store directly to specific item category
-	//False: open the store base panel first	
+	//False: open the224 store base panel first	
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
@@ -217,16 +217,22 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 			break;
 		case CurrencyTypes.Gem:
+			//TODO: temporary code. Need fixed up
 			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
 
+				InventoryLogic.Instance.AddItem(itemID, 1);
+				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
+
+				OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-				Debug.Log("hii");
+
+				//spawn buy more gems popup
 				Hashtable notificationEntry = new Hashtable();
-				
 				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
 
-				
 				NotificationUIManager.Instance.AddToQueue(notificationEntry);
 			}
 			break;

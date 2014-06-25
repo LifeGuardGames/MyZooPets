@@ -56,7 +56,8 @@ public enum NotificationPopupType{
     BadgeUnlocked,
     FireLevelUp,
 	Premium,
-	InhalerRecharging
+	InhalerRecharging,
+	PremiumTest
 }
 
 public enum NotificationPopupFields{

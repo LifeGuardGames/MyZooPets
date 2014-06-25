@@ -159,6 +159,7 @@ GameObject:
   - 114: {fileID: 11400034}
   - 114: {fileID: 11400032}
   - 114: {fileID: 11400030}
+  - 114: {fileID: 11400230}
   m_Layer: 10
   m_Name: PopupNotification_Premium
   m_TagString: Untagged
@@ -3844,8 +3845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
+  target: {fileID: 100018}
+  functionName: OnBuyPremium
   trigger: 0
   includeChildren: 0
 --- !u!114 &11400028
@@ -4137,8 +4138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
+  target: {fileID: 100018}
+  functionName: OnBuyPremium
   trigger: 0
   includeChildren: 0
 --- !u!114 &11400056
@@ -4424,8 +4425,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
+  target: {fileID: 100018}
+  functionName: OnBuyPremium
   trigger: 0
   includeChildren: 0
 --- !u!114 &11400086
@@ -4539,8 +4540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  functionName: Button1Action
+  target: {fileID: 100018}
+  functionName: OnBuyPremium
   trigger: 0
   includeChildren: 0
 --- !u!114 &11400096
@@ -5843,6 +5844,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 50
+--- !u!114 &11400230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43518796e13a4f8d93f5bf230721d48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

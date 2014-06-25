@@ -35,7 +35,11 @@ public class ClickManager : Singleton<ClickManager>{
 
 	public UIModeTypes CurrentMode{
 		get{
-			return stackModes.Peek();
+			UIModeTypes retVal = UIModeTypes.None;
+			if(stackModes.Count != 0)
+				retVal = stackModes.Peek();
+
+			return retVal;
 		}
 	}
 

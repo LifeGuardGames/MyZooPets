@@ -31,7 +31,7 @@ public class GateMonster : Gate{
 		
 		// if the monster is missing hp, it needs to move
 		if(damage > 0)
-			Move(damage);
+//			Move(damage);
 
 		PlayNormalAnimation();
 	}	
@@ -65,7 +65,7 @@ public class GateMonster : Gate{
 
 		// when a monster is damaged, it physically moves
 		// for now, they will always move to the right...
-		Move(damage);
+//		Move(damage);
 	}	
 
 	protected override void GateDestroyed(){

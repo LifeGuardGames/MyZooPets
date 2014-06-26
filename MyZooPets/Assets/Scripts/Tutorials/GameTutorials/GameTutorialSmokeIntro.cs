@@ -30,7 +30,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		case 0:
 				// actually place the tutorial trigger dust behind the smoke monster now, even though this is for a later
 				// tutorial...it's so the user can actually see it with the smoke monster
-			DegradationUIManager.Instance.PlaceTutorialTrigger();
+//			DegradationUIManager.Instance.PlaceTutorialTrigger();
 			
 				// begin the panning "cut scene"
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());

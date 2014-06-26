@@ -101,11 +101,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		if(degradationTriggers.Count == 0)
 			WellapadMissionController.Instance.TaskCompleted("CleanRoom");
 	}
-	
-	//---------------------------------------------------
-	// TriggerHitPet()
-	// When a trigger particle effect hits the pet.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Triggers hit pet. When a trigger particle effect hits the pet.
+	/// </summary>
+	/// <param name="trigger">Trigger.</param>
 	public void TriggerHitPet(DegradParticle trigger){
 		// send out a callback
 		if(OnPetHit != null)
@@ -113,9 +113,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		
 		// damage the pet
 		int nDamage = trigger.GetDamage();
-//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-//		                                     -nDamage, Vector3.zero, 0, Vector3.zero, 
-//		                                     bFloaty: true);
+
 		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, bFloaty: true);
 
 		//Send analytics event
@@ -133,13 +131,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		CalculateMoodDegradation(sinceLastPlayed);
 		CalculateHealthDegradation();
 	}
-    
-	//---------------------------------------------------
-	// SetUpTriggers()
-	// This function just SETS UP the triggers and
-	// where they should spawn.  The actual triggers are
-	// spawned from the DegradationUIManager.
-	//---------------------------------------------------   
+   
+	/// <summary>
+	/// Sets up triggers.
+	/// This function just SETS UP the triggers and
+	/// where they should spawn.  The actual triggers are
+	/// spawned from the DegradationUIManager.
+	/// </summary>
 	private void SetUpTriggers(){      
 		// get list of available locations to spawn triggers
 		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
@@ -164,6 +162,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
 			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
 
+			//TODO: Hacky... for play test...need to figure out better way
+//			if(!isTriggerTutDone) return;
 			if(!isTriggerTutDone && i == 0){
 				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
 

@@ -91,6 +91,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   - 212: {fileID: 21200002}
+  - 114: {fileID: 11400004}
   m_Layer: 10
   m_Name: MouthLower_Sprite
   m_TagString: Untagged
@@ -839,7 +840,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22, y: -177.019989, z: -15}
+  m_LocalPosition: {x: 0, y: -177.019989, z: -15}
   m_LocalScale: {x: 48, y: 48, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
@@ -1157,7 +1158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.38418579e-07, y: -.699999988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400044}
@@ -1208,7 +1209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.699999988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400052}
@@ -1501,7 +1502,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.8850632, y: -46.6703415, z: 0}
+  m_LocalPosition: {x: 6, y: -46.6703415, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400034}
@@ -1578,8 +1579,24 @@ MonoBehaviour:
   strSoundProcess: 
   buttonName: 
   bCheckClickManager: 1
+  modeTypes: 
+  buttonSound: 
+  isCheckingClickManager: 0
+  isSprite: 0
   target: {fileID: 0}
   functionName: 
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59bded2beb2e84f4da591b443bc4b985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSetIndexToLoad: 13
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1883,13 +1900,36 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100034}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 476221b4c141d0341b3ad7260932c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteSetPrefix: 
-  spriteRendererList: []
+  spriteSetPrefix: MenuScenePet_
+  spriteRendererList:
+  - {fileID: 21200044}
+  - {fileID: 21200026}
+  - {fileID: 21200038}
+  - {fileID: 21200030}
+  - {fileID: 21200034}
+  - {fileID: 21200016}
+  - {fileID: 21200000}
+  - {fileID: 21200028}
+  - {fileID: 21200022}
+  - {fileID: 21200036}
+  - {fileID: 21200014}
+  - {fileID: 21200002}
+  - {fileID: 21200012}
+  - {fileID: 21200006}
+  - {fileID: 21200018}
+  - {fileID: 21200004}
+  - {fileID: 21200010}
+  - {fileID: 21200042}
+  - {fileID: 21200020}
+  - {fileID: 21200008}
+  - {fileID: 21200040}
+  - {fileID: 21200024}
+  - {fileID: 21200032}
   isDebug: 0
 --- !u!212 &21200000
 SpriteRenderer:
@@ -1931,7 +1971,7 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 1826078847
+  m_SortingLayerID: 0
   m_SortingOrder: 100
   m_Sprite: {fileID: 21300026, guid: 6f01e0a2aa0b64327bbf9f80ad36b0e2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

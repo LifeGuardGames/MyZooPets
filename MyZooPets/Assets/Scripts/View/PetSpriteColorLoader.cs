@@ -15,13 +15,17 @@ public class PetSpriteColorLoader : MonoBehaviour {
 				Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
 			}
 			else{
-				LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+				if(Application.loadedLevelName == "MenuScene"){
+					LoadAndSetColor(DataManager.Instance.MenuSceneData.PetColor);
+				}
+				else{
+					LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+				}
 			}
 		}
 	}
 
 	private void LoadAndSetColor(string petColor){
-		Debug.Log(" Loading set sprites: " + spriteSetPrefix + petColor);
 		Sprite[] sprites = Resources.LoadAll<Sprite>(spriteSetPrefix + petColor);
 
 		// Loop through all the body parts that needs color assignment

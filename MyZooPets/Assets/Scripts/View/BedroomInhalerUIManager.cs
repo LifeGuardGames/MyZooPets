@@ -65,11 +65,13 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 		string displayTime = "";
 
 		if(timeLeft.Hours > 0)
-			displayTime = string.Format("{0}H {1}M", timeLeft.Hours, timeLeft.Minutes);
+			displayTime = string.Format("{0}H {1}M {2}S", 
+			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
 		else if(timeLeft.Minutes > 0)
 			displayTime = string.Format("{0}M {1}S", timeLeft.Minutes, timeLeft.Seconds);
 		else
 			displayTime = string.Format("{0}S", timeLeft.Seconds);
+
 		
 		// set the label
 		coolDownLabel.text = displayTime;

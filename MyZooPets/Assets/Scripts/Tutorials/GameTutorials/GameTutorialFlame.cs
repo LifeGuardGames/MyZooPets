@@ -37,6 +37,27 @@ public class GameTutorialFlame : GameTutorial{
 	protected override void _End(bool isFinished){
 		// clean up various things this tutorial created
 		// RemovePopup();
+
+		// since this is the last tutorial, show a little notification
+		string strKey = "TUTS_FINISHED";											// key of text to show
+		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
+		string strAnalytics = "";														// analytics tracker
+		
+		// show the standard popup
+		string petName = DataManager.Instance.GameData.PetInfo.PetName;
+		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
+		                                    String.Format(Localization.Localize(strKey), 
+		              StringUtils.FormatStringPossession(petName)),
+		                                    strImage, null, true, true, strAnalytics);
+		
+		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
+		if(wellapadButton != null){
+			ButtonWellapad buttonWellapadScript = wellapadButton.GetComponent<ButtonWellapad>();
+			buttonWellapadScript.SetListenersToWellapadMissionController();
+		}
+		else{
+			Debug.LogError("wellapad button can't be found: " + this);
+		}
 	}
 	
 	//---------------------------------------------------

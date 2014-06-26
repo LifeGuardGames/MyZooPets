@@ -30,11 +30,8 @@ public class TutorialManagerBedroom : TutorialManager{
 	// last tutorial
 	// TODO: need to be reviewed
 //	public const string TUT_LAST = TUT_DECOS;
-	public const string TUT_LAST = TUT_TRIGGERS;
-	
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------	
+	public const string TUT_LAST = TUT_FLAME;
+
 	protected override void _Start(){
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
@@ -42,10 +39,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		// do the first check for tutorials
 		Check();
 	}
-	
-	//---------------------------------------------------
-	// _Check()
-	//---------------------------------------------------		
+
 	protected override void _Check(){
 		// old and unused
 		//bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
@@ -74,20 +68,20 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the smoke monster intro tutorial
 			new GameTutorialSmokeIntro();
 		}
-		else if(isFlameTutorialDone && !isTriggerTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
-			// play the trigger tutorial
-			new GameTutorialTriggers();
-		}
+//		else if(isFlameTutorialDone && !isTriggerTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
+//			// play the trigger tutorial
+//			new GameTutorialTriggers();
+//		}
 //		else if(isFlameTutorialDone && !isDecoTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
 //			// play the deco tutorial
 //			new GameTutorialDecorations();
 //		}
 	}
-	
-	//---------------------------------------------------
-	// IntroDone()
-	// Callback for when the intro notification is clicked.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Intros the done.
+	/// Callback for when the intro notification is clicked.
+	/// </summary>
 	private void IntroDone(){
 		// mark the tut as viewed
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_INTRO);	
@@ -95,10 +89,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		// and check to see what the next tut should be
 		Check();
 	}
-	
-	//---------------------------------------------------
-	// OnReachedGate()
-	//---------------------------------------------------	
+
 	public void OnReachedGate(object sender, EventArgs args){
 		if(!isTutorialEnabled)
 			return;

@@ -63,25 +63,31 @@ public class ButtonMonster : LgButtonHold{
 	//---------------------------------------------------	
 	protected override void ProcessClick(){	
 		isLegal = false;
-		
 		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
+		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		
 		// if the pet is currently busy, forgetaboutit
 		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
 			return;
-		
-		isLegal = true;
-		
-		// get the gate for this monster
-		Gate scriptGate = gate;		
-		
-		// kick off the attack script
-		int damage = GetDamage();
-		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-		scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
-		
-		// turn the fire meter on
-		scriptFireMeter.StartFilling();
+
+		if(canBreathFire){
+			isLegal = true;
+			
+			// get the gate for this monster
+			Gate scriptGate = gate;		
+			
+			// kick off the attack script
+			int damage = GetDamage();
+			scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
+			scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
+			
+			// turn the fire meter on
+			scriptFireMeter.StartFilling();
+		}
+		else{
+			//explain why can't breathe fire right now. call GatingManager to do this
+			GatingManager.Instance.ShowNoChargeNoFireNotification();
+		}
 	}
 	
 	//---------------------------------------------------
@@ -94,10 +100,7 @@ public class ButtonMonster : LgButtonHold{
 		int damage = curSkill.DamagePoint;
 		return damage;
 	}
-	
-	//---------------------------------------------------
-	// ButtonReleased()
-	//---------------------------------------------------	
+
 	protected override void ButtonReleased(){
 		if(!isLegal){
 			Debug.Log("Something going wrong with the fire button.  Aborting");
@@ -111,8 +114,11 @@ public class ButtonMonster : LgButtonHold{
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
 			int damage = GetDamage();
-			if(gate.GetGateHP() <= damage || !DataManager.Instance.GameData.PetInfo.IsInfiniteFire())
-				Destroy(parentPanel);		
+			if(gate.GetGateHP() <= damage)
+				Destroy(parentPanel);	
+			else
+				//disable button
+				FireButtonUIManager.Instance.TurnFireButtonEffectOff();
 		}
 		else{
 			// if the meter was not full, cancel the attack

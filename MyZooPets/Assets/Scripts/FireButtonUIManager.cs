@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireButtonUIManager : MonoBehaviour {
+public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 	public GameObject fireOrbDropTarget;
 	public Animation buttonPluseAnimation;
@@ -16,21 +16,43 @@ public class FireButtonUIManager : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 
 		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		if(!canBreatheFire){
-			buttonPluseAnimation.Stop();
-			sunBeam.SetActive(false);
-
-			imageButton.hoverSprite = inactiveButtonSpriteName;
-			imageButton.normalSprite = inactiveButtonSpriteName;
-			imageButton.disabledSprite = inactiveButtonSpriteName;
-			imageButton.pressedSprite = inactiveButtonSpriteName;
-		}
+		if(!canBreatheFire)
+			TurnFireButtonEffectOff();
+		else
+			TurnFireButtonEffectOn();
 	}
 
 	void OnDestroy(){
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 	}
 
+	public void TurnFireButtonEffectOff(){
+		buttonPluseAnimation.Stop();
+		sunBeam.SetActive(false);
+		
+		imageButton.hoverSprite = inactiveButtonSpriteName;
+		imageButton.normalSprite = inactiveButtonSpriteName;
+		imageButton.disabledSprite = inactiveButtonSpriteName;
+		imageButton.pressedSprite = inactiveButtonSpriteName;
+
+		imageButton.gameObject.SetActive(false);
+		imageButton.gameObject.SetActive(true);
+	}
+
+	public void TurnFireButtonEffectOn(){
+		buttonPluseAnimation.Play();
+		sunBeam.SetActive(true);
+
+		//change button image 
+		imageButton.hoverSprite = activeButtonSpriteName;
+		imageButton.normalSprite = activeButtonSpriteName;
+		imageButton.disabledSprite = activeButtonSpriteName;
+		imageButton.pressedSprite = activeButtonSpriteName;
+
+		imageButton.gameObject.SetActive(false);
+		imageButton.gameObject.SetActive(true);
+	}
+	
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		if(args.TargetCollider.name == fireOrbDropTarget.name){
 			Debug.Log("orb on target");
@@ -44,19 +66,9 @@ public class FireButtonUIManager : MonoBehaviour {
 
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UsePetItem(invItemID);
+
+				TurnFireButtonEffectOn();
 			}
-
-			//change button image 
-			imageButton.hoverSprite = activeButtonSpriteName;
-			imageButton.normalSprite = activeButtonSpriteName;
-			imageButton.disabledSprite = activeButtonSpriteName;
-			imageButton.pressedSprite = activeButtonSpriteName;
-
-			//enable sun beam
-			sunBeam.SetActive(true);
-
-			//enable pusle
-			buttonPluseAnimation.Play();
 		}
 	}
 }

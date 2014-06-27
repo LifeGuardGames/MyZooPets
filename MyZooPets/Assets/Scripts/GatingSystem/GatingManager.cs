@@ -288,6 +288,67 @@ public class GatingManager : Singleton<GatingManager>{
 	}	
 
 	/// <summary>
+	/// Shows the fire button.
+	/// </summary>
+	public void ShowFireButton(){
+		// the pet has reached its destination (in front of the monster) so show the fire UI
+		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
+		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
+		
+		// Find the position of the pet and transform that position into NGUI screen space.
+		// The fire button will always be spawned at the pet's location
+		GameObject petLocation = GameObject.Find("Pet_LWF");
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		                                                             petLocation.transform.position);
+		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
+		                                                               InterfaceAnchors.BottomLeft, 
+		                                                               InterfaceAnchors.Center);
+		
+		
+		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
+		// 	strConstant = "FireLoc_Tutorial";
+		
+		// set location of the button based on if it is a tutorial or not
+		//		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
+		goFireButton.transform.localPosition = fireButtonLoc;
+		
+		// rename the button so that other things can find it
+		goFireButton.name = ButtonMonster.FIRE_BUTTON;
+		
+		// get the gate in this room
+		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
+		if(gate){
+			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
+			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
+			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
+			script.SetGate(gate);
+		}
+		else
+			Debug.LogError("Destination callback being called for non gated room");		
+	}
+
+	public void ShowNoChargeNoFireNotification(){
+		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+			PetSpeechAI.Instance.ShowInhalerMsg();
+		}
+		else{
+
+			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+				StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+
+				ClickManager.Instance.Lock(UIModeTypes.Store);
+				StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+			};
+
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+			
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		}
+	}
+
+	/// <summary>
 	/// Listens for movement finished.
 	/// </summary>
 	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
@@ -322,7 +383,7 @@ public class GatingManager : Singleton<GatingManager>{
 	}
 
 	private void GateLiteLogic(){
-		LgCrossPromo.ShowInterstitial(LgCrossPromo.LAST_GATE);
+//		LgCrossPromo.ShowInterstitial(LgCrossPromo.LAST_GATE);
 	}
 
 	private void GateProLogic(){
@@ -335,7 +396,7 @@ public class GatingManager : Singleton<GatingManager>{
 			ShowFireButton();
 		else{
 			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
-			ShowNoFireNotification();
+			ShowUnhealthyNoFireNotification();
 		}
 	}
 
@@ -343,7 +404,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// Shows the no fire notification. Calling this function assumes the player
 	/// cannot breathe fire
 	/// </summary>
-	private void ShowNoFireNotification(){
+	private void ShowUnhealthyNoFireNotification(){
 		//use thought bubble instead. try to stay away from notification
 
 		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
@@ -391,45 +452,7 @@ public class GatingManager : Singleton<GatingManager>{
 		StoreUIManager.OnShortcutModeEnd -= ReturnToGatingSystemUIMode;
 	} 
 
-	/// <summary>
-	/// Shows the fire button.
-	/// </summary>
-	public void ShowFireButton(){
-		// the pet has reached its destination (in front of the monster) so show the fire UI
-		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
-		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
 
-		// Find the position of the pet and transform that position into NGUI screen space.
-		// The fire button will always be spawned at the pet's location
-		GameObject petLocation = GameObject.Find("Pet_LWF");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
-		                                                             petLocation.transform.position);
-		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
-		                                                          InterfaceAnchors.BottomLeft, 
-		                                                               InterfaceAnchors.Center);
-
-
-		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
-		// 	strConstant = "FireLoc_Tutorial";
-	
-		// set location of the button based on if it is a tutorial or not
-//		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
-		goFireButton.transform.localPosition = fireButtonLoc;
-		
-		// rename the button so that other things can find it
-		goFireButton.name = ButtonMonster.FIRE_BUTTON;
-		
-		// get the gate in this room
-		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
-		if(gate){
-			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
-			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
-			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
-			script.SetGate(gate);
-		}
-		else
-			Debug.LogError("Destination callback being called for non gated room");		
-	}
 
 	/// <summary>
 	/// Enables the UI.

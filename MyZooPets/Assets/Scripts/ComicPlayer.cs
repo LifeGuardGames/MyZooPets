@@ -64,7 +64,8 @@ public class ComicPlayer : MonoBehaviour{
         int pageIndex = currentPageNum - 1;
 
         string petSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies;
-        string petColor = DataManager.Instance.GameData.PetInfo.PetColor; 
+        //string petColor = DataManager.Instance.GameData.PetInfo.PetColor; 
+		string petColor = "OrangeYellow"; // TEMP
 
         try{
             //Get the comic page name

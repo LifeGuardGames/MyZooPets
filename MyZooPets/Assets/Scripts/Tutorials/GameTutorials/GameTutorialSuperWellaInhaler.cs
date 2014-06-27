@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class GameTutorialSuperWellaInhaler : GameTutorial {
+	// wait for few seconds
+	// fire orb spew out of inhaler
+	// then focus on fire orb. tell the user to pick it up
+	// spawn super wella message to tell user to take inhaler morning and night
+
 	public GameTutorialSuperWellaInhaler() : base(){	
 	}
 	
@@ -28,6 +33,14 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 			
 		
 		}
+	}
+
+	private IEnumerator DropFireOrb(){
+		yield return new WaitForSeconds(0.5f);
+
+		BedroomInhalerUIManager.Instance.CheckToDropFireOrb();
+
+		//need to get reference of the dropped fire orb and add it to the process list
 	}
 
 	private IEnumerator ShowSuperWella(){

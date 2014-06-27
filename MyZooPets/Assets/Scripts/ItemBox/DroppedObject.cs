@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// 3D world (although it may be 2D) that the player
 /// can pick up to obtain.
 /// </summary>
-public abstract class DroppedObject : LgButton{
+ public abstract class DroppedObject : LgButton{
 	// --------------- Pure Abstract ---------------------------
 	protected abstract void ObtainObject();			// give the user the object
 	protected abstract void AutoCollectAndDestroy();	// collect the dropped object and destroy itself 
@@ -153,7 +153,7 @@ public abstract class DroppedObject : LgButton{
 			SetState(DroppedItemStates.PickedUp);
 
 			// play pick up audio
-			AudioManager.Instance.PlayClip(strSoundProcess);
+			AudioManager.Instance.PlayClip(buttonSound);
 			
 			// animate the object by applying a rotation, translation, and fade
 			float fTime = Constants.GetConstant<float>("ItemPickup_Time");

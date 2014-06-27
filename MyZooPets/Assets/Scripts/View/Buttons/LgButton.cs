@@ -16,41 +16,42 @@ public class LgButton : MonoBehaviour{
 	//=====================================================		
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
-	public bool bSprite;
-	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
+//	public bool bSprite;
+//	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
+//
+//
+//	public string strSoundProcess; // the sound resource this button plays when it is clicked
 
-
-	public string strSoundProcess; // the sound resource this button plays when it is clicked
-	public string buttonName; //the name that will be used for analytics event if not empty
-	public bool bCheckClickManager = true;
+//	public bool bCheckClickManager = true;
 
 	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
+	public string buttonName; //the name that will be used for analytics event if not empty
 	public string buttonSound;
 	public bool isCheckingClickManager;
 	public bool isSprite;
 
-	public UIModeTypes GetMode(){
-		return eMode;	
-	}
+//	public UIModeTypes GetMode(){
+//		return eMode;	
+//	}
 
 	public List<UIModeTypes> GetModes(){
 		return modeTypes;
 	}
 
 	public string GetProcessSound(){
-		return strSoundProcess;	
+		return buttonSound;	
 	}
 	
 	private bool ShouldCheckClickManager(){
-		return bCheckClickManager;	
+		return isCheckingClickManager;	
 	}
 	
 	void Start(){
 		//TODO: remove this
-		if(eMode == UIModeTypes.NotInited){
-			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
-			eMode = UIModeTypes.None;	
-		}
+//		if(eMode == UIModeTypes.NotInited){
+//			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
+//			eMode = UIModeTypes.None;	
+//		}
 
 		for(int i=0; i<modeTypes.Count; i++){
 			if(modeTypes[i] == UIModeTypes.NotInited)
@@ -81,7 +82,7 @@ public class LgButton : MonoBehaviour{
 	/// they won't in the future, so this is for 2D only.
 	/// </summary>
 	void OnClick(){
-		if(enabled && bSprite)
+		if(enabled && isSprite)
 			ButtonClicked();
 	}
 
@@ -143,7 +144,7 @@ public class LgButton : MonoBehaviour{
 
 	private void CheckSoundToPlay(){
 		if(ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
-			if(bSprite){
+			if(isSprite){
 				// Play the bad sound
 				PlayNotProcessSound();
 			}
@@ -152,7 +153,7 @@ public class LgButton : MonoBehaviour{
 		
 		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
 			!TutorialManager.Instance.CanProcess(gameObject)){
-			if(bSprite){
+			if(isSprite){
 				// Play the bad sound
 				PlayNotProcessSound();
 			}

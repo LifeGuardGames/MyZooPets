@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-public class BedroomInhalerUIManager : MonoBehaviour {
+public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 	public Animation spinningAnimation;
 	public GameObject starParticle;
@@ -14,21 +14,31 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 
 	// Start the correct animations based on its state
 	void Start(){
+		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
+		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
 		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
 			ReadyToUseMode();
+			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 		}
 		else{
 			CoolDownMode();
+			CheckToDropFireOrb();
 		}
-
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
-		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 	}
 
 	void OnDestroy(){
 		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
+	}
+
+	public void CheckToDropFireOrb(){
+		bool hasReceivedFireOrb = DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb;
+		if(!hasReceivedFireOrb){
+			//Activate animation here
+
+			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = true;
+		}
 	}
 
 	/// <summary>

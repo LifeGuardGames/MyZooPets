@@ -11,12 +11,12 @@ public class MoveVariableData : EditorWindow {
 		if(GUILayout.Button("MoveData")) {
 			LgButton[] components = Resources.FindObjectsOfTypeAll<LgButton>();
 			foreach (LgButton component in components) {
-				if(!component.modeTypes.Contains(component.eMode))
-					component.modeTypes.Add(component.eMode);
-
-				component.isSprite = component.bSprite;
-				component.isCheckingClickManager = component.bCheckClickManager;
-				component.buttonSound = component.strSoundProcess;
+//				if(!component.modeTypes.Contains(component.eMode))
+//					component.modeTypes.Add(component.eMode);
+//
+//				component.isSprite = component.bSprite;
+//				component.isCheckingClickManager = component.bCheckClickManager;
+//				component.buttonSound = component.strSoundProcess;
 
 				EditorUtility.SetDirty(component.gameObject);
 			}

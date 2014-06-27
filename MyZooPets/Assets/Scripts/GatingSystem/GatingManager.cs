@@ -331,7 +331,7 @@ public class GatingManager : Singleton<GatingManager>{
 		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
 		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 
-		if(eState == PetHealthStates.Healthy && eMood == PetMoods.Happy && bCanBreath) 
+		if(eState == PetHealthStates.Healthy && eMood == PetMoods.Happy) 
 			ShowFireButton();
 		else{
 			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
@@ -358,26 +358,26 @@ public class GatingManager : Singleton<GatingManager>{
 			PetSpeechAI.Instance.ShowNoFireHungryMsg();
 		}
 		else{
-			if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
-				PetSpeechAI.Instance.ShowInhalerMsg();
-			}
-			else{
-				//TODO: Missing logic here. If the user already has fire orb need a diff message
-
-				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
-					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-
-					ClickManager.Instance.Lock(UIModeTypes.Store);
-					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
-				};
-
-				Hashtable notificationEntry = new Hashtable();
-				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-				
-				NotificationUIManager.Instance.AddToQueue(notificationEntry);
-				
-			}
+//			if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+//				PetSpeechAI.Instance.ShowInhalerMsg();
+//			}
+//			else{
+//				//TODO: Missing logic here. If the user already has fire orb need a diff message
+//
+//				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+//					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+//
+//					ClickManager.Instance.Lock(UIModeTypes.Store);
+//					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+//				};
+//
+//				Hashtable notificationEntry = new Hashtable();
+//				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+//				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+//				
+//				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//				
+//			}
 		
 //		    				PetSpeechAI.Instance.ShowOutOfFireMsg();
 			//TODO: enable FireOrbMsg once it's ready to integrate

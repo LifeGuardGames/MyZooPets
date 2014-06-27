@@ -32,7 +32,10 @@ public class PetInteractionManager : MonoBehaviour{
 		if(args.TargetCollider.name == this.gameObject.name){
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			
+
+			// don't allow fire orb drop on pet
+			if(invItemID == "Usable1") return;
+
 			// check to make sure the item can be used
 			if(ItemLogic.Instance.CanUseItem(invItemID)){
 				args.IsValidTarget = true;
@@ -42,8 +45,6 @@ public class PetInteractionManager : MonoBehaviour{
 				
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UsePetItem(invItemID);
-				
-				
 			}
 			else{
 				// else the drop was valid or the item could not be used...show a message

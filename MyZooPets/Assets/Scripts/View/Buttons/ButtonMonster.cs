@@ -3,11 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// ButtonMonster
-// Button that is on a gating monster.
-//---------------------------------------------------
-
+/// <summary>
+/// Button monster.
+/// </summary>
 public class ButtonMonster : LgButtonHold{
 	// const variable for the name of the fire button
 	public const string FIRE_BUTTON = "FireButtonPanel";
@@ -34,35 +32,25 @@ public class ButtonMonster : LgButtonHold{
 
 		if(isActive && isCamMoving){
 			NGUITools.SetActive(goIcon, false);	// if the button is on and the camera is moving, deactivate it
-			Debug.Log("off");
 		}
 		else if(!isActive && !isCamMoving){
-			Debug.Log("On");
+
 			NGUITools.SetActive(goIcon, true);	// if the button is off and the camera isn't moving, activate it
 		}
 	}	
-	
-	//---------------------------------------------------
-	// _OnDestroy()
-	//---------------------------------------------------		
+		
 	protected override void _OnDestroy(){
 		if(CameraManager.Instance){
 			PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
 			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnPartitionChanged()
-	//---------------------------------------------------	
+
 	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
 		// if the partition is changing at all, destroy this UI
 		Destroy(parentPanel);
 	}
-	
-	//---------------------------------------------------
-	// SetGate()
-	//---------------------------------------------------	
+
 	public void SetGate(Gate gate){
 		this.gate = gate;
 	}

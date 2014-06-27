@@ -13,11 +13,11 @@ using System.Collections.Generic;
 public class DroppedObjectItem : DroppedObject{
 	// the item that this object represents
 	private Item dataItem;
-	
-	//---------------------------------------------------
-	// Init()
-	// Inits this dropped object with an item.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Init the specified dropped item.
+	/// </summary>
+	/// <param name="item">Item.</param>
 	public void Init(Item item){
 		// set the state of this item to dropped
 		SetState(DroppedItemStates.Dropped);
@@ -35,11 +35,11 @@ public class DroppedObjectItem : DroppedObject{
 		// also listen for when the inventory logic is being destroyed
 		// InventoryLogic.Instance.OnBeingDestroyed += OnManagerDestroyed;
 	}
-	
-	//---------------------------------------------------
-	// ObtainObject()
-	// Puts the item into the player's inventory.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Obtains the object.
+	/// Puts the item into the player's inventory.
+	/// </summary>
 	protected override void ObtainObject(){
 		DroppedItemStates eState = GetState();
 		

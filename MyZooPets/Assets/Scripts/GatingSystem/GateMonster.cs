@@ -52,7 +52,7 @@ public class GateMonster : Gate{
 			DroppedObjectStat droppedObjectStat = goDroppedItem.GetComponent<DroppedObjectStat>();
 
 			droppedObjectStat.Init(HUDElementType.Stars, 5);
-			droppedObjectStat.eMode = UIModeTypes.GatingSystem;
+			droppedObjectStat.modeTypes.Add(UIModeTypes.GatingSystem);
 			
 			// set the position of the newly spawned item to be wherever this item box is
 			Vector3 vPosition = gameObject.transform.position;

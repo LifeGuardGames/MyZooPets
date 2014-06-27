@@ -16,7 +16,7 @@ public class ButtonChangeEggColor : LgButton {
 	public string strColor;
 	
 	protected override void _Awake() {
-		strSoundProcess = "introChangeColor";	
+		buttonSound = "introChangeColor";	
 	}
 	
 	protected override void ProcessClick() {

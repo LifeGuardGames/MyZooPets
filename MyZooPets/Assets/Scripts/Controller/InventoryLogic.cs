@@ -129,11 +129,11 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 			//TODO: needs to be reviewed...not sure if this is the best place to put this code
 			//show fire button right away if in an active gate and used a fire orb
-			if(ClickManager.Instance.CurrentMode == UIModeTypes.GatingSystem &&
-			   itemID == "Usable1"){
-
-				GatingManager.Instance.ShowFireButton();
-			}
+//			if(ClickManager.Instance.CurrentMode == UIModeTypes.GatingSystem &&
+//			   itemID == "Usable1"){
+//
+//				GatingManager.Instance.ShowFireButton();
+//			}
 			
 			//analytics
 			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);

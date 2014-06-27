@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// TutorialManager_Bedroom
-// Tutorial manager for the bedroom.  Responsible for
-// managing, ordering, instantiating, etc, all tutorials
-// that happen in this room.
-//---------------------------------------------------
-
+/// <summary>
+/// Tutorial manager bedroom.
+/// Responsible for
+/// managing, ordering, instantiating, etc, all tutorials
+/// that happen in this room.
+/// </summary>
 public class TutorialManagerBedroom : TutorialManager{
 	// old and unused
 	public const string TUT_INTRO = "IntroNotification";
@@ -17,6 +16,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	
 	// currently used
 	public const string TUT_INHALER = "FOCUS_INHALER";
+	public const string TUT_SUPERWELLA_INHALER = "TUT_SUPERWELLA_INHALER";
 	public const string TUT_WELLAPAD = "FOCUS_WELLAPAD";
 	public const string TUT_CLAIM_FIRST = "CLAIM_FIRST_REWARD";
 	public const string TUT_SMOKE_INTRO = "TUT_SMOKE_INTRO";
@@ -51,7 +51,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SMOKE_INTRO);
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
-		
+		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SUPERWELLA_INHALER);
 		// bFocusWellapad = true;
 		// bFocusInhaler = true;		
 
@@ -63,6 +63,9 @@ public class TutorialManagerBedroom : TutorialManager{
 		else if(!isFocusInhalerTutorialDone){
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorialFocusInhaler();
+		}
+		else if(!isSuperWellaInhalerDone){
+			new GameTutorialSuperWellaInhaler();
 		}
 		else if(!isSmokeIntroDone){
 			// play the smoke monster intro tutorial

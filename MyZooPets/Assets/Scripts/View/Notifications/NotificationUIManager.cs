@@ -18,8 +18,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupGameOverRewardMessageTwoButtons;
 	public GameObject popupBadgeUnlockedMessage;
 	public GameObject popupFireLevelUpMessage;
+
+
 	public GameObject popupPremiumMessage;
 	public GameObject popupInhalerRechargeMessage;
+	public GameObject popupInhalerTutorialMessage;
 
 	//TODO: need to be removed
 	public GameObject popupPremiumTest;
@@ -159,6 +162,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 			case NotificationPopupType.PremiumTest:
 				ShowPremiumTestMessage(
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
+				);
+				break;
+			case NotificationPopupType.InhalerTutorial:
+				ShowInhalerTutorialMessage(
+					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
 			default:
@@ -332,6 +340,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		twoButtonMessage.OnHideFinished += TryNextNotification;
 		
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
+	}
+
+	private void ShowInhalerTutorialMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupInhalerTutorialMessage);
+
+		oneButtonMessage.Button1Callback = okButtonCallBack;
+		oneButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 
 	

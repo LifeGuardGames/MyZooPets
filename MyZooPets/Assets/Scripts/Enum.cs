@@ -57,7 +57,8 @@ public enum NotificationPopupType{
     FireLevelUp,
 	Premium,
 	InhalerRecharging,
-	PremiumTest
+	PremiumTest,
+	InhalerTutorial
 }
 
 public enum NotificationPopupFields{

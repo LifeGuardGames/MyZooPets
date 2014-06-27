@@ -98,7 +98,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             if(VersionManager.IsLite()){
                 LoadScene();
             }else{
-				LoadScene();
+
+				ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+				Invoke("ShowIntroMovie", 1);
+
+//				LoadScene();
             }
 		}
 
@@ -110,6 +114,23 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 //            SelectionUIManager.Instance.ToggleSpotLight(false);
         }
     }
+
+	private void ShowIntroMovie() {
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro"))
+			LoadScene();
+		
+		AudioManager.Instance.LowerBackgroundVolume(0.1f);
+		
+		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		ComicPlayer.OnComicPlayerDone += IntroComicDone;
+	}
+
+	private void IntroComicDone(object sender, EventArgs args){
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Comic_Intro");
+		ComicPlayer.OnComicPlayerDone -= IntroComicDone;
+		LoadScene();
+	}
 	
 	private void LoadScene(){
 		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");

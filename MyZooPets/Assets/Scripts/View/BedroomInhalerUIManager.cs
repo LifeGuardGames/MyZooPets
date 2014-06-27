@@ -75,12 +75,12 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		string displayTime = "";
 
 		if(timeLeft.Hours > 0)
-			displayTime = string.Format("{0}H {1}M {2}S", 
+			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
 			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
 		else if(timeLeft.Minutes > 0)
-			displayTime = string.Format("{0}M {1}S", timeLeft.Minutes, timeLeft.Seconds);
+			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
 		else
-			displayTime = string.Format("{0}S", timeLeft.Seconds);
+			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
 
 		
 		// set the label

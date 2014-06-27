@@ -21,12 +21,8 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		switch(step){
 		case 0:
 			// the start of the focus inhaler tutorial
-
 			TutorialManager.Instance.StartCoroutine(ShowSuperWella());
-			
 			break;
-			
-		
 		}
 	}
 
@@ -45,5 +41,4 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 
 		AudioManager.Instance.PlayClip("tutorialSuperWellaInhaler");
 	}
-	
 }

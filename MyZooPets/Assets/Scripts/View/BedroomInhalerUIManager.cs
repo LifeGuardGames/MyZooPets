@@ -4,7 +4,7 @@ using System.Collections;
 
 public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
-	public Animation spinningAnimation;
+	public Animation spinningComponentAnimation;
 	public GameObject starParticle;
 	public GameObject rechargeParticle;
 
@@ -45,7 +45,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	/// Cools down mode.
 	/// </summary>
 	private void CoolDownMode(){
-		spinningAnimation.Stop();
+		spinningComponentAnimation.Stop();
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
 		progressBar3D.SetActive(true);
@@ -55,7 +55,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	/// Readies to use mode.
 	/// </summary>
 	private void ReadyToUseMode(){
-		spinningAnimation.Play();
+		spinningComponentAnimation.Play();
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
 		progressBar3D.SetActive(false);

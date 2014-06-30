@@ -72,10 +72,10 @@ public class AttackGate : MonoBehaviour{
 		yield return 0;
 		
 		// move the player because the gate just got pushed back (if it still exists)
-		if(gateTarget != null && !isDestroyed){
-			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
-			PetMovement.Instance.MovePet(vNewLoc);
-		}
+//		if(gateTarget != null && !isDestroyed){
+//			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
+//			PetMovement.Instance.MovePet(vNewLoc);
+//		}
 		
 		// then we're done -- destroy ourselves
 		Destroy(this);		

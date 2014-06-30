@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// LgButtonHold
-// This type of button must be held down to work.
-//---------------------------------------------------
-
+/// <summary>
+/// Lg button hold. This type of button must be held down to work.
+/// </summary>
 public abstract class LgButtonHold : LgButton{
 	
 	// pure abstract functions
 	protected abstract void _Update();
+	protected abstract void ButtonReleased();
 	//------------------------
 
 	// is this button being held?
@@ -26,13 +25,14 @@ public abstract class LgButtonHold : LgButton{
 	//---------------------------------------------------	
 	void OnClick(){
 	}	
-	
-	//---------------------------------------------------
-	// OnPress()
-	// 2D sprite buttons will receive this event.  NGUI
-	// does not have support for detecting button holds,
-	// so this is how we do it.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Raises the press event.
+	/// 2D sprite buttons will receive this event.  NGUI
+	/// does not have support for detecting button holds,
+	/// so this is how we do it.
+	/// </summary>
+	/// <param name="isPressed">If set to <c>true</c> is pressed.</param>
 	void OnPress(bool isPressed){
 		if(enabled && isSprite){
 			bool wasHeld = isHeld;
@@ -44,10 +44,7 @@ public abstract class LgButtonHold : LgButton{
 				ButtonReleased();				// user let go and is no longer holding, so release
 		}
 	}	
-	
-	//---------------------------------------------------
-	// Update()
-	//---------------------------------------------------	
+
 	void Update(){
 		// if this button is enabled and is currently being held...
 		if(enabled && isSprite && isHeld){
@@ -61,11 +58,12 @@ public abstract class LgButtonHold : LgButton{
 		// let children do their updating
 		_Update();
 	}	
-	
-	//---------------------------------------------------
-	// OnFingerStationary()
-	// For 3D objects.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Raises the finger stationary event.
+	/// For 3D objects
+	/// </summary>
+	/// <param name="e">E.</param>
 	void OnFingerStationary(FingerMotionEvent e){
 		if(e.Phase == FingerMotionPhase.Started){
 			// when the motion starts, it means the user has clicked the button
@@ -76,12 +74,4 @@ public abstract class LgButtonHold : LgButton{
 			ButtonReleased();
 		}
 	}
-	
-	//---------------------------------------------------
-	// ButtonReleased()
-	// Abstract function called when this held button is
-	// released.
-	//---------------------------------------------------	
-	protected abstract void ButtonReleased();
-		
 }

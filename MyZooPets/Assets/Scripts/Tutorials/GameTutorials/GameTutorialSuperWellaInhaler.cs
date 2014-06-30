@@ -41,14 +41,20 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		BedroomInhalerUIManager.Instance.CheckToDropFireOrb();
 		GameObject fireOrbObject = BedroomInhalerUIManager.Instance.FireOrbReference;
 	
+		//add fire orb to interactable list after some setting change
 		if(fireOrbObject != null){
 			fireOrbObject.GetComponent<DroppedObjectItem>().TurnAutoCollectOff();
 			fireOrbObject.GetComponent<LgButton>().OnProcessed += PickedUpFireOrb;
 			AddToProcessList(fireOrbObject);
 		}
-		//need to get reference of the dropped fire orb and add it to the process list
 	}
 
+	/// <summary>
+	/// Pickeds up fire orb. 
+	/// Advance the tutorial after fire orb is picked up
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void PickedUpFireOrb(object sender, EventArgs args){
 		LgButton button = (LgButton)sender;
 		button.OnProcessed -= PickedUpFireOrb;
@@ -57,12 +63,13 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	}
 
 	private IEnumerator ShowSuperWella(){
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(1.5f);
 
 		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
 			Advance();
 		};
-		
+
+		//Display tutorial notification
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerTutorial);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);

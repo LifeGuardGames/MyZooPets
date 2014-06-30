@@ -161,6 +161,9 @@ public abstract class Gate : MonoBehaviour{
 			WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
 	}
 
+	/// <summary>
+	/// Unlocks the item box.
+	/// </summary>
 	private void UnlockItemBox(){
 		// since this gate is getting created, if it is guarding an item box, create the box
 		ImmutableDataGate dataGate = GetGateData();

@@ -42,7 +42,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         Input.multiTouchEnabled = true;
         InhalerLogic.OnGameOver += OnGameEnd;
         InhalerLogic.OnNextStep += OnNextStep;
-        GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;
+//        GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;
 
         StartCoroutine(StartGame());
     }
@@ -50,7 +50,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     void OnDestroy(){
         InhalerLogic.OnGameOver -= OnGameEnd;
         InhalerLogic.OnNextStep -= OnNextStep;
-        GetFireAnimationController.OnGetFireAnimationDone -= OnGetFireAnimationDone;
+//        GetFireAnimationController.OnGetFireAnimationDone -= OnGetFireAnimationDone;
     }
 
     //---------------------------------------------
@@ -190,26 +190,27 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
         FloatyUtil.SpawnFloatyText(option);
 
+		Invoke("GiveReward", 1.0f);
         //play sound
-        AudioManager.Instance.PlayClip("inhalerFireFlow");
+//        AudioManager.Instance.PlayClip("inhalerFireFlow");
 
         //play animation
-        fireAnimationController.PlaySequence();
-		foreach(GameObject light in lightsToTurnOff){
-			light.SetActive(false);
-		}
-		foreach(ParticleSystemController fireParticle in particlesToTurnOff){
-			fireParticle.Stop();
-		}
+//        fireAnimationController.PlaySequence();
+//		foreach(GameObject light in lightsToTurnOff){
+//			light.SetActive(false);
+//		}
+//		foreach(ParticleSystemController fireParticle in particlesToTurnOff){
+//			fireParticle.Stop();
+//		}
     }
 
     //Event listener. continue the game after GetFireAnimation is done
-    private void OnGetFireAnimationDone(object sender, EventArgs args){
-        StatsController.Instance.ChangeFireBreaths(1);
-        AudioManager.Instance.PlayClip("inhalerShiningFireIcon");
+//    private void OnGetFireAnimationDone(object sender, EventArgs args){
+//        StatsController.Instance.ChangeFireBreaths(1);
+//        AudioManager.Instance.PlayClip("inhalerShiningFireIcon");
         
-        Invoke("GiveReward", 1.0f);
-    }
+//        Invoke("GiveReward", 1.0f);
+//    }
 
     //Reward player after the animation is done
     private void GiveReward(){

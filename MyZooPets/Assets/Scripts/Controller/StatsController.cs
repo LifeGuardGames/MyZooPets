@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 public class StatsController : Singleton<StatsController>{
 	//----------- Events ------------------------------
-	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
+//	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
 	public static EventHandler<EventArgs> OnHappyToSad; //when mood changes
 	public static EventHandler<EventArgs> OnSadToHappy;
 	public static EventHandler<EventArgs> OnHealthyToVerySick;
@@ -355,34 +355,36 @@ public class StatsController : Singleton<StatsController>{
 		
 		return strLocalizedStat;
 	}
-	
-	//---------------------------------------------------
-	// GetStatIconName()
-	// Returns the sprite name of the icon for the 
-	// incoming stat.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Gets the name of the stat icon.
+	/// Returns the sprite name of the icon for the 
+	/// incoming stat.
+	/// </summary>
+	/// <returns>The stat icon name.</returns>
+	/// <param name="eStat">E stat.</param>
 	public string GetStatIconName(HUDElementType eStat){
 		string strKey = "PetStatsIcon_" + eStat;
 		string strSprite = Constants.GetConstant<string>(strKey);
 		return strSprite;
 	}
-	
-	//---------------------------------------------------
-	// ChangeFireBreaths()
-	// Changes the # of breaths the pet has.
-	//---------------------------------------------------		
-	public void ChangeFireBreaths(int nAmount){
-		int nBreaths = DataManager.Instance.GameData.PetInfo.nFireBreaths;
-		int nBreathsNew = nBreaths + nAmount;
-		SetFireBreaths(nBreathsNew);
+
+	/// <summary>
+	/// Changes the fire breaths the pet has.
+	/// </summary>
+	/// <param name="amount">Amount.</param>
+	public void ChangeFireBreaths(int amount){
+		int breaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
+		int newBreaths = breaths + amount;
+		SetFireBreaths(newBreaths);
 	}
 
-	private void SetFireBreaths(int nAmount){
-		DataManager.Instance.GameData.PetInfo.SetFireBreaths(nAmount);
+	private void SetFireBreaths(int amount){
+		DataManager.Instance.GameData.PetInfo.SetFireBreaths(amount);
 		
 		// send out an event that fire breaths have changed
-		if(OnBreathsChanged != null)
-			OnBreathsChanged(this, EventArgs.Empty);		
+//		if(OnBreathsChanged != null)
+//			OnBreathsChanged(this, EventArgs.Empty);		
 	}
 	
 	//---------------------------------------------------

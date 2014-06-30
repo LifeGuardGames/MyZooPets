@@ -2,11 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// PetInfoData 
-// Save data for PetInfo. 
-// Mutable data.
-//---------------------------------------------------
 public class MutableDataPetInfo{	
 	public string PetID { get; set; }
 
@@ -18,40 +13,40 @@ public class MutableDataPetInfo{
 
 	public bool IsHatched { get; set; }
 
-	public int nFireBreaths { get; set; } // fire breathing status of the pet
+	public int FireBreaths { get; set; } // fire breathing status of the pet
 
-	public void ChangeFireBreaths(int nAmount){
-		int nBreathsNew = nFireBreaths + nAmount;
-		SetFireBreaths(nBreathsNew);
+	public void ChangeFireBreaths(int amount){
+		int newFireBreaths = FireBreaths + amount;
+		SetFireBreaths(newFireBreaths);
 	}
 
-	public void SetFireBreaths(int nAmount){
-		nFireBreaths = nAmount;	
+	public void SetFireBreaths(int amount){
+		FireBreaths = amount;	
 	
 		// for now, we are capping the max breaths at 1
-		bool bInfiniteMode = IsInfiniteFire();
-		if(nFireBreaths > 1)
-			nFireBreaths = 1;
-		else if(nFireBreaths < 0 && !bInfiniteMode){
+		bool isInfiniteMode = IsInfiniteFire();
+		if(FireBreaths > 1)
+			FireBreaths = 1;
+		else if(FireBreaths < 0 && !isInfiniteMode){
 			Debug.LogError("Fire breaths somehow going negative.");
-			nFireBreaths = 0;
+			FireBreaths = 0;
 		}
 	}
 
 	public bool CanBreathFire(){
-		int nBreaths = GetFireBreaths();
-		bool bInfiniteMode = IsInfiniteFire();
-		bool bCan = nBreaths > 0 || bInfiniteMode;
-		return bCan;
+		int breaths = GetFireBreaths();
+		bool isInfiniteFire = IsInfiniteFire();
+		bool canBreathFire = breaths > 0 || isInfiniteFire;
+		return canBreathFire;
 	}
 
 	private int GetFireBreaths(){
-		return nFireBreaths;	
+		return FireBreaths;	
 	}
 
 	public bool IsInfiniteFire(){
-		bool bInfinite = Constants.GetConstant<bool>("InfiniteFireMode");
-		return bInfinite;
+		bool isInfinite = Constants.GetConstant<bool>("InfiniteFireMode");
+		return isInfinite;
 	}
 
 	public MutableDataPetInfo(){
@@ -64,6 +59,6 @@ public class MutableDataPetInfo{
 		PetSpecies = "Basic";
 		PetColor = "OrangeYellow";
 		IsHatched = false;
-		nFireBreaths = 0;
+		FireBreaths = 0;
 	}
 }

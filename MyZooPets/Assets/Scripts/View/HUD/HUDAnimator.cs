@@ -56,7 +56,7 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl starIconAnim;
 	private AnimationControl gemIconAnim;
 	private AnimationControl xpIconAnim;
-	private ParticleSystemController animFire;
+//	private ParticleSystemController animFire;
 	
 	private GameObject toDestroy;	
 	private GameObject tweenParent; 	// Parent for tweening
@@ -112,14 +112,14 @@ public class HUDAnimator : MonoBehaviour{
 		starIconAnim = HUDUIManager.Instance.animMoney;
 		gemIconAnim = HUDUIManager.Instance.animGem;
 		xpIconAnim = HUDUIManager.Instance.animXP;
-		animFire = HUDUIManager.Instance.animFire;
+//		animFire = HUDUIManager.Instance.animFire;
 		tweenParent = HUDUIManager.Instance.GetTweenParent();		
 		
 		// turn on/off the fire icon depending on if the pet can currently breath fire
 		UpdateBreathUI();
 		
 		// also sign up for an event for when the breaths change
-		StatsController.Instance.OnBreathsChanged += OnBreathsChanged;
+//		StatsController.Instance.OnBreathsChanged += OnBreathsChanged;
 		
 		// store all the relevant elements in hashes...kind of annoying
 		hashAnimControls[HUDElementType.Points] = xpIconAnim.GetComponent<AnimationControl>();
@@ -150,15 +150,15 @@ public class HUDAnimator : MonoBehaviour{
 	// based on whether or not the pet can breath fire.
 	//---------------------------------------------------		
 	private void UpdateBreathUI(){
-		bool isFireOn = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		NGUITools.SetActive(animFire.gameObject, isFireOn);
-		if(isFireOn){
-			animFire.Play();
-		}
+//		bool isFireOn = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+//		NGUITools.SetActive(animFire.gameObject, isFireOn);
+//		if(isFireOn){
+//			animFire.Play();
+//		}
 	}
 	
 	private void OnBreathsChanged(object sender, EventArgs args){
-		UpdateBreathUI();	
+//		UpdateBreathUI();	
 	}
 	
 	//---------------------------------------------------

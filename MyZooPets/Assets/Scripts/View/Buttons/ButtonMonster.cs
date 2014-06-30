@@ -86,7 +86,8 @@ public class ButtonMonster : LgButtonHold{
 		}
 		else{
 			//explain why can't breathe fire right now. call GatingManager to do this
-			GatingManager.Instance.ShowNoChargeNoFireNotification();
+			if(!TutorialManager.Instance.IsTutorialActive())
+				GatingManager.Instance.ShowNoChargeNoFireNotification();
 		}
 	}
 	

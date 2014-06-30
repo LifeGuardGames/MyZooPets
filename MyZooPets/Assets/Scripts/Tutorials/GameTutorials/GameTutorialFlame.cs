@@ -3,12 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// GameTutorial_Flame
-// Tutorial to explain to the user how to blow fire
-// at the smoke monster.
-//---------------------------------------------------
-
+/// <summary>
+/// Game tutorial flame. 
+/// Explain to user how to use fire orb and blow fire.
+/// </summary>
 public class GameTutorialFlame : GameTutorial{
 	
 	public GameTutorialFlame() : base(){		
@@ -16,27 +14,105 @@ public class GameTutorialFlame : GameTutorial{
 		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
 		PetAnimator.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
-	
-	//---------------------------------------------------
-	// SetMaxSteps()
-	//---------------------------------------------------		
+			
 	protected override void SetMaxSteps(){
-		maxSteps = 2;
+		maxSteps = 3;
 	}
-	
-	//---------------------------------------------------
-	// SetKey()
-	//---------------------------------------------------		
+
 	protected override void SetKey(){
 		tutorialKey = TutorialManagerBedroom.TUT_FLAME;
 	}
-	
-	//---------------------------------------------------
-	// _End()
-	//---------------------------------------------------		
+
 	protected override void _End(bool isFinished){
-		// clean up various things this tutorial created
-		// RemovePopup();
+		TutorialManager.Instance.StartCoroutine(TutorialEndMessage());
+	}
+			
+	protected override void ProcessStep(int step){
+		// location of flame popups
+		Vector3 flamePopupLoc = Constants.GetConstant<Vector3>("FlamePopup");
+		Hashtable option = new Hashtable();
+
+		//Tutorial popup options 
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+
+		switch(step){
+		case 0:
+			//add fire orb to the clickable list
+			FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
+			GameObject fireOrbReferrence = InventoryUIManager.Instance.GetFireOrbReference();
+			AddToProcessList(fireOrbReferrence);
+			
+			break;
+		case 1:
+
+			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
+			
+			// show a little popup message telling the user to hold down the flame button
+			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
+			break;
+		case 2:
+			string petName = DataManager.Instance.GameData.PetInfo.PetName;
+			string stringKey = GetKey() + "_" + GetStep();
+			string tutMessage = String.Format(Localization.Localize(stringKey), petName);
+			
+			option.Add(TutorialPopupFields.Message, tutMessage);
+			
+			// show a little popup message telling the user to let go to breath fire
+			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
+			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
+			break;
+		}
+	}
+
+	/// <summary>
+	/// When the fire button is active advance tutorial.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void FireButtonActiveEventHandler(object sender, EventArgs args){
+		FireButtonUIManager.FireButtonActive -= FireButtonActiveEventHandler;
+
+		Advance();
+	}
+
+	/// <summary>
+	/// Removes the popup delay.
+	/// </summary>
+	/// <returns>The popup delay.</returns>
+	private IEnumerator RemovePopupDelay(){
+		yield return new WaitForSeconds(1f);
+		RemovePopup();	
+	}
+
+	/// <summary>
+	/// Focuses on the flame button.
+	/// This part of the tutorial highlights the flame
+	/// button and tells the user to press and hold it.
+	/// </summary>
+	/// <returns>The on flame button.</returns>
+	private IEnumerator FocusOnFlameButton(){
+		// wait one frame so that the flame button can appear
+		yield return 0;
+		
+		// find and spotlight the fire button
+		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
+		if(goFlameButton != null){
+			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
+			                "TutorialSpotlightFlameButton", fingerHint: true, 
+			                fingerHintPrefab: "PressHoldTut", fingerHintOffsetY: 0f, 
+			                fingerHintFlip: true, delay: 0.5f);
+			
+			// add the fire button to the processable list
+			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
+			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
+			AddToProcessList(goButton);
+		}
+		else
+			Debug.LogError("No flame button...that means the game is going to break");
+	}
+
+	private IEnumerator TutorialEndMessage(){
+		yield return new WaitForSeconds(1f);
 
 		// since this is the last tutorial, show a little notification
 		string strKey = "TUTS_FINISHED";											// key of text to show
@@ -59,76 +135,13 @@ public class GameTutorialFlame : GameTutorial{
 			Debug.LogError("wellapad button can't be found: " + this);
 		}
 	}
-	
-	//---------------------------------------------------
-	// ProcessStep()
-	//---------------------------------------------------		
-	protected override void ProcessStep(int step){
-		// location of flame popups
-		Vector3 flamePopupLoc = Constants.GetConstant<Vector3>("FlamePopup");
-		Hashtable option = new Hashtable();
 
-		//Tutorial popup options 
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-
-		switch(step){
-		case 0:
-				// hack central...use a "surrogate" to run the coroutine since this tutorial is not a monobehaviour
-			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
-			
-				// show a little popup message telling the user to hold down the flame button
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
-			
-			break;
-		case 1:
-			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string stringKey = GetKey() + "_" + GetStep();
-			string tutMessage = String.Format(Localization.Localize(stringKey), petName);
-
-			option.Add(TutorialPopupFields.Message, tutMessage);
-				
-				// show a little popup message telling the user to let go to breath fire
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
-			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
-			break;
-		}
-	}
-
-	private IEnumerator RemovePopupDelay(){
-		yield return new WaitForSeconds(1f);
-		RemovePopup();	
-	}
-	
-	//---------------------------------------------------
-	// FocusOnFlameButton()
-	// This part of the tutorial highlights the flame
-	// button and tells the user to press and hold it.
-	//---------------------------------------------------		
-	private IEnumerator FocusOnFlameButton(){
-		// wait one frame so that the flame button can appear
-		yield return 0;
-		
-		// find and spotlight the fire button
-		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
-		if(goFlameButton != null){
-			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
-			                "TutorialSpotlightFlameButton", fingerHint: true, 
-			                fingerHintPrefab: "PressHoldTut", fingerHintOffsetY: 0f, 
-			                fingerHintFlip: true, delay: 0.5f);
-			
-			// add the fire button to the processable list
-			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
-			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
-			AddToProcessList(goButton);
-		}
-		else
-			Debug.LogError("No flame button...that means the game is going to break");
-	}
-	
-	//---------------------------------------------------
-	// OnMeterFilled()
-	// Callback for when the fire meter gets to 100%.
-	//---------------------------------------------------		
+	/// <summary>
+	/// Raises the meter filled event.
+	/// Callback for when the fire meter gets to 100%
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnMeterFilled(object sender, EventArgs args){
 		// unsub from callback
 		FireMeter.OnMeterFilled -= OnMeterFilled;
@@ -140,16 +153,22 @@ public class GameTutorialFlame : GameTutorial{
 		Advance();
 	}
 
+	/// <summary>
+	/// When the meter starts filling up remove hint.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnMeterStartFilling(object sender, EventArgs args){
 		FireMeter.OnMeterStartFilling -= OnMeterStartFilling;
 
 		RemoveFingerHint();
 	}
-	
-	//---------------------------------------------------
-	// OnBreathEnded()
-	// Callback for when the pet finishes breathing fire.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Callback for when the pet finishes breathing fire.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnBreathEnded(object sender, EventArgs args){
 		// unsub from callback
 		PetAnimator.OnBreathEnded -= OnBreathEnded;

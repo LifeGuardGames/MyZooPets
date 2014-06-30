@@ -39,6 +39,83 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
 
+	/// <summary>
+	/// Gets the fire orb reference.
+	/// Use for the tutorial to get the fire orb gameobject.
+	/// </summary>
+	/// <returns>The fire orb reference.</returns>
+	public GameObject GetFireOrbReference(){
+		GameObject retVal = null;
+		foreach(Transform item in uiGridObject.transform){
+			if(item.name == "Usable1")
+				retVal = item.Find("Usable1").gameObject;
+		}
+		return retVal;
+	}
+
+	public void UpdateBarPosition(){
+		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+		
+		// Adjust the bar length based on how many items we want showing at all times
+		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+			inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
+			
+			// Update position of the bar if inventory is open
+			if(isGuiShowing){
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeOutBounce);
+				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+			}
+		}
+		
+		uiGridObject.GetComponent<UIGrid>().Reposition();
+		
+		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
+		Vector3 oldPanelPos = gridPanel.transform.localPosition;
+		gridPanel.transform.localPosition = new Vector3(363f, oldPanelPos.y, oldPanelPos.z);
+		Vector4 oldClipRange = gridPanel.clipRange;
+		gridPanel.clipRange = new Vector4(206f, oldClipRange.y, oldClipRange.z, oldClipRange.w);
+	}
+	
+	//Find the position of Inventory Item game object with invItemID
+	//Used for animation position in StoreUIManager
+	public Vector3 GetPositionOfInvItem(string invItemID){
+		// position to use
+		Vector3 invItemPosition;
+		
+		if(!isGuiShowing){
+			// if the inventory is minimized, use the position of the inventory sprite object
+			invItemPosition = uiButtonSpriteObject.transform.position;
+		}
+		else{
+			// otherwise use the position of the item in the inventory panel
+			Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			invItemPosition = invItemTrans.position;
+			
+			//Offset position if the item is just added to the inventory
+			if(invItem.Amount == 1)
+				invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
+		
+		return invItemPosition;
+	}
+	
+	// Image button clicked receiver
+	public void ExpandToggled(){
+		// Local aux to keep track of toggles
+		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
+		isGuiShowing = !isGuiShowing;
+	}
+	
+	public void ShowPanel(){
+		inventoryPanel.GetComponent<TweenToggle>().Show();
+	}
+	
+	public void HidePanel(){
+		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
+	}
+
 	//Event listener. listening to when item is dragged out of the inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
@@ -143,68 +220,5 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		UpdateBarPosition();
 	}
 
-	public void UpdateBarPosition(){
-        
 
-		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-		
-		// Adjust the bar length based on how many items we want showing at all times
-		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-			inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
-			
-			// Update position of the bar if inventory is open
-			if(isGuiShowing){
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
-			}
-		}
-		
-		uiGridObject.GetComponent<UIGrid>().Reposition();
-		
-		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
-		Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		gridPanel.transform.localPosition = new Vector3(363f, oldPanelPos.y, oldPanelPos.z);
-		Vector4 oldClipRange = gridPanel.clipRange;
-		gridPanel.clipRange = new Vector4(206f, oldClipRange.y, oldClipRange.z, oldClipRange.w);
-	}
-
-	//Find the position of Inventory Item game object with invItemID
-	//Used for animation position in StoreUIManager
-	public Vector3 GetPositionOfInvItem(string invItemID){
-		// position to use
-		Vector3 invItemPosition;
-			
-		if(!isGuiShowing){
-			// if the inventory is minimized, use the position of the inventory sprite object
-			invItemPosition = uiButtonSpriteObject.transform.position;
-		}
-		else{
-			// otherwise use the position of the item in the inventory panel
-			Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			invItemPosition = invItemTrans.position;
-	
-			//Offset position if the item is just added to the inventory
-			if(invItem.Amount == 1)
-				invItemPosition += new Vector3(-0.22f, 0, 0);
-		}
-		
-		return invItemPosition;
-	}
-
-	// Image button clicked receiver
-	public void ExpandToggled(){
-		// Local aux to keep track of toggles
-		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
-		isGuiShowing = !isGuiShowing;
-	}
-
-	public void ShowPanel(){
-		inventoryPanel.GetComponent<TweenToggle>().Show();
-	}
-
-	public void HidePanel(){
-		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
-	}
 }

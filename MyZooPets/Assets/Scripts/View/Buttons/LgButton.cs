@@ -177,7 +177,5 @@ public class LgButton : MonoBehaviour{
 	//---------------------------------------------------	
 	protected virtual void ProcessClick(){
 		Analytics.Instance.LgButtonClicked(buttonName);
-		
-		Debug.LogError("Children should implement ProcessClick!");	
 	}
 }

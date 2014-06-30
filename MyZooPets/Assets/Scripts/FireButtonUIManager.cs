@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class FireButtonUIManager : Singleton<FireButtonUIManager> {
+	public static EventHandler<EventArgs> FireButtonActive;
 
 	public GameObject fireOrbDropTarget;
 	public Animation buttonPluseAnimation;
@@ -40,6 +42,9 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	public void TurnFireButtonEffectOn(){
+		if(FireButtonActive != null)
+			FireButtonActive(this, EventArgs.Empty);
+
 		buttonPluseAnimation.Play();
 		sunBeam.SetActive(true);
 

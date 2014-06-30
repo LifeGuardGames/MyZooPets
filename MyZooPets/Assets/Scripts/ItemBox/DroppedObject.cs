@@ -18,9 +18,11 @@ using System.Collections.Generic;
 	public UISprite sprite;
 
 	protected float timeBeforeAutoCollect = 5.0f;
+	protected bool runTimer = true;
+
 	private DroppedItemStates eState = DroppedItemStates.UnInit; // state of this dropped item
 	private float timer = 0;
-	private bool runTimer = true;
+
 
 
 	public DroppedItemStates GetState(){

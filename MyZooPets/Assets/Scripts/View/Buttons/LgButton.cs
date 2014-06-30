@@ -30,9 +30,6 @@ public class LgButton : MonoBehaviour{
 	public bool isCheckingClickManager;
 	public bool isSprite;
 
-//	public UIModeTypes GetMode(){
-//		return eMode;	
-//	}
 
 	public List<UIModeTypes> GetModes(){
 		return modeTypes;
@@ -47,12 +44,6 @@ public class LgButton : MonoBehaviour{
 	}
 	
 	void Start(){
-		//TODO: remove this
-//		if(eMode == UIModeTypes.NotInited){
-//			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
-//			eMode = UIModeTypes.None;	
-//		}
-
 		for(int i=0; i<modeTypes.Count; i++){
 			if(modeTypes[i] == UIModeTypes.NotInited)
 				modeTypes[i] = UIModeTypes.None;

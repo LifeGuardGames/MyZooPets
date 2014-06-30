@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class GameTutorialSuperWellaInhaler : GameTutorial {
@@ -11,7 +12,7 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	}
 	
 	protected override void SetMaxSteps(){
-		maxSteps = 1;
+		maxSteps = 2;
 	}
 	
 	protected override void SetKey(){
@@ -26,6 +27,9 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		switch(step){
 		case 0:
 			// the start of the focus inhaler tutorial
+			TutorialManager.Instance.StartCoroutine(DropFireOrb());
+			break;
+		case 1:
 			TutorialManager.Instance.StartCoroutine(ShowSuperWella());
 			break;
 		}
@@ -35,12 +39,25 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		yield return new WaitForSeconds(0.5f);
 
 		BedroomInhalerUIManager.Instance.CheckToDropFireOrb();
-
+		GameObject fireOrbObject = BedroomInhalerUIManager.Instance.FireOrbReference;
+	
+		if(fireOrbObject != null){
+			fireOrbObject.GetComponent<DroppedObjectItem>().TurnAutoCollectOff();
+			fireOrbObject.GetComponent<LgButton>().OnProcessed += PickedUpFireOrb;
+			AddToProcessList(fireOrbObject);
+		}
 		//need to get reference of the dropped fire orb and add it to the process list
 	}
 
+	private void PickedUpFireOrb(object sender, EventArgs args){
+		LgButton button = (LgButton)sender;
+		button.OnProcessed -= PickedUpFireOrb;
+
+		Advance();
+	}
+
 	private IEnumerator ShowSuperWella(){
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(1f);
 
 		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
 			Advance();

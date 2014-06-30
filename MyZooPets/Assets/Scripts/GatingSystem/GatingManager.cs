@@ -451,9 +451,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 		StoreUIManager.OnShortcutModeEnd -= ReturnToGatingSystemUIMode;
 	} 
-
-
-
+	
 	/// <summary>
 	/// Enables the UI.
 	/// </summary>

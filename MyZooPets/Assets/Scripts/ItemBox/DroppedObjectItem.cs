@@ -46,6 +46,14 @@ public class DroppedObjectItem : DroppedObject{
 	}
 
 	/// <summary>
+	/// Turns the auto collect off. Use in tutorial so user is forced to acutally
+	/// click on the item to collect.
+	/// </summary>
+	public void TurnAutoCollectOff(){
+		this.runTimer = false;
+	}
+
+	/// <summary>
 	/// Obtains the object.
 	/// Puts the item into the player's inventory.
 	/// </summary>

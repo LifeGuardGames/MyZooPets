@@ -20,6 +20,9 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 	// tutorial that is currently active
 	private GameTutorial tutorial;
 
+	/// <summary>
+	/// Whether tutorial is active in the scene
+	/// </summary>
 	public bool IsTutorialActive(){
 		bool isActive = tutorial != null;
 		return isActive;

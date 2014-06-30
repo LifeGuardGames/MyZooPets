@@ -68,15 +68,15 @@ public class AnimationControl : MonoBehaviour {
 		Stop();
 	}
 	
-	void OnGUI(){
-		if(debug){
-			if(GUI.Button(new Rect(100, 100, 100, 100), "start")){
-				Play();
-			}
-			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
-				//Play("smallBounceSoftWellapad");
-				StopAndResetFrame("zero");
-			}
-		}
-	}
+//	void OnGUI(){
+//		if(debug){
+//			if(GUI.Button(new Rect(100, 100, 100, 100), "start")){
+//				Play();
+//			}
+//			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
+//				//Play("smallBounceSoftWellapad");
+//				StopAndResetFrame("zero");
+//			}
+//		}
+//	}
 }

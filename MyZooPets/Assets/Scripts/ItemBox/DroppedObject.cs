@@ -11,15 +11,15 @@ using System.Collections.Generic;
  public abstract class DroppedObject : LgButton{
 	// --------------- Pure Abstract ---------------------------
 	protected abstract void ObtainObject();			// give the user the object
-	protected abstract void AutoCollectAndDestroy();	// collect the dropped object and destroy itself 
+	protected abstract void CollectAndDestroyAutomatically();	// collect the dropped object and destroy itself 
 	// ---------------------------------------------------------
 	
 	// sprite associated with this dropped object
 	public UISprite sprite;
-	
+
+	protected float timeBeforeAutoCollect = 5.0f;
 	private DroppedItemStates eState = DroppedItemStates.UnInit; // state of this dropped item
 	private float timer = 0;
-	private float timeBeforeAutoCollect = 5.0f;
 	private bool runTimer = true;
 
 
@@ -43,15 +43,14 @@ using System.Collections.Generic;
 			ProcessClick(); //by pass the click manager, so the droppedobject self collect regardless
 			runTimer = false;
 		}
-
 	}
 
 	void OnDestroy(){
 		ButtonChangeScene.OnChangeScene -= OnChangeScene;
 	}
 			
-	void OnApplicationPause(bool bPaused){
-		if(bPaused){
+	void OnApplicationPause(bool isPaused){
+		if(isPaused){
 			// if the game is pausing, obtain this item
 			ObtainObject();
 		}
@@ -130,22 +129,20 @@ using System.Collections.Generic;
 		Debug.LogError("Bursitng " + gameObject + " with " + vForce, gameObject);*/
 		
 	}
-	
-	//---------------------------------------------------
-	// GetGameObject()
-	// This function is necessary because some dropped
-	// objects have different hierarchies.  This function
-	// should return the upper most level of the dropped
-	// object's game object, to destory, apply movement
-	// to, etc.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the game object.
+	/// This function is necessary because some dropped
+	/// objects have different hierarchies.  This function
+	/// should return the upper most level of the dropped
+	/// object's game object, to destory, apply movement
+	/// to, etc.
+	/// </summary>
+	/// <returns>The game object.</returns>
 	protected virtual GameObject GetGameObject(){
 		return gameObject;
 	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	//---------------------------------------------------		
+
 	protected override void ProcessClick(){
 		// only do something if the user hasn't already started picking up this item
 		DroppedItemStates eState = GetState();
@@ -170,47 +167,23 @@ using System.Collections.Generic;
 			
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnDoneAnimating()
-	// The object is done doing its little pickup anim.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Raises the done animating event.
+	/// Object done doing its pickup anim.
+	/// </summary>
 	private void OnDoneAnimating(){
 		// animation done -- award the object
 		ObtainObject();
 	}
-
-	//----------------------------------------------------
-	// Force object to be picked up on scene change
-	//----------------------------------------------------
+	
+	/// <summary>
+	/// Raises the change scene event.
+	/// Force object to be picked up on scene change.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnChangeScene(object sender, EventArgs args){
-		AutoCollectAndDestroy();
+		CollectAndDestroyAutomatically();
 	}
-	
-	//---------------------------------------------------
-	// _OnDestroy()
-	//---------------------------------------------------		
-	// protected override void _OnDestroy() {
-	// OnObjectDestroyed();
-	// }
-	
-	//---------------------------------------------------
-	// ObtainObject()
-	// Gives the user the object.
-	//---------------------------------------------------
-	// protected void ObtainObject() {
-	// 	_ObtainObject();	
-	// }
-
-	//---------------------------------------------------
-	// AutoCollectAndDestroy()
-	// This is a generic function that is called when a
-	// dependent manager is destroyed.  It basically 
-	// forces the item to be picked up right away, because
-	// the item requires the dependent manager in order to
-	// actual process the picking up.
-	//---------------------------------------------------	
-	// protected void AutoCollectAndDestroy( object sender, EventArgs args ) {
-	// _AutoCollectAndDestroy();
-	// }		
 }

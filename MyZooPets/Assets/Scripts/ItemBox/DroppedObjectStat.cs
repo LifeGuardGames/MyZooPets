@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,7 +80,7 @@ public class DroppedObjectStat : DroppedObject{
 	/// is being destroyed (likely because the scene is
 	/// changing).
 	/// </summary>
-	protected override void AutoCollectAndDestroy(){
+	protected override void CollectAndDestroyAutomatically(){
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if(eState != DroppedItemStates.Awarded)

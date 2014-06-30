@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DroppedObject_Item
-// This is an item that is on the ground, in the
-// 3D world (although it may be 2D) that the player
-// can pick up to obtain.
-//---------------------------------------------------
-
+/// <summary>
+/// Dropped object item.
+/// This is an item that is on the ground, in the
+/// 3D world (although it may be 2D) that the player
+/// can pick up to obtain.
+/// </summary>
 public class DroppedObjectItem : DroppedObject{
 	// the item that this object represents
 	private Item dataItem;
@@ -37,6 +36,16 @@ public class DroppedObjectItem : DroppedObject{
 	}
 
 	/// <summary>
+	/// Changes the auto collect time.
+	/// Use this to increase/decrease the time waiting before the item auto
+	/// collects itself
+	/// </summary>
+	/// <param name="autoCollectTime">Auto collect time.</param>
+	public void ChangeAutoCollectTime(float autoCollectTime){
+		this.timeBeforeAutoCollect = autoCollectTime;
+	}
+
+	/// <summary>
 	/// Obtains the object.
 	/// Puts the item into the player's inventory.
 	/// </summary>
@@ -59,29 +68,17 @@ public class DroppedObjectItem : DroppedObject{
 		// destroy the object
 		Destroy(gameObject);		
 	}	
-	
-	//---------------------------------------------------
-	// AutoCollectAndDestroy()
-	// Callback sent from the inventory logic because it
-	// is being destroyed (likely because the scene is
-	// changing).
-	//---------------------------------------------------	
-	protected override void AutoCollectAndDestroy(){
+
+	/// <summary>
+	/// Collects and destroy automatically.
+	/// Callback sent from the inventory logic because it
+	/// is being destroyed (likely because the scene is
+	/// changing).
+	/// </summary>
+	protected override void CollectAndDestroyAutomatically(){
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if(eState != DroppedItemStates.Awarded)
 			ObtainObject();
 	}	
-
-	// *note: bad idea to wait until the scene is cleaning up to collect the object
-	// this override function is not called right now.	
-	//---------------------------------------------------
-	// OnObjectDestroyed()
-	//---------------------------------------------------		
-	// protected override void OnObjectDestroyed(){
-		// if this dropped item is being destroyed, has not yet been awarded, AND the inventory still exists, obtain it
-		// DroppedItemStates eState = GetState();
-		// if(eState != DroppedItemStates.Awarded && InventoryLogic.Instance != null)
-		// 	ObtainObject();
-	// }	
 }

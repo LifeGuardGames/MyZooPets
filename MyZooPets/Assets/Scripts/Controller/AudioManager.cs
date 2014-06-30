@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 // event arguments for game pausing
 public class PauseArgs : EventArgs{
-	private bool bIsPausing;
+	private bool isPausing;
 	public bool IsPausing() {
-		return bIsPausing;	
+		return isPausing;	
 	}
 
-	public PauseArgs( bool bIsPausing){
-		this.bIsPausing = bIsPausing;
+	public PauseArgs( bool isPausing){
+		this.isPausing = isPausing;
 	}
 }
 

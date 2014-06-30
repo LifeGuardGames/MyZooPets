@@ -1,14 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// GateMonster
-// This is a gate that is a monster.
-// If we ever change which direction a monster is
-// blocking, be sure to update the code where MOVE_DIR
-// is placed.
-//---------------------------------------------------
-
+/// <summary>
+/// Gate monster.
+/// NOTE: This is a gate that is a monster.
+/// If we ever change which direction a monster is
+/// blocking, be sure to update the code where MOVE_DIR
+/// is placed.
+/// </summary>
 public class GateMonster : Gate{
 //	public float fMove; // the screen % this monster moves per % of health
 	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
@@ -24,13 +23,13 @@ public class GateMonster : Gate{
 		idealPos = transform.position;
 
 		// the monster's position should be set relative to its hp
-		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-		int maxHealth = data.GetMonster().MonsterHealth;
-		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-		int damage = maxHealth - currentHealth; 
+//		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
+//		int maxHealth = data.GetMonster().MonsterHealth;
+//		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+//		int damage = maxHealth - currentHealth; 
 		
 		// if the monster is missing hp, it needs to move
-		if(damage > 0)
+//		if(damage > 0)
 //			Move(damage);
 
 		PlayNormalAnimation();

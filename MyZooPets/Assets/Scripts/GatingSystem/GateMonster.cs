@@ -12,10 +12,13 @@ public class GateMonster : Gate{
 //	public float fMove; // the screen % this monster moves per % of health
 	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
 	public Animator smokeMonsterAnimator; // script that controls the anims for this monster
-	
+	public GameObject[] smokeMonsterHeads;	// Local locations of the heads, base head needs to be first!
+
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
 	private Vector3 idealPos;
-
+	private int currentHealth;
+	private GameObject baseHeadToMove;	// Keep track of the first head to check
+	private GameObject nextHeadToMove;
 
 	public override void Start(){
 		base.Start();
@@ -32,6 +35,23 @@ public class GateMonster : Gate{
 //		if(damage > 0)
 //			Move(damage);
 
+		// New way to show monster health - having multiple heads
+		currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+		if(currentHealth <= smokeMonsterHeads.Length){
+			for(int i = currentHealth - 1; i < smokeMonsterHeads.Length - 1; i++){
+				Debug.Log("setting heads false " + currentHealth);
+				smokeMonsterHeads[i].gameObject.SetActive(false);
+			}
+			// First head to move is always the last one on the list
+			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
+
+			// Assign the base head
+			baseHeadToMove = smokeMonsterHeads[0];
+		}
+		else{
+			Debug.LogError("Incorrect length size for smoke monster list");
+		}
+
 		PlayNormalAnimation();
 	}	
 	
@@ -40,7 +60,7 @@ public class GateMonster : Gate{
 	/// </summary>
 	/// <param name="damage">Damage.</param>
 	protected override void GateDamaged(int damage){
-
+		Debug.Log(gameObject + "   " + DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID]);
 		//drop some coins when the gate monster is attacked
 		AudioManager.Instance.PlayClip("coinDrop");
 		int randomNumberOfCoins = Random.Range(2, 6);
@@ -62,29 +82,39 @@ public class GateMonster : Gate{
 			droppedObjectStat.Burst(burstToLeftOnly:true);
 		}
 
+		// Move one of the heads out, ONLY applies to everything thats not the first head
+		if(baseHeadToMove != nextHeadToMove){
+			MoveSubHead();
+			// Update the pointer to the next head
+			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
+		}
+
 		// when a monster is damaged, it physically moves
 		// for now, they will always move to the right...
 //		Move(damage);
 	}	
 
 	protected override void GateDestroyed(){
-		// for monsters, just move them fast and far away MOVE_DIR
-		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
-		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
-		
-		// add hashtable params for alerting the parent object when the move anim is complete
-		Hashtable optional = new Hashtable();
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "OnDestroyAnimComplete");
-		
-		Vector3 targetPos = gameObject.transform.position;
-		targetPos.x += monsterMoveDistance;
+		// Move all the heads that is NOT the base head
+		MoveBaseHead();
 
-		smokeMonsterAnimator.Play("smokeMonsterHurt");
-
-		// Cancel the move tweens previous to this
-		LeanTween.cancel(gameObject);
-		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
+//		// for monsters, just move them fast and far away MOVE_DIR
+//		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
+//		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
+//		
+//		// add hashtable params for alerting the parent object when the move anim is complete
+//		Hashtable optional = new Hashtable();
+//		optional.Add("onCompleteTarget", gameObject);
+//		optional.Add("onComplete", "OnDestroyAnimComplete");
+//		
+//		Vector3 targetPos = gameObject.transform.position;
+//		targetPos.x += monsterMoveDistance;
+//
+//		smokeMonsterAnimator.Play("smokeMonsterHurt");
+//
+//		// Cancel the move tweens previous to this
+//		LeanTween.cancel(gameObject);
+//		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
 	}
 	
 	/// <summary>
@@ -96,39 +126,82 @@ public class GateMonster : Gate{
 		return idealPos;
 	}	
 
-	/// <summary>
-	/// Move the specified damage.
-	/// </summary>
-	/// <param name="damage">Damage.</param>
-	private void Move(int damage){
-		// get the monster's data and find out how far it should move based on the damage it just received
-		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-		int maxHealth = data.GetMonster().MonsterHealth;
-		float damagePercentage = ((float)damage / (float)maxHealth);
-		
+	private void MoveSubHead(){
 		// get the screen location of the monster and find out where it should move based on the width of the screen
-		Vector3 screenLoc = Camera.main.WorldToScreenPoint(transform.position);
-
-		float moveWidth = maxScreenSpace * damagePercentage;
-
+		Vector3 screenLoc = Camera.main.WorldToScreenPoint(nextHeadToMove.transform.position);
+		
+		float moveWidth = maxScreenSpace;
+		
 		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
 		Vector3 newLoc = screenLoc;
 		newLoc.x += moveWidth;
 		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
-
+		
 		// play a hurt animation on the monster
-		PlayHurtAnimation();
-
+		//PlayHurtAnimation();
+		
 		// update our ideal position with where we are moving too
 		idealPos = vNewLocWorld;
-		
-		LeanTween.cancel(gameObject);
-		// phew...now move this bad boy!
+
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "PlayNormalAnimation");
-		LeanTween.moveLocal(gameObject, vNewLocWorld, tweenTime, optional);	
+		//optional.Add("onComplete", "PlayNormalAnimation");
+		LeanTween.moveLocal(nextHeadToMove, vNewLocWorld, tweenTime, optional);	
 	}
+
+	private void MoveBaseHead(){
+		// for monsters, just move them fast and far away MOVE_DIR
+		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
+		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
+		
+		// add hashtable params for alerting the parent object when the move anim is complete
+		Hashtable optional = new Hashtable();
+		optional.Add("onCompleteTarget", gameObject);
+		optional.Add("onComplete", "OnDestroyAnimComplete");
+		
+		Vector3 targetPos = gameObject.transform.position;
+		targetPos.x += monsterMoveDistance;
+		
+		smokeMonsterAnimator.Play("smokeMonsterHurt");
+		
+		// Cancel the move tweens previous to this
+		LeanTween.cancel(gameObject);
+		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
+	}
+
+	/// <summary>
+	/// Move the specified damage.
+	/// </summary>
+	/// <param name="damage">Damage.</param>
+//	private void Move(int damage){
+//		// get the monster's data and find out how far it should move based on the damage it just received
+//		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
+//		int maxHealth = data.GetMonster().MonsterHealth;
+//		float damagePercentage = ((float)damage / (float)maxHealth);
+//		
+//		// get the screen location of the monster and find out where it should move based on the width of the screen
+//		Vector3 screenLoc = Camera.main.WorldToScreenPoint(transform.position);
+//
+//		float moveWidth = maxScreenSpace * damagePercentage;
+//
+//		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
+//		Vector3 newLoc = screenLoc;
+//		newLoc.x += moveWidth;
+//		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
+//
+//		// play a hurt animation on the monster
+//		PlayHurtAnimation();
+//
+//		// update our ideal position with where we are moving too
+//		idealPos = vNewLocWorld;
+//		
+//		LeanTween.cancel(gameObject);
+//		// phew...now move this bad boy!
+//		Hashtable optional = new Hashtable();
+//		optional.Add("onCompleteTarget", gameObject);
+//		optional.Add("onComplete", "PlayNormalAnimation");
+//		LeanTween.moveLocal(gameObject, vNewLocWorld, tweenTime, optional);	
+//	}
 
 	private void PlayNormalAnimation(){
 		smokeMonsterAnimator.Play("smokeMonsterNormal");

@@ -86,7 +86,8 @@ public class GateMonster : Gate{
 		if(baseHeadToMove != nextHeadToMove){
 			MoveSubHead();
 			// Update the pointer to the next head
-			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
+			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
+			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
 
 		// when a monster is damaged, it physically moves
@@ -127,26 +128,17 @@ public class GateMonster : Gate{
 	}	
 
 	private void MoveSubHead(){
-		// get the screen location of the monster and find out where it should move based on the width of the screen
-		Vector3 screenLoc = Camera.main.WorldToScreenPoint(nextHeadToMove.transform.position);
-		
-		float moveWidth = maxScreenSpace;
-		
-		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
-		Vector3 newLoc = screenLoc;
-		newLoc.x += moveWidth;
-		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
+		Vector3 newLoc = nextHeadToMove.transform.localPosition;
+		newLoc.x += 80;
+		//Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
 		
 		// play a hurt animation on the monster
 		//PlayHurtAnimation();
-		
-		// update our ideal position with where we are moving too
-		idealPos = vNewLocWorld;
 
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
 		//optional.Add("onComplete", "PlayNormalAnimation");
-		LeanTween.moveLocal(nextHeadToMove, vNewLocWorld, tweenTime, optional);	
+		LeanTween.moveLocal(nextHeadToMove, newLoc, tweenTime, optional);	
 	}
 
 	private void MoveBaseHead(){

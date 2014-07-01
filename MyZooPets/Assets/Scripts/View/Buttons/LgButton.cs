@@ -29,8 +29,7 @@ public class LgButton : MonoBehaviour{
 	public string buttonSound;
 	public bool isCheckingClickManager;
 	public bool isSprite;
-
-
+	
 	public List<UIModeTypes> GetModes(){
 		return modeTypes;
 	}
@@ -60,10 +59,6 @@ public class LgButton : MonoBehaviour{
 	void Awake(){
 		_Awake();	
 	}
-
-	protected virtual void _Start(){}
-	protected virtual void _OnDestroy(){}
-	protected virtual void _Awake(){}
 
 	/// <summary>
 	/// Raises the click event.
@@ -109,10 +104,9 @@ public class LgButton : MonoBehaviour{
 		}
 	}
 	
-	//---------------------------------------------------
-	// ButtonClicked()
-	// When the button is actually clicked.
-	//---------------------------------------------------	
+	/// <summary>
+	/// When button is actually clicked.
+	/// </summary>
 	public void ButtonClicked(){
 		// if the button needs to check the click manager before proceding, do so and return if necessary
 		if(ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
@@ -133,6 +127,30 @@ public class LgButton : MonoBehaviour{
 		ProcessClick();
 	}
 
+	protected virtual void _Start(){}
+	protected virtual void _OnDestroy(){}
+	protected virtual void _Awake(){}
+
+	/// <summary>
+	/// Processes the click.
+	/// Children should implement this. This function will only be called if the
+	/// button is allowed to process the click (i.e., UI is not locked, etc).
+	/// </summary>
+	protected virtual void ProcessClick(){
+		Analytics.Instance.LgButtonClicked(buttonName);
+	}
+
+	protected void PlayNotProcessSound(){
+		string sound = "buttonDontClick";
+		
+		if(!string.IsNullOrEmpty(sound))
+			AudioManager.Instance.PlayClip(sound);
+	}
+
+	/// <summary>
+	/// Checks the sound to play.
+	/// Play click sound or negative sound
+	/// </summary>
 	private void CheckSoundToPlay(){
 		if(ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
 			if(isSprite){
@@ -162,20 +180,5 @@ public class LgButton : MonoBehaviour{
 			AudioManager.Instance.PlayClip(strSound);	
 	}
 
-	protected void PlayNotProcessSound(){
-		string sound = "buttonDontClick";
 
-		if(!string.IsNullOrEmpty(sound))
-			AudioManager.Instance.PlayClip(sound);
-	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	// Children should implement this.  This function will
-	// only be called if the button is allowed to process
-	// the click (i.e., UI is not locked, etc).
-	//---------------------------------------------------	
-	protected virtual void ProcessClick(){
-		Analytics.Instance.LgButtonClicked(buttonName);
-	}
 }

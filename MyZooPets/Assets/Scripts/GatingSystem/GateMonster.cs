@@ -19,6 +19,7 @@ public class GateMonster : Gate{
 	private int currentHealth;
 	private GameObject baseHeadToMove;	// Keep track of the first head to check
 	private GameObject nextHeadToMove;
+	private GameObject nextHeadToDestroy;	// Aux to disable the head when finished tweening
 
 	public override void Start(){
 		base.Start();
@@ -52,7 +53,7 @@ public class GateMonster : Gate{
 			Debug.LogError("Incorrect length size for smoke monster list");
 		}
 
-		PlayNormalAnimation();
+//		PlayNormalAnimation();
 	}	
 	
 	/// <summary>
@@ -86,6 +87,7 @@ public class GateMonster : Gate{
 		if(baseHeadToMove != nextHeadToMove){
 			MoveSubHead();
 			// Update the pointer to the next head
+			nextHeadToDestroy = nextHeadToMove;
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
 			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
@@ -133,12 +135,12 @@ public class GateMonster : Gate{
 		//Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
 		
 		// play a hurt animation on the monster
-		//PlayHurtAnimation();
+		nextHeadToMove.GetComponent<Animator>().Play("smokeMonsterHurt");
 
 		Hashtable optional = new Hashtable();
 		optional.Add("onCompleteTarget", gameObject);
-		//optional.Add("onComplete", "PlayNormalAnimation");
-		LeanTween.moveLocal(nextHeadToMove, newLoc, tweenTime, optional);	
+		optional.Add("onComplete", "DisableSubHead");
+		LeanTween.moveLocal(nextHeadToMove.transform.parent.gameObject, newLoc, tweenTime, optional);
 	}
 
 	private void MoveBaseHead(){
@@ -154,7 +156,7 @@ public class GateMonster : Gate{
 		Vector3 targetPos = gameObject.transform.position;
 		targetPos.x += monsterMoveDistance;
 		
-		smokeMonsterAnimator.Play("smokeMonsterHurt");
+		baseHeadToMove.GetComponent<Animator>().Play("smokeMonsterHurt");
 		
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
@@ -195,13 +197,17 @@ public class GateMonster : Gate{
 //		LeanTween.moveLocal(gameObject, vNewLocWorld, tweenTime, optional);	
 //	}
 
-	private void PlayNormalAnimation(){
-		smokeMonsterAnimator.Play("smokeMonsterNormal");
+	private void DisableSubHead(){
+		nextHeadToDestroy.SetActive(false);
 	}
 
-	private void PlayHurtAnimation(){
-		smokeMonsterAnimator.Play("smokeMonsterHurt");
-	}
+//	private void PlayNormalAnimation(){
+//		smokeMonsterAnimator.Play("smokeMonsterNormal");
+//	}
+//
+//	private void PlayHurtAnimation(){
+//		smokeMonsterAnimator.Play("smokeMonsterHurt");
+//	}
 	
 
 }

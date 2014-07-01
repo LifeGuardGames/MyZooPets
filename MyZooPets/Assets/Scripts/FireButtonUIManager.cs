@@ -60,7 +60,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		if(args.TargetCollider.name == fireOrbDropTarget.name){
-			Debug.Log("orb on target");
 
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);

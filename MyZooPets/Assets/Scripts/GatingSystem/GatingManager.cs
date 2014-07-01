@@ -287,64 +287,37 @@ public class GatingManager : Singleton<GatingManager>{
 		return isDestroyed;
 	}	
 
-	/// <summary>
-	/// Shows the fire button.
-	/// </summary>
-	public void ShowFireButton(){
-		// the pet has reached its destination (in front of the monster) so show the fire UI
-		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
-		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
-		
-		// Find the position of the pet and transform that position into NGUI screen space.
-		// The fire button will always be spawned at the pet's location
-		GameObject petLocation = GameObject.Find("Pet_LWF");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
-		                                                             petLocation.transform.position);
-		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
-		                                                               InterfaceAnchors.BottomLeft, 
-		                                                               InterfaceAnchors.Center);
-		
-		
-		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
-		// 	strConstant = "FireLoc_Tutorial";
-		
-		// set location of the button based on if it is a tutorial or not
-		//		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
-		goFireButton.transform.localPosition = fireButtonLoc;
-		
-		// rename the button so that other things can find it
-		goFireButton.name = ButtonMonster.FIRE_BUTTON;
-		
-		// get the gate in this room
-		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
-		if(gate){
-			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
-			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
-			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
-			script.SetGate(gate);
-		}
-		else
-			Debug.LogError("Destination callback being called for non gated room");		
-	}
 
-	public void ShowNoChargeNoFireNotification(){
+	/// <summary>
+	/// Shows the no fire notification.
+	/// </summary>
+	public void ShowNoFireNotification(){
+		// if inhaler is ready to be used prompt user to use inhaler
 		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
 			PetSpeechAI.Instance.ShowInhalerMsg();
 		}
+		// if inhaler already use check if there's fire orb in the inventory
 		else{
-
-			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
-				StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-
-				ClickManager.Instance.Lock(UIModeTypes.Store);
-				StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
-			};
-
-			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-			
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			// if there's a fire orb in the inventory prompt the user to use it
+			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
+			if(fireOrb != null){
+				Debug.Log("use the fire Orb");
+			}
+			// if not tell user to buy it or wait for inhaler
+			else{
+				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+					
+					ClickManager.Instance.Lock(UIModeTypes.Store);
+					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+				};
+				
+				Hashtable notificationEntry = new Hashtable();
+				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+				
+				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			}
 		}
 	}
 
@@ -366,38 +339,21 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void PetReachedDest(object sender, EventArgs args){
-		
-		// process any callbacks for when the pet reaches a gate
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);		
 	
-		//Check if version is Lite. spawn cross promo ads if so
-		bool tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(tutDone && VersionManager.IsLite())
-			GateLiteLogic();
-		else
-			GateProLogic();
+		// if the pet is happy and healthy, add the fire button
+		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
+		
+		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy) 
+			ShowFireButton();
+		else{
+			ShowUnhealthyNoFireNotification();
+		}
 		
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
-	}
-
-	private void GateLiteLogic(){
-//		LgCrossPromo.ShowInterstitial(LgCrossPromo.LAST_GATE);
-	}
-
-	private void GateProLogic(){
-		// if the pet is happy and healthy, add the fire button
-		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
-		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
-		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-
-		if(eState == PetHealthStates.Healthy && eMood == PetMoods.Happy) 
-			ShowFireButton();
-		else{
-			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
-			ShowUnhealthyNoFireNotification();
-		}
 	}
 
 	/// <summary>
@@ -405,45 +361,54 @@ public class GatingManager : Singleton<GatingManager>{
 	/// cannot breathe fire
 	/// </summary>
 	private void ShowUnhealthyNoFireNotification(){
-		//use thought bubble instead. try to stay away from notification
-
-		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
-		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
+		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		
-		if(eState != PetHealthStates.Healthy){
+		if(healthState != PetHealthStates.Healthy){
 
 			PetSpeechAI.Instance.ShowNoFireSickMsg();
 		}
-		else if(eMood != PetMoods.Happy){
+		else if(moodState != PetMoods.Happy){
 
 			PetSpeechAI.Instance.ShowNoFireHungryMsg();
 		}
-		else{
-//			if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
-//				PetSpeechAI.Instance.ShowInhalerMsg();
-//			}
-//			else{
-//				//TODO: Missing logic here. If the user already has fire orb need a diff message
-//
-//				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
-//					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-//
-//					ClickManager.Instance.Lock(UIModeTypes.Store);
-//					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
-//				};
-//
-//				Hashtable notificationEntry = new Hashtable();
-//				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-//				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-//				
-//				NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//				
-//			}
-		
-//		    				PetSpeechAI.Instance.ShowOutOfFireMsg();
-			//TODO: enable FireOrbMsg once it's ready to integrate
-		}
 	}
+
+	/// <summary>
+	/// Shows the fire button.
+	/// </summary>
+	private void ShowFireButton(){
+		// the pet has reached its destination (in front of the monster) so show the fire UI
+		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
+		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
+		
+		// Find the position of the pet and transform that position into NGUI screen space.
+		// The fire button will always be spawned at the pet's location
+		GameObject petLocation = GameObject.Find("Pet_LWF");
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		                                                             petLocation.transform.position);
+		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
+		                                                               InterfaceAnchors.BottomLeft, 
+		                                                               InterfaceAnchors.Center);
+		
+		// set button location
+		goFireButton.transform.localPosition = fireButtonLoc;
+		
+		// rename the button so that other things can find it
+		goFireButton.name = ButtonMonster.FIRE_BUTTON;
+		
+		// get the gate in this room
+		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
+		if(gate){
+			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
+			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
+			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
+			script.SetGate(gate);
+		}
+		else
+			Debug.LogError("Destination callback being called for non gated room");		
+	}
+
 
 	//TODO: need fix up
 	private void ReturnToGatingSystemUIMode(object sender, EventArgs args){
@@ -459,7 +424,6 @@ public class GatingManager : Singleton<GatingManager>{
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
-//		InventoryUIManager.Instance.ShowPanel();
 	}
 	
 	//---------------------------------------------------

@@ -54,13 +54,12 @@ public class ButtonMonster : LgButtonHold{
 	public void SetGate(Gate gate){
 		this.gate = gate;
 	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	// When the user presses down on the fire meter button.
-	// This will begin some pet animation prep and start
-	// to fill the attached meter.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Processes the click.
+	/// When the user presses down on the fire meter button. This will begin
+	/// some pet animation prep and start to fill the attached meter
+	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
 		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
@@ -70,6 +69,7 @@ public class ButtonMonster : LgButtonHold{
 		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
 			return;
 
+		// if can breathe fire, attack the gate!!
 		if(canBreathFire){
 			isLegal = true;
 			
@@ -84,18 +84,17 @@ public class ButtonMonster : LgButtonHold{
 			// turn the fire meter on
 			scriptFireMeter.StartFilling();
 		}
+		// else can't breathe fire. explain why
 		else{
-			//explain why can't breathe fire right now. call GatingManager to do this
 			if(!TutorialManager.Instance.IsTutorialActive())
-				GatingManager.Instance.ShowNoChargeNoFireNotification();
+				GatingManager.Instance.ShowNoFireNotification();
 		}
 	}
-	
-	//---------------------------------------------------
-	// GetDamage()
-	// Returns the amount of damage the pet will currently
-	// attack with.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the damage the pet will currenlty attack with.
+	/// </summary>
+	/// <returns>The damage.</returns>
 	private int GetDamage(){
 		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		int damage = curSkill.DamagePoint;
@@ -104,7 +103,7 @@ public class ButtonMonster : LgButtonHold{
 
 	protected override void ButtonReleased(){
 		if(!isLegal){
-			Debug.Log("Something going wrong with the fire button.  Aborting");
+//			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
 		

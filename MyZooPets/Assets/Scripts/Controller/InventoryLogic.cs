@@ -126,14 +126,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			
 			//need to use the stats effect from item
 			ItemLogic.Instance.StatsEffect(itemID);
-
-			//TODO: needs to be reviewed...not sure if this is the best place to put this code
-			//show fire button right away if in an active gate and used a fire orb
-//			if(ClickManager.Instance.CurrentMode == UIModeTypes.GatingSystem &&
-//			   itemID == "Usable1"){
-//
-//				GatingManager.Instance.ShowFireButton();
-//			}
 			
 			//analytics
 			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
@@ -172,15 +164,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 			//analytics
 			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
-//			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
-//			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
-//			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
-//			                                         Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
-			
-			// play the item's sound, if it has one
-//			string itemSound = invItem.ItemData.SoundUsed;
-//			if(!string.IsNullOrEmpty(itemSound))
-//				AudioManager.Instance.PlayClip(itemSound);
 			
 			//remove inv item if there is none left
 			if(invItem.Amount == 0)

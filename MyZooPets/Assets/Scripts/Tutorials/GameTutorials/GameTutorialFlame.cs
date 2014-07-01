@@ -8,7 +8,8 @@ using System.Collections.Generic;
 /// Explain to user how to use fire orb and blow fire.
 /// </summary>
 public class GameTutorialFlame : GameTutorial{
-	
+	GameObject fireOrbFingerHint;
+
 	public GameTutorialFlame() : base(){		
 		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
 		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
@@ -37,11 +38,8 @@ public class GameTutorialFlame : GameTutorial{
 
 		switch(step){
 		case 0:
-			//add fire orb to the clickable list
-			FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
-			GameObject fireOrbReferrence = InventoryUIManager.Instance.GetFireOrbReference();
-			AddToProcessList(fireOrbReferrence);
-			
+			TutorialManager.Instance.StartCoroutine(DragFireOrbHint());
+
 			break;
 		case 1:
 
@@ -64,6 +62,37 @@ public class GameTutorialFlame : GameTutorial{
 		}
 	}
 
+	private IEnumerator DragFireOrbHint(){
+		yield return new WaitForSeconds(0.5f);
+
+		//add fire orb to the clickable list
+		FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
+		GameObject fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();
+		GameObject fireButtonReference = FireButtonUIManager.Instance.GetFireButtonReference();
+		Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
+		Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
+		
+		AddToProcessList(fireOrbItemReference);
+
+		fireOrbFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-BottomRight"),
+		                                                  (GameObject)Resources.Load("FireOrbFingerHint"));
+
+		// set the hint to the right spawn location
+		Vector3 hintPosition = fireOrbItemPosition;
+		hintPosition.z = fireOrbFingerHint.transform.localPosition.z;
+		fireOrbFingerHint.transform.localPosition = hintPosition;
+
+		
+		fireButtonPosition = CameraManager.Instance.TransformAnchorPosition(fireButtonPosition, 
+		                                                                    InterfaceAnchors.Center, 
+		                                                                    InterfaceAnchors.BottomRight);
+		fireButtonPosition.z = fireOrbFingerHint.transform.localPosition.z;
+
+		Hashtable optional = new Hashtable();
+		optional.Add("repeat", 0);
+		LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 3f, optional);
+	}
+
 	/// <summary>
 	/// When the fire button is active advance tutorial.
 	/// </summary>
@@ -71,6 +100,10 @@ public class GameTutorialFlame : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void FireButtonActiveEventHandler(object sender, EventArgs args){
 		FireButtonUIManager.FireButtonActive -= FireButtonActiveEventHandler;
+
+		// clean up tween from last step
+		LeanTween.cancel(fireOrbFingerHint);
+		GameObject.Destroy(fireOrbFingerHint);
 
 		Advance();
 	}

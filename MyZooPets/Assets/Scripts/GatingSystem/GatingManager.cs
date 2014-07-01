@@ -390,7 +390,9 @@ public class GatingManager : Singleton<GatingManager>{
 		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
 		                                                               InterfaceAnchors.BottomLeft, 
 		                                                               InterfaceAnchors.Center);
-		
+
+		fireButtonLoc.z = 1;
+
 		// set button location
 		goFireButton.transform.localPosition = fireButtonLoc;
 		

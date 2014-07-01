@@ -28,6 +28,10 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 	}
 
+	public GameObject GetFireButtonReference(){
+		return imageButton.gameObject;
+	}
+
 	public void TurnFireButtonEffectOff(){
 		buttonPluseAnimation.Stop();
 		sunBeam.SetActive(false);

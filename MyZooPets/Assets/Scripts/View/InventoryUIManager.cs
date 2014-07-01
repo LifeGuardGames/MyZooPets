@@ -153,23 +153,23 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// Handles the item press event.
 	/// </summary>
 	private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
-		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
-
-		//remove drag hint on the next time user press on any item 
-		if(fingerHintGO != null)
-			Destroy(fingerHintGO);
-
-		//if user is pressing the item for the first time show hint
-		if(!isTutDone){
-			Vector3 hintPos = e.ParentTransform.position;
-			GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
-			fingerHintGO = (GameObject)Instantiate(fingerHintResource, hintPos, Quaternion.identity);
-			fingerHintGO.transform.parent = GameObject.Find("Anchor-BottomRight").transform;
-			fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
-
-			// fingerHintGO.transform.position = hintPos; 
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
-		}
+//		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
+//
+//		//remove drag hint on the next time user press on any item 
+//		if(fingerHintGO != null)
+//			Destroy(fingerHintGO);
+//
+//		//if user is pressing the item for the first time show hint
+//		if(!isTutDone){
+//			Vector3 hintPos = e.ParentTransform.position;
+//			GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
+//			fingerHintGO = (GameObject)Instantiate(fingerHintResource, hintPos, Quaternion.identity);
+//			fingerHintGO.transform.parent = GameObject.Find("Anchor-BottomRight").transform;
+//			fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
+//
+//			// fingerHintGO.transform.position = hintPos; 
+//			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
+//		}
 	}
 
 	//Event listener. listening to when new item is added to the inventory

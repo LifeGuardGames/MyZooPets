@@ -12,11 +12,11 @@ public class MultiAnimationController : MonoBehaviour {
 		}
 	}
 	
-	void OnGUI(){
-		if(isDebug){
-			if(GUI.Button(new Rect(100, 100, 100, 100), "Play Animations")){
-				PlayAnimations();
-			}
-		}
-	}
+//	void OnGUI(){
+//		if(isDebug){
+//			if(GUI.Button(new Rect(100, 100, 100, 100), "Play Animations")){
+//				PlayAnimations();
+//			}
+//		}
+//	}
 }

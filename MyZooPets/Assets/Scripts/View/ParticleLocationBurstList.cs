@@ -21,9 +21,9 @@ public class ParticleLocationBurstList : MonoBehaviour {
 		}
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "start")){
-			Play();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "start")){
+//			Play();
+//		}
+//	}
 }

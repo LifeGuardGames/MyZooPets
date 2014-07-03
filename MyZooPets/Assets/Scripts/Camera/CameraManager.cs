@@ -50,10 +50,7 @@ public class CameraManager : Singleton<CameraManager>{
 	public int GetNativeHeight(){
 		return nativeHeight;	
 	}
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------	
+
 	void Awake(){
 		// native height is a fixed constant that we define for NGUI
 		nativeHeight = Constants.GetConstant<int>("NativeHeight");
@@ -63,15 +60,15 @@ public class CameraManager : Singleton<CameraManager>{
 		nativeWidth = (int)(Screen.width * ratioY);
 		ratioX = nativeWidth / (Screen.width * 1.0f);
 	}	
-	
-	//---------------------------------------------------
-	// IsPartitionChanging()
-	// Returns true if the camera is currently moving.
-	// NOTE: I used to check for a lean tween, but we
-	// sometimes move the camera without using lean tween.
-	// So now I just look at the X of the camera and see if
-	// is where it should be.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Returns true if the camera is currently moving.
+	/// NOTE: I used to check for a lean tween, but we
+	/// sometimes move the camera without using lean tween.
+	/// So now I just look at the X of the camera and see if
+	/// is where it should be.
+	/// </summary>
+	/// <returns><c>true</c> if this camera is moving; otherwise, <c>false</c>.</returns>
 	public bool IsCameraMoving(){
 		PanToMoveCamera script = GetPanScript();
 		
@@ -89,32 +86,33 @@ public class CameraManager : Singleton<CameraManager>{
 		
 		return bMoving;
 	}
-	
-	//---------------------------------------------------
-	// ZoomToTarget()
-	// Moves the camera to a target position with a 
-	// target rotation over a set time.
-	// NOTE: If this function can ever "fail", be sure to
-	// check ZoomHelper because it assumes this function
-	// will always work.
-	//---------------------------------------------------	
-	public void ZoomToTarget(Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject){
+
+	/// <summary>
+	/// Moves the camera to a target position with a 
+	/// target rotation over a set time.
+	/// NOTE: If this function can ever "fail", be sure to
+	/// check ZoomHelper because it assumes this function
+	/// will always work.
+	/// </summary>
+	/// <param name="position">Position.</param>
+	/// <param name="rotation">Rotation.</param>
+	/// <param name="time">Time.</param>
+	/// <param name="targetObject">Target object.</param>
+	public void ZoomToTarget(Vector3 position, Vector3 rotation, float time, GameObject targetObject){
 		// before zooming, cache the camera position
 		initPosition = gameObject.transform.position;
 		initFaceDirection = gameObject.transform.eulerAngles;
 		
 		// move the camera
-		MoveCamera(vPos, vRotation, fTime, goObject);
+		MoveCamera(position, rotation, time, targetObject);
 			
 		// mark that the camera is zoomed
 		bZoomed = true;
 	}
-	
-	//---------------------------------------------------
-	// ZoomOutMove()
-	// Zooms the camera back to its original position
-	// over time.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Zooms camera back to its original position over time.
+	/// </summary>
 	public void ZoomOutMove(){
 		ZoomOutMove(.3f);
 	}
@@ -125,20 +123,17 @@ public class CameraManager : Singleton<CameraManager>{
 			bZoomed = false;
 		}
 	}	
-	
-	//---------------------------------------------------
-	// MoveCamera()
-	//---------------------------------------------------	
-	private void MoveCamera(Vector3 vPos, Vector3 vRotation, float fTime, GameObject goObject){
+
+	private void MoveCamera(Vector3 position, Vector3 rotation, float time, GameObject targetObject){
 		// set up the movement hash
 		Hashtable hashMove = new Hashtable();
 		
 		// make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
-		vPos -= gameObject.transform.parent.position;
+		position -= gameObject.transform.parent.position;
 		
 		// if the incoming object isn't null, set up a callback
-		if(goObject != null){
-			hashMove.Add("onCompleteTarget", goObject);
+		if(targetObject != null){
+			hashMove.Add("onCompleteTarget", targetObject);
 			hashMove.Add("onComplete", "CameraMoveDone");
 		}
 		
@@ -149,8 +144,8 @@ public class CameraManager : Singleton<CameraManager>{
 		hashRotation.Add("ease", LeanTweenType.easeInOutQuad);
 		
 		// kick of the move and rotation tweens
-		LeanTween.moveLocal(gameObject, vPos, fTime, hashMove);
-		LeanTween.rotateLocal(gameObject, vRotation, fTime, hashRotation);		
+		LeanTween.moveLocal(gameObject, position, time, hashMove);
+		LeanTween.rotateLocal(gameObject, rotation, time, hashRotation);		
 	}
 
 	/// <summary>

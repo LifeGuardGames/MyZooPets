@@ -110,7 +110,8 @@ public enum UIModeTypes {
     CustomizePet,
     IntroComic,
 	MenuSettings,
-	GatingSystem
+	GatingSystem,
+	MiniPet
 }
 
 // decoration node anchor types

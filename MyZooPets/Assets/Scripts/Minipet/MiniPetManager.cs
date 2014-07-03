@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetManager : Singleton<MiniPetManager> {
+	public static EventHandler<EventArgs> MiniPetStatusUpdate;
+
 	private Level maxLevel = Level.Level6;
 	// Use this for initialization
 	void Start(){
@@ -31,18 +34,108 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
+	/// <summary>
+	/// Whether mp has been tickled
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public bool IsTickled(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.IsTickled(miniPetID);
+	}
+
+	/// <summary>
+	/// Sets the tickle status of the mp.
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	/// <param name="isTickled">If set to <c>true</c> mp is tickled.</param>
+	public void SetTickle(string miniPetID, bool isTickled){
+		DataManager.Instance.GameData.MiniPets.SetIsTickled(miniPetID, isTickled);
+
+		if(MiniPetStatusUpdate != null)
+			MiniPetStatusUpdate(this, EventArgs.Empty);
+	}
+
+	/// <summary>
+	/// Whether mp has been cleaned
+	/// </summary>
+	/// <returns><c>true</c> true if mp is cleaned; otherwise, <c>false</c>.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public bool IsCleaned(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
+	}
+
+	/// <summary>
+	/// Sets the clean status of the mp.
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	/// <param name="isCleaned">If set to <c>true</c> mp is cleaned.</param>
+	public void SetCleaned(string miniPetID, bool isCleaned){
+		DataManager.Instance.GameData.MiniPets.SetIsCleaned(miniPetID, isCleaned);
+
+		if(MiniPetStatusUpdate != null)
+			MiniPetStatusUpdate(this, EventArgs.Empty);
+	}
+
+	/// <summary>
+	/// Determine whether mp can be fed. 
+	/// </summary>
+	/// <returns><c>true</c> if mp can be fed; otherwise, <c>false</c>.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
 	public bool CanModifyFoodXP(string miniPetID){
 		//make sure current level is not at max level
 		bool canModify = true;
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+		bool isTickled = DataManager.Instance.GameData.MiniPets.IsTickled(miniPetID);
+		bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
 
-		if(currentLevel == maxLevel)
-			canModify = false;
+		canModify = (currentLevel != maxLevel) && isTickled && isCleaned;
 
 		return canModify;
 	}
 
+	/// <summary>
+	/// Gets the current level.
+	/// </summary>
+	/// <returns>The current level.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public Level GetCurrentLevel(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+	}
 
+	/// <summary>
+	/// Gets the current food XP.
+	/// </summary>
+	/// <returns>The current food XP.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public int GetCurrentFoodXP(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.GetCurrentFoodXP(miniPetID);
+	}
+
+	/// <summary>
+	/// Gets the next level up condition.
+	/// </summary>
+	/// <returns>The next level up condition.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public int GetNextLevelUpCondition(string miniPetID){
+		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+		ImmutableDataMiniPetLevelUpConditions levelUpConditionData = 
+			DataLoaderLevelUpConditions.GetData(data.LevelUpConditionID);
+
+		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+		
+		//get next level
+		Level nextLevel = GetNextLevel(currentLevel);
+		
+		//get next level up condition
+		int levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
+
+		return levelUpCondition;
+	}
+
+	/// <summary>
+	/// Call this method when food has been fed to mp. Need to check if mp can be
+	/// fed first using CanModifyFoodXP
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseFoodXP(string miniPetID){
 		//check if level meter meets next lv condition
 		//if it does play level up animations and spew out rewards
@@ -50,19 +143,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		//Increase food xp                                                                         
 		DataManager.Instance.GameData.MiniPets.IncreaseFoodXP(miniPetID, 1);
 
-		//get immutabledata
-		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
-		ImmutableDataMiniPetLevelUpConditions levelUpConditionData = 
-			DataLoaderLevelUpConditions.GetData(data.LevelUpConditionID);
-
-		//get current level
-		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
-
-		//get next level
-		Level nextLevel = GetNextLevel(currentLevel);
-
-		//get next level up condition
-		int levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
+		int levelUpCondition = GetNextLevelUpCondition(miniPetID);
 
 		//get current food xp
 		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentFoodXP(miniPetID);
@@ -71,8 +152,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		if(currentFoodXP >= levelUpCondition){
 			Debug.Log("pet level up!!!!"); 
 			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
+			DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
 		}
-			
+
+		if(MiniPetStatusUpdate != null)
+			MiniPetStatusUpdate(this, EventArgs.Empty);
 
 		/*
 		 * Few options here for level up. Can just return boolean to signify if user level up

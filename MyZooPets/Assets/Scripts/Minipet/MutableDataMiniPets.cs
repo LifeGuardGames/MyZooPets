@@ -15,10 +15,14 @@ public class MutableDataMiniPets{
 	public class Status{
 		public Level CurrentLevel {get; set;}
 		public int CurrentFoodXP {get; set;}
+		public bool IsTickled {get; set;}
+		public bool IsCleaned {get; set;}
 		
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
+			IsTickled = false;
+			IsCleaned = false;
 		}
 	}
 
@@ -70,6 +74,19 @@ public class MutableDataMiniPets{
 	}
 
 	/// <summary>
+	/// Resets the current food XP.
+	/// </summary>
+	/// <param name="miniPetID">Mini pet I.</param>
+	public void ResetCurrentFoodXP(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			status.CurrentFoodXP = 0;
+
+			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
+	/// <summary>
 	/// Increases the current level by one level
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
@@ -100,6 +117,60 @@ public class MutableDataMiniPets{
 
 		return currentLevel;
 	}
+
+	/// <summary>
+	/// Determines whether this mini pet is tickeld
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public bool IsTickled(string miniPetID){
+		bool retVal = false;
+
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			retVal = status.IsTickled;
+		}
+
+		return retVal;
+	}
+
+	/// <summary>
+	/// Sets if MP is tickled
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	/// <param name="isTickled">If set to <c>true</c> mp is tickled.</param>
+	public void SetIsTickled(string miniPetID, bool isTickled){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			status.IsTickled = isTickled;
+
+//			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
+	public bool IsCleaned(string miniPetID){
+		bool retVal = false;
+
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			retVal = status.IsCleaned;
+		}
+
+		return retVal;
+	}
+
+	public void SetIsCleaned(string miniPetID, bool isCleaned){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			status.IsCleaned = isCleaned;
+
+//			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
 
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();

@@ -23,13 +23,25 @@ public class JLocalCacheWindow : EditorWindow {
 		"Windows Store Apps",
 		"Windows Phone 8",
 #endif
-#if !UNITY_3_4 && !UNITY_3_5
+#if !UNITY_3_4 && !UNITY_3_5 && (UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3)
 		"Google Native Client",
 #endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 		"Flash Player",
+#endif
 		"PS3",
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+		"PS4",
+		"PS Vita",
+		"Playstation®Mobile",
+#endif
 		"Xbox 360",
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+		"Xbox One",
+#endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
 		"Wii"
+#endif
 	};
 	
 	static string[][] buildTargetWithSubtargetsOptions = new string[][] {
@@ -37,6 +49,7 @@ public class JLocalCacheWindow : EditorWindow {
 		new string[] { "PC, Mac and Linux Standalone" },
 		new string[] { "iOS" },
 		new string[] { 
+			"Android (GENERIC)",
 			"Android (DXT)",
 			"Android (PVRTC)",
 			"Android (ATC)",
@@ -50,6 +63,7 @@ public class JLocalCacheWindow : EditorWindow {
 		},
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
 		new string[] {
+			"Blackberry (GENERIC)",
 			"Blackberry (PVRTC)",
 			"Blackberry (ATC)",
 			"Blackberry (ETC1)",
@@ -57,16 +71,29 @@ public class JLocalCacheWindow : EditorWindow {
 		new string[] { "Windows Store Apps" },
 		new string[] { "Windows Phone 8" },
 #endif
-#if !UNITY_3_4 && !UNITY_3_5
+#if !UNITY_3_4 && !UNITY_3_5 && (UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3)
 		new string[] { "Google Native Client" },
 #endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 		new string[] { "Flash Player" },
+#endif
 		new string[] { "PS3" },
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+		new string[] { "PS4" },
+		new string[] { "PS Vita" },
+		new string[] { "Playstation®Mobile" },
+#endif
 		new string[] { "Xbox 360" },
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+		new string[] { "Xbox One" },
+#endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
 		new string[] { "Wii" }
+#endif
 	};
 	
 	static string[] androidTextureCompressionOptions = new string[] {
+		"Don't override",
 		"DXT (Tegra)",
 		"PVRTC (PowerVR)",
 		"ATC (Adreno)",
@@ -81,6 +108,7 @@ public class JLocalCacheWindow : EditorWindow {
 	
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
 	static string[] blackberryTextureCompressionOptions = new string[] {
+		"Don't override",
 		"PVRTC (PowerVR)",
 		"ATC (Adreno)",
 		"ETC1 or RGBA16 (GLES 2.0)"
@@ -99,13 +127,13 @@ public class JLocalCacheWindow : EditorWindow {
 	Texture2D zipBuildTargetTexture = null;
 	Texture2D unzipBuildTargetTexture = null;
 	
-	LocalCache.Shared.CacheTarget? currentCacheTarget;
+	Texture2D shadedBackgroundTexture = null;
+	
 	LocalCache.Shared.CacheTarget? wantedCacheTarget;
-	LocalCache.Shared.CacheSubtarget? currentCacheSubtarget;
 	LocalCache.Shared.CacheSubtarget? wantedCacheSubtarget;
 	
 	int toolbarIndex = 0;
-	string[] toolbarOptions = new string[] { "Platform", "Status", "Settings" };
+	string[] toolbarOptions = new string[] { "PLATFORM", "STATUS", "SETTINGS" };
 	Vector2 scrollPos1 = Vector2.zero;
 	Vector2 scrollPos2 = Vector2.zero;
 	Vector2 scrollPos3 = Vector2.zero;
@@ -133,44 +161,36 @@ public class JLocalCacheWindow : EditorWindow {
 	GUIStyle statusFontStyle = new GUIStyle();
 	GUIStyle statusFontCachedStyle = new GUIStyle();
 	GUIStyle statusFontCompressedStyle = new GUIStyle();
+	
+	GUIStyle headerGUIStyle;
+	GUIStyle toolbarGUIStyle;
+	GUIStyle pipelineButtonGUIStyle;
 
 	[MenuItem("Window/Fast Platform Switch")]
 	public static void ShowWindow()
 	{
-		EditorWindow.GetWindow(typeof(JLocalCacheWindow), false, "Platform");
+		JLocalCacheWindow w = EditorWindow.GetWindow(typeof(JLocalCacheWindow), false, "Platform") as JLocalCacheWindow;
+		w.Show ();
 	}
 	
 	void OnEnable() {
-		// Listen for platform changes & cache manager refreshes
-		//EditorUserBuildSettings.activeBuildTargetChanged += ActiveBuildTargetChanged;
-		
-		// Local Cache Version
-		if (LocalCache.Preferences.LocalCacheVersion == -1) {
-			LocalCache.Preferences.LocalCacheVersion = 1;
-			LocalCache.CacheManager.ClearAllCache();
-		}
-		
-		// Warmup preferences
-		LocalCache.Preferences.Warmup();
-		
-		// Auto compress?
-		if (LocalCache.Preferences.AutoCompress)
-			LocalCache.CacheManager.CompressAllCache(true);
-		
-		// Force repaint
-		LocalCache.CacheManager.ShouldRefreshUI = true;
-		
-		EditorApplication.update += EditorUpdate;
+		// Setup current wanted target
+		wantedCacheTarget = LocalCache.CacheManager.CurrentCacheTarget;
+		wantedCacheSubtarget = LocalCache.CacheManager.CurrentCacheSubtarget;
 	}
 	
 	void OnGUI()
 	{
-		if (currentCacheTarget == null || areaStyle.normal.background == null)
-			SetupWindow();
-
-		bool isDirty = false;
+		SetupGUIStyles(GUI.skin);
 		
-		toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbarOptions);
+		bool isDirty = false;
+
+		if (buildTargetTextures == null || areaStyle.normal.background == null) {
+			SetupWindow();
+			isDirty = true;
+    	}
+		
+		toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbarOptions, toolbarGUIStyle);
 		
 		GUILayout.Space(10);
 		
@@ -203,7 +223,7 @@ public class JLocalCacheWindow : EditorWindow {
 				GUILayout.FlexibleSpace();
 				
 				// Selected platform
-				if (i == (int)currentCacheTarget) {
+				if (i == (int)LocalCache.CacheManager.CurrentCacheTarget) {
 					EditorGUILayout.BeginVertical(GUILayout.Height(40));
 					GUILayout.FlexibleSpace();
 					GUILayout.Box(selectedBuildTargetTexture, imageStyle);
@@ -234,20 +254,20 @@ public class JLocalCacheWindow : EditorWindow {
 				GUILayout.Label("Texture Compression");
 				GUILayout.FlexibleSpace();
 		
-				int androidCompressionOption = CacheSubtargetToAndroidCompressionOption(wantedCacheSubtarget ?? currentCacheSubtarget);
+				int androidCompressionOption = CacheSubtargetToAndroidCompressionOption(wantedCacheSubtarget ?? LocalCache.CacheManager.CurrentCacheSubtarget);
 				androidCompressionOption = EditorGUILayout.Popup(androidCompressionOption, androidTextureCompressionOptions);
 				wantedCacheSubtarget = AndroidCompressionOptionToCacheSubtarget(androidCompressionOption);
 				GUILayout.EndHorizontal();
 			}
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-			else if (wantedCacheTarget == LocalCache.Shared.CacheTarget.BB10) {
+			else if (wantedCacheTarget == LocalCache.Shared.CacheTarget.BlackBerry) {
 				GUILayout.Space(10);
 				
 				GUILayout.BeginHorizontal();
 				GUILayout.Label("Texture Compression");
 				GUILayout.FlexibleSpace();
 		
-				int blackberryCompressionOption = CacheSubtargetToBlackBerryCompressionOption(wantedCacheSubtarget ?? currentCacheSubtarget);
+				int blackberryCompressionOption = CacheSubtargetToBlackBerryCompressionOption(wantedCacheSubtarget ?? LocalCache.CacheManager.CurrentCacheSubtarget);
 				blackberryCompressionOption = EditorGUILayout.Popup(blackberryCompressionOption, blackberryTextureCompressionOptions);
 				wantedCacheSubtarget = BlackBerryCompressionOptionToCacheSubtarget(blackberryCompressionOption);
 				GUILayout.EndHorizontal();
@@ -259,8 +279,8 @@ public class JLocalCacheWindow : EditorWindow {
 			
 			GUILayout.Space(10);
 			
-			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlaying && !EditorApplication.isCompiling;
-			if (GUILayout.Button("Switch Platform"))
+			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;
+			if (GUILayout.Button("SWITCH PLATFORM", pipelineButtonGUIStyle))
 			{
 #if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 				if (EditorSettings.externalVersionControl == ExternalVersionControl.Disabled) {
@@ -269,14 +289,13 @@ public class JLocalCacheWindow : EditorWindow {
 					}
 				}
 #endif
-				
+
 				AssetDatabase.Refresh();
 				
 #if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 				if (EditorSettings.externalVersionControl != ExternalVersionControl.Disabled) {
 #endif
-					if (!EditorApplication.isCompiling)
-						LocalCache.CacheManager.SwitchPlatform(currentCacheTarget, currentCacheSubtarget, wantedCacheTarget, wantedCacheSubtarget, false);
+					LocalCache.CacheManager.SwitchPlatform(wantedCacheTarget, wantedCacheSubtarget, false);
 #if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 				}
 #endif
@@ -293,8 +312,11 @@ public class JLocalCacheWindow : EditorWindow {
 			if (LocalCache.CacheManager.PlatformRefreshInProgress) {
 				GUILayout.Label("Please wait for platform refresh to end...");
 				GUILayout.Space(10);
-			} else if (EditorApplication.isCompiling) {
+			} else if (EditorApplication.isCompiling || EditorApplication.isUpdating) {
 				GUILayout.Label("Please wait for script compilation to end...");
+				GUILayout.Space(10);
+			} else if (EditorApplication.isPlayingOrWillChangePlaymode) {
+				GUILayout.Label("Cannot switch platform during play mode...");
 				GUILayout.Space(10);
 			}
 				
@@ -336,8 +358,8 @@ public class JLocalCacheWindow : EditorWindow {
 					if (cacheTarget == LocalCache.Shared.CacheTarget.Android)
 						cacheSubtarget = (LocalCache.Shared.CacheSubtarget)j + (int)LocalCache.Shared.CacheSubtarget.Android_First + 1;
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-					else if (cacheTarget == LocalCache.Shared.CacheTarget.BB10)
-						cacheSubtarget = (LocalCache.Shared.CacheSubtarget)j + (int)LocalCache.Shared.CacheSubtarget.BB10_First + 1;
+					else if (cacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
+						cacheSubtarget = (LocalCache.Shared.CacheSubtarget)j + (int)LocalCache.Shared.CacheSubtarget.BlackBerry_First + 1;
 #endif
 					
 					// Cacheception
@@ -358,7 +380,7 @@ public class JLocalCacheWindow : EditorWindow {
 					if (cacheTarget == LocalCache.Shared.CacheTarget.Android)
 						GUILayout.Box(androidSubtargetTextures[j], imageStyle);
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-					else if (cacheTarget == LocalCache.Shared.CacheTarget.BB10)
+					else if (cacheTarget == LocalCache.Shared.CacheTarget.BlackBerry)
 						GUILayout.Box(blackberrySubtargetTextures[j], imageStyle);
 #endif
 					else
@@ -417,42 +439,46 @@ public class JLocalCacheWindow : EditorWindow {
 						EditorGUILayout.EndVertical();
 						
 						GUILayout.Space(5);
+
+						if (!(LocalCache.Preferences.EnableHardLinks && cacheTarget == LocalCache.CacheManager.CurrentCacheTarget && cacheSubtarget == LocalCache.CacheManager.CurrentCacheSubtarget)) {
+							EditorGUILayout.BeginVertical(GUILayout.Height(40));
+							GUILayout.FlexibleSpace();
+							GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;
+							if (cacheData[i][j].CompressionStatus) {
+								if (GUILayout.Button(unzipBuildTargetTexture)) {
+									LocalCache.CacheManager.DecompressCache(cacheTarget, cacheSubtarget);
+									cacheDataIsInvalid = true;
+									isDirty = true;
+								}
+							} else {
+								if (GUILayout.Button(zipBuildTargetTexture)) {
+									LocalCache.CacheManager.CompressCache(cacheTarget, cacheSubtarget);
+									cacheDataIsInvalid = true;
+									isDirty = true;
+								}
+							}
+							GUI.enabled = true;
+							GUILayout.FlexibleSpace();
+							EditorGUILayout.EndVertical();
 						
-						EditorGUILayout.BeginVertical(GUILayout.Height(40));
-						GUILayout.FlexibleSpace();
-						GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlaying;
-						if (cacheData[i][j].CompressionStatus) {
-							if (GUILayout.Button(unzipBuildTargetTexture)) {
-								LocalCache.CacheManager.DecompressCache(cacheTarget, cacheSubtarget);
+							GUILayout.Space(5);
+							
+							EditorGUILayout.BeginVertical(GUILayout.Height(40));
+							GUILayout.FlexibleSpace();
+							GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;
+							if (GUILayout.Button(trashBuildTargetTexture)) {
+								LocalCache.CacheManager.ClearCache(cacheTarget, cacheSubtarget);
 								cacheDataIsInvalid = true;
 								isDirty = true;
 							}
+							GUI.enabled = true;
+							GUILayout.FlexibleSpace();
+							EditorGUILayout.EndVertical();
+							
+							GUILayout.Space(5);
 						} else {
-							if (GUILayout.Button(zipBuildTargetTexture)) {
-								LocalCache.CacheManager.CompressCache(cacheTarget, cacheSubtarget);
-								cacheDataIsInvalid = true;
-								isDirty = true;
-							}
+							GUILayout.Space(110);
 						}
-						GUI.enabled = true;
-						GUILayout.FlexibleSpace();
-						EditorGUILayout.EndVertical();
-						
-						GUILayout.Space(5);
-						
-						EditorGUILayout.BeginVertical(GUILayout.Height(40));
-						GUILayout.FlexibleSpace();
-						GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlaying;
-						if (GUILayout.Button(trashBuildTargetTexture)) {
-							LocalCache.CacheManager.ClearCache(cacheTarget, cacheSubtarget);
-							cacheDataIsInvalid = true;
-							isDirty = true;
-						}
-						GUI.enabled = true;
-						GUILayout.FlexibleSpace();
-						EditorGUILayout.EndVertical();
-						
-						GUILayout.Space(5);
 					}
 					
 					EditorGUILayout.EndHorizontal();
@@ -467,7 +493,7 @@ public class JLocalCacheWindow : EditorWindow {
 			GUILayout.Space(10);
 			if (totalCacheSize >= 1073741824)
 				GUILayout.Label("Total cache size: " + (totalCacheSize * 9.31322575 * 1E-10).ToString("F2") + " GB");
-			if (totalCacheSize >= 1048576)
+			else if (totalCacheSize >= 1048576)
 				GUILayout.Label("Total cache size: " + (totalCacheSize * 9.53674316 * 1E-7).ToString("F2") + " MB");
 			else
 				GUILayout.Label("Total cache size: " + (totalCacheSize * 0.0009765625).ToString("F2") + " kB");
@@ -477,12 +503,44 @@ public class JLocalCacheWindow : EditorWindow {
 				cacheData = null;
 		} else if (toolbarIndex == 2) {
 			scrollPos3 = EditorGUILayout.BeginScrollView(scrollPos3, GUILayout.ExpandHeight(true));
-			GUILayout.Label("COMPRESSION", EditorStyles.boldLabel);
+			
+			GUILayout.Label("HARD LINKS (EXPERIMENTAL)", headerGUIStyle);
+			
+			GUILayout.Space(5);
+
+			GUI.skin.label.wordWrap = true;
+			GUILayout.Label ("Hard links boost performance by having the cache stay in place and instead change directory links during platform switch. This feature is still experimental and may cause issues on some platforms and under certain conditions.", GUILayout.Width(position.width - 25), GUILayout.Height(110f - position.width * 0.1f));
+			GUI.skin.label.wordWrap = false;
+
+			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;	
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Label("Enable Hard Links");
+			GUILayout.FlexibleSpace();
+
+			var enableHardLinks = EditorGUILayout.Toggle("",LocalCache.Preferences.EnableHardLinks, GUILayout.Width(15));
+			if (enableHardLinks != LocalCache.Preferences.EnableHardLinks) {
+				if (enableHardLinks == true) {
+					if (EditorUtility.DisplayDialog("Enable hard links?", "WARNING: Hard links is an expirmental feature. It is recommended you BACKUP YOUR PROJECTS before using it.\n\nHard links can fail under a number of conditions including: unsupported file system, network shares, unsupported platform...\n\nTHIS OPTION IS SYSTEM-WIDE AND WILL BE ACTIVATED ON OPENING ANY OF YOUR FAST PLATFORM SWITCH V1.4+ ENABLED PROJECTS.\n\nIn case of trouble, contact us at contact@jemast.com to resolve issues.", "Ok, I understand!", "Wait... Cancel!")) {
+						LocalCache.Preferences.EnableHardLinks = enableHardLinks;
+						LocalCache.CacheManager.HasCheckedHardLinkStatus = false;
+						isDirty = true;
+					}
+				} else {
+					LocalCache.Preferences.EnableHardLinks = enableHardLinks;
+					LocalCache.CacheManager.HasCheckedHardLinkStatus = false;
+					isDirty = true;
+				}
+			}
+
+			EditorGUILayout.EndHorizontal();
+
+			GUILayout.Space(10);
+
+			GUILayout.Label("COMPRESSION", headerGUIStyle);
 			
 			GUILayout.Space(10);
 			
-			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlaying;
-			
+			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;		
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Label("Automatic Compression");
 			GUILayout.FlexibleSpace();
@@ -519,11 +577,11 @@ public class JLocalCacheWindow : EditorWindow {
 			
 			GUILayout.Space(10);
 			
-			GUILayout.Label("CLEAN UP", EditorStyles.boldLabel);
+			GUILayout.Label("CLEAN UP", headerGUIStyle);
 			
 			GUILayout.Space(10);
 			
-			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlaying;
+			GUI.enabled = !LocalCache.CacheManager.BackgroundCacheCompressionInProgress && !LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && !EditorApplication.isUpdating;
 			if (GUILayout.Button("Delete all cached data immediately")) {
 				if (EditorUtility.DisplayDialog("Delete all cached data?", "All cached data will be destroyed and switching platform will result in cache reinitialization and full asset reimport for that platform.", "Ok, I understand!", "Wait... Cancel!")) {
 					LocalCache.CacheManager.ClearAllCache();
@@ -538,6 +596,8 @@ public class JLocalCacheWindow : EditorWindow {
 					LocalCache.CacheManager.PlatformRefreshInProgress = false;
 					LocalCache.CacheManager.SwitchOperationInProgress = false;
 					LocalCache.CacheManager.PlatformRefreshCurrentScene = "";
+					LocalCache.CacheManager.SwitchOperationIsAPI = false;
+					LocalCache.CacheManager.PlatformRefreshShouldBustCache = false;
 					File.Delete(LocalCache.Shared.CachePath + "Background.txt");
 				}
 			}
@@ -552,7 +612,7 @@ public class JLocalCacheWindow : EditorWindow {
 			
 			GUILayout.Space(10);
 			
-			GUILayout.Label("VERSION CONTROL", EditorStyles.boldLabel);
+			GUILayout.Label("VERSION CONTROL", headerGUIStyle);
 			
 			GUILayout.Space(10);
 			
@@ -576,8 +636,8 @@ public class JLocalCacheWindow : EditorWindow {
 					stream.Dispose();
 				}
 				string vcFileContent = File.ReadAllText (vcFilePath);
-				if (!vcFileContent.Contains("/LocalCache/")) {
-					vcFileContent += "\n\n#Fast Platform Switch\nsyntax: regexp\n/^LocalCache/";
+				if (!vcFileContent.Contains("^LocalCache/")) {
+					vcFileContent += "\n\n#Fast Platform Switch\nsyntax: regexp\n^LocalCache/";
 					File.WriteAllText(vcFilePath, vcFileContent);
 				}
 			}
@@ -588,24 +648,7 @@ public class JLocalCacheWindow : EditorWindow {
 			
 			GUILayout.Space(10);
 			
-			if (LocalCache.CacheManager.BackgroundCacheCompressionInProgress) {
-				GUILayout.Label("Please wait for background compression to end...");
-				GUILayout.Space(10);
-			}
-			
-			if (LocalCache.CacheManager.PlatformRefreshInProgress) {
-				GUILayout.Label("Please wait for platform refresh to end...");
-				GUILayout.Space(10);
-			}
-			
-			if (EditorApplication.isPlaying) {
-				GUILayout.Label("Cannot switch platform while in Play mode...");
-				GUILayout.Space(10);
-			}
-			
-			GUILayout.Space(10);
-			
-			GUILayout.Label("DEBUG", EditorStyles.boldLabel);
+			GUILayout.Label("DEBUG", headerGUIStyle);
 			
 			GUILayout.Space(10);
 			
@@ -630,10 +673,8 @@ public class JLocalCacheWindow : EditorWindow {
 	void SetupWindow() {
 		if (LocalCache.CacheManager.PlatformRefreshInProgress)
 			return;
-
-		var script = MonoScript.FromScriptableObject(this);
-		var scriptPath = AssetDatabase.GetAssetPath(script);
-		var assetsPath = scriptPath.Substring(0, scriptPath.Length - 20);
+		
+		var assetsPath = LocalCache.Shared.EditorAssetsPath;
 
 		// Load textures
 		buildTargetTextures = new Texture2D[] {
@@ -646,16 +687,29 @@ public class JLocalCacheWindow : EditorWindow {
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_METRO.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_WP8.png", typeof(Texture2D)) as Texture2D,
 			#endif
-			#if !UNITY_3_4 && !UNITY_3_5
+			#if !UNITY_3_4 && !UNITY_3_5 && (UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3)
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_NACL.png", typeof(Texture2D)) as Texture2D,
 			#endif
+			#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_FLASH.png", typeof(Texture2D)) as Texture2D,
+			#endif
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_PS3.png", typeof(Texture2D)) as Texture2D,
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_PS4.png", typeof(Texture2D)) as Texture2D,
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_VITA.png", typeof(Texture2D)) as Texture2D,
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_PSM.png", typeof(Texture2D)) as Texture2D,
+#endif
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_X360.png", typeof(Texture2D)) as Texture2D,
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_XBONE.png", typeof(Texture2D)) as Texture2D,
+#endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_WII.png", typeof(Texture2D)) as Texture2D
+#endif
 		};
 		
 		androidSubtargetTextures = new Texture2D[] {
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_ANDROID.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_ANDROID_DXT.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_ANDROID_PVRTC.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_ANDROID_ATC.png", typeof(Texture2D)) as Texture2D,
@@ -670,6 +724,7 @@ public class JLocalCacheWindow : EditorWindow {
 		
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
 		blackberrySubtargetTextures = new Texture2D[] {
+			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_BB10.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_BB10_PVRTC.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_BB10_ATC.png", typeof(Texture2D)) as Texture2D,
 			AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_BB10_ETC1.png", typeof(Texture2D)) as Texture2D
@@ -681,16 +736,12 @@ public class JLocalCacheWindow : EditorWindow {
 		zipBuildTargetTexture = AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_Zip.png", typeof(Texture2D)) as Texture2D;
 		unzipBuildTargetTexture = AssetDatabase.LoadAssetAtPath(assetsPath + "Images/Platform_Unzip.png", typeof(Texture2D)) as Texture2D;
 		
-		// Setup current target
-		wantedCacheTarget = currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
-		if (wantedCacheTarget == LocalCache.Shared.CacheTarget.Android)
-			wantedCacheSubtarget = currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
-#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-		else if (wantedCacheTarget == LocalCache.Shared.CacheTarget.BB10)
-			wantedCacheSubtarget = currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
-#endif
-		else
-			wantedCacheSubtarget = currentCacheSubtarget = null;
+		var sharedPath = LocalCache.Shared.SharedEditorAssetsPath;
+		shadedBackgroundTexture = AssetDatabase.LoadAssetAtPath(sharedPath + "Images/shadedBackground.png", typeof(Texture2D)) as Texture2D;
+		
+		// Setup current wanted target
+		wantedCacheTarget = LocalCache.CacheManager.CurrentCacheTarget;
+		wantedCacheSubtarget = LocalCache.CacheManager.CurrentCacheSubtarget;
 		
 		// Setup rects for list view handling
 		listViewRects = new Rect[buildTargetOptions.Length];
@@ -731,13 +782,25 @@ public class JLocalCacheWindow : EditorWindow {
 			assetsPath + "Images/Platform_METRO.png",
 			assetsPath + "Images/Platform_WP8.png",
 			#endif
-			#if !UNITY_3_4 && !UNITY_3_5
+			#if !UNITY_3_4 && !UNITY_3_5 && (UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3)
 			assetsPath + "Images/Platform_NACL.png",
 			#endif
+			#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2
 			assetsPath + "Images/Platform_FLASH.png",
+			#endif
 			assetsPath + "Images/Platform_PS3.png",
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+			assetsPath + "Images/Platform_PS4.png",
+			assetsPath + "Images/Platform_VITA.png",
+			assetsPath + "Images/Platform_PSM.png",
+#endif
 			assetsPath + "Images/Platform_X360.png",
+#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
+			assetsPath + "Images/Platform_XBONE.png",
+#endif
+#if UNITY_3_4 || UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
 			assetsPath + "Images/Platform_WII.png",
+#endif
 			assetsPath + "Images/Platform_ANDROID_DXT.png",
 			assetsPath + "Images/Platform_ANDROID_PVRTC.png",
 			assetsPath + "Images/Platform_ANDROID_ATC.png",
@@ -751,7 +814,8 @@ public class JLocalCacheWindow : EditorWindow {
 			assetsPath + "Images/Platform_Selected.png",
 			assetsPath + "Images/Platform_Trash.png",
 			assetsPath + "Images/Platform_Zip.png",
-			assetsPath + "Images/Platform_Unzip.png"
+			assetsPath + "Images/Platform_Unzip.png",
+			sharedPath + "Images/shadedBackground.png"
 		};
 		
 		foreach (var path in allTextures) {
@@ -779,93 +843,31 @@ public class JLocalCacheWindow : EditorWindow {
 		}
 	}
 	
+	void SetupGUIStyles(GUISkin skin) {
+		headerGUIStyle = new GUIStyle(skin.GetStyle("Label"));
+		headerGUIStyle.fontStyle = FontStyle.Bold;
+		headerGUIStyle.fontSize = 14;
+		headerGUIStyle.padding = new RectOffset(10,10,5,5);
+		headerGUIStyle.margin = new RectOffset(0,0,5,5);
+		headerGUIStyle.normal.background = shadedBackgroundTexture;
+		
+		toolbarGUIStyle = new GUIStyle(skin.GetStyle("toolbarbutton"));
+		toolbarGUIStyle.fontStyle = FontStyle.Bold;
+		toolbarGUIStyle.fontSize = 14;
+		toolbarGUIStyle.fixedHeight = 30;
+		
+		pipelineButtonGUIStyle = new GUIStyle(skin.GetStyle("Button"));
+		pipelineButtonGUIStyle.fontStyle = FontStyle.Bold;
+		pipelineButtonGUIStyle.fontSize = 14;
+		pipelineButtonGUIStyle.margin = new RectOffset(10,10,10,10);
+	}
+	
 	void CacheManagerRefresh() {
 		if (this != null) {
 			cacheData = null;
 			EditorUtility.SetDirty(this);
 			this.Repaint();
 		}
-	}
-	
-	
-	void EditorUpdate () {
-		if (LocalCache.CacheManager.ShouldRefreshUI) {
-			LocalCache.CacheManager.ShouldRefreshUI = false;
-			
-			if (this != null) {
-				cacheData = null;
-				EditorUtility.SetDirty(this);
-				this.Repaint();
-			}
-		}
-		
-		if (LocalCache.CacheManager.ShouldSwitchPlatform) {
-			LocalCache.CacheManager.SwitchPlatformOperation(currentCacheTarget, currentCacheSubtarget, wantedCacheTarget, wantedCacheSubtarget);
-		}
-		
-		if (LocalCache.CacheManager.PlatformRefreshInProgress && !EditorApplication.isCompiling && !LocalCache.CacheManager.SwitchOperationInProgress) {
-			ActiveBuildTargetChanged();
-		}
-	}
-	
-	void ActiveBuildTargetChanged() {
-		wantedCacheTarget = currentCacheTarget = LocalCache.Shared.CacheTargetForBuildTarget(EditorUserBuildSettings.activeBuildTarget);
-		if (currentCacheTarget == LocalCache.Shared.CacheTarget.Android)
-			wantedCacheSubtarget = currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForAndroidBuildSubtarget(EditorUserBuildSettings.androidBuildSubtarget);
-#if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-		else if (wantedCacheTarget == LocalCache.Shared.CacheTarget.BB10)
-			wantedCacheSubtarget = currentCacheSubtarget = LocalCache.Shared.CacheSubtargetForBlackBerryBuildSubtarget(EditorUserBuildSettings.blackberryBuildSubtarget);
-#endif
-		else
-			wantedCacheSubtarget = currentCacheSubtarget = null;
-		
-		LocalCache.LogUtility.LogImmediate("Applying trick to refresh subtargets");
-		
-		// This will trigger refresh for subtargets
-		// Unfortunately this code is not functional anymore since Unity 4.3.x
-//		Object playerSettings = Unsupported.GetSerializedAssetInterfaceSingleton("PlayerSettings");
-//		SerializedObject ser = new SerializedObject(playerSettings);
-//		SerializedProperty prop = ser.FindProperty("AndroidBundleVersionCode");
-//		prop.intValue = prop.intValue + 1;
-//		ser.ApplyModifiedProperties();
-//		prop.intValue = prop.intValue - 1;
-//		ser.ApplyModifiedProperties();
-
-		// New method requires building an asset bundle from an empty scene
-		// Slower but hopefully will last
-		// Only required with subtarget-only switches
-		if (LocalCache.CacheManager.PlatformRefreshShouldBustCache == true) {
-			var script = MonoScript.FromScriptableObject(this);
-			var scriptPath = AssetDatabase.GetAssetPath(script);
-			var assetsPath = scriptPath.Substring(0, scriptPath.Length - 20);
-
-			EditorUtility.DisplayProgressBar("Hold on", "Forcing synchronization with empty asset bundle build...", 0.5f);
-			BuildPipeline.BuildStreamedSceneAssetBundle(new string[] { assetsPath + "SubtargetCacheBust.unity" }, "JLocalCachePluginCacheBuster.unity3d", EditorUserBuildSettings.activeBuildTarget);
-			File.Delete(LocalCache.Shared.ProjectPath + "/JLocalCachePluginCacheBuster.unity3d");
-			Jemast.LocalCache.CacheManager.PlatformRefreshShouldBustCache = false;
-		}
-
-		LocalCache.LogUtility.LogImmediate("Platform refresh is all done");
-		
-		LocalCache.CacheManager.PlatformRefreshInProgress = false;
-		
-		if (this != null) {
-			cacheData = null;
-			EditorUtility.SetDirty(this);
-			this.Repaint();
-		}
-		
-		AssetDatabase.Refresh();
-		
-		LocalCache.LogUtility.LogImmediate("Reopening previous scene if any");
-		
-		if (!string.IsNullOrEmpty(LocalCache.CacheManager.PlatformRefreshCurrentScene)) {
-			EditorUtility.DisplayProgressBar("Hold on", "Reopening previous scene...", 0.5f);
-			EditorApplication.OpenScene(LocalCache.CacheManager.PlatformRefreshCurrentScene);
-			LocalCache.CacheManager.PlatformRefreshCurrentScene = "";
-		}
-		
-		EditorUtility.ClearProgressBar();
 	}
 	
 	// Handy method by andeeeee...
@@ -885,43 +887,47 @@ public class JLocalCacheWindow : EditorWindow {
 	
 	private static int CacheSubtargetToAndroidCompressionOption(LocalCache.Shared.CacheSubtarget? target) {
 		switch (target) {
-		case LocalCache.Shared.CacheSubtarget.Android_ETC:
-			return 3;
-		case LocalCache.Shared.CacheSubtarget.Android_DXT:
+		case LocalCache.Shared.CacheSubtarget.Android_GENERIC:
 			return 0;
-		case LocalCache.Shared.CacheSubtarget.Android_PVRTC:
+		case LocalCache.Shared.CacheSubtarget.Android_ETC:
+			return 4;
+		case LocalCache.Shared.CacheSubtarget.Android_DXT:
 			return 1;
-		case LocalCache.Shared.CacheSubtarget.Android_ATC:
+		case LocalCache.Shared.CacheSubtarget.Android_PVRTC:
 			return 2;
+		case LocalCache.Shared.CacheSubtarget.Android_ATC:
+			return 3;
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
 		case LocalCache.Shared.CacheSubtarget.Android_ETC2:
-			return 4;
+			return 5;
 #endif
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2
 		case LocalCache.Shared.CacheSubtarget.Android_ASTC:
-			return 5;
+			return 6;
 #endif
 		default:
-			return 3;
+			return 0;
 		}
 	}
 	
 	private static LocalCache.Shared.CacheSubtarget? AndroidCompressionOptionToCacheSubtarget(int option) {
 		switch (option) {
 		case 0:
-			return LocalCache.Shared.CacheSubtarget.Android_DXT;
+			return LocalCache.Shared.CacheSubtarget.Android_GENERIC;
 		case 1:
-			return LocalCache.Shared.CacheSubtarget.Android_PVRTC;
+			return LocalCache.Shared.CacheSubtarget.Android_DXT;
 		case 2:
-			return LocalCache.Shared.CacheSubtarget.Android_ATC;
+			return LocalCache.Shared.CacheSubtarget.Android_PVRTC;
 		case 3:
+			return LocalCache.Shared.CacheSubtarget.Android_ATC;
+		case 4:
 			return LocalCache.Shared.CacheSubtarget.Android_ETC;
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
-		case 4:
+		case 5:
 			return LocalCache.Shared.CacheSubtarget.Android_ETC2;
 #endif
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2
-		case 5:
+		case 6:
 			return LocalCache.Shared.CacheSubtarget.Android_ASTC;
 #endif
 		default:
@@ -933,14 +939,16 @@ public class JLocalCacheWindow : EditorWindow {
 #if !UNITY_3_4 && !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1
 	private static int CacheSubtargetToBlackBerryCompressionOption(LocalCache.Shared.CacheSubtarget? target) {
 		switch (target) {
-		case LocalCache.Shared.CacheSubtarget.BB10_PVRTC:
+		case LocalCache.Shared.CacheSubtarget.BlackBerry_GENERIC:
 			return 0;
-		case LocalCache.Shared.CacheSubtarget.BB10_ATC:
+		case LocalCache.Shared.CacheSubtarget.BlackBerry_PVRTC:
 			return 1;
-		case LocalCache.Shared.CacheSubtarget.BB10_ETC:
+		case LocalCache.Shared.CacheSubtarget.BlackBerry_ATC:
 			return 2;
+		case LocalCache.Shared.CacheSubtarget.BlackBerry_ETC:
+			return 3;
 		default:
-			return 2;
+			return 0;
 		}
 	}
 	
@@ -948,11 +956,13 @@ public class JLocalCacheWindow : EditorWindow {
 	private static LocalCache.Shared.CacheSubtarget? BlackBerryCompressionOptionToCacheSubtarget(int option) {
 		switch (option) {
 		case 0:
-			return LocalCache.Shared.CacheSubtarget.BB10_PVRTC;
+			return LocalCache.Shared.CacheSubtarget.BlackBerry_GENERIC;
 		case 1:
-			return LocalCache.Shared.CacheSubtarget.BB10_ATC;
+			return LocalCache.Shared.CacheSubtarget.BlackBerry_PVRTC;
 		case 2:
-			return LocalCache.Shared.CacheSubtarget.BB10_ETC;
+			return LocalCache.Shared.CacheSubtarget.BlackBerry_ATC;
+		case 3:
+			return LocalCache.Shared.CacheSubtarget.BlackBerry_ETC;
 		default:
 			return null;
 		}

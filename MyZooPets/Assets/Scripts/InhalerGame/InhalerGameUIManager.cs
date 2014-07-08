@@ -180,13 +180,13 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HideProgressBar();
 
         //Spawn floaty
-        Hashtable option = new Hashtable();
-        option.Add("parent", GameObject.Find("Anchor-Center"));
-        option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-        option.Add("textSize", 100f);
-        option.Add("color", Color.white);
-
-        FloatyUtil.SpawnFloatyText(option);
+//        Hashtable option = new Hashtable();
+//        option.Add("parent", GameObject.Find("Anchor-Center"));
+//        option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+//        option.Add("textSize", 100f);
+//        option.Add("color", Color.white);
+//
+//        FloatyUtil.SpawnFloatyText(option);
 
 		Invoke("GiveReward", 1.0f);
         //play sound

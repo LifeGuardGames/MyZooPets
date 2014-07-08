@@ -50,6 +50,9 @@ public class Inhale : InhalerPart{
 		LgInhalerAnimationEventHandler.BreatheInEndEvent -= BreatheInEndEventHandler;
 		petAnimator.SetTrigger("Backflip");
 
+		// Hide the inhaler
+		InhalerGameUIManager.Instance.HideInhaler();
+
 		//using invoke instead of listening to animationController callback
 		//because LWFAnimator sometimes sends callback prematurely. Don't
 		//want to debug LWFAnimator since we are switching away from it soon

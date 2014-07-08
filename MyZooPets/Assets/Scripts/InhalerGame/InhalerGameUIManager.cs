@@ -88,9 +88,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HUDUIManager.Instance.HidePanel();
     }
 
-    private void HideInhaler(){
+    public void HideInhaler(){
 		inhalerWholeObject.Play("InhalerFade");
-        //inhalerBody.SetActive(false);
     }
 
     private void ShowInhaler(){
@@ -178,7 +177,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     //Event listener. Listens to game over message. Play fire animation 
     private void OnGameEnd(object sender, EventArgs args){
         ShowHUD();
-        HideInhaler();
         HideProgressBar();
 
         //Spawn floaty

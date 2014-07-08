@@ -13,7 +13,7 @@ public class Inhale : InhalerPart{
 	protected override void Awake(){
 		base.Awake();
 		gameStepID = 7;
-		floatyOptions.Add("text", ""); 
+//		floatyOptions.Add("text", ""); 
 	}
 
 	void OnSwipe(SwipeGesture gesture){
@@ -27,6 +27,14 @@ public class Inhale : InhalerPart{
 			LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
 			AudioManager.Instance.PlayClip("inhalerInhale"); 
 			petAnimator.SetTrigger("BreatheIn");
+
+			Hashtable option = new Hashtable();
+			option.Add("parent", GameObject.Find("Anchor-Center"));
+			option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+			option.Add("textSize", 100f);
+			option.Add("color", Color.white);
+			
+			FloatyUtil.SpawnFloatyText(option);
 
 			InhalerBodyMoveAnimation.Play();
 		}
@@ -50,7 +58,7 @@ public class Inhale : InhalerPart{
 		LgInhalerAnimationEventHandler.BreatheInEndEvent -= BreatheInEndEventHandler;
 		petAnimator.SetTrigger("Backflip");
 
-		// Hide the inhaler
+//		// Hide the inhaler
 		InhalerGameUIManager.Instance.HideInhaler();
 
 		//using invoke instead of listening to animationController callback

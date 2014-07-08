@@ -7,6 +7,9 @@ using System.Collections;
 /// </summary>
 public class MiniPet : MonoBehaviour {
 	public Animator animator;
+	public ParticleSystem bubbleParticle;
+	public ParticleSystem dirtyParticle;
+
 	private string id;
 	private string name;
 	private FingerGestures.SwipeDirection lastDirection;
@@ -16,10 +19,34 @@ public class MiniPet : MonoBehaviour {
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
+
+		RefreshMiniPetState();
 	}
 	
 	void OnDestroy(){
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
+	}
+
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused)
+			RefreshMiniPetState();
+	}
+
+	private void RefreshMiniPetState(){
+		//check if pet is sad and dirty
+		bool isTickled = MiniPetManager.Instance.IsTickled(id);
+		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+		
+		if(!isTickled)
+			animator.SetBool("Sad", true);
+		else
+			animator.SetBool("Sad", false);
+		
+		if(!isCleaned)
+			dirtyParticle.Play();
+		else
+			dirtyParticle.Stop();
+
 	}
 
 	private void CameraMoveDone() {
@@ -35,7 +62,7 @@ public class MiniPet : MonoBehaviour {
 			Vector3 positionOffset = new Vector3(3, 4, -11);
 			Vector3 position = this.transform.position + positionOffset;
 			Vector3 rotation = new Vector3(12, 0, 0);
-//			MiniPetHUDUIManager.Instance.OpenUI();
+
 			ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
 			CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
 		}
@@ -43,13 +70,9 @@ public class MiniPet : MonoBehaviour {
 			string colliderName = gesture.Selection.collider.name;
 			
 			if(colliderName == this.gameObject.name){
-				//need to check clickmanager if can respond to tap
-//				if(ClickManager.Instance.CanRespondToTap()){
-					//do some
-					Debug.Log("Minipet does some funny animation here");
-					animator.SetTrigger("gestureWiggle");
-					MiniPetManager.Instance.SetTickle(id, true);
-//				}
+				animator.SetTrigger("GestureWiggle");
+				MiniPetManager.Instance.SetTickle(id, true);
+				animator.SetBool("Sad", false);
 			}
 		}
 	}
@@ -78,13 +101,48 @@ public class MiniPet : MonoBehaviour {
 
 			currentNumOfCleaningGesture++;
 			if(currentNumOfCleaningGesture == maxNumOfCleaningGesture){
-				Debug.Log("pet cleaned");
 				MiniPetManager.Instance.SetCleaned(id, true);
+				dirtyParticle.Stop();
 				currentNumOfCleaningGesture = 0;
 			}
 		}
 		
 		lastDirection = swipeDir;
+
+
+
+		switch(gesture.Phase){
+		case ContinuousGesturePhase.Started:
+			bubbleParticle.Play();
+
+			MoveBubbleParticleWithUserTouch(gesture);
+			break;
+		case ContinuousGesturePhase.Updated:
+
+			MoveBubbleParticleWithUserTouch(gesture);
+			break;
+		case ContinuousGesturePhase.Ended:
+			bubbleParticle.Stop();
+			break;
+		}
+
+	}
+
+	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
+		bool isDraggingOnMP = gesture.Raycast.Hit3D.collider &&
+			gesture.Raycast.Hit3D.collider.name == this.gameObject.name;
+
+
+		if(isDraggingOnMP){
+			//z position is constant
+			Vector3 touchPositionInWorld = 
+				Camera.main.ScreenToWorldPoint(new Vector3(gesture.Position.x, gesture.Position.y, 10));
+			
+			bubbleParticle.transform.position = touchPositionInWorld;
+		}
+		else{
+			bubbleParticle.Stop();
+		}
 	}
 
 	/// <summary>
@@ -107,13 +165,12 @@ public class MiniPet : MonoBehaviour {
 			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
 				//use item if so
 				args.IsValidTarget = true;
-				Debug.Log("item dropped on mini pet");
 				
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);
 				MiniPetManager.Instance.IncreaseFoodXP(id);
 
-				animator.SetTrigger("happy");
+				animator.SetTrigger("Happy");
 			}
 			else{
 				//say sth if minipet doesn't want food anymore

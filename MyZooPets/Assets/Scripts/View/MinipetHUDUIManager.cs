@@ -49,7 +49,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	}
 
 	private void RefreshUI(object sender, EventArgs args){
-//		Debug.Log("refreshui");
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
 

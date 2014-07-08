@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 /*
@@ -18,6 +19,8 @@ public class RescueCap : InhalerPart{
 
             //If current step is the right sequence
             if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+
+
                 //Lean tween cap
                 Vector3 to = new Vector3(2, -6, 0); //off the screen
                 Hashtable optional = new Hashtable();
@@ -34,10 +37,16 @@ public class RescueCap : InhalerPart{
 
     protected override void NextStep(){
 		// play sound here
-		AudioManager.Instance.PlayClip( "inhalerRemoveCap" );
+		AudioManager.Instance.PlayClip("inhalerRemoveCap");
+//		LgInhalerAnimationEventHandler.InhalerHappy1EndEvent += InhalerHappy1EndEventHandler;
+		petAnimator.SetTrigger("InhalerHappy1");
 
-        gameObject.SetActive(false);
-
-       base.NextStep();
+		gameObject.SetActive(false);
+		base.NextStep();
     }
+
+	private void InhalerHappy1EndEventHandler(object sender, EventArgs args){
+		LgInhalerAnimationEventHandler.InhalerHappy1EndEvent -= InhalerHappy1EndEventHandler;
+
+	}
 }

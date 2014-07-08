@@ -6,7 +6,8 @@ using System.Collections;
     Handles inhale (swipe up) action
 */
 public class Inhale : InhalerPart{
-	public InhalerAnimationController animationController;
+//	public InhalerAnimationController animationController;
+//	public Animator animator;
 	public Animation InhalerBodyMoveAnimation;
 
 	protected override void Awake(){
@@ -20,25 +21,15 @@ public class Inhale : InhalerPart{
 
 		if(direction == FingerGestures.SwipeDirection.Up){
 
-			if(InhalerAnimationController.OnAnimDone == null){
+			//Disable hint when swipe gesture is registered. 
+			GetComponent<HintController>().DisableHint(false);
 
-
-				//Disable hint when swipe gesture is registered. 
-				GetComponent<HintController>().DisableHint(false);
-
-				animationController.Inhale();
-				AudioManager.Instance.PlayClip("inhalerInhale"); 
-
-				InhalerBodyMoveAnimation.Play();
-
-				//using invoke instead of listening to animationController callback
-				//because LWFAnimator sometimes sends callback prematurely. Don't
-				//want to debug LWFAnimator since we are switching away from it soon
-				Invoke("NextStep", 3.5f);
-			}
+			LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
+			AudioManager.Instance.PlayClip("inhalerInhale"); 
+			petAnimator.SetTrigger("BreatheIn");
 		}
 	}
-
+	
 	protected override void Disable(){
 		gameObject.SetActive(false);
 	}
@@ -53,4 +44,14 @@ public class Inhale : InhalerPart{
 
 	}
 
+	private void BreatheInEndEventHandler(object sender, EventArgs args){
+		LgInhalerAnimationEventHandler.BreatheInEndEvent -= BreatheInEndEventHandler;
+		petAnimator.SetTrigger("Backflip");
+
+		//using invoke instead of listening to animationController callback
+		//because LWFAnimator sometimes sends callback prematurely. Don't
+		//want to debug LWFAnimator since we are switching away from it soon
+		Invoke("NextStep", 3.5f);
+	}
+	
 }

@@ -8,8 +8,10 @@ using System.Collections;
     or deactivated at the appropriate steps
 */
 public class InhalerPart : MonoBehaviour {
+	public Animator petAnimator;
     protected int gameStepID; //The step in which the part will be activated
     protected Hashtable floatyOptions;
+
 
     //Initialize any protected variables here
     protected virtual void Awake(){
@@ -52,4 +54,5 @@ public class InhalerPart : MonoBehaviour {
 
         InhalerLogic.Instance.NextStep();
     }
+
 }

@@ -27,6 +27,8 @@ public class Inhale : InhalerPart{
 			LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
 			AudioManager.Instance.PlayClip("inhalerInhale"); 
 			petAnimator.SetTrigger("BreatheIn");
+
+			InhalerBodyMoveAnimation.Play();
 		}
 	}
 	

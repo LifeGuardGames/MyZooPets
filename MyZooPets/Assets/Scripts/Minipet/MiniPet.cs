@@ -12,10 +12,8 @@ public class MiniPet : MonoBehaviour {
 
 	private string id;
 	private string name;
-	private FingerGestures.SwipeDirection lastDirection;
-
-	private int maxNumOfCleaningGesture = 5;
-	private int currentNumOfCleaningGesture = 0;
+	private float currentDistanceInCentimeters = 0;
+	private float targetDistanceInCentimetersForCleanGesture = 300;
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -32,29 +30,7 @@ public class MiniPet : MonoBehaviour {
 			RefreshMiniPetState();
 	}
 
-	private void RefreshMiniPetState(){
-		//check if pet is sad and dirty
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-		
-		if(!isTickled)
-			animator.SetBool("Sad", true);
-		else
-			animator.SetBool("Sad", false);
-		
-		if(!isCleaned)
-			dirtyParticle.Play();
-		else
-			dirtyParticle.Stop();
 
-	}
-
-	private void CameraMoveDone() {
-		ClickManager.Instance.ReleaseLock();
-		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
-		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
-		MiniPetHUDUIManager.Instance.OpenUI();
-	}
 
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
@@ -90,27 +66,6 @@ public class MiniPet : MonoBehaviour {
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		if(!isUIOpened) return;
 
-		Vector2 dir = gesture.TotalMove.normalized; // you could also use Gesture.DeltaMove to get the movement change since last frame
-		FingerGestures.SwipeDirection swipeDir = FingerGestures.GetSwipeDirection(dir);
-
-		if(swipeDir != lastDirection &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
-
-			currentNumOfCleaningGesture++;
-			if(currentNumOfCleaningGesture == maxNumOfCleaningGesture){
-				MiniPetManager.Instance.SetCleaned(id, true);
-				dirtyParticle.Stop();
-				currentNumOfCleaningGesture = 0;
-			}
-		}
-		
-		lastDirection = swipeDir;
-
-
-
 		switch(gesture.Phase){
 		case ContinuousGesturePhase.Started:
 			bubbleParticle.Play();
@@ -118,14 +73,34 @@ public class MiniPet : MonoBehaviour {
 			MoveBubbleParticleWithUserTouch(gesture);
 			break;
 		case ContinuousGesturePhase.Updated:
-
 			MoveBubbleParticleWithUserTouch(gesture);
+
+			float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
+			float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
+
+			currentDistanceInCentimeters += (totalMoveXInCentimeters + totalMoveYInCentimeters);
+
+			if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
+				MiniPetManager.Instance.SetCleaned(id, true);
+				dirtyParticle.Stop();
+				currentDistanceInCentimeters = 0;
+			}
+
 			break;
 		case ContinuousGesturePhase.Ended:
 			bubbleParticle.Stop();
 			break;
 		}
+	}
 
+	/// <summary>
+	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
+	/// with the proper information.
+	/// </summary>
+	/// <param name="data">ImmutableDataMiniPet.</param>
+	public void Init(ImmutableDataMiniPet data){
+		this.id = data.ID;
+		this.name = data.Name;
 	}
 
 	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
@@ -145,14 +120,28 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	/// <summary>
-	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
-	/// with the proper information.
-	/// </summary>
-	/// <param name="data">ImmutableDataMiniPet.</param>
-	public void Init(ImmutableDataMiniPet data){
-		this.id = data.ID;
-		this.name = data.Name;
+	private void RefreshMiniPetState(){
+		//check if pet is sad and dirty
+		bool isTickled = MiniPetManager.Instance.IsTickled(id);
+		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+		
+		if(!isTickled)
+			animator.SetBool("Sad", true);
+		else
+			animator.SetBool("Sad", false);
+		
+		if(!isCleaned)
+			dirtyParticle.Play();
+		else
+			dirtyParticle.Stop();
+		
+	}
+	
+	private void CameraMoveDone() {
+		ClickManager.Instance.ReleaseLock();
+		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
+		MiniPetHUDUIManager.Instance.OpenUI();
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){

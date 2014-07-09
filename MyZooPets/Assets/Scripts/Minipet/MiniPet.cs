@@ -30,8 +30,6 @@ public class MiniPet : MonoBehaviour {
 			RefreshMiniPetState();
 	}
 
-
-
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		if(!isUIOpened){

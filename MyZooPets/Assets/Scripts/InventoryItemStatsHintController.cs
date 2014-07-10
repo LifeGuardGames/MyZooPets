@@ -30,7 +30,7 @@ public class InventoryItemStatsHintController : MonoBehaviour{
                     spriteName = "iconHeart";
                 break;
 				case StatType.Fire:
-					spriteName = "HUDFire";
+					spriteName = "iconFire";
 				break;
             }
 

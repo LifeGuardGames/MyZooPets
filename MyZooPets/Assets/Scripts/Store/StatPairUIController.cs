@@ -21,7 +21,7 @@ public class StatPairUIController : MonoBehaviour{
 		else if(eStat == StatType.Health)
 			spriteIcon.spriteName = "iconHeart";
 		else if(eStat == StatType.Fire)
-			spriteIcon.spriteName = "HUDFire";
+			spriteIcon.spriteName = "iconFire";
 		else{}
 		
 		// set the label to whatever the amount is, with a + or -, and then add the amount for the text

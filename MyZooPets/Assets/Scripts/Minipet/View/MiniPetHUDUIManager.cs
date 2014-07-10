@@ -13,6 +13,13 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public Animation levelUpAnimation;
 
 	/// <summary>
+	/// Gets or sets a value indicating whether feeding is lock because lv up
+	/// animation is happening right now.
+	/// </summary>
+	/// <value><c>true</c> if this instance is level up animation lock on; otherwise, <c>false</c>.</value>
+	public bool IsLevelUpAnimationLockOn {get; set;}
+
+	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
 	/// panel is opened. 
 	/// </summary>
@@ -22,6 +29,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	void Awake(){
 		eModeType = UIModeTypes.MiniPet;
+		IsLevelUpAnimationLockOn = false;
 	}
 
 	/// <summary>
@@ -30,6 +38,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void LevelUpAnimationCompleted(){
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
+		IsLevelUpAnimationLockOn = false;
 	}
 
 	protected override void _OpenUI(){
@@ -71,11 +80,18 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
 
 		levelLabel.text = currentLevel.ToString();
-		levelSlider.sliderValue = (float) currentFoodXP / (float) nextLevelUpCondition;
-		progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
+
+		if(nextLevelUpCondition != -1){
+			levelSlider.sliderValue = (float) currentFoodXP / (float) nextLevelUpCondition;
+			progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
+		}
+		else{
+			progressLabel.text = "Max Level";
+		}
 
 		if(args.UpdateStatus == "levelUp"){
 			levelUpAnimation.Play();
+			IsLevelUpAnimationLockOn = true;
 		}
 	}
 }

@@ -10,6 +10,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UISlider levelSlider;
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
+	public Animation levelUpAnimation;
 
 	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
@@ -23,10 +24,18 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		eModeType = UIModeTypes.MiniPet;
 	}
 
+	/// <summary>
+	/// Level up animation completed. 
+	/// Actually increase the level after level up animation is done
+	/// </summary>
+	public void LevelUpAnimationCompleted(){
+		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
+	}
+
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
 		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
-		RefreshUI(this, EventArgs.Empty);
+		RefreshUI(this, new MiniPetManager.MiniPetStatusUpdateEventArgs());
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -48,7 +57,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		CameraManager.Instance.ZoomOutMove();
 	}
 
-	private void RefreshUI(object sender, EventArgs args){
+	private void RefreshUI(object sender, MiniPetManager.MiniPetStatusUpdateEventArgs args){
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
 
@@ -64,5 +73,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		levelLabel.text = currentLevel.ToString();
 		levelSlider.sliderValue = (float) currentFoodXP / (float) nextLevelUpCondition;
 		progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
+
+		if(args.UpdateStatus == "levelUp"){
+			levelUpAnimation.Play();
+		}
 	}
 }

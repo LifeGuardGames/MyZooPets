@@ -6,7 +6,10 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public static EventHandler<EventArgs> FireButtonActive;
 
 	public GameObject fireOrbDropTarget;
-	public Animation buttonPluseAnimation;
+	public Animation buttonAnimation;
+	public Animation EnableFireButtonAnimation;
+	public ParticleSystem buttonChargeParticle;
+	public ParticleSystem buttonBurstParticle;
 	public GameObject sunBeam;
 	public UIImageButton imageButton;
 
@@ -21,7 +24,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		if(!canBreatheFire)
 			TurnFireButtonEffectOff();
 		else
-			TurnFireButtonEffectOn();
+			TurnFireButtonOn(0);
 	}
 
 	void OnDestroy(){
@@ -33,7 +36,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	public void TurnFireButtonEffectOff(){
-		buttonPluseAnimation.Stop();
+		buttonAnimation.Stop();
 		sunBeam.SetActive(false);
 		
 		imageButton.hoverSprite = inactiveButtonSpriteName;
@@ -45,11 +48,40 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		imageButton.gameObject.SetActive(true);
 	}
 
-	public void TurnFireButtonEffectOn(){
+	// Start the animation for the fire button enabling process, this will call the below 4 functions
+	public void StartFireButtonAnimation(){
+		EnableFireButtonAnimation.Play();
+	}
+
+	// This is called from the animation event
+	public void FireButtonAnimationActivate(){
+		EnableFireButtonAnimation.Stop();
+		buttonAnimation.Play();
+	}
+
+	// This is called from the animation event
+	public void StartChargeParticle(){
+		buttonChargeParticle.Play();
+	}
+
+	// This is called from the animation event
+	public void StartBurstParticle(){
+		if(buttonBurstParticle){
+			buttonBurstParticle.Play();
+		}
+	}
+
+	// This is called from the animation event / or from start
+	public void TurnFireButtonOn(int isCalledFromAnimation){
+
+		// Turn on the pulsing manually because its not done from animation
+		if(isCalledFromAnimation == 0){
+			FireButtonAnimationActivate();
+		}
+
 		if(FireButtonActive != null)
 			FireButtonActive(this, EventArgs.Empty);
 
-		buttonPluseAnimation.Play();
 		sunBeam.SetActive(true);
 
 		//change button image 
@@ -75,7 +107,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UsePetItem(invItemID);
 
-				TurnFireButtonEffectOn();
+				StartFireButtonAnimation();
 			}
 		}
 	}

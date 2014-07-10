@@ -79,9 +79,11 @@ public class MiniPet : MonoBehaviour {
 
 			currentDistanceInCentimeters += (totalMoveXInCentimeters + totalMoveYInCentimeters);
 
+			//if clean gesture is recognized. stop dirty particle and play happy animation
 			if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
 				MiniPetManager.Instance.SetCleaned(id, true);
 				dirtyParticle.Stop();
+				animator.SetTrigger("Happy");
 				currentDistanceInCentimeters = 0;
 			}
 
@@ -146,10 +148,12 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		if(args.TargetCollider.name == this.gameObject.name){
+		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
+
+		if(args.TargetCollider.name == this.gameObject.name && 
+		   !isLevelUpAnimationLockOn){
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-
 
 			//check if minipet needs food
 			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
@@ -163,15 +167,21 @@ public class MiniPet : MonoBehaviour {
 				animator.SetTrigger("Happy");
 			}
 			else{
-				//say sth if minipet doesn't want food anymore
+				bool isTickled = MiniPetManager.Instance.IsTickled(id);
+				bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+				bool isMaxLevel = MiniPetManager.Instance.IsMaxLevel(id);
 
-				//if not tickled show not tickled message
-
-				//if not cleaned show not cleaned message
-
-				//if max level show max level message
+				if(!isTickled){
+					miniPetSpeechAI.ShowSadMsg();
+				}
+				else if(!isCleaned){
+					miniPetSpeechAI.ShowDirtyMsg();
+				}
+				else if(isMaxLevel){
+					miniPetSpeechAI.ShowMaxLevelMsg();
+				}
+				else{}
 			}
-
 		}
 	}
 }

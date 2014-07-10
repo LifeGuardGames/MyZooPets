@@ -15,8 +15,22 @@ public class MiniPetSpeechAI : MonoBehaviour{
 
 	public void ShowDirtyMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+//		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
+
+	public void ShowSadMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("MINIPET_SAD_MSG"));
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void ShowMaxLevelMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+
 }

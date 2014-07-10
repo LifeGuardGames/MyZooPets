@@ -38,6 +38,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
+	public bool IsMaxLevel(string miniPetID){
+		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+		return currentLevel == maxLevel;
+	}
+
 	/// <summary>
 	/// Whether mp has been tickled
 	/// </summary>
@@ -124,7 +129,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <summary>
 	/// Gets the next level up condition.
 	/// </summary>
-	/// <returns>The next level up condition.</returns>
+	/// <returns>The next level up condition. -1 if at max level already</returns>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public int GetNextLevelUpCondition(string miniPetID){
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
@@ -137,7 +142,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		Level nextLevel = GetNextLevel(currentLevel);
 		
 		//get next level up condition
-		int levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
+		int levelUpCondition = -1;
+		if(currentLevel != maxLevel)
+			levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
 
 		return levelUpCondition;
 	}
@@ -148,9 +155,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseFoodXP(string miniPetID){
-		//check if level meter meets next lv condition
-		//if it does play level up animations and spew out rewards
-
 		//Increase food xp                                                                         
 		DataManager.Instance.GameData.MiniPets.IncreaseFoodXP(miniPetID, 1);
 
@@ -176,14 +180,17 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseCurrentLevelAndResetCurrentFoodXP(string miniPetID){
-		DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
-		DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
+		if(!IsMaxLevel(miniPetID))
+			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
 
+		DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
+		
 		MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
 		args.UpdateStatus = "increaseCurrentLevel";
-
+		
 		if(MiniPetStatusUpdate != null)
 			MiniPetStatusUpdate(this, args);
+		
 	}
 
 	/// <summary>

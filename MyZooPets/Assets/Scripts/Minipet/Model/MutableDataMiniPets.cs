@@ -21,7 +21,7 @@ public class MutableDataMiniPets{
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
-			IsTickled = false;
+			IsTickled = true;
 			IsCleaned = false;
 		}
 	}

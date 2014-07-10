@@ -4,7 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetManager : Singleton<MiniPetManager> {
-	public static EventHandler<EventArgs> MiniPetStatusUpdate;
+	public class MiniPetStatusUpdateEventArgs : EventArgs{
+		public string UpdateStatus {get; set;}
+	}
+
+	public static EventHandler<MiniPetStatusUpdateEventArgs> MiniPetStatusUpdate;
 
 	private Level maxLevel = Level.Level6;
 	// Use this for initialization
@@ -50,8 +54,12 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public void SetTickle(string miniPetID, bool isTickled){
 		DataManager.Instance.GameData.MiniPets.SetIsTickled(miniPetID, isTickled);
 
-		if(MiniPetStatusUpdate != null)
-			MiniPetStatusUpdate(this, EventArgs.Empty);
+		if(MiniPetStatusUpdate != null){
+			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
+			args.UpdateStatus = "tickle";
+			MiniPetStatusUpdate(this, args);
+		}
+			
 	}
 
 	/// <summary>
@@ -71,8 +79,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public void SetCleaned(string miniPetID, bool isCleaned){
 		DataManager.Instance.GameData.MiniPets.SetIsCleaned(miniPetID, isCleaned);
 
-		if(MiniPetStatusUpdate != null)
-			MiniPetStatusUpdate(this, EventArgs.Empty);
+		if(MiniPetStatusUpdate != null){
+			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
+			args.UpdateStatus = "clean";
+			MiniPetStatusUpdate(this, args);
+		}
 	}
 
 	/// <summary>
@@ -148,30 +159,39 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		//get current food xp
 		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentFoodXP(miniPetID);
 
+		MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
+		args.UpdateStatus = "increaseFoodXP";
+
 		//check current food xp with that condition
 		if(currentFoodXP >= levelUpCondition){
-			Debug.Log("pet level up!!!!"); 
-			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
-			DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
+			args.UpdateStatus = "levelUp";
 		}
 
 		if(MiniPetStatusUpdate != null)
-			MiniPetStatusUpdate(this, EventArgs.Empty);
-
-		/*
-		 * Few options here for level up. Can just return boolean to signify if user level up
-		 * after IncreaseFoodXP is called. or send out an event from the manager. Sending out 
-		 * an level up event will be usefull if other classes besides MiniPet.cs needs to know
-		 * about mini pet level up as well otherwise returning boolean is the more straight forward
-		 * way.
-		 */
-
-		/*
-		 * As for reward just spawn 1 gem and randomize coin numbers for now. dont' think we need
-		 * a xml for that yet
-		 */
+			MiniPetStatusUpdate(this, args);
 	}
 
+	/// <summary>
+	/// Increases the current level and reset current food XP.
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public void IncreaseCurrentLevelAndResetCurrentFoodXP(string miniPetID){
+		DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
+		DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
+
+		MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
+		args.UpdateStatus = "increaseCurrentLevel";
+
+		if(MiniPetStatusUpdate != null)
+			MiniPetStatusUpdate(this, args);
+	}
+
+	/// <summary>
+	/// Raises the destroyed gate handler event. Check to spawn mini pet after
+	/// a gate has been destroyed
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){
 		string gateID = args.DestroyedGateID;
 		string miniPetID = args.MiniPetID;
@@ -187,6 +207,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
 	}
 
+	/// <summary>
+	/// Gets the next level.
+	/// </summary>
+	/// <returns>The next level.</returns>
+	/// <param name="currentLevel">Current level.</param>
 	private Level GetNextLevel(Level currentLevel){
 		int currentLevelNum = (int) currentLevel;
 		currentLevelNum++;

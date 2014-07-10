@@ -9,6 +9,7 @@ public class MiniPet : MonoBehaviour {
 	public Animator animator;
 	public ParticleSystem bubbleParticle;
 	public ParticleSystem dirtyParticle;
+	public MiniPetSpeechAI miniPetSpeechAI;
 
 	private string id;
 	private string name;
@@ -128,11 +129,13 @@ public class MiniPet : MonoBehaviour {
 		else
 			animator.SetBool("Sad", false);
 		
-		if(!isCleaned)
+		if(!isCleaned){
 			dirtyParticle.Play();
-		else
+			miniPetSpeechAI.ShowDirtyMsg();
+		}
+		else{
 			dirtyParticle.Stop();
-		
+		}
 	}
 	
 	private void CameraMoveDone() {

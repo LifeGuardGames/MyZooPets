@@ -19,8 +19,8 @@ public class PetSpriteColorLoader : MonoBehaviour {
 					LoadAndSetColor(DataManager.Instance.MenuSceneData.PetColor);
 				}
 				else{
-					LoadAndSetColor("PurpleLime");
-					//LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+//					LoadAndSetColor("PurpleLime");
+					LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
 				}
 			}
 		}

@@ -435,8 +435,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400052}
-  - 95: {fileID: 9500000}
   - 114: {fileID: 11400072}
+  - 111: {fileID: 11100000}
   m_Layer: 10
   m_Name: LevelParentAnim
   m_TagString: Untagged
@@ -806,20 +806,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 127.991852, y: 127.991547, z: 0}
   m_Center: {x: -2.28881836e-05, y: .000419616699, z: -1.5}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 3
+--- !u!111 &11100000
+Animation:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8ee6bb88512cb8d44b72f13279c06690, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_HasTransformHierarchy: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: cfa5b88eace74944680db8854ca7d2d8, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: cfa5b88eace74944680db8854ca7d2d8, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -11,7 +11,6 @@ public class LevelBarPopHelper : MonoBehaviour {
 			particle.Play();
 		}
 
-		// JASON: Call other stuff here to do with progress bar reset
 		MiniPetHUDUIManager.Instance.LevelUpAnimationCompleted();
 	}
 }

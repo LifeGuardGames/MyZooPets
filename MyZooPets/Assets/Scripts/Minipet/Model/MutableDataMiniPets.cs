@@ -4,11 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Mutable data mini pet status.
-/// </summary>
-
-
-/// <summary>
 /// Mutable data mini pets.
 /// </summary>
 public class MutableDataMiniPets{
@@ -189,7 +184,6 @@ public class MutableDataMiniPets{
 			status.IsCleaned = isCleaned;
 		}
 	}
-
 
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();

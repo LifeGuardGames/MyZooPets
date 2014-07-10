@@ -28,6 +28,8 @@ public class ButtonChangeScene : LgButton {
 	public GameObject petLWF; //needs to record pet position before scene change
 
 	public string analyticsEvent;	
+
+	public EntranceHelperController entranceHelper;
 	
 	//---------------------------------------------------
 	// ProcessClick()
@@ -57,6 +59,10 @@ public class ButtonChangeScene : LgButton {
 
 		//Save some basic data for current scene
 		RememberCurrentScene();
+
+		//record that this entrance has been used
+		if(entranceHelper != null)
+			entranceHelper.EntranceUsed();
 		
 		// if there is a camera move, do it -- otherwise, just skip to the move being complete
 		if ( fTime > 0 ) {

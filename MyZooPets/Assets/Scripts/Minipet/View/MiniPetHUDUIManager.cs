@@ -67,9 +67,17 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		InventoryUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
 
+		if(cleaningTutorialObject != null)
+			Destroy(cleaningTutorialObject);
+
 		CameraManager.Instance.ZoomOutMove();
 	}
 
+	/// <summary>
+	/// Refreshs the UI whenever MP data have been updated
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void RefreshUI(object sender, MiniPetManager.MiniPetStatusUpdateEventArgs args){
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
@@ -111,7 +119,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				                                                                         InterfaceAnchors.BottomLeft, 
 				                                                                         InterfaceAnchors.Center);
 				selectedMiniPetLocation.z = 0;
-				cleaningTutorialObject = LgNGUITools.AddChildWithPosition(tutorialParent, cleaningTutorial);
+				cleaningTutorialObject = NGUITools.AddChild(tutorialParent, cleaningTutorial);
+				cleaningTutorialObject.transform.localPosition = selectedMiniPetLocation;
 			}
 		}
 		else{

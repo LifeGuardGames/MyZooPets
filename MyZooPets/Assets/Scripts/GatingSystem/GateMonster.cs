@@ -61,7 +61,7 @@ public class GateMonster : Gate{
 	/// </summary>
 	/// <param name="damage">Damage.</param>
 	protected override void GateDamaged(int damage){
-		Debug.Log(gameObject + "   " + DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID]);
+//		Debug.Log(gameObject + "   " + DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID]);
 		//drop some coins when the gate monster is attacked
 //		AudioManager.Instance.PlayClip("coinDrop");
 //		int randomNumberOfCoins = Random.Range(2, 6);

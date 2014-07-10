@@ -82,6 +82,7 @@ public class MiniPet : MonoBehaviour {
 			//if clean gesture is recognized. stop dirty particle and play happy animation
 			if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
 				MiniPetManager.Instance.SetCleaned(id, true);
+				MiniPetManager.Instance.SetFirstTimeCleaning(id);
 				dirtyParticle.Stop();
 				animator.SetTrigger("Happy");
 				currentDistanceInCentimeters = 0;
@@ -144,6 +145,7 @@ public class MiniPet : MonoBehaviour {
 		ClickManager.Instance.ReleaseLock();
 		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
 		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
 		MiniPetHUDUIManager.Instance.OpenUI();
 	}
 

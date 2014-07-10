@@ -11,6 +11,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
 	public Animation levelUpAnimation;
+	public GameObject tutorialParent;
+
+	private GameObject cleaningTutorialObject;
 
 	/// <summary>
 	/// Gets or sets a value indicating whether feeding is lock because lv up
@@ -26,6 +29,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// <value>The selected mini pet ID.</value>
 	public string SelectedMiniPetID {get; set;}
 	public string SelectedMiniPetName {get; set;}
+	public GameObject SelectedMiniPetGameObject {get; set;}
 
 	void Awake(){
 		eModeType = UIModeTypes.MiniPet;
@@ -69,6 +73,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void RefreshUI(object sender, MiniPetManager.MiniPetStatusUpdateEventArgs args){
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
+		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning(SelectedMiniPetID);
 
 		tickleCheckBox.SetActive(isTickled);
 		cleanCheckBox.SetActive(isCleaned);
@@ -89,9 +94,30 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			progressLabel.text = "Max Level";
 		}
 
+		// level up handler
 		if(args.UpdateStatus == "levelUp"){
 			levelUpAnimation.Play();
 			IsLevelUpAnimationLockOn = true;
+		}
+
+		// tutorial handler
+		if(isFirstTimeCleaning){
+			if(cleaningTutorialObject == null){
+				GameObject cleaningTutorial = (GameObject) Resources.Load("SwirlTut");
+				
+				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+				                                                                       SelectedMiniPetGameObject.transform.position);
+				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
+				                                                                         InterfaceAnchors.BottomLeft, 
+				                                                                         InterfaceAnchors.Center);
+				selectedMiniPetLocation.z = 0;
+				cleaningTutorialObject = LgNGUITools.AddChildWithPosition(tutorialParent, cleaningTutorial);
+			}
+		}
+		else{
+			if(cleaningTutorialObject != null){
+				Destroy(cleaningTutorialObject.gameObject);
+			}
 		}
 	}
 }

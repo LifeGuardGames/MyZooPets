@@ -17,12 +17,15 @@ public class MutableDataMiniPets{
 		public int CurrentFoodXP {get; set;}
 		public bool IsTickled {get; set;}
 		public bool IsCleaned {get; set;}
+
+		public bool IsFirstTimeCleaning {get; set;}
 		
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
 			IsTickled = true;
 			IsCleaned = false;
+			IsFirstTimeCleaning = true;
 		}
 	}
 
@@ -118,6 +121,26 @@ public class MutableDataMiniPets{
 		return currentLevel;
 	}
 
+	public bool IsFirstTimeCleaning(string miniPetID){
+		bool retVal = true;
+
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			retVal = status.IsFirstTimeCleaning;
+		}
+
+		return retVal;
+	}
+
+	public void SetFirstTimeCleaning(string miniPetID, bool isFirstTime){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			status.IsFirstTimeCleaning = isFirstTime;
+		}
+	}
+
 	/// <summary>
 	/// Determines whether this mini pet is tickeld
 	/// </summary>
@@ -144,8 +167,6 @@ public class MutableDataMiniPets{
 			Status status = MiniPetProgress[miniPetID];
 
 			status.IsTickled = isTickled;
-
-//			MiniPetProgress[miniPetID] = status;
 		}
 	}
 
@@ -166,8 +187,6 @@ public class MutableDataMiniPets{
 			Status status = MiniPetProgress[miniPetID];
 
 			status.IsCleaned = isCleaned;
-
-//			MiniPetProgress[miniPetID] = status;
 		}
 	}
 

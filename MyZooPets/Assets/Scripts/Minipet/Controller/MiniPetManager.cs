@@ -38,6 +38,20 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
+	public bool IsFirstTimeCleaning(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning(miniPetID);
+	}
+
+	public void SetFirstTimeCleaning(string miniPetID){
+		DataManager.Instance.GameData.MiniPets.SetFirstTimeCleaning(miniPetID, false);
+
+		if(MiniPetStatusUpdate != null){
+			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
+			args.UpdateStatus = "firstTimeCleaning";
+			MiniPetStatusUpdate(this, args);
+		}
+	}
+
 	public bool IsMaxLevel(string miniPetID){
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
 		return currentLevel == maxLevel;

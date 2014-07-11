@@ -56,6 +56,9 @@ public class MinigameLife : MonoBehaviour {
 		if ( nChange < 0 && nLives+1 == nIndex ) {
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
 			Toggle( false );
+
+			// Play the camera shake animation
+			Camera.main.animation.Play();
 		}
 		else if ( nChange > 0 && nLives == nIndex ) {
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon

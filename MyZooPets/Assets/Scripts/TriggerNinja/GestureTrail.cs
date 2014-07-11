@@ -1,37 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-///////////////////////////////////////////
-// TrailManager
-// The TrailManager is in charge of creating,
-// maintaining, and destroying the particle
-// trail that follows a user's finger.
-///////////////////////////////////////////
-
+/// <summary>
+/// Gesture trail is in charge of creating, maintaining, and destroying the particle
+/// trail taht follows a user's finger.
+/// </summary>
 public class GestureTrail : MonoBehaviour{	
-	// the resource name of the trail
-	public string trailResourceName;
+
+	public string trailResourceName; // the resource name of the trail
+	public float trailZValue; // the Z value the trail should be set to
+
+	private GameObject goTrail; // the actual trail that is created
+	private Vector3 lastTouch; // the last position of the trail
 
 	public string GetTrailName(){
 		return trailResourceName;
 	}
-	
-	// the Z value the trail should be set to
-	public float trailZValue;
 
 	private float GetZ(){
 		return trailZValue;
 	}
-	
-	// the actual trail that is created
-	private GameObject goTrail;
 
 	private GameObject GetTrail(){
 		return goTrail;
 	}
-	
-	// the last position of the trail
-	private Vector3 lastTouch;
 
 	private void SetLastPosition(Vector3 vec){
 		lastTouch = vec;
@@ -45,64 +37,36 @@ public class GestureTrail : MonoBehaviour{
 		return true;	
 	}
 	
-	///////////////////////////////////////////
-	// DragStarted()
-	// Function called when the user begins 
-	// to drag their finger.
-	// i_vPos is a Vector2 that contains the
-	// screen coordinate where the user touched.
-	///////////////////////////////////////////		
-	public void DragStarted(Vector2 i_vPos){
+	/// <summary>
+	/// Drags the started.
+	/// Function called when the user begins to drag their finger.
+	/// </summary>
+	/// <param name="position">Position with user touch position in Vector2.</param>
+	public void DragStarted(Vector2 position){
 		// get the trail resource to create
-		string strTrail = GetTrailName();
+		string trailName = GetTrailName();
 				
 		// get the proper vector3 position of the trail based on where the user is touching
-		Vector3 vPos = TranslateScreenPos(i_vPos);
+		Vector3 vPos = TranslateScreenPos(position);
 		
-		goTrail = Instantiate(Resources.Load(strTrail) as GameObject, vPos, Quaternion.identity) as GameObject;
+		goTrail = Instantiate(Resources.Load(trailName) as GameObject, vPos, Quaternion.identity) as GameObject;
 	}
-	
-	///////////////////////////////////////////
-	// DragEnded()
-	// When the drag ends, this function is
-	// called.
-	// Unfortunately I need to make this function
-	// a bit more robust than originally intended,
-	// because there is no FingerGestures feedback
-	// for an "failed" PointCloud gesture -- just
-	// a DragEnded event.  So this function has
-	// to just take raw data (the result) and
-	// do the play the proper color/sound based
-	// on that result.
-	///////////////////////////////////////////
+
+	/// <summary>
+	/// Drag ended.
+	/// </summary>
 	public void DragEnded(){
-		//StartCoroutine( OnDragEnded() );
 		// for now, just destroy the trail immediately
 		GameObject goTrail = GetTrail();
 		
 		if(goTrail) 
 			Destroy(goTrail);	
 	}
-	/*private IEnumerator OnDragEnded() {
-		Debug.Log("Drag ended");
-		// for now, just destroy the trail immediately
-		GameObject goTrail = GetTrail();
-		
-		if ( goTrail ) {
-			//float fLinger = Constants.GetConstant<float>( "Ninja_TrailLinger" );
-			//yield return new WaitForSeconds( fLinger );
-			
-			Destroy( goTrail );
-		}		
-	}*/
-	
-	///////////////////////////////////////////
-	// DragUpdated()
-	// As the user drags across the screen,
-	// this function is called.
-	// i_vPos is a Vector2 that contains the
-	// screen coordinate where the user touched.	
-	///////////////////////////////////////////		
+
+	/// <summary>
+	/// As user drags across the screen trail is updated
+	/// </summary>
+	/// <param name="userTouchPos">User touch position.</param>
 	public void DragUpdated(Vector2 userTouchPos){
 		// update the trail by setting the trail's position to wherever the user is currently touching the screen
 		GameObject goTrail = GetTrail(); 
@@ -115,13 +79,12 @@ public class GestureTrail : MonoBehaviour{
 			SetLastPosition(goTrail.transform.position);
 		}
 	}
-	
-	///////////////////////////////////////////
-	// TranslateScreenPos()
-	// Simple function that takes the 2d screen
-	// position of a drag and turns it into
-	// a 3d position for the trail.	
-	///////////////////////////////////////////		
+
+	/// <summary>
+	/// Translates the screen position from 2d screen position to 3d position
+	/// </summary>
+	/// <returns>The screen position.</returns>
+	/// <param name="screenPos">Screen position.</param>
 	private Vector3 TranslateScreenPos(Vector2 screenPos){
 		Vector3 vPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 10));
 		
@@ -130,5 +93,4 @@ public class GestureTrail : MonoBehaviour{
 		
 		return vPos;
 	}
-
 }

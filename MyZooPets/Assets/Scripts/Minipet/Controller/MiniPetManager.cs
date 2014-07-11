@@ -13,7 +13,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	private Level maxLevel = Level.Level6;
 	// Use this for initialization
 	void Start(){
-
 		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
 		//iterate through the MiniPetProgress
 		//if minipet not in MiniPetProgress then it's not unlock yet
@@ -25,13 +24,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			string miniPetID = progress.Key;
 			MutableDataMiniPets.Status miniPetStatus = progress.Value;
 
-			//use the id to get the immutable data
-			ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
-			GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-			GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+			CreateMiniPet(miniPetID);
 		}
-
-		//listen to Gate unlock from GatingManager
 	}
 
 	void OnDestroy(){
@@ -218,14 +212,22 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		string miniPetID = args.MiniPetID;
 
 		//when a gate is destroyed load the proper minipet and spawned it
+		CreateMiniPet(miniPetID);
+
+		//unlock in data manager
+		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+	}
+
+	/// <summary>
+	/// Creates the mini pet.
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	private void CreateMiniPet(string miniPetID){
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
 		goMiniPet.name = prefab.name;
 		goMiniPet.GetComponent<MiniPet>().Init(data);
-
-		//unlock in data manager
-		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
 	}
 
 	/// <summary>

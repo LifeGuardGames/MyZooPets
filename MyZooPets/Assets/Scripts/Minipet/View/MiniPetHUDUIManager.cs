@@ -12,6 +12,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject cleanCheckBox;
 	public Animation levelUpAnimation;
 	public GameObject tutorialParent;
+	public GameObject petReference;
 
 	private GameObject cleaningTutorialObject;
 
@@ -55,6 +56,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		HUDUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.ShowPanel();
+		petReference.SetActive(false);
 	}
 
 	protected override void _CloseUI(){
@@ -66,6 +68,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		HUDUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		petReference.SetActive(true);
 
 		if(cleaningTutorialObject != null)
 			Destroy(cleaningTutorialObject);

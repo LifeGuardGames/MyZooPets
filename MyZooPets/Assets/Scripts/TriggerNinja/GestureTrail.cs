@@ -56,11 +56,13 @@ public class GestureTrail : MonoBehaviour{
 	/// Drag ended.
 	/// </summary>
 	public void DragEnded(){
-		// for now, just destroy the trail immediately
-		GameObject goTrail = GetTrail();
-		
-		if(goTrail) 
-			Destroy(goTrail);	
+		StartCoroutine( OnDragEnded() );
+	}
+
+	// Linger the trail for some time
+	private IEnumerator OnDragEnded() {
+			float fLinger = Constants.GetConstant<float>( "Ninja_TrailLinger" );
+			yield return new WaitForSeconds( fLinger );
 	}
 
 	/// <summary>

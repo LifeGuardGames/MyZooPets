@@ -6,7 +6,7 @@ using System.Collections;
 // This kind of decoration node instantiates objects.
 //---------------------------------------------------
 
-public class DecorationNodeObject : DecorationNode {
+public class DecorationNodeObject : DecorationNode{
 	// default object that may exist on this node
 	public GameObject goDefaultDeco;
 	
@@ -23,10 +23,10 @@ public class DecorationNodeObject : DecorationNode {
 	//---------------------------------------------------
 	// _SetDecoration()
 	//---------------------------------------------------	
-	protected override void _SetDecoration( string strID ) {
+	protected override void _SetDecoration(string strID){
 		// first, if our defeat deco exists, destroy it
-		if ( goDefaultDeco )
-			Destroy( goDefaultDeco );
+		if(goDefaultDeco)
+			Destroy(goDefaultDeco);
 		
 		// build the prefab from the id of the decoration
 		string strResource = ItemLogic.Instance.GetDecoItemPrefabName(strID);
@@ -34,12 +34,12 @@ public class DecorationNodeObject : DecorationNode {
 		
 		// find the right position -- most likely every object will have this override
 		Vector3 vPos = transform.position;
-		if ( vOverridePos != Vector3.zero )
+		if(vOverridePos != Vector3.zero)
 			vPos = vOverridePos;
-		else if ( vOffsetPos != Vector3.zero )
+		else if(vOffsetPos != Vector3.zero)
 			vPos += vOffsetPos;
 		
-		if ( goPrefab ) {
+		if(goPrefab){
 			goDeco = Instantiate(goPrefab, vPos, goPrefab.transform.rotation) as GameObject;
 			goDeco.transform.parent = transform.parent;	// put it in the hierachy of decorations in this room	
 		}
@@ -50,24 +50,25 @@ public class DecorationNodeObject : DecorationNode {
 	//---------------------------------------------------
 	// _RemoveDecoration()
 	//---------------------------------------------------	
-	protected override void _RemoveDecoration() {
+	protected override void _RemoveDecoration(){
 		// destroy the game object
-		Destroy( goDeco );				
+		Destroy(goDeco);				
 	}
 	
 	//---------------------------------------------------
 	// HasRemoveOption()
 	// Does this node currently have a decoration on it?
 	//---------------------------------------------------	
-	public override bool HasRemoveOption() {
+	public override bool HasRemoveOption(){
 		return goDeco != null;
 	}		
 	
 	//---------------------------------------------------
 	// _SetDefaultDeco()
 	//---------------------------------------------------	
-	protected override void _SetDefaultDeco( string strDecoID ) {
-		if ( goDefaultDeco == null ) {
+	protected override void _SetDefaultDeco(string strDecoID){
+		Debug.Log("Setting default");
+		if(goDefaultDeco == null){
 			Debug.LogError("Default deco ID set but no default deco object!?!!?");
 			return;
 		}

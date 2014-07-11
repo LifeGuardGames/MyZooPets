@@ -53,12 +53,12 @@ public static class ListUtils{
 		
 		return listResults;
 	}
-	
-	///////////////////////////////////////////
-	// Shuffle()
-	// Shuffles a list.  I got this off the
-	// interwebs.
-	///////////////////////////////////////////	
+
+	/// <summary>
+	/// Shuffle the specified list.
+	/// </summary>
+	/// <param name="list">List.</param>
+	/// <typeparam name="T">The 1st type parameter.</typeparam>
 	public static void Shuffle<T>(this IList<T> list){  
 		System.Random rng = new System.Random();  
 		int n = list.Count;  

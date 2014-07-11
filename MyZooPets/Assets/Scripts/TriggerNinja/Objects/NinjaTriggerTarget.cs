@@ -8,10 +8,11 @@ using System.Collections;
 // destroy.
 //---------------------------------------------------	
 
-public class NinjaTriggerTarget : NinjaTrigger {
+public class NinjaTriggerTarget : NinjaTrigger{
 	// how much is this trigger worth when the player cuts it?
 	public int nPoints;
-	public int GetPointValue() {
+
+	public int GetPointValue(){
 		return nPoints;	
 	}
 	
@@ -21,15 +22,15 @@ public class NinjaTriggerTarget : NinjaTrigger {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------	
-	protected override void Start() {
+	protected override void Start(){
 		base.Start();	
 		
 		// pick a face for this roach
-		int nFaces = Constants.GetConstant<int> ("Ninja_NumFaces" );
-		string strFaceKey = Constants.GetConstant<string> ("Ninja_FaceKey" );
-		int nFace = Random.Range( 1, nFaces + 1); // faces index starts at 1, so get 1-max inclusive (exclusive??)
- 		string strFace = strFaceKey + nFace;
-		SetFace( strFace );
+		int nFaces = Constants.GetConstant<int>("Ninja_NumFaces");
+		string strFaceKey = Constants.GetConstant<string>("Ninja_FaceKey");
+		int nFace = Random.Range(1, nFaces + 1); // faces index starts at 1, so get 1-max inclusive (exclusive??)
+		string strFace = strFaceKey + nFace;
+		SetFace(strFace);
 	}
 	
 	//---------------------------------------------------
@@ -37,25 +38,25 @@ public class NinjaTriggerTarget : NinjaTrigger {
 	// Sets this roach's face to the incoming string
 	// referenced material.
 	//---------------------------------------------------	
-	private void SetFace( string strFace ) {
+	private void SetFace(string strFace){
 		Material matPrefab = Resources.Load(strFace) as Material;
 		
-		if ( matPrefab != null )
-			rendererFace.material = matPrefab;	
+		if(matPrefab != null)
+			rendererFace.material = matPrefab;
 		else
-			Debug.LogError( "Attempting to set cockroach face to non-existant material with face " + strFace );
+			Debug.LogError("Attempting to set cockroach face to non-existant material with face " + strFace);
 	}
 	
 	//---------------------------------------------------
 	// _OnCut()
 	//---------------------------------------------------		
-	protected override void _OnCut() {
+	protected override void _OnCut(){
 		// award points
 		int nVal = GetPointValue();
-		NinjaManager.Instance.UpdateScore( nVal );	
+		NinjaManager.Instance.UpdateScore(nVal);	
 		
 		// increase the player's combo
-		NinjaManager.Instance.IncreaseCombo( 1 );
+		NinjaManager.Instance.IncreaseCombo(1);
 		
 		// then launch the trigger into the air
 		
@@ -69,8 +70,8 @@ public class NinjaTriggerTarget : NinjaTrigger {
 ////		gameObject.rigidbody.AddForce( vForce );
 		
 		// set the cockroach's face to dead
-		string strFaceKey = Constants.GetConstant<string>( "Ninja_FaceKey" );
-		SetFace( strFaceKey + "Dead" );	
+		string strFaceKey = Constants.GetConstant<string>("Ninja_FaceKey");
+		SetFace(strFaceKey + "Dead");	
 
 		Destroy(this.gameObject);
 	}
@@ -78,7 +79,7 @@ public class NinjaTriggerTarget : NinjaTrigger {
 	//---------------------------------------------------
 	// _OnMissed()
 	//---------------------------------------------------	
-	protected override void _OnMissed() {
+	protected override void _OnMissed(){
 		if(!NinjaManager.Instance.IsTutorialRunning()){
 			// the player loses a life
 			NinjaManager.Instance.UpdateLives(-1);	

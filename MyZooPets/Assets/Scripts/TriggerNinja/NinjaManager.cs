@@ -3,11 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// NinjaManager
-// Manager for the trigger ninja game.
-//---------------------------------------------------
-
 public class NinjaManager : MinigameManager<NinjaManager>{
 	// combo related
 	public float comboMaxTime;		// max time between cuts for a combo
@@ -70,17 +65,18 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	/// </summary>
 	/// <param name="num">Number.</param>
 	public void IncreaseCombo(int num){
-		// increase the combo
-		int nCombo = GetCombo();
-		nCombo += num;
-		SetCombo(nCombo);
-		
-		// by default, increasing the combo resets the countdown before the combo expires
-		comboTime = GetMaxComboTime();
+		if(!IsTutorialRunning()){
+			// increase the combo
+			int nCombo = GetCombo();
+			nCombo += num;
+			SetCombo(nCombo);
+			
+			// by default, increasing the combo resets the countdown before the combo expires
+			comboTime = GetMaxComboTime();
+		}
 	}
 	
 	void Awake(){
-		//TO DO - not sure if this is the best place to set frame rate
 		Application.targetFrameRate = 60;
 	}
 
@@ -200,14 +196,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			NinjaScoring eScore;
 			NinjaData data = null;
 
-			if(!IsTutorialRunning()){
+//			if(!IsTutorialRunning()){
 				eScore = GetScoringKey();
 				data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-			}
+//			}
 			//Tutorial mode spawns specific NinjaData
-			else{
-				data = GetTutorialSpawnGroup();
-			}
+//			else{
+//				data = GetTutorialSpawnGroup();
+//			}
 			//Debug.Log("STARTING GROUP " + data.GetID() + " of length " + data.GetEntries().Count);
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
@@ -215,37 +211,56 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 		else
 			timeCount -= deltaTime;	// otherwise, there is no group and we still need to countdown before spawning the next group
-	}	
+	}
+
+	public GameObject SpawnSingleTriggerTutorial(){
+		GameObject triggerPrefab = (GameObject) Resources.Load("NinjaTrigger1");
+
+		Vector3 triggerLocation = new Vector3(0, 2.8f, 0);
+
+		//instantiate trigger 
+		GameObject triggerObject = (GameObject) Instantiate(triggerPrefab, triggerLocation, 
+		                                                    triggerPrefab.transform.localRotation);
+		Rigidbody triggerObjectRigidbody = triggerObject.GetComponent<Rigidbody>();
+		triggerObjectRigidbody.useGravity = false;
+		triggerObjectRigidbody.constraints = RigidbodyConstraints.None;
+		triggerObjectRigidbody.constraints = RigidbodyConstraints.FreezePositionX | 
+			RigidbodyConstraints.FreezePositionY | 
+				RigidbodyConstraints.FreezeRotationX |
+				RigidbodyConstraints.FreezeRotationY;
+
+		return triggerObject;
+	}
 
 	/// <summary>
 	/// Gets the tutorial spawn group.
 	/// </summary>
 	/// <returns>The tutorial spawn group.</returns>
-	private NinjaData GetTutorialSpawnGroup(){
-		//get tutorial class
-		NinjaTutorial tutorial = (NinjaTutorial)GetTutorial();
-
-		//get current step id
-		int currentTutStep = tutorial.GetStep(); 
-
-		NinjaScoring eScore = NinjaScoring.Start_1;
-		NinjaData data = null;
-
-		//Different tutorial step spawns different NinjaData	
-		switch(currentTutStep){
-		case 0:
-			eScore = NinjaScoring.Start_1;
-			break;
-		case 1:
-			eScore = NinjaScoring.Start_3;
-			break;
-		}
-
-		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-
-		return data;
-
-	}	
+//	private NinjaData GetTutorialSpawnGroup(){
+//		//get tutorial class
+//		NinjaTutorial tutorial = (NinjaTutorial)GetTutorial();
+//
+//		//get current step id
+//		int currentTutStep = tutorial.GetStep(); 
+//
+//		NinjaScoring eScore = NinjaScoring.Start_1;
+//		NinjaData data = null;
+//
+//		//Different tutorial step spawns different NinjaData	
+//		switch(currentTutStep){
+//		case 0:
+//			eScore = NinjaScoring.Start_1;
+//			break;
+//		case 1:
+//			eScore = NinjaScoring.Start_3;
+//			break;
+//		}
+//
+//		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
+//
+//		return data;
+//
+//	}	
 
 	/// <summary>
 	/// Updates the trail.
@@ -282,15 +297,16 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	/// <param name="entry">Entry.</param>
 	private void SpawnGroup(NinjaDataEntry entry){
 		// create the proper list of objects to spawn
-		int nTriggers = entry.GetTriggers();
-		int nBombs = entry.GetBombs();
+		int numOfTriggers = entry.GetTriggers();
+		int numOfBombs = entry.GetBombs();
 		List<string> listObjects = new List<string>();
-		for(int i = 0; i < nTriggers; ++i){
+
+		for(int i = 0; i < numOfTriggers; ++i){
 			// NOTE: if want to add variation over time, use GetRandomTrigger(n to choose from)
 			string randomTrigger = DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
 			listObjects.Add(randomTrigger);
 		}
-		for(int i = 0; i < nBombs; ++i){
+		for(int i = 0; i < numOfBombs; ++i){
 			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
 			string randomBomb = DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
@@ -300,8 +316,8 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		listObjects.Shuffle();
 		
 		// create the proper object based off the entry's pattern
-		NinjaPatterns eType = entry.GetPattern();
-		switch(eType){
+		NinjaPatterns patternType = entry.GetPattern();
+		switch(patternType){
 		case NinjaPatterns.Separate:
 			new SpawnGroupSeparate(listObjects);
 			break;
@@ -318,7 +334,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			new SpawnGroupSplit(listObjects);
 			break;			
 		default:
-			Debug.LogError("Unhandled group type: " + eType);
+			Debug.LogError("Unhandled group type: " + patternType);
 			break;
 		}		
 	}

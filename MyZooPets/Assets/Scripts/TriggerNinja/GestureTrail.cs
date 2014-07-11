@@ -6,7 +6,6 @@ using System.Collections;
 /// trail taht follows a user's finger.
 /// </summary>
 public class GestureTrail : MonoBehaviour{	
-
 	public string trailResourceName; // the resource name of the trail
 	public float trailZValue; // the Z value the trail should be set to
 

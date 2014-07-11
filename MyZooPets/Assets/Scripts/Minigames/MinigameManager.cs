@@ -331,8 +331,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Adds num points to the player's current score.
 	//---------------------------------------------------	
 	public void UpdateScore(int num){
-		int nNewScore = score + num;
-		SetScore(nNewScore);
+		if(!IsTutorialRunning()){
+			int nNewScore = score + num;
+			SetScore(nNewScore);
+		}
 	}	
 	
 	//---------------------------------------------------
@@ -355,17 +357,19 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Adds num points to the player's current lives.
 	//---------------------------------------------------	
 	public void UpdateLives(int num){
-		// for now, current lives cannot go above the starting value...
-		int nCurLives = GetLives();
-		if(num > 0 && nCurLives == nStartingLives)
-			return;
-		
-		int nNew = lives + num;
-		SetLives(nNew);
-		
-		// send callback because lives are chaning
-		if(OnLivesChanged != null)
-			OnLivesChanged(this, new LivesChangedArgs(num));		
+		if(!IsTutorialRunning()){
+			// for now, current lives cannot go above the starting value...
+			int nCurLives = GetLives();
+			if(num > 0 && nCurLives == nStartingLives)
+				return;
+			
+			int nNew = lives + num;
+			SetLives(nNew);
+			
+			// send callback because lives are chaning
+			if(OnLivesChanged != null)
+				OnLivesChanged(this, new LivesChangedArgs(num));		
+		}
 	}		
 	
 	//---------------------------------------------------

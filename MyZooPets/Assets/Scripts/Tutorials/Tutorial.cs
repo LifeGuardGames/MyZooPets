@@ -15,7 +15,7 @@ public abstract class Tutorial{
 	protected abstract void SetKey();						// the tutorial key is used to mark a lot of lists
 	protected abstract void SetMaxSteps();					// set the max steps of the tutorial
 	protected abstract void ProcessStep(int nStep);		// the meat of a tutorial is processing its steps and doing things
-	protected abstract void _End(bool bFinished);			// when the tutorial is finishd
+	protected abstract void _End(bool isFinished);			// when the tutorial is finishd
 	
 	// ----------- Tutorial Popup types -------------------
 	protected const string POPUP_STD = "TutorialPopup_Standard";

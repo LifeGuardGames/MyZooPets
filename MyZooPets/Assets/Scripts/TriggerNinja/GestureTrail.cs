@@ -42,6 +42,7 @@ public class GestureTrail : MonoBehaviour{
 	/// </summary>
 	/// <param name="position">Position with user touch position in Vector2.</param>
 	public void DragStarted(Vector2 position){
+
 		// get the trail resource to create
 		string trailName = GetTrailName();
 				
@@ -49,19 +50,15 @@ public class GestureTrail : MonoBehaviour{
 		Vector3 screenPos = TranslateScreenPos(position);
 		
 		goTrail = Instantiate(Resources.Load(trailName) as GameObject, screenPos, Quaternion.identity) as GameObject;
+		goTrail.GetComponent<TrailRenderer>().autodestruct = false;
 	}
 
 	/// <summary>
 	/// Drag ended.
 	/// </summary>
 	public void DragEnded(){
-		StartCoroutine(OnDragEnded());
-	}
-
-	// Linger the trail for some time
-	private IEnumerator OnDragEnded(){
-		float seconds = Constants.GetConstant<float>("Ninja_TrailLinger");
-		yield return new WaitForSeconds(seconds);
+		// Let the trail commit seppuku
+		goTrail.GetComponent<TrailRenderer>().autodestruct = true;
 	}
 
 	/// <summary>

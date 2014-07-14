@@ -46,22 +46,22 @@ public class GestureTrail : MonoBehaviour{
 		string trailName = GetTrailName();
 				
 		// get the proper vector3 position of the trail based on where the user is touching
-		Vector3 vPos = TranslateScreenPos(position);
+		Vector3 screenPos = TranslateScreenPos(position);
 		
-		goTrail = Instantiate(Resources.Load(trailName) as GameObject, vPos, Quaternion.identity) as GameObject;
+		goTrail = Instantiate(Resources.Load(trailName) as GameObject, screenPos, Quaternion.identity) as GameObject;
 	}
 
 	/// <summary>
 	/// Drag ended.
 	/// </summary>
 	public void DragEnded(){
-		StartCoroutine( OnDragEnded() );
+		StartCoroutine(OnDragEnded());
 	}
 
 	// Linger the trail for some time
-	private IEnumerator OnDragEnded() {
-			float fLinger = Constants.GetConstant<float>( "Ninja_TrailLinger" );
-			yield return new WaitForSeconds( fLinger );
+	private IEnumerator OnDragEnded(){
+		float seconds = Constants.GetConstant<float>("Ninja_TrailLinger");
+		yield return new WaitForSeconds(seconds);
 	}
 
 	/// <summary>
@@ -84,14 +84,14 @@ public class GestureTrail : MonoBehaviour{
 	/// <summary>
 	/// Translates the screen position from 2d screen position to 3d position
 	/// </summary>
-	/// <returns>The screen position.</returns>
+	/// <returns>The world position.</returns>
 	/// <param name="screenPos">Screen position.</param>
 	private Vector3 TranslateScreenPos(Vector2 screenPos){
-		Vector3 vPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 10));
+		Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 10));
 		
 		// we are setting the Z manually because the translation from screen to world sets the Z to the camera's Z
-		vPos.z = GetZ();
+		worldPoint.z = GetZ();
 		
-		return vPos;
+		return worldPoint;
 	}
 }

@@ -193,18 +193,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		else if(timeCount <= 0){
 			// otherwise, there is no current group and it is time to start one, 
 			// so figure out which one to begin
-			NinjaScoring eScore;
+			NinjaScoring scoreKey;
 			NinjaData data = null;
 
-//			if(!IsTutorialRunning()){
-				eScore = GetScoringKey();
-				data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-//			}
-			//Tutorial mode spawns specific NinjaData
-//			else{
-//				data = GetTutorialSpawnGroup();
-//			}
-			//Debug.Log("STARTING GROUP " + data.GetID() + " of length " + data.GetEntries().Count);
+
+			scoreKey = GetScoringKey();
+			data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, scoreKey);
+
+	
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
 			currentTriggerEntries = new List<NinjaDataEntry>(data.GetEntries());
@@ -231,37 +227,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 		return triggerObject;
 	}
-
-	/// <summary>
-	/// Gets the tutorial spawn group.
-	/// </summary>
-	/// <returns>The tutorial spawn group.</returns>
-//	private NinjaData GetTutorialSpawnGroup(){
-//		//get tutorial class
-//		NinjaTutorial tutorial = (NinjaTutorial)GetTutorial();
-//
-//		//get current step id
-//		int currentTutStep = tutorial.GetStep(); 
-//
-//		NinjaScoring eScore = NinjaScoring.Start_1;
-//		NinjaData data = null;
-//
-//		//Different tutorial step spawns different NinjaData	
-//		switch(currentTutStep){
-//		case 0:
-//			eScore = NinjaScoring.Start_1;
-//			break;
-//		case 1:
-//			eScore = NinjaScoring.Start_3;
-//			break;
-//		}
-//
-//		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-//
-//		return data;
-//
-//	}	
-
+	
 	/// <summary>
 	/// Updates the trail.
 	/// </summary>
@@ -303,12 +269,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 		for(int i = 0; i < numOfTriggers; ++i){
 			// NOTE: if want to add variation over time, use GetRandomTrigger(n to choose from)
-			string randomTrigger = DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
+			string randomTrigger = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
 			listObjects.Add(randomTrigger);
 		}
 		for(int i = 0; i < numOfBombs; ++i){
 			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
-			string randomBomb = DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
+			string randomBomb = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
 		}
 		
@@ -410,8 +378,8 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}		
 		
 		// if the current combo was better than their best, update it
-		int nBest = GetComboBest();
-		if(combo > nBest)
+		int bestCombo = GetComboBest();
+		if(combo > bestCombo)
 			SetComboBest(combo);
 		
 		// reset the combo down to 0

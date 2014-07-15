@@ -133,6 +133,10 @@ public class GatingManager : Singleton<GatingManager>{
 	public void GateCleared(){
 		// enable the player to do stuff in the room
 		EnableUI();
+
+		// move the pet to the center of the room
+//		Vector3 petPositionAfterGateCleared = new Vector3(76, -2, 20);
+//		PetMovement.Instance.MovePet(petPositionAfterGateCleared);
 	}
 
 	/// <summary>

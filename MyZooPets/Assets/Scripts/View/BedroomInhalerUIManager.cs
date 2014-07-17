@@ -98,7 +98,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	/// Readies to use mode.
 	/// </summary>
 	private void ReadyToUseMode(){
-		inhalerAnimationController.Play("spin360slow");
+		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
 		progressBar3D.SetActive(false);

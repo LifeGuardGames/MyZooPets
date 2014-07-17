@@ -30,5 +30,17 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
 		GetComponent<PetSpeechController>().Talk(msgOption);
-	}	
+	}
+
+	public void ShowPokeMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, "Tickle me!!");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
+
+	public void FeedMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechController.Keys.MessageText, "Feed me!!");
+		GetComponent<PetSpeechController>().Talk(msgOption);
+	}
 }

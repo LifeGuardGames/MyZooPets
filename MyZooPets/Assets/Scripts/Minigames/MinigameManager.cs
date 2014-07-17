@@ -408,7 +408,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// because Unity is dumb, and because we use SendMessage.
 	//---------------------------------------------------	
 	protected void PauseGame(){
-		Debug.Log("Pausedd");
+//		Debug.Log("Pausedd");
 		PauseGameWithPopup(true);	
 	}
 

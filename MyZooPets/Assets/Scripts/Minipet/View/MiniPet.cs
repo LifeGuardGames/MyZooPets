@@ -48,6 +48,8 @@ public class MiniPet : MonoBehaviour {
 				animator.SetTrigger("GestureWiggle");
 				MiniPetManager.Instance.SetTickle(id, true);
 				animator.SetBool("Sad", false);
+
+				StartCoroutine(FeedMsg());
 			}
 		}
 	}
@@ -86,6 +88,8 @@ public class MiniPet : MonoBehaviour {
 				dirtyParticle.Stop();
 				animator.SetTrigger("Happy");
 				currentDistanceInCentimeters = 0;
+
+				StartCoroutine(PokeMsg());
 			}
 
 			break;
@@ -94,6 +98,19 @@ public class MiniPet : MonoBehaviour {
 			break;
 		}
 	}
+	
+	#region Focus Group test code
+	private IEnumerator PokeMsg(){
+		yield return new WaitForSeconds(1.5f);
+		miniPetSpeechAI.ShowPokeMsg();
+	}
+
+	private IEnumerator FeedMsg(){
+		yield return new WaitForSeconds(1.5f);
+		miniPetSpeechAI.FeedMsg();
+	}
+
+	#endregion
 
 	/// <summary>
 	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated

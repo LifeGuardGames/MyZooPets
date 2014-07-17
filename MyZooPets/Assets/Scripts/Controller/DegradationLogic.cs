@@ -44,8 +44,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void RefreshCheck(){
 		degradationTriggers = new List<DegradData>(); 
-		RefreshDegradationCheck();
-		SetUpTriggers();       
+		//TODO: temporary disable triggers for focus group testing
+//		RefreshDegradationCheck();
+//		SetUpTriggers();       
 		UpdateNextPlayPeriodTime();
 	}
 

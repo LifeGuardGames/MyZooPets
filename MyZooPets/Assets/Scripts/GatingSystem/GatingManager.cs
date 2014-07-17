@@ -309,20 +309,28 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 			// if not tell user to buy it or wait for inhaler
 			else{
-				PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
-					StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-					
-					ClickManager.Instance.Lock(UIModeTypes.Store);
-					StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
-				};
-				
-				Hashtable notificationEntry = new Hashtable();
-				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-				notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-				
-				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+				IAPNotification();
 			}
 		}
+	}
+
+	/// <summary>
+	/// In app purchase notification. Prompt the user to either wait for inhaler or
+	/// buy flame crystal from the store with gems
+	/// </summary>
+	private void IAPNotification(){
+		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+			
+			ClickManager.Instance.Lock(UIModeTypes.Store);
+			StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+		};
+		
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+		
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 	}
 
 	/// <summary>
@@ -342,7 +350,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void PetReachedDest(object sender, EventArgs args){
+	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);		
 	
@@ -350,12 +358,15 @@ public class GatingManager : Singleton<GatingManager>{
 		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		
-		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy) 
+		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
 			ShowFireButton();
-		else{
-			ShowUnhealthyNoFireNotification();
+
+			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseRealInhaler();
+			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
+			
+			if(!canUseRealInhaler && fireOrb == null)
+				IAPNotification();
 		}
-		
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
 	}

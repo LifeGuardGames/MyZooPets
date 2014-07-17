@@ -16,8 +16,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
-	private GameObject goExitButton;	// exit button on sub panel
-	
+
 	// store related sounds
 	public string soundChangeTab;
 	public string soundBuy;
@@ -31,10 +30,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
-
-		goExitButton = storeSubPanel.FindInChildren("ExitButton");
-		if(goExitButton == null)
-			Debug.LogError("Exit button is null...please set");
 	}
 	
 	void Start(){
@@ -267,11 +262,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			Debug.LogError("Illegal sore sub category: " + page);
 			return;
 		}
-		
-		// we also need to hide the exit button's active state based on whether or not we are shortcutting
-		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
-		string strFunction = isShortcutMode ? "HideStoreSubPanel" : "CloseUI";
-		goExitButton.GetComponent<LgButtonMessage>().functionName = strFunction;		
 		
 		currentPage = page;
 

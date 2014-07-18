@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AssemblyLineController : MonoBehaviour {
 
 	public GameObject itemPrefab;
 	public GameObject startLocation;
 	public GameObject endLocation;
+	public List<AssemblyLineItem> itemList;
 
 	private float speed;
 	public float Speed{
@@ -15,11 +17,18 @@ public class AssemblyLineController : MonoBehaviour {
 
 	void Start(){
 		Speed = 4.0f;
-		StartSpawning();
+//		StartSpawning();
 	}
 
 	public void StartSpawning(){
 		InvokeRepeating("SpawnItem", 1f, 1f);
+	}
+
+	public void SetSpeed(float newSpeed){
+		speed = newSpeed;
+		foreach(AssemblyLineItem item in itemList){
+			item.SetSpeed(newSpeed);
+		}
 	}
 
 	void Reset(){

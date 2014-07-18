@@ -159,7 +159,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	protected virtual void _OnDestroy(){
-		// children implement	
+		// children implement
 	}
 	
 	//---------------------------------------------------

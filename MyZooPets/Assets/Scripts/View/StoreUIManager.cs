@@ -53,13 +53,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
 
 	protected override void _CloseUI(){
 		//Show other UI object
-		NavigationUIManager.Instance.ShowPanel();		
+		NavigationUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -69,6 +71,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -80,6 +83,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Analytics.Instance.StoreItemShortCutClicked();
 
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -88,6 +92,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
@@ -234,9 +239,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		case CurrencyTypes.IAP:
 			break;
 		}
-
-
-
 	}
 
 	public void OnBuyPremium(GameObject button){
@@ -285,6 +287,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Decorations"){
+			EditDecosUIManager.Instance.ShowNavButton();
+			InventoryUIManager.Instance.HidePanel();
+
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
@@ -345,6 +350,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Return to the StoreBasePanel
 	//------------------------------------------
 	public void HideStoreSubPanel(){
+		EditDecosUIManager.Instance.HideNavButton();
+		InventoryUIManager.Instance.ShowPanel();
+
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 		
 		// this is a little hacky, but our demux system is kind of difficult to get around, so...

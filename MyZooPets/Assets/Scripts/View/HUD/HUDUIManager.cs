@@ -17,6 +17,8 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 
 	// Parent for tweening
 	public GameObject tweenParent;
+	public GameObject anchorTopLeft;
+	public GameObject anchorTopRight;
 
 	// Icon pulsing
 	public AnimationControl animHealth;
@@ -43,6 +45,19 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	/// <returns>The tween parent.</returns>
 	public GameObject GetTweenParent(){
 		return tweenParent;	
+	}
+
+	public GameObject GetTweenParent(string anchor){
+		if(anchor == "topLeft"){
+			return anchorTopLeft;
+		}
+		else if(anchor == "topRight"){
+			return anchorTopRight;
+		}
+		else{
+			Debug.LogError("Bad anchor specified for HUD tween");
+			return null;
+		}
 	}
     
 	// Use this for initialization

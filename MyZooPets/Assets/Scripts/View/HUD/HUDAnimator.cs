@@ -58,8 +58,7 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl xpIconAnim;
 //	private ParticleSystemController animFire;
 	
-	private GameObject toDestroy;	
-	private GameObject tweenParent; 	// Parent for tweening
+	private GameObject toDestroy;
 	
 	// stores elements for easy access
 	private Dictionary<HUDElementType, int> hashDisplays = new Dictionary<HUDElementType, int>();
@@ -112,8 +111,7 @@ public class HUDAnimator : MonoBehaviour{
 		starIconAnim = HUDUIManager.Instance.animMoney;
 		gemIconAnim = HUDUIManager.Instance.animGem;
 		xpIconAnim = HUDUIManager.Instance.animXP;
-//		animFire = HUDUIManager.Instance.animFire;
-		tweenParent = HUDUIManager.Instance.GetTweenParent();		
+//		animFire = HUDUIManager.Instance.animFire;	
 		
 		// turn on/off the fire icon depending on if the pet can currently breath fire
 		UpdateBreathUI();
@@ -265,12 +263,12 @@ public class HUDAnimator : MonoBehaviour{
 		float modifier = 3f;	// How many to spawn for each change
 		bool isScaleUpDown = false;	// Used for adding animation
 		bool isFade = false;	// Used for subtracting animation
-		
 		string strImageUp = Constants.GetConstant<string>(type + "_Up");
 		string strImageDown = Constants.GetConstant<string>(type + "_Down");
 		float fModifier = GetModifier(type);
 		Vector3 vHUD = Constants.GetConstant<Vector3>(type + "_HUD");
-		
+		GameObject tweenParent = HUDUIManager.Instance.GetTweenParent(Constants.GetConstant<String>(type + "_Anchor"));	// Check which anchor this is in
+
 		modifier = Math.Abs(fModifier * amount);
 		if(amount > 0){
 			endPosition = vHUD;
@@ -290,7 +288,7 @@ public class HUDAnimator : MonoBehaviour{
 			// On its own thread, asynchronous
 			Hashtable hashSoundOverrides = new Hashtable();
 			hashSoundOverrides["Pitch"] = 1.0f + i;
-			StartCoroutine(SpawnOneSprite(i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade, strSound, hashSoundOverrides));
+			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageName, originPoint, endPosition, duration, isScaleUpDown, isFade, strSound, hashSoundOverrides));
 		}
 	}
 
@@ -298,7 +296,7 @@ public class HUDAnimator : MonoBehaviour{
 	// SpawnOneSprite()
 	// Spawns one sprite for the visual curve.
 	//---------------------------------------------------	
-	IEnumerator SpawnOneSprite(float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade, string strSound, Hashtable hashSoundOverrides){
+	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, HUDElementType type, string imageName, Vector3 fromPos, Vector3 toPos, float duration, bool isScaleUpDown, bool isFade, string strSound, Hashtable hashSoundOverrides){
 		yield return new WaitForSeconds(waitTime);
 
 		if(!string.IsNullOrEmpty(strSound))

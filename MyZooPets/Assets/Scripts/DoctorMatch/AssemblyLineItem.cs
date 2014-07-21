@@ -16,11 +16,14 @@ public class AssemblyLineItem : MonoBehaviour {
 		isOnAssemblyLine = true;	// Start moving the object
 	}
 
+	public void SetSpeed(float newSpeed){
+		speed = newSpeed;
+	}
+
 	void Update(){
 		// While the item is not being dragged
 		if(isOnAssemblyLine){
 			transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, Time.deltaTime * speed);
-//			Debug.Log("moving " + transform.position + " " + speed);
 			if(transform.position == destination.transform.position){
 				Destroy(gameObject);
 			}
@@ -46,10 +49,10 @@ public class AssemblyLineItem : MonoBehaviour {
 
 				/// DO REWARD CHECKING HERE ///
 				if(itemKey == currentHoverKey){
-					Debug.Log(" YAY" );
+					DoctorMatchManager.Instance.CharacterScoredRight();
 				}
 				else{
-					Debug.Log("Boooooooooooooo");
+					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
 				///////////////////////////////
 

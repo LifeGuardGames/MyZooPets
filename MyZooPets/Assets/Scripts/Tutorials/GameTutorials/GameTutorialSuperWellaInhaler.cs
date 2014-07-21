@@ -20,7 +20,6 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	}
 	
 	protected override void _End(bool isFinished){
-		NotificationUIManager.Instance.CleanupNotification();
 	}
 	
 	protected override void ProcessStep(int step){
@@ -71,7 +70,8 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 
 		//Display tutorial notification
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerTutorial);
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaInhaler);
+		notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("TUT_SUPERWELLA_INHALER"));
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
 		
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);

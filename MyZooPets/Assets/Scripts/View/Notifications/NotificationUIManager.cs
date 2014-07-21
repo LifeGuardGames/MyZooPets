@@ -22,7 +22,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 	public GameObject popupPremiumMessage;
 	public GameObject popupInhalerRechargeMessage;
-	public GameObject popupInhalerTutorialMessage;
+	public GameObject popupSuperWellaInhaler;
 
 	//TODO: need to be removed
 	public GameObject popupPremiumTest;
@@ -164,8 +164,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
 				);
 				break;
-			case NotificationPopupType.InhalerTutorial:
-				ShowInhalerTutorialMessage(
+			case NotificationPopupType.SuperWellaInhaler:
+				ShowSuperWellaInhalerMessage(
+					(string)entry[NotificationPopupFields.Message],
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
@@ -342,9 +343,16 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
-	private void ShowInhalerTutorialMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
-		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupInhalerTutorialMessage);
+		
+	/// <summary>
+	/// Shows the super wella inhaler message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="okButtonCallBack">Ok button call back.</param>
+	private void ShowSuperWellaInhalerMessage(string message, PopupNotificationNGUI.HashEntry okButtonCallBack){
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupSuperWellaInhaler);
 
+		oneButtonMessage.Message = message;
 		oneButtonMessage.Button1Callback = okButtonCallBack;
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 

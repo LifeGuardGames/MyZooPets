@@ -43,7 +43,7 @@ GameObject:
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
   m_Layer: 10
-  m_Name: PopupNotification_InhalerFinishPopup
+  m_Name: PopupNotification_SuperWellaInhaler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  - 114: {fileID: 11400016}
+  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: Contents
   m_TagString: Untagged
@@ -181,22 +181,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100022
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400022}
-  - 114: {fileID: 11400030}
-  m_Layer: 10
-  m_Name: Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -233,7 +217,6 @@ Transform:
   m_Children:
   - {fileID: 400008}
   - {fileID: 400012}
-  - {fileID: 400022}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400006
@@ -340,18 +323,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400008}
   m_RootOrder: 2
---- !u!4 &400022
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100022}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -14.9980793, z: 0}
-  m_LocalScale: {x: 1959.20789, y: 1231.37109, z: 2.2887938}
-  m_Children: []
-  m_Father: {fileID: 400004}
-  m_RootOrder: 2
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -410,7 +381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 1
+  blockUI: 0
   startsHidden: 0
   hideDeltaX: 0
   hideDeltaY: -600
@@ -424,8 +395,8 @@ MonoBehaviour:
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
+  HideTarget: {fileID: 100004}
+  HideFunctionName: BroadcastHideFinished
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
@@ -442,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfd7f1bd8d83433790f852a4897d471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textArea: {fileID: 0}
+  textArea: {fileID: 11400026}
   HideImmediately: 0
 --- !u!114 &11400006
 MonoBehaviour:
@@ -472,6 +443,40 @@ MonoBehaviour:
   HideFunctionName: 
   HideIncludeChildren: 0
   hideImmediately: 0
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 1
+  blockUI: 0
+  startsHidden: 0
+  hideDeltaX: 0
+  hideDeltaY: 800
+  hideDeltaZ: 0
+  showDuration: .5
+  hideDuration: .5
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 4
+  easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 100004}
+  HideFunctionName: BroadcastHideFinished
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -523,40 +528,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  blockUI: 1
-  startsHidden: 0
-  hideDeltaX: 0
-  hideDeltaY: 800
-  hideDeltaZ: 0
-  showDuration: .5
-  hideDuration: .5
-  showDelay: 0
-  hideDelay: 0
-  easeHide: 4
-  easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  strSoundShow: 
-  strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -651,8 +622,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 7
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: "Don't forget to take your \neveryday inhaler every [ff6c00]morning[-] and
-    [323fe1]night[-]!"
+  mText: 
   mMaxLineWidth: 527
   mMaxLineHeight: 311
   mEncoding: 1
@@ -682,27 +652,6 @@ MonoBehaviour:
   mDepth: -1
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: panel2
-  mFillCenter: 1
-  mType: 1
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
---- !u!114 &11400030
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: .286274523}
-  mPivot: 4
-  mDepth: -3
-  mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
-  mSpriteName: box30
   mFillCenter: 1
   mType: 1
   mFillDirection: 4

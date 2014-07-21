@@ -99,15 +99,18 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			
-			// check to make sure the item can be used
-			if(ItemLogic.Instance.CanUseItem(invItemID)){
-				args.IsValidTarget = true;
 
-				//notify inventory logic that this item is being used
-				InventoryLogic.Instance.UsePetItem(invItemID);
 
-				StartFireButtonAnimation();
+			if(invItem.ItemID == "Usable1"){
+				// check to make sure the item can be used
+				if(ItemLogic.Instance.CanUseItem(invItemID)){
+					args.IsValidTarget = true;
+					
+					//notify inventory logic that this item is being used
+					InventoryLogic.Instance.UsePetItem(invItemID);
+					
+					StartFireButtonAnimation();
+				}
 			}
 		}
 	}

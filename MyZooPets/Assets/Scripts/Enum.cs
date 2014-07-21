@@ -58,7 +58,7 @@ public enum NotificationPopupType{
 	Premium,
 	InhalerRecharging,
 	PremiumTest,
-	InhalerTutorial
+	SuperWellaInhaler
 }
 
 public enum NotificationPopupFields{

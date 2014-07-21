@@ -3,11 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// ButtonRealInahler
-// Button class that loads up the real inhaler game.
-//---------------------------------------------------
-
+/// <summary>
+/// Button class that loads up the real inhaler game
+/// </summary>
 public class ButtonRealInhaler : ButtonChangeScene {
 	
 	/// <summary>
@@ -22,16 +20,35 @@ public class ButtonRealInhaler : ButtonChangeScene {
 		//else
 			CheckToOpenInhaler();
 	}
-
-	//--------------------------------------------------
-	// Check if inhaler can be used at the current time. 
-	// Open if yes or show notification	
-	//--------------------------------------------------
+	
+	/// <summary>
+	/// Checks if inhaler can be used at the current time.
+	/// Open if yes or show notification.
+	/// </summary>
 	private void CheckToOpenInhaler(){
 		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
 			OpenRealInhaler();
 		}else{
-			PlayNotProcessSound();
+//			PlayNotProcessSound();
+
+			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
+			string popupMessage = "TUT_SUPERWELLA_INHALER";
+
+			if(currentTimeFrame == TimeFrames.Morning)
+				popupMessage = "NOTIFICATION_INHALER_TONIGHT";
+			else
+				popupMessage = "NOTIFICATION_INHALER_MORNING";
+
+			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
+			};
+			
+			//Display tutorial notification
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaInhaler);
+			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize(popupMessage));
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+			
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		}
 	}
 

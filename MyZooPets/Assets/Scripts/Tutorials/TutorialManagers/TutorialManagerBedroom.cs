@@ -55,7 +55,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		// bFocusWellapad = true;
 		// bFocusInhaler = true;		
 
-		// these tutorials occur in quick succession
+		//Tutorial 1
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
 			new GameTutorialWellapadIntro();
@@ -71,6 +71,10 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the smoke monster intro tutorial
 			new GameTutorialSmokeIntro();
 		}
+
+		//Tutorial 2
+
+
 //		else if(isFlameTutorialDone && !isTriggerTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
 //			// play the trigger tutorial
 //			new GameTutorialTriggers();

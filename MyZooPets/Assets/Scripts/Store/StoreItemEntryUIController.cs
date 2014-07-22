@@ -12,6 +12,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	public UISprite spriteIcon;
 	public UISprite buttonIcon;
 	public UIButtonMessage buttonMessage;
+	public AnimationControl tutorialWiggleAnimation;	//TODO Jason use this <<<
 
 	/// <summary>
 	/// Creates the entry.

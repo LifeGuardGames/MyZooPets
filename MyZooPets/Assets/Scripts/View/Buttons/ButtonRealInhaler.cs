@@ -30,15 +30,19 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			OpenRealInhaler();
 		}else{
 //			PlayNotProcessSound();
-
+			string soundToPlay;
 			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
 			string popupMessage = "TUT_SUPERWELLA_INHALER";
 
-			if(currentTimeFrame == TimeFrames.Morning)
+			if(currentTimeFrame == TimeFrames.Morning){
 				popupMessage = "NOTIFICATION_INHALER_TONIGHT";
-			else
+				soundToPlay = "superWellaInhalerTonight";
+			}
+			else{
 				popupMessage = "NOTIFICATION_INHALER_MORNING";
-
+				soundToPlay = "superWellaInhalerMorning";
+			}
+				
 			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
 			};
 			
@@ -49,6 +53,8 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
 			
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+			AudioManager.Instance.PlayClip(soundToPlay);
 		}
 	}
 

@@ -65,8 +65,12 @@ public class GameTutorialTriggers : GameTutorial{
 	}
 	
 	private IEnumerator ShowWellapad(){
-		float fWait = Constants.GetConstant<float>("TriggerTutorialWait_PreShowWellapad");
-		yield return new WaitForSeconds(fWait);
+		float seconds = Constants.GetConstant<float>("TriggerTutorialWait_PreShowWellapad");
+		yield return new WaitForSeconds(seconds);
+
+		//Create new tasks for tutorial part2
+		WellapadMissionController.Instance.CreateTutorialPart2Missions();
+
 		// highlight the fight task
 		WellapadMissionController.Instance.HighlightTask("CleanRoom");
 	
@@ -143,7 +147,7 @@ public class GameTutorialTriggers : GameTutorial{
 		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, useViewPort: false, option: option);
 	
 		// spotlight the dust
-		SpotlightObject(scriptTrigger.gameObject, fingerHint: true);
+		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);
 	
 		// add the dust to clickable objects
 		AddToProcessList(scriptTrigger.gameObject);

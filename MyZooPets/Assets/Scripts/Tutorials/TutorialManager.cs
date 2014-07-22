@@ -52,12 +52,6 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 	}
 	
 	void Start(){
-		//Debug.Log("Starting tutorial manager, running a test");
-		//GameTutTest tutTest = new GameTutTest();
-		
-		//Debug.Log("Starting tut manager, running spotlight test");
-		//SpotlightObject( goSpotTest );
-		
 		// listen for partition changing event
 		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
 		

@@ -44,9 +44,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void RefreshCheck(){
 		degradationTriggers = new List<DegradData>(); 
-		//TODO: temporary disable triggers for focus group testing
-//		RefreshDegradationCheck();
-//		SetUpTriggers();       
+
+		RefreshDegradationCheck();
+		SetUpTriggers();       
 		UpdateNextPlayPeriodTime();
 	}
 
@@ -166,7 +166,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			//TODO: Hacky... for play test...need to figure out better way
 //			if(!isTriggerTutDone) return;
 			if(!isTriggerTutDone && i == 0){
-				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
+				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_3", "Bedroom");
 
 				if(location == null)
 					Debug.LogError("Tutorial trigger location not set up correctly");

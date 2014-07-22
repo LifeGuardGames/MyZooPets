@@ -239,7 +239,9 @@ public enum InterfaceAnchors {
 	Center,
 	Left,
 	Right,
-	Top
+	Top,
+	TopLeft,
+	TopRight
 }
 
 // reward types for minigames

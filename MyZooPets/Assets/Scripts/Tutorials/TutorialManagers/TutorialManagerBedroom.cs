@@ -29,9 +29,9 @@ public class TutorialManagerBedroom : TutorialManager{
 	
 	// last tutorial
 	// TODO: need to be reviewed
-//	public const string TUT_LAST = TUT_DECOS;
-	public const string TUT_LAST = TUT_FLAME;
-
+	public const string TUT_LAST = TUT_DECOS;
+//	public const string TUT_LAST = TUT_FLAME;
+	
 	protected override void _Start(){
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
@@ -41,21 +41,19 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	protected override void _Check(){
-		// old and unused
-		//bool bIntro = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_INTRO );
-		//bool bFocusCalendar = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains( TUT_CALENDAR );
-		
+		//Tutorial 1
+		TutorialPart1Check();
+
+		//Tutorial 2
+		TutorialPart2Check();
+	}
+
+	private void TutorialPart1Check(){
 		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_INHALER);
 		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_WELLAPAD);	
-		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
 		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SMOKE_INTRO);
-		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SUPERWELLA_INHALER);
-		// bFocusWellapad = true;
-		// bFocusInhaler = true;		
 
-		//Tutorial 1
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
 			new GameTutorialWellapadIntro();
@@ -71,18 +69,28 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the smoke monster intro tutorial
 			new GameTutorialSmokeIntro();
 		}
+		else{}
+	}
 
-		//Tutorial 2
+	private void TutorialPart2Check(){
+		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
+		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
+		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
+		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
-
-//		else if(isFlameTutorialDone && !isTriggerTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
-//			// play the trigger tutorial
-//			new GameTutorialTriggers();
-//		}
-//		else if(isFlameTutorialDone && !isDecoTutorialDone && CameraManager.Instance.GetPanScript().currentPartition == 1){
-//			// play the deco tutorial
-//			new GameTutorialDecorations();
-//		}
+		if(LgDateTime.GetTimeNow() >= nextPlayPeriod){
+			if(isFlameTutorialDone && !isTriggerTutorialDone &&
+			   CameraManager.Instance.GetPanScript().currentPartition == 0){
+				// play the trigger tutorial
+				new GameTutorialTriggers();
+			}
+			else if(isFlameTutorialDone && !isDecoTutorialDone && 
+			        CameraManager.Instance.GetPanScript().currentPartition == 0){
+				// play the deco tutorial
+				new GameTutorialDecorations();
+			}
+			else{}
+		}
 	}
 
 	/// <summary>

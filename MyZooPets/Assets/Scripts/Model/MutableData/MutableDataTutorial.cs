@@ -10,17 +10,31 @@ using System.Collections.Generic;
 public class MutableDataTutorial{
     public List<string> ListPlayed {get; set;}	// list of tutorials that have been played	
 
-	public bool IsTutorialFinished(string tutorialID){
-		return true;
+	/// <summary>
+	/// Determines whether tutorial part 1 is done
+	/// </summary>
+	/// <returns><c>true</c> if tutorial part1 is done; otherwise, <c>false</c>.</returns>
+	public bool IsTutorialPart1Done(){
+		bool isFlameTutorialDone = ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
+		return isFlameTutorialDone;
 	}
 
-	public void AddTutorialToFinishList(string tutorialID){
-
+	/// <summary>
+	/// Determines whether tutorial part 2 is done.
+	/// </summary>
+	/// <returns><c>true</c> if tutorial part2 is done; otherwise, <c>false</c>.</returns>
+	public bool IsTutorialPart2Done(){
+		bool isDecoTutorialDone = ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS);
+		return isDecoTutorialDone;
 	}
 
-	public bool AreTutorialsFinished() {
-		bool bTutsDone = ListPlayed.Contains( TutorialManagerBedroom.TUT_LAST );
-		return bTutsDone;	
+	/// <summary>
+	/// Ares the tutorials finished.
+	/// </summary>
+	/// <returns><c>true</c>, if all tutorials are finished, <c>false</c> otherwise.</returns>
+	public bool AreTutorialsFinished(){
+		bool areTutorialsDone = ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST);
+		return areTutorialsDone;	
 	}
 	
     //================Initialization============

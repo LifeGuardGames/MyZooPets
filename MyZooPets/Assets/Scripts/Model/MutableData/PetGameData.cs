@@ -1,8 +1,5 @@
 using UnityEngine;
 
-//---------------------------------------------------
-// All mutable data
-//---------------------------------------------------
 public class PetGameData{
 	public MutableDataWellapad Wellapad {get; set;}
     public MutableDataPetInfo PetInfo {get; set;}

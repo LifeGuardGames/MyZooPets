@@ -26,7 +26,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			ReadyToUseMode();
 			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 		}

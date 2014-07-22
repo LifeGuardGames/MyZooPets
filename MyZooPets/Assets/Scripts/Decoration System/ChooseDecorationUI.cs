@@ -12,43 +12,30 @@ using System.Linq;
 //---------------------------------------------------
 
 public class ChooseDecorationUI : MonoBehaviour {
-	
-	// prefab that items in this UI are instantiated from
-	public GameObject prefabChooseDecoEntry;
-	
-	// sound that gets played when a decoration is placed
-	public string strSoundPlace;
-	
-	// the remove button game object
-	public GameObject goRemoveButton;
-	
-	// Panel of the grid
-	public UIPanel gridPanel;
-	
-	// the grid this UI places its items in
-	public GameObject goGrid;	
-	
-	// Show the status of available items, else tell user to go to store
-	public UILabel statusLabel;
+	//=======================Events========================
+	public EventHandler<EventArgs> OnDecoPlaced;   // when a decoration is placed	
 
-	// Animation for shop button if there is no deco
-	public AnimationControl shopAnimControl;
+	public GameObject prefabChooseDecoEntry; // prefab that items in this UI are instantiated from
+	public string strSoundPlace; // sound that gets played when a decoration is placed
+	public GameObject goRemoveButton; // the remove button game object
+	public UIPanel gridPanel; // Panel of the grid
+	public GameObject goGrid; // the grid this UI places its items in
+	public UILabel statusLabel; // Show the status of available items, else tell user to go to store
+	public AnimationControl shopAnimControl; // Animation for shop button if there is no deco
 	
 	// the decoration node that this UI is currently representing
 	private DecorationNode decoNodeCurrent;
+	// save the 0th item in the deco menu for using in tutorials
+	private GameObject goTutorialEntry;
+
 	public DecorationNode GetNode() {
 		return decoNodeCurrent;	
 	}
-	
-	// save the 0th item in the deco menu for using in tutorials
-	private GameObject goTutorialEntry;
+
 	public GameObject GetTutorialEntry() {
 		return goTutorialEntry;	
 	}
-	
-	//=======================Events========================
-    public EventHandler<EventArgs> OnDecoPlaced;   // when a decoration is placed	
-	
+
 	void Start(){
 		// Reposition all the things nicely to stretch to the end of the screen
 		Vector4 oldRange = gridPanel.clipRange;
@@ -171,8 +158,10 @@ public class ChooseDecorationUI : MonoBehaviour {
 			}
 			
 			// save the tutorial entry (a bit hacky)
-			if ( itemDeco.ID == "WallPoster8" )
+			if(goTutorialEntry == null)
 				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
+//			if ( itemDeco.ID == "WallPoster8" )
+//				goTutorialEntry = item.transform.FindChild("PlaceButton").gameObject;
 		}
 		
 		// Update the status label with formatted type name

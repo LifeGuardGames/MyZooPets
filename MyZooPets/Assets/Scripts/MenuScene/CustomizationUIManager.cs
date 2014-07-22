@@ -17,11 +17,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
-    // private bool skipComic = false;
+     private bool isComicOn;
 	
     void Awake(){
         eModeType = UIModeTypes.CustomizePet;
-        // skipComic = Constants.GetConstant<bool>("SkipIntroComic");
+        isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }
 
 	//---------------------------------------------------
@@ -100,9 +100,10 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             }else{
 
 				ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-				Invoke("ShowIntroMovie", 1);
-
-//				LoadScene();
+				if(isComicOn)
+					Invoke("ShowIntroMovie", 1);
+				else
+					LoadScene();
             }
 		}
 

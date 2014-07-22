@@ -31,15 +31,21 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	//Check if the user can play the inhaler game
-	public bool CanUseRealInhaler(){
+	public bool CanUseEverydayInhaler(){
 
 		DateTime now = LgDateTime.GetTimeNow();
 		bool retVal = now >= NextPlayPeriod;
-			
+
+
+//		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
+
+		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
 		// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
-		bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
-		if(!tutsDone && inhalerTutDone)
+//		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		bool isInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
+//		if(!areTutorialsFinished && isInhalerTutorialDone)
+//		if(!isFlameTutorialDone)
+		if(!isPart1TutorialDone && isInhalerTutorialDone)
 			retVal = false;
 			
 		return retVal;
@@ -48,7 +54,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 
 	void Update(){
 
-		if(CanUseRealInhaler()){
+		if(CanUseEverydayInhaler()){
 			// okay, so the player can use their inhaler...but were we previously counting down?
 			if(isCountingDown){
 				// if we were, stop

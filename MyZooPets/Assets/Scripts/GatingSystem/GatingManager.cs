@@ -297,7 +297,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	public void ShowNoFireNotification(){
 		// if inhaler is ready to be used prompt user to use inhaler
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			PetSpeechAI.Instance.ShowInhalerMsg();
 		}
 		// if inhaler already use check if there's fire orb in the inventory
@@ -361,7 +361,7 @@ public class GatingManager : Singleton<GatingManager>{
 		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
 			ShowFireButton();
 
-			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseRealInhaler();
+			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
 			
 			if(!canUseRealInhaler && fireOrb == null)

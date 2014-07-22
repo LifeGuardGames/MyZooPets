@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	/// Open if yes or show notification.
 	/// </summary>
 	private void CheckToOpenInhaler(){
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			OpenRealInhaler();
 		}else{
 //			PlayNotProcessSound();

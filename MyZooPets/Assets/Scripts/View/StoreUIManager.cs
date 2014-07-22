@@ -16,6 +16,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
+	public GameObject backButton; // exit button reference
 
 	// store related sounds
 	public string soundChangeTab;
@@ -48,6 +49,28 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		grid.transform.localPosition = new Vector3(
 			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);
+	}
+
+	/// <summary>
+	/// Gets the exit button.
+	/// </summary>
+	/// <returns>The exit button.</returns>
+	public GameObject GetBackButton(){
+		return backButton;
+	}
+
+	/// <summary>
+	/// Enables the tab area. Use in tutorial
+	/// </summary>
+	public void EnableTabArea(){
+		tabArea.SetActive(true);
+	}
+
+	/// <summary>
+	/// Disables the tab area. Use in tutorial
+	/// </summary>
+	public void DisableTabArea(){
+		tabArea.SetActive(false);
 	}
 
 	protected override void _OpenUI(){

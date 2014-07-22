@@ -64,7 +64,7 @@ public class GameTutorialDecorations : GameTutorial{
 			TutorialManager.Instance.StartCoroutine(FocusOnStoreButton());
 			break;			
 		case 4:
-			TutorialManager.Instance.StartCoroutine(FocusOnStoreExitButton());
+			StoreUIManager.OnDecorationItemBought += FocusOnStoreExitButton;
 			break;
 		case 5:
 			TutorialManager.Instance.StartCoroutine(FocusOnDecorationUI());
@@ -240,9 +240,8 @@ public class GameTutorialDecorations : GameTutorial{
 	/// After some decoration items have been bought, prompt the user to exit
 	/// the store
 	/// </summary>
-	private IEnumerator FocusOnStoreExitButton(){
-		yield return new WaitForSeconds(2f);
-
+	private void FocusOnStoreExitButton(object sender, EventArgs args){
+		StoreUIManager.OnDecorationItemBought -= FocusOnStoreExitButton;
 		storeBackButton = StoreUIManager.Instance.GetBackButton();
 
 		ShowFingerHint(storeBackButton, isGUI: true, anchor: InterfaceAnchors.TopLeft, flipX: true);

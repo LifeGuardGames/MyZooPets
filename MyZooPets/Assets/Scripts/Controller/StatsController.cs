@@ -52,33 +52,33 @@ public class StatsController : Singleton<StatsController>{
 	}	
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
-	void OnGUI(){
-		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
-			ChangeStats(deltaHealth: 10);
-	 	}
-		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
-			ChangeStats(deltaHealth: -10);
-		 }
-		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
-			ChangeStats(deltaMood: 10);
-		}
-		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
-			ChangeStats(deltaMood: -10);
-		}
-		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
-			ChangeStats(deltaPoints: 100);
-		}
-		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
-			ChangeStats(deltaGems: 5);
-		}
-		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
-			ChangeStats(deltaStars: 50);
-		}
-		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
-			ChangeStats(deltaStars: -40);
-		}
-
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
+//			ChangeStats(deltaHealth: 10);
+//	 	}
+//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
+//			ChangeStats(deltaHealth: -10);
+//		 }
+//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
+//			ChangeStats(deltaMood: 10);
+//		}
+//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
+//			ChangeStats(deltaMood: -10);
+//		}
+//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
+//			ChangeStats(deltaPoints: 100);
+//		}
+//		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
+//			ChangeStats(deltaGems: 5);
+//		}
+//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
+//			ChangeStats(deltaStars: 50);
+//		}
+//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
+//			ChangeStats(deltaStars: -40);
+//		}
+//
+//	}
 	#endif
 
 	public int GetStat(HUDElementType stat){

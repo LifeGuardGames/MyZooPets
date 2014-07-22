@@ -7,7 +7,6 @@ public class AssemblyLineController : MonoBehaviour {
 	public GameObject itemPrefab;
 	public GameObject startLocation;
 	public GameObject endLocation;
-//	public List<AssemblyLineItem> itemList;	// TODO Need to use listener
 
 //	private float interval;
 //	public float Interval{
@@ -31,9 +30,6 @@ public class AssemblyLineController : MonoBehaviour {
 	
 	public void SetSpeed(float newSpeed){
 		speed = newSpeed;
-//		foreach(AssemblyLineItem item in itemList){
-//			item.SetSpeed(newSpeed);
-//		}
 	}
 
 	private void SpawnItem(){

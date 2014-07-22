@@ -7,10 +7,29 @@ public class AssemblyLineItem : MonoBehaviour {
 	private string currentHoverKey = null;	// Key of the zone it is hovering over, null otherwise
 	private int dragFingerIndex;
 	private bool isOnAssemblyLine = false;
+	private bool isPaused = false;
 	private GameObject destination;
 	private float speed;
-	
+	private AssemblyLineController assemblyLineParent;
+
+
+	void Start(){
+		// listen for various messages from the game manager
+		DoctorMatchManager.OnSpeedChange += OnSpeedChange;			// speed change events
+		DoctorMatchManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
+		DoctorMatchManager.OnNewGame += OnNewGame;					// new game
+	}
+
+	void OnDestroy(){
+		// stop listening to messages
+		DoctorMatchManager.OnSpeedChange -= OnSpeedChange;			// speed change events	
+		DoctorMatchManager.OnStateChanged -= OnGameStateChanged;	// game state changes
+		DoctorMatchManager.OnNewGame -= OnNewGame;					// new game
+	}
+
 	public void SetupItem(AssemblyLineController assemblyLineController){
+
+		assemblyLineParent = assemblyLineController;
 
 		// Pass self object to the game manager for random sprite setup
 		DoctorMatchManager.Instance.SetUpRandomAssemblyItemSprite(this.gameObject);
@@ -26,7 +45,7 @@ public class AssemblyLineItem : MonoBehaviour {
 
 	void Update(){
 		// While the item is not being dragged
-		if(isOnAssemblyLine){
+		if(isOnAssemblyLine && !isPaused){
 			transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, Time.deltaTime * speed);
 			if(transform.position == destination.transform.position){	// Reached end platform
 				DoctorMatchManager.Instance.CharacterScoredWrong();
@@ -72,5 +91,32 @@ public class AssemblyLineItem : MonoBehaviour {
 
 	public void SetHoverZoneKey(string zoneKey){
 		currentHoverKey = zoneKey;
+	}
+
+	void OnSpeedChange(object sender, System.EventArgs args){
+		speed = assemblyLineParent.Speed;	// Get the speed from the parent assembly line
+	}
+
+	void OnGameStateChanged(object sender, GameStateArgs args){
+		MinigameStates eState = args.GetGameState();
+		
+		switch(eState){
+		case MinigameStates.GameOver:
+			// stop them in their tracks
+			isPaused = true;
+			break;
+		case MinigameStates.Paused:
+			// stop them in their tracks
+			isPaused = true;
+			break;
+		case MinigameStates.Playing:
+			// resume their movement
+			isPaused = false;
+			break;
+		}
+	}
+
+	void OnNewGame(object sender, System.EventArgs args){
+		Destroy(gameObject);
 	}
 }

@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	//=======================Events========================
-//	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
+	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
 	//=====================================================
 
 	// Move this to constant XML -------
+	public float minimumSpeed = 2f;
 	public float startSpeed = 2f;
 	public float speedIncreaseInterval = 0.2f;
 	public int speedUpMatchInterval = 5;	// Amount of pets correct needed before speedup occurs
@@ -113,12 +116,25 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	private void SpeedGameUp(){
-		assemblyLineController.SetSpeed(assemblyLineController.Speed + speedIncreaseInterval);
+		float newSpeed = assemblyLineController.Speed + speedIncreaseInterval;
+
+		// Set assembly line speed for new spawns
+		assemblyLineController.SetSpeed(newSpeed);
+
+		// Send out a message to all things on the assembly line letting them know their speed needs to change
+		if(OnSpeedChange != null)
+			OnSpeedChange(this, EventArgs.Empty);
 	}
 
 	private void SlowGameDown(){
-		// Cut speed in half for now
-		assemblyLineController.SetSpeed(assemblyLineController.Speed / 2f);
+		float newSpeed = Math.Max(assemblyLineController.Speed / 2f, minimumSpeed);	// Pick the higher of half of speed or minimum
+
+		// Cut speed in half for now for new spawns
+		assemblyLineController.SetSpeed(newSpeed);
+
+		// Send out a message to all things on the assembly line letting them know their speed needs to change
+		if(OnSpeedChange != null)
+			OnSpeedChange(this, EventArgs.Empty);
 	}
 
 	public void SetUpRandomAssemblyItemSprite(GameObject assemblyLineItemObject){
@@ -128,9 +144,9 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 		SpriteRenderer sprite = assemblyLineItemObject.transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
 
-		int randomNum = Random.Range(1,4);
+		int randomNum = UnityEngine.Random.Range(1,4);
 
-		int chooseSpriteRandom = Random.Range(0,4);
+		int chooseSpriteRandom = UnityEngine.Random.Range(0,4);
 
 		switch(randomNum){
 		case 1:

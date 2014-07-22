@@ -1,10 +1,8 @@
 LifeGuardGames StyleGuide
 =========
-Unity
----------
+Please use lgg.policymd file in the projects folder
 
-
-Useful git command
+Useful git commands
 ==========
 **Ignore changes to _Critical.xml**
 

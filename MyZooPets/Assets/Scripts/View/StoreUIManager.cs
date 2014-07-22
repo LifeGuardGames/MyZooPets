@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
+	public static EventHandler<EventArgs> OnDecorationItemBought;
 	public GameObject grid;
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
@@ -63,14 +64,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// Enables the tab area. Use in tutorial
 	/// </summary>
 	public void EnableTabArea(){
-		tabArea.SetActive(true);
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(true);
+		}
 	}
 
 	/// <summary>
 	/// Disables the tab area. Use in tutorial
 	/// </summary>
 	public void DisableTabArea(){
-		tabArea.SetActive(false);
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(false);
+		}
 	}
 
 	protected override void _OpenUI(){
@@ -208,7 +213,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	/// <param name="button">Button.</param>
 	public void OnBuyButton(GameObject button){
-		string itemID = button.transform.parent.name;
+		Transform buttonParent = button.transform.parent.parent;
+		string itemID = buttonParent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
 
 		switch(itemData.CurrencyType){
@@ -226,11 +232,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 						if(buyButton)
 							buyButton.isEnabled = false;
 					}
+
+					//Use for tutorial to notify tutorial manager when deco item has been bought
+					bool isDecorationTutorialDone = DataManager.Instance.GameData.
+						Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS);
+
+					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
+						OnDecorationItemBought(this, EventArgs.Empty);
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
-				OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
 				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
@@ -246,7 +259,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
 
-				OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
@@ -457,11 +470,19 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
 				DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 
+				//Do a check for decoration tutorial
+				bool isDecorationTutorialDone = DataManager.Instance.GameData.
+					Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS);
+
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
 					foreach(DecorationItem decoItemData in decoList){
-						if(!decoItemData.ItemBoxOnly)
-							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						if(!decoItemData.ItemBoxOnly){
+							GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+
+							if(!isDecorationTutorialDone)
+								itemEntry.GetComponent<StoreItemEntryUIController>().PlayWiggleAnimation();
+						}
 					}
 				}
 			}

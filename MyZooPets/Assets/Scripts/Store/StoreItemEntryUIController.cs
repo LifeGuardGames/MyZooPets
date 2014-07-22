@@ -12,7 +12,14 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	public UISprite spriteIcon;
 	public UISprite buttonIcon;
 	public UIButtonMessage buttonMessage;
-	public AnimationControl tutorialWiggleAnimation;	//TODO Jason use this <<<
+	public AnimationControl tutorialWiggleAnimation;
+
+	/// <summary>
+	/// Plaies the wiggle animation.
+	/// </summary>
+	public void PlayWiggleAnimation(){
+		tutorialWiggleAnimation.Play();
+	}
 
 	/// <summary>
 	/// Creates the entry.
@@ -20,7 +27,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	/// <param name="goGrid">grid to add game object to.</param>
 	/// <param name="goPrefab">prefab to instantiate.</param>
 	/// <param name="item">Item.</param>
-	public static void CreateEntry(GameObject goGrid, GameObject goPrefab, 
+	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, 
 	                               Item item, GameObject buyButtonMessageTarget = null,
 	                               string buyButtonMessageFunctionName = ""){
 
@@ -35,6 +42,8 @@ public class StoreItemEntryUIController : MonoBehaviour{
 		itemUIObject.GetComponent<StoreItemEntryUIController>().Init(item, 
 		                                                             buyButtonMessageTarget,
 		                                                             buyButtonMessageFunctionName);
+
+		return itemUIObject;
 	}
 
 	/// <summary>

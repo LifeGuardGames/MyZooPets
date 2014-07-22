@@ -61,7 +61,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     // throughout the game (for someone's first time playing this).
     //----------------------------------------------
     void Update(){
-        if(runShowHintTimer){
+        if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
             ShowHintTimer(); // This checks and shows hints if necessary.
         }
     }

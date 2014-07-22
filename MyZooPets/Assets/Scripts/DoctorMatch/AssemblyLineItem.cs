@@ -11,6 +11,10 @@ public class AssemblyLineItem : MonoBehaviour {
 	private float speed;
 	
 	public void SetupItem(AssemblyLineController assemblyLineController){
+
+		// Pass self object to the game manager for random sprite setup
+		DoctorMatchManager.Instance.SetUpRandomAssemblyItemSprite(this.gameObject);
+
 		speed = assemblyLineController.Speed;
 		destination = assemblyLineController.endLocation;
 		isOnAssemblyLine = true;	// Start moving the object
@@ -24,7 +28,8 @@ public class AssemblyLineItem : MonoBehaviour {
 		// While the item is not being dragged
 		if(isOnAssemblyLine){
 			transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, Time.deltaTime * speed);
-			if(transform.position == destination.transform.position){
+			if(transform.position == destination.transform.position){	// Reached end platform
+				DoctorMatchManager.Instance.CharacterScoredWrong();
 				Destroy(gameObject);
 			}
 		}
@@ -47,28 +52,25 @@ public class AssemblyLineItem : MonoBehaviour {
 			else{	// End drag
 				dragFingerIndex = -1;
 
+				if(itemKey == null || currentHoverKey == null){	// Dragged and released in empty area
+					Debug.Log(itemKey + " " + currentHoverKey);
+					Debug.LogError("No key presented in match");
+					DoctorMatchManager.Instance.CharacterScoredWrong();
+				}
 				/// DO REWARD CHECKING HERE ///
-				if(itemKey == currentHoverKey){
+				else if(itemKey == currentHoverKey){
 					DoctorMatchManager.Instance.CharacterScoredRight();
 				}
 				else{
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
 				///////////////////////////////
-
 				Destroy(gameObject);
 			}
 		}
 	}
 
-	void OnTriggerEnter2D(Collider2D collider){
-		DoctorMatchZone zoneScript = collider.gameObject.GetComponent<DoctorMatchZone>();
-		if(zoneScript){
-			currentHoverKey = collider.gameObject.GetComponent<DoctorMatchZone>().zoneKey;
-		}
-	}
-
-	void OnTriggerExit2D(Collider2D collider){
-		currentHoverKey = null;
+	public void SetHoverZoneKey(string zoneKey){
+		currentHoverKey = zoneKey;
 	}
 }

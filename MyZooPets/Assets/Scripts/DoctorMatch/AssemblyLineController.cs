@@ -7,7 +7,13 @@ public class AssemblyLineController : MonoBehaviour {
 	public GameObject itemPrefab;
 	public GameObject startLocation;
 	public GameObject endLocation;
-	public List<AssemblyLineItem> itemList;
+//	public List<AssemblyLineItem> itemList;	// TODO Need to use listener
+
+//	private float interval;
+//	public float Interval{
+//		get{return interval;}
+//		set{interval = value;}
+//	}
 
 	private float speed;
 	public float Speed{
@@ -15,24 +21,19 @@ public class AssemblyLineController : MonoBehaviour {
 		set{speed = value;}
 	}
 
-	void Start(){
-		Speed = 4.0f;
-//		StartSpawning();
-	}
-
 	public void StartSpawning(){
-		InvokeRepeating("SpawnItem", 1f, 1f);
+		InvokeRepeating("SpawnItem", 1f, 1.5f);
 	}
 
+	public void StopSpawning(){
+		CancelInvoke();
+	}
+	
 	public void SetSpeed(float newSpeed){
 		speed = newSpeed;
-		foreach(AssemblyLineItem item in itemList){
-			item.SetSpeed(newSpeed);
-		}
-	}
-
-	void Reset(){
-
+//		foreach(AssemblyLineItem item in itemList){
+//			item.SetSpeed(newSpeed);
+//		}
 	}
 
 	private void SpawnItem(){

@@ -6,18 +6,36 @@ public class DoctorMatchZone : MonoBehaviour {
 	public string zoneKey;	// Key to match with the item key
 	public Vector3 hoverScale;
 	private Collider2D auxItemCheck;
-	private string auxItemCheckKey;
+//	private string auxItemCheckKey;
 	private bool activeState;
 
+	void Start(){
+		if(zoneKey == null){
+			Debug.LogError("Zone key is missing");
+		}
+	}
 
 	void OnTriggerEnter2D(Collider2D collider){
 		SetActiveState(true);
 		auxItemCheck = collider;
-		auxItemCheckKey = collider.gameObject.GetComponent<AssemblyLineItem>().itemKey;
+
+		AssemblyLineItem item = collider.gameObject.GetComponent<AssemblyLineItem>();
+		item.SetHoverZoneKey(zoneKey);
+	}
+
+	// Some descrepancy between trigger enter and trigger exit, do brute force check every frame for active
+	void OnTriggerStay2D(Collider2D collider){
+		SetActiveState(true);
+
+		AssemblyLineItem item = collider.gameObject.GetComponent<AssemblyLineItem>();
+		item.SetHoverZoneKey(zoneKey);
 	}
 
 	void OnTriggerExit2D(Collider2D collider){
 		SetActiveState(false);
+
+		AssemblyLineItem item = collider.gameObject.GetComponent<AssemblyLineItem>();
+		item.SetHoverZoneKey(null);
 	}
 
 	private void SetActiveState(bool state){

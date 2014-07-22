@@ -19,7 +19,9 @@ public class MinigameLife : MonoBehaviour{
 	// particle systems for this object
 	public ParticleSystemController systemOff;
 	public ParticleSystemController systemOn;
-	
+
+	public DegradAlert bloodPanelControl;
+
 	// the state of this life
 	//private bool bOn;
 	
@@ -64,6 +66,10 @@ public class MinigameLife : MonoBehaviour{
 			// Play the camera shake animation
 			if(Camera.main.animation != null){
 				Camera.main.animation.Play();
+			}
+
+			if(bloodPanelControl != null){
+				bloodPanelControl.Play();
 			}
 		}
 		else if(nChange > 0 && nLives == nIndex){

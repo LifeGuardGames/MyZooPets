@@ -40,6 +40,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		return retVal; 
 	}
 
+	public bool IsDoneWithGame(){
+		return currentStep == RESCUE_NUM_STEPS;
+	}
+
 	//Use this function to move on to the next step
 	public void NextStep(){
 		if(IsDoneWithGame())
@@ -88,11 +92,5 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();
 	}	
 	
-	//---------------------------------------------------       
-	// IsDoneWithGame()
-	// True: done with the game , False: have more steps to go
-	//---------------------------------------------------       
-	private bool IsDoneWithGame(){
-		return currentStep == RESCUE_NUM_STEPS;
-	}
+
 }

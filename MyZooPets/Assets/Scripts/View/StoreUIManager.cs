@@ -63,14 +63,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// Enables the tab area. Use in tutorial
 	/// </summary>
 	public void EnableTabArea(){
-		tabArea.SetActive(true);
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(true);
+		}
 	}
 
 	/// <summary>
 	/// Disables the tab area. Use in tutorial
 	/// </summary>
 	public void DisableTabArea(){
-		tabArea.SetActive(false);
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(false);
+		}
 	}
 
 	protected override void _OpenUI(){

@@ -226,6 +226,8 @@ public class GameTutorialDecorations : GameTutorial{
 		LgButton button = shopButton.GetComponent<LgButton>();
 		button.OnProcessed -= OnStoreEntered;
 
+		StoreUIManager.Instance.DisableTabArea();
+
 		//clean up
 		RemoveFromProcessList(shopButton);
 		RemoveFingerHint();
@@ -261,6 +263,8 @@ public class GameTutorialDecorations : GameTutorial{
 	private void OnStoreExit(object sender, EventArgs args){
 		LgButton button = storeBackButton.GetComponent<LgButton>();
 		button.OnProcessed -= OnStoreExit;
+
+		StoreUIManager.Instance.EnableTabArea();
 
 		RemoveFromProcessList(storeBackButton);
 		RemoveFingerHint();

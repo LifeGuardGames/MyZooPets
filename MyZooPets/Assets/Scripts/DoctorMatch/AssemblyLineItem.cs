@@ -72,8 +72,6 @@ public class AssemblyLineItem : MonoBehaviour {
 				dragFingerIndex = -1;
 
 				if(itemKey == null || currentHoverKey == null){	// Dragged and released in empty area
-					Debug.Log(itemKey + " " + currentHoverKey);
-					Debug.LogError("No key presented in match");
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
 				/// DO REWARD CHECKING HERE ///

@@ -95,8 +95,6 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	public void CharacterScoredWrong(){
-		Debug.Log("Wronggg");
-
 		// character was sent to wrong zone...lose a life!
 		UpdateLives(-1);
 

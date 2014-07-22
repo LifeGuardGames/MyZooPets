@@ -3,6 +3,10 @@ using System.Collections;
 
 public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
+	//=======================Events========================
+//	public static EventHandler<EventArgs> OnSpeedChange; 	// when the game speed changes
+	//=====================================================
+
 	// Move this to constant XML -------
 	public float startSpeed = 2f;
 	public float speedIncreaseInterval = 0.2f;
@@ -13,8 +17,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	public Sprite[] spriteList;
 
 	private int numOfCorrectDiagnose; //keep track of the number of correct diagnose
-
-
+	
 	//---------------------------------------------------
 	// GetReward()
 	//---------------------------------------------------	

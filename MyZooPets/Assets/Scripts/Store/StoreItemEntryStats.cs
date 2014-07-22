@@ -11,7 +11,6 @@ using System.Linq;
 public class StoreItemEntryStats : StoreItemEntryUIController{
 	// list of stat pair objects
 	public List<StatPairUIController> listStats;
-	public AnimationControl tutorialWiggleAnimation;	//TODO Jason use this <<<
 
 	/// <summary>
 	/// Sets the desc.

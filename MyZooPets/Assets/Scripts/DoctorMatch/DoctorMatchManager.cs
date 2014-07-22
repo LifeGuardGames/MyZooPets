@@ -61,8 +61,6 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	// _GameOver()
 	//---------------------------------------------------		
 	protected override void _GameOver(){
-		assemblyLineController.StopSpawning();
-
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
 	

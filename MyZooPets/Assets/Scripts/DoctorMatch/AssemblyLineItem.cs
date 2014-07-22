@@ -44,10 +44,6 @@ public class AssemblyLineItem : MonoBehaviour {
 		isOnAssemblyLine = true;	// Start moving the object
 	}
 
-//	public void SetSpeed(float newSpeed){
-//		speed = newSpeed;
-//	}
-
 	void Update(){
 		// While the item is not being dragged
 		if(isOnAssemblyLine && !isPaused){
@@ -79,14 +75,12 @@ public class AssemblyLineItem : MonoBehaviour {
 				if(itemKey == null || currentHoverKey == null){	// Dragged and released in empty area
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
-				/// DO REWARD CHECKING HERE ///
 				else if(itemKey == currentHoverKey){
 					DoctorMatchManager.Instance.CharacterScoredRight();
 				}
 				else{
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
-				///////////////////////////////
 				Destroy(gameObject);
 			}
 		}

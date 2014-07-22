@@ -423,7 +423,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// show the pause game UI if appropriate
 		if(bShowPopup) 
 			ui.TogglePopup(MinigamePopups.Pause, true);
-	}	
+	}
 	
 	//---------------------------------------------------
 	// ResumeGame()

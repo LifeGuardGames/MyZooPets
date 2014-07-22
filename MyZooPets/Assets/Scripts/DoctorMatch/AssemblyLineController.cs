@@ -26,6 +26,30 @@ public class AssemblyLineController : MonoBehaviour {
 		set{speed = value;}
 	}
 
+	void Start(){
+		DoctorMatchManager.OnStateChanged += OnGameStateChanged;	// Game state changes
+	}
+
+	void OnDestroy(){
+		DoctorMatchManager.OnStateChanged -= OnGameStateChanged;	// Game state changes
+	}
+
+	void OnGameStateChanged(object sender, GameStateArgs args){
+		MinigameStates eState = args.GetGameState();
+		
+		switch(eState){
+		case MinigameStates.GameOver:
+			StopSpawning();
+			break;
+		case MinigameStates.Paused:
+			StopSpawning();
+			break;
+		case MinigameStates.Playing:
+			StartSpawning();
+			break;
+		}
+	}
+
 	public void StartSpawning(){
 		StopSpawning();
 		isRunning = true;
@@ -36,14 +60,6 @@ public class AssemblyLineController : MonoBehaviour {
 		isRunning = false;
 		CancelInvoke("SpawnItem");
 	}
-	
-//	public void SetSpeed(float newSpeed){
-//		speed = newSpeed;
-//	}
-
-//	public void SetFrequency(float newFrequency){
-//		frequency = new frequence
-//	}
 
 	private void SpawnItem(){
 		GameObject item = Instantiate(itemPrefab) as GameObject;

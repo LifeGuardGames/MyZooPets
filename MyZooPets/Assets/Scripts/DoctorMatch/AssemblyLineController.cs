@@ -8,11 +8,17 @@ public class AssemblyLineController : MonoBehaviour {
 	public GameObject startLocation;
 	public GameObject endLocation;
 
-//	private float interval;
-//	public float Interval{
-//		get{return interval;}
-//		set{interval = value;}
-//	}
+	private bool isRunning = false;
+	private float frequency;
+	public float Frequency{
+		get{return frequency;}
+		set{
+			frequency = value;
+			if(isRunning){	// Keep the track running if it is already active
+				StartSpawning();
+			}
+		}
+	}
 
 	private float speed;
 	public float Speed{
@@ -21,16 +27,23 @@ public class AssemblyLineController : MonoBehaviour {
 	}
 
 	public void StartSpawning(){
-		InvokeRepeating("SpawnItem", 1f, 1.5f);
+		StopSpawning();
+		isRunning = true;
+		InvokeRepeating("SpawnItem", 1f, frequency);
 	}
 
 	public void StopSpawning(){
-		CancelInvoke();
+		isRunning = false;
+		CancelInvoke("SpawnItem");
 	}
 	
-	public void SetSpeed(float newSpeed){
-		speed = newSpeed;
-	}
+//	public void SetSpeed(float newSpeed){
+//		speed = newSpeed;
+//	}
+
+//	public void SetFrequency(float newFrequency){
+//		frequency = new frequence
+//	}
 
 	private void SpawnItem(){
 		GameObject item = Instantiate(itemPrefab) as GameObject;

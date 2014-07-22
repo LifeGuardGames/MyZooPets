@@ -10,6 +10,11 @@ public class AssemblyLineItem : MonoBehaviour {
 	private bool isPaused = false;
 	private GameObject destination;
 	private float speed;
+	public float Speed{
+		get{return speed;}
+		set{speed = value;}
+	}
+
 	private AssemblyLineController assemblyLineParent;
 
 
@@ -39,9 +44,9 @@ public class AssemblyLineItem : MonoBehaviour {
 		isOnAssemblyLine = true;	// Start moving the object
 	}
 
-	public void SetSpeed(float newSpeed){
-		speed = newSpeed;
-	}
+//	public void SetSpeed(float newSpeed){
+//		speed = newSpeed;
+//	}
 
 	void Update(){
 		// While the item is not being dragged

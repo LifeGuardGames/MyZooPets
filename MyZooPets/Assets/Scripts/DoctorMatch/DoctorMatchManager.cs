@@ -13,6 +13,11 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	public float minimumSpeed = 2f;
 	public float startSpeed = 2f;
 	public float speedIncreaseInterval = 0.2f;
+
+	public float minimumFrequency = 1.5f;
+	public float startFrequency = 1.5f;
+	public float frequencyIncreaseInterval = 0.1f;
+
 	public int speedUpMatchInterval = 5;	// Amount of pets correct needed before speedup occurs
 	private int speedUpMatchTrack = 0;
 	public AssemblyLineController assemblyLineController;
@@ -47,7 +52,8 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	protected override void _NewGame(){
 		// set num of correct diagnose for each new game
 		numOfCorrectDiagnose = 0;
-		assemblyLineController.SetSpeed(startSpeed);
+		assemblyLineController.Speed = startSpeed;
+		assemblyLineController.Frequency = startFrequency;
 		assemblyLineController.StartSpawning();
 	}
 	
@@ -115,30 +121,35 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	private void SpeedGameUp(){
 		float newSpeed = assemblyLineController.Speed + speedIncreaseInterval;
+		float newFrequency = assemblyLineController.Frequency - frequencyIncreaseInterval;
 
 		// Set assembly line speed for new spawns
-		assemblyLineController.SetSpeed(newSpeed);
-
+		assemblyLineController.Speed = newSpeed;
 		// Send out a message to all things on the assembly line letting them know their speed needs to change
 		if(OnSpeedChange != null)
 			OnSpeedChange(this, EventArgs.Empty);
+
+		// Set assembly line spawn frequency
+		assemblyLineController.Frequency = newFrequency;
 	}
 
 	private void SlowGameDown(){
 		float newSpeed = Math.Max(assemblyLineController.Speed / 2f, minimumSpeed);	// Pick the higher of half of speed or minimum
+		float newfrequency = Math.Max(assemblyLineController.Frequency / 2f, minimumFrequency);	// Pick the higher of half of speed or minimum
 
 		// Cut speed in half for now for new spawns
-		assemblyLineController.SetSpeed(newSpeed);
-
+		assemblyLineController.Speed = newSpeed;
 		// Send out a message to all things on the assembly line letting them know their speed needs to change
 		if(OnSpeedChange != null)
 			OnSpeedChange(this, EventArgs.Empty);
+
+		// Set assembly line spawn frequency
+		assemblyLineController.Frequency = newfrequency;
 	}
 
 	public void SetUpRandomAssemblyItemSprite(GameObject assemblyLineItemObject){
-
 		AssemblyLineItem item = assemblyLineItemObject.GetComponent<AssemblyLineItem>();
-		item.SetSpeed(assemblyLineController.Speed);
+		item.Speed = assemblyLineController.Speed;
 
 		SpriteRenderer sprite = assemblyLineItemObject.transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
 

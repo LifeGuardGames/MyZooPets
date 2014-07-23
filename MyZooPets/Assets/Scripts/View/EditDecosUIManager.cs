@@ -16,25 +16,16 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	//------------ Event Handlers ----------------------------------
 	public event EventHandler<NodeSelectedArgs> OnNodeSelected;		// when a deco node is selected
 	//--------------------------------------------------------------
-	
-	// temp boolean to control whetehr or not edit mode is accessible
-	public bool bDisableEditMode = false;
-	
-	// the exit panels for leaving edit mode
-	public TweenToggleDemux tweenExit;
-	
-	// the edit deco button
-	public GameObject goEdit;
 
+	public bool IsDisableEditMode = false; // temp boolean to control whetehr or not edit mode is accessible
+	public TweenToggleDemux tweenExit; // the exit panels for leaving edit mode
+	public GameObject goEdit; // the edit deco button
 	public GameObject shopButton; // The shop button
-	
-	// the choose deco panel
-	public GameObject goChoosePanel;
-	public ChooseDecorationUI scriptChooseUI;
+	public GameObject goChoosePanel; // the choose deco panel
+	public ChooseDecorationUIController chooseDecorationScript;
 
 	private PositionTweenToggle tweenEdit;
-	// "saved" deco node for when the user is in the choose menu and opens the shop
-	private DecorationNode nodeSaved;
+	private DecorationNode nodeSaved; // "saved" deco node for when the user is in the choose menu and opens the shop
 
 	void Start(){
 		eModeType = UIModeTypes.EditDecos;
@@ -43,7 +34,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		tweenEdit = goEdit.GetComponent<PositionTweenToggle>();
 		
 		// if edit mode is currently disabled, destroy the button
-		if(bDisableEditMode)
+		if(IsDisableEditMode)
 			Destroy(goEdit);
 		
 		// listen for partition change event
@@ -73,7 +64,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		}
 		
 		// update the menu based on the incoming deco node
-		scriptChooseUI.UpdateItems(decoNode);
+		chooseDecorationScript.UpdateItems(decoNode);
 		
 		// send out a callback for deco nodes to update their highlight state
 		if(OnNodeSelected != null){
@@ -126,7 +117,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	/// </summary>
 	/// <returns>The tutorial entry.</returns>
 	public GameObject GetTutorialEntry(){
-		GameObject goEntry = scriptChooseUI.GetTutorialEntry();
+		GameObject goEntry = chooseDecorationScript.GetTutorialEntry();
 		return goEntry;
 	}
 
@@ -142,8 +133,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	/// Gets the choose menu script. Used for tutorials
 	/// </summary>
 	/// <returns>The choose script.</returns>
-	public ChooseDecorationUI GetChooseScript(){
-		return scriptChooseUI;
+	public ChooseDecorationUIController GetChooseScript(){
+		return chooseDecorationScript;
 	}
 
 	public void ShowNavButton(){
@@ -218,7 +209,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	/// </summary>
 	private void OpenShop(){
 		// save the node the player was trying to use
-		nodeSaved = scriptChooseUI.GetNode();
+		nodeSaved = chooseDecorationScript.GetNode();
 		
 		// close this UI and show the edit decos button
 		CloseChooseMenuHelper(false);

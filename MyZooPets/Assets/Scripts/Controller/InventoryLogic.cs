@@ -19,10 +19,14 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	}
 
 	private bool listNeedsUpdate = true;
-	private List<InventoryItem> inventoryItemList;
+	private List<InventoryItem> inventoryItemList; //list of all consumable items
 
 
-	public List<InventoryItem> AllInventoryItems{ //TO DO: cache data
+	/// <summary>
+	/// Gets all inventory items.
+	/// </summary>
+	/// <value>All inventory items.</value>
+	public List<InventoryItem> AllInventoryItems{ 
 		get{
 			if(inventoryItemList == null || listNeedsUpdate){
 				inventoryItemList = (from keyValuePair in DataManager.Instance.GameData.Inventory.InventoryItems
@@ -31,7 +35,22 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			}
 			return inventoryItemList;
 		}
-	}	
+	}
+
+	/// <summary>
+	/// Gets all decoration inventory items.
+	/// </summary>
+	/// <value>All decoration inventory items.</value>
+	public List<InventoryItem> GetDecorationInventoryItemsOrderyByType(DecorationTypes type){
+		// get the list of decorations the user owns
+		List<InventoryItem> decorations = (from keyValuePair in DataManager.Instance.GameData.Inventory.DecorationItems
+		                                 select keyValuePair.Value).ToList();
+		
+		// now order the list by the type of decoration we are looking for
+		decorations = decorations.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == type).ToList();	
+
+		return decorations;
+	}
 	
 	/// <summary>
 	/// Checks if wallpaper is already bought

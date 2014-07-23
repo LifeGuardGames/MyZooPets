@@ -20,21 +20,16 @@ public class Exhale : InhalerPart {
 
        if(direction == FingerGestures.SwipeDirection.Down){
 
-            //Only proceed with this step if no listener is registered to OnAnimDone
-            //This is to fix the problem when the user swipes really fast during exhale
-            //the same listener is registered to the same event multiple time, causing
-            //skipping game steps
-//            if(InhalerAnimationController.OnAnimDone == null){
-                //Attach handler. so game can move on to next step after animation is done
-//                InhalerAnimationController.OnAnimDone += OnAnimationDone;
+       		if(!isGestureRecognized){
+				isGestureRecognized = true;
 
-                //Disable hint when swipe gesture is registered. 
-                GetComponent<HintController>().DisableHint(false);
+				//Disable hint when swipe gesture is registered. 
+				GetComponent<HintController>().DisableHint(false);
 
-
-                AudioManager.Instance.PlayClip("inhalerExhale");
+				AudioManager.Instance.PlayClip("inhalerExhale");
 				LgInhalerAnimationEventHandler.BreatheOutEndEvent += BreatheOutEndEventHandler;	
 				petAnimator.SetTrigger("BreatheOut");
+			}
        }
     }
 

@@ -31,7 +31,10 @@ public class RescueShaker : InhalerPart {
             elapsed = gesture.ElapsedTime; 
 
             if(!doneWithShake && elapsed >= 1f){ //Shake inhaler for 1 second
-                NextStep();
+				if(!isGestureRecognized){
+					isGestureRecognized = true;
+					NextStep();
+				}
             }
         }
     }

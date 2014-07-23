@@ -10,6 +10,11 @@ public class AssemblyLineItem : MonoBehaviour {
 	private bool isPaused = false;
 	private GameObject destination;
 	private float speed;
+	public float Speed{
+		get{return speed;}
+		set{speed = value;}
+	}
+
 	private AssemblyLineController assemblyLineParent;
 
 
@@ -37,10 +42,6 @@ public class AssemblyLineItem : MonoBehaviour {
 		speed = assemblyLineController.Speed;
 		destination = assemblyLineController.endLocation;
 		isOnAssemblyLine = true;	// Start moving the object
-	}
-
-	public void SetSpeed(float newSpeed){
-		speed = newSpeed;
 	}
 
 	void Update(){
@@ -74,14 +75,12 @@ public class AssemblyLineItem : MonoBehaviour {
 				if(itemKey == null || currentHoverKey == null){	// Dragged and released in empty area
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
-				/// DO REWARD CHECKING HERE ///
 				else if(itemKey == currentHoverKey){
 					DoctorMatchManager.Instance.CharacterScoredRight();
 				}
 				else{
 					DoctorMatchManager.Instance.CharacterScoredWrong();
 				}
-				///////////////////////////////
 				Destroy(gameObject);
 			}
 		}

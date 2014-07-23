@@ -22,18 +22,22 @@ public class RescueShaker : InhalerPart {
     void OnDrag(DragGesture gesture) { 
        // current gesture phase (Started/Updated/Ended)
         ContinuousGesturePhase phase = gesture.Phase; 
-
-        if(phase == ContinuousGesturePhase.Ended){
-            transform.position = startDragPos;
-            if(doneWithShake) GetComponent<TBDragToMove>().DragPlaneCollider = null;
-        }
-        else if(phase == ContinuousGesturePhase.Updated){
-            elapsed = gesture.ElapsedTime; 
-
-            if(!doneWithShake && elapsed >= 1f){ //Shake inhaler for 1 second
-                NextStep();
-            }
-        }
+		switch(phase){
+			case ContinuousGesturePhase.Ended:
+				transform.position = startDragPos;
+				if(doneWithShake) GetComponent<TBDragToMove>().DragPlaneCollider = null;
+			break;
+			case ContinuousGesturePhase.Updated:
+				elapsed = gesture.ElapsedTime; 
+				
+				if(!doneWithShake && elapsed >= 1f){ //Shake inhaler for 1 second
+					if(!isGestureRecognized){
+						isGestureRecognized = true;
+						NextStep();
+					}
+				}
+			break;
+		}
     }
 
     void OnFingerHover( FingerHoverEvent e ) 

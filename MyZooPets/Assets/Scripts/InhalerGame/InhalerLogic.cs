@@ -50,14 +50,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 			GameDone();
 		else{
 			currentStep++;
-			
+
 			if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
 				OnNextStep(this, EventArgs.Empty);
 		}
-//		//Send analytics event
-//		Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
-
-
 	}
 
 	public void ResetGame(){

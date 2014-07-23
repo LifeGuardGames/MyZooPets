@@ -20,13 +20,16 @@ public class RescueCap : InhalerPart{
             //If current step is the right sequence
             if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
 
+				if(!isGestureRecognized){
+					isGestureRecognized = true;
 
-                //Lean tween cap
-                Vector3 to = new Vector3(2, -6, 0); //off the screen
-                Hashtable optional = new Hashtable();
-                optional.Add("onCompleteTarget", gameObject);
-                optional.Add("onComplete", "NextStep");
-                LeanTween.move(gameObject, to, 0.5f, optional);
+					//Lean tween cap
+					Vector3 to = new Vector3(2, -6, 0); //off the screen
+					Hashtable optional = new Hashtable();
+					optional.Add("onCompleteTarget", gameObject);
+					optional.Add("onComplete", "NextStep");
+					LeanTween.move(gameObject, to, 0.5f, optional);
+				}
             }
         }
     }

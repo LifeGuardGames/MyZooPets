@@ -36,7 +36,8 @@ public class RescueDrag : InhalerPart{
                     if(hit.collider.gameObject == targetCollider){ 
                         transform.position = targetDragPos;
 
-                        if(!doneWithDrag){
+                        if(!doneWithDrag && !isGestureRecognized){
+							isGestureRecognized = true;
                             NextStep();
                             snapBack = false;
                         }

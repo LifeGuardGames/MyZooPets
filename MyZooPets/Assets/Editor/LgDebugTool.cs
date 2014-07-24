@@ -82,6 +82,47 @@ public class LgDebugTool : EditorWindow
         if(buildSettingList != null){
             foreach(Constant constant in buildSettingList){
                 switch(constant.Name){
+				case "BuildVersion":
+					constant.ConstantValue = EditorGUILayout.TextField("Build Version", constant.ConstantValue);
+					gaBuildVersion = constant.ConstantValue;
+					PlayerSettings.bundleVersion = constant.ConstantValue;
+					break;
+				case "BuildVersionCode":
+					constant.ConstantValue = EditorGUILayout.TextField("Android Build Version Code", constant.ConstantValue);
+					PlayerSettings.Android.bundleVersionCode = int.Parse(constant.ConstantValue);
+					break;
+				case "IsLiteVersion":
+					isLiteVersion = EditorGUILayout.Toggle(
+						new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite Lite or Pro build setting for the fields above will also be set"),
+						bool.Parse(constant.ConstantValue));
+					constant.ConstantValue = isLiteVersion.ToString();
+					
+					if(isLiteVersion){
+						PlayerSettings.bundleIdentifier = liteBundleID;
+						PlayerSettings.productName = liteProductName;
+					}else{
+						PlayerSettings.bundleIdentifier = proBundleID;
+						PlayerSettings.productName = proProductName;
+					}
+					break;
+				case "AnalyticsEnabled":
+					bool toggleState = EditorGUILayout.Toggle(
+						new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
+						bool.Parse(constant.ConstantValue));
+					constant.ConstantValue = toggleState.ToString();
+					
+					if(toggleState){
+						//set the build version
+						GA.SettingsGA.Build = gaBuildVersion;
+						
+						//set the api keys
+						if(isLiteVersion)
+							GA.SettingsGA.SetKeys(liteGameKey, liteSecretKey);
+						else
+							GA.SettingsGA.SetKeys(proGameKey, proSecretKey);
+					}else
+						GA.SettingsGA.SetKeys("", "");
+					break;
                     case "LiteBundleID":
                         constant.ConstantValue = EditorGUILayout.TextField("Lite Bundle ID", constant.ConstantValue);
                         liteBundleID = constant.ConstantValue;
@@ -114,42 +155,7 @@ public class LgDebugTool : EditorWindow
                         constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
                         proSecretKey = constant.ConstantValue;
                     break;
-					case "GABuildVersion":
-						constant.ConstantValue = EditorGUILayout.TextField("GA Build Version", constant.ConstantValue);
-						gaBuildVersion = constant.ConstantValue;
-					break;
-                    case "IsLiteVersion":
-                        isLiteVersion = EditorGUILayout.Toggle(
-                            new GUIContent("Is Lite Version", "Toggle this box to set Lite or Pro version. The approprite Lite or Pro build setting for the fields above will also be set"),
-                            bool.Parse(constant.ConstantValue));
-                        constant.ConstantValue = isLiteVersion.ToString();
 
-                        if(isLiteVersion){
-                            PlayerSettings.bundleIdentifier = liteBundleID;
-                            PlayerSettings.productName = liteProductName;
-                        }else{
-                            PlayerSettings.bundleIdentifier = proBundleID;
-                            PlayerSettings.productName = proProductName;
-                        }
-                    break;
-                    case "AnalyticsEnabled":
-                        bool toggleState = EditorGUILayout.Toggle(
-                            new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
-                            bool.Parse(constant.ConstantValue));
-                        constant.ConstantValue = toggleState.ToString();
-
-                        if(toggleState){
-							//set the build version
-							GA.SettingsGA.Build = gaBuildVersion;
-
-							//set the api keys
-                            if(isLiteVersion)
-                                GA.SettingsGA.SetKeys(liteGameKey, liteSecretKey);
-                            else
-                                GA.SettingsGA.SetKeys(proGameKey, proSecretKey);
-                        }else
-                            GA.SettingsGA.SetKeys("", "");
-                    break;
                 }
             }
 

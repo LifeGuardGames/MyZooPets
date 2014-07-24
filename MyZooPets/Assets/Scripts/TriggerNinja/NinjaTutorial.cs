@@ -22,21 +22,11 @@ public class NinjaTutorial : MinigameTutorial {
 			GameObject.Destroy(swipeTutObject);
 	}
 
-    protected override void ProcessStep(int nStep){
-        Vector3 vPos = new Vector3();
-        string strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON_AND_IMAGE; 
-        vPos = POS_TOP;
+    protected override void ProcessStep(int step){
         Hashtable option = new Hashtable();
 
-//        TutorialPopup.Callback button1Fuction = delegate(){
-//            Advance();
-//        };
-//        option.Add(TutorialPopupFields.SpriteAtlas, "TriggerNinjaAtlas");
-//        option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
-
-        switch(nStep){
+        switch(step){
             case 0:
-//                option.Add(TutorialPopupFields.SpriteName, "tutorialNinjaSwipe");
 				trigger1Object = NinjaManager.Instance.SpawnSingleTriggerTutorial();
 				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
 				swipeTutObject = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), swipeTut);
@@ -54,16 +44,11 @@ public class NinjaTutorial : MinigameTutorial {
 				}
 
                 break;
-            case 1:
-//                option.Add(TutorialPopupFields.SpriteName, "tutorialNinjaAvoid");
-//				swipeTutAnimation.Play("NinjaSwipeTut2");
-                break;
             default:
-                Debug.LogError("Ninja tutorial has an unhandled step: " + nStep);
+                Debug.LogError("Ninja tutorial has an unhandled step: " + step);
                 break;
         }
 
-//        ShowPopup(strResourceKey, vPos, false, option);
     }
 
 	private void NinjaTriggerFirstCutEventHandler(object sender, EventArgs args){

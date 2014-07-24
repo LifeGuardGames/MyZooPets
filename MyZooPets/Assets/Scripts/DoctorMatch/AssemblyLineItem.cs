@@ -37,7 +37,7 @@ public class AssemblyLineItem : MonoBehaviour {
 		assemblyLineParent = assemblyLineController;
 
 		// Pass self object to the game manager for random sprite setup
-		DoctorMatchManager.Instance.SetUpRandomAssemblyItemSprite(this.gameObject);
+		DoctorMatchManager.Instance.SetUpAssemblyItemSprite(this.gameObject);
 
 		speed = assemblyLineController.Speed;
 		destination = assemblyLineController.endLocation;

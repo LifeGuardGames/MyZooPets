@@ -51,9 +51,11 @@ public class AssemblyLineController : MonoBehaviour {
 	}
 
 	public void StartSpawning(){
-		StopSpawning();
-		isRunning = true;
-		InvokeRepeating("SpawnItem", 1f, frequency);
+		if(!DoctorMatchManager.Instance.IsTutorialRunning()){
+			StopSpawning();
+			isRunning = true;
+			InvokeRepeating("SpawnItem", 1f, frequency);
+		}
 	}
 
 	public void StopSpawning(){
@@ -61,9 +63,18 @@ public class AssemblyLineController : MonoBehaviour {
 		CancelInvoke("SpawnItem");
 	}
 
-	private void SpawnItem(){
+	public GameObject SpawnItemForTutorial(){
 		GameObject item = Instantiate(itemPrefab) as GameObject;
-		item.transform.position = startLocation.transform.position;
-		item.GetComponent<AssemblyLineItem>().SetupItem(this);
+//		item.GetComponent<AssemblyLineItem>().SetupItem(this);
+
+		return item;
+	}
+
+	private void SpawnItem(){
+		if(!DoctorMatchManager.Instance.IsTutorialRunning()){
+			GameObject item = Instantiate(itemPrefab) as GameObject;
+			item.transform.position = startLocation.transform.position;
+			item.GetComponent<AssemblyLineItem>().SetupItem(this);
+		}
 	}
 }

@@ -77,11 +77,14 @@ public class AssemblyLineItem : MonoBehaviour {
 				}
 				else if(itemKey == currentHoverKey){
 					DoctorMatchManager.Instance.CharacterScoredRight();
+					Destroy(gameObject);
 				}
 				else{
 					DoctorMatchManager.Instance.CharacterScoredWrong();
+					if(!DoctorMatchManager.Instance.IsTutorialRunning())
+						Destroy(gameObject);
 				}
-				Destroy(gameObject);
+
 			}
 		}
 	}

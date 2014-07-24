@@ -96,7 +96,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		// also slow down the game, if this didn't cause us to have a game over
 		MinigameStates eState = GetGameState();
 
-		if(eState == MinigameStates.Playing){
+		if(eState == MinigameStates.Playing && !IsTutorialRunning()){
 			speedUpMatchTrack = 0;	// Reset speed track counter
 			SlowGameDown();
 		}
@@ -141,7 +141,6 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	/// <param name="assemblyLineItemObject">Assembly line item object.</param>
 	/// <param name="itemGroupNumber">Item group number. </param>
 	public void SetUpAssemblyItemSprite(GameObject assemblyLineItemObject, int itemGroupNumber = 0){
-		Debug.Log(itemGroupNumber);
 		AssemblyLineItem item = assemblyLineItemObject.GetComponent<AssemblyLineItem>();
 		item.Speed = assemblyLineController.Speed;
 
@@ -170,11 +169,9 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 			Debug.LogError("Not valid item group");
 			break;
 		}
-//		Debug.Log(item.itemKey);
 	}
 
 	private void StartTutorial(){
-		Debug.Log("tutorial");
 		// set our tutorial
 		SetTutorial(new DoctorMatchTutorial());
 	}	

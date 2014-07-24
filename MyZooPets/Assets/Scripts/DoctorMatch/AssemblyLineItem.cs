@@ -72,19 +72,22 @@ public class AssemblyLineItem : MonoBehaviour {
 			else{	// End drag
 				dragFingerIndex = -1;
 
-				if(itemKey == null || currentHoverKey == null){	// Dragged and released in empty area
+				if(itemKey == null || currentHoverKey == null){		// Dragged and released in empty area
 					DoctorMatchManager.Instance.CharacterScoredWrong();
+					if(!DoctorMatchManager.Instance.IsTutorialRunning()){
+						Destroy(gameObject);
+					}
 				}
-				else if(itemKey == currentHoverKey){
+				else if(itemKey == currentHoverKey){				// Dragged and released in correct area
 					DoctorMatchManager.Instance.CharacterScoredRight();
 					Destroy(gameObject);
 				}
-				else{
+				else{												// Dragged and released in wrong area
 					DoctorMatchManager.Instance.CharacterScoredWrong();
-					if(!DoctorMatchManager.Instance.IsTutorialRunning())
+					if(!DoctorMatchManager.Instance.IsTutorialRunning()){
 						Destroy(gameObject);
+					}
 				}
-
 			}
 		}
 	}
@@ -102,15 +105,15 @@ public class AssemblyLineItem : MonoBehaviour {
 		
 		switch(eState){
 		case MinigameStates.GameOver:
-			// stop them in their tracks
+			// Stop them in their tracks
 			isPaused = true;
 			break;
 		case MinigameStates.Paused:
-			// stop them in their tracks
+			// Stop them in their tracks
 			isPaused = true;
 			break;
 		case MinigameStates.Playing:
-			// resume their movement
+			// Resume their movement
 			isPaused = false;
 			break;
 		}

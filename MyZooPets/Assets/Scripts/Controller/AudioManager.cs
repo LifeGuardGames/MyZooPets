@@ -6,18 +6,31 @@ using System.Collections.Generic;
 // event arguments for game pausing
 public class PauseArgs : EventArgs{
 	private bool isPausing;
-	public bool IsPausing() {
+
+	public bool IsPausing(){
 		return isPausing;	
 	}
 
-	public PauseArgs( bool isPausing){
+	public PauseArgs(bool isPausing){
 		this.isPausing = isPausing;
+	}
+}
+
+public class StopArgs : EventArgs{
+	private string clipName;
+	public string ClipName{
+		get{return clipName;}
+	}
+
+	public StopArgs(string clipName){
+		this.clipName = clipName;
 	}
 }
 
 public class AudioManager : Singleton<AudioManager>{
 	//=======================Events========================
 	public EventHandler<PauseArgs> OnGamePaused; 		// when the game is paused (NOT application paused)
+	public EventHandler<StopArgs> OnStopClipCalled; 	// when the game is paused (NOT application paused)
 	//=====================================================		
 
 	/** Types of Audio Clips
@@ -27,11 +40,9 @@ public class AudioManager : Singleton<AudioManager>{
 	
 	public AudioClip background1;
 	public string strBgMusic;
-
 	private AudioClip backgroundClip;
 	private AudioClip effectClip;
 	private AudioSource backgroundSource;
-
 	public bool isMusicOn = true; // Thank me(Sean) later, devs
 	
 
@@ -43,17 +54,17 @@ public class AudioManager : Singleton<AudioManager>{
 		DataSounds.SetupData();
 	}
 	
-	void Start() {
+	void Start(){
 		StartCoroutine(PlayBackground());
 	}
 
 	public IEnumerator PlayBackground(){
 		yield return new WaitForSeconds(0.5f);
 		if(isMusicOn){
-			if ( background1 )
+			if(background1)
 				backgroundClip = background1;
-			else if ( strBgMusic != null )
-				backgroundClip = Resources.Load( strBgMusic ) as AudioClip;
+			else if(strBgMusic != null)
+				backgroundClip = Resources.Load(strBgMusic) as AudioClip;
 
 			D.Assert(backgroundClip != null, "Null audioclip");
 			backgroundSource.volume = 0.3f;
@@ -73,10 +84,10 @@ public class AudioManager : Singleton<AudioManager>{
 	}
 
 	private IEnumerator FadeOutPlayNewBgHelper(string newAudioClipName){
-		for (int i = 9; i > 0; i--){
-	        backgroundSource.volume = i * .1f;
-	        yield return new WaitForSeconds(.4f);
-	    }
+		for(int i = 9; i > 0; i--){
+			backgroundSource.volume = i * .1f;
+			yield return new WaitForSeconds(.4f);
+		}
 		if(newAudioClipName != null){
 			PlayBackground();
 		}
@@ -90,14 +101,25 @@ public class AudioManager : Singleton<AudioManager>{
 	// If the game ever gets paused, all the
 	// audio sources also need to pause.
 	///////////////////////////////////////////		
-	public void Pause( bool bPausing ) {
-		if ( OnGamePaused != null )
-			OnGamePaused( this, new PauseArgs(bPausing) );		
+	public void Pause(bool bPausing){
+		if(OnGamePaused != null)
+			OnGamePaused(this, new PauseArgs(bPausing));		
 
 		if(bPausing)
 			backgroundSource.Pause();
 		else
 			backgroundSource.Play();
+	}
+
+	///////////////////////////////////////////
+	// Stop()
+	// This is a event call to all the audiosources out there
+	// which matches the name and stops itself
+	///////////////////////////////////////////		
+	public void Stop(string clipName){
+		if(OnStopClipCalled != null){
+			OnStopClipCalled(this, new StopArgs(clipName));
+		}
 	}
 	
 	///////////////////////////////////////////
@@ -108,23 +130,23 @@ public class AudioManager : Singleton<AudioManager>{
 	//	Volume(float)
 	//	Pitch(float)
 	///////////////////////////////////////////	
-	public LgAudioSource PlayClip( string strClip, Hashtable hashOverrides = null ) {
-		if ( hashOverrides == null )
+	public LgAudioSource PlayClip(string strClip, Hashtable hashOverrides = null){
+		if(hashOverrides == null)
 			hashOverrides = new Hashtable();
 		
-		if ( strClip == "" ) {
+		if(strClip == ""){
 			Debug.LogError("Something trying to play a sound with an empty sound id...");
 			return null;
 		}
 		
-		DataSound sound = DataSounds.GetSoundData( strClip );
+		DataSound sound = DataSounds.GetSoundData(strClip);
 		
-		if ( sound == null ) {
-			Debug.LogError("No such sound with id " + strClip );
+		if(sound == null){
+			Debug.LogError("No such sound with id " + strClip);
 			return null;
 		}
 			
-		return PlaySound( sound, hashOverrides );	
+		return PlaySound(sound, hashOverrides);	
 	}
 	
 	///////////////////////////////////////////
@@ -134,43 +156,11 @@ public class AudioManager : Singleton<AudioManager>{
 	// source that gives us more control over
 	// the sound.
 	///////////////////////////////////////////	
-	private LgAudioSource PlaySound( DataSound sound, Hashtable hashOverrides ) {
+	private LgAudioSource PlaySound(DataSound sound, Hashtable hashOverrides){
 		GameObject soundObject = new GameObject("Sound: " + sound.GetResourceName()); 
 		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
-		soundSource.Init( sound, transform, hashOverrides );
+		soundSource.Init(sound, transform, hashOverrides);
 		
 		return soundSource;		
 	}
-	
-//	public void PlayEffect(string audioClipName){
-//		PlayEffect(audioClipName, 1.0f);
-//	}
-//	
-//	public void PlayEffect(string audioClipName, float volume){
-//		if(audioClipName == "button1"){
-//			effectClip = button1;
-//		}
-//		else if(audioClipName == "button2"){
-//			effectClip = button2;
-//		}
-//		else{
-//			Debug.LogError("Could not find AudioClip Name");	
-//		}
-//		
-//		if(effectClip != null){
-//			if(volume > 1){
-//				Debug.Log("Audio volume greater than 1");
-//				volume = 1;
-//			}
-//			else if(volume < 0){
-//				Debug.Log("Audio volume negative");
-//				volume = 0;
-//			}
-//			effectSource.volume = volume;
-//			backgroundSource.PlayOneShot(effectClip);
-//		}
-//		else{
-//			Debug.LogError("Effect audio clip can not be found");
-//		}
-//	}
 }

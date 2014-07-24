@@ -114,4 +114,13 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 			}
 		}
 	}
+
+	// Audio handlers for animation event
+	public void PlayAudioCharge(){
+		AudioManager.Instance.PlayClip("fireCharge");
+	}
+
+	public void PlayAudioPop(){
+		AudioManager.Instance.PlayClip("pop");
+	}
 }

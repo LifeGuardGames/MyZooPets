@@ -8,6 +8,9 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress{
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
+	public bool IsNewToMultipleMonsterHeads {get; set;} //is new to the game design change where 
+	                                                    //we start using number of monster heads to 
+	        											//symoblizing the health of the monster
 
 	/// <summary>
 	/// Determines whether incoming gate is active.
@@ -78,7 +81,8 @@ public class MutableDataGatingProgress{
 
 	//Populate with dummy data
 	private void Init(){
-		GatingProgress = new Dictionary<string, int>();		
+		GatingProgress = new Dictionary<string, int>();
+		IsNewToMultipleMonsterHeads = true;
 		
 		// load all our gating data from xml
 		LoadFromXML();		
@@ -90,10 +94,45 @@ public class MutableDataGatingProgress{
 
 		if(buildVersion < version131){
 			//add multiple monster head hp conversion here
+			if(IsNewToMultipleMonsterHeads){
+				ConvertGateHP();
+				IsNewToMultipleMonsterHeads = false;
+			}
 		}
 		// when we are doing a version check, just load the data from xml again.
 		// any existing data will be left alone, and new data will be inserted into our dictionary.
 		LoadFromXML();	
+	}
+
+	/// <summary>
+	/// Converts the gate HP.
+	/// New game design change. Monster health is now symbolize by the number of heads, 
+	/// so need to convert from the old health value into the number of heads the monster
+	/// have left
+	/// </summary>
+	private void ConvertGateHP(){
+		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3"};
+		int[] oldFullHealths = new int[]{10, 40, 80};
+
+		for(int index=0; index < convertingGateIDs.Length; index++){
+			string gateID = convertingGateIDs[index];
+			if(GatingProgress.ContainsKey(gateID)){
+				int oldFullHealth = oldFullHealths[index];
+				ImmutableDataGate gate = DataLoaderGate.GetData(gateID);
+				ImmutableDataMonster monster = gate.GetMonster();
+				int newFullHealth = monster.MonsterHealth;
+
+				//use this to convert the old health data to new health data
+				int conversionFactor = oldFullHealth / newFullHealth;
+
+				int oldCurrentHealth = GatingProgress[gateID];
+				int newCurrentHealth = oldCurrentHealth / conversionFactor;
+
+				Debug.Log(newCurrentHealth);
+
+				GatingProgress[gateID] = newCurrentHealth;
+			}
+		}
 	}
 
 	/// <summary>

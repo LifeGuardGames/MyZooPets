@@ -53,6 +53,11 @@ public class PetGameData{
 	/// </summary>
 	public void VersionCheck() {
 		string buildVersion = Constants.GetConstant<string>("BuildVersion");
+
+		//BuildVersion constant is introduced in 1.3.1 so any version before 
+		//will not be able to find it. default the version to 1.3.0
+		if(string.IsNullOrEmpty(buildVersion))
+			buildVersion = "1.3.0";
 		Debug.Log(buildVersion);
 
 		GatingProgress.VersionCheck(buildVersion);

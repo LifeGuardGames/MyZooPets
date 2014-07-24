@@ -98,7 +98,6 @@ public class LgAudioSource : MonoBehaviour {
 	///////////////////////////////////////////
 	public void CheckForStop( object sender, StopArgs args){
 		if(args.ClipName == audioClipName){
-			Debug.Log("Stopping " + audioClipName);
 			audioSource.Stop();
 		}
 	}

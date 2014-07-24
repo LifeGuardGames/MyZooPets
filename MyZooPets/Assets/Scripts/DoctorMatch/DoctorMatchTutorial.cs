@@ -7,6 +7,9 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	private Collider2D zone1Collider;
 	private Collider2D zone2Collider;
 	private Collider2D zone3Collider;
+	private GameObject fingerTutorialPrefab;
+	private GameObject fingerTutorialObject;
+	private Animation fingerTutorialAnimation;
 
 	protected override void SetMaxSteps(){
 		maxSteps = 3;
@@ -21,6 +24,8 @@ public class DoctorMatchTutorial : MinigameTutorial {
 		zone1Collider.enabled = true;
 		zone2Collider.enabled = true;
 		zone3Collider.enabled = true;
+
+		GameObject.Destroy(fingerTutorialObject);
 	}
 	
 	protected override void ProcessStep(int step){
@@ -33,24 +38,36 @@ public class DoctorMatchTutorial : MinigameTutorial {
 			zone3Collider = GameObject.Find("Zone3").collider2D;
 		}
 
+		// Cache the finger tutorial animation
+		if(fingerTutorialPrefab == null){
+			fingerTutorialPrefab = Resources.Load("DoctorMatchTut") as GameObject;
+			fingerTutorialObject = GameObject.Instantiate(fingerTutorialPrefab) as GameObject;
+			GameObject animObject = fingerTutorialObject.transform.FindChild("AnimationParent").gameObject;
+			fingerTutorialAnimation = animObject.GetComponent<Animation>();
+			fingerTutorialAnimation.Play();
+		}
+
 		switch(step){
 		case 0:
 				SetUpCharacterGroup(1);
 				zone1Collider.enabled = true;
 				zone2Collider.enabled = false;
 				zone3Collider.enabled = false;
+				fingerTutorialAnimation.Play("DoctorTut1");
 			break;
 		case 1:
 				SetUpCharacterGroup(2);
 				zone1Collider.enabled = false;
 				zone2Collider.enabled = true;
 				zone3Collider.enabled = false;
+				fingerTutorialAnimation.Play("DoctorTut2");
 			break;
 		case 2:
 				SetUpCharacterGroup(3);
 				zone1Collider.enabled = false;
 				zone2Collider.enabled = false;
 				zone3Collider.enabled = true;
+				fingerTutorialAnimation.Play("DoctorTut3");
 			break;
 		default:
 			Debug.LogError("Ninja tutorial has an unhandled step: " + step);

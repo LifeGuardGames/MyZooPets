@@ -52,7 +52,10 @@ public class PetGameData{
 	/// be updated when the app is updated.
 	/// </summary>
 	public void VersionCheck() {
-		GatingProgress.VersionCheck();
-		Calendar.VersionCheck();
+		string buildVersion = Constants.GetConstant<string>("BuildVersion");
+		Debug.Log(buildVersion);
+
+		GatingProgress.VersionCheck(buildVersion);
+		Calendar.VersionCheck(buildVersion);
 	}
 }

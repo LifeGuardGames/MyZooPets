@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -83,7 +84,13 @@ public class MutableDataGatingProgress{
 		LoadFromXML();		
 	}
 	
-	public void VersionCheck(){
+	public void VersionCheck(string currentBuildVersion){
+		Version buildVersion = new Version(currentBuildVersion);
+		Version version131 = new Version("1.3.1");
+
+		if(buildVersion < version131){
+			//add multiple monster head hp conversion here
+		}
 		// when we are doing a version check, just load the data from xml again.
 		// any existing data will be left alone, and new data will be inserted into our dictionary.
 		LoadFromXML();	

@@ -76,6 +76,6 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
-		AudioManager.Instance.PlayClip("tutorialSuperWellaInhaler");
+		AudioManager.Instance.PlayClip("superWellaInhalerTutorial");
 	}
 }

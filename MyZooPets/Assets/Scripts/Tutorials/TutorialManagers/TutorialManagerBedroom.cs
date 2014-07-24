@@ -10,16 +10,17 @@ using System.Collections.Generic;
 /// that happen in this room.
 /// </summary>
 public class TutorialManagerBedroom : TutorialManager{
-	// old and unused
-	public const string TUT_INTRO = "IntroNotification";
-	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
+//	// old and unused
+//	public const string TUT_INTRO = "IntroNotification";
+//	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
 	
 	// currently used
 	public const string TUT_INHALER = "FOCUS_INHALER";
 	public const string TUT_SUPERWELLA_INHALER = "TUT_SUPERWELLA_INHALER";
 	public const string TUT_WELLAPAD = "FOCUS_WELLAPAD";
-	public const string TUT_CLAIM_FIRST = "CLAIM_FIRST_REWARD";
+//	public const string TUT_CLAIM_FIRST = "CLAIM_FIRST_REWARD";
 	public const string TUT_SMOKE_INTRO = "TUT_SMOKE_INTRO";
+	public const string TUT_FLAME_CRYSTAL = "TUT_FLAME_CRYSTAL";
 	public const string TUT_FLAME = "TUT_FLAME";
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
 	public const string TUT_DECOS = "TUT_DECOS";
@@ -91,18 +92,6 @@ public class TutorialManagerBedroom : TutorialManager{
 			}
 			else{}
 		}
-	}
-
-	/// <summary>
-	/// Intros the done.
-	/// Callback for when the intro notification is clicked.
-	/// </summary>
-	private void IntroDone(){
-		// mark the tut as viewed
-		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_INTRO);	
-		
-		// and check to see what the next tut should be
-		Check();
 	}
 
 	public void OnReachedGate(object sender, EventArgs args){

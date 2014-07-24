@@ -23,7 +23,7 @@ public class LgNotificationServices{
 		notification.message = message;
 		notification.title = title;
 		notification.delayTypeTime = EnumTimeType.Hours;
-		notification.delay = delay.TotalHours;
+		notification.delay = (int) delay.TotalHours;
 		notification.useSound = true;
 		notification.useVibration = true;
 		notification.send();

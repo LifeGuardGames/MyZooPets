@@ -10,17 +10,12 @@ using System.Collections.Generic;
 /// that happen in this room.
 /// </summary>
 public class TutorialManagerBedroom : TutorialManager{
-//	// old and unused
-//	public const string TUT_INTRO = "IntroNotification";
-//	public const string TUT_CALENDAR = "FOCUS_CALENDAR";
-	
 	// currently used
 	public const string TUT_INHALER = "FOCUS_INHALER";
 	public const string TUT_SUPERWELLA_INHALER = "TUT_SUPERWELLA_INHALER";
 	public const string TUT_WELLAPAD = "FOCUS_WELLAPAD";
-//	public const string TUT_CLAIM_FIRST = "CLAIM_FIRST_REWARD";
 	public const string TUT_SMOKE_INTRO = "TUT_SMOKE_INTRO";
-	public const string TUT_FLAME_CRYSTAL = "TUT_FLAME_CRYSTAL";
+	public const string TUT_FLAME_CRYSTAL = "TUT_FLAME_CRYSTAL"; //new tutorial key introduced in v1.3.1
 	public const string TUT_FLAME = "TUT_FLAME";
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
 	public const string TUT_DECOS = "TUT_DECOS";
@@ -29,9 +24,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
 	
 	// last tutorial
-	// TODO: need to be reviewed
 	public const string TUT_LAST = TUT_DECOS;
-//	public const string TUT_LAST = TUT_FLAME;
 	
 	protected override void _Start(){
 		// listen for partition changing event; used for flame tutorial
@@ -53,6 +46,8 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_INHALER);
 		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_WELLAPAD);	
 		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SMOKE_INTRO);
+		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME_CRYSTAL);
+		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SUPERWELLA_INHALER);
 
 		if(!isFocusWellapadTutorialDone){
@@ -70,7 +65,9 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the smoke monster intro tutorial
 			new GameTutorialSmokeIntro();
 		}
-		else{}
+		else if(isFlameCrystalTutorialDone && !isFlameTutorialDone){
+			new GameTutorialFlame();
+		}
 	}
 
 	private void TutorialPart2Check(){
@@ -94,19 +91,24 @@ public class TutorialManagerBedroom : TutorialManager{
 		}
 	}
 
-	public void OnReachedGate(object sender, EventArgs args){
+	/// <summary>
+	/// When the pet reaches the gate. check if flame crystal tutorial is done.
+	/// This applies for existing user as well. The tutorial will be played if
+	/// existing user hasn't seen flame crystal before. Only play this tutorial
+	/// if there is a flame crystal in the inventory already
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void OnReachedGate(object sender, EventArgs args){
 		if(!isTutorialEnabled)
 			return;
-		
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
-		
-		// if the player reached a gated room and has not yet seen the flame tutorial, start it
-		if(!isFlameTutorialDone){
-			// unsub from callback
+		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME_CRYSTAL);
+		GameObject fireOrbReference = InventoryUIManager.Instance.GetFireOrbReference();
+
+		if(fireOrbReference != null && !isFlameCrystalTutorialDone){
 			GatingManager.Instance.OnReachedGate -= OnReachedGate;
-		
-			// start the tut
-			new GameTutorialFlame();
+
+			new GameTutorialFlameCrystal();
 		}
 	}
 }

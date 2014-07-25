@@ -99,9 +99,10 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
 
-
-			if(invItem.ItemID == "Usable1"){
+			//only works if item is flame crystal and pet can't breathe fire yet
+			if(invItem.ItemID == "Usable1" && numOfFireBreaths == 0){
 				// check to make sure the item can be used
 				if(ItemLogic.Instance.CanUseItem(invItemID)){
 					args.IsValidTarget = true;

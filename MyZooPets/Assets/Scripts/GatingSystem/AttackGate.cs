@@ -59,12 +59,12 @@ public class AttackGate : MonoBehaviour{
 	/// Pet done attacking. 
 	/// </summary> 
 	private IEnumerator DoneAttacking(){
-		// damage the gate
-		bool isDestroyed = gateTarget.DamageGate(damage);
-		
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);
-		
+
+		// damage the gate
+		bool isDestroyed = gateTarget.DamageGate(damage);
+
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted("FightMonster");
 		

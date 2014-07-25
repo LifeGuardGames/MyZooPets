@@ -62,5 +62,6 @@ public class PetGameData{
 		GatingProgress.VersionCheck(buildVersion);
 		Calendar.VersionCheck(buildVersion);
 		PetInfo.VersionCheck(buildVersion);
+		Tutorial.VersionCheck(buildVersion);
 	}
 }

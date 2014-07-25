@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,6 +23,5 @@ public class MutableDataHighScore{
 	//============================Initialization===============================
 	public MutableDataHighScore(){
 		MinigameHighScore = new Dictionary<string, int>();
-		// MinigameHighScore.Add("Runner", 14000);
 	}
 }

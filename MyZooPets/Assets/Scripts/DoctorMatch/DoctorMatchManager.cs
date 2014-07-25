@@ -62,7 +62,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	protected override string GetMinigameKey(){
-		return "DoctorMatch";
+		return "Clinic";
 	}	
 	
 	protected override bool IsTutorialOn(){

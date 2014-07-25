@@ -151,6 +151,12 @@ public static class LgCUDLRCommands {
 		CUDLR.Console.Log(PlayerPrefs.GetInt(args[0]) + "");
 	}
 
+	[CUDLR.Command("GetFireBreaths", "")]
+	public static void GetFireBreaths(string[] args){
+		int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
+		CUDLR.Console.Log("Fire: " + numOfFireBreaths);
+	}
+
 }
 
 

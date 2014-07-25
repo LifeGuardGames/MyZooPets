@@ -378,7 +378,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//---------------------------------------------------	
 	protected void GameOver(){
 		// send out a completion task
-		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
+//		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
 		
 		// send out score task
 		int nScore = GetScore();

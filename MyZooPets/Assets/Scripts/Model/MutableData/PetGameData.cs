@@ -58,9 +58,9 @@ public class PetGameData{
 		//will not be able to find it. default the version to 1.3.0
 		if(string.IsNullOrEmpty(buildVersion))
 			buildVersion = "1.3.0";
-		Debug.Log(buildVersion);
 
 		GatingProgress.VersionCheck(buildVersion);
 		Calendar.VersionCheck(buildVersion);
+		PetInfo.VersionCheck(buildVersion);
 	}
 }

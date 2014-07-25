@@ -15,11 +15,8 @@ public class MutableDataPetInfo{
 
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 
-	public void ChangeFireBreaths(int amount){
-		int newFireBreaths = FireBreaths + amount;
-		SetFireBreaths(newFireBreaths);
-	}
-
+	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
+	
 	public void SetFireBreaths(int amount){
 		FireBreaths = amount;	
 	
@@ -34,14 +31,10 @@ public class MutableDataPetInfo{
 	}
 
 	public bool CanBreathFire(){
-		int breaths = GetFireBreaths();
+		int breaths = FireBreaths;
 		bool isInfiniteFire = IsInfiniteFire();
 		bool canBreathFire = breaths > 0 || isInfiniteFire;
 		return canBreathFire;
-	}
-
-	private int GetFireBreaths(){
-		return FireBreaths;	
 	}
 
 	public bool IsInfiniteFire(){
@@ -60,5 +53,14 @@ public class MutableDataPetInfo{
 		PetColor = "OrangeYellow";
 		IsHatched = false;
 		FireBreaths = 0;
+	}
+
+	public void VersionCheck(string currentBuildVersion){
+		Version buildVersion = new Version(currentBuildVersion);
+		Version version131 = new Version("1.3.1");
+		
+		if(buildVersion <= version131){
+			FireBreaths = nFireBreaths;
+		}
 	}
 }

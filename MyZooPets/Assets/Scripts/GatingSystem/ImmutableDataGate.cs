@@ -5,7 +5,7 @@ public class ImmutableDataGate{
 	
 	private string gateID; // id of the gate
 	private string gateArea; // location of the gate
-	private float screenPercentage; //stronger gate covers more screen space
+	private float screenPercentage; //stronger gate covers more screen space //DEPRECATED
 	private int partition; // partition id of the gate
 	private string monsterID; // id of the monster at this gate
 	private RoomDirection swipeDirection; // the swipe direction that this monster is blocking

@@ -67,6 +67,8 @@ public class DataManager : Singleton<DataManager>{
 			InitializeGameDataForNewPet();
 		}else{
 			ModifyDataIntoSinglePetMode();
+
+			//decide 
 		}
 
 		LoadMenuSceneData();
@@ -103,10 +105,10 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-			}
 
-			//No longer first time
-			PlayerPrefs.SetInt("IsFirstTime", 0);
+				//No longer first time
+				PlayerPrefs.SetInt("IsFirstTime", 0);
+			}
 		}
 	}
 	

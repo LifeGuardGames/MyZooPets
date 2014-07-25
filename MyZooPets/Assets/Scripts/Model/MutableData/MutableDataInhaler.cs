@@ -23,7 +23,7 @@ public class MutableDataInhaler{
     public void Init(){
 		IsNewToTapPrescriptionHint = true;
         FirstTimeRescue = true;
-		HasReceivedFireOrb = false;
+		HasReceivedFireOrb = true;
         LastInhalerPlayTime = LgDateTime.GetTimeNow();
     }
 }

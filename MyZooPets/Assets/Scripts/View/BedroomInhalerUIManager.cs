@@ -28,7 +28,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			ReadyToUseMode();
-			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 		}
 		else{
 			CoolDownMode();
@@ -102,6 +101,8 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
 		progressBar3D.SetActive(false);
+
+		DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){

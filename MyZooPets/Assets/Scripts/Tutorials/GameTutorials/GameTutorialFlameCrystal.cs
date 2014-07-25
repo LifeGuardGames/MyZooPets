@@ -19,6 +19,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
+
 			TutorialManager.Instance.StartCoroutine(DragFireOrbHint());
 			break;
 		}

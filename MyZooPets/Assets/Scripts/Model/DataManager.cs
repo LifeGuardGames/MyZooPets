@@ -32,17 +32,15 @@ public class DataManager : Singleton<DataManager>{
     
 	//Save temporary data when transitioning to new scene
 	public LoadSceneData SceneData{ get; set; } 
-
-	//Use to tell if it's users' first time launching the app
+	
+	/// <summary>
+	/// Gets a value indicating whether if it's user's first time launching app.
+	/// first session ends when application is paused (i.e home out or quit)
+	/// </summary>
 	public bool IsFirstTime{
 		get{
 			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		
-			if(firstTime){
-				//not first time anymore after this property is called
-				PlayerPrefs.SetInt("IsFirstTime", 0);
-			}
-
 			return firstTime;
 		}
 	}
@@ -105,7 +103,10 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-			}    
+			}
+
+			//No longer first time
+			PlayerPrefs.SetInt("IsFirstTime", 0);
 		}
 	}
 	

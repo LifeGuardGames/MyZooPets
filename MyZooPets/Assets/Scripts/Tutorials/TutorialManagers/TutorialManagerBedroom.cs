@@ -49,6 +49,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME_CRYSTAL);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_SUPERWELLA_INHALER);
+		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
 
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
@@ -58,7 +59,7 @@ public class TutorialManagerBedroom : TutorialManager{
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorialFocusInhaler();
 		}
-		else if(!isSuperWellaInhalerDone){
+		else if(!isSuperWellaInhalerDone && isFirstTime){
 			new GameTutorialSuperWellaInhaler();
 		}
 		else if(!isSmokeIntroDone){

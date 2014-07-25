@@ -212,4 +212,13 @@ public class ClickManager : Singleton<ClickManager>{
 		
 		return bIsTweening;
 	}
+
+	/// <summary>
+	/// Checks the whole stack for a mode type, this is useful for detecting store shortcuts to see where you came from
+	/// </summary>
+	/// <returns><c>true</c>, If mode type exists in stack, <c>false</c> otherwise.</returns>
+	/// <param name="modeType">UIModeType</param>
+	public bool CheckStack(UIModeTypes modeType){
+		return stackModes.Contains(modeType);
+	}
 }

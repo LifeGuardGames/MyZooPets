@@ -119,6 +119,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		OpenToSubCategory("Items", true);
 	}
 
+	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
+		
+		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
+		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
+		OnShortcutModeEnd += ShortcutModeEnded;
+		
+		OpenToSubCategory("Premiums", true);
+	}
+
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
@@ -128,7 +138,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	//---------------------------------------------------
 	
 	/// <summary>
-	/// Opens to sub category. Special function used to pen the store UI straight
+	/// Opens to sub category. Special function used to open the store UI straight
 	/// up to a certain category
 	/// </summary>
 	/// <param name="category">Category.</param>
@@ -138,8 +148,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
 		isShortcutMode = isShortCut;
 		if(isShortcutMode){
-			// if we are shortcutting, we have to tween the bg in now	
+			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+
+
 		}	
 		
 		CreateSubCategoryItemsWithString(category); 
@@ -306,6 +318,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
+			EditDecosUIManager.Instance.HideNavButton();
+			InventoryUIManager.Instance.ShowPanel();
+
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -315,6 +330,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Items"){
+			EditDecosUIManager.Instance.HideNavButton();
+			InventoryUIManager.Instance.ShowPanel();
+
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -392,20 +410,30 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	//------------------------------------------
 	public void HideStoreSubPanel(){
 		EditDecosUIManager.Instance.HideNavButton();
-		InventoryUIManager.Instance.ShowPanel();
-
+		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
-		
+
 		// this is a little hacky, but our demux system is kind of difficult to get around, so...
 		// before doing anything else, check to see if the deco system has a saved node...
 		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
 		// store doesn't apply...otherwise just show the store base panel like normal
 		if(isShortcutMode){
-			// close the store bg
-			_CloseUI();	// Call all the close pipelines (only overridden tho)
-			
-			if(OnShortcutModeEnd != null)
+
+			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+			}
+			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+				InventoryUIManager.Instance.ShowPanel();
+			}
+			else{
+				_CloseUI();	// Call all the close pipelines (only overridden tho)
+			}
+
+			if(OnShortcutModeEnd != null){
+				Debug.Log("shortcut mode listener");
 				OnShortcutModeEnd(this, EventArgs.Empty);
+			}
 
 			isShortcutMode = false;
 		}

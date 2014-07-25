@@ -19,8 +19,8 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 	}
 
 	void Start(){
-		if(SelectionManager.Instance.IsFirstTime)
-			StartCoroutine(ShowAgeSelector());
+//		if(SelectionManager.Instance.IsFirstTime)
+//			StartCoroutine(ShowAgeSelector());
 //			Invoke("OpenUI", f);
 	}
 

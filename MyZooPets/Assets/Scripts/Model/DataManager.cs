@@ -257,7 +257,8 @@ public class DataManager : Singleton<DataManager>{
 				#endif
 				
 				gameData = newGameData;
-				gameData.VersionCheck();
+				if(!IsFirstTime)
+					gameData.VersionCheck();
 				
 				Deserialized(true);
 			}

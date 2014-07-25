@@ -157,8 +157,12 @@ public abstract class Gate : MonoBehaviour{
 		// add any appropriate task unlocks
 		ImmutableDataGate data = GetGateData();
 		string[] arrayUnlocks = data.GetTaskUnlocks();
-		for(int i = 0; i < arrayUnlocks.Length; ++i)
-			WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
+
+		if(arrayUnlocks != null){
+			for(int i = 0; i < arrayUnlocks.Length; ++i){
+				WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
+			}
+		}
 	}
 
 	/// <summary>

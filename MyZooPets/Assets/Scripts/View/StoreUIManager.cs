@@ -90,6 +90,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		InventoryUIManager.Instance.ShowPanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -297,7 +298,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// <param name="page">Page.</param>
 	public void CreateSubCategoryItemsWithString(string page){
 		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
-			Debug.LogError("Illegal sore sub category: " + page);
+			Debug.LogError("Illegal store sub category: " + page);
 			return;
 		}
 		
@@ -361,6 +362,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			CreateSubCategoryItemsTab(defaultTabName, Color.white);
 		}
 		else if(currentPage == "Premiums"){
+			InventoryUIManager.Instance.HidePanel();
+			EditDecosUIManager.Instance.HideNavButton();
+			NavigationUIManager.Instance.HidePanel();
+
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -397,8 +402,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		// store doesn't apply...otherwise just show the store base panel like normal
 		if(isShortcutMode){
 			// close the store bg
-			storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-		
+			_CloseUI();	// Call all the close pipelines (only overridden tho)
+			
 			if(OnShortcutModeEnd != null)
 				OnShortcutModeEnd(this, EventArgs.Empty);
 

@@ -18,7 +18,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	public float minimumFrequency = 1.5f;
 	public float startFrequency = 1.5f;
-	public float frequencyIncreaseInterval = 0.1f;
+	public float frequencyIncreaseInterval = 0.2f;
 
 	public int speedUpMatchInterval = 5;	// Amount of pets correct needed before speedup occurs
 	private int speedUpMatchTrack = 0;

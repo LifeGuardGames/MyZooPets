@@ -39,7 +39,7 @@ public class MutableDataCalendar{
 		Version buildVersion = new Version(currentBuildVersion);
 		Version version127 = new Version("1.2.7");
 
-		if(buildVersion < version127){
+		if(buildVersion <= version127){
 			TimeSpan totalTimeRemain = NextPlayPeriod - LgDateTime.GetTimeNow();
 			TotalTimeRemainInTicks = totalTimeRemain.Ticks.ToString();
 		}

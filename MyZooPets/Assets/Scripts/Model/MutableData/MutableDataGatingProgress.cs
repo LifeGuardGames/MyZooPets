@@ -92,7 +92,7 @@ public class MutableDataGatingProgress{
 		Version buildVersion = new Version(currentBuildVersion);
 		Version version131 = new Version("1.3.1");
 
-		if(buildVersion < version131){
+		if(buildVersion <= version131){
 			//add multiple monster head hp conversion here
 			if(IsNewToMultipleMonsterHeads){
 				ConvertGateHP();
@@ -111,26 +111,31 @@ public class MutableDataGatingProgress{
 	/// have left
 	/// </summary>
 	private void ConvertGateHP(){
-		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3"};
-		int[] oldFullHealths = new int[]{10, 40, 80};
+		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3", "Gate_Yard_R"};
+		int[] oldFullHealths = new int[]{10, 40, 80, 5};
 
 		for(int index=0; index < convertingGateIDs.Length; index++){
 			string gateID = convertingGateIDs[index];
+
 			if(GatingProgress.ContainsKey(gateID)){
 				int oldFullHealth = oldFullHealths[index];
 				ImmutableDataGate gate = DataLoaderGate.GetData(gateID);
 				ImmutableDataMonster monster = gate.GetMonster();
 				int newFullHealth = monster.MonsterHealth;
 
-				//use this to convert the old health data to new health data
-				int conversionFactor = oldFullHealth / newFullHealth;
-
 				int oldCurrentHealth = GatingProgress[gateID];
-				int newCurrentHealth = oldCurrentHealth / conversionFactor;
 
-				Debug.Log(newCurrentHealth);
-
-				GatingProgress[gateID] = newCurrentHealth;
+				//if data is already in the right scale don't convert it
+				//don't need to convert if the gate is opened already
+				if(oldCurrentHealth != newFullHealth && oldCurrentHealth != 0){
+					//use this to convert the old health data to new health data
+					int conversionFactor = oldFullHealth / newFullHealth;
+					int newCurrentHealth = oldCurrentHealth / conversionFactor;
+					
+					Debug.Log(newCurrentHealth);
+					
+					GatingProgress[gateID] = newCurrentHealth;
+				}
 			}
 		}
 	}

@@ -149,7 +149,7 @@ public abstract class Gate : MonoBehaviour{
 		// if there is an item box behind this gate, let it know it is now unclaimed
 //		if(scriptItemBox)
 //			scriptItemBox.NowAvailable();
-//		UnlockItemBox();
+		UnlockItemBox();
 		
 		// gates might do their own thing upon destruction
 		GateDestroyed();	

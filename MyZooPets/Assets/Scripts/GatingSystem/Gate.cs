@@ -145,10 +145,7 @@ public abstract class Gate : MonoBehaviour{
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
-		
-		// if there is an item box behind this gate, let it know it is now unclaimed
-//		if(scriptItemBox)
-//			scriptItemBox.NowAvailable();
+
 		UnlockItemBox();
 		
 		// gates might do their own thing upon destruction

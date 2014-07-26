@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Attack gate. Script put on a pet when it is ready to attack a gate
 /// </summary>
-public class AttackGate : MonoBehaviour{
+public class AttackGate : Singleton<AttackGate>{
 
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
@@ -39,7 +39,7 @@ public class AttackGate : MonoBehaviour{
 		PetAnimator.OnAnimDone -= DoneAnimating;	
 	}
 
-	private void Attack(object sender, EventArgs args){
+	private void Attack(object sender, EventArgs args){ 
 		attacker.BreathFire();
 		FireMeter.OnFireReady -= Attack;
 	}

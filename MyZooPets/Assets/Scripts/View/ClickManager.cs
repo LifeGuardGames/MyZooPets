@@ -90,11 +90,15 @@ public class ClickManager : Singleton<ClickManager>{
 		// hard stop (for now): If the partition is transitioning, don't allow anything
 		if(CameraManager.Instance && CameraManager.Instance.IsCameraMoving())
 			return false;
-		
+
+		// if pet is currently attacking gate. can't do anything else
+		if(AttackGate.Instance)
+			return false;
+
 		// if a tutorial is playing, check with that tutorial
 		if(TutorialManager.Instance && !TutorialManager.Instance.CanProcess(goCaller))
 			return false;
-		
+
 		// if there is an exception in effect for the incoming action, then it can bypass the mode check
 		// this check should appear BEFORE the tweening checks because exceptions should be an auto-accept
 		if(listExceptions.Contains(eException) || listTempExceptions.Contains(eException))

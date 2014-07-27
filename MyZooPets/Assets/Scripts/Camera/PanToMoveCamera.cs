@@ -26,13 +26,16 @@ public class PanToMoveCamera : MonoBehaviour {
     public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
     //========================================================
 
-    public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
+    
+
     public int numOfPartitions = 4; //number of partitions allowed
     public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
                                     //on the left of the starting partition(always 0)
     public int lastPartition = 2;
     public float partitionOffset = 80.0f; //How big each partition is in world position
     public int currentPartition = 0;
+
+	public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
     public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
     public float panDistanceToChange = 0.5f;    // distance to pan before the camera will snap to the next partition
 
@@ -174,12 +177,11 @@ public class PanToMoveCamera : MonoBehaviour {
 		if ( OnPartitionChanged != null )
 			OnPartitionChanged( this, new PartitionChangedArgs( oldPartition, currentPartition ) );		
 	}
-	
-	///////////////////////////////////////////
-	// ChangePartition()
-	// Changes the current partition by moves 
-	// in swipeDirection (if it's legal).
-	///////////////////////////////////////////		
+
+	/// <summary>
+	/// Changes the partition.
+	/// </summary>
+	/// <param name="targetPartition">Target partition.</param>
 	private void ChangePartition( int targetPartition) {
 		// check to make sure the move is legal (i.e. within bounds)
 		if (targetPartition >= firstPartition && targetPartition <= lastPartition){
@@ -195,12 +197,12 @@ public class PanToMoveCamera : MonoBehaviour {
 		}
 	}	
 
-	///////////////////////////////////////////////////
+
     // CanMoveToPartition() 
     // The user has attempted to initiate a change in
 	// partition; this function makes sure that it is
 	// a legal move.
-    /////////////////////////////////////////////////// 
+    
 	private bool CanMoveToPartition( int targetPartition, RoomDirection panDirection, float swipeTime ) {	
         bool retVal = true;
 
@@ -290,10 +292,11 @@ public class PanToMoveCamera : MonoBehaviour {
 		return target;
 	}
 
-    ///////////////////////////////////////////
-    // SetCameraToPartition()
-    // Set the camera position to the partition position
-    ///////////////////////////////////////////     
+    
+    /// <summary>
+    /// Sets the camera to partition.
+    /// </summary>
+    /// <param name="partition">Partition.</param>
     private void SetCameraToPartition(int partition){
         currentPartition = partition;
         float cameraX = partition * partitionOffset;

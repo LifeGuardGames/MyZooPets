@@ -10,6 +10,8 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 	void Start(){
 		CameraManager.Instance.GetPanScript().OnPartitionChanged += ShowPanel;
+
+
 		Invoke("ShowPanel", 0.5f);
 	}
 
@@ -17,12 +19,24 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		CameraManager.Instance.GetPanScript().OnPartitionChanged -= ShowPanel;
 	}
 
-	private void ShowPanel(object sender, EventArgs args){
+	public GameObject GetRightArrowReference(){
+		return rightArrowTween.transform.FindChild("Image Button").gameObject;
+	}
+
+	public void ShowPanel(object sender, EventArgs args){
 		ShowPanel();
 	}
 	
 	// Shows both arrows
 	public void ShowPanel(){
+		//hacky... need to refactor TutorialManager so that it's child class can also be an instance
+//		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME_CRYSTAL);
+//		if(TutorialManager.Instance.IsTutorialActive() || !isFlameCrystalTutorialDone){
+//			return;
+//		};
+
+		if(TutorialManager.Instance.IsTutorialActive()) return;
+
 		int currentPartition = CameraManager.Instance.GetPanScript().currentPartition;
 		int firstPartition = CameraManager.Instance.GetPanScript().firstPartition;
 		int lastPartition = CameraManager.Instance.GetPanScript().lastPartition;

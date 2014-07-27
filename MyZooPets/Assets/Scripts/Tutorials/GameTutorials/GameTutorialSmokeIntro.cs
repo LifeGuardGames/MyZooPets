@@ -23,16 +23,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 			
 	protected override void _End(bool isFinished){
+
 	}
-			
+	
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-				// actually place the tutorial trigger dust behind the smoke monster now, even though this is for a later
-				// tutorial...it's so the user can actually see it with the smoke monster
-//			DegradationUIManager.Instance.PlaceTutorialTrigger();
-			
-				// begin the panning "cut scene"
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());
 			break;
 			
@@ -42,7 +38,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			break;
 
 		case 2:
-			SetupSwipeListener();
+			FocusOnRightArrow();
 			break;
 		}
 	}
@@ -185,6 +181,29 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			GameObject.Destroy(swipeGO);
 
 		//advance in tutorial
+		Advance();
+	}
+
+	private void FocusOnRightArrow(){
+		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();
+
+		// begin listening for when the inhaler is clicked
+		LgButton button = rightArrowObject.GetComponent<LgButton>();
+		button.OnProcessed += RightArrowClicked;
+		
+		// the inhaler is the only object that can be clicked
+		AddToProcessList(rightArrowObject);
+
+		RoomArrowsUIManager.Instance.ShowRightArrow();
+		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
+//		SpotlightObject(rightArrowObject, fingerHint: true, fingerHintFlip: true);
+	}
+
+	private void RightArrowClicked(object sender, EventArgs args){
+		LgButton button = (LgButton)sender;
+		button.OnProcessed -= RightArrowClicked;
+
+		RemoveFingerHint();
 		Advance();
 	}
 }

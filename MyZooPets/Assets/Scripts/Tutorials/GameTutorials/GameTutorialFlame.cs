@@ -25,6 +25,7 @@ public class GameTutorialFlame : GameTutorial{
 	}
 
 	protected override void _End(bool isFinished){
+		RoomArrowsUIManager.Instance.ShowPanel();
 	}
 			
 	protected override void ProcessStep(int step){
@@ -36,10 +37,7 @@ public class GameTutorialFlame : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 
 		switch(step){
-//		case 0:
-//			TutorialManager.Instance.StartCoroutine(DragFireOrbHint());
-//
-//			break;
+
 		case 0:
 
 			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
@@ -60,52 +58,6 @@ public class GameTutorialFlame : GameTutorial{
 			break;
 		}
 	}
-
-//	private IEnumerator DragFireOrbHint(){
-//		yield return new WaitForSeconds(0.5f);
-//
-//		//add fire orb to the clickable list
-//		FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
-//		GameObject fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();
-//		GameObject fireButtonReference = FireButtonUIManager.Instance.GetFireButtonReference();
-//		Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
-//		Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
-//		
-//		AddToProcessList(fireOrbItemReference);
-//
-//		fireOrbFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-BottomRight"),
-//		                                                  (GameObject)Resources.Load("FireOrbFingerHint"));
-//
-//		// set the hint to the right spawn location
-//		Vector3 hintPosition = fireOrbItemPosition;
-//		hintPosition.z = fireOrbFingerHint.transform.localPosition.z;
-//		fireOrbFingerHint.transform.localPosition = hintPosition;
-//
-//		
-//		fireButtonPosition = CameraManager.Instance.TransformAnchorPosition(fireButtonPosition, 
-//		                                                                    InterfaceAnchors.Center, 
-//		                                                                    InterfaceAnchors.BottomRight);
-//		fireButtonPosition.z = fireOrbFingerHint.transform.localPosition.z;
-//
-//		Hashtable optional = new Hashtable();
-//		optional.Add("repeat", 0);
-//		LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 3f, optional);
-//	}
-//
-//	/// <summary>
-//	/// When the fire button is active advance tutorial.
-//	/// </summary>
-//	/// <param name="sender">Sender.</param>
-//	/// <param name="args">Arguments.</param>
-//	private void FireButtonActiveEventHandler(object sender, EventArgs args){
-//		FireButtonUIManager.FireButtonActive -= FireButtonActiveEventHandler;
-//
-//		// clean up tween from last step
-//		LeanTween.cancel(fireOrbFingerHint);
-//		GameObject.Destroy(fireOrbFingerHint);
-//
-//		Advance();
-//	}
 
 	/// <summary>
 	/// Removes the popup delay.
@@ -142,31 +94,6 @@ public class GameTutorialFlame : GameTutorial{
 		else
 			Debug.LogError("No flame button...that means the game is going to break");
 	}
-
-//	private IEnumerator TutorialEndMessage(){
-//		yield return new WaitForSeconds(1f);
-//
-//		// since this is the last tutorial, show a little notification
-//		string strKey = "TUTS_FINISHED";											// key of text to show
-//		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
-//		string strAnalytics = "";														// analytics tracker
-//		
-//		// show the standard popup
-//		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-//		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
-//		                                    String.Format(Localization.Localize(strKey), 
-//		              StringUtils.FormatStringPossession(petName)),
-//		                                    strImage, null, true, true, strAnalytics);
-//		
-//		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
-//		if(wellapadButton != null){
-//			ButtonWellapad buttonWellapadScript = wellapadButton.GetComponent<ButtonWellapad>();
-//			buttonWellapadScript.SetListenersToWellapadMissionController();
-//		}
-//		else{
-//			Debug.LogError("wellapad button can't be found: " + this);
-//		}
-//	}
 
 	/// <summary>
 	/// Raises the meter filled event.

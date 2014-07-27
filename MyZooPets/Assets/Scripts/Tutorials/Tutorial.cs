@@ -121,28 +121,25 @@ public abstract class Tutorial{
 		if(OnTutorialEnd != null)
 			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));	
 	}
-
-	//TO DO-jason: maybe use a struct for all the params since it's growing kind
-	//of long	
-	//---------------------------------------------------
-	// SpotlightObject()
-	// Puts a spotlight around the incoming object to
-	// draw attention to it.
-	// eAnchor is the incoming anchor of the object/where
-	// the spotlight should be created.  For 3D objects
-	// the anchor should be center, and for GUI elements
-	// the anchor should be whatever anchor the element
-	// is in.
-	// Params:
-	//	goTarget (GameObject): the target that you want the spotlight to spawn on
-	// Optional Params:
-	// 	bGUI (bool): is it a UI element.
-	//  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
-	//  strSpotlightPrefab (string): the string name of the spotlight prefab
-	//  fingerHint (bool): show finger hint or not
-	//  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
-	//  delay (float): how long does it take the spot light to fade in
-	//---------------------------------------------------	
+	
+	/// <summary>
+	/// Puts a spotlight around the incoming object to
+	/// draw attention to it.
+	/// eAnchor is the incoming anchor of the object/where
+	/// the spotlight should be created.  For 3D objects
+	/// the anchor should be center, and for GUI elements
+	/// the anchor should be whatever anchor the element
+	/// is in.
+	/// Params:
+	///	goTarget (GameObject): the target that you want the spotlight to spawn on
+	/// Optional Params:
+	///  isGUI (bool): is it a UI element.
+	///  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
+	///  strSpotlightPrefab (string): the string name of the spotlight prefab
+	///  fingerHint (bool): show finger hint or not
+	///  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
+	///  delay (float): how long does it take the spot light to fade in
+	/// </summary>
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
 		bool fingerHint = false, string fingerHintPrefab = "PressTut",

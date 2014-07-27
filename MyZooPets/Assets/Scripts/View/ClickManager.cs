@@ -44,14 +44,14 @@ public class ClickManager : Singleton<ClickManager>{
 	}
 
 	void Update(){
-		count = stackModes.Count;
-		if(count != 0){
-			UIModeTypes eCurrentMode = stackModes.Peek();
-			stackPeek = eCurrentMode.ToString();
-		}
-		else{
-			stackPeek = null;
-		}
+//		count = stackModes.Count;
+//		if(count != 0){
+//			UIModeTypes eCurrentMode = stackModes.Peek();
+//			stackPeek = eCurrentMode.ToString();
+//		}
+//		else{
+//			stackPeek = null;
+//		}
 	}
 	
 	//Clean all event listeners and static references

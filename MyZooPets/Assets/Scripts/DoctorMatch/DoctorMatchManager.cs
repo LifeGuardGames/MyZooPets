@@ -70,7 +70,8 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	public void CharacterScoredRight(){
-		UpdateScore(1);
+		int correctPoints = Constants.GetConstant<int>("Clinic_ScoredCharacterValue");
+		UpdateScore(correctPoints);
 		numOfCorrectDiagnose++;
 
 		// play appropriate sound

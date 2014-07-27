@@ -18,6 +18,13 @@ public class NinjaTutorial : MinigameTutorial {
     }
 
 	protected override void _End(bool isFinished){
+		if(!isFinished){
+			if(trigger1Object){
+				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+				GameObject.Destroy(trigger1Object);
+			}
+		}
+
 		if(swipeTutObject != null)
 			GameObject.Destroy(swipeTutObject);
 	}

@@ -72,9 +72,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		
 		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
 		Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		gridPanel.transform.localPosition = new Vector3(363f, oldPanelPos.y, oldPanelPos.z);
+		gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
 		Vector4 oldClipRange = gridPanel.clipRange;
-		gridPanel.clipRange = new Vector4(206f, oldClipRange.y, oldClipRange.z, oldClipRange.w);
+		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
 	}
 	
 	//Find the position of Inventory Item game object with invItemID

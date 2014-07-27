@@ -155,8 +155,9 @@ public class PanToMoveCamera : MonoBehaviour{
 		Hashtable completeParamHash = new Hashtable();
 		completeParamHash.Add("Old", oldPartition);			
 		optional.Add("onCompleteParam", completeParamHash);
+		optional.Add("ease", LeanTweenType.easeOutQuad);
 			
-		LeanTween.moveX(gameObject, moveTo, 0.25f, optional);
+		LeanTween.moveX(gameObject, moveTo, 0.35f, optional);
 		normalizedTouchPosX = 0;		
 	}
 

@@ -237,7 +237,7 @@ public abstract class Tutorial{
 
 	protected void RemoveFingerHint(){
 		if(goFingerHint == null){
-			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
+//			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 
@@ -250,7 +250,7 @@ public abstract class Tutorial{
 	//---------------------------------------------------		
 	protected void RemoveSpotlight(){
 		if(goSpotlight == null){
-			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
+//			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 		
@@ -263,7 +263,6 @@ public abstract class Tutorial{
 	//---------------------------------------------------		
 	protected void RemovePopup(){
 		if(goPopup == null){
-			Debug.LogError("Trying to destroy a popup that doesn't exist!");
 			return;
 		}
 		

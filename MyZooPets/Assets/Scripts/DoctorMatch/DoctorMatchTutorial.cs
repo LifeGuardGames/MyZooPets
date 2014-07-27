@@ -20,12 +20,23 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	}
 	
 	protected override void _End(bool isFinished){
-		// Enable all the collider and continue the game
-		zone1Collider.enabled = true;
-		zone2Collider.enabled = true;
-		zone3Collider.enabled = true;
 
-		GameObject.Destroy(fingerTutorialObject);
+		if(isFinished){
+			// Enable all the collider and continue the game
+			zone1Collider.enabled = true;
+			zone2Collider.enabled = true;
+			zone3Collider.enabled = true;
+
+			if(fingerTutorialObject)
+				GameObject.Destroy(fingerTutorialObject);
+		}
+		//tutorial aborted so need to do some clean up
+		else{
+			DoctorMatchManager.OnCharacterScoredRight -= OnCharacterScoredRightEventHandler;
+
+			if(fingerTutorialObject)
+				GameObject.Destroy(fingerTutorialObject);
+		}
 	}
 	
 	protected override void ProcessStep(int step){

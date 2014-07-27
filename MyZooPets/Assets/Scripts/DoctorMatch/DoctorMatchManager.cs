@@ -70,18 +70,21 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	public void CharacterScoredRight(){
-		int correctPoints = Constants.GetConstant<int>("Clinic_ScoredCharacterValue");
-		UpdateScore(correctPoints);
-		numOfCorrectDiagnose++;
 
+		if(!IsTutorialRunning()){
+			int correctPoints = Constants.GetConstant<int>("Clinic_ScoredCharacterValue");
+			UpdateScore(correctPoints);
+			numOfCorrectDiagnose++;
+
+			speedUpMatchTrack++;
+			if(speedUpMatchTrack == speedUpMatchInterval){
+				speedUpMatchTrack = 0;
+				SpeedGameUp();
+			}
+		}
+	
 		// play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
-
-		speedUpMatchTrack++;
-		if(speedUpMatchTrack == speedUpMatchInterval){
-			speedUpMatchTrack = 0;
-			SpeedGameUp();
-		}
 
 		if(OnCharacterScoredRight != null)
 			OnCharacterScoredRight(this, EventArgs.Empty);

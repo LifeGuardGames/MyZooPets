@@ -26,7 +26,13 @@ public class RunnerTutorial : MinigameTutorial {
     //---------------------------------------------------
     // _End()
     //---------------------------------------------------   
-    protected override void _End( bool bFinished ) {
+    protected override void _End( bool isFinished ) {
+		//tutorial aborted. need to do some clean up
+		if(!isFinished){
+			PlayerController.OnJump -= TutorialJump;
+			PlayerController.OnDrop -= TutorialDrop;
+			RemovePopup();
+		}
     }
     
     //---------------------------------------------------

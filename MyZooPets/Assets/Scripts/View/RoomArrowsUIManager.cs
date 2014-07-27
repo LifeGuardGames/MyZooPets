@@ -32,18 +32,18 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		leftArrowTween.Hide();
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Show all")){
-//			ShowPanel();
-//		}
-//		else if(GUI.Button(new Rect(200, 100, 100, 100), "Hide all")){
-//			HidePanel();
-//		}
-//		else if(GUI.Button(new Rect(300, 100, 100, 100), "Show Left")){
-//			ShowLeftArrow();
-//		}
-//		else if(GUI.Button(new Rect(400, 100, 100, 100), "Show Right")){
-//			ShowRightArrow();
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Show all")){
+			ShowPanel();
+		}
+		else if(GUI.Button(new Rect(200, 100, 100, 100), "Hide all")){
+			HidePanel();
+		}
+		else if(GUI.Button(new Rect(300, 100, 100, 100), "Show Left")){
+			ShowLeftArrow();
+		}
+		else if(GUI.Button(new Rect(400, 100, 100, 100), "Show Right")){
+			ShowRightArrow();
+		}
+	}
 }

@@ -238,6 +238,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void RestartGame(){
+		AudioManager.Instance.Pause(false);
+
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 		if(ui.IsPopupShowing(MinigamePopups.GameOver))
 			ui.TogglePopup(MinigamePopups.GameOver, false);
@@ -249,7 +251,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			tutorial.Abort();
 			tutorial = null;	
 		}
-		
+
 		SetGameState(MinigameStates.Restarting);
 		
 		NewGame();

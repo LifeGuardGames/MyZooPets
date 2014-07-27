@@ -30,6 +30,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
 
 		// show the UI itself
 		GetComponent<TweenToggle>().Show();
@@ -47,6 +48,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		RoomArrowsUIManager.Instance.ShowPanel();
 		
 		// hide the UI
 		GetComponent<TweenToggle>().Hide();

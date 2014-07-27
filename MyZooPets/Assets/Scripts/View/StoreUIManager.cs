@@ -82,6 +82,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
@@ -90,6 +91,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		RoomArrowsUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();

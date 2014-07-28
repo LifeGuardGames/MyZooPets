@@ -147,6 +147,8 @@ public abstract class Gate : MonoBehaviour{
 		GatingManager.Instance.GateCleared();
 
 		UnlockItemBox();
+
+		Invoke("UnlockRoomArrows", 0.5f);
 		
 		// gates might do their own thing upon destruction
 		GateDestroyed();	
@@ -160,6 +162,10 @@ public abstract class Gate : MonoBehaviour{
 				WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
 			}
 		}
+	}
+
+	private void UnlockRoomArrows(){
+		RoomArrowsUIManager.Instance.ShowPanel();
 	}
 
 	/// <summary>

@@ -10,6 +10,8 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 	void Start(){
 		CameraManager.Instance.GetPanScript().OnPartitionChanged += ShowPanel;
+
+
 		Invoke("ShowPanel", 0.5f);
 	}
 
@@ -17,31 +19,74 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		CameraManager.Instance.GetPanScript().OnPartitionChanged -= ShowPanel;
 	}
 
-	private void ShowPanel(object sender, EventArgs args){
+	public GameObject GetRightArrowReference(){
+		return rightArrowTween.transform.FindChild("Image Button").gameObject;
+	}
+
+	public void ShowPanel(object sender, EventArgs args){
 		ShowPanel();
 	}
 	
 	// Shows both arrows
 	public void ShowPanel(){
-		int currentPartition = CameraManager.Instance.GetPanScript().currentPartition;
-		int firstPartition = CameraManager.Instance.GetPanScript().firstPartition;
-		int lastPartition = CameraManager.Instance.GetPanScript().lastPartition;
+		//hacky... need to refactor TutorialManager so that it's child class can also be an instance
+//		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME_CRYSTAL);
+//		if(TutorialManager.Instance.IsTutorialActive() || !isFlameCrystalTutorialDone){
+//			return;
+//		};
 
-		if(currentPartition == firstPartition){
-			ShowRightArrow();
-		}
-		else if(currentPartition == lastPartition){
-			ShowLeftArrow();
-		}
-		else{
-			//check for gating
-			bool isEnabled = Constants.GetConstant<bool>("GatingEnabled");
-			bool canEnterRightRoom = GatingManager.Instance.CanEnterRoom(currentPartition, RoomDirection.Left);
-			if(!isEnabled || canEnterRightRoom)
-				ShowBothArrows();
-			else
+		if(TutorialManager.Instance.IsTutorialActive()) return;
+
+		PanToMoveCamera panScript = CameraManager.Instance.GetPanScript();
+		int currentPartition = panScript.currentPartition;
+		int firstPartition = panScript.firstPartition;
+		int lastPartition = panScript.lastPartition;
+		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating
+
+		//deco mode specific checks
+		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen()){
+			//first partition
+			if(currentPartition == firstPartition){
+				if(panScript.CanDecoModeMoveToRight())
+					ShowRightArrow();
+			}
+			//last partition
+			else if(currentPartition == lastPartition){
 				ShowLeftArrow();
+			}
+			//in between partitions
+			else{
+				if(!isEnabled || panScript.CanDecoModeMoveToRight())
+					ShowBothArrows();
+				else
+					ShowLeftArrow();
+			}
 		}
+		//regular mode (all non deco) checks
+		else{
+			if(currentPartition == firstPartition){
+				ShowRightArrow();
+			}
+			else if(currentPartition == lastPartition){
+				ShowLeftArrow();
+			}
+			else{
+
+				bool canEnterRightRoom = GatingManager.Instance.CanEnterRoom(currentPartition, RoomDirection.Left);
+				
+				if(!isEnabled || canEnterRightRoom){
+					ShowBothArrows();
+				}
+				else
+					ShowLeftArrow();
+			}
+		}
+
+
+
+
+
+		
 	}
 
 	// Hides both arrows
@@ -68,11 +113,11 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	}
 
 	public void RightArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().RightRoom();
+		CameraManager.Instance.GetPanScript().MoveOneRoomToRight();
 	}
 
 	public void LeftArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().LeftRoom();
+		CameraManager.Instance.GetPanScript().MoveOneRoomToLeft();
 	}
 
 //	void OnGUI(){

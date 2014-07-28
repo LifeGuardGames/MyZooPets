@@ -184,8 +184,9 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="eSwipeDirection">E swipe direction.</param>
 	public bool CanEnterRoom(int currentRoom, RoomDirection swipeDirection){
 		// early out if click manager is tweening
-		if(ClickManager.Instance.IsTweeningUI())
-			return false;
+		// WTF is this?? this messes up with the check logic. -- Jason
+//		if(ClickManager.Instance.IsTweeningUI())
+//			return false;
 		
 		// start off optimistic
 		bool isAllowed = true;

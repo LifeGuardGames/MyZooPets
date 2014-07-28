@@ -246,16 +246,27 @@ public class PanToMoveCamera : MonoBehaviour{
 		}
 	}
 
-	public void RightRoom(){
+	public void MoveOneRoomToRight(){
 		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
 			ChangePartition(GetTargetPartition(1, RoomDirection.Left));
 		}
 	}
 
-	public void LeftRoom(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Right, -1)){
+	public void MoveOneRoomToLeft(){
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
 			ChangePartition(GetTargetPartition(1, RoomDirection.Right));
 		}
+	}
+
+	public bool CanDecoModeMoveToRight(){
+		int targetPartition = GetTargetPartition(1, RoomDirection.Left);
+		bool retVal = true;
+
+		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen() && 
+			GatingManager.Instance.HasActiveGate(targetPartition))
+				retVal = false;
+
+		return retVal;
 	}
 	
 	private void CheckArrowKeys(){

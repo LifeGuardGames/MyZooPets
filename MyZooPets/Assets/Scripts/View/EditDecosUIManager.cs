@@ -218,6 +218,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	private void OpenShop(){
 		// save the node the player was trying to use
 		nodeSaved = chooseDecorationScript.GetNode();
+
+		// hide swipe arrow because not needed in shop mode
+		RoomArrowsUIManager.Instance.HidePanel();
 		
 		// close this UI and show the edit decos button
 		CloseChooseMenuHelper(false);
@@ -245,6 +248,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	private void ReopenChooseMenu(object sender, EventArgs args){
 		// hide the edit button
 		tweenEdit.Hide();
+
+		// show swipe arrows
+		RoomArrowsUIManager.Instance.ShowPanel();
 		
 		// update the menu
 		UpdateChooseMenu(nodeSaved);	

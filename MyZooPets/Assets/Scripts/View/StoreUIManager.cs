@@ -436,7 +436,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			if(OnShortcutModeEnd != null){
-				Debug.Log("shortcut mode listener");
 				OnShortcutModeEnd(this, EventArgs.Empty);
 			}
 

@@ -25,7 +25,6 @@ public class GameTutorialFlame : GameTutorial{
 	}
 
 	protected override void _End(bool isFinished){
-		RoomArrowsUIManager.Instance.ShowPanel();
 	}
 			
 	protected override void ProcessStep(int step){

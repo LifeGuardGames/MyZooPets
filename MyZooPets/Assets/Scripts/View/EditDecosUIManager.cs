@@ -152,6 +152,9 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
+
+		RoomArrowsUIManager.Instance.HidePanel();
+		Invoke("ShowDecoRoomArrows", 0.5f);
 		
 		// show the exit panels
 		tweenExit.Show();	
@@ -163,6 +166,10 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		GameObject goPet = PetMovement.Instance.GetPetGameObject();
 		goPet.SetActive(false);
 	}
+
+	private void ShowDecoRoomArrows(){
+		RoomArrowsUIManager.Instance.ShowPanel();
+	}
 	
 	protected override void _CloseUI(){
 		// if the choose menu was open, close it
@@ -173,6 +180,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();	
 		InventoryUIManager.Instance.ShowPanel();
+		RoomArrowsUIManager.Instance.ShowPanel();
 		
 		// hide the exit panels
 		tweenExit.Hide();	

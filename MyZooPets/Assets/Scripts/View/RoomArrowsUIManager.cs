@@ -37,25 +37,56 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 		if(TutorialManager.Instance.IsTutorialActive()) return;
 
-		int currentPartition = CameraManager.Instance.GetPanScript().currentPartition;
-		int firstPartition = CameraManager.Instance.GetPanScript().firstPartition;
-		int lastPartition = CameraManager.Instance.GetPanScript().lastPartition;
+		PanToMoveCamera panScript = CameraManager.Instance.GetPanScript();
+		int currentPartition = panScript.currentPartition;
+		int firstPartition = panScript.firstPartition;
+		int lastPartition = panScript.lastPartition;
+		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating
 
-		if(currentPartition == firstPartition){
-			ShowRightArrow();
-		}
-		else if(currentPartition == lastPartition){
-			ShowLeftArrow();
-		}
-		else{
-			//check for gating
-			bool isEnabled = Constants.GetConstant<bool>("GatingEnabled");
-			bool canEnterRightRoom = GatingManager.Instance.CanEnterRoom(currentPartition, RoomDirection.Left);
-			if(!isEnabled || canEnterRightRoom)
-				ShowBothArrows();
-			else
+		//deco mode specific checks
+		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen()){
+			//first partition
+			if(currentPartition == firstPartition){
+				if(panScript.CanDecoModeMoveToRight())
+					ShowRightArrow();
+			}
+			//last partition
+			else if(currentPartition == lastPartition){
 				ShowLeftArrow();
+			}
+			//in between partitions
+			else{
+				if(!isEnabled || panScript.CanDecoModeMoveToRight())
+					ShowBothArrows();
+				else
+					ShowLeftArrow();
+			}
 		}
+		//regular mode (all non deco) checks
+		else{
+			if(currentPartition == firstPartition){
+				ShowRightArrow();
+			}
+			else if(currentPartition == lastPartition){
+				ShowLeftArrow();
+			}
+			else{
+
+				bool canEnterRightRoom = GatingManager.Instance.CanEnterRoom(currentPartition, RoomDirection.Left);
+				
+				if(!isEnabled || canEnterRightRoom){
+					ShowBothArrows();
+				}
+				else
+					ShowLeftArrow();
+			}
+		}
+
+
+
+
+
+		
 	}
 
 	// Hides both arrows
@@ -82,11 +113,11 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	}
 
 	public void RightArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().RightRoom();
+		CameraManager.Instance.GetPanScript().MoveOneRoomToRight();
 	}
 
 	public void LeftArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().LeftRoom();
+		CameraManager.Instance.GetPanScript().MoveOneRoomToLeft();
 	}
 
 //	void OnGUI(){

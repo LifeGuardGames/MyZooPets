@@ -106,10 +106,11 @@ public class ButtonMonster : LgButtonHold{
 //			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
-		
+
 		if(scriptFireMeter.IsFull()){
 			// if the meter was full on release, complete the attack!
-			scriptAttack.FinishAttack();			
+//			scriptAttack.FinishAttack();
+			scriptAttack.Attack();
 			
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive

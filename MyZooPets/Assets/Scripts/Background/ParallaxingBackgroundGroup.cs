@@ -35,6 +35,9 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 
     private void GameStateChange(object sender, GameStateArgs args){
         switch(args.GetGameState()){
+			case MinigameStates.GameOver:
+				PauseParallax();
+			break;
             case MinigameStates.Paused:
                 PauseParallax();
             break;

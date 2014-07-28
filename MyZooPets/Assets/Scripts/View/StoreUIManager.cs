@@ -411,6 +411,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Return to the StoreBasePanel
 	//------------------------------------------
 	public void HideStoreSubPanel(){
+
+		DestroyGrid();
+
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -459,12 +462,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Create items for sub category 
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
-		if(currentTab != tabName){
+//		if(currentTab != tabName){
 			//Destroy existing items first
-			foreach(Transform child in grid.transform){
-				child.gameObject.SetActive(false);
-				Destroy(child.gameObject);
-			}
+			DestroyGrid();
 
 			//Reset clip range so scrolling will start from beginning again
 			ResetUIPanelClipRange();
@@ -534,6 +534,17 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			grid.GetComponent<UIGrid>().Reposition();
+//		}
+	}
+
+	//-----------------------------------------
+	// HideUnuseTab()
+	// Destroys the entries in the grid
+	//------------------------------------------
+	private void DestroyGrid(){
+		foreach(Transform child in grid.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
 		}
 	}
 

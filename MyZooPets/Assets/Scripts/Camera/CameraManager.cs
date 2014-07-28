@@ -201,6 +201,12 @@ public class CameraManager : Singleton<CameraManager>{
 		case InterfaceAnchors.Top:
 			transformedPosition = ConvertToAnchorTop(position, baseAnchor);
 			break;
+		case InterfaceAnchors.TopLeft:
+			transformedPosition = ConvertToAnchorTopLeft(position, baseAnchor);
+			break;
+		case InterfaceAnchors.TopRight:
+			transformedPosition = ConvertToAnchorTopRight(position, baseAnchor);
+			break;
 		case InterfaceAnchors.BottomRight:
 			transformedPosition = ConvertToAnchorBottomRight(position, baseAnchor);
 			break;
@@ -248,7 +254,7 @@ public class CameraManager : Singleton<CameraManager>{
 	}
 	
 	private Vector3 ConvertToAnchorTop(Vector3 position, InterfaceAnchors baseAnchor){
-		Vector3 vTransformed = position;
+		Vector3 transformedPosition = position;
 		
 		switch(baseAnchor){
 		case InterfaceAnchors.Center:
@@ -256,17 +262,49 @@ public class CameraManager : Singleton<CameraManager>{
 													 // so i commented it out. center to top has the same x only the
 													 //Y change...not sure why this was here in the beginning. hope i
 													 //didn't break more code
-			vTransformed.y -= nativeHeight / 2;
+			transformedPosition.y -= nativeHeight / 2;
 			break;
 		case InterfaceAnchors.BottomLeft:
-			vTransformed.x -= nativeWidth / 2;
-			vTransformed.y -= nativeHeight;
+			transformedPosition.x -= nativeWidth / 2;
+			transformedPosition.y -= nativeHeight;
 			break;			
 		default:
 			Debug.LogError("Sorry not implemented yet.");
 			break;
 		}
 		
-		return vTransformed;		
-	}	
+		return transformedPosition;		
+	}
+
+	private Vector3 ConvertToAnchorTopRight(Vector3 position, InterfaceAnchors baseAnchor){
+		Vector3 transformedPosition = position;
+
+		switch(baseAnchor){
+		case InterfaceAnchors.Center:
+			transformedPosition.x -= nativeWidth / 2;
+			transformedPosition.y -= nativeHeight / 2;
+			break;
+		default:
+			Debug.LogError("Sorry not implemented yet.");
+			break;
+		}
+
+		return transformedPosition;
+	}
+
+	private Vector3 ConvertToAnchorTopLeft(Vector3 position, InterfaceAnchors baseAnchor){
+		Vector3 transformedPosition = position;
+
+		switch(baseAnchor){
+		case InterfaceAnchors.Center:
+			transformedPosition.x += nativeWidth / 2;
+			transformedPosition.y -= nativeHeight / 2;
+			break;
+		default:
+			Debug.LogError("Sorry not implemented yet.");
+			break;
+		}
+
+		return transformedPosition;
+	}
 }

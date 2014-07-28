@@ -146,32 +146,32 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	/// Creates a giant collider on the screen that listens to the swipe event.
 	/// This is an easier way to do swipe during tutorial
 	/// </summary>
-	private void SetupSwipeListener(){
-		//check for right anchor
-		GameObject anchorRight = GameObject.Find("Anchor-Right");
-		string tutKey = GetKey() + "_" + GetStep();
-
-		if(anchorRight == null)
-			Debug.LogError(tutKey + " Needs anchor right");
-
-		//spawn the giant collider
-		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
-		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
-		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
-
-		//show finger hint
-		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
-
-		// show message
-		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-		string tutMessage = Localization.Localize(tutKey);
-		Hashtable option = new Hashtable();
-
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
-	}
+//	private void SetupSwipeListener(){
+//		//check for right anchor
+//		GameObject anchorRight = GameObject.Find("Anchor-Right");
+//		string tutKey = GetKey() + "_" + GetStep();
+//
+//		if(anchorRight == null)
+//			Debug.LogError(tutKey + " Needs anchor right");
+//
+//		//spawn the giant collider
+//		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
+//		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
+//		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
+//
+//		//show finger hint
+//		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
+//
+//		// show message
+//		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
+//		string tutMessage = Localization.Localize(tutKey);
+//		Hashtable option = new Hashtable();
+//
+//		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+//		option.Add(TutorialPopupFields.Message, tutMessage);
+//
+//		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+//	}
 
 	private void OnTutorialSwiped(object sender, EventArgs args){
 		//clean up
@@ -186,6 +186,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 	private void FocusOnRightArrow(){
 		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();
+		string tutKey = GetKey() + "_" + GetStep();
 
 		// begin listening for when the inhaler is clicked
 		LgButton button = rightArrowObject.GetComponent<LgButton>();
@@ -196,7 +197,16 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 		RoomArrowsUIManager.Instance.ShowRightArrow();
 		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
-//		SpotlightObject(rightArrowObject, fingerHint: true, fingerHintFlip: true);
+
+		// show message
+		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
+		string tutMessage = Localization.Localize(tutKey);
+		Hashtable option = new Hashtable();
+		
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+		
+		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
 	}
 
 	private void RightArrowClicked(object sender, EventArgs args){
@@ -204,6 +214,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		button.OnProcessed -= RightArrowClicked;
 
 		RemoveFingerHint();
+		RemovePopup();
 		Advance();
 	}
 }

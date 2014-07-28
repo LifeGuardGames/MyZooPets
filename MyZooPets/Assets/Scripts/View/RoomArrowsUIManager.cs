@@ -35,7 +35,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 //			return;
 //		};
 
-		if(TutorialManager.Instance.IsTutorialActive()) return;
+		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()) return;
 
 		PanToMoveCamera panScript = CameraManager.Instance.GetPanScript();
 		int currentPartition = panScript.currentPartition;

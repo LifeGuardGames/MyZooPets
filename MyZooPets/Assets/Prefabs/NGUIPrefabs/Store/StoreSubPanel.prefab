@@ -341,6 +341,7 @@ GameObject:
   - 4: {fileID: 400050}
   - 114: {fileID: 11400088}
   - 114: {fileID: 11400092}
+  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: ItemArea
   m_TagString: Untagged
@@ -955,6 +956,41 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isShown: 1
+  ignoreTimeScale: 0
+  isUsingDemultiplexer: 1
+  blockUI: 1
+  startsHidden: 0
+  hideDeltaX: -1
+  hideDeltaY: -1
+  hideDeltaZ: 0
+  showDuration: .200000003
+  hideDuration: .200000003
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 26
+  easeShow: 27
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
+  isDebug: 0
+  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1217,6 +1253,7 @@ MonoBehaviour:
   - {fileID: 100080}
   - {fileID: 100024}
   - {fileID: 100052}
+  - {fileID: 100050}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1

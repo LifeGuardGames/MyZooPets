@@ -37,6 +37,14 @@ public class MutableDataTutorial{
 		bool areTutorialsDone = ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST);
 		return areTutorialsDone;	
 	}
+
+	/// <summary>
+	/// Determines whether specific tutorial is finished
+	/// </summary>
+	/// <param name="tutorialID">Tutorial ID.</param>
+	public bool IsTutorialFinished(string tutorialID){
+		return ListPlayed.Contains(tutorialID);
+	}
 	
     //================Initialization============
     public MutableDataTutorial(){

@@ -149,8 +149,8 @@ public class ChooseDecorationUIController : MonoBehaviour{
 			}
 			
 			// save the tutorial entry (a bit hacky)
-			if(goTutorialEntry == null)
-				goTutorialEntry = decorationUIEntry.placeButtonGO;
+//			if(goTutorialEntry == null)
+			goTutorialEntry = decorationUIEntry.placeButtonGO;
 		}
 		
 		// Update the status label with formatted type name

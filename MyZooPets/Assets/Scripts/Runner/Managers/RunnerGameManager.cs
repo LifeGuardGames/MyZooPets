@@ -59,7 +59,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	protected override void _NewGame(){	
 		//check for tutorial here.
 		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(RunnerTutorial.TUT_KEY))){
+			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(RunnerTutorial.TUT_KEY))){
             
 			StartTutorial();
 			ResetGameTutorial();

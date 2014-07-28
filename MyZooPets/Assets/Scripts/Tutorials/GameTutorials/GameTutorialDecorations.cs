@@ -43,7 +43,6 @@ public class GameTutorialDecorations : GameTutorial{
 		else{
 			Debug.LogError("wellapad button can't be found: " + this);
 		}
-
 	}
 	
 	//---------------------------------------------------
@@ -64,6 +63,7 @@ public class GameTutorialDecorations : GameTutorial{
 			TutorialManager.Instance.StartCoroutine(FocusOnStoreButton());
 			break;			
 		case 4:
+			TutorialManager.Instance.StartCoroutine(WiggleDecorationBuyButtons());
 			StoreUIManager.OnDecorationItemBought += FocusOnStoreExitButton;
 			break;
 		case 5:
@@ -74,6 +74,8 @@ public class GameTutorialDecorations : GameTutorial{
 			break;
 		}
 	}
+
+
 	
 	private IEnumerator ShowWellapad(){
 		yield return new WaitForSeconds(1.5f);
@@ -171,9 +173,6 @@ public class GameTutorialDecorations : GameTutorial{
 		// listen for when the node is clicked
 		LgButton button = decoNode.GetComponent<LgButton>();
 		button.OnProcessed += OnNodeClicked;		
-		
-		// at this point, also give the user an item for the node they are about to click
-//		InventoryLogic.Instance.AddItem("WallPoster8", 1);
 	}
 
 	/// <summary>
@@ -228,12 +227,26 @@ public class GameTutorialDecorations : GameTutorial{
 
 		StoreUIManager.Instance.DisableTabArea();
 
+
+
 		//clean up
 		RemoveFromProcessList(shopButton);
 		RemoveFingerHint();
 
 		// advance the tutorial
 		Advance();
+	}
+
+	private IEnumerator WiggleDecorationBuyButtons(){
+		yield return new WaitForSeconds(1f);
+		
+		GameObject itemGrid = StoreUIManager.Instance.grid;
+		int count = 0;
+		foreach(Transform itemTransform in itemGrid.transform){
+			itemTransform.GetComponent<StoreItemEntryUIController>().PlayWiggleAnimation();
+			count++;
+			if(count == 4) break; //only wiggle the first four deco
+		}
 	}
 
 	/// <summary>
@@ -251,7 +264,17 @@ public class GameTutorialDecorations : GameTutorial{
 		
 		// listen for when the node is clicked
 		LgButton button = storeBackButton.GetComponent<LgButton>();
-		button.OnProcessed += OnStoreExit;		
+		button.OnProcessed += OnStoreExit;
+
+		//stop buy buttons from wiggling
+		//make buy button wiggle
+		GameObject itemGrid = StoreUIManager.Instance.grid;
+		int count = 0;
+		foreach(Transform itemTransform in itemGrid.transform){
+			itemTransform.GetComponent<StoreItemEntryUIController>().StopWiggleAnimation();
+			count++;
+			if(count == 4) break; 
+		}
 	}
 
 	/// <summary>

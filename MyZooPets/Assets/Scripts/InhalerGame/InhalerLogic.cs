@@ -31,7 +31,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	}
 
 	public bool IsTutorialCompleted{
-		get{ return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);}
+		get{ return DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);}
 	}
 
 	//True: the step that the user is currently on is correct, False: wrong step

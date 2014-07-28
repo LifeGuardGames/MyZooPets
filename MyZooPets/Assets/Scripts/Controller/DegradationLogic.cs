@@ -161,7 +161,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
             
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
-			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
+			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 
 			if(!isTriggerTutDone){
 				if(i == 0){
@@ -217,7 +217,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	//---------------------------------------------------       
 	private int GetNewTriggerCount(){
 		int newTriggers = 0;
-		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
+		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 
 		if(!isTriggerTutDone){
 			newTriggers = 1;
@@ -302,7 +302,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		StatsController.Instance.ChangeStats(deltaMood: -nMoodLoss);
         
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
-		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TIME_DECAY_TUT))
+		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TIME_DECAY_TUT))
 			StartCoroutine(MoodDegradTutorial());
 	}
 

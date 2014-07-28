@@ -178,7 +178,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);
 		
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
-		if(DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST) == false)
+		if(DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_LAST) == false)
 			IsRefresh = false;
 
 		// if we have to refresh, just delete our data...the missions list will take it from there

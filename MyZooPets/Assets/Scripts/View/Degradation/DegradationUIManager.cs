@@ -83,7 +83,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
     //---------------------------------------------------       
     private void PlaceTriggers(object sender, EventArgs args) {
         // if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
-        bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_LAST);
+        bool bTriggers = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_LAST);
         if (!bTriggers && !IsTesting())
             return;
 

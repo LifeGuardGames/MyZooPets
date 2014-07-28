@@ -136,7 +136,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		currentTriggerEntries = null;
 
 		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
+			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)))
 			StartTutorial();
 
 	}

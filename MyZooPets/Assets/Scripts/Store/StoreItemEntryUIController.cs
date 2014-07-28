@@ -21,6 +21,10 @@ public class StoreItemEntryUIController : MonoBehaviour{
 		tutorialWiggleAnimation.Play();
 	}
 
+	public void StopWiggleAnimation(){
+		tutorialWiggleAnimation.Stop();
+	}
+
 	/// <summary>
 	/// Creates the entry.
 	/// </summary>

@@ -250,7 +250,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 					//Use for tutorial to notify tutorial manager when deco item has been bought
 					bool isDecorationTutorialDone = DataManager.Instance.GameData.
-						Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS);
+						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
 
 					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
 						OnDecorationItemBought(this, EventArgs.Empty);
@@ -505,18 +505,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
 				DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 
-				//Do a check for decoration tutorial
-				bool isDecorationTutorialDone = DataManager.Instance.GameData.
-					Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS);
-
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
 					foreach(DecorationItem decoItemData in decoList){
 						if(!decoItemData.ItemBoxOnly){
 							GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
-
-							if(!isDecorationTutorialDone)
-								itemEntry.GetComponent<StoreItemEntryUIController>().PlayWiggleAnimation();
 						}
 					}
 				}

@@ -45,7 +45,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 		// if the play hasn't played the tutorial yet, start it
 		if(IsTutorialOn() && (IsTutorialOverride() || 
-          !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(DoctorMatchTutorial.TUT_KEY)))
+          !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(DoctorMatchTutorial.TUT_KEY)))
 			StartTutorial();
 		else{
 			assemblyLineController.Speed = startSpeed;

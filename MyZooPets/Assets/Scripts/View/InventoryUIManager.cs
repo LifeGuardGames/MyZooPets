@@ -47,8 +47,14 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public GameObject GetFireOrbReference(){
 		GameObject retVal = null;
 		foreach(Transform item in uiGridObject.transform){
-			if(item.name == "Usable1")
-				retVal = item.Find("Usable1").gameObject;
+			if(item.name == "Usable1"){
+				try{
+					retVal = item.Find("Usable1").gameObject;
+				}
+				catch(NullReferenceException e){
+					Debug.LogError("Flame crystal dragged out the inventory before fire button shows up in gating room");
+				}
+			}
 		}
 		return retVal;
 	}

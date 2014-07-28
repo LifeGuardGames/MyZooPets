@@ -39,7 +39,8 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		HUDUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
-		
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		// disable the collider so the user can't click the chart again
 		gameObject.collider.enabled = false;
 		
@@ -63,7 +64,8 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		HUDUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
-		
+		RoomArrowsUIManager.Instance.ShowPanel();
+
 		// deactivate the back button
 		goBackButton.SetActive(false);
 		draggableCollider.enabled = false;

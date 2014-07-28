@@ -32,7 +32,10 @@ public class ClickManager : Singleton<ClickManager>{
 	public string stackPeek;
 	public int count;
 	
-
+	/// <summary>
+	/// Gets the current mode. The mode that the click manager is locked at
+	/// </summary>
+	/// <value>The current mode.</value>
 	public UIModeTypes CurrentMode{
 		get{
 			UIModeTypes retVal = UIModeTypes.None;

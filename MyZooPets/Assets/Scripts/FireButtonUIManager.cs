@@ -12,6 +12,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public ParticleSystem buttonBurstParticle;
 	public GameObject sunBeam;
 	public UIImageButton imageButton;
+	public Collider fireButtonCollider;
 
 	private string activeButtonSpriteName = "buttonFireFull";
 	private string inactiveButtonSpriteName = "buttonFireEmpty";

@@ -229,7 +229,7 @@ public class PetAnimator : LgCharacterAnimator{
 	//---------------------------------------------------	
 	public void DoneBreathingFire(bool bFinished){
 		if(!bFinished)
-			Resume();
+			return;
 		else if(bCancelFire == false){
 			// process any callbacks for when the pet finishes breathing fire
 			if(OnBreathEnded != null)

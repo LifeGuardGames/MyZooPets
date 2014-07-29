@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Net;
+using fastJSON;
 
 /**
  * Example console commands for getting information about GameObjects

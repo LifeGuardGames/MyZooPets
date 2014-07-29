@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class PetGameData{
 	public MutableDataWellapad Wellapad {get; set;}
@@ -17,7 +18,7 @@ public class PetGameData{
     public MutableDataGatingProgress GatingProgress {get; set;}
     public MutableDataRunnerGame RunnerGame {get; set;}
     public MutableDataHighScore HighScore {get; set;}
-	public MutableDataMiniPets MiniPets {get; set;}
+//	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	
     public PetGameData(){
@@ -41,7 +42,7 @@ public class PetGameData{
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
-		MiniPets = new MutableDataMiniPets();
+//		MiniPets = new MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
     }
 
@@ -51,17 +52,10 @@ public class PetGameData{
 	/// version checks so that save data can properly
 	/// be updated when the app is updated.
 	/// </summary>
-	public void VersionCheck() {
-		string buildVersion = Constants.GetConstant<string>("BuildVersion");
-
-		//BuildVersion constant is introduced in 1.3.1 so any version before 
-		//will not be able to find it. default the version to 1.3.0
-		if(string.IsNullOrEmpty(buildVersion))
-			buildVersion = "1.3.0";
-
-		GatingProgress.VersionCheck(buildVersion);
-		Calendar.VersionCheck(buildVersion);
-		PetInfo.VersionCheck(buildVersion);
-		Tutorial.VersionCheck(buildVersion);
+	public void VersionCheck(Version currentDataVersion) {
+		GatingProgress.VersionCheck(currentDataVersion);
+		Calendar.VersionCheck(currentDataVersion);
+		PetInfo.VersionCheck(currentDataVersion);
+		Tutorial.VersionCheck(currentDataVersion);
 	}
 }

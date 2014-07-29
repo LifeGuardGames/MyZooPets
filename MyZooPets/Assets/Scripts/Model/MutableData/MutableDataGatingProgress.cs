@@ -8,9 +8,6 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress{
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
-//	public bool IsNewToMultipleMonsterHeads {get; set;} //is new to the game design change where 
-	                                                    //we start using number of monster heads to 
-	        											//symoblizing the health of the monster
 
 	/// <summary>
 	/// Determines whether incoming gate is active.
@@ -82,7 +79,6 @@ public class MutableDataGatingProgress{
 	//Populate with dummy data
 	private void Init(){
 		GatingProgress = new Dictionary<string, int>();
-//		IsNewToMultipleMonsterHeads = true;
 		
 		// load all our gating data from xml
 		LoadFromXML();		
@@ -92,11 +88,7 @@ public class MutableDataGatingProgress{
 		Version version131 = new Version("1.3.1");
 
 		if(currentDataVersion < version131){
-			//add multiple monster head hp conversion here
-//			if(IsNewToMultipleMonsterHeads){
-				ConvertGateHP();
-//				IsNewToMultipleMonsterHeads = false;
-//			}
+			ConvertGateHP();	
 		}
 		// when we are doing a version check, just load the data from xml again.
 		// any existing data will be left alone, and new data will be inserted into our dictionary.
@@ -130,7 +122,12 @@ public class MutableDataGatingProgress{
 					//use this to convert the old health data to new health data
 					int conversionFactor = oldFullHealth / newFullHealth;
 					int newCurrentHealth = oldCurrentHealth / conversionFactor;
-					
+
+					//if newCurrentHealth is 0 we set it to 1 so it doesn't look like
+					//the monster all of the suden disappeared
+					if(newCurrentHealth == 0)
+						newCurrentHealth = 1;
+
 					Debug.Log(newCurrentHealth);
 					
 					GatingProgress[gateID] = newCurrentHealth;

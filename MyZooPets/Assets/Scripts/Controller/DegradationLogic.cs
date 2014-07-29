@@ -218,16 +218,24 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private int GetNewTriggerCount(){
 		int newTriggers = 0;
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
+		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
 		if(!isTriggerTutDone){
 			int uncleanedTriggers= DataManager.Instance.GameData.Degradation.UncleanedTriggers;
-			if(uncleanedTriggers == 0)
+
+			// only spawn one trigger if trigger tutorial is not done yet
+			if(uncleanedTriggers == 0){
 				newTriggers = 1;
+				degradationData.IsTriggerSpawned = true;
+			}
+
+			//need to update this time every time this function is called while trigger tutorial is not done yet otherwise
+			//logic gets messed up
+			degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 		}
 		else{
 
 			int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
-			MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
 			//There are missed play periods
 			if(numOfMissedPlayPeriod > 0){
@@ -300,7 +308,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			nMoodLoss += (int)(nSecondHours * (fSecondHoursPenalty * fMultiplier));
 
 		// actually change the pet's mood
-//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
 		StatsController.Instance.ChangeStats(deltaMood: -nMoodLoss);
         
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)

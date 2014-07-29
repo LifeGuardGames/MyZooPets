@@ -129,11 +129,22 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log(jsonString);
   }
 
-  [CUDLR.Command("GameData", "get data of pet in json")]
-  public static void GameData(){
+  [CUDLR.Command("GameDataJson", "get data of pet in json")]
+  public static void GameDataJson(){
     string jsonString = PlayerPrefs.GetString("GameData", "");
     CUDLR.Console.Log(jsonString);
   }
+
+  [CUDLR.Command("GameData", "get real time data")]
+	public static void GameData(){
+		try{
+			string jsonString = JSON.Instance.ToJSON(DataManager.Instance.GameData);
+			CUDLR.Console.Log(jsonString);
+		}
+		catch(NullReferenceException e){
+
+		}
+	}
 
 	[CUDLR.Command("TimeRemainTillNextPlayPeriod", "get time until next playperiod")]
 	public static void TotalTimeRemain(){

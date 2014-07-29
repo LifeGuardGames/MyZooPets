@@ -52,7 +52,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 					retVal = item.Find("Usable1").gameObject;
 				}
 				catch(NullReferenceException e){
-					Debug.LogError("Flame crystal dragged out the inventory before fire button shows up in gating room");
+					retVal = null;
 				}
 			}
 		}

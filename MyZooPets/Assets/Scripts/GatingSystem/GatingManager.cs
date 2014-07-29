@@ -391,6 +391,8 @@ public class GatingManager : Singleton<GatingManager>{
 			if(!canUseRealInhaler && fireOrb == null)
 				IAPNotification();
 		}
+		else
+			ShowUnhealthyNoFireNotification();
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
 	}

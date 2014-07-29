@@ -55,11 +55,10 @@ public class MutableDataPetInfo{
 		FireBreaths = 0;
 	}
 
-	public void VersionCheck(string currentBuildVersion){
-		Version buildVersion = new Version(currentBuildVersion);
+	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
 		
-		if(buildVersion <= version131){
+		if(currentDataVersion < version131){
 			FireBreaths = nFireBreaths;
 		}
 	}

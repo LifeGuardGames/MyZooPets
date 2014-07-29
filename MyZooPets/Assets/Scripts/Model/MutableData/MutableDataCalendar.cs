@@ -35,11 +35,10 @@ public class MutableDataCalendar{
 	/// the correct value. TimeSpan.Zero won't work unless it's a complete new
 	/// game
 	/// </summary>
-	public void VersionCheck(string currentBuildVersion){
-		Version buildVersion = new Version(currentBuildVersion);
+	public void VersionCheck(Version currentDataVersion){
 		Version version127 = new Version("1.2.7");
 
-		if(buildVersion <= version127){
+		if(currentDataVersion < version127){
 			TimeSpan totalTimeRemain = NextPlayPeriod - LgDateTime.GetTimeNow();
 			TotalTimeRemainInTicks = totalTimeRemain.Ticks.ToString();
 		}

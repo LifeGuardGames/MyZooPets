@@ -55,11 +55,10 @@ public class MutableDataTutorial{
 		ListPlayed = new List<string>();
     }
 
-	public void VersionCheck(string currentBuildVersion){
-		Version buildVersion = new Version(currentBuildVersion);
+	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
 		
-		if(buildVersion <= version131){
+		if(currentDataVersion < version131){
 			//Don't have DGT_TUT key anymore so remove this key
 			if(ListPlayed.Contains("DGT_TUT"))
 				ListPlayed.Remove("DGT_TUT");

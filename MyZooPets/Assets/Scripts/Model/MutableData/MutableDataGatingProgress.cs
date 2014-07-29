@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress{
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
-	public bool IsNewToMultipleMonsterHeads {get; set;} //is new to the game design change where 
+//	public bool IsNewToMultipleMonsterHeads {get; set;} //is new to the game design change where 
 	                                                    //we start using number of monster heads to 
 	        											//symoblizing the health of the monster
 
@@ -82,22 +82,21 @@ public class MutableDataGatingProgress{
 	//Populate with dummy data
 	private void Init(){
 		GatingProgress = new Dictionary<string, int>();
-		IsNewToMultipleMonsterHeads = true;
+//		IsNewToMultipleMonsterHeads = true;
 		
 		// load all our gating data from xml
 		LoadFromXML();		
 	}
 	
-	public void VersionCheck(string currentBuildVersion){
-		Version buildVersion = new Version(currentBuildVersion);
+	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
 
-		if(buildVersion <= version131){
+		if(currentDataVersion < version131){
 			//add multiple monster head hp conversion here
-			if(IsNewToMultipleMonsterHeads){
+//			if(IsNewToMultipleMonsterHeads){
 				ConvertGateHP();
-				IsNewToMultipleMonsterHeads = false;
-			}
+//				IsNewToMultipleMonsterHeads = false;
+//			}
 		}
 		// when we are doing a version check, just load the data from xml again.
 		// any existing data will be left alone, and new data will be inserted into our dictionary.

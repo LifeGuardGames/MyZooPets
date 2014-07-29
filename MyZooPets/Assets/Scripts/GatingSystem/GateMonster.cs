@@ -36,25 +36,32 @@ public class GateMonster : Gate{
 //		if(damage > 0)
 //			Move(damage);
 
+		SetupHeads();
+	}
+
+	void OnApplicationPause(bool isPaused){
+		SetupHeads();
+	}
+
+	public void SetupHeads(){
+//		Debug.Log("setting up..." + gateID);
 		// New way to show monster health - having multiple heads
 		currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		if(currentHealth <= smokeMonsterHeads.Length){
-			for(int i = currentHealth - 1; i < smokeMonsterHeads.Length - 1; i++){
-				Debug.Log("setting heads false " + currentHealth);
+			for(int i = currentHealth; i <= smokeMonsterHeads.Length - 1; i++){
+//				Debug.Log("setting heads false in list: " + i + " current health: " + currentHealth);
 				smokeMonsterHeads[i].gameObject.SetActive(false);
 			}
 			// First head to move is always the last one on the list
 			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
-
+			
 			// Assign the base head
 			baseHeadToMove = smokeMonsterHeads[0];
 		}
 		else{
 			Debug.LogError("Incorrect length size for smoke monster list");
 		}
-
-//		PlayNormalAnimation();
-	}	
+	}
 	
 	/// <summary>
 	/// Damages the gate.

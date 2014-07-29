@@ -193,12 +193,12 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private int GetNumTriggersToSpawn(){
 		// get the new number of triggers to spawn based on how long the player has been absent
 		int newTriggers = GetNewTriggerCount();
-        
+
 		// get the number of triggers the player did not clean
 		int uncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
 		if(uncleanedTriggers < 0)
 			uncleanedTriggers = 0; // this is a safeguard...I think this will eventually be changed a bit though
-        
+
 		// add them together but check min/maxes
 		int numToSpawn = Mathf.Min(MAX_TRIGGERS, newTriggers + uncleanedTriggers);
 		if(numToSpawn < 0){
@@ -220,7 +220,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 
 		if(!isTriggerTutDone){
-			newTriggers = 1;
+			int uncleanedTriggers= DataManager.Instance.GameData.Degradation.UncleanedTriggers;
+			if(uncleanedTriggers == 0)
+				newTriggers = 1;
 		}
 		else{
 

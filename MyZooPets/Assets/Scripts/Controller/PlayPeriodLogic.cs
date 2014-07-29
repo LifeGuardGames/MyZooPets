@@ -30,21 +30,18 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 
-	//Check if the user can play the inhaler game
+	/// <summary>
+	/// Check if user can play inhaler game. 
+	/// Also tells if user is in a new play period already
+	/// </summary>
 	public bool CanUseEverydayInhaler(){
 
 		DateTime now = LgDateTime.GetTimeNow();
 		bool retVal = now >= NextPlayPeriod;
 
-
-//		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
-
 		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
-		// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
-//		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
 		bool isInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
-//		if(!areTutorialsFinished && isInhalerTutorialDone)
-//		if(!isFlameTutorialDone)
+
 		if(!isPart1TutorialDone && isInhalerTutorialDone)
 			retVal = false;
 			

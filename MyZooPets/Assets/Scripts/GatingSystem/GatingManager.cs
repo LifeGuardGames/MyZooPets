@@ -30,17 +30,16 @@ public class GatingManager : Singleton<GatingManager>{
 	/// before converting them to world point
 	/// </summary>
 	public Vector3 startingScreenPosition;
-	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
-	private Hashtable activeGates = new Hashtable(); // hash of active gates that the manager is currently managing
 
-	public Hashtable ActiveGates{
-		get{ return activeGates; }
+	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
+	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>();
+
+	void Awake(){
+		// set pan script
+		scriptPan = CameraManager.Instance.GetPanScript();
 	}
 
 	void Start(){		
-		// set pan script
-		scriptPan = CameraManager.Instance.GetPanScript();
-		
 		// see if the gating system is enabled
 		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled())
 			return;
@@ -53,6 +52,13 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		// now spawn the gates
 		SpawnGates();
+	}
+
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused){;
+			RecurringGateCheck();	
+			SpawnGates();
+		}
 	}
 		
 	/// <summary>
@@ -73,9 +79,9 @@ public class GatingManager : Singleton<GatingManager>{
 			
 			bool isRecurring = dataGate.IsRecurring();
 			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			bool isNewPlayPeriod = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
 			
-			if(isRecurring && !isGateActive && canBreatheFire)
+			if(isRecurring && !isGateActive && isNewPlayPeriod)
 				DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
 		}
 	}
@@ -87,10 +93,27 @@ public class GatingManager : Singleton<GatingManager>{
 		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
+			int partition = dataGate.GetPartition();
 			
 			// if the gate is activate, spawn the monster at an offset 
 			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			if(isGateActive){
+
+			// check if gate is still in the scene. SpawnGates is also called after
+			// game is paused so need to check the status of each gate. This is mainly
+			// for the recurring gate to be spawned correctly
+			bool isGateInSceneAlready = false;
+			if(activeGates.ContainsKey(partition)){
+				try{
+					GameObject gateObject = activeGates[partition].gameObject;
+					if(gateObject) isGateInSceneAlready = true;
+				}
+				// Gate object has already been destroyed.
+				catch(MissingReferenceException e){
+					isGateInSceneAlready = false;
+				}
+			}
+				
+			if(isGateActive && !isGateInSceneAlready){
 				int startingPartition = scriptPan.currentPartition;	// room the player is in
 				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
 				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
@@ -121,7 +144,7 @@ public class GatingManager : Singleton<GatingManager>{
 				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
 				
 				// hash the gate based on the room, for easier access
-				int partition = dataGate.GetPartition();
+
 				activeGates[partition] = scriptGate;
 			}
 		}		
@@ -416,7 +439,7 @@ public class GatingManager : Singleton<GatingManager>{
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;
 		
 		// get the gate in this room
-		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
+		Gate gate = activeGates[scriptPan.currentPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
 			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
@@ -456,14 +479,14 @@ public class GatingManager : Singleton<GatingManager>{
 	//---------------------------------------------------	
 	private void MovePlayer(int roomPartition){
 		// then get the id of the gate and get that gate object from our list of active gates
-		Gate gate = (Gate)activeGates[roomPartition];
-		
-		// get the position the player should approach
-		Vector3 playerPosition = gate.GetPlayerPosition();
-		
-		// phew...now tell the player to move
-		PetMovement.Instance.MovePet(playerPosition);		
+		if(activeGates.ContainsKey(roomPartition)){
+			Gate gate = activeGates[roomPartition];
+			
+			// get the position the player should approach
+			Vector3 playerPosition = gate.GetPlayerPosition();
+			
+			// phew...now tell the player to move
+			PetMovement.Instance.MovePet(playerPosition);		
+		}
 	}
-	
-
 }

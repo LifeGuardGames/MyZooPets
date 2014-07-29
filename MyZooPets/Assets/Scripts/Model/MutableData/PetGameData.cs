@@ -18,7 +18,7 @@ public class PetGameData{
     public MutableDataGatingProgress GatingProgress {get; set;}
     public MutableDataRunnerGame RunnerGame {get; set;}
     public MutableDataHighScore HighScore {get; set;}
-//	public MutableDataMiniPets MiniPets {get; set;}
+	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	
     public PetGameData(){
@@ -42,7 +42,7 @@ public class PetGameData{
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
-//		MiniPets = new MutableDataMiniPets();
+		MiniPets = new MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
     }
 

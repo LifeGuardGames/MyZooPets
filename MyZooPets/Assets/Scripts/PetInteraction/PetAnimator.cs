@@ -156,7 +156,6 @@ public class PetAnimator : LgCharacterAnimator{
 		// actually kick off the effect
 		scriptFire = goFire.GetComponent<FireBlowParticleController>();
 
-		Debug.Log("Calling FinishFire");
 		StartCoroutine(FinishFire());
 //		FinishFire();
 		// start a coroutine to pause the animation, for timing purposes.
@@ -182,8 +181,6 @@ public class PetAnimator : LgCharacterAnimator{
 	// fire.  This function will finish the animation.
 	//---------------------------------------------------		
 	public IEnumerator FinishFire(){
-
-		Debug.Log("FinishFire");
 		// resume the animation
 		// Resume();
 		
@@ -209,9 +206,8 @@ public class PetAnimator : LgCharacterAnimator{
 	public IEnumerator HoldForExhale(){
 		// then wait another amount of time
 		float fHoldExhale = Constants.GetConstant<float>("HoldExhale");
-		Debug.Log("hold exhale: " + fHoldExhale);
 		yield return new WaitForSeconds(fHoldExhale);
-		Debug.Log("after hold: " + fHoldExhale);
+
 		// done holding exhale
 		Resume();
 		

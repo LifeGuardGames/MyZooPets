@@ -17,10 +17,7 @@ public class AttackGate : Singleton<AttackGate>{
 		this.damage = damage;
 		
 		// listen for anim complete message on pet
-//		PetAnimator.OnAnimDone += DoneAnimating;
 		PetAnimator.OnBreathEnded += DoneAnimating;
-//		FireMeter.OnFireReady += Attack;
-//		FireMeter.OnMeterFilled += DisableAttack;
 		
 		// kick off attack animation
 		this.attacker = attacker;
@@ -28,27 +25,16 @@ public class AttackGate : Singleton<AttackGate>{
 
 	void OnDestroy(){
 		// stop listening
-//		PetAnimator.OnAnimDone -= DoneAnimating;
 		PetAnimator.OnBreathEnded -= DoneAnimating;
-//		FireMeter.OnFireReady -= Attack;
-//		FireMeter.OnMeterFilled -= DisableAttack;
 	}
-
-//	public void FinishAttack(){
-//		Debug.Log("FinishAttack");
-//		StartCoroutine(attacker.FinishFire());	
-//	}
 
 	/// <summary>
 	/// Cancel attack so clean up.
 	/// </summary>
 	public void Cancel(){
-//		PetAnimator.OnAnimDone -= DoneAnimating;
-//		FireMeter.OnFireReady -= Attack;
-
 		attacker.CancelFire();
 	
-//		FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+		FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
 
 		//release lock if fire breathing lock was called previously
 		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
@@ -59,15 +45,11 @@ public class AttackGate : Singleton<AttackGate>{
 	}
 	
 	public void Attack(){ 
-//		FireMeter.OnFireReady -= Attack;
 		attacker.BreathFire();
 
+		FireButtonUIManager.Instance.fireButtonCollider.enabled = false;
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
-
-//	private void DisableAttack(object sender, EventArgs args){
-//		FireButtonUIManager.Instance.fireButtonCollider.enabled = false;
-//	}
 
 	/// <summary>
 	/// When pet is done animating
@@ -75,11 +57,7 @@ public class AttackGate : Singleton<AttackGate>{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void DoneAnimating(object sender, EventArgs args){
-		Debug.Log("DoneAnimating");
-//		Debug.Log("PetAnimState: " + args.GetAnimState());
-//		if(args.GetAnimState() == PetAnimStates.BreathingFire){
-			StartCoroutine(DoneAttacking());
-//		}
+		StartCoroutine(DoneAttacking());
 	}
 	
 	/// <summary>
@@ -99,8 +77,8 @@ public class AttackGate : Singleton<AttackGate>{
 		yield return 0;
 
 		//make button clickable again
-//		if(FireButtonUIManager.Instance)
-//			FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+		if(FireButtonUIManager.Instance)
+			FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
 
 		// release fire breathing lock
 		ClickManager.Instance.ReleaseLock();

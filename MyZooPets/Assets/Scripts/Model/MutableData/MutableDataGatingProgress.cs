@@ -8,7 +8,8 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress{
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
-
+	public DateTime LastRecurringGateSpawnedPlayPeriod {get; set;}
+	
 	/// <summary>
 	/// Determines whether incoming gate is active.
 	/// </summary>
@@ -79,6 +80,7 @@ public class MutableDataGatingProgress{
 	//Populate with dummy data
 	private void Init(){
 		GatingProgress = new Dictionary<string, int>();
+		LastRecurringGateSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 		
 		// load all our gating data from xml
 		LoadFromXML();		
@@ -102,6 +104,7 @@ public class MutableDataGatingProgress{
 	/// have left
 	/// </summary>
 	private void ConvertGateHP(){
+
 		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3", "Gate_Yard_R"};
 		int[] oldFullHealths = new int[]{10, 40, 80, 5};
 

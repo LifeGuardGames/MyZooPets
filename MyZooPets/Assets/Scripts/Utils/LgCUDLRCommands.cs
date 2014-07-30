@@ -124,6 +124,11 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());
   }
 
+  [CUDLR.Command("NextPP", "get next play period")]
+	public static void NextPP(){
+		CUDLR.Console.Log("Next play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
+	}
+
   [CUDLR.Command("MenuSceneData", "get MenuSceneData in json")]
   public static void MenuSceneData(){
     string jsonString = PlayerPrefs.GetString("MenuSceneData", "");

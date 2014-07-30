@@ -53,13 +53,6 @@ public class GatingManager : Singleton<GatingManager>{
 		// now spawn the gates
 		SpawnGates();
 	}
-
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){;
-			RecurringGateCheck();	
-			SpawnGates();
-		}
-	}
 		
 	/// <summary>
 	/// Recurrings the gate check.
@@ -73,16 +66,24 @@ public class GatingManager : Singleton<GatingManager>{
 		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
 		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
 		// but it works for our initial design of the gate...can be changed later
-		Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
-		foreach(DictionaryEntry entry in gates){
-			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			
-			bool isRecurring = dataGate.IsRecurring();
-			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			bool isNewPlayPeriod = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
-			
-			if(isRecurring && !isGateActive && isNewPlayPeriod)
-				DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
+	
+		DateTime now = LgDateTime.GetTimeNow();
+		DateTime lastRecurringGateSpawnedPlayPeriod = DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod;
+		TimeSpan timeSinceLastSpawned = now - lastRecurringGateSpawnedPlayPeriod;
+
+		// Next play period. refresh recurring gate
+		if(timeSinceLastSpawned.TotalHours >= 12){
+			Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
+			foreach(DictionaryEntry entry in gates){
+				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
+				
+				bool isRecurring = dataGate.IsRecurring();
+				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+				
+				if(isRecurring && !isGateActive){
+					DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
+				}
+			}
 		}
 	}
 
@@ -109,6 +110,9 @@ public class GatingManager : Singleton<GatingManager>{
 				}
 				// Gate object has already been destroyed.
 				catch(MissingReferenceException e){
+					isGateInSceneAlready = false;
+				}
+				catch(NullReferenceException e){
 					isGateInSceneAlready = false;
 				}
 			}
@@ -142,9 +146,12 @@ public class GatingManager : Singleton<GatingManager>{
 				
 				string gateID = dataGate.GetGateID();
 				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
+
+				if(dataGate.IsRecurring())
+					DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod = 
+						PlayPeriodLogic.GetCurrentPlayPeriod();
 				
 				// hash the gate based on the room, for easier access
-
 				activeGates[partition] = scriptGate;
 			}
 		}		

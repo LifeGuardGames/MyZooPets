@@ -40,7 +40,8 @@ public class GateMonster : Gate{
 	}
 
 	void OnApplicationPause(bool isPaused){
-		SetupHeads();
+		if(!isPaused)
+			SetupHeads();
 	}
 
 	public void SetupHeads(){

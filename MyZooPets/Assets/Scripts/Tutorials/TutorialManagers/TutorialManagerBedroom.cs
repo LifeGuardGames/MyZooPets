@@ -38,8 +38,15 @@ public class TutorialManagerBedroom : TutorialManager{
 		//Tutorial 1
 		TutorialPart1Check();
 
+
 		//Tutorial 2
 		TutorialPart2Check();
+	}
+
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused){
+			TutorialPart2Check();
+		}
 	}
 
 	private void TutorialPart1Check(){

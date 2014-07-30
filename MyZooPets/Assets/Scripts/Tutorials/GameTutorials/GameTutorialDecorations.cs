@@ -10,7 +10,7 @@ public class GameTutorialDecorations : GameTutorial{
 
 	private GameObject shopButton;
 	private GameObject storeBackButton;
-	
+
 	public GameTutorialDecorations() : base(){	
 	}	
 			
@@ -227,8 +227,6 @@ public class GameTutorialDecorations : GameTutorial{
 
 		StoreUIManager.Instance.DisableTabArea();
 
-
-
 		//clean up
 		RemoveFromProcessList(shopButton);
 		RemoveFingerHint();
@@ -237,13 +235,24 @@ public class GameTutorialDecorations : GameTutorial{
 		Advance();
 	}
 
+	/// <summary>
+	/// Wiggles the decoration buy buttons.
+	/// and temporary switch the button click callback to a tutorial specific function
+	/// </summary>
+	/// <returns>The decoration buy buttons.</returns>
 	private IEnumerator WiggleDecorationBuyButtons(){
 		yield return new WaitForSeconds(1f);
 		
 		GameObject itemGrid = StoreUIManager.Instance.grid;
 		int count = 0;
+
 		foreach(Transform itemTransform in itemGrid.transform){
-			itemTransform.GetComponent<StoreItemEntryUIController>().PlayWiggleAnimation();
+			StoreItemEntryUIController storeItemEntryUIController = itemTransform.GetComponent<StoreItemEntryUIController>();
+
+			storeItemEntryUIController.PlayWiggleAnimation();
+			storeItemEntryUIController.buttonMessage.target = StoreUIManager.Instance.gameObject;
+			storeItemEntryUIController.buttonMessage.functionName = "OnBuyButtonTutorial";
+
 			count++;
 			if(count == 4) break; //only wiggle the first four deco
 		}
@@ -267,11 +276,16 @@ public class GameTutorialDecorations : GameTutorial{
 		button.OnProcessed += OnStoreExit;
 
 		//stop buy buttons from wiggling
-		//make buy button wiggle
 		GameObject itemGrid = StoreUIManager.Instance.grid;
 		int count = 0;
+
 		foreach(Transform itemTransform in itemGrid.transform){
-			itemTransform.GetComponent<StoreItemEntryUIController>().StopWiggleAnimation();
+			StoreItemEntryUIController storeItemEntryUIController = itemTransform.GetComponent<StoreItemEntryUIController>();
+
+			storeItemEntryUIController.StopWiggleAnimation();
+			storeItemEntryUIController.buttonMessage.target = StoreUIManager.Instance.gameObject;
+			storeItemEntryUIController.buttonMessage.functionName = "OnBuyButton";
+
 			count++;
 			if(count == 4) break; 
 		}

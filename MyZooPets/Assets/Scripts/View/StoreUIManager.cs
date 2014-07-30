@@ -248,12 +248,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 							buyButton.isEnabled = false;
 					}
 
-					//Use for tutorial to notify tutorial manager when deco item has been bought
-					bool isDecorationTutorialDone = DataManager.Instance.GameData.
-						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
-
-					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
-						OnDecorationItemBought(this, EventArgs.Empty);
+//					//Use for tutorial to notify tutorial manager when deco item has been bought
+//					bool isDecorationTutorialDone = DataManager.Instance.GameData.
+//						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
+//
+//					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
+//						OnDecorationItemBought(this, EventArgs.Empty);
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
@@ -288,6 +288,42 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 			break;
 		case CurrencyTypes.IAP:
+			break;
+		}
+	}
+
+	/// <summary>
+	/// This buy button is used only during tutorial. It doesn't check for wella coins
+	/// but user will only be limited to one item in GameTutorialDecoration.cs
+	/// </summary>
+	/// <param name="button">Button.</param>
+	public void OnBuyButtonTutorial(GameObject button){
+		Transform buttonParent = button.transform.parent.parent;
+		string itemID = buttonParent.name;
+		Item itemData = ItemLogic.Instance.GetItem(itemID);
+
+		switch(itemData.CurrencyType){
+		case CurrencyTypes.WellaCoin:
+			if(itemData.Type == ItemType.Decorations){
+				DecorationItem decoItem = (DecorationItem)itemData;
+
+				//Use for tutorial to notify tutorial manager when deco item has been bought
+				bool isDecorationTutorialDone = DataManager.Instance.GameData.
+					Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
+				
+				if(!isDecorationTutorialDone && OnDecorationItemBought != null)
+					OnDecorationItemBought(this, EventArgs.Empty);
+					
+				InventoryLogic.Instance.AddItem(itemID, 1);
+
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+				
+				//Analytics
+				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
+				
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
+			}
 			break;
 		}
 	}

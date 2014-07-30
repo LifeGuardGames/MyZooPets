@@ -20,6 +20,6 @@ public class ButtonItemBox : LgButton {
 		scriptLogic.OpenBox();
 		
 		// the box was opened...destroy ourselves
-		Destroy( gameObject );
+		Destroy(gameObject);
 	}
 }

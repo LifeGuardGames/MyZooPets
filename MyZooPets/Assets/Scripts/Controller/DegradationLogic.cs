@@ -267,7 +267,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 					if(!degradationData.IsTriggerSpawned){
 						newTriggers = 3;
 						degradationData.IsTriggerSpawned = true;
-						degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+						degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 					}
 				}
 			}

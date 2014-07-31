@@ -10,10 +10,10 @@ path = argv[1]
 project = XcodeProject.Load(path +'/Unity-iPhone.xcodeproj/project.pbxproj')
 
 #project.add_file('System/Library/Frameworks/Accounts.framework', tree='SDKROOT', weak=True)
-project.add_file('System/Library/Frameworks/CoreTelephony.framework', tree='SDKROOT')
+#project.add_file('System/Library/Frameworks/CoreTelephony.framework', tree='SDKROOT')
 #project.add_file('System/Library/Frameworks/GameKit.framework', tree='SDKROOT', weak=True)
 #project.add_file('System/Library/Frameworks/MessageUI.framework', tree='SDKROOT')
-project.add_file('System/Library/Frameworks/MobileCoreServices.framework', tree='SDKROOT')
+#project.add_file('System/Library/Frameworks/MobileCoreServices.framework', tree='SDKROOT')
 # project.add_file('System/Library/Frameworks/StoreKit.framework', tree='SDKROOT')
 # project.add_file('System/Library/Frameworks/Social.framework', tree='SDKROOT', weak=True)
 # project.add_file('usr/lib/libsqlite3.dylib', tree='SDKROOT')

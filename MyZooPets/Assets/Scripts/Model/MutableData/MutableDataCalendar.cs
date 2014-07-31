@@ -3,12 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// CalendarData 
-// Save the data for Calendar. 
-// Mutable data
-//---------------------------------------------------
-
 public class MutableDataCalendar{
     public DateTime NextPlayPeriod {get; set;} //the next time that the user can collect check bonuses
 	public string TotalTimeRemainInTicks {get; set;} //serializer doesn't serialize TimeSpan, so it's converted into ticks string first
@@ -41,9 +35,13 @@ public class MutableDataCalendar{
 	/// the correct value. TimeSpan.Zero won't work unless it's a complete new
 	/// game
 	/// </summary>
-	public void VersionCheck(){
-		TimeSpan totalTimeRemain = NextPlayPeriod - LgDateTime.GetTimeNow();
-		TotalTimeRemainInTicks = totalTimeRemain.Ticks.ToString();
+	public void VersionCheck(Version currentDataVersion){
+		Version version127 = new Version("1.2.7");
+
+		if(currentDataVersion < version127){
+			TimeSpan totalTimeRemain = NextPlayPeriod - LgDateTime.GetTimeNow();
+			TotalTimeRemainInTicks = totalTimeRemain.Ticks.ToString();
+		}
 	}
 
     private void Init(){

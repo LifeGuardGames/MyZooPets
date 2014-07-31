@@ -1,9 +1,11 @@
 using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class InventoryUIManager : Singleton<InventoryUIManager>{
+	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
+
 	public GameObject inventoryPanel;
 	public bool isDebug;
 	public UIPanel gridPanel;
@@ -15,10 +17,12 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	private bool isGuiShowing = true;   // Aux to keep track, not synced!!
 	private float collapsedPos;
 	private GameObject fingerHintGO;
+	private Transform currentDragDropItem;
 
 	void Start(){
 		collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
-		InventoryLogic.OnItemAddedToInventory += OnItemAdded;
+		InventoryLogic.OnItemAddedToInventory += OnItemAddedHandler;
+		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
 		//Spawn items in the inventory for the first time
 		List<InventoryItem> allInvItems = InventoryLogic.Instance.AllInventoryItems;
@@ -31,7 +35,91 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	void OnDestroy(){
-		InventoryLogic.OnItemAddedToInventory -= OnItemAdded;
+		InventoryLogic.OnItemAddedToInventory -= OnItemAddedHandler;
+		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
+	}
+
+	/// <summary>
+	/// Gets the fire orb reference.
+	/// Use for the tutorial to get the fire orb gameobject.
+	/// </summary>
+	/// <returns>The fire orb reference.</returns>
+	public GameObject GetFireOrbReference(){
+		GameObject retVal = null;
+		foreach(Transform item in uiGridObject.transform){
+			if(item.name == "Usable1"){
+				try{
+					retVal = item.Find("Usable1").gameObject;
+				}
+				catch(NullReferenceException e){
+					retVal = null;
+				}
+			}
+		}
+		return retVal;
+	}
+
+	public void UpdateBarPosition(){
+		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+		
+		// Adjust the bar length based on how many items we want showing at all times
+		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+			inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
+			
+			// Update position of the bar if inventory is open
+			if(isGuiShowing){
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeOutBounce);
+				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+			}
+		}
+		
+		uiGridObject.GetComponent<UIGrid>().Reposition();
+		
+		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
+		Vector3 oldPanelPos = gridPanel.transform.localPosition;
+		gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
+		Vector4 oldClipRange = gridPanel.clipRange;
+		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
+	}
+	
+	//Find the position of Inventory Item game object with invItemID
+	//Used for animation position in StoreUIManager
+	public Vector3 GetPositionOfInvItem(string invItemID){
+		// position to use
+		Vector3 invItemPosition;
+		
+		if(!isGuiShowing){
+			// if the inventory is minimized, use the position of the inventory sprite object
+			invItemPosition = uiButtonSpriteObject.transform.position;
+		}
+		else{
+			// otherwise use the position of the item in the inventory panel
+			Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			invItemPosition = invItemTrans.position;
+			
+			//Offset position if the item is just added to the inventory
+			if(invItem.Amount == 1)
+				invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
+		
+		return invItemPosition;
+	}
+	
+	// Image button clicked receiver
+	public void ExpandToggled(){
+		// Local aux to keep track of toggles
+		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
+		isGuiShowing = !isGuiShowing;
+	}
+	
+	public void ShowPanel(){
+		inventoryPanel.GetComponent<TweenToggle>().Show();
+	}
+	
+	public void HidePanel(){
+		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
 	}
 
 	//Event listener. listening to when item is dragged out of the inventory on drop
@@ -43,84 +131,55 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		if(fingerHintGO != null)
 			Destroy(fingerHintGO);
 
-		//some debug check
-		if(isDebug){
-			if(e.TargetCollider && e.TargetCollider.name == "Cube")
-				dropOnTarget = true;
+		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
+			currentDragDropItem = e.ParentTransform;
+
+			if(ItemDroppedOnTargetEvent != null)
+				ItemDroppedOnTargetEvent(this, e);
 		}
-		else{
-			if(e.TargetCollider && e.TargetCollider.name == "Pet_LWF")
-				dropOnTarget = true;
-		}
+	}
 
-		//logic for when item is dropped on target
-		if(dropOnTarget){
-			string invItemID = e.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-
-			// check to make sure the item can be used
-			if(ItemLogic.Instance.CanUseItem(invItemID)){
-				e.IsValidTarget = true;
-				
-
-				if(invItem != null && invItem.ItemType == ItemType.Foods)
-					ShowPetReceivedFoodAnimation();		
-				
-				//notify inventory logic that this item is being used
-				InventoryLogic.Instance.UseItem(invItemID);
-				
-				if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-					e.ParentTransform.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-				}
-				else{ //destroy object if it has been used up
-					Destroy(e.ParentTransform.gameObject);
-					UpdateBarPosition();
-				}
+	/// <summary>
+	/// Items the used event handler.
+	/// </summary>
+	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+		if(currentDragDropItem != null){
+			InventoryItem invItem = args.InvItem;
+			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
-			else{
-				// else the drop was valid or the item could not be used...show a message
-				Hashtable hashSpeech = new Hashtable();
-
-				if(invItem.ItemType == ItemType.Foods)
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
-				else
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
-
-				PetSpeechController.Instance.Talk(hashSpeech);				
+			else{ //destroy object if it has been used up
+				Destroy(currentDragDropItem.gameObject);
+				UpdateBarPosition();
 			}
 		}
 	}
 
+	/// <summary>
+	/// Handles the item press event.
+	/// </summary>
 	private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
-		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
-
-		//remove drag hint on the next time user press on any item 
-		if(fingerHintGO != null)
-			Destroy(fingerHintGO);
-
-		//if user is pressing the item for the first time show hint
-		if(!isTutDone){
-			Vector3 hintPos = e.ParentTransform.position;
-			GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
-			fingerHintGO = (GameObject)Instantiate(fingerHintResource, hintPos, Quaternion.identity);
-			fingerHintGO.transform.parent = GameObject.Find("Anchor-BottomRight").transform;
-			fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
-
-			// fingerHintGO.transform.position = hintPos; 
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
-		}
-	}
-
-	//play chew animation from pet animator
-	private void ShowPetReceivedFoodAnimation(){
-		if(!petAnimator.IsBusy()){
-			petAnimator.PlayUnrestrictedAnim("Eat", true);
-			PetMovement.Instance.StopMoving(false);
-		}
+//		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
+//
+//		//remove drag hint on the next time user press on any item 
+//		if(fingerHintGO != null)
+//			Destroy(fingerHintGO);
+//
+//		//if user is pressing the item for the first time show hint
+//		if(!isTutDone){
+//			Vector3 hintPos = e.ParentTransform.position;
+//			GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
+//			fingerHintGO = (GameObject)Instantiate(fingerHintResource, hintPos, Quaternion.identity);
+//			fingerHintGO.transform.parent = GameObject.Find("Anchor-BottomRight").transform;
+//			fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
+//
+//			// fingerHintGO.transform.position = hintPos; 
+//			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
+//		}
 	}
 
 	//Event listener. listening to when new item is added to the inventory
-	private void OnItemAdded(object sender, InventoryLogic.InventoryEventArgs e){
+	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
 		
 		// inventory doesn't currently care about decorations
 		if(e.InvItem.ItemType == ItemType.Decorations)
@@ -167,68 +226,5 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		UpdateBarPosition();
 	}
 
-	public void UpdateBarPosition(){
-        
 
-		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-		
-		// Adjust the bar length based on how many items we want showing at all times
-		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-			inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
-			
-			// Update position of the bar if inventory is open
-			if(isGuiShowing){
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
-			}
-		}
-		
-		uiGridObject.GetComponent<UIGrid>().Reposition();
-		
-		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
-		Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		gridPanel.transform.localPosition = new Vector3(363f, oldPanelPos.y, oldPanelPos.z);
-		Vector4 oldClipRange = gridPanel.clipRange;
-		gridPanel.clipRange = new Vector4(206f, oldClipRange.y, oldClipRange.z, oldClipRange.w);
-	}
-
-	//Find the position of Inventory Item game object with invItemID
-	//Used for animation position in StoreUIManager
-	public Vector3 GetPositionOfInvItem(string invItemID){
-		// position to use
-		Vector3 invItemPosition;
-			
-		if(!isGuiShowing){
-			// if the inventory is minimized, use the position of the inventory sprite object
-			invItemPosition = uiButtonSpriteObject.transform.position;
-		}
-		else{
-			// otherwise use the position of the item in the inventory panel
-			Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			invItemPosition = invItemTrans.position;
-	
-			//Offset position if the item is just added to the inventory
-			if(invItem.Amount == 1)
-				invItemPosition += new Vector3(-0.22f, 0, 0);
-		}
-		
-		return invItemPosition;
-	}
-
-	// Image button clicked receiver
-	public void ExpandToggled(){
-		// Local aux to keep track of toggles
-		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
-		isGuiShowing = !isGuiShowing;
-	}
-
-	public void ShowPanel(){
-		inventoryPanel.GetComponent<TweenToggle>().Show();
-	}
-
-	public void HidePanel(){
-		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
-	}
 }

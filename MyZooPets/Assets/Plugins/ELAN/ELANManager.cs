@@ -9,6 +9,35 @@ public class ELANManager {
 #endif
 	//private static string PREF_KEY = "ELANPlayerPrefsKey";
 	
+	
+	
+	public static void sendParametrizedNotification (ELANNotification notification){
+#if UNITY_ANDROID && !UNITY_EDITOR
+		Debug.Log("public static void sendParametrizedNotification (ELANNotification notification) --> " + notification.fullClassName );
+		// Obtain unity context
+        if(playerActivityContext == null) {
+			AndroidJavaClass actClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        	playerActivityContext = actClass.GetStatic<AndroidJavaObject>("currentActivity");
+		}
+		
+        // Set notification within java plugin
+        AndroidJavaClass pluginClass = new AndroidJavaClass("com.CFM.ELAN.ELANManager");
+		
+        if (pluginClass != null) {
+			Debug.Log("FireNotification --> " + notification.fullClassName );
+			pluginClass.CallStatic("FireNotification", playerActivityContext, notification.title,notification.message,notification.getDelay(),notification.ID, notification.fullClassName,notification.useSound,notification.useVibration,notification.getRepetition());
+			if(notification.getDelay() > 0) { // NEW forgot to add this to be able to cancel notification
+				currentNotificationIDs.Add (notification.ID);
+			}
+       }
+#endif
+	}
+	
+	
+	
+	
+	
+	 [System.Obsolete("sendParametrizedNotification (ELANNotification notification)", true)]
 	public static int SendNotification (string title, string message, long delay) {
 #if UNITY_ANDROID && !UNITY_EDITOR
 		//if(currentNotificationIDs.Count == 0) currentNotificationIDs.AddRange(GetIntArray());
@@ -25,14 +54,13 @@ public class ELANManager {
 			pluginClass.CallStatic("FireNotification", playerActivityContext, title,message,delay,nID);
 			if(delay > 0) {
 				currentNotificationIDs.Add (nID);
-				//SetIntArray(currentNotificationIDs.ToArray ());
 			}
         }
 		return nID;
 #endif
 		return -1;
 	}
-	
+	 [System.Obsolete("sendParametrizedNotification (ELANNotification notification)", true)]
 	public static void ScheduleRepeatingNotification (string title, string message, long delay, long rep) {
 #if UNITY_ANDROID && !UNITY_EDITOR
 		// Obtain unity context
@@ -64,7 +92,6 @@ public class ELANManager {
 	}
 	
 	public static void CancelAllNotifications () {
-		
 #if UNITY_ANDROID && !UNITY_EDITOR
 		//currentNotificationIDs.AddRange(GetIntArray());
 		if(currentNotificationIDs.Count == 0) return;
@@ -91,8 +118,15 @@ public class ELANManager {
 			currentNotificationIDs.Remove (nID);
         }
 #endif
+		
+
 	}
-	
+	// NEW not being called anywhere!
+	#if UNITY_ANDROID && !UNITY_EDITOR
+	public static void addNotificationId(int nID){
+		if ( currentNotificationIDs != null )currentNotificationIDs.Add(nID);
+	}
+#endif
 	// HELPER FUNCTIONS
 	// This code is not used anymore due to a funny error on unity when trying to remove notifications from previous sessions
 	// I leave it here so users can build their own notification tracking system from it

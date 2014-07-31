@@ -41,6 +41,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
+			RoomArrowsUIManager.Instance.HidePanel();
 			
 			isActive = true;
 			highscoreBoard.collider.enabled = false;
@@ -62,6 +63,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			EditDecosUIManager.Instance.ShowNavButton();
+			RoomArrowsUIManager.Instance.ShowPanel();
 			
 			if(D.Assert(backButton != null, "No back button to delete"))
 				backButton.SetActive(false);

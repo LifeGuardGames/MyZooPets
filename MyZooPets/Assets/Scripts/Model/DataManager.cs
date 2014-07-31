@@ -32,17 +32,15 @@ public class DataManager : Singleton<DataManager>{
     
 	//Save temporary data when transitioning to new scene
 	public LoadSceneData SceneData{ get; set; } 
-
-	//Use to tell if it's users' first time launching the app
+	
+	/// <summary>
+	/// Gets a value indicating whether if it's user's first time launching app.
+	/// first session ends when application is paused (i.e home out or quit)
+	/// </summary>
 	public bool IsFirstTime{
 		get{
 			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		
-			if(firstTime){
-				//not first time anymore after this property is called
-				PlayerPrefs.SetInt("IsFirstTime", 0);
-			}
-
 			return firstTime;
 		}
 	}
@@ -69,6 +67,8 @@ public class DataManager : Singleton<DataManager>{
 			InitializeGameDataForNewPet();
 		}else{
 			ModifyDataIntoSinglePetMode();
+
+			//decide 
 		}
 
 		LoadMenuSceneData();
@@ -105,15 +105,17 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-			}    
+
+				//No longer first time
+				PlayerPrefs.SetInt("IsFirstTime", 0);
+			}
 		}
 	}
-	
-	//----------------------------------------------------
-	// IsGameDataLoaded()
-	// Use this to check if there is data loaded into gameData at anypoint
-	// in the menuscene
-	//----------------------------------------------------
+
+	/// <summary>
+	/// Use this to check if there is data loaded into gameData at anypoint
+	/// in the menuscene
+	/// </summary>
 	public bool IsGameDataLoaded(){
 		return gameData != null;
 	}
@@ -257,7 +259,7 @@ public class DataManager : Singleton<DataManager>{
 				#endif
 				
 				gameData = newGameData;
-				gameData.VersionCheck();
+				LoadDataVersion();
 				
 				Deserialized(true);
 			}
@@ -268,6 +270,33 @@ public class DataManager : Singleton<DataManager>{
 		else{
 			Deserialized(true);
 		}
+	}
+
+	/// <summary>
+	/// Loads the data version.
+	/// use the data version for version check
+	/// </summary>
+	private void LoadDataVersion(){
+		//don't change the default value
+		string currentDataVersion = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+
+		if(!IsFirstTime)
+			gameData.VersionCheck(new Version(currentDataVersion));
+	}
+
+	/// <summary>
+	/// Saves the data version.
+	/// This steps is important because it updates the data version number to 
+	/// the lastest build number
+	/// </summary>
+	private void SaveDataVersion(){
+		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		Version buildVersion = new Version(buildVersionString);
+		Version currentDataVersion = new Version(currentDataVersionString);
+
+		if(buildVersion > currentDataVersion)
+			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
 	}
 
 	//serialize data into byte array and store locally in PlayerPrefs
@@ -290,9 +319,9 @@ public class DataManager : Singleton<DataManager>{
             Debug.Log("SERIALIZED: " + jsonString);
 			#endif
 
-			PlayerPrefs.SetString("GameData", jsonString); 
+			PlayerPrefs.SetString("GameData", jsonString);
+			SaveDataVersion();
 			Serialized();
-
 		}
 		else{
 			Debug.LogError("PetID is null or empty, so data cannot be serialized");

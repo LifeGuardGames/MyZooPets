@@ -12,25 +12,27 @@ public class ImmutableDataMonster{
 	private int monsterHP; // hp of the monster
 	private string resourceKey; // key for the monster, used to buid resources
 
-	public string GetMonsterID(){
-		return monsterID;	
+	public string MonsterID{
+		get{ return monsterID;}
 	}
 	
-	public int GetMonsterHealth(){
-		return monsterHP;	
+	public int MonsterHealth{
+		get{ return monsterHP;}
 	}
 	
-	public string GetResourceKey(){
-		return resourceKey;	
+	public string ResourceKey{
+		get{ return resourceKey;}
 	}
 	
-	public ImmutableDataMonster(string id, Hashtable hashElements, string strError){
+	public ImmutableDataMonster(string id, IXMLNode xmlNode, string errorMsg){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
+
 		monsterID = id;	
 
 		// get monster hp
-		monsterHP = XMLUtils.GetInt(hashElements["Health"] as IXMLNode, 100, strError);
+		monsterHP = XMLUtils.GetInt(hashElements["Health"] as IXMLNode, 100, errorMsg);
 		
 		// get prefab that this monster spawns
-		resourceKey = XMLUtils.GetString(hashElements["PrefabName"] as IXMLNode, "SmokeMonster", strError);
+		resourceKey = XMLUtils.GetString(hashElements["PrefabName"] as IXMLNode, "SmokeMonster", errorMsg);
 	}
 }

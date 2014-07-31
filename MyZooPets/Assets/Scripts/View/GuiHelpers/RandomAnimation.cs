@@ -10,6 +10,7 @@ public class RandomAnimation : MonoBehaviour {
 	
 	//Timer stuff
 	public bool isActive;
+	public GameObject childGameObject;	// Tells it to not play in the beginning
 	public float delayBeforeStart;
 	public float minInterval;
 	public float maxInterval;
@@ -17,12 +18,20 @@ public class RandomAnimation : MonoBehaviour {
 	private float timeBegin;
 	
 	void Start(){
+		if(childGameObject){
+			childGameObject.SetActive(false);
+		}
 		if(maxInterval < minInterval){
 			Debug.LogError("Max interval is less than min interval, clamping to min");
 			maxInterval = minInterval;
 		}
 		generatedValue = Random.Range(minInterval, maxInterval);
-		timeBegin = Time.time;
+		if(delayBeforeStart > 0){
+			Invoke("Enable", delayBeforeStart);
+		}
+		else{
+			Enable();
+		}
 	}
 	
 	void Update(){
@@ -39,10 +48,17 @@ public class RandomAnimation : MonoBehaviour {
 	
 	// Note: If some script enables a bunch of buttons at the same time they will all animate at once the first time
 	public void Enable(){
+		if(childGameObject){
+			childGameObject.SetActive(true);
+		}
+		timeBegin = Time.time;
 		isActive = true;
 	}
 	
 	public void Disable(){
+		if(childGameObject){
+			childGameObject.SetActive(false);
+		}
 		isActive = false;
 	}
 }

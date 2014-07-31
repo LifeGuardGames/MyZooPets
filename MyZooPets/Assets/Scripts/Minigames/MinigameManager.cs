@@ -159,7 +159,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	protected virtual void _OnDestroy(){
-		// children implement	
+		// children implement
 	}
 	
 	//---------------------------------------------------
@@ -238,6 +238,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void RestartGame(){
+		AudioManager.Instance.Pause(false);
+
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 		if(ui.IsPopupShowing(MinigamePopups.GameOver))
 			ui.TogglePopup(MinigamePopups.GameOver, false);
@@ -249,7 +251,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			tutorial.Abort();
 			tutorial = null;	
 		}
-		
+
 		SetGameState(MinigameStates.Restarting);
 		
 		NewGame();
@@ -331,8 +333,10 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Adds num points to the player's current score.
 	//---------------------------------------------------	
 	public void UpdateScore(int num){
-		int nNewScore = score + num;
-		SetScore(nNewScore);
+		if(!IsTutorialRunning()){
+			int nNewScore = score + num;
+			SetScore(nNewScore);
+		}
 	}	
 	
 	//---------------------------------------------------
@@ -355,17 +359,19 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Adds num points to the player's current lives.
 	//---------------------------------------------------	
 	public void UpdateLives(int num){
-		// for now, current lives cannot go above the starting value...
-		int nCurLives = GetLives();
-		if(num > 0 && nCurLives == nStartingLives)
-			return;
-		
-		int nNew = lives + num;
-		SetLives(nNew);
-		
-		// send callback because lives are chaning
-		if(OnLivesChanged != null)
-			OnLivesChanged(this, new LivesChangedArgs(num));		
+		if(!IsTutorialRunning()){
+			// for now, current lives cannot go above the starting value...
+			int nCurLives = GetLives();
+			if(num > 0 && nCurLives == nStartingLives)
+				return;
+			
+			int nNew = lives + num;
+			SetLives(nNew);
+			
+			// send callback because lives are chaning
+			if(OnLivesChanged != null)
+				OnLivesChanged(this, new LivesChangedArgs(num));		
+		}
 	}		
 	
 	//---------------------------------------------------
@@ -374,7 +380,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//---------------------------------------------------	
 	protected void GameOver(){
 		// send out a completion task
-		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
+//		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
 		
 		// send out score task
 		int nScore = GetScore();
@@ -404,6 +410,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// because Unity is dumb, and because we use SendMessage.
 	//---------------------------------------------------	
 	protected void PauseGame(){
+//		Debug.Log("Pausedd");
 		PauseGameWithPopup(true);	
 	}
 
@@ -418,7 +425,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// show the pause game UI if appropriate
 		if(bShowPopup) 
 			ui.TogglePopup(MinigamePopups.Pause, true);
-	}	
+	}
 	
 	//---------------------------------------------------
 	// ResumeGame()

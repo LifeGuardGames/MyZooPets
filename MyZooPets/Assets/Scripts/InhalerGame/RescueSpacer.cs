@@ -31,15 +31,18 @@ public class RescueSpacer : InhalerPart{
             bool snapBack = true;
             int maskLayer = 1 << 9;
 
-
             //Snap to position if spacer is at target position or revert to start pos
             if(Physics.Raycast(ray, out hit, 100, maskLayer)){
                 if(hit.collider.gameObject == rescueSpacerTarget){ 
-                    transform.position = targetDragPos;
-                    transform.parent = rescueBody.transform;
+					if(!isGestureRecognized){
+						isGestureRecognized = true;
 
-                    NextStep();
-                    snapBack = false;
+						transform.position = targetDragPos;
+						transform.parent = rescueBody.transform;
+						
+						NextStep();
+						snapBack = false;
+					}
                 }
             }
 

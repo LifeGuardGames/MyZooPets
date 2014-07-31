@@ -30,16 +30,19 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 
-	//Check if the user can play the inhaler game
-	public bool CanUseRealInhaler(){
+	/// <summary>
+	/// Check if user can play inhaler game. 
+	/// Also tells if user is in a new play period already
+	/// </summary>
+	public bool CanUseEverydayInhaler(){
 
 		DateTime now = LgDateTime.GetTimeNow();
 		bool retVal = now >= NextPlayPeriod;
-			
-		// special case: if we are done with the inhaler tutorial but not all tutorials, just return false
-		bool tutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		bool inhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
-		if(!tutsDone && inhalerTutDone)
+
+		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
+		bool isInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
+
+		if(!isPart1TutorialDone && isInhalerTutorialDone)
 			retVal = false;
 			
 		return retVal;
@@ -48,7 +51,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 
 	void Update(){
 
-		if(CanUseRealInhaler()){
+		if(CanUseEverydayInhaler()){
 			// okay, so the player can use their inhaler...but were we previously counting down?
 			if(isCountingDown){
 				// if we were, stop
@@ -140,7 +143,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			nextPlayPeriod = LgDateTime.Today.AddDays(1);
 		}
 
-		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);
+		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
 		if(isInhalerTutDone){
 			//register local notification.
 			localNotificationFireDate = nextPlayPeriod.AddHours(7); //set notif to 7am and 7pm

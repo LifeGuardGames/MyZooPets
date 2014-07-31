@@ -76,6 +76,7 @@ Transform:
   m_Children:
   - {fileID: 400010}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -87,6 +88,7 @@ Transform:
   m_LocalScale: {x: 900, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 400010}
+  m_RootOrder: 1
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -98,6 +100,7 @@ Transform:
   m_LocalScale: {x: 900, y: 40, z: 0}
   m_Children: []
   m_Father: {fileID: 400010}
+  m_RootOrder: 0
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -106,11 +109,12 @@ Transform:
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: .5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: .674989939, z: 1}
   m_Children:
   - {fileID: 400008}
   - {fileID: 400006}
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e7aee2617a64117bba31452f973696, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fa4dc69f69534c07bcdd4dd983558f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   progressStep: {fileID: 100004, guid: 334bafa69c01448069875607defa6d4b, type: 2}
@@ -140,7 +144,7 @@ MonoBehaviour:
   direction: 0
   eventReceiver: {fileID: 0}
   functionName: OnSliderChange
-  numberOfSteps: 7
+  numberOfSteps: 8
   rawValue: .0549999997
 --- !u!114 &11400010
 MonoBehaviour:

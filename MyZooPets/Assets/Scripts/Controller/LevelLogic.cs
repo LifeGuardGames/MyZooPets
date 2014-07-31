@@ -53,7 +53,7 @@ public class LevelLogic : Singleton<LevelLogic>{
 		if(IsAtMaxLevel())
             adjustedNextLevel -= 1;
 		
-		PetLevel petLevel = DataPetLevels.GetLevel((Level)adjustedNextLevel);
+		ImmutableDataPetLevel petLevel = DataLoaderPetLevels.GetLevel((Level)adjustedNextLevel);
 
 		return petLevel.LevelUpCondition;
 	}
@@ -65,7 +65,7 @@ public class LevelLogic : Singleton<LevelLogic>{
 	//------------------------------------------------
 	public string GetLevelUpMessage(){
 		Level currentLevel = DataManager.Instance.GameData.Level.CurrentLevel;
-		PetLevel petLevel = DataPetLevels.GetLevel(currentLevel);
+		ImmutableDataPetLevel petLevel = DataLoaderPetLevels.GetLevel(currentLevel);
 		return petLevel.LevelUpMessage;
 	}
 

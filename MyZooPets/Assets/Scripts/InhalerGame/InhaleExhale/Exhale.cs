@@ -7,7 +7,8 @@ using System.Collections;
     Listens to swipe gesture. 
 */
 public class Exhale : InhalerPart {
-    public InhalerAnimationController animationController;
+//    public InhalerAnimationController animationController;
+//	public Animator animator;
 
     protected override void Awake(){
         base.Awake();
@@ -19,22 +20,23 @@ public class Exhale : InhalerPart {
 
        if(direction == FingerGestures.SwipeDirection.Down){
 
-            //Only proceed with this step if no listener is registered to OnAnimDone
-            //This is to fix the problem when the user swipes really fast during exhale
-            //the same listener is registered to the same event multiple time, causing
-            //skipping game steps
-            if(InhalerAnimationController.OnAnimDone == null){
-                //Attach handler. so game can move on to next step after animation is done
-                InhalerAnimationController.OnAnimDone += OnAnimationDone;
+       		if(!isGestureRecognized){
+				isGestureRecognized = true;
 
-                //Disable hint when swipe gesture is registered. 
-                GetComponent<HintController>().DisableHint(false);
+				//Disable hint when swipe gesture is registered. 
+				GetComponent<HintController>().DisableHint(false);
 
-                animationController.Exhale();
-                AudioManager.Instance.PlayClip( "inhalerExhale" );      
-            }
+				AudioManager.Instance.PlayClip("inhalerExhale");
+				LgInhalerAnimationEventHandler.BreatheOutEndEvent += BreatheOutEndEventHandler;	
+				petAnimator.SetTrigger("BreatheOut");
+			}
        }
     }
+
+	private void BreatheOutEndEventHandler(object sender, EventArgs args){
+		LgInhalerAnimationEventHandler.BreatheOutEndEvent -= BreatheOutEndEventHandler;
+		NextStep();
+	}
 
     protected override void Disable(){
         gameObject.SetActive(false);
@@ -46,11 +48,7 @@ public class Exhale : InhalerPart {
 
     protected override void NextStep(){
         base.NextStep();
-        InhalerAnimationController.OnAnimDone -= OnAnimationDone;
         Destroy(gameObject);
     }
-
-    private void OnAnimationDone(object sender, EventArgs args){
-        NextStep();
-    }
+	
 }

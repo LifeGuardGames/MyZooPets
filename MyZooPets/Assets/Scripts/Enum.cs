@@ -33,11 +33,13 @@ public enum ItemType{
 	Foods,
 	Usables,
 	Decorations,
+	Premiums
 }
 public enum StatType{
     Mood,
     Health,
 	Fire,
+	Gems
 }
 public enum ChallengeType{
     Weekly,
@@ -52,7 +54,11 @@ public enum NotificationPopupType{
 	TipWithImage,
 	LevelUp,
     BadgeUnlocked,
-    FireLevelUp
+    FireLevelUp,
+	Premium,
+	InhalerRecharging,
+	PremiumTest,
+	SuperWellaInhaler
 }
 
 public enum NotificationPopupFields{
@@ -104,7 +110,9 @@ public enum UIModeTypes {
     CustomizePet,
     IntroComic,
 	MenuSettings,
-	GatingSystem
+	GatingSystem,
+	MiniPet,
+	FireBreathing
 }
 
 // decoration node anchor types
@@ -214,7 +222,8 @@ public enum HUDElementType{
 	Points, 
 	Stars, 
 	Health, 
-	Mood
+	Mood,
+	Gems
 }
 
 // types of button clicks
@@ -231,7 +240,9 @@ public enum InterfaceAnchors {
 	Center,
 	Left,
 	Right,
-	Top
+	Top,
+	TopLeft,
+	TopRight
 }
 
 // reward types for minigames
@@ -271,5 +282,15 @@ public enum DroppedItemStates {
 	Dropped,
 	PickedUp,
 	Awarded
+}
+
+public enum MiniPetTypes{
+    Basic,
+}
+
+public enum CurrencyTypes{
+	WellaCoin,
+	Gem,
+	IAP
 }
 

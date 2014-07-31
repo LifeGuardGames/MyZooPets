@@ -6,37 +6,38 @@ using System.Collections;
 /// Used to toogle move objects with LeanTween
 /// Parent class not to be used, implemented by PositionTweenToggle, ScaleTweenToggle, and RotationTweenToggle
 /// </summary>
-public class TweenToggle : MonoBehaviour {
+public class TweenToggle : MonoBehaviour{
 
 	public bool IsMoving{ get { return isMoving; } }
+
 	protected bool isMoving;
+
 	public bool IsShowing{ get { return isShown; } }
-	protected bool isShown;
+
+	public bool isShown;
 
 	//////////////////////////////////////////////////////
 	
 	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
-	
 	public bool blockUI = true;		// If true, when this object is tweening it will lock the UI
 	public bool startsHidden = false;
-	
 	public float hideDeltaX; //Position, Scale, or Rotation depending on subclass
 	public float hideDeltaY;
 	public float hideDeltaZ;
-	
 	public float showDuration = 0.5f;
 	public float hideDuration = 0.5f;
 	public float showDelay = 0.0f;
 	public float hideDelay = 0.0f;
 	public LeanTweenType easeHide = LeanTweenType.easeInBack;
 	public LeanTweenType easeShow = LeanTweenType.easeOutBack;
-
 	protected Vector3 hiddenPos;
 	protected Vector3 showingPos;
-	public Vector3 GetShowPos() {
+
+	public Vector3 GetShowPos(){
 		return showingPos;
 	}
+
 	protected bool positionSet;
 	
 	//////////////////////////////////////////////////////
@@ -45,7 +46,6 @@ public class TweenToggle : MonoBehaviour {
 	public GameObject ShowTarget;
 	public string ShowFunctionName;
 	public bool ShowIncludeChildren = false;
-
 	public GameObject HideTarget;
 	public string HideFunctionName;
 	public bool HideIncludeChildren = false;
@@ -78,21 +78,21 @@ public class TweenToggle : MonoBehaviour {
 		// Implement in child
 	}
 
-	// void OnGUI(){
-		// if(isDebug){
-		// 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
-		// 		Show();
-		// 	}
-		// 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
-		// 		Hide();
-		// 	}
-		// }
-	// }
+//	void OnGUI(){
+//		if(isDebug){
+//			if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
+//				Show();
+//			}
+//			if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
+//				Hide();
+//			}
+//		}
+//	}
 
 	public void Show(){
 		// play sound (if it exists)
-		if ( !string.IsNullOrEmpty(strSoundShow) )
-			AudioManager.Instance.PlayClip( strSoundShow );
+		if(!string.IsNullOrEmpty(strSoundShow))
+			AudioManager.Instance.PlayClip(strSoundShow);
 		
 		Show(showDuration);
 	}
@@ -105,14 +105,16 @@ public class TweenToggle : MonoBehaviour {
 	// 	if something has a dynamically changing position (inventory),
 	//	this will update the new positions before tweening
 	public void HideWithUpdatedPosition(){
-		RememberPositions();
-		Hide();
+		if(isShown){
+			RememberPositions();
+			Hide();
+		}
 	}
 	
 	public void Hide(){
 		// play sound (if it exists)
-		if ( !string.IsNullOrEmpty(strSoundHide) )
-			AudioManager.Instance.PlayClip( strSoundHide );		
+		if(!string.IsNullOrEmpty(strSoundHide))
+			AudioManager.Instance.PlayClip(strSoundHide);		
 		
 		Hide(hideDuration);
 	}
@@ -157,7 +159,7 @@ public class TweenToggle : MonoBehaviour {
 		}
 		if(ShowIncludeChildren){
 			Transform[] transforms = ShowTarget.GetComponentsInChildren<Transform>();
-			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+			for(int i = 0, imax = transforms.Length; i < imax; ++i){
 				Transform t = transforms[i];
 				t.gameObject.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
 			}
@@ -176,7 +178,7 @@ public class TweenToggle : MonoBehaviour {
 		}
 		if(HideIncludeChildren){
 			Transform[] transforms = HideTarget.GetComponentsInChildren<Transform>();
-			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+			for(int i = 0, imax = transforms.Length; i < imax; ++i){
 				Transform t = transforms[i];
 				t.gameObject.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
 			}

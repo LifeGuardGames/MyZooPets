@@ -44,6 +44,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void RefreshCheck(){
 		degradationTriggers = new List<DegradData>(); 
+
 		RefreshDegradationCheck();
 		SetUpTriggers();       
 		UpdateNextPlayPeriodTime();
@@ -101,11 +102,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		if(degradationTriggers.Count == 0)
 			WellapadMissionController.Instance.TaskCompleted("CleanRoom");
 	}
-	
-	//---------------------------------------------------
-	// TriggerHitPet()
-	// When a trigger particle effect hits the pet.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Triggers hit pet. When a trigger particle effect hits the pet.
+	/// </summary>
+	/// <param name="trigger">Trigger.</param>
 	public void TriggerHitPet(DegradParticle trigger){
 		// send out a callback
 		if(OnPetHit != null)
@@ -113,9 +114,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		
 		// damage the pet
 		int nDamage = trigger.GetDamage();
-//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-//		                                     -nDamage, Vector3.zero, 0, Vector3.zero, 
-//		                                     bFloaty: true);
+
 		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, bFloaty: true);
 
 		//Send analytics event
@@ -124,8 +123,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void RefreshDegradationCheck(){
 		// don't do these checks if the player has not yet finished the tutorials (we don't want them losing health/hunger)
-		bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(!bTutsDone)
+		bool isTutotrialDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		if(!isTutotrialDone)
 			return;
 		
 		// calculate changes in the pets mood
@@ -133,27 +132,27 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		CalculateMoodDegradation(sinceLastPlayed);
 		CalculateHealthDegradation();
 	}
-    
-	//---------------------------------------------------
-	// SetUpTriggers()
-	// This function just SETS UP the triggers and
-	// where they should spawn.  The actual triggers are
-	// spawned from the DegradationUIManager.
-	//---------------------------------------------------   
+   
+	/// <summary>
+	/// Sets up triggers.
+	/// This function just SETS UP the triggers and
+	/// where they should spawn.  The actual triggers are
+	/// spawned from the DegradationUIManager.
+	/// </summary>
 	private void SetUpTriggers(){      
 		// get list of available locations to spawn triggers
-		List<Data_TriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
+		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
         
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 
-		List<Data_TriggerLocation> listChosen = ListUtils.GetRandomElements<Data_TriggerLocation>(listAvailable, numToSpawn);
+		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
 		//create trigger data to be spawned
 		for(int i = 0; i < listChosen.Count; i++){
-			Data_TriggerLocation location = listChosen[i];
+			ImmutableDataTriggerLocation location = listChosen[i];
             
 			ImmutableDataTrigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 
@@ -162,18 +161,22 @@ public class DegradationLogic : Singleton<DegradationLogic>{
             
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
-			bool bTriggers = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_TRIGGERS);
-			if(!bTriggers && i == 0){
-				location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
-				if(location == null)
-					Debug.LogError("Tutorial trigger location not set up correctly");
-                
-				// objectIndex = 3;
-				randomTrigger = DataLoaderTriggers.GetTrigger("Trigger_3");
+			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
+
+			if(!isTriggerTutDone){
+				if(i == 0){
+					location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_3", "Bedroom");
+					
+					if(location == null)
+						Debug.LogError("Tutorial trigger location not set up correctly");
+					
+					// objectIndex = 3;
+					randomTrigger = DataLoaderTriggers.GetTrigger("Trigger_3");
+				}
 			}
 
 			//spawn them at a pre define location ID is the order in which the data are created
-			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.GetPosition()));
+			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Position));
 		}                
 
 		DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
@@ -189,15 +192,15 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	//---------------------------------------------------       
 	private int GetNumTriggersToSpawn(){
 		// get the new number of triggers to spawn based on how long the player has been absent
-		int nNewTriggers = GetNewTriggerCount();
-        
+		int newTriggers = GetNewTriggerCount();
+
 		// get the number of triggers the player did not clean
-		int nUncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
-		if(nUncleanedTriggers < 0)
-			nUncleanedTriggers = 0; // this is a safeguard...I think this will eventually be changed a bit though
-        
+		int uncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
+		if(uncleanedTriggers < 0)
+			uncleanedTriggers = 0; // this is a safeguard...I think this will eventually be changed a bit though
+
 		// add them together but check min/maxes
-		int numToSpawn = Mathf.Min(MAX_TRIGGERS, nNewTriggers + nUncleanedTriggers);
+		int numToSpawn = Mathf.Min(MAX_TRIGGERS, newTriggers + uncleanedTriggers);
 		if(numToSpawn < 0){
 			numToSpawn = 0;
 			Debug.LogError("Number of triggers to spawn somehow < 0...");
@@ -213,46 +216,64 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	// new triggers that should spawn.
 	//---------------------------------------------------       
 	private int GetNewTriggerCount(){
-		int nNew = 0;
-		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+		int newTriggers = 0;
+		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
-		//There are missed play periods
-		if(numOfMissedPlayPeriod > 0){
-			//max of 2 missed play period will be accounted
-			if(numOfMissedPlayPeriod > 2)
-				numOfMissedPlayPeriod = 2;
+		if(!isTriggerTutDone){
+			int uncleanedTriggers= DataManager.Instance.GameData.Degradation.UncleanedTriggers;
 
-			//calculate num of new triggers
-			nNew = numOfMissedPlayPeriod * 3;
+			// only spawn one trigger if trigger tutorial is not done yet
+			if(uncleanedTriggers == 0){
+				newTriggers = 1;
+				degradationData.IsTriggerSpawned = true;
+			}
 
-			//update lastTriggerSpawnedPlayPeriod. Important that we update it here
-			//otherwise more triggers will be spawned if user return from pause
+			//need to update this time every time this function is called while trigger tutorial is not done yet otherwise
+			//logic gets messed up
 			degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
-
 		}
-        //No missed play periods. spawn triggers for Next Play Period
-        else{
-			DateTime now = LgDateTime.GetTimeNow();
-			DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastTriggerSpawnedPlayPeriod;
-			TimeSpan timeSinceLastTriggerSpawned = now - lastTriggerSpawnedPlayPeriod;
+		else{
 
-			//only spawn new trigger if time hasn't been rewind somehow
-			if(lastTriggerSpawnedPlayPeriod <= now){
-				//new play period need to refresh variable
-				if(timeSinceLastTriggerSpawned.TotalHours >= 12){
-					degradationData.IsTriggerSpawned = false;
-				}
+			int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
 
-				if(!degradationData.IsTriggerSpawned){
-					nNew = 3;
-					degradationData.IsTriggerSpawned = true;
-					degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+			//There are missed play periods
+			if(numOfMissedPlayPeriod > 0){
+				//max of 2 missed play period will be accounted
+				if(numOfMissedPlayPeriod > 2)
+					numOfMissedPlayPeriod = 2;
+
+				//calculate num of new triggers
+				newTriggers = numOfMissedPlayPeriod * 3;
+
+				//update lastTriggerSpawnedPlayPeriod. Important that we update it here
+				//otherwise more triggers will be spawned if user return from pause
+				degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+
+			}
+	        //No missed play periods. spawn triggers for Next Play Period
+	        else{
+				DateTime now = LgDateTime.GetTimeNow();
+				DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastTriggerSpawnedPlayPeriod;
+				TimeSpan timeSinceLastTriggerSpawned = now - lastTriggerSpawnedPlayPeriod;
+
+				//only spawn new trigger if time hasn't been rewind somehow
+				if(lastTriggerSpawnedPlayPeriod <= now){
+					//new play period need to refresh variable
+					if(timeSinceLastTriggerSpawned.TotalHours >= 12){
+						degradationData.IsTriggerSpawned = false;
+					}
+
+					if(!degradationData.IsTriggerSpawned){
+						newTriggers = 3;
+						degradationData.IsTriggerSpawned = true;
+						degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+					}
 				}
 			}
 		}
 
-		return nNew;
+		return newTriggers;
 	}
         
 	//---------------------------------------------------
@@ -287,11 +308,10 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			nMoodLoss += (int)(nSecondHours * (fSecondHoursPenalty * fMultiplier));
 
 		// actually change the pet's mood
-//		StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, -nMoodLoss, Vector3.zero);
 		StatsController.Instance.ChangeStats(deltaMood: -nMoodLoss);
         
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
-		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TIME_DECAY_TUT))
+		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TIME_DECAY_TUT))
 			StartCoroutine(MoodDegradTutorial());
 	}
 

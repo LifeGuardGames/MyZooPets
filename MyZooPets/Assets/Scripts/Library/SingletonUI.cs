@@ -3,36 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-//---------------------------------------------------
-// SingletonUI
-// This class is a singleton that is also a UI
-// manager.
-//---------------------------------------------------
-
+/// <summary>
+/// Singleton that is a UI manager.
+/// </summary>
 public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
-	//------------------ Pure Abstract ----------------------------
 	protected abstract void _OpenUI();		// when the UI manager is opened
 	protected abstract void _CloseUI();		// when the UI manager is closed
-	//------------------------------------------------------------- 
-	
-	// =======================Events========================
     public EventHandler<UIManagerEventArgs> OnTweenDone;   	// event that fires when the UI finishes a tween
 	public EventHandler<UIManagerEventArgs> OnManagerOpen;	// event that fires when the user enters or exits a UI mode
-	// =====================================================	
-	
-	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
-	public bool blockGUI;	
-	protected bool ShouldLockUI() {
-		return blockGUI;
-	}
+
+	// is this ui open?
+	private bool isOpen = false;
 
 	// the mode type of this manager
 	protected UIModeTypes eModeType = UIModeTypes.Generic;
 	
-	// is this ui open?
-	private bool bOpen = false;
+	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
+	public bool blockGUI;	
+
+	protected bool ShouldLockUI() {
+		return blockGUI;
+	}
+
+	/// <summary>
+	/// Determines whether this UI is opened.
+	/// </summary>
+	/// <returns><c>true</c> if this instance is open; otherwise, <c>false</c>.</returns>
 	public bool IsOpen() {
-		return bOpen;	
+		return isOpen;	
 	}
 	
 	void Start() {
@@ -40,14 +38,13 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	}
 	
 	protected virtual void _Start() {}
-	
-	//---------------------------------------------------
-	// OpenUI()
-	// When a button wants to open a given UI, this is
-	// what should be called.  From a high level, the UI
-	// manager locks clicks/modes, and then the child
-	// class does its unique thing via _OpenUI.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// When a button wants to open a given UI, this is
+	/// what should be called.  From a high level, the UI
+	/// manager locks clicks/modes, and then the child
+	/// class does its unique thing via _OpenUI.
+	/// </summary>
 	public void OpenUI() {
 		
 		// a ui is opening, so we need to lock things down
@@ -64,16 +61,15 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
             OnManagerOpen(this, args);		
 		
 		// the UI is now open
-		bOpen = true;
+		isOpen = true;
 		
 		_OpenUI();
 	}
-	
-	//---------------------------------------------------
-	// OnShow()
-	// Tween callback for when this UI finishes its 
-	// show tween.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Raises the show event. Tween callback for when this UI finishes its 
+	/// show tween.
+	/// </summary>
 	private void OnShow() {
 		// send callback
 		UIManagerEventArgs args = new UIManagerEventArgs();
@@ -81,12 +77,10 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
         if( OnTweenDone != null )
             OnTweenDone(this, args);			
 	}
-	
-	//---------------------------------------------------
-	// CloseUI()
-	// From a high level, releases all appropriate locks
-	// on the UI.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Closes the UI. From a high level, releases all appropriate locks on the UI.
+	/// </summary>
 	public void CloseUI() {
 		// you can't close a UI if there is UI tweening going on
 		if ( ClickManager.Instance.IsTweeningUI() )
@@ -105,16 +99,15 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
             OnManagerOpen(this, args);			
 		
 		// the ui is no longer open
-		bOpen = false;
+		isOpen = false;
 		
 		_CloseUI();
 	}
-	
-	//---------------------------------------------------
-	// GetClickLockExceptions()
-	// It's possible some managers may have click lock
-	// exceptions.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Gets the click lock exceptions.
+	/// </summary>
+	/// <returns>The click lock exceptions.</returns>
 	protected virtual List<ClickLockExceptions> GetClickLockExceptions() {
 		return null;
 	}

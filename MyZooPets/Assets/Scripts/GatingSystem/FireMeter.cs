@@ -45,6 +45,7 @@ public class FireMeter : MonoBehaviour {
 	//---------------------------------------------------		
 	public void StartFilling(){
 		SetFillStatus( true );
+		AudioManager.Instance.PlayClip("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -54,6 +55,7 @@ public class FireMeter : MonoBehaviour {
 	public void Empty(){
 		SetFillStatus( false );
 		slider.sliderValue = 0;
+		AudioManager.Instance.Stop("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -81,6 +83,8 @@ public class FireMeter : MonoBehaviour {
 			
 			// stop filling
 			SetFillStatus(false);
+
+			AudioManager.Instance.Stop("barAscend");
 		}
 	}
 	
@@ -90,7 +94,6 @@ public class FireMeter : MonoBehaviour {
 	//---------------------------------------------------	
 	public bool IsFull(){
 		bool bFull = slider.sliderValue >= 1;
-		
 		return bFull;
 	}
 }

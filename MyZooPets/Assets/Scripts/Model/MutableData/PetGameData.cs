@@ -1,8 +1,6 @@
 using UnityEngine;
+using System;
 
-//---------------------------------------------------
-// All mutable data
-//---------------------------------------------------
 public class PetGameData{
 	public MutableDataWellapad Wellapad {get; set;}
     public MutableDataPetInfo PetInfo {get; set;}
@@ -20,6 +18,8 @@ public class PetGameData{
     public MutableDataGatingProgress GatingProgress {get; set;}
     public MutableDataRunnerGame RunnerGame {get; set;}
     public MutableDataHighScore HighScore {get; set;}
+	public MutableDataMiniPets MiniPets {get; set;}
+	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	
     public PetGameData(){
         Init();
@@ -42,17 +42,20 @@ public class PetGameData{
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
+		MiniPets = new MutableDataMiniPets();
+		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
     }
-	
-	//---------------------------------------------------
-	// VersionCheck()
-	// This function is called after the game data has
-	// been loaded.  It will call individual game data
-	// version checks so that save data can properly
-	// be updated when the app is updated.
-	//---------------------------------------------------	
-	public void VersionCheck() {
-		GatingProgress.VersionCheck();
-		Calendar.VersionCheck();
+
+	/// <summary>
+	/// This function is called after the game data has
+	/// been loaded.  It will call individual game data
+	/// version checks so that save data can properly
+	/// be updated when the app is updated.
+	/// </summary>
+	public void VersionCheck(Version currentDataVersion) {
+		GatingProgress.VersionCheck(currentDataVersion);
+		Calendar.VersionCheck(currentDataVersion);
+		PetInfo.VersionCheck(currentDataVersion);
+		Tutorial.VersionCheck(currentDataVersion);
 	}
 }

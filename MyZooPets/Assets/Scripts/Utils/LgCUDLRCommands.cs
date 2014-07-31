@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Net;
+using fastJSON;
 
 /**
  * Example console commands for getting information about GameObjects
@@ -123,17 +124,33 @@ public static class LgCUDLRCommands {
     CUDLR.Console.Log("Time Now: " + LgDateTime.GetTimeNow());
   }
 
+  [CUDLR.Command("NextPP", "get next play period")]
+	public static void NextPP(){
+		CUDLR.Console.Log("Next play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
+	}
+
   [CUDLR.Command("MenuSceneData", "get MenuSceneData in json")]
   public static void MenuSceneData(){
     string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
     CUDLR.Console.Log(jsonString);
   }
 
-  [CUDLR.Command("GameData", "get data of pet in json")]
-  public static void GameData(){
+  [CUDLR.Command("GameDataJson", "get data of pet in json")]
+  public static void GameDataJson(){
     string jsonString = PlayerPrefs.GetString("GameData", "");
     CUDLR.Console.Log(jsonString);
   }
+
+  [CUDLR.Command("GameData", "get real time data")]
+	public static void GameData(){
+		try{
+			string jsonString = JSON.Instance.ToJSON(DataManager.Instance.GameData);
+			CUDLR.Console.Log(jsonString);
+		}
+		catch(NullReferenceException e){
+
+		}
+	}
 
 	[CUDLR.Command("TimeRemainTillNextPlayPeriod", "get time until next playperiod")]
 	public static void TotalTimeRemain(){
@@ -149,6 +166,12 @@ public static class LgCUDLRCommands {
 	[CUDLR.Command("GetPlayerPrefInt", "")]
 	public static void GetPlayerPrefInt(string[] args){
 		CUDLR.Console.Log(PlayerPrefs.GetInt(args[0]) + "");
+	}
+
+	[CUDLR.Command("GetFireBreaths", "")]
+	public static void GetFireBreaths(string[] args){
+		int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
+		CUDLR.Console.Log("Fire: " + numOfFireBreaths);
 	}
 
 }

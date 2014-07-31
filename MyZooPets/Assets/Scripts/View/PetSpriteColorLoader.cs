@@ -15,13 +15,19 @@ public class PetSpriteColorLoader : MonoBehaviour {
 				Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
 			}
 			else{
-				LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+				if(Application.loadedLevelName == "MenuScene"){
+					LoadAndSetColor(DataManager.Instance.MenuSceneData.PetColor);
+				}
+				else{
+//					LoadAndSetColor("PurpleLime");
+					LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+				}
 			}
 		}
 	}
 
 	private void LoadAndSetColor(string petColor){
-		Debug.Log(" Loading set sprites: " + spriteSetPrefix + petColor);
+		Debug.Log("Loading Colors...");
 		Sprite[] sprites = Resources.LoadAll<Sprite>(spriteSetPrefix + petColor);
 
 		// Loop through all the body parts that needs color assignment
@@ -31,6 +37,8 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			// Set their sprites according to index from metadata
 			spriteRenderer.sprite = sprites[atlasIndex];
 		}
+
+		Debug.Log("Loading Colors done...");
 	}
 
 	private void ClearDebug(){
@@ -43,7 +51,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 		// Debug has been flipped on, do changes
 		if(isDebug != isDebugInternal){
 			if(isDebug){
-				LoadAndSetColor("OrangeYellow");	// Sample
+				LoadAndSetColor("PurpleLime");	// Sample
 			}
 			else{
 				ClearDebug();

@@ -1,11 +1,17 @@
-MyZooPets
+LifeGuardGames StyleGuide
 =========
+Please use lgg.policymd file in the projects folder
 
+Useful git commands
+==========
 **Ignore changes to _Critical.xml**
 
-	git update-index --assume-unchanged MyZooPets/Assets/XML/Resources/Constants/_Critical.xml
-
+```
+git update-index --assume-unchanged MyZooPets/Assets/XML/Resources/Constants/_Critical.xml
+```
 
 **Undo ignore changes**
 
-	git update-index --no-assume-unchanged MyZooPets/Assets/XML/Resources/Constants/_Critical.xml
+```
+git update-index --no-assume-unchanged MyZooPets/Assets/XML/Resources/Constants/_Critical.xml
+```

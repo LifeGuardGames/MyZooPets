@@ -38,7 +38,6 @@ public class GameTutorialFocusInhaler : GameTutorial{
 			RemoveSpotlight();
 			RemoveFingerHint();
 			RemovePopup();
-
 			break;
 		}
 	}

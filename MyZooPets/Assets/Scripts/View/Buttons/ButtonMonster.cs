@@ -3,11 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// ButtonMonster
-// Button that is on a gating monster.
-//---------------------------------------------------
-
+/// <summary>
+/// Button monster.
+/// </summary>
 public class ButtonMonster : LgButtonHold{
 	// const variable for the name of the fire button
 	public const string FIRE_BUTTON = "FireButtonPanel";
@@ -34,97 +32,94 @@ public class ButtonMonster : LgButtonHold{
 
 		if(isActive && isCamMoving){
 			NGUITools.SetActive(goIcon, false);	// if the button is on and the camera is moving, deactivate it
-			Debug.Log("off");
 		}
 		else if(!isActive && !isCamMoving){
-			Debug.Log("On");
+
 			NGUITools.SetActive(goIcon, true);	// if the button is off and the camera isn't moving, activate it
 		}
 	}	
-	
-	//---------------------------------------------------
-	// _OnDestroy()
-	//---------------------------------------------------		
+		
 	protected override void _OnDestroy(){
 		if(CameraManager.Instance){
 			PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
 			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnPartitionChanged()
-	//---------------------------------------------------	
+
 	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
 		// if the partition is changing at all, destroy this UI
 		Destroy(parentPanel);
 	}
-	
-	//---------------------------------------------------
-	// SetGate()
-	//---------------------------------------------------	
+
 	public void SetGate(Gate gate){
 		this.gate = gate;
 	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	// When the user presses down on the fire meter button.
-	// This will begin some pet animation prep and start
-	// to fill the attached meter.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Processes the click.
+	/// When the user presses down on the fire meter button. This will begin
+	/// some pet animation prep and start to fill the attached meter
+	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
-		
 		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
+		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		
 		// if the pet is currently busy, forgetaboutit
 		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
 			return;
-		
-		isLegal = true;
-		
-		// get the gate for this monster
-		Gate scriptGate = gate;		
-		
-		// kick off the attack script
-		int damage = GetDamage();
-		scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-		scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
-		
-		// turn the fire meter on
-		scriptFireMeter.StartFilling();
+
+		// if can breathe fire, attack the gate!!
+		if(canBreathFire){
+			isLegal = true;
+			
+			// get the gate for this monster
+			Gate scriptGate = gate;		
+			
+			// kick off the attack script
+			int damage = GetDamage();
+			scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
+			scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
+			
+			// turn the fire meter on
+			scriptFireMeter.StartFilling();
+		}
+		// else can't breathe fire. explain why
+		else{
+			if(!TutorialManager.Instance.IsTutorialActive())
+				GatingManager.Instance.ShowNoFireNotification();
+		}
 	}
-	
-	//---------------------------------------------------
-	// GetDamage()
-	// Returns the amount of damage the pet will currently
-	// attack with.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the damage the pet will currenlty attack with.
+	/// </summary>
+	/// <returns>The damage.</returns>
 	private int GetDamage(){
 		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
 		int damage = curSkill.DamagePoint;
 		return damage;
 	}
-	
-	//---------------------------------------------------
-	// ButtonReleased()
-	//---------------------------------------------------	
+
 	protected override void ButtonReleased(){
 		if(!isLegal){
-			Debug.Log("Something going wrong with the fire button.  Aborting");
+//			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
-		
+
 		if(scriptFireMeter.IsFull()){
 			// if the meter was full on release, complete the attack!
-			scriptAttack.FinishAttack();			
+//			scriptAttack.FinishAttack();
+			scriptAttack.Attack();
 			
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
 			int damage = GetDamage();
-			if(gate.GetGateHP() <= damage || !DataManager.Instance.GameData.PetInfo.IsInfiniteFire())
-				Destroy(parentPanel);		
+			if(gate.GetGateHP() <= damage)
+				Destroy(parentPanel);	
+			else
+				//disable button
+				FireButtonUIManager.Instance.TurnFireButtonEffectOff();
 		}
 		else{
 			// if the meter was not full, cancel the attack

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Attack gate. Script put on a pet when it is ready to attack a gate
 /// </summary>
-public class AttackGate : MonoBehaviour{
+public class AttackGate : Singleton<AttackGate>{
 
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
@@ -17,31 +17,38 @@ public class AttackGate : MonoBehaviour{
 		this.damage = damage;
 		
 		// listen for anim complete message on pet
-		PetAnimator.OnAnimDone += DoneAnimating;
-		FireMeter.OnFireReady += Attack;
+		PetAnimator.OnBreathEnded += DoneAnimating;
 		
 		// kick off attack animation
 		this.attacker = attacker;
 	}
 
-	public void FinishAttack(){
-		StartCoroutine(attacker.FinishFire());	
+	void OnDestroy(){
+		// stop listening
+		PetAnimator.OnBreathEnded -= DoneAnimating;
 	}
-	
+
+	/// <summary>
+	/// Cancel attack so clean up.
+	/// </summary>
 	public void Cancel(){
 		attacker.CancelFire();
+	
+		FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+
+		//release lock if fire breathing lock was called previously
+		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
+		if(currentLockMode == UIModeTypes.FireBreathing)
+			ClickManager.Instance.ReleaseLock();
 		
 		Destroy(this);
 	}
-
-	void OnDestroy(){
-		// stop listening
-		PetAnimator.OnAnimDone -= DoneAnimating;	
-	}
-
-	private void Attack(object sender, EventArgs args){
+	
+	public void Attack(){ 
 		attacker.BreathFire();
-		FireMeter.OnFireReady -= Attack;
+
+		FireButtonUIManager.Instance.fireButtonCollider.enabled = false;
+		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 
 	/// <summary>
@@ -49,34 +56,33 @@ public class AttackGate : MonoBehaviour{
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void DoneAnimating(object sender, PetAnimArgs args){
-		if(args.GetAnimState() == PetAnimStates.BreathingFire){
-			StartCoroutine(DoneAttacking());
-		}
+	private void DoneAnimating(object sender, EventArgs args){
+		StartCoroutine(DoneAttacking());
 	}
 	
 	/// <summary>
 	/// Pet done attacking. 
 	/// </summary> 
 	private IEnumerator DoneAttacking(){
-		// damage the gate
-		bool isDestroyed = gateTarget.GateDamaged(damage);
-		
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);
-		
+
+		// damage the gate
+		bool isDestroyed = gateTarget.DamageGate(damage);
+
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted("FightMonster");
 		
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
-		
-		// move the player because the gate just got pushed back (if it still exists)
-		if(gateTarget != null && !isDestroyed){
-			Vector3 vNewLoc = gateTarget.GetPlayerPosition();
-			PetMovement.Instance.MovePet(vNewLoc);
-		}
-		
+
+		//make button clickable again
+		if(FireButtonUIManager.Instance)
+			FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+
+		// release fire breathing lock
+		ClickManager.Instance.ReleaseLock();
+
 		// then we're done -- destroy ourselves
 		Destroy(this);		
 	}

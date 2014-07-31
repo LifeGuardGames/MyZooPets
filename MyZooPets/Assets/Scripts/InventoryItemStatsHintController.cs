@@ -29,6 +29,9 @@ public class InventoryItemStatsHintController : MonoBehaviour{
                 case StatType.Health:
                     spriteName = "iconHeart";
                 break;
+				case StatType.Fire:
+					spriteName = "iconFire";
+				break;
             }
 
             //instantiate the prefab

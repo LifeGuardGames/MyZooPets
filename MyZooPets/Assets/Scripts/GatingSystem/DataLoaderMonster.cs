@@ -3,68 +3,34 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DataMonsterLoader
-// Loads monster data from xml.
-//---------------------------------------------------
+/// <summary>
+/// Data loader monster.
+/// Hashtable -- Key: MonsterID, Value: ImmutableDataMonster
+/// </summary>
+public class DataLoaderMonster : XMLLoaderGeneric<DataLoaderMonster>{
 
-public class DataLoaderMonster{
-
-	private static Dictionary<string, ImmutableDataMonster> dictData;
-
-	// Get monster with incoming id
+	/// <summary>
+	/// Gets Monster data.
+	/// </summary>
+	/// <returns>The data.</returns>
+	/// <param name="id">Identifier.</param>
 	public static ImmutableDataMonster GetData(string id){
-		if(dictData == null)
-			SetupData();
-		
-		ImmutableDataMonster data = null;
+		instance.InitXMLLoader();
 
-		if(dictData.ContainsKey(id))
-			data = dictData[id];
-		else
-			Debug.LogError("No such monster with id " + id + " -- creating one with default values");
-
-		return data;
+		return instance.GetData<ImmutableDataMonster>(id);
 	}
 
-	public static void SetupData(){
-		dictData = new Dictionary<string, ImmutableDataMonster>();
-		
-		//Load all data xml files
-		UnityEngine.Object[] files = Resources.LoadAll("Monsters", typeof(TextAsset));
-		foreach(TextAsset file in files){
-			string xmlString = file.text;
-			
-			// error message
-			string strErrorFile = "Error in file " + file.name;			
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+		ImmutableDataMonster data = new ImmutableDataMonster(id, xmlNode, errorMessage);
 
-			//Create XMLParser instance
-			XMLParser xmlParser = new XMLParser(xmlString);
+		if(hashData.ContainsKey(id))
+			Debug.LogError(errorMessage + "Duplicate keys!");
+		else
+			hashData.Add(id, data);	
+	}
 
-			//Call the parser to build the IXMLNode objects
-			XMLElement xmlElement = xmlParser.Parse();
-
-			//Go through all child node of xmlElement (the parent of the file)
-			for(int i=0; i<xmlElement.Children.Count; i++){
-				IXMLNode childNode = xmlElement.Children[i];
-
-				//Get id
-				Hashtable hashAttr = XMLUtils.GetAttributes(childNode);
-				string id = (string)hashAttr["ID"];
-				string strError = strErrorFile + "(" + id + "): ";
-
-				// Get  properties from xml node
-				Hashtable hashElements = XMLUtils.GetChildren(childNode);
-				
-				ImmutableDataMonster data = new ImmutableDataMonster(id, hashElements, strError);
-				
-				// store the data
-				if(dictData.ContainsKey(id))
-					Debug.LogError(strError + "Duplicate keys!");
-				else
-					dictData.Add(id, data);		
-			}
-		}
+	protected override void InitXMLLoader(){
+		xmlFileFolderPath = "Monsters";
 	}
 }
 

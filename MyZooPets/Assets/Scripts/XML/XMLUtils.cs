@@ -3,12 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//Util class to interface with XMLParser.cs
+/// <summary>
+/// Util class to interface with XMLParser.cs
+/// </summary>
 public static class XMLUtils{
-
-    /*
-        Desc: This returns all the attributes of a node as a hashtable
-    */
+	
+	/// <summary>
+	/// This returns all the attriutes of a node as a hashtable
+	/// </summary>
+	/// <returns>The attributes.</returns>
+	/// <param name="node">Node.</param>
     public static Hashtable GetAttributes(IXMLNode node){
         Hashtable attributesHash = new Hashtable(); //Key: attribute name, Value: attribute value
 
@@ -20,11 +24,13 @@ public static class XMLUtils{
         }
         return attributesHash;
     }
-
-    /*
-        Desc: This returns the children of an xml node as a hashtable. 
-        DO NOT USE THIS if there can be more than one child with the same tag name.
-    */
+	
+	/// <summary>
+	/// This returns the children of an xml node as a hashtable. 
+	/// DO NOT USE THIS if there can be more than one child with the same tag name.
+	/// </summary>
+	/// <returns>The children.</returns>
+	/// <param name="node">Node.</param>
     public static Hashtable GetChildren(IXMLNode node){
         Hashtable childrenHash = new Hashtable(); //Key: name of the xml node, Value: xml node
 
@@ -35,11 +41,13 @@ public static class XMLUtils{
         }
         return childrenHash;
     }
-
-    /*
-        Desc: This returns the children of a xml node as a list. ONLY use this if 
-        the children all share the same tag name
-    */
+	
+	/// <summary>
+	/// This returns the children of a xml node as a list. ONLY use this if 
+	/// the children all share the same tag name
+	/// </summary>
+	/// <returns>The children list.</returns>
+	/// <param name="node">Node.</param>
     public static List<IXMLNode> GetChildrenList(IXMLNode node){
         List<IXMLNode> childrenList = new List<IXMLNode>();
 
@@ -52,6 +60,11 @@ public static class XMLUtils{
     }
 
     //get the string value from a xml node. Default to empty string
+	/// <summary>
+	/// Gets the string value from a xml node. Default to empty string
+	/// </summary>
+	/// <returns>The string.</returns>
+	/// <param name="node">Node.</param>
     public static string GetString(IXMLNode node){
         return GetString(node, "");
     }
@@ -69,12 +82,23 @@ public static class XMLUtils{
 		
         return retVal;
     }
-
-    //get int value from a xml node. default to 0
+	
+	/// <summary>
+	/// Gets the int value from a xml node. default to 0
+	/// </summary>
+	/// <returns>The int.</returns>
+	/// <param name="node">Node.</param>
     public static int GetInt(IXMLNode node){
         return GetInt(node, 0);
     }
 
+	/// <summary>
+	/// Gets the int value from a xml node.
+	/// </summary>
+	/// <returns>The int.</returns>
+	/// <param name="node">Node.</param>
+	/// <param name="defaultValue">Default value.</param>
+	/// <param name="strError">String error.</param>
     public static int GetInt(IXMLNode node, int defaultValue, string strError = null){
         int retVal = defaultValue;
         if(node != null){
@@ -88,11 +112,23 @@ public static class XMLUtils{
 		
         return retVal;
     }
-	
+
+	/// <summary>
+	/// Gets the float value from xml node. default to 0
+	/// </summary>
+	/// <returns>The float.</returns>
+	/// <param name="node">Node.</param>
 	public static float GetFloat(IXMLNode node) {
 		return GetFloat(node, 0);		
 	}
-	
+
+	/// <summary>
+	/// Gets the float value from xml node.
+	/// </summary>
+	/// <returns>The float.</returns>
+	/// <param name="node">Node.</param>
+	/// <param name="defaultValue">Default value.</param>
+	/// <param name="strError">String error.</param>
 	public static float GetFloat(IXMLNode node, float defaultValue, string strError = null){
 		float retVal = defaultValue;
         if(node != null){
@@ -107,6 +143,12 @@ public static class XMLUtils{
         return retVal;		
 	}
 
+	/// <summary>
+	/// Gets the bool value from xml node.
+	/// </summary>
+	/// <returns><c>true</c>, if bool was gotten, <c>false</c> otherwise.</returns>
+	/// <param name="node">Node.</param>
+	/// <param name="defaultValue">If set to <c>true</c> default value.</param>
     public static bool GetBool(IXMLNode node, bool defaultValue = true){
         bool retVal = defaultValue;
         if(node != null){

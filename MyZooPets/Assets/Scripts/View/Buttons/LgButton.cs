@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// LgButton (Lifeguard Button)
-// Generic button class that other buttons derive from.
-// This class handles high level input restrictions
-// and makes sure that the button can process a click.
-//---------------------------------------------------
-
+/// <summary>
+/// Lg button (Lifeguard Button)
+/// Generic button class that other buttons derive from.
+/// This class handles high level input restrictions
+/// and makes sure that the button can process a click.
+/// </summary>
 public class LgButton : MonoBehaviour{
 	
 	//=======================Events========================
@@ -17,110 +16,97 @@ public class LgButton : MonoBehaviour{
 	//=====================================================		
 	
 	// is this button a sprite (2D)?  if it is, it is clicked a little differently than a 3d object
-	public bool bSprite;
-	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
-	public string strSoundProcess; // the sound resource this button plays when it is clicked
+//	public bool bSprite;
+//	public UIModeTypes eMode = UIModeTypes.NotInited; // the mode that this button will check for to make sure it can be clicked
+//
+//
+//	public string strSoundProcess; // the sound resource this button plays when it is clicked
+
+//	public bool bCheckClickManager = true;
+
+	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
 	public string buttonName; //the name that will be used for analytics event if not empty
-
-	// ah...this boolean is for buttons that are on a UI that do not care about checking the click manager.
-	// however, as soon as we have UIs that open other UIs, we will need to implement a more real system by
-	// which buttons have a mode, opening a UI pushes a mode (and closing a UI pops a mode) and this class should
-	// actually check the button's mode against the latest mode in the queue.
-	public bool bCheckClickManager = true;
-
-	public UIModeTypes GetMode(){
-		return eMode;	
+	public string buttonSound;
+	public bool isCheckingClickManager;
+	public bool isSprite;
+	
+	public List<UIModeTypes> GetModes(){
+		return modeTypes;
 	}
 
 	public string GetProcessSound(){
-		return strSoundProcess;	
+		return buttonSound;	
 	}
 	
 	private bool ShouldCheckClickManager(){
-		return bCheckClickManager;	
+		return isCheckingClickManager;	
 	}
-
-	// if button is clicked when mode is locked, play a negative feedback sound
-	// public bool playNotProcessSound = false;
 	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
 	void Start(){
-		// do a check for a valid mode
-		if(eMode == UIModeTypes.NotInited){
-			//Debug.LogError("LgButton(" + gameObject.name + ") does not have a proper mode!", gameObject);
-			eMode = UIModeTypes.None;	
+		for(int i=0; i<modeTypes.Count; i++){
+			if(modeTypes[i] == UIModeTypes.NotInited)
+				modeTypes[i] = UIModeTypes.None;
 		}
+
 		
 		_Start();
 	}
-
-	protected virtual void _Start(){
-	}
 	
-	//---------------------------------------------------
-	// OnDestroy()
-	//---------------------------------------------------		
 	void OnDestroy(){
 		_OnDestroy();
-	}
-
-	protected virtual void _OnDestroy(){
 	}
 	
 	void Awake(){
 		_Awake();	
 	}
 
-	protected virtual void _Awake(){
-	}
-	
-	//---------------------------------------------------
-	// OnClick()
-	// 2D sprite buttons will receive this event, which
-	// will click the button.  At the moment 3D objects
-	// also happen to receive this event, but it's possible
-	// they won't in the future, so this is for 2D only.
-	//---------------------------------------------------	
+	/// <summary>
+	/// Raises the click event.
+	/// 2D sprite buttons will receive this event, which
+	/// will click the button.  At the moment 3D objects
+	/// also happen to receive this event, but it's possible
+	/// they won't in the future, so this is for 2D only.
+	/// </summary>
 	void OnClick(){
-		if(enabled && bSprite)
+		if(enabled && isSprite)
 			ButtonClicked();
 	}
 
-	//---------------------------------------------------
-	// OnPress()
-	// 2D sprite buttons - Play the sound when the button is pressed
-	//---------------------------------------------------	
-	void OnPress(bool bPressed){
-		if(bPressed){
+	/// <summary>
+	/// Raises the press event.
+	/// 2D sprite buttons - Play the sound when the button is pressed
+	/// </summary>
+	/// <param name="bPressed">If set to <c>true</c> is pressed.</param>
+	void OnPress(bool isPressed){
+		if(isPressed){
 			CheckSoundToPlay();
 		}
 	}
-	
-	//---------------------------------------------------
-	// OnTap()
-	// 3D gameObjects will receive this event.
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Raises the tap event. 
+	/// 3D gameObjects will receive this event.
+	/// </summary>
+	/// <param name="gesture">Gesture.</param>
 	void OnTap(TapGesture gesture){ 
 		ButtonClicked();
 		CheckSoundToPlay();
 	}
 
-	//---------------------------------------------------
-	// OnFingerStationary()
-	// 3D objects - Play the sound when the object is pressed down
-	//---------------------------------------------------	
+	/// <summary>
+	/// Raises the finger stationary event.
+	/// 3D objects - Play the sound when the object is pressed down
+	/// </summary>
+	/// <param name="e">E.</param>
 	void OnFingerStationary(FingerMotionEvent e){
 		if(e.Phase == FingerMotionPhase.Started){
 			CheckSoundToPlay();
 		}
 	}
 	
-	//---------------------------------------------------
-	// ButtonClicked()
-	// When the button is actually clicked.
-	//---------------------------------------------------	
+	/// <summary>
+	/// When button is actually clicked.
+	/// </summary>
 	public void ButtonClicked(){
 		// if the button needs to check the click manager before proceding, do so and return if necessary
 		if(ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
@@ -141,9 +127,33 @@ public class LgButton : MonoBehaviour{
 		ProcessClick();
 	}
 
+	protected virtual void _Start(){}
+	protected virtual void _OnDestroy(){}
+	protected virtual void _Awake(){}
+
+	/// <summary>
+	/// Processes the click.
+	/// Children should implement this. This function will only be called if the
+	/// button is allowed to process the click (i.e., UI is not locked, etc).
+	/// </summary>
+	protected virtual void ProcessClick(){
+		Analytics.Instance.LgButtonClicked(buttonName);
+	}
+
+	protected void PlayNotProcessSound(){
+		string sound = "buttonDontClick";
+		
+		if(!string.IsNullOrEmpty(sound))
+			AudioManager.Instance.PlayClip(sound);
+	}
+
+	/// <summary>
+	/// Checks the sound to play.
+	/// Play click sound or negative sound
+	/// </summary>
 	private void CheckSoundToPlay(){
 		if(ShouldCheckClickManager() && !ClickManager.Instance.CanRespondToTap(gameObject)){
-			if(bSprite){
+			if(isSprite){
 				// Play the bad sound
 				PlayNotProcessSound();
 			}
@@ -152,7 +162,7 @@ public class LgButton : MonoBehaviour{
 		
 		if(ShouldCheckClickManager() == false && TutorialManager.Instance && 
 			!TutorialManager.Instance.CanProcess(gameObject)){
-			if(bSprite){
+			if(isSprite){
 				// Play the bad sound
 				PlayNotProcessSound();
 			}
@@ -170,22 +180,5 @@ public class LgButton : MonoBehaviour{
 			AudioManager.Instance.PlayClip(strSound);	
 	}
 
-	protected void PlayNotProcessSound(){
-		string sound = "buttonDontClick";
 
-		if(!string.IsNullOrEmpty(sound))
-			AudioManager.Instance.PlayClip(sound);
-	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	// Children should implement this.  This function will
-	// only be called if the button is allowed to process
-	// the click (i.e., UI is not locked, etc).
-	//---------------------------------------------------	
-	protected virtual void ProcessClick(){
-		Analytics.Instance.LgButtonClicked(buttonName);
-		
-		Debug.LogError("Children should implement ProcessClick!");	
-	}
 }

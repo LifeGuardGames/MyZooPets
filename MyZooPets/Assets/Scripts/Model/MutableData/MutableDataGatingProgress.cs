@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,7 +8,8 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress{
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
-
+	public DateTime LastRecurringGateSpawnedPlayPeriod {get; set;}
+	
 	/// <summary>
 	/// Determines whether incoming gate is active.
 	/// </summary>
@@ -37,7 +39,7 @@ public class MutableDataGatingProgress{
 	public void RefreshGate(ImmutableDataGate data){
 		string gateID = data.GetGateID();
 		if(GatingProgress.ContainsKey(gateID)){
-			int hp = data.GetMonster().GetMonsterHealth();
+			int hp = data.GetMonster().MonsterHealth;
 			GatingProgress[gateID] = hp;
 		}
 		else
@@ -77,16 +79,64 @@ public class MutableDataGatingProgress{
 
 	//Populate with dummy data
 	private void Init(){
-		GatingProgress = new Dictionary<string, int>();		
+		GatingProgress = new Dictionary<string, int>();
+		LastRecurringGateSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 		
 		// load all our gating data from xml
 		LoadFromXML();		
 	}
 	
-	public void VersionCheck(){
+	public void VersionCheck(Version currentDataVersion){
+		Version version131 = new Version("1.3.1");
+
+		if(currentDataVersion < version131){
+			ConvertGateHP();	
+		}
 		// when we are doing a version check, just load the data from xml again.
 		// any existing data will be left alone, and new data will be inserted into our dictionary.
 		LoadFromXML();	
+	}
+
+	/// <summary>
+	/// Converts the gate HP.
+	/// New game design change. Monster health is now symbolize by the number of heads, 
+	/// so need to convert from the old health value into the number of heads the monster
+	/// have left
+	/// </summary>
+	private void ConvertGateHP(){
+
+		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3", "Gate_Yard_R"};
+		int[] oldFullHealths = new int[]{10, 40, 80, 5};
+
+		for(int index=0; index < convertingGateIDs.Length; index++){
+			string gateID = convertingGateIDs[index];
+
+			if(GatingProgress.ContainsKey(gateID)){
+				int oldFullHealth = oldFullHealths[index];
+				ImmutableDataGate gate = DataLoaderGate.GetData(gateID);
+				ImmutableDataMonster monster = gate.GetMonster();
+				int newFullHealth = monster.MonsterHealth;
+
+				int oldCurrentHealth = GatingProgress[gateID];
+
+				//if data is already in the right scale don't convert it
+				//don't need to convert if the gate is opened already
+				if(oldCurrentHealth != newFullHealth && oldCurrentHealth != 0){
+					//use this to convert the old health data to new health data
+					int conversionFactor = oldFullHealth / newFullHealth;
+					int newCurrentHealth = oldCurrentHealth / conversionFactor;
+
+					//if newCurrentHealth is 0 we set it to 1 so it doesn't look like
+					//the monster all of the suden disappeared
+					if(newCurrentHealth == 0)
+						newCurrentHealth = 1;
+
+					Debug.Log(newCurrentHealth);
+					
+					GatingProgress[gateID] = newCurrentHealth;
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -95,11 +145,11 @@ public class MutableDataGatingProgress{
 	/// </summary>
 	private void LoadFromXML(){
 		// init the data by filling the dictionary with xml data
-		Dictionary<string, ImmutableDataGate> dictGates = DataLoaderGate.GetAllData();
-		foreach(KeyValuePair<string, ImmutableDataGate> entry in dictGates){
-			string gateID = entry.Key;
-			ImmutableDataGate dataGate = entry.Value;
-			int hp = dataGate.GetMonster().GetMonsterHealth();
+		List<ImmutableDataGate> gates = DataLoaderGate.GetAllData();
+		foreach(ImmutableDataGate gate in gates){
+			string gateID = gate.GetGateID();
+
+			int hp = gate.GetMonster().MonsterHealth;
 			
 			// maps gate key to monster's max hp (i.e. no progress)
 			// don't map it if it already exists; it means that the data for that key was already loaded and contains mutable save data

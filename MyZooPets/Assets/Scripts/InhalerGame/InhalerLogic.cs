@@ -31,7 +31,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	}
 
 	public bool IsTutorialCompleted{
-		get{ return DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_INHALER);}
+		get{ return DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);}
 	}
 
 	//True: the step that the user is currently on is correct, False: wrong step
@@ -40,20 +40,20 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		return retVal; 
 	}
 
+	public bool IsDoneWithGame(){
+		return currentStep == RESCUE_NUM_STEPS;
+	}
+
 	//Use this function to move on to the next step
 	public void NextStep(){
 		if(IsDoneWithGame())
 			GameDone();
 		else{
 			currentStep++;
-			
+
 			if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
 				OnNextStep(this, EventArgs.Empty);
 		}
-//		//Send analytics event
-//		Analytics.Instance.InhalerSwipeSequences(Analytics.STEP_STATUS_COMPLETE, currentStep);
-
-
 	}
 
 	public void ResetGame(){
@@ -88,11 +88,5 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();
 	}	
 	
-	//---------------------------------------------------       
-	// IsDoneWithGame()
-	// True: done with the game , False: have more steps to go
-	//---------------------------------------------------       
-	private bool IsDoneWithGame(){
-		return currentStep == RESCUE_NUM_STEPS;
-	}
+
 }

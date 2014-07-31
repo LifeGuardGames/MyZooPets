@@ -23,16 +23,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 			
 	protected override void _End(bool isFinished){
+
 	}
-			
+	
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-				// actually place the tutorial trigger dust behind the smoke monster now, even though this is for a later
-				// tutorial...it's so the user can actually see it with the smoke monster
-			DegradationUIManager.Instance.PlaceTutorialTrigger();
-			
-				// begin the panning "cut scene"
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());
 			break;
 			
@@ -42,7 +38,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			break;
 
 		case 2:
-			SetupSwipeListener();
+			FocusOnRightArrow();
 			break;
 		}
 	}
@@ -150,32 +146,32 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	/// Creates a giant collider on the screen that listens to the swipe event.
 	/// This is an easier way to do swipe during tutorial
 	/// </summary>
-	private void SetupSwipeListener(){
-		//check for right anchor
-		GameObject anchorRight = GameObject.Find("Anchor-Right");
-		string tutKey = GetKey() + "_" + GetStep();
-
-		if(anchorRight == null)
-			Debug.LogError(tutKey + " Needs anchor right");
-
-		//spawn the giant collider
-		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
-		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
-		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
-
-		//show finger hint
-		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut");
-
-		// show message
-		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-		string tutMessage = Localization.Localize(tutKey);
-		Hashtable option = new Hashtable();
-
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
-	}
+//	private void SetupSwipeListener(){
+//		//check for right anchor
+//		GameObject anchorRight = GameObject.Find("Anchor-Right");
+//		string tutKey = GetKey() + "_" + GetStep();
+//
+//		if(anchorRight == null)
+//			Debug.LogError(tutKey + " Needs anchor right");
+//
+//		//spawn the giant collider
+//		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
+//		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
+//		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
+//
+//		//show finger hint
+//		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
+//
+//		// show message
+//		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
+//		string tutMessage = Localization.Localize(tutKey);
+//		Hashtable option = new Hashtable();
+//
+//		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+//		option.Add(TutorialPopupFields.Message, tutMessage);
+//
+//		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+//	}
 
 	private void OnTutorialSwiped(object sender, EventArgs args){
 		//clean up
@@ -185,6 +181,40 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			GameObject.Destroy(swipeGO);
 
 		//advance in tutorial
+		Advance();
+	}
+
+	private void FocusOnRightArrow(){
+		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();
+		string tutKey = GetKey() + "_" + GetStep();
+
+		// begin listening for when the inhaler is clicked
+		LgButton button = rightArrowObject.GetComponent<LgButton>();
+		button.OnProcessed += RightArrowClicked;
+		
+		// the inhaler is the only object that can be clicked
+		AddToProcessList(rightArrowObject);
+
+		RoomArrowsUIManager.Instance.ShowRightArrow();
+		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
+
+		// show message
+		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
+		string tutMessage = Localization.Localize(tutKey);
+		Hashtable option = new Hashtable();
+		
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+		
+		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+	}
+
+	private void RightArrowClicked(object sender, EventArgs args){
+		LgButton button = (LgButton)sender;
+		button.OnProcessed -= RightArrowClicked;
+
+		RemoveFingerHint();
+		RemovePopup();
 		Advance();
 	}
 }

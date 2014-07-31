@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //---------------------------------------------------
@@ -10,8 +10,8 @@ using System.Collections;
 
 public abstract class Gate : MonoBehaviour{
 	// ----- Pure Abstract -------------------------
-	protected abstract void OnGateDamaged(int nDamage);	// when a gate is damaged
-	protected abstract void OnGateDestroyed();			// what to do when this gate is destroyed
+	protected abstract void GateDamaged(int nDamage);	// when a gate is damaged
+	protected abstract void GateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
 	public float playerBuffer;	// the % in screen space that the player should walk in front of the gate when approaching it
@@ -28,55 +28,57 @@ public abstract class Gate : MonoBehaviour{
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
 		return data;
 	}
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
+
 	public virtual void Start(){}
 
+	/// <summary>
+	/// Init the specified id, monster and maxScreenSpace.
+	/// </summary>
+	/// <param name="id">Identifier.</param>
+	/// <param name="monster">Monster.</param>
+	/// <param name="maxScreenSpace">Max screen space.</param>
 	public void Init(string id, ImmutableDataMonster monster, float maxScreenSpace){
 		if(string.IsNullOrEmpty(gateID))
 			gateID = id;
 		else
 			Debug.LogError("Something trying to set id on gate twice " + gateID);
 		
-		gateResource = monster.GetResourceKey();
+		gateResource = monster.ResourceKey;
 
 		this.maxScreenSpace = maxScreenSpace;
 		
-		// since this gate is getting created, if it is guarding an item box, create the box
-		ImmutableDataGate dataGate = GetGateData();
-		string itemBoxID = dataGate.GetItemBoxID();
-		if(!string.IsNullOrEmpty(itemBoxID)){
-			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
-			GameObject goBox = Instantiate(goResource, 
-			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
-			                               Quaternion.identity) as GameObject;
-			goBox = goBox.FindInChildren("Button");
-			
-			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
-			if(scriptItemBox)
-				scriptItemBox.SetItemBoxID(itemBoxID);
-			else
-				Debug.LogError("No logic script on box", goBox);
-		}		
+//		// since this gate is getting created, if it is guarding an item box, create the box
+//		ImmutableDataGate dataGate = GetGateData();
+//		string itemBoxID = dataGate.GetItemBoxID();
+//		if(!string.IsNullOrEmpty(itemBoxID)){
+//			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
+//			GameObject goBox = Instantiate(goResource, 
+//			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
+//			                               Quaternion.identity) as GameObject;
+//			goBox = goBox.FindInChildren("Button");
+//			
+//			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
+//			if(scriptItemBox)
+//				scriptItemBox.SetItemBoxID(itemBoxID);
+//			else
+//				Debug.LogError("No logic script on box", goBox);
+//		}		
 	}
-
-	
-	//---------------------------------------------------
-	// GreetPlayer()
-	// For when the player enters a room with this gate.
-	//---------------------------------------------------		
+			
+	/// <summary>
+	/// Greets the player.
+	/// For when the player enters a room with this gate.
+	/// </summary>
 	public void GreetPlayer(){
 		// play a sound
 		AudioManager.Instance.PlayClip("EnterSmokeMonster");
 	}
-	
-	//---------------------------------------------------
-	// GetPlayerPosition()
-	// Returns where the pet should be standing when
-	// approaching the gate.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Gets the player position.
+	/// Returns where the pet should be standing when approching the gate.
+	/// </summary>
+	/// <returns>The player position.</returns>
 	public Vector3 GetPlayerPosition(){
 		// get the screen location of the gate and find out where the player should be with the buffer
 		Vector3 idealPos = GetIdealPosition();
@@ -95,29 +97,28 @@ public abstract class Gate : MonoBehaviour{
 		
 		return newWorldLoc;		
 	}
-	
-	//---------------------------------------------------
-	// GetIdealPosition()
-	// Returns the ideal position of this gate.  Note that
-	// this may not always be the transform position in
-	// some children.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the ideal position.
+	/// Returns the ideal position of this gate.  Note that
+	/// this may not always be the transform position in
+	/// some children.
+	/// </summary>
+	/// <returns>The ideal position.</returns>
 	protected virtual Vector3 GetIdealPosition(){
 		return transform.position;	
 	}
-	
-	//---------------------------------------------------
-	// GetGateHP()
-	//---------------------------------------------------		
+
 	public int GetGateHP(){
 		return DataManager.Instance.GameData.GatingProgress.GetGateHP(gateID);
 	}
-	
-	//---------------------------------------------------
-	// DamageGate()
-	// The user has done something to damage the gate.
-	//---------------------------------------------------	
-	public bool GateDamaged(int damage){
+
+	/// <summary>
+	/// Damages the gate.
+	/// </summary>
+	/// <returns><c>true</c>, if gate is destroyed, <c>false</c> otherwise.</returns>
+	/// <param name="damage">Damage.</param>
+	public bool DamageGate(int damage){
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
 		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
 		
@@ -125,7 +126,7 @@ public abstract class Gate : MonoBehaviour{
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
-		OnGateDamaged(damage);
+		GateDamaged(damage);
 		
 		if(isDestroyed){
 			Analytics.Instance.GateUnlocked(gateID);	
@@ -133,73 +134,73 @@ public abstract class Gate : MonoBehaviour{
 		}
 		
 		return isDestroyed;
-	}
-	
-	//---------------------------------------------------
-	// DamageGate_SaveData()
-	// Damages a gate with strID for nDamage, and handles
-	// the save data side of things.  This used to be in
-	// the actual save data class for gates, but was moved
-	// out to here.
-	//---------------------------------------------------		
-//	public bool DamageGateSaveData(string gateID, int damage){
-//		// check to make sure the gate exists
-//		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(gateID)){
-//			Debug.LogError("Something trying to access a non-existant gate " + gateID);
-//			return true;
-//		}
-//		
-//		// check to make sure the gate is active
-//		if(!DataManager.Instance.GameData.GatingProgress.IsGateActive(gateID)){
-//			Debug.LogError("Something trying to damage an inactive gate " + gateID);
-//			return true;
-//		}
-//		
-//		// otherwise, calculate and save the new hp
-//		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-//		hp = Mathf.Max(hp - damage, 0);
-//		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
-//		
-//		// then return whether or not the gate has been destroyed
-//		bool isDestroyed = hp <= 0;
-//
-//		return isDestroyed;
-//	}	
-	
-	//---------------------------------------------------
-	// PrepGateDestruction()
-	// Starts the process of removing this gate.
-	//---------------------------------------------------		
+	} 
+
+	/// <summary>
+	/// Preps the gate destruction.
+	/// </summary>
 	private void PrepGateDestruction(){
 		// play a sound
 		AudioManager.Instance.PlayClip("DefeatSmokeMonster");
 		
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
-		
-		// if there is an item box behind this gate, let it know it is now unclaimed
-		if(scriptItemBox)
-			scriptItemBox.NowAvailable();
+
+		UnlockItemBox();
+
+		Invoke("UnlockRoomArrows", 0.5f);
 		
 		// gates might do their own thing upon destruction
-		OnGateDestroyed();	
+		GateDestroyed();	
 		
 		// add any appropriate task unlocks
 		ImmutableDataGate data = GetGateData();
 		string[] arrayUnlocks = data.GetTaskUnlocks();
-		for(int i = 0; i < arrayUnlocks.Length; ++i)
-			WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
+
+		if(arrayUnlocks != null){
+			for(int i = 0; i < arrayUnlocks.Length; ++i){
+				WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
+			}
+		}
 	}
-	
-	//---------------------------------------------------
-	// OnDestroyAnimComplete()
-	// It's up for child gates to properly call this 
-	// function when their destroy animation is complete.
-	// NOTE: I don't think anything important should go
-	// here because at present, the game could exit before
-	// the animation is complete, but the gate is already
-	// marked as destroyed.
-	//---------------------------------------------------		
+
+	private void UnlockRoomArrows(){
+		RoomArrowsUIManager.Instance.ShowPanel();
+	}
+
+	/// <summary>
+	/// Unlocks the item box.
+	/// </summary>
+	private void UnlockItemBox(){
+		// since this gate is getting created, if it is guarding an item box, create the box
+		ImmutableDataGate dataGate = GetGateData();
+		string itemBoxID = dataGate.GetItemBoxID();
+
+		if(!string.IsNullOrEmpty(itemBoxID)){
+			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
+			GameObject goBox = Instantiate(goResource, 
+			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
+			                               Quaternion.identity) as GameObject;
+			goBox = goBox.FindInChildren("Button");
+			
+			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
+			if(scriptItemBox)
+				scriptItemBox.SetItemBoxID(itemBoxID);
+			else
+				Debug.LogError("No logic script on box", goBox);
+		}
+
+		scriptItemBox.NowAvailable();
+	}
+
+	/// <summary>
+	/// It's up for child gates to properly call this 
+	/// function when their destroy animation is complete.
+	/// NOTE: I don't think anything important should go
+	/// here because at present, the game could exit before
+	/// the animation is complete, but the gate is already
+	/// marked as destroyed.
+	/// </summary>
 	private void OnDestroyAnimComplete(){		
 		// destroy the object
 		Destroy(gameObject);			

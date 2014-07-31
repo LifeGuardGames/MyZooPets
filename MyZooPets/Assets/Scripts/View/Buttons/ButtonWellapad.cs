@@ -8,12 +8,14 @@ using System.Collections;
 //---------------------------------------------------
 
 public class ButtonWellapad : LgButton {
+
+	public GameObject sunBeam;
 	private bool tutDone = false;
 
 	//---------------------------------------------------
 	// _Start()
 	//---------------------------------------------------		
-	protected override void _Start() {		
+	protected override void _Start(){
 		// for debug/testing -- we may have the wellapad disabled
 		bool isWellapadOn = Constants.GetConstant<bool>("WellapadOn");
 		if(!isWellapadOn)
@@ -60,13 +62,22 @@ public class ButtonWellapad : LgButton {
 
 	private void EnableButtonBounce(object sender, EventArgs args){
 		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl != null)
+		if(animControl != null){
 			animControl.Play("smallBounceSoftNavWellapad");
+		}
+		if(sunBeam){
+			sunBeam.SetActive(true);
+		}
 	}
 
 	private void DisableButtonBounce(){
 		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceSoftNavWellapad"))
+		if(animControl.IsPlaying("smallBounceSoftNavWellapad")){
 			animControl.StopAndResetFrame("zero");
+		}
+		if(sunBeam){
+			sunBeam.SetActive(false);
+		}
+
 	}
 }

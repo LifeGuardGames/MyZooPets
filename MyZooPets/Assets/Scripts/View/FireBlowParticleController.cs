@@ -8,6 +8,7 @@ using System.Collections;
 public class FireBlowParticleController : ParticleSystemController {
 
 	public ParticleSystem pSystem2;	// This is the fireball, primary is the stream
+	public ParticleLocationBurstList hitEffect;
 	public float secondaryDelay;	// Number of seconds to wait before the secondary starts playing
 	public bool isStartSimultaneous;// Starts both particles simultaneously or wait till delay
 	public bool isStopSimultaneous;	// Stops both particles simultaneously or wait till delay
@@ -40,6 +41,7 @@ public class FireBlowParticleController : ParticleSystemController {
 		yield return new WaitForSeconds(delay);
 		if(pSystem2 != null){
 			pSystem2.Play();
+			hitEffect.Play();
 		}
 	}
 	

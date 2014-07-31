@@ -19,7 +19,14 @@ public class LgNotificationServices{
 #if UNITY_ANDROID
         TimeSpan delay = fireDate - LgDateTime.GetTimeNow();
 
-        ELANManager.SendNotification(title, message, (long) delay.TotalSeconds);
+		ELANNotification notification = new ELANNotification();
+		notification.message = message;
+		notification.title = title;
+		notification.delayTypeTime = EnumTimeType.Hours;
+		notification.delay = (int) delay.TotalHours;
+		notification.useSound = true;
+		notification.useVibration = true;
+		notification.send();
 #endif
     }
 

@@ -9,11 +9,16 @@ using System.Collections.Generic;
 /// player.
 /// </summary>
 
+public class DestroyedGateEventArgs : EventArgs{
+	public string DestroyedGateID{ get; set; }
+	public string MiniPetID{ get; set; }
+}
+
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
 	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
 	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-//	public static EventHandler<EventArgs> OnGateDestroyed; // When a specific gate has been destroyed
+	public static EventHandler<DestroyedGateEventArgs> OnDestroyedGate; // When a specific gate has been destroyed
 	//=====================================================
     
 	public string currentArea; // area that this manager is in
@@ -24,23 +29,17 @@ public class GatingManager : Singleton<GatingManager>{
 	/// need a base point to calculate the actual screen position for all the gates
 	/// before converting them to world point
 	/// </summary>
-	public Vector3 startingScreenPosition; 
+	public Vector3 startingScreenPosition;
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
-	private Hashtable activeGates = new Hashtable(); // hash of active gates that the manager is currently managing
+	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>();
 
-	public Hashtable ActiveGates{
-		get{ return activeGates; }
-	}
-	
-//	public string GetArea{
-//		get{ return currentArea; }
-//	}
-
-	void Start(){		
+	void Awake(){
 		// set pan script
 		scriptPan = CameraManager.Instance.GetPanScript();
-		
+	}
+
+	void Start(){		
 		// see if the gating system is enabled
 		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled())
 			return;
@@ -67,16 +66,24 @@ public class GatingManager : Singleton<GatingManager>{
 		// loop through all gates...if the gate is inactive (destroyed) but is marked as recurring, and the player can breath fire,
 		// the gate should be refreshed.  Note that this is a fairly crude way of deciding if the gate should be refreshed or not,
 		// but it works for our initial design of the gate...can be changed later
-		Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
-		foreach(DictionaryEntry entry in gates){
-			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			
-			bool isRecurring = dataGate.IsRecurring();
-			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-			
-			if(isRecurring && !isGateActive && canBreatheFire)
-				DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
+	
+		DateTime now = LgDateTime.GetTimeNow();
+		DateTime lastRecurringGateSpawnedPlayPeriod = DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod;
+		TimeSpan timeSinceLastSpawned = now - lastRecurringGateSpawnedPlayPeriod;
+
+		// Next play period. refresh recurring gate
+		if(timeSinceLastSpawned.TotalHours >= 12){
+			Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
+			foreach(DictionaryEntry entry in gates){
+				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
+				
+				bool isRecurring = dataGate.IsRecurring();
+				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+				
+				if(isRecurring && !isGateActive){
+					DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
+				}
+			}
 		}
 	}
 
@@ -87,10 +94,30 @@ public class GatingManager : Singleton<GatingManager>{
 		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
+			int partition = dataGate.GetPartition();
 			
 			// if the gate is activate, spawn the monster at an offset 
 			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
-			if(isGateActive){
+
+			// check if gate is still in the scene. SpawnGates is also called after
+			// game is paused so need to check the status of each gate. This is mainly
+			// for the recurring gate to be spawned correctly
+			bool isGateInSceneAlready = false;
+			if(activeGates.ContainsKey(partition)){
+				try{
+					GameObject gateObject = activeGates[partition].gameObject;
+					if(gateObject) isGateInSceneAlready = true;
+				}
+				// Gate object has already been destroyed.
+				catch(MissingReferenceException e){
+					isGateInSceneAlready = false;
+				}
+				catch(NullReferenceException e){
+					isGateInSceneAlready = false;
+				}
+			}
+				
+			if(isGateActive && !isGateInSceneAlready){
 				int startingPartition = scriptPan.currentPartition;	// room the player is in
 				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
 				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
@@ -112,16 +139,19 @@ public class GatingManager : Singleton<GatingManager>{
 				gateLocation.x += distanceFromStartingPartition;
 				
 				// create the gate at the location and set its id
-				string strPrefab = dataGate.GetMonster().GetResourceKey();
+				string strPrefab = dataGate.GetMonster().ResourceKey;
 				GameObject prefab = Resources.Load(strPrefab) as GameObject;
 				GameObject goGate = Instantiate(prefab, gateLocation, Quaternion.identity) as GameObject;
 				Gate scriptGate = goGate.GetComponent<Gate>();
 				
 				string gateID = dataGate.GetGateID();
 				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
+
+				if(dataGate.IsRecurring())
+					DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod = 
+						PlayPeriodLogic.GetCurrentPlayPeriod();
 				
 				// hash the gate based on the room, for easier access
-				int partition = dataGate.GetPartition();
 				activeGates[partition] = scriptGate;
 			}
 		}		
@@ -133,6 +163,10 @@ public class GatingManager : Singleton<GatingManager>{
 	public void GateCleared(){
 		// enable the player to do stuff in the room
 		EnableUI();
+
+		// move the pet to the center of the room
+//		Vector3 petPositionAfterGateCleared = new Vector3(76, -2, 20);
+//		PetMovement.Instance.MovePet(petPositionAfterGateCleared);
 	}
 
 	/// <summary>
@@ -180,8 +214,9 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="eSwipeDirection">E swipe direction.</param>
 	public bool CanEnterRoom(int currentRoom, RoomDirection swipeDirection){
 		// early out if click manager is tweening
-		if(ClickManager.Instance.IsTweeningUI())
-			return false;
+		// WTF is this?? this messes up with the check logic. -- Jason
+//		if(ClickManager.Instance.IsTweeningUI())
+//			return false;
 		
 		// start off optimistic
 		bool isAllowed = true;
@@ -189,8 +224,8 @@ public class GatingManager : Singleton<GatingManager>{
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
 		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
 		if(dataGate != null && 
-		   DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
-		   dataGate.DoesBlock(swipeDirection))
+			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
+			dataGate.DoesBlock(swipeDirection))
 			isAllowed = false;
 		
 		return isAllowed; 
@@ -215,9 +250,10 @@ public class GatingManager : Singleton<GatingManager>{
 			List<ClickLockExceptions> listExceptions = new List<ClickLockExceptions>();
 			listExceptions.Add(ClickLockExceptions.Moving);
 			ClickManager.Instance.Lock(UIModeTypes.GatingSystem, listExceptions);
+
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
-			InventoryUIManager.Instance.HidePanel();
+//			InventoryUIManager.Instance.HidePanel();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate)activeGates[enteringPartitionNumber];
@@ -259,8 +295,6 @@ public class GatingManager : Singleton<GatingManager>{
 			return true;
 		}
 
-
-		
 		// otherwise, calculate and save the new hp
 		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		hp = Mathf.Max(hp - damage, 0);
@@ -272,9 +306,63 @@ public class GatingManager : Singleton<GatingManager>{
 		// Fire event to notify any UI that GatinProgress data may have been changed
 		if(OnDamageGate != null)
 			OnDamageGate(this, EventArgs.Empty);
-		
+
+		// Fire event to notify gate with gateID has been destroyed
+		if(isDestroyed){
+			if(OnDestroyedGate != null){
+				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
+				
+				args.DestroyedGateID = gateID;
+				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
+
+				OnDestroyedGate(this, args);
+			}
+		}
+			
 		return isDestroyed;
 	}	
+
+
+	/// <summary>
+	/// Shows the no fire notification.
+	/// </summary>
+	public void ShowNoFireNotification(){
+		// if inhaler is ready to be used prompt user to use inhaler
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			PetSpeechAI.Instance.ShowInhalerMsg();
+		}
+		// if inhaler already use check if there's fire orb in the inventory
+		else{
+			// if there's a fire orb in the inventory prompt the user to use it
+			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
+			if(fireOrb != null){
+				Debug.Log("use the fire Orb");
+			}
+			// if not tell user to buy it or wait for inhaler
+			else{
+				IAPNotification();
+			}
+		}
+	}
+
+	/// <summary>
+	/// In app purchase notification. Prompt the user to either wait for inhaler or
+	/// buy flame crystal from the store with gems
+	/// </summary>
+	private void IAPNotification(){
+		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+			
+			ClickManager.Instance.Lock(UIModeTypes.Store);
+			StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+		};
+		
+		Hashtable notificationEntry = new Hashtable();
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+		
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+	}
 
 	/// <summary>
 	/// Listens for movement finished.
@@ -293,89 +381,45 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void PetReachedDest(object sender, EventArgs args){
-		
-		// process any callbacks for when the pet reaches a gate
+	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);		
 	
-		//Check if version is Lite. spawn cross promo ads if so
-		bool tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(tutDone && VersionManager.IsLite())
-			GateLiteLogic();
-		else
-			GateProLogic();
+		// if the pet is happy and healthy, add the fire button
+		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		
+		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
+			ShowFireButton();
+
+			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
+			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
+			
+			if(!canUseRealInhaler && fireOrb == null)
+				IAPNotification();
+		}
+		else
+			ShowUnhealthyNoFireNotification();
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
-	}
-
-	private void GateLiteLogic(){
-		LgCrossPromo.ShowInterstitial(LgCrossPromo.LAST_GATE);
-	}
-
-	private void GateProLogic(){
-		// if the pet is happy and healthy, add the fire button
-		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
-		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
-		bool bCanBreath = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-
-		if(eState == PetHealthStates.Healthy && eMood == PetMoods.Happy && bCanBreath) 
-			ShowFireButton();
-		else{
-			// otherwise, we want to show the tutorial explaining why the fire button isn't there (if it hasn't been shown)	
-			ShowNoFireNotification();
-		}
 	}
 
 	/// <summary>
 	/// Shows the no fire notification. Calling this function assumes the player
 	/// cannot breathe fire
 	/// </summary>
-	private void ShowNoFireNotification(){
-		//use thought bubble instead. try to stay away from notification
+	private void ShowUnhealthyNoFireNotification(){
+		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
+		
+		if(healthState != PetHealthStates.Healthy){
 
-		PetHealthStates eState = DataManager.Instance.GameData.Stats.GetHealthState();
-		PetMoods eMood = DataManager.Instance.GameData.Stats.GetMoodState();
-		
-//		string strKey;			// key of text to show
-//		string strImage;		// image to appear on notification
-//		string strAnalytics = "";	// analytics tracker
-		
-		if(eState != PetHealthStates.Healthy){
-			// pet is not healthy enough
-//			strKey = "NO_FIRE_SICK";
-//			strImage = "Skull";
-			// strAnalytics = "BreathFire:Fail:Sick";
 			PetSpeechAI.Instance.ShowNoFireSickMsg();
 		}
-		else if(eMood != PetMoods.Happy){
-			// pet is not happy enough
-//			strKey = "NO_FIRE_UNHAPPY";
-//			strImage = "Skull";
-			// strAnalytics = "BreathFire:Fail:Unhappy";
+		else if(moodState != PetMoods.Happy){
+
 			PetSpeechAI.Instance.ShowNoFireHungryMsg();
 		}
-		else{
-			if(PlayPeriodLogic.Instance.CanUseRealInhaler())
-				PetSpeechAI.Instance.ShowInhalerMsg();
-				
-			else
-				PetSpeechAI.Instance.ShowOutOfFireMsg();
-				//TODO: enable FireOrbMsg once it's ready to integrate
-
-//				PetSpeechAI.Instance.ShowFireOrbMsg();
-			// out of flame charges
-//			strKey = "NO_FIRE_INHALER";
-//			strImage = "itemInhalerMain";
-			// strAnalytics = "BreathFire:Fail:NoCharges";
-		}
-		
-//		string petName = DataManager.Instance.GameData.PetInfo.PetName;	
-//		string message = String.Format(Localization.Localize(strKey), petName);
-//		// show the standard popup
-//		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
-//			message, strImage, null, true, true, strAnalytics);		
 	}
 
 	/// <summary>
@@ -385,29 +429,26 @@ public class GatingManager : Singleton<GatingManager>{
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
 		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
-
+		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet_LWF");
 		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
 		                                                             petLocation.transform.position);
 		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
-		                                                          InterfaceAnchors.BottomLeft, 
+		                                                               InterfaceAnchors.BottomLeft, 
 		                                                               InterfaceAnchors.Center);
 
+		fireButtonLoc.z = 1;
 
-		// if ( TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive() )
-		// 	strConstant = "FireLoc_Tutorial";
-	
-		// set location of the button based on if it is a tutorial or not
-//		Vector3 fireButtonLoc = Constants.GetConstant<Vector3>("FireLoc_Normal");
+		// set button location
 		goFireButton.transform.localPosition = fireButtonLoc;
 		
 		// rename the button so that other things can find it
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;
 		
 		// get the gate in this room
-		Gate gate = (Gate)activeGates[scriptPan.currentPartition];
+		Gate gate = activeGates[scriptPan.currentPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
 			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
@@ -418,6 +459,14 @@ public class GatingManager : Singleton<GatingManager>{
 			Debug.LogError("Destination callback being called for non gated room");		
 	}
 
+
+	//TODO: need fix up
+	private void ReturnToGatingSystemUIMode(object sender, EventArgs args){
+		ClickManager.Instance.ReleaseLock();
+
+		StoreUIManager.OnShortcutModeEnd -= ReturnToGatingSystemUIMode;
+	} 
+	
 	/// <summary>
 	/// Enables the UI.
 	/// </summary>
@@ -425,7 +474,6 @@ public class GatingManager : Singleton<GatingManager>{
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();		
-		InventoryUIManager.Instance.ShowPanel();
 	}
 	
 	//---------------------------------------------------
@@ -440,14 +488,14 @@ public class GatingManager : Singleton<GatingManager>{
 	//---------------------------------------------------	
 	private void MovePlayer(int roomPartition){
 		// then get the id of the gate and get that gate object from our list of active gates
-		Gate gate = (Gate)activeGates[roomPartition];
-		
-		// get the position the player should approach
-		Vector3 playerPosition = gate.GetPlayerPosition();
-		
-		// phew...now tell the player to move
-		PetMovement.Instance.MovePet(playerPosition);		
+		if(activeGates.ContainsKey(roomPartition)){
+			Gate gate = activeGates[roomPartition];
+			
+			// get the position the player should approach
+			Vector3 playerPosition = gate.GetPlayerPosition();
+			
+			// phew...now tell the player to move
+			PetMovement.Instance.MovePet(playerPosition);		
+		}
 	}
-	
-
 }

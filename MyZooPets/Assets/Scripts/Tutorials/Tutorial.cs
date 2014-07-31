@@ -15,7 +15,7 @@ public abstract class Tutorial{
 	protected abstract void SetKey();						// the tutorial key is used to mark a lot of lists
 	protected abstract void SetMaxSteps();					// set the max steps of the tutorial
 	protected abstract void ProcessStep(int nStep);		// the meat of a tutorial is processing its steps and doing things
-	protected abstract void _End(bool bFinished);			// when the tutorial is finishd
+	protected abstract void _End(bool isFinished);			// when the tutorial is finishd
 	
 	// ----------- Tutorial Popup types -------------------
 	protected const string POPUP_STD = "TutorialPopup_Standard";
@@ -121,28 +121,25 @@ public abstract class Tutorial{
 		if(OnTutorialEnd != null)
 			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));	
 	}
-
-	//TO DO-jason: maybe use a struct for all the params since it's growing kind
-	//of long	
-	//---------------------------------------------------
-	// SpotlightObject()
-	// Puts a spotlight around the incoming object to
-	// draw attention to it.
-	// eAnchor is the incoming anchor of the object/where
-	// the spotlight should be created.  For 3D objects
-	// the anchor should be center, and for GUI elements
-	// the anchor should be whatever anchor the element
-	// is in.
-	// Params:
-	//	goTarget (GameObject): the target that you want the spotlight to spawn on
-	// Optional Params:
-	// 	bGUI (bool): is it a UI element.
-	//  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
-	//  strSpotlightPrefab (string): the string name of the spotlight prefab
-	//  fingerHint (bool): show finger hint or not
-	//  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
-	//  delay (float): how long does it take the spot light to fade in
-	//---------------------------------------------------	
+	
+	/// <summary>
+	/// Puts a spotlight around the incoming object to
+	/// draw attention to it.
+	/// eAnchor is the incoming anchor of the object/where
+	/// the spotlight should be created.  For 3D objects
+	/// the anchor should be center, and for GUI elements
+	/// the anchor should be whatever anchor the element
+	/// is in.
+	/// Params:
+	///	goTarget (GameObject): the target that you want the spotlight to spawn on
+	/// Optional Params:
+	///  isGUI (bool): is it a UI element.
+	///  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
+	///  strSpotlightPrefab (string): the string name of the spotlight prefab
+	///  fingerHint (bool): show finger hint or not
+	///  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
+	///  delay (float): how long does it take the spot light to fade in
+	/// </summary>
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
 		bool fingerHint = false, string fingerHintPrefab = "PressTut",
@@ -203,7 +200,8 @@ public abstract class Tutorial{
 	//--------------------------------------------------------------
 	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string fingerHintPrefab = "PressTut",
-		float offsetFromCenter = 60.0f, bool flipX = false){
+		float offsetFromCenter = 60.0f, float offsetFromCenterX = 0.0f, bool flipX = false){
+
 		string anchorName = "Anchor-" + anchor.ToString();
 
 		// get the proper location of the object we are going to focus on
@@ -224,8 +222,9 @@ public abstract class Tutorial{
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
 		goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(anchorName), fingerHintResource);
-		focusPos.z = goFingerHint.transform.localPosition.z;
+		focusPos.x = focusPos.x + offsetFromCenterX;
 		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
+		focusPos.z = goFingerHint.transform.localPosition.z;
 		goFingerHint.transform.localPosition = focusPos;
 
 		if(flipX)
@@ -235,7 +234,7 @@ public abstract class Tutorial{
 
 	protected void RemoveFingerHint(){
 		if(goFingerHint == null){
-			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
+//			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 
@@ -248,7 +247,7 @@ public abstract class Tutorial{
 	//---------------------------------------------------		
 	protected void RemoveSpotlight(){
 		if(goSpotlight == null){
-			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
+//			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 		
@@ -261,7 +260,6 @@ public abstract class Tutorial{
 	//---------------------------------------------------		
 	protected void RemovePopup(){
 		if(goPopup == null){
-			Debug.LogError("Trying to destroy a popup that doesn't exist!");
 			return;
 		}
 		

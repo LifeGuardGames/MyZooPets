@@ -89,7 +89,7 @@ public class GA_SystemTracker : MonoBehaviour
 		
 		if(GA.API.Debugging.SubmitErrors) //Warning this registerLogCallback is slow because it saves the stacktraces
 			Application.RegisterLogCallback(GA.API.Debugging.HandleLog);
-		
+
 		// Add system specs to the submit queue
 		if (IncludeSystemSpecs)
 		{
@@ -97,7 +97,7 @@ public class GA_SystemTracker : MonoBehaviour
 			
 			foreach (Hashtable spec in systemspecs)
 			{
-				GA_Queue.AddItem(spec, GA_Submit.CategoryType.GA_Log, false);
+				GA_Queue.AddItem(spec, GA_Submit.CategoryType.GA_Error, false);
 			}
 		}
 	}

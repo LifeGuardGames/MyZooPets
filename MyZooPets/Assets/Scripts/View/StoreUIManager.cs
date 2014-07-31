@@ -5,9 +5,11 @@ using System.Collections.Generic;
 
 public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
+	public static EventHandler<EventArgs> OnDecorationItemBought;
 	public GameObject grid;
 	public GameObject itemStorePrefab; //basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
+	public GameObject itemStorePrefabPremium; // premium item entry
 	public GameObject itemSpritePrefab; // item sprite for inventory
 	public GameObject storeBasePanel; //Where you choose item category
 	public GameObject storeSubPanel; //Where you choose item sub category
@@ -15,51 +17,21 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject itemArea; //Where the items will be display
 	public GameObject tabArea; //Where all the tabs for sub category are
 	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
-	private GameObject goExitButton;	// exit button on sub panel
-	
+	public GameObject backButton; // exit button reference
+
 	// store related sounds
-	public string strSoundChangeTab;
-	public string strSoundBuy;
-	private bool bShortcutMode; //True: open store directly to specific item category
-	//False: open the store base panel first	
+	public string soundChangeTab;
+	public string soundBuy;
+	private bool isShortcutMode; //True: open store directly to specific item category
+	//False: open the224 store base panel first	
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-
-
-
-	public List<Color> colors; //colors for the tab;
+	
+//	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
-
-		// Disabling custom colors
-		/*
-		Color pink = new Color(0.78f, 0f, 0.49f, 0.78f);
-		Color purple = new Color(0.49f, 0.03f, 0.66f, 0.78f);
-		Color blue = new Color(0.05f, 0.36f, 0.65f, 0.78f);
-		Color teel = new Color(0, 0.58f, 0.6f, 0.78f);
-		Color green = new Color(0, 0.71f, 0.31f, 0.78f);
-		Color orange = new Color(1, 0.6f, 0, 0.78f);
-		Color limeGreen = new Color(0.53f, 0.92f, 0, 0.78f);
-		Color purpleish = new Color(0.44f, 0.04f, 0.67f, 0.78f);
-		Color yellow = new Color(1, 0.91f, 0f, 0.78f);
-
-		colors = new List<Color>();
-		colors.Add(pink);
-		colors.Add(purple);
-		colors.Add(blue);
-		colors.Add(teel);
-		colors.Add(green);
-		colors.Add(orange);
-		colors.Add(limeGreen);
-		colors.Add(purpleish);
-		colors.Add(yellow);
-		*/
-		
-		goExitButton = storeSubPanel.FindInChildren("ExitButton");
-		if(goExitButton == null)
-			Debug.LogError("Exit button is null...please set");
 	}
 	
 	void Start(){
@@ -79,23 +51,48 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);
 	}
-	
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Gets the exit button.
+	/// </summary>
+	/// <returns>The exit button.</returns>
+	public GameObject GetBackButton(){
+		return backButton;
+	}
+
+	/// <summary>
+	/// Enables the tab area. Use in tutorial
+	/// </summary>
+	public void EnableTabArea(){
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(true);
+		}
+	}
+
+	/// <summary>
+	/// Disables the tab area. Use in tutorial
+	/// </summary>
+	public void DisableTabArea(){
+		foreach(Transform tabTransform in tabArea.transform){
+			tabTransform.FindChild("Tab").gameObject.SetActive(false);
+		}
+	}
+
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
-	
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+
 	protected override void _CloseUI(){
 		//Show other UI object
-		NavigationUIManager.Instance.ShowPanel();		
+		NavigationUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
+		RoomArrowsUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -105,6 +102,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -116,42 +114,57 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Analytics.Instance.StoreItemShortCutClicked();
 
 		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
 		OpenToSubCategory("Items", true);
 	}
 
+	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
+		
+		NavigationUIManager.Instance.HidePanel();
+		EditDecosUIManager.Instance.HideNavButton();
+		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
+		OnShortcutModeEnd += ShortcutModeEnded;
+		
+		OpenToSubCategory("Premiums", true);
+	}
+
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
+		EditDecosUIManager.Instance.ShowNavButton();
 		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
 	//---------------------------------------------------
-
-	//---------------------------------------------------
-	// OpenToSubCategory()
-	// Special function used to open the store UI 
-	// straight up to a certain category.
-	//---------------------------------------------------	
-	public void OpenToSubCategory(string strCat, bool bShortcut = false){		
+	
+	/// <summary>
+	/// Opens to sub category. Special function used to open the store UI straight
+	/// up to a certain category
+	/// </summary>
+	/// <param name="category">Category.</param>
+	/// <param name="isShortCut">If set to <c>true</c> is short cut.</param>
+	public void OpenToSubCategory(string category, bool isShortCut = false){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
-		bShortcutMode = bShortcut;
-		if(bShortcutMode){
-			// if we are shortcutting, we have to tween the bg in now	
+		isShortcutMode = isShortCut;
+		if(isShortcutMode){
+			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+
+
 		}	
 		
-		CreateSubCategoryItemsWithString(strCat); 
+		CreateSubCategoryItemsWithString(category); 
 	}
-
-	//---------------------------------------------------
-	// OnBuyAnimation()
-	// This function is called when buying an item
-	// It creates a icon for the item and move it to Inventory
-	// TODO Scales are a little mess up
-	//---------------------------------------------------
+	
+	/// <summary>
+	/// This function is called when buying an item. I creates an icon for the item
+	/// and move it to Inventory
+	/// </summary>
+	/// <param name="itemData">Item data.</param>
+	/// <param name="sprite">Sprite.</param>
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string itemID = sprite.transform.parent.transform.parent.name;
@@ -179,7 +192,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		path[2] = origin;
 		path[3] = itemPosition;
 
-		Debug.Log(itemPosition);
 
 		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);
@@ -211,67 +223,142 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}	
 	}
 
-	//---------------------------------------------------
-	// OnBuyButton()
-	// Called when "Buy" is clicked
-	//---------------------------------------------------
+	/// <summary>
+	/// Raises the buy button event.
+	/// </summary>
+	/// <param name="button">Button.</param>
 	public void OnBuyButton(GameObject button){
-		string itemID = button.transform.parent.name;
+		Transform buttonParent = button.transform.parent.parent;
+		string itemID = buttonParent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
 
+		switch(itemData.CurrencyType){
+		case CurrencyTypes.WellaCoin:
+			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
+				//Special case to handle here. Since only one wallpaper can be used at anytime
+				//There is no point for the user to buy more than one of each diff wallpaper
+				if(itemData.Type == ItemType.Decorations){
+					DecorationItem decoItem = (DecorationItem)itemData;
+					
+					if(decoItem.DecorationType == DecorationTypes.Wallpaper){
+						UIImageButton buyButton = button.GetComponent<UIImageButton>();
+						
+						//Disable the buy button so user can't buy the same wallpaper anymore 
+						if(buyButton)
+							buyButton.isEnabled = false;
+					}
 
-		if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
-			//Special case to handle here. Since only one wallpaper can be used at anytime
-			//There is no point for the user to buy more than one of each diff wallpaper
+//					//Use for tutorial to notify tutorial manager when deco item has been bought
+//					bool isDecorationTutorialDone = DataManager.Instance.GameData.
+//						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
+//
+//					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
+//						OnDecorationItemBought(this, EventArgs.Empty);
+				}
+				
+				InventoryLogic.Instance.AddItem(itemID, 1);
+				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+				
+				//Analytics
+				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
+				
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
+			}
+			break;
+		case CurrencyTypes.Gem:
+			//TODO: temporary code. Need fixed up
+			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
+
+				InventoryLogic.Instance.AddItem(itemID, 1);
+				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
+
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
+			}
+			else{
+
+				//spawn buy more gems popup
+				Hashtable notificationEntry = new Hashtable();
+				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
+
+				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			}
+			break;
+		case CurrencyTypes.IAP:
+			break;
+		}
+	}
+
+	/// <summary>
+	/// This buy button is used only during tutorial. It doesn't check for wella coins
+	/// but user will only be limited to one item in GameTutorialDecoration.cs
+	/// </summary>
+	/// <param name="button">Button.</param>
+	public void OnBuyButtonTutorial(GameObject button){
+		Transform buttonParent = button.transform.parent.parent;
+		string itemID = buttonParent.name;
+		Item itemData = ItemLogic.Instance.GetItem(itemID);
+
+		switch(itemData.CurrencyType){
+		case CurrencyTypes.WellaCoin:
 			if(itemData.Type == ItemType.Decorations){
 				DecorationItem decoItem = (DecorationItem)itemData;
 
-				if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-					UIImageButton buyButton = button.GetComponent<UIImageButton>();
-		
-					//Disable the buy button so user can't buy the same wallpaper anymore 
-					if(buyButton)
-						buyButton.isEnabled = false;
-				}
+				//Use for tutorial to notify tutorial manager when deco item has been bought
+				bool isDecorationTutorialDone = DataManager.Instance.GameData.
+					Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
+				
+				if(!isDecorationTutorialDone && OnDecorationItemBought != null)
+					OnDecorationItemBought(this, EventArgs.Empty);
+					
+				InventoryLogic.Instance.AddItem(itemID, 1);
+
+				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+				
+				//Analytics
+				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
+				
+				// play a sound since an item was bought
+				AudioManager.Instance.PlayClip(soundBuy);
 			}
-
-			InventoryLogic.Instance.AddItem(itemID, 1);
-//			StatsController.Instance.ChangeStats(0, Vector3.zero, itemData.Cost * -1, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero);	// Convert to negative
-			StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
-			OnBuyAnimation(itemData, button.transform.parent.gameObject.FindInChildren("ItemTexture"));
-
-			//Analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-			
-			// play a sound since an item was bought
-			AudioManager.Instance.PlayClip(strSoundBuy);
+			break;
 		}
 	}
 
-	//----------------------------------------------------
-	// CreateSubCategoryItems()
-	// Create tabs for sub category if sub category exists. 
-	// Then call other methods to create the items
-	//----------------------------------------------------
+	public void OnBuyPremium(GameObject button){
+		Debug.Log("Premium currency bought");
+//		StatsController.Instance.ChangeStats(deltaGems:)
+	}
+	
+	/// <summary>
+	/// Creates the sub category items. Create tabs for sub category if sub category exists.
+	/// Then call other methods to create the items
+	/// </summary>
+	/// <param name="page">Page.</param>
 	public void CreateSubCategoryItems(GameObject page){
 		CreateSubCategoryItemsWithString(page.name);
 	}
-	
-	public void CreateSubCategoryItemsWithString(string strPage){
-		if(strPage != "Items" && strPage != "Food" && strPage != "Decorations"){
-			Debug.LogError("Illegal sore sub category: " + strPage);
+
+	/// <summary>
+	/// Creates the sub category items with string.
+	/// </summary>
+	/// <param name="page">Page.</param>
+	public void CreateSubCategoryItemsWithString(string page){
+		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
+			Debug.LogError("Illegal store sub category: " + page);
 			return;
 		}
 		
-		// we also need to hide the exit button's active state based on whether or not we are shortcutting
-		// NOTE: Just can't hide the damn button, so I am changing the function target...not a great solution...but...sigh...
-		string strFunction = bShortcutMode ? "HideStoreSubPanel" : "CloseUI";
-		goExitButton.GetComponent<LgButtonMessage>().functionName = strFunction;		
-		
-		currentPage = strPage;
+		currentPage = page;
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
+			EditDecosUIManager.Instance.HideNavButton();
+			InventoryUIManager.Instance.ShowPanel();
+
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -281,6 +368,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Items"){
+			EditDecosUIManager.Instance.HideNavButton();
+			InventoryUIManager.Instance.ShowPanel();
+
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
@@ -290,6 +380,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Decorations"){
+			EditDecosUIManager.Instance.ShowNavButton();
+			InventoryUIManager.Instance.HidePanel();
+
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
@@ -324,16 +417,26 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			//After tabs have been set up create items for the first/default tab
 			CreateSubCategoryItemsTab(defaultTabName, Color.white);
 		}
+		else if(currentPage == "Premiums"){
+			InventoryUIManager.Instance.HidePanel();
+			EditDecosUIManager.Instance.HideNavButton();
+			NavigationUIManager.Instance.HidePanel();
+
+			foreach(Transform tabParent in tabArea.transform){
+				HideUnuseTab(tabParent.FindChild("Tab"));
+			}
+			
+			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
+		}
 
 		ShowStoreSubPanel();
 	}
 
 	//------------------------------------------
-	// ShowStoreSubPanel()
-	// By not calling the Open() of SingletonUI we 
-	// by pass the clickmanager lock so it will
-	// remain lock 
-	//------------------------------------------
+	/// <summary>
+	/// Shows the store sub panel. By not calling the Open() of SingletonUI
+	/// we bypass the clickmanager lock so it will remain lock
+	/// </summary>
 	private void ShowStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
@@ -344,20 +447,35 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Return to the StoreBasePanel
 	//------------------------------------------
 	public void HideStoreSubPanel(){
+
+		DestroyGrid();
+
+		EditDecosUIManager.Instance.HideNavButton();
+		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
-		
+
 		// this is a little hacky, but our demux system is kind of difficult to get around, so...
 		// before doing anything else, check to see if the deco system has a saved node...
 		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
 		// store doesn't apply...otherwise just show the store base panel like normal
-		if(bShortcutMode){
-			// close the store bg
-			storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-		
-			if(OnShortcutModeEnd != null)
-				OnShortcutModeEnd(this, EventArgs.Empty);
+		if(isShortcutMode){
 
-			bShortcutMode = false;
+			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+			}
+			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+				InventoryUIManager.Instance.ShowPanel();
+			}
+			else{
+				_CloseUI();	// Call all the close pipelines (only overridden tho)
+			}
+
+			if(OnShortcutModeEnd != null){
+				OnShortcutModeEnd(this, EventArgs.Empty);
+			}
+
+			isShortcutMode = false;
 		}
 		else
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
@@ -379,19 +497,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Create items for sub category 
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
-		if(currentTab != tabName){
+//		if(currentTab != tabName){
 			//Destroy existing items first
-			foreach(Transform child in grid.transform){
-				child.gameObject.SetActive(false);
-				Destroy(child.gameObject);
-			}
+			DestroyGrid();
 
 			//Reset clip range so scrolling will start from beginning again
 			ResetUIPanelClipRange();
 
 			//if the current page is not null, we are switching tabs, so play a sound
 			if(currentTab != null)
-				AudioManager.Instance.PlayClip(strSoundChangeTab);
+				AudioManager.Instance.PlayClip(soundChangeTab);
 
 			//set current tab
 			currentTab = tabName;
@@ -428,13 +543,36 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				if(decoDict.ContainsKey(decoType)){
 					List<DecorationItem> decoList = decoDict[decoType];
 					foreach(DecorationItem decoItemData in decoList){
-						if(!decoItemData.ItemBoxOnly)
-							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						if(!decoItemData.ItemBoxOnly){
+							GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						}
 					}
+				}
+			}
+			else if(currentPage == "Premiums"){
+				//TODO: temporary implementation for IAP. This will need to be connected with iOS/Android
+				//IAP stuff laterr
+
+				List<Item> premiumList = ItemLogic.Instance.PremiumList;
+
+				foreach(Item itemData in premiumList){
+					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData, 
+					                                       this.gameObject, "OnBuyPremium");
 				}
 			}
 
 			grid.GetComponent<UIGrid>().Reposition();
+//		}
+	}
+
+	//-----------------------------------------
+	// HideUnuseTab()
+	// Destroys the entries in the grid
+	//------------------------------------------
+	private void DestroyGrid(){
+		foreach(Transform child in grid.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
 		}
 	}
 
@@ -476,11 +614,4 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
 		itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
 	}
-
-	// //Delay calling reposition due to async problem Destroying/Repositionoing.
-	// //TODO Maybe change later when we have moreItems 
-	// private void Reposition(){
-	// 	grid.GetComponent<UIGrid>().Reposition();
-
-	// }
 }

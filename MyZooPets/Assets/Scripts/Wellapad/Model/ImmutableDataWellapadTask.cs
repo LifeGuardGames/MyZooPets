@@ -74,23 +74,24 @@ public class ImmutableDataWellapadTask{
 		return strKey;	
 	}
 
-	public ImmutableDataWellapadTask(string id, Hashtable hashData, string errorMessage){
+	public ImmutableDataWellapadTask(string id, IXMLNode xmlNode, string errorMessage){
+		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		// set id
 		taskID = id;
 		
 		// get the task completion name -- fallback to the id
-		taskName = XMLUtils.GetString(hashData["Name"] as IXMLNode, "", errorMessage);
+		taskName = XMLUtils.GetString(hashElements["Name"] as IXMLNode, "", errorMessage);
 		
 		// get the mission type
-		taskType = XMLUtils.GetString(hashData["Type"] as IXMLNode, "Side", errorMessage);
+		taskType = XMLUtils.GetString(hashElements["Type"] as IXMLNode, "Side", errorMessage);
 		
 		// get the category of this task
-		taskCategory = XMLUtils.GetString(hashData["Category"] as IXMLNode, "", errorMessage);
+		taskCategory = XMLUtils.GetString(hashElements["Category"] as IXMLNode, "", errorMessage);
 		
 		// get the amounts(optional)
-		if(hashData.ContainsKey("CompleteConditions")){
+		if(hashElements.ContainsKey("CompleteConditions")){
 			completeConditions = new List<int>();
-			string strAmounts = XMLUtils.GetString(hashData["CompleteConditions"] as IXMLNode);
+			string strAmounts = XMLUtils.GetString(hashElements["CompleteConditions"] as IXMLNode);
 			string[] arrayAmounts = strAmounts.Split(","[0]);
 			for(int i = 0; i < arrayAmounts.Length; ++i)
 				completeConditions.Add(int.Parse(arrayAmounts[i]));

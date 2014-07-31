@@ -11,6 +11,7 @@ using System.Collections;
 public class LgAudioSource : MonoBehaviour {
 
 	private AudioSource audioSource;
+	private string audioClipName;
 	
 	public void Init( DataSound sound, Transform tf, Hashtable hashOverrides ) {		
 		string strResource = sound.GetResourceName();
@@ -21,7 +22,9 @@ public class LgAudioSource : MonoBehaviour {
 			Destroy( gameObject );
 			return;
 		}
-		
+
+		audioClipName = strResource;
+
 		// this is a little messy, but get variables that could be overriden
 		float fVol = sound.GetVolume();
 		if ( hashOverrides.Contains("Volume" ) )
@@ -42,7 +45,10 @@ public class LgAudioSource : MonoBehaviour {
 		
 		// listen for pausing
 		AudioManager.Instance.OnGamePaused += SetPauseState;
-		
+
+		// listen for stopping
+		AudioManager.Instance.OnStopClipCalled += CheckForStop;
+
 		// add destroy script
 		DestroyThis scriptDestroy = gameObject.AddComponent<DestroyThis>();
 		scriptDestroy.SetLife( clip.length + 0.1f );		
@@ -56,29 +62,8 @@ public class LgAudioSource : MonoBehaviour {
 		
 		// stop listening for pausing	
 		AudioManager.Instance.OnGamePaused -= SetPauseState;
+		AudioManager.Instance.OnStopClipCalled -= CheckForStop;
 	}
-	
-	/*
-	// DEPRECATED
-	public void Init( AudioClip sound, Transform tf, float fVolume ) {
-		//Messenger.instance.Listen( LibraryMessageTypes.PAUSE, this );	// listen for combat being paused
-		
-		// create the audio source	
-		audioSource = gameObject.AddComponent<AudioSource>(); 
-		audioSource.clip = sound; 
-		audioSource.volume = fVolume; 
-		audioSource.pitch = 1.0f;
-		gameObject.transform.parent = tf;
-		gameObject.transform.position = tf.position;
-		audioSource.Play();
-		
-		// add destroy script
-		DestroyThis scriptDestroy = gameObject.AddComponent<DestroyThis>();
-		scriptDestroy.SetLife( sound.length + 0.1f );
-		
-		//StartCoroutine( FadeOut() );	
-	}
-	*/
 	
 	///////////////////////////////////////////
 	// FadeOut()
@@ -105,5 +90,15 @@ public class LgAudioSource : MonoBehaviour {
 			audioSource.Pause();
 		else
 			audioSource.Play();
+	}
+
+	///////////////////////////////////////////
+	// CheckForStop()
+	// Listener call, will match parameters and check if this needs to be stopped
+	///////////////////////////////////////////
+	public void CheckForStop( object sender, StopArgs args){
+		if(args.ClipName == audioClipName){
+			audioSource.Stop();
+		}
 	}
 }

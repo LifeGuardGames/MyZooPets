@@ -144,15 +144,17 @@ public class PlayerController : Singleton<PlayerController>{
 	}
 	
 	//Listen to swipe down gesture
-	void OnSwipe(SwipeGesture gesture){ 
-		FingerGestures.SwipeDirection direction = gesture.Direction;
-		if(direction == FingerGestures.SwipeDirection.Down){
-			Drop();
-			
-			if(OnDrop != null)
-				OnDrop(this, EventArgs.Empty);
+	void OnSwipe(SwipeGesture gesture){
+		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
+			FingerGestures.SwipeDirection direction = gesture.Direction;
+			if(direction == FingerGestures.SwipeDirection.Down){
+				Drop();
+				
+				if(OnDrop != null)
+					OnDrop(this, EventArgs.Empty);
+			}
 		}
-	} 
+	}
 	
 	/// <summary>
 	/// Reset player position and physics

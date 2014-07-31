@@ -3,12 +3,11 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// TutorialManager
-// Used in scenes like the yard and bedroom to keep
-// track of game tutorials.
-//---------------------------------------------------
-
+/// <summary>
+/// Tutorial manager.
+/// Used in scenes like the yard and bedroom to keep
+/// track of game tutorials.
+/// </summary>
 public abstract class TutorialManager : Singleton<TutorialManager>{
 	// pure abstract functions ------------------
 	protected abstract void _Start();	// start function
@@ -21,6 +20,9 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 	// tutorial that is currently active
 	private GameTutorial tutorial;
 
+	/// <summary>
+	/// Whether tutorial is active in the scene
+	/// </summary>
 	public bool IsTutorialActive(){
 		bool isActive = tutorial != null;
 		return isActive;
@@ -50,44 +52,35 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 	}
 	
 	void Start(){
-		//Debug.Log("Starting tutorial manager, running a test");
-		//GameTutTest tutTest = new GameTutTest();
-		
-		//Debug.Log("Starting tut manager, running spotlight test");
-		//SpotlightObject( goSpotTest );
-		
 		// listen for partition changing event
 		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
 		
 		_Start();
 	}
-	
-	//---------------------------------------------------
-	// EnteredRoom()
-	// When the player switches rooms.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Entered the room. When player switches rooms.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	public void EnteredRoom(object sender, PartitionChangedArgs args){
 		// do a check in case a tutorial was in a different room
 		Check();
 	}
-	
-	//---------------------------------------------------
-	// Check()
-	// Checks which tutorial should play based on certain
-	// game conditions.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Checks withich tutorial should play based on certain game conditions
+	/// </summary>
 	protected void Check(){
 		if(!isTutorialEnabled || tutorial != null)
 			return;
 		else
 			_Check();
 	}
-	
-	//---------------------------------------------------
-	// CanProcess()
-	// Used in scenes like the yard and bedroom to keep
-	// track of game tutorials.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Used in scenes like the yard and bedroom to keep track of game tutorials
+	/// </summary>
 	public bool CanProcess(GameObject go){
 		// if the gameobject is null, then tutorial doesn't care (at the moment)
 		if(go == null)

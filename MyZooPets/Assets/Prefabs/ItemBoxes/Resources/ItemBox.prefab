@@ -50,6 +50,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
+  m_RootOrder: 0
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -62,6 +63,7 @@ Transform:
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -80,9 +82,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -128,11 +129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4506d147edd68411f97945a2174cece6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 0
-  eMode: 0
-  strSoundProcess: button-21
+  modeTypes: 
   buttonName: 
-  bCheckClickManager: 1
+  buttonSound: pop
+  isCheckingClickManager: 0
+  isSprite: 0
   scriptLogic: {fileID: 11400002}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -179,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f840fe59d41c3c4ca89d52e5f9a6426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Camera: {fileID: 0}
+  camera: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,6 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 1
+  childGameObject: {fileID: 0}
   delayBeforeStart: 0
   minInterval: 1
   maxInterval: 3

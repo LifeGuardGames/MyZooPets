@@ -4,20 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-//---------------------------------------------------
-// StoreItemEntry_Stats
-// An individual item entry in the store UI for a 
-// stats item.
-//---------------------------------------------------
-
+/// <summary>
+/// Store item entry stats. An individual item entry in the sore UI for a stats
+/// item
+/// </summary>
 public class StoreItemEntryStats : StoreItemEntryUIController{
 	// list of stat pair objects
 	public List<StatPairUIController> listStats;
-	
-	//---------------------------------------------------
-	// SetDesc()
-	// Set the description for this item.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Sets the desc.
+	/// </summary>
+	/// <param name="itemData">Item data.</param>
 	protected override void SetDesc(Item itemData){
 		// do some bounds and null checking
 		StatsItem item = (StatsItem)itemData;

@@ -22,8 +22,29 @@ public class GameTutorialTriggers : GameTutorial{
 	protected override void SetKey(){
 		tutorialKey = TutorialManagerBedroom.TUT_TRIGGERS;
 	}
-			
+
+	//TODO: temp last tutorial step. needs review
 	protected override void _End(bool isFinished){
+//		// since this is the last tutorial, show a little notification
+//		string strKey = "TUTS_FINISHED";											// key of text to show
+//		string strImage = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
+//		string strAnalytics = "";														// analytics tracker
+//		
+//		// show the standard popup
+//		string petName = DataManager.Instance.GameData.PetInfo.PetName;
+//		TutorialUIManager.AddStandardTutTip(NotificationPopupType.TipWithImage, 
+//		                                    String.Format(Localization.Localize(strKey), 
+//		              StringUtils.FormatStringPossession(petName)),
+//		                                    strImage, null, true, true, strAnalytics);
+//		
+//		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
+//		if(wellapadButton != null){
+//			ButtonWellapad buttonWellapadScript = wellapadButton.GetComponent<ButtonWellapad>();
+//			buttonWellapadScript.SetListenersToWellapadMissionController();
+//		}
+//		else{
+//			Debug.LogError("wellapad button can't be found: " + this);
+//		}
 	}
 
 	protected override void ProcessStep(int step){
@@ -44,8 +65,12 @@ public class GameTutorialTriggers : GameTutorial{
 	}
 	
 	private IEnumerator ShowWellapad(){
-		float fWait = Constants.GetConstant<float>("TriggerTutorialWait_PreShowWellapad");
-		yield return new WaitForSeconds(fWait);
+		float seconds = Constants.GetConstant<float>("TriggerTutorialWait_PreShowWellapad");
+		yield return new WaitForSeconds(seconds);
+
+		//Create new tasks for tutorial part2
+		WellapadMissionController.Instance.CreateTutorialPart2Missions();
+
 		// highlight the fight task
 		WellapadMissionController.Instance.HighlightTask("CleanRoom");
 	
@@ -122,7 +147,7 @@ public class GameTutorialTriggers : GameTutorial{
 		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, useViewPort: false, option: option);
 	
 		// spotlight the dust
-		SpotlightObject(scriptTrigger.gameObject, fingerHint: true);
+		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);
 	
 		// add the dust to clickable objects
 		AddToProcessList(scriptTrigger.gameObject);

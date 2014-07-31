@@ -2,9 +2,10 @@
 using System;
 using System.Collections;
 
-public class BedroomInhalerUIManager : MonoBehaviour {
+public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
-	public Animation spinningAnimation;
+	public Animation inhalerAnimationController;
+	public GameObject fireOrbParent;
 	public GameObject starParticle;
 	public GameObject rechargeParticle;
 
@@ -12,18 +13,28 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 	public UILabel coolDownLabel;
 	public UISlider coolDownSlider;
 
+	private GameObject fireOrbObject;
+
+	public GameObject FireOrbReference{
+		get{
+			return fireOrbObject;
+		}
+	}
+
 	// Start the correct animations based on its state
 	void Start(){
+		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
+		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			ReadyToUseMode();
 		}
 		else{
 			CoolDownMode();
-		}
 
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
-		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
+			if(!TutorialManager.Instance.IsTutorialActive())
+				CheckToDropFireOrb();
+		}
 	}
 
 	void OnDestroy(){
@@ -31,11 +42,52 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(0, 0, 100, 100), "start")){
+//			CheckToDropFireOrb();
+//		}
+//	}
+
+	/// <summary>
+	/// Checks to drop fire orb.
+	/// If user hasn't received fire orb after using inhaler, a fire orb will be 
+	/// dropped from the inhaler
+	/// </summary>
+	public void CheckToDropFireOrb(){
+		bool hasReceivedFireOrb = DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb;
+		if(!hasReceivedFireOrb){
+			//spawn fire orb
+			GameObject fireOrbPrefab = Resources.Load("DroppedItemFireOrb") as GameObject;
+			fireOrbObject = NGUITools.AddChild(fireOrbParent, fireOrbPrefab);
+
+			fireOrbObject.layer = LayerMask.NameToLayer("Default");
+			fireOrbObject.transform.parent = fireOrbParent.transform;
+			DroppedObjectItem droppedObjectItem = fireOrbObject.GetComponent<DroppedObjectItem>();
+
+			Item fireOrbData = DataLoaderItems.GetItem("Usable1");
+
+			droppedObjectItem.Init(fireOrbData);
+			droppedObjectItem.ChangeAutoCollectTime(15f);
+
+			fireOrbObject.SetActive(false);
+
+			//Activate animation here
+			Invoke("SpawnFireOrb", 1.5f);
+
+			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = true;
+		}
+	}
+
+	private void SpawnFireOrb(){
+		inhalerAnimationController.Play("SpawnFireOrb");
+		fireOrbObject.SetActive(true);
+	}
+
 	/// <summary>
 	/// Cools down mode.
 	/// </summary>
 	private void CoolDownMode(){
-		spinningAnimation.Stop();
+		inhalerAnimationController.Stop();
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
 		progressBar3D.SetActive(true);
@@ -45,10 +97,12 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 	/// Readies to use mode.
 	/// </summary>
 	private void ReadyToUseMode(){
-		spinningAnimation.Play();
+		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
 		progressBar3D.SetActive(false);
+
+		DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){
@@ -65,11 +119,13 @@ public class BedroomInhalerUIManager : MonoBehaviour {
 		string displayTime = "";
 
 		if(timeLeft.Hours > 0)
-			displayTime = string.Format("{0}H {1}M", timeLeft.Hours, timeLeft.Minutes);
+			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
+			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
 		else if(timeLeft.Minutes > 0)
-			displayTime = string.Format("{0}M {1}S", timeLeft.Minutes, timeLeft.Seconds);
+			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
 		else
-			displayTime = string.Format("{0}S", timeLeft.Seconds);
+			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
+
 		
 		// set the label
 		coolDownLabel.text = displayTime;

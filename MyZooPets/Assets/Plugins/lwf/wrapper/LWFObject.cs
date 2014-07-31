@@ -391,6 +391,7 @@ public class LWFObject : MonoBehaviour
 		});
 	}
 
+	// SEAN: this keeps track of numbers of pauses/resumes called! (resumeCount == 0) in order to pause!!!!
 	public virtual void Pause()
 	{
 		--resumeCount;

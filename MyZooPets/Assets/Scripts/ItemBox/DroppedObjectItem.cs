@@ -3,21 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DroppedObject_Item
-// This is an item that is on the ground, in the
-// 3D world (although it may be 2D) that the player
-// can pick up to obtain.
-//---------------------------------------------------
-
+/// <summary>
+/// Dropped object item.
+/// This is an item that is on the ground, in the
+/// 3D world (although it may be 2D) that the player
+/// can pick up to obtain.
+/// </summary>
 public class DroppedObjectItem : DroppedObject{
 	// the item that this object represents
 	private Item dataItem;
-	
-	//---------------------------------------------------
-	// Init()
-	// Inits this dropped object with an item.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Init the specified dropped item.
+	/// </summary>
+	/// <param name="item">Item.</param>
 	public void Init(Item item){
 		// set the state of this item to dropped
 		SetState(DroppedItemStates.Dropped);
@@ -35,11 +34,29 @@ public class DroppedObjectItem : DroppedObject{
 		// also listen for when the inventory logic is being destroyed
 		// InventoryLogic.Instance.OnBeingDestroyed += OnManagerDestroyed;
 	}
-	
-	//---------------------------------------------------
-	// ObtainObject()
-	// Puts the item into the player's inventory.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Changes the auto collect time.
+	/// Use this to increase/decrease the time waiting before the item auto
+	/// collects itself
+	/// </summary>
+	/// <param name="autoCollectTime">Auto collect time.</param>
+	public void ChangeAutoCollectTime(float autoCollectTime){
+		this.timeBeforeAutoCollect = autoCollectTime;
+	}
+
+	/// <summary>
+	/// Turns the auto collect off. Use in tutorial so user is forced to acutally
+	/// click on the item to collect.
+	/// </summary>
+	public void TurnAutoCollectOff(){
+		this.runTimer = false;
+	}
+
+	/// <summary>
+	/// Obtains the object.
+	/// Puts the item into the player's inventory.
+	/// </summary>
 	protected override void ObtainObject(){
 		DroppedItemStates eState = GetState();
 		
@@ -59,29 +76,17 @@ public class DroppedObjectItem : DroppedObject{
 		// destroy the object
 		Destroy(gameObject);		
 	}	
-	
-	//---------------------------------------------------
-	// AutoCollectAndDestroy()
-	// Callback sent from the inventory logic because it
-	// is being destroyed (likely because the scene is
-	// changing).
-	//---------------------------------------------------	
-	protected override void AutoCollectAndDestroy(){
+
+	/// <summary>
+	/// Collects and destroy automatically.
+	/// Callback sent from the inventory logic because it
+	/// is being destroyed (likely because the scene is
+	/// changing).
+	/// </summary>
+	protected override void CollectAndDestroyAutomatically(){
 		// if the inventory is being destroyed, but this dropped item has not yet been awarded, award it
 		DroppedItemStates eState = GetState();
 		if(eState != DroppedItemStates.Awarded)
 			ObtainObject();
 	}	
-
-	// *note: bad idea to wait until the scene is cleaning up to collect the object
-	// this override function is not called right now.	
-	//---------------------------------------------------
-	// OnObjectDestroyed()
-	//---------------------------------------------------		
-	// protected override void OnObjectDestroyed(){
-		// if this dropped item is being destroyed, has not yet been awarded, AND the inventory still exists, obtain it
-		// DroppedItemStates eState = GetState();
-		// if(eState != DroppedItemStates.Awarded && InventoryLogic.Instance != null)
-		// 	ObtainObject();
-	// }	
 }

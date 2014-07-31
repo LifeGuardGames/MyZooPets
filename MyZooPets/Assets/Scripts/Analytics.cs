@@ -55,39 +55,6 @@ public class Analytics : MonoBehaviour {
             return instance;
         }
     }
-
-    //---------------------- important methods from MAT SDK --------------------
-    #if UNITY_ANDROID
-        // Pass the name of the plugin's dynamic library.
-        // Import any functions we will be using from the MAT lib.
-        // (I've listed them all here)
-        [DllImport ("mobileapptracker")]
-        private static extern void initNativeCode(string advertiserId, string conversionKey);
-
-        [DllImport ("mobileapptracker")]
-        private static extern void setExistingUser(bool isExisting);
-
-        // Tracking functions
-        [DllImport ("mobileapptracker")]
-        private static extern int measureSession();
-    #endif
-
-     #if UNITY_IPHONE
-        // Main initializer method for MAT
-        [DllImport ("__Internal")]
-        private static extern void initNativeCode(string advertiserId, string conversionKey);
-
-        // Methods for setting Apple related id
-        [DllImport ("__Internal")]
-        private static extern void setAppleAdvertisingIdentifier(string appleAdvertisingIdentifier, bool trackingEnabled);
-
-        [DllImport ("__Internal")] 
-        private static extern void setExistingUser(bool isExisting);
-
-        // Methods to track install, update events
-        [DllImport ("__Internal")]
-        private static extern void measureSession();
-    #endif
     //--------------------------------------------------------------------------
 
     void Awake(){
@@ -101,36 +68,6 @@ public class Analytics : MonoBehaviour {
 
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
-
-        #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
-            //start facebook sdk
-            FB.Init(OnInitComplete);
-
-            //start MAT sdk
-            initNativeCode(MAT_ADVERTISER_ID, MAT_CONVERSION_KEY);
-
-            #if UNITY_IPHONE
-                setAppleAdvertisingIdentifier(iPhone.advertisingIdentifier, iPhone.advertisingTrackingEnabled);
-            #endif
-
-            // For existing users prior to MAT SDK implementation, call setExistingUser(true) before measureSession.
-            // Otherwise, existing users will be counted as new installs the first time they run your app.
-//            if(!DataManager.Instance.IsFirstTime)
-//                setExistingUser(true);
-
-            measureSession();
-        #endif
-    }
-
-    private void OnInitComplete(){
-        //tell facebook this is the first install.
-        //i think facebook sdk only sends the first ever publish install so we
-        //don't have to do the first install check ourself
-        FB.PublishInstall(PublishComplete);
-    }
-
-    private void PublishComplete(FBResult result){
-        Debug.Log("publish response: " + result.Text);
     }
 
     //=========================Runner Game======================================

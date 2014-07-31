@@ -17,11 +17,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
-    // private bool skipComic = false;
+     private bool isComicOn;
 	
     void Awake(){
         eModeType = UIModeTypes.CustomizePet;
-        // skipComic = Constants.GetConstant<bool>("SkipIntroComic");
+        isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }
 
 	//---------------------------------------------------
@@ -98,7 +98,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             if(VersionManager.IsLite()){
                 LoadScene();
             }else{
-				LoadScene();
+
+				ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+				if(isComicOn)
+					Invoke("ShowIntroMovie", 1);
+				else
+					LoadScene();
             }
 		}
 
@@ -110,6 +115,23 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 //            SelectionUIManager.Instance.ToggleSpotLight(false);
         }
     }
+
+	private void ShowIntroMovie() {
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro"))
+			LoadScene();
+		
+		AudioManager.Instance.LowerBackgroundVolume(0.1f);
+		
+		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
+		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		ComicPlayer.OnComicPlayerDone += IntroComicDone;
+	}
+
+	private void IntroComicDone(object sender, EventArgs args){
+		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Comic_Intro");
+		ComicPlayer.OnComicPlayerDone -= IntroComicDone;
+		LoadScene();
+	}
 	
 	private void LoadScene(){
 		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");

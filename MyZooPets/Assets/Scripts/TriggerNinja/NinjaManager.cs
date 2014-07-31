@@ -3,11 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// NinjaManager
-// Manager for the trigger ninja game.
-//---------------------------------------------------
-
 public class NinjaManager : MinigameManager<NinjaManager>{
 	// combo related
 	public float comboMaxTime;		// max time between cuts for a combo
@@ -26,19 +21,16 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public Vector2 GetTrailDeltaMove(){
 		return trailDeltaMove;
 	}
-
-	//---------------------------------------------------
-	// GetReward()
-	//---------------------------------------------------		
+			
 	public override int GetReward(MinigameRewardTypes eType){
 		// for now, just use the standard way
 		return GetStandardReward(eType);
 	}
-
-	//---------------------------------------------------
-	// GetCombo()
-	// Returns the player's current combo level.
-	//---------------------------------------------------		
+	
+	/// <summary>
+	/// Gets the current combo level.
+	/// </summary>
+	/// <returns>The combo.</returns>
 	public int GetCombo(){
 		return combo;	
 	}
@@ -47,41 +39,94 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		return bestCombo;	
 	}
 	
-	//---------------------------------------------------
-	// IncreaseCombo()
-	// Increases the player's combo level by num.
-	//---------------------------------------------------	
+	/// <summary>
+	/// Sets the combo.
+	/// </summary>
+	/// <param name="num">Number.</param>
+	private void SetCombo(int num){
+		combo = num;	
+	}
+	
+	private void SetComboBest(int num){
+		bestCombo = num;	
+	}
+
+	/// <summary>
+	/// Gets the max combo time. The max time between successful cuts before the 
+	/// player's combo expries
+	/// </summary>
+	/// <returns>The max combo time.</returns>
+	private float GetMaxComboTime(){
+		return comboMaxTime;
+	}	
+
+	/// <summary>
+	/// Increases the combo.
+	/// </summary>
+	/// <param name="num">Number.</param>
 	public void IncreaseCombo(int num){
-		// increase the combo
-		int nCombo = GetCombo();
-		nCombo += num;
-		SetCombo(nCombo);
-		
-		// by default, increasing the combo resets the countdown before the combo expires
-		comboTime = GetMaxComboTime();
+		if(!IsTutorialRunning()){
+			// increase the combo
+			int nCombo = GetCombo();
+			nCombo += num;
+			SetCombo(nCombo);
+			
+			// by default, increasing the combo resets the countdown before the combo expires
+			comboTime = GetMaxComboTime();
+		}
 	}
 	
 	void Awake(){
-		//TO DO - not sure if this is the best place to set frame rate
 		Application.targetFrameRate = 60;
 	}
-	
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------	
-	protected override void _Start(){
-	}	
-	
-	//---------------------------------------------------
-	// _OnDestroy()
-	//---------------------------------------------------	
+
+	void OnDrag(DragGesture gesture){
+		// check is playing
+		if(GetGameState() != MinigameStates.Playing)
+			return;
+		
+		// update the ninja gesture cut trail
+		UpdateTrail(gesture);
+		
+		//-----------Figure out the direction of the trail-------------
+		Vector2 dir = gesture.TotalMove.normalized; // you could also use Gesture.DeltaMove to get the movement change since last frame
+		FingerGestures.SwipeDirection swipeDir = FingerGestures.GetSwipeDirection(dir);
+		
+		if(swipeDir != lastDirection &&
+		   swipeDir != FingerGestures.SwipeDirection.UpperLeftDiagonal &&
+		   swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
+		   swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
+		   swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
+			AudioManager.Instance.PlayClip("swordCut");
+		}
+		
+		lastDirection = swipeDir;
+		//--------------- end -----------------------
+		
+		switch(gesture.Phase){
+		case ContinuousGesturePhase.Updated:
+			GameObject go = gesture.Selection;
+			if(go){
+				//Debug.Log("Touching " + go.name);
+				NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
+				
+				// if the trigger is null, check the parent...a little hacky, but sue me!
+				if(trigger == null)
+					trigger = go.transform.parent.gameObject.GetComponent<NinjaTrigger>();
+				
+				if(trigger)
+					trigger.OnCut(gesture.Position);
+			}
+			break;
+		}
+	}
+
+	protected override void _Start(){}	
+
 	protected override void _OnDestroy(){
 		Application.targetFrameRate = 30;
 	}
-	
-	//---------------------------------------------------
-	// _NewGame()
-	//---------------------------------------------------	
+
 	protected override void _NewGame(){		
 		// reset variables
 		comboTime = 0;
@@ -91,14 +136,11 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		currentTriggerEntries = null;
 
 		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(NinjaTutorial.TUT_KEY)))
+			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)))
 			StartTutorial();
 
 	}
-	
-	//---------------------------------------------------
-	// _GameOver()
-	//---------------------------------------------------		
+			
 	protected override void _GameOver(){
 		// send out combo task
 		int nBestCombo = GetComboBest();
@@ -107,10 +149,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		//check for badge unlock
 		UpdateBadgeProgress();
 	}		
-	
-	//---------------------------------------------------
-	// GetMinigameKey()
-	//---------------------------------------------------	
+
 	protected override string GetMinigameKey(){
 		return "Ninja";	
 	}
@@ -119,31 +158,28 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
 	}
 	
-	//---------------------------------------------------
-	// HasCutscene()
-	//---------------------------------------------------		
+		
 	protected override bool HasCutscene(){
 		return false;
 	}	
-	
-	//---------------------------------------------------
-	// _Update()
-	//---------------------------------------------------
+
 	protected override void _Update(){
-		float fDelta = Time.deltaTime;
+		if(IsTutorialRunning()) return;
+
+		float deltaTime = Time.deltaTime;
 		
 		// update the player's combo
-		UpdateComboTimer(fDelta);
+		UpdateComboTimer(deltaTime);
 		
 		// if there is a current group of spawn entries in process...
 		if(currentTriggerEntries != null && currentTriggerEntries.Count > 0){
 			// count up
-			timeCount += fDelta;
+			timeCount += deltaTime;
 			
 			// if our time has surpassed the next entry's time, do it up and remove that entry
 			NinjaDataEntry entry = currentTriggerEntries[0];
-			float fTimeEntry = entry.GetTime();
-			if(timeCount >= fTimeEntry){
+			float timeEntry = entry.GetTime();
+			if(timeCount >= timeEntry){
 				SpawnGroup(entry);
 				currentTriggerEntries.RemoveAt(0);
 			}
@@ -157,111 +193,51 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		else if(timeCount <= 0){
 			// otherwise, there is no current group and it is time to start one, 
 			// so figure out which one to begin
-			NinjaScoring eScore;
+			NinjaScoring scoreKey;
 			NinjaData data = null;
 
-			if(!IsTutorialRunning()){
-				eScore = GetScoringKey();
-				data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-			}
-			//Tutorial mode spawns specific NinjaData
-			else{
-				data = GetTutorialSpawnGroup();
-			}
-			//Debug.Log("STARTING GROUP " + data.GetID() + " of length " + data.GetEntries().Count);
+
+			scoreKey = GetScoringKey();
+			data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, scoreKey);
+
+	
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
 			currentTriggerEntries = new List<NinjaDataEntry>(data.GetEntries());
 		}
 		else
-			timeCount -= fDelta;	// otherwise, there is no group and we still need to countdown before spawning the next group
-	}	
+			timeCount -= deltaTime;	// otherwise, there is no group and we still need to countdown before spawning the next group
+	}
 
-	//---------------------------------------------------
-	// GetTutorialSpawnGroup()
-	// Return the appropriate NinjaDataEntry for each tutorial step
-	//---------------------------------------------------
-	private NinjaData GetTutorialSpawnGroup(){
-		//get tutorial class
-		NinjaTutorial tutorial = (NinjaTutorial)GetTutorial();
+	public GameObject SpawnSingleTriggerTutorial(){
+		GameObject triggerPrefab = (GameObject) Resources.Load("NinjaTrigger1");
 
-		//get current step id
-		int currentTutStep = tutorial.GetStep(); 
+		Vector3 triggerLocation = new Vector3(0, 2.8f, 0);
 
-		NinjaScoring eScore = NinjaScoring.Start_1;
-		NinjaData data = null;
+		//instantiate trigger 
+		GameObject triggerObject = (GameObject) Instantiate(triggerPrefab, triggerLocation, 
+		                                                    triggerPrefab.transform.localRotation);
+		Rigidbody triggerObjectRigidbody = triggerObject.GetComponent<Rigidbody>();
+		triggerObjectRigidbody.useGravity = false;
+		triggerObjectRigidbody.constraints = RigidbodyConstraints.None;
+		triggerObjectRigidbody.constraints = RigidbodyConstraints.FreezePositionX | 
+			RigidbodyConstraints.FreezePositionY | 
+				RigidbodyConstraints.FreezeRotationX |
+				RigidbodyConstraints.FreezeRotationY;
 
-		//Different tutorial step spawns different NinjaData	
-		switch(currentTutStep){
-		case 0:
-			eScore = NinjaScoring.Start_1;
-			break;
-		case 1:
-			eScore = NinjaScoring.Start_3;
-			break;
-		}
-
-		data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, eScore);
-
-		return data;
-
-	}	
-	
-
-	//---------------------------------------------------
-	// OnDrag()
-	//---------------------------------------------------	
-	void OnDrag(DragGesture gesture){
-		// check is playing
-		if(GetGameState() != MinigameStates.Playing)
-			return;
-		
-		// update the ninja gesture cut trail
-		UpdateTrail(gesture);
-
-		//-----------Figure out the direction of the trail-------------
-		Vector2 dir = gesture.TotalMove.normalized; // you could also use Gesture.DeltaMove to get the movement change since last frame
-		FingerGestures.SwipeDirection swipeDir = FingerGestures.GetSwipeDirection(dir);
-
-		if(swipeDir != lastDirection &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
-			AudioManager.Instance.PlayClip("swordCut");
-		}
-
-		lastDirection = swipeDir;
-		//--------------- end -----------------------
-
-		GameObject go = gesture.Selection;
-		if(go){
-			//Debug.Log("Touching " + go.name);
-			NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
-			
-			// if the trigger is null, check the parent...a little hacky, but sue me!
-			if(trigger == null)
-				trigger = go.transform.parent.gameObject.GetComponent<NinjaTrigger>();
-				
-			if(trigger)
-				trigger.OnCut(gesture.Position);
-		}
+		return triggerObject;
 	}
 	
-	//---------------------------------------------------
-	// UpdateTrail()
-	// Updates the trail renderer that follows the
-	// user's finger/mouse around.
-	// I'm not sure how/why FingerGestures only calls
-	// drag events on this class; otherwise I would have
-	// had the trail itself take these messages...
-	//---------------------------------------------------	
+	/// <summary>
+	/// Updates the trail.
+	/// </summary>
+	/// <param name="gesture">Gesture.</param>
 	private void UpdateTrail(DragGesture gesture){
 		ContinuousGesturePhase ePhase = gesture.Phase;
-		
+
 		// the screen position the user's finger is at currently
 		Vector2 vPos = gesture.Position;
-	    
+
 		// based on phase of the gesture, call certain functions
 		switch(ePhase){
 		case ContinuousGesturePhase.Started:
@@ -281,22 +257,26 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		trailDeltaMove = gesture.DeltaMove;
 	}
 
-	//---------------------------------------------------
-	// SpawnGroup()
-	//---------------------------------------------------		
+	/// <summary>
+	/// Spawns the group.
+	/// </summary>
+	/// <param name="entry">Entry.</param>
 	private void SpawnGroup(NinjaDataEntry entry){
 		// create the proper list of objects to spawn
-		int nTriggers = entry.GetTriggers();
-		int nBombs = entry.GetBombs();
+		int numOfTriggers = entry.GetTriggers();
+		int numOfBombs = entry.GetBombs();
 		List<string> listObjects = new List<string>();
-		for(int i = 0; i < nTriggers; ++i){
+
+		for(int i = 0; i < numOfTriggers; ++i){
 			// NOTE: if want to add variation over time, use GetRandomTrigger(n to choose from)
-			string randomTrigger = DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
+			string randomTrigger = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomTrigger(DataLoaderNinjaTriggersAndBombs.numTriggers);
 			listObjects.Add(randomTrigger);
 		}
-		for(int i = 0; i < nBombs; ++i){
+		for(int i = 0; i < numOfBombs; ++i){
 			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
-			string randomBomb = DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
+			string randomBomb = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
 		}
 		
@@ -304,8 +284,8 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		listObjects.Shuffle();
 		
 		// create the proper object based off the entry's pattern
-		NinjaPatterns eType = entry.GetPattern();
-		switch(eType){
+		NinjaPatterns patternType = entry.GetPattern();
+		switch(patternType){
 		case NinjaPatterns.Separate:
 			new SpawnGroupSeparate(listObjects);
 			break;
@@ -322,17 +302,17 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			new SpawnGroupSplit(listObjects);
 			break;			
 		default:
-			Debug.LogError("Unhandled group type: " + eType);
+			Debug.LogError("Unhandled group type: " + patternType);
 			break;
 		}		
 	}
-
-	//---------------------------------------------------
-	// GetScoringKey()
-	// Returns the current scoring key, based on the
-	// player's current score.  This function is a little
-	// hacky.
-	//---------------------------------------------------	
+	
+	/// <summary>
+	/// Returns the current scoring key, based on the
+	/// player's current score.  This function is a little
+	/// hacky.
+	/// </summary>
+	/// <returns>The scoring key.</returns>
 	private NinjaScoring GetScoringKey(){
 		int nScore = GetScore();
 		NinjaScoring eScore;
@@ -348,75 +328,49 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		else
 			eScore = NinjaScoring.High;
 		
-		//Debug.Log("Current score key: " + eScore);
-		
 		return eScore;
 	}
-	
-	//---------------------------------------------------
-	// SetCombo()
-	// Sets the player's combo level to num.
-	//---------------------------------------------------	
-	private void SetCombo(int num){
-		combo = num;	
-	}
 
-	private void SetComboBest(int num){
-		bestCombo = num;	
-	}
-	
-	//---------------------------------------------------
-	// GetMaxComboTime()
-	// Returns the max time between successful cuts before
-	// the player's combo expires.
-	//---------------------------------------------------	
-	private float GetMaxComboTime(){
-		return comboMaxTime;
-	}	
-	
-	//---------------------------------------------------
-	// UpdateComboTimer()
-	// Takes care of updating the combo timer.
-	//---------------------------------------------------	
-	private void UpdateComboTimer(float fDelta){
+	/// <summary>
+	/// Updates the combo timer.
+	/// </summary>
+	/// <param name="fDelta">F delta.</param>
+	private void UpdateComboTimer(float deltaTime){
 		// if the player doesn't have a combo going, don't bother
-		int nCombo = GetCombo();
-		if(nCombo <= 0)
+		int combo = GetCombo();
+		if(combo <= 0)
 			return;
 		
 		// update the time
-		comboTime -= fDelta;
+		comboTime -= deltaTime;
 		
 		// if the time has expired, end the current combo
 		if(comboTime <= 0)
 			OnComboEnd();
 	}
-	
-	//---------------------------------------------------
-	// OnComboEnd()
-	//---------------------------------------------------	
+
 	private void OnComboEnd(){
 		// give the player an additional point for each level of their combo
-		int nCombo = GetCombo();
-		if(nCombo > 2){
-			UpdateScore(nCombo);
+		int combo = GetCombo();
+		if(combo > 2){
+			UpdateScore(combo);
 				        	
 			// get the right text for combo
 			string strText = Localization.Localize("NINJA_COMBO");
-			strText = String.Format(strText, nCombo);
+			strText = String.Format(strText, combo);
 			
 			// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
-			Vector3 vPos = lastPos;
-			vPos.y *= CameraManager.Instance.GetRatioDifference();
-			vPos.x *= CameraManager.Instance.GetRatioDifference();
-			vPos = CameraManager.Instance.TransformAnchorPosition(vPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
+			Vector3 position = lastPos;
+			position.y *= CameraManager.Instance.GetRatioDifference();
+			position.x *= CameraManager.Instance.GetRatioDifference();
+			position = CameraManager.Instance.TransformAnchorPosition(position, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 	
 			// set up the hashtable full of options
 			Hashtable option = new Hashtable();
 			option.Add("parent", GameObject.Find("Anchor-Center"));
 			option.Add("text", strText);
 			option.Add("prefab", "NinjaComboFloatyText");
-			option.Add("position", vPos);
+			option.Add("position", position);
 			option.Add("textSize", Constants.GetConstant<float>("Ninja_ComboTextSize"));
 			
 			// spawn floaty text
@@ -424,20 +378,17 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}		
 		
 		// if the current combo was better than their best, update it
-		int nBest = GetComboBest();
-		if(nCombo > nBest)
-			SetComboBest(nCombo);
+		int bestCombo = GetComboBest();
+		if(combo > bestCombo)
+			SetComboBest(combo);
 		
 		// reset the combo down to 0
 		SetCombo(0);	
-		
-		//Debug.Log("Combo ended: " + nCombo);
 	}
-	
-	//---------------------------------------------------
-	// UpdateBadgeProgress()
-	// Check with BadgeLogic to see if any badge can be unlocked
-	//---------------------------------------------------
+
+	/// <summary>
+	/// Updates the badge progress.
+	/// </summary>
 	private void UpdateBadgeProgress(){
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.NinjaScore, 
             GetScore(), true);

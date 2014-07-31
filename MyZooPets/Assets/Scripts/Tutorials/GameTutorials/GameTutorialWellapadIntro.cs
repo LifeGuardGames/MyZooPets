@@ -47,7 +47,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		RemoveSpotlight();		
 	
 		// also, set the correct tutorial tasks in the wellapad
-		WellapadMissionController.Instance.CreateTutorialMissions();	
+		WellapadMissionController.Instance.CreateTutorialPart1Missions();	
 	
 		// wait a frame for the new UI elements to create themselves
 		yield return 0;

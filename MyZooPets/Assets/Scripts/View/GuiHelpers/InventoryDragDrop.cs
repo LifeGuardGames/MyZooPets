@@ -95,7 +95,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
-		if(!ClickManager.Instance.CanRespondToTap()) return;
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
 		
 		if (enabled && UICamera.currentTouchID > -2)
 		{
@@ -108,21 +108,34 @@ public class InventoryDragDrop : MonoBehaviour {
 				mIsDragging = true;
 				mParent = mTrans.parent;
 				mTrans.parent = DragDropRoot.root;
-				
-				Vector3 pos = mTrans.localPosition;
-				pos.z = 0f;
-				mTrans.localPosition = pos;
+
+				//The following code changes the position of the dragged item so that it
+				//is always ontop of the finger. This way the items won't be blocked by
+				//the finger while dragging
+
+				//the finger position needs to be adjusted by the actual ratio of the game.
+				//screen size could be different on diff devices
+				Vector3 adjustedPosition = new Vector3(UICamera.currentTouch.pos.x * CameraManager.Instance.ratioX,
+				                                  UICamera.currentTouch.pos.y * CameraManager.Instance.ratioY,
+				                                  0f);
+
+				//after the position is adjusted we need to transform the position from BottomLeft anchor to center anchor
+				//NGUI's default anchor is BottomLeft so UICamera.currentTouch.pos is relative to BottomLeft.
+				//The dragged item is in Anchor-Center, so we need to transform the adjusted position for the 
+				//coordinates to work
+				Vector3 dragStartingPosition = CameraManager.Instance.TransformAnchorPosition(adjustedPosition, 
+				                                               InterfaceAnchors.BottomLeft, 
+				                                               InterfaceAnchors.Center);
+
+				//the starting position of the dragged item is always offseted by 30 unit
+				//from where the finger is pressing.
+				dragStartingPosition.y += 30;
+				mTrans.localPosition = dragStartingPosition;
 
 				NGUITools.MarkParentAsChanged(gameObject);
 			}
 			else if(mIsDragging)
 			{
-				// Sean: Not syncing with UIRoot manual height for ratio change account for them here
-				// TODO-s Find pernament solution to this
-				// Joe: Reverting these changes to fix the drag on PC and iOS.  If something is still wrong on Android, and this change fixed it,
-				// Jason: reverting joe's changes cause it seem to be working.....kabooya
-				// we may just want to ifdef these code chunks
-				//Debug.Log(ratioX + " " + ratioY + " " + Screen.height + " " + Screen.width);
 				Vector3 newDelta = new Vector3(delta.x * CameraManager.Instance.ratioX, delta.y * CameraManager.Instance.ratioY, 0f);
 				
 				mTrans.localPosition += newDelta;
@@ -142,7 +155,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnPress (bool isPressed)
 	{
-		if(!ClickManager.Instance.CanRespondToTap()) return;
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
 
 		if(!mIsDragging)
 			isClickLock = true;

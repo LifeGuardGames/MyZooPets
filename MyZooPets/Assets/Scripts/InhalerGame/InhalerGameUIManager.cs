@@ -42,7 +42,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         Input.multiTouchEnabled = true;
         InhalerLogic.OnGameOver += OnGameEnd;
         InhalerLogic.OnNextStep += OnNextStep;
-        GetFireAnimationController.OnGetFireAnimationDone += OnGetFireAnimationDone;
 
         StartCoroutine(StartGame());
     }
@@ -50,7 +49,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     void OnDestroy(){
         InhalerLogic.OnGameOver -= OnGameEnd;
         InhalerLogic.OnNextStep -= OnNextStep;
-        GetFireAnimationController.OnGetFireAnimationDone -= OnGetFireAnimationDone;
     }
 
     //---------------------------------------------
@@ -61,24 +59,14 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     // throughout the game (for someone's first time playing this).
     //----------------------------------------------
     void Update(){
-        if(runShowHintTimer){
+        if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
             ShowHintTimer(); // This checks and shows hints if necessary.
         }
     }
  
-    private  void HideProgressBar(){
+    private void HideProgressBar(){
         progressBarObject.SetActive(false);
     }
-
-//    private void ShowProgressBar(){
-//        progressBarObject.SetActive(true);
-//    }
-//
-//    private void ShowGameUI(){
-//        ShowProgressBar();
-//        if(HintEvent != null)
-//            HintEvent(this, EventArgs.Empty);
-//    }
 
     private void ShowHUD(){
         HUDUIManager.Instance.ShowPanel();
@@ -88,9 +76,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         HUDUIManager.Instance.HidePanel();
     }
 
-    private void HideInhaler(){
+    public void HideInhaler(){
 		inhalerWholeObject.Play("InhalerFade");
-        //inhalerBody.SetActive(false);
     }
 
     private void ShowInhaler(){
@@ -102,8 +89,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
         HideHUD();
         SetUpHintTimer();
-
-        // Analytics.Instance.StartPlayTimeTracker();
 
         //Start the first hint
         if(HintEvent != null)
@@ -178,44 +163,15 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
     //Event listener. Listens to game over message. Play fire animation 
     private void OnGameEnd(object sender, EventArgs args){
         ShowHUD();
-        HideInhaler();
         HideProgressBar();
 
-        //Spawn floaty
-        Hashtable option = new Hashtable();
-        option.Add("parent", GameObject.Find("Anchor-Center"));
-        option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-        option.Add("textSize", 100f);
-        option.Add("color", Color.white);
-
-        FloatyUtil.SpawnFloatyText(option);
-
-        //play sound
-        AudioManager.Instance.PlayClip("inhalerFireFlow");
-
-        //play animation
-        fireAnimationController.PlaySequence();
-		foreach(GameObject light in lightsToTurnOff){
-			light.SetActive(false);
-		}
-		foreach(ParticleSystemController fireParticle in particlesToTurnOff){
-			fireParticle.Stop();
-		}
+		Invoke("GiveReward", 1.0f);
     }
-
-    //Event listener. continue the game after GetFireAnimation is done
-    private void OnGetFireAnimationDone(object sender, EventArgs args){
-        StatsController.Instance.ChangeFireBreaths(1);
-        AudioManager.Instance.PlayClip("inhalerShiningFireIcon");
-        
-        Invoke("GiveReward", 1.0f);
-    }
-
+	
     //Reward player after the animation is done
     private void GiveReward(){
 		int nXP = DataLoaderXpRewards.GetXP( "DailyInhaler", new Hashtable() );
-//        StatsController.Instance.ChangeStats(nXP, Vector3.zero, 
-//            starIncrement, Vector3.zero, 0, Vector3.zero, 0, Vector3.zero, false, false, false);
+
 		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
         Invoke("QuitInhalerGame", 2.0f);
     }

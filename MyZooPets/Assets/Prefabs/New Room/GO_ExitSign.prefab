@@ -27,6 +27,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400004}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: Label
   m_TagString: Untagged
@@ -64,6 +65,7 @@ Transform:
   - {fileID: 400004}
   - {fileID: 400002}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -72,9 +74,10 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -.564617157}
-  m_LocalScale: {x: 3, y: 3, z: .0207500849}
+  m_LocalScale: {x: 2.20000005, y: 2.20000005, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+  m_RootOrder: 1
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -86,6 +89,7 @@ Transform:
   m_LocalScale: {x: 61.3191338, y: 61.3191261, z: 61.3191338}
   m_Children: []
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -104,6 +108,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -137,9 +143,13 @@ MonoBehaviour:
   bSprite: 0
   eMode: 0
   strSoundProcess: houseEntrance
+  buttonName: 
   bCheckClickManager: 1
+  modeTypes: 00000000
+  buttonSound: houseEntrance
+  isCheckingClickManager: 1
+  isSprite: 0
   strScene: MenuScene
-  scriptTransition: {fileID: 0}
   vOffset: {x: 0, y: 0, z: -10}
   vFinalRotation: {x: 0, y: 0, z: 0}
   fTime: 2
@@ -147,6 +157,7 @@ MonoBehaviour:
   shouldSaveSceneData: 0
   cameraGO: {fileID: 0}
   petLWF: {fileID: 0}
+  analyticsEvent: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,7 +188,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 0
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: Exit
+  mText: Menu
   mMaxLineWidth: 0
   mMaxLineHeight: 0
   mEncoding: 1
@@ -191,6 +202,18 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: MENU_TITLE
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

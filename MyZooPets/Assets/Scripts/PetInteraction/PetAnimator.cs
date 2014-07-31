@@ -155,11 +155,13 @@ public class PetAnimator : LgCharacterAnimator{
 		
 		// actually kick off the effect
 		scriptFire = goFire.GetComponent<FireBlowParticleController>();
-		
+
+		StartCoroutine(FinishFire());
+//		FinishFire();
 		// start a coroutine to pause the animation, for timing purposes.
 		// it is resumed from the FireMeter script.
-		float fFireWait = Constants.GetConstant<float>("FireInhale");
-		StartCoroutine(PauseAnim(fFireWait));
+//		float fFireWait = Constants.GetConstant<float>("FireInhale");
+//		StartCoroutine(PauseAnim(fFireWait));
 	}
 	
 	//---------------------------------------------------
@@ -180,7 +182,7 @@ public class PetAnimator : LgCharacterAnimator{
 	//---------------------------------------------------		
 	public IEnumerator FinishFire(){
 		// resume the animation
-		Resume();
+		// Resume();
 		
 		// the pet is actually breathing fire, so play the fire breathing sound
 		LgAudioSource audioFire = AudioManager.Instance.PlayClip("petFire");
@@ -188,19 +190,24 @@ public class PetAnimator : LgCharacterAnimator{
 		// pause it again once the pet begins to exhale
 		float fUntilExhale = Constants.GetConstant<float>("UntilExhale");
 		yield return new WaitForSeconds(fUntilExhale);
-		
+
 		// the pet is now exhaling, so pause
 		Pause();
 		
 		// play the actual particle effect
 		float fFireWait = Constants.GetConstant<float>("FireInhale");
 		float fFireDelay = Constants.GetConstant<float>("FireDelay");
-		StartCoroutine(scriptFire.PlayAfterDelay(fFireDelay - fFireWait - fUntilExhale));		
-		
+		StartCoroutine(scriptFire.PlayAfterDelay(fFireDelay - fFireWait - fUntilExhale));	
+
+		StartCoroutine(HoldForExhale());
+
+	}
+
+	public IEnumerator HoldForExhale(){
 		// then wait another amount of time
 		float fHoldExhale = Constants.GetConstant<float>("HoldExhale");
 		yield return new WaitForSeconds(fHoldExhale);
-		
+
 		// done holding exhale
 		Resume();
 		
@@ -208,9 +215,9 @@ public class PetAnimator : LgCharacterAnimator{
 		FireBlowParticleController script = goFire.GetComponent<FireBlowParticleController>();
 		script.Stop();		
 		
-		// fire breathing portion of the animation is over, so fade out the sound
-		float fFade = Constants.GetConstant<float>("FireSoundFadeTime");
-		StartCoroutine(audioFire.FadeOut(fFade));
+//		// fire breathing portion of the animation is over, so fade out the sound
+//		float fFade = Constants.GetConstant<float>("FireSoundFadeTime");
+//		StartCoroutine(audioFire.FadeOut(fFade));
 	}
 	
 	//---------------------------------------------------
@@ -218,7 +225,7 @@ public class PetAnimator : LgCharacterAnimator{
 	//---------------------------------------------------	
 	public void DoneBreathingFire(bool bFinished){
 		if(!bFinished)
-			Resume();
+			return;
 		else if(bCancelFire == false){
 			// process any callbacks for when the pet finishes breathing fire
 			if(OnBreathEnded != null)

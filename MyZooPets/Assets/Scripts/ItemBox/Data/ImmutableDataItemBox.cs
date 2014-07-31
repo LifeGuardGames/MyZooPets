@@ -61,7 +61,9 @@ public class ImmutableDataItemBox{
 	// list of all potential variations on this item box
 	List<ItemBoxVariation> listVariations;
 
-	public ImmutableDataItemBox(string id, Hashtable hashAttr, List<IXMLNode> listData, string errorMessage){
+	public ImmutableDataItemBox(string id, IXMLNode xmlNode, string errorMessage){
+		List<IXMLNode> listData = XMLUtils.GetChildrenList(xmlNode);
+
 		// set id
 		itemBoxID = id;
 		

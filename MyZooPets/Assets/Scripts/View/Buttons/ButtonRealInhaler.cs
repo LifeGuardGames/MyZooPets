@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// ButtonRealInahler
-// Button class that loads up the real inhaler game.
-//---------------------------------------------------
-
+/// <summary>
+/// Button class that loads up the real inhaler game
+/// </summary>
 public class ButtonRealInhaler : ButtonChangeScene {
 	
 	/// <summary>
@@ -23,57 +21,40 @@ public class ButtonRealInhaler : ButtonChangeScene {
 			CheckToOpenInhaler();
 	}
 	
-//	/// <summary>
-//	/// Shows the cutscene.
-//	/// </summary>
-//	private void ShowCutscene() {
-//		GameObject resourceMovie = Resources.Load("Cutscene_Inhaler") as GameObject;
-//		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-//		CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-//	}
-//	
-//    private void CutsceneDone(object sender, EventArgs args){
-//		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_Inhaler");	
-//		CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-//		ProcessClick();
-//    }	
-
-	//--------------------------------------------------
-	// Check if inhaler can be used at the current time. 
-	// Open if yes or show notification	
-	//--------------------------------------------------
+	/// <summary>
+	/// Checks if inhaler can be used at the current time.
+	/// Open if yes or show notification.
+	/// </summary>
 	private void CheckToOpenInhaler(){
-		if(PlayPeriodLogic.Instance.CanUseRealInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			OpenRealInhaler();
 		}else{
-			PlayNotProcessSound();
-			/////// Send Notication ////////
-			// The notification is going to differ depending on if the user has completed all tutorials or not
+//			PlayNotProcessSound();
+			string soundToPlay;
+			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
+			string popupMessage = "TUT_SUPERWELLA_INHALER";
+
+			if(currentTimeFrame == TimeFrames.Morning){
+				popupMessage = "NOTIFICATION_INHALER_TONIGHT";
+				soundToPlay = "superWellaInhalerTonight";
+			}
+			else{
+				popupMessage = "NOTIFICATION_INHALER_MORNING";
+				soundToPlay = "superWellaInhalerMorning";
+			}
+				
+			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
+			};
 			
-//			// Assign delegate functions to be passed in hashtable
-//			PopupNotificationNGUI.HashEntry button1Function = delegate(){};
-//
-//			//Get next play time
-//			TimeSpan timeSpan = PlayPeriodLogic.Instance.NextPlayPeriod - LgDateTime.GetTimeNow();
-//        	int countDownTime = timeSpan.Hours + 1;
-//			
-//			// choose message based on the state of tutorials
-//			string strMessage;
-//			bool bTutsDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-//			if ( bTutsDone ) 
-//				strMessage = String.Format(Localization.Localize("NOTIFICATION_DONT_NEED_INHALER"), countDownTime.ToString());
-//			else
-//				strMessage = Localization.Localize("NOTIFICATION_DONT_NEED_INHALER_TUT");
-//			
-//			// Populate notification entry table
-//			Hashtable notificationEntry = new Hashtable();
-//			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.OneButton);
-//			notificationEntry.Add(NotificationPopupFields.Message, strMessage );
-//			// notificationEntry.Add(NotificationPopupFields.Button1Label, Localization.Localize("BACK"));
-//			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-//		
-//			// Place notification entry table in static queue
-//			NotificationUIManager.Instance.AddToQueue(notificationEntry);			
+			//Display tutorial notification
+			Hashtable notificationEntry = new Hashtable();
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaInhaler);
+			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize(popupMessage));
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+			
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+			AudioManager.Instance.PlayClip(soundToPlay);
 		}
 	}
 

@@ -9,8 +9,10 @@ using System.Collections;
 public class MutableDataStats{
     public int Points {get; set;} //evolution Points
     public int Stars {get; set;} //currency of the game
+	public int Gems {get; set;} //premium currency of the game
     public int Health {get; set;} //pet's Health
-    public int Mood {get; set;} //pet's mood (weighted or unweighted)
+    public int Mood {get; set;} //pet's mood (refer to as hungry)
+
 	
 	// constants
 	// if the pet's mood <= this number, it will be sad
@@ -32,33 +34,10 @@ public class MutableDataStats{
         Mood = 80;
         Points = 0;
         Stars = 300;
-        // Stars = 1000;
+		Gems = 0;
+//		Gems = 100;
     }
-
-	// public int GetStat( HUDElementType eStat ) {
-	// 	int nStat = 0;
-		
-	// 	switch ( eStat ) {
-	// 	case HUDElementType.Points:
-	// 		nStat = Points;
-	// 		break;
-	// 	case HUDElementType.Health:
-	// 		nStat = Health;
-	// 		break;
-	// 	case HUDElementType.Mood:
-	// 		nStat = Mood;
-	// 		break;
-	// 	case HUDElementType.Stars:
-	// 		nStat = Stars;
-	// 		break;
-	// 	default:
-	// 		Debug.LogError("No such display target for " + eStat);
-	// 		break;
-	// 	}	
-		
-	// 	return nStat;
-	// }
-
+	
     //==============StatsModifiers================
     //Points
     public void AddPoints(int val){
@@ -83,6 +62,14 @@ public class MutableDataStats{
             Stars = 0;
     }
 
+	//Gems
+	public void AddGems(int val){
+		Gems += val;
+	}
+	public void SubstractGems(int val){
+		Gems -= val;
+	}
+
     //Health
     public void AddHealth(int val){
         Health += val;
@@ -96,11 +83,7 @@ public class MutableDataStats{
             Health = 0;
         }
     }
-
-    //Mood
-    // public double GetWeightedMood(){
-    //     return (0.5*Mood + 0.5*Health);
-    // }
+	
     public void AddMood(int val){
 		// cache old mood
 		//int nOldMood = Mood;
@@ -123,12 +106,12 @@ public class MutableDataStats{
             Mood = 0;
         }
     }
-	
-	//---------------------------------------------------
-	// GetMoodState()
-	// Based on the numerical value of the mood stat,
-	// returns an enum of the pet's mood.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the state of the mood. Based on the numerical value of the mood stat,
+	/// returns an enum of the pet's mood
+	/// </summary>
+	/// <returns>The mood state.</returns>
 	public PetMoods GetMoodState() {
 		PetMoods eMood = PetMoods.Happy;
 		
@@ -137,12 +120,12 @@ public class MutableDataStats{
 		
 		return eMood;
 	}
-	
-	//---------------------------------------------------
-	// GetHealthState()
-	// Based on the numerical value of the Health stat,
-	// returns an enum of the pet's Health.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// Gets the state of the health. Based on the numerical value of the Health stat,
+	/// returns an enum of the pet's health.
+	/// </summary>
+	/// <returns>The health state.</returns>
 	public PetHealthStates GetHealthState() {
 		PetHealthStates eHealth = PetHealthStates.Healthy;
 		

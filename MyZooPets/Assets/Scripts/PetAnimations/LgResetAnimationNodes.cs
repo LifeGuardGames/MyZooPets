@@ -61,13 +61,15 @@ public class LgResetAnimationNodes : MonoBehaviour {
 	public void ResetAnimation(string animationState){
 		SetupList(animationState);
 		foreach(GameObject go in validTagList){
-			SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
-			if(spriteRenderer != null){
-				// If the object in our list matches the hashtables' entries enable renderer, else disable
-				spriteRenderer.enabled = (validListCheck.ContainsKey(go.name)) ? true : false;
-			}
-			else{
-				Debug.LogError("No sprite renderer detected on " + go.name);
+			if(go != null){
+				SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
+				if(spriteRenderer != null){
+					// If the object in our list matches the hashtables' entries enable renderer, else disable
+					spriteRenderer.enabled = (validListCheck.ContainsKey(go.name)) ? true : false;
+				}
+				else{
+					Debug.LogError("No sprite renderer detected on " + go.name);
+				}
 			}
 		}
 	}

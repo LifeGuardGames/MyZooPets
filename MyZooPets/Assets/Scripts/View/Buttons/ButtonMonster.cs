@@ -62,12 +62,12 @@ public class ButtonMonster : LgButtonHold{
 	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
-		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
+//		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		
 		// if the pet is currently busy, forgetaboutit
-		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
-			return;
+//		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
+//			return;
 
 		// if can breathe fire, attack the gate!!
 		if(canBreathFire){
@@ -78,8 +78,8 @@ public class ButtonMonster : LgButtonHold{
 			
 			// kick off the attack script
 			int damage = GetDamage();
-			scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-			scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
+//			scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
+//			scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
 			
 			// turn the fire meter on
 			scriptFireMeter.StartFilling();

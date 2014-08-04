@@ -61,9 +61,6 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	private void ShowPetReceivedFoodAnimation(){
-		if(!petAnimator.IsBusy()){
-			petAnimator.PlayUnrestrictedAnim("Eat", true);
-			PetMovement.Instance.StopMoving(false);
-		}
+		PetAnimationManager.Instance.Feed();
 	}
 }

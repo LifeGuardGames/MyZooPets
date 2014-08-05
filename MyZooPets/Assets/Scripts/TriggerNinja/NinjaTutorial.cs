@@ -30,8 +30,6 @@ public class NinjaTutorial : MinigameTutorial {
 	}
 
     protected override void ProcessStep(int step){
-        Hashtable option = new Hashtable();
-
         switch(step){
             case 0:
 				trigger1Object = NinjaManager.Instance.SpawnSingleTriggerTutorial();

@@ -40,8 +40,6 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	}
 	
 	protected override void ProcessStep(int step){
-		Hashtable option = new Hashtable();
-
 		// Cache this on initial call
 		if(zone1Collider == null || zone2Collider == null || zone3Collider == null){
 			zone1Collider = GameObject.Find("Zone1").collider2D;
@@ -84,7 +82,6 @@ public class DoctorMatchTutorial : MinigameTutorial {
 			Debug.LogError("Ninja tutorial has an unhandled step: " + step);
 			break;
 		}
-		
 	}
 
 	private void SetUpCharacterGroup(int itemGroupNumber){

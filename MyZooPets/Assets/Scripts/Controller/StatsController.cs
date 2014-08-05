@@ -253,9 +253,6 @@ public class StatsController : Singleton<StatsController>{
 
 		//HealthyHappySick --> SickVerySick or HealthySadSick --> SickVerySick
 		if(oldHealth == PetHealthStates.Healthy && newHealth == PetHealthStates.VerySick){
-			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
-			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
-
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
@@ -263,30 +260,24 @@ public class StatsController : Singleton<StatsController>{
 
 		// Healthy --> HappySick or Healthy --> SadSick
 		else if(oldHealth == PetHealthStates.Healthy && newHealth == PetHealthStates.Sick){
-			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
-
 			if(OnHealthyToSick != null)
 				OnHealthyToSick(this, EventArgs.Empty);
-				
 		}
 
 		// VerySick --> HealthyHappy or VerySick --> HealthySad
 		else if(oldHealth == PetHealthStates.VerySick && newHealth == PetHealthStates.Healthy){
-
 			if(OnVerySickToHealthy != null)
 				OnVerySickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> HealthyHappy or Sick --> HealthySad
 		else if(oldHealth == PetHealthStates.Sick && newHealth == PetHealthStates.Healthy){
-
 			if(OnSickToHealthy != null)
 				OnSickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> VerySick
 		else if(oldHealth == PetHealthStates.Sick && newHealth == PetHealthStates.VerySick){
-
 			if(OnSickToVerySick != null)
 				OnSickToVerySick(this, EventArgs.Empty);
 

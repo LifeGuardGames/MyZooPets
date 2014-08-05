@@ -1,9 +1,10 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 //change this to PetInteraction Manager to handle item drop as well
 public class PetInteractionManager : MonoBehaviour{
-	public PetAnimator petAnimator;
+//	public PetAnimator petAnimator;
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -14,12 +15,66 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	void OnTap(TapGesture gesture){
-		string colliderName = gesture.Selection.collider.name;
-		if(colliderName == this.gameObject.name){
-			if(ClickManager.Instance.CanRespondToTap() && !petAnimator.IsBusy()){
-				petAnimator.PlayRestrictedAnim("Poke", true);
-				PetMovement.Instance.StopMoving(false);
+		try{
+			string colliderName = gesture.Selection.collider.name;
+			
+			if(colliderName == this.gameObject.name){
+				if(colliderName == "HeadCollider"){
+					PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
+					PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+					if(moodState == PetMoods.Sad || healthState == PetHealthStates.Sick ||
+					   healthState == PetHealthStates.VerySick){
+						PetAnimationManager.Instance.Swat();
+					}
+				}else if(colliderName == "HighFiveCollider"){
+					PetAnimationManager.Instance.FinishHighFive();
+				}else{}
 			}
+		}
+		catch(NullReferenceException e){}
+	}
+	
+	/// <summary>
+	/// Raises the drag event.
+	/// Note: This needs to be here so it catches the OnDrag event sent out by UICamera
+	/// which belongs to NGUI. Finger Gesture also send out the same event so they
+	/// need to be specified otherwise error will be thrown
+	/// </summary>
+	/// <param name="delta">Delta.</param>
+	void OnDrag(Vector2 delta){}
+
+	void OnDrag(DragGesture gesture){
+		try{
+			string colliderName = gesture.Selection.collider.name;
+			
+			if(colliderName == this.gameObject.name){
+				switch(gesture.Phase){
+				case ContinuousGesturePhase.Started:
+					
+					if(colliderName == "HeadCollider")
+						PetAnimationManager.Instance.StartRubbing();
+					else
+						PetAnimationManager.Instance.StartTickling();
+					
+					break;
+				case ContinuousGesturePhase.Ended:
+					
+					if(colliderName == "HeadCollider")
+						PetAnimationManager.Instance.StopRubbing();
+					else
+						PetAnimationManager.Instance.StopTickling();
+					
+					break;
+				}
+			}
+			else{
+				PetAnimationManager.Instance.StopRubbing();
+				PetAnimationManager.Instance.StopTickling();
+			}
+		}
+		catch(NullReferenceException e){
+			PetAnimationManager.Instance.StopRubbing();
+			PetAnimationManager.Instance.StopTickling();
 		}
 	}
 
@@ -61,6 +116,6 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	private void ShowPetReceivedFoodAnimation(){
-		PetAnimationManager.Instance.Feed();
+		PetAnimationManager.Instance.FinishFeeding();
 	}
 }

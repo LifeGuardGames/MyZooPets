@@ -10,7 +10,6 @@ public class AttackGate : Singleton<AttackGate>{
 
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
-	private PetAnimator attacker; // the pet
 
 	public void Init(Gate gateTarget, int damage){
 		this.gateTarget = gateTarget;

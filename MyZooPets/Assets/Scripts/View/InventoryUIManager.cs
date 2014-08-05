@@ -13,7 +13,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public GameObject uiButtonSpriteObject;
 	public GameObject spritePet;
 	public GameObject inventoryItemPrefab;
-	public PetAnimator petAnimator;
 	private bool isGuiShowing = true;   // Aux to keep track, not synced!!
 	private float collapsedPos;
 	private GameObject fingerHintGO;

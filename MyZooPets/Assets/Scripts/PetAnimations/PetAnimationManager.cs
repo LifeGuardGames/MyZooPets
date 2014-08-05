@@ -5,6 +5,7 @@ using System.Collections;
 public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public Animator animator;
 	public GameObject flippableComponents;
+	public GameObject fireBlowPosition;
 	public GameObject headCollider;
 	public GameObject bodyCollider;
 	public GameObject highFiveCollider;
@@ -21,6 +22,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	private float highFiveWaitTimer = 0;
 	private float timeBeforeHighFiveEnds = 5f;
 	private PetAnimStates currentAnimationState;
+
+	private FireBlowParticleController fireScript;
 
 	public bool IsBusy{
 		get{
@@ -43,14 +46,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 
+//	void OnGUI(){
 
-
-	void OnGUI(){
-
-		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
-//			animator.SetInteger("Health", 80);
-			StartHighFive();
-		}
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
+////			animator.SetInteger("Health", 80);
+//			StartHighFive();
+//		}
 
 //		if(GUI.Button(new Rect(100, 0, 100, 50), "Sick1")){
 //			animator.SetInteger("Health", 50);
@@ -67,7 +68,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 //		if(GUI.Button(new Rect(100, 50, 100, 50), "Sad")){
 //			animator.SetInteger("Mood", 30);
 //		}
-	}
+//	}
 
 	/// <summary>
 	/// Pet stats have been modified so make sure idle state animation reflects
@@ -119,7 +120,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		animator.SetBool("IsFireBlowIn", false);
 		currentAnimationState = PetAnimStates.Idling;
 	}
-
+	
 	/// <summary>
 	/// Finishes the fire blow. Blow out animation
 	/// </summary>
@@ -127,7 +128,32 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		animator.SetTrigger("FireBlowOut");
 		animator.SetBool("IsFireBlowIn", false);
 
-		//need a call back from animation to know when to change the anim state
+		// spawn the particle effect
+		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
+		string flameResourceString = curSkill.FlameResource;
+		GameObject flamePrefab = Resources.Load(flameResourceString) as GameObject;
+		GameObject flameObject = Instantiate(flamePrefab, new Vector3(0, 0, 0), flamePrefab.transform.rotation) as GameObject;
+		
+		// parent it to the right position
+		flameObject.transform.parent = fireBlowPosition.transform;				
+		flameObject.transform.localPosition = new Vector3(0, 0, 0);
+		
+		// actually kick off the effect
+		fireScript = flameObject.GetComponent<FireBlowParticleController>();
+		fireScript.Play();
+	}
+
+	/// <summary>
+	/// Called by the PetAnimationEventHandler when the FireBlowOut animation is
+	/// complete
+	/// </summary>
+	public void DoneWithFireBlowAnimation(){
+		currentAnimationState = PetAnimStates.Idling;
+
+		fireScript.Stop();
+
+		if(AttackGate.Instance)
+			AttackGate.Instance.ExecutePostAttackLogic();
 	}
 
 	public void StartRubbing(){
@@ -250,6 +276,9 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		}
 	}
 
+	/// <summary>
+	/// Runs the idle state timer. Play a random idle animation after counting down
+	/// </summary>
 	private void RunIdleStateTimer(){
 		if(animator.IsInTransition(0)){ // reset timer if in transition
 			idleStateTimer = 0;
@@ -262,7 +291,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 			AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 			List<string> animations = new List<string>();
 			bool isIdle = animator.GetBool("IsIdle");
-			
+
+			//if idle figure out which idle state is the animator in
 			if(isIdle){
 				if(stateInfo.IsName("Base.SadIdle")){
 					animations = sadIdleAnimations;
@@ -280,7 +310,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 					
 				}
 			}
-			
+
+			//pick the appropriate random idle animation
 			if(animations.Count != 0){
 				int randomIndex = UnityEngine.Random.Range(0, animations.Count);
 				animator.SetTrigger(animations[randomIndex]);

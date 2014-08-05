@@ -37,6 +37,7 @@ public class PetMovement : Singleton<PetMovement>{
 	// how fast the pet moves
 	private float normalSpeed;
 	private float sickSpeed;
+	private float verySickSpeed;
 
 	void Awake(){
 		// set up camera variables
@@ -49,6 +50,7 @@ public class PetMovement : Singleton<PetMovement>{
 		// get speed from constants
 		normalSpeed = Constants.GetConstant<float>("NormalMoveSpeed");
 		sickSpeed = Constants.GetConstant<float>("SickMoveSpeed");
+		verySickSpeed = Constants.GetConstant<float>("VerySickMoveSpeed");
 	}
 
 	void Start(){
@@ -67,8 +69,10 @@ public class PetMovement : Singleton<PetMovement>{
 				float movementSpeed = normalSpeed;
 
 				//show pet movement down if pet is sick
-				if(health != PetHealthStates.Healthy || mood != PetMoods.Happy)
+				if(health == PetHealthStates.Sick || mood != PetMoods.Happy)
 					movementSpeed = sickSpeed;
+				else if(health == PetHealthStates.VerySick)
+					movementSpeed = verySickSpeed;
 
 				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint, movementSpeed * Time.deltaTime);

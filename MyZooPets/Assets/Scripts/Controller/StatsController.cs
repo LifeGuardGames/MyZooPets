@@ -29,11 +29,6 @@ public class StatsController : Singleton<StatsController>{
 
 	private GameObject hudAnimatorObject;
 	private HUDAnimator hudAnimator;
-	
-	// the pet animator
-//	public PetAnimator scriptPetAnim;
-	
-	// this is a bit hacky...but some levels don't have the pet, so we don't want to do pet related stuff
 	private bool isPetAnimationManagerPresent;
 	
 	void Start(){
@@ -53,30 +48,30 @@ public class StatsController : Singleton<StatsController>{
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
 	void OnGUI(){
-//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
-//			ChangeStats(deltaHealth: 10);
-//	 	}
-//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
-//			ChangeStats(deltaHealth: -10);
-//		 }
-//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
-//			ChangeStats(deltaMood: 10);
-//		}
-//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
-//			ChangeStats(deltaMood: -10);
-//		}
-//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
-//			ChangeStats(deltaPoints: 100);
-//		}
-//		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
-//			ChangeStats(deltaGems: 5);
-//		}
-//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
-//			ChangeStats(deltaStars: 50);
-//		}
-//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
-//			ChangeStats(deltaStars: -40);
-//		}
+		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
+			ChangeStats(deltaHealth: 10);
+	 	}
+		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
+			ChangeStats(deltaHealth: -10);
+		 }
+		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
+			ChangeStats(deltaMood: 10);
+		}
+		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
+			ChangeStats(deltaMood: -10);
+		}
+		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
+			ChangeStats(deltaPoints: 100);
+		}
+		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
+			ChangeStats(deltaGems: 5);
+		}
+		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
+			ChangeStats(deltaStars: 50);
+		}
+		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
+			ChangeStats(deltaStars: -40);
+		}
 
 	}
 	#endif
@@ -203,6 +198,7 @@ public class StatsController : Singleton<StatsController>{
 			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
 		}
 
+		//when stats are modified make sure PetAnimationManager knows about it
 		if(isPetAnimationManagerPresent)
 			PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
 			                                              DataManager.Instance.GameData.Stats.Mood);
@@ -224,7 +220,7 @@ public class StatsController : Singleton<StatsController>{
 	// Checks to see if a mood transition is appropriate,
 	// and if so, kicks it off on the pet animator.
 	//---------------------------------------------------		
-	private void CheckForMoodTransition(PetMoods moldMood, PetMoods newMood){
+	private void CheckForMoodTransition(PetMoods oldMood, PetMoods newMood){
 		if(bBeingDestroyed)
 			return;
 		
@@ -234,18 +230,12 @@ public class StatsController : Singleton<StatsController>{
 			return;
 		
 		// otherwise, let's actually check for a transition
-		if(moldMood == PetMoods.Happy && newMood == PetMoods.Sad){
-			// pet is going from happy to sad
-//			scriptPetAnim.Transition("Transition_HappySad");
-
+		if(oldMood == PetMoods.Happy && newMood == PetMoods.Sad){
 			// fire event to notify listeners
 			if(OnHappyToSad != null)
 				OnHappyToSad(this, EventArgs.Empty);
 		}
-		else if(moldMood == PetMoods.Sad && newMood == PetMoods.Happy){
-			// pet is going from sad to happy	
-//			scriptPetAnim.Transition("Transition_SadHappy");
-
+		else if(oldMood == PetMoods.Sad && newMood == PetMoods.Happy){
 			// fire event
 			if(OnSadToHappy != null)
 				OnSadToHappy(this, EventArgs.Empty);
@@ -266,13 +256,6 @@ public class StatsController : Singleton<StatsController>{
 			// if the pet has gone from health to very sick in one fell swoop, we need to queue up both transitions
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
-//			if(mood == PetMoods.Happy)
-//				scriptPetAnim.Transition("Transition_HealthyHappySick");
-//			else if(mood == PetMoods.Sad)
-//				scriptPetAnim.Transition("Transition_HealthySadSick");
-//
-//			scriptPetAnim.Transition("Transition_SickVerySick");
-
 			if(OnHealthyToVerySick != null){
 				OnHealthyToVerySick(this, EventArgs.Empty);
 			}
@@ -282,11 +265,6 @@ public class StatsController : Singleton<StatsController>{
 		else if(oldHealth == PetHealthStates.Healthy && newHealth == PetHealthStates.Sick){
 			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
 
-//			if(mood == PetMoods.Happy)
-//				scriptPetAnim.Transition("Transition_HealthyHappySick");
-//			else if(mood == PetMoods.Sad)
-//				scriptPetAnim.Transition("Transition_HealthySadSick");
-
 			if(OnHealthyToSick != null)
 				OnHealthyToSick(this, EventArgs.Empty);
 				
@@ -294,15 +272,6 @@ public class StatsController : Singleton<StatsController>{
 
 		// VerySick --> HealthyHappy or VerySick --> HealthySad
 		else if(oldHealth == PetHealthStates.VerySick && newHealth == PetHealthStates.Healthy){
-			// pet is going from very sick to healthy; play both transitions
-//			scriptPetAnim.Transition("Transition_VerySickSick");
-
-			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
-
-//			if(mood == PetMoods.Happy)
-//				scriptPetAnim.Transition("Transition_SickHealthyHappy");
-//			else if(mood == PetMoods.Sad)
-//				scriptPetAnim.Transition("Transition_SickHealthySad");
 
 			if(OnVerySickToHealthy != null)
 				OnVerySickToHealthy(this, EventArgs.Empty);
@@ -310,12 +279,6 @@ public class StatsController : Singleton<StatsController>{
 
 		// Sick --> HealthyHappy or Sick --> HealthySad
 		else if(oldHealth == PetHealthStates.Sick && newHealth == PetHealthStates.Healthy){
-			PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();	
-
-//			if(mood == PetMoods.Happy)
-//				scriptPetAnim.Transition("Transition_SickHealthyHappy");
-//			else if(mood == PetMoods.Sad)
-//				scriptPetAnim.Transition("Transition_SickHealthySad");
 
 			if(OnSickToHealthy != null)
 				OnSickToHealthy(this, EventArgs.Empty);
@@ -323,17 +286,11 @@ public class StatsController : Singleton<StatsController>{
 
 		// Sick --> VerySick
 		else if(oldHealth == PetHealthStates.Sick && newHealth == PetHealthStates.VerySick){
-//			scriptPetAnim.Transition("Transition_SickVerySick");
 
 			if(OnSickToVerySick != null)
 				OnSickToVerySick(this, EventArgs.Empty);
 
-		}
-
-		// VerySick --> Sick
-//		else if(oldHealth == PetHealthStates.VerySick && newHealth == PetHealthStates.Sick)
-//			scriptPetAnim.Transition("Transition_VerySickSick");
-		
+		}	
 	}
 
 	//---------------------------------------------------	

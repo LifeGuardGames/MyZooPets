@@ -12,27 +12,16 @@ public class AttackGate : Singleton<AttackGate>{
 	private int damage; // damage to deal
 	private PetAnimator attacker; // the pet
 
-	public void Init(PetAnimator attacker, Gate gateTarget, int damage){
+	public void Init(Gate gateTarget, int damage){
 		this.gateTarget = gateTarget;
 		this.damage = damage;
-		
-		// listen for anim complete message on pet
-		PetAnimator.OnBreathEnded += DoneAnimating;
-		
-		// kick off attack animation
-		this.attacker = attacker;
-	}
-
-	void OnDestroy(){
-		// stop listening
-		PetAnimator.OnBreathEnded -= DoneAnimating;
 	}
 
 	/// <summary>
 	/// Cancel attack so clean up.
 	/// </summary>
 	public void Cancel(){
-		attacker.CancelFire();
+		PetAnimationManager.Instance.AbortFireBlow();
 	
 		FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
 
@@ -43,27 +32,29 @@ public class AttackGate : Singleton<AttackGate>{
 		
 		Destroy(this);
 	}
-	
-	public void Attack(){ 
-		attacker.BreathFire();
+
+	/// <summary>
+	/// Finishs the attack. Button is charged so blow out and finish the attack
+	/// </summary>
+	public void FinishAttack(){
+		PetAnimationManager.Instance.FinishFireBlow();
 
 		FireButtonUIManager.Instance.fireButtonCollider.enabled = false;
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 
 	/// <summary>
-	/// When pet is done animating
+	/// Executes the post attack logic.
 	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void DoneAnimating(object sender, EventArgs args){
-		StartCoroutine(DoneAttacking());
+	public void ExecutePostAttackLogic(){
+		StartCoroutine(PostAttackLogic());
 	}
-	
+
 	/// <summary>
-	/// Pet done attacking. 
+	/// Pet done attacking. Call the appropriate classes/functions to damage
+	/// smog monster, decrement fire breaths count, and release click manager lock
 	/// </summary> 
-	private IEnumerator DoneAttacking(){
+	private IEnumerator PostAttackLogic(){
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);
 

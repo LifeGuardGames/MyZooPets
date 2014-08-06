@@ -66,9 +66,6 @@ public class AttackGate : Singleton<AttackGate>{
 		// and decrement the user's fire breaths
 		StatsController.Instance.ChangeFireBreaths(-1);
 
-		// damage the gate
-		bool isDestroyed = gateTarget.DamageGate(damage);
-
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted("FightMonster");
 		

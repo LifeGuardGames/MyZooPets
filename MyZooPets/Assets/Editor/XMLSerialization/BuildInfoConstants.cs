@@ -5,5 +5,5 @@ using System.Collections.Generic;
 [XmlRoot("Constants")]
 public class BuildInfoConstants{
 	[XmlElement("Constant")]
-	public List<InfoConstant> BuildSettingConstantList = new List<InfoConstant>();
+	public List<Constant> BuildInfoConstantList = new List<Constant>();
 }

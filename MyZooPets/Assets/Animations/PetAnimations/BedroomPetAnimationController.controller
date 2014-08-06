@@ -170,6 +170,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: Backflip
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 3
     m_Name: Base
@@ -450,6 +456,26 @@ Transition:
     m_ConditionEvent: HappyJump
     m_EventTreshold: 0
     m_ExitTime: .825056493
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
+  m_CanTransitionToSelf: 0
+--- !u!1101 &110121955
+Transition:
+  serializedVersion: 2
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110200000}
+  m_DstState: {fileID: 110205037}
+  m_TransitionDuration: .125
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Backflip
+    m_EventTreshold: 0
+    m_ExitTime: .875
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -1758,6 +1784,26 @@ Transition:
   m_Solo: 0
   m_Mute: 0
   m_CanTransitionToSelf: 0
+--- !u!1101 &110197288
+Transition:
+  serializedVersion: 2
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110205037}
+  m_DstState: {fileID: 110200000}
+  m_TransitionDuration: .0625
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 5
+    m_ConditionEvent: 
+    m_EventTreshold: 0
+    m_ExitTime: .9375
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
+  m_CanTransitionToSelf: 0
 --- !u!1101 &110198726
 Transition:
   serializedVersion: 2
@@ -1874,7 +1920,7 @@ State:
   m_Motions:
   - {fileID: 7400000, guid: 3fbd46523b16d4621a8b7a9ae9e62836, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: 336, y: -312, z: 0}
+  m_Position: {x: -672, y: 228, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
@@ -2558,10 +2604,6 @@ StateMachine:
       - {fileID: 110143636}
       - {fileID: 110131059}
     data:
-      first: {fileID: 110219014}
-      second:
-      - {fileID: 110179448}
-    data:
       first: {fileID: 110200000}
       second:
       - {fileID: 110195328}
@@ -2574,6 +2616,7 @@ StateMachine:
       - {fileID: 110157695}
       - {fileID: 110124682}
       - {fileID: 110185635}
+      - {fileID: 110121955}
     data:
       first: {fileID: 110291681}
       second:
@@ -2584,7 +2627,8 @@ StateMachine:
       - {fileID: 110179164}
     data:
       first: {fileID: 110205037}
-      second: []
+      second:
+      - {fileID: 110197288}
     data:
       first: {fileID: 110212688}
       second:
@@ -2663,6 +2707,10 @@ StateMachine:
       first: {fileID: 110285523}
       second:
       - {fileID: 110148570}
+    data:
+      first: {fileID: 110219014}
+      second:
+      - {fileID: 110179448}
     data:
       first: {fileID: 110257641}
       second:

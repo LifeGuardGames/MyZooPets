@@ -11,6 +11,14 @@ public class AttackGate : Singleton<AttackGate>{
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
 
+	void Start(){
+		PetAnimationManager.OnBreathEnded += ExecutePostAttackLogic;
+	}
+
+	void OnDestroy(){
+		PetAnimationManager.OnBreathEnded -= ExecutePostAttackLogic;
+	}
+
 	public void Init(Gate gateTarget, int damage){
 		this.gateTarget = gateTarget;
 		this.damage = damage;
@@ -45,7 +53,8 @@ public class AttackGate : Singleton<AttackGate>{
 	/// <summary>
 	/// Executes the post attack logic.
 	/// </summary>
-	public void ExecutePostAttackLogic(){
+	public void ExecutePostAttackLogic(object sender, EventArgs args){
+
 		StartCoroutine(PostAttackLogic());
 	}
 

@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Collections;
 
 public class PetAnimationManager : Singleton<PetAnimationManager> {
+	public static EventHandler<EventArgs> OnBreathEnded; //event sent out when fire blow animation ended
+
+
 	public Animator animator;
 	public GameObject flippableComponents;
 	public GameObject fireBlowPosition;
@@ -152,8 +156,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 		fireScript.Stop();
 
-		if(AttackGate.Instance)
-			AttackGate.Instance.ExecutePostAttackLogic();
+		if(OnBreathEnded != null)
+			OnBreathEnded(this, EventArgs.Empty);
 	}
 
 	public void StartRubbing(){

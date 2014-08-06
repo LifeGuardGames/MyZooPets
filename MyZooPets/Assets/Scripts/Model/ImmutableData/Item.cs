@@ -72,11 +72,7 @@ public class Item{
 		int lockLevel = UnlockAtLevel;
 		int currentPetLevel = (int)(LevelLogic.Instance.CurrentLevel);
 
-		//Don't allow item unlock in lite version
-		if(VersionManager.IsLite()) 
-			isLocked = lockLevel >= LevelLogic.Instance.MaxLevel;
-		else
-			isLocked = lockLevel > 0 && lockLevel > currentPetLevel;
+		isLocked = lockLevel > 0 && lockLevel > currentPetLevel;
 
 		return isLocked;
 	}

@@ -36,8 +36,6 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		GetComponent<TweenToggle>().Show();
 
 		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
-		if(VersionManager.IsLite() && !hasActiveTasks) 
-			Invoke("DisplayPromoAd", 0.5f);
 	}
 
 	//---------------------------------------------------
@@ -65,8 +63,4 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	private void RefreshScreen(object sender, EventArgs args){
 		RefreshScreen();
 	}
-
-	private void DisplayPromoAd(){
-		LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
-	}	
 }

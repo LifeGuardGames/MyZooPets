@@ -30,13 +30,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UISprite endCircle;		// For setting
 
 	void Awake(){
-		//pet's name
-		if(labelTimerMessage != null && VersionManager.IsLite()){
-			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string rawText = Localization.Localize("WELLAPAD_LITE_INHALER");
-			string message = String.Format(rawText, petName);
-			labelTimerMessage.text = message;
-		}
 	}
 
 	void Start(){

@@ -31,10 +31,7 @@ public class LevelLogic : Singleton<LevelLogic>{
 	}
 
 	void Awake(){
-		if(VersionManager.IsLite())
-			maxLevel = (int)Level.Level3;
-		else
-			maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
+		maxLevel = Enum.GetNames(typeof(Level)).Length;	// no need to do -1 because the index begins at 1, not 0
 	}
 
     public bool IsAtMaxLevel(){

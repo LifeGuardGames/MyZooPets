@@ -150,13 +150,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
 			string notifText;
 
-			if(VersionManager.IsLite()){
-				string petPossession = StringUtils.FormatStringPossession(petName);
-				notifText = String.Format(Localization.Localize("NOTIFICATION_1_LITE"), petPossession, petName);
-			}
-			else{
-				notifText = String.Format(Localization.Localize("NOTIFICATION_1_PRO"), petName);
-			}
+		
+			notifText = String.Format(Localization.Localize("NOTIFICATION_1_PRO"), petName);
+
 
 			LgNotificationServices.RemoveIconBadgeNumber();
 			LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);

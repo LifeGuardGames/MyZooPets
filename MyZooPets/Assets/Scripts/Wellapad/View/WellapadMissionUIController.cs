@@ -16,7 +16,6 @@ public class WellapadMissionUIController : MonoBehaviour {
 	public bool showTitle = false;
 	public GameObject prefabTitle;		// mission title
 	public GameObject prefabTask;		// mission task (dynamic amount in each mission)
-	public GameObject prefabLiteLabel;
 	
 	// the number of elements in the mission list...this is used for helping to sort elements in the grid
 	private int nCount = 0;
@@ -79,11 +78,6 @@ public class WellapadMissionUIController : MonoBehaviour {
 			
 			// init this task UI with the task itself
 			goTask.GetComponent<WellapadTaskUI>().Init(task);
-		}
-
-		if(VersionManager.IsLite() && missionType == "LiteCritical"){
-			GameObject liteLabel = NGUITools.AddChild(goGrid, prefabLiteLabel);
-			SetNameForGrid(liteLabel);
 		}
 	}
 	

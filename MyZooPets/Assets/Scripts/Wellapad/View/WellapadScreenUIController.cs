@@ -25,7 +25,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	}
 
 	void Awake(){
-		missionDonePrefabName = VersionManager.IsLite() ? "MissionDoneLite" : "MissionDonePro";
+		missionDonePrefabName = "MissionDonePro";
 	}	
 	//---------------------------------------------------
 	// Start()

@@ -205,7 +205,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400024}
   - 114: {fileID: 11400072}
-  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: Background
   m_TagString: Untagged
@@ -226,6 +225,22 @@ GameObject:
   - 114: {fileID: 11400036}
   m_Layer: 10
   m_Name: Tab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100028
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400028}
+  - 114: {fileID: 11400002}
+  m_Layer: 10
+  m_Name: TweenParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,7 +356,6 @@ GameObject:
   - 4: {fileID: 400050}
   - 114: {fileID: 11400088}
   - 114: {fileID: 11400092}
-  - 114: {fileID: 11400008}
   m_Layer: 10
   m_Name: ItemArea
   m_TagString: Untagged
@@ -357,7 +371,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400052}
-  - 114: {fileID: 11400002}
   m_Layer: 10
   m_Name: TabArea
   m_TagString: Untagged
@@ -609,9 +622,9 @@ Transform:
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -53.3329468, z: 0}
-  m_LocalScale: {x: 1600, y: 540, z: 0}
+  m_LocalScale: {x: 1600.00012, y: 540, z: 0}
   m_Children: []
-  m_Father: {fileID: 400070}
+  m_Father: {fileID: 400028}
   m_RootOrder: 0
 --- !u!4 &400026
 Transform:
@@ -626,6 +639,21 @@ Transform:
   - {fileID: 400008}
   - {fileID: 400040}
   m_Father: {fileID: 400016}
+  m_RootOrder: 0
+--- !u!4 &400028
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100028}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400024}
+  - {fileID: 400050}
+  - {fileID: 400052}
+  m_Father: {fileID: 400070}
   m_RootOrder: 0
 --- !u!4 &400030
 Transform:
@@ -712,7 +740,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400044}
-  m_Father: {fileID: 400070}
+  m_Father: {fileID: 400028}
   m_RootOrder: 1
 --- !u!4 &400052
 Transform:
@@ -728,7 +756,7 @@ Transform:
   - {fileID: 400016}
   - {fileID: 400010}
   - {fileID: 400004}
-  m_Father: {fileID: 400070}
+  m_Father: {fileID: 400028}
   m_RootOrder: 2
 --- !u!4 &400056
 Transform:
@@ -761,12 +789,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .5, y: .014465332, z: 3.06963921e-06}
+  m_LocalPosition: {x: -.0999999642, y: .0997924805, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400024}
-  - {fileID: 400050}
-  - {fileID: 400052}
+  - {fileID: 400028}
   m_Father: {fileID: 400022}
   m_RootOrder: 1
 --- !u!4 &400074
@@ -776,7 +802,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.18634, y: 384.014465, z: 3.06963921e-06}
+  m_LocalPosition: {x: -681.699951, y: 384.099792, z: 3.06963921e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400080}
@@ -887,10 +913,10 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100052}
+  m_GameObject: {fileID: 100028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
+  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isShown: 0
@@ -898,15 +924,15 @@ MonoBehaviour:
   isUsingDemultiplexer: 1
   blockUI: 1
   startsHidden: 0
-  hideDeltaX: -1
-  hideDeltaY: -1
+  hideDeltaX: 0
+  hideDeltaY: -700
   hideDeltaZ: 0
   showDuration: .200000003
   hideDuration: .200000003
-  showDelay: .200000003
-  hideDelay: .200000003
-  easeHide: 26
-  easeShow: 27
+  showDelay: 0
+  hideDelay: .100000001
+  easeHide: 4
+  easeShow: 4
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -956,41 +982,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isShown: 1
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  blockUI: 1
-  startsHidden: 0
-  hideDeltaX: -1
-  hideDeltaY: -1
-  hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: 0
-  hideDelay: 0
-  easeHide: 26
-  easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  strSoundShow: 
-  strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1033,41 +1024,6 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isShown: 0
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  blockUI: 1
-  startsHidden: 0
-  hideDeltaX: 0
-  hideDeltaY: -700
-  hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: 0
-  hideDelay: .100000001
-  easeHide: 4
-  easeShow: 4
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  strSoundShow: 
-  strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1251,14 +1207,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GoList:
   - {fileID: 100080}
-  - {fileID: 100024}
-  - {fileID: 100052}
-  - {fileID: 100050}
+  - {fileID: 100028}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100052}
-  lastFinishedHideObject: {fileID: 100052}
+  lastFinishedShowObject: {fileID: 100028}
+  lastFinishedHideObject: {fileID: 100028}
   isShowFinishedCallback: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -1504,11 +1458,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 0
+    e03: .599999964
     e10: 0
     e11: 384
     e12: 0
-    e13: 2232.41064
+    e13: 2232.3252
     e20: 0
     e21: 0
     e22: 384

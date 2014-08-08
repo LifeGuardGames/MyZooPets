@@ -100,9 +100,11 @@ public class ImmutableDataGate{
 		isRecurring = XMLUtils.GetBool(hashElements["Recurring"] as IXMLNode, false);
 		
 		// get an item box id gate leaves behind (if any)
-		itemBoxID = XMLUtils.GetString(hashElements["ItemBoxID"] as IXMLNode, null, error);
+		if(hashElements.ContainsKey("ItemBoxID"))
+			itemBoxID = XMLUtils.GetString(hashElements["ItemBoxID"] as IXMLNode, null, error);
 
-		itemBoxPositionOffset = XMLUtils.GetFloat(hashElements["ItemBoxPositionOffset"] as IXMLNode, 0, error);
+		if(hashElements.ContainsKey("ItemBoxPositionOffset"))
+			itemBoxPositionOffset = XMLUtils.GetFloat(hashElements["ItemBoxPositionOffset"] as IXMLNode, 0, error);
 		
 		// get the direction the gate is blocking
 		swipeDirection = (RoomDirection)System.Enum.Parse(typeof(RoomDirection), 

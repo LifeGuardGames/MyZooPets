@@ -12,15 +12,12 @@ public class MutableDataMiniPets{
 		public int CurrentFoodXP {get; set;}
 		public bool IsTickled {get; set;}
 		public bool IsCleaned {get; set;}
-
-		public bool IsFirstTimeCleaning {get; set;}
-		
+	
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
 			IsTickled = false;
 			IsCleaned = false;
-			IsFirstTimeCleaning = true;
 		}
 	}
 
@@ -30,6 +27,8 @@ public class MutableDataMiniPets{
 	/// if miniPetID is not in this dictionary then it's not unlocked yet
 	/// </summary>
 	public Dictionary<string, Status> MiniPetProgress {get; set;} 
+	public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
+	public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
 
 	/// <summary>
 	/// Unlocks the mini pet.
@@ -116,26 +115,6 @@ public class MutableDataMiniPets{
 		return currentLevel;
 	}
 
-	public bool IsFirstTimeCleaning(string miniPetID){
-		bool retVal = true;
-
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			retVal = status.IsFirstTimeCleaning;
-		}
-
-		return retVal;
-	}
-
-	public void SetFirstTimeCleaning(string miniPetID, bool isFirstTime){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			status.IsFirstTimeCleaning = isFirstTime;
-		}
-	}
-
 	/// <summary>
 	/// Determines whether this mini pet is tickeld
 	/// </summary>
@@ -187,5 +166,7 @@ public class MutableDataMiniPets{
 
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();
+		IsFirstTimeCleaning = true;
+		IsFirstTimeTickling = true;
 	}
 }

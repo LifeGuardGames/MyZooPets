@@ -73,6 +73,7 @@ public class MiniPet : MonoBehaviour {
 				else{
 					animationManager.StartTickling();
 					MiniPetManager.Instance.SetTickle(id, true);
+					MiniPetManager.Instance.IsFirstTimeTickling = false;
 				}
 			}
 		}
@@ -108,7 +109,7 @@ public class MiniPet : MonoBehaviour {
 			//if clean gesture is recognized. stop dirty particle and play happy animation
 			if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
 				MiniPetManager.Instance.SetCleaned(id, true);
-				MiniPetManager.Instance.SetFirstTimeCleaning(id);
+				MiniPetManager.Instance.IsFirstTimeCleaning = false;
 				dirtyParticle.Stop();
 				animationManager.Cheer();
 				currentDistanceInCentimeters = 0;

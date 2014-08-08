@@ -15,6 +15,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject petReference;
 
 	private GameObject cleaningTutorialObject;
+	private GameObject ticklingTutorialObject;
 
 	/// <summary>
 	/// Gets or sets a value indicating whether feeding is lock because lv up
@@ -75,6 +76,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(cleaningTutorialObject != null)
 			Destroy(cleaningTutorialObject);
 
+		if(ticklingTutorialObject != null)
+			Destroy(ticklingTutorialObject);
+
 		CameraManager.Instance.ZoomOutMove();
 	}
 
@@ -86,19 +90,38 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
-		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning(SelectedMiniPetID);
 
 		tickleCheckBox.SetActive(isTickled);
 		cleanCheckBox.SetActive(isCleaned);
 
 		nameLabel.text = SelectedMiniPetName;
+		UpdateLevelUI();
 
+		switch(args.UpdateStatus){
+		case MiniPetManager.UpdateStatuses.LevelUp:
+			levelUpAnimation.Play();
+			IsLevelUpAnimationLockOn = true;
+			break;
+		case MiniPetManager.UpdateStatuses.FirstTimeCleaning:
+			CheckForTicklingTutorial();
+			break;
+		case MiniPetManager.UpdateStatuses.FirstTimeTickling:
+			if(ticklingTutorialObject != null)
+				Destroy(ticklingTutorialObject.gameObject);
+			break;
+		}
+
+		CheckForCleaningTutorial();
+	}
+
+	private void UpdateLevelUI(){
 		int currentLevel = (int) MiniPetManager.Instance.GetCurrentLevel(SelectedMiniPetID);
 		int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
 		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-
+		
 		levelLabel.text = currentLevel.ToString();
-
+		
+		// update level slider
 		if(nextLevelUpCondition != -1){
 			levelSlider.sliderValue = (float) currentFoodXP / (float) nextLevelUpCondition;
 			progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
@@ -106,14 +129,39 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		else{
 			progressLabel.text = "Max Level";
 		}
+	}
 
-		// level up handler
-		if(args.UpdateStatus == MiniPetManager.UpdateStatuses.LevelUp){
-			levelUpAnimation.Play();
-			IsLevelUpAnimationLockOn = true;
+	private void CheckForTicklingTutorial(){
+		if(cleaningTutorialObject != null){
+			Destroy(cleaningTutorialObject.gameObject);
 		}
+		
+		//check if tickling tutorial needs to be started
+		bool isFirstTimeTickling = MiniPetManager.Instance.IsFirstTimeTickling;
+		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
+		if(!isFirstTimeCleaning && isFirstTimeTickling){
+			//spawn tutorial here
+			if(ticklingTutorialObject == null){
+				GameObject ticklingTutorial = (GameObject) Resources.Load("PressTut");
+				
+				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+				                                                                       SelectedMiniPetGameObject.transform.position);
+				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
+				                                                                         InterfaceAnchors.BottomLeft, 
+				                                                                         InterfaceAnchors.Center);
+				selectedMiniPetLocation.z = 0;
+				ticklingTutorialObject = NGUITools.AddChild(tutorialParent, ticklingTutorial);
+				ticklingTutorialObject.transform.localPosition = selectedMiniPetLocation;
+			}
+		}
+	}
+	
+	/// <summary>
+	/// Check if cleaning tutorial needs to be spawned.
+	/// </summary>
+	private void CheckForCleaningTutorial(){
+		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
 
-		// tutorial handler
 		if(isFirstTimeCleaning){
 			if(cleaningTutorialObject == null){
 				GameObject cleaningTutorial = (GameObject) Resources.Load("SwirlTut");
@@ -126,11 +174,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				selectedMiniPetLocation.z = 0;
 				cleaningTutorialObject = NGUITools.AddChild(tutorialParent, cleaningTutorial);
 				cleaningTutorialObject.transform.localPosition = selectedMiniPetLocation;
-			}
-		}
-		else{
-			if(cleaningTutorialObject != null){
-				Destroy(cleaningTutorialObject.gameObject);
 			}
 		}
 	}

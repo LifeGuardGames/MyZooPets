@@ -9,7 +9,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	}
 
 	public enum UpdateStatuses{
+		None,
 		FirstTimeCleaning,
+		FirstTimeTickling,
 		Tickle,
 		Clean,
 		IncreaseFoodXP,
@@ -17,9 +19,36 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		LevelUp
 	}
 
-	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate;
+	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate; //send event to UI when data have been updated
 
 	private Level maxLevel = Level.Level6;
+
+	public bool IsFirstTimeCleaning{
+		get{ return DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;}
+		set{
+			DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning = value;
+
+			if(MiniPetStatusUpdate != null){
+				StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+				args.UpdateStatus = UpdateStatuses.FirstTimeCleaning;
+				MiniPetStatusUpdate(this, args);
+			}
+		}
+	}
+
+	public bool IsFirstTimeTickling{
+		get{ return DataManager.Instance.GameData.MiniPets.IsFirstTimeTickling;}
+		set{ 
+			DataManager.Instance.GameData.MiniPets.IsFirstTimeTickling = value;
+
+			if(MiniPetStatusUpdate != null){
+				StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+				args.UpdateStatus = UpdateStatuses.FirstTimeTickling;
+				MiniPetStatusUpdate(this, args);
+			}
+		}
+	}
+
 	// Use this for initialization
 	void Start(){
 		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
@@ -41,19 +70,19 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
-	public bool IsFirstTimeCleaning(string miniPetID){
-		return DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning(miniPetID);
-	}
-
-	public void SetFirstTimeCleaning(string miniPetID){
-		DataManager.Instance.GameData.MiniPets.SetFirstTimeCleaning(miniPetID, false);
-
-		if(MiniPetStatusUpdate != null){
-			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
-			args.UpdateStatus = UpdateStatuses.FirstTimeCleaning;
-			MiniPetStatusUpdate(this, args);
-		}
-	}
+//	public bool IsFirstTimeCleaning(string miniPetID){
+//		return (miniPetID);
+//	}
+//
+//	public void SetFirstTimeCleaning(string miniPetID){
+//		DataManager.Instance.GameData.MiniPets.SetFirstTimeCleaning(miniPetID, false);
+//
+//		if(MiniPetStatusUpdate != null){
+//			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+//			args.UpdateStatus = UpdateStatuses.FirstTimeCleaning;
+//			MiniPetStatusUpdate(this, args);
+//		}
+//	}
 
 	public bool IsMaxLevel(string miniPetID){
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);

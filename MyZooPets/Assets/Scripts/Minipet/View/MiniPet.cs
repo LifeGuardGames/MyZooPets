@@ -28,7 +28,8 @@ public class MiniPet : MonoBehaviour {
 	
 	void OnDestroy(){
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
-		MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
+		if(MiniPetHUDUIManager.Instance)
+			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
 		MiniPetManager.MiniPetStatusUpdate -= UpdateAnimation;
 	}
 

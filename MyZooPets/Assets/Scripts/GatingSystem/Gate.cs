@@ -141,6 +141,7 @@ public abstract class Gate : MonoBehaviour{
 	/// </summary>
 	private void PrepGateDestruction(){
 		// play a sound
+		AudioManager.Instance.PlayClip("unlockRoom");
 		AudioManager.Instance.PlayClip("DefeatSmokeMonster");
 		
 		// let the gating manager know

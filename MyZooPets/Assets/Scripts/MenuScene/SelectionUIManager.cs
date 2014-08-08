@@ -41,6 +41,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             CustomizationUIManager.Instance.OpenUI();
         }else{
             //open up pet start panel
+			AudioManager.Instance.PlayClip("petStart");
 			LoadGame();
 
         }

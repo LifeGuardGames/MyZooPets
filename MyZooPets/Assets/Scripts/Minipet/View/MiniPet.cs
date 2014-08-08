@@ -19,11 +19,16 @@ public class MiniPet : MonoBehaviour {
 	private float tickleTimer = 0;
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
+	void Awake(){
+
+	}
+
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
-		RefreshMiniPetState();
+		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		RefreshMiniPetUIState();
 	}
 	
 	void OnDestroy(){
@@ -48,8 +53,11 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	void OnApplicationPause(bool isPaused){
-		if(!isPaused)
-			RefreshMiniPetState();
+		if(!isPaused){
+			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+			RefreshMiniPetUIState();
+		}
+			
 	}
 
 	void OnTap(TapGesture gesture){
@@ -149,7 +157,7 @@ public class MiniPet : MonoBehaviour {
 		MiniPetManager.UpdateStatuses status = args.UpdateStatus;
 	
 		if(status == MiniPetManager.UpdateStatuses.Tickle){
-			RefreshMiniPetState();
+			RefreshMiniPetUIState();
 		}
 	}
 
@@ -170,7 +178,7 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	private void RefreshMiniPetState(){
+	private void RefreshMiniPetUIState(){
 		//check if pet is sad and dirty
 		bool isTickled = MiniPetManager.Instance.IsTickled(id);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);

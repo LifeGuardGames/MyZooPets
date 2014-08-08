@@ -12,12 +12,14 @@ public class MutableDataMiniPets{
 		public int CurrentFoodXP {get; set;}
 		public bool IsTickled {get; set;}
 		public bool IsCleaned {get; set;}
+		public DateTime LastActionTime {get; set;}
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
 			IsTickled = false;
 			IsCleaned = false;
+			LastActionTime = LgDateTime.GetTimeNow();
 		}
 	}
 
@@ -113,6 +115,35 @@ public class MutableDataMiniPets{
 		}
 
 		return currentLevel;
+	}
+
+	/// <summary>
+	/// Gets the last action time.
+	/// </summary>
+	/// <returns>The last action time.</returns>
+	/// <param name="miniPetID">Mini pet I.</param>
+	public DateTime GetLastActionTime(string miniPetID){
+		DateTime retVal = LgDateTime.GetTimeNow();
+
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			retVal = status.LastActionTime;
+		}
+
+		return retVal;
+	}
+
+	/// <summary>
+	/// Sets the last action time. last time the tickle or clean status 
+	/// </summary>
+	/// <param name="miniPetID">Mini pet I.</param>
+	public void UpdateLastActionTime(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+
+			status.LastActionTime = LgDateTime.GetTimeNow();
+		}
 	}
 
 	/// <summary>

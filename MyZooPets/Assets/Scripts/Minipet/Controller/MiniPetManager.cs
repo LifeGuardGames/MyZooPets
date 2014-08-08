@@ -70,23 +70,34 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
-//	public bool IsFirstTimeCleaning(string miniPetID){
-//		return (miniPetID);
-//	}
-//
-//	public void SetFirstTimeCleaning(string miniPetID){
-//		DataManager.Instance.GameData.MiniPets.SetFirstTimeCleaning(miniPetID, false);
-//
-//		if(MiniPetStatusUpdate != null){
-//			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
-//			args.UpdateStatus = UpdateStatuses.FirstTimeCleaning;
-//			MiniPetStatusUpdate(this, args);
-//		}
-//	}
-
 	public bool IsMaxLevel(string miniPetID){
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
 		return currentLevel == maxLevel;
+	}
+
+	/// <summary>
+	/// Checks to refresh mini pet status. Use this function to check whether 
+	/// the IsTickled or IsCleaned variable of that specific MP should be reset to
+	/// false. Should reset every 2 hrs (arbitrary)
+	/// </summary>
+	public void CheckToRefreshMiniPetStatus(string miniPetID){
+		bool isTickled = IsTickled(miniPetID);
+		bool isCleaned = IsCleaned(miniPetID);
+		DateTime now = LgDateTime.GetTimeNow();
+
+		if(isTickled && isCleaned){
+			DateTime lastActionTime = DataManager.Instance.GameData.MiniPets.GetLastActionTime(miniPetID);
+
+			//make sure last action time is not in a future time
+			if(lastActionTime <= now){
+				TimeSpan timeSinceLastAction = now - lastActionTime;
+				
+				if(timeSinceLastAction.Hours >= 2){
+					DataManager.Instance.GameData.MiniPets.SetIsTickled(miniPetID, false);
+					DataManager.Instance.GameData.MiniPets.SetIsCleaned(miniPetID, false);
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -105,12 +116,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public void SetTickle(string miniPetID, bool isTickled){
 		DataManager.Instance.GameData.MiniPets.SetIsTickled(miniPetID, isTickled);
 
+		if(isTickled){
+			DataManager.Instance.GameData.MiniPets.UpdateLastActionTime(miniPetID);
+		}
+
 		if(MiniPetStatusUpdate != null){
 			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
 			args.UpdateStatus = UpdateStatuses.Tickle;
 			MiniPetStatusUpdate(this, args);
 		}
-			
 	}
 
 	/// <summary>
@@ -129,6 +143,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <param name="isCleaned">If set to <c>true</c> mp is cleaned.</param>
 	public void SetCleaned(string miniPetID, bool isCleaned){
 		DataManager.Instance.GameData.MiniPets.SetIsCleaned(miniPetID, isCleaned);
+
+		if(isCleaned)
+			DataManager.Instance.GameData.MiniPets.UpdateLastActionTime(miniPetID);
 
 		if(MiniPetStatusUpdate != null){
 			StatusUpdateEventArgs args = new StatusUpdateEventArgs();

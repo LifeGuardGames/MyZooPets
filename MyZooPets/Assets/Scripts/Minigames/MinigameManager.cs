@@ -51,6 +51,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public int nStartingLives;
 //	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
 
+	public string gameOverAudioClip = "minigameGameOver";
+
 	private int score;	// player score
 	private int lives; // player lives
 	private bool tutorialOverride; // is there a tutorial override? 
@@ -381,7 +383,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected void GameOver(){
 		// send out a completion task
 //		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
-		
+
+		AudioManager.Instance.PlayClip(gameOverAudioClip);
+
 		// send out score task
 		int nScore = GetScore();
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), nScore);

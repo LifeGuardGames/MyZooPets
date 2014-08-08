@@ -4,11 +4,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetManager : Singleton<MiniPetManager> {
-	public class MiniPetStatusUpdateEventArgs : EventArgs{
-		public string UpdateStatus {get; set;}
+	public class StatusUpdateEventArgs : EventArgs{
+		public UpdateStatuses UpdateStatus {get; set;}
 	}
 
-	public static EventHandler<MiniPetStatusUpdateEventArgs> MiniPetStatusUpdate;
+	public enum UpdateStatuses{
+		FirstTimeCleaning,
+		Tickle,
+		Clean,
+		IncreaseFoodXP,
+		IncreaseCurrentLevel,
+		LevelUp
+	}
+
+	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate;
 
 	private Level maxLevel = Level.Level6;
 	// Use this for initialization
@@ -40,8 +49,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		DataManager.Instance.GameData.MiniPets.SetFirstTimeCleaning(miniPetID, false);
 
 		if(MiniPetStatusUpdate != null){
-			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
-			args.UpdateStatus = "firstTimeCleaning";
+			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+			args.UpdateStatus = UpdateStatuses.FirstTimeCleaning;
 			MiniPetStatusUpdate(this, args);
 		}
 	}
@@ -68,8 +77,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		DataManager.Instance.GameData.MiniPets.SetIsTickled(miniPetID, isTickled);
 
 		if(MiniPetStatusUpdate != null){
-			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
-			args.UpdateStatus = "tickle";
+			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+			args.UpdateStatus = UpdateStatuses.Tickle;
 			MiniPetStatusUpdate(this, args);
 		}
 			
@@ -93,8 +102,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		DataManager.Instance.GameData.MiniPets.SetIsCleaned(miniPetID, isCleaned);
 
 		if(MiniPetStatusUpdate != null){
-			MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
-			args.UpdateStatus = "clean";
+			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+			args.UpdateStatus = UpdateStatuses.Clean;
 			MiniPetStatusUpdate(this, args);
 		}
 	}
@@ -171,12 +180,12 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		//get current food xp
 		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentFoodXP(miniPetID);
 
-		MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
-		args.UpdateStatus = "increaseFoodXP";
+		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+		args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
 
 		//check current food xp with that condition
 		if(currentFoodXP >= levelUpCondition){
-			args.UpdateStatus = "levelUp";
+			args.UpdateStatus = UpdateStatuses.LevelUp;
 		}
 
 		if(MiniPetStatusUpdate != null)
@@ -193,8 +202,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 		DataManager.Instance.GameData.MiniPets.ResetCurrentFoodXP(miniPetID);
 		
-		MiniPetStatusUpdateEventArgs args = new MiniPetStatusUpdateEventArgs();
-		args.UpdateStatus = "increaseCurrentLevel";
+		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+		args.UpdateStatus = UpdateStatuses.IncreaseCurrentLevel;
 		
 		if(MiniPetStatusUpdate != null)
 			MiniPetStatusUpdate(this, args);

@@ -6,24 +6,44 @@ using System.Collections;
 /// Should attach this script to the highest parent in the minipet prefab
 /// </summary>
 public class MiniPet : MonoBehaviour {
-	public Animator animator;
+	public MiniPetAnimationManager animationManager;
 	public ParticleSystem bubbleParticle;
 	public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
 
-	private string id;
+	private string id; //pet id
 	private string name;
 	private float currentDistanceInCentimeters = 0;
-	private float targetDistanceInCentimetersForCleanGesture = 300;
+	private float targetDistanceInCentimetersForCleanGesture = 300; //clean gestures will be recognized after the finger moved 300cm (both x and y position)
+
+	private float tickleTimer = 0;
+	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
-
+		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
+		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		RefreshMiniPetState();
 	}
 	
 	void OnDestroy(){
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
+		MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
+		MiniPetManager.MiniPetStatusUpdate -= UpdateAnimation;
+	}
+
+	void Update(){
+
+		//count down starts if tickling animation is playing.
+		if(animationManager.IsTickling()){
+			tickleTimer += Time.deltaTime;
+
+			//turn tickling animation off after certain time
+			if(tickleTimer > timeBeforeTickleAnimationStops){
+				tickleTimer = 0;
+				animationManager.StopTickling();
+			}
+		}
 	}
 
 	void OnApplicationPause(bool isPaused){
@@ -45,11 +65,15 @@ public class MiniPet : MonoBehaviour {
 			string colliderName = gesture.Selection.collider.name;
 			
 			if(colliderName == this.gameObject.name){
-				animator.SetTrigger("GestureWiggle");
-				MiniPetManager.Instance.SetTickle(id, true);
-				animator.SetBool("Sad", false);
 
-				StartCoroutine(FeedMsg());
+				//if tickling animation is still playing reset timer
+				if(animationManager.IsTickling()){
+					tickleTimer = 0;
+				}
+				else{
+					animationManager.StartTickling();
+					MiniPetManager.Instance.SetTickle(id, true);
+				}
 			}
 		}
 	}
@@ -86,10 +110,8 @@ public class MiniPet : MonoBehaviour {
 				MiniPetManager.Instance.SetCleaned(id, true);
 				MiniPetManager.Instance.SetFirstTimeCleaning(id);
 				dirtyParticle.Stop();
-				animator.SetTrigger("Happy");
+				animationManager.Cheer();
 				currentDistanceInCentimeters = 0;
-
-				StartCoroutine(PokeMsg());
 			}
 
 			break;
@@ -98,19 +120,6 @@ public class MiniPet : MonoBehaviour {
 			break;
 		}
 	}
-	
-	#region Focus Group test code
-	private IEnumerator PokeMsg(){
-		yield return new WaitForSeconds(1.5f);
-		miniPetSpeechAI.ShowPokeMsg();
-	}
-
-	private IEnumerator FeedMsg(){
-		yield return new WaitForSeconds(1.5f);
-		miniPetSpeechAI.FeedMsg();
-	}
-
-	#endregion
 
 	/// <summary>
 	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
@@ -120,6 +129,26 @@ public class MiniPet : MonoBehaviour {
 	public void Init(ImmutableDataMiniPet data){
 		this.id = data.ID;
 		this.name = data.Name;
+	}
+
+	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
+		if(args.Opening)
+			animationManager.IsRunningIdleAnimations = false;
+		else
+			animationManager.IsRunningIdleAnimations = true;
+	}
+
+	/// <summary>
+	/// Updates the animation when minipet status is also updated
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void UpdateAnimation(object sender, MiniPetManager.StatusUpdateEventArgs args){
+		MiniPetManager.UpdateStatuses status = args.UpdateStatus;
+	
+		if(status == MiniPetManager.UpdateStatuses.Tickle){
+			RefreshMiniPetState();
+		}
 	}
 
 	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
@@ -145,13 +174,12 @@ public class MiniPet : MonoBehaviour {
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 		
 		if(!isTickled)
-			animator.SetBool("Sad", true);
+			animationManager.Sad();
 		else
-			animator.SetBool("Sad", false);
+			animationManager.NotSad();
 		
 		if(!isCleaned){
 			dirtyParticle.Play();
-			miniPetSpeechAI.ShowDirtyMsg();
 		}
 		else{
 			dirtyParticle.Stop();
@@ -166,6 +194,11 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.OpenUI();
 	}
 
+	/// <summary>
+	/// When item is dropped on MP do the necessary check and carry out the action.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
@@ -185,7 +218,7 @@ public class MiniPet : MonoBehaviour {
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);
 				MiniPetManager.Instance.IncreaseFoodXP(id);
 
-				animator.SetTrigger("Happy");
+				animationManager.Eat();
 			}
 			else{
 				bool isTickled = MiniPetManager.Instance.IsTickled(id);

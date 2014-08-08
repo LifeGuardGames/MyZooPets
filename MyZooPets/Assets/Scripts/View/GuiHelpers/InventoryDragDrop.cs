@@ -64,7 +64,8 @@ public class InventoryDragDrop : MonoBehaviour {
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
 
-				PetAnimationManager.Instance.AbortFeeding();
+				if(!MiniPetHUDUIManager.Instance.IsOpen())
+					PetAnimationManager.Instance.AbortFeeding();
 			}else{
 				mTrans.parent = mParent;	
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
@@ -141,8 +142,11 @@ public class InventoryDragDrop : MonoBehaviour {
 				// if item is being dragged and is not usable items play eat anticipation
 				string invItemID = this.gameObject.name;
 				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-				if(invItem != null && invItem.ItemType != ItemType.Usables)
-					PetAnimationManager.Instance.WaitingToBeFed();
+				if(invItem != null && invItem.ItemType != ItemType.Usables){
+					if(!MiniPetHUDUIManager.Instance.IsOpen())
+						PetAnimationManager.Instance.WaitingToBeFed();
+				}
+					
 
 				Vector3 newDelta = new Vector3(delta.x * CameraManager.Instance.ratioX, delta.y * CameraManager.Instance.ratioY, 0f);
 				

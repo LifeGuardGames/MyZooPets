@@ -50,12 +50,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 
-//	void OnGUI(){
+	void OnGUI(){
 
-//		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
-//			animator.SetInteger("Health", 80);
-//			StartHighFive();
-//		}
+		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
+			animator.SetInteger("Health", 80);
+			StartHighFive();
+		}
 
 //		if(GUI.Button(new Rect(100, 0, 100, 50), "Sick1")){
 //			animator.SetInteger("Health", 50);
@@ -72,7 +72,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 //		if(GUI.Button(new Rect(100, 50, 100, 50), "Sad")){
 //			animator.SetInteger("Mood", 30);
 //		}
-//	}
+	}
 
 	/// <summary>
 	/// Pet stats have been modified so make sure idle state animation reflects

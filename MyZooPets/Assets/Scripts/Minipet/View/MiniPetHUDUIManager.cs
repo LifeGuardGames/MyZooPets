@@ -49,13 +49,14 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
 		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
-		RefreshUI(this, new MiniPetManager.MiniPetStatusUpdateEventArgs());
+		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		HUDUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.ShowPanel();
+		RoomArrowsUIManager.Instance.HidePanel();
 		petReference.SetActive(false);
 	}
 
@@ -68,6 +69,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		HUDUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		RoomArrowsUIManager.Instance.ShowPanel();
 		petReference.SetActive(true);
 
 		if(cleaningTutorialObject != null)
@@ -81,7 +83,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void RefreshUI(object sender, MiniPetManager.MiniPetStatusUpdateEventArgs args){
+	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
 		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
 		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning(SelectedMiniPetID);
@@ -106,7 +108,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		}
 
 		// level up handler
-		if(args.UpdateStatus == "levelUp"){
+		if(args.UpdateStatus == MiniPetManager.UpdateStatuses.LevelUp){
 			levelUpAnimation.Play();
 			IsLevelUpAnimationLockOn = true;
 		}

@@ -191,7 +191,8 @@ public abstract class Gate : MonoBehaviour{
 				Debug.LogError("No logic script on box", goBox);
 		}
 
-		scriptItemBox.NowAvailable();
+		if(scriptItemBox != null)
+			scriptItemBox.NowAvailable();
 	}
 
 	/// <summary>

@@ -59,8 +59,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 3f, optional);
 		}
 		catch(NullReferenceException e){
-			Debug.LogError("null reference in DragFireOrbHint. possible null values. fireOrbItemRef: " + fireOrbItemReference +
-			               "fireButtonReference: " + fireButtonReference);
+			Debug.LogError(e.Message);
 		}
 	}
 

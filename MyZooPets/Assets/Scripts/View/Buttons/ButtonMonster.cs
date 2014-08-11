@@ -62,12 +62,7 @@ public class ButtonMonster : LgButtonHold{
 	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
-//		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		
-		// if the pet is currently busy, forgetaboutit
-//		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
-//			return;
 
 		// if can breathe fire, attack the gate!!
 		if(canBreathFire){

@@ -62,32 +62,31 @@ public class ButtonMonster : LgButtonHold{
 	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
-//		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		
-		// if the pet is currently busy, forgetaboutit
-//		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
-//			return;
 
-		// if can breathe fire, attack the gate!!
-		if(canBreathFire){
-			isLegal = true;
-
-			
-			// kick off the attack script
-			int damage = GetDamage();
-			attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
-			attackScript.Init(gate, damage);
-
-			PetAnimationManager.Instance.StartFireBlow();
-			
-			// turn the fire meter on
-			scriptFireMeter.StartFilling();
+		try{
+			// if can breathe fire, attack the gate!!
+			if(canBreathFire){
+				isLegal = true;
+				
+				// kick off the attack script
+				int damage = GetDamage();
+				attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
+				attackScript.Init(gate, damage);
+				
+				PetAnimationManager.Instance.StartFireBlow();
+				
+				// turn the fire meter on
+				scriptFireMeter.StartFilling();
+			}
+			// else can't breathe fire. explain why
+			else{
+				if(!TutorialManager.Instance.IsTutorialActive())
+					GatingManager.Instance.ShowNoFireNotification();
+			}
 		}
-		// else can't breathe fire. explain why
-		else{
-			if(!TutorialManager.Instance.IsTutorialActive())
-				GatingManager.Instance.ShowNoFireNotification();
+		catch(NullReferenceException e){
+			Debug.LogError("Error in ButtonMonster " + e.Message, this);
 		}
 	}
 

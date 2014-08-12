@@ -23,6 +23,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	private Level maxLevel = Level.Level6;
 
+	/// <summary>
+	/// Gets or sets a value indicating whether is first time cleaning.
+	/// Also sends out Event when value has been updated
+	/// </summary>
+	/// <value><c>true</c> if this instance is first time cleaning; otherwise, <c>false</c>.</value>
 	public bool IsFirstTimeCleaning{
 		get{ return DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;}
 		set{

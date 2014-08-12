@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
+	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
 
 	public UILabel nameLabel;
 	public UILabel levelLabel;
@@ -40,11 +41,14 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	/// <summary>
 	/// Level up animation completed. 
-	/// Actually increase the level after level up animation is done
+	/// Actually increase the level after level up animation is done.
 	/// </summary>
 	public void LevelUpAnimationCompleted(){
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
 		IsLevelUpAnimationLockOn = false;
+
+		if(OnLevelUpAnimationCompleted != null)
+			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
 	}
 
 	protected override void _OpenUI(){

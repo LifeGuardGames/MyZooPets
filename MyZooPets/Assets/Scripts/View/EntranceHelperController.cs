@@ -28,13 +28,35 @@ public class EntranceHelperController : MonoBehaviour {
 		else{
 			arrowGameObject.SetActive(false);
 		}
+
+		MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
+	}
+
+	void OnDestroy(){
+		if(MiniPetHUDUIManager.Instance)
+			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
 	}
 
 	public void ShowArrow(){
 		arrowGameObject.SetActive(true);
 	}
-
+	
 	public void EntranceUsed(){
 		DataManager.Instance.GameData.FirstTimeEntrance.EntranceUsed(entranceKey);
+	}
+
+	/// <summary>
+	/// Disable arrow hints for entrance when zoom into mini pet. 
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void OnManageOpenEventHandler(object sender, UIManagerEventArgs args){
+		if(args.Opening)
+			arrowGameObject.SetActive(false);
+		else{
+			bool isFirstTime = DataManager.Instance.GameData.FirstTimeEntrance.IsFirstTimeEntrance(entranceKey);
+			if(isFirstTime)
+				ShowArrow();
+		}
 	}
 }

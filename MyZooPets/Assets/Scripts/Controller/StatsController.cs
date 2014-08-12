@@ -303,11 +303,11 @@ public class StatsController : Singleton<StatsController>{
 	// Returns the localized stat text for incoming
 	// stat id.
 	//---------------------------------------------------	
-	public string GetStatText(StatType eStat){
-		string strKey = "STAT_" + eStat;
-		string strLocalizedStat = Localization.Localize(strKey);
+	public string GetStatText(StatType statType){
+		string key = "STAT_" + statType;
+		string localizedStat = Localization.Localize(key);
 		
-		return strLocalizedStat;
+		return localizedStat;
 	}
 
 	/// <summary>

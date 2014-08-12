@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -19,14 +20,13 @@ public class MiniPet : MonoBehaviour {
 	private float tickleTimer = 0;
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
-	void Awake(){
-
-	}
 
 	void Start(){
-		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
+		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
+		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
+
 		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 		RefreshMiniPetUIState();
 	}
@@ -35,6 +35,7 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 		if(MiniPetHUDUIManager.Instance)
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
+		MiniPetHUDUIManager.OnLevelUpAnimationCompleted -= LevelUpEventHandler;
 		MiniPetManager.MiniPetStatusUpdate -= UpdateAnimation;
 	}
 
@@ -246,6 +247,26 @@ public class MiniPet : MonoBehaviour {
 				}
 				else{}
 			}
+		}
+	}
+
+	private void LevelUpEventHandler(object sender, EventArgs args){
+		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
+//			// spawn the item to be coming out of this box
+//			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
+//			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+//			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
+//			
+//			droppedObjectStat.Init(HUDElementType.Gems, 1);
+//			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
+//			
+//			// set the position of the newly spawned item to be wherever this item box is
+//			Vector3 position = gameObject.transform.position;
+////			position.y -= 8; //drop the stat underneath the smoke monster
+//			droppedItem.transform.position = position;
+//			
+//			// make the item "burst" out
+//			droppedObjectStat.Burst();
 		}
 	}
 }

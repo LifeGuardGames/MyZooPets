@@ -52,10 +52,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	void OnGUI(){
 
-		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
-			animator.SetInteger("Health", 80);
-			StartHighFive();
-		}
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
+//			animator.SetInteger("Health", 80);
+//			StartHighFive();
+//		}
 
 //		if(GUI.Button(new Rect(100, 0, 100, 50), "Sick1")){
 //			animator.SetInteger("Health", 50);

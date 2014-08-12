@@ -26,16 +26,6 @@ public class GateMonster : Gate{
 		// the ideal position of the monster is its transform at the outset
 		idealPos = transform.position;
 
-		// the monster's position should be set relative to its hp
-//		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-//		int maxHealth = data.GetMonster().MonsterHealth;
-//		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-//		int damage = maxHealth - currentHealth; 
-		
-		// if the monster is missing hp, it needs to move
-//		if(damage > 0)
-//			Move(damage);
-
 		SetupHeads();
 	}
 

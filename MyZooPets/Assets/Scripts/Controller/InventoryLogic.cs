@@ -196,8 +196,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 				OnItemUsed(this, args);
 			}
 		}
-
-		Debug.Log("MiniPet receives item");
 	}
 
 	/// <summary>

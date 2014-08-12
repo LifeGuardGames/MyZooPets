@@ -221,14 +221,23 @@ public class MiniPet : MonoBehaviour {
 
 			//check if minipet needs food
 			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
-				//use item if so
-				args.IsValidTarget = true;
-				
-				//notify inventory logic that this item is being used
-				InventoryLogic.Instance.UseMiniPetItem(invItemID);
-				MiniPetManager.Instance.IncreaseFoodXP(id);
+				string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
-				animationManager.Eat();
+				//check if minipet wants this food
+				if(preferredFoodID == invItem.ItemID){
+					//use item if so
+					args.IsValidTarget = true;
+					
+					//notify inventory logic that this item is being used
+					InventoryLogic.Instance.UseMiniPetItem(invItemID);
+					MiniPetManager.Instance.IncreaseFoodXP(id);
+					
+					animationManager.Eat();
+				}
+				// show notification that the mp wants a specific food
+				else{
+					Debug.Log("don't want this type of food");
+				}
 			}
 			else{
 				bool isTickled = MiniPetManager.Instance.IsTickled(id);

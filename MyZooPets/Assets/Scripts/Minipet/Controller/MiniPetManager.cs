@@ -262,6 +262,21 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	}
 
 	/// <summary>
+	/// Gets the food preference of this minipet at the current level
+	/// </summary>
+	/// <returns>The food preference food ID.</returns>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public string GetFoodPreference(string miniPetID){
+		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+		ImmutableDataFoodPreferences foodPreferenceData = DataLoaderFoodPreferences.GetData(data.FoodPreferenceID);
+
+		string preferredFoodID = foodPreferenceData.GetFoodPreference(currentLevel);
+
+		return preferredFoodID;
+	}
+
+	/// <summary>
 	/// Raises the destroyed gate handler event. Check to spawn mini pet after
 	/// a gate has been destroyed
 	/// </summary>

@@ -218,10 +218,11 @@ public class MiniPet : MonoBehaviour {
 
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			string preferredFoodID = "";
 
 			//check if minipet needs food
 			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
-				string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
 				//check if minipet wants this food
 				if(preferredFoodID == invItem.ItemID){
@@ -236,7 +237,8 @@ public class MiniPet : MonoBehaviour {
 				}
 				// show notification that the mp wants a specific food
 				else{
-					Debug.Log("don't want this type of food");
+					Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+					miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 				}
 			}
 			else{

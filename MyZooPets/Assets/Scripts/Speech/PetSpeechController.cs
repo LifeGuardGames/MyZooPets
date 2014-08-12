@@ -10,6 +10,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
     public enum Keys{
         MessageText,
         ImageTextureName,
+		AtlasName,
         ImageClickTarget,
         ImageClickFunctionName
     } 
@@ -28,17 +29,23 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 
         //Use SpeechWithImageAndText prefab
         if(message.ContainsKey(Keys.MessageText) && message.ContainsKey(Keys.ImageTextureName)){
-            if(petSpeechWithImageAndTextPrefab == null)
-                petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
+			if(petSpeechWithImageAndTextPrefab == null)
+					petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
 
             currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImageAndTextPrefab);
 			
             UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
 			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
-			
+
 			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
-            sprite.spriteName = (string) message[Keys.ImageTextureName];
+			//switch atlas if necessary
+			if(message.ContainsKey(Keys.AtlasName)){
+				string atlasName = (string) message[Keys.AtlasName];
+				GameObject atlas = (GameObject) Resources.Load(atlasName);
+				sprite.atlas = atlas.GetComponent<UIAtlas>();
+			}
+			sprite.spriteName = (string) message[Keys.ImageTextureName];
 
             //also check if the image should be make clickable. 
             if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
@@ -47,7 +54,6 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
                 buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
                 sprite.gameObject.AddComponent<BoxCollider>();
             }
-
         }
         //Use SpeechWithText prefab
         else if(message.ContainsKey(Keys.MessageText)){

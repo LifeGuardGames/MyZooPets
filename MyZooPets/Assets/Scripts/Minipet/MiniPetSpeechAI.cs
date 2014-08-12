@@ -2,21 +2,10 @@
 using System.Collections;
 
 public class MiniPetSpeechAI : MonoBehaviour{
-
-	// Use this for initialization
-	void Start () {
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public void ShowDirtyMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
-//		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 
@@ -32,15 +21,11 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 
-	public void ShowPokeMsg(){
+	public void ShowFoodPreferenceMsg(string itemTextureName){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, "Tickle me!!");
-		GetComponent<PetSpeechController>().Talk(msgOption);
-	}
-
-	public void FeedMsg(){
-		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, "Feed me!!");
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "ItemAtlas");
+		msgOption.Add(PetSpeechController.Keys.ImageTextureName, itemTextureName);
+		msgOption.Add(PetSpeechController.Keys.MessageText, "I want this");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 }

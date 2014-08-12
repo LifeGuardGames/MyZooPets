@@ -166,7 +166,6 @@ public class MiniPet : MonoBehaviour {
 		bool isDraggingOnMP = gesture.Raycast.Hit3D.collider &&
 			gesture.Raycast.Hit3D.collider.name == this.gameObject.name;
 
-
 		if(isDraggingOnMP){
 			//z position is constant
 			Vector3 touchPositionInWorld = 

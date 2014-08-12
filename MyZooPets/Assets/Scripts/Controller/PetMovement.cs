@@ -14,16 +14,6 @@ public class PetMovement : Singleton<PetMovement>{
 	
 	public GameObject petSprite;
 
-	public GameObject GetPetGameObject(){
-		return petSprite;	
-	}
-	
-//	// lwf animator
-//	public PetAnimator scriptAnim;
-//	public PetAnimator GetPetAnimatorScript() {
-//		return scriptAnim;	
-//	}
-	
 	// sound for when the pet moves
 	public string strSoundMove;
 	public float fShadow = .6f;

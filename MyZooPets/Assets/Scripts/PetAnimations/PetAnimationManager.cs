@@ -5,16 +5,16 @@ using System.Collections;
 
 public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public static EventHandler<EventArgs> OnBreathEnded; //event sent out when fire blow animation ended
-
-
+	
 	public Animator animator;
+	public GameObject animatorObject;
+	public GameObject petShadow;
 	public GameObject flippableComponents;
 	public GameObject fireBlowPosition;
 	public GameObject headCollider;
 	public GameObject bodyCollider;
 	public GameObject highFiveCollider;
-
-
+	
 	public List<string> sadIdleAnimations;
 	public List<string> happyIdleAnimations;
 	public List<string> sick1IdleAnimations;
@@ -72,6 +72,23 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 //		if(GUI.Button(new Rect(100, 50, 100, 50), "Sad")){
 //			animator.SetInteger("Mood", 30);
 //		}
+	}
+
+	/// <summary>
+	/// Disables the animation. by hiding the colliders and the body parts
+	/// </summary>
+	public void DisableAnimation(){
+		animatorObject.SetActive(false);
+		headCollider.SetActive(false);
+		bodyCollider.SetActive(false);
+		petShadow.GetComponent<MeshRenderer>().enabled = false;
+	}
+
+	public void EnableAnimation(){
+		animatorObject.SetActive(true);
+		headCollider.SetActive(true);
+		bodyCollider.SetActive(true);
+		petShadow.GetComponent<MeshRenderer>().enabled = true;
 	}
 
 	/// <summary>

@@ -40,6 +40,7 @@ public class AudioManager : Singleton<AudioManager>{
 	
 	public AudioClip background1;
 	public string strBgMusic;
+	public string backgroundMusic;
 	private AudioClip backgroundClip;
 	private AudioClip effectClip;
 	private AudioSource backgroundSource;

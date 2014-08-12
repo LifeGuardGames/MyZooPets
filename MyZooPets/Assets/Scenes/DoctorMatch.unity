@@ -519,7 +519,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400076, guid: 5bc953636cce24f4ba45c7b29b27c4d4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -511.184723
+      value: -510.967743
       objectReference: {fileID: 0}
     - target: {fileID: 400076, guid: 5bc953636cce24f4ba45c7b29b27c4d4, type: 2}
       propertyPath: m_LocalPosition.y
@@ -527,7 +527,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 5bc953636cce24f4ba45c7b29b27c4d4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 512.407654
+      value: 512.516174
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 5bc953636cce24f4ba45c7b29b27c4d4, type: 2}
       propertyPath: m_LocalPosition.y
@@ -855,6 +855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui: {fileID: 1134181637}
   nStartingLives: 3
+  gameOverAudioClip: minigameGameOver
   minimumSpeed: 2
   startSpeed: 2
   speedIncreaseInterval: 1
@@ -892,7 +893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &95930320
 Transform:
   m_ObjectHideFlags: 0
@@ -5868,6 +5869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background1: {fileID: 0}
   strBgMusic: bgClinic
+  backgroundMusic: bgClinic
   isMusicOn: 1
 --- !u!4 &317320125
 Transform:
@@ -9762,7 +9764,7 @@ Transform:
   m_PrefabInternal: {fileID: 69752353}
   m_GameObject: {fileID: 462539651}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -511.184723, y: 40, z: 1.52587891e-05}
+  m_LocalPosition: {x: -510.967743, y: 40, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 545594379}
@@ -13192,7 +13194,7 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .611450791
+    e03: .774206758
     e10: 0
     e11: 384
     e12: 0
@@ -16789,7 +16791,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1040511978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.611450791, y: 384, z: 0}
+  m_LocalPosition: {x: -.774206758, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 792511250}
@@ -16955,7 +16957,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1071829514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -511.796173, y: 384, z: 0}
+  m_LocalPosition: {x: -511.741943, y: 384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2087649945}
@@ -17506,7 +17508,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1149615759}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -511.796173, y: -384, z: 0}
+  m_LocalPosition: {x: -511.741943, y: -384, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 604049599}
@@ -17669,7 +17671,7 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .611450791
+    e03: .774206758
     e10: 0
     e11: 384
     e12: 0
@@ -18059,7 +18061,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1231449633
 Transform:
   m_ObjectHideFlags: 0
@@ -19375,7 +19377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1282517054
 Transform:
   m_ObjectHideFlags: 0
@@ -21847,6 +21849,10 @@ Prefab:
       propertyPath: isMusicOn
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
+      propertyPath: backgroundMusic
+      value: bgClinic
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
   m_RootGameObject: {fileID: 317320123}
@@ -22588,7 +22594,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1503828610
 Transform:
   m_ObjectHideFlags: 0
@@ -24957,7 +24963,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.612304688
+      value: -.7734375
       objectReference: {fileID: 0}
     - target: {fileID: 400018, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_LocalPosition.y
@@ -28856,7 +28862,7 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: -7511.04492
+    e03: -7510.88379
     e10: 0
     e11: 384
     e12: 0
@@ -30414,7 +30420,7 @@ Transform:
   m_PrefabInternal: {fileID: 69752353}
   m_GameObject: {fileID: 1821042851}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 512.407654, y: 40, z: 1.52587891e-05}
+  m_LocalPosition: {x: 512.516174, y: 40, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2075006870}
@@ -33778,7 +33784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc088f06c146a5041aca20de11b4a87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptPetAnim: {fileID: 0}
 --- !u!114 &2018245889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34910,7 +34915,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2035032513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.611450791, y: 0, z: 0}
+  m_LocalPosition: {x: -.774206758, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1170625100}
@@ -36316,7 +36321,7 @@ Transform:
   m_PrefabInternal: {fileID: 1566636728}
   m_GameObject: {fileID: 2076010430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.612304688, y: 0, z: 0}
+  m_LocalPosition: {x: -.7734375, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1706492452}
@@ -36527,7 +36532,7 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: 511.796173
+    e03: 511.741943
     e10: 0
     e11: 384
     e12: 0

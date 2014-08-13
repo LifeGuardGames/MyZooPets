@@ -13,7 +13,7 @@ Shader "3DSprites/Default"
 		{ 
 			"Queue"="Transparent" 
 			"IgnoreProjector"="True" 
-			"RenderType"="Transparent" 
+			"RenderType"="TransparentCutout" 
 			"PreviewType"="Plane"
 			"CanUseSpriteAtlas"="True"
 		}

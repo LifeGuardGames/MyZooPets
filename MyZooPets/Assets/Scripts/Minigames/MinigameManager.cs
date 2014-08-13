@@ -114,9 +114,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		
 		// if the game is being paused, let the audio manager know so it can pause sounds
 		if(currentState == MinigameStates.Paused)
-			AudioManager.Instance.Pause(true);
+			AudioManager.Instance.PauseBackground(true);
 		else if(currentState == MinigameStates.Playing && eOldState == MinigameStates.Paused)
-			AudioManager.Instance.Pause(false);
+			AudioManager.Instance.PauseBackground(false);
 		
 		// send out a message to everything that cares about the game state
 		if(OnStateChanged != null)
@@ -240,7 +240,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void RestartGame(){
-		AudioManager.Instance.Pause(false);
+		AudioManager.Instance.PauseBackground(false);
 
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 		if(ui.IsPopupShowing(MinigamePopups.GameOver))

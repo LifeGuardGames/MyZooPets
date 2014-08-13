@@ -181,4 +181,19 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			}
 		}
 	}
+
+	private void OpenShop(){
+		ClickManager.Instance.Lock(UIModeTypes.Store);
+		
+		// open the shop
+		StoreUIManager.OnShortcutModeEnd += CloseShop;	
+		StoreUIManager.Instance.OpenToSubCategory("Food", true);
+	}
+
+	private void CloseShop(object sender, EventArgs args){
+		// pop the mode we pushed earlier from the click manager
+		ClickManager.Instance.ReleaseLock();
+		
+		StoreUIManager.OnShortcutModeEnd -= CloseShop;
+	}
 }

@@ -54,6 +54,7 @@ public class MiniPetAnimationManager : MonoBehaviour {
 	/// </summary>
 	public void StopTickling(){
 		animator.SetBool("IsTickling", false);
+		MiniPetAudioManager.Instance.StopLoopingClip();
 	}
 
 	/// <summary>
@@ -66,6 +67,7 @@ public class MiniPetAnimationManager : MonoBehaviour {
 
 	public void NotSad(){
 		animator.SetBool("IsSad", false);
+		MiniPetAudioManager.Instance.StopRecurringClip();
 	}
 
 	/// <summary>

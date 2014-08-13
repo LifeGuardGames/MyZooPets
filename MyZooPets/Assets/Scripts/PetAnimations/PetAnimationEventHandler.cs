@@ -12,5 +12,5 @@ public class PetAnimationEventHandler : MonoBehaviour {
 			PetAnimationManager.Instance.DoneWithFireBlowAnimation();
 			break;
 		}
-	}
+	}	
 }

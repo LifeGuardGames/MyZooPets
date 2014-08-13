@@ -20,7 +20,7 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// </summary>
 	/// <param name="soundClip">Sound clip.</param>
 	/// <param name="hashOverrides">Hash overrides.</param>
-	public void PlayClip(string clipName, Hashtable hashOverrides = null){
+	public virtual void PlayClip(string clipName, Hashtable hashOverrides = null){
 		if(hashOverrides == null)
 			hashOverrides = new Hashtable();
 		
@@ -47,8 +47,8 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// Stops the clip. clip gets destoryed after stop
 	/// </summary>
 	/// <param name="clipName">Clip name.</param>
-	public void StopClip(string clipName){
-		if(spawnedAudioSources.ContainsKey(clipName)){
+	public virtual void StopClip(string clipName){
+		if(!string.IsNullOrEmpty(clipName) && spawnedAudioSources.ContainsKey(clipName)){
 			LgAudioSource audioSource = spawnedAudioSources[clipName];
 			audioSource.Stop();
 		}

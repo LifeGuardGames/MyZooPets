@@ -39,25 +39,26 @@ public class LgAudioSource : MonoBehaviour{
 		float pitch = sound.GetPitch();
 		if(hashOverrides.Contains("Pitch"))
 			pitch = (float)hashOverrides["Pitch"];
+
+		bool loop = false;
+		if(hashOverrides.Contains("Loop"))
+			loop = (bool)hashOverrides["Loop"];
 		
 		// create the audio source	
 		audioSource = gameObject.AddComponent<AudioSource>(); 
 		audioSource.clip = clip; 
 		audioSource.volume = volume;
 		audioSource.pitch = pitch;
+		audioSource.loop = loop;
 		gameObject.transform.parent = tf;
 		gameObject.transform.position = tf.position;
 		audioSource.Play();
-		
-		// listen for pausing
-//		AudioManager.Instance.OnGamePaused += SetPauseState;
-
-		// listen for stopping
-//		AudioManager.Instance.OnStopClipCalled += CheckForStop;
 
 		// add destroy script
-		DestroyThis scriptDestroy = gameObject.AddComponent<DestroyThis>();
-		scriptDestroy.SetLife(clip.length);		
+		if(!loop){
+			DestroyThis scriptDestroy = gameObject.AddComponent<DestroyThis>();
+			scriptDestroy.SetLife(clip.length);		
+		}
 	}
 	
 	void OnDestroy(){
@@ -66,15 +67,6 @@ public class LgAudioSource : MonoBehaviour{
 			args.ClipName = audioClipName;
 			OnDestroyed(this, args);
 		}
-			
-		// it's possible that the audio manager has been destroyed because the scene is changing, in which case, don't worry
-		// about removing listeners, because the audio manager has been destroyed
-//		if(!AudioManager.Instance)
-//			return;
-		
-		// stop listening for pausing	
-//		AudioManager.Instance.OnGamePaused -= SetPauseState;
-//		AudioManager.Instance.OnStopClipCalled -= CheckForStop;
 	}
 	
 	///////////////////////////////////////////
@@ -89,31 +81,10 @@ public class LgAudioSource : MonoBehaviour{
 		
 		//Debug.Log(audioSource.name + " should be completely faded out now");
 	}
-	
-	///////////////////////////////////////////
-	// SetPauseState()
-	// If the game is pausing or unpausing.
-	///////////////////////////////////////////
-//	private void SetPauseState(object sender, PauseArgs args){	
-//		bool isPaused = args.IsPausing();	
-//
-//		if(isPaused)
-//			audioSource.Pause();
-//		else
-//			audioSource.Play();
-//	}
 
 	public void Stop(){
 		audioSource.Stop();
 		Destroy(gameObject);
 	}
-	///////////////////////////////////////////
-	// CheckForStop()
-	// Listener call, will match parameters and check if this needs to be stopped
-	///////////////////////////////////////////
-//	public void CheckForStop(object sender, StopArgs args){
-//		if(args.ClipName == audioClipName){
-//			audioSource.Stop();
-//		}
-//	}
+
 }

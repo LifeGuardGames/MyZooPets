@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ public class FireMeter : MonoBehaviour {
 	public void Empty(){
 		SetFillStatus( false );
 		slider.sliderValue = 0;
-		AudioManager.Instance.Stop("barAscend");
+		AudioManager.Instance.StopClip("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -77,7 +77,7 @@ public class FireMeter : MonoBehaviour {
 			// stop filling
 			SetFillStatus(false);
 
-			AudioManager.Instance.Stop("barAscend");
+			AudioManager.Instance.StopClip("barAscend");
 		}
 	}
 	

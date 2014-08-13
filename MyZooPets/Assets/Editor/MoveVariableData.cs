@@ -9,13 +9,13 @@ public class MoveVariableData : EditorWindow {
 	
 	void OnGUI() {
 		if(GUILayout.Button("MoveData")) {
-			AudioManager[] components = Resources.FindObjectsOfTypeAll<AudioManager>();
-			foreach (AudioManager component in components) {
-
-				component.backgroundMusic = component.strBgMusic;
-
-				EditorUtility.SetDirty(component.gameObject);
-			}
+//			AudioManager[] components = Resources.FindObjectsOfTypeAll<AudioManager>();
+//			foreach (AudioManager component in components) {
+//
+//				component.backgroundMusic = component.strBgMusic;
+//
+//				EditorUtility.SetDirty(component.gameObject);
+//			}
 		}
 	}
 }

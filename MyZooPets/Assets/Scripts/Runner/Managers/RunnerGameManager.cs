@@ -75,13 +75,13 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// </summary>
 	protected override void _GameOver(){
 		// send out distance task
-		int nDistance = ScoreManager.Instance.Distance;
-		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), nDistance);
-		Analytics.Instance.RunnerPlayerDistanceRan(nDistance);
+		int distance = ScoreManager.Instance.Distance;
+		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);
+		Analytics.Instance.RunnerPlayerDistanceRan(distance);
 		
 		// send out coins task
-		int nCoins = ScoreManager.Instance.Coins;
-		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), nCoins);
+		int coins = ScoreManager.Instance.Coins;
+		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
 
 		// check for badge unlock;
 		UpdateBadgeProgress();

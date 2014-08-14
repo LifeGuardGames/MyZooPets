@@ -29,9 +29,6 @@ public class Analytics : MonoBehaviour {
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 
-    private const string MAT_ADVERTISER_ID = "17900";
-    private const string MAT_CONVERSION_KEY = "757d356bf92419b36822e14a62ebedee";
-
     private static bool isCreated = false;
     private static Analytics instance;
     // private DateTime playTime;
@@ -72,10 +69,10 @@ public class Analytics : MonoBehaviour {
 
     //=========================Runner Game======================================
     //Where did the user die most often in the runner game?
-    public void RunnerPlayerDied(string levelComponentName){
-        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
-    }
+//    public void RunnerPlayerDied(string levelComponentName){
+//        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
+//            GA.API.Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
+//    }
 
     //Which triggers does the user have difficulty recognizing as bad triggers?
     //Number of times crashed into trigger. 
@@ -101,12 +98,6 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
     }
 
-    //Number of missed vs correct inhaler swipe sequences
-    public void InhalerSwipeSequences(string stepStatus, int stepID){
-        if(!String.IsNullOrEmpty(stepStatus) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent(INHALER_CATEGORY + "Inhaler:" + stepStatus + ":" + stepID);
-    }
-
     //==========================Diagnose track game=============================
     //Number of correct diagnose. 
     //Which symptom is the user having trouble identifying
@@ -116,6 +107,14 @@ public class Analytics : MonoBehaviour {
                 Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
     }
 
+	public void WrongDiagnose(){
+
+	}
+
+	public void DieAtWhatSpeed(){
+
+	}
+
     //=======================General Analytics==================================
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
@@ -123,18 +122,20 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);
     }
 
-    // //record when a user changes to another scene. Can be used to track how many
-    // //times user plays mini game 
+
+
+     //record when a user changes to another scene. Can be used to track how many
+     //times user plays mini game 
     public void ChangeScene(string newSceneName){
         if(!String.IsNullOrEmpty(newSceneName))
             GA.API.Design.NewEvent("SceneChanged:" + newSceneName);
     }
 
-    //track which button is most clicked by users
-    public void LgButtonClicked(string buttonName){
-        if(!String.IsNullOrEmpty(buttonName))
-            GA.API.Design.NewEvent("ButtonClicked:" + buttonName);
-    }
+//    //track which button is most clicked by users
+//    public void LgButtonClicked(string buttonName){
+//        if(!String.IsNullOrEmpty(buttonName))
+//            GA.API.Design.NewEvent("ButtonClicked:" + buttonName);
+//    }
 
     //when the user clean the triggers
     public void TriggersCleaned(String triggerID){
@@ -212,10 +213,10 @@ public class Analytics : MonoBehaviour {
     }
 
     //store short cup clicked. (from pet thought bubble)
-    public void StoreItemShortCutClicked(){
-        if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Button:StoreItemShortCut");
-    }
+//    public void StoreItemShortCutClicked(){
+//        if(isAnalyticsEnabled)
+//            GA.API.Design.NewEvent("Button:StoreItemShortCut");
+//    }
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)

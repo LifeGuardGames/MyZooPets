@@ -137,7 +137,6 @@ public class LgButton : MonoBehaviour{
 	/// button is allowed to process the click (i.e., UI is not locked, etc).
 	/// </summary>
 	protected virtual void ProcessClick(){
-		Analytics.Instance.LgButtonClicked(buttonName);
 	}
 
 	protected void PlayNotProcessSound(){

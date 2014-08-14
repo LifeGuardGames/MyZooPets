@@ -110,9 +110,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
-		//send analytics
-		Analytics.Instance.StoreItemShortCutClicked();
-
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());

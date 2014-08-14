@@ -12,5 +12,21 @@ public class PetAnimationEventHandler : MonoBehaviour {
 			PetAnimationManager.Instance.DoneWithFireBlowAnimation();
 			break;
 		}
-	}	
+	}
+
+	public void PlaySoundClip(string animationID){
+		if(!string.IsNullOrEmpty(animationID)){
+			PetAudioManager.Instance.PlayAnimationSound(animationID);
+		}
+	}
+
+	public void PlayRecurringSoundClip(string animationID){
+		if(!string.IsNullOrEmpty(animationID))
+			PetAudioManager.Instance.PlayRecurringClip(animationID);
+	}
+
+	public void PlayLoopingSoundClip(string animationID){
+		if(!string.IsNullOrEmpty(animationID))
+			PetAudioManager.Instance.PlayLoopingClip(animationID);
+	}
 }

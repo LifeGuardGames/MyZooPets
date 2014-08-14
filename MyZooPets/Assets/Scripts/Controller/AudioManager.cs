@@ -12,6 +12,7 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	
 	protected override void Awake(){
 		base.Awake();
+		isPlayingMultipleSounds = true;
 		backgroundSource = GetComponent<AudioSource>();
 	}
 	

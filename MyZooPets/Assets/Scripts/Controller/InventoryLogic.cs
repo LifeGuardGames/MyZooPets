@@ -154,9 +154,9 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			                                         Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
 			
 			// play the item's sound, if it has one
-			string itemSound = invItem.ItemData.SoundUsed;
-			if(!string.IsNullOrEmpty(itemSound))
-				AudioManager.Instance.PlayClip(itemSound);
+//			string itemSound = invItem.ItemData.SoundUsed;
+//			if(!string.IsNullOrEmpty(itemSound))
+//				AudioManager.Instance.PlayClip(itemSound);
 			
 			//remove inv item if there is none left
 			if(invItem.Amount == 0)

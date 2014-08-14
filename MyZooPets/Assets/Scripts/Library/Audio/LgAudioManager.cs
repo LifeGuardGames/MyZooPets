@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
-
+	protected bool isPlayingMultipleSounds = false; //T: allow sound clip to be played eventhough there's a same clip playing in the scene already
 	private Dictionary<string, LgAudioSource> spawnedAudioSources; //key: clip name, value: LgAudioSource
+
 
 	protected virtual void Awake(){
 		spawnedAudioSources = new Dictionary<string, LgAudioSource>();
@@ -35,12 +36,25 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 			Debug.LogError("No such sound with id " + clipName);
 			return;
 		}
-		
-		if(!spawnedAudioSources.ContainsKey(clipName)){
+
+		if(!isPlayingMultipleSounds && spawnedAudioSources.ContainsKey(clipName))
+			return;
+	
+
+		//if multip sound mode is on. just play the clip
+		if(isPlayingMultipleSounds){
 			LgAudioSource audioSource = PlaySound(sound, hashOverrides);
-			spawnedAudioSources.Add(clipName, audioSource);
 			audioSource.OnDestroyed += LgAudioSourceDestroyed;
 		}
+		//if multi sound mode is off. check the dicitonary for the same clip
+		else{
+			if(!spawnedAudioSources.ContainsKey(clipName)){
+				LgAudioSource audioSource = PlaySound(sound, hashOverrides);
+				spawnedAudioSources.Add(clipName, audioSource);
+				audioSource.OnDestroyed += LgAudioSourceDestroyed;
+			}
+		}
+
 	}
 
 	/// <summary>

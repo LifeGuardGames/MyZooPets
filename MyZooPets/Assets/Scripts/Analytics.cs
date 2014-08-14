@@ -122,7 +122,10 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);
     }
 
+	//start game from menu scene
+	public void StartGame(){
 
+	}
 
      //record when a user changes to another scene. Can be used to track how many
      //times user plays mini game 

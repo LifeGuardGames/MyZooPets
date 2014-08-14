@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
+public class PetAudioManager : LgAudioManager<PetAudioManager> {
 
-	private string lastPlayedClip; //keep track of the last clip being played
-	private string loopingClipName; //the name of the clip that's looping
+	private string lastPlayedClip;
+	private string loopingClipName;
+
 	private string recurringClipName; //the name of the clip that is being played at an interval
 	private bool isPlayingRecurringClip = false;
-	private float recurringTimer = 0;
+	private float recurringTimer = 5f;
 	private float maxTimeBetweenRecurring = 5f;
+
 
 	protected override void Update(){
 		base.Update();
-
+		
 		if(isPlayingRecurringClip){
 			recurringTimer += Time.deltaTime;
-
+			
 			if(recurringTimer >= maxTimeBetweenRecurring){
 				recurringTimer = 0;
-
+				
 				//play clip here
 				PlayClip(recurringClipName);
 			}
@@ -26,45 +29,52 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 	}
 
 	/// <summary>
-	/// Plays the clip. Have option to interrupt the recurring clip that is
-	/// playing right now
+	/// Play the sound using animationID. animationID needs to be converted to clipName first
 	/// </summary>
-	/// <param name="clipName">Clip name.</param>
-	/// <param name="option">Option.</param>
-	public override void PlayClip(string clipName, Hashtable option = null){
-		bool isInterruptingRecurringClip = false;
-		if(option != null && option.ContainsKey("IsInterruptingRecurringClip"))
-			isInterruptingRecurringClip = (bool) option["IsInterruptingRecurringClip"];
+	/// <returns>The animation sound.</returns>
+	/// <param name="animationID">Animation I.</param>
+	public string PlayAnimationSound(string animationID){
+		ImmutableDataPetAnimationSound animationSound = DataLoaderPetAnimationSounds.GetData(animationID);
+		string clipName = animationSound.GetRandomClipName();
 
-		if(isInterruptingRecurringClip)
-			StopRecurringClip();
-		else
+		PlayClip(clipName);
+
+		return clipName;
+	}
+
+	public void StopAnimationSound(){
+		if(!string.IsNullOrEmpty(lastPlayedClip))
 			StopClip(lastPlayedClip);
+	}
 
+	public override void PlayClip(string clipName, Hashtable hashOverrides = null){
+		StopClip(lastPlayedClip);
 		lastPlayedClip = clipName;
 
-		base.PlayClip(clipName, option);
+		base.PlayClip(clipName, hashOverrides);
 	}
 
 	public override void StopClip(string clipName){
 		lastPlayedClip = "";
-
 		base.StopClip(clipName);
 	}
-	
+
 	/// <summary>
 	/// Plays recurring clip. This means the clip will be played every 
 	/// maxTimeBetweenRecurring.
 	/// </summary>
 	/// <param name="clipName">Clip name.</param>
 	/// <param name="timer">Timer.</param>
-	public void PlayRecurringClip(string clipName){
+	public void PlayRecurringClip(string animationID){
 		if(!isPlayingRecurringClip){
+			ImmutableDataPetAnimationSound animationSound = DataLoaderPetAnimationSounds.GetData(animationID);
+			string clipName = animationSound.GetRandomClipName();
+
 			recurringClipName = clipName;
 			isPlayingRecurringClip = true;
 		}
 	}
-
+	
 	/// <summary>
 	/// Stops the recurring clip. recurring clip doesn't stop unless this function
 	/// is called.
@@ -80,17 +90,21 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 	/// This will make the audio clip keep looping until stop
 	/// </summary>
 	/// <param name="clipName">Clip name.</param>
-	public void PlayLoopingClip(string clipName){
-
+	public void PlayLoopingClip(string animationID){
+		
 		//only play looping clip again if there is no looping clip right now
 		if(string.IsNullOrEmpty(loopingClipName)){
 			Hashtable option = new Hashtable();
 			option.Add("Loop", true);
+
+			ImmutableDataPetAnimationSound animationSound = DataLoaderPetAnimationSounds.GetData(animationID);
+			string clipName = animationSound.GetRandomClipName();
+
 			loopingClipName = clipName;
 			PlayClip(clipName, option);
 		}
 	}
-
+	
 	/// <summary>
 	/// Stops the current looping clip.
 	/// </summary>

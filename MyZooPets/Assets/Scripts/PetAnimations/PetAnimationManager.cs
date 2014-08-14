@@ -52,8 +52,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	void OnGUI(){
 
-//		if(GUI.Button(new Rect(0, 0, 100, 50), "Healthy")){
-//			animator.SetInteger("Health", 80);
+//		if(GUI.Button(new Rect(0, 0, 100, 200), "Healthy")){
+////			animator.SetInteger("Health", 80);
 //			StartHighFive();
 //		}
 
@@ -140,6 +140,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public void AbortFireBlow(){
 		animator.SetBool("IsFireBlowIn", false);
 		currentAnimationState = PetAnimStates.Idling;
+		PetAudioManager.Instance.StopAnimationSound();
 	}
 	
 	/// <summary>
@@ -191,7 +192,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void WaitingToBeFed(){
 		CheckConditionBeforeAnyStateAnimation();
-
 		animator.SetBool("IsWaitingToEat", true);
 	}
 
@@ -200,12 +200,14 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void AbortFeeding(){
 		animator.SetBool("IsWaitingToEat", false);
+		PetAudioManager.Instance.StopRecurringClip();
 	}
 
 	/// <summary>
 	/// Feed the pet. Play the chew animation then return to the appropriate idle state
 	/// </summary>
 	public void FinishFeeding(){
+		PetAudioManager.Instance.StopRecurringClip();
 		animator.SetTrigger("EatChew");
 		animator.SetBool("IsWaitingToEat", false);
 	}
@@ -222,6 +224,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void StopTickling(){
 		animator.SetBool("IsTickling", false);
+		PetAudioManager.Instance.StopAnimationSound();
 	}
 
 	/// <summary>

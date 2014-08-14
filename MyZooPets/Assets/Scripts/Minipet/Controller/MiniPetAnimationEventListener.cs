@@ -9,7 +9,6 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 			option.Add("IsInterruptingRecurringClip", true);
 			MiniPetAudioManager.Instance.PlayClip(clipName, option);
 		}
-			
 	}
 
 	public void PlayRecurringSoundClip(string clipName){

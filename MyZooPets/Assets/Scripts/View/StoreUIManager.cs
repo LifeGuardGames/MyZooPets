@@ -467,6 +467,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
 			}
+			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+			}
 			else{
 				_CloseUI();	// Call all the close pipelines (only overridden tho)
 			}

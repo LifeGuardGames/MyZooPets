@@ -182,10 +182,22 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		}
 	}
 
+	/// <summary>
+	/// Opens the shop. Store button calls this function
+	/// </summary>
 	private void OpenShop(){
+		this.GetComponent<TweenToggleDemux>().Hide();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store);
-		
-		// open the shop
+
+		Invoke("OpenShopAfterWaiting", 0.2f);
+	}
+
+	/// <summary>
+	/// Opens the shop after waiting. So the MiniPetHUDUI can hide first before the
+	/// store UI shows up
+	/// </summary>
+	private void OpenShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
 		StoreUIManager.Instance.OpenToSubCategory("Food", true);
 	}
@@ -195,5 +207,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		ClickManager.Instance.ReleaseLock();
 		
 		StoreUIManager.OnShortcutModeEnd -= CloseShop;
+
+		this.GetComponent<TweenToggleDemux>().Show();
 	}
 }

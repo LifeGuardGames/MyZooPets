@@ -64,7 +64,12 @@ public class ParticleSystemController : MonoBehaviour {
 	}
 	
 	public void Play(){
-		pSystem.Play();
+		if(delayBeforeStart > 0){
+			StartCoroutine(PlayAfterDelay(delayBeforeStart));
+		}
+		else{
+			pSystem.Play();
+		}
 		_Play();
 	}
 	
@@ -74,7 +79,7 @@ public class ParticleSystemController : MonoBehaviour {
 
 	public IEnumerator PlayAfterDelay(float fDelay){
 		yield return new WaitForSeconds(fDelay);
-		Play();
+		pSystem.Play();
 	}	
 	
 	public void Stop(){

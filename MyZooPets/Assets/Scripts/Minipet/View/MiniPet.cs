@@ -283,21 +283,20 @@ public class MiniPet : MonoBehaviour {
 	private void LevelUpEventHandler(object sender, EventArgs args){
 		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
 			animationManager.Cheer();
-//			// spawn the item to be coming out of this box
-//			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
-//			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-//			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
-//			
-//			droppedObjectStat.Init(HUDElementType.Gems, 1);
-//			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
-//			
-//			// set the position of the newly spawned item to be wherever this item box is
-//			Vector3 position = gameObject.transform.position;
-////			position.y -= 8; //drop the stat underneath the smoke monster
-//			droppedItem.transform.position = position;
-//			
-//			// make the item "burst" out
-//			droppedObjectStat.Burst();
+			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
+			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
+			
+			droppedObjectStat.Init(HUDElementType.Gems, 1);
+			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
+			
+			// set the position of the newly spawned item to be wherever this item box is
+			Vector3 position = gameObject.transform.position;
+//			position.y -= 8; //drop the stat underneath the smoke monster
+			droppedItem.transform.position = position;
+			
+			// make the item "burst" out
+			droppedObjectStat.Burst();
 		}
 	}
 }

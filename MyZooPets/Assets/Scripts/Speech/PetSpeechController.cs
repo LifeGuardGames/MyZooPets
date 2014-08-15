@@ -53,6 +53,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 				sprite.atlas = atlas.GetComponent<UIAtlas>();
 			}
 			sprite.spriteName = (string) message[Keys.ImageTextureName];
+			sprite.transform.localPosition = new Vector3(0f, 0f, -1f);
 		
             //also check if the image should be make clickable. 
             if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){

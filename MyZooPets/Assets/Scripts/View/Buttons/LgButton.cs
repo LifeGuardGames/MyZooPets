@@ -142,8 +142,12 @@ public class LgButton : MonoBehaviour{
 	protected void PlayNotProcessSound(){
 		string sound = "buttonDontClick";
 		
-		if(!string.IsNullOrEmpty(sound))
-			AudioManager.Instance.PlayClip(sound);
+		if(!string.IsNullOrEmpty(sound)){
+			Hashtable option = new Hashtable();
+			option.Add("IsSoundClipManaged", false);
+			AudioManager.Instance.PlayClip(sound, option);
+		}
+			
 	}
 
 	/// <summary>

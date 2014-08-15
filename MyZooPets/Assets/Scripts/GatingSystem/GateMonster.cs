@@ -77,7 +77,7 @@ public class GateMonster : Gate{
 			goDroppedItem.transform.position = new Vector3(vPosition.x, vPosition.y, 20);
 			
 			// make the item "burst" out
-			droppedObjectStat.Burst(burstToLeftOnly:true);
+			droppedObjectStat.Burst(isBurstToLeftOnly:true, burstStreamOrder : i);
 		}
 
 		// Move one of the heads out, ONLY applies to everything thats not the first head

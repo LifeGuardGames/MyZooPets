@@ -24,9 +24,9 @@ public class MiniPetSpeechAI : MonoBehaviour{
 	public void ShowFoodPreferenceMsg(string itemTextureName){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.AtlasName, "ItemAtlas");
-//		msgOption.Add(PetSpeechController.Keys.BubbleSpriteName, "box20");
+		msgOption.Add(PetSpeechController.Keys.BubbleSpriteName, "box20");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, itemTextureName);
-		msgOption.Add(PetSpeechController.Keys.MessageText, "I want this");
+		msgOption.Add(PetSpeechController.Keys.MessageText, "Feed me this!!");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 }

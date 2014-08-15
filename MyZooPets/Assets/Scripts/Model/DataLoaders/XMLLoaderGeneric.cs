@@ -71,7 +71,6 @@ public abstract class XMLLoaderGeneric<T> where T : new() {
 		if(hashData == null)
 			SetupData();
 
-//		U data = default(U);
 		List<U> dataList = new List<U>();
 
 		try{

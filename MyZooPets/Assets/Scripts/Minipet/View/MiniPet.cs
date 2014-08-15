@@ -14,6 +14,8 @@ public class MiniPet : MonoBehaviour {
 
 	private string id; //pet id
 	private string name;
+
+
 	private float currentDistanceInCentimeters = 0;
 	private float targetDistanceInCentimetersForCleanGesture = 300; //clean gestures will be recognized after the finger moved 300cm (both x and y position)
 
@@ -29,6 +31,7 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
+
 
 		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 		RefreshMiniPetUIState();
@@ -59,9 +62,9 @@ public class MiniPet : MonoBehaviour {
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
 			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+
 			RefreshMiniPetUIState();
 		}
-			
 	}
 
 	void OnTap(TapGesture gesture){
@@ -85,7 +88,11 @@ public class MiniPet : MonoBehaviour {
 				}
 				else{
 					animationManager.StartTickling();
-					MiniPetManager.Instance.SetTickle(id, true);
+
+					bool isTickled = MiniPetManager.Instance.IsTickled(id);
+					if(!isTickled)
+						MiniPetManager.Instance.SetTickle(id, true);
+
 					MiniPetManager.Instance.IsFirstTimeTickling = false;
 				}
 			}
@@ -197,6 +204,16 @@ public class MiniPet : MonoBehaviour {
 		else{
 			dirtyParticle.Stop();
 		}
+
+		if(isTickled && isCleaned){
+			Invoke("ShowFoodPreferenceMessage", 1f);
+		}
+	}
+
+	private void ShowFoodPreferenceMessage(){
+		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 	}
 	
 	private void CameraMoveDone() {

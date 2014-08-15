@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Data loader mini pet.
@@ -17,6 +18,12 @@ public class DataLoaderMiniPet : XMLLoaderGeneric<DataLoaderMiniPet>{
 
 		return instance.GetData<ImmutableDataMiniPet>(id);
     }
+
+	public static List<ImmutableDataMiniPet> GetDataList(){
+		instance.InitXMLLoader();
+
+		return instance.GetDataList<ImmutableDataMiniPet>();
+	}
 
 	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
 		ImmutableDataMiniPet data = new ImmutableDataMiniPet(id, xmlNode, errorMessage); 

@@ -57,18 +57,22 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	// Use this for initialization
 	void Start(){
 		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
-		//iterate through the MiniPetProgress
-		//if minipet not in MiniPetProgress then it's not unlock yet
-		//if in MiniPetProgress spawn the appropriate mini pet
+
+		//load all minipet into the scene
 		Dictionary<string, MutableDataMiniPets.Status> miniPetProgress = 
 			DataManager.Instance.GameData.MiniPets.MiniPetProgress;
 
-		foreach(KeyValuePair<string, MutableDataMiniPets.Status> progress in miniPetProgress){
-			string miniPetID = progress.Key;
-			MutableDataMiniPets.Status miniPetStatus = progress.Value;
-
-			CreateMiniPet(miniPetID);
+		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
+		foreach(ImmutableDataMiniPet data in miniPetData){
+			CreateMiniPet(data.ID);
 		}
+
+//		foreach(KeyValuePair<string, MutableDataMiniPets.Status> progress in miniPetProgress){
+//			string miniPetID = progress.Key;
+//			MutableDataMiniPets.Status miniPetStatus = progress.Value;
+//
+//			CreateMiniPet(miniPetID);
+//		}
 	}
 
 	void OnDestroy(){
@@ -287,7 +291,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		string miniPetID = args.MiniPetID;
 
 		//when a gate is destroyed load the proper minipet and spawned it
-		CreateMiniPet(miniPetID);
+//		CreateMiniPet(miniPetID);
 
 		//unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);

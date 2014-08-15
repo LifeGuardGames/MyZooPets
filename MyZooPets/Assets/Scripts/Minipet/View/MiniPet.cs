@@ -282,6 +282,7 @@ public class MiniPet : MonoBehaviour {
 
 	private void LevelUpEventHandler(object sender, EventArgs args){
 		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
+			animationManager.Cheer();
 //			// spawn the item to be coming out of this box
 //			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
 //			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;

@@ -25,8 +25,14 @@ public class TutorialManagerBedroom : TutorialManager{
 	
 	// last tutorial
 	public const string TUT_LAST = TUT_DECOS;
-	
-	protected override void _Start(){
+
+	protected override void Awake(){
+		base.Awake();
+
+	}
+
+	protected override void Start(){
+		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
 		
@@ -34,13 +40,18 @@ public class TutorialManagerBedroom : TutorialManager{
 		Check();
 	}
 
-	protected override void _Check(){
-		//Tutorial 1
-		TutorialPart1Check();
+	protected override bool Check(){
+		bool isChecking = base.Check();
 
+		if(isChecking){
+			//Tutorial 1
+			TutorialPart1Check();
 
-		//Tutorial 2
-		TutorialPart2Check();
+			//Tutorial 2
+			TutorialPart2Check();
+		}
+
+		return isChecking;
 	}
 
 	void OnApplicationPause(bool isPaused){

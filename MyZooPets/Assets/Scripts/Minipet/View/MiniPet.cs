@@ -88,7 +88,11 @@ public class MiniPet : MonoBehaviour {
 				}
 				else{
 					animationManager.StartTickling();
-					MiniPetManager.Instance.SetTickle(id, true);
+
+					bool isTickled = MiniPetManager.Instance.IsTickled(id);
+					if(!isTickled)
+						MiniPetManager.Instance.SetTickle(id, true);
+
 					MiniPetManager.Instance.IsFirstTimeTickling = false;
 				}
 			}
@@ -202,11 +206,14 @@ public class MiniPet : MonoBehaviour {
 		}
 
 		if(isTickled && isCleaned){
-
-			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
-			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
-			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+			Invoke("ShowFoodPreferenceMessage", 1f);
 		}
+	}
+
+	private void ShowFoodPreferenceMessage(){
+		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 	}
 	
 	private void CameraMoveDone() {

@@ -26,7 +26,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		msgOption.Add(PetSpeechController.Keys.AtlasName, "ItemAtlas");
 		msgOption.Add(PetSpeechController.Keys.BubbleSpriteName, "box20");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, itemTextureName);
-		msgOption.Add(PetSpeechController.Keys.MessageText, "Feed me!!");
+		msgOption.Add(PetSpeechController.Keys.MessageText, "Feed me this!!");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
 }

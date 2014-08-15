@@ -223,7 +223,12 @@ public class Analytics : MonoBehaviour {
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)
-			GA.API.Design.NewEvent("UserInfo:Age", (float) age);
+			GA.API.Design.NewEvent("UserInfo:Age:" + age.ToString());
+	}
+
+	public void UserAsthma(bool isAsthmatic){
+		if(isAnalyticsEnabled)
+			GA.API.Design.NewEvent("UserInfo:Asthma:" + isAsthmatic.ToString());
 	}
 
 }

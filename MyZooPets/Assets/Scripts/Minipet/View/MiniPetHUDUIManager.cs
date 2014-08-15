@@ -109,7 +109,12 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			IsLevelUpAnimationLockOn = true;
 			break;
 		case MiniPetManager.UpdateStatuses.FirstTimeCleaning:
-			CheckForTicklingTutorial();
+			if(cleaningTutorialObject != null){
+				Destroy(cleaningTutorialObject.gameObject);
+			}
+
+			Invoke("CheckForTicklingTutorial", 2f);
+
 			break;
 		case MiniPetManager.UpdateStatuses.FirstTimeTickling:
 			if(ticklingTutorialObject != null)
@@ -138,10 +143,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	}
 
 	private void CheckForTicklingTutorial(){
-		if(cleaningTutorialObject != null){
-			Destroy(cleaningTutorialObject.gameObject);
-		}
-		
 		//check if tickling tutorial needs to be started
 		bool isFirstTimeTickling = MiniPetManager.Instance.IsFirstTimeTickling;
 		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;

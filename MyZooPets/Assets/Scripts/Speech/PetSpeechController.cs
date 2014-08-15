@@ -12,7 +12,8 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
         ImageTextureName,
 		AtlasName,
         ImageClickTarget,
-        ImageClickFunctionName
+        ImageClickFunctionName,
+		BubbleSpriteName,
     } 
 
     private GameObject petSpeechWithTextPrefab;
@@ -37,6 +38,11 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
             UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
 			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
+
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
 
 			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
 			//switch atlas if necessary

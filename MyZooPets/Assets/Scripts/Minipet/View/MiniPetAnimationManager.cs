@@ -13,7 +13,15 @@ public class MiniPetAnimationManager : MonoBehaviour {
 
 	public bool IsRunningIdleAnimations{
 		get{ return isRunningHappyIdleAnimations;}
-		set{ isRunningHappyIdleAnimations = value;}
+		set{ 
+			if(value){
+				bool isSad = animator.GetBool("IsSad");
+				if(!isSad)
+					isRunningHappyIdleAnimations = value;
+			}
+			else
+				isRunningHappyIdleAnimations = value;
+		}
 	}
 
 	void Awake(){

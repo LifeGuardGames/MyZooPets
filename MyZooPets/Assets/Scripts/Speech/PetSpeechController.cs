@@ -45,6 +45,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 			}
 
 			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+
 			//switch atlas if necessary
 			if(message.ContainsKey(Keys.AtlasName)){
 				string atlasName = (string) message[Keys.AtlasName];
@@ -52,7 +53,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 				sprite.atlas = atlas.GetComponent<UIAtlas>();
 			}
 			sprite.spriteName = (string) message[Keys.ImageTextureName];
-
+		
             //also check if the image should be make clickable. 
             if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
                 LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();

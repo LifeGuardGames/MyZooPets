@@ -197,6 +197,12 @@ public class MiniPet : MonoBehaviour {
 		else{
 			dirtyParticle.Stop();
 		}
+
+		if(isTickled && isCleaned){
+			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+		}
 	}
 	
 	private void CameraMoveDone() {

@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PetAudioManager : LgAudioManager<PetAudioManager> {
-
+public class PetAudioManager : LgAudioManager<PetAudioManager> { 
 	private string lastPlayedClip;
 	private string loopingClipName;
 
@@ -12,6 +11,13 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 	private float recurringTimer = 5f;
 	private float maxTimeBetweenRecurring = 5f;
 
+	private bool enableSound = true;
+
+	//T: allow clip to be played. F: Pet is probably not visible so prohibit sound to be played
+	public bool EnableSound{
+		get{return enableSound;}
+		set{enableSound = value;}
+	}
 
 	protected override void Update(){
 		base.Update();
@@ -42,18 +48,34 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 		return clipName;
 	}
 
+	/// <summary>
+	/// Stops the animation sound. Use this function to stop any sound that is playing 
+	/// right now
+	/// </summary>
 	public void StopAnimationSound(){
 		if(!string.IsNullOrEmpty(lastPlayedClip))
 			StopClip(lastPlayedClip);
 	}
 
+	/// <summary>
+	/// Plays the clip. The basic version of play clip. It interrupts the last clip
+	/// and start playing the new one
+	/// </summary>
+	/// <param name="hashOverrides">Hash overrides.</param>
+	/// <param name="clipName">Clip name.</param>
 	public override void PlayClip(string clipName, Hashtable hashOverrides = null){
-		StopClip(lastPlayedClip);
-		lastPlayedClip = clipName;
-
-		base.PlayClip(clipName, hashOverrides);
+		if(enableSound){
+			StopClip(lastPlayedClip);
+			lastPlayedClip = clipName;
+			
+			base.PlayClip(clipName, hashOverrides);
+		}
 	}
 
+	/// <summary>
+	/// Stops the clip. clip gets destoryed after stop
+	/// </summary>
+	/// <param name="clipName">Clip name.</param>
 	public override void StopClip(string clipName){
 		lastPlayedClip = "";
 		base.StopClip(clipName);

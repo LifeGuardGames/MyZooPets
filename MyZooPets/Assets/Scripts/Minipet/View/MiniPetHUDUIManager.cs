@@ -63,6 +63,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		InventoryUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.HidePanel();
 		PetAnimationManager.Instance.DisableAnimation();
+		PetAudioManager.Instance.EnableSound = false;
 	}
 
 	protected override void _CloseUI(){
@@ -76,6 +77,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		EditDecosUIManager.Instance.ShowNavButton();
 		RoomArrowsUIManager.Instance.ShowPanel();
 		PetAnimationManager.Instance.EnableAnimation();
+		PetAudioManager.Instance.EnableSound = true;
 
 		if(cleaningTutorialObject != null)
 			Destroy(cleaningTutorialObject);

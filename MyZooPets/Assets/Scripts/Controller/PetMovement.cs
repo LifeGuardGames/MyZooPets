@@ -111,7 +111,7 @@ public class PetMovement : Singleton<PetMovement>{
 	//Pet will follow the camera when the partition has been changed
 	//---------------------------------------------------
 	public void MovePetWithCamera(object sender, PartitionChangedArgs arg){
-		bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.nNew);
+		bool hasActiveGate = GatingManager.Instance.HasActiveGate(arg.newPartition);
 		if(!hasActiveGate){		
 			// first add a temporary exception so the pet can move freely
 			ClickManager.Instance.AddTemporaryException(ClickLockExceptions.Moving);

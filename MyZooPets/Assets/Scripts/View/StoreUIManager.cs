@@ -261,7 +261,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 				
 				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
+				Hashtable option = new Hashtable();
+				option.Add("IsSoundClipManaged", false);
+				AudioManager.Instance.PlayClip(soundBuy, option);
 			}
 			break;
 		case CurrencyTypes.Gem:

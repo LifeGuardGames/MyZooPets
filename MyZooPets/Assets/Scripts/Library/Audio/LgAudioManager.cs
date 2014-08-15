@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
-	protected bool isPlayingMultipleSounds = false; //T: allow sound clip to be played eventhough there's a same clip playing in the scene already
 	private Dictionary<string, LgAudioSource> spawnedAudioSources; //key: clip name, value: LgAudioSource
 
 
@@ -17,13 +16,18 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected virtual void OnDestroy(){}
 
 	/// <summary>
-	/// Plays the clip.
+	/// <para>Plays the clip. </para>
+	/// <para>option: pass in properties (Volume, Loop, etc) for LgAudioSource. </para>
+	/// <para>option: isSoundClipManaged (T: LgAudioManager will keep a reference to this sound clip
+	/// and will not allow the same sound clip to be played again until the current clip is stopped or
+	/// finished, F: same sound can be played more than once and once the sound is played there's no
+	/// way to stop it until it finishes)</para>  
 	/// </summary>
 	/// <param name="soundClip">Sound clip.</param>
 	/// <param name="hashOverrides">Hash overrides.</param>
-	public virtual void PlayClip(string clipName, Hashtable hashOverrides = null){
-		if(hashOverrides == null)
-			hashOverrides = new Hashtable();
+	public virtual void PlayClip(string clipName, Hashtable option = null){
+		if(option == null)
+			option = new Hashtable();
 		
 		if(clipName == ""){
 			Debug.LogError("Something trying to play a sound with an empty sound id...");
@@ -37,19 +41,19 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 			return;
 		}
 
-		if(!isPlayingMultipleSounds && spawnedAudioSources.ContainsKey(clipName))
-			return;
-	
+		bool isSoundClipManaged = true;
+		if(option.ContainsKey("IsSoundClipManaged"))
+			isSoundClipManaged = (bool) option["IsSoundClipManaged"];
 
 		//if multip sound mode is on. just play the clip
-		if(isPlayingMultipleSounds){
-			LgAudioSource audioSource = PlaySound(sound, hashOverrides);
+		if(!isSoundClipManaged){
+			LgAudioSource audioSource = PlaySound(sound, option);
 			audioSource.OnDestroyed += LgAudioSourceDestroyed;
 		}
 		//if multi sound mode is off. check the dicitonary for the same clip
 		else{
 			if(!spawnedAudioSources.ContainsKey(clipName)){
-				LgAudioSource audioSource = PlaySound(sound, hashOverrides);
+				LgAudioSource audioSource = PlaySound(sound, option);
 				spawnedAudioSources.Add(clipName, audioSource);
 				audioSource.OnDestroyed += LgAudioSourceDestroyed;
 			}
@@ -80,13 +84,10 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// source that gives us more control over
 	/// the sound.
 	/// </summary>
-	/// <returns>The sound.</returns>
-	/// <param name="sound">Sound.</param>
-	/// <param name="hashOverrides">Hash overrides.</param>
-	private LgAudioSource PlaySound(DataSound sound, Hashtable hashOverrides){
+	private LgAudioSource PlaySound(DataSound sound, Hashtable option){
 		GameObject soundObject = new GameObject("Sound: " + sound.GetResourceName()); 
 		LgAudioSource soundSource = soundObject.AddComponent<LgAudioSource>();
-		soundSource.Init(sound, transform, hashOverrides);
+		soundSource.Init(sound, transform, option);
 		
 		return soundSource;		
 	}

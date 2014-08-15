@@ -19,7 +19,7 @@ public class LgAudioSource : MonoBehaviour{
 	private AudioSource audioSource;
 	private string audioClipName;
 	
-	public void Init(DataSound sound, Transform tf, Hashtable hashOverrides){		
+	public void Init(DataSound sound, Transform tf, Hashtable option){		
 		string strResource = sound.GetResourceName();
 		AudioClip clip = Resources.Load(strResource) as AudioClip;
 		
@@ -33,16 +33,16 @@ public class LgAudioSource : MonoBehaviour{
 
 		// this is a little messy, but get variables that could be overriden
 		float volume = sound.GetVolume();
-		if(hashOverrides.Contains("Volume"))
-			volume = (float)hashOverrides["Volume"];
+		if(option.Contains("Volume"))
+			volume = (float)option["Volume"];
 		
 		float pitch = sound.GetPitch();
-		if(hashOverrides.Contains("Pitch"))
-			pitch = (float)hashOverrides["Pitch"];
+		if(option.Contains("Pitch"))
+			pitch = (float)option["Pitch"];
 
 		bool loop = false;
-		if(hashOverrides.Contains("Loop"))
-			loop = (bool)hashOverrides["Loop"];
+		if(option.Contains("Loop"))
+			loop = (bool)option["Loop"];
 		
 		// create the audio source	
 		audioSource = gameObject.AddComponent<AudioSource>(); 

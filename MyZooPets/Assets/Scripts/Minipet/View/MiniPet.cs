@@ -20,6 +20,9 @@ public class MiniPet : MonoBehaviour {
 	private float tickleTimer = 0;
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
+	public string ID{
+		get{return id;}
+	}
 
 	void Start(){
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;

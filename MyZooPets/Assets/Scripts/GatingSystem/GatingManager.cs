@@ -239,8 +239,8 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	public void EnteredRoom(object sender, PartitionChangedArgs args){
-		int leavingPartitionNumber = args.nOld;
-		int enteringPartitionNumber = args.nNew;
+		int leavingPartitionNumber = args.oldPartition;
+		int enteringPartitionNumber = args.newPartition;
 		
 		bool isGateLeavingActive = HasActiveGate(currentArea, leavingPartitionNumber);
 		bool isGateEnteringActive = HasActiveGate(currentArea, enteringPartitionNumber);
@@ -253,7 +253,6 @@ public class GatingManager : Singleton<GatingManager>{
 
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
-//			InventoryUIManager.Instance.HidePanel();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate)activeGates[enteringPartitionNumber];

@@ -12,7 +12,6 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	
 	protected override void Awake(){
 		base.Awake();
-		isPlayingMultipleSounds = true;
 		backgroundSource = GetComponent<AudioSource>();
 	}
 	
@@ -21,7 +20,8 @@ public class AudioManager : LgAudioManager<AudioManager>{
 		StartCoroutine(PlayBackground());
 	}
 
-	public IEnumerator PlayBackground(){
+
+	private IEnumerator PlayBackground(){
 		yield return new WaitForSeconds(0.5f);
 		if(isMusicOn){
 			AudioClip backgroundClip = null;

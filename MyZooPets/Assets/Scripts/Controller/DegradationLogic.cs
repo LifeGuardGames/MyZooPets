@@ -45,8 +45,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private void RefreshCheck(){
 		degradationTriggers = new List<DegradData>(); 
 
-		RefreshDegradationCheck();
-		SetUpTriggers();       
+//		RefreshDegradationCheck();
+//		SetUpTriggers();       
 		UpdateNextPlayPeriodTime();
 	}
 

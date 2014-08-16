@@ -29,6 +29,13 @@ public class TutorialManagerBedroom : TutorialManager{
 	protected override void Awake(){
 		base.Awake();
 
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_WELLAPAD);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_INHALER);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SUPERWELLA_INHALER);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SMOKE_INTRO);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_TRIGGERS);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_DECOS);
 	}
 
 	protected override void Start(){

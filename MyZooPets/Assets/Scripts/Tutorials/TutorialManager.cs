@@ -63,7 +63,6 @@ public class TutorialManager : Singleton<TutorialManager>{
 	
 	protected virtual void Awake(){
 		isTutorialEnabled = Constants.GetConstant<bool>("IntroTutorialsEnabled");
-		Debug.Log(isTutorialEnabled);
 	}
 	
 	protected virtual void Start(){

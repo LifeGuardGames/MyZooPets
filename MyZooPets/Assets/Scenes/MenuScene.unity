@@ -9398,7 +9398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &724760099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11370,6 +11370,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 812610675}
   - 114: {fileID: 812610676}
+  - 82: {fileID: 812610677}
   m_Layer: 10
   m_Name: AudioManager
   m_TagString: Untagged
@@ -11403,6 +11404,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isMusicOn: 1
   backgroundMusic: bgMenuScene
+--- !u!82 &812610677
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 812610674}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1 &817767054
 GameObject:
   m_ObjectHideFlags: 0
@@ -21739,7 +21798,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}

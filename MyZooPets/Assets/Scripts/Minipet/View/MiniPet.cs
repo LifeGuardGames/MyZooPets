@@ -14,13 +14,14 @@ public class MiniPet : MonoBehaviour {
 
 	private string id; //pet id
 	private string name;
-
-
+	
 	private float currentDistanceInCentimeters = 0;
 	private float targetDistanceInCentimetersForCleanGesture = 300; //clean gestures will be recognized after the finger moved 300cm (both x and y position)
 
 	private float tickleTimer = 0;
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
+
+	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
 
 	public string ID{
 		get{return id;}
@@ -69,33 +70,36 @@ public class MiniPet : MonoBehaviour {
 
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-		if(!isUIOpened){
-			Vector3 positionOffset = new Vector3(3, 4, -11);
-			Vector3 position = this.transform.position + positionOffset;
-			Vector3 rotation = new Vector3(12, 0, 0);
-
-			ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
-			CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
-		}
-		else{
-			string colliderName = gesture.Selection.collider.name;
-			bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
-
-			//only allow tap gesture if cleaning tutorial is finished
-			if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
-
-				//if tickling animation is still playing reset timer
-				if(animationManager.IsTickling()){
-					tickleTimer = 0;
-				}
-				else{
-					animationManager.StartTickling();
-
-					bool isTickled = MiniPetManager.Instance.IsTickled(id);
-					if(!isTickled)
-						MiniPetManager.Instance.SetTickle(id, true);
-
-					MiniPetManager.Instance.IsFirstTimeTickling = false;
+		if(!isMiniPetColliderLocked){
+			if(!isUIOpened){
+				Vector3 positionOffset = new Vector3(3, 4, -11);
+				Vector3 position = this.transform.position + positionOffset;
+				Vector3 rotation = new Vector3(12, 0, 0);
+				
+				isMiniPetColliderLocked = true;
+				ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
+				CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
+			}
+			else{
+				string colliderName = gesture.Selection.collider.name;
+				bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
+				
+				//only allow tap gesture if cleaning tutorial is finished
+				if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
+					
+					//if tickling animation is still playing reset timer
+					if(animationManager.IsTickling()){
+						tickleTimer = 0;
+					}
+					else{
+						animationManager.StartTickling();
+						
+						bool isTickled = MiniPetManager.Instance.IsTickled(id);
+						if(!isTickled)
+							MiniPetManager.Instance.SetTickle(id, true);
+						
+						MiniPetManager.Instance.IsFirstTimeTickling = false;
+					}
 				}
 			}
 		}
@@ -217,8 +221,12 @@ public class MiniPet : MonoBehaviour {
 		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 	}
-	
+
+	/// <summary>
+	/// Logic to run after the camera has zoomed into the minipet
+	/// </summary>
 	private void CameraMoveDone() {
+		isMiniPetColliderLocked = false;
 		ClickManager.Instance.ReleaseLock();
 		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
 		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
@@ -294,7 +302,6 @@ public class MiniPet : MonoBehaviour {
 			
 			// set the position of the newly spawned item to be wherever this item box is
 			Vector3 position = gameObject.transform.position;
-//			position.y -= 8; //drop the stat underneath the smoke monster
 			droppedItem.transform.position = position;
 			
 			// make the item "burst" out

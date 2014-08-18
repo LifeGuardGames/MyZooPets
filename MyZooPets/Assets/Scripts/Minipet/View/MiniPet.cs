@@ -79,8 +79,10 @@ public class MiniPet : MonoBehaviour {
 		}
 		else{
 			string colliderName = gesture.Selection.collider.name;
-			
-			if(colliderName == this.gameObject.name){
+			bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
+
+			//only allow tap gesture if cleaning tutorial is finished
+			if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
 
 				//if tickling animation is still playing reset timer
 				if(animationManager.IsTickling()){

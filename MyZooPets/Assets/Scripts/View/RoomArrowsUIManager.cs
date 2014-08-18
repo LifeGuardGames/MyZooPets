@@ -81,12 +81,6 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 					ShowLeftArrow();
 			}
 		}
-
-
-
-
-
-		
 	}
 
 	// Hides both arrows

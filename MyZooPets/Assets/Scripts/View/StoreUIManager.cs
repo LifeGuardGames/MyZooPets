@@ -103,6 +103,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -112,6 +114,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -122,6 +126,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;
 		
@@ -131,6 +137,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		NavigationUIManager.Instance.ShowPanel();
 		EditDecosUIManager.Instance.ShowNavButton();
+		RoomArrowsUIManager.Instance.ShowPanel();
+
 		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
@@ -149,10 +157,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		if(isShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
-
-
-		}	
-		
+		}
 		CreateSubCategoryItemsWithString(category); 
 	}
 	

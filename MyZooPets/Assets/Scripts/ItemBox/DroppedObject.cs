@@ -146,7 +146,9 @@ using System.Collections.Generic;
 			SetState(DroppedItemStates.PickedUp);
 
 			// play pick up audio
-			AudioManager.Instance.PlayClip(buttonSound);
+			Hashtable option = new Hashtable();
+			option.Add("IsSoundClipManaged", false);
+			AudioManager.Instance.PlayClip(buttonSound, option);
 			
 			// animate the object by applying a rotation, translation, and fade
 			float fTime = Constants.GetConstant<float>("ItemPickup_Time");

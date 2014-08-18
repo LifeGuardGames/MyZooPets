@@ -8,10 +8,7 @@ public class PetMovement : Singleton<PetMovement>{
 	public EventHandler<EventArgs> OnReachedDest;   // when the pet reaches its destination
 	//=====================================================     
 
-
 	public List<Collider> walkingPathColliders; //Areas that the pet is allowed to move
-	public GameObject shadowObject; //pet's shadow
-	
 	public GameObject petSprite;
 
 	// sound for when the pet moves
@@ -192,13 +189,9 @@ public class PetMovement : Singleton<PetMovement>{
 		
 		if(destinationPoint.x > petSprite.transform.position.x){
 			PetAnimationManager.Instance.Flip(true);
-			shadowObject.transform.localPosition = new Vector3(fShadow, 
-                shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
 		}
 		else{
 			PetAnimationManager.Instance.Flip(false);
-			shadowObject.transform.localPosition = new Vector3(-fShadow, 
-                shadowObject.transform.localPosition.y, shadowObject.transform.localPosition.z);
 		}
 	}
 

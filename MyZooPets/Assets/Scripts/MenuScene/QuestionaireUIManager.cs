@@ -4,21 +4,25 @@ using System.Collections;
 /// <summary>
 /// Player age user interface manager.
 /// </summary>
-public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
+public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 
 	public UISlider slider;
 	public UILabel label;
 	public TweenToggle finishButtonTweenToggle;
-	public ParticleSystemController leafParticle;
 
 	private int age;
 	private bool hasMovedSlider = false;
 
+	private bool hasAsthma;
+	private bool hasAsthmaOptionChecked = false;
+
 	void Awake(){
-		eModeType = UIModeTypes.CustomizePet;
+		// TODO -Jason
+//		eModeType = UIModeTypes.CustomizePet;
 	}
 
 	void Start(){
+		// TODO -Jason
 //		if(SelectionManager.Instance.IsFirstTime)
 //			StartCoroutine(ShowAgeSelector());
 //			Invoke("OpenUI", f);
@@ -47,23 +51,51 @@ public class PlayerAgeUIManager : SingletonUI<PlayerAgeUIManager> {
 		}
 
 		if(!hasMovedSlider){
-			finishButtonTweenToggle.Show();
 			hasMovedSlider = true;
+		}
+	}
+
+	/// <summary>
+	/// Event callback when yes radio button is clicked
+	/// </summary>
+	public void OnAsthmaYes(){
+		hasAsthma = true;
+		hasAsthmaOptionChecked = true;
+	}
+
+	/// <summary>
+	/// Event callback when no radio button is clicked
+	/// </summary>
+	public void OnAsthmaNo(){
+		hasAsthma = false;
+		hasAsthmaOptionChecked = true;
+	}
+
+	void Update(){
+		if(hasMovedSlider && hasAsthmaOptionChecked){
+			finishButtonTweenToggle.Show();
 		}
 	}
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
+		// TODO -Jason : add analytics for has asthma here, use "hasAsthma" param
+
 		CloseUI();
 	}
 
 	protected override void _OpenUI(){
-		leafParticle.Stop();
 		gameObject.GetComponent<TweenToggle>().Show();
 	}
 
 	protected override void _CloseUI(){
-		leafParticle.Play();
 		gameObject.GetComponent<TweenToggle>().Hide();
+	}
+
+	/// <summary>
+	/// Callback for finish tweening
+	/// </summary>
+	public void DestroyPanel(){
+		Destroy(gameObject);
 	}
 }

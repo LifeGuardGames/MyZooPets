@@ -179,8 +179,11 @@ public class LgButton : MonoBehaviour{
 	private void PlayProcessSound(){
 		string strSound = GetProcessSound();
 		
-		if(!string.IsNullOrEmpty(strSound))
-			AudioManager.Instance.PlayClip(strSound);	
+		if(!string.IsNullOrEmpty(strSound)){
+			Hashtable option = new Hashtable();
+			option.Add("IsSoundClipManaged", false);
+			AudioManager.Instance.PlayClip(strSound, option);
+		}
 	}
 
 

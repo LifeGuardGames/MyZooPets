@@ -973,6 +973,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400124}
+  m_Layer: 0
+  m_Name: ItemSpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -1769,15 +1784,28 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.51622009, y: 3.8695569, z: 4.90685558}
+  m_LocalPosition: {x: 85.5826035, y: 2.95550776, z: 27.4054394}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400120}
   - {fileID: 400004}
   - {fileID: 400002}
   - {fileID: 400000}
+  - {fileID: 400124}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &400124
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100124}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -2.02705193, z: -1.65739059}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400122}
+  m_RootOrder: 4
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1831,6 +1859,7 @@ MonoBehaviour:
   bubbleParticle: {fileID: 19800000}
   dirtyParticle: {fileID: 19800002}
   miniPetSpeechAI: {fileID: 11400006}
+  itemSpawnPosition: {fileID: 400124}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1875,15 +1904,15 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: -10.5252647
+    e03: -90.5916443
     e10: 0
     e11: 1
     e12: 0
-    e13: -7.88440752
+    e13: -6.97035837
     e20: 0
     e21: 0
     e22: 1
-    e23: -4.90685558
+    e23: -27.4054394
     e30: 0
     e31: 0
     e32: 0

@@ -84,7 +84,9 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		}
 	
 		// play appropriate sound
-		AudioManager.Instance.PlayClip("clinicCorrect");
+		Hashtable option = new Hashtable();
+		option.Add("IsSoundClipManaged", false);
+		AudioManager.Instance.PlayClip("clinicCorrect", option);
 
 		if(OnCharacterScoredRight != null)
 			OnCharacterScoredRight(this, EventArgs.Empty);
@@ -95,7 +97,9 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		UpdateLives(-1);
 
 		// play an incorrect sound
-		AudioManager.Instance.PlayClip("clinicWrong");
+		Hashtable option = new Hashtable();
+		option.Add("IsSoundClipManaged", false);
+		AudioManager.Instance.PlayClip("clinicWrong", option);
 
 		// also slow down the game, if this didn't cause us to have a game over
 		MinigameStates eState = GetGameState();

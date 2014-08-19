@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -17,15 +18,21 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 	private bool hasAsthmaOptionChecked = false;
 
 	void Awake(){
-		// TODO -Jason
-//		eModeType = UIModeTypes.CustomizePet;
+		eModeType = UIModeTypes.CustomizePet;
 	}
 
 	void Start(){
-		// TODO -Jason
-//		if(SelectionManager.Instance.IsFirstTime)
-//			StartCoroutine(ShowAgeSelector());
-//			Invoke("OpenUI", f);
+
+		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
+		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
+
+		//this questionaire should only come up if 2nd play period and the flame tutorial
+		//has been finished
+		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
+		   isFlameTutorialDone){
+			Invoke("OpenUI", 1f);
+		}
 	}
 
 	private IEnumerator ShowAgeSelector(){
@@ -58,17 +65,21 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 	/// <summary>
 	/// Event callback when yes radio button is clicked
 	/// </summary>
-	public void OnAsthmaYes(){
-		hasAsthma = true;
-		hasAsthmaOptionChecked = true;
+	public void OnAsthmaYes(bool isChecked){
+		if(isChecked){
+			hasAsthma = true;
+			hasAsthmaOptionChecked = true;
+		}
 	}
 
 	/// <summary>
 	/// Event callback when no radio button is clicked
 	/// </summary>
-	public void OnAsthmaNo(){
-		hasAsthma = false;
-		hasAsthmaOptionChecked = true;
+	public void OnAsthmaNo(bool isChecked){
+		if(isChecked){
+			hasAsthma = false;
+			hasAsthmaOptionChecked = true;
+		}
 	}
 
 	void Update(){
@@ -79,7 +90,8 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
-		// TODO -Jason : add analytics for has asthma here, use "hasAsthma" param
+		Analytics.Instance.UserAsthma(hasAsthma);
+		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected = true;
 
 		CloseUI();
 	}

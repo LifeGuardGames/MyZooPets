@@ -226,9 +226,9 @@ public class Analytics : MonoBehaviour {
 			GA.API.Design.NewEvent("UserInfo:Age:" + age.ToString());
 	}
 
-	public void UserAsthma(bool isAsthmatic){
+	public void UserAsthma(bool hasAsthma){
 		if(isAnalyticsEnabled)
-			GA.API.Design.NewEvent("UserInfo:Asthma:" + isAsthmatic.ToString());
+			GA.API.Design.NewEvent("UserInfo:Asthma:" + hasAsthma.ToString());
 	}
 
 }

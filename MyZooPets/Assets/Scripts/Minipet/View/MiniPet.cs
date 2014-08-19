@@ -13,7 +13,7 @@ public class MiniPet : MonoBehaviour {
 	public MiniPetSpeechAI miniPetSpeechAI;
 
 	private string id; //pet id
-	private string name;
+	private new string name;
 	
 	private float currentDistanceInCentimeters = 0;
 	private float targetDistanceInCentimetersForCleanGesture = 300; //clean gestures will be recognized after the finger moved 300cm (both x and y position)

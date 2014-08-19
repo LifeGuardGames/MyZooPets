@@ -23,7 +23,7 @@ using System.Collections.Generic;
 	private DroppedItemStates eState = DroppedItemStates.UnInit; // state of this dropped item
 	private float timer = 0;
 
-	public Animation animation;
+	public new Animation animation;
 
 	public DroppedItemStates GetState(){
 		return eState;	

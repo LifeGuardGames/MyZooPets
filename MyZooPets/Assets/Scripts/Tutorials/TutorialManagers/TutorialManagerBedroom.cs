@@ -42,7 +42,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
-//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
+		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
@@ -103,8 +103,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
-//		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
-		bool isQuestionaireCollected = true;
+		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
 
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&

@@ -339,7 +339,7 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 			// if not tell user to buy it or wait for inhaler
 			else{
-//				IAPNotification();
+				IAPNotification();
 			}
 		}
 	}
@@ -394,8 +394,8 @@ public class GatingManager : Singleton<GatingManager>{
 			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
 			
-//			if(!canUseRealInhaler && fireOrb == null)
-//				IAPNotification();
+			if(!canUseRealInhaler && fireOrb == null)
+				IAPNotification();
 		}
 		else
 			ShowUnhealthyNoFireNotification();

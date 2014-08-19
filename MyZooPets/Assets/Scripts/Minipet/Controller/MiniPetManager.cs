@@ -287,11 +287,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){
-		string gateID = args.DestroyedGateID;
 		string miniPetID = args.MiniPetID;
-
-		//when a gate is destroyed load the proper minipet and spawned it
-//		CreateMiniPet(miniPetID);
 
 		//unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);

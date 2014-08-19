@@ -305,7 +305,7 @@ public class MiniPet : MonoBehaviour {
 			droppedItem.transform.position = position;
 			
 			// make the item "burst" out
-			droppedObjectStat.Burst();
+			droppedObjectStat.Burst(isXOverride: true, xOverride: -1f);
 		}
 	}
 }

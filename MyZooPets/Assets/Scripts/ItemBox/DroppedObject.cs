@@ -80,7 +80,9 @@ using System.Collections.Generic;
 	/// </summary>
 	/// <param name="burstToLeftOnly">If set to <c>true</c> burst to left only</param>
 	/// <param name="burstStreamOrder">Burst stream order, will be multiplied with delay for multi burst effect</param>
-	public void Burst(bool isBurstToLeftOnly = false, int burstStreamOrder = -1){
+	/// <param name="isXOverride">Check true to override x value to certain value</param>
+	/// <param name="xOverride">Overrided value</param>
+	public void Burst(bool isBurstToLeftOnly = false, int burstStreamOrder = -1, bool isXOverride = false, float xOverride = 0f){
 		float delay = Constants.GetConstant<float>("ItemBoxBurst_DelayBetweenEach");
 
 		// Hide this for animation first
@@ -88,15 +90,15 @@ using System.Collections.Generic;
 
 		// Default case
 		if(burstStreamOrder == -1){
-			StartCoroutine(BurstHelper(isBurstToLeftOnly, 0f));
+			StartCoroutine(BurstHelper(isBurstToLeftOnly, 0f, isXOverride, xOverride));
 		}
 		// Multiple items stream effect
 		else{
-			StartCoroutine(BurstHelper(isBurstToLeftOnly, burstStreamOrder * delay));
+			StartCoroutine(BurstHelper(isBurstToLeftOnly, burstStreamOrder * delay, isXOverride, xOverride));
 		}
 	}
 
-	private IEnumerator BurstHelper(bool isBurstToLeftOnly, float secondsToWait){
+	private IEnumerator BurstHelper(bool isBurstToLeftOnly, float secondsToWait, bool isXOverride, float xOverride){
 
 		// Wait if streaming
 		yield return new WaitForSeconds(secondsToWait);
@@ -110,19 +112,26 @@ using System.Collections.Generic;
 		// the starting location is the object's current location
 		GameObject go = GetGameObject();
 		Vector3 vStart = go.transform.position;
-		
-		// the end location is some random X length away
-		int positiveRangeX = nRangeX;
-		if(isBurstToLeftOnly){
-			positiveRangeX = 0;
+
+
+		// Use overrided x if it is on, otherwise use random values between specified range
+		float fEndX;
+		if(isXOverride){
+			fEndX = xOverride;
+		}
+		else{
+			// the end location is some random X length away
+			int positiveRangeX = nRangeX;
+			if(isBurstToLeftOnly){
+				positiveRangeX = 0;
+			}
+			fEndX = UnityEngine.Random.Range(-nRangeX, positiveRangeX);
 		}
 
-		float fEndX = UnityEngine.Random.Range(-nRangeX, positiveRangeX);
 		Vector3 vEnd = new Vector3(vStart.x + fEndX, vStart.y, vStart.z);
 		
-		Hashtable optional = new Hashtable();	
-
 		// and send the object on its way!
+		Hashtable optional = new Hashtable();	
 		LeanTween.moveLocal(go, vEnd, fTime, optional);
 	}
 

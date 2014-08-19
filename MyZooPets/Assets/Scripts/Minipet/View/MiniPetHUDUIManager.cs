@@ -12,6 +12,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
 	public Animation levelUpAnimation;
+	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
 
@@ -106,6 +107,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		switch(args.UpdateStatus){
 		case MiniPetManager.UpdateStatuses.LevelUp:
 			levelUpAnimation.Play();
+			levelUpDropdown.Play();
 			IsLevelUpAnimationLockOn = true;
 			break;
 		case MiniPetManager.UpdateStatuses.FirstTimeCleaning:

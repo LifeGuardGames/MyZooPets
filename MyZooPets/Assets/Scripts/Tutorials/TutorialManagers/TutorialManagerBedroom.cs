@@ -29,20 +29,20 @@ public class TutorialManagerBedroom : TutorialManager{
 	protected override void Awake(){
 		base.Awake();
 
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_WELLAPAD);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_INHALER);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SUPERWELLA_INHALER);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SMOKE_INTRO);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_TRIGGERS);
-//		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_DECOS);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_WELLAPAD);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_INHALER);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SUPERWELLA_INHALER);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_SMOKE_INTRO);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_TRIGGERS);
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_DECOS);
 	}
 
 	protected override void Start(){
 		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
-		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
+//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
@@ -103,7 +103,8 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
-		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
+//		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
+		bool isQuestionaireCollected = true;
 
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&

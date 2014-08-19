@@ -330,7 +330,7 @@ public class GatingManager : Singleton<GatingManager>{
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			PetSpeechAI.Instance.ShowInhalerMsg();
 		}
-		// if inhaler already use check if there's fire orb in the inventory
+		// check if there's fire orb in the inventory
 		else{
 			// if there's a fire orb in the inventory prompt the user to use it
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
@@ -339,7 +339,7 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 			// if not tell user to buy it or wait for inhaler
 			else{
-				IAPNotification();
+//				IAPNotification();
 			}
 		}
 	}
@@ -394,8 +394,8 @@ public class GatingManager : Singleton<GatingManager>{
 			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
 			
-			if(!canUseRealInhaler && fireOrb == null)
-				IAPNotification();
+//			if(!canUseRealInhaler && fireOrb == null)
+//				IAPNotification();
 		}
 		else
 			ShowUnhealthyNoFireNotification();

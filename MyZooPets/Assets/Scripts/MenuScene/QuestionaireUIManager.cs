@@ -31,7 +31,7 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 		//has been finished
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
 		   isFlameTutorialDone){
-			Invoke("OpenUI", 1f);
+//			Invoke("OpenUI", 1f);
 		}
 	}
 

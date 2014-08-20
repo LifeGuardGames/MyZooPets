@@ -113,6 +113,10 @@ public class PetInteractionManager : MonoBehaviour{
 				PetSpeechController.Instance.Talk(hashSpeech);				
 			}
 		}
+		//item is dropped on target, but not on the pet's collider
+		else{
+			PetAnimationManager.Instance.AbortFeeding();
+		}
 	}
 
 	private void ShowPetReceivedFoodAnimation(){

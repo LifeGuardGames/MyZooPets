@@ -22,6 +22,8 @@ public class MiniPet : MonoBehaviour {
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
+	private bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
+	private string invItemID; //local reference to the item that is dropped on the minipet
 
 	public string ID{
 		get{return id;}
@@ -68,17 +70,13 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
+
+
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		if(!isMiniPetColliderLocked){
 			if(!isUIOpened){
-				Vector3 positionOffset = new Vector3(3, 4, -11);
-				Vector3 position = this.transform.position + positionOffset;
-				Vector3 rotation = new Vector3(12, 0, 0);
-				
-				isMiniPetColliderLocked = true;
-				ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
-				CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
+				ZoomInToMiniPet();
 			}
 			else{
 				string colliderName = gesture.Selection.collider.name;
@@ -158,6 +156,16 @@ public class MiniPet : MonoBehaviour {
 		this.name = data.Name;
 	}
 
+	private void ZoomInToMiniPet(){
+		Vector3 positionOffset = new Vector3(3, 4, -11);
+		Vector3 position = this.transform.position + positionOffset;
+		Vector3 rotation = new Vector3(12, 0, 0);
+		
+		isMiniPetColliderLocked = true;
+		ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
+		CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
+	}
+
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
 		if(args.Opening)
 			animationManager.IsRunningIdleAnimations = false;
@@ -232,6 +240,13 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
 		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
 		MiniPetHUDUIManager.Instance.OpenUI();
+
+		if(!isFinishEating){
+			InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			MiniPetManager.Instance.IncreaseFoodXP(id);
+			
+			animationManager.Eat();
+		}
 	}
 
 	/// <summary>
@@ -243,10 +258,11 @@ public class MiniPet : MonoBehaviour {
 		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 
-		if(args.TargetCollider.name == this.gameObject.name && 
-		   !isLevelUpAnimationLockOn && isUIOpened){
 
-			string invItemID = args.ItemTransform.name; //get id from listener args
+		if(args.TargetCollider.name == this.gameObject.name && 
+		   !isLevelUpAnimationLockOn){
+
+			invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 			string preferredFoodID = "";
 
@@ -258,12 +274,18 @@ public class MiniPet : MonoBehaviour {
 				if(preferredFoodID == invItem.ItemID){
 					//use item if so
 					args.IsValidTarget = true;
-					
-					//notify inventory logic that this item is being used
-					InventoryLogic.Instance.UseMiniPetItem(invItemID);
-					MiniPetManager.Instance.IncreaseFoodXP(id);
-					
-					animationManager.Eat();
+
+					if(!isUIOpened){
+						ZoomInToMiniPet();
+						isFinishEating = false;
+					}
+					else{
+						//notify inventory logic that this item is being used
+						InventoryLogic.Instance.UseMiniPetItem(invItemID);
+						MiniPetManager.Instance.IncreaseFoodXP(id);
+						
+						animationManager.Eat();
+					}
 				}
 				// show notification that the mp wants a specific food
 				else{

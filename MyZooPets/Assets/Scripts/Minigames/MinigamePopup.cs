@@ -7,56 +7,66 @@ using System.Collections;
 // minigames.
 //---------------------------------------------------
 
-public class MinigamePopup : MonoBehaviour {
+public class MinigamePopup : MonoBehaviour{
 	// tween script for this popup
 	public PositionTweenToggle tween;
 	
 	// a popular concept may be showing the HUD when a popup is shown
 	public TweenToggleDemux demuxHUD;
+	public TweenToggle pauseTween;	// Hide the pause button when any of the panels are shown
 	
 	//---------------------------------------------------
 	// Toggle()
 	// Turns this UI on and off.
 	//---------------------------------------------------		
-	public void Toggle( bool bShow ) {
-		if ( bShow ) {
+	public void Toggle(bool bShow){
+		if(bShow){
 			tween.Show();
 			
 			_OnShow();
 			
-			if ( demuxHUD )
+			if(demuxHUD)
 				demuxHUD.Show();
-			
+
+			pauseTween.Hide();
+
 			// lock clicks
 			ClickManager.Instance.Lock();
-			ClickManager.SetActiveGUIModeLock( true );
+			ClickManager.SetActiveGUIModeLock(true);
 		}
-		else {
+		else{
 			tween.Hide();
 			
 			_OnHide();
 			
-			if ( demuxHUD )
+			if(demuxHUD)
 				demuxHUD.Hide();
-			
+
+			pauseTween.Show();
+
 			// clicks are ok
 			ClickManager.Instance.ReleaseLock();
-			ClickManager.SetActiveGUIModeLock( false );
+			ClickManager.SetActiveGUIModeLock(false);
 		}		
 	}
 	
-	void Update() {
+	void Update(){
 		_OnUpdate();	
 	}
 	
 	//---------------------------------------------------
 	// IsShowing()
 	//---------------------------------------------------		
-	public bool IsShowing() {
+	public bool IsShowing(){
 		return tween.IsShowing;	
 	}
 	
-	protected virtual void _OnShow() {}
-	protected virtual void _OnHide() {}
-	protected virtual void _OnUpdate() {}
+	protected virtual void _OnShow(){
+	}
+
+	protected virtual void _OnHide(){
+	}
+
+	protected virtual void _OnUpdate(){
+	}
 }

@@ -241,6 +241,7 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
 		MiniPetHUDUIManager.Instance.OpenUI();
 
+		//if pet not finish eating yet. finish eating logic
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			MiniPetManager.Instance.IncreaseFoodXP(id);
@@ -259,8 +260,7 @@ public class MiniPet : MonoBehaviour {
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 
 
-		if(args.TargetCollider.name == this.gameObject.name && 
-		   !isLevelUpAnimationLockOn){
+		if(args.TargetCollider.name == this.gameObject.name && !isLevelUpAnimationLockOn){
 
 			invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 // information to the player.
 //---------------------------------------------------
 
-public class MinigameUI : MonoBehaviour {
+public class MinigameUI : MonoBehaviour{
 	// popups
 	public MinigamePopup popupOpening;
 	public MinigamePopup popupGameOver;
@@ -29,7 +29,7 @@ public class MinigameUI : MonoBehaviour {
 	//---------------------------------------------------
 	// Start()
 	//---------------------------------------------------		
-	void Start() {
+	void Start(){
 		// set up the hash of labels
 		hashLabels = new Hashtable();
 		hashLabels[MinigameLabels.Score] = labelScore;
@@ -47,11 +47,11 @@ public class MinigameUI : MonoBehaviour {
 	// Updates the label with the incoming type to the
 	// incoming string.
 	//---------------------------------------------------	
-	public void SetLabel( MinigameLabels eLabel, string strText ) {
-		UILabel label = (UILabel) hashLabels[eLabel];	
+	public void SetLabel(MinigameLabels eLabel, string strText){
+		UILabel label = (UILabel)hashLabels[eLabel];	
 		
 		// minigame may not have label (I'm looking at you, runner)
-		if ( label == null )
+		if(label == null)
 			return;
 		
 		// update text
@@ -69,18 +69,18 @@ public class MinigameUI : MonoBehaviour {
 	// TogglePopup()
 	// Shows or hides a UI popup.
 	//---------------------------------------------------		
-	public void TogglePopup( MinigamePopups ePopup, bool bShow ) {
+	public void TogglePopup(MinigamePopups ePopup, bool bShow){
 		MinigamePopup popup = hashPopups[ePopup];
 		
 		// only do the toggle if appropriate
-		if ( ( bShow && popup.IsShowing() == false ) || ( !bShow && popup.IsShowing() == true ) )
-			popup.Toggle( bShow );
+		if((bShow && popup.IsShowing() == false) || (!bShow && popup.IsShowing() == true))
+			popup.Toggle(bShow);
 	}
 	
 	//---------------------------------------------------
 	// IsPopupShowing()
 	//---------------------------------------------------	
-	public bool IsPopupShowing( MinigamePopups ePopup ) {
+	public bool IsPopupShowing(MinigamePopups ePopup){
 		MinigamePopup popup = hashPopups[ePopup];
 		bool bShowing = popup.IsShowing();
 		

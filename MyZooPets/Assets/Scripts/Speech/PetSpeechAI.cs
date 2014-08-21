@@ -61,6 +61,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 	public void ShowInhalerMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
@@ -68,6 +69,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 	public void ShowOutOfFireMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
 		GetComponent<PetSpeechController>().Talk(msgOption);
 	}
@@ -75,6 +77,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 	public void ShowNoFireSickMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_SICK"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
 		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
 		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
@@ -116,6 +119,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private void ShowSickToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
         msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
@@ -126,6 +130,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private void ShowHealthyToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
         msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
         msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
         msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
         msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 

@@ -86,6 +86,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
+		Debug.Log("HIDING");
 		HUDUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.ShowPanel();
@@ -252,5 +253,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		StoreUIManager.OnShortcutModeEnd -= CloseShop;
 
 		this.GetComponent<TweenToggleDemux>().Show();
+		HUDUIManager.Instance.HidePanel();
 	}
 }

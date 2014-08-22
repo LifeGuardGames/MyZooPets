@@ -157,6 +157,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		if(isShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+			HUDUIManager.Instance.ShowPanel();
 		}
 		CreateSubCategoryItemsWithString(category); 
 	}

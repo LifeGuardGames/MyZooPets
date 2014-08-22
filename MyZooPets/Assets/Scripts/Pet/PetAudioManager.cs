@@ -105,7 +105,7 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 		StopClip(recurringClipName);
 		recurringClipName = "";
 		isPlayingRecurringClip = false;
-		recurringTimer = 0;
+		recurringTimer = 5f;
 	}
 
 	/// <summary>

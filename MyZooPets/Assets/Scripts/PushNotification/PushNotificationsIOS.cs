@@ -64,9 +64,11 @@ public class PushNotificationsIOS : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		registerForRemoteNotifications();
-		setListenerName(this.gameObject.name);
-		Debug.Log(getPushToken());
+		#if !UNITY_EDITOR
+			registerForRemoteNotifications();
+			setListenerName(this.gameObject.name);
+			Debug.Log(getPushToken());	
+		#endif
 	}
 
 	

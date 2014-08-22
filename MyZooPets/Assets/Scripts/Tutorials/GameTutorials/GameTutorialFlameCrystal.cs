@@ -40,7 +40,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			
 			AddToProcessList(fireOrbItemReference);
 			
-			fireOrbFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-BottomRight"),
+			fireOrbFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
 			                                                     (GameObject)Resources.Load("FireOrbFingerHint"));
 			
 			// set the hint to the right spawn location
@@ -73,8 +73,10 @@ public class GameTutorialFlameCrystal : GameTutorial {
 		
 		// clean up tween from last step
 		LeanTween.cancel(fireOrbFingerHint);
+//		fireOrbFingerHint.SetActive(false);
 		GameObject.Destroy(fireOrbFingerHint);
 		
 		Advance();
 	}
+
 }

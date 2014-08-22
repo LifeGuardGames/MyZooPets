@@ -105,12 +105,14 @@ public class PetInteractionManager : MonoBehaviour{
 				// else the drop was valid or the item could not be used...show a message
 				Hashtable hashSpeech = new Hashtable();
 				
-				if(invItem.ItemType == ItemType.Foods)
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
-				else
-					hashSpeech.Add(PetSpeechController.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
-				
-				PetSpeechController.Instance.Talk(hashSpeech);				
+				if(invItem.ItemType == ItemType.Foods){
+					hashSpeech.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
+				}
+				else{
+					hashSpeech.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
+				}
+				hashSpeech.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+				PetSpeechManager.Instance.Talk(hashSpeech);				
 			}
 		}
 		//item is dropped on target, but not on the pet's collider

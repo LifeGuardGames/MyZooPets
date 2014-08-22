@@ -18,14 +18,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupGameOverRewardMessageTwoButtons;
 	public GameObject popupBadgeUnlockedMessage;
 	public GameObject popupFireLevelUpMessage;
+	public GameObject popupGemIntro;
 
-
-	public GameObject popupPremiumMessage;
+//	public GameObject popupPremiumMessage;
 	public GameObject popupInhalerRechargeMessage;
 	public GameObject popupSuperWellaInhaler;
 
 	//TODO: need to be removed
-	public GameObject popupPremiumTest;
+//	public GameObject popupPremiumTest;
 
 	private bool isNotificationActive = false;
 	private GameObject anchorCenter; //parent of notificationCenterPanel
@@ -151,23 +151,29 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 						(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
-			case NotificationPopupType.Premium:
-				ShowBuyPremiumMessage();
-				break;
+//			case NotificationPopupType.Premium:
+//				ShowBuyPremiumMessage();
+//				break;
 			case NotificationPopupType.InhalerRecharging:
 				ShowInhalerRechargingMessage(
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
-			case NotificationPopupType.PremiumTest:
-				ShowPremiumTestMessage(
-					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
-				);
-				break;
+//			case NotificationPopupType.PremiumTest:
+//				ShowPremiumTestMessage(
+//					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
+//				);
+//				break;
 			case NotificationPopupType.SuperWellaInhaler:
 				ShowSuperWellaInhalerMessage(
 					(string)entry[NotificationPopupFields.Message],
 					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			case NotificationPopupType.GemIntro:
+				ShowGemIntroMessage(
+					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button1Callback],
+					(PopupNotificationNGUI.HashEntry)entry[NotificationPopupFields.Button2Callback]
 				);
 				break;
 			default:
@@ -311,13 +317,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	/// <summary>
 	/// Shows the buy premium message.
 	/// </summary>
-	private void ShowBuyPremiumMessage(){
-		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupPremiumMessage);
-
-		oneButtonMessage.OnHideFinished += TryNextNotification;
-
-		StartCoroutine(DisplayAfterInit(oneButtonMessage));
-	}
+//	private void ShowBuyPremiumMessage(){
+//		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupPremiumMessage);
+//
+//		oneButtonMessage.OnHideFinished += TryNextNotification;
+//
+//		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+//	}
 
 	/// <summary>
 	/// Shows the inhaler recharging message.
@@ -333,15 +339,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	}
 
 	//TODO: need to be removed after IAP test
-	private void ShowPremiumTestMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
-		Debug.Log("show premiumtest message");
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupPremiumTest);
-		
-		twoButtonMessage.Button2Callback = okButtonCallBack;
-		twoButtonMessage.OnHideFinished += TryNextNotification;
-		
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
-	}
+//	private void ShowPremiumTestMessage(PopupNotificationNGUI.HashEntry okButtonCallBack){
+//		Debug.Log("show premiumtest message");
+//		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupPremiumTest);
+//		
+//		twoButtonMessage.Button2Callback = okButtonCallBack;
+//		twoButtonMessage.OnHideFinished += TryNextNotification;
+//		
+//		StartCoroutine(DisplayAfterInit(twoButtonMessage));
+//	}
 
 		
 	/// <summary>
@@ -357,6 +363,18 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	private void ShowGemIntroMessage(PopupNotificationNGUI.HashEntry okButtonCallBack,
+	                                 PopupNotificationNGUI.HashEntry cancelButtonCallBack){
+
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupGemIntro);
+
+		twoButtonMessage.Button1Callback = okButtonCallBack;
+		twoButtonMessage.Button2Callback = cancelButtonCallBack;
+		twoButtonMessage.OnHideFinished += TryNextNotification;
+
+		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	

@@ -48,8 +48,35 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
 		IsLevelUpAnimationLockOn = false;
 
+		Invoke("CheckIfFirstTimeReceivingGems", 1f);
+
 		if(OnLevelUpAnimationCompleted != null)
 			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
+	}
+
+	/// <summary>
+	/// Checks if first time receiving gems. Show intro notification if first time
+	/// </summary>
+	private void CheckIfFirstTimeReceivingGems(){
+		bool isFirstTime = MiniPetManager.Instance.IsFirstTimeReceivingGems;
+		if(isFirstTime){
+			Hashtable notificationEntry = new Hashtable();
+
+			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+				OpenItemShop();
+				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
+			};
+
+			PopupNotificationNGUI.HashEntry button2Function = delegate(){
+				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
+			};
+
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GemIntro);
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+		
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		}
 	}
 
 	protected override void _OpenUI(){
@@ -195,16 +222,27 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		ClickManager.Instance.Lock(UIModeTypes.Store);
 
-		Invoke("OpenShopAfterWaiting", 0.2f);
+		Invoke("OpenFoodShopAfterWaiting", 0.2f);
 	}
 
 	/// <summary>
 	/// Opens the shop after waiting. So the MiniPetHUDUI can hide first before the
 	/// store UI shows up
 	/// </summary>
-	private void OpenShopAfterWaiting(){
+	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
 		StoreUIManager.Instance.OpenToSubCategory("Food", true);
+	}
+
+	/// <summary>
+	/// Opens the item shop.
+	/// </summary>
+	private void OpenItemShop(){
+		this.GetComponent<TweenToggleDemux>().Hide();
+		ClickManager.Instance.Lock(UIModeTypes.Store);
+
+		StoreUIManager.OnShortcutModeEnd += CloseShop;
+		StoreUIManager.Instance.OpenToSubCategory("Items", true);
 	}
 
 	private void CloseShop(object sender, EventArgs args){

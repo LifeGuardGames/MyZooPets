@@ -249,13 +249,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 						if(buyButton)
 							buyButton.isEnabled = false;
 					}
-
-//					//Use for tutorial to notify tutorial manager when deco item has been bought
-//					bool isDecorationTutorialDone = DataManager.Instance.GameData.
-//						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
-//
-//					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
-//						OnDecorationItemBought(this, EventArgs.Empty);
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
@@ -272,24 +265,27 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 			break;
 		case CurrencyTypes.Gem:
-			//TODO: temporary code. Need fixed up
+
 			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
 
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
 
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+
+				Hashtable option = new Hashtable();
+				option.Add("IsSoundClipManaged", false);
 				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
+				AudioManager.Instance.PlayClip(soundBuy, option);
 			}
-			else{
-
-				//spawn buy more gems popup
-				Hashtable notificationEntry = new Hashtable();
-				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
-
-				NotificationUIManager.Instance.AddToQueue(notificationEntry);
-			}
+//			else{
+//
+//				//spawn buy more gems popup
+//				Hashtable notificationEntry = new Hashtable();
+//				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
+//
+//				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//			}
 			break;
 		case CurrencyTypes.IAP:
 			break;

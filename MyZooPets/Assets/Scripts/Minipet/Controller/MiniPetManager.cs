@@ -54,6 +54,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		}
 	}
 
+	public bool IsFirstTimeReceivingGems{
+		get{ return DataManager.Instance.GameData.MiniPets.IsFirsTimeReceivingGems;}
+		set{ DataManager.Instance.GameData.MiniPets.IsFirsTimeReceivingGems = value;}
+	}
+
 	// Use this for initialization
 	void Start(){
 		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;

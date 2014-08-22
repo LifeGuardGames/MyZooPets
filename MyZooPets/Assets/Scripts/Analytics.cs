@@ -124,7 +124,7 @@ public class Analytics : MonoBehaviour {
 
 	//start game from menu scene
 	public void StartGame(){
-
+		GA.API.Design.NewEvent("StartGame");
 	}
 
      //record when a user changes to another scene. Can be used to track how many

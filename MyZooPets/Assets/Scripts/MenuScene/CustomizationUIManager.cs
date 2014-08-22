@@ -58,6 +58,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             petName = nameField.text;
 
             Analytics.Instance.PetColorChosen(petColor);
+			Analytics.Instance.StartGame();
 
             //Initialize data for new pet
             DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 

@@ -29,7 +29,8 @@ public class EntranceHelperController : MonoBehaviour {
 			arrowGameObject.SetActive(false);
 		}
 
-		MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
+		if(MiniPetHUDUIManager.Instance)
+			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
 	}
 
 	void OnDestroy(){

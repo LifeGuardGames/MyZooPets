@@ -303,7 +303,6 @@ public class DataManager : Singleton<DataManager>{
 	public void SaveGameData(){
 		// hopefully we are safe here, but do an absolute check if a tutorial is playing
 		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
-			Debug.LogError("Something trying to save the game while a tutorial is playing.  Investigate.");
 			return;
 		}
         

@@ -169,6 +169,14 @@ public class PanToMoveCamera : MonoBehaviour{
 		}
 	}
 
+	public void MoveToFirstPartition(){
+		int targetPartition = GetTargetPartition(currentPartition, RoomDirection.Right);
+		bool isAllowedToMoveToPartition = CanMoveToPartition(targetPartition, RoomDirection.Right, -1);
+
+		if(isAllowedToMoveToPartition)
+			ChangePartition(targetPartition);
+	}
+
 	public bool CanDecoModeMoveToRight(){
 		int targetPartition = GetTargetPartition(1, RoomDirection.Left);
 		bool retVal = true;

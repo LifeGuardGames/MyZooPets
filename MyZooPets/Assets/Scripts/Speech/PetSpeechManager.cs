@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PetSpeechController : SpeechController<PetSpeechController>{
+public class PetSpeechManager : SpeechController<PetSpeechManager>{
     // Message options keys
     // MessageText:
     // ImageTextureName: (use the sprite name in the atlas)
@@ -14,7 +14,10 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
         ImageClickTarget,
         ImageClickFunctionName,
 		BubbleSpriteName,
+		Follow3DTarget
     } 
+
+	public GameObject spawnParent;
 
     private GameObject petSpeechWithTextPrefab;
     private GameObject petSpeechWithImagePrefab;
@@ -33,19 +36,20 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 			if(petSpeechWithImageAndTextPrefab == null)
 					petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
 
-            currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImageAndTextPrefab);
-			Debug.Log("Added child " + currentMessage.name);
-			
-			UILabel label = currentMessage.transform.Find("CameraFacingParent/LabelParent/Label_Message").GetComponent<UILabel>();
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImageAndTextPrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
-			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
 
 			if(message.ContainsKey(Keys.BubbleSpriteName)){
-				UISprite bubbleSprite = currentMessage.transform.Find("CameraFacingParent/BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
 				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
 			}
 
-			UISprite sprite = currentMessage.transform.Find("CameraFacingParent/Image/Sprite_Message").GetComponent<UISprite>();
+			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
 
 			//switch atlas if necessary
 			if(message.ContainsKey(Keys.AtlasName)){
@@ -57,7 +61,6 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 //				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
 			}
 			sprite.spriteName = (string) message[Keys.ImageTextureName];
-			sprite.transform.localPosition = new Vector3(0f, 0f, -1f);
 		
             //also check if the image should be make clickable. 
             if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
@@ -72,18 +75,25 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
             if(petSpeechWithTextPrefab == null)
                 petSpeechWithTextPrefab = Resources.Load("PetSpeechWithText") as GameObject;
 
-            currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithTextPrefab);
-			UILabel label = currentMessage.transform.Find("CameraFacingParent/LabelParent/Label_Message").GetComponent<UILabel>();
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithTextPrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
-			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
         }
         //Use SpeechWithImage prefab
         else if(message.ContainsKey(Keys.ImageTextureName)){
             if(petSpeechWithImagePrefab == null)
                 petSpeechWithImagePrefab = Resources.Load("PetSpeechWithImage") as GameObject;
 
-            currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImagePrefab);
-			currentMessage.transform.Find("CameraFacingParent/Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImagePrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
         }
     }
 

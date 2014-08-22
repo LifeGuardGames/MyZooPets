@@ -51,6 +51,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 	public void ShowFireOrbMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
+		msgOption.Add(PetSpeechController.Keys.AtlasName, "BedroomAtlas");
 		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemFireOrb");
 		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
 		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 

@@ -34,23 +34,27 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
 					petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
 
             currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImageAndTextPrefab);
+			Debug.Log("Added child " + currentMessage.name);
 			
-            UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+			UILabel label = currentMessage.transform.Find("CameraFacingParent/LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
 			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
 
 			if(message.ContainsKey(Keys.BubbleSpriteName)){
-				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				UISprite bubbleSprite = currentMessage.transform.Find("CameraFacingParent/BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
 				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
 			}
 
-			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+			UISprite sprite = currentMessage.transform.Find("CameraFacingParent/Image/Sprite_Message").GetComponent<UISprite>();
 
 			//switch atlas if necessary
 			if(message.ContainsKey(Keys.AtlasName)){
 				string atlasName = (string) message[Keys.AtlasName];
+//				Debug.Log(atlasName);
+//				Debug.Log(sprite.atlas.gameObject.name);
 				GameObject atlas = (GameObject) Resources.Load(atlasName);
 				sprite.atlas = atlas.GetComponent<UIAtlas>();
+//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
 			}
 			sprite.spriteName = (string) message[Keys.ImageTextureName];
 			sprite.transform.localPosition = new Vector3(0f, 0f, -1f);
@@ -69,7 +73,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
                 petSpeechWithTextPrefab = Resources.Load("PetSpeechWithText") as GameObject;
 
             currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithTextPrefab);
-            UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+			UILabel label = currentMessage.transform.Find("CameraFacingParent/LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
 			label.transform.localPosition = new Vector3(0f, 0f, -0.05f);	// Set the damn position to make sure its on top
         }
@@ -79,9 +83,7 @@ public class PetSpeechController : SpeechController<PetSpeechController>{
                 petSpeechWithImagePrefab = Resources.Load("PetSpeechWithImage") as GameObject;
 
             currentMessage = LgNGUITools.AddChildWithPosition(this.gameObject, petSpeechWithImagePrefab);
-            currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
-        }
-        else{
+			currentMessage.transform.Find("CameraFacingParent/Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
         }
     }
 

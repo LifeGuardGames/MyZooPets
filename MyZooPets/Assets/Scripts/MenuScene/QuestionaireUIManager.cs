@@ -79,10 +79,15 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 
 	protected override void _OpenUI(){
 		gameObject.GetComponent<TweenToggle>().Show();
+
 	}
 
 	protected override void _CloseUI(){
 		gameObject.GetComponent<TweenToggle>().Hide();
+
+		//once questionaire is done. let tutorial knows to continue
+		TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
+		tutorialManager.OnQuestionaireDone();
 	}
 
 	/// <summary>

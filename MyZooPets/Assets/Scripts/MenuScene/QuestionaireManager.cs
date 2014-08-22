@@ -27,7 +27,7 @@ public class QuestionaireManager : MonoBehaviour {
 		   isFlameTutorialDone){
 			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel");
 			LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
-
+	
 			Invoke("ShowQuestionaire", 1f);
 		}
 	}

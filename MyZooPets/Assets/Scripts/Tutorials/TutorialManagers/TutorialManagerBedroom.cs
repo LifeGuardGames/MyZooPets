@@ -34,7 +34,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
-		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
+//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
@@ -133,11 +133,12 @@ public class TutorialManagerBedroom : TutorialManager{
 		}
 	}
 
-	private void OnQuestionaireDone(object sender, UIManagerEventArgs args){
+	public void OnQuestionaireDone(){
 		//check if pet in partition 0, if not force it to partition 0
-		if(!args.Opening){
+//		if(!args.Opening){
+			
 			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
 			Check();
-		}
+//		}
 	}
 }

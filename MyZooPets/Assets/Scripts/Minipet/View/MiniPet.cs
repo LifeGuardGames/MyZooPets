@@ -69,9 +69,7 @@ public class MiniPet : MonoBehaviour {
 			RefreshMiniPetUIState();
 		}
 	}
-
-
-
+	
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		if(!isMiniPetColliderLocked){
@@ -116,33 +114,47 @@ public class MiniPet : MonoBehaviour {
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		if(!isUIOpened) return;
 
-		switch(gesture.Phase){
-		case ContinuousGesturePhase.Started:
-			bubbleParticle.Play();
+		string colliderName = "";
+		if(gesture.Selection)
+			 colliderName = gesture.Selection.collider.name;
 
-			MoveBubbleParticleWithUserTouch(gesture);
-			break;
-		case ContinuousGesturePhase.Updated:
-			MoveBubbleParticleWithUserTouch(gesture);
+		if(colliderName == this.gameObject.name){
+			switch(gesture.Phase){
+			case ContinuousGesturePhase.Started:
 
-			float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
-			float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
+				bubbleParticle.Play();
+				MoveBubbleParticleWithUserTouch(gesture);
+				break;
+			case ContinuousGesturePhase.Updated:
 
-			currentDistanceInCentimeters += (totalMoveXInCentimeters + totalMoveYInCentimeters);
+				if(!bubbleParticle.isPlaying)
+					bubbleParticle.Play();
 
-			//if clean gesture is recognized. stop dirty particle and play happy animation
-			if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
-				MiniPetManager.Instance.SetCleaned(id, true);
-				MiniPetManager.Instance.IsFirstTimeCleaning = false;
-				dirtyParticle.Stop();
-				animationManager.Cheer();
-				currentDistanceInCentimeters = 0;
+				MoveBubbleParticleWithUserTouch(gesture);
+				
+				float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
+				float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
+				
+				currentDistanceInCentimeters += (totalMoveXInCentimeters + totalMoveYInCentimeters);
+				
+				//if clean gesture is recognized. stop dirty particle and play happy animation
+				if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
+					MiniPetManager.Instance.SetCleaned(id, true);
+					MiniPetManager.Instance.IsFirstTimeCleaning = false;
+					dirtyParticle.Stop();
+					animationManager.Cheer();
+					currentDistanceInCentimeters = 0;
+				}
+				
+				break;
+			case ContinuousGesturePhase.Ended:
+
+				bubbleParticle.Stop();
+				break;
 			}
-
-			break;
-		case ContinuousGesturePhase.Ended:
+		}
+		else{
 			bubbleParticle.Stop();
-			break;
 		}
 	}
 

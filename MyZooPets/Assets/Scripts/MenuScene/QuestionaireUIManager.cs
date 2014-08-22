@@ -20,26 +20,7 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 	void Awake(){
 		eModeType = UIModeTypes.CustomizePet;
 	}
-
-	void Start(){
-
-		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
-		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
-
-		//this questionaire should only come up if 2nd play period and the flame tutorial
-		//has been finished
-		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
-		   isFlameTutorialDone){
-			Invoke("OpenUI", 1f);
-		}
-	}
-
-	private IEnumerator ShowAgeSelector(){
-		yield return new WaitForSeconds(1.5f);
-		OpenUI();
-	}
-
+	
 	/// <summary>
 	/// Called by the slider when the value has changed. Rounds up to the nearest integer for age
 	/// </summary>
@@ -109,5 +90,10 @@ public class QuestionaireUIManager : SingletonUI<QuestionaireUIManager> {
 	/// </summary>
 	public void DestroyPanel(){
 		Destroy(gameObject);
+	}
+
+	private IEnumerator ShowAgeSelector(){
+		yield return new WaitForSeconds(1.5f);
+		OpenUI();
 	}
 }

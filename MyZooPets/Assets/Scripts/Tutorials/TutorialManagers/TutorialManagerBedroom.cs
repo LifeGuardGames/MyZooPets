@@ -134,7 +134,10 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	private void OnQuestionaireDone(object sender, UIManagerEventArgs args){
-		if(!args.Opening)
+		//check if pet in partition 0, if not force it to partition 0
+		if(!args.Opening){
+			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
 			Check();
+		}
 	}
 }

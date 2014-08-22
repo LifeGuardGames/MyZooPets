@@ -8,20 +8,23 @@ using System.Collections;
 public class FollowObjectRaycast : MonoBehaviour {
 
 	public GameObject target;
+	public Camera mainCamera;
+
 	private Vector3 targetAuxPosition;
+	private Vector3 mainCameraAuxPosition;
 
 	void Start(){
-		if(target != null){
-			RaycastAndMove();
+		if(mainCamera == null){
+			mainCamera = Camera.main;
 		}
+
+		RaycastAndMove();
 	}
 
 	void Update(){
-		if(target != null){
-			// Only do raycast of the position of the target has changed since the last frame
-			if(target.transform.position != targetAuxPosition){
-				RaycastAndMove();
-			}
+		// Only do raycast of the position of the target has changed since the last frame, account for camera move too
+		if(target.transform.position != targetAuxPosition || mainCamera.transform.position != mainCameraAuxPosition){
+			RaycastAndMove();
 		}
 	}
 
@@ -31,5 +34,6 @@ public class FollowObjectRaycast : MonoBehaviour {
 
 		// Keep track to check if moved later on
 		targetAuxPosition = target.transform.position;
+		mainCameraAuxPosition = mainCamera.transform.position;
 	}
 }

@@ -158,6 +158,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 			HUDUIManager.Instance.ShowPanel();
+			RoomArrowsUIManager.Instance.HidePanel();
 		}
 		CreateSubCategoryItemsWithString(category); 
 	}
@@ -467,6 +468,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
+				RoomArrowsUIManager.Instance.ShowPanel();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();

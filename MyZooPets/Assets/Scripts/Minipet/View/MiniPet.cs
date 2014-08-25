@@ -81,24 +81,29 @@ public class MiniPet : MonoBehaviour {
 				ZoomInToMiniPet();
 			}
 			else{
-				string colliderName = gesture.Selection.collider.name;
-				bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
-				
-				//only allow tap gesture if cleaning tutorial is finished
-				if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
+
+				UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
+
+				if(currentLockMode == UIModeTypes.MiniPet){
+					string colliderName = gesture.Selection.collider.name;
+					bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
 					
-					//if tickling animation is still playing reset timer
-					if(animationManager.IsTickling()){
-						tickleTimer = 0;
-					}
-					else{
-						animationManager.StartTickling();
+					//only allow tap gesture if cleaning tutorial is finished
+					if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
 						
-						bool isTickled = MiniPetManager.Instance.IsTickled(id);
-						if(!isTickled)
-							MiniPetManager.Instance.SetTickle(id, true);
-						
-						MiniPetManager.Instance.IsFirstTimeTickling = false;
+						//if tickling animation is still playing reset timer
+						if(animationManager.IsTickling()){
+							tickleTimer = 0;
+						}
+						else{
+							animationManager.StartTickling();
+							
+							bool isTickled = MiniPetManager.Instance.IsTickled(id);
+							if(!isTickled)
+								MiniPetManager.Instance.SetTickle(id, true);
+							
+							MiniPetManager.Instance.IsFirstTimeTickling = false;
+						}
 					}
 				}
 			}
@@ -116,7 +121,8 @@ public class MiniPet : MonoBehaviour {
 
 	void OnDrag(DragGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-		if(!isUIOpened) return;
+		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
+		if(!isUIOpened || currentLockMode != UIModeTypes.MiniPet) return;
 
 		string colliderName = "";
 		if(gesture.Selection)

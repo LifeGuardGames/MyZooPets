@@ -64,9 +64,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			
 			//Spawn floaty text to indicate trigger has been cleaned
 			Hashtable option = new Hashtable();
-			Vector3 floatUpPos = new Vector3(0, 2, 0);
+			Vector3 floatUpPos = new Vector3(0, 5, 0);
 			option.Add("parent", goDroppedItem);
-			option.Add("textSize", 0.4f);
+			option.Add("textSize", 1f);
 			option.Add("text", triggerData.FloatyDesc);
 			option.Add("floatingUpPos", floatUpPos);
 

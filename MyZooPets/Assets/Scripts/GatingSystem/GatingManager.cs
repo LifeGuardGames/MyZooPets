@@ -337,7 +337,7 @@ public class GatingManager : Singleton<GatingManager>{
 			if(fireOrb != null){
 				Debug.Log("use the fire Orb");
 			}
-			// if not tell user to buy it or wait for inhaler
+			// if not tell user to buy flame crystal
 			else{
 				IAPNotification();
 			}
@@ -391,11 +391,10 @@ public class GatingManager : Singleton<GatingManager>{
 		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
 			ShowFireButton();
 
-			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
-			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
-			
-			if(!canUseRealInhaler && fireOrb == null)
-				IAPNotification();
+			//if can't breathe fire show message
+			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			if(!canBreatheFire)
+				ShowNoFireNotification();
 		}
 		else
 			ShowUnhealthyNoFireNotification();

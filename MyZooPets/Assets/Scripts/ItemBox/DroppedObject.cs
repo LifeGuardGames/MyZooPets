@@ -111,7 +111,7 @@ using System.Collections.Generic;
 
 		// the starting location is the object's current location
 		GameObject go = GetGameObject();
-		Vector3 vStart = go.transform.position;
+		Vector3 vStart = go.transform.localPosition;
 
 
 		// Use overrided x if it is on, otherwise use random values between specified range
@@ -128,8 +128,10 @@ using System.Collections.Generic;
 			fEndX = UnityEngine.Random.Range(-nRangeX, positiveRangeX);
 		}
 
+
+
 		Vector3 vEnd = new Vector3(vStart.x + fEndX, vStart.y, vStart.z);
-		
+
 		// and send the object on its way!
 		Hashtable optional = new Hashtable();	
 		LeanTween.moveLocal(go, vEnd, fTime, optional);

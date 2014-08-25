@@ -11,6 +11,10 @@ public class MiniPet : MonoBehaviour {
 	public ParticleSystem bubbleParticle;
 	public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
+	public Transform spawnItemTransform;
+
+	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
+	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 
 	private string id; //pet id
 	private new string name;
@@ -169,13 +173,11 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ZoomInToMiniPet(){
-		Vector3 positionOffset = new Vector3(3, 4, -11);
-		Vector3 position = this.transform.position + positionOffset;
-		Vector3 rotation = new Vector3(12, 0, 0);
+		Vector3 position = this.transform.position + zoomPositionOffset;
 		
 		isMiniPetColliderLocked = true;
 		ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
-		CameraManager.Instance.ZoomToTarget(position, rotation, 1f, this.gameObject);
+		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, this.gameObject);
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
@@ -329,18 +331,22 @@ public class MiniPet : MonoBehaviour {
 			animationManager.Cheer();
 			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
 			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+			droppedItem.transform.parent = spawnItemTransform;
+			droppedItem.transform.localPosition = Vector3.zero;
+			droppedItem.transform.localScale = Vector3.one;
+			droppedItem.transform.localEulerAngles = Vector3.zero;
+
 			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
 			
 			droppedObjectStat.Init(HUDElementType.Gems, 1);
 			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
 			
 			// set the position of the newly spawned item to be wherever this item box is
-			Vector3 position = gameObject.transform.position;
-			droppedItem.transform.position = position;
+//			Vector3 position = gameObject.transform.position;
+//			droppedItem.transform.position = position;
 			
 			// make the item "burst" out
-			droppedObjectStat.Burst(isXOverride: true, xOverride: -1f);
-
+			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
 		}
 	}
 }

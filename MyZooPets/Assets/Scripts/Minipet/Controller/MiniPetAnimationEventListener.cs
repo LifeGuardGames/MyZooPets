@@ -43,7 +43,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 	private void CheckMiniPetVisibleInPartition(string currentArea, int currentPartition){
 		ImmutableDataGate gate = DataLoaderGate.GetData(currentArea, currentPartition);
-		string miniPetID = this.transform.parent.GetComponent<MiniPet>().ID;
+		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().ID;
 		
 		if(gate != null && miniPetID == gate.GetMiniPetID())
 			isVisibleInScene = true;

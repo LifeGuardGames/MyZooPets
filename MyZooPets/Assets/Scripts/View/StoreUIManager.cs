@@ -468,6 +468,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
+				RoomArrowsUIManager.Instance.ShowPanel();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();

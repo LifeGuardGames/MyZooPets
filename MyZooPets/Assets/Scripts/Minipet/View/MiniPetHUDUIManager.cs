@@ -86,7 +86,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
-		Debug.Log("HIDING");
 		HUDUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.ShowPanel();

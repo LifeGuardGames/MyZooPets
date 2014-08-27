@@ -457,7 +457,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnDestroy
@@ -960,7 +960,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 6
+  m_RootOrder: 3
 --- !u!114 &165581586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,7 +1137,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 2
+  m_RootOrder: 7
 --- !u!1001 &183522037
 Prefab:
   m_ObjectHideFlags: 0
@@ -1431,7 +1431,6 @@ GameObject:
   - 4: {fileID: 288796084}
   - 65: {fileID: 288796089}
   - 114: {fileID: 288796088}
-  - 114: {fileID: 288796087}
   - 114: {fileID: 288796086}
   - 114: {fileID: 288796085}
   m_Layer: 10
@@ -1440,7 +1439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &288796084
 Transform:
   m_ObjectHideFlags: 0
@@ -1468,7 +1467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeTypes: 02000000
   buttonName: 
-  buttonSound: 
+  buttonSound: buttonGeneric2
   isCheckingClickManager: 1
   isSprite: 1
 --- !u!114 &288796086
@@ -1487,22 +1486,6 @@ MonoBehaviour:
   hover: {x: 1, y: 1, z: 1}
   pressed: {x: .899999976, y: .899999976, z: 1}
   duration: 0
---- !u!114 &288796087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400080, guid: 5bc953636cce24f4ba45c7b29b27c4d4,
-    type: 2}
-  m_PrefabInternal: {fileID: 183522037}
-  m_GameObject: {fileID: 288796083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d44bc69c2ca5f943b845318866dc1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
-  trigger: 0
-  volume: 1
-  pitch: 1
 --- !u!114 &288796088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2132,7 +2115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.00188029, z: 1.00187957}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 0
+  m_RootOrder: 5
 --- !u!114 &426230595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2502,7 +2485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &475231772
 Transform:
   m_ObjectHideFlags: 0
@@ -5633,14 +5616,14 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 426230594}
-  - {fileID: 1369135705}
-  - {fileID: 180827517}
   - {fileID: 949094630}
   - {fileID: 748688745}
   - {fileID: 1020919715}
   - {fileID: 165581585}
   - {fileID: 986876082}
+  - {fileID: 426230594}
+  - {fileID: 1369135705}
+  - {fileID: 180827517}
   m_Father: {fileID: 0}
   m_RootOrder: 3
 --- !u!1 &633453194
@@ -7570,7 +7553,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 4
+  m_RootOrder: 1
 --- !u!114 &748688746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11714,7 +11697,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 3
+  m_RootOrder: 0
 --- !u!1 &952488155
 GameObject:
   m_ObjectHideFlags: 0
@@ -13071,7 +13054,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 7
+  m_RootOrder: 4
 --- !u!114 &986876083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13174,7 +13157,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 5
+  m_RootOrder: 2
 --- !u!1001 &1026112978
 Prefab:
   m_ObjectHideFlags: 0
@@ -19019,7 +19002,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 625723117}
-  m_RootOrder: 1
+  m_RootOrder: 6
 --- !u!114 &1369135706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24594,12 +24577,11 @@ MonoBehaviour:
     type: 2}
   popupFireLevelUpMessage: {fileID: 100024, guid: 5d1d250f16abafa4c86e31fc5550f5d8,
     type: 2}
-  popupPremiumMessage: {fileID: 100018, guid: ae69da5b25cf4144e8f7ed82711b13f1, type: 2}
+  popupGemIntro: {fileID: 100060, guid: 0c0bf6e70a97ff942be665d9d9c6a7e8, type: 2}
   popupInhalerRechargeMessage: {fileID: 100012, guid: a18cca9c6872f304aa47f59786db23e5,
     type: 2}
   popupSuperWellaInhaler: {fileID: 100004, guid: ec8057038d34d294db24d14523b07a9a,
     type: 2}
-  popupPremiumTest: {fileID: 100002, guid: 38ed2e2a9521ece4b9aa15ded6447281, type: 2}
 --- !u!1 &1713397744
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 //TODO: hacky class need to be removed after focus group
@@ -9,7 +9,7 @@ public class PremiumPopupUIController : MonoBehaviour {
 
 //		NotificationUIManager.Instance.CleanupNotification();
 
-		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
 			StatsController.Instance.ChangeStats(deltaGems: 5);
 		};
 		

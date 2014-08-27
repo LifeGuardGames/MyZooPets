@@ -19,7 +19,7 @@ public class TutorialUIManager : Singleton<TutorialUIManager>{
 	}
 
 	public static void AddStandardTutTip(NotificationPopupType eType, string text, 
-        string sprite, PopupNotificationNGUI.HashEntry button1cb, bool isStartHidden, bool isHideImmediately, string analytics){
+        string sprite, PopupNotificationNGUI.Callback button1cb, bool isStartHidden, bool isHideImmediately, string analytics){
 		/////// Send Notication ////////
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();

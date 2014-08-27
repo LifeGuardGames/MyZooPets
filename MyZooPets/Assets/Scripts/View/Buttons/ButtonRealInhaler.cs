@@ -43,7 +43,7 @@ public class ButtonRealInhaler : ButtonChangeScene {
 				soundToPlay = "superWellaInhalerMorning";
 			}
 				
-			PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
+			PopupNotificationNGUI.Callback okButtonCallback = delegate(){	
 			};
 			
 			//Display tutorial notification

@@ -310,7 +310,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			};
 
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.MiniGameQuitCheck);
 			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);

@@ -300,13 +300,13 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		//double confirm quit game
 		if(ui.IsPopupShowing(MinigamePopups.Pause)){
 
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+			PopupNotificationNGUI.Callback button1Function = delegate(){
 				ui.TogglePopup(MinigamePopups.Pause, false);
 
 				LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 			};
 
-			PopupNotificationNGUI.HashEntry button2Function = delegate(){
+			PopupNotificationNGUI.Callback button2Function = delegate(){
 			};
 
 			Hashtable notificationEntry = new Hashtable();

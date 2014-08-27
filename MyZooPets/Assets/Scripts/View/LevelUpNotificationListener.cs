@@ -18,7 +18,7 @@ public class LevelUpNotificationListener : MonoBehaviour {
     private void OnLevelUpNotification(object senders, EventArgs e){
     	HUDAnimator.OnLevelUp -= OnLevelUpNotification;	
 
-        PopupNotificationNGUI.HashEntry button1Function = delegate(){
+        PopupNotificationNGUI.Callback button1Function = delegate(){
             //unregister before registering listener to prevent multiple registering
             //when using spam click the button
             HUDAnimator.OnLevelUp -= OnLevelUpNotification;

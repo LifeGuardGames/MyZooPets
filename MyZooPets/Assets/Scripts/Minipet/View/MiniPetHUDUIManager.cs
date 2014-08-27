@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -62,12 +62,12 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(isFirstTime){
 			Hashtable notificationEntry = new Hashtable();
 
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+			PopupNotificationNGUI.Callback button1Function = delegate(){
 				OpenItemShop();
 				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
 			};
 
-			PopupNotificationNGUI.HashEntry button2Function = delegate(){
+			PopupNotificationNGUI.Callback button2Function = delegate(){
 				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
 			};
 

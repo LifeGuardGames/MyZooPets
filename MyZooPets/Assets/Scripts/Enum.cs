@@ -59,7 +59,9 @@ public enum NotificationPopupType{
 	InhalerRecharging,
 	PremiumTest,
 	SuperWellaInhaler,
-	GemIntro
+	GemIntro,
+	MiniGameQuitCheck,
+	ZeroHealth
 }
 
 public enum NotificationPopupFields{

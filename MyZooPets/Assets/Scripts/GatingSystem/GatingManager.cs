@@ -349,7 +349,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// buy flame crystal from the store with gems
 	/// </summary>
 	private void IAPNotification(){
-		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
 			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
 			
 			ClickManager.Instance.Lock(UIModeTypes.Store);

@@ -5,10 +5,10 @@ public class PopupNotificationNGUI : MonoBehaviour {
 
     public UILabel textArea;
     public bool HideImmediately = false;
-	public delegate void HashEntry(); // Used for notification entry
-    public HashEntry Button1Callback;
-    public HashEntry Button2Callback;
-	public HashEntry OnHideFinished;
+	public delegate void Callback(); // Used for notification entry
+    public Callback Button1Callback;
+    public Callback Button2Callback;
+	public Callback OnHideFinished;
 
     public string Message{
         get{return textArea.text;}

@@ -44,6 +44,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
 
+			// Change speech bubble sprite if explicit
 			if(message.ContainsKey(Keys.BubbleSpriteName)){
 				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
 				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
@@ -54,7 +55,6 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 			//switch atlas if necessary
 			if(message.ContainsKey(Keys.AtlasName)){
 				string atlasName = (string) message[Keys.AtlasName];
-//				Debug.Log(atlasName);
 //				Debug.Log(sprite.atlas.gameObject.name);
 				GameObject atlas = (GameObject) Resources.Load(atlasName);
 				sprite.atlas = atlas.GetComponent<UIAtlas>();
@@ -80,6 +80,12 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 			// Assign the follow target for the dialogue box
 			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
 
+			// Change speech bubble sprite if explicit
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
+
 			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
 			label.text = (string) message[Keys.MessageText];
         }
@@ -93,7 +99,31 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 			// Assign the follow target for the dialogue box
 			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
 
-			currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
+			// Change speech bubble sprite if explicit
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
+			
+			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+			
+			//switch atlas if necessary
+			if(message.ContainsKey(Keys.AtlasName)){
+				string atlasName = (string) message[Keys.AtlasName];
+				//				Debug.Log(sprite.atlas.gameObject.name);
+				GameObject atlas = (GameObject) Resources.Load(atlasName);
+				sprite.atlas = atlas.GetComponent<UIAtlas>();
+				//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
+			}
+			sprite.spriteName = (string) message[Keys.ImageTextureName];
+			
+			//also check if the image should be make clickable. 
+			if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
+				LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+				buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
+				buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
+				sprite.gameObject.AddComponent<BoxCollider>();
+			}
         }
     }
 

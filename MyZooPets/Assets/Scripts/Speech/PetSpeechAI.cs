@@ -119,6 +119,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 
     private void ShowSadToHappyMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
         msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "speechImageHeart");
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.Talk(msgOption);

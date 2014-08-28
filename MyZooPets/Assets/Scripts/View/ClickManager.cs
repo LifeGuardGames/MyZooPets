@@ -29,8 +29,11 @@ public class ClickManager : Singleton<ClickManager>{
 	
 	// stack of modes that have locked the click manager
 	private Stack<UIModeTypes> stackModes = new Stack<UIModeTypes>();
+
+	#region debug variable dont use
 	public string stackPeek;
 	public int count;
+	#endregion
 	
 	/// <summary>
 	/// Gets the current mode. The mode that the click manager is locked at
@@ -44,6 +47,10 @@ public class ClickManager : Singleton<ClickManager>{
 
 			return retVal;
 		}
+	}
+
+	public int IsModeLockEmpty{
+		get{ return stackModes.Count == 0;}
 	}
 
 	void Update(){

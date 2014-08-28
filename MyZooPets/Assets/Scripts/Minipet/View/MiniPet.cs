@@ -76,8 +76,10 @@ public class MiniPet : MonoBehaviour {
 	
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+
 		if(!isMiniPetColliderLocked){
-			if(!isUIOpened){
+			if(!isUIOpened && isModeLockEmpty){
 				ZoomInToMiniPet();
 			}
 			else{

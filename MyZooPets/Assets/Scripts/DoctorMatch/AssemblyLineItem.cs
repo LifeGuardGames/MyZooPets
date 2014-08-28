@@ -61,9 +61,7 @@ public class AssemblyLineItem : MonoBehaviour {
 
 		if(gesture.Phase == ContinuousGesturePhase.Started){
 			// Play pick up audio
-			Hashtable option = new Hashtable();
-			option.Add("IsSoundClipManaged", false);
-			AudioManager.Instance.PlayClip("buttonGeneric2", option);
+			AudioManager.Instance.PlayClip("buttonGeneric2");
 
 			// Scale up the pet
 			transform.localScale = new Vector3(1.1f, 1.1f, 1f);

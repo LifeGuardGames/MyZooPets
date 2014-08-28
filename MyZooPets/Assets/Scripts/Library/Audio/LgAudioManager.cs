@@ -41,7 +41,7 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 			return;
 		}
 
-		bool isSoundClipManaged = true;
+		bool isSoundClipManaged = false;	// Set the default to false
 		if(option.ContainsKey("IsSoundClipManaged"))
 			isSoundClipManaged = (bool) option["IsSoundClipManaged"];
 

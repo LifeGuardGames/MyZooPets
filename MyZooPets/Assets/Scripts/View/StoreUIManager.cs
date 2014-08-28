@@ -256,14 +256,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 				
 				// play a sound since an item was bought
-				Hashtable option = new Hashtable();
-				option.Add("IsSoundClipManaged", false);
-				AudioManager.Instance.PlayClip(soundBuy, option);
+				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-				Hashtable option = new Hashtable();
-				option.Add("IsSoundClipManaged", false);
-				AudioManager.Instance.PlayClip("buttonDontClick", option);
+				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;
 		case CurrencyTypes.Gem:
@@ -276,14 +272,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 
 				// play a sound since an item was bought
-				Hashtable option = new Hashtable();
-				option.Add("IsSoundClipManaged", false);
-				AudioManager.Instance.PlayClip(soundBuy, option);
+				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-				Hashtable option = new Hashtable();
-				option.Add("IsSoundClipManaged", false);
-				AudioManager.Instance.PlayClip("buttonDontClick", option);
+				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 //			else{
 //

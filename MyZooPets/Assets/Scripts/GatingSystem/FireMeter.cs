@@ -42,7 +42,6 @@ public class FireMeter : MonoBehaviour {
 	//---------------------------------------------------		
 	public void StartFilling(){
 		SetFillStatus( true );
-		AudioManager.Instance.PlayClip("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -52,7 +51,6 @@ public class FireMeter : MonoBehaviour {
 	public void Empty(){
 		SetFillStatus( false );
 		slider.sliderValue = 0;
-		AudioManager.Instance.StopClip("barAscend");
 	}
 	
 	//---------------------------------------------------

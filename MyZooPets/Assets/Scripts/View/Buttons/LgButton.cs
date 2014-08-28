@@ -143,9 +143,7 @@ public class LgButton : MonoBehaviour{
 		string sound = "buttonDontClick";
 		
 		if(!string.IsNullOrEmpty(sound)){
-			Hashtable option = new Hashtable();
-			option.Add("IsSoundClipManaged", false);
-			AudioManager.Instance.PlayClip(sound, option);
+			AudioManager.Instance.PlayClip(sound);
 		}
 			
 	}
@@ -180,9 +178,7 @@ public class LgButton : MonoBehaviour{
 		string strSound = GetProcessSound();
 		
 		if(!string.IsNullOrEmpty(strSound)){
-			Hashtable option = new Hashtable();
-			option.Add("IsSoundClipManaged", false);
-			AudioManager.Instance.PlayClip(strSound, option);
+			AudioManager.Instance.PlayClip(strSound);
 		}
 	}
 

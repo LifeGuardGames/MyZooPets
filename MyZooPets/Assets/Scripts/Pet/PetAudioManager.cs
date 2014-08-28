@@ -61,14 +61,19 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 	/// Plays the clip. The basic version of play clip. It interrupts the last clip
 	/// and start playing the new one
 	/// </summary>
-	/// <param name="hashOverrides">Hash overrides.</param>
+	/// <param name="option">Hash overrides.</param>
 	/// <param name="clipName">Clip name.</param>
-	public override void PlayClip(string clipName, Hashtable hashOverrides = null){
+	public override void PlayClip(string clipName, Hashtable option = null){
 		if(enableSound){
 			StopClip(lastPlayedClip);
 			lastPlayedClip = clipName;
-			
-			base.PlayClip(clipName, hashOverrides);
+
+			if(option == null){
+				option = new Hashtable();
+			}
+			option.Add("IsSoundClipManaged", true);
+
+			base.PlayClip(clipName, option);
 		}
 	}
 

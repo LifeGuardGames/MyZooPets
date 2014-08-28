@@ -11,22 +11,16 @@ public class AnimatioEventAudio : MonoBehaviour {
 
 	public void PlaySound1(){
 		// play pick up audio
-		Hashtable option = new Hashtable();
-		option.Add("IsSoundClipManaged", false);
-		AudioManager.Instance.PlayClip(sound1, option);
+		AudioManager.Instance.PlayClip(sound1);
 	}
 
 	public void PlaySound2(){
 		// play pick up audio
-		Hashtable option = new Hashtable();
-		option.Add("IsSoundClipManaged", false);
-		AudioManager.Instance.PlayClip(sound2, option);
+		AudioManager.Instance.PlayClip(sound2);
 	}
 
 	public void PlaySound3(){
 		// play pick up audio
-		Hashtable option = new Hashtable();
-		option.Add("IsSoundClipManaged", false);
-		AudioManager.Instance.PlayClip(sound3, option);
+		AudioManager.Instance.PlayClip(sound3);
 	}
 }

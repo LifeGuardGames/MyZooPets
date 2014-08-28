@@ -78,6 +78,10 @@ public class ButtonMonster : LgButtonHold{
 			
 			// turn the fire meter on
 			scriptFireMeter.StartFilling();
+
+			Hashtable option = new Hashtable();
+			option.Add("IsSoundClipManaged", true);
+			AudioManager.Instance.PlayClip("barAscend", option);
 		}
 		// else can't breathe fire. explain why
 		else{
@@ -119,6 +123,9 @@ public class ButtonMonster : LgButtonHold{
 		else{
 			// if the meter was not full, cancel the attack
 			attackScript.Cancel();
+
+			// Kill the bar sound
+			AudioManager.Instance.StopClip("barAscend");
 		}	
 		
 		// regardless we want to empty the meter

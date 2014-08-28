@@ -20,7 +20,8 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 				recurringTimer = 0;
 
 				//play clip here
-				PlayClip(recurringClipName);
+				Hashtable option = new Hashtable();
+				PlayClip(recurringClipName, option);
 			}
 		}
 	}
@@ -42,6 +43,12 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 			StopClip(lastPlayedClip);
 
 		lastPlayedClip = clipName;
+
+		// Sound clip managed at all times
+		if(option == null){
+			option = new Hashtable();
+		}
+		option.Add("IsSoundClipManaged", true);
 
 		base.PlayClip(clipName, option);
 	}
@@ -81,11 +88,11 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 	/// </summary>
 	/// <param name="clipName">Clip name.</param>
 	public void PlayLoopingClip(string clipName){
-
 		//only play looping clip again if there is no looping clip right now
 		if(string.IsNullOrEmpty(loopingClipName)){
 			Hashtable option = new Hashtable();
 			option.Add("Loop", true);
+
 			loopingClipName = clipName;
 			PlayClip(clipName, option);
 		}

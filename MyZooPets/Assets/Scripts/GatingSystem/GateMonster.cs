@@ -86,7 +86,7 @@ public class GateMonster : Gate{
 			// Update the pointer to the next head
 			nextHeadToDestroy = nextHeadToMove;
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
-			Debug.Log("Updating to next head " + nextHeadToMove);
+//			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
 
 		// when a monster is damaged, it physically moves

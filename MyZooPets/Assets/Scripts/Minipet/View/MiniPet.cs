@@ -76,8 +76,10 @@ public class MiniPet : MonoBehaviour {
 	
 	void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+
 		if(!isMiniPetColliderLocked){
-			if(!isUIOpened){
+			if(!isUIOpened && isModeLockEmpty){
 				ZoomInToMiniPet();
 			}
 			else{
@@ -265,7 +267,7 @@ public class MiniPet : MonoBehaviour {
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			MiniPetManager.Instance.IncreaseFoodXP(id);
-			
+			isFinishEating = true;
 			animationManager.Eat();
 		}
 	}

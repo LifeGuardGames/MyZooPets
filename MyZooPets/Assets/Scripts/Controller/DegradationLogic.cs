@@ -12,7 +12,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public event EventHandler<EventArgs> OnPetHit;
 	
 	// tut key
-	public static string TIME_DECAY_TUT = "TUT_TIME_DECAY";
+//	public static string TIME_DECAY_TUT = "TUT_TIME_DECAY";
 
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
@@ -282,37 +282,39 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	// last played, the pet will suffer some mood loss.
 	//---------------------------------------------------   
 	private void CalculateMoodDegradation(TimeSpan timeSinceLastPlayed){
-		// wait a frame, or else the notification manager won't work properly
-        
 		// amount to degrade mood by
-		int nMoodLoss = 0;
+		int moodLoss = 0;
         
 		// penalties
-		float fFirstHoursPenalty = Constants.GetConstant<float>("HungerDamage_Short");
-		float fSecondHoursPenalty = Constants.GetConstant<float>("HungerDamage_Long");
+		float firstHoursPenalty = Constants.GetConstant<float>("HungerDamage_Short");
+		float secondHoursPenalty = Constants.GetConstant<float>("HungerDamage_Long");
 		
 		// get the pet's health %, because it affects how their mood changes
-		float fHP = (float)(DataManager.Instance.GameData.Stats.Health / 100.0f);
-		float fMultiplier = Constants.GetConstant<float>("HungerMultiplier_Healthy");
-		if(fHP < fHealthMoodThreshold)
-			fMultiplier = Constants.GetConstant<float>("HungerMultiplier_Sick");
+		float hp = (float)(DataManager.Instance.GameData.Stats.Health / 100.0f);
+		float multiplier = Constants.GetConstant<float>("HungerMultiplier_Healthy");
+		if(hp < fHealthMoodThreshold)
+			multiplier = Constants.GetConstant<float>("HungerMultiplier_Sick");
         
 		// first part of the mood degradation -- the first 24 hours of not playing
-		int nFirstHours = timeSinceLastPlayed.TotalHours > 24 ? 24 : (int)timeSinceLastPlayed.TotalHours;
-		if(nFirstHours > 0)
-			nMoodLoss += (int)(nFirstHours * (fFirstHoursPenalty * fMultiplier));
+		int firstHours = timeSinceLastPlayed.TotalHours > 24 ? 24 : (int)timeSinceLastPlayed.TotalHours;
+		if(firstHours > 0)
+			moodLoss += (int)(firstHours * (firstHoursPenalty * multiplier));
         
 		// second part of mood degradation -- anything after 24 hours of not playing
-		int nSecondHours = (int)(timeSinceLastPlayed.TotalHours - 24);
-		if(nSecondHours > 0)
-			nMoodLoss += (int)(nSecondHours * (fSecondHoursPenalty * fMultiplier));
+		int secondHours = (int)(timeSinceLastPlayed.TotalHours - 24);
+		if(secondHours > 0)
+			moodLoss += (int)(secondHours * (secondHoursPenalty * multiplier));
 
 		// actually change the pet's mood
-		StatsController.Instance.ChangeStats(deltaMood: -nMoodLoss);
+		StatsController.Instance.ChangeStats(deltaMood: -moodLoss);
         
 		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
-		if(nMoodLoss > 0 && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TIME_DECAY_TUT))
-			StartCoroutine(MoodDegradTutorial());
+		// also only spawn tutorial if pet is healthy. Other notifications will be spawned
+		// when pet is not healthy
+//		bool isMoodDecayTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TIME_DECAY_TUT);
+//		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+//		if(moodLoss > 0 && !isMoodDecayTutorialDone && healthState == PetHealthStates.Healthy)
+//			StartCoroutine(MoodDegradTutorial());
 	}
 
 	//-----------------------------------------------
@@ -321,10 +323,10 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	// because CalculateMoodDeradation is called in Awake()
 	// and Awake() execution order is not guaranteed between classes 
 	//-----------------------------------------------
-	private IEnumerator MoodDegradTutorial(){
-		yield return 0;
-		TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
-	}
+//	private IEnumerator MoodDegradTutorial(){
+//		yield return 0;
+//		TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
+//	}
 
 	//---------------------------------------------------   
 	// CalculateHealthDegradation()
@@ -341,8 +343,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			if(numOfMissedPlayPeriod > 2)
 				numOfMissedPlayPeriod = 2;
 
-//			StatsController.Instance.ChangeStats(0, Vector3.zero, 0, Vector3.zero, 
-//                numOfMissedPlayPeriod * -20, Vector3.zero, 0, Vector3.zero);
 			StatsController.Instance.ChangeStats(deltaHealth: numOfMissedPlayPeriod * -20);
 		}
 	}

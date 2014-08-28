@@ -30,6 +30,11 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, itemTextureName);
 		msgOption.Add(PetSpeechManager.Keys.MessageText, "Feed me this!!");
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+
+		msgOption.Add(PetSpeechManager.Keys.ImageButtonModeType, UIModeTypes.MiniPet);
+		msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, MiniPetHUDUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
+		              "OpenShop");
 		PetSpeechManager.Instance.Talk(msgOption);
 	}
 }

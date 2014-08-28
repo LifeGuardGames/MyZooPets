@@ -98,8 +98,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	//----------------Hacky code to fix store shortcut problems. need a better solution
-	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
+	#region Store shortcut mode used by PetSpeechAI
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
@@ -135,14 +134,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
-		NavigationUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
-		RoomArrowsUIManager.Instance.ShowPanel();
-
 		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
-	//---------------------------------------------------
+	#endregion
 	
 	/// <summary>
 	/// Opens to sub category. Special function used to open the store UI straight
@@ -456,10 +451,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 
-		// this is a little hacky, but our demux system is kind of difficult to get around, so...
-		// before doing anything else, check to see if the deco system has a saved node...
-		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
-		// store doesn't apply...otherwise just show the store base panel like normal
+		// kind of hacky way to ensure that the UI is reset to the correct mode
+		// after store short cut mode is done. Depending on which mode is at the top
+		// of the click manager stack we will set up the UI for that specific mode
 		if(isShortcutMode){
 
 			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
@@ -475,7 +469,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				InventoryUIManager.Instance.ShowPanel();
 			}
 			else{
-				_CloseUI();	// Call all the close pipelines (only overridden tho)
+				_CloseUI();	
 			}
 
 			if(OnShortcutModeEnd != null){

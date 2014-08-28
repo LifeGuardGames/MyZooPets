@@ -267,7 +267,7 @@ public class MiniPet : MonoBehaviour {
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			MiniPetManager.Instance.IncreaseFoodXP(id);
-			
+			isFinishEating = true;
 			animationManager.Eat();
 		}
 	}

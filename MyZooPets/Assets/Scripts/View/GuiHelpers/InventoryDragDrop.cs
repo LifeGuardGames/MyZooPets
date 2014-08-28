@@ -64,7 +64,9 @@ public class InventoryDragDrop : MonoBehaviour {
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
 
-				if(!MiniPetHUDUIManager.Instance.IsOpen())
+				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen())
+					PetAnimationManager.Instance.AbortFeeding();
+				else
 					PetAnimationManager.Instance.AbortFeeding();
 			}else{
 				mTrans.parent = mParent;	
@@ -143,7 +145,10 @@ public class InventoryDragDrop : MonoBehaviour {
 				string invItemID = this.gameObject.name;
 				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 				if(invItem != null && invItem.ItemType != ItemType.Usables){
-					if(!MiniPetHUDUIManager.Instance.IsOpen())
+
+					if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen())
+						PetAnimationManager.Instance.WaitingToBeFed();
+					else
 						PetAnimationManager.Instance.WaitingToBeFed();
 				}
 					

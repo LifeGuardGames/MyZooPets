@@ -76,6 +76,7 @@ GameObject:
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400012}
   - 114: {fileID: 11400024}
+  - 114: {fileID: 11400010}
   m_Layer: 10
   m_Name: Button_Store
   m_TagString: Untagged
@@ -304,7 +305,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 128.005432, y: 128.160385, z: 0}
-  m_Center: {x: 0, y: 0, z: -.5}
+  m_Center: {x: 0, y: 0, z: -1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -437,6 +438,21 @@ MonoBehaviour:
   strSoundHide: 
   isDebug: 0
   testButtonPos: {x: 0, y: 0}
+--- !u!114 &11400010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 0}
+  hover: {x: 1, y: 1, z: 1}
+  pressed: {x: .899999976, y: .899999976, z: 1}
+  duration: 0
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1

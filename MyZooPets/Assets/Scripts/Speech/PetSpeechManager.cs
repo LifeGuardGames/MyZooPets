@@ -35,6 +35,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 
         //Use SpeechWithImageAndText prefab
         if(message.ContainsKey(Keys.MessageText) && message.ContainsKey(Keys.ImageTextureName)){
+<<<<<<< HEAD
 			ShowSpeechWithImageAndText(message);
         }
         //Use SpeechWithText prefab
@@ -44,6 +45,99 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
         //Use SpeechWithImage prefab
         else if(message.ContainsKey(Keys.ImageTextureName)){
            ShowSpeechWithImage(message);
+=======
+			if(petSpeechWithImageAndTextPrefab == null)
+					petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
+
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImageAndTextPrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+			label.text = (string) message[Keys.MessageText];
+
+			// Change speech bubble sprite if explicit
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
+
+			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+
+			//switch atlas if necessary
+			if(message.ContainsKey(Keys.AtlasName)){
+				string atlasName = (string) message[Keys.AtlasName];
+//				Debug.Log(sprite.atlas.gameObject.name);
+				GameObject atlas = (GameObject) Resources.Load(atlasName);
+				sprite.atlas = atlas.GetComponent<UIAtlas>();
+//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
+			}
+			sprite.spriteName = (string) message[Keys.ImageTextureName];
+		
+            //also check if the image should be make clickable. 
+            if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
+                LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+                buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
+                buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
+                sprite.gameObject.AddComponent<BoxCollider>();
+            }
+        }
+        //Use SpeechWithText prefab
+        else if(message.ContainsKey(Keys.MessageText)){
+            if(petSpeechWithTextPrefab == null)
+                petSpeechWithTextPrefab = Resources.Load("PetSpeechWithText") as GameObject;
+
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithTextPrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			// Change speech bubble sprite if explicit
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
+
+			UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+			label.text = (string) message[Keys.MessageText];
+        }
+        //Use SpeechWithImage prefab
+        else if(message.ContainsKey(Keys.ImageTextureName)){
+            if(petSpeechWithImagePrefab == null)
+                petSpeechWithImagePrefab = Resources.Load("PetSpeechWithImage") as GameObject;
+
+			currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImagePrefab);
+
+			// Assign the follow target for the dialogue box
+			currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+
+			// Change speech bubble sprite if explicit
+			if(message.ContainsKey(Keys.BubbleSpriteName)){
+				UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+				bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			}
+			
+			UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+			
+			//switch atlas if necessary
+			if(message.ContainsKey(Keys.AtlasName)){
+				string atlasName = (string) message[Keys.AtlasName];
+				//				Debug.Log(sprite.atlas.gameObject.name);
+				GameObject atlas = (GameObject) Resources.Load(atlasName);
+				sprite.atlas = atlas.GetComponent<UIAtlas>();
+				//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
+			}
+			sprite.spriteName = (string) message[Keys.ImageTextureName];
+			
+			//also check if the image should be make clickable. 
+			if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
+				LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+				buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
+				buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
+				sprite.gameObject.AddComponent<BoxCollider>();
+			}
+>>>>>>> origin/development
         }
     }
 

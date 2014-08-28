@@ -65,7 +65,6 @@ public class ItemBoxLogic : MonoBehaviour{
 			Debug.LogError("No valid item box data for item box", this);
 		
 		// create all the items to be obtained from this box
-		Debug.Log("OPENING BOX");
 		BurstItems(items);
 		
 		// remove the box from save data now that it has been opened

@@ -49,7 +49,10 @@ public class ClickManager : Singleton<ClickManager>{
 		}
 	}
 
-	public int IsModeLockEmpty{
+	/// <summary>
+	/// Indicate clicking is not locked at the moment
+	/// </summary>
+	public bool IsModeLockEmpty{
 		get{ return stackModes.Count == 0;}
 	}
 

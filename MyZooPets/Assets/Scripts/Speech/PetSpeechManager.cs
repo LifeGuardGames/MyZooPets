@@ -69,16 +69,20 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 		//switch atlas if necessary
 		if(message.ContainsKey(Keys.AtlasName)){
 			string atlasName = (string) message[Keys.AtlasName];
-			//				Debug.Log(sprite.atlas.gameObject.name);
 			GameObject atlas = (GameObject) Resources.Load(atlasName);
 			sprite.atlas = atlas.GetComponent<UIAtlas>();
-			//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
 		}
 		sprite.spriteName = (string) message[Keys.ImageTextureName];
 		
 		//also check if the image should be make clickable. 
 		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
 			LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+
+			if(message.ContainsKey(Keys.ImageButtonModeType))
+				buttonMessage.modeTypes.Add((UIModeTypes) message[Keys.ImageButtonModeType]);
+			
+			buttonMessage.isSprite = true;
+			buttonMessage.isCheckingClickManager = true;
 			buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
 			buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
 			sprite.gameObject.AddComponent<BoxCollider>();

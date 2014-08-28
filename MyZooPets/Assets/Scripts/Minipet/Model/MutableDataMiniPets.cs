@@ -43,6 +43,19 @@ public class MutableDataMiniPets{
 	}
 
 	/// <summary>
+	/// Whether the minipet has been unlocked
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public bool IsMiniPetUnlocked(string miniPetID){
+		bool retVal = false;
+
+		if(!string.IsNullOrEmpty(miniPetID))
+			retVal = MiniPetProgress.ContainsKey(miniPetID);
+
+		return retVal;
+	}
+
+	/// <summary>
 	/// Increases the food XP by amount
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>

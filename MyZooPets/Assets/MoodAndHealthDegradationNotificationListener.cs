@@ -50,6 +50,9 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		ShowSuperWellaSickReminder();
 	}
 
+	/// <summary>
+	/// Shows two notifications telling user how to increase the pet's mood
+	/// </summary>
 	private void ShowMoodDegradeMessage(){
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		string timeMoodDecay1 = String.Format(Localization.Localize("TMD_1"), petName);

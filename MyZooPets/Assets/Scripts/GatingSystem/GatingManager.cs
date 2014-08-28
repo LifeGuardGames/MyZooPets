@@ -32,7 +32,7 @@ public class GatingManager : Singleton<GatingManager>{
 	public Vector3 startingScreenPosition;
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
-	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>();
+	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
 
 	void Awake(){
 		// set pan script
@@ -153,6 +153,19 @@ public class GatingManager : Singleton<GatingManager>{
 				
 				// hash the gate based on the room, for easier access
 				activeGates[partition] = scriptGate;
+			}
+			// if gate is not active that means it has been completely unlocked
+			else{
+				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
+				//this is mainly for backward compatibility. Old users with the gates unlocked
+				//already should be awarded the minipets right away
+				string miniPetID = dataGate.GetMiniPetID();
+				if(!string.IsNullOrEmpty(miniPetID)){
+					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
+
+					if(!isUnlocked)
+						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+				}
 			}
 		}		
 	}

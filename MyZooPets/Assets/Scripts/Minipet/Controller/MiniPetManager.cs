@@ -71,13 +71,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			CreateMiniPet(data.ID);
 		}
-
-//		foreach(KeyValuePair<string, MutableDataMiniPets.Status> progress in miniPetProgress){
-//			string miniPetID = progress.Key;
-//			MutableDataMiniPets.Status miniPetStatus = progress.Value;
-//
-//			CreateMiniPet(miniPetID);
-//		}
 	}
 
 	void OnDestroy(){

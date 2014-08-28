@@ -270,6 +270,14 @@ public class MiniPet : MonoBehaviour {
 			isFinishEating = true;
 			animationManager.Eat();
 		}
+		//else check if tickle and cleaning is done. if both done 
+		else{
+			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			if(isTickled && isCleaned){
+				Invoke("ShowFoodPreferenceMessage", 1f);
+			}
+		}
 	}
 
 	/// <summary>

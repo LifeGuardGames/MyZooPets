@@ -31,7 +31,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	public bool IsBusy{
 		get{
-			return currentAnimationState != PetAnimStates.Idling;
+			return (currentAnimationState != PetAnimStates.Idling && 
+			        currentAnimationState != PetAnimStates.Walking);
 		}
 	}
 

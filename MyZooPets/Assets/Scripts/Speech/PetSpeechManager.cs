@@ -13,6 +13,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 		AtlasName,
         ImageClickTarget,
         ImageClickFunctionName,
+		ImageButtonModeType,
 		BubbleSpriteName,
 		Follow3DTarget
     } 
@@ -23,16 +24,28 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
     private GameObject petSpeechWithImagePrefab;
     private GameObject petSpeechWithImageAndTextPrefab; 
 
-    //---------------------------------------------------
-    // SpawnMessage()
-    // Look at the message keys and decide what is the 
-    // appropriate layout to use for this message
-    //---------------------------------------------------
+   
+	/// <summary>
+	/// Spawns the message. Look at the message keys and decide what is the
+	/// appropriate layout to use for this message
+	/// </summary>
+	/// <param name="message">Message.</param>
     protected override void SpawnMessage(Hashtable message){
         currentMessage = null;
 
         //Use SpeechWithImageAndText prefab
         if(message.ContainsKey(Keys.MessageText) && message.ContainsKey(Keys.ImageTextureName)){
+<<<<<<< HEAD
+			ShowSpeechWithImageAndText(message);
+        }
+        //Use SpeechWithText prefab
+        else if(message.ContainsKey(Keys.MessageText)){
+           ShowSpeechWithText(message);
+        }
+        //Use SpeechWithImage prefab
+        else if(message.ContainsKey(Keys.ImageTextureName)){
+           ShowSpeechWithImage(message);
+=======
 			if(petSpeechWithImageAndTextPrefab == null)
 					petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
 
@@ -124,9 +137,76 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 				buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
 				sprite.gameObject.AddComponent<BoxCollider>();
 			}
+>>>>>>> origin/development
         }
     }
 
+	private void ShowSpeechWithImageAndText(Hashtable message){
+		if(petSpeechWithImageAndTextPrefab == null)
+			petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
+		
+		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImageAndTextPrefab);
+		
+		// Assign the follow target for the dialogue box
+		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+		
+		UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+		label.text = (string) message[Keys.MessageText];
+		
+		if(message.ContainsKey(Keys.BubbleSpriteName)){
+			UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
+			bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+		}
+		
+		UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+		
+		//switch atlas if necessary
+		if(message.ContainsKey(Keys.AtlasName)){
+			string atlasName = (string) message[Keys.AtlasName];
+			GameObject atlas = (GameObject) Resources.Load(atlasName);
+			sprite.atlas = atlas.GetComponent<UIAtlas>();
+		}
+		sprite.spriteName = (string) message[Keys.ImageTextureName];
+		
+		//also check if the image should be make clickable. 
+		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
+			LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+			
+			if(message.ContainsKey(Keys.ImageButtonModeType))
+				buttonMessage.modeTypes.Add((UIModeTypes) message[Keys.ImageButtonModeType]);
+			
+			buttonMessage.isSprite = true;
+			buttonMessage.isCheckingClickManager = true;
+			buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
+			buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
+			sprite.gameObject.AddComponent<BoxCollider>();
+		}
+	}
+
+	private void ShowSpeechWithText(Hashtable message){
+		if(petSpeechWithTextPrefab == null)
+			petSpeechWithTextPrefab = Resources.Load("PetSpeechWithText") as GameObject;
+		
+		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithTextPrefab);
+		
+		// Assign the follow target for the dialogue box
+		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+		
+		UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+		label.text = (string) message[Keys.MessageText];
+	}
+
+	private void ShowSpeechWithImage(Hashtable message){
+		if(petSpeechWithImagePrefab == null)
+			petSpeechWithImagePrefab = Resources.Load("PetSpeechWithImage") as GameObject;
+		
+		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImagePrefab);
+		
+		// Assign the follow target for the dialogue box
+		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
+		
+		currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>().spriteName = (string) message[Keys.ImageTextureName];
+	}
     // void OnGUI(){
     //     if(isDebug){
     //         if(GUI.Button(new Rect(20, 20, 20, 20), "1")){

@@ -19,6 +19,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_FLAME = "TUT_FLAME";
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
 	public const string TUT_DECOS = "TUT_DECOS";
+	public const string TUT_MOOD_DEGRADE = "TUT_TIME_DECAY";
 
 	// tutorial that's is not related to the intro tutorial 
 	public const string TUT_FEED_PET = "TUT_FEED_PET";

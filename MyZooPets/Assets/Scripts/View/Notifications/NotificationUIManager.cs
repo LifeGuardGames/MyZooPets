@@ -10,6 +10,12 @@ using System.Collections;
 
 public class NotificationUIManager : Singleton<NotificationUIManager>{
 
+	//NOTE: This class went from a generic notification system to fairly non generic
+	//We don't really use the popupNotifcationOneButton/TwoButton prefab anymore. The reason
+	//is that most of the pop we require special notification layout for different events
+	//in the game. We should probably add a feature where you can just specify a notification
+	//prefab when you call NotificationUIManager. Will save us from creating so many switch statements
+
 	public GameObject popupNotificationOneButton;
 	public GameObject popupNotificationTwoButtons;
 	public GameObject popupLevelUpMessage;
@@ -26,6 +32,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 //	public GameObject popupPremiumMessage;
 	public GameObject popupInhalerRechargeMessage;
 	public GameObject popupSuperWellaInhaler;
+	public GameObject popupSuperWellaSick;
 
 	//TODO: need to be removed
 //	public GameObject popupPremiumTest;
@@ -188,6 +195,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 			case NotificationPopupType.ZeroHealth:
 				ShowZeroHealthMessage(
 					(string)entry[NotificationPopupFields.Message],
+					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
+				);
+				break;
+			case NotificationPopupType.SuperWellaSickReminder:
+				ShowSuperWellaSickReminder(
 					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
@@ -410,6 +422,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.Button1Callback = okButtonCallBack;
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 		
+		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+	}
+
+	private void ShowSuperWellaSickReminder(PopupNotificationNGUI.Callback okButtonCallBack){
+		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupSuperWellaSick);
+
+		oneButtonMessage.Button1Callback = okButtonCallBack;
+		oneButtonMessage.OnHideFinished += TryNextNotification;
+
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
 

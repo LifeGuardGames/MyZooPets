@@ -4,6 +4,7 @@ using System.Collections;
 
 public class ZeroHealthNotificationListener : MonoBehaviour {
     public int hospitalBillCost = 300;
+	public int moodPunishment = 30;
 
 	// Use this for initialization
 	void Start () {
@@ -19,11 +20,9 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
         StatsController.OnZeroHealth -= OnZeroHealthNotification;    
 
         PopupNotificationNGUI.Callback button1Function = delegate(){
-//            StatsController.Instance.ChangeStats(0, Vector3.zero, -1 * hospitalBillCost, 
-//                Vector3.zero, 100, Vector3.zero, -30, Vector3.zero, true, bFloaty: false);
 
 			StatsController.Instance.ChangeStats(deltaStars: -1 * hospitalBillCost,
-			                                     deltaHealth: 100, deltaMood: -30,
+			                                     deltaHealth: 100, deltaMood: -1 * moodPunishment,
 			                                     bPlaySounds: true, bFloaty: false);
 
             //Register the handler again after the notification has been cleared

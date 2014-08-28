@@ -174,6 +174,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	/// </summary>
 	public void CalculateCurrentPlayPeriod(){
 		DataManager.Instance.GameData.Calendar.NextPlayPeriod = GetCurrentPlayPeriod(); 
+
+		//since there's a miss play period. reactivate sick notification
+		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = false;
 	}
 
 }

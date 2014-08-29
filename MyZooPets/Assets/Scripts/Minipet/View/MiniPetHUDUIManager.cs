@@ -220,8 +220,16 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void OpenShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
 
-		ClickManager.Instance.Lock(UIModeTypes.Store);
+		//sometimes this function will be called in a different mode, so we need
+		//to make sure the UIs are handled appropriately
+		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+		if(isModeLockEmpty){
+			NavigationUIManager.Instance.HidePanel();
+			EditDecosUIManager.Instance.HideNavButton();
+			RoomArrowsUIManager.Instance.HidePanel();
+		}
 
+		ClickManager.Instance.Lock(UIModeTypes.Store);
 		Invoke("OpenFoodShopAfterWaiting", 0.2f);
 	}
 
@@ -240,18 +248,18 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void OpenItemShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
 		ClickManager.Instance.Lock(UIModeTypes.Store);
-
 		StoreUIManager.OnShortcutModeEnd += CloseShop;
 		StoreUIManager.Instance.OpenToSubCategory("Items", true);
 	}
 
 	private void CloseShop(object sender, EventArgs args){
-		// pop the mode we pushed earlier from the click manager
-		ClickManager.Instance.ReleaseLock();
-		
 		StoreUIManager.OnShortcutModeEnd -= CloseShop;
-
-		this.GetComponent<TweenToggleDemux>().Show();
-		HUDUIManager.Instance.HidePanel();
+		ClickManager.Instance.ReleaseLock();
+	
+		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
+		if(currentMode == UIModeTypes.MiniPet){
+			this.GetComponent<TweenToggleDemux>().Show();
+			HUDUIManager.Instance.HidePanel();
+		}
 	}
 }

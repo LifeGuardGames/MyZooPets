@@ -14,7 +14,7 @@ public class ButtonMonster : LgButtonHold{
 	public GameObject goIcon; // the sprite icon of this button
 	public GameObject parentPanel; // The parent panel for this button, to be destroyed when needed
 	
-	private AttackGate scriptAttack; // attack gate script
+	private AttackGate attackScript; // attack gate script
 	private Gate gate; // the gate that this button is for
 	private bool isLegal; // is this button being pressed legally?  Mainly used as a stopgap for now
 
@@ -62,27 +62,26 @@ public class ButtonMonster : LgButtonHold{
 	/// </summary>
 	protected override void ProcessClick(){	
 		isLegal = false;
-		PetAnimator scriptPetAnimator = PetMovement.Instance.GetPetAnimatorScript();
 		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		
-		// if the pet is currently busy, forgetaboutit
-		if(scriptPetAnimator.IsBusy() || scriptPetAnimator.GetAnimState() == PetAnimStates.Walking)
-			return;
 
 		// if can breathe fire, attack the gate!!
 		if(canBreathFire){
 			isLegal = true;
-			
-			// get the gate for this monster
-			Gate scriptGate = gate;		
+
 			
 			// kick off the attack script
 			int damage = GetDamage();
-			scriptAttack = scriptPetAnimator.gameObject.AddComponent<AttackGate>();
-			scriptAttack.Init(scriptPetAnimator, scriptGate, damage);
+			attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
+			attackScript.Init(gate, damage);
+
+			PetAnimationManager.Instance.StartFireBlow();
 			
 			// turn the fire meter on
 			scriptFireMeter.StartFilling();
+
+			Hashtable option = new Hashtable();
+			option.Add("IsSoundClipManaged", true);
+			AudioManager.Instance.PlayClip("barAscend", option);
 		}
 		// else can't breathe fire. explain why
 		else{
@@ -109,8 +108,8 @@ public class ButtonMonster : LgButtonHold{
 
 		if(scriptFireMeter.IsFull()){
 			// if the meter was full on release, complete the attack!
-//			scriptAttack.FinishAttack();
-			scriptAttack.Attack();
+			attackScript.FinishAttack();
+//			scriptAttack.Attack();
 			
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
@@ -123,7 +122,10 @@ public class ButtonMonster : LgButtonHold{
 		}
 		else{
 			// if the meter was not full, cancel the attack
-			scriptAttack.Cancel();
+			attackScript.Cancel();
+
+			// Kill the bar sound
+			AudioManager.Instance.StopClip("barAscend");
 		}	
 		
 		// regardless we want to empty the meter

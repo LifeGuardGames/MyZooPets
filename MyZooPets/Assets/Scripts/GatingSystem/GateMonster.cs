@@ -26,16 +26,6 @@ public class GateMonster : Gate{
 		// the ideal position of the monster is its transform at the outset
 		idealPos = transform.position;
 
-		// the monster's position should be set relative to its hp
-//		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-//		int maxHealth = data.GetMonster().MonsterHealth;
-//		int currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-//		int damage = maxHealth - currentHealth; 
-		
-		// if the monster is missing hp, it needs to move
-//		if(damage > 0)
-//			Move(damage);
-
 		SetupHeads();
 	}
 
@@ -87,7 +77,7 @@ public class GateMonster : Gate{
 			goDroppedItem.transform.position = new Vector3(vPosition.x, vPosition.y, 20);
 			
 			// make the item "burst" out
-			droppedObjectStat.Burst(burstToLeftOnly:true);
+			droppedObjectStat.Burst(isBurstToLeftOnly:true, burstStreamOrder : i);
 		}
 
 		// Move one of the heads out, ONLY applies to everything thats not the first head
@@ -96,7 +86,7 @@ public class GateMonster : Gate{
 			// Update the pointer to the next head
 			nextHeadToDestroy = nextHeadToMove;
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
-			Debug.Log("Updating to next head " + nextHeadToMove);
+//			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
 
 		// when a monster is damaged, it physically moves

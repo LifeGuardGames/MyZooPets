@@ -3,28 +3,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// DroppedObject_Stat
-// This is an object that is on the ground, in the
-// 3D world (although it may be 2D) that the player
-// can pick up to obtain.  It is a stat (like xp or
-// gold) that the play can get by picking it up.
-//---------------------------------------------------
-
+/// <summary>
+/// This is an object that is on the ground, in the
+/// 3D world (although it may be 2D) that the player
+/// can pick up to obtain.  It is a stat (like xp or
+/// gold) that the play can get by picking it up.
+/// </summary>
 public class DroppedObjectStat : DroppedObject{
-	// label for displaying the amount of points on this object
-	public UILabel labelPoints;
+
+	public UILabel labelPoints; // label for displaying the amount of points on this object
+	private HUDElementType hudElementType; // the stat that this object represents
+	private int amount; // amount that this object gives for the stat
 	
-	// the stat that this object represents
-	private HUDElementType hudElementType;
-	
-	// amount that this object gives for the stat
-	private int amount;
-	
-	//---------------------------------------------------
-	// Init()
-	// Inits this dropped object with a stat.
-	//---------------------------------------------------
+
 	/// <summary>
 	/// Init the DroppedObject
 	/// </summary>
@@ -46,11 +37,10 @@ public class DroppedObjectStat : DroppedObject{
 			Debug.LogError("No sprite", gameObject);
 
 	}
-	
-	//---------------------------------------------------
-	// ObtainObject()
-	// Puts the item into the player's inventory.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Obtains the object. Puts the item into the player's inventory.
+	/// </summary>
 	protected override void ObtainObject(){
 		DroppedItemStates eState = GetState();
 		
@@ -62,13 +52,15 @@ public class DroppedObjectStat : DroppedObject{
 		SetState(DroppedItemStates.Awarded);
 		
 		// add the stat...I really need to refactor StatsController...
-		int nXP = hudElementType == HUDElementType.Points ? amount : 0;
-		int nCoins = hudElementType == HUDElementType.Stars ? amount : 0;
-		int nHealth = hudElementType == HUDElementType.Health ? amount : 0;
-		int nMood = hudElementType == HUDElementType.Mood ? amount : 0;
+		int xp = hudElementType == HUDElementType.Points ? amount : 0;
+		int coins = hudElementType == HUDElementType.Stars ? amount : 0;
+		int health = hudElementType == HUDElementType.Health ? amount : 0;
+		int mood = hudElementType == HUDElementType.Mood ? amount : 0;
+		int gems = hudElementType == HUDElementType.Gems ? amount : 0;
 
-		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: nCoins, 
-		                                     deltaHealth: nHealth, deltaMood: nMood, bFloaty: true);
+		StatsController.Instance.ChangeStats(deltaPoints: xp, deltaStars: coins, 
+		                                     deltaHealth: health, deltaMood: mood,
+		                                     deltaGems: gems);
 
 		// destroy the object
 		GameObject go = GetGameObject();

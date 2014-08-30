@@ -58,6 +58,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             petName = nameField.text;
 
             Analytics.Instance.PetColorChosen(petColor);
+			Analytics.Instance.StartGame();
 
             //Initialize data for new pet
             DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 
@@ -95,16 +96,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private void HideChooseGUI(bool showMovie){
         customizationPanel.GetComponent<TweenToggleDemux>().Hide();
 		if(showMovie){
-            if(VersionManager.IsLite()){
-                LoadScene();
-            }else{
-
-				ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-				if(isComicOn)
-					Invoke("ShowIntroMovie", 1);
-				else
-					LoadScene();
-            }
+			ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+			if(isComicOn)
+				Invoke("ShowIntroMovie", 1);
+			else
+				LoadScene();
 		}
 
         //since we turn on spotlight and turn off animation for customization UI

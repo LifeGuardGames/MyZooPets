@@ -27,7 +27,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 	}
 
 	private void LoadAndSetColor(string petColor){
-		Debug.Log("Loading Colors...");
+//		Debug.Log("Loading Colors...");
 		Sprite[] sprites = Resources.LoadAll<Sprite>(spriteSetPrefix + petColor);
 
 		// Loop through all the body parts that needs color assignment
@@ -38,7 +38,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			spriteRenderer.sprite = sprites[atlasIndex];
 		}
 
-		Debug.Log("Loading Colors done...");
+//		Debug.Log("Loading Colors done...");
 	}
 
 	private void ClearDebug(){

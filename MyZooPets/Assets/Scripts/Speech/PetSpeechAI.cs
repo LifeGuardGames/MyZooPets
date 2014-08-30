@@ -50,46 +50,55 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 
 	public void ShowFireOrbMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemFireOrb");
-		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemFireOrb");
+		msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
 		              "OpenToSubCategoryItemsWithLockAndCallBack");
-		GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
 	public void ShowInhalerMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
-		GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerMain");
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
 	public void ShowOutOfFireMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerMain");
-		GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerMain");
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
 	public void ShowNoFireSickMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_SICK"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
-		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_SICK"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerEmergency");
+		msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
 		              "OpenToSubCategoryItemsWithLockAndCallBack");
-		GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
 	public void ShowNoFireHungryMsg(){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("NO_FIRE_HUNGRY"));
-		msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
-		msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-		msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_HUNGRY"));
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "shopButtonFood");
+		msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
 		              "OpenToSubCategoryFoodWithLockAndCallBack");
-		GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 	
     private void StopAutoSpeech(object sender, EventArgs args){
@@ -99,38 +108,45 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 
     private void ShowHappyToSadMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
-        msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HAPPY_TO_SAD_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "shopButtonFood");
-        msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+        msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("HAPPY_TO_SAD_0"));
+        msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "shopButtonFood");
+        msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+        msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryFoodWithLockAndCallBack");
-        GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
     }
 
     private void ShowSadToHappyMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "speechImageHeart");
-        GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+        msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "speechImageHeart");
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
     }
 
     private void ShowSickToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
-        msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
-        msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+        msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("SICK_TO_VERYSICK_0"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+        msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerEmergency");
+        msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+        msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryItemsWithLockAndCallBack");
-        GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
     }
 
     private void ShowHealthyToVerySickMsg(object sender, EventArgs args){
         Hashtable msgOption = new Hashtable();
-        msgOption.Add(PetSpeechController.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
-        msgOption.Add(PetSpeechController.Keys.ImageTextureName, "itemInhalerEmergency");
-        msgOption.Add(PetSpeechController.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-        msgOption.Add(PetSpeechController.Keys.ImageClickFunctionName, 
+        msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("HEALTHY_TO_VERYSICK_0"));
+		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
+        msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerEmergency");
+        msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+        msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, 
             "OpenToSubCategoryItemsWithLockAndCallBack");
-        GetComponent<PetSpeechController>().Talk(msgOption);
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 
         enableAutoSpeech = true;
     }

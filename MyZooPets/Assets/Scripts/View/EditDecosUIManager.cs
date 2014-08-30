@@ -163,8 +163,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		HideNavButton();
 		
 		// hide the pet so it doesn't get in the way
-		GameObject goPet = PetMovement.Instance.GetPetGameObject();
-		goPet.SetActive(false);
+		PetAnimationManager.Instance.DisableAnimation();
 	}
 
 	private void ShowDecoRoomArrows(){
@@ -189,8 +188,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 		ShowNavButton();
 		
 		// show the pet again
-		GameObject goPet = PetMovement.Instance.GetPetGameObject();
-		goPet.SetActive(true);	
+		PetAnimationManager.Instance.EnableAnimation();
 		
 		// clear any saved node
 		nodeSaved = null;

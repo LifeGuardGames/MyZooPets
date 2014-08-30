@@ -12,14 +12,18 @@ public class LgDebugTool : EditorWindow
 	#region constant values
     private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";
     private const string BUILDSETTING_PATH = "/XML/Resources/Constants/_BuildSetting.xml";
-	private const string BUILDINFO_PATH = "";
+	private const string BUILDINFO_PATH = "/Editor/XMLSerialization/BuildInfo.xml";
 	#endregion
 
 	#region private values
     private List<Constant> criticalList;
     private List<Constant> buildSettingList;
+	private List<Constant> buildInfoList;
+	
     private CriticalConstants criticalConstants;
     private BuildSettingConstants buildSettingConstants;
+	private BuildInfoConstants buildInfoConstants;
+
     private string aetnaBundleID; 
     private string proBundleID;
     private string aetnaGameyKey;
@@ -47,6 +51,9 @@ public class LgDebugTool : EditorWindow
 
         buildSettingConstants = Deserialize<BuildSettingConstants>(BUILDSETTING_PATH);
         buildSettingList = buildSettingConstants.BuildSettingConstantList;
+
+		buildInfoConstants = Deserialize<BuildInfoConstants>(BUILDINFO_PATH);
+		buildInfoList = buildInfoConstants.BuildInfoConstantList;
     }
 
     void OnGUI()
@@ -92,20 +99,7 @@ public class LgDebugTool : EditorWindow
 					constant.ConstantValue = EditorGUILayout.TextField("Android Build Version Code", constant.ConstantValue);
 					PlayerSettings.Android.bundleVersionCode = int.Parse(constant.ConstantValue);
 					break;
-				case "IsAetnaBuild":
-					isAetnaBuild = EditorGUILayout.Toggle(
-						new GUIContent("Is Aetna Build", "Aetna build or not"),
-						bool.Parse(constant.ConstantValue));
-					constant.ConstantValue = isAetnaBuild.ToString();
-					
-					if(isAetnaBuild){
-						PlayerSettings.bundleIdentifier = aetnaBundleID;
-						PlayerSettings.productName = aetnaProductName;
-					}else{
-						PlayerSettings.bundleIdentifier = proBundleID;
-						PlayerSettings.productName = proProductName;
-					}
-					break;
+				
 				case "AnalyticsEnabled":
 					bool toggleState = EditorGUILayout.Toggle(
 						new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
@@ -124,38 +118,7 @@ public class LgDebugTool : EditorWindow
 					}else
 						GA.SettingsGA.SetKeys("", "");
 					break;
-                    case "AetnaBundleID":
-                        constant.ConstantValue = EditorGUILayout.TextField("Aetna Bundle ID", constant.ConstantValue);
-                        aetnaBundleID = constant.ConstantValue;
-                    break;
-                    case "ProBundleID":
-                        constant.ConstantValue = EditorGUILayout.TextField("Pro Bundle ID", constant.ConstantValue);
-                        proBundleID = constant.ConstantValue;
-                    break;
-                    case "AetnaProductName":
-                        constant.ConstantValue = EditorGUILayout.TextField("Aetna Product Name", constant.ConstantValue);
-                        aetnaProductName = constant.ConstantValue;
-                    break;
-                    case "ProProductName":
-                        constant.ConstantValue = EditorGUILayout.TextField("Pro Product Name", constant.ConstantValue);
-                        proProductName = constant.ConstantValue;
-                    break;
-                    case "WellapetsAetnaGameKey":
-                        constant.ConstantValue = EditorGUILayout.TextField("Aetna GA Game Key", constant.ConstantValue);
-                        aetnaGameyKey = constant.ConstantValue;
-                    break;
-                    case "WellapetsAetnaSecretKey":
-                        constant.ConstantValue = EditorGUILayout.TextField("Aetna GA Secret Key", constant.ConstantValue);
-                        aetnaSecretKey = constant.ConstantValue;
-                    break;
-                    case "WellapetsProGameKey":
-                        constant.ConstantValue = EditorGUILayout.TextField("Pro GA Game Key", constant.ConstantValue);
-                        proGameKey = constant.ConstantValue;
-                    break;
-                    case "WellapetsProSecretKey":
-                        constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
-                        proSecretKey = constant.ConstantValue;
-                    break;
+                
 
                 }
             }
@@ -164,14 +127,72 @@ public class LgDebugTool : EditorWindow
                 Serialize<BuildSettingConstants>(BUILDSETTING_PATH, buildSettingConstants);
             }
 
-            GUILayout.Label("Build Setting Tools", EditorStyles.boldLabel);
-            EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button("Load Lite App Icon")){
-                    LoadAppIcon("WellaPetsIconLite");
-                }
-                if(GUILayout.Button("Load Pro App Icon")){
-                    LoadAppIcon("WellaPetsIcon");
-                }
+			GUILayout.Label("Build Info Editor (Not package with the game binary", EditorStyles.boldLabel);
+			if(buildInfoList != null){
+				foreach(Constant constant in buildInfoList){
+					switch(constant.Name){
+					case "IsAetnaBuild":
+						isAetnaBuild = EditorGUILayout.Toggle(
+							new GUIContent("Is Aetna Build", "Aetna build or not"),
+							bool.Parse(constant.ConstantValue));
+						constant.ConstantValue = isAetnaBuild.ToString();
+						
+						if(isAetnaBuild){
+							PlayerSettings.bundleIdentifier = aetnaBundleID;
+							PlayerSettings.productName = aetnaProductName;
+						}else{
+							PlayerSettings.bundleIdentifier = proBundleID;
+							PlayerSettings.productName = proProductName;
+						}
+						break;
+					case "AetnaBundleID":
+						constant.ConstantValue = EditorGUILayout.TextField("Aetna Bundle ID", constant.ConstantValue);
+						aetnaBundleID = constant.ConstantValue;
+						break;
+					case "ProBundleID":
+						constant.ConstantValue = EditorGUILayout.TextField("Pro Bundle ID", constant.ConstantValue);
+						proBundleID = constant.ConstantValue;
+						break;
+					case "AetnaProductName":
+						constant.ConstantValue = EditorGUILayout.TextField("Aetna Product Name", constant.ConstantValue);
+						aetnaProductName = constant.ConstantValue;
+						break;
+					case "ProProductName":
+						constant.ConstantValue = EditorGUILayout.TextField("Pro Product Name", constant.ConstantValue);
+						proProductName = constant.ConstantValue;
+						break;
+					case "WellapetsAetnaGameKey":
+						constant.ConstantValue = EditorGUILayout.TextField("Aetna GA Game Key", constant.ConstantValue);
+						aetnaGameyKey = constant.ConstantValue;
+						break;
+					case "WellapetsAetnaSecretKey":
+						constant.ConstantValue = EditorGUILayout.TextField("Aetna GA Secret Key", constant.ConstantValue);
+						aetnaSecretKey = constant.ConstantValue;
+						break;
+					case "WellapetsProGameKey":
+						constant.ConstantValue = EditorGUILayout.TextField("Pro GA Game Key", constant.ConstantValue);
+						proGameKey = constant.ConstantValue;
+						break;
+					case "WellapetsProSecretKey":
+						constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
+						proSecretKey = constant.ConstantValue;
+						break;
+					}
+				}
+			}
+				
+			if(GUILayout.Button("Save")){
+				Serialize<BuildInfoConstants>(BUILDINFO_PATH, buildInfoConstants);
+			}
+				
+			GUILayout.Label("Build Setting Tools", EditorStyles.boldLabel);
+			EditorGUILayout.BeginHorizontal();
+			if(GUILayout.Button("Load Lite App Icon")){
+				LoadAppIcon("WellaPetsIconLite");
+			}
+			if(GUILayout.Button("Load Pro App Icon")){
+                LoadAppIcon("WellaPetsIcon");
+            }
             EditorGUILayout.EndHorizontal(); 
         }
 		EditorGUILayout.EndScrollView();

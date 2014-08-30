@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -76,7 +76,7 @@ public class LgParticleEmitterDegradation : LgParticleEmitter{
 	///////////////////////////////////////////	
 	private void OnPartitionChanging(object sender, PartitionChangedArgs args){
 		// find out if the room being changed to has a gate or not
-		int nEntering = args.nNew;
+		int nEntering = args.newPartition;
 		bool bGated = false;
 		
 		if(GatingManager.Instance)

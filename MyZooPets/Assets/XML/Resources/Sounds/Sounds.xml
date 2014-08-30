@@ -1,11 +1,8 @@
 <Sounds>
-	<Sound ID="badgesClicked" Volume="1"> </Sound>	
-	<Sound ID="badgesView"> </Sound>	
+	<Sound ID="petStart"> </Sound>
 	
-	<Sound ID="calendarView"> </Sound>
-	<Sound ID="calendarBlankDay"> </Sound>
-	<Sound ID="calendarGetReward"> </Sound>
-	<Sound ID="calendarMissedReward"> </Sound>
+	<Sound ID="badgesClicked" Volume="1"> </Sound>
+	<Sound ID="badgesView"> </Sound>	
 
 	<Sound ID="shopBuy"> </Sound>
 	<Sound ID="shopChangeTab"> </Sound>
@@ -16,15 +13,14 @@
 	<Sound ID="houseEntrance"> </Sound>
 	<Sound ID="notesOpen"> </Sound>
 	<Sound ID="invSound"> </Sound>	
+	<Sound ID="unlockRoom"> </Sound>	
 	
 	<Sound ID="decoEnter"> </Sound>
 	<Sound ID="decoPlace"> </Sound>	
 	
 	<Sound ID="tutorialNext"> </Sound>
 	<Sound ID="tutorialFinished"> </Sound>	
-	<Sound ID="tutorialSmokeIntro"> </Sound>	
-	
-	<Sound ID="dojoView"> </Sound>
+	<Sound ID="tutorialSmokeIntro"> </Sound>
 	
 	<Sound ID="introChangeColor"> </Sound>
 	<Sound ID="introClickEgg"> </Sound>
@@ -33,6 +29,8 @@
 	<Sound ID="introSelectLanguage"> </Sound>
 	<Sound ID="introEggBounce" Volume="0.3"></Sound>
 	
+	<Sound ID="minigameGameOver"> </Sound>
+
 	<Sound ID="clinicCorrect" Volume="0.2"> </Sound>
 	<Sound ID="clinicGameOver"> </Sound>
 	<Sound ID="clinicSpeedUp"> </Sound>
@@ -53,8 +51,8 @@
 	<Sound ID="StarSingle"> </Sound>
 	<Sound ID="PointSingle" Volume="0.3"> </Sound>
 	<Sound ID="coinDrop"> </Sound>
-	<Sound ID="droppedObjectCollected"></Sound>
-	
+	<Sound ID="droppedObjectCollected" Volume="0.3"></Sound>
+	<Sound ID="hit"> </Sound>
 	
 	<Sound ID="runnerDie"> </Sound>
 	<Sound ID="runnerGameOver"> </Sound>
@@ -73,7 +71,6 @@
 	<Sound ID="inhalerToMouth"> </Sound>
 	<Sound ID="inhalerFireFlow" Volume="0.5"></Sound>
 	<Sound ID="inhalerShiningFireIcon"></Sound>
-
 	
 	<Sound ID="DamageSmokeMonster"> </Sound>
 	<Sound ID="DefeatSmokeMonster"> </Sound>
@@ -92,45 +89,15 @@
 	<Sound ID="comicSuperwellaFire"></Sound>
 
 	<!-- UIButton sounds -->
-	<Sound ID="buttonGeneric2" Volume="1.0"> </Sound>	
-	<Sound ID="button-21"> </Sound>	
-	<Sound ID="buttonDontClick" Volume="0.5"> </Sound>	
+	<Sound ID="buttonGeneric2" Volume="1.0"> </Sound>
+	<Sound ID="buttonDontClick" Volume="0.5"> </Sound>
 	<Sound ID="effectXylophoneTing" Volume="0.9"> </Sound>
 
-	<!-- Pet Animation sounds -->
-	<Sound ID="animHappyTickle"> </Sound>	
-	<Sound ID="animFingerGuns"> </Sound>	
-	<Sound ID="animBeatSmokeMonster"> </Sound>
-	<Sound ID="animHappyDance"> </Sound>
-	<Sound ID="animSadDoNotTickle"> </Sound>
-	<Sound ID="animSadFiddleHands"> </Sound>
-	<Sound ID="animSadLooksUp"> </Sound>
-	<Sound ID="animSadFidget"> </Sound>
-	<Sound ID="animSadKicksGround"> </Sound>
-	<Sound ID="animSadSick1Trans"> </Sound>
-
-	<Sound ID="animSick1Idle"> </Sound>
-	<Sound ID="animSick1GestureLongBreath"> </Sound>
-	<Sound ID="animSick1LightCough"> </Sound>
-	<Sound ID="animSick1SadTrans"> </Sound>
-	<Sound ID="animSick1Sick2Trans"> </Sound>
-
-	<Sound ID="animSick2Idle"> </Sound>
-	<Sound ID="animSick2GesturePatOnChest"> </Sound>
-	<Sound ID="animSick2GestureHandsThroat"> </Sound>
-	<Sound ID="animSick2NearlyFainting"> </Sound>
-	<Sound ID="animSick2Sick1Trans"> </Sound>
-
-
-	<Sound ID="petMove"> </Sound>
-	<Sound ID="petEat"> </Sound>
-	<Sound ID="petDrink"> </Sound>
-	<Sound ID="petFire"> </Sound>
-	
 	<!-- Super Wella -->
 	<Sound ID="superWellaInhalerTutorial" Volume="1.0"> </Sound>
 	<Sound ID="superWellaInhalerTonight" Volume="1.0"> </Sound>
 	<Sound ID="superWellaInhalerMorning" Volume="1.0"> </Sound>
+	<Sound ID="superWellaSick" Volume="1.0"> </Sound>
 	
 	<!-- Flame crystal spawn sounds -->
 	<Sound ID="crystalDrop" Volume="1.0"> </Sound>
@@ -139,5 +106,101 @@
 	<Sound ID="fireCharge" Volume="1.0"> </Sound>
 	<Sound ID="pop" Volume="1.0"> </Sound>
 	<Sound ID="barAscend" Volume="1.0"> </Sound>
+
+	<!-- Pet Animation sounds -->
+	<Sound ID="backFlip" Volume="1.0"> </Sound>
+	<Sound ID="happyClap"> </Sound>
 	
+	<Sound ID="happyDance"> </Sound>
+	<Sound ID="happyDance2"> </Sound>
+	<Sound ID="happyGuns"> </Sound>
+	<Sound ID="happyGuns2"> </Sound>
+	<Sound ID="happyJump"> </Sound>
+	<Sound ID="happyJump2"> </Sound>
+	<Sound ID="happyWave"> </Sound>
+	<Sound ID="happyWave2"> </Sound>
+	<Sound ID="happyWave3"> </Sound>
+	<Sound ID="happyWave4"> </Sound>
+	
+	<Sound ID="sadFidget"> </Sound>
+	<Sound ID="sadHunger"> </Sound>
+	<Sound ID="sadIdle"> </Sound>
+	<Sound ID="sadKick"> </Sound>
+	<Sound ID="sadKickNormal"> </Sound>
+	<Sound ID="sadSigh"> </Sound>
+	
+	<Sound ID="sick1Cough"> </Sound>
+	<Sound ID="sick1Cough2"> </Sound>
+	<Sound ID="sick1Idle"> </Sound>
+	<Sound ID="sick1Idle2"> </Sound>
+	<Sound ID="sick1Idle3"> </Sound>
+	<Sound ID="sick1Idle4"> </Sound>
+	<Sound ID="sick1LongBreath"> </Sound>
+	<Sound ID="sick1LongBreath2"> </Sound>
+	
+	<Sound ID="sick2HandsOnThroat"> </Sound>
+	<Sound ID="sick2HandsOnThroat2"> </Sound>
+	<Sound ID="sick2Idle"> </Sound>
+	<Sound ID="sick2Idle2"> </Sound>
+	<Sound ID="sick2NearlyFainting"> </Sound>
+	<Sound ID="sick2NearlyFainting2"> </Sound>
+	<Sound ID="sick2PatOnChest"> </Sound>
+	<Sound ID="sick2PatOnChest2"> </Sound>
+	
+	<Sound ID="eatChew"> </Sound>
+	<Sound ID="eatChew2"> </Sound>
+	<Sound ID="highFiveLoop"> </Sound>
+	<Sound ID="highFiveLoop2"> </Sound>
+	<Sound ID="isFireBlowIn"> </Sound>
+	<Sound ID="isFireBlowIn2"> </Sound>
+	<Sound ID="isRubbing"> </Sound>
+	<Sound ID="isRubbing2"> </Sound>
+	<Sound ID="isRubbing3"> </Sound>
+	<Sound ID="isTickling"> </Sound>
+	<Sound ID="isTickling2"> </Sound>
+	<Sound ID="isTickling3"> </Sound>
+	<Sound ID="isWaitingToEat"> </Sound>
+	<Sound ID="noHighFive"> </Sound>
+	<Sound ID="noHighFive2"> </Sound>
+	<Sound ID="petFire"> </Sound>
+	<Sound ID="petMove"> </Sound>
+	<Sound ID="startHighFive"> </Sound>
+	<Sound ID="swat"> </Sound>
+	<Sound ID="swat2"> </Sound>
+	<Sound ID="yesHighFive"> </Sound>
+	<Sound ID="yesHighFive2"> </Sound>
+	<Sound ID="yesHighFive3"> </Sound>
+	
+	<!--Minipet sounds-->
+	<!--FireBird-->
+	<Sound ID="firebirdCheer"> </Sound>
+	<Sound ID="firebirdEat"> </Sound>
+	<Sound ID="firebirdLaugh"> </Sound>
+	<Sound ID="firebirdLaugh2"> </Sound>
+	<Sound ID="firebirdLaugh3"> </Sound>
+	<Sound ID="firebirdSad"> </Sound>
+	<Sound ID="firebirdSad2"> </Sound>
+	<Sound ID="firebirdTryToFly"> </Sound>
+	<Sound ID="firebirdWave"> </Sound>
+	<!--Fluffy-->
+	<Sound ID="fluffyCheer"> </Sound>
+	<Sound ID="fluffyEat"> </Sound>
+	<Sound ID="fluffyLaugh"> </Sound>
+	<Sound ID="fluffyLaugh2"> </Sound>
+	<Sound ID="fluffyLaugh3"> </Sound>
+	<Sound ID="fluffyPoof"> </Sound>
+	<Sound ID="fluffyRocking"> </Sound>
+	<Sound ID="fluffySad"> </Sound>
+	<Sound ID="fluffySad2"> </Sound>
+	<Sound ID="fluffySad3"> </Sound>
+	<Sound ID="fluffySad4"> </Sound>
+	<Sound ID="fluffySad5"> </Sound>
+	<!--Pebble-->
+	<Sound ID="pebbleCheer" Volume="1.0"> </Sound>
+	<Sound ID="pebbleEat" Volume="1.0"> </Sound>
+	<Sound ID="pebbleGlance" Volume="1.0"> </Sound>
+	<Sound ID="pebbleLaugh" Volume="1.0"> </Sound>
+	<Sound ID="pebbleLaugh2" Volume="1.0"> </Sound>
+	<Sound ID="pebbleSad" Volume="1.0"> </Sound>
+	<Sound ID="pebbleUltraSquish" Volume="1.0"> </Sound>
 </Sounds>

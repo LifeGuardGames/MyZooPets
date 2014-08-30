@@ -51,6 +51,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public int nStartingLives;
 //	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
 
+	public string gameOverAudioClip = "minigameGameOver";
+
 	private int score;	// player score
 	private int lives; // player lives
 	private bool tutorialOverride; // is there a tutorial override? 
@@ -112,9 +114,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		
 		// if the game is being paused, let the audio manager know so it can pause sounds
 		if(currentState == MinigameStates.Paused)
-			AudioManager.Instance.Pause(true);
+			AudioManager.Instance.PauseBackground(true);
 		else if(currentState == MinigameStates.Playing && eOldState == MinigameStates.Paused)
-			AudioManager.Instance.Pause(false);
+			AudioManager.Instance.PauseBackground(false);
 		
 		// send out a message to everything that cares about the game state
 		if(OnStateChanged != null)
@@ -238,7 +240,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void RestartGame(){
-		AudioManager.Instance.Pause(false);
+		AudioManager.Instance.PauseBackground(false);
 
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 		if(ui.IsPopupShowing(MinigamePopups.GameOver))
@@ -298,17 +300,17 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		//double confirm quit game
 		if(ui.IsPopupShowing(MinigamePopups.Pause)){
 
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+			PopupNotificationNGUI.Callback button1Function = delegate(){
 				ui.TogglePopup(MinigamePopups.Pause, false);
 
 				LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
 			};
 
-			PopupNotificationNGUI.HashEntry button2Function = delegate(){
+			PopupNotificationNGUI.Callback button2Function = delegate(){
 			};
 
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TwoButtons);
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.MiniGameQuitCheck);
 			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
 			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
@@ -381,7 +383,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected void GameOver(){
 		// send out a completion task
 //		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
-		
+
+		AudioManager.Instance.PlayClip(gameOverAudioClip);
+
 		// send out score task
 		int nScore = GetScore();
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), nScore);

@@ -1,50 +1,52 @@
 using UnityEngine;
 using System.Collections;
 
-public class PopupNotificationNGUI : MonoBehaviour {
+public class PopupNotificationNGUI : MonoBehaviour{
 
-    public UILabel textArea;
-    public bool HideImmediately = false;
-	public delegate void HashEntry(); // Used for notification entry
-    public HashEntry Button1Callback;
-    public HashEntry Button2Callback;
-	public HashEntry OnHideFinished;
+	public UILabel textArea;
+	public bool HideImmediately = false;
+	public delegate void Callback(); // Used for notification entry
+	public Callback Button1Callback;
+	public Callback Button2Callback;
+	public Callback OnHideFinished;
+	
+	private string soundOpen; // sound this notification should play when it opens
 
-    public string Message{
-        get{return textArea.text;}
-        set{textArea.text = value;}
-    }
+	public string Message{
+		get{ return textArea.text;}
+		set{ textArea.text = value;}
+	}
 
-	// sound this notification should play when it opens
-	private string soundOpen;
-	public void SetSound( string sound ) {
+	public void SetSound(string sound){
 		soundOpen = sound;	
 	}
 
-	public string GetSound() {
+	public string GetSound(){
 		return soundOpen;
 	}
 
-    // These two functions are called when the buttons are clicked.
-    protected void Button1Action(){
-        Hide();
-        if(Button1Callback != null) Button1Callback();
-    }
+	// These two functions are called when the buttons are clicked.
+	protected void Button1Action(){
+		Hide();
+		if(Button1Callback != null)
+			Button1Callback();
+	}
 
-    protected void Button2Action(){
-        Hide();
-        if(Button2Callback != null) Button2Callback();
-    }
+	protected void Button2Action(){
+		Hide();
+		if(Button2Callback != null)
+			Button2Callback();
+	}
 
-    // Display the popup panel
-    public void Display(){
+	// Display the popup panel
+	public void Display(){
 		TryShowDemuxThenToggle(-1);
 		
 		// play sound if there is one
 		string sound = GetSound();
-		if ( !string.IsNullOrEmpty(sound) ) 
-			AudioManager.Instance.PlayClip( sound );
-    }
+		if(!string.IsNullOrEmpty(sound)) 
+			AudioManager.Instance.PlayClip(sound);
+	}
 
 	// IMPORTANT: All notifications should call this when finished tween hide callback
 	public void BroadcastHideFinished(){
@@ -53,17 +55,22 @@ public class PopupNotificationNGUI : MonoBehaviour {
 		}
 	}
 
-    // Hide the popup panel
-    protected void Hide(){
-        if (HideImmediately){
-			TryHideDemuxThenToggle(0f);
-            Destroy(gameObject, 1.0f);
-        }
-        else {
-            TryHideDemuxThenToggle(0.5f);
-            Destroy(gameObject, 3.0f);
-        }
-    }
+	// Hide the popup panel
+	protected void Hide(){
+		try{
+			if(HideImmediately){
+				TryHideDemuxThenToggle(0f);
+				Destroy(gameObject, 1.0f);
+			}
+			else{
+				TryHideDemuxThenToggle(0.5f);
+				Destroy(gameObject, 3.0f);
+			}
+		} catch(MissingReferenceException e){
+			Debug.LogError("Message: " + e.Message + " for this object " + this.gameObject.name);
+		}
+        
+	}
 
 	/// <summary>
 	/// Helper class to show this object. Will try to see if there is MoveTweenToggleDemultiplexer, else just MoveTweenToggle
@@ -72,6 +79,9 @@ public class PopupNotificationNGUI : MonoBehaviour {
 	/// -1 to use default
 	/// </param>
 	private void TryShowDemuxThenToggle(float toggleDuration){
+		if(this.gameObject == null)
+			return;
+
 		TweenToggleDemux mtDemux = GetComponent<TweenToggleDemux>();
 		TweenToggle mt = GetComponent<TweenToggle>();
 		if(mtDemux != null){

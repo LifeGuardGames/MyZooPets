@@ -6,8 +6,10 @@ public class DoctorMatchZone : MonoBehaviour {
 	public string zoneKey;	// Key to match with the item key
 	public Vector3 hoverScale;
 	private Collider2D auxItemCheck;
-//	private string auxItemCheckKey;
+	private string auxItemCheckKey;
 	private bool activeState;
+	public ParticleSystem particle;
+	public GameObject floatyPrefab;
 
 	void Start(){
 		if(zoneKey == null){
@@ -18,6 +20,7 @@ public class DoctorMatchZone : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		SetActiveState(true);
 		auxItemCheck = collider;
+		auxItemCheckKey = collider.GetComponent<AssemblyLineItem>().itemKey;
 
 		AssemblyLineItem item = collider.gameObject.GetComponent<AssemblyLineItem>();
 		item.SetHoverZoneKey(zoneKey);
@@ -52,7 +55,15 @@ public class DoctorMatchZone : MonoBehaviour {
 		// Thing inside the zone was destroyed, so deactivate
 		// user let go inside the zone
 		if(auxItemCheck == null && activeState){
+			// Local check here as well as in assembly line item
+			if(auxItemCheckKey == zoneKey){
+				GameObject go = Instantiate(floatyPrefab) as GameObject;
+				go.transform.parent = gameObject.transform;
+				go.transform.localPosition = Vector3.zero;
+				particle.Play();
+			}
 			SetActiveState(false);
+			auxItemCheckKey = null;
 		}
 	}
 }

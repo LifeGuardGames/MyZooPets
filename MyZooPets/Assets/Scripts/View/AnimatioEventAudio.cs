@@ -10,14 +10,17 @@ public class AnimatioEventAudio : MonoBehaviour {
 	public string sound3;
 
 	public void PlaySound1(){
+		// play pick up audio
 		AudioManager.Instance.PlayClip(sound1);
 	}
 
 	public void PlaySound2(){
+		// play pick up audio
 		AudioManager.Instance.PlayClip(sound2);
 	}
 
 	public void PlaySound3(){
+		// play pick up audio
 		AudioManager.Instance.PlayClip(sound3);
 	}
 }

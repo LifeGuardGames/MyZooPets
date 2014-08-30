@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class FlameLevelUpNotificationListener : MonoBehaviour {
@@ -16,7 +16,7 @@ public class FlameLevelUpNotificationListener : MonoBehaviour {
         //Unregister handler so we don't get multiple same notifications
         FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;
 
-        PopupNotificationNGUI.HashEntry button1Function = delegate(){
+        PopupNotificationNGUI.Callback button1Function = delegate(){
             //unregister before registering listener to prevent multiple registering
             //when using spam click the button
             FlameLevelLogic.OnFlameLevelUp -= OnFlameLevelUp;

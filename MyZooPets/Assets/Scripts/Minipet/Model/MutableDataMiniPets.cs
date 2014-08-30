@@ -12,15 +12,14 @@ public class MutableDataMiniPets{
 		public int CurrentFoodXP {get; set;}
 		public bool IsTickled {get; set;}
 		public bool IsCleaned {get; set;}
-
-		public bool IsFirstTimeCleaning {get; set;}
-		
+		public DateTime LastActionTime {get; set;}
+	
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentFoodXP = 0;
-			IsTickled = true;
+			IsTickled = false;
 			IsCleaned = false;
-			IsFirstTimeCleaning = true;
+			LastActionTime = LgDateTime.GetTimeNow();
 		}
 	}
 
@@ -30,14 +29,30 @@ public class MutableDataMiniPets{
 	/// if miniPetID is not in this dictionary then it's not unlocked yet
 	/// </summary>
 	public Dictionary<string, Status> MiniPetProgress {get; set;} 
+	public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
+	public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
+	public bool IsFirsTimeReceivingGems {get; set;}
 
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void UnlockMiniPet(string miniPetID){
-		if(!MiniPetProgress.ContainsKey(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID))
 			MiniPetProgress.Add(miniPetID, new Status());
+	}
+
+	/// <summary>
+	/// Whether the minipet has been unlocked
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public bool IsMiniPetUnlocked(string miniPetID){
+		bool retVal = false;
+
+		if(!string.IsNullOrEmpty(miniPetID))
+			retVal = MiniPetProgress.ContainsKey(miniPetID);
+
+		return retVal;
 	}
 
 	/// <summary>
@@ -96,6 +111,8 @@ public class MutableDataMiniPets{
 			currentLevelNum++;
 
 			status.CurrentLevel = (Level) currentLevelNum;
+
+			Analytics.Instance.MiniPetLevelUp(miniPetID, currentLevelNum);
 		}
 	}
 
@@ -116,23 +133,32 @@ public class MutableDataMiniPets{
 		return currentLevel;
 	}
 
-	public bool IsFirstTimeCleaning(string miniPetID){
-		bool retVal = true;
+	/// <summary>
+	/// Gets the last action time.
+	/// </summary>
+	/// <returns>The last action time.</returns>
+	/// <param name="miniPetID">Mini pet I.</param>
+	public DateTime GetLastActionTime(string miniPetID){
+		DateTime retVal = LgDateTime.GetTimeNow();
 
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
-			retVal = status.IsFirstTimeCleaning;
+			retVal = status.LastActionTime;
 		}
 
 		return retVal;
 	}
 
-	public void SetFirstTimeCleaning(string miniPetID, bool isFirstTime){
+	/// <summary>
+	/// Sets the last action time. last time the tickle or clean status 
+	/// </summary>
+	/// <param name="miniPetID">Mini pet I.</param>
+	public void UpdateLastActionTime(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
-			status.IsFirstTimeCleaning = isFirstTime;
+			status.LastActionTime = LgDateTime.GetTimeNow();
 		}
 	}
 
@@ -187,5 +213,8 @@ public class MutableDataMiniPets{
 
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();
+		IsFirstTimeCleaning = true;
+		IsFirstTimeTickling = true;
+		IsFirsTimeReceivingGems = true;
 	}
 }

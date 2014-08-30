@@ -20,6 +20,7 @@ public class PetGameData{
     public MutableDataHighScore HighScore {get; set;}
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
+	public MutableDataSickNotification SickNotification {get; set;}
 	
     public PetGameData(){
         Init();
@@ -44,6 +45,7 @@ public class PetGameData{
         HighScore = new MutableDataHighScore();
 		MiniPets = new MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
+		SickNotification = new MutableDataSickNotification();
     }
 
 	/// <summary>

@@ -344,10 +344,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 
 	private void AddDefaultMissions(){
-		if(VersionManager.IsLite())
-			AddMission("LiteCritical");
-		else
-			AddMission("Critical");
+		AddMission("Critical");
 	}
 
 	/// <summary>

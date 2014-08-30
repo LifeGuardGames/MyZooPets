@@ -4,7 +4,7 @@ from mod_pbxproj import XcodeProject
 
 path = argv[1]
 
-# print('----------------------------------prepare for excuting our magic scripts to tweak our xcode ----------------------------------')
+print('----------------------------------prepare for excuting our magic scripts to tweak our xcode ----------------------------------')
 
 # print('Step 1: start add libraries ')
 project = XcodeProject.Load(path +'/Unity-iPhone.xcodeproj/project.pbxproj')
@@ -14,7 +14,8 @@ project = XcodeProject.Load(path +'/Unity-iPhone.xcodeproj/project.pbxproj')
 #project.add_file('System/Library/Frameworks/GameKit.framework', tree='SDKROOT', weak=True)
 #project.add_file('System/Library/Frameworks/MessageUI.framework', tree='SDKROOT')
 #project.add_file('System/Library/Frameworks/MobileCoreServices.framework', tree='SDKROOT')
-# project.add_file('System/Library/Frameworks/StoreKit.framework', tree='SDKROOT')
+ project.add_file('System/Library/Frameworks/StoreKit.framework', tree='SDKROOT')
+ project.add_file('System/Library/Frameworks/Security.framework', tree='SDKROOT')
 # project.add_file('System/Library/Frameworks/Social.framework', tree='SDKROOT', weak=True)
 # project.add_file('usr/lib/libsqlite3.dylib', tree='SDKROOT')
 

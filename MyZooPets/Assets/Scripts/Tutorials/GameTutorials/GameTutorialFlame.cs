@@ -13,7 +13,7 @@ public class GameTutorialFlame : GameTutorial{
 	public GameTutorialFlame() : base(){		
 		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
 		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
-		PetAnimator.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
+		PetAnimationManager.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
 			
 	protected override void SetMaxSteps(){
@@ -129,7 +129,7 @@ public class GameTutorialFlame : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnBreathEnded(object sender, EventArgs args){
 		// unsub from callback
-		PetAnimator.OnBreathEnded -= OnBreathEnded;
+		PetAnimationManager.OnBreathEnded -= OnBreathEnded;
 		
 		// at this point the user has done battle with the smoke monster, so I'm going to call highlight on a bogus task here just to unhighlight everything
 		WellapadMissionController.Instance.HighlightTask("");

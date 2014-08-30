@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,14 +17,11 @@ public class FireMeter : MonoBehaviour {
 	//keep getting the event
     public static EventHandler<EventArgs> OnMeterFilled;   // when the meter is 100% full
     public static EventHandler<EventArgs> OnMeterStartFilling;   // when meter is filling up 
-    public static EventHandler<EventArgs> OnFireReady; //when the fire is ready to be used
 
 	public UISlider slider; // the slider that the meter fills up
 	public float fFillRate; // every frame, the meter will fill this %
 	
 	private bool bShouldFill = false; // should this meter be filling?
-	private float fireReadyMeter = 0.3f; //between 0 and 1. the point where pet starts
-											//breathing in to attack
 
 	private void SetFillStatus(bool bStatus) {
 		bShouldFill = bStatus;	
@@ -45,7 +42,6 @@ public class FireMeter : MonoBehaviour {
 	//---------------------------------------------------		
 	public void StartFilling(){
 		SetFillStatus( true );
-		AudioManager.Instance.PlayClip("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -55,7 +51,6 @@ public class FireMeter : MonoBehaviour {
 	public void Empty(){
 		SetFillStatus( false );
 		slider.sliderValue = 0;
-		AudioManager.Instance.Stop("barAscend");
 	}
 	
 	//---------------------------------------------------
@@ -71,10 +66,6 @@ public class FireMeter : MonoBehaviour {
 
 		// fill the slider by the fill rate
 		slider.sliderValue += fFillRate;
-	
-		if(slider.sliderValue >= fireReadyMeter)
-			if(OnFireReady != null)
-				OnFireReady(this, EventArgs.Empty);
 
 		if(slider.sliderValue >= 1){
 			// process any callbacks for when the meter is full
@@ -84,7 +75,7 @@ public class FireMeter : MonoBehaviour {
 			// stop filling
 			SetFillStatus(false);
 
-			AudioManager.Instance.Stop("barAscend");
+			AudioManager.Instance.StopClip("barAscend");
 		}
 	}
 	

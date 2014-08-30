@@ -8,6 +8,7 @@ public class ParticleLocationBurstList : MonoBehaviour {
 	public ParticleSystem particleSystem;
 	public float delayBetween;
 	public Transform[] locationList;
+	public string particleSound;
 
 	public void Play(){
 		StartCoroutine(PlayHelper());
@@ -17,6 +18,11 @@ public class ParticleLocationBurstList : MonoBehaviour {
 		foreach(Transform location in locationList){
 			particleSystem.transform.localPosition = location.transform.localPosition;
 			particleSystem.Play();
+
+			if(particleSound != null){
+				AudioManager.Instance.PlayClip(particleSound);
+			}
+
 			yield return new WaitForSeconds(delayBetween);
 		}
 	}

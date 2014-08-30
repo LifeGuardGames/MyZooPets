@@ -60,6 +60,12 @@ public class AssemblyLineItem : MonoBehaviour {
 		FingerGestures.Finger finger = gesture.Fingers[0];
 
 		if(gesture.Phase == ContinuousGesturePhase.Started){
+			// Play pick up audio
+			AudioManager.Instance.PlayClip("buttonGeneric2");
+
+			// Scale up the pet
+			transform.localScale = new Vector3(1.1f, 1.1f, 1f);
+
 			isOnAssemblyLine = false;	// Disable automatic moving
 			dragFingerIndex = finger.Index;
 		}

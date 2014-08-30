@@ -8,11 +8,7 @@ using System.Collections.Generic;
 /// Used in scenes like the yard and bedroom to keep
 /// track of game tutorials.
 /// </summary>
-public abstract class TutorialManager : Singleton<TutorialManager>{
-	// pure abstract functions ------------------
-	protected abstract void _Start();	// start function
-	protected abstract void _Check();	// forces the tutorial manager to do a check to see if any tutorials should be launched
-	// ------------------------------------------
+public class TutorialManager : Singleton<TutorialManager>{
 	
 	// public on/off switch for testing while in development
 	protected bool isTutorialEnabled;
@@ -31,7 +27,6 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 	public void SetTutorial(GameTutorial tutorial){
 		// check to make sure there are not overlapping tutorials
 		if(tutorial != null && this.tutorial != null){
-			Debug.LogError("Tutorial Warning: " + tutorial + " is trying to override " + this.tutorial + " ABORTING!");
 			return;	
 		}
 	
@@ -46,44 +41,13 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 			Check();
 		}
 	}
-	
-	void Awake(){
-		isTutorialEnabled = Constants.GetConstant<bool>("IntroTutorialsEnabled");
-	}
-	
-	void Start(){
-		// listen for partition changing event
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
-		
-		_Start();
-	}
-
-	/// <summary>
-	/// Entered the room. When player switches rooms.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	public void EnteredRoom(object sender, PartitionChangedArgs args){
-		// do a check in case a tutorial was in a different room
-		Check();
-	}
-
-	/// <summary>
-	/// Checks withich tutorial should play based on certain game conditions
-	/// </summary>
-	protected void Check(){
-		if(!isTutorialEnabled || tutorial != null)
-			return;
-		else
-			_Check();
-	}
 
 	/// <summary>
 	/// Used in scenes like the yard and bedroom to keep track of game tutorials
 	/// </summary>
-	public bool CanProcess(GameObject go){
+	public bool CanProcess(GameObject processGameObject){
 		// if the gameobject is null, then tutorial doesn't care (at the moment)
-		if(go == null)
+		if(processGameObject == null)
 			return true;
 		
 		// if there is no tutorial currently going on right now, the tutorial doesn't care (obviously)
@@ -92,8 +56,39 @@ public abstract class TutorialManager : Singleton<TutorialManager>{
 			return true;
 		
 		// otherwise we have a valid object and a valid tutorial, so let's get to checkin'
-		bool canProcess = tutorial.CanProcess(go);
+		bool canProcess = tutorial.CanProcess(processGameObject);
 		
 		return canProcess;
 	}
+	
+	protected virtual void Awake(){
+		isTutorialEnabled = Constants.GetConstant<bool>("IntroTutorialsEnabled");
+	}
+	
+	protected virtual void Start(){
+		// listen for partition changing event
+		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
+	}
+
+	/// <summary>
+	/// Checks withich tutorial should play based on certain game conditions
+	/// </summary>
+	protected virtual bool Check(){
+		bool retVal = true;
+
+		if(!isTutorialEnabled || tutorial != null)
+			retVal = false;
+
+		return retVal;
+	}
+
+	/// <summary>
+	/// Entered the room. When player switches rooms.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void EnteredRoom(object sender, PartitionChangedArgs args){
+		// do a check in case a tutorial was in a different room
+		Check();
+	}	
 }

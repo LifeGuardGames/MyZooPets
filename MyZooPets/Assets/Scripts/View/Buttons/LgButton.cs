@@ -137,14 +137,15 @@ public class LgButton : MonoBehaviour{
 	/// button is allowed to process the click (i.e., UI is not locked, etc).
 	/// </summary>
 	protected virtual void ProcessClick(){
-		Analytics.Instance.LgButtonClicked(buttonName);
 	}
 
 	protected void PlayNotProcessSound(){
 		string sound = "buttonDontClick";
 		
-		if(!string.IsNullOrEmpty(sound))
+		if(!string.IsNullOrEmpty(sound)){
 			AudioManager.Instance.PlayClip(sound);
+		}
+			
 	}
 
 	/// <summary>
@@ -176,8 +177,9 @@ public class LgButton : MonoBehaviour{
 	private void PlayProcessSound(){
 		string strSound = GetProcessSound();
 		
-		if(!string.IsNullOrEmpty(strSound))
-			AudioManager.Instance.PlayClip(strSound);	
+		if(!string.IsNullOrEmpty(strSound)){
+			AudioManager.Instance.PlayClip(strSound);
+		}
 	}
 
 

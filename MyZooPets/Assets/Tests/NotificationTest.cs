@@ -12,7 +12,7 @@ public class NotificationTest : MonoBehaviour {
 			
 			/////// Send Notication ////////
 			// Assign delegate functions to be passed in hashtable
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+			PopupNotificationNGUI.Callback button1Function = delegate(){
 	                //
 	            };
 			
@@ -30,7 +30,7 @@ public class NotificationTest : MonoBehaviour {
 		if(GUI.Button(new Rect(10, 10+BUTTON_OFFSET*1, BUTTON_WIDTH, BUTTON_HEIGHT),
             "image button")){
 
-            PopupNotificationNGUI.HashEntry button1Function = delegate(){
+            PopupNotificationNGUI.Callback button1Function = delegate(){
                     //
                 };
 
@@ -88,7 +88,7 @@ public class NotificationTest : MonoBehaviour {
 			
 			/////// Send Notication ////////
 			// Assign delegate functions to be passed in hashtable
-			PopupNotificationNGUI.HashEntry button1Function = delegate(){
+			PopupNotificationNGUI.Callback button1Function = delegate(){
 	                //
 	            };
 			

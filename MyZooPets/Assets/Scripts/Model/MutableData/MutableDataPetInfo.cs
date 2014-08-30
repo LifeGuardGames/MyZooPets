@@ -16,6 +16,8 @@ public class MutableDataPetInfo{
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 
 	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
+
+	public bool IsQuestionaireCollected {get; set;}
 	
 	public void SetFireBreaths(int amount){
 		FireBreaths = amount;	
@@ -53,6 +55,7 @@ public class MutableDataPetInfo{
 		PetColor = "OrangeYellow";
 		IsHatched = false;
 		FireBreaths = 0;
+		IsQuestionaireCollected = false;
 	}
 
 	public void VersionCheck(Version currentDataVersion){

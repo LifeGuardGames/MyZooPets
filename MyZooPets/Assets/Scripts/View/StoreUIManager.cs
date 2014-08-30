@@ -98,11 +98,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	//----------------Hacky code to fix store shortcut problems. need a better solution
-	// The reason the click manager is locked from here is because these shorcuts circumvent the normal open/closing of this UI.
+	#region Store shortcut mode used by PetSpeechAI
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -110,11 +111,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
-		//send analytics
-		Analytics.Instance.StoreItemShortCutClicked();
-
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;	
 
@@ -125,6 +125,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		NavigationUIManager.Instance.HidePanel();
 		EditDecosUIManager.Instance.HideNavButton();
+		RoomArrowsUIManager.Instance.HidePanel();
+
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;
 		
@@ -132,12 +134,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
-		NavigationUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 		ClickManager.Instance.ReleaseLock();
 		OnShortcutModeEnd -= ShortcutModeEnded;
 	}
-	//---------------------------------------------------
+	#endregion
 	
 	/// <summary>
 	/// Opens to sub category. Special function used to open the store UI straight
@@ -152,10 +152,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		if(isShortcutMode){
 			// if we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
-
-
-		}	
-		
+			HUDUIManager.Instance.ShowPanel();
+			RoomArrowsUIManager.Instance.HidePanel();
+		}
 		CreateSubCategoryItemsWithString(category); 
 	}
 	
@@ -247,13 +246,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 						if(buyButton)
 							buyButton.isEnabled = false;
 					}
-
-//					//Use for tutorial to notify tutorial manager when deco item has been bought
-//					bool isDecorationTutorialDone = DataManager.Instance.GameData.
-//						Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
-//
-//					if(!isDecorationTutorialDone && OnDecorationItemBought != null)
-//						OnDecorationItemBought(this, EventArgs.Empty);
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
@@ -266,26 +258,33 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
+			else{
+				AudioManager.Instance.PlayClip("buttonDontClick");
+			}
 			break;
 		case CurrencyTypes.Gem:
-			//TODO: temporary code. Need fixed up
+
 			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
 
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
 
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-
-				//spawn buy more gems popup
-				Hashtable notificationEntry = new Hashtable();
-				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
-
-				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
+//			else{
+//
+//				//spawn buy more gems popup
+//				Hashtable notificationEntry = new Hashtable();
+//				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
+//
+//				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+//			}
 			break;
 		case CurrencyTypes.IAP:
 			break;
@@ -454,10 +453,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 
-		// this is a little hacky, but our demux system is kind of difficult to get around, so...
-		// before doing anything else, check to see if the deco system has a saved node...
-		// if it does, it actually means the store was opened from the deco system, so the normal path of showing the base
-		// store doesn't apply...otherwise just show the store base panel like normal
+		// kind of hacky way to ensure that the UI is reset to the correct mode
+		// after store short cut mode is done. Depending on which mode is at the top
+		// of the click manager stack we will set up the UI for that specific mode
 		if(isShortcutMode){
 
 			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
@@ -466,9 +464,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
+				RoomArrowsUIManager.Instance.ShowPanel();
+			}
+			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+				InventoryUIManager.Instance.ShowPanel();
 			}
 			else{
-				_CloseUI();	// Call all the close pipelines (only overridden tho)
+				_CloseUI();	
 			}
 
 			if(OnShortcutModeEnd != null){

@@ -32,7 +32,7 @@ public class GatingManager : Singleton<GatingManager>{
 	public Vector3 startingScreenPosition;
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
-	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>();
+	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
 
 	void Awake(){
 		// set pan script
@@ -154,6 +154,19 @@ public class GatingManager : Singleton<GatingManager>{
 				// hash the gate based on the room, for easier access
 				activeGates[partition] = scriptGate;
 			}
+			// if gate is not active that means it has been completely unlocked
+			else{
+				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
+				//this is mainly for backward compatibility. Old users with the gates unlocked
+				//already should be awarded the minipets right away
+				string miniPetID = dataGate.GetMiniPetID();
+				if(!string.IsNullOrEmpty(miniPetID)){
+					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
+
+					if(!isUnlocked)
+						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+				}
+			}
 		}		
 	}
 
@@ -239,8 +252,8 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	public void EnteredRoom(object sender, PartitionChangedArgs args){
-		int leavingPartitionNumber = args.nOld;
-		int enteringPartitionNumber = args.nNew;
+		int leavingPartitionNumber = args.oldPartition;
+		int enteringPartitionNumber = args.newPartition;
 		
 		bool isGateLeavingActive = HasActiveGate(currentArea, leavingPartitionNumber);
 		bool isGateEnteringActive = HasActiveGate(currentArea, enteringPartitionNumber);
@@ -253,7 +266,6 @@ public class GatingManager : Singleton<GatingManager>{
 
 			NavigationUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
-//			InventoryUIManager.Instance.HidePanel();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate)activeGates[enteringPartitionNumber];
@@ -331,14 +343,14 @@ public class GatingManager : Singleton<GatingManager>{
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			PetSpeechAI.Instance.ShowInhalerMsg();
 		}
-		// if inhaler already use check if there's fire orb in the inventory
+		// check if there's fire orb in the inventory
 		else{
 			// if there's a fire orb in the inventory prompt the user to use it
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
 			if(fireOrb != null){
 				Debug.Log("use the fire Orb");
 			}
-			// if not tell user to buy it or wait for inhaler
+			// if not tell user to buy flame crystal
 			else{
 				IAPNotification();
 			}
@@ -350,7 +362,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// buy flame crystal from the store with gems
 	/// </summary>
 	private void IAPNotification(){
-		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
 			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
 			
 			ClickManager.Instance.Lock(UIModeTypes.Store);
@@ -392,11 +404,10 @@ public class GatingManager : Singleton<GatingManager>{
 		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
 			ShowFireButton();
 
-			bool canUseRealInhaler = PlayPeriodLogic.Instance.CanUseEverydayInhaler();
-			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
-			
-			if(!canUseRealInhaler && fireOrb == null)
-				IAPNotification();
+			//if can't breathe fire show message
+			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			if(!canBreatheFire)
+				ShowNoFireNotification();
 		}
 		else
 			ShowUnhealthyNoFireNotification();
@@ -432,7 +443,7 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
-		GameObject petLocation = GameObject.Find("Pet_LWF");
+		GameObject petLocation = GameObject.Find("Pet");
 		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
 		                                                             petLocation.transform.position);
 		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 

@@ -26,12 +26,8 @@ public class LevelLockObject : MonoBehaviour {
 		GameObject lockObject = NGUITools.AddChild(goParent, goPrefab);
 
 		// UI change if lite version
-		if(VersionManager.IsLite()){
-			lockObject.GetComponent<LevelLockObject>().InitLiteVersion();
-		}
-		else{
-			lockObject.GetComponent<LevelLockObject>().Init(nLevel, bBreaks);
-		}
+
+		lockObject.GetComponent<LevelLockObject>().Init(nLevel, bBreaks);
 	}
 	
 	//---------------------------------------------------
@@ -63,8 +59,7 @@ public class LevelLockObject : MonoBehaviour {
 	//---------------------------------------------------	
 	void OnDestroy(){
 		// stop listening for callbacks
-		if(!VersionManager.IsLite())
-			HUDAnimator.OnLevelUp -= LevelUp;	
+		HUDAnimator.OnLevelUp -= LevelUp;	
 	}
 	
 	//---------------------------------------------------

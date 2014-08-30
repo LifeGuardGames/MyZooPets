@@ -8,6 +8,10 @@ using System.Collections;
 // everything so that pausing can be an
 // easy and universal task.
 ///////////////////////////////////////////
+/// 
+
+
+//NEEDS refactoring.. WTF is all these underscores and hungarian syntax doing
 
 public class DestroyThis : MonoBehaviour{
 

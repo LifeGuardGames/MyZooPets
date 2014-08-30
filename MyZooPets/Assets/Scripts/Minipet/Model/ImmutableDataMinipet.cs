@@ -13,6 +13,7 @@ public class ImmutableDataMiniPet{
 	private string prefabName; // prefab to spawn for the miniPet
 	private Vector3 spawnLocation; // the location that the miniPet should be spawned at
 	private string levelUpConditionID; //key: level, value: condition to lv up. # of food required
+	private string foodPreferenceID; //key: level, value: food preference for each level
 
 	public string ID{
 		get{ return id;}
@@ -38,7 +39,9 @@ public class ImmutableDataMiniPet{
 		get{ return levelUpConditionID;}
 	}
 
-	//rewards? in a dictionary maybe?
+	public string FoodPreferenceID{
+		get{ return foodPreferenceID;}
+	}
 
 	public ImmutableDataMiniPet(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
@@ -56,5 +59,7 @@ public class ImmutableDataMiniPet{
 		spawnLocation = Constants.ParseVector3(rawLocation);
 
 		levelUpConditionID = XMLUtils.GetString(hashElements["LevelUpConditionID"] as IXMLNode, null, error);
+
+		foodPreferenceID = XMLUtils.GetString(hashElements["FoodPreferenceID"] as IXMLNode, null, error);
 	}
 }

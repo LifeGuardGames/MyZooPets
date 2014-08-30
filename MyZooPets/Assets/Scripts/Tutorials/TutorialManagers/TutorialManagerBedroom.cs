@@ -19,28 +19,40 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_FLAME = "TUT_FLAME";
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
 	public const string TUT_DECOS = "TUT_DECOS";
+	public const string TUT_MOOD_DEGRADE = "TUT_TIME_DECAY";
 
 	// tutorial that's is not related to the intro tutorial 
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
 	
 	// last tutorial
 	public const string TUT_LAST = TUT_DECOS;
-	
-	protected override void _Start(){
+
+	protected override void Awake(){
+		base.Awake();
+	}
+
+	protected override void Start(){
+		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
+//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
 	}
 
-	protected override void _Check(){
-		//Tutorial 1
-		TutorialPart1Check();
+	protected override bool Check(){
+		bool isChecking = base.Check();
 
+		if(isChecking){
+			//Tutorial 1
+			TutorialPart1Check();
 
-		//Tutorial 2
-		TutorialPart2Check();
+			//Tutorial 2
+			TutorialPart2Check();
+		}
+
+		return isChecking;
 	}
 
 	void OnApplicationPause(bool isPaused){
@@ -84,7 +96,9 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
-		if(LgDateTime.GetTimeNow() >= nextPlayPeriod){
+		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
+
+		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.GetPanScript().currentPartition == 0){
 				// play the trigger tutorial
@@ -118,5 +132,14 @@ public class TutorialManagerBedroom : TutorialManager{
 
 			new GameTutorialFlameCrystal();
 		}
+	}
+
+	public void OnQuestionaireDone(){
+		//check if pet in partition 0, if not force it to partition 0
+//		if(!args.Opening){
+			
+			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
+			Check();
+//		}
 	}
 }

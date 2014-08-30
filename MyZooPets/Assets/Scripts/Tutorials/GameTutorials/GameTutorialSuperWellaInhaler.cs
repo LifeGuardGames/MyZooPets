@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -64,7 +64,7 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	private IEnumerator ShowSuperWella(){
 		yield return new WaitForSeconds(1.5f);
 
-		PopupNotificationNGUI.HashEntry okButtonCallback = delegate(){	
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){	
 			Advance();
 		};
 

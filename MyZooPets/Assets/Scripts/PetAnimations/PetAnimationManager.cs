@@ -51,7 +51,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 
-	void OnGUI(){
+//	void OnGUI(){
 
 //		if(GUI.Button(new Rect(0, 0, 100, 200), "Healthy")){
 ////			animator.SetInteger("Health", 80);
@@ -73,7 +73,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 //		if(GUI.Button(new Rect(100, 50, 100, 50), "Sad")){
 //			animator.SetInteger("Mood", 30);
 //		}
-	}
+//	}
 
 	/// <summary>
 	/// Disables the animation. by hiding the colliders and the body parts
@@ -339,7 +339,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 			//pick the appropriate random idle animation
 			if(animations.Count != 0){
 				int randomIndex = UnityEngine.Random.Range(0, animations.Count);
-				animator.SetTrigger(animations[randomIndex]);
+				string animationName = animations[randomIndex];
+
+				if(animationName == "HighFive")
+					StartHighFive();
+				else
+					animator.SetTrigger(animationName);
 			}
 		}
 	}

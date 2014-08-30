@@ -115,6 +115,14 @@ public class Analytics : MonoBehaviour {
 
 	}
 
+	// ======================Mini Pets============================
+	public void MiniPetLevelUp(string miniPetID, int currentLevel){
+		string levelString = currentLevel.ToString();
+		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
+			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
+		}
+	}
+
     //=======================General Analytics==================================
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
@@ -133,12 +141,6 @@ public class Analytics : MonoBehaviour {
         if(!String.IsNullOrEmpty(newSceneName))
             GA.API.Design.NewEvent("SceneChanged:" + newSceneName);
     }
-
-//    //track which button is most clicked by users
-//    public void LgButtonClicked(string buttonName){
-//        if(!String.IsNullOrEmpty(buttonName))
-//            GA.API.Design.NewEvent("ButtonClicked:" + buttonName);
-//    }
 
     //when the user clean the triggers
     public void TriggersCleaned(String triggerID){

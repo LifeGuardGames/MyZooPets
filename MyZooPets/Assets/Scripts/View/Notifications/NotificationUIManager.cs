@@ -438,8 +438,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	// Displaying after one frame, make sure the notification is loaded nicely
 	private IEnumerator DisplayAfterInit(PopupNotificationNGUI notification){
 		yield return 0;
-		
-		notification.Display();
+
+		if(notification != null)
+			notification.Display();
 	}
 
 	private PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab){ 

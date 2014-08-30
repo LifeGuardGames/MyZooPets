@@ -35,7 +35,6 @@ public class MutableDataStats{
         Points = 0;
         Stars = 300;
 		Gems = 0;
-//		Gems = 100;
     }
 	
     //==============StatsModifiers================

@@ -111,6 +111,8 @@ public class MutableDataMiniPets{
 			currentLevelNum++;
 
 			status.CurrentLevel = (Level) currentLevelNum;
+
+			Analytics.Instance.MiniPetLevelUp(miniPetID, currentLevelNum);
 		}
 	}
 

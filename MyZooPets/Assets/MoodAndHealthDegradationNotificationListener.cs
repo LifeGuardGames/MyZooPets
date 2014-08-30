@@ -95,6 +95,8 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaSickReminder);
 		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+		AudioManager.Instance.PlayClip("superWellaSick");
 	}
 
 	private void CloseShop(object sender, EventArgs args){

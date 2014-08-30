@@ -62,6 +62,18 @@ public class PushNotificationsIOS : MonoBehaviour {
 		internalSendStringTags (tagName, array);
 	}
 
+	private static bool isCreated;
+	void Awake(){
+		//Make Object persistent
+		if(isCreated){
+			//If There is a duplicate in the scene. delete the object and jump Awake
+			Destroy(gameObject);
+			return;
+		}
+		DontDestroyOnLoad(gameObject);
+		isCreated = true;
+	}
+
 	// Use this for initialization
 	void Start () {
 		#if !UNITY_EDITOR && UNITY_IPHONE

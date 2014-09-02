@@ -9,7 +9,8 @@ using System.Collections.Generic;
 
 public class MutableDataInventory{
     public Dictionary<string, InventoryItem> InventoryItems {get; set;} //Key: itemID, Value: InventoryItem instance
-    public Dictionary<string, InventoryItem> DecorationItems {get; set;} //Key: itemID, Value: InventoryItem instance	
+    public Dictionary<string, InventoryItem> DecorationItems {get; set;} //Key: itemID, Value: InventoryItem instance
+	public Dictionary<string, InventoryItem> AccessoryItems {get; set;} //Key: itemID, Value: InventoryItem instance
     public List<string> OneTimePurchasedItems {get; set;} // Key:itemID  keep tracks of the items that can only be purchased once 
 	public List<string> UnopenedItemBoxes {get; set;} // unopened item box ids
 
@@ -21,6 +22,7 @@ public class MutableDataInventory{
     public void Init(){
         InventoryItems = new Dictionary<string, InventoryItem>();
 		DecorationItems = new Dictionary<string, InventoryItem>();
+		AccessoryItems = new Dictionary<string, InventoryItem>();
         OneTimePurchasedItems = new List<string>();
 		UnopenedItemBoxes = new List<string>();
     }

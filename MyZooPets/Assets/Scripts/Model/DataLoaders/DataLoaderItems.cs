@@ -87,8 +87,8 @@ public class DataLoaderItems{
         return dictItems[type];
     }
 	
-	private static Dictionary<ItemType, Dictionary<string, Item>> GetAllItems() {
-		if ( allItems == null )
+	private static Dictionary<ItemType, Dictionary<string, Item>> GetAllItems(){
+		if(allItems == null)
 			SetupData();
 		
 		return allItems;
@@ -129,16 +129,19 @@ public class DataLoaderItems{
                 switch(itemType){
                     case ItemType.Foods:
                         item = new FoodItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
                     case ItemType.Usables:
                         item = new UsableItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
                     case ItemType.Decorations:
 						item = new DecorationItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
+					case ItemType.Accessories:
+						item = new AccessoryItem(itemID, itemType, hashItemData);
+						break;
 					case ItemType.Premiums:
 						item = new PremiumItem(itemID, itemType, hashItemData);
-					break;
+						break;
                 }
 				
 				if ( !categoryItem.ContainsKey( itemID ) )

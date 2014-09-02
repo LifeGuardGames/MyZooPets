@@ -10,6 +10,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> foodList; //list with only FoodItem. sorted by cost
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
+	private List<Item> accessoryList; // List with only AccessoryItem. sorted by cost
 	private List<Item> premiumList;
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
 
@@ -53,10 +54,20 @@ public class ItemLogic : Singleton<ItemLogic>{
 				decorationList = new List<Item>();
 				Dictionary<string, Item> decorationDict = DataLoaderItems.GetAllItemsOfType(ItemType.Decorations);
 				decorationList = SelectListFromDictionaryAndSort(decorationDict);
-
 			}
 			return decorationList;
 		}		
+	}
+
+	public List<Item> AccessoryList{
+		get{
+			if(accessoryList == null){
+				accessoryList = new List<Item>();
+				Dictionary<string, Item> accesorryDict = DataLoaderItems.GetAllItemsOfType(ItemType.Accessories);
+				accessoryList = SelectListFromDictionaryAndSort(accesorryDict);
+			}
+			return accessoryList;
+		}
 	}
 
 	/// <summary>

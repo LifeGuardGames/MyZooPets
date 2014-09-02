@@ -33,6 +33,7 @@ public enum ItemType{
 	Foods,
 	Usables,
 	Decorations,
+	Accessories,
 	Premiums
 }
 public enum StatType{
@@ -129,6 +130,10 @@ public enum DecorationTypes {
     // TallFurniture,
     // BigFurniture,
     // BigPlant,
+}
+
+public enum AccessoryTypes{
+	Hat,
 }
 
 // mini game states

@@ -3,6 +3,18 @@ using System.Collections;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Accessory user interface manager.
+/// 
+/// ARCHITECTURE:
+/// 
+/// Controlling "store" buttons and entries:
+/// 	AccessoryUIManager -> AccessoryEntryUIController
+/// 
+/// Controlling equipping accessory on pet:
+/// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
+/// 
+/// </summary>
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public UIGrid grid;
 	public GameObject accessoryTitlePrefab;
@@ -23,21 +35,26 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	void Start(){
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
-		string lastCategory = null;
+		AccessoryTypes lastCategory = AccessoryTypes.Hat;
+		bool isFirstTitle = true;
 		foreach(Item accessory in accessoryList){
 
 			// Create a new accessory type label if lastCategory has changed
-			if(lastCategory != (AccessoryItem)accessory.Type.ToString()){
-				GameObject itemUIObject = NGUITools.AddChild(grid, accessoryTitlePrefab);
+			if(lastCategory != (AccessoryTypes)accessory.Type || isFirstTitle){
+
+				Debug.Log("getting types " + accessory.Type.ToString());
+
+				isFirstTitle = false;
+				GameObject itemUIObject = NGUITools.AddChild(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-				switch(accessory.Type){
+				switch((AccessoryTypes)accessory.Type){
 				case AccessoryTypes.Hat:
 					localize.key = "ACCESSORIES_TYPE_HAT";
 					break;
-				case AccessoryTypes.Hat:
+				case AccessoryTypes.Glasses:
 					localize.key = "ACCESSORIES_TYPE_GLASSES";
 					break;
-				case AccessoryTypes.Hat:
+				case AccessoryTypes.Color:
 					localize.key = "ACCESSORIES_TYPE_COLOR";
 					break;
 				default:
@@ -45,7 +62,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 					break;
 				}
 				localize.Localize();	// Force relocalize
-				lastCategory = (AccessoryItem)accessory.Type.ToString();
+				lastCategory = (AccessoryTypes)accessory.Type;
 			}
 			AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 		}
@@ -54,11 +71,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
-			// zoom into the item
+			// Zoom into the item
 			Vector3 vPos = zoomItem.transform.position + vOffset;
 			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
 			
-			//Hide other UI objects
+			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
@@ -72,7 +89,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		}
 	}
 	
-	//The back button on the left top corner is clicked to zoom out of the badge board
+	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
 		if(isActive){
 			isActive = false;
@@ -80,7 +97,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			
 			CameraManager.Instance.ZoomOutMove();
 			
-			//Show other UI Objects
+			// Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
@@ -148,5 +165,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			}
 			break;
 		}
+	}
+
+	public void EquipAccessory(string itemID){
+		//TODO unequip any existing ones
 	}
 }

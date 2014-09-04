@@ -2,6 +2,7 @@
 using System.Collections;
 
 public enum AccessoryButtonType{
+	UnboughtLocked,		// Not yet bought, use BuyButton but locked
 	Unbought,			// Not yet bought, use BuyButton
 	BoughtEquipped,		// Bought and equipped, use UnequipButton
 	BoughtUnequipped	// Bought and not equipped, use EquipButton
@@ -65,8 +66,10 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	/// the incoming item data.
 	/// </summary>
 	/// <param name="itemData">Item data.</param>
-	public void Init(Item itemData, GameObject buyButtonMessageTarget,
-	                 string buyButtonMessageFunctionName){
+	public void Init(Item itemData,
+	                 GameObject buyButtonMessageTarget, string buyButtonMessageFunctionName,
+	                 GameObject equipButtonMessageTarget, string equipButtonMessageFunctionName,
+	                 GameObject unequipButtonMessageTarget, string unqeuipButtonMessageFunctionName){
 		// set the proper values on the entry
 		gameObject.name = itemData.ID;
 		
@@ -82,17 +85,23 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		labelName.text = itemData.Name;
 		spriteIcon.spriteName = itemData.TextureName;
 		buyButtonMessage.target = buyButtonMessageTarget;
-		buyButtonMessage.functionName = buyButtonMessageFunctionName;		
+		buyButtonMessage.functionName = buyButtonMessageFunctionName;
 		
-		//Check if wallpaper has already been bought. Disable the buy button if so
-		if(itemData.Type == ItemType.Decorations){
-			DecorationItem decoItem = (DecorationItem)itemData;
-			
-			if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-				bool isWallpaperBought = InventoryLogic.Instance.CheckForWallpaper(decoItem.ID);
-				
-				if(isWallpaperBought)
-					buyButtonMessage.gameObject.GetComponent<UIImageButton>().isEnabled = false;
+		//Check if accessory has already been bought. Change the button if so
+		if(itemData.Type == ItemType.Accessories){
+			AccessoryItem accessoryItem = (AccessoryItem)itemData;
+			bool isAccessoryBought = InventoryLogic.Instance.CheckForAccessory(accessoryItem.ID);
+			if(isAccessoryBought){
+
+				//TODO check to see if it is equipped here
+				if(true){
+					// Bought and equipped
+					SetState(AccessoryButtonType.BoughtEquipped);
+				}
+				else{
+					// Bought but not equipped
+					SetState(AccessoryButtonType.BoughtUnequipped);
+				}
 			}
 		}
 		
@@ -101,13 +110,24 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			// show the UI
 			LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
 			
-			// delete the buy button
-			Destroy(buyButtonMessage.gameObject);
+			// Hide all the buttons
+			SetState(AccessoryButtonType.UnboughtLocked);
 		}
 	}
 
+	//TODO need event listener for level up and unlock items
+
+
+
+	//
+
 	public void SetState(AccessoryButtonType buttonType){
 		switch(buttonType){
+		case AccessoryButtonType.UnboughtLocked:
+			buyButtonMessage.gameObject.SetActive(false);
+			unequipButtonMessage.gameObject.SetActive(false);
+			equipButtonMessage.gameObject.SetActive(false);
+			break;
 		case AccessoryButtonType.Unbought:
 			buyButtonMessage.gameObject.SetActive(true);
 			unequipButtonMessage.gameObject.SetActive(false);

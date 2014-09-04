@@ -7,17 +7,18 @@ using System.Collections;
 // the type of decoration node.
 //---------------------------------------------------
 
-public abstract class DecorationNode : LgButton {
+public abstract class DecorationNode : LgButton{
 	// ------ Pure Abstract --------------------------
-	protected abstract void _SetDefaultDeco( string strDecoID );		// sets the default deco properly
+	protected abstract void _SetDefaultDeco(string strDecoID);		// sets the default deco properly
 	protected abstract void _RemoveDecoration();						// removes the decoration
-	protected abstract void _SetDecoration( string strID );				// set the deco to this node
+	protected abstract void _SetDecoration(string strID);				// set the deco to this node
 	public abstract bool HasRemoveOption();								// can this deco be removed?
 	//------------------------------------------------
 	
 	// what type of decorations can go on this node?
 	public DecorationTypes eType;
-	public DecorationTypes GetDecoType() {
+
+	public DecorationTypes GetDecoType(){
 		return eType;
 	}
 	
@@ -36,12 +37,12 @@ public abstract class DecorationNode : LgButton {
 	// the decoration currently being displayed on this node
 	private string strDecoID = string.Empty;
 
-	protected override void _Start() {
+	protected override void _Start(){
 		// init node icons
 		InitIcons();
 		
 		// set the graphics for this node
-		SetNodeArt( false );
+		SetNodeArt(false);
 		
 		// these variables would normally be set on the game object in the scene, but it is more convenient to set them here
 		isCheckingClickManager = true;
@@ -60,23 +61,23 @@ public abstract class DecorationNode : LgButton {
 		EditDecosUIManager.Instance.OnNodeSelected += OnNodeSelected;		// player selects a node
 		
 		// by default, decoration nodes are not visible/interactable
-		ToggleNode( false );
+		ToggleNode(false);
 	}
 	
 	//---------------------------------------------------
 	// InitIcons()
 	// Sets some icon variables that will be used later.
 	//---------------------------------------------------		
-	private void InitIcons() {
-		GameObject goNode = gameObject.FindInChildren( "NodeIcon_Type" );
-		if ( goNode )
+	private void InitIcons(){
+		GameObject goNode = gameObject.FindInChildren("NodeIcon_Type");
+		if(goNode)
 			spriteIcon = goNode.GetComponent<UISprite>();
 		
-		GameObject goBG = gameObject.FindInChildren( "NodeIcon_BG" );
-		if ( goBG )
+		GameObject goBG = gameObject.FindInChildren("NodeIcon_BG");
+		if(goBG)
 			spriteIconBG = goBG.GetComponent<UISprite>();
 		
-		if ( spriteIcon == null || spriteIconBG == null )
+		if(spriteIcon == null || spriteIconBG == null)
 			Debug.LogError("Icons not properly set up for deco node.", gameObject);
 	}
 	
@@ -85,19 +86,19 @@ public abstract class DecorationNode : LgButton {
 	// A node is really just a box collider -- this function
 	// sets the visual art for the node.
 	//---------------------------------------------------		
-	private void SetNodeArt( bool bSelected ) {	
+	private void SetNodeArt(bool bSelected){	
 		// set art for the icon based on the type of decoration this node represents
-		if ( spriteIcon ) {
+		if(spriteIcon){
 			string strIcon = "iconDeco" + GetDecoType() + "2";	// Parsed! version 2 for a few icons for now
 			spriteIcon.spriteName = strIcon;
 		}
 		
 		// set the art for the button bg based on if the node is selected or not
-		if ( spriteIconBG ) {
+		if(spriteIconBG){
 			// build the constant name that will tell us which sprite to use
 			string strState = bSelected ? "Selected" : "Unselected";
 			string strConstant = "Node_" + strState;
-			string strSprite = Constants.GetConstant<string>( strConstant );
+			string strSprite = Constants.GetConstant<string>(strConstant);
 			spriteIconBG.spriteName = strSprite;
 		}
 	}
@@ -106,11 +107,11 @@ public abstract class DecorationNode : LgButton {
 	// OnNodeSelected()
 	// Callback for when the player clicks on a node.
 	//---------------------------------------------------	
-	private void OnNodeSelected( object sender, NodeSelectedArgs args ) {
+	private void OnNodeSelected(object sender, NodeSelectedArgs args){
 		bool bSelected = args.Node == gameObject;
 		
 		// set the art with selection flag
-		SetNodeArt( bSelected );
+		SetNodeArt(bSelected);
 	}
 	
 	//---------------------------------------------------
@@ -119,17 +120,17 @@ public abstract class DecorationNode : LgButton {
 	// decoration saved there.  If it does, place that
 	// decoration.
 	//---------------------------------------------------	
-	private void CheckSaveData() {
+	private void CheckSaveData(){
 		// if the saved data contains this node's id, it means there was a decoration placed here
-		if ( DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey( strNodeID ) ) {
-			string strSavedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[ strNodeID ];
-			SetDecoration( strSavedDeco );
+		if(DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey(strNodeID)){
+			string strSavedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[strNodeID];
+			SetDecoration(strSavedDeco);
 		}
-		else {
+		else{
 			// there was no decoration placed here -- however, there could be a default decoration, in which case, we just want
 			// to set it so that when it is replaced, the user gets that default decoration in their inventory
-			if ( !string.IsNullOrEmpty( strDefaultDecoID ) )
-				SetDefaultDeco( strDefaultDecoID );
+			if(!string.IsNullOrEmpty(strDefaultDecoID))
+				SetDefaultDeco(strDefaultDecoID);
 		}
 	}
 	
@@ -139,28 +140,29 @@ public abstract class DecorationNode : LgButton {
 	// complicated because there are different types of
 	// nodes.
 	//---------------------------------------------------	
-	private void SetDefaultDeco( string strDecoID ) {
+	private void SetDefaultDeco(string strDecoID){
 		// set the string ID of the decoration -- this will place the item in the user's inventory when it is replaced
 		this.strDecoID = strDecoID;	
 		
 		// now call children function so that certain node can do additional stuff
-		_SetDefaultDeco( strDecoID );
+		_SetDefaultDeco(strDecoID);
 	}
 	
-    //Event listener. listening to when decoration mode is enabled/disabled
-    private void OnDecoMode(object sender, UIManagerEventArgs e){
-       if(e.Opening){
-            ToggleNode( true );		// edit mode is opening, so turn this node on
-        }else{
-            ToggleNode( false );	// edit mode is closing so turn this node off
-        }
-    }
+	//Event listener. listening to when decoration mode is enabled/disabled
+	private void OnDecoMode(object sender, UIManagerEventArgs e){
+		if(e.Opening){
+			ToggleNode(true);		// edit mode is opening, so turn this node on
+		}
+		else{
+			ToggleNode(false);	// edit mode is closing so turn this node off
+		}
+	}
 	
 	//---------------------------------------------------
 	// ToggleNode()
 	// Makes the node visible or invisible. Checks for TweenToggleScale
 	//---------------------------------------------------	
-	private void ToggleNode( bool bOn ) {
+	private void ToggleNode(bool bOn){
 		GetComponent<BoxCollider>().enabled = bOn;
 		
 		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
@@ -178,9 +180,9 @@ public abstract class DecorationNode : LgButton {
 	// ProcessClick()
 	// Called when this node is clicked.
 	//---------------------------------------------------	
-	protected override void ProcessClick() {
+	protected override void ProcessClick(){
 		// have the deco UI manager update itself based on this node being selected
-		EditDecosUIManager.Instance.UpdateChooseMenu( this );
+		EditDecosUIManager.Instance.UpdateChooseMenu(this);
 	}
 	
 	//---------------------------------------------------
@@ -188,7 +190,7 @@ public abstract class DecorationNode : LgButton {
 	// Returns this nodes decoration id.  May be null if
 	// no decoration is set.
 	//---------------------------------------------------	
-	public string GetDecorationID() {
+	public string GetDecorationID(){
 		return strDecoID;
 	}
 	
@@ -196,7 +198,7 @@ public abstract class DecorationNode : LgButton {
 	// HasDecoration()
 	// Does this node currently have a decoration on it?
 	//---------------------------------------------------	
-	public virtual bool HasDecoration() {
+	public virtual bool HasDecoration(){
 		return strDecoID != string.Empty;
 	}	
 	
@@ -205,15 +207,15 @@ public abstract class DecorationNode : LgButton {
 	// Sets this node's decoration to the incoming
 	// decoration.
 	//---------------------------------------------------	
-	public void SetDecoration( string strID ) {
+	public void SetDecoration(string strID){
 		// do one last check
-		if ( !CanPlaceDecoration( strID ) ) {
+		if(!CanPlaceDecoration(strID)){
 			Debug.LogError("Illegal deco placement for " + strID + " on node " + gameObject);
 			return;
 		}
 		
 		// if there was already a decoration here, remove it
-		if ( HasDecoration() )
+		if(HasDecoration())
 			RemoveDecoration();		
 		
 		// cache the id
@@ -227,7 +229,7 @@ public abstract class DecorationNode : LgButton {
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
 		
 		// actually create/set the decoration
-		_SetDecoration( strDecoID );
+		_SetDecoration(strDecoID);
 	}
 	
 	//---------------------------------------------------
@@ -235,11 +237,11 @@ public abstract class DecorationNode : LgButton {
 	// Checks to see if the decoration with strID may
 	// be placed on this node.
 	//---------------------------------------------------	
-	private bool CanPlaceDecoration( string strID ) {
+	private bool CanPlaceDecoration(string strID){
 		bool bOK = true;	// start optimistic
 		
 		// compare the node type to the decoration type
-		DecorationItem itemDeco = (DecorationItem) ItemLogic.Instance.GetItem( strID );
+		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(strID);
 		DecorationTypes eNodeType = GetDecoType();
 		DecorationTypes eDecoType = itemDeco.DecorationType;
 		bOK = eNodeType == eDecoType;
@@ -251,18 +253,18 @@ public abstract class DecorationNode : LgButton {
 	// RemoveDecoration()
 	// Removes the decoration from this node.
 	//---------------------------------------------------	
-	public void RemoveDecoration() {		
+	public void RemoveDecoration(){		
 		// call child function to actually remove the decoration
 		_RemoveDecoration();
 		
 		// give the user the decoration back in their inventory
-		if ( strDecoID != null )
+		if(strDecoID != null)
 			InventoryLogic.Instance.AddItem(strDecoID, 1);
 		else
 			Debug.LogError("Just removed an illegal decoration?");		
 		
 		// update the save data since this node is now empty
-		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove( strNodeID );
+		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove(strNodeID);
 
 		// reset the deco id on this node
 		strDecoID = string.Empty;

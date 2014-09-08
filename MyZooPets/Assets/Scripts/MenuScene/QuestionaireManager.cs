@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -26,7 +26,7 @@ public class QuestionaireManager : MonoBehaviour {
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
 		   isFlameTutorialDone){
 			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel");
-			LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
+			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
 	
 			Invoke("ShowQuestionaire", 1f);
 		}

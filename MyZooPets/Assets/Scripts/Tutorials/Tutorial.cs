@@ -169,7 +169,7 @@ public abstract class Tutorial{
 		// create the spotlight
 		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
 		string anchorName = "Anchor-" + anchor.ToString();
-		goSpotlight = LgNGUITools.AddChildWithPosition(GameObject.Find(anchorName), goResource);
+		goSpotlight = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), goResource);
 		
 		// Set the delay if defined
 		if(delay > 0){
@@ -183,7 +183,7 @@ public abstract class Tutorial{
 		// spawn finger hint
 		if(fingerHint){
 			GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-			goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(anchorName), fingerHintResource);
+			goFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
 			focusPos.z = goFingerHint.transform.localPosition.z;
 			focusPos.y = focusPos.y + fingerHintOffsetY; //offset in Y so the finger hint doesn't overlap the image
 			focusPos.x = focusPos.x + fingerHintOffsetX;
@@ -221,7 +221,7 @@ public abstract class Tutorial{
 			GameObject.Destroy(goFingerHint);
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-		goFingerHint = LgNGUITools.AddChildWithPosition(GameObject.Find(anchorName), fingerHintResource);
+		goFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
 		focusPos.x = focusPos.x + offsetFromCenterX;
 		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
 		focusPos.z = goFingerHint.transform.localPosition.z;
@@ -305,7 +305,7 @@ public abstract class Tutorial{
 
 		// create the popup
 		GameObject goResource = Resources.Load(popupKey) as GameObject;
-		goPopup = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), goResource);
+		goPopup = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
 //		newPos.z = goPopup.transform.position.z; // keep the default z-value
 		goPopup.transform.localPosition = newPos;				
 		

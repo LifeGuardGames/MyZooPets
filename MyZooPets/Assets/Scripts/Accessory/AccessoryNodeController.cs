@@ -17,11 +17,23 @@ public class AccessoryNodeController : Singleton<AccessoryNodeController> {
 	/// Sets the accessory.
 	/// Called from AccessoryEntryUIController
 	/// </summary>
-	/// <param name="accessoryKey">Accessory key.</param>
-	/// <param name="atlasName">Atlas name.</param>
-	/// <param name="spriteName">Sprite name.</param>
-	public void SetAccessory(string accessoryKey, string atlasName, string spriteName){
-		AccessoryNode node = accessoryNodeHash[accessoryKey];	// Get respective node to change
-		node.ChangeAccessory(atlasName, spriteName);
+	/// <param name="accessoryID">Accessory ID.</param>
+	public void SetAccessory(string accessoryID){
+
+		// Get the respective AccessoryNode to populate and then populate it
+		AccessoryNode node = accessoryNodeHash[GetAccessoryNodeType(accessoryID)];	// Get respective node to change
+
+		node.SetAccessoryNode(accessoryID);
+	}
+
+	/// <summary>
+	/// Gets the type of the accessory node.
+	/// Given a accessory(ID), check the xml to see which type it is.
+	/// </summary>
+	/// <returns>The accessory node type.</returns>
+	/// <param name="accessoryID">Accessory ID.</param>
+	public string GetAccessoryNodeType(string accessoryID){
+		AccessoryItem itemDeco = (AccessoryItem)ItemLogic.Instance.GetItem(accessoryID);
+		return itemDeco.AccessoryType.ToString();
 	}
 }

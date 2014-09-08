@@ -32,22 +32,27 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public string soundUnequip;
 	public string soundEquip;
 
+	void Awake(){
+		eModeType = UIModeTypes.Accessory;
+	}
+
 	void Start(){
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
-		foreach(Item accessory in accessoryList){
-
+		foreach(AccessoryItem accessory in accessoryList){
+			Debug.Log(accessory.Name);
 			// Create a new accessory type label if lastCategory has changed
-			if(lastCategory != (AccessoryTypes)accessory.Type || isFirstTitle){
+			if(lastCategory != accessory.AccessoryType || isFirstTitle){
 
-				Debug.Log("getting types " + accessory.Type.ToString());
+//				Debug.Log("getting types " + accessory.AccessoryType.ToString());
 
 				isFirstTitle = false;
-				GameObject itemUIObject = NGUITools.AddChild(grid.gameObject, accessoryTitlePrefab);
+				GameObject itemUIObject = LgNGUITools.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-				switch((AccessoryTypes)accessory.Type){
+
+				switch((AccessoryTypes)accessory.AccessoryType){
 				case AccessoryTypes.Hat:
 					localize.key = "ACCESSORIES_TYPE_HAT";
 					break;
@@ -62,8 +67,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 					break;
 				}
 				localize.Localize();	// Force relocalize
-				lastCategory = (AccessoryTypes)accessory.Type;
+				lastCategory = accessory.AccessoryType;
 			}
+
 			AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 		}
 	}
@@ -71,6 +77,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
+			this.GetComponent<TweenToggleDemux>().Show();
+			Debug.Log("OPENING");
 			// Zoom into the item
 			Vector3 vPos = zoomItem.transform.position + vOffset;
 			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
@@ -92,6 +100,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
 		if(isActive){
+			this.GetComponent<TweenToggleDemux>().Hide();
+
 			isActive = false;
 			zoomItem.collider.enabled = true;
 			

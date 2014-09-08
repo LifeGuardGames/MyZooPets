@@ -50,7 +50,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 		if(petSpeechWithImageAndTextPrefab == null)
 			petSpeechWithImageAndTextPrefab = Resources.Load("PetSpeechWithImageAndText") as GameObject;
 		
-		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImageAndTextPrefab);
+		currentMessage = LgNGUITools.AddChildWithPositionAndScale(spawnParent, petSpeechWithImageAndTextPrefab);
 		
 		// Assign the follow target for the dialogue box
 		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
@@ -93,7 +93,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 		if(petSpeechWithTextPrefab == null)
 			petSpeechWithTextPrefab = Resources.Load("PetSpeechWithText") as GameObject;
 		
-		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithTextPrefab);
+		currentMessage = LgNGUITools.AddChildWithPositionAndScale(spawnParent, petSpeechWithTextPrefab);
 		
 		// Assign the follow target for the dialogue box
 		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
@@ -112,7 +112,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager>{
 		if(petSpeechWithImagePrefab == null)
 			petSpeechWithImagePrefab = Resources.Load("PetSpeechWithImage") as GameObject;
 		
-		currentMessage = LgNGUITools.AddChildWithPosition(spawnParent, petSpeechWithImagePrefab);
+		currentMessage = LgNGUITools.AddChildWithPositionAndScale(spawnParent, petSpeechWithImagePrefab);
 		
 		// Assign the follow target for the dialogue box
 		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];

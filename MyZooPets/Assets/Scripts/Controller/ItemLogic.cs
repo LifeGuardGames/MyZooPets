@@ -23,7 +23,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(foodList == null){
 				foodList = new List<Item>();
 				Dictionary<string, Item> foodDict = DataLoaderItems.GetAllItemsOfType(ItemType.Foods);
-				foodList = SelectListFromDictionaryAndSort(foodDict);
+				foodList = ListFromDictionarySortByCost(foodDict);
 			}
 			return foodList;
 		}
@@ -38,7 +38,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(usableList == null){
 				usableList = new List<Item>();
 				Dictionary<string, Item> usableDict = DataLoaderItems.GetAllItemsOfType(ItemType.Usables);
-				usableList = SelectListFromDictionaryAndSort(usableDict);
+				usableList = ListFromDictionarySortByCost(usableDict);
 			}
 			return usableList;
 		}
@@ -53,7 +53,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(decorationList == null){
 				decorationList = new List<Item>();
 				Dictionary<string, Item> decorationDict = DataLoaderItems.GetAllItemsOfType(ItemType.Decorations);
-				decorationList = SelectListFromDictionaryAndSort(decorationDict);
+				decorationList = ListFromDictionarySortByCost(decorationDict);
 			}
 			return decorationList;
 		}		
@@ -64,7 +64,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(accessoryList == null){
 				accessoryList = new List<Item>();
 				Dictionary<string, Item> accesorryDict = DataLoaderItems.GetAllItemsOfType(ItemType.Accessories);
-				accessoryList = SelectListFromDictionaryAndSort(accesorryDict);
+				accessoryList = ListFromDictionarySortByCategoryCost(accesorryDict);
 			}
 			return accessoryList;
 		}
@@ -79,7 +79,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(premiumList == null){
 				premiumList = new List<Item>();
 				Dictionary<string, Item> premiumDict = DataLoaderItems.GetAllItemsOfType(ItemType.Premiums);
-				premiumList = SelectListFromDictionaryAndSort(premiumDict);
+				premiumList = ListFromDictionarySortByCost(premiumDict);
 
 //				var items = from keyValuePair in premiumDict 
 //					select keyValuePair.Value;
@@ -283,12 +283,27 @@ public class ItemLogic : Singleton<ItemLogic>{
 	/// </summary>
 	/// <returns>The list from dictionary and sort.</returns>
 	/// <param name="itemDict">Item dict.</param>
-	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
+	private List<Item> ListFromDictionarySortByCost(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
 						orderby item.UnlockAtLevel ascending, item.Cost.ToString() ascending
 						select item).ToList();
+		return itemList;
+	}
+
+	/// <summary>
+	/// Lists from dictionary sort by category cost.
+	/// NOTE: Requires 'SortCategory' component in xml (ie accessory)
+	/// </summary>
+	/// <returns>The from dictionary sort by category cost.</returns>
+	/// <param name="itemDict">Item dict.</param>
+	private List<Item> ListFromDictionarySortByCategoryCost(Dictionary<string, Item> itemDict){
+		var items = from keyValuePair in itemDict 
+						select keyValuePair.Value;
+		List<Item> itemList = (from item in items 
+		                       orderby item.SortCategory ascending, item.UnlockAtLevel ascending, item.Cost.ToString() ascending
+		                       select item).ToList();
 		return itemList;
 	}
 }

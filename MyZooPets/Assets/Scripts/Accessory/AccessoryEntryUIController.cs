@@ -51,10 +51,9 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			buyButtonMessageTarget = StoreUIManager.Instance.gameObject;
 			buyButtonMessageFunctionName = "OnBuyButton";
 		}
-		
-		itemUIObject.GetComponent<StoreItemEntryUIController>().Init(item, 
-		                                                             buyButtonMessageTarget,
-		                                                             buyButtonMessageFunctionName);
+
+		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
+		entryController.Init(item, buyButtonMessageTarget, buyButtonMessageFunctionName, null, null, null, null);
 		
 		return itemUIObject;
 	}
@@ -81,7 +80,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			buyButtonIcon.spriteName = "iconGem";
 		
 		labelCost.text = costText;
-		
+		Debug.Log(itemData.Name);
 		labelName.text = itemData.Name;
 		spriteIcon.spriteName = itemData.TextureName;
 		buyButtonMessage.target = buyButtonMessageTarget;
@@ -90,34 +89,36 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		//Check if accessory has already been bought. Change the button if so
 		if(itemData.Type == ItemType.Accessories){
 			AccessoryItem accessoryItem = (AccessoryItem)itemData;
-			bool isAccessoryBought = InventoryLogic.Instance.CheckForAccessory(accessoryItem.ID);
-			if(isAccessoryBought){
 
-				//TODO check to see if it is equipped here
-				if(true){
-					// Bought and equipped
-					SetState(AccessoryButtonType.BoughtEquipped);
-				}
-				else{
-					// Bought but not equipped
-					SetState(AccessoryButtonType.BoughtUnequipped);
-				}
+			// Check if the item has been bought
+			if(InventoryLogic.Instance.CheckForAccessory(accessoryItem.ID)){
+				// Bought but not equipped
+				SetState(AccessoryButtonType.BoughtUnequipped);
+			}
+			// Check if the item has been equipped, this is mutually exclusive from owning it
+			else if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsKey(accessoryItem.ID)){
+				// Bought and equipped
+				SetState(AccessoryButtonType.BoughtEquipped);
+			}
+			// If this item is currently locked...
+			else if(itemData.IsLocked()){
+				// Show the UI
+				LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
+				
+				// Hide all the buttons
+				SetState(AccessoryButtonType.UnboughtLocked);
+			}
+			// Unlocked but not bought yet
+			else{
+				SetState(AccessoryButtonType.Unbought);
 			}
 		}
-		
-		// if this item is currently locked...
-		if(itemData.IsLocked()){
-			// show the UI
-			LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
-			
-			// Hide all the buttons
-			SetState(AccessoryButtonType.UnboughtLocked);
+		else{
+			Debug.LogError("Non-Accessory detected");
 		}
 	}
 
 	//TODO need event listener for level up and unlock items
-
-
 
 	//
 

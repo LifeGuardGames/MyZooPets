@@ -6,6 +6,7 @@ public class PetGameData{
     public MutableDataPetInfo PetInfo {get; set;}
     public MutableDataCutscene Cutscenes {get; set;} //no longer in use
     public MutableDataDecorationSystem Decorations {get; set;}
+	public MutableDataAccessories Accessories {get; set;}
     public MutableDataStats Stats {get; set;}
     public MutableDataPetLevel Level {get; set;}
     public MutableDataCalendar Calendar {get; set;}
@@ -31,6 +32,7 @@ public class PetGameData{
         PetInfo = new MutableDataPetInfo();
         Cutscenes = new MutableDataCutscene();
         Decorations = new MutableDataDecorationSystem();
+		Accessories = new MutableDataAccessories();
         Stats = new MutableDataStats();
         Level = new MutableDataPetLevel();
         Calendar = new MutableDataCalendar();

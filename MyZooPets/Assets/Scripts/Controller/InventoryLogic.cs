@@ -107,10 +107,11 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
 
-			//if in the inventory already check if it's wallpaper
-			//if it's wallpaper don't increment count just return
-			if(CheckForWallpaper(itemID))
+			//if in the inventory already check if it's wallpaper/accessory
+			//if it's wallpaper/accessory don't increment count just return
+			if(CheckForWallpaper(itemID) || CheckForAccessory(itemID)){
 				return;
+			}
 
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
@@ -132,7 +133,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 					oneTimePurchasedInv.Add(itemData.ID);
 				}
 			}
-			//special case: keep track of bought wallpaper in another list.
+			//special case: keep track of bought accessories in another list.
 			if(itemData.Type == ItemType.Accessories){
 				AccessoryItem accessoryItem = (AccessoryItem)itemData;
 

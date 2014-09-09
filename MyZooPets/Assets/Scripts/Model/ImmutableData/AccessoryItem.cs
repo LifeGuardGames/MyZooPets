@@ -13,9 +13,19 @@ public class AccessoryItem : Item{
 		get{return eType;}
 	}
 
+	private string prefabName;
+
+	public string PrefabName{
+		get{return prefabName;}
+	}
+
 	public AccessoryItem(string id, ItemType type, Hashtable hashItemData) : base(id, type, hashItemData){
 		// Get the type of this decoration
 		string strType = XMLUtils.GetString(hashItemData["AccessoryType"] as IXMLNode);
 		eType = (AccessoryTypes)System.Enum.Parse(typeof(AccessoryTypes), strType);
+
+		if(hashItemData.Contains("PrefabName"))
+			prefabName = XMLUtils.GetString(hashItemData["PrefabName"] as IXMLNode);
+
 	}
 }

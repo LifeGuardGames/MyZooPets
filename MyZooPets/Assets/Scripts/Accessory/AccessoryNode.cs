@@ -51,41 +51,47 @@ public class AccessoryNode : MonoBehaviour{
 			RemoveAccessoryNode();
 		}
 
-		// Cache the new itemID
-		placedAccessoryID = newAccessoryID;
+		if(newAccessoryID != null){
+			// Cache the new itemID
+			placedAccessoryID = newAccessoryID;
 
-		// Populate it in gamedata in placedAccessories
-		DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID] = placedAccessoryID;
+			// Populate it in gamedata in placedAccessories
+			DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID] = placedAccessoryID;
 
-		// Load and place the actual accessory
-		// build the prefab from the id of the decoration
-		string strResource = ItemLogic.Instance.GetDecoItemPrefabName(placedAccessoryID);
-		GameObject goPrefab = Resources.Load(strResource) as GameObject;
+			// Load and place the actual accessory
+			// build the prefab from the id of the decoration
+			string strResource = ItemLogic.Instance.GetAccessoryItemPrefabName(placedAccessoryID);
+			GameObject goPrefab = Resources.Load(strResource) as GameObject;
 
-		if(goPrefab){
-			placedAccessoryObject = Instantiate(goPrefab, Vector3.zero, goPrefab.transform.rotation) as GameObject;
-			placedAccessoryObject.transform.parent = transform;
-		}
-		else{
-			Debug.LogError("No such prefab for " + strResource);
+			if(goPrefab){
+				placedAccessoryObject = Instantiate(goPrefab, Vector3.zero, goPrefab.transform.rotation) as GameObject;
+				placedAccessoryObject.transform.parent = transform;
+				GameObjectUtils.ZeroLocalTransform(placedAccessoryObject);	// Zero out all local transforms
+			}
+			else{
+				Debug.LogError("No such prefab for " + strResource);
+			}
 		}
 	}
 
 	public void RemoveAccessoryNode(){
-		// give the user the decoration back in their inventory
-		if(placedAccessoryID != null)
-			InventoryLogic.Instance.AddItem(placedAccessoryID, 1);	// TODO doublecheck this
-		else
-			Debug.LogError("Just removed an illegal accessory?");		
-		
-		// update the save data since this node is now empty
-		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(placedAccessoryID);
-		
+//		// give the user the decoration back in their inventory
+//		if(placedAccessoryID != null)
+//			InventoryLogic.Instance.AddItem(placedAccessoryID, 1);	// TODO doublecheck this
+//		else
+//			Debug.LogError("Just removed an illegal accessory?");		
+//		
+//		// update the save data since this node is now empty
+//		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(placedAccessoryID);
+//		
 		// reset the deco id on this node
 		placedAccessoryID = null;
 
+		//TODO refresh the button here
+
 		// Destroy the gameobject
 		Destroy(placedAccessoryObject);
+
 	}
 
 	public string GetAccessoryID(){

@@ -22,6 +22,9 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			itemID = value;
 		}
 	}
+
+	private AccessoryItem itemData;
+
 	private AccessoryButtonType buttonState;
 
 	// various elements on the entry
@@ -40,20 +43,14 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	/// <param name="goGrid">grid to add game object to.</param>
 	/// <param name="goPrefab">prefab to instantiate.</param>
 	/// <param name="item">Item.</param>
-	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, 
-	                                     Item item, GameObject buyButtonMessageTarget = null,
-	                                     string buyButtonMessageFunctionName = ""){
-		
-		GameObject itemUIObject = NGUITools.AddChild(goGrid, goPrefab);
-		
-		//set default buy button message target/function name if they are null
-		if(buyButtonMessageTarget == null || string.IsNullOrEmpty(buyButtonMessageFunctionName)){
-			buyButtonMessageTarget = StoreUIManager.Instance.gameObject;
-			buyButtonMessageFunctionName = "OnBuyButton";
-		}
+	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, Item item){
 
+		GameObject itemUIObject = NGUITools.AddChild(goGrid, goPrefab);
 		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
-		entryController.Init(item, buyButtonMessageTarget, buyButtonMessageFunctionName, null, null, null, null);
+		entryController.Init(item, 
+		                     AccessoryUIManager.Instance.gameObject, "OnBuyButton",			// Assigning buy button
+		                     AccessoryUIManager.Instance.gameObject, "OnEquipButton",		// Assigning equip button
+		                     AccessoryUIManager.Instance.gameObject, "OnUnequipButton");	// Assigning unequip button
 		
 		return itemUIObject;
 	}
@@ -65,40 +62,56 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	/// the incoming item data.
 	/// </summary>
 	/// <param name="itemData">Item data.</param>
-	public void Init(Item itemData,
+	public void Init(Item newItemData,
 	                 GameObject buyButtonMessageTarget, string buyButtonMessageFunctionName,
 	                 GameObject equipButtonMessageTarget, string equipButtonMessageFunctionName,
 	                 GameObject unequipButtonMessageTarget, string unqeuipButtonMessageFunctionName){
 		// set the proper values on the entry
-		gameObject.name = itemData.ID;
-		
-		string costText = itemData.Cost.ToString();
-		if(itemData.Type == ItemType.Premiums)
+		gameObject.name = newItemData.ID;
+
+		// Cache this information
+		itemData = (AccessoryItem)newItemData;
+
+		string costText = newItemData.Cost.ToString();
+		if(newItemData.Type == ItemType.Premiums)
 			costText = "$" + costText;
 		
-		if(itemData.CurrencyType == CurrencyTypes.Gem)
+		if(newItemData.CurrencyType == CurrencyTypes.Gem)
 			buyButtonIcon.spriteName = "iconGem";
 		
 		labelCost.text = costText;
-		Debug.Log(itemData.Name);
-		labelName.text = itemData.Name;
-		spriteIcon.spriteName = itemData.TextureName;
+		Debug.Log(newItemData.Name);
+		labelName.text = newItemData.Name;
+		spriteIcon.spriteName = newItemData.TextureName;
+
+		// Assign buttons
 		buyButtonMessage.target = buyButtonMessageTarget;
 		buyButtonMessage.functionName = buyButtonMessageFunctionName;
+		equipButtonMessage.target = equipButtonMessageTarget;
+		equipButtonMessage.functionName = equipButtonMessageFunctionName;
+		unequipButtonMessage.target = unequipButtonMessageTarget;
+		unequipButtonMessage.functionName = unqeuipButtonMessageFunctionName;
 		
-		//Check if accessory has already been bought. Change the button if so
-		if(itemData.Type == ItemType.Accessories){
-			AccessoryItem accessoryItem = (AccessoryItem)itemData;
+		CheckState();
+	}
 
-			// Check if the item has been bought
-			if(InventoryLogic.Instance.CheckForAccessory(accessoryItem.ID)){
-				// Bought but not equipped
-				SetState(AccessoryButtonType.BoughtUnequipped);
-			}
+	//TODO need event listener for level up and unlock items - call CheckState
+
+	//
+
+	public void CheckState(){
+		// Check if accessory has already been bought. Change the button if so
+		if(itemData.Type == ItemType.Accessories){
+
 			// Check if the item has been equipped, this is mutually exclusive from owning it
-			else if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsKey(accessoryItem.ID)){
-				// Bought and equipped
+			if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsValue(itemData.ID)){
+				// Bought and equipped, show unequipped button
 				SetState(AccessoryButtonType.BoughtEquipped);
+			}
+			// Check if the item has been bought
+			else if(InventoryLogic.Instance.CheckForAccessory(itemData.ID)){
+				// Show the equip button
+				SetState(AccessoryButtonType.BoughtUnequipped);
 			}
 			// If this item is currently locked...
 			else if(itemData.IsLocked()){
@@ -117,10 +130,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			Debug.LogError("Non-Accessory detected");
 		}
 	}
-
-	//TODO need event listener for level up and unlock items
-
-	//
 
 	public void SetState(AccessoryButtonType buttonType){
 		switch(buttonType){

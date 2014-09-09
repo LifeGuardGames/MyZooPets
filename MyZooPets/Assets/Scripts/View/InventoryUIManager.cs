@@ -180,8 +180,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	//Event listener. listening to when new item is added to the inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
 		
-		// inventory doesn't currently care about decorations
-		if(e.InvItem.ItemType == ItemType.Decorations)
+		// inventory doesn't currently care about decorations/accessories
+		if(e.InvItem.ItemType == ItemType.Decorations || e.InvItem.ItemType == ItemType.Accessories)
 			return;
 		
 		if(e.IsItemNew){

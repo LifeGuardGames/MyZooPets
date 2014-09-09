@@ -154,6 +154,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 	}
 
 	/// <summary>
+	/// Gets the name of the accessory item prefab.
+	/// </summary>
+	/// <returns>The accessory item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public string GetAccessoryItemPrefabName(string itemID){
+		return DataLoaderItems.GetAccessoryItemPrefabName(itemID);
+	}
+
+	/// <summary>
 	/// For the player's own good, we stop them if they
 	/// try to use an item that will buff a stat that is
 	/// already at max.  This function returns whether or

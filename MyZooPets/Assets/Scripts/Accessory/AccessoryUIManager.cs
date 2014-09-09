@@ -32,6 +32,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public string soundUnequip;
 	public string soundEquip;
 
+	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
+
 	void Awake(){
 		eModeType = UIModeTypes.Accessory;
 	}
@@ -70,8 +72,20 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 				lastCategory = accessory.AccessoryType;
 			}
 
-			AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
+			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
+			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 		}
+	}
+
+	/// <summary>
+	/// Gets the type of the accessory node.
+	/// Given a accessory(ID), check the xml to see which type it is.
+	/// </summary>
+	/// <returns>The accessory node type.</returns>
+	/// <param name="accessoryID">Accessory ID.</param>
+	public static string GetAccessoryNodeType(string accessoryID){
+		AccessoryItem itemDeco = (AccessoryItem)ItemLogic.Instance.GetItem(accessoryID);
+		return itemDeco.AccessoryType.ToString();
 	}
 
 	// When the zoomItem is clicked and zoomed into
@@ -123,7 +137,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	/// </summary>
 	/// <param name="button">Button.</param>
 	public void OnBuyButton(GameObject button){
-		Transform buttonParent = button.transform.parent.parent;
+		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
 		
@@ -139,7 +153,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
 
 				// Change the state of the button
-				button.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
+				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
+
+				// Equip item
+				Equip(itemID);
 
 				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
@@ -163,7 +180,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 				
 				// Change the state of the button
 				button.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
-				
+
+				// Equip item
+				Equip(itemID);
+
 				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 				
@@ -177,7 +197,53 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		}
 	}
 
-	public void EquipAccessory(string itemID){
-		//TODO unequip any existing ones
+	public void OnEquipButton(GameObject button){
+		Debug.Log("equipping");
+		Transform buttonParent = button.transform.parent;
+		string itemID = buttonParent.name;
+
+		Equip(itemID);
+
+		AudioManager.Instance.PlayClip(soundEquip);
+	}
+
+	public void OnUnequipButton(GameObject button){
+		Debug.Log("removing");
+		Transform buttonParent = button.transform.parent;
+		string itemID = buttonParent.name;
+
+		Unequip(itemID);
+
+		AudioManager.Instance.PlayClip(soundUnequip);
+	}
+
+	public void Equip(string itemID){
+
+		// Unequip anything first
+		Unequip(itemID);
+
+		// Set the mutable data
+		DataManager.Instance.GameData.Accessories.PlacedAccessories.Add(GetAccessoryNodeType(itemID), itemID);
+
+		// Equip the node
+		AccessoryNodeController.Instance.SetAccessory(itemID);
+		
+		// Refresh all the other buttons
+		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
+			entryController.CheckState();
+		}
+	}
+
+	public void Unequip(string itemID){
+		// Set the mutable data
+		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(GetAccessoryNodeType(itemID));
+
+		// Unequip the node
+		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
+
+		// Refresh all the other buttons
+		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
+			entryController.CheckState();
+		}
 	}
 }

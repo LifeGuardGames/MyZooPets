@@ -32,6 +32,8 @@ public class DataLoaderItems{
             item = dictItems[ItemType.Decorations][itemID];
         }else if(dictItems[ItemType.Premiums].ContainsKey(itemID)){
 			item = dictItems[ItemType.Premiums][itemID];
+		}else if(dictItems[ItemType.Accessories].ContainsKey(itemID)){
+			item = dictItems[ItemType.Accessories][itemID];
 		}
 
         return item;
@@ -76,6 +78,16 @@ public class DataLoaderItems{
         DecorationItem item = (DecorationItem) GetItem(itemID);
         return item.MaterialName;
     }
+
+	/// <summary>
+	/// Gets the name of the accessory item prefab.
+	/// </summary>
+	/// <returns>The accessory item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public static string GetAccessoryItemPrefabName(string itemID){
+		AccessoryItem item = (AccessoryItem) GetItem(itemID);
+		return item.PrefabName;
+	}
 	
 	/// <summary>
 	/// Gets Items of type

@@ -135,8 +135,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			}
 			//special case: keep track of bought accessories in another list.
 			if(itemData.Type == ItemType.Accessories){
-				AccessoryItem accessoryItem = (AccessoryItem)itemData;
-
 				//Keep track for all accessories
 				List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
 				oneTimePurchasedInv.Add(itemData.ID);

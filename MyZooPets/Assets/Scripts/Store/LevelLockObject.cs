@@ -19,11 +19,12 @@ public class LevelLockObject : MonoBehaviour {
 	/// <param name="parentObject">Parent object.</param>
 	/// <param name="level">Level.</param>
 	/// <param name="prefabName">Prefab name.</param>
-	public static void CreateLock(GameObject parentObject, int level, string prefabName = "LevelLockUI"){
+	public static GameObject CreateLock(GameObject parentObject, int level, string prefabName = "LevelLockUI"){
 		GameObject goPrefab = Resources.Load(prefabName) as GameObject;
 		GameObject lockObject = NGUITools.AddChild(parentObject, goPrefab);
 
 		lockObject.GetComponent<LevelLockObject>().Init(level);
+		return lockObject;
 	}
 
 	/// <summary>

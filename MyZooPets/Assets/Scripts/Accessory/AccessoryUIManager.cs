@@ -218,7 +218,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	public void OnEquipButton(GameObject button){
-		Debug.Log("equipping");
+//		Debug.Log("equipping");
 		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
 
@@ -228,7 +228,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	public void OnUnequipButton(GameObject button){
-		Debug.Log("removing");
+//		Debug.Log("removing");
 		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
 

@@ -12,7 +12,7 @@ public class ButtonInventory : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		InventoryUIManager.Instance.ExpandToggled();
+//		InventoryUIManager.Instance.ExpandToggled();
 	}
 
 }

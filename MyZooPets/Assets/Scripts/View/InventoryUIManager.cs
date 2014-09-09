@@ -10,16 +10,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public bool isDebug;
 	public UIPanel gridPanel;
 	public GameObject uiGridObject;
-	public GameObject uiButtonSpriteObject;
 	public GameObject spritePet;
 	public GameObject inventoryItemPrefab;
-	private bool isGuiShowing = true;   // Aux to keep track, not synced!!
-	private float collapsedPos;
+	private float collapsedPos = -164f;
 	private GameObject fingerHintGO;
 	private Transform currentDragDropItem;
 
 	void Start(){
-		collapsedPos = inventoryPanel.GetComponent<TweenPosition>().to.x;
 		InventoryLogic.OnItemAddedToInventory += OnItemAddedHandler;
 		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
@@ -63,14 +60,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		
 		// Adjust the bar length based on how many items we want showing at all times
 		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-			inventoryPanel.GetComponent<TweenPosition>().from.x = collapsedPos - allInventoryItemsCount * 90;
-			
+
 			// Update position of the bar if inventory is open
-			if(isGuiShowing){
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
-			}
+			Hashtable optional = new Hashtable();
+			optional.Add("ease", LeanTweenType.easeOutBounce);
+			LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
 		}
 		
 		uiGridObject.GetComponent<UIGrid>().Reposition();
@@ -87,30 +81,17 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public Vector3 GetPositionOfInvItem(string invItemID){
 		// position to use
 		Vector3 invItemPosition;
+
+		// Use the position of the item in the inventory panel
+		Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+		InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+		invItemPosition = invItemTrans.position;
 		
-		if(!isGuiShowing){
-			// if the inventory is minimized, use the position of the inventory sprite object
-			invItemPosition = uiButtonSpriteObject.transform.position;
-		}
-		else{
-			// otherwise use the position of the item in the inventory panel
-			Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
-			invItemPosition = invItemTrans.position;
-			
-			//Offset position if the item is just added to the inventory
-			if(invItem.Amount == 1)
-				invItemPosition += new Vector3(-0.22f, 0, 0);
-		}
+		//Offset position if the item is just added to the inventory
+		if(invItem.Amount == 1)
+			invItemPosition += new Vector3(-0.22f, 0, 0);
 		
 		return invItemPosition;
-	}
-	
-	// Image button clicked receiver
-	public void ExpandToggled(){
-		// Local aux to keep track of toggles
-		// NOTE: Not synced with UIButtonTween->PlayDirection:Toggle!
-		isGuiShowing = !isGuiShowing;
 	}
 	
 	public void ShowPanel(){
@@ -224,6 +205,4 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 		UpdateBarPosition();
 	}
-
-
 }

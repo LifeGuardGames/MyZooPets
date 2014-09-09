@@ -81,7 +81,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
-		Debug.Log(newItemData.TextureName + " d");
 		spriteIcon.spriteName = newItemData.TextureName;
 		spriteIcon.GetComponent<SpriteResizer>().Resize();
 

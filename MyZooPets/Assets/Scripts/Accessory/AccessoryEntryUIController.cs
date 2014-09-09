@@ -36,6 +36,8 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	public UIButtonMessage buyButtonMessage;
 	public UIButtonMessage equipButtonMessage;
 	public UIButtonMessage unequipButtonMessage;
+
+	private bool islockExists = false;
 	
 	/// <summary>
 	/// Creates the entry.
@@ -79,8 +81,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		if(newItemData.CurrencyType == CurrencyTypes.Gem)
 			buyButtonIcon.spriteName = "iconGem";
 
-
-		
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
 		spriteIcon.spriteName = newItemData.TextureName;
@@ -94,26 +94,12 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		unequipButtonMessage.target = unequipButtonMessageTarget;
 		unequipButtonMessage.functionName = unqeuipButtonMessageFunctionName;
 
-		bool isLocked = newItemData.IsLocked();
-		if(isLocked){
-			// show the UI
-			LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, newItemData.UnlockAtLevel);
-			
-			// delete the buy button
-			buyButtonMessage.gameObject.SetActive(false);
-		}
-
 		CheckState();
 	}
-
-	//TODO need event listener for level up and unlock items - call CheckState
-
-	//
 
 	public void CheckState(){
 		// Check if accessory has already been bought. Change the button if so
 		if(itemData.Type == ItemType.Accessories){
-
 			// Check if the item has been equipped, this is mutually exclusive from owning it
 			if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsValue(itemData.ID)){
 				// Bought and equipped, show unequipped button
@@ -126,9 +112,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			}
 			// If this item is currently locked...
 			else if(itemData.IsLocked()){
-				// Show the UI
-				LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
-				
 				// Hide all the buttons
 				SetState(AccessoryButtonType.UnboughtLocked);
 			}
@@ -140,33 +123,44 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		else{
 			Debug.LogError("Non-Accessory detected");
 		}
-
-		if(!itemData.IsLocked())
-			buyButtonMessage.gameObject.SetActive(true);
 	}
 
 	public void SetState(AccessoryButtonType buttonType){
 		switch(buttonType){
 		case AccessoryButtonType.UnboughtLocked:
+
+			// Only want to spawn one lock
+			if(!islockExists){
+				islockExists = true;
+
+				// Show the lock
+				GameObject goLock = LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
+				goLock.transform.localPosition = new Vector3(196f, 0f, -2f);
+				goLock.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+			}
 			buyButtonMessage.gameObject.SetActive(false);
 			unequipButtonMessage.gameObject.SetActive(false);
 			equipButtonMessage.gameObject.SetActive(false);
 			break;
+
 		case AccessoryButtonType.Unbought:
 			buyButtonMessage.gameObject.SetActive(true);
 			unequipButtonMessage.gameObject.SetActive(false);
 			equipButtonMessage.gameObject.SetActive(false);
 			break;
+
 		case AccessoryButtonType.BoughtEquipped:
 			buyButtonMessage.gameObject.SetActive(false);
 			unequipButtonMessage.gameObject.SetActive(true);
 			equipButtonMessage.gameObject.SetActive(false);
 			break;
+
 		case AccessoryButtonType.BoughtUnequipped:
 			buyButtonMessage.gameObject.SetActive(false);
 			unequipButtonMessage.gameObject.SetActive(false);
 			equipButtonMessage.gameObject.SetActive(true);
 			break;
+
 		default:
 			Debug.LogError("Invalid state for button type");
 			break;

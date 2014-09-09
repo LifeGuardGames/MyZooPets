@@ -78,6 +78,8 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		
 		if(newItemData.CurrencyType == CurrencyTypes.Gem)
 			buyButtonIcon.spriteName = "iconGem";
+
+
 		
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
@@ -91,7 +93,16 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		equipButtonMessage.functionName = equipButtonMessageFunctionName;
 		unequipButtonMessage.target = unequipButtonMessageTarget;
 		unequipButtonMessage.functionName = unqeuipButtonMessageFunctionName;
-		
+
+		bool isLocked = newItemData.IsLocked();
+		if(isLocked){
+			// show the UI
+			LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, newItemData.UnlockAtLevel);
+			
+			// delete the buy button
+			buyButtonMessage.gameObject.SetActive(false);
+		}
+
 		CheckState();
 	}
 
@@ -129,6 +140,9 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		else{
 			Debug.LogError("Non-Accessory detected");
 		}
+
+		if(!itemData.IsLocked())
+			buyButtonMessage.gameObject.SetActive(true);
 	}
 
 	public void SetState(AccessoryButtonType buttonType){

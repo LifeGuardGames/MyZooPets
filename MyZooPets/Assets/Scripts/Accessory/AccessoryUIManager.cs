@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -39,6 +39,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	void Start(){
+		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
+
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
@@ -46,8 +48,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		foreach(AccessoryItem accessory in accessoryList){
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
-//				Debug.Log("getting types " + accessory.AccessoryType.ToString());
-
 				isFirstTitle = false;
 				GameObject itemUIObject = LgNGUITools.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
@@ -73,6 +73,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 		}
+	}
+
+	void OnDestroy(){
+		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 
 	/// <summary>
@@ -218,7 +222,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	public void OnEquipButton(GameObject button){
-//		Debug.Log("equipping");
 		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
 
@@ -228,7 +231,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	public void OnUnequipButton(GameObject button){
-//		Debug.Log("removing");
 		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
 
@@ -247,11 +249,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 		// Equip the node
 		AccessoryNodeController.Instance.SetAccessory(itemID);
-		
-		// Refresh all the other buttons
-		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
-			entryController.CheckState();
-		}
+
+		RefreshAccessoryItems();
 	}
 
 	public void Unequip(string itemID){
@@ -261,9 +260,17 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		// Unequip the node
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
 
-		// Refresh all the other buttons
+		RefreshAccessoryItems();
+	}
+
+	//Check for any UI updateds
+	private void RefreshAccessoryItems(){
 		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
 			entryController.CheckState();
 		}
+	}
+
+	private void RefreshAccessoryItems(object sender, EventArgs args){
+		RefreshAccessoryItems();
 	}
 }

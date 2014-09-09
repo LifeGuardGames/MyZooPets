@@ -106,7 +106,7 @@ public class Item{
 			unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode, 0);
 
 		if(hashItemData.Contains("SortCategory"))
-			unlockAtLevel = XMLUtils.GetInt(hashItemData["SortCategory"] as IXMLNode, 0);
+			sortCategory = XMLUtils.GetInt(hashItemData["SortCategory"] as IXMLNode, 0);
 
 		if(hashItemData.Contains("Sound"))
 			soundUsed = XMLUtils.GetString(hashItemData["Sound"] as IXMLNode, "");

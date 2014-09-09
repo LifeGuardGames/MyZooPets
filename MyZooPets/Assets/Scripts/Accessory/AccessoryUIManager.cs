@@ -24,9 +24,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	private bool isActive = false;
 	
 	// related to zooming into the badge board
-	public float fZoomTime;
-	public Vector3 vOffset;
-	public Vector3 vRotation;
+	public float ZoomTime;
+	public Vector3 zoomOffset;
+	public Vector3 zoomRotation;
 
 	public string soundBuy;
 	public string soundUnequip;
@@ -44,10 +44,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList){
-			Debug.Log(accessory.Name);
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
-
 //				Debug.Log("getting types " + accessory.AccessoryType.ToString());
 
 				isFirstTitle = false;
@@ -91,11 +89,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
-			this.GetComponent<TweenToggleDemux>().Show();
-			Debug.Log("OPENING");
 			// Zoom into the item
-			Vector3 vPos = zoomItem.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
+			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
+			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, ZoomTime, this.gameObject);
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -103,12 +99,35 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			InventoryUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
 			RoomArrowsUIManager.Instance.HidePanel();
+
+			//need to disable more things here
+			PetAnimationManager.Instance.DisableIdleAnimation();
 			
 			isActive = true;
 			zoomItem.collider.enabled = false;
 			
 			backButton.SetActive(true);
 		}
+	}
+
+	/// <summary>
+	/// show the ui once camera is done zooming in.
+	/// </summary>
+	private void CameraMoveDone(){
+
+		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
+		toggleDemux.Show();
+		toggleDemux.ShowTarget = this.gameObject;
+		toggleDemux.ShowFunctionName = "MovePet";
+	}
+
+	/// <summary>
+	/// Move pet into accessory view after camera is done zooming in
+	/// </summary>
+	private void MovePet(){
+		//teleport first then walk into view
+		PetMovement.Instance.petSprite.transform.localPosition = new Vector3(-12f, 0, 33f);
+		PetMovement.Instance.MovePet(new Vector3(-17f, 0, 33f));
 	}
 	
 	// The back button on the left top corner is clicked to zoom out of the zoom item
@@ -120,6 +139,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			zoomItem.collider.enabled = true;
 			
 			CameraManager.Instance.ZoomOutMove();
+			PetAnimationManager.Instance.EnableIdleAnimation();
 			
 			// Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();

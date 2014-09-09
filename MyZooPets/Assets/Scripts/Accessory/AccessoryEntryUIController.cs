@@ -80,9 +80,10 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			buyButtonIcon.spriteName = "iconGem";
 		
 		labelCost.text = costText;
-		Debug.Log(newItemData.Name);
 		labelName.text = newItemData.Name;
+		Debug.Log(newItemData.TextureName + " d");
 		spriteIcon.spriteName = newItemData.TextureName;
+		spriteIcon.GetComponent<SpriteResizer>().Resize();
 
 		// Assign buttons
 		buyButtonMessage.target = buyButtonMessageTarget;

@@ -31,6 +31,7 @@ public class SpriteResizer : MonoBehaviour{
 		
 		// get the size that we want to resize the sprite to
 		int nSizeTo = Constants.GetConstant<int>(strConstant);
+		Debug.Log(nSizeTo);
 		// then make the sprite pixel perfect so we can easily get the width and height
 		sprite.MakePixelPerfect();
 		

@@ -44,7 +44,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList){
-			Debug.Log(accessory.Name);
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
 

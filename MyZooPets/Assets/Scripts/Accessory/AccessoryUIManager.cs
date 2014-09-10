@@ -99,7 +99,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
-			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 			EditDecosUIManager.Instance.HideNavButton();
 			RoomArrowsUIManager.Instance.HidePanel();
@@ -147,7 +146,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			
 			// Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
-			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			EditDecosUIManager.Instance.ShowNavButton();
 			RoomArrowsUIManager.Instance.ShowPanel();

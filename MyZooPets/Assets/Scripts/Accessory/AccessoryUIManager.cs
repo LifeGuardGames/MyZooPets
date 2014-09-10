@@ -21,7 +21,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public GameObject accessoryEntryPrefab;
 	public GameObject backButton;
 	public GameObject zoomItem;
-	private bool isActive = false;
+	public EntranceHelperController entranceHelper;
 	
 	// related to zooming into the badge board
 	public float ZoomTime;
@@ -33,6 +33,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public string soundEquip;
 
 	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
+	private bool isActive = false;
 
 	void Awake(){
 		eModeType = UIModeTypes.Accessory;
@@ -118,6 +119,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	/// </summary>
 	private void CameraMoveDone(){
 
+		// disable entrance highlight after zoomed in for the first time
+		entranceHelper.EntranceUsed();
+
 		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
 		toggleDemux.Show();
 		toggleDemux.ShowTarget = this.gameObject;
@@ -129,9 +133,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	/// </summary>
 	private void MovePet(){
 		//teleport first then walk into view
-		PetMovement.Instance.petSprite.transform.localPosition = new Vector3(-12f, 0, 33f);
+		PetMovement.Instance.petSprite.transform.position = new Vector3(-13f, 0, 33f);
 		PetMovement.Instance.MovePet(new Vector3(-17f, 0, 33f));
 	}
+
+
 	
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){

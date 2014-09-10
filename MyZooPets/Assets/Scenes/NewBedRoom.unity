@@ -16155,6 +16155,7 @@ MonoBehaviour:
   zoomHelper: {fileID: 453147156}
   goBackButton: {fileID: 270063093}
   draggableCollider: {fileID: 206198732}
+  dragRecognizerFingerGesture: {fileID: 1645322222}
   mapEntries:
   - {fileID: 675266814}
   - {fileID: 1519871308}
@@ -19097,7 +19098,7 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 533314242}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 524.761475, y: 321.92981, z: 0}
+  m_LocalPosition: {x: 524.761475, y: 267.546753, z: -7.62939453e-06}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 1402234440}
@@ -22765,7 +22766,7 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 643729225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 255.160522, y: -35.6986084, z: -1}
+  m_LocalPosition: {x: 255.160522, y: -65, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1575522539}
@@ -22833,7 +22834,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: 2185.15479
+    e13: 2214.45605
     e20: 0
     e21: 0
     e22: 384
@@ -22845,7 +22846,7 @@ MonoBehaviour:
   mAlpha: 1
   mDebugInfo: 1
   mClipping: 3
-  mClipRange: {x: 0, y: 0, z: 500, w: 600}
+  mClipRange: {x: 0, y: 0, z: 500, w: 550}
   mClipSoftness: {x: 1, y: 1}
 --- !u!1 &649440107
 GameObject:
@@ -24403,6 +24404,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
+      propertyPath: dragRecognizerFingerGesture
+      value: 
+      objectReference: {fileID: 1645322222}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
   m_RootGameObject: {fileID: 453147152}
@@ -43797,8 +43802,8 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 1212945394}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 219, y: -16.9998779, z: 0}
-  m_LocalScale: {x: 614, y: 702, z: 1}
+  m_LocalPosition: {x: 219, y: -47, z: 0}
+  m_LocalScale: {x: 614, y: 642, z: 1}
   m_Children: []
   m_Father: {fileID: 2008148705}
   m_RootOrder: 0
@@ -53054,7 +53059,7 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 1575522538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 260, z: 0}
+  m_LocalPosition: {x: 0, y: 230.920288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 643729226}
@@ -54359,7 +54364,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   RayThickness: 0
-  VisualizeRaycasts: 1
+  VisualizeRaycasts: 0
   UsePhysics2D: 1
 --- !u!114 &1645322221
 MonoBehaviour:
@@ -59492,7 +59497,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnApplicationQuit
@@ -63496,7 +63501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1814776892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70602,7 +70607,7 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 2020571756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 251.213593, y: 320.992126, z: 0}
+  m_LocalPosition: {x: 251.213562, y: 266.609253, z: -7.62939453e-06}
   m_LocalScale: {x: 462.000031, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 2008148705}
@@ -74243,7 +74248,7 @@ Transform:
   m_PrefabInternal: {fileID: 347786504}
   m_GameObject: {fileID: 2087408692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 251.928528, y: 335.511841, z: 0}
+  m_LocalPosition: {x: 251.928528, y: 281.128967, z: -5}
   m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 2008148705}

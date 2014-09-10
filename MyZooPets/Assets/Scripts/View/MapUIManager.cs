@@ -14,6 +14,9 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	public ZoomHelper zoomHelper; // zoom helper
 	public GameObject goBackButton; // back button for the chart
 	public BoxCollider draggableCollider; // The collider that is dragged, to be enabled only when zoomed in
+	public DragRecognizer dragRecognizerFingerGesture; //need to temporary disable this script when zoomed into map
+													//OnDrag event from FingerGesture conflicts with NGUI. Need to
+													//set them on diff layer. this is only a quick fix
 	public List<MapEntry> mapEntries = new List<MapEntry>();
 
 	protected override void _Start(){
@@ -43,6 +46,9 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 
 		// disable the collider so the user can't click the chart again
 		gameObject.collider.enabled = false;
+
+		// disable FingerGesture OnDrag event
+		dragRecognizerFingerGesture.enabled = false;
 		
 		// enable the back button for the user to back out
 		goBackButton.SetActive(true);
@@ -55,6 +61,9 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	protected override void _CloseUI(){
 		// enable the collider so that the board can be clicked again
 		gameObject.collider.enabled = true;
+
+		// enable FingerGesture OnDrag event
+		dragRecognizerFingerGesture.enabled = true;
 		
 		// zoom out
 		CameraManager.Instance.ZoomOutMove();

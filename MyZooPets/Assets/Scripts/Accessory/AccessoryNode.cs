@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Accessory node on the pet to be controlled by AccessoryNodeController
-/// NOTE: A node can contain references to multiple body sprites, ie. finger accessories
+/// Accessory node on the pet to be controlled by AccessoryNodeController for population
+/// In scenes where you only need to show accessories, this by itself is enough!
+/// NOTE: A node can contain references to multiple body sprites, ie. finger accessories, not yet implemented
 /// </summary>
 public class AccessoryNode : MonoBehaviour{
 	public string accessoryNodeID;				// ID of this node
@@ -17,12 +18,15 @@ public class AccessoryNode : MonoBehaviour{
 			Debug.LogError("Missing accessory node ID");
 		}
 
-		// Add self to the hash table in the controller
-		if(AccessoryNodeController.Instance.accessoryNodeHash.ContainsKey(accessoryNodeID)){
-			Debug.LogError("Key already present: " + accessoryNodeID);
-		}
-		else{
-			AccessoryNodeController.Instance.accessoryNodeHash.Add(accessoryNodeID, this);
+		// Might not always have controller depending on scene
+		if(AccessoryNodeController.Instance != null){
+			// Add self to the hash table in the controller
+			if(AccessoryNodeController.Instance.accessoryNodeHash.ContainsKey(accessoryNodeID)){
+				Debug.LogError("Key already present: " + accessoryNodeID);
+			}
+			else{
+				AccessoryNodeController.Instance.accessoryNodeHash.Add(accessoryNodeID, this);
+			}
 		}
 
 		CheckSaveData();

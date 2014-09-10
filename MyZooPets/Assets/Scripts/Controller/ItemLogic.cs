@@ -311,7 +311,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
-		                       orderby item.SortCategory ascending, item.UnlockAtLevel ascending, item.Cost.ToString() ascending
+		                       orderby item.SortCategory ascending ,item.UnlockAtLevel.ToString() ascending, item.Cost.ToString() ascending
 		                       select item).ToList();
 		return itemList;
 	}

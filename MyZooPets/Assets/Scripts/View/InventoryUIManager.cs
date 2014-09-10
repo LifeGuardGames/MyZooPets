@@ -26,7 +26,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 			// ideally, we might abstract out the inventory to be an inventory of certain things (food, usables, decos, etc)
 			// but for now, I guess just don't show decorations in the inventory
 			//if ( invItem.ItemType != ItemType.Decorations )
-			SpawnInventoryItemInPanel(invItem);
+			SpawnInventoryItemInPanel(invItem, isOnLoad : true);
 		}
 	}
 
@@ -55,16 +55,36 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		return retVal;
 	}
 
-	public void UpdateBarPosition(){
+	/// <summary>
+	/// Updates the bar position.
+	/// </summary>
+	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
+	public void UpdateBarPosition(bool isOnLoad = false){
 		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-		
-		// Adjust the bar length based on how many items we want showing at all times
-		if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 
-			// Update position of the bar if inventory is open
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", LeanTweenType.easeOutBounce);
-			LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+		// Normal case where you add item during game
+		if(!isOnLoad){
+			// Adjust the bar length based on how many items we want showing at all times
+			if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+
+				// Update position of the bar if inventory is open
+				Hashtable optional = new Hashtable();
+				optional.Add("ease", LeanTweenType.easeOutBounce);
+				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+			}
+		}
+		// Scene loading case, dont want to tween here so set them explicitly
+		else{
+			// Adjust the bar length based on how many items we want showing at all times
+			if(allInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+				allInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+			}
+			
+			if(inventoryPanel.transform.localPosition.x != collapsedPos - allInventoryItemsCount * 90){
+				inventoryPanel.transform.localPosition = new Vector3(collapsedPos - allInventoryItemsCount * 90,
+				                                                     inventoryPanel.transform.localPosition.y,
+				                                                     inventoryPanel.transform.localPosition.z);
+			}
 		}
 		
 		uiGridObject.GetComponent<UIGrid>().Reposition();
@@ -175,7 +195,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	//Create the NGUI object and populate the fields with InventoryItem data
-	private void SpawnInventoryItemInPanel(InventoryItem invItem){
+	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
 		GameObject inventoryItemObject = NGUITools.AddChild(uiGridObject, inventoryItemPrefab);
 
@@ -203,6 +223,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		invDragDrop.OnItemDrop += OnItemDrop;
 		invDragDrop.OnItemPress += OnItemPress;
 
-		UpdateBarPosition();
+		UpdateBarPosition(isOnLoad);
 	}
 }

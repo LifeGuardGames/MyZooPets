@@ -32,6 +32,8 @@ public class DataLoaderItems{
             item = dictItems[ItemType.Decorations][itemID];
         }else if(dictItems[ItemType.Premiums].ContainsKey(itemID)){
 			item = dictItems[ItemType.Premiums][itemID];
+		}else if(dictItems[ItemType.Accessories].ContainsKey(itemID)){
+			item = dictItems[ItemType.Accessories][itemID];
 		}
 
         return item;
@@ -76,6 +78,16 @@ public class DataLoaderItems{
         DecorationItem item = (DecorationItem) GetItem(itemID);
         return item.MaterialName;
     }
+
+	/// <summary>
+	/// Gets the name of the accessory item prefab.
+	/// </summary>
+	/// <returns>The accessory item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public static string GetAccessoryItemPrefabName(string itemID){
+		AccessoryItem item = (AccessoryItem) GetItem(itemID);
+		return item.PrefabName;
+	}
 	
 	/// <summary>
 	/// Gets Items of type
@@ -87,8 +99,8 @@ public class DataLoaderItems{
         return dictItems[type];
     }
 	
-	private static Dictionary<ItemType, Dictionary<string, Item>> GetAllItems() {
-		if ( allItems == null )
+	private static Dictionary<ItemType, Dictionary<string, Item>> GetAllItems(){
+		if(allItems == null)
 			SetupData();
 		
 		return allItems;
@@ -129,16 +141,19 @@ public class DataLoaderItems{
                 switch(itemType){
                     case ItemType.Foods:
                         item = new FoodItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
                     case ItemType.Usables:
                         item = new UsableItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
                     case ItemType.Decorations:
 						item = new DecorationItem(itemID, itemType, hashItemData);
-                    break;
+                    	break;
+					case ItemType.Accessories:
+						item = new AccessoryItem(itemID, itemType, hashItemData);
+						break;
 					case ItemType.Premiums:
 						item = new PremiumItem(itemID, itemType, hashItemData);
-					break;
+						break;
                 }
 				
 				if ( !categoryItem.ContainsKey( itemID ) )

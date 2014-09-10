@@ -26,8 +26,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	private float highFiveWaitTimer = 0;
 	private float timeBeforeHighFiveEnds = 5f;
 	private PetAnimStates currentAnimationState;
-
 	private FireBlowParticleController fireScript;
+	private bool isIdleAnimationActive = true; //F: temporary suspend any idle animations. 
+											//animations can still be played but need to be called explicitly
+
 
 	public bool IsBusy{
 		get{
@@ -46,11 +48,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	// Update is called once per frame
 	void Update () {
-		RunIdleStateTimer();
-		RunHighFiveTimer();
+		if(isIdleAnimationActive){
+			RunIdleStateTimer();
+			RunHighFiveTimer();
+		}
 	}
-
-
+	
 //	void OnGUI(){
 
 //		if(GUI.Button(new Rect(0, 0, 100, 200), "Healthy")){
@@ -74,6 +77,14 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 //			animator.SetInteger("Mood", 30);
 //		}
 //	}
+
+	public void DisableIdleAnimation(){
+		isIdleAnimationActive = false;
+	}
+
+	public void EnableIdleAnimation(){
+		isIdleAnimationActive = true;
+	}
 
 	/// <summary>
 	/// Disables the animation. by hiding the colliders and the body parts

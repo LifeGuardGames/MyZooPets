@@ -4,19 +4,12 @@ using System.Collections.Generic;
 
 public class MutableDataPetInfo{	
 	public string PetID { get; set; }
-
 	public string PetName { get; set; }
-
 	public string PetSpecies { get; set; }
-
 	public string PetColor { get; set; }
-
 	public bool IsHatched { get; set; }
-
 	public int FireBreaths { get; set; } // fire breathing status of the pet
-
 	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
-
 	public bool IsQuestionaireCollected {get; set;}
 	
 	public void SetFireBreaths(int amount){

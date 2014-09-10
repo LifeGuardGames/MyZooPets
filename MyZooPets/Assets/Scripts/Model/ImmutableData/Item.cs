@@ -16,6 +16,8 @@ public class Item{
 	protected string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
 	private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
+	private int sortCategory;	// Options, use for category sorting (ie. accessories)
+
 	//F: available in store as well
 	//default to false
 	private string soundUsed; // sound item makes when it is used
@@ -66,6 +68,10 @@ public class Item{
 	public bool ItemBoxOnly{
 		get{ return itemBoxOnly;}
 	}
+
+	public int SortCategory{
+		get{ return sortCategory;}
+	}
 	
 	public bool IsLocked(){
 		bool isLocked = true;
@@ -88,7 +94,7 @@ public class Item{
 
 //		cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
 
-		currencyType = (CurrencyTypes) Enum.Parse(typeof(CurrencyTypes), 
+		currencyType = (CurrencyTypes)Enum.Parse(typeof(CurrencyTypes), 
 		                  HashUtils.GetHashValue<string>(costAttributes, "CurrencyType", ""));
 
 		cost = (double)Double.Parse(HashUtils.GetHashValue<string>(costAttributes, "Amount", ""));
@@ -98,7 +104,10 @@ public class Item{
 		// optional for now
 		if(hashItemData.Contains("UnlockAtLevel"))
 			unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode, 0);
-		
+
+		if(hashItemData.Contains("SortCategory"))
+			sortCategory = XMLUtils.GetInt(hashItemData["SortCategory"] as IXMLNode, 0);
+
 		if(hashItemData.Contains("Sound"))
 			soundUsed = XMLUtils.GetString(hashItemData["Sound"] as IXMLNode, "");
 

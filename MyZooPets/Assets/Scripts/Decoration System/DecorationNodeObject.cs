@@ -24,7 +24,7 @@ public class DecorationNodeObject : DecorationNode{
 	// _SetDecoration()
 	//---------------------------------------------------	
 	protected override void _SetDecoration(string strID){
-		// first, if our defeat deco exists, destroy it
+		// first, if our default deco exists, destroy it
 		if(goDefaultDeco)
 			Destroy(goDefaultDeco);
 		

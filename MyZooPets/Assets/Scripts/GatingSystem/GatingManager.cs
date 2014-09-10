@@ -439,7 +439,7 @@ public class GatingManager : Singleton<GatingManager>{
 	private void ShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
-		GameObject goFireButton = LgNGUITools.AddChildWithPosition(GameObject.Find("Anchor-Center"), resourceFireButton);
+		GameObject goFireButton = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), resourceFireButton);
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location

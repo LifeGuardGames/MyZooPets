@@ -33,6 +33,7 @@ public enum ItemType{
 	Foods,
 	Usables,
 	Decorations,
+	Accessories,
 	Premiums
 }
 public enum StatType{
@@ -116,7 +117,8 @@ public enum UIModeTypes {
 	MenuSettings,
 	GatingSystem,
 	MiniPet,
-	FireBreathing
+	FireBreathing,
+	Accessory
 }
 
 // decoration node anchor types
@@ -129,6 +131,12 @@ public enum DecorationTypes {
     // TallFurniture,
     // BigFurniture,
     // BigPlant,
+}
+
+public enum AccessoryTypes{
+	Hat,
+	Glasses,
+	Color
 }
 
 // mini game states

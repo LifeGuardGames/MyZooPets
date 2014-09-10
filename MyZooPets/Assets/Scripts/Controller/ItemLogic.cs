@@ -10,6 +10,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> foodList; //list with only FoodItem. sorted by cost
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
+	private List<Item> accessoryList; // List with only AccessoryItem. sorted by cost
 	private List<Item> premiumList;
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
 
@@ -22,7 +23,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(foodList == null){
 				foodList = new List<Item>();
 				Dictionary<string, Item> foodDict = DataLoaderItems.GetAllItemsOfType(ItemType.Foods);
-				foodList = SelectListFromDictionaryAndSort(foodDict);
+				foodList = ListFromDictionarySortByCost(foodDict);
 			}
 			return foodList;
 		}
@@ -37,7 +38,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(usableList == null){
 				usableList = new List<Item>();
 				Dictionary<string, Item> usableDict = DataLoaderItems.GetAllItemsOfType(ItemType.Usables);
-				usableList = SelectListFromDictionaryAndSort(usableDict);
+				usableList = ListFromDictionarySortByCost(usableDict);
 			}
 			return usableList;
 		}
@@ -52,11 +53,21 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(decorationList == null){
 				decorationList = new List<Item>();
 				Dictionary<string, Item> decorationDict = DataLoaderItems.GetAllItemsOfType(ItemType.Decorations);
-				decorationList = SelectListFromDictionaryAndSort(decorationDict);
-
+				decorationList = ListFromDictionarySortByCost(decorationDict);
 			}
 			return decorationList;
 		}		
+	}
+
+	public List<Item> AccessoryList{
+		get{
+			if(accessoryList == null){
+				accessoryList = new List<Item>();
+				Dictionary<string, Item> accesorryDict = DataLoaderItems.GetAllItemsOfType(ItemType.Accessories);
+				accessoryList = ListFromDictionarySortByCategoryCost(accesorryDict);
+			}
+			return accessoryList;
+		}
 	}
 
 	/// <summary>
@@ -68,7 +79,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			if(premiumList == null){
 				premiumList = new List<Item>();
 				Dictionary<string, Item> premiumDict = DataLoaderItems.GetAllItemsOfType(ItemType.Premiums);
-				premiumList = SelectListFromDictionaryAndSort(premiumDict);
+				premiumList = ListFromDictionarySortByCost(premiumDict);
 
 //				var items = from keyValuePair in premiumDict 
 //					select keyValuePair.Value;
@@ -140,6 +151,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 	/// <param name="itemID">Item ID.</param>
 	public string GetDecoItemMaterialName(string itemID){
 		return DataLoaderItems.GetDecoItemMaterialName(itemID);
+	}
+
+	/// <summary>
+	/// Gets the name of the accessory item prefab.
+	/// </summary>
+	/// <returns>The accessory item prefab name.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public string GetAccessoryItemPrefabName(string itemID){
+		return DataLoaderItems.GetAccessoryItemPrefabName(itemID);
 	}
 
 	/// <summary>
@@ -272,12 +292,27 @@ public class ItemLogic : Singleton<ItemLogic>{
 	/// </summary>
 	/// <returns>The list from dictionary and sort.</returns>
 	/// <param name="itemDict">Item dict.</param>
-	private List<Item> SelectListFromDictionaryAndSort(Dictionary<string, Item> itemDict){
+	private List<Item> ListFromDictionarySortByCost(Dictionary<string, Item> itemDict){
 		var items = from keyValuePair in itemDict 
 						select keyValuePair.Value;
 		List<Item> itemList = (from item in items 
 						orderby item.UnlockAtLevel ascending, item.Cost.ToString() ascending
 						select item).ToList();
+		return itemList;
+	}
+
+	/// <summary>
+	/// Lists from dictionary sort by category cost.
+	/// NOTE: Requires 'SortCategory' component in xml (ie accessory)
+	/// </summary>
+	/// <returns>The from dictionary sort by category cost.</returns>
+	/// <param name="itemDict">Item dict.</param>
+	private List<Item> ListFromDictionarySortByCategoryCost(Dictionary<string, Item> itemDict){
+		var items = from keyValuePair in itemDict 
+						select keyValuePair.Value;
+		List<Item> itemList = (from item in items 
+		                       orderby item.SortCategory ascending ,item.UnlockAtLevel.ToString() ascending, item.Cost.ToString() ascending
+		                       select item).ToList();
 		return itemList;
 	}
 }

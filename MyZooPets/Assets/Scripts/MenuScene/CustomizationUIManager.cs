@@ -119,7 +119,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		AudioManager.Instance.LowerBackgroundVolume(0.1f);
 		
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
-		LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
+		LgNGUITools.AddChildWithPositionAndScale( GameObject.Find("Anchor-Center"), resourceMovie );
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
 	}
 

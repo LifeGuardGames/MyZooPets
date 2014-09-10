@@ -56,13 +56,26 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// Checks if wallpaper is already bought
 	/// </summary>
 	/// <returns><c>true</c>, if for wallpaper was checked, <c>false</c> otherwise.</returns>
-	/// <param name="itemID">Item I.</param>
+	/// <param name="itemID">Item ID.</param>
 	public bool CheckForWallpaper(string itemID){
 		bool isWallpaperBought = false;
 		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
 		isWallpaperBought = oneTimePurchasedInv.Contains(itemID);
 
 		return isWallpaperBought;
+	}
+
+	/// <summary>
+	/// Checks if the accessory is already bought
+	/// </summary>
+	/// <returns><c>true</c>, if for accessory was checked, <c>false</c> otherwise.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public bool CheckForAccessory(string itemID){
+		bool isAccessoryBought = false;
+		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+		isAccessoryBought = oneTimePurchasedInv.Contains(itemID);
+
+		return isAccessoryBought;
 	}
 	
 	/// <summary>
@@ -94,10 +107,11 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
 
-			//if in the inventory already check if it's wallpaper
-			//if it's wallpaper don't increment count just return
-			if(CheckForWallpaper(itemID))
+			//if in the inventory already check if it's wallpaper/accessory
+			//if it's wallpaper/accessory don't increment count just return
+			if(CheckForWallpaper(itemID) || CheckForAccessory(itemID)){
 				return;
+			}
 
 			invItem = invItems[itemID];
 			invItem.Amount += count; 
@@ -118,6 +132,12 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 					List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
 					oneTimePurchasedInv.Add(itemData.ID);
 				}
+			}
+			//special case: keep track of bought accessories in another list.
+			if(itemData.Type == ItemType.Accessories){
+				//Keep track for all accessories
+				List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
+				oneTimePurchasedInv.Add(itemData.ID);
 			}
 		}
 
@@ -212,6 +232,9 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		switch(eType){
 		case ItemType.Decorations:
 			inventory = DataManager.Instance.GameData.Inventory.DecorationItems;
+			break;
+		case ItemType.Accessories:
+			inventory = DataManager.Instance.GameData.Inventory.AccessoryItems;
 			break;
 		default:
 			inventory = DataManager.Instance.GameData.Inventory.InventoryItems;

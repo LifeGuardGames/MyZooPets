@@ -10,7 +10,6 @@ using System.Collections.Generic;
 
 public class MutableDataDecorationSystem{
     public Dictionary<string, string> PlacedDecorations {get; set;} // dictionary of placed decorations; Key: node ID, Value: item ID
-	
 
     //=======================Initialization==================
     public MutableDataDecorationSystem(){

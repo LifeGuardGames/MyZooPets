@@ -230,7 +230,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Transform buttonParent = button.transform.parent.parent;
 		string itemID = buttonParent.name;
 		Item itemData = ItemLogic.Instance.GetItem(itemID);
-
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){

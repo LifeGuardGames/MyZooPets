@@ -42,7 +42,7 @@ public class FlameChartEntry : MonoBehaviour {
 			bool bUnlocked = skill.IsUnlocked;
 			if ( bUnlocked == false ) {
 				int nLevel = skill.UnlockLevel;	
-				LevelLockObject.CreateLock( spriteIcon.gameObject.GetParent(), nLevel, true, "LevelLockUI_Default" );
+//				LevelLockObject.CreateLock( spriteIcon.gameObject.GetParent(), nLevel, true, "LevelLockUI_Default" );
 			}
 		}
 	}

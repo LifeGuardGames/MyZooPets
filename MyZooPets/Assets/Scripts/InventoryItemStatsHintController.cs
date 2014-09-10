@@ -35,7 +35,7 @@ public class InventoryItemStatsHintController : MonoBehaviour{
             }
 
             //instantiate the prefab
-            GameObject statHint = LgNGUITools.AddChildWithPosition(this.gameObject, inventoryStatsHintPrefab);
+            GameObject statHint = LgNGUITools.AddChildWithPositionAndScale(this.gameObject, inventoryStatsHintPrefab);
             statHint.transform.localPosition = new Vector3(statHint.transform.localPosition.x, 
                                                         yPositionOfFirstHint * hintCounter,
                                                         statHint.transform.localPosition.z);

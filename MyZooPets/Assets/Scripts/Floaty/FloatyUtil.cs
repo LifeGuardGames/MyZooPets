@@ -37,7 +37,7 @@ public class FloatyUtil {
         GameObject floaty;
 
         if(option.ContainsKey("parent")){
-            floaty = LgNGUITools.AddChildWithPosition((GameObject) option["parent"], floatyText);
+            floaty = LgNGUITools.AddChildWithPositionAndScale((GameObject) option["parent"], floatyText);
         }else{
             Debug.LogError("SpawnfloatyText needs a parent");
             return;

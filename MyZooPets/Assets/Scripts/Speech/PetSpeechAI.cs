@@ -48,6 +48,20 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
         }
     }
 
+	public void ShowItemNotHungryMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("ITEM_NOT_HUNGRY"));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);	
+	}
+	
+	public void ShowItemNoThanksMsg(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);	
+	}
+
 	public void ShowFireOrbMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
@@ -150,5 +164,4 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 
         enableAutoSpeech = true;
     }
-
 }

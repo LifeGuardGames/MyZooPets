@@ -127,9 +127,9 @@ public enum DecorationTypes {
     Wallpaper,
     Carpet,
 	SmallPlant,
+	BigFurniture,
     // FloorTile,
     // TallFurniture,
-    // BigFurniture,
     // BigPlant,
 }
 

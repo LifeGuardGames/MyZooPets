@@ -41,10 +41,20 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// Gets all decoration inventory items.
 	/// </summary>
 	/// <value>All decoration inventory items.</value>
-	public List<InventoryItem> GetDecorationInventoryItemsOrderyByType(DecorationTypes type){
+	public List<InventoryItem> GetDecorationInventoryItems(){
 		// get the list of decorations the user owns
 		List<InventoryItem> decorations = (from keyValuePair in DataManager.Instance.GameData.Inventory.DecorationItems
-		                                 select keyValuePair.Value).ToList();
+		                                   select keyValuePair.Value).ToList();
+		return decorations;
+	}
+
+	/// <summary>
+	/// Gets all decoration inventory items ordered by type.
+	/// </summary>
+	/// <value>All decoration inventory items.</value>
+	public List<InventoryItem> GetDecorationInventoryItemsOrderyByType(DecorationTypes type){
+		// get the list of decorations the user owns
+		List<InventoryItem> decorations = GetDecorationInventoryItems();
 		
 		// now order the list by the type of decoration we are looking for
 		decorations = decorations.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == type).ToList();	

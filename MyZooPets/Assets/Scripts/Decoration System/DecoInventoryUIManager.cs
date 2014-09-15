@@ -3,7 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class DecorationUIManager : SingletonUI<DecorationUIManager> {
+/// <summary>
+/// Decoration user interface manager.
+/// This class includes the Decoration Inventory as well as UI for inventory.
+/// 
+/// 
+/// InventoryLogic 	- DecoInventoryUIManager	(two separate inventory managers!)
+/// 				\ InventoryUIManager
+/// 
+/// </summary>
+public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	public EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
 	public EventHandler<EventArgs> OnDecoDropped;   // when a decoration is picked up
@@ -27,31 +36,47 @@ public class DecorationUIManager : SingletonUI<DecorationUIManager> {
 	}
 
 	void Start(){
-//		InventoryLogic.OnItemAddedToDecoration += OnItemAddedHandler;
+		InventoryLogic.onItemAddedToDecoInventory += OnItemAddedHandler;
 //		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
 		// Spawn items in the decoration inventory for the first time
-		List<InventoryItem> listDecos = InventoryLogic.Instance.GetDecorationInventoryItems();
+		List<InventoryItem> listDecos = InventoryLogic.Instance.AllDecoInventoryItems;
 		foreach(InventoryItem invItem in listDecos){
 			// Setting isOnLoad option to true for first time loading
 			SpawnInventoryItemInPanel(invItem, isOnLoad:true);
 		}
 	}
 
+	void OnDestroy(){
+		InventoryLogic.onItemAddedToDecoInventory -= OnItemAddedHandler;
+	}
+
+	//Event listener. listening to when new item is added to the deco inventory
+	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
+		Debug.Log("ADDDED DECOO");
+		if(e.IsItemNew){
+			SpawnInventoryItemInPanel(e.InvItem);
+		}
+		else{
+			Transform invItem = uiGridObject.transform.Find(e.InvItem.ItemID);
+			invItem.Find("Label_Amount").GetComponent<UILabel>().text = e.InvItem.Amount.ToString();
+		}
+	}
+
 	//Create the NGUI object and populate the fields with InventoryItem data
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
-		GameObject inventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
+		GameObject decoInventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
 		
 		//get reference to all the GO and scripts
-		Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
-		UISprite itemSprite = inventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
-		UILabel itemAmountLabel = inventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
+		Transform itemWrapper = decoInventoryItemObject.transform.Find("Icon");
+		UISprite itemSprite = decoInventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
+		UILabel itemAmountLabel = decoInventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
 		InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
 		
 		//Set value to UI element
 		itemWrapper.name = invItem.ItemID;
-		inventoryItemObject.name = invItem.ItemID;
+		decoInventoryItemObject.name = invItem.ItemID;
 		itemSprite.spriteName = invItem.ItemTextureName;
 		itemAmountLabel.text = invItem.Amount.ToString();
 		
@@ -71,28 +96,29 @@ public class DecorationUIManager : SingletonUI<DecorationUIManager> {
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
-		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+		Debug.Log("updating");
+		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
 		
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+			if(allDecoInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 				
 				// Update position of the bar if inventory is open
 				Hashtable optional = new Hashtable();
 				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allDecoInventoryItemsCount * 90, 0.4f, optional);
 			}
 		}
 		// Scene loading case, dont want to tween here so set them explicitly
 		else{
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-				allInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+			if(allDecoInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+				allDecoInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 			}
 			
-			if(decorationGridPanel.transform.localPosition.x != collapsedPos - allInventoryItemsCount * 90){
-				decorationGridPanel.transform.localPosition = new Vector3(collapsedPos - allInventoryItemsCount * 90,
+			if(decorationGridPanel.transform.localPosition.x != collapsedPos - allDecoInventoryItemsCount * 90){
+				decorationGridPanel.transform.localPosition = new Vector3(collapsedPos - allDecoInventoryItemsCount * 90,
 				                                                          decorationGridPanel.transform.localPosition.y,
 				                                                          decorationGridPanel.transform.localPosition.z);
 			}
@@ -107,6 +133,24 @@ public class DecorationUIManager : SingletonUI<DecorationUIManager> {
 		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
 	}
 
+	//Find the position of Decoration Item game object with invItemID
+	//Used for animation position in StoreUIManager
+	public Vector3 GetPositionOfDecoInvItem(string itemID){
+		Debug.Log("LOOKING FOR POS");
+		// position to use
+		Vector3 decoInvItemPosition;
+		
+		// Use the position of the item in the inventory panel
+		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
+		InventoryItem decoInvItem = InventoryLogic.Instance.GetDecoInvItem(itemID);
+		decoInvItemPosition = deocInvItemTrans.position;
+		
+		//Offset position if the item is just added to the inventory
+		if(decoInvItem.Amount == 1)
+			decoInvItemPosition += new Vector3(-0.22f, 0, 0);
+		
+		return decoInvItemPosition;
+	}
 
 	/// <summary>
 	/// Show only the decoration inventory bar
@@ -119,7 +163,7 @@ public class DecorationUIManager : SingletonUI<DecorationUIManager> {
 	/// Hide only the decoration inventory bar
 	/// </summary>
 	public void HideDecoInventory(){
-		decorationGridPanel.GetComponent<TweenToggle>().Hide();
+		decorationGridPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
 	}
 
 	//When the highscore board is clicked and zoomed into

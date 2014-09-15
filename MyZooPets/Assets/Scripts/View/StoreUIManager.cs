@@ -174,9 +174,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		ItemType eType = itemData.Type;
 		switch(eType){
 		case ItemType.Decorations:
-			itemPosition = EditDecosUIManager.Instance.GetEditButtonPosition();
+			Debug.Log("calling deco");
+			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemID);
 			break;
 		default:
+			Debug.Log("calling food");
 			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
 			break;
 		}
@@ -354,8 +356,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.ShowPanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -366,8 +368,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Items"){
-			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.ShowPanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -378,8 +380,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Decorations"){
-			EditDecosUIManager.Instance.ShowNavButton();
 			InventoryUIManager.Instance.HidePanel();
+			DecoInventoryUIManager.Instance.ShowDecoInventory();
 
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
@@ -417,8 +419,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else if(currentPage == "Premiums"){
 			InventoryUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
 			NavigationUIManager.Instance.HidePanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -450,6 +452,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.HidePanel();
+		DecoInventoryUIManager.Instance.HideDecoInventory();
+
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 
 		// kind of hacky way to ensure that the UI is reset to the correct mode

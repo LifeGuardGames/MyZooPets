@@ -42,8 +42,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	protected abstract void _SetDecoration(string strID);				// set the deco to this node
 
 	void Start(){
-		DecorationUIManager.Instance.OnDecoPickedUp += OnDecorationPickedUp;
-		DecorationUIManager.Instance.OnDecoDropped += OnDecorationDropped;
+		DecoInventoryUIManager.Instance.OnDecoPickedUp += OnDecorationPickedUp;
+		DecoInventoryUIManager.Instance.OnDecoDropped += OnDecorationDropped;
 
 		// Set the decoration icon
 		switch(nodeType){
@@ -70,8 +70,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		DecorationUIManager.Instance.OnDecoPickedUp -= OnDecorationPickedUp;
-		DecorationUIManager.Instance.OnDecoDropped -= OnDecorationDropped;
+		DecoInventoryUIManager.Instance.OnDecoPickedUp -= OnDecorationPickedUp;
+		DecoInventoryUIManager.Instance.OnDecoDropped -= OnDecorationDropped;
 	}
 	
 	/// <summary>
@@ -157,7 +157,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raises the decoration picked up event.
 	/// </summary>
 	private void OnDecorationPickedUp(object sender, EventArgs args){
-		SetState(DecorationUIManager.Instance.currentDeco.DecorationType.ToString());
+		SetState(DecoInventoryUIManager.Instance.currentDeco.DecorationType.ToString());
 	}
 
 	/// <summary>
@@ -171,7 +171,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raycasting call from drag object
 	/// </summary>
 	public void CheckHover(GameObject sender){
-		SetState(DecorationUIManager.Instance.currentDeco.DecorationType.ToString(), isHovered:true);
+		SetState(DecoInventoryUIManager.Instance.currentDeco.DecorationType.ToString(), isHovered:true);
 	}
 
 	/// <summary>

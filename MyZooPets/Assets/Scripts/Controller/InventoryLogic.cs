@@ -9,8 +9,10 @@ using System.Linq;
 	Contains all items the pet owns.
 */
 public class InventoryLogic : Singleton<InventoryLogic>{
-	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; //Call when an item is added
-	public static event EventHandler<InventoryEventArgs> OnItemUsed; //Call when an item has been used
+	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; 	//Call when an item is added
+	public static event EventHandler<InventoryEventArgs> OnItemUsed; 				//Call when an item has been used
+
+	public static event EventHandler<InventoryEventArgs> onItemAddedToDecoInventory;	// Call when an deco item is added
 	
 	public class InventoryEventArgs : EventArgs{
 		public bool IsItemNew{ get; set; }
@@ -41,11 +43,13 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// Gets all decoration inventory items.
 	/// </summary>
 	/// <value>All decoration inventory items.</value>
-	public List<InventoryItem> GetDecorationInventoryItems(){
-		// get the list of decorations the user owns
-		List<InventoryItem> decorations = (from keyValuePair in DataManager.Instance.GameData.Inventory.DecorationItems
-		                                   select keyValuePair.Value).ToList();
-		return decorations;
+	public List<InventoryItem> AllDecoInventoryItems{
+		get{
+			// get the list of decorations the user owns
+			List<InventoryItem> decorations = (from keyValuePair in DataManager.Instance.GameData.Inventory.DecorationItems
+			                                   select keyValuePair.Value).ToList();
+			return decorations;
+		}
 	}
 
 	/// <summary>
@@ -54,7 +58,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// <value>All decoration inventory items.</value>
 	public List<InventoryItem> GetDecorationInventoryItemsOrderyByType(DecorationTypes type){
 		// get the list of decorations the user owns
-		List<InventoryItem> decorations = GetDecorationInventoryItems();
+		List<InventoryItem> decorations = AllDecoInventoryItems;
 		
 		// now order the list by the type of decoration we are looking for
 		decorations = decorations.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == type).ToList();	
@@ -102,6 +106,21 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 
 		return invItem;
 	}
+
+	/// <summary>
+	/// Gets the deco inv item. Return null if deco inventory item has been removed
+	/// </summary>
+	/// <returns>The inv item.</returns>
+	/// <param name="itemID">Item ID.</param>
+	public InventoryItem GetDecoInvItem(string itemID){
+		Dictionary<string, InventoryItem> decoInvItems = DataManager.Instance.GameData.Inventory.DecorationItems;
+		InventoryItem decoInvItem = null;
+		
+		if(decoInvItems.ContainsKey(itemID))
+			decoInvItem = decoInvItems[itemID];
+		
+		return decoInvItem;
+	}
 	
 	/// <summary>
 	/// Adds the item.
@@ -110,7 +129,8 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// <param name="count">Count.</param>
 	public void AddItem(string itemID, int count){
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
-		
+		Item itemData = DataLoaderItems.GetItem(itemID);
+
 		InventoryItem invItem = null;
 		bool itemNew = false;
 		listNeedsUpdate = true;
@@ -129,8 +149,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		}
 		else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
-			Item itemData = DataLoaderItems.GetItem(itemID);
-
 			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
 			invItems[itemID] = invItem;
 
@@ -151,12 +169,24 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			}
 		}
 
-		if(OnItemAddedToInventory != null){
-			InventoryEventArgs args = new InventoryEventArgs();
-			args.IsItemNew = itemNew;
-			args.InvItem = invItem;
+		// Add the respective items to their respective UIs
+		if(itemData.Type == ItemType.Foods || itemData.Type == ItemType.Usables){
+			if(OnItemAddedToInventory != null){
+				InventoryEventArgs args = new InventoryEventArgs();
+				args.IsItemNew = itemNew;
+				args.InvItem = invItem;
 
-			OnItemAddedToInventory(this, args);
+				OnItemAddedToInventory(this, args);
+			}
+		}
+		else if(itemData.Type == ItemType.Decorations){
+			if(onItemAddedToDecoInventory != null){
+				InventoryEventArgs args = new InventoryEventArgs();
+				args.IsItemNew = itemNew;
+				args.InvItem = invItem;
+
+				onItemAddedToDecoInventory(this, args);
+			}
 		}
 	}
 	

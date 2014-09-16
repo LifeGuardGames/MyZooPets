@@ -289,7 +289,6 @@ public class MiniPet : MonoBehaviour {
 		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 
-
 		if(args.TargetCollider.name == this.gameObject.name && !isLevelUpAnimationLockOn){
 
 			invItemID = args.ItemTransform.name; //get id from listener args

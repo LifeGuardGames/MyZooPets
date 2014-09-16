@@ -14,6 +14,6 @@ public class ButtonEditDecos : LgButton {
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
 		// if we are currently in edit deco mode, close the UI, otherwise, open it
-		EditDecosUIManager.Instance.OpenUI();
+		DecoInventoryUIManager.Instance.OpenUI();
 	}
 }

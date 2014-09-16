@@ -41,26 +41,30 @@ public abstract class DecorationZone : MonoBehaviour {
 	protected abstract void _RemoveDecoration();						// removes the decoration
 	protected abstract void _SetDecoration(string strID);				// set the deco to this node
 
-	void Start(){
+	void Start(){ 
+		DecoInventoryUIManager.Instance.ItemDroppedOnTargetEvent += OnDroppedInZone;
+
 		DecoInventoryUIManager.Instance.OnDecoPickedUp += OnDecorationPickedUp;
 		DecoInventoryUIManager.Instance.OnDecoDropped += OnDecorationDropped;
+
+		DecoInventoryUIManager.Instance.OnManagerOpen += OnDecoMode;
 
 		// Set the decoration icon
 		switch(nodeType){
 		case DecorationTypes.Carpet:
-			spriteIcon.spriteName = "iconDecoCarpet";
+			spriteIcon.spriteName = "iconDecoCarpet2";
 			break;
 		case DecorationTypes.Poster:
-			spriteIcon.spriteName = "iconDecoPoster";
+			spriteIcon.spriteName = "iconDecoPoster2";
 			break;
 		case DecorationTypes.SmallPlant:
-			spriteIcon.spriteName = "iconDecoSmallPlant";
+			spriteIcon.spriteName = "iconDecoSmallPlant2";
 			break;
 		case DecorationTypes.Wallpaper:
-			spriteIcon.spriteName = "iconDecoWallpaper";
+			spriteIcon.spriteName = "iconDecoWallpaper2";
 			break;
 		case DecorationTypes.BigFurniture:
-			spriteIcon.spriteName = "iconDecoBigFurniture";
+			spriteIcon.spriteName = "iconDecoBigFurniture2";
 			break;
 		}
 
@@ -72,6 +76,9 @@ public abstract class DecorationZone : MonoBehaviour {
 	void OnDestroy(){
 		DecoInventoryUIManager.Instance.OnDecoPickedUp -= OnDecorationPickedUp;
 		DecoInventoryUIManager.Instance.OnDecoDropped -= OnDecorationDropped;
+
+		DecoInventoryUIManager.Instance.ItemDroppedOnTargetEvent -= OnDroppedInZone;
+		DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
 	}
 	
 	/// <summary>
@@ -85,7 +92,12 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 	}
 
-	void SetDecoration(string itemID){
+	private void OnDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
+		Debug.Log("dropped in a zone!");
+		Debug.Log(args.IsValidTarget + " " + args.ItemTransform + " " + args.ParentTransform + " " + args.TargetCollider);
+	}
+
+	public void SetDecoration(string itemID){
 		// do one last check
 		if(!CanPlaceDecoration(itemID)){
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
@@ -224,6 +236,18 @@ public abstract class DecorationZone : MonoBehaviour {
 
 			spriteOutline.color = activeColorOutline;
 			spriteFill.color = activeColorFill;
+		}
+	}
+
+	//Event listener. listening to when decoration mode is enabled/disabled
+	private void OnDecoMode(object sender, UIManagerEventArgs e){
+		Debug.Log("TOGGLING");
+		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
+		if(e.Opening){
+			toggle.Show();		// edit mode is opening, so turn this node on
+		}
+		else{
+			toggle.Hide();		// edit mode is closing so turn this node off
 		}
 	}
 }

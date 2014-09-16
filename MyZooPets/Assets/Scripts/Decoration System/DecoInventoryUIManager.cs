@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Decoration user interface manager.
-/// This class includes the Decoration Inventory as well as UI for inventory.
+/// This class includes the Decoration Inventory as well as UI for decoration.
 /// 
 /// 
 /// InventoryLogic 	- DecoInventoryUIManager	(two separate inventory managers!)
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
+	public EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
 
 	public EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
 	public EventHandler<EventArgs> OnDecoDropped;   // when a decoration is picked up
@@ -85,7 +86,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 //		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
 //		
 //		//listen to on drop event
-//		invDragDrop.OnItemDrop += OnItemDrop;
+		invDragDrop.OnItemDrop += OnItemDrop;
 //		invDragDrop.OnItemPress += OnItemPress;
 		
 		UpdateBarPosition(isOnLoad);
@@ -152,6 +153,23 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		return decoInvItemPosition;
 	}
 
+	//Event listener. listening to when item is dragged out of the deco inventory on drop
+	//on something in the game
+	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
+		bool dropOnTarget = false;
+		
+		//delete tutorial GO if still alive
+//		if(fingerHintGO != null)
+//			Destroy(fingerHintGO);
+		
+		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
+			currentDragDropItem = e.ParentTransform;
+			
+			if(ItemDroppedOnTargetEvent != null)
+				ItemDroppedOnTargetEvent(this, e);
+		}
+	}
+
 	/// <summary>
 	/// Show only the decoration inventory bar
 	/// </summary>
@@ -172,15 +190,18 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			isActive = true;
 
 			this.GetComponent<TweenToggleDemux>().Show();
+			ShowDecoInventory();
+			RoomArrowsUIManager.Instance.ShowPanel();
 
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
-			RoomArrowsUIManager.Instance.HidePanel();
 
 			backButton.SetActive(true);
+
+			// Hide the pet so it doesn't get in the way
+			PetAnimationManager.Instance.DisableAnimation();
 		}
 	}
 	
@@ -190,15 +211,36 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			isActive = false;
 
 			this.GetComponent<TweenToggleDemux>().Hide();
+			HideDecoInventory();
 			
 			//Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
-			EditDecosUIManager.Instance.ShowNavButton();
 			RoomArrowsUIManager.Instance.ShowPanel();
 			
 			backButton.SetActive(false);
 		}
+	}
+
+	/// <summary>
+	/// Opens the store leading to decorations for the current category the playing is trying to place.
+	/// This is a little messy/complicated, because we are basically faking the deco UI closing and the
+	/// shop UI opening. It's not legit because all the tweening and demux make it diffcult to do legitly.
+	/// </summary>
+	private void OpenShop(){
+		// hide swipe arrow because not needed in shop mode
+		RoomArrowsUIManager.Instance.HidePanel();
+
+		// push the shop mode type onto the click manager stack
+		ClickManager.Instance.Lock(UIModeTypes.Store);
+		
+		// open the shop
+//		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
+		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+
+//		// open the specific sub category in the shop
+//		string category = nodeSaved.GetDecoType().ToString();
+//		StoreUIManager.Instance.CreateSubCategoryItemsTab(category, Color.white);
 	}
 }

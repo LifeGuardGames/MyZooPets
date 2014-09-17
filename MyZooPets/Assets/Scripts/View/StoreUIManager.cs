@@ -81,7 +81,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
@@ -90,7 +89,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 		RoomArrowsUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
@@ -101,7 +99,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	#region Store shortcut mode used by PetSpeechAI
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -112,7 +109,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -124,7 +120,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
 		
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -447,10 +442,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Return to the StoreBasePanel
 	//------------------------------------------
 	public void HideStoreSubPanel(){
-
 		DestroyGrid();
 
-		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.HidePanel();
 		DecoInventoryUIManager.Instance.HideDecoInventory();
 

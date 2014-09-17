@@ -49,9 +49,6 @@ public class ButtonChangeScene : LgButton {
 		if(InventoryUIManager.Instance != null){
 			InventoryUIManager.Instance.HidePanel();
 		}
-		if(EditDecosUIManager.Instance != null){
-			EditDecosUIManager.Instance.HideNavButton();
-		}
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		//Sent an change scene event out, so other objects can run appropriate logic before scene change

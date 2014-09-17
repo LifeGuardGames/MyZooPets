@@ -25,7 +25,6 @@ public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 		NavigationUIManager.Instance.HidePanel();
 		HUDUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		
 		// disable the collider so the user can't click the chart again
 		gameObject.collider.enabled = false;
@@ -48,7 +47,6 @@ public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 		NavigationUIManager.Instance.ShowPanel();
 		HUDUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 
 		// deactivate the back button
 		goBackButton.SetActive(false);

@@ -13,15 +13,14 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
-	public EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
+	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
 
-	public EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
-	public EventHandler<EventArgs> OnDecoDropped;   // when a decoration is picked up
+	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
+	public static EventHandler<EventArgs> OnDecoDropped;   // when a decoration is dropped
 
 	private bool isActive = false;
 
 	public GameObject backButton;
-	public DecorationItem currentDeco;
 
 	public GameObject decorationGridPanel;
 	public UIPanel gridPanel;
@@ -30,7 +29,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	private float collapsedPos = -164f;
 
-	private Transform currentDragDropItem;
+	public Transform currentDragDropItem;
 
 	void Awake(){
 		eModeType = UIModeTypes.EditDecos;
@@ -87,6 +86,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 //		
 //		//listen to on drop event
 		invDragDrop.OnItemDrop += OnItemDrop;
+		invDragDrop.OnItemDrag += OnItemDrag;
 //		invDragDrop.OnItemPress += OnItemPress;
 		
 		UpdateBarPosition(isOnLoad);
@@ -156,17 +156,32 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	//Event listener. listening to when item is dragged out of the deco inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-		bool dropOnTarget = false;
-		
+		Debug.Log("ON ITEM DROP");
+
+//		bool dropOnTarget = false;
 		//delete tutorial GO if still alive
 //		if(fingerHintGO != null)
 //			Destroy(fingerHintGO);
 		
-		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
+		if(e.TargetCollider && e.TargetCollider.tag == "DecoItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 			
 			if(ItemDroppedOnTargetEvent != null)
 				ItemDroppedOnTargetEvent(this, e);
+		}
+
+		currentDragDropItem = null;
+	}
+
+	private void OnItemDrag(object sender, EventArgs e){
+		GameObject go = ((InventoryDragDrop)sender).gameObject;
+
+		if(currentDragDropItem != null && go != currentDragDropItem.gameObject){
+			currentDragDropItem = go.transform;
+
+			if(OnDecoPickedUp != null){
+				OnDecoPickedUp(go, e);
+			}
 		}
 	}
 
@@ -198,10 +213,9 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 
-			backButton.SetActive(true);
-
-			// Hide the pet so it doesn't get in the way
-			PetAnimationManager.Instance.DisableAnimation();
+			// Hide the pet/minipet so it doesn't get in the way
+			PetAnimationManager.Instance.DisableVisibility();
+			MiniPetManager.Instance.DisableAllMinipetVisibility();
 		}
 	}
 	
@@ -218,8 +232,10 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-			
-			backButton.SetActive(false);
+
+			// Show the pet/minipet again
+			PetAnimationManager.Instance.EnableVisibility();
+			MiniPetManager.Instance.EnableAllMinipetVisilibity();
 		}
 	}
 

@@ -89,14 +89,14 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// <summary>
 	/// Disables the animation. by hiding the colliders and the body parts
 	/// </summary>
-	public void DisableAnimation(){
+	public void DisableVisibility(){
 		animatorObject.SetActive(false);
 		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		petShadow.GetComponent<MeshRenderer>().enabled = false;
 	}
 
-	public void EnableAnimation(){
+	public void EnableVisibility(){
 		animatorObject.SetActive(true);
 		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);

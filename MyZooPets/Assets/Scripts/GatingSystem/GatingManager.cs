@@ -265,7 +265,6 @@ public class GatingManager : Singleton<GatingManager>{
 			ClickManager.Instance.Lock(UIModeTypes.GatingSystem, listExceptions);
 
 			NavigationUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
 			
 			// let the gate know that the player has entered the room
 			Gate gate = (Gate)activeGates[enteringPartitionNumber];
@@ -484,7 +483,6 @@ public class GatingManager : Singleton<GatingManager>{
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();		
 	}
 	
 	//---------------------------------------------------

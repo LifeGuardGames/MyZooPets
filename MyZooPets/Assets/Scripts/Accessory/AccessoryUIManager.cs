@@ -101,7 +101,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
 			RoomArrowsUIManager.Instance.HidePanel();
 
 			//need to disable more things here
@@ -154,7 +153,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			EditDecosUIManager.Instance.ShowNavButton();
-			RoomArrowsUIManager.Instance.ShowPanel();
 			
 			backButton.SetActive(false);
 		}

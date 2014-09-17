@@ -42,10 +42,9 @@ public abstract class DecorationZone : MonoBehaviour {
 	protected abstract void _SetDecoration(string strID);				// set the deco to this node
 
 	void Start(){ 
-		DecoInventoryUIManager.Instance.ItemDroppedOnTargetEvent += OnDroppedInZone;
-
-		DecoInventoryUIManager.Instance.OnDecoPickedUp += OnDecorationPickedUp;
-		DecoInventoryUIManager.Instance.OnDecoDropped += OnDecorationDropped;
+		DecoInventoryUIManager.ItemDroppedOnTargetEvent += OnDroppedInZone;
+		DecoInventoryUIManager.OnDecoPickedUp += OnDecorationPickedUp;
+		DecoInventoryUIManager.OnDecoDropped += OnDecorationDropped;
 
 		DecoInventoryUIManager.Instance.OnManagerOpen += OnDecoMode;
 
@@ -74,11 +73,12 @@ public abstract class DecorationZone : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		DecoInventoryUIManager.Instance.OnDecoPickedUp -= OnDecorationPickedUp;
-		DecoInventoryUIManager.Instance.OnDecoDropped -= OnDecorationDropped;
-
-		DecoInventoryUIManager.Instance.ItemDroppedOnTargetEvent -= OnDroppedInZone;
-		DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
+		DecoInventoryUIManager.OnDecoPickedUp -= OnDecorationPickedUp;
+		DecoInventoryUIManager.OnDecoDropped -= OnDecorationDropped;
+		DecoInventoryUIManager.ItemDroppedOnTargetEvent -= OnDroppedInZone;
+		if(DecoInventoryUIManager.Instance){
+			DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
+		}
 	}
 	
 	/// <summary>
@@ -92,6 +92,11 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Raises the dropped in zone event.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
 	private void OnDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
 		Debug.Log("dropped in a zone!");
 		Debug.Log(args.IsValidTarget + " " + args.ItemTransform + " " + args.ParentTransform + " " + args.TargetCollider);
@@ -169,7 +174,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raises the decoration picked up event.
 	/// </summary>
 	private void OnDecorationPickedUp(object sender, EventArgs args){
-		SetState(DecoInventoryUIManager.Instance.currentDeco.DecorationType.ToString());
+		SetState(DecoInventoryUIManager.Instance.currentDragDropItem.gameObject.GetComponent<.DecorationType.ToString());
 	}
 
 	/// <summary>

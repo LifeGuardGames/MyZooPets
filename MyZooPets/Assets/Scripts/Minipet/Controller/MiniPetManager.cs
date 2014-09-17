@@ -21,6 +21,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate; //send event to UI when data have been updated
 
+	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
+	
 	private Level maxLevel = Level.Level6;
 
 	/// <summary>
@@ -301,6 +303,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
 		goMiniPet.name = prefab.name;
 		goMiniPet.GetComponent<MiniPet>().Init(data);
+
+		// Add the pet into the dictionary to keep track
+		MiniPetTable.Add(miniPetID, goMiniPet);
 	}
 
 	/// <summary>
@@ -313,5 +318,27 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		currentLevelNum++;
 		
 		return (Level) currentLevelNum;
+	}
+
+	/// <summary>
+	/// Enables all minipet visilibity.
+	/// This is used for deco mode, shows all pets
+	/// </summary>
+	public void EnableAllMinipetVisilibity(){
+		foreach(KeyValuePair<string, GameObject> entry in MiniPetTable){
+			GameObject minipetGO = entry.Value;
+			minipetGO.GetComponent<MiniPet>().ToggleVisibility(true);
+		}
+	}
+
+	/// <summary>
+	/// Disables all minipet visibility.
+	/// This is used for deco mode, hides all pets
+	/// </summary>
+	public void DisableAllMinipetVisibility(){
+		foreach(KeyValuePair<string, GameObject> entry in MiniPetTable){
+			GameObject minipetGO = entry.Value;
+			minipetGO.GetComponent<MiniPet>().ToggleVisibility(false);
+		}
 	}
 }

@@ -18,19 +18,28 @@ public class DataManager : Singleton<DataManager>{
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-	private MutableDataPetMenuInfo menuSceneData; //basic info data of all the pet that are only used in this scene
+//	private MutableDataPetMenuInfo menuSceneData; 
+
+	//basic info data of all the pet that are only used in the menu scene
+	private Dictionary<string, MutableDataPetInfo> menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 
 	//Return menu scene data used in MenuScene
-	public MutableDataPetMenuInfo MenuSceneData{
-		get{ return menuSceneData; }
-	}
+//	public MutableDataPetMenuInfo MenuSceneData{
+//		get{ return menuSceneData; }
+//	}
 
-	//Return the current game datda
+	/// <summary>
+	/// Gets the game data.
+	/// </summary>
+	/// <value>The game data.</value>
 	public PetGameData GameData{
 		get{ return gameData; }
 	}
     
-	//Save temporary data when transitioning to new scene
+	/// <summary>
+	/// Gets or sets the scene data. temporary data when transition to new scene
+	/// </summary>
+	/// <value>The scene data.</value>
 	public LoadSceneData SceneData{ get; set; } 
 	
 	/// <summary>
@@ -42,6 +51,16 @@ public class DataManager : Singleton<DataManager>{
 			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		
 			return firstTime;
+		}
+	}
+
+	/// <summary>
+	/// Use this to check if there is data loaded into gameData at anypoint
+	/// in the menuscene
+	/// </summary>
+	public bool IsGameDataLoaded{
+		get{
+			return gameData != null;
 		}
 	}
 
@@ -63,14 +82,14 @@ public class DataManager : Singleton<DataManager>{
 
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
-		if(isDebug){
+		if(isDebug)
 			InitializeGameDataForNewPet();
-		}else{
-			ModifyDataIntoSinglePetMode();
 
-			//decide 
+		if(!IsFirstTime){
+			string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+			VersionCheck(currentDataVersionString);
 		}
-
+			
 		LoadMenuSceneData();
 	}
 
@@ -113,14 +132,12 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	/// <summary>
-	/// Use this to check if there is data loaded into gameData at anypoint
-	/// in the menuscene
+	/// Initializes the game data for new pet.
 	/// </summary>
-	public bool IsGameDataLoaded(){
-		return gameData != null;
-	}
-
-	//Initalize New PetGameData
+	/// <param name="petID">Pet ID.</param>
+	/// <param name="petName">Pet name.</param>
+	/// <param name="petSpecies">Pet species.</param>
+	/// <param name="petColor">Pet color.</param>
 	public void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
@@ -132,123 +149,126 @@ public class DataManager : Singleton<DataManager>{
 		gameData.PetInfo.PetID = petID;
            
 		if(!isDebug){
-			menuSceneData = 
-                new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
+			if(menuSceneData == null)
+				menuSceneData = new Dictionary<string, MutableDataPetInfo>();
+
+            menuSceneData.Add(petID, new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies));
 		}
 	}
 
+//	/// <summary>
+//	/// Modifies the data into single pet mode.
+//	/// v1.2.7
+//	/// </summary>
+//	private void ModifyDataIntoSinglePetMode(){
+//		//check if game is already in single mode. default to false;
+//		bool isSinglePetMode = PlayerPrefs.GetInt("IsSinglePetMode", 0) > 0;
+//		//used to have 3 pets, but switching to one pet
+//
+//		//return if it's already in single pet mode
+//		if(isSinglePetMode) return;
+//
+//		string petIDToKeep = ModifyGameDataForSingleMode();
+//
+//		ModifyMenuSceneDataForSingleMode(petIDToKeep);
+//
+//		//Set single mode to true
+//		PlayerPrefs.SetInt("IsSinglePetMode", 1);
+//	}
+//
+//	/// <summary>
+//	/// Modifies the game data for single mode.
+//	/// v1.2.7
+//	/// </summary>
+//	/// <returns>petID that will be kept.</returns>
+//	private string ModifyGameDataForSingleMode(){
+//		//deserialize all data. 
+//		List<PetGameData> existingData = new List<PetGameData>();
+//		
+//		for(int index=0; index < 3; index++){
+//			string jsonString = PlayerPrefs.GetString("Pet" + index + "_GameData", "");
+//			
+//			if(!String.IsNullOrEmpty(jsonString)){
+//				PetGameData newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
+//				existingData.Add(newGameData);
+//			}
+//		}
+//		
+//		//find the data with the highest level and use that one
+//		Level highestLevel = Level.Level1;
+//		PetGameData gameDataToKeep = null;
+//		string petIDToKeep = "";
+//		
+//		foreach(PetGameData data in existingData){
+//			if(data.Level.CurrentLevel >= highestLevel){
+//				highestLevel = data.Level.CurrentLevel;
+//				gameDataToKeep = data;
+//				petIDToKeep = data.PetInfo.PetID;
+//			}
+//		}
+//
+//		
+//		//serialize the game data into a new player pref
+//		if(gameDataToKeep != null)
+//			gameDataToKeep.PetInfo.PetID = "Pet0"; //reset the ID to 0
+//		gameData = gameDataToKeep;
+//
+//		string serializedString = JSON.Instance.ToJSON(gameDataToKeep);
+//		if(!String.IsNullOrEmpty(serializedString))
+//			PlayerPrefs.SetString("GameData", serializedString);
+//
+//		//delete everything from the old player pref. ex Pet0_GameData
+//		for(int index=0; index < 3; index++){
+//			PlayerPrefs.DeleteKey("Pet" + index + "_GameData");
+//		}
+//
+//		//Usually don't want to do this but we are modifying data so want to update it
+//		//right away
+//		PlayerPrefs.Save();
+//
+//		return petIDToKeep;
+//	}
+//
+//	/// <summary>
+//	/// Modifies the menu scene data for single mode.
+//	/// v1.2.7
+//	/// </summary>
+//	/// <param name="petIDToKeep">Pet identifier to keep.</param>
+//	private void ModifyMenuSceneDataForSingleMode(string petIDToKeep){
+//		Dictionary<string, MutableDataPetMenuInfo> oldMenuSceneData = 
+//			new Dictionary<string, MutableDataPetMenuInfo>();
+//		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
+//		
+//		if(!String.IsNullOrEmpty(jsonString)){
+//			oldMenuSceneData = JSON.Instance.ToObject<Dictionary<string, MutableDataPetMenuInfo>>(jsonString);
+//			List<string> keysToBeRemoved = new List<string>();
+//
+//			foreach(KeyValuePair<string, MutableDataPetMenuInfo> petMenuInfo in oldMenuSceneData){
+//				if(petMenuInfo.Key != petIDToKeep){
+//					keysToBeRemoved.Add(petMenuInfo.Key);
+//				}else{
+//					menuSceneData = petMenuInfo.Value;
+//				}
+//			}
+//
+//			//remove unwanted data
+//			foreach(string key in keysToBeRemoved){
+//				if(oldMenuSceneData.ContainsKey(key))
+//					oldMenuSceneData.Remove(key);
+//			}
+//			
+//			SaveMenuSceneData();
+//		}
+//	}
+
+	
 	/// <summary>
-	/// Modifies the data into single pet mode.
-	/// v1.2.7
+	/// Loads the game data from PlayerPrefs.
 	/// </summary>
-	private void ModifyDataIntoSinglePetMode(){
-		//check if game is already in single mode. default to false;
-		bool isSinglePetMode = PlayerPrefs.GetInt("IsSinglePetMode", 0) > 0;
-		//used to have 3 pets, but switching to one pet
-
-		//return if it's already in single pet mode
-		if(isSinglePetMode) return;
-
-		string petIDToKeep = ModifyGameDataForSingleMode();
-
-		ModifyMenuSceneDataForSingleMode(petIDToKeep);
-
-		//Set single mode to true
-		PlayerPrefs.SetInt("IsSinglePetMode", 1);
-	}
-
-	/// <summary>
-	/// Modifies the game data for single mode.
-	/// v1.2.7
-	/// </summary>
-	/// <returns>petID that will be kept.</returns>
-	private string ModifyGameDataForSingleMode(){
-		//deserialize all data. 
-		List<PetGameData> existingData = new List<PetGameData>();
-		
-		for(int index=0; index < 3; index++){
-			string jsonString = PlayerPrefs.GetString("Pet" + index + "_GameData", "");
-			
-			if(!String.IsNullOrEmpty(jsonString)){
-				PetGameData newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
-				existingData.Add(newGameData);
-			}
-		}
-		
-		//find the data with the highest level and use that one
-		Level highestLevel = Level.Level1;
-		PetGameData gameDataToKeep = null;
-		string petIDToKeep = "";
-		
-		foreach(PetGameData data in existingData){
-			if(data.Level.CurrentLevel >= highestLevel){
-				highestLevel = data.Level.CurrentLevel;
-				gameDataToKeep = data;
-				petIDToKeep = data.PetInfo.PetID;
-			}
-		}
-
-		
-		//serialize the game data into a new player pref
-		if(gameDataToKeep != null)
-			gameDataToKeep.PetInfo.PetID = "Pet0"; //reset the ID to 0
-		gameData = gameDataToKeep;
-
-		string serializedString = JSON.Instance.ToJSON(gameDataToKeep);
-		if(!String.IsNullOrEmpty(serializedString))
-			PlayerPrefs.SetString("GameData", serializedString);
-
-		//delete everything from the old player pref. ex Pet0_GameData
-		for(int index=0; index < 3; index++){
-			PlayerPrefs.DeleteKey("Pet" + index + "_GameData");
-		}
-
-		//Usually don't want to do this but we are modifying data so want to update it
-		//right away
-		PlayerPrefs.Save();
-
-		return petIDToKeep;
-	}
-
-	/// <summary>
-	/// Modifies the menu scene data for single mode.
-	/// v1.2.7
-	/// </summary>
-	/// <param name="petIDToKeep">Pet identifier to keep.</param>
-	private void ModifyMenuSceneDataForSingleMode(string petIDToKeep){
-		Dictionary<string, MutableDataPetMenuInfo> oldMenuSceneData = 
-			new Dictionary<string, MutableDataPetMenuInfo>();
-		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
-		
-		if(!String.IsNullOrEmpty(jsonString)){
-			oldMenuSceneData = JSON.Instance.ToObject<Dictionary<string, MutableDataPetMenuInfo>>(jsonString);
-			List<string> keysToBeRemoved = new List<string>();
-
-			foreach(KeyValuePair<string, MutableDataPetMenuInfo> petMenuInfo in oldMenuSceneData){
-				if(petMenuInfo.Key != petIDToKeep){
-					keysToBeRemoved.Add(petMenuInfo.Key);
-				}else{
-					menuSceneData = petMenuInfo.Value;
-				}
-			}
-
-			//remove unwanted data
-			foreach(string key in keysToBeRemoved){
-				if(oldMenuSceneData.ContainsKey(key))
-					oldMenuSceneData.Remove(key);
-			}
-			
-			SaveMenuSceneData();
-		}
-
-	}
-
-
-	//Load the data of the pet that has been chosen
-	public void LoadGameData(){
-		if(gameData == null){
+	public void LoadGameData(string petID = "Pet0"){
+		if(gameData == null || gameData.PetInfo.PetID != petID){
 			PetGameData newGameData = null;
-			string jsonString = PlayerPrefs.GetString("GameData", "");
+			string jsonString = PlayerPrefs.GetString(petID + "_GameData", "");
 			
 			//Check if json string is actually loaded and not empty
 			if(!String.IsNullOrEmpty(jsonString)){
@@ -273,33 +293,8 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	/// <summary>
-	/// Loads the data version.
-	/// use the data version for version check
+	/// Serialize data into json string and store locally in PlayerPrefs
 	/// </summary>
-	private void LoadDataVersion(){
-		//don't change the default value
-		string currentDataVersion = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
-
-		if(!IsFirstTime)
-			gameData.VersionCheck(new Version(currentDataVersion));
-	}
-
-	/// <summary>
-	/// Saves the data version.
-	/// This steps is important because it updates the data version number to 
-	/// the lastest build number
-	/// </summary>
-	private void SaveDataVersion(){
-		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
-		Version buildVersion = new Version(buildVersionString);
-		Version currentDataVersion = new Version(currentDataVersionString);
-
-		if(buildVersion > currentDataVersion)
-			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
-	}
-
-	//serialize data into byte array and store locally in PlayerPrefs
 	public void SaveGameData(){
 		// hopefully we are safe here, but do an absolute check if a tutorial is playing
 		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
@@ -318,7 +313,9 @@ public class DataManager : Singleton<DataManager>{
             Debug.Log("SERIALIZED: " + jsonString);
 			#endif
 
-			PlayerPrefs.SetString("GameData", jsonString);
+			string currentPetID = gameData.PetInfo.PetID;
+			PlayerPrefs.SetString(currentPetID + "_GameData", jsonString);
+
 			SaveDataVersion();
 			Serialized();
 		}
@@ -326,31 +323,89 @@ public class DataManager : Singleton<DataManager>{
 			Debug.LogError("PetID is null or empty, so data cannot be serialized");
 		}
 	}
+	
+	private void VersionCheck(Version currentDataVersion){
+		Version version134 = new Version("1.3.4");
 
-	//----------------------------------------------------
-	// LoadMenuSceneData()
-	// Deserialize menu scene data
-	//----------------------------------------------------
+		// Bring back the code that supports multiple pets
+		if(currentDataVersion < version134){
+			string menuSceneJSONString = PlayerPrefs.GetString("MenuSceneData", "");
+			MutableDataPetInfo oldMenuSceneData = null;
+			if(!String.IsNullOrEmpty(menuSceneJSONString)){
+				oldMenuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(menuSceneJSONString);
+
+				if(menuSceneData == null)
+					menuSceneData = new Dictionary<string, MutableDataPetInfo>();
+
+				menuSceneData.Add("Pet0", oldMenuSceneData);
+				SaveMenuSceneData();
+			}
+
+			//load the old game data json
+			string oldGameDataJSONString = PlayerPrefs.GetString("GameData", "");
+			if(!String.IsNullOrEmpty(jsonString)){
+				//assign the json string to a new PlayerPrefs key that has the petID
+				PlayerPrefs.SetString("Pet0_GameData", oldGameDataJSONString);
+
+				//remove the old player pref key
+				PlayerPrefs.DeleteKey("GameData");
+				PlayerPrefs.DeleteKey("IsSinglePetMode");
+				PlayerPrefs.Save();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Loads the data version.
+	/// use the data version for version check
+	/// </summary>
+	private void LoadDataVersion(){
+		//don't change the default value
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		
+		if(!IsFirstTime)
+			gameData.VersionCheck(new Version(currentDataVersionString));
+	}
+
+	/// <summary>
+	/// Saves the data version.
+	/// This steps is important because it updates the data version number to 
+	/// the lastest build number
+	/// </summary>
+	private void SaveDataVersion(){
+		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		Version buildVersion = new Version(buildVersionString);
+		Version currentDataVersion = new Version(currentDataVersionString);
+		
+		if(buildVersion > currentDataVersion)
+			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
+	}
+	
+	/// <summary>
+	/// Loads the menu scene data.
+	/// </summary>
 	private void LoadMenuSceneData(){
 		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
 
 		//Check if json string is actually loaded and not empty
 		if(!String.IsNullOrEmpty(jsonString))
-			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
+			menuSceneData = JSON.Instance.ToObject<Dictionary<string, MutableDataPetMenuInfo>>(jsonString);
 	}
-
-	//----------------------------------------------------
-	// SaveMenuSceneData()
-	// Serialize menu scene data.
-	//----------------------------------------------------
+	
+	/// <summary>
+	/// Saves the menu scene data.
+	/// </summary>
 	private void SaveMenuSceneData(){
 		if(menuSceneData != null){
 			string jsonString = JSON.Instance.ToJSON(menuSceneData);
 			PlayerPrefs.SetString("MenuSceneData", jsonString);
 		}
 	}
-
-	//called when game data has be deserialized. could be successful or failure 
+	
+	/// <summary>
+	/// Called when game data has been deserialized. Could be successful or failure
+	/// </summary>
 	private void Deserialized(bool isSuccessful){
 		SerializerEventArgs args = new SerializerEventArgs();
 		args.IsSuccessful = isSuccessful;
@@ -358,8 +413,10 @@ public class DataManager : Singleton<DataManager>{
 		if(OnGameDataLoaded != null)
 			OnGameDataLoaded(this, args);
 	}
-
-	//called when game data has been serialized
+	
+	/// <summary>
+	/// Called when game data has been serialized
+	/// </summary>
 	private void Serialized(){
 
 		if(OnGameDataSaved != null)

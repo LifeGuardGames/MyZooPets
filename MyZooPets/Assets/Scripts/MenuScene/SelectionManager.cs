@@ -30,7 +30,7 @@ public class SelectionManager : Singleton<SelectionManager> {
     //start if the data is there
     public bool IsGameDataLoaded{
         get{
-            return DataManager.Instance.IsGameDataLoaded();
+            return DataManager.Instance.IsGameDataLoaded;
         }
     }
 

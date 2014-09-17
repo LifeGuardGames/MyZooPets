@@ -20,7 +20,7 @@ public class SelectionManager : Singleton<SelectionManager> {
 //    }
 
     //Return PetMenuInfo serialized data
-    public MutableDataPetMenuInfo PetMenuInfo{
+    public Dictionary<string, MutableDataPetMenuInfo> PetMenuInfo{
         get{
             return DataManager.Instance.MenuSceneData;
         }
@@ -40,8 +40,8 @@ public class SelectionManager : Singleton<SelectionManager> {
 		}
 	}
 
-    public void LoadPetGameData(){
-        DataManager.Instance.LoadGameData();
+    public void LoadPetGameData(string petID){
+        DataManager.Instance.LoadGameData(petID);
     }
 
 

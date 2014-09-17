@@ -43,7 +43,7 @@ public class MutableDataPetInfo{
 
 	private void Init(){
 		PetID = "";
-		PetName = "LazyWinkle";
+		PetName = "";
 		PetSpecies = "Basic";
 		PetColor = "OrangeYellow";
 		IsHatched = false;

@@ -18,15 +18,14 @@ public class DataManager : Singleton<DataManager>{
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-//	private MutableDataPetMenuInfo menuSceneData; 
 
 	//basic info data of all the pet that are only used in the menu scene
-	private Dictionary<string, MutableDataPetInfo> menuSceneData; // key: petID, value: instance of MutableDataPetInfo
+	private Dictionary<string, MutableDataPetMenuInfo> menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 
 	//Return menu scene data used in MenuScene
-//	public MutableDataPetMenuInfo MenuSceneData{
-//		get{ return menuSceneData; }
-//	}
+	public Dictionary<string, MutableDataPetMenuInfo> MenuSceneData{
+		get{ return menuSceneData; }
+	}
 
 	/// <summary>
 	/// Gets the game data.
@@ -51,6 +50,15 @@ public class DataManager : Singleton<DataManager>{
 			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		
 			return firstTime;
+		}
+	}
+
+	public int NumOfPets{
+		get{
+			return PlayerPrefs.GetInt("NumOfPets", 0);
+		}
+		set{
+			PlayerPrefs.SetInt("NumOfPets", value);
 		}
 	}
 
@@ -85,9 +93,15 @@ public class DataManager : Singleton<DataManager>{
 		if(isDebug)
 			InitializeGameDataForNewPet();
 
+		// if not first time need to do version check
 		if(!IsFirstTime){
 			string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
-			VersionCheck(currentDataVersionString);
+			VersionCheck(new Version(currentDataVersionString));
+		}
+		// else create data for pet0 by default
+		else{
+			AddNewMenuSceneData();
+			SaveMenuSceneData();
 		}
 			
 		LoadMenuSceneData();
@@ -142,17 +156,22 @@ public class DataManager : Singleton<DataManager>{
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
 		gameData = new PetGameData();
+
 		if(!String.IsNullOrEmpty(petName))
 			gameData.PetInfo.PetName = petName;
+		else
+			gameData.PetInfo.PetName = "Player" + NumOfPets;
+
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
 		gameData.PetInfo.PetID = petID;
            
 		if(!isDebug){
-			if(menuSceneData == null)
-				menuSceneData = new Dictionary<string, MutableDataPetInfo>();
-
-            menuSceneData.Add(petID, new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies));
+			if(menuSceneData.ContainsKey(petID)){
+				menuSceneData[petID].PetName = gameData.PetInfo.PetName;
+				menuSceneData[petID].PetColor = petColor;
+				menuSceneData[petID].PetSpecies = petSpecies;
+			}
 		}
 	}
 
@@ -323,27 +342,37 @@ public class DataManager : Singleton<DataManager>{
 			Debug.LogError("PetID is null or empty, so data cannot be serialized");
 		}
 	}
-	
+
+	public void AddNewMenuSceneData(MutableDataPetMenuInfo petMenuInfo = null){
+		if(menuSceneData == null)
+			menuSceneData = new Dictionary<string, MutableDataPetMenuInfo>();
+
+		string petID = "Pet" + NumOfPets;
+		if(petMenuInfo == null)
+			menuSceneData.Add(petID, new MutableDataPetMenuInfo());
+		else
+			menuSceneData.Add(petID, petMenuInfo);
+
+		NumOfPets++;
+//		SaveMenuSceneData();
+	}
+
 	private void VersionCheck(Version currentDataVersion){
 		Version version134 = new Version("1.3.4");
 
 		// Bring back the code that supports multiple pets
 		if(currentDataVersion < version134){
 			string menuSceneJSONString = PlayerPrefs.GetString("MenuSceneData", "");
-			MutableDataPetInfo oldMenuSceneData = null;
+			MutableDataPetMenuInfo oldMenuSceneData = null;
 			if(!String.IsNullOrEmpty(menuSceneJSONString)){
 				oldMenuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(menuSceneJSONString);
 
-				if(menuSceneData == null)
-					menuSceneData = new Dictionary<string, MutableDataPetInfo>();
-
-				menuSceneData.Add("Pet0", oldMenuSceneData);
-				SaveMenuSceneData();
+				AddNewMenuSceneData(oldMenuSceneData);
 			}
 
 			//load the old game data json
 			string oldGameDataJSONString = PlayerPrefs.GetString("GameData", "");
-			if(!String.IsNullOrEmpty(jsonString)){
+			if(!String.IsNullOrEmpty(oldGameDataJSONString)){
 				//assign the json string to a new PlayerPrefs key that has the petID
 				PlayerPrefs.SetString("Pet0_GameData", oldGameDataJSONString);
 

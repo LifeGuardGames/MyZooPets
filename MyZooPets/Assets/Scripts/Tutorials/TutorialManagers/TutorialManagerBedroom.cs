@@ -70,6 +70,8 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
 		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
 
+		//check why we need isFirstTime variable
+
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
 			new GameTutorialWellapadIntro();
@@ -78,7 +80,7 @@ public class TutorialManagerBedroom : TutorialManager{
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorialFocusInhaler();
 		}
-		else if(!isSuperWellaInhalerDone && isFirstTime){
+		else if(!isSuperWellaInhalerDone){
 			new GameTutorialSuperWellaInhaler();
 		}
 		else if(!isSmokeIntroDone){

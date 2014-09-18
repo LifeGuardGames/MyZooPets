@@ -169,11 +169,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		ItemType eType = itemData.Type;
 		switch(eType){
 		case ItemType.Decorations:
-			Debug.Log("calling deco");
 			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemID);
 			break;
 		default:
-			Debug.Log("calling food");
 			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
 			break;
 		}

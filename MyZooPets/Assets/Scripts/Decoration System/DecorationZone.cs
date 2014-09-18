@@ -42,7 +42,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	protected abstract void _SetDecoration(string strID);				// set the deco to this node
 
 	void Start(){ 
-		DecoInventoryUIManager.ItemDroppedOnTargetEvent += OnDroppedInZone;
+		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationDroppedInZone;
 		DecoInventoryUIManager.OnDecoPickedUp += OnDecorationPickedUp;
 		DecoInventoryUIManager.OnDecoDropped += OnDecorationDropped;
 
@@ -75,7 +75,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	void OnDestroy(){
 		DecoInventoryUIManager.OnDecoPickedUp -= OnDecorationPickedUp;
 		DecoInventoryUIManager.OnDecoDropped -= OnDecorationDropped;
-		DecoInventoryUIManager.ItemDroppedOnTargetEvent -= OnDroppedInZone;
+		DecoInventoryUIManager.OnDecoDroppedOnTarget -= OnDecorationDroppedInZone;
 		if(DecoInventoryUIManager.Instance){
 			DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
 		}
@@ -97,7 +97,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void OnDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
+	private void OnDecorationDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
 		Debug.Log("dropped in a zone!");
 		Debug.Log(args.IsValidTarget + " " + args.ItemTransform + " " + args.ParentTransform + " " + args.TargetCollider);
 	}
@@ -174,13 +174,16 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raises the decoration picked up event.
 	/// </summary>
 	private void OnDecorationPickedUp(object sender, EventArgs args){
-		SetState(DecoInventoryUIManager.Instance.currentDragDropItem.gameObject.GetComponent<.DecorationType.ToString());
+		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(((GameObject)sender).name);
+//		Debug.Log(item.ItemData.Type.ToString());
+		SetState(item.ItemData.Type.ToString());
 	}
 
 	/// <summary>
 	/// Raises the decoration dropped event.
 	/// </summary>
 	private void OnDecorationDropped(object sender, EventArgs args){
+//		Debug.Log("NULL");
 		SetState(null);
 	}
 
@@ -188,7 +191,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raycasting call from drag object
 	/// </summary>
 	public void CheckHover(GameObject sender){
-		SetState(DecoInventoryUIManager.Instance.currentDeco.DecorationType.ToString(), isHovered:true);
+		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(((GameObject)sender).name);
+		SetState(item.ItemData.Type.ToString(), isHovered: true);
 	}
 
 	/// <summary>
@@ -198,6 +202,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// <param name="typeName">Type name.</param>
 	private void SetState(string nodeTypeName, bool isHovered = false){
 		// Neutral state, play idle state
+		Debug.Log("Setting state " + nodeTypeName);
 		if(nodeTypeName == null){
 			state = DecorationZoneState.Neutral;
 

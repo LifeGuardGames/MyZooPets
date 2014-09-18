@@ -13,7 +13,7 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
-	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
+	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
 
 	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
 	public static EventHandler<EventArgs> OnDecoDropped;   // when a decoration is dropped
@@ -53,7 +53,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	//Event listener. listening to when new item is added to the deco inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
-		Debug.Log("ADDDED DECOO");
 		if(e.IsItemNew){
 			SpawnInventoryItemInPanel(e.InvItem);
 		}
@@ -97,7 +96,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
-		Debug.Log("updating");
 		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
 		
 		// Normal case where you add item during game
@@ -137,7 +135,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	//Find the position of Decoration Item game object with invItemID
 	//Used for animation position in StoreUIManager
 	public Vector3 GetPositionOfDecoInvItem(string itemID){
-		Debug.Log("LOOKING FOR POS");
 		// position to use
 		Vector3 decoInvItemPosition;
 		
@@ -156,18 +153,23 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	//Event listener. listening to when item is dragged out of the deco inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-		Debug.Log("ON ITEM DROP");
+//		Debug.Log("ON ITEM DROP");
 
 //		bool dropOnTarget = false;
 		//delete tutorial GO if still alive
 //		if(fingerHintGO != null)
 //			Destroy(fingerHintGO);
-		
+//		Debug.Log(e.ItemTransform.gameObject); //TODO
 		if(e.TargetCollider && e.TargetCollider.tag == "DecoItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 			
-			if(ItemDroppedOnTargetEvent != null)
-				ItemDroppedOnTargetEvent(this, e);
+			if(OnDecoDroppedOnTarget != null)
+				OnDecoDroppedOnTarget(this, e);
+		}
+
+		// Regardless of drop, reset the node state
+		if(OnDecoDropped != null){
+			OnDecoDropped(this, e);
 		}
 
 		currentDragDropItem = null;
@@ -176,7 +178,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	private void OnItemDrag(object sender, EventArgs e){
 		GameObject go = ((InventoryDragDrop)sender).gameObject;
 
-		if(currentDragDropItem != null && go != currentDragDropItem.gameObject){
+		if(currentDragDropItem == null || go != currentDragDropItem.gameObject){
 			currentDragDropItem = go.transform;
 
 			if(OnDecoPickedUp != null){

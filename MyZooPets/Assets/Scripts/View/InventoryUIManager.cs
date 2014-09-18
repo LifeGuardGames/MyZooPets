@@ -181,7 +181,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	//Event listener. listening to when new item is added to the inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
-		Debug.Log("ADDDED FOOOOOOD");
 		// inventory doesn't currently care about decorations/accessories
 		if(e.InvItem.ItemType == ItemType.Decorations || e.InvItem.ItemType == ItemType.Accessories)
 			return;
@@ -197,7 +196,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	//Create the NGUI object and populate the fields with InventoryItem data
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
-		Debug.Log("SPawninventoryinPanel");
 		//Create inventory item
 		GameObject inventoryItemObject = NGUITools.AddChild(uiGridObject, inventoryItemPrefab);
 

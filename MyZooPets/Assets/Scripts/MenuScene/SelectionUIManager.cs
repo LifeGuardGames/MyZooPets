@@ -19,12 +19,17 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         RefreshUI();	
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(0, 0, 100, 50), "New account")){
-			DataManager.Instance.AddNewMenuSceneData();
-			RefreshUI();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "create user")){
+////			DataManager.Instance.AddNewMenuSceneData();
+////			RefreshUI();
+//			ExtraParseLogic.Instance.TestUser();
+//		}
+//
+//		if(GUI.Button(new Rect(100, 0, 100, 50), "new account")){
+////			DataManager.Instance.CreateNewAccount();
+//		}
+//	}
 
 	/// <summary>
 	/// Pet selected.

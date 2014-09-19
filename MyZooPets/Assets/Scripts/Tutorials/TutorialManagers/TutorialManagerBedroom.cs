@@ -35,7 +35,6 @@ public class TutorialManagerBedroom : TutorialManager{
 		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
-//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
@@ -62,13 +61,21 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	private void TutorialPart1Check(){
-		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_INHALER);
-		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_WELLAPAD);	
-		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SMOKE_INTRO);
-		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
-		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
-		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
+//		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_INHALER);
+//		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_WELLAPAD);	
+//		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SMOKE_INTRO);
+//		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
+//		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
+//		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
+//		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
+
+		bool isFocusInhalerTutorialDone = true;
+		bool isFocusWellapadTutorialDone = true;
+		bool isSmokeIntroDone = true;
+		bool isFlameCrystalTutorialDone = true;
+		bool isFlameTutorialDone = true;
+		bool isSuperWellaInhalerDone = true;
+		bool isFirstTime = false;
 
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
@@ -91,14 +98,19 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	private void TutorialPart2Check(){
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
-		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
+//		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
+//		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
+		bool isFlameTutorialDone = true;
+		bool isTriggerTutorialDone = true;
+
+//		bool isDecoTutorialDone = true;
+
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
 
-		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
+//		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.GetPanScript().currentPartition == 0){
 				// play the trigger tutorial
@@ -110,7 +122,7 @@ public class TutorialManagerBedroom : TutorialManager{
 				new GameTutorialDecorations();
 			}
 			else{}
-		}
+//		}
 	}
 
 	/// <summary>

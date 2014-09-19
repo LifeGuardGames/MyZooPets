@@ -3,10 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// Tutorial
-// Parent class for all tutorials.
-//---------------------------------------------------
+/// <summary>
+/// Parent class for all tutorials
+/// </summary>
 public abstract class Tutorial{
 	//---------------------Events--------------------------
 	public EventHandler<TutorialEndEventArgs> OnTutorialEnd; // when the tutorial ends
@@ -77,11 +76,10 @@ public abstract class Tutorial{
 		SetMaxSteps();
 		SetStep(0);
 	}
-	
-	//---------------------------------------------------
-	// Advance()
-	// Go to the next part of this tutorial.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// Go to the next part of this tutorial
+	/// </summary>
 	public void Advance(){
 		// increment the current step of the tutorial
 		int step = GetStep();
@@ -89,18 +87,17 @@ public abstract class Tutorial{
 		SetStep(step);
 	}	
 
-	//---------------------------------------------------
-	// Abort()
-	// Ends the tutorial early.
-	//---------------------------------------------------		
+	/// <summary>
+	/// Ends the tutorial early
+	/// </summary>
 	public void Abort(){
 		End(false);	
 	}
-	
-	//---------------------------------------------------
-	// End()
-	// When this tutorial is finished.
-	//---------------------------------------------------		
+
+	/// <summary>
+	/// When this tutorial is finished.
+	/// </summary>
+	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
 	protected virtual void End(bool isFinished){
 		// debug message
 		// Debug.Log("Tutorial Ending: " + GetKey());
@@ -123,22 +120,24 @@ public abstract class Tutorial{
 	}
 	
 	/// <summary>
-	/// Puts a spotlight around the incoming object to
+	/// <para>Puts a spotlight around the incoming object to
 	/// draw attention to it.
 	/// eAnchor is the incoming anchor of the object/where
 	/// the spotlight should be created.  For 3D objects
 	/// the anchor should be center, and for GUI elements
 	/// the anchor should be whatever anchor the element
-	/// is in.
+	/// is in.</para>
+	/// 
 	/// Params:
-	///	goTarget (GameObject): the target that you want the spotlight to spawn on
+	///		goTarget (GameObject): the target that you want the spotlight to spawn on
+	/// 
 	/// Optional Params:
-	///  isGUI (bool): is it a UI element.
-	///  eAnchor (InteraceAnchors): the anchor to spawn the spot light under
-	///  strSpotlightPrefab (string): the string name of the spotlight prefab
-	///  fingerHint (bool): show finger hint or not
-	///  fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
-	///  delay (float): how long does it take the spot light to fade in
+	/// 	isGUI (bool): is it a UI element.
+	///  	eAnchor (InteraceAnchors): the anchor to spawn the spot light under
+	///  	strSpotlightPrefab (string): the string name of the spotlight prefab
+	///  	fingerHint (bool): show finger hint or not
+	///  	fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
+	///  	delay (float): how long does it take the spot light to fade in
 	/// </summary>
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
@@ -234,7 +233,6 @@ public abstract class Tutorial{
 
 	protected void RemoveFingerHint(){
 		if(goFingerHint == null){
-//			Debug.LogError("Trying to destroy a finger hint that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 
@@ -247,7 +245,6 @@ public abstract class Tutorial{
 	//---------------------------------------------------		
 	protected void RemoveSpotlight(){
 		if(goSpotlight == null){
-//			Debug.LogError("Trying to destroy a spotlight that doesn't exist (" + GetKey() + " -- " + GetStep() + ")");
 			return;
 		}
 		

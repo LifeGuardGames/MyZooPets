@@ -183,7 +183,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
-			EditDecosUIManager.Instance.ShowNavButton();
+			RoomArrowsUIManager.Instance.ShowPanel();
 
 			if(D.Assert(backButton != null, "No back button to delete"))
 				backButton.SetActive(false);

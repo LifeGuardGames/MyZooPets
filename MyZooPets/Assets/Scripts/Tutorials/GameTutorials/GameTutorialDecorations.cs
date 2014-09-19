@@ -38,8 +38,9 @@ public class GameTutorialDecorations : GameTutorial{
 		notificationEntry.Add(NotificationPopupFields.Message, String.Format(Localization.Localize(strKey), 
 		                                                                     StringUtils.FormatStringPossession(petName)));
 		notificationEntry.Add(NotificationPopupFields.SpriteName, spriteName);
-
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+		WellapadMissionController.Instance.TaskCompleted("Decorate");
 
 		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
 		if(wellapadButton != null){

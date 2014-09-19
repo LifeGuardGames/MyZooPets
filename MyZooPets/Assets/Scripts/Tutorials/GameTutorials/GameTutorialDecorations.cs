@@ -15,7 +15,7 @@ public class GameTutorialDecorations : GameTutorial{
 	}	
 			
 	protected override void SetMaxSteps(){
-		maxSteps = 7;
+		maxSteps = 6;
 	}
 			
 	protected override void SetKey(){
@@ -51,10 +51,7 @@ public class GameTutorialDecorations : GameTutorial{
 			Debug.LogError("wellapad button can't be found: " + this);
 		}
 	}
-	
-	//---------------------------------------------------
-	// ProcessStep()
-	//---------------------------------------------------		
+			
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
@@ -64,20 +61,16 @@ public class GameTutorialDecorations : GameTutorial{
 			TutorialManager.Instance.StartCoroutine(FocusOnEditButton());
 			break;
 		case 2:
-			Advance();
-//			FocusOnNode();
-			break;
-		case 3:
 			TutorialManager.Instance.StartCoroutine(FocusOnStoreButton());
 			break;			
-		case 4:
+		case 3:
 			TutorialManager.Instance.StartCoroutine(WiggleDecorationBuyButtons());
 			StoreUIManager.OnDecorationItemBought += FocusOnStoreExitButton;
 			break;
-		case 5:
+		case 4:
 			TutorialManager.Instance.StartCoroutine(FocusOnDecorationUI());
 			break;
-		case 6:
+		case 5:
 			TutorialManager.Instance.StartCoroutine(FocusOnDecoExitButton());
 			break;
 		}
@@ -146,7 +139,6 @@ public class GameTutorialDecorations : GameTutorial{
 		
 		// sign up for a callback for when the button is clicked
 		DecoInventoryUIManager.Instance.OnManagerOpen += OnEditDecos;
-//		EditDecosUIManager.Instance.OnManagerOpen += OnEditDecos;
 	}	
 	
 	/// <summary>
@@ -156,7 +148,6 @@ public class GameTutorialDecorations : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnEditDecos(object sender, UIManagerEventArgs args){
 		// stop listening for callback
-//		EditDecosUIManager.Instance.OnManagerOpen -= OnEditDecos;
 		DecoInventoryUIManager.Instance.OnManagerOpen -= OnEditDecos;
 
 		// clean up
@@ -166,23 +157,6 @@ public class GameTutorialDecorations : GameTutorial{
 
 		// advance the tutorial
 		Advance();		
-	}
-
-	/// <summary>
-	/// Focuses the on decoration node.
-	/// </summary>
-	private void FocusOnNode(){
-		// find and spotlight the tutorial node
-		decoNode = GameObject.Find("DecoNode_Starting_Rug");
-		// SpotlightObject( goNode );
-		ShowFingerHint(decoNode, flipX: true);
-		
-		// add the node to the process list so the user can click it
-		AddToProcessList(decoNode);
-		
-		// listen for when the node is clicked
-		LgButton button = decoNode.GetComponent<LgButton>();
-		button.OnProcessed += OnNodeClicked;		
 	}
 
 	/// <summary>
@@ -339,7 +313,7 @@ public class GameTutorialDecorations : GameTutorial{
 		GameObject tutDecoItemGameObject = DecoInventoryUIManager.Instance.GetTutorialItem();
 		Vector3 tutDecoItemPosition = LgNGUITools.GetScreenPosition(tutDecoItemGameObject, isObjectInUIGrid: true);
 		decoFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
-		                                         (GameObject)Resources.Load("FireOrbFingerHint"));
+		                                         (GameObject)Resources.Load("DecoFingerHint"));
 		decoFingerHint.transform.localPosition = tutDecoItemPosition;
 
 		Hashtable optional = new Hashtable();
@@ -381,7 +355,7 @@ public class GameTutorialDecorations : GameTutorial{
 		decoModeBackButton = GameObject.Find("DecoExitButton");
 
 		// show finger hint
-		ShowFingerHint(decoModeBackButton, true, InterfaceAnchors.BottomLeft);
+		ShowFingerHint(decoModeBackButton, isGUI:true, anchor:InterfaceAnchors.BottomLeft, flipX:true);
 
 		// show message
 		Vector3 popupLocation = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");

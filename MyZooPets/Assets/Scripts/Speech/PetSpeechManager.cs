@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PetSpeechManager : SpeechController<PetSpeechManager>{
+public class PetSpeechManager : SpeechController<PetSpeechManager> {
     // Message options keys
     // MessageText:
     // ImageTextureName: (use the sprite name in the atlas)

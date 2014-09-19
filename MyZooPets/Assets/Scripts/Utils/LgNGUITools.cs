@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/*
-    LifeGuard Games customization of NGUITools functions
-*/
+/// <summary>
+/// Lg NGUI tools. LifeGuard Games customization of NGUITools functions
+/// </summary>
 public static class LgNGUITools{
 
 	/// <summary>
@@ -21,50 +21,62 @@ public static class LgNGUITools{
 	}
 
 	/// <summary>
-	/// Gets the screen position.
-	/// Returns the screen position of the incoming NGUI
-	/// object.  Note that by "screen position" I mean the
+	/// <para>Gets the screen position.</para>
+	/// 
+	/// <para>Returns the screen position of the incoming NGUI
+	/// object with respect to the UIAnchor. </para>
+	/// 
+	/// <para>If the incoming NGUI object is spawned inside a UIGrid
+	/// make sure to toggle isObjectInUIGrid otherwise this method might not
+	/// return the right screen position</para>
+	/// 
+	/// Note that by "screen position" I mean the
 	/// relative position of the gameobject given its
-	/// anchor.  i.e. 0,0 for a top anchored object will
-	/// be the upper left, but the center for a center object.
+	/// anchor.  i.e. 0,0 for a top-left anchored object will
+	/// be the upper left, but the center for a center anchored object.
 	/// It's up to whoever uses this function to translate
 	/// the coordinates as they need them using the
 	/// CameraManager.TransformAnchorPosition function.
 	/// </summary>
 	/// <returns>The screen position.</returns>
 	/// <param name="go">GameObject</param>
-	static public Vector3 GetScreenPosition(GameObject go){
-		Vector3 vScreenPos = GetPosition(go);
-		bool bTop = false;
-		Transform transParent = go.transform.parent;
+	/// <param name="isObjectInUIGrid">bool</param>
+	static public Vector3 GetScreenPosition(GameObject go, bool isObjectInUIGrid = false){
+		Vector3 screenPos = GetPosition(go, isObjectInUIGrid);
+		bool isTheTop = false;
+		Transform parent = go.transform.parent;
 		
-		while(bTop == false && transParent){
-			GameObject goParent = transParent.gameObject;
-			bTop = goParent.GetComponent<UIAnchor>() != null;
+		while(isTheTop == false && parent){
+			GameObject parentGO = parent.gameObject;
+			isTheTop = parentGO.GetComponent<UIAnchor>() != null;
 			
-			if(!bTop){
-				vScreenPos += GetPosition(goParent);
-				transParent = transParent.parent;
+			if(!isTheTop){
+				screenPos += GetPosition(parentGO, isObjectInUIGrid);
+				parent = parent.parent;
 			}
 		}
 		
-		return vScreenPos;
+		return screenPos;
 	}
 
 	/// <summary>
 	/// Gets the position.
 	/// Returns the position of an NGUI object; if the 
 	/// incoming object has a tween, it will instead return
-	/// the place that object is SUPPOSED TO be.
+	/// the place that object is SUPPOSED to be. 
 	/// </summary>
 	/// <returns>The position.</returns>
 	/// <param name="go">Go.</param>
-	static private Vector3 GetPosition(GameObject go){
-		Vector3 vPos = go.transform.localPosition;
+	static private Vector3 GetPosition(GameObject go, bool isObjectInUIGrid){
+		Vector3 pos = go.transform.localPosition;
+
+		//using the position return from PositionTweenToggle doesn't work well if
+		//the object is inside an UIGrid. The return position is a little bit off
+		//from the desired position
 		PositionTweenToggle scriptTween = go.GetComponent<PositionTweenToggle>();
-		if(scriptTween)
-			vPos = scriptTween.GetShowPos();
+		if(!isObjectInUIGrid && scriptTween)
+			pos = scriptTween.GetShowPos();
 		
-		return vPos;
+		return pos;
 	}
 }

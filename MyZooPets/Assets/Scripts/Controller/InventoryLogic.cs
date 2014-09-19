@@ -12,7 +12,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory; 	//Call when an item is added
 	public static event EventHandler<InventoryEventArgs> OnItemUsed; 				//Call when an item has been used
 
-	public static event EventHandler<InventoryEventArgs> onItemAddedToDecoInventory;	// Call when an deco item is added
+	public static event EventHandler<InventoryEventArgs> OnItemAddedToDecoInventory;	// Call when an deco item is added
 	
 	public class InventoryEventArgs : EventArgs{
 		public bool IsItemNew{ get; set; }
@@ -180,12 +180,12 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			}
 		}
 		else if(itemData.Type == ItemType.Decorations){
-			if(onItemAddedToDecoInventory != null){
+			if(OnItemAddedToDecoInventory != null){
 				InventoryEventArgs args = new InventoryEventArgs();
 				args.IsItemNew = itemNew;
 				args.InvItem = invItem;
 
-				onItemAddedToDecoInventory(this, args);
+				OnItemAddedToDecoInventory(this, args);
 			}
 		}
 	}

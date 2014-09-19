@@ -23,7 +23,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	public GameObject shopButtonParent;
 	private GameObject sunbeamObject = null;
 	public GameObject backButton;
-
+	public GameObject shopButton;
 	public GameObject decorationGridPanel;
 	public UIPanel gridPanel;
 	public GameObject uiGridObject;
@@ -38,7 +38,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	}
 
 	void Start(){
-		InventoryLogic.onItemAddedToDecoInventory += OnItemAddedHandler;
+		InventoryLogic.OnItemAddedToDecoInventory += OnItemAddedHandler;
 		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
 		// Spawn items in the decoration inventory for the first time
@@ -58,8 +58,23 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	}
 
 	void OnDestroy(){
-		InventoryLogic.onItemAddedToDecoInventory -= OnItemAddedHandler;
+		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
+	}
+
+	public GameObject GetTutorialItem(){
+		GameObject tutorialObject = null;
+
+		if(uiGridObject.transform.childCount != 0){
+			Transform parent = uiGridObject.transform.GetChild(0);
+			tutorialObject = parent.FindChild(parent.name).gameObject;
+		}
+
+		return tutorialObject;
+	}
+
+	public GameObject GetShopButton(){
+		return shopButton;
 	}
 
 	//Event listener. listening to when new item is added to the deco inventory
@@ -285,9 +300,27 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	}
 
 	/// <summary>
-	/// Opens the store leading to decorations for the current category the playing is trying to place.
-	/// This is a little messy/complicated, because we are basically faking the deco UI closing and the
-	/// shop UI opening. It's not legit because all the tweening and demux make it diffcult to do legitly.
+	/// Opens the shop directly to decoration category and jumps to specific
+	/// decoration type
+	/// </summary>
+	/// <param name="decorationType">Decoration type.</param>
+	private void OpenShopForTutorial(){
+		// hide swipe arrow because not needed in shop mode
+		RoomArrowsUIManager.Instance.HidePanel();
+		
+		// push the shop mode type onto the click manager stack
+		ClickManager.Instance.Lock(UIModeTypes.Store);
+		
+		// open the shop
+		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
+		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+
+		string tabName = DecorationTypes.Carpet.ToString();
+		StoreUIManager.Instance.CreateSubCategoryItemsTab(tabName, Color.white);
+	}
+
+	/// <summary>
+	/// Open store directly to decoration category
 	/// </summary>
 	private void OpenShop(){
 		// hide swipe arrow because not needed in shop mode

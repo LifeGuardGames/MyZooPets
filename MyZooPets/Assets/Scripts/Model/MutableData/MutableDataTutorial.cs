@@ -57,11 +57,17 @@ public class MutableDataTutorial{
 
 	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
+		Version version134 = new Version("1.3.4");
 		
 		if(currentDataVersion < version131){
 			//Don't have DGT_TUT key anymore so remove this key
 			if(ListPlayed.Contains("DGT_TUT"))
 				ListPlayed.Remove("DGT_TUT");
+		}
+		else if(currentDataVersion < version134){
+			//remove deco tutorial, so it comes up again
+			if(ListPlayed.Contains(TutorialManagerBedroom.TUT_DECOS))
+				ListPlayed.Remove(TutorialManagerBedroom.TUT_DECOS);
 		}
 	}
 }

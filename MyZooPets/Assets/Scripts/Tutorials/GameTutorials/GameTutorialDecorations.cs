@@ -4,8 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameTutorialDecorations : GameTutorial{
-	// decoration node for tutorial
-	private GameObject decoNode;
+
 	private GameObject decoModeBackButton; //reference to deco mode exit button
 	private GameObject decoFingerHint;
 	private GameObject shopButton;
@@ -39,8 +38,9 @@ public class GameTutorialDecorations : GameTutorial{
 		notificationEntry.Add(NotificationPopupFields.Message, String.Format(Localization.Localize(strKey), 
 		                                                                     StringUtils.FormatStringPossession(petName)));
 		notificationEntry.Add(NotificationPopupFields.SpriteName, spriteName);
-
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+		WellapadMissionController.Instance.TaskCompleted("Decorate");
 
 		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
 		if(wellapadButton != null){
@@ -159,25 +159,7 @@ public class GameTutorialDecorations : GameTutorial{
 		Advance();		
 	}
 
-	/// <summary>
-	/// Node clicked. Clean up and advance.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnNodeClicked(object sender, EventArgs args){
-		// stop listening for the node to be clicked
-		LgButton button = decoNode.GetComponent<LgButton>();
-		button.OnProcessed -= OnNodeClicked;
 
-		//Remove button from the clickable list
-		RemoveFromProcessList(decoNode);
-
-		// clean up	
-		RemoveFingerHint();
-
-		// advance the tutorial
-		Advance();
-	}
 
 	/// <summary>
 	/// No deocration items yet, so make the user go to the store to buy some

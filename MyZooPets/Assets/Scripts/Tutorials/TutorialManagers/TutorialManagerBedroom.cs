@@ -105,7 +105,6 @@ public class TutorialManagerBedroom : TutorialManager{
 
 //		bool isFlameTutorialDone = true;
 //		bool isTriggerTutorialDone = true;
-
 //		bool isDecoTutorialDone = true;
 
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;

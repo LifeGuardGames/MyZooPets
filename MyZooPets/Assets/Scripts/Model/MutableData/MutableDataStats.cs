@@ -33,7 +33,7 @@ public class MutableDataStats{
         Health = 80;
         Mood = 80;
         Points = 0;
-        Stars = 3000;
+        Stars = 300;
 		Gems = 0;
     }
 	

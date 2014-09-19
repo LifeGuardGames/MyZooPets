@@ -20,6 +20,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	private bool isActive = false;
 
+	public GameObject shopButtonParent;
+	private GameObject sunbeamObject = null;
 	public GameObject backButton;
 
 	public GameObject decorationGridPanel;
@@ -45,6 +47,14 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			// Setting isOnLoad option to true for first time loading
 			SpawnInventoryItemInPanel(invItem, isOnLoad:true);
 		}
+
+		// Workaround for start hidden, the position setting conflicts with tween
+		StartCoroutine(NextFrameHelper());
+	}
+
+	IEnumerator NextFrameHelper(){
+		yield return 0;
+		HideDecoInventory();
 	}
 
 	void OnDestroy(){
@@ -133,7 +143,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			if(allDecoInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 				allDecoInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 			}
-			
 			if(decorationGridPanel.transform.localPosition.x != collapsedPos - allDecoInventoryItemsCount * 90){
 				decorationGridPanel.transform.localPosition = new Vector3(collapsedPos - allDecoInventoryItemsCount * 90,
 				                                                          decorationGridPanel.transform.localPosition.y,
@@ -148,6 +157,14 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
 		Vector4 oldClipRange = gridPanel.clipRange;
 		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
+
+		// Pulse shop icon where appropriate
+		if(allDecoInventoryItemsCount == 0){
+			TogglePulseShopButton(true);
+		}
+		else{
+			TogglePulseShopButton(false);
+		}
 	}
 
 	//Find the position of Decoration Item game object with invItemID
@@ -236,6 +253,10 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			if(MiniPetManager.Instance){
 				MiniPetManager.Instance.DisableAllMinipetVisibility();
 			}
+
+			if(InventoryLogic.Instance.AllDecoInventoryItems.Count == 0){
+				TogglePulseShopButton(true);
+			}
 		}
 	}
 	
@@ -258,6 +279,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			if(MiniPetManager.Instance){
 				MiniPetManager.Instance.EnableAllMinipetVisilibity();
 			}
+
+			TogglePulseShopButton(false);
 		}
 	}
 
@@ -291,5 +314,25 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		ClickManager.Instance.ReleaseLock();
 		
 		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
+	}
+
+	private void TogglePulseShopButton(bool isPulseShopButton){
+		// Cache the sunbeam
+		if(sunbeamObject == null){
+			sunbeamObject = shopButtonParent.transform.FindChild("SunBeamRotating").gameObject;
+			if(sunbeamObject == null){
+				Debug.LogWarning("Cannot find sunbeam object from deco mode shop");
+			}
+		}
+
+		if(isPulseShopButton){
+			shopButtonParent.animation.Play();
+			sunbeamObject.SetActive(true);
+		}
+		else{
+			shopButtonParent.animation.Stop();
+			GameObjectUtils.ResetLocalScale(shopButtonParent);
+			sunbeamObject.SetActive(false);
+		}
 	}
 }

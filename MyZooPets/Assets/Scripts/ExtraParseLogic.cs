@@ -29,6 +29,24 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 		
 	}
 
+	public bool UserAndAccountCheck(){
+		bool isUserAndAccountValid = false;
+		var user = ParseUser.CurrentUser;
+
+		//user not login yet
+		if(user == null){
+			//sign up
+
+			// or login
+
+		}
+		//user login and valid
+		else{
+			//check if kid account exist
+
+		}
+	}
+
 	public void LoginAndCreateKidAccount(){
 		CreateParseNewUser().ContinueWith(t => {
 			return CreateNewAccount();
@@ -59,7 +77,33 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 		});
 	}
 	
-	public Task CreateParseNewUser(){
+	public Task CreateParseNez
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	wUser(){
 		string guid = Guid.NewGuid().ToString();
 		
 		var user = new ParseUser(){

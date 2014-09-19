@@ -37,7 +37,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	void Start(){
 		InventoryLogic.onItemAddedToDecoInventory += OnItemAddedHandler;
-//		InventoryLogic.OnItemUsed += OnItemUsedHandler;
+		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
 		// Spawn items in the decoration inventory for the first time
 		List<InventoryItem> listDecos = InventoryLogic.Instance.AllDecoInventoryItems;
@@ -49,6 +49,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	void OnDestroy(){
 		InventoryLogic.onItemAddedToDecoInventory -= OnItemAddedHandler;
+		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	//Event listener. listening to when new item is added to the deco inventory
@@ -59,6 +60,23 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		else{
 			Transform invItem = uiGridObject.transform.Find(e.InvItem.ItemID);
 			invItem.Find("Label_Amount").GetComponent<UILabel>().text = e.InvItem.Amount.ToString();
+		}
+	}
+
+	/// <summary>
+	/// Items the used event handler.
+	/// Called to update the bar from deco inventory
+	/// </summary>
+	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+		if(currentDragDropItem != null){
+			InventoryItem invItem = args.InvItem;
+			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
+				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
+			}
+			else{ //destroy object if it has been used up
+				Destroy(currentDragDropItem.gameObject);
+				UpdateBarPosition();
+			}
 		}
 	}
 
@@ -153,8 +171,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	//Event listener. listening to when item is dragged out of the deco inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-//		Debug.Log("ON ITEM DROP");
-
 //		bool dropOnTarget = false;
 		//delete tutorial GO if still alive
 //		if(fingerHintGO != null)
@@ -217,7 +233,9 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 			// Hide the pet/minipet so it doesn't get in the way
 			PetAnimationManager.Instance.DisableVisibility();
-			MiniPetManager.Instance.DisableAllMinipetVisibility();
+			if(MiniPetManager.Instance){
+				MiniPetManager.Instance.DisableAllMinipetVisibility();
+			}
 		}
 	}
 	
@@ -237,7 +255,9 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 			// Show the pet/minipet again
 			PetAnimationManager.Instance.EnableVisibility();
-			MiniPetManager.Instance.EnableAllMinipetVisilibity();
+			if(MiniPetManager.Instance){
+				MiniPetManager.Instance.EnableAllMinipetVisilibity();
+			}
 		}
 	}
 
@@ -254,11 +274,22 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		ClickManager.Instance.Lock(UIModeTypes.Store);
 		
 		// open the shop
-//		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
+		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
 		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+	}
 
-//		// open the specific sub category in the shop
-//		string category = nodeSaved.GetDecoType().ToString();
-//		StoreUIManager.Instance.CreateSubCategoryItemsTab(category, Color.white);
+	/// <summary>
+	/// This function is called from the store UI when the store closes and the user had opened the store from the deco system.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void ReopenChooseMenu(object sender, EventArgs args){
+		// show swipe arrows
+		RoomArrowsUIManager.Instance.ShowPanel();
+		
+		// pop the mode we pushed earlier from the click manager
+		ClickManager.Instance.ReleaseLock();
+		
+		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}
 }

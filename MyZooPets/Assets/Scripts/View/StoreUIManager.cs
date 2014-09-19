@@ -118,7 +118,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
-		
 		NavigationUIManager.Instance.HidePanel();
 		RoomArrowsUIManager.Instance.HidePanel();
 
@@ -393,6 +392,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
 					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
 
+					// Call resizer
+					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
+					resizer.enabled = true;	// Resize automatically
+
 					ShowUseTab(tabParent.FindChild("Tab"));
 					if(counter == 0){
 						defaultTabName = tabParent.name;
@@ -442,9 +445,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void HideStoreSubPanel(){
 		DestroyGrid();
 
-		InventoryUIManager.Instance.HidePanel();
-		DecoInventoryUIManager.Instance.HideDecoInventory();
-
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 
 		// kind of hacky way to ensure that the UI is reset to the correct mode
@@ -454,15 +454,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+				DecoInventoryUIManager.Instance.ShowDecoInventory();
+				InventoryUIManager.Instance.HidePanel();
+				HUDUIManager.Instance.HidePanel();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
 				RoomArrowsUIManager.Instance.ShowPanel();
+				DecoInventoryUIManager.Instance.HideDecoInventory();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				InventoryUIManager.Instance.ShowPanel();
+				DecoInventoryUIManager.Instance.HideDecoInventory();
 			}
 			else{
 				_CloseUI();	
@@ -474,8 +479,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			isShortcutMode = false;
 		}
-		else
+		else{
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
+			InventoryUIManager.Instance.HidePanel();
+		}
 	}
 
 	//----------------------------------------------------

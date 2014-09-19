@@ -33,10 +33,10 @@ public abstract class DecorationZone : MonoBehaviour {
 	public Animation activeHoverAnimation;
 
 	private bool isHovered = false;
-	private bool isHoverPlaying = false;
+	private bool isAnimationPlaying = false;
 	private DecorationZoneState state;
 	private string nodeID;
-	private string placedDecoID = null;
+	private string placedDecoID = string.Empty;
 
 	protected abstract void _RemoveDecoration();						// removes the decoration
 	protected abstract void _SetDecoration(string strID);				// set the deco to this node
@@ -67,6 +67,10 @@ public abstract class DecorationZone : MonoBehaviour {
 			break;
 		}
 
+		// Turn on resizer and resize
+		SpriteResizer resizer = spriteIcon.GetComponent<SpriteResizer>();
+		resizer.enabled = true;	// Resize automatically
+
 		nodeID = transform.parent.name;
 
 		CheckSaveData();
@@ -93,23 +97,45 @@ public abstract class DecorationZone : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Gets the decoration item from inventory.
+	/// </summary>
+	/// <returns>The decoration item from inventory.</returns>
+	/// <param name="itemID">Item ID</param>
+	private DecorationItem GetDecorationItemFromInventory(string itemID){
+		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(itemID);
+		if(item == null){
+			return null;
+		}
+		else{
+			return (DecorationItem)item.ItemData;
+		}
+	}
+
+	/// <summary>
 	/// Raises the dropped in zone event.
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnDecorationDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
-		Debug.Log("dropped in a zone!");
-		Debug.Log(args.IsValidTarget + " " + args.ItemTransform + " " + args.ParentTransform + " " + args.TargetCollider);
+		// Weed out everything but the target node due to event call
+		if(args.TargetCollider.gameObject == this.gameObject){
+			// Double check the item
+			DecorationItem decoItem = GetDecorationItemFromInventory(args.ItemTransform.gameObject.name);
+			if(args.TargetCollider.GetComponent<DecorationZone>().nodeType == decoItem.DecorationType){
+				args.IsValidTarget = true;
+				SetDecoration(args.ItemTransform.gameObject.name);	// TODO refactor this item Name???
+			}
+		}
 	}
 
 	public void SetDecoration(string itemID){
-		// do one last check
+		// Do one last check
 		if(!CanPlaceDecoration(itemID)){
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
 			return;
 		}
 
-		// if there was already a decoration here, remove it
+		// If there was already a decoration here, remove it
 		if(HasDecoration())
 			RemoveDecoration();	
 
@@ -117,12 +143,24 @@ public abstract class DecorationZone : MonoBehaviour {
 
 		// update the save data with the new decoration id
 		DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID] = itemID;		
-		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
 		
-		//Check for badge unlock
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
+		// Notify inventory logic that this item is being used
+		InventoryLogic.Instance.UsePetItem(itemID);
 
 		_SetDecoration(itemID);
+
+		// Play a sound
+		string sound = Constants.GetConstant<string>("Deco_PlaceSound");
+		AudioManager.Instance.PlayClip(sound);
+
+		// play an FX
+		Vector3 particlePos = transform.position;
+		string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
+		ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+
+		//Check for badge unlock
+		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
 	}
 	
 	/// <summary>
@@ -150,8 +188,9 @@ public abstract class DecorationZone : MonoBehaviour {
 	
 	/// <summary>
 	/// Removes the decoration from this node.
+	/// Assuming that the user has inventory placed
 	/// </summary>
-	public void RemoveDecoration(){		
+	public void RemoveDecoration(){
 		// call child function to actually remove the decoration
 		_RemoveDecoration();
 		
@@ -174,25 +213,16 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// Raises the decoration picked up event.
 	/// </summary>
 	private void OnDecorationPickedUp(object sender, EventArgs args){
-		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(((GameObject)sender).name);
-//		Debug.Log(item.ItemData.Type.ToString());
-		SetState(item.ItemData.Type.ToString());
+		DecorationItem decoItem = GetDecorationItemFromInventory(((GameObject)sender).name);
+		SetState(decoItem.DecorationType.ToString());
 	}
 
 	/// <summary>
 	/// Raises the decoration dropped event.
+	/// This applies to all nodes, just rever the node back to normal
 	/// </summary>
 	private void OnDecorationDropped(object sender, EventArgs args){
-//		Debug.Log("NULL");
 		SetState(null);
-	}
-
-	/// <summary>
-	/// Raycasting call from drag object
-	/// </summary>
-	public void CheckHover(GameObject sender){
-		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(((GameObject)sender).name);
-		SetState(item.ItemData.Type.ToString(), isHovered: true);
 	}
 
 	/// <summary>
@@ -200,58 +230,46 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// NOTE: Only for object picked up! hovering will be done with raycasting
 	/// </summary>
 	/// <param name="typeName">Type name.</param>
-	private void SetState(string nodeTypeName, bool isHovered = false){
+	private void SetState(string nodeTypeName){
 		// Neutral state, play idle state
-		Debug.Log("Setting state " + nodeTypeName);
 		if(nodeTypeName == null){
 			state = DecorationZoneState.Neutral;
 
-			isHoverPlaying = false;
-			if(!isHoverPlaying){
+			isAnimationPlaying = false;
+			if(!isAnimationPlaying){
 				animation.Stop();
 			}
-
+			
 			spriteOutline.color = neutralColorOutline;
 			spriteFill.color = neutralColorFill;
+			GameObjectUtils.ResetLocalScale(gameObject);
 		}
 		// Wrong state, play the inactive state
 		else if(nodeTypeName != nodeType.ToString()){
 			state = DecorationZoneState.Inactive;
 
-			isHoverPlaying = false;
-			if(!isHoverPlaying){
+			isAnimationPlaying = false;
+			if(!isAnimationPlaying){
 				animation.Stop();
 			}
 
 			spriteOutline.color = inactiveColorOutline;
 			spriteFill.color = inactiveColorFill;
 		}
-		// Correct state, is hovered with right object
-		else if(state == DecorationZoneState.Active && isHovered){
-			state = DecorationZoneState.Hover;
-
-			if(!isHoverPlaying){
-				isHoverPlaying = true;
-				activeHoverAnimation.Play();
-			}
-		}
 		// Correct state, play the active state
 		else{
 			state = DecorationZoneState.Active;
 
-			isHoverPlaying = false;
-			if(!isHoverPlaying){
-				animation.Stop();
-			}
+			animation.Play();
+			isAnimationPlaying = true;
 
 			spriteOutline.color = activeColorOutline;
 			spriteFill.color = activeColorFill;
 		}
 	}
 
-	//Event listener. listening to when decoration mode is enabled/disabled
+	// Event listener. listening to when decoration mode is enabled/disabled
 	private void OnDecoMode(object sender, UIManagerEventArgs e){
-		Debug.Log("TOGGLING");
 		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
 		if(e.Opening){
 			toggle.Show();		// edit mode is opening, so turn this node on

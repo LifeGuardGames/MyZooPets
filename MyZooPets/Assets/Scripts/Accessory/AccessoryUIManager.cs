@@ -113,6 +113,25 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		}
 	}
 
+	// The back button on the left top corner is clicked to zoom out of the zoom item
+	protected override void _CloseUI(){
+		if(isActive){
+			this.GetComponent<TweenToggleDemux>().Hide();
+			
+			isActive = false;
+			zoomItem.collider.enabled = true;
+			
+			CameraManager.Instance.ZoomOutMove();
+			PetAnimationManager.Instance.EnableIdleAnimation();
+			
+			// Show other UI Objects
+			NavigationUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel();
+			
+			backButton.SetActive(false);
+		}
+	}
+
 	/// <summary>
 	/// show the ui once camera is done zooming in.
 	/// </summary>
@@ -138,25 +157,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 
 	
-	// The back button on the left top corner is clicked to zoom out of the zoom item
-	protected override void _CloseUI(){
-		if(isActive){
-			this.GetComponent<TweenToggleDemux>().Hide();
-
-			isActive = false;
-			zoomItem.collider.enabled = true;
-			
-			CameraManager.Instance.ZoomOutMove();
-			PetAnimationManager.Instance.EnableIdleAnimation();
-			
-			// Show other UI Objects
-			NavigationUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
-			EditDecosUIManager.Instance.ShowNavButton();
-			
-			backButton.SetActive(false);
-		}
-	}
 
 	/// <summary>
 	/// Raises the buy button event.

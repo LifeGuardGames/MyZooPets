@@ -94,6 +94,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		petShadow.GetComponent<MeshRenderer>().enabled = false;
+		DisableIdleAnimation();
+		PetAudioManager.Instance.EnableSound = false;
 	}
 
 	public void EnableVisibility(){
@@ -101,6 +103,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);
 		petShadow.GetComponent<MeshRenderer>().enabled = true;
+		EnableIdleAnimation();
+		PetAudioManager.Instance.EnableSound = true;
 	}
 
 	/// <summary>

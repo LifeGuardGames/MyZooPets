@@ -4,10 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameTutorialDecorations : GameTutorial{
-	// decoration node for tutorial
-	private GameObject decoNode;
-	private GameObject decoModeBackButton; //reference to deco mode exit button
 
+	private GameObject decoModeBackButton; //reference to deco mode exit button
+	private GameObject decoFingerHint;
 	private GameObject shopButton;
 	private GameObject storeBackButton;
 
@@ -15,7 +14,7 @@ public class GameTutorialDecorations : GameTutorial{
 	}	
 			
 	protected override void SetMaxSteps(){
-		maxSteps = 7;
+		maxSteps = 6;
 	}
 			
 	protected override void SetKey(){
@@ -23,6 +22,12 @@ public class GameTutorialDecorations : GameTutorial{
 	}
 			
 	protected override void _End(bool isFinished){
+
+		// when the tutorial is done reset the shop button function name here.
+		LgButton button = shopButton.GetComponent<LgButton>();
+		LgButtonMessage buttonMessage = (LgButtonMessage) button;
+		buttonMessage.functionName = "OpenShop";
+
 		// since this is the last tutorial, show a little notification
 		string strKey = "TUTS_FINISHED";											// key of text to show
 		string spriteName = Constants.GetConstant<string>("Tutorial_Finished");		// image to appear on notification
@@ -33,8 +38,9 @@ public class GameTutorialDecorations : GameTutorial{
 		notificationEntry.Add(NotificationPopupFields.Message, String.Format(Localization.Localize(strKey), 
 		                                                                     StringUtils.FormatStringPossession(petName)));
 		notificationEntry.Add(NotificationPopupFields.SpriteName, spriteName);
-
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+		WellapadMissionController.Instance.TaskCompleted("Decorate");
 
 		GameObject wellapadButton = (GameObject)GameObject.Find("WellapadButton");
 		if(wellapadButton != null){
@@ -45,10 +51,7 @@ public class GameTutorialDecorations : GameTutorial{
 			Debug.LogError("wellapad button can't be found: " + this);
 		}
 	}
-	
-	//---------------------------------------------------
-	// ProcessStep()
-	//---------------------------------------------------		
+			
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
@@ -58,19 +61,16 @@ public class GameTutorialDecorations : GameTutorial{
 			TutorialManager.Instance.StartCoroutine(FocusOnEditButton());
 			break;
 		case 2:
-			FocusOnNode();
-			break;
-		case 3:
 			TutorialManager.Instance.StartCoroutine(FocusOnStoreButton());
 			break;			
-		case 4:
+		case 3:
 			TutorialManager.Instance.StartCoroutine(WiggleDecorationBuyButtons());
 			StoreUIManager.OnDecorationItemBought += FocusOnStoreExitButton;
 			break;
-		case 5:
+		case 4:
 			TutorialManager.Instance.StartCoroutine(FocusOnDecorationUI());
 			break;
-		case 6:
+		case 5:
 			TutorialManager.Instance.StartCoroutine(FocusOnDecoExitButton());
 			break;
 		}
@@ -138,7 +138,7 @@ public class GameTutorialDecorations : GameTutorial{
 		AddToProcessList(goEditButton);
 		
 		// sign up for a callback for when the button is clicked
-		EditDecosUIManager.Instance.OnManagerOpen += OnEditDecos;
+		DecoInventoryUIManager.Instance.OnManagerOpen += OnEditDecos;
 	}	
 	
 	/// <summary>
@@ -148,7 +148,7 @@ public class GameTutorialDecorations : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnEditDecos(object sender, UIManagerEventArgs args){
 		// stop listening for callback
-		EditDecosUIManager.Instance.OnManagerOpen -= OnEditDecos;
+		DecoInventoryUIManager.Instance.OnManagerOpen -= OnEditDecos;
 
 		// clean up
 		RemoveSpotlight();
@@ -159,42 +159,7 @@ public class GameTutorialDecorations : GameTutorial{
 		Advance();		
 	}
 
-	/// <summary>
-	/// Focuses the on decoration node.
-	/// </summary>
-	private void FocusOnNode(){
-		// find and spotlight the tutorial node
-		decoNode = GameObject.Find("DecoNode_Starting_Rug");
-		// SpotlightObject( goNode );
-		ShowFingerHint(decoNode, flipX: true);
-		
-		// add the node to the process list so the user can click it
-		AddToProcessList(decoNode);
-		
-		// listen for when the node is clicked
-		LgButton button = decoNode.GetComponent<LgButton>();
-		button.OnProcessed += OnNodeClicked;		
-	}
 
-	/// <summary>
-	/// Node clicked. Clean up and advance.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnNodeClicked(object sender, EventArgs args){
-		// stop listening for the node to be clicked
-		LgButton button = decoNode.GetComponent<LgButton>();
-		button.OnProcessed -= OnNodeClicked;
-
-		//Remove button from the clickable list
-		RemoveFromProcessList(decoNode);
-
-		// clean up	
-		RemoveFingerHint();
-
-		// advance the tutorial
-		Advance();
-	}
 
 	/// <summary>
 	/// No deocration items yet, so make the user go to the store to buy some
@@ -204,7 +169,7 @@ public class GameTutorialDecorations : GameTutorial{
 		yield return 0;
 
 		// find the store button
-		shopButton = EditDecosUIManager.Instance.GetShopButton();
+		shopButton = DecoInventoryUIManager.Instance.GetShopButton();
 
 		//Show finger hint
 		ShowFingerHint(shopButton, true, InterfaceAnchors.BottomLeft, flipX: true);
@@ -213,6 +178,8 @@ public class GameTutorialDecorations : GameTutorial{
 
 		//listen for when the button is clicked
 		LgButton button = shopButton.GetComponent<LgButton>();
+		LgButtonMessage buttonMessage = (LgButtonMessage) button;
+		buttonMessage.functionName = "OpenShopForTutorial";
 		button.OnProcessed += OnStoreEntered;
 	}
 
@@ -224,6 +191,7 @@ public class GameTutorialDecorations : GameTutorial{
 	private void OnStoreEntered(object sender, EventArgs args){
 		//stop listening to shop button
 		LgButton button = shopButton.GetComponent<LgButton>();
+
 		button.OnProcessed -= OnStoreEntered;
 
 		StoreUIManager.Instance.DisableTabArea();
@@ -310,21 +278,34 @@ public class GameTutorialDecorations : GameTutorial{
 	}
 
 	/// <summary>
-	/// There are some items on the decoration inventory now, so focus on the first
-	/// item and prompt the user to use it.
+	/// There are some items on the decoration inventory now, so hint at the user
+	/// to drag the decoration from the inventory to the drop zone
 	/// </summary>
 	private IEnumerator FocusOnDecorationUI(){
 		yield return new WaitForSeconds(1);
-		// find and spotlight the decoration in the user's inventory/UI
-		GameObject decorationItem = EditDecosUIManager.Instance.GetTutorialEntry();
-		
-		//Show finger hint
-		ShowFingerHint(decorationItem, isGUI: true, anchor: InterfaceAnchors.Bottom, flipX: true);
-		
-		AddToProcessList(decorationItem);
-		
-		// listen for when that decoration is actually clicked
-		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced += OnDecorationPlaced;
+
+		GameObject tutDecoNode = GameObject.Find("DecoNode_Starting_Rug");
+		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		                                                             tutDecoNode.transform.position);
+		tutDecoNodePosition = CameraManager.Instance.TransformAnchorPosition(tutDecoNodePosition, 
+		                                                               InterfaceAnchors.BottomLeft, 
+		                                                               InterfaceAnchors.BottomRight);
+		tutDecoNodePosition.z = 1;
+
+		GameObject tutDecoItemGameObject = DecoInventoryUIManager.Instance.GetTutorialItem();
+		Vector3 tutDecoItemPosition = LgNGUITools.GetScreenPosition(tutDecoItemGameObject, isObjectInUIGrid: true);
+		decoFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
+		                                         (GameObject)Resources.Load("DecoFingerHint"));
+		decoFingerHint.transform.localPosition = tutDecoItemPosition;
+
+		Hashtable optional = new Hashtable();
+		optional.Add("repeat", 0);
+		LeanTween.moveLocal(decoFingerHint, tutDecoNodePosition, 2f, optional);
+
+		AddToProcessList(tutDecoItemGameObject);
+	
+		//listen to when decoration is drop on decoration zone
+		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationPlaced;
 	}
 
 	/// <summary>
@@ -334,10 +315,10 @@ public class GameTutorialDecorations : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnDecorationPlaced(object sender, EventArgs args){
 		// stop listening for the decoration clicked callback
-		EditDecosUIManager.Instance.GetChooseScript().OnDecoPlaced -= OnDecorationPlaced;
+		DecoInventoryUIManager.OnDecoDroppedOnTarget -= OnDecorationPlaced;
 
 		// clean up
-		RemoveFingerHint();
+		GameObject.Destroy(decoFingerHint);
 		
 		// advance the tutorial
 		Advance();
@@ -356,10 +337,10 @@ public class GameTutorialDecorations : GameTutorial{
 		decoModeBackButton = GameObject.Find("DecoExitButton");
 
 		// show finger hint
-		ShowFingerHint(decoModeBackButton, true, InterfaceAnchors.BottomRight);
+		ShowFingerHint(decoModeBackButton, isGUI:true, anchor:InterfaceAnchors.BottomLeft, flipX:true);
 
 		// show message
-		Vector3 vLoc = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
+		Vector3 popupLocation = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
 		string tutKey = GetKey() + "_" + GetStep();
 		string tutMessage = Localization.Localize(tutKey);
 		Hashtable option = new Hashtable();
@@ -367,7 +348,7 @@ public class GameTutorialDecorations : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, vLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLocation, useViewPort: false, option: option);
 
 		//permit exit button to be clicked
 		AddToProcessList(decoModeBackButton);

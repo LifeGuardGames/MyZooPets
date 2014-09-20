@@ -136,7 +136,7 @@ public class PanToMoveCamera : MonoBehaviour{
 			retVal = false;
 		
 		// if the user is in deco mode and the room they are moving to has an active gate, illegal move
-		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen() && 
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen() && 
 			GatingManager.Instance.HasActiveGate(targetPartition))
 			retVal = false;
 		
@@ -181,7 +181,7 @@ public class PanToMoveCamera : MonoBehaviour{
 		int targetPartition = GetTargetPartition(1, RoomDirection.Left);
 		bool retVal = true;
 
-		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen() && 
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen() && 
 			GatingManager.Instance.HasActiveGate(targetPartition))
 				retVal = false;
 

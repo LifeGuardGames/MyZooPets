@@ -81,7 +81,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
@@ -90,7 +89,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 		RoomArrowsUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
@@ -101,7 +99,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	#region Store shortcut mode used by PetSpeechAI
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -112,7 +109,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -122,9 +118,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
-		
 		NavigationUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
@@ -174,7 +168,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		ItemType eType = itemData.Type;
 		switch(eType){
 		case ItemType.Decorations:
-			itemPosition = EditDecosUIManager.Instance.GetEditButtonPosition();
+			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemID);
 			break;
 		default:
 			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
@@ -354,8 +348,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.ShowPanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -366,8 +360,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Items"){
-			EditDecosUIManager.Instance.HideNavButton();
 			InventoryUIManager.Instance.ShowPanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -378,8 +372,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		}
 		else if(currentPage == "Decorations"){
-			EditDecosUIManager.Instance.ShowNavButton();
 			InventoryUIManager.Instance.HidePanel();
+			DecoInventoryUIManager.Instance.ShowDecoInventory();
 
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
@@ -397,6 +391,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					
 					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
 					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
+
+					// Call resizer
+					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
+					resizer.enabled = true;	// Resize automatically
 
 					ShowUseTab(tabParent.FindChild("Tab"));
 					if(counter == 0){
@@ -417,8 +415,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else if(currentPage == "Premiums"){
 			InventoryUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
 			NavigationUIManager.Instance.HidePanel();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
 
 			foreach(Transform tabParent in tabArea.transform){
 				HideUnuseTab(tabParent.FindChild("Tab"));
@@ -445,11 +443,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Return to the StoreBasePanel
 	//------------------------------------------
 	public void HideStoreSubPanel(){
-
 		DestroyGrid();
 
-		EditDecosUIManager.Instance.HideNavButton();
-		InventoryUIManager.Instance.HidePanel();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
 
 		// kind of hacky way to ensure that the UI is reset to the correct mode
@@ -459,15 +454,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+				DecoInventoryUIManager.Instance.ShowDecoInventory();
+				InventoryUIManager.Instance.HidePanel();
+				HUDUIManager.Instance.HidePanel();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
 				InventoryUIManager.Instance.ShowPanel();
 				RoomArrowsUIManager.Instance.ShowPanel();
+				DecoInventoryUIManager.Instance.HideDecoInventory();
 			}
 			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				InventoryUIManager.Instance.ShowPanel();
+				DecoInventoryUIManager.Instance.HideDecoInventory();
 			}
 			else{
 				_CloseUI();	
@@ -479,8 +479,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			isShortcutMode = false;
 		}
-		else
+		else{
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
+			DecoInventoryUIManager.Instance.HideDecoInventory();
+			InventoryUIManager.Instance.HidePanel();
+		}
 	}
 
 	//----------------------------------------------------

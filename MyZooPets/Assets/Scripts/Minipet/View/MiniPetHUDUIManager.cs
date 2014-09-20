@@ -87,10 +87,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		HUDUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		InventoryUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.HidePanel();
-		PetAnimationManager.Instance.DisableAnimation();
+		PetAnimationManager.Instance.DisableVisibility();
 		PetAudioManager.Instance.EnableSound = false;
 	}
 
@@ -102,9 +101,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		NavigationUIManager.Instance.ShowPanel();
 		HUDUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 		RoomArrowsUIManager.Instance.ShowPanel();
-		PetAnimationManager.Instance.EnableAnimation();
+		PetAnimationManager.Instance.EnableVisibility();
 		PetAudioManager.Instance.EnableSound = true;
 
 		if(cleaningTutorialObject != null)
@@ -225,7 +223,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 		if(isModeLockEmpty){
 			NavigationUIManager.Instance.HidePanel();
-			EditDecosUIManager.Instance.HideNavButton();
 			RoomArrowsUIManager.Instance.HidePanel();
 		}
 

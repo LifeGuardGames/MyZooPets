@@ -44,7 +44,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating
 
 		//deco mode specific checks
-		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen()){
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen()){
 			//first partition
 			if(currentPartition == firstPartition){
 				if(panScript.CanDecoModeMoveToRight())

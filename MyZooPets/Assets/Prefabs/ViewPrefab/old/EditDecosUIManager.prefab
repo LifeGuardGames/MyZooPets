@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: InventoryUIManager
+  m_Name: EditDecosUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,6 +27,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -35,17 +36,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e745fe6221e6e4da7b8fcf573260e49c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cf3669d9e4ff46fbb5294a20bbc6138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPanel: {fileID: 0}
-  isDebug: 0
-  uiGridObject: {fileID: 0}
-  uiButtonToggleObject: {fileID: 0}
-  uiButtonSpriteObject: {fileID: 0}
-  spritePet: {fileID: 0}
-  inventoryItemPrefab: {fileID: 100000, guid: e40a594589ec042ab9c09257d042e280, type: 2}
-  petAnimator: {fileID: 0}
+  blockGUI: 0
+  IsDisableEditMode: 0
+  tweenExit: {fileID: 0}
+  goEdit: {fileID: 0}
+  shopButton: {fileID: 0}
+  goChoosePanel: {fileID: 0}
+  chooseDecorationScript: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

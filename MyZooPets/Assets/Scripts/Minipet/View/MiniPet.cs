@@ -12,10 +12,12 @@ public class MiniPet : MonoBehaviour {
 	public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
+	public GameObject flippable;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 
+	private bool isVisible;
 	private string id; //pet id
 	private new string name;
 	
@@ -53,15 +55,16 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	void Update(){
+		if(isVisible){
+			//count down starts if tickling animation is playing.
+			if(animationManager.IsTickling()){
+				tickleTimer += Time.deltaTime;
 
-		//count down starts if tickling animation is playing.
-		if(animationManager.IsTickling()){
-			tickleTimer += Time.deltaTime;
-
-			//turn tickling animation off after certain time
-			if(tickleTimer > timeBeforeTickleAnimationStops){
-				tickleTimer = 0;
-				animationManager.StopTickling();
+				//turn tickling animation off after certain time
+				if(tickleTimer > timeBeforeTickleAnimationStops){
+					tickleTimer = 0;
+					animationManager.StopTickling();
+				}
 			}
 		}
 	}
@@ -289,7 +292,6 @@ public class MiniPet : MonoBehaviour {
 		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 
-
 		if(args.TargetCollider.name == this.gameObject.name && !isLevelUpAnimationLockOn){
 
 			invItemID = args.ItemTransform.name; //get id from listener args
@@ -363,6 +365,24 @@ public class MiniPet : MonoBehaviour {
 			
 			// make the item "burst" out
 			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
+		}
+	}
+
+	public void ToggleVisibility(bool _isVisible){
+
+		isVisible = _isVisible;
+
+		if(_isVisible){
+			bubbleParticle.gameObject.SetActive(true);
+			dirtyParticle.gameObject.SetActive(true);
+			flippable.SetActive(true);
+			gameObject.collider.enabled = true;
+		}
+		else{
+			bubbleParticle.gameObject.SetActive(false);
+			dirtyParticle.gameObject.SetActive(false);
+			flippable.SetActive(false);
+			gameObject.collider.enabled = false;
 		}
 	}
 }

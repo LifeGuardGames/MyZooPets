@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -70,7 +70,7 @@ public class AccessoryNode : MonoBehaviour{
 			if(goPrefab){
 				placedAccessoryObject = Instantiate(goPrefab, Vector3.zero, goPrefab.transform.rotation) as GameObject;
 				placedAccessoryObject.transform.parent = transform;
-				GameObjectUtils.ZeroLocalTransform(placedAccessoryObject);	// Zero out all local transforms
+				GameObjectUtils.ResetLocalTransform(placedAccessoryObject);	// Zero out all local transforms
 			}
 			else{
 				Debug.LogError("No such prefab for " + strResource);

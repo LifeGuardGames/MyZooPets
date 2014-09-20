@@ -95,7 +95,7 @@ public class PetMovement : Singleton<PetMovement>{
 			return;
 		
 		// bit of a hack...remove if this causes any issues -- prevent pet movement if the edit decos UI is open
-		if(EditDecosUIManager.Instance && EditDecosUIManager.Instance.IsOpen())
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen())
 			return;
        
 		AudioManager.Instance.PlayClip(strSoundMove);

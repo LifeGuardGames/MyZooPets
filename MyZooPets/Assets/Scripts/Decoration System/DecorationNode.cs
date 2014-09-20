@@ -91,6 +91,8 @@ public abstract class DecorationNode : LgButton{
 		if(spriteIcon){
 			string strIcon = "iconDeco" + GetDecoType() + "2";	// Parsed! version 2 for a few icons for now
 			spriteIcon.spriteName = strIcon;
+			spriteIcon.GetComponent<SpriteResizer>().Resize();
+			spriteIcon.transform.localPosition = Vector3.zero;
 		}
 		
 		// set the art for the button bg based on if the node is selected or not

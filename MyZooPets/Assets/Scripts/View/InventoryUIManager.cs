@@ -99,6 +99,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	//Find the position of Inventory Item game object with invItemID
 	//Used for animation position in StoreUIManager
 	public Vector3 GetPositionOfInvItem(string invItemID){
+		Debug.Log("getting position of inv item");
 		// position to use
 		Vector3 invItemPosition;
 
@@ -180,7 +181,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	//Event listener. listening to when new item is added to the inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
-		
 		// inventory doesn't currently care about decorations/accessories
 		if(e.InvItem.ItemType == ItemType.Decorations || e.InvItem.ItemType == ItemType.Accessories)
 			return;

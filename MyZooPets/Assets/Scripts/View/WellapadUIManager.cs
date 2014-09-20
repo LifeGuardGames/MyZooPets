@@ -29,7 +29,6 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
-		EditDecosUIManager.Instance.HideNavButton();
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		// show the UI itself
@@ -45,7 +44,6 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
-		EditDecosUIManager.Instance.ShowNavButton();
 		RoomArrowsUIManager.Instance.ShowPanel();
 		
 		// hide the UI

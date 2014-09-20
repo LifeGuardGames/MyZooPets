@@ -127,6 +127,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			// Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
+			RoomArrowsUIManager.Instance.ShowPanel();
 			
 			backButton.SetActive(false);
 		}

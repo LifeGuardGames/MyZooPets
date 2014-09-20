@@ -20,17 +20,34 @@ public class DataManager : Singleton<DataManager>{
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 	private MutableDataPetMenuInfo menuSceneData; //basic info data of all the pet that are only used in this scene
 
-	//Return menu scene data used in MenuScene
+	/// <summary>
+	/// Gets the menu scene data.
+	/// </summary>
+	/// <value>The menu scene data.</value>
 	public MutableDataPetMenuInfo MenuSceneData{
 		get{ return menuSceneData; }
 	}
 
-	//Return the current game datda
+	/// <summary>
+	/// Gets the current data version.
+	/// </summary>
+	/// <value>The current data version.</value>
+	public Version CurrentDataVersion{
+		get{ return new Version(PlayerPrefs.GetString("CurrentDataVersion", "1.3.0"));}
+	}
+
+	/// <summary>
+	/// Gets the game data.
+	/// </summary>
+	/// <value>The game data.</value>
 	public PetGameData GameData{
 		get{ return gameData; }
 	}
     
-	//Save temporary data when transitioning to new scene
+	/// <summary>
+	/// Save temporary data when transitioning to new scene.
+	/// </summary>
+	/// <value>The scene data.</value>
 	public LoadSceneData SceneData{ get; set; } 
 	
 	/// <summary>

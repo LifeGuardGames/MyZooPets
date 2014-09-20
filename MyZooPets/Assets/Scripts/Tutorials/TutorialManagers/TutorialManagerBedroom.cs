@@ -122,6 +122,19 @@ public class TutorialManagerBedroom : TutorialManager{
 			}
 			else{}
 		}
+		else{
+			//if current data version is < v1.3.4 then the deco tutorial needs to be run again
+			Version currentDataVersion = DataManager.Instance.CurrentDataVersion;
+			Version version134 = new Version("1.3.4");
+
+			if(currentDataVersion < version134){
+				if(isFlameTutorialDone && !isDecoTutorialDone &&
+					CameraManager.Instance.GetPanScript().currentPartition == 0){
+					// play the deco tutorial
+					new GameTutorialDecorations();
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -147,10 +160,7 @@ public class TutorialManagerBedroom : TutorialManager{
 
 	public void OnQuestionaireDone(){
 		//check if pet in partition 0, if not force it to partition 0
-//		if(!args.Opening){
-			
-			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
-			Check();
-//		}
+		CameraManager.Instance.GetPanScript().MoveToFirstPartition();
+		Check();
 	}
 }

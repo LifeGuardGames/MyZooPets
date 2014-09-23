@@ -245,6 +245,7 @@ public class MiniPet : MonoBehaviour {
 		}
 
 		if(isTickled && isCleaned){
+			ShowFoodPreferenceInUI();
 			Invoke("ShowFoodPreferenceMessage", 1f);
 		}
 	}
@@ -253,6 +254,11 @@ public class MiniPet : MonoBehaviour {
 		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+	}
+
+	private void ShowFoodPreferenceInUI(){
+		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 	}
 
 	/// <summary>
@@ -315,7 +321,6 @@ public class MiniPet : MonoBehaviour {
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
 						MiniPetManager.Instance.IncreaseFoodXP(id);
-						
 						animationManager.Eat();
 					}
 				}
@@ -365,6 +370,8 @@ public class MiniPet : MonoBehaviour {
 			
 			// make the item "burst" out
 			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
+
+			ShowFoodPreferenceInUI();
 		}
 	}
 

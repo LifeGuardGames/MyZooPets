@@ -11,10 +11,16 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UISlider levelSlider;
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
+
+	public UILabel labelFeedCount;
+	public UILabel labelFeed;
+	public UISprite spriteFeed;
+
 	public Animation levelUpAnimation;
 	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
+
 
 	private GameObject cleaningTutorialObject;
 	private GameObject ticklingTutorialObject;
@@ -125,6 +131,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		tickleCheckBox.SetActive(isTickled);
 		cleanCheckBox.SetActive(isCleaned);
+
+		RefreshFoodItemUI();
 
 		nameLabel.text = SelectedMiniPetName;
 		UpdateLevelUI();
@@ -257,6 +265,31 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
 			HUDUIManager.Instance.HidePanel();
+		}
+	}
+
+	/// <summary>
+	/// Refreshs the food item UI
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+	public void RefreshFoodItemUI(){
+		if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
+			int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
+			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
+			labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
+			
+			labelFeedCount.gameObject.SetActive(true);
+			labelFeed.gameObject.SetActive(true);
+			Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+			spriteFeed.spriteName = item.TextureName;
+			spriteFeed.gameObject.SetActive(true);
+			spriteFeed.GetComponent<SpriteResizer>().Resize();
+		}
+		else{
+			labelFeedCount.gameObject.SetActive(false);
+			labelFeed.gameObject.SetActive(false);
+			spriteFeed.spriteName = null;
+			spriteFeed.gameObject.SetActive(false);
 		}
 	}
 }

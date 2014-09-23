@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
@@ -15,6 +16,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UILabel labelFeedCount;
 	public UILabel labelFeed;
 	public UISprite spriteFeed;
+
+	public Animation storeButtonPulseAnim;
+	public GameObject storeButtonSunbeam;
 
 	public Animation levelUpAnimation;
 	public Animation levelUpDropdown;
@@ -101,6 +105,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		CheckStoreButtonPulse();
 		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 
 		//Show other UI Objects
@@ -266,6 +271,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			this.GetComponent<TweenToggleDemux>().Show();
 			HUDUIManager.Instance.HidePanel();
 		}
+
+		CheckStoreButtonPulse();
 	}
 
 	/// <summary>
@@ -290,6 +297,26 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			labelFeed.gameObject.SetActive(false);
 			spriteFeed.spriteName = null;
 			spriteFeed.gameObject.SetActive(false);
+		}
+		CheckStoreButtonPulse();
+	}
+
+	/// <summary>
+	/// Checks the store button pulse.
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+	private void CheckStoreButtonPulse(){
+		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+
+		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen()){
+			storeButtonPulseAnim.Play();
+			storeButtonSunbeam.SetActive(true);
+		}
+		else{
+			storeButtonPulseAnim.Stop();
+			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
+			storeButtonSunbeam.SetActive(false);
 		}
 	}
 }

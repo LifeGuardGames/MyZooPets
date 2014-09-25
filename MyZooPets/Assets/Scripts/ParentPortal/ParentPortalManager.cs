@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class ParentPortalManager : Singleton<ParentPortalManager> {
-	public static EventHandler<EventArgs> OnDataLoadSucessful;
-	public static EventHandler<EventArgs> OnDataLoadFailed;
+	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 
 	// Use this for initialization
 	void Start () {
@@ -18,38 +17,6 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 	void Update () {
 	
 	}
-
-#if UNITY_EDITOR
-	void OnGUI(){
-		GUILayout.BeginHorizontal();
-		if(GUILayout.Button("parent portal refresh data")){
-			RefreshData();
-		}
-		if(GUILayout.Button("Add Kid Account")){
-			try{
-				ExtraParseLogic.Instance.CreateNewKidAccount().ContinueWith(t => {
-					if(t.IsFaulted || t.IsCanceled){
-						foreach(ParseException e in t.Exception.InnerExceptions){
-							Debug.Log(e.Message);
-							Debug.Log(e.Code);
-						}
-					}
-					else{
-						Debug.Log("Kid Account created");
-					}
-				});
-			}
-			catch(InvalidOperationException e){
-				Debug.Log(e.Message);
-			}
-
-		}
-		if(GUILayout.Button("Logout")){
-			ParseUser.LogOut();
-		}
-		GUILayout.EndHorizontal();
-	}
-	#endif
 		
 	public void RefreshData(){
 		var parentPortalQuery = new ParseQuery<KidAccount>()
@@ -60,32 +27,45 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 				return parentPortalQuery.FindAsync();
 			}).Unwrap().ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
-					// Errors from Parse Cloud and network interactions
-					foreach(ParseException e in t.Exception.InnerExceptions){
-						Debug.Log(e.Message);
-						Debug.Log(e.Code);
-					}
-
-					if(OnDataLoadFailed != null)
-						OnDataLoadFailed(this, EventArgs.Empty);
+					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
+					
+					Loom.DispatchToMainThread(() => {
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = false;
+						args.ErrorCode = ErrorCodes.ConnectionError;
+						
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
 				}
 				else{
-					Debug.Log("pass");
 					IEnumerable<KidAccount> kidAccounts = t.Result;
 					foreach(KidAccount account in kidAccounts){
 						Debug.Log("kid account: " + account.ObjectId);
 					}
-					if(OnDataLoadSucessful != null)
-						OnDataLoadSucessful(this, EventArgs.Empty);
+
+					Loom.DispatchToMainThread(() => {
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = true;
+						args.ErrorCode = ErrorCodes.None;
+						
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
 				}
 			});
 		}
 		catch(InvalidOperationException e){
 			//Errors from parse SDK logic check
-			Debug.Log(e.Message);
+			Debug.LogException(e);
 
-			if(OnDataLoadFailed != null)
-				OnDataLoadFailed(this, EventArgs.Empty);
+			ServerEventArgs args = new ServerEventArgs();
+			args.IsSuccessful = false;
+			args.ErrorCode = ErrorCodes.None;
+			
+			if(OnDataRefreshed != null)
+				OnDataRefreshed(this, args);
 		}
 	}
 }

@@ -15,33 +15,18 @@ public enum ErrorCodes{
 public class ServerEventArgs : EventArgs{
 	public bool IsSuccessful {get; set;}
 	public ErrorCodes ErrorCode {get; set;}
+	public string ErrorMessage {get; set;}
 }
 
 public class SocialManager : Singleton<SocialManager> {
-//	public static EventHandler<EventArgs> OnDataLoadSucessful;
-//	public static EventHandler<EventArgs> OnDataLoadFailed;
-
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
+	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 
-#if UNITY_EDITOR
-//	void OnGUI(){
-//		GUILayout.BeginHorizontal();
-//		if(GUILayout.Button("add friend code")){
-//			AddFriendCode("bEydV3HOUU");
-//		}
-//
-//		if(GUILayout.Button("refresh friend list")){
-////			StartCoroutine(RefreshData());
-//			RefreshData();
-//		}
-//		
-//		GUILayout.EndHorizontal();
-//	}
-#endif
-	
+	/// <summary>
+	/// Refreshs the data.
+	/// </summary>
 	public void RefreshData(){
 		try{
-
 			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
 				KidAccount kidAccount = t.Result;
 
@@ -70,7 +55,6 @@ public class SocialManager : Singleton<SocialManager> {
 						Debug.Log(account.FriendList.Count);
 
 					Loom.DispatchToMainThread(() => {
-
 						ServerEventArgs args = new ServerEventArgs();
 						args.IsSuccessful = true;
 						args.ErrorCode = ErrorCodes.None;
@@ -82,16 +66,14 @@ public class SocialManager : Singleton<SocialManager> {
 			});
 		}
 		catch(InvalidOperationException e){
-			Debug.Log(e.Message);
+			Debug.LogException(e);
 
-
-				ServerEventArgs args = new ServerEventArgs();
-				args.IsSuccessful = false;
-				args.ErrorCode = ErrorCodes.ConnectionError;
-				
-				if(OnDataRefreshed != null)
-					OnDataRefreshed(this, args);
-
+			ServerEventArgs args = new ServerEventArgs();
+			args.IsSuccessful = false;
+			args.ErrorCode = ErrorCodes.ConnectionError;
+			
+			if(OnDataRefreshed != null)
+				OnDataRefreshed(this, args);
 		}
 	}
 	
@@ -113,17 +95,40 @@ public class SocialManager : Singleton<SocialManager> {
 				if(t.IsFaulted){
 					foreach(ParseException e in t.Exception.InnerExceptions)
 						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-					
-					// OtherCause code = connection error
+
+					Loom.DispatchToMainThread(() => {
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = false;
+						args.ErrorCode = ErrorCodes.ConnectionError;
+						
+						if(OnFriendCodeAdded != null)
+							OnFriendCodeAdded(this, args);
+					});
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
 					if(result.TryGetValue("code", out code)){
-						Debug.Log("Error Code: " + code);
-						//101 -> object not found
-						//137 -> dupliate value
+//						Debug.Log("Error Code: " + code);
+	
+						int parseCode = Convert.ToInt32(code);
+						ErrorCodes errorCode = ErrorCodes.None;
+
+						switch(parseCode){
+							case 101:
+								errorCode = ErrorCodes.ObjectNotFound;
+								break;
+						}
+
+						Loom.DispatchToMainThread(() => {
+							ServerEventArgs args = new ServerEventArgs();
+							args.IsSuccessful = false;
+							args.ErrorCode = errorCode;
+							
+							if(OnFriendCodeAdded != null)
+								OnFriendCodeAdded(this, args);
+						});
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);

@@ -167,49 +167,5 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 
 		return source.Task;
 	}
-
-#if UNITY_EDITOR
-	#region Test Code
-	/// <summary>
-	/// Test case 2:
-	/// user sign up --> pass
-	/// kid account creation --> fail
-	/// 
-	/// with the same user we try kid account creation again.
-	/// </summary>
-	public void UserSignupCase2(){
-		try{
-			UserAndKidAccountCheck().ContinueWith(t => {
-				
-				Loom.DispatchToMainThread(() => {
-					Debug.Log("First time userId: " + ParseUser.CurrentUser.ObjectId);
-					DataManager.Instance.GameData.PetInfo.ParseKidAccountID = "";
-				});
-				
-				return UserAndKidAccountCheck();
-			}).Unwrap().ContinueWith(t => {
-				if(t.IsCanceled || t.IsFaulted){
-					// Errors from Parse Cloud and network interactions
-					foreach(ParseException e in t.Exception.InnerExceptions){
-						Debug.Log(e.Message);
-						Debug.Log(e.Code);
-					}
-				}
-				else{
-					Debug.Log("Second time userId: " + ParseUser.CurrentUser.ObjectId);
-					
-					Loom.DispatchToMainThread(() => {
-						Debug.Log("Kid Account Id: " + DataManager.Instance.GameData.PetInfo.ParseKidAccountID);	
-					});
-					
-				}
-			});
-		}
-		catch(InvalidCastException e){
-			Debug.Log(e.Message);
-		}
-	}
-	#endregion
-#endif
 }
 

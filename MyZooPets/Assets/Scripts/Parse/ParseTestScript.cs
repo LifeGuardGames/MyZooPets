@@ -7,24 +7,17 @@ using System.Threading.Tasks;
 public class ParseTestScript : MonoBehaviour {
 
 	void Start(){
-		SocialManager.OnDataRefreshed += OnDataRefreshed;
+		SocialManager.OnDataRefreshed += EventListener;
+		SocialManager.OnFriendCodeAdded += EventListener;
+		ParentPortalManager.OnDataRefreshed += EventListener;
 	}
 
 	#if UNITY_EDITOR
 	void OnGUI(){
-
-
-
 		#region ExtraParseLogic Test
 		GUILayout.BeginHorizontal();
-
-		if(GUILayout.Button("User & Kid Account case 1")){
-			UserSignupAndKidAccountTest();
-		}
-		if(GUILayout.Button("User & Kid Account case 2")){
-			ExtraParseLogic.Instance.UserSignupCase2();
-		}
-		if(GUILayout.Button("User & Kid Account case 3")){
+		GUILayout.Label("ExtraParseLogic Test");
+		if(GUILayout.Button("User & Kid Account ")){
 			RegularUserSignupAndKidAccountTest();
 		}
 
@@ -33,12 +26,25 @@ public class ParseTestScript : MonoBehaviour {
 
 		#region SocialManager Test
 		GUILayout.BeginHorizontal();
-
+		GUILayout.Label("SocialManager Test");
 		if(GUILayout.Button("Get friend list")){
 			SocialManager.Instance.RefreshData();
 		}
-		if(GUILayout.Button("Add friend code")){
+		if(GUILayout.Button("Add good friend code")){
 			SocialManager.Instance.AddFriendCode("xcrusNVAjo");
+		}
+		if(GUILayout.Button("Add bad friend code")){
+			SocialManager.Instance.AddFriendCode("x5r4s4VAj1");
+		}
+
+		GUILayout.EndHorizontal();
+		#endregion
+
+		#region ParentPortal Test
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("ParentPortal Test");
+		if(GUILayout.Button("Get all kid accounts of current user")){
+			ParentPortalManager.Instance.RefreshData();
 		}
 
 		GUILayout.EndHorizontal();
@@ -47,13 +53,13 @@ public class ParseTestScript : MonoBehaviour {
 		if(GUILayout.Button("Logout")){
 			ParseUser.LogOut();
 		}
-
-
 	}
 	#endif
 
-	private void OnDataRefreshed(object sender, ServerEventArgs args){
+	private void EventListener(object sender, ServerEventArgs args){
 		Debug.Log("IsSuccessful: " + args.IsSuccessful);
+		if(!args.IsSuccessful)
+			Debug.Log("Error code: " + args.ErrorCode);
 	}
 
 	private void RegularUserSignupAndKidAccountTest(){

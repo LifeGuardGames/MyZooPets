@@ -13,11 +13,13 @@ public class MiniPet : MonoBehaviour {
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
 	public GameObject flippable;
+	public GameObject eggParent;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 
 	private bool isVisible;
+	private bool isHatchedAux;
 	private string id; //pet id
 	private new string name;
 	
@@ -41,8 +43,18 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 
-
 		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+
+		// Check to see if you want to display pet or egg
+		if(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID)){
+			Debug.Log("unlocked");
+			ToggleHatched(true);
+		}
+		else{
+			Debug.Log("locked");
+			ToggleHatched(false);
+		}
+
 		RefreshMiniPetUIState();
 	}
 	
@@ -375,6 +387,20 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
+	public void ToggleHatched(bool isHatched){
+		isHatchedAux = isHatched;
+		if(isHatched){
+			eggParent.SetActive(false);
+			flippable.SetActive(true);
+			gameObject.collider.enabled = true;
+		}
+		else{
+			eggParent.SetActive(true);
+			eggParent.animation.Play();
+			flippable.SetActive(false);
+		}
+	}
+
 	public void ToggleVisibility(bool _isVisible){
 
 		isVisible = _isVisible;
@@ -382,13 +408,14 @@ public class MiniPet : MonoBehaviour {
 		if(_isVisible){
 			bubbleParticle.gameObject.SetActive(true);
 			dirtyParticle.gameObject.SetActive(true);
-			flippable.SetActive(true);
-			gameObject.collider.enabled = true;
+
+			ToggleHatched(isHatchedAux);	// Keep track of it internally already DWID
 		}
 		else{
 			bubbleParticle.gameObject.SetActive(false);
 			dirtyParticle.gameObject.SetActive(false);
 			flippable.SetActive(false);
+			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;
 		}
 	}

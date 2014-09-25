@@ -118,7 +118,8 @@ public enum UIModeTypes {
 	GatingSystem,
 	MiniPet,
 	FireBreathing,
-	Accessory
+	Accessory,
+	Cutscene
 }
 
 // decoration node anchor types

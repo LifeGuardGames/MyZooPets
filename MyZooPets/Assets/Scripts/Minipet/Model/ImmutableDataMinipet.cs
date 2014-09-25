@@ -14,6 +14,7 @@ public class ImmutableDataMiniPet{
 	private Vector3 spawnLocation; // the location that the miniPet should be spawned at
 	private string levelUpConditionID; //key: level, value: condition to lv up. # of food required
 	private string foodPreferenceID; //key: level, value: food preference for each level
+	private string cutsceneHatchPrefabName; // Prefab name of the cutscene to load
 
 	public string ID{
 		get{ return id;}
@@ -43,6 +44,10 @@ public class ImmutableDataMiniPet{
 		get{ return foodPreferenceID;}
 	}
 
+	public string CutsceneHatchPrefabName{
+		get{ return cutsceneHatchPrefabName;}
+	}
+
 	public ImmutableDataMiniPet(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
@@ -61,5 +66,7 @@ public class ImmutableDataMiniPet{
 		levelUpConditionID = XMLUtils.GetString(hashElements["LevelUpConditionID"] as IXMLNode, null, error);
 
 		foodPreferenceID = XMLUtils.GetString(hashElements["FoodPreferenceID"] as IXMLNode, null, error);
+
+		cutsceneHatchPrefabName = XMLUtils.GetString(hashElements["CutsceneHatchPrefabName"] as IXMLNode, null, error);
 	}
 }

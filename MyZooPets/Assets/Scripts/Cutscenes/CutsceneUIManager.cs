@@ -51,7 +51,6 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	/// This should be called from CutsceneControllers to notify manager to close
 	/// </summary>
 	public void FinishAnimation(){
-		Debug.Log("Finish called");
 		Invoke("CloseUI", pauseAfterFinishDuration);
 	}
 

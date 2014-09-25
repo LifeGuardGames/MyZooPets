@@ -45,7 +45,7 @@ public class PetGameData{
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
-		MiniPets = new MutableDataMiniPets();
+		MiniPets = new  MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
 		SickNotification = new MutableDataSickNotification();
     }

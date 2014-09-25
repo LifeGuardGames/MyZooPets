@@ -57,7 +57,6 @@ public class NGUIAlphaTween : MonoBehaviour {
 
 		Initialize();
 		StartAlphaTween();
-		Debug.Log("TWEENING");
 	}
 
 	// LeanTween to update its own value
@@ -84,7 +83,6 @@ public class NGUIAlphaTween : MonoBehaviour {
 	}
 
 	private void OnCompleteCallback(){
-		Debug.Log("completed tween");
 		isTweening = false;
 		if(string.IsNullOrEmpty(onCompleteFunctionName)){
 			return;

@@ -14,6 +14,7 @@ public class MiniPet : MonoBehaviour {
 	public Transform spawnItemTransform;
 	public GameObject flippable;
 	public GameObject eggParent;
+	public Animation eggAnimation;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
@@ -45,13 +46,15 @@ public class MiniPet : MonoBehaviour {
 
 		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
-		// Check to see if you want to display pet or egg
+		RefreshUnlockState();
+	}
+
+	// Check to see if you want to display pet or egg
+	public void RefreshUnlockState(){
 		if(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID)){
-			Debug.Log("unlocked");
 			ToggleHatched(true);
 		}
 		else{
-			Debug.Log("locked");
 			ToggleHatched(false);
 		}
 
@@ -393,11 +396,16 @@ public class MiniPet : MonoBehaviour {
 			eggParent.SetActive(false);
 			flippable.SetActive(true);
 			gameObject.collider.enabled = true;
+			bubbleParticle.gameObject.SetActive(true);
+			dirtyParticle.gameObject.SetActive(true);
+			eggAnimation.animation.Stop();
 		}
 		else{
 			eggParent.SetActive(true);
-			eggParent.animation.Play();
+			eggAnimation.animation.Play();
 			flippable.SetActive(false);
+			bubbleParticle.gameObject.SetActive(false);
+			dirtyParticle.gameObject.SetActive(false);
 		}
 	}
 

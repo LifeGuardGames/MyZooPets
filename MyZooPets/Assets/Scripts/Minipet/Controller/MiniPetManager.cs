@@ -299,11 +299,17 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 		// Play the respective minipet hatch animation
 		StartCoroutine(PlayHatchCutscene(GetHatchPrefabName(miniPetID)));
+		StartCoroutine(RefreshUnlockState(miniPetID));
 	}
 
 	IEnumerator PlayHatchCutscene(string cutscenePrefabName){
 		yield return new WaitForSeconds(2f);
 		CutsceneUIManager.Instance.PlayCutscene(cutscenePrefabName);
+	}
+
+	IEnumerator RefreshUnlockState(string miniPetID){
+		yield return new WaitForSeconds(3f);
+		MiniPetTable[miniPetID].GetComponent<MiniPet>().RefreshUnlockState();
 	}
 
 	/// <summary>

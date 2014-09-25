@@ -51,13 +51,9 @@ public class MiniPet : MonoBehaviour {
 
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
-		if(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID)){
-			ToggleHatched(true);
-		}
-		else{
-			ToggleHatched(false);
-		}
 
+		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
+	
 		RefreshMiniPetUIState();
 	}
 	
@@ -243,25 +239,27 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void RefreshMiniPetUIState(){
-		//check if pet is sad and dirty
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-		
-		if(!isTickled)
-			animationManager.Sad();
-		else
-			animationManager.NotSad();
-		
-		if(!isCleaned){
-			dirtyParticle.Play();
-		}
-		else{
-			dirtyParticle.Stop();
-		}
+		if(isHatchedAux){
+			//check if pet is sad and dirty
+			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			
+			if(!isTickled)
+				animationManager.Sad();
+			else
+				animationManager.NotSad();
+			
+			if(!isCleaned){
+				dirtyParticle.Play();
+			}
+			else{
+				dirtyParticle.Stop();
+			}
 
-		if(isTickled && isCleaned){
-			ShowFoodPreferenceInUI();
-			Invoke("ShowFoodPreferenceMessage", 1f);
+			if(isTickled && isCleaned){
+				ShowFoodPreferenceInUI();
+				Invoke("ShowFoodPreferenceMessage", 1f);
+			}
 		}
 	}
 

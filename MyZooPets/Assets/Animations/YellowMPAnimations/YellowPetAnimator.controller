@@ -444,6 +444,21 @@ State:
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
+--- !u!1102 &110228778
+State:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: CutsceneMinipetHatchFluffyCheer
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Motions:
+  - {fileID: 0}
+  m_ParentStateMachine: {fileID: 110700000}
+  m_Position: {x: 695, y: 185, z: 0}
+  m_IKOnFeet: 0
+  m_Mirror: 0
+  m_Tag: 
 --- !u!1102 &110232657
 State:
   m_ObjectHideFlags: 3
@@ -521,6 +536,7 @@ StateMachine:
   - {fileID: 110232657}
   - {fileID: 110220037}
   - {fileID: 110290898}
+  - {fileID: 110228778}
   m_ChildStateMachine: []
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
@@ -563,9 +579,6 @@ StateMachine:
       first: {fileID: 110220037}
       second:
       - {fileID: 110149047}
-    data:
-      first: {fileID: 0}
-      second: []
     data:
       first: {fileID: 110290898}
       second:

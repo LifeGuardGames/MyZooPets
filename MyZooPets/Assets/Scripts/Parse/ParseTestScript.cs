@@ -31,7 +31,7 @@ public class ParseTestScript : MonoBehaviour {
 			SocialManager.Instance.RefreshData();
 		}
 		if(GUILayout.Button("Add good friend code")){
-			SocialManager.Instance.AddFriendCode("xcrusNVAjo");
+			SocialManager.Instance.AddFriendCode("5P8QH1PfME");
 		}
 		if(GUILayout.Button("Add bad friend code")){
 			SocialManager.Instance.AddFriendCode("x5r4s4VAj1");

@@ -30,7 +30,10 @@ public class SocialManager : Singleton<SocialManager> {
 			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
 				KidAccount kidAccount = t.Result;
 
-				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>();
+				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>()
+					.Include("friendList.petInfo")
+					.WhereEqualTo("objectId", kidAccount.ObjectId);
+
 
 				return friendListQuery.GetAsync(kidAccount.ObjectId);
 			}).Unwrap().ContinueWith(t => {
@@ -51,8 +54,23 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					KidAccount account = t.Result;
 
-					if(account.FriendList != null)
+					ParseObject petInfo = new ParseObject("PetInfo");
+					petInfo = account.Get<ParseObject>("petInfo");
+					Debug.Log("pet info data available: " + petInfo.IsDataAvailable);
+//					List<ParseObject> friendList = account.FriendList;
+
+//					Debug.Log(petInfo.Get<string>("name"));
+					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
+						foreach(KidAccount friendAccount in account.FriendList){
+							Debug.Log("friend object id: " + friendAccount.ObjectId);
+							Debug.Log("Friend Account is linked?: " + friendAccount.IsLinkedToParentAccount);
+
+							ParseObject friendPetInfo = new ParseObject("PetInfo");
+							friendPetInfo = friendAccount.PetInfoPointer;
+							Debug.Log("Friend Account pet info data available?: " + friendAccount.IsDataAvailable);
+						}
+					}
 
 					Loom.DispatchToMainThread(() => {
 						ServerEventArgs args = new ServerEventArgs();

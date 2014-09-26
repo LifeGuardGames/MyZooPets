@@ -15,14 +15,20 @@ public class KidAccount : ParseObject{
 	}
 
 	[ParseFieldName("friendList")]
-	public List<object> FriendList{
-		get{ return GetProperty<List<object>>("FriendList");}
-//		set{ SetProperty<List<object>>(value, "FriendList");}
+	public IList<ParseObject> FriendList{
+		get{ return GetProperty<IList<ParseObject>>("FriendList");}
+		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
 	}
 
 	[ParseFieldName("createdBy")]
 	public ParseUser CreatedBy{
 		get{ return GetProperty<ParseUser>("CreatedBy");}
 		set{ SetProperty<ParseUser>(value, "CreatedBy");}
+	}
+
+	[ParseFieldName("petInfo")]
+	public ParseObject PetInfoPointer{
+		get{ return GetProperty<ParseObject>("PetInfoPointer");}
+		set{ SetProperty<ParseObject>(value, "PetInfoPointer");}
 	}
 }

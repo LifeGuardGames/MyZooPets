@@ -68,12 +68,12 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 		background.gameObject.SetActive(false);
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "open")){
-			PlayCutscene("CutsceneMinipetHatchFireBird");
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "close")){
-			CloseUI();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "open")){
+//			PlayCutscene("CutsceneMinipetHatchFireBird");
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "close")){
+//			CloseUI();
+//		}
+//	}
 }

@@ -203,10 +203,13 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
-		if(args.Opening)
-			animationManager.IsRunningIdleAnimations = false;
-		else
-			animationManager.IsRunningIdleAnimations = true;
+		// Check if the minipet is hatched first
+		if(isHatchedAux){
+			if(args.Opening)
+				animationManager.IsRunningIdleAnimations = false;
+			else
+				animationManager.IsRunningIdleAnimations = true;
+		}
 	}
 
 	/// <summary>

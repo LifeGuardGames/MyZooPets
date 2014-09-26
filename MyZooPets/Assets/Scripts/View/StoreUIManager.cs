@@ -27,8 +27,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-	
-//	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
@@ -356,8 +354,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			CreateSubCategoryItemsTab("foodDefaultTab", Color.white);
-			//CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);	// Disabling custom colors
-
 		}
 		else if(currentPage == "Items"){
 			InventoryUIManager.Instance.ShowPanel();
@@ -368,8 +364,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white);
-			//CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);	// Disabling custom colors
-
 		}
 		else if(currentPage == "Decorations"){
 			InventoryUIManager.Instance.HidePanel();
@@ -384,10 +378,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
 					tabParent.name = decorationEnums[counter];
-
-					// Disabling custom colors
-//					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
-//					backgroundSprite.color = colors[counter];
 					
 					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
 					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
@@ -399,7 +389,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					ShowUseTab(tabParent.FindChild("Tab"));
 					if(counter == 0){
 						defaultTabName = tabParent.name;
-//						defaultColor = colors[counter];
 					}
 				}
 				else{
@@ -424,7 +413,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			
 			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
 		}
-
 		ShowStoreSubPanel();
 	}
 
@@ -538,7 +526,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					if(!itemData.ItemBoxOnly)
 						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
-
 			}
 			else if(currentPage == "Decorations"){
 				//Retrieve decoration items base on the tab name (sub category)

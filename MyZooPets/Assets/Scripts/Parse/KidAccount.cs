@@ -26,6 +26,12 @@ public class KidAccount : ParseObject{
 		set{ SetProperty<ParseUser>(value, "CreatedBy");}
 	}
 
+	[ParseFieldName("petInfo")]
+	public ParseObject PetInfo{
+		get{ return GetProperty<ParseObject>("PetInfo");}
+		set{ SetProperty<ParseObject>(value, "PetInfo");}
+	}
+
 	[ParseFieldName("petAccessory")]
 	public ParseObject PetAccessory{
 		get{ return GetProperty<ParseObject>("PetAccessory");}

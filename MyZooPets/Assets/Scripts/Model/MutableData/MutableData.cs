@@ -23,9 +23,9 @@ public abstract class MutableData{
 	/// Syncs to parse server. This is where the code to save data to parse backend
 	/// will go
 	/// </summary>
-	public abstract void SaveAsyncToParseServer();
+	public abstract void SaveAsyncToParseServer(string kidAccountID);
 
 	public MutableData(){
-		IsDirty = false;
+		IsDirty = true;
 	}
 }

@@ -54,7 +54,8 @@ public class MutableDataAccessories : MutableData{
 			IsDirty = true;
 		}
 	}
-	
+
+	#region Initialization and override functions
 	public MutableDataAccessories() : base(){
 		PlacedAccessories = new Dictionary<string, string>();
 	}
@@ -63,19 +64,21 @@ public class MutableDataAccessories : MutableData{
 		throw new System.NotImplementedException();
 	}
 
-	public override void SaveAsyncToParseServer(){
+	public override void SaveAsyncToParseServer(string kidAccountID){
 		string placedAccessoriesJSON = JSON.Instance.ToJSON(PlacedAccessories);
 
-		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-			KidAccount kidAccount = t.Result;
-
+//		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
+//			KidAccount kidAccount = t.Result;
+//
 			//make the query that will get the kid account and eager load the pet accessory
 			ParseQuery<KidAccount> query = new ParseQuery<KidAccount>()
-				.Include("petAccessory")
-				.WhereEqualTo("objectId", kidAccount.ObjectId);
-
-			return query.GetAsync(kidAccount.ObjectId);
-		}).Unwrap().ContinueWith(t => {
+				.Include("petAccessory");
+//				.WhereEqualTo("objectId", kidAccount.ObjectId);
+//
+//			return query.GetAsync(kidAccount.ObjectId);
+//		}).Unwrap().
+//		string kidAccountID = DataManager.Instance.GameData.PetInfo.ParseKidAccountID;
+		query.GetAsync(kidAccountID).ContinueWith(t => {
 			//here we have the kid account the the loaded PetAccessory
 			KidAccount fetchedAccount = t.Result;
 			ParseObject petAccessory = fetchedAccount.PetAccessory;
@@ -105,12 +108,11 @@ public class MutableDataAccessories : MutableData{
 				Debug.Log("Fail to save async: " + this.ToString());
 			}
 			else{
-				Loom.DispatchToMainThread(() =>{
-					IsDirty = false;
-					Debug.Log("save async successful: " + this.ToString());
-					Debug.Log("is data dirty: " + IsDirty);
-				});
+				IsDirty = false;
+				Debug.Log("save async successful: " + this.ToString());
+				Debug.Log("is data dirty: " + IsDirty);
 			}
 		});
 	}
+	#endregion
 }

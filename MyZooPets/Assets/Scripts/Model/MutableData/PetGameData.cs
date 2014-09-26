@@ -34,6 +34,8 @@ public class PetGameData{
     private void Init(){
 		Wellapad = new MutableDataWellapad();
         PetInfo = new MutableDataPetInfo();
+		allMutableData.Add(PetInfo);
+
         Cutscenes = new MutableDataCutscene();
         Decorations = new MutableDataDecorationSystem();
 
@@ -71,8 +73,14 @@ public class PetGameData{
 	}
 
 	public void SaveAsyncToParse(){
-		foreach(MutableData data in allMutableData)
-			if(data.IsDirty)
-				data.SaveAsyncToParseServer();
+
+		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
+			KidAccount kidAccount = t.Result;
+
+			foreach(MutableData data in allMutableData)
+				if(data.IsDirty)
+					data.SaveAsyncToParseServer(kidAccount.ObjectId);
+		});
+
 	}
 }

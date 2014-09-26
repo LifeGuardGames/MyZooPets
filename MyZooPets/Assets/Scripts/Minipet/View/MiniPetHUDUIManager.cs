@@ -249,7 +249,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
-		StoreUIManager.Instance.OpenToSubCategory("Food", true);
+		StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.MinipetUIStoreButton);
 	}
 
 	/// <summary>
@@ -259,7 +259,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Hide();
 		ClickManager.Instance.Lock(UIModeTypes.Store);
 		StoreUIManager.OnShortcutModeEnd += CloseShop;
-		StoreUIManager.Instance.OpenToSubCategory("Items", true);
+		StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.GemExplanationNotification);
 	}
 
 	private void CloseShop(object sender, EventArgs args){

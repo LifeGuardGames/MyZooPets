@@ -337,7 +337,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <summary>
 	/// Shows the no fire notification.
 	/// </summary>
-	public void ShowNoFireNotification(){
+	public void IndicateNoFire(){
 		// if inhaler is ready to be used prompt user to use inhaler
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			PetSpeechAI.Instance.ShowInhalerMsg();
@@ -351,7 +351,7 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 			// if not tell user to buy flame crystal
 			else{
-				IAPNotification();
+				FlameCrystalNotification();
 			}
 		}
 	}
@@ -360,12 +360,12 @@ public class GatingManager : Singleton<GatingManager>{
 	/// In app purchase notification. Prompt the user to either wait for inhaler or
 	/// buy flame crystal from the store with gems
 	/// </summary>
-	private void IAPNotification(){
+	private void FlameCrystalNotification(){
 		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
 			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
 			
 			ClickManager.Instance.Lock(UIModeTypes.Store);
-			StoreUIManager.Instance.OpenToSubCategory("Items", isShortCut: true);
+			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
 		};
 		
 		Hashtable notificationEntry = new Hashtable();
@@ -406,10 +406,10 @@ public class GatingManager : Singleton<GatingManager>{
 			//if can't breathe fire show message
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 			if(!canBreatheFire)
-				ShowNoFireNotification();
+				IndicateNoFire();
 		}
 		else
-			ShowUnhealthyNoFireNotification();
+			ShowUnhealthyNoFireSpeech();
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
 	}
@@ -418,7 +418,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// Shows the no fire notification. Calling this function assumes the player
 	/// cannot breathe fire
 	/// </summary>
-	private void ShowUnhealthyNoFireNotification(){
+	private void ShowUnhealthyNoFireSpeech(){
 		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,7 +86,7 @@ public class ButtonMonster : LgButtonHold{
 		// else can't breathe fire. explain why
 		else{
 			if(!TutorialManager.Instance.IsTutorialActive())
-				GatingManager.Instance.ShowNoFireNotification();
+				GatingManager.Instance.IndicateNoFire();
 		}
 	}
 

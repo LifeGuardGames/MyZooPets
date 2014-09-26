@@ -249,7 +249,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		Unequip(itemID);
 
 		// Set the mutable data
-		DataManager.Instance.GameData.Accessories.PlacedAccessories.Add(GetAccessoryNodeType(itemID), itemID);
+		DataManager.Instance.GameData.Accessories.SetAccessoryAtNode(GetAccessoryNodeType(itemID), itemID);
+//		DataManager.Instance.GameData.Accessories.PlacedAccessories.Add(GetAccessoryNodeType(itemID), itemID);
 
 		// Equip the node
 		AccessoryNodeController.Instance.SetAccessory(itemID);
@@ -259,7 +260,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 	public void Unequip(string itemID){
 		// Set the mutable data
-		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(GetAccessoryNodeType(itemID));
+		DataManager.Instance.GameData.Accessories.RemoveAccessoryAtNode(GetAccessoryNodeType(itemID));
+//		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(GetAccessoryNodeType(itemID));
 
 		// Unequip the node
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove

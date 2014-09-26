@@ -50,6 +50,22 @@ public class ParseTestScript : MonoBehaviour {
 		GUILayout.EndHorizontal();
 		#endregion
 
+		#region Pet Accessory save test
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Pet Accessory save Test");
+		if(GUILayout.Button("add pet accessory")){
+			DataManager.Instance.GameData.Accessories.SetAccessoryAtNode("testnode1", "testItem1" + DateTime.Now);
+		}
+		if(GUILayout.Button("remove pet accessory")){
+			DataManager.Instance.GameData.Accessories.RemoveAccessoryAtNode("testnode1");
+		}
+		if(GUILayout.Button("save test")){
+			DataManager.Instance.GameData.SaveAsyncToParse();
+		}
+		GUILayout.EndHorizontal();
+
+		#endregion
+
 		if(GUILayout.Button("Logout")){
 			ParseUser.LogOut();
 		}

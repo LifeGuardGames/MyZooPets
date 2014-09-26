@@ -146,16 +146,9 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 		acl.PublicReadAccess = true;
 		acl.PublicWriteAccess = false;
 
-		var petInfo = new ParseObject("PetInfo");
-		petInfo["name"] = "Jason";
-		petInfo["isHatched"] = true;
-		petInfo["color"] = "blue";
-
-
 		var account = new KidAccount{
 			IsLinkedToParentAccount = false,
 			CreatedBy = user,
-			PetInfoPointer = petInfo,
 			ACL = acl
 		};
 

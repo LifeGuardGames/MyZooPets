@@ -31,7 +31,7 @@ public class SocialManager : Singleton<SocialManager> {
 				KidAccount kidAccount = t.Result;
 
 				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>()
-					.Include("friendList.petInfo")
+//					.Include("friendList.petInfo")
 					.WhereEqualTo("objectId", kidAccount.ObjectId);
 
 
@@ -54,9 +54,9 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					KidAccount account = t.Result;
 
-					ParseObject petInfo = new ParseObject("PetInfo");
-					petInfo = account.Get<ParseObject>("petInfo");
-					Debug.Log("pet info data available: " + petInfo.IsDataAvailable);
+//					ParseObject petInfo = new ParseObject("PetInfo");
+//					petInfo = account.Get<ParseObject>("petInfo");
+//					Debug.Log("pet info data available: " + petInfo.IsDataAvailable);
 //					List<ParseObject> friendList = account.FriendList;
 
 //					Debug.Log(petInfo.Get<string>("name"));
@@ -66,8 +66,8 @@ public class SocialManager : Singleton<SocialManager> {
 							Debug.Log("friend object id: " + friendAccount.ObjectId);
 							Debug.Log("Friend Account is linked?: " + friendAccount.IsLinkedToParentAccount);
 
-							ParseObject friendPetInfo = new ParseObject("PetInfo");
-							friendPetInfo = friendAccount.PetInfoPointer;
+//							ParseObject friendPetInfo = new ParseObject("PetInfo");
+//							friendPetInfo = friendAccount.PetInfoPointer;
 							Debug.Log("Friend Account pet info data available?: " + friendAccount.IsDataAvailable);
 						}
 					}

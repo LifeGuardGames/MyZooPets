@@ -17,6 +17,17 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 	void Update () {
 	
 	}
+
+	public void AddNewAccount(){
+		bool isMaxPet = DataManager.Instance.IsMaxNumOfPet;
+		if(!isMaxPet){
+			//create menu scene data here
+
+
+			//Kid account won't be created until the first time the kid account
+			//try to sync up to parse sdk
+		}
+	}
 		
 	public void RefreshData(){
 		var parentPortalQuery = new ParseQuery<KidAccount>()
@@ -27,17 +38,15 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 				return parentPortalQuery.FindAsync();
 			}).Unwrap().ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
-					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
+					foreach(ParseException e in t.Exception.InnerExceptions)
+						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = ErrorCodes.ConnectionError;
 					
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = false;
-						args.ErrorCode = ErrorCodes.ConnectionError;
-						
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
+					if(OnDataRefreshed != null)
+						OnDataRefreshed(this, args);
 				}
 				else{
 					IEnumerable<KidAccount> kidAccounts = t.Result;
@@ -45,14 +54,12 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 						Debug.Log("kid account: " + account.ObjectId);
 					}
 
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = true;
-						args.ErrorCode = ErrorCodes.None;
-						
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = true;
+					args.ErrorCode = ErrorCodes.None;
+					
+					if(OnDataRefreshed != null)
+						OnDataRefreshed(this, args);
 				}
 			});
 		}

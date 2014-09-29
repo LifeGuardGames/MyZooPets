@@ -67,6 +67,10 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
+	public bool IsMaxNumOfPet{
+		get{ return NumOfPets >= 3;}
+	}
+
 	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
 	/// in the menuscene

@@ -15,29 +15,29 @@ public class ParseTestScript : MonoBehaviour {
 	#if UNITY_EDITOR
 	void OnGUI(){
 		#region ExtraParseLogic Test
-		GUILayout.BeginHorizontal();
-		GUILayout.Label("ExtraParseLogic Test");
-		if(GUILayout.Button("User & Kid Account ")){
-			RegularUserSignupAndKidAccountTest();
-		}
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("ExtraParseLogic Test");
+			if(GUILayout.Button("User & Kid Account ")){
+				RegularUserSignupAndKidAccountTest();
+			}
 
-		GUILayout.EndHorizontal();
+			GUILayout.EndHorizontal();
 		#endregion
 
 		#region SocialManager Test
-		GUILayout.BeginHorizontal();
-		GUILayout.Label("SocialManager Test");
-		if(GUILayout.Button("Get friend list")){
-			SocialManager.Instance.RefreshData();
-		}
-		if(GUILayout.Button("Add good friend code")){
-			SocialManager.Instance.AddFriendCode("5P8QH1PfME");
-		}
-		if(GUILayout.Button("Add bad friend code")){
-			SocialManager.Instance.AddFriendCode("x5r4s4VAj1");
-		}
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("SocialManager Test");
+			if(GUILayout.Button("Get friend list")){
+				SocialManager.Instance.RefreshData();
+			}
+			if(GUILayout.Button("Add good friend code")){
+			SocialManager.Instance.AddFriendCode("bYFafRZV");
+			}
+			if(GUILayout.Button("Add bad friend code")){
+				SocialManager.Instance.AddFriendCode("x5r4s4VAj1");
+			}
 
-		GUILayout.EndHorizontal();
+			GUILayout.EndHorizontal();
 		#endregion
 
 		#region ParentPortal Test

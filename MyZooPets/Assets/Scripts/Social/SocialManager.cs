@@ -30,9 +30,9 @@ public class SocialManager : Singleton<SocialManager> {
 			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
 				KidAccount kidAccount = t.Result;
 
-				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>()
+				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>();
 //					.Include("friendList.petInfo")
-					.WhereEqualTo("objectId", kidAccount.ObjectId);
+//					.WhereEqualTo("objectId", kidAccount.ObjectId);
 
 
 				return friendListQuery.GetAsync(kidAccount.ObjectId);
@@ -42,14 +42,12 @@ public class SocialManager : Singleton<SocialManager> {
 					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
 					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
 
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = false;
-						args.ErrorCode = ErrorCodes.ConnectionError;
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = ErrorCodes.ConnectionError;
 
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
+					if(OnDataRefreshed != null)
+						OnDataRefreshed(this, args);
 				}
 				else{
 					KidAccount account = t.Result;
@@ -72,14 +70,12 @@ public class SocialManager : Singleton<SocialManager> {
 						}
 					}
 
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = true;
-						args.ErrorCode = ErrorCodes.None;
-						
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = true;
+					args.ErrorCode = ErrorCodes.None;
+					
+					if(OnDataRefreshed != null)
+						OnDataRefreshed(this, args);
 				}
 			});
 		}
@@ -113,15 +109,13 @@ public class SocialManager : Singleton<SocialManager> {
 				if(t.IsFaulted){
 					foreach(ParseException e in t.Exception.InnerExceptions)
 						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = false;
-						args.ErrorCode = ErrorCodes.ConnectionError;
-						
-						if(OnFriendCodeAdded != null)
-							OnFriendCodeAdded(this, args);
-					});
+					
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = ErrorCodes.ConnectionError;
+					
+					if(OnFriendCodeAdded != null)
+						OnFriendCodeAdded(this, args);
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
@@ -139,14 +133,12 @@ public class SocialManager : Singleton<SocialManager> {
 								break;
 						}
 
-						Loom.DispatchToMainThread(() => {
-							ServerEventArgs args = new ServerEventArgs();
-							args.IsSuccessful = false;
-							args.ErrorCode = errorCode;
-							
-							if(OnFriendCodeAdded != null)
-								OnFriendCodeAdded(this, args);
-						});
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = false;
+						args.ErrorCode = errorCode;
+						
+						if(OnFriendCodeAdded != null)
+							OnFriendCodeAdded(this, args);
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);

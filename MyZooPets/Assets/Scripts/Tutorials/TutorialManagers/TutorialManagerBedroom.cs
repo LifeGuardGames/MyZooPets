@@ -35,7 +35,6 @@ public class TutorialManagerBedroom : TutorialManager{
 		base.Start();
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
-//		QuestionaireUIManager.Instance.OnManagerOpen += OnQuestionaireDone;
 		
 		// do the first check for tutorials
 		Check();
@@ -144,4 +143,6 @@ public class TutorialManagerBedroom : TutorialManager{
 			Check();
 //		}
 	}
+
+
 }

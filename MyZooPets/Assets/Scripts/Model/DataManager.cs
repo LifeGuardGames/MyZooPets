@@ -109,6 +109,7 @@ public class DataManager : Singleton<DataManager>{
 		}
 		// else create data for pet0 by default
 		else{
+			Debug.Log("first time getting run");
 			AddNewMenuSceneData();
 			SaveMenuSceneData();
 
@@ -151,6 +152,7 @@ public class DataManager : Singleton<DataManager>{
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
+				Debug.Log("before game save");
 				SaveGameData();
 
 				//No longer first time
@@ -252,6 +254,7 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	public void AddNewMenuSceneData(MutableDataPetMenuInfo petMenuInfo = null){
+		Debug.Log("someone calling add new menu scene data");
 		if(menuSceneData == null)
 			menuSceneData = new Dictionary<string, MutableDataPetMenuInfo>();
 
@@ -261,7 +264,8 @@ public class DataManager : Singleton<DataManager>{
 		else
 			menuSceneData.Add(petID, petMenuInfo);
 
-		NumOfPets++;
+		if(!IsMaxNumOfPet)
+			NumOfPets++;
 //		SaveMenuSceneData();
 	}
 

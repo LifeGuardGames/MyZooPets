@@ -2,25 +2,35 @@
 using System;
 using Parse;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public enum ErrorCodes{
-	None,
-	ObjectNotFound,
-	ConnectionError,
-	DuplicateValue
-}
+//public enum ErrorCodes{
+//	None,
+//	ObjectNotFound,
+//	ConnectionError,
+//	DuplicateValue,
+//	BadInput
+//}
 
 public class ServerEventArgs : EventArgs{
 	public bool IsSuccessful {get; set;}
-	public ErrorCodes ErrorCode {get; set;}
+	public ParseException.ErrorCode ErrorCode {get; set;}
 	public string ErrorMessage {get; set;}
 }
 
 public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
+
+	/// <summary>
+	/// Gets or sets the friend list.
+	/// Need to be cast to List<KidAccount> using a foreach loop to gain access
+	/// to the property in KidAccount
+	/// </summary>
+	/// <value>The friend list.</value>
+	public List<ParseObject> FriendList {get; set;}
 
 	/// <summary>
 	/// Refreshs the data.
@@ -30,10 +40,9 @@ public class SocialManager : Singleton<SocialManager> {
 			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
 				KidAccount kidAccount = t.Result;
 
-				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>();
-//					.Include("friendList.petInfo")
-//					.WhereEqualTo("objectId", kidAccount.ObjectId);
-
+				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>()
+					.Include("friendList.petInfo")
+					.Include("friendList.petAccessory");
 
 				return friendListQuery.GetAsync(kidAccount.ObjectId);
 			}).Unwrap().ContinueWith(t => {
@@ -44,7 +53,7 @@ public class SocialManager : Singleton<SocialManager> {
 
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = false;
-					args.ErrorCode = ErrorCodes.ConnectionError;
+					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
 
 					if(OnDataRefreshed != null)
 						OnDataRefreshed(this, args);
@@ -60,6 +69,7 @@ public class SocialManager : Singleton<SocialManager> {
 //					Debug.Log(petInfo.Get<string>("name"));
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
+						FriendList = account.FriendList.ToList();
 						foreach(KidAccount friendAccount in account.FriendList){
 							Debug.Log("friend object id: " + friendAccount.ObjectId);
 							Debug.Log("Friend Account is linked?: " + friendAccount.IsLinkedToParentAccount);
@@ -72,7 +82,7 @@ public class SocialManager : Singleton<SocialManager> {
 
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = true;
-					args.ErrorCode = ErrorCodes.None;
+//					args.ErrorCode = ParseException.ErrorCode.OtherCause;
 					
 					if(OnDataRefreshed != null)
 						OnDataRefreshed(this, args);
@@ -107,12 +117,13 @@ public class SocialManager : Singleton<SocialManager> {
 			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("addFriendCode", paramDict)
 				.ContinueWith(t => {
 				if(t.IsFaulted){
-					foreach(ParseException e in t.Exception.InnerExceptions)
-						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-					
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = false;
-					args.ErrorCode = ErrorCodes.ConnectionError;
+					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+					
 					
 					if(OnFriendCodeAdded != null)
 						OnFriendCodeAdded(this, args);
@@ -125,17 +136,11 @@ public class SocialManager : Singleton<SocialManager> {
 //						Debug.Log("Error Code: " + code);
 	
 						int parseCode = Convert.ToInt32(code);
-						ErrorCodes errorCode = ErrorCodes.None;
-
-						switch(parseCode){
-							case 101:
-								errorCode = ErrorCodes.ObjectNotFound;
-								break;
-						}
 
 						ServerEventArgs args = new ServerEventArgs();
 						args.IsSuccessful = false;
-						args.ErrorCode = errorCode;
+						args.ErrorCode = (ParseException.ErrorCode) parseCode;
+						args.ErrorMessage = result["message"];
 						
 						if(OnFriendCodeAdded != null)
 							OnFriendCodeAdded(this, args);

@@ -36,12 +36,12 @@ public class DayNightTk2dSpriteSwitch : MonoBehaviour {
 		sprite.SetSprite(nightSpriteName);
 	}
 	
-		void OnGUI(){
-			if(GUI.Button(new Rect(100f, 100f, 100f, 100f), "Day")){
-				ActivateDay();
-			}
-			if(GUI.Button(new Rect(200f, 100f, 100f, 100f), "Night")){
-				ActivateNight();
-			}
-		}
+//		void OnGUI(){
+//			if(GUI.Button(new Rect(100f, 100f, 100f, 100f), "Day")){
+//				ActivateDay();
+//			}
+//			if(GUI.Button(new Rect(200f, 100f, 100f, 100f), "Night")){
+//				ActivateNight();
+//			}
+//		}
 }

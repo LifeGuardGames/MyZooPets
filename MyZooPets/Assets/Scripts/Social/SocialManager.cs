@@ -94,7 +94,7 @@ public class SocialManager : Singleton<SocialManager> {
 
 			ServerEventArgs args = new ServerEventArgs();
 			args.IsSuccessful = false;
-			args.ErrorCode = ErrorCodes.ConnectionError;
+			args.ErrorCode = ParseException.ErrorCode.OperationForbidden;
 			
 			if(OnDataRefreshed != null)
 				OnDataRefreshed(this, args);
@@ -140,7 +140,7 @@ public class SocialManager : Singleton<SocialManager> {
 						ServerEventArgs args = new ServerEventArgs();
 						args.IsSuccessful = false;
 						args.ErrorCode = (ParseException.ErrorCode) parseCode;
-						args.ErrorMessage = result["message"];
+						args.ErrorMessage = (string) result["message"];
 						
 						if(OnFriendCodeAdded != null)
 							OnFriendCodeAdded(this, args);

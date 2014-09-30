@@ -114,13 +114,11 @@ public class DataManager : Singleton<DataManager>{
 			SaveMenuSceneData();
 
 			//first time playing game so try to create Parse User and create Account
+			ExtraParseLogic.Instance.UserCheck();
 		}
 			
 		LoadMenuSceneData();
 	}
-
-
-
 
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){
@@ -195,29 +193,49 @@ public class DataManager : Singleton<DataManager>{
 	/// Loads the game data from PlayerPrefs.
 	/// </summary>
 	public void LoadGameData(string petID = "Pet0"){
-		if(gameData == null || gameData.PetInfo.PetID != petID){
-			PetGameData newGameData = null;
-			string jsonString = PlayerPrefs.GetString(petID + "_GameData", "");
-			
-			//Check if json string is actually loaded and not empty
-			if(!String.IsNullOrEmpty(jsonString)){
-				newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
-				
-				#if UNITY_EDITOR
-				Debug.Log("Deserialized: " + jsonString);
-				#endif
-				
-				gameData = newGameData;
-				LoadDataVersion();
-				
-				Deserialized(true);
-			}
-			else{
-				Deserialized(false);
-			}
+		//if gameData is not null then the gameData needs to be saved first
+		//otherwise loading the new data will erase the current gameData
+		if(gameData == null){
+			LoadGameDataHelper(petID);
 		}
 		else{
+			//gameData not null && tyring to load gameData of a different pet
+			//the current gameData need to be serialized first otherwise data will
+			//be lost
+			if(gameData.PetInfo.PetID != petID){
+				PetGameData oldGameData = this.gameData;
+				SaveGameData(oldGameData);
+
+				LoadGameDataHelper(petID);
+			}
+			else{
+				Deserialized(true);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Loads the game data from PlayerPrefs.
+	/// </summary>
+	private void LoadGameDataHelper(string petID){
+		PetGameData newGameData = null;
+		string jsonString = PlayerPrefs.GetString(petID + "_GameData", "");
+		
+		//Check if json string is actually loaded and not empty
+		if(!String.IsNullOrEmpty(jsonString)){
+			newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
+			
+			#if UNITY_EDITOR
+			Debug.Log("Deserialized: " + jsonString);
+			#endif
+			
+			gameData = newGameData;
+			LoadDataVersion();
+			
 			Deserialized(true);
+		}
+		else{
+			Deserialized(false);
 		}
 	}
 
@@ -234,17 +252,24 @@ public class DataManager : Singleton<DataManager>{
             Debug.Log("Game is saving");
 		#endif
 
+		SaveGameData(this.gameData);
+	}
+
+	/// <summary>
+	/// Serialize data into json string and store locally in PlayerPrefs
+	/// </summary>
+	private void SaveGameData(PetGameData dataToSave){
 		//Data will not be saved if gameData is empty
-		if(gameData != null){
-			string jsonString = JSON.Instance.ToJSON(gameData);
-
+		if(dataToSave != null){
+			string jsonString = JSON.Instance.ToJSON(dataToSave);
+			
 			#if UNITY_EDITOR
-            Debug.Log("SERIALIZED: " + jsonString);
+			Debug.Log("SERIALIZED: " + jsonString);
 			#endif
-
-			string currentPetID = gameData.PetInfo.PetID;
+			
+			string currentPetID = dataToSave.PetInfo.PetID;
 			PlayerPrefs.SetString(currentPetID + "_GameData", jsonString);
-
+			
 			SaveDataVersion();
 			Serialized();
 		}
@@ -253,6 +278,10 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
+	/// <summary>
+	/// Adds the new menu scene data.
+	/// </summary>
+	/// <param name="petMenuInfo">Pet menu info.</param>
 	public void AddNewMenuSceneData(MutableDataPetMenuInfo petMenuInfo = null){
 		Debug.Log("someone calling add new menu scene data");
 		if(menuSceneData == null)
@@ -266,11 +295,14 @@ public class DataManager : Singleton<DataManager>{
 
 		if(!IsMaxNumOfPet)
 			NumOfPets++;
-//		SaveMenuSceneData();
 	}
 
+	/// <summary>
+	/// Versions the check. Handles any major data schema changes to the DataManager
+	/// </summary>
+	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
-		Version version134 = new Version("1.3.4");
+		Version version134 = new Version("1.3.4"); //change version number before push to store
 
 		// Bring back the code that supports multiple pets
 		if(currentDataVersion < version134){
@@ -295,6 +327,7 @@ public class DataManager : Singleton<DataManager>{
 			}
 
 			//need to create ParseUser here as well
+			ExtraParseLogic.Instance.UserCheck();
 		}
 	}
 

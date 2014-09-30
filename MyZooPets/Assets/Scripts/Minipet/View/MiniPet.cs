@@ -400,6 +400,7 @@ public class MiniPet : MonoBehaviour {
 			bubbleParticle.gameObject.SetActive(true);
 			dirtyParticle.gameObject.SetActive(true);
 			eggAnimation.animation.Stop();
+			isVisible = true;
 		}
 		else{
 			eggParent.SetActive(true);
@@ -407,14 +408,17 @@ public class MiniPet : MonoBehaviour {
 			flippable.SetActive(false);
 			bubbleParticle.gameObject.SetActive(false);
 			dirtyParticle.gameObject.SetActive(false);
+			isVisible = false;
 		}
 	}
 
-	public void ToggleVisibility(bool _isVisible){
 
-		isVisible = _isVisible;
+	public void ToggleVisibility(bool isVisible){
 
-		if(_isVisible){
+		this.isVisible = isVisible;
+		Debug.Log("visible: " + this.isVisible);
+
+		if(this.isVisible){
 			bubbleParticle.gameObject.SetActive(true);
 			dirtyParticle.gameObject.SetActive(true);
 

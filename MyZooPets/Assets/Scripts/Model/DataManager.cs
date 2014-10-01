@@ -116,7 +116,9 @@ public class DataManager : Singleton<DataManager>{
 			SaveMenuSceneData();
 
 			//first time playing game so try to create Parse User and create Account
-			ExtraParseLogic.Instance.UserCheck();
+			bool isSyncToBackendOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+			if(!isDebug && isSyncToBackendOn)
+				ExtraParseLogic.Instance.UserCheck();
 		}
 			
 		LoadMenuSceneData();
@@ -347,7 +349,9 @@ public class DataManager : Singleton<DataManager>{
 			}
 
 			//need to create ParseUser here as well
-			ExtraParseLogic.Instance.UserCheck();
+			bool isSyncToBackendOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+			if(!isDebug && isSyncToBackendOn)
+				ExtraParseLogic.Instance.UserCheck();
 		}
 	}
 

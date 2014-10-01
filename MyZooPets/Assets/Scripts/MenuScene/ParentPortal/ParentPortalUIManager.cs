@@ -3,54 +3,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-//Controls the parent portal template
-public class ParentPortalUIManager : Singleton<ParentPortalUIManager> {
-    public static Action onOkButtonClicked;  
-    public static Action onCancelButtonClicked; 
-    public List<GameObject> parentPortalContents = new List<GameObject>();
-    public UILabel generalMessage; //Use this label to display positive feedback (ex. your account has been created)
+public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
-    public void OkButtonClicked(){
-        if(onOkButtonClicked != null)
-            onOkButtonClicked();
-    }
+	public UIGrid grid;
+	public GameObject parentPortalEntryPetPrefab;
+	public GameObject parentPortalEntryCreatePrefab;
 
-    public void CancelButtonClicked(){
-        if(onCancelButtonClicked != null)
-            onCancelButtonClicked();
-    }
+	void Awake(){
+		eModeType = UIModeTypes.ParentPortal;
+	}
 
-    public void DisplayGeneralMessage(string message){
-        generalMessage.text = Localization.Localize(message);
-        Invoke("HideGeneralMessage", 3f);
-    }
+	void UpdateGrid(){
+		// TODO Jason populate grid here based on data
 
-    private void HideGeneralMessage(){
-        generalMessage.text = "";
-    }
+		grid.Reposition();
+	}
 
-    public void ShowPortalSetup(GameObject currentContent){
-        ShowContent("PortalSetup", currentContent);
-    }
+	protected override void _OpenUI(){
+		GetComponent<TweenToggleDemux>().Show();
+	}
 
-    public void ShowPortalLogin(GameObject currentContent){
-        ShowContent("PortalLogin", currentContent);
-    }
+	protected override void _CloseUI(){
+		GetComponent<TweenToggleDemux>().Hide();
+	}
 
-    public void ShowPortalReset(GameObject currentContent){
-        ShowContent("PortalReset", currentContent);
-    }
-
-    public void ShowPortalRecovery(GameObject currentContent){
-        ShowContent("PortalRecovery", currentContent);
-    }
-
-    //Display new content in parent portal template and hide current content
-    private void ShowContent(string newContentName, GameObject currentContent){
-        GameObject newContent = parentPortalContents.Find(content => content.name == newContentName);
-
-        if(currentContent != null)
-            currentContent.SetActive(false);
-        newContent.SetActive(true);
-    }
+		void OnGUI(){
+			if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){
+				OpenUI();
+			}
+			if(GUI.Button(new Rect(200, 100, 100, 100), "Close")){
+				CloseUI();
+			}
+		}
 }

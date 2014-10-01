@@ -64,9 +64,15 @@ public class TweenToggleDemux : MonoBehaviour {
 		if(lastFinishedShowObject != null){
 			lastFinishedShowObjectScript = lastFinishedShowObject.GetComponent<TweenToggle>();
 		}
+		else{
+			Debug.LogError("Demux last finished show object not assigned!");
+		}
 		
 		if(lastFinishedHideObject != null){
 			lastFinishedHideObjectScript = lastFinishedHideObject.GetComponent<TweenToggle>();
+		}
+		else{
+			Debug.LogError("Demux last finished hide object not assigned!");
 		}
 	}
 	

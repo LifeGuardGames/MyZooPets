@@ -22,6 +22,8 @@ public class DataManager : Singleton<DataManager>{
 
 	//basic info data of all the pet that are only used in the menu scene
 	private Dictionary<string, MutableDataPetMenuInfo> menuSceneData; // key: petID, value: instance of MutableDataPetInfo
+	private float syncToParseTimer = 0f;
+	private float syncToParseWaitTime = 60f; //60 seconds before data get sync to server
 
 	//Return menu scene data used in MenuScene
 	public Dictionary<string, MutableDataPetMenuInfo> MenuSceneData{
@@ -155,10 +157,25 @@ public class DataManager : Singleton<DataManager>{
 
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
+
+				gameData.SaveAsyncToParse();
 			}
 		}
 	}
 
+	void Update(){
+		//this is the timer that will be running to keep track of when to sync data
+		//to parse server
+		if(!isDebug){
+			syncToParseTimer += Time.deltaTime;
+			if(syncToParseTimer >= syncToParseWaitTime){
+				syncToParseTimer = 0;
+				if(gameData != null)
+					gameData.SaveAsyncToParse();
+			}
+		}
+	}
+	
 	/// <summary>
 	/// Initializes the game data for new pet.
 	/// </summary>

@@ -158,7 +158,9 @@ public class DataManager : Singleton<DataManager>{
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 
-				gameData.SaveAsyncToParse();
+				bool isSyncToBackendOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+				if(!isDebug && isSyncToBackendOn)
+					gameData.SaveAsyncToParse();
 			}
 		}
 	}
@@ -166,7 +168,8 @@ public class DataManager : Singleton<DataManager>{
 	void Update(){
 		//this is the timer that will be running to keep track of when to sync data
 		//to parse server
-		if(!isDebug){
+		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+		if(!isDebug && isSyncToServerOn){
 			syncToParseTimer += Time.deltaTime;
 			if(syncToParseTimer >= syncToParseWaitTime){
 				syncToParseTimer = 0;

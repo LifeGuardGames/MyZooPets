@@ -33,11 +33,15 @@ public class AccessoryNode : MonoBehaviour{
 	}
 	
 	public void CheckSaveData(){
-		// if the saved data contains this node's id, it means there was a accessory placed here
-		if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsKey(accessoryNodeID)){
-			string savedAccessoryKey = DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID];
+//		// if the saved data contains this node's id, it means there was a accessory placed here
+//		if(DataManager.Instance.GameData.Accessories.PlacedAccessories.ContainsKey(accessoryNodeID)){
+//			string savedAccessoryKey = DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID];
+//			SetAccessoryNode(savedAccessoryKey);
+//		}
+
+		string savedAccessoryKey = DataManager.Instance.GameData.Accessories.GetPlacedAccessory(accessoryNodeID);
+		if(!string.IsNullOrEmpty(savedAccessoryKey))
 			SetAccessoryNode(savedAccessoryKey);
-		}
 	}
 	
 	/// <summary>
@@ -60,7 +64,8 @@ public class AccessoryNode : MonoBehaviour{
 			placedAccessoryID = newAccessoryID;
 
 			// Populate it in gamedata in placedAccessories
-			DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID] = placedAccessoryID;
+//			DataManager.Instance.GameData.Accessories.PlacedAccessories[accessoryNodeID] = placedAccessoryID;
+//			DataManager.Instance.GameData.Accessories.SetAccessoryAtNode(accessoryNodeID, placedAccessoryID);
 
 			// Load and place the actual accessory
 			// build the prefab from the id of the decoration

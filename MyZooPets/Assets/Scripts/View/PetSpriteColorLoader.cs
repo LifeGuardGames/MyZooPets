@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class PetSpriteColorLoader : MonoBehaviour {
@@ -10,19 +12,27 @@ public class PetSpriteColorLoader : MonoBehaviour {
 	private bool isDebugInternal = false;
 
 	void Start(){
-		if(Application.isPlaying){	// Exception for execute in edit mode
-			if(isDebug){
-				Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
-			}
-			else{
-				if(Application.loadedLevelName == "MenuScene"){
-					LoadAndSetColor(DataManager.Instance.MenuSceneData.PetColor);
+		try{
+			if(Application.isPlaying){	// Exception for execute in edit mode
+				if(isDebug){
+					Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
 				}
 				else{
-//					LoadAndSetColor("PurpleLime");
-					LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+					if(Application.loadedLevelName == "MenuScene"){
+						string petID = transform.parent.parent.name;
+						Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+						MutableDataPetMenuInfo petMenuInfo = petMenuInfoDict[petID];
+
+						LoadAndSetColor(petMenuInfo.PetColor);
+					}
+					else{
+						LoadAndSetColor(DataManager.Instance.GameData.PetInfo.PetColor);
+					}
 				}
 			}
+		}
+		catch(Exception e){
+			Debug.LogError("Exception caught in PetSpriteColorLoader with message: " + e.Message);
 		}
 	}
 

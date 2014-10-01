@@ -178,6 +178,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
 		}
 		else{
+			levelSlider.sliderValue = 1f;
 			progressLabel.text = "Max Level";
 		}
 	}

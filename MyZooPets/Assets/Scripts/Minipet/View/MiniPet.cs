@@ -261,7 +261,9 @@ public class MiniPet : MonoBehaviour {
 
 			if(isTickled && isCleaned){
 				ShowFoodPreferenceInUI();
-				Invoke("ShowFoodPreferenceMessage", 1f);
+
+				if(MiniPetManager.Instance.CanModifyFoodXP(id))
+					Invoke("ShowFoodPreferenceMessage", 1f);
 			}
 		}
 	}
@@ -299,7 +301,7 @@ public class MiniPet : MonoBehaviour {
 		else{
 			bool isTickled = MiniPetManager.Instance.IsTickled(id);
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned){
+			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
 		}

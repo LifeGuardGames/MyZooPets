@@ -171,6 +171,8 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         }
 
 		Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
+		List<GameObject> accountsList = new List<GameObject>();	// List of all accounts for positioning
+		float xPositionOffsetTrack = 0;	// Aux used for positioning, start at 0
 		foreach(KeyValuePair<string, MutableDataPetMenuInfo> keyValuePair in petMenuInfoDict){
 			string petID = keyValuePair.Key;
 			MutableDataPetMenuInfo petMenuInfo = keyValuePair.Value;
@@ -183,12 +185,18 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 
 				menuSceneEggGO.name = petID;
 				menuSceneEggGO.transform.localScale = menuSceneEggPrefab.transform.localScale;
+
+				menuSceneEggGO.transform.localPosition = new Vector3(xPositionOffsetTrack++, 0f, 0f);
+
 				menuSceneEggGO.GetComponent<LgButtonMessage>().target = this.gameObject;
 				menuSceneEggGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
+				accountsList.Add(menuSceneEggGO);
 			}
 			else{
 				GameObject menuScenePetPrefab = Resources.Load("MenuScenePet") as GameObject;
 				GameObject menuScenePetGO = NGUITools.AddChild(selectionGrid, menuScenePetPrefab);
+
+				menuScenePetGO.transform.localPosition = new Vector3(xPositionOffsetTrack++, 0f, 0f);
 
 				menuScenePetGO.name = petID;
 				UILabel petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<UILabel>();
@@ -196,7 +204,20 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 
 				menuScenePetGO.GetComponent<LgButtonMessage>().target = this.gameObject;
 				menuScenePetGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
+				accountsList.Add(menuScenePetGO);
 			}
+		}
+
+		// Repositioning the pets/eggs dynamically based on center position
+		float xSum = 0;
+		foreach(GameObject account in accountsList){
+			xSum += account.transform.localPosition.x;
+		}
+		float xOffset = xSum / accountsList.Count;
+		foreach(GameObject account in accountsList){
+			account.transform.localPosition = new Vector3(account.transform.localPosition.x - xOffset,
+			                                              account.transform.localPosition.y,
+			                                              account.transform.localPosition.z);
 		}
 
 //        foreach(Transform petSelectionTransform  in selectionGrid.transform){

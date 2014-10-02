@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Parse;
 
@@ -159,7 +160,14 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 			}
 			else{
 				Loom.DispatchToMainThread(() =>{
+					//store the account id in the GameData and the MenuSceneData
 					DataManager.Instance.GameData.PetInfo.ParseKidAccountID = account.ObjectId;
+
+					string petID = DataManager.Instance.GameData.PetInfo.PetID;
+					Dictionary<string, MutableDataPetMenuInfo> menuSceneData = DataManager.Instance.MenuSceneData;
+
+					if(menuSceneData.ContainsKey(petID))
+						menuSceneData[petID].ParseKidAccountID = account.ObjectId;
 				});
 				source.SetResult(account.ObjectId);
 			}

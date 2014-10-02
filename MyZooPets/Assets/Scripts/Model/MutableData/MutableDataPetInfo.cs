@@ -70,27 +70,18 @@ public class MutableDataPetInfo : MutableData{
 	}
 
 	public override void SaveAsyncToParseServer(string kidAccountID){
-//		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-//			KidAccount kidAccount = t.Result;
-//			
-//			//make the query that will get the kid account and eager load the pet accessory
-			ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
-				.Include("petInfo");
-//				.WhereEqualTo("objectId", kidAccount.ObjectId);
-//			
-//			return query.GetAsync(kidAccount.ObjectId);
-//		}).Unwrap()
-
-//		string kidAccountID = DataManager.Instance.GameData.PetInfo.ParseKidAccountID;
+		//make the query that will get the kid account and eager load the pet accessory
+		ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
+			.Include("petInfo");
 
 		query.GetAsync(kidAccountID).ContinueWith(t => {
 
 			ParseObjectKidAccount fetchedAccount = t.Result;
-			ParseObject petInfo = fetchedAccount.PetInfo;
+			ParseObjectPetInfo petInfo = fetchedAccount.PetInfo;
 			List<ParseObject> objectsToSave = new List<ParseObject>();
 
 			if(petInfo == null){
-				petInfo = new ParseObject("PetInfo");
+				petInfo = new ParseObjectPetInfo();
 				ParseACL acl = new ParseACL();
 				acl.PublicReadAccess = true;
 				acl.PublicWriteAccess = false;
@@ -101,10 +92,10 @@ public class MutableDataPetInfo : MutableData{
 				objectsToSave.Add(fetchedAccount);
 			}
 
-			petInfo["petId"] = PetID;
-			petInfo["name"] = PetName;
-			petInfo["color"] = PetColor;
-			petInfo["species"] = PetSpecies;
+			petInfo.ID = PetID;
+			petInfo.Name = PetName;
+			petInfo.Color = PetColor;
+			petInfo.Species = PetSpecies;
 
 			objectsToSave.Add(petInfo);
 			

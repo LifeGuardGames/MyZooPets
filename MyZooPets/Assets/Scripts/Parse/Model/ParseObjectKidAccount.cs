@@ -33,9 +33,9 @@ public class ParseObjectKidAccount : ParseObject{
 	}
 
 	[ParseFieldName("petInfo")]
-	public ParseObject PetInfo{
-		get{ return GetProperty<ParseObject>("PetInfo");}
-		set{ SetProperty<ParseObject>(value, "PetInfo");}
+	public ParseObjectPetInfo PetInfo{
+		get{ return GetProperty<ParseObjectPetInfo>("PetInfo");}
+		set{ SetProperty<ParseObjectPetInfo>(value, "PetInfo");}
 	}
 
 	[ParseFieldName("petAccessory")]

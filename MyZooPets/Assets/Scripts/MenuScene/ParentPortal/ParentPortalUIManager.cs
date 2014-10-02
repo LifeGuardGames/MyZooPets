@@ -58,10 +58,10 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 					codeLabel.text = account.AccountCode;
 
 					//set the name for the account
-					ParseObject petInfo = account.PetInfo;
+					ParseObjectPetInfo petInfo = account.PetInfo;
 					if(petInfo != null && petInfo.IsDataAvailable){
 						UILabel nameLabel = portalEntryPet.FindInChildren("LabelName").GetComponent<UILabel>();
-						nameLabel.text = petInfo.Get<string>("name");
+						nameLabel.text = petInfo.Name;
 					}
 				}
 

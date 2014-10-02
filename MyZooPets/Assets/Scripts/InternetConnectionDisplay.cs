@@ -10,14 +10,22 @@ public class InternetConnectionDisplay : MonoBehaviour {
 		loadingIconSpin.gameObject.SetActive(true);
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Show();
 		loadingIconSpin.Play();
+		labelLocalize.GetComponent<ScaleTweenToggle>().Show();
 		labelLocalize.key = labelLocalizeKey;
 		labelLocalize.Localize();
 	}
 
-	public void Stop(string labelLocalizeKey){
+	public void Stop(bool isSuccess, string labelLocalizeKey){
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
-		labelLocalize.key = labelLocalizeKey;
-		labelLocalize.Localize();
+
+		if(isSuccess){
+			labelLocalize.GetComponent<ScaleTweenToggle>().Hide();
+		}
+		else{
+			// Dont hide it and show error message
+			labelLocalize.key = labelLocalizeKey;
+			labelLocalize.Localize();
+		}
 	}
 
 	// Callback from hide tween

@@ -29,7 +29,7 @@ public class DataManager : Singleton<DataManager>{
 	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method
 	/// </summary>
 	/// <value>The menu scene data.</value>
-	public Dictionary<string, MutableDataPetMenuInfo> MenuSceneData{
+	public MutableDataPetMenuInfo MenuSceneData{
 		get{ return menuSceneData; }
 	}
 
@@ -57,19 +57,6 @@ public class DataManager : Singleton<DataManager>{
 		
 			return firstTime;
 		}
-	}
-
-	/// <summary>
-	/// Gets or sets the number of pets.
-	/// </summary>
-	/// <value>The number of pets.</value>
-	public int NumOfPets{
-		get{ return PlayerPrefs.GetInt("NumOfPets", 0);}
-		set{ PlayerPrefs.SetInt("NumOfPets", value);}
-	}
-
-	public bool IsMaxNumOfPet{
-		get{ return NumOfPets >= 3;}
 	}
 
 	/// <summary>
@@ -103,21 +90,18 @@ public class DataManager : Singleton<DataManager>{
 		//before other classes call DataManager
 		if(isDebug)
 			InitializeGameDataForNewPet();
-
-		// if not first time need to do version check
-		if(!IsFirstTime){
-			string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
-			VersionCheck(new Version(currentDataVersionString));
-		}
-		// else create data for pet0 by default
 		else{
-			AddNewPet();
-
-			//first time playing game so try to create Parse User and create Account
-			UserCheckAndSyncToParse();
-		}
+			// if not first time need to do version check
+			if(!IsFirstTime){
+				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+				VersionCheck(new Version(currentDataVersionString));
+			}
+			else{
+				ExtraParseLogic.Instance.UserCheck();
+			}
 			
-		LoadMenuSceneData();
+			LoadMenuSceneData();
+		}
 	}
 	
 	//Serialize the data whenever the game is paused
@@ -150,13 +134,10 @@ public class DataManager : Singleton<DataManager>{
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
 				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
-				Debug.Log("before game save");
 				SaveGameData();
 
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
-
-				UserCheckAndSyncToParse();
 			}
 		}
 	}
@@ -178,37 +159,6 @@ public class DataManager : Singleton<DataManager>{
 			}
 		}
 	}
-
-	/// <summary>
-	/// Add a new pet to the game. This function will initialize/save the MenuSceneData
-	/// and the GameData for the new pet. GameData will be loaded with the new pets data after this
-	/// functions is completed.
-	/// </summary>
-	public void AddNewPet(){
-		//create menu scene data here
-		string petID = "Pet" + NumOfPets;
-		AddNewMenuSceneData();
-		InitializeGameDataForNewPet(petID: petID);
-		
-		SaveMenuSceneData();
-		//save the new game data right after it's created so we don't risk
-		//losing it if the user decide to create another one right away.
-		SaveGameData();
-	}
-
-	/// <summary>
-	/// Removes the menu scene data. This will also remove the GameData of that pet
-	/// and decrease the NumOfPets
-	/// </summary>
-	/// <param name="petID">Pet ID.</param>
-	public void RemovePet(string petID){
-		if(!string.IsNullOrEmpty(petID) && menuSceneData.ContainsKey(petID)){
-			menuSceneData.Remove(petID);
-			
-			PlayerPrefs.DeleteKey(petID + "_GameData");
-			NumOfPets--;
-		}
-	}
 	
 	/// <summary>
 	/// Serialize data into json string and store locally in PlayerPrefs
@@ -223,32 +173,20 @@ public class DataManager : Singleton<DataManager>{
 		Debug.Log("Game is saving");
 		#endif
 		
-		SaveGameData(this.gameData);
-	}
-	
-	/// <summary>
-	/// Gets the menu scene data for petID
-	/// </summary>
-	/// <returns>The menu scene data.</returns>
-	/// <param name="petID">Pet ID.</param>
-	public MutableDataPetMenuInfo GetMenuSceneData(string petID){
-		MutableDataPetMenuInfo retVal = null;
-		
-		if(!string.IsNullOrEmpty(petID) && menuSceneData.ContainsKey(petID)){
-			retVal = menuSceneData[petID];
+		//Data will not be saved if gameData is empty
+		if(gameData != null){
+			string jsonString = JSON.Instance.ToJSON(gameData);
+			
+			#if UNITY_EDITOR
+			Debug.Log("SERIALIZED: " + jsonString);
+			#endif
+			
+			PlayerPrefs.SetString("GameData", jsonString);
+			SaveDataVersion();
+			Serialized();
 		}
-		
-		return retVal;
-	}
-
-	/// <summary>
-	/// Sets the menu scene data.
-	/// </summary>
-	/// <param name="petID">Pet ID.</param>
-	/// <param name="petMenuInfo">Pet menu info.</param>
-	public void SetMenuSceneData(string petID, MutableDataPetMenuInfo petMenuInfo){
-		if(!string.IsNullOrEmpty(petID) && menuSceneData.ContainsKey(petID)){
-			menuSceneData[petID] = petMenuInfo;
+		else{
+			Debug.LogError("gameData is null, so data cannot be serialized");
 		}
 	}
 	
@@ -259,21 +197,28 @@ public class DataManager : Singleton<DataManager>{
 		//if gameData is not null then the gameData needs to be saved first
 		//otherwise loading the new data will erase the current gameData
 		if(gameData == null){
-			LoadGameDataHelper(petID);
-		}
-		else{
-			//gameData not null && tyring to load gameData of a different pet
-			//the current gameData need to be serialized first otherwise data will
-			//be lost
-			if(gameData.PetInfo.PetID != petID){
-				PetGameData oldGameData = this.gameData;
-				SaveGameData(oldGameData);
+			PetGameData newGameData = null;
+			string jsonString = PlayerPrefs.GetString("GameData", "");
+			
+			//Check if json string is actually loaded and not empty
+			if(!String.IsNullOrEmpty(jsonString)){
+				newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
 				
-				LoadGameDataHelper(petID);
-			}
-			else{
+				#if UNITY_EDITOR
+				Debug.Log("Deserialized: " + jsonString);
+				#endif
+				
+				gameData = newGameData;
+				LoadDataVersion();
+				
 				Deserialized(true);
 			}
+			else{
+				Deserialized(false);
+			}
+		}
+		else{
+			Deserialized(true);
 		}
 	}
 	
@@ -284,7 +229,7 @@ public class DataManager : Singleton<DataManager>{
 	/// <param name="petName">Pet name.</param>
 	/// <param name="petSpecies">Pet species.</param>
 	/// <param name="petColor">Pet color.</param>
-	private void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
+	public void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
 		gameData = new PetGameData();
@@ -292,131 +237,27 @@ public class DataManager : Singleton<DataManager>{
 		if(!String.IsNullOrEmpty(petName))
 			gameData.PetInfo.PetName = petName;
 		else
-			gameData.PetInfo.PetName = "Player" + NumOfPets;
+			gameData.PetInfo.PetName = "Player1";
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
 		gameData.PetInfo.PetID = petID;
            
-		if(!isDebug){
-			if(menuSceneData.ContainsKey(petID)){
-				menuSceneData[petID].PetName = gameData.PetInfo.PetName;
-				menuSceneData[petID].PetColor = petColor;
-				menuSceneData[petID].PetSpecies = petSpecies;
-			}
-		}
-	}
-
-	/// <summary>
-	/// Loads the game data from PlayerPrefs.
-	/// </summary>
-	private void LoadGameDataHelper(string petID){
-		PetGameData newGameData = null;
-		string jsonString = PlayerPrefs.GetString(petID + "_GameData", "");
-		
-		//Check if json string is actually loaded and not empty
-		if(!String.IsNullOrEmpty(jsonString)){
-			newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
-			
-			#if UNITY_EDITOR
-			Debug.Log("Deserialized: " + jsonString);
-			#endif
-			
-			gameData = newGameData;
-			LoadDataVersion();
-			
-			Deserialized(true);
-		}
-		else{
-			Deserialized(false);
-		}
-	}
-
-	/// <summary>
-	/// Adds the new menu scene data.
-	/// </summary>
-	/// <param name="petMenuInfo">Pet menu info.</param>
-	private void AddNewMenuSceneData(MutableDataPetMenuInfo petMenuInfo = null){
-		if(!IsMaxNumOfPet){
-			if(menuSceneData == null)
-				menuSceneData = new Dictionary<string, MutableDataPetMenuInfo>();
-			
-			string petID = "Pet" + NumOfPets;
-			if(petMenuInfo == null)
-				menuSceneData.Add(petID, new MutableDataPetMenuInfo());
-			else
-				menuSceneData.Add(petID, petMenuInfo);
-
-			NumOfPets++;
-		}
+		if(!isDebug)
+			menuSceneData = new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
 	}
 	
-	/// <summary>
-	/// Checks if Parse user exists. if not creates a user then try to sync all
-	/// dirty data to parse.
-	/// </summary>
-	private void UserCheckAndSyncToParse(){
-		bool isSyncToBackendOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-		if(!isDebug && isSyncToBackendOn)
-			gameData.SaveAsyncToParse();
-	}
-
 	/// <summary>
 	/// Versions the check. Handles any major data schema changes to the DataManager
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
-		Version version134 = new Version("1.3.4"); //change version number before push to store
+		Version version135 = new Version("1.3.5");
 
-		// Bring back the code that supports multiple pets
-		if(currentDataVersion < version134){
-			string menuSceneJSONString = PlayerPrefs.GetString("MenuSceneData", "");
-			MutableDataPetMenuInfo oldMenuSceneData = null;
-			if(!String.IsNullOrEmpty(menuSceneJSONString)){
-				oldMenuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(menuSceneJSONString);
+		if(currentDataVersion < version135){
+			PlayerPrefs.DeleteKey("IsSinglePetMode");
 
-				AddNewMenuSceneData(oldMenuSceneData);
-			}
-
-			//load the old game data json
-			string oldGameDataJSONString = PlayerPrefs.GetString("GameData", "");
-			if(!String.IsNullOrEmpty(oldGameDataJSONString)){
-				//assign the json string to a new PlayerPrefs key that has the petID
-				PlayerPrefs.SetString("Pet0_GameData", oldGameDataJSONString);
-
-				//remove the old player pref key
-				PlayerPrefs.DeleteKey("GameData");
-				PlayerPrefs.DeleteKey("IsSinglePetMode");
-				PlayerPrefs.Save();
-			}
-
-			//need to create ParseUser here as well
-			bool isSyncToBackendOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-			if(!isDebug && isSyncToBackendOn)
-				ExtraParseLogic.Instance.UserCheck();
-		}
-	}
-
-	/// <summary>
-	/// Serialize data into json string and store locally in PlayerPrefs
-	/// </summary>
-	private void SaveGameData(PetGameData dataToSave){
-		//Data will not be saved if gameData is empty
-		if(dataToSave != null){
-			string jsonString = JSON.Instance.ToJSON(dataToSave);
-			
-			#if UNITY_EDITOR
-			Debug.Log("SERIALIZED: " + jsonString);
-			#endif
-			
-			string currentPetID = dataToSave.PetInfo.PetID;
-			PlayerPrefs.SetString(currentPetID + "_GameData", jsonString);
-			
-			SaveDataVersion();
-			Serialized();
-		}
-		else{
-			Debug.LogError("PetID is null or empty, so data cannot be serialized");
+			ExtraParseLogic.Instance.UserCheck();
 		}
 	}
 
@@ -455,7 +296,7 @@ public class DataManager : Singleton<DataManager>{
 
 		//Check if json string is actually loaded and not empty
 		if(!String.IsNullOrEmpty(jsonString))
-			menuSceneData = JSON.Instance.ToObject<Dictionary<string, MutableDataPetMenuInfo>>(jsonString);
+			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
 	}
 	
 	/// <summary>

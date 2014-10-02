@@ -11,11 +11,6 @@ public class ParseTestScript : MonoBehaviour {
 		SocialManager.OnDataRefreshed += EventListener;
 		SocialManager.OnFriendCodeAdded += EventListener;
 		ParentPortalManager.OnDataRefreshed += EventListener;
-
-//		if(DataManager.Instance.IsFirstTime && DataManager.Instance.NumOfPets == 1){
-//			DataManager.Instance.InitializeGameDataForNewPet();
-//			DataManager.Instance.SaveGameData();
-//		}
 	}
 
 	#if UNITY_EDITOR
@@ -65,24 +60,10 @@ public class ParseTestScript : MonoBehaviour {
 			GUILayout.BeginHorizontal();
 				GUILayout.Label("MenuScene Test");
 					
-				if(GUILayout.Button("Create New pet")){
-					if(!DataManager.Instance.IsMaxNumOfPet){
-						DataManager.Instance.AddNewPet();
-						
-						FakeTutorial();
-					}
+				if(GUILayout.Button("Initialize game data")){
+					DataManager.Instance.InitializeGameDataForNewPet();
+					FakeTutorial();
 				}
-
-				GUILayout.BeginVertical();
-				GUILayout.Label("Num of pets " + DataManager.Instance.NumOfPets);
-				for(int i=0; i<DataManager.Instance.NumOfPets; i++){
-					string petID = "Pet" + i;
-					if(GUILayout.Button("load: " + petID)){
-						DataManager.Instance.LoadGameData(petID);
-					}
-				}
-				GUILayout.EndVertical();
-
 			GUILayout.EndHorizontal();
 
 			//parent portal

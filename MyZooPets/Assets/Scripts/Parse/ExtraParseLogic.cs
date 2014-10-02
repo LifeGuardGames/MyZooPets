@@ -25,6 +25,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 
 	void Awake(){
 		ParseObject.RegisterSubclass<ParseObjectKidAccount>();
+		ParseObject.RegisterSubclass<ParseObjectPetInfo>();
 	}
 
 	// Use this for initialization
@@ -164,10 +165,12 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 					DataManager.Instance.GameData.PetInfo.ParseKidAccountID = account.ObjectId;
 
 					string petID = DataManager.Instance.GameData.PetInfo.PetID;
-					Dictionary<string, MutableDataPetMenuInfo> menuSceneData = DataManager.Instance.MenuSceneData;
+					MutableDataPetMenuInfo petMenuInfo = DataManager.Instance.GetMenuSceneData(petID);
 
-					if(menuSceneData.ContainsKey(petID))
-						menuSceneData[petID].ParseKidAccountID = account.ObjectId;
+					if(petMenuInfo != null){
+						petMenuInfo.ParseKidAccountID = account.ObjectId;
+						DataManager.Instance.SetMenuSceneData(petID, petMenuInfo);
+					}
 				});
 				source.SetResult(account.ObjectId);
 			}

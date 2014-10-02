@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 public class ParentPortalManager : Singleton<ParentPortalManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnAccountCreated;
+//	public static EventHandler<ServerEventArgs> OnAccountDeleted;
 	
 	/// <summary>
 	/// Gets or sets the kid account list.
@@ -17,18 +18,72 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 	/// <value>The kid account list.</value>
 	public List<ParseObjectKidAccount> KidAccountList {get; set;}
 
+	public void RemoveAccount(string petID){
+		MutableDataPetMenuInfo petMenuInfo = DataManager.Instance.GetMenuSceneData(petID);
+		if(petMenuInfo != null){
+			string kidAccountID = petMenuInfo.ParseKidAccountID;
 
+			if(string.IsNullOrEmpty(kidAccountID)){
+				//remove locally
+				DataManager.Instance.RemovePet(petID);
+			}
+			//need to remove from backend before removing locally
+			else{
+				IDictionary<string, object> paramDict = new Dictionary<string, object>{
+					{"kidAccountId", kidAccountID}
+				};
+
+				//call the cloud function
+				ParseCloud.CallFunctionAsync<IDictionary<string, object>>("deleteKidAccount", paramDict)
+					.ContinueWith(t => {
+						//connection faulted
+						if(t.IsFaulted){
+							ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+							Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+							
+							ServerEventArgs args = new ServerEventArgs();
+							args.IsSuccessful = false;
+							args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+							
+							Loom.DispatchToMainThread(() => {
+								if(OnDataRefreshed != null)
+									OnDataRefreshed(this, args);
+							});
+						} 
+						else{
+							IDictionary<string, object> result = t.Result;
+							// Hack, check for errors
+							object code;
+							ServerEventArgs args = new ServerEventArgs();
+
+							//error happened
+							if(result.TryGetValue("code", out code)){
+								int parseCode = Convert.ToInt32(code);
+								
+								args.IsSuccessful = false;
+								args.ErrorCode = (ParseException.ErrorCode) parseCode;
+								args.ErrorMessage = (string) result["message"];
+							} 
+							//success
+							else{
+								Debug.Log("Result: " + result["success"]);
+								args.IsSuccessful = true;
+								
+								Loom.DispatchToMainThread(() => {
+									DataManager.Instance.RemovePet(petID);
+									RefreshData();
+								});
+							}
+						}
+					});
+			}
+		}
+	}
+			
 	public void AddNewAccount(){
 		bool isMaxPet = DataManager.Instance.IsMaxNumOfPet;
 		if(!isMaxPet){
-			//create menu scene data here
-			string petID = "Pet" + DataManager.Instance.NumOfPets;
-			DataManager.Instance.AddNewMenuSceneData();
-			DataManager.Instance.InitializeGameDataForNewPet(petID: petID);
-
-			//save the new game data right after it's created so we don't risk
-			//losing it if the user decide to create another one right away.
-			DataManager.Instance.SaveGameData();
+			DataManager.Instance.AddNewPet();
 
 			SyncKidAccountToParse();
 		}
@@ -67,6 +122,7 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 	public void RefreshData(){
 		var parentPortalQuery = new ParseQuery<ParseObjectKidAccount>()
 			.WhereEqualTo("createdBy", ParseUser.CurrentUser)
+			.WhereEqualTo("isDeleted", false)
 			.Include("petInfo");
 
 		try{

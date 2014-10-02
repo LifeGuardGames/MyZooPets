@@ -5,6 +5,7 @@ public class MutableDataPetMenuInfo{
     public string PetName {get; set;}
     public string PetColor {get; set;}
     public string PetSpecies {get; set;} 
+	public string ParseKidAccountID {get; set;}
 
     public MutableDataPetMenuInfo(){}
 

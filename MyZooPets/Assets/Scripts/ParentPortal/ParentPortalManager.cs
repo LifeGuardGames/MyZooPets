@@ -8,37 +8,66 @@ using System.Threading.Tasks;
 
 public class ParentPortalManager : Singleton<ParentPortalManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
-
+	public static EventHandler<ServerEventArgs> OnAccountCreated;
+	
 	/// <summary>
 	/// Gets or sets the kid account list.
 	/// This list contains KidAccounts that belong to the current Parse User
 	/// </summary>
 	/// <value>The kid account list.</value>
-	public List<KidAccount> KidAccountList {get; set;}
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public List<ParseObjectKidAccount> KidAccountList {get; set;}
+
 
 	public void AddNewAccount(){
 		bool isMaxPet = DataManager.Instance.IsMaxNumOfPet;
 		if(!isMaxPet){
 			//create menu scene data here
+			string petID = "Pet" + DataManager.Instance.NumOfPets;
+			DataManager.Instance.AddNewMenuSceneData();
+			DataManager.Instance.InitializeGameDataForNewPet(petID: petID);
 
+			//save the new game data right after it's created so we don't risk
+			//losing it if the user decide to create another one right away.
+			DataManager.Instance.SaveGameData();
 
-			//Kid account won't be created until the first time the kid account
-			//try to sync up to parse sdk
+			SyncKidAccountToParse();
 		}
+	}
+
+	private void SyncKidAccountToParse(){
+		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
+			if(t.IsFaulted || t.IsCanceled){
+				foreach(ParseException e in t.Exception.InnerExceptions)
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+				
+				Loom.DispatchToMainThread(() => {
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+					args.ErrorMessage = "Failed to creat user. Try again later";
+					
+					if(OnAccountCreated != null)
+						OnAccountCreated(this, args);
+				});
+			}
+			else{
+				Loom.DispatchToMainThread(() => {
+					DataManager.Instance.GameData.SaveAsyncToParse();
+
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = true;
+					
+					if(OnAccountCreated != null)
+						OnAccountCreated(this, args);
+				});
+			}
+		});
 	}
 		
 	public void RefreshData(){
-		var parentPortalQuery = new ParseQuery<KidAccount>()
-			.WhereEqualTo("createdBy", ParseUser.CurrentUser);
+		var parentPortalQuery = new ParseQuery<ParseObjectKidAccount>()
+			.WhereEqualTo("createdBy", ParseUser.CurrentUser)
+			.Include("petInfo");
 
 		try{
 			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
@@ -48,28 +77,29 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 					foreach(ParseException e in t.Exception.InnerExceptions)
 						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
 
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = false;
-					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
-					
-					if(OnDataRefreshed != null)
-						OnDataRefreshed(this, args);
+					Loom.DispatchToMainThread(() => {
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = false;
+						args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+						
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
 				}
 				else{
-					IEnumerable<KidAccount> kidAccounts = t.Result;
+					IEnumerable<ParseObjectKidAccount> kidAccounts = t.Result;
 					KidAccountList = kidAccounts.ToList();
 
 					Debug.Log(KidAccountList.Count());
-//					foreach(KidAccount account in kidAccounts){
-//						Debug.Log("kid account: " + account.ObjectId);
-//					}
 
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = true;
-//					args.ErrorCode = ErrorCodes.None;
-					
-					if(OnDataRefreshed != null)
-						OnDataRefreshed(this, args);
+					Loom.DispatchToMainThread(() => {
+						ServerEventArgs args = new ServerEventArgs();
+						args.IsSuccessful = true;
+						
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
+
 				}
 			});
 		}

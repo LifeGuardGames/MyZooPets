@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Parse;
 
 [ParseClassName("KidAccount")]
-public class KidAccount : ParseObject{
+public class ParseObjectKidAccount : ParseObject{
 
-	public KidAccount(){}
+	public ParseObjectKidAccount(){}
 
 	[ParseFieldName("isLinkedToParentAccount")]
 	public bool IsLinkedToParentAccount{
@@ -17,9 +17,15 @@ public class KidAccount : ParseObject{
 	[ParseFieldName("friendList")]
 	public IList<ParseObject> FriendList{
 		get{ return GetProperty<IList<ParseObject>>("FriendList");}
-		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
+//		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
 	}
 
+	[ParseFieldName("accountCode")]
+	public string AccountCode{
+		get{ return GetProperty<string>("AccountCode");}
+//		set{ SetProperty<string>(value, "AccountCode");}
+	}
+	
 	[ParseFieldName("createdBy")]
 	public ParseUser CreatedBy{
 		get{ return GetProperty<ParseUser>("CreatedBy");}

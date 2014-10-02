@@ -74,7 +74,7 @@ public class MutableDataPetInfo : MutableData{
 //			KidAccount kidAccount = t.Result;
 //			
 //			//make the query that will get the kid account and eager load the pet accessory
-			ParseQuery<KidAccount> query = new ParseQuery<KidAccount>()
+			ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
 				.Include("petInfo");
 //				.WhereEqualTo("objectId", kidAccount.ObjectId);
 //			
@@ -85,7 +85,7 @@ public class MutableDataPetInfo : MutableData{
 
 		query.GetAsync(kidAccountID).ContinueWith(t => {
 
-			KidAccount fetchedAccount = t.Result;
+			ParseObjectKidAccount fetchedAccount = t.Result;
 			ParseObject petInfo = fetchedAccount.PetInfo;
 			List<ParseObject> objectsToSave = new List<ParseObject>();
 
@@ -101,7 +101,7 @@ public class MutableDataPetInfo : MutableData{
 				objectsToSave.Add(fetchedAccount);
 			}
 
-			petInfo["id"] = PetID;
+			petInfo["petId"] = PetID;
 			petInfo["name"] = PetName;
 			petInfo["color"] = PetColor;
 			petInfo["species"] = PetSpecies;

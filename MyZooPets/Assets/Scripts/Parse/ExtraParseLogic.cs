@@ -23,7 +23,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	 */
 
 	void Awake(){
-		ParseObject.RegisterSubclass<KidAccount>();
+		ParseObject.RegisterSubclass<ParseObjectKidAccount>();
 	}
 
 	// Use this for initialization
@@ -38,6 +38,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// </summary>
 	/// <returns>Task</returns>
 	public Task UserCheck(){
+
 		var user = ParseUser.CurrentUser;
 		var source = new TaskCompletionSource<string>();
 
@@ -65,9 +66,9 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// Both ParseUser and KidAccount will be created if they don't already exist
 	/// </summary>
 	/// <returns>Task with current KidAccount object</returns>
-	public Task<KidAccount> UserAndKidAccountCheck(){
+	public Task<ParseObjectKidAccount> UserAndKidAccountCheck(){
 		var user = ParseUser.CurrentUser;
-		var source = new TaskCompletionSource<KidAccount>();
+		var source = new TaskCompletionSource<ParseObjectKidAccount>();
 
 		//user not login yet
 		if(user == null){
@@ -79,7 +80,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 					source.SetException(t.Exception);
 				}
 				else{
-					KidAccount account = ParseObject.CreateWithoutData<KidAccount>(t.Result);
+					ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(t.Result);
 					source.SetResult(account);
 				}
 			});
@@ -98,7 +99,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 			});
 
 			if(isKidAccountValid){
-				KidAccount account = ParseObject.CreateWithoutData<KidAccount>(kidAccountID);
+				ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(kidAccountID);
 				source.SetResult(account);
 			}
 			// kid account doesn't exist so create one
@@ -108,7 +109,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 						source.SetException(t.Exception);
 					}
 					else{
-						KidAccount account = ParseObject.CreateWithoutData<KidAccount>(t.Result);
+						ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(t.Result);
 						source.SetResult(account);
 					}
 				});
@@ -146,7 +147,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 		acl.PublicReadAccess = true;
 		acl.PublicWriteAccess = false;
 
-		var account = new KidAccount{
+		var account = new ParseObjectKidAccount{
 			IsLinkedToParentAccount = false,
 			CreatedBy = user,
 			ACL = acl

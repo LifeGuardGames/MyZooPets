@@ -75,7 +75,7 @@ public class PetGameData{
 	public void SaveAsyncToParse(){
 
 		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-			KidAccount kidAccount = t.Result;
+			ParseObjectKidAccount kidAccount = t.Result;
 
 			foreach(MutableData data in allMutableData)
 				if(data.IsDirty)

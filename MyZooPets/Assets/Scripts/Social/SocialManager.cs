@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using Parse;
 using System.Collections;
@@ -38,9 +38,9 @@ public class SocialManager : Singleton<SocialManager> {
 	public void RefreshData(){
 		try{
 			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-				KidAccount kidAccount = t.Result;
+				ParseObjectKidAccount kidAccount = t.Result;
 
-				ParseQuery<KidAccount> friendListQuery = new ParseQuery<KidAccount>()
+				ParseQuery<ParseObjectKidAccount> friendListQuery = new ParseQuery<ParseObjectKidAccount>()
 					.Include("friendList.petInfo")
 					.Include("friendList.petAccessory");
 
@@ -59,7 +59,7 @@ public class SocialManager : Singleton<SocialManager> {
 						OnDataRefreshed(this, args);
 				}
 				else{
-					KidAccount account = t.Result;
+					ParseObjectKidAccount account = t.Result;
 
 //					ParseObject petInfo = new ParseObject("PetInfo");
 //					petInfo = account.Get<ParseObject>("petInfo");
@@ -70,7 +70,7 @@ public class SocialManager : Singleton<SocialManager> {
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
 						FriendList = account.FriendList.ToList();
-						foreach(KidAccount friendAccount in account.FriendList){
+						foreach(ParseObjectKidAccount friendAccount in account.FriendList){
 							Debug.Log("friend object id: " + friendAccount.ObjectId);
 							Debug.Log("Friend Account is linked?: " + friendAccount.IsLinkedToParentAccount);
 

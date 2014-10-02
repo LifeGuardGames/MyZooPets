@@ -145,7 +145,7 @@ public class ParseTestScript : MonoBehaviour {
 					}
 				}
 				else{
-					KidAccount account = t.Result;
+					ParseObjectKidAccount account = t.Result;
 					Debug.Log(account.ObjectId);
 				}
 			});

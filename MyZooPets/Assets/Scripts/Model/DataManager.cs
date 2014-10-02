@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+using Parse;
 using fastJSON;
 
 //This class handles all game data. No game logic
@@ -98,6 +98,8 @@ public class DataManager : Singleton<DataManager>{
 		DontDestroyOnLoad(gameObject);
 		isCreated = true;
 		//---------------------------------------------------------------------
+
+		ParseClient.Initialize("J0M9QYtJJ7mUCnplysgza2zX2fo5MUCCbuoniZnN", "jTbrSqfrOKlJbIn5b1STpFpVItqwF4HyrWgejJ5S");
 
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager

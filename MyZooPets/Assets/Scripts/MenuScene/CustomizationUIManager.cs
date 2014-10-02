@@ -61,8 +61,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 			Analytics.Instance.StartGame();
 
             //Initialize data for new pet
-            DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.name, 
-                petName, "Basic", petColor);
+//            DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.name, 
+//                petName, "Basic", petColor);
 
         }
         base.CloseUI();

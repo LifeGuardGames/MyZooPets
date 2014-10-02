@@ -18,15 +18,24 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	void Start(){
 		ParentPortalManager.OnDataRefreshed += UpdateGrid;
 		ParentPortalManager.OnAccountCreated += NewAccountCreated;
+//		ParentPortalManager.OnAccountDeleted += UpdateGrid;
 	}
 
 	void Destroy(){
 		ParentPortalManager.OnDataRefreshed -= UpdateGrid;
 		ParentPortalManager.OnAccountCreated -= NewAccountCreated;
+//		ParentPortalManager.OnAccountDeleted -= UpdateGrid;
 	}
 
 	public void AddNewAccount(){
 		ParentPortalManager.Instance.AddNewAccount();
+	}
+
+	public void DeleteAccount(GameObject buttonObject){
+		string petID = buttonObject.transform.parent.name;
+		if(!string.IsNullOrEmpty(petID)){
+			ParentPortalManager.Instance.RemoveAccount(petID);
+		}
 	}
 
 	private void NewAccountCreated(object sender, ServerEventArgs args){
@@ -39,7 +48,7 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	}
 
 	private void UpdateGrid(object sender, ServerEventArgs args){
-		// TODO Jason populate grid here based on data
+		Debug.Log("updategrid");
 		foreach(Transform child in grid.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
@@ -57,11 +66,18 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 					UILabel codeLabel = portalEntryPet.FindInChildren("LabelCode").GetComponent<UILabel>();
 					codeLabel.text = account.AccountCode;
 
+					//set the delete button
+					LgButtonMessage buttonMessage = portalEntryPet.FindInChildren("ButtonTrash").GetComponent<LgButtonMessage>();
+					buttonMessage.target = this.gameObject;
+					buttonMessage.functionName = "DeleteAccount";
+
 					//set the name for the account
 					ParseObjectPetInfo petInfo = account.PetInfo;
 					if(petInfo != null && petInfo.IsDataAvailable){
 						UILabel nameLabel = portalEntryPet.FindInChildren("LabelName").GetComponent<UILabel>();
 						nameLabel.text = petInfo.Name;
+
+						portalEntryPet.name = petInfo.ID;
 					}
 				}
 
@@ -84,7 +100,6 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	protected override void _CloseUI(){
 		GetComponent<TweenToggleDemux>().Hide();
-		ParentPortalManager.OnDataRefreshed -= UpdateGrid;
 	}
 
 		void OnGUI(){

@@ -63,56 +63,49 @@ public class MutableDataAccessories : MutableData{
 	public override void VersionCheck(System.Version currentDataVersion){
 		throw new System.NotImplementedException();
 	}
-
+	
 	public override void SaveAsyncToParseServer(string kidAccountID){
-		string placedAccessoriesJSON = JSON.Instance.ToJSON(PlacedAccessories);
-
-//		ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-//			KidAccount kidAccount = t.Result;
+//		string placedAccessoriesJSON = JSON.Instance.ToJSON(PlacedAccessories);
 //
-			//make the query that will get the kid account and eager load the pet accessory
-			ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
-				.Include("petAccessory");
-//				.WhereEqualTo("objectId", kidAccount.ObjectId);
+//		//make the query that will get the kid account and eager load the pet accessory
+//		ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
+//			.Include("petAccessory");
 //
-//			return query.GetAsync(kidAccount.ObjectId);
-//		}).Unwrap().
-//		string kidAccountID = DataManager.Instance.GameData.PetInfo.ParseKidAccountID;
-		query.GetAsync(kidAccountID).ContinueWith(t => {
-			//here we have the kid account the the loaded PetAccessory
-			ParseObjectKidAccount fetchedAccount = t.Result;
-			ParseObject petAccessory = fetchedAccount.PetAccessory;
-			List<ParseObject> objectsToSave = new List<ParseObject>();
-
-			//if petAccessory is null that means it hasn't been synced up to the
-			//server yet. create one here and save both the fetchedAccount and petAccessory
-			//because they are both modified.
-			if(petAccessory == null){
-				petAccessory = new ParseObject("PetAccessory");
-				ParseACL acl = new ParseACL();
-				acl.PublicReadAccess = true;
-				acl.PublicWriteAccess = false;
-				acl.SetWriteAccess(ParseUser.CurrentUser, true);
-				petAccessory.ACL = acl;
-
-				fetchedAccount.PetAccessory = petAccessory;
-				objectsToSave.Add(fetchedAccount);
-			}
-
-			petAccessory["placedAccessoriesJSON"] = placedAccessoriesJSON;
-			objectsToSave.Add(petAccessory);
-
-			return ParseObject.SaveAllAsync(objectsToSave);
-		}).Unwrap().ContinueWith(t => {
-			if(t.IsFaulted || t.IsCanceled){
-				Debug.Log("Fail to save async: " + this.ToString());
-			}
-			else{
-				IsDirty = false;
-				Debug.Log("save async successful: " + this.ToString());
-				Debug.Log("is data dirty: " + IsDirty);
-			}
-		});
+//		query.GetAsync(kidAccountID).ContinueWith(t => {
+//			//here we have the kid account the the loaded PetAccessory
+//			ParseObjectKidAccount fetchedAccount = t.Result;
+//			ParseObject petAccessory = fetchedAccount.PetAccessory;
+//			List<ParseObject> objectsToSave = new List<ParseObject>();
+//
+//			//if petAccessory is null that means it hasn't been synced up to the
+//			//server yet. create one here and save both the fetchedAccount and petAccessory
+//			//because they are both modified.
+//			if(petAccessory == null){
+//				petAccessory = new ParseObject("PetAccessory");
+//				ParseACL acl = new ParseACL();
+//				acl.PublicReadAccess = true;
+//				acl.PublicWriteAccess = false;
+//				acl.SetWriteAccess(ParseUser.CurrentUser, true);
+//				petAccessory.ACL = acl;
+//
+//				fetchedAccount.PetAccessory = petAccessory;
+//				objectsToSave.Add(fetchedAccount);
+//			}
+//
+//			petAccessory["placedAccessoriesJSON"] = placedAccessoriesJSON;
+//			objectsToSave.Add(petAccessory);
+//
+//			return ParseObject.SaveAllAsync(objectsToSave);
+//		}).Unwrap().ContinueWith(t => {
+//			if(t.IsFaulted || t.IsCanceled){
+//				Debug.Log("Fail to save async: " + this.ToString());
+//			}
+//			else{
+//				IsDirty = false;
+//				Debug.Log("save async successful: " + this.ToString());
+//				Debug.Log("is data dirty: " + IsDirty);
+//			}
+//		});
 	}
 	#endregion
 }

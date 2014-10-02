@@ -12,10 +12,10 @@ public class ParseTestScript : MonoBehaviour {
 		SocialManager.OnFriendCodeAdded += EventListener;
 		ParentPortalManager.OnDataRefreshed += EventListener;
 
-		if(DataManager.Instance.IsFirstTime && DataManager.Instance.NumOfPets == 1){
-			DataManager.Instance.InitializeGameDataForNewPet();
-			DataManager.Instance.SaveGameData();
-		}
+//		if(DataManager.Instance.IsFirstTime && DataManager.Instance.NumOfPets == 1){
+//			DataManager.Instance.InitializeGameDataForNewPet();
+//			DataManager.Instance.SaveGameData();
+//		}
 	}
 
 	#if UNITY_EDITOR
@@ -67,9 +67,8 @@ public class ParseTestScript : MonoBehaviour {
 					
 				if(GUILayout.Button("Create New pet")){
 					if(!DataManager.Instance.IsMaxNumOfPet){
-						string petID = "Pet" + DataManager.Instance.NumOfPets;
-						DataManager.Instance.AddNewMenuSceneData();
-						DataManager.Instance.InitializeGameDataForNewPet(petID: petID);
+						DataManager.Instance.AddNewPet();
+						
 						FakeTutorial();
 					}
 				}

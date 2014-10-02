@@ -4,15 +4,25 @@ using System.Collections;
 public class InternetConnectionDisplay : MonoBehaviour {
 
 	public RotateAroundCenter loadingIconSpin;
+	public UILocalize labelLocalize;
 	
-
-
-	public void Show(){
-		GetComponent<TweenToggle>().Show();
+	public void Play(string labelLocalizeKey){
+		loadingIconSpin.gameObject.SetActive(true);
+		loadingIconSpin.GetComponent<ScaleTweenToggle>().Show();
+		loadingIconSpin.Play();
+		labelLocalize.key = labelLocalizeKey;
+		labelLocalize.Localize();
 	}
 
-	public void Hide(){
-		GetComponent<TweenToggle>().Hide();
+	public void Stop(string labelLocalizeKey){
+		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
+		labelLocalize.key = labelLocalizeKey;
+		labelLocalize.Localize();
+	}
+
+	// Callback from hide tween
+	public void DeactivateSpinSprite(){
+		loadingIconSpin.gameObject.SetActive(false);
 	}
 
 //	void OnGUI(){

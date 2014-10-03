@@ -11,6 +11,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public InternetConnectionDisplay internetConnectionDisplay;
 	public GameObject friendArea;
+	public GameObject grid;
 	public GameObject hiddenCode;
 	public GameObject buttonCode;
 
@@ -23,11 +24,27 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	protected override void _Start(){
 		SocialManager.OnDataRefreshed += FinishInternetConnection;
 
+		RepositionGrid();
+
 		ToggleCodeButton(false);
 	}
 
 	void OnDestroy(){
 		SocialManager.OnDataRefreshed -= FinishInternetConnection;
+	}
+
+	private void RepositionGrid(){
+		// Reposition all the things nicely to stretch to the end of the screen
+		
+		// Position the UIPanel clipping range
+		UIPanel itemAreaPanel = friendArea.GetComponent<UIPanel>();
+		Vector4 oldRange = itemAreaPanel.clipRange;
+		itemAreaPanel.transform.localPosition = new Vector3(0, itemAreaPanel.transform.localPosition.y, 0f);
+		itemAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		
+		// Position the grid origin to the left of the screen
+//		Vector3 gridPosition = grid.transform.localPosition;
+		grid.transform.localPosition = new Vector3(0f, 0f, 0f);
 	}
 
 	public void CodeButtonCallback(){

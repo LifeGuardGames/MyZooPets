@@ -55,10 +55,13 @@ public class SocialManager : Singleton<SocialManager> {
 
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = false;
-					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+					args.ErrorCode = exception.Code;
+					args.ErrorMessage = exception.Message;
 
-					if(OnDataRefreshed != null)
-						OnDataRefreshed(this, args);
+					Loom.DispatchToMainThread(() => {	
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
 				}
 				else{
 					ParseObjectKidAccount account = t.Result;
@@ -66,14 +69,15 @@ public class SocialManager : Singleton<SocialManager> {
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
 						FriendList = account.FriendList.ToList();
-				
 					}
 
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = true;
-					
-					if(OnDataRefreshed != null)
-						OnDataRefreshed(this, args);
+
+					Loom.DispatchToMainThread(() => {	
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
 				}
 			});
 		}
@@ -106,35 +110,40 @@ public class SocialManager : Singleton<SocialManager> {
 				if(t.IsFaulted){
 					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
 					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-
+				
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = false;
-					args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
-					
-					
-					if(OnFriendCodeAdded != null)
-						OnFriendCodeAdded(this, args);
+					args.ErrorCode = e.Code;
+					args.ErrorMessage = e.Message;
+
+					Loom.DispatchToMainThread(() => {	
+						if(OnFriendCodeAdded != null)
+							OnFriendCodeAdded(this, args);
+					});
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
+					ServerEventArgs args = new ServerEventArgs();
+
 					if(result.TryGetValue("code", out code)){
 						Debug.Log("Error Code: " + code);
-	
 						int parseCode = Convert.ToInt32(code);
 
-						ServerEventArgs args = new ServerEventArgs();
 						args.IsSuccessful = false;
 						args.ErrorCode = (ParseException.ErrorCode) parseCode;
 						args.ErrorMessage = (string) result["message"];
-						
-						if(OnFriendCodeAdded != null)
-							OnFriendCodeAdded(this, args);
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
+						args.IsSuccessful = true;
 					}
+					
+					Loom.DispatchToMainThread(() => {
+						if(OnFriendCodeAdded != null)
+							OnFriendCodeAdded(this, args);
+					});
 				}
 			});
 		}

@@ -28,13 +28,14 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 				return parentPortalQuery.FirstAsync();
 			}).Unwrap().ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
-					foreach(ParseException e in t.Exception.InnerExceptions)
-						Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
 
 					Loom.DispatchToMainThread(() => {
 						ServerEventArgs args = new ServerEventArgs();
 						args.IsSuccessful = false;
-						args.ErrorCode = ParseException.ErrorCode.ConnectionFailed;
+						args.ErrorCode = exception.Code;
+						args.ErrorMessage = exception.Message;
 						
 						if(OnDataRefreshed != null)
 							OnDataRefreshed(this, args);

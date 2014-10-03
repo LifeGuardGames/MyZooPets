@@ -103,6 +103,9 @@ public class MutableDataPetInfo : MutableData{
 			return ParseObject.SaveAllAsync(objectsToSave);
 		}).Unwrap().ContinueWith(t => {
 			if(t.IsFaulted || t.IsCanceled){
+				foreach(ParseException e in t.Exception.InnerExceptions)
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+
 				Debug.Log("Fail to save async: " + this.ToString());
 			}
 			else{

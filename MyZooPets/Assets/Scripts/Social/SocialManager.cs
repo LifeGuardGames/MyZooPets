@@ -24,6 +24,8 @@ public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 
+	public bool useDummyData = false;
+
 	/// <summary>
 	/// Gets or sets the friend list.
 	/// Need to be cast to List<KidAccount> using a foreach loop to gain access
@@ -36,12 +38,13 @@ public class SocialManager : Singleton<SocialManager> {
 	/// Refreshs the data.
 	/// </summary>
 	public void RefreshData(){
+		if(IsUsingDummyData()) return;
+
 		try{
 			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
 				ParseQuery<ParseObjectKidAccount> friendListQuery = new ParseQuery<ParseObjectKidAccount>()
 					.WhereEqualTo("createdBy", ParseUser.CurrentUser)
-					.Include("friendList.petInfo")
-					.Include("friendList.petAccessory");
+					.Include("friendList.petInfo");
 
 				return friendListQuery.FirstAsync();
 			}).Unwrap().ContinueWith(t => {
@@ -135,5 +138,35 @@ public class SocialManager : Singleton<SocialManager> {
 				}
 			});
 		}
+	}
+
+	private bool IsUsingDummyData(){
+		bool retVal = false; 
+		if(useDummyData){
+			retVal = useDummyData;
+			List<ParseObjectKidAccount> dummyData = new List<ParseObjectKidAccount>();
+
+			//set up dummy data
+			for(int i=0; i<3; i++){
+				ParseObjectPetInfo petInfo = new ParseObjectPetInfo();
+				petInfo.Name = "dummy";
+
+				ParseObjectKidAccount account = new ParseObjectKidAccount();
+				account.AccountCode = "testing code";
+				account.PetInfo = petInfo;
+
+				dummyData.Add(account);
+			}
+
+			FriendList = dummyData;
+
+			ServerEventArgs args = new ServerEventArgs();
+			args.IsSuccessful = true;
+			
+			if(OnDataRefreshed != null)
+				OnDataRefreshed(this, args);
+		}
+		
+		return retVal;
 	}
 }

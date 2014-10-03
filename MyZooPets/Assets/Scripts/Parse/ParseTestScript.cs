@@ -6,7 +6,7 @@ using Parse;
 using System.Threading.Tasks;
 
 public class ParseTestScript : MonoBehaviour {
-
+	public string friendCode = "friend code";
 	void Start(){
 		SocialManager.OnDataRefreshed += EventListener;
 		SocialManager.OnFriendCodeAdded += EventListener;
@@ -44,8 +44,10 @@ public class ParseTestScript : MonoBehaviour {
 			if(GUILayout.Button("Get friend list")){
 				SocialManager.Instance.RefreshData();
 			}
+
+			friendCode = GUILayout.TextField(friendCode, GUILayout.MinWidth(60));
 			if(GUILayout.Button("Add good friend code")){
-			SocialManager.Instance.AddFriendCode("WmhPN$fE");
+			SocialManager.Instance.AddFriendCode(friendCode);
 			}
 			if(GUILayout.Button("Add bad friend code")){
 				SocialManager.Instance.AddFriendCode("x5r4s4VAj1");

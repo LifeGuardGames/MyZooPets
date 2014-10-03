@@ -67,7 +67,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			// Hide the connection display
 			internetConnectionDisplay.Stop(true, string.Empty);
 
-			List<ParseObject> friendList = SocialManager.Instance.FriendList;
+			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
 			// TODO Jason fill in the required components here, 6 at a time per page
 
 
@@ -86,6 +86,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	protected override void _OpenUI(){
 		if(!isActive){
 			GetComponent<TweenToggleDemux>().Show();
+
+			// Hide other UI objects
+			NavigationUIManager.Instance.HidePanel();
+			InventoryUIManager.Instance.HidePanel();
+			RoomArrowsUIManager.Instance.HidePanel();
+
 			TryInternetConnection();
 		}
 	}
@@ -93,6 +99,11 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	protected override void _CloseUI(){
 		if(isActive){
 			GetComponent<TweenToggleDemux>().Hide();
+
+			// Show other UI Objects
+			NavigationUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel();
+			RoomArrowsUIManager.Instance.ShowPanel();
 		}
 	}
 

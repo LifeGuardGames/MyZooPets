@@ -15,8 +15,8 @@ public class ParseObjectKidAccount : ParseObject{
 	}
 
 	[ParseFieldName("friendList")]
-	public IList<ParseObject> FriendList{
-		get{ return GetProperty<IList<ParseObject>>("FriendList");}
+	public IList<ParseObjectKidAccount> FriendList{
+		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
 //		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
 	}
 

@@ -30,7 +30,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// to the property in KidAccount
 	/// </summary>
 	/// <value>The friend list.</value>
-	public List<ParseObject> FriendList {get; set;}
+	public List<ParseObjectKidAccount> FriendList {get; set;}
 
 	/// <summary>
 	/// Refreshs the data.
@@ -96,7 +96,6 @@ public class SocialManager : Singleton<SocialManager> {
 		if(!string.IsNullOrEmpty(friendCode)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendCode", friendCode},
-				{"kidAccountId", DataManager.Instance.GameData.PetInfo.ParseKidAccountID}
 			};
 
 			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("addFriendCode", paramDict)

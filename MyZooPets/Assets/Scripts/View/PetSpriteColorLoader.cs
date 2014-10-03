@@ -20,8 +20,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 				else{
 					if(Application.loadedLevelName == "MenuScene"){
 						string petID = transform.parent.parent.name;
-						Dictionary<string, MutableDataPetMenuInfo> petMenuInfoDict = SelectionManager.Instance.PetMenuInfo;
-						MutableDataPetMenuInfo petMenuInfo = petMenuInfoDict[petID];
+						MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
 
 						LoadAndSetColor(petMenuInfo.PetColor);
 					}

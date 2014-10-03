@@ -19,7 +19,7 @@ public class SelectionManager : Singleton<SelectionManager> {
 		get{ return DataManager.Instance.IsFirstTime;}
 	}
 
-    public void LoadPetGameData(string petID){
-        DataManager.Instance.LoadGameData(petID);
+    public void LoadPetGameData(){
+        DataManager.Instance.LoadGameData();
     }
 }

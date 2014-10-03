@@ -61,10 +61,10 @@ public class MutableDataAccessories : MutableData{
 	}
 
 	public override void VersionCheck(System.Version currentDataVersion){
-		throw new System.NotImplementedException();
+
 	}
 	
-	public override void SaveAsyncToParseServer(string kidAccountID){
+	public override void SaveAsyncToParseServer(){
 //		string placedAccessoriesJSON = JSON.Instance.ToJSON(PlacedAccessories);
 //
 //		//make the query that will get the kid account and eager load the pet accessory

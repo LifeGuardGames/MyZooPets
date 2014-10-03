@@ -21,7 +21,7 @@ public class DataManager : Singleton<DataManager>{
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
 	//basic info data of all the pet that are only used in the menu scene
-	private Dictionary<string, MutableDataPetMenuInfo> menuSceneData; // key: petID, value: instance of MutableDataPetInfo
+	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 	private float syncToParseTimer = 0f;
 	private float syncToParseWaitTime = 60f; //60 seconds before data get sync to server
 

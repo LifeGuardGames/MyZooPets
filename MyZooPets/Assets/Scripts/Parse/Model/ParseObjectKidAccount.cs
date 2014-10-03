@@ -23,7 +23,7 @@ public class ParseObjectKidAccount : ParseObject{
 	[ParseFieldName("accountCode")]
 	public string AccountCode{
 		get{ return GetProperty<string>("AccountCode");}
-//		set{ SetProperty<string>(value, "AccountCode");}
+		set{ SetProperty<string>(value, "AccountCode");}
 	}
 	
 	[ParseFieldName("createdBy")]

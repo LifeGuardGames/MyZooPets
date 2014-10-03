@@ -17,36 +17,12 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	void Start(){
 		ParentPortalManager.OnDataRefreshed += UpdateGrid;
-		ParentPortalManager.OnAccountCreated += NewAccountCreated;
-//		ParentPortalManager.OnAccountDeleted += UpdateGrid;
 	}
 
 	void Destroy(){
 		ParentPortalManager.OnDataRefreshed -= UpdateGrid;
-		ParentPortalManager.OnAccountCreated -= NewAccountCreated;
-//		ParentPortalManager.OnAccountDeleted -= UpdateGrid;
 	}
-
-	public void AddNewAccount(){
-		ParentPortalManager.Instance.AddNewAccount();
-	}
-
-	public void DeleteAccount(GameObject buttonObject){
-		string petID = buttonObject.transform.parent.name;
-		if(!string.IsNullOrEmpty(petID)){
-			ParentPortalManager.Instance.RemoveAccount(petID);
-		}
-	}
-
-	private void NewAccountCreated(object sender, ServerEventArgs args){
-		if(args.IsSuccessful){
-			CloseUI();
-		}
-		else{
-			//display error message to user
-		}
-	}
-
+	
 	private void UpdateGrid(object sender, ServerEventArgs args){
 		Debug.Log("updategrid");
 		foreach(Transform child in grid.transform){
@@ -56,33 +32,20 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 		//data refreshed successfully
 		if(args.IsSuccessful){
-			List<ParseObjectKidAccount> kidAccountList = ParentPortalManager.Instance.KidAccountList;
-			if(kidAccountList.Count > 0){
-				//go through the account list and create UI for every account
-				foreach(ParseObjectKidAccount account in kidAccountList){
-					GameObject portalEntryPet = NGUITools.AddChild(grid.gameObject, parentPortalEntryPetPrefab);
+			ParseObjectKidAccount account = ParentPortalManager.Instance.KidAccount;
 
-					//set the code
-					UILabel codeLabel = portalEntryPet.FindInChildren("LabelCode").GetComponent<UILabel>();
-					codeLabel.text = account.AccountCode;
+			GameObject portalEntryPet = NGUITools.AddChild(grid.gameObject, parentPortalEntryPetPrefab);
 
-					//set the delete button
-					LgButtonMessage buttonMessage = portalEntryPet.FindInChildren("ButtonTrash").GetComponent<LgButtonMessage>();
-					buttonMessage.target = this.gameObject;
-					buttonMessage.functionName = "DeleteAccount";
+			//set the code
+			UILabel codeLabel = portalEntryPet.FindInChildren("LabelCode").GetComponent<UILabel>();
+			codeLabel.text = account.AccountCode;
 
-					//set the name for the account
-					ParseObjectPetInfo petInfo = account.PetInfo;
-					if(petInfo != null && petInfo.IsDataAvailable){
-						UILabel nameLabel = portalEntryPet.FindInChildren("LabelName").GetComponent<UILabel>();
-						nameLabel.text = petInfo.Name;
+			MutableDataPetMenuInfo menuInfo = DataManager.Instance.MenuSceneData;
+			UILabel nameLabel = portalEntryPet.FindInChildren("LabelName").GetComponent<UILabel>();
+			if(menuInfo != null)
+				nameLabel.text = menuInfo.PetName;
 
-						portalEntryPet.name = petInfo.ID;
-					}
-				}
-
-				grid.Reposition();
-			}
+			grid.Reposition();
 		}
 		else{
 			//display error message to user

@@ -37,14 +37,13 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	public void RefreshData(){
 		try{
-			ExtraParseLogic.Instance.UserAndKidAccountCheck().ContinueWith(t => {
-				ParseObjectKidAccount kidAccount = t.Result;
-
+			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
 				ParseQuery<ParseObjectKidAccount> friendListQuery = new ParseQuery<ParseObjectKidAccount>()
+					.WhereEqualTo("createdBy", ParseUser.CurrentUser)
 					.Include("friendList.petInfo")
 					.Include("friendList.petAccessory");
 
-				return friendListQuery.GetAsync(kidAccount.ObjectId);
+				return friendListQuery.FirstAsync();
 			}).Unwrap().ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
 					// Errors from Parse Cloud and network interactions
@@ -61,28 +60,14 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					ParseObjectKidAccount account = t.Result;
 
-//					ParseObject petInfo = new ParseObject("PetInfo");
-//					petInfo = account.Get<ParseObject>("petInfo");
-//					Debug.Log("pet info data available: " + petInfo.IsDataAvailable);
-//					List<ParseObject> friendList = account.FriendList;
-
-//					Debug.Log(petInfo.Get<string>("name"));
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
 						FriendList = account.FriendList.ToList();
-						foreach(ParseObjectKidAccount friendAccount in account.FriendList){
-							Debug.Log("friend object id: " + friendAccount.ObjectId);
-							Debug.Log("Friend Account is linked?: " + friendAccount.IsLinkedToParentAccount);
-
-//							ParseObject friendPetInfo = new ParseObject("PetInfo");
-//							friendPetInfo = friendAccount.PetInfoPointer;
-							Debug.Log("Friend Account pet info data available?: " + friendAccount.IsDataAvailable);
-						}
+				
 					}
 
 					ServerEventArgs args = new ServerEventArgs();
 					args.IsSuccessful = true;
-//					args.ErrorCode = ParseException.ErrorCode.OtherCause;
 					
 					if(OnDataRefreshed != null)
 						OnDataRefreshed(this, args);
@@ -133,7 +118,7 @@ public class SocialManager : Singleton<SocialManager> {
 					// Hack, check for errors
 					object code;
 					if(result.TryGetValue("code", out code)){
-//						Debug.Log("Error Code: " + code);
+						Debug.Log("Error Code: " + code);
 	
 						int parseCode = Convert.ToInt32(code);
 

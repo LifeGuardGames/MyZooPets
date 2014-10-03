@@ -69,12 +69,13 @@ public class MutableDataPetInfo : MutableData{
 		}
 	}
 
-	public override void SaveAsyncToParseServer(string kidAccountID){
+	public override void SaveAsyncToParseServer(){
 		//make the query that will get the kid account and eager load the pet accessory
 		ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
+			.WhereEqualTo("createdBy", ParseUser.CurrentUser)
 			.Include("petInfo");
 
-		query.GetAsync(kidAccountID).ContinueWith(t => {
+		query.FirstAsync().ContinueWith(t => {
 
 			ParseObjectKidAccount fetchedAccount = t.Result;
 			ParseObjectPetInfo petInfo = fetchedAccount.PetInfo;

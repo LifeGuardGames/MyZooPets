@@ -39,27 +39,27 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// Check if ParseUser exists. If not create one
 	/// </summary>
 	/// <returns>Task</returns>
-	public Task UserCheck(){
-
-		var user = ParseUser.CurrentUser;
-		var source = new TaskCompletionSource<string>();
-
-		if(user == null){
-			CreateParseNewUser().ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
-					source.SetException(t.Exception);
-				}
-				else{
-					source.SetResult("User Valid");
-				}
-			});
-		}
-		else{
-			source.SetResult("User Valid");
-		}
-
-		return source.Task;
-	}
+//	public Task UserCheck(){
+//
+//		var user = ParseUser.CurrentUser;
+//		var source = new TaskCompletionSource<string>();
+//
+//		if(user == null){
+//			CreateParseUser().ContinueWith(t => {
+//				if(t.IsFaulted || t.IsCanceled){
+//					source.SetException(t.Exception);
+//				}
+//				else{
+//					source.SetResult("User Valid");
+//				}
+//			});
+//		}
+//		else{
+//			source.SetResult("User Valid");
+//		}
+//
+//		return source.Task;
+//	}
 	
 	/// <summary>
 	/// Check if Parse User is login and check if kid account exist.
@@ -68,56 +68,26 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// Both ParseUser and KidAccount will be created if they don't already exist
 	/// </summary>
 	/// <returns>Task with current KidAccount object</returns>
-	public Task<ParseObjectKidAccount> UserAndKidAccountCheck(){
+	public Task UserCheck(){
 		var user = ParseUser.CurrentUser;
-		var source = new TaskCompletionSource<ParseObjectKidAccount>();
+		var source = new TaskCompletionSource<string>();
 
 		//user not login yet
 		if(user == null){
 			//sign up and create kid account
-			CreateParseNewUser().ContinueWith(t => {
-				return CreateNewKidAccount();
+			CreateParseUser().ContinueWith(t => {
+				return CreateKidAccount();
 			}).Unwrap().ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
+				if(t.IsFaulted || t.IsCanceled)
 					source.SetException(t.Exception);
-				}
-				else{
-					ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(t.Result);
-					source.SetResult(account);
-				}
+				else
+					source.SetResult("User account valid");
 			});
 			// or login .... will implement later
-
 		}
-		//user login and valid
 		else{
-			//check if kid account exist
-			bool isKidAccountValid = false;
-			string kidAccountID = "";
-			Loom.DispatchToMainThread(() => {
-				kidAccountID = DataManager.Instance.GameData.PetInfo.ParseKidAccountID;
-
-				isKidAccountValid = !string.IsNullOrEmpty(kidAccountID);
-			});
-
-			if(isKidAccountValid){
-				ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(kidAccountID);
-				source.SetResult(account);
-			}
-			// kid account doesn't exist so create one
-			else{
-				CreateNewKidAccount().ContinueWith(t => {
-					if(t.IsFaulted || t.IsCanceled){
-						source.SetException(t.Exception);
-					}
-					else{
-						ParseObjectKidAccount account = ParseObject.CreateWithoutData<ParseObjectKidAccount>(t.Result);
-						source.SetResult(account);
-					}
-				});
-			}
+			source.SetResult("User account valid");
 		}
-
 		return source.Task;
 	}
 
@@ -125,7 +95,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// Creates the parse new user.
 	/// </summary>
 	/// <returns>Task.</returns>
-	public Task CreateParseNewUser(){
+	private Task CreateParseUser(){
 		string guid = Guid.NewGuid().ToString();
 		
 		var user = new ParseUser(){
@@ -142,8 +112,8 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// Creates the new kid account.
 	/// </summary>
 	/// <returns>Task with KidAccountID</returns>
-	public Task<string> CreateNewKidAccount(){
-		var source = new TaskCompletionSource<string>();
+	private Task CreateKidAccount(){
+//		var source = new TaskCompletionSource<string>();
 		var user = ParseUser.CurrentUser;
 		ParseACL acl = new ParseACL(user);
 		acl.PublicReadAccess = true;
@@ -155,28 +125,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 			ACL = acl
 		};
 
-		account.SaveAsync().ContinueWith(t => {
-			if(t.IsFaulted || t.IsCanceled){
-				source.SetException(t.Exception);
-			}
-			else{
-				Loom.DispatchToMainThread(() =>{
-					//store the account id in the GameData and the MenuSceneData
-					DataManager.Instance.GameData.PetInfo.ParseKidAccountID = account.ObjectId;
-
-					string petID = DataManager.Instance.GameData.PetInfo.PetID;
-					MutableDataPetMenuInfo petMenuInfo = DataManager.Instance.GetMenuSceneData(petID);
-
-					if(petMenuInfo != null){
-						petMenuInfo.ParseKidAccountID = account.ObjectId;
-						DataManager.Instance.SetMenuSceneData(petID, petMenuInfo);
-					}
-				});
-				source.SetResult(account.ObjectId);
-			}
-		});
-
-		return source.Task;
+		return account.SaveAsync();
 	}
 }
 

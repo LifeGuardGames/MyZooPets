@@ -15,6 +15,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject hiddenCode;
 	public GameObject buttonCode;
 
+	public TweenToggleDemux CodeInputTween;
+	public TweenToggleDemux RequestsTween;
+	public GameObject requestEntryPrefab;
+
 	private bool isActive = false;
 
 	void Awake(){
@@ -109,6 +113,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			InventoryUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
 
+			isActive = true;
+
 			TryInternetConnection();
 		}
 	}
@@ -121,6 +127,36 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
+
+			isActive = false;
+		}
+	}
+
+	//////////////// Code Input ////////////////////////////
+
+	public void OpenCodeInputWindow(){
+		if(isActive){
+			CodeInputTween.Show();
+		}
+	}
+
+	public void CloseCodeInputWindow(){
+		if(isActive){
+			CodeInputTween.Hide();
+		}
+	}
+
+	//////////////// Friend Requests ////////////////////////
+
+	public void OpenRequestsWindow(){
+		if(isActive){
+			RequestsTween.Show();
+		}
+	}
+
+	public void CloseRequestsWindow(){
+		if(isActive){
+			RequestsTween.Hide();
 		}
 	}
 

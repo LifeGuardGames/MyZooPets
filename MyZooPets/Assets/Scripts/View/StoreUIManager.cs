@@ -385,7 +385,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
-			string defaultTabName = "";
+			string defaultTabName = "Carpet";	// Set the default category
 
 			//Rename the tab to reflect the sub category name
 			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
@@ -400,9 +400,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					resizer.enabled = true;	// Resize automatically
 
 					ShowUseTab(tabParent.FindChild("Tab"));
-					if(counter == 0){
-						defaultTabName = tabParent.name;
-					}
 				}
 				else{
 					tabParent.name = "";

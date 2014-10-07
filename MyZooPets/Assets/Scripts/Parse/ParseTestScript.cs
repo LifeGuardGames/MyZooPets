@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 public class ParseTestScript : MonoBehaviour {
 	public string friendCode = "friend code";
+	public string requestId = "request id";
+	public string username = "user name";
+	public string friendObjectId = "friendObjectId";
+
 	void Start(){
 		SocialManager.OnDataRefreshed += EventListener;
 		SocialManager.OnFriendCodeAdded += EventListener;
+		SocialManager.OnFriendRequestAccepted += EventListener;
 		ParentPortalManager.OnDataRefreshed += EventListener;
+
 	}
 
 	#if UNITY_EDITOR
@@ -46,13 +52,17 @@ public class ParseTestScript : MonoBehaviour {
 			}
 
 			friendCode = GUILayout.TextField(friendCode, GUILayout.MinWidth(60));
-			if(GUILayout.Button("Add good friend code")){
-			SocialManager.Instance.AddFriendCode(friendCode);
+			if(GUILayout.Button("send friend request")){
+			SocialManager.Instance.SendFriendRequest(friendCode);
 			}
-			if(GUILayout.Button("Add bad friend code")){
-				SocialManager.Instance.AddFriendCode("x5r4s4VAj1");
+			requestId = GUILayout.TextField(requestId, GUILayout.MinWidth(60));
+			if(GUILayout.Button("Accept friend request")){
+				SocialManager.Instance.AcceptFriendRequest(requestId);
 			}
-
+			friendObjectId = GUILayout.TextField(friendObjectId, GUILayout.MinWidth(60));
+			if(GUILayout.Button("Remove friend")){
+				SocialManager.Instance.RemoveFriend(friendObjectId);
+			}
 			GUILayout.EndHorizontal();
 		#endregion
 
@@ -107,12 +117,27 @@ public class ParseTestScript : MonoBehaviour {
 		if(GUILayout.Button("Logout")){
 			ParseUser.LogOut();
 		}
+
+		GUILayout.BeginHorizontal();
+		username = GUILayout.TextField(username, GUILayout.MinWidth(150));
+		if(GUILayout.Button("login")){
+			ParseUser.LogInAsync(username, username).ContinueWith(t => {
+				if(t.IsCompleted){
+					Debug.Log("log in successful");
+				}
+			});
+		}
+		GUILayout.EndHorizontal();
 	}
 	#endif
 
 	private void EventListener(object sender, ServerEventArgs args){
 		Debug.Log("IsSuccessful: " + args.IsSuccessful);
-		if(!args.IsSuccessful)
+		if(!args.IsSuccessful){
 			Debug.Log("Error code: " + args.ErrorCode);
+			Debug.Log("Error message: " + args.ErrorMessage);
+		}
+			
+
 	}
 }

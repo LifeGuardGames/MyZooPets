@@ -23,6 +23,7 @@ public class ServerEventArgs : EventArgs{
 public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
+	public static EventHandler<ServerEventArgs> OnFriendRequestAccepted;
 
 	public bool useDummyData = false;
 
@@ -99,15 +100,15 @@ public class SocialManager : Singleton<SocialManager> {
 	/// Appropriate successful or error events will be passed to the call back
 	/// </summary>
 	/// <param name="friendCode">Friend code.</param>
-	public void AddFriendCode(string friendCode){
+	public void SendFriendRequest(string friendCode){
 		if(!string.IsNullOrEmpty(friendCode)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendCode", friendCode},
 			};
 
-			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("addFriendCode", paramDict)
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("sendFriendRequest", paramDict)
 				.ContinueWith(t => {
-				if(t.IsFaulted){
+				if(t.IsFaulted || t.IsCanceled){
 					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
 					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
 				
@@ -143,6 +144,106 @@ public class SocialManager : Singleton<SocialManager> {
 					Loom.DispatchToMainThread(() => {
 						if(OnFriendCodeAdded != null)
 							OnFriendCodeAdded(this, args);
+					});
+				}
+			});
+		}
+	}
+
+	public void AcceptFriendRequest(string requestId){
+		if(!string.IsNullOrEmpty(requestId)){
+			IDictionary<string, object> paramDict = new Dictionary<string, object>{
+				{"requestId", requestId},
+			};
+			
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("acceptFriendRequest", paramDict)
+				.ContinueWith(t => {
+				if(t.IsFaulted || t.IsCanceled){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = e.Code;
+					args.ErrorMessage = e.Message;
+					
+					Loom.DispatchToMainThread(() => {
+						if(OnFriendRequestAccepted != null)
+							OnFriendRequestAccepted(this, args);
+					});
+				} 
+				else{
+					IDictionary<string, object> result = t.Result;
+					// Hack, check for errors
+					object code;
+					ServerEventArgs args = new ServerEventArgs();
+					
+					if(result.TryGetValue("code", out code)){
+						Debug.Log("Error Code: " + code);
+						int parseCode = Convert.ToInt32(code);
+						
+						args.IsSuccessful = false;
+						args.ErrorCode = (ParseException.ErrorCode) parseCode;
+						args.ErrorMessage = (string) result["message"];
+					} 
+					else{
+						Debug.Log("Result: " + result["success"]);
+						args.IsSuccessful = true;
+					}
+					
+					Loom.DispatchToMainThread(() => {
+						if(OnFriendRequestAccepted != null)
+							OnFriendRequestAccepted(this, args);
+					});
+				}
+			});
+		}
+	}
+
+	public void RemoveFriend(string friendObjectId){
+		if(!string.IsNullOrEmpty(friendObjectId)){
+			IDictionary<string, object> paramDict = new Dictionary<string, object>{
+				{"friendObjectId", friendObjectId},
+			};
+			
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("removeFriend", paramDict)
+				.ContinueWith(t => {
+				if(t.IsFaulted || t.IsCanceled){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = e.Code;
+					args.ErrorMessage = e.Message;
+					
+					Loom.DispatchToMainThread(() => {
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
+					});
+				} 
+				else{
+					IDictionary<string, object> result = t.Result;
+					// Hack, check for errors
+					object code;
+					ServerEventArgs args = new ServerEventArgs();
+					
+					if(result.TryGetValue("code", out code)){
+						Debug.Log("Error Code: " + code);
+						int parseCode = Convert.ToInt32(code);
+						
+						args.IsSuccessful = false;
+						args.ErrorCode = (ParseException.ErrorCode) parseCode;
+						args.ErrorMessage = (string) result["message"];
+					} 
+					else{
+						Debug.Log("Result: " + result["success"]);
+						args.IsSuccessful = true;
+					}
+					
+					Loom.DispatchToMainThread(() => {
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
 					});
 				}
 			});

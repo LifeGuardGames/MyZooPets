@@ -122,18 +122,13 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     // Turn egg wiggle animation on/off
     //---------------------------------------------------
     public void ToggleEggAnimation(bool isOn){
-        MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-
         foreach(Transform child in selectionGrid.transform){
-            bool isHatched = petMenuInfo != null;
-
-            if(!isHatched){
-                Transform eggParent = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
-                if(isOn)
-                    eggParent.GetComponent<RandomAnimation>().Enable();
-                else
-                    eggParent.GetComponent<RandomAnimation>().Disable();
-            }
+            Transform eggParent = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
+			if(isOn)
+                eggParent.GetComponent<RandomAnimation>().Enable();
+            else{
+                eggParent.GetComponent<RandomAnimation>().Disable();
+			}
         }
     }
     

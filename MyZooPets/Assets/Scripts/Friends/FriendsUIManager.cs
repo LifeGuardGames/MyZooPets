@@ -15,6 +15,14 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject hiddenCode;
 	public GameObject buttonCode;
 
+	public TweenToggleDemux codeInputTween;
+	public InternetConnectionDisplay codeInputConnectionDisplay;
+	public UILocalize codeInputErrorLabelLocalize;
+
+	public TweenToggleDemux requestsTween;
+	public InternetConnectionDisplay requestsConnectionDisplay;
+	public GameObject requestEntryPrefab;
+
 	private bool isActive = false;
 
 	void Awake(){
@@ -74,9 +82,9 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		// TODO
 	}
 
-	private void RadialFill(float fraction){
-		radialFillRewardSprite.fillAmount = fraction;
-	}
+//	private void RadialFill(float fraction){
+//		radialFillRewardSprite.fillAmount = fraction;
+//	}
 
 	public void FinishInternetConnection(object sender, ServerEventArgs args){
 		// Valid response
@@ -109,6 +117,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			InventoryUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
 
+			isActive = true;
+
 			TryInternetConnection();
 		}
 	}
@@ -121,6 +131,50 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
+
+			isActive = false;
+		}
+	}
+
+	//////////////// Code Input ////////////////////////////
+
+	public void OpenCodeInputWindow(){
+		if(isActive){
+			codeInputTween.Show();
+		}
+	}
+
+	public void CloseCodeInputWindow(){
+		if(isActive){
+			codeInputTween.Hide();
+		}
+	}
+
+	public void CodeInputShowConnectionDisplay(){
+//		codeInputConnectionDisplay.Play();
+	}
+
+	public void CodeInputHideConnectionDisplay(){
+//		codeInputConnectionDisplay.Stop();
+	}
+
+	public void ShowErrorMessage(string errorMessageKey){
+		codeInputErrorLabelLocalize.gameObject.SetActive(true);
+		codeInputErrorLabelLocalize.key = errorMessageKey;
+		codeInputErrorLabelLocalize.Localize();
+	}
+
+	//////////////// Friend Requests ////////////////////////
+
+	public void OpenRequestsWindow(){
+		if(isActive){
+			requestsTween.Show();
+		}
+	}
+
+	public void CloseRequestsWindow(){
+		if(isActive){
+			requestsTween.Hide();
 		}
 	}
 

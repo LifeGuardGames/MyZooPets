@@ -15,8 +15,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject hiddenCode;
 	public GameObject buttonCode;
 
-	public TweenToggleDemux CodeInputTween;
-	public TweenToggleDemux RequestsTween;
+	public TweenToggleDemux codeInputTween;
+	public InternetConnectionDisplay codeInputConnectionDisplay;
+	public UILocalize codeInputErrorLabelLocalize;
+
+	public TweenToggleDemux requestsTween;
+	public InternetConnectionDisplay requestsConnectionDisplay;
 	public GameObject requestEntryPrefab;
 
 	private bool isActive = false;
@@ -78,9 +82,9 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		// TODO
 	}
 
-	private void RadialFill(float fraction){
-		radialFillRewardSprite.fillAmount = fraction;
-	}
+//	private void RadialFill(float fraction){
+//		radialFillRewardSprite.fillAmount = fraction;
+//	}
 
 	public void FinishInternetConnection(object sender, ServerEventArgs args){
 		// Valid response
@@ -136,27 +140,41 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public void OpenCodeInputWindow(){
 		if(isActive){
-			CodeInputTween.Show();
+			codeInputTween.Show();
 		}
 	}
 
 	public void CloseCodeInputWindow(){
 		if(isActive){
-			CodeInputTween.Hide();
+			codeInputTween.Hide();
 		}
+	}
+
+	public void CodeInputShowConnectionDisplay(){
+//		codeInputConnectionDisplay.Play();
+	}
+
+	public void CodeInputHideConnectionDisplay(){
+//		codeInputConnectionDisplay.Stop();
+	}
+
+	public void ShowErrorMessage(string errorMessageKey){
+		codeInputErrorLabelLocalize.gameObject.SetActive(true);
+		codeInputErrorLabelLocalize.key = errorMessageKey;
+		codeInputErrorLabelLocalize.Localize();
 	}
 
 	//////////////// Friend Requests ////////////////////////
 
 	public void OpenRequestsWindow(){
 		if(isActive){
-			RequestsTween.Show();
+			requestsTween.Show();
 		}
 	}
 
 	public void CloseRequestsWindow(){
 		if(isActive){
-			RequestsTween.Hide();
+			requestsTween.Hide();
 		}
 	}
 

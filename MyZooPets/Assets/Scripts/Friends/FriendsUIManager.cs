@@ -10,6 +10,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public UISprite radialFillRewardSprite;
 
 	public InternetConnectionDisplay internetConnectionDisplay;
+	public GameObject friendEntryPrefab;
 	public GameObject friendArea;
 	public GameObject grid;
 	public GameObject hiddenCode;
@@ -45,14 +46,15 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		// Reposition all the things nicely to stretch to the end of the screen
 		
 		// Position the UIPanel clipping range
-		UIPanel itemAreaPanel = friendArea.GetComponent<UIPanel>();
-		Vector4 oldRange = itemAreaPanel.clipRange;
-		itemAreaPanel.transform.localPosition = new Vector3(0, itemAreaPanel.transform.localPosition.y, 0f);
-		itemAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		UIPanel friendAreaPanel = friendArea.GetComponent<UIPanel>();
+		Vector4 oldRange = friendAreaPanel.clipRange;
+		friendAreaPanel.transform.localPosition = new Vector3(0, friendAreaPanel.transform.localPosition.y, 0f);
+		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
 		
 		// Position the grid origin to the left of the screen
 //		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(0f, 0f, 0f);
+		grid.GetComponent<UIGrid>().Reposition();
 	}
 
 	public void CodeButtonCallback(){
@@ -89,16 +91,33 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void FinishInternetConnection(object sender, ServerEventArgs args){
 		// Valid response
 		if(args.IsSuccessful){
+			Debug.Log("Connection Success");
 			// Hide the connection display
 			internetConnectionDisplay.Stop(true, string.Empty);
 
 			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
-			// TODO Jason fill in the required components here, 6 at a time per page
+
+			foreach(ParseObjectKidAccount friendAccount in friendList){
+				Debug.Log("initiating friend");
+				GameObject friendObject = NGUITools.AddChild(grid, friendEntryPrefab);
+				FriendEntryController friendEntryController = friendObject.GetComponent<FriendEntryController>();
+
+				// TODO rename friendObject to friendACcount.ObjectId
+
+				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
+				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
+					// TODO create the pet into hashtable down the road and pass in here v
+					friendEntryController.Populate(friendPetInfo.Name, null);
+				}
+			}
+			RepositionGrid();
 
 
 		}
 		// Error state
 		else{
+			// Check for errorcode first then erromessage. only OtherCause
+
 			internetConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
 			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
 		}
@@ -106,6 +125,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	private void TryInternetConnection(){
 		internetConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
+		Debug.Log("trying connection");
+		SocialManager.Instance.RefreshData();
 	}
 
 	protected override void _OpenUI(){
@@ -116,10 +137,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			NavigationUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
+			HUDUIManager.Instance.HidePanel();
 
 			isActive = true;
 
 			TryInternetConnection();
+			Debug.Log("opening ui");
 		}
 	}
 
@@ -131,6 +154,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
+			HUDUIManager.Instance.ShowPanel();
 
 			isActive = false;
 		}

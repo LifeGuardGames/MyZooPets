@@ -254,29 +254,47 @@ public class SocialManager : Singleton<SocialManager> {
 		bool retVal = false; 
 		if(useDummyData){
 			retVal = useDummyData;
-			List<ParseObjectKidAccount> dummyData = new List<ParseObjectKidAccount>();
-
-			//set up dummy data
-			for(int i=0; i<3; i++){
-				ParseObjectPetInfo petInfo = new ParseObjectPetInfo();
-				petInfo.Name = "dummy";
-
-				ParseObjectKidAccount account = new ParseObjectKidAccount();
-				account.AccountCode = "testing code";
-				account.PetInfo = petInfo;
-
-				dummyData.Add(account);
-			}
-
-			FriendList = dummyData;
-
-			ServerEventArgs args = new ServerEventArgs();
-			args.IsSuccessful = true;
-			
-			if(OnDataRefreshed != null)
-				OnDataRefreshed(this, args);
+			StartCoroutine(BadData());
 		}
 		
 		return retVal;
+	}
+
+	private IEnumerator GoodData(){
+		yield return new WaitForSeconds(2f);
+		List<ParseObjectKidAccount> dummyData = new List<ParseObjectKidAccount>();
+		
+		//set up dummy data
+		for(int i=0; i<3; i++){
+			ParseObjectPetInfo petInfo = new ParseObjectPetInfo();
+			petInfo.Name = "dummy" + i;
+			
+			ParseObjectKidAccount account = new ParseObjectKidAccount();
+			account.AccountCode = "testing code";
+			account.PetInfo = petInfo;
+			
+			dummyData.Add(account);
+		}
+		
+		FriendList = dummyData;
+		
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = true;
+		
+		if(OnDataRefreshed != null)
+			OnDataRefreshed(this, args);
+	}
+
+	private IEnumerator BadData(){
+		yield return new WaitForSeconds(5f);
+
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = false;
+		args.ErrorCode = ParseException.ErrorCode.OtherCause;
+		args.ErrorMessage = "Cannot connect to internet";
+		
+		if(OnDataRefreshed != null)
+			OnDataRefreshed(this, args);
+
 	}
 }

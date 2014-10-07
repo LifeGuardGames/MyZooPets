@@ -4,13 +4,14 @@ using System.Collections;
 public class InternetConnectionDisplay : MonoBehaviour {
 
 	public RotateAroundCenter loadingIconSpin;
+	public GameObject labelTweenParent;
 	public UILocalize labelLocalize;
 	
 	public void Play(string labelLocalizeKey){
 		loadingIconSpin.gameObject.SetActive(true);
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Show();
 		loadingIconSpin.Play();
-		labelLocalize.GetComponent<ScaleTweenToggle>().Show();
+		labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
 		labelLocalize.key = labelLocalizeKey;
 		labelLocalize.Localize();
 	}
@@ -19,7 +20,8 @@ public class InternetConnectionDisplay : MonoBehaviour {
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
 
 		if(isSuccess){
-			labelLocalize.GetComponent<ScaleTweenToggle>().Hide();
+			labelTweenParent.GetComponent<ScaleTweenToggle>().Hide();
+			Debug.Log("success, hiding label");
 		}
 		else{
 			// Dont hide it and show error message

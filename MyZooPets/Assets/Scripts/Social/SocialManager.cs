@@ -21,6 +21,11 @@ public class ServerEventArgs : EventArgs{
 }
 
 public class SocialManager : Singleton<SocialManager> {
+	public class FriendRequest{
+		public string RequestId {get; set;}
+		public string FriendName {get; set;}
+	}
+
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
@@ -36,7 +41,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// <value>The friend list.</value>
 	public List<ParseObjectKidAccount> FriendList {get; set;}
 
-	public List<string> FriendRequets {get; set;}
+	public List<FriendRequest> FriendRequests {get; set;}
 
 	/// <summary>
 	/// Refreshs the data.
@@ -109,7 +114,6 @@ public class SocialManager : Singleton<SocialManager> {
 			return;
 		}
 
-
 		if(!string.IsNullOrEmpty(friendCode)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendCode", friendCode},
@@ -172,9 +176,15 @@ public class SocialManager : Singleton<SocialManager> {
 	/// Gets the friend requests from backend. subscribe to OnFriendRequestRefreshed
 	/// </summary>
 	public void GetFriendRequests(){
+		#region Dummy data
 		if(useDummyData){
+			FriendRequests = new List<FriendRequest>();
 			for(int i=0; i<3; i++){
-				FriendRequets.Add("369 you so fine :)");
+				FriendRequest newRequest = new FriendRequest();
+				newRequest.RequestId = "dummy Id";
+				newRequest.FriendName = "no name";
+
+				FriendRequests.Add(newRequest);
 			}
 
 			ServerEventArgs args = new ServerEventArgs();
@@ -182,27 +192,91 @@ public class SocialManager : Singleton<SocialManager> {
 			
 			if(OnFriendRequestRefreshed != null)
 				OnFriendRequestRefreshed(this, args);
+
 			return;
 		}
+		#endregion
+
+		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriendRequests", null)
+			.ContinueWith(t => {
+				ServerEventArgs args = new ServerEventArgs();
+
+				if(t.IsFaulted || t.IsCanceled){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+
+					args.IsSuccessful = false;
+					args.ErrorCode = e.Code;
+					args.ErrorMessage = e.Message;
+				}
+				else{
+					IDictionary<string, object> result = t.Result;
+					// Hack, check for errors
+					object code;
+					
+					if(result.TryGetValue("code", out code)){
+						Debug.Log("Error Code: " + code);
+						int parseCode = Convert.ToInt32(code);
+						
+						args.IsSuccessful = false;
+						args.ErrorCode = (ParseException.ErrorCode) parseCode;
+						args.ErrorMessage = (string) result["message"];
+					} 
+					else{
+						var friendRequests = (IEnumerable) result["success"];
+						FriendRequests = new List<FriendRequest>();
+
+						foreach(ParseObject friendRequest in friendRequests){
+							string requestId = friendRequest.ObjectId;
+							ParseObject fromKidAccount = (ParseObject) friendRequest["from"];
+							ParseObjectPetInfo requestPetInfo = (ParseObjectPetInfo) fromKidAccount["petInfo"];
+	
+							FriendRequest newRequest = new FriendRequest();
+							newRequest.RequestId = requestId;
+							newRequest.FriendName = requestPetInfo.Name;
+	
+							FriendRequests.Add(newRequest);
+						}
+
+						args.IsSuccessful = true;
+					}
+				}
+
+				Loom.DispatchToMainThread(() => {
+					if(OnFriendRequestRefreshed != null)
+						OnFriendRequestRefreshed(this, args);
+				});
+			});	
 	}
 
 	/// <summary>
-	/// Accepts the friend request. You need to subscribe to OnFriendRequestAccepted
-	/// to know when this function is finish.
+	/// Accepts the friend request. Subscribe to OnFriendRequestRefresh for callback 
 	/// </summary>
 	/// <param name="requestId">Request identifier.</param>
 	public void AcceptFriendRequest(string requestId){
+		FriendRequestAction("acceptFriendRequest", requestId);
+	}
+
+	/// <summary>
+	/// Rejects the friend request. Subscribe to OnFriendRequestRefresh for callback
+	/// </summary>
+	/// <param name="requestId">Request identifier.</param>
+	public void RejectFriendRequest(string requestId){
+		FriendRequestAction("rejectFriendRequest", requestId);
+	}
+
+	private void FriendRequestAction(string cloudFunctionName, string requestId){
 		if(useDummyData){
-			StartCoroutine(WaitForAcceptFriendRequest());
+			StartCoroutine(WaitForFriendRequest());
 			return;
 		}
 
-		if(!string.IsNullOrEmpty(requestId)){
+		if(!string.IsNullOrEmpty(cloudFunctionName)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"requestId", requestId},
 			};
 			
-			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("acceptFriendRequest", paramDict)
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>(cloudFunctionName, paramDict)
 				.ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
 					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
@@ -214,8 +288,7 @@ public class SocialManager : Singleton<SocialManager> {
 					args.ErrorMessage = e.Message;
 					
 					Loom.DispatchToMainThread(() => {
-						if(OnFriendRequestAccepted != null)
-							OnFriendRequestAccepted(this, args);
+						GetFriendRequests();
 					});
 				} 
 				else{
@@ -231,16 +304,16 @@ public class SocialManager : Singleton<SocialManager> {
 						args.IsSuccessful = false;
 						args.ErrorCode = (ParseException.ErrorCode) parseCode;
 						args.ErrorMessage = (string) result["message"];
+						
+						Loom.DispatchToMainThread(() => {
+							if(OnFriendRequestRefreshed != null)
+								OnFriendRequestRefreshed(this, args);
+						});
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
-						args.IsSuccessful = true;
+						GetFriendRequests();
 					}
-					
-					Loom.DispatchToMainThread(() => {
-						if(OnFriendRequestAccepted != null)
-							OnFriendRequestAccepted(this, args);
-					});
 				}
 			});
 		}
@@ -362,14 +435,14 @@ public class SocialManager : Singleton<SocialManager> {
 			OnFriendCodeAdded(this, args);
 	}
 
-	private IEnumerator WaitForAcceptFriendRequest(){
+	private IEnumerator WaitForFriendRequest(){
 		yield return new WaitForSeconds(2f);
 
 		ServerEventArgs args = new ServerEventArgs();
 		args.IsSuccessful = true;
 
-		if(OnFriendRequestAccepted != null)
-			OnFriendRequestAccepted(this, args);
+		if(OnFriendRequestRefreshed != null)
+			OnFriendRequestRefreshed(this, args);
 	}
 	#endregion
 }

@@ -14,7 +14,7 @@ public class ParseTestScript : MonoBehaviour {
 	void Start(){
 		SocialManager.OnDataRefreshed += EventListener;
 		SocialManager.OnFriendCodeAdded += EventListener;
-		SocialManager.OnFriendRequestAccepted += EventListener;
+		SocialManager.OnFriendRequestRefreshed += EventListener;
 		ParentPortalManager.OnDataRefreshed += EventListener;
 
 	}
@@ -47,22 +47,32 @@ public class ParseTestScript : MonoBehaviour {
 		#region SocialManager Test
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("SocialManager Test");
+
+			GUILayout.BeginVertical();
 			if(GUILayout.Button("Get friend list")){
 				SocialManager.Instance.RefreshData();
-			}
-
-			friendCode = GUILayout.TextField(friendCode, GUILayout.MinWidth(60));
-			if(GUILayout.Button("send friend request")){
-			SocialManager.Instance.SendFriendRequest(friendCode);
-			}
-			requestId = GUILayout.TextField(requestId, GUILayout.MinWidth(60));
-			if(GUILayout.Button("Accept friend request")){
-				SocialManager.Instance.AcceptFriendRequest(requestId);
 			}
 			friendObjectId = GUILayout.TextField(friendObjectId, GUILayout.MinWidth(60));
 			if(GUILayout.Button("Remove friend")){
 				SocialManager.Instance.RemoveFriend(friendObjectId);
 			}
+			GUILayout.EndVertical();
+
+			GUILayout.BeginVertical();
+			friendCode = GUILayout.TextField(friendCode, GUILayout.MinWidth(60));
+			if(GUILayout.Button("Send friend request")){
+				SocialManager.Instance.SendFriendRequest(friendCode);
+			}
+			requestId = GUILayout.TextField(requestId, GUILayout.MinWidth(60));
+			if(GUILayout.Button("Accept friend request")){
+				SocialManager.Instance.AcceptFriendRequest(requestId);
+			}
+			if(GUILayout.Button("Get friend requests")){
+				SocialManager.Instance.GetFriendRequests();
+			}
+			
+			GUILayout.EndVertical()	;
+
 			GUILayout.EndHorizontal();
 		#endregion
 
@@ -137,7 +147,5 @@ public class ParseTestScript : MonoBehaviour {
 			Debug.Log("Error code: " + args.ErrorCode);
 			Debug.Log("Error message: " + args.ErrorMessage);
 		}
-			
-
 	}
 }

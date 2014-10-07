@@ -17,7 +17,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject buttonCode;
 	public GameObject buttonAdd;
 	public GameObject buttonRequest;
-	public GameObject giftGroup;
+	public GameObject noFriendsParent;
+//	public GameObject giftGroup;
 
 	public TweenToggleDemux codeInputTween;
 	public GameObject codeInputTitle;
@@ -37,16 +38,17 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	protected override void _Start(){
-		SocialManager.OnDataRefreshed += FinishConnectionUIOpen;
+		SocialManager.OnDataRefreshed += FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded += FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed += FinishConnectionRequestRefresh;
 
+		noFriendsParent.SetActive(false);
 		ToggleCodeButton(false);
 		RepositionGridBorders();
 	}
 
 	void OnDestroy(){
-		SocialManager.OnDataRefreshed -= FinishConnectionUIOpen;
+		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded -= FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed -= FinishConnectionRequestRefresh;
 	}
@@ -80,11 +82,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
-//	private void RadialFill(float fraction){
-//		radialFillRewardSprite.fillAmount = fraction;
-//	}
-
-	public void FinishConnectionUIOpen(object sender, ServerEventArgs args){
+	public void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
 		if(args.IsSuccessful){
 			Debug.Log("Connection Success");
 			// Hide the connection display
@@ -93,7 +91,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonAdd.SetActive(true);
 			buttonRequest.SetActive(true);
 			buttonCode.SetActive(true);
-			giftGroup.SetActive(true);
+//			giftGroup.SetActive(true);
 
 			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
 			foreach(ParseObjectKidAccount friendAccount in friendList){
@@ -109,7 +107,16 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 					friendEntryController.Initilize(friendPetInfo.Name, null);
 				}
 			}
+
+			// Reposition the grid
+//			GameObjectUtils.ResetLocalPosition(friendArea);
+//			GameObjectUtils.ResetLocalPosition(grid);
 			grid.GetComponent<UIGrid>().Reposition();
+
+			// No friends! show no friend message
+			if(friendList.Count() == 0){
+				noFriendsParent.SetActive(true);
+			}
 		}
 		else{
 			// Check for errorcode first then erromessage. only OtherCause
@@ -122,10 +129,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		if(!isActive){
 			GetComponent<TweenToggleDemux>().Show();
 
+			ToggleCodeButton(false);
 			buttonAdd.SetActive(false);
 			buttonRequest.SetActive(false);
 			buttonCode.SetActive(false);
-			giftGroup.SetActive(false);
+			noFriendsParent.SetActive(false);
+//			giftGroup.SetActive(false);
 
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -154,14 +163,23 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			HUDUIManager.Instance.ShowPanel();
 
 			isActive = false;
+
+			// Destroy all children
+			foreach(Transform child in grid.transform) {
+				Destroy(child.gameObject);
+			}
 		}
 	}
 
+	////////////////////////////////////////////////////////
 	//////////////// Code Input ////////////////////////////
 
 	public void OpenCodeInputWindow(){
 		if(isActive){
 			codeInputTween.Show();
+			codeInputTitle.SetActive(true);
+			codeInputInput.gameObject.SetActive(true);
+			codeInputInput.text = "";
 		}
 	}
 
@@ -212,6 +230,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
+	/////////////////////////////////////////////////////////
 	//////////////// Friend Requests ////////////////////////
 
 	public void OpenRequestWindow(){
@@ -227,38 +246,16 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void RequestAccept(string id){
-		// TODO
+		// TODO initiate server call
 	}
 
 	public void RequestDecline(string id){
-		// TODO
+		// TODO initiate server call
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
-		if(args.IsSuccessful){
-			Debug.Log("Request List Connection Success");
-			// Hide the connection display
-			requestConnectionDisplay.Stop(true, string.Empty);
-
-			// TODO Refresh list here
-//			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
-//			
-//			foreach(ParseObjectKidAccount friendAccount in friendList){
-//				Debug.Log("initiating request");
-//				GameObject requestObject = NGUITools.AddChild(grid, requestGrid);
-//				RequestEntryController requestEntryController = requestObject.GetComponent<RequestEntryController>();
-//				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
-//				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
-//					// TODO create the pet into hashtable down the road and pass in here v
-//					requestEntryController.Initialize(friendPetInfo.Name);
-//				}
-//			}
-			requestGrid.Reposition();
-		}
-		else{
-			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
-			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
-		}
+		// Refresh the UI with the same arguments as a openUI refresh
+		FinishConnectionUIRefresh(obj, args);
 	}
 
 //	void OnGUI(){

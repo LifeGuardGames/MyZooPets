@@ -29,6 +29,7 @@ public class InternetConnectionDisplay : MonoBehaviour {
 		}
 		else{
 			// Dont hide it and show error message
+			labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
 			labelLocalize.GetComponent<UILabel>().color = errorTextColor;
 			labelLocalize.key = labelLocalizeKey;
 			labelLocalize.Localize();

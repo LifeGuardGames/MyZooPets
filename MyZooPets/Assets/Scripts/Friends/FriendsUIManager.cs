@@ -17,6 +17,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject buttonCode;
 
 	public TweenToggleDemux codeInputTween;
+	public GameObject codeInputTitle;
+	public UIInput codeInputInput;
 	public InternetConnectionDisplay codeInputConnectionDisplay;
 	public UILocalize codeInputErrorLabelLocalize;
 
@@ -31,7 +33,9 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	protected override void _Start(){
-		SocialManager.OnDataRefreshed += FinishInternetConnection;
+		SocialManager.OnDataRefreshed += FinishInternetConnectionUIOpen;
+		SocialManager.OnFriendCodeAdded += FinishInternetConnectionFriendCodeAdd;
+
 
 		RepositionGrid();
 
@@ -39,7 +43,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	void OnDestroy(){
-		SocialManager.OnDataRefreshed -= FinishInternetConnection;
+		SocialManager.OnDataRefreshed -= FinishInternetConnectionUIOpen;
 	}
 
 	private void RepositionGrid(){
@@ -88,7 +92,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 //		radialFillRewardSprite.fillAmount = fraction;
 //	}
 
-	public void FinishInternetConnection(object sender, ServerEventArgs args){
+	public void FinishInternetConnectionUIOpen(object sender, ServerEventArgs args){
 		// Valid response
 		if(args.IsSuccessful){
 			Debug.Log("Connection Success");
@@ -174,12 +178,35 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
-	public void CodeInputShowConnectionDisplay(){
-//		codeInputConnectionDisplay.Play();
+	public void CodeInputSubmitButton(){
+		codeInputTitle.SetActive(false);
+		codeInputInput.gameObject.SetActive(false);
+		string input = codeInputInput.text;
+
+		SocialManager.Instance.SendFriendRequest(input);
+
+		codeInputConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 	}
 
-	public void CodeInputHideConnectionDisplay(){
-//		codeInputConnectionDisplay.Stop();
+	public void FinishInternetConnectionFriendCodeAdd(object obj, ServerEventArgs args){
+		// Valid response
+		if(args.IsSuccessful){
+			Debug.Log("friend add Connection Success");
+			// Hide the connection display
+			codeInputConnectionDisplay.Stop(true, string.Empty);
+
+			CloseCodeInputWindow();
+
+		}
+		// Error state
+		else{
+			// TODO add custom error handling
+			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
+			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+
+			codeInputTitle.SetActive(true);
+			codeInputInput.gameObject.SetActive(true);
+		}
 	}
 
 	public void ShowErrorMessage(string errorMessageKey){

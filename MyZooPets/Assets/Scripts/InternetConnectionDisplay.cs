@@ -17,6 +17,7 @@ public class InternetConnectionDisplay : MonoBehaviour {
 	}
 
 	public void Stop(bool isSuccess, string labelLocalizeKey){
+		Debug.Log("Stopping spinner");
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
 
 		if(isSuccess){

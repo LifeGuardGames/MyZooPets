@@ -22,6 +22,7 @@ public class ServerEventArgs : EventArgs{
 
 public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
+	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 	public static EventHandler<ServerEventArgs> OnFriendRequestAccepted;
 
@@ -34,6 +35,8 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <value>The friend list.</value>
 	public List<ParseObjectKidAccount> FriendList {get; set;}
+
+	public List<string> FriendRequets {get; set;}
 
 	/// <summary>
 	/// Refreshs the data.
@@ -148,8 +151,28 @@ public class SocialManager : Singleton<SocialManager> {
 				}
 			});
 		}
+		else{
+			ServerEventArgs args = new ServerEventArgs();
+			args.IsSuccessful = false;
+			args.ErrorCode = ParseException.ErrorCode.ObjectNotFound;
+			args.ErrorMessage = "friend code is required";
+
+			if(OnFriendCodeAdded != null)
+				OnFriendCodeAdded(this, args);
+		}
 	}
 
+	public void GetFriendRequests(){
+		if(useDummyData){
+
+		}
+	}
+
+	/// <summary>
+	/// Accepts the friend request. You need to subscribe to OnFriendRequestAccepted
+	/// to know when this function is finish.
+	/// </summary>
+	/// <param name="requestId">Request identifier.</param>
 	public void AcceptFriendRequest(string requestId){
 		if(!string.IsNullOrEmpty(requestId)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
@@ -200,6 +223,11 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 	}
 
+	/// <summary>
+	/// Removes the friend. Subscribe to OnDataRefreshed to know when the remove is
+	/// complete.
+	/// </summary>
+	/// <param name="friendObjectId">Friend object identifier.</param>
 	public void RemoveFriend(string friendObjectId){
 		if(!string.IsNullOrEmpty(friendObjectId)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
@@ -250,11 +278,12 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 	}
 
+	#region Dummy Data
 	private bool IsUsingDummyData(){
 		bool retVal = false; 
 		if(useDummyData){
 			retVal = useDummyData;
-			StartCoroutine(BadData());
+			StartCoroutine(GoodData());
 		}
 		
 		return retVal;
@@ -297,4 +326,7 @@ public class SocialManager : Singleton<SocialManager> {
 			OnDataRefreshed(this, args);
 
 	}
+
+
+	#endregion
 }

@@ -104,6 +104,12 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="friendCode">Friend code.</param>
 	public void SendFriendRequest(string friendCode){
+		if(useDummyData){
+			StartCoroutine(WaitForSendFriendRequest());
+			return;
+		}
+
+
 		if(!string.IsNullOrEmpty(friendCode)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendCode", friendCode},
@@ -162,9 +168,21 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 	}
 
+	/// <summary>
+	/// Gets the friend requests from backend. subscribe to OnFriendRequestRefreshed
+	/// </summary>
 	public void GetFriendRequests(){
 		if(useDummyData){
+			for(int i=0; i<3; i++){
+				FriendRequets.Add("369 you so fine :)");
+			}
 
+			ServerEventArgs args = new ServerEventArgs();
+			args.IsSuccessful = true;
+			
+			if(OnFriendRequestRefreshed != null)
+				OnFriendRequestRefreshed(this, args);
+			return;
 		}
 	}
 
@@ -174,6 +192,11 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="requestId">Request identifier.</param>
 	public void AcceptFriendRequest(string requestId){
+		if(useDummyData){
+			StartCoroutine(WaitForAcceptFriendRequest());
+			return;
+		}
+
 		if(!string.IsNullOrEmpty(requestId)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"requestId", requestId},
@@ -229,6 +252,8 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="friendObjectId">Friend object identifier.</param>
 	public void RemoveFriend(string friendObjectId){
+		if(IsUsingDummyData()) return;
+
 		if(!string.IsNullOrEmpty(friendObjectId)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendObjectId", friendObjectId},
@@ -283,13 +308,13 @@ public class SocialManager : Singleton<SocialManager> {
 		bool retVal = false; 
 		if(useDummyData){
 			retVal = useDummyData;
-			StartCoroutine(GoodData());
+			StartCoroutine(GoodFriendData());
 		}
 		
 		return retVal;
 	}
 
-	private IEnumerator GoodData(){
+	private IEnumerator GoodFriendData(){
 		yield return new WaitForSeconds(2f);
 		List<ParseObjectKidAccount> dummyData = new List<ParseObjectKidAccount>();
 		
@@ -314,7 +339,7 @@ public class SocialManager : Singleton<SocialManager> {
 			OnDataRefreshed(this, args);
 	}
 
-	private IEnumerator BadData(){
+	private IEnumerator BadFriendData(){
 		yield return new WaitForSeconds(5f);
 
 		ServerEventArgs args = new ServerEventArgs();
@@ -327,6 +352,24 @@ public class SocialManager : Singleton<SocialManager> {
 
 	}
 
+	private IEnumerator WaitForSendFriendRequest(){
+		yield return new WaitForSeconds(2f);
+		
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = true;
 
+		if(OnFriendCodeAdded != null)
+			OnFriendCodeAdded(this, args);
+	}
+
+	private IEnumerator WaitForAcceptFriendRequest(){
+		yield return new WaitForSeconds(2f);
+
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = true;
+
+		if(OnFriendRequestAccepted != null)
+			OnFriendRequestAccepted(this, args);
+	}
 	#endregion
 }

@@ -7,7 +7,7 @@ public class FriendEntryController : MonoBehaviour {
 	public UILabel friendLabel;
 
 
-	public void Populate(string friendName, Hashtable friendPetInfo){
+	public void Initilize(string friendName, Hashtable friendPetInfo){
 		friendLabel.text = friendName;
 	}
 }

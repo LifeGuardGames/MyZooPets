@@ -6,12 +6,15 @@ public class InternetConnectionDisplay : MonoBehaviour {
 	public RotateAroundCenter loadingIconSpin;
 	public GameObject labelTweenParent;
 	public UILocalize labelLocalize;
+	public Color normalTextColor;
+	public Color errorTextColor;
 	
 	public void Play(string labelLocalizeKey){
 		loadingIconSpin.gameObject.SetActive(true);
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Show();
 		loadingIconSpin.Play();
 		labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
+		labelLocalize.GetComponent<UILabel>().color = normalTextColor;
 		labelLocalize.key = labelLocalizeKey;
 		labelLocalize.Localize();
 	}
@@ -26,6 +29,7 @@ public class InternetConnectionDisplay : MonoBehaviour {
 		}
 		else{
 			// Dont hide it and show error message
+			labelLocalize.GetComponent<UILabel>().color = errorTextColor;
 			labelLocalize.key = labelLocalizeKey;
 			labelLocalize.Localize();
 		}

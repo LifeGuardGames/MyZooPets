@@ -13,7 +13,7 @@ public class GiftGroupController : MonoBehaviour {
 	private int giftCountAux;
 
 	private const string FullSpriteName = "friendsStarFull";
-	private const string EmptySpriteName = "friendsStarEmpty";
+	private const string EmptySpriteName = "friendsStarBlank";
 
 	public void Refresh(int starCount, int giftCount){
 		if(starCount == 0 && giftCount != 0){
@@ -62,9 +62,6 @@ public class GiftGroupController : MonoBehaviour {
 
 		giftCountAux = giftCount;
 
-		// Reward Gems all together in one go
-		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCount));
-
 		giftAnimation.Play();
 	}
 
@@ -75,10 +72,13 @@ public class GiftGroupController : MonoBehaviour {
 	}
 
 	public void SpawnFloatyEvent(){
-		Hashtable option = new Hashtable();
-		option.Add("parent", floatyParent);
-		option.Add("spriteGems", "iconGems");
-		option.Add("deltaGems", giftCountAux);
-		FloatyUtil.SpawnFloatyStats(option);
+		// Reward Gems all together in one go
+		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCount));
+		
+//		Hashtable option = new Hashtable();
+//		option.Add("parent", floatyParent);
+//		option.Add("spriteGems", "iconGems");
+//		option.Add("deltaGems", giftCountAux);
+//		FloatyUtil.SpawnFloatyStats(option);
 	}
 }

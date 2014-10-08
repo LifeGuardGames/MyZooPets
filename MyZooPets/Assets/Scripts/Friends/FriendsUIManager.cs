@@ -6,9 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 public class FriendsUIManager : SingletonUI<FriendsUIManager> {
-
-	public UISprite radialFillRewardSprite;
-
 	public InternetConnectionDisplay internetConnectionDisplay;
 	public GameObject friendEntryPrefab;
 	public GameObject friendArea;
@@ -18,7 +15,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject buttonAdd;
 	public GameObject buttonRequest;
 	public GameObject noFriendsParent;
-//	public GameObject giftGroup;
+	public GiftGroupController giftGroupController;
 
 	public TweenToggleDemux codeInputTween;
 	public GameObject codeInputTitle;
@@ -63,7 +60,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
 		
 		// Position the grid origin to the left of the screen
-//		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(0f, 0f, 0f);
 	}
 
@@ -91,7 +87,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonAdd.SetActive(true);
 			buttonRequest.SetActive(true);
 			buttonCode.SetActive(true);
-//			giftGroup.SetActive(true);
+			giftGroupController.gameObject.SetActive(true);
 
 			foreach(Transform child in grid.transform){
 				child.gameObject.SetActive(false);
@@ -116,8 +112,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			hiddenCode.transform.FindChild("LabelCode").GetComponent<UILabel>().text = SocialManager.Instance.AccountCode;
 
 			// Reposition the grid
-//			GameObjectUtils.ResetLocalPosition(friendArea);
-//			GameObjectUtils.ResetLocalPosition(grid);
 			grid.GetComponent<UIGrid>().Reposition();
 
 			// No friends! show no friend message
@@ -126,10 +120,22 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			}
 		}
 		else{
-			// Check for errorcode first then erromessage. only OtherCause
-			internetConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
-			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			// Custom errors that we handle
+			if(args.ErrorCode == ParseException.ErrorCode.ConnectionFailed){
+				// Pass the error message directly as localize key
+				codeInputConnectionDisplay.Stop(false, args.ErrorMessage);
+				Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			}
+			// Untracked errors, show generic error
+			else{
+				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+				Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			}
 		}
+	}
+
+	public void RefreshGiftReward(){
+
 	}
 
 	#region Protected Overrides
@@ -142,7 +148,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonRequest.SetActive(false);
 			buttonCode.SetActive(false);
 			noFriendsParent.SetActive(false);
-//			giftGroup.SetActive(false);
+			giftGroupController.gameObject.SetActive(false);
 
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -179,7 +185,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 	#endregion
-
 
 	#region Code Input
 	public void OpenCodeInputWindow(){
@@ -220,34 +225,20 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			CloseCodeInputWindow();
 		}
 		else{
-			string errorMessage = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
-			switch(args.ErrorCode){
-			case ParseException.ErrorCode.OtherCause:
-				break;
-			case ParseException.ErrorCode.ObjectNotFound:
-				errorMessage = "FRIENDS_ADD_FRIEND_ERROR_INVALID";
-				break;
-			case ParseException.ErrorCode.ConnectionFailed:
-				errorMessage = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
-				break;
-			case ParseException.ErrorCode.DuplicateValue:
-//				errorMessage = ""
-			case ParseException.ErrorCode.InternalServerError:
-				break;
-			default:
-				break;
+			// Custom errors that we handle
+			if(args.ErrorCode == ParseException.ErrorCode.ObjectNotFound ||
+			   args.ErrorCode == ParseException.ErrorCode.ConnectionFailed ||
+			   args.ErrorCode == ParseException.ErrorCode.DuplicateValue ||
+			   args.ErrorCode == ParseException.ErrorCode.InternalServerError){
+				// Pass the error message directly as localize key
+				codeInputConnectionDisplay.Stop(false, args.ErrorMessage);
+				Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
 			}
-
-//			FRIENDS_ADD_FRIEND_ERROR_EMPTY_INPUT = No friend code entered!
-//				FRIENDS_ADD_FRIEND_ERROR_ALREADY_HAVE_FRIEND = You already have this friend!
-//					FRIENDS_ADD_FRIEND_ERROR_INVALID = Double check your friend code!
-//					FRIENDS_ADD_FRIEND_ERROR_ALREADY_REQUESTED = Friend invite already sent!
-//					FRIENDS_ADD_FRIEND_ERROR_OWN_CODE = Can't add your own code!
-	
-			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
-
-			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
-
+			// Untracked errors, show generic error
+			else{
+				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+				Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			}
 			codeInputTitle.SetActive(true);
 			codeInputInput.gameObject.SetActive(true);
 		}
@@ -258,6 +249,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void OpenRequestWindow(){
 		if(isActive){
 			requestTween.Show();
+			requestConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 			SocialManager.Instance.GetFriendRequests();
 		}
 	}
@@ -277,10 +269,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
-		// Refresh the UI with the same arguments as a openUI refresh
-//		FinishConnectionUIRefresh(obj, args);
-
 		if(args.IsSuccessful){
+			// Hide the connection display
+			codeInputConnectionDisplay.Stop(true, string.Empty);
+
 			List<SocialManager.FriendRequest> friendRequests = SocialManager.Instance.FriendRequests;
 			Debug.Log(friendRequests.Count());
 			foreach(Transform child in requestGrid.transform){
@@ -297,17 +289,18 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			requestGrid.Reposition();
 		}
 		else{
-			switch(args.ErrorCode){
-			case ParseException.ErrorCode.OtherCause:
-				break;
-			case ParseException.ErrorCode.ObjectNotFound:
-				break;
-			case ParseException.ErrorCode.ConnectionFailed:
-				break;
-			case ParseException.ErrorCode.InternalServerError:
-				break;
-			default:
-				break;
+			// Custom errors that we handle
+			if(args.ErrorCode == ParseException.ErrorCode.ObjectNotFound ||
+			   args.ErrorCode == ParseException.ErrorCode.ConnectionFailed ||
+			   args.ErrorCode == ParseException.ErrorCode.InternalServerError){
+				// Pass the error message directly as localize key
+				codeInputConnectionDisplay.Stop(false, args.ErrorMessage);
+				Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			}
+			// Untracked errors, show generic error
+			else{
+				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+				Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
 			}
 		}
 	}

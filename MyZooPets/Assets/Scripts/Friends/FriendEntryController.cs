@@ -5,7 +5,7 @@ public class FriendEntryController : MonoBehaviour {
 
 	public UISprite friendSprite;
 	public UILabel friendLabel;
-	private LgButtonMessage deleteButtonMessage;
+	public LgButtonMessage deleteButtonMessage;
 
 	public void Initilize(string friendName, Hashtable friendPetInfo){
 		friendLabel.text = friendName;

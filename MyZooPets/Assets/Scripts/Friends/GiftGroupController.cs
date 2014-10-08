@@ -65,6 +65,8 @@ public class GiftGroupController : MonoBehaviour {
 		// Reward Gems all together in one go
 		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCount));
 
+		SocialManager.Instance.ClaimFriendReferralReward();
+
 		giftAnimation.Play();
 	}
 
@@ -75,10 +77,10 @@ public class GiftGroupController : MonoBehaviour {
 	}
 
 	public void SpawnFloatyEvent(){
-		Hashtable option = new Hashtable();
-		option.Add("parent", floatyParent);
-		option.Add("spriteGems", "iconGems");
-		option.Add("deltaGems", giftCountAux);
-		FloatyUtil.SpawnFloatyStats(option);
+//		Hashtable option = new Hashtable();
+//		option.Add("parent", floatyParent);
+//		option.Add("spriteGems", "iconGems");
+//		option.Add("deltaGems", giftCountAux.ToString());
+//		FloatyUtil.SpawnFloatyStats(option);
 	}
 }

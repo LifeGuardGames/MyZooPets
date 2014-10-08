@@ -83,6 +83,7 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					ParseObjectKidAccount kidAccount = (ParseObjectKidAccount) result["success"];
 					AccountCode = kidAccount.AccountCode;
+					UserSocial = kidAccount.Social;
 
 					if(kidAccount.Social.FriendList != null){
 						Debug.Log(kidAccount.Social.FriendList.Count);
@@ -108,7 +109,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// <param name="friendCode">Friend code.</param>
 	public void SendFriendRequest(string friendCode){
 		if(useDummyData){
-			StartCoroutine(WaitForSendFriendRequest());
+			StartCoroutine(WaitForBadFriendRequest());
 			return;
 		}
 
@@ -185,11 +186,12 @@ public class SocialManager : Singleton<SocialManager> {
 				FriendRequests.Add(newRequest);
 			}
 
-			ServerEventArgs args = new ServerEventArgs();
-			args.IsSuccessful = true;
-			
-			if(OnFriendRequestRefreshed != null)
-				OnFriendRequestRefreshed(this, args);
+			StartCoroutine(WaitForFriendRequest());
+//			ServerEventArgs args = new ServerEventArgs();
+//			args.IsSuccessful = true;
+//			
+//			if(OnFriendRequestRefreshed != null)
+//				OnFriendRequestRefreshed(this, args);
 
 			return;
 		}
@@ -326,7 +328,10 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="friendObjectId">Friend object identifier.</param>
 	public void RemoveFriend(string friendObjectId){
-		if(IsUsingDummyData()) return;
+		if(useDummyData){
+			StartCoroutine(BadFriendData());
+			return;
+		}
 
 		if(!string.IsNullOrEmpty(friendObjectId)){
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
@@ -449,8 +454,8 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 
 		ParseObjectSocial social = new ParseObjectSocial();
-		social.NumOfStars = 3;
-		social.RewardCount = 0;
+		social.NumOfStars = 0;
+		social.RewardCount = 1;
 
 		UserSocial = social;
 		FriendList = dummyData;
@@ -482,6 +487,18 @@ public class SocialManager : Singleton<SocialManager> {
 		ServerEventArgs args = new ServerEventArgs();
 		args.IsSuccessful = true;
 
+		if(OnFriendCodeAdded != null)
+			OnFriendCodeAdded(this, args);
+	}
+
+	private IEnumerator WaitForBadFriendRequest(){
+		yield return new WaitForSeconds(2f);
+		
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = false;
+		args.ErrorCode = ParseException.ErrorCode.ObjectNotFound;
+		args.ErrorMessage = "objecct now found";
+		
 		if(OnFriendCodeAdded != null)
 			OnFriendCodeAdded(this, args);
 	}

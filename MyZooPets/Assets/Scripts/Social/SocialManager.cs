@@ -335,7 +335,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// <param name="friendObjectId">Friend object identifier.</param>
 	public void RemoveFriend(string friendObjectId){
 		if(useDummyData){
-			StartCoroutine(BadFriendData());
+			StartCoroutine(RemoveFriendGood());
 			return;
 		}
 
@@ -464,6 +464,7 @@ public class SocialManager : Singleton<SocialManager> {
 			ParseObjectKidAccount account = new ParseObjectKidAccount();
 			account.AccountCode = "testing code";
 			account.PetInfo = petInfo;
+			account.ObjectId = "testing12" + i;
 			
 			dummyData.Add(account);
 		}
@@ -494,6 +495,19 @@ public class SocialManager : Singleton<SocialManager> {
 		if(OnDataRefreshed != null)
 			OnDataRefreshed(this, args);
 
+	}
+
+	private IEnumerator RemoveFriendGood(){
+		yield return new WaitForSeconds(2f);
+		
+		ServerEventArgs args = new ServerEventArgs();
+		args.IsSuccessful = true;
+
+		Debug.Log("firing remove friend");
+		if(OnFriendRemoved != null)
+			OnFriendRemoved(this, args);
+
+		RefreshData();
 	}
 
 	private IEnumerator WaitForSendFriendRequest(){

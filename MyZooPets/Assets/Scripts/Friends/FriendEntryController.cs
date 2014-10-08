@@ -7,7 +7,12 @@ public class FriendEntryController : MonoBehaviour {
 	public UILabel friendLabel;
 	public LgButtonMessage deleteButtonMessage;
 
-	public void Initilize(string friendName, Hashtable friendPetInfo){
+	public string FriendName {get; set;}
+	public string FriendID {get; set;}
+
+	public void Initilize(string friendName, string friendID, Hashtable friendPetInfo){
+		FriendName = friendName;
+		FriendID = friendID;
 		friendLabel.text = friendName;
 
 		// Assign delete button properties

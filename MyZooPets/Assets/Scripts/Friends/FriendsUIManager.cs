@@ -155,12 +155,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				GameObject friendObject = NGUITools.AddChild(grid, friendEntryPrefab);
 				FriendEntryController friendEntryController = friendObject.GetComponent<FriendEntryController>();
 
-				// TODO rename friendObject to friendACcount.ObjectId
-
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					// TODO create the pet into hashtable down the road and pass in here v
-					friendEntryController.Initilize(friendPetInfo.Name, null);
+					friendEntryController.Initilize(friendPetInfo.Name, friendAccount.ObjectId, null);
 				}
 			}
 
@@ -201,11 +199,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		if(isActive){
 			// Assigning another event listener to base dataRefresh
 			// We want to refresh base along with handling popup connection display
-			SocialManager.OnDataRefreshed += FinishConnectionDeleteFriendDone;
+			SocialManager.OnFriendRemoved += FinishConnectionDeleteFriendDone;
 
-			string deleteUserID = sourceObject.transform.parent.name;
+			string deleteUserID = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendID;
+			Debug.Log("delete user:" + deleteUserID);
 			deleteUserIDAux = deleteUserID;	// Cache this
-			deleteUserLabel.text = deleteUserID;
+			deleteUserLabel.text = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendName;
 			deleteFriendTween.Show();
 			labelParent.SetActive(true);
 		}
@@ -214,7 +213,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void CloseDeleteFriendWindow(){
 		if(isActive){
 			// Unassigning temporary listener
-			SocialManager.OnDataRefreshed -= FinishConnectionDeleteFriendDone;
+			SocialManager.OnFriendRemoved -= FinishConnectionDeleteFriendDone;
 
 			deleteFriendTween.Hide();
 			deleteUserIDAux = string.Empty;	// Clear cache
@@ -226,9 +225,13 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		Debug.Log("deleting " + deleteUserIDAux);
 		if(!string.IsNullOrEmpty(deleteUserIDAux)){
 			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
+
+			labelParent.SetActive(false);
+			deleteFriendConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 		}
-		labelParent.SetActive(false);
-		deleteFriendConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
+		else{
+			Debug.LogError("FriendId can't be empty");
+		}
 	}
 
 	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){

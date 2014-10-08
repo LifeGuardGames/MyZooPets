@@ -17,6 +17,11 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject noFriendsParent;
 	public GiftGroupController giftGroupController;
 
+	public TweenToggleDemux deleteFriendTween; 
+	public InternetConnectionDisplay deleteFriendConnectionDisplay;
+	public UILabel deleteUserLabel;
+	private string deleteUserIDAux = string.Empty;
+
 	public TweenToggleDemux codeInputTween;
 	public GameObject codeInputTitle;
 	public UIInput codeInputInput;
@@ -34,6 +39,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		eModeType = UIModeTypes.Friends;
 	}
 
+	#region Protected Overrides
 	protected override void _Start(){
 		SocialManager.OnDataRefreshed += FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded += FinishConnectionFriendCodeAdd;
@@ -43,6 +49,53 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		ToggleCodeButton(false);
 		RepositionGridBorders();
 	}
+
+	protected override void _OpenUI(){
+		if(!isActive){
+			GetComponent<TweenToggleDemux>().Show();
+			
+			ToggleCodeButton(false);
+			buttonAdd.SetActive(false);
+			buttonRequest.SetActive(false);
+			buttonCode.SetActive(false);
+			noFriendsParent.SetActive(false);
+			giftGroupController.gameObject.SetActive(false);
+			
+			// Hide other UI objects
+			NavigationUIManager.Instance.HidePanel();
+			InventoryUIManager.Instance.HidePanel();
+			RoomArrowsUIManager.Instance.HidePanel();
+			HUDUIManager.Instance.HidePanel();
+			isActive = true;
+			
+			// Try internet connection
+			internetConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
+			Debug.Log("trying connection");
+			SocialManager.Instance.RefreshData();
+			
+			Debug.Log("opening ui");
+		}
+	}
+	
+	protected override void _CloseUI(){
+		if(isActive){
+			GetComponent<TweenToggleDemux>().Hide();
+			
+			// Show other UI Objects
+			NavigationUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel();
+			RoomArrowsUIManager.Instance.ShowPanel();
+			HUDUIManager.Instance.ShowPanel();
+			
+			isActive = false;
+			
+			// Destroy all children
+			foreach(Transform child in grid.transform) {
+				Destroy(child.gameObject);
+			}
+		}
+	}
+	#endregion
 
 	void OnDestroy(){
 		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
@@ -140,49 +193,75 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		giftGroupController.Refresh(1, 0);
 	}
 
-	#region Protected Overrides
-	protected override void _OpenUI(){
-		if(!isActive){
-			GetComponent<TweenToggleDemux>().Show();
-
-			ToggleCodeButton(false);
-			buttonAdd.SetActive(false);
-			buttonRequest.SetActive(false);
-			buttonCode.SetActive(false);
-			noFriendsParent.SetActive(false);
-			giftGroupController.gameObject.SetActive(false);
-
-			// Hide other UI objects
-			NavigationUIManager.Instance.HidePanel();
-			InventoryUIManager.Instance.HidePanel();
-			RoomArrowsUIManager.Instance.HidePanel();
-			HUDUIManager.Instance.HidePanel();
-			isActive = true;
-
-			// Try internet connection
-			internetConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
-			Debug.Log("trying connection");
-			SocialManager.Instance.RefreshData();
-
-			Debug.Log("opening ui");
+	#region Delete Friend
+	public void OpenDeleteFriendWindowCallback(GameObject sourceObject){
+		if(isActive){
+			string deleteUserID = sourceObject.transform.parent.name;
+			deleteUserIDAux = deleteUserID;	// Cache this
+			deleteUserLabel.text = deleteUserID;
+			deleteFriendTween.Show();
 		}
 	}
 
-	protected override void _CloseUI(){
+	public void CloseDeleteFriendWindow(){
 		if(isActive){
-			GetComponent<TweenToggleDemux>().Hide();
+			deleteFriendTween.Hide();
+			deleteUserIDAux = string.Empty;	// Clear cache
+		}
+	}
 
-			// Show other UI Objects
-			NavigationUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
-			RoomArrowsUIManager.Instance.ShowPanel();
-			HUDUIManager.Instance.ShowPanel();
+	public void DeleteFriendCallback(){
+		Debug.Log("deleting " + deleteUserIDAux);
+		//TODO do delete here
+	}
 
-			isActive = false;
+	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){
+		if(args.IsSuccessful){
+			Debug.Log("Connection Success");
+			// Hide the connection display
+			deleteFriendConnectionDisplay.Stop(true, string.Empty);
 
-			// Destroy all children
-			foreach(Transform child in grid.transform) {
+			CloseDeleteFriendWindow();
+			
+			foreach(Transform child in grid.transform){
+				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
+			}
+			
+			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
+			foreach(ParseObjectKidAccount friendAccount in friendList){
+				Debug.Log("initiating friend");
+				GameObject friendObject = NGUITools.AddChild(grid, friendEntryPrefab);
+				FriendEntryController friendEntryController = friendObject.GetComponent<FriendEntryController>();
+				
+				// TODO rename friendObject to friendACcount.ObjectId
+				
+				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
+				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
+					// TODO create the pet into hashtable down the road and pass in here v
+					friendEntryController.Initilize(friendPetInfo.Name, null);
+				}
+			}
+
+			// Reposition the grid
+			grid.GetComponent<UIGrid>().Reposition();
+			
+			// No friends! show no friend message
+			if(friendList.Count() == 0){
+				noFriendsParent.SetActive(true);
+			}
+		}
+		else{
+			// Custom errors that we handle
+			if(args.ErrorCode == ParseException.ErrorCode.ConnectionFailed){
+				// Pass the error message directly as localize key
+				deleteFriendConnectionDisplay.Stop(false, args.ErrorMessage);
+				Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			}
+			// Untracked errors, show generic error
+			else{
+				deleteFriendConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+				Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
 			}
 		}
 	}

@@ -142,6 +142,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400016}
+  - 114: {fileID: 11400024}
   m_Layer: 10
   m_Name: RequestEntry
   m_TagString: Untagged
@@ -365,8 +366,8 @@ MonoBehaviour:
   buttonSound: buttonGeneric2
   isCheckingClickManager: 1
   isSprite: 1
-  target: {fileID: 0}
-  functionName: 
+  target: {fileID: 100016}
+  functionName: ButtonAccept
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -467,8 +468,8 @@ MonoBehaviour:
   buttonSound: buttonGeneric2
   isCheckingClickManager: 1
   isSprite: 1
-  target: {fileID: 0}
-  functionName: 
+  target: {fileID: 100016}
+  functionName: ButtonDecline
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -521,6 +522,18 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &11400024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31bc71bdca5493d45a518ba854eed906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  labelName: {fileID: 11400000}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

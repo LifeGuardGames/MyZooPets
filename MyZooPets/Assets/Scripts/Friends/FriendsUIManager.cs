@@ -82,7 +82,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
-	public void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
+	private void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
 		if(args.IsSuccessful){
 			Debug.Log("Connection Success");
 			// Hide the connection display
@@ -92,6 +92,11 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonRequest.SetActive(true);
 			buttonCode.SetActive(true);
 //			giftGroup.SetActive(true);
+
+			foreach(Transform child in grid.transform){
+				child.gameObject.SetActive(false);
+				Destroy(child.gameObject);
+			}
 
 			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
 			foreach(ParseObjectKidAccount friendAccount in friendList){
@@ -107,6 +112,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 					friendEntryController.Initilize(friendPetInfo.Name, null);
 				}
 			}
+
+			hiddenCode.transform.FindChild("LabelCode").GetComponent<UILabel>().text = SocialManager.Instance.AccountCode;
 
 			// Reposition the grid
 //			GameObjectUtils.ResetLocalPosition(friendArea);
@@ -125,6 +132,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
+	#region Protected Overrides
 	protected override void _OpenUI(){
 		if(!isActive){
 			GetComponent<TweenToggleDemux>().Show();
@@ -170,10 +178,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			}
 		}
 	}
+	#endregion
 
-	////////////////////////////////////////////////////////
-	//////////////// Code Input ////////////////////////////
 
+	#region Code Input
 	public void OpenCodeInputWindow(){
 		if(isActive){
 			codeInputTween.Show();
@@ -212,16 +220,31 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			CloseCodeInputWindow();
 		}
 		else{
-			// TODO add custom error handling
-			if(true){
-				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
+			string errorMessage = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
+			switch(args.ErrorCode){
+			case ParseException.ErrorCode.OtherCause:
+				break;
+			case ParseException.ErrorCode.ObjectNotFound:
+				errorMessage = "FRIENDS_ADD_FRIEND_ERROR_INVALID";
+				break;
+			case ParseException.ErrorCode.ConnectionFailed:
+				errorMessage = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
+				break;
+			case ParseException.ErrorCode.DuplicateValue:
+//				errorMessage = ""
+			case ParseException.ErrorCode.InternalServerError:
+				break;
+			default:
+				break;
 			}
-			else if(true){
-				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
-			}
-			else if(true){
-				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
-			}
+
+//			FRIENDS_ADD_FRIEND_ERROR_EMPTY_INPUT = No friend code entered!
+//				FRIENDS_ADD_FRIEND_ERROR_ALREADY_HAVE_FRIEND = You already have this friend!
+//					FRIENDS_ADD_FRIEND_ERROR_INVALID = Double check your friend code!
+//					FRIENDS_ADD_FRIEND_ERROR_ALREADY_REQUESTED = Friend invite already sent!
+//					FRIENDS_ADD_FRIEND_ERROR_OWN_CODE = Can't add your own code!
+	
+			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
 
 			Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
 
@@ -229,13 +252,13 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputInput.gameObject.SetActive(true);
 		}
 	}
+	#endregion
 
-	/////////////////////////////////////////////////////////
-	//////////////// Friend Requests ////////////////////////
-
+	#region Friend Requests
 	public void OpenRequestWindow(){
 		if(isActive){
 			requestTween.Show();
+			SocialManager.Instance.GetFriendRequests();
 		}
 	}
 	
@@ -245,18 +268,50 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
-	public void RequestAccept(string id){
-		// TODO initiate server call
+	public void RequestAccept(string requestId){
+		SocialManager.Instance.AcceptFriendRequest(requestId);
 	}
 
-	public void RequestDecline(string id){
-		// TODO initiate server call
+	public void RequestDecline(string requestId){
+		SocialManager.Instance.RejectFriendRequest(requestId);
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
 		// Refresh the UI with the same arguments as a openUI refresh
-		FinishConnectionUIRefresh(obj, args);
+//		FinishConnectionUIRefresh(obj, args);
+
+		if(args.IsSuccessful){
+			List<SocialManager.FriendRequest> friendRequests = SocialManager.Instance.FriendRequests;
+			Debug.Log(friendRequests.Count());
+			foreach(Transform child in requestGrid.transform){
+				child.gameObject.SetActive(false);
+				Destroy(child.gameObject);
+			}
+			
+			foreach(SocialManager.FriendRequest request in friendRequests){
+				GameObject requestObject = NGUITools.AddChild(requestGrid.gameObject, requestEntryPrefab);
+				RequestEntryController requestEntryController = requestObject.GetComponent<RequestEntryController>();
+				requestEntryController.Initialize(request.RequestId, request.FriendName);
+			}
+			
+			requestGrid.Reposition();
+		}
+		else{
+			switch(args.ErrorCode){
+			case ParseException.ErrorCode.OtherCause:
+				break;
+			case ParseException.ErrorCode.ObjectNotFound:
+				break;
+			case ParseException.ErrorCode.ConnectionFailed:
+				break;
+			case ParseException.ErrorCode.InternalServerError:
+				break;
+			default:
+				break;
+			}
+		}
 	}
+	#endregion
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){

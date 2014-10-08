@@ -21,6 +21,7 @@ public class ServerEventArgs : EventArgs{
 }
 
 public class SocialManager : Singleton<SocialManager> {
+	/// Friend request data type use in FriendsUIManager
 	public class FriendRequest{
 		public string RequestId {get; set;}
 		public string FriendName {get; set;}
@@ -29,19 +30,26 @@ public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
-	public static EventHandler<ServerEventArgs> OnFriendRequestAccepted;
 
-	public bool useDummyData = false;
+	public bool useDummyData = false; // Turn this to true if testing with dummy data
 
 	/// <summary>
 	/// Gets or sets the friend list.
-	/// Need to be cast to List<KidAccount> using a foreach loop to gain access
-	/// to the property in KidAccount
 	/// </summary>
 	/// <value>The friend list.</value>
 	public List<ParseObjectKidAccount> FriendList {get; set;}
 
+	/// <summary>
+	/// Gets or sets the friend requests.
+	/// </summary>
+	/// <value>The friend requests.</value>
 	public List<FriendRequest> FriendRequests {get; set;}
+
+	/// <summary>
+	/// Gets or sets the account code. aka friend code
+	/// </summary>
+	/// <value>The account code.</value>
+	public string AccountCode {get; set;}
 
 	/// <summary>
 	/// Refreshs the data.
@@ -74,6 +82,7 @@ public class SocialManager : Singleton<SocialManager> {
 				}
 				else{
 					ParseObjectKidAccount account = t.Result;
+					AccountCode = account.AccountCode;
 
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
@@ -199,54 +208,54 @@ public class SocialManager : Singleton<SocialManager> {
 
 		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriendRequests", null)
 			.ContinueWith(t => {
-				ServerEventArgs args = new ServerEventArgs();
+			ServerEventArgs args = new ServerEventArgs();
 
-				if(t.IsFaulted || t.IsCanceled){
-					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+			if(t.IsFaulted || t.IsCanceled){
+				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
 
-					args.IsSuccessful = false;
-					args.ErrorCode = e.Code;
-					args.ErrorMessage = e.Message;
-				}
-				else{
-					IDictionary<string, object> result = t.Result;
-					// Hack, check for errors
-					object code;
+				args.IsSuccessful = false;
+				args.ErrorCode = e.Code;
+				args.ErrorMessage = e.Message;
+			}
+			else{
+				IDictionary<string, object> result = t.Result;
+				// Hack, check for errors
+				object code;
+				
+				if(result.TryGetValue("code", out code)){
+					Debug.Log("Error Code: " + code);
+					int parseCode = Convert.ToInt32(code);
 					
-					if(result.TryGetValue("code", out code)){
-						Debug.Log("Error Code: " + code);
-						int parseCode = Convert.ToInt32(code);
-						
-						args.IsSuccessful = false;
-						args.ErrorCode = (ParseException.ErrorCode) parseCode;
-						args.ErrorMessage = (string) result["message"];
-					} 
-					else{
-						var friendRequests = (IEnumerable) result["success"];
-						FriendRequests = new List<FriendRequest>();
+					args.IsSuccessful = false;
+					args.ErrorCode = (ParseException.ErrorCode) parseCode;
+					args.ErrorMessage = (string) result["message"];
+				} 
+				else{
+					var friendRequests = (IEnumerable) result["success"];
+					FriendRequests = new List<FriendRequest>();
 
-						foreach(ParseObject friendRequest in friendRequests){
-							string requestId = friendRequest.ObjectId;
-							ParseObject fromKidAccount = (ParseObject) friendRequest["from"];
-							ParseObjectPetInfo requestPetInfo = (ParseObjectPetInfo) fromKidAccount["petInfo"];
-	
-							FriendRequest newRequest = new FriendRequest();
-							newRequest.RequestId = requestId;
-							newRequest.FriendName = requestPetInfo.Name;
-	
-							FriendRequests.Add(newRequest);
-						}
+					foreach(ParseObject friendRequest in friendRequests){
+						string requestId = friendRequest.ObjectId;
+						ParseObject fromKidAccount = (ParseObject) friendRequest["from"];
+						ParseObjectPetInfo requestPetInfo = (ParseObjectPetInfo) fromKidAccount["petInfo"];
 
-						args.IsSuccessful = true;
+						FriendRequest newRequest = new FriendRequest();
+						newRequest.RequestId = requestId;
+						newRequest.FriendName = requestPetInfo.Name;
+
+						FriendRequests.Add(newRequest);
 					}
-				}
 
-				Loom.DispatchToMainThread(() => {
-					if(OnFriendRequestRefreshed != null)
-						OnFriendRequestRefreshed(this, args);
-				});
-			});	
+					args.IsSuccessful = true;
+				}
+			}
+
+			Loom.DispatchToMainThread(() => {
+				if(OnFriendRequestRefreshed != null)
+					OnFriendRequestRefreshed(this, args);
+			});
+		});	
 	}
 
 	/// <summary>
@@ -312,6 +321,7 @@ public class SocialManager : Singleton<SocialManager> {
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
+						RefreshData();
 						GetFriendRequests();
 					}
 				}
@@ -404,6 +414,7 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 		
 		FriendList = dummyData;
+		AccountCode = "dummydata369";
 		
 		ServerEventArgs args = new ServerEventArgs();
 		args.IsSuccessful = true;

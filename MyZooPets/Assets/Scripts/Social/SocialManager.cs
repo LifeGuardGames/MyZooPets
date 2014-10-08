@@ -388,7 +388,7 @@ public class SocialManager : Singleton<SocialManager> {
 			return;
 		}
 
-		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", paramDict)
+		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", null)
 			.ContinueWith(t => {
 				if(t.IsFaulted || t.IsCanceled){
 					ParseException e = (ParseException) t.Exception.InnerExceptions[0];

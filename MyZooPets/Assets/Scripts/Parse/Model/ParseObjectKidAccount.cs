@@ -14,11 +14,11 @@ public class ParseObjectKidAccount : ParseObject{
 		set{ SetProperty<bool>(value, "IsLinkedToParentAccount");}
 	}
 
-	[ParseFieldName("friendList")]
-	public IList<ParseObjectKidAccount> FriendList{
-		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
-//		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
-	}
+//	[ParseFieldName("friendList")]
+//	public IList<ParseObjectKidAccount> FriendList{
+//		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
+////		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
+//	}
 
 	[ParseFieldName("accountCode")]
 	public string AccountCode{

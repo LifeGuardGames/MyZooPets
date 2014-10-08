@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Parse;
 
 [ParseClassName("Social")]
@@ -7,15 +8,34 @@ public class ParseObjectSocial : ParseObject{
 
 	public ParseObjectSocial(){}
 
-	[ParseFieldName("numOfFriendReferral")]
-	public int NumOfFriendReferral{
-		get{ return GetProperty<int>("NumOfFriendReferral"); }
-		set{ SetProperty<int>(value, "NumOfFriendReferral"); }
+	/// <summary>
+	/// Gets the friend list. The current friend list of the user
+	/// </summary>
+	/// <value>The friend list.</value>
+	[ParseFieldName("currentFriendList")]
+	public IList<ParseObjectKidAccount> FriendList{
+		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
+		//		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
 	}
 
-	[ParseFieldName("isReferralRewardClaimed")]
-	public bool IsReferralRewardClaimed{
-		get{ return GetProperty<bool>("IsReferralRewardClaimed"); }
-		set{ SetProperty<bool>(value, "IsReferralRewardClaimed"); }
+	/// <summary>
+	/// How mandy rewards are to be given to the user
+	/// </summary>
+	/// <value>The reward count.</value>
+	[ParseFieldName("rewardCount")]
+	public int RewardCount{
+		get{ return GetProperty<int>("RewardCount"); }
+		set{ SetProperty<int>(value, "RewardCount"); }
+	}
+
+	/// <summary>
+	/// Gets or sets the number of stars. How many stars to show to indicate
+	/// friend referral progress
+	/// </summary>
+	/// <value>The number of stars.</value>
+	[ParseFieldName("numOfStars")]
+	public int NumOfStars{
+		get{ return GetProperty<int>("NumOfStars"); }
+		set{ SetProperty<int>(value, "NumOfStars"); }
 	}
 }

@@ -20,8 +20,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public TweenToggleDemux deleteFriendTween; 
 	public InternetConnectionDisplay deleteFriendConnectionDisplay;
 	public UILabel deleteUserLabel;
-	public GameObject buttonDeleteConfirm;
-
+	public GameObject labelParent;
 	private string deleteUserIDAux = string.Empty;
 
 
@@ -208,7 +207,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			deleteUserIDAux = deleteUserID;	// Cache this
 			deleteUserLabel.text = deleteUserID;
 			deleteFriendTween.Show();
-			buttonDeleteConfirm.SetActive(true);
+			labelParent.SetActive(true);
 		}
 	}
 
@@ -219,6 +218,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 			deleteFriendTween.Hide();
 			deleteUserIDAux = string.Empty;	// Clear cache
+			deleteFriendConnectionDisplay.Reset();
 		}
 	}
 
@@ -227,7 +227,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		if(!string.IsNullOrEmpty(deleteUserIDAux)){
 			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
 		}
-		buttonDeleteConfirm.SetActive(false);
+		labelParent.SetActive(false);
 		deleteFriendConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 	}
 
@@ -268,6 +268,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void CloseCodeInputWindow(){
 		if(isActive){
 			codeInputTween.Hide();
+			codeInputConnectionDisplay.Reset();
 		}
 	}
 
@@ -330,21 +331,30 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
 			}
+			requestConnectionDisplay.Reset();
 		}
 	}
 
 	public void RequestAccept(string requestId){
 		SocialManager.Instance.AcceptFriendRequest(requestId);
+
+		requestGrid.gameObject.SetActive(false);
+		requestConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 	}
 
 	public void RequestDecline(string requestId){
 		SocialManager.Instance.RejectFriendRequest(requestId);
+
+		requestGrid.gameObject.SetActive(false);
+		requestConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
 		if(args.IsSuccessful){
+			requestGrid.gameObject.SetActive(true);
+
 			// Hide the connection display
-			codeInputConnectionDisplay.Stop(true, string.Empty);
+			requestConnectionDisplay.Stop(true, string.Empty);
 
 			List<SocialManager.FriendRequest> friendRequests = SocialManager.Instance.FriendRequests;
 			Debug.Log(friendRequests.Count());
@@ -369,12 +379,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			   args.ErrorCode == ParseException.ErrorCode.ConnectionFailed ||
 			   args.ErrorCode == ParseException.ErrorCode.InternalServerError){
 				// Pass the error message directly as localize key
-				codeInputConnectionDisplay.Stop(false, args.ErrorMessage);
+				requestConnectionDisplay.Stop(false, args.ErrorMessage);
 				Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
 			}
 			// Untracked errors, show generic error
 			else{
-				codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+				requestConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
 				Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
 			}
 		}

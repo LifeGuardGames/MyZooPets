@@ -41,6 +41,11 @@ public class InternetConnectionDisplay : MonoBehaviour {
 		loadingIconSpin.gameObject.SetActive(false);
 	}
 
+	public void Reset(){
+		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
+		labelTweenParent.GetComponent<ScaleTweenToggle>().Hide();
+	}
+
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){
 //			loadingIconSpin.Play();

@@ -54,14 +54,7 @@ public class GiftGroupController : MonoBehaviour {
 	}
 
 	public void ClaimReward(int giftCount){
-		// Empty the stars
-		gift1.spriteName = EmptySpriteName;
-		gift2.spriteName = EmptySpriteName;
-		gift3.spriteName = EmptySpriteName;
-		gift4.spriteName = EmptySpriteName;
-
 		giftCountAux = giftCount;
-
 		giftAnimation.Play();
 	}
 
@@ -72,8 +65,14 @@ public class GiftGroupController : MonoBehaviour {
 	}
 
 	public void SpawnFloatyEvent(){
+		// Empty the stars
+		gift1.spriteName = EmptySpriteName;
+		gift2.spriteName = EmptySpriteName;
+		gift3.spriteName = EmptySpriteName;
+		gift4.spriteName = EmptySpriteName;
+		
 		// Reward Gems all together in one go
-		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCount));
+		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCountAux));
 		
 //		Hashtable option = new Hashtable();
 //		option.Add("parent", floatyParent);

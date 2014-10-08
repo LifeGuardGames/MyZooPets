@@ -6,14 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-//public enum ErrorCodes{
-//	None,
-//	ObjectNotFound,
-//	ConnectionError,
-//	DuplicateValue,
-//	BadInput
-//}
-
 public class ServerEventArgs : EventArgs{
 	public bool IsSuccessful {get; set;}
 	public ParseException.ErrorCode ErrorCode {get; set;}
@@ -52,6 +44,12 @@ public class SocialManager : Singleton<SocialManager> {
 	public string AccountCode {get; set;}
 
 	/// <summary>
+	/// Gets or sets the user's social properties
+	/// </summary>
+	/// <value>The user social.</value>
+	public ParseObjectSocial UserSocial {get; set;}
+
+	/// <summary>
 	/// Refreshs the data.
 	/// </summary>
 	public void RefreshData(){
@@ -61,6 +59,7 @@ public class SocialManager : Singleton<SocialManager> {
 			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
 				ParseQuery<ParseObjectKidAccount> friendListQuery = new ParseQuery<ParseObjectKidAccount>()
 					.WhereEqualTo("createdBy", ParseUser.CurrentUser)
+					.Include("social")
 					.Include("friendList.petInfo");
 
 				return friendListQuery.FirstAsync();
@@ -83,6 +82,8 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					ParseObjectKidAccount account = t.Result;
 					AccountCode = account.AccountCode;
+
+					Debug.Log("num of referral: " + account.Social.NumOfFriendReferral);
 
 					if(account.FriendList != null){
 						Debug.Log(account.FriendList.Count);
@@ -321,8 +322,10 @@ public class SocialManager : Singleton<SocialManager> {
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
-						RefreshData();
-						GetFriendRequests();
+						Loom.DispatchToMainThread(() => {
+							RefreshData();
+							GetFriendRequests();
+						});
 					}
 				}
 			});
@@ -386,6 +389,17 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 	}
 
+	/// <summary>
+	/// Claims the friend referral reward.
+	/// Call this method when the reward is given to the user
+	/// </summary>
+	public void ClaimFriendReferralReward(){
+		if(useDummyData){
+			if(UserSocial != null)
+				UserSocial.IsReferralRewardClaimed = true;
+		}
+	}
+
 	#region Dummy Data
 	private bool IsUsingDummyData(){
 		bool retVal = false; 
@@ -412,7 +426,12 @@ public class SocialManager : Singleton<SocialManager> {
 			
 			dummyData.Add(account);
 		}
-		
+
+		ParseObjectSocial social = new ParseObjectSocial();
+		social.NumOfFriendReferral = 3;
+		social.IsReferralRewardClaimed = false;
+
+		UserSocial = social;
 		FriendList = dummyData;
 		AccountCode = "dummydata369";
 		

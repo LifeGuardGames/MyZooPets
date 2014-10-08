@@ -6,9 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 public class FriendsUIManager : SingletonUI<FriendsUIManager> {
-
-	public UISprite radialFillRewardSprite;
-
 	public InternetConnectionDisplay internetConnectionDisplay;
 	public GameObject friendEntryPrefab;
 	public GameObject friendArea;
@@ -137,6 +134,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
+	public void RefreshGiftReward(){
+
+	}
+
 	#region Protected Overrides
 	protected override void _OpenUI(){
 		if(!isActive){
@@ -184,7 +185,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 	#endregion
-
 
 	#region Code Input
 	public void OpenCodeInputWindow(){

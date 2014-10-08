@@ -168,6 +168,19 @@ public class FloatyUtil {
 			
 			offsetTracker++;
 		}
+		if(option.ContainsKey("deltaGems")){
+			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			label.gameObject.SetActive(true);
+			label.text = (string)option["deltaGems"];
+			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
+			
+			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			sprite.gameObject.SetActive(true);
+			sprite.spriteName = (string) option["spriteGems"];
+			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
+			
+			offsetTracker++;
+		}
 		
 		if(offsetTracker != 4){	// Check if every stat was modified, else need to hide them
 			

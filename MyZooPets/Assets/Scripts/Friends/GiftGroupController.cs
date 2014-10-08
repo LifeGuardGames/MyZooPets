@@ -6,12 +6,80 @@ public class GiftGroupController : MonoBehaviour {
 	public UISprite gift2;
 	public UISprite gift3;
 	public UISprite gift4;
-	public ParticleSystem getGiftParticle;
+	public ParticleSystem giftParticle;
+	public Animation giftAnimation;
+	public GameObject floatyParent;
+
+	private int giftCountAux;
 
 	private const string FullSpriteName = "friendsStarFull";
 	private const string EmptySpriteName = "friendsStarEmpty";
 
-	public void Initialize(){
+	public void RefreshStars(int starCount, int giftCount){
+		if(starCount == 0 && giftCount != 0){
+			gift1.spriteName = FullSpriteName;
+			gift2.spriteName = FullSpriteName;
+			gift3.spriteName = FullSpriteName;
+			gift4.spriteName = FullSpriteName;
+		}
+		else if(starCount == 0 && giftCount == 0){
+			gift1.spriteName = EmptySpriteName;
+			gift2.spriteName = EmptySpriteName;
+			gift3.spriteName = EmptySpriteName;
+			gift4.spriteName = EmptySpriteName;
+		}
+		else if(starCount == 1){
+			gift1.spriteName = FullSpriteName;
+			gift2.spriteName = EmptySpriteName;
+			gift3.spriteName = EmptySpriteName;
+			gift4.spriteName = EmptySpriteName;
+		}
+		else if(starCount == 2){
+			gift1.spriteName = FullSpriteName;
+			gift2.spriteName = FullSpriteName;
+			gift3.spriteName = EmptySpriteName;
+			gift4.spriteName = EmptySpriteName;
+		}
+		else if(starCount == 3){
+			gift1.spriteName = FullSpriteName;
+			gift2.spriteName = FullSpriteName;
+			gift3.spriteName = FullSpriteName;
+			gift4.spriteName = EmptySpriteName;
+		}
 
+
+		if(giftCount != 0){
+			ClaimReward(giftCount);
+		}
 	}
+
+	public void ClaimReward(int giftCount){
+		// Empty the stars
+		gift1.spriteName = EmptySpriteName;
+		gift2.spriteName = EmptySpriteName;
+		gift3.spriteName = EmptySpriteName;
+		gift4.spriteName = EmptySpriteName;
+
+		giftCountAux = giftCount;
+
+		// Reward Gems all together in one go
+		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCount));
+
+		giftAnimation.Play();
+	}
+
+	public void PlayParticleEvent(){
+		giftParticle.Play();
+	}
+
+	public void SpawnFloatyEvent(){
+		Hashtable option = new Hashtable();
+		
+		option.Add("parent", floatyParent);
+		option.Add("spriteGems", "iconGems");
+		option.Add("deltaGems", giftCountAux);
+		
+		FloatyUtil.SpawnFloatyStats(option);
+	}
+
 }

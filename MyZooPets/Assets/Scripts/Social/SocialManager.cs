@@ -55,61 +55,49 @@ public class SocialManager : Singleton<SocialManager> {
 	public void RefreshData(){
 		if(IsUsingDummyData()) return;
 
-		try{
-			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
-				ParseQuery<ParseObjectKidAccount> friendListQuery = new ParseQuery<ParseObjectKidAccount>()
-					.WhereEqualTo("createdBy", ParseUser.CurrentUser)
-					.Include("social")
-					.Include("friendList.petInfo");
-
-				return friendListQuery.FirstAsync();
-			}).Unwrap().ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
-					// Errors from Parse Cloud and network interactions
-					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
-
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = false;
-					args.ErrorCode = exception.Code;
-					args.ErrorMessage = exception.Message;
-
-					Loom.DispatchToMainThread(() => {	
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
-				}
-				else{
-					ParseObjectKidAccount account = t.Result;
-					AccountCode = account.AccountCode;
-
-					Debug.Log("num of referral: " + account.Social.NumOfFriendReferral);
-
-					if(account.FriendList != null){
-						Debug.Log(account.FriendList.Count);
-						FriendList = account.FriendList.ToList();
-					}
-
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = true;
-
-					Loom.DispatchToMainThread(() => {	
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
-				}
-			});
-		}
-		catch(InvalidOperationException e){
-			Debug.LogException(e);
-
+		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriends", null)
+		.ContinueWith(t => {
 			ServerEventArgs args = new ServerEventArgs();
-			args.IsSuccessful = false;
-			args.ErrorCode = ParseException.ErrorCode.OperationForbidden;
 			
-			if(OnDataRefreshed != null)
-				OnDataRefreshed(this, args);
-		}
+			if(t.IsFaulted || t.IsCanceled){
+				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+				
+				args.IsSuccessful = false;
+				args.ErrorCode = e.Code;
+				args.ErrorMessage = e.Message;
+			}
+			else{
+				IDictionary<string, object> result = t.Result;
+				// Hack, check for errors
+				object code;
+				
+				if(result.TryGetValue("code", out code)){
+					Debug.Log("Error Code: " + code);
+					int parseCode = Convert.ToInt32(code);
+					
+					args.IsSuccessful = false;
+					args.ErrorCode = (ParseException.ErrorCode) parseCode;
+					args.ErrorMessage = (string) result["message"];
+				} 
+				else{
+					ParseObjectKidAccount kidAccount = (ParseObjectKidAccount) result["success"];
+					AccountCode = kidAccount.AccountCode;
+
+					if(kidAccount.Social.FriendList != null){
+						Debug.Log(kidAccount.Social.FriendList.Count);
+						FriendList = kidAccount.Social.FriendList.ToList();
+					}
+					
+					args.IsSuccessful = true;
+				}
+			}
+			
+			Loom.DispatchToMainThread(() => {
+				if(OnDataRefreshed != null)
+					OnDataRefreshed(this, args);
+			});
+		});
 	}
 	
 	/// <summary>
@@ -395,9 +383,42 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	public void ClaimFriendReferralReward(){
 		if(useDummyData){
-			if(UserSocial != null)
-				UserSocial.IsReferralRewardClaimed = true;
+//			if(UserSocial != null)
+//				UserSocial.IsReferralRewardClaimed = true;
+			return;
 		}
+
+		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", paramDict)
+			.ContinueWith(t => {
+				if(t.IsFaulted || t.IsCanceled){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					
+					ServerEventArgs args = new ServerEventArgs();
+					args.IsSuccessful = false;
+					args.ErrorCode = e.Code;
+					args.ErrorMessage = e.Message;
+					
+				
+				} 
+				else{
+					IDictionary<string, object> result = t.Result;
+					// Hack, check for errors
+					object code;
+					ServerEventArgs args = new ServerEventArgs();
+					
+					if(result.TryGetValue("code", out code)){
+						Debug.Log("Error Code: " + code);
+						int parseCode = Convert.ToInt32(code);
+						
+					
+					} 
+					else{
+						Debug.Log("Result: " + result["success"]);
+
+					}
+				}
+			});
 	}
 
 	#region Dummy Data
@@ -428,8 +449,8 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 
 		ParseObjectSocial social = new ParseObjectSocial();
-		social.NumOfFriendReferral = 3;
-		social.IsReferralRewardClaimed = false;
+		social.NumOfStars = 3;
+		social.RewardCount = 0;
 
 		UserSocial = social;
 		FriendList = dummyData;

@@ -20,7 +20,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public TweenToggleDemux deleteFriendTween; 
 	public InternetConnectionDisplay deleteFriendConnectionDisplay;
 	public UILabel deleteUserLabel;
+	public GameObject buttonDeleteConfirm;
+
 	private string deleteUserIDAux = string.Empty;
+
 
 	public TweenToggleDemux codeInputTween;
 	public GameObject codeInputTitle;
@@ -190,21 +193,30 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void RefreshGiftReward(){
-		giftGroupController.Refresh(1, 0);
+		giftGroupController.Refresh(SocialManager.Instance.UserSocial.NumOfStars
+		                            ,SocialManager.Instance.UserSocial.RewardCount);
 	}
 
 	#region Delete Friend
 	public void OpenDeleteFriendWindowCallback(GameObject sourceObject){
 		if(isActive){
+			// Assigning another event listener to base dataRefresh
+			// We want to refresh base along with handling popup connection display
+			SocialManager.OnDataRefreshed += FinishConnectionDeleteFriendDone;
+
 			string deleteUserID = sourceObject.transform.parent.name;
 			deleteUserIDAux = deleteUserID;	// Cache this
 			deleteUserLabel.text = deleteUserID;
 			deleteFriendTween.Show();
+			buttonDeleteConfirm.SetActive(true);
 		}
 	}
 
 	public void CloseDeleteFriendWindow(){
 		if(isActive){
+			// Unassigning temporary listener
+			SocialManager.OnDataRefreshed -= FinishConnectionDeleteFriendDone;
+
 			deleteFriendTween.Hide();
 			deleteUserIDAux = string.Empty;	// Clear cache
 		}
@@ -212,7 +224,11 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public void DeleteFriendCallback(){
 		Debug.Log("deleting " + deleteUserIDAux);
-		//TODO do delete here
+		if(!string.IsNullOrEmpty(deleteUserIDAux)){
+			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
+		}
+		buttonDeleteConfirm.SetActive(false);
+		deleteFriendConnectionDisplay.Play("NOTIFICATION_INTERNET_CONNECTION_WAIT");
 	}
 
 	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){
@@ -222,34 +238,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			deleteFriendConnectionDisplay.Stop(true, string.Empty);
 
 			CloseDeleteFriendWindow();
-			
-			foreach(Transform child in grid.transform){
-				child.gameObject.SetActive(false);
-				Destroy(child.gameObject);
-			}
-			
-			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
-			foreach(ParseObjectKidAccount friendAccount in friendList){
-				Debug.Log("initiating friend");
-				GameObject friendObject = NGUITools.AddChild(grid, friendEntryPrefab);
-				FriendEntryController friendEntryController = friendObject.GetComponent<FriendEntryController>();
-				
-				// TODO rename friendObject to friendACcount.ObjectId
-				
-				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
-				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
-					// TODO create the pet into hashtable down the road and pass in here v
-					friendEntryController.Initilize(friendPetInfo.Name, null);
-				}
-			}
-
-			// Reposition the grid
-			grid.GetComponent<UIGrid>().Reposition();
-			
-			// No friends! show no friend message
-			if(friendList.Count() == 0){
-				noFriendsParent.SetActive(true);
-			}
 		}
 		else{
 			// Custom errors that we handle
@@ -338,6 +326,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void CloseRequestWindow(){
 		if(isActive){
 			requestTween.Hide();
+			foreach(Transform child in requestGrid.transform){
+				child.gameObject.SetActive(false);
+				Destroy(child.gameObject);
+			}
 		}
 	}
 
@@ -356,6 +348,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 			List<SocialManager.FriendRequest> friendRequests = SocialManager.Instance.FriendRequests;
 			Debug.Log(friendRequests.Count());
+
+			//remove existing objects
 			foreach(Transform child in requestGrid.transform){
 				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);

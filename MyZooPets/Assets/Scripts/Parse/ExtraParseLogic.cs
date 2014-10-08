@@ -26,6 +26,7 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	void Awake(){
 		ParseObject.RegisterSubclass<ParseObjectKidAccount>();
 		ParseObject.RegisterSubclass<ParseObjectPetInfo>();
+		ParseObject.RegisterSubclass<ParseObjectSocial>();
 	}
 
 	// Use this for initialization

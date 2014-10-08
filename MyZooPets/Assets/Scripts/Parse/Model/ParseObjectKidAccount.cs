@@ -38,6 +38,12 @@ public class ParseObjectKidAccount : ParseObject{
 		set{ SetProperty<ParseObjectPetInfo>(value, "PetInfo");}
 	}
 
+	[ParseFieldName("social")]
+	public ParseObjectSocial Social{
+		get{ return GetProperty<ParseObjectSocial>("Social");}
+		set{ SetProperty<ParseObjectSocial>(value, "Social");}
+	}
+
 //	[ParseFieldName("petAccessory")]
 //	public ParseObject PetAccessory{
 //		get{ return GetProperty<ParseObject>("PetAccessory");}

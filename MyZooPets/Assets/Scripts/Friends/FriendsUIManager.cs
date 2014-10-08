@@ -118,6 +118,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			if(friendList.Count() == 0){
 				noFriendsParent.SetActive(true);
 			}
+
+			RefreshGiftReward();
 		}
 		else{
 			// Custom errors that we handle
@@ -135,7 +137,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void RefreshGiftReward(){
-
+		giftGroupController.Refresh(1, 0);
 	}
 
 	#region Protected Overrides

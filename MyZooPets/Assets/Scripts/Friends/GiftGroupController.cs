@@ -15,7 +15,7 @@ public class GiftGroupController : MonoBehaviour {
 	private const string FullSpriteName = "friendsStarFull";
 	private const string EmptySpriteName = "friendsStarEmpty";
 
-	public void RefreshStars(int starCount, int giftCount){
+	public void Refresh(int starCount, int giftCount){
 		if(starCount == 0 && giftCount != 0){
 			gift1.spriteName = FullSpriteName;
 			gift2.spriteName = FullSpriteName;
@@ -69,17 +69,16 @@ public class GiftGroupController : MonoBehaviour {
 	}
 
 	public void PlayParticleEvent(){
-		giftParticle.Play();
+		if(giftParticle != null){
+			giftParticle.Play();
+		}
 	}
 
 	public void SpawnFloatyEvent(){
 		Hashtable option = new Hashtable();
-		
 		option.Add("parent", floatyParent);
 		option.Add("spriteGems", "iconGems");
 		option.Add("deltaGems", giftCountAux);
-		
 		FloatyUtil.SpawnFloatyStats(option);
 	}
-
 }

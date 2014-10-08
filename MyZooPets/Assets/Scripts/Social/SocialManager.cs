@@ -20,11 +20,13 @@ public class SocialManager : Singleton<SocialManager> {
 	}
 
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
+	public static EventHandler<ServerEventArgs> OnFriendRemoved;
 	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 
 	public bool useDummyData = false; // Turn this to true if testing with dummy data
 
+	#region Properties
 	/// <summary>
 	/// Gets or sets the friend list.
 	/// </summary>
@@ -48,7 +50,9 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <value>The user social.</value>
 	public ParseObjectSocial UserSocial {get; set;}
+	#endregion
 
+	#region Refresh Data
 	/// <summary>
 	/// Refreshs the data.
 	/// </summary>
@@ -100,7 +104,9 @@ public class SocialManager : Singleton<SocialManager> {
 			});
 		});
 	}
-	
+	#endregion
+
+	#region Send Friend Request
 	/// <summary>
 	/// Use this function to add/check the friend code.
 	/// After you call this function you need to subscribe to it's call back event
@@ -170,12 +176,14 @@ public class SocialManager : Singleton<SocialManager> {
 				OnFriendCodeAdded(this, args);
 		}
 	}
+	#endregion
 
+	#region Get Friend Request
 	/// <summary>
 	/// Gets the friend requests from backend. subscribe to OnFriendRequestRefreshed
 	/// </summary>
 	public void GetFriendRequests(){
-		#region Dummy data
+		#region Dummy Data
 		if(useDummyData){
 			FriendRequests = new List<FriendRequest>();
 			for(int i=0; i<3; i++){
@@ -187,12 +195,6 @@ public class SocialManager : Singleton<SocialManager> {
 			}
 
 			StartCoroutine(WaitForFriendRequest());
-//			ServerEventArgs args = new ServerEventArgs();
-//			args.IsSuccessful = true;
-//			
-//			if(OnFriendRequestRefreshed != null)
-//				OnFriendRequestRefreshed(this, args);
-
 			return;
 		}
 		#endregion
@@ -248,7 +250,9 @@ public class SocialManager : Singleton<SocialManager> {
 			});
 		});	
 	}
+	#endregion
 
+	#region Friend Request Action
 	/// <summary>
 	/// Accepts the friend request. Subscribe to OnFriendRequestRefresh for callback 
 	/// </summary>
@@ -321,7 +325,9 @@ public class SocialManager : Singleton<SocialManager> {
 			});
 		}
 	}
+	#endregion
 
+	#region Remove Friend
 	/// <summary>
 	/// Removes the friend. Subscribe to OnDataRefreshed to know when the remove is
 	/// complete.
@@ -350,8 +356,8 @@ public class SocialManager : Singleton<SocialManager> {
 					args.ErrorMessage = e.Message;
 					
 					Loom.DispatchToMainThread(() => {
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
+						if(OnFriendRemoved != null)
+							OnFriendRemoved(this, args);
 					});
 				} 
 				else{
@@ -367,21 +373,29 @@ public class SocialManager : Singleton<SocialManager> {
 						args.IsSuccessful = false;
 						args.ErrorCode = (ParseException.ErrorCode) parseCode;
 						args.ErrorMessage = (string) result["message"];
+
+						
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
 						args.IsSuccessful = true;
+						
+						Loom.DispatchToMainThread(() => {
+							RefreshData();
+						});
 					}
-					
+
 					Loom.DispatchToMainThread(() => {
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
+						if(OnFriendRemoved != null)
+							OnFriendRemoved(this, args);
 					});
 				}
 			});
 		}
 	}
+	#endregion
 
+	#region Claim Reward
 	/// <summary>
 	/// Claims the friend referral reward.
 	/// Call this method when the reward is given to the user
@@ -394,37 +408,38 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 
 		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", null)
-			.ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
-					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-					
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = false;
-					args.ErrorCode = e.Code;
-					args.ErrorMessage = e.Message;
+		.ContinueWith(t => {
+			if(t.IsFaulted || t.IsCanceled){
+				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+				
+				ServerEventArgs args = new ServerEventArgs();
+				args.IsSuccessful = false;
+				args.ErrorCode = e.Code;
+				args.ErrorMessage = e.Message;
+				
+			
+			} 
+			else{
+				IDictionary<string, object> result = t.Result;
+				// Hack, check for errors
+				object code;
+				ServerEventArgs args = new ServerEventArgs();
+				
+				if(result.TryGetValue("code", out code)){
+					Debug.Log("Error Code: " + code);
+					int parseCode = Convert.ToInt32(code);
 					
 				
 				} 
 				else{
-					IDictionary<string, object> result = t.Result;
-					// Hack, check for errors
-					object code;
-					ServerEventArgs args = new ServerEventArgs();
-					
-					if(result.TryGetValue("code", out code)){
-						Debug.Log("Error Code: " + code);
-						int parseCode = Convert.ToInt32(code);
-						
-					
-					} 
-					else{
-						Debug.Log("Result: " + result["success"]);
+					Debug.Log("Result: " + result["success"]);
 
-					}
 				}
-			});
+			}
+		});
 	}
+	#endregion
 
 	#region Dummy Data
 	private bool IsUsingDummyData(){

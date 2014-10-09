@@ -32,6 +32,11 @@ public class RotationTweenToggle : TweenToggle {
 			// If this tween locks the UI, properly increment the counter
 			if(blockUI){
 				ClickManager.Instance.IncrementTweenCount();
+
+				// Already tweening, and want to abort and decrement
+				if(isMoving){
+					ClickManager.Instance.DecrementTweenCount();
+				}
 			}
 				
 			isShown = true;
@@ -59,6 +64,11 @@ public class RotationTweenToggle : TweenToggle {
 			// If this tween locks the UI, properly increment the counter
 			if(blockUI){
 				ClickManager.Instance.IncrementTweenCount();
+
+				// Already tweening, and want to abort and decrement
+				if(isMoving){
+					ClickManager.Instance.DecrementTweenCount();
+				}
 			}
 			
 			isShown = false;

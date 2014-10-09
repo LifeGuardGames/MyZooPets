@@ -86,10 +86,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			
 			// Try internet connection
 			baseConnectionDisplay.Play("FRIENDS_LOADING");
-			Debug.Log("trying connection");
 			SocialManager.Instance.RefreshData();
-			
-			Debug.Log("opening ui");
 		}
 	}
 	
@@ -148,7 +145,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	#region Refresh Data Handler
 	private void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
 		if(args.IsSuccessful){
-			Debug.Log("Connection Success");
 			// Hide the connection display
 			baseConnectionDisplay.Stop(true, string.Empty);
 
@@ -251,7 +247,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){
 		if(args.IsSuccessful){
-			Debug.Log("Connection Success");
 			// Hide the connection display
 			deleteFriendConnectionDisplay.Stop(true, string.Empty);
 
@@ -296,7 +291,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public void FinishConnectionFriendCodeAdd(object obj, ServerEventArgs args){
 		if(args.IsSuccessful){
-			Debug.Log("friend add Connection Success");
 			// Hide the connection display
 			codeInputConnectionDisplay.Stop(true, string.Empty);
 

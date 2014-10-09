@@ -37,32 +37,6 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	}
 
 	/// <summary>
-	/// Check if ParseUser exists. If not create one
-	/// </summary>
-	/// <returns>Task</returns>
-//	public Task UserCheck(){
-//
-//		var user = ParseUser.CurrentUser;
-//		var source = new TaskCompletionSource<string>();
-//
-//		if(user == null){
-//			CreateParseUser().ContinueWith(t => {
-//				if(t.IsFaulted || t.IsCanceled){
-//					source.SetException(t.Exception);
-//				}
-//				else{
-//					source.SetResult("User Valid");
-//				}
-//			});
-//		}
-//		else{
-//			source.SetResult("User Valid");
-//		}
-//
-//		return source.Task;
-//	}
-	
-	/// <summary>
 	/// Check if Parse User is login and check if kid account exist.
 	/// Call this method everytime before you try to any data to the backend.
 	/// 

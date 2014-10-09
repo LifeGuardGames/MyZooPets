@@ -23,7 +23,7 @@ public class DataManager : Singleton<DataManager>{
 	//basic info data of all the pet that are only used in the menu scene
 	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 	private float syncToParseTimer = 0f;
-	private float syncToParseWaitTime = 60f; //60 seconds before data get sync to server
+	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
 	/// <summary>
 	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method

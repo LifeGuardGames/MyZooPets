@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 public class FriendsUIManager : SingletonUI<FriendsUIManager> {
+	#region Public Variables
 	public InternetConnectionDisplay internetConnectionDisplay;
 	public GameObject friendEntryPrefab;
 	public GameObject friendArea;
@@ -34,12 +35,21 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public UIGrid requestGrid;
 	public InternetConnectionDisplay requestConnectionDisplay;
 	public GameObject requestEntryPrefab;
+	#endregion
 
 	private bool isActive = false;
 
+	#region Unity MonoBehaviour Functions
 	void Awake(){
 		eModeType = UIModeTypes.Friends;
 	}
+
+	void OnDestroy(){
+		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
+		SocialManager.OnFriendCodeAdded -= FinishConnectionFriendCodeAdd;
+		SocialManager.OnFriendRequestRefreshed -= FinishConnectionRequestRefresh;
+	}
+	#endregion
 
 	#region Protected Overrides
 	protected override void _Start(){
@@ -99,12 +109,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 	#endregion
 
-	void OnDestroy(){
-		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
-		SocialManager.OnFriendCodeAdded -= FinishConnectionFriendCodeAdd;
-		SocialManager.OnFriendRequestRefreshed -= FinishConnectionRequestRefresh;
-	}
-
+	
 	// Reposition all the things nicely to stretch to the end of the screen
 	private void RepositionGridBorders(){
 		
@@ -133,6 +138,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 
+	public void RefreshGiftReward(){
+		giftGroupController.Refresh(SocialManager.Instance.UserSocial.NumOfStars
+		                            ,SocialManager.Instance.UserSocial.RewardCount);
+	}
+
+	#region Refresh Data Handler
 	private void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
 		if(args.IsSuccessful){
 			Debug.Log("Connection Success");
@@ -144,24 +155,27 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonCode.SetActive(true);
 			giftGroupController.gameObject.SetActive(true);
 
+			//remove any old game objects
 			foreach(Transform child in grid.transform){
 				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
 			}
 
 			List<ParseObjectKidAccount> friendList = SocialManager.Instance.FriendList;
+			//Initiating friends
 			foreach(ParseObjectKidAccount friendAccount in friendList){
-				Debug.Log("initiating friend");
 				GameObject friendObject = NGUITools.AddChild(grid, friendEntryPrefab);
 				FriendEntryController friendEntryController = friendObject.GetComponent<FriendEntryController>();
 
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
+				string friendName = "";
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
-					// TODO create the pet into hashtable down the road and pass in here v
-					friendEntryController.Initilize(friendPetInfo.Name, friendAccount.ObjectId, null);
+					friendName = friendPetInfo.Name;
 				}
+				friendEntryController.Initilize(friendName, friendAccount.ObjectId, null);
 			}
 
+			//assign user friend code
 			hiddenCode.transform.FindChild("LabelCode").GetComponent<UILabel>().text = SocialManager.Instance.AccountCode;
 
 			// Reposition the grid
@@ -188,11 +202,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			}
 		}
 	}
-
-	public void RefreshGiftReward(){
-		giftGroupController.Refresh(SocialManager.Instance.UserSocial.NumOfStars
-		                            ,SocialManager.Instance.UserSocial.RewardCount);
-	}
+	#endregion
 
 	#region Delete Friend
 	public void OpenDeleteFriendWindowCallback(GameObject sourceObject){
@@ -258,7 +268,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 	#endregion
 
-	#region Code Input
+	#region Add Friend Code
 	public void OpenCodeInputWindow(){
 		if(isActive){
 			codeInputTween.Show();

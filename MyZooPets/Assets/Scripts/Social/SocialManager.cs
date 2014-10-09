@@ -58,9 +58,9 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	public void RefreshData(){
 		if(IsUsingDummyData()) return;
-
-		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriends", null)
-		.ContinueWith(t => {
+		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
+			return ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriends", null);
+		}).Unwrap().ContinueWith(t => {
 			ServerEventArgs args = new ServerEventArgs();
 			
 			if(t.IsFaulted || t.IsCanceled){
@@ -89,6 +89,7 @@ public class SocialManager : Singleton<SocialManager> {
 					AccountCode = kidAccount.AccountCode;
 					UserSocial = kidAccount.Social;
 
+					FriendList = new List<ParseObjectKidAccount>();
 					if(kidAccount.Social.FriendList != null){
 						Debug.Log(kidAccount.Social.FriendList.Count);
 						FriendList = kidAccount.Social.FriendList.ToList();

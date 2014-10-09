@@ -11,7 +11,7 @@ public enum FriendsConnectionType{
 
 public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	#region Variables
-	public InternetConnectionDisplay internetConnectionDisplay;
+	public InternetConnectionDisplay baseConnectionDisplay;
 	public GameObject friendEntryPrefab;
 	public GameObject friendArea;
 	public GameObject grid;
@@ -85,7 +85,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			isActive = true;
 			
 			// Try internet connection
-			internetConnectionDisplay.Play("FRIENDS_LOADING");
+			baseConnectionDisplay.Play("FRIENDS_LOADING");
 			Debug.Log("trying connection");
 			SocialManager.Instance.RefreshData();
 			
@@ -150,7 +150,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		if(args.IsSuccessful){
 			Debug.Log("Connection Success");
 			// Hide the connection display
-			internetConnectionDisplay.Stop(true, string.Empty);
+			baseConnectionDisplay.Stop(true, string.Empty);
 
 			buttonAdd.SetActive(true);
 			buttonRequest.SetActive(true);
@@ -384,22 +384,39 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	public void HandleError(FriendsConnectionType source, ServerEventArgs args){
 		Debug.LogWarning(args.ErrorCode.ToString() + " " + args.ErrorMessage);
+
+		string errorKey;
 		switch(args.ErrorCode){
 		case ParseException.ErrorCode.ObjectNotFound:	// Only applies for friends
-			codeInputConnectionDisplay.Stop(false, "FRIENDS_ADD_ERROR_INVALID");
+			errorKey = "FRIENDS_ADD_ERROR_INVALID";
 			break;
 		case ParseException.ErrorCode.DuplicateValue:	// Only applies for friends
-			codeInputConnectionDisplay.Stop(false, "FRIENDS_ADD_ERROR_ALREADY_REQUESTED");
+			errorKey = "FRIENDS_ADD_ERROR_ALREADY_REQUESTED";
 			break;
 		case ParseException.ErrorCode.ConnectionFailed:
-			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_CONNECTION_FAIL");
+			errorKey = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
 			break;
 		case ParseException.ErrorCode.OtherCause:
-			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
 			break;
 		default:
-			codeInputConnectionDisplay.Stop(false, "NOTIFICATION_INTERNET_ERROR_GENERIC");
+			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
 			Debug.LogWarning("Internet connection untracked error: " + args.ErrorCode.ToString() + " " + args.ErrorMessage);
+			break;
+		}
+
+		switch(source){
+		case FriendsConnectionType.BaseUI:
+			baseConnectionDisplay.Stop(false, errorKey);
+			break;
+		case FriendsConnectionType.CodeInput:
+			codeInputConnectionDisplay.Stop(false, errorKey);
+			break;
+		case FriendsConnectionType.Delete:
+			deleteFriendConnectionDisplay.Stop(false, errorKey);
+			break;
+		case FriendsConnectionType.Request:
+			requestConnectionDisplay.Stop(false, errorKey);
 			break;
 		}
 	}

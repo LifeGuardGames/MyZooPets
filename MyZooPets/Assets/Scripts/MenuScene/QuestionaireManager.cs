@@ -33,6 +33,6 @@ public class QuestionaireManager : MonoBehaviour {
 	}
 
 	private void ShowQuestionaire(){
-		QuestionaireUIManager.Instance.OpenUI();
+		QuestionaireUIManager1.Instance.OpenUI();
 	}
 }

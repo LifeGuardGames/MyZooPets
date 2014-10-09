@@ -175,6 +175,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				Hashtable petInitHash = null;
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					friendName = friendPetInfo.Name;
+					friendColor = friendPetInfo.Color;
 					petInitHash = new Hashtable();
 					petInitHash.Add("Color", friendColor);
 					// Add more pet info here

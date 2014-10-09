@@ -169,8 +169,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
 				string friendName = "";
+				string friendColor = "OrangeYellow";
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					friendName = friendPetInfo.Name;
+					friendColor = friendPetInfo.Color;
 				}
 				friendEntryController.Initilize(friendName, friendAccount.ObjectId, null);
 			}

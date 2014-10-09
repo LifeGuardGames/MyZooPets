@@ -114,6 +114,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100014
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400014}
+  - 114: {fileID: 11400040}
+  - 114: {fileID: 11400078}
+  m_Layer: 10
+  m_Name: LabelTitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100016
 GameObject:
   m_ObjectHideFlags: 1
@@ -1566,7 +1583,7 @@ GameObject:
   - 114: {fileID: 11400242}
   - 114: {fileID: 11400228}
   m_Layer: 10
-  m_Name: LabelTitle
+  m_Name: LabelNoRequests
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1833,6 +1850,18 @@ Transform:
   - {fileID: 400180}
   m_Father: {fileID: 400194}
   m_RootOrder: 4
+--- !u!4 &400014
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 248, z: -5}
+  m_LocalScale: {x: 50, y: 50, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400160}
+  m_RootOrder: 2
 --- !u!4 &400016
 Transform:
   m_ObjectHideFlags: 1
@@ -2007,7 +2036,7 @@ Transform:
   - {fileID: 400048}
   - {fileID: 400006}
   m_Father: {fileID: 400160}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!4 &400048
 Transform:
   m_ObjectHideFlags: 1
@@ -2635,7 +2664,7 @@ Transform:
   m_Children:
   - {fileID: 400150}
   m_Father: {fileID: 400160}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!4 &400154
 Transform:
   m_ObjectHideFlags: 1
@@ -2659,7 +2688,7 @@ Transform:
   m_LocalScale: {x: 1799.88477, y: 899.942383, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400160}
-  m_RootOrder: 5
+  m_RootOrder: 6
 --- !u!4 &400158
 Transform:
   m_ObjectHideFlags: 1
@@ -2684,6 +2713,7 @@ Transform:
   m_Children:
   - {fileID: 400000}
   - {fileID: 400196}
+  - {fileID: 400014}
   - {fileID: 400204}
   - {fileID: 400152}
   - {fileID: 400046}
@@ -2976,11 +3006,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100204}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 248, z: -5}
-  m_LocalScale: {x: 50, y: 50, z: 1}
+  m_LocalPosition: {x: 0, y: -40.1524658, z: -5}
+  m_LocalScale: {x: 65, y: 65, z: 1}
   m_Children: []
   m_Father: {fileID: 400160}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &400206
 Transform:
   m_ObjectHideFlags: 1
@@ -3771,6 +3801,35 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &11400040
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: .477941185, g: .407364905, b: .281141788, a: 1}
+  mPivot: 4
+  mDepth: 11
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: Friend Requests
+  mMaxLineWidth: 395
+  mMaxLineHeight: 50
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 1
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3961,6 +4020,7 @@ MonoBehaviour:
   codeInputConnectionDisplay: {fileID: 11400282}
   codeInputErrorLabelLocalize: {fileID: 11400308}
   requestTween: {fileID: 11400016}
+  requestNoRequestsObject: {fileID: 100204}
   requestGrid: {fileID: 11400158}
   requestConnectionDisplay: {fileID: 11400058}
   requestEntryPrefab: {fileID: 100016, guid: 9abb0d5547e33dd4f9fcfc144f2768bb, type: 2}
@@ -4210,6 +4270,18 @@ MonoBehaviour:
   mShrinkToFit: 1
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &11400078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: FRIENDS_REQUESTS_TITLE
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5636,7 +5708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: FRIENDS_REQUESTS_TITLE
+  key: FRIENDS_REQUESTS_NO_REQUESTS
 --- !u!114 &11400230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5743,9 +5815,9 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 11
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: Friend Requests
-  mMaxLineWidth: 395
-  mMaxLineHeight: 50
+  mText: You don't have any requests!
+  mMaxLineWidth: 465
+  mMaxLineHeight: 132
   mEncoding: 1
   mMaxLineCount: 0
   mPassword: 0
@@ -6348,7 +6420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: FRIENDS_ADD_FRIEND_TITLE
+  key: FRIENDS_ADD_TITLE
 --- !u!114 &11400300
 MonoBehaviour:
   m_ObjectHideFlags: 1

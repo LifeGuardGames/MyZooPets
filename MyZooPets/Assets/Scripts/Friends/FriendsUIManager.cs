@@ -351,15 +351,15 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			}
 
 			if(friendRequests.Count > 0){
-				requestNoRequestsObject.SetActive(true);
-			}
-			else{
 				requestNoRequestsObject.SetActive(false);
 				foreach(SocialManager.FriendRequest request in friendRequests){
 					GameObject requestObject = NGUITools.AddChild(requestGrid.gameObject, requestEntryPrefab);
 					RequestEntryController requestEntryController = requestObject.GetComponent<RequestEntryController>();
 					requestEntryController.Initialize(request.RequestId, request.FriendName);
 				}
+			}
+			else{
+				requestNoRequestsObject.SetActive(true);
 			}
 			 
 			requestGrid.Reposition();

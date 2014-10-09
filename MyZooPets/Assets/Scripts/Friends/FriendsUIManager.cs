@@ -172,11 +172,21 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
 				string friendName = "";
 				string friendColor = "OrangeYellow";
+				Hashtable petInitHash = null;
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					friendName = friendPetInfo.Name;
-					friendColor = friendPetInfo.Color;
+					petInitHash = new Hashtable();
+					petInitHash.Add("Color", friendColor);
+					// Add more pet info here
+
 				}
-				friendEntryController.Initilize(friendName, friendAccount.ObjectId, null);
+				friendEntryController.Initilize(friendName, friendAccount.ObjectId, petInitHash);
+			}
+
+			if(friendList.Count == 0){
+				noFriendsParent.SetActive(true);
+			}else{
+				noFriendsParent.SetActive(false);
 			}
 
 			// Assign user friend code
@@ -190,6 +200,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				noFriendsParent.SetActive(true);
 			}
 			RefreshGiftReward();
+			ToggleCodeButton(false);
 		}
 		else{
 			HandleError(FriendsConnectionType.BaseUI, args);

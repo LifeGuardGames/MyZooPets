@@ -10,10 +10,17 @@ public class FriendEntryController : MonoBehaviour {
 	public string FriendName {get; set;}
 	public string FriendID {get; set;}
 
-	public void Initilize(string friendName, string friendID, Hashtable friendPetInfo){
+	public void Initilize(string friendName, string friendID, Hashtable petInitInfo){
 		FriendName = friendName;
 		FriendID = friendID;
 		friendLabel.text = friendName;
+
+		if(petInitInfo != null){
+			friendSprite.spriteName = "petEntry" + petInitInfo["Color"];
+		}
+		else{
+			Debug.LogWarning("No pet info detected for friendlist");
+		}
 
 		// Assign delete button properties
 		deleteButtonMessage.target = FriendsUIManager.Instance.gameObject;

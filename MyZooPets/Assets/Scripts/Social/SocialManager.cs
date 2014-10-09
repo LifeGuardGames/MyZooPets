@@ -236,7 +236,12 @@ public class SocialManager : Singleton<SocialManager> {
 
 						FriendRequest newRequest = new FriendRequest();
 						newRequest.RequestId = requestId;
-						newRequest.FriendName = requestPetInfo.Name;
+					
+						string friendName = "";
+						if(requestPetInfo != null){
+							friendName = requestPetInfo.Name;
+						}
+						newRequest.FriendName = friendName;
 
 						FriendRequests.Add(newRequest);
 					}

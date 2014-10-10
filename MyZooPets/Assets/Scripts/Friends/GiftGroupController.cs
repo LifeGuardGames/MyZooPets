@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class GiftGroupController : MonoBehaviour {
@@ -9,13 +10,15 @@ public class GiftGroupController : MonoBehaviour {
 	public ParticleSystem giftParticle;
 	public Animation giftAnimation;
 	public GameObject floatyParent;
+	public UILabel addLabel;
 
 	private int giftCountAux;
-
 	private const string FullSpriteName = "friendsStarFull";
 	private const string EmptySpriteName = "friendsStarBlank";
 
 	public void Refresh(int starCount, int giftCount){
+		addLabel.text = String.Format(Localization.Localize("FRIENDS_GIFT_GROUP"), 4 - (starCount % 4));
+
 		if(starCount == 0 && giftCount != 0){
 			gift1.spriteName = FullSpriteName;
 			gift2.spriteName = FullSpriteName;
@@ -46,7 +49,6 @@ public class GiftGroupController : MonoBehaviour {
 			gift3.spriteName = FullSpriteName;
 			gift4.spriteName = EmptySpriteName;
 		}
-
 
 		if(giftCount != 0){
 			ClaimReward(giftCount);

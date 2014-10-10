@@ -418,7 +418,7 @@ public class MiniPet : MonoBehaviour {
 	public void ToggleVisibility(bool isVisible){
 
 		this.isVisible = isVisible;
-		Debug.Log("visible: " + this.isVisible);
+//		Debug.Log("visible: " + this.isVisible);
 
 		if(this.isVisible){
 			bubbleParticle.gameObject.SetActive(true);

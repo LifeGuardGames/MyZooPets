@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using Parse;
+using System.Threading;
 using System.Threading.Tasks;
 
 public class ParseTestScript : MonoBehaviour {
@@ -10,7 +11,7 @@ public class ParseTestScript : MonoBehaviour {
 	public string requestId = "request id";
 	public string username = "user name";
 	public string friendObjectId = "friendObjectId";
-
+//	private CancellationTokenSource cts = new CancellationTokenSource();
 	void Start(){
 		SocialManager.OnDataRefreshed += EventListener;
 		SocialManager.OnFriendCodeAdded += EventListener;
@@ -138,11 +139,21 @@ public class ParseTestScript : MonoBehaviour {
 			});
 		}
 
-		if(GUILayout.Button("create 20 test users")){
-			for(int i=0; i<20; i++)
-				ExtraParseLogic.Instance.CreateTestUser();
-		}
+//		if(GUILayout.Button("create 20 test users")){
+//			for(int i=0; i<20; i++)
+//				ExtraParseLogic.Instance.CreateTestUser();
+//		}
 		GUILayout.EndHorizontal();
+
+//		GUILayout.BeginHorizontal();
+//			if(GUILayout.Button("time out test")){
+//				ConnectionTimeout();
+//			}
+//
+//			if(GUILayout.Button("cancel request")){
+//				cts.Cancel();
+//			}
+//		GUILayout.EndHorizontal();
 	}
 	#endif
 
@@ -153,4 +164,21 @@ public class ParseTestScript : MonoBehaviour {
 			Debug.Log("Error message: " + args.ErrorMessage);
 		}
 	}
+
+//	private void ConnectionTimeout(){
+//		cts = new CancellationTokenSource();
+//		try{
+//			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("loop", null, cts.Token).ContinueWith(t => {
+//				if(t.IsFaulted || t.IsCanceled){
+////					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+//					Debug.Log(t.Exception);
+////					Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+//					Debug.Log("shit");
+//				}
+//			});
+//		}
+//		catch(Exception e){
+//			Debug.Log(e);
+//		}
+//	}
 }

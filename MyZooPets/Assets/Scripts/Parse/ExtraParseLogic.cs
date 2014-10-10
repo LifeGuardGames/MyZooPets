@@ -77,8 +77,6 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 			Username = guid,
 			Password = guid
 		};
-		
-		user["userType"] = "kid";
 
 		return user.SignUpAsync();
 	}

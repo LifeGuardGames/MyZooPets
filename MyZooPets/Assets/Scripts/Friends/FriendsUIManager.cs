@@ -282,6 +282,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputInput.gameObject.SetActive(true);
 			codeInputInput.text = "";
 			codeInputExitButton.SetActive(true);
+			codeInputConnectionDisplay.Reset();
 		}
 	}
 
@@ -330,6 +331,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		if(isActive){
 			requestTween.Show();
 			requestNoRequestsObject.SetActive(false);
+			requestExitButton.SetActive(false);
 			requestConnectionDisplay.Play("FRIENDS_REQUESTS_LOADING");
 			SocialManager.Instance.GetFriendRequests();
 		}

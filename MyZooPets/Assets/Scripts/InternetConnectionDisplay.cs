@@ -11,23 +11,23 @@ public class InternetConnectionDisplay : MonoBehaviour {
 	
 	public void Play(string labelLocalizeKey){
 		loadingIconSpin.gameObject.SetActive(true);
-		loadingIconSpin.GetComponent<ScaleTweenToggle>().Show();
 		loadingIconSpin.Play();
-		labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
+
+		labelTweenParent.SetActive(true);
 		labelLocalize.GetComponent<UILabel>().color = normalTextColor;
 		labelLocalize.key = labelLocalizeKey;
 		labelLocalize.Localize();
 	}
 
 	public void Stop(bool isSuccess, string labelLocalizeKey){
-		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
+		loadingIconSpin.gameObject.SetActive(false);
 
 		if(isSuccess){
-			labelTweenParent.GetComponent<ScaleTweenToggle>().Hide();
+			labelTweenParent.SetActive(false);
 		}
 		else{
 			// Dont hide it and show error message
-			labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
+			labelTweenParent.SetActive(true);
 			labelLocalize.GetComponent<UILabel>().color = errorTextColor;
 			labelLocalize.key = labelLocalizeKey;
 			labelLocalize.Localize();
@@ -40,8 +40,8 @@ public class InternetConnectionDisplay : MonoBehaviour {
 	}
 
 	public void Reset(){
-		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
-		labelTweenParent.GetComponent<ScaleTweenToggle>().Hide();
+		loadingIconSpin.gameObject.SetActive(false);
+		labelTweenParent.SetActive(false);
 	}
 
 //	void OnGUI(){

@@ -1,6 +1,12 @@
 <linker>
-       <assembly fullname="UnityEngine">
-               <type fullname="UnityEngine.iPhone" preserve="all"/>
-			   <type fullname="UnityEngine.WWW" preserve="all" />
-       </assembly>
+    <assembly fullname="UnityEngine">
+        <type fullname="UnityEngine.iPhone" preserve="all"/>
+        <type fullname="UnityEngine.WWW" preserve="all" />
+    </assembly>
+
+    <assembly fullname="Parse.Unity">
+        <namespace fullname="Parse" preserve="all"/>
+        <namespace fullname="Parse.Internal" preserve="all"/>
+    </assembly>
+
 </linker>

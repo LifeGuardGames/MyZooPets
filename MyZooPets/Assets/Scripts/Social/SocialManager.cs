@@ -65,7 +65,7 @@ public class SocialManager : Singleton<SocialManager> {
 			
 			if(t.IsFaulted || t.IsCanceled){
 				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+				Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
 				
 				args.IsSuccessful = false;
 				args.ErrorCode = e.Code;
@@ -77,7 +77,7 @@ public class SocialManager : Singleton<SocialManager> {
 				object code;
 				
 				if(result.TryGetValue("code", out code)){
-					Debug.Log("Error Code: " + code);
+					Debug.LogError("Error Code: " + code);
 					int parseCode = Convert.ToInt32(code);
 					
 					args.IsSuccessful = false;
@@ -89,12 +89,11 @@ public class SocialManager : Singleton<SocialManager> {
 					AccountCode = kidAccount.AccountCode;
 					UserSocial = kidAccount.Social;
 
+					//assign FriedList if list is not null from server result
 					FriendList = new List<ParseObjectKidAccount>();
 					if(kidAccount.Social.FriendList != null){
-						Debug.Log(kidAccount.Social.FriendList.Count);
 						FriendList = kidAccount.Social.FriendList.ToList();
 					}
-					
 					args.IsSuccessful = true;
 				}
 			}
@@ -218,7 +217,7 @@ public class SocialManager : Singleton<SocialManager> {
 				object code;
 				
 				if(result.TryGetValue("code", out code)){
-					Debug.Log("Error Code: " + code);
+					Debug.LogError("Error Code: " + code);
 					int parseCode = Convert.ToInt32(code);
 					
 					args.IsSuccessful = false;

@@ -73,7 +73,7 @@ public class GiftGroupController : MonoBehaviour {
 		
 		// Reward Gems all together in one go
 		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCountAux));
-		
+		SocialManager.Instance.ClaimFriendReferralReward();
 //		Hashtable option = new Hashtable();
 //		option.Add("parent", floatyParent);
 //		option.Add("spriteGems", "iconGems");

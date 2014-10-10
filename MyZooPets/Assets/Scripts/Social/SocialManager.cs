@@ -77,7 +77,7 @@ public class SocialManager : Singleton<SocialManager> {
 				object code;
 				
 				if(result.TryGetValue("code", out code)){
-					Debug.LogError("Error Code: " + code);
+//					Debug.LogError("Error Code: " + code);
 					int parseCode = Convert.ToInt32(code);
 					
 					args.IsSuccessful = false;
@@ -85,16 +85,24 @@ public class SocialManager : Singleton<SocialManager> {
 					args.ErrorMessage = (string) result["message"];
 				} 
 				else{
-					ParseObjectKidAccount kidAccount = (ParseObjectKidAccount) result["success"];
-					AccountCode = kidAccount.AccountCode;
-					UserSocial = kidAccount.Social;
-
+//					ParseObjectKidAccount kidAccount = (ParseObjectKidAccount) result["kidAccount"];
+//					Loom.DispatchToMainThread(() => {
+					var friendList = (IEnumerable) result["friendList"];
+					AccountCode = (string) result["accountCode"];
+					UserSocial = new ParseObjectSocial();
+					UserSocial.NumOfStars = Convert.ToInt32(result["numOfStars"]);
+					UserSocial.RewardCount = Convert.ToInt32(result["rewardCount"]);
+					
 					//assign FriedList if list is not null from server result
 					FriendList = new List<ParseObjectKidAccount>();
-					if(kidAccount.Social.FriendList != null){
-						FriendList = kidAccount.Social.FriendList.ToList();
+					if(friendList != null){
+						foreach(ParseObjectKidAccount friendAccount in friendList){
+							FriendList.Add(friendAccount);
+						}	
 					}
+
 					args.IsSuccessful = true;
+//					});
 				}
 			}
 			
@@ -217,7 +225,7 @@ public class SocialManager : Singleton<SocialManager> {
 				object code;
 				
 				if(result.TryGetValue("code", out code)){
-					Debug.LogError("Error Code: " + code);
+//					Debug.LogError("Error Code: " + code);
 					int parseCode = Convert.ToInt32(code);
 					
 					args.IsSuccessful = false;
@@ -307,7 +315,7 @@ public class SocialManager : Singleton<SocialManager> {
 					ServerEventArgs args = new ServerEventArgs();
 					
 					if(result.TryGetValue("code", out code)){
-						Debug.Log("Error Code: " + code);
+//						Debug.Log("Error Code: " + code);
 						int parseCode = Convert.ToInt32(code);
 						
 						args.IsSuccessful = false;
@@ -320,7 +328,7 @@ public class SocialManager : Singleton<SocialManager> {
 						});
 					} 
 					else{
-						Debug.Log("Result: " + result["success"]);
+//						Debug.Log("Result: " + result["success"]);
 						Loom.DispatchToMainThread(() => {
 							RefreshData();
 							GetFriendRequests();
@@ -407,8 +415,6 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	public void ClaimFriendReferralReward(){
 		if(useDummyData){
-//			if(UserSocial != null)
-//				UserSocial.IsReferralRewardClaimed = true;
 			return;
 		}
 
@@ -432,14 +438,13 @@ public class SocialManager : Singleton<SocialManager> {
 				ServerEventArgs args = new ServerEventArgs();
 				
 				if(result.TryGetValue("code", out code)){
-					Debug.Log("Error Code: " + code);
+//					Debug.Log("Error Code: " + code);
 					int parseCode = Convert.ToInt32(code);
 					
 				
 				} 
 				else{
 					Debug.Log("Result: " + result["success"]);
-
 				}
 			}
 		});

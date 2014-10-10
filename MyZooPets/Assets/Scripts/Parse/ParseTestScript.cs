@@ -137,6 +137,11 @@ public class ParseTestScript : MonoBehaviour {
 				}
 			});
 		}
+
+		if(GUILayout.Button("create 20 test users")){
+			for(int i=0; i<20; i++)
+				ExtraParseLogic.Instance.CreateTestUser();
+		}
 		GUILayout.EndHorizontal();
 	}
 	#endif

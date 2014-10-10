@@ -227,7 +227,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			SocialManager.OnFriendRemoved += FinishConnectionDeleteFriendDone;
 
 			string deleteUserID = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendID;
-			Debug.Log("delete user:" + deleteUserID);
+//			Debug.Log("delete user:" + deleteUserID);
 			deleteUserIDAux = deleteUserID;	// Cache this
 			deleteUserLabel.text = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendName;
 			deleteFriendTween.Show();

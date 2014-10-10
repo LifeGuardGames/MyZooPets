@@ -12,11 +12,11 @@ public class ParseObjectSocial : ParseObject{
 	/// Gets the friend list. The current friend list of the user
 	/// </summary>
 	/// <value>The friend list.</value>
-	[ParseFieldName("currentFriendList")]
-	public IList<ParseObjectKidAccount> FriendList{
-		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
-		//		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
-	}
+//	[ParseFieldName("currentFriendList")]
+//	public IList<ParseObjectKidAccount> FriendList{
+//		get{ return GetProperty<IList<ParseObjectKidAccount>>("FriendList");}
+//		//		set{ SetProperty<IList<ParseObject>>(value, "FriendList");}
+//	}
 
 	/// <summary>
 	/// How mandy rewards are to be given to the user

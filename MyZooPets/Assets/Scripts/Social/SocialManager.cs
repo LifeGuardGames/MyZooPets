@@ -85,8 +85,6 @@ public class SocialManager : Singleton<SocialManager> {
 					args.ErrorMessage = (string) result["message"];
 				} 
 				else{
-//					ParseObjectKidAccount kidAccount = (ParseObjectKidAccount) result["kidAccount"];
-//					Loom.DispatchToMainThread(() => {
 					var friendList = (IEnumerable) result["friendList"];
 					AccountCode = (string) result["accountCode"];
 					UserSocial = new ParseObjectSocial();
@@ -102,7 +100,6 @@ public class SocialManager : Singleton<SocialManager> {
 					}
 
 					args.IsSuccessful = true;
-//					});
 				}
 			}
 			
@@ -408,48 +405,48 @@ public class SocialManager : Singleton<SocialManager> {
 	}
 	#endregion
 
-	#region Claim Reward
-	/// <summary>
-	/// Claims the friend referral reward.
-	/// Call this method when the reward is given to the user
-	/// </summary>
-	public void ClaimFriendReferralReward(){
-		if(useDummyData){
-			return;
-		}
-
-		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", null)
-		.ContinueWith(t => {
-			if(t.IsFaulted || t.IsCanceled){
-				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-				
-				ServerEventArgs args = new ServerEventArgs();
-				args.IsSuccessful = false;
-				args.ErrorCode = e.Code;
-				args.ErrorMessage = e.Message;
-				
-			
-			} 
-			else{
-				IDictionary<string, object> result = t.Result;
-				// Hack, check for errors
-				object code;
-				ServerEventArgs args = new ServerEventArgs();
-				
-				if(result.TryGetValue("code", out code)){
-//					Debug.Log("Error Code: " + code);
-					int parseCode = Convert.ToInt32(code);
-					
-				
-				} 
-				else{
-					Debug.Log("Result: " + result["success"]);
-				}
-			}
-		});
-	}
-	#endregion
+//	#region Claim Reward
+//	/// <summary>
+//	/// Claims the friend referral reward.
+//	/// Call this method when the reward is given to the user
+//	/// </summary>
+//	public void ClaimFriendReferralReward(){
+//		if(useDummyData){
+//			return;
+//		}
+//
+//		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", null)
+//		.ContinueWith(t => {
+//			if(t.IsFaulted || t.IsCanceled){
+//				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+//				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+//				
+//				ServerEventArgs args = new ServerEventArgs();
+//				args.IsSuccessful = false;
+//				args.ErrorCode = e.Code;
+//				args.ErrorMessage = e.Message;
+//				
+//			
+//			} 
+//			else{
+//				IDictionary<string, object> result = t.Result;
+//				// Hack, check for errors
+//				object code;
+//				ServerEventArgs args = new ServerEventArgs();
+//				
+//				if(result.TryGetValue("code", out code)){
+////					Debug.Log("Error Code: " + code);
+//					int parseCode = Convert.ToInt32(code);
+//					
+//				
+//				} 
+//				else{
+//					Debug.Log("Result: " + result["success"]);
+//				}
+//			}
+//		});
+//	}
+//	#endregion
 
 	#region Dummy Data
 	private bool IsUsingDummyData(){

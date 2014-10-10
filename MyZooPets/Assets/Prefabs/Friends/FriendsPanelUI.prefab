@@ -571,22 +571,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100078
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400078}
-  - 114: {fileID: 11400108}
-  m_Layer: 10
-  m_Name: Cloud
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100080
 GameObject:
   m_ObjectHideFlags: 1
@@ -923,22 +907,6 @@ GameObject:
   - 4: {fileID: 400124}
   m_Layer: 10
   m_Name: Clouds
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100126
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400126}
-  - 114: {fileID: 11400262}
-  m_Layer: 10
-  m_Name: SpriteBGHill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2225,18 +2193,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400084}
   m_RootOrder: 0
---- !u!4 &400078
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100078}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3424, y: 266, z: .000562205911}
-  m_LocalScale: {x: 362, y: 121, z: 0}
-  m_Children: []
-  m_Father: {fileID: 400124}
-  m_RootOrder: 5
 --- !u!4 &400080
 Transform:
   m_ObjectHideFlags: 1
@@ -2381,7 +2337,6 @@ Transform:
   - {fileID: 400132}
   - {fileID: 400130}
   - {fileID: 400128}
-  - {fileID: 400126}
   m_Father: {fileID: 400070}
   m_RootOrder: 2
 --- !u!4 &400102
@@ -2392,7 +2347,7 @@ Transform:
   m_GameObject: {fileID: 100102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -800, y: -207, z: 0}
-  m_LocalScale: {x: 8061, y: 428, z: 0}
+  m_LocalScale: {x: 10762, y: 428, z: 0}
   m_Children: []
   m_Father: {fileID: 400070}
   m_RootOrder: 1
@@ -2507,21 +2462,8 @@ Transform:
   - {fileID: 400118}
   - {fileID: 400116}
   - {fileID: 400114}
-  - {fileID: 400078}
   m_Father: {fileID: 400070}
   m_RootOrder: 3
---- !u!4 &400126
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100126}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6241, y: -49, z: .00062520802}
-  m_LocalScale: {x: 1449.71509, y: 487, z: 0}
-  m_Children: []
-  m_Father: {fileID: 400100}
-  m_RootOrder: 4
 --- !u!4 &400128
 Transform:
   m_ObjectHideFlags: 1
@@ -3179,8 +3121,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10000, y: 400, z: 1}
-  m_Center: {x: 4835, y: 0, z: 0}
+  m_Size: {x: 20000, y: 400, z: 1}
+  m_Center: {x: 9776, y: 0, z: 0}
 --- !u!65 &6500008
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -4462,27 +4404,6 @@ MonoBehaviour:
   repositionNow: 0
   sorted: 0
   hideInactive: 1
---- !u!114 &11400108
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mDepth: -4
-  mAtlas: {fileID: 11400000, guid: b77362d8c2af9f3489a0aa2ba34b3c16, type: 2}
-  mSpriteName: fullScreenBGCloud2
-  mFillCenter: 1
-  mType: 0
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
 --- !u!114 &11400110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5803,27 +5724,6 @@ MonoBehaviour:
   mDepth: -9
   mAtlas: {fileID: 11400000, guid: b77362d8c2af9f3489a0aa2ba34b3c16, type: 2}
   mSpriteName: fullScreenBGCloud2
-  mFillCenter: 1
-  mType: 0
-  mFillDirection: 4
-  mFillAmount: 1
-  mInvert: 0
---- !u!114 &11400262
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: .915618658, g: 1, b: .617647052, a: 1}
-  mPivot: 4
-  mDepth: -6
-  mAtlas: {fileID: 11400000, guid: b77362d8c2af9f3489a0aa2ba34b3c16, type: 2}
-  mSpriteName: fullScreenBGHill1
   mFillCenter: 1
   mType: 0
   mFillDirection: 4

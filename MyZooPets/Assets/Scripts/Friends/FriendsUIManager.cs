@@ -21,20 +21,24 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject buttonRequest;
 	public GameObject noFriendsParent;
 	public GiftGroupController giftGroupController;
+	public UILabel friendsCount;
 
 	public TweenToggleDemux deleteFriendTween; 
+	public GameObject deleteExitButton;
 	public InternetConnectionDisplay deleteFriendConnectionDisplay;
 	public UILabel deleteUserLabel;
 	public GameObject labelParent;
 	private string deleteUserIDAux = string.Empty;
 
 	public TweenToggleDemux codeInputTween;
+	public GameObject codeInputExitButton;
 	public GameObject codeInputTitle;
 	public UIInput codeInputInput;
 	public InternetConnectionDisplay codeInputConnectionDisplay;
 	public UILocalize codeInputErrorLabelLocalize;
 
 	public TweenToggleDemux requestTween;
+	public GameObject requestExitButton;
 	public GameObject requestNoRequestsObject;
 	public UIGrid requestGrid;
 	public InternetConnectionDisplay requestConnectionDisplay;
@@ -76,6 +80,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonCode.SetActive(false);
 			noFriendsParent.SetActive(false);
 			giftGroupController.gameObject.SetActive(false);
+			friendsCount.gameObject.SetActive(false);
+
+			// Enable all the sub exit buttons on open base
+			codeInputExitButton.SetActive(true);
+			deleteExitButton.SetActive(true);
+			requestExitButton.SetActive(true);
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -86,10 +96,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			
 			// Try internet connection
 			baseConnectionDisplay.Play("FRIENDS_LOADING");
-			Debug.Log("trying connection");
 			SocialManager.Instance.RefreshData();
-			
-			Debug.Log("opening ui");
 		}
 	}
 	
@@ -141,14 +148,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void RefreshGiftReward(){
-		giftGroupController.Refresh(SocialManager.Instance.UserSocial.NumOfStars,
-		                            SocialManager.Instance.UserSocial.RewardCount);
+		giftGroupController.Refresh(SocialManager.Instance.UserSocial.NumOfStars, SocialManager.Instance.UserSocial.RewardCount);
 	}
 
 	#region Refresh Data Handler
 	private void FinishConnectionUIRefresh(object sender, ServerEventArgs args){
 		if(args.IsSuccessful){
-			Debug.Log("Connection Success");
 			// Hide the connection display
 			baseConnectionDisplay.Stop(true, string.Empty);
 
@@ -157,7 +162,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			buttonCode.SetActive(true);
 			giftGroupController.gameObject.SetActive(true);
 
-			//remove any old game objects
+			// Remove any old game objects
 			foreach(Transform child in grid.transform){
 				child.gameObject.SetActive(false);
 				Destroy(child.gameObject);
@@ -180,13 +185,18 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 					petInitHash.Add("Color", friendColor);
 					// Add more pet info here
 
+					//
 				}
 				friendEntryController.Initilize(friendName, friendAccount.ObjectId, petInitHash);
 			}
 
 			if(friendList.Count == 0){
+				friendsCount.gameObject.SetActive(false);
 				noFriendsParent.SetActive(true);
-			}else{
+			}
+			else{
+				friendsCount.gameObject.SetActive(true);
+				friendsCount.text = friendList.Count + "/40";
 				noFriendsParent.SetActive(false);
 			}
 
@@ -239,9 +249,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void DeleteFriendCallback(){
 		Debug.Log("deleting " + deleteUserIDAux);
 		if(!string.IsNullOrEmpty(deleteUserIDAux)){
-			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
-
 			labelParent.SetActive(false);
+			deleteExitButton.SetActive(false);
+
+			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
 			deleteFriendConnectionDisplay.Play("FRIENDS_DELETE_LOADING");
 		}
 		else{
@@ -250,8 +261,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){
+		deleteExitButton.SetActive(true);
 		if(args.IsSuccessful){
-			Debug.Log("Connection Success");
 			// Hide the connection display
 			deleteFriendConnectionDisplay.Stop(true, string.Empty);
 
@@ -270,6 +281,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputTitle.SetActive(true);
 			codeInputInput.gameObject.SetActive(true);
 			codeInputInput.text = "";
+			codeInputExitButton.SetActive(true);
 		}
 	}
 
@@ -289,14 +301,16 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		else{
 			codeInputTitle.SetActive(false);
 			codeInputInput.gameObject.SetActive(false);
+			codeInputExitButton.SetActive(false);
+
 			SocialManager.Instance.SendFriendRequest(input);
 			codeInputConnectionDisplay.Play("FRIENDS_ADD_LOADING");
 		}
 	}
 
 	public void FinishConnectionFriendCodeAdd(object obj, ServerEventArgs args){
+		codeInputExitButton.SetActive(true);
 		if(args.IsSuccessful){
-			Debug.Log("friend add Connection Success");
 			// Hide the connection display
 			codeInputConnectionDisplay.Stop(true, string.Empty);
 
@@ -336,6 +350,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		SocialManager.Instance.AcceptFriendRequest(requestId);
 
 		requestGrid.gameObject.SetActive(false);
+		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_ACCEPT_LOADING");
 	}
 
@@ -343,10 +358,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		SocialManager.Instance.RejectFriendRequest(requestId);
 
 		requestGrid.gameObject.SetActive(false);
+		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_DECLINE_LOADING");
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
+		requestExitButton.SetActive(true);
 		if(args.IsSuccessful){
 			requestGrid.gameObject.SetActive(true);
 

@@ -20,15 +20,12 @@ public class InternetConnectionDisplay : MonoBehaviour {
 	}
 
 	public void Stop(bool isSuccess, string labelLocalizeKey){
-		Debug.Log("Stopping spinner");
 		loadingIconSpin.GetComponent<ScaleTweenToggle>().Hide();
 
 		if(isSuccess){
 			labelTweenParent.GetComponent<ScaleTweenToggle>().Hide();
-			Debug.Log("success, hiding label");
 		}
 		else{
-			Debug.Log("failed, showing message " + labelLocalizeKey);
 			// Dont hide it and show error message
 			labelTweenParent.GetComponent<ScaleTweenToggle>().Show();
 			labelLocalize.GetComponent<UILabel>().color = errorTextColor;

@@ -196,6 +196,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100024
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400024}
+  - 114: {fileID: 11400080}
+  - 114: {fileID: 11400044}
+  m_Layer: 10
+  m_Name: LabelBanner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &100028
 GameObject:
   m_ObjectHideFlags: 1
@@ -284,9 +301,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400038}
   - 114: {fileID: 11400046}
-  - 114: {fileID: 11400044}
   m_Layer: 10
-  m_Name: LabelBanner
+  m_Name: LabelCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1817,7 +1833,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 50.8668823, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -1910,6 +1926,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 1
+--- !u!4 &400024
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 320.432007, z: -5.00006104}
+  m_LocalScale: {x: 60, y: 60, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400054}
+  m_RootOrder: 1
 --- !u!4 &400028
 Transform:
   m_ObjectHideFlags: 1
@@ -1981,11 +2009,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 320.432007, z: -5.00006104}
-  m_LocalScale: {x: 60, y: 60, z: 1}
+  m_LocalPosition: {x: -378, y: 183, z: -5.00010967}
+  m_LocalScale: {x: 60, y: 60, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400054}
-  m_RootOrder: 1
+  m_RootOrder: 5
 --- !u!4 &400040
 Transform:
   m_ObjectHideFlags: 1
@@ -2017,7 +2045,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.566371679, y: .566345215, z: 4.57763672e-05}
+  m_LocalPosition: {x: -.549356222, y: 1.09863281, z: 4.57763672e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400054}
@@ -2088,10 +2116,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400040}
-  - {fileID: 400038}
+  - {fileID: 400024}
   - {fileID: 400036}
   - {fileID: 400070}
   - {fileID: 400166}
+  - {fileID: 400038}
   m_Father: {fileID: 400044}
   m_RootOrder: 0
 --- !u!4 &400056
@@ -2158,7 +2187,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.566345, y: -383.433655, z: 0}
+  m_LocalPosition: {x: -512.549377, y: -383.450684, z: 0}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400134}
@@ -2572,7 +2601,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.566345, y: -383.433655, z: 0}
+  m_LocalPosition: {x: -512.549377, y: -383.450684, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400136}
@@ -2727,7 +2756,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100162}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.566371679, y: 384.566345, z: 0}
+  m_LocalPosition: {x: -.549356222, y: 384.549316, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400190}
@@ -3772,6 +3801,7 @@ MonoBehaviour:
   giftParticle: {fileID: 0}
   giftAnimation: {fileID: 11100000}
   floatyParent: {fileID: 100112}
+  addLabel: {fileID: 11400038}
 --- !u!114 &11400038
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3856,7 +3886,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100038}
+  m_GameObject: {fileID: 100024}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
@@ -3878,8 +3908,8 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 4
   mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: Friends
-  mMaxLineWidth: 406
+  mText: 40/40
+  mMaxLineWidth: 184
   mMaxLineHeight: 60
   mEncoding: 1
   mMaxLineCount: 0
@@ -4010,16 +4040,20 @@ MonoBehaviour:
   buttonRequest: {fileID: 100002}
   noFriendsParent: {fileID: 100008}
   giftGroupController: {fileID: 11400036}
+  friendsCount: {fileID: 11400046}
   deleteFriendTween: {fileID: 11400032}
+  deleteExitButton: {fileID: 0}
   deleteFriendConnectionDisplay: {fileID: 11400130}
   deleteUserLabel: {fileID: 11400256}
   labelParent: {fileID: 100012}
   codeInputTween: {fileID: 11400290}
+  codeInputExitButton: {fileID: 0}
   codeInputTitle: {fileID: 100206}
   codeInputInput: {fileID: 11400210}
   codeInputConnectionDisplay: {fileID: 11400282}
   codeInputErrorLabelLocalize: {fileID: 11400308}
   requestTween: {fileID: 11400016}
+  requestExitButton: {fileID: 0}
   requestNoRequestsObject: {fileID: 100204}
   requestGrid: {fileID: 11400158}
   requestConnectionDisplay: {fileID: 11400058}
@@ -4282,6 +4316,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: FRIENDS_REQUESTS_TITLE
+--- !u!114 &11400080
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mDepth: 4
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: Friends
+  mMaxLineWidth: 406
+  mMaxLineHeight: 60
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 1
+  mEffectColor: {r: .0509803928, g: 0, b: .376470596, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 6, y: 6}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!114 &11400082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4472,7 +4535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrangement: 1
   maxPerLine: 1
-  cellWidth: 300
+  cellWidth: 350
   cellHeight: 400
   repositionNow: 0
   sorted: 0
@@ -4579,11 +4642,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .566371679
+    e03: .549356222
     e10: 0
     e11: 384
     e12: 0
-    e13: 2091.38794
+    e13: 2090.85571
     e20: 0
     e21: 0
     e22: 384
@@ -5050,11 +5113,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .566371679
+    e03: .549356222
     e10: 0
     e11: 384
     e12: 0
-    e13: 2162.96582
+    e13: 2162.98291
     e20: 0
     e21: 0
     e22: 384
@@ -5109,11 +5172,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .566371679
+    e03: .549356222
     e10: 0
     e11: 384
     e12: 0
-    e13: 2071.31689
+    e13: 2071.33398
     e20: 0
     e21: 0
     e22: 384
@@ -5623,11 +5686,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .566371679
+    e03: .549356222
     e10: 0
     e11: 384
     e12: 0
-    e13: 2086.88965
+    e13: 2086.90674
     e20: 0
     e21: 0
     e22: 384
@@ -6243,11 +6306,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .566371679
+    e03: .549356222
     e10: 0
     e11: 384
     e12: 0
-    e13: 2086.88965
+    e13: 2086.90674
     e20: 0
     e21: 0
     e22: 384

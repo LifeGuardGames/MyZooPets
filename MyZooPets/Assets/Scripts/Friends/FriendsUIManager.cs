@@ -445,7 +445,25 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			errorKey = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
 			break;
 		case ParseException.ErrorCode.OtherCause:
-			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
+			// Parsing check for custom LgErrors
+			string errorMessage = args.ErrorMessage;
+			char[] delimiterChar = {':'};
+			string[] lgErrorPair = errorMessage.Split(delimiterChar);
+			if("LgError".Equals(lgErrorPair[0])){
+				if("YourFriendListFull".Equals(lgErrorPair[1])){
+					errorKey = "FRIENDS_ADD_ERROR_YOUR_LIST_FULL";
+				}
+				else if("FriendFriendListFull".Equals(lgErrorPair[1])){
+					errorKey = "FRIENDS_ADD_ERROR_FRIEND_LIST_FULL";
+				}
+				else{
+					errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
+					Debug.LogWarning("Unhandled LgError key: " + lgErrorPair[0]);
+				}
+			}
+			else{
+				errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
+			}
 			break;
 		default:
 			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";

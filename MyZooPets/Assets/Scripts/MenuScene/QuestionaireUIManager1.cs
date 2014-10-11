@@ -42,22 +42,25 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
-		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected = true;
+		Debug.Log("registered questionaire1");
+		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollectedMenuScene = true; // TODO
 
 		CloseUI();
 	}
 
 	protected override void _OpenUI(){
-		gameObject.GetComponent<TweenToggle>().Show();
+//		gameObject.GetComponent<TweenToggle>().Show();
 
 	}
 
 	protected override void _CloseUI(){
-		gameObject.GetComponent<TweenToggle>().Hide();
+//		gameObject.GetComponent<TweenToggle>().Hide();
 
 		//once questionaire is done. let tutorial knows to continue
 		TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
 		tutorialManager.OnQuestionaireDone();
+
+		DestroyPanel();
 	}
 
 	/// <summary>

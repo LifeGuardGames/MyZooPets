@@ -9,6 +9,7 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 	private bool hasAsthma;
 	private bool hasAsthmaOptionChecked = false;
 
+
 	void Awake(){
 		eModeType = UIModeTypes.CustomizePet;
 	}
@@ -35,21 +36,23 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAsthma(hasAsthma);
+		Debug.Log("registered questionaire2");
 		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected = true; // TODO
 		CloseUI();
 	}
 
 	protected override void _OpenUI(){
-		gameObject.GetComponent<TweenToggle>().Show();
-
+//		gameObject.GetComponent<TweenToggle>().Show();
 	}
 
 	protected override void _CloseUI(){
-		gameObject.GetComponent<TweenToggle>().Hide();
+//		gameObject.GetComponent<TweenToggle>().Hide();
 
 		//once questionaire is done. let tutorial knows to continue
 		TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
 		tutorialManager.OnQuestionaireDone();
+
+		DestroyPanel();
 	}
 
 	/// <summary>

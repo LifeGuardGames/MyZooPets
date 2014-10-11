@@ -107,7 +107,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   m_Layer: 10
-  m_Name: LabelParents
+  m_Name: ContentParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1824,8 +1824,9 @@ Transform:
   - {fileID: 400148}
   - {fileID: 400142}
   - {fileID: 400180}
+  - {fileID: 400176}
   m_Father: {fileID: 400194}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!4 &400014
 Transform:
   m_ObjectHideFlags: 1
@@ -2260,7 +2261,7 @@ Transform:
   - {fileID: 400104}
   - {fileID: 400098}
   m_Father: {fileID: 400194}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!4 &400090
 Transform:
   m_ObjectHideFlags: 1
@@ -2374,7 +2375,7 @@ Transform:
   m_LocalScale: {x: 1799.88477, y: 1200, z: .999935985}
   m_Children: []
   m_Father: {fileID: 400194}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!4 &400112
 Transform:
   m_ObjectHideFlags: 1
@@ -2781,13 +2782,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 248.503693, y: 116.530701, z: 0}
+  m_LocalPosition: {x: 248.503693, y: 116.530762, z: 0}
   m_LocalScale: {x: .7998721, y: .7998721, z: .999935985}
   m_Children:
   - {fileID: 400158}
   - {fileID: 400154}
-  m_Father: {fileID: 400194}
-  m_RootOrder: 1
+  m_Father: {fileID: 400012}
+  m_RootOrder: 3
 --- !u!4 &400178
 Transform:
   m_ObjectHideFlags: 1
@@ -2906,7 +2907,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400192}
-  - {fileID: 400176}
   - {fileID: 400088}
   - {fileID: 400106}
   - {fileID: 400012}
@@ -3909,9 +3909,10 @@ MonoBehaviour:
   deleteExitButton: {fileID: 100176}
   deleteFriendConnectionDisplay: {fileID: 11400130}
   deleteUserLabel: {fileID: 11400256}
-  labelParent: {fileID: 100012}
+  deleteContentParent: {fileID: 100012}
   codeInputTween: {fileID: 11400290}
   codeInputExitButton: {fileID: 100214}
+  codeInputOkButton: {fileID: 100210}
   codeInputTitle: {fileID: 100206}
   codeInputInput: {fileID: 11400210}
   codeInputConnectionDisplay: {fileID: 11400282}

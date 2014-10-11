@@ -124,10 +124,12 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public void ToggleEggAnimation(bool isOn){
         foreach(Transform child in selectionGrid.transform){
             Transform eggParent = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
-			if(isOn)
-                eggParent.GetComponent<RandomAnimation>().Enable();
-            else{
-                eggParent.GetComponent<RandomAnimation>().Disable();
+			if(eggParent != null){
+				if(isOn)
+					eggParent.GetComponent<RandomAnimation>().Enable();
+				else{
+					eggParent.GetComponent<RandomAnimation>().Disable();
+				}
 			}
         }
     }

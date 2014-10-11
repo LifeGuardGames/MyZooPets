@@ -247,16 +247,19 @@ public class DataManager : Singleton<DataManager>{
 			menuSceneData = new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
 	}
 	
+
+
+	#region Data Version
 	/// <summary>
 	/// Versions the check. Handles any major data schema changes to the DataManager
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
 		Version version135 = new Version("1.3.5");
-
+		
 		if(currentDataVersion < version135){
 			PlayerPrefs.DeleteKey("IsSinglePetMode");
-
+			
 			ExtraParseLogic.Instance.UserCheck();
 		}
 	}
@@ -287,7 +290,9 @@ public class DataManager : Singleton<DataManager>{
 		if(buildVersion > currentDataVersion)
 			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
 	}
-	
+	#endregion
+
+	#region MenuScene Data
 	/// <summary>
 	/// Loads the menu scene data.
 	/// </summary>
@@ -308,6 +313,7 @@ public class DataManager : Singleton<DataManager>{
 			PlayerPrefs.SetString("MenuSceneData", jsonString);
 		}
 	}
+	#endregion
 	
 	/// <summary>
 	/// Called when game data has been deserialized. Could be successful or failure

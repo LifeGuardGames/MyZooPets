@@ -72,6 +72,20 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 	protected override void _OpenUI(){
 		if(!isActive){
+			GetComponent<TweenToggleDemux>().Show();
+			
+			ToggleCodeButton(false);
+			buttonAdd.SetActive(false);
+			buttonRequest.SetActive(false);
+			buttonCode.SetActive(false);
+			noFriendsParent.SetActive(false);
+			giftGroupController.gameObject.SetActive(false);
+			friendsCount.gameObject.SetActive(false);
+
+			// Enable all the sub exit buttons on open base
+			codeInputExitButton.SetActive(true);
+			deleteExitButton.SetActive(true);
+			requestExitButton.SetActive(true);
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -80,8 +94,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			HUDUIManager.Instance.HidePanel();
 			isActive = true;
 			
-			ResetBaseUI();
-
 			// Try internet connection
 			baseConnectionDisplay.Play("FRIENDS_LOADING");
 			SocialManager.Instance.RefreshData();
@@ -107,29 +119,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		}
 	}
 	#endregion
-
-	private void ResetBaseUI(){
-		GetComponent<TweenToggleDemux>().Show();
-		
-		ToggleCodeButton(false);
-		buttonAdd.SetActive(false);
-		buttonRequest.SetActive(false);
-		buttonCode.SetActive(false);
-		noFriendsParent.SetActive(false);
-		giftGroupController.gameObject.SetActive(false);
-		friendsCount.gameObject.SetActive(false);
-		
-		// Enable all the sub exit buttons on open base
-		codeInputExitButton.SetActive(true);
-		deleteExitButton.SetActive(true);
-		requestExitButton.SetActive(true);
-
-		// Remove any old game objects
-		foreach(Transform child in grid.transform){
-			child.gameObject.SetActive(false);
-			Destroy(child.gameObject);
-		}
-	}
 
 	// Reposition all the things nicely to stretch to the end of the screen
 	private void RepositionGridBorders(){
@@ -201,12 +190,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 				friendEntryController.Initilize(friendName, friendAccount.ObjectId, petInitHash);
 			}
 
-			// Reset the dragging panel position
-			Vector3 panelPos = friendArea.transform.localPosition;
-			friendArea.transform.localPosition = new Vector3(0f, panelPos.y, panelPos.z);
-			Vector4 panelClipRange = friendArea.GetComponent<UIPanel>().clipRange;
-			friendArea.GetComponent<UIPanel>().clipRange = new Vector4(0f, panelClipRange.y, panelClipRange.z, panelClipRange.w);
-
 			if(friendList.Count == 0){
 				friendsCount.gameObject.SetActive(false);
 				noFriendsParent.SetActive(true);
@@ -249,7 +232,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			deleteUserLabel.text = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendName;
 			deleteFriendTween.Show();
 			labelParent.SetActive(true);
-			deleteFriendConnectionDisplay.Reset();
 		}
 	}
 
@@ -265,15 +247,10 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void DeleteFriendCallback(){
-		Debug.Log("deleting " + deleteUserIDAux);
+//		Debug.Log("deleting " + deleteUserIDAux);
 		if(!string.IsNullOrEmpty(deleteUserIDAux)){
 			labelParent.SetActive(false);
 			deleteExitButton.SetActive(false);
-
-			// Delete friend will make another call to refresh base so reset the base
-			ResetBaseUI();
-			// Try internet connection
-			baseConnectionDisplay.Play("FRIENDS_LOADING");
 
 			SocialManager.Instance.RemoveFriend(deleteUserIDAux);
 			deleteFriendConnectionDisplay.Play("FRIENDS_DELETE_LOADING");
@@ -328,8 +305,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputExitButton.SetActive(false);
 
 			SocialManager.Instance.SendFriendRequest(input);
-
-			// Queue
 			codeInputConnectionDisplay.Play("FRIENDS_ADD_LOADING");
 		}
 	}
@@ -374,23 +349,19 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void RequestAccept(string requestId){
-		// Accept friend will make another call to refresh base so reset the base
-		ResetBaseUI();
-		baseConnectionDisplay.Play("FRIENDS_LOADING"); // Base try internet connection
+		SocialManager.Instance.AcceptFriendRequest(requestId);
 
 		requestGrid.gameObject.SetActive(false);
 		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_ACCEPT_LOADING");
-
-		SocialManager.Instance.AcceptFriendRequest(requestId);
 	}
 
 	public void RequestDecline(string requestId){
+		SocialManager.Instance.RejectFriendRequest(requestId);
+
 		requestGrid.gameObject.SetActive(false);
 		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_DECLINE_LOADING");
-
-		SocialManager.Instance.RejectFriendRequest(requestId);
 	}
 
 	public void FinishConnectionRequestRefresh(object obj, ServerEventArgs args){
@@ -402,7 +373,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			requestConnectionDisplay.Stop(true, string.Empty);
 
 			List<SocialManager.FriendRequest> friendRequests = SocialManager.Instance.FriendRequests;
-			Debug.Log(friendRequests.Count());
+//			Debug.Log(friendRequests.Count());
 
 			//remove existing objects
 			foreach(Transform child in requestGrid.transform){
@@ -445,25 +416,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			errorKey = "NOTIFICATION_INTERNET_CONNECTION_FAIL";
 			break;
 		case ParseException.ErrorCode.OtherCause:
-			// Parsing check for custom LgErrors
-			string errorMessage = args.ErrorMessage;
-			char[] delimiterChar = {':'};
-			string[] lgErrorPair = errorMessage.Split(delimiterChar);
-			if("LgError".Equals(lgErrorPair[0])){
-				if("YourFriendListFull".Equals(lgErrorPair[1])){
-					errorKey = "FRIENDS_ADD_ERROR_YOUR_LIST_FULL";
-				}
-				else if("FriendFriendListFull".Equals(lgErrorPair[1])){
-					errorKey = "FRIENDS_ADD_ERROR_FRIEND_LIST_FULL";
-				}
-				else{
-					errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
-					Debug.LogWarning("Unhandled LgError key: " + lgErrorPair[0]);
-				}
-			}
-			else{
-				errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
-			}
+			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";
 			break;
 		default:
 			errorKey = "NOTIFICATION_INTERNET_ERROR_GENERIC";

@@ -81,7 +81,7 @@ public class SocialManager : Singleton<SocialManager> {
 			                                                                 null, 
 			                                                                 timeOutRequestCancellation.Token);
 		}).Unwrap().ContinueWith(t => {
-			StopTimeOutTimer();
+
 			ServerEventArgs args = new ServerEventArgs();
 
 			if(t.IsFaulted || t.IsCanceled){
@@ -135,6 +135,8 @@ public class SocialManager : Singleton<SocialManager> {
 				if(OnDataRefreshed != null)
 					OnDataRefreshed(this, args);
 			});
+
+			StopTimeOutTimer();
 		});
 	}
 	#endregion
@@ -163,7 +165,7 @@ public class SocialManager : Singleton<SocialManager> {
 			                                                          paramDict, 
 			                                                          timeOutRequestCancellation.Token)
 			.ContinueWith(t => {
-				StopTimeOutTimer();
+				
 				ServerEventArgs args = new ServerEventArgs();
 
 				if(t.IsFaulted || t.IsCanceled){
@@ -204,6 +206,8 @@ public class SocialManager : Singleton<SocialManager> {
 					if(OnFriendCodeAdded != null)
 						OnFriendCodeAdded(this, args);
 				});
+				
+				StopTimeOutTimer();
 			});
 		}
 		else{
@@ -245,7 +249,7 @@ public class SocialManager : Singleton<SocialManager> {
 		                                                          null, 
 		                                                          timeOutRequestCancellation.Token)
 		.ContinueWith(t => {
-			StopTimeOutTimer();
+			
 			ServerEventArgs args = new ServerEventArgs();
 
 			if(t.IsFaulted || t.IsCanceled){
@@ -306,6 +310,8 @@ public class SocialManager : Singleton<SocialManager> {
 				if(OnFriendRequestRefreshed != null)
 					OnFriendRequestRefreshed(this, args);
 			});
+
+			StopTimeOutTimer();
 		});	
 	}
 	#endregion
@@ -426,9 +432,7 @@ public class SocialManager : Singleton<SocialManager> {
 			                                                          paramDict,
 			                                                          timeOutRequestCancellation.Token)
 			.ContinueWith(t => {
-				StopTimeOutTimer();
 				ServerEventArgs args = new ServerEventArgs();
-
 				if(t.IsFaulted || t.IsCanceled){
 					ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
 					string message = "time out by client";
@@ -465,7 +469,7 @@ public class SocialManager : Singleton<SocialManager> {
 						args.ErrorMessage = (string) result["message"];
 					} 
 					else{
-						Debug.Log("Result: " + result["success"]);
+//						Debug.Log("Result: " + result["success"]);
 						args.IsSuccessful = true;
 						
 						Loom.DispatchToMainThread(() => {
@@ -478,6 +482,8 @@ public class SocialManager : Singleton<SocialManager> {
 							OnFriendRemoved(this, args);
 					});
 				}
+
+				StopTimeOutTimer();
 			});
 		}
 	}

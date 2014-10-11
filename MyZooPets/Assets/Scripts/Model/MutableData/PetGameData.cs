@@ -40,7 +40,7 @@ public class PetGameData{
         Decorations = new MutableDataDecorationSystem();
 
 		Accessories = new MutableDataAccessories();
-		allMutableData.Add(Accessories);
+//		allMutableData.Add(Accessories);
 
         Stats = new MutableDataStats();
         Level = new MutableDataPetLevel();

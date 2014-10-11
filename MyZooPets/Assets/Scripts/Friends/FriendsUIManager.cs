@@ -94,6 +94,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			RoomArrowsUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
 			isActive = true;
+			PetAudioManager.Instance.EnableSound = false;
 			
 			// Try internet connection
 			baseConnectionDisplay.Play("FRIENDS_LOADING");
@@ -110,8 +111,8 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
-			
 			isActive = false;
+			PetAudioManager.Instance.EnableSound = true;
 			
 			// Destroy all children
 			foreach(Transform child in grid.transform) {

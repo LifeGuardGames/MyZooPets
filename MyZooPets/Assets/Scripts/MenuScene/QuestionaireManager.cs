@@ -7,16 +7,28 @@ using System.Collections;
 /// </summary>
 public class QuestionaireManager : MonoBehaviour {
 	void Start(){
-		CheckToOpenQuestionaire();
-	}
-	
-	void OnApplicationPause(bool paused){
-		if(!paused){
-			CheckToOpenQuestionaire();
+		if(Application.loadedLevelName == "MenuScene"){
+			CheckToOpenQuestionaireMenuScene();
+		}
+		else if(Application.loadedLevelName == "NewBedRoom"){
+			CheckToOpenQuestionaireBedroom();
 		}
 	}
 
-	private void CheckToOpenQuestionaire(){
+	private void CheckToOpenQuestionaireMenuScene(){
+		// TODO JASON FIX HERE
+		bool isQuestionaireCollectedMenuScene = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollectedMenuScene;
+		/////////
+
+		if(isQuestionaireCollectedMenuScene){
+			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel2");
+			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
+
+			Invoke("ShowQuestionaireMenuScene", 1f);
+		}
+	}
+
+	private void CheckToOpenQuestionaireBedroom(){
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
@@ -25,14 +37,18 @@ public class QuestionaireManager : MonoBehaviour {
 		//has been finished
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
 		   isFlameTutorialDone){
-			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel");
+			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel2");
 			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
 	
-			Invoke("ShowQuestionaire", 1f);
+			Invoke("ShowQuestionaireBedroom", 1f);
 		}
 	}
 
-	private void ShowQuestionaire(){
+	private void ShowQuestionaireBedroom(){
+		QuestionaireUIManager2.Instance.OpenUI();
+	}
+
+	private void ShowQuestionaireMenuScene(){
 		QuestionaireUIManager1.Instance.OpenUI();
 	}
 }

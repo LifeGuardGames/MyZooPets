@@ -27,11 +27,12 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public GameObject deleteExitButton;
 	public InternetConnectionDisplay deleteFriendConnectionDisplay;
 	public UILabel deleteUserLabel;
-	public GameObject labelParent;
+	public GameObject deleteContentParent;
 	private string deleteUserIDAux = string.Empty;
 
 	public TweenToggleDemux codeInputTween;
 	public GameObject codeInputExitButton;
+	public GameObject codeInputOkButton;
 	public GameObject codeInputTitle;
 	public UIInput codeInputInput;
 	public InternetConnectionDisplay codeInputConnectionDisplay;
@@ -248,7 +249,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			deleteUserIDAux = deleteUserID;	// Cache this
 			deleteUserLabel.text = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendName;
 			deleteFriendTween.Show();
-			labelParent.SetActive(true);
+			deleteContentParent.SetActive(true);
 			deleteFriendConnectionDisplay.Reset();
 		}
 	}
@@ -267,8 +268,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public void DeleteFriendCallback(){
 		Debug.Log("deleting " + deleteUserIDAux);
 		if(!string.IsNullOrEmpty(deleteUserIDAux)){
-			labelParent.SetActive(false);
-			deleteExitButton.SetActive(false);
+			deleteContentParent.SetActive(false);
 
 			// Delete friend will make another call to refresh base so reset the base
 			ResetBaseUI();
@@ -284,7 +284,6 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	}
 
 	public void FinishConnectionDeleteFriendDone(object obj, ServerEventArgs args){
-		deleteExitButton.SetActive(true);
 		if(args.IsSuccessful){
 			// Hide the connection display
 			deleteFriendConnectionDisplay.Stop(true, string.Empty);
@@ -304,6 +303,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputTitle.SetActive(true);
 			codeInputInput.gameObject.SetActive(true);
 			codeInputInput.text = "";
+			codeInputOkButton.SetActive(true);
 			codeInputExitButton.SetActive(true);
 			codeInputConnectionDisplay.Reset();
 		}
@@ -326,6 +326,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			codeInputTitle.SetActive(false);
 			codeInputInput.gameObject.SetActive(false);
 			codeInputExitButton.SetActive(false);
+			codeInputOkButton.SetActive(false);
 
 			SocialManager.Instance.SendFriendRequest(input);
 
@@ -346,6 +347,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			HandleError(FriendsConnectionType.CodeInput, args);
 
 			codeInputTitle.SetActive(true);
+			codeInputOkButton.SetActive(true);
 			codeInputInput.gameObject.SetActive(true);
 		}
 	}

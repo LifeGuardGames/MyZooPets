@@ -25,6 +25,7 @@ public class DataManager : Singleton<DataManager>{
 	private float syncToParseTimer = 0f;
 	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
+	#region Properties
 	/// <summary>
 	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method
 	/// </summary>
@@ -53,9 +54,28 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	public bool IsFirstTime{
 		get{
+			//default to true
 			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		
 			return firstTime;
+		}
+	}
+
+	/// <summary>
+	/// Gets a value indicating whether terms of service and privacy are accepted
+	/// by the user
+	/// </summary>
+	public bool IsTermsAndPrivacyAccepeted{
+		get{
+			//default to false
+			bool isAccepted = PlayerPrefs.GetInt("IsTermsAndPrivacyAccepted", 0) > 0;
+
+			return isAccepted;
+		}
+		set{
+			bool isAccepted = value;
+			if(isAccepted)
+				PlayerPrefs.SetInt("IsTermsAndPrivacyAccepted", 1);
 		}
 	}
 
@@ -66,7 +86,9 @@ public class DataManager : Singleton<DataManager>{
 	public bool IsGameDataLoaded{
 		get{ return gameData != null;}
 	}
+	#endregion
 
+	#region Unity MonoBehaviours
 	void Awake(){
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;
@@ -97,7 +119,9 @@ public class DataManager : Singleton<DataManager>{
 				VersionCheck(new Version(currentDataVersionString));
 			}
 			else{
-				ExtraParseLogic.Instance.UserCheck();
+				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+				if(isSyncToServerOn)
+					ExtraParseLogic.Instance.UserCheck();
 			}
 			
 			LoadMenuSceneData();
@@ -159,7 +183,9 @@ public class DataManager : Singleton<DataManager>{
 			}
 		}
 	}
-	
+	#endregion
+
+	#region Game Data
 	/// <summary>
 	/// Serialize data into json string and store locally in PlayerPrefs
 	/// </summary>
@@ -221,7 +247,8 @@ public class DataManager : Singleton<DataManager>{
 			Deserialized(true);
 		}
 	}
-	
+	#endregion
+
 	/// <summary>
 	/// Initializes the game data for new pet.
 	/// </summary>
@@ -246,8 +273,6 @@ public class DataManager : Singleton<DataManager>{
 		if(!isDebug)
 			menuSceneData = new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
 	}
-	
-
 
 	#region Data Version
 	/// <summary>
@@ -255,9 +280,9 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
-		Version version135 = new Version("1.3.5");
+		Version version140 = new Version("1.4.0");
 		
-		if(currentDataVersion < version135){
+		if(currentDataVersion < version140){
 			PlayerPrefs.DeleteKey("IsSinglePetMode");
 			
 			ExtraParseLogic.Instance.UserCheck();

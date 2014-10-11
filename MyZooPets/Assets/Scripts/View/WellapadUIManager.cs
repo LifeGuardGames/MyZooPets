@@ -16,7 +16,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		return wellapadScreenUIController;
 	}
 	
-	protected override void _Start() {
+	protected override void Start() {
 		// set the tween target on the wellapad object to this object
 		GetComponent<TweenToggle>().ShowTarget = gameObject;
 		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();

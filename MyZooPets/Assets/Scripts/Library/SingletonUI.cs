@@ -33,11 +33,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 		return isOpen;	
 	}
 	
-	void Start() {
-		_Start();	
-	}
-	
-	protected virtual void _Start() {}
+	protected virtual void Start() {}
+
 
 	/// <summary>
 	/// When a button wants to open a given UI, this is

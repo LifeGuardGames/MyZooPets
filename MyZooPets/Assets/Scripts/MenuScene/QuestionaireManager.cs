@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Questionaire manager. Check when it's appropriate to spawn the questionaire
 /// </summary>
-public class QuestionaireManager : MonoBehaviour {
+public class QuestionaireManager : Singleton<QuestionaireManager> {
 	void Start(){
 		if(Application.loadedLevelName == "MenuScene"){
 			CheckToOpenQuestionaireMenuScene();
@@ -15,19 +15,38 @@ public class QuestionaireManager : MonoBehaviour {
 		}
 	}
 
-	private void CheckToOpenQuestionaireMenuScene(){
-		// TODO JASON FIX HERE
-		bool isQuestionaireCollectedMenuScene = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollectedMenuScene;
-		/////////
+	/// <summary>
+	/// Accepts the terms and privacy.
+	/// </summary>
+	public void AcceptTermsAndPrivacy(){
+		DataManager.Instance.IsTermsAndPrivacyAccepeted = true;
+	}
 
-		if(isQuestionaireCollectedMenuScene){
-			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel2");
+	/// <summary>
+	/// Asthma info collected.
+	/// </summary>
+	public void AsthmaInfoCollected(){
+		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected = true;
+	}
+
+	/// <summary>
+	/// Checks to open questionaire menu scene. Collects user age and agreement to
+	/// privacy policy and terms of agreement
+	/// </summary>
+	private void CheckToOpenQuestionaireMenuScene(){
+		bool isQuestionaireCollected = DataManager.Instance.IsTermsAndPrivacyAccepeted;
+
+		if(!isQuestionaireCollected){
+			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel1");
 			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
 
 			Invoke("ShowQuestionaireMenuScene", 1f);
 		}
 	}
 
+	/// <summary>
+	/// Checks to open questionaire bedroom. This questionaire collects asthma info
+	/// </summary>
 	private void CheckToOpenQuestionaireBedroom(){
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME);

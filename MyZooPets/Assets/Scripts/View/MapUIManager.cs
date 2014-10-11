@@ -19,7 +19,7 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 													//set them on diff layer. this is only a quick fix
 	public List<MapEntry> mapEntries = new List<MapEntry>();
 
-	protected override void _Start(){
+	protected override void Start(){
 		draggableCollider.enabled = false;
 
 		GatingManager.OnDamageGate += RefreshMapEntry;

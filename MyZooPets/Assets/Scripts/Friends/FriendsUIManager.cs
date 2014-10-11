@@ -61,7 +61,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	#endregion
 
 	#region Protected Overrides
-	protected override void _Start(){
+	protected override void Start(){
 		SocialManager.OnDataRefreshed += FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded += FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed += FinishConnectionRequestRefresh;

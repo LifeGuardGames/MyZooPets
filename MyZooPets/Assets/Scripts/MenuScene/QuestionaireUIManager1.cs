@@ -13,11 +13,21 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 
 	private int age;
 	private bool hasMovedSlider = false;
+	private GameObject menuScenePet = null;
 
 	void Awake(){
 		eModeType = UIModeTypes.CustomizePet;
 	}
-	
+
+	protected override void Start(){
+		base.Start();
+
+		//pet sprite need to be disable if it's in the scene because of layering issue
+		menuScenePet = GameObject.Find("MenuScenePet");
+		if(menuScenePet != null)
+			menuScenePet.SetActive(false);
+	}
+
 	/// <summary>
 	/// Called by the slider when the value has changed. Rounds up to the nearest integer for age
 	/// </summary>
@@ -37,30 +47,25 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 
 		if(!hasMovedSlider){
 			hasMovedSlider = true;
+			finishButtonTweenToggle.Show();
 		}
 	}
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
-		Debug.Log("registered questionaire1");
-		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollectedMenuScene = true; // TODO
+		QuestionaireManager.Instance.AcceptTermsAndPrivacy();
 
 		CloseUI();
 	}
 
 	protected override void _OpenUI(){
-//		gameObject.GetComponent<TweenToggle>().Show();
 
 	}
 
 	protected override void _CloseUI(){
-//		gameObject.GetComponent<TweenToggle>().Hide();
-
-		//once questionaire is done. let tutorial knows to continue
-		TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
-		tutorialManager.OnQuestionaireDone();
-
 		DestroyPanel();
+		if(menuScenePet != null)
+			menuScenePet.SetActive(true);
 	}
 
 	/// <summary>
@@ -71,11 +76,11 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 	}
 
 	public void ButtonPrivacyPolicy(){
-		// TODO Add link here
+		Application.OpenURL("http://www.wellapets.com/privacy");
 	}
 
 	public void ButtonTermsOfService(){
-		// TODO Add link here
+		Application.OpenURL("http://www.wellapets.com/terms");
 	}
 
 	private IEnumerator ShowAgeSelector(){

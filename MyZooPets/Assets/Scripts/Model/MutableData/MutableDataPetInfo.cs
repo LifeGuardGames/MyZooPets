@@ -18,8 +18,6 @@ public class MutableDataPetInfo : MutableData{
 	/// <value>The n fire breaths.</value>
 	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
 	public bool IsQuestionaireCollected {get; set;}
-	public bool IsQuestionaireCollectedMenuScene {get; set;}
-	public string ParseKidAccountID {get; set;}
 	
 	public void SetFireBreaths(int amount){
 		FireBreaths = amount;	
@@ -59,8 +57,6 @@ public class MutableDataPetInfo : MutableData{
 		IsHatched = false;
 		FireBreaths = 0;
 		IsQuestionaireCollected = false;
-		IsQuestionaireCollectedMenuScene = false;
-		ParseKidAccountID = "";
 	}
 
 	public override void VersionCheck(Version currentDataVersion){

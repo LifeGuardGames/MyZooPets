@@ -6,6 +6,8 @@ using System.Collections;
 /// Player age user interface manager.
 /// </summary>
 public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
+	public TweenToggle finishButtonTweenToggle;
+
 	private bool hasAsthma;
 	private bool hasAsthmaOptionChecked = false;
 
@@ -20,7 +22,10 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 	public void OnAsthmaYes(bool isChecked){
 		if(isChecked){
 			hasAsthma = true;
-			hasAsthmaOptionChecked = true;
+			if(!hasAsthmaOptionChecked){
+				hasAsthmaOptionChecked = true;
+				finishButtonTweenToggle.Show();
+			}
 		}
 	}
 
@@ -30,14 +35,16 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 	public void OnAsthmaNo(bool isChecked){
 		if(isChecked){
 			hasAsthma = false;
-			hasAsthmaOptionChecked = true;
+			if(!hasAsthmaOptionChecked){
+				hasAsthmaOptionChecked = true;
+				finishButtonTweenToggle.Show();
+			}
 		}
 	}
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAsthma(hasAsthma);
-		Debug.Log("registered questionaire2");
-		DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected = true; // TODO
+		QuestionaireManager.Instance.AsthmaInfoCollected();
 		CloseUI();
 	}
 
@@ -62,8 +69,8 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 		Destroy(gameObject);
 	}
 
-	private IEnumerator ShowAgeSelector(){
-		yield return new WaitForSeconds(1.5f);
-		OpenUI();
-	}
+//	private IEnumerator ShowAgeSelector(){
+//		yield return new WaitForSeconds(1.5f);
+//		OpenUI();
+//	}
 }

@@ -4,6 +4,7 @@ using Parse;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 public class ServerEventArgs : EventArgs{
@@ -25,6 +26,11 @@ public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 
 	public bool useDummyData = false; // Turn this to true if testing with dummy data
+
+	private bool runTimeOutTimer = false;
+	private float timeOutTimer = 0;
+	private float timeOut = 20f; //time out set to 20 seconds
+	private CancellationTokenSource timeOutRequestCancellation; //token used to cancel unfinish task/thread when timeout timer is up
 
 	#region Properties
 	/// <summary>
@@ -52,6 +58,17 @@ public class SocialManager : Singleton<SocialManager> {
 	public ParseObjectSocial UserSocial {get; set;}
 	#endregion
 
+	void Update(){
+		if(runTimeOutTimer){
+			timeOutTimer += Time.deltaTime;
+			if(timeOutTimer >= timeOut){
+				timeOutTimer = 0;
+				runTimeOutTimer = false;
+				timeOutRequestCancellation.Cancel();
+			}
+		}
+	}
+
 	#region Refresh Data
 	/// <summary>
 	/// Refreshs the data.
@@ -59,17 +76,28 @@ public class SocialManager : Singleton<SocialManager> {
 	public void RefreshData(){
 		if(IsUsingDummyData()) return;
 		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
-			return ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriends", null);
+			StartTimeOutTimer();
+			return ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriends", 
+			                                                                 null, 
+			                                                                 timeOutRequestCancellation.Token);
 		}).Unwrap().ContinueWith(t => {
+			StopTimeOutTimer();
 			ServerEventArgs args = new ServerEventArgs();
-			
+
 			if(t.IsFaulted || t.IsCanceled){
-				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-				Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
-				
+				ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+				string message = "time out by client";
+
+				if(t.Exception != null){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					code = e.Code;
+					message = e.Message;
+//					Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+				}
+
 				args.IsSuccessful = false;
-				args.ErrorCode = e.Code;
-				args.ErrorMessage = e.Message;
+				args.ErrorCode = code;
+				args.ErrorMessage = message;
 			}
 			else{
 				IDictionary<string, object> result = t.Result;
@@ -129,27 +157,34 @@ public class SocialManager : Singleton<SocialManager> {
 				{"friendCode", friendCode},
 			};
 
-			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("sendFriendRequest", paramDict)
-				.ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
-					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-				
-					ServerEventArgs args = new ServerEventArgs();
-					args.IsSuccessful = false;
-					args.ErrorCode = e.Code;
-					args.ErrorMessage = e.Message;
+			StartTimeOutTimer();
 
-					Loom.DispatchToMainThread(() => {	
-						if(OnFriendCodeAdded != null)
-							OnFriendCodeAdded(this, args);
-					});
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("sendFriendRequest", 
+			                                                          paramDict, 
+			                                                          timeOutRequestCancellation.Token)
+			.ContinueWith(t => {
+				StopTimeOutTimer();
+				ServerEventArgs args = new ServerEventArgs();
+
+				if(t.IsFaulted || t.IsCanceled){
+					ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+					string message = "time out by client";
+					
+					if(t.Exception != null){
+						ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+						code = e.Code;
+						message = e.Message;
+						//Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+					}
+					
+					args.IsSuccessful = false;
+					args.ErrorCode = code;
+					args.ErrorMessage = message;
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
-					ServerEventArgs args = new ServerEventArgs();
 
 					if(result.TryGetValue("code", out code)){
 						Debug.Log("Error Code: " + code);
@@ -163,12 +198,12 @@ public class SocialManager : Singleton<SocialManager> {
 						Debug.Log("Result: " + result["success"]);
 						args.IsSuccessful = true;
 					}
-					
-					Loom.DispatchToMainThread(() => {
-						if(OnFriendCodeAdded != null)
-							OnFriendCodeAdded(this, args);
-					});
 				}
+				
+				Loom.DispatchToMainThread(() => {
+					if(OnFriendCodeAdded != null)
+						OnFriendCodeAdded(this, args);
+				});
 			});
 		}
 		else{
@@ -204,17 +239,29 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 		#endregion
 
-		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriendRequests", null)
-			.ContinueWith(t => {
+		StartTimeOutTimer();
+
+		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("getFriendRequests", 
+		                                                          null, 
+		                                                          timeOutRequestCancellation.Token)
+		.ContinueWith(t => {
+			StopTimeOutTimer();
 			ServerEventArgs args = new ServerEventArgs();
 
 			if(t.IsFaulted || t.IsCanceled){
-				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-
+				ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+				string message = "time out by client";
+				
+				if(t.Exception != null){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					code = e.Code;
+					message = e.Message;
+					//Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+				}
+				
 				args.IsSuccessful = false;
-				args.ErrorCode = e.Code;
-				args.ErrorMessage = e.Message;
+				args.ErrorCode = code;
+				args.ErrorMessage = message;
 			}
 			else{
 				IDictionary<string, object> result = t.Result;
@@ -232,7 +279,8 @@ public class SocialManager : Singleton<SocialManager> {
 				else{
 					var friendRequests = (IEnumerable) result["success"];
 					FriendRequests = new List<FriendRequest>();
-
+					
+					//loop through all friend requests and put data into UI readable class
 					foreach(ParseObject friendRequest in friendRequests){
 						string requestId = friendRequest.ObjectId;
 						ParseObject fromKidAccount = (ParseObject) friendRequest["from"];
@@ -268,7 +316,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="requestId">Request identifier.</param>
 	public void AcceptFriendRequest(string requestId){
-		FriendRequestAction("acceptFriendRequest", requestId);
+		FriendRequestAction("acceptFriendRequest", requestId, true);
 	}
 
 	/// <summary>
@@ -276,10 +324,10 @@ public class SocialManager : Singleton<SocialManager> {
 	/// </summary>
 	/// <param name="requestId">Request identifier.</param>
 	public void RejectFriendRequest(string requestId){
-		FriendRequestAction("rejectFriendRequest", requestId);
+		FriendRequestAction("rejectFriendRequest", requestId, false);
 	}
 
-	private void FriendRequestAction(string cloudFunctionName, string requestId){
+	private void FriendRequestAction(string cloudFunctionName, string requestId, bool sendOnDataRefreshedEvent){
 		if(useDummyData){
 			StartCoroutine(WaitForFriendRequest());
 			return;
@@ -289,27 +337,42 @@ public class SocialManager : Singleton<SocialManager> {
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"requestId", requestId},
 			};
-			
-			ParseCloud.CallFunctionAsync<IDictionary<string, object>>(cloudFunctionName, paramDict)
-				.ContinueWith(t => {
+
+			StartTimeOutTimer();
+
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>(cloudFunctionName, 
+			                                                          paramDict,
+			                                                          timeOutRequestCancellation.Token)
+			.ContinueWith(t => {
+				
+				ServerEventArgs args = new ServerEventArgs();
+
 				if(t.IsFaulted || t.IsCanceled){
-					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+					string message = "time out by client";
 					
-					ServerEventArgs args = new ServerEventArgs();
+					if(t.Exception != null){
+						ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+						code = e.Code;
+						message = e.Message;
+						//Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+					}
+					
 					args.IsSuccessful = false;
-					args.ErrorCode = e.Code;
-					args.ErrorMessage = e.Message;
+					args.ErrorCode = code;
+					args.ErrorMessage = message;
 					
 					Loom.DispatchToMainThread(() => {
-						GetFriendRequests();
+						if(OnFriendRequestRefreshed != null)
+							OnFriendRequestRefreshed(this, args);
+						if(OnDataRefreshed != null && sendOnDataRefreshedEvent)
+							OnDataRefreshed(this, args);
 					});
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
-					ServerEventArgs args = new ServerEventArgs();
 					
 					if(result.TryGetValue("code", out code)){
 //						Debug.Log("Error Code: " + code);
@@ -322,6 +385,8 @@ public class SocialManager : Singleton<SocialManager> {
 						Loom.DispatchToMainThread(() => {
 							if(OnFriendRequestRefreshed != null)
 								OnFriendRequestRefreshed(this, args);
+							if(OnDataRefreshed != null && sendOnDataRefreshedEvent)
+								OnDataRefreshed(this, args);
 						});
 					} 
 					else{
@@ -332,6 +397,7 @@ public class SocialManager : Singleton<SocialManager> {
 						});
 					}
 				}
+				StopTimeOutTimer();
 			});
 		}
 	}
@@ -353,28 +419,42 @@ public class SocialManager : Singleton<SocialManager> {
 			IDictionary<string, object> paramDict = new Dictionary<string, object>{
 				{"friendObjectId", friendObjectId},
 			};
-			
-			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("removeFriend", paramDict)
-				.ContinueWith(t => {
+
+			StartTimeOutTimer();
+
+			ParseCloud.CallFunctionAsync<IDictionary<string, object>>("removeFriend", 
+			                                                          paramDict,
+			                                                          timeOutRequestCancellation.Token)
+			.ContinueWith(t => {
+				StopTimeOutTimer();
+				ServerEventArgs args = new ServerEventArgs();
+
 				if(t.IsFaulted || t.IsCanceled){
-					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
+					ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+					string message = "time out by client";
 					
-					ServerEventArgs args = new ServerEventArgs();
+					if(t.Exception != null){
+						ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+						code = e.Code;
+						message = e.Message;
+						//Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+					}
+					
 					args.IsSuccessful = false;
-					args.ErrorCode = e.Code;
-					args.ErrorMessage = e.Message;
+					args.ErrorCode = code;
+					args.ErrorMessage = message;
 					
 					Loom.DispatchToMainThread(() => {
 						if(OnFriendRemoved != null)
 							OnFriendRemoved(this, args);
+						if(OnDataRefreshed != null)
+							OnDataRefreshed(this, args);
 					});
 				} 
 				else{
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
-					ServerEventArgs args = new ServerEventArgs();
 					
 					if(result.TryGetValue("code", out code)){
 						Debug.Log("Error Code: " + code);
@@ -383,8 +463,6 @@ public class SocialManager : Singleton<SocialManager> {
 						args.IsSuccessful = false;
 						args.ErrorCode = (ParseException.ErrorCode) parseCode;
 						args.ErrorMessage = (string) result["message"];
-
-						
 					} 
 					else{
 						Debug.Log("Result: " + result["success"]);
@@ -405,48 +483,15 @@ public class SocialManager : Singleton<SocialManager> {
 	}
 	#endregion
 
-//	#region Claim Reward
-//	/// <summary>
-//	/// Claims the friend referral reward.
-//	/// Call this method when the reward is given to the user
-//	/// </summary>
-//	public void ClaimFriendReferralReward(){
-//		if(useDummyData){
-//			return;
-//		}
-//
-//		ParseCloud.CallFunctionAsync<IDictionary<string, object>>("claimReferralReward", null)
-//		.ContinueWith(t => {
-//			if(t.IsFaulted || t.IsCanceled){
-//				ParseException e = (ParseException) t.Exception.InnerExceptions[0];
-//				Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-//				
-//				ServerEventArgs args = new ServerEventArgs();
-//				args.IsSuccessful = false;
-//				args.ErrorCode = e.Code;
-//				args.ErrorMessage = e.Message;
-//				
-//			
-//			} 
-//			else{
-//				IDictionary<string, object> result = t.Result;
-//				// Hack, check for errors
-//				object code;
-//				ServerEventArgs args = new ServerEventArgs();
-//				
-//				if(result.TryGetValue("code", out code)){
-////					Debug.Log("Error Code: " + code);
-//					int parseCode = Convert.ToInt32(code);
-//					
-//				
-//				} 
-//				else{
-//					Debug.Log("Result: " + result["success"]);
-//				}
-//			}
-//		});
-//	}
-//	#endregion
+	private void StartTimeOutTimer(){
+		runTimeOutTimer = true;
+		timeOutRequestCancellation = new CancellationTokenSource();
+	}
+
+	private void StopTimeOutTimer(){
+		runTimeOutTimer = false;
+		timeOutTimer = 0;
+	}
 
 	#region Dummy Data
 	private bool IsUsingDummyData(){

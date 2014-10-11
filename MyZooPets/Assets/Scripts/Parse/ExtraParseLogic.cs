@@ -77,8 +77,6 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 			Username = guid,
 			Password = guid
 		};
-		
-		user["userType"] = "kid";
 
 		return user.SignUpAsync();
 	}
@@ -102,5 +100,20 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 
 		return account.SaveAsync();
 	}
+
+#if UNITY_EDITOR
+	public void CreateTestUser(){
+//		var source = new TaskCompletionSource<string>();
+
+		CreateParseUser().ContinueWith(t => {
+			return CreateKidAccount();
+		}).Unwrap().ContinueWith(t => {
+//			if(t.IsFaulted || t.IsCanceled)
+//				source.SetException(t.Exception);
+//			else
+//				source.SetResult("User account valid");
+		});
+	}
+	#endif
 }
 

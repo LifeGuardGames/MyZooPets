@@ -44,6 +44,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	public UIGrid requestGrid;
 	public InternetConnectionDisplay requestConnectionDisplay;
 	public GameObject requestEntryPrefab;
+	public EntranceHelperController entranceHelper;
 
 	private bool isActive = false;
 	#endregion
@@ -97,6 +98,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			PetAudioManager.Instance.EnableSound = false;
 
 			Analytics.Instance.EnterFriendTree();
+			entranceHelper.EntranceUsed();
 			
 			// Try internet connection
 			baseConnectionDisplay.Play("FRIENDS_LOADING");

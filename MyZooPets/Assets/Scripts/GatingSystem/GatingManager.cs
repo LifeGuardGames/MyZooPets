@@ -394,7 +394,11 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="args">Arguments.</param>
 	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
-			OnReachedGate(this, EventArgs.Empty);		
+			OnReachedGate(this, EventArgs.Empty);
+
+		//once pet is in position for fire breathing. Idle animations need to be turn off
+		//otherwise it might break the breathe fire animation
+		PetAnimationManager.Instance.DisableIdleAnimation();
 	
 		// if the pet is happy and healthy, add the fire button
 		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
@@ -483,6 +487,9 @@ public class GatingManager : Singleton<GatingManager>{
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
+
+		//turn pet idle animation back on before leaving the gated room
+		PetAnimationManager.Instance.EnableIdleAnimation();
 	}
 	
 	//---------------------------------------------------

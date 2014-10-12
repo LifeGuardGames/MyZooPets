@@ -15,6 +15,12 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 		}
 	}
 
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused && Application.loadedLevelName == "NewBedRoom"){
+			CheckToOpenQuestionaireBedroom();
+		}
+	}
+
 	/// <summary>
 	/// Accepts the terms and privacy.
 	/// </summary>

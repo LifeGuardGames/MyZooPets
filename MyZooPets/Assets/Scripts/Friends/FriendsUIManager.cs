@@ -238,6 +238,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			deleteUserLabel.text = sourceObject.transform.parent.gameObject.GetComponent<FriendEntryController>().FriendName;
 			deleteFriendTween.Show();
 			deleteContentParent.SetActive(true);
+			deleteFriendConnectionDisplay.Reset();
 		}
 	}
 

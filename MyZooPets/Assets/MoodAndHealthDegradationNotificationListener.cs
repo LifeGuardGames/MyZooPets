@@ -88,7 +88,7 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 			NavigationUIManager.Instance.HidePanel();
 			
 			StoreUIManager.OnShortcutModeEnd += CloseShop;
-			StoreUIManager.Instance.OpenToSubCategory("Items", true);
+			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.SickNotification);
 		};
 
 		Hashtable notificationEntry = new Hashtable();

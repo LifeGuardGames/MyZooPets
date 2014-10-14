@@ -88,33 +88,11 @@ public class GateMonster : Gate{
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
 //			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
-
-		// when a monster is damaged, it physically moves
-		// for now, they will always move to the right...
-//		Move(damage);
 	}	
 
 	protected override void GateDestroyed(){
 		// Move all the heads that is NOT the base head
 		MoveBaseHead();
-
-//		// for monsters, just move them fast and far away MOVE_DIR
-//		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
-//		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
-//		
-//		// add hashtable params for alerting the parent object when the move anim is complete
-//		Hashtable optional = new Hashtable();
-//		optional.Add("onCompleteTarget", gameObject);
-//		optional.Add("onComplete", "OnDestroyAnimComplete");
-//		
-//		Vector3 targetPos = gameObject.transform.position;
-//		targetPos.x += monsterMoveDistance;
-//
-//		smokeMonsterAnimator.Play("smokeMonsterHurt");
-//
-//		// Cancel the move tweens previous to this
-//		LeanTween.cancel(gameObject);
-//		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
 	}
 	
 	/// <summary>
@@ -160,51 +138,7 @@ public class GateMonster : Gate{
 		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
 	}
 
-	/// <summary>
-	/// Move the specified damage.
-	/// </summary>
-	/// <param name="damage">Damage.</param>
-//	private void Move(int damage){
-//		// get the monster's data and find out how far it should move based on the damage it just received
-//		ImmutableDataGate data = DataLoaderGate.GetData(gateID);
-//		int maxHealth = data.GetMonster().MonsterHealth;
-//		float damagePercentage = ((float)damage / (float)maxHealth);
-//		
-//		// get the screen location of the monster and find out where it should move based on the width of the screen
-//		Vector3 screenLoc = Camera.main.WorldToScreenPoint(transform.position);
-//
-//		float moveWidth = maxScreenSpace * damagePercentage;
-//
-//		// get the new screen location of the monster, then tranform it into world location MOVE_DIR
-//		Vector3 newLoc = screenLoc;
-//		newLoc.x += moveWidth;
-//		Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
-//
-//		// play a hurt animation on the monster
-//		PlayHurtAnimation();
-//
-//		// update our ideal position with where we are moving too
-//		idealPos = vNewLocWorld;
-//		
-//		LeanTween.cancel(gameObject);
-//		// phew...now move this bad boy!
-//		Hashtable optional = new Hashtable();
-//		optional.Add("onCompleteTarget", gameObject);
-//		optional.Add("onComplete", "PlayNormalAnimation");
-//		LeanTween.moveLocal(gameObject, vNewLocWorld, tweenTime, optional);	
-//	}
-
 	private void DisableSubHead(){
 		nextHeadToDestroy.SetActive(false);
 	}
-
-//	private void PlayNormalAnimation(){
-//		smokeMonsterAnimator.Play("smokeMonsterNormal");
-//	}
-//
-//	private void PlayHurtAnimation(){
-//		smokeMonsterAnimator.Play("smokeMonsterHurt");
-//	}
-	
-
 }

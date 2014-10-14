@@ -69,13 +69,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
 		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
 
-//		bool isFocusInhalerTutorialDone = true;
-//		bool isFocusWellapadTutorialDone = true;
-//		bool isSmokeIntroDone = true;
-//		bool isFlameCrystalTutorialDone = true;
-//		bool isFlameTutorialDone = true;
-//		bool isSuperWellaInhalerDone = true;
-//		bool isFirstTime = false;
+		//check why we need isFirstTime variable
 
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
@@ -85,7 +79,7 @@ public class TutorialManagerBedroom : TutorialManager{
 			// next check to see if the focus inhaler tutorial should display
 			new GameTutorialFocusInhaler();
 		}
-		else if(!isSuperWellaInhalerDone && isFirstTime){
+		else if(!isSuperWellaInhalerDone){
 			new GameTutorialSuperWellaInhaler();
 		}
 		else if(!isSmokeIntroDone){
@@ -103,10 +97,6 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
 
-//		bool isFlameTutorialDone = true;
-//		bool isTriggerTutorialDone = true;
-//		bool isDecoTutorialDone = true;
-
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
 
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
@@ -121,19 +111,6 @@ public class TutorialManagerBedroom : TutorialManager{
 				new GameTutorialDecorations();
 			}
 			else{}
-		}
-		else{
-			//if current data version is < v1.3.4 then the deco tutorial needs to be run again
-			Version currentDataVersion = DataManager.Instance.CurrentDataVersion;
-			Version version134 = new Version("1.3.4");
-
-			if(currentDataVersion < version134){
-				if(isFlameTutorialDone && !isDecoTutorialDone &&
-					CameraManager.Instance.GetPanScript().currentPartition == 0){
-					// play the deco tutorial
-					new GameTutorialDecorations();
-				}
-			}
 		}
 	}
 
@@ -160,7 +137,12 @@ public class TutorialManagerBedroom : TutorialManager{
 
 	public void OnQuestionaireDone(){
 		//check if pet in partition 0, if not force it to partition 0
-		CameraManager.Instance.GetPanScript().MoveToFirstPartition();
-		Check();
+//		if(!args.Opening){
+			
+			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
+			Check();
+//		}
 	}
+
+
 }

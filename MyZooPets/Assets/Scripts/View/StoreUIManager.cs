@@ -3,32 +3,45 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+// Shortcut mode types into store sub panel
+public enum StoreShortcutType{
+	None,
+	FlameCrystalNeededNotification,
+	DecorationUIStoreButton,
+	DecorationUIStoreButtonTutorial,
+	MinipetUIStoreButton,
+	GemExplanationNotification,
+	NeedFoodPetSpeech,
+	NeedEmergencyInhalerPetSpeech,
+	SickNotification
+}
+
 public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
 	public static EventHandler<EventArgs> OnDecorationItemBought;
 	public GameObject grid;
-	public GameObject itemStorePrefab; //basic ui setup for an individual item
+	public GameObject itemStorePrefab;		//basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemStorePrefabPremium; // premium item entry
-	public GameObject itemSpritePrefab; // item sprite for inventory
-	public GameObject storeBasePanel; //Where you choose item category
-	public GameObject storeSubPanel; //Where you choose item sub category
+	public GameObject itemSpritePrefab; 	// item sprite for inventory
+	public GameObject storeBasePanel; 		//Where you choose item category
+	public GameObject storeSubPanel; 		//Where you choose item sub category
 	public GameObject storeSubPanelBg;
-	public GameObject itemArea; //Where the items will be display
-	public GameObject tabArea; //Where all the tabs for sub category are
-	public GameObject storeBgPanel;	// the bg of the store (sub panel and base panel)
-	public GameObject backButton; // exit button reference
+	public GameObject itemArea; 			//Where the items will be display
+	public GameObject tabArea; 				//Where all the tabs for sub category are
+	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
+	public GameObject backButton; 			// exit button reference
 
 	// store related sounds
 	public string soundChangeTab;
 	public string soundBuy;
-	private bool isShortcutMode; //True: open store directly to specific item category
-	//False: open the224 store base panel first	
+	private bool isShortcutMode; 			//True: open store directly to specific item category
+											//False: open the store base panel first	
+	private StoreShortcutType shortcutType = StoreShortcutType.None;	// Store where shortcut was from
+
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
-	
-//	public List<Color> colors; //colors for the tab;
 
 	void Awake(){
 		eModeType = UIModeTypes.Store;
@@ -98,34 +111,22 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	#region Store shortcut mode used by PetSpeechAI
 	public void OpenToSubCategoryFoodWithLockAndCallBack(){
-		NavigationUIManager.Instance.HidePanel();
-		RoomArrowsUIManager.Instance.HidePanel();
-
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
-		OnShortcutModeEnd += ShortcutModeEnded;	
-
-		OpenToSubCategory("Food", true);
+		OnShortcutModeEnd += ShortcutModeEnded;
+		OpenToSubCategory("Food", true, StoreShortcutType.NeedFoodPetSpeech);
 	}
 
 	public void OpenToSubCategoryItemsWithLockAndCallBack(){
-		NavigationUIManager.Instance.HidePanel();
-		RoomArrowsUIManager.Instance.HidePanel();
-
-		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
-		OnShortcutModeEnd += ShortcutModeEnded;	
-
-		OpenToSubCategory("Items", true);
-	}
-
-	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
-		NavigationUIManager.Instance.HidePanel();
-		RoomArrowsUIManager.Instance.HidePanel();
-
 		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
 		OnShortcutModeEnd += ShortcutModeEnded;
-		
-		OpenToSubCategory("Premiums", true);
+		OpenToSubCategory("Items", true, StoreShortcutType.NeedEmergencyInhalerPetSpeech);
 	}
+
+//	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
+//		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
+//		OnShortcutModeEnd += ShortcutModeEnded;
+//		OpenToSubCategory("Premiums", true);
+//	}
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		ClickManager.Instance.ReleaseLock();
@@ -139,17 +140,27 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	/// <param name="category">Category.</param>
 	/// <param name="isShortCut">If set to <c>true</c> is short cut.</param>
-	public void OpenToSubCategory(string category, bool isShortCut = false){		
+	public void OpenToSubCategory(string category, bool isShortCut = false, StoreShortcutType shortcutType = StoreShortcutType.None){		
 		// this is a bit of a hack, but basically there are multiple ways to open the shop.  One way is a shortcut in that it
 		// bypasses the normal means of opening a shop, so we need to do some special things in this case
 		isShortcutMode = isShortCut;
 		if(isShortcutMode){
-			// if we are shortcutting, we have to tween the bg in now
+
+			// Check to make sure we have a shortcut type and cache it
+			if(shortcutType != StoreShortcutType.None){
+				this.shortcutType = shortcutType;
+			}
+			else{
+				Debug.LogError("No shortcut type supplied with store shortcut call");
+			}
+
+			// If we are shortcutting, we have to tween the bg in now
 			storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 			HUDUIManager.Instance.ShowPanel();
+			NavigationUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
 		}
-		CreateSubCategoryItemsWithString(category); 
+		CreateSubCategoryItemsWithString(category, shortcutType); 
 	}
 	
 	/// <summary>
@@ -320,10 +331,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 	}
 
-	public void OnBuyPremium(GameObject button){
-		Debug.Log("Premium currency bought");
-//		StatsController.Instance.ChangeStats(deltaGems:)
-	}
+//	public void OnBuyPremium(GameObject button){
+//		Debug.Log("Premium currency bought");
+//		StatsController.Instance.ChangeStats(deltaGems);
+//	}
 	
 	/// <summary>
 	/// Creates the sub category items. Create tabs for sub category if sub category exists.
@@ -338,7 +349,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// Creates the sub category items with string.
 	/// </summary>
 	/// <param name="page">Page.</param>
-	public void CreateSubCategoryItemsWithString(string page){
+	private void CreateSubCategoryItemsWithString(string page, StoreShortcutType shortcutType = StoreShortcutType.None){
 		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
 			Debug.LogError("Illegal store sub category: " + page);
 			return;
@@ -355,9 +366,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
 
-			CreateSubCategoryItemsTab("foodDefaultTab", Color.white);
-			//CreateSubCategoryItemsTab("foodDefaultTab", colors[3]);	// Disabling custom colors
-
+			CreateSubCategoryItemsTab("foodDefaultTab", Color.white, shortcutType);
 		}
 		else if(currentPage == "Items"){
 			InventoryUIManager.Instance.ShowPanel();
@@ -367,9 +376,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				HideUnuseTab(tabParent.FindChild("Tab"));
 			}
 
-			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white);
-			//CreateSubCategoryItemsTab("itemsDefaultTab", colors[2]);	// Disabling custom colors
-
+			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white, shortcutType);
 		}
 		else if(currentPage == "Decorations"){
 			InventoryUIManager.Instance.HidePanel();
@@ -378,16 +385,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
 			int counter = 0;
-			string defaultTabName = "";
+			string defaultTabName = "Carpet";	// Set the default category
 
 			//Rename the tab to reflect the sub category name
 			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
 					tabParent.name = decorationEnums[counter];
-
-					// Disabling custom colors
-//					UISprite backgroundSprite = tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
-//					backgroundSprite.color = colors[counter];
 					
 					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
 					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
@@ -397,10 +400,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					resizer.enabled = true;	// Resize automatically
 
 					ShowUseTab(tabParent.FindChild("Tab"));
-					if(counter == 0){
-						defaultTabName = tabParent.name;
-//						defaultColor = colors[counter];
-					}
 				}
 				else{
 					tabParent.name = "";
@@ -411,21 +410,123 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 
 			//After tabs have been set up create items for the first/default tab
-			CreateSubCategoryItemsTab(defaultTabName, Color.white);
+			CreateSubCategoryItemsTab(defaultTabName, Color.white, shortcutType);
 		}
-		else if(currentPage == "Premiums"){
-			InventoryUIManager.Instance.HidePanel();
-			NavigationUIManager.Instance.HidePanel();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+//		else if(currentPage == "Premiums"){
+//			InventoryUIManager.Instance.HidePanel();
+//			NavigationUIManager.Instance.HidePanel();
+//			DecoInventoryUIManager.Instance.HideDecoInventory();
+//
+//			foreach(Transform tabParent in tabArea.transform){
+//				HideUnuseTab(tabParent.FindChild("Tab"));
+//			}
+//			
+//			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
+//		}
+		ShowStoreSubPanel();
+	}
 
-			foreach(Transform tabParent in tabArea.transform){
-				HideUnuseTab(tabParent.FindChild("Tab"));
+	
+	//----------------------------------------------------
+	// CreateSubCategoryItemsTab()
+	// Create items for sub category.
+	// public method to be called by button
+	//----------------------------------------------------
+	public void CreateSubCategoryItemsTab(GameObject tab){
+		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
+		Color tabColor = backgroundSprite.color;
+		CreateSubCategoryItemsTab(tab.GetParent().name, tabColor);
+	}
+	
+	//----------------------------------------------------
+	// CreateSubCategoryItemsTab()
+	// Create items for sub category 
+	//----------------------------------------------------
+	public void CreateSubCategoryItemsTab(string tabName, Color tabColor, StoreShortcutType shortcutType = StoreShortcutType.None){
+//		Debug.Log("OPENING STORE MODE " + shortcutType.ToString());
+		
+		//Destroy existing items first
+		DestroyGrid();
+		
+		//Reset clip range so scrolling will start from beginning again
+		ResetUIPanelClipRange();
+		
+		//if the current page is not null, we are switching tabs, so play a sound
+		if(currentTab != null)
+			AudioManager.Instance.PlayClip(soundChangeTab);
+		
+		//set current tab
+		currentTab = tabName;
+		
+		//set panel background color
+		storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
+		
+		//base on the tab name and the page name, create proper set of item in the store
+		if(currentPage == "Food"){
+			//No sub category so retrieve a list of all food
+			List<Item> foodList = ItemLogic.Instance.FoodList;
+			
+			foreach(Item itemData in foodList){
+				if(!itemData.ItemBoxOnly){
+					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+				}
 			}
 			
-			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
 		}
-
-		ShowStoreSubPanel();
+		else if(currentPage == "Items"){
+			//No sub category so retrieve a list of all item
+			List<Item> usableList = ItemLogic.Instance.UsableList;
+			
+			foreach(Item itemData in usableList){
+				if(!itemData.ItemBoxOnly){
+					// Flame crystal shortcut, only show flame crystal
+					if(shortcutType == StoreShortcutType.FlameCrystalNeededNotification || shortcutType == StoreShortcutType.GemExplanationNotification){
+						if(itemData.ID == "Usable1"){
+							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+							break;
+						}
+						continue;
+					}
+					// Need emergency inhaler shortcut, only show emergency inhaler
+					else if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
+						if(itemData.ID == "Usable0"){
+							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+							break;
+						}
+						continue;
+					}
+					// Default case, show everything
+					else{	
+						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+					}
+				}
+			}
+		}
+		else if(currentPage == "Decorations"){
+			//Retrieve decoration items base on the tab name (sub category)
+			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
+			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
+			
+			if(decoDict.ContainsKey(decoType)){
+				List<DecorationItem> decoList = decoDict[decoType];
+				foreach(DecorationItem decoItemData in decoList){
+					if(!decoItemData.ItemBoxOnly){
+						GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+					}
+				}
+			}
+		}
+//		else if(currentPage == "Premiums"){
+//			//TODO: temporary implementation for IAP. This will need to be connected with iOS/Android
+//			//IAP stuff laterr
+//			
+//			List<Item> premiumList = ItemLogic.Instance.PremiumList;
+//			
+//			foreach(Item itemData in premiumList){
+//				StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData, this.gameObject, "OnBuyPremium");
+//			}
+//		}
+		grid.GetComponent<UIGrid>().Reposition();
 	}
 
 	//------------------------------------------
@@ -444,130 +545,84 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	//------------------------------------------
 	public void HideStoreSubPanel(){
 		DestroyGrid();
-
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
-
-		// kind of hacky way to ensure that the UI is reset to the correct mode
-		// after store short cut mode is done. Depending on which mode is at the top
-		// of the click manager stack we will set up the UI for that specific mode
 		if(isShortcutMode){
-
-			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
-				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+			switch(shortcutType){
+			// Exit back to decoration UI
+			case StoreShortcutType.DecorationUIStoreButton:
+			case StoreShortcutType.DecorationUIStoreButtonTutorial:
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				DecoInventoryUIManager.Instance.ShowDecoInventory();
 				InventoryUIManager.Instance.HidePanel();
 				HUDUIManager.Instance.HidePanel();
-			}
-			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
-				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+				break;
+
+			// Exit back to fireblowing room UI
+			case StoreShortcutType.FlameCrystalNeededNotification:
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				InventoryUIManager.Instance.ShowPanel();
 				RoomArrowsUIManager.Instance.ShowPanel();
 				DecoInventoryUIManager.Instance.HideDecoInventory();
-			}
-			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
+				break;
+
+			// Exit back to minipet UI
+			case StoreShortcutType.GemExplanationNotification:
+			case StoreShortcutType.MinipetUIStoreButton:
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				InventoryUIManager.Instance.ShowPanel();
 				DecoInventoryUIManager.Instance.HideDecoInventory();
-			}
-			else{
-				_CloseUI();	
+				break;
+
+			// Exit back to default UI
+			case StoreShortcutType.NeedFoodPetSpeech:
+			case StoreShortcutType.NeedEmergencyInhalerPetSpeech:
+			case StoreShortcutType.SickNotification:
+				_CloseUI();
+				break;
+
+			// Default cases which should never happen
+			case StoreShortcutType.None:
+			default:
+				Debug.LogWarning("Invalid shortcut type detected");
+				_CloseUI();
+				break;
 			}
 
+
+//			if(ClickManager.Instance.CheckStack(UIModeTypes.EditDecos)){	// If we are shortcuting from edit deco
+//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+//				DecoInventoryUIManager.Instance.ShowDecoInventory();
+//				InventoryUIManager.Instance.HidePanel();
+//				HUDUIManager.Instance.HidePanel();
+//			}
+//			else if(ClickManager.Instance.CheckStack(UIModeTypes.GatingSystem)){	// If we are shortcuting from flame crystal notif
+//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();		// Only hide certain things
+//				InventoryUIManager.Instance.ShowPanel();
+//				RoomArrowsUIManager.Instance.ShowPanel();
+//				DecoInventoryUIManager.Instance.HideDecoInventory();
+//			}
+//			else if(ClickManager.Instance.CheckStack(UIModeTypes.MiniPet)){
+//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+//				InventoryUIManager.Instance.ShowPanel();
+//				DecoInventoryUIManager.Instance.HideDecoInventory();
+//			}
+//			else{
+//				_CloseUI();	
+//			}
+
 			if(OnShortcutModeEnd != null){
+				// This will unlock click manager when shortcutted
 				OnShortcutModeEnd(this, EventArgs.Empty);
 			}
 
 			isShortcutMode = false;
+			shortcutType = StoreShortcutType.None;
 		}
 		else{
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 			DecoInventoryUIManager.Instance.HideDecoInventory();
 			InventoryUIManager.Instance.HidePanel();
 		}
-	}
-
-	//----------------------------------------------------
-	// CreateSubCategoryItemsTab()
-	// Create items for sub category.
-	// public method to be called by button
-	//----------------------------------------------------
-	public void CreateSubCategoryItemsTab(GameObject tab){
-		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
-		Color tabColor = backgroundSprite.color;
-		CreateSubCategoryItemsTab(tab.GetParent().name, tabColor);
-	}
-
-	//----------------------------------------------------
-	// CreateSubCategoryItemsTab()
-	// Create items for sub category 
-	//----------------------------------------------------
-	public void CreateSubCategoryItemsTab(string tabName, Color tabColor){
-//		if(currentTab != tabName){
-			//Destroy existing items first
-			DestroyGrid();
-
-			//Reset clip range so scrolling will start from beginning again
-			ResetUIPanelClipRange();
-
-			//if the current page is not null, we are switching tabs, so play a sound
-			if(currentTab != null)
-				AudioManager.Instance.PlayClip(soundChangeTab);
-
-			//set current tab
-			currentTab = tabName;
-
-			//set panel background color
-			storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
-
-			//base on the tab name and the page name, create proper set of item in the store
-			if(currentPage == "Food"){
-				//No sub category so retrieve a list of all food
-				List<Item> foodList = ItemLogic.Instance.FoodList;
-
-				foreach(Item itemData in foodList){
-					if(!itemData.ItemBoxOnly)
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
-				}
-
-			}
-			else if(currentPage == "Items"){
-				//No sub category so retrieve a list of all item
-				List<Item> usableList = ItemLogic.Instance.UsableList;
-
-				foreach(Item itemData in usableList){
-					if(!itemData.ItemBoxOnly)
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
-				}
-
-			}
-			else if(currentPage == "Decorations"){
-				//Retrieve decoration items base on the tab name (sub category)
-				Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
-				DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
-
-				if(decoDict.ContainsKey(decoType)){
-					List<DecorationItem> decoList = decoDict[decoType];
-					foreach(DecorationItem decoItemData in decoList){
-						if(!decoItemData.ItemBoxOnly){
-							GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
-						}
-					}
-				}
-			}
-			else if(currentPage == "Premiums"){
-				//TODO: temporary implementation for IAP. This will need to be connected with iOS/Android
-				//IAP stuff laterr
-
-				List<Item> premiumList = ItemLogic.Instance.PremiumList;
-
-				foreach(Item itemData in premiumList){
-					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData, 
-					                                       this.gameObject, "OnBuyPremium");
-				}
-			}
-
-			grid.GetComponent<UIGrid>().Reposition();
-//		}
 	}
 
 	//-----------------------------------------

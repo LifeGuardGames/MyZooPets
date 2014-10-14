@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class PetGameData{
 	public MutableDataWellapad Wellapad {get; set;}
@@ -22,17 +23,25 @@ public class PetGameData{
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	public MutableDataSickNotification SickNotification {get; set;}
+
+	private List<MutableData> allMutableData;
 	
     public PetGameData(){
+		allMutableData = new List<MutableData>();
         Init();
     }
 
     private void Init(){
 		Wellapad = new MutableDataWellapad();
         PetInfo = new MutableDataPetInfo();
+		allMutableData.Add(PetInfo);
+
         Cutscenes = new MutableDataCutscene();
         Decorations = new MutableDataDecorationSystem();
+
 		Accessories = new MutableDataAccessories();
+//		allMutableData.Add(Accessories);
+
         Stats = new MutableDataStats();
         Level = new MutableDataPetLevel();
         Calendar = new MutableDataCalendar();
@@ -45,7 +54,7 @@ public class PetGameData{
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
-		MiniPets = new MutableDataMiniPets();
+		MiniPets = new  MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
 		SickNotification = new MutableDataSickNotification();
     }
@@ -61,5 +70,14 @@ public class PetGameData{
 		Calendar.VersionCheck(currentDataVersion);
 		PetInfo.VersionCheck(currentDataVersion);
 		Tutorial.VersionCheck(currentDataVersion);
+	}
+
+	public void SaveAsyncToParse(){
+
+		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
+			foreach(MutableData data in allMutableData)
+				if(data.IsDirty)
+					data.SaveAsyncToParseServer();
+		});
 	}
 }

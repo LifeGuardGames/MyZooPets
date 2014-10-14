@@ -64,7 +64,8 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	private IEnumerator ShowSuperWella(){
 		yield return new WaitForSeconds(1.5f);
 
-		PopupNotificationNGUI.Callback okButtonCallback = delegate(){	
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+			PetAudioManager.Instance.EnableSound = true;
 			Advance();
 		};
 
@@ -77,5 +78,6 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
 		AudioManager.Instance.PlayClip("superWellaInhalerTutorial");
+		PetAudioManager.Instance.EnableSound = false;
 	}
 }

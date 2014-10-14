@@ -80,16 +80,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 
-	/// <summary>
-	/// Gets the type of the accessory node.
-	/// Given a accessory(ID), check the xml to see which type it is.
-	/// </summary>
-	/// <returns>The accessory node type.</returns>
-	/// <param name="accessoryID">Accessory ID.</param>
-	public static string GetAccessoryNodeType(string accessoryID){
-		AccessoryItem itemDeco = (AccessoryItem)ItemLogic.Instance.GetItem(accessoryID);
-		return itemDeco.AccessoryType.ToString();
-	}
+
 
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
@@ -156,9 +147,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		PetMovement.Instance.MovePet(new Vector3(-17f, 0, 33f));
 	}
 
-
-	
-
 	/// <summary>
 	/// Raises the buy button event.
 	/// </summary>
@@ -170,7 +158,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
-			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
+			if(StatsController.Instance.GetStat(HUDElementType.Stars) >= itemData.Cost){
 
 				//Disable the buy button so user can't buy the same wallpaper anymore 
 				UIImageButton buyButton = button.GetComponent<UIImageButton>();
@@ -196,7 +184,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			}
 			break;
 		case CurrencyTypes.Gem:
-			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
+			if(StatsController.Instance.GetStat(HUDElementType.Gems) >= itemData.Cost){
 				
 				//Disable the buy button so user can't buy the same wallpaper anymore 
 				UIImageButton buyButton = button.GetComponent<UIImageButton>();
@@ -248,7 +236,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		Unequip(itemID);
 
 		// Set the mutable data
-		DataManager.Instance.GameData.Accessories.PlacedAccessories.Add(GetAccessoryNodeType(itemID), itemID);
+		AccessoryManager.Instance.SetAccessoryAtNode(itemID);
 
 		// Equip the node
 		AccessoryNodeController.Instance.SetAccessory(itemID);
@@ -258,7 +246,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 	public void Unequip(string itemID){
 		// Set the mutable data
-		DataManager.Instance.GameData.Accessories.PlacedAccessories.Remove(GetAccessoryNodeType(itemID));
+		AccessoryManager.Instance.RemoveAccessoryAtNode(itemID);
 
 		// Unequip the node
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove

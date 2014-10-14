@@ -313,7 +313,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButtonTutorial);
 
 		string tabName = DecorationTypes.Carpet.ToString();
 		StoreUIManager.Instance.CreateSubCategoryItemsTab(tabName, Color.white);
@@ -331,7 +331,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButton);
 	}
 
 	/// <summary>

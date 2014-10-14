@@ -21,12 +21,12 @@ public class AccessoryNodeController : Singleton<AccessoryNodeController> {
 	public void SetAccessory(string accessoryID){
 
 		// Get the respective AccessoryNode to populate and then populate it
-		AccessoryNode node = accessoryNodeHash[AccessoryUIManager.GetAccessoryNodeType(accessoryID)];	// Get respective node to change
+		AccessoryNode node = accessoryNodeHash[AccessoryManager.Instance.GetAccessoryNodeType(accessoryID)];	// Get respective node to change
 		node.SetAccessoryNode(accessoryID);
 	}
 
 	public void RemoveAccessory(string accessoryID){
-		AccessoryNode node = accessoryNodeHash[AccessoryUIManager.GetAccessoryNodeType(accessoryID)];	// Get respective node to change
+		AccessoryNode node = accessoryNodeHash[AccessoryManager.Instance.GetAccessoryNodeType(accessoryID)];	// Get respective node to change
 		node.SetAccessoryNode(null);
 	}
 }

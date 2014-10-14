@@ -2,10 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-//---------------------------------------------------
-// PetLevelMutableData
-// Mutable data.
-//---------------------------------------------------
 public class MutableDataPetLevel{
     public Level CurrentLevel {get; set;} //pets current level 
 

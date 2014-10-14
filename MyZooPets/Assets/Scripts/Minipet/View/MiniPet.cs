@@ -13,11 +13,14 @@ public class MiniPet : MonoBehaviour {
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
 	public GameObject flippable;
+	public GameObject eggParent;
+	public Animation eggAnimation;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 
 	private bool isVisible;
+	private bool isHatchedAux;
 	private string id; //pet id
 	private new string name;
 	
@@ -41,8 +44,16 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 
-
 		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+
+		RefreshUnlockState();
+	}
+
+	// Check to see if you want to display pet or egg
+	public void RefreshUnlockState(){
+
+		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
+	
 		RefreshMiniPetUIState();
 	}
 	
@@ -192,10 +203,13 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
-		if(args.Opening)
-			animationManager.IsRunningIdleAnimations = false;
-		else
-			animationManager.IsRunningIdleAnimations = true;
+		// Check if the minipet is hatched first
+		if(isHatchedAux){
+			if(args.Opening)
+				animationManager.IsRunningIdleAnimations = false;
+			else
+				animationManager.IsRunningIdleAnimations = true;
+		}
 	}
 
 	/// <summary>
@@ -228,24 +242,29 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void RefreshMiniPetUIState(){
-		//check if pet is sad and dirty
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-		
-		if(!isTickled)
-			animationManager.Sad();
-		else
-			animationManager.NotSad();
-		
-		if(!isCleaned){
-			dirtyParticle.Play();
-		}
-		else{
-			dirtyParticle.Stop();
-		}
+		if(isHatchedAux){
+			//check if pet is sad and dirty
+			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			
+			if(!isTickled)
+				animationManager.Sad();
+			else
+				animationManager.NotSad();
+			
+			if(!isCleaned){
+				dirtyParticle.Play();
+			}
+			else{
+				dirtyParticle.Stop();
+			}
 
-		if(isTickled && isCleaned){
-			Invoke("ShowFoodPreferenceMessage", 1f);
+			if(isTickled && isCleaned){
+				ShowFoodPreferenceInUI();
+
+				if(MiniPetManager.Instance.CanModifyFoodXP(id))
+					Invoke("ShowFoodPreferenceMessage", 1f);
+			}
 		}
 	}
 
@@ -253,6 +272,11 @@ public class MiniPet : MonoBehaviour {
 		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+	}
+
+	private void ShowFoodPreferenceInUI(){
+		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 	}
 
 	/// <summary>
@@ -277,7 +301,7 @@ public class MiniPet : MonoBehaviour {
 		else{
 			bool isTickled = MiniPetManager.Instance.IsTickled(id);
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned){
+			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
 		}
@@ -315,7 +339,6 @@ public class MiniPet : MonoBehaviour {
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
 						MiniPetManager.Instance.IncreaseFoodXP(id);
-						
 						animationManager.Eat();
 					}
 				}
@@ -365,23 +388,49 @@ public class MiniPet : MonoBehaviour {
 			
 			// make the item "burst" out
 			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
+
+			ShowFoodPreferenceInUI();
 		}
 	}
 
-	public void ToggleVisibility(bool _isVisible){
-
-		isVisible = _isVisible;
-
-		if(_isVisible){
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
+	public void ToggleHatched(bool isHatched){
+		isHatchedAux = isHatched;
+		if(isHatched){
+			eggParent.SetActive(false);
 			flippable.SetActive(true);
 			gameObject.collider.enabled = true;
+			bubbleParticle.gameObject.SetActive(true);
+			dirtyParticle.gameObject.SetActive(true);
+			eggAnimation.animation.Stop();
+			isVisible = true;
+		}
+		else{
+			eggParent.SetActive(true);
+			eggAnimation.animation.Play();
+			flippable.SetActive(false);
+			bubbleParticle.gameObject.SetActive(false);
+			dirtyParticle.gameObject.SetActive(false);
+			isVisible = false;
+		}
+	}
+
+
+	public void ToggleVisibility(bool isVisible){
+
+		this.isVisible = isVisible;
+//		Debug.Log("visible: " + this.isVisible);
+
+		if(this.isVisible){
+			bubbleParticle.gameObject.SetActive(true);
+			dirtyParticle.gameObject.SetActive(true);
+
+			ToggleHatched(isHatchedAux);	// Keep track of it internally already DWID
 		}
 		else{
 			bubbleParticle.gameObject.SetActive(false);
 			dirtyParticle.gameObject.SetActive(false);
 			flippable.SetActive(false);
+			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;
 		}
 	}

@@ -8,8 +8,7 @@ public class MutableDataPetMenuInfo{
 
     public MutableDataPetMenuInfo(){}
 
-    public MutableDataPetMenuInfo(string petName, string petColor, 
-        string petSpecies){
+    public MutableDataPetMenuInfo(string petName, string petColor, string petSpecies){
         PetName = petName;
         PetColor = petColor;
         PetSpecies = petSpecies;

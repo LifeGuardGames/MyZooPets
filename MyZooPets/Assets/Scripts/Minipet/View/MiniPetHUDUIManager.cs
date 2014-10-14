@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
@@ -11,10 +12,19 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UISlider levelSlider;
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
+
+	public UILabel labelFeedCount;
+	public UILabel labelFeed;
+	public UISprite spriteFeed;
+
+	public Animation storeButtonPulseAnim;
+	public GameObject storeButtonSunbeam;
+
 	public Animation levelUpAnimation;
 	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
+
 
 	private GameObject cleaningTutorialObject;
 	private GameObject ticklingTutorialObject;
@@ -95,6 +105,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		CheckStoreButtonPulse();
 		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 
 		//Show other UI Objects
@@ -125,6 +136,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		tickleCheckBox.SetActive(isTickled);
 		cleanCheckBox.SetActive(isCleaned);
+
+		RefreshFoodItemUI();
 
 		nameLabel.text = SelectedMiniPetName;
 		UpdateLevelUI();
@@ -165,6 +178,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
 		}
 		else{
+			levelSlider.sliderValue = 1f;
 			progressLabel.text = "Max Level";
 		}
 	}
@@ -236,7 +250,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
-		StoreUIManager.Instance.OpenToSubCategory("Food", true);
+		StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.MinipetUIStoreButton);
 	}
 
 	/// <summary>
@@ -246,7 +260,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Hide();
 		ClickManager.Instance.Lock(UIModeTypes.Store);
 		StoreUIManager.OnShortcutModeEnd += CloseShop;
-		StoreUIManager.Instance.OpenToSubCategory("Items", true);
+		StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.GemExplanationNotification);
 	}
 
 	private void CloseShop(object sender, EventArgs args){
@@ -257,6 +271,53 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
 			HUDUIManager.Instance.HidePanel();
+		}
+
+		CheckStoreButtonPulse();
+	}
+
+	/// <summary>
+	/// Refreshs the food item UI
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+	public void RefreshFoodItemUI(){
+		if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
+			int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
+			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
+			labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
+			
+			labelFeedCount.gameObject.SetActive(true);
+			labelFeed.gameObject.SetActive(true);
+			Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+			spriteFeed.spriteName = item.TextureName;
+			spriteFeed.gameObject.SetActive(true);
+			spriteFeed.GetComponent<SpriteResizer>().Resize();
+		}
+		else{
+			labelFeedCount.gameObject.SetActive(false);
+			labelFeed.gameObject.SetActive(false);
+			spriteFeed.spriteName = null;
+			spriteFeed.gameObject.SetActive(false);
+		}
+		CheckStoreButtonPulse();
+	}
+
+	/// <summary>
+	/// Checks the store button pulse.
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+	private void CheckStoreButtonPulse(){
+		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+
+		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen()){
+			storeButtonPulseAnim.Play();
+			storeButtonSunbeam.SetActive(true);
+		}
+		else{
+			storeButtonPulseAnim.Stop();
+			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
+			storeButtonSunbeam.SetActive(false);
 		}
 	}
 }

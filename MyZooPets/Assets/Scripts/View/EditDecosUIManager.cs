@@ -229,7 +229,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;	
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true);
+		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButton);
 		
 		// open the specific sub category in the shop
 		string category = nodeSaved.GetDecoType().ToString();

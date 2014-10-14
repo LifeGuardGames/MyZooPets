@@ -280,6 +280,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		return preferredFoodID;
 	}
 
+	public string GetHatchPrefabName(string miniPetID){
+		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+		return data.CutsceneHatchPrefabName;
+	}
+
 	/// <summary>
 	/// Raises the destroyed gate handler event. Check to spawn mini pet after
 	/// a gate has been destroyed
@@ -291,6 +296,20 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 		//unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+
+		// Play the respective minipet hatch animation
+		StartCoroutine(PlayHatchCutscene(GetHatchPrefabName(miniPetID)));
+		StartCoroutine(RefreshUnlockState(miniPetID));
+	}
+
+	IEnumerator PlayHatchCutscene(string cutscenePrefabName){
+		yield return new WaitForSeconds(2f);
+		CutsceneUIManager.Instance.PlayCutscene(cutscenePrefabName);
+	}
+
+	IEnumerator RefreshUnlockState(string miniPetID){
+		yield return new WaitForSeconds(3f);
+		MiniPetTable[miniPetID].GetComponent<MiniPet>().RefreshUnlockState();
 	}
 
 	/// <summary>

@@ -21,12 +21,12 @@ public class EntranceHelperController : MonoBehaviour {
 		RefreshState();
 
 		if(MiniPetHUDUIManager.Instance)
-			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
+			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManagerOpenEventHandler;
 	}
 
 	void OnDestroy(){
 		if(MiniPetHUDUIManager.Instance)
-			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManageOpenEventHandler;
+			MiniPetHUDUIManager.Instance.OnManagerOpen -= OnManagerOpenEventHandler;
 	}
 
 	private void RefreshState(){
@@ -57,7 +57,7 @@ public class EntranceHelperController : MonoBehaviour {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void OnManageOpenEventHandler(object sender, UIManagerEventArgs args){
+	private void OnManagerOpenEventHandler(object sender, UIManagerEventArgs args){
 		if(args.Opening)
 			arrowGameObject.SetActive(false);
 		else{

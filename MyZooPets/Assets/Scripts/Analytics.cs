@@ -67,7 +67,7 @@ public class Analytics : MonoBehaviour {
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
     }
 
-    //=========================Runner Game======================================
+	#region Runner Game
     //Where did the user die most often in the runner game?
 //    public void RunnerPlayerDied(string levelComponentName){
 //        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
@@ -90,21 +90,24 @@ public class Analytics : MonoBehaviour {
         if(isAnalyticsEnabled)
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
     }
+	#endregion
 
-    //==========================Inhaler Game====================================
+	#region Inhaler Game
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
         if(isAnalyticsEnabled)
             GA.API.Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
     }
+	#endregion
 
+	#region Doctor Match
     //==========================Diagnose track game=============================
     //Number of correct diagnose. 
     //Which symptom is the user having trouble identifying
     public void DiagnoseResult(string diagnoseResult, AsthmaStage petStatus, AsthmaStage zone){
-        if(!String.IsNullOrEmpty(diagnoseResult) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
-                Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
+//        if(!String.IsNullOrEmpty(diagnoseResult) && isAnalyticsEnabled)
+//            GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
+//                Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
     }
 
 	public void WrongDiagnose(){
@@ -114,14 +117,30 @@ public class Analytics : MonoBehaviour {
 	public void DieAtWhatSpeed(){
 
 	}
+	#endregion
 
-	// ======================Mini Pets============================
+	#region MiniPet
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
 		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
 			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
 		}
 	}
+	#endregion
+
+	#region Friend Network
+	public void EnterFriendTree(){
+		GA.API.Design.NewEvent("Social:EnterFriendTree");
+	}
+
+	public void AddFriend(){
+		GA.API.Design.NewEvent("Social:AddFriend");
+	}
+
+	public void AcceptFriendRequest(){
+		GA.API.Design.NewEvent("Social:AcceptFriendRequest");
+	}
+	#endregion
 
     //=======================General Analytics==================================
     //Will be use in different mini games

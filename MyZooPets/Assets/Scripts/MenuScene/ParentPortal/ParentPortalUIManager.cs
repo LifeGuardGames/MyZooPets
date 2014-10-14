@@ -2,55 +2,75 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Parse;
 
-//Controls the parent portal template
-public class ParentPortalUIManager : Singleton<ParentPortalUIManager> {
-    public static Action onOkButtonClicked;  
-    public static Action onCancelButtonClicked; 
-    public List<GameObject> parentPortalContents = new List<GameObject>();
-    public UILabel generalMessage; //Use this label to display positive feedback (ex. your account has been created)
+public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
-    public void OkButtonClicked(){
-        if(onOkButtonClicked != null)
-            onOkButtonClicked();
-    }
+	public UIGrid grid;
+	public GameObject parentPortalEntryPetPrefab;
+	public GameObject parentPortalEntryCreatePrefab;
+	
 
-    public void CancelButtonClicked(){
-        if(onCancelButtonClicked != null)
-            onCancelButtonClicked();
-    }
+	void Awake(){
+		eModeType = UIModeTypes.ParentPortal;
+	}
 
-    public void DisplayGeneralMessage(string message){
-        generalMessage.text = Localization.Localize(message);
-        Invoke("HideGeneralMessage", 3f);
-    }
+	void Start(){
+		ParentPortalManager.OnDataRefreshed += UpdateGrid;
+	}
 
-    private void HideGeneralMessage(){
-        generalMessage.text = "";
-    }
+	void Destroy(){
+		ParentPortalManager.OnDataRefreshed -= UpdateGrid;
+	}
+	
+	private void UpdateGrid(object sender, ServerEventArgs args){
+		Debug.Log("updategrid");
+		foreach(Transform child in grid.transform){
+			child.gameObject.SetActive(false);
+			Destroy(child.gameObject);
+		}
 
-    public void ShowPortalSetup(GameObject currentContent){
-        ShowContent("PortalSetup", currentContent);
-    }
+		//data refreshed successfully
+		if(args.IsSuccessful){
+			ParseObjectKidAccount account = ParentPortalManager.Instance.KidAccount;
 
-    public void ShowPortalLogin(GameObject currentContent){
-        ShowContent("PortalLogin", currentContent);
-    }
+			GameObject portalEntryPet = NGUITools.AddChild(grid.gameObject, parentPortalEntryPetPrefab);
 
-    public void ShowPortalReset(GameObject currentContent){
-        ShowContent("PortalReset", currentContent);
-    }
+			//set the code
+			UILabel codeLabel = portalEntryPet.FindInChildren("LabelCode").GetComponent<UILabel>();
+			codeLabel.text = account.AccountCode;
 
-    public void ShowPortalRecovery(GameObject currentContent){
-        ShowContent("PortalRecovery", currentContent);
-    }
+			MutableDataPetMenuInfo menuInfo = DataManager.Instance.MenuSceneData;
+			UILabel nameLabel = portalEntryPet.FindInChildren("LabelName").GetComponent<UILabel>();
+			if(menuInfo != null)
+				nameLabel.text = menuInfo.PetName;
 
-    //Display new content in parent portal template and hide current content
-    private void ShowContent(string newContentName, GameObject currentContent){
-        GameObject newContent = parentPortalContents.Find(content => content.name == newContentName);
+			grid.Reposition();
+		}
+		else{
+			//display error message to user
+		}
+	}
 
-        if(currentContent != null)
-            currentContent.SetActive(false);
-        newContent.SetActive(true);
-    }
+	protected override void _OpenUI(){
+		GetComponent<TweenToggleDemux>().Show();
+
+		//Note: maybe do some cache check. don't need to do a server everytime
+		//the list opens
+		ParentPortalManager.Instance.RefreshData();
+
+	}
+
+	protected override void _CloseUI(){
+		GetComponent<TweenToggleDemux>().Hide();
+	}
+
+		void OnGUI(){
+			if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){
+				OpenUI();
+			}
+			if(GUI.Button(new Rect(200, 100, 100, 100), "Close")){
+				CloseUI();
+			}
+		}
 }

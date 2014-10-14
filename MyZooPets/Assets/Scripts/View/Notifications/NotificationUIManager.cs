@@ -357,7 +357,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	/// <param name="okButtonCallBack">Ok button call back.</param>
 	private void ShowInhalerRechargingMessage(PopupNotificationNGUI.Callback okButtonCallBack){
 		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupInhalerRechargeMessage);
-
+		Debug.Log("Inhaler recharging message");
 		twoButtonMessage.Button1Callback = okButtonCallBack;
 		twoButtonMessage.OnHideFinished += TryNextNotification;
 

@@ -48,6 +48,7 @@ public class RandomAnimation : MonoBehaviour {
 	
 	// Note: If some script enables a bunch of buttons at the same time they will all animate at once the first time
 	public void Enable(){
+		GetComponent<Animation>().Play();
 		if(childGameObject){
 			childGameObject.SetActive(true);
 		}
@@ -56,6 +57,7 @@ public class RandomAnimation : MonoBehaviour {
 	}
 	
 	public void Disable(){
+		GetComponent<Animation>().Stop();
 		if(childGameObject){
 			childGameObject.SetActive(false);
 		}

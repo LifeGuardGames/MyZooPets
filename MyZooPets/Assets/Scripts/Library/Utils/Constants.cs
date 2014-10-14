@@ -3,10 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-///////////////////////////////////////////
-// Constants
-// Reads constants from an XML file.
-///////////////////////////////////////////
+/// <summary>
+/// Constants. Loads constant from xml file;[
+/// </summary>
 
 public class Constants{
 	private static Hashtable hashConstants;

@@ -61,8 +61,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 			Analytics.Instance.StartGame();
 
             //Initialize data for new pet
-            DataManager.Instance.InitializeGameDataForNewPet(selectedEgg.transform.parent.name, 
-                petName, "Basic", petColor);
+            DataManager.Instance.InitializeGameDataForNewPet(petName:petName, petSpecies:"Basic", petColor:petColor);
 
         }
         base.CloseUI();
@@ -115,7 +114,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	private void ShowIntroMovie() {
 		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro"))
 			LoadScene();
-		
+
+		SelectionUIManager.Instance.ToggleEggAnimation(false);
 		AudioManager.Instance.LowerBackgroundVolume(0.1f);
 		
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;

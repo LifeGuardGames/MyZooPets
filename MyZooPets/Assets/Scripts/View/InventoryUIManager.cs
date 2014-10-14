@@ -99,7 +99,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	//Find the position of Inventory Item game object with invItemID
 	//Used for animation position in StoreUIManager
 	public Vector3 GetPositionOfInvItem(string invItemID){
-		Debug.Log("getting position of inv item");
 		// position to use
 		Vector3 invItemPosition;
 

@@ -147,12 +147,10 @@ public class MiniPet : MonoBehaviour {
 		if(colliderName == this.gameObject.name){
 			switch(gesture.Phase){
 			case ContinuousGesturePhase.Started:
-
 				bubbleParticle.Play();
 				MoveBubbleParticleWithUserTouch(gesture);
 				break;
 			case ContinuousGesturePhase.Updated:
-
 				if(!bubbleParticle.isPlaying)
 					bubbleParticle.Play();
 
@@ -171,10 +169,8 @@ public class MiniPet : MonoBehaviour {
 					animationManager.Cheer();
 					currentDistanceInCentimeters = 0;
 				}
-				
 				break;
 			case ContinuousGesturePhase.Ended:
-
 				bubbleParticle.Stop();
 				break;
 			}
@@ -260,8 +256,6 @@ public class MiniPet : MonoBehaviour {
 			}
 
 			if(isTickled && isCleaned){
-				ShowFoodPreferenceInUI();
-
 				if(MiniPetManager.Instance.CanModifyFoodXP(id))
 					Invoke("ShowFoodPreferenceMessage", 1f);
 			}
@@ -272,11 +266,6 @@ public class MiniPet : MonoBehaviour {
 		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
-	}
-
-	private void ShowFoodPreferenceInUI(){
-		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
-		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 	}
 
 	/// <summary>
@@ -388,8 +377,6 @@ public class MiniPet : MonoBehaviour {
 			
 			// make the item "burst" out
 			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
-
-			ShowFoodPreferenceInUI();
 		}
 	}
 

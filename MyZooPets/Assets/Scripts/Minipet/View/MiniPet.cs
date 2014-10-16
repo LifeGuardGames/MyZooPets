@@ -268,6 +268,19 @@ public class MiniPet : MonoBehaviour {
 		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 	}
 
+	public void TryShowDirtyOrSadMessage(){
+		Debug.Log("TRUONMG");
+		bool isTickled = MiniPetManager.Instance.IsTickled(id);
+		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+
+		if(!isTickled){
+			miniPetSpeechAI.ShowSadMsg();
+		}
+		else if(!isCleaned){
+			miniPetSpeechAI.ShowDirtyMsg();
+		}
+	}
+
 	/// <summary>
 	/// Logic to run after the camera has zoomed into the minipet
 	/// </summary>

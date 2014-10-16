@@ -269,7 +269,6 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	public void TryShowDirtyOrSadMessage(){
-		Debug.Log("TRUONMG");
 		bool isTickled = MiniPetManager.Instance.IsTickled(id);
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 

@@ -14,6 +14,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UILabel labelFeedCount;
 	public UILabel labelFeed;
 	public UISprite spriteFeed;
+	public TweenToggle feedParent;
 
 	public Animation storeButtonPulseAnim;
 	public GameObject storeButtonSunbeam;
@@ -63,6 +64,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		feedParent.Hide();
 		CheckStoreButtonPulse();
 		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 
@@ -226,6 +228,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		feedParent.Hide();
 
 		//sometimes this function will be called in a different mode, so we need
 		//to make sure the UIs are handled appropriately
@@ -265,6 +268,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
+			if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
+				feedParent.Show();
+			}
 			HUDUIManager.Instance.HidePanel();
 		}
 
@@ -287,8 +293,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			spriteFeed.spriteName = item.TextureName;
 			spriteFeed.gameObject.SetActive(true);
 			spriteFeed.GetComponent<SpriteResizer>().Resize();
+			feedParent.Show();
 		}
 		else{
+			feedParent.Hide();
 			labelFeedCount.gameObject.SetActive(false);
 			labelFeed.gameObject.SetActive(false);
 			spriteFeed.spriteName = null;

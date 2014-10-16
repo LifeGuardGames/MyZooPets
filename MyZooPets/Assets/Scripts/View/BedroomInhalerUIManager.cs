@@ -11,7 +11,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 	public GameObject progressBar3D;
 	public UILabel coolDownLabel;
-	public UISlider coolDownSlider;
+	public UISprite coolDownSprite;
 
 	private GameObject fireOrbObject;
 
@@ -90,7 +90,10 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		inhalerAnimationController.Stop();
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
-		progressBar3D.SetActive(true);
+
+		coolDownLabel.enabled = true;
+		progressBar3D.animation.Stop();
+		progressBar3D.transform.localScale = Vector3.one;
 	}
 
 	/// <summary>
@@ -100,7 +103,10 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
-		progressBar3D.SetActive(false);
+
+		coolDownLabel.enabled = false;
+		coolDownSprite.fillAmount = 1f;
+		progressBar3D.animation.Play();
 
 		DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 	}
@@ -132,7 +138,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemain;
 		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
-		coolDownSlider.sliderValue = completePercentage;
+		coolDownSprite.fillAmount = completePercentage;
 	}
 	
 }

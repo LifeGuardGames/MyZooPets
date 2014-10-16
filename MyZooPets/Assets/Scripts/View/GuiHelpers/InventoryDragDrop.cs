@@ -104,7 +104,9 @@ public class InventoryDragDrop : MonoBehaviour {
 		
 		if (enabled && UICamera.currentTouchID > -2)
 		{
-			if (!mIsDragging && delta.y > 0 && !isScrolling)	// If the delta has positive Y, pick up
+			if (!mIsDragging && !isScrolling &&
+			    ((InventoryUIManager.Instance.IsInventoryScrollable() && delta.y > 0) ||	// If the delta has positive Y and scrollable, pick up
+			    (!InventoryUIManager.Instance.IsInventoryScrollable())))					// If not scrollable, just pick up
 			{
 				isClickLock = false;
 				dragScrollScript.enabled = false;

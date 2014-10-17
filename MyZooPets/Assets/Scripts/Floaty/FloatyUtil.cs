@@ -118,13 +118,10 @@ public class FloatyUtil {
 			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaPoints"];
-			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
 			sprite.gameObject.SetActive(true);
 			sprite.spriteName = (string) option["spritePoints"];
-			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
-			
 			
 			offsetTracker++;
 		}
@@ -132,12 +129,10 @@ public class FloatyUtil {
 			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaHealth"];
-			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
 			sprite.gameObject.SetActive(true);
 			sprite.spriteName = (string) option["spriteHealth"];
-			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			offsetTracker++;
 		}
@@ -145,12 +140,10 @@ public class FloatyUtil {
 			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaMood"];
-			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
 			sprite.gameObject.SetActive(true);
 			sprite.spriteName = (string) option["spriteHunger"];
-			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			offsetTracker++;
 		}
@@ -159,12 +152,10 @@ public class FloatyUtil {
 			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaStars"];
-			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
 			sprite.gameObject.SetActive(true);
 			sprite.spriteName = (string) option["spriteStars"];
-			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			offsetTracker++;
 		}
@@ -172,12 +163,10 @@ public class FloatyUtil {
 			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaGems"];
-			label.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
 			sprite.gameObject.SetActive(true);
 			sprite.spriteName = (string) option["spriteGems"];
-			sprite.gameObject.GetComponent<NGUIAlphaTween>().StartAlphaTween();
 			
 			offsetTracker++;
 		}

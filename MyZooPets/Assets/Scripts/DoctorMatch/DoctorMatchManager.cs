@@ -154,20 +154,23 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		if(randomNum == 0)
 			randomNum = UnityEngine.Random.Range(1,4);
 
-		int chooseSpriteRandom = UnityEngine.Random.Range(0,4);
+		int chooseSpriteRandom = UnityEngine.Random.Range(0,5);
 
 		switch(randomNum){
 		case 1:
 			item.itemKey = "green";
+//			Debug.Log("GREEN : " + chooseSpriteRandom);
 			sprite.sprite = spriteList[chooseSpriteRandom];
 			break;
 		case 2:
 			item.itemKey = "yellow";
-			sprite.sprite = spriteList[4+chooseSpriteRandom];
+//			Debug.Log("YELLOW : " + (5+chooseSpriteRandom));
+			sprite.sprite = spriteList[5+chooseSpriteRandom];
 			break;
 		case 3:
 			item.itemKey = "red";
-			sprite.sprite = spriteList[8+chooseSpriteRandom];
+//			Debug.Log("RED : " + (9+chooseSpriteRandom));
+			sprite.sprite = spriteList[10+chooseSpriteRandom];
 			break;
 		default:
 			Debug.LogError("Not valid item group");

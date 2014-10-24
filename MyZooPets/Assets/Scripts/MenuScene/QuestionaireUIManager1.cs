@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -53,7 +53,7 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
-		QuestionaireManager.Instance.AcceptTermsAndPrivacy();
+		QuestionaireManager.Instance.AgeCollected();
 
 		CloseUI();
 	}

@@ -24,8 +24,8 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// <summary>
 	/// Accepts the terms and privacy.
 	/// </summary>
-	public void AcceptTermsAndPrivacy(){
-		DataManager.Instance.IsTermsAndPrivacyAccepeted = true;
+	public void AgeCollected(){
+		DataManager.Instance.IsAgeCollected = true;
 	}
 
 	/// <summary>
@@ -40,7 +40,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// privacy policy and terms of agreement
 	/// </summary>
 	private void CheckToOpenQuestionaireMenuScene(){
-		bool isQuestionaireCollected = DataManager.Instance.IsTermsAndPrivacyAccepeted;
+		bool isQuestionaireCollected = DataManager.Instance.IsAgeCollected;
 
 		if(!isQuestionaireCollected){
 			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel1");

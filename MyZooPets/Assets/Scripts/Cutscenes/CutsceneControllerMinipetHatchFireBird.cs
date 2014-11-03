@@ -16,4 +16,12 @@ public class CutsceneControllerMinipetHatchFireBird : CutsceneController{
 		fireBirdAnim.gameObject.SetActive(true);
 		fireBirdAnim.Play();
 	}
+
+	public void playRollAudio(){
+		AudioManager.Instance.PlayClip("drumRoll");
+	}
+
+	public void playHatchAudio(){
+		AudioManager.Instance.PlayClip("petHatch");
+	}
 }

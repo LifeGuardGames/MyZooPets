@@ -2381,7 +2381,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5093322de04db04bb7595aa47397b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlaying: 1
   speed: 50
+  isIntervalOn: 0
+  intervalIncrement: 45
+  intervalSpeed: .200000003
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2412,10 +2416,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target1: {fileID: 100142}
   functionName1: popPet
-  target2: {fileID: 0}
-  functionName2: 
-  target3: {fileID: 0}
-  functionName3: 
+  target2: {fileID: 100142}
+  functionName2: playRollAudio
+  target3: {fileID: 100142}
+  functionName3: playHatchAudio
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1

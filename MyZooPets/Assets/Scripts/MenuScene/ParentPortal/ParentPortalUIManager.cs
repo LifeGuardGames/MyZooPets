@@ -24,20 +24,24 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 		eModeType = UIModeTypes.ParentPortal;
 	}
 
-	void Start(){
-		// TODO JASON POPULATE HERE
-//		playerName.text = ;
-//		code.text = ;
-	}
-
 	void OnDestroy(){
+		ParentPortalManager.OnDataRefreshed -= DataRefreshedHandler;
 	}
 
+	protected override void Start(){
+		ParentPortalManager.OnDataRefreshed += DataRefreshedHandler;
+	}
+
+	private void DataRefreshedHandler(object sender, ServerEventArgs args){
+		ParseObjectKidAccount account = ParentPortalManager.Instance.KidAccount;
+		code.text = account.AccountCode;
+	}
 
 	protected override void _OpenUI(){
 		OpenBackground();
 		OpenMathQuestion();
 
+		ParentPortalManager.Instance.RefreshData();
 		SelectionUIManager.Instance.gameObject.SetActive(false);
 	}
 

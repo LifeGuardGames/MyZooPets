@@ -105,9 +105,6 @@ public class DataManager : Singleton<DataManager>{
 		isCreated = true;
 		//---------------------------------------------------------------------
 
-//		//Initialize Parse so it can be used right away
-//		ParseClient.Initialize("J0M9QYtJJ7mUCnplysgza2zX2fo5MUCCbuoniZnN", "jTbrSqfrOKlJbIn5b1STpFpVItqwF4HyrWgejJ5S");
-
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
 		if(isDebug)

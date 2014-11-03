@@ -6,9 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class ParentPortalManager : Singleton<ParentPortalManager> {
+public class ParentPortalManager : ServerConnector<ParentPortalManager> {
 	public static EventHandler<ServerEventArgs> OnDataRefreshed;
-	public bool useDummyData = false;
 	
 	/// <summary>
 	/// Gets or sets the kid account list.
@@ -20,55 +19,46 @@ public class ParentPortalManager : Singleton<ParentPortalManager> {
 	public void RefreshData(){
 		if(IsUsingDummyData()) return;
 
-		try{
-			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
-				var parentPortalQuery = new ParseQuery<ParseObjectKidAccount>()
-					.WhereEqualTo("createdBy", ParseUser.CurrentUser);
+		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
+			StartTimeOutTimer();
 
-				return parentPortalQuery.FirstAsync();
-			}).Unwrap().ContinueWith(t => {
-				if(t.IsFaulted || t.IsCanceled){
-					ParseException exception = (ParseException)t.Exception.InnerExceptions[0];
-					Debug.Log("Message: " + exception.Message + ", Code: " + exception.Code);
+			var parentPortalQuery = new ParseQuery<ParseObjectKidAccount>()
+				.WhereEqualTo("createdBy", ParseUser.CurrentUser);
 
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = false;
-						args.ErrorCode = exception.Code;
-						args.ErrorMessage = exception.Message;
-						
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
-				}
-				else{
-					ParseObjectKidAccount kidAccount = t.Result;
-					KidAccount = kidAccount;
-
-					Loom.DispatchToMainThread(() => {
-						ServerEventArgs args = new ServerEventArgs();
-						args.IsSuccessful = true;
-						
-						if(OnDataRefreshed != null)
-							OnDataRefreshed(this, args);
-					});
-
-				}
-			});
-		}
-		catch(InvalidOperationException e){
-			//Errors from parse SDK logic check
-			Debug.LogException(e);
-
+			return parentPortalQuery.FirstAsync(timeOutRequestCancellation.Token);
+		}).Unwrap().ContinueWith(t => {
 			ServerEventArgs args = new ServerEventArgs();
-			args.IsSuccessful = false;
-			args.ErrorCode = ParseException.ErrorCode.OtherCause;
-			
-			if(OnDataRefreshed != null)
-				OnDataRefreshed(this, args);
-		}
-	}
 
+			if(t.IsFaulted || t.IsCanceled){
+				ParseException.ErrorCode code = ParseException.ErrorCode.OtherCause;
+				string message = "time out by client";
+				
+				if(t.Exception != null){
+					ParseException e = (ParseException) t.Exception.InnerExceptions[0];
+					code = e.Code;
+					message = e.Message;
+					//Debug.LogError("Message: " + e.Message + ", Code: " + e.Code);
+				}
+				
+				args.IsSuccessful = false;
+				args.ErrorCode = code;
+				args.ErrorMessage = message;
+			}
+			else{
+				ParseObjectKidAccount kidAccount = t.Result;
+				KidAccount = kidAccount;
+				args.IsSuccessful = true;
+			}
+
+			Loom.DispatchToMainThread(() => {
+				if(OnDataRefreshed != null)
+					OnDataRefreshed(this, args);
+			});
+			
+			StopTimeOutTimer();
+		});
+	}
+	
 	private bool IsUsingDummyData(){
 		bool retVal = false; 
 		if(useDummyData){

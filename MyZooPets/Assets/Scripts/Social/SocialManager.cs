@@ -19,8 +19,6 @@ public class SocialManager : ServerConnector<SocialManager>{
 	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
 
-	public bool useDummyData = false; // Turn this to true if testing with dummy data
-
 	#region Properties
 	/// <summary>
 	/// Gets or sets the friend list.

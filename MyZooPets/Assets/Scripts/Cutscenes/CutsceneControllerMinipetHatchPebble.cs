@@ -15,4 +15,12 @@ public class CutsceneControllerMinipetHatchPebble : CutsceneController {
 		pebbleAnim.gameObject.SetActive(true);
 		pebbleAnim.Play();
 	}
+
+	public void playRollAudio(){
+		AudioManager.Instance.PlayClip("drumRoll");
+	}
+	
+	public void playHatchAudio(){
+		AudioManager.Instance.PlayClip("petHatch");
+	}
 }

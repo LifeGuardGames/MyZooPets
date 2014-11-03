@@ -65,17 +65,17 @@ public class DataManager : Singleton<DataManager>{
 	/// Gets a value indicating whether terms of service and privacy are accepted
 	/// by the user
 	/// </summary>
-	public bool IsTermsAndPrivacyAccepeted{
+	public bool IsAgeCollected{
 		get{
 			//default to false
-			bool isAccepted = PlayerPrefs.GetInt("IsTermsAndPrivacyAccepted", 0) > 0;
+			bool isAccepted = PlayerPrefs.GetInt("IsAgeCollected", 0) > 0;
 
 			return isAccepted;
 		}
 		set{
 			bool isAccepted = value;
 			if(isAccepted)
-				PlayerPrefs.SetInt("IsTermsAndPrivacyAccepted", 1);
+				PlayerPrefs.SetInt("IsAgeCollected", 1);
 		}
 	}
 
@@ -284,6 +284,7 @@ public class DataManager : Singleton<DataManager>{
 		
 		if(currentDataVersion < version140){
 			PlayerPrefs.DeleteKey("IsSinglePetMode");
+			IsAgeCollected = true;
 			
 			ExtraParseLogic.Instance.UserCheck();
 		}

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using Parse;
 
 public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
-
-	public UILabel playerName;
 	public UILabel code;
 
 	public TweenToggle backgroundTween;
@@ -17,6 +15,8 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	private int answerToMath;
 	private int sequenceCount = 1;
 	private int answerSoFar;
+
+	public ParticleSystemController leafParticle;
 
 	public TweenToggle parentPortalTween;
 
@@ -38,6 +38,8 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	}
 
 	protected override void _OpenUI(){
+		leafParticle.Stop();
+
 		OpenBackground();
 		OpenMathQuestion();
 
@@ -46,6 +48,8 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	}
 
 	protected override void _CloseUI(){
+		leafParticle.Play();
+
 		CloseBackground();
 		CloseMathQuestion();
 		CloseParentPortal();
@@ -140,12 +144,12 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	public void Button9(){ EnteredSequence(9); }
 	public void Button0(){ EnteredSequence(0); }
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){
-			OpenUI();
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "Close")){
-			CloseUI();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Open")){
+//			OpenUI();
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "Close")){
+//			CloseUI();
+//		}
+//	}
 }

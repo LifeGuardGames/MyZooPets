@@ -18,6 +18,17 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private List<NinjaDataEntry> currentTriggerEntries; // current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection; // record the last drag direction
 
+	void Awake(){
+		Application.targetFrameRate = 60;
+		quitGameScene = SceneUtils.BEDROOM;
+	}
+
+	protected override void _Start(){}	
+	
+	protected override void _OnDestroy(){
+		Application.targetFrameRate = 30;
+	}
+
 	public Vector2 GetTrailDeltaMove(){
 		return trailDeltaMove;
 	}
@@ -76,9 +87,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 	}
 	
-	void Awake(){
-		Application.targetFrameRate = 60;
-	}
+
 
 	void OnDrag(DragGesture gesture){
 		// check is playing
@@ -121,12 +130,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 	}
 
-	protected override void _Start(){}	
-
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
-
 	protected override void _NewGame(){		
 		// reset variables
 		comboTime = 0;
@@ -157,8 +160,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	protected override bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
 	}
-	
-		
+
 	protected override bool HasCutscene(){
 		return false;
 	}	

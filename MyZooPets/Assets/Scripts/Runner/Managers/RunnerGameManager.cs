@@ -15,6 +15,19 @@ using System.Collections.Generic;
 
 public class RunnerGameManager : MinigameManager<RunnerGameManager>{
     
+	void Awake(){
+		quitGameScene = SceneUtils.BEDROOM;
+	}
+	
+	// Use this for initialization
+	protected override void _Start(){
+		Application.targetFrameRate = 60;
+	}
+	
+	protected override void _OnDestroy(){
+		Application.targetFrameRate = 30;
+	}
+
 	//public SceneTransition scriptTransition;
 	public bool GameRunning{
 		get { return GetGameState() == MinigameStates.Playing; }
@@ -43,16 +56,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	protected override bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsRunnerTutorialOn");
 	}
-	
-	// Use this for initialization
-	protected override void _Start(){
-		Application.targetFrameRate = 60;
-	}
 
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
-	
 	/// <summary>
 	/// Starts a new game.
 	/// </summary>
@@ -65,7 +69,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 			ResetGameTutorial();
 		}
 		else{
-
 			ResetGame();
 		}
 	}	

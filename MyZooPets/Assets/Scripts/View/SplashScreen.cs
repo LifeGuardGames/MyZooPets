@@ -22,6 +22,6 @@ public class SplashScreen : MonoBehaviour {
 	//fades the splash screen
 	void FadeStartScene()
 	{
-		Application.LoadLevel("MenuScene");
+		Application.LoadLevel(SceneUtils.MENU);
 	}
 }

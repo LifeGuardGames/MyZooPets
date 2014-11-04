@@ -7,16 +7,16 @@ using System.Collections;
 /// </summary>
 public class QuestionaireManager : Singleton<QuestionaireManager> {
 	void Start(){
-		if(Application.loadedLevelName == "MenuScene"){
+		if(Application.loadedLevelName == SceneUtils.MENU){
 			CheckToOpenQuestionaireMenuScene();
 		}
-		else if(Application.loadedLevelName == "NewBedRoom"){
+		else if(Application.loadedLevelName == SceneUtils.BEDROOM){
 			CheckToOpenQuestionaireBedroom();
 		}
 	}
 
 	void OnApplicationPause(bool isPaused){
-		if(!isPaused && Application.loadedLevelName == "NewBedRoom"){
+		if(!isPaused && Application.loadedLevelName == SceneUtils.BEDROOM){
 			CheckToOpenQuestionaireBedroom();
 		}
 	}

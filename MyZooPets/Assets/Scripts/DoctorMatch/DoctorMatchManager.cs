@@ -28,15 +28,19 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	private int numOfCorrectDiagnose; //keep track of the number of correct diagnose
 
-	public override int GetReward(MinigameRewardTypes eType){
-		// for now, just use the standard way
-		return GetStandardReward(eType);
+	void Awake(){
+		quitGameScene = SceneUtils.BEDROOM;
 	}
 	
 	protected override void _Start(){
 	}	
-
+	
 	protected override void _OnDestroy(){
+	}
+
+	public override int GetReward(MinigameRewardTypes eType){
+		// for now, just use the standard way
+		return GetStandardReward(eType);
 	}
 
 	protected override void _NewGame(){
@@ -83,7 +87,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 			}
 		}
 	
-		// play appropriate sound
+		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
 
 		if(OnCharacterScoredRight != null)
@@ -159,17 +163,14 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		switch(randomNum){
 		case 1:
 			item.itemKey = "green";
-//			Debug.Log("GREEN : " + chooseSpriteRandom);
 			sprite.sprite = spriteList[chooseSpriteRandom];
 			break;
 		case 2:
 			item.itemKey = "yellow";
-//			Debug.Log("YELLOW : " + (5+chooseSpriteRandom));
 			sprite.sprite = spriteList[5+chooseSpriteRandom];
 			break;
 		case 3:
 			item.itemKey = "red";
-//			Debug.Log("RED : " + (9+chooseSpriteRandom));
 			sprite.sprite = spriteList[10+chooseSpriteRandom];
 			break;
 		default:

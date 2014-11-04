@@ -25,7 +25,7 @@ public class ButtonChangeScene : LgButton {
 
 	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
 	public GameObject cameraGO; //needs the camera to record partition # before scene change
-	public GameObject petLWF; //needs to record pet position before scene change
+	public GameObject petObject; //needs to record pet position before scene change
 
 	public string analyticsEvent;	
 
@@ -89,10 +89,10 @@ public class ButtonChangeScene : LgButton {
 	private void RememberCurrentScene(){
 		if(shouldSaveSceneData){
 			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
-			Vector3 petPos = petLWF.transform.position;
+			Vector3 petPos = petObject.transform.position;
 			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
 		}else
-			if(strScene == "MenuScene")
+			if(strScene == SceneUtils.MENU)
 				//Only remove scene data if returning to menu scene
 				DataManager.Instance.SceneData = null;
 	}

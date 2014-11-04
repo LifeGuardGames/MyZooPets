@@ -60,6 +60,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	private MinigameStates currentState = MinigameStates.Opening; // the state of this minigame
 	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
 
+	protected string quitGameScene = null;	// Over write this in child on awake
+
 	//Return player score
 	public virtual int GetScore(){
 		return score;	
@@ -78,7 +80,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//Set reference to the tutorial
 	protected void SetTutorial(MinigameTutorial tutorial){
 		this.tutorial = tutorial;
-		
 		this.tutorial.OnTutorialEnd += TutorialEnded;
 	}	
 
@@ -127,8 +128,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public MinigameStates GetGameState(){
 		return currentState;
 	}
-	
-	
+
 	//---------------------------------------------------
 	// Start()
 	// Only stuff that should be done ONCE should be done
@@ -287,35 +287,37 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void QuitGame(){
-		string strKey = GetMinigameKey();
-		string strScene = Constants.GetConstant<string>(strKey + "_QuitScene");
+		if(quitGameScene != null){
+			// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
+			if(ui.IsPopupShowing(MinigamePopups.GameOver)){
+				ui.TogglePopup(MinigamePopups.GameOver, false);
 
-		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
-		if(ui.IsPopupShowing(MinigamePopups.GameOver)){
-			ui.TogglePopup(MinigamePopups.GameOver, false);
+				LoadLevelUIManager.Instance.StartLoadTransition(quitGameScene, "");
+			}
+			
+			//double confirm quit game
+			if(ui.IsPopupShowing(MinigamePopups.Pause)){
 
-			LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
+				PopupNotificationNGUI.Callback button1Function = delegate(){
+					ui.TogglePopup(MinigamePopups.Pause, false);
+
+					LoadLevelUIManager.Instance.StartLoadTransition(quitGameScene, "");
+				};
+
+				PopupNotificationNGUI.Callback button2Function = delegate(){
+				};
+
+				Hashtable notificationEntry = new Hashtable();
+				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.MiniGameQuitCheck);
+				notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
+				notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+				notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+
+				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+			}
 		}
-		
-		//double confirm quit game
-		if(ui.IsPopupShowing(MinigamePopups.Pause)){
-
-			PopupNotificationNGUI.Callback button1Function = delegate(){
-				ui.TogglePopup(MinigamePopups.Pause, false);
-
-				LoadLevelUIManager.Instance.StartLoadTransition(strScene, "");
-			};
-
-			PopupNotificationNGUI.Callback button2Function = delegate(){
-			};
-
-			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.MiniGameQuitCheck);
-			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		else{
+			Debug.LogError("quitGameScene not set in child");
 		}
 	}
 	

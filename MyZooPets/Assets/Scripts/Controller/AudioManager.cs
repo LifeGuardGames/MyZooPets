@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class AudioManager : LgAudioManager<AudioManager>{
 	public bool isMusicOn = true;
 	public string backgroundMusic;
@@ -19,7 +18,6 @@ public class AudioManager : LgAudioManager<AudioManager>{
 		base.Start();
 		StartCoroutine(PlayBackground());
 	}
-
 
 	private IEnumerator PlayBackground(){
 		yield return new WaitForSeconds(0.5f);

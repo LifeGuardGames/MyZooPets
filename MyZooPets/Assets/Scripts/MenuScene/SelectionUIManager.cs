@@ -9,7 +9,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject selectionGrid;
 //    private string selectedPetID;
 
-
     void Awake(){
         Input.multiTouchEnabled = false;
     }
@@ -59,7 +58,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }
 
     public void LoadGame(){
-
         //Lock it while loading
         ClickManager.Instance.Lock(UIModeTypes.IntroComic);
 
@@ -136,7 +134,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     
     //First initialization of the PetSelectionArea
     private void RefreshUI(){
-
         //Remove old data
         foreach(Transform petSelectionTransform in selectionGrid.transform){
             foreach(Transform childTransform in petSelectionTransform){
@@ -169,13 +166,11 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
             }else{
                 GameObject menuScenePetPrefab = Resources.Load("MenuScenePet") as GameObject;
                 GameObject menuScenePetGO = NGUITools.AddChild(petSelectionGO, menuScenePetPrefab);
-                // GameObject lwfObject = menuScenePetGO.transform.Find("UILWFObject").gameObject;
 
                 menuScenePetGO.name = "MenuScenePet";
                 UILabel petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<UILabel>();
                 petNameLabel.text = petMenuInfo.PetName;
 
-                // lwfObject.transform.localScale = menuScenePetPrefab.transform.localScale;
                 menuScenePetGO.GetComponent<LgButtonMessage>().target = this.gameObject;
                 menuScenePetGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
             }

@@ -388,7 +388,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			// Set the default category
 			string defaultTabName = "Carpet";	
-			if(Application.loadedLevelName == "Yard"){
+			if(Application.loadedLevelName == SceneUtils.YARD){
 				defaultTabName = "SmallPlant";
 			}
 

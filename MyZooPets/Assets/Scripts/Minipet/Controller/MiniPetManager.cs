@@ -294,13 +294,14 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){
 		string miniPetID = args.MiniPetID;
 
-		//unlock in data manager
-		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+		if(!string.IsNullOrEmpty(miniPetID)){
+			//unlock in data manager
+			DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
 
-		// Play the respective minipet hatch animation
-		StartCoroutine(PlayHatchCutscene(GetHatchPrefabName(miniPetID)));
-		StartCoroutine(RefreshUnlockState(miniPetID));
-
+			// Play the respective minipet hatch animation
+			StartCoroutine(PlayHatchCutscene(GetHatchPrefabName(miniPetID)));
+			StartCoroutine(RefreshUnlockState(miniPetID));
+		}
 	}
 
 	IEnumerator PlayHatchCutscene(string cutscenePrefabName){

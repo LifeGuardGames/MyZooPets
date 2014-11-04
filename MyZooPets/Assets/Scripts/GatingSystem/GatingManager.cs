@@ -110,9 +110,11 @@ public class GatingManager : Singleton<GatingManager>{
 				}
 				// Gate object has already been destroyed.
 				catch(MissingReferenceException e){
+					Debug.LogException(e);
 					isGateInSceneAlready = false;
 				}
 				catch(NullReferenceException e){
+					Debug.LogException(e);
 					isGateInSceneAlready = false;
 				}
 			}

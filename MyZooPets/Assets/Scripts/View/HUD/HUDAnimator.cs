@@ -354,7 +354,7 @@ public class HUDAnimator : MonoBehaviour{
 		AnimationControl anim = hashAnimControls[eStat];
 		int nTarget = StatsController.Instance.GetStat(eStat);
 
-		int count = 0;
+//		int count = 0;
 
 		// while the display number is not where we want to be...
 		while(hashDisplays[eStat] != nTarget){

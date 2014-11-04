@@ -15,7 +15,8 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 	private bool hasMovedSlider = false;
 	private GameObject menuScenePet = null;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.CustomizePet;
 	}
 

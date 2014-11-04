@@ -34,7 +34,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		// show the UI itself
 		GetComponent<TweenToggle>().Show();
 
-		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+//		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
 	}
 
 	//---------------------------------------------------

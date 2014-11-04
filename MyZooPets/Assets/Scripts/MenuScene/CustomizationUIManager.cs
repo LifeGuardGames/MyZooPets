@@ -19,7 +19,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private bool finishClicked = false;
      private bool isComicOn;
 	
-    void Awake(){
+    protected override void Awake(){
+		base.Awake();
         eModeType = UIModeTypes.CustomizePet;
         isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }

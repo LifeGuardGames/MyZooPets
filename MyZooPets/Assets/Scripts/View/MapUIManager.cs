@@ -20,13 +20,15 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	public List<MapEntry> mapEntries = new List<MapEntry>();
 
 	protected override void Start(){
+		base.Start();
 		draggableCollider.enabled = false;
 
 		GatingManager.OnDamageGate += RefreshMapEntry;
 		RefreshMapEntry(this, EventArgs.Empty);
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		GatingManager.OnDamageGate -= RefreshMapEntry;
 	}
 

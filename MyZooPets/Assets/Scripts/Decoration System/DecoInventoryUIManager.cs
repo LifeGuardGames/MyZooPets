@@ -33,11 +33,13 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	public Transform currentDragDropItem;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.EditDecos;
 	}
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		InventoryLogic.OnItemAddedToDecoInventory += OnItemAddedHandler;
 		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
@@ -57,7 +59,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		HideDecoInventory();
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}

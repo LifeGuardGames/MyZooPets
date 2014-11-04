@@ -67,7 +67,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
-		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
+//		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
 
 		//check why we need isFirstTime variable
 

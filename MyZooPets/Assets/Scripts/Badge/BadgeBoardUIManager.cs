@@ -24,12 +24,14 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public Vector3 vOffset;
 	public Vector3 vRotation;
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
 		InitBadges();
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		BadgeLogic.OnNewBadgeUnlocked -= UnlockBadge;
 	}
 

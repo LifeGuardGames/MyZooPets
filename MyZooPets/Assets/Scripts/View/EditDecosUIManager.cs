@@ -27,7 +27,8 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	private PositionTweenToggle tweenEdit;
 	private DecorationNode nodeSaved; // "saved" deco node for when the user is in the choose menu and opens the shop
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		eModeType = UIModeTypes.EditDecos;
 		
 		// cache the tween on the edit button for easier use

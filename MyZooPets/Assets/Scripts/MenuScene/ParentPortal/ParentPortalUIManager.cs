@@ -20,11 +20,13 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	public TweenToggle parentPortalTween;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.ParentPortal;
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		ParentPortalManager.OnDataRefreshed -= DataRefreshedHandler;
 	}
 

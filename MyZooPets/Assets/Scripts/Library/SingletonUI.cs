@@ -32,8 +32,10 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour {
 	public bool IsOpen() {
 		return isOpen;	
 	}
-	
-	protected virtual void Start() {}
+
+	protected virtual void Awake(){}
+	protected virtual void Start(){}
+	protected virtual void OnDestroy(){}
 
 
 	/// <summary>

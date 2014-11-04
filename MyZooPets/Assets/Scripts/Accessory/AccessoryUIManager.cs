@@ -35,11 +35,13 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
 	private bool isActive = false;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Accessory;
 	}
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
 
 		// Populate the entries with loaded data
@@ -76,7 +78,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		}
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 

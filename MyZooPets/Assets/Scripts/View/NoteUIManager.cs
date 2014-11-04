@@ -12,16 +12,6 @@ public class NoteUIManager : SingletonUI<NoteUIManager> {
 	public Vector3 vOffset;
 	public float fZoomTime;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();

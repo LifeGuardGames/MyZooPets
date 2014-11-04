@@ -9,7 +9,7 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class GameTutorialSmokeIntro : GameTutorial{
-	private GameObject swipeGO; //reference to the swipe listener
+//	private GameObject swipeGO; //reference to the swipe listener
 
 	public GameTutorialSmokeIntro() : base(){		
 	}
@@ -173,16 +173,16 @@ public class GameTutorialSmokeIntro : GameTutorial{
 //		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
 //	}
 
-	private void OnTutorialSwiped(object sender, EventArgs args){
-		//clean up
-		RemoveFingerHint();
-
-		if(swipeGO != null)
-			GameObject.Destroy(swipeGO);
-
-		//advance in tutorial
-		Advance();
-	}
+//	private void OnTutorialSwiped(object sender, EventArgs args){
+//		//clean up
+//		RemoveFingerHint();
+//
+//		if(swipeGO != null)
+//			GameObject.Destroy(swipeGO);
+//
+//		//advance in tutorial
+//		Advance();
+//	}
 
 	private void FocusOnRightArrow(){
 		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();

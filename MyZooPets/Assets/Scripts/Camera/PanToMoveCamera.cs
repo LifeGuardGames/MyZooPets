@@ -40,8 +40,8 @@ public class PanToMoveCamera : MonoBehaviour{
 	private Vector2 currentTouchPos; //Position of touch right now
 	private float startTime; //Time at when finger touches screen
 	private RoomDirection panDirection; //direction of the last finger gesture
-	private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
-	private bool touchCancelled = false; //True: touch shouldn't be handled
+//	private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
+//	private bool touchCancelled = false; //True: touch shouldn't be handled
 	private Camera nguiCamera;
 	private Camera mainCamera;
 
@@ -77,7 +77,7 @@ public class PanToMoveCamera : MonoBehaviour{
 		optional.Add("ease", LeanTweenType.easeOutQuad);
 			
 		LeanTween.moveX(gameObject, moveTo, 0.35f, optional);
-		normalizedTouchPosX = 0;		
+//		normalizedTouchPosX = 0;		
 	}
 
 	/// <summary>

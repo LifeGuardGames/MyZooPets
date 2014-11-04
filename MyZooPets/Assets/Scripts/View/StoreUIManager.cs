@@ -43,11 +43,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Store;
 	}
 	
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		// Reposition all the things nicely to stretch to the end of the screen
 		
 		// Position the UIPanel clipping range
@@ -308,7 +310,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(itemData.Type == ItemType.Decorations){
-				DecorationItem decoItem = (DecorationItem)itemData;
+//				DecorationItem decoItem = (DecorationItem)itemData;
 
 				//Use for tutorial to notify tutorial manager when deco item has been bought
 				bool isDecorationTutorialDone = DataManager.Instance.GameData.
@@ -516,7 +518,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				List<DecorationItem> decoList = decoDict[decoType];
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.ItemBoxOnly){
-						GameObject itemEntry = StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
 					}
 				}
 			}

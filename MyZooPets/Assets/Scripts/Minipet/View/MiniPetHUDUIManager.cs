@@ -42,7 +42,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public string SelectedMiniPetName {get; set;}
 	public GameObject SelectedMiniPetGameObject {get; set;}
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.MiniPet;
 		IsLevelUpAnimationLockOn = false;
 	}

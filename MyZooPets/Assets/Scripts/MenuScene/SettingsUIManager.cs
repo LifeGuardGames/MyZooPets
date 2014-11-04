@@ -16,7 +16,8 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 	public GameObject settingsPanel;
 	private TweenToggleDemux tweenSettings;
 	
-	void Start() {
+	protected override void Start() {
+		base.Start();
 		// cache the tweens for easier use
 		//tweenNav = firstTimeNavPanel.GetComponent<TweenToggleDemux>();
 		tweenSettings = settingsPanel.GetComponent<TweenToggleDemux>();
@@ -24,7 +25,8 @@ public class SettingsUIManager : SingletonUI<SettingsUIManager> {
 
 	}
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.MenuSettings;
 	}
 

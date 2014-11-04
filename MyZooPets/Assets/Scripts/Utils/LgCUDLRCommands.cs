@@ -148,7 +148,7 @@ public static class LgCUDLRCommands {
 			CUDLR.Console.Log(jsonString);
 		}
 		catch(NullReferenceException e){
-
+			Debug.LogException(e);
 		}
 	}
 

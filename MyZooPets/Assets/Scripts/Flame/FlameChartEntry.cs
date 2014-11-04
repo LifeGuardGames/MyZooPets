@@ -41,7 +41,7 @@ public class FlameChartEntry : MonoBehaviour {
 			// set the lock UI if the skill is locked
 			bool bUnlocked = skill.IsUnlocked;
 			if ( bUnlocked == false ) {
-				int nLevel = skill.UnlockLevel;	
+//				int nLevel = skill.UnlockLevel;	
 //				LevelLockObject.CreateLock( spriteIcon.gameObject.GetParent(), nLevel, true, "LevelLockUI_Default" );
 			}
 		}

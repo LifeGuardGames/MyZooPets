@@ -31,7 +31,9 @@ public class PetInteractionManager : MonoBehaviour{
 				}else{}
 			}
 		}
-		catch(NullReferenceException e){}
+		catch(NullReferenceException e){
+			Debug.LogException(e);
+		}
 	}
 	
 	/// <summary>
@@ -73,6 +75,7 @@ public class PetInteractionManager : MonoBehaviour{
 			}
 		}
 		catch(NullReferenceException e){
+			Debug.LogException(e);
 			PetAnimationManager.Instance.StopRubbing();
 			PetAnimationManager.Instance.StopTickling();
 		}

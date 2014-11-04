@@ -19,7 +19,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 				}
 				else{
 					if(Application.loadedLevelName == "MenuScene"){
-						string petID = transform.parent.parent.name;
+//						string petID = transform.parent.parent.name;
 						MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
 
 						LoadAndSetColor(petMenuInfo.PetColor);

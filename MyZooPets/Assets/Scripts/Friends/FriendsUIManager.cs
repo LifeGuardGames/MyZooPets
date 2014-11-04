@@ -49,20 +49,21 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	private bool isActive = false;
 	#endregion
 
-	#region Unity MonoBehaviour Functions
-	void Awake(){
+	#region Protected Overrides
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Friends;
 	}
-
-	void OnDestroy(){
+	
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded -= FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed -= FinishConnectionRequestRefresh;
 	}
-	#endregion
 
-	#region Protected Overrides
 	protected override void Start(){
+		base.Start();
 		SocialManager.OnDataRefreshed += FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded += FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed += FinishConnectionRequestRefresh;

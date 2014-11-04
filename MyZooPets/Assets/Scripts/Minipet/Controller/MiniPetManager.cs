@@ -66,8 +66,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
 
 		//load all minipet into the scene
-		Dictionary<string, MutableDataMiniPets.Status> miniPetProgress = 
-			DataManager.Instance.GameData.MiniPets.MiniPetProgress;
+//		Dictionary<string, MutableDataMiniPets.Status> miniPetProgress = 
+//			DataManager.Instance.GameData.MiniPets.MiniPetProgress;
 
 		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
 		foreach(ImmutableDataMiniPet data in miniPetData){

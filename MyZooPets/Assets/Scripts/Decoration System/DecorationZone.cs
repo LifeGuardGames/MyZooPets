@@ -32,7 +32,7 @@ public abstract class DecorationZone : MonoBehaviour {
 
 	public Animation activeHoverAnimation;
 
-	private bool isHovered = false;
+//	private bool isHovered = false;
 	private bool isAnimationPlaying = false;
 	private DecorationZoneState state;
 	private string nodeID;

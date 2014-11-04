@@ -22,10 +22,6 @@ public class ItemBoxUI : SingletonUI<ItemBoxUI> {
 	// used to properly name items in the grid for proper sorting
 	private int nCount = 0;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
 	//---------------------------------------------------
 	// _OpenUI()
 	//---------------------------------------------------	

@@ -12,7 +12,8 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 	private bool hasAsthmaOptionChecked = false;
 
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.CustomizePet;
 	}
 

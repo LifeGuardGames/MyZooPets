@@ -14,7 +14,8 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 
 	private bool isActive = false;
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		RefreshScoreBoard();
 	}
 

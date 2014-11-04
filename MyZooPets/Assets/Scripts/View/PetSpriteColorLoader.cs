@@ -20,7 +20,6 @@ public class PetSpriteColorLoader : MonoBehaviour {
 				else{
 					if(Application.loadedLevelName == SceneUtils.MENU){
 						MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-
 						LoadAndSetColor(petMenuInfo.PetColor);
 					}
 					else{

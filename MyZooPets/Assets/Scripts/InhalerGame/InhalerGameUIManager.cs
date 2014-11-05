@@ -148,7 +148,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 
     private void QuitInhalerGame(){
         NotificationUIManager.Instance.CleanupNotification();
-        LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");
+        LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
     }
 
     //Event listener. Listens to when user moves on to the next step

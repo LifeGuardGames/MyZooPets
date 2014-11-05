@@ -131,6 +131,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	}
 	
 	private void LoadScene(){
-		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM, "");
+		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 }

@@ -19,9 +19,7 @@ public class ButtonChangeScene : LgButton{
 	public Vector3 vOffset;			// offset of camera on the target
 	public Vector3 vFinalRotation;	// how the camera should rotate
 	public float fTime;				// how long the tween should last
-	
-	// what loading screen to show after the transition?  This is a prefab's name
-	public string strLoadingScreen = "LoadingScreen";
+
 	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
 	public GameObject cameraGO; //needs the camera to record partition # before scene change
 	public GameObject petObject; //needs to record pet position before scene change
@@ -80,7 +78,7 @@ public class ButtonChangeScene : LgButton{
 	//---------------------------------------------------	
 	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
-		LoadLevelUIManager.Instance.StartLoadTransition(strScene, strLoadingScreen);
+		LoadLevelUIManager.Instance.StartLoadTransition(strScene);
 	}
 
 	//---------------------------------------------------

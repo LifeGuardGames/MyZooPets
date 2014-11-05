@@ -6,7 +6,6 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	public SceneTransitionController transitionController;
 
 	private string levelName = null;	// Aux to store scene to be loaded
-	private string loadingScreen = null;	// Aux to store loading screen to be loaded from resources
 	private AsyncOperation async = null;	// Aux for keeping track of current loading coroutine
 	
 	/// <summary>
@@ -14,13 +13,12 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	/// </summary>
 	/// <param name="levelName">Level to be loaded</param>
 	/// <param name="loadingScreen">Loading screen to use</param>
-	public void StartLoadTransition(string levelName, string loadingScreen){
+	public void StartLoadTransition(string levelName){
 
 		Application.backgroundLoadingPriority = threadPriority;
 
 		if(async == null){
 			this.levelName = levelName;
-			this.loadingScreen = loadingScreen;
 			transitionController.StartTransition();
 		}
 		else{

@@ -285,7 +285,7 @@ public class GameTutorialDecorations : GameTutorial{
 		yield return new WaitForSeconds(1);
 
 		GameObject tutDecoNode = GameObject.Find("DecoNode_Starting_Rug");
-		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 		                                                             tutDecoNode.transform.position);
 		tutDecoNodePosition = CameraManager.Instance.TransformAnchorPosition(tutDecoNodePosition, 
 		                                                               InterfaceAnchors.BottomLeft, 

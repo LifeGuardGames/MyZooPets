@@ -40,12 +40,12 @@ public class ChooseDecorationUIController : MonoBehaviour{
 		
 		// The 52 comes from some wierd scaling issue.. not sure what it is but compensate now
 		gridPanel.transform.localPosition = new Vector3(0f, gridPanel.transform.localPosition.y, 0f);
-		gridPanel.clipRange = new Vector4(0f, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		gridPanel.clipRange = new Vector4(0f, oldRange.y, (float)(CameraManager.Instance.NativeWidth), oldRange.w);
 		
 		// Position the grid origin to the left of the screen
 		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(
-			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - gridPanel.transform.localPosition.x + 10,
+			(-1f * (CameraManager.Instance.NativeWidth / 2)) - gridPanel.transform.localPosition.x + 10,
 			gridPosition.y, gridPosition.z);	
 	}
 	

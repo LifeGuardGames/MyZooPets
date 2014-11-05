@@ -58,12 +58,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		// The 52 comes from some wierd scaling issue.. not sure what it is but compensate now
 		itemAreaPanel.transform.localPosition = new Vector3(52f, itemAreaPanel.transform.localPosition.y, 0f);
-		itemAreaPanel.clipRange = new Vector4(52f, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		itemAreaPanel.clipRange = new Vector4(52f, oldRange.y, (float)(CameraManager.Instance.NativeWidth), oldRange.w);
 		
 		// Position the grid origin to the left of the screen
 		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(
-			(-1f * (CameraManager.Instance.GetNativeWidth() / 2)) - itemArea.transform.localPosition.x,
+			(-1f * (CameraManager.Instance.NativeWidth / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);
 	}
 

@@ -28,8 +28,8 @@ public class PetMovement : Singleton<PetMovement>{
 
 	void Awake(){
 		// set up camera variables
-		scriptPan = CameraManager.Instance.GetPanScript();
-		mainCamera = CameraManager.Instance.cameraMain;
+		scriptPan = CameraManager.Instance.PanScript;
+		mainCamera = CameraManager.Instance.CameraMain;
 		
 		int layerNGUI = LayerMask.NameToLayer("NGUI");
 		nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);

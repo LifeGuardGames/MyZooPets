@@ -192,10 +192,40 @@ public class MiniPet : MonoBehaviour {
 
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;
-		
+
 		isMiniPetColliderLocked = true;
-		ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
-		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, this.gameObject);
+
+		CameraManager.Callback cameraDoneFunction = delegate(){
+			CameraMoveDone();
+		};
+		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, cameraDoneFunction);
+	}
+
+	/// <summary>
+	/// Logic to run after the camera has zoomed into the minipet
+	/// </summary>
+	private void CameraMoveDone() {
+		isMiniPetColliderLocked = false;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
+		MiniPetHUDUIManager.Instance.OpenUI();
+		
+		//if pet not finish eating yet. finish eating logic
+		if(!isFinishEating){
+			InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			MiniPetManager.Instance.IncreaseFoodXP(id);
+			isFinishEating = true;
+			animationManager.Eat();
+		}
+		//else check if tickle and cleaning is done. if both done 
+		else{
+			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
+				Invoke("ShowFoodPreferenceMessage", 1f);
+			}
+		}
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
@@ -277,34 +307,6 @@ public class MiniPet : MonoBehaviour {
 		}
 		else if(!isCleaned){
 			miniPetSpeechAI.ShowDirtyMsg();
-		}
-	}
-
-	/// <summary>
-	/// Logic to run after the camera has zoomed into the minipet
-	/// </summary>
-	private void CameraMoveDone() {
-		isMiniPetColliderLocked = false;
-		ClickManager.Instance.ReleaseLock();
-		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
-		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
-		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
-		MiniPetHUDUIManager.Instance.OpenUI();
-
-		//if pet not finish eating yet. finish eating logic
-		if(!isFinishEating){
-			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseFoodXP(id);
-			isFinishEating = true;
-			animationManager.Eat();
-		}
-		//else check if tickle and cleaning is done. if both done 
-		else{
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
-				Invoke("ShowFoodPreferenceMessage", 1f);
-			}
 		}
 	}
 

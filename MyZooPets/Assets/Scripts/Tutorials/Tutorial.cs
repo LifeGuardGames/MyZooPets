@@ -151,7 +151,7 @@ public abstract class Tutorial{
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
-			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
+			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
@@ -209,7 +209,7 @@ public abstract class Tutorial{
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
-			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
+			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
@@ -295,7 +295,7 @@ public abstract class Tutorial{
 		//viewport kind of broken..... don't use
 		if(useViewPort){
 			// transform viewport location to screen position, then from bottom left to center
-			newPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, location);
+			newPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.CameraMain, location);
 			newPos = CameraManager.Instance.TransformAnchorPosition(newPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
 		}

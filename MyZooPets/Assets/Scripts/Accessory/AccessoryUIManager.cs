@@ -90,7 +90,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		if(!isActive){
 			// Zoom into the item
 			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
-			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, ZoomTime, this.gameObject);
+
+			CameraManager.Callback cameraDoneFunction = delegate(){
+				CameraMoveDone();
+			};
+			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, ZoomTime, cameraDoneFunction);
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -105,6 +109,18 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			
 			backButton.SetActive(true);
 		}
+	}
+
+	/// <summary>
+	/// Show the ui once camera is done zooming in.
+	/// </summary>
+	private void CameraMoveDone(){
+		entranceHelper.EntranceUsed();	// Disable entrance highlight after zoomed in for the first time
+		
+		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
+		toggleDemux.Show();
+		toggleDemux.ShowTarget = this.gameObject;
+		toggleDemux.ShowFunctionName = "MovePet";
 	}
 
 	// The back button on the left top corner is clicked to zoom out of the zoom item
@@ -125,20 +141,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			
 			backButton.SetActive(false);
 		}
-	}
-
-	/// <summary>
-	/// show the ui once camera is done zooming in.
-	/// </summary>
-	private void CameraMoveDone(){
-
-		// disable entrance highlight after zoomed in for the first time
-		entranceHelper.EntranceUsed();
-
-		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
-		toggleDemux.Show();
-		toggleDemux.ShowTarget = this.gameObject;
-		toggleDemux.ShowFunctionName = "MovePet";
 	}
 
 	/// <summary>

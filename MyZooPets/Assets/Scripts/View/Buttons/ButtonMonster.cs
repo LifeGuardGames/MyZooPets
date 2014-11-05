@@ -19,7 +19,7 @@ public class ButtonMonster : LgButtonHold{
 	private bool isLegal; // is this button being pressed legally?  Mainly used as a stopgap for now
 
 	protected override void _Start(){
-		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+		PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
 		scriptPan.OnPartitionChanging += OnPartitionChanging;
 	}
 
@@ -41,7 +41,7 @@ public class ButtonMonster : LgButtonHold{
 		
 	protected override void _OnDestroy(){
 		if(CameraManager.Instance){
-			PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+			PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
 			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
 		}
 	}

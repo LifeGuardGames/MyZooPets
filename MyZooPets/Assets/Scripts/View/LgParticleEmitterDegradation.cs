@@ -31,11 +31,11 @@ public class LgParticleEmitterDegradation : LgParticleEmitter{
 	private void Subscribe(bool subscribeNow){
 		if(subscribeNow && !isSubscribed){
 			isSubscribed = true; 	
-			CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;	
+			CameraManager.Instance.PanScript.OnPartitionChanging += OnPartitionChanging;	
 		}
 		else if(!subscribeNow && isSubscribed && CameraManager.Instance){
 			isSubscribed = false;	
-			CameraManager.Instance.GetPanScript().OnPartitionChanging -= OnPartitionChanging;
+			CameraManager.Instance.PanScript.OnPartitionChanging -= OnPartitionChanging;
 		}
 	}
 	

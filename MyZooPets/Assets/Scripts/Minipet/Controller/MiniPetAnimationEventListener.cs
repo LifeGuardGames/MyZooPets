@@ -5,15 +5,15 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 	private bool isVisibleInScene = false; //T: allow sound cilp to be played
 
 	void Start(){
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += CheckMiniPetVisibleInPartition;
+		CameraManager.Instance.PanScript.OnPartitionChanged += CheckMiniPetVisibleInPartition;
 
-		int currentPartition = CameraManager.Instance.GetPanScript().currentPartition;
+		int currentPartition = CameraManager.Instance.PanScript.currentPartition;
 		string currentArea = GatingManager.Instance.currentArea;
 		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
 	}
 
 	void OnDestroy(){
-//		CameraManager.Instance.GetPanScript().OnPartitionChanged -= CheckMiniPetVisibleInPartition;
+//		CameraManager.Instance.PanScript.OnPartitionChanged -= CheckMiniPetVisibleInPartition;
 	}
 
 	public void PlaySoundClip(string clipName){

@@ -121,7 +121,7 @@ public class GateMonster : Gate{
 	private void MoveBaseHead(){
 		// for monsters, just move them fast and far away MOVE_DIR
 		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
-		float monsterMoveDistance = CameraManager.Instance.GetPanScript().partitionOffset;
+		float monsterMoveDistance = CameraManager.Instance.PanScript.partitionOffset;
 		
 		// add hashtable params for alerting the parent object when the move anim is complete
 		Hashtable optional = new Hashtable();

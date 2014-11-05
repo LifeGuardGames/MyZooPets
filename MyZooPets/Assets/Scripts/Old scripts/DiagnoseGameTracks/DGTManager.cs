@@ -206,7 +206,7 @@ public class DGTManager : MinigameManager<DGTManager>{
 	
 	private Vector3 GetSpawnLocation(){
 		// the location is in viewport coordinates, so translate it
-		Vector3 vRealLoc = CameraManager.Instance.cameraMain.ViewportToWorldPoint(vSpawnLocation);
+		Vector3 vRealLoc = CameraManager.Instance.CameraMain.ViewportToWorldPoint(vSpawnLocation);
 		return vRealLoc;	
 	}
 

@@ -36,7 +36,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 	void Awake(){
 		// set pan script
-		scriptPan = CameraManager.Instance.GetPanScript();
+		scriptPan = CameraManager.Instance.PanScript;
 	}
 
 	void Start(){		
@@ -449,7 +449,7 @@ public class GatingManager : Singleton<GatingManager>{
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 		                                                             petLocation.transform.position);
 		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
 		                                                               InterfaceAnchors.BottomLeft, 

@@ -101,12 +101,12 @@ public class TutorialManagerBedroom : TutorialManager{
 
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
-			   CameraManager.Instance.GetPanScript().currentPartition == 0){
+			   CameraManager.Instance.PanScript.currentPartition == 0){
 				// play the trigger tutorial
 				new GameTutorialTriggers();
 			}
 			else if(isFlameTutorialDone && !isDecoTutorialDone && 
-			        CameraManager.Instance.GetPanScript().currentPartition == 0){
+			        CameraManager.Instance.PanScript.currentPartition == 0){
 				// play the deco tutorial
 				new GameTutorialDecorations();
 			}
@@ -139,7 +139,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		//check if pet in partition 0, if not force it to partition 0
 //		if(!args.Opening){
 			
-			CameraManager.Instance.GetPanScript().MoveToFirstPartition();
+			CameraManager.Instance.PanScript.MoveToFirstPartition();
 			Check();
 //		}
 	}

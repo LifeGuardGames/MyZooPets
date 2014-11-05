@@ -39,7 +39,7 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 			Destroy(goEdit);
 		
 		// listen for partition change event
-		CameraManager.Instance.GetPanScript().OnPartitionChanging += OnPartitionChanging;
+		CameraManager.Instance.PanScript.OnPartitionChanging += OnPartitionChanging;
 	}
 
 	public bool IsNodeSaved(){

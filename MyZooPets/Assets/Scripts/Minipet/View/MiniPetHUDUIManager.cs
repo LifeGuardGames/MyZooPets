@@ -190,7 +190,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			if(ticklingTutorialObject == null){
 				GameObject ticklingTutorial = (GameObject) Resources.Load("PressTut");
 				
-				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 				                                                                       SelectedMiniPetGameObject.transform.position);
 				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
 				                                                                         InterfaceAnchors.BottomLeft, 
@@ -212,7 +212,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			if(cleaningTutorialObject == null){
 				GameObject cleaningTutorial = (GameObject) Resources.Load("SwirlTut");
 				
-				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 				                                                                       SelectedMiniPetGameObject.transform.position);
 				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
 				                                                                         InterfaceAnchors.BottomLeft, 

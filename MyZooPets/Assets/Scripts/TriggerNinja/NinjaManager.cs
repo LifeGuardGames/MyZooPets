@@ -7,7 +7,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	// combo related
 	public float comboMaxTime;		// max time between cuts for a combo
 	public GestureTrail trail; // the gesture trail that follows the user's finger around
-	public float timeBetweenSpawnGroups;			// time between spawn groups
+	public float timeBetweenSpawnGroups;	// time between spawn groups
 
 	private float comboTime = 0;	// time counter
 	private int combo = 0;			// the current combo level of the player

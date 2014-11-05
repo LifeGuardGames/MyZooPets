@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
+public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	public GameObject backButton;
 	public GameObject highscoreBoard;
 	public UIGrid scoreBoardGrid;
@@ -11,7 +11,6 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 	public float fZoomTime;
 	public Vector3 vOffset;
 	public Vector3 vRotation;
-
 	private bool isActive = false;
 
 	protected override void Start(){
@@ -21,7 +20,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 
 	//Refresh high score
 	private void RefreshScoreBoard(){
-		GameObject highScoreEntryPrefab = (GameObject) Resources.Load("HighScoreEntry");
+		GameObject highScoreEntryPrefab = (GameObject)Resources.Load("HighScoreEntry");
 		Dictionary<string, int> highScoreDict = HighScoreManager.Instance.MinigameHighScore;
 
 		foreach(KeyValuePair<string, int> score in highScoreDict){
@@ -35,7 +34,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager> {
 		if(!isActive){
 			// zoom into the board
 			Vector3 vPos = highscoreBoard.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
+			CameraManager.Instance.ZoomToTarget(vPos, vRotation, fZoomTime, null);
 			
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();

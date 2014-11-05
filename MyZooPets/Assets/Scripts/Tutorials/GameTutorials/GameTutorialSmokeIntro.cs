@@ -97,7 +97,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		yield return new WaitForSeconds(waitTime);
 		
 		// begin the pan right
-		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+		PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
 		float moveTo = scriptPan.partitionOffset;
 		float panTime = Constants.GetConstant<float>("SmokeIntroPanTime");
 		

@@ -9,7 +9,7 @@ using System.Collections;
 // function in CameraMove does the actual loading.
 //---------------------------------------------------
 
-public class ButtonChangeScene : LgButton {
+public class ButtonChangeScene : LgButton{
 	public static EventHandler<EventArgs> OnChangeScene; //Event when changing scene on user input
 
 	// name of the scene to be loaded
@@ -22,19 +22,17 @@ public class ButtonChangeScene : LgButton {
 	
 	// what loading screen to show after the transition?  This is a prefab's name
 	public string strLoadingScreen = "LoadingScreen";
-
 	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
 	public GameObject cameraGO; //needs the camera to record partition # before scene change
 	public GameObject petObject; //needs to record pet position before scene change
 
-	public string analyticsEvent;	
-
+	public string analyticsEvent;
 	public EntranceHelperController entranceHelper;
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
-	protected override void ProcessClick() {
+	protected override void ProcessClick(){
 		// lock the click manager
 		ClickManager.Instance.Lock();
 
@@ -63,9 +61,13 @@ public class ButtonChangeScene : LgButton {
 			entranceHelper.EntranceUsed();
 		
 		// if there is a camera move, do it -- otherwise, just skip to the move being complete
-		if ( fTime > 0 ) {
+		if(fTime > 0){
 			Vector3 vFinalPos = gameObject.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget( vFinalPos, vFinalRotation, fTime, gameObject );
+
+			CameraManager.Callback cameraDoneFunction = delegate(){
+				CameraMoveDone();
+			};
+			CameraManager.Instance.ZoomToTarget(vFinalPos, vFinalRotation, fTime, cameraDoneFunction);
 		}
 		else
 			CameraMoveDone();
@@ -76,7 +78,7 @@ public class ButtonChangeScene : LgButton {
 	// Callback for when the camera is done tweening to
 	// its target.
 	//---------------------------------------------------	
-	private void CameraMoveDone() {
+	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
 		LoadLevelUIManager.Instance.StartLoadTransition(strScene, strLoadingScreen);
 	}
@@ -91,9 +93,10 @@ public class ButtonChangeScene : LgButton {
 			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
 			Vector3 petPos = petObject.transform.position;
 			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
-		}else
+		}
+		else
 			if(strScene == SceneUtils.MENU)
 				//Only remove scene data if returning to menu scene
-				DataManager.Instance.SceneData = null;
+			DataManager.Instance.SceneData = null;
 	}
 }

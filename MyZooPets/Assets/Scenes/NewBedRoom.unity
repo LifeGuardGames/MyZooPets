@@ -17373,7 +17373,6 @@ GameObject:
   - 4: {fileID: 453147153}
   - 65: {fileID: 453147158}
   - 114: {fileID: 453147157}
-  - 114: {fileID: 453147156}
   - 114: {fileID: 453147155}
   - 114: {fileID: 453147154}
   m_Layer: 0
@@ -17410,7 +17409,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockGUI: 0
-  zoomHelper: {fileID: 453147156}
+  fZoomTime: .400000006
+  vOffset: {x: .25, y: -.300000012, z: -15}
+  vRotation: {x: 0, y: 0, z: 0}
   goBackButton: {fileID: 270063093}
   draggableCollider: {fileID: 206198732}
   dragRecognizerFingerGesture: {fileID: 1645322222}
@@ -17460,21 +17461,6 @@ MonoBehaviour:
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
   mClipSoftness: {x: 40, y: 40}
---- !u!114 &453147156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400084, guid: b83fbe258656a604a86f663263d505a1,
-    type: 2}
-  m_PrefabInternal: {fileID: 721824233}
-  m_GameObject: {fileID: 453147152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 263dceebcea4242eca8534da4a97f648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fZoomTime: .400000006
-  vOffset: {x: .25, y: -.300000012, z: -15}
-  vRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &453147157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25622,7 +25608,24 @@ Prefab:
       propertyPath: dragRecognizerFingerGesture
       value: 
       objectReference: {fileID: 1645322222}
-    m_RemovedComponents: []
+    - target: {fileID: 11400000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
+      propertyPath: fZoomTime
+      value: .400000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
+      propertyPath: vOffset.x
+      value: .25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
+      propertyPath: vOffset.y
+      value: -.300000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
+      propertyPath: vOffset.z
+      value: -15
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 11400084, guid: b83fbe258656a604a86f663263d505a1, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: b83fbe258656a604a86f663263d505a1, type: 2}
   m_RootGameObject: {fileID: 453147152}
   m_IsPrefabParent: 0
@@ -26060,13 +26063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696dabcc8d1fe0642bf203eb46a50b61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockGUI: 0
-  backButton: {fileID: 868722603}
-  highscoreBoard: {fileID: 737520537}
-  scoreBoardGrid: {fileID: 908767088}
-  fZoomTime: .400000006
-  vOffset: {x: 0, y: 0, z: -15}
-  vRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &737520542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65293,10 +65289,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraMain: {fileID: 1648505574}
-  cameraNGUI: {fileID: 797955372}
+  scriptPan: {fileID: 158023567}
   ratioX: 0
   ratioY: 0
-  scriptPan: {fileID: 158023567}
 --- !u!1 &1652171303
 GameObject:
   m_ObjectHideFlags: 0
@@ -70651,7 +70646,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnApplicationQuit
@@ -73810,7 +73805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1814776892
 MonoBehaviour:
   m_ObjectHideFlags: 0

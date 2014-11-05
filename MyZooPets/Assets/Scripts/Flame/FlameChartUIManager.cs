@@ -9,7 +9,7 @@ using System.Collections;
 
 public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 	// zoom helper
-	public ZoomHelper zoomHelper;
+//	public ZoomHelper zoomHelper;
 	
 	// back button for the chart
 	public GameObject goBackButton;
@@ -19,7 +19,7 @@ public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 	//---------------------------------------------------
 	protected override void _OpenUI(){		
 		// zoom into the chart
-		zoomHelper.Zoom();
+//		zoomHelper.Zoom();
 		
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();

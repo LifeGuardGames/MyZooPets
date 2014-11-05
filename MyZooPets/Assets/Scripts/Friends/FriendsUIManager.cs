@@ -133,7 +133,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		UIPanel friendAreaPanel = friendArea.GetComponent<UIPanel>();
 		Vector4 oldRange = friendAreaPanel.clipRange;
 		friendAreaPanel.transform.localPosition = new Vector3(0, friendAreaPanel.transform.localPosition.y, 0f);
-		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.NativeWidth), oldRange.w);
 
 		// Position the grid origin to the left of the screen
 		grid.transform.localPosition = new Vector3(0f, 0f, 0f);

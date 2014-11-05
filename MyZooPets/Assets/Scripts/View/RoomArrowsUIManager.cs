@@ -9,14 +9,14 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	public TweenToggle rightArrowTween;
 
 	void Start(){
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += ShowPanel;
+		CameraManager.Instance.PanScript.OnPartitionChanged += ShowPanel;
 
 
 		Invoke("ShowPanel", 0.5f);
 	}
 
 	void OnDestroyed(){
-		CameraManager.Instance.GetPanScript().OnPartitionChanged -= ShowPanel;
+		CameraManager.Instance.PanScript.OnPartitionChanged -= ShowPanel;
 	}
 
 	public GameObject GetRightArrowReference(){
@@ -37,7 +37,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()) return;
 
-		PanToMoveCamera panScript = CameraManager.Instance.GetPanScript();
+		PanToMoveCamera panScript = CameraManager.Instance.PanScript;
 		int currentPartition = panScript.currentPartition;
 		int firstPartition = panScript.firstPartition;
 		int lastPartition = panScript.lastPartition;
@@ -107,11 +107,11 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	}
 
 	public void RightArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().MoveOneRoomToRight();
+		CameraManager.Instance.PanScript.MoveOneRoomToRight();
 	}
 
 	public void LeftArrowClicked(GameObject sender){
-		CameraManager.Instance.GetPanScript().MoveOneRoomToLeft();
+		CameraManager.Instance.PanScript.MoveOneRoomToLeft();
 	}
 
 //	void OnGUI(){

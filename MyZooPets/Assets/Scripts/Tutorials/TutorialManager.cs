@@ -67,7 +67,7 @@ public class TutorialManager : Singleton<TutorialManager>{
 	
 	protected virtual void Start(){
 		// listen for partition changing event
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
+		CameraManager.Instance.PanScript.OnPartitionChanged += EnteredRoom;		
 	}
 
 	/// <summary>

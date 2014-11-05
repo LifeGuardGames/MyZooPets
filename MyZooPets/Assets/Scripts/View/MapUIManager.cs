@@ -11,7 +11,10 @@ using System.Collections.Generic;
 
 public class MapUIManager : SingletonUI<MapUIManager> {
 
-	public ZoomHelper zoomHelper; // zoom helper
+	public float fZoomTime;
+	public Vector3 vOffset;
+	public Vector3 vRotation;
+
 	public GameObject goBackButton; // back button for the chart
 	public BoxCollider draggableCollider; // The collider that is dragged, to be enabled only when zoomed in
 	public DragRecognizer dragRecognizerFingerGesture; //need to temporary disable this script when zoomed into map
@@ -36,10 +39,11 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	// _OpenUI()
 	//---------------------------------------------------
 	protected override void _OpenUI(){
-		// zoom into the chart
-		zoomHelper.Zoom();
+		// Zoom into the chart
+		Vector3 vPos = transform.position + vOffset;
+		CameraManager.Instance.ZoomToTarget(vPos, vRotation, fZoomTime, null);
 		
-		//Hide other UI objects
+		// Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		HUDUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();

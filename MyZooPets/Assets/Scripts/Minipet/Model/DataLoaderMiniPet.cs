@@ -15,13 +15,11 @@ public class DataLoaderMiniPet : XMLLoaderGeneric<DataLoaderMiniPet>{
 	/// <param name="id">Identifier.</param>
     public static ImmutableDataMiniPet GetData(string id){
 		instance.InitXMLLoader();
-
 		return instance.GetData<ImmutableDataMiniPet>(id);
     }
 
 	public static List<ImmutableDataMiniPet> GetDataList(){
 		instance.InitXMLLoader();
-
 		return instance.GetDataList<ImmutableDataMiniPet>();
 	}
 
@@ -39,4 +37,3 @@ public class DataLoaderMiniPet : XMLLoaderGeneric<DataLoaderMiniPet>{
 		xmlFileFolderPath = "MiniPets";
 	}
 }
-

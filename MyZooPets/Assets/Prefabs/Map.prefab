@@ -413,9 +413,9 @@ GameObject:
   - 4: {fileID: 400050}
   - 65: {fileID: 6500002}
   - 114: {fileID: 11400086}
-  - 114: {fileID: 11400084}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400084}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -1863,9 +1863,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockGUI: 0
-  zoomHelper: {fileID: 11400084}
+  fZoomTime: .400000006
+  vOffset: {x: .25, y: -.300000012, z: -15}
+  vRotation: {x: 0, y: 0, z: 0}
   goBackButton: {fileID: 100046}
   draggableCollider: {fileID: 6500004}
+  dragRecognizerFingerGesture: {fileID: 0}
   mapEntries:
   - {fileID: 11400094}
   - {fileID: 11400050}
@@ -2685,12 +2688,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 2
-  strSoundProcess: 
-  buttonName: 
-  bCheckClickManager: 1
   modeTypes: 02000000
+  buttonName: 
   buttonSound: 
   isCheckingClickManager: 1
   isSprite: 1
@@ -2780,7 +2779,7 @@ MonoBehaviour:
   mInvert: 0
 --- !u!114 &11400084
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100050}
@@ -2803,12 +2802,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 0
-  eMode: 0
-  strSoundProcess: 
-  buttonName: 
-  bCheckClickManager: 1
   modeTypes: 00000000
+  buttonName: 
   buttonSound: 
   isCheckingClickManager: 1
   isSprite: 0

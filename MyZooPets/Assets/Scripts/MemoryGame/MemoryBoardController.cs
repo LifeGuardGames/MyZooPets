@@ -10,15 +10,17 @@ using System.Collections.Generic;
 /// </summary>
 public class MemoryBoardController : MonoBehaviour {
 
-	const int ROW_COUNT = 4;
-	const int COLUMN_COUNT = 5;
-	const float DISTANCE_UNIT = 1.5f;
+	public static int ROW_COUNT = 4;
+	public static int COLUMN_COUNT = 5;
+	const float DISTANCE_UNIT = 2f;
 
 	private List<GameObject> cardList = new List<GameObject>(); // Card array, there is 20 of them
 	public GameObject memoryCardPrefab;
 
 	public void ResetBoard(List<ImmutableDataMemoryTrigger> triggerList){
-
+		foreach(GameObject go in cardList){
+			Destroy(go);
+		}
 		cardList.Clear();
 
 		foreach(ImmutableDataMemoryTrigger triggerData in triggerList){
@@ -26,6 +28,7 @@ public class MemoryBoardController : MonoBehaviour {
 			// Make the sprite card
 			GameObject cardObject1 = Instantiate(memoryCardPrefab) as GameObject;
 			cardObject1.transform.parent = transform;
+
 			cardObject1.name = triggerData.Name + "Sprite";
 			cardObject1.GetComponent<MemoryCard>().Initialize(triggerData, true);
 			cardList.Add(cardObject1);
@@ -33,15 +36,15 @@ public class MemoryBoardController : MonoBehaviour {
 			// Make the word card
 			GameObject cardObject2 = Instantiate(memoryCardPrefab) as GameObject;
 			cardObject2.transform.parent = transform;
+
 			cardObject2.name = triggerData.Name + "Word";
 			cardObject2.GetComponent<MemoryCard>().Initialize(triggerData, false);
 			cardList.Add(cardObject2);
 		}
-		Debug.Log(cardList.Count);
 		cardList.Shuffle();
 		
 		for(int i=0; i<cardList.Count; i++){
-			cardList[i].transform.position = new Vector3(
+			cardList[i].transform.localPosition = new Vector3(
 					(i % COLUMN_COUNT) * DISTANCE_UNIT,
 					-1f * (i / COLUMN_COUNT) * DISTANCE_UNIT,
 					0f

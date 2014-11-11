@@ -495,11 +495,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		case MinigameRewardTypes.Money:
 			strConstant = strKey + "_StandardMoney";
 			break;
-			
 		case MinigameRewardTypes.XP:
 			strConstant = strKey + "_StandardXP";
 			break;
-			
 		default:
 			Debug.LogError("Unhandled minigame reward type: " + eType);
 			break;

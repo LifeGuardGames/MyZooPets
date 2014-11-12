@@ -36,6 +36,15 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	/// <summary>
+	/// Check if the inventory is scrollable
+	/// If the item types in invetory is greater than the max display item type count, make it scrollable
+	/// </summary>
+	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
+	public bool IsInventoryScrollable(){
+		return InventoryLogic.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+	}
+
+	/// <summary>
 	/// Gets the fire orb reference.
 	/// Use for the tutorial to get the fire orb gameobject.
 	/// </summary>

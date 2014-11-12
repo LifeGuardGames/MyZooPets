@@ -8,11 +8,11 @@ public class ParseObjectKidAccount : ParseObject{
 
 	public ParseObjectKidAccount(){}
 
-	[ParseFieldName("isLinkedToParentAccount")]
-	public bool IsLinkedToParentAccount{
-		get{ return GetProperty<bool>("IsLinkedToParentAccount");}
-		set{ SetProperty<bool>(value, "IsLinkedToParentAccount");}
-	}
+//	[ParseFieldName("isLinkedToParentAccount")]
+//	public bool IsLinkedToParentAccount{
+//		get{ return GetProperty<bool>("IsLinkedToParentAccount");}
+//		set{ SetProperty<bool>(value, "IsLinkedToParentAccount");}
+//	}
 
 //	[ParseFieldName("friendList")]
 //	public IList<ParseObjectKidAccount> FriendList{

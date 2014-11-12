@@ -15,4 +15,12 @@ public class CutsceneControllerMinipetHatchFluffy : CutsceneController {
 		fluffyAnim.gameObject.SetActive(true);
 		fluffyAnim.Play();
 	}
+
+	public void playRollAudio(){
+		AudioManager.Instance.PlayClip("drumRoll");
+	}
+	
+	public void playHatchAudio(){
+		AudioManager.Instance.PlayClip("petHatch");
+	}
 }

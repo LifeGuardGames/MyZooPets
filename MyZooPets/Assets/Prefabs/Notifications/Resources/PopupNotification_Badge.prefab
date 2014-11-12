@@ -292,7 +292,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400034}
-  - 114: {fileID: 11400000}
   m_Layer: 10
   m_Name: ImageButtonParent
   m_TagString: Untagged
@@ -545,41 +544,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 128, y: 127.999512, z: 0}
   m_Center: {x: 0, y: -.000244140625, z: -2.75000763}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isShown: 0
-  ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
-  blockUI: 0
-  startsHidden: 0
-  hideDeltaX: -1
-  hideDeltaY: -1
-  hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .5
-  hideDelay: .200000003
-  easeHide: 26
-  easeShow: 27
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  strSoundShow: 
-  strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1165,11 +1129,10 @@ MonoBehaviour:
   - {fileID: 100006}
   - {fileID: 100004}
   - {fileID: 100002}
-  - {fileID: 100034}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
-  lastFinishedShowObject: {fileID: 100034}
+  lastFinishedShowObject: {fileID: 100002}
   lastFinishedHideObject: {fileID: 100026}
   isShowFinishedCallback: 0
   ShowTarget: {fileID: 0}

@@ -7,13 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class ServerEventArgs : EventArgs{
-	public bool IsSuccessful {get; set;}
-	public ParseException.ErrorCode ErrorCode {get; set;}
-	public string ErrorMessage {get; set;}
-}
-
-public class SocialManager : Singleton<SocialManager> {
+public class SocialManager : ServerConnector<SocialManager>{
 	/// Friend request data type use in FriendsUIManager
 	public class FriendRequest{
 		public string RequestId {get; set;}
@@ -24,13 +18,6 @@ public class SocialManager : Singleton<SocialManager> {
 	public static EventHandler<ServerEventArgs> OnFriendRemoved;
 	public static EventHandler<ServerEventArgs> OnFriendRequestRefreshed;
 	public static EventHandler<ServerEventArgs> OnFriendCodeAdded;
-
-	public bool useDummyData = false; // Turn this to true if testing with dummy data
-
-	private bool runTimeOutTimer = false;
-	private float timeOutTimer = 0;
-	private float timeOut = 20f; //time out set to 20 seconds
-	private CancellationTokenSource timeOutRequestCancellation; //token used to cancel unfinish task/thread when timeout timer is up
 
 	#region Properties
 	/// <summary>
@@ -57,18 +44,7 @@ public class SocialManager : Singleton<SocialManager> {
 	/// <value>The user social.</value>
 	public ParseObjectSocial UserSocial {get; set;}
 	#endregion
-
-	void Update(){
-		if(runTimeOutTimer){
-			timeOutTimer += Time.deltaTime;
-			if(timeOutTimer >= timeOut){
-				timeOutTimer = 0;
-				runTimeOutTimer = false;
-				timeOutRequestCancellation.Cancel();
-			}
-		}
-	}
-
+	
 	#region Refresh Data
 	/// <summary>
 	/// Refreshs the data.
@@ -488,16 +464,6 @@ public class SocialManager : Singleton<SocialManager> {
 		}
 	}
 	#endregion
-
-	private void StartTimeOutTimer(){
-		runTimeOutTimer = true;
-		timeOutRequestCancellation = new CancellationTokenSource();
-	}
-
-	private void StopTimeOutTimer(){
-		runTimeOutTimer = false;
-		timeOutTimer = 0;
-	}
 
 	#region Dummy Data
 	private bool IsUsingDummyData(){

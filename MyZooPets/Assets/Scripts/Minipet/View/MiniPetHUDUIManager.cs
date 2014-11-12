@@ -4,27 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
+
 	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
 
 	public UILabel nameLabel;
-	public UILabel levelLabel;
-	public UILabel progressLabel;
-	public UISlider levelSlider;
 	public GameObject tickleCheckBox;
 	public GameObject cleanCheckBox;
 
 	public UILabel labelFeedCount;
 	public UILabel labelFeed;
 	public UISprite spriteFeed;
+	public TweenToggle feedParent;
 
 	public Animation storeButtonPulseAnim;
 	public GameObject storeButtonSunbeam;
 
-	public Animation levelUpAnimation;
 	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
-
 
 	private GameObject cleaningTutorialObject;
 	private GameObject ticklingTutorialObject;
@@ -50,45 +47,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		IsLevelUpAnimationLockOn = false;
 	}
 
-	/// <summary>
-	/// Level up animation completed. 
-	/// Actually increase the level after level up animation is done.
-	/// </summary>
-	public void LevelUpAnimationCompleted(){
-		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
-		IsLevelUpAnimationLockOn = false;
-
-		Invoke("CheckIfFirstTimeReceivingGems", 2.5f);
-
-		if(OnLevelUpAnimationCompleted != null)
-			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
-	}
-
-	/// <summary>
-	/// Checks if first time receiving gems. Show intro notification if first time
-	/// </summary>
-	private void CheckIfFirstTimeReceivingGems(){
-		bool isFirstTime = MiniPetManager.Instance.IsFirstTimeReceivingGems;
-		if(isFirstTime){
-			Hashtable notificationEntry = new Hashtable();
-
-			PopupNotificationNGUI.Callback button1Function = delegate(){
-				OpenItemShop();
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-
-			PopupNotificationNGUI.Callback button2Function = delegate(){
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GemIntro);
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-		
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-		}
-	}
-
+	#region Overridden functions
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
 		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
@@ -105,6 +64,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		feedParent.Hide();
 		CheckStoreButtonPulse();
 		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 
@@ -124,6 +84,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		CameraManager.Instance.ZoomOutMove();
 	}
+	#endregion
 
 	/// <summary>
 	/// Refreshs the UI whenever MP data have been updated
@@ -144,9 +105,13 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		switch(args.UpdateStatus){
 		case MiniPetManager.UpdateStatuses.LevelUp:
-			levelUpAnimation.Play();
+			// Start all level up logic here
+			CloseUI();
+
 			levelUpDropdown.Play();
 			IsLevelUpAnimationLockOn = true;
+
+			LevelUpAnimationCompleted();
 			break;
 		case MiniPetManager.UpdateStatuses.FirstTimeCleaning:
 			if(cleaningTutorialObject != null){
@@ -161,25 +126,57 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				Destroy(ticklingTutorialObject.gameObject);
 			break;
 		}
-
 		CheckForCleaningTutorial();
 	}
 
 	private void UpdateLevelUI(){
-		int currentLevel = (int) MiniPetManager.Instance.GetCurrentLevel(SelectedMiniPetID);
-		int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
 		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-		
-		levelLabel.text = currentLevel.ToString();
-		
+
 		// update level slider
 		if(nextLevelUpCondition != -1){
-			levelSlider.sliderValue = (float) currentFoodXP / (float) nextLevelUpCondition;
-			progressLabel.text = currentFoodXP + "/" + nextLevelUpCondition;
+			//TODO Need this?
 		}
-		else{
-			levelSlider.sliderValue = 1f;
-			progressLabel.text = "Max Level";
+		else{// Max level
+			//TODO Design what happens here
+		}
+	}
+
+	/// <summary>
+	/// Level up animation completed. 
+	/// Actually increase the level after level up animation is done.
+	/// </summary>
+	public void LevelUpAnimationCompleted(){
+		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
+		IsLevelUpAnimationLockOn = false;	// Unlocked immediately... save for future use
+		
+		Invoke("CheckIfFirstTimeReceivingGems", 4f);
+		
+		if(OnLevelUpAnimationCompleted != null)
+			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
+	}
+
+	/// <summary>
+	/// Checks if first time receiving gems. Show intro notification if first time
+	/// </summary>
+	private void CheckIfFirstTimeReceivingGems(){
+		bool isFirstTime = MiniPetManager.Instance.IsFirstTimeReceivingGems;
+		if(isFirstTime){
+			Hashtable notificationEntry = new Hashtable();
+			
+			PopupNotificationNGUI.Callback button1Function = delegate(){
+				OpenItemShop();
+				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
+			};
+			
+			PopupNotificationNGUI.Callback button2Function = delegate(){
+				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
+			};
+			
+			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GemIntro);
+			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
+			
+			NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		}
 	}
 
@@ -231,6 +228,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		feedParent.Hide();
 
 		//sometimes this function will be called in a different mode, so we need
 		//to make sure the UIs are handled appropriately
@@ -270,6 +268,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
+			if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
+				feedParent.Show();
+			}
 			HUDUIManager.Instance.HidePanel();
 		}
 
@@ -292,8 +293,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			spriteFeed.spriteName = item.TextureName;
 			spriteFeed.gameObject.SetActive(true);
 			spriteFeed.GetComponent<SpriteResizer>().Resize();
+			feedParent.Show();
 		}
 		else{
+			feedParent.Hide();
 			labelFeedCount.gameObject.SetActive(false);
 			labelFeed.gameObject.SetActive(false);
 			spriteFeed.spriteName = null;

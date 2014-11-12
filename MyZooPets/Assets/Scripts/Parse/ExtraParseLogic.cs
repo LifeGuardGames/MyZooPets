@@ -7,21 +7,6 @@ using System.Threading.Tasks;
 using Parse;
 
 public class ExtraParseLogic : Singleton<ExtraParseLogic>{
-	
-	/*
-	 * Update logic:
-	 *   query for the ParseObject created by KidAccount
-	 * 
-	 * var query = ParseObject.GetQuery("Badge")
-     * .WhereEqualTo("createdBy", ParseObject.CreateWithoutData("KidAccount", "1zEcyElZ80"));
-	 * 
-	 *   continue with changing the appropriate values then save async
-	 * 
-	 * get data by id
-	 * 
-	 * ParseQuery<ParseObject> query = ParseObject.GetQuery("KidAccount");
-     *  query.GetAsync("xWMyZ4YEGZ").ContinueWith
-	 */
 
 	void Awake(){
 		ParseObject.RegisterSubclass<ParseObjectKidAccount>();
@@ -87,14 +72,12 @@ public class ExtraParseLogic : Singleton<ExtraParseLogic>{
 	/// </summary>
 	/// <returns>Task with KidAccountID</returns>
 	private Task CreateKidAccount(){
-//		var source = new TaskCompletionSource<string>();
 		var user = ParseUser.CurrentUser;
 		ParseACL acl = new ParseACL(user);
 		acl.PublicReadAccess = true;
 		acl.PublicWriteAccess = false;
 
 		var account = new ParseObjectKidAccount{
-			IsLinkedToParentAccount = false,
 			CreatedBy = user,
 			ACL = acl
 		};

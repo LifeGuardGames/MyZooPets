@@ -7,7 +7,6 @@ public class MutableDataCalendar{
     public DateTime NextPlayPeriod {get; set;} //the next time that the user can collect check bonuses
 	public string TotalTimeRemainInTicks {get; set;} //serializer doesn't serialize TimeSpan, so it's converted into ticks string first
 
-
 	/// <summary>
 	/// Gets the total time remain.
 	/// </summary>

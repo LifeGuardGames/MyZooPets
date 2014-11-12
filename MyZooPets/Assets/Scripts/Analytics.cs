@@ -236,12 +236,6 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent("TriggerHitPet");
     }
 
-    //store short cup clicked. (from pet thought bubble)
-//    public void StoreItemShortCutClicked(){
-//        if(isAnalyticsEnabled)
-//            GA.API.Design.NewEvent("Button:StoreItemShortCut");
-//    }
-
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)
 			GA.API.Design.NewEvent("UserInfo:Age:" + age.ToString());
@@ -250,6 +244,18 @@ public class Analytics : MonoBehaviour {
 	public void UserAsthma(bool hasAsthma){
 		if(isAnalyticsEnabled)
 			GA.API.Design.NewEvent("UserInfo:Asthma:" + hasAsthma.ToString());
+	}
+
+	public void TimeBetweenPlaySession(int hours){
+		if(isAnalyticsEnabled){
+			if(hours > 0){
+				GA.API.Design.NewEvent("Time between session:" + hours.ToString());
+				GA.API.Design.NewEvent("Avg time between session", hours);
+			}
+			else{
+				GA.API.Design.NewEvent("Time between session:" + "< 1 hr");
+			}
+		}
 	}
 
 }

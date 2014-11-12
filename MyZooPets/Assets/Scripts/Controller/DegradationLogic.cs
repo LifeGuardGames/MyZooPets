@@ -179,7 +179,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Position));
 		}                
 
-		DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
+//		DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
 
 		if(OnRefreshTriggers != null)
 			OnRefreshTriggers(this, EventArgs.Empty);

@@ -161,13 +161,13 @@ public class GatingManager : Singleton<GatingManager>{
 				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
 				//this is mainly for backward compatibility. Old users with the gates unlocked
 				//already should be awarded the minipets right away
-				string miniPetID = dataGate.GetMiniPetID();
-				if(!string.IsNullOrEmpty(miniPetID)){
-					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
-
-					if(!isUnlocked)
-						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-				}
+//				string miniPetID = dataGate.GetMiniPetID();
+//				if(!string.IsNullOrEmpty(miniPetID)){
+//					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
+//
+//					if(!isUnlocked)
+//						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+//				}
 			}
 		}		
 	}
@@ -321,16 +321,16 @@ public class GatingManager : Singleton<GatingManager>{
 			OnDamageGate(this, EventArgs.Empty);
 
 		// Fire event to notify gate with gateID has been destroyed
-		if(isDestroyed){
-			if(OnDestroyedGate != null){
-				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
-				
-				args.DestroyedGateID = gateID;
-				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
-
-				OnDestroyedGate(this, args);
-			}
-		}
+//		if(isDestroyed){
+//			if(OnDestroyedGate != null){
+//				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
+//				
+//				args.DestroyedGateID = gateID;
+//				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
+//
+//				OnDestroyedGate(this, args);
+//			}
+//		}
 			
 		return isDestroyed;
 	}	

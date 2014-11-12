@@ -63,7 +63,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	// Use this for initialization
 	void Start(){
-		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
+//		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
 
 		//load all minipet into the scene
 //		Dictionary<string, MutableDataMiniPets.Status> miniPetProgress = 
@@ -76,7 +76,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	}
 
 	void OnDestroy(){
-		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
+//		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}
 
 	public bool IsMaxLevel(string miniPetID){
@@ -286,33 +286,23 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	}
 
 	/// <summary>
-	/// Raises the destroyed gate handler event. Check to spawn mini pet after
-	/// a gate has been destroyed
+	/// Starts the hatch sequence for the requested pet
 	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnDestroyedGateHandler(object sender, DestroyedGateEventArgs args){
-		string miniPetID = args.MiniPetID;
+	/// <param name="miniPetID">Mini pet ID</param>
+	public void StartHatchSequence(string miniPetID){
+		// Unlock in data manager
+		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
 
-		if(!string.IsNullOrEmpty(miniPetID)){
-			//unlock in data manager
-			DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-
-			// Play the respective minipet hatch animation
-			StartCoroutine(PlayHatchCutscene(GetHatchPrefabName(miniPetID)));
-			StartCoroutine(RefreshUnlockState(miniPetID));
-		}
-	}
-
-	IEnumerator PlayHatchCutscene(string cutscenePrefabName){
-		yield return new WaitForSeconds(2f);
-		CutsceneUIManager.Instance.PlayCutscene(cutscenePrefabName);
+		// Play the respective minipet hatch animation
+		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));
+		StartCoroutine(RefreshUnlockState(miniPetID));
 	}
 
 	IEnumerator RefreshUnlockState(string miniPetID){
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(2f);
+		// Toggle the appearance of the actualy pet, its been unlocked
 		MiniPetTable[miniPetID].GetComponent<MiniPet>().RefreshUnlockState();
-		yield return new WaitForSeconds(8f);
+		yield return new WaitForSeconds(6f);
 		MiniPetTable[miniPetID].GetComponent<MiniPet>().TryShowDirtyOrSadMessage();	// Show a message telling user to pay attention
 	}
 

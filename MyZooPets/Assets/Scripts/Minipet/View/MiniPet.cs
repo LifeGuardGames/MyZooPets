@@ -15,6 +15,7 @@ public class MiniPet : MonoBehaviour {
 	public GameObject flippable;
 	public GameObject eggParent;
 	public Animation eggAnimation;
+	public MinipetEggClickController eggClickController;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
@@ -22,6 +23,9 @@ public class MiniPet : MonoBehaviour {
 	private bool isVisible;
 	private bool isHatchedAux;
 	private string id; //pet id
+	public string ID{
+		get{return id;}
+	}
 	private new string name;
 	
 	private float currentDistanceInCentimeters = 0;
@@ -34,9 +38,6 @@ public class MiniPet : MonoBehaviour {
 	private bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
-	public string ID{
-		get{return id;}
-	}
 
 	void Start(){
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
@@ -51,10 +52,34 @@ public class MiniPet : MonoBehaviour {
 
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
-
 		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
-	
 		RefreshMiniPetUIState();
+	}
+
+	public void ToggleHatched(bool isHatched){
+		isHatchedAux = isHatched;
+		if(isHatched){
+			eggParent.SetActive(false);
+			eggAnimation.animation.Stop();
+			flippable.SetActive(true);
+			gameObject.collider.enabled = true;
+			bubbleParticle.gameObject.SetActive(true);
+			dirtyParticle.gameObject.SetActive(true);
+			if(eggClickController != null){	// Remove unused components on the egg parent
+				Destroy(eggClickController);
+				Destroy(eggClickController.collider);
+			}
+			isVisible = true;
+		}
+		else{	// Not hatched yet
+			eggParent.SetActive(true);
+			eggAnimation.animation.Play();
+			flippable.SetActive(false);
+			gameObject.collider.enabled = false;
+			bubbleParticle.gameObject.SetActive(false);
+			dirtyParticle.gameObject.SetActive(false);
+			isVisible = false;
+		}
 	}
 	
 	void OnDestroy(){
@@ -394,32 +419,9 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	public void ToggleHatched(bool isHatched){
-		isHatchedAux = isHatched;
-		if(isHatched){
-			eggParent.SetActive(false);
-			flippable.SetActive(true);
-			gameObject.collider.enabled = true;
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
-			eggAnimation.animation.Stop();
-			isVisible = true;
-		}
-		else{
-			eggParent.SetActive(true);
-			eggAnimation.animation.Play();
-			flippable.SetActive(false);
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
-			isVisible = false;
-		}
-	}
-
-
 	public void ToggleVisibility(bool isVisible){
 
 		this.isVisible = isVisible;
-//		Debug.Log("visible: " + this.isVisible);
 
 		if(this.isVisible){
 			bubbleParticle.gameObject.SetActive(true);

@@ -46,7 +46,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	}
 
 	/// <summary>
-	/// Gets the area gates.
+	/// Gets the gates inside the zone(area).
 	/// </summary>
 	/// <returns>The area gates.</returns>
 	/// <param name="area">Area.</param>
@@ -94,8 +94,8 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 		if(areaPartitionGates == null)
 			areaPartitionGates = new Hashtable();
 
-		string areaID = dataGate.GetArea();
-		int roomPartition = dataGate.GetPartition();
+		string areaID = dataGate.GateArea;
+		int roomPartition = dataGate.Partition;
 		
 		// if the area isn't in the hash yet, create it
 		if(!areaPartitionGates.ContainsKey(areaID))

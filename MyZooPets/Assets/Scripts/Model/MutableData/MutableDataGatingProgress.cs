@@ -37,7 +37,7 @@ public class MutableDataGatingProgress{
 	/// </summary>
 	/// <param name="data">Data.</param>
 	public void RefreshGate(ImmutableDataGate data){
-		string gateID = data.GetGateID();
+		string gateID = data.GateID;
 		if(GatingProgress.ContainsKey(gateID)){
 			int hp = data.GetMonster().MonsterHealth;
 			GatingProgress[gateID] = hp;
@@ -147,7 +147,7 @@ public class MutableDataGatingProgress{
 		// init the data by filling the dictionary with xml data
 		List<ImmutableDataGate> gates = DataLoaderGate.GetAllData();
 		foreach(ImmutableDataGate gate in gates){
-			string gateID = gate.GetGateID();
+			string gateID = gate.GateID;
 
 			int hp = gate.GetMonster().MonsterHealth;
 			

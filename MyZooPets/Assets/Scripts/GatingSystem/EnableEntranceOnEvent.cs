@@ -6,7 +6,7 @@ using System.Collections;
 /// Enable entrance on gate destroyed.
 /// Attached this script on any mini game entrance that should be activated after
 /// certain events.
-/// Currently it will check if minipet has finished in room + gate unlocked
+/// NOTE: Currently it will check if minipet has finished in room + gate unlocked
 /// </summary>
 public class EnableEntranceOnEvent : MonoBehaviour {
 	public int roomPartition;

@@ -77,6 +77,16 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused){
+			//calculate time diff since last play session ended and submit to game analytics
+			TimeSpan timeSinceLastSession = LgDateTime.GetTimeSinceLastPlayed();
+			int timeDifference = (int)timeSinceLastSession.TotalHours;
+
+			Analytics.Instance.TimeBetweenPlaySession(timeDifference);
+		}
+	}
+
 	/// <summary>
 	/// Gets the time frame.
 	/// Given a time, will return whether or not that

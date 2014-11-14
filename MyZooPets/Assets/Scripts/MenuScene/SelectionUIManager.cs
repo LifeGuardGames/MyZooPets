@@ -60,10 +60,10 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public void LoadGame(){
         //Lock it while loading
         ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-
+		LoadScene();
         //Load game data 
-        DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
-        SelectionManager.Instance.LoadPetGameData();
+//        DataManager.Instance.OnGameDataLoaded += EnterGameAfterGameDataDeserialized;
+//        SelectionManager.Instance.LoadPetGameData();
     }
 
     public void DeleteGameData(){
@@ -178,14 +178,14 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     }	
 
     //After existing game data has been loaded. Enter the game
-    private void EnterGameAfterGameDataDeserialized(object sender, DataManager.SerializerEventArgs args){
-        if(args.IsSuccessful){
-            LoadScene();
-        
-            //Unregister itself from the event
-            DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
-        }
-    }
+//    private void EnterGameAfterGameDataDeserialized(object sender, DataManager.SerializerEventArgs args){
+//        if(args.IsSuccessful){
+//            LoadScene();
+//        
+//            //Unregister itself from the event
+//            DataManager.Instance.OnGameDataLoaded -= EnterGameAfterGameDataDeserialized;
+//        }
+//    }
 
     private void LoadScene(){
         LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);

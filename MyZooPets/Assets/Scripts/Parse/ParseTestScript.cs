@@ -84,7 +84,7 @@ public class ParseTestScript : MonoBehaviour {
 				GUILayout.Label("MenuScene Test");
 					
 				if(GUILayout.Button("Initialize game data")){
-					DataManager.Instance.InitializeGameDataForNewPet();
+					DataManager.Instance.InitGameDataForDebug();
 					FakeTutorial();
 				}
 			GUILayout.EndHorizontal();

@@ -12,7 +12,7 @@ public class DataManager : Singleton<DataManager>{
 		public bool IsSuccessful { get; set; }
 	}
 
-	public event EventHandler<SerializerEventArgs> OnGameDataLoaded;
+	public event EventHandler<EventArgs> OnGameDataLoaded;
 	public event EventHandler<EventArgs> OnGameDataSaved;
 
 	public bool isDebug = false; //turn isDebug to true if working on independent scene
@@ -46,7 +46,14 @@ public class DataManager : Singleton<DataManager>{
 	/// Gets or sets the scene data. temporary data when transition to new scene
 	/// </summary>
 	/// <value>The scene data.</value>
-	public LoadSceneData SceneData{ get; set; } 
+	public LoadSceneData SceneData{ get; set; }
+
+	/// <summary>
+	/// If membership check failed a code will be passed from the LoadingScene to
+	/// the MenuScene. 
+	/// </summary>
+	/// <value>The membership check failed code.</value>
+	public string MembershipCheckFailedCode{get; set;}
 	
 	/// <summary>
 	/// Gets a value indicating whether if it's user's first time launching app.
@@ -80,6 +87,36 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	/// <summary>
+	/// Local storage of the trial start time. Use if connection error happened
+	/// when starting game for the first time
+	/// </summary>
+	/// <value>The trial start time stamp.</value>
+	public long TrialStartTimeStamp{
+		get{
+			string startDate = PlayerPrefs.GetString("TrialStart", "");
+			return long.Parse(startDate);
+		}
+		set{
+			string startDate = value.ToString();
+			PlayerPrefs.SetString("TrialStart", startDate);
+		}
+	}
+
+	/// <summary>
+	/// Tracks the connection error allowed before game is locked and user will 
+	/// be forced to go online before continue playing
+	/// </summary>
+	/// <value>The accumulated connection errors.</value>
+	public int AccumulatedConnectionErrors{
+		get{
+			return PlayerPrefs.GetInt("ConnectionErrors", 0);
+		}
+		set{
+			PlayerPrefs.SetInt("ConnectionErrors", value);
+		}
+	}
+
+	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
 	/// in the menuscene
 	/// </summary>
@@ -108,7 +145,7 @@ public class DataManager : Singleton<DataManager>{
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
 		if(isDebug)
-			InitializeGameDataForNewPet();
+			InitGameDataForDebug();
 		else{
 			// if not first time need to do version check
 			if(!IsFirstTime){
@@ -120,8 +157,9 @@ public class DataManager : Singleton<DataManager>{
 				if(isSyncToServerOn)
 					ExtraParseLogic.Instance.UserCheck();
 			}
-			
-			LoadMenuSceneData();
+
+			LoadGameData();
+//			LoadMenuSceneData();
 		}
 	}
 	
@@ -133,7 +171,7 @@ public class DataManager : Singleton<DataManager>{
 			#endif
 
 			//Save menu scene data. doesn't depend on if tutorial is finished or not
-			SaveMenuSceneData();
+//			SaveMenuSceneData();
 
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
@@ -214,9 +252,11 @@ public class DataManager : Singleton<DataManager>{
 	}
 	
 	/// <summary>
-	/// Loads the game data from PlayerPrefs.
+	/// Loads the game data from PlayerPrefs. If no game data is found from PlayerPrefs
+	/// a new game data will be initiated. This function should only be called once when the
+	/// game loads in LoadingScene.
 	/// </summary>
-	public void LoadGameData(string petID = "Pet0"){
+	public void LoadGameData(){
 		//if gameData is not null then the gameData needs to be saved first
 		//otherwise loading the new data will erase the current gameData
 		if(gameData == null){
@@ -234,29 +274,27 @@ public class DataManager : Singleton<DataManager>{
 				gameData = newGameData;
 				LoadDataVersion();
 				
-				Deserialized(true);
+				Deserialized();
 			}
 			else{
-				Deserialized(false);
+				//initiate game data here because none is found in the PlayerPrefs
+				gameData = new PetGameData();
+				Deserialized();
 			}
-		}
-		else{
-			Deserialized(true);
 		}
 	}
 	#endregion
 
 	/// <summary>
-	/// Initializes the game data for new pet.
+	/// Modify Pet Info. Used in the MenuScene. Will trigger game data to be serialized
+	/// immediately. 
 	/// </summary>
 	/// <param name="petID">Pet ID.</param>
 	/// <param name="petName">Pet name.</param>
 	/// <param name="petSpecies">Pet species.</param>
 	/// <param name="petColor">Pet color.</param>
-	public void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
+	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
-
-		gameData = new PetGameData();
 
 		if(!String.IsNullOrEmpty(petName))
 			gameData.PetInfo.PetName = petName;
@@ -266,9 +304,13 @@ public class DataManager : Singleton<DataManager>{
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
 		gameData.PetInfo.PetID = petID;
-           
-		if(!isDebug)
-			menuSceneData = new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
+
+		//serialize data right away
+    	SaveGameData();
+	}
+
+	public void InitGameDataForDebug(){
+		gameData = new PetGameData();
 	}
 
 	#region Data Version
@@ -319,34 +361,34 @@ public class DataManager : Singleton<DataManager>{
 	/// <summary>
 	/// Loads the menu scene data.
 	/// </summary>
-	private void LoadMenuSceneData(){
-		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
-
-		//Check if json string is actually loaded and not empty
-		if(!String.IsNullOrEmpty(jsonString))
-			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
-	}
+//	private void LoadMenuSceneData(){
+//		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
+//
+//		//Check if json string is actually loaded and not empty
+//		if(!String.IsNullOrEmpty(jsonString))
+//			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
+//	}
 	
 	/// <summary>
 	/// Saves the menu scene data.
 	/// </summary>
-	private void SaveMenuSceneData(){
-		if(menuSceneData != null){
-			string jsonString = JSON.Instance.ToJSON(menuSceneData);
-			PlayerPrefs.SetString("MenuSceneData", jsonString);
-		}
-	}
+//	private void SaveMenuSceneData(){
+//		if(menuSceneData != null){
+//			string jsonString = JSON.Instance.ToJSON(menuSceneData);
+//			PlayerPrefs.SetString("MenuSceneData", jsonString);
+//		}
+//	}
 	#endregion
 	
 	/// <summary>
 	/// Called when game data has been deserialized. Could be successful or failure
 	/// </summary>
-	private void Deserialized(bool isSuccessful){
-		SerializerEventArgs args = new SerializerEventArgs();
-		args.IsSuccessful = isSuccessful;
+	private void Deserialized(){
+//		SerializerEventArgs args = new SerializerEventArgs();
+//		args.IsSuccessful = isSuccessful;
 
 		if(OnGameDataLoaded != null)
-			OnGameDataLoaded(this, args);
+			OnGameDataLoaded(this, EventArgs.Empty);
 	}
 	
 	/// <summary>

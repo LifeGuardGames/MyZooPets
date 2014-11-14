@@ -11,15 +11,15 @@ public class SelectionManager : Singleton<SelectionManager> {
 
     //Has a game data been loaded into DataManager. Game is only safe to 
     //start if the data is there
-    public bool IsGameDataLoaded{
-        get{ return DataManager.Instance.IsGameDataLoaded;}
-    }
+//    public bool IsGameDataLoaded{
+//        get{ return DataManager.Instance.IsGameDataLoaded;}
+//    }
 
 	public bool IsFirstTime{
 		get{ return DataManager.Instance.IsFirstTime;}
 	}
 
-    public void LoadPetGameData(){
-        DataManager.Instance.LoadGameData();
-    }
+//    public void LoadPetGameData(){
+//        DataManager.Instance.LoadGameData();
+//    }
 }

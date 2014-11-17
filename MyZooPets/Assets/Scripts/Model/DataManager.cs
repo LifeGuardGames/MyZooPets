@@ -91,14 +91,12 @@ public class DataManager : Singleton<DataManager>{
 	/// when starting game for the first time
 	/// </summary>
 	/// <value>The trial start time stamp.</value>
-	public long TrialStartTimeStamp{
+	public string TrialStartTimeStamp{
 		get{
-			string startDate = PlayerPrefs.GetString("TrialStart", "");
-			return long.Parse(startDate);
+			return PlayerPrefs.GetString("TrialStart", "");;
 		}
 		set{
-			string startDate = value.ToString();
-			PlayerPrefs.SetString("TrialStart", startDate);
+			PlayerPrefs.SetString("TrialStart", value);
 		}
 	}
 

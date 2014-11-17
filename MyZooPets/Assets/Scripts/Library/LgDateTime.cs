@@ -37,7 +37,7 @@ public class LgDateTime{
 	/// Gets the UTC now in timestamp format.
 	/// </summary>
 	/// <returns>The UTC now timestamp.</returns>
-	public static long GetUtcNowTimestamp(){
+	public static string GetUtcNowTimestamp(){
 		DateTime utcNow = DateTime.UtcNow;
 		return GetUnixTimestampFromDateTime(utcNow);
 	}
@@ -59,10 +59,10 @@ public class LgDateTime{
 	/// </summary>
 	/// <returns>The unix timestamp from date time.</returns>
 	/// <param name="date">Date.</param>
-	private static long GetUnixTimestampFromDateTime(DateTime date){
+	private static string GetUnixTimestampFromDateTime(DateTime date){
 		long unixTimestamp = date.Ticks - new DateTime(1970, 1, 1).Ticks;
 		unixTimestamp /= TimeSpan.TicksPerSecond;
-		return unixTimestamp;
+		return unixTimestamp.ToString();
 	}
     
 }

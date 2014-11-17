@@ -9,20 +9,24 @@ using System.Collections.Generic;
 /// player.
 /// </summary>
 
-public class DestroyedGateEventArgs : EventArgs{
-	public string DestroyedGateID{ get; set; }
-	public string MiniPetID{ get; set; }
-}
+//public class DestroyedGateEventArgs : EventArgs{
+//	public string DestroyedGateID{ get; set; }
+//	public string MiniPetID{ get; set; }
+//}
 
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
 	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
 	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-	public static EventHandler<DestroyedGateEventArgs> OnDestroyedGate; // When a specific gate has been destroyed
+	public static EventHandler<EventArgs> OnDestroyedGate; // When a specific gate has been destroyed
 	//=====================================================
     
 	public string currentArea; // area that this manager is in
 	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
+	public ImmutableDataGate latestUnlockedGate; 
+	public ImmutableDataGate LatestUnlockedGate{
+		get{ return latestUnlockedGate; }
+	}
 
 	/// <summary>
 	/// The starting screen position. The Gates' position is decided by percentage of screen.
@@ -30,6 +34,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// before converting them to world point
 	/// </summary>
 	public Vector3 startingScreenPosition;
+
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
 	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
@@ -53,7 +58,39 @@ public class GatingManager : Singleton<GatingManager>{
 		// now spawn the gates
 		SpawnGates();
 	}
-		
+
+	/// <summary>
+	/// When store opens, get the cached latest gate and return the allowed decoration types
+	/// based on the gate xml data.
+	/// </summary>
+	/// <returns>The allowed deco type from latest unlocked gate.</returns>
+	public List<string> GetAllowedDecoTypeFromLatestUnlockedGate(){
+		if(latestUnlockedGate != null){
+			return new List<string>(latestUnlockedGate.DecoCategoriesStore);
+		}
+		else{
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Calculates the latest unlocked gate.
+	/// This should be called everytime that a gate is unlocked
+	/// 'Null' if no unlocked gates yet
+	/// </summary>
+	private ImmutableDataGate CalculateLatestUnlockedGate(){
+		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
+		int maxGateNumberSoFar = -1;
+		ImmutableDataGate latestGateSoFar = null;
+		foreach(ImmutableDataGate gate in gateList){
+			if(gate.GateNumber > maxGateNumberSoFar && !DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				latestGateSoFar = gate;
+			}
+		}
+		latestUnlockedGate = latestGateSoFar;	// Cache it
+		return latestGateSoFar;
+	}
+
 	/// <summary>
 	/// Recurrings the gate check.
 	/// Some gates recur -- that is, if they have been
@@ -77,8 +114,8 @@ public class GatingManager : Singleton<GatingManager>{
 			foreach(DictionaryEntry entry in gates){
 				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 				
-				bool isRecurring = dataGate.IsRecurring();
-				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+				bool isRecurring = dataGate.IsRecurring;
+				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID);
 				
 				if(isRecurring && !isGateActive){
 					DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
@@ -94,10 +131,10 @@ public class GatingManager : Singleton<GatingManager>{
 		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			int partition = dataGate.GetPartition();
+			int partition = dataGate.Partition;
 			
 			// if the gate is activate, spawn the monster at an offset 
-			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID);
 
 			// check if gate is still in the scene. SpawnGates is also called after
 			// game is paused so need to check the status of each gate. This is mainly
@@ -122,11 +159,11 @@ public class GatingManager : Singleton<GatingManager>{
 			if(isGateActive && !isGateInSceneAlready){
 				int startingPartition = scriptPan.currentPartition;	// room the player is in
 				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
-				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
+				int partitionCountFromStartingPartition = dataGate.Partition - startingPartition;	// the distance between the starting room and this gate's room
 				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
 
 				// how much screen space should the gate be moved by
-				float screenOffset = Screen.width * dataGate.GetScreenPercentage();
+				float screenOffset = Screen.width * dataGate.ScreenPercentage;
 				Vector3 newScreenPosition = new Vector3(screenOffset, startingScreenPosition.y, startingScreenPosition.z);
 
 				float maxScreenSpace = Screen.width - screenOffset;
@@ -146,10 +183,10 @@ public class GatingManager : Singleton<GatingManager>{
 				GameObject goGate = Instantiate(prefab, gateLocation, Quaternion.identity) as GameObject;
 				Gate scriptGate = goGate.GetComponent<Gate>();
 				
-				string gateID = dataGate.GetGateID();
+				string gateID = dataGate.GateID;
 				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
 
-				if(dataGate.IsRecurring())
+				if(dataGate.IsRecurring)
 					DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod = 
 						PlayPeriodLogic.GetCurrentPlayPeriod();
 				
@@ -161,7 +198,7 @@ public class GatingManager : Singleton<GatingManager>{
 				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
 				//this is mainly for backward compatibility. Old users with the gates unlocked
 				//already should be awarded the minipets right away
-//				string miniPetID = dataGate.GetMiniPetID();
+//				string miniPetID = dataGate.MiniPetID;
 //				if(!string.IsNullOrEmpty(miniPetID)){
 //					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
 //
@@ -216,7 +253,7 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		ImmutableDataGate data = DataLoaderGate.GetData(area, roomPartition);
 		if(data != null) 
-			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GetGateID());
+			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GateID);
 		
 		return isActive;
 	}
@@ -239,7 +276,7 @@ public class GatingManager : Singleton<GatingManager>{
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
 		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
 		if(dataGate != null && 
-			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
+			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID) && 
 			dataGate.DoesBlock(swipeDirection))
 			isAllowed = false;
 		
@@ -320,17 +357,15 @@ public class GatingManager : Singleton<GatingManager>{
 		if(OnDamageGate != null)
 			OnDamageGate(this, EventArgs.Empty);
 
-		// Fire event to notify gate with gateID has been destroyed
-//		if(isDestroyed){
-//			if(OnDestroyedGate != null){
-//				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
-//				
-//				args.DestroyedGateID = gateID;
-//				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
-//
-//				OnDestroyedGate(this, args);
-//			}
-//		}
+		if(isDestroyed){
+			// Fire event to notify gate with gateID has been destroyed
+			if(OnDestroyedGate != null){
+				OnDestroyedGate(this, null);
+			}
+
+			// Recalculate the latest unlocked gate
+			CalculateLatestUnlockedGate();
+		}
 			
 		return isDestroyed;
 	}	

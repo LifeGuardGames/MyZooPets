@@ -394,6 +394,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				defaultTabName = "SmallPlant";
 			}
 
+			List<string> unlockedDecoList = GatingManager.Instance.GetAllowedDecoTypeFromLatestUnlockedGate();
+
 			//Rename the tab to reflect the sub category name
 			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
@@ -406,7 +408,25 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
 					resizer.enabled = true;	// Resize automatically
 
-					ShowUseTab(tabParent.FindChild("Tab"));
+					if(unlockedDecoList != null){
+						// If the gate xml has the deco type allowed, enable button
+						if(unlockedDecoList.Contains(tabParent.name)){
+							ShowActiveTab(tabParent.FindChild("Tab"));
+						}
+						// Else disable button
+						else{
+							ShowInactiveTab(tabParent.FindChild("Tab"));
+						}
+					}
+					// Default case where no gates are unlocked yet, just unlock carpet
+					else{
+						if(tabParent.name == "Carpet"){
+							ShowActiveTab(tabParent.FindChild("Tab"));
+						}
+						else{
+							ShowInactiveTab(tabParent.FindChild("Tab"));
+						}
+					}
 				}
 				else{
 					tabParent.name = "";
@@ -654,14 +674,26 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.collider.enabled = false;
 	}
 
-	//-----------------------------------------
-	// UseTab()
-	//	If tab is used. Show 
-	//------------------------------------------
-	private void ShowUseTab(Transform tab){
+	/// <summary>
+	/// If tab is valid and unlocked
+	/// </summary>
+	/// <param name="tab">Tab transform</param>
+	private void ShowActiveTab(Transform tab){
+		tab.GetComponent<UIImageButton>().isEnabled = true;
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.collider.enabled = true;
+	}
+
+	/// <summary>
+	/// If tab is valid but locked
+	/// </summary>
+	/// <param name="tab">Tab transform</param>
+	private void ShowInactiveTab(Transform tab){
+		tab.GetComponent<UIImageButton>().isEnabled = false;
+		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
+		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
+		tab.collider.enabled = false;
 	}
 
 	//------------------------------------------

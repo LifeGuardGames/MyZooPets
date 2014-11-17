@@ -49,11 +49,11 @@ public abstract class Gate : MonoBehaviour{
 		
 //		// since this gate is getting created, if it is guarding an item box, create the box
 //		ImmutableDataGate dataGate = GetGateData();
-//		string itemBoxID = dataGate.GetItemBoxID();
+//		string itemBoxID = dataGate.ItemBoxID;
 //		if(!string.IsNullOrEmpty(itemBoxID)){
 //			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 //			GameObject goBox = Instantiate(goResource, 
-//			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
+//			                               new Vector3(transform.position.x + dataGate.ItemBoxPositionOffset, transform.position.y, goResource.transform.position.z), 
 //			                               Quaternion.identity) as GameObject;
 //			goBox = goBox.FindInChildren("Button");
 //			
@@ -156,7 +156,7 @@ public abstract class Gate : MonoBehaviour{
 		
 		// add any appropriate task unlocks
 		ImmutableDataGate data = GetGateData();
-		string[] arrayUnlocks = data.GetTaskUnlocks();
+		string[] arrayUnlocks = data.TaskUnlocks;
 
 		if(arrayUnlocks != null){
 			for(int i = 0; i < arrayUnlocks.Length; ++i){
@@ -175,12 +175,12 @@ public abstract class Gate : MonoBehaviour{
 	private void UnlockItemBox(){
 		// since this gate is getting created, if it is guarding an item box, create the box
 		ImmutableDataGate dataGate = GetGateData();
-		string itemBoxID = dataGate.GetItemBoxID();
+		string itemBoxID = dataGate.ItemBoxID;
 
 		if(!string.IsNullOrEmpty(itemBoxID)){
 			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 			GameObject goBox = Instantiate(goResource, 
-			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), 
+			                               new Vector3(transform.position.x + dataGate.ItemBoxPositionOffset, 
 			            								goResource.transform.position.y, 
 			            								goResource.transform.position.z), 
 			                               Quaternion.identity) as GameObject;

@@ -4,22 +4,11 @@ using System.Collections.Generic;
 
 public class SelectionManager : Singleton<SelectionManager> {
 
-    //Return PetMenuInfo serialized data
-    public MutableDataPetMenuInfo PetMenuInfo{
-        get{ return DataManager.Instance.MenuSceneData;}
+    public MutableDataPetInfo PetMenuInfo{
+        get{ return DataManager.Instance.GameData.PetInfo;}
     }
-
-    //Has a game data been loaded into DataManager. Game is only safe to 
-    //start if the data is there
-//    public bool IsGameDataLoaded{
-//        get{ return DataManager.Instance.IsGameDataLoaded;}
-//    }
 
 	public bool IsFirstTime{
 		get{ return DataManager.Instance.IsFirstTime;}
 	}
-
-//    public void LoadPetGameData(){
-//        DataManager.Instance.LoadGameData();
-//    }
 }

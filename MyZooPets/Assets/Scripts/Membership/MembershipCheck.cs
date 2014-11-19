@@ -33,7 +33,7 @@ public class MembershipCheck : MonoBehaviour {
 		isCreated = true;
 		//---------------------------------------------------------------------
 
-//		StartCoroutine(CheckMembershipStatus());
+		StartCoroutine(CheckMembershipStatus());
 	}
 
 	/// <summary>
@@ -52,7 +52,7 @@ public class MembershipCheck : MonoBehaviour {
 
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
-//			CheckMembershipStatus();
+			StartCoroutine(CheckMembershipStatus());
 		}
 	}
 
@@ -62,7 +62,7 @@ public class MembershipCheck : MonoBehaviour {
 
 	private IEnumerator CheckMembershipStatus(){
 		//Try to ping the server
-		WWW www = new WWW("http://www.google.com");
+		WWW www = new WWW("https://wellapetstest.parseapp.com/ping");
 		
 		//Wait for response
 		yield return www;
@@ -132,7 +132,6 @@ public class MembershipCheck : MonoBehaviour {
 						Loom.DispatchToMainThread(() => {
 							//If trial is over check membership subscription status
 							if(trialStatus == "expired"){
-								Debug.Log("trial expired");
 								//If subscription status inactive load menu and prompt user to subscribe
 								if(membershipStatus == "expired"){
 									Debug.Log("membership expired");
@@ -188,49 +187,31 @@ public class MembershipCheck : MonoBehaviour {
 	}
 	
 	private void CheckSceneToLoadInto(bool performHatchCheck = false){
-		if(!isTestMode){
-			if(!performHatchCheck){
+//		if(!isTestMode){
+			if(performHatchCheck){
 				bool isHatched = DataManager.Instance.GameData.PetInfo.IsHatched;
 				if(isHatched)
-					Application.LoadLevel(SceneUtils.BEDROOM);
+					if(!Application.loadedLevelName == SceneUtils.BEDROOM)
+						Application.LoadLevel(SceneUtils.BEDROOM);
 				else
 					Application.LoadLevel(SceneUtils.MENU);
 			}
 			else{
 				Application.LoadLevel(SceneUtils.MENU);
 			}
-		}
+//		}
 	}
 	
 	/// <summary>
 	/// Checks the internet connectivity.
-	/// Uses Game Analytics code to check for server response. 
 	/// </summary>
 	/// <returns>The internet connectivity.</returns>
 	private void CheckInternetConnectivity(WWW www){
-		try{
-			if(GA_Submit.CheckServerReply(www)){
-				isConnectedToInternet = true;
-			}
-			else if(!string.IsNullOrEmpty(www.error)){
-				isConnectedToInternet = false;
-			}
-			else{
-				//Get the JSON object from the response
-				Hashtable returnParam = (Hashtable)GA_MiniJSON.JsonDecode(www.text);
-				
-				//If the response contains the key "status" with the value "ok" we know that we are connected
-				if(returnParam != null && returnParam.ContainsKey("status") && 
-				   returnParam["status"].ToString().Equals("ok")){
-					isConnectedToInternet = true;
-				}
-				else{
-					isConnectedToInternet = false;
-				}
-			}
-		}
-		catch{
+		if(!string.IsNullOrEmpty(www.error))
 			isConnectedToInternet = false;
+		else{
+			if(www.text == "OK")
+				isConnectedToInternet = true;
 		}
 	}
 

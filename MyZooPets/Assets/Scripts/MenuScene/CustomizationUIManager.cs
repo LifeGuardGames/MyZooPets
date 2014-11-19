@@ -24,10 +24,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         eModeType = UIModeTypes.CustomizePet;
         isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }
-
-	//---------------------------------------------------
-	// _OpenUI()
-	//---------------------------------------------------	
+	
 	protected override void _OpenUI(){
         //HideTitle();
         ShowChooseGUI();	

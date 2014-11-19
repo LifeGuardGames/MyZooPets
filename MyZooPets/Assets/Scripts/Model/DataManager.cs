@@ -21,7 +21,7 @@ public class DataManager : Singleton<DataManager>{
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
 	//basic info data of all the pet that are only used in the menu scene
-	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
+//	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 	private float syncToParseTimer = 0f;
 	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
@@ -30,9 +30,9 @@ public class DataManager : Singleton<DataManager>{
 	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method
 	/// </summary>
 	/// <value>The menu scene data.</value>
-	public MutableDataPetMenuInfo MenuSceneData{
-		get{ return menuSceneData; }
-	}
+//	public MutableDataPetMenuInfo MenuSceneData{
+//		get{ return menuSceneData; }
+//	}
 
 	/// <summary>
 	/// Gets the game data.
@@ -318,12 +318,20 @@ public class DataManager : Singleton<DataManager>{
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
 		Version version140 = new Version("1.4.0");
+		Version version142 = new Version("1.4.2");
 		
 		if(currentDataVersion < version140){
+			//no longer needs this key so removed it. this key was previously use
+			//to update from single pet to mulitple pet
 			PlayerPrefs.DeleteKey("IsSinglePetMode");
 			IsAgeCollected = true;
 			
 			ExtraParseLogic.Instance.UserCheck();
+		}
+
+		if(currentDataVersion < version142){
+			//menu scene data is no longer required. 
+			PlayerPrefs.DeleteKey("MenuSceneData");
 		}
 	}
 

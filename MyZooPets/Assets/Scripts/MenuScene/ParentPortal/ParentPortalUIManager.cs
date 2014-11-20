@@ -41,6 +41,7 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	protected override void _OpenUI(){
 		leafParticle.Stop();
+		SubscriptionAlertController.Instance.HideAll();
 
 		OpenBackground();
 		OpenMathQuestion();

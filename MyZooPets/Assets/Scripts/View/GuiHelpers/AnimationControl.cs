@@ -12,6 +12,7 @@ public class AnimationControl : MonoBehaviour {
 	private Vector3 originalPostion;
 	private Quaternion originalRotation;
 	private Vector3 originalScale;
+	public GameObject optionalToggle;	// for use on SunBeamRotating and things like that
 	
 	public bool debug = false;
 	
@@ -24,7 +25,13 @@ public class AnimationControl : MonoBehaviour {
 		originalRotation = gameObject.transform.localRotation;
 		originalScale = gameObject.transform.localScale;
 	}
-	
+
+	void Start(){
+		if(optionalToggle){
+			optionalToggle.SetActive(false);
+		}
+	}
+
 	void Update(){
 		if(isLooping && isPlay && !animation.isPlaying){
 			animation.Play();
@@ -33,23 +40,36 @@ public class AnimationControl : MonoBehaviour {
 	
 	public void Play(string animationName){
 		isPlay = true;
+		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
 		animation.Play(animationName);
+
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
 	}
 	
 	public void Play(){
 		isPlay = true;
 		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
 		animation.Play();
+
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
 	}
 
 	public bool IsPlaying(string animName){
 		return animation.IsPlaying(animName);
 	}
-		
+
 	public void Stop(){
 		isPlay = false;
 		animation.Stop();
-		
+
+		if(optionalToggle){
+			optionalToggle.SetActive(false);
+		}
+
 		if(resetAfterStop){
 			gameObject.transform.localPosition = originalPostion;
 			gameObject.transform.localRotation = originalRotation;

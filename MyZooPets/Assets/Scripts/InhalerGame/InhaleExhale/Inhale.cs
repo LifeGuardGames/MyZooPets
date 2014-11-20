@@ -54,7 +54,6 @@ public class Inhale : InhalerPart{
 	protected override void NextStep(){
 		base.NextStep();
 		Destroy(gameObject);
-
 	}
 
 	private void BreatheInEndEventHandler(object sender, EventArgs args){
@@ -62,13 +61,9 @@ public class Inhale : InhalerPart{
 		InhalerGameProgressBarUIManager.Instance.UpdateNodeColors();
 		petAnimator.SetTrigger("Backflip");
 
-//		// Hide the inhaler
+		// Hide the inhaler
 		InhalerGameUIManager.Instance.HideInhaler();
 
-		//using invoke instead of listening to animationController callback
-		//because LWFAnimator sometimes sends callback prematurely. Don't
-		//want to debug LWFAnimator since we are switching away from it soon
-		Invoke("NextStep", 3.5f);
+		NextStep();
 	}
-	
 }

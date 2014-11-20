@@ -191,7 +191,7 @@ public class MembershipCheck : MonoBehaviour {
 			if(performHatchCheck){
 				bool isHatched = DataManager.Instance.GameData.PetInfo.IsHatched;
 				if(isHatched)
-					if(!Application.loadedLevelName == SceneUtils.BEDROOM)
+					if(Application.loadedLevelName != SceneUtils.BEDROOM)
 						Application.LoadLevel(SceneUtils.BEDROOM);
 				else
 					Application.LoadLevel(SceneUtils.MENU);

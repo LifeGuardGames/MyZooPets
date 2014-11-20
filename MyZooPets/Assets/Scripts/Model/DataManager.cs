@@ -19,21 +19,10 @@ public class DataManager : Singleton<DataManager>{
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-
-	//basic info data of all the pet that are only used in the menu scene
-//	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
 	private float syncToParseTimer = 0f;
 	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
 	#region Properties
-	/// <summary>
-	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method
-	/// </summary>
-	/// <value>The menu scene data.</value>
-//	public MutableDataPetMenuInfo MenuSceneData{
-//		get{ return menuSceneData; }
-//	}
-
 	/// <summary>
 	/// Gets the game data.
 	/// </summary>
@@ -157,7 +146,6 @@ public class DataManager : Singleton<DataManager>{
 			}
 
 			LoadGameData();
-//			LoadMenuSceneData();
 		}
 	}
 	
@@ -167,10 +155,6 @@ public class DataManager : Singleton<DataManager>{
 			#if DEVELOPMENT_BUILD
 				return;
 			#endif
-
-			//Save menu scene data. doesn't depend on if tutorial is finished or not
-//			SaveMenuSceneData();
-
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
 				Debug.Log("Auto save canceled because we are in a tutorial");
@@ -363,36 +347,10 @@ public class DataManager : Singleton<DataManager>{
 	}
 	#endregion
 
-	#region MenuScene Data
-	/// <summary>
-	/// Loads the menu scene data.
-	/// </summary>
-//	private void LoadMenuSceneData(){
-//		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
-//
-//		//Check if json string is actually loaded and not empty
-//		if(!String.IsNullOrEmpty(jsonString))
-//			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
-//	}
-	
-	/// <summary>
-	/// Saves the menu scene data.
-	/// </summary>
-//	private void SaveMenuSceneData(){
-//		if(menuSceneData != null){
-//			string jsonString = JSON.Instance.ToJSON(menuSceneData);
-//			PlayerPrefs.SetString("MenuSceneData", jsonString);
-//		}
-//	}
-	#endregion
-	
 	/// <summary>
 	/// Called when game data has been deserialized. Could be successful or failure
 	/// </summary>
 	private void Deserialized(){
-//		SerializerEventArgs args = new SerializerEventArgs();
-//		args.IsSuccessful = isSuccessful;
-
 		if(OnGameDataLoaded != null)
 			OnGameDataLoaded(this, EventArgs.Empty);
 	}
@@ -401,7 +359,6 @@ public class DataManager : Singleton<DataManager>{
 	/// Called when game data has been serialized
 	/// </summary>
 	private void Serialized(){
-
 		if(OnGameDataSaved != null)
 			OnGameDataSaved(this, EventArgs.Empty);
 	}

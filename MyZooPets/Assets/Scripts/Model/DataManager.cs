@@ -37,12 +37,12 @@ public class DataManager : Singleton<DataManager>{
 	/// <value>The scene data.</value>
 	public LoadSceneData SceneData{ get; set; }
 
-	/// <summary>
-	/// If membership check failed a code will be passed from the LoadingScene to
-	/// the MenuScene. 
-	/// </summary>
-	/// <value>The membership check failed code.</value>
-	public string MembershipCheckFailedCode{get; set;}
+//	/// <summary>
+//	/// If membership check failed a code will be passed from the LoadingScene to
+//	/// the MenuScene. 
+//	/// </summary>
+//	/// <value>The membership check failed code.</value>
+//	public string MembershipCheckFailedCode{get; set;}
 	
 	/// <summary>
 	/// Gets a value indicating whether if it's user's first time launching app.
@@ -75,18 +75,48 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
+//	/// <summary>
+//	/// Local storage of the trial start time. Use if connection error happened
+//	/// when starting game for the first time
+//	/// </summary>
+//	/// <value>The trial start time stamp.</value>
+//	public string TrialStartTimeStamp{
+//		get{
+//			return PlayerPrefs.GetString("TrialStart", "");;
+//		}
+//		set{
+//			PlayerPrefs.SetString("TrialStart", value);
+//		}
+//	}
+
 	/// <summary>
-	/// Local storage of the trial start time. Use if connection error happened
-	/// when starting game for the first time
+	/// Gets or sets the membership check dates. Keep track of when membership check
+	/// happens. Also used for calculating when the trial period expires. Data will
+	/// be reset if trialStatus == expired
 	/// </summary>
-	/// <value>The trial start time stamp.</value>
-	public string TrialStartTimeStamp{
+	/// <value>The membership check dates.</value>
+	public string MembershipCheckDates{
 		get{
-			return PlayerPrefs.GetString("TrialStart", "");;
+			return PlayerPrefs.GetString("MembershipCheckDates", "");
 		}
 		set{
-			PlayerPrefs.SetString("TrialStart", value);
+			PlayerPrefs.SetString("MembershipCheckDates", value);
 		}
+	}
+
+	public void AddMembershipCheckDate(string timestamp){
+		string currentDates = MembershipCheckDates;
+		if(!string.IsNullOrEmpty(timestamp)){
+			if(!string.IsNullOrEmpty(currentDates))
+				//Add new dates using a comma as the deliminating character
+				MembershipCheckDates = currentDates + "," + timestamp;
+			else
+				MembershipCheckDates = timestamp;
+		}
+	}
+
+	public void ResetMembershipCheckDates(){
+		MembershipCheckDates = "";
 	}
 
 	/// <summary>

@@ -7,7 +7,15 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class MembershipCheck : MonoBehaviour {
+public class MembershipCheck : Singleton<MembershipCheck> {
+	public enum Errors{
+		None,
+		OverConnectionErrorLimit,
+		TrialExpired,
+		MembershipExpired
+	}
+	public static EventHandler<EventArgs> OnCheckDoneEvent;
+
 	private static bool isCreated;
 
 	/// <summary>
@@ -22,6 +30,13 @@ public class MembershipCheck : MonoBehaviour {
 	private float timeOut = 20f; //time out set to 20 seconds
 	private CancellationTokenSource timeOutRequestCancellation; //token used to cancel unfinish task/thread when timeout timer is up
 
+	/// <summary>
+	/// Tells the UI what error the membership check failed with so UI can spawn the
+	/// right notification
+	/// </summary>
+	/// <value>The membership check error.</value>
+	public Errors MembershipCheckError {get; set;}
+
 	void Awake(){
 		//--------------------Make Object persistent---------------------------
 		if(isCreated){
@@ -32,6 +47,10 @@ public class MembershipCheck : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 		isCreated = true;
 		//---------------------------------------------------------------------
+
+		#if !UNITY_EDITOR
+		StartCheck();
+		#endif
 	}
 
 	/// <summary>
@@ -54,13 +73,16 @@ public class MembershipCheck : MonoBehaviour {
 		}
 	}
 
-	public void MembershipTest(){
+	public void StartCheck(){
 		StartCoroutine(CheckMembershipStatus());
 	}
 
 	private IEnumerator CheckMembershipStatus(){
 		//Try to ping the server
 		WWW www = new WWW("https://wellapetstest.parseapp.com/ping");
+
+		//Store the date this check happens
+		DataManager.Instance.AddMembershipCheckDate(LgDateTime.GetUtcNowTimestamp());
 		
 		//Wait for response
 		yield return www;
@@ -74,22 +96,7 @@ public class MembershipCheck : MonoBehaviour {
 			Debug.Log("connection ok");
 			IDictionary<string, object> paramDict = new Dictionary<string, object>();
 			paramDict.Add("isTestingMode", isTestMode);
-
-			bool isFirstTime = DataManager.Instance.IsFirstTime;
-			string startTime = LgDateTime.GetUtcNowTimestamp();
-
-			//if first time playing send trial start time
-			if(isFirstTime){
-				paramDict.Add("trialStart", startTime);
-			}
-			//if not first time. check if a local trial start time has been cached
-			//cached time means there's an unsuccessful connection previously
-			else{
-				string trialStartTimeStamp = DataManager.Instance.TrialStartTimeStamp;
-				if(!string.IsNullOrEmpty(trialStartTimeStamp)){
-					startTime = trialStartTimeStamp;
-				}
-			}
+			paramDict.Add("membershipCheckDates", DataManager.Instance.MembershipCheckDates);
 			
 			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
 				StartTimeOutTimer();
@@ -117,22 +124,42 @@ public class MembershipCheck : MonoBehaviour {
 					IDictionary<string, object> result = t.Result;
 					// Hack, check for errors
 					object code;
-					
-					if(result.TryGetValue("code", out code)){
-						//Debug.LogError("Error Code: " + code);
-						int parseCode = Convert.ToInt32(code);
-						Debug.LogError("Error Code: " + parseCode + " " + result["message"]);
-					} 
-					else{
-						string trialStatus = (string) result["trialStatus"];
-						string membershipStatus = (string) result["membershipStatus"];
 
-						Loom.DispatchToMainThread(() => {
-							//If trial is over check membership subscription status
-							if(trialStatus == "expired"){
+					Loom.DispatchToMainThread(() => {
+						if(result.TryGetValue("code", out code)){
+							//Debug.LogError("Error Code: " + code);
+							int parseCode = Convert.ToInt32(code);
+							Debug.LogError("Error Code: " + parseCode + " " + result["message"]);
+						} 
+						else{
+							if(result.ContainsKey("trialStatus")){
+								string trialStatus = (string) result["trialStatus"];
+								
+								if(trialStatus == "expired"){
+									Debug.Log("trial expired");
+
+									//set error message so UI know what notification to spawn
+									MembershipCheckError = Errors.TrialExpired;
+
+									//reset
+									DataManager.Instance.ResetMembershipCheckDates();
+									CheckSceneToLoadInto();
+								}
+								else{
+									Debug.Log("trial active");
+									CheckSceneToLoadInto(true);
+								}
+							}
+							else{
+								//reset 
+								DataManager.Instance.ResetMembershipCheckDates();
+
+								string membershipStatus = (string) result["membershipStatus"];
+								
 								//If subscription status inactive load menu and prompt user to subscribe
 								if(membershipStatus == "expired"){
 									Debug.Log("membership expired");
+									MembershipCheckError = Errors.MembershipExpired;
 									CheckSceneToLoadInto();
 								}
 								//if egg hatch. yes -> bedroom , no -> menu
@@ -141,16 +168,11 @@ public class MembershipCheck : MonoBehaviour {
 									CheckSceneToLoadInto(true);
 								}
 							}
-							//if egg hatch. yes -> bedroom , no -> menu
-							else{
-								Debug.Log("trial active");
-								CheckSceneToLoadInto(true);
-							}
+						}
 
-							//after successfull connection with backend remove cached trial start time
-							DataManager.Instance.TrialStartTimeStamp = "";
-						});
-					}
+						//after successfull connection with backend reset accumulated errors
+						DataManager.Instance.AccumulatedConnectionErrors = 0;
+					});
 				}
 
 				StopTimeOutTimer();
@@ -167,37 +189,40 @@ public class MembershipCheck : MonoBehaviour {
 		//if conection failed check for accumulated connection errors
 		int accumulatedConnectionErrors = DataManager.Instance.AccumulatedConnectionErrors;
 		
-		//if < 3 check if egg hatch. yes -> bedroom , no -> menu
-		if(accumulatedConnectionErrors < 3){
+		//if <= 3 check if egg hatch. yes -> bedroom , no -> menu
+		if(accumulatedConnectionErrors <= 3){
 			Debug.Log("less than 3 connection errors");
 			CheckSceneToLoadInto(true);
 		}
 		//else load menu and show error message
 		else{
 			Debug.Log("more than 3 connection error");
+			MembershipCheckError = Errors.OverConnectionErrorLimit;
 			CheckSceneToLoadInto();
 		}
-		
-		//save start time locally if first time playing
-		bool isFirstTime = DataManager.Instance.IsFirstTime;
-		if(isFirstTime)
-			DataManager.Instance.TrialStartTimeStamp = LgDateTime.GetUtcNowTimestamp();
 	}
 	
 	private void CheckSceneToLoadInto(bool performHatchCheck = false){
-//		if(!isTestMode){
+		if(!isTestMode){
 			if(performHatchCheck){
 				bool isHatched = DataManager.Instance.GameData.PetInfo.IsHatched;
-				if(isHatched)
+				if(isHatched){
 					if(!string.Equals(Application.loadedLevelName, SceneUtils.BEDROOM))
 						Application.LoadLevel(SceneUtils.BEDROOM);
-				else
-					Application.LoadLevel(SceneUtils.MENU);
+				}
+				else{
+					if(!string.Equals(Application.loadedLevelName, SceneUtils.MENU))
+						Application.LoadLevel(SceneUtils.MENU);
+				}
 			}
 			else{
-				Application.LoadLevel(SceneUtils.MENU);
+				if(!string.Equals(Application.loadedLevelName, SceneUtils.MENU))
+					Application.LoadLevel(SceneUtils.MENU);
 			}
-//		}
+		}
+
+		if(OnCheckDoneEvent != null)
+			OnCheckDoneEvent(this, EventArgs.Empty);
 	}
 	
 	/// <summary>

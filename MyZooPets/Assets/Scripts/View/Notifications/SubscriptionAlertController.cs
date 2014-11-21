@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
 /// Alert controller.
 /// This is for an alert popup that isnt an notification and doesnt lock anything
 /// </summary>
-public class SubscriptionAlertController : Singleton<SubscriptionAlertController> {
+public class SubscriptionAlertController : Singleton<SubscriptionAlertController>{
 
 	public TweenToggle tweenToggle;
 	public UILocalize labelLocalize;
@@ -27,9 +28,44 @@ public class SubscriptionAlertController : Singleton<SubscriptionAlertController
 			tweenToggle.HideFunctionName = "HideFinishedCallback";
 		}
 		spinner.gameObject.SetActive(false);
+
+		//Do an instance check here so we can debug MenuScene without MembershipCheck Instance
+		if(MembershipCheck.Instance){
+			CheckMembershipError();
+		}
 	}
 
-	public void ShowTrialUpAlert(){
+	/// <summary>
+	/// Checks Membership Check Errors. Show the appropriate error message
+	/// </summary>
+	public bool CheckMembershipError(){
+		bool retVal = false;
+
+		switch(MembershipCheck.Instance.MembershipCheckError){
+		case MembershipCheck.Errors.OverConnectionErrorLimit:
+			Debug.Log("connectionerror");
+			retVal = true;
+			ShowConnectToInternetAlert();
+			break;
+		case MembershipCheck.Errors.TrialExpired:
+			retVal = true;
+			ShowTrialExpiredAlert();
+			break;
+		case MembershipCheck.Errors.MembershipExpired:
+			retVal = true;
+			ShowMembershipExpiredAlert();
+			break;
+		default:
+			retVal = false;
+			HideAll();
+			break;
+		}
+		
+		MembershipCheck.Instance.MembershipCheckError = MembershipCheck.Errors.None;
+		return retVal;
+	}
+
+	public void ShowTrialExpiredAlert(){
 		StopSpinner();
 		ShowLabelKey(trialUpKey);
 		parentPortalButtonController.Play("scalePulseHeartbeat");

@@ -127,7 +127,7 @@ public class ParseTestScript : MonoBehaviour {
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Trial And Membership Check");
 		if(GUILayout.Button("check trial and membership")){
-			GameObject.Find("MembershipCheck").GetComponent<MembershipCheck>().MembershipTest();
+			GameObject.Find("MembershipCheck").GetComponent<MembershipCheck>().StartCheck();
 		}
 		GUILayout.EndHorizontal();
 		#endregion

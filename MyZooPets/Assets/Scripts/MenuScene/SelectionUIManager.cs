@@ -7,6 +7,12 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public GameObject spotLight; //spotlight to shine on the egg when chosen	
     public GameObject selectionGrid;
 
+	/// <summary>
+	/// Gets or sets the selected pet.
+	/// </summary>
+	/// <value>The selected pet.</value>
+	public GameObject SelectedPet {get; set;}
+
     void Awake(){
         Input.multiTouchEnabled = false;
     }
@@ -16,30 +22,56 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         RefreshUI();	
 	}
 
-    //---------------------------------------------------
-    // PetSelected()
-    // Call when select button is clicked. Decides to start 
-    // a new pet or load existing game data
-    //---------------------------------------------------
+	/// <summary>
+	/// Pet selected and will trigger a membership check
+	/// </summary>
+	/// <param name="selectedPetGO">Selected pet G.</param>
     public void PetSelected(GameObject selectedPetGO){
-        MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-        bool isHatched = petMenuInfo.IsHatched;
+		SelectedPet = selectedPetGO;
 
         //probably shoudn't use spot light right away. should toggle spot light
         //after some logic check for the data
-        ToggleEggAnimation(false);
+//        ToggleEggAnimation(false);
 
-        if(!isHatched){
-            //Open CustomizationUIManager to create/initiate new pet game data
-            CustomizationUIManager.Instance.selectedEgg = selectedPetGO;
-            CustomizationUIManager.Instance.OpenUI();
-        }else{
-            //open up pet start panel
-			AudioManager.Instance.PlayClip("petStart");
-			LoadGame();
-
-        }
+    	StartMembershipCheck();
     }
+
+	/// <summary>
+	/// Starts the membership check.
+	/// </summary>
+	private void StartMembershipCheck(){
+		SubscriptionAlertController.Instance.ShowSpinner();
+		
+		if(MembershipCheck.Instance){
+			MembershipCheck.OnCheckDoneEvent += MembershipCheckDoneEventHandler;
+			MembershipCheck.Instance.StartCheck();
+		}	
+	}
+
+	/// <summary>
+	/// Handles Membership Check Done event. Check if pet is hatched and load game
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void MembershipCheckDoneEventHandler(object sender, EventArgs args){
+		MembershipCheck.OnCheckDoneEvent -= MembershipCheckDoneEventHandler;
+
+		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
+		if(!hasMembershipError){
+
+			MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
+			bool isHatched = petMenuInfo.IsHatched;
+
+			if(!isHatched){
+				//Open CustomizationUIManager to create/initiate new pet game data
+				CustomizationUIManager.Instance.OpenUI();
+			}else{
+				//open up pet start panel
+				AudioManager.Instance.PlayClip("petStart");
+				LoadGame();
+			}
+		}
+	}
 
     public void LoadGame(){
         //Lock it while loading

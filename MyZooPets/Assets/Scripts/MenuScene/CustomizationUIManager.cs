@@ -7,7 +7,6 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject customizationPanel;
     public GameObject popupTitle;
     public UILabel nameField;
-    public GameObject selectedEgg;
 	public Camera NGUICamera;
     public SceneTransition scriptTransition;
     public ButtonSetHighlight buttonHighLight;
@@ -17,7 +16,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
-     private bool isComicOn;
+    private bool isComicOn;
 	
     protected override void Awake(){
 		base.Awake();
@@ -34,11 +33,12 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	protected override void _CloseUI(){
 	}
     
-    public void ChangeEggColor( string strSprite, string strColor ) {
+    public void ChangeEggColor(string spriteName, string petColor){
         if (!finishClicked){
+			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
 			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
-            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = strSprite;
-            petColor = strColor;
+            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = spriteName;
+            petColor = petColor;
         }       
     }
 
@@ -72,6 +72,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         customizationPanel.GetComponent<TweenToggleDemux>().Show();
 
         //find out what color is the egg and change the color selection button
+		GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
         string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName;
         LgButton colorButton = null;
 

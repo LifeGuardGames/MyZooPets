@@ -12,14 +12,6 @@ public class BeginMembershipCheck : MonoBehaviour {
 
 	// Use this for initialization
 	void Start(){
-		//remove unwanted loading screen carry over from other scenes
-//		GameObject loadingScreen = GameObject.Find("UI Root LoadingScreen");
-//		if(loadingScreen != null){
-//			loadingScreen.SetActive(false);
-//			Destroy(loadingScreen);
-//		}
-		
-		Debug.Log(Application.loadedLevelName);
 		MembershipCheck.Instance.StartCheck();
 	}
 }

@@ -122,6 +122,7 @@ public enum UIModeTypes {
 	Cutscene,
 	ParentPortal,
 	Friends,
+	MembershipCheck
 }
 
 // decoration node anchor types

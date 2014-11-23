@@ -33,6 +33,9 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
         //after some logic check for the data
 //        ToggleEggAnimation(false);
 
+		//lock the UI to prevent user from spam clicking while waiting for membership
+		//check to finish
+		ClickManager.Instance.Lock(UIModeTypes.MembershipCheck);
     	StartMembershipCheck();
     }
 
@@ -55,6 +58,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 	/// <param name="args">Arguments.</param>
 	private void MembershipCheckDoneEventHandler(object sender, EventArgs args){
 		MembershipCheck.OnCheckDoneEvent -= MembershipCheckDoneEventHandler;
+		ClickManager.Instance.ReleaseLock();
 
 		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
 		if(!hasMembershipError){

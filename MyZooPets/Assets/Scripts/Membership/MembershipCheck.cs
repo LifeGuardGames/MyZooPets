@@ -205,7 +205,11 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	}
 
 	private void ConnectionFailed(){
-		DataManager.Instance.AccumulatedConnectionErrors++;
+		//only record connection error in the loading scene. Otherwise connection
+		//error will accumulate too fast
+		if(string.Equals(Application.loadedLevelName, SceneUtils.LOADING))
+			DataManager.Instance.AccumulatedConnectionErrors++;
+
 		//if conection failed check for accumulated connection errors
 		int accumulatedConnectionErrors = DataManager.Instance.AccumulatedConnectionErrors;
 		

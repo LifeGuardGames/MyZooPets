@@ -125,13 +125,11 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	private void CheckAnswer(){
 		if(answerSoFar == answerToMath){
 			// Success, go into parent portal
-			Debug.Log("Success!");
 			parentPortalTween.Show();
 			mathTween.Hide();
 		}
 		else{
 			// Fail, start over
-			Debug.Log("You're stupid!");
 			GenerateMathQuestion();
 		}
 	}

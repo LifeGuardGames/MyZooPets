@@ -14,7 +14,7 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		TrialExpired,
 		MembershipExpired
 	}
-	public static EventHandler<EventArgs> OnCheckDoneEvent;
+	public static EventHandler<EventArgs> OnCheckDoneEvent; //Event fired when membership check is finished
 
 	private static bool isCreated;
 
@@ -47,10 +47,6 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		DontDestroyOnLoad(gameObject);
 		isCreated = true;
 		//---------------------------------------------------------------------
-
-		#if !UNITY_EDITOR
-		StartCheck();
-		#endif
 	}
 
 	/// <summary>
@@ -67,16 +63,40 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		}
 	}
 
+	/// <summary>
+	/// Raises the application pause event.
+	/// </summary>
+	/// <param name="isPaused">If set to <c>true</c> is paused.</param>
 	void OnApplicationPause(bool isPaused){
+
+		//When player resumes the game we first check how long has it been since
+		//the last play session. If play session time > 30min we force the game
+		//to start from LoadingScene.unity again. This is to prevent any game logic
+		//from running while the membership check is going on. 
 		if(!isPaused){
-			StartCoroutine(CheckMembershipStatus());
+			DateTime lastPlaySessionDate = DataManager.Instance.LastPlaySessionDate;
+			TimeSpan timeSinceLastPlaySession = LgDateTime.GetTimeNow() - lastPlaySessionDate;
+
+			if(timeSinceLastPlaySession.TotalMinutes > 30){
+				Application.LoadLevel(SceneUtils.LOADING);
+			}
+		}
+		else{
+			DataManager.Instance.LastPlaySessionDate = LgDateTime.GetTimeNow();
 		}
 	}
 
 	public void StartCheck(){
+		Debug.Log("Start check");
 		StartCoroutine(CheckMembershipStatus());
 	}
 
+	/// <summary>
+	/// Checks the membership status. 
+	/// 1) Ping the backend server to check connectivity
+	/// 2) Then check trial or membership status
+	/// </summary>
+	/// <returns>The membership status.</returns>
 	private IEnumerator CheckMembershipStatus(){
 		//Try to ping the server
 		WWW www = new WWW("https://wellapetstest.parseapp.com/ping");

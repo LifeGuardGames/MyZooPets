@@ -75,24 +75,10 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
-//	/// <summary>
-//	/// Local storage of the trial start time. Use if connection error happened
-//	/// when starting game for the first time
-//	/// </summary>
-//	/// <value>The trial start time stamp.</value>
-//	public string TrialStartTimeStamp{
-//		get{
-//			return PlayerPrefs.GetString("TrialStart", "");;
-//		}
-//		set{
-//			PlayerPrefs.SetString("TrialStart", value);
-//		}
-//	}
-
 	/// <summary>
 	/// Gets or sets the membership check dates. Keep track of when membership check
 	/// happens. Also used for calculating when the trial period expires. Data will
-	/// be reset if trialStatus == expired
+	/// be reset if trialStatus == expired, membershipStatus == active || expired.
 	/// </summary>
 	/// <value>The membership check dates.</value>
 	public string MembershipCheckDates{
@@ -104,6 +90,11 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
+	/// <summary>
+	/// Adds the membership check date. Save date in a comma deliminated string
+	/// ex. 14908789,14908382,14i09090
+	/// </summary>
+	/// <param name="timestamp">Timestamp.</param>
 	public void AddMembershipCheckDate(string timestamp){
 		string currentDates = MembershipCheckDates;
 		if(!string.IsNullOrEmpty(timestamp)){
@@ -130,6 +121,27 @@ public class DataManager : Singleton<DataManager>{
 		}
 		set{
 			PlayerPrefs.SetInt("ConnectionErrors", value);
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets the last play session date. Use to determine whether the game
+	/// should be force start from LoadingScene.unity
+	/// </summary>
+	/// <value>The last play session date.</value>
+	public DateTime LastPlaySessionDate{
+		get{
+			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
+			DateTime lastSessionTime = LgDateTime.GetTimeNow();
+
+			if(!string.IsNullOrEmpty(timeString))
+				lastSessionTime = Convert.ToDateTime(timeString);
+		
+			return lastSessionTime;
+		}
+		set{
+			string timeString = value.ToString("o");
+			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
 		}
 	}
 
@@ -309,9 +321,9 @@ public class DataManager : Singleton<DataManager>{
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
 		if(!String.IsNullOrEmpty(petName))
-			gameData.PetInfo.PetName = petName;
+			gameData.PetInfo.ChangeName(petName);
 		else
-			gameData.PetInfo.PetName = "Player1";
+			gameData.PetInfo.ChangeName("Player1");
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;

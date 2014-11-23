@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 public class MutableDataPetInfo : MutableData{	
 	public string PetID { get; set; }
+
+	/// <summary>
+	/// Gets or sets the name of the pet. **NOTE For json serialization use only. Use 
+	/// ChangeName() to edit pet name otherwise data will not be save to the server
+	/// </summary>
+	/// <value>The name of the pet.</value>
 	public string PetName { get; set; }
+
 	public string PetSpecies { get; set; }
 	public string PetColor { get; set; }
 	public bool IsHatched { get; set; }
@@ -18,6 +25,17 @@ public class MutableDataPetInfo : MutableData{
 	/// <value>The n fire breaths.</value>
 	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
 	public bool IsQuestionaireCollected {get; set;}
+
+	/// <summary>
+	/// Changes the name.
+	/// </summary>
+	/// <param name="petName">Pet name.</param>
+	public void ChangeName(string petName){
+		IsDirty = true;
+		if(!string.IsNullOrEmpty(petName)){
+			PetName = petName;
+		}
+	}
 	
 	public void SetFireBreaths(int amount){
 		FireBreaths = amount;	
@@ -91,7 +109,6 @@ public class MutableDataPetInfo : MutableData{
 				objectsToSave.Add(fetchedAccount);
 			}
 
-			petInfo.ID = PetID;
 			petInfo.Name = PetName;
 			petInfo.Color = PetColor;
 			petInfo.Species = PetSpecies;

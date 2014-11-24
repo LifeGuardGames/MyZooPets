@@ -16,8 +16,8 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	private int sequenceCount = 1;
 	private int answerSoFar;
 
+	public UILocalize parentPortalText;
 	public ParticleSystemController leafParticle;
-
 	public TweenToggle parentPortalTween;
 
 	protected override void Awake(){
@@ -83,6 +83,11 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	private void CloseParentPortal(){
 		parentPortalTween.Hide();
+	}
+
+	public void SetParentPortalText(string key){
+		parentPortalText.key = key;
+		parentPortalText.Localize();
 	}
 
 	/// <summary>

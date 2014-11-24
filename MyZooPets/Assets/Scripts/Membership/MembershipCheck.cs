@@ -15,18 +15,13 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		MembershipExpired
 	}
 	public enum Status{
+		None,
 		Active,
 		Expired
 	}
 	public static EventHandler<EventArgs> OnCheckDoneEvent; //Event fired when membership check is finished
 
 	private static bool isCreated;
-
-	/// <summary>
-	/// If isTestMode:True then trial time will be set to 3 minutes, and scene
-	/// transitions woun't actually happen. 
-	/// </summary>
-	public bool isTestMode = false;
 
 	private bool isConnectedToInternet;
 	private bool runTimeOutTimer = false; // to run the time out timer or not
@@ -41,6 +36,8 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	/// <value>The membership check error.</value>
 	public Errors MembershipCheckError {get; set;}
 
+	public Status TrialStatus {get; set;}
+	public Status MembershipStatus {get; set;}
 
 
 	void Awake(){
@@ -159,9 +156,11 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 						else{
 							if(result.ContainsKey("trialStatus")){
 								string trialStatus = (string) result["trialStatus"];
+								MembershipStatus = Status.None;
 								
 								if(trialStatus == "expired"){
 									Debug.Log("trial expired");
+									TrialStatus = Status.Expired;
 
 									//set error message so UI know what notification to spawn
 									MembershipCheckError = Errors.TrialExpired;
@@ -172,6 +171,7 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 								}
 								else{
 									Debug.Log("trial active");
+									TrialStatus = Status.Active;
 									CheckSceneToLoadInto(true);
 								}
 							}
@@ -180,16 +180,19 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 								DataManager.Instance.ResetMembershipCheckDates();
 
 								string membershipStatus = (string) result["membershipStatus"];
+								TrialStatus = Status.None;
 								
 								//If subscription status inactive load menu and prompt user to subscribe
 								if(membershipStatus == "expired"){
 									Debug.Log("membership expired");
+									MembershipStatus = Status.Expired;
 									MembershipCheckError = Errors.MembershipExpired;
 									CheckSceneToLoadInto();
 								}
 								//if egg hatch. yes -> bedroom , no -> menu
 								else{
 									Debug.Log("membership active");
+									MembershipStatus = Status.Active;
 									CheckSceneToLoadInto(true);
 								}
 							}
@@ -232,22 +235,20 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	}
 	
 	private void CheckSceneToLoadInto(bool performHatchCheck = false){
-		if(!isTestMode){
-			if(performHatchCheck){
-				bool isHatched = DataManager.Instance.GameData.PetInfo.IsHatched;
-				if(isHatched){
-					if(!string.Equals(Application.loadedLevelName, SceneUtils.BEDROOM))
-						Application.LoadLevel(SceneUtils.BEDROOM);
-				}
-				else{
-					if(!string.Equals(Application.loadedLevelName, SceneUtils.MENU))
-						Application.LoadLevel(SceneUtils.MENU);
-				}
+		if(performHatchCheck){
+			bool isHatched = DataManager.Instance.GameData.PetInfo.IsHatched;
+			if(isHatched){
+				if(!string.Equals(Application.loadedLevelName, SceneUtils.BEDROOM))
+					Application.LoadLevel(SceneUtils.BEDROOM);
 			}
 			else{
 				if(!string.Equals(Application.loadedLevelName, SceneUtils.MENU))
 					Application.LoadLevel(SceneUtils.MENU);
 			}
+		}
+		else{
+			if(!string.Equals(Application.loadedLevelName, SceneUtils.MENU))
+				Application.LoadLevel(SceneUtils.MENU);
 		}
 
 		if(OnCheckDoneEvent != null)

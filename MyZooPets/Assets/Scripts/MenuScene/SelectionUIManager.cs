@@ -61,6 +61,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 		ClickManager.Instance.ReleaseLock();
 
 		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
+		ParentPortalUIManager.Instance.ParentPortalTextCheck();
 		if(!hasMembershipError){
 
 			MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;

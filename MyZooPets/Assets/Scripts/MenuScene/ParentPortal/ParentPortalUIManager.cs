@@ -32,6 +32,35 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	protected override void Start(){
 		ParentPortalManager.OnDataRefreshed += DataRefreshedHandler;
+
+		ParentPortalTextCheck();
+	}
+
+	/// <summary>
+	/// Check the trial status and membership status and display the appropriate text
+	/// </summary>
+	public void ParentPortalTextCheck(){
+		MembershipCheck.Status membershipStatus = MembershipCheck.Instance.MembershipStatus;
+		MembershipCheck.Status trialStatus = MembershipCheck.Instance.TrialStatus;
+		
+		//Display trial message in parent portal
+		if(membershipStatus == MembershipCheck.Status.None){
+			if(trialStatus == MembershipCheck.Status.Active){
+				SetParentPortalText("PARENT_PORTAL_TEXT_TRIAL");
+			}
+			else{
+				SetParentPortalText("PARENT_PORTAL_TEXT_TRIAL_EXPIRED");
+			}
+		}
+		//Display membership message in parent portal
+		else{
+			if(membershipStatus == MembershipCheck.Status.Active){
+				SetParentPortalText("PARENT_PORTAL_TEXT_MEMBERSHIP_ACTIVE");
+			}
+			else{
+				SetParentPortalText("PARENT_PORTAL_TEXT_MEMBERSHIP_EXPIRED");
+			}
+		}
 	}
 
 	private void DataRefreshedHandler(object sender, ServerEventArgs args){
@@ -85,7 +114,8 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 		parentPortalTween.Hide();
 	}
 
-	public void SetParentPortalText(string key){
+
+	private void SetParentPortalText(string key){
 		parentPortalText.key = key;
 		parentPortalText.Localize();
 	}

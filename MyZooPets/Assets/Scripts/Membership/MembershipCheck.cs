@@ -14,6 +14,10 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		TrialExpired,
 		MembershipExpired
 	}
+	public enum Status{
+		Active,
+		Expired
+	}
 	public static EventHandler<EventArgs> OnCheckDoneEvent; //Event fired when membership check is finished
 
 	private static bool isCreated;
@@ -36,6 +40,8 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	/// </summary>
 	/// <value>The membership check error.</value>
 	public Errors MembershipCheckError {get; set;}
+
+
 
 	void Awake(){
 		//--------------------Make Object persistent---------------------------
@@ -115,7 +121,6 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		if(isConnectedToInternet){
 			Debug.Log("connection ok");
 			IDictionary<string, object> paramDict = new Dictionary<string, object>();
-			paramDict.Add("isTestingMode", isTestMode);
 			paramDict.Add("membershipCheckDates", DataManager.Instance.MembershipCheckDates);
 			
 			ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {

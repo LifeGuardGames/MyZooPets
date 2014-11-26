@@ -38,7 +38,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
 			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
             selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = spriteName;
-            petColor = petColor;
+            this.petColor = petColor;
         }       
     }
 
@@ -55,11 +55,11 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
             finishClicked = true;
             petName = nameField.text;
 
-            Analytics.Instance.PetColorChosen(petColor);
+            Analytics.Instance.PetColorChosen(this.petColor);
 			Analytics.Instance.StartGame();
 
             //Initialize data for new pet
-            DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:petColor);
+            DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
 
         }
         base.CloseUI();

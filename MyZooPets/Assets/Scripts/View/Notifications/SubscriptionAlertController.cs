@@ -17,7 +17,6 @@ public class SubscriptionAlertController : Singleton<SubscriptionAlertController
 	public string connectInternetKey;
 
 	private string auxStringKeyToShow;	// The next message to show after hide tween is done
-	private bool isFirstTween = true;
 
 	void Start(){
 		if(tweenToggle.HideTarget == null){

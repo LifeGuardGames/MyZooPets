@@ -40,10 +40,6 @@ public class PanToMoveCamera : MonoBehaviour{
 	private Vector2 currentTouchPos; //Position of touch right now
 	private float startTime; //Time at when finger touches screen
 	private RoomDirection panDirection; //direction of the last finger gesture
-//	private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
-//	private bool touchCancelled = false; //True: touch shouldn't be handled
-	private Camera nguiCamera;
-	private Camera mainCamera;
 
 	// Use this for initialization
 	void Start(){
@@ -54,7 +50,6 @@ public class PanToMoveCamera : MonoBehaviour{
 			SetCameraToPartition(sceneData.LastCameraPartition);
 	}
 
-	
 	///////////////////////////////////////////
 	// SnapCamera()
 	// Snaps the camera to the current partition.
@@ -77,7 +72,6 @@ public class PanToMoveCamera : MonoBehaviour{
 		optional.Add("ease", LeanTweenType.easeOutQuad);
 			
 		LeanTween.moveX(gameObject, moveTo, 0.35f, optional);
-//		normalizedTouchPosX = 0;		
 	}
 
 	/// <summary>
@@ -187,23 +181,6 @@ public class PanToMoveCamera : MonoBehaviour{
 
 		return retVal;
 	}
-	
-	private void CheckArrowKeys(){
-		// do a check here to see if the clickmanager can respond to movement, if it can't, don't move
-		if(!ClickManager.Instance.CanRespondToTap(mainCamera.gameObject, ClickLockExceptions.Moving))
-			return;
-			
-		if(Input.GetKeyDown(KeyCode.RightArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
-				ChangePartition(GetTargetPartition(1, RoomDirection.Left));
-			}
-		}
-		else if(Input.GetKeyDown(KeyCode.LeftArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
-				ChangePartition(GetTargetPartition(1, RoomDirection.Right));       
-			}
-		}
-	}
 
 	/// <summary>
 	/// Gets the target partition.
@@ -220,7 +197,6 @@ public class PanToMoveCamera : MonoBehaviour{
 		return target;
 	}
 
-    
 	/// <summary>
 	/// Sets the camera to partition.
 	/// </summary>

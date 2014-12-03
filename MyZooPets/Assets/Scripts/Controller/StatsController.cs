@@ -35,11 +35,6 @@ public class StatsController : Singleton<StatsController>{
 		hudAnimatorObject = GameObject.Find("HUDPanel");
 		hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
 		
-		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
-			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-			D.Assert(hudAnimator != null, "No HUDAnimator script attached");
-		}
-		
 		isPetAnimationManagerPresent = PetAnimationManager.Instance;
 		
 		// listen for refresh message

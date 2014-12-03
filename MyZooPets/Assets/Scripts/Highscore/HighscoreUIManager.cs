@@ -62,9 +62,8 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-			
-			if(D.Assert(backButton != null, "No back button to delete"))
-				backButton.SetActive(false);
+
+			backButton.SetActive(false);
 		}
 	}
 }

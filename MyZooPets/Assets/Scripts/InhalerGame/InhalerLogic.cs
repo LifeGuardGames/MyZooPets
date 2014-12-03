@@ -51,8 +51,12 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		else{
 			currentStep++;
 
-			if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
+			if(OnNextStep != null){
 				OnNextStep(this, EventArgs.Empty);
+			}
+			else{
+				Debug.LogError("OnNextStep has no listeners");
+			}
 		}
 	}
 

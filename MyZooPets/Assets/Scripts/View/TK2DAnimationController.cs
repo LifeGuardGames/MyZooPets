@@ -14,7 +14,9 @@ public class TK2DAnimationController : MonoBehaviour {
 
 	protected void Initialize(){
 		animator = animatorObject.GetComponent<tk2dSpriteAnimator>();
-		D.Assert(animator != null, "No animator found");
+		if(animator == null){
+			Debug.LogError("No animator found");
+		}
 
 		if(isPlayAutomatically){
 			animator.playAutomatically = true;

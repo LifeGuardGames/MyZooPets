@@ -32,18 +32,20 @@ public class PanToRotate : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-	   numPartitions = enabledPartitions.Length;
-       snapOption1 = new Hashtable();
-       snapOption2 = new Hashtable();
-       snapOption1.Add("ease", LeanTweenType.easeOutBack);
-       snapOption1.Add("onCompleteTarget", PetMovement.Instance.gameObject);
-       snapOption1.Add("onComplete", "MovePetWithCamera");
-       snapOption2.Add("ease", LeanTweenType.easeOutBack);
-       mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
-       int layerNGUI = LayerMask.NameToLayer("NGUI");
-        nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
-        
-        D.Assert(nguiCamera != null, "NGUI camera not found");
+		numPartitions = enabledPartitions.Length;
+		snapOption1 = new Hashtable();
+		snapOption2 = new Hashtable();
+		snapOption1.Add("ease", LeanTweenType.easeOutBack);
+		snapOption1.Add("onCompleteTarget", PetMovement.Instance.gameObject);
+		snapOption1.Add("onComplete", "MovePetWithCamera");
+		snapOption2.Add("ease", LeanTweenType.easeOutBack);
+		mainCamera = transform.Find("Main Camera").GetComponent<Camera>();
+		int layerNGUI = LayerMask.NameToLayer("NGUI");
+		nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
+
+		if(nguiCamera == null){
+			Debug.LogError("NGUI camera not found");
+		}
 	}
 	
 	//************************************************

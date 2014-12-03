@@ -89,7 +89,9 @@ public class SpeechBubbleControllerTK2D : Singleton<SpeechBubbleControllerTK2D> 
 	}
 
 	public void SetBubbleSize(float width, float height){
-		D.Assert(width > 0 && height > 0);
+		if(!(width > 0 && height > 0)){
+			Debug.LogError("Invalid width and height");
+		}
 
 		if(width > MAX_WIDTH){
 			Debug.LogWarning("speech bubble max width exceeded, setting to max");

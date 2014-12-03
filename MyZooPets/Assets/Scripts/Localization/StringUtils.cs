@@ -13,6 +13,11 @@ using System.Collections.Generic;
 public class StringUtils {
 
 	public static string FormatStringPossession(string oldString){
+		if(string.IsNullOrEmpty(oldString)){
+			Debug.LogWarning("Formatting an empty string");
+			return "";
+		}
+
 		string subString = oldString.Substring(oldString.Length - 1);
 		string newString = "";
 

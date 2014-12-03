@@ -61,8 +61,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 
 		string tutKey = GetKey() + "_" + GetStep();
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string message = String.Format(Localization.Localize(tutKey),
-		                               StringUtils.FormatStringPossession(petName));
+		string message = String.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
 		
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("InhalerPopupLoc");

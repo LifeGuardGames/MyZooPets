@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Social manager.
+/// Makes async calls to WellapetsBackend, mainly "friend.js"
+/// </summary>
 public class SocialManager : ServerConnector<SocialManager>{
 	/// Friend request data type use in FriendsUIManager
 	public class FriendRequest{

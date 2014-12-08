@@ -12,7 +12,7 @@ public class PlayerController : Singleton<PlayerController>{
         
 		public float defaultTargetSpeed = 15f; //The default running speed
 		[System.NonSerialized]
-		public float currentSpeed = 0f; //currvent movement speed after it gets smoothed by acceleration
+		public float currentSpeed = 0f; //current movement speed after it gets smoothed by acceleration
 		public float targetSpeed; //The speed you want the character to reach to
 		public float acceleration = 5f; //How fast does the character change speed? higher is faster
 		public float jumpHeight = 9;
@@ -133,17 +133,17 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics.Move(amountToMove);
 	}
 
-	//Listen to tap gesture from finger gesture plugin
-	void OnTap(TapGesture gesture){ 
+	// Listen to finger down gesture
+	void OnFingerDown(FingerDownEvent e){ 
 		if(RunnerGameManager.Instance.GameRunning){
 			Jump();
-			
+
 			if(OnJump != null)
 				OnJump(this, EventArgs.Empty);
 		}
 	}
 	
-	//Listen to swipe down gesture
+	// Listen to swipe down gesture
 	void OnSwipe(SwipeGesture gesture){
 		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			FingerGestures.SwipeDirection direction = gesture.Direction;
@@ -228,18 +228,23 @@ public class PlayerController : Singleton<PlayerController>{
 		if(playerPhysics.Grounded){
             AudioManager.Instance.PlayClip("runnerJumpUp");
 
-			// amountToMove.y = jumpHeight;
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
-
 			playerPhysics.Jumping = true;
 		}
 	}
 
 	private void Drop(){
-		if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
-			AudioManager.Instance.PlayClip("runnerJumpDown");
+		AudioManager.Instance.PlayClip("runnerJumpDown");
 
 		playerPhysics.AllowPassThroughLayer = true;
+
+		// Immediately tween down
+		if(movement.verticalSpeed >= 0){
+			movement.verticalSpeed = -10f;
+		}
+		else{
+			movement.verticalSpeed += -10f;
+		}
 	}
 	
 	//---------------------------------------------------

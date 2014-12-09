@@ -53,7 +53,7 @@ public class MiniPet : MonoBehaviour {
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
 		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
-		RefreshMiniPetUIState();
+		RefreshMiniPetUIState(isForceHideFoodMsg:true);
 	}
 
 	public void ToggleHatched(bool isHatched){
@@ -109,7 +109,7 @@ public class MiniPet : MonoBehaviour {
 		if(!isPaused){
 			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
-			RefreshMiniPetUIState();
+			RefreshMiniPetUIState(isForceHideFoodMsg:true);
 		}
 	}
 	
@@ -292,7 +292,7 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	private void RefreshMiniPetUIState(){
+	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
 		if(isHatchedAux){
 			//check if pet is sad and dirty
 			bool isTickled = MiniPetManager.Instance.IsTickled(id);
@@ -311,8 +311,12 @@ public class MiniPet : MonoBehaviour {
 			}
 
 			if(isTickled && isCleaned){
-				if(MiniPetManager.Instance.CanModifyFoodXP(id))
-					Invoke("ShowFoodPreferenceMessage", 1f);
+				// Sometimes we want to control when the food message is hidden/shown
+				if(!isForceHideFoodMsg){
+					if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+						Invoke("ShowFoodPreferenceMessage", 1f);
+					}
+				}
 			}
 		}
 	}

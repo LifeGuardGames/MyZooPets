@@ -63,7 +63,7 @@ public class ButtonWellapad : LgButton {
 	private void EnableButtonBounce(object sender, EventArgs args){
 		AnimationControl animControl = GetComponent<AnimationControl>();
 		if(animControl != null){
-			animControl.Play("smallBounceSoftNavWellapad");
+			animControl.Play("smallBounceHard");
 		}
 		if(sunBeam){
 			sunBeam.SetActive(true);
@@ -72,8 +72,8 @@ public class ButtonWellapad : LgButton {
 
 	private void DisableButtonBounce(){
 		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceSoftNavWellapad")){
-			animControl.StopAndResetFrame("zero");
+		if(animControl.IsPlaying("smallBounceHard")){
+			animControl.StopAndResetFrame("zeroPointEight");
 		}
 		if(sunBeam){
 			sunBeam.SetActive(false);

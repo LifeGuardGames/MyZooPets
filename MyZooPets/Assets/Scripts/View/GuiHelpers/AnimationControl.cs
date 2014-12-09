@@ -94,7 +94,7 @@ public class AnimationControl : MonoBehaviour {
 //				Play();
 //			}
 //			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
-//				//Play("smallBounceSoftWellapad");
+	//				//Play("smallBounceHard");
 //				StopAndResetFrame("zero");
 //			}
 //		}

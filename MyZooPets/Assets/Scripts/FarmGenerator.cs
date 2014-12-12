@@ -13,18 +13,29 @@ public class FarmGenerator : MonoBehaviour {
 	public float capacity;
 	public float current = 0;
 	public float ratePerHour;
-	public float showButtonThreshold; // amount in current when it starts to show the button
+	public float showButtonThreshold; // Amount in current when it starts to show the button
+	public float allowTapThreshold; // Amount in current when you are allowed to tap the collider
+
+	public GameObject buttonParent;
 
 	private bool isFull;
 	private TimeSpan lastTimeDurationAux;
 
 	void Start(){
+		Debug.Log("STARTING");
+		if(allowTapThreshold > showButtonThreshold){
+			Debug.LogWarning(gameObject.name + " - Farm button shown before it is allowed to tap!");
+		}
+
 		float initialAmount = 0; 	// TODO get the initial amount here
 		RefreshLastTimeSinceLastPlayedWithBase(initialAmount);
+
+		CheckShowButton();	// Hide this by default, enabled later on
 	}
 
 	void OnApplicationPause(bool isPaused){
-		if(isPaused = false){
+		if(isPaused == false){
+			Debug.Log("resumed from pause");
 			RefreshLastTimeSinceLastPlayed();
 		}
 	}
@@ -45,18 +56,26 @@ public class FarmGenerator : MonoBehaviour {
 			CancelInvoke("RepeatFarm");
 		}
 		else{
-			InvokeRepeating("RepeatFarm", 0f, 1f);
+			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 
+			InvokeRepeating("RepeatFarm", 1f, 1f);
 		}
 		CheckShowButton();
 	}
 
 	void OnTap(TapGesture gesture){
-		// Spew out the reward here
-		//TODO
-
-		// Reset the generator
-		isFull = false;
-		InvokeRepeating("RepeatFarm", 0f, 1f);
+		if(current >= allowTapThreshold){
+			Debug.Log("spewing " + (int)current + " coins");
+			
+			// Spew out the reward here
+			StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
+			
+			// Reset the generator
+			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 
+			InvokeRepeating("RepeatFarm", 1f, 1f);
+			isFull = false;
+			current = 0;
+			CheckShowButton();
+		}
 	}
 
 	void RepeatFarm(){
@@ -72,16 +91,13 @@ public class FarmGenerator : MonoBehaviour {
 	}
 
 	private void CheckShowButton(){
+		// Show the button
 		if(current >= showButtonThreshold){
-			ShowButton();
+			buttonParent.SetActive(true);
 		}
-	}
-
-	private void ShowButton(){
-		// TODO
-	}
-
-	private void HideButton(){
-		// TODO
+		// Hide the button
+		else{
+			buttonParent.SetActive(false);
+		}
 	}
 }

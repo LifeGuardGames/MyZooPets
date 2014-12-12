@@ -358,8 +358,10 @@ public class HUDAnimator : MonoBehaviour{
 
 			// if there is a controller, play it
 			if(anim){
-				anim.Play();
+				bool auxPlayParticle = (nStep > 0) ? true : false;
+				anim.Play(auxPlayParticle);
 			}
+
 
 			// wait one frame
 			yield return 0;

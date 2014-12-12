@@ -13,7 +13,8 @@ public class AnimationControl : MonoBehaviour {
 	private Quaternion originalRotation;
 	private Vector3 originalScale;
 	public GameObject optionalToggle;	// for use on SunBeamRotating and things like that
-	
+	public ParticleSystem optionalParticle;
+
 	public bool debug = false;
 	
 	private bool isPlay = false;
@@ -48,13 +49,31 @@ public class AnimationControl : MonoBehaviour {
 		}
 	}
 	
-	public void Play(){
+	public void Play(bool isPlayParticle){
 		isPlay = true;
 		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
 		animation.Play();
 
 		if(optionalToggle){
 			optionalToggle.SetActive(true);
+		}
+
+		if(optionalParticle && isPlayParticle){
+			optionalParticle.Play();
+		}
+	}
+
+	public void Play(){
+		isPlay = true;
+		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		animation.Play();
+		
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
+		
+		if(optionalParticle){
+			optionalParticle.Play();
 		}
 	}
 

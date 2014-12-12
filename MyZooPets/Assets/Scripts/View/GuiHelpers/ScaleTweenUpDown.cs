@@ -9,7 +9,7 @@ using System.Collections;
 public class ScaleTweenUpDown : MonoBehaviour {
 	
 	public Vector3 scaleInit;
-	public Vector3 scaleDelta;
+	public Vector3 scaleFactor;
 	public float delay = 0;
 	public float duration = 2f;
 	
@@ -19,7 +19,7 @@ public class ScaleTweenUpDown : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		scaleInit = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
-		scaleTo = new Vector3(transform.localScale.x * scaleDelta.x, transform.localScale.y * scaleDelta.y, transform.localScale.z * scaleDelta.z);
+		scaleTo = new Vector3(transform.localScale.x * scaleFactor.x, transform.localScale.y * scaleFactor.y, transform.localScale.z * scaleFactor.z);
 		Invoke("StartScale", delay);
 	}
 	

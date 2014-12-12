@@ -282,7 +282,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			StatsController.Instance.ChangeFireBreaths(fireBreath);
 		}
 
-		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, bFloaty: true);
+		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, isFloaty: true);
 	}
 
 	/// <summary>

@@ -59,26 +59,30 @@ public class GateMonster : Gate{
 	/// </summary>
 	/// <param name="damage">Damage.</param>
 	protected override void GateDamaged(int damage){
-		//drop some coins when the gate monster is attacked
-		AudioManager.Instance.PlayClip("coinDrop");
-		int randomNumberOfCoins = Random.Range(2, 6);
-		for(int i = 0; i < randomNumberOfCoins; ++i){
-			// spawn the item to be coming out of this box
-			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
-			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-			DroppedObjectStat droppedObjectStat = goDroppedItem.GetComponent<DroppedObjectStat>();
 
-			droppedObjectStat.Init(HUDElementType.Stars, 5);
-			droppedObjectStat.modeTypes.Add(UIModeTypes.GatingSystem);
-			
-			// set the position of the newly spawned item to be wherever this item box is
-			Vector3 vPosition = gameObject.transform.position;
-			vPosition.y -= 8; //drop the stat underneath the smoke monster
-			goDroppedItem.transform.position = new Vector3(vPosition.x, vPosition.y, 20);
-			
-			// make the item "burst" out
-			droppedObjectStat.Burst(isBurstToLeftOnly:true, burstStreamOrder : i);
-		}
+
+//		AudioManager.Instance.PlayClip("coinDrop");
+//		int randomNumberOfCoins = Random.Range(2, 6);
+//		for(int i = 0; i < randomNumberOfCoins; ++i){
+//			// spawn the item to be coming out of this box
+//			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
+//			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+//			DroppedObjectStat droppedObjectStat = goDroppedItem.GetComponent<DroppedObjectStat>();
+//
+//			droppedObjectStat.Init(HUDElementType.Stars, 5);
+//			droppedObjectStat.modeTypes.Add(UIModeTypes.GatingSystem);
+//			
+//			// set the position of the newly spawned item to be wherever this item box is
+//			Vector3 vPosition = gameObject.transform.position;
+//			vPosition.y -= 8; //drop the stat underneath the smoke monster
+//			goDroppedItem.transform.position = new Vector3(vPosition.x, vPosition.y, 20);
+//			
+//			// make the item "burst" out
+//			droppedObjectStat.Burst(isBurstToLeftOnly:true, burstStreamOrder : i);
+//		}
+
+		//drop some coins when the gate monster is attacked
+		StatsController.Instance.ChangeStats(deltaStars: 35, starsLoc: nextHeadToMove.transform.position, is3DObject: true);
 
 		// Move one of the heads out, ONLY applies to everything thats not the first head
 		if(baseHeadToMove != nextHeadToMove){

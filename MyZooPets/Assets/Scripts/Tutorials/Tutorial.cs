@@ -152,10 +152,7 @@ public abstract class Tutorial{
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
-			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
-
-			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
-				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
+			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
 		
 		// destroy the old object if it existed

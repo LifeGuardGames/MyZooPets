@@ -300,6 +300,10 @@ public class CameraManager : Singleton<CameraManager>{
 			transformedPosition.x -= nativeWidth / 2;
 			transformedPosition.y -= nativeHeight / 2;
 			break;
+		case InterfaceAnchors.BottomLeft:
+			transformedPosition.x -= nativeWidth;
+			transformedPosition.y -= nativeHeight;
+			break;
 		default:
 			Debug.LogError("Sorry not implemented yet.");
 			break;
@@ -315,6 +319,9 @@ public class CameraManager : Singleton<CameraManager>{
 		case InterfaceAnchors.Center:
 			transformedPosition.x += nativeWidth / 2;
 			transformedPosition.y -= nativeHeight / 2;
+			break;
+		case InterfaceAnchors.BottomLeft:
+			transformedPosition.y -= nativeHeight;
 			break;
 		default:
 			Debug.LogError("Sorry not implemented yet.");

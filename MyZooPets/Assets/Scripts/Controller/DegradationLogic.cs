@@ -59,32 +59,35 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
 		if(bTut == false){
-			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
-			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-			
-			//Spawn floaty text to indicate trigger has been cleaned
-			Hashtable option = new Hashtable();
-			Vector3 floatUpPos = new Vector3(0, 5, 0);
-			option.Add("parent", goDroppedItem);
-			option.Add("textSize", 1f);
-			option.Add("text", triggerData.FloatyDesc);
-			option.Add("floatingUpPos", floatUpPos);
-
-			FloatyUtil.SpawnFloatyText(option);
-
-			//Init dropped item
 			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
-			goDroppedItem.GetComponent<DroppedObjectStat>().Init(HUDElementType.Points, nXP);
-			
-			// set the position of the newly spawned item to be wherever this item box is
-			float fOFfsetY = Constants.GetConstant<float>("ItemBoxTrigger_OffsetY");
-			Vector3 vPosition = new Vector3(trigger.gameObject.transform.position.x, 
-			                                trigger.gameObject.transform.position.y + fOFfsetY, 
-			                                trigger.gameObject.transform.position.z);
-			goDroppedItem.transform.position = vPosition;
-			
-			// make the stats "burst" out
-			goDroppedItem.GetComponent<DroppedObject>().Appear();			
+			StatsController.Instance.ChangeStats(deltaPoints: nXP, pointsLoc: trigger.transform.position, is3DObject: true);
+
+//			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
+//			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+//			
+//			//Spawn floaty text to indicate trigger has been cleaned
+//			Hashtable option = new Hashtable();
+//			Vector3 floatUpPos = new Vector3(0, 5, 0);
+//			option.Add("parent", trigger.gameObject);
+//			option.Add("textSize", 1f);
+//			option.Add("text", triggerData.FloatyDesc);
+//			option.Add("floatingUpPos", floatUpPos);
+//
+//			FloatyUtil.SpawnFloatyText(option);
+//
+//			//Init dropped item
+//			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
+//			goDroppedItem.GetComponent<DroppedObjectStat>().Init(HUDElementType.Points, nXP);
+//			
+//			// set the position of the newly spawned item to be wherever this item box is
+//			float fOFfsetY = Constants.GetConstant<float>("ItemBoxTrigger_OffsetY");
+//			Vector3 vPosition = new Vector3(trigger.gameObject.transform.position.x, 
+//			                                trigger.gameObject.transform.position.y + fOFfsetY, 
+//			                                trigger.gameObject.transform.position.z);
+//			goDroppedItem.transform.position = vPosition;
+//			
+//			// make the stats "burst" out
+//			goDroppedItem.GetComponent<DroppedObject>().Appear();			
 
 			//send analytics event
 			Analytics.Instance.TriggersCleaned(triggerData.ID);
@@ -115,7 +118,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		// damage the pet
 		int nDamage = trigger.GetDamage();
 
-		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, bFloaty: true);
+		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, isFloaty: true);
 
 		//Send analytics event
 		Analytics.Instance.TriggerHitPet();    

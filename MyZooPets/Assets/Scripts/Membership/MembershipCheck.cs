@@ -22,8 +22,6 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	public static EventHandler<EventArgs> OnCheckDoneEvent; //Event fired when membership check is finished
 
 	private static bool isCreated;
-
-	private bool isConnectedToInternet;
 	private bool runTimeOutTimer = false; // to run the time out timer or not
 	private float timeOutTimer = 0;
 	private float timeOut = 20f; //time out set to 20 seconds
@@ -110,12 +108,8 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		//Wait for response
 		yield return www;
 
-		isConnectedToInternet = false;
-
-		CheckInternetConnectivity(www);
-
 		//Do the 3 day free trial check and time update here
-		if(isConnectedToInternet){
+		if(IsConnectedToInternet(www)){
 			Debug.Log("connection ok");
 			IDictionary<string, object> paramDict = new Dictionary<string, object>();
 			paramDict.Add("membershipCheckDates", DataManager.Instance.MembershipCheckDates);
@@ -259,13 +253,17 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 	/// Checks the internet connectivity.
 	/// </summary>
 	/// <returns>The internet connectivity.</returns>
-	private void CheckInternetConnectivity(WWW www){
-		if(!string.IsNullOrEmpty(www.error))
-			isConnectedToInternet = false;
-		else{
-			if(www.text == "OK")
-				isConnectedToInternet = true;
+	private bool IsConnectedToInternet(WWW www){
+		if(!string.IsNullOrEmpty(www.error)){
+			return false;
 		}
+		else{
+			if(www.text == "OK"){
+				return true;
+			}
+		}
+		// Default to false
+		return false;
 	}
 
 	/// <summary>

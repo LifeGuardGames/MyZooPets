@@ -29,14 +29,17 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     public void PetSelected(GameObject selectedPetGO){
 		SelectedPet = selectedPetGO;
 
-        //probably shoudn't use spot light right away. should toggle spot light
-        //after some logic check for the data
-//        ToggleEggAnimation(false);
-
-		//lock the UI to prevent user from spam clicking while waiting for membership
-		//check to finish
-		ClickManager.Instance.Lock(UIModeTypes.MembershipCheck);
-    	StartMembershipCheck();
+		// See if no-sync debug is turned on
+		if(Constants.GetConstant<bool>("IsMenusceneConnectionOn")){
+			//lock the UI to prevent user from spam clicking while waiting for membership
+			//check to finish
+			ClickManager.Instance.Lock(UIModeTypes.MembershipCheck);
+			StartMembershipCheck();
+		}
+		else{
+			// Skip into create pet
+			OpenCustomizationManager();
+		}
     }
 
 	/// <summary>
@@ -48,7 +51,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 		if(MembershipCheck.Instance){
 			MembershipCheck.OnCheckDoneEvent += MembershipCheckDoneEventHandler;
 			MembershipCheck.Instance.StartCheck();
-		}	
+		}
 	}
 
 	/// <summary>
@@ -63,18 +66,21 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
 		ParentPortalUIManager.Instance.ParentPortalTextCheck();
 		if(!hasMembershipError){
+			OpenCustomizationManager();
+		}
+	}
 
-			MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-			bool isHatched = petMenuInfo.IsHatched;
-
-			if(!isHatched){
-				//Open CustomizationUIManager to create/initiate new pet game data
-				CustomizationUIManager.Instance.OpenUI();
-			}else{
-				//open up pet start panel
-				AudioManager.Instance.PlayClip("petStart");
-				LoadGame();
-			}
+	private void OpenCustomizationManager(){
+		MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
+		bool isHatched = petMenuInfo.IsHatched;
+		
+		if(!isHatched){
+			//Open CustomizationUIManager to create/initiate new pet game data
+			CustomizationUIManager.Instance.OpenUI();
+		}else{
+			//open up pet start panel
+			AudioManager.Instance.PlayClip("petStart");
+			LoadGame();
 		}
 	}
 

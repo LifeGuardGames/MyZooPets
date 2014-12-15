@@ -11,9 +11,7 @@ using System.Collections.Generic;
 // event args for OnTaskUpdated event
 public class TaskUpdatedArgs : EventArgs{
 	public string ID{ get; set; }
-
 	public string Mission{ get; set; }
-
 	public bool Status{ get; set; }
 }
 

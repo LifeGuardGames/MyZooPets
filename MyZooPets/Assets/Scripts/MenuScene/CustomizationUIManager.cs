@@ -11,6 +11,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public SceneTransition scriptTransition;
     public ButtonSetHighlight buttonHighLight;
 	public ParticleSystemController leafParticle;
+	public Animation requireNameAnimation;
 
     private string petColor = "OrangeYellow"; //Default pet color
     private string petName; //Default pet name
@@ -48,22 +49,27 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 
     public void ButtonClicked_Finish(){
-        if (!finishClicked){
-            // play sound
-             AudioManager.Instance.PlayClip("introDoneNaming");
-            
-            finishClicked = true;
-            petName = nameField.text;
-
-            Analytics.Instance.PetColorChosen(this.petColor);
-			Analytics.Instance.StartGame();
-
-            //Initialize data for new pet
-            DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
-
-        }
-        base.CloseUI();
-        HideChooseGUI(true);
+		if(!String.IsNullOrEmpty(nameField.text)){
+			if (!finishClicked){
+				// play sound
+				AudioManager.Instance.PlayClip("introDoneNaming");
+				
+				finishClicked = true;
+				petName = nameField.text;
+				
+				Analytics.Instance.PetColorChosen(this.petColor);
+				Analytics.Instance.StartGame();
+				
+				//Initialize data for new pet
+				DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
+			}
+			base.CloseUI();
+			HideChooseGUI(true);
+		}
+		// Play the animation to prompt user to enter name
+		else{
+			requireNameAnimation.Play();
+		}
     }
 	
     private void ShowChooseGUI(){

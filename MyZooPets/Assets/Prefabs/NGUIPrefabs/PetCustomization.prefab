@@ -345,6 +345,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400040}
   - 114: {fileID: 11400066}
+  - 111: {fileID: 11100000}
   m_Layer: 10
   m_Name: Sprite (box30)
   m_TagString: Untagged
@@ -425,7 +426,7 @@ Transform:
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 128, y: 128, z: 1}
+  m_LocalScale: {x: 74, y: 62, z: 1}
   m_Children: []
   m_Father: {fileID: 400044}
   m_RootOrder: 1
@@ -449,7 +450,7 @@ Transform:
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 128, y: 128, z: 1}
+  m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 1
@@ -774,6 +775,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 100, y: 100, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!111 &11100000
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100040}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: fce56e7734922584c9b764114a0c66f6, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: fce56e7734922584c9b764114a0c66f6, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -785,6 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShown: 0
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
   blockUI: 1
@@ -846,12 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 6
-  strSoundProcess: buttonGeneric2
-  buttonName: 
-  bCheckClickManager: 1
   modeTypes: 06000000
+  buttonName: 
   buttonSound: buttonGeneric2
   isCheckingClickManager: 1
   isSprite: 1
@@ -924,12 +937,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 6
-  strSoundProcess: buttonGeneric2
-  buttonName: 
-  bCheckClickManager: 0
   modeTypes: 06000000
+  buttonName: 
   buttonSound: buttonGeneric2
   isCheckingClickManager: 0
   isSprite: 1
@@ -962,12 +971,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff3dda4143084221809741c242a70e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 6
-  strSoundProcess: button-21
-  buttonName: 
-  bCheckClickManager: 1
   modeTypes: 06000000
+  buttonName: 
   buttonSound: button-21
   isCheckingClickManager: 1
   isSprite: 1
@@ -1067,12 +1072,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60fe0c15eca54d698e93c22092d5818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 1
-  eMode: 6
-  strSoundProcess: buttonGeneric2
-  buttonName: 
-  bCheckClickManager: 0
   modeTypes: 06000000
+  buttonName: 
   buttonSound: buttonGeneric2
   isCheckingClickManager: 0
   isSprite: 1
@@ -1248,6 +1249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShown: 0
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
   blockUI: 1
@@ -1478,6 +1480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShown: 0
   ignoreTimeScale: 0
   isUsingDemultiplexer: 1
   blockUI: 1
@@ -1516,11 +1519,11 @@ MonoBehaviour:
   customizationPanel: {fileID: 100030}
   popupTitle: {fileID: 0}
   nameField: {fileID: 11400052}
-  selectedEgg: {fileID: 0}
   NGUICamera: {fileID: 0}
   scriptTransition: {fileID: 0}
   buttonHighLight: {fileID: 11400092}
   leafParticle: {fileID: 0}
+  requireNameAnimation: {fileID: 11100000}
 --- !u!114 &11400066
 MonoBehaviour:
   m_ObjectHideFlags: 1

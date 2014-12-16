@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class LgParticleEmitterDegradation : LgParticleEmitter{
 
-	
 	public GameObject targetDestination;
 	private List<GameObject> listSpawned = new List<GameObject>(); // list of objects this emitter has spawned
 	private bool isSubscribed = false; // is this trigger subscribed to the partition changing event?

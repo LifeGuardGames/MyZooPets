@@ -80,8 +80,6 @@ public class GameTutorialDecorations : GameTutorial{
 	
 	private IEnumerator ShowWellapad(){
 		yield return new WaitForSeconds(1.5f);
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("Decorate");
 	
 		// show the wellapad
 		WellapadUIManager.Instance.OpenUI();

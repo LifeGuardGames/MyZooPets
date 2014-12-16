@@ -44,9 +44,6 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 	
 	private void ShowWellapad(){
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("FightMonster");
-	
 		// show the wellapad
 		WellapadUIManager.Instance.OpenUI();
 	

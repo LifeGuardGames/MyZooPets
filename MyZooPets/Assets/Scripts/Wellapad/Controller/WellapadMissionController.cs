@@ -19,7 +19,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	//=======================Events========================
 	public EventHandler<TaskUpdatedArgs> OnTaskUpdated;   	// when a task's status is updated
 	public EventHandler<EventArgs> OnMissionsRefreshed;		// when missions get refreshed
-	public EventHandler<TaskUpdatedArgs> OnHighlightTask;	// when a certain task needs to be highlighted
 	public EventHandler<EventArgs> OnRewardClaimed;			// when a reward is claimed
 	//=====================================================
 	
@@ -233,30 +232,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// send event
 		if(OnMissionsRefreshed != null) 
 			OnMissionsRefreshed(this, EventArgs.Empty);
-	}
-
-	/// <summary>
-	/// Highlights the task. Sends a message to the UI that will highlight task,
-	/// and dim out any other tasks.
-	/// </summary>
-	/// <param name="taskID">Task I.</param>
-	public void HighlightTask(string taskID){
-		StartCoroutine(HighlightTaskWait(taskID));
-	}
-	
-	// TODO-REFACTOR
-	// We wait for 2 frames here because when wellapad is opened, to make sure evrything "OnHighlightTask()" registered from MissionTaskUI
-	// Wellapad_MissionList.cs:DisplayMissions() waits a frame already
-	// Also take a look at GameTutorial_WellapadIntro.cs:OpeningWellapad(), that waits a frame before calling this!
-	//				I think the ^ one can be removed
-	private IEnumerator HighlightTaskWait(string strTask){
-		yield return 0;
-		yield return 0;
-		if(OnHighlightTask != null){
-			TaskUpdatedArgs args = new TaskUpdatedArgs();
-			args.ID = strTask;
-			OnHighlightTask(this, args);
-		}
 	}
 
 	/// <summary>

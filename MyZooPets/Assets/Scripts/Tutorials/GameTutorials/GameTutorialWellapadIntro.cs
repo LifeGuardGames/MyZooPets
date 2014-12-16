@@ -51,9 +51,6 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	
 		// wait a frame for the new UI elements to create themselves
 		yield return 0;
-		
-		// highlight this task
-		WellapadMissionController.Instance.HighlightTask("DailyInhaler");
 	
 		// listen for when the wellapad is closed
 		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;

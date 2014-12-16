@@ -70,9 +70,6 @@ public class GameTutorialTriggers : GameTutorial{
 
 		//Create new tasks for tutorial part2
 		WellapadMissionController.Instance.CreateTutorialPart2Missions();
-
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("CleanRoom");
 	
 		// show the wellapad
 		WellapadUIManager.Instance.OpenUI();

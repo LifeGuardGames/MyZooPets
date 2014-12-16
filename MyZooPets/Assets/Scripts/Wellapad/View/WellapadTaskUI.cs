@@ -37,7 +37,6 @@ public class WellapadTaskUI : MonoBehaviour {
 		SetCheckboxSprite( false );
 		
 		// listen for various messages
-		WellapadMissionController.Instance.OnHighlightTask += OnTaskHighlighted;	// when a task may be highlighted
 		WellapadUIManager.Instance.OnTweenDone += OnTweenDone;						// whent he ui finishes tweening
 	}
 	
@@ -84,31 +83,12 @@ public class WellapadTaskUI : MonoBehaviour {
 		// if the UI is opening, update our task
 		if ( args.Opening )
 			SetCheckboxSprite( true );
-	}	
-	
-	//---------------------------------------------------
-	// OnTaskHighlighted()
-	// Callback for when a task is highlighted
-	//---------------------------------------------------	
-	private void OnTaskHighlighted( object sender, TaskUpdatedArgs args ) {
-		if ( args.ID == task.TaskName ) {
-			// this task is being highlighted -- change the text to black
-			label.color = tutTextHighlightOn;
-		}
-		else {
-			// this task is not being highlighted, so grey it out
-			label.color = tutTextHighlightOff;
-		}
 	}
 	
 	//---------------------------------------------------
 	// OnDestroy()
 	//---------------------------------------------------		
 	void OnDestroy() {
-		// stop listening for task completion data
-		if ( WellapadMissionController.Instance )
-			WellapadMissionController.Instance.OnHighlightTask -= OnTaskHighlighted;
-		
 		if ( WellapadUIManager.Instance )
 			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;		
 	}

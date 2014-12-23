@@ -36,9 +36,17 @@ public class MutableDataPetInfo : MutableData{
 			PetName = petName;
 		}
 	}
+
+	public void ChangeColor(PetColor petColorEnum){
+		// Sould we do sanity color checking here?
+		if(true){
+			IsDirty = true;
+			PetColor = petColorEnum.ToString();
+		}
+	}
 	
 	public void SetFireBreaths(int amount){
-		FireBreaths = amount;	
+		FireBreaths = amount;
 	
 		// for now, we are capping the max breaths at 1
 		bool isInfiniteMode = IsInfiniteFire();

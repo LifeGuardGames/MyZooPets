@@ -183,7 +183,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
 				string friendName = "";
-				string friendColor = "OrangeYellow";
+				string friendColor = PetColor.OrangeYellow.ToString();	// Set default
 				Hashtable petInitHash = null;
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					friendName = friendPetInfo.Name;

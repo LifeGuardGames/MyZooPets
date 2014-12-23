@@ -13,7 +13,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	public ParticleSystemController leafParticle;
 	public Animation requireNameAnimation;
 
-    private string petColor = "OrangeYellow"; //Default pet color
+    private string petColor;
     private string petName; //Default pet name
     private Color currentRenderColor;
     private bool finishClicked = false;
@@ -21,6 +21,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	
     protected override void Awake(){
 		base.Awake();
+		petColor = PetColor.OrangeYellow.ToString(); //Default pet color
         eModeType = UIModeTypes.CustomizePet;
         isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }

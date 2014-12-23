@@ -17,6 +17,11 @@ public enum Level{
     Level8
 }
 
+public enum PetColor{
+	OrangeYellow,
+	PurpleLime,
+}
+
 public enum DosageRecord{
     Hit,
     Unknown,

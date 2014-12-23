@@ -35,13 +35,9 @@ public class PetGameData{
 		Wellapad = new MutableDataWellapad();
         PetInfo = new MutableDataPetInfo();
 		allMutableData.Add(PetInfo);
-
         Cutscenes = new MutableDataCutscene();
         Decorations = new MutableDataDecorationSystem();
-
 		Accessories = new MutableDataAccessories();
-//		allMutableData.Add(Accessories);
-
         Stats = new MutableDataStats();
         Level = new MutableDataPetLevel();
         Calendar = new MutableDataCalendar();
@@ -73,7 +69,6 @@ public class PetGameData{
 	}
 
 	public void SaveAsyncToParse(){
-
 		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
 			foreach(MutableData data in allMutableData)
 				if(data.IsDirty)

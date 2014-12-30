@@ -11,7 +11,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private MemoryCard flip1 = null;
 	private MemoryCard flip2 = null;
 	private bool pauseDelayActive = false;
-	private float delayTimer = 1f;
+	private float delayTimer = 0.8f;
 
 	private bool timeBonusActive = true;
 	private int timeBonusScoreValue = 100;
@@ -118,12 +118,19 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	private void UnlockDelaySuccess(){
-//		Debug.Log("unlock success");
 		UpdateScore(correctScoreValue);
 
 		// Tell cards to play success state
 		flip1.FlipResult(true);
 		flip2.FlipResult(true);
+
+		// Display a floaty text of the score increase
+		Hashtable floatyOption = new Hashtable();
+		floatyOption.Add("prefab", "FloatyTextMemory");
+		floatyOption.Add("parent", flip2.transform.parent.gameObject);
+		floatyOption.Add("position", flip2.transform.localPosition);
+		floatyOption.Add("text", "+" + correctScoreValue);
+		FloatyUtil.SpawnFloatyText(floatyOption);
 
 		pauseDelayActive = false;
 

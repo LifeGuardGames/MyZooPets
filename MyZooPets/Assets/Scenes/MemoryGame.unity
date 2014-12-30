@@ -2345,64 +2345,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 0
   transitionController: {fileID: 1706492453}
---- !u!1 &300631010
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100028, guid: 865c4d825fd03af4e96bfd4d93817e94, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 300631011}
-  - 114: {fileID: 300631012}
-  m_Layer: 10
-  m_Name: LabelTimeLeft
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &300631011
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400028, guid: 865c4d825fd03af4e96bfd4d93817e94, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 300631010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 327, y: -123.709717, z: -5.0000639}
-  m_LocalScale: {x: 39, y: 39, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2087649945}
-  m_RootOrder: 4
---- !u!114 &300631012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400030, guid: 865c4d825fd03af4e96bfd4d93817e94,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 300631010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 3
-  mDepth: 1
-  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: 1234561
-  mMaxLineWidth: 180
-  mMaxLineHeight: 40
-  mEncoding: 1
-  mMaxLineCount: 0
-  mPassword: 0
-  mShowLastChar: 0
-  mEffectStyle: 1
-  mEffectColor: {r: .270588249, g: .576470613, b: .270588249, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 8, y: 8}
-  mShrinkToFit: 1
-  mLineWidth: 0
-  mMultiline: 1
 --- !u!1 &317320123
 GameObject:
   m_ObjectHideFlags: 0
@@ -9357,7 +9299,6 @@ MonoBehaviour:
   popupPaused: {fileID: 889925892}
   labelScore: {fileID: 811829035}
   labelLives: {fileID: 0}
-  timeLeftLabel: {fileID: 300631012}
 --- !u!1 &1138216102
 GameObject:
   m_ObjectHideFlags: 0
@@ -10001,7 +9942,9 @@ MonoBehaviour:
   nStartingLives: 1
   gameOverAudioClip: minigameGameOver
   boardController: {fileID: 254150432}
-  correctScoreValue: 50
+  startScoreValue: 1000
+  scoreDecrementValue: 10
+  scoreDecrementTimer: 2
 --- !u!1 &1231449632
 GameObject:
   m_ObjectHideFlags: 0
@@ -14573,78 +14516,6 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
---- !u!1 &1980627411
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100022, guid: 865c4d825fd03af4e96bfd4d93817e94, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1980627412}
-  - 114: {fileID: 1980627414}
-  - 114: {fileID: 1980627413}
-  m_Layer: 10
-  m_Name: LabelTimeLeftTitle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1980627412
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400022, guid: 865c4d825fd03af4e96bfd4d93817e94, type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1980627411}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 319, y: -123.709717, z: -5.0000639}
-  m_LocalScale: {x: 40.0001297, y: 40.0001297, z: .999935985}
-  m_Children: []
-  m_Father: {fileID: 2087649945}
-  m_RootOrder: 3
---- !u!114 &1980627413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400018, guid: 865c4d825fd03af4e96bfd4d93817e94,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1980627411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: MEMORY_TIME_LEFT
---- !u!114 &1980627414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400020, guid: 865c4d825fd03af4e96bfd4d93817e94,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1980627411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 5
-  mDepth: 0
-  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
-  mText: 'Time bonus left:'
-  mMaxLineWidth: 0
-  mMaxLineHeight: 0
-  mEncoding: 1
-  mMaxLineCount: 0
-  mPassword: 0
-  mShowLastChar: 0
-  mEffectStyle: 1
-  mEffectColor: {r: .270588249, g: .576470613, b: .270588249, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 8, y: 8}
-  mShrinkToFit: 0
-  mLineWidth: 0
-  mMultiline: 1
 --- !u!1 &1993258509
 GameObject:
   m_ObjectHideFlags: 0
@@ -15481,8 +15352,6 @@ Transform:
   - {fileID: 811829033}
   - {fileID: 567378925}
   - {fileID: 513252446}
-  - {fileID: 1980627412}
-  - {fileID: 300631011}
   m_Father: {fileID: 1071829515}
   m_RootOrder: 0
 --- !u!114 &2087649946

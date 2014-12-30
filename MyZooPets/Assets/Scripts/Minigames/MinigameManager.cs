@@ -325,7 +325,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// SetScore()
 	// Sets the player's score and updates the label.
 	//---------------------------------------------------	
-	private void SetScore(int num){
+	protected void SetScore(int num){
 		score = num;
 		
 		// update ui

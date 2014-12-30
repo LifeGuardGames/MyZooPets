@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Memory game manager.
+/// The scoring would be done in a count down fashion, so your final score is the score
+/// that you get when you complete all the matches.
+/// </summary>
 public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	public MemoryBoardController boardController;
 
-	public int correctScoreValue = 50;
-	private int cardsCount;
+	public int startScoreValue = 1000;
+	public int scoreDecrementValue = 10;
+	public int scoreDecrementTimer = 2;
 
+	private int cardsCount;
 	private MemoryCard flip1 = null;
 	private MemoryCard flip2 = null;
 	private bool pauseDelayActive = false;
-	private float delayTimer = 0.8f;
-
-	private bool timeBonusActive = true;
-	private int timeBonusScoreValue = 100;
-	private float timeBonusDuration = 50f;
-	private float timeLeft;
+	private float cardDelayTimer = 0.8f;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -24,7 +26,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	#region Overridden Functions
 	protected override void _Start(){
-		timeLeft = timeBonusDuration;
 	}
 
 	protected override void _OnDestroy(){
@@ -48,19 +49,15 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		flip2 = null;
 
 		cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
-		timeBonusActive = true;
-		timeLeft = timeBonusDuration;
+
+		CancelInvoke("StartScoreCountdown");
+		SetScore(startScoreValue);
+		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
+
 		ResetBoard();
 	}
 
 	protected override void _Update(){
-		timeLeft -= Time.deltaTime;
-		MemoryGameUIManager memoryUI = ui as MemoryGameUIManager;	// Downcast here
-		memoryUI.DisplayTimeLeft(timeLeft);
-		if(timeLeft < 0){
-			timeBonusActive = false;
-
-		}
 	}
 
 	protected override void _GameOver(){
@@ -73,6 +70,20 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	#endregion
 
 	#region Game Specific Functions
+	/// <summary>
+	/// Starts the score countdown.
+	/// InvokeRepeating method from _NewGame()
+	/// </summary>
+	private void StartScoreCountdown(){
+		// Check for negative score
+		if(GetScore() - scoreDecrementValue >= 0){
+			UpdateScore(scoreDecrementValue * -1);
+		}
+		else{
+			SetScore(0);
+		}
+	}
+
 	private void ResetBoard(){
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
 	}
@@ -95,42 +106,28 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	/// <param name="card">Card</param>
 	public void NotifyClicked(MemoryCard card){
 		if(flip1 == null){
-//			Debug.Log("flip1");
 			flip1 = card;
 		}
 		else if(flip2 == null && card != flip1){ // Prevent clicking on self
-//			Debug.Log("flip2");
 			flip2 = card;
 
 			pauseDelayActive = true;
 
 			if(flip1.TriggerName == flip2.TriggerName){
-//				Debug.Log("Success");
 				// Match! play scoring sequence after delay
-				Invoke("UnlockDelaySuccess", delayTimer);
+				Invoke("UnlockDelaySuccess", cardDelayTimer);
 			}
 			else{
-//				Debug.Log("Failure");
 				// Failed, flip back again after delay
-				Invoke("UnlockDelayFailure", delayTimer);
+				Invoke("UnlockDelayFailure", cardDelayTimer);
 			}
 		}
 	}
 
 	private void UnlockDelaySuccess(){
-		UpdateScore(correctScoreValue);
-
 		// Tell cards to play success state
 		flip1.FlipResult(true);
 		flip2.FlipResult(true);
-
-		// Display a floaty text of the score increase
-		Hashtable floatyOption = new Hashtable();
-		floatyOption.Add("prefab", "FloatyTextMemory");
-		floatyOption.Add("parent", flip2.transform.parent.gameObject);
-		floatyOption.Add("position", flip2.transform.localPosition);
-		floatyOption.Add("text", "+" + correctScoreValue);
-		FloatyUtil.SpawnFloatyText(floatyOption);
 
 		pauseDelayActive = false;
 
@@ -139,16 +136,15 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		flip2 = null;
 
 		cardsCount -= 2;
+
+		// Final calculations to the score before game over
 		if(cardsCount <= 0){
-			if(timeBonusActive){
-				UpdateScore(timeBonusScoreValue);
-			}
+			CancelInvoke("StartScoreCountdown");
 			GameOver();
 		}
 	}
 
 	private void UnlockDelayFailure(){
-//		Debug.Log("unlock failure");
 		// Tell cards to flip back
 		flip1.FlipResult(false);
 		flip2.FlipResult(false);

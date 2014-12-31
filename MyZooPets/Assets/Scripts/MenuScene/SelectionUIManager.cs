@@ -38,6 +38,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
 		}
 		else{
 			// Skip into create pet
+			Debug.LogWarning("Connection debug turned off");
 			OpenCustomizationManager();
 		}
     }

@@ -40,6 +40,11 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	/// Check the trial status and membership status and display the appropriate text
 	/// </summary>
 	public void ParentPortalTextCheck(){
+		if(!Constants.GetConstant<bool>("IsMenusceneConnectionOn")){
+			Debug.LogWarning("Connection debug turned off");
+			return;
+		}
+
 		Debug.Log("Parent portal check");
 		MembershipCheck.Status membershipStatus = MembershipCheck.Instance.MembershipStatus;
 		MembershipCheck.Status trialStatus = MembershipCheck.Instance.TrialStatus;

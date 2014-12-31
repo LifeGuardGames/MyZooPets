@@ -39,7 +39,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
         if (!finishClicked){
 			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
 			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
-            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName = spriteName;
+			Sprite sprite = Resources.Load<Sprite>(spriteName);
+            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite = sprite;
             this.petColor = petColor;
         }       
     }
@@ -80,7 +81,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 
         //find out what color is the egg and change the color selection button
 		GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
-        string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<UISprite>().spriteName;
+        string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite.name;
         LgButton colorButton = null;
 
         switch(defaultEggColor){

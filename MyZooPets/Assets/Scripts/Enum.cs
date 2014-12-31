@@ -20,6 +20,7 @@ public enum Level{
 public enum PetColor{
 	OrangeYellow,
 	PurpleLime,
+	BlueYellow
 }
 
 public enum DosageRecord{

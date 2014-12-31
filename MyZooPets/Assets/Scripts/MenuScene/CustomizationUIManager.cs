@@ -93,6 +93,10 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
                 colorButton = buttonHighLight.buttonList[1];
                 petColor = "PurpleLime";
             break;
+			case "eggBlueYellow":
+				colorButton = buttonHighLight.buttonList[2];
+				petColor = "BlueYellow";
+			break;
         }
 
         buttonHighLight.firstButton = colorButton;

@@ -199,7 +199,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 				isUsable = false;
 			else if(healthAmount > 0 && currentHealth == 100)
 				isUsable = false;
+
+			// Custom check for emergency inhaler, dont want to apply if not sick
+			if(itemID == "Usable0"){	
+				if(currentHealth > 60){
+					isUsable = false;
+				}
+			}
 		}
+
 		
 		return isUsable;
 	}

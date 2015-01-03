@@ -5,20 +5,22 @@ using System.Collections;
 /// Memory game manager.
 /// The scoring would be done in a count down fashion, so your final score is the score
 /// that you get when you complete all the matches.
+/// There are also combos if you get 2+ in a row, this adds a multiplier to your score
 /// </summary>
 public class MemoryGameManager : MinigameManager<MemoryGameManager> {
-
 	public MemoryBoardController boardController;
 
 	public int startScoreValue = 1000;
 	public int scoreDecrementValue = 10;
 	public int scoreDecrementTimer = 2;
+	public int comboMultiplier = 25;
 
 	private int cardsCount;
 	private MemoryCard flip1 = null;
 	private MemoryCard flip2 = null;
 	private bool pauseDelayActive = false;
 	private float cardDelayTimer = 0.8f;
+	private int combo = 0;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -116,11 +118,24 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 			if(flip1.TriggerName == flip2.TriggerName){
 				// Match! play scoring sequence after delay
 				Invoke("UnlockDelaySuccess", cardDelayTimer);
+
+				// Increase the combo
+				combo++;
+				if(combo >= 2){
+					UpdateScore(combo * comboMultiplier);
+				}
 			}
 			else{
 				// Failed, flip back again after delay
 				Invoke("UnlockDelayFailure", cardDelayTimer);
+
+				// Reset the combo
+				combo = 0;
 			}
+
+			// Update the combo text in the UI
+			MemoryGameUIManager uimanager = ui as MemoryGameUIManager;
+			uimanager.SetComboText(combo);
 		}
 	}
 

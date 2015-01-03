@@ -17,7 +17,7 @@ public class MemoryCard : MonoBehaviour {
 
 	public UISprite coverSprite;
 	public UISprite triggerSprite;
-	public UILabel triggerLabel;
+	public UILocalize triggerLabelLocalize;
 
 	public float activeTweenTime = 0.2f;
 	public float activeTweenScale = 1.1f;
@@ -35,13 +35,15 @@ public class MemoryCard : MonoBehaviour {
 		if(isSprite){
 			triggerSprite.type = UISprite.Type.Simple;
 			triggerSprite.spriteName = triggerData.SpriteName;
-			tweeningContentParent = triggerSprite.transform.parent.gameObject;
-			triggerLabel.transform.parent.gameObject.SetActive(false);
+			triggerSprite.MakePixelPerfect();
+			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather
+			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);
 		}
 		else{
-			triggerLabel.text = triggerData.Name;
-			tweeningContentParent = triggerLabel.transform.parent.gameObject;
-			triggerSprite.transform.parent.gameObject.SetActive(false);
+			triggerLabelLocalize.key= triggerData.DisplayKey;
+			triggerLabelLocalize.Localize();
+			tweeningContentParent = triggerLabelLocalize.transform.parent.gameObject;
+			triggerSprite.transform.parent.parent.gameObject.SetActive(false);	// Get grandfather
 		}
 
 		// Hide the original card content until its clicked

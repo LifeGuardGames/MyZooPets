@@ -12,7 +12,7 @@ public class MemoryBoardController : MonoBehaviour {
 
 	public static int ROW_COUNT = 4;
 	public static int COLUMN_COUNT = 5;
-	const float DISTANCE_UNIT = 2f;
+	const float DISTANCE_UNIT = 2.2f;
 
 	private List<GameObject> cardList = new List<GameObject>(); // Card array, there is 20 of them
 	public GameObject memoryCardPrefab;

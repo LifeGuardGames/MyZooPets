@@ -21,6 +21,9 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private bool pauseDelayActive = false;
 	private float cardDelayTimer = 0.8f;
 	private int combo = 0;
+	private bool isPaused = false;
+
+	private MemoryGameUIManager memoryUI;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -28,10 +31,13 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	#region Overridden Functions
 	protected override void _Start(){
+		MemoryGameManager.OnStateChanged += GameStateChange;
+
+		memoryUI = ui as MemoryGameUIManager;
 	}
 
 	protected override void _OnDestroy(){
-
+		MemoryGameManager.OnStateChanged -= GameStateChange;
 	}
 
 	protected override string GetMinigameKey(){
@@ -63,7 +69,23 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _GameOver(){
+		memoryUI.FinishBoard();
 		// TODO add badges
+	}
+
+	private void GameStateChange(object sender, GameStateArgs args){
+		switch(args.GetGameState()){
+		case MinigameStates.GameOver:
+			break;
+		case MinigameStates.Paused:
+			Debug.Log("Paused");
+			isPaused = true;
+			break;
+		case MinigameStates.Playing:
+			Debug.Log("Playing");
+			isPaused = false;
+			break;
+		}
 	}
 
 	public override int GetReward(MinigameRewardTypes eType){
@@ -77,17 +99,20 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	/// InvokeRepeating method from _NewGame()
 	/// </summary>
 	private void StartScoreCountdown(){
-		// Check for negative score
-		if(GetScore() - scoreDecrementValue >= 0){
-			UpdateScore(scoreDecrementValue * -1);
-		}
-		else{
-			SetScore(0);
+		if(!isPaused){
+			// Check for negative score
+			if(GetScore() - scoreDecrementValue >= 0){
+				UpdateScore(scoreDecrementValue * -1);
+			}
+			else{
+				SetScore(0);
+			}
 		}
 	}
 
 	private void ResetBoard(){
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
+		memoryUI.StartBoard();
 	}
 
 	/// <summary>
@@ -134,8 +159,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 			}
 
 			// Update the combo text in the UI
-			MemoryGameUIManager uimanager = ui as MemoryGameUIManager;
-			uimanager.SetComboText(combo);
+			memoryUI.SetComboText(combo);
 		}
 	}
 
@@ -171,10 +195,10 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		flip2 = null;
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-//			ResetBoard();
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
+			GameOver();
+		}
+	}
 	#endregion
 }

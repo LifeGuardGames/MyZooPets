@@ -19,11 +19,14 @@ public class MemoryCard : MonoBehaviour {
 	public UISprite triggerSprite;
 	public UILocalize triggerLabelLocalize;
 
+	public float pressDownScale = 0.9f;
 	public float activeTweenTime = 0.2f;
 	public float activeTweenScale = 1.1f;
 
 	private GameObject tweeningContentParent;
 	private GameObject tweeningCoverParent;
+
+	private bool isClickable = true;	// When the card is showing/animating lock the click, internal check of card state
 
 	public void Initialize(ImmutableDataMemoryTrigger triggerData, bool isSprite){
 		triggerName = triggerData.Name;
@@ -36,6 +39,7 @@ public class MemoryCard : MonoBehaviour {
 			triggerSprite.type = UISprite.Type.Simple;
 			triggerSprite.spriteName = triggerData.SpriteName;
 			triggerSprite.MakePixelPerfect();
+			triggerSprite.name = triggerData.SpriteName;
 			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather
 			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);
 		}
@@ -51,20 +55,32 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	void OnTap(TapGesture gesture){
-		CardFlipped();
+		if(isClickable){
+			CardFlipped();
+		}
 	}
 
-//	void OnFingerDown(FingerDownEvent e){ 
-//		Debug.Log("DSD");
-//	}
+	void OnFingerDown(FingerDownEvent e){
+		if(isClickable){
+			gameObject.transform.localScale = new Vector3(pressDownScale, pressDownScale, 1f);
+		}
+	}
+
+	void OnFingerHover( FingerHoverEvent e){
+		if(isClickable){
+			if( e.Phase == FingerHoverPhase.Exit){
+				GameObjectUtils.ResetLocalScale(this.gameObject);
+			}
+		}
+	}
 
 	public void CardFlipped(){
 		// Check the manager to see if flip is allowed
 		if(MemoryGameManager.Instance.IsFlipAllowed(this)){
-//			Debug.Log(triggerName);
 			// Ping the memory game manager this was flipped
 			MemoryGameManager.Instance.NotifyClicked(this);
 
+			isClickable = false;
 			PlayFlipSquenceOpen();
 		}
 	}
@@ -96,7 +112,11 @@ public class MemoryCard : MonoBehaviour {
 
 		tweeningCoverParent.transform.localScale = new Vector3(0f, 1f, 1f);
 		tweeningCoverParent.SetActive(true);
-		LeanTween.scaleX(tweeningCoverParent, 1f, activeTweenTime / 2f);
+		LeanTween.scaleX(tweeningCoverParent, 1f, activeTweenTime / 2f).setOnComplete(FlipSequenceCloseFinished);
+	}
+
+	private void FlipSequenceCloseFinished(){
+		isClickable = true;	// Unlock the click so the user can click on it again
 	}
 
 	/// <summary>

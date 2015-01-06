@@ -23,6 +23,8 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private int combo = 0;
 	private bool isPaused = false;
 
+	private MemoryGameUIManager memoryUI;
+
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -30,6 +32,8 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	#region Overridden Functions
 	protected override void _Start(){
 		MemoryGameManager.OnStateChanged += GameStateChange;
+
+		memoryUI = ui as MemoryGameUIManager;
 	}
 
 	protected override void _OnDestroy(){
@@ -65,6 +69,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _GameOver(){
+		memoryUI.FinishBoard();
 		// TODO add badges
 	}
 
@@ -107,6 +112,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	private void ResetBoard(){
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
+		memoryUI.StartBoard();
 	}
 
 	/// <summary>
@@ -153,8 +159,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 			}
 
 			// Update the combo text in the UI
-			MemoryGameUIManager uimanager = ui as MemoryGameUIManager;
-			uimanager.SetComboText(combo);
+			memoryUI.SetComboText(combo);
 		}
 	}
 

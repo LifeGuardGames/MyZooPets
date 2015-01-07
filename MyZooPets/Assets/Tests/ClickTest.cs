@@ -7,6 +7,10 @@ public class ClickTest : MonoBehaviour {
 		Debug.Log("CLICKED");
 	}
 
+	void OnTap(TapGesture e){
+		Debug.Log("sdfsdf");
+	}
+
 	public void Print(){
 		Debug.Log("Print call");
 	}

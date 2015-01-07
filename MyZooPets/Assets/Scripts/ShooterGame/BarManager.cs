@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class BarManager : MonoBehaviour {
 
@@ -29,7 +30,9 @@ public class BarManager : MonoBehaviour {
 	//Player Health
 	public float playerHealth;
 	//Our Shooter Game Manager
-	public GameObject ShooterGameManager;
+	public GameObject Player;
+	public GameObject button; 
+	public GameObject text;
 	// we use this to get our start time and set up variables for our window
 	void Start () {
 		startTime=int.Parse(DateTime.Now.ToString("hh"));
@@ -37,6 +40,7 @@ public class BarManager : MonoBehaviour {
 		justRight.x = startTime;
 		justRight.y = justRight.x + offset;
 		currTime= startTime;
+		text.GetComponent<Text>().text= currTime.ToString();
 	}
 	
 	// Update is called once per frame
@@ -52,10 +56,9 @@ public class BarManager : MonoBehaviour {
 		{
 			if(justUsed=false)
 			{
-				//todo Make button shine
+				button.gameObject.SetActive(true);
 				
 			}
-			ShooterGameManager.GetComponent<ShooterGameManager>().removeHealth(-.02f);
 		}
 		if(Time.time-elaspedTime>= timeIncrementer)
 		{
@@ -67,9 +70,8 @@ public class BarManager : MonoBehaviour {
 			{
 				currTime=1;
 			}
+			text.GetComponent<Text>().text= currTime.ToString();
 			elaspedTime=Time.time;
-			playerHealth-=0.01f;
-			ShooterGameManager.GetComponent<ShooterGameManager>().removeHealth(playerHealth);
 		}
 		
 	}
@@ -112,7 +114,7 @@ public class BarManager : MonoBehaviour {
 			playerHealth-=(1*overBy);
 			playerHealth-=(1*earlyBy);
 		}
-		ShooterGameManager.GetComponent<ShooterGameManager>().removeHealth(playerHealth);
+		Player.GetComponent<Player>().removeHealth(playerHealth);
 	}
 
 

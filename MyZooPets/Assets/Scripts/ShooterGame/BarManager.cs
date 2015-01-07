@@ -79,12 +79,12 @@ public class BarManager : MonoBehaviour {
 	//on button Tap
 	void OnTap(TapGesture gesture)
 	{
-		Debug.Log("hi");
 		calculateStrength();
 		justRight.x = currTime;
 		justRight.y = justRight.x + offset;
 		justUsed=true;
 		elaspedTime=Time.time;
+		button.gameObject.SetActive(false);
 	}
 	void calculateStrength ()
 	{

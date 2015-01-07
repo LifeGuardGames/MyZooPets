@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -72,7 +72,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>
 		}
 
 		public void shoot (Vector3 dir){
+				fBallScale= Player.GetComponent<Player>().fBallScale;
 				GameObject instance = Instantiate (bullet,bulletSpawn.transform.position, bullet.transform.rotation)as GameObject;
+				instance.gameObject.transform.localScale/=fBallScale;
 				instance.GetComponent<bulletScript>().target= dir;
 		}
 	

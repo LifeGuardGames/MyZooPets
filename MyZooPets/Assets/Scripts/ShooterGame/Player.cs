@@ -18,6 +18,6 @@ public class Player : MonoBehaviour {
 	public void removeHealth (float amount){
 		playerHealth += amount;
 		//timeBetweenFire += amount;
-		fBallScale -= amount;
+		fBallScale -= (amount/10);
 	}
 }

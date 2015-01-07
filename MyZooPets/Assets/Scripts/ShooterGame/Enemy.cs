@@ -19,12 +19,12 @@ public class Enemy : MonoBehaviour {
 	void Update () {
 		transform.Translate (-speed*Time.deltaTime,0,0);
 	}
-	// when offscreen kill enemy
+	/*// when offscreen kill enemy
 	void OnBecameInvisible()
 	{
 		Player.GetComponent<Player>().removeHealth(-damage);
 		Destroy(this.gameObject);
-	}
+	}*/
 	// if we hit a bullet destroy both the enemy anbd bullet
 	void OnTriggerEnter2D(Collider2D collider)
 	{
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour {
 			Destroy(collider.gameObject);
 			Destroy(this.gameObject);
 		}
-		if (collider.gameObject.tag=="Player")
+		else if (collider.gameObject.tag=="Player")
 		{
 			Player.GetComponent<Player>().removeHealth(-damage);
 			Destroy(this.gameObject);

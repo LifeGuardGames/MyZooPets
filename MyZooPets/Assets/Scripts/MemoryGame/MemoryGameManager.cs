@@ -164,6 +164,8 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	private void UnlockDelaySuccess(){
+		AudioManager.Instance.PlayClip("MemoryGood");
+
 		// Tell cards to play success state
 		flip1.FlipResult(true);
 		flip2.FlipResult(true);
@@ -195,10 +197,10 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		flip2 = null;
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-			GameOver();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
+//			GameOver();
+//		}
+//	}
 	#endregion
 }

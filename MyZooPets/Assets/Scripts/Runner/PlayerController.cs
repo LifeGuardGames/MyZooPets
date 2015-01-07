@@ -64,6 +64,8 @@ public class PlayerController : Singleton<PlayerController>{
 	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
 
+	public Camera nguiCamera;
+
 #if UNITY_EDITOR	
 	// used just for testing keyboard input in unity editor
 	private bool bDelay = false;
@@ -135,7 +137,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	// Listen to finger down gesture
 	void OnFingerDown(FingerDownEvent e){ 
-		if(RunnerGameManager.Instance.GameRunning){
+		if(RunnerGameManager.Instance.GameRunning && !IsTouchingNGUI(e.Position)){
 			Jump();
 
 			if(OnJump != null)
@@ -309,4 +311,22 @@ public class PlayerController : Singleton<PlayerController>{
 	}
 	#endif
 
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	private bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
+	}
 }

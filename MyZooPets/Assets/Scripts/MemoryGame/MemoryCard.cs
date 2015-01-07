@@ -18,10 +18,14 @@ public class MemoryCard : MonoBehaviour {
 	public UISprite coverSprite;
 	public UISprite triggerSprite;
 	public UILocalize triggerLabelLocalize;
+	public GameObject NGUIParent;
 
 	public float pressDownScale = 0.9f;
 	public float activeTweenTime = 0.2f;
 	public float activeTweenScale = 1.1f;
+
+	public ParticleSystem endingParticle;
+	public float waitForParticle = 1.5f;
 
 	private GameObject tweeningContentParent;
 	private GameObject tweeningCoverParent;
@@ -41,13 +45,13 @@ public class MemoryCard : MonoBehaviour {
 			triggerSprite.MakePixelPerfect();
 			triggerSprite.name = triggerData.SpriteName;
 			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather
-			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);
+			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);	// Disable the unused half
 		}
 		else{
 			triggerLabelLocalize.key= triggerData.DisplayKey;
 			triggerLabelLocalize.Localize();
-			tweeningContentParent = triggerLabelLocalize.transform.parent.gameObject;
-			triggerSprite.transform.parent.parent.gameObject.SetActive(false);	// Get grandfather
+			tweeningContentParent = triggerLabelLocalize.transform.parent.gameObject; // Get grandfather
+			triggerSprite.transform.parent.parent.gameObject.SetActive(false);	// Disable the unused half
 		}
 
 		// Hide the original card content until its clicked
@@ -55,19 +59,19 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	void OnTap(TapGesture gesture){
-		if(isClickable){
+		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			CardFlipped();
 		}
 	}
 
 	void OnFingerDown(FingerDownEvent e){
-		if(isClickable){
+		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			gameObject.transform.localScale = new Vector3(pressDownScale, pressDownScale, 1f);
 		}
 	}
 
 	void OnFingerHover( FingerHoverEvent e){
-		if(isClickable){
+		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			if( e.Phase == FingerHoverPhase.Exit){
 				GameObjectUtils.ResetLocalScale(this.gameObject);
 			}
@@ -86,9 +90,10 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	private void PlayFlipSquenceOpen(){
+		AudioManager.Instance.PlayClip("MemoryCard1");
+
 		// Zoom in on the whole object
 		LeanTween.scale(gameObject, new Vector3(activeTweenScale, activeTweenScale, 1), activeTweenTime);
-		
 		LeanTween.scaleX(tweeningCoverParent, 0f, activeTweenTime / 2f).setOnComplete(FlipSequenceOpenHelper);
 	}
 	
@@ -97,13 +102,19 @@ public class MemoryCard : MonoBehaviour {
 
 		tweeningContentParent.transform.localScale = new Vector3(0f, 1f, 1f);
 		tweeningContentParent.SetActive(true);
-		LeanTween.scaleX(tweeningContentParent, 1f, activeTweenTime / 2f);
+		LeanTween.scaleX(tweeningContentParent, 1f, activeTweenTime / 2f).setOnComplete(FlipSequenceOpenFinished);
+	}
+
+	private void FlipSequenceOpenFinished(){
+		tweeningContentParent.GetComponent<AnimationControl>().Play();
 	}
 
 	private void PlayFlipSequenceClose(){
+		AudioManager.Instance.PlayClip("MemoryCard2");
+		tweeningContentParent.GetComponent<AnimationControl>().Stop();
+
 		// Zoom back out on the whole object
 		LeanTween.scale(gameObject, new Vector3(1, 1, 1), activeTweenTime);
-		
 		LeanTween.scaleX(tweeningContentParent, 0f, activeTweenTime / 2f).setOnComplete(FlipSequenceCloseHelper);
 	}
 	
@@ -125,10 +136,20 @@ public class MemoryCard : MonoBehaviour {
 	/// <param name="isSuccess">If set to <c>true</c> is success.</param>
 	public void FlipResult(bool isSuccess){
 		if(isSuccess){
-			Destroy(gameObject);
+			LeanTween.scale(NGUIParent, new Vector3(0, 0, 0), 0.1f).setOnComplete(SuccessHelper);
 		}
 		else{
 			PlayFlipSequenceClose();
 		}
+	}
+
+	/// <summary>
+	/// Callback for tween finished, play particle effects here
+	/// </summary>
+	private void SuccessHelper(){
+		tweeningContentParent.SetActive(false);
+		tweeningCoverParent.SetActive(false);
+		endingParticle.Play();
+		Destroy(gameObject, waitForParticle);
 	}
 }

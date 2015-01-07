@@ -37,6 +37,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     
     public void ChangeEggColor(string spriteName, string petColor){
         if (!finishClicked){
+			Debug.Log("Egg change color");
 			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
 			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
 			Sprite sprite = Resources.Load<Sprite>(spriteName);

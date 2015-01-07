@@ -19,14 +19,16 @@ public class SelectionUIManager : Singleton<SelectionUIManager> {
     
 	// Use this for initialization
 	void Start () {
-        RefreshUI();	
+        RefreshUI();
 	}
 
 	/// <summary>
 	/// Pet selected and will trigger a membership check
 	/// </summary>
-	/// <param name="selectedPetGO">Selected pet G.</param>
+	/// <param name="selectedPetGO">Selected pet</param>
     public void PetSelected(GameObject selectedPetGO){
+		Debug.Log("PET SELECTED");
+
 		SelectedPet = selectedPetGO;
 
 		// See if no-sync debug is turned on

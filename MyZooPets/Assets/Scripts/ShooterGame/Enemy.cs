@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
-	public int health=1;
-	public int damage=1;
-	public float speed=5;
+	public int Health=1;
+	public int Damage=1;
+	public float Speed=5;
+	public int ScoreVal=1;
 	private GameObject Player;
 
 
@@ -17,7 +18,7 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate (-speed*Time.deltaTime,0,0);
+		transform.Translate (-Speed*Time.deltaTime,0,0);
 	}
 	/*// when offscreen kill enemy
 	void OnBecameInvisible()
@@ -26,16 +27,15 @@ public class Enemy : MonoBehaviour {
 		Destroy(this.gameObject);
 	}*/
 	// if we hit a bullet destroy both the enemy anbd bullet
-	void OnTriggerEnter2D(Collider2D collider)
-	{
-		if(collider.gameObject.tag=="bullet")
+	void OnTriggerEnter2D(Collider2D Col){
+		if(Col.gameObject.tag=="bullet")
 		{
-			Destroy(collider.gameObject);
+			Player.GetComponent<Player>().AddScore(ScoreVal);
+			Destroy(Col.gameObject);
 			Destroy(this.gameObject);
 		}
-		else if (collider.gameObject.tag=="Player")
-		{
-			Player.GetComponent<Player>().removeHealth(-damage);
+		else if (Col.gameObject.tag=="Player"){
+			Player.GetComponent<Player>().removeHealth(-Damage);
 			Destroy(this.gameObject);
 		}
 	}

@@ -20,7 +20,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>
 		public GameObject bullet;
 		public GameObject bulletSpawn;
 		public GameObject Player;
-		
+		public Camera nguiCamera;
 		//player health
 		public float playerHealth;
 
@@ -49,17 +49,19 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>
 		}
 
 		protected override void _NewGame (){
-				Debug.Log ("hi");
+				//Debug.Log ("hi");
 				lastFire = Time.time;
 				lastSpawn = Time.time;
 		}
-
+		
 		public override int GetReward (MinigameRewardTypes eType){
 				return GetStandardReward (eType);
 		}
 
 		void OnTap(TapGesture e){
+		if(!IsTouchingNGUI(e.Position)){
 #if !UNITY_EDITOR
+		
 		Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(touchPos);
 		shoot(lookPos);
@@ -69,10 +71,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
 		shoot(lookPos);
 #endif
+			}
 		}
 
 		public void shoot (Vector3 dir){
-				fBallScale= Player.GetComponent<Player>().fBallScale;
+				fBallScale= Player.GetComponent<Player>().FBallScale;
 				GameObject instance = Instantiate (bullet,bulletSpawn.transform.position, bullet.transform.rotation)as GameObject;
 				instance.gameObject.transform.localScale/=fBallScale;
 				instance.GetComponent<bulletScript>().target= dir;
@@ -85,5 +88,23 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>
 			Spawner.GetComponent<SpawnManager> ().spawnTrigger (randomeSpawner);
 			lastSpawn= Time.time;
 		}
+	}
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	private bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
 	}
 }

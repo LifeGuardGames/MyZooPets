@@ -24,7 +24,6 @@ public class SpawnManager : MonoBehaviour {
 	
 	public void spawnTrigger(int pos)
 	{
-		Debug.Log ("Spawning");
 		Instantiate(enemy,posList[pos],enemy.transform.rotation);
 	}
 

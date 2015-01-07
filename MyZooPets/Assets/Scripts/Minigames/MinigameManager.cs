@@ -438,12 +438,17 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// The game is being unpaused.
 	//---------------------------------------------------	
 	protected void ResumeGame(){
-		// update the game state
-		SetGameState(MinigameStates.Playing);
+		// update the game state, next frame due to clicking resume getting registered in game
+		StartCoroutine(ResumeChangeStateNextFrame());
 		
 		// hide the game paused UI
 		ui.TogglePopup(MinigamePopups.Pause, false);
-	}	
+	}
+
+	IEnumerator ResumeChangeStateNextFrame(){
+		yield return 0;
+		SetGameState(MinigameStates.Playing);
+	}
 	
 	//---------------------------------------------------
 	// HowToPlay()

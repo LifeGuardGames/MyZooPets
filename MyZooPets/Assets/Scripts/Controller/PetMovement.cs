@@ -14,6 +14,20 @@ public class PetMovement : Singleton<PetMovement>{
 	// sound for when the pet moves
 	public string strSoundMove;
 	public float fShadow = .6f;
+
+	// Used for 2D room pet movement, height screen ratio in normal room walking
+	private float movementStaticHeightRatio;	
+
+	// Used for 2D room pet movement, height screen point in normal room walking
+	private float movementStaticScreenY;
+
+	// Used for 2D pet movement, this will be the z depth for all pet placement
+	// Useful for zoomed in modes (accessories) where camera is zoomed in
+	private float movementStaticZ;	
+	public float MovementStaticZ{
+		get{ return MovementStaticZ; }
+	}
+
 	private Vector3 destinationPoint; //destination that the pet is going to move to
 	private bool moving; //Is Pet moving now or not
 	private Camera mainCamera;
@@ -38,11 +52,38 @@ public class PetMovement : Singleton<PetMovement>{
 		normalSpeed = Constants.GetConstant<float>("NormalMoveSpeed");
 		sickSpeed = Constants.GetConstant<float>("SickMoveSpeed");
 		verySickSpeed = Constants.GetConstant<float>("VerySickMoveSpeed");
+
+		// Get the constant height ratio in screens of 2D pet movement
+		movementStaticHeightRatio = Constants.GetConstant<float>("StaticMovementHeightRatio");
 	}
 
 	void Start(){
 		destinationPoint = petSprite.transform.position;
 		scriptPan.OnPartitionChanged += MovePetWithCamera;
+
+		// Get the screen height for pet walking in regular room mode
+		movementStaticScreenY = Screen.height * movementStaticHeightRatio;
+
+		// Get the 3D Z-value where the pet will be locked to
+		Ray initRay = Camera.main.ScreenPointToRay(new Vector2(Screen.width/2f, movementStaticScreenY));
+		// Debug.DrawRay(initRay.origin, initRay.direction * 50, Color.green, 5000f);
+		RaycastHit hit;
+		if(Physics.Raycast(initRay, out hit)){
+			foreach(Collider walkingPathCollider in walkingPathColliders){
+				// This is the point where the ratio ray will hit the floor
+				if(hit.collider == walkingPathCollider){	// Assume one floor for now
+					movementStaticZ = hit.point.z;
+					break;
+				}
+				else{
+					Debug.LogWarning("Raycast did not hit any floor");
+				}
+			}
+		}
+
+		// Make sure the pet is in the correct Z-plane
+		Vector3 petPos = petSprite.transform.position;
+		petSprite.transform.position = new Vector3(petPos.x, petPos.y, movementStaticZ);
 	}
 
 	// Update is called once per frame
@@ -99,8 +140,8 @@ public class PetMovement : Singleton<PetMovement>{
 			return;
        
 		AudioManager.Instance.PlayClip(strSoundMove);
-
-		MovePet(Camera.main.ScreenPointToRay(gesture.Position));    
+		Debug.Log(gesture.Position);
+		MovePet(Camera.main.ScreenPointToRay(new Vector3(gesture.Position.x, movementStaticScreenY, 0)));    
 	}
 
 	//---------------------------------------------------
@@ -114,8 +155,10 @@ public class PetMovement : Singleton<PetMovement>{
 			ClickManager.Instance.AddTemporaryException(ClickLockExceptions.Moving);
 			
 			//Transform pet position to screen point first so we can move the pet to the right y position
-			Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
-			MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, petPosInScreenPoint.y, 0)));
+//			Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
+//			MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, petPosInScreenPoint.y, 0)));
+
+			MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, movementStaticScreenY, 0)));
 		}
 	}
 	
@@ -145,7 +188,7 @@ public class PetMovement : Singleton<PetMovement>{
 	
 	public void MovePet(Vector3 raycastHitPosition){
 		destinationPoint = raycastHitPosition;
-		
+
 		// tell the pet animator script to start moving (but only if we aren't already moving)
 		if(!moving)
 			PetAnimationManager.Instance.StartWalking();

@@ -95,7 +95,7 @@ public class BarManager : MonoBehaviour {
 		if (currTime>= justRight.x || currTime<=justRight.y){
 			if( justUsed==false)
 			{
-			Player.GetComponent<Player>().AddScore(5);
+		//	Player.GetComponent<Player>().AddScore(5);
 			playerHealth+=3;
 			if (numMissed>0){
 				numMissed--;
@@ -112,7 +112,7 @@ public class BarManager : MonoBehaviour {
 			playerHealth-=(1*numMissed);
 
 		}
-		Player.GetComponent<Player>().removeHealth(-playerHealth);
+	//	Player.GetComponent<Player>().removeHealth(-playerHealth);
 	}
 
 

@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
+public class Enemy{
 
-	public int Health=1;
-	public int Damage=1;
-	public float Speed=5;
-	public int ScoreVal=1;
-	private GameObject Player;
+	public string name;
+	public string spritz;
+	public string AiScript;
+
+	public Enemy(){
+	}
 
 
-	// Use this for initialization
+	/*// Use this for initialization
 	void Start () {
 	
 		Player= GameObject.FindWithTag("Player");
@@ -19,7 +20,7 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.Translate (-Speed*Time.deltaTime,0,0);
-	}
+	}*/
 	/*// when offscreen kill enemy
 	void OnBecameInvisible()
 	{
@@ -27,16 +28,16 @@ public class Enemy : MonoBehaviour {
 		Destroy(this.gameObject);
 	}*/
 	// if we hit a bullet destroy both the enemy anbd bullet
-	void OnTriggerEnter2D(Collider2D Col){
+	/*void OnTriggerEnter2D(Collider2D Col){
 		if(Col.gameObject.tag=="bullet")
 		{
-			Player.GetComponent<Player>().AddScore(ScoreVal);
+			//Player.GetComponent<Player>().AddScore(ScoreVal);
 			Destroy(Col.gameObject);
 			Destroy(this.gameObject);
 		}
 		else if (Col.gameObject.tag=="Player"){
-			Player.GetComponent<Player>().removeHealth(-Damage);
+			//Player.GetComponent<Player>().removeHealth(-Damage);
 			Destroy(this.gameObject);
 		}
-	}
+	}*/
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class PlayerShooterController : MonoBehaviour {
 
 	//player health
 	public float PlayerHealth;
@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	// our score
 	public int Score=0;
 	public GameObject ScoreLabel;
+	public GameObject bullet;
 	// Use this for initialization
 	void Start () {
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
@@ -32,4 +33,11 @@ public class Player : MonoBehaviour {
 		Score+=amount;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 	}
+	/*public void shoot(Vector3 dir){
+		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
+		//fBallScale = Player.GetComponent<Player>().FBallScale;
+		GameObject instance = Instantiate(bullet, bulletSpawn.transform.position, bullet.transform.rotation)as GameObject;
+		instance.gameObject.transform.localScale /= fBallScale;
+		instance.GetComponent<bulletScript>().target = dir;
+	}*/
 }

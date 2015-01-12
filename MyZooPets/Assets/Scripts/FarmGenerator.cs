@@ -4,7 +4,7 @@ using System.Collections;
 
 /// <summary>
 /// Farm generator.
-/// This a 3d object in the scene that spawns a utility (coins/gems) stored up to a capacity.
+/// This a 3d object in the scene that spawns a utility (coins) stored up to a capacity.
 /// Much like how money is harvested like Clash of Clans.
 /// </summary>
 [RequireComponent (typeof (Collider))]

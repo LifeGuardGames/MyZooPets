@@ -61,9 +61,6 @@ public class StatsController : Singleton<StatsController>{
 //		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
 //			ChangeStats(deltaPoints: 100);
 //		}
-//		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
-//			ChangeStats(deltaGems: 5);
-//		}
 //		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
 //			ChangeStats(deltaStars: 50);
 //		}
@@ -75,10 +72,6 @@ public class StatsController : Singleton<StatsController>{
 //		if(GUI.Button(new Rect(0, 50, 100, 50), "+health")){
 //			ChangeStats(deltaHealth: 100);
 //		}
-//		if(GUI.Button(new Rect(100, 50, 100, 50), "test")){
-//			ChangeStats(deltaHealth: 100, deltaGems: 100, healthLoc: Vector3.zero, gemsLoc: Vector3.zero, isAllAtOnce:true);
-//		}
-
 
 //		if(GUI.Button(new Rect(200, 50, 100, 50), "+mood")){
 //			ChangeStats(deltaMood: 10);
@@ -88,9 +81,6 @@ public class StatsController : Singleton<StatsController>{
 //		}
 //		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
 //			ChangeStats(deltaPoints: 100);
-//		}
-//		if(GUI.Button(new Rect(500, 50, 100, 50), "+Gems")){
-//			ChangeStats(deltaGems: 5);
 //		}
 //		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
 //			ChangeStats(deltaStars: 50);
@@ -116,9 +106,6 @@ public class StatsController : Singleton<StatsController>{
 		case HUDElementType.Stars:
 			statNumber = DataManager.Instance.GameData.Stats.Stars;
 			break;
-		case HUDElementType.Gems:
-			statNumber = DataManager.Instance.GameData.Stats.Gems;
-			break;
 		default:
 			Debug.LogError("No such display target for " + stat);
 			break;
@@ -135,8 +122,6 @@ public class StatsController : Singleton<StatsController>{
 	/// <param name="pointsLoc">Points location.</param>
 	/// <param name="deltaStars">Delta stars.</param>
 	/// <param name="starsLoc">Stars location.</param>
-	/// <param name="deltaGems">Delta gems.</param>
-	/// <param name="gemsLoc">Gems location.</param>
 	/// <param name="deltaHealth">Delta health.</param>
 	/// <param name="healthLoc">Health location.</param>
 	/// <param name="deltaMood">Delta mood.</param>
@@ -146,7 +131,6 @@ public class StatsController : Singleton<StatsController>{
 	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
 	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3),
 	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3),
-	                        int deltaGems = 0, Vector3 gemsLoc = default(Vector3),
 	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
 	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3),
 							bool isPlaySounds = true, bool isAllAtOnce = false, bool isFloaty = false,
@@ -169,15 +153,6 @@ public class StatsController : Singleton<StatsController>{
 			}
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
-		}
-
-		if(deltaGems != 0){
-			if(deltaGems > 0){
-				DataManager.Instance.GameData.Stats.AddGems(deltaGems);
-			}
-			else if(deltaGems < 0){
-				DataManager.Instance.GameData.Stats.SubstractGems(-1 * deltaGems);
-			}
 		}
 		
 		// so that the pet animations play properly, make sure to change and check mood BEFORE health
@@ -234,10 +209,6 @@ public class StatsController : Singleton<StatsController>{
 				starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
 				starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopRight);
 			}
-			if(gemsLoc != default(Vector3)){
-				gemsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, gemsLoc);
-				gemsLoc = CameraManager.Instance.TransformAnchorPosition(gemsLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopRight);
-			}
 			if(healthLoc != default(Vector3)){
 				healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);
 				healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopLeft);
@@ -256,7 +227,6 @@ public class StatsController : Singleton<StatsController>{
 		List<StatPair> listStats = new List<StatPair>();
 		listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
 		listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
-		listStats.Add(new StatPair(HUDElementType.Gems, deltaGems, gemsLoc, deltaGems > 0 ? hudAnimator.soundStars : null));
 		listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
 		listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
 		

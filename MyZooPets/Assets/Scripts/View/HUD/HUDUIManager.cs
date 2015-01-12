@@ -13,21 +13,15 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public UILabel moodLabel;
 	public UILabel starLabel;
 
-	public UILabel gemLabel;
-
 	// Parent for tweening
 	public GameObject tweenParent;
 	public GameObject anchorTopLeft;
-	public GameObject anchorTopRight;
 
 	// Icon pulsing
 	public AnimationControl animHealth;
 	public AnimationControl animMood;
 	public AnimationControl animMoney;
 	public AnimationControl animXP;
-	public ParticleSystemController animFire;
-
-	public AnimationControl animGem;
 
 	private float points;
 	private float mood;
@@ -36,8 +30,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	private string levelText;
 	private int nextLevelPoints;
 	private string starCount;
-
-	private string gemCount;
 	
 	/// <summary>
 	/// Gets the tween parent.
@@ -50,9 +42,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public GameObject GetTweenParent(string anchor){
 		if(anchor == "topLeft"){
 			return anchorTopLeft;
-		}
-		else if(anchor == "topRight"){
-			return anchorTopRight;
 		}
 		else{
 			Debug.LogError("Bad anchor specified for HUD tween");
@@ -85,8 +74,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		//Star data
 		starCount = hudAnimator.GetDisplayValue(HUDElementType.Stars).ToString();
 
-		gemCount = hudAnimator.GetDisplayValue(HUDElementType.Gems).ToString();
-
 		levelSlider.sliderValue = points / nextLevelPoints;
 		levelNumber.text = level;
 		levelFraction.text = levelText;
@@ -95,8 +82,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		healthSlider.sliderValue = health / 100;
 		healthLabel.text = health.ToString() + "%";
 		starLabel.text = starCount;
-
-		gemLabel.text = gemCount;
 	}
 
 	public void ShowPanel(){

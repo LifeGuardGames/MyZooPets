@@ -53,9 +53,7 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl healthIconAnim;
 	private AnimationControl moodIconAnim;
 	private AnimationControl starIconAnim;
-	private AnimationControl gemIconAnim;
 	private AnimationControl xpIconAnim;
-//	private ParticleSystemController animFire;
 	
 	private GameObject toDestroy;
 	
@@ -108,20 +106,17 @@ public class HUDAnimator : MonoBehaviour{
 		healthIconAnim = HUDUIManager.Instance.animHealth;
 		moodIconAnim = HUDUIManager.Instance.animMood;
 		starIconAnim = HUDUIManager.Instance.animMoney;
-		gemIconAnim = HUDUIManager.Instance.animGem;
 		xpIconAnim = HUDUIManager.Instance.animXP;
 		
 		// store all the relevant elements in hashes...kind of annoying
 		hashAnimControls[HUDElementType.Points] = xpIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Stars] = starIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Gems] = gemIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Mood] = moodIconAnim.GetComponent<AnimationControl>();		
 		
 		// Model > View, exception!
 		hashDisplays[HUDElementType.Points] = DataManager.Instance.GameData.Stats.Points;
 		hashDisplays[HUDElementType.Stars] = DataManager.Instance.GameData.Stats.Stars;
-		hashDisplays[HUDElementType.Gems] = DataManager.Instance.GameData.Stats.Gems;
 		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
 		hashDisplays[HUDElementType.Mood] = DataManager.Instance.GameData.Stats.Mood;
 		
@@ -176,7 +171,7 @@ public class HUDAnimator : MonoBehaviour{
 	/// <param name="isFloaty">If set to <c>true</c> is floaty.</param>
 	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isPlaySounds, bool isAllAtOnce, bool isFloaty, float animDelay){
 		yield return new WaitForSeconds(animDelay);
-		// One loop for each TYPE of stat (Gem, Coin, Stars, etc)
+		// One loop for each TYPE of stat (Coin, Stars, etc)
 		for(int i = 0; i < statsTypeList.Count; ++i){
 			StatPair pair = statsTypeList[i];
 			HUDElementType eType = pair.eType;

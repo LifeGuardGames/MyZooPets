@@ -402,25 +402,8 @@ public class MiniPet : MonoBehaviour {
 	private void LevelUpEventHandler(object sender, EventArgs args){
 		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
 			animationManager.Cheer();
-//			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
-//			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-//			droppedItem.transform.parent = spawnItemTransform;
-//			droppedItem.transform.localPosition = Vector3.zero;
-//			droppedItem.transform.localScale = Vector3.one;
-//			droppedItem.transform.localEulerAngles = Vector3.zero;
-//
-//			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
-//			droppedObjectStat.Init(HUDElementType.Gems, 1);
-//			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
-			
-			// set the position of the newly spawned item to be wherever this item box is
-//			Vector3 position = gameObject.transform.position;
-//			droppedItem.transform.position = position;
-			
-			// make the item "burst" out
-//			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
-
-			StatsController.Instance.ChangeStats(deltaGems: 1, gemsLoc: transform.position, is3DObject: true, animDelay: 1.5f);
+			Debug.Log("RECEIVING GIFT HERE");
+//			StatsController.Instance.ChangeStats(deltaGems: 1, gemsLoc: transform.position, is3DObject: true, animDelay: 1.5f);
 		}
 	}
 

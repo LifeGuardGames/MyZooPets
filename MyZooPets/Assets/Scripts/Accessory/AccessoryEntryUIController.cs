@@ -75,12 +75,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		itemData = (AccessoryItem)newItemData;
 
 		string costText = newItemData.Cost.ToString();
-		if(newItemData.Type == ItemType.Premiums)
-			costText = "$" + costText;
-		
-		if(newItemData.CurrencyType == CurrencyTypes.Gem)
-			buyButtonIcon.spriteName = "iconGem";
-
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
 		spriteIcon.spriteName = newItemData.TextureName;

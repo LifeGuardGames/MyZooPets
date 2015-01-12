@@ -11,7 +11,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
 	private List<Item> accessoryList; // List with only AccessoryItem. sorted by cost
-	private List<Item> premiumList;
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
 
 	/// <summary>
@@ -67,28 +66,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 				accessoryList = ListFromDictionarySortByCategoryCost(accesorryDict);
 			}
 			return accessoryList;
-		}
-	}
-
-	/// <summary>
-	/// Gets the premium list. Sorted by cost
-	/// </summary>
-	/// <value>The premium list.</value>
-	public List<Item> PremiumList{
-		get{
-			if(premiumList == null){
-				premiumList = new List<Item>();
-				Dictionary<string, Item> premiumDict = DataLoaderItems.GetAllItemsOfType(ItemType.Premiums);
-				premiumList = ListFromDictionarySortByCost(premiumDict);
-
-//				var items = from keyValuePair in premiumDict 
-//					select keyValuePair.Value;
-//				premiumList = (from item in items 
-//				                       orderby item.Cost.ToString() ascending
-//				                       select item).ToList();
-			}
-
-			return premiumList;
 		}
 	}
 

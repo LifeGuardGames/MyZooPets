@@ -10,7 +10,6 @@ public enum StoreShortcutType{
 	DecorationUIStoreButton,
 	DecorationUIStoreButtonTutorial,
 	MinipetUIStoreButton,
-	GemExplanationNotification,
 	NeedFoodPetSpeech,
 	NeedEmergencyInhalerPetSpeech,
 	SickNotification
@@ -22,7 +21,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject grid;
 	public GameObject itemStorePrefab;		//basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
-	public GameObject itemStorePrefabPremium; // premium item entry
 	public GameObject itemSpritePrefab; 	// item sprite for inventory
 	public GameObject storeBasePanel; 		//Where you choose item category
 	public GameObject storeSubPanel; 		//Where you choose item sub category
@@ -123,12 +121,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		OnShortcutModeEnd += ShortcutModeEnded;
 		OpenToSubCategory("Items", true, StoreShortcutType.NeedEmergencyInhalerPetSpeech);
 	}
-
-//	public void OpenToSubCategoryPremiumWithLockAndCallBack(){
-//		ClickManager.Instance.Lock(UIModeTypes.Store, GetClickLockExceptions());
-//		OnShortcutModeEnd += ShortcutModeEnded;
-//		OpenToSubCategory("Premiums", true);
-//	}
 
 	private void ShortcutModeEnded(object sender, EventArgs args){
 		ClickManager.Instance.ReleaseLock();
@@ -268,32 +260,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;
-		case CurrencyTypes.Gem:
-
-			if(DataManager.Instance.GameData.Stats.Gems >= itemData.Cost){
-
-				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaGems: (int)itemData.Cost * -1);
-
-				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
-
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
-			}
-			else{
-				AudioManager.Instance.PlayClip("buttonDontClick");
-			}
-//			else{
-//
-//				//spawn buy more gems popup
-//				Hashtable notificationEntry = new Hashtable();
-//				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.Premium);
-//
-//				NotificationUIManager.Instance.AddToQueue(notificationEntry);
-//			}
-			break;
-		case CurrencyTypes.IAP:
-			break;
 		}
 	}
 
@@ -332,11 +298,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			break;
 		}
 	}
-
-//	public void OnBuyPremium(GameObject button){
-//		Debug.Log("Premium currency bought");
-//		StatsController.Instance.ChangeStats(deltaGems);
-//	}
 	
 	/// <summary>
 	/// Creates the sub category items. Create tabs for sub category if sub category exists.
@@ -352,7 +313,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	/// <param name="page">Page.</param>
 	private void CreateSubCategoryItemsWithString(string page, StoreShortcutType shortcutType = StoreShortcutType.None){
-		if(page != "Items" && page != "Food" && page != "Decorations" && page != "Premiums"){
+		if(page != "Items" && page != "Food" && page != "Decorations"){
 			Debug.LogError("Illegal store sub category: " + page);
 			return;
 		}
@@ -439,17 +400,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			//After tabs have been set up create items for the first/default tab
 			CreateSubCategoryItemsTab(defaultTabName, Color.white, shortcutType);
 		}
-//		else if(currentPage == "Premiums"){
-//			InventoryUIManager.Instance.HidePanel();
-//			NavigationUIManager.Instance.HidePanel();
-//			DecoInventoryUIManager.Instance.HideDecoInventory();
-//
-//			foreach(Transform tabParent in tabArea.transform){
-//				HideUnuseTab(tabParent.FindChild("Tab"));
-//			}
-//			
-//			CreateSubCategoryItemsTab("premiumsDefaultTab", Color.white);
-//		}
 		ShowStoreSubPanel();
 	}
 
@@ -506,16 +456,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			
 			foreach(Item itemData in usableList){
 				if(!itemData.ItemBoxOnly){
-					// Flame crystal shortcut, only show flame crystal
-					if(shortcutType == StoreShortcutType.FlameCrystalNeededNotification || shortcutType == StoreShortcutType.GemExplanationNotification){
-						if(itemData.ID == "Usable1"){
-							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
-							break;
-						}
-						continue;
-					}
 					// Need emergency inhaler shortcut, only show emergency inhaler
-					else if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
+					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
 							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 							break;
@@ -543,16 +485,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				}
 			}
 		}
-//		else if(currentPage == "Premiums"){
-//			//TODO: temporary implementation for IAP. This will need to be connected with iOS/Android
-//			//IAP stuff laterr
-//			
-//			List<Item> premiumList = ItemLogic.Instance.PremiumList;
-//			
-//			foreach(Item itemData in premiumList){
-//				StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabPremium, itemData, this.gameObject, "OnBuyPremium");
-//			}
-//		}
 		grid.GetComponent<UIGrid>().Reposition();
 	}
 
@@ -589,14 +521,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				InventoryUIManager.Instance.ShowPanel();
 				RoomArrowsUIManager.Instance.ShowPanel();
-				DecoInventoryUIManager.Instance.HideDecoInventory();
-				break;
-
-			// Exit back to minipet UI
-			case StoreShortcutType.GemExplanationNotification:
-			case StoreShortcutType.MinipetUIStoreButton:
-				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-				InventoryUIManager.Instance.ShowPanel();
 				DecoInventoryUIManager.Instance.HideDecoInventory();
 				break;
 

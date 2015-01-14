@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: badgeSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400002}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Badge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,8 +40,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 150, y: 150, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -4}
+  m_LocalScale: {x: 128, y: 128, z: 0}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 0
@@ -52,7 +52,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: -2.98023224e-08, z: 0, w: 1}
-  m_LocalPosition: {x: 380, y: -380, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -85,7 +85,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 48f0d7582fa85e042b2b7ca833b4d145, type: 2}
-  mSpriteName: badgeBlank
+  mSpriteName: badgeDeco3
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -102,12 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6796c8a97d5814f3c95f215183ca4d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bSprite: 0
-  eMode: 0
-  strSoundProcess: badgesClicked
-  buttonName: 
-  bCheckClickManager: 0
   modeTypes: 00000000
+  buttonName: 
   buttonSound: badgesClicked
   isCheckingClickManager: 0
   isSprite: 0

@@ -12,11 +12,17 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
+	public string blankBadgeTextureName = "badgeBlank";
 
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
 	private GameObject backButtonReference;
 	private bool isActive = false;
+
+	protected override void Awake(){
+		base.Awake();
+		eModeType = UIModeTypes.Badge;
+	}
 
 	protected override void Start(){
 		base.Start();
@@ -54,11 +60,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				string textureName = "";
 				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
 
-				//TO DO: Update this after you have all the art for badges
+				//TODO: Update this after you have all the art for badges
 				if(badge.IsUnlocked){
 					textureName = badge.TextureName;
 				}else{
-					textureName = badge.TextureName + "Dark";
+					textureName = blankBadgeTextureName;
 				}
 				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = textureName;
 			}
@@ -141,18 +147,19 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	//When the badge board is clicked and zoomed into
 	protected override void _OpenUI(){
+		Debug.Log("open called");
 		if(!isActive){
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
-			
+
+			GetComponent<TweenToggleDemux>().Show();
+
 			isActive = true;
 			badgeBoard.collider.enabled = false;
 			firstClick = true;
-			
-			backButton.SetActive(true);
 		}
 	}
 
@@ -165,19 +172,17 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				lastClickedBadge.transform.localScale = Vector3.one;
 			}
 			lastClickedBadge = null;
-			
+
+			GetComponent<TweenToggleDemux>().Hide();
+
 			isActive = false;
 			badgeBoard.collider.enabled = true;
-			
-			CameraManager.Instance.ZoomOutMove();
 
 			//Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-
-			backButton.SetActive(false);
 		}
 	}
 }

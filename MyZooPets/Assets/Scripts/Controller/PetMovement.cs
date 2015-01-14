@@ -140,7 +140,7 @@ public class PetMovement : Singleton<PetMovement>{
 			return;
        
 		AudioManager.Instance.PlayClip(strSoundMove);
-		Debug.Log(gesture.Position);
+//		Debug.Log(gesture.Position);
 		MovePet(Camera.main.ScreenPointToRay(new Vector3(gesture.Position.x, movementStaticScreenY, 0)));    
 	}
 

@@ -56,12 +56,11 @@ public class DroppedObjectStat : DroppedObject{
 		int coins = hudElementType == HUDElementType.Stars ? amount : 0;
 		int health = hudElementType == HUDElementType.Health ? amount : 0;
 		int mood = hudElementType == HUDElementType.Mood ? amount : 0;
-		int gems = hudElementType == HUDElementType.Gems ? amount : 0;
 
 		Debug.Log("DROPPED STAT");
 		// Pass in the global object and flag is3DObject
 		StatsController.Instance.ChangeStats(deltaPoints: xp, pointsLoc: transform.position, deltaStars: coins, starsLoc: transform.position,
-		                                     deltaGems: gems, gemsLoc: transform.position, deltaHealth: health, healthLoc: transform.position,
+		                                     deltaHealth: health, healthLoc: transform.position,
 		                                     deltaMood: mood, moodLoc: transform.position, is3DObject: true);
 
 		// destroy the object

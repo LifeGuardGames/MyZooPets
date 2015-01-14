@@ -12,17 +12,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
 	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
-	// public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-	
+
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
 	private GameObject backButtonReference;
 	private bool isActive = false;
-	
-	// related to zooming into the badge board
-	public float fZoomTime;
-	public Vector3 vOffset;
-	public Vector3 vRotation;
 
 	protected override void Start(){
 		base.Start();
@@ -148,10 +142,6 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	//When the badge board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
-			// zoom into the board
-			Vector3 vPos = badgeBoard.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
-			
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
@@ -180,7 +170,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			badgeBoard.collider.enabled = true;
 			
 			CameraManager.Instance.ZoomOutMove();
-	
+
 			//Show other UI Objects
 			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();

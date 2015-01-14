@@ -30,8 +30,6 @@ public class DataLoaderItems{
             item = dictItems[ItemType.Usables][itemID];
         }else if(dictItems[ItemType.Decorations].ContainsKey(itemID)){
             item = dictItems[ItemType.Decorations][itemID];
-        }else if(dictItems[ItemType.Premiums].ContainsKey(itemID)){
-			item = dictItems[ItemType.Premiums][itemID];
 		}else if(dictItems[ItemType.Accessories].ContainsKey(itemID)){
 			item = dictItems[ItemType.Accessories][itemID];
 		}
@@ -150,9 +148,6 @@ public class DataLoaderItems{
                     	break;
 					case ItemType.Accessories:
 						item = new AccessoryItem(itemID, itemType, hashItemData);
-						break;
-					case ItemType.Premiums:
-						item = new PremiumItem(itemID, itemType, hashItemData);
 						break;
                 }
 				

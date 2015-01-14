@@ -74,11 +74,7 @@ public class GiftGroupController : MonoBehaviour {
 		gift4.spriteName = EmptySpriteName;
 		
 		// Reward Gems all together in one go
-		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCountAux));
-//		Hashtable option = new Hashtable();
-//		option.Add("parent", floatyParent);
-//		option.Add("spriteGems", "iconGems");
-//		option.Add("deltaGems", giftCountAux);
-//		FloatyUtil.SpawnFloatyStats(option);
+		Debug.LogError("REWARD WAS GEMS");
+//		StatsController.Instance.ChangeStats(deltaGems:(2 * giftCountAux));
 	}
 }

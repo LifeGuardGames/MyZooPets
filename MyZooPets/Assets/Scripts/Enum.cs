@@ -40,13 +40,11 @@ public enum ItemType{
 	Usables,
 	Decorations,
 	Accessories,
-	Premiums
 }
 public enum StatType{
     Mood,
     Health,
-	Fire,
-	Gems
+	Fire
 }
 public enum ChallengeType{
     Weekly,
@@ -62,12 +60,9 @@ public enum NotificationPopupType{
 	LevelUp,
     BadgeUnlocked,
     FireLevelUp,
-	Premium,
 	InhalerRecharging,
-	PremiumTest,
 	SuperWellaInhaler,
 	SuperWellaSickReminder,
-	GemIntro,
 	MiniGameQuitCheck,
 	ZeroHealth
 }
@@ -244,8 +239,7 @@ public enum HUDElementType{
 	Points, 
 	Stars, 
 	Health, 
-	Mood,
-	Gems
+	Mood
 }
 
 // types of button clicks
@@ -311,8 +305,6 @@ public enum MiniPetTypes{
 }
 
 public enum CurrencyTypes{
-	WellaCoin,
-	Gem,
-	IAP
+	WellaCoin
 }
 

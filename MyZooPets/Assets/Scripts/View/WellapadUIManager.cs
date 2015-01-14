@@ -7,7 +7,7 @@ using System.Collections;
 /// </summary>
 
 public class WellapadUIManager : SingletonUI<WellapadUIManager> {
-//	public GameObject goWellapadUI; // the actual game object of the wellapad
+	public TweenToggle wellapadTweenParent;
 
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
@@ -18,7 +18,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	
 	protected override void Start() {
 		// set the tween target on the wellapad object to this object
-		GetComponent<TweenToggle>().ShowTarget = gameObject;
+		wellapadTweenParent.ShowTarget = gameObject;
 		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();
 
 		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
@@ -32,9 +32,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		// show the UI itself
-		GetComponent<TweenToggle>().Show();
-
-//		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
+		wellapadTweenParent.Show();
 	}
 
 	//---------------------------------------------------
@@ -47,7 +45,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		RoomArrowsUIManager.Instance.ShowPanel();
 		
 		// hide the UI
-		GetComponent<TweenToggle>().Hide();
+		wellapadTweenParent.Hide();
 	}
 
 	//---------------------------------------------------

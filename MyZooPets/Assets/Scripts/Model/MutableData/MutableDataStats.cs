@@ -9,7 +9,6 @@ using System.Collections;
 public class MutableDataStats{
     public int Points {get; set;} //evolution Points
     public int Stars {get; set;} //currency of the game
-	public int Gems {get; set;} //premium currency of the game
     public int Health {get; set;} //pet's Health
     public int Mood {get; set;} //pet's mood (refer to as hungry)
 
@@ -34,7 +33,6 @@ public class MutableDataStats{
         Mood = 80;
         Points = 0;
 		Stars = 300;
-		Gems = 0;
     }
 	
     //==============StatsModifiers================
@@ -60,14 +58,6 @@ public class MutableDataStats{
         if (Stars < 0)
             Stars = 0;
     }
-
-	//Gems
-	public void AddGems(int val){
-		Gems += val;
-	}
-	public void SubstractGems(int val){
-		Gems -= val;
-	}
 
     //Health
     public void AddHealth(int val){

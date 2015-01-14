@@ -398,18 +398,19 @@ public class GatingManager : Singleton<GatingManager>{
 	/// buy flame crystal from the store with gems
 	/// </summary>
 	private void FlameCrystalNotification(){
-		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
-			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-			
-			ClickManager.Instance.Lock(UIModeTypes.Store);
-			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
-		};
-		
-		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-		
-		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		Debug.LogError("NEW NOTIFICATION HERE");
+//		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+//			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+//			
+//			ClickManager.Instance.Lock(UIModeTypes.Store);
+//			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
+//		};
+//		
+//		Hashtable notificationEntry = new Hashtable();
+//		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+//		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+//		
+//		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 	}
 
 	/// <summary>

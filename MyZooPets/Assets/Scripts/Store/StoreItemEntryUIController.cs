@@ -63,16 +63,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 		gameObject.name = itemData.ID;
 
 		string costText = itemData.Cost.ToString();
-		if(itemData.Type == ItemType.Premiums)
-			costText = "$" + costText;
-
-		if(itemData.CurrencyType == CurrencyTypes.Gem)
-			buttonIcon.spriteName = "iconGem";
-//		else
-//			buttonIcon.spriteName = "iconCoin";
-
 		labelCost.text = costText;
-
 		labelName.text = itemData.Name;
 		spriteIcon.spriteName = itemData.TextureName;
 		buttonMessage.target = buyButtonMessageTarget;

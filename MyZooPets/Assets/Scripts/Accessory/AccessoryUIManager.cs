@@ -15,7 +15,7 @@ using System.Collections.Generic;
 /// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
 /// 
 /// </summary>
-public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
+public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public UIGrid grid;
 	public GameObject accessoryTitlePrefab;
 	public GameObject accessoryEntryPrefab;
@@ -27,11 +27,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	public float ZoomTime;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
-
 	public string soundBuy;
 	public string soundUnequip;
 	public string soundEquip;
-
 	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
 	private bool isActive = false;
 
@@ -174,32 +172,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 				// Change the state of the button
 				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
-
-				// Equip item
-				Equip(itemID);
-
-				//Analytics
-				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-				
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
-			}
-			else{
-				AudioManager.Instance.PlayClip("buttonDontClick");
-			}
-			break;
-		case CurrencyTypes.Gem:
-			if(StatsController.Instance.GetStat(HUDElementType.Gems) >= itemData.Cost){
-				
-				//Disable the buy button so user can't buy the same wallpaper anymore 
-				UIImageButton buyButton = button.GetComponent<UIImageButton>();
-				buyButton.isEnabled = false;
-				
-				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
-				
-				// Change the state of the button
-				button.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
 
 				// Equip item
 				Equip(itemID);

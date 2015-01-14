@@ -149,36 +149,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public void LevelUpAnimationCompleted(){
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
 		IsLevelUpAnimationLockOn = false;	// Unlocked immediately... save for future use
-		
-		Invoke("CheckIfFirstTimeReceivingGems", 4f);
-		
+
 		if(OnLevelUpAnimationCompleted != null)
 			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
-	}
-
-	/// <summary>
-	/// Checks if first time receiving gems. Show intro notification if first time
-	/// </summary>
-	private void CheckIfFirstTimeReceivingGems(){
-		bool isFirstTime = MiniPetManager.Instance.IsFirstTimeReceivingGems;
-		if(isFirstTime){
-			Hashtable notificationEntry = new Hashtable();
-			
-			PopupNotificationNGUI.Callback button1Function = delegate(){
-				OpenItemShop();
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-			
-			PopupNotificationNGUI.Callback button2Function = delegate(){
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-			
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GemIntro);
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-			
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-		}
 	}
 
 	private void CheckForTicklingTutorial(){
@@ -250,16 +223,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
 		StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.MinipetUIStoreButton);
-	}
-
-	/// <summary>
-	/// Opens the item shop.
-	/// </summary>
-	private void OpenItemShop(){
-		this.GetComponent<TweenToggleDemux>().Hide();
-		ClickManager.Instance.Lock(UIModeTypes.Store);
-		StoreUIManager.OnShortcutModeEnd += CloseShop;
-		StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.GemExplanationNotification);
 	}
 
 	private void CloseShop(object sender, EventArgs args){

@@ -6,17 +6,18 @@ using System.Linq;
 
 public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public AnimationClip pulseClip;
-	public GameObject backButton;
 	public GameObject badgeBoard;
-	public GameObject descriptionObject;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
-	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
-	public string blankBadgeTextureName = "badgeBlank";
+	public string blankBadgeTextureName = "64pxTest";
+
+	public TweenToggleDemux descriptionDemux;
+	public UISprite descriptionBadgeSprite;
+	public UILabel descriptionBadgeTitle;
+	public UILabel descriptionBadgeInfo;
 
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
-	private GameObject backButtonReference;
 	private bool isActive = false;
 
 	protected override void Awake(){
@@ -70,109 +71,75 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			}
 		}
 
-		badgeBase.GetComponent<UIGrid>().Reposition();
+		UIGrid grid = badgeBase.GetComponent<UIGrid>();
+		grid.sorted = true;
+		grid.Reposition();
 	}
 
 	//Event Listener that updates the Level badges UI when a new badge is unlocked
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
-		Badge badge = arg.UnlockedBadge;
-		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
-
-		//TODO: Update this after you have all the art for badges
-		// if(badge.IsUnlocked){
-
-		// }else{
-
-		// }
-
-		if(badgeTrans != null)
-			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
-
-		badgeBase.GetComponent<UIGrid>().Reposition();
+		// Show the badge board and show the get badge animation
+		StartCoroutine(UnlockBadgeHelper(arg.UnlockedBadge));
 	}
-	
+
+	private IEnumerator UnlockBadgeHelper(Badge badge){
+		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
+		if(badgeTrans != null){
+			badgeTrans.Find("AnimParent").GetComponent<Animation>().Play();
+		}
+		else{
+			Debug.LogError("Badge " + badge.ID + " not found to unlock");
+		}
+		yield return 0;
+	}
+
+	private void UnlockBadgeHelperShowSprite(){
+		// TODO need way to get the specific sprite!!!!
+		//			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
+	}
+
 	public void BadgeClicked(GameObject go){
 		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
-
-		// First time clicking, not showing description
-		if(firstClick){
-			firstClick = false;
-			descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
-			descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
-			ShowDescriptionPanel();
-		}
-		
-		if(lastClickedBadge != go){
-			// Remove the animation component in the last badge and assign new reference
-			if(lastClickedBadge != null){
-				Destroy(lastClickedBadge.GetComponent<Animation>());
-				lastClickedBadge.transform.localScale = Vector3.one;
-			}
-			lastClickedBadge = go;
-			
-			// Play pulsing animation in current badge
-			Animation anim = go.AddComponent<Animation>();
-			anim.AddClip(pulseClip, "scaleUpDownBadge");
-			anim.Play("scaleUpDownBadge");
-			
-			// Hide callback, show last badge info
-			TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
-			toggle.HideTarget = gameObject;
-			toggle.HideFunctionName = "RepopulateAndShowDescriptionPanel";
-			HideDescriptionPanel();
-		}
-	}
-	
-	// Callback for finished hide description, populate panel with new info and show
-	private void RepopulateAndShowDescriptionPanel(){
-		Badge clickedBadge = BadgeLogic.Instance.GetBadge(lastClickedBadge.name);
-		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
-		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
+		descriptionBadgeSprite.spriteName = blankBadgeTextureName; //TODO
+		descriptionBadgeTitle.text = clickedBadge.Name;
+		descriptionBadgeInfo.text = clickedBadge.Description;
+		Debug.Log("Badge clicked");
 		ShowDescriptionPanel();
-		descriptionObject.GetComponent<PositionTweenToggle>().HideTarget = null;
-		descriptionObject.GetComponent<PositionTweenToggle>().HideFunctionName = null;
+	}
+
+	/// <summary>
+	/// Clicked anywhere when showing the info, return to normal badge display
+	/// </summary>
+	public void BadgeInfoClicked(){
+		HideDescriptionPanel();
 	}
 	
 	private void ShowDescriptionPanel(){
-		descriptionObject.GetComponent<PositionTweenToggle>().Show();
+		descriptionDemux.GetComponent<TweenToggleDemux>().Show();
 	}
 	
 	private void HideDescriptionPanel(){
-		descriptionObject.GetComponent<PositionTweenToggle>().Hide();
+		descriptionDemux.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	public void DisableBackButton(){
-		isActive = false;
-	}
-
-	//When the badge board is clicked and zoomed into
 	protected override void _OpenUI(){
-		Debug.Log("open called");
 		if(!isActive){
+			GetComponent<TweenToggleDemux>().Show();
+
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 			RoomArrowsUIManager.Instance.HidePanel();
 
-			GetComponent<TweenToggleDemux>().Show();
-
 			isActive = true;
 			badgeBoard.collider.enabled = false;
-			firstClick = true;
 		}
 	}
 
-	//The back button on the left top corner is clicked to zoom out of the badge board
 	protected override void _CloseUI(){
 		if(isActive){
 			HideDescriptionPanel();
-			if(lastClickedBadge != null){
-				Destroy(lastClickedBadge.GetComponent<Animation>());
-				lastClickedBadge.transform.localScale = Vector3.one;
-			}
-			lastClickedBadge = null;
-
 			GetComponent<TweenToggleDemux>().Hide();
 
 			isActive = false;

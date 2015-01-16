@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &100000
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -33,6 +33,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400004}
+  - 111: {fileID: 11100000}
+  - 114: {fileID: 11400004}
+  m_Layer: 10
+  m_Name: AnimParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -40,10 +57,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4}
-  m_LocalScale: {x: 128, y: 128, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: -4}
+  m_LocalScale: {x: 90, y: 90, z: 0}
   m_Children: []
-  m_Father: {fileID: 400002}
+  m_Father: {fileID: 400004}
   m_RootOrder: 0
 --- !u!4 &400002
 Transform:
@@ -52,11 +69,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: -2.98023224e-08, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400000}
+  - {fileID: 400004}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &400004
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_Children:
+  - {fileID: 400000}
+  m_Father: {fileID: 400002}
   m_RootOrder: 0
 --- !u!65 &6500000
 BoxCollider:
@@ -68,8 +98,23 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 150, y: 150, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 90, y: 90, z: 0}
+  m_Center: {x: 0, y: 0, z: -10}
+--- !u!111 &11100000
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 5bbd8d9a0fab77e4f91b9d0dd36efb2c, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 5bbd8d9a0fab77e4f91b9d0dd36efb2c, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -85,7 +130,7 @@ MonoBehaviour:
   mPivot: 4
   mDepth: 1
   mAtlas: {fileID: 11400000, guid: 48f0d7582fa85e042b2b7ca833b4d145, type: 2}
-  mSpriteName: badgeDeco3
+  mSpriteName: 64pxTest
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -102,11 +147,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6796c8a97d5814f3c95f215183ca4d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modeTypes: 00000000
+  modeTypes: 11000000
   buttonName: 
   buttonSound: badgesClicked
-  isCheckingClickManager: 0
-  isSprite: 0
+  isCheckingClickManager: 1
+  isSprite: 1
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6039938926434fd4aa51207d8895790b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target1: {fileID: 0}
+  functionName1: 
+  target2: {fileID: 0}
+  functionName2: 
+  target3: {fileID: 0}
+  functionName3: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

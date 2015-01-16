@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ComicPlayer : MonoBehaviour{
     public static EventHandler<EventArgs> OnComicPlayerDone; //event fire when comic player played through all pages
-    public List<string> pages = new List<string>(); //name of the prefab of the comic pages
+	public List<GameObject> pages = new List<GameObject>(); //name of the prefab of the comic pages
 
     private int currentPageNum;
     private int totalNumOfPages;
@@ -17,9 +17,15 @@ public class ComicPlayer : MonoBehaviour{
         currentComicPage = null;
     }
 
-    void Start(){
-        NextPage();
-    }
+	public void Init(string petColor){
+		// Populate all the pet colors in all the pages
+		foreach(GameObject go in pages){
+			go.GetComponent<ComicPage>().Init(petColor);
+		}
+
+		// Launch the comic sequence
+		NextPage();
+	}
 
     //---------------------------------------------------
     // NextPage()

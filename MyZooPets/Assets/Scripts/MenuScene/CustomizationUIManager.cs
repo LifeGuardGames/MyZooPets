@@ -132,6 +132,7 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		
 		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
 		LgNGUITools.AddChildWithPositionAndScale( GameObject.Find("Anchor-Center"), resourceMovie );
+		resourceMovie.GetComponent<ComicPlayer>().Init(petColor);
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
 	}
 

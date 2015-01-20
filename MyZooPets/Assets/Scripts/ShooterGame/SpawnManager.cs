@@ -40,15 +40,24 @@ public class SpawnManager :MonoBehaviour {
 		posList.Add(firstPos.transform.position);
 		posList.Add (secondPos.transform.position);	
 		posList.Add(thirdPos.transform.position);
-
 	}
-	
-	public void spawnTrigger(Enemy[] enemy){
-		for ( int i =0; i <enemy.Length;i++){
+
+	public void spawnTrigger(List<EnemyData> enemy){
+		//Debug.Log(enemy.Count);
+		for ( int i =0; i <enemy.Count;i++){
+			StartCoroutine("SpawnEnemy",enemy);
+
+		}
+	}
+	IEnumerator SpawnEnemy(List<EnemyData> enemy){
+		yield return new WaitForSeconds(0.5f);
 		int rand = Random.Range(0,3);
 		GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
-		enemy1.GetComponent<Enemy>().Initialize(enemy[i]);
-		}
+		enemy1.GetComponent<Enemy>().name = enemy[0].name;
+		enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
+		enemy1.GetComponent<Enemy>().AiScript = enemy[0].AiScript;
+		enemy1.GetComponent<Enemy>().Initialize();
+
 	}
 
 }

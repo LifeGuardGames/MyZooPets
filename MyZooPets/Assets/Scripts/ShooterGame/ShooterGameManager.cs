@@ -3,12 +3,6 @@ using System.Collections;
 
 public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
-	// used to calculate spawn rate
-	private float LastSpawn = 0.0f;
-	//Rate of enemy spawn at a spawner
-	public float SpawnTimer = 6.0f; 
-	//The Spawn Manager 
-	public GameObject Spawner;
 	// the number of times the user has missed the optimal use window
 	//public int NumMissed=0;
 	public Camera nguiCamera;
@@ -37,7 +31,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
-		LastSpawn = Time.time;
+		Debug.Log("breaking");
 		EController.GetComponent<EnemyController>().reset();
 	}
 		
@@ -51,11 +45,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 #if !UNITY_EDITOR
 		
 			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-			//PlayerController.instance.ShootFireBall(TouchPos);
+			PlayerShooterController.Instance.shoot(TouchPos);
 #endif
 #if UNITY_EDITOR
 		Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-		//PlayerController.instance.ShootFireBall(mousePos);
+			PlayerShooterController.Instance.shoot(mousePos);
 #endif
 		}
 	}
@@ -63,10 +57,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	
 	// Update is called once per frame
 	protected override void _Update(){
-		if(Time.time - LastSpawn >= SpawnTimer){
-		
-			LastSpawn = Time.time;
-		}
+	
 	}
 	//True: if finger touches NGUI 
 	/// <summary>

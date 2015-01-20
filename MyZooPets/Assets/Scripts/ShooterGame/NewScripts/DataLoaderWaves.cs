@@ -23,6 +23,6 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 			hashData.Add(id, data);
 	}
 	protected override void InitXMLLoader(){
-		xmlFileFolderPath = "Waves";
+		xmlFileFolderPath = "Shooter/Waves";
 	}
 }

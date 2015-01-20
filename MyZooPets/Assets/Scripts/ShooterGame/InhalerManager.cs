@@ -26,7 +26,7 @@ public class InhalerManager : MonoBehaviour {
 	//Player Health
 	public float playerHealth;
 	//Our Shooter Game Manager
-	public GameObject Player;
+	public GameObject Player; 
 	//UI
 	//public GameObject arrowLabel;
 	//public GameObject arrow;

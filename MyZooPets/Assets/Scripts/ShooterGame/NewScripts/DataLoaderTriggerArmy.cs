@@ -22,6 +22,6 @@ public class DataLoaderTriggerArmy : XMLLoaderGeneric<DataLoaderTriggerArmy> {
 			hashData.Add(id, data);
 	}
 	protected override void InitXMLLoader(){
-		xmlFileFolderPath = "TriggerShooter";
+		xmlFileFolderPath = "Shooter/TriggerShooter";
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerShooterController : MonoBehaviour {
+public class PlayerShooterController : Singleton<PlayerShooterController> {
 	//the player state this dictates the pets strength
 	public string State = "neutral";
 	//player health
@@ -61,7 +61,8 @@ public class PlayerShooterController : MonoBehaviour {
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 		//fBallScale = Player.GetComponent<Player>().FBallScale;
 		GameObject instance = Instantiate(bullet, bulletSpawn.transform.position, bullet.transform.rotation)as GameObject;
+		instance.GetComponent<bulletScript>().target = lookPos;
+		instance.GetComponent<bulletScript>().FindTarget();
 		instance.gameObject.transform.localScale /= FBallScale;
-		instance.GetComponent<bulletScript>().target = dir;
 	}
 }

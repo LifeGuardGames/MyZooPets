@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   m_Layer: 0
-  m_Name: Cigs_Face
+  m_Name: Smoke_Face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,9 +29,9 @@ GameObject:
   - 23: {fileID: 2300002}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400000}
-  - 65: {fileID: 6500000}
+  - 135: {fileID: 13500000}
   m_Layer: 0
-  m_Name: NinjaTrigger2
+  m_Name: NinjaTrigger6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0359992795, y: .0570001602, z: .230999947}
+  m_LocalPosition: {x: -0, y: .0460000001, z: .0329999924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -56,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -4.37113883e-08}
-  m_LocalPosition: {x: 30.8899994, y: 6.94999981, z: -6.05999994}
+  m_LocalPosition: {x: 33.3100014, y: 4.26399994, z: -6.05999994}
   m_LocalScale: {x: 1.20000005, y: 1.20000005, z: 1.20000005}
   m_Children:
   - {fileID: 400000}
@@ -74,7 +74,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 5000296a9bd177e40aedccc0be87bffa, type: 2}
+  - {fileID: 2100000, guid: 753d5045477989945b68bbb81244a51a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -94,7 +94,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 20c3ca5c1af100647bde1d6101d467d1, type: 2}
+  - {fileID: 2100000, guid: 753d5045477989945b68bbb81244a51a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -108,14 +108,14 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 87d9db8b08c287c4b83769ad726f903c, type: 3}
+  m_Mesh: {fileID: 4300000, guid: aa19d190d17d9ee4fb7199a7d628f7ac, type: 3}
 --- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Mesh: {fileID: 4300000, guid: 94e42acb3de7a9c4fbc2132a864a4e96, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 7a351463580262e4ca525c42966a0035, type: 3}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -131,18 +131,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &6500000
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.14999998, z: .730000019}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,6 +148,18 @@ MonoBehaviour:
   goHitDirectionFX: {fileID: 100000, guid: c047075965977464bad7e777db26907e, type: 2}
   nPoints: 1
   rendererFace: {fileID: 2300000}
+--- !u!135 &13500000
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .620000005
+  m_Center: {x: 0, y: .129527956, z: .0372455716}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

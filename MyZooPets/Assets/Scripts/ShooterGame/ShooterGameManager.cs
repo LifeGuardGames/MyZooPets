@@ -10,9 +10,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	//The Spawn Manager 
 	public GameObject Spawner;
 	// the number of times the user has missed the optimal use window
-	public int NumMissed=0;
+	//public int NumMissed=0;
 	public Camera nguiCamera;
-
+	public GameObject EController;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -38,6 +38,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _NewGame(){
 		LastSpawn = Time.time;
+		EController.GetComponent<EnemyController>().reset();
 	}
 		
 	public override int GetReward(MinigameRewardTypes eType){
@@ -63,8 +64,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// Update is called once per frame
 	protected override void _Update(){
 		if(Time.time - LastSpawn >= SpawnTimer){
-			int randomeSpawner = Random.Range(0, 3);
-			Spawner.GetComponent<SpawnManager>().spawnTrigger(randomeSpawner);
+		
 			LastSpawn = Time.time;
 		}
 	}

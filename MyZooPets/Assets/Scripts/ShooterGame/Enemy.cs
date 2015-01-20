@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy{
+public class Enemy : MonoBehaviour{
 
 	public string name;
 	public string spritz;
 	public string AiScript;
+	public UISprite triggerSprite;
+	public GameObject NGUIParent;
 
 	public Enemy(){
 	}
-
+	public void Initialize(Enemy enemy){
+		triggerSprite.type = UISprite.Type.Simple;
+		triggerSprite.spriteName = enemy.spritz;
+		triggerSprite.MakePixelPerfect();
+		triggerSprite.name = enemy.spritz;
+		this.gameObject.AddComponent(AiScript);
+	}
 
 	/*// Use this for initialization
 	void Start () {

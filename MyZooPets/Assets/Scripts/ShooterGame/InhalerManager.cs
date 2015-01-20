@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System;
 
 
-public class BarManager : MonoBehaviour {
+public class InhalerManager : MonoBehaviour {
 
 	//Speed at which the arrow scrolls
-	public float scrollSpeed;
+	//public float scrollSpeed;
 	//start Time
 	private int startTime;
 	//how often we increment time
@@ -17,7 +17,7 @@ public class BarManager : MonoBehaviour {
 	// the current time
 	public int currTime;
 	// the number of times the user has missed the optimal use window
-	public int numMissed=0;
+	//public int numMissed=0;
 	// window offset
 	public int offset;
 	// variable to prevent multiple used in the window
@@ -28,10 +28,10 @@ public class BarManager : MonoBehaviour {
 	//Our Shooter Game Manager
 	public GameObject Player;
 	//UI
-	public GameObject arrowLabel;
-	public GameObject arrow;
-	public GameObject arrowstartPos;
-	public GameObject arrowLabelStartPos;
+	//public GameObject arrowLabel;
+	//public GameObject arrow;
+	//public GameObject arrowstartPos;
+	//public GameObject arrowLabelStartPos;
 
 	// we use this to get our start time and set up variables for our window
 	void Start () {
@@ -44,14 +44,14 @@ public class BarManager : MonoBehaviour {
 			justRight.y-=12;
 		}
 		currTime= startTime;
-		arrowLabel.gameObject.GetComponent<UILabel>().text= currTime.ToString();
+		//arrowLabel.gameObject.GetComponent<UILabel>().text= currTime.ToString();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Scrolling the arrow and label
-		arrow.transform.Translate(0,Time.deltaTime*scrollSpeed,0);
-		arrowLabel.transform.Translate(-Time.deltaTime*scrollSpeed,0,0);
+		//arrow.transform.Translate(0,Time.deltaTime*scrollSpeed,0);
+		//arrowLabel.transform.Translate(-Time.deltaTime*scrollSpeed,0,0);
 		/*once we have vacated the window assumeing the window will always be a 12 hour difference 
 		  this allows us to prevent button spamming while the window is open*/
 		if(justRight.y == currTime)
@@ -69,7 +69,7 @@ public class BarManager : MonoBehaviour {
 			else{
 				currTime=1;
 			}
-			arrowLabel.gameObject.GetComponent<UILabel>().text= currTime.ToString();
+			//arrowLabel.gameObject.GetComponent<UILabel>().text= currTime.ToString();
 			elaspedTime=Time.time;
 		}
 		
@@ -87,8 +87,8 @@ public class BarManager : MonoBehaviour {
 		}
 		justUsed=true;
 		elaspedTime=Time.time;
-		arrow.transform.position= arrowstartPos.transform.position;
-		arrowLabel.transform.position= arrowLabelStartPos.transform.position;
+		//arrow.transform.position= arrowstartPos.transform.position;
+		//arrowLabel.transform.position= arrowLabelStartPos.transform.position;
 	}
 	// calculates health of the player based off a number of factors
 	private void calculateStrength (){
@@ -97,22 +97,22 @@ public class BarManager : MonoBehaviour {
 			{
 		//	Player.GetComponent<Player>().AddScore(5);
 			playerHealth+=3;
-			if (numMissed>0){
-				numMissed--;
-			}
+			//if (numMissed>0){
+			//	numMissed--;
+			//}
 		
-			playerHealth-=(1*numMissed);
+			//playerHealth-=(1*numMissed);
 		}
 			else{
-				playerHealth+=(3/(numMissed+1));
+				playerHealth++;
 			}
 		}
-		else{
+		/*else{
 			playerHealth+=(3/(numMissed+1));
 			playerHealth-=(1*numMissed);
 
-		}
-	//	Player.GetComponent<Player>().removeHealth(-playerHealth);
+		}*/
+		Player.GetComponent<PlayerShooterController>().removeHealth(playerHealth);
 	}
 
 

@@ -26,7 +26,7 @@ public class ImmutableDataWaves {
 	public ImmutableDataWaves(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.wave = id;
-		wave = XMLUtils.GetString(hashElements["Wave"] as IXMLNode, null, error);
+		//wave = XMLUtils.GetString(hashElements["Wave"] as IXMLNode, null, error);
 		numOfEnemies = XMLUtils.GetString(hashElements["NumOfEnemies"] as IXMLNode, null, error);
 		begEnemies = XMLUtils.GetString(hashElements["BasicEnemies"] as IXMLNode, null, error);
 		mediumEnemies = XMLUtils.GetString(hashElements["MediumEnemies"] as IXMLNode, null, error);

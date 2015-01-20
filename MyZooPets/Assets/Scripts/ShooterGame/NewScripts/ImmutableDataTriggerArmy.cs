@@ -24,11 +24,18 @@ public class ImmutableDataTriggerArmy : MonoBehaviour {
 		get{ return displayKey;}
 	}
 	public ImmutableDataTriggerArmy(string id, IXMLNode xmlNode, string error){
+		Debug.Log("where");
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
+		Debug.Log("are");
 		this.mober = id;
+		Debug.Log("we");
 		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);
+		Debug.Log("breaking");
 		spriteName = XMLUtils.GetString(hashElements["SpriteName"] as IXMLNode, null, error);
+		Debug.Log("?");
 		ai = XMLUtils.GetString(hashElements["AI"] as IXMLNode, null, error);
-		displayKey = XMLUtils.GetString(hashElements["DisplayKey"] as IXMLNode, null, error);
+		Debug.Log("!");
+		displayKey = XMLUtils.GetString(hashElements["DisPlayKey"] as IXMLNode, null, error);
+		Debug.Log("here?");
 	}
 }

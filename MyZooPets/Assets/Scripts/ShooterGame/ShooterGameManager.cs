@@ -7,6 +7,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	//public int NumMissed=0;
 	public Camera nguiCamera;
 	public GameObject EController;
+	// our score
+	public int Score=0;
+	public GameObject ScoreLabel;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -31,7 +34,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
-		Debug.Log("breaking");
+		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 		EController.GetComponent<EnemyController>().reset();
 	}
 		
@@ -53,7 +56,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 #endif
 		}
 	}
-
+	public void AddScore(int amount)
+	{
+		Score+=amount;
+		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
+	}
 	
 	// Update is called once per frame
 	protected override void _Update(){

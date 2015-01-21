@@ -4,10 +4,14 @@ using System.Collections;
 public class BasicEnemyAi : MonoBehaviour {
 
 	public float Speed = 2.0f;
+	public int ScoreVal=1;
+	public int Damage = 1;
 	private GameObject EnemyC;
+	private GameObject Player;
 	// Use this for initialization
 	void Start () {
 		EnemyC=GameObject.Find("ShooterGameManager");
+		Player = GameObject.FindWithTag("Player");
 	}
 	
 	// Update is called once per frame
@@ -17,18 +21,17 @@ public class BasicEnemyAi : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D Col){
 		if(Col.gameObject.tag=="bullet")
 		{
-			//Player.GetComponent<Player>().AddScore(ScoreVal);
+			EnemyC.GetComponent<ShooterGameManager>().AddScore(ScoreVal);
 			Destroy(Col.gameObject);
 			StartCoroutine("DestroyEnemy");
 		}
 		else if (Col.gameObject.tag=="Player"){
-			//Player.GetComponent<Player>().removeHealth(-Damage);
+			Player.GetComponent<PlayerShooterController>().removeHealth(-Damage);
 			StartCoroutine("DestroyEnemy");
 
 		}
 	}
 	IEnumerator DestroyEnemy(){
-		Debug.Log("hi");
 		yield return new WaitForEndOfFrame();
 		EnemyC.GetComponent<EnemyController>().EnemiesInWave--;
 		Destroy(this.gameObject);

@@ -50,7 +50,6 @@ public class EnemyController : MonoBehaviour {
 		buildWaveList(DataLoaderWaves.GetDataList());
 	}
 	public void GenerateWave(int _WaveNum){
-		Debug.Log("is");
 		CurrWave=waves[_WaveNum];
 		EnemiesInWave= int.Parse(waves[_WaveNum].NumOfEnemies);
 		SpawnWave(CurrWave);

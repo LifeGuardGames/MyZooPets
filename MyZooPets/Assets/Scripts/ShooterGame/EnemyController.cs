@@ -6,7 +6,6 @@ public class EnemyController : MonoBehaviour {
 
 	public List<EnemyData> EnemyList;
 	public int EnemiesInWave=0;
-
 	Wave waver;
 	Wave CurrWave;
 	public GameObject EnemyPrefab;
@@ -18,6 +17,7 @@ public class EnemyController : MonoBehaviour {
 		EnemyList = new List<EnemyData>();
 		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 	}
+
 	// builds a list of waves
 	public Wave buildWave (int _WaveNum){
 		int difficulty=0;
@@ -39,6 +39,7 @@ public class EnemyController : MonoBehaviour {
 		waver.NumOfHard=LoadedWave.HardEnemies;
 		return waver;
 	}
+
 	// builds a list of enemy types
 	public void BuildEnemyList(List<ImmutableDataTriggerArmy> mobList){
 		foreach (ImmutableDataTriggerArmy baddie in mobList){
@@ -57,6 +58,7 @@ public class EnemyController : MonoBehaviour {
 		EnemiesInWave= int.Parse(CurrWave.NumOfEnemies);
 		SpawnWave(CurrWave);
 	}
+
 	// Spawns the current wave
 	public void SpawnWave(Wave currWave){
 		List<EnemyData> WaveEnemies;
@@ -74,14 +76,15 @@ public class EnemyController : MonoBehaviour {
 			WaveEnemies.Add(EnemyList[2]);
 		}*/
 		SpawnManager.Instance.spawnTrigger(WaveEnemies);
-
 	}
+
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
 			this.gameObject.GetComponent<ShooterGameManager>().ChangeWaves();
 		}
 	}
+
 	// Update is called once per frame
 	void Update () {
 	

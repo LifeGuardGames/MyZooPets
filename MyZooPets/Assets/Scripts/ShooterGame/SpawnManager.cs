@@ -30,6 +30,7 @@ public class SpawnManager :Singleton<SpawnManager>{
 
 		
 	}
+
 	IEnumerator SpawnEnemy(List<EnemyData> enemy){
 		for ( int i =0; i <enemy.Count;i++){
 		yield return new WaitForSeconds(1.0f);

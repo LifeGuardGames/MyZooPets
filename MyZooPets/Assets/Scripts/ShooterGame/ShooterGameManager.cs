@@ -62,11 +62,13 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			StartTime=Time.time;
 		}
 	}
+
 	public void AddScore(int amount)
 	{
 		Score+=amount;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 	}
+
 	public void ChangeWaves(){
 		//TODO Play sunAnimation
 		//TODO once animation finishes playing
@@ -75,12 +77,14 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
 	}
+
 	IEnumerator WaitForAnimation(Animation animation){
 		do{
 			yield return null;
 		}
 		while (animation.isPlaying);
 	}
+
 	// Update is called once per frame
 	protected override void _Update(){
 	

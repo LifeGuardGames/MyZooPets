@@ -7,11 +7,7 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 		instance.InitXMLLoader();
 		return instance.GetData<ImmutableDataWave>(id);
 	}
-
-	public static List<ImmutableDataWave> GetDataList(){
-		instance.InitXMLLoader();
-		return instance.GetDataList<ImmutableDataWave>();
-	}
+	
 	public static ImmutableDataWave GetWave(int difficulty){
 
 		switch(difficulty){
@@ -27,10 +23,9 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 		default:
 				return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
 				break;
-
 		}
-
 	}
+
 	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
 		ImmutableDataWave data = new ImmutableDataWave(id,xmlNode,errorMessage);
 		// Store the data
@@ -39,6 +34,7 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 		else
 			hashData.Add(id, data);
 	}
+
 	protected override void InitXMLLoader(){
 		xmlFileFolderPath = "Shooter/Waves";
 	}

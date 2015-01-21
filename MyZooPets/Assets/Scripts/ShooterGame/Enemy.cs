@@ -15,15 +15,20 @@ public class Enemy : MonoBehaviour {
 		triggerSprite.MakePixelPerfect();
 		triggerSprite.name = spritz;
 		tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;
-		this.gameObject.AddComponent<BasicEnemyAi>();
-	}
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		switch(AiScript){
+			case"BasicAI":
+				this.gameObject.AddComponent<BasicEnemyAi>();
+				break;
+			case "MediumAI":
+				this.gameObject.AddComponent<BasicEnemyAi>();
+				break;
+			case "HardAI":
+				this.gameObject.AddComponent<BasicEnemyAi>();
+				break;
+			default:
+				this.gameObject.AddComponent<BasicEnemyAi>();
+				break;
+		}
+
 	}
 }

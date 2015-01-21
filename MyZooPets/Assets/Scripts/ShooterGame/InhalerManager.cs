@@ -90,6 +90,7 @@ public class InhalerManager : MonoBehaviour {
 		//arrow.transform.position= arrowstartPos.transform.position;
 		//arrowLabel.transform.position= arrowLabelStartPos.transform.position;
 	}
+
 	// calculates health of the player based off a number of factors
 	private void calculateStrength (){
 		if (currTime>= justRight.x || currTime<=justRight.y){
@@ -115,6 +116,4 @@ public class InhalerManager : MonoBehaviour {
 		}*/
 		Player.GetComponent<PlayerShooterController>().removeHealth(playerHealth);
 	}
-
-
 }

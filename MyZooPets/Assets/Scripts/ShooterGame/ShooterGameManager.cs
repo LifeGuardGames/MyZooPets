@@ -12,6 +12,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public GameObject ScoreLabel;
 	public float ShootTime;
 	private float StartTime;
+	public int WaveNum=0;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -66,7 +67,17 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		Score+=amount;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 	}
-	
+	public void ChangeWaves(){
+		//TODO Play sunAnimation
+		//TODO once animation finishes playing
+		if(WaveNum >= this.gameObject.GetComponent<EnemyController>().waves.Count){
+			WaveNum=0;
+		}
+		else{
+			WaveNum++;
+		}
+		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
+	}
 	// Update is called once per frame
 	protected override void _Update(){
 	

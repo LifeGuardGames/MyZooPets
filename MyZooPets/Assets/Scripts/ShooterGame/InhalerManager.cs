@@ -95,17 +95,18 @@ public class InhalerManager : MonoBehaviour {
 		if (currTime>= justRight.x || currTime<=justRight.y){
 			if( justUsed==false)
 			{
-		//	Player.GetComponent<Player>().AddScore(5);
+				ShooterGameManager.Instance.AddScore(10);
 			playerHealth+=3;
+			justUsed=true;
 			//if (numMissed>0){
 			//	numMissed--;
 			//}
 		
 			//playerHealth-=(1*numMissed);
 		}
-			else{
+			/*else{
 				playerHealth++;
-			}
+			}*/
 		}
 		/*else{
 			playerHealth+=(3/(numMissed+1));

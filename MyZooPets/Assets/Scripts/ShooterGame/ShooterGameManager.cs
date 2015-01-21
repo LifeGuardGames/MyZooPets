@@ -70,13 +70,16 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public void ChangeWaves(){
 		//TODO Play sunAnimation
 		//TODO once animation finishes playing
-		if(WaveNum >= this.gameObject.GetComponent<EnemyController>().waves.Count){
-			WaveNum=0;
-		}
-		else{
+		//yield WaitForAnimation(sunrise);
 			WaveNum++;
-		}
+
 		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
+	}
+	IEnumerator WaitForAnimation(Animation animation){
+		do{
+			yield return null;
+		}
+		while (animation.isPlaying);
 	}
 	// Update is called once per frame
 	protected override void _Update(){

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class EnemyController : MonoBehaviour {
 
 	public List<EnemyData> EnemyList;
-	public List <Wave> waves;
 	public int EnemiesInWave=0;
 
 	Wave waver;
@@ -17,21 +16,28 @@ public class EnemyController : MonoBehaviour {
 		EnemyList.Clear();
 		}
 		EnemyList = new List<EnemyData>();
-		waves = new List<Wave>();
 		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 	}
 	// builds a list of waves
-	public void buildWaveList (List<ImmutableDataWaves> waveList){
-		foreach(ImmutableDataWaves tsunami in waveList){
-			waver = new Wave();
-			Debug.Log(tsunami.NumOfEnemies);
-			waver.NumOfEnemies = tsunami.NumOfEnemies;
-			waver.NumOfBasics= tsunami.BegEnemies;
-			waver.NumOfMedium = tsunami.MediumEnemies;
-			waver.NumOfHard= tsunami.HardEnemies;
-			waves.Add(waver);
+	public Wave buildWave (int _WaveNum){
+		int difficulty=0;
+		if(_WaveNum<3){
+			difficulty=1;
 		}
-		GenerateWave(0);
+		else if (_WaveNum >=3 &&_WaveNum<6){
+			difficulty=2;
+		}
+		else{
+			difficulty=3;
+		}
+		waver = new Wave();
+	
+		ImmutableDataWave LoadedWave = DataLoaderWaves.GetWave(difficulty);
+		waver.NumOfEnemies= LoadedWave.NumOfEnemies;
+		waver.NumOfBasics=LoadedWave.BegEnemies;
+		waver.NumOfMedium=LoadedWave.MediumEnemies;
+		waver.NumOfHard=LoadedWave.HardEnemies;
+		return waver;
 	}
 	// builds a list of enemy types
 	public void BuildEnemyList(List<ImmutableDataTriggerArmy> mobList){
@@ -43,13 +49,12 @@ public class EnemyController : MonoBehaviour {
 			EnemyList.Add(mob);
 
 		}
-		buildWaveList(DataLoaderWaves.GetDataList());
+		GenerateWave(0);
 	}
 	// determines which wave to spawn and set the enemies in wave to the correct amount
 	public void GenerateWave(int _WaveNum){
-		Debug.Log(_WaveNum);
-		CurrWave=waves[_WaveNum];
-		EnemiesInWave= int.Parse(waves[_WaveNum].NumOfEnemies);
+		CurrWave=buildWave(_WaveNum);
+		EnemiesInWave= int.Parse(CurrWave.NumOfEnemies);
 		SpawnWave(CurrWave);
 	}
 	// Spawns the current wave
@@ -59,14 +64,22 @@ public class EnemyController : MonoBehaviour {
 		for (int i =0; i < EnemiesInWave; i++){
 			WaveEnemies.Add(EnemyList[0]);
 		}
+		/*for (int i =0; i < currWave.NumOfBasics; i++){
+			WaveEnemies.Add(EnemyList[0]);
+		}
+		for (int i =0; i < currWave.NumOfMedium; i++){
+			WaveEnemies.Add(EnemyList[1]);
+		}
+		for (int i =0; i < currWave.NumOfHard; i++){
+			WaveEnemies.Add(EnemyList[2]);
+		}*/
 		SpawnManager.Instance.spawnTrigger(WaveEnemies);
 
 	}
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
-
-
+			this.gameObject.GetComponent<ShooterGameManager>().ChangeWaves();
 		}
 	}
 	// Update is called once per frame

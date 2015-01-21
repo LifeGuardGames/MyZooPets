@@ -55,6 +55,6 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		GameObject instance = Instantiate(bullet, bulletSpawn.transform.position, bullet.transform.rotation)as GameObject;
 		instance.GetComponent<bulletScript>().target = lookPos;
 		instance.GetComponent<bulletScript>().FindTarget();
-		instance.gameObject.transform.localScale /= FBallScale;
+		instance.gameObject.transform.localScale *= FBallScale;
 	}
 }

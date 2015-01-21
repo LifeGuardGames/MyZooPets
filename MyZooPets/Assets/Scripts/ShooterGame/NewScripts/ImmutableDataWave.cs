@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ImmutableDataWaves {
+public class ImmutableDataWave {
 
-	private string wave;
+	private string waveID;
 	public string Wave{
-	get{ return wave;}
+	get{ return waveID;}
 	}
 	private string numOfEnemies;
 	public string NumOfEnemies{
@@ -23,9 +23,9 @@ public class ImmutableDataWaves {
 	public string HardEnemies{
 		get{ return hardEnemies;}
 	}
-	public ImmutableDataWaves(string id, IXMLNode xmlNode, string error){
+	public ImmutableDataWave(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
-		this.wave = id;
+		this.waveID = id;
 		//wave = XMLUtils.GetString(hashElements["Wave"] as IXMLNode, null, error);
 		numOfEnemies = XMLUtils.GetString(hashElements["NumOfEnemies"] as IXMLNode, null, error);
 		begEnemies = XMLUtils.GetString(hashElements["BasicEnemies"] as IXMLNode, null, error);

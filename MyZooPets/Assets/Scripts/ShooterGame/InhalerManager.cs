@@ -90,22 +90,24 @@ public class InhalerManager : MonoBehaviour {
 		//arrow.transform.position= arrowstartPos.transform.position;
 		//arrowLabel.transform.position= arrowLabelStartPos.transform.position;
 	}
+
 	// calculates health of the player based off a number of factors
 	private void calculateStrength (){
 		if (currTime>= justRight.x || currTime<=justRight.y){
 			if( justUsed==false)
 			{
-		//	Player.GetComponent<Player>().AddScore(5);
+				ShooterGameManager.Instance.AddScore(10);
 			playerHealth+=3;
+			justUsed=true;
 			//if (numMissed>0){
 			//	numMissed--;
 			//}
 		
 			//playerHealth-=(1*numMissed);
 		}
-			else{
+			/*else{
 				playerHealth++;
-			}
+			}*/
 		}
 		/*else{
 			playerHealth+=(3/(numMissed+1));
@@ -114,6 +116,4 @@ public class InhalerManager : MonoBehaviour {
 		}*/
 		Player.GetComponent<PlayerShooterController>().removeHealth(playerHealth);
 	}
-
-
 }

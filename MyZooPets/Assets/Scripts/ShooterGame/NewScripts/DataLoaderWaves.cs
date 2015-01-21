@@ -3,25 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
-
-	public static ImmutableDataWaves GetData(string id){
+	public static ImmutableDataWave GetData(string id){
 		instance.InitXMLLoader();
-		return instance.GetData<ImmutableDataWaves>(id);
+		return instance.GetData<ImmutableDataWave>(id);
 	}
+	
+	public static ImmutableDataWave GetWave(int difficulty){
 
-	public static List<ImmutableDataWaves> GetDataList(){
-		instance.InitXMLLoader();
-		return instance.GetDataList<ImmutableDataWaves>();
+		switch(difficulty){
+		case 1:
+			return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
+			break;
+		case 2:
+			return GetData("Medium Wave_"+Random.Range (1,4).ToString());
+			break;
+		case 3:
+			return GetData( "Hard Wave_"+Random.Range (1,4).ToString());
+			break;
+		default:
+				return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
+				break;
+		}
 	}
 
 	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
-		ImmutableDataWaves data = new ImmutableDataWaves(id,xmlNode,errorMessage);
+		ImmutableDataWave data = new ImmutableDataWave(id,xmlNode,errorMessage);
 		// Store the data
 		if(hashData.ContainsKey(id))
 			Debug.LogError(errorMessage + "Duplicate keys!");
 		else
 			hashData.Add(id, data);
 	}
+
 	protected override void InitXMLLoader(){
 		xmlFileFolderPath = "Shooter/Waves";
 	}

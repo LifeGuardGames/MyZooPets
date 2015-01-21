@@ -18,6 +18,7 @@ public class BasicEnemyAi : MonoBehaviour {
 	void Update () {
 		transform.Translate (-Speed*Time.deltaTime,0,0);
 	}
+
 	void OnTriggerEnter2D(Collider2D Col){
 		if(Col.gameObject.tag=="bullet")
 		{
@@ -31,6 +32,7 @@ public class BasicEnemyAi : MonoBehaviour {
 
 		}
 	}
+
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
 		EnemyC.GetComponent<EnemyController>().EnemiesInWave--;

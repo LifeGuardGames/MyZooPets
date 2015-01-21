@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpawnManager :MonoBehaviour {
+public class SpawnManager :Singleton<SpawnManager>{
 	static SpawnManager _instance;
 	//first spawner
 	public GameObject firstPos;
@@ -14,25 +14,6 @@ public class SpawnManager :MonoBehaviour {
 	public GameObject enemyPrefab;
 	//list of positions to spawn enemy from
 	List<Vector3> posList;
-
-	static public bool IsActive{
-		get{
-			return _instance !=null;
-		}
-	}
-	static public SpawnManager instance{
-		get{
-			if(_instance==null){
-				_instance = Object.FindObjectOfType(typeof(SpawnManager))as SpawnManager;
-				if(_instance == null){
-					GameObject thing = new GameObject ("SpawnManager");
-					_instance=thing.AddComponent<SpawnManager>();
-				}
-			}
-			return _instance;
-
-		}
-	}
 			
 	// Use this for initialization
 	void Start () {

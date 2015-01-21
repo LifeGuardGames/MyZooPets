@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class EnemyController : MonoBehaviour {
 
 	public List<EnemyData> EnemyList;
-	private List<GameObject> SpawnerList;
 	public List <Wave> waves;
 	public int EnemiesInWave=0;
 	public int WaveNum=0;
@@ -14,15 +13,10 @@ public class EnemyController : MonoBehaviour {
 	public GameObject EnemyPrefab;
 
 	public void reset(){
-		if(SpawnerList != null){
-		foreach (GameObject stuff in SpawnerList){
-			Destroy(stuff);
-		}
-		SpawnerList.Clear();
+		if(EnemyList!=null){
 		EnemyList.Clear();
 		}
 		EnemyList = new List<EnemyData>();
-		SpawnerList = new List<GameObject>();
 		waves = new List<Wave>();
 		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 
@@ -30,6 +24,7 @@ public class EnemyController : MonoBehaviour {
 	public void buildWaveList (List<ImmutableDataWaves> waveList){
 		foreach(ImmutableDataWaves tsunami in waveList){
 			waver = new Wave();
+			Debug.Log(tsunami.NumOfEnemies);
 			waver.NumOfEnemies = tsunami.NumOfEnemies;
 			waver.NumOfBasics= tsunami.BegEnemies;
 			waver.NumOfMedium = tsunami.MediumEnemies;
@@ -50,6 +45,7 @@ public class EnemyController : MonoBehaviour {
 		buildWaveList(DataLoaderWaves.GetDataList());
 	}
 	public void GenerateWave(int _WaveNum){
+		Debug.Log(_WaveNum);
 		CurrWave=waves[_WaveNum];
 		EnemiesInWave= int.Parse(waves[_WaveNum].NumOfEnemies);
 		SpawnWave(CurrWave);
@@ -60,7 +56,7 @@ public class EnemyController : MonoBehaviour {
 		for (int i =0; i < EnemiesInWave; i++){
 			WaveEnemies.Add(EnemyList[0]);
 		}
-		SpawnManager.instance.spawnTrigger(WaveEnemies);
+		SpawnManager.Instance.spawnTrigger(WaveEnemies);
 		if(WaveNum >= waves.Count){
 			WaveNum=0;
 		}
@@ -68,11 +64,14 @@ public class EnemyController : MonoBehaviour {
 			WaveNum++;
 		}
 	}
+	public void CheckEnemiesInWave(){
+		if (EnemiesInWave == 0){
+			GenerateWave(WaveNum);
+			
+		}
+	}
 	// Update is called once per frame
 	void Update () {
-		if (EnemiesInWave == 0&&WaveNum!=0){
-			GenerateWave(WaveNum);
-
-		}
+	
 	}
 }

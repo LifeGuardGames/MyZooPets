@@ -34,6 +34,7 @@ public class BasicEnemyAi : MonoBehaviour {
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
 		EnemyC.GetComponent<EnemyController>().EnemiesInWave--;
+		EnemyC.GetComponent<EnemyController>().CheckEnemiesInWave();
 		Destroy(this.gameObject);
 	}
 }

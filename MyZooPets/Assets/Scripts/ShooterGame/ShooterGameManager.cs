@@ -10,6 +10,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// our score
 	public int Score=0;
 	public GameObject ScoreLabel;
+	public float ShootTime;
+	private float StartTime;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -43,8 +45,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	void OnTap(TapGesture e){
+		if(StartTime <= Time.time-ShootTime){
 		if(!IsTouchingNGUI(e.Position)){
-
+		
 #if !UNITY_EDITOR
 		
 			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
@@ -54,6 +57,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
 			PlayerShooterController.Instance.shoot(mousePos);
 #endif
+			}
+			StartTime=Time.time;
 		}
 	}
 	public void AddScore(int amount)

@@ -38,7 +38,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 	}
 	public void removeHealth (float amount){
 		PlayerHealth += amount;
-		if (PlayerHealth == 11){
+		if (PlayerHealth >= 11){
 			ChangeState("happy");
 		}
 		else if (PlayerHealth >5 && PlayerHealth <=10){

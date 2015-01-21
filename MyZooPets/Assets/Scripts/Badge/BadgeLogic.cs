@@ -158,11 +158,4 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         return unlockNewBadge;
     }
-
-    //Return a list from dictionary. 
-//    private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
-//        List<Badge> badgeList = (from keyValuePair in badgeDict
-//                                    select keyValuePair.Value).ToList();
-//        return badgeList;
-//    }
 }

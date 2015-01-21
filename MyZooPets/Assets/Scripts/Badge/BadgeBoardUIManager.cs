@@ -9,7 +9,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgeBoard;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
-	public string blankBadgeTextureName = "64pxTest";
+	public string blankBadgeTextureName = "badge64Blank";
 
 	public TweenToggleDemux descriptionDemux;
 	public UISprite descriptionBadgeSprite;
@@ -20,6 +20,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private GameObject lastClickedBadge;
 	private bool isActive = false;
 
+	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
+	private bool isQueueAnimating = false;
+	private GameObject currentAnimatingObject;	// Aux used for animation sprite swapping
+	private Badge currentAnimatingBadge;		// Aux used for animation information
+
 	protected override void Awake(){
 		base.Awake();
 		eModeType = UIModeTypes.Badge;
@@ -27,6 +32,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void Start(){
 		base.Start();
+		badgeUnlockQueue = new Queue<Badge>();
 		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
 		InitBadges();
 	}
@@ -67,7 +73,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				}else{
 					textureName = blankBadgeTextureName;
 				}
-				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = textureName;
+				badgeGO.transform.Find("AnimParent/badgeSprite").GetComponent<UISprite>().spriteName = blankBadgeTextureName;
 			}
 		}
 
@@ -78,24 +84,54 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	//Event Listener that updates the Level badges UI when a new badge is unlocked
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
-		// Show the badge board and show the get badge animation
-		StartCoroutine(UnlockBadgeHelper(arg.UnlockedBadge));
+		// Populate the unlocked badge into the unlock queue
+		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
+
+		StartCoroutine(TryPopBadgeQueue());
 	}
 
-	private IEnumerator UnlockBadgeHelper(Badge badge){
-		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
-		if(badgeTrans != null){
-			badgeTrans.Find("AnimParent").GetComponent<Animation>().Play();
+	// Show the badge board pop queue board if any
+	private IEnumerator TryPopBadgeQueue(){
+		// Check to see if it is in process of animating already
+		if(!isQueueAnimating){
+			if(badgeUnlockQueue.Count != 0){
+
+				// If the badge board is not opened already, open the UI and wait a while
+				if(!BadgeBoardUIManager.Instance.IsOpen()){
+					OpenUI();
+					yield return new WaitForSeconds(1f);
+				}
+
+				// Time to animate, lock the queue animation check
+				isQueueAnimating = true;
+				Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+				Transform badgeGOTransform = badgeBase.transform.Find(currentAnimatingBadge.Name);
+
+				if(badgeGOTransform != null){
+					BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+					badgeController.PlayUnlockAnimation();
+				}
+				else{
+					Debug.LogWarning("Can not find badge name: " + currentAnimatingBadge.Name);
+					CloseUI();	// Try to fail gracefully
+				}
+			}
 		}
-		else{
-			Debug.LogError("Badge " + badge.ID + " not found to unlock");
-		}
-		yield return 0;
 	}
 
-	private void UnlockBadgeHelperShowSprite(){
-		// TODO need way to get the specific sprite!!!!
-		//			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
+	/// <summary>
+	/// Called when a badge animation is done, check the queue again if still needs popping
+	/// </summary>
+	public IEnumerator BadgeAnimationDone(){
+		yield return new WaitForSeconds(1f);
+
+		isQueueAnimating = false;	// Release the animation lock
+		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
+
+		// Ending queue check, all animations and popping finished
+		if(badgeUnlockQueue.Count == 0){
+			CloseUI();
+		}
 	}
 
 	public void BadgeClicked(GameObject go){

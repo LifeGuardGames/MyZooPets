@@ -8,11 +8,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public Camera nguiCamera;
 	public GameObject EController;
 	// our score
-	public int Score=0;
+	public int Score = 0;
 	public GameObject ScoreLabel;
 	public float ShootTime;
 	private float StartTime;
-	public int WaveNum=0;
+	public int WaveNum = 0;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -41,9 +41,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
-		WaveNum=0;
+		WaveNum = 0;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
-		EController.GetComponent<EnemyController>().reset();
+		EController.GetComponent<ShooterGameEnemyController>().reset();
 		ShooterUIManager.Instance.reset();
 		PlayerShooterController.Instance.reset();
 	}
@@ -68,20 +68,20 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			PlayerShooterController.Instance.shoot(mousePos);
 #endif
 			}
-			StartTime=Time.time;
+			StartTime = Time.time;
 		}
 	}
 
 	public void AddScore(int amount)
 	{
-		Score+=amount;
+		Score += amount;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 	}
 
 	public void ChangeWaves(){
-		InhalerManager.Instance.CanUseInhalerButton=!InhalerManager.Instance.CanUseInhalerButton;
+		ShooterInhalerManager.Instance.CanUseInhalerButton = !ShooterInhalerManager.Instance.CanUseInhalerButton;
 			WaveNum++;
-		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
+		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(WaveNum);
 	}
 
 

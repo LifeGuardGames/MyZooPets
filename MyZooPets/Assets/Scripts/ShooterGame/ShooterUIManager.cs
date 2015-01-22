@@ -27,15 +27,15 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 	}
 	// Use this for initialization
 	void Start () {
-		ShooterGameManager.OnStateChanged+=OnGameStateChanged;
+		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
 	public void reset(){
 		Sun.transform.position=PosSky.transform.position;
 		Moon.transform.position=PosBottom.transform.position;
 	}
 	public void AChangeOfTimeActOne(){
-		if(ShooterGameManager.Instance.GetGameState()!=MinigameStates.GameOver){
-		if(Sun.GetComponent<MovingSky>().InSky==true){
+		if(ShooterGameManager.Instance.GetGameState()!= MinigameStates.GameOver){
+		if(Sun.GetComponent<MovingSky>().InSky == true){
 			LeanTween.move(Sun,PosBottom.transform.position,2.0f).setOnComplete(AChangeOfTimeActTwo);
 		}
 		else{
@@ -45,15 +45,15 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 
 	}
 	public void AChangeOfTimeActTwo(){
-		if(Sun.GetComponent<MovingSky>().InSky==true){
+		if(Sun.GetComponent<MovingSky>().InSky == true){
 			LeanTween.move(Moon,PosSky.transform.position,2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
-			Moon.GetComponent<MovingSky>().InSky=true;
-			Sun.GetComponent<MovingSky>().InSky=false;
+			Moon.GetComponent<MovingSky>().InSky = true;
+			Sun.GetComponent<MovingSky>().InSky = false;
 		}
 		else{
 			LeanTween.move(Sun,PosSky.transform.position,2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
-			Sun.GetComponent<MovingSky>().InSky=true;
-			Moon.GetComponent<MovingSky>().InSky=false;
+			Sun.GetComponent<MovingSky>().InSky = true;
+			Moon.GetComponent<MovingSky>().InSky = false;
 		}
 	}
 

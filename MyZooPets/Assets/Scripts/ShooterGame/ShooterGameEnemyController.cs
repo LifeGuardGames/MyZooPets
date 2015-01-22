@@ -1,17 +1,17 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ShooterEnemyController : Singleton<ShooterEnemyController> {
+public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> {
 
 	public List<EnemyData> EnemyList;
-	public int EnemiesInWave=0;
+	public int EnemiesInWave = 0;
 	Wave waver;
 	Wave CurrWave;
 	public GameObject EnemyPrefab;
 
 	public void reset(){
-		EnemiesInWave=0;
+		EnemiesInWave = 0;
 		if(EnemyList!=null){
 		EnemyList.Clear();
 		}
@@ -23,15 +23,15 @@ public class ShooterEnemyController : Singleton<ShooterEnemyController> {
 	// builds a list of waves
 	public Wave buildWave (int _WaveNum){
 
-		int difficulty=0;
+		int difficulty = 0;
 		if(_WaveNum<3){
-			difficulty=1;
+			difficulty = 1;
 		}
 		else if (_WaveNum >=3 &&_WaveNum<6){
-			difficulty=2;
+			difficulty = 2;
 		}
 		else{
-			difficulty=3;
+			difficulty = 3;
 		}
 		waver = new Wave();
 	
@@ -67,7 +67,7 @@ public class ShooterEnemyController : Singleton<ShooterEnemyController> {
 
 		List<EnemyData> WaveEnemies;
 		WaveEnemies = new List<EnemyData>();
-		for (int i =0; i < EnemiesInWave; i++){
+		for (int i = 0; i < EnemiesInWave; i++){
 			WaveEnemies.Add(EnemyList[0]);
 		}
 		/*for (int i =0; i < currWave.NumOfBasics; i++){

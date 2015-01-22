@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpawnManager :Singleton<SpawnManager>{
-	static SpawnManager _instance;
+public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	//first spawner
 	public GameObject firstPos;
 	//second spawner
@@ -33,19 +32,19 @@ public class SpawnManager :Singleton<SpawnManager>{
 		MinigameStates eState = args.GetGameState();
 		switch(eState){
 		case MinigameStates.GameOver:
-			IsSpawing=false;
+			IsSpawing = false;
 			break;
 		case MinigameStates.Paused:
-			IsSpawing=false;
+			IsSpawing = false;
 			break;
 		case MinigameStates.Playing:
-			IsSpawing=true;
+			IsSpawing = true;
 			break;
 		}
 	}
 	public void spawnTrigger(){
 		//Debug.Log(enemy.Count);
-		enemy = EnemyController.Instance.EnemyList;
+		enemy = ShooterGameEnemyController.Instance.EnemyList;
 		int rand = Random.Range(0,3);
 		GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
 		enemy1.GetComponent<Enemy>().name = enemy[0].name;
@@ -54,18 +53,18 @@ public class SpawnManager :Singleton<SpawnManager>{
 		enemy1.GetComponent<Enemy>().Initialize();
 		EnemySpawnCount--;
 		if(EnemySpawnCount<=0){
-			IsSpawing=false;
+			IsSpawing = false;
 		}
 	}
 	void Update(){
-		if(IsSpawing ==true){
+		if(IsSpawing == true){
 			if(LastSpawn<= Time.time-SpawnTime){
 				spawnTrigger();
 				LastSpawn=Time.time;
 			}
 		}
-		if(EnemyController.Instance.EnemiesInWave==0){
-			IsSpawing=false;
+		if(ShooterGameEnemyController.Instance.EnemiesInWave==0){
+			IsSpawing = false;
 		}
 	}
 }

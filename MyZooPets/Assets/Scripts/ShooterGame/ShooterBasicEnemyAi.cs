@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasicEnemyAi : MonoBehaviour {
+public class ShooterBasicEnemyAi : MonoBehaviour {
 
 	public float Speed = 2.0f;
 	public int ScoreVal=1;
@@ -58,8 +58,8 @@ public class BasicEnemyAi : MonoBehaviour {
 
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
-		EnemyC.GetComponent<EnemyController>().EnemiesInWave--;
-		EnemyC.GetComponent<EnemyController>().CheckEnemiesInWave();
+		EnemyC.GetComponent<ShooterGameEnemyController>().EnemiesInWave--;
+		EnemyC.GetComponent<ShooterGameEnemyController>().CheckEnemiesInWave();
 		ShooterGameManager.OnStateChanged-= OnGameStateChanged;
 		Destroy(this.gameObject);
 	}

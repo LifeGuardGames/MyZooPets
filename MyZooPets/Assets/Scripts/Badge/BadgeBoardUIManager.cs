@@ -89,6 +89,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			// If the badge board is not opened already, open the UI and wait a while
 			if(!BadgeBoardUIManager.Instance.IsOpen()){
+				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
+				yield return new WaitForSeconds(sceneSpecificDelay);
 				OpenUI();
 				yield return new WaitForSeconds(1f);
 			}
@@ -152,13 +154,23 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			GetComponent<TweenToggleDemux>().Show();
 
 			//Hide other UI objects
-			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
-			InventoryUIManager.Instance.HidePanel();
-			RoomArrowsUIManager.Instance.HidePanel();
+
+			if(NavigationUIManager.Instance != null){
+				NavigationUIManager.Instance.HidePanel();
+			}
+			if(InventoryUIManager.Instance != null){
+				InventoryUIManager.Instance.HidePanel();
+			}
+			if(RoomArrowsUIManager.Instance != null){
+				RoomArrowsUIManager.Instance.HidePanel();
+			}
 
 			isActive = true;
-			badgeBoard.collider.enabled = false;
+
+			if(badgeBoard != null){
+				badgeBoard.collider.enabled = false;
+			}
 		}
 	}
 
@@ -168,13 +180,23 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			GetComponent<TweenToggleDemux>().Hide();
 
 			isActive = false;
-			badgeBoard.collider.enabled = true;
+
+			if(badgeBoard != null){
+				badgeBoard.collider.enabled = true;
+			}
 
 			//Show other UI Objects
-			NavigationUIManager.Instance.ShowPanel();
 			HUDUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
-			RoomArrowsUIManager.Instance.ShowPanel();
+
+			if(NavigationUIManager.Instance != null){
+				NavigationUIManager.Instance.ShowPanel();
+			}
+			if(InventoryUIManager.Instance != null){
+				InventoryUIManager.Instance.ShowPanel();
+			}
+			if(RoomArrowsUIManager.Instance != null){
+				RoomArrowsUIManager.Instance.ShowPanel();
+			}
 		}
 	}
 }

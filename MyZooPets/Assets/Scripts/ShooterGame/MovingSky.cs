@@ -4,10 +4,12 @@ using System.Collections;
 public class MovingSky : MonoBehaviour {
 	public bool InSky;
 	public GameObject PosSky;
+	public bool isSun;
 	// Use this for initialization
 	void Start () {
-	if (transform.position == PosSky.transform.position){
-			InSky=true;
+		transform.position = PosSky.transform.position;
+		if (transform.position == PosSky.transform.position){
+			InSky = true;
 		}
 		else{
 			InSky=false;

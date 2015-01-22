@@ -79,8 +79,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void ChangeWaves(){
-		Debug.Log("a");
-		InhalerManager.Instance.JustUsed=!InhalerManager.Instance.JustUsed;
+		InhalerManager.Instance.CanUseInhalerButton=!InhalerManager.Instance.CanUseInhalerButton;
 			WaveNum++;
 		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
 	}

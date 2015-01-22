@@ -87,13 +87,9 @@ public class EnemyController : Singleton<EnemyController> {
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
-			InhalerManager.Instance.JustUsed=!InhalerManager.Instance.JustUsed;
+			Debug.Log("check enemies in wave");
+			InhalerManager.Instance.CanUseInhalerButton=!InhalerManager.Instance.CanUseInhalerButton;
 			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

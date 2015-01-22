@@ -7,30 +7,28 @@ using System;
 public class InhalerManager :Singleton<InhalerManager> {
 
 
-	private bool justUsed=true;
+	public bool canUseInhalerButton = true;
 
-	public bool JustUsed{
+	public bool CanUseInhalerButton{
 		get{
-			return justUsed;
+			return canUseInhalerButton;
 		}
 		set{
-			justUsed=value;
-			Debug.Log(value);
+			Debug.Log("setting value " + value);
+			canUseInhalerButton=value;
 		}
 	}
 
 	//on button Tap
-	public void ClickIt(){
-		if(JustUsed==false){
+	public void ShooterGameInhalerButton(){
+		if(CanUseInhalerButton == false){
 			Debug.Log("b");
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.removeHealth(3);
-			JustUsed=!JustUsed;
+			CanUseInhalerButton =! CanUseInhalerButton;
 		}
-		else if(JustUsed==true){
+		else if(CanUseInhalerButton == true){
 			Debug.Log("anasegs");
 		}
 	}
-
-
 }

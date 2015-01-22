@@ -17,16 +17,16 @@ public class Enemy : MonoBehaviour {
 		tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;
 		switch(AiScript){
 			case"BasicAI":
-				this.gameObject.AddComponent<BasicEnemyAi>();
+				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
 				break;
 			case "MediumAI":
-				this.gameObject.AddComponent<BasicEnemyAi>();
+				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
 				break;
 			case "HardAI":
-				this.gameObject.AddComponent<BasicEnemyAi>();
+				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
 				break;
 			default:
-				this.gameObject.AddComponent<BasicEnemyAi>();
+				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
 				break;
 		}
 

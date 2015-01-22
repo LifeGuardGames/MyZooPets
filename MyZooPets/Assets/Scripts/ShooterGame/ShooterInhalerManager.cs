@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 
-public class InhalerManager :Singleton<InhalerManager> {
+public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
 
 	public bool canUseInhalerButton = true;

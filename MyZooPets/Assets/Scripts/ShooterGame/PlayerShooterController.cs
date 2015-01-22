@@ -13,7 +13,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 	public GameObject bullet;
 
 	public void reset(){
-		PlayerHealth=10;
+		PlayerHealth = 10;
 		ChangeState("neutral");
 	}
 
@@ -24,15 +24,15 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		State = _state;
 		switch(State){
 		case "happy":{
-			FBallScale=1.5f;
+			FBallScale = 1.5f;
 			break;
 			}
 		case "neutral":{
-			FBallScale=1.0f;
+			FBallScale = 1.0f;
 			break;
 			}
 		case "distressed":{
-			FBallScale=0.5f;
+			FBallScale = 0.5f;
 			break;
 			}
 		}
@@ -43,10 +43,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		if (PlayerHealth >= 11){
 			ChangeState("happy");
 		}
-		else if (PlayerHealth >5 && PlayerHealth <=10){
+		else if (PlayerHealth > 5 && PlayerHealth <= 10){
 			ChangeState("neutral");
 		}
-		else if (PlayerHealth<=5){
+		else if (PlayerHealth <= 5){
 			ChangeState("distressed");
 		}
 		ShooterGameManager.Instance.UpdateLives((int)amount);

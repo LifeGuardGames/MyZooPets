@@ -21,6 +21,9 @@ public class BasicEnemyAi : MonoBehaviour {
 		if(ShooterGameManager.Instance.GetGameState()!= MinigameStates.Paused){
 		transform.Translate (-Speed*Time.deltaTime,0,0);
 		}
+		if(ShooterGameManager.Instance.GetGameState()== MinigameStates.GameOver){
+			StartCoroutine("DestroyEnemy");
+		}
 	}
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
@@ -33,6 +36,9 @@ public class BasicEnemyAi : MonoBehaviour {
 			break;
 		case MinigameStates.Playing:
 			paused = false;
+			break;
+		case MinigameStates.Restarting:
+			StartCoroutine("DestroyEnemy");
 			break;
 		}
 	}

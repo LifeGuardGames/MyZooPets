@@ -18,6 +18,7 @@ public class SpawnManager :Singleton<SpawnManager>{
 	//list of positions to spawn enemy from
 	List<Vector3> posList;
 	public List <EnemyData> enemy;
+	public int EnemySpawnCount;
 			
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,6 @@ public class SpawnManager :Singleton<SpawnManager>{
 		posList.Add(firstPos.transform.position);
 		posList.Add (secondPos.transform.position);	
 		posList.Add(thirdPos.transform.position);
-		LastSpawn=Time.time;
 		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
 	}
 
@@ -52,6 +52,10 @@ public class SpawnManager :Singleton<SpawnManager>{
 		enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
 		enemy1.GetComponent<Enemy>().AiScript = enemy[0].AiScript;
 		enemy1.GetComponent<Enemy>().Initialize();
+		EnemySpawnCount--;
+		if(EnemySpawnCount<=0){
+			IsSpawing=false;
+		}
 	}
 	void Update(){
 		if(IsSpawing ==true){

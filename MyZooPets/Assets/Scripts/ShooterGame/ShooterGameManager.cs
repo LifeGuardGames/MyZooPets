@@ -41,8 +41,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
+		WaveNum=0;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 		EController.GetComponent<EnemyController>().reset();
+		ShooterUIManager.Instance.reset();
+		PlayerShooterController.Instance.reset();
 	}
 		
 	public override int GetReward(MinigameRewardTypes eType){
@@ -76,20 +79,13 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void ChangeWaves(){
-		//TODO Play sunAnimation
-		//TODO once animation finishes playing
-		//yield WaitForAnimation(sunrise);
+		Debug.Log("a");
+		InhalerManager.Instance.JustUsed=!InhalerManager.Instance.JustUsed;
 			WaveNum++;
-
 		this.gameObject.GetComponent<EnemyController>().GenerateWave(WaveNum);
 	}
 
-	IEnumerator WaitForAnimation(Animation animation){
-		do{
-			yield return null;
-		}
-		while (animation.isPlaying);
-	}
+
 
 	// Update is called once per frame
 	protected override void _Update(){

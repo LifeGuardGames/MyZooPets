@@ -11,15 +11,18 @@ public class EnemyController : Singleton<EnemyController> {
 	public GameObject EnemyPrefab;
 
 	public void reset(){
+		EnemiesInWave=0;
 		if(EnemyList!=null){
 		EnemyList.Clear();
 		}
 		EnemyList = new List<EnemyData>();
 		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
+
 	}
 
 	// builds a list of waves
 	public Wave buildWave (int _WaveNum){
+
 		int difficulty=0;
 		if(_WaveNum<3){
 			difficulty=1;
@@ -61,6 +64,7 @@ public class EnemyController : Singleton<EnemyController> {
 
 	// Spawns the current wave
 	public void SpawnWave(Wave currWave){
+
 		List<EnemyData> WaveEnemies;
 		WaveEnemies = new List<EnemyData>();
 		for (int i =0; i < EnemiesInWave; i++){
@@ -75,12 +79,15 @@ public class EnemyController : Singleton<EnemyController> {
 		for (int i =0; i < currWave.NumOfHard; i++){
 			WaveEnemies.Add(EnemyList[2]);
 		}*/
+		SpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
 		SpawnManager.Instance.IsSpawing=true;
+
 	}
 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
+			InhalerManager.Instance.JustUsed=!InhalerManager.Instance.JustUsed;
 			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}
 	}

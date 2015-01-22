@@ -11,7 +11,12 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 	//The bar Manager used to retrieve health data from bar usage
 	public GameObject bulletSpawn;
 	public GameObject bullet;
-	
+
+	public void reset(){
+		PlayerHealth=10;
+		ChangeState("neutral");
+	}
+
 	// Update is called once per frame
 	void Update () {
 	}

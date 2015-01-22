@@ -44,6 +44,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		else if (PlayerHealth<=5){
 			ChangeState("distressed");
 		}
+		ShooterGameManager.Instance.UpdateLives((int)amount);
 	}
 
 	public void shoot(Vector3 dir){

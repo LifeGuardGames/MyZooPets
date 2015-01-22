@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : Singleton<EnemyController> {
 
 	public List<EnemyData> EnemyList;
 	public int EnemiesInWave=0;
@@ -75,13 +75,13 @@ public class EnemyController : MonoBehaviour {
 		for (int i =0; i < currWave.NumOfHard; i++){
 			WaveEnemies.Add(EnemyList[2]);
 		}*/
-		SpawnManager.Instance.spawnTrigger(WaveEnemies);
+		SpawnManager.Instance.IsSpawing=true;
 	}
 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
-			this.gameObject.GetComponent<ShooterGameManager>().ChangeWaves();
+			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}
 	}
 

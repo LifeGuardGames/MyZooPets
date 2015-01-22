@@ -20,6 +20,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	protected override void _Start(){
 	}
 
+	public override int GetScore(){
+		return Score;
+	}
+
 	protected override void _OnDestroy(){
 		Application.targetFrameRate = 30;
 	}
@@ -44,7 +48,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public override int GetReward(MinigameRewardTypes eType){
 		return GetStandardReward(eType);
 	}
-
+	protected override void _GameOver(){
+		//BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
+	}
 	void OnTap(TapGesture e){
 		if(StartTime <= Time.time-ShootTime){
 		if(!IsTouchingNGUI(e.Position)){

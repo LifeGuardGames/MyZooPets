@@ -9,7 +9,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgeBoard;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
-	public string blankBadgeTextureName = "64pxTest";
+	public string blankBadgeTextureName = "badge64Blank";
 
 	public TweenToggleDemux descriptionDemux;
 	public UISprite descriptionBadgeSprite;
@@ -20,6 +20,9 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private GameObject lastClickedBadge;
 	private bool isActive = false;
 
+	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
+	private bool isQueueAnimating = false;
+
 	protected override void Awake(){
 		base.Awake();
 		eModeType = UIModeTypes.Badge;
@@ -27,6 +30,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void Start(){
 		base.Start();
+		badgeUnlockQueue = new Queue<Badge>();
 		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
 		InitBadges();
 	}
@@ -58,16 +62,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			foreach(var badge in group.Elements){
 				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
 				badgeGO.name = badge.ID;
-				string textureName = "";
-				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
-
-				//TODO: Update this after you have all the art for badges
-				if(badge.IsUnlocked){
-					textureName = badge.TextureName;
-				}else{
-					textureName = blankBadgeTextureName;
-				}
-				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = textureName;
+				badgeGO.GetComponent<BadgeController>().Init(badge.IsUnlocked, badge.TextureName, blankBadgeTextureName);
 			}
 		}
 
@@ -78,24 +73,54 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	//Event Listener that updates the Level badges UI when a new badge is unlocked
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
-		// Show the badge board and show the get badge animation
-		StartCoroutine(UnlockBadgeHelper(arg.UnlockedBadge));
+		// Populate the unlocked badge into the unlock queue
+		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
+
+		// Try to animate, lock the queue animation check so more than one calls wont go thru
+		if(!isQueueAnimating){
+			isQueueAnimating = true;
+			StartCoroutine(TryPopBadgeQueue());
+		}
 	}
 
-	private IEnumerator UnlockBadgeHelper(Badge badge){
-		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
-		if(badgeTrans != null){
-			badgeTrans.Find("AnimParent").GetComponent<Animation>().Play();
+	// Show the badge board pop queue board if any
+	private IEnumerator TryPopBadgeQueue(){
+			if(badgeUnlockQueue.Count != 0){
+
+			// If the badge board is not opened already, open the UI and wait a while
+			if(!BadgeBoardUIManager.Instance.IsOpen()){
+				OpenUI();
+				yield return new WaitForSeconds(1f);
+			}
+
+			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+			if(badgeGOTransform != null){
+				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+				badgeController.PlayUnlockAnimation();
+			}
+			else{
+				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
+				CloseUI();	// Try to fail gracefully
+			}
 		}
-		else{
-			Debug.LogError("Badge " + badge.ID + " not found to unlock");
-		}
-		yield return 0;
 	}
 
-	private void UnlockBadgeHelperShowSprite(){
-		// TODO need way to get the specific sprite!!!!
-		//			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
+	/// <summary>
+	/// Called when a badge animation is done, check the queue again if still needs popping
+	/// </summary>
+	public IEnumerator BadgeAnimationDone(){
+		Debug.Log("BadgeANIM DONE");
+
+		yield return new WaitForSeconds(1f);
+		
+		// Ending queue check, all animations and popping finished
+		if(badgeUnlockQueue.Count == 0){
+			CloseUI();
+			isQueueAnimating = false;	// Release the animation lock
+		}
+
+		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
 	}
 
 	public void BadgeClicked(GameObject go){

@@ -22,8 +22,6 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
 	private bool isQueueAnimating = false;
-	private GameObject currentAnimatingObject;	// Aux used for animation sprite swapping
-	private Badge currentAnimatingBadge;		// Aux used for animation information
 
 	protected override void Awake(){
 		base.Awake();
@@ -64,16 +62,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			foreach(var badge in group.Elements){
 				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
 				badgeGO.name = badge.ID;
-				string textureName = "";
-				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
-
-				//TODO: Update this after you have all the art for badges
-				if(badge.IsUnlocked){
-					textureName = badge.TextureName;
-				}else{
-					textureName = blankBadgeTextureName;
-				}
-				badgeGO.transform.Find("AnimParent/badgeSprite").GetComponent<UISprite>().spriteName = blankBadgeTextureName;
+				badgeGO.GetComponent<BadgeController>().Init(badge.IsUnlocked, badge.TextureName, blankBadgeTextureName);
 			}
 		}
 
@@ -87,34 +76,32 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 		// Populate the unlocked badge into the unlock queue
 		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
 
-		StartCoroutine(TryPopBadgeQueue());
+		// Try to animate, lock the queue animation check so more than one calls wont go thru
+		if(!isQueueAnimating){
+			isQueueAnimating = true;
+			StartCoroutine(TryPopBadgeQueue());
+		}
 	}
 
 	// Show the badge board pop queue board if any
 	private IEnumerator TryPopBadgeQueue(){
-		// Check to see if it is in process of animating already
-		if(!isQueueAnimating){
 			if(badgeUnlockQueue.Count != 0){
 
-				// If the badge board is not opened already, open the UI and wait a while
-				if(!BadgeBoardUIManager.Instance.IsOpen()){
-					OpenUI();
-					yield return new WaitForSeconds(1f);
-				}
+			// If the badge board is not opened already, open the UI and wait a while
+			if(!BadgeBoardUIManager.Instance.IsOpen()){
+				OpenUI();
+				yield return new WaitForSeconds(1f);
+			}
 
-				// Time to animate, lock the queue animation check
-				isQueueAnimating = true;
-				Badge unlockingBadge = badgeUnlockQueue.Dequeue();
-				Transform badgeGOTransform = badgeBase.transform.Find(currentAnimatingBadge.Name);
-
-				if(badgeGOTransform != null){
-					BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
-					badgeController.PlayUnlockAnimation();
-				}
-				else{
-					Debug.LogWarning("Can not find badge name: " + currentAnimatingBadge.Name);
-					CloseUI();	// Try to fail gracefully
-				}
+			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+			if(badgeGOTransform != null){
+				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+				badgeController.PlayUnlockAnimation();
+			}
+			else{
+				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
+				CloseUI();	// Try to fail gracefully
 			}
 		}
 	}
@@ -123,15 +110,17 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	/// Called when a badge animation is done, check the queue again if still needs popping
 	/// </summary>
 	public IEnumerator BadgeAnimationDone(){
+		Debug.Log("BadgeANIM DONE");
+
 		yield return new WaitForSeconds(1f);
-
-		isQueueAnimating = false;	// Release the animation lock
-		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
-
+		
 		// Ending queue check, all animations and popping finished
 		if(badgeUnlockQueue.Count == 0){
 			CloseUI();
+			isQueueAnimating = false;	// Release the animation lock
 		}
+
+		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
 	}
 
 	public void BadgeClicked(GameObject go){

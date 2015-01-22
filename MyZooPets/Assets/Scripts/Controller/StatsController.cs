@@ -203,19 +203,25 @@ public class StatsController : Singleton<StatsController>{
 			if(pointsLoc != default(Vector3)){
 				// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into respective NGUI Anchors
 				pointsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, pointsLoc);
-				pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopLeft);
+				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
+				pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				Debug.Log(pointsLoc);
 			}
 			if(starsLoc != default(Vector3)){
 				starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
-				starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopRight);
+				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
+				starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				Debug.Log(starsLoc);
 			}
 			if(healthLoc != default(Vector3)){
 				healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);
-				healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopLeft);
+				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
+				healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, endAnchor);
 			}
 			if(moodLoc != default(Vector3)){
 				moodLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, moodLoc);
-				moodLoc = CameraManager.Instance.TransformAnchorPosition(moodLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.TopLeft);
+				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
+				moodLoc = CameraManager.Instance.TransformAnchorPosition(moodLoc, InterfaceAnchors.BottomLeft, endAnchor);
 			}
 		}
 		// Adjust for custom position using screen position for NGUI objects

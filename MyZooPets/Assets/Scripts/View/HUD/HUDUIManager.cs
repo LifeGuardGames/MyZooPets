@@ -40,7 +40,7 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	}
 
 	public GameObject GetTweenParent(string anchor){
-		if(anchor == "topLeft"){
+		if(anchor == "TopLeft"){
 			return anchorTopLeft;
 		}
 		else{

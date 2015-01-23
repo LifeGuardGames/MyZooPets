@@ -14,7 +14,13 @@ public class ComicPage : MonoBehaviour{
 	public SpriteRenderer sprite3;
 	public string sprite3PrefixName;
 
-	public void Init(string color){
+	public LgButtonMessage buttonMessage;
+
+	/// <summary>
+	/// Populate the comic pages with the appropriate color
+	/// </summary>
+	/// <param name="color">Color.</param>
+	public void Init(string color, ComicPlayer player){
 //		switch(color){
 //		case PetColor.OrangeYellow, PetColor.BlueYellow, PetColor.PurpleLime:
 //			SwapColor(color.ToString());
@@ -22,6 +28,9 @@ public class ComicPage : MonoBehaviour{
 //		default:
 //			Debug.LogError("Invalid color");
 //		}
+
+		buttonMessage.target = player.gameObject;
+		buttonMessage.functionName = "NextPage";
 	}
 
 	/// <summary>
@@ -30,6 +39,10 @@ public class ComicPage : MonoBehaviour{
 	/// <param name="petColor">Pet color.</param>
 	private void SwapColor(string petColor){
 		//TODO Swap here;
+	}
+
+	public void ToggleActive(bool isActive){
+		//TODO toggle here
 	}
 
     public void PlaySound(){

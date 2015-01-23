@@ -14,7 +14,6 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	/// <param name="levelName">Level to be loaded</param>
 	/// <param name="loadingScreen">Loading screen to use</param>
 	public void StartLoadTransition(string levelName){
-
 		Application.backgroundLoadingPriority = threadPriority;
 
 		if(async == null){
@@ -63,4 +62,10 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 		transitionController.EndLoadingScreen();
 		async = null;
 	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Load scene")){
+//			StartLoadTransition("test");
+//		}
+//	}
 }

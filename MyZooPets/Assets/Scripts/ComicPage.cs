@@ -14,7 +14,9 @@ public class ComicPage : MonoBehaviour{
 	public SpriteRenderer sprite3;
 	public string sprite3PrefixName;
 
-	public LgButtonMessage buttonMessage;
+	public TweenToggleDemux demux;
+	public List<SpriteRenderer> allSpriteRenderers;
+//	public LgButtonMessage buttonMessage;
 
 	/// <summary>
 	/// Populate the comic pages with the appropriate color
@@ -29,8 +31,10 @@ public class ComicPage : MonoBehaviour{
 //			Debug.LogError("Invalid color");
 //		}
 
-		buttonMessage.target = player.gameObject;
-		buttonMessage.functionName = "NextPage";
+//		buttonMessage.target = player.gameObject;
+//		buttonMessage.functionName = "NextPage";
+		demux.HideTarget = player.gameObject;
+		demux.HideFunctionName = "StartTransitionAndCallNextPage";
 	}
 
 	/// <summary>
@@ -42,8 +46,21 @@ public class ComicPage : MonoBehaviour{
 	}
 
 	public void ToggleActive(bool isActive){
-		//TODO toggle here
+		foreach(SpriteRenderer renderer in allSpriteRenderers){
+			renderer.enabled = isActive;
+		}
+		// Play is it is active
+		if(isActive){
+			Debug.Log("PLaying " + name + demux.IsShowing);
+			demux.Hide();
+//			StartCoroutine(StartHideNextFrame());
+		}
 	}
+//
+//	private IEnumerator StartHideNextFrame(){
+//		yield return 0;
+//		demux.Hide();
+//	}
 
     public void PlaySound(){
         if(!String.IsNullOrEmpty(clipName))

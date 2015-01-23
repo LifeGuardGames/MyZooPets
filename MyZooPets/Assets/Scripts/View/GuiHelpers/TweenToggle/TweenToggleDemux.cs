@@ -196,16 +196,16 @@ public class TweenToggleDemux : MonoBehaviour {
 		}
 	}
 
-//	 void OnGUI(){
-//	 	 if(isDebug){
-//	 	 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
-//	 	 		Show();
-//	 	 	}
-//	 	 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
-//	 	 		Hide();
-//	 	 	}
-//	 	 }
-//	 }
+	 void OnGUI(){
+	 	 if(isDebug){
+	 	 	if(GUI.Button(new Rect(testButtonPos.x, testButtonPos.y, 100, 100), "show")){
+	 	 		Show();
+	 	 	}
+	 	 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
+	 	 		Hide();
+	 	 	}
+	 	 }
+	 }
 	
 	void ShowSendCallback(){
 		if (string.IsNullOrEmpty(ShowFunctionName)) return;

@@ -108,4 +108,14 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 		return isOnNGUILayer;
 	}
+	public Coroutine sync(){
+		return StartCoroutine("PauseRoutine"); 
+	}
+	public IEnumerator PauseRoutine(){
+		Debug.Log("hi");
+		while (ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
+			yield return new WaitForFixedUpdate();
+		}
+		yield return new WaitForEndOfFrame();
+	}
 }

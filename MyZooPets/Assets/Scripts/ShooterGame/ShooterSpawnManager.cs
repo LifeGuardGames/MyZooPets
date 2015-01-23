@@ -42,29 +42,36 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			break;
 		}
 	}
-	public void spawnTrigger(){
+	public void spawnTrigger(List<EnemyData> enemy){
 		//Debug.Log(enemy.Count);
-		enemy = ShooterGameEnemyController.Instance.EnemyList;
-		int rand = Random.Range(0,3);
-		GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
-		enemy1.GetComponent<Enemy>().name = enemy[0].name;
-		enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
-		enemy1.GetComponent<Enemy>().AiScript = enemy[0].AiScript;
-		enemy1.GetComponent<Enemy>().Initialize();
-		EnemySpawnCount--;
-		if(EnemySpawnCount<=0){
+
+	/*	if(EnemySpawnCount<=0){
 			IsSpawing = false;
-		}
+		}*/
+		StartCoroutine("SpawnEnemies");
 	}
 	void Update(){
-		if(IsSpawing == true){
+		/*if(IsSpawing == true){
 			if(LastSpawn<= Time.time-SpawnTime){
 				spawnTrigger();
 				LastSpawn=Time.time;
+			}*/
+
+
+	}
+	IEnumerator SpawnEnemies(){
+		for (int i = 0; i<enemy.Count;i++){
+			if (IsSpawing == false){
+				yield return ShooterGameManager.Instance.sync();
 			}
-		}
-		if(ShooterGameEnemyController.Instance.EnemiesInWave==0){
-			IsSpawing = false;
+			yield return new WaitForSeconds(1.0f);
+			int rand = Random.Range(0,3);
+			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
+			enemy1.GetComponent<Enemy>().name = enemy[0].name;
+			enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
+			enemy1.GetComponent<Enemy>().AiScript = enemy[i].AiScript;
+			enemy1.GetComponent<Enemy>().Initialize();
+			EnemySpawnCount--;
 		}
 	}
 }

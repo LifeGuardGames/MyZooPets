@@ -67,27 +67,27 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 		List<EnemyData> WaveEnemies;
 		WaveEnemies = new List<EnemyData>();
-		for (int i = 0; i < EnemiesInWave; i++){
+		/*for (int i = 0; i < EnemiesInWave; i++){
+			WaveEnemies.Add(EnemyList[0]);
+		}*/
+		for (int i =0; i < int.Parse(currWave.NumOfBasics); i++){
 			WaveEnemies.Add(EnemyList[0]);
 		}
-		/*for (int i =0; i < currWave.NumOfBasics; i++){
-			WaveEnemies.Add(EnemyList[0]);
-		}
-		for (int i =0; i < currWave.NumOfMedium; i++){
+		for (int i =0; i < int.Parse(currWave.NumOfMedium); i++){
 			WaveEnemies.Add(EnemyList[1]);
 		}
-		for (int i =0; i < currWave.NumOfHard; i++){
+		/*for (int i =0; i < currWave.NumOfHard; i++){
 			WaveEnemies.Add(EnemyList[2]);
 		}*/
-		ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
-		ShooterSpawnManager.Instance.IsSpawing=true;
+		//ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
+		ShooterSpawnManager.Instance.enemy = WaveEnemies;
+		ShooterSpawnManager.Instance.spawnTrigger(WaveEnemies);
 
 	}
 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
-			Debug.Log("check enemies in wave");
 			ShooterInhalerManager.Instance.CanUseInhalerButton=!ShooterInhalerManager.Instance.CanUseInhalerButton;
 			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}

@@ -6,20 +6,19 @@ using System.Collections;
 /// Used for callback transitioning between comic pages, fades in and out
 /// </summary>
 public class ComicPageTransition : MonoBehaviour {
-	public SpriteRenderer transitionSprite;
-	private AlphaTweenToggle alphaTween;
+	public AlphaTweenToggle alphaTween;
+	public ComicPlayer comicPlayer;
 
-	void Start(){
-		// Make sure we have a valid sprite
-		if(transitionSprite == null){
-			transitionSprite = GetComponent<SpriteRenderer>();
-			if(transitionSprite == null){
-				Debug.LogError("Cant find any components");
-			}
-		}
+	public void StartTransition(){
+		Darken();
+	}
 
-		alphaTween = transitionSprite.GetComponent<AlphaTweenToggle>();
+	public void Darken(){
+		alphaTween.Show();
+	}
 
-
+	public void BrightenAndNextPage(){
+		comicPlayer.NextPage();
+		alphaTween.Hide();
 	}
 }

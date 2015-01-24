@@ -6,25 +6,24 @@ using System.Collections.Generic;
 public class ComicPlayer : MonoBehaviour{
     public static EventHandler<EventArgs> OnComicPlayerDone; //event fire when comic player played through all pages
 	public List<GameObject> pages = new List<GameObject>(); //name of the prefab of the comic pages
+	public string pagePrefabPrefix = "ComicPage";
+	public ComicPageTransition transition;
 
     private int currentPageNum;
-    private int totalNumOfPages;
+    private int totalNumOfPages = 3;
     private GameObject currentComicPage; //keeps track of the spawned comic page
 
-    void Awake(){
-        totalNumOfPages = pages.Count;
-        currentPageNum = 1;
-        currentComicPage = null;
-    }
+	void Start(){
+		currentPageNum = 0;
+	}
 
-	public void Init(string petColor){
-		// Populate all the pet colors in all the pages
-		foreach(GameObject go in pages){
-			go.GetComponent<ComicPage>().Init(petColor);
-		}
+	public void StartComic(){
+		currentPageNum = 0;
+		StartTransitionAndCallNextPage();
+	}
 
-		// Launch the comic sequence
-		NextPage();
+	public void StartTransitionAndCallNextPage(){
+		transition.Darken();
 	}
 
     //---------------------------------------------------
@@ -32,70 +31,53 @@ public class ComicPlayer : MonoBehaviour{
     // Setup the callback function name.
     //---------------------------------------------------
     public void NextPage(){
-        //first page
-        if(currentPageNum == 1){
-            LoadComicPage();
+		currentPageNum++;
+		// First page
+		if(currentPageNum == 1){
+            LoadComicPages();
         }
-        //last page
-        else if(currentPageNum == totalNumOfPages){
-            if(currentComicPage != null){
-                TweenToggleDemux tweenToggleDemux = currentComicPage.GetComponent<TweenToggleDemux>();
-                tweenToggleDemux.HideTarget = this.gameObject;
-                tweenToggleDemux.HideFunctionName = "LoadComicPage";
-
-                tweenToggleDemux.Hide();
-            }
-        }
-        //no more pages left. destroy player
-        else{
-            if(currentComicPage != null){
-                TweenToggleDemux tweenToggleDemux = currentComicPage.GetComponent<TweenToggleDemux>();
-                tweenToggleDemux.HideTarget = this.gameObject;
-                tweenToggleDemux.HideFunctionName = "DestroyComicPage";
-
-                if(OnComicPlayerDone != null)
-                    OnComicPlayerDone(this, EventArgs.Empty);
-
-                tweenToggleDemux.Hide();
-            }
-        }
+        else if(currentPageNum <= totalNumOfPages){
+			// Turn off all the other pages that isnt the current page
+			pages[0].GetComponent<ComicPage>().ToggleActive(false);
+			for(int i = 1; i < totalNumOfPages; i++){
+				Debug.Log("Loading page " + i);
+				pages[i].GetComponent<ComicPage>().ToggleActive(i == (currentPageNum - 1) ? true : false);
+			}
+		}
+		else{
+			Debug.Log("DONE");
+		}
     }
 
-    //---------------------------------------------------
-    // LoadComicPage()
-    // Load comic page from resources and Instantiate
-    //---------------------------------------------------
-    public void LoadComicPage(){
-        GameObject loadedPage = null; 
-        int pageIndex = currentPageNum - 1;
-
+    /// <summary>
+    /// Load comic pages into pages list, and make sure only the first one shows
+    /// </summary>
+    private void LoadComicPages(){
         string petSpecies = DataManager.Instance.GameData.PetInfo.PetSpecies;
         string petColor = DataManager.Instance.GameData.PetInfo.PetColor;
 
-        try{
-            //Get the comic page name
-            string pageName = petSpecies + petColor + pages[pageIndex];
-            //Load comic prefab from resource and instantiate
-            GameObject pagePrefab = (GameObject) Resources.Load(pageName);
-            loadedPage = NGUITools.AddChild(this.gameObject, pagePrefab);
+		for(int i = 1; i <= totalNumOfPages; i++){
+			Debug.Log("Loading " + pagePrefabPrefix + i.ToString());
+			GameObject pagePrefab = Resources.Load(pagePrefabPrefix + i.ToString()) as GameObject;
+			GameObject pageGO = GameObjectUtils.AddChild(gameObject, pagePrefab);
+			ComicPage pageScript = pageGO.GetComponent<ComicPage>();
+			pageScript.Init(petColor, this);
 
-            LgButtonMessage buttonMessage = loadedPage.transform.Find("NextButton").GetComponent<LgButtonMessage>();
-            buttonMessage.target = this.gameObject;
-            buttonMessage.functionName = "NextPage";
+			// Turn off everything but the first page
+			if(i == 1){
+				pageScript.ToggleActive(true);	// Takes care of play as well
+			}
+			else{
+				pageScript.ToggleActive(false);	// Hide all and dont play
+			}
 
-            //display loaded comic page
-            loadedPage.GetComponent<TweenToggleDemux>().Show();
-
-            //store reference to current comic page
-            currentComicPage = loadedPage;
-            currentPageNum++;
-        }
-        catch(ArgumentOutOfRangeException outOfRange){
-            Debug.LogError("page index out of range " + outOfRange.Message);
-        }
+			pages.Add(pageGO);
+		}
     }
 
-    public void DestroyComicPage(){
-        Destroy(this.gameObject);
-    }
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
+			StartComic();
+		}
+	}
 }

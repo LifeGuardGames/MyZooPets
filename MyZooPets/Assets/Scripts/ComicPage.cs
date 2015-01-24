@@ -14,7 +14,15 @@ public class ComicPage : MonoBehaviour{
 	public SpriteRenderer sprite3;
 	public string sprite3PrefixName;
 
-	public void Init(string color){
+	public TweenToggleDemux demux;
+	public List<SpriteRenderer> allSpriteRenderers;
+//	public LgButtonMessage buttonMessage;
+
+	/// <summary>
+	/// Populate the comic pages with the appropriate color
+	/// </summary>
+	/// <param name="color">Color.</param>
+	public void Init(string color, ComicPlayer player){
 //		switch(color){
 //		case PetColor.OrangeYellow, PetColor.BlueYellow, PetColor.PurpleLime:
 //			SwapColor(color.ToString());
@@ -22,6 +30,11 @@ public class ComicPage : MonoBehaviour{
 //		default:
 //			Debug.LogError("Invalid color");
 //		}
+
+//		buttonMessage.target = player.gameObject;
+//		buttonMessage.functionName = "NextPage";
+		demux.HideTarget = player.gameObject;
+		demux.HideFunctionName = "StartTransitionAndCallNextPage";
 	}
 
 	/// <summary>
@@ -31,6 +44,23 @@ public class ComicPage : MonoBehaviour{
 	private void SwapColor(string petColor){
 		//TODO Swap here;
 	}
+
+	public void ToggleActive(bool isActive){
+		foreach(SpriteRenderer renderer in allSpriteRenderers){
+			renderer.enabled = isActive;
+		}
+		// Play is it is active
+		if(isActive){
+			Debug.Log("PLaying " + name + demux.IsShowing);
+			demux.Hide();
+//			StartCoroutine(StartHideNextFrame());
+		}
+	}
+//
+//	private IEnumerator StartHideNextFrame(){
+//		yield return 0;
+//		demux.Hide();
+//	}
 
     public void PlaySound(){
         if(!String.IsNullOrEmpty(clipName))

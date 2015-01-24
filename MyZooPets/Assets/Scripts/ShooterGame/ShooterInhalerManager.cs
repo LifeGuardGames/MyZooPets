@@ -6,7 +6,7 @@ using System;
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
-
+	public EventHandler<EventArgs> Proceed;
 	public bool canUseInhalerButton = true;
 
 	public bool CanUseInhalerButton{
@@ -22,7 +22,10 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	//on button Tap
 	public void ShooterGameInhalerButton(){
 		if(CanUseInhalerButton == false){
-			Debug.Log("b");
+			if(ShooterGameManager.Instance.InTutorial==true){
+					if(Proceed != null)
+						Proceed(this, EventArgs.Empty);
+			}
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.removeHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;

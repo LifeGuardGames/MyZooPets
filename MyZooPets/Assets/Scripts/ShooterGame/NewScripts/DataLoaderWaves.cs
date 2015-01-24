@@ -11,6 +11,9 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 	public static ImmutableDataWave GetWave(int difficulty){
 
 		switch(difficulty){
+		case 0:
+			return GetData("Tutorial Wave_1");
+			break;
 		case 1:
 			return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
 			break;

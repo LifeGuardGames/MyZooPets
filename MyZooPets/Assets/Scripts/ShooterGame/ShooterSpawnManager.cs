@@ -66,10 +66,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			}
 			yield return new WaitForSeconds(1.0f);
 			int rand = Random.Range(0,3);
+			int RandomSpawn = Random.Range(0, enemy.Count);
 			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
 			enemy1.GetComponent<Enemy>().name = enemy[0].name;
 			enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
-			enemy1.GetComponent<Enemy>().AiScript = enemy[i].AiScript;
+			enemy1.GetComponent<Enemy>().AiScript = enemy[RandomSpawn].AiScript;
 			enemy1.GetComponent<Enemy>().Initialize();
 			EnemySpawnCount--;
 		}

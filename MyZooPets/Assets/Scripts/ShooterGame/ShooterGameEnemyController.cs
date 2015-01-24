@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> {
-
+	public EventHandler<EventArgs> Proceed;
 	public List<EnemyData> EnemyList;
 	public int EnemiesInWave = 0;
 	Wave waver;
@@ -15,19 +16,21 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		if(EnemyList!=null){
 		EnemyList.Clear();
 		}
-		EnemyList = new List<EnemyData>();
-		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 
+		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 	}
 
 	// builds a list of waves
 	public Wave buildWave (int _WaveNum){
 
 		int difficulty = 0;
-		if(_WaveNum<3){
+		if(_WaveNum==0){
+			difficulty = 0;
+		}
+		else if(_WaveNum>0&&_WaveNum<4){
 			difficulty = 1;
 		}
-		else if (_WaveNum >=3 &&_WaveNum<6){
+		else if (_WaveNum >=4 &&_WaveNum<7){
 			difficulty = 2;
 		}
 		else{
@@ -45,6 +48,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	// builds a list of enemy types
 	public void BuildEnemyList(List<ImmutableDataTriggerArmy> mobList){
+			EnemyList = new List<EnemyData>();
 		foreach (ImmutableDataTriggerArmy baddie in mobList){
 			EnemyData mob = new EnemyData();
 			mob.name = baddie.Name;
@@ -53,7 +57,12 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 			EnemyList.Add(mob);
 
 		}
-		GenerateWave(0);
+		if(ShooterGameManager.Instance.InTutorial == true){
+			GenerateWave(0);
+		}
+		else{
+		GenerateWave(1);
+		}
 	}
 	// determines which wave to spawn and set the enemies in wave to the correct amount
 	public void GenerateWave(int _WaveNum){
@@ -88,7 +97,11 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (EnemiesInWave == 0){
-			ShooterInhalerManager.Instance.CanUseInhalerButton=!ShooterInhalerManager.Instance.CanUseInhalerButton;
+			if(ShooterGameManager.Instance.InTutorial){
+				if(Proceed != null)
+					Proceed(this, EventArgs.Empty);
+			}
+			ShooterInhalerManager.Instance.CanUseInhalerButton=false;
 			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}
 	}

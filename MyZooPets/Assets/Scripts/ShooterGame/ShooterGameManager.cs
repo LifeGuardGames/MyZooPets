@@ -1,10 +1,12 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	// the number of times the user has missed the optimal use window
 	//public int NumMissed=0;
+	public EventHandler<EventArgs> Proceed;
 	public Camera nguiCamera;
 	public GameObject EController;
 	// our score
@@ -13,6 +15,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public float ShootTime;
 	private float StartTime;
 	public int WaveNum = 0;
+	public bool InTutorial= false;
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
@@ -41,13 +44,27 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
+
+		if(IsTutorialOn() && IsTutorialOverride()|| !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY))
+		{
+			InTutorial=true;
+			StartTutorial();
+		}
+		else{
+			WaveNum = 0;
+			ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
+			EController.GetComponent<ShooterGameEnemyController>().reset();
+			ShooterUIManager.Instance.reset();
+			PlayerShooterController.Instance.reset();
+		}
+	}
+	public void reset(){
 		WaveNum = 0;
 		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
 		EController.GetComponent<ShooterGameEnemyController>().reset();
 		ShooterUIManager.Instance.reset();
 		PlayerShooterController.Instance.reset();
 	}
-		
 	public override int GetReward(MinigameRewardTypes eType){
 		return GetStandardReward(eType);
 	}
@@ -55,12 +72,16 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		//BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
 	void OnTap(TapGesture e){
+		if(InTutorial){
+			if(Proceed != null)
+				Proceed(this, EventArgs.Empty);
+		}
 		if(StartTime <= Time.time-ShootTime){
 		if(!IsTouchingNGUI(e.Position)){
 		
 #if !UNITY_EDITOR
 		
-			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
+			Vector3 TouchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
 			PlayerShooterController.Instance.shoot(TouchPos);
 #endif
 #if UNITY_EDITOR
@@ -79,7 +100,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void ChangeWaves(){
-		ShooterInhalerManager.Instance.CanUseInhalerButton = !ShooterInhalerManager.Instance.CanUseInhalerButton;
+		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
 			WaveNum++;
 		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(WaveNum);
 	}
@@ -117,5 +138,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			yield return new WaitForFixedUpdate();
 		}
 		yield return new WaitForEndOfFrame();
+	}
+	private void StartTutorial(){
+		SetTutorial(new ShooterGameTutorial());
 	}
 }

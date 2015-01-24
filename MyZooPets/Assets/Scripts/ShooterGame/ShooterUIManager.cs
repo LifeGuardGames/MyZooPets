@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ShooterUIManager :Singleton<ShooterUIManager> {
+
 	public GameObject Sun;
 	public GameObject Moon;
 	public GameObject PosSky;
@@ -34,15 +35,19 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 		Moon.transform.position=PosBottom.transform.position;
 	}
 	public void AChangeOfTimeActOne(){
+		if(!ShooterGameManager.Instance.InTutorial){
 		if(ShooterGameManager.Instance.GetGameState()!= MinigameStates.GameOver){
 		if(Sun.GetComponent<MovingSky>().InSky == true){
 			LeanTween.move(Sun,PosBottom.transform.position,2.0f).setOnComplete(AChangeOfTimeActTwo);
 		}
 		else{
 			LeanTween.move(Moon,PosBottom.transform.position,2.0f).setOnComplete(AChangeOfTimeActTwo);
+				}
+			}
 		}
-	}
-
+		else{
+			LeanTween.move(Sun,PosBottom.transform.position,2.0f);
+		}
 	}
 	public void AChangeOfTimeActTwo(){
 		if(Sun.GetComponent<MovingSky>().InSky == true){

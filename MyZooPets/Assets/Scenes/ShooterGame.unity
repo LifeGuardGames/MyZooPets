@@ -2110,7 +2110,6 @@ MonoBehaviour:
   ShootTime: .300000012
   WaveNum: 0
   InTutorial: 0
-  lives: 0
 --- !u!65 &185100908
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14107,6 +14106,22 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 185100905}
+    - target: {fileID: 400002, guid: 094d240adc3df48238828db9b4b34ebe, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 094d240adc3df48238828db9b4b34ebe, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 094d240adc3df48238828db9b4b34ebe, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 094d240adc3df48238828db9b4b34ebe, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 094d240adc3df48238828db9b4b34ebe, type: 2}
   m_RootGameObject: {fileID: 604049598}
@@ -26714,8 +26729,8 @@ Transform:
   m_PrefabInternal: {fileID: 861459254}
   m_GameObject: {fileID: 1579241632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 128, y: 128, z: 1}
+  m_LocalPosition: {x: .5, y: .5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 604049599}
   m_RootOrder: 0
@@ -39160,6 +39175,7 @@ MonoBehaviour:
   pauseTween: {fileID: 889925891}
   labelXP: {fileID: 2055739479}
   labelStars: {fileID: 1942312934}
+  labelShards: {fileID: 0}
   labelScore: {fileID: 851490575}
   goIconStars: {fileID: 1566827203}
   goIconXP: {fileID: 1574997531}

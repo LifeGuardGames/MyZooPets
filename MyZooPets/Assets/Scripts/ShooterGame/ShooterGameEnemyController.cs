@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -52,8 +52,8 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		foreach (ImmutableDataTriggerArmy baddie in mobList){
 			EnemyData mob = new EnemyData();
 			mob.name = baddie.Name;
-			mob.spritz= baddie.SpriteName;
-			mob.AiScript= baddie.AI;
+			mob.spriteName= baddie.SpriteName;
+			mob.aiScript= baddie.AI;
 			EnemyList.Add(mob);
 
 		}

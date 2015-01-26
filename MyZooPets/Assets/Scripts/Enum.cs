@@ -124,7 +124,8 @@ public enum UIModeTypes {
 	ParentPortal,
 	Friends,
 	MembershipCheck,
-	Badge
+	Badge,
+	FireCrystal
 }
 
 // decoration node anchor types

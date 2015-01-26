@@ -33,4 +33,16 @@ public static class GameObjectUtils{
 		}
 		return go;
 	}
+
+	/// <summary>
+	/// Gets the point on circle circumference centered around center on XY plane.
+	/// </summary>
+	/// <param name="position">Position.</param>
+	/// <param name="radius">Radius.</param>
+	static public Vector3 GetRandomPointOnCircumference(Vector3 center, float radius){
+		float randomDegree = UnityEngine.Random.Range(0f,360f);
+		float xComponent = radius * Mathf.Sin(randomDegree);	// Not sure if sin or cos but we dont really care
+		float yComponent = radius * Mathf.Cos(randomDegree);
+		return new Vector3(center.x + xComponent, center.y + yComponent, center.z);
+	}
 }

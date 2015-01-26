@@ -286,7 +286,7 @@ public class HUDAnimator : MonoBehaviour{
 			// Addition tweening behavior
 			Vector3[] path = new Vector3[4];
 			path[0] = go.transform.localPosition;
-			Vector3 randomPoint = GetRandomPointOnCircumference(go.transform.localPosition, 200f);
+			Vector3 randomPoint = GameObjectUtils.GetRandomPointOnCircumference(go.transform.localPosition, 200f);
 			path[1] = randomPoint;
 			path[2] = path[1];
 			path[3] = toPos;
@@ -307,62 +307,45 @@ public class HUDAnimator : MonoBehaviour{
 			StartCoroutine(AnimateStatBar(type, duration));
 	}
 
-	/// <summary>
-	/// Gets the point on circle circumference centered around center on XY plane.
-	/// Used for getting a random midpoint in the bezier curve leantween
-	/// </summary>
-	/// <param name="position">Position.</param>
-	/// <param name="radius">Radius.</param>
-	private Vector3 GetRandomPointOnCircumference(Vector3 center, float radius){
-		float randomDegree = UnityEngine.Random.Range(0f,360f);
-		float xComponent = radius * Mathf.Sin(randomDegree);	// Not sure if sin or cos but we dont really care
-		float yComponent = radius * Mathf.Cos(randomDegree);
-		return new Vector3(center.x + xComponent, center.y + yComponent, center.z);
-	}
-	
 	//---------------------------------------------------
 	// AnimateStatBar()
 	// Animates the stat bar for eStat.
 	//---------------------------------------------------	
-	private IEnumerator AnimateStatBar(HUDElementType eStat, float fDelay){
+	private IEnumerator AnimateStatBar(HUDElementType eStat, float delay){
 		// wait X seconds
-		yield return new WaitForSeconds(fDelay);
+		yield return new WaitForSeconds(delay);
 		
 		// required data for animating the bar
-		int nStep = Constants.GetConstant<int>(eStat + "_Step");
-		bool firstFrame = true;
+		int step = Constants.GetConstant<int>(eStat + "_Step");
 		AnimationControl anim = hashAnimControls[eStat];
-		int nTarget = StatsController.Instance.GetStat(eStat);
-		
-		// while the display number is not where we want to be...
-		while(hashDisplays[eStat] != nTarget){
+		int target = StatsController.Instance.GetStat(eStat);
 
-			// add proper signage to the step, Only on first frame!
-			if(hashDisplays[eStat] > nTarget && firstFrame){
-				firstFrame = false;
-				nStep *= -1;
-			}
-			
+		if(hashDisplays[eStat] > target){
+			step *= -1;
+		}
+
+		// while the display number is not where we want to be...
+		while(hashDisplays[eStat] != target){
+
 			// animate by altering the display amount, but don't go over/under the target
-			if(nStep > 0){
-				hashDisplays[eStat] = Mathf.Min(hashDisplays[eStat] + nStep, nTarget);
+			if(step > 0){
+				hashDisplays[eStat] = Mathf.Min(hashDisplays[eStat] + step, target);
 			}
 			else{
-				hashDisplays[eStat] = Mathf.Max(hashDisplays[eStat] + nStep, nTarget);
+				hashDisplays[eStat] = Mathf.Max(hashDisplays[eStat] + step, target);
 			}
 
 			// if there is a controller, play it
 			if(anim){
-				bool auxPlayParticle = (nStep > 0) ? true : false;
+				bool auxPlayParticle = (step > 0) ? true : false;
 				anim.Play(auxPlayParticle);
 			}
-
 
 			// wait one frame
 			yield return 0;
 			
 			// update our target in case it changed
-			nTarget = StatsController.Instance.GetStat(eStat);
+			target = StatsController.Instance.GetStat(eStat);
 		}
 
 		// animating is finished, so stop the control if it exists

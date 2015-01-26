@@ -266,7 +266,8 @@ public enum InterfaceAnchors {
 // reward types for minigames
 public enum MinigameRewardTypes {
 	XP,
-	Money
+	Money,
+	Shard
 }
 
 // reward statuses for wellapad missions

@@ -16,7 +16,6 @@ public class FireShardController : MonoBehaviour {
 
 	private void MovingComplete(){
 		sprite.enabled = false;
-
 		// Play some particle here TODO
 		finishParticle.Play();
 

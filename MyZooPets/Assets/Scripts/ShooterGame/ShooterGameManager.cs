@@ -8,23 +8,16 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	//public int NumMissed=0;
 	public EventHandler<EventArgs> Proceed;
 	public Camera nguiCamera;
-	public GameObject EController;
-	// our score
-	public int Score = 0;
-	public GameObject ScoreLabel;
 	public float ShootTime;
 	private float StartTime;
 	public int WaveNum = 0;
 	public bool InTutorial= false;
+
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
 	protected override void _Start(){
-	}
-
-	public override int GetScore(){
-		return Score;
 	}
 
 	protected override void _OnDestroy(){
@@ -45,32 +38,36 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _NewGame(){
 
-		if(IsTutorialOn() && IsTutorialOverride()|| !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY))
+		if(IsTutorialOn() && IsTutorialOverride())
 		{
-			InTutorial=true;
+			InTutorial = true;
 			StartTutorial();
 		}
+
 		else{
 			WaveNum = 0;
-			ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
-			EController.GetComponent<ShooterGameEnemyController>().reset();
+			ShooterSpawnManager.Instance.reset();
+			ShooterGameEnemyController.Instance.reset();
 			ShooterUIManager.Instance.reset();
 			PlayerShooterController.Instance.reset();
 		}
 	}
+
 	public void reset(){
 		WaveNum = 0;
-		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
-		EController.GetComponent<ShooterGameEnemyController>().reset();
+		ShooterGameEnemyController.Instance.reset();
 		ShooterUIManager.Instance.reset();
 		PlayerShooterController.Instance.reset();
 	}
+
 	public override int GetReward(MinigameRewardTypes eType){
 		return GetStandardReward(eType);
 	}
+
 	protected override void _GameOver(){
 		//BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
+
 	void OnTap(TapGesture e){
 		if(InTutorial){
 			if(Proceed != null)
@@ -95,8 +92,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void AddScore(int amount)
 	{
-		Score += amount;
-		ScoreLabel.GetComponent<UILabel>().text = Score.ToString();
+		UpdateScore(amount);
 	}
 
 	public void ChangeWaves(){
@@ -104,8 +100,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			WaveNum++;
 		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(WaveNum);
 	}
-
-
 
 	// Update is called once per frame
 	protected override void _Update(){
@@ -130,10 +124,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		return isOnNGUILayer;
 	}
 	public Coroutine sync(){
-		return StartCoroutine("PauseRoutine"); 
+		return StartCoroutine(PauseRoutine()); 
 	}
 	public IEnumerator PauseRoutine(){
-		Debug.Log("hi");
 		while (ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
 			yield return new WaitForFixedUpdate();
 		}

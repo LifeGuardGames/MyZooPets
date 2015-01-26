@@ -24,16 +24,23 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 			LeanTween.resume(Sun);
 			LeanTween.resume(Moon);
 			break;
+		case MinigameStates.Restarting:
+			LeanTween.cancel(Sun);
+			LeanTween.cancel(Moon);
+			break;
 		}
 	}
+
 	// Use this for initialization
 	void Start () {
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
+
 	public void reset(){
 		Sun.transform.position=PosSky.transform.position;
 		Moon.transform.position=PosBottom.transform.position;
 	}
+
 	public void AChangeOfTimeActOne(){
 		if(!ShooterGameManager.Instance.InTutorial){
 		if(ShooterGameManager.Instance.GetGameState()!= MinigameStates.GameOver){
@@ -49,6 +56,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 			LeanTween.move(Sun,PosBottom.transform.position,2.0f);
 		}
 	}
+
 	public void AChangeOfTimeActTwo(){
 		if(Sun.GetComponent<MovingSky>().InSky == true){
 			LeanTween.move(Moon,PosSky.transform.position,2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
@@ -61,5 +69,4 @@ public class ShooterUIManager :Singleton<ShooterUIManager> {
 			Moon.GetComponent<MovingSky>().InSky = false;
 		}
 	}
-
 }

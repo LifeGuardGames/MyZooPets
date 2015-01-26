@@ -1,25 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShooterHardEnemyAI : MonoBehaviour {
+public class ShooterHardEnemyAi :EnemyAiHandeler {
 
-	public float Speed = 2.0f;
-	public int ScoreVal = 5;
-	//public int Damage = 2;
-	public int health = 3;
-	private GameObject EnemyC;
+
 	private GameObject Player;
-	GameObject SkyPos;
-	GameObject Bottom;
-	GameObject MidPoint;
+	private GameObject SkyPos;
+	private GameObject Bottom;
+	private GameObject MidPoint;
 	private bool paused;
 	public GameObject BulletPrefab;
+
 	// Use this for initialization
 	void Start () {
-		EnemyC=GameObject.Find("ShooterGameManager");
-		this.gameObject.GetComponentInChildren<UISprite>().color = Color.cyan;
-		Player = GameObject.FindWithTag("Player");
-		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
+		Speed = 2.0f;
+		ScoreVal = 5;
+		health = 3;
+		this.gameObject.GetComponentInChildren<UISprite>().color = Color.gray;
 		SkyPos = GameObject.Find ("Upper");
 		Bottom = GameObject.Find("Lower");
 		MidPoint =  GameObject.Find("MidPoint");
@@ -34,53 +31,9 @@ public class ShooterHardEnemyAI : MonoBehaviour {
 			LeanTween.move(this.gameObject,Bottom.transform.position,Speed).setOnComplete(MoveAgain);
 		}
 	}
-	// Update is called once per frame
-	void Update () {
-		if(ShooterGameManager.Instance.GetGameState()== MinigameStates.GameOver){
-			StartCoroutine("DestroyEnemy");
-		}
-	}
-	void OnGameStateChanged(object sender, GameStateArgs args){
-		MinigameStates eState = args.GetGameState();
-		switch(eState){
-		case MinigameStates.GameOver:
-			StartCoroutine("DestroyEnemy");
-			break;
-		case MinigameStates.Paused:
-			LeanTween.pause(this.gameObject);
-			break;
-		case MinigameStates.Playing:
-			LeanTween.resume(this.gameObject);
-			break;
-		case MinigameStates.Restarting:
-			StartCoroutine("DestroyEnemy");
-			break;
-		}
-	}
-	void OnTriggerEnter2D(Collider2D Col){
-		if(Col.gameObject.tag=="bullet")
-		{
-			
-			Destroy(Col.gameObject);
-			health--;
-			if (health <= 0){
-				EnemyC.GetComponent<ShooterGameManager>().AddScore(ScoreVal);
-				StartCoroutine("DestroyEnemy");
-			}
-		}
 
-	}
 	void ShootSmogBall(){
 		GameObject instance = Instantiate(BulletPrefab,this.gameObject.transform.position,BulletPrefab.transform.rotation)as GameObject;
 		LeanTween.move (instance,Player.transform.position,2.0f);
-	}
-
-	IEnumerator DestroyEnemy(){
-		yield return new WaitForEndOfFrame();
-		LeanTween.cancel(this.gameObject);
-		EnemyC.GetComponent<ShooterGameEnemyController>().EnemiesInWave--;
-		EnemyC.GetComponent<ShooterGameEnemyController>().CheckEnemiesInWave();
-		ShooterGameManager.OnStateChanged-= OnGameStateChanged;
-		Destroy(this.gameObject);
 	}
 }

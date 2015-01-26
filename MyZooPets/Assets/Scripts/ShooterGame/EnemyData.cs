@@ -4,10 +4,10 @@ using System.Collections;
 public class EnemyData{
 
 	public string name;
-	public string spritz;
-	public string AiScript;
+	public string spriteName;
+	public string aiScript;
 	public UISprite triggerSprite;
-	//public GameObject NGUIParent;
+
 	public EnemyData(){
 	}
 

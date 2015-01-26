@@ -11,13 +11,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public GameObject thirdPos;
 	//enemy prefab
 	public GameObject enemyPrefab;
-	public bool IsSpawing;
-	private float LastSpawn;
-	public float SpawnTime;
+	public bool isSpawing;
+	private float lastSpawn;
+	public float spawnTime;
 	//list of positions to spawn enemy from
 	List<Vector3> posList;
 	public List <EnemyData> enemy;
-	public int EnemySpawnCount;
 			
 	// Use this for initialization
 	void Start () {
@@ -27,24 +26,26 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		posList.Add(thirdPos.transform.position);
 		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
 	}
-
+	public void reset(){
+		Debug.Log("working");
+		StopCoroutine("SpawnEnemies");
+	}
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
 		switch(eState){
 		case MinigameStates.GameOver:
-			IsSpawing = false;
+			isSpawing = false;
 			break;
 		case MinigameStates.Paused:
-			IsSpawing = false;
+			isSpawing = false;
 			break;
 		case MinigameStates.Playing:
-			IsSpawing = true;
+			isSpawing = true;
 			break;
 		}
 	}
 	public void spawnTrigger(List<EnemyData> enemy){
 		//Debug.Log(enemy.Count);
-
 	/*	if(EnemySpawnCount<=0){
 			IsSpawing = false;
 		}*/
@@ -61,7 +62,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	}
 	IEnumerator SpawnEnemies(){
 		for (int i = 0; i<enemy.Count;i++){
-			if (IsSpawing == false){
+			if (isSpawing == false){
 				yield return ShooterGameManager.Instance.sync();
 			}
 			yield return new WaitForSeconds(1.0f);
@@ -69,10 +70,9 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			int RandomSpawn = Random.Range(0, enemy.Count);
 			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
 			enemy1.GetComponent<Enemy>().name = enemy[0].name;
-			enemy1.GetComponent<Enemy>().spritz = enemy[0].spritz;
-			enemy1.GetComponent<Enemy>().AiScript = enemy[RandomSpawn].AiScript;
+			enemy1.GetComponent<Enemy>().spriteName = enemy[0].spriteName;
+			enemy1.GetComponent<Enemy>().aiScript = enemy[RandomSpawn].aiScript;
 			enemy1.GetComponent<Enemy>().Initialize();
-			EnemySpawnCount--;
 		}
 	}
 }

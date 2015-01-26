@@ -4,23 +4,25 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
 	public string name;
-	public string spritz;
-	public string AiScript;
+	public string spriteName;
+	public string aiScript;
 	public UISprite triggerSprite;
 	private GameObject tweeningContentParent;
 	//public GameObject NGUIParent;
 	public void Initialize(){
 		triggerSprite.type = UISprite.Type.Simple;
-		triggerSprite.spriteName = spritz;
+		triggerSprite.spriteName = spriteName;
 		triggerSprite.MakePixelPerfect();
-		triggerSprite.name = spritz;
+		triggerSprite.name = spriteName;
 		tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;
-		switch(AiScript){
+
+		switch(aiScript){
 			case"BasicAI":
 				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
 				break;
 			case "MediumAI":
-				this.gameObject.AddComponent<ShooterMediumEnemyAI>();
+				this.gameObject.AddComponent<ShooterMediumEnemyAi
+				>();
 				break;
 			case "HardAI":
 				this.gameObject.AddComponent<ShooterBasicEnemyAi>();

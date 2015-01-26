@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerShooterController : Singleton<PlayerShooterController> {
+	public EventHandler <EventArgs> changeInHealth;
 	//the player state this dictates the pets strength
 	public string State = "neutral";
 	//player health
@@ -50,6 +52,14 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 			ChangeState("distressed");
 		}
 		ShooterGameManager.Instance.UpdateLives((int)amount);
+		if(amount >0){ 
+		// work around for increaseing health above max 
+		if(changeInHealth != null)
+			changeInHealth(this, EventArgs.Empty);
+		}
+		else{
+			changeInHealth-=ShooterGameManager.Instance.healthUpdate;
+		}
 	}
 
 	public void shoot(Vector3 dir){
@@ -59,5 +69,12 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		instance.GetComponent<bulletScript>().target = lookPos;
 		instance.GetComponent<bulletScript>().FindTarget();
 		instance.gameObject.transform.localScale *= FBallScale;
+	}
+
+	void OnTriggerEnter2D(Collider2D collider){
+		if(collider.gameObject.tag == "EnemyBullet"){
+			removeHealth(-1);
+			Destroy(collider.gameObject);
+		}
 	}
 }

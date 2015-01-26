@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 	public string spriteName;
 	public string aiScript;
 	public UISprite triggerSprite;
+	public GameObject bulletPrefab;
 	private GameObject tweeningContentParent;
 	//public GameObject NGUIParent;
 	public void Initialize(){
@@ -25,7 +26,7 @@ public class Enemy : MonoBehaviour {
 				>();
 				break;
 			case "HardAI":
-				this.gameObject.AddComponent<ShooterBasicEnemyAi>();
+				this.gameObject.AddComponent<ShooterHardEnemyAi>();
 				break;
 			default:
 				this.gameObject.AddComponent<ShooterBasicEnemyAi>();

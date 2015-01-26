@@ -2107,12 +2107,10 @@ MonoBehaviour:
   nStartingLives: 10
   gameOverAudioClip: minigameGameOver
   nguiCamera: {fileID: 85857248}
-  EController: {fileID: 185100905}
-  Score: 0
-  ScoreLabel: {fileID: 811829032}
   ShootTime: .300000012
   WaveNum: 0
   InTutorial: 0
+  lives: 0
 --- !u!65 &185100908
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2140,9 +2138,9 @@ MonoBehaviour:
   secondPos: {fileID: 1963431173}
   thirdPos: {fileID: 216190693}
   enemyPrefab: {fileID: 100000, guid: 771bd3b110484d248832ff11db91ea9d, type: 2}
-  IsSpawing: 1
-  SpawnTime: 1
-  EnemySpawnCount: 0
+  isSpawing: 0
+  spawnTime: 0
+  bulletPrefab: {fileID: 100000, guid: 0238c3e6213b0fd43b87633a46cd4bcf, type: 2}
 --- !u!114 &185100910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2154,8 +2152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987c62edcede98140bd3297dc32c5e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemiesInWave: 0
-  EnemyPrefab: {fileID: 100000, guid: 771bd3b110484d248832ff11db91ea9d, type: 2}
+  enemiesInWave: 0
 --- !u!1 &187725538
 GameObject:
   m_ObjectHideFlags: 0
@@ -5496,7 +5493,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 243279508}
   - 212: {fileID: 243279507}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cheek
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5640,7 +5637,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 280031025}
   - 212: {fileID: 280031026}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5793,7 +5790,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 324222134}
   - 212: {fileID: 324222135}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegLower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8206,7 +8203,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 395181058}
   - 212: {fileID: 395181059}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ArmLower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9761,7 +9758,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 478773151}
   - 212: {fileID: 478773152}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ArmUpper_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11499,7 +11496,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 572359218}
   - 212: {fileID: 572359219}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegUpper_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12128,7 +12125,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 726839966}
   - 212: {fileID: 726839967}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Brow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12268,7 +12265,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 774044110}
   - 212: {fileID: 774044111}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14124,7 +14121,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 867632898}
   - 212: {fileID: 867632899}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegLower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17786,7 +17783,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
       propertyPath: m_LocalScale.x
@@ -17803,6 +17800,78 @@ Prefab:
     - target: {fileID: 100024, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100028, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100030, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100034, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100024, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100022, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100032, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100026, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9500000, guid: 81f3c68e663784c50800e8f1d68c8949, type: 2}
@@ -17869,7 +17938,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1015808852}
   - 212: {fileID: 1015808853}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21148,7 +21217,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1271391033}
   - 212: {fileID: 1271391034}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ArmLower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21292,7 +21361,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1298011743}
   - 212: {fileID: 1298011744}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegMid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23851,7 +23920,7 @@ GameObject:
   - 4: {fileID: 1412321053}
   - 61: {fileID: 1412321055}
   - 114: {fileID: 1412321056}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PetRunner
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -24097,7 +24166,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3021cd5898d19488baa95dee45c36765, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3021cd5898d19488baa95dee45c36765, type: 2}
@@ -26305,7 +26374,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1518870408}
   - 212: {fileID: 1518870409}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegUpper_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26459,7 +26528,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
@@ -26515,7 +26584,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aba1a5a1c9e3b2546b13115d925d9565, type: 2}
@@ -30251,7 +30320,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1703566558}
   - 212: {fileID: 1703566559}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ArmUpper_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32990,7 +33059,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8071afd131fd04d8fb3db7884728685d, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8071afd131fd04d8fb3db7884728685d, type: 2}
@@ -33113,7 +33182,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1860512768}
   - 212: {fileID: 1860512769}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LegMid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35562,7 +35631,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1946903940}
   - 212: {fileID: 1946903941}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35836,7 +35905,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1967093384}
   - 212: {fileID: 1967093385}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38539,6 +38608,33 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!1 &2045191133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2045191134}
+  m_Layer: 0
+  m_Name: MidPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2045191134
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2045191133}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.72749996, y: 13.4589996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
 --- !u!1 &2055739476
 GameObject:
   m_ObjectHideFlags: 0

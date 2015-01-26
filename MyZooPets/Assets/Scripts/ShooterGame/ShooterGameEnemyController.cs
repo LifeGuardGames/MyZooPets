@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System;
 
 public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> {
-	public EventHandler<EventArgs> Proceed;
-	public List<EnemyData> EnemyList;
-	public int EnemiesInWave = 0;
+	public EventHandler<EventArgs> proceed;
+	public List<EnemyData> enemyList;
+	public int enemiesInWave = 0;
 	Wave waver;
-	Wave CurrWave;
-	public GameObject EnemyPrefab;
+	Wave currWave;
 
 	public void reset(){
-		EnemiesInWave = 0;
-		if(EnemyList!=null){
-		EnemyList.Clear();
+		enemiesInWave = 0;
+		if(enemyList!=null){
+		enemyList.Clear();
 		}
 
 		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
@@ -48,13 +47,13 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	// builds a list of enemy types
 	public void BuildEnemyList(List<ImmutableDataTriggerArmy> mobList){
-			EnemyList = new List<EnemyData>();
+			enemyList = new List<EnemyData>();
 		foreach (ImmutableDataTriggerArmy baddie in mobList){
 			EnemyData mob = new EnemyData();
 			mob.name = baddie.Name;
 			mob.spriteName= baddie.SpriteName;
 			mob.aiScript= baddie.AI;
-			EnemyList.Add(mob);
+			enemyList.Add(mob);
 
 		}
 		if(ShooterGameManager.Instance.InTutorial == true){
@@ -66,9 +65,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 	}
 	// determines which wave to spawn and set the enemies in wave to the correct amount
 	public void GenerateWave(int _WaveNum){
-		CurrWave=buildWave(_WaveNum);
-		EnemiesInWave= int.Parse(CurrWave.NumOfEnemies);
-		SpawnWave(CurrWave);
+		currWave=buildWave(_WaveNum);
+		enemiesInWave= int.Parse(currWave.NumOfEnemies);
+		SpawnWave(currWave);
 	}
 
 	// Spawns the current wave
@@ -80,14 +79,14 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 			WaveEnemies.Add(EnemyList[0]);
 		}*/
 		for (int i =0; i < int.Parse(currWave.NumOfBasics); i++){
-			WaveEnemies.Add(EnemyList[0]);
+			WaveEnemies.Add(enemyList[0]);
 		}
 		for (int i =0; i < int.Parse(currWave.NumOfMedium); i++){
-			WaveEnemies.Add(EnemyList[1]);
+			WaveEnemies.Add(enemyList[1]);
 		}
-		/*for (int i =0; i < currWave.NumOfHard; i++){
-			WaveEnemies.Add(EnemyList[2]);
-		}*/
+		for (int i =0; i < int.Parse(currWave.NumOfHard); i++){
+			WaveEnemies.Add(enemyList[2]);
+		}
 		//ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
 		ShooterSpawnManager.Instance.enemy = WaveEnemies;
 		ShooterSpawnManager.Instance.spawnTrigger(WaveEnemies);
@@ -96,10 +95,10 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
-		if (EnemiesInWave == 0){
+		if (enemiesInWave == 0){
 			if(ShooterGameManager.Instance.InTutorial){
-				if(Proceed != null)
-					Proceed(this, EventArgs.Empty);
+				if(proceed != null)
+					proceed(this, EventArgs.Empty);
 			}
 			ShooterInhalerManager.Instance.CanUseInhalerButton=false;
 			ShooterUIManager.Instance.AChangeOfTimeActOne();

@@ -17,6 +17,9 @@ public class EnemyAiHandeler : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(ShooterGameManager.Instance.GetGameState()== MinigameStates.Paused){
+			LeanTween.pause(this.gameObject);
+		}
 		if(ShooterGameManager.Instance.GetGameState()== MinigameStates.GameOver){
 			StartCoroutine(DestroyEnemy());
 		}
@@ -60,7 +63,7 @@ public class EnemyAiHandeler : MonoBehaviour {
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
 		LeanTween.cancel(this.gameObject);
-		ShooterGameEnemyController.Instance.EnemiesInWave--;
+		ShooterGameEnemyController.Instance.enemiesInWave--;
 		ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 		ShooterGameManager.OnStateChanged-= OnGameStateChanged;
 		Destroy(this.gameObject);

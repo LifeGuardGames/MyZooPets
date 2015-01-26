@@ -10,6 +10,7 @@ public class ShooterMediumEnemyAi : EnemyAiHandeler{
 		Speed = 2.0f;
 		ScoreVal = 3;
 		health = 2;
+		Damage = 2;
 		this.gameObject.GetComponentInChildren<UISprite>().color = Color.cyan;
 		SkyPos= GameObject.Find ("Upper");
 		Bottom= GameObject.Find("Lower");

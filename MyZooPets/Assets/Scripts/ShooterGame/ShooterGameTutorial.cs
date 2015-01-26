@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -19,13 +19,13 @@ public class ShooterGameTutorial : MinigameTutorial {
 			break;
 		case 1:
 			ShooterGameManager.Instance.Proceed -=MoveAlong;
-			ShooterGameEnemyController.Instance.Proceed +=MoveAlong;
+			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
 			GameObject DestroyPrefabsClone = TutorialFinger;
 			GameObject.Destroy(DestroyPrefabsClone);
 			ShooterGameEnemyController.Instance.BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 			break;
 		case 2:
-			ShooterGameEnemyController.Instance.Proceed -=MoveAlong;
+			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
 			ShooterInhalerManager.Instance.Proceed +=MoveAlong;
 			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
 			TutorialInhalerUse = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);

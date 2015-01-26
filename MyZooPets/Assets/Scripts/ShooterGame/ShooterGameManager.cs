@@ -12,6 +12,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float StartTime;
 	public int WaveNum = 0;
 	public bool InTutorial= false;
+	public int lives;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -38,13 +39,14 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _NewGame(){
 
-		if(IsTutorialOn() && IsTutorialOverride())
+		if(IsTutorialOverride())
 		{
 			InTutorial = true;
 			StartTutorial();
 		}
 
 		else{
+			PlayerShooterController.Instance.changeInHealth+=healthUpdate;
 			WaveNum = 0;
 			ShooterSpawnManager.Instance.reset();
 			ShooterGameEnemyController.Instance.reset();
@@ -103,7 +105,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	// Update is called once per frame
 	protected override void _Update(){
-	
+		lives = GetLives();
 	}
 	//True: if finger touches NGUI 
 	/// <summary>
@@ -134,5 +136,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 	private void StartTutorial(){
 		SetTutorial(new ShooterGameTutorial());
+	}
+	public void healthUpdate(object sender, EventArgs args){
+		UpdateLives(-1);
+		UpdateLives(4);
+		PlayerShooterController.Instance.changeInHealth-=healthUpdate;	
 	}
 }

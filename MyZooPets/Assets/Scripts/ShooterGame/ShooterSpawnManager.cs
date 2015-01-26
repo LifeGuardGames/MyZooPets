@@ -17,6 +17,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	//list of positions to spawn enemy from
 	List<Vector3> posList;
 	public List <EnemyData> enemy;
+	public GameObject bulletPrefab;
 			
 	// Use this for initialization
 	void Start () {
@@ -27,7 +28,6 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
 	}
 	public void reset(){
-		Debug.Log("working");
 		StopCoroutine("SpawnEnemies");
 	}
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -72,6 +72,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			enemy1.GetComponent<Enemy>().name = enemy[0].name;
 			enemy1.GetComponent<Enemy>().spriteName = enemy[0].spriteName;
 			enemy1.GetComponent<Enemy>().aiScript = enemy[RandomSpawn].aiScript;
+			enemy1.GetComponent<Enemy>().bulletPrefab = bulletPrefab;
 			enemy1.GetComponent<Enemy>().Initialize();
 		}
 	}

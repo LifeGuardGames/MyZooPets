@@ -12,7 +12,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float StartTime;
 	public int WaveNum = 0;
 	public bool InTutorial= false;
-	public int lives;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -105,7 +104,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	// Update is called once per frame
 	protected override void _Update(){
-		lives = GetLives();
 	}
 	//True: if finger touches NGUI 
 	/// <summary>

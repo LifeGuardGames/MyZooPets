@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ComicPage : MonoBehaviour{
-	public string clipName;
+	public string audioClipName;
 
 	// For color swapping, support up to 3 for now
 	public SpriteRenderer sprite1;
@@ -16,7 +16,6 @@ public class ComicPage : MonoBehaviour{
 
 	public TweenToggleDemux demux;
 	public List<SpriteRenderer> allSpriteRenderers;
-//	public LgButtonMessage buttonMessage;
 
 	/// <summary>
 	/// Populate the comic pages with the appropriate color
@@ -31,8 +30,6 @@ public class ComicPage : MonoBehaviour{
 //			Debug.LogError("Invalid color");
 //		}
 
-//		buttonMessage.target = player.gameObject;
-//		buttonMessage.functionName = "NextPage";
 		demux.HideTarget = player.gameObject;
 		demux.HideFunctionName = "StartTransitionAndCallNextPage";
 	}
@@ -49,21 +46,15 @@ public class ComicPage : MonoBehaviour{
 		foreach(SpriteRenderer renderer in allSpriteRenderers){
 			renderer.enabled = isActive;
 		}
-		// Play is it is active
+		// Play if it is active
 		if(isActive){
 			Debug.Log("PLaying " + name + demux.IsShowing);
 			demux.Hide();
-//			StartCoroutine(StartHideNextFrame());
 		}
 	}
-//
-//	private IEnumerator StartHideNextFrame(){
-//		yield return 0;
-//		demux.Hide();
-//	}
 
     public void PlaySound(){
-        if(!String.IsNullOrEmpty(clipName))
-            AudioManager.Instance.PlayClip(clipName);
+        if(!String.IsNullOrEmpty(audioClipName))
+            AudioManager.Instance.PlayClip(audioClipName);
     }
 }

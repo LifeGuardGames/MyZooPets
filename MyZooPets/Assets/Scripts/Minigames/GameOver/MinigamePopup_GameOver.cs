@@ -15,6 +15,7 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	// labels for the stars and xp rewards
 	public UILabel labelXP;
 	public UILabel labelStars;
+	public UILabel labelShards;
 	
 	// label for the player's score
 	public UILabel labelScore;
@@ -57,16 +58,17 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		// the game over screen is showing, so we need to set our stats properly
 		
 		// set the score
-		int nScore = GetScore();
-		string strScore = StringUtils.FormatNumber(nScore);
-		labelScore.text = strScore;
+		int score = GetScore();
+		string scoreText = StringUtils.FormatNumber(score);
+		labelScore.text = scoreText;
 		
 		// set the stars and XP earned
-		int nRewardXP = GetReward(MinigameRewardTypes.XP) + nFreebie;
-		int nRewardMoney = GetReward(MinigameRewardTypes.Money) + nFreebie;
+		int rewardXP = GetReward(MinigameRewardTypes.XP) + nFreebie;
+		int rewardMoney = GetReward(MinigameRewardTypes.Money) + nFreebie;
+		int rewardShard = GetReward(MinigameRewardTypes.Shard) + nFreebie;
 		
-		string strXP = StringUtils.FormatNumber(nRewardXP);
-		string strMoney = StringUtils.FormatNumber(nRewardMoney);
+		string strXP = StringUtils.FormatNumber(rewardXP);
+		string strMoney = StringUtils.FormatNumber(rewardMoney);
 		
 		labelXP.text = strXP;
 		labelStars.text = strMoney;
@@ -79,8 +81,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		vPosMoney = CameraManager.Instance.TransformAnchorPosition(vPosMoney, InterfaceAnchors.Center, InterfaceAnchors.TopLeft);
 		
 		// award the actual xp and money
-		StatsController.Instance.ChangeStats(deltaPoints: nRewardXP, pointsLoc: vPosXP,
-		                                     deltaStars: nRewardMoney, starsLoc: vPosMoney,
+		StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: vPosXP,
+		                                     deltaStars: rewardMoney, starsLoc: vPosMoney,
 		                                     animDelay: 0.5f);
 	}
 	

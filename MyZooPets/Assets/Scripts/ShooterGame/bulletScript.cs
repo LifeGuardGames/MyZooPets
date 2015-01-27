@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class bulletScript : MonoBehaviour {
+public class bulletScript : MonoBehaviour{
 
-	public float speed=5f;
+	public float speed = 5f;
 	public Vector3 target;
 
 	public void FindTarget(){
@@ -13,11 +13,11 @@ public class bulletScript : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
-		transform.Translate (speed*Time.deltaTime,0,0);
+	void Update(){
+		transform.Translate(speed * Time.deltaTime, 0, 0);
 	}
 
-	void OnBecameInvisible (){
+	void OnBecameInvisible(){
 		Destroy(this.gameObject);
 	}
 

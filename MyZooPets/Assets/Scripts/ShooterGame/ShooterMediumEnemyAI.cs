@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class ShooterMediumEnemyAi : EnemyAiHandeler{
+public class ShooterMediumEnemyAi : ShooterEnemyAi{
 	private GameObject SkyPos;
 	private GameObject Bottom;
 	

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class ShooterBasicEnemyAi :EnemyAiHandeler{
+public class ShooterBasicEnemyAi:ShooterEnemyAi{
 	// Use this for initialization
 	void Start () {
 		Speed = 2.5f;

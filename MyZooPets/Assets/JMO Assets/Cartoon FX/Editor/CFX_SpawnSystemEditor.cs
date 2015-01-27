@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
+// Cartoon FX  - (c) 2015 Jean Moreno
+
+// CFX Spawn System Editor interface
 
 [CustomEditor(typeof(CFX_SpawnSystem))]
 public class CFX_SpawnSystemEditor : Editor
@@ -17,17 +20,50 @@ public class CFX_SpawnSystemEditor : Editor
 		{
 			GUILayout.BeginHorizontal();
 			
-			(this.target as CFX_SpawnSystem).objectsToPreload[i] = (GameObject)EditorGUILayout.ObjectField((this.target as CFX_SpawnSystem).objectsToPreload[i], typeof(GameObject), true);
+			EditorGUI.BeginChangeCheck();
+			GameObject obj = (GameObject)EditorGUILayout.ObjectField((this.target as CFX_SpawnSystem).objectsToPreload[i], typeof(GameObject), true);
+			if(EditorGUI.EndChangeCheck())
+			{
+#if UNITY_4_2
+				Undo.RegisterUndo(target, "Change Spawn System object to preload");
+#else
+				Undo.RecordObject(target, "Change Spawn System object to preload");
+#endif
+				(this.target as CFX_SpawnSystem).objectsToPreload[i] = obj;
+			}
 			EditorGUILayout.LabelField(new GUIContent("times","Number of times to copy the effect\nin the pool, i.e. the max number of\ntimes the object will be used\nsimultaneously"), GUILayout.Width(40));
+			EditorGUI.BeginChangeCheck();
 			int nb = EditorGUILayout.IntField("", (this.target as CFX_SpawnSystem).objectsToPreloadTimes[i], GUILayout.Width(50));
 			if(nb < 1)
 				nb = 1;
-			(this.target as CFX_SpawnSystem).objectsToPreloadTimes[i] = nb;
+			if(EditorGUI.EndChangeCheck())
+			{
+#if UNITY_4_2
+				Undo.RegisterUndo(target, "Change Spawn System preload count");
+#else
+				Undo.RecordObject(target, "Change Spawn System preload count");
+#endif
+				(this.target as CFX_SpawnSystem).objectsToPreloadTimes[i] = nb;
+			}
+			
+			if(GUI.changed)
+			{
+				EditorUtility.SetDirty(target);
+			}
 			
 			if(GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(24)))
 			{
+				Object preloadedObject = (this.target as CFX_SpawnSystem).objectsToPreload[i];
+				string objectName = (preloadedObject == null) ? "" : preloadedObject.name;
+#if UNITY_4_2
+				Undo.RegisterUndo(target, string.Format("Remove {0} from Spawn System", objectName));
+#else
+				Undo.RecordObject(target, string.Format("Remove {0} from Spawn System", objectName));
+#endif
 				ArrayUtility.RemoveAt<GameObject>(ref (this.target as CFX_SpawnSystem).objectsToPreload, i);
 				ArrayUtility.RemoveAt<int>(ref (this.target as CFX_SpawnSystem).objectsToPreloadTimes, i);
+				
+				EditorUtility.SetDirty(target);
 			}
 			
 			GUILayout.EndHorizontal();
@@ -56,8 +92,15 @@ public class CFX_SpawnSystemEditor : Editor
 						
 						if(!already)
 						{
+#if UNITY_4_2
+							Undo.RegisterUndo(target, string.Format("Add {0} to Spawn System", o.name));
+#else
+							Undo.RecordObject(target, string.Format("Add {0} to Spawn System", o.name));
+#endif
 							ArrayUtility.Add<GameObject>(ref (this.target as CFX_SpawnSystem).objectsToPreload, (GameObject)o);
 							ArrayUtility.Add<int>(ref (this.target as CFX_SpawnSystem).objectsToPreloadTimes, 1);
+							
+							EditorUtility.SetDirty(target);
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShooterHardEnemyAi :EnemyAiHandeler {
+public class ShooterHardEnemyAi:ShooterEnemyAi {
 
 	private GameObject skyPos;
 	private GameObject Bottom;
@@ -15,7 +15,7 @@ public class ShooterHardEnemyAi :EnemyAiHandeler {
 		ScoreVal = 5;
 		health = 3;
 		this.gameObject.GetComponentInChildren<UISprite>().color = Color.red;
-		skyPos = GameObject.Find ("Upper");
+		skyPos = GameObject.Find("Upper");
 		Bottom = GameObject.Find("Lower");
 		MidPoint = GameObject.Find("MidPoint");
 		LeanTween.move(this.gameObject,MidPoint.transform.position,Speed).setOnComplete(MoveAgain);

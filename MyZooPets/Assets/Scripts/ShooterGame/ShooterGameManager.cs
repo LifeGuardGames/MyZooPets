@@ -49,7 +49,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			WaveNum = 0;
 			ShooterSpawnManager.Instance.reset();
 			ShooterGameEnemyController.Instance.reset();
-			ShooterUIManager.Instance.reset();
+			ShooterUIManager.Instance.Reset();
 			PlayerShooterController.Instance.reset();
 		}
 	}
@@ -57,7 +57,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public void reset(){
 		WaveNum = 0;
 		ShooterGameEnemyController.Instance.reset();
-		ShooterUIManager.Instance.reset();
+		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.reset();
 	}
 

@@ -75,9 +75,9 @@ public class ComicPlayer : MonoBehaviour{
 		}
     }
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
-			StartComic();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
+//			StartComic();
+//		}
+//	}
 }

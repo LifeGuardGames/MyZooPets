@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -6,7 +6,7 @@ using System;
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
-	public EventHandler<EventArgs> Proceed;
+	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
 
 	public bool CanUseInhalerButton{
@@ -22,9 +22,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	//on button Tap
 	public void ShooterGameInhalerButton(){
 		if(CanUseInhalerButton == false){
-			if(ShooterGameManager.Instance.InTutorial==true){
-					if(Proceed != null)
-						Proceed(this, EventArgs.Empty);
+			if(ShooterGameManager.Instance.inTutorial==true){
+					if(proceed != null)
+						proceed(this, EventArgs.Empty);
 			}
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.removeHealth(3);

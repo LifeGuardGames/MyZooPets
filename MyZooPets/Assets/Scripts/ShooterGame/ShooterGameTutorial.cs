@@ -4,31 +4,31 @@ using System.Collections;
 
 public class ShooterGameTutorial : MinigameTutorial {
 	public static string TUT_KEY = "SHOOT_TUT";
-	GameObject TutorialFinger;
-	GameObject TutorialInhalerUse;
-	GameObject PressHere;
+	GameObject tutorialFinger;
+	GameObject tutorialInhalerUse;
+	GameObject pressHere;
 
 
 	protected override void ProcessStep(int nStep){
 		switch(nStep){
 		case 0:
-			ShooterGameManager.Instance.Proceed +=MoveAlong;
+			ShooterGameManager.Instance.proceed +=MoveAlong;
 			//prompt user to shoot
-			PressHere = (GameObject)Resources.Load("ShooterTuTorial");
-			TutorialFinger = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),PressHere);
+			pressHere = (GameObject)Resources.Load("ShooterTuTorial");
+			tutorialFinger = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
 			break;
 		case 1:
-			ShooterGameManager.Instance.Proceed -=MoveAlong;
+			ShooterGameManager.Instance.proceed -=MoveAlong;
 			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
-			GameObject DestroyPrefabsClone = TutorialFinger;
+			GameObject DestroyPrefabsClone = tutorialFinger;
 			GameObject.Destroy(DestroyPrefabsClone);
 			ShooterGameEnemyController.Instance.BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
 			break;
 		case 2:
 			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
-			ShooterInhalerManager.Instance.Proceed +=MoveAlong;
+			ShooterInhalerManager.Instance.proceed +=MoveAlong;
 			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
-			TutorialInhalerUse = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
+			tutorialInhalerUse = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
 			break;
 		}
 	}
@@ -42,8 +42,8 @@ public class ShooterGameTutorial : MinigameTutorial {
 	}
 
 	protected override void _End(bool isFinished){
-		GameObject.Destroy(TutorialInhalerUse);
-		ShooterGameManager.Instance.InTutorial=false;
+		GameObject.Destroy(tutorialInhalerUse);
+		ShooterGameManager.Instance.inTutorial=false;
 		if(!isFinished){
 			ShooterGameManager.Instance.reset();
 		}

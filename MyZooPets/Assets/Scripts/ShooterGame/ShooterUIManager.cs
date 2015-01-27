@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -41,9 +41,9 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	}
 
 	public void AChangeOfTimeActOne(){
-		if(!ShooterGameManager.Instance.InTutorial){
+		if(!ShooterGameManager.Instance.inTutorial){
 			if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
-				if(sun.GetComponent<MovingSky>().InSky == true){
+				if(sun.GetComponent<MovingSky>().inSky == true){
 					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);
 				}
 				else{
@@ -60,15 +60,15 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		MovingSky sunScript = sun.GetComponent<MovingSky>();
 		MovingSky moonScript = moon.GetComponent<MovingSky>();
 
-		if(sunScript.InSky == true){
+		if(sunScript.inSky == true){
 			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
-			moonScript.InSky = true;
-			sunScript.InSky = false;
+			moonScript.inSky = true;
+			sunScript.inSky = false;
 		}
 		else{
 			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
-			sunScript.InSky = true;
-			moonScript.InSky = false;
+			sunScript.inSky = true;
+			moonScript.inSky = false;
 		}
 	}
 }

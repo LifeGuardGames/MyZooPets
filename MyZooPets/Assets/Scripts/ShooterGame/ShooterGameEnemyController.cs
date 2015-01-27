@@ -38,10 +38,10 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		waver = new Wave();
 	
 		ImmutableDataWave LoadedWave = DataLoaderWaves.GetWave(difficulty);
-		waver.NumOfEnemies= LoadedWave.NumOfEnemies;
-		waver.NumOfBasics=LoadedWave.BegEnemies;
-		waver.NumOfMedium=LoadedWave.MediumEnemies;
-		waver.NumOfHard=LoadedWave.HardEnemies;
+		waver.numOfEnemies= LoadedWave.NumOfEnemies;
+		waver.numOfBasics=LoadedWave.BegEnemies;
+		waver.numOfMedium=LoadedWave.MediumEnemies;
+		waver.numOfHard=LoadedWave.HardEnemies;
 		return waver;
 	}
 
@@ -56,7 +56,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 			enemyList.Add(mob);
 
 		}
-		if(ShooterGameManager.Instance.InTutorial == true){
+		if(ShooterGameManager.Instance.inTutorial == true){
 			GenerateWave(0);
 		}
 		else{
@@ -66,7 +66,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 	// determines which wave to spawn and set the enemies in wave to the correct amount
 	public void GenerateWave(int _WaveNum){
 		currWave=buildWave(_WaveNum);
-		enemiesInWave= int.Parse(currWave.NumOfEnemies);
+		enemiesInWave= int.Parse(currWave.numOfEnemies);
 		SpawnWave(currWave);
 	}
 
@@ -78,13 +78,13 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		/*for (int i = 0; i < EnemiesInWave; i++){
 			WaveEnemies.Add(EnemyList[0]);
 		}*/
-		for (int i =0; i < int.Parse(currWave.NumOfBasics); i++){
+		for (int i =0; i < int.Parse(currWave.numOfBasics); i++){
 			WaveEnemies.Add(enemyList[0]);
 		}
-		for (int i =0; i < int.Parse(currWave.NumOfMedium); i++){
+		for (int i =0; i < int.Parse(currWave.numOfMedium); i++){
 			WaveEnemies.Add(enemyList[1]);
 		}
-		for (int i =0; i < int.Parse(currWave.NumOfHard); i++){
+		for (int i =0; i < int.Parse(currWave.numOfHard); i++){
 			WaveEnemies.Add(enemyList[2]);
 		}
 		//ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
@@ -96,7 +96,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 	// checks if all enemies are dead and if they are 
 	public void CheckEnemiesInWave(){
 		if (enemiesInWave == 0){
-			if(ShooterGameManager.Instance.InTutorial){
+			if(ShooterGameManager.Instance.inTutorial){
 				if(proceed != null)
 					proceed(this, EventArgs.Empty);
 			}

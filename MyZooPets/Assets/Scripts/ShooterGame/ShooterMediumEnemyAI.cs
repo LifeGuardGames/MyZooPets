@@ -2,27 +2,27 @@ using UnityEngine;
 using System.Collections;
 
 public class ShooterMediumEnemyAi : ShooterEnemyAi{
-	private GameObject SkyPos;
-	private GameObject Bottom;
+	private GameObject skyPos;
+	private GameObject bottom;
 	
 	// Use this for initialization
 	void Start () {
-		Speed = 2.0f;
-		ScoreVal = 3;
+		speed = 2.0f;
+		scoreVal = 3;
 		health = 2;
-		Damage = 2;
+		damage = 2;
 		this.gameObject.GetComponentInChildren<UISprite>().color = Color.cyan;
-		SkyPos= GameObject.Find ("Upper");
-		Bottom= GameObject.Find("Lower");
+		skyPos= GameObject.Find ("Upper");
+		bottom= GameObject.Find("Lower");
 		if (Random.Range (0,2)==0){
-			LeanTween.move(this.gameObject,SkyPos.transform.position,Speed).setOnComplete(MoveAgain);
+			LeanTween.move(this.gameObject,skyPos.transform.position,speed).setOnComplete(MoveAgain);
 		}
 		else{
-			LeanTween.move(this.gameObject,Bottom.transform.position,Speed).setOnComplete(MoveAgain);
+			LeanTween.move(this.gameObject,bottom.transform.position,speed).setOnComplete(MoveAgain);
 			}
 		}
 
 	void MoveAgain(){
-		LeanTween.move(this.gameObject,Player.transform.position,Speed);
+		LeanTween.move(this.gameObject,player.transform.position,speed);
 	}
 }

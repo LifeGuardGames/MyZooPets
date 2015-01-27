@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Wave {
 
-	public string NumOfEnemies;
-	public string NumOfBasics;
-	public string NumOfMedium;
-	public string NumOfHard;
+	public string numOfEnemies;
+	public string numOfBasics;
+	public string numOfMedium;
+	public string numOfHard;
 	public Wave(){
 	}
 }

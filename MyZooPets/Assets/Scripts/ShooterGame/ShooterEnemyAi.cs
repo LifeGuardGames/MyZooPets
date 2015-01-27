@@ -2,15 +2,15 @@ using UnityEngine;
 using System.Collections;
 
 public class ShooterEnemyAi : MonoBehaviour{
-	public float Speed;
-	public int ScoreVal;
-	public int Damage;
+	public float speed;
+	public int scoreVal;
+	public int damage;
 	public int health;
-	protected GameObject Player;
+	protected GameObject player;
 
 	// Use this for initialization
 	void Awake(){
-		Player = GameObject.FindWithTag("Player");
+		player = GameObject.FindWithTag("Player");
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
 
@@ -48,12 +48,12 @@ public class ShooterEnemyAi : MonoBehaviour{
 			Destroy(collider.gameObject);
 			health--;
 			if(health <= 0){
-				ShooterGameManager.Instance.AddScore(ScoreVal);
+				ShooterGameManager.Instance.AddScore(scoreVal);
 				StartCoroutine(DestroyEnemy());
 			}
 		}
 		else if(collider.gameObject.tag == "Player"){
-			PlayerShooterController.Instance.removeHealth(-Damage);
+			PlayerShooterController.Instance.removeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
 	}

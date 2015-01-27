@@ -4,10 +4,10 @@ using System.Collections;
 public class ShooterBasicEnemyAi:ShooterEnemyAi{
 	// Use this for initialization
 	void Start () {
-		Speed = 2.5f;
-		ScoreVal=1;
-		Damage = 1;
+		speed = 2.5f;
+		scoreVal=1;
+		damage = 1;
 		health=1;
-		LeanTween.moveX(this.gameObject,Player.transform.position.x,Speed);
+		LeanTween.moveX(this.gameObject,player.transform.position.x,speed);
 	}
 }

@@ -6,12 +6,12 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	// the number of times the user has missed the optimal use window
 	//public int NumMissed=0;
-	public EventHandler<EventArgs> Proceed;
+	public EventHandler<EventArgs> proceed;
 	public Camera nguiCamera;
-	public float ShootTime;
-	private float StartTime;
-	public int WaveNum = 0;
-	public bool InTutorial= false;
+	public float shootTime;
+	private float startTime;
+	public int waveNum = 0;
+	public bool inTutorial= false;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -40,13 +40,13 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 		if(IsTutorialOverride())
 		{
-			InTutorial = true;
+			inTutorial = true;
 			StartTutorial();
 		}
 
 		else{
 			PlayerShooterController.Instance.changeInHealth+=healthUpdate;
-			WaveNum = 0;
+			waveNum = 0;
 			ShooterSpawnManager.Instance.reset();
 			ShooterGameEnemyController.Instance.reset();
 			ShooterUIManager.Instance.Reset();
@@ -55,7 +55,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void reset(){
-		WaveNum = 0;
+		waveNum = 0;
 		ShooterGameEnemyController.Instance.reset();
 		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.reset();
@@ -70,11 +70,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	void OnTap(TapGesture e){
-		if(InTutorial){
-			if(Proceed != null)
-				Proceed(this, EventArgs.Empty);
+		if(inTutorial){
+			if(proceed != null)
+				proceed(this, EventArgs.Empty);
 		}
-		if(StartTime <= Time.time-ShootTime){
+		if(startTime <= Time.time-shootTime){
 		if(!IsTouchingNGUI(e.Position)){
 		
 #if !UNITY_EDITOR
@@ -87,7 +87,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			PlayerShooterController.Instance.shoot(mousePos);
 #endif
 			}
-			StartTime = Time.time;
+			startTime = Time.time;
 		}
 	}
 
@@ -98,8 +98,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void ChangeWaves(){
 		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
-			WaveNum++;
-		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(WaveNum);
+			waveNum++;
+		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
 	}
 
 	// Update is called once per frame

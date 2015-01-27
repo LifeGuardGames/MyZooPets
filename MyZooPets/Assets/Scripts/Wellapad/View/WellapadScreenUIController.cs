@@ -56,7 +56,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 			// user has active tasks/missions, so show the task list
 			if(missionListGO == null){
 				GameObject missionListPrefab = (GameObject) Resources.Load(missionListPrefabName);
-				missionListGO = LgNGUITools.AddChildWithPositionAndScale(goWellapadScreen, missionListPrefab);
+				missionListGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionListPrefab);
 			}
 
 			missionListGO.GetComponent<WellapadMissionUIController>().DisplayMissions();
@@ -64,7 +64,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 			// otherwise, show the "come back later" screen
 			if(missionDoneGO == null){
 				GameObject missionDonePrefab = (GameObject) Resources.Load(missionDonePrefabName);
-				missionDoneGO = LgNGUITools.AddChildWithPositionAndScale(goWellapadScreen, missionDonePrefab);
+				missionDoneGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionDonePrefab);
 			}
 		}
 	}

@@ -40,7 +40,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			
 			AddToProcessList(fireOrbItemReference);
 			
-			fireOrbFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
+			fireOrbFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
 			                                                     (GameObject)Resources.Load("FireOrbFingerHint"));
 			
 			// set the hint to the right spawn location

@@ -44,7 +44,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 
 		if(!isQuestionaireCollected){
 			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel1");
-			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
+			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
 
 			Invoke("ShowQuestionaireMenuScene", 1f);
 		}
@@ -63,7 +63,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && !isQuestionaireCollected &&
 		   isFlameTutorialDone){
 			GameObject questionaireUIPrefab = (GameObject) Resources.Load("QuestionairePanel2");
-			LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
+			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), questionaireUIPrefab);
 	
 			Invoke("ShowQuestionaireBedroom", 1f);
 		}

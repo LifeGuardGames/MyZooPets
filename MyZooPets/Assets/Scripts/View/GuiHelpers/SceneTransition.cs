@@ -44,7 +44,7 @@ public class SceneTransition : MonoBehaviour {
 		
 		// load the loading prefab (it will start inactive)
 		GameObject goLoading = Resources.Load( strLoadingPrefab ) as GameObject;
-		goLoadScreen = LgNGUITools.AddChildWithPositionAndScale( transform.parent.gameObject, goLoading );
+		goLoadScreen = GameObjectUtils.AddChildWithPositionAndScale( transform.parent.gameObject, goLoading );
 		
 		// cache scene to load
 		this.strScene = strScene;

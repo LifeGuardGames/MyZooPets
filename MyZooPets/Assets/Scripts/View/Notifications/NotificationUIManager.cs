@@ -92,14 +92,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 			//Check if notification panel exist. load it if not
 			if(notificationCenterPanel == null){
 				GameObject notificationPanelPrefab = (GameObject)Resources.Load("NotificationCenterPanel");
-				notificationCenterPanel = LgNGUITools.AddChildWithPositionAndScale(anchorCenter, notificationPanelPrefab);
+				notificationCenterPanel = GameObjectUtils.AddChildWithPositionAndScale(anchorCenter, notificationPanelPrefab);
 
 			}
 
 			//load the 3D click blocker	
 			if(notificationBackDrop3D == null && mainCamera != null){
 				GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
-				notificationBackDrop3D = LgNGUITools.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
+				notificationBackDrop3D = GameObjectUtils.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
 			}
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
@@ -395,7 +395,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 	private PopupNotificationNGUI CreatePopupNotificationNGUI(GameObject prefab, bool startsHidden){ 
 		// GameObject obj = LgNGUITools.AddChildWithPosition(anchorCenter, prefab);
-		GameObject obj = LgNGUITools.AddChildWithPositionAndScale(notificationCenterPanel, prefab);
+		GameObject obj = GameObjectUtils.AddChildWithPositionAndScale(notificationCenterPanel, prefab);
 
 		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
 		if(demux != null){

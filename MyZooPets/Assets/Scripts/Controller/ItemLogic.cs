@@ -208,12 +208,12 @@ public class ItemLogic : Singleton<ItemLogic>{
 		//ItemBoxOnly == false
 		//UnlockAtLevel == nextLevel
 		foreach(Item item in FoodList){
-			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+			if(!item.ItemBoxOnly  && !item.UnbuyableItem && item.UnlockAtLevel == nextLevel)
 				itemsUnlock.Add(item);
 		}
 
 		foreach(Item item in DecorationList){
-			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+			if(!item.ItemBoxOnly  && !item.UnbuyableItem && item.UnlockAtLevel == nextLevel)
 				itemsUnlock.Add(item);
 		}
 

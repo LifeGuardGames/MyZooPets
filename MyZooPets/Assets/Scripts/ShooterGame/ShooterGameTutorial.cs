@@ -15,7 +15,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterGameManager.Instance.proceed +=MoveAlong;
 			//prompt user to shoot
 			pressHere = (GameObject)Resources.Load("ShooterTuTorial");
-			tutorialFinger = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
+			tutorialFinger = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
 			break;
 		case 1:
 			ShooterGameManager.Instance.proceed -=MoveAlong;
@@ -28,7 +28,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
 			ShooterInhalerManager.Instance.proceed +=MoveAlong;
 			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
-			tutorialInhalerUse = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
+			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
 			break;
 		}
 	}

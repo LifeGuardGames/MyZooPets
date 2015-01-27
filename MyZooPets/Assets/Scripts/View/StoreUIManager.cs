@@ -444,7 +444,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			List<Item> foodList = ItemLogic.Instance.FoodList;
 			
 			foreach(Item itemData in foodList){
-				if(!itemData.ItemBoxOnly){
+				if(!itemData.ItemBoxOnly && !itemData.UnbuyableItem){
 					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
 			}
@@ -455,7 +455,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			List<Item> usableList = ItemLogic.Instance.UsableList;
 			
 			foreach(Item itemData in usableList){
-				if(!itemData.ItemBoxOnly){
+				if(!itemData.ItemBoxOnly && !itemData.UnbuyableItem){
 					// Need emergency inhaler shortcut, only show emergency inhaler
 					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
@@ -479,7 +479,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];
 				foreach(DecorationItem decoItemData in decoList){
-					if(!decoItemData.ItemBoxOnly){
+					if(!decoItemData.ItemBoxOnly && !decoItemData.UnbuyableItem){
 						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
 					}
 				}

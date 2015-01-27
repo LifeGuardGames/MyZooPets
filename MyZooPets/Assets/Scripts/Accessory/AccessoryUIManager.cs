@@ -50,7 +50,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
 				isFirstTitle = false;
-				GameObject itemUIObject = LgNGUITools.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
+				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
 
 				switch((AccessoryTypes)accessory.AccessoryType){

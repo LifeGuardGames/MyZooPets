@@ -12,10 +12,11 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public TweenToggle tweenToggle;
 	public GameObject shardSpritePrefab;
 	public GameObject shardParent;
-	public float delayBetweenShards = 0.5f;
+	public float delayBetweenShards = 0.1f;
+	public Animation crystalAnimation;
 
 	private int totalSubdivisions;
-	private float step = 0.001f;
+	private float step = 0.005f;
 	private float currentPercentage; // In terms of 0.0 -> 1.0
 	private float targetPercentage;
 
@@ -112,16 +113,36 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		}
 		else{
 			Debug.Log("Fire is not full");
+
+			//TODO check if it is in wellapad mode here
+			Invoke("CloseUI", 1f);
 		}
 	}
 
 	private void RewardFireCrystal(){
 		Debug.Log("Fire full check passed! Getting fire crystal");
+		crystalAnimation.Play();
+	}
+
+	// Event callback from the crystal animation CrystalPop
+	public void CrystalPopDone(){
+		// Show the floaty for the crystal
+		Hashtable option = new Hashtable();
+		option.Add("parent", shardParent);
+		option.Add("deltaShards", "+1");
+		FloatyUtil.SpawnFloatyFireCrystal(option);
+
+		// Reward the player the actual item - Fire crystal
+		InventoryLogic.Instance.AddItem("Usable1", 1);
+	
+		//TODO check if it is in wellapad mode here
+		Invoke("CloseUI", 1f);
 	}
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
 //			PopupAndRewardShards(10);
+////			CrystalPopDone();
 //		}
 //	}
 }

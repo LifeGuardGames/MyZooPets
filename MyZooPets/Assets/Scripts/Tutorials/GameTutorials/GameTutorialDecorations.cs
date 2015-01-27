@@ -292,7 +292,7 @@ public class GameTutorialDecorations : GameTutorial{
 
 		GameObject tutDecoItemGameObject = DecoInventoryUIManager.Instance.GetTutorialItem();
 		Vector3 tutDecoItemPosition = LgNGUITools.GetScreenPosition(tutDecoItemGameObject, isObjectInUIGrid: true);
-		decoFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
+		decoFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
 		                                         (GameObject)Resources.Load("DecoFingerHint"));
 		decoFingerHint.transform.localPosition = tutDecoItemPosition;
 

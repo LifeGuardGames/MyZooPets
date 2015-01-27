@@ -34,7 +34,7 @@ public class NinjaTutorial : MinigameTutorial {
             case 0:
 				trigger1Object = NinjaManager.Instance.SpawnSingleTriggerTutorial();
 				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
-				swipeTutObject = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
+				swipeTutObject = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
 
 				//listen to when trigger gets cut
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;

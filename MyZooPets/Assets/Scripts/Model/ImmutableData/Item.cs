@@ -16,6 +16,7 @@ public class Item{
 	protected string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
 	private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
+	private bool unbuyableItem = false;
 	private int sortCategory;	// Options, use for category sorting (ie. accessories)
 
 	//F: available in store as well
@@ -69,6 +70,10 @@ public class Item{
 		get{ return itemBoxOnly;}
 	}
 
+	public bool UnbuyableItem{
+		get{ return unbuyableItem;}
+	}
+
 	public int SortCategory{
 		get{ return sortCategory;}
 	}
@@ -113,6 +118,9 @@ public class Item{
 
 		if(hashItemData.Contains("ItemBoxOnly"))
 			itemBoxOnly = XMLUtils.GetBool(hashItemData["ItemBoxOnly"] as IXMLNode, false);
+
+		if(hashItemData.Contains("UnbuyableItem"))
+			unbuyableItem = XMLUtils.GetBool(hashItemData["UnbuyableItem"] as IXMLNode, false);
 	}
 	
 	/// <summary>

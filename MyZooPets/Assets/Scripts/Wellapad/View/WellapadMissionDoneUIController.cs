@@ -111,7 +111,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
 		if(badge != null){
-			GameObject go = LgNGUITools.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasBadge; 
 			sprite.spriteName = badge.TextureName;
@@ -119,7 +119,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
 		if(skill != null)	{
-			GameObject go = LgNGUITools.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasBedroom; 
 			sprite.spriteName = skill.TextureName;
@@ -127,7 +127,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 
 		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
 		foreach(Item item in items){
-			GameObject go = LgNGUITools.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
+			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasItem;
 			sprite.spriteName = item.TextureName;

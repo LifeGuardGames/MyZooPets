@@ -12,8 +12,21 @@ public class BadgeController : MonoBehaviour {
 	public UISprite sprite;
 
 	private bool isUnlocked;
+	public bool IsUnlocked{
+		get{ return isUnlocked; }
+	}
+
 	private string activeSpriteName;
+	public string ActiveSpriteName{
+		get{ return activeSpriteName; }
+	}
+
 	private string inactiveSpriteName;
+	public string InactiveSpriteName{
+		get{ return inactiveSpriteName; }
+	}
+
+	private int renderOrderAux;
 
 	public void Init(bool isUnlocked, string activeSpriteName, string inactiveSpriteName){
 		this.isUnlocked = isUnlocked;
@@ -21,6 +34,7 @@ public class BadgeController : MonoBehaviour {
 		this.inactiveSpriteName = inactiveSpriteName;
 
 		sprite.spriteName = isUnlocked ? activeSpriteName : inactiveSpriteName;
+		renderOrderAux = sprite.depth;
 	}
 
 	public void PlayUnlockAnimation(){
@@ -41,8 +55,18 @@ public class BadgeController : MonoBehaviour {
 		sprite.spriteName = activeSpriteName;
 	}
 
+	public void PlaySlamParticle(){
+		BadgeBoardUIManager.Instance.PlaySlamParticle(transform.position);
+	}
+
 	public void AnimationDoneEvent(){
 		Debug.Log("Anim done " + gameObject.name);
 		StartCoroutine(BadgeBoardUIManager.Instance.BadgeAnimationDone());
+	}
+
+	// For use in animation event, set it to render in front of others if true
+	// 0 for false, 1 for true
+	public void RenderOrderFrontToggle(int isFront){
+		sprite.depth = (isFront == 1) ? 20 : renderOrderAux;
 	}
 }

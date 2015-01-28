@@ -15,6 +15,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public UISprite descriptionBadgeSprite;
 	public UILabel descriptionBadgeTitle;
 	public UILabel descriptionBadgeInfo;
+	public ParticleSystem slamParticle;
 
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
@@ -118,6 +119,14 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	}
 
 	/// <summary>
+	/// Plays the slam particle. Call from badge reward animation event
+	/// </summary>
+	public void PlaySlamParticle(Vector3 position){
+		slamParticle.transform.position = position;
+		slamParticle.Play();
+	}
+
+	/// <summary>
 	/// Called when a badge animation is done, check the queue again if still needs popping
 	/// </summary>
 	public IEnumerator BadgeAnimationDone(){
@@ -140,11 +149,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	}
 
 	public void BadgeClicked(GameObject go){
+		// Get the information from the populated controller
 		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
-		descriptionBadgeSprite.spriteName = blankBadgeTextureName; //TODO
+		descriptionBadgeSprite.spriteName = BadgeLogic.Instance.IsBadgeUnlocked(clickedBadge.ID) ? clickedBadge.TextureName : blankBadgeTextureName;
 		descriptionBadgeTitle.text = clickedBadge.Name;
 		descriptionBadgeInfo.text = clickedBadge.Description;
-		Debug.Log("Badge clicked");
 		ShowDescriptionPanel();
 	}
 

@@ -8,13 +8,11 @@ using System.Collections;
 /// </summary>
 public class TweenToggle : MonoBehaviour{
 
+	protected bool isMoving;
 	public bool IsMoving{ get { return isMoving; } }
 
-	protected bool isMoving;
-
-	public bool IsShowing{ get { return isShown; } }
-
 	public bool isShown;
+	public bool IsShowing{ get { return isShown; } }
 
 	//////////////////////////////////////////////////////
 	
@@ -22,7 +20,7 @@ public class TweenToggle : MonoBehaviour{
 	public bool isUsingDemultiplexer = false;
 	public bool blockUI = true;		// If true, when this object is tweening it will lock the UI
 	public bool startsHidden = false;
-	public float hideDeltaX; //Position, Scale, or Rotation depending on subclass
+	public float hideDeltaX; 		//Position, Scale, or Rotation depending on subclass
 	public float hideDeltaY;
 	public float hideDeltaZ;
 	public float showDuration = 0.5f;
@@ -56,18 +54,20 @@ public class TweenToggle : MonoBehaviour{
 	// we might want these to get fancier at some point (i.e. start the sound when the object tweens in, or when it finishes, etc)
 	public string strSoundShow;
 	public string strSoundHide;
-	
-	// Testing purposes, isDebug true will show OnGUI buttons
+
 	public bool isDebug = false;
-	public Vector2 testButtonPos; // Set base positions of test buttons
-	
+	public Vector2 testButtonPos; 			// Set base positions of test buttons
+
+	private bool isProperlyInited = false;	// Boolean to check that initializing is done before tweening
 
 	protected void Awake(){
+		isProperlyInited = false;
 		RememberPositions();
 	}
 	
 	protected void Start(){
 		Reset();
+		isProperlyInited = true;			// Properly initialized now
 	}
 	
 	protected virtual void RememberPositions(){
@@ -90,6 +90,10 @@ public class TweenToggle : MonoBehaviour{
 //	}
 
 	public void Show(){
+		if(!isProperlyInited){
+			Debug.LogWarning(gameObject.name + " - Demux not properly inited before show call, skip a frame before tweening!");
+		}
+
 		// play sound (if it exists)
 		if(!string.IsNullOrEmpty(strSoundShow))
 			AudioManager.Instance.PlayClip(strSoundShow);
@@ -112,6 +116,10 @@ public class TweenToggle : MonoBehaviour{
 	}
 	
 	public void Hide(){
+		if(!isProperlyInited){
+			Debug.LogWarning(gameObject.name + " - Demux not properly inited before hide call, skip a frame before tweening!");
+		}
+		
 		// play sound (if it exists)
 		if(!string.IsNullOrEmpty(strSoundHide))
 			AudioManager.Instance.PlayClip(strSoundHide);		
@@ -128,7 +136,6 @@ public class TweenToggle : MonoBehaviour{
 	protected void ShowUnlockCallback(Hashtable hash){
 		// Since LeanTween uses BroadcastMessage, it applies to all children, check for self object
 		if(hash["selfCaller"] == this.gameObject){
-//			print("HASH " + hash["selfCaller"] + " " + gameObject.name);
 			// If this tween locks the UI, now that the tween is finished, decrement the counter
 			if(blockUI){
 				ClickManager.Instance.DecrementTweenCount();

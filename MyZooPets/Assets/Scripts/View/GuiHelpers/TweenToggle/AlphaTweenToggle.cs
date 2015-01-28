@@ -14,8 +14,6 @@ public class AlphaTweenToggle : TweenToggle {
 	private float showingAlpha;
 	private float hiddenAlpha;
 
-	
-
 	protected override void RememberPositions(){
 		// Sanitize the input
 		if(hideDeltaAlpha > 1f){
@@ -35,7 +33,6 @@ public class AlphaTweenToggle : TweenToggle {
 	
 	public override void Reset(){
 		if (startsHidden){
-			Debug.Log("STARTS HIDDEN");
 			if(isSprite){
 				spriteRenderer.color = new Color(spriteRenderer.color.r,
 				                                 spriteRenderer.color.g,
@@ -90,7 +87,6 @@ public class AlphaTweenToggle : TweenToggle {
 	}
 	
 	public override void Hide(float time){
-		Debug.Log("HIDING is shown: " + isShown);
 		if(isShown){
 			// If this tween locks the UI, properly increment the counter
 			if(blockUI){
@@ -101,8 +97,6 @@ public class AlphaTweenToggle : TweenToggle {
 					ClickManager.Instance.DecrementTweenCount();
 				}
 			}
-
-			Debug.Log("CALLING THIS SHIT");
 
 			isShown = false;
 			isMoving = true;

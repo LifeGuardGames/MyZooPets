@@ -48,7 +48,6 @@ public class ComicPage : MonoBehaviour{
 		}
 		// Play if it is active
 		if(isActive){
-			Debug.Log("PLaying " + name + demux.IsShowing);
 			demux.Hide();
 		}
 	}

@@ -14,8 +14,7 @@ public class LgButtonMessage : LgButton {
     //---------------------------------------------------
     // ProcessClick()
     //---------------------------------------------------   
-    protected override void ProcessClick() {
-		Debug.Log("Clicked");
+    protected override void ProcessClick(){
         Send();
     }
 

@@ -27,8 +27,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 	/// </summary>
 	/// <param name="selectedPetGO">Selected pet</param>
 	public void PetSelected(GameObject selectedPetGO){
-		Debug.Log("PET SELECTED");
-
 		SelectedPet = selectedPetGO;
 
 		// See if no-sync debug is turned on

@@ -20,6 +20,16 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	private float currentPercentage; // In terms of 0.0 -> 1.0
 	private float targetPercentage;
 
+	private bool isFireCrystalUIAnimating = false;
+	public bool IsFireCrystalUIAnimating{		// Scenes will poll this to see if they need to wait
+		get{
+			return isFireCrystalUIAnimating;
+		}
+	}
+
+	public delegate void Callback();
+	public Callback FinishedAnimatingCallback;
+
 	void Awake(){
 		eModeType = UIModeTypes.FireCrystal;
 	}
@@ -40,6 +50,9 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 			// Make sure that the actual percentage does not go over 1.0f
 			targetPercentage = Mathf.Min(targetPercentageAux, 1.0f);
+
+			// Lock and fire animations
+			isFireCrystalUIAnimating = true;
 			OpenUI();
 			StartCoroutine(StartFlyingShards(numberOfShards, 1.0f));
 		}
@@ -51,6 +64,13 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	protected override void _CloseUI(){
 		tweenToggle.Hide();
+
+		isFireCrystalUIAnimating = false;
+
+		// Launch any finished callback
+		if(FinishedAnimatingCallback != null){	//TODO check if it is in wellapad mode here
+			FinishedAnimatingCallback();
+		}
 	}
 
 	/// <summary>

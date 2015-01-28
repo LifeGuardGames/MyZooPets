@@ -21,7 +21,16 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private bool isActive = false;
 
 	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
+
 	private bool isQueueAnimating = false;
+	public bool IsBadgeBoardUIAnimating{	// Scenes will poll this to see if they need to wait
+		get{
+			return isQueueAnimating;
+		}
+	}
+
+	public delegate void Callback();
+	public Callback FinishedAnimatingCallback;
 
 	protected override void Awake(){
 		base.Awake();
@@ -120,6 +129,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 		if(badgeUnlockQueue.Count == 0){
 			CloseUI();
 			isQueueAnimating = false;	// Release the animation lock
+
+			// Launch any finished callback
+			if(FinishedAnimatingCallback != null){
+				FinishedAnimatingCallback();
+			}
 		}
 
 		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try

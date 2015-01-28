@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     public GameObject customizationPanel;
-    public GameObject popupTitle;
     public UILabel nameField;
 	public Camera NGUICamera;
-    public SceneTransition scriptTransition;
     public ButtonSetHighlight buttonHighLight;
 	public ParticleSystemController leafParticle;
 	public Animation requireNameAnimation;
+	public ParticleSystem poofParticle;
+	public TweenToggle logoTitleTween;
 
     private string petColor;
     private string petName; //Default pet name
@@ -27,8 +27,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     }
 	
 	protected override void _OpenUI(){
-        //HideTitle();
-        ShowChooseGUI();	
+		logoTitleTween.Hide();
+        ShowChooseGUI();
 	}
 	
 	// Used when pressing back button in the panel
@@ -37,9 +37,8 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     
     public void ChangeEggColor(string spriteName, string petColor){
         if (!finishClicked){
-			Debug.Log("Egg change color");
 			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
-			ParticlePlane.Instance.PlayParticle(NGUICamera.camera.WorldToScreenPoint(selectedEgg.transform.position));
+			poofParticle.Play();
 			Sprite sprite = Resources.Load<Sprite>(spriteName);
             selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite = sprite;
             this.petColor = petColor;
@@ -130,9 +129,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		SelectionUIManager.Instance.ToggleEggAnimation(false);
 		AudioManager.Instance.LowerBackgroundVolume(0.1f);
 		
-		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
-		GameObjectUtils.AddChildWithPositionAndScale( GameObject.Find("Anchor-Center"), resourceMovie );
-//		resourceMovie.GetComponent<ComicPlayer>().Init(petColor);
+		GameObject comicPlayerPrefab = Resources.Load("IntroComicPlayer") as GameObject;
+		GameObject goComicPlayer = GameObjectUtils.AddChildWithPositionAndScale(null, comicPlayerPrefab) as GameObject;
+		goComicPlayer.GetComponent<ComicPlayer>().Init(petColor);
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
 	}
 

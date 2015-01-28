@@ -14,8 +14,6 @@ public class AlphaTweenToggle : TweenToggle {
 	private float showingAlpha;
 	private float hiddenAlpha;
 
-	
-
 	protected override void RememberPositions(){
 		// Sanitize the input
 		if(hideDeltaAlpha > 1f){
@@ -83,6 +81,9 @@ public class AlphaTweenToggle : TweenToggle {
 			}
 			LeanTween.alpha(gameObject, showingAlpha, time, optional);
 		}
+		else{
+			Debug.LogWarning("Alpha tween toggle show is in bad state to call show");
+		}
 	}
 	
 	public override void Hide(float time){
@@ -96,7 +97,7 @@ public class AlphaTweenToggle : TweenToggle {
 					ClickManager.Instance.DecrementTweenCount();
 				}
 			}
-			
+
 			isShown = false;
 			isMoving = true;
 			
@@ -114,6 +115,9 @@ public class AlphaTweenToggle : TweenToggle {
 				optional.Add("useEstimatedTime", true);
 			}
 			LeanTween.alpha(gameObject, hiddenAlpha, time, optional);
+		}
+		else{
+			Debug.LogWarning("Alpha tween toggle show is in bad state to call hide");
 		}
 	}
 }

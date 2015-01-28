@@ -135,7 +135,7 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics.Move(amountToMove);
 	}
 
-	// Listen to finger down gesture
+	/*// Listen to finger down gesture
 	void OnFingerDown(FingerDownEvent e){ 
 		if(RunnerGameManager.Instance.GameRunning && !IsTouchingNGUI(e.Position)){
 			Jump();
@@ -143,7 +143,7 @@ public class PlayerController : Singleton<PlayerController>{
 			if(OnJump != null)
 				OnJump(this, EventArgs.Empty);
 		}
-	}
+	}*/
 	
 	// Listen to swipe down gesture
 	void OnSwipe(SwipeGesture gesture){
@@ -155,6 +155,13 @@ public class PlayerController : Singleton<PlayerController>{
 				if(OnDrop != null)
 					OnDrop(this, EventArgs.Empty);
 			}
+			else if (direction == FingerGestures.SwipeDirection.Up){
+				Jump();
+			
+			if(OnJump != null)
+				OnJump(this, EventArgs.Empty);
+			
+		}
 		}
 	}
 	

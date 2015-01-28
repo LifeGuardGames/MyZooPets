@@ -211,11 +211,32 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			timeCount -= deltaTime;	// otherwise, there is no group and we still need to countdown before spawning the next group
 	}
 
-	public GameObject SpawnSingleTriggerTutorial(){
-		GameObject triggerPrefab = (GameObject) Resources.Load("NinjaTrigger1");
-
-		Vector3 triggerLocation = new Vector3(0, 2.8f, 0);
-
+	public GameObject SpawnTriggersTutorial(int num){
+		GameObject triggerPrefab = (GameObject) Resources.Load("NinjaTrigger"+ num.ToString());
+		Vector3 triggerLocation;
+		switch (num){
+		case 1:
+			triggerLocation = new Vector3(0, 2.8f, 0);
+			break;
+		case 2:
+			triggerLocation = new Vector3(2.8f, 2.8f, 0);
+			break;
+		case 3:
+			triggerLocation = new Vector3(-2.8f, 2.8f, 0);
+			break;
+		case 4:
+			triggerLocation = new Vector3(5.6f, 2.8f, 0);
+			break;
+		case 5:
+			triggerLocation = new Vector3(-5.6f, 2.8f, 0);
+			break;
+		case 6:
+			triggerLocation = new Vector3(0, -1.4f, 0);
+			break;
+		default:
+			triggerLocation = new Vector3(0, 2.8f, 0);
+			break;
+		}
 		//instantiate trigger 
 		GameObject triggerObject = (GameObject) Instantiate(triggerPrefab, triggerLocation, 
 		                                                    triggerPrefab.transform.localRotation);

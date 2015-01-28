@@ -8,6 +8,12 @@ public class NinjaTutorial : MinigameTutorial {
 	private Animation swipeTutAnimation;
 	private GameObject swipeTutObject;
 	private GameObject trigger1Object;
+	private GameObject trigger2Object;
+	private GameObject trigger3Object;
+	private GameObject trigger4Object;
+	private GameObject trigger5Object;
+	private GameObject trigger6Object;
+	private int numOfTriggersCut;
 	  
     protected override void SetMaxSteps(){
         maxSteps = 1;
@@ -32,13 +38,22 @@ public class NinjaTutorial : MinigameTutorial {
     protected override void ProcessStep(int step){
         switch(step){
             case 0:
-				trigger1Object = NinjaManager.Instance.SpawnSingleTriggerTutorial();
+				trigger1Object = NinjaManager.Instance.SpawnTriggersTutorial(1);
+				trigger2Object = NinjaManager.Instance.SpawnTriggersTutorial(2);
+				trigger3Object = NinjaManager.Instance.SpawnTriggersTutorial(3);
+				trigger4Object = NinjaManager.Instance.SpawnTriggersTutorial(4);
+				trigger5Object = NinjaManager.Instance.SpawnTriggersTutorial(5);
+				trigger6Object = NinjaManager.Instance.SpawnTriggersTutorial(6);
 				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
 				swipeTutObject = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
 
 				//listen to when trigger gets cut
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
-
+				trigger2Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				trigger3Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				trigger4Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				trigger5Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				trigger6Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
 				//play swipe tutorial
 				try{
 					swipeTutAnimation = swipeTutObject.FindInChildren("AnimationParent").GetComponent<Animation>();
@@ -57,7 +72,28 @@ public class NinjaTutorial : MinigameTutorial {
     }
 
 	private void NinjaTriggerFirstCutEventHandler(object sender, EventArgs args){
+		
+		if(sender.ToString() == "NinjaTrigger1(Clone) (NinjaTriggerTarget)"){
 		trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
-		Advance();
+		}
+		else if(sender.ToString() == "NinjaTrigger2(Clone) (NinjaTriggerTarget)"){
+			trigger2Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+		}
+		else if(sender.ToString() == "NinjaTrigger3(Clone) (NinjaTriggerTarget)"){
+			trigger3Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+		}
+		else if(sender.ToString() == "NinjaTrigger4(Clone) (NinjaTriggerTarget)"){
+			trigger4Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+		}
+		else if(sender.ToString() == "NinjaTrigger5(Clone) (NinjaTriggerTarget)"){
+			trigger5Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+		}
+		else if(sender.ToString() == "NinjaTrigger6(Clone) (NinjaTriggerTarget)"){
+			trigger6Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
+		}
+		numOfTriggersCut++;
+		//end the tutorial when all triggers are cut
+		if (numOfTriggersCut >= 6)
+			Advance();
 	}
 }

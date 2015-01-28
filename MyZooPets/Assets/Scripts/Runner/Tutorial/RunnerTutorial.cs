@@ -48,8 +48,9 @@ public class RunnerTutorial : MinigameTutorial {
         switch ( nStep ) {
             case 0:
                 PlayerController.OnJump += TutorialJump;
+				option.Add(TutorialPopupFields.Message, "Swipe up to Jump");
                 option.Add(TutorialPopupFields.SpriteAtlas, "RunnerAtlas");
-                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerTap");
+                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerSwipeUp");
                 break;
             case 1:
                 PlayerController.OnDrop += TutorialDrop;

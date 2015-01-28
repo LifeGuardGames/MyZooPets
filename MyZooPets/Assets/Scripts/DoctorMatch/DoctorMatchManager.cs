@@ -179,6 +179,38 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		}
 	}
 
+	/// <summary>
+	/// Sets up assembly item sprite.
+	/// For itemGroupNumber
+	/// 0: random, 1: green, 2: yellow, 3: red
+	/// </summary>
+	/// <param name="assemblyLineItemObject">Assembly line item object.</param>
+	/// <param name="itemGroupNumber">Item group number. </param>
+	public void SetUpAssemblyItemSpriteTutorial(GameObject assemblyLineItemObject,int spriteNum, int itemGroupNumber = 0){
+		AssemblyLineItem item = assemblyLineItemObject.GetComponent<AssemblyLineItem>();
+		item.Speed = assemblyLineController.Speed;
+		
+		SpriteRenderer sprite = assemblyLineItemObject.transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
+		
+		switch(itemGroupNumber){
+		case 1:
+			item.itemKey = "green";
+			sprite.sprite = spriteList[spriteNum];
+			break;
+		case 2:
+			item.itemKey = "yellow";
+			sprite.sprite = spriteList[5+spriteNum];
+			break;
+		case 3:
+			item.itemKey = "red";
+			sprite.sprite = spriteList[10+spriteNum];
+			break;
+		default:
+			Debug.LogError("Not valid item group");
+			break;
+		}
+	}
+
 	private void StartTutorial(){
 		// set our tutorial
 		SetTutorial(new DoctorMatchTutorial());

@@ -10,15 +10,20 @@ public class ComicPageTransition : MonoBehaviour {
 	public ComicPlayer comicPlayer;
 
 	public void StartTransition(){
-		Darken();
+		Darken(false);
 	}
 
-	public void Darken(){
+	public void Darken(bool isLastPage){
+		// Remove the callback is it is the last page
+		if(isLastPage){
+			alphaTween.ShowTarget = null;
+			alphaTween.ShowFunctionName = null;
+		}
 		alphaTween.Show();
 	}
 
 	public void BrightenAndNextPage(){
-		comicPlayer.NextPage();
 		alphaTween.Hide();
+		comicPlayer.NextPage();
 	}
 }

@@ -146,11 +146,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
         runShowHintTimer = true;
     }
 
-    private void QuitInhalerGame(){
-        NotificationUIManager.Instance.CleanupNotification();
-        LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
-    }
-
     //Event listener. Listens to when user moves on to the next step
     private void OnNextStep(object sender, EventArgs args){
         if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn)
@@ -170,10 +165,23 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	
     //Reward player after the animation is done
     private void GiveReward(){
-		int nXP = DataLoaderXpRewards.GetXP( "DailyInhaler", new Hashtable() );
-
+		int nXP = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
 		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
-        Invoke("QuitInhalerGame", 2.0f);
+	
+		Invoke("GiveShardsAndQuit", 1.5f);
     }
+
+	private void GiveShardsAndQuit(){
+		FireCrystalUIManager.Callback finishShardCallback = delegate(){
+			Invoke("QuitInhalerGame", 1.5f);
+		};
+		FireCrystalUIManager.Instance.FinishedAnimatingCallback = finishShardCallback;
+		FireCrystalUIManager.Instance.PopupAndRewardShards(100);
+	}
+
+	private void QuitInhalerGame(){
+		NotificationUIManager.Instance.CleanupNotification();
+		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
+	}
 }
 

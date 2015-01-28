@@ -130,9 +130,9 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 		SelectionUIManager.Instance.ToggleEggAnimation(false);
 		AudioManager.Instance.LowerBackgroundVolume(0.1f);
 		
-		GameObject resourceMovie = Resources.Load("IntroComicPlayer") as GameObject;
-		GameObjectUtils.AddChildWithPositionAndScale( GameObject.Find("Anchor-Center"), resourceMovie );
-//		resourceMovie.GetComponent<ComicPlayer>().Init(petColor);
+		GameObject comicPlayerPrefab = Resources.Load("IntroComicPlayer") as GameObject;
+		GameObject goComicPlayer = GameObjectUtils.AddChildWithPositionAndScale(null, comicPlayerPrefab) as GameObject;
+		goComicPlayer.GetComponent<ComicPlayer>().Init(petColor);
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
 	}
 

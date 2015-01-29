@@ -246,11 +246,4 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	private void RefreshAccessoryItems(object sender, EventArgs args){
 		RefreshAccessoryItems();
 	}
-
-	IEnumerator WaitASecond(){
-		yield return new WaitForSeconds(1.0f);
-		GameObject pet = GameObject.Find("Pet");
-		pet.transform.localScale = new Vector3(1,1,1);
-
-	}
 }

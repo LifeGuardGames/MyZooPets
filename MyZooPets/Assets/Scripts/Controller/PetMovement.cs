@@ -191,9 +191,9 @@ public class PetMovement : Singleton<PetMovement>{
 		destinationPoint = raycastHitPosition;
 
 		// tell the pet animator script to start moving (but only if we aren't already moving)
-		if(!moving)
+		if(!moving){
 			PetAnimationManager.Instance.StartWalking();
-		Debug.Log("working");
+		}
 		moving = true;	
 		
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't

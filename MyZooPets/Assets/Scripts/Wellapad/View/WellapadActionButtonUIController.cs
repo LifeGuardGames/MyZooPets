@@ -8,6 +8,10 @@ public class WellapadActionButtonUIController : MonoBehaviour {
 
     private string missionID = "";
 
+	void Awake(){
+
+	}
+
 	// Use this for initialization
 	void Start () {
         WellapadUIManager.Instance.OnTweenDone += OnWellapadVisible;

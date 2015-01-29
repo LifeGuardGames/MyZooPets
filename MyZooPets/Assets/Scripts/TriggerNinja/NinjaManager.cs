@@ -323,7 +323,12 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			break;
 		case NinjaPatterns.Split:
 			new SpawnGroupSplit(listObjects);
-			break;			
+			break;	
+		case NinjaPatterns.Swarms:
+			// Random is ambiguous need to specify unity engine
+			int rand = UnityEngine.Random.Range (2,5);
+			StartCoroutine(WaitASec(rand, listObjects));
+			break;
 		default:
 			Debug.LogError("Unhandled group type: " + patternType);
 			break;
@@ -420,4 +425,10 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private void StartTutorial(){
 		SetTutorial(new NinjaTutorial());
 	}	
+	IEnumerator WaitASec(int _rand, List<string> listObjects){
+		for (int i = 0; i <= _rand; i++){
+			yield return new WaitForSeconds(0.5f);
+			new SpawnGroupSwarms(listObjects);
+		}
+	}
 }

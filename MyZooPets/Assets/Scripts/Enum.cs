@@ -205,7 +205,8 @@ public enum NinjaPatterns {
 	Cross,
 	Split,
 	Meet,
-	Sequence
+	Sequence,
+	Swarms
 }
 
 // scoring categories for the ninja game

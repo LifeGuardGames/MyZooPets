@@ -32,6 +32,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public string soundEquip;
 	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
 	private bool isActive = false;
+	//temp variable for pet scale
+	private Vector3 petScale;
 
 	protected override void Awake(){
 		base.Awake();
@@ -128,7 +130,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			
 			isActive = false;
 			zoomItem.collider.enabled = true;
-			
+
 			CameraManager.Instance.ZoomOutMove();
 			PetAnimationManager.Instance.EnableIdleAnimation();
 			
@@ -145,9 +147,12 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	/// Move pet into accessory view after camera is done zooming in
 	/// </summary>
 	private void MovePet(){
+		GameObject pet = GameObject.Find("Pet");
 		//teleport first then walk into view
-		PetMovement.Instance.petSprite.transform.position = new Vector3(-13f, 0, 33f);
-		PetMovement.Instance.MovePet(new Vector3(-17f, 0, 33f));
+		if(!pet.renderer.isVisible)
+		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
+		PetMovement.Instance.MovePet(new Vector3(-8f, 0, 26.65529f));
+
 	}
 
 	/// <summary>
@@ -240,5 +245,12 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	private void RefreshAccessoryItems(object sender, EventArgs args){
 		RefreshAccessoryItems();
+	}
+
+	IEnumerator WaitASecond(){
+		yield return new WaitForSeconds(1.0f);
+		GameObject pet = GameObject.Find("Pet");
+		pet.transform.localScale = new Vector3(1,1,1);
+
 	}
 }

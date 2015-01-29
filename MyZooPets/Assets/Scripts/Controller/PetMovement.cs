@@ -21,6 +21,7 @@ public class PetMovement : Singleton<PetMovement>{
 	// Used for 2D room pet movement, height screen point in normal room walking
 	private float movementStaticScreenY;
 
+
 	// Used for 2D pet movement, this will be the z depth for all pet placement
 	// Useful for zoomed in modes (accessories) where camera is zoomed in
 	private float movementStaticZ;	
@@ -29,7 +30,7 @@ public class PetMovement : Singleton<PetMovement>{
 	}
 
 	private Vector3 destinationPoint; //destination that the pet is going to move to
-	private bool moving; //Is Pet moving now or not
+	public bool moving; //Is Pet moving now or not
 	private Camera mainCamera;
 	private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
 	//be moved when clicking on NGUI
@@ -192,7 +193,7 @@ public class PetMovement : Singleton<PetMovement>{
 		// tell the pet animator script to start moving (but only if we aren't already moving)
 		if(!moving)
 			PetAnimationManager.Instance.StartWalking();
-		
+		Debug.Log("working");
 		moving = true;	
 		
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't

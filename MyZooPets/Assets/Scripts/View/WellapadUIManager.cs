@@ -3,20 +3,24 @@ using System;
 using System.Collections;
 
 /// <summary>
-/// Wellapad user interface manager.
+/// Wellapad user interface manager
+/// NOTE: This will open up with the fire crystal ui manager as well
 /// </summary>
-
-public class WellapadUIManager : SingletonUI<WellapadUIManager> {
+public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 	public TweenToggle wellapadTweenParent;
 
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
+	void Awake(){
+		eModeType = UIModeTypes.Wellapad;
+	}
+
 	//Return WellapadScreenUIController script
-	public WellapadScreenUIController GetScreenManager() {
+	public WellapadScreenUIController GetScreenManager(){
 		return wellapadScreenUIController;
 	}
 	
-	protected override void Start() {
+	protected override void Start(){
 		// set the tween target on the wellapad object to this object
 		wellapadTweenParent.ShowTarget = gameObject;
 		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();
@@ -31,6 +35,11 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		InventoryUIManager.Instance.HidePanel();
 		RoomArrowsUIManager.Instance.HidePanel();
 
+		// Open the fire crystal UI manager together  with special settings
+		FireCrystalUIManager.Instance.isLockModeInClickmanager = false;	// Temporary unlock
+		FireCrystalUIManager.Instance.isIgnoreTweenLockOnClose = true;
+		FireCrystalUIManager.Instance.OpenUI();
+
 		// show the UI itself
 		wellapadTweenParent.Show();
 	}
@@ -43,7 +52,12 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 		NavigationUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.ShowPanel();
-		
+
+		// Close the fire crystal UI manager together with special settings
+		FireCrystalUIManager.Instance.CloseUI();
+		FireCrystalUIManager.Instance.isLockModeInClickmanager = true; // Set this back immediately after close
+		FireCrystalUIManager.Instance.isIgnoreTweenLockOnClose = false;
+
 		// hide the UI
 		wellapadTweenParent.Hide();
 	}

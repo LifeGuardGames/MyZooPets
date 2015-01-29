@@ -25,7 +25,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	}
 
 	void Awake(){
-		missionDonePrefabName = "MissionDonePro";
+		missionDonePrefabName = "MissionDone";
 	}	
 	//---------------------------------------------------
 	// Start()

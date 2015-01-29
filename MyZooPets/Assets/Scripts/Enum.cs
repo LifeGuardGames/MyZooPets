@@ -125,7 +125,8 @@ public enum UIModeTypes {
 	Friends,
 	MembershipCheck,
 	Badge,
-	FireCrystal
+	FireCrystal,
+	Wellapad
 }
 
 // decoration node anchor types

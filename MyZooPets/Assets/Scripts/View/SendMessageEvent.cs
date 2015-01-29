@@ -16,6 +16,9 @@ public class SendMessageEvent : MonoBehaviour {
 	public GameObject target3;
 	public string functionName3;
 
+	public GameObject intTarget1;
+	public string intFunctionName1;
+
 	public void Broadcast1(){
 		if(target1 != null && functionName1 != null){
 			target1.SendMessage(functionName1, gameObject, SendMessageOptions.DontRequireReceiver);
@@ -40,6 +43,15 @@ public class SendMessageEvent : MonoBehaviour {
 		}
 		else{
 			Debug.LogError("Null references to broadcast3");
+		}
+	}
+
+	public void BroadcastInt1(int boolAux){
+		if(intTarget1 != null && intFunctionName1 != null){
+			intTarget1.SendMessage(intFunctionName1, boolAux);
+		}
+		else{
+			Debug.LogError("Null references to boolBroadcast1");
 		}
 	}
 }

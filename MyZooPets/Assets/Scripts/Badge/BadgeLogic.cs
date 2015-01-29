@@ -41,6 +41,15 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     }
 
 	/// <summary>
+	/// Determines whether the badge is unlocked or not
+	/// </summary>
+	/// <returns><c>true</c> if badge unlocked; otherwise, <c>false</c>.</returns>
+	/// <param name="badgeID">Badge ID</param>
+	public bool IsBadgeUnlocked(string badgeID){
+		return DataManager.Instance.GameData.Badge.GetIsUnlocked(badgeID);
+	}
+
+	/// <summary>
 	/// Gets the badge unlock at next level.
 	/// </summary>
 	/// <returns>The badge unlock at next level.</returns>
@@ -137,7 +146,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         bool unlockNewBadge = false;
 
         if(progress >= badge.UnlockCondition){ //Check if progress matches unlock conditions
-            bool isUnlocked = DataManager.Instance.GameData.Badge.GetIsUnlocked(badge.ID);
+            bool isUnlocked = IsBadgeUnlocked(badge.ID);
 
             if(!isUnlocked){ //Unlock new badges
                 DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);

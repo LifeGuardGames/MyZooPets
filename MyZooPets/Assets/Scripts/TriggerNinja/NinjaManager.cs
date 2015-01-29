@@ -216,22 +216,22 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		Vector3 triggerLocation;
 		switch (num){
 		case 1:
-			triggerLocation = new Vector3(0, 2.8f, 0);
+			triggerLocation = new Vector3(0, 1.8962f, 0);
 			break;
 		case 2:
-			triggerLocation = new Vector3(2.8f, 2.8f, 0);
+			triggerLocation = new Vector3(1.4f, 2.9321f, 0);
 			break;
 		case 3:
-			triggerLocation = new Vector3(-2.8f, 2.8f, 0);
+			triggerLocation = new Vector3(-1.9353f, 1.0183f, 0);
 			break;
 		case 4:
-			triggerLocation = new Vector3(5.6f, 2.8f, 0);
+			triggerLocation = new Vector3(3.0671f, 3.8541f, 0);
 			break;
 		case 5:
-			triggerLocation = new Vector3(-5.6f, 2.8f, 0);
+			triggerLocation = new Vector3(-3.5413f, -0.14406f, 0);
 			break;
 		case 6:
-			triggerLocation = new Vector3(0, -1.4f, 0);
+			triggerLocation = new Vector3(4.7322f, 4.5339f, 0);
 			break;
 		default:
 			triggerLocation = new Vector3(0, 2.8f, 0);

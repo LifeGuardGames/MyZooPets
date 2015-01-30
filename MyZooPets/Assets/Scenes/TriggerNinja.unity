@@ -524,6 +524,7 @@ Transform:
   - {fileID: 591972175}
   - {fileID: 906475559}
   - {fileID: 356260361}
+  - {fileID: 1477202279}
   m_Father: {fileID: 1991734814}
   m_RootOrder: 2
 --- !u!114 &128884711
@@ -9195,6 +9196,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
+      propertyPath: bonusLabel
+      value: 
+      objectReference: {fileID: 1477202278}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e11342ebc0acc46d6b9f71d19fbffc21, type: 2}
   m_RootGameObject: {fileID: 1020919712}
@@ -17066,6 +17071,9 @@ MonoBehaviour:
   comboMaxTime: .25
   trail: {fileID: 1660645602}
   timeBetweenSpawnGroups: 3
+  bonusRound: 0
+  chain: 0
+  bonusLabel: {fileID: 1477202278}
 --- !u!4 &1020919715
 Transform:
   m_ObjectHideFlags: 0
@@ -19939,6 +19947,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4bdcbb0793cb843988b6a6ac0296ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLockModeInClickmanager: 1
+  isIgnoreTweenLockOnClose: 0
   blockGUI: 0
   pulseClip: {fileID: 7400000, guid: 4fb471a2233f9e24bb828bbd3eee0aa5, type: 2}
   badgeBoard: {fileID: 0}
@@ -28738,6 +28748,63 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!1 &1477202278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1477202279}
+  - 114: {fileID: 1477202280}
+  m_Layer: 10
+  m_Name: BonusLabel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1477202279
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1477202278}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
+  m_Children: []
+  m_Father: {fileID: 128884710}
+  m_RootOrder: 4
+--- !u!114 &1477202280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1477202278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mColor: {r: 0, g: 0, b: 0, a: 1}
+  mPivot: 4
+  mDepth: 15
+  mFont: {fileID: 11400000, guid: b7829c9d940304e8f86216400254162f, type: 2}
+  mText: Bonus Round!
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mPassword: 0
+  mShowLastChar: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mShrinkToFit: 0
+  mLineWidth: 0
+  mMultiline: 1
 --- !u!1 &1489543335
 GameObject:
   m_ObjectHideFlags: 0

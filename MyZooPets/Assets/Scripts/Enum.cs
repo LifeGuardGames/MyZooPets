@@ -217,7 +217,8 @@ public enum NinjaScoring {
 	Start_3,
 	Med,
 	Med_High,
-	High
+	High,
+	Bonus
 }
 
 // ninja game modes

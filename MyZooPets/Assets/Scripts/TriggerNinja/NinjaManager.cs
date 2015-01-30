@@ -8,7 +8,10 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public float comboMaxTime;		// max time between cuts for a combo
 	public GestureTrail trail; // the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;	// time between spawn groups
-
+	public bool bonusRound=false;			// triggers Bonus round
+	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
+	public int chain = 0;			// number of enemies killed with out hitting a bomb 
+	public GameObject bonusLabel;
 	private float comboTime = 0;	// time counter
 	private int combo = 0;			// the current combo level of the player
 	private int bestCombo = 0;		// player's best combo in one run
@@ -37,7 +40,16 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// for now, just use the standard way
 		return GetStandardReward(eType);
 	}
-	
+	public void increaseChain(){
+		chain++;
+		if(chain%25 == 0){
+			bonusRound = true;
+			StartCoroutine("BonusTime");
+		}
+	}
+	public void resetChain(){
+		chain = 0;
+	}
 	/// <summary>
 	/// Gets the current combo level.
 	/// </summary>
@@ -197,15 +209,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			// so figure out which one to begin
 			NinjaScoring scoreKey;
 			NinjaData data = null;
-
-
+			if(spawning){
 			scoreKey = GetScoringKey();
 			data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, scoreKey);
-
-	
+			
 			
 			// cache the list -- ALMOST FOOLED ME....use new to copy the list
 			currentTriggerEntries = new List<NinjaDataEntry>(data.GetEntries());
+			}
 		}
 		else
 			timeCount -= deltaTime;	// otherwise, there is no group and we still need to countdown before spawning the next group
@@ -344,8 +355,11 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private NinjaScoring GetScoringKey(){
 		int nScore = GetScore();
 		NinjaScoring eScore;
-		
-		if(nScore == 0)
+
+		if (bonusRound == true){
+			eScore = NinjaScoring.Bonus;
+		}
+		else if(nScore == 0)
 			eScore = NinjaScoring.Start_1;
 		else if(nScore > 0 && nScore < 3)
 			eScore = NinjaScoring.Start_2;
@@ -430,5 +444,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			yield return new WaitForSeconds(0.5f);
 			new SpawnGroupSwarms(listObjects);
 		}
+	}
+	IEnumerator BonusTime(){ 
+		bonusLabel.SetActive(true);
+		yield return new WaitForSeconds(10.0f);
+		spawning = false;
+		yield return new WaitForSeconds(5.0f);
+		bonusLabel.SetActive(false);
+		bonusRound = false;
+		spawning = true;
+		StopCoroutine("BonusTime");
 	}
 }

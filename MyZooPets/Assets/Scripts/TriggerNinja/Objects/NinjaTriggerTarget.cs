@@ -53,8 +53,9 @@ public class NinjaTriggerTarget : NinjaTrigger{
 	protected override void _OnCut(){
 		// award points
 		int nVal = GetPointValue();
-		NinjaManager.Instance.UpdateScore(nVal);	
-		
+		NinjaManager.Instance.UpdateScore(nVal);
+		if(!NinjaManager.Instance.bonusRound)
+		NinjaManager.Instance.increaseChain();
 		// increase the player's combo
 		NinjaManager.Instance.IncreaseCombo(1);
 		
@@ -82,7 +83,10 @@ public class NinjaTriggerTarget : NinjaTrigger{
 	protected override void _OnMissed(){
 		if(!NinjaManager.Instance.IsTutorialRunning()){
 			// the player loses a life
-			NinjaManager.Instance.UpdateLives(-1);	
+			if(NinjaManager.Instance.bonusRound == false){
+			NinjaManager.Instance.UpdateLives(-1);
+			NinjaManager.Instance.resetChain();
+			}
 		}
 	}	
 }

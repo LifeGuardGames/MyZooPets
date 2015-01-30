@@ -148,8 +148,10 @@ public class StatsController : Singleton<StatsController>{
 				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
 
 				//Check if there are enough coins/stars to unlock badge
-				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, 
-					GetStat(HUDElementType.Stars), true);
+				RewardQueueData.GenericDelegate function = delegate() {
+					BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
+				};
+				RewardManager.Instance.AddToRewardQueue(function);
 			}
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
@@ -205,13 +207,11 @@ public class StatsController : Singleton<StatsController>{
 				pointsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, pointsLoc);
 				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
 				pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, endAnchor);
-				Debug.Log(pointsLoc);
 			}
 			if(starsLoc != default(Vector3)){
 				starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
 				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
 				starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, endAnchor);
-				Debug.Log(starsLoc);
 			}
 			if(healthLoc != default(Vector3)){
 				healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);

@@ -62,12 +62,15 @@ public class FarmGenerator : MonoBehaviour {
 		CheckShowButton();
 	}
 
-	void OnTap(TapGesture gesture){
+	public void ItemTapped(){
 		if(current >= allowTapThreshold){
 			Debug.Log("spewing " + (int)current + " coins");
 			
 			// Spew out the reward here
-			StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
+			RewardQueueData.GenericDelegate function = delegate(){
+				StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
+			};
+			RewardManager.Instance.AddToRewardQueue(function);
 			
 			// Reset the generator
 			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 

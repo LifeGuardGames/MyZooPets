@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Fire crystal user interface manager.
@@ -7,7 +8,12 @@ using System.Collections;
 /// Note: there is no overflow reward for the player, so the player will
 /// 	lose whatever extra they are currently getting after max has been reached
 /// </summary>
+
+
 public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
+
+	public static EventHandler<EventArgs> OnFireCrystalUIAnimationDone;
+
 	public UISprite spriteFireFill;
 	public TweenToggle tweenToggle;
 	public GameObject shardSpritePrefab;
@@ -67,6 +73,11 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 		isFireCrystalUIAnimating = false;
 
+		// Notify anything that is listening to this done
+		if(OnFireCrystalUIAnimationDone != null){
+			OnFireCrystalUIAnimationDone(this, EventArgs.Empty);
+		}
+
 		// Launch any finished callback
 		if(FinishedAnimatingCallback != null){	//TODO check if it is in wellapad mode here
 			FinishedAnimatingCallback();
@@ -86,7 +97,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 				GameObject shardObject = GameObjectUtils.AddChild(shardParent, shardSpritePrefab);
 				// Place the shard object on a random point on a circle around center
 				shardObject.transform.localPosition = 
-					GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, Random.Range(300f, 400f));
+					GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, UnityEngine.Random.Range(300f, 400f));
 				FireShardController shardController = shardObject.GetComponent<FireShardController>();
 				if(i == 0){
 					// Move the shard into the center and call start filling sprite, first tween
@@ -161,7 +172,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
-//			PopupAndRewardShards(10);
+//			PopupAndRewardShards(100);
 ////			CrystalPopDone();
 //		}
 //	}

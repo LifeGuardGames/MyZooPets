@@ -33,6 +33,9 @@ public class HUDAnimator : MonoBehaviour{
 	//================Events================
 	//call when the pet levels up. used this to level up UI components
 	public static EventHandler<EventArgs> OnLevelUp;
+
+	public static EventHandler<EventArgs> OnStatsAnimationDone;
+
 	//========================================
 
 	#region public variables
@@ -66,6 +69,14 @@ public class HUDAnimator : MonoBehaviour{
 
 	// there may be an override for how many of a given sprite we spawn when animating the HUD
 	private float fModifierOverride = 0;
+
+	private bool isAnimating = false;
+	public bool IsAnimating{
+		get{
+			return isAnimating;
+		}
+	}
+
 	#endregion
 
 	#region Getter/Setters
@@ -170,6 +181,7 @@ public class HUDAnimator : MonoBehaviour{
 	/// <param name="isAllAtOnce">If set to <c>true</c> is all at once.</param>
 	/// <param name="isFloaty">If set to <c>true</c> is floaty.</param>
 	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isPlaySounds, bool isAllAtOnce, bool isFloaty, float animDelay){
+		isAnimating = true;
 		yield return new WaitForSeconds(animDelay);
 		// One loop for each TYPE of stat (Coin, Stars, etc)
 		for(int i = 0; i < statsTypeList.Count; ++i){
@@ -199,6 +211,17 @@ public class HUDAnimator : MonoBehaviour{
 					yield return new WaitForSeconds(fModifier * pair.nPoints);	
 				}
 			}
+
+			// Soft check for detecting when anim is done, its so complicated we are just going to estimate here
+			if(i == statsTypeList.Count - 1){
+				Invoke("CallFinishedAnimation", 1.5f);
+			}
+		}
+	}
+
+	private void CallFinishedAnimation(){
+		if(OnStatsAnimationDone != null){
+			OnStatsAnimationDone(this, EventArgs.Empty);
 		}
 	}
 	
@@ -303,8 +326,9 @@ public class HUDAnimator : MonoBehaviour{
 
 		// Enables the progress bar/count to animate after duration (when the first tween image touches the bar)
 		// Hopefully Invoke matches up with LeanTween time
-		if(waitTime == 0)
+		if(waitTime == 0){
 			StartCoroutine(AnimateStatBar(type, duration));
+		}
 	}
 
 	//---------------------------------------------------

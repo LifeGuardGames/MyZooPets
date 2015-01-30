@@ -51,7 +51,6 @@ public class BadgeController : MonoBehaviour {
 	/// First event call from the SendMessageEvent object
 	/// </summary>
 	public void PopUnlockBadgeEvent(){
-		Debug.Log("popbadge");
 		sprite.spriteName = activeSpriteName;
 	}
 
@@ -60,7 +59,6 @@ public class BadgeController : MonoBehaviour {
 	}
 
 	public void AnimationDoneEvent(){
-		Debug.Log("Anim done " + gameObject.name);
 		StartCoroutine(BadgeBoardUIManager.Instance.BadgeAnimationDone());
 	}
 

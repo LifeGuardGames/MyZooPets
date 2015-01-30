@@ -5,6 +5,9 @@ using System;
 using System.Linq;
 
 public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
+
+	public static EventHandler<EventArgs> OnBadgeUIAnimationDone;
+
 	public AnimationClip pulseClip;
 	public GameObject badgeBoard;
 	public GameObject badgePrefab;
@@ -130,14 +133,18 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	/// Called when a badge animation is done, check the queue again if still needs popping
 	/// </summary>
 	public IEnumerator BadgeAnimationDone(){
-		Debug.Log("BadgeANIM DONE");
-
 		yield return new WaitForSeconds(1f);
 		
 		// Ending queue check, all animations and popping finished
 		if(badgeUnlockQueue.Count == 0){
 			CloseUI();
+
 			isQueueAnimating = false;	// Release the animation lock
+
+			//Notify anything that is listening to animation done
+			if(OnBadgeUIAnimationDone != null){
+				OnBadgeUIAnimationDone(this, EventArgs.Empty);
+			}
 
 			// Launch any finished callback
 			if(FinishedAnimatingCallback != null){

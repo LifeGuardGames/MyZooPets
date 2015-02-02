@@ -299,6 +299,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// create the proper list of objects to spawn
 		int numOfTriggers = entry.GetTriggers();
 		int numOfBombs = entry.GetBombs();
+		int numOfPowUps =  entry.GetPowUp();
 		List<string> listObjects = new List<string>();
 
 		for(int i = 0; i < numOfTriggers; ++i){
@@ -313,7 +314,13 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 				DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
 		}
-		
+
+		for(int i = 0; i < numOfPowUps; ++i){
+			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
+			string randomPowUps = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomPowUp(DataLoaderNinjaTriggersAndBombs.numPowUps);
+			listObjects.Add(randomPowUps);
+		}
 		// shuffle the list so everything is nice and mixed up
 		listObjects.Shuffle();
 		

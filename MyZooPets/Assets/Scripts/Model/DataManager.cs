@@ -317,13 +317,14 @@ public class DataManager : Singleton<DataManager>{
 	/// <param name="petName">Pet name.</param>
 	/// <param name="petSpecies">Pet species.</param>
 	/// <param name="petColor">Pet color.</param>
-	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", 
-	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
+	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
-		if(!String.IsNullOrEmpty(petName))
-			gameData.PetInfo.ChangeName(petName);
-		else
-			gameData.PetInfo.ChangeName("Player1");
+		if(!String.IsNullOrEmpty(petName)){
+			gameData.PetInfo.PetName = petName;
+		}
+		else{
+			gameData.PetInfo.PetName = "Player1";
+		}
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;

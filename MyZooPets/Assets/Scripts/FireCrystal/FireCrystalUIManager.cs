@@ -8,8 +8,6 @@ using System;
 /// Note: there is no overflow reward for the player, so the player will
 /// 	lose whatever extra they are currently getting after max has been reached
 /// </summary>
-
-
 public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	public static EventHandler<EventArgs> OnFireCrystalUIAnimationDone;

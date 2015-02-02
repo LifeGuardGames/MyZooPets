@@ -175,14 +175,14 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		RewardManager.Instance.AddToRewardQueue(function1);
 	
 		// Reward shards
-		RewardQueueData.GenericDelegate function2 = delegate{		
-			FireCrystalManager.Instance.RewardShards(100);
+		RewardQueueData.GenericDelegate function2 = delegate{
+			FireCrystalManager.Instance.RewardShards(10);
 		};
 		RewardManager.Instance.AddToRewardQueue(function2);
 
 		// Check for badge reward
 		RewardQueueData.GenericDelegate function3 = delegate(){
-			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 5, false);
+			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
 		};
 		RewardManager.Instance.AddToRewardQueue(function3);
 	}

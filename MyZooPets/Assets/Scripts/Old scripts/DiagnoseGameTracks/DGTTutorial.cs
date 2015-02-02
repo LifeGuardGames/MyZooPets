@@ -121,7 +121,7 @@ public class DGTTutorial : MinigameTutorial {
 		}		
 			
 		// show the proper tutorial message
-		ShowPopup(strResourceKey, vPos, false, option);			
+		ShowPopup(strResourceKey, vPos, option);			
 	}
 	
 	//---------------------------------------------------

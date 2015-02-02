@@ -27,14 +27,12 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-				// start by focusing on the wellapad button
+			// start by focusing on the wellapad button
 			FocusWellapadButton();
-				
 			break;
 			
 		case 1:
 			TutorialManager.Instance.StartCoroutine(OpeningWellapad());
-			
 			break;
 		}
 	}
@@ -87,7 +85,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 	}
 	
 	//---------------------------------------------------

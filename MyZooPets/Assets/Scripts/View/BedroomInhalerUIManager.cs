@@ -31,9 +31,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		}
 		else{
 			CoolDownMode();
-
-			if(!TutorialManager.Instance.IsTutorialActive())
-				CheckToDropFireOrb();
 		}
 	}
 

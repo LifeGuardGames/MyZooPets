@@ -125,7 +125,7 @@ public class GameTutorialDecorations : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, location, option: option);
 		
 		// find and spotlight the edit button
 		GameObject goEditButton = NavigationUIManager.Instance.GetEditDecoButton();
@@ -346,7 +346,7 @@ public class GameTutorialDecorations : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, popupLocation, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLocation, option: option);
 
 		//permit exit button to be clicked
 		AddToProcessList(decoModeBackButton);

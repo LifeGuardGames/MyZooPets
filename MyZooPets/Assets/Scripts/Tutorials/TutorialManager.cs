@@ -25,6 +25,7 @@ public class TutorialManager : Singleton<TutorialManager>{
 	}
 
 	public void SetTutorial(GameTutorial tutorial){
+		Debug.Log("+++++++ SETTING TUTORIAL ");
 		// check to make sure there are not overlapping tutorials
 		if(tutorial != null && this.tutorial != null){
 			return;	

@@ -4,46 +4,19 @@ using System.Collections.Generic;
 using Parse;
 using System.Threading.Tasks;
 
-public class MutableDataPetInfo : MutableData{
-
+public class MutableDataPetInfo : MutableData{	
 	public string PetID { get; set; }
 
-	public string PetName {
-		get{
-			return PetName;
-		}
-		set{
-			try{
-				if(!string.IsNullOrEmpty(value)){
-					PetName = value;
-					IsDirty = true;
-				}
-			}
-			catch(Exception e){
-				Debug.LogError("Exception in setting data: " + e.Message);
-			}
-		}
-	}
+	/// <summary>
+	/// Gets or sets the name of the pet. **NOTE For json serialization use only. Use 
+	/// ChangeName() to edit pet name otherwise data will not be save to the server
+	/// </summary>
+	/// <value>The name of the pet.</value>
+	public string PetName { get; set; }
 
 	public string PetSpecies { get; set; }
-
-	public string PetColor {
-		get{
-			return PetColor;
-		}
-		set{
-			try{
-				PetColor newColor = (PetColor)Enum.Parse(typeof(PetColor), value);
-				PetColor = newColor.ToString();
-				IsDirty = true;
-			}
-			catch(Exception e){
-				Debug.LogError("Exception in setting data: " + e.Message);
-			}
-		}
-	}
+	public string PetColor { get; set; }
 	public bool IsHatched { get; set; }
-
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 
 	/// <summary>
@@ -51,8 +24,26 @@ public class MutableDataPetInfo : MutableData{
 	/// </summary>
 	/// <value>The n fire breaths.</value>
 	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
-
 	public bool IsQuestionaireCollected {get; set;}
+
+	/// <summary>
+	/// Changes the name.
+	/// </summary>
+	/// <param name="petName">Pet name.</param>
+	public void ChangeName(string petName){
+		IsDirty = true;
+		if(!string.IsNullOrEmpty(petName)){
+			PetName = petName;
+		}
+	}
+
+	public void ChangeColor(PetColor petColorEnum){
+		// Sould we do sanity color checking here?
+		if(true){
+			IsDirty = true;
+			PetColor = petColorEnum.ToString();
+		}
+	}
 	
 	public void SetFireBreaths(int amount){
 		FireBreaths = amount;

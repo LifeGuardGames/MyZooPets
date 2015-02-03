@@ -103,7 +103,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 			//need to disable more things here
 			PetAnimationManager.Instance.DisableIdleAnimation();
-			
+			PetMovement.Instance.canMove = false;
 			isActive = true;
 			zoomItem.collider.enabled = false;
 			
@@ -127,7 +127,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	protected override void _CloseUI(){
 		if(isActive){
 			this.GetComponent<TweenToggleDemux>().Hide();
-			
+			PetMovement.Instance.canMove = true;
 			isActive = false;
 			zoomItem.collider.enabled = true;
 

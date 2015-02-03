@@ -28,7 +28,7 @@ public class PetMovement : Singleton<PetMovement>{
 	public float MovementStaticZ{
 		get{ return MovementStaticZ; }
 	}
-
+	public bool canMove;
 	private Vector3 destinationPoint; //destination that the pet is going to move to
 	public bool moving; //Is Pet moving now or not
 	private Camera mainCamera;
@@ -59,6 +59,7 @@ public class PetMovement : Singleton<PetMovement>{
 	}
 
 	void Start(){
+		canMove = true;
 		destinationPoint = petSprite.transform.position;
 		scriptPan.OnPartitionChanged += MovePetWithCamera;
 
@@ -89,6 +90,12 @@ public class PetMovement : Singleton<PetMovement>{
 
 	// Update is called once per frame
 	void Update(){
+		if(canMove){
+			this.gameObject.GetComponentInChildren<MeshCollider>().enabled = true;
+		}
+		else{
+			this.gameObject.GetComponentInChildren<MeshCollider>().enabled = false;
+		}
 		if(moving && petSprite != null){
 			//move the pet location if allowed
 			if(ClickManager.Instance.CanRespondToTap(this.gameObject, ClickLockExceptions.Moving)){ 

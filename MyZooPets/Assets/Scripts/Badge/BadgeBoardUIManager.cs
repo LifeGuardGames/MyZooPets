@@ -95,7 +95,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
 		// Populate the unlocked badge into the unlock queue
 		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
-		Debug.Log("BADGE UNLOCKED!!!");
+
 		// Check for waiting in reward queue because there might be more badges coming in during waiting so only want to enqueue
 		if(!isWaitingInRewardQueue){
 			isWaitingInRewardQueue = true;

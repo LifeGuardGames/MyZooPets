@@ -183,6 +183,7 @@ public class ClickManager : Singleton<ClickManager>{
 			
 		// push this latest mode
 		stackModes.Push(mode);
+		Debug.Log("locked");
 	}
 
 	/// <summary>

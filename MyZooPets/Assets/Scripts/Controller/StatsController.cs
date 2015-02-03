@@ -137,21 +137,21 @@ public class StatsController : Singleton<StatsController>{
 	                        bool isDisableStream = false, bool is3DObject = false, float animDelay = 0f){;
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
-			if(deltaPoints > 0)
+			if(deltaPoints > 0){
 				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
-			else if(deltaPoints < 0)
+			}
+			else if(deltaPoints < 0){
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+			}
 		}
 	
 		if(deltaStars != 0){
 			if(deltaStars > 0){
 				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
-
-				//Check if there are enough coins/stars to unlock badge
-				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
 			}
-			else if(deltaStars < 0)
+			else if(deltaStars < 0){
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
+			}
 		}
 		
 		// so that the pet animations play properly, make sure to change and check mood BEFORE health
@@ -175,10 +175,12 @@ public class StatsController : Singleton<StatsController>{
 		if(deltaHealth != 0){
 			PetHealthStates oldHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 
-			if(deltaHealth > 0)
+			if(deltaHealth > 0){
 				DataManager.Instance.GameData.Stats.AddHealth(deltaHealth);
-			else if(deltaHealth < 0)
+			}
+			else if(deltaHealth < 0){
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
+			}
 
 			PetHealthStates newHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
@@ -193,9 +195,10 @@ public class StatsController : Singleton<StatsController>{
 		}
 
 		//when stats are modified make sure PetAnimationManager knows about it
-		if(isPetAnimationManagerPresent)
+		if(isPetAnimationManagerPresent){
 			PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
 			                                              DataManager.Instance.GameData.Stats.Mood);
+		}
 
 		// Adjust for custom positions using screen position for 3D objects
 		if(is3DObject){
@@ -234,8 +237,15 @@ public class StatsController : Singleton<StatsController>{
 		listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
 		
 		if(hudAnimator != null && !bBeingDestroyed){
-			StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
+			// Push this into the reward queue
+			RewardQueueData.GenericDelegate function1 = delegate{
+				StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
+			};
+			RewardManager.Instance.AddToRewardQueue(function1);
 		}
+
+		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
 	}
 
 	//---------------------------------------------------

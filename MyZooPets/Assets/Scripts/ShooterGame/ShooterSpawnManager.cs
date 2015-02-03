@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -63,7 +63,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	IEnumerator SpawnEnemies(){
 		for (int i = 0; i<enemy.Count;i++){
 			if (isSpawing == false){
-				yield return ShooterGameManager.Instance.sync();
+				yield return ShooterGameManager.Instance.Sync();
 			}
 			yield return new WaitForSeconds(1.0f);
 			int rand = Random.Range(0,3);

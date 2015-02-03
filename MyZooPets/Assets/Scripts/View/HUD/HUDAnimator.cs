@@ -214,7 +214,7 @@ public class HUDAnimator : MonoBehaviour{
 
 			// Soft check for detecting when anim is done, its so complicated we are just going to estimate here
 			if(i == statsTypeList.Count - 1){
-				Invoke("CallFinishedAnimation", 1.5f);
+				Invoke("CallFinishedAnimation", 0.8f);
 			}
 		}
 	}

@@ -10,4 +10,7 @@ public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
 	protected override int GetScore(){
 		return ShooterGameManager.Instance.GetScore();
 	}
+
+	protected override void _RewardBadges(){
+	}
 }

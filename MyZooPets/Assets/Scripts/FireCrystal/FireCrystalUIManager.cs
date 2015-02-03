@@ -16,10 +16,10 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public TweenToggle tweenToggle;
 	public GameObject shardSpritePrefab;
 	public GameObject shardParent;
-	public float delayBetweenShards = 0.1f;
+	public float delayBetweenShards = 0.02f;
 	public Animation crystalAnimation;
 
-	private int totalSubdivisions;
+	private int totalSubdivisions = 100;
 	private float step = 0.005f;
 	private float currentPercentage; // In terms of 0.0 -> 1.0
 	private float targetPercentage;
@@ -39,7 +39,9 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	}
 
 	void Start(){
-		currentPercentage = 0; // TODO populate this from data
+		// Initalizaing from data
+		currentPercentage = (float)DataManager.Instance.GameData.Stats.Shards/(float)totalSubdivisions;
+		currentPercentage = Mathf.Min(currentPercentage, 1.0f);
 		spriteFireFill.fillAmount = currentPercentage;
 	}
 
@@ -58,7 +60,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			// Lock and fire animations
 			isFireCrystalUIAnimating = true;
 			OpenUI();
-			StartCoroutine(StartFlyingShards(numberOfShards, 1.0f));
+			StartCoroutine(StartFlyingShards(numberOfShards, 0.8f));
 		}
 	}
 

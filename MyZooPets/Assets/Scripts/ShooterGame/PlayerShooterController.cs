@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 				changeInHealth(this, EventArgs.Empty);
 		}
 		else{
-			changeInHealth -= ShooterGameManager.Instance.healthUpdate;
+			changeInHealth -= ShooterGameManager.Instance.HealthUpdate;
 		}
 	}
 

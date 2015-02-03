@@ -19,6 +19,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	public Animator inhalerWholeObject;
 	public SceneTransition scriptTransition;
 	public bool tutOn; //turn tutorial on or off. for debuggin
+	private bool isFirstTimeAux; // Keep track of this internally, need for gameover reward
 
 	private bool showHint = false; //display swipe hints for the inhaler
 	private bool runShowHintTimer = true; //True: start running hint timer
@@ -27,6 +28,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	private int starIncrement = 0;
 	public GameObject[] lightsToTurnOff;
 	public ParticleSystemController[] particlesToTurnOff;
+
 
 	public bool ShowHint{
 		get{
@@ -45,6 +47,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		InhalerLogic.OnNextStep += OnNextStep;
 
 		StartCoroutine(StartGame());
+
+		isFirstTimeAux = InhalerLogic.Instance.IsFirstTimeRescue;
 	}
 
 	void OnDestroy(){
@@ -103,12 +107,11 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	// for the hint count down timer
 	//----------------------------------------------------------
 	private void SetUpHintTimer(){
-		bool isFirstTimeUsingRescueInhaler = InhalerLogic.Instance.IsFirstTimeRescue;
 		//User is new to the tap gesture we introduce in v1.2.8 force the tutorial to run again
 		bool isNewToTapPrescriptionHint = InhalerLogic.Instance.IsNewToTapPrescriptionHint;
 
 		//Show hint right away if it's users' first time
-		if((isFirstTimeUsingRescueInhaler && tutOn) || (isNewToTapPrescriptionHint && tutOn)){ 
+		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn) || (isNewToTapPrescriptionHint && tutOn)){ 
 			runShowHintTimer = false;
 			showHint = true;
 		}
@@ -169,22 +172,17 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	private void GiveReward(){
 		//Reward xp
 		int nXP = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
-		RewardQueueData.GenericDelegate function1 = delegate{
-			StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
-		};
-		RewardManager.Instance.AddToRewardQueue(function1);
-	
+		StatsController.Instance.ChangeStats(deltaPoints: nXP, deltaStars: starIncrement);
+		
 		// Reward shards
-		RewardQueueData.GenericDelegate function2 = delegate{
-			FireCrystalManager.Instance.RewardShards(10);
-		};
-		RewardManager.Instance.AddToRewardQueue(function2);
+		int fireShardReward = 50;	
+		if(isFirstTimeAux){	// First time tutorial gives you full crystal
+			fireShardReward = 100;
+		}
+		FireCrystalManager.Instance.RewardShards(fireShardReward);
 
 		// Check for badge reward
-		RewardQueueData.GenericDelegate function3 = delegate(){
-			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
-		};
-		RewardManager.Instance.AddToRewardQueue(function3);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
 	}
 
 	private void QuitInhalerGame(object sender, EventArgs args){

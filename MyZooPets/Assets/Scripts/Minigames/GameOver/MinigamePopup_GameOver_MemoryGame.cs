@@ -19,5 +19,9 @@ public class MinigamePopup_GameOver_MemoryGame : MinigamePopup_GameOver{
 	//---------------------------------------------------		
 	protected override int GetScore(){
 		return MemoryGameManager.Instance.GetScore();
-	}	
+	}
+
+	protected override void _RewardBadges(){
+		// TODO add badges
+	}
 }

@@ -85,10 +85,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
-
-		// check for badge unlock;
-		UpdateBadgeProgress();
-
 	}		
 
 	/// <summary>
@@ -156,14 +152,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	public override int GetReward(MinigameRewardTypes rewardType){
 		// for now, just use the standard way
 		return GetStandardReward(rewardType);
-	}   
-	
-	/// <summary>
-	/// Updates the badge progress. Check with BadgeLogic to see if any badges 
-	/// </summary>
-	private void UpdateBadgeProgress(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, 
-            ScoreManager.Instance.Distance, true);
 	}
 
 	/// <summary>

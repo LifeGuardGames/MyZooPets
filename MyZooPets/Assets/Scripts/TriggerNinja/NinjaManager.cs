@@ -98,8 +98,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			comboTime = GetMaxComboTime();
 		}
 	}
-	
-
 
 	void OnDrag(DragGesture gesture){
 		// check is playing
@@ -160,9 +158,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// send out combo task
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
-
-		//check for badge unlock
-		UpdateBadgeProgress();
 	}		
 
 	protected override string GetMinigameKey(){
@@ -426,14 +421,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		
 		// reset the combo down to 0
 		SetCombo(0);	
-	}
-
-	/// <summary>
-	/// Updates the badge progress.
-	/// </summary>
-	private void UpdateBadgeProgress(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.NinjaScore, 
-            GetScore(), true);
 	}
 	
 	private void StartTutorial(){

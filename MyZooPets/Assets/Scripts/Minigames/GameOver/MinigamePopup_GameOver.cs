@@ -81,9 +81,13 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		vPosMoney = CameraManager.Instance.TransformAnchorPosition(vPosMoney, InterfaceAnchors.Center, InterfaceAnchors.TopLeft);
 		
 		// award the actual xp and money
-		StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: vPosXP,
-		                                     deltaStars: rewardMoney, starsLoc: vPosMoney,
-		                                     animDelay: 0.5f);
+		Debug.Log("Reward money and xp");
+		RewardQueueData.GenericDelegate function = delegate(){
+			StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: vPosXP,
+			                                     deltaStars: rewardMoney, starsLoc: vPosMoney,
+			                                     animDelay: 0.5f);
+		};
+		RewardManager.Instance.AddToRewardQueue(function);
 	}
 	
 	//---------------------------------------------------

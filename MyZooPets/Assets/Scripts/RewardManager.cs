@@ -43,14 +43,20 @@ public class RewardManager : Singleton<RewardManager> {
 	/// </summary>
 	/// <param name="notificationEntry">Notification entry.</param>
 	public void AddToRewardQueue(RewardQueueData.GenericDelegate functionToCall){
+
+		Debug.Log("ADD TO REWARD QUEUE");
 		RewardQueueData.AddReward(functionToCall);
 		
 		if(!isRewardingActive){
+			Debug.Log(" Reward queue empty");
 			TryNextReward();
+		}else{
+			Debug.Log(" Reward queue FULL");
 		}
 	}
 
 	public void TryNextReward(object sender, EventArgs args){
+		Debug.Log("TRY NEXT REWARD CALLBACK");
 		TryNextReward();
 	}
 

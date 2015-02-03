@@ -33,6 +33,13 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 		}
 	}
 
+	private bool isWaitingInRewardQueue = false;
+	public bool IsWaitingInRewardQueue{		// If it is waiting in reward queue waiting to be animated, used for controlling unlocking multiple badges
+		get{
+			return isWaitingInRewardQueue;
+		}
+	}
+
 	public delegate void Callback();
 	public Callback FinishedAnimatingCallback;
 
@@ -88,36 +95,43 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
 		// Populate the unlocked badge into the unlock queue
 		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
+		Debug.Log("BADGE UNLOCKED!!!");
+		// Check for waiting in reward queue because there might be more badges coming in during waiting so only want to enqueue
+		if(!isWaitingInRewardQueue){
+			isWaitingInRewardQueue = true;
 
-		// Try to animate, lock the queue animation check so more than one calls wont go thru
-		if(!isQueueAnimating){
-			isQueueAnimating = true;
-			StartCoroutine(TryPopBadgeQueue());
+			RewardQueueData.GenericDelegate funtion = delegate(){
+				// Try to animate, lock the queue animation. might be more badges coming in during animation so only want to enqueue
+				if(!isQueueAnimating){
+					isQueueAnimating = true;
+					StartCoroutine(TryPopBadgeQueue());
+				}
+			};
+			RewardManager.Instance.AddToRewardQueue(funtion);
 		}
 	}
 
 	// Show the badge board pop queue board if any
 	private IEnumerator TryPopBadgeQueue(){
-			if(badgeUnlockQueue.Count != 0){
+		if(badgeUnlockQueue.Count != 0){
+		// If the badge board is not opened already, open the UI and wait a while
+		if(!BadgeBoardUIManager.Instance.IsOpen()){
+			float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
+			yield return new WaitForSeconds(sceneSpecificDelay);
+			OpenUI();
+			yield return new WaitForSeconds(1f);
+		}
 
-			// If the badge board is not opened already, open the UI and wait a while
-			if(!BadgeBoardUIManager.Instance.IsOpen()){
-				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
-				yield return new WaitForSeconds(sceneSpecificDelay);
-				OpenUI();
-				yield return new WaitForSeconds(1f);
-			}
-
-			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
-			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
-			if(badgeGOTransform != null){
-				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
-				badgeController.PlayUnlockAnimation();
-			}
-			else{
-				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
-				CloseUI();	// Try to fail gracefully
-			}
+		Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+		Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+		if(badgeGOTransform != null){
+			BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+			badgeController.PlayUnlockAnimation();
+		}
+		else{
+			Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
+			CloseUI();	// Try to fail gracefully
+		}
 		}
 	}
 
@@ -140,6 +154,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			CloseUI();
 
 			isQueueAnimating = false;	// Release the animation lock
+			isWaitingInRewardQueue = false;		// It is animating so no longer waiting in reward queue
 
 			//Notify anything that is listening to animation done
 			if(OnBadgeUIAnimationDone != null){

@@ -105,11 +105,6 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 			}
 		}
 
-		// If no single badge is unlocked, notify reward manager to try next
-		if(!badgeUnlocked){
-			RewardManager.Instance.TryNextReward();
-		}
-
         //Check if all badges of the same type have been unlocked
         foreach(Badge badge in sortedBadgesType){
             if(!badge.IsUnlocked){

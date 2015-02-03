@@ -148,10 +148,7 @@ public class StatsController : Singleton<StatsController>{
 				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
 
 				//Check if there are enough coins/stars to unlock badge
-				RewardQueueData.GenericDelegate function = delegate() {
-					BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
-				};
-				RewardManager.Instance.AddToRewardQueue(function);
+				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
 			}
 			else if(deltaStars < 0)
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);

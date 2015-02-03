@@ -17,7 +17,11 @@ public static class RewardQueueData{
 	public static GenericDelegate PopReward(){
 		return q.Dequeue() as GenericDelegate;
 	}
-	
+
+	public static GenericDelegate PeekReward(){
+		return q.Peek() as GenericDelegate;
+	}
+
 	public static bool IsEmpty(){
 		return (QueueCount() > 0) ? false : true;
 	}

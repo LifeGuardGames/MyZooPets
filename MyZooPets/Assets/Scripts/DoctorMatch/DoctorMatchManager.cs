@@ -190,6 +190,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	/// </summary>
 	/// <param name="assemblyLineItemObject">Assembly line item object.</param>
 	/// <param name="itemGroupNumber">Item group number. </param>
+	/// seperated for tutorials as those sprites arn't random
 	public void SetUpAssemblyItemSpriteTutorial(GameObject assemblyLineItemObject,int spriteNum, int itemGroupNumber = 0){
 		AssemblyLineItem item = assemblyLineItemObject.GetComponent<AssemblyLineItem>();
 		item.Speed = assemblyLineController.Speed;

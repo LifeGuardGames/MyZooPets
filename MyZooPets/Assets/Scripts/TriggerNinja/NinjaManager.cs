@@ -44,7 +44,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		chain++;
 		if(chain%25 == 0){
 			bonusRound = true;
-			StartCoroutine("BonusTime");
 		}
 	}
 	public void resetChain(){
@@ -176,7 +175,9 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		if(IsTutorialRunning()) return;
 
 		float deltaTime = Time.deltaTime;
-		
+		if(bonusRound == true){
+		StartCoroutine("BonusTime");
+		}
 		// update the player's combo
 		UpdateComboTimer(deltaTime);
 		
@@ -294,6 +295,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// create the proper list of objects to spawn
 		int numOfTriggers = entry.GetTriggers();
 		int numOfBombs = entry.GetBombs();
+		int numOfPowUps =  entry.GetPowUp();
 		List<string> listObjects = new List<string>();
 
 		for(int i = 0; i < numOfTriggers; ++i){
@@ -308,7 +310,13 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 				DataLoaderNinjaTriggersAndBombs.GetRandomBomb(DataLoaderNinjaTriggersAndBombs.numBombs);
 			listObjects.Add(randomBomb);
 		}
-		
+
+		for(int i = 0; i < numOfPowUps; ++i){
+			// NOTE: if want to add variation over time, use GetRandomBomb(n to choose from)
+			string randomPowUps = 
+				DataLoaderNinjaTriggersAndBombs.GetRandomPowUp(DataLoaderNinjaTriggersAndBombs.numPowUps);
+			listObjects.Add(randomPowUps);
+		}
 		// shuffle the list so everything is nice and mixed up
 		listObjects.Shuffle();
 		
@@ -432,10 +440,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			new SpawnGroupSwarms(listObjects);
 		}
 	}
+	// runs during a bonus round
 	IEnumerator BonusTime(){ 
+		// temp for visual
 		bonusLabel.SetActive(true);
+		// bonus round runs 10 seconds and then stop the spawns so the user can clean up
 		yield return new WaitForSeconds(10.0f);
 		spawning = false;
+		// after 5 seconds of clean up start spawning normal again
 		yield return new WaitForSeconds(5.0f);
 		bonusLabel.SetActive(false);
 		bonusRound = false;

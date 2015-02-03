@@ -8,9 +8,11 @@ public class DataLoaderNinjaTriggersAndBombs{
 	// Hashtable that contains all the NinjaTriggersAndBombs.xml data
 	private static ArrayList triggerList = null;
 	private static ArrayList bombList = null;
+	private static ArrayList powUpList = null;
 
 	public static int numTriggers = 0;
 	public static int numBombs = 0;
+	public static int numPowUps = 0;
 
 	// Gets a random trigger given a combination number, priority head first
 	public static string GetRandomTrigger(int combinations){
@@ -38,6 +40,20 @@ public class DataLoaderNinjaTriggersAndBombs{
 		return bombList[index] as string;
 	}
 
+	// Gets a PowerUp from the list given index
+	private static string GetPowUp(int index){
+		Debug.Log(index);
+		if(powUpList == null){
+			SetupData();
+		}
+		return powUpList[index] as string;
+	}
+
+	// Gets a random bomb given a combination number, priority head first
+	public static string GetRandomPowUp(int combinations){
+		return GetPowUp(UnityEngine.Random.Range(0, combinations));	// Exclusive max
+	}
+
 	// Initializing the data from XML
 	private static void SetupData(){
 		if(bombList != null || triggerList != null){
@@ -46,6 +62,7 @@ public class DataLoaderNinjaTriggersAndBombs{
 		else{
 			triggerList = new ArrayList();
 			bombList = new ArrayList();
+			powUpList = new ArrayList();
 
 			TextAsset file = Resources.Load("Ninja/NinjaTriggersAndBombs", typeof(TextAsset)) as TextAsset;
 			string xmlString = file.text;
@@ -73,6 +90,11 @@ public class DataLoaderNinjaTriggersAndBombs{
 				else if(XMLUtils.GetString(hashTriggerData["Type"] as IXMLNode).Equals("Bomb")){
 					bombList.Add(XMLUtils.GetString(hashTriggerData["PrefabString"] as IXMLNode));
 					numBombs++;
+				}
+				// Add to bomb list if type is powUp
+				else if(XMLUtils.GetString(hashTriggerData["Type"] as IXMLNode).Equals("PowerUp")){
+					powUpList.Add(XMLUtils.GetString(hashTriggerData["PrefabString"] as IXMLNode));
+					numPowUps++;
 				}
 				else{
 					Debug.LogError("Unknown ID inside NinjaTriggersAndBombs");

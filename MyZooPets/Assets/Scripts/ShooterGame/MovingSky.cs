@@ -7,7 +7,8 @@ public class MovingSky : MonoBehaviour {
 	public bool isSun;
 	// Use this for initialization
 	void Start () {
-		transform.position = posSky.position;
+
+		// then set the bool value based on where we are
 		if (transform.position == posSky.position){
 			inSky = true;
 		}

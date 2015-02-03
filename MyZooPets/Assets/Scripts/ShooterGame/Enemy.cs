@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour {
 	public GameObject bulletPrefab;
 	private GameObject tweeningContentParent;
 	//public GameObject NGUIParent;
+
+	// initalizes the enemy with the correct values and scripts
 	public void Initialize(){
 		triggerSprite.type = UISprite.Type.Simple;
 		triggerSprite.spriteName = spriteName;
@@ -17,6 +19,7 @@ public class Enemy : MonoBehaviour {
 		triggerSprite.name = spriteName;
 		tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;
 
+		// adds the correct script based off the script ai string
 		switch(aiScript){
 			case"BasicAI":
 				this.gameObject.AddComponent<ShooterBasicEnemyAi>();

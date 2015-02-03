@@ -16,6 +16,7 @@ public class ShooterEnemyAi : MonoBehaviour{
 
 	// Update is called once per frame
 	void Update(){
+		// work around for enemies who spawn during a state change they seem to miss the event call when this happens
 		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
 			LeanTween.pause(this.gameObject);
 		}
@@ -42,6 +43,7 @@ public class ShooterEnemyAi : MonoBehaviour{
 		}
 	}
 
+	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
 			
@@ -57,7 +59,8 @@ public class ShooterEnemyAi : MonoBehaviour{
 			StartCoroutine(DestroyEnemy());
 		}
 	}
-	
+
+	// this is a corutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
 		LeanTween.cancel(this.gameObject);

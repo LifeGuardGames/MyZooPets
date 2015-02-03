@@ -88,7 +88,7 @@ public class RewardManager : Singleton<RewardManager> {
 //			};
 //			RewardQueueData.AddReward(gen);
 //		}
-//
+
 //		if(GUI.Button(new Rect(200, 100, 100, 100), "Fire reward2")){
 //			
 //			RewardQueueData.GenericDelegate gen = delegate(){
@@ -96,14 +96,11 @@ public class RewardManager : Singleton<RewardManager> {
 //			};
 //			RewardQueueData.AddReward(gen);
 //		}
-//
+
 //		if(GUI.Button(new Rect(300, 100, 100, 100), "Fire reward2")){
-//			RewardQueueData.GenericDelegate gen = delegate(){
-//				FireCrystalManager.Instance.RewardShards(100);
-//			};
-//			RewardQueueData.AddReward(gen);
+//			FireCrystalManager.Instance.RewardShards(100);
 //		}
-//
+
 //		if(GUI.Button(new Rect(400, 100, 100, 100), "POP")){
 //			RewardQueueData.PopReward();
 //		}

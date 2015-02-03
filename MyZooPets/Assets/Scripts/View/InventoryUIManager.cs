@@ -12,8 +12,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public GameObject uiGridObject;
 	public GameObject spritePet;
 	public GameObject inventoryItemPrefab;
+	public Transform itemFlyToTransform;
 	private float collapsedPos = -164f;
-//	private GameObject fingerHintGO;
 	private Transform currentDragDropItem;
 
 	void Start(){
@@ -42,6 +42,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
 	public bool IsInventoryScrollable(){
 		return InventoryLogic.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+	}
+
+	public Vector3 GetItemFlyToPosition(){
+		return itemFlyToTransform.position;
 	}
 
 	/// <summary>

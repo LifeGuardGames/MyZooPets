@@ -18,6 +18,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public GameObject shardParent;
 	public float delayBetweenShards = 0.02f;
 	public Animation crystalAnimation;
+	public GameObject clickableFireCrystalPrefab;
 
 	private int totalSubdivisions = 100;
 	private float step = 0.005f;
@@ -93,7 +94,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			// Wait before starting
 			yield return new WaitForSeconds(delay);
 
-			for(int i = 0; i < numberOfShards; i++){
+			for(int i = 0; i < numberOfShards/2; i++){
 				GameObject shardObject = GameObjectUtils.AddChild(shardParent, shardSpritePrefab);
 				// Place the shard object on a random point on a circle around center
 				shardObject.transform.localPosition = 
@@ -157,23 +158,25 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	// Event callback from the crystal animation CrystalPop
 	public void CrystalPopDone(){
+		// Spawn a prefab that the user can click on and obtain
+		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
+
 		// Show the floaty for the crystal
-		Hashtable option = new Hashtable();
-		option.Add("parent", shardParent);
-		option.Add("deltaShards", "+1");
-		FloatyUtil.SpawnFloatyFireCrystal(option);
+//		Hashtable option = new Hashtable();
+//		option.Add("parent", shardParent);
+//		option.Add("deltaShards", "+1");
+//		FloatyUtil.SpawnFloatyFireCrystal(option);
 
 		// Reward the player the actual item - Fire crystal
-		InventoryLogic.Instance.AddItem("Usable1", 1);
+//		InventoryLogic.Instance.AddItem("Usable1", 1);
 	
 		//TODO check if it is in wellapad mode here
-		Invoke("CloseUI", 1f);
+//		Invoke("CloseUI", 1f);
 	}
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
-//			PopupAndRewardShards(100);
-////			CrystalPopDone();
+//			FireCrystalManager.Instance.RewardShards(100);
 //		}
 //	}
 }

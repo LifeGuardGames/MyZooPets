@@ -7,7 +7,7 @@ using System.Collections;
 /// </summary>
 
 public class AnimationControl : MonoBehaviour {
-	
+	public Animation thisAnimation;
 	public bool resetAfterStop = false;
 	private Vector3 originalPostion;
 	private Quaternion originalRotation;
@@ -31,18 +31,22 @@ public class AnimationControl : MonoBehaviour {
 		if(optionalToggle){
 			optionalToggle.SetActive(false);
 		}
+
+		if(thisAnimation == null){
+			thisAnimation = animation;
+		}
 	}
 
 	void Update(){
-		if(isLooping && isPlay && !animation.isPlaying){
-			animation.Play();
+		if(isLooping && isPlay && !thisAnimation.isPlaying){
+			thisAnimation.Play();
 		}
 	}
 	
 	public void Play(string animationName){
 		isPlay = true;
-		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
-		animation.Play(animationName);
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play(animationName);
 
 		if(optionalToggle){
 			optionalToggle.SetActive(true);
@@ -51,8 +55,8 @@ public class AnimationControl : MonoBehaviour {
 	
 	public void Play(bool isPlayParticle){
 		isPlay = true;
-		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
-		animation.Play();
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play();
 
 		if(optionalToggle){
 			optionalToggle.SetActive(true);
@@ -65,8 +69,8 @@ public class AnimationControl : MonoBehaviour {
 
 	public void Play(){
 		isPlay = true;
-		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
-		animation.Play();
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play();
 		
 		if(optionalToggle){
 			optionalToggle.SetActive(true);
@@ -78,12 +82,12 @@ public class AnimationControl : MonoBehaviour {
 	}
 
 	public bool IsPlaying(string animName){
-		return animation.IsPlaying(animName);
+		return thisAnimation.IsPlaying(animName);
 	}
 
 	public void Stop(){
 		isPlay = false;
-		animation.Stop();
+		thisAnimation.Stop();
 
 		if(optionalToggle){
 			optionalToggle.SetActive(false);
@@ -113,7 +117,7 @@ public class AnimationControl : MonoBehaviour {
 //				Play();
 //			}
 //			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
-	//				//Play("smallBounceHard");
+//					//Play("smallBounceHard");
 //				StopAndResetFrame("zero");
 //			}
 //		}

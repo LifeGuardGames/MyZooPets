@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class ShooterBasicEnemyAi:ShooterEnemyAi{
-	// Use this for initialization
+	// basic ai just handles moveing to the left and assigning values
 	void Start () {
 		speed = 2.5f;
 		scoreVal=1;

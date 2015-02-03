@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System;
 
 public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> {
-	public EventHandler<EventArgs> proceed;
-	public List<EnemyData> enemyList;
-	public int enemiesInWave = 0;
-	Wave waver;
-	Wave currWave;
+	public EventHandler<EventArgs> proceed;					//tutorial event handeler
+	public List<EnemyData> enemyList;						// list of the various enemy types
+	public int enemiesInWave = 0;							// the number of enemies in the current wave											
+	Wave currWave;											// our current wave
 
 	public void reset(){
 		enemiesInWave = 0;
@@ -21,7 +20,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	// builds a list of waves
 	public Wave buildWave (int _WaveNum){
-
+		Wave waver;	
 		int difficulty = 0;
 		if(_WaveNum==0){
 			difficulty = 0;
@@ -56,6 +55,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 			enemyList.Add(mob);
 
 		}
+		// if we are in tutorial generate the test wave
 		if(ShooterGameManager.Instance.inTutorial == true){
 			GenerateWave(0);
 		}
@@ -72,7 +72,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	// Spawns the current wave
 	public void SpawnWave(Wave currWave){
-
+		// here wed basically build an array of varying enemy types that array is then passed to the spawner manager
 		List<EnemyData> WaveEnemies;
 		WaveEnemies = new List<EnemyData>();
 		/*for (int i = 0; i < EnemiesInWave; i++){
@@ -93,7 +93,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 
 	}
 
-	// checks if all enemies are dead and if they are 
+	// checks if all enemies are dead and if they are beings day transition
 	public void CheckEnemiesInWave(){
 		if (enemiesInWave == 0){
 			if(ShooterGameManager.Instance.inTutorial){

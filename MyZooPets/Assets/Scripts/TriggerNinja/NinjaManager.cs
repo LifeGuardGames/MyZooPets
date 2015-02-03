@@ -453,10 +453,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			new SpawnGroupSwarms(listObjects);
 		}
 	}
+	// runs during a bonus round
 	IEnumerator BonusTime(){ 
+		// temp for visual
 		bonusLabel.SetActive(true);
+		// bonus round runs 10 seconds and then stop the spawns so the user can clean up
 		yield return new WaitForSeconds(10.0f);
 		spawning = false;
+		// after 5 seconds of clean up start spawning normal again
 		yield return new WaitForSeconds(5.0f);
 		bonusLabel.SetActive(false);
 		bonusRound = false;

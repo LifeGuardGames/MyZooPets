@@ -7,12 +7,14 @@ public class NinjaTutorial : MinigameTutorial {
 
 	private Animation swipeTutAnimation;
 	private GameObject swipeTutObject;
+	// one game object for each type of trigger
 	private GameObject trigger1Object;
 	private GameObject trigger2Object;
 	private GameObject trigger3Object;
 	private GameObject trigger4Object;
 	private GameObject trigger5Object;
 	private GameObject trigger6Object;
+	// number of triggers cut, this is a subsitute from having more steps
 	private int numOfTriggersCut;
 	  
     protected override void SetMaxSteps(){
@@ -38,6 +40,7 @@ public class NinjaTutorial : MinigameTutorial {
     protected override void ProcessStep(int step){
         switch(step){
             case 0:
+				// spawn each trigger
 				trigger1Object = NinjaManager.Instance.SpawnTriggersTutorial(1);
 				trigger2Object = NinjaManager.Instance.SpawnTriggersTutorial(2);
 				trigger3Object = NinjaManager.Instance.SpawnTriggersTutorial(3);
@@ -72,7 +75,7 @@ public class NinjaTutorial : MinigameTutorial {
     }
 
 	private void NinjaTriggerFirstCutEventHandler(object sender, EventArgs args){
-		
+		// convoluted way of removing the listener 
 		if(sender.ToString() == "NinjaTrigger1(Clone) (NinjaTriggerTarget)"){
 		trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
 		}

@@ -484,7 +484,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 85752165}
   m_Layer: 17
-  m_Name: Door
+  m_Name: DoorFlipped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -498,7 +498,7 @@ Transform:
   m_GameObject: {fileID: 85752164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 1963500351}
   m_Father: {fileID: 1056556714}
@@ -23773,7 +23773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inSky: 0
-  posSky: {fileID: 0}
+  posSky: {fileID: 680307735}
   isSun: 1
 --- !u!114 &1485915738
 MonoBehaviour:
@@ -26311,7 +26311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inSky: 0
-  posSky: {fileID: 0}
+  posSky: {fileID: 680307735}
   isSun: 0
 --- !u!1001 &1531856307
 Prefab:
@@ -29018,7 +29018,7 @@ MonoBehaviour:
   mPivot: 3
   mDepth: 9
   mAtlas: {fileID: 11400000, guid: 5308ec00f1af58b4ab72603b06a92793, type: 2}
-  mSpriteName: LoadingScreenRight512
+  mSpriteName: LoadingScreenFlip
   mFillCenter: 1
   mType: 0
   mFillDirection: 4
@@ -35420,7 +35420,7 @@ Transform:
   m_GameObject: {fileID: 1963500350}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 686.399841, y: 772.388062, z: 1}
+  m_LocalScale: {x: 686.399841, y: 772.388062, z: 0}
   m_Children: []
   m_Father: {fileID: 85752165}
   m_RootOrder: 0
@@ -35437,10 +35437,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 5
+  mPivot: 3
   mDepth: 20
   mAtlas: {fileID: 11400000, guid: 5308ec00f1af58b4ab72603b06a92793, type: 2}
-  mSpriteName: LoadingScreenLeft512
+  mSpriteName: LoadingScreenFlip
   mFillCenter: 1
   mType: 0
   mFillDirection: 4

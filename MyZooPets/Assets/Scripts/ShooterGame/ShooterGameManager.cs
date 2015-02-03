@@ -76,7 +76,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 		if(startTime <= Time.time-shootTime){
 		if(!IsTouchingNGUI(e.Position)){
-		
+	// this handles mouse look the actual overall picture is spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
 		
 			Vector3 TouchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);

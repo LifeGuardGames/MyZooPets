@@ -10,6 +10,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	private GameObject fingerTutorialPrefab;
 	private GameObject fingerTutorialObject;
 	private Animation fingerTutorialAnimation;
+	// handles multiple sprites needed for completeion 
 	private int numOfCompleteions = 0;
 
 	protected override void SetMaxSteps(){
@@ -65,8 +66,10 @@ public class DoctorMatchTutorial : MinigameTutorial {
 				SetUpCharacterGroup(1);
 				zone1Collider.enabled = true;
 				zone2Collider.enabled = false;
+				// greys out non active collider
 				zone2Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				zone3Collider.enabled = false;
+				// greys out non active collider
 				zone3Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				fingerTutorialAnimation.Play("DoctorTut1");
 			break;
@@ -97,7 +100,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 			break;
 		}
 	}
-
+	// spawns the two sprites associated with the situation
 	private void SetUpCharacterGroup(int itemGroupNumber){
 		GameObject[] stepItem = new GameObject[2];
 		for (int i = 0; i <2; i++){
@@ -113,6 +116,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 
 	private void OnCharacterScoredRightEventHandler(object sender, EventArgs args){
 		numOfCompleteions++;
+		// handles more than one completion
 		if(numOfCompleteions == 2){
 			numOfCompleteions = 0;
 		DoctorMatchManager.OnCharacterScoredRight -= OnCharacterScoredRightEventHandler;

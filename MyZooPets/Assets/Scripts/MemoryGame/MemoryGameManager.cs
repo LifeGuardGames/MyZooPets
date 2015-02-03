@@ -70,7 +70,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver(){
 		memoryUI.FinishBoard();
-		// TODO add badges
 	}
 
 	private void GameStateChange(object sender, GameStateArgs args){

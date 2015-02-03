@@ -26,7 +26,12 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	public Sprite[] spriteList;
 
-	private int numOfCorrectDiagnose; //keep track of the number of correct diagnose
+	private int numOfCorrectDiagnose;
+	public int NumOfCorrectDiagnose{
+		get{ return numOfCorrectDiagnose; }
+	}
+
+ //keep track of the number of correct diagnose
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -59,7 +64,6 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	protected override void _GameOver(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
 
 	protected override void _Update(){

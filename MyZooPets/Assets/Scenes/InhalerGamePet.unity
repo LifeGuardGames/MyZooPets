@@ -2806,6 +2806,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 100390032}
+  - 114: {fileID: 100390034}
   - 114: {fileID: 100390033}
   m_Layer: 10
   m_Name: FireCrystalPanelUI
@@ -2848,6 +2849,45 @@ MonoBehaviour:
   shardParent: {fileID: 1511661062}
   delayBetweenShards: .100000001
   crystalAnimation: {fileID: 1108148862}
+--- !u!114 &100390034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400014, guid: 5fbc728de123f814e8910c3fc1b1f961,
+    type: 2}
+  m_PrefabInternal: {fileID: 878072082}
+  m_GameObject: {fileID: 100390031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 384
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 384
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 384
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
 --- !u!1 &102186388
 GameObject:
   m_ObjectHideFlags: 0
@@ -6384,7 +6424,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnDestroy
@@ -9912,7 +9952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &440341768
 MonoBehaviour:
   m_ObjectHideFlags: 0

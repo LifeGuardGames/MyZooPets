@@ -271,7 +271,7 @@ public abstract class Tutorial{
 	//	Button1Label(string): what does the button say
 	//	ShrinkBgToFitText(bool): default to T. background size is automatically adjusted to fit label
 	//---------------------------------------------------
-	protected void ShowPopup(string popupKey, Vector3 location, bool useViewPort=true, Hashtable option=null){
+	protected void ShowPopup(string popupKey, Vector3 location, Hashtable option=null){
 		if(goPopup)
 			GameObject.Destroy(goPopup);
 
@@ -289,19 +289,11 @@ public abstract class Tutorial{
 		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
 			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
 
-		//viewport kind of broken..... don't use
-		if(useViewPort){
-			// transform viewport location to screen position, then from bottom left to center
-			newPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.CameraMain, location);
-			newPos = CameraManager.Instance.TransformAnchorPosition(newPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
-			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
-		}
-
 		// create the popup
 		GameObject goResource = Resources.Load(popupKey) as GameObject;
 		goPopup = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
 //		newPos.z = goPopup.transform.position.z; // keep the default z-value
-		goPopup.transform.localPosition = newPos;				
+		goPopup.transform.localPosition = newPos;
 		
 		//feed the script the option hashtable		
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();

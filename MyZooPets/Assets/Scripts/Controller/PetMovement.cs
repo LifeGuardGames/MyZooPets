@@ -156,9 +156,6 @@ public class PetMovement : Singleton<PetMovement>{
 			ClickManager.Instance.AddTemporaryException(ClickLockExceptions.Moving);
 			
 			//Transform pet position to screen point first so we can move the pet to the right y position
-//			Vector2 petPosInScreenPoint = mainCamera.WorldToScreenPoint(petSprite.transform.position);
-//			MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, petPosInScreenPoint.y, 0)));
-
 			MovePet(mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, movementStaticScreenY, 0)));
 		}
 	}
@@ -199,17 +196,19 @@ public class PetMovement : Singleton<PetMovement>{
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
 		// take so long for the pet to move to its new destination.
 		if(!petSprite.renderer.isVisible){
-			// get the point right off screen
-			float startingLocationX = Constants.GetConstant<float>("FromX");
+			// Get the point right off screen in viewport coordinates
+			float viewportOffsetX = Constants.GetConstant<float>("ViewportOffsetX");
+
+			// Add 1 to the viewport offset if the pet coming from left or right
 			float locationDifference = raycastHitPosition.x - petSprite.transform.position.x;
-			startingLocationX = locationDifference < 0 ? 1 + startingLocationX : -startingLocationX; 				// the point varies if the pet is coming from the right or left
+			viewportOffsetX = locationDifference < 0 ? 1 + viewportOffsetX : -viewportOffsetX;
 			
 			// also, the viewport y varies and is based on where the player is moving to
 			Vector3 viewPortPointOfRaycastLoc = Camera.main.WorldToViewportPoint(raycastHitPosition);
 			float startLocationY = viewPortPointOfRaycastLoc.y;
 			
 			// change the y and z because we really only want the x.  if we don't change the z the pet kind of appears too big
-			Vector3 targetPosition = Camera.main.ViewportToWorldPoint(new Vector3(startingLocationX, startLocationY, raycastHitPosition.z));
+			Vector3 targetPosition = Camera.main.ViewportToWorldPoint(new Vector3(viewportOffsetX, startLocationY, raycastHitPosition.z));
 			targetPosition.y = raycastHitPosition.y;
 			targetPosition.z = raycastHitPosition.z;
 			

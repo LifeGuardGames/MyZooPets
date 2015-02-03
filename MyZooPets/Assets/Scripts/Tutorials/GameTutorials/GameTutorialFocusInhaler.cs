@@ -70,7 +70,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, message);
 		
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 	}
 
 	/// <summary>

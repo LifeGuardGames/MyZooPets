@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 		// amount is 0 or less remove the listener
 		else{
-			changeInHealth -= ShooterGameManager.Instance.healthUpdate;
+			changeInHealth -= ShooterGameManager.Instance.HealthUpdate;
 		}
 	}
 

@@ -11,7 +11,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public float shootTime;
 	private float startTime;
 	public int waveNum = 0;
-	public bool inTutorial= false;
+	public bool inTutorial = false;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -38,14 +38,12 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _NewGame(){
 
-		if(IsTutorialOverride())
-		{
+		if(IsTutorialOverride()){
 			inTutorial = true;
 			StartTutorial();
 		}
-
 		else{
-			PlayerShooterController.Instance.changeInHealth+=healthUpdate;
+			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
 			ShooterSpawnManager.Instance.reset();
 			ShooterGameEnemyController.Instance.reset();
@@ -74,31 +72,30 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			if(proceed != null)
 				proceed(this, EventArgs.Empty);
 		}
-		if(startTime <= Time.time-shootTime){
-		if(!IsTouchingNGUI(e.Position)){
+		if(startTime <= Time.time - shootTime){
+			if(!IsTouchingNGUI(e.Position)){
 	// this handles mouse look the actual overall picture is spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
 		
-			Vector3 TouchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-			PlayerShooterController.Instance.shoot(TouchPos);
+				Vector3 TouchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
+				PlayerShooterController.Instance.shoot(TouchPos);
 #endif
 #if UNITY_EDITOR
-		Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-			PlayerShooterController.Instance.shoot(mousePos);
+				Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
+				PlayerShooterController.Instance.shoot(mousePos);
 #endif
 			}
 			startTime = Time.time;
 		}
 	}
 
-	public void AddScore(int amount)
-	{
+	public void AddScore(int amount){
 		UpdateScore(amount);
 	}
 
 	public void ChangeWaves(){
 		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
-			waveNum++;
+		waveNum++;
 		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
 	}
 
@@ -123,21 +120,25 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 		return isOnNGUILayer;
 	}
-	public Coroutine sync(){
+
+	public Coroutine Sync(){
 		return StartCoroutine(PauseRoutine()); 
 	}
+
 	public IEnumerator PauseRoutine(){
-		while (ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
+		while(ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
 			yield return new WaitForFixedUpdate();
 		}
 		yield return new WaitForEndOfFrame();
 	}
+
 	private void StartTutorial(){
 		SetTutorial(new ShooterGameTutorial());
 	}
-	public void healthUpdate(object sender, EventArgs args){
+
+	public void HealthUpdate(object sender, EventArgs args){
 		UpdateLives(-1);
 		UpdateLives(4);
-		PlayerShooterController.Instance.changeInHealth-=healthUpdate;	
+		PlayerShooterController.Instance.changeInHealth -= HealthUpdate;	
 	}
 }

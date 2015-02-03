@@ -30,7 +30,7 @@ public abstract class SpawnGroup{
 			Debug.LogError("Incorrect number of objects to be spawned for " + this);
 			return;
 		}
-		Debug.Log(this);
+
 		// if the count is good, let's spawn the objects
 		SpawnObjects(listObjects);
 	}

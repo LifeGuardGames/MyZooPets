@@ -20,5 +20,8 @@ public class MinigamePopup_GameOver_DGT : MinigamePopup_GameOver {
 	//---------------------------------------------------		
 	protected override int GetScore () {
 		return DGTManager.Instance.GetScore();
-	}	
+	}
+
+	protected override void _RewardBadges(){
+	}
 }

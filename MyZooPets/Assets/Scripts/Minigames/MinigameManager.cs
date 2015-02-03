@@ -491,40 +491,43 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Returns the standard reward for a minigame, which
 	// is the player's score divided by some constant.
 	//---------------------------------------------------	
-	protected int GetStandardReward(MinigameRewardTypes eType){
-		int nReward = 0;
-		string strConstant = null;
-		string strKey = GetMinigameKey();
+	protected int GetStandardReward(MinigameRewardTypes rewardType){
+		int rewardAmount = 0;
+		string modifierKey = null;
+		string minigameKey = GetMinigameKey();
 		
-		switch(eType){
+		switch(rewardType){
 		case MinigameRewardTypes.Money:
-			strConstant = strKey + "_StandardMoney";
+			modifierKey = minigameKey + "_StandardMoney";
+			break;
+		case MinigameRewardTypes.Shard:
+			modifierKey = minigameKey + "_StandardShard";
 			break;
 		case MinigameRewardTypes.XP:
-			strConstant = strKey + "_StandardXP";
+			modifierKey = minigameKey + "_StandardXP";
 			break;
 		default:
-			Debug.LogError("Unhandled minigame reward type: " + eType);
+			Debug.LogError("Unhandled minigame reward type: " + rewardType);
 			break;
 		}
 		
-		int nScore = GetScore();
+		int score = GetScore();
 		
-		if(eType == MinigameRewardTypes.XP){
+		if(rewardType == MinigameRewardTypes.XP){
 			// whoops, things changed, so I'm implementing this as a quick hack for now...
 			// to get xp we now use another system
 			Hashtable hashBonus = new Hashtable();
-			hashBonus["Score"] = nScore.ToString();
-			nReward = DataLoaderXpRewards.GetXP(strKey, hashBonus);
+			hashBonus["Score"] = score.ToString();
+			rewardAmount = DataLoaderXpRewards.GetXP(minigameKey, hashBonus);
 		}
-		else if(!string.IsNullOrEmpty(strConstant)){
+		else if(!string.IsNullOrEmpty(modifierKey)){
 			// the standard reward is the player's score divided by some constant
-			int nStandard = Constants.GetConstant<int>(strConstant);			
-			nReward = nScore / nStandard;
+			int modifier = Constants.GetConstant<int>(modifierKey);			
+			rewardAmount = score / modifier;
 		}
 		
-		//Debug.Log("Reward for " + eType + " is " + nReward);
+		Debug.Log("Reward for " + rewardType + " is " + rewardAmount);
 		
-		return nReward;
+		return rewardAmount;
 	}
 }

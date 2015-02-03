@@ -8,7 +8,6 @@ using System;
 /// Stats reward, badge reward, and fire crystal reward
 /// This is done through a queue that makes sure one is done animating before the other is called.
 /// </summary>
-
 public class RewardManager : Singleton<RewardManager> {
 
 	public static EventHandler<EventArgs> OnAllRewardsDone;
@@ -43,19 +42,24 @@ public class RewardManager : Singleton<RewardManager> {
 	/// </summary>
 	/// <param name="notificationEntry">Notification entry.</param>
 	public void AddToRewardQueue(RewardQueueData.GenericDelegate functionToCall){
+//		Debug.Log("ADD TO REWARD QUEUE");
 		RewardQueueData.AddReward(functionToCall);
 		
 		if(!isRewardingActive){
+//			Debug.Log(" Reward queue empty");
 			TryNextReward();
+		}else{
+//			Debug.Log(" Reward queue FULL");
 		}
 	}
 
 	public void TryNextReward(object sender, EventArgs args){
+//		Debug.Log("TRY NEXT REWARD CALLBACK");
 		TryNextReward();
 	}
 
 	public void TryNextReward(){
-		Debug.Log("TRYING NEXT");
+//		Debug.Log("TRYING NEXT");
 		if(!RewardQueueData.IsEmpty()){
 			isRewardingActive = true;
 			isAnimationDoneCheck = true;
@@ -63,7 +67,7 @@ public class RewardManager : Singleton<RewardManager> {
 			functionToCall();
 		}
 		else{	// End condition here
-			Debug.Log("DONE");
+//			Debug.Log("DONE");
 			isRewardingActive = false;
 
 			// Called only when it has animated and finished

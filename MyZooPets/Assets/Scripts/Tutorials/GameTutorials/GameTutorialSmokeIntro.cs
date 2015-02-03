@@ -137,49 +137,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	private void OnLeftPanDone(){
 		Advance();	
 	}
-	
-	/// <summary>
-	/// Setups the swipe listener.
-	/// Creates a giant collider on the screen that listens to the swipe event.
-	/// This is an easier way to do swipe during tutorial
-	/// </summary>
-//	private void SetupSwipeListener(){
-//		//check for right anchor
-//		GameObject anchorRight = GameObject.Find("Anchor-Right");
-//		string tutKey = GetKey() + "_" + GetStep();
-//
-//		if(anchorRight == null)
-//			Debug.LogError(tutKey + " Needs anchor right");
-//
-//		//spawn the giant collider
-//		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
-//		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
-//		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
-//
-//		//show finger hint
-//		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
-//
-//		// show message
-//		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-//		string tutMessage = Localization.Localize(tutKey);
-//		Hashtable option = new Hashtable();
-//
-//		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-//		option.Add(TutorialPopupFields.Message, tutMessage);
-//
-//		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
-//	}
 
-//	private void OnTutorialSwiped(object sender, EventArgs args){
-//		//clean up
-//		RemoveFingerHint();
-//
-//		if(swipeGO != null)
-//			GameObject.Destroy(swipeGO);
-//
-//		//advance in tutorial
-//		Advance();
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "TEST")){
+			FocusOnRightArrow();
+		}
+	}
 
 	private void FocusOnRightArrow(){
 		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();
@@ -193,6 +156,11 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		AddToProcessList(rightArrowObject);
 
 		RoomArrowsUIManager.Instance.ShowRightArrow();
+
+		// spotlight the wellapad
+		SpotlightObject(rightArrowObject, true, InterfaceAnchors.Right, 
+		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0f);
+
 		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
 
 		// show message
@@ -203,13 +171,14 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 		
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, location, option: option);
 	}
 
 	private void RightArrowClicked(object sender, EventArgs args){
 		LgButton button = (LgButton)sender;
 		button.OnProcessed -= RightArrowClicked;
 
+		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
 		Advance();

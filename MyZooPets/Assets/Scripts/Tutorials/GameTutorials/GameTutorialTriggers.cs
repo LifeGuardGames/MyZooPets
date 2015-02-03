@@ -141,7 +141,7 @@ public class GameTutorialTriggers : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, option: option);
 	
 		// spotlight the dust
 		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);

@@ -97,8 +97,13 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         //Check if a new badge can be unlocked. Multiple badges of the same type 
         //can be unlock at the same time
-        foreach(Badge badge in sortedBadgesType)
-            CheckUnlockProgress(badge, latestProgress);
+		bool badgeUnlocked = false;
+        foreach(Badge badge in sortedBadgesType){
+			bool unlockFlag = CheckUnlockProgress(badge, latestProgress);
+			if(unlockFlag == true){
+				badgeUnlocked = true;
+			}
+		}
 
         //Check if all badges of the same type have been unlocked
         foreach(Badge badge in sortedBadgesType){

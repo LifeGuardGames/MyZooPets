@@ -70,7 +70,7 @@ public class RunnerTutorial : MinigameTutorial {
                 break;      
         }       
 
-        ShowPopup(strResourceKey, vPos, false, option);
+        ShowPopup(strResourceKey, vPos, option);
     }
 
     private void TutorialJump(object sender, EventArgs args){

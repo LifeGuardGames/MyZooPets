@@ -11,7 +11,7 @@ public class MutableDataStats{
     public int Stars {get; set;} //currency of the game
     public int Health {get; set;} //pet's Health
     public int Mood {get; set;} //pet's mood (refer to as hungry)
-
+	public int Shards {get; set;}	// Shard count, get out of 100 for now
 	
 	// constants
 	// if the pet's mood <= this number, it will be sad
@@ -32,7 +32,8 @@ public class MutableDataStats{
         Health = 80;
         Mood = 80;
         Points = 0;
-		Stars = 30000;
+		Stars = 200;
+		Shards = 0;
     }
 	
     //==============StatsModifiers================
@@ -95,6 +96,18 @@ public class MutableDataStats{
             Mood = 0;
         }
     }
+
+	// The animation takes care of rewarding the crystal after 100 shard... take care of it here?
+	public void AddShard(int val){
+		Shards += val;
+		if(Shards >= 100){
+			ResetShard();
+		}
+	}
+
+	public void ResetShard(){
+		Shards = 0;
+	}
 
 	/// <summary>
 	/// Gets the state of the mood. Based on the numerical value of the mood stat,

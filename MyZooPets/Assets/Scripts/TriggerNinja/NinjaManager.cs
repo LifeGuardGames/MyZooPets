@@ -44,7 +44,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		chain++;
 		if(chain%25 == 0){
 			bonusRound = true;
-			StartCoroutine("BonusTime");
 		}
 	}
 	public void resetChain(){
@@ -181,7 +180,9 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		if(IsTutorialRunning()) return;
 
 		float deltaTime = Time.deltaTime;
-		
+		if(bonusRound == true){
+		StartCoroutine("BonusTime");
+		}
 		// update the player's combo
 		UpdateComboTimer(deltaTime);
 		

@@ -181,7 +181,7 @@ public class DGTManager : MinigameManager<DGTManager>{
 	// _GameOver()
 	//---------------------------------------------------		
 	protected override void _GameOver(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, numOfCorrectDiagnose, true);
 	}
 
 	//---------------------------------------------------

@@ -17,6 +17,6 @@ public class MinigamePopup_GameOver_DoctorMatch : MinigamePopup_GameOver{
 	}	
 	
 	protected override void _RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, DoctorMatchManager.Instance.NumOfCorrectDiagnose, true);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, DoctorMatchManager.Instance.NumOfCorrectDiagnose, true);
 	}
 }

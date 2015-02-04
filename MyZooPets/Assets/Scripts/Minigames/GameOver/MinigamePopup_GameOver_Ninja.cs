@@ -16,6 +16,6 @@ public class MinigamePopup_GameOver_Ninja : MinigamePopup_GameOver {
 	}
 
 	protected override void _RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.NinjaScore, NinjaManager.Instance.GetScore(), true);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Ninja, NinjaManager.Instance.GetScore(), true);
 	}
 }

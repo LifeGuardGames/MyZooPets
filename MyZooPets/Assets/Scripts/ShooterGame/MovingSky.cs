@@ -9,7 +9,7 @@ public class MovingSky : MonoBehaviour {
 	void Start () {
 
 		// then set the bool value based on where we are
-		if (transform.position == posSky.position){
+		if (isSun){
 			inSky = true;
 		}
 		else{

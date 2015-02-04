@@ -91,12 +91,16 @@ public enum TutorialPopupFields{
 
 public enum BadgeType{
     Level,
-    RunnerDistance,
-    PatientNumber,
-    Decoration,
-    Inhaler,
-    Coin,
-	NinjaScore
+	Inhaler,
+	Return, 	// How many times in a row the user returns.
+	Coin,
+	Decoration,
+	Accessory,
+	Ninja,
+	Memory,
+	DoctorMatch,
+    Runner,
+	Shooter,
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!

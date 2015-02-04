@@ -27,9 +27,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		posList.Add(thirdPos.transform.position);
 		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
 	}
+	// prevents finishing the last wave
 	public void reset(){
 		StopCoroutine("SpawnEnemies");
 	}
+
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
 		switch(eState){
@@ -44,6 +46,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			break;
 		}
 	}
+
 	public void spawnTrigger(List<EnemyData> enemy){
 		//Debug.Log(enemy.Count);
 	/*	if(EnemySpawnCount<=0){
@@ -51,6 +54,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		}*/
 		StartCoroutine("SpawnEnemies");
 	}
+
 	void Update(){
 		/*if(IsSpawing == true){
 			if(LastSpawn<= Time.time-SpawnTime){
@@ -60,6 +64,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 
 	}
+
+	//Spawns all enemies in the list waiting 1 sec inbetween 
 	IEnumerator SpawnEnemies(){
 		for (int i = 0; i<enemy.Count;i++){
 			if (isSpawing == false){
@@ -67,6 +73,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			}
 			yield return new WaitForSeconds(1.0f);
 			int rand = Random.Range(0,3);
+			//they are spawned in more of a weighted list fashion 
+			//so while one of the first waves has only one hard enemy in it it can spawn more than one
 			int RandomSpawn = Random.Range(0, enemy.Count);
 			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
 			enemy1.GetComponent<Enemy>().name = enemy[0].name;

@@ -21,7 +21,7 @@ public class ShooterMediumEnemyAi : ShooterEnemyAi{
 			LeanTween.move(this.gameObject,bottom.transform.position,speed).setOnComplete(MoveAgain);
 			}
 		}
-
+	// moves once movement is complete makes a zigzag
 	void MoveAgain(){
 		LeanTween.move(this.gameObject,player.transform.position,speed);
 	}

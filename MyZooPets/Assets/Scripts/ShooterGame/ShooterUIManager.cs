@@ -40,6 +40,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		sun.transform.position = posSky.position;
 		moon.transform.position = posBottom.position;
 	}
+
 	// changes the sun to moon or moon to sun and then sets off the next transition once it is complete
 	public void AChangeOfTimeActOne(){
 		if(!ShooterGameManager.Instance.inTutorial){
@@ -56,6 +57,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			LeanTween.move(sun, posBottom.position, 2.0f);
 		}
 	}
+
 	// does the opposite of act 2 and then changes to the next wave
 	public void AChangeOfTimeActTwo(){
 		MovingSky sunScript = sun.GetComponent<MovingSky>();

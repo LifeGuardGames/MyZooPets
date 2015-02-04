@@ -21,7 +21,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
 	//on button Tap
 	public void ShooterGameInhalerButton(){
+		// if they can use the inhaler reward them with health and points
 		if(CanUseInhalerButton == false){
+			// if its the tutorial go to next step
 			if(ShooterGameManager.Instance.inTutorial==true){
 					if(proceed != null)
 						proceed(this, EventArgs.Empty);
@@ -31,7 +33,6 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			CanUseInhalerButton =! CanUseInhalerButton;
 		}
 		else if(CanUseInhalerButton == true){
-			Debug.Log("anasegs");
 		}
 	}
 }

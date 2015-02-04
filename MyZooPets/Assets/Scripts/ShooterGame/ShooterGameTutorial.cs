@@ -15,7 +15,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		case 0:
 			ShooterGameManager.Instance.proceed +=MoveAlong;
 			//prompt user to shoot
-			pressHere = (GameObject)Resources.Load("ShooterTuTorial");
+			pressHere = (GameObject)Resources.Load("ShooterTutorial");
 			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies

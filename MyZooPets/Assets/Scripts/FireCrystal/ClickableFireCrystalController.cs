@@ -4,12 +4,14 @@ using System.Collections;
 public class ClickableFireCrystalController : MonoBehaviour{
 	public AnimationControl animControl;
 	public GameObject animParent;
+	public Collider thisCollider;
 
 	void Start(){
 		animControl.Play();
 	}
 
 	public void ObjectClicked(){
+		thisCollider.enabled = false;
 		LeanTween.move(this.gameObject, InventoryUIManager.Instance.GetItemFlyToPosition(), 1f)
 			.setEase(LeanTweenType.easeOutQuad)
 			.setOnComplete(RewardPlayerFireCrystal);

@@ -30,6 +30,14 @@ public class ShooterHardEnemyAi:ShooterEnemyAi {
 			LeanTween.move(this.gameObject,Bottom.transform.position,speed).setOnComplete(ShootSmogBall);
 		}
 	}
+	void AndAgain(){
+		if (transform.position == skyPos.transform.position){
+			LeanTween.move(this.gameObject,Bottom.transform.position,speed).setOnComplete(ShootSmogBall);
+		}
+		else {
+			LeanTween.move(this.gameObject,skyPos.transform.position,speed).setOnComplete(ShootSmogBall);
+		}
+	}
 	// shoots a smog ball at the player
 	void ShootSmogBall(){
 		GameObject instance = Instantiate(bulletPrefab,this.gameObject.transform.position,bulletPrefab.transform.rotation)as GameObject;
@@ -38,7 +46,7 @@ public class ShooterHardEnemyAi:ShooterEnemyAi {
 	}
 	// gives a 2 sec breather between shots
 	IEnumerator HoldaSec(){
-		yield return new WaitForSeconds(2.0f);
-		MoveAgain();
+		yield return new WaitForSeconds(1.0f);
+		AndAgain();
 	}
 }

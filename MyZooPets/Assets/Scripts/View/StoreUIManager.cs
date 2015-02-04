@@ -369,24 +369,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
 					resizer.enabled = true;	// Resize automatically
 
-					if(unlockedDecoList != null){
-						// If the gate xml has the deco type allowed, enable button
-						if(unlockedDecoList.Contains(tabParent.name)){
-							ShowActiveTab(tabParent.FindChild("Tab"));
-						}
-						// Else disable button
-						else{
-							ShowInactiveTab(tabParent.FindChild("Tab"));
-						}
+					// If the gate xml has the deco type allowed, enable button
+					if(unlockedDecoList.Contains(tabParent.name)){
+						ShowActiveTab(tabParent.FindChild("Tab"));
 					}
-					// Default case where no gates are unlocked yet, just unlock carpet
+					// Else disable button
 					else{
-						if(tabParent.name == "Carpet"){
-							ShowActiveTab(tabParent.FindChild("Tab"));
-						}
-						else{
-							ShowInactiveTab(tabParent.FindChild("Tab"));
-						}
+						ShowInactiveTab(tabParent.FindChild("Tab"));
 					}
 				}
 				else{

@@ -8,10 +8,9 @@ using System.Collections.Generic;
 /// The reason why this class exists is for layout purposes.
 /// In the future if we want to shuffle the card this is the place to do it.
 /// </summary>
-public class MemoryBoardController : MonoBehaviour {
-
+public class MemoryBoardController : MonoBehaviour{
 	public static int ROW_COUNT = 4;
-	public static int COLUMN_COUNT = 5;	// TODO 16 cards instead of 20
+	public static int COLUMN_COUNT = 4;
 	const float DISTANCE_UNIT = 2.2f;
 
 	private List<GameObject> cardList = new List<GameObject>(); // Card array, there is 20 of them

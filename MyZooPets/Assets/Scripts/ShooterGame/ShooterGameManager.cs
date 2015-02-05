@@ -11,7 +11,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public float shootTime;
 	private float startTime;
 	public int waveNum = 0;
-	public bool inTutorial = false;
+	public bool inTutorial;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -29,7 +29,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override bool IsTutorialOn(){
-		return false;	//TODO Change
+		return true;	//TODO Change
 	}
 	
 	protected override bool HasCutscene(){
@@ -38,8 +38,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _NewGame(){
 
-		if(IsTutorialOverride()){
-			inTutorial = true;
+//		if(IsTutorialOverride() && IsTutorialOn()){
+		if(inTutorial){
+			ShooterUIManager.Instance.Reset();
+			PlayerShooterController.Instance.reset();
 			StartTutorial();
 		}
 		else{

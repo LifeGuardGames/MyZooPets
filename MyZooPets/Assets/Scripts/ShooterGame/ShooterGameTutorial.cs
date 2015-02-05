@@ -15,7 +15,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		case 0:
 			ShooterGameManager.Instance.proceed +=MoveAlong;
 			//prompt user to shoot
-			pressHere = (GameObject)Resources.Load("ShooterTutorial");
+			pressHere = (GameObject)Resources.Load("ShooterTuTorial");
 			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
@@ -36,6 +36,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
 		case 3:
+			GameObject.Destroy(tutorialInhalerUse);
 			ShooterGameManager.Instance.proceed -=MoveAlong;
 			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
 			DestroyPrefabsClone = tutBoards;

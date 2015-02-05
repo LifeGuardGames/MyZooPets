@@ -12,6 +12,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float startTime;
 	public int waveNum = 0;
 	public bool inTutorial;
+	private int missed; 
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
@@ -47,6 +48,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		else{
 			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
+			missed = 0;
 			ShooterSpawnManager.Instance.reset();
 			ShooterGameEnemyController.Instance.reset();
 			ShooterUIManager.Instance.Reset();
@@ -56,6 +58,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void reset(){
 		waveNum = 0;
+		missed = 0;
 		ShooterGameEnemyController.Instance.reset();
 		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.reset();
@@ -97,6 +100,13 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void ChangeWaves(){
 		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
+		if(ShooterInhalerManager.Instance.hit == false){
+			missed++;
+			if(missed >= 2){
+				PlayerShooterController.Instance.removeHealth(-2);
+			}
+		}
+		ShooterInhalerManager.Instance.hit = false;
 		waveNum++;
 		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
 	}

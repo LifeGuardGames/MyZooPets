@@ -7,6 +7,7 @@ using System;
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
+	public bool hit = false;
 	public GameObject badTiming;
 	public GameObject[] goodFX;
 	public bool CanUseInhalerButton{
@@ -22,6 +23,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
 	//on button Tap
 	public void ShooterGameInhalerButton(){
+		hit = true;
 		// if they can use the inhaler reward them with health and points
 		if(CanUseInhalerButton == false){
 			if(ShooterGameManager.Instance.inTutorial==true){
@@ -36,7 +38,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			}
 		}
 		else if(CanUseInhalerButton == true){
-				badTiming.SetActive(true);
+			badTiming.SetActive(true);
 			StartCoroutine(HoldIt());
 		}
 	}

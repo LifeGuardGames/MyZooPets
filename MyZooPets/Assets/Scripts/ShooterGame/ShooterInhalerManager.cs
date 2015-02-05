@@ -7,7 +7,8 @@ using System;
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
-
+	public GameObject tooEarly;
+	public GameObject tooLate;
 	public bool CanUseInhalerButton{
 		get{
 			return canUseInhalerButton;

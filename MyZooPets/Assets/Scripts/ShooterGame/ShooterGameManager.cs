@@ -72,7 +72,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		//BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
 	}
 
-	void OnTap(TapGesture e){
+	public void ClickIt(TapGesture e){
 		if(inTutorial){
 			if(proceed != null)
 				proceed(this, EventArgs.Empty);

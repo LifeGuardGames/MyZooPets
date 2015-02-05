@@ -5,10 +5,10 @@ using System;
 
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
-
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
-
+	public GameObject tooEarly;
+	public GameObject tooLate;
 	public bool CanUseInhalerButton{
 		get{
 			return canUseInhalerButton;
@@ -23,10 +23,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public void ShooterGameInhalerButton(){
 		// if they can use the inhaler reward them with health and points
 		if(CanUseInhalerButton == false){
-			// if its the tutorial go to next step
 			if(ShooterGameManager.Instance.inTutorial==true){
-					if(proceed != null)
-						proceed(this, EventArgs.Empty);
+				if(proceed != null)
+					proceed(this, EventArgs.Empty);
 			}
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.removeHealth(3);

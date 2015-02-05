@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ShooterUIManager :Singleton<ShooterUIManager>{
+
 	public GameObject sun;
 	public GameObject moon;
 	public Transform posSky;
@@ -54,10 +56,13 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			}
 		}
 		else{
-			LeanTween.move(sun, posBottom.position, 2.0f);
+			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(tutChange);
 		}
 	}
-
+	public void tutChange(){
+		// if its the tutorial go to next step
+		LeanTween.move(moon, posSky.position, 2.0f);
+	}
 	// does the opposite of act 2 and then changes to the next wave
 	public void AChangeOfTimeActTwo(){
 		MovingSky sunScript = sun.GetComponent<MovingSky>();
@@ -73,5 +78,6 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}
+
 	}
 }

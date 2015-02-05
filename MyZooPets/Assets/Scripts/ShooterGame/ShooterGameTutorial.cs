@@ -15,7 +15,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		case 0:
 			ShooterGameManager.Instance.proceed +=MoveAlong;
 			//prompt user to shoot
-			pressHere = (GameObject)Resources.Load("ShooterTutorial");
+			pressHere = (GameObject)Resources.Load("ShooterTuTorial");
 			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),pressHere);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
@@ -33,15 +33,33 @@ public class ShooterGameTutorial : MinigameTutorial {
 			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
 			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
 			break;
+		
+		// the user must defeat the first wave which is simply a wave of 5 basic enemies
+		case 3:
+			GameObject.Destroy(tutorialInhalerUse);
+			ShooterGameManager.Instance.proceed -=MoveAlong;
+			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
+			DestroyPrefabsClone = tutBoards;
+			GameObject.Destroy(DestroyPrefabsClone);
+			ShooterGameEnemyController.Instance.BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
+		break;
+		//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
+		case 4:
+			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
+			ShooterInhalerManager.Instance.proceed +=MoveAlong;
+			UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
+			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
+		break;
 		}
 	}
+
 
 	protected override void SetKey(){
 		tutorialKey = TUT_KEY;
 	}
 
 	protected override void SetMaxSteps(){
-		maxSteps = 3;
+		maxSteps = 6;
 	}
 	// oce we are done destroy the remaining board and reset for round 1
 	protected override void _End(bool isFinished){

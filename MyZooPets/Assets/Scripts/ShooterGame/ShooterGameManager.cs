@@ -114,6 +114,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// Update is called once per frame
 	protected override void _Update(){
 	}
+
 	//True: if finger touches NGUI 
 	/// <summary>
 	/// Determines whether if the touch is touching NGUI element

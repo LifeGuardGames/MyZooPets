@@ -29,6 +29,7 @@ public class MemoryCard : MonoBehaviour {
 
 	private GameObject tweeningContentParent;
 	private GameObject tweeningCoverParent;
+	private ParticleSystem triggerTypeParticle;
 
 	private bool isClickable = true;	// When the card is showing/animating lock the click, internal check of card state
 
@@ -56,6 +57,10 @@ public class MemoryCard : MonoBehaviour {
 
 		// Hide the original card content until its clicked
 		tweeningContentParent.SetActive(false);
+
+		// Assign the respective trigger type particle
+		GameObject particlePrefab = Resources.Load(triggerData.TypeParticlePrefab) as GameObject;
+		triggerTypeParticle = GameObjectUtils.AddChild(this.gameObject, particlePrefab).particleSystem;
 	}
 
 	void OnTap(TapGesture gesture){
@@ -107,11 +112,13 @@ public class MemoryCard : MonoBehaviour {
 
 	private void FlipSequenceOpenFinished(){
 		tweeningContentParent.GetComponent<AnimationControl>().Play();
+		triggerTypeParticle.Play();
 	}
 
 	private void PlayFlipSequenceClose(){
 		AudioManager.Instance.PlayClip("MemoryCard2");
 		tweeningContentParent.GetComponent<AnimationControl>().Stop();
+		triggerTypeParticle.Stop();
 
 		// Zoom back out on the whole object
 		LeanTween.scale(gameObject, new Vector3(1, 1, 1), activeTweenTime);
@@ -150,6 +157,7 @@ public class MemoryCard : MonoBehaviour {
 		tweeningContentParent.SetActive(false);
 		tweeningCoverParent.SetActive(false);
 		endingParticle.Play();
+		triggerTypeParticle.Stop();
 		Destroy(gameObject, waitForParticle);
 	}
 }

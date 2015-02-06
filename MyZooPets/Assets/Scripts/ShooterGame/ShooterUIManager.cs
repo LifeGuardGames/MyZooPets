@@ -9,6 +9,8 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	public GameObject moon;
 	public Transform posSky;
 	public Transform posBottom;
+	public TextureListAlphaTween dayTween;
+	public TextureListAlphaTween nightTween;
 
 	// handles the game state changes
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -39,8 +41,11 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	}
 
 	public void Reset(){
+		Debug.Log("RESETTING");
 		sun.transform.position = posSky.position;
 		moon.transform.position = posBottom.position;
+		dayTween.InstantShow();
+		nightTween.InstantHide();
 	}
 
 	// changes the sun to moon or moon to sun and then sets off the next transition once it is complete
@@ -49,20 +54,28 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 				if(sun.GetComponent<MovingSky>().inSky == true){
 					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);
+					nightTween.Show();
+					dayTween.Hide();
 				}
 				else{
-					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);
+					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);;
+					dayTween.Show();
+					nightTween.Hide();
 				}
 			}
 		}
 		else{
 			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(tutChange);
+			nightTween.Show();
+			dayTween.Hide();
 		}
 	}
+
 	public void tutChange(){
 		// if its the tutorial go to next step
 		LeanTween.move(moon, posSky.position, 2.0f);
 	}
+
 	// does the opposite of act 2 and then changes to the next wave
 	public void AChangeOfTimeActTwo(){
 		MovingSky sunScript = sun.GetComponent<MovingSky>();
@@ -78,6 +91,5 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}
-
 	}
 }

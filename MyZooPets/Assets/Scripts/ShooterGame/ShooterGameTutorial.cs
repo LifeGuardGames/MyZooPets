@@ -7,6 +7,8 @@ public class ShooterGameTutorial : MinigameTutorial {
 	GameObject tutBoards;				// Gameobject that positions the tutorial boards			
 	GameObject tutorialInhalerUse;		// tutorial message board		
 	GameObject pressHere;				// tutorial message board
+	GameObject tutorialFinger;			// tutorial Finger
+	GameObject fingerPos;
 
 	// in each case we are going to listen to events that tell us to move along
 	protected override void ProcessStep(int nStep){
@@ -32,10 +34,13 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterInhalerManager.Instance.proceed +=MoveAlong;
 			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
 			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
+			tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
+			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
 			break;
 		
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
 		case 3:
+			GameObject.Destroy(fingerPos);
 			GameObject.Destroy(tutorialInhalerUse);
 			ShooterGameManager.Instance.proceed -=MoveAlong;
 			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
@@ -49,6 +54,8 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterInhalerManager.Instance.proceed +=MoveAlong;
 			UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
 			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
+			tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
+			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
 		break;
 		}
 	}
@@ -64,6 +71,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 	// oce we are done destroy the remaining board and reset for round 1
 	protected override void _End(bool isFinished){
 		GameObject.Destroy(tutorialInhalerUse);
+		GameObject.Destroy(fingerPos);
 		ShooterGameManager.Instance.inTutorial=false;
 		if(!isFinished){
 			ShooterGameManager.Instance.reset();

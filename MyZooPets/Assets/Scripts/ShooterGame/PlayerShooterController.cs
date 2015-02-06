@@ -65,10 +65,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		instance.GetComponent<bulletScript>().target = lookPos;
 		instance.GetComponent<bulletScript>().FindTarget();
 		if(isTripple){
-			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
+			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
 			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y+5, lookPos.z);
 			instance.GetComponent<bulletScript>().FindTarget();
-			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
+			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
 			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y-5, lookPos.z);
 			instance.GetComponent<bulletScript>().FindTarget();
 		}

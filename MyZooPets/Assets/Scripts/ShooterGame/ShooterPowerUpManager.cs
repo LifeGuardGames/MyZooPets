@@ -5,7 +5,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 	private string powerUp = "normal";
 	public float timer;
 	public void changePowerUp(string _powerUp){
-		powerUp = _powerUp
+		powerUp = _powerUp;
 	}
 
 	public void powerUP(GameObject instance){
@@ -18,7 +18,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 			break;
 		case "pierce":
 			instance.GetComponent<bulletScript>().isPierceing = true;
-			StartCorutine("powerTime", instance);
+			StartCoroutine("powerTime", instance);
 			break;
 		}
 	}

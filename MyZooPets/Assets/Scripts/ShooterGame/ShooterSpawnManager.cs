@@ -18,6 +18,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	List<Vector3> posList;
 	public List <EnemyData> enemy;
 	public GameObject bulletPrefab;
+	public GameObject powerUpPrefab;
 			
 	// Use this for initialization
 	void Start () {
@@ -73,6 +74,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			}
 			yield return new WaitForSeconds(1.0f);
 			int rand = Random.Range(0,3);
+			int pChance = Random.Range (0,20);
+			if(pChance == 0){
+				GameObject Instance = Instantiate(powerUpPrefab,posList[rand], powerUpPrefab.transform.rotation) as GameObject;
+				i--;
+			}
+			else{
 			//they are spawned in more of a weighted list fashion 
 			//so while one of the first waves has only one hard enemy in it it can spawn more than one
 			int RandomSpawn = Random.Range(0, enemy.Count);
@@ -82,6 +89,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			enemy1.GetComponent<Enemy>().aiScript = enemy[RandomSpawn].aiScript;
 			enemy1.GetComponent<Enemy>().bulletPrefab = bulletPrefab;
 			enemy1.GetComponent<Enemy>().Initialize();
+			}
 		}
 	}
 }

@@ -53,6 +53,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			ShooterGameEnemyController.Instance.reset();
 			ShooterUIManager.Instance.Reset();
 			PlayerShooterController.Instance.reset();
+			if(ShooterUIManager.Instance.fingerPos != null){
+				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
+			}
 		}
 	}
 
@@ -62,6 +65,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		ShooterGameEnemyController.Instance.reset();
 		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.reset();
+		if(ShooterUIManager.Instance.fingerPos != null){
+			Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
+		}
 	}
 
 	public override int GetReward(MinigameRewardTypes eType){
@@ -99,6 +105,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void ChangeWaves(){
+		if(ShooterUIManager.Instance.fingerPos != null){
+			Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
+		}
 		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
 		if(ShooterInhalerManager.Instance.hit == false){
 			missed++;

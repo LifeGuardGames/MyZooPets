@@ -46,8 +46,10 @@ public class ShooterEnemyAi : MonoBehaviour{
 	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
-			
-			Destroy(collider.gameObject);
+
+			if(!collider.GetComponent<bulletScript>().isPierceing){
+				Destroy(collider.gameObject);
+			}
 			health--;
 			if(health <= 0){
 				ShooterGameManager.Instance.AddScore(scoreVal);

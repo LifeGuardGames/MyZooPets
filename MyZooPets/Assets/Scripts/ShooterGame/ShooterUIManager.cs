@@ -9,6 +9,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	public GameObject moon;
 	public Transform posSky;
 	public Transform posBottom;
+	public GameObject fingerPos;
 	public TextureListAlphaTween dayTween;
 	public TextureListAlphaTween nightTween;
 
@@ -43,6 +44,8 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	public void Reset(){
 		Debug.Log("RESETTING");
 		sun.transform.position = posSky.position;
+		sun.GetComponent<MovingSky>().inSky = true;
+		moon.GetComponent<MovingSky>().inSky = false;
 		moon.transform.position = posBottom.position;
 		dayTween.InstantShow();
 		nightTween.InstantHide();
@@ -52,6 +55,10 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	public void AChangeOfTimeActOne(){
 		if(!ShooterGameManager.Instance.inTutorial){
 			if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+				if(ShooterGameManager.Instance.waveNum == 0){
+					GameObject tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
+					fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
+				}
 				if(sun.GetComponent<MovingSky>().inSky == true){
 					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);
 					nightTween.Show();

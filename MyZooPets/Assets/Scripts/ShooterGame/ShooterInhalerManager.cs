@@ -30,6 +30,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 				if(proceed != null)
 					proceed(this, EventArgs.Empty);
 			}
+			if(ShooterUIManager.Instance.fingerPos != null){
+				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
+			}
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.removeHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;

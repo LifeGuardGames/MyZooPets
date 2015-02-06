@@ -11,6 +11,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
 	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
 	public bool isTripple;						// are we tripple firing
+	public bool isPiercing;						// are we tripple firing
 
 	// on reset change health to 10 and state ti neutral
 	public void reset(){
@@ -64,13 +65,16 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
 		instance.GetComponent<bulletScript>().target = lookPos;
 		instance.GetComponent<bulletScript>().FindTarget();
+		instance.GetComponent<bulletScript>().isPierceing = isPiercing;
 		if(isTripple){
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
-			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y+5, lookPos.z);
+			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y+1, lookPos.z);
 			instance.GetComponent<bulletScript>().FindTarget();
+			instance.GetComponent<bulletScript>().isPierceing = isPiercing;
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
-			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y-5, lookPos.z);
+			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y-1, lookPos.z);
 			instance.GetComponent<bulletScript>().FindTarget();
+			instance.GetComponent<bulletScript>().isPierceing = isPiercing;
 		}
 	}
 

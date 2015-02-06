@@ -6,25 +6,30 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 	public float timer;
 	public void changePowerUp(string _powerUp){
 		powerUp = _powerUp;
+		powerUP();
 	}
 
-	public void powerUP(GameObject instance){
+	public void powerUP(){
 		switch(powerUp){
 		case "normal":
-			instance.GetComponent<bulletScript>().isPierceing = false;
+			PlayerShooterController.Instance.isPiercing = false;
+			PlayerShooterController.Instance.isTripple = false;
 			break;
 		case "tripple":
-			// TODO add powerupscript here
+			PlayerShooterController.Instance.isTripple = true;
+			StartCoroutine("powerTime");
 			break;
 		case "pierce":
 			instance.GetComponent<bulletScript>().isPierceing = true;
-			StartCoroutine("powerTime", instance);
+			StartCoroutine("powerTime");
 			break;
 		}
 	}
-	IEnumerator powerTime(GameObject _instance){
+	IEnumerator powerTime(){
+		Debug.Log("reaching");
 		yield return new WaitForSeconds(timer);
 		powerUp = "normal";
-		powerUP(_instance);
+		Debug.Log("working");
+		powerUP();
 	}
 }

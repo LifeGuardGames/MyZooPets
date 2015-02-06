@@ -10,6 +10,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public List<GameObject> fireBallPrefabs;	// List of fireball presets too choose from
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
 	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
+	public bool isTripple;						// are we tripple firing
 
 	// on reset change health to 10 and state ti neutral
 	public void reset(){
@@ -63,6 +64,14 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
 		instance.GetComponent<bulletScript>().target = lookPos;
 		instance.GetComponent<bulletScript>().FindTarget();
+		if(isTripple){
+			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
+			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y+5, lookPos.z);
+			instance.GetComponent<bulletScript>().FindTarget();
+			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
+			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y-5, lookPos.z);
+			instance.GetComponent<bulletScript>().FindTarget();
+		}
 	}
 
 	// removes health from player when hit by an enemy bullet // written this way to avoid making a mundane script

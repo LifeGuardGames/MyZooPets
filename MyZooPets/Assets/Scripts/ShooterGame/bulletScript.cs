@@ -7,6 +7,7 @@ public class bulletScript : MonoBehaviour{
 	public float speed = 5f;
 	// the position the bullet will move toward
 	public Vector3 target;
+	public bool isPierceing;
 
 	//find target aids the bullet in moving toward the fire position
 	public void FindTarget(){
@@ -30,7 +31,9 @@ public class bulletScript : MonoBehaviour{
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
 			Destroy(collider.gameObject);
+			if(!isPierceing){
 			Destroy(this.gameObject);
+			}
 		}
 	}
 }

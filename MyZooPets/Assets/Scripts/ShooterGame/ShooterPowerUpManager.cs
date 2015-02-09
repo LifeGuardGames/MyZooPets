@@ -32,4 +32,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 		Debug.Log("working");
 		powerUP();
 	}
+	public void GetPowerUp(){
+	
+	}
 }

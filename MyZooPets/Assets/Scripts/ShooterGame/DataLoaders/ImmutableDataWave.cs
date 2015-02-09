@@ -28,6 +28,11 @@ public class ImmutableDataWave {
 		get{ return hardEnemies;}
 	}
 
+	private string powerUp;
+	public string PowerUp{
+		get{ return powerUp;}
+	}
+
 	public ImmutableDataWave(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.waveID = id;
@@ -36,5 +41,6 @@ public class ImmutableDataWave {
 		begEnemies = XMLUtils.GetString(hashElements["BasicEnemies"] as IXMLNode, null, error);
 		mediumEnemies = XMLUtils.GetString(hashElements["MediumEnemies"] as IXMLNode, null, error);
 		hardEnemies = XMLUtils.GetString(hashElements["HardEnemies"] as IXMLNode, null, error);
+		powerUp = XMLUtils.GetString(hashElements["PowerUps"] as IXMLNode, null, error);
 	}
 }

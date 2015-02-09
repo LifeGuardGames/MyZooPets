@@ -7,6 +7,7 @@ public class Wave {
 	public string numOfBasics;
 	public string numOfMedium;
 	public string numOfHard;
+	public string numOfPowerUps;
 	public Wave(){
 	}
 }

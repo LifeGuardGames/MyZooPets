@@ -26,7 +26,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
 			GameObject DestroyPrefabsClone = tutBoards;
 			GameObject.Destroy(DestroyPrefabsClone);
-			ShooterGameEnemyController.Instance.BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
+			ShooterGameEnemyController.Instance.BuildEnemyList();
 			break;
 		//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
 		case 2:
@@ -46,7 +46,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 			ShooterGameEnemyController.Instance.proceed +=MoveAlong;
 			DestroyPrefabsClone = tutBoards;
 			GameObject.Destroy(DestroyPrefabsClone);
-			ShooterGameEnemyController.Instance.BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
+			ShooterGameEnemyController.Instance.BuildEnemyList();
 		break;
 		//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
 		case 4:

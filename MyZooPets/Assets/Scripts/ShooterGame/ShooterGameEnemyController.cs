@@ -15,7 +15,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		enemyList.Clear();
 		}
 
-		BuildEnemyList(DataLoaderTriggerArmy.GetDataList());
+		BuildEnemyList();
 	}
 
 	// builds a list of waves
@@ -37,18 +37,20 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		waver = new Wave();
 	
 		ImmutableDataWave LoadedWave = DataLoaderWaves.GetWave(difficulty);
-		waver.numOfEnemies= LoadedWave.NumOfEnemies;
-		waver.numOfBasics=LoadedWave.BegEnemies;
-		waver.numOfMedium=LoadedWave.MediumEnemies;
-		waver.numOfHard=LoadedWave.HardEnemies;
+		waver.numOfEnemies = LoadedWave.NumOfEnemies;
+		waver.numOfBasics = LoadedWave.BegEnemies;
+		waver.numOfMedium = LoadedWave.MediumEnemies;
+		waver.numOfHard = LoadedWave.HardEnemies;
+		waver.numOfPowerUps = LoadedWave.PowerUp;
 		return waver;
 	}
 
 	// builds a list of enemy types
-	public void BuildEnemyList(List<ImmutableDataTriggerArmy> mobList){
+	public void BuildEnemyList(){
 			enemyList = new List<EnemyData>();
-		foreach (ImmutableDataTriggerArmy baddie in mobList){
+		for(int i = 0; i < 5; i++){
 			EnemyData mob = new EnemyData();
+			ImmutableDataTriggerArmy baddie = DataLoaderTriggerArmy.GetEnemy(i);
 			mob.name = baddie.Name;
 			mob.spriteName= baddie.SpriteName;
 			mob.aiScript= baddie.AI;
@@ -80,12 +82,18 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		}*/
 		for (int i =0; i < int.Parse(currWave.numOfBasics); i++){
 			WaveEnemies.Add(enemyList[0]);
+			Debug.Log(enemyList[0].name);
 		}
 		for (int i =0; i < int.Parse(currWave.numOfMedium); i++){
 			WaveEnemies.Add(enemyList[1]);
 		}
 		for (int i =0; i < int.Parse(currWave.numOfHard); i++){
 			WaveEnemies.Add(enemyList[2]);
+		}
+		for (int i =0; i < int.Parse(currWave.numOfPowerUps); i++){
+			Debug.Log(currWave.numOfPowerUps);
+			int rand = UnityEngine.Random.Range(3,5);
+			WaveEnemies.Add(enemyList[rand]);
 		}
 		//ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
 		ShooterSpawnManager.Instance.enemy = WaveEnemies;

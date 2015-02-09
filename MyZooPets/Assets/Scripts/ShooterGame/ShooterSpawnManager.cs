@@ -74,11 +74,15 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			}
 			yield return new WaitForSeconds(1.0f);
 			int rand = Random.Range(0,3);
-			int pChance = Random.Range (0,20);
-			if(pChance == 0){
-				GameObject Instance = Instantiate(powerUpPrefab,posList[rand], powerUpPrefab.transform.rotation) as GameObject;
-				i--;
-			}
+			if(enemy[i].name == "powerUp"){
+				Debug.Log(enemy[i].name);
+				ShooterPowerUpManager.Instance.GetPowerUp();
+				GameObject pUP = Instantiate(powerUpPrefab,posList[rand], powerUpPrefab.transform.rotation) as GameObject;
+				pUP.GetComponent<ShooterPowerUpInit>().name = enemy[i].name;
+				pUP.GetComponent<ShooterPowerUpInit>().spriteName = enemy[i].spriteName;
+				pUP.GetComponent<ShooterPowerUpInit>().aiScript = enemy[i].aiScript;
+				pUP.GetComponent<ShooterPowerUpInit>().Initialize();
+			}			
 			else{
 			//they are spawned in more of a weighted list fashion 
 			//so while one of the first waves has only one hard enemy in it it can spawn more than one

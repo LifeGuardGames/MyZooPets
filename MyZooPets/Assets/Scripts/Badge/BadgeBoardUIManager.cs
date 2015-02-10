@@ -12,7 +12,6 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgeBoard;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
-	public string blankBadgeTextureName = "badge64Blank";
 
 	public TweenToggleDemux descriptionDemux;
 	public UISprite descriptionBadgeSprite;
@@ -20,6 +19,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public UILabel descriptionBadgeInfo;
 	public ParticleSystem slamParticle;
 
+	private string blankBadgeTextureName = "badgeBlank";
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
 	private bool isActive = false;

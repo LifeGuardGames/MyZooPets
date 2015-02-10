@@ -158,17 +158,10 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	// Event callback from the crystal animation CrystalPop
 	public void CrystalPopDone(){
+		InventoryUIManager.Instance.ShowPanel();
+
 		// Spawn a prefab that the user can click on and obtain
 		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
-
-		// Show the floaty for the crystal
-//		Hashtable option = new Hashtable();
-//		option.Add("parent", shardParent);
-//		option.Add("deltaShards", "+1");
-//		FloatyUtil.SpawnFloatyFireCrystal(option);
-
-		// Reward the player the actual item - Fire crystal
-//		InventoryLogic.Instance.AddItem("Usable1", 1);
 	
 		//TODO check if it is in wellapad mode here
 //		Invoke("CloseUI", 1f);

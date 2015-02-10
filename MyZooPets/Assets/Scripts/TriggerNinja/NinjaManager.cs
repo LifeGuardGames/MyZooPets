@@ -167,10 +167,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
 	}
 
-	protected override bool HasCutscene(){
-		return false;
-	}	
-
 	protected override void _Update(){
 		if(IsTutorialRunning()) return;
 

@@ -48,6 +48,20 @@ public static class GameObjectUtils{
 	}
 
 	/// <summary>
+	/// Instantiate an object and add it to the specified parent. use all the transforms of prefab
+	/// </summary>
+	static public GameObject AddChildWithTransform(GameObject parent, GameObject prefab){
+		GameObject go = AddChild(parent, prefab);
+		if(go != null){
+			Transform t = go.transform;
+			t.localPosition = prefab.transform.localPosition;
+			t.localRotation = prefab.transform.localRotation;
+			t.localScale = prefab.transform.localScale;
+		}
+		return go;
+	}
+
+	/// <summary>
 	/// Gets the point on circle circumference centered around center on XY plane.
 	/// </summary>
 	/// <param name="position">Position.</param>

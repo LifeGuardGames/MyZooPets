@@ -47,10 +47,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	protected override bool IsTutorialOn(){
 		return false;	//TODO Change
 	}
-	
-	protected override bool HasCutscene(){
-		return false;	//TODO Change
-	}
 
 	protected override void _NewGame(){
 		flip1 = null;

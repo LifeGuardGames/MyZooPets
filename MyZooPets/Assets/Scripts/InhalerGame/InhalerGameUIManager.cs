@@ -80,6 +80,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	private void HideHUD(){
 		HUDUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
 	}
 
 	public void HideInhaler(){

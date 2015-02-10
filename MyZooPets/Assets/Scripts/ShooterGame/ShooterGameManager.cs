@@ -32,10 +32,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	protected override bool IsTutorialOn(){
 		return true;	//TODO Change
 	}
-	
-	protected override bool HasCutscene(){
-		return false;	//TODO Change
-	}
 
 	protected override void _NewGame(){
 

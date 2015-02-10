@@ -145,11 +145,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// reset labels
 		ResetLabels();
 		
-		// show the cutscene for the game if it has not yet been viewed
-		// string strKey = GetMinigameKey();
-		// if ( HasCutscene() && DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_" + strKey) == false )
-		// 	ShowCutscene();		
-		
 		_Start();
 	}
 	
@@ -460,33 +455,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	//---------------------------------------------------
-	// ShowCutscene()
-	//---------------------------------------------------	
-	private void ShowCutscene(){
-		// string strKey = GetMinigameKey();
-		// GameObject resourceMovie = Resources.Load("Cutscene_" + strKey) as GameObject;
-		// LgNGUITools.AddChildWithPosition( GameObject.Find("Anchor-Center"), resourceMovie );
-		// CutsceneFrames.OnCutsceneDone += CutsceneDone;	
-	}
-	
-	//---------------------------------------------------
-	// CutsceneDone()
-	//---------------------------------------------------		
-	private void CutsceneDone(object sender, EventArgs args){
-		// string strKey = GetMinigameKey();
-		// DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Cutscene_" + strKey);	
-		// CutsceneFrames.OnCutsceneDone -= CutsceneDone;
-	}	
-	
-	//---------------------------------------------------
-	// HasCutscene()
-	//---------------------------------------------------		
-	protected virtual bool HasCutscene(){
-		// children implement this
-		return false;
-	}
-	
-	//---------------------------------------------------
 	// GetStandardReward()
 	// Returns the standard reward for a minigame, which
 	// is the player's score divided by some constant.
@@ -526,7 +494,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			rewardAmount = score / modifier;
 		}
 		
-		Debug.Log("Reward for " + rewardType + " is " + rewardAmount);
+//		Debug.Log("Reward for " + rewardType + " is " + rewardAmount);
 		
 		return rewardAmount;
 	}

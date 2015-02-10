@@ -19,7 +19,7 @@ public class Inhale : InhalerPart{
 	void OnSwipe(SwipeGesture gesture){
 		FingerGestures.SwipeDirection direction = gesture.Direction; 
 
-		if(direction == FingerGestures.SwipeDirection.Up){
+		if(direction == FingerGestures.SwipeDirection.Left){
 			if(!isGestureRecognized){
 				isGestureRecognized = true;
 

@@ -40,7 +40,6 @@ public class TextureListAlphaTween : MonoBehaviour {
 	public void Show(){
 		foreach(GameObject go in gameObjectList){
 			LTDescr description = LeanTween.alpha(go, showAlpha, tweenTime);
-			Debug.Log(description.id);
 		}
 	}
 

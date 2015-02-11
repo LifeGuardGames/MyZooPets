@@ -60,19 +60,19 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 					fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
 				}
 				if(sun.GetComponent<MovingSky>().inSky == true){
-					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);
+					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo).setEase(LeanTweenType.easeInQuad);
 					nightTween.Show();
 					dayTween.Hide();
 				}
 				else{
-					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo);;
+					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo).setEase(LeanTweenType.easeInQuad);
 					dayTween.Show();
 					nightTween.Hide();
 				}
 			}
 		}
 		else{
-			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(tutChange);
+			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(tutChange).setEase(LeanTweenType.easeInQuad);
 			nightTween.Show();
 			dayTween.Hide();
 		}
@@ -80,7 +80,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 
 	public void tutChange(){
 		// if its the tutorial go to next step
-		LeanTween.move(moon, posSky.position, 2.0f);
+		LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 	}
 
 	// does the opposite of act 2 and then changes to the next wave
@@ -89,12 +89,12 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		MovingSky moonScript = moon.GetComponent<MovingSky>();
 
 		if(sunScript.inSky == true){
-			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
+			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves).setEase(LeanTweenType.easeOutQuad);
 			moonScript.inSky = true;
 			sunScript.inSky = false;
 		}
 		else{
-			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves);
+			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves).setEase(LeanTweenType.easeOutQuad);
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}

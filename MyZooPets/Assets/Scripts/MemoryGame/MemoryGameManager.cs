@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 /// <summary>
@@ -9,7 +10,7 @@ using System.Collections;
 /// </summary>
 public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	public MemoryBoardController boardController;
-
+	public EventHandler<EventArgs> proceed;
 	public int startScoreValue = 1000;
 	public int scoreDecrementValue = 10;
 	public int scoreDecrementTimer = 2;
@@ -22,6 +23,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private float cardDelayTimer = 0.8f;
 	private int combo = 0;
 	private bool isPaused = false;
+	public bool inTutorial = true;
 
 	private MemoryGameUIManager memoryUI;
 
@@ -49,15 +51,35 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _NewGame(){
+	//	if (IsTutorialOverride () && IsTutorialOn ()) {
+			if (inTutorial) {
+				StartTutorial ();
+			}
+
+		else{
+			flip1 = null;
+			flip2 = null;
+
+			cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
+
+			CancelInvoke("StartScoreCountdown");
+			SetScore(startScoreValue);
+			InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
+
+			ResetBoard();
+		}
+	}
+
+	public void reset(){
 		flip1 = null;
 		flip2 = null;
-
+		
 		cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
-
+		
 		CancelInvoke("StartScoreCountdown");
 		SetScore(startScoreValue);
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-
+		
 		ResetBoard();
 	}
 
@@ -94,6 +116,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	/// InvokeRepeating method from _NewGame()
 	/// </summary>
 	private void StartScoreCountdown(){
+
 		if(!isPaused){
 			// Check for negative score
 			if(GetScore() - scoreDecrementValue >= 0){
@@ -190,6 +213,17 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		// Reset the flips
 		flip1 = null;
 		flip2 = null;
+	}
+
+	private void StartTutorial(){
+		SetTutorial(new MemoryGameTut());
+		StartCoroutine (StudyTime ());
+	}
+
+	IEnumerator StudyTime(){
+		yield return new WaitForSeconds(4.0f);
+		if(proceed != null)
+			proceed(this, EventArgs.Empty);
 	}
 
 //	void OnGUI(){

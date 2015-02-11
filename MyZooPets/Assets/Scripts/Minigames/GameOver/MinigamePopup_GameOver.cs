@@ -5,6 +5,7 @@ using System.Collections;
 // MinigamePopup_GameOver
 // Shown when the minigame is over.
 //---------------------------------------------------
+using System;
 
 public abstract class MinigamePopup_GameOver : MinigamePopup{
 	// ---------- Pure Abstract -------------------------
@@ -28,30 +29,17 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	public PositionTweenToggle tweenButtons;
 	private bool bCheckToShowButtons = false;
 	public int nFreebie; // used for testing purposes
-	
-	//---------------------------------------------------
-	// _OnUpdate()
-	//---------------------------------------------------	
-	protected override void _OnUpdate(){
-		if(bCheckToShowButtons){
-			if(HUDUIManager.Instance.hudAnimator.GetDisplayValue(HUDElementType.Points) == DataManager.Instance.GameData.Stats.Points &&
-				HUDUIManager.Instance.hudAnimator.GetDisplayValue(HUDElementType.Stars) == DataManager.Instance.GameData.Stats.Stars){
-				
-				bCheckToShowButtons = false;
-				
-				// show the buttons
-				tweenButtons.Show();
-			}
-		}
+
+	void Start(){
+		// Attach event to only show the game over buttons when all rewards are rewarded
+		RewardManager.OnAllRewardsDone += ShowButtons;
 	}
-	
-	//---------------------------------------------------
-	// _OnShow()
-	//---------------------------------------------------	
+
+	void OnDestroy(){
+		RewardManager.OnAllRewardsDone -= ShowButtons;
+	}
+
 	protected override void _OnShow(){
-		// set an override for the hud animation modifier because we don't want to spam animations
-		//hudAnimator.SetModifierOverride( .00001f );
-		
 		// the game over screen is showing, so we need to check to show the buttons now too
 		bCheckToShowButtons = true;
 		
@@ -92,13 +80,17 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	protected abstract void _RewardBadges();
-	
-	//---------------------------------------------------
-	// _OnHide()
-	//---------------------------------------------------	
+
 	protected override void _OnHide(){
-		// make sure to not check to show the buttons
-		bCheckToShowButtons = false;
+		HideButtons();
+	}
+
+	public void ShowButtons(object obj, EventArgs e){
+		Debug.Log("SHOWING BUTTONS");
+		tweenButtons.Show();
+	}
+	
+	public void HideButtons(){
 		tweenButtons.Hide();
 	}
 }

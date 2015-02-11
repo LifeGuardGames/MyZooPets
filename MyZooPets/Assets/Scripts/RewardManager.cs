@@ -13,7 +13,7 @@ public class RewardManager : Singleton<RewardManager> {
 	public static EventHandler<EventArgs> OnAllRewardsDone;
 
 	private bool isRewardingActive = false;
-	private bool isAnimationDoneCheck = false;	// This aux bool checks for animating -> finish animating to call event
+	private bool isDoAnimationDoneCheck = false;	// This aux bool checks for animating -> finish animating to call event
 
 	/// <summary>
 	/// Assign some callbacks that will launch try next reward when the components are done animating
@@ -62,7 +62,7 @@ public class RewardManager : Singleton<RewardManager> {
 //		Debug.Log("TRYING NEXT");
 		if(!RewardQueueData.IsEmpty()){
 			isRewardingActive = true;
-			isAnimationDoneCheck = true;
+			isDoAnimationDoneCheck = true;
 			RewardQueueData.GenericDelegate functionToCall = RewardQueueData.PopReward();
 			functionToCall();
 		}
@@ -71,8 +71,8 @@ public class RewardManager : Singleton<RewardManager> {
 			isRewardingActive = false;
 
 			// Called only when it has animated and finished
-			if(isAnimationDoneCheck){
-				isAnimationDoneCheck = false;
+			if(isDoAnimationDoneCheck){
+				isDoAnimationDoneCheck = false;
 				if(OnAllRewardsDone != null){
 					OnAllRewardsDone(this, EventArgs.Empty);
 				}

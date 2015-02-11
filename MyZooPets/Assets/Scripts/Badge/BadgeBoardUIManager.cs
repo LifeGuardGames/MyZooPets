@@ -233,14 +233,18 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			//Show other UI Objects
 			HUDUIManager.Instance.ShowPanel();
 
-			if(NavigationUIManager.Instance != null){
-				NavigationUIManager.Instance.ShowPanel();
-			}
-			if(InventoryUIManager.Instance != null){
-				InventoryUIManager.Instance.ShowPanel();
-			}
-			if(RoomArrowsUIManager.Instance != null){
-				RoomArrowsUIManager.Instance.ShowPanel();
+			// Only run this chunk if in bedroom or yard scene
+			if((Application.loadedLevelName == SceneUtils.BEDROOM.ToString()
+			    || Application.loadedLevelName == SceneUtils.YARD.ToString())){
+				if(NavigationUIManager.Instance != null){
+					NavigationUIManager.Instance.ShowPanel();
+				}
+				if(InventoryUIManager.Instance != null){
+					InventoryUIManager.Instance.ShowPanel();
+				}
+				if(RoomArrowsUIManager.Instance != null){
+					RoomArrowsUIManager.Instance.ShowPanel();
+				}
 			}
 		}
 	}

@@ -20,7 +20,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 			StartCoroutine("powerTime");
 			break;
 		case "pierce":
-			instance.GetComponent<bulletScript>().isPierceing = true;
+			PlayerShooterController.Instance.isPiercing = true;
 			StartCoroutine("powerTime");
 			break;
 		}

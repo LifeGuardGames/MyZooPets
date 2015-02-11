@@ -7,7 +7,7 @@ public class ShooterMediumEnemyAi : ShooterEnemyAi{
 	
 	// Use this for initialization
 	void Start () {
-		speed = 2.0f;
+		speed = 1.0f;
 		scoreVal = 3;
 		health = 2;
 		damage = 2;

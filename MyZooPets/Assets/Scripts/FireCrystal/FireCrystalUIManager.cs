@@ -19,6 +19,9 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public float delayBetweenShards = 0.02f;
 	public Animation crystalAnimation;
 	public GameObject clickableFireCrystalPrefab;
+	public UIAnchor parentAnchor;	// Changes depending on which scene we are in
+	public TweenToggle parentTween;	// Changes depending on which scene we are in
+	public UISprite parentBG;
 
 	private int totalSubdivisions = 100;
 	private float step = 0.005f;
@@ -37,6 +40,20 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	void Awake(){
 		eModeType = UIModeTypes.FireCrystal;
+
+		// If scene is the inhaler game, use right anchor and offset tweenparent
+		// NOTE: Make sure script execution order is BEFORE tween toggle scripts!
+		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+			parentAnchor.side = UIAnchor.Side.Right;
+			Vector3 currentPos = parentTween.transform.localPosition;
+			parentTween.transform.localPosition = new Vector3(-300f, currentPos.y, currentPos.z);
+		}
+		// If scene is in bedroom or yard, combine with wellapad
+		else if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+			Vector3 currentPos = parentTween.transform.localPosition;
+			parentTween.transform.localPosition = new Vector3(-272, currentPos.y, currentPos.z);
+			parentBG.enabled = false;
+		}
 	}
 
 	void Start(){
@@ -60,7 +77,14 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 			// Lock and fire animations
 			isFireCrystalUIAnimating = true;
-			OpenUI();
+
+			if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+				WellapadUIManager.Instance.OpenUI();
+			}
+			else{
+				OpenUI();
+			}
+
 			StartCoroutine(StartFlyingShards(numberOfShards, 0.8f));
 		}
 	}
@@ -72,16 +96,19 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	protected override void _CloseUI(){
 		tweenToggle.Hide();
 
+		// Launch any finished callback
+		if(FinishedAnimatingCallback != null){	//TODO check if it is in wellapad mode here
+			FinishedAnimatingCallback();
+		}
+	}
+
+	// TODO Sean - inconsistent place call with other finishtweens, this is done after hide whereas others is on hide
+	public void CloseFinishedHelper(){
 		isFireCrystalUIAnimating = false;
 
 		// Notify anything that is listening to this done
 		if(OnFireCrystalUIAnimationDone != null){
 			OnFireCrystalUIAnimationDone(this, EventArgs.Empty);
-		}
-
-		// Launch any finished callback
-		if(FinishedAnimatingCallback != null){	//TODO check if it is in wellapad mode here
-			FinishedAnimatingCallback();
 		}
 	}
 
@@ -163,13 +190,19 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		// Spawn a prefab that the user can click on and obtain
 		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
 	
+
+
 		//TODO check if it is in wellapad mode here
-//		Invoke("CloseUI", 1f);
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
-//			FireCrystalManager.Instance.RewardShards(100);
-//		}
-//	}
+	public void ResetFrontSprite(){
+		currentPercentage = 0;
+		FireCrystalManager.Instance.ResetShards();
+	}
+
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
+			FireCrystalManager.Instance.RewardShards(100);
+		}
+	}
 }

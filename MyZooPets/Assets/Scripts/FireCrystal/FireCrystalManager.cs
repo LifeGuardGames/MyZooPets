@@ -15,4 +15,8 @@ public class FireCrystalManager : Singleton<FireCrystalManager> {
 			RewardManager.Instance.AddToRewardQueue(function2);
 		}
 	}
+
+	public void ResetShards(){
+		DataManager.Instance.GameData.Stats.ResetShard();
+	}
 }

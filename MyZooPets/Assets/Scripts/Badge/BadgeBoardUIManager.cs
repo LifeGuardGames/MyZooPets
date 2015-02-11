@@ -12,6 +12,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public GameObject badgeBoard;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
+	public GameObject badgeExitButton;
 
 	public TweenToggleDemux descriptionDemux;
 	public UISprite descriptionBadgeSprite;
@@ -196,6 +197,10 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void _OpenUI(){
 		if(!isActive){
+
+			// Disable the exit button if the badge is animating from reward manager
+			badgeExitButton.SetActive(isQueueAnimating ? false : true);
+
 			GetComponent<TweenToggleDemux>().Show();
 
 			//Hide other UI objects

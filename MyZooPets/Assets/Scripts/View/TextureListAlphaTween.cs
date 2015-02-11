@@ -18,18 +18,19 @@ public class TextureListAlphaTween : MonoBehaviour {
 	}
 
 	public void InstantHide(){
+
 		foreach(GameObject go in gameObjectList){
+			LeanTween.cancel(go);
 			go.renderer.material.color = new Color(go.renderer.material.color.r,
 			                                       go.renderer.material.color.g,
 			                                       go.renderer.material.color.b,
 			                                       hideAlpha);
-			Debug.Log("HIDING ALPHA");
 		}
 	}
 
 	public void InstantShow(){
 		foreach(GameObject go in gameObjectList){
-			Debug.Log("SHOWING ALPHA");
+			LeanTween.cancel(go);
 			go.renderer.material.color = new Color(go.renderer.material.color.r,
 			                                       go.renderer.material.color.g,
 			                                       go.renderer.material.color.b,
@@ -39,14 +40,13 @@ public class TextureListAlphaTween : MonoBehaviour {
 
 	public void Show(){
 		foreach(GameObject go in gameObjectList){
-			LTDescr description = LeanTween.alpha(go, showAlpha, tweenTime);
-			Debug.Log(description.id);
+			LeanTween.alpha(go, showAlpha, tweenTime);
 		}
 	}
 
 	public void Hide(){
 		foreach(GameObject go in gameObjectList){
-			LTDescr description = LeanTween.alpha(go, hideAlpha, tweenTime);
+			LeanTween.alpha(go, hideAlpha, tweenTime);
 		}
 	}
 

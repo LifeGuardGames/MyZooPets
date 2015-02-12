@@ -16,7 +16,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public TweenToggle tweenToggle;
 	public GameObject shardSpritePrefab;
 	public GameObject shardParent;
-	public float delayBetweenShards = 0.02f;
+	public float totalTimeTween = 1.5f;
 	public Animation crystalAnimation;
 	public GameObject clickableFireCrystalPrefab;
 	public UIAnchor parentAnchor;	// Changes depending on which scene we are in
@@ -78,14 +78,31 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			// Lock and fire animations
 			isFireCrystalUIAnimating = true;
 
-			if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
-				WellapadUIManager.Instance.OpenUI();
-			}
-			else{
-				OpenUI();
-			}
+			OpenUIBasedOnScene();
 
-			StartCoroutine(StartFlyingShards(numberOfShards, 0.8f));
+			StartCoroutine(StartFlyingShards(numberOfShards, 0.5f));
+		}
+	}
+
+	public void OpenUIBasedOnScene(){
+		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+			WellapadUIManager.Instance.OpenUI();
+		}
+		else{
+			OpenUI();
+		}
+	}
+
+	public void CloseUIBasedOnScene(){
+		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+			WellapadUIManager.Instance.CloseUI();
+
+			if(FinishedAnimatingCallback != null){
+				FinishedAnimatingCallback();
+			}
+		}
+		else{
+			CloseUI();
 		}
 	}
 
@@ -97,7 +114,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		tweenToggle.Hide();
 
 		// Launch any finished callback
-		if(FinishedAnimatingCallback != null){	//TODO check if it is in wellapad mode here
+		if(FinishedAnimatingCallback != null){
 			FinishedAnimatingCallback();
 		}
 	}
@@ -121,6 +138,8 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			// Wait before starting
 			yield return new WaitForSeconds(delay);
 
+			float delayBetweenShards = totalTimeTween / (float)numberOfShards;
+			
 			for(int i = 0; i < numberOfShards/2; i++){
 				GameObject shardObject = GameObjectUtils.AddChild(shardParent, shardSpritePrefab);
 				// Place the shard object on a random point on a circle around center
@@ -144,42 +163,32 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	/// Starts the one-off fire animation, only should be called ONCE at start animating!
 	/// </summary>
 	public void StartFillFireSprite(){
-		StartCoroutine(StartFillFireSpriteHelper());
+		Debug.Log(currentPercentage + "-----");
+		LeanTween.cancel(gameObject);
+		LeanTween.value(gameObject, UpdateValueCallback, currentPercentage, targetPercentage, totalTimeTween)
+			.setOnComplete(FinishedFillSpriteCallback);
 	}
 
-	private IEnumerator StartFillFireSpriteHelper(){
-		while(currentPercentage != targetPercentage){
-			// Increase by one step, but do not go over the target amount
-			currentPercentage = Mathf.Min(currentPercentage + step, targetPercentage);
-			// Populate sprite
-			spriteFireFill.fillAmount = currentPercentage;
+	// Helper function for the value leantween
+	private void UpdateValueCallback(float value){
+		Debug.Log("tweening update call " + value);
+		currentPercentage = value;
+		spriteFireFill.fillAmount = currentPercentage;
+	}
 
-			// Wait one frame
-			yield return 0;
-
-			// Update our target incase it has been changed
-			//TODO targetPercentage = 
-
-			// Do a sanity check here for target
-			if(currentPercentage > targetPercentage){
-				Debug.LogError("The current flame percentage is higher than the target percentage");
-			}
-		}
-
+	// Helper function for value leantween done
+	private void FinishedFillSpriteCallback(){
 		// Do check if full
 		if(currentPercentage == 1.0f){
 			RewardFireCrystal();
 		}
 		else{
 			Debug.Log("Fire is not full");
-
-			//TODO check if it is in wellapad mode here
-			Invoke("CloseUI", 1f);
+			Invoke("CloseUIBasedOnScene", 1f);
 		}
 	}
 
 	private void RewardFireCrystal(){
-		Debug.Log("Fire full check passed! Getting fire crystal");
 		crystalAnimation.Play();
 	}
 
@@ -189,20 +198,20 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 		// Spawn a prefab that the user can click on and obtain
 		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
-	
-
-
-		//TODO check if it is in wellapad mode here
 	}
 
 	public void ResetFrontSprite(){
 		currentPercentage = 0;
+		spriteFireFill.fillAmount = 0;
 		FireCrystalManager.Instance.ResetShards();
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
-//			FireCrystalManager.Instance.RewardShards(100);
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
+			FireCrystalManager.Instance.RewardShards(100);
+		}
+		if(GUI.Button(new Rect(200, 100, 100, 100), "Fire reward")){
+			FireCrystalManager.Instance.RewardShards(30);
+		}
+	}
 }

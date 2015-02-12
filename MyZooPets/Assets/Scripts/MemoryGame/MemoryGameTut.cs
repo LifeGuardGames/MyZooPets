@@ -11,7 +11,7 @@ public class MemoryGameTut : MinigameTutorial{
 	// in each case we are going to listen to events that tell us to move along
 	protected override void ProcessStep(int nStep){
 		switch (nStep) {
-		//the user simply needs to tap the screen 
+		//runs for about 4 sec then starts the game the timer is in the memory game manager
 		case 0:
 			MemoryGameManager.Instance.proceed += MoveAlong;
 			//prompt user to shoot
@@ -29,7 +29,7 @@ public class MemoryGameTut : MinigameTutorial{
 	protected override void SetMaxSteps(){
 		maxSteps = 1;
 	}
-	// oce we are done destroy the remaining board and reset for round 1
+	// oce we are done destroy the remaining board and reset for the game
 	protected override void _End(bool isFinished){
 		GameObject.Destroy(tutBoards);
 		MemoryGameManager.Instance.inTutorial = false;

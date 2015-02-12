@@ -22,7 +22,6 @@ public class FarmGenerator : MonoBehaviour {
 	private TimeSpan lastTimeDurationAux;
 
 	void Start(){
-		Debug.Log("STARTING");
 		if(allowTapThreshold > showButtonThreshold){
 			Debug.LogWarning(gameObject.name + " - Farm button shown before it is allowed to tap!");
 		}
@@ -67,11 +66,8 @@ public class FarmGenerator : MonoBehaviour {
 			Debug.Log("spewing " + (int)current + " coins");
 			
 			// Spew out the reward here
-			RewardQueueData.GenericDelegate function = delegate(){
-				StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
-			};
-			RewardManager.Instance.AddToRewardQueue(function);
-			
+			StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
+
 			// Reset the generator
 			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 
 			InvokeRepeating("RepeatFarm", 1f, 1f);

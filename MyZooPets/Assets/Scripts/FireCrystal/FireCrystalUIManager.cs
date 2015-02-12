@@ -206,12 +206,12 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		FireCrystalManager.Instance.ResetShards();
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
-			FireCrystalManager.Instance.RewardShards(100);
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "Fire reward")){
-			FireCrystalManager.Instance.RewardShards(30);
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Fire reward")){
+//			FireCrystalManager.Instance.RewardShards(100);
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "Fire reward")){
+//			FireCrystalManager.Instance.RewardShards(30);
+//		}
+//	}
 }

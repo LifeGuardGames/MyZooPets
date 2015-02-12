@@ -13,6 +13,10 @@ public class RewardManager : Singleton<RewardManager> {
 	public static EventHandler<EventArgs> OnAllRewardsDone;
 
 	private bool isRewardingActive = false;
+	public bool IsRewardingActive{
+		get{ return isRewardingActive; }
+	}
+
 	private bool isDoAnimationDoneCheck = false;	// This aux bool checks for animating -> finish animating to call event
 
 	/// <summary>
@@ -45,9 +49,10 @@ public class RewardManager : Singleton<RewardManager> {
 		RewardQueueData.AddReward(functionToCall);
 		
 		if(!isRewardingActive){
+//			Debug.Log("Try next reward----");
 			TryNextReward();
 		}else{
-//			Debug.Log(" Reward queue FULL");
+//			Debug.Log("Reward queue FULL----");
 		}
 	}
 
@@ -68,6 +73,7 @@ public class RewardManager : Singleton<RewardManager> {
 			// Called only when it has animated and finished
 			if(isDoAnimationDoneCheck){
 				isDoAnimationDoneCheck = false;
+				Debug.Log("ALL REWARDS DONE");
 				if(OnAllRewardsDone != null){
 					OnAllRewardsDone(this, EventArgs.Empty);
 				}

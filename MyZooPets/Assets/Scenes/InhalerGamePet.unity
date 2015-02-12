@@ -2897,12 +2897,13 @@ MonoBehaviour:
   tweenToggle: {fileID: 533855817}
   shardSpritePrefab: {fileID: 100006, guid: 6b0feaff5c6b4fe4bb1066d20de3803b, type: 2}
   shardParent: {fileID: 1511661062}
-  delayBetweenShards: .100000001
+  totalTimeTween: 1
   crystalAnimation: {fileID: 1108148862}
   clickableFireCrystalPrefab: {fileID: 100016, guid: 6b91de10836ad9e42bc9dd27e9b2c691,
     type: 2}
   parentAnchor: {fileID: 1146422768}
   parentTween: {fileID: 533855817}
+  parentBG: {fileID: 1244262598}
 --- !u!114 &100390034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10550,19 +10551,19 @@ MonoBehaviour:
   blockUI: 1
   startsHidden: 1
   hideDeltaX: 0
-  hideDeltaY: -1000
+  hideDeltaY: -800
   hideDeltaZ: 0
-  showDuration: .5
-  hideDuration: .5
+  showDuration: .300000012
+  hideDuration: .300000012
   showDelay: 0
   hideDelay: 0
-  easeHide: 26
-  easeShow: 27
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
+  HideTarget: {fileID: 100390031}
+  HideFunctionName: CloseFinishedHelper
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
@@ -20736,6 +20737,14 @@ Prefab:
       propertyPath: uiCamera
       value: 
       objectReference: {fileID: 1856142250}
+    - target: {fileID: 11400012, guid: 5fbc728de123f814e8910c3fc1b1f961, type: 2}
+      propertyPath: HideTarget
+      value: 
+      objectReference: {fileID: 100390031}
+    - target: {fileID: 11400012, guid: 5fbc728de123f814e8910c3fc1b1f961, type: 2}
+      propertyPath: HideFunctionName
+      value: CloseFinishedHelper
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5fbc728de123f814e8910c3fc1b1f961, type: 2}
   m_RootGameObject: {fileID: 100390031}

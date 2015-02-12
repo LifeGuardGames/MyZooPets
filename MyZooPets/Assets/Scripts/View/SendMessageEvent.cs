@@ -24,7 +24,7 @@ public class SendMessageEvent : MonoBehaviour {
 			target1.SendMessage(functionName1, gameObject, SendMessageOptions.DontRequireReceiver);
 		}
 		else{
-			Debug.LogError("Null references to broadcast1");
+			Debug.LogError("Null references to broadcast1 from " + name);
 		}
 	}
 
@@ -33,7 +33,7 @@ public class SendMessageEvent : MonoBehaviour {
 			target2.SendMessage(functionName2, gameObject, SendMessageOptions.DontRequireReceiver);
 		}
 		else{
-			Debug.LogError("Null references to broadcast2");
+			Debug.LogError("Null references to broadcast2 from " + name);
 		}
 	}
 
@@ -42,7 +42,7 @@ public class SendMessageEvent : MonoBehaviour {
 			target3.SendMessage(functionName3, gameObject, SendMessageOptions.DontRequireReceiver);
 		}
 		else{
-			Debug.LogError("Null references to broadcast3");
+			Debug.LogError("Null references to broadcast3 from " + name);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class SendMessageEvent : MonoBehaviour {
 			intTarget1.SendMessage(intFunctionName1, boolAux);
 		}
 		else{
-			Debug.LogError("Null references to boolBroadcast1");
+			Debug.LogError("Null references to boolBroadcast1 from " + name);
 		}
 	}
 }

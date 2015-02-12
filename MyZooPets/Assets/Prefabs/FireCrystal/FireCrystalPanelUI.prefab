@@ -288,8 +288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target1: {fileID: 100014}
   functionName1: CrystalPopDone
-  target2: {fileID: 0}
-  functionName2: 
+  target2: {fileID: 100014}
+  functionName2: ResetFrontSprite
   target3: {fileID: 0}
   functionName3: 
   intTarget1: {fileID: 0}
@@ -394,7 +394,7 @@ MonoBehaviour:
   tweenToggle: {fileID: 11400012}
   shardSpritePrefab: {fileID: 100006, guid: 6b0feaff5c6b4fe4bb1066d20de3803b, type: 2}
   shardParent: {fileID: 100004}
-  delayBetweenShards: .100000001
+  totalTimeTween: 1
   crystalAnimation: {fileID: 11100000}
   clickableFireCrystalPrefab: {fileID: 100016, guid: 6b91de10836ad9e42bc9dd27e9b2c691,
     type: 2}
@@ -429,8 +429,8 @@ MonoBehaviour:
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
+  HideTarget: {fileID: 100014}
+  HideFunctionName: CloseFinishedHelper
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 

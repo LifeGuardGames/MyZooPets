@@ -25,12 +25,6 @@ public class ClickableFireCrystalController : MonoBehaviour{
 	private IEnumerator CloseFireCrystalUIManager(){
 		animParent.SetActive(false);
 		yield return new WaitForSeconds(1);
-
-		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
-			WellapadUIManager.Instance.CloseUI();
-		}
-		else{
-			FireCrystalUIManager.Instance.CloseUI();
-		}
+		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 	}
 }

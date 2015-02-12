@@ -499,7 +499,7 @@ GameObject:
   - 4: {fileID: 400076}
   - 114: {fileID: 11400086}
   m_Layer: 10
-  m_Name: HUDAnchor-TopLeft
+  m_Name: HUDAnchor-Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,7 +571,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 43, y: -40, z: 0}
+  m_LocalPosition: {x: -443, y: -40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400060}
@@ -686,7 +686,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 581, y: -40, z: -1.52587891e-05}
+  m_LocalPosition: {x: 95, y: -40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -816,7 +816,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 380, y: -40, z: 0}
+  m_LocalPosition: {x: -106, y: -40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400022}
@@ -918,7 +918,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 844.568909, y: -39.999939, z: 0}
+  m_LocalPosition: {x: 295, y: -40, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400062}
@@ -934,7 +934,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100076}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.68634, y: 384.514709, z: 1.52587891e-05}
+  m_LocalPosition: {x: -.607594967, y: 384.607544, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400052}
@@ -1038,6 +1038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdd644b33569cf4f877f42007da8649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisAnimation: {fileID: 0}
   resetAfterStop: 1
   optionalToggle: {fileID: 0}
   optionalParticle: {fileID: 19800000}
@@ -1176,6 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdd644b33569cf4f877f42007da8649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisAnimation: {fileID: 0}
   resetAfterStop: 1
   optionalToggle: {fileID: 0}
   optionalParticle: {fileID: 19800008}
@@ -1623,6 +1625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdd644b33569cf4f877f42007da8649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisAnimation: {fileID: 0}
   resetAfterStop: 1
   optionalToggle: {fileID: 0}
   optionalParticle: {fileID: 19800002}
@@ -1650,7 +1653,7 @@ MonoBehaviour:
   moodLabel: {fileID: 11400038}
   starLabel: {fileID: 11400070}
   tweenParent: {fileID: 100026}
-  anchorTopLeft: {fileID: 100076}
+  anchorTop: {fileID: 100076}
   animHealth: {fileID: 11400020}
   animMood: {fileID: 11400002}
   animMoney: {fileID: 11400066}
@@ -1702,6 +1705,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cdd644b33569cf4f877f42007da8649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisAnimation: {fileID: 0}
   resetAfterStop: 1
   optionalToggle: {fileID: 0}
   optionalParticle: {fileID: 19800004}
@@ -1806,7 +1810,7 @@ MonoBehaviour:
   uiCamera: {fileID: 0}
   widgetContainer: {fileID: 0}
   panelContainer: {fileID: 0}
-  side: 2
+  side: 3
   halfPixelOffset: 1
   runOnlyOnce: 0
   relativeOffset: {x: 0, y: 0}

@@ -29,20 +29,17 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	private bool isQueueAnimating = false;
 	public bool IsBadgeBoardUIAnimating{	// Scenes will poll this to see if they need to wait
-		get{
-			return isQueueAnimating;
-		}
+		get{ return isQueueAnimating; }
 	}
 
 	private bool isWaitingInRewardQueue = false;
 	public bool IsWaitingInRewardQueue{		// If it is waiting in reward queue waiting to be animated, used for controlling unlocking multiple badges
-		get{
-			return isWaitingInRewardQueue;
-		}
+		get{ return isWaitingInRewardQueue; }
 	}
 
 	public delegate void Callback();
 	public Callback FinishedAnimatingCallback;
+	private bool isOpenedAsReward = false;	// Check if it is badge board clicked or from reward manager
 
 	protected override void Awake(){
 		base.Awake();
@@ -115,24 +112,24 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	// Show the badge board pop queue board if any
 	private IEnumerator TryPopBadgeQueue(){
 		if(badgeUnlockQueue.Count != 0){
-		// If the badge board is not opened already, open the UI and wait a while
-		if(!BadgeBoardUIManager.Instance.IsOpen()){
-			float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
-			yield return new WaitForSeconds(sceneSpecificDelay);
-			OpenUI();
-			yield return new WaitForSeconds(1f);
-		}
+			// If the badge board is not opened already, open the UI and wait a while
+			if(!BadgeBoardUIManager.Instance.IsOpen()){
+				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
+				yield return new WaitForSeconds(sceneSpecificDelay);
+				OpenUI();
+				yield return new WaitForSeconds(1f);
+			}
 
-		Badge unlockingBadge = badgeUnlockQueue.Dequeue();
-		Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
-		if(badgeGOTransform != null){
-			BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
-			badgeController.PlayUnlockAnimation();
-		}
-		else{
-			Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
-			CloseUI();	// Try to fail gracefully
-		}
+			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+			if(badgeGOTransform != null){
+				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+				badgeController.PlayUnlockAnimation();
+			}
+			else{
+				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
+				CloseUI();	// Try to fail gracefully
+			}
 		}
 	}
 
@@ -157,18 +154,16 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			isQueueAnimating = false;	// Release the animation lock
 			isWaitingInRewardQueue = false;		// It is animating so no longer waiting in reward queue
 
-			//Notify anything that is listening to animation done
-			if(OnBadgeUIAnimationDone != null){
-				OnBadgeUIAnimationDone(this, EventArgs.Empty);
-			}
+
 
 			// Launch any finished callback
 			if(FinishedAnimatingCallback != null){
 				FinishedAnimatingCallback();
 			}
 		}
-
-		StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
+		else{
+			StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
+		}
 	}
 
 	public void BadgeClicked(GameObject go){
@@ -200,6 +195,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			// Disable the exit button if the badge is animating from reward manager
 			badgeExitButton.SetActive(isQueueAnimating ? false : true);
+			isOpenedAsReward = isQueueAnimating;
 
 			GetComponent<TweenToggleDemux>().Show();
 
@@ -250,6 +246,15 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				if(RoomArrowsUIManager.Instance != null){
 					RoomArrowsUIManager.Instance.ShowPanel();
 				}
+			}
+		}
+	}
+
+	private void CloseFinishHelper(){
+		if(isOpenedAsReward){
+			//Notify anything that is listening to animation done
+			if(OnBadgeUIAnimationDone != null){
+				OnBadgeUIAnimationDone(this, EventArgs.Empty);
 			}
 		}
 	}

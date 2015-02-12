@@ -42,6 +42,30 @@ public class Inhale : InhalerPart{
 			}
 		}
 	}
+	void OnDrag(DragGesture gesture){
+
+			if(!isGestureRecognized){
+				isGestureRecognized = true;
+				
+				//Disable hint when swipe gesture is registered. 
+				GetComponent<HintController>().DisableHint(false);
+				
+				LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
+				AudioManager.Instance.PlayClip("inhalerInhale"); 
+				petAnimator.SetTrigger("BreatheIn");
+				
+				Hashtable option = new Hashtable();
+				option.Add("parent", GameObject.Find("Anchor-Center"));
+				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+				option.Add("textSize", 100f);
+				option.Add("color", Color.white);
+				
+				FloatyUtil.SpawnFloatyText(option);
+				
+				InhalerBodyMoveAnimation.Play();
+			}
+
+	}
 	
 	protected override void Disable(){
 		gameObject.SetActive(false);

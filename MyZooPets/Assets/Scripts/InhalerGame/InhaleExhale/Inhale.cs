@@ -43,8 +43,15 @@ public class Inhale : InhalerPart{
 		}
 	}
 	void OnDrag(DragGesture gesture){
-
-			if(!isGestureRecognized){
+		if(!isGestureRecognized){
+			Vector3 begin = new Vector3 (0,0,0);
+			Vector3 ended;
+			if(gesture.Phase == ContinuousGesturePhase.Started){
+				begin = Input.GetTouch(0).position;
+			}
+			if(gesture.Phase == ContinuousGesturePhase.Ended){
+				ended = Input.GetTouch(0).position;
+				if(begin.x < ended.x){
 				isGestureRecognized = true;
 				
 				//Disable hint when swipe gesture is registered. 
@@ -63,8 +70,9 @@ public class Inhale : InhalerPart{
 				FloatyUtil.SpawnFloatyText(option);
 				
 				InhalerBodyMoveAnimation.Play();
+				}
 			}
-
+		}
 	}
 	
 	protected override void Disable(){

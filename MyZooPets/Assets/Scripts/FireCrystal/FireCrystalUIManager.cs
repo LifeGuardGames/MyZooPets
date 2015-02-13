@@ -119,7 +119,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		}
 	}
 
-	// TODO Sean - inconsistent place call with other finishtweens, this is done after hide whereas others is on hide
 	public void CloseFinishedHelper(){
 		isFireCrystalUIAnimating = false;
 
@@ -163,7 +162,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	/// Starts the one-off fire animation, only should be called ONCE at start animating!
 	/// </summary>
 	public void StartFillFireSprite(){
-		Debug.Log(currentPercentage + "-----");
 		LeanTween.cancel(gameObject);
 		LeanTween.value(gameObject, UpdateValueCallback, currentPercentage, targetPercentage, totalTimeTween)
 			.setOnComplete(FinishedFillSpriteCallback);
@@ -171,7 +169,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	// Helper function for the value leantween
 	private void UpdateValueCallback(float value){
-		Debug.Log("tweening update call " + value);
 		currentPercentage = value;
 		spriteFireFill.fillAmount = currentPercentage;
 	}

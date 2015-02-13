@@ -40,6 +40,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public delegate void Callback();
 	public Callback FinishedAnimatingCallback;
 	private bool isOpenedAsReward = false;	// Check if it is badge board clicked or from reward manager
+	private bool isOpenedInDecoMode = false; 	// Check if rewarded from decoration
 
 	protected override void Awake(){
 		base.Awake();
@@ -116,6 +117,14 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			if(!BadgeBoardUIManager.Instance.IsOpen()){
 				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
 				yield return new WaitForSeconds(sceneSpecificDelay);
+
+				// If the badge is rewarded inside deco mode, certain UI we want to toggle on hide
+				if(DecoInventoryUIManager.Instance != null){
+					if(DecoInventoryUIManager.Instance.IsOpen() && isOpenedAsReward){
+						isOpenedInDecoMode = true;
+					}
+				}
+
 				OpenUI();
 				yield return new WaitForSeconds(1f);
 			}
@@ -237,14 +246,18 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			// Only run this chunk if in bedroom or yard scene
 			if((Application.loadedLevelName == SceneUtils.BEDROOM.ToString()
 			    || Application.loadedLevelName == SceneUtils.YARD.ToString())){
-				if(NavigationUIManager.Instance != null){
-					NavigationUIManager.Instance.ShowPanel();
-				}
-				if(InventoryUIManager.Instance != null){
-					InventoryUIManager.Instance.ShowPanel();
-				}
-				if(RoomArrowsUIManager.Instance != null){
-					RoomArrowsUIManager.Instance.ShowPanel();
+
+				// Check if opened in editdeco mode, theres things we dont want to show
+				if(!isOpenedInDecoMode){
+					if(NavigationUIManager.Instance != null){
+						NavigationUIManager.Instance.ShowPanel();
+					}
+					if(InventoryUIManager.Instance != null){
+						InventoryUIManager.Instance.ShowPanel();
+					}
+					if(RoomArrowsUIManager.Instance != null){
+						RoomArrowsUIManager.Instance.ShowPanel();
+					}
 				}
 			}
 		}

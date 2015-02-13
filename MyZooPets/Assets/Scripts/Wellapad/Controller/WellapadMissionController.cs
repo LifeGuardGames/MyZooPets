@@ -82,7 +82,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				// get the position of the actual reward object because we want to stream the XP from it
 				GameObject goReward = GameObject.Find("WellapadRewardButton");				
 				Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
-				screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.TopLeft);
+				screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
 
 				StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: screenPos);
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus = RewardStatuses.Claimed;

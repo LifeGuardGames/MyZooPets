@@ -10,7 +10,7 @@ public class MinigamePopup_GameOver_Ninja : MinigamePopup_GameOver {
 	protected override int GetReward (MinigameRewardTypes eType) {
 		return NinjaManager.Instance.GetReward( eType );
 	}
-		
+
 	protected override int GetScore () {
 		return NinjaManager.Instance.GetScore();
 	}

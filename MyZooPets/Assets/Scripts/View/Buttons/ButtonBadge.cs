@@ -8,6 +8,8 @@ using System.Collections;
 
 public class ButtonBadge : LgButton{
 	protected override void ProcessClick(){
-		BadgeBoardUIManager.Instance.BadgeClicked(gameObject);
+		if(!BadgeBoardUIManager.Instance.IsBadgeBoardUIAnimating){
+			BadgeBoardUIManager.Instance.BadgeClicked(gameObject);
+		}
 	}
 }

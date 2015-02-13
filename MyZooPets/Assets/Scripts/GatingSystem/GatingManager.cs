@@ -69,7 +69,8 @@ public class GatingManager : Singleton<GatingManager>{
 			return new List<string>(latestUnlockedGate.DecoCategoriesStore);
 		}
 		else{
-			return null;
+			string[] defaultDeco = {"Carpet"};
+			return new List<string>(defaultDeco);
 		}
 	}
 

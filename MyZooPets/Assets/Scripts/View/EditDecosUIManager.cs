@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public class NodeSelectedArgs : EventArgs{
 	public GameObject Node{ get; set; }
 }
 
-public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{	
+public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 	//------------ Event Handlers ----------------------------------
 	public event EventHandler<NodeSelectedArgs> OnNodeSelected;		// when a deco node is selected
 	//--------------------------------------------------------------
@@ -272,3 +273,4 @@ public class EditDecosUIManager : SingletonUI<EditDecosUIManager>{
 			CloseChooseMenu();
 	}
 }
+*/

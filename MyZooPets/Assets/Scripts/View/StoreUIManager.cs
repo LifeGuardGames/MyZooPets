@@ -520,7 +520,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				_CloseUI();
 				break;
 
-			// Default cases which should never happen
+			// Default cases which should never happen5
 			case StoreShortcutType.None:
 			default:
 				Debug.LogWarning("Invalid shortcut type detected");

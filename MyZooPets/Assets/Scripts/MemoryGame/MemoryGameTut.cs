@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 
 public class MemoryGameTut : MinigameTutorial{
-
 	public static string TUT_KEY = "MEMORY_TUT";
 	GameObject tutBoards;				// Gameobject that positions the tutorial boards			
 	GameObject memoryCards;     		// memory prefab
@@ -20,8 +19,7 @@ public class MemoryGameTut : MinigameTutorial{
 			break;
 		}
 	}
-	
-	
+
 	protected override void SetKey(){
 		tutorialKey = TUT_KEY;
 	}
@@ -34,13 +32,11 @@ public class MemoryGameTut : MinigameTutorial{
 		GameObject.Destroy(tutBoards);
 		MemoryGameManager.Instance.inTutorial = false;
 		if(!isFinished){
-			MemoryGameManager.Instance.reset();
+			MemoryGameManager.Instance.Reset();
 		}
 	}
-	
-	
+
 	private void MoveAlong(object sender, EventArgs args){
 		Advance();
 	}
-
 }

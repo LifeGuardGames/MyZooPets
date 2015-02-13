@@ -51,26 +51,15 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _NewGame(){
-	//	if (IsTutorialOverride () && IsTutorialOn ()) {
-			if (inTutorial) {
-				StartTutorial ();
-			}
-
+		if(inTutorial){
+			StartTutorial();
+		}
 		else{
-			flip1 = null;
-			flip2 = null;
-
-			cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
-
-			CancelInvoke("StartScoreCountdown");
-			SetScore(startScoreValue);
-			InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-
-			ResetBoard();
+			Reset();
 		}
 	}
 
-	public void reset(){
+	public void Reset(){
 		flip1 = null;
 		flip2 = null;
 		
@@ -81,6 +70,11 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
 		
 		ResetBoard();
+	}
+
+	private void ResetBoard(){
+		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
+		memoryUI.StartBoard();
 	}
 
 	protected override void _Update(){
@@ -126,11 +120,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 				SetScore(0);
 			}
 		}
-	}
-
-	private void ResetBoard(){
-		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
-		memoryUI.StartBoard();
 	}
 
 	/// <summary>

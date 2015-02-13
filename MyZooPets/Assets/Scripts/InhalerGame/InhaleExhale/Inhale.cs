@@ -46,12 +46,11 @@ public class Inhale : InhalerPart{
 		if(!isGestureRecognized){
 			Vector3 begin = new Vector3 (0,0,0);
 			Vector3 ended;
-			if(gesture.Phase == ContinuousGesturePhase.Started){
-				begin = Input.GetTouch(0).position;
-			}
+
 			if(gesture.Phase == ContinuousGesturePhase.Ended){
-				ended = Input.GetTouch(0).position;
-				if(begin.x < ended.x){
+				ended = gesture.Position;
+				begin = gesture.StartPosition;
+				if(begin.x > ended.x){
 				isGestureRecognized = true;
 				
 				//Disable hint when swipe gesture is registered. 

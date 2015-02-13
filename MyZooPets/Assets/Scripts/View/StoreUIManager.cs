@@ -368,8 +368,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					// Call resizer
 					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
 					resizer.enabled = true;	// Resize automatically
-					if(unlockedDecoList == null)
-					Debug.Log("Wrong");
+
 					// If the gate xml has the deco type allowed, enable button
 					if(unlockedDecoList.Contains(tabParent.name)){
 						ShowActiveTab(tabParent.FindChild("Tab"));

@@ -34,14 +34,25 @@ public class Exhale : InhalerPart {
     }
 	void OnDrag(DragGesture gesture){
 		if(!isGestureRecognized){
-			isGestureRecognized = true;
-			
-			//Disable hint when swipe gesture is registered. 
-			GetComponent<HintController>().DisableHint(false);
-			
-			AudioManager.Instance.PlayClip("inhalerExhale");
-			LgInhalerAnimationEventHandler.BreatheOutEndEvent += BreatheOutEndEventHandler;	
-			petAnimator.SetTrigger("BreatheOut");
+			Vector3 begin = new Vector3 (0,0,0);
+			Vector3 ended;
+			if(gesture.Phase == ContinuousGesturePhase.Started){
+				begin = Input.GetTouch(0).position;
+			}
+			if(gesture.Phase == ContinuousGesturePhase.Ended){
+				ended = Input.GetTouch(0).position;
+				if(begin.x < ended.x){
+					isGestureRecognized = true;
+					
+					//Disable hint when swipe gesture is registered. 
+					GetComponent<HintController>().DisableHint(false);
+					
+					AudioManager.Instance.PlayClip("inhalerExhale");
+					LgInhalerAnimationEventHandler.BreatheOutEndEvent += BreatheOutEndEventHandler;	
+					petAnimator.SetTrigger("BreatheOut");
+				}
+			}
+
 		}
 	}
 	private void BreatheOutEndEventHandler(object sender, EventArgs args){

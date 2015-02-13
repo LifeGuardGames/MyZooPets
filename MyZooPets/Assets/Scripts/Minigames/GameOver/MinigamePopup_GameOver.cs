@@ -65,8 +65,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		Vector3 vPosXP = LgNGUITools.GetScreenPosition(goIconXP);
 		Vector3 vPosMoney = LgNGUITools.GetScreenPosition(goIconStars);
 
-		vPosXP = CameraManager.Instance.TransformAnchorPosition(vPosXP, InterfaceAnchors.Center, InterfaceAnchors.TopLeft);
-		vPosMoney = CameraManager.Instance.TransformAnchorPosition(vPosMoney, InterfaceAnchors.Center, InterfaceAnchors.TopLeft);
+		vPosXP = CameraManager.Instance.TransformAnchorPosition(vPosXP, InterfaceAnchors.Center, InterfaceAnchors.Top);
+		vPosMoney = CameraManager.Instance.TransformAnchorPosition(vPosMoney, InterfaceAnchors.Center, InterfaceAnchors.Top);
 		
 		// award the actual xp and money
 		Debug.Log("Reward money and xp");

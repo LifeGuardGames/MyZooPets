@@ -444,7 +444,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		yield return new WaitForSeconds(10.0f);
 		spawning = false;
 		// after 5 seconds of clean up start spawning normal again
-		yield return new WaitForSeconds(5.0f);
+		yield return new WaitForSeconds(8.0f);
 		bonusLabel.SetActive(false);
 		bonusRound = false;
 		spawning = true;

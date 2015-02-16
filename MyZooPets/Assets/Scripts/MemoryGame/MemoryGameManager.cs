@@ -45,20 +45,18 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	protected override string GetMinigameKey(){
 		return "MemoryGame";
 	}
-	
-	protected override bool IsTutorialOn(){
-		return false;	//TODO Change
-	}
 
 	protected override void _NewGame(){
-		if(inTutorial){
+		if(IsTutorialOn() && IsTutorialOverride()){
 			StartTutorial();
 		}
 		else{
 			Reset();
 		}
 	}
-
+	protected override bool IsTutorialOn(){
+		return Constants.GetConstant<bool>("IsMemoryTutorialOn");
+	}
 	public void Reset(){
 		flip1 = null;
 		flip2 = null;

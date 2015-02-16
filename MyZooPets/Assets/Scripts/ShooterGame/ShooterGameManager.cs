@@ -29,18 +29,15 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		return "ShooterGame";
 	}
 
-	protected override bool IsTutorialOn(){
-		return true;	//TODO Change
-	}
-
 	protected override void _NewGame(){
 
-//		if(IsTutorialOverride() && IsTutorialOn()){
+	if(IsTutorialOverride() && IsTutorialOn()){
 		if(inTutorial){
 			ShooterUIManager.Instance.Reset();
 			PlayerShooterController.Instance.reset();
 			StartTutorial();
 		}
+	}
 		else{
 			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
@@ -54,7 +51,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			}
 		}
 	}
-
+	protected override bool IsTutorialOn(){
+		return Constants.GetConstant<bool>("IsShooterTutorialOn");
+	}
 	public void reset(){
 		waveNum = 0;
 		missed = 0;

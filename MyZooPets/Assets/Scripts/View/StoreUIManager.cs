@@ -29,7 +29,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject tabArea; 				//Where all the tabs for sub category are
 	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
 	public GameObject backButton; 			// exit button reference
-
+	public GameObject prevTab; 
 	// store related sounds
 	public string soundChangeTab;
 	public string soundBuy;
@@ -422,6 +422,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			AudioManager.Instance.PlayClip(soundChangeTab);
 		
 		//set current tab
+		prevTab = GameObject.Find(currentTab);
 		currentTab = tabName;
 		
 		//set panel background color
@@ -461,12 +462,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 		}
 		else if(currentPage == "Decorations"){
+			// our currently selected tab
+			GameObject selectedTab = GameObject.Find(tabName);
 			//Retrieve decoration items base on the tab name (sub category)
 			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
-			
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];
+				//if we havn't changed tabs dont reset the tab color
+				if(prevTab != null)
+				prevTab.GetComponentInChildren<UISprite>().color = Color.white;
+				//colors the current tab green
+				selectedTab.GetComponentInChildren<UISprite>().color = Color.green;
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.ItemBoxOnly && !decoItemData.UnbuyableItem){
 						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);

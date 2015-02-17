@@ -469,11 +469,24 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];
-				//if we havn't changed tabs dont reset the tab color
-				if(prevTab != null)
-				prevTab.GetComponentInChildren<UISprite>().color = Color.white;
-				//colors the current tab green
-				selectedTab.GetComponentInChildren<UISprite>().color = Color.green;
+
+				// If we havent changed tabs, dont set reset anything
+				if(prevTab != null){
+					UIImageButton imageButtonPrev = prevTab.transform.Find("Tab").GetComponent<UIImageButton>();
+					imageButtonPrev.normalSprite = "buttonCategory";
+					imageButtonPrev.hoverSprite = "buttonCategory";
+					imageButtonPrev.pressedSprite = "buttonCategory";
+					imageButtonPrev.enabled = false;
+					imageButtonPrev.enabled = true;
+				}
+				// Change the sprite of the current tab to active
+				UIImageButton imageButtonSeletected = selectedTab.transform.Find("Tab").GetComponent<UIImageButton>();
+				imageButtonSeletected.normalSprite = "buttonCategoryActive";
+				imageButtonSeletected.hoverSprite = "buttonCategoryActive";
+				imageButtonSeletected.pressedSprite = "buttonCategoryActive";
+				imageButtonSeletected.enabled = false;
+				imageButtonSeletected.enabled = true;
+
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.ItemBoxOnly && !decoItemData.UnbuyableItem){
 						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);

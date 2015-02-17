@@ -20,6 +20,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private Vector3 lastPos = new Vector3(0, 0, 0); // the last position of the user's trail
 	private List<NinjaDataEntry> currentTriggerEntries; // current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection; // record the last drag direction
+	public int bonusRoundEnemies;
 
 	void Awake(){
 		Application.targetFrameRate = 60;
@@ -432,22 +433,26 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}	
 	IEnumerator WaitASec(int _rand, List<string> listObjects){
 		for (int i = 0; i <= _rand; i++){
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.1f);
 			new SpawnGroupSwarms(listObjects);
 		}
 	}
+
+	public void checkBonusRound(){
+		if(bonusRoundEnemies <= 0){
+			bonusLabel.SetActive(false);
+			bonusRound = false;
+			StopCoroutine("BonusTime");
+			currentTriggerEntries.RemoveAt(0);
+			spawning = true;
+		}
+	}
+
 	// runs during a bonus round
 	IEnumerator BonusTime(){ 
 		// temp for visual
 		bonusLabel.SetActive(true);
 		// bonus round runs 10 seconds and then stop the spawns so the user can clean up
 		yield return new WaitForSeconds(10.0f);
-		spawning = false;
-		// after 5 seconds of clean up start spawning normal again
-		yield return new WaitForSeconds(8.0f);
-		bonusLabel.SetActive(false);
-		bonusRound = false;
-		spawning = true;
-		StopCoroutine("BonusTime");
 	}
 }

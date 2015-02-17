@@ -55,7 +55,11 @@ public class NinjaTriggerTarget : NinjaTrigger{
 		int nVal = GetPointValue();
 		NinjaManager.Instance.UpdateScore(nVal);
 		if(!NinjaManager.Instance.bonusRound)
-		NinjaManager.Instance.increaseChain();
+			NinjaManager.Instance.increaseChain();
+		else if (NinjaManager.Instance.bonusRoundEnemies !=0){
+			NinjaManager.Instance.bonusRoundEnemies--;
+			NinjaManager.Instance.checkBonusRound();
+		}
 		// increase the player's combo
 		NinjaManager.Instance.IncreaseCombo(1);
 		
@@ -86,6 +90,10 @@ public class NinjaTriggerTarget : NinjaTrigger{
 			if(NinjaManager.Instance.bonusRound == false){
 			NinjaManager.Instance.UpdateLives(-1);
 			NinjaManager.Instance.resetChain();
+			}
+			else if (NinjaManager.Instance.bonusRoundEnemies !=0){
+				NinjaManager.Instance.bonusRoundEnemies--;
+				NinjaManager.Instance.checkBonusRound();
 			}
 		}
 	}	

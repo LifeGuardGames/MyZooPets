@@ -48,6 +48,8 @@ public class SpawnGroupSplit : SpawnGroup {
 		
 		// loop through all the objects to be spawned and assign them a random x and y force
 		for ( int i = 0; i < nCount; ++i ) {
+			if(NinjaManager.Instance.bonusRound)
+			NinjaManager.Instance.bonusRoundEnemies++;
 			// y force
 			int nForceY = GetRandomForce();
 			

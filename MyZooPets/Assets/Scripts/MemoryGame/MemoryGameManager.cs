@@ -47,7 +47,8 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _NewGame(){
-		if(IsTutorialOn() && IsTutorialOverride()){
+		if(IsTutorialOn() && IsTutorialOverride()|| 
+		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 			StartTutorial();
 		}
 		else{

@@ -443,7 +443,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			bonusLabel.SetActive(false);
 			bonusRound = false;
 			StopCoroutine("BonusTime");
-			currentTriggerEntries.RemoveAt(0);
+			//currentTriggerEntries.RemoveAt(0);
 			spawning = true;
 		}
 	}

@@ -8,7 +8,6 @@ using System.Collections;
 // then changes the scene.  Note that the zoom 
 // function in CameraMove does the actual loading.
 //---------------------------------------------------
-
 public class ButtonChangeScene : LgButton{
 	public static EventHandler<EventArgs> OnChangeScene; //Event when changing scene on user input
 
@@ -16,13 +15,13 @@ public class ButtonChangeScene : LgButton{
 	public string strScene;
 	
 	// related to the camera move
-	public Vector3 vOffset;			// offset of camera on the target
-	public Vector3 vFinalRotation;	// how the camera should rotate
-	public float fTime;				// how long the tween should last
+	public Vector3 finalPosition;		// offset of camera on the target
+	public Vector3 finalRotation;		// how the camera should rotate
+	public float zoomTime = 1f;				// how long the tween should last
 
-	public bool shouldSaveSceneData; //give the option to load scene without saving partition or pet position
-	public GameObject cameraGO; //needs the camera to record partition # before scene change
-	public GameObject petObject; //needs to record pet position before scene change
+	public bool shouldSaveSceneData;	// give the option to load scene without saving partition or pet position
+	public GameObject cameraGO; 		// needs the camera to record partition # before scene change
+	public GameObject petObject; 		// needs to record pet position before scene change
 
 	public string analyticsEvent;
 	public EntranceHelperController entranceHelper;
@@ -32,49 +31,51 @@ public class ButtonChangeScene : LgButton{
 	//---------------------------------------------------	
 	protected override void ProcessClick(){
 		if(DataManager.Instance.GameData.Stats.GetMoodState() != PetMoods.Sad){
-		// lock the click manager
-		ClickManager.Instance.Lock();
+			// lock the click manager
+			ClickManager.Instance.Lock();
 
-		//Hide other UI Objects
-		//Assuming that HUD is present at all scenes, so need to be hidden before scene change
-		if(HUDUIManager.Instance != null){
-			HUDUIManager.Instance.HidePanel();
-		}
-		if(NavigationUIManager.Instance != null){
-			NavigationUIManager.Instance.HidePanel();	
-		}
-		if(InventoryUIManager.Instance != null){
-			InventoryUIManager.Instance.HidePanel();
-		}
-		RoomArrowsUIManager.Instance.HidePanel();
+			//Hide other UI Objects
+			//Assuming that HUD is present at all scenes, so need to be hidden before scene change
+			if(HUDUIManager.Instance != null){
+				HUDUIManager.Instance.HidePanel();
+			}
+			if(NavigationUIManager.Instance != null){
+				NavigationUIManager.Instance.HidePanel();	
+			}
+			if(InventoryUIManager.Instance != null){
+				InventoryUIManager.Instance.HidePanel();
+			}
+			RoomArrowsUIManager.Instance.HidePanel();
 
-		//Sent an change scene event out, so other objects can run appropriate logic before scene change
-		if(OnChangeScene != null)
-			OnChangeScene(this, EventArgs.Empty);
+			//Sent an change scene event out, so other objects can run appropriate logic before scene change
+			if(OnChangeScene != null){
+				OnChangeScene(this, EventArgs.Empty);
+			}
 
-		//Save some basic data for current scene
-		RememberCurrentScene();
+			//Save some basic data for current scene
+			RememberCurrentScene();
 
-		//record that this entrance has been used
-		if(entranceHelper != null)
-			entranceHelper.EntranceUsed();
-		
-		// if there is a camera move, do it -- otherwise, just skip to the move being complete
-		if(fTime > 0){
-			Vector3 vFinalPos = gameObject.transform.position + vOffset;
-
-			CameraManager.Callback cameraDoneFunction = delegate(){
+			//record that this entrance has been used
+			if(entranceHelper != null){
+				entranceHelper.EntranceUsed();
+			}
+			
+			// if there is a camera move, do it -- otherwise, just skip to the move being complete
+			if(zoomTime > 0){
+				CameraManager.Callback cameraDoneFunction = delegate(){
+					CameraMoveDone();
+				};
+				CameraManager.Instance.ZoomToTarget(finalPosition, finalRotation, zoomTime, cameraDoneFunction);
+			}
+			else{
 				CameraMoveDone();
-			};
-			CameraManager.Instance.ZoomToTarget(vFinalPos, vFinalRotation, fTime, cameraDoneFunction);
-		}
-		else
-			CameraMoveDone();
+			}
 		}
 		else {
 			PetSpeechAI.Instance.ShowSadMessage();
 		}
 	}
+
 	//---------------------------------------------------
 	// CameraMoveDone()
 	// Callback for when the camera is done tweening to
@@ -96,9 +97,11 @@ public class ButtonChangeScene : LgButton{
 			Vector3 petPos = petObject.transform.position;
 			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
 		}
-		else
-			if(strScene == SceneUtils.MENU)
+		else{
+			if(strScene == SceneUtils.MENU){
 				//Only remove scene data if returning to menu scene
-			DataManager.Instance.SceneData = null;
+				DataManager.Instance.SceneData = null;
+			}
+		}
 	}
 }

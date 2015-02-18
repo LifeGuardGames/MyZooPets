@@ -24,7 +24,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public EntranceHelperController entranceHelper;
 	
 	// related to zooming into the badge board
-	public float ZoomTime;
+	public float zoomTime;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
 	public string soundBuy;
@@ -94,7 +94,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			CameraManager.Callback cameraDoneFunction = delegate(){
 				CameraMoveDone();
 			};
-			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, ZoomTime, cameraDoneFunction);
+			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, zoomTime, cameraDoneFunction);
 			
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();

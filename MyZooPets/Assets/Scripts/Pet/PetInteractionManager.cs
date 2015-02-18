@@ -5,7 +5,7 @@ using System.Collections;
 //change this to PetInteraction Manager to handle item drop as well
 public class PetInteractionManager : MonoBehaviour{
 //	public PetAnimator petAnimator;
-
+	public bool isInteractable = true;
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 	}
@@ -15,6 +15,7 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	void OnTap(TapGesture gesture){
+		if(isInteractable){
 		try{
 			string colliderName = gesture.Selection.collider.name;
 			
@@ -34,6 +35,7 @@ public class PetInteractionManager : MonoBehaviour{
 		catch(NullReferenceException e){
 			Debug.LogException(e);
 		}
+		}
 	}
 	
 	/// <summary>
@@ -46,6 +48,7 @@ public class PetInteractionManager : MonoBehaviour{
 	void OnDrag(Vector2 delta){}
 
 	void OnDrag(DragGesture gesture){
+		if(isInteractable){
 		try{
 			string colliderName = gesture.Selection.collider.name;
 			
@@ -78,6 +81,7 @@ public class PetInteractionManager : MonoBehaviour{
 			Debug.LogException(e);
 			PetAnimationManager.Instance.StopRubbing();
 			PetAnimationManager.Instance.StopTickling();
+		}
 		}
 	}
 

@@ -31,6 +31,7 @@ public class ButtonChangeScene : LgButton{
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick(){
+		if(DataManager.Instance.GameData.Stats.GetMoodState() != PetMoods.Sad){
 		// lock the click manager
 		ClickManager.Instance.Lock();
 
@@ -69,8 +70,8 @@ public class ButtonChangeScene : LgButton{
 		}
 		else
 			CameraMoveDone();
-	}	
-	
+		}	
+	}
 	//---------------------------------------------------
 	// CameraMoveDone()
 	// Callback for when the camera is done tweening to

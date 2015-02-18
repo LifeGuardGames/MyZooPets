@@ -201,6 +201,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	protected virtual void _NewGame(){
+	StatsController.Instance.ChangeStats(deltaMood: -10, isInternal: true);
 		// children implement this
 	}
 	
@@ -235,6 +236,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// This comes from clicking a button.
 	//---------------------------------------------------		
 	public void RestartGame(){
+		Debug.Log (DataManager.Instance.GameData.Stats.Mood);
+		StatsController.Instance.ChangeStats(deltaMood: -10,isInternal: true);
 		AudioManager.Instance.PauseBackground(false);
 
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from

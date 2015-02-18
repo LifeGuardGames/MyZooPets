@@ -134,7 +134,8 @@ public class StatsController : Singleton<StatsController>{
 	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
 	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3),
 							bool isPlaySounds = true, bool isAllAtOnce = false, bool isFloaty = false,
-	                        bool isDisableStream = false, bool is3DObject = false, float animDelay = 0f){;
+	                        bool isDisableStream = false, bool is3DObject = false, float animDelay = 0f,
+	                        bool isInternal = false){;
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
 			if(deltaPoints > 0){
@@ -189,7 +190,7 @@ public class StatsController : Singleton<StatsController>{
 				CheckForZeroHealth();
 			}
 		}
-		
+		if(isInternal == false){
 		if(isFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
 			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
 		}
@@ -243,7 +244,7 @@ public class StatsController : Singleton<StatsController>{
 			};
 			RewardManager.Instance.AddToRewardQueue(function1);
 		}
-
+	}
 		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
 	}

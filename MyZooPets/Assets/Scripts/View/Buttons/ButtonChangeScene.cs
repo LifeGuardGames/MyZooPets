@@ -70,7 +70,10 @@ public class ButtonChangeScene : LgButton{
 		}
 		else
 			CameraMoveDone();
-		}	
+		}
+		else {
+			PetSpeechAI.Instance.ShowSadMessage();
+		}
 	}
 	//---------------------------------------------------
 	// CameraMoveDone()

@@ -54,7 +54,14 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.Talk(msgOption);	
 	}
-	
+
+	public void ShowSadMessage(){
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("TOO_SAD_TO_PLAY"));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
+	}
+
 	public void ShowItemNoThanksMsg(){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("ITEM_NO_THANKS"));

@@ -20,7 +20,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
 	public static EventHandler<EventArgs> OnDestroyedGate; // When a specific gate has been destroyed
 	//=====================================================
-	private GameObject head;
 	private GameObject body;
 	public string currentArea; // area that this manager is in
 	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
@@ -435,10 +434,8 @@ public class GatingManager : Singleton<GatingManager>{
 	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);
-
-		head = GameObject.Find("HeadCollider");
+		
 		body = GameObject.Find("BodyCollider");
-		head.GetComponent<PetInteractionManager>().isInteractable = false;
 		body.GetComponent<PetInteractionManager>().isInteractable = false;
 
 		//once pet is in position for fire breathing. Idle animations need to be turn off
@@ -532,8 +529,7 @@ public class GatingManager : Singleton<GatingManager>{
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
-
-		head.GetComponent<PetInteractionManager>().isInteractable = true;
+		
 		body.GetComponent<PetInteractionManager>().isInteractable = true;
 
 		//turn pet idle animation back on before leaving the gated room

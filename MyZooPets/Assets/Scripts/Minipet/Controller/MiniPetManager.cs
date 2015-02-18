@@ -25,6 +25,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	
 	private Level maxLevel = Level.Level6;
 
+	private bool canLevel;
+
 	/// <summary>
 	/// Gets or sets a value indicating whether is first time cleaning.
 	/// Also sends out Event when value has been updated
@@ -58,6 +60,10 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	// Use this for initialization
 	void Start(){
+		Debug.Log(PlayPeriodLogic.Instance.CanUseEverydayInhaler());
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			canLevel = true;
+		}
 //		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
 
 		//load all minipet into the scene
@@ -170,7 +176,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		bool isTickled = DataManager.Instance.GameData.MiniPets.IsTickled(miniPetID);
 		bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
 
-		canModify = (currentLevel != maxLevel) && isTickled && isCleaned;
+		canModify = (currentLevel != maxLevel) && isTickled && isCleaned && canLevel;
 
 		return canModify;
 	}
@@ -222,6 +228,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseFoodXP(string miniPetID){
+		if(canLevel){
 		//Increase food xp                                                                         
 		DataManager.Instance.GameData.MiniPets.IncreaseFoodXP(miniPetID, 1);
 
@@ -236,10 +243,13 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		//check current food xp with that condition
 		if(currentFoodXP >= levelUpCondition){
 			args.UpdateStatus = UpdateStatuses.LevelUp;
+				canLevel = false;
 		}
 
 		if(MiniPetStatusUpdate != null)
 			MiniPetStatusUpdate(this, args);
+		}
+
 	}
 
 	/// <summary>

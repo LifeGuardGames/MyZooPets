@@ -53,6 +53,10 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	void Awake(){
 		hudAnimator = GetComponent<HUDAnimator>();
 	}
+
+	void Start(){
+		HideLabels();
+	}
 	
 	// Update is called once per frame
 	void Update(){
@@ -90,5 +94,20 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 
 	public void HidePanel(){
 		gameObject.GetComponent<TweenToggleDemux>().Hide();
+	}
+
+	/// <summary>
+	/// Shows the more detailed HUD labels
+	/// </summary>
+	public void ShowLabels(){
+		levelFraction.gameObject.SetActive(true);
+		healthLabel.gameObject.SetActive(true);
+		moodLabel.gameObject.SetActive(true);
+	}
+
+	public void HideLabels(){
+		levelFraction.gameObject.SetActive(false);
+		healthLabel.gameObject.SetActive(false);
+		moodLabel.gameObject.SetActive(false);
 	}
 }

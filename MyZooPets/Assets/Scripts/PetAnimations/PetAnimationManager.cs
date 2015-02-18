@@ -233,6 +233,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void StartTickling(){
 		animator.SetBool("IsTickling", true);
+		StartCoroutine("GenerateCoins");
 	}
 
 	/// <summary>
@@ -241,6 +242,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public void StopTickling(){
 		animator.SetBool("IsTickling", false);
 		PetAudioManager.Instance.StopAnimationSound();
+		StopCoroutine("GenerateCoins");
 	}
 
 	/// <summary>
@@ -362,5 +364,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 					animator.SetTrigger(animationName);
 			}
 		}
+	}
+	IEnumerator GenerateCoins(){
+		yield return new WaitForSeconds (5.0f);
+		StatsController.Instance.ChangeStats(deltaStars: 1, starsLoc: transform.position, is3DObject: true);
+		StartCoroutine("GenerateCoins");
 	}
 }

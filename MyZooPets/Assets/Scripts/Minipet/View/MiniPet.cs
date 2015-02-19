@@ -19,7 +19,7 @@ public class MiniPet : MonoBehaviour {
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
-
+	public string minipetName = "general";
 	private bool isVisible;
 	private bool isHatchedAux;
 	private string id; //pet id
@@ -35,7 +35,7 @@ public class MiniPet : MonoBehaviour {
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
-	private bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
+	public bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 
@@ -240,7 +240,7 @@ public class MiniPet : MonoBehaviour {
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			MiniPetManager.Instance.IncreaseFoodXP(id);
-			isFinishEating = true;
+			FinishEating();
 			animationManager.Eat();
 		}
 		//else check if tickle and cleaning is done. if both done 
@@ -262,7 +262,9 @@ public class MiniPet : MonoBehaviour {
 				animationManager.IsRunningIdleAnimations = true;
 		}
 	}
-
+	public virtual void FinishEating(){
+		isFinishEating = true;
+	}
 	/// <summary>
 	/// Updates the animation when minipet status is also updated
 	/// </summary>

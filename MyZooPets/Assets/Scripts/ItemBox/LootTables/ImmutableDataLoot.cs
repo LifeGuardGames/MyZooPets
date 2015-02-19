@@ -20,7 +20,7 @@ public class ImmutableDataLoot{
 	}
 
 	public int GetWeight(){
-		return weight;	
+		return weight;
 	}
 	
 	public ImmutableDataLoot(IXMLNode node, string errorMessage){

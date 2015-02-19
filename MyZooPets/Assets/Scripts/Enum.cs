@@ -318,3 +318,17 @@ public enum CurrencyTypes{
 	WellaCoin
 }
 
+public enum MinigameTypes{
+	None,	// Default value
+	TriggerNinja,
+	Shooter,
+	Memory,
+	Clinic,
+	Runner
+}
+
+public enum ZoneTypes{
+	None,	// Default value
+	Bedroom,
+	Yard
+}

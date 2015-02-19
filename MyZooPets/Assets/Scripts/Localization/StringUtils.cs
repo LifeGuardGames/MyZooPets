@@ -73,4 +73,26 @@ public class StringUtils {
 
         return retValue;	
 	}
+
+	public static Vector3 ParseVector3(string vectorString){
+		Vector3 vector = new Vector3(0, 0, 0);
+		String[] arrayVector3;
+		
+		try{
+			arrayVector3 = vectorString.Split(","[0]);
+			
+			if(arrayVector3.Length == 3){
+				vector = new Vector3(
+					float.Parse(arrayVector3[0]), 
+					float.Parse(arrayVector3[1]), 
+					float.Parse(arrayVector3[2]));
+			}
+			else
+				Debug.LogError("Illegal vector3 parsing, reverting to 0,0,0");
+		}
+		catch(NullReferenceException e){
+			Debug.LogError("Vector3 parsing. string cannot be null. error message: " + e.Message);
+		}
+		return vector;
+	}
 }

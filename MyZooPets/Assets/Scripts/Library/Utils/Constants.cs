@@ -117,7 +117,7 @@ public class Constants{
 				hashConstants[strKey] = ParseColor(strValue);
 				break;
 			case "Vector3":
-				hashConstants[strKey] = ParseVector3(strValue);				
+				hashConstants[strKey] = ParseVector3(strValue);
 				break;
 			default:
 				Debug.LogError("Illegal constant type for " + strKey);

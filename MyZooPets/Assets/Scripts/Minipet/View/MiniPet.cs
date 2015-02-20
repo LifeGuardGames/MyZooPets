@@ -334,10 +334,10 @@ public class MiniPet : MonoBehaviour {
 		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 
 		if(!isTickled){
-			miniPetSpeechAI.ShowSadMsg();
+			miniPetSpeechAI.ShowSadMsg(name);
 		}
 		else if(!isCleaned){
-			miniPetSpeechAI.ShowDirtyMsg();
+			miniPetSpeechAI.ShowDirtyMsg(name);
 		}
 	}
 
@@ -388,13 +388,13 @@ public class MiniPet : MonoBehaviour {
 				bool isMaxLevel = MiniPetManager.Instance.IsMaxLevel(id);
 
 				if(!isTickled){
-					miniPetSpeechAI.ShowSadMsg();
+					miniPetSpeechAI.ShowSadMsg(name);
 				}
 				else if(!isCleaned){
-					miniPetSpeechAI.ShowDirtyMsg();
+					miniPetSpeechAI.ShowDirtyMsg(name);
 				}
 				else if(isMaxLevel){
-					miniPetSpeechAI.ShowMaxLevelMsg();
+					miniPetSpeechAI.ShowMaxLevelMsg(name);
 				}
 				else{}
 			}

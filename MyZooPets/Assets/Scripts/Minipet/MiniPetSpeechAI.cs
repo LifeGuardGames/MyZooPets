@@ -24,9 +24,23 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
-	public void ShowSadMsg(){
+	public void ShowSadMsg(string pet){
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_SAD_MSG"));
+		if(pet == "general"){
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+		}
+		else if (pet == "rentention"){
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+		}
+		else if (pet == "gameMaster"){
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+		}
+		else if (pet == "merch"){
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+		}
+		else if (pet == "warrior"){
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
+		}
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.Talk(msgOption);
 	}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -94,7 +94,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 		if(areaPartitionGates == null)
 			areaPartitionGates = new Hashtable();
 
-		string areaID = dataGate.GateArea;
+		string areaID = dataGate.Zone;
 		int roomPartition = dataGate.Partition;
 		
 		// if the area isn't in the hash yet, create it

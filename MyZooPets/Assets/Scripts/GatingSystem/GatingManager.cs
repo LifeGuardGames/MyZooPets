@@ -79,7 +79,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// This should be called everytime that a gate is unlocked
 	/// 'Null' if no unlocked gates yet
 	/// </summary>
-	private ImmutableDataGate CalculateLatestUnlockedGate(){
+	private ImmutableDataGate GetLatestUnlockedGate(){
 		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
 		int maxGateNumberSoFar = -1;
 		ImmutableDataGate latestGateSoFar = null;
@@ -365,7 +365,7 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 
 			// Recalculate the latest unlocked gate
-			CalculateLatestUnlockedGate();
+			GetLatestUnlockedGate();
 		}
 			
 		return isDestroyed;

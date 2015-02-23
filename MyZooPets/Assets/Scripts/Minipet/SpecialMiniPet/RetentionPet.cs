@@ -19,6 +19,7 @@ public class RetentionPet : MiniPet {
 	}
 
 	private void giveOutMission(){
+		WellapadMissionController.Instance.AddMission("Ninja");
 	}
 
 

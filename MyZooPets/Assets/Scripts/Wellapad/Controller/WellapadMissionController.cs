@@ -172,13 +172,14 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		DateTime dateMissionsCreated = DataManager.Instance.GameData.Wellapad.DateMissionsCreated;	
 		bool IsRefresh = sinceCreated.TotalHours >= 12 || 
 			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);
-		
+		//bool IsRefresh = MiniPetManager.Instance.needMission;
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
-		if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
-			IsRefresh = false;
+		/*if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
+			IsRefresh = false;*/
 
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if(IsRefresh){
+			Debug.Log("stuff");
 			//Before reseting mission. Go through current mission and send failed tasks to analytics server
 			foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
 				foreach(KeyValuePair<string, MutableDataWellapadTask> taskKeyValuePair in mission.Value.Tasks){
@@ -203,7 +204,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
+
+			//IsRefresh = false;
 		}
+		Debug.Log("broked");
 	}
 
 	/// <summary>
@@ -353,11 +357,12 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			
 			savedTasks[taskID] = new MutableDataWellapadTask(task);
 		}
-		
 		DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID] = new MutableDataMission(missionID, savedTasks);
 		
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
 		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
+
+
 	}
 
 	private List<ImmutableDataWellapadTask> GetUnlockedTasks(string missionID){

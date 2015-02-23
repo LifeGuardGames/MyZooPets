@@ -4,6 +4,7 @@ using System;
 
 /// <summary>
 /// Reward manager.
+// TODO persistent??
 /// This is a class that is persistent across all scenes where it controls the UI order for
 /// Stats reward, badge reward, and fire crystal reward
 /// This is done through a queue that makes sure one is done animating before the other is called.

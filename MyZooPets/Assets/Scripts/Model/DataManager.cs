@@ -205,8 +205,7 @@ public class DataManager : Singleton<DataManager>{
 			
 			// also early out if we happen to be in the inhaler game.  Ultimately we may want to create a more elaborate hash/list
 			// of scenes it is okay to save in, if we ever create more scenes that shouldn't serialize data
-			string loadedLevelName = Application.loadedLevelName;
-			if(loadedLevelName == "InhalerGamePet"){
+			if(Application.loadedLevelName == SceneUtils.INHALERGAME){
 				Debug.Log("Not saving the game because its inhaler scene");
 				return;
 			}

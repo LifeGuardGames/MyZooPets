@@ -44,7 +44,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	public void SetScreen() {
 		// for now, just check to see if the player has any outstanding missions.
 		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
-
+		Debug.Log(hasActiveTasks);
 		foreach(Transform child in goWellapadScreen.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
@@ -58,7 +58,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 				GameObject missionListPrefab = (GameObject) Resources.Load(missionListPrefabName);
 				missionListGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionListPrefab);
 			}
-
+			Debug.Log(2);
 			missionListGO.GetComponent<WellapadMissionUIController>().DisplayMissions();
 		}else{
 			// otherwise, show the "come back later" screen

@@ -4,9 +4,9 @@ using System.Collections;
 public class TestMissionFlow : MonoBehaviour {
 
 	public void getMission(){
-		DataManager.Instance.GameData.Wellapad.ResetMissions();
+		WellapadMissionController.Instance.UnlockTask("Ninja");
 		MiniPetManager.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission("Critical");
+		WellapadMissionController.Instance.AddMission("Ninja");
 
 	}
 }

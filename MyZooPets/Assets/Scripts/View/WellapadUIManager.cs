@@ -25,8 +25,8 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 		wellapadTweenParent.ShowTarget = gameObject;
 		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();
 
-		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
-		RefreshScreen();
+		//WellapadMissionController.Instance.OnMissionsRefreshed += RefreshScreen;
+		//RefreshScreen();
 	}
 
 	protected override void _OpenUI(){
@@ -42,6 +42,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 
 		// show the UI itself
 		wellapadTweenParent.Show();
+		RefreshScreen();
 	}
 
 	//---------------------------------------------------

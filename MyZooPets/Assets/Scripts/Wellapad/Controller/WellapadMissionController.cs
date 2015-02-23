@@ -64,7 +64,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// <param name="taskID">Task ID.</param>
 	public void UnlockTask(string taskID){
 		DataManager.Instance.GameData.Wellapad.TasksUnlocked.Add(taskID);
-		Debug.Log(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains("ScoreNinja"));
+
 	}
 
 	/// <summary>
@@ -180,7 +180,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if(IsRefresh){
-			Debug.Log("stuff");
 			//Before reseting mission. Go through current mission and send failed tasks to analytics server
 			foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
 				foreach(KeyValuePair<string, MutableDataWellapadTask> taskKeyValuePair in mission.Value.Tasks){
@@ -208,7 +207,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 			IsRefresh = false;
 		}
-		Debug.Log("broked");
 	}
 
 	/// <summary>
@@ -335,7 +333,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
 			// user has saved tasks...use those	
 			Dictionary<string, MutableDataWellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks;
-			Debug.Log(savedTasks.Count);
 			// loop through all saved tasks and add them to the list
 			foreach(KeyValuePair<string, MutableDataWellapadTask> pair in savedTasks)
 				listTasks.Add(pair.Value);
@@ -348,7 +345,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 	public void AddMission(string missionID){
 		List<ImmutableDataWellapadTask> listTasks = GetUnlockedTasks(missionID);
-		Debug.Log(listTasks.Count);
 		Dictionary<string, MutableDataWellapadTask> savedTasks = new Dictionary<string, MutableDataWellapadTask>();
 		
 		for(int i = 0; i < listTasks.Count; ++i){
@@ -376,7 +372,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 			if(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains(category)){
 				List<ImmutableDataWellapadTask> listTasks = (List<ImmutableDataWellapadTask>) pair.Value;
-				Debug.Log(listTasks.Count);
 				// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
 				// otherwise we just want to pick 1 at random
 				// int nTasks = strCategory == WellapadData.ALWAYShashDataD ? listTasks.Count : 1;

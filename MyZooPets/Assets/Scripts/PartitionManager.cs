@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -29,7 +30,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 				Debug.LogError("Non partition detected " + trans.name);
 			}
 		}
-
 		availablePartitionLocationsList = DataLoaderPartitionLocations.GetDataList();
 	}
 
@@ -49,15 +49,11 @@ public class PartitionManager : Singleton<PartitionManager> {
 	}
 
 	#region Minipet spawning use
-	public MinigameTypes GetRandomUnlockedMinigameType(){
-		return MinigameTypes.None;
-	}
-
 	public LgTuple<Vector3, int> GetBasePositionInBedroom(){
 		// Initialize all to null first
 		LgTuple<Vector3, int> tupleToReturn = null;
 		ImmutableDataPartitionLocation locationToDelete = null;
-
+		
 		// Loop through available list and keep track if found
 		foreach(ImmutableDataPartitionLocation location in availablePartitionLocationsList){
 			if(location.Attribute == PartitionLocationTypes.Base){
@@ -71,6 +67,12 @@ public class PartitionManager : Singleton<PartitionManager> {
 			availablePartitionLocationsList.Remove(locationToDelete);
 		}
 		return tupleToReturn;
+	}
+
+	public MinigameTypes GetRandomUnlockedMinigameType(){
+		string[] typeList = Enum.GetNames(typeof(MinigameTypes));
+		int randomIndex = UnityEngine.Random.Range(1, typeList.Length);	// Leaving out the None enum
+		return (MinigameTypes)Enum.Parse(typeof(MinigameTypes), typeList[randomIndex]);
 	}
 
 	public LgTuple<Vector3, int> GetUnusedPositionNextToMinigame(MinigameTypes minigameType){
@@ -139,7 +141,13 @@ public class PartitionManager : Singleton<PartitionManager> {
 	#endregion
 
 	private int GetLastestUnlockedPartition(){
-		return 0;
+		ImmutableDataGate latestGate = GatingManager.Instance.GetLatestUnlockedGate();
+		if(latestGate != null){	// All gates unlocked
+			return latestGate.Partition - 1;	// Get latest gate and subtract 1
+		}
+		else{
+			return DataLoaderPartitions.GetDataList().Count - 1;	// Get the gates list count, off by 1
+		}
 	}
 
 	public bool IsPartitionInCurrentZone(int partitionNumber){
@@ -147,4 +155,13 @@ public class PartitionManager : Singleton<PartitionManager> {
 		ImmutableDataPartition partition = DataLoaderPartitions.GetData(craftedId);
 		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
 	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "random minigame")){
+//			Debug.Log(GetRandomUnlockedMinigameType().ToString());
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "latest unlocked p")){
+//			Debug.Log(GetLastestUnlockedPartition());
+//		}
+//	}
 }

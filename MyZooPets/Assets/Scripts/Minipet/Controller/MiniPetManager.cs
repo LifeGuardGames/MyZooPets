@@ -27,6 +27,8 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	private bool canLevel;
 
+	public bool needMission = false;
+
 	/// <summary>
 	/// Gets or sets a value indicating whether is first time cleaning.
 	/// Also sends out Event when value has been updated

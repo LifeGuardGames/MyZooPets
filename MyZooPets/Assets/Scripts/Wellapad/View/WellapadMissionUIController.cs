@@ -42,7 +42,7 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMissions() {		
 		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentMissions();
-		
+		Debug.Log(3);
 		// create our missions
 		if(currentMissions.Count > 0)
 			foreach (string strMission in currentMissions)
@@ -57,7 +57,9 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMission(string missionType){	
 		// find the available tasks for the mission and add them
+		Debug.Log(missionType);
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
+		Debug.Log(listTasks.Count);
 		for ( int i = 0; i < listTasks.Count; i++ ){
 			MutableDataWellapadTask task = listTasks[i];
 			

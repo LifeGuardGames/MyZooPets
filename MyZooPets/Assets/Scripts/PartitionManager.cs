@@ -8,8 +8,10 @@ using System.Collections.Generic;
 /// Each partition will have 2 zones max that is available to the user
 /// </summary>
 public class PartitionManager : Singleton<PartitionManager> {
+	public Transform partitionParent;
 
-	public List<ImmutableDataPartitionLocation> availablePartitionLocationsList;
+	private Dictionary<int, Transform> partitionInteractableDictionary;
+	private List<ImmutableDataPartitionLocation> availablePartitionLocationsList;
 
 	void Start(){
 		Initialize();
@@ -17,7 +19,33 @@ public class PartitionManager : Singleton<PartitionManager> {
 
 	// TODO need to take care of once per pp data handling
 	private void Initialize(){
+		// Populate the partition interactable parent dictionary, only for ones existing
+		foreach(Transform trans in partitionParent){
+			PartitionMetadata metadata = trans.GetComponent<PartitionMetadata>();
+			if(metadata != null){
+				partitionInteractableDictionary.Add(metadata.partitionNumber, metadata.interactables);
+			}
+			else{
+				Debug.LogError("Non partition detected " + trans.name);
+			}
+		}
+
 		availablePartitionLocationsList = DataLoaderPartitionLocations.GetDataList();
+	}
+
+	/// <summary>
+	/// Gets the interactable parent transform based on what partition number is input
+	/// </summary>
+	/// <returns>Parent transform for interactables</returns>
+	/// <param name="partitionNumber">Partition number</param>
+	public Transform GetInteractableParent(int partitionNumber){
+		if(partitionInteractableDictionary.ContainsKey(partitionNumber)){
+			return partitionInteractableDictionary[partitionNumber];
+		}
+		else{
+			Debug.LogError("Partition " + partitionNumber + " does not exist, double check your zone!");
+			return null;
+		}
 	}
 
 	#region Minipet spawning use

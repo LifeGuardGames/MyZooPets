@@ -10,14 +10,14 @@ public class ImmutableDataPartition{
 		get{ return id; }
 	}
 
-	private int number;
-	public int Number{
-		get{ return number; }
-	}
-
 	private ZoneTypes zone;
 	public ZoneTypes Zone{
 		get{ return zone; }
+	}
+
+	private Vector3 position;
+	public Vector3 Position {
+		get { return position; }
 	}
 
 	private List<MinigameTypes> minigameList;
@@ -35,8 +35,8 @@ public class ImmutableDataPartition{
 	public ImmutableDataPartition(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.id = id;
-		number = XMLUtils.GetInt(hashElements["Number"] as IXMLNode, 0, error);
 		zone = (ZoneTypes)Enum.Parse(typeof(ZoneTypes), XMLUtils.GetString(hashElements["Zone"] as IXMLNode, null, error));
+		position = StringUtils.ParseVector3(XMLUtils.GetString(hashElements["Position"] as IXMLNode, null, error));
 
 		// get the minigames in the partition(optional)
 		if(hashElements.ContainsKey("Minigame")){

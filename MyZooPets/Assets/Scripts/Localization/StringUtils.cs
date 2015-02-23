@@ -73,4 +73,47 @@ public class StringUtils {
 
         return retValue;	
 	}
+
+	public static Vector3 ParseVector3(string vectorString){
+		Vector3 vector = new Vector3(0, 0, 0);
+		String[] arrayVector3;
+		
+		try{
+			arrayVector3 = vectorString.Split(","[0]);
+			
+			if(arrayVector3.Length == 3){
+				vector = new Vector3(
+					float.Parse(arrayVector3[0]), 
+					float.Parse(arrayVector3[1]), 
+					float.Parse(arrayVector3[2]));
+			}
+			else
+				Debug.LogError("Illegal vector3 parsing, reverting to 0,0,0");
+		}
+		catch(NullReferenceException e){
+			Debug.LogError("Vector3 parsing. string cannot be null. error message: " + e.Message);
+		}
+		return vector;
+	}
+
+	/// <summary>
+	/// Formats the int to double digit string.
+	/// Useful for making integer counts into string for XML use
+	/// </summary>
+	/// <returns>Double digit string representation of the number</returns>
+	/// <param name="number">Number to convert</param>
+	public static string FormatIntToDoubleDigitString(int number){
+		if(number > 99 || number < 0){
+			Debug.LogError("Unsupported input for number detected " + number);
+			return "00";
+		}
+		else{
+			if(number > 9){
+				return number.ToString();
+			}
+			else{
+				return "0" + number.ToString();
+			}
+		}
+	}
 }

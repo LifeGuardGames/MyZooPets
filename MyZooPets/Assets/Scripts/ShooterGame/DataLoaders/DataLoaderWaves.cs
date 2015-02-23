@@ -24,8 +24,8 @@ public class DataLoaderWaves: XMLLoaderGeneric<DataLoaderWaves> {
 			return GetData( "Hard Wave_"+Random.Range (1,4).ToString());
 			break;
 		default:
-				return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
-				break;
+			return GetData( "Starting Wave_"+Random.Range (1,4).ToString());
+			break;
 		}
 	}
 

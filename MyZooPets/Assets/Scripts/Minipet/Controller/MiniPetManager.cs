@@ -74,7 +74,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
 		foreach(ImmutableDataMiniPet data in miniPetData){
+			if(data.Type == MiniPetTypes.None){
+			}
+			else{
 			CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
+			}
 		}
 	}
 
@@ -320,7 +324,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	private void CreateMiniPet(string miniPetID){
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
+		if(data.Type == MiniPetTypes.Basic){
 		GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+		}
+		else if (data.Type == MiniPetTypes.Rentention){
+		}
 		goMiniPet.name = prefab.name;
 		goMiniPet.GetComponent<MiniPet>().Init(data);
 

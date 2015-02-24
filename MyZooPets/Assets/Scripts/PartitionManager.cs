@@ -68,9 +68,25 @@ public class PartitionManager : Singleton<PartitionManager> {
 	}
 
 	public MinigameTypes GetRandomUnlockedMinigameType(){
-		string[] typeList = Enum.GetNames(typeof(MinigameTypes));
-		int randomIndex = UnityEngine.Random.Range(1, typeList.Length);	// Leaving out the None enum
-		return (MinigameTypes)Enum.Parse(typeof(MinigameTypes), typeList[randomIndex]);
+		int lastestPartition = GetLatestUnlockedPartition();
+		List<MinigameTypes> minigameAux = new List<MinigameTypes>();
+		foreach(ImmutableDataPartition partitionData in DataLoaderPartitions.GetDataList()){
+			if(partitionData.Number <= lastestPartition && partitionData.MinigameList != null){
+				Debug.Log("    partition num " + partitionData.Number + " " + lastestPartition);
+				foreach(MinigameTypes minigameType in partitionData.MinigameList){
+					Debug.Log("    adding " + minigameType.ToString());
+					minigameAux.Add(minigameType);
+				}
+			}
+		}
+		if(minigameAux.Count == 0){
+			return MinigameTypes.None;
+		}
+		else{
+			int randomIndex = UnityEngine.Random.Range(0, minigameAux.Count);
+			Debug.Log("    random index " + randomIndex);
+			return minigameAux[randomIndex];
+		}
 	}
 
 	public LgTuple<Vector3, int> GetUnusedPositionNextToMinigame(MinigameTypes minigameType){
@@ -138,7 +154,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	}
 	#endregion
 
-	private int GetLastestUnlockedPartition(){
+	private int GetLatestUnlockedPartition(){
 		ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 		if(latestGate != null){	// All gates unlocked
 			return latestGate.Partition - 1;	// Get latest gate and subtract 1
@@ -154,12 +170,12 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "random minigame")){
-//			Debug.Log(GetRandomUnlockedMinigameType().ToString());
-//		}
-//		if(GUI.Button(new Rect(200, 100, 100, 100), "latest unlocked p")){
-//			Debug.Log(GetLastestUnlockedPartition());
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "random minigame")){
+			Debug.Log(GetRandomUnlockedMinigameType().ToString());
+		}
+		if(GUI.Button(new Rect(200, 100, 100, 100), "latest unlocked p")){
+			Debug.Log(GetLatestUnlockedPartition());
+		}
+	}
 }

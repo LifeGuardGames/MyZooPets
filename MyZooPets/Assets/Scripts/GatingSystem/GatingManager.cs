@@ -79,7 +79,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// This should be called everytime that a gate is unlocked
 	/// 'Null' if no unlocked gates yet
 	/// </summary>
-	public ImmutableDataGate GetLatestUnlockedGate(){
+	private ImmutableDataGate GetLatestUnlockedGate(){
 		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
 		int maxGateNumberSoFar = -1;
 		ImmutableDataGate latestGateSoFar = null;
@@ -91,6 +91,20 @@ public class GatingManager : Singleton<GatingManager>{
 		}
 		latestUnlockedGate = latestGateSoFar;	// Cache it
 		return latestGateSoFar;
+	}
+
+	public ImmutableDataGate GetLatestLockedGate(){
+		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
+		int minLockedGateNumberSoFar = 999;
+		ImmutableDataGate minLockedGateSoFar = null;
+		foreach(ImmutableDataGate gate in gateList){
+			if(gate.GateNumber < minLockedGateNumberSoFar && DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				minLockedGateNumberSoFar = gate.GateNumber;
+				minLockedGateSoFar = gate;
+			}
+		}
+		latestUnlockedGate = minLockedGateSoFar;	// Cache it
+		return minLockedGateSoFar;
 	}
 
 	/// <summary>

@@ -49,9 +49,11 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 	// _CloseUI()
 	//---------------------------------------------------	
 	protected override void _CloseUI(){
-		//Show other UI object
-		NavigationUIManager.Instance.ShowPanel();
-		InventoryUIManager.Instance.ShowPanel();
+		//Show other UI objects
+		if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){	// If in deco mode dont show these
+			NavigationUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel();
+		}
 		RoomArrowsUIManager.Instance.ShowPanel();
 
 		// Close the fire crystal UI manager together with special settings

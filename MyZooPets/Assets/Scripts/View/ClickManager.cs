@@ -229,4 +229,8 @@ public class ClickManager : Singleton<ClickManager>{
 		
 		return bIsTweening;
 	}
+
+	public bool IsStackContainsType(UIModeTypes type){
+		return stackModes.Contains(type);
+	}
 }

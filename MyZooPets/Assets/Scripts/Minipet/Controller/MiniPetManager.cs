@@ -333,12 +333,36 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		MiniPetTable.Add(miniPetID, goMiniPet);
 		}
 		else if (data.Type == MiniPetTypes.Rentention){
+			goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+			goMiniPet.name = prefab.name;
+			goMiniPet.GetComponent<MiniPet>().Init(data);
+			// Add the pet into the dictionary to keep track
+			MiniPetTable.Add(miniPetID, goMiniPet);
 		}
-
-
-
+		else if (data.Type == MiniPetTypes.GameMaster){
+			MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
+			Vector3 pos = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type).Item1;
+			goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+			goMiniPet.name = prefab.name;
+			goMiniPet.GetComponent<MiniPet>().Init(data);
+			// Add the pet into the dictionary to keep track
+			MiniPetTable.Add(miniPetID, goMiniPet);
+		}
+		else if (data.Type == MiniPetTypes.Merchant){
+			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
+			if(latestGate.Partition - 1  == 2){
+				if(UnityEngine.Random.Range (0,51) == 0){
+					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
+					Vector3 pos = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type).Item1;
+					goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+					goMiniPet.name = prefab.name;
+					goMiniPet.GetComponent<MiniPet>().Init(data);
+					// Add the pet into the dictionary to keep track
+					MiniPetTable.Add(miniPetID, goMiniPet);
+				}
+			}
+		}
 	}
-
 	/// <summary>
 	/// Gets the next level.
 	/// </summary>

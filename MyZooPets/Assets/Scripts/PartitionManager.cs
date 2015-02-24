@@ -141,7 +141,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	#endregion
 
 	private int GetLastestUnlockedPartition(){
-		ImmutableDataGate latestGate = GatingManager.Instance.GetLatestUnlockedGate();
+		ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 		if(latestGate != null){	// All gates unlocked
 			return latestGate.Partition - 1;	// Get latest gate and subtract 1
 		}

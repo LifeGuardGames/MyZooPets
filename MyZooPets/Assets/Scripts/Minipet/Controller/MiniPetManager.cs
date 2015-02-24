@@ -323,17 +323,20 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <param name="miniPetID">Mini pet ID.</param>
 	private void CreateMiniPet(string miniPetID){
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
-		GameObject goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+		goMiniPet = Instantiate(prefab, data.SpawnLocation, Quaternion.identity) as GameObject;
+		goMiniPet.name = prefab.name;
+		goMiniPet.GetComponent<MiniPet>().Init(data);
+		// Add the pet into the dictionary to keep track
+		MiniPetTable.Add(miniPetID, goMiniPet);
 		}
 		else if (data.Type == MiniPetTypes.Rentention){
 		}
-		goMiniPet.name = prefab.name;
-		goMiniPet.GetComponent<MiniPet>().Init(data);
 
-		// Add the pet into the dictionary to keep track
-		MiniPetTable.Add(miniPetID, goMiniPet);
+
+
 	}
 
 	/// <summary>

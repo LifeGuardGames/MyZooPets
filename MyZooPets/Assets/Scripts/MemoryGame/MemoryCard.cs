@@ -7,14 +7,10 @@ using System.Collections;
 /// through the MemoryBoardController and pings the MemoryGameManager when it is flipped
 /// </summary>
 public class MemoryCard : MonoBehaviour {
-
-	private bool isSprite;
-
 	private string triggerName;
 	public string TriggerName{
 		get{ return triggerName; }
 	}
-
 	public UISprite coverSprite;
 	public UISprite triggerSprite;
 	public UILocalize triggerLabelLocalize;
@@ -35,7 +31,6 @@ public class MemoryCard : MonoBehaviour {
 
 	public void Initialize(ImmutableDataMemoryTrigger triggerData, bool isSprite){
 		triggerName = triggerData.Name;
-		this.isSprite = isSprite;
 
 		tweeningCoverParent = coverSprite.transform.parent.gameObject;
 

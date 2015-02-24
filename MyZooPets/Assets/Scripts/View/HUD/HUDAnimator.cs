@@ -314,7 +314,6 @@ public class HUDAnimator : MonoBehaviour{
 			path[2] = path[1];
 			path[3] = toPos;
 
-			Hashtable optional = new Hashtable();
 			LeanTween.moveLocal(go, path, duration).setEase(customEaseCurve).setDestroyOnComplete(true);
 		}
 		else{

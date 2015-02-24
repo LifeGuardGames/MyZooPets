@@ -7,18 +7,16 @@ using System.Collections.Generic;
 /// Partition manager takes care of giving the transforms of the particular partition
 /// when something needs to be procedurally spawned on game start (ie. minipets)
 /// Each partition will have 2 zones max that is available to the user
+/// 
+/// NOTE: Partition manager doesnt save any data when spawning minipets, the minipet
+/// locations will be saved from MinipetManager itself
 /// </summary>
 public class PartitionManager : Singleton<PartitionManager> {
 	public Transform partitionParent;
 
 	private Dictionary<int, Transform> partitionInteractableDictionary;
-	private List<ImmutableDataPartitionLocation> availablePartitionLocationsList;
+	private List<ImmutableDataPartitionLocation> openMinipetLocationsList;
 
-	void Start(){
-		Initialize();
-	}
-
-	// TODO need to take care of once per pp data handling
 	private void Initialize(){
 		// Populate the partition interactable parent dictionary, only for ones existing
 		foreach(Transform trans in partitionParent){
@@ -30,7 +28,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 				Debug.LogError("Non partition detected " + trans.name);
 			}
 		}
-		availablePartitionLocationsList = DataLoaderPartitionLocations.GetDataList();
+		openMinipetLocationsList = DataLoaderPartitionLocations.GetDataList();
 	}
 
 	/// <summary>
@@ -55,7 +53,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		ImmutableDataPartitionLocation locationToDelete = null;
 		
 		// Loop through available list and keep track if found
-		foreach(ImmutableDataPartitionLocation location in availablePartitionLocationsList){
+		foreach(ImmutableDataPartitionLocation location in openMinipetLocationsList){
 			if(location.Attribute == PartitionLocationTypes.Base){
 				tupleToReturn = new LgTuple<Vector3, int>(location.Offset, location.Partition);	// TODO turn offset into actual position
 				locationToDelete = location;
@@ -64,7 +62,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 		// Remove the tuple from the list if is exists, outside foreach iteration
 		if(locationToDelete != null){
-			availablePartitionLocationsList.Remove(locationToDelete);
+			openMinipetLocationsList.Remove(locationToDelete);
 		}
 		return tupleToReturn;
 	}
@@ -103,7 +101,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		ImmutableDataPartitionLocation locationToDelete = null;
 
 		// Loop through available list and keep track if found
-		foreach(ImmutableDataPartitionLocation location in availablePartitionLocationsList){
+		foreach(ImmutableDataPartitionLocation location in openMinipetLocationsList){
 			if(location.Attribute == locationType){
 				tupleToReturn = new LgTuple<Vector3, int>(location.Offset, location.Partition);	// TODO turn offset into actual position
 				locationToDelete = location;
@@ -112,7 +110,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 		// Remove the tuple from the list if is exists, outside foreach iteration
 		if(locationToDelete != null){
-			availablePartitionLocationsList.Remove(locationToDelete);
+			openMinipetLocationsList.Remove(locationToDelete);
 		}
 		return tupleToReturn;
 	}
@@ -128,13 +126,13 @@ public class PartitionManager : Singleton<PartitionManager> {
 		ImmutableDataPartitionLocation locationToDelete = null;
 
 		// Choose a random index and designate it
-		int randomIndex = UnityEngine.Random.Range(0, availablePartitionLocationsList.Count);	// TODO Test this out!!
-		locationToDelete = availablePartitionLocationsList[randomIndex];
+		int randomIndex = UnityEngine.Random.Range(0, openMinipetLocationsList.Count);	// TODO Test this out!!
+		locationToDelete = openMinipetLocationsList[randomIndex];
 		tupleToReturn = new LgTuple<Vector3, int>(locationToDelete.Offset, locationToDelete.Partition);
 
 		// Remove the tuple from the list if is exists, outside foreach iteration
 		if(locationToDelete != null){
-			availablePartitionLocationsList.Remove(locationToDelete);
+			openMinipetLocationsList.Remove(locationToDelete);
 		}
 		return tupleToReturn;
 	}

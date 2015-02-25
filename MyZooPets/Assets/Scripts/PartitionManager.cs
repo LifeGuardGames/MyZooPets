@@ -14,10 +14,12 @@ using System.Collections.Generic;
 public class PartitionManager : Singleton<PartitionManager> {
 	public Transform partitionParent;
 
-	private Dictionary<int, Transform> partitionInteractableDictionary;
+	private Dictionary<int, Transform> partitionInteractableDictionary = new Dictionary<int, Transform>();
 	private List<ImmutableDataPartitionLocation> openMinipetLocationsList;
+	private bool isOpenLocationsInitalized = false;
+	private bool isMinigameRandomCallLocked = false;
 
-	private void Initialize(){
+	public void Start(){
 		// Populate the partition interactable parent dictionary, only for ones existing
 		foreach(Transform trans in partitionParent){
 			PartitionMetadata metadata = trans.GetComponent<PartitionMetadata>();
@@ -28,7 +30,20 @@ public class PartitionManager : Singleton<PartitionManager> {
 				Debug.LogError("Non partition detected " + trans.name);
 			}
 		}
-		openMinipetLocationsList = DataLoaderPartitionLocations.GetDataList();
+	}
+
+	private void CheckInitializeOpenLocations(){
+		// Initialize it if havent yet
+		if(!isOpenLocationsInitalized){
+			openMinipetLocationsList = new List<ImmutableDataPartitionLocation>();
+			int latestPartition = GetLatestUnlockedPartition();
+			foreach(ImmutableDataPartitionLocation location in DataLoaderPartitionLocations.GetDataList()){
+				if(location.Partition <= latestPartition){
+					openMinipetLocationsList.Add(location);
+				}
+			}
+			isOpenLocationsInitalized = true;
+		}
 	}
 
 	/// <summary>
@@ -47,15 +62,17 @@ public class PartitionManager : Singleton<PartitionManager> {
 	}
 
 	#region Minipet spawning use
-	public LgTuple<Vector3, int> GetBasePositionInBedroom(){
+	public LgTuple<Vector3, string> GetBasePositionInBedroom(){
+		CheckInitializeOpenLocations();
+
 		// Initialize all to null first
-		LgTuple<Vector3, int> tupleToReturn = null;
+		LgTuple<Vector3, string> tupleToReturn = null;
 		ImmutableDataPartitionLocation locationToDelete = null;
 		
 		// Loop through available list and keep track if found
 		foreach(ImmutableDataPartitionLocation location in openMinipetLocationsList){
 			if(location.Attribute == PartitionLocationTypes.Base){
-				tupleToReturn = new LgTuple<Vector3, int>(location.Offset, location.Partition);	// TODO turn offset into actual position
+				tupleToReturn = new LgTuple<Vector3, string>(location.Offset, location.Id);
 				locationToDelete = location;
 				break;
 			}
@@ -67,29 +84,46 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return tupleToReturn;
 	}
 
+	/// <summary>
+	/// Gets the random type of the unlocked minigame
+	/// NOTE: Should only get called ONCE, it can repeat if called again, leading to error
+	/// </summary>
+	/// <returns>The random unlocked minigame type.</returns>
 	public MinigameTypes GetRandomUnlockedMinigameType(){
-		int lastestPartition = GetLatestUnlockedPartition();
-		List<MinigameTypes> minigameAux = new List<MinigameTypes>();
-		foreach(ImmutableDataPartition partitionData in DataLoaderPartitions.GetDataList()){
-			if(partitionData.Number <= lastestPartition && partitionData.MinigameList != null){
-				Debug.Log("    partition num " + partitionData.Number + " " + lastestPartition);
-				foreach(MinigameTypes minigameType in partitionData.MinigameList){
-					Debug.Log("    adding " + minigameType.ToString());
-					minigameAux.Add(minigameType);
+		if(!isMinigameRandomCallLocked){
+			isMinigameRandomCallLocked = true;	// Lock the function call so its not called again
+			int lastestPartition = GetLatestUnlockedPartition();
+			List<MinigameTypes> minigameAux = new List<MinigameTypes>();
+			foreach(ImmutableDataPartition partitionData in DataLoaderPartitions.GetDataList()){
+				if(partitionData.Number <= lastestPartition && partitionData.MinigameList != null){
+					foreach(MinigameTypes minigameType in partitionData.MinigameList){
+						minigameAux.Add(minigameType);
+					}
 				}
 			}
-		}
-		if(minigameAux.Count == 0){
-			return MinigameTypes.None;
+			if(minigameAux.Count == 0){
+				return MinigameTypes.None;
+			}
+			else{
+				int randomIndex = UnityEngine.Random.Range(0, minigameAux.Count);
+				return minigameAux[randomIndex];
+			}
 		}
 		else{
-			int randomIndex = UnityEngine.Random.Range(0, minigameAux.Count);
-			Debug.Log("    random index " + randomIndex);
-			return minigameAux[randomIndex];
+			Debug.LogError("Illegal second call for minigame");
+			return MinigameTypes.None;
 		}
 	}
 
-	public LgTuple<Vector3, int> GetUnusedPositionNextToMinigame(MinigameTypes minigameType){
+	/// <summary>
+	/// Gets the unused position next to minigame
+	/// NOTE: GetRandomUnlockedMinigameType() does not keep track of local, if picked already
+	/// </summary>
+	/// <returns>The unused position next to minigame.</returns>
+	/// <param name="minigameType">Minigame type.</param>
+	public LgTuple<Vector3, string> GetUnusedPositionNextToMinigame(MinigameTypes minigameType){
+		CheckInitializeOpenLocations();
+
 		// Converting to the MinigameTypes to a PartitionLocationType
 		PartitionLocationTypes locationType = PartitionLocationTypes.None;
 		switch(minigameType){
@@ -109,17 +143,17 @@ public class PartitionManager : Singleton<PartitionManager> {
 			locationType = PartitionLocationTypes.TriggerNinja;
 			break;
 		default:
-			break;
+			return null;
 		}
 
 		// Initialize all to null first
-		LgTuple<Vector3, int> tupleToReturn = null;
+		LgTuple<Vector3, string> tupleToReturn = null;
 		ImmutableDataPartitionLocation locationToDelete = null;
 
 		// Loop through available list and keep track if found
 		foreach(ImmutableDataPartitionLocation location in openMinipetLocationsList){
 			if(location.Attribute == locationType){
-				tupleToReturn = new LgTuple<Vector3, int>(location.Offset, location.Partition);	// TODO turn offset into actual position
+				tupleToReturn = new LgTuple<Vector3, string>(location.Offset, location.Id);
 				locationToDelete = location;
 				break;
 			}
@@ -136,19 +170,23 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// </summary>
 	/// <returns>Used position in partition, zero if none exists</returns>
 	/// <param name="partitionNumber">Partition number.</param>
-	public LgTuple<Vector3, int> GetRandomUnusedPosition(){
+	public LgTuple<Vector3, string> GetRandomUnusedPosition(){
+		CheckInitializeOpenLocations();
+
 		// Initialize all to null first
-		LgTuple<Vector3, int> tupleToReturn = null;
+		LgTuple<Vector3, string> tupleToReturn = null;
 		ImmutableDataPartitionLocation locationToDelete = null;
+		
+		if(openMinipetLocationsList.Count > 0){
+			// Choose a random index and designate it
+			int randomIndex = UnityEngine.Random.Range(0, openMinipetLocationsList.Count);
+			locationToDelete = openMinipetLocationsList[randomIndex];
+			tupleToReturn = new LgTuple<Vector3, string>(locationToDelete.Offset, locationToDelete.Id);
 
-		// Choose a random index and designate it
-		int randomIndex = UnityEngine.Random.Range(0, openMinipetLocationsList.Count);	// TODO Test this out!!
-		locationToDelete = openMinipetLocationsList[randomIndex];
-		tupleToReturn = new LgTuple<Vector3, int>(locationToDelete.Offset, locationToDelete.Partition);
-
-		// Remove the tuple from the list if is exists, outside foreach iteration
-		if(locationToDelete != null){
-			openMinipetLocationsList.Remove(locationToDelete);
+			// Remove the tuple from the list if is exists, outside foreach iteration
+			if(locationToDelete != null){
+				openMinipetLocationsList.Remove(locationToDelete);
+			}
 		}
 		return tupleToReturn;
 	}
@@ -170,12 +208,27 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "random minigame")){
-			Debug.Log(GetRandomUnlockedMinigameType().ToString());
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "latest unlocked p")){
-			Debug.Log(GetLatestUnlockedPartition());
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "base")){
+//			Debug.Log(GetBasePositionInBedroom());
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "minigame")){
+//			Debug.Log(GetUnusedPositionNextToMinigame(GetRandomUnlockedMinigameType()));
+//		}
+//		if(GUI.Button(new Rect(300, 100, 100, 100), "unused")){
+//			Debug.Log(GetRandomUnusedPosition());
+//		}
+//		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
+//			Debug.Log(IsPartitionInCurrentZone(2));
+//		}
+//		if(GUI.Button(new Rect(500, 100, 100, 100), "5")){
+//			Debug.Log(IsPartitionInCurrentZone(4));
+//		}
+//		if(GUI.Button(new Rect(600, 100, 100, 100), "6")){
+//			Debug.Log(IsPartitionInCurrentZone(-1));
+//		}
+//		if(GUI.Button(new Rect(700, 100, 100, 100), "7")){
+//			Debug.Log(IsPartitionInCurrentZone(8));
+//		}
+//	}
 }

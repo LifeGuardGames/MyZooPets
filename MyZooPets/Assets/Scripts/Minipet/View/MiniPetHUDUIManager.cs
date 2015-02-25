@@ -93,11 +93,11 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
+		//bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
+		//bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
 
-		tickleCheckBox.SetActive(isTickled);
-		cleanCheckBox.SetActive(isCleaned);
+		//tickleCheckBox.SetActive(isTickled);
+		//cleanCheckBox.SetActive(isCleaned);
 
 		RefreshFoodItemUI();
 
@@ -127,7 +127,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				Destroy(ticklingTutorialObject.gameObject);
 			break;
 		}
-		CheckForCleaningTutorial();
+	//	CheckForCleaningTutorial();
 	}
 
 	private void UpdateLevelUI(){
@@ -147,17 +147,17 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// Actually increase the level after level up animation is done.
 	/// </summary>
 	public void LevelUpAnimationCompleted(){
-		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
+		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentXP(SelectedMiniPetID);
 		IsLevelUpAnimationLockOn = false;	// Unlocked immediately... save for future use
 
 		if(OnLevelUpAnimationCompleted != null)
 			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
 	}
 
-	private void CheckForTicklingTutorial(){
+	/*private void CheckForTicklingTutorial(){
 		//check if tickling tutorial needs to be started
-		bool isFirstTimeTickling = MiniPetManager.Instance.IsFirstTimeTickling;
-		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
+		//bool isFirstTimeTickling = MiniPetManager.Instance.IsFirstTimeTickling;
+		//bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
 		if(!isFirstTimeCleaning && isFirstTimeTickling){
 			//spawn tutorial here
 			if(ticklingTutorialObject == null){
@@ -174,11 +174,11 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			}
 		}
 	}
-	
+	*/
 	/// <summary>
 	/// Check if cleaning tutorial needs to be spawned.
 	/// </summary>
-	private void CheckForCleaningTutorial(){
+	/*private void CheckForCleaningTutorial(){
 		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
 
 		if(isFirstTimeCleaning){
@@ -196,7 +196,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			}
 		}
 	}
-
+*/
 	/// <summary>
 	/// Opens the shop. Store button calls this function
 	/// </summary>
@@ -232,7 +232,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
-			if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
+			if(MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
 				feedParent.Show();
 			}
 			HUDUIManager.Instance.HidePanel();
@@ -246,8 +246,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// This does all the check by itself so dont worry when calling this
 	/// </summary>
 	public void RefreshFoodItemUI(){
-		if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
-			int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
+		if(MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
+			int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
 			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
 			labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
 			

@@ -45,7 +45,7 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 
-		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
 		RefreshUnlockState();
 	}
@@ -107,7 +107,7 @@ public class MiniPet : MonoBehaviour {
 
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
-			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		//	MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
 			RefreshMiniPetUIState(isForceHideFoodMsg:true);
 		}
@@ -127,11 +127,11 @@ public class MiniPet : MonoBehaviour {
 
 				if(currentLockMode == UIModeTypes.MiniPet){
 					string colliderName = gesture.Selection.collider.name;
-					bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
+					//bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
 					
 					//only allow tap gesture if cleaning tutorial is finished
-					if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
-						
+				//	if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
+					if(colliderName == this.gameObject.name){
 						//if tickling animation is still playing reset timer
 						if(animationManager.IsTickling()){
 							tickleTimer = 0;
@@ -139,11 +139,11 @@ public class MiniPet : MonoBehaviour {
 						else{
 							animationManager.StartTickling();
 							
-							bool isTickled = MiniPetManager.Instance.IsTickled(id);
-							if(!isTickled)
-								MiniPetManager.Instance.SetTickle(id, true);
+						//	bool isTickled = MiniPetManager.Instance.IsTickled(id);
+						/*	if(!isTickled)
+								MiniPetManager.Instance.SetTickle(id, true);*/
 							
-							MiniPetManager.Instance.IsFirstTimeTickling = false;
+							//MiniPetManager.Instance.IsFirstTimeTickling = false;
 						}
 					}
 				}
@@ -188,8 +188,8 @@ public class MiniPet : MonoBehaviour {
 				
 				//if clean gesture is recognized. stop dirty particle and play happy animation
 				if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
-					MiniPetManager.Instance.SetCleaned(id, true);
-					MiniPetManager.Instance.IsFirstTimeCleaning = false;
+				//	MiniPetManager.Instance.SetCleaned(id, true);
+					//MiniPetManager.Instance.IsFirstTimeCleaning = false;
 					dirtyParticle.Stop();
 					animationManager.Cheer();
 					currentDistanceInCentimeters = 0;
@@ -239,17 +239,17 @@ public class MiniPet : MonoBehaviour {
 		//if pet not finish eating yet. finish eating logic
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseFoodXP(id);
+			MiniPetManager.Instance.IncreaseXP(id);
 			FinishEating();
 			animationManager.Eat();
 		}
 		//else check if tickle and cleaning is done. if both done 
 		else{
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			/*bool isTickled = MiniPetManager.Instance.IsTickled(id);
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
+			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyXP(id)){*/
 				Invoke("ShowFoodPreferenceMessage", 1f);
-			}
+			//}
 		}
 	}
 
@@ -297,27 +297,27 @@ public class MiniPet : MonoBehaviour {
 	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
 		if(isHatchedAux){
 			//check if pet is sad and dirty
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 			
-			if(!isTickled)
+			//if(!isTickled)
 				animationManager.Sad();
-			else
+			//else
 				animationManager.NotSad();
 			
-			if(!isCleaned){
+		//	if(!isCleaned){
 				dirtyParticle.Play();
-			}
-			else{
+			//}
+			//else{
 				dirtyParticle.Stop();
-			}
+		//	}
 
-			if(isTickled && isCleaned){
+			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
 				if(!isForceHideFoodMsg){
-					if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+					if(MiniPetManager.Instance.CanModifyXP(id)){
 						Invoke("ShowFoodPreferenceMessage", 1f);
-					}
+					//}
 				}
 			}
 		}
@@ -330,15 +330,15 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	public void TryShowDirtyOrSadMessage(){
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+		//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+		//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 
-		if(!isTickled){
+	//	if(!isTickled){
 			miniPetSpeechAI.ShowSadMsg(name);
-		}
-		else if(!isCleaned){
+		//}
+	//	else if(!isCleaned){
 			miniPetSpeechAI.ShowDirtyMsg(name);
-		}
+		//}
 	}
 
 	/// <summary>
@@ -357,7 +357,7 @@ public class MiniPet : MonoBehaviour {
 			string preferredFoodID = "";
 
 			//check if minipet needs food
-			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+			if(MiniPetManager.Instance.CanModifyXP(id)){
 				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
 				//check if minipet wants this food
@@ -372,7 +372,7 @@ public class MiniPet : MonoBehaviour {
 					else{
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
-						MiniPetManager.Instance.IncreaseFoodXP(id);
+						MiniPetManager.Instance.IncreaseXP(id);
 						animationManager.Eat();
 					}
 				}
@@ -383,17 +383,17 @@ public class MiniPet : MonoBehaviour {
 				}
 			}
 			else{
-				bool isTickled = MiniPetManager.Instance.IsTickled(id);
-				bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+				//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+				//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 				bool isMaxLevel = MiniPetManager.Instance.IsMaxLevel(id);
 
-				if(!isTickled){
+			/*	if(!isTickled){
 					miniPetSpeechAI.ShowSadMsg(name);
 				}
 				else if(!isCleaned){
 					miniPetSpeechAI.ShowDirtyMsg(name);
-				}
-				else if(isMaxLevel){
+				}*/
+				 if(isMaxLevel){
 					miniPetSpeechAI.ShowMaxLevelMsg(name);
 				}
 				else{}

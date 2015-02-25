@@ -327,16 +327,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
 			//if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
-
-			LgTuple<Vector3, int> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
-			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2.ToString()).Partition;
+			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
+			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 				locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
-				partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2.ToString()).Partition;
+				partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			}
 			Vector3 pos = locationTuple.Item1;
-			goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
-
+			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
+			goMiniPet.transform.localPosition = pos;
 			//Getting the partition number
 			//string locationData = PartitionManager.Instance.
 
@@ -351,7 +350,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		}
 		else if (data.Type == MiniPetTypes.Rentention){
 			Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
-			goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+			int partitionNumber  = 0;
+			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
+			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
@@ -359,8 +360,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		}
 		else if (data.Type == MiniPetTypes.GameMaster){
 			MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
-			Vector3 pos = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type).Item1;
-			goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
+			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
+				locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
+				partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+			}
+			Vector3 pos = locationTuple.Item1;
+			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
+			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
@@ -370,8 +378,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate.Partition - 1  == 2){
 				if(UnityEngine.Random.Range (0,8) == 0){
-					Vector3 pos = PartitionManager.Instance.GetRandomUnusedPosition().Item1;
-					goMiniPet = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
+					int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+					while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
+						locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
+						partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+					}
+					Vector3 pos = locationTuple.Item1;
+					goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
+					goMiniPet.transform.localPosition = pos;
 					goMiniPet.name = prefab.name;
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					// Add the pet into the dictionary to keep track

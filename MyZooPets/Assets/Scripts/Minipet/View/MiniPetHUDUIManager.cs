@@ -249,8 +249,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
 			int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
 			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-			labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
-			
+			//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
+			labelFeedCount.text = (1).ToString();
 			labelFeedCount.gameObject.SetActive(true);
 			labelFeed.gameObject.SetActive(true);
 			Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));

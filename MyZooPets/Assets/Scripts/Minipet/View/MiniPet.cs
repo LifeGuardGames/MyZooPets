@@ -22,7 +22,7 @@ public class MiniPet : MonoBehaviour {
 	public string minipetName = "general";
 	private bool isVisible;
 	private bool isHatchedAux;
-	private string id; //pet id
+	protected string id; //pet id
 	public string ID{
 		get{return id;}
 	}
@@ -240,7 +240,6 @@ public class MiniPet : MonoBehaviour {
 		if(!isFinishEating){
 			InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			MiniPetManager.Instance.IncreaseXP(id);
-			FinishEating();
 			animationManager.Eat();
 		}
 		//else check if tickle and cleaning is done. if both done 
@@ -373,6 +372,7 @@ public class MiniPet : MonoBehaviour {
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
 						MiniPetManager.Instance.IncreaseXP(id);
+						FinishEating();
 						animationManager.Eat();
 					}
 				}

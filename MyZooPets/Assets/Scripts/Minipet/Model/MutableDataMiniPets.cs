@@ -62,7 +62,7 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	/// <param name="amount">Amount.</param>
-	public void IncreaseXP(string miniPetID, int amount){
+	public void IncreaseXP(string miniPetID, int amount, bool canLevel = false){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 

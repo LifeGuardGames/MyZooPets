@@ -25,7 +25,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	
 	private Level maxLevel = Level.Level6;
 
-	private bool canLevel;
+	public bool canLevel = false;
 
 	public bool needMission = false;
 
@@ -225,7 +225,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		if(currentLevel != maxLevel)
 			levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
 
-		return levelUpCondition;
+		return 1;
 	}
 
 	/// <summary>
@@ -234,27 +234,26 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseXP(string miniPetID){
-		if(canLevel){
-		//Increase food xp                                                                         
-		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1);
 
 		int levelUpCondition = GetNextLevelUpCondition(miniPetID);
-
 		//get current food xp
 		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
-
+		//if(canLevel){
+		//Increase food xp                                                                         
+		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1, canLevel);
+		//}
 		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
 		args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
 
 		//check current food xp with that condition
-		if(currentFoodXP >= levelUpCondition){
+		if(1 >= 1){
 			args.UpdateStatus = UpdateStatuses.LevelUp;
 				canLevel = false;
 		}
-
+		
 		if(MiniPetStatusUpdate != null)
 			MiniPetStatusUpdate(this, args);
-		}
+
 
 	}
 
@@ -354,7 +353,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
-			goMiniPet.GetComponent<MiniPet>().Init(data);
+			goMiniPet.GetComponent<RetentionPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
 		}
@@ -362,10 +361,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
-			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
-				locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
-				partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
-			}
 			Vector3 pos = locationTuple.Item1;
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 			goMiniPet.transform.localPosition = pos;

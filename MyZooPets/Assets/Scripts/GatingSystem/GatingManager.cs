@@ -60,21 +60,6 @@ public class GatingManager : Singleton<GatingManager>{
 	}
 
 	/// <summary>
-	/// When store opens, get the cached latest gate and return the allowed decoration types
-	/// based on the gate xml data.
-	/// </summary>
-	/// <returns>The allowed deco type from latest unlocked gate.</returns>
-	public List<string> GetAllowedDecoTypeFromLatestUnlockedGate(){
-		if(latestUnlockedGate != null){
-			return new List<string>(latestUnlockedGate.DecoCategoriesStore);
-		}
-		else{
-			string[] defaultDeco = {"Carpet"};
-			return new List<string>(defaultDeco);
-		}
-	}
-
-	/// <summary>
 	/// Calculates the latest unlocked gate.
 	/// This should be called everytime that a gate is unlocked
 	/// 'Null' if no unlocked gates yet

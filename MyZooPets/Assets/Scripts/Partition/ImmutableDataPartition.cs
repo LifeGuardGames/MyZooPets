@@ -32,6 +32,11 @@ public class ImmutableDataPartition{
 		set{ basePosition = value; }
 	}
 
+	private string[] decoCategoriesStore;	// Categories of deco items to unlock in store for latest partition
+	public string[] DecoCategoriesStore{
+		get{ return decoCategoriesStore; }
+	}
+
 	public ImmutableDataPartition(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.id = id;
@@ -46,6 +51,12 @@ public class ImmutableDataPartition{
 			for(int i = 0; i < arrayAmounts.Length; ++i){
 				minigameList.Add((MinigameTypes)Enum.Parse(typeof(MinigameTypes), arrayAmounts[i]));
 			}
+		}
+
+		// get list of wellapad unlocks
+		if(hashElements.ContainsKey("DecoTypeAllowed")){
+			string strStoreCategories = XMLUtils.GetString(hashElements["DecoTypeAllowed"] as IXMLNode);
+			decoCategoriesStore = strStoreCategories.Split(","[0]);
 		}
 	}
 }

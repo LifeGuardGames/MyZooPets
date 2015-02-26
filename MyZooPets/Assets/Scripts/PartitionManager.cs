@@ -144,6 +144,8 @@ public class PartitionManager : Singleton<PartitionManager> {
 			return latestGate.Partition - 1;	// Get latest gate and subtract 1
 		}
 		else{
+			// All gates unlocked
+			Debug.Log("All gates unlocked");
 			return DataLoaderPartitions.GetDataList().Count - 1;	// Get the gates list count, off by 1
 		}
 	}
@@ -152,6 +154,17 @@ public class PartitionManager : Singleton<PartitionManager> {
 		string craftedId = "Partition" + StringUtils.FormatIntToDoubleDigitString(partitionNumber);
 		ImmutableDataPartition partition = DataLoaderPartitions.GetData(craftedId);
 		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
+	}
+
+	/// <summary>
+	/// When store opens, get the latest gate and return the allowed decoration types
+	/// based on the partition xml data.
+	/// </summary>
+	/// <returns>The allowed deco type from latest unlocked gate.</returns>
+	public List<string> GetAllowedDecoTypeFromLatestPartition(){
+		string preparedPartitionString = "Partition" + StringUtils.FormatIntToDoubleDigitString(GetLastestUnlockedPartition());
+		ImmutableDataPartition partitionData = DataLoaderPartitions.GetData(preparedPartitionString);
+		return new List<string>(partitionData.DecoCategoriesStore);
 	}
 
 //	void OnGUI(){

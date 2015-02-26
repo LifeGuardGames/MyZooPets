@@ -15,7 +15,6 @@ public class ImmutableDataGate{
 	private string itemBoxID; // item box id this gate leaves behind once destroyed
 	private float itemBoxPositionOffset; // offset from the position of the gate
 	private string miniPetID; // id of the miniPet that will be unlocked when this gate is destroyed
-	private string[] decoCategoriesStore;	// Categories of deco items to unlock in store if this is latest gate
 
 	public string GateID{
 		get{ return gateID; }
@@ -73,10 +72,6 @@ public class ImmutableDataGate{
 		get{ return itemBoxPositionOffset; }
 	}
 
-	public string[] DecoCategoriesStore{
-		get{ return decoCategoriesStore; }
-	}
-	
 	public ImmutableDataGate(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
@@ -115,12 +110,6 @@ public class ImmutableDataGate{
 		if(hashElements.ContainsKey("TaskUnlocks")){
 			string strUnlocks = XMLUtils.GetString(hashElements["TaskUnlocks"] as IXMLNode);
 			taskUnlocks = strUnlocks.Split(","[0]);
-		}
-
-		// get list of wellapad unlocks
-		if(hashElements.ContainsKey("DecoTypeAllowed")){
-			string strStoreCategories = XMLUtils.GetString(hashElements["DecoTypeAllowed"] as IXMLNode);
-			decoCategoriesStore = strStoreCategories.Split(","[0]);
 		}
 
 		if(hashElements.ContainsKey("MiniPetID"))

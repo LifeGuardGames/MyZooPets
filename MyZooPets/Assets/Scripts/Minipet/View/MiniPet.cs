@@ -22,6 +22,7 @@ public class MiniPet : MonoBehaviour {
 	public string minipetName = "general";
 	private bool isVisible;
 	private bool isHatchedAux;
+	public Camera nguiCamera;
 	protected string id; //pet id
 	public string ID{
 		get{return id;}
@@ -40,6 +41,7 @@ public class MiniPet : MonoBehaviour {
 
 
 	void Start(){
+		nguiCamera = GameObject.Find("Camera").camera;
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -114,6 +116,7 @@ public class MiniPet : MonoBehaviour {
 	}
 	
 	protected virtual void OnTap(TapGesture gesture){
+		if(!IsTouchingNGUI(gesture.Position)){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
@@ -144,6 +147,7 @@ public class MiniPet : MonoBehaviour {
 								MiniPetManager.Instance.SetTickle(id, true);*/
 							
 							//MiniPetManager.Instance.IsFirstTimeTickling = false;
+							}
 						}
 					}
 				}
@@ -426,5 +430,23 @@ public class MiniPet : MonoBehaviour {
 			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;
 		}
+	}
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	private bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
 	}
 }

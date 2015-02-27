@@ -19,11 +19,11 @@ public class RetentionPet : MiniPet {
 		timesVisted++;
 		giveOutMission();
 	}
-/*	protected override void OnTap(TapGesture gesture){
+protected override void OnTap(TapGesture gesture){
 
 		base.OnTap(gesture);
 		turnInMission();
-	}*/
+	}
 
 	private void turnInMission(){
 		if (isFinishEating){

@@ -5,7 +5,7 @@ public class ImmutableDataGate{
 	
 	private string gateID; // id of the gate
 	private int gateNumber ;// sequential order of the gates, used for gate comparison
-	private string gateArea; // location of the gate
+	private string zone; // location of the gate
 	private float screenPercentage; //stronger gate covers more screen space //DEPRECATED
 	private int partition; // partition id of the gate
 	private string monsterID; // id of the monster at this gate
@@ -15,7 +15,6 @@ public class ImmutableDataGate{
 	private string itemBoxID; // item box id this gate leaves behind once destroyed
 	private float itemBoxPositionOffset; // offset from the position of the gate
 	private string miniPetID; // id of the miniPet that will be unlocked when this gate is destroyed
-	private string[] decoCategoriesStore;	// Categories of deco items to unlock in store if this is latest gate
 
 	public string GateID{
 		get{ return gateID; }
@@ -30,11 +29,11 @@ public class ImmutableDataGate{
 	}
 
 	/// <summary>
-	/// Gets the gate area/zone
+	/// Gets the gate zone
 	/// </summary>
 	/// <value>The gate area/zone</value>
-	public string GateArea{
-		get{ return gateArea; }
+	public string Zone{
+		get{ return zone; }
 	}
 
 	public float ScreenPercentage{
@@ -73,10 +72,6 @@ public class ImmutableDataGate{
 		get{ return itemBoxPositionOffset; }
 	}
 
-	public string[] DecoCategoriesStore{
-		get{ return decoCategoriesStore; }
-	}
-	
 	public ImmutableDataGate(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
@@ -86,7 +81,7 @@ public class ImmutableDataGate{
 		gateNumber = XMLUtils.GetInt(hashElements["GateNumber"] as IXMLNode, -1, error);
 
 		// get location
-		gateArea = XMLUtils.GetString(hashElements["Location"] as IXMLNode, null, error);
+		zone = XMLUtils.GetString(hashElements["Zone"] as IXMLNode, null, error);
 		
 		// get partition
 		partition = XMLUtils.GetInt(hashElements["Partition"] as IXMLNode, 0, error);
@@ -115,12 +110,6 @@ public class ImmutableDataGate{
 		if(hashElements.ContainsKey("TaskUnlocks")){
 			string strUnlocks = XMLUtils.GetString(hashElements["TaskUnlocks"] as IXMLNode);
 			taskUnlocks = strUnlocks.Split(","[0]);
-		}
-
-		// get list of wellapad unlocks
-		if(hashElements.ContainsKey("DecoTypeAllowed")){
-			string strStoreCategories = XMLUtils.GetString(hashElements["DecoTypeAllowed"] as IXMLNode);
-			decoCategoriesStore = strStoreCategories.Split(","[0]);
 		}
 
 		if(hashElements.ContainsKey("MiniPetID"))

@@ -62,17 +62,19 @@ public class PetGameData{
 	/// be updated when the app is updated.
 	/// </summary>
 	public void VersionCheck(Version currentDataVersion) {
-		GatingProgress.VersionCheck(currentDataVersion);
-		Calendar.VersionCheck(currentDataVersion);
-		PetInfo.VersionCheck(currentDataVersion);
-		Tutorial.VersionCheck(currentDataVersion);
+//		GatingProgress.VersionCheck(currentDataVersion);
+//		Calendar.VersionCheck(currentDataVersion);
+//		PetInfo.VersionCheck(currentDataVersion);
+//		Tutorial.VersionCheck(currentDataVersion);
 	}
 
 	public void SaveAsyncToParse(){
 		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
-			foreach(MutableData data in allMutableData)
-				if(data.IsDirty)
+			foreach(MutableData data in allMutableData){
+				if(data.IsDirty){
 					data.SaveAsyncToParseServer();
+				}
+			}
 		});
 	}
 }

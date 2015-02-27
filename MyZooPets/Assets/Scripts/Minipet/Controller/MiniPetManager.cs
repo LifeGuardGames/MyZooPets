@@ -72,7 +72,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
 		foreach(ImmutableDataMiniPet data in miniPetData){
-			CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
+//			CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
 		}
 	}
 

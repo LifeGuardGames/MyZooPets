@@ -357,7 +357,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				defaultTabName = "SmallPlant";
 			}
 
-			List<string> unlockedDecoList = GatingManager.Instance.GetAllowedDecoTypeFromLatestUnlockedGate();
+			List<string> unlockedDecoList = PartitionManager.Instance.GetAllowedDecoTypeFromLatestPartition();
 
 			//Rename the tab to reflect the sub category name
 			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS

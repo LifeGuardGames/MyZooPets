@@ -95,4 +95,25 @@ public class StringUtils {
 		}
 		return vector;
 	}
+
+	/// <summary>
+	/// Formats the int to double digit string.
+	/// Useful for making integer counts into string for XML use
+	/// </summary>
+	/// <returns>Double digit string representation of the number</returns>
+	/// <param name="number">Number to convert</param>
+	public static string FormatIntToDoubleDigitString(int number){
+		if(number > 99 || number < 0){
+			Debug.LogError("Unsupported input for number detected " + number);
+			return "00";
+		}
+		else{
+			if(number > 9){
+				return number.ToString();
+			}
+			else{
+				return "0" + number.ToString();
+			}
+		}
+	}
 }

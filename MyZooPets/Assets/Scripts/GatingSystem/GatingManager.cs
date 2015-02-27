@@ -60,36 +60,36 @@ public class GatingManager : Singleton<GatingManager>{
 	}
 
 	/// <summary>
-	/// When store opens, get the cached latest gate and return the allowed decoration types
-	/// based on the gate xml data.
-	/// </summary>
-	/// <returns>The allowed deco type from latest unlocked gate.</returns>
-	public List<string> GetAllowedDecoTypeFromLatestUnlockedGate(){
-		if(latestUnlockedGate != null){
-			return new List<string>(latestUnlockedGate.DecoCategoriesStore);
-		}
-		else{
-			string[] defaultDeco = {"Carpet"};
-			return new List<string>(defaultDeco);
-		}
-	}
-
-	/// <summary>
 	/// Calculates the latest unlocked gate.
 	/// This should be called everytime that a gate is unlocked
 	/// 'Null' if no unlocked gates yet
 	/// </summary>
-	private ImmutableDataGate CalculateLatestUnlockedGate(){
+	private ImmutableDataGate GetLatestUnlockedGate(){
 		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
 		int maxGateNumberSoFar = -1;
 		ImmutableDataGate latestGateSoFar = null;
 		foreach(ImmutableDataGate gate in gateList){
 			if(gate.GateNumber > maxGateNumberSoFar && !DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				maxGateNumberSoFar = gate.GateNumber;
 				latestGateSoFar = gate;
 			}
 		}
 		latestUnlockedGate = latestGateSoFar;	// Cache it
 		return latestGateSoFar;
+	}
+
+	public ImmutableDataGate GetLatestLockedGate(){
+		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
+		int minLockedGateNumberSoFar = 999;
+		ImmutableDataGate minLockedGateSoFar = null;
+		foreach(ImmutableDataGate gate in gateList){
+			if(gate.GateNumber < minLockedGateNumberSoFar && DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				minLockedGateNumberSoFar = gate.GateNumber;
+				minLockedGateSoFar = gate;
+			}
+		}
+		latestUnlockedGate = minLockedGateSoFar;	// Cache it
+		return minLockedGateSoFar;
 	}
 
 	/// <summary>
@@ -365,7 +365,7 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 
 			// Recalculate the latest unlocked gate
-			CalculateLatestUnlockedGate();
+			GetLatestUnlockedGate();
 		}
 			
 		return isDestroyed;

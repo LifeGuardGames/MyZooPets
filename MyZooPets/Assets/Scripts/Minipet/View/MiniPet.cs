@@ -8,8 +8,8 @@ using System.Collections;
 /// </summary>
 public class MiniPet : MonoBehaviour {
 	public MiniPetAnimationManager animationManager;
-	public ParticleSystem bubbleParticle;
-	public ParticleSystem dirtyParticle;
+//	public ParticleSystem bubbleParticle;
+	//public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
 	public GameObject flippable;
@@ -63,8 +63,8 @@ public class MiniPet : MonoBehaviour {
 			eggAnimation.animation.Stop();
 			flippable.SetActive(true);
 			gameObject.collider.enabled = true;
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
+		//	bubbleParticle.gameObject.SetActive(true);
+		//	dirtyParticle.gameObject.SetActive(true);
 			if(eggClickController != null){	// Remove unused components on the egg parent
 				Destroy(eggClickController);
 				Destroy(eggClickController.collider);
@@ -76,8 +76,8 @@ public class MiniPet : MonoBehaviour {
 			eggAnimation.animation.Play();
 			flippable.SetActive(false);
 			gameObject.collider.enabled = false;
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
+//			bubbleParticle.gameObject.SetActive(false);
+		//	dirtyParticle.gameObject.SetActive(false);
 			isVisible = false;
 		}
 	}
@@ -113,7 +113,7 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 	
-	void OnTap(TapGesture gesture){
+	protected virtual void OnTap(TapGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
@@ -172,14 +172,14 @@ public class MiniPet : MonoBehaviour {
 		if(colliderName == this.gameObject.name){
 			switch(gesture.Phase){
 			case ContinuousGesturePhase.Started:
-				bubbleParticle.Play();
-				MoveBubbleParticleWithUserTouch(gesture);
+				//bubbleParticle.Play();
+				//MoveBubbleParticleWithUserTouch(gesture);
 				break;
 			case ContinuousGesturePhase.Updated:
-				if(!bubbleParticle.isPlaying)
-					bubbleParticle.Play();
+			//	if(!bubbleParticle.isPlaying)
+				//	bubbleParticle.Play();
 
-				MoveBubbleParticleWithUserTouch(gesture);
+				//MoveBubbleParticleWithUserTouch(gesture);
 				
 				float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
 				float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
@@ -190,18 +190,18 @@ public class MiniPet : MonoBehaviour {
 				if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
 				//	MiniPetManager.Instance.SetCleaned(id, true);
 					//MiniPetManager.Instance.IsFirstTimeCleaning = false;
-					dirtyParticle.Stop();
+					//dirtyParticle.Stop();
 					animationManager.Cheer();
 					currentDistanceInCentimeters = 0;
 				}
 				break;
 			case ContinuousGesturePhase.Ended:
-				bubbleParticle.Stop();
+				//Particle.Stop();
 				break;
 			}
 		}
 		else{
-			bubbleParticle.Stop();
+			//bubbleParticle.Stop();
 		}
 	}
 
@@ -277,7 +277,7 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
+	/*private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
 		bool isDraggingOnMP = gesture.Raycast.Hit3D.collider &&
 			gesture.Raycast.Hit3D.collider.name == this.gameObject.name;
 
@@ -292,7 +292,7 @@ public class MiniPet : MonoBehaviour {
 			bubbleParticle.Stop();
 		}
 	}
-
+*/
 	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
 		if(isHatchedAux){
 			//check if pet is sad and dirty
@@ -305,10 +305,10 @@ public class MiniPet : MonoBehaviour {
 				animationManager.NotSad();
 			
 		//	if(!isCleaned){
-				dirtyParticle.Play();
+				//dirtyParticle.Play();
 			//}
 			//else{
-				dirtyParticle.Stop();
+			//	dirtyParticle.Stop();
 		//	}
 
 			//if(isTickled && isCleaned){
@@ -414,14 +414,14 @@ public class MiniPet : MonoBehaviour {
 		this.isVisible = isVisible;
 
 		if(this.isVisible){
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
+			//bubbleParticle.gameObject.SetActive(true);
+			//dirtyParticle.gameObject.SetActive(true);
 
 			ToggleHatched(isHatchedAux);	// Keep track of it internally already DWID
 		}
 		else{
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
+		//	bubbleParticle.gameObject.SetActive(false);
+		//	dirtyParticle.gameObject.SetActive(false);
 			flippable.SetActive(false);
 			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;

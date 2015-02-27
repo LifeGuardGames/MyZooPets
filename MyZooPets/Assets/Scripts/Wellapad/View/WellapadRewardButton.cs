@@ -38,7 +38,7 @@ public class WellapadRewardButton : LgButton{
 		SetSprites();		
 		
 		// listen for when a task is complete so the UI can react
-		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
+		//WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
 		
 		
 	}

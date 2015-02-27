@@ -178,7 +178,7 @@ public class DataManager : Singleton<DataManager>{
 		else{
 			// if not first time need to do version check
 			if(!IsFirstTime){
-				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 				VersionCheck(new Version(currentDataVersionString));
 			}
 			else{
@@ -337,11 +337,13 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	#region Data Version
+
 	/// <summary>
-	/// Versions the check. Handles any major data schema changes to the DataManager
+	/// Checks the version. Handles any major data schema changes to the DataManager
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
+		/*
 		Version version140 = new Version("1.4.0");
 		Version version142 = new Version("1.4.2");
 		
@@ -358,6 +360,7 @@ public class DataManager : Singleton<DataManager>{
 			//menu scene data is no longer required. 
 			PlayerPrefs.DeleteKey("MenuSceneData");
 		}
+		 */
 	}
 
 	/// <summary>
@@ -366,10 +369,11 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	private void LoadDataVersion(){
 		//don't change the default value
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 		
-		if(!IsFirstTime)
+		if(!IsFirstTime){
 			gameData.VersionCheck(new Version(currentDataVersionString));
+		}
 	}
 
 	/// <summary>
@@ -379,12 +383,13 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	private void SaveDataVersion(){
 		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 		Version buildVersion = new Version(buildVersionString);
 		Version currentDataVersion = new Version(currentDataVersionString);
 		
-		if(buildVersion > currentDataVersion)
+		if(buildVersion > currentDataVersion){
 			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
+		}
 	}
 	#endregion
 

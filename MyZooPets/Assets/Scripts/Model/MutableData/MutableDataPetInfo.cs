@@ -86,11 +86,13 @@ public class MutableDataPetInfo : MutableData{
 	}
 
 	public override void VersionCheck(Version currentDataVersion){
+		/*
 		Version version131 = new Version("1.3.1");
 		
 		if(currentDataVersion < version131){
 			FireBreaths = nFireBreaths;
 		}
+		 */
 	}
 
 	public override void SaveAsyncToParseServer(){

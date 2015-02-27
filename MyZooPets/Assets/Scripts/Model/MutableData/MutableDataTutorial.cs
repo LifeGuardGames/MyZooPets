@@ -55,6 +55,7 @@ public class MutableDataTutorial{
 		ListPlayed = new List<string>();
     }
 
+	/*
 	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
 		Version version134 = new Version("1.3.4");
@@ -70,4 +71,5 @@ public class MutableDataTutorial{
 				ListPlayed.Remove(TutorialManagerBedroom.TUT_DECOS);
 		}
 	}
+	*/
 }

@@ -28,6 +28,7 @@ public class MutableDataCalendar{
         Init();
     }
 
+	/*
 	/// <summary>
 	/// Versions the check. 
 	/// TotalTimeRemainInTicks is introduced in v1.2.7. Need to initialize it to
@@ -42,6 +43,7 @@ public class MutableDataCalendar{
 			TotalTimeRemainInTicks = totalTimeRemain.Ticks.ToString();
 		}
 	}
+	*/
 
     private void Init(){
         NextPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();

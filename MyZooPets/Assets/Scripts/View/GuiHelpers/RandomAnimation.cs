@@ -14,11 +14,12 @@ public class RandomAnimation : MonoBehaviour {
 	public float delayBeforeStart;
 	public float minInterval;
 	public float maxInterval;
+	public bool isHideChildrenOnDisable = true;
 	private float generatedValue;
 	private float timeBegin;
 	
 	void Start(){
-		if(childGameObject){
+		if(childGameObject && isHideChildrenOnDisable){
 			childGameObject.SetActive(false);
 		}
 		if(maxInterval < minInterval){
@@ -49,7 +50,7 @@ public class RandomAnimation : MonoBehaviour {
 	// Note: If some script enables a bunch of buttons at the same time they will all animate at once the first time
 	public void Enable(){
 		GetComponent<Animation>().Play();
-		if(childGameObject){
+		if(childGameObject && isHideChildrenOnDisable){
 			childGameObject.SetActive(true);
 		}
 		timeBegin = Time.time;
@@ -58,7 +59,7 @@ public class RandomAnimation : MonoBehaviour {
 	
 	public void Disable(){
 		GetComponent<Animation>().Stop();
-		if(childGameObject){
+		if(childGameObject && isHideChildrenOnDisable){
 			childGameObject.SetActive(false);
 		}
 		isActive = false;

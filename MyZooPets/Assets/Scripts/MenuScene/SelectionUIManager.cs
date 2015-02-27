@@ -4,8 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SelectionUIManager : Singleton<SelectionUIManager>{
-	public GameObject spotLight; //spotlight to shine on the egg when chosen	
 	public GameObject selectionGrid;
+
+	private Transform eggAnimTransform;	// Egg animation object to be cached
+	private GameObject crack1;
+	private GameObject crack2;
 
 	/// <summary>
 	/// Gets or sets the selected pet.
@@ -98,14 +101,44 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 	//---------------------------------------------------
 	public void ToggleEggAnimation(bool isOn){
 		foreach(Transform child in selectionGrid.transform){
-			Transform eggParent = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
-			if(eggParent != null){
+			eggAnimTransform = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
+
+			if(eggAnimTransform != null){
 				if(isOn)
-					eggParent.GetComponent<RandomAnimation>().Enable();
+					eggAnimTransform.GetComponent<RandomAnimation>().Enable();
 				else{
-					eggParent.GetComponent<RandomAnimation>().Disable();
+					eggAnimTransform.GetComponent<RandomAnimation>().Disable();
 				}
 			}
+		}
+	}
+
+	public void EggCrack(int crackNumber){
+		if(eggAnimTransform == null){
+			foreach(Transform child in selectionGrid.transform){
+				eggAnimTransform = child.Find("MenuSceneEgg/SpriteGrandparent/SpriteParent (Animation)");
+			}
+		}
+
+		if(crack1 == null || crack2 == null){
+			crack1 = eggAnimTransform.Find("Crack1").gameObject;
+			crack2 = eggAnimTransform.Find("Crack2").gameObject;
+		}
+
+		switch(crackNumber){
+		case 1:
+			crack1.SetActive(true);
+			crack2.SetActive(false);
+			eggAnimTransform.GetComponent<Animation>().Play("eggShakeOnce");
+			break;
+		case 2:
+			crack1.SetActive(false);
+			crack2.SetActive(true);
+			eggAnimTransform.GetComponent<Animation>().Play("eggShakeOnce");
+			break;
+		default:
+			Debug.LogError("Invalid crack number " + crackNumber);
+			break;
 		}
 	}
     

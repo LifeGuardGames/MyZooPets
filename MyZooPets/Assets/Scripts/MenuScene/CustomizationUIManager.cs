@@ -3,11 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
-    public GameObject customizationPanel;
+public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
+	public TweenToggle nameTweenParent;		// Part 1 of the selection process
+	public TweenToggle colorTweenParent;	// Part 2 of the selection process
     public UILabel nameField;
 	public Camera NGUICamera;
-    public ButtonSetHighlight buttonHighLight;
 	public ParticleSystemController leafParticle;
 	public Animation requireNameAnimation;
 	public ParticleSystem poofParticle;
@@ -16,19 +16,16 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
     private string petColor;
     private string petName; //Default pet name
     private Color currentRenderColor;
-    private bool finishClicked = false;
-    private bool isComicOn;
 	
     protected override void Awake(){
 		base.Awake();
 		petColor = PetColor.OrangeYellow.ToString(); //Default pet color
         eModeType = UIModeTypes.CustomizePet;
-        isComicOn = Constants.GetConstant<bool>("IsComicIntroOn");
     }
 	
 	protected override void _OpenUI(){
 		logoTitleTween.Hide();
-        ShowChooseGUI();
+        ShowFirstChooseUI();
 	}
 	
 	// Used when pressing back button in the panel
@@ -36,98 +33,66 @@ public class CustomizationUIManager : SingletonUI<CustomizationUIManager> {
 	}
     
     public void ChangeEggColor(string spriteName, string petColor){
-        if (!finishClicked){
-			GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
-			poofParticle.Play();
-			Sprite sprite = Resources.Load<Sprite>(spriteName);
-            selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite = sprite;
-            this.petColor = petColor;
-        }       
+		GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
+		poofParticle.Play();
+		Sprite sprite = Resources.Load<Sprite>(spriteName);
+        selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite = sprite;
+        this.petColor = petColor;     
     }
 
-    public void ButtonClicked_Back(){
-        base.CloseUI();
-        HideChooseGUI(false);
-    }
+	private void ShowFirstChooseUI(){
+		SelectionUIManager.Instance.ToggleEggAnimation(false);
+		SelectionUIManager.Instance.EggCrack(1);
+		leafParticle.Stop();
+		nameTweenParent.Show();
+	}
 
-    public void ButtonClicked_Finish(){
+	public void FirstFinishClicked(){
 		if(!String.IsNullOrEmpty(nameField.text)){
-			if (!finishClicked){
-				// play sound
-				AudioManager.Instance.PlayClip("introDoneNaming");
-				
-				finishClicked = true;
-				petName = nameField.text;
-				
-				Analytics.Instance.PetColorChosen(this.petColor);
-				Analytics.Instance.StartGame();
-				
-				//Initialize data for new pet
-				DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
-			}
-			base.CloseUI();
-			HideChooseGUI(true);
+			petName = nameField.text;
+			nameTweenParent.Hide();
+			SelectionUIManager.Instance.EggCrack(2);
 		}
-		// Play the animation to prompt user to enter name
 		else{
+			// Play the animation to prompt user to enter name
 			requireNameAnimation.Play();
 		}
-    }
-	
-    private void ShowChooseGUI(){
-		SelectionUIManager.Instance.ToggleEggAnimation(true);
-		leafParticle.Stop();
-        customizationPanel.GetComponent<TweenToggleDemux>().Show();
+	}
 
-        //find out what color is the egg and change the color selection button
-		GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
-        string defaultEggColor = selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite.name;
-        LgButton colorButton = null;
+	/// <summary>
+	/// Shows the second choose UI, called from first finish callback
+	/// </summary>
+	public void ShowSecondChooseUI(){
+		colorTweenParent.Show();
+	}
 
-        switch(defaultEggColor){
-            case "eggOrangeYellow":
-                colorButton = buttonHighLight.buttonList[0];
-                petColor = "OrangeYellow";
-            break;
-            case "eggPurpleLime":
-                colorButton = buttonHighLight.buttonList[1];
-                petColor = "PurpleLime";
-            break;
-			case "eggBlueYellow":
-				colorButton = buttonHighLight.buttonList[2];
-				petColor = "BlueYellow";
-			break;
-        }
+	public void SecondFinishClicked(){
+		colorTweenParent.Hide();
 
-        buttonHighLight.firstButton = colorButton;
-        buttonHighLight.SetFirstButton();
-    }
+		Analytics.Instance.PetColorChosen(this.petColor);
+		Analytics.Instance.StartGame();
 
-    private void HideChooseGUI(bool showMovie){
-        customizationPanel.GetComponent<TweenToggleDemux>().Hide();
-		if(showMovie){
-			ClickManager.Instance.Lock(UIModeTypes.IntroComic);
-			if(isComicOn)
-				Invoke("ShowIntroMovie", 1);
-			else
-				LoadScene();
+		// Initialize data for new pet
+		DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
+
+		// Play the movie
+		if(Constants.GetConstant<bool>("IsComicIntroOn")){
+			Invoke("ShowIntroMovie", 1);
 		}
-
-        //since we turn on spotlight and turn off animation for customization UI
-        //need to reverse them 
-        else{
-			leafParticle.Play();
-            SelectionUIManager.Instance.ToggleEggAnimation(true);
-//            SelectionUIManager.Instance.ToggleSpotLight(false);
-        }
-    }
+		else{
+			LoadScene();
+		}
+	}
 
 	private void ShowIntroMovie() {
-		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro"))
-			LoadScene();
+//		ClickManager.Instance.Lock(UIModeTypes.IntroComic);
 
-		SelectionUIManager.Instance.ToggleEggAnimation(false);
-		AudioManager.Instance.LowerBackgroundVolume(0.1f);
+		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro")){
+			LoadScene();
+		}
+
+//		SelectionUIManager.Instance.ToggleEggAnimation(false);
+//		AudioManager.Instance.LowerBackgroundVolume(0.1f);
 		
 		GameObject comicPlayerPrefab = Resources.Load("IntroComicPlayer") as GameObject;
 		GameObject goComicPlayer = GameObjectUtils.AddChildWithPositionAndScale(null, comicPlayerPrefab) as GameObject;

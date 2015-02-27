@@ -21,6 +21,12 @@ public class RetentionPet : MiniPet {
 
 	private void turnInMission(){
 		MiniPetManager.Instance.IncreaseXP(id);
+		MutableDataMission mission = WellapadMissionController.Instance.GetMission("Ninja");
+		
+		if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+			// claim the reward
+			WellapadMissionController.Instance.ClaimReward("Ninja");
+			WellapadMissionController.Instance.RefreshCheck();
 	}
 
 	private void giveOutMission(){

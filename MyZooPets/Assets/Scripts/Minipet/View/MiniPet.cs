@@ -36,7 +36,7 @@ public class MiniPet : MonoBehaviour {
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
-	public bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
+	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 
@@ -46,7 +46,6 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
-
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
 		RefreshUnlockState();
@@ -242,9 +241,9 @@ public class MiniPet : MonoBehaviour {
 		
 		//if pet not finish eating yet. finish eating logic
 		if(!isFinishEating){
-			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseXP(id);
-			animationManager.Eat();
+			//InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			//MiniPetManager.Instance.IncreaseXP(id);
+			//animationManager.Eat();
 		}
 		//else check if tickle and cleaning is done. if both done 
 		else{
@@ -252,8 +251,8 @@ public class MiniPet : MonoBehaviour {
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyXP(id)){*/
 				Invoke("ShowFoodPreferenceMessage", 1f);
-			//}
-		}
+			}
+		//}
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){

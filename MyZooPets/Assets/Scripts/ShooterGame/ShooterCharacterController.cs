@@ -63,18 +63,18 @@ public class ShooterCharacterController : MonoBehaviour {
 		}
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "Happy")){
-			SetState(ShooterCharacterStates.dead);
-		}
-		else if(GUI.Button(new Rect(200, 100, 100, 100), "SAD")){
-			SetState(ShooterCharacterStates.distressed);
-		}
-		else if(GUI.Button(new Rect(300, 100, 100, 100), "Neugtral")){
-			SetState(ShooterCharacterStates.neutral);
-		}
-		else if(GUI.Button(new Rect(400, 100, 100, 100), "Shoot")){
-			Shoot();
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Happy")){
+//			SetState(ShooterCharacterStates.dead);
+//		}
+//		else if(GUI.Button(new Rect(200, 100, 100, 100), "SAD")){
+//			SetState(ShooterCharacterStates.distressed);
+//		}
+//		else if(GUI.Button(new Rect(300, 100, 100, 100), "Neugtral")){
+//			SetState(ShooterCharacterStates.neutral);
+//		}
+//		else if(GUI.Button(new Rect(400, 100, 100, 100), "Shoot")){
+//			Shoot();
+//		}
+//	}
 }

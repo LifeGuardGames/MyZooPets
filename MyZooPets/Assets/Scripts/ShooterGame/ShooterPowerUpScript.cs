@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ShooterPowerUpScript : MonoBehaviour {
@@ -34,7 +34,7 @@ public class ShooterPowerUpScript : MonoBehaviour {
 			Destroy(this.gameObject);
 		}
 		else if (collider.gameObject.tag == "Player"){
-			ShooterPowerUpManager.Instance.changePowerUp(powerUp);
+			ShooterPowerUpManager.Instance.ChangePowerUp(powerUp);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 			Destroy(this.gameObject);

@@ -28,7 +28,6 @@ public class LivesChangedArgs : EventArgs{
 		this.nChange = nChange;
 	}
 }
-	
 
 //---------------------------------------------------
 // MinigameManager

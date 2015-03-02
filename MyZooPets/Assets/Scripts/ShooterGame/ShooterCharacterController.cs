@@ -7,7 +7,8 @@ public class ShooterCharacterController : MonoBehaviour {
 		none,
 		neutral,
 		happy,
-		distressed
+		distressed,
+		dead
 	}
 
 	public Animator anim;
@@ -19,16 +20,24 @@ public class ShooterCharacterController : MonoBehaviour {
 		case ShooterCharacterStates.neutral:
 			anim.SetBool("Happy", false);
 			anim.SetBool("Distressed", false);
+			anim.SetBool("Dead", false);
 			stateAux = ShooterCharacterStates.neutral;
 			break;
 		case ShooterCharacterStates.happy:
 			anim.SetBool("Happy", true);
 			anim.SetBool("Distressed", false);
+			anim.SetBool("Dead", false);
 			stateAux = ShooterCharacterStates.happy;
 			break;
 		case ShooterCharacterStates.distressed:
 			anim.SetBool("Happy", false);
 			anim.SetBool("Distressed", true);
+			anim.SetBool("Dead", false);
+			stateAux = ShooterCharacterStates.distressed;
+			break;
+		case ShooterCharacterStates.dead:
+			anim.SetTrigger("Die");
+			anim.SetBool("Dead", true);
 			stateAux = ShooterCharacterStates.distressed;
 			break;
 		default:
@@ -54,18 +63,18 @@ public class ShooterCharacterController : MonoBehaviour {
 		}
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Happy")){
-//			SetState(ShooterCharacterStates.happy);
-//		}
-//		else if(GUI.Button(new Rect(200, 100, 100, 100), "SAD")){
-//			SetState(ShooterCharacterStates.distressed);
-//		}
-//		else if(GUI.Button(new Rect(300, 100, 100, 100), "Neugtral")){
-//			SetState(ShooterCharacterStates.neutral);
-//		}
-//		else if(GUI.Button(new Rect(400, 100, 100, 100), "Shoot")){
-//			Shoot();
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "Happy")){
+			SetState(ShooterCharacterStates.dead);
+		}
+		else if(GUI.Button(new Rect(200, 100, 100, 100), "SAD")){
+			SetState(ShooterCharacterStates.distressed);
+		}
+		else if(GUI.Button(new Rect(300, 100, 100, 100), "Neugtral")){
+			SetState(ShooterCharacterStates.neutral);
+		}
+		else if(GUI.Button(new Rect(400, 100, 100, 100), "Shoot")){
+			Shoot();
+		}
+	}
 }

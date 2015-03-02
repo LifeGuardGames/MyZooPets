@@ -11,10 +11,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public List<GameObject> fireBallPrefabs;	// List of fireball presets too choose from
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
 	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
-	public bool isTriple;						// are we tripple firing
-	public bool isPiercing;						// are we tripple firing
+	public bool isTriple;						// are we triple firing
+	public bool isPiercing;
 
-	// on reset change health to 10 and state ti neutral
+	// on reset change health to 10 and state to neutral
 	public void Reset(){
 		playerHealth = 10;
 		ChangeState("neutral");
@@ -52,6 +52,11 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 		// Also updates the lives in game manager as that is the true health
 		ShooterGameManager.Instance.UpdateLives((int)amount);
+
+		if(ShooterGameManager.Instance.GetLives() == 0){
+			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
+		}
+
 		if(amount > 0){ 
 			// work around for increaseing health above max 
 			if(changeInHealth != null)

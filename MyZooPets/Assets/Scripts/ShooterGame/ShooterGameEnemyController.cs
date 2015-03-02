@@ -9,7 +9,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 	public int enemiesInWave = 0;							// the number of enemies in the current wave											
 	Wave currWave;											// our current wave
 
-	public void reset(){
+	public void Reset(){
 		enemiesInWave = 0;
 		if(enemyList!=null){
 		enemyList.Clear();
@@ -97,7 +97,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController> 
 		}
 		//ShooterSpawnManager.Instance.EnemySpawnCount=EnemiesInWave;
 		ShooterSpawnManager.Instance.enemy = WaveEnemies;
-		ShooterSpawnManager.Instance.spawnTrigger(WaveEnemies);
+		ShooterSpawnManager.Instance.SpawnTrigger(WaveEnemies);
 
 	}
 

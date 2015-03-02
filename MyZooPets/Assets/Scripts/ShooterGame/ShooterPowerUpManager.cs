@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
@@ -13,10 +13,10 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager> {
 		switch(powerUp){
 		case "normal":
 			PlayerShooterController.Instance.isPiercing = false;
-			PlayerShooterController.Instance.isTripple = false;
+			PlayerShooterController.Instance.isTriple = false;
 			break;
 		case "tripple":
-			PlayerShooterController.Instance.isTripple = true;
+			PlayerShooterController.Instance.isTriple = true;
 			StartCoroutine("powerTime");
 			break;
 		case "pierce":

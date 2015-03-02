@@ -47,7 +47,7 @@ public class ShooterEnemyAi : MonoBehaviour{
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
 
-			if(!collider.GetComponent<bulletScript>().isPierceing){
+			if(!collider.GetComponent<BulletScript>().isPierceing){
 				Destroy(collider.gameObject);
 			}
 			health--;
@@ -57,7 +57,7 @@ public class ShooterEnemyAi : MonoBehaviour{
 			}
 		}
 		else if(collider.gameObject.tag == "Player"){
-			PlayerShooterController.Instance.removeHealth(-damage);
+			PlayerShooterController.Instance.RemoveHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
 	}

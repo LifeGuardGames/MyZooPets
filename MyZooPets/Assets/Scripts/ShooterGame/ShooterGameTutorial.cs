@@ -74,7 +74,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		GameObject.Destroy(fingerPos);
 		ShooterGameManager.Instance.inTutorial=false;
 		if(!isFinished){
-			ShooterGameManager.Instance.reset();
+			ShooterGameManager.Instance.Reset();
 		}
 	}
 

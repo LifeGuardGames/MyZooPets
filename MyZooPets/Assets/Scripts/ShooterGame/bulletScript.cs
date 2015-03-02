@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class bulletScript : MonoBehaviour{
+public class BulletScript : MonoBehaviour{
 
 	// speed of the bullet
 	public float speed = 5f;

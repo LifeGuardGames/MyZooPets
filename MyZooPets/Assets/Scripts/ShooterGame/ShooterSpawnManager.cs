@@ -29,8 +29,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
 	}
 	// prevents finishing the last wave
-	public void reset(){
-		StopCoroutine("SpawnEnemies");
+	public void Reset(){
+		StopCoroutine(SpawnEnemies());
 	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -48,22 +48,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		}
 	}
 
-	public void spawnTrigger(List<EnemyData> enemy){
-		//Debug.Log(enemy.Count);
-	/*	if(EnemySpawnCount<=0){
-			IsSpawing = false;
-		}*/
-		StartCoroutine("SpawnEnemies");
-	}
-
-	void Update(){
-		/*if(IsSpawing == true){
-			if(LastSpawn<= Time.time-SpawnTime){
-				spawnTrigger();
-				LastSpawn=Time.time;
-			}*/
-
-
+	public void SpawnTrigger(List<EnemyData> enemy){
+		StartCoroutine(SpawnEnemies());
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
@@ -79,11 +65,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			int RandomSpawn = Random.Range(0, enemy.Count);
 			if(enemy[RandomSpawn].name == "powerUp"){
 				Debug.Log(enemy[RandomSpawn].name);
-				GameObject pUP = Instantiate(powerUpPrefab,posList[rand], powerUpPrefab.transform.rotation) as GameObject;
-				pUP.GetComponent<ShooterPowerUpScript>().name = enemy[RandomSpawn].name;
-				pUP.GetComponent<ShooterPowerUpScript>().spriteName = enemy[RandomSpawn].spriteName;
-				pUP.GetComponent<ShooterPowerUpScript>().aiScript = enemy[RandomSpawn].aiScript;
-				pUP.GetComponent<ShooterPowerUpScript>().Initialize();
+				GameObject powerUp = Instantiate(powerUpPrefab, posList[rand], powerUpPrefab.transform.rotation) as GameObject;
+				powerUp.GetComponent<ShooterPowerUpScript>().name = enemy[RandomSpawn].name;
+				powerUp.GetComponent<ShooterPowerUpScript>().spriteName = enemy[RandomSpawn].spriteName;
+				powerUp.GetComponent<ShooterPowerUpScript>().aiScript = enemy[RandomSpawn].aiScript;
+				powerUp.GetComponent<ShooterPowerUpScript>().Initialize();
 			}
 			else{
 			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;

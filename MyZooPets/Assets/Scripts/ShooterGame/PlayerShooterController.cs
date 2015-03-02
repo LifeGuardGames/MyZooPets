@@ -4,17 +4,18 @@ using System;
 using System.Collections.Generic;
 
 public class PlayerShooterController : Singleton<PlayerShooterController>{
+	public ShooterCharacterController characterController;
 	public EventHandler <EventArgs> changeInHealth;
 	public string state = "neutral";	//the player state this dictates the pets strength
 	public float playerHealth;			//player health
 	public List<GameObject> fireBallPrefabs;	// List of fireball presets too choose from
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
 	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
-	public bool isTripple;						// are we tripple firing
+	public bool isTriple;						// are we tripple firing
 	public bool isPiercing;						// are we tripple firing
 
 	// on reset change health to 10 and state ti neutral
-	public void reset(){
+	public void Reset(){
 		playerHealth = 10;
 		ChangeState("neutral");
 	}
@@ -23,19 +24,22 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		state = _state;
 		switch(state){
 		case "happy":
+			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.happy);
 			currentFireBall = fireBallPrefabs[0];	// Big fireball prefab
 			break;
 		case "neutral":
+			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.neutral);
 			currentFireBall = fireBallPrefabs[1];	// Medium fireball prefab
 			break;
 		case "distressed":
+			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.distressed);
 			currentFireBall = fireBallPrefabs[2];	// Small fireball prefab
 			break;
 		}
 	}
 
 	// removes health and then calculates state
-	public void removeHealth(float amount){
+	public void RemoveHealth(float amount){
 		playerHealth += amount;
 		if(playerHealth >= 11){
 			ChangeState("happy");
@@ -60,28 +64,35 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	// shoots a bullet at the current position of the mouse or touch
-	public void shoot(Vector3 dir){
+	public void Shoot(Vector3 dir){
+
+		characterController.Shoot();	// Tell the animator to shoot
+
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
-		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
-		instance.GetComponent<bulletScript>().target = lookPos;
-		instance.GetComponent<bulletScript>().FindTarget();
-		instance.GetComponent<bulletScript>().isPierceing = isPiercing;
-		if(isTripple){
-			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
-			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y+1, lookPos.z);
-			instance.GetComponent<bulletScript>().FindTarget();
-			instance.GetComponent<bulletScript>().isPierceing = isPiercing;
-			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation)as GameObject;
-			instance.GetComponent<bulletScript>().target = new Vector3(lookPos.x, lookPos.y-1, lookPos.z);
-			instance.GetComponent<bulletScript>().FindTarget();
-			instance.GetComponent<bulletScript>().isPierceing = isPiercing;
+		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+		BulletScript bulletScript = instance.GetComponent<BulletScript>();
+		bulletScript.target = lookPos;
+		bulletScript.FindTarget();
+		bulletScript.isPierceing = isPiercing;
+		if(isTriple){
+			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+			bulletScript = instance.GetComponent<BulletScript>();
+			bulletScript.target = new Vector3(lookPos.x, lookPos.y+1, lookPos.z);
+			bulletScript.FindTarget();
+			bulletScript.isPierceing = isPiercing;
+
+			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+			bulletScript = instance.GetComponent<BulletScript>();
+			bulletScript.target = new Vector3(lookPos.x, lookPos.y-1, lookPos.z);
+			bulletScript.FindTarget();
+			bulletScript.isPierceing = isPiercing;
 		}
 	}
 
 	// removes health from player when hit by an enemy bullet // written this way to avoid making a mundane script
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
-			removeHealth(-1);
+			RemoveHealth(-1);
 			Destroy(collider.gameObject);
 		}
 	}

@@ -129,6 +129,7 @@ public class StatsController : Singleton<StatsController>{
 	/// <param name="bPlaySounds">If set to <c>true</c> play sounds.</param>
 	/// <param name="bAtOnce">If set to <c>true</c> animate all stats at once.</param>
 	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
+	/// <param name="isInternal">If set to <c>true</c> skip all animations / rewarding</param>
 	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3),
 	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3),
 	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
@@ -190,63 +191,66 @@ public class StatsController : Singleton<StatsController>{
 				CheckForZeroHealth();
 			}
 		}
+
+		// If internal checked, skip all animations and reward checking
 		if(isInternal == false){
-		if(isFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
-			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
-		}
+			if(isFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
+				PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
+			}
 
-		//when stats are modified make sure PetAnimationManager knows about it
-		if(isPetAnimationManagerPresent){
-			PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
-			                                              DataManager.Instance.GameData.Stats.Mood);
-		}
+			//when stats are modified make sure PetAnimationManager knows about it
+			if(isPetAnimationManagerPresent){
+				PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
+				                                              DataManager.Instance.GameData.Stats.Mood);
+			}
 
-		// Adjust for custom positions using screen position for 3D objects
-		if(is3DObject){
-			if(pointsLoc != default(Vector3)){
-				// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into respective NGUI Anchors
-				pointsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, pointsLoc);
-				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
-				pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+			// Adjust for custom positions using screen position for 3D objects
+			if(is3DObject){
+				if(pointsLoc != default(Vector3)){
+					// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into respective NGUI Anchors
+					pointsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, pointsLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
+					pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(starsLoc != default(Vector3)){
+					starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
+					starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(healthLoc != default(Vector3)){
+					healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
+					healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(moodLoc != default(Vector3)){
+					moodLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, moodLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
+					moodLoc = CameraManager.Instance.TransformAnchorPosition(moodLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
 			}
-			if(starsLoc != default(Vector3)){
-				starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
-				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
-				starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+			// Adjust for custom position using screen position for NGUI objects
+			else{
+				// Not needed yet
 			}
-			if(healthLoc != default(Vector3)){
-				healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);
-				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
-				healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, endAnchor);
-			}
-			if(moodLoc != default(Vector3)){
-				moodLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, moodLoc);
-				InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
-				moodLoc = CameraManager.Instance.TransformAnchorPosition(moodLoc, InterfaceAnchors.BottomLeft, endAnchor);
-			}
-		}
-		// Adjust for custom position using screen position for NGUI objects
-		else{
-			// Not needed yet
-		}
 
-		// Tell HUDAnimator to animate and change
-		List<StatPair> listStats = new List<StatPair>();
-		listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
-		listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
-		listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
-		listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
-		
-		if(hudAnimator != null && !bBeingDestroyed){
-			// Push this into the reward queue
-			RewardQueueData.GenericDelegate function1 = delegate{
-				StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
-			};
-			RewardManager.Instance.AddToRewardQueue(function1);
-		}
-	}
+			// Tell HUDAnimator to animate and change
+			List<StatPair> listStats = new List<StatPair>();
+			listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
+			listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
+			listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
+			listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
+			
+			if(hudAnimator != null && !bBeingDestroyed){
+				// Push this into the reward queue
+				RewardQueueData.GenericDelegate function1 = delegate{
+					StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
+				};
+				RewardManager.Instance.AddToRewardQueue(function1);
+			}
+
 		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
+		}
 	}
 
 	//---------------------------------------------------

@@ -33,20 +33,20 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 		if(IsTutorialOverride() && IsTutorialOn()|| 
 		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
-		if(inTutorial){
-			ShooterUIManager.Instance.Reset();
-			PlayerShooterController.Instance.reset();
-			StartTutorial();
+			if(inTutorial){
+				ShooterUIManager.Instance.Reset();
+				PlayerShooterController.Instance.Reset();
+				StartTutorial();
+			}
 		}
-	}
 		else{
 			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
 			missed = 0;
-			ShooterSpawnManager.Instance.reset();
-			ShooterGameEnemyController.Instance.reset();
+			ShooterSpawnManager.Instance.Reset();
+			ShooterGameEnemyController.Instance.Reset();
 			ShooterUIManager.Instance.Reset();
-			PlayerShooterController.Instance.reset();
+			PlayerShooterController.Instance.Reset();
 			if(ShooterUIManager.Instance.fingerPos != null){
 				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 			}
@@ -55,12 +55,13 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	protected override bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsShooterTutorialOn");
 	}
-	public void reset(){
+
+	public void Reset(){
 		waveNum = 0;
 		missed = 0;
-		ShooterGameEnemyController.Instance.reset();
+		ShooterGameEnemyController.Instance.Reset();
 		ShooterUIManager.Instance.Reset();
-		PlayerShooterController.Instance.reset();
+		PlayerShooterController.Instance.Reset();
 		if(ShooterUIManager.Instance.fingerPos != null){
 			Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 		}
@@ -89,7 +90,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 #endif
 #if UNITY_EDITOR
 				Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-				PlayerShooterController.Instance.shoot(mousePos);
+				PlayerShooterController.Instance.Shoot(mousePos);
 #endif
 			}
 			startTime = Time.time;
@@ -108,7 +109,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		if(ShooterInhalerManager.Instance.hit == false){
 			missed++;
 			if(missed >= 2){
-				PlayerShooterController.Instance.removeHealth(-2);
+				PlayerShooterController.Instance.RemoveHealth(-2);
 			}
 		}
 		ShooterInhalerManager.Instance.hit = false;

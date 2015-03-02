@@ -235,9 +235,11 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// RestartGame()
 	// This comes from clicking a button.
 	//---------------------------------------------------		
-	public void RestartGame(){
-		Debug.Log (DataManager.Instance.GameData.Stats.Mood);
-		StatsController.Instance.ChangeStats(deltaMood: -10,isInternal: true);
+	public void RestartGame(bool minusMood = true){
+		if(minusMood){
+			StatsController.Instance.ChangeStats(deltaMood: -10, isInternal: true);
+			Debug.Log ("SFSDFSF");
+		}
 		AudioManager.Instance.PauseBackground(false);
 
 		// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
@@ -277,7 +279,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		SetTutorialOverride(false);
 		
 		// then just restart the game
-		RestartGame();
+		RestartGame(minusMood:false);
 	}	
 	
 	//---------------------------------------------------

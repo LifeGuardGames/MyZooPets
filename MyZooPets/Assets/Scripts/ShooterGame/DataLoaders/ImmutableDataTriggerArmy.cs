@@ -29,6 +29,6 @@ public class ImmutableDataTriggerArmy{
 		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);
 		spriteName = XMLUtils.GetString(hashElements["SpriteName"] as IXMLNode, null, error);
 		ai = XMLUtils.GetString(hashElements["AI"] as IXMLNode, null, error);
-		displayKey = XMLUtils.GetString(hashElements["DisPlayKey"] as IXMLNode, null, error);
+		displayKey = XMLUtils.GetString(hashElements["DisplayKey"] as IXMLNode, null, error);
 	}
 }

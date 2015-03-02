@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
@@ -15,11 +14,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			return canUseInhalerButton;
 		}
 		set{
-			Debug.Log("setting value " + value);
-			canUseInhalerButton=value;
+			canUseInhalerButton = value;
 		}
 	}
-
 
 	//on button Tap
 	public void ShooterGameInhalerButton(){
@@ -34,7 +31,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 			}
 			ShooterGameManager.Instance.AddScore(10);
-			PlayerShooterController.Instance.removeHealth(3);
+			PlayerShooterController.Instance.RemoveHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;
 			foreach (GameObject boom in goodFX){
 				boom.SetActive(true);
@@ -45,6 +42,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			StartCoroutine(HoldIt());
 		}
 	}
+
 	IEnumerator HoldIt(){
 		yield return new WaitForSeconds (2.0f);
 		badTiming.SetActive(false);

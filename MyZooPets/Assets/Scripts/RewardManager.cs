@@ -50,7 +50,7 @@ public class RewardManager : Singleton<RewardManager> {
 		RewardQueueData.AddReward(functionToCall);
 		
 		if(!isRewardingActive){
-//			Debug.Log("Try next reward----");
+			Debug.Log("Try next reward----");
 			TryNextReward();
 		}else{
 //			Debug.Log("Reward queue FULL----");

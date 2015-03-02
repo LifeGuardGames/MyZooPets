@@ -48,6 +48,9 @@ public class MiniPet : MonoBehaviour {
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
+		if(!PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
+		}
 		RefreshUnlockState();
 	}
 

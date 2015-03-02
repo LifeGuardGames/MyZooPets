@@ -17,7 +17,7 @@ public class RetentionPet : MiniPet {
 	}
 	public override void FinishEating(){
 		MiniPetManager.Instance.canLevel = true;
-		//isFinishEating = true; 
+		isFinishEating = true; 
 		miniPetSpeechAI.ShowTipMsg();
 		timesVisted++;
 		giveOutMission();

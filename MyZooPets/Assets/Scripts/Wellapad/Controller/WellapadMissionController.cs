@@ -81,11 +81,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				int rewardXP = DataLoaderXpRewards.GetXP("WellapadBonus", new Hashtable());
 				
 				// get the position of the actual reward object because we want to stream the XP from it
-				GameObject goReward = GameObject.Find("WellapadRewardButton");				
-				Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
-				screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
+				//GameObject goReward = GameObject.Find("WellapadRewardButton");				
+				//Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
+				//screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
 
-				StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: screenPos);
+				StatsController.Instance.ChangeStats(deltaPoints: rewardXP);
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event
@@ -204,7 +204,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
-
+			MiniPetManager.Instance.needMission = false;
 			IsRefresh = false;
 		}
 	}

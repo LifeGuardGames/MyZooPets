@@ -40,8 +40,10 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void UnlockMiniPet(string miniPetID){
-		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress.Add(miniPetID, new Status());
+			DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
+		}
 	}
 
 	/// <summary>

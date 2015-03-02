@@ -177,11 +177,10 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public bool CanModifyXP(string miniPetID){
 		//make sure current level is not at max level
-		bool canModify = true;
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
 		//bool isTickled = DataManager.Instance.GameData.MiniPets.IsTickled(miniPetID);
 		//bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
-
+		bool canModify;
 	//	canModify = (currentLevel != maxLevel) && isTickled && isCleaned && canLevel;
 		canModify = (currentLevel != maxLevel) && canLevel;
 		return canModify;
@@ -325,6 +324,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
+			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			//if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -346,6 +346,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
+			}
+			else{
+				goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
+				goMiniPet.name = prefab.name;
+				goMiniPet.GetComponent<MiniPet>().Init(data);
+				// Add the pet into the dictionary to keep track
+				MiniPetTable.Add(miniPetID, goMiniPet);
+
+			}
 		}
 		else if (data.Type == MiniPetTypes.Rentention){
 			Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
@@ -423,4 +432,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			minipetGO.GetComponent<MiniPet>().ToggleVisibility(false);
 		}
 	}
+
+
 }

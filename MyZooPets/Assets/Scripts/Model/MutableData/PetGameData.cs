@@ -23,6 +23,7 @@ public class PetGameData{
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	public MutableDataSickNotification SickNotification {get; set;}
+	public MutableDataMiniPetLocations MiniPetLocations {get; set;}
 
 	private List<MutableData> allMutableData;
 	
@@ -53,6 +54,7 @@ public class PetGameData{
 		MiniPets = new  MutableDataMiniPets();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
 		SickNotification = new MutableDataSickNotification();
+		MiniPetLocations = new MutableDataMiniPetLocations();
     }
 
 	/// <summary>

@@ -13,7 +13,7 @@ public class WellapadRewardUI : MonoBehaviour {
 	private string strMissionID;
 	
 	// button for the reward
-	public WellapadRewardButton buttonReward;
+	//public WellapadRewardButton buttonReward;
 	
 	//---------------------------------------------------
 	// Init()
@@ -23,6 +23,6 @@ public class WellapadRewardUI : MonoBehaviour {
 		this.strMissionID = strMissionID;
 		
 		// init the button belonging to this reward -- the button code will take care of the rest
-		buttonReward.Init( this.strMissionID );
+		//buttonReward.Init( this.strMissionID );
 	}
 }

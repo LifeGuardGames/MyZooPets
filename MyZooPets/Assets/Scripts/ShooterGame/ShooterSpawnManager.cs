@@ -21,12 +21,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public GameObject powerUpPrefab;
 			
 	// Use this for initialization
-	void Start () {
+	void Start(){
 		posList = new List<Vector3>();
 		posList.Add(firstPos.transform.position);
-		posList.Add (secondPos.transform.position);	
+		posList.Add(secondPos.transform.position);	
 		posList.Add(thirdPos.transform.position);
-		ShooterGameManager.OnStateChanged+= OnGameStateChanged;
+		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
 	// prevents finishing the last wave
 	public void Reset(){
@@ -54,12 +54,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
 	IEnumerator SpawnEnemies(){
-		for (int i = 0; i<enemy.Count;i++){
-			if (isSpawing == false){
+		for(int i = 0; i<enemy.Count; i++){
+			if(isSpawing == false){
 				yield return ShooterGameManager.Instance.Sync();
 			}
 			yield return new WaitForSeconds(1.0f);
-			int rand = Random.Range(0,3);
+			int rand = Random.Range(0, 3);
 			//they are spawned in more of a weighted list fashion 
 			//so while one of the first waves has only one hard enemy in it it can spawn more than one
 			int RandomSpawn = Random.Range(0, enemy.Count);
@@ -72,12 +72,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				powerUp.GetComponent<ShooterPowerUpScript>().Initialize();
 			}
 			else{
-			GameObject enemy1 = Instantiate(enemyPrefab,posList[rand],enemyPrefab.transform.rotation)as GameObject;
-			enemy1.GetComponent<Enemy>().name = enemy[0].name;
-			enemy1.GetComponent<Enemy>().spriteName = enemy[0].spriteName;
-			enemy1.GetComponent<Enemy>().aiScript = enemy[RandomSpawn].aiScript;
-			enemy1.GetComponent<Enemy>().bulletPrefab = bulletPrefab;
-			enemy1.GetComponent<Enemy>().Initialize();
+				GameObject enemy1 = Instantiate(enemyPrefab, posList[rand], enemyPrefab.transform.rotation)as GameObject;
+				enemy1.GetComponent<Enemy>().name = enemy[0].name;
+				enemy1.GetComponent<Enemy>().spriteName = enemy[0].spriteName;
+				enemy1.GetComponent<Enemy>().aiScript = enemy[RandomSpawn].aiScript;
+				enemy1.GetComponent<Enemy>().bulletPrefab = bulletPrefab;
+				enemy1.GetComponent<Enemy>().Initialize();
 			}
 		}
 	}

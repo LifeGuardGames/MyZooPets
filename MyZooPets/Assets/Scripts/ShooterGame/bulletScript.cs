@@ -27,12 +27,12 @@ public class BulletScript : MonoBehaviour{
 		Destroy(this.gameObject);
 	}
 
-	// collision handleing
+	// collision handling
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
 			Destroy(collider.gameObject);
 			if(!isPierceing){
-			Destroy(this.gameObject);
+				Destroy(this.gameObject);
 			}
 		}
 	}

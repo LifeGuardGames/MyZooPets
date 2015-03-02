@@ -18,6 +18,7 @@ public class MutableDataMiniPetLocations : MonoBehaviour {
 	public Dictionary<string, Status> MiniPetLoc {get; set;} 
 
 	public void UnlockMiniPet(string miniPetID){
+		Debug.Log(MiniPetLoc.ContainsKey(miniPetID));
 		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetLoc.ContainsKey(miniPetID))
 			MiniPetLoc.Add(miniPetID, new Status());
 	}
@@ -75,5 +76,8 @@ public class MutableDataMiniPetLocations : MonoBehaviour {
 		else{
 			return false;
 		}
+	}
+	public MutableDataMiniPetLocations(){
+		MiniPetLoc = new Dictionary<string, Status>();
 	}
 }

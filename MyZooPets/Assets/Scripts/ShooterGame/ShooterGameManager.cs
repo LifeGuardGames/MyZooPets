@@ -36,6 +36,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			if(inTutorial){
 				ShooterUIManager.Instance.Reset();
 				PlayerShooterController.Instance.Reset();
+				ShooterGameEnemyController.Instance.Reset();
 				StartTutorial();
 			}
 		}

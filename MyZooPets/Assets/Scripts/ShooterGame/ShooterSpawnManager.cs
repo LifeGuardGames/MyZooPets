@@ -30,14 +30,14 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	}
 	// prevents finishing the last wave
 	public void Reset(){
-		StopCoroutine(SpawnEnemies());
+		StopCoroutine("SpawnEnemies");
 	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
 		switch(eState){
 		case MinigameStates.GameOver:
-			isSpawing = false;
+			StopCoroutine("SpawnEnemies");
 			break;
 		case MinigameStates.Paused:
 			isSpawing = false;
@@ -45,11 +45,14 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		case MinigameStates.Playing:
 			isSpawing = true;
 			break;
+		case MinigameStates.Restarting:
+			StopCoroutine("SpawnEnemies");
+			break;
 		}
 	}
 
 	public void SpawnTrigger(List<EnemyData> enemy){
-		StartCoroutine(SpawnEnemies());
+		StartCoroutine("SpawnEnemies");
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 

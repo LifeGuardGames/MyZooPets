@@ -25,6 +25,7 @@ public class NinjaTrigger : MonoBehaviour{
 	
 	// particle effect that will play when this object gets hit
 	public GameObject goHitFX;
+	public GameObject goHitFX2;
 	public GameObject goHitDirectionFX;
 
 	protected virtual void Start(){
@@ -68,6 +69,9 @@ public class NinjaTrigger : MonoBehaviour{
 		Vector3 vPosWorld = Camera.main.ScreenToWorldPoint(new Vector3(vHit.x, vHit.y, 10));
 		vPosWorld.z = goHitFX.transform.position.z;
 		ParticleUtils.CreateParticle(goHitFX, vPosWorld);
+		if(goHitFX2 != null){
+			ParticleUtils.CreateParticle(goHitFX2, vPosWorld);
+		}
 		
 		// Directional particle spawn
 		if(goHitDirectionFX != null){

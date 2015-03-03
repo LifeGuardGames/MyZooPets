@@ -15,7 +15,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 
 	//Return the next time the user can collect bonuses
 	public DateTime NextPlayPeriod{
-		get{ 
+		get{
 			return DataManager.Instance.GameData.Calendar.NextPlayPeriod;
 		}
 	}

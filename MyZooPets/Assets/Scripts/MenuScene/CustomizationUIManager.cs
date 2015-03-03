@@ -4,22 +4,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
-	public TweenToggle nameTweenParent;		// Part 1 of the selection process
-	public TweenToggle colorTweenParent;	// Part 2 of the selection process
+	public TweenToggle colorTweenParent;	// Part 1 of the selection process
+	public TweenToggle nameTweenParent;		// Part 2 of the selection process
     public UILabel nameField;
 	public Camera NGUICamera;
 	public ParticleSystemController leafParticle;
 	public Animation requireNameAnimation;
+	public Animation requireColorAnimation;
 	public ParticleSystem poofParticle;
 	public TweenToggle logoTitleTween;
 
-    private string petColor;
+    private string petColor = null;
     private string petName; //Default pet name
     private Color currentRenderColor;
 	
     protected override void Awake(){
 		base.Awake();
-		petColor = PetColor.OrangeYellow.ToString(); //Default pet color
         eModeType = UIModeTypes.CustomizePet;
     }
 	
@@ -44,18 +44,17 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 		SelectionUIManager.Instance.ToggleEggAnimation(false);
 		SelectionUIManager.Instance.EggCrack(1);
 		leafParticle.Stop();
-		nameTweenParent.Show();
+
+		colorTweenParent.Show();
 	}
 
 	public void FirstFinishClicked(){
-		if(!String.IsNullOrEmpty(nameField.text)){
-			petName = nameField.text;
-			nameTweenParent.Hide();
+		if(petColor != null){
+			colorTweenParent.Hide();
 			SelectionUIManager.Instance.EggCrack(2);
 		}
 		else{
-			// Play the animation to prompt user to enter name
-			requireNameAnimation.Play();
+			requireColorAnimation.Play();
 		}
 	}
 
@@ -63,24 +62,31 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	/// Shows the second choose UI, called from first finish callback
 	/// </summary>
 	public void ShowSecondChooseUI(){
-		colorTweenParent.Show();
+		nameTweenParent.Show();
 	}
 
 	public void SecondFinishClicked(){
-		colorTweenParent.Hide();
+		if(!String.IsNullOrEmpty(nameField.text)){
+			petName = nameField.text;
+			nameTweenParent.Hide();
 
-		Analytics.Instance.PetColorChosen(this.petColor);
-		Analytics.Instance.StartGame();
-
-		// Initialize data for new pet
-		DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
-
-		// Play the movie
-		if(Constants.GetConstant<bool>("IsComicIntroOn")){
-			Invoke("ShowIntroMovie", 1);
+			Analytics.Instance.PetColorChosen(this.petColor);
+			Analytics.Instance.StartGame();
+			
+			// Initialize data for new pet
+			DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
+			
+			// Play the movie
+			if(Constants.GetConstant<bool>("IsComicIntroOn")){
+				Invoke("ShowIntroMovie", 1);
+			}
+			else{
+				LoadScene();
+			}
 		}
 		else{
-			LoadScene();
+			// Play the animation to prompt user to enter name
+			requireNameAnimation.Play();
 		}
 	}
 

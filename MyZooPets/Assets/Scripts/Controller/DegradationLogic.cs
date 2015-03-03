@@ -360,7 +360,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
 
 		if(numOfMissedPlayPeriod > 0){
-			PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
+			Debug.LogWarning("DANGING LOGIC FIX");
+//			PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
 			// Debug.Log("current play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
 		}
 	}

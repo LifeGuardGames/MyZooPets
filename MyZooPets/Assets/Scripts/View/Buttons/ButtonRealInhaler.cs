@@ -6,19 +6,13 @@ using System.Collections.Generic;
 /// <summary>
 /// Button class that loads up the real inhaler game
 /// </summary>
-public class ButtonRealInhaler : ButtonChangeScene {
+public class ButtonRealInhaler : ButtonChangeScene{
 	
 	/// <summary>
 	/// Processes the click.
 	/// </summary>
-	protected override void ProcessClick() {
-		//Start tutorial if first time; otherwise, open inhaler game
-		//if ( DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Cutscene_Inhaler") == false )
-		//	ShowCutscene();
-		//else if(TutorialLogic.Instance.FirstTimeRealInhaler)
-		//	TutorialUIManager.Instance.StartRealInhalerTutorial();
-		//else
-			CheckToOpenInhaler();
+	protected override void ProcessClick(){
+		CheckToOpenInhaler();
 	}
 	
 	/// <summary>
@@ -28,7 +22,8 @@ public class ButtonRealInhaler : ButtonChangeScene {
 	private void CheckToOpenInhaler(){
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			OpenRealInhaler();
-		}else{
+		}
+		else{
 //			PlayNotProcessSound();
 			string soundToPlay;
 			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());

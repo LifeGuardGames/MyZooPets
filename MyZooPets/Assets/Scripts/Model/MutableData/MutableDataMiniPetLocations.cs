@@ -3,19 +3,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class MutableDataMiniPetLocations {
 	public class Status{
 		public Vector3 Loc{get; set;}
 		public bool IsFinishEating {get; set;}
-		
-		
+
 		public Status(){
 			Loc = new Vector3(0,0,0);
 			IsFinishEating =  false;
 		}
 	}
-	public Dictionary<string, Status> MiniPetLoc {get; set;} 
+
+	public Dictionary<string, Status> MiniPetLoc {get; set;}
+	public DateTime LastestPlayPeriodUpdated {get; set;}	// This is to check if you need to refresh dictionary coming back into scene
+
+	public MutableDataMiniPetLocations(){
+		Init();
+	}
+
+	private void Init(){
+		MiniPetLoc = new Dictionary<string, Status>();
+		LastestPlayPeriodUpdated = DateTime.MinValue;
+	}
 
 	public void UnlockMiniPet(string miniPetID){
 		Debug.Log(MiniPetLoc.ContainsKey(miniPetID));
@@ -76,8 +85,5 @@ public class MutableDataMiniPetLocations {
 		else{
 			return false;
 		}
-	}
-	public MutableDataMiniPetLocations(){
-		MiniPetLoc = new Dictionary<string, Status>();
 	}
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -145,12 +145,6 @@ public static class LgCUDLRCommands{
 		}
 	}
 
-	[CUDLR.Command("TimeRemainTillNextPlayPeriod", "get time until next playperiod")]
-	public static void TotalTimeRemain(){
-		TimeSpan timeRemain = DataManager.Instance.GameData.Calendar.GetTotalTimeRemain();
-		CUDLR.Console.Log(timeRemain.Hours + "H " + timeRemain.Minutes + "M ");
-	}
-
 	[CUDLR.Command("GetPlayerPrefString", "")]
 	public static void GetPlayerPrefString(string[] args){
 		CUDLR.Console.Log(PlayerPrefs.GetString(args[0], ""));
@@ -166,10 +160,7 @@ public static class LgCUDLRCommands{
 		int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
 		CUDLR.Console.Log("Fire: " + numOfFireBreaths);
 	}
-
 }
-
-
 
 /**
  * Example console route for getting information about GameObjects

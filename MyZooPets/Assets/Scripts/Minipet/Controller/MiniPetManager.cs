@@ -81,6 +81,19 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		}
 	}
 
+	/// <summary>
+	/// Determines whether new minipet locations should be spawned, also flags the datetime automatically
+	/// </summary>
+	private bool CanSpawnNewMinipetLocations(){
+		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
+			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	void OnDestroy(){
 //		GatingManager.OnDestroyedGate -= OnDestroyedGateHandler;
 	}

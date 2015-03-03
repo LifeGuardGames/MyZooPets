@@ -13,14 +13,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	public UILabel coolDownLabel;
 	public UISprite coolDownSprite;
 
-	private GameObject fireOrbObject;
-
-	public GameObject FireOrbReference{
-		get{
-			return fireOrbObject;
-		}
-	}
-
 	// Start the correct animations based on its state
 	void Start(){
 		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
@@ -37,47 +29,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	void OnDestroy(){
 		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
-	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(0, 0, 100, 100), "start")){
-//			CheckToDropFireOrb();
-//		}
-//	}
-
-	/// <summary>
-	/// Checks to drop fire orb.
-	/// If user hasn't received fire orb after using inhaler, a fire orb will be 
-	/// dropped from the inhaler
-	/// </summary>
-	public void CheckToDropFireOrb(){
-		bool hasReceivedFireOrb = DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb;
-		if(!hasReceivedFireOrb){
-			//spawn fire orb
-			GameObject fireOrbPrefab = Resources.Load("DroppedItemFireOrb") as GameObject;
-			fireOrbObject = NGUITools.AddChild(fireOrbParent, fireOrbPrefab);
-
-			fireOrbObject.layer = LayerMask.NameToLayer("Default");
-			fireOrbObject.transform.parent = fireOrbParent.transform;
-			DroppedObjectItem droppedObjectItem = fireOrbObject.GetComponent<DroppedObjectItem>();
-
-			Item fireOrbData = DataLoaderItems.GetItem("Usable1");
-
-			droppedObjectItem.Init(fireOrbData);
-			droppedObjectItem.ChangeAutoCollectTime(15f);
-
-			fireOrbObject.SetActive(false);
-
-			//Activate animation here
-			Invoke("SpawnFireOrb", 1.5f);
-
-			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = true;
-		}
-	}
-
-	private void SpawnFireOrb(){
-		inhalerAnimationController.Play("SpawnFireOrb");
-		fireOrbObject.SetActive(true);
 	}
 
 	/// <summary>
@@ -104,8 +55,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		coolDownLabel.enabled = false;
 		coolDownSprite.fillAmount = 1f;
 		progressBar3D.animation.Play();
-
-		DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){
@@ -121,21 +70,30 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		TimeSpan timeLeft = args.TimeLeft;
 		string displayTime = "";
 
-		if(timeLeft.Hours > 0)
+		if(timeLeft.Hours > 0){
 			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
 			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
-		else if(timeLeft.Minutes > 0)
+		}
+		else if(timeLeft.Minutes > 0){
 			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
-		else
+		}
+		else{
 			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
+		}
 
-		
 		// set the label
 		coolDownLabel.text = displayTime;
 
-		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemain;
-		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
-		coolDownSprite.fillAmount = completePercentage;
+		Debug.LogWarning("DANGING LOGIC HERE");
+//		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemaining;
+//		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
+//		coolDownSprite.fillAmount = completePercentage;
+		Debug.LogWarning("^^^");
 	}
-	
+
+	//	void OnGUI(){
+	//		if(GUI.Button(new Rect(0, 0, 100, 100), "start")){
+	//			CheckToDropFireOrb();
+	//		}
+	//	}
 }

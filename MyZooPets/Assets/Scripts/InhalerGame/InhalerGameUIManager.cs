@@ -32,8 +32,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	public bool ShowHint{
 		get{
-			//take into consideration if user has seen the new gesture introduced in v1.2.8
-			return showHint || InhalerLogic.Instance.IsNewToTapPrescriptionHint;
+			return showHint;
 		}
 	}
 
@@ -108,11 +107,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	// for the hint count down timer
 	//----------------------------------------------------------
 	private void SetUpHintTimer(){
-		//User is new to the tap gesture we introduce in v1.2.8 force the tutorial to run again
-		bool isNewToTapPrescriptionHint = InhalerLogic.Instance.IsNewToTapPrescriptionHint;
-
 		//Show hint right away if it's users' first time
-		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn) || (isNewToTapPrescriptionHint && tutOn)){ 
+		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn)){ 
 			runShowHintTimer = false;
 			showHint = true;
 		}

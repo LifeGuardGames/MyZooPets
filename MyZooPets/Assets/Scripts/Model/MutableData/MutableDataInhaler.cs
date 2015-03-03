@@ -9,11 +9,13 @@ using System.Collections;
 //---------------------------------------------------
 
 public class MutableDataInhaler{
-    public bool FirstTimeRescue {get; set;} //first time the player has seen the rescue inhaler
-                                        //(this tells us whether to show tutorial arrows in the Inhaler Game)
-	public bool IsNewToTapPrescriptionHint {get; set;} // first time seeing the tap gesture for prescription that we introduce in v1.2.8
-    public DateTime LastInhalerPlayTime {get; set;} //last time the user played the regular inhaler
-	public bool HasReceivedFireOrb {get; set;} 
+    public bool IsFirstTimeRescue {get; set;} 			// First time the player has seen the rescue inhaler
+                                        				// (this tells us whether to show tutorial arrows in the Inhaler Game)
+
+	public DateTime LastestPlayPeriodUsed {get; set;}	// Last pp the user played the regular inhaler
+
+//    public DateTime LastInhalerPlayTime {get; set;}		
+//	public bool HasReceivedFireOrb {get; set;} 
 
     //================Initialization============
     public MutableDataInhaler(){
@@ -21,9 +23,9 @@ public class MutableDataInhaler{
     }
 
     public void Init(){
-		IsNewToTapPrescriptionHint = true;
-        FirstTimeRescue = true;
-		HasReceivedFireOrb = true;
-        LastInhalerPlayTime = LgDateTime.GetTimeNow();
+        IsFirstTimeRescue = true;
+//		HasReceivedFireOrb = true;
+		LastestPlayPeriodUsed = DateTime.MinValue;
+//        LastInhalerPlayTime = LgDateTime.GetTimeNow();
     }
 }

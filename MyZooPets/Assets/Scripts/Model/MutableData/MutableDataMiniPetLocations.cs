@@ -31,7 +31,7 @@ public class MutableDataMiniPetLocations : MonoBehaviour {
 		bool retVal = false;
 		
 		if(!string.IsNullOrEmpty(miniPetID))
-			retVal = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
+			retVal = MiniPetLoc.ContainsKey(miniPetID);
 		
 		return retVal;
 	}

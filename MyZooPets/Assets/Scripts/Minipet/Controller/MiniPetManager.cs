@@ -301,6 +301,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public void StartHatchSequence(string miniPetID){
 		// Unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
 
 		// Play the respective minipet hatch animation
 		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));

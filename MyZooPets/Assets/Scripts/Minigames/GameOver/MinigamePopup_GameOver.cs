@@ -27,7 +27,6 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	
 	// the buttons for the game over screen don't come up until the appropriate time
 	public PositionTweenToggle tweenButtons;
-	private bool bCheckToShowButtons = false;
 	public int nFreebie; // used for testing purposes
 
 	void Start(){
@@ -40,9 +39,6 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	protected override void _OnShow(){
-		// the game over screen is showing, so we need to check to show the buttons now too
-		bCheckToShowButtons = true;
-		
 		// the game over screen is showing, so we need to set our stats properly
 		
 		// set the score

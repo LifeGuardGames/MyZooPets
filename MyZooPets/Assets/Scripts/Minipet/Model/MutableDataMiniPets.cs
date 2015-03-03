@@ -9,17 +9,20 @@ using System.Collections.Generic;
 public class MutableDataMiniPets{
 	public class Status{
 		public Level CurrentLevel {get; set;}
-		public int CurrentFoodXP {get; set;}
-		public bool IsTickled {get; set;}
-		public bool IsCleaned {get; set;}
-		public DateTime LastActionTime {get; set;}
+		public int CurrentXP {get; set;}
+	//	public bool IsTickled {get; set;}
+	//	public bool IsCleaned {get; set;}
+	//	public DateTime LastActionTime {get; set;}
+		public bool CanGiveMission{get; set;}
+
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
-			CurrentFoodXP = 0;
-			IsTickled = false;
-			IsCleaned = false;
-			LastActionTime = LgDateTime.GetTimeNow();
+			CurrentXP = 0;
+			CanGiveMission = false;
+			//IsTickled = false;
+			//IsCleaned = false;
+			//LastActionTime = LgDateTime.GetTimeNow();
 		}
 	}
 
@@ -29,16 +32,18 @@ public class MutableDataMiniPets{
 	/// if miniPetID is not in this dictionary then it's not unlocked yet
 	/// </summary>
 	public Dictionary<string, Status> MiniPetProgress {get; set;} 
-	public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
-	public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
+	//public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
+	//public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
 
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void UnlockMiniPet(string miniPetID){
-		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress.Add(miniPetID, new Status());
+
+		}
 	}
 
 	/// <summary>
@@ -59,11 +64,11 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	/// <param name="amount">Amount.</param>
-	public void IncreaseFoodXP(string miniPetID, int amount){
+	public void IncreaseXP(string miniPetID, int amount, bool canLevel = false){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
-			status.CurrentFoodXP += amount;
+			status.CurrentXP += amount;
 
 			MiniPetProgress[miniPetID] = status;
 		}
@@ -74,25 +79,25 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <returns>The current food XP.</returns>
 	/// <param name="miniPetID">Mini pet ID.</param>
-	public int GetCurrentFoodXP(string miniPetID){
-		int foodXP = -1;
+	public int GetCurrentXP(string miniPetID){
+		int XP = -1;
 
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			foodXP = status.CurrentFoodXP;
+			XP = status.CurrentXP;
 		}
 
-		return foodXP;
+		return XP;
 	}
 
 	/// <summary>
 	/// Resets the current food XP.
 	/// </summary>
 	/// <param name="miniPetID">Mini pet I.</param>
-	public void ResetCurrentFoodXP(string miniPetID){
+	public void ResetCurrentXP(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			status.CurrentFoodXP = 0;
+			status.CurrentXP = 0;
 
 			MiniPetProgress[miniPetID] = status;
 		}
@@ -137,7 +142,7 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <returns>The last action time.</returns>
 	/// <param name="miniPetID">Mini pet I.</param>
-	public DateTime GetLastActionTime(string miniPetID){
+	/*public DateTime GetLastActionTime(string miniPetID){
 		DateTime retVal = LgDateTime.GetTimeNow();
 
 		if(MiniPetProgress.ContainsKey(miniPetID)){
@@ -147,25 +152,25 @@ public class MutableDataMiniPets{
 		}
 
 		return retVal;
-	}
+	}*/
 
 	/// <summary>
 	/// Sets the last action time. last time the tickle or clean status 
 	/// </summary>
 	/// <param name="miniPetID">Mini pet I.</param>
-	public void UpdateLastActionTime(string miniPetID){
+	/*public void UpdateLastActionTime(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
 			status.LastActionTime = LgDateTime.GetTimeNow();
 		}
-	}
+	}*/
 
 	/// <summary>
 	/// Determines whether this mini pet is tickeld
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
-	public bool IsTickled(string miniPetID){
+	/*public bool IsTickled(string miniPetID){
 		bool retVal = false;
 
 		if(MiniPetProgress.ContainsKey(miniPetID)){
@@ -176,21 +181,21 @@ public class MutableDataMiniPets{
 
 		return retVal;
 	}
-
+*/
 	/// <summary>
 	/// Sets if MP is tickled
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	/// <param name="isTickled">If set to <c>true</c> mp is tickled.</param>
-	public void SetIsTickled(string miniPetID, bool isTickled){
+	/*public void SetIsTickled(string miniPetID, bool isTickled){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
 			status.IsTickled = isTickled;
 		}
 	}
-
-	public bool IsCleaned(string miniPetID){
+*/
+/*	public bool IsCleaned(string miniPetID){
 		bool retVal = false;
 
 		if(MiniPetProgress.ContainsKey(miniPetID)){
@@ -201,7 +206,19 @@ public class MutableDataMiniPets{
 
 		return retVal;
 	}
-
+*/
+	public bool CanGiveMission(string miniPetID){
+		bool retVal = false;
+		
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			retVal = status.CanGiveMission;
+		}
+		
+		return retVal;
+	}
+/*
 	public void SetIsCleaned(string miniPetID, bool isCleaned){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
@@ -209,10 +226,16 @@ public class MutableDataMiniPets{
 			status.IsCleaned = isCleaned;
 		}
 	}
+*/
+	public void SetCanGiveMission(string miniPetID, bool canGiveMission){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.CanGiveMission = canGiveMission;
+		}
+	}
 
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();
-		IsFirstTimeCleaning = true;
-		IsFirstTimeTickling = true;
 	}
 }

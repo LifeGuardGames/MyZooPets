@@ -311,7 +311,11 @@ public enum DroppedItemStates {
 }
 
 public enum MiniPetTypes{
-    Basic,
+    None,
+	Basic,
+	Rentention,
+	GameMaster,
+	Merchant,
 }
 
 public enum CurrencyTypes{

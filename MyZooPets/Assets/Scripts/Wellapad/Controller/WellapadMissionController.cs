@@ -13,6 +13,7 @@ public class TaskUpdatedArgs : EventArgs{
 	public string ID{ get; set; }
 	public string Mission{ get; set; }
 	public bool Status{ get; set; }
+
 }
 
 public class WellapadMissionController : Singleton<WellapadMissionController>{
@@ -21,7 +22,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public EventHandler<EventArgs> OnMissionsRefreshed;		// when missions get refreshed
 	public EventHandler<EventArgs> OnRewardClaimed;			// when a reward is claimed
 	//=====================================================
-	
+
+	//check missions based off this
+	public bool needMission{get; set;}
+
 	/// <summary>
 	/// Gets the mission.
 	/// </summary>
@@ -64,6 +68,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// <param name="taskID">Task ID.</param>
 	public void UnlockTask(string taskID){
 		DataManager.Instance.GameData.Wellapad.TasksUnlocked.Add(taskID);
+
 	}
 
 	/// <summary>
@@ -80,11 +85,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				int rewardXP = DataLoaderXpRewards.GetXP("WellapadBonus", new Hashtable());
 				
 				// get the position of the actual reward object because we want to stream the XP from it
-				GameObject goReward = GameObject.Find("WellapadRewardButton");				
-				Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
-				screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
+				//GameObject goReward = GameObject.Find("WellapadRewardButton");				
+				//Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
+				//screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
 
-				StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: screenPos);
+				StatsController.Instance.ChangeStats(deltaPoints: rewardXP);
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event
@@ -140,7 +145,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 
 	void Awake(){
-		RefreshCheck();
+		//RefreshCheck();
 	}
 
 	void OnApplicationPause(bool isPaused){
@@ -151,7 +156,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 	
 	private void RefreshCheck(object sender, EventArgs args){
-		RefreshCheck();	
+		//RefreshCheck();	
 	}
 
 	/// <summary>
@@ -170,12 +175,12 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// the list needs to be refreshed if it has been more than 12 hours from creation OR the creation time frame (morning/evening)
 		// is different than the current time frame (morning/evening)
 		DateTime dateMissionsCreated = DataManager.Instance.GameData.Wellapad.DateMissionsCreated;	
-		bool IsRefresh = sinceCreated.TotalHours >= 12 || 
-			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);
-		
+		/*bool IsRefresh = sinceCreated.TotalHours >= 12 || 
+			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);*/
+		bool IsRefresh = needMission;
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
-		if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
-			IsRefresh = false;
+		/*if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
+			IsRefresh = false;*/
 
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if(IsRefresh){
@@ -194,15 +199,17 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 			DataManager.Instance.GameData.Wellapad.ResetMissions();
 			
-			AddDefaultMissions();
+			//AddDefaultMissions();
 			
 			// have the screens of the wellapad refresh before we send out the event below, because we want to make sure the
 			// missions screen is active
-			// WellapadUIManager.Instance.RefreshScreen();
+			//WellapadUIManager.Instance.RefreshScreen();
 		
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
+			needMission = false;
+			IsRefresh = false;
 		}
 	}
 
@@ -302,7 +309,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 	public List<string> GetCurrentMissions(){
 		List<string> listMissions = new List<string>();
-		
 		// if the user does not have any missions saved, give them the default missions
 		// probably want to do this through xml data at some point...
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.Count == 0)
@@ -327,12 +333,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// <param name="missionID">Mission ID.</param>
 	public List<MutableDataWellapadTask> GetTasks(string missionID){
 		List<MutableDataWellapadTask> listTasks = new List<MutableDataWellapadTask>();
-			
 		// before creating the missions from scratch, check to see if the user has any save data
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
 			// user has saved tasks...use those	
 			Dictionary<string, MutableDataWellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks;
-			
 			// loop through all saved tasks and add them to the list
 			foreach(KeyValuePair<string, MutableDataWellapadTask> pair in savedTasks)
 				listTasks.Add(pair.Value);
@@ -353,25 +357,25 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			
 			savedTasks[taskID] = new MutableDataWellapadTask(task);
 		}
-		
 		DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID] = new MutableDataMission(missionID, savedTasks);
 		
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
 		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
+		// send event
+		if(OnMissionsRefreshed != null) 
+			OnMissionsRefreshed(this, EventArgs.Empty);
 	}
 
 	private List<ImmutableDataWellapadTask> GetUnlockedTasks(string missionID){
 		Hashtable taskHash = DataLoaderWellapadTasks.GetTasks(missionID);
 		List<ImmutableDataWellapadTask> taskListFinal = new List<ImmutableDataWellapadTask>();
-
 		// now go through each category in this hash and pick one task at random and add it to our list of tasks
 		// (but also check to make sure the category is unlocked)
 		foreach(DictionaryEntry pair in taskHash){
 			string category = (string)pair.Key;
-			
+
 			if(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains(category)){
 				List<ImmutableDataWellapadTask> listTasks = (List<ImmutableDataWellapadTask>) pair.Value;
-				
 				// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
 				// otherwise we just want to pick 1 at random
 				// int nTasks = strCategory == WellapadData.ALWAYShashDataD ? listTasks.Count : 1;

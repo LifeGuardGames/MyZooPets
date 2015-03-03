@@ -8,8 +8,8 @@ using System.Collections;
 /// </summary>
 public class MiniPet : MonoBehaviour {
 	public MiniPetAnimationManager animationManager;
-	public ParticleSystem bubbleParticle;
-	public ParticleSystem dirtyParticle;
+//	public ParticleSystem bubbleParticle;
+	//public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
 	public GameObject flippable;
@@ -19,10 +19,11 @@ public class MiniPet : MonoBehaviour {
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
-
+	public string minipetName = "general";
 	private bool isVisible;
 	private bool isHatchedAux;
-	private string id; //pet id
+	public Camera nguiCamera;
+	protected string id; //pet id
 	public string ID{
 		get{return id;}
 	}
@@ -35,18 +36,20 @@ public class MiniPet : MonoBehaviour {
 	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
-	private bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
+	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 
 	void Start(){
+		nguiCamera = GameObject.Find("Camera").camera;
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
-
-		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-
+		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
+		isFinishEating = DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
+		
 		RefreshUnlockState();
 	}
 
@@ -63,8 +66,8 @@ public class MiniPet : MonoBehaviour {
 			eggAnimation.animation.Stop();
 			flippable.SetActive(true);
 			gameObject.collider.enabled = true;
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
+		//	bubbleParticle.gameObject.SetActive(true);
+		//	dirtyParticle.gameObject.SetActive(true);
 			if(eggClickController != null){	// Remove unused components on the egg parent
 				Destroy(eggClickController);
 				Destroy(eggClickController.collider);
@@ -76,8 +79,8 @@ public class MiniPet : MonoBehaviour {
 			eggAnimation.animation.Play();
 			flippable.SetActive(false);
 			gameObject.collider.enabled = false;
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
+//			bubbleParticle.gameObject.SetActive(false);
+		//	dirtyParticle.gameObject.SetActive(false);
 			isVisible = false;
 		}
 	}
@@ -107,13 +110,14 @@ public class MiniPet : MonoBehaviour {
 
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
-			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		//	MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 
 			RefreshMiniPetUIState(isForceHideFoodMsg:true);
 		}
 	}
 	
-	void OnTap(TapGesture gesture){
+	protected virtual void OnTap(TapGesture gesture){
+		if(!IsTouchingNGUI(gesture.Position)){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
@@ -127,11 +131,11 @@ public class MiniPet : MonoBehaviour {
 
 				if(currentLockMode == UIModeTypes.MiniPet){
 					string colliderName = gesture.Selection.collider.name;
-					bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
+					//bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
 					
 					//only allow tap gesture if cleaning tutorial is finished
-					if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
-						
+				//	if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
+					if(colliderName == this.gameObject.name){
 						//if tickling animation is still playing reset timer
 						if(animationManager.IsTickling()){
 							tickleTimer = 0;
@@ -139,11 +143,12 @@ public class MiniPet : MonoBehaviour {
 						else{
 							animationManager.StartTickling();
 							
-							bool isTickled = MiniPetManager.Instance.IsTickled(id);
-							if(!isTickled)
-								MiniPetManager.Instance.SetTickle(id, true);
+						//	bool isTickled = MiniPetManager.Instance.IsTickled(id);
+						/*	if(!isTickled)
+								MiniPetManager.Instance.SetTickle(id, true);*/
 							
-							MiniPetManager.Instance.IsFirstTimeTickling = false;
+							//MiniPetManager.Instance.IsFirstTimeTickling = false;
+							}
 						}
 					}
 				}
@@ -172,14 +177,14 @@ public class MiniPet : MonoBehaviour {
 		if(colliderName == this.gameObject.name){
 			switch(gesture.Phase){
 			case ContinuousGesturePhase.Started:
-				bubbleParticle.Play();
-				MoveBubbleParticleWithUserTouch(gesture);
+				//bubbleParticle.Play();
+				//MoveBubbleParticleWithUserTouch(gesture);
 				break;
 			case ContinuousGesturePhase.Updated:
-				if(!bubbleParticle.isPlaying)
-					bubbleParticle.Play();
+			//	if(!bubbleParticle.isPlaying)
+				//	bubbleParticle.Play();
 
-				MoveBubbleParticleWithUserTouch(gesture);
+				//MoveBubbleParticleWithUserTouch(gesture);
 				
 				float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
 				float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
@@ -188,20 +193,20 @@ public class MiniPet : MonoBehaviour {
 				
 				//if clean gesture is recognized. stop dirty particle and play happy animation
 				if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
-					MiniPetManager.Instance.SetCleaned(id, true);
-					MiniPetManager.Instance.IsFirstTimeCleaning = false;
-					dirtyParticle.Stop();
+				//	MiniPetManager.Instance.SetCleaned(id, true);
+					//MiniPetManager.Instance.IsFirstTimeCleaning = false;
+					//dirtyParticle.Stop();
 					animationManager.Cheer();
 					currentDistanceInCentimeters = 0;
 				}
 				break;
 			case ContinuousGesturePhase.Ended:
-				bubbleParticle.Stop();
+				//Particle.Stop();
 				break;
 			}
 		}
 		else{
-			bubbleParticle.Stop();
+			//bubbleParticle.Stop();
 		}
 	}
 
@@ -238,19 +243,18 @@ public class MiniPet : MonoBehaviour {
 		
 		//if pet not finish eating yet. finish eating logic
 		if(!isFinishEating){
-			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseFoodXP(id);
-			isFinishEating = true;
-			animationManager.Eat();
+			//InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			//MiniPetManager.Instance.IncreaseXP(id);
+			//animationManager.Eat();
 		}
 		//else check if tickle and cleaning is done. if both done 
 		else{
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			/*bool isTickled = MiniPetManager.Instance.IsTickled(id);
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
+			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyXP(id)){*/
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
-		}
+		//}
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
@@ -262,7 +266,11 @@ public class MiniPet : MonoBehaviour {
 				animationManager.IsRunningIdleAnimations = true;
 		}
 	}
-
+	public virtual void FinishEating(){
+		isFinishEating = true;
+		DataManager.Instance.GameData.MiniPetLocations.SaveHunger(id,isFinishEating);
+		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
+	}
 	/// <summary>
 	/// Updates the animation when minipet status is also updated
 	/// </summary>
@@ -276,7 +284,7 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 
-	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
+	/*private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
 		bool isDraggingOnMP = gesture.Raycast.Hit3D.collider &&
 			gesture.Raycast.Hit3D.collider.name == this.gameObject.name;
 
@@ -291,31 +299,31 @@ public class MiniPet : MonoBehaviour {
 			bubbleParticle.Stop();
 		}
 	}
-
+*/
 	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
 		if(isHatchedAux){
 			//check if pet is sad and dirty
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+			//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+			//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 			
-			if(!isTickled)
+			//if(!isTickled)
 				animationManager.Sad();
-			else
+			//else
 				animationManager.NotSad();
 			
-			if(!isCleaned){
-				dirtyParticle.Play();
-			}
-			else{
-				dirtyParticle.Stop();
-			}
+		//	if(!isCleaned){
+				//dirtyParticle.Play();
+			//}
+			//else{
+			//	dirtyParticle.Stop();
+		//	}
 
-			if(isTickled && isCleaned){
+			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
 				if(!isForceHideFoodMsg){
-					if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+					if(MiniPetManager.Instance.CanModifyXP(id)){
 						Invoke("ShowFoodPreferenceMessage", 1f);
-					}
+					//}
 				}
 			}
 		}
@@ -328,15 +336,15 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	public void TryShowDirtyOrSadMessage(){
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+		//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+		//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 
-		if(!isTickled){
-			miniPetSpeechAI.ShowSadMsg();
-		}
-		else if(!isCleaned){
-			miniPetSpeechAI.ShowDirtyMsg();
-		}
+	//	if(!isTickled){
+			miniPetSpeechAI.ShowSadMsg(name);
+		//}
+	//	else if(!isCleaned){
+			miniPetSpeechAI.ShowDirtyMsg(name);
+		//}
 	}
 
 	/// <summary>
@@ -355,7 +363,7 @@ public class MiniPet : MonoBehaviour {
 			string preferredFoodID = "";
 
 			//check if minipet needs food
-			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
+			if(MiniPetManager.Instance.CanModifyXP(id)){
 				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
 				//check if minipet wants this food
@@ -370,7 +378,8 @@ public class MiniPet : MonoBehaviour {
 					else{
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
-						MiniPetManager.Instance.IncreaseFoodXP(id);
+						MiniPetManager.Instance.IncreaseXP(id);
+						FinishEating();
 						animationManager.Eat();
 					}
 				}
@@ -381,18 +390,18 @@ public class MiniPet : MonoBehaviour {
 				}
 			}
 			else{
-				bool isTickled = MiniPetManager.Instance.IsTickled(id);
-				bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
+				//bool isTickled = MiniPetManager.Instance.IsTickled(id);
+				//bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 				bool isMaxLevel = MiniPetManager.Instance.IsMaxLevel(id);
 
-				if(!isTickled){
-					miniPetSpeechAI.ShowSadMsg();
+			/*	if(!isTickled){
+					miniPetSpeechAI.ShowSadMsg(name);
 				}
 				else if(!isCleaned){
-					miniPetSpeechAI.ShowDirtyMsg();
-				}
-				else if(isMaxLevel){
-					miniPetSpeechAI.ShowMaxLevelMsg();
+					miniPetSpeechAI.ShowDirtyMsg(name);
+				}*/
+				 if(isMaxLevel){
+					miniPetSpeechAI.ShowMaxLevelMsg(name);
 				}
 				else{}
 			}
@@ -412,17 +421,35 @@ public class MiniPet : MonoBehaviour {
 		this.isVisible = isVisible;
 
 		if(this.isVisible){
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
+			//bubbleParticle.gameObject.SetActive(true);
+			//dirtyParticle.gameObject.SetActive(true);
 
 			ToggleHatched(isHatchedAux);	// Keep track of it internally already DWID
 		}
 		else{
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
+		//	bubbleParticle.gameObject.SetActive(false);
+		//	dirtyParticle.gameObject.SetActive(false);
 			flippable.SetActive(false);
 			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;
 		}
+	}
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	private bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
 	}
 }

@@ -27,18 +27,18 @@ public class WellapadRewardButton : LgButton{
 	public void Init(string missionID){
 		
 		// Save the current active label color
-		activeLabelColor = buttonLabel.color;
+		//activeLabelColor = buttonLabel.color;
 		
 		// set wellapad sprite object
 		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
 			
-		this.missionID = missionID;	
+		//this.missionID = missionID;	
 		
 		// set the sprites for this button appropriately on init
-		SetSprites();		
+		//SetSprites();		
 		
 		// listen for when a task is complete so the UI can react
-		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
+		//WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
 		
 		
 	}
@@ -101,8 +101,8 @@ public class WellapadRewardButton : LgButton{
 	//---------------------------------------------------		
 	private void OnTaskUpdated(object sender, TaskUpdatedArgs args){
 		// if the mission IDs match, update our sprite (maybe)
-		if(args.Mission == missionID)
-			SetSprites();
+		//if(args.Mission == missionID)
+			//SetSprites();
 	}	
 	
 	//---------------------------------------------------
@@ -117,7 +117,7 @@ public class WellapadRewardButton : LgButton{
 			WellapadMissionController.Instance.ClaimReward(missionID);
 			
 			// update the sprite
-			SetSprites();
+			//SetSprites();
 
 			//Refresh Check
 			//Case: User plays pass the playperiod and collects the reward

@@ -57,6 +57,9 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		// now spawn the gates
 		SpawnGates();
+
+		// Search and assign bodycollider
+		body = GameObject.Find("BodyCollider");
 	}
 
 	/// <summary>
@@ -434,8 +437,7 @@ public class GatingManager : Singleton<GatingManager>{
 	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);
-		
-		body = GameObject.Find("BodyCollider");
+
 		body.GetComponent<PetInteractionManager>().isInteractable = false;
 
 		//once pet is in position for fire breathing. Idle animations need to be turn off

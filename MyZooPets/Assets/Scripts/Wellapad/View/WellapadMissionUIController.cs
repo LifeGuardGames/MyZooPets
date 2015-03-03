@@ -42,7 +42,6 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMissions() {		
 		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentMissions();
-		
 		// create our missions
 		if(currentMissions.Count > 0)
 			foreach (string strMission in currentMissions)

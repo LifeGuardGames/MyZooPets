@@ -20,19 +20,6 @@ public class TutorialPopup : MonoBehaviour {
 	public delegate void Callback();
 	
 	private Callback Button1Callback;
-	private bool shrinkBgToFitText;
-	
-	void Start() {
-		if(shrinkBgToFitText){
-			Vector3 vSize = label.relativeSize;
-			//Debug.Log("Okay, here we go...");
-			//Debug.Log("Relative size: " + vSize);
-			
-			Vector3 textScale = label.transform.localScale;
-			//Vector3 offset = label.transform.localPosition;	// not sure what this was supposed to do...
-			//Debug.Log("And the local scale of the text is " + textScale);
-		}
-	}
 
 	public void Init(Hashtable option) {
 		// label.text = strLabelText;
@@ -54,15 +41,11 @@ public class TutorialPopup : MonoBehaviour {
 		if(option.ContainsKey(TutorialPopupFields.Button1Callback)){
 			Button1Callback = (Callback) option[TutorialPopupFields.Button1Callback];
 		}
-
-		if(option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText)){
-			shrinkBgToFitText = (bool) option[TutorialPopupFields.ShrinkBgToFitText];
-		}
 	}
 
 	public void Button1Action(){
-		if(Button1Callback != null)
+		if(Button1Callback != null){
 			Button1Callback();
+		}
 	}
-	
 }

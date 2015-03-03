@@ -76,7 +76,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			if(data.Type == MiniPetTypes.None){
 			}
 			else{
-			CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
+				CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
 			}
 		}
 	}

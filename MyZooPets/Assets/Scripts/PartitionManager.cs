@@ -216,7 +216,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// </summary>
 	/// <returns>The allowed deco type from latest unlocked gate.</returns>
 	public List<string> GetAllowedDecoTypeFromLatestPartition(){
-		string preparedPartitionString = "Partition" + StringUtils.FormatIntToDoubleDigitString(GetLastestUnlockedPartition());
+		string preparedPartitionString = "Partition" + StringUtils.FormatIntToDoubleDigitString(GetLatestUnlockedPartition());
 		ImmutableDataPartition partitionData = DataLoaderPartitions.GetData(preparedPartitionString);
 		return new List<string>(partitionData.DecoCategoriesStore);
 	}

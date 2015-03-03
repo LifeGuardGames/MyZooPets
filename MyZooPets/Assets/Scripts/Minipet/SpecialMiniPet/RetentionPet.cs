@@ -3,11 +3,11 @@ using System.Collections;
 
 public class RetentionPet : MiniPet {
 
-	private int timesVisted = 0;
+	private int timesVisited = 0;
 
 	void Awake(){
 		//temp
-		timesVisted = PlayerPrefs.GetInt("TimesVisted");
+		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "retention";
 
 	}
@@ -20,26 +20,27 @@ public class RetentionPet : MiniPet {
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowTipMsg();
-		timesVisted++;
+		timesVisited++;
+		PlayerPrefs.SetInt("TimesVisited", timesVisited);
 		giveOutMission();
 	}
 
 	private void turnInMission(){
 		if(isFinishEating){
 		MiniPetManager.Instance.IncreaseXP(id);
-		MutableDataMission mission = WellapadMissionController.Instance.GetMission("Ninja");
+		MutableDataMission mission = WellapadMissionController.Instance.GetMission("Critical");
 		
 		if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 			// claim the reward
-			WellapadMissionController.Instance.ClaimReward("Ninja");
+			WellapadMissionController.Instance.ClaimReward("Critical");
 			WellapadMissionController.Instance.RefreshCheck();
 		}
 	}
 }
 	private void giveOutMission(){
-		WellapadMissionController.Instance.UnlockTask("Ninja");
+		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission("Ninja");
+		WellapadMissionController.Instance.AddMission("Critical");
 	}
 
 

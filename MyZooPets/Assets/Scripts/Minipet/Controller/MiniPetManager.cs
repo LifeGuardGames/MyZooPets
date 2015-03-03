@@ -367,6 +367,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			MiniPetTable.Add(miniPetID, goMiniPet);
 		}
 		else if (data.Type == MiniPetTypes.GameMaster){
+			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -378,9 +379,20 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
 		}
+			else{
+				Debug.Log("stuff");
+				goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
+				goMiniPet.name = prefab.name;
+				goMiniPet.GetComponent<MiniPet>().Init(data);
+				// Add the pet into the dictionary to keep track
+				MiniPetTable.Add(miniPetID, goMiniPet);
+				
+			}
+		}
 		else if (data.Type == MiniPetTypes.Merchant){
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate.Partition - 1  == 2){
+				if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 				if(UnityEngine.Random.Range (0,8) == 0){
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 					int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -395,6 +407,16 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					// Add the pet into the dictionary to keep track
 					MiniPetTable.Add(miniPetID, goMiniPet);
+				}
+				}
+				else{
+					Debug.Log("stuff");
+					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
+					goMiniPet.name = prefab.name;
+					goMiniPet.GetComponent<MiniPet>().Init(data);
+					// Add the pet into the dictionary to keep track
+					MiniPetTable.Add(miniPetID, goMiniPet);
+					
 				}
 			}
 		}

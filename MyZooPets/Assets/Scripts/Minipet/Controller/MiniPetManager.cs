@@ -27,7 +27,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	public bool canLevel = false;
 
-	public bool needMission = false;
 
 	/// <summary>
 	/// Gets or sets a value indicating whether is first time cleaning.
@@ -325,7 +324,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
-			if(PlayPeriodLogic.Instance.IsNextPlayPeriod()){
+			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){

@@ -5,7 +5,7 @@ public class TestMissionFlow : MonoBehaviour {
 
 	public void getMission(){
 		WellapadMissionController.Instance.UnlockTask("Ninja");
-		MiniPetManager.Instance.needMission = true;
+		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Ninja");
 
 	}

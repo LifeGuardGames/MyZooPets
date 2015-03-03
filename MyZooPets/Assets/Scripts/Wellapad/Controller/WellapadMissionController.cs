@@ -13,6 +13,7 @@ public class TaskUpdatedArgs : EventArgs{
 	public string ID{ get; set; }
 	public string Mission{ get; set; }
 	public bool Status{ get; set; }
+
 }
 
 public class WellapadMissionController : Singleton<WellapadMissionController>{
@@ -21,7 +22,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public EventHandler<EventArgs> OnMissionsRefreshed;		// when missions get refreshed
 	public EventHandler<EventArgs> OnRewardClaimed;			// when a reward is claimed
 	//=====================================================
-	
+
+	//check missions based off this
+	public bool needMission{get; set;}
+
 	/// <summary>
 	/// Gets the mission.
 	/// </summary>
@@ -173,7 +177,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		DateTime dateMissionsCreated = DataManager.Instance.GameData.Wellapad.DateMissionsCreated;	
 		/*bool IsRefresh = sinceCreated.TotalHours >= 12 || 
 			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);*/
-		bool IsRefresh = MiniPetManager.Instance.needMission;
+		bool IsRefresh = needMission;
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
 		/*if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
 			IsRefresh = false;*/
@@ -204,7 +208,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
-			MiniPetManager.Instance.needMission = false;
+			needMission = false;
 			IsRefresh = false;
 		}
 	}

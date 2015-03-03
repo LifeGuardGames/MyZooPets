@@ -47,10 +47,9 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-
-		if(!PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
-			DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
-		}
+		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
+		isFinishEating = DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
+		
 		RefreshUnlockState();
 	}
 
@@ -269,6 +268,8 @@ public class MiniPet : MonoBehaviour {
 	}
 	public virtual void FinishEating(){
 		isFinishEating = true;
+		DataManager.Instance.GameData.MiniPetLocations.SaveHunger(id,isFinishEating);
+		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
 	}
 	/// <summary>
 	/// Updates the animation when minipet status is also updated

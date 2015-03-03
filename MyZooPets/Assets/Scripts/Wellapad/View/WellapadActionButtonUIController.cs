@@ -31,11 +31,11 @@ public class WellapadActionButtonUIController : MonoBehaviour {
             RewardStatuses status = mission.RewardStatus;
 
             //if reward status is claimed or unearned, so regular back button
-            if(status == RewardStatuses.Claimed || status == RewardStatuses.Unearned)
+           // if(status == RewardStatuses.Claimed || status == RewardStatuses.Unearned)
                 ShowBackButton();
             //if reward status is unclaimed, so reward button
-            else
-                ShowRewardButton();
+            //else
+              //  ShowRewardButton();
         }
 
     }

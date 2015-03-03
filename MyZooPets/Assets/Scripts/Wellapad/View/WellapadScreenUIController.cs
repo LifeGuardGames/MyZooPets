@@ -72,7 +72,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	// Callback for when the user claims a wellapad reward.
 	//---------------------------------------------------	
 	private void OnRewardClaimed( object sender, EventArgs args ) {
-		StartCoroutine( SetScreenDelay() );
+		//StartCoroutine( SetScreenDelay() );
 	}	
 
 	//---------------------------------------------------

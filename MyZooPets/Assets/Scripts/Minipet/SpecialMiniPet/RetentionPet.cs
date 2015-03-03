@@ -16,6 +16,7 @@ public class RetentionPet : MiniPet {
 		turnInMission();
 	}
 	public override void FinishEating(){
+		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowTipMsg();
@@ -37,7 +38,7 @@ public class RetentionPet : MiniPet {
 }
 	private void giveOutMission(){
 		WellapadMissionController.Instance.UnlockTask("Ninja");
-		MiniPetManager.Instance.needMission = true;
+		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Ninja");
 	}
 

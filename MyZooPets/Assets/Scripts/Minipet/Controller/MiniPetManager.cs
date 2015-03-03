@@ -325,8 +325,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
-			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
-			//if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			if(PlayPeriodLogic.Instance.IsNextPlayPeriod()){
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
@@ -349,6 +348,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			MiniPetTable.Add(miniPetID, goMiniPet);
 			}
 			else{
+				Debug.Log("stuff");
 				goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPet>().Init(data);

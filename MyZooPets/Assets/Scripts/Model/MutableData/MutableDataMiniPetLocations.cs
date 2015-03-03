@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class MutableDataMiniPetLocations : MonoBehaviour {
+public class MutableDataMiniPetLocations {
 	public class Status{
 		public Vector3 Loc{get; set;}
 		public bool IsFinishEating {get; set;}

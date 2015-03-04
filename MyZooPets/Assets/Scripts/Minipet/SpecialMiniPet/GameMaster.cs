@@ -4,12 +4,13 @@ using System.Collections;
 public class GameMaster : MiniPet {
 
 	private int timesBeatened = 0;
-	private string minigameType;
+	public MinigameTypes minigameType;
 	
 	void Awake(){
 		//temp
 		timesBeatened = PlayerPrefs.GetInt("TimesBeatened");
 		name = "GameMaster";
+		Debug.Log(minigameType);
 		
 	}
 	protected override void OnTap(TapGesture gesture){	
@@ -35,31 +36,34 @@ public class GameMaster : MiniPet {
 				WellapadMissionController.Instance.RefreshCheck();
 				timesBeatened++;
 				PlayerPrefs.SetInt("TimesBeatened", timesBeatened);
+				MiniPetManager.Instance.IncreaseXP(id);
 			}
 		}
 	}
 	private void giveOutMission(){
-		WellapadMissionController.Instance.UnlockTask(PickMinigameMission());
+		//WellapadMissionController.Instance.UnlockTask(PickMinigameMission());
+		WellapadMissionController.Instance.UnlockTask("Ninja");
 		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission(PickMinigameMission());
+		//WellapadMissionController.Instance.AddMission(PickMinigameMission());
+		WellapadMissionController.Instance.AddMission("Ninja");
 	}
 
 	private string PickMinigameMission(){
 		int rand = Random.Range (0,3);
 		switch (minigameType){
-		case "Ninja":
+		case MinigameTypes.TriggerNinja:
 			return "Ninja";
 			break;
-		case "Memory":
+		case MinigameTypes.Memory:
 			return "Memory";
 			break;
-		case "DoctorMatch":
-			return "DoctorMatch";
+		case MinigameTypes.Clinic:
+			return "Clinic";
 			break;
-		case "Shooter":
+		case MinigameTypes.Shooter:
 			return "Shooter";
 			break;
-		case "Runner":
+		case MinigameTypes.Runner:
 			return "Runner";
 			break;
 		default:

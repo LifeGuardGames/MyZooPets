@@ -32,8 +32,10 @@ public class RetentionPet : MiniPet {
 		
 		if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 			// claim the reward
+			
 			WellapadMissionController.Instance.ClaimReward("Critical");
 			WellapadMissionController.Instance.RefreshCheck();
+			MiniPetManager.Instance.IncreaseXP(id);
 		}
 	}
 }

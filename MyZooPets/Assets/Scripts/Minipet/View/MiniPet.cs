@@ -378,7 +378,7 @@ public class MiniPet : MonoBehaviour {
 					else{
 						//notify inventory logic that this item is being used
 						InventoryLogic.Instance.UseMiniPetItem(invItemID);
-						MiniPetManager.Instance.IncreaseXP(id);
+						//MiniPetManager.Instance.IncreaseXP(id);
 						FinishEating();
 						animationManager.Eat();
 					}

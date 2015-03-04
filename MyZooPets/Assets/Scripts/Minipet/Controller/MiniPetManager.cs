@@ -385,12 +385,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			Vector3 pos = locationTuple.Item1;
+			if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
+				goMiniPet.GetComponent<GameMaster>().minigameType = type;
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
+				}
 		}
 			else{
 				Debug.Log("stuff");

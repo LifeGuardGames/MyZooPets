@@ -40,7 +40,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		RefreshLevelProgress();
 		RefreshUnlockPredictions(this, EventArgs.Empty);
 
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 	}
 
@@ -51,7 +50,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
 		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
@@ -59,13 +57,14 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		WellapadMissionController.Instance.RefreshCheck();
 	}
 
-	private void OnUpdateTimeLeft(object sender, PlayPeriodEventArgs args){
-		TimeSpan timeLeft = args.TimeLeft;
-		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
-		
-		// set the label
-		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
-		labelTimer.text = String.Format(strLabel, strTime);
+	void Update(){
+		Debug.LogWarning("DANGING LOGIC HERE");
+//		TimeSpan timeLeft = args.TimeLeft;
+//		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+//		
+//		// set the label
+//		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
+//		labelTimer.text = String.Format(strLabel, strTime);
 	}
 
 	private void RefreshLevelProgress(){

@@ -3,15 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayPeriodEventArgs : EventArgs{
-	public TimeSpan TimeLeft { get; set; }	
-}
-
 public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
-	public static EventHandler<PlayPeriodEventArgs> OnUpdateTimeLeftTillNextPlayPeriod;
 	public static EventHandler<EventArgs> OnNextPlayPeriod;
-	public const float PLAYPERIOD_LENGTH = 12f;
-	private bool isCountingDown = false;
+	private DateTime nextPlayPeriodAux;
 
 	//Return the next time the user can collect bonuses
 	public DateTime NextPlayPeriod{
@@ -27,58 +21,68 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 
-	/// <summary>
-	/// Gets the total time remaining
-	/// </summary>
-	/// <value>The total time remaining</value>
-//	public TimeSpan TotalTimeRemaining{
-//		get{
-//			return DataManager.Instance.GameData.Calendar.GetTotalTimeRemaining();
-//		}
-//	}
+	void Start(){
+		nextPlayPeriodAux = NextPlayPeriod;
+		InvokeRepeating("NextPlayPeriodPolling", 1, 1);
+	}
 
+	void NextPlayPeriodPolling(){
+		// If the time now crosses over the play play period
+		if(nextPlayPeriodAux < LgDateTime.GetTimeNow()){
+			nextPlayPeriodAux = NextPlayPeriod;	// Update the aux to the next play period
+			Debug.Log("POLLING PLAY PERIOD TRIGGERED!!");
+			// Fire event
+			if(OnNextPlayPeriod != null){
+				OnNextPlayPeriod(this, EventArgs.Empty);
+			}
+		}
+	}
+
+	#region Inhaler use functions
 	/// <summary>
 	/// Check if user can play inhaler game.
 	/// </summary>
-	public bool CanUseEverydayInhaler(){	
-//		Debug.Log(DataManager.Instance.GameData.Inhaler.LastestPlayPeriodUsed + " " + GetCurrentPlayPeriod());
+	public bool CanUseEverydayInhaler(){
 		bool retVal = DataManager.Instance.GameData.Inhaler.LastestPlayPeriodUsed < GetCurrentPlayPeriod();
 
+		// If you didnt finish tutorial-1 and the tutorial is done
 		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
 		bool isInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
 		if(!isPart1TutorialDone && isInhalerTutorialDone){
 			retVal = false;
 		}
+
 		return retVal;
 	}
 
-	void Update(){
-		// TODO this is called every frame????
-		if(CanUseEverydayInhaler()){
-			// okay, so the player can use their inhaler...but were we previously counting down?
-			if(isCountingDown){
-				// if we were, stop
-				isCountingDown = false;
-				
-				//fire event
-				if(OnNextPlayPeriod != null)
-					OnNextPlayPeriod(this, EventArgs.Empty);
-			}
-			return;
-		}
+	public DateTime GetLastInhalerTime(){
+		return DataManager.Instance.GameData.PlayPeriod.InhalerInitialTime;
+	}
 
-		// if we make it here, we are counting down
-		isCountingDown = true;
+	public void SetLastInhalerTime(DateTime lastTime){
+		DataManager.Instance.GameData.PlayPeriod.InhalerInitialTime = lastTime;
+	}
 
-		TimeSpan timeTillNextPlayPeriod = NextPlayPeriod - LgDateTime.GetTimeNow();
-
-		//fire counting down event
-		if(OnUpdateTimeLeftTillNextPlayPeriod != null){
-			PlayPeriodEventArgs args = new PlayPeriodEventArgs();
-			args.TimeLeft = timeTillNextPlayPeriod;
-			OnUpdateTimeLeftTillNextPlayPeriod(this, args);
+	/// <summary>
+	/// Additional steps to be done after inhaler game is finished
+	/// </summary>
+	public void InhalerGameDonePostLogic(){
+		// Queue up local notification
+		DateTime localNotificationFireDate;
+		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
+		if(isInhalerTutDone){
+			//register local notification.
+			localNotificationFireDate = NextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
+			string petName = DataManager.Instance.GameData.PetInfo.PetName;
+			string notifText;
+			
+			notifText = String.Format(Localization.Localize("NOTIFICATION_1_PRO"), petName);
+			
+			LgNotificationServices.RemoveIconBadgeNumber();
+			LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
 		}
 	}
+	#endregion
 
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
@@ -116,43 +120,13 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	/// <summary>
 	/// Calculates the time left till next play period.
 	/// </summary>
-	/// <returns>The time left till next play period.</returns>
 	public TimeSpan CalculateTimeLeftTillNextPlayPeriod(){
+		TimeSpan timeTillNextPlayPeriod = NextPlayPeriod - LgDateTime.GetTimeNow();
 
-		DateTime next = NextPlayPeriod;
-		DateTime now = LgDateTime.GetTimeNow();
-		TimeSpan timeTillNextPlayPeriod = next - now;
-
-		//Remove negate TimeSpan
-		if(timeTillNextPlayPeriod < TimeSpan.Zero)
-			timeTillNextPlayPeriod = TimeSpan.Zero;
-
-		return timeTillNextPlayPeriod;
-	}
-	
-	/// <summary>
-	/// Additional steps to be done after inhaler game is finished
-	/// </summary>
-	public void InhalerGameDonePostLogic(){
-		DateTime localNotificationFireDate;
-		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
-		if(isInhalerTutDone){
-			//register local notification.
-			localNotificationFireDate = NextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
-			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string notifText;
-		
-			notifText = String.Format(Localization.Localize("NOTIFICATION_1_PRO"), petName);
-
-			LgNotificationServices.RemoveIconBadgeNumber();
-			LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
+		if(timeTillNextPlayPeriod < TimeSpan.Zero){
+			Debug.LogError("Negative timespan detected");
 		}
-
-		//update next play period in DM so it gets serialized
-//		DataManager.Instance.GameData.Calendar.NextPlayPeriod = nextPlayPeriod;
-
-		TimeSpan totalTimeRemainTillNextPlayPeriod = NextPlayPeriod - LgDateTime.GetTimeNow();
-//		DataManager.Instance.GameData.Calendar.SetTotalTimeRemaining(totalTimeRemainTillNextPlayPeriod);
+		return timeTillNextPlayPeriod;
 	}
 	
 	/// <summary>
@@ -167,17 +141,17 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 //		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = false;
 //	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
-//			Debug.Log( CalculateTimeLeftTillNextPlayPeriod());
-//		}
-//		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
-//			Debug.Log(GetCurrentPlayPeriod());
-//		}
-//		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
-//		}
-//		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
-//			Debug.Log(NextPlayPeriod);
-//		}
-//	}
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
+			Debug.Log(CanUseEverydayInhaler());
+		}
+		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
+			Debug.Log(GetTimeFrame(GetCurrentPlayPeriod()));
+		}
+		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
+		}
+		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
+			Debug.Log(GetTimeFrame(NextPlayPeriod));
+		}
+	}
 }

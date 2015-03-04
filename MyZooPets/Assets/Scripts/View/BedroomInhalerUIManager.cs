@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 
 public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
-
 	public Animation inhalerAnimationController;
 	public GameObject fireOrbParent;
 	public GameObject starParticle;
@@ -15,7 +14,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 	// Start the correct animations based on its state
 	void Start(){
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
@@ -27,7 +25,6 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	}
 
 	void OnDestroy(){
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
@@ -61,15 +58,11 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		ReadyToUseMode();
 	}
 
-	/// <summary>
-	/// Raises the update time left event. Keep updating the cool down timer
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnUpdateTimeLeft(object sender, PlayPeriodEventArgs args){
-		TimeSpan timeLeft = args.TimeLeft;
+	void Update(){
+		// Update the cool down timer
+		TimeSpan timeLeft = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
 		string displayTime = "";
-
+		
 		if(timeLeft.Hours > 0){
 			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
 			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
@@ -80,15 +73,13 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		else{
 			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
 		}
-
+		
 		// set the label
 		coolDownLabel.text = displayTime;
-
+		
 		Debug.LogWarning("DANGING LOGIC HERE");
-//		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemaining;
 //		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
 //		coolDownSprite.fillAmount = completePercentage;
-		Debug.LogWarning("^^^");
 	}
 
 	//	void OnGUI(){

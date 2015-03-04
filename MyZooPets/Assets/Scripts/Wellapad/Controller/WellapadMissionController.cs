@@ -310,9 +310,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		List<string> listMissions = new List<string>();
 		// if the user does not have any missions saved, give them the default missions
 		// probably want to do this through xml data at some point...
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.Count == 0)
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.Count == 0){
 			//AddDefaultMissions();
-		
+		}
 		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
 			listMissions.Add(mission.Key);	
 		}

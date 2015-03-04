@@ -13,7 +13,6 @@ public class TaskUpdatedArgs : EventArgs{
 	public string ID{ get; set; }
 	public string Mission{ get; set; }
 	public bool Status{ get; set; }
-
 }
 
 public class WellapadMissionController : Singleton<WellapadMissionController>{

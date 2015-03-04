@@ -167,17 +167,17 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 //		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = false;
 //	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
-			Debug.Log( CalculateTimeLeftTillNextPlayPeriod());
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
-			Debug.Log(GetCurrentPlayPeriod());
-		}
-		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
-		}
-		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
-			Debug.Log(NextPlayPeriod);
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
+//			Debug.Log( CalculateTimeLeftTillNextPlayPeriod());
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
+//			Debug.Log(GetCurrentPlayPeriod());
+//		}
+//		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
+//		}
+//		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
+//			Debug.Log(NextPlayPeriod);
+//		}
+//	}
 }

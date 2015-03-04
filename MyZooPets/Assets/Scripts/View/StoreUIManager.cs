@@ -12,7 +12,8 @@ public enum StoreShortcutType{
 	MinipetUIStoreButton,
 	NeedFoodPetSpeech,
 	NeedEmergencyInhalerPetSpeech,
-	SickNotification
+	SickNotification,
+	BlackMerchant
 }
 
 public class StoreUIManager : SingletonUI<StoreUIManager>{

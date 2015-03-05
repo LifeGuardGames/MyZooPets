@@ -51,7 +51,8 @@ public class MutableDataMiniPetLocations {
 			Status status = MiniPetLoc[miniPetID];
 			
 			status.Loc = _Loc;
-			
+			Debug.Log(status.Loc);
+			Debug.Log(_Loc);
 			MiniPetLoc[miniPetID] = status;
 		}
 	}
@@ -73,6 +74,7 @@ public class MutableDataMiniPetLocations {
 			return status.Loc;
 		}
 		else{
+			Debug.Log(miniPetID);
 			return new Vector3(0,0,0);
 		}
 	}

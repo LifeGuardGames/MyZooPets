@@ -315,12 +315,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID</param>
 	public void StartHatchSequence(string miniPetID){
-		// Unlock in data manager
-		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
+
 
 		// Play the respective minipet hatch animation
 		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));
+		DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID,true);
 		StartCoroutine(RefreshUnlockState(miniPetID));
 	}
 
@@ -337,7 +336,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	private void CreateMiniPet(string miniPetID){
-
+		// Unlock in data manager
+		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
+		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
@@ -363,7 +364,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
-			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
+			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 			}
 			else{
 				Debug.Log("stuff");
@@ -395,21 +396,22 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
-				goMiniPet.GetComponent<GameMaster>().minigameType = type;
+			goMiniPet.GetComponent<GameMaster>().minigameType = type;
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
-			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
+			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 				}
 		}
 			else{
+				if (DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3 (0,0,0)){
 				Debug.Log("stuff");
 				goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPet>().Init(data);
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
-				
+				}
 			}
 		}
 		else if (data.Type == MiniPetTypes.Merchant){
@@ -430,7 +432,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					// Add the pet into the dictionary to keep track
 					MiniPetTable.Add(miniPetID, goMiniPet);
-					DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
+					DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 				}
 				}
 				else{

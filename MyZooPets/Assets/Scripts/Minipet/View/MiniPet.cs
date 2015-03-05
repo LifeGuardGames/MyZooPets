@@ -55,7 +55,7 @@ public class MiniPet : MonoBehaviour {
 
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
-		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
+		ToggleHatched(DataManager.Instance.GameData.MiniPets.GetHatched(id));
 		RefreshMiniPetUIState(isForceHideFoodMsg:true);
 	}
 

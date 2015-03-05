@@ -14,12 +14,14 @@ public class MutableDataMiniPets{
 	//	public bool IsCleaned {get; set;}
 	//	public DateTime LastActionTime {get; set;}
 		public bool CanGiveMission{get; set;}
+		public bool isHatched{get; set;}
 
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
 			CurrentXP = 0;
 			CanGiveMission = false;
+			isHatched = false;
 			//IsTickled = false;
 			//IsCleaned = false;
 			//LastActionTime = LgDateTime.GetTimeNow();
@@ -232,6 +234,25 @@ public class MutableDataMiniPets{
 			Status status = MiniPetProgress[miniPetID];
 			
 			status.CanGiveMission = canGiveMission;
+		}
+	}
+
+	public void SetisHatched(string miniPetID, bool hatched){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.isHatched = hatched;
+		}
+	}
+
+	public bool GetHatched(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			return status.isHatched;
+		}
+		else{
+			return true;
 		}
 	}
 

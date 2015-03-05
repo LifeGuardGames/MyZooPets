@@ -23,7 +23,7 @@ public class ImmutableDataMemoryTrigger {
 
 	private string displayKey;
 	public string DisplayKey{
-		get{ return DisplayKey; }
+		get{ return displayKey; }
 	}
 
 	private string typeParticlePrefab;

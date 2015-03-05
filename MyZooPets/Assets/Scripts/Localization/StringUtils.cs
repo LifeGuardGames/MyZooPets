@@ -116,4 +116,24 @@ public class StringUtils {
 			}
 		}
 	}
+
+	/// <summary>
+	/// Formats a TimeSpan into a xH:xM:xS format
+	/// </summary>
+	/// <returns>The time left.</returns>
+	/// <param name="timeLeft">Time left</param>
+	public static string FormatTimeLeft(TimeSpan timeLeft){
+		string displayTime = "";
+		if(timeLeft.Hours > 0){
+			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
+			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+		}
+		else if(timeLeft.Minutes > 0){
+			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
+		}
+		else{
+			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
+		}
+		return displayTime;
+	}
 }

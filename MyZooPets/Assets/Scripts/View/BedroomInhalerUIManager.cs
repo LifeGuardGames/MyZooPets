@@ -12,6 +12,10 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	public UILabel coolDownLabel;
 	public UISprite coolDownSprite;
 
+	private bool isCoolDownMode = false;
+	private bool isInitialCalculatedOffsetCached = false;
+	private TimeSpan initialCalculatedOffset;
+
 	// Start the correct animations based on its state
 	void Start(){
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
@@ -32,6 +36,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	/// Cools down mode.
 	/// </summary>
 	private void CoolDownMode(){
+		isCoolDownMode = true;
 		inhalerAnimationController.Stop();
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
@@ -39,12 +44,15 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		coolDownLabel.enabled = true;
 		progressBar3D.animation.Stop();
 		progressBar3D.transform.localScale = Vector3.one;
+		
+		isInitialCalculatedOffsetCached = false;	// Force recalculate the cache
 	}
 
 	/// <summary>
 	/// Readies to use mode.
 	/// </summary>
 	private void ReadyToUseMode(){
+		isCoolDownMode = false;
 		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
@@ -59,32 +67,22 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	}
 
 	void Update(){
-		// Update the cool down timer
-		TimeSpan timeLeft = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
-		string displayTime = "";
-		
-		if(timeLeft.Hours > 0){
-			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
-			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
-		}
-		else if(timeLeft.Minutes > 0){
-			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
-		}
-		else{
-			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
-		}
-		
-		// set the label
-		coolDownLabel.text = displayTime;
-		
-		Debug.LogWarning("DANGING LOGIC HERE");
-//		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
-//		coolDownSprite.fillAmount = completePercentage;
-	}
+		if(isCoolDownMode){
+			// Update the cool down timer
+			TimeSpan timeLeft = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
+			coolDownLabel.text = StringUtils.FormatTimeLeft(timeLeft);
 
-	//	void OnGUI(){
-	//		if(GUI.Button(new Rect(0, 0, 100, 100), "start")){
-	//			CheckToDropFireOrb();
-	//		}
-	//	}
+			DateTime initialSavedTime = PlayPeriodLogic.Instance.GetLastInhalerTime();
+			TimeSpan timeOffset = LgDateTime.GetTimeNow() - initialSavedTime;
+
+			// Calculate the denomicator once and cache it
+			if(!isInitialCalculatedOffsetCached){
+				initialCalculatedOffset = PlayPeriodLogic.Instance.NextPlayPeriod - initialSavedTime;
+				isInitialCalculatedOffsetCached = true;
+			}
+
+			float completePercentage = (float)timeOffset.TotalMinutes / (float)initialCalculatedOffset.TotalMinutes;
+			coolDownSprite.fillAmount = completePercentage;
+		}
+	}
 }

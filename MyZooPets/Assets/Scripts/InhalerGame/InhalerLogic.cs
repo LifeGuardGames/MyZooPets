@@ -25,11 +25,6 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		set{ DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue = value; }
 	}
 
-	public DateTime LastestPlayPeriodUsed{
-		get{ return DataManager.Instance.GameData.Inhaler.LastestPlayPeriodUsed; }
-		set{ DataManager.Instance.GameData.Inhaler.LastestPlayPeriodUsed = value; }
-	}
-
 	public bool IsTutorialCompleted{
 		get{ return DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);}
 	}
@@ -75,15 +70,17 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
 		// Save settings into data manager
 		IsFirstTimeRescue = false;
-		LastestPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
+		DataManager.Instance.GameData.Inhaler.LatestPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
+		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = LgDateTime.GetTimeNow();
 
 		if(OnGameOver != null){
 			OnGameOver(this, EventArgs.Empty);
 		}
 
 		//finish inhaler tutorial 
-		if(!IsTutorialCompleted)
+		if(!IsTutorialCompleted){
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
+		}
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted("DailyInhaler");

@@ -27,6 +27,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	public bool canLevel = false;
 
+	public bool switchSpawn = false;
 
 	/// <summary>
 	/// Gets or sets a value indicating whether is first time cleaning.
@@ -61,16 +62,17 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 
 	// Use this for initialization
 	void Start(){
-		Debug.Log(PlayPeriodLogic.Instance.CanUseEverydayInhaler());
-		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
-			canLevel = true;
-		}
+		
+			
+		
 //		GatingManager.OnDestroyedGate += OnDestroyedGateHandler;
 
 		//load all minipet into the scene
 //		Dictionary<string, MutableDataMiniPets.Status> miniPetProgress = 
 //			DataManager.Instance.GameData.MiniPets.MiniPetProgress;
-
+		switchSpawn = CanSpawnNewMinipetLocations();
+		Debug.Log(switchSpawn);
+		canLevel = switchSpawn;
 		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			if(data.Type == MiniPetTypes.None){
@@ -87,9 +89,11 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	private bool CanSpawnNewMinipetLocations(){
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
+			Debug.Log("yay");
 			return true;
 		}
 		else{
+			Debug.Log("nay");
 			return false;
 		}
 	}
@@ -333,11 +337,12 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	private void CreateMiniPet(string miniPetID){
+
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Basic){
-			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			if(switchSpawn){
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 			while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
@@ -358,6 +363,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
+			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
 			}
 			else{
 				Debug.Log("stuff");
@@ -380,7 +386,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			MiniPetTable.Add(miniPetID, goMiniPet);
 		}
 		else if (data.Type == MiniPetTypes.GameMaster){
-			if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+			if(switchSpawn){
 			MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 			LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 			int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -393,6 +399,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.GetComponent<MiniPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
+			DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
 				}
 		}
 			else{
@@ -408,7 +415,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		else if (data.Type == MiniPetTypes.Merchant){
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate.Partition - 1  == 2){
-				if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+				if(switchSpawn){
 				if(UnityEngine.Random.Range (0,8) == 0){
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 					int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -423,6 +430,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					// Add the pet into the dictionary to keep track
 					MiniPetTable.Add(miniPetID, goMiniPet);
+					DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, transform.position);
 				}
 				}
 				else{

@@ -22,6 +22,7 @@ public class MutableDataMiniPetLocations {
 	}
 
 	private void Init(){
+		Debug.Log("aksbfviakbs");
 		MiniPetLoc = new Dictionary<string, Status>();
 		LastestPlayPeriodUpdated = DateTime.MinValue;
 	}
@@ -68,7 +69,7 @@ public class MutableDataMiniPetLocations {
 	public Vector3 GetLoc(string miniPetID){
 		if(MiniPetLoc.ContainsKey(miniPetID)){
 			Status status = MiniPetLoc[miniPetID];
-			
+			Debug.Log(status.Loc);
 			return status.Loc;
 		}
 		else{

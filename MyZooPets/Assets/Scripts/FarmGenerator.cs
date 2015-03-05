@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -46,7 +46,7 @@ public class FarmGenerator : MonoBehaviour {
 
 	// Check and calculate how much time until last session and populate current
 	private void RefreshLastTimeSinceLastPlayed(){
-		lastTimeDurationAux = LgDateTime.GetTimeSinceLastPlayed();
+		lastTimeDurationAux = LgDateTime.GetTimeSpanSinceLastPlayed();
 		// Current should be populated already
 		current += ratePerHour / 3600f * lastTimeDurationAux.Seconds;
 		if(current >= capacity){

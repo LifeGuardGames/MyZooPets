@@ -30,11 +30,32 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		// If the time now crosses over the play play period
 		if(nextPlayPeriodAux < LgDateTime.GetTimeNow()){
 			nextPlayPeriodAux = NextPlayPeriod;	// Update the aux to the next play period
-			Debug.Log("POLLING PLAY PERIOD TRIGGERED!!");
 			// Fire event
 			if(OnNextPlayPeriod != null){
 				OnNextPlayPeriod(this, EventArgs.Empty);
 			}
+		}
+	}
+
+	public void SetLastPlayPeriod(DateTime playPeriod){
+		DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = playPeriod;
+	}
+
+	public DateTime GetLastPlayPeriod(){
+		return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod;
+	}
+
+	void OnApplicationPause(bool isPaused){
+		if(!isPaused){
+			// Save current information
+			SetLastPlayPeriod(GetCurrentPlayPeriod());
+
+
+			//calculate time diff since last play session ended and submit to game analytics
+			TimeSpan timeSinceLastSession = LgDateTime.GetTimeSpanSinceLastPlayed();
+			int timeDifference = (int)timeSinceLastSession.TotalHours;
+			
+			Analytics.Instance.TimeBetweenPlaySession(timeDifference);
 		}
 	}
 
@@ -43,7 +64,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	/// Check if user can play inhaler game.
 	/// </summary>
 	public bool CanUseEverydayInhaler(){
-		bool retVal = DataManager.Instance.GameData.Inhaler.LatestPlayPeriodUsed < GetCurrentPlayPeriod();
+		bool retVal = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed < GetCurrentPlayPeriod();
 
 		// If you didnt finish tutorial-1 and the tutorial is done
 		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
@@ -83,16 +104,6 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 	#endregion
-
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
-			//calculate time diff since last play session ended and submit to game analytics
-			TimeSpan timeSinceLastSession = LgDateTime.GetTimeSinceLastPlayed();
-			int timeDifference = (int)timeSinceLastSession.TotalHours;
-
-			Analytics.Instance.TimeBetweenPlaySession(timeDifference);
-		}
-	}
 
 	/// <summary>
 	/// Gets the time frame.
@@ -141,17 +152,17 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 //		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = false;
 //	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
-			Debug.Log(CanUseEverydayInhaler());
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
-			Debug.Log(GetTimeFrame(GetCurrentPlayPeriod()));
-		}
-		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
-		}
-		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
-			Debug.Log(GetTimeFrame(NextPlayPeriod));
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
+//			Debug.Log(CanUseEverydayInhaler());
+//		}
+//		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
+//			Debug.Log(GetTimeFrame(GetCurrentPlayPeriod()));
+//		}
+//		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
+//		}
+//		if(GUI.Button(new Rect(400, 100, 100, 100), "4")){
+//			Debug.Log(GetTimeFrame(NextPlayPeriod));
+//		}
+//	}
 }

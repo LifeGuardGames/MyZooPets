@@ -143,19 +143,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		}
 	}
 
-	void Awake(){
-		//RefreshCheck();
-	}
-
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
 			// if the game is unpausing, we need to do a check to refresh the mission list	
 			RefreshCheck();
 		}
-	}
-	
-	private void RefreshCheck(object sender, EventArgs args){
-		//RefreshCheck();	
 	}
 
 	/// <summary>
@@ -241,7 +233,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 
 	/// <summary>
-	/// ReThis function was called because some task in
+	/// This function was called because some task in
 	/// missionID was just completed, so we need to see
 	/// if that mission's reward needs a status update.  This
 	/// is kind of heavy handed, but I'm not sure how else

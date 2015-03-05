@@ -70,7 +70,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
 		// Save settings into data manager
 		IsFirstTimeRescue = false;
-		DataManager.Instance.GameData.Inhaler.LatestPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
+		DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
 		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = LgDateTime.GetTimeNow();
 
 		if(OnGameOver != null){

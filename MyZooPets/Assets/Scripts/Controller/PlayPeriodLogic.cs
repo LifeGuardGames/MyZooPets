@@ -43,7 +43,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	/// Check if user can play inhaler game.
 	/// </summary>
 	public bool CanUseEverydayInhaler(){
-		bool retVal = DataManager.Instance.GameData.Inhaler.LastestPlayPeriodUsed < GetCurrentPlayPeriod();
+		bool retVal = DataManager.Instance.GameData.Inhaler.LatestPlayPeriodUsed < GetCurrentPlayPeriod();
 
 		// If you didnt finish tutorial-1 and the tutorial is done
 		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
@@ -56,11 +56,11 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	public DateTime GetLastInhalerTime(){
-		return DataManager.Instance.GameData.PlayPeriod.InhalerInitialTime;
+		return DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime;
 	}
 
 	public void SetLastInhalerTime(DateTime lastTime){
-		DataManager.Instance.GameData.PlayPeriod.InhalerInitialTime = lastTime;
+		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = lastTime;
 	}
 
 	/// <summary>

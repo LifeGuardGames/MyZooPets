@@ -76,6 +76,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 		BulletScript bulletScript = instance.GetComponent<BulletScript>();
+		if(bulletScript == null)
+			Debug.Log("broke");
 		bulletScript.target = lookPos;
 		bulletScript.FindTarget();
 		bulletScript.isPierceing = isPiercing;

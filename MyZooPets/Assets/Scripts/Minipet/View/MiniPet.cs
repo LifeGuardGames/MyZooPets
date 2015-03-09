@@ -47,7 +47,6 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
 		isFinishEating = DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
 		
 		RefreshUnlockState();
@@ -163,7 +162,7 @@ public class MiniPet : MonoBehaviour {
 	/// need to be specified otherwise error will be thrown
 	/// </summary>
 	/// <param name="delta">Delta.</param>
-	void OnDrag(Vector2 delta){}
+	/*void OnDrag(Vector2 delta){}
 
 	void OnDrag(DragGesture gesture){
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
@@ -209,7 +208,7 @@ public class MiniPet : MonoBehaviour {
 			//bubbleParticle.Stop();
 		}
 	}
-
+*/
 	/// <summary>
 	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
 	/// with the proper information.
@@ -321,7 +320,7 @@ public class MiniPet : MonoBehaviour {
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
 				if(!isForceHideFoodMsg){
-					if(MiniPetManager.Instance.CanModifyXP(id)){
+					if(!MiniPetManager.Instance.CanModifyXP(id)){
 						Invoke("ShowFoodPreferenceMessage", 1f);
 					//}
 				}
@@ -363,7 +362,7 @@ public class MiniPet : MonoBehaviour {
 			string preferredFoodID = "";
 
 			//check if minipet needs food
-			if(MiniPetManager.Instance.CanModifyXP(id)){
+			if(!MiniPetManager.Instance.CanModifyXP(id)){
 				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
 				//check if minipet wants this food

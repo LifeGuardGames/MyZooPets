@@ -86,7 +86,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// <summary>
 	/// Determines whether new minipet locations should be spawned, also flags the datetime automatically
 	/// </summary>
-	private bool CanSpawnNewMinipetLocations(){
+	public bool CanSpawnNewMinipetLocations(){
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
 			Debug.Log("yay");
@@ -198,7 +198,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 		//bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
 		bool canModify;
 	//	canModify = (currentLevel != maxLevel) && isTickled && isCleaned && canLevel;
-		canModify = (currentLevel != maxLevel) && canLevel;
+		canModify = (currentLevel != maxLevel) && canLevel && DataManager.Instance.GameData.MiniPetLocations.GetHunger(miniPetID);
 		return canModify;
 	}
 

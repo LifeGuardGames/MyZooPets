@@ -78,9 +78,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  - 114: {fileID: 11400004}
   - 58: {fileID: 5800000}
   - 212: {fileID: 21200000}
+  - 114: {fileID: 11400006}
   m_Layer: 2
   m_Name: ShooterFireBallBig
   m_TagString: bullet
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275fc5543f4e43c48a8b9ce3c3b559e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400004
+--- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -193,11 +193,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 770b08f77f068fb48846a58279a6b466, type: 3}
+  m_Script: {fileID: 11500000, guid: b2ba0d3e1c4898346b162ef03dbd5a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
   target: {x: 0, y: 0, z: 0}
+  isPierceing: 0
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1

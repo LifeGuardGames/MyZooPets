@@ -232,7 +232,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
-			if(MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
+			if(!MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
 				feedParent.Show();
 			}
 			HUDUIManager.Instance.HidePanel();
@@ -246,7 +246,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// This does all the check by itself so dont worry when calling this
 	/// </summary>
 	public void RefreshFoodItemUI(){
-		if(MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
+		if(!MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
 			int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
 			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
 			//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();

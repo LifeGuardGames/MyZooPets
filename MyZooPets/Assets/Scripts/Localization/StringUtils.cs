@@ -4,6 +4,7 @@ using System.Collections;
 using System.Reflection;
 using System.Collections.Generic;
 
+
 //---------------------------------------------------
 // StringUtils
 // Utility functions for formatting/localizing strings.
@@ -79,13 +80,13 @@ public class StringUtils {
 		String[] arrayVector3;
 		
 		try{
+			Debug.Log(vectorString);
 			arrayVector3 = vectorString.Split(","[0]);
-			
 			if(arrayVector3.Length == 3){
 				vector = new Vector3(
-					float.Parse(arrayVector3[0]), 
+					float.Parse(arrayVector3[0].Trim(new char[]{'(' })), 
 					float.Parse(arrayVector3[1]), 
-					float.Parse(arrayVector3[2]));
+					float.Parse(arrayVector3[2].Trim(new char[]{')' })));
 			}
 			else
 				Debug.LogError("Illegal vector3 parsing, reverting to 0,0,0");

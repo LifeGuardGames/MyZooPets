@@ -290,7 +290,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	// Quit()
 	// This comes from clicking a button.
 	//---------------------------------------------------		
-	public void QuitGame(){
+	public virtual void QuitGame(){
 		if(quitGameScene != null){
 			// this is a little messy...the way the UI Button Message works, we don't really know where this is coming from
 			if(ui.IsPopupShowing(MinigamePopups.GameOver)){

@@ -18,6 +18,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
+	public override void QuitGame(){
+		ShooterUIManager.Instance.Quit();
+		base.QuitGame();
+	}
+
 	protected override void _Start(){
 	}
 
@@ -34,7 +39,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		if(IsTutorialOverride() && IsTutorialOn()|| 
 		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
 			if(inTutorial){
-				ShooterUIManager.Instance.Reset();
+				//ShooterUIManager.Instance.Reset();
 				PlayerShooterController.Instance.Reset();
 				StartTutorial();
 			}

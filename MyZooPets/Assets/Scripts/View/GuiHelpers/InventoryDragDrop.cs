@@ -42,7 +42,9 @@ public class InventoryDragDrop : MonoBehaviour {
 	}
 
 	public void reAddClick(object sender, EventArgs args){
+		if(this.collider != null){
 		this.collider.enabled = true;
+		}
 	}
 
 	/// <summary>

@@ -42,17 +42,17 @@ public class GameMaster : MiniPet {
 	}
 	private void giveOutMission(){
 		//WellapadMissionController.Instance.UnlockTask(PickMinigameMission());
-		WellapadMissionController.Instance.UnlockTask("Ninja");
+		WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;
 		//WellapadMissionController.Instance.AddMission(PickMinigameMission());
-		WellapadMissionController.Instance.AddMission("Ninja");
+		WellapadMissionController.Instance.AddMission("NinjaS");
 	}
 
 	private string PickMinigameMission(){
 		int rand = Random.Range (0,3);
 		switch (minigameType){
 		case MinigameTypes.TriggerNinja:
-			return "Ninja";
+			return "NinjaS";
 			break;
 		case MinigameTypes.Memory:
 			return "Memory";

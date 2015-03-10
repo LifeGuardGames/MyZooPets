@@ -41,6 +41,10 @@ public class InventoryDragDrop : MonoBehaviour {
 		UpdateGrid();
 	}
 
+	public void reAddClick(object sender, EventArgs args){
+		this.collider.enabled = true;
+	}
+
 	/// <summary>
 	/// Drop the dragged object.
 	/// </summary>
@@ -55,8 +59,13 @@ public class InventoryDragDrop : MonoBehaviour {
 			args.ParentTransform = mParent;
 			args.TargetCollider = UICamera.lastHit.collider;
 
-			if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
-			
+
+			if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
+				args.IsValidTarget = false;
+			}
+			else{
+				if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
+			}
 			if(!args.IsValidTarget){
 				// No valid container under the mouse -- revert the item's parent
 				mTrans.parent = mParent;
@@ -68,7 +77,9 @@ public class InventoryDragDrop : MonoBehaviour {
 					PetAnimationManager.Instance.AbortFeeding();
 				else
 					PetAnimationManager.Instance.AbortFeeding();
-			}else{
+			}
+			else{
+
 				mTrans.parent = mParent;	
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
@@ -84,6 +95,7 @@ public class InventoryDragDrop : MonoBehaviour {
 		else{
 			isScrolling = false;	// Done scrolling
 		}
+		
 	}
 
 	void Awake () { 
@@ -92,6 +104,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void Start(){
 		dragScrollScript = GetComponent<UIDragPanelContents>();
+		RewardManager.OnAllRewardsDone += reAddClick;
 	}
 
 	/// <summary>
@@ -100,7 +113,10 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	void OnDrag (Vector2 delta)
 	{
-		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
+			Drop();
+			return;
+		}
 		
 		if (enabled && UICamera.currentTouchID > -2)
 		{

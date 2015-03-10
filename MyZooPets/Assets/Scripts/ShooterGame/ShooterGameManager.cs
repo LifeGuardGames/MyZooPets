@@ -18,6 +18,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
+	public override void QuitGame(){
+		ShooterUIManager.Instance.Quit();
+		base.QuitGame();
+	}
+
 	protected override void _Start(){
 	}
 

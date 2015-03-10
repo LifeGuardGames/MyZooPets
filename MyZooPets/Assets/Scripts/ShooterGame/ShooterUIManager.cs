@@ -26,7 +26,9 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			LeanTween.pause(moon);
 			break;
 		case MinigameStates.Playing:
+			if(sun != null)
 			LeanTween.resume(sun);
+			if(moon != null)
 			LeanTween.resume(moon);
 			break;
 		case MinigameStates.Restarting:
@@ -36,6 +38,11 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		}
 	}
 
+	public void Quit(){
+		LeanTween.cancel(sun);
+		LeanTween.cancel(moon);
+	}
+
 	// Use this for initialization
 	void Start(){
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
@@ -43,6 +50,8 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 
 	public void Reset(){
 		Debug.Log("RESETTING");
+		sun = GameObject.Find("SpriteSun");
+		moon = GameObject.Find("SpriteMoon");
 		sun.transform.position = posSky.position;
 		sun.GetComponent<MovingSky>().inSky = true;
 		moon.GetComponent<MovingSky>().inSky = false;

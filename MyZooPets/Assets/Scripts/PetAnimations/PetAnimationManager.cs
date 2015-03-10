@@ -11,7 +11,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public GameObject petShadow;
 	public GameObject flippableComponents;
 	public GameObject fireBlowPosition;
-	public GameObject headCollider;
 	public GameObject bodyCollider;
 	public GameObject highFiveCollider;
 	
@@ -91,7 +90,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void DisableVisibility(){
 		animatorObject.SetActive(false);
-		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		petShadow.GetComponent<MeshRenderer>().enabled = false;
 		DisableIdleAnimation();
@@ -100,7 +98,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	public void EnableVisibility(){
 		animatorObject.SetActive(true);
-		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);
 		petShadow.GetComponent<MeshRenderer>().enabled = true;
 		EnableIdleAnimation();
@@ -250,14 +247,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void StartHighFive(){
 		highFiveCollider.SetActive(true);
-		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		animator.SetBool("IsHighFiving", true);
 	}
 
 	public void FinishHighFive(){
 		highFiveCollider.SetActive(false);
-		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);
 		animator.SetBool("IsHighFiving", false);
 		animator.SetTrigger("YesHighFive");
@@ -294,7 +289,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		if(isHighFiving){
 			animator.SetBool("IsHighFiving", false);
 			highFiveCollider.SetActive(false);
-			headCollider.SetActive(true);
 			bodyCollider.SetActive(true);
 		}
 	}
@@ -310,7 +304,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 				
 				//user didn't high five pet so end the high five animation
 				highFiveCollider.SetActive(false);
-				headCollider.SetActive(true);
 				bodyCollider.SetActive(true);
 				animator.SetBool("IsHighFiving", false);
 				animator.SetTrigger("NoHighFive");

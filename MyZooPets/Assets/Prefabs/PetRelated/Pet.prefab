@@ -1914,25 +1914,8 @@ GameObject:
   - 4: {fileID: 400236}
   - 65: {fileID: 6500004}
   - 114: {fileID: 11400026}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BodyCollider
-  m_TagString: ItemTarget
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100238
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400238}
-  - 65: {fileID: 6500006}
-  - 114: {fileID: 11400028}
-  m_Layer: 0
-  m_Name: HeadCollider
   m_TagString: ItemTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1973,13 +1956,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.175427437, y: .150215149, z: 23.7611961}
+  m_LocalPosition: {x: -.175427437, y: .150215149, z: 26.6552792}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
   - {fileID: 400004}
   - {fileID: 400008}
-  - {fileID: 400238}
   - {fileID: 400236}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2077,7 +2059,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.73295879, y: 2.1329813, z: -2.07999992}
+  m_LocalPosition: {x: -3.47869992, y: 3.44950008, z: -2.07999992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400024}
@@ -3131,8 +3113,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100178}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -.370000005, y: .49000001, z: 0}
+  m_LocalScale: {x: 1.30999994, y: 1.29999995, z: 1}
   m_Children:
   - {fileID: 400094}
   m_Father: {fileID: 400024}
@@ -3501,18 +3483,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
-  m_RootOrder: 4
---- !u!4 &400238
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100238}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .00435018539, y: 6.63782406, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400002}
   m_RootOrder: 3
 --- !u!4 &400240
 Transform:
@@ -3564,7 +3534,7 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2117205683
   m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
@@ -3602,20 +3572,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6.90999985, y: 5, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &6500006
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100238}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6.53000021, y: 3.4000001, z: 0}
-  m_Center: {x: 0, y: .600000024, z: 0}
+  m_Size: {x: 9.60000038, y: 11.5699997, z: 0}
+  m_Center: {x: 0, y: 2.6099999, z: 0}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 3
@@ -3630,6 +3588,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3675,6 +3634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3754,7 +3714,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 1
-    e23: -23.6611958
+    e23: -26.5552788
     e30: 0
     e31: 0
     e32: 0
@@ -3792,7 +3752,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 1
-    e23: -23.7611961
+    e23: -26.6552792
     e30: 0
     e31: 0
     e32: 0
@@ -3841,7 +3801,6 @@ MonoBehaviour:
   petShadow: {fileID: 100010}
   flippableComponents: {fileID: 100024}
   fireBlowPosition: {fileID: 100018}
-  headCollider: {fileID: 100238}
   bodyCollider: {fileID: 100236}
   highFiveCollider: {fileID: 100234}
   sadIdleAnimations:
@@ -4032,17 +3991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  isInteractable: 1
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1

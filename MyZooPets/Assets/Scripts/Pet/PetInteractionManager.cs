@@ -49,39 +49,45 @@ public class PetInteractionManager : MonoBehaviour{
 
 	void OnDrag(DragGesture gesture){
 		if(isInteractable){
-		try{
-			string colliderName = gesture.Selection.collider.name;
-			
-			if(colliderName == this.gameObject.name){
-				switch(gesture.Phase){
-				case ContinuousGesturePhase.Started:
-					
-					if(colliderName == "HeadCollider")
-						PetAnimationManager.Instance.StartRubbing();
-					else
-						PetAnimationManager.Instance.StartTickling();
-					
-					break;
-				case ContinuousGesturePhase.Ended:
-					
-					if(colliderName == "HeadCollider")
-						PetAnimationManager.Instance.StopRubbing();
-					else
-						PetAnimationManager.Instance.StopTickling();
-					
-					break;
+			try{
+				if(gesture.Selection == null){
+					PetAnimationManager.Instance.StopRubbing();
+					PetAnimationManager.Instance.StopTickling();
+					return;
+				}
+
+				string colliderName = gesture.Selection.collider.name;
+				
+				if(colliderName == this.gameObject.name){
+					switch(gesture.Phase){
+					case ContinuousGesturePhase.Started:
+						
+						if(colliderName == "HeadCollider")
+							PetAnimationManager.Instance.StartRubbing();
+						else
+							PetAnimationManager.Instance.StartTickling();
+						
+						break;
+					case ContinuousGesturePhase.Ended:
+						
+						if(colliderName == "HeadCollider")
+							PetAnimationManager.Instance.StopRubbing();
+						else
+							PetAnimationManager.Instance.StopTickling();
+						
+						break;
+					}
+				}
+				else{
+					PetAnimationManager.Instance.StopRubbing();
+					PetAnimationManager.Instance.StopTickling();
 				}
 			}
-			else{
+			catch(NullReferenceException e){
+				Debug.LogException(e);
 				PetAnimationManager.Instance.StopRubbing();
 				PetAnimationManager.Instance.StopTickling();
 			}
-		}
-		catch(NullReferenceException e){
-			Debug.LogException(e);
-			PetAnimationManager.Instance.StopRubbing();
-			PetAnimationManager.Instance.StopTickling();
-		}
 		}
 	}
 

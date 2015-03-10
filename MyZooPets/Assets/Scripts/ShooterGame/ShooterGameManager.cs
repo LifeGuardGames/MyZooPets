@@ -39,7 +39,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		if(IsTutorialOverride() && IsTutorialOn()|| 
 		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
 			if(inTutorial){
-				//ShooterUIManager.Instance.Reset();
+				ShooterUIManager.Instance.Reset();
 				PlayerShooterController.Instance.Reset();
 				StartTutorial();
 			}

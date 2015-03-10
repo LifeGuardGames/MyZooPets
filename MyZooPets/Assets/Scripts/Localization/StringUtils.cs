@@ -80,7 +80,6 @@ public class StringUtils {
 		String[] arrayVector3;
 		
 		try{
-			Debug.Log(vectorString);
 			arrayVector3 = vectorString.Split(","[0]);
 			if(arrayVector3.Length == 3){
 				vector = new Vector3(

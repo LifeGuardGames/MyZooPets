@@ -418,7 +418,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate.Partition - 1  == 2){
 				if(switchSpawn){
-				if(UnityEngine.Random.Range (0,8) == 0){
+				if(UnityEngine.Random.Range (0,1) == 0){
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 					int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 					while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){

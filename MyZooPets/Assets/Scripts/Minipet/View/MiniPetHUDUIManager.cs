@@ -8,8 +8,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
 
 	public UILabel nameLabel;
-	public GameObject tickleCheckBox;
-	public GameObject cleanCheckBox;
 
 	public UILabel labelFeedCount;
 	public UILabel labelFeed;
@@ -19,6 +17,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public Animation storeButtonPulseAnim;
 	public GameObject storeButtonSunbeam;
 
+	public GameObject contentParent;
 	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
@@ -46,6 +45,45 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		base.Awake();
 		eModeType = UIModeTypes.MiniPet;
 		IsLevelUpAnimationLockOn = false;
+	}
+
+	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash){
+		GameObject contentPrefab;
+		switch(type){
+		case MiniPetTypes.Rentention:
+			contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
+			break;
+		case MiniPetTypes.GameMaster:
+			contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
+			break;
+		case MiniPetTypes.Merchant:
+			contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
+			break;
+		default:
+			Debug.LogError("No minipet type found: " + type.ToString());
+			return;
+		}
+
+		GameObject content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+
+		switch(type){
+		case MiniPetTypes.Rentention:
+			MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
+			// Get data from hash and put them in here
+			controller.Initialize("");
+			break;
+		case MiniPetTypes.GameMaster:
+			MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
+			controller2.Initialize();
+			break;
+		case MiniPetTypes.Merchant:
+			MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
+			controller3.Initialize("", false);
+			break;
+		default:
+			Debug.LogError("No controller found: " + type.ToString());
+			return;
+		}
 	}
 
 	#region Overridden functions

@@ -199,7 +199,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 		else{
 			// All gates unlocked
-			Debug.Log("All gates unlocked");
 			return DataLoaderPartitions.GetDataList().Count - 1;	// Get the gates list count, off by 1
 		}
 	}

@@ -7,6 +7,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// the number of times the user has missed the optimal use window
 	//public int NumMissed=0;
 	public EventHandler<EventArgs> proceed;
+	public EventHandler<EventArgs> QuitEvent;
 	public Camera nguiCamera;
 	public float shootTime;
 	private float startTime;
@@ -19,7 +20,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public override void QuitGame(){
+		if(QuitEvent != null)
+			QuitEvent(this, EventArgs.Empty);
 		ShooterUIManager.Instance.Quit();
+		ShooterSpawnManager.Instance.Quit();
 		base.QuitGame();
 	}
 

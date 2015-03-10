@@ -43,8 +43,10 @@ public class GateMonster : Gate{
 //				Debug.Log("setting heads false in list: " + i + " current health: " + currentHealth);
 				smokeMonsterHeads[i].gameObject.SetActive(false);
 			}
-			// First head to move is always the last one on the list
+			// First head to move is always the last one on the list unless there are no more heads
+			if(currentHealth != 0){
 			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
+			}
 			
 			// Assign the base head
 			baseHeadToMove = smokeMonsterHeads[0];

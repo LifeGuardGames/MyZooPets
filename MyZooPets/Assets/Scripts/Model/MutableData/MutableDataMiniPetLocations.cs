@@ -22,13 +22,11 @@ public class MutableDataMiniPetLocations {
 	}
 
 	private void Init(){
-		Debug.Log("aksbfviakbs");
 		MiniPetLoc = new Dictionary<string, Status>();
 		LastestPlayPeriodUpdated = DateTime.MinValue;
 	}
 
 	public void UnlockMiniPet(string miniPetID){
-		Debug.Log(MiniPetLoc.ContainsKey(miniPetID));
 		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetLoc.ContainsKey(miniPetID))
 			MiniPetLoc.Add(miniPetID, new Status());
 	}
@@ -71,7 +69,6 @@ public class MutableDataMiniPetLocations {
 			return StringUtils.ParseVector3(status.Loc);
 		}
 		else{
-			Debug.Log(miniPetID);
 			return new Vector3(0,0,0);
 		}
 	}

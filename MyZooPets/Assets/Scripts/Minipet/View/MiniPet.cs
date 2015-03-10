@@ -268,7 +268,7 @@ public class MiniPet : MonoBehaviour {
 	public virtual void FinishEating(){
 		isFinishEating = true;
 		DataManager.Instance.GameData.MiniPetLocations.SaveHunger(id,isFinishEating);
-		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetHunger(id));
+		RefreshMiniPetUIState();
 	}
 	/// <summary>
 	/// Updates the animation when minipet status is also updated
@@ -316,14 +316,12 @@ public class MiniPet : MonoBehaviour {
 			//else{
 			//	dirtyParticle.Stop();
 		//	}
-
+			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
-				if(!isForceHideFoodMsg){
-					if(!MiniPetManager.Instance.CanModifyXP(id)){
+				if(isForceHideFoodMsg && isFinishEating != true){
 						Invoke("ShowFoodPreferenceMessage", 1f);
 					//}
-				}
 			}
 		}
 	}

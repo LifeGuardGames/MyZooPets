@@ -246,27 +246,31 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// This does all the check by itself so dont worry when calling this
 	/// </summary>
 	public void RefreshFoodItemUI(){
-		if(!MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
-			int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
-			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-			//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
-			labelFeedCount.text = (1).ToString();
-			labelFeedCount.gameObject.SetActive(true);
-			labelFeed.gameObject.SetActive(true);
-			Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
-			spriteFeed.spriteName = item.TextureName;
-			spriteFeed.gameObject.SetActive(true);
-			spriteFeed.GetComponent<SpriteResizer>().Resize();
-			feedParent.Show();
+		if(SelectedMiniPetID != null){
+			Debug.Log(SelectedMiniPetID);
+			if(!DataManager.Instance.GameData.MiniPetLocations.GetHunger(SelectedMiniPetID)){
+				nameLabel.text = SelectedMiniPetName;
+				int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
+				int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
+				//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
+				labelFeedCount.text = (1).ToString();
+				labelFeedCount.gameObject.SetActive(true);
+				labelFeed.gameObject.SetActive(true);
+				Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+				spriteFeed.spriteName = item.TextureName;
+				spriteFeed.gameObject.SetActive(true);
+				spriteFeed.GetComponent<SpriteResizer>().Resize();
+				feedParent.Show();
+			}
+			else{
+				feedParent.Hide();
+				labelFeedCount.gameObject.SetActive(false);
+				labelFeed.gameObject.SetActive(false);
+				spriteFeed.spriteName = null;
+				spriteFeed.gameObject.SetActive(false);
+			}
+			CheckStoreButtonPulse();
 		}
-		else{
-			feedParent.Hide();
-			labelFeedCount.gameObject.SetActive(false);
-			labelFeed.gameObject.SetActive(false);
-			spriteFeed.spriteName = null;
-			spriteFeed.gameObject.SetActive(false);
-		}
-		CheckStoreButtonPulse();
 	}
 
 	/// <summary>
@@ -276,8 +280,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void CheckStoreButtonPulse(){
 		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
 		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+		bool petFed = !DataManager.Instance.GameData.MiniPetLocations.GetHunger(SelectedMiniPetID);
 
-		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen()){
+		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && petFed){
 			storeButtonPulseAnim.Play();
 			storeButtonSunbeam.SetActive(true);
 		}

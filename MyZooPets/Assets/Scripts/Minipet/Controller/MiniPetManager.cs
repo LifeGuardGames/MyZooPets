@@ -312,8 +312,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID</param>
 	public void StartHatchSequence(string miniPetID){
-
-
 		// Play the respective minipet hatch animation
 		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));
 		DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID,true);

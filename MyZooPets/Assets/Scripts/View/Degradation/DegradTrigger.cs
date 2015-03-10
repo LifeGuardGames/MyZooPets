@@ -19,8 +19,6 @@ public class DegradTrigger : MonoBehaviour{
 	
 	// Use this for initialization
 	void Start(){
-		Debug.Log(hitParticle.name);
-
 		// Set life of the emitter
 		clicksToKill = Constants.GetConstant<int>("DegradHitsToClean");
 

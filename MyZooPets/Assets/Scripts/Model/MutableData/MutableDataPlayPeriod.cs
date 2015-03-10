@@ -4,7 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MutableDataPlayPeriod{
-    public DateTime LastPlayPeriod {get; set;}		// Last play period that use has signed on
+	public DateTime LastPlayPeriod {get; set;}		// Last play period that use has signed on
+	public DateTime LastTimeUserPlayedGame {get; set;}
 
 	public MutableDataPlayPeriod(){
 		Init();
@@ -12,5 +13,6 @@ public class MutableDataPlayPeriod{
 
 	private void Init(){
 		LastPlayPeriod = DateTime.MinValue;
+		LastTimeUserPlayedGame = DateTime.MinValue;
 	}
 }

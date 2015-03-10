@@ -10,7 +10,7 @@ using System.Collections;
 public class MutableDataInhaler{
     public bool IsFirstTimeRescue {get; set;} 			// First time the player has seen the rescue inhaler
                                         				// (this tells us whether to show tutorial arrows in the Inhaler Game)
-	public DateTime LastPlayPeriodUsed {get; set;}	// Last pp the user played the regular inhaler
+	public DateTime LastPlayPeriodUsed {get; set;}		// Last pp the user played the regular inhaler
 	public DateTime LastInhalerPlayTime {get; set;}		// Saved time value for inhaler countdown
 
     public MutableDataInhaler(){

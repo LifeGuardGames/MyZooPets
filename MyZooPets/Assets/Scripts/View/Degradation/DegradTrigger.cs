@@ -35,8 +35,9 @@ public class DegradTrigger : MonoBehaviour{
 		
 		// if the trigger tutorial has been played, activate the trigger
 		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting())
+		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting()){
 			ActivateParticles();		
+		}
 	}
 
 	void OnDestroy(){

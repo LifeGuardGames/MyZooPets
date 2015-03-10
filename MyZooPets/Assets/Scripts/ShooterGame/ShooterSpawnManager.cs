@@ -28,6 +28,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		posList.Add(thirdPos.transform.position);
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
+
 	// prevents finishing the last wave
 	public void Reset(){
 		StopCoroutine("SpawnEnemies");
@@ -45,10 +46,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		case MinigameStates.Playing:
 			isSpawing = true;
 			break;
-		case MinigameStates.Restarting:
-			StopCoroutine("SpawnEnemies");
-			break;
+
 		}
+	}
+
+	public void Quit(){
+		StopCoroutine("SpawnEnemies");
 	}
 
 	public void SpawnTrigger(List<EnemyData> enemy){

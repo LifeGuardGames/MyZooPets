@@ -18,11 +18,15 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		MinigameStates eState = args.GetGameState();
 		switch(eState){
 		case MinigameStates.GameOver:
+			if(sun != null)
 			LeanTween.cancel(sun);
+			if(moon != null)
 			LeanTween.cancel(moon);
 			break;
 		case MinigameStates.Paused:
+			if(sun != null)
 			LeanTween.pause(sun);
+			if(moon != null)
 			LeanTween.pause(moon);
 			break;
 		case MinigameStates.Playing:
@@ -32,7 +36,9 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			LeanTween.resume(moon);
 			break;
 		case MinigameStates.Restarting:
+			if(sun != null)
 			LeanTween.cancel(sun);
+			if(moon != null)
 			LeanTween.cancel(moon);
 			break;
 		}

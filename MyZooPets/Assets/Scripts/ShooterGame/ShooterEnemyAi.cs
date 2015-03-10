@@ -24,6 +24,11 @@ public class ShooterEnemyAi : MonoBehaviour{
 			StartCoroutine(DestroyEnemy());
 		}
 	}
+	
+	private void OnDisable(){
+		Debug.Log("seigbsdruign");
+		LeanTween.cancel(this.gameObject);
+	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
@@ -35,7 +40,9 @@ public class ShooterEnemyAi : MonoBehaviour{
 			LeanTween.pause(this.gameObject);
 			break;
 		case MinigameStates.Playing:
+			if(this.gameObject != null){
 			LeanTween.resume(this.gameObject);
+			}
 			break;
 		case MinigameStates.Restarting:
 			StartCoroutine(DestroyEnemy());

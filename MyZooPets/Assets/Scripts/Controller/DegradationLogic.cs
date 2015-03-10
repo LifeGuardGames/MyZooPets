@@ -19,10 +19,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public float fHealthMoodThreshold;
 	private const int MAX_TRIGGERS = 6;
 	private List<DegradData> degradationTriggers; //list of triggers spawned
-
 	public List<DegradData> DegradationTriggers{
 		get{ return degradationTriggers;} 
 	}
+
+	private bool isAwakeCheck = true;
 
 	void Awake(){		
 		RefreshCheck();
@@ -35,7 +36,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	void OnApplicationPause(bool isPaused){
 		//Refresh logic
 		if(!isPaused){
-			RefreshCheck();
+			if(isAwakeCheck){
+				isAwakeCheck = false;
+				return;
+			}
+			else{
+				RefreshCheck();
+			}
 		}
 	}
 
@@ -46,9 +53,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private void RefreshCheck(){
 		degradationTriggers = new List<DegradData>(); 
 
-		RefreshDegradationCheck();
+		StatsDegradationCheck();
 		SetUpTriggers();
-		UpdateNextPlayPeriodTime();
+//		UpdateNextPlayPeriodTime();
 	}
 
 	//use the method when a trigger has been destroyed by user
@@ -125,7 +132,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		Analytics.Instance.TriggerHitPet();    
 	}
 
-	private void RefreshDegradationCheck(){
+	private void StatsDegradationCheck(){
 		// don't do these checks if the player has not yet finished the tutorials (we don't want them losing health/hunger)
 		bool isTutorialDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
 		if(!isTutorialDone){
@@ -150,7 +157,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
-        
+
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
@@ -161,31 +168,25 @@ public class DegradationLogic : Singleton<DegradationLogic>{
             
 			ImmutableDataTrigger randomTrigger = DataLoaderTriggers.GetRandomSceneTrigger("Bedroom");
 
-			// random prefab
-			// int objectIndex = UnityEngine.Random.Range(0, triggerPrefabs.Count);
-            
 			// to make things easier, if the user has not done the trigger tutorial yet, just override the random location and use 0
 			// also, use the dust prefab...this is a soft setting...hopefully no one changes that array
 			bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 
 			if(!isTriggerTutDone){
 				if(i == 0){
-					location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_3", "Bedroom");
+					location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
 					
 					if(location == null)
 						Debug.LogError("Tutorial trigger location not set up correctly");
 					
-					// objectIndex = 3;
 					randomTrigger = DataLoaderTriggers.GetTrigger("Trigger_3");
 				}
 			}
 
 			//spawn them at a pre define location ID is the order in which the data are created
-			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Position));
+			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Partition, location.Position));
 		}                
-
-//		DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow(); //update last played time       
-
+		
 		if(OnRefreshTriggers != null){
 			OnRefreshTriggers(this, EventArgs.Empty);
 		}
@@ -227,8 +228,10 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
+//		isTriggerTutDone = true;	// DEBUG
+
 		if(!isTriggerTutDone){
-			int uncleanedTriggers= DataManager.Instance.GameData.Degradation.UncleanedTriggers;
+			int uncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
 
 			// only spawn one trigger if trigger tutorial is not done yet
 			if(uncleanedTriggers == 0){
@@ -238,10 +241,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 			//need to update this time every time this function is called while trigger tutorial is not done yet otherwise
 			//logic gets messed up
-			degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+			degradationData.LastPlayPeriodTriggerSpawned = PlayPeriodLogic.GetCurrentPlayPeriod();
 		}
 		else{
-
 			int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
 
 			//There are missed play periods
@@ -256,13 +258,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 				//update lastTriggerSpawnedPlayPeriod. Important that we update it here
 				//otherwise more triggers will be spawned if user return from pause
-				degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+				degradationData.LastPlayPeriodTriggerSpawned = PlayPeriodLogic.GetCurrentPlayPeriod();
 
 			}
 	        //No missed play periods. spawn triggers for Next Play Period
 	        else{
 				DateTime now = LgDateTime.GetTimeNow();
-				DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastTriggerSpawnedPlayPeriod;
+				DateTime lastTriggerSpawnedPlayPeriod = degradationData.LastPlayPeriodTriggerSpawned;
 				TimeSpan timeSinceLastTriggerSpawned = now - lastTriggerSpawnedPlayPeriod;
 
 				//only spawn new trigger if time hasn't been rewind somehow
@@ -275,12 +277,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 					if(!degradationData.IsTriggerSpawned){
 						newTriggers = 3;
 						degradationData.IsTriggerSpawned = true;
-						degradationData.LastTriggerSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+						degradationData.LastPlayPeriodTriggerSpawned = PlayPeriodLogic.GetCurrentPlayPeriod();
 					}
 				}
 			}
 		}
-
 		return newTriggers;
 	}
         
@@ -365,15 +366,15 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	// for timing logic, so if we ever need to update NextPlayPeriod it needs to be
 	// done only after both functions run their logic with the same NextPlayPeriod value
 	//-------------------------------------------------------------------------- 
-	private void UpdateNextPlayPeriodTime(){
-		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();	//TODO tie this to inhaler
-
-		if(numOfMissedPlayPeriod > 0){
-			Debug.LogWarning("DANGING LOGIC FIX");
-//			PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
-			// Debug.Log("current play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
-		}
-	}
+//	private void UpdateNextPlayPeriodTime(){
+//		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();	//TODO tie this to inhaler
+//
+//		if(numOfMissedPlayPeriod > 0){
+//			Debug.LogWarning("DANGING LOGIC FIX");
+////			PlayPeriodLogic.Instance.CalculateCurrentPlayPeriod();
+//			// Debug.Log("current play period: " + PlayPeriodLogic.Instance.NextPlayPeriod);
+//		}
+//	}
 
 	//-------------------------------------------------------------------------- 
 	// GetNumOfMissedPlayPeriod()
@@ -382,15 +383,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		int missedPlayPeriod = 0;
 		DateTime lastPlayPeriod = PlayPeriodLogic.Instance.GetLastPlayPeriod();
 
-		//different in hours between now and next play period
+		// Difference in hours between now and next play period
 		TimeSpan timeSinceStartOfPlayPeriod = LgDateTime.GetTimeNow() - lastPlayPeriod;
-		Debug.Log("health degrade timeSinceStartOfPlayPeriod: " + timeSinceStartOfPlayPeriod);
 
 		//if within 12 hours no punishment
 		//if > 12 hrs punishment for every 12 hrs miss
 		missedPlayPeriod = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
 
-		Debug.Log("MISSED PLAY PERIOD" + missedPlayPeriod);
 		return missedPlayPeriod;
 	}
 }

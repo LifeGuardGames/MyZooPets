@@ -19,8 +19,6 @@ public class DegradTrigger : MonoBehaviour{
 	
 	// Use this for initialization
 	void Start(){
-		Debug.Log(hitParticle.name);
-
 		// Set life of the emitter
 		clicksToKill = Constants.GetConstant<int>("DegradHitsToClean");
 
@@ -35,8 +33,9 @@ public class DegradTrigger : MonoBehaviour{
 		
 		// if the trigger tutorial has been played, activate the trigger
 		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting())
+		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting()){
 			ActivateParticles();		
+		}
 	}
 
 	void OnDestroy(){

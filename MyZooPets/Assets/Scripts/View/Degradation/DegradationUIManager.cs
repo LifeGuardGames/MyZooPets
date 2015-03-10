@@ -104,14 +104,16 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	//---------------------------------------------------		
 	private DegradTrigger PlaceTrigger(DegradData degradData){		
 		string triggerID = degradData.TriggerID;
+		int partition = degradData.Partition;
 		Vector3 position = degradData.Position;
+
 		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
 
-		//Load trigger prefab
+		//instantiate all the triggers saved in DataManager
+		Transform parent = PartitionManager.Instance.GetInteractableParent(partition);
 		GameObject triggerPrefab = (GameObject)Resources.Load(triggerData.PrefabName);
-
-		//instantiate all the triggers save in DataManager
-		GameObject trigger = (GameObject)Instantiate(triggerPrefab, position, Quaternion.identity);
+		GameObject trigger = GameObjectUtils.AddChild(parent.gameObject, triggerPrefab);
+		trigger.transform.localPosition = position;
 
 		//keep a local reference
 		currentSpawnTriggers.Add(trigger);
@@ -122,5 +124,4 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		
 		return scriptTrigger;
 	}
-
 }

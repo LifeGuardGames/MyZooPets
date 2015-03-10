@@ -214,7 +214,7 @@ public class DataManager : Singleton<DataManager>{
 			//any thing that needs saving, so check before saving
 			if(gameData != null){
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
+				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
 
@@ -256,7 +256,7 @@ public class DataManager : Singleton<DataManager>{
 		#if UNITY_EDITOR
 		Debug.Log("Game is saving");
 		#endif
-		
+
 		//Data will not be saved if gameData is empty
 		if(gameData != null){
 			string jsonString = JSON.Instance.ToJSON(gameData);

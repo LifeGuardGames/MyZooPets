@@ -74,7 +74,7 @@ public class RewardManager : Singleton<RewardManager> {
 			// Called only when it has animated and finished
 			if(isDoAnimationDoneCheck){
 				isDoAnimationDoneCheck = false;
-				Debug.Log("ALL REWARDS DONE");
+//				Debug.Log("ALL REWARDS DONE");
 				if(OnAllRewardsDone != null){
 					OnAllRewardsDone(this, EventArgs.Empty);
 				}
